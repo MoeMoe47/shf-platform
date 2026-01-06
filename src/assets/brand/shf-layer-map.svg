@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
+  <defs>
+    <style>
+      .bg{fill:#0b0f14}
+      .title{fill:#ffffff;font:700 34px system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+      .sub{fill:#aab6c3;font:500 16px system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+      .box{fill:#121a24;stroke:#2a3a4d;stroke-width:2;rx:14;ry:14}
+      .boxLock{fill:#10202a;stroke:#ff7a18;stroke-width:3;rx:14;ry:14}
+      .num{fill:#ffffff;font:800 18px system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+      .txt{fill:#e7eef7;font:600 15px system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+      .small{fill:#9fb0c4;font:500 13px system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+      .badge{fill:#ff7a18}
+      .badgeTxt{fill:#0b0f14;font:800 12px system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+      .rule{fill:#0f1620;stroke:#2a3a4d;stroke-width:2;rx:12;ry:12}
+      .ruleTitle{fill:#ffffff;font:800 16px system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+      .ruleTxt{fill:#aab6c3;font:500 13px system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1400" height="900"/>
+
+  <text class="title" x="60" y="80">Silicon Heartland — Canon Layer Map</text>
+  <text class="sub" x="60" y="110">Locked items have an orange border (Top-1% governance standard)</text>
+
+  <!-- Doctrine panel -->
+  <rect class="rule" x="60" y="140" width="1280" height="140"/>
+  <text class="ruleTitle" x="85" y="175">Global Doctrines (apply to ALL layers)</text>
+  <text class="ruleTxt" x="85" y="205">• Human override  • Metric stability  • Silence-as-default  • Efficiency separation</text>
+  <text class="ruleTxt" x="85" y="230">• Negative capability  • Triple-layer non-bypass (Efficiency → AI → Automation)  • AI never triggers automation directly</text>
+
+  <!-- Grid settings -->
+  <!-- 5 columns x 5 rows boxes -->
+  <!-- coords -->
+  <!-- colX: 60, 330, 600, 870, 1140  -->
+  <!-- rowY: 320, 410, 500, 590, 680 -->
+
+  <!-- helper: function-like: box(x,y,locked,num,title,subtitle) -->
+  <!-- Row 1 -->
+  <rect class="boxLock" x="60" y="320" width="250" height="70"/><text class="num" x="80" y="350">L1</text><text class="txt" x="125" y="350">Identity & Access</text><text class="small" x="125" y="372">Role integrity</text>
+  <rect class="boxLock" x="330" y="320" width="250" height="70"/><text class="num" x="350" y="350">L2</text><text class="txt" x="395" y="350">Session & Context</text><text class="small" x="395" y="372">State integrity</text>
+  <rect class="boxLock" x="600" y="320" width="250" height="70"/><text class="num" x="620" y="350">L3</text><text class="txt" x="665" y="350">Routing & Surfaces</text><text class="small" x="665" y="372">Navigation integrity</text>
+  <rect class="boxLock" x="870" y="320" width="250" height="70"/><text class="num" x="890" y="350">L4</text><text class="txt" x="935" y="350">UI & Visual Integrity</text><text class="small" x="935" y="372">Presentation layer</text>
+  <rect class="boxLock" x="1140" y="320" width="250" height="70"/><text class="num" x="1160" y="350">L5</text><text class="txt" x="1205" y="350">Content Integrity</text><text class="small" x="1205" y="372">Copy & truth</text>
+
+  <!-- Row 2 -->
+  <rect class="box" x="60" y="410" width="250" height="70"/><text class="num" x="80" y="440">L6</text><text class="txt" x="125" y="440">Dashboards</text><text class="small" x="125" y="462">Info surfaces</text>
+  <rect class="box" x="330" y="410" width="250" height="70"/><text class="num" x="350" y="440">L7</text><text class="txt" x="395" y="440">Forms & Input</text><text class="small" x="395" y="462">User submissions</text>
+  <rect class="box" x="600" y="410" width="250" height="70"/><text class="num" x="620" y="440">L8</text><text class="txt" x="665" y="440">Learning Delivery</text><text class="small" x="665" y="462">Engagement</text>
+  <rect class="box" x="870" y="410" width="250" height="70"/><text class="num" x="890" y="440">L9</text><text class="txt" x="935" y="440">Portfolio & Proofs</text><text class="small" x="935" y="462">Artifacts</text>
+  <rect class="box" x="1140" y="410" width="250" height="70"/><text class="num" x="1160" y="440">L10</text><text class="txt" x="1205" y="440">Feedback Signals</text><text class="small" x="1205" y="462">Non-punitive</text>
+
+  <!-- Row 3 -->
+  <rect class="box" x="60" y="500" width="250" height="70"/><text class="num" x="80" y="530">L11</text><text class="txt" x="125" y="530">Data Modeling</text><text class="small" x="125" y="552">Schema</text>
+  <rect class="box" x="330" y="500" width="250" height="70"/><text class="num" x="350" y="530">L12</text><text class="txt" x="395" y="530">Processing</text><text class="small" x="395" y="552">Normalize</text>
+  <rect class="box" x="600" y="500" width="250" height="70"/><text class="num" x="620" y="530">L13</text><text class="txt" x="665" y="530">Metrics</text><text class="small" x="665" y="552">Definitions</text>
+  <rect class="box" x="870" y="500" width="250" height="70"/><text class="num" x="890" y="530">L14</text><text class="txt" x="935" y="530">Analytics</text><text class="small" x="935" y="552">Aggregation</text>
+  <rect class="box" x="1140" y="500" width="250" height="70"/><text class="num" x="1160" y="530">L15</text><text class="txt" x="1205" y="530">Storage</text><text class="small" x="1205" y="552">Retention</text>
+
+  <!-- Row 4 -->
+  <rect class="boxLock" x="60" y="590" width="250" height="70"/><text class="num" x="80" y="620">L16</text><text class="txt" x="125" y="620">Efficiency</text><text class="small" x="125" y="642">Resource optimization</text>
+  <rect class="box" x="330" y="590" width="250" height="70"/><text class="num" x="350" y="620">L17</text><text class="txt" x="395" y="620">AI Advisory</text><text class="small" x="395" y="642">Assist only</text>
+  <rect class="boxLock" x="600" y="590" width="250" height="70"/><text class="num" x="620" y="620">L18</text><text class="txt" x="665" y="620">Resilience</text><text class="small" x="665" y="642">Graceful fail</text>
+  <rect class="boxLock" x="870" y="590" width="250" height="70"/><text class="num" x="890" y="620">L19</text><text class="txt" x="935" y="620">Explainability</text><text class="small" x="935" y="642">Contestability</text>
+  <rect class="box" x="1140" y="590" width="250" height="70"/><text class="num" x="1160" y="620">L20</text><text class="txt" x="1205" y="620">Automation</text><text class="small" x="1205" y="642">Decision support</text>
+
+  <!-- Row 5 -->
+  <rect class="boxLock" x="60" y="680" width="250" height="70"/><text class="num" x="80" y="710">L21</text><text class="txt" x="125" y="710">Compliance</text><text class="small" x="125" y="732">Audit readiness</text>
+  <rect class="box" x="330" y="680" width="250" height="70"/><text class="num" x="350" y="710">L22</text><text class="txt" x="395" y="710">Funding & Narrative</text><text class="small" x="395" y="732">Strategy framing</text>
+  <rect class="box" x="600" y="680" width="250" height="70"/><text class="num" x="620" y="710">L23</text><text class="txt" x="665" y="710">Pilot/System Mode</text><text class="small" x="665" y="732">Controls</text>
+  <rect class="box" x="870" y="680" width="250" height="70"/><text class="num" x="890" y="710">L24</text><text class="txt" x="935" y="710">Scale & Evolution</text><text class="small" x="935" y="732">Future state</text>
+  <rect class="boxLock" x="1140" y="680" width="250" height="70"/><text class="num" x="1160" y="710">L25</text><text class="txt" x="1205" y="710">Exit & Portability</text><text class="small" x="1205" y="732">Independence</text>
+
+  <!-- Locked legend -->
+  <rect class="badge" x="60" y="790" width="16" height="16" rx="4" ry="4"/>
+  <text class="sub" x="85" y="804">Orange border = LOCKED layer</text>
+</svg>

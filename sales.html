@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en" data-app="sales">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sales — Silicon Heartland</title>
+  </head>
+  <body>
+    <!-- Root mount for the Sales app -->
+    <div id="root" data-app="sales">
+      <!-- This text should disappear once React mounts -->
+      <div style="padding:16px;font-family:system-ui;color:#4b5563">
+        Loading Sales app…
+      </div>
+    </div>
+
+    <!-- Vite dev client (same as other apps) -->
+    <script type="module" src="/@vite/client"></script>
+
+    <!-- Sales entry file -->
+    <script type="module" src="/src/entries/sales.main.jsx"></script>
+
+    <noscript>Enable JavaScript to run the Sales app.</noscript>
+  </body>
+</html>

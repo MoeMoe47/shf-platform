@@ -1,0 +1,203 @@
+{
+  "id": "instructor.asl-01",
+  "title": "Instructor Guide — ASL 1.1 Fingerspelling A–Z",
+  "studentMirrorOf": "student.asl-01",
+  "estMinutes": 25,
+
+  /* ---------- 1) Objectives (teacher-facing) ---------- */
+  "objectives": [
+    "Coach recognition and production of ASL letters A–Z with correct handshape and palm orientation",
+    "Facilitate learners fingerspelling their first/last name and 3 domain words (school/tech/career)",
+    "Build fluency through chunking (A–M, N–Z) and smooth transitions (no mouthing)"
+  ],
+
+  /* ---------- 2) Standards + Funding Alignment ---------- */
+  "standards": {
+    "Common Core ELA": ["SL.9-10.1", "SL.9-10.6"],
+    "ISTE": ["1.6 Creative Communicator"],
+    "CSTA": ["1A-CS-01"],
+    "Perkins V": ["134(b)(5) Communication"],
+    "ESSA": ["Title IV Well-Rounded Education"],
+    "IDEA": ["Accessible instructional design (multiple modalities)"]
+  },
+  "standardsMap": {
+    "Common Core": {
+      "SL.9-10.1": "Structured partner drills; accountable talk in signed modality",
+      "SL.9-10.6": "Adapts signing clarity and speed to audience"
+    },
+    "ISTE": { "1.6": "Creates and shares signed content for authentic audiences" },
+    "CSTA": { "1A-CS-01": "Represents data (letters) with symbols and precision" },
+    "Perkins V": { "134(b)(5)": "Career-ready communication and presentation" },
+    "ESSA": { "Title IV": "Supports well-rounded arts/world language programming" },
+    "IDEA": { "A11y": "Provides visual, tactile, and pacing scaffolds for diverse learners" }
+  },
+  "fundingTags": ["PerkinsV-CTE", "ESSA-TitleIV", "IDEA-A11y", "WIOA-softskills"],
+
+  /* ---------- 3) Time & Pacing (minute-by-minute) ---------- */
+  "pacing": [
+    { "minute": "0–3",  "activity": "Silent greet + posture check; show alphabet poster (fade quickly)" },
+    { "minute": "3–7",  "activity": "Model A–M slowly (front/side angle). Class mirrors. Emphasize palm orientation" },
+    { "minute": "7–10", "activity": "Model N–Z. Quick contrast for M vs N; Q vs G; dominant-hand rule" },
+    { "minute": "10–15","activity": "Partner drill: A spells name (2×), B gives one cue (palm/handshape). Swap" },
+    { "minute": "15–20","activity": "Tech words (pick 3): APP, CODE, EMAIL, DATA, AI. Chunk by syllables for flow" },
+    { "minute": "20–23","activity": "Quick check: 5 random letters call-and-response; fix high-frequency errors" },
+    { "minute": "23–25","activity": "Exit ticket: 10–15s video — first name + one tech word; upload to portfolio" }
+  ],
+
+  /* ---------- 4) Materials & Prep ---------- */
+  "materials": {
+    "visuals": ["Alphabet chart (print or slide)", "Side-angle GIFs (optional)"],
+    "tech": ["Device camera for 10–15s exit ticket", "Arcade mini-game access"],
+    "roomSetup": ["Pairs facing each other; sightlines to instructor’s face maintained"]
+  },
+  "prep": [
+    "Print or load alphabet slide; prepare 3–4 example tech words",
+    "Open the arcade links for fast transitions",
+    "Set up portfolio upload instructions (QR or LMS link)"
+  ],
+
+  /* ---------- 5) Differentiation & Accessibility ---------- */
+  "differentiation": {
+    "IEP_504": [
+      "Offer seated mirroring with side-angle demo",
+      "Provide handshape cue cards; allow slower pace and extra reps"
+    ],
+    "ELL": [
+      "Bridge to English letter names briefly, then fade",
+      "Use picture cards for tech words to reduce cognitive load"
+    ],
+    "Advanced": [
+      "Timed A–Z sprint with accuracy threshold",
+      "Spell two-word phrases; add common first/last names"
+    ],
+    "DeafBlind_futureReady": [
+      "Tactile demo (instructor/peer) for a few high-contrast letters",
+      "Verbalize handshape descriptions for aide training"
+    ],
+    "UDL": [
+      "Multiple exemplars (front/side), chunking, self-video feedback",
+      "Clear rule posters: Orientation > Speed; Face > Hands"
+    ]
+  },
+
+  /* ---------- 6) Teaching Notes by Lesson Section ---------- */
+  "teachingNotes": [
+    {
+      "section": "Alphabet A–Z",
+      "guidance": "Model compact signing at torso; avoid big arcs. Emphasize face visibility; remind students to watch your face, not your hands."
+    },
+    {
+      "section": "Chunking & Transitions",
+      "guidance": "Teach A–M, N–Z chunks. Coach micro-pauses between letters in names to reduce blur."
+    },
+    {
+      "section": "Feedback Protocol",
+      "guidance": "Glow + Grow: one praise + one precise cue (e.g., 'GOOD. PALM IN. AGAIN.'). Keep turns ≤20–30s."
+    }
+  ],
+
+  /* ---------- 7) Checks for Understanding ---------- */
+  "checksForUnderstanding": [
+    { "type": "signal", "prompt": "Show me M vs N silently", "lookFor": "Thumb placement clarity" },
+    { "type": "pair-reteach", "prompt": "Partners: fix one orientation error you see", "lookFor": "Specific, kind cue use" },
+    { "type": "cold-call", "prompt": "Spell the class code word", "lookFor": "Pacing + smooth transitions" }
+  ],
+
+  /* ---------- 8) Assessment Strategy (fast + fair) ---------- */
+  "assessment": {
+    "portfolioArtifact": "Exit Ticket: 10–15s video spelling first/last name + 1 tech word",
+    "rubric": [
+      {
+        "dimension": "Handshape Accuracy",
+        "beginning": "Frequent confusions (e.g., M/N, G/Q)",
+        "proficient": "Mostly accurate with occasional slips",
+        "mastery": "Consistent, precise handshapes across all letters"
+      },
+      {
+        "dimension": "Palm Orientation",
+        "beginning": "Often incorrect; rotates away from target",
+        "proficient": "Correct in most cases with quick self-corrections",
+        "mastery": "Stable, correct orientation throughout"
+      },
+      {
+        "dimension": "Fluency & Transitions",
+        "beginning": "Choppy; large movements; frequent resets",
+        "proficient": "Smooth in chunks; manageable pauses",
+        "mastery": "Smooth continuous flow; compact space; controlled pace"
+      }
+    ],
+    "fastGradeMode": "Score only Orientation, Handshape, Fluency (3-point scale). Mark reteach if 2+ dimensions = Beginning",
+    "reteachFlagRule": "If the same error repeats ≥3 times in one clip, schedule a 2-minute micro-reteach next session"
+  },
+
+  /* ---------- 9) Quiz Support (keys + common errors + instant fixes) ---------- */
+  "quizAnswerKey": {
+    "1": 1,
+    "2": 1,
+    "3": 0,
+    "4": 1,
+    "5": "NAME ME [fingerspell]",
+    "6": "Varies: name hardest letter(s) and one improvement plan"
+  },
+  "commonErrors": [
+    "M vs N thumb position",
+    "G vs Q orientation",
+    "S/E squeezed too tight causing tension",
+    "Speed > clarity (blurry transitions)"
+  ],
+  "instantReteachPrompts": [
+    "“PALM IN. AGAIN.”",
+    "“THUMB HERE (M), SMALLER.”",
+    "“SLOW + SMOOTH. FACE UP.”",
+    "“SIDE-ANGLE CHECK. TRY AGAIN.”"
+  ],
+
+  /* ---------- 10) Classroom Management Cues ---------- */
+  "classroomManagement": [
+    "Pairs face each other; both keep eyes on partner’s face",
+    "Rotate roles every 30–45 seconds (timer visible)",
+    "Equity move: Everyone records at least once before end"
+  ],
+
+  /* ---------- 11) Tech & Arcade Integration ---------- */
+  "techIntegration": {
+    "arcadeLinks": [
+      { "id": "alpha-blaster", "title": "Alphabet Blaster", "route": "/arcade/asl/alpha-blaster", "xp": 50, "purpose": "Letter recognition under gentle time pressure" },
+      { "id": "spell-rush", "title": "Fingerspell Rush", "route": "/arcade/asl/spell-rush", "xp": 50, "purpose": "Name/word fluency with accuracy gating" }
+    ],
+    "voiceflowPrompts": [
+      "“Billy, run a 90-second A–M speed drill and stop when accuracy < 90%.”",
+      "“Billy, quiz N–Z with side-angle tips when errors repeat.”"
+    ],
+    "exports": [
+      "CSV: rubric scores + notes",
+      "PDF: student progress slips for families",
+      "JSON: portfolio artifact metadata (timestamp, attempt count)"
+    ]
+  },
+
+  /* ---------- 12) Data, Reporting, & Grants ---------- */
+  "dataReporting": {
+    "metrics": ["Artifact completion rate", "Orientation accuracy", "Fluency score", "Self-assessment reflection submitted (Y/N)"],
+    "grantNotes": "This lesson supports Perkins V communication competency, ESSA Title IV well-rounded education, and IDEA accessibility via UDL scaffolds. Include rubric distributions and artifact counts in quarterly reports."
+  },
+
+  /* ---------- 13) Teacher Reflection (for improvement + audits) ---------- */
+  "teacherReflection": [
+    "Which letters produced the most orientation errors (M/N, G/Q)?",
+    "Who needs a 2-minute micro-reteach next class?",
+    "Did Glow+Grow feedback stay at 1 cue only? If not, adjust protocol."
+  ],
+
+  /* ---------- 14) Home Extension (optional) ---------- */
+  "homeExtension": [
+    "Record 20s: spell full name + two school words; aim for smooth transitions",
+    "Teach a family member 5 letters; reflect on which cue helped them most"
+  ],
+
+  /* ---------- 15) Compliance & Ethics ---------- */
+  "compliance": {
+    "ethicsLine": "Respect privacy in video artifacts; obtain consent per school policy; no public posting without permission.",
+    "a11yNote": "Provide side-angle examples and extra time as needed; prioritize clarity over speed."
+  }
+}

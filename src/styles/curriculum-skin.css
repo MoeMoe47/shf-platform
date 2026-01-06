@@ -1,0 +1,86 @@
+/* src/styles/curriculum-skin.css
+   Scope: ONLY Curriculum (safe — no other apps/themes touched)
+   Goal: Header/Sidebar = white; Main area = beige; Cards = white
+*/
+
+:root[data-app="curriculum"] {
+  /* palette */
+  --canvas: #ffffff;   /* pure white */
+  --beige:  #f5efe6;   /* soft beige body */
+  --text:   #0f172a;
+  --muted:  #6b7280;
+  --ring:   #e5e7eb;
+  --brand:  #ff4f00;   /* International Orange */
+  --shadow: 0 1px 2px rgba(0,0,0,.06), 0 6px 24px rgba(0,0,0,.05);
+  --radius: 12px;
+}
+
+/* -------------------------------------------------------
+   Curriculum is using AppLayout (Career v1 shell)
+   Classes: .app-shell .app-header .app-sidebar .app-main
+-------------------------------------------------------- */
+
+:root[data-app="curriculum"] .app-shell {
+  min-height: 100dvh;
+  background: var(--canvas);
+  color: var(--text);
+}
+
+/* Header: white */
+:root[data-app="curriculum"] .app-header {
+  background: var(--canvas);
+  color: var(--text);
+  border-bottom: 1px solid var(--ring);
+}
+
+/* Sidebar: white */
+:root[data-app="curriculum"] .app-sidebar {
+  background: var(--canvas);
+  color: var(--text);
+  border-right: 1px solid var(--ring);
+}
+
+/* Kill default bullets/dots in sidebar */
+:root[data-app="curriculum"] .app-sidebar ul,
+:root[data-app="curriculum"] .app-sidebar ol {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+:root[data-app="curriculum"] .app-sidebar li { margin: 0; }
+
+/* Main area: beige, full width */
+:root[data-app="curriculum"] .app-main {
+  background: var(--beige);
+  min-height: calc(100dvh - 64px);
+}
+
+/* Constrain the reading content inside main (fixes huge whitespace) */
+:root[data-app="curriculum"] .app-main > * {
+  width: 100%;
+  max-width: 1120px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 28px 24px 64px;
+}
+
+/* Cards: white */
+:root[data-app="curriculum"] .card,
+:root[data-app="curriculum"] .db-card,
+:root[data-app="curriculum"] .sh-card {
+  background: var(--canvas);
+  border: 1px solid var(--ring);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* Optional: subtle hover polish for links */
+:root[data-app="curriculum"] a:hover { color: var(--brand); }
+
+/* Mobile padding */
+@media (max-width: 640px) {
+  :root[data-app="curriculum"] .app-main > * {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}

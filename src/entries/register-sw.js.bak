@@ -1,0 +1,32 @@
+import { isEnabled } from "@/shared/appFlags.js";
+import { bootLessonEnhancer } from "@/shared/enhancers/lessonEnhancer.js";
+
+/** Resolve current app scope via dataset or window. */
+function getApp() {
+  try {
+    const el = document.querySelector("[data-app]") || document.body;
+    return el?.dataset?.app || window.__APP_SCOPE || "unknown";
+  } catch {
+    return "unknown";
+  }
+}
+const app = getApp();
+
+/** Only register a Service Worker in production builds (never in dev). */
+try {
+  if (!import.meta.env.DEV && isEnabled(app, "offline") && "serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      const sw = "/sw.js"; // must exist at site root in prod
+      navigator.serviceWorker.register(sw).catch(() => {});
+    });
+  }
+} catch { /* no-op */ }
+
+/** Start lesson enhancer (non-visual in Career). Wrapped to avoid hard crashes. */
+try {
+  bootLessonEnhancer({
+    app,
+    lessonId: window.__LESSON_ID__ || "lesson:unknown",
+    showProgressUI: isEnabled(app, "showProgressUI") // Career => false
+  });
+} catch { /* no-op */ }

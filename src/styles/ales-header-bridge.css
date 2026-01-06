@@ -1,0 +1,47 @@
+
+
+/* Map existing header + sidebar classes to Solutions tokens */
+
+/* Header */
+.theme-solutions .app-header{
+  position: sticky; top: 0; z-index: 40;
+  height: var(--header-h, 56px);
+  display: grid; grid-template-columns: 1fr auto; align-items: center;
+  padding: 8px 12px;
+  background: var(--header-bg);
+  color: var(--header-ink);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  backdrop-filter: saturate(1.05) blur(10px);
+}
+.theme-solutions .app-toggleBtn{
+  height: 32px; min-width: 36px; padding: 0 10px;
+  border-radius: 10px; border: 1px solid var(--ring);
+  background: transparent; color: var(--header-ink);
+  cursor: pointer; font-weight: 700;
+}
+.theme-solutions .app-toggleBtn:hover{ background: rgba(255,255,255,.06); }
+.theme-solutions .app-toggleBtn:focus-visible{ outline: 2px solid var(--brand); outline-offset: 2px; }
+
+/* Sidebar */
+.theme-solutions .sal-sidebar{
+  background: var(--sidebar-surface);
+  border-right: 1px solid var(--ring);
+  color: var(--ink);
+}
+.theme-solutions .sal-sb-head{ border-bottom: 1px solid var(--ring); }
+.theme-solutions .sal-sb-title{ color: var(--ink); }
+.theme-solutions .sal-sb-link{ color: var(--ink); border: 1px solid transparent; }
+.theme-solutions .sal-sb-link:hover{ background: var(--hover); }
+.theme-solutions .sal-sb-link.is-active{
+  background: var(--active);
+  border-color: var(--brand);
+  font-weight: 700;
+}
+
+/* Mobile overlay tint */
+.theme-solutions .sal-sb-overlay{ background: rgba(0,0,0,0.45); }
+
+/* Main */
+.theme-solutions .app-main{ color: var(--ink); }
+
+

@@ -1,0 +1,13 @@
+
+
+:root{ --panel:#121821; --ring:#2A3340; --text:#E8EDF2; --muted:#9AA6B2; --red:#FF2B2B; --green:#1CFF7A; --orange:#FF4F00; }
+.ticker-wrap{position:fixed; left:0; right:0; bottom:0; z-index:20; height:40px; display:block; overflow:hidden; background: color-mix(in srgb, transparent 80%, var(--panel) 20%); border-top:1px solid var(--ring); backdrop-filter: blur(6px);}
+.ticker-track{display:inline-flex; align-items:center; gap:24px; white-space:nowrap; min-width:200%; padding-inline:16px; animation:scroll-left 45s linear infinite;}
+.ticker-wrap.is-paused .ticker-track{animation-play-state:paused}
+.tick{display:inline-flex; align-items:center; gap:10px; padding:0 10px; height:40px; border-right:1px dashed color-mix(in srgb, var(--ring) 70%, transparent);}
+.tick .icon{font-weight:800; filter: drop-shadow(0 0 6px currentColor)} .tick .label{font-weight:600} .tick .meta{opacity:.9; font-style:normal; color:var(--muted)}
+.tick.gain{color:var(--green)} .tick.loss{color:var(--red)} .tick.ai{color:var(--orange)}
+@keyframes scroll-left{ from{ transform:translateX(0) } to{ transform:translateX(-50%) } }
+@media (max-width: 680px){ .ticker-track{ gap:16px; } .tick{ gap:8px; } }
+
+

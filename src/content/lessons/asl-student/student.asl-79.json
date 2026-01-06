@@ -1,0 +1,64 @@
+{
+  "id": "student.asl-79",
+  "title": "ASL 10.2 — Audience Q&A: Moderation, Clarify, Time-Box ⏱️",
+  "estMinutes": 35,
+  "objectives": [
+    "Moderate a Q&A using clear turn-taking and hand-offs",
+    "Request repetition/clarification and summarize accurately",
+    "Time-box questions and close Q&A smoothly"
+  ],
+  "vocab": [
+    { "term": "QUESTION / ASK-AUDIENCE", "def": "Index-curved hand moves toward signer/audience." },
+    { "term": "YOU-NEXT / HOLD / WAIT", "def": "Assign turns with index; flat hand for pause." },
+    { "term": "PLEASE REPEAT / AGAIN", "def": "C-hand near ear or palm-circle AGAIN." },
+    { "term": "UNDERSTAND? / CLARIFY", "def": "UNDERSTAND wiggle; brief paraphrase + brow position." },
+    { "term": "SUMMARY / REPEAT-BACK", "def": "Short gloss of question before answer." },
+    { "term": "TIME LIMIT / TWO-MORE / LAST", "def": "Show time, count-down fingers, final signal." },
+    { "term": "CLOSE / THANK-YOU", "def": "Button line to end segment." }
+  ],
+  "sections": [
+    {
+      "heading": "1) Flow Template",
+      "body": "Opener → take hands → pick **YOU-NEXT** → **SUMMARY** question → answer → brief follow-up → next. Keep eye gaze steady; show clear **HOLD/WAIT** when needed."
+    },
+    {
+      "heading": "2) Make Questions Audible (Visible)",
+      "body": "Always **repeat-back** the question in short gloss so all see it: **QUESTION: CLASS ACCESS HOW?** Then answer."
+    },
+    {
+      "heading": "3) Clarify Fast",
+      "body": "**PLEASE REPEAT** / **CLARIFY** with one keyword. If multi-part, list **1–2–3** and answer in that order.",
+      "microCheck": {
+        "q": "What increases audience comprehension most?",
+        "options": ["Answer immediately", "Repeat-back the question first", "Skip follow-ups", "Long digressions"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "4) Time-Boxing",
+      "body": "Signal limits visually: **TWO-MORE**, then **LAST**. Use a **button line**: **Q&A FINISH, THANK-YOU. NEXT, SOCIAL OUTSIDE.**"
+    },
+    {
+      "heading": "5) Partner Drill",
+      "body": "A moderates, B and C ask. Include: one **repeat-back**, one **clarify**, one **time-box** close. Rotate roles."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 10.2 — Q&A Moderation Quiz",
+    "items": [
+      { "type": "mcq", "q": "Best order for handling a question:", "options": ["Answer → Repeat", "Repeat-back → Answer", "Apologize → Answer", "Point → Move on"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Time-boxing signal:", "options": ["SMILE", "YOU-NEXT", "TWO-MORE / LAST", "PLEASE"], "answerIndex": 2 },
+      { "type": "short", "q": "Gloss a 2-line close for Q&A with a final ‘thank you’ and next action." },
+      { "type": "reflection", "prompt": "Which was hardest—repeat-back, clarifying, or closing on time? Why?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Record 20–30s moderating: pick a question, repeat-back, answer, then time-box with **LAST** and close.",
+  "summary": "You moderated Q&A using repeat-backs, concise clarifications, and visible time-boxing with a clean close.",
+  "nextSlug": "student.asl-80",
+  "games": [
+    { "id": "rb-snap", "title": "Repeat-Back Snap", "route": "/arcade/asl/rb-snap", "estMinutes": 5, "xp": 50, "outcomes": ["Crisp question summaries"] },
+    { "id": "time-tap", "title": "Time Tap", "route": "/arcade/asl/time-tap", "estMinutes": 5, "xp": 50, "outcomes": ["Visual time-boxing cues"] },
+    { "id": "mod-hand", "title": "Mod Hand", "route": "/arcade/asl/mod-hand", "estMinutes": 5, "xp": 50, "outcomes": ["YOU-NEXT / HOLD flow"] }
+  ]
+}

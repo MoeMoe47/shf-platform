@@ -1,0 +1,312 @@
+/* ============================================================
+   TOOL DASHBOARD STYLES
+   Silicon Heartland – Admin AI Tool Workflow
+   This file assumes global tokens + base styles already live in:
+   src/index.css  (sh-*, app-*, etc.)
+   ------------------------------------------------------------
+   Safe to import via:
+   @import "./styles/tool-dashboard.css";
+   at the top of index.css or another global stylesheet.
+============================================================ */
+
+/* --- Scope hint (optional: uncomment to tighten to Admin app) --- */
+/*
+html[data-app="admin"] body {
+  background: var(--beige);
+}
+*/
+
+/* ===================== Table Layout ========================= */
+
+/* Wrapper class used by ToolDashboard for the table grid */
+.td-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: 14px;
+  color: var(--ink, #111827);
+}
+
+/* Generic row */
+.td-row {
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line, #e5e7eb);
+  background: var(--card, #ffffff);
+}
+
+/* Header row */
+.td-row--head {
+  background: var(--ivory, #f9f5ec);
+  font-weight: 600;
+}
+
+/* Hover highlight on normal rows */
+.td-row:not(.td-row--head):hover {
+  background: linear-gradient(
+    to right,
+    rgba(255, 249, 242, 0.95),
+    rgba(255, 243, 224, 0.98)
+  );
+}
+
+/* Make sure table area scrolls smoothly on narrow screens */
+.td-scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Optional stripe accent for table sections */
+.td-sectionTitle {
+  font-weight: 600;
+  color: var(--ink, #111827);
+  margin: 0 0 4px;
+}
+
+.td-sectionHint {
+  font-size: 13px;
+  color: var(--ink-soft, #6b7280);
+}
+
+/* ===================== Chips & Badges ======================= */
+
+.td-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--ring, #e5e7eb);
+  background: var(--card, #ffffff);
+  font-size: 12px;
+  line-height: 1;
+  color: var(--ink, #111827);
+}
+
+.td-pill--core {
+  border-color: var(--accent, #ff4f00);
+  color: var(--accent, #ff4f00);
+}
+
+.td-pill--pilot {
+  border-style: dashed;
+}
+
+.td-pillDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--accent, #ff4f00);
+}
+
+/* ===================== Top Toolbar + Tabs =================== */
+
+.td-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.td-tabRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.td-tab {
+  border-radius: 999px;
+  border: 1px solid var(--ring, #e5e7eb);
+  padding: 6px 12px;
+  font-size: 13px;
+  background: var(--card, #ffffff);
+  color: var(--ink, #111827);
+  cursor: pointer;
+}
+
+.td-tab.is-active {
+  background: var(--accent, #ff4f00);
+  color: #ffffff;
+  border-color: var(--accent, #ff4f00);
+}
+
+/* ===================== Wizard Card Enhancements ============= */
+
+.td-wizard {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+  gap: 12px;
+}
+
+@media (max-width: 900px) {
+  .td-wizard {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Highlight for wizard step labels */
+.td-stepLabel {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft, #6b7280);
+  margin-bottom: 4px;
+}
+
+/* ===================== Drawers & Overlays =================== */
+/* (Note: kb-overlay + kb-card base styles also live in index.css;
+   these are safe enhancements if both files are loaded.) */
+
+.kb-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.kb-card {
+  background: var(--card, #ffffff);
+  border-radius: var(--radius, 14px);
+  border: 1px solid var(--ring, #e5e7eb);
+  padding: var(--pad, 14px);
+  max-width: 640px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: auto;
+  box-shadow: var(--shadow-md, 0 2px 10px rgba(0, 0, 0, 0.06));
+}
+
+/* Slight fade-in */
+@keyframes kb-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.kb-card {
+  animation: kb-fadeIn 0.2s ease-out;
+}
+
+/* ===================== Form Enhancements ==================== */
+
+.td-fieldRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+@media (max-width: 720px) {
+  .td-fieldRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+.td-fieldLabel {
+  font-size: 12px;
+  color: var(--ink-soft, #6b7280);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.td-input,
+.td-textarea,
+.td-select {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--ring, #e5e7eb);
+  padding: 8px 10px;
+  font-size: 14px;
+  background: var(--card, #ffffff);
+  color: var(--ink, #111827);
+}
+
+.td-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* ===================== Log Summary Pills ==================== */
+
+.td-logSummary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.td-logSummaryItem {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--ring, #e5e7eb);
+  background: var(--card, #ffffff);
+  color: var(--ink-soft, #6b7280);
+}
+
+/* ===================== Helper for PDF preview (future) ====== */
+
+.td-pdfPreview {
+  border-radius: 12px;
+  border: 1px dashed var(--ring, #e5e7eb);
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.5);
+  font-size: 13px;
+  color: var(--ink-soft, #6b7280);
+}
+
+.td-pdfPreviewTitle {
+  font-weight: 600;
+  color: var(--ink, #111827);
+  margin-bottom: 4px;
+}
+
+/* ===================== Utility Classes ====================== */
+
+.td-right {
+  text-align: right;
+}
+
+.td-mt-8 {
+  margin-top: 8px;
+}
+
+.td-mt-12 {
+  margin-top: 12px;
+}
+
+.td-mb-8 {
+  margin-bottom: 8px;
+}
+
+/* Compact hint text */
+.td-hint {
+  font-size: 12px;
+  color: var(--ink-soft, #6b7280);
+}
+
+/* On print, hide overlays and keep tables clean */
+@media print {
+  .kb-overlay {
+    display: none !important;
+  }
+
+  .td-table {
+    font-size: 12px;
+  }
+
+  .td-row {
+    padding: 6px 8px;
+  }
+}

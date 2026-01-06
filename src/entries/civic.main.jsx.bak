@@ -1,0 +1,93 @@
+// src/entries/civic.main.jsx
+
+/* ---- App ID (used for mount + theming) ---- */
+const APP = "civic";
+
+/* ---- Very-early scoping for CSS (no await) ---- */
+try {
+  const html = document.documentElement;
+  html.setAttribute("data-app", APP);
+  // Optional theme switch:
+  // html.setAttribute("data-theme", "foundation");
+} catch {}
+
+/* ---- Base CSS (keep imports at top; order matters) ---- */
+import "@/styles/emoji.css";
+import "@/styles/lesson-soft.css";
+import "@/styles/foundation.css";
+import "@/styles/global.css";
+import "@/styles/shell.css";
+import "@/styles/skeleton.css";
+import "@/styles/util-wash.css";
+import "@/styles/dashboard-shared.css";
+import "@/styles/kpi.css";
+import "@/styles/civic-shell.css";
+/* Layout guardrails LAST so nothing collapses on mobile/desktop */
+import "@/styles/app-shell.css";
+
+/* ---- React / Router ---- */
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { HashRouter } from "react-router-dom";
+
+/* ---- App scaffolding ---- */
+import RootProviders from "@/entries/RootProviders.jsx";
+import GlobalErrorBoundary from "@/components/GlobalErrorBoundary.jsx";
+import { RoleProvider } from "@/context/RoleCtx.jsx";
+import { setAppScope } from "@/utils/setAppScope.js";
+import CivicRoutes from "@/router/CivicRoutes.jsx";
+
+/* ---- Focus mode (UI + behavior) ---- */
+import "@/styles/FocusMode.css";
+import "@/shared/ui/focusMode.js";
+
+/* ---- Lesson helpers (UI mounted at root) ---- */
+import CoachDrawer from "@/components/civic/CoachDrawer.jsx";
+
+/* ---- Bilingual + Reading-level providers ---- */
+import LocaleProvider from "@/context/LocaleProvider.jsx";
+import ReadingLevelProvider from "@/context/ReadingLevelProvider.jsx";
+
+/* ---- Optional dev mocks (no top-level await) ---- */
+if (import.meta.env.DEV) {
+  // fire-and-forget import so there’s no TLA
+  import("@/dev/mockApi.js");
+}
+
+/* ---- App scope (env signal) ---- */
+setAppScope(APP);
+
+/* ---- Robust mount helper (works with #root or [data-app="civic"]) ---- */
+function getMount() {
+  let el =
+    document.getElementById("root") ||
+    document.querySelector(`[data-app="${APP}"]`);
+  if (!el) {
+    el = document.createElement("div");
+    el.id = "root";
+    el.dataset.app = APP;
+    document.body.appendChild(el);
+  }
+  return el;
+}
+
+/* ---- Mount ---- */
+createRoot(getMount()).render(
+  <React.StrictMode>
+    <GlobalErrorBoundary>
+      <LocaleProvider>
+        <ReadingLevelProvider>
+          <RootProviders appScope={APP}>
+            <RoleProvider initial="admin">
+              <HashRouter>
+                {/* Global coach panel lives at the shell level */}
+                <CoachDrawer />
+                <CivicRoutes />
+              </HashRouter>
+            </RoleProvider>
+          </RootProviders>
+        </ReadingLevelProvider>
+      </LocaleProvider>
+    </GlobalErrorBoundary>
+  </React.StrictMode>
+);

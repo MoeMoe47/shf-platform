@@ -1,0 +1,20 @@
+// src/layouts/CurriculumLayout.jsx (unified)
+import React from "react";
+import { Outlet, useParams } from "react-router-dom";
+import AppShellLayout from "@/layouts/AppShellLayout.jsx";
+import CurriculumSidebar from "@/components/CurriculumSidebar.jsx";
+
+export default function CurriculumLayout() {
+  const params = useParams();
+  const cur = (params.curriculum || params.cur || "asl").toUpperCase();
+  return (
+    <AppShellLayout
+      app="curriculum"
+      Sidebar={CurriculumSidebar}
+      title={`Lessons · ${cur}`}
+      headerRight={null}
+    >
+      <Outlet />
+    </AppShellLayout>
+  );
+}

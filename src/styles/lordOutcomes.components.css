@@ -1,0 +1,70 @@
+/* =========================================================
+   LORD OF OUTCOMES — COMPONENTS
+   ========================================================= */
+
+.looHero{
+  padding: 26px 0 10px;
+}
+
+.looHeroTitle{
+  font-size: 54px;
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  margin: 0 0 10px;
+}
+
+.looHeroSubtitle{
+  margin: 0 0 22px;
+  color: rgba(255,255,255,0.66);
+  max-width: 72ch;
+}
+
+.looTileGrid{
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 18px;
+  margin-top: 14px;
+}
+
+.looTileSlot{
+  grid-column: span 4;
+}
+
+.looMetricTile{
+  min-height: 92px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.looMetricLabel{
+  color: rgba(255,255,255,0.86);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.looMetricValue{
+  margin-top: 8px;
+  font-size: 34px;
+  letter-spacing: -0.02em;
+}
+
+.looMetricHint{
+  margin-top: 8px;
+  color: rgba(255,255,255,0.56);
+  font-size: 12px;
+}
+
+.looMetricTile.is-right{
+  text-align: right;
+}
+
+@media (max-width: 980px){
+  .looHeroTitle{ font-size: 44px; }
+  .looTileSlot{ grid-column: span 6; }
+}
+
+@media (max-width: 640px){
+  .looHeroTitle{ font-size: 38px; }
+  .looTileSlot{ grid-column: span 12; }
+}

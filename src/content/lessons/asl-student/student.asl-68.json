@@ -1,0 +1,68 @@
+{
+  "id": "asl-68",
+  "title": "ASL 8.5 — Storytelling: Classifiers in Action Scenes 🚴‍♀️🚗🌧️",
+  "estMinutes": 40,
+  "objectives": [
+    "Use common classifier handshapes (CL:1, CL:3, CL:V, CL:B) to show movement and placement",
+    "Layer classifiers with time/place anchors and clear transitions",
+    "Maintain role clarity: narrator-neutral vs. character RS while classifiers animate the scene"
+  ],
+  "vocab": [
+    { "term": "CL:1 (PERSON/WALKER)", "def": "Single index to show a person moving/standing." },
+    { "term": "CL:3 (VEHICLE)", "def": "3-hand to show cars/buses/bikes movement/turns/stops." },
+    { "term": "CL:V (LEGS/SMALL-ANIMAL)", "def": "Two fingers for falling, sitting, landing." },
+    { "term": "CL:B (FLAT-SURFACE)", "def": "Palm to indicate floor/table/road/wall; supports contact." },
+    { "term": "PATH/CONTACT", "def": "Arc/line showing motion; bounce/tap to show impact." },
+    { "term": "TRANSFER TO RS", "def": "Switch from neutral narrator to character POV briefly, then return." }
+  ],
+  "sections": [
+    {
+      "heading": "1) Warm-Up: Place + Path",
+      "media": { "src": "/media/asl/unit-8/cl-place-path.png", "alt": "Classifier path arrows over a road surface", "caption": "Anchor the surface first, then move on it." },
+      "body": "Set **CL:B ROAD** (flat surface). Move **CL:3 CAR** straight, turn-left, stop. Then add **CL:1 PERSON** crossing. Keep each path **clean + single idea**."
+    },
+    {
+      "heading": "2) Model: Short Action Beat",
+      "media": { "src": "/media/asl/unit-8/cl-action.mp4", "alt": "Narrator shows car turning, biker swerving", "caption": "Neutral narrator → RS → neutral return" },
+      "body": "Example gloss:\n• **YESTERDAY AFTERNOON STREET (CL:B). CAR (CL:3) DRIVE, TURN-LEFT, STOP.**  \n• **BIKE (CL:3-small) SPEED, SWERVE (avoid).**  \n• **RS→BIKER:** **WORRY FACE.** (neutral)  \n• **SAFE FINISH.**"
+    },
+    {
+      "heading": "3) Technique: Clean Layers",
+      "body": "Order for clarity: **Surface → Object → Path → Contact/Result**. Avoid mixing many paths at once. Use **tiny pauses** between beats. Return to **neutral narrator** before RS."
+    },
+    {
+      "heading": "4) Partner Drill: 3 Beats, 2 Classifiers",
+      "media": { "src": "/media/asl/unit-8/cl-drill.gif", "alt": "Two signers practicing sequential action beats", "caption": "Beat1 → Beat2 → Beat3" },
+      "body": "A tells three quick beats using at least **two classifiers** (e.g., CL:3 vehicle + CL:1 person). B identifies each path and result. Swap roles.",
+      "microCheck": {
+        "q": "What’s the clearest order?",
+        "options": ["Object → Surface → Path → Result", "Surface → Object → Path → Result", "Random", "Result first"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "5) Mini-Showcase",
+      "body": "Record **30–40s**: build an action scene with **one surface**, **two moving things (two classifier types)**, and **one contact/near-miss**. Include **one RS** line and return to neutral.",
+      "teacherNote": "Assess for clean surfaces, uncluttered paths, and obvious result (stop, bump, avoid)."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 8.5 — Classifiers in Action Scenes",
+    "items": [
+      { "type": "mcq", "q": "Which classifier represents a vehicle best?", "options": ["CL:1", "CL:3", "CL:V", "CL:B"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Best sequence for clarity:", "options": ["Surface → Object → Path → Result", "Object → Result → Path → Surface", "Random", "Result only"], "answerIndex": 0 },
+      { "type": "mcq", "q": "When should you return to neutral narrator?", "options": ["Never", "Before/after each RS line", "Only at the end", "Whenever tired"], "answerIndex": 1 },
+      { "type": "short", "q": "Gloss a two-beat action: car turns to avoid a walker (use CL:3 and CL:1 + a surface)." },
+      { "type": "reflection", "prompt": "Which part was hardest—clean paths, contact markers, or RS timing? What’s your plan to improve?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Upload your 30–40s classifier scene. Caption which classifiers you used and where the contact/near-miss occurred.",
+  "summary": "You used surfaces and common classifiers to animate action scenes, kept role clarity with neutral returns, and showed results (stop/avoid/impact) cleanly.",
+  "nextSlug": "asl-69",
+  "games": [
+    { "id": "cl-surface", "title": "Surface First", "route": "/arcade/asl/cl-surface", "estMinutes": 5, "xp": 50, "outcomes": ["Anchor surfaces before motion"] },
+    { "id": "path-clean", "title": "Path Clean", "route": "/arcade/asl/path-clean", "estMinutes": 5, "xp": 50, "outcomes": ["One clear path per beat"] },
+    { "id": "rs-toggle", "title": "RS Toggle", "route": "/arcade/asl/rs-toggle", "estMinutes": 5, "xp": 50, "outcomes": ["Neutral ↔ RS timing control"] }
+  ]
+}

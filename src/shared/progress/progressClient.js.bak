@@ -1,0 +1,31 @@
+import { appendEvent } from "@/shared/ledger/ledgerClient.js";
+
+const PKEY = "progress:records:v1";
+
+export function markLessonComplete({ actorId, curriculum, slug }) {
+  const rec = { actorId, curriculum, slug, ts: new Date().toISOString() };
+  const all = readAll();
+  all.push(rec);
+  saveAll(all);
+
+  appendEvent({
+    actorId,
+    app: "curriculum",
+    type: "progress",
+    amount: 0,
+    tags: ["lesson.completed", curriculum],
+    meta: { curriculum, slug },
+  });
+  return rec;
+}
+
+export function getProgress(actorId) {
+  return readAll().filter(r => r.actorId === actorId);
+}
+
+function readAll(){
+  try { return JSON.parse(localStorage.getItem(PKEY) || "[]"); } catch { return []; }
+}
+function saveAll(all){
+  try { localStorage.setItem(PKEY, JSON.stringify(all)); } catch {}
+}

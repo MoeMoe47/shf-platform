@@ -1,0 +1,5 @@
+:root{ --io:#FF4F00; --ink:#0f172a; --muted:#6b7280; }
+.int-apply{ display:flex; gap:10px; flex-wrap:wrap; }
+.int-btn{ padding:10px 14px; border-radius:12px; font-weight:800; cursor:pointer; border:0; background:#111827; color:#fff; }
+.int-btn-io{ background:var(--io); color:#fff; }
+.int-btn-outline{ background:transparent; color:var(--io); border:2px solid var(--io); }

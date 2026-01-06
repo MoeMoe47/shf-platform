@@ -1,0 +1,22 @@
+
+
+/* src/styles/no-sidebar.css
+   Optional mode: hide the left rail when .no-sidebar is on the root.
+   Safe defaults: does nothing unless the class is present.
+*/
+
+.app-root.no-sidebar { --sidebar-w: 0px; }
+
+.app-root.no-sidebar .app-sidebar {
+  display: none !important;
+}
+
+.app-root.no-sidebar .app-body {
+  grid-template-columns: 1fr; /* ensure layout stays 1-col when sidebar is hidden */
+}
+
+@media print {
+  .app-root.no-sidebar .app-main { padding: 0 !important; }
+}
+
+

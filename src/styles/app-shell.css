@@ -1,0 +1,12 @@
+/* minimal, non-opinionated layout baseline */
+html, body { height: 100%; margin: 0; }
+#root, [data-app] { min-height: 100dvh; display: flex; flex-direction: column; }
+
+/* flex children don’t collapse */
+main, .app-main, .car-main, .civ-main, .sales-main, .treasury-main { min-height: 0; }
+
+/* mobile 100vh safety */
+:root { --vh: 1dvh; }
+@supports not (height: 100dvh) { :root { --vh: 1vh; } }
+#root, [data-app] { min-height: calc(var(--vh) * 100); }
+

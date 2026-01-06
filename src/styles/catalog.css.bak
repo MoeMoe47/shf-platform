@@ -1,0 +1,116 @@
+:root {
+  /* International Orange (Aerospace) */
+  --accent: #FF4F00;
+  --accent-ink: #fff;
+  --ink: #0B1320;
+  --muted: #516070;
+  --card: #ffffff;
+  --bg: #f5f6f7;
+  --shadow: 0 12px 30px rgba(0,0,0,.08);
+  --r-lg: 18px;
+}
+
+/* Page wrap */
+.catalog {
+  background: var(--bg);
+  min-height: 100vh;
+}
+
+/* --- HERO --------------------------------------------------------------- */
+.cat-hero {
+  position: relative;
+  min-height: 56vh;
+  display: grid;
+  place-items: center start;
+  padding: clamp(16px, 4vw, 40px);
+  color: #fff;
+  overflow: hidden;
+}
+
+.cat-hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: center/cover no-repeat var(--hero-url, none);
+  filter: saturate(1.05) contrast(1.05) brightness(.88);
+  transform: scale(1.02);
+}
+
+.cat-hero::after {
+  /* subtle bottom fog for readable text */
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom,
+    rgba(0,0,0,.25) 0%,
+    rgba(0,0,0,.25) 40%,
+    rgba(0,0,0,.55) 100%);
+}
+
+.cat-hero .hero-inner {
+  position: relative; z-index: 1; max-width: 1100px;
+}
+.cat-hero h1 {
+  font-size: clamp(36px, 6vw, 64px);
+  line-height: 1.03;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 4px 0 12px 0;
+}
+.cat-hero p {
+  font-size: clamp(15px, 2.2vw, 20px);
+  opacity: .92;
+}
+
+/* --- FILTER PILLS ------------------------------------------------------ */
+.cat-pills {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  margin-top: -32px; padding: 0 clamp(16px,4vw,40px);
+}
+.cat-pill {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 999px;
+  padding: 8px 14px; font-weight: 700;
+  color: var(--ink);
+  box-shadow: 0 6px 18px rgba(0,0,0,.06);
+}
+.cat-pill.is-active {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: transparent;
+}
+
+/* --- GRID -------------------------------------------------------------- */
+.cat-grid {
+  max-width: 1180px;
+  margin: 24px auto;
+  padding: 0 clamp(16px, 4vw, 40px);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+  gap: 16px;
+}
+.cat-card {
+  background: var(--card);
+  border: 1px solid rgba(0,0,0,.06);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+  padding: 18px;
+  display: grid; gap: 12px;
+}
+.cat-card h3 { margin: 0; font-size: 18px; letter-spacing: -.01em; }
+.cat-meta { color: var(--muted); font-size: 13px; }
+
+/* progress bar */
+.cat-bar { height: 6px; background: #edf1f5; border-radius: 999px; overflow: hidden; }
+.cat-bar > i { display: block; height: 100%; background: var(--accent); width: var(--w,0%); }
+
+/* primary buttons -> International Orange */
+.btn {
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:8px; font-weight:800; border-radius:12px; padding:10px 16px;
+  border: 2px solid transparent; cursor: pointer; text-decoration:none;
+}
+.btn-primary { background: var(--accent); color: var(--accent-ink); }
+.btn-primary:hover { filter: brightness(.96); }
+.btn-ghost   { background: transparent; color: var(--accent); border-color: var(--accent); }
+.btn-ghost:hover { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+

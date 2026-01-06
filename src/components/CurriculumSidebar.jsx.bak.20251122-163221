@@ -1,0 +1,80 @@
+// src/components/CurriculumSidebar.jsx
+import React, { useMemo, useState } from "react";
+import AppLink from "@/components/nav/AppLink.jsx";
+import { NavLink } from "react-router-dom";
+import { inApp, href, INSTRUCTOR, MASTER } from "@/router/paths.js";
+
+const linkClass = ({ isActive }) => "cur-link" + (isActive ? " is-active" : "");
+
+// Small collapsible section (keeps labels hidden when collapsed)
+function Section({ title, emoji, children, defaultOpen = true }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <section className={"cur-navSection" + (open ? " is-open" : "")}>
+      <button
+        className="cur-navTitle cur-navTitleBtn"
+        aria-expanded={open}
+        onClick={() => setOpen(v => !v)}
+        title={title}
+        type="button"
+      >
+        <span className="cur-emoji" aria-hidden>{emoji}</span>
+        <span className="cur-label">{title}</span>
+        <span className="cur-chevron" aria-hidden>{open ? "▾" : "▸"}</span>
+      </button>
+      {open && <ul className="cur-list">{children}</ul>}
+    </section>
+  );
+}
+
+/**
+ * ChatGPT-like sidebar:
+ * - When collapsed, only emojis show (labels hidden via CSS in curriculum-sidebar.css)
+ * - Uses inApp.curriculum(cur) to generate paths that match CurriculumRoutes
+ * - Cross-app links use plain anchors built with href.*
+ */
+export default function CurriculumSidebar({
+  cur = "asl",
+  collapsed = false,
+  onNavigate = () => {},
+  P, // optional precomputed builders from layout
+}) {
+  const paths = P || useMemo(() => inApp.curriculum(cur), [cur]);
+
+  return (
+    <nav className="cur-nav" aria-label="Curriculum">
+      {/* Brand / wordmark */}
+      <div className="cur-brand">
+        <span className="cur-emoji cur-brandEmoji" aria-hidden>📚</span>
+        <span className="cur-label cur-wordmark">Curriculum</span>
+      </div>
+
+      {/* Overview (ALL real in-app routes) */}
+      <Section title="Overview" emoji="🏠" defaultOpen>
+        <li><AppLink end to={paths.dashboard()} className={linkClass} onClick={onNavigate} title="Dashboard">📊<span className="cur-label">Dashboard</span></AppLink></li>
+        <li><AppLink to={paths.calendar()}   className={linkClass} onClick={onNavigate} title="Calendar">🗓️<span className="cur-label">Calendar</span></AppLink></li>
+        <li><AppLink to={paths.portfolio()}  className={linkClass} onClick={onNavigate} title="Portfolio">🧰<span className="cur-label">Portfolio</span></AppLink></li>
+      </Section>
+
+      {/* Learning (ALL real in-app routes) */}
+      <Section title="Learning" emoji="🎓">
+        <li><AppLink to={paths.lessons()}     className={linkClass} onClick={onNavigate} title="Lessons">📒<span className="cur-label">Lessons</span></AppLink></li>
+        <li><AppLink to={paths.assignments()} className={linkClass} onClick={onNavigate} title="Assignments">✅<span className="cur-label">Assignments</span></AppLink></li>
+        <li><AppLink to={paths.help()}        className={linkClass} onClick={onNavigate} title="Help">❓<span className="cur-label">Help</span></AppLink></li>
+      </Section>
+
+      {/* Instructor / Master tools (only if you have those routes; otherwise keep for later) */}
+      <Section title="Instructor Tools" emoji="🛠️">
+        <li><AppLink to={INSTRUCTOR(cur)} className={linkClass} onClick={onNavigate} title="Instructor">👩‍🏫<span className="cur-label">Instructor</span></AppLink></li>
+        <li><AppLink to={MASTER(cur)}     className={linkClass} onClick={onNavigate} title="Master View">🧭<span className="cur-label">Master View</span></AppLink></li>
+      </Section>
+
+      {/* Cross-app quick links — these are anchors into other apps */}
+      <Section title="Cross-App" emoji="🧭">
+        <li><a className="cur-link" href={href.career("/dashboard")} onClick={onNavigate} title="Career">💼<span className="cur-label">Career</span></a></li>
+        <li><a className="cur-link" href={href.arcade("/dashboard")} onClick={onNavigate} title="Arcade">🎯<span className="cur-label">Arcade</span></a></li>
+        <li><a className="cur-link" href={href.store("/")}           onClick={onNavigate} title="Store">🛍️<span className="cur-label">Store</span></a></li>
+      </Section>
+    </nav>
+  );
+}

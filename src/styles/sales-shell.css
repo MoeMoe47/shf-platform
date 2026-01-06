@@ -1,0 +1,181 @@
+
+
+.crb-root{display:flex;flex-direction:column;min-height:100vh}
+.crb-header{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid #eee;background:#fff;position:sticky;top:0;z-index:10}
+.crb-body{display:grid;grid-template-columns:240px 1fr;gap:0;min-height:0;flex:1}
+.crb-sidebar{border-right:1px solid #eee;padding:12px;background:#fafafa}
+.crb-main{padding:16px}
+.crb-rail{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.crb-link{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:10px;text-decoration:none;color:#111;background:transparent}
+.crb-link.is-active{background:#eef6ff}
+
+/* sticky table header for long lists */
+.table thead th.sticky { position: sticky; top: 0; background: #fff; z-index: 1; }
+
+/* subtle card lift */
+.card { box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04); border-radius: 12px; }
+.card--pad { padding: 14px; }
+
+/* inputs feel crisp */
+.input:focus { outline: none; box-shadow: 0 0 0 3px rgba(16,185,129,.15); border-color: #10b981; }
+
+@media print {
+  .print-hide { display: none !important; }
+  .card { box-shadow: none !important; border: 1px solid #ddd; }
+  .crb-sidebar, .crb-header, nav.crb-nav { display: none !important; }
+  .crb-body { grid-template-columns: 1fr !important; }
+}
+
+/* --- tables + badges + input --- */
+.table th, .table td { padding: 8px 10px; border-bottom: 1px solid var(--wash, #eee); }
+.badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; background: var(--wash, #eee); }
+.input { padding: 6px 8px; border: 1px solid #ddd; border-radius: 8px; }
+
+/* --- optional: rail polish (keep if you want it) --- */
+.crb-link.is-active{background:#eef6ff}
+.table table { width:100%; border-collapse:collapse; }
+.table th, .table td { padding:8px 10px; border-bottom:1px solid var(--wash-200,#e5e7eb); text-align:left; }
+
+/* --- tables + badges + input --- */
+.table th, .table td { padding: 8px 10px; border-bottom: 1px solid var(--wash, #eee); }
+.badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; background: var(--wash, #eee); }
+.input { padding: 6px 8px; border: 1px solid #ddd; border-radius: 8px; }
+
+/* --- optional: rail polish (keep if you want it) --- */
+.crb-link.is-active{background:#eef6ff}
+.table table { width:100%; border-collapse:collapse; }
+.table th, .table td { padding:8px 10px; border-bottom:1px solid var(--wash-200,#e5e7eb); text-align:left; }
+
+/* skeleton shimmer */
+.skel{position:relative;overflow:hidden;background:linear-gradient(90deg,#eee 20%,#f7f7f7 40%,#eee 60%);background-size:200% 100%;animation:skel 1.2s infinite}
+@keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+.soft { padding:10px; border-radius:12px; background:var(--surface-2,#f7f7f9); }
+
+/* --- Command Palette --- */
+.cmdp-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.35);display:grid;place-items:center;z-index:80}
+.cmdp{width:min(720px,92vw);background:#fff;border-radius:14px;box-shadow:0 18px 48px rgba(0,0,0,.25);overflow:hidden}
+.cmdp-h{display:flex;gap:8px;align-items:center;padding:10px 12px;border-bottom:1px solid #eee}
+.cmdp-input{flex:1;padding:10px 12px;border:1px solid #e5e7eb;border-radius:10px;font-size:15px}
+.cmdp-x{border:0;background:#f3f4f6;border-radius:8px;padding:8px 10px;cursor:pointer}
+.cmdp-list{list-style:none;margin:0;padding:6px 8px;max-height:60vh;overflow:auto}
+.cmdp-item{width:100%;display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;border:0;background:transparent;cursor:pointer}
+.cmdp-item:hover{background:#f7f7f9}
+.cmdp-ic{width:22px;text-align:center}
+.cmdp-label{flex:1;text-align:left}
+.cmdp-kbd{background:#f3f4f6;border:1px solid #e5e7eb;border-bottom-color:#d1d5db;border-radius:6px;padding:2px 6px;font-size:12px}
+.cmdp-empty{padding:16px;color:#6b7280}
+
+/* ===== Responsive / Mobile Excellence ===== */
+:root{ --vh: 1vh; } /* set by JS for iOS 100vh */
+@media (max-width: 1200px){
+  .crb-body{ grid-template-columns: 220px 1fr; }
+}
+@media (max-width: 900px){
+  .crb-body{ grid-template-columns: 1fr; }
+  .crb-sidebar{ position: fixed; inset: 0 auto 60px 0; width: 280px; transform: translateX(-100%); transition: transform .25s ease; z-index: 30; background:#fff; box-shadow: 0 20px 50px rgba(0,0,0,.18); }
+  html[data-rail="expanded"] .crb-sidebar{ transform: translateX(0); }
+  .crb-main{ padding: 12px; padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
+  .crb-header{ position: sticky; top: 0; }
+
+  /* Mini hamburger in header (reuse .crb-railToggle styles if present) */
+  .crb-railToggleWrap{ display:none; }
+  .btn-hamb{ border:0; background:transparent; font-size:24px; padding:8px; }
+
+  /* Bottom Tab Bar */
+  .mobile-tabs{
+    position: fixed;
+    left: 0; right: 0;
+    bottom: 0;
+    padding: calc(8px + env(safe-area-inset-bottom,0px)) 8px 8px;
+    background: #fff;
+    border-top: 1px solid #e5e7eb;
+    display: grid; grid-template-columns: repeat(5,1fr);
+    gap: 6px; z-index: 40;
+  }
+  .mtab{
+    display: grid; gap: 4px; place-items: center;
+    padding: 8px 4px; border-radius: 10px; text-decoration: none; color:#374151;
+  }
+  .mtab.is-active{ background:#eef6ff; color:#111; }
+  .mtab-ic{ font-size: 18px; line-height: 1; }
+  .mtab-txt{ font-size: 11px; }
+}
+
+/* Tap target comfort */
+@media (pointer: coarse){
+  .crb-link{ padding: 12px 12px; }
+  button, .btn, .crb-link { min-height: 44px; }
+}
+
+/* Large desktop polish */
+@media (min-width: 1600px){
+  .crb-main{ padding: 24px; }
+  .card--pad{ padding: 20px; }
+}
+
+/* Safe reduced motion (disables pulse animation if user prefers) */
+@media (prefers-reduced-motion: reduce){
+  .pulse-dot{ animation: none !important; }
+}
+
+/* Dark mode support (basic) */
+@media (prefers-color-scheme: dark){
+  :root{ color-scheme: dark; }
+  body, .crb-main, .crb-sidebar, .card{ background:#0b0b0d; color:#e5e7eb; }
+  .crb-link.is-active{ background:#0f172a; }
+  .mobile-tabs{ background:#0b0b0d; border-top-color:#1f2937; }
+  .mtab.is-active{ background:#0f172a; }
+}
+
+/* Horizontal scroll wrappers for overflow content */
+.h-scroll{ overflow:auto; -webkit-overflow-scrolling: touch; }
+.h-scroll > table{ min-width: 640px; }
+
+/* --- Off-canvas rail control --- */
+@media (max-width: 900px){
+  .crb-sidebar{
+    position: fixed; inset: 0 auto 60px 0; width: 280px;
+    transform: translateX(-100%); transition: transform .25s ease;
+    z-index: 30; background:#fff; box-shadow: 0 20px 50px rgba(0,0,0,.18);
+  }
+  html[data-rail="expanded"] .crb-sidebar{ transform: translateX(0); }
+
+  .offcanvas-backdrop{
+    position: fixed; inset: 0; background: rgba(0,0,0,.35);
+    z-index: 25; display: none;
+  }
+  html[data-rail="expanded"] .offcanvas-backdrop{ display: block; }
+
+  .btn-hamb{ border:0; background:transparent; font-size:24px; padding:8px; }
+}
+
+/* --- Collapsed rail behavior --- */
+html[data-rail="collapsed"] .crb-body{ grid-template-columns: 64px 1fr; }
+html[data-rail="collapsed"] .crb-sidebar{ width:64px; padding:12px 8px; }
+html[data-rail="collapsed"] .crb-link{ justify-content:center; gap:8px; }
+html[data-rail="collapsed"] .crb-linkLabel{ display:none; }
+html[data-rail="collapsed"] .crb-navTitle{ display:none; }
+html[data-rail="collapsed"] .crb-railToggleWrap{ justify-content:center; }
+html[data-rail="collapsed"] .crb-railToggle .lbl-text{ display:none; }
+
+/* ensure the toggle is always clickable */
+.crb-railToggleWrap{ display:flex; padding:10px 0; }
+.crb-railToggle{ position:relative; z-index:2; border:0; background:#f3f4f6; border-radius:10px; padding:8px 10px; cursor:pointer; }
+.crb-railToggle:hover{ filter:brightness(0.98); }
+
+/* --- Collapsed rail using app root attribute --- */
+.crb-root[data-rail="collapsed"] .crb-body{ grid-template-columns: 64px 1fr; }
+.crb-root[data-rail="collapsed"] .crb-sidebar{ width:64px; padding:12px 8px; }
+.crb-root[data-rail="collapsed"] .crb-link{ justify-content:center; gap:8px; }
+.crb-root[data-rail="collapsed"] .crb-linkLabel{ display:none; }
+.crb-root[data-rail="collapsed"] .crb-navTitle{ display:none; }
+.crb-root[data-rail="collapsed"] .crb-railToggleWrap{ justify-content:center; }
+.crb-root[data-rail="collapsed"] .crb-railToggle .lbl-text{ display:none; }
+
+/* Ensure toggle always clickable */
+.crb-railToggleWrap{ display:flex; padding:10px 0; }
+.crb-railToggle{ position:relative; z-index:2; border:0; background:#f3f4f6; border-radius:10px; padding:8px 10px; cursor:pointer; }
+.crb-railToggle:hover{ filter:brightness(0.98); }
+
+

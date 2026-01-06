@@ -1,0 +1,253 @@
+/* ===============================
+   SHF Tesla–Apple System Theme
+   - Modern typography (SF/Inter)
+   - International Orange accents
+   - Glass cards + soft shadows
+   - Auto dark mode + motion polish
+=================================*/
+:root {
+  /* Color tokens */
+  --accent: #FF4F00;            /* International Orange */
+  --bg: #0b0d10;                /* canvas */
+  --panel: #ffffff;
+  --text: #0b0d10;
+  --muted: #64748b;
+  --hairline: #e2e8f0;
+  --shadow: 0 10px 30px rgba(2, 6, 23, .10);
+  --ring: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+
+  /* Radii, blur, spacing */
+  --r-lg: 16px;
+  --r-xl: 20px;
+  --blur: 14px;
+  --pad: 16px;
+
+  /* Typography scale */
+  --font: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+          "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial, "Apple Color Emoji",
+          "Segoe UI Emoji", "Segoe UI Symbol";
+  --h1: 34px;
+  --h2: 22px;
+  --h3: 18px;
+  --lead: 15px;
+  --body: 14px;
+}
+
+/* Auto dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0a0b0e;
+    --panel: #0f141a;
+    --text: #e5e7eb;
+    --muted: #94a3b8;
+    --hairline: #1f2937;
+    --shadow: 0 10px 30px rgba(0,0,0,.45);
+  }
+}
+
+/* Canvas */
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background:
+    radial-gradient(1200px 800px at 80% -10%, rgba(255,79,0,.06), transparent 60%),
+    radial-gradient(800px 600px at 0% 100%, rgba(255,79,0,.05), transparent 60%),
+    linear-gradient(180deg, color-mix(in srgb, var(--bg) 90%, #111 10%), var(--bg));
+  color: var(--text);
+  font: 400 var(--body)/1.55 var(--font);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Headings */
+h1 { font-weight: 800; font-size: var(--h1); letter-spacing: -0.02em; margin: 0 0 10px; }
+h2 { font-weight: 800; font-size: var(--h2); letter-spacing: -0.01em; margin: 0 0 8px; }
+h3 { font-weight: 700; font-size: var(--h3); margin: 0 0 6px; }
+.lead { font-size: var(--lead); color: var(--muted); }
+
+/* Links */
+a { color: var(--accent); text-decoration: none; }
+a:hover { filter: brightness(1.05); }
+
+/* Buttons */
+.btn, .btn-orange {
+  -webkit-tap-highlight-color: transparent;
+  appearance: none;
+  background: var(--accent);
+  color: #fff;
+  border: 0;
+  padding: 10px 14px;
+  border-radius: var(--r-lg);
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transform: translateZ(0);
+  transition: transform .06s ease, filter .15s ease, box-shadow .15s ease;
+}
+.btn:hover, .btn-orange:hover { filter: brightness(.96); }
+.btn:active, .btn-orange:active { transform: translateY(1px); }
+.btn.ghost {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--accent);
+}
+
+/* Cards (glass + soft shadow) */
+.card, .sh-card {
+  background: color-mix(in srgb, var(--panel) 90%, transparent);
+  backdrop-filter: blur(var(--blur));
+  border-radius: var(--r-xl);
+  padding: calc(var(--pad) + 4px);
+  box-shadow: var(--shadow);
+  border: 1px solid color-mix(in srgb, var(--hairline) 70%, transparent);
+}
+
+/* Tables */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: color-mix(in srgb, var(--panel) 90%, transparent);
+  border: 1px solid color-mix(in srgb, var(--hairline) 70%, transparent);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+}
+.table th, .table td { padding: 12px; }
+.table thead th { background: color-mix(in srgb, var(--hairline) 30%, transparent); text-align: left; font-weight: 700; }
+.table tbody tr + tr { border-top: 1px solid color-mix(in srgb, var(--hairline) 70%, transparent); }
+
+/* Inputs */
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  background: color-mix(in srgb, var(--panel) 92%, transparent);
+  border: 1px solid color-mix(in srgb, var(--hairline) 70%, transparent);
+  border-radius: var(--r-lg);
+  color: var(--text);
+  outline: none;
+}
+.input:focus { box-shadow: var(--ring); }
+
+/* App frame helpers */
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 16px 60px;
+}
+.toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+
+/* Small motion polish */
+@media (prefers-reduced-motion: no-preference) {
+  .fade-in { animation: fade-in .2s ease both; }
+  @keyframes fade-in { from {opacity:0; transform: translateY(4px)} to {opacity:1; transform:none} }
+}
+
+/* Scrollbar (WebKit) */
+*::-webkit-scrollbar { height: 10px; width: 10px; }
+*::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--accent) 25%, #475569); border-radius: 999px; }
+
+/* ===== Tesla–Apple Chrome (applies when a top wrapper has .app-shell) ===== */
+
+.app-shell {
+  --header-h: 64px;
+  --sidebar-w: 280px;
+  --gap: 16px;
+}
+
+/* Responsive grid scaffold */
+.app-shell .shell-grid {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  gap: var(--gap);
+  padding: 16px;
+}
+@media (max-width: 980px) {
+  .app-shell .shell-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Glass header (sticky) */
+.app-shell .glass-header,
+.app-shell [class$="Header"] {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  backdrop-filter: blur(var(--blur));
+  background: color-mix(in srgb, var(--panel) 80%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--hairline) 70%, transparent);
+  box-shadow: 0 6px 18px rgba(0,0,0,.05);
+}
+
+/* Brand + breadcrumb area inside the header (optional) */
+.app-shell .glass-header .brand {
+  display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -0.01em;
+}
+.app-shell .glass-header .crumbs {
+  margin-left: auto; display: flex; gap: 8px; font-size: 12px; color: var(--muted);
+}
+.app-shell .glass-header .crumbs a { color: inherit; }
+.app-shell .glass-header .crumbs .sep { opacity: .5; }
+
+/* Sidebar (rounded, glass) */
+.app-shell .glass-sidebar,
+.app-shell [class$="Sidebar"] {
+  position: sticky;
+  top: calc(var(--header-h) + 12px);
+  align-self: start;
+  background: color-mix(in srgb, var(--panel) 90%, transparent);
+  backdrop-filter: blur(var(--blur));
+  border-radius: var(--r-xl);
+  border: 1px solid color-mix(in srgb, var(--hairline) 70%, transparent);
+  box-shadow: var(--shadow);
+  padding: 12px;
+}
+
+/* Sidebar nav look */
+.app-shell .glass-sidebar nav ul,
+.app-shell [class$="Sidebar"] nav ul { list-style: none; margin: 0; padding: 0; }
+.app-shell .glass-sidebar a,
+.app-shell [class$="Sidebar"] a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 12px;
+  color: var(--text); text-decoration: none; font-weight: 600;
+}
+.app-shell .glass-sidebar a:hover,
+.app-shell [class$="Sidebar"] a:hover {
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+}
+.app-shell .glass-sidebar a.active,
+.app-shell [class$="Sidebar"] a.active {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  outline: 2px solid color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+/* Main canvas */
+.app-shell main, .app-shell .app-main, .app-shell .car-main {
+  min-height: calc(100vh - var(--header-h) - 40px);
+  padding-bottom: 40px;
+}
+
+/* Sticky mini toolbar (optional, shows under header) */
+.app-shell .sticky-tools {
+  position: sticky; top: calc(var(--header-h) + 8px); z-index: 40;
+  display:flex; gap:8px; align-items:center;
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  backdrop-filter: blur(var(--blur));
+  padding: 10px; border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--hairline) 70%, transparent);
+}
+
+/* Page title row */
+.app-shell .page-title {
+  display:flex; align-items:baseline; gap:10px; margin: 12px 0;
+}
+.app-shell .page-title .hint { color: var(--muted); font-size: 13px; }
+
+/* Accent focus ring for inputs in chrome */
+.app-shell input:focus, .app-shell select:focus, .app-shell textarea:focus {
+  box-shadow: var(--ring);
+}

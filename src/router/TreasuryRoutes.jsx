@@ -1,0 +1,42 @@
+import React, { Suspense, lazy } from "react";
+const Portfolio = lazy(() => import("@/pages/treasury/Portfolio.jsx"));
+
+// src/router/TreasuryRoutes.jsx
+import { Routes, Route, Navigate } from "react-router-dom";
+import TreasuryLayout from "@/layouts/TreasuryLayout.jsx";
+import DevDocsViewer from "@/pages/dev/Docs.jsx";
+
+/* Pages (all rendered INSIDE TreasuryLayout via <Outlet/>) */
+const Dashboard = lazy(() => import("@/pages/treasury/Dashboard.jsx"));
+const Assets    = lazy(() => import("@/pages/treasury/Assets.jsx"));
+const Ledger    = lazy(() => import("@/pages/treasury/Ledger.jsx"));
+const Proofs    = lazy(() => import("@/pages/treasury/Proofs.jsx"));
+const Settings  = lazy(() => import("@/pages/treasury/Settings.jsx"));
+const Help      = lazy(() => import("@/pages/treasury/Help.jsx"));
+const TxDetails = lazy(() => import("@/pages/treasury/TransactionDetails.jsx"));
+
+export default function TreasuryRoutes() {
+  return (
+    <Suspense fallback={<div className="skeleton pad">Loading…</div>}>
+      <Routes>
+        {/* Out-of-shell docs (intentionally not wrapped in the app shell) */}
+        <Route path="/__docs" element={<DevDocsViewer />} />
+
+        {/* App shell with shared Header + Sidebar */}
+        <Route path="/" element={<TreasuryLayout />}>
+          <Route index element={<Navigate to="dashboard" replace />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="assets" element={<Assets />} />
+          <Route path="ledger" element={<Ledger />} />
+          <Route path="transaction/:id" element={<TxDetails />} />
+          <Route path="proofs" element={<Proofs />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="help" element={<Help />} />
+          {/* Friendly in-shell catch-all */}
+          <Route path="*" element={<Navigate to="dashboard" replace />} />
+        </Route>
+          <Route path="portfolio" element={<Portfolio />} />
+        </Routes>
+    </Suspense>
+  );
+}

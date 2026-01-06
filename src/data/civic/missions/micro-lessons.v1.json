@@ -1,0 +1,40 @@
+{
+  "version": "v1",
+  "items": [
+    {
+      "id": "onboarding-civic-tour",
+      "title": "Civic App Tour",
+      "objective": "Learn the core features (Dashboards, Elections, Proposals, Treasury) and how to navigate.",
+      "minutes": 8,
+      "attestationTags": ["onboarding", "civic"],
+      "points": 50,
+      "content": [
+        "Open Dashboard to see your civic KPIs and profile progress.",
+        "Visit Elections to preview mock ballots and results.",
+        "Visit Proposals to see student proposals and voting.",
+        "Open Treasury to tweak budgets and see trade-offs."
+      ],
+      "assessments": [
+        { "id": "tour-1", "type": "short", "prompt": "Which feature is most useful to you and why?" },
+        { "id": "tour-2", "type": "mc", "prompt": "Where do you adjust budgets?", "choices": ["Dashboard", "Elections", "Proposals", "Treasury"] }
+      ]
+    },
+    {
+      "id": "support-the-mission",
+      "title": "Support the Mission",
+      "objective": "Subscribe, like, and share to help spread awareness.",
+      "minutes": 5,
+      "attestationTags": ["community", "outreach"],
+      "points": 40,
+      "content": [
+        "Find Silicon Heartland on your favorite platforms.",
+        "Subscribe to the channel/account.",
+        "Like the latest post relevant to your interests.",
+        "Share one post publicly with #SiliconHeartland."
+      ],
+      "assessments": [
+        { "id": "supp-1", "type": "short", "prompt": "Paste a one-sentence reason others should check us out." }
+      ]
+    }
+  ]
+}

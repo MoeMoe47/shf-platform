@@ -1,0 +1,147 @@
+// src/layouts/CurriculumLayout.jsx
+import "@/styles/curriculum-sidebar.css";
+import "@/styles/lesson.css";
+import "@/styles/curriculum/curriculum-day.css"; // keep LAST and only here
+
+import React, { useEffect, useMemo, useState } from "react";
+import { Outlet, useParams, Link } from "react-router-dom";
+import CurriculumSidebar from "@/components/CurriculumSidebar.jsx";
+import ErrorBoundary from "@/components/ErrorBoundary.jsx";
+import AppHeaderActions from "@/components/nav/AppHeaderActions.jsx";
+import ThemeToggle from "@/components/curriculum/ThemeToggle.jsx";
+import CrossAppLink from "@/components/nav/CrossAppLink.jsx";
+import { inApp } from "@/router/paths.js";
+
+/** ChatGPT-like shell for the Curriculum app. */
+export default function CurriculumLayout() {
+  const { curriculum: p1, cur: p2 } = useParams();
+  const cur = (p1 || p2 || "asl").toLowerCase();
+  const P = useMemo(() => inApp.curriculum(cur), [cur]);
+
+  const [collapsed, setCollapsed] = useState(() => {
+    try {
+      return localStorage.getItem("cur.sidebar.collapsed") === "1";
+    } catch {
+      return false;
+    }
+  });
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("cur.sidebar.collapsed", collapsed ? "1" : "0");
+    } catch {}
+  }, [collapsed]);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      const isMac = navigator.platform.toUpperCase().includes("MAC");
+      const mod = isMac ? e.metaKey : e.ctrlKey;
+      if (mod && (e.key === "b" || e.key === "B")) {
+        e.preventDefault();
+        setCollapsed((c) => !c);
+      }
+      if (e.key === "Escape") setMobileOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  const handleNavigate = () => setMobileOpen(false);
+
+  return (
+    <div
+      className="cur-app"
+      data-app="curriculum"
+      data-theme="career"                 /* ✅ same tokens/colors as Career */
+      data-collapsed={collapsed ? "1" : "0"}
+      data-mobileopen={mobileOpen ? "1" : "0"}
+    >
+      {/* Top header */}
+      <header className="cur-topbar" role="banner">
+        <button
+          className="cur-toggle"
+          type="button"
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          aria-pressed={!collapsed}
+          onClick={() => setCollapsed((c) => !c)}
+        >
+          {collapsed ? "➡️" : "☰"}
+        </button>
+
+        <button
+          className="cur-toggle--mobile"
+          type="button"
+          aria-label="Open navigation"
+          onClick={() => setMobileOpen(true)}
+        >
+          ☰
+        </button>
+
+        <nav className="cur-breadcrumbs" aria-label="Breadcrumb">
+          <Link to={P.dashboard()} className="cur-crumb">Home</Link>
+          <span className="cur-crumbSep">/</span>
+          <span className="cur-crumb">{String(cur).toUpperCase()}</span>
+        </nav>
+
+        <div className="cur-topbarSpacer" />
+
+        <div className="cur-actions" style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <CrossAppLink
+            app="fuel"
+            to="/top"
+            title="Open Fuel Tank"
+            aria-label="Open Fuel Tank"
+            className="btn pill"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "6px 10px",
+              border: "1px solid var(--ring, #e5e7eb)",
+              borderRadius: 999,
+              background: "#fff",
+              textDecoration: "none",
+              fontWeight: 600,
+            }}
+          >
+            ⛽ Fuel Tank
+          </CrossAppLink>
+
+        <AppHeaderActions />
+        <ThemeToggle showAnchorToggle />
+        </div>
+      </header>
+
+      {/* Sidebar */}
+      <aside
+        className="cur-sidebar"
+        aria-label="Curriculum navigation"
+        aria-expanded={!collapsed}
+      >
+        <CurriculumSidebar
+          cur={cur}
+          collapsed={collapsed}
+          onNavigate={handleNavigate}
+          P={P}
+        />
+      </aside>
+
+      {/* Main content */}
+      <main id="cur-main" className="cur-main" role="main" aria-live="polite">
+        <ErrorBoundary>
+          <Outlet />
+        </ErrorBoundary>
+      </main>
+
+      {/* Mobile backdrop */}
+      {mobileOpen && (
+        <button
+          className="cur-backdrop"
+          aria-label="Close navigation"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+    </div>
+  );
+}

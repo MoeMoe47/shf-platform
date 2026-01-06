@@ -1,0 +1,369 @@
+
+
+/* src/styles/civic-shell.css
+   Civic variant of the shared shell.
+   Scope with [data-app="civic"] so other apps keep their own look. */
+
+/* ===== Civic theme tokens (safe defaults) ===== */
+:root[data-app="civic"] {
+  --brand:        #2563eb;      /* civic blue */
+  --brand-ink:    #0f172a;
+  --wash:         #f7f9ff;      /* very light blue wash */
+  --canvas:       #ffffff;
+  --ink:          #0b1220;
+  --ink-soft:     #5b6474;
+  --ring:         #e6eaf6;
+  --sidebar-bg:   linear-gradient(180deg, #ffffff 0%, #f4f7ff 80%);
+}
+
+/* ===== Root layout ===== */
+:root[data-app="civic"] .crb-root {
+  --crb-sidebar-w: 260px;
+  min-height: 100vh;
+  background: var(--wash, #fafafa);
+  color: var(--ink, #111);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Skip link */
+:root[data-app="civic"] .crb-skip {
+  position: absolute;
+  left: -9999px;
+}
+:root[data-app="civic"] .crb-skip:focus {
+  left: 12px;
+  top: 8px;
+  z-index: 9999;
+  background: var(--canvas);
+  padding: 8px 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+/* Header */
+:root[data-app="civic"] .crb-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 64px;
+  padding: 0 16px;
+  background: var(--canvas);
+  border-bottom: 1px solid var(--ring, #e6e6e6);
+}
+:root[data-app="civic"] .crb-headerSpacer { flex: 1; }
+
+/* Brand */
+:root[data-app="civic"] .crb-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+:root[data-app="civic"] .crb-brandImg {
+  height: 36px;
+  width: auto;
+  display: block;
+}
+:root[data-app="civic"] .crb-wordmark {
+  font-weight: 800;
+  letter-spacing: .4px;
+  color: var(--brand-ink, var(--ink));
+}
+
+/* Cross-app strip (buttons styled by base shell) */
+:root[data-app="civic"] .crb-crossapp { display: flex; gap: 8px; }
+
+/* Body grid */
+:root[data-app="civic"] .crb-body {
+  display: grid;
+  grid-template-columns: var(--crb-sidebar-w) 1fr;
+  gap: 0;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* ===== Sidebar ===== */
+:root[data-app="civic"] .crb-sidebar {
+  background:
+    linear-gradient(180deg, #ffffff 0%, #f7f9ff 80%),
+    var(--sidebar-bg, transparent);
+  border-right: 1px solid var(--ring, #e6e6e6);
+  border-radius: 14px;
+  padding: 12px;
+}
+:root[data-app="civic"] .crb-navTitle {
+  font-size: 12px;
+  letter-spacing: .6px;
+  color: var(--ink-soft, #666);
+  margin: 12px 0 6px;
+}
+:root[data-app="civic"] .crb-navSection + .crb-navSection { margin-top: 12px; }
+:root[data-app="civic"] .crb-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+}
+:root[data-app="civic"] .crb-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--ink, #111);
+}
+:root[data-app="civic"] .crb-link.is-active {
+  background: var(--canvas);
+  box-shadow:
+    0 1px 0 var(--ring, #eee) inset,
+    0 0 0 1px var(--ring, #eee) inset;
+}
+:root[data-app="civic"] .crb-linkIcon { width: 1.2em; text-align: center; }
+
+/* Collapse control */
+:root[data-app="civic"] .crb-railToggleWrap { margin-top: 12px; }
+:root[data-app="civic"] .crb-railToggle {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--ring, #e6e6e6);
+  background: var(--canvas);
+  border-radius: 10px;
+  cursor: pointer;
+}
+:root[data-app="civic"] .crb-railToggle:hover { background: #f7f7f7; }
+
+/* Main content */
+:root[data-app="civic"] .crb-main {
+  min-height: calc(100vh - 64px - 32px);
+  padding-left: 16px;
+}
+
+/* ===== Dashboard primitives ===== */
+:root[data-app="civic"] .db-shell {}
+:root[data-app="civic"] .db-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+:root[data-app="civic"] .db-title { margin: 0; }
+:root[data-app="civic"] .db-subtitle { color: var(--ink-soft, #666); }
+
+/* Cards / grids */
+:root[data-app="civic"] .card {
+  background: var(--canvas);
+  border-radius: 14px;
+  border: 1px solid var(--ring, #eee);
+}
+:root[data-app="civic"] .card--pad { padding: 14px; }
+:root[data-app="civic"] .db-grid { display: grid; gap: 12px; }
+:root[data-app="civic"] .db-grid--kpis { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
+/* Hero */
+:root[data-app="civic"] .lux-hero {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 16px;
+}
+:root[data-app="civic"] .lux-cta { display: flex; gap: 8px; margin-top: 8px; }
+:root[data-app="civic"] .lux-kpi {
+  background: var(--canvas);
+  border: 1px solid var(--ring, #eee);
+  border-radius: 12px;
+  padding: 10px;
+}
+:root[data-app="civic"] .lux-kpi-meter {
+  height: 6px;
+  background: #eef2ff;
+  border-radius: 999px;
+  overflow: hidden;
+}
+:root[data-app="civic"] .lux-kpi-meter > span {
+  display: block;
+  height: 100%;
+  background: var(--brand, #2563eb);
+}
+
+/* ===== Collapsed rail (emoji-only) ===== */
+:root[data-app="civic"][data-rail="collapsed"] .crb-body { grid-template-columns: 72px 1fr; }
+:root[data-app="civic"][data-rail="collapsed"] .crb-sidebar { padding: 8px; }
+:root[data-app="civic"][data-rail="collapsed"] .crb-link { justify-content: center; padding: 10px 0; }
+:root[data-app="civic"][data-rail="collapsed"] .crb-linkLabel,
+:root[data-app="civic"][data-rail="collapsed"] .crb-navTitle,
+:root[data-app="civic"][data-rail="collapsed"] .crb-railToggle .lbl-text { display: none; }
+:root[data-app="civic"][data-rail="collapsed"] .crb-railToggle { padding: 10px 0; }
+
+/* Keep emoji readable when collapsed */
+:root[data-app="civic"] .crb-linkIcon { width: 1.25em; text-align: center; font-size: 18px; }
+/* ------------------------------
+   Civic Survey Layout Polish
+---------------------------------*/
+
+/* Responsive card grid: 280–360px wide columns that auto-fill */
+.db-grid--survey {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  align-content: start;
+}
+
+/* Question card: vertical rhythm + safe wrapping */
+.questionCard {
+  display: grid;
+  gap: 10px;
+  min-height: 160px;                /* gives breathing room */
+}
+
+/* Question text: readable, never overflows, hyphenate if needed */
+.q-text {
+  font-weight: 800;
+  line-height: 1.25;
+  font-size: 15px;
+  word-break: normal;
+  overflow-wrap: anywhere;          /* avoids overflow in narrow columns */
+  hyphens: auto;
+}
+
+/* Likert row: grid of 5 that wraps to 2 lines on narrow screens */
+.likertRow {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.likertLabel {
+  display: block;
+  text-align: center;
+  white-space: normal;              /* allow labels to wrap */
+  line-height: 1.15;
+  font-size: 13px;
+}
+
+/* Chips fill their cell and wrap text */
+.sh-chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 8px;
+  min-height: 40px;
+  text-align: center;
+}
+
+/* Small screens: make cards a bit wider and Likert wrap to 2 rows */
+@media (max-width: 860px) {
+  .db-grid--survey {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+  .likertRow {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .db-grid--survey {
+    grid-template-columns: 1fr;
+  }
+  .likertRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+/* chip variants already exist; ensure a subtle ghost style */
+.sh-chip.is-ghost { background:#fff; border:1px solid var(--ring,#e6e6e6); border-radius:999px; padding:6px 10px; font-weight:600; }
+.sh-badge.is-success { background:#e6fbef; border:1px solid #c7eed7; }
+/* --- Northstar KPI polish --- */
+.kpi-card {
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,.07);
+}
+/* ------------------------------------------
+   Civic Sidebar — Clean Modern Look
+------------------------------------------- */
+.civic-sidebar {
+  width: 240px;
+  padding: 20px 18px;
+  background: #f9fafb;
+  border-right: 1px solid #e5e7eb;
+  min-height: calc(100vh - 60px);
+}
+
+.civic-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.civic-section-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #6b7280;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+
+.civic-link {
+  display: block;
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: #374151;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.civic-link:hover {
+  background: #eef2ff;
+  color: #4338ca;
+}
+
+.civic-link.active {
+  background: #e0e7ff;
+  color: #3730a3;
+  font-weight: 600;
+}
+/* ------------------------------------------
+   CIVIC DASHBOARD – remove extra top gap
+   ------------------------------------------ */
+
+/* Make sure main content starts right under the header */
+.civic-main {
+  padding-top: 16px !important;
+}
+
+/* Kill any extra margin on the first page section */
+.civic-main > .crb-main:first-child {
+  margin-top: 0 !important;
+}
+/* --- Civic shell layout: sidebar + main side-by-side --- */
+.crb-shell {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+}
+
+/* Left rail (sidebar) keeps its fixed width */
+.crb-rail {
+  flex: 0 0 248px;
+}
+
+/* Main content grows and starts right under the header */
+.crb-main {
+  flex: 1;
+  padding: 24px;
+  min-height: calc(100vh - 64px); /* or whatever your header height is */
+  margin: 0;                       /* make sure no big top margin */
+}
+
+

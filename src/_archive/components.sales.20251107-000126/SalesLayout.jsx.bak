@@ -1,0 +1,24 @@
+import React from "react";
+import SalesHeader from "@/components/sales/SalesHeader.jsx";
+import SalesSidebar from "@/components/sales/SalesSidebar.jsx";
+import SalesRoutes from "@/router/SalesRoutes.jsx";
+import "@/styles/sales-shell.css";
+
+export default function SalesLayout() {
+  console.log("[sales] mount SalesLayout");
+  return (
+    <div className="crb-root" data-app="sales">
+      <header className="crb-header" role="banner">
+        <SalesHeader />
+      </header>
+      <div className="crb-body">
+        <aside className="crb-sidebar" aria-label="Primary">
+          <SalesSidebar />
+        </aside>
+        <main className="crb-main" id="sales-main" role="main" aria-live="polite">
+          <SalesRoutes />
+        </main>
+      </div>
+    </div>
+  );
+}

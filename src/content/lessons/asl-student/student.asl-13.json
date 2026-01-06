@@ -1,0 +1,78 @@
+{
+  "id": "asl-13",
+  "title": "ASL 2.7 — Mini Dialogues 🎭",
+  "estMinutes": 25,
+  "objectives": [
+    "Build two-person mini scenes using numbers, time-first, colors, places, food/drink",
+    "Switch NMMs naturally between YES/NO and WH questions",
+    "Keep turns compact (3–5 signs) and maintain eye gaze"
+  ],
+  "vocab": [
+    { "term": "TURN-TAKING", "def": "Tiny nod to yield/hold your turn." },
+    { "term": "BACKCHANNEL", "def": "Short nods/facial cues that show you’re following." },
+    { "term": "CLARIFY", "def": "Ask follow-ups (WHAT-COLOR?, WHERE?, WHAT-TIME?)." }
+  ],
+  "sections": [
+    {
+      "heading": "Warm-Up: Q↔A Swap",
+      "media": { "src": "/media/asl/unit-2/qa-swap.gif", "alt": "Quick Q&A swap drill", "caption": "YES/NO ↔ WH alternation" },
+      "body": "A asks **YOU WANT DRINK?** (brows up). B answers **YES. WATER.** Switch: A asks **YOU FAVORITE FOOD WHAT?** (brows down). Keep each turn ≤ 4 signs.",
+      "microCheck": {
+        "q": "Which face matches WH-questions?",
+        "options": ["Brows up", "Brows down", "Neutral", "Eyes closed"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Model Skit 1: Class Time",
+      "media": { "src": "/media/asl/unit-2/skit-class.mp4", "alt": "Skit about class time", "caption": "WRIST-TAP → WHAT-TIME? → number + O’CLOCK" },
+      "body": "A: **TODAY CLASS WHAT-TIME?**  B: **CLASS 8-O’CLOCK.**  A: **TONIGHT YOU STUDY?** (brows up)  B: **NO.** **HOME SLEEP.**",
+      "microCheck": {
+        "q": "Best answer to WHAT-TIME?",
+        "options": ["YES", "3-O’CLOCK", "PLEASE", "THANK-YOU"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Model Skit 2: Describe & Find",
+      "body": "A: **BOOK WHAT-COLOR?**  B: **BLUE SMALL.**  A points: **THAT?**  B: **YES.**  \nKeep descriptions compact; order consistent.",
+      "callouts": [
+        { "type": "tip", "title": "Order Tip", "body": "OBJECT → ADJECTIVE(S) → COLOR (stay consistent)." }
+      ]
+    },
+    {
+      "heading": "Partner Practice: 3 Micro-Skits",
+      "media": { "src": "/media/asl/unit-2/skit-cards.png", "alt": "Prompt cards", "caption": "Pull 3 prompts; 30–40s each" },
+      "body": "Choose 3 prompts: **(1) TIME + CLASS**, **(2) FOOD/DRINK order**, **(3) PLACE + DO-DO?** Record notes on NMMs and eye gaze.",
+      "microCheck": {
+        "q": "Backchannel behavior is…",
+        "options": ["Interrupting often", "Neutral face only", "Small nods/face cues while watching", "Looking down at hands"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "heading": "Mini-Showcase",
+      "body": "Record **15–20s** of your favorite skit. Add a short caption: **Which WH follow-up made it clearer?**",
+      "teacherNote": "Offer privacy submission; keep scene close to the chest (compact space)."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 2.7 — Mini Dialogues Quiz",
+    "items": [
+      { "type": "mcq", "q": "Which NMM matches YES/NO questions?", "options": ["Brows down", "Brows up", "Neutral only", "Eyes closed"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Best follow-up after a vague answer:", "options": ["Repeat louder", "Change topic", "Ask a WH follow-up (e.g., WHERE?)", "Ignore"], "answerIndex": 2 },
+      { "type": "mcq", "q": "Clear time-first frame:", "options": ["PRONOUN→VERB→PLACE→TIME", "TIME→PRONOUN→VERB→PLACE", "PLACE→TIME→VERB→PRONOUN", "VERB→PLACE→TIME→PRONOUN"], "answerIndex": 1 },
+      { "type": "short", "q": "Write a 2-turn gloss using WHAT-TIME? and a YES/NO follow-up." },
+      { "type": "reflection", "prompt": "Which part of skits challenged you most—NMM switching, eye gaze, or order consistency?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Upload your 15–20s skit with a note about the most useful WH follow-up.",
+  "summary": "You ran compact two-person scenes with correct NMMs, eye gaze, and clear follow-ups.",
+  "nextSlug": "asl-14",
+  "games": [
+    { "id": "dialogue-pingpong", "title": "Dialogue Ping-Pong", "route": "/arcade/asl/dialogue-pingpong", "estMinutes": 5, "xp": 50, "outcomes": ["Turn-taking rhythm"] },
+    { "id": "wh-or-yn", "title": "WH or Y/N?", "route": "/arcade/asl/wh-or-yn", "estMinutes": 5, "xp": 50, "outcomes": ["NMM switching"] },
+    { "id": "clarify-quest", "title": "Clarify Quest", "route": "/arcade/asl/clarify-quest", "estMinutes": 5, "xp": 50, "outcomes": ["Follow-up questions"] }
+  ]
+}

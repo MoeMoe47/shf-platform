@@ -1,0 +1,209 @@
+/* =========================================================
+   LOO LOCKED HEADER — MOCK MATCH (pill tabs + thin full width)
+========================================================= */
+
+.looPage { min-height: 100vh; }
+
+/* Full-width thin bar */
+.looTopHeader{
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  padding: 12px 16px;
+  background: transparent;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+/* Inner layout */
+.looTopInner{
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 240px 1fr 320px;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Left brand */
+.looTopBrand{
+  display:flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.05;
+}
+.looTopTitle{
+  font-weight: 700;
+  letter-spacing: .2px;
+  color: rgba(255,255,255,.92);
+  font-size: 14px;
+}
+.looTopSub{
+  font-size: 12px;
+  color: rgba(255,255,255,.58);
+}
+
+/* CENTER: the PILL tabs (the missing part) */
+.looTopTabs{
+  display:flex;
+  justify-content: center;
+}
+.looTopPill{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.35),
+    inset 0 1px 0 rgba(255,255,255,.06);
+}
+.looTopTab{
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: rgba(255,255,255,.70);
+  font-size: 12px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .18s ease, color .18s ease, box-shadow .18s ease;
+}
+.looTopTab:hover{
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.88);
+}
+.looTopTab.is-active{
+  background: rgba(255,140,70,.16);
+  color: rgba(255,255,255,.94);
+  border: 1px solid rgba(255,140,70,.35);
+  box-shadow: 0 0 0 3px rgba(255,140,70,.10);
+}
+
+/* Right controls: Menu/Export buttons */
+.looTopActions{
+  display:flex;
+  justify-content: flex-end;
+  align-items:center;
+  gap: 10px;
+}
+
+.looTopMenuBtn,
+.looTopActionBtn{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.04);
+  color: rgba(255,255,255,.82);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.looTopMenuBtn:hover,
+.looTopActionBtn:hover{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.16);
+}
+
+/* Dropdown popover */
+.looTopMenuPop{
+  margin-top: 8px;
+  padding: 10px;
+  border-radius: 14px;
+  background: rgba(10,12,16,.92);
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 14px 40px rgba(0,0,0,.55);
+}
+
+/* Meta row (Region · Range · Stream + Updated) */
+.looHdrMeta{
+  max-width: 1240px;
+  margin: 10px auto 0;
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  color: rgba(255,255,255,.62);
+  font-size: 12px;
+}
+
+.looDot{
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255,140,70,.95);
+  box-shadow: 0 0 18px rgba(255,140,70,.35);
+}
+
+.looMetaRight{ margin-left: auto; opacity: .90; }
+
+/* Mobile */
+@media (max-width: 980px){
+  .looTopInner{
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+  }
+  .looTopTabs{
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+  .looTopPill{ width: 100%; justify-content: space-between; }
+}
+
+/* Allow pattern to show through (mock-style "glass") */
+.looTopHeader{
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.looTopHeader::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom,
+    rgba(10,12,16,.55),
+    rgba(10,12,16,.70)
+  );
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  pointer-events: none;
+}
+
+.looTopInner,
+.looHdrMeta{
+  position: relative;
+  z-index: 1;
+}
+
+/* --- TUNE: match mock header glass + warmth --- */
+.looTopHeader::before{
+  background: linear-gradient(to bottom,
+    rgba(10,12,16,.40),
+    rgba(10,12,16,.62)
+  );
+}
+
+/* slightly stronger active tab warmth */
+.looTopTab.is-active{
+  background: rgba(255,140,70,.22) !important;
+  box-shadow: 0 0 18px rgba(255,140,70,.12);
+}
+
+/* make pill controls more “readable” like mock */
+.looTopPill{
+  background: rgba(255,255,255,.08) !important;
+  border-color: rgba(255,255,255,.14) !important;
+}
+
+/* brighten header text */
+.looTopHeader, .looTopHeader *{
+  color: rgba(245,245,245,.92);
+}
+

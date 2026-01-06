@@ -1,0 +1,90 @@
+/* CURRICULUM · Day theme (scoped to the Curriculum app)
+   Tip: import after curriculum-shell.css and lesson.css so it wins */
+
+/* Put tokens on <html> to cascade correctly (higher specificity; no :where). */
+html[data-app="curriculum"].cur-theme-light {
+  color-scheme: light;
+
+  /* brand tokens */
+  --beige:  #efe7dc;   /* page */
+  --ivory:  #faf8f3;   /* panels/cards/rails */
+  --orange: #ff4f00;   /* International Orange */
+  --text:   #111827;
+  --line:   #e6e4de;
+
+  /* aliases used by components */
+  --bg:       var(--beige);
+  --panel:    var(--ivory);
+  --paper:    var(--ivory);
+  --ring:     var(--line);
+  --ink:      var(--text);
+  --ink-soft: #6b7280;
+
+  /* accent */
+  --brand:     var(--orange);
+  --brand-ink: #fff;
+}
+
+/* repaint root + shell */
+html[data-app="curriculum"].cur-theme-light body,
+html[data-app="curriculum"].cur-theme-light #root,
+html[data-app="curriculum"].cur-theme-light .cur-shell {
+  background: var(--bg) !important;
+  color: var(--ink) !important;
+}
+
+/* main regions */
+html[data-app="curriculum"].cur-theme-light .cur-header,
+html[data-app="curriculum"].cur-theme-light .cur-sidebar,
+html[data-app="curriculum"].cur-theme-light .cur-main {
+  background: var(--panel) !important;
+  color: var(--ink) !important;
+  border-color: var(--ring) !important;
+}
+
+/* right rail — force light */
+html[data-app="curriculum"].cur-theme-light .on-this-lesson,
+html[data-app="curriculum"].cur-theme-light .lesson-rail,
+html[data-app="curriculum"].cur-theme-light .cur-rail,
+html[data-app="curriculum"].cur-theme-light [class*="rail"] {
+  background: var(--paper) !important;
+  color: var(--ink) !important;
+  border-color: var(--ring) !important;
+}
+html[data-app="curriculum"].cur-theme-light .on-this-lesson *,
+html[data-app="curriculum"].cur-theme-light .lesson-rail *,
+html[data-app="curriculum"].cur-theme-light .cur-rail *,
+html[data-app="curriculum"].cur-theme-light [class*="rail"] * {
+  color: var(--ink) !important;
+  -webkit-text-fill-color: var(--ink) !important; /* WebKit fix */
+}
+
+/* CTAs = International Orange */
+html[data-app="curriculum"].cur-theme-light .btn-primary,
+html[data-app="curriculum"].cur-theme-light .button.primary,
+html[data-app="curriculum"].cur-theme-light .cta,
+html[data-app="curriculum"].cur-theme-light .accent {
+  background: var(--brand) !important;
+  color: var(--brand-ink) !important;
+  border-color: var(--brand) !important;
+}
+
+/* links pick up ink (not bright brand) */
+html[data-app="curriculum"].cur-theme-light a { color: var(--ink) !important; }
+
+/* sidebar text visibility */
+html[data-app="curriculum"].cur-theme-light .cur-sidebar,
+html[data-app="curriculum"].cur-theme-light .cur-sidebar * {
+  color: var(--ink) !important;
+  -webkit-text-fill-color: var(--ink) !important;
+}
+
+/* optional: collapse the left logo/anchor */
+html[data-app="curriculum"].no-anchor .cur-anchor { display: none !important; }
+html[data-app="curriculum"].no-anchor .cur-shell {
+  --cur-anchor-w: 0px !important;
+  grid-template-columns: var(--cur-sidebar-w) 1fr !important;
+  grid-template-areas:
+    "header header"
+    "sidebar main" !important;
+}

@@ -1,0 +1,315 @@
+[
+  {
+    "id": "medical-assistant",
+    "slug": "medical-assistant",
+    "title": "Medical Assistant",
+    "cluster": "Healthcare",
+    "estWeeks": 18,
+    "estCost": 3200,
+    "years": 6,
+    "avgIncome": 38000,
+    "annualGrowthPct": 4.2,
+    "modules": [
+      { "slug": "mod-1-med-terminology", "title": "Medical Terminology & HIPAA", "minutes": 540 },
+      { "slug": "mod-2-clinical-basics", "title": "Clinical Basics & Vital Signs", "minutes": 720 },
+      { "slug": "mod-3-externship", "title": "Externship / Practicum", "minutes": 600 }
+    ],
+    "firstCredential": { "name": "CCMA (NHA) Exam", "examCode": "CCMA" },
+    "fundingHints": ["WIOA eligible", "State ETPL", "Employer tuition assist"],
+    "partners": [
+      { "name": "Metro Health", "url": "https://example.org/partners/metro-health" },
+      { "name": "Community Clinic Network", "url": "https://example.org/partners/ccn" }
+    ],
+    "jobsMeta": {
+      "medianStart": 36000,
+      "openingsIndex": 82,
+      "localEmployers": ["Metro Health", "CityCare Clinic", "Sunrise Pediatrics"]
+    },
+    "demand": "high",
+    "progressPct": 12,
+    "skills": ["Vital signs", "EHR basics", "Patient intake", "HIPAA"],
+    "badges": ["CPR/First Aid", "OSHA-10 Healthcare"],
+    "nextCohortDate": "2025-11-15"
+  },
+  {
+    "id": "certified-nursing-assistant",
+    "slug": "certified-nursing-assistant",
+    "title": "Certified Nursing Assistant (CNA)",
+    "cluster": "Healthcare",
+    "estWeeks": 6,
+    "estCost": 950,
+    "years": 5,
+    "avgIncome": 33000,
+    "annualGrowthPct": 3.8,
+    "modules": [
+      { "slug": "mod-1-care-fundamentals", "title": "Care Fundamentals", "minutes": 420 },
+      { "slug": "mod-2-clinical-skills", "title": "Clinical Skills Lab", "minutes": 480 },
+      { "slug": "mod-3-clinical-rotation", "title": "Clinical Rotation", "minutes": 420 }
+    ],
+    "firstCredential": { "name": "State CNA Exam" },
+    "fundingHints": ["WIOA eligible", "SNAP E&T", "Employer sponsorship"],
+    "partners": [
+      { "name": "Evergreen Long-Term Care", "url": "https://example.org/partners/evergreen" }
+    ],
+    "jobsMeta": {
+      "medianStart": 31000,
+      "openingsIndex": 90,
+      "localEmployers": ["Evergreen LTC", "HomeCare Plus", "Metro Health"]
+    },
+    "demand": "very high",
+    "progressPct": 0,
+    "skills": ["Activities of daily living", "Infection control", "Patient safety"],
+    "badges": ["CPR/First Aid"],
+    "nextCohortDate": "2025-10-05"
+  },
+  {
+    "id": "cybersecurity-analyst",
+    "slug": "cybersecurity-analyst",
+    "title": "Cybersecurity Analyst (Entry)",
+    "cluster": "Cybersecurity",
+    "estWeeks": 22,
+    "estCost": 4200,
+    "years": 8,
+    "avgIncome": 58000,
+    "annualGrowthPct": 6.5,
+    "modules": [
+      { "slug": "mod-1-networking", "title": "Networking Foundations", "minutes": 600 },
+      { "slug": "mod-2-syssec", "title": "System Security & Hardening", "minutes": 720 },
+      { "slug": "mod-3-soc-analyst", "title": "SOC Analyst Toolkit", "minutes": 720 }
+    ],
+    "firstCredential": { "name": "CompTIA Security+", "examCode": "SY0-701" },
+    "fundingHints": ["ETPL state list", "GI Bill (provider dependent)", "Employer upskilling"],
+    "partners": [
+      { "name": "BlueShield Cyber", "url": "https://example.org/partners/blueshield" },
+      { "name": "City IT Dept", "url": "https://example.org/partners/city-it" }
+    ],
+    "jobsMeta": {
+      "medianStart": 52000,
+      "openingsIndex": 74,
+      "localEmployers": ["BlueShield Cyber", "City IT", "SecureCloud MSP"]
+    },
+    "demand": "high",
+    "progressPct": 5,
+    "skills": ["Linux", "SIEM", "Vulnerability scanning", "Incident response"],
+    "badges": ["Security+ Prep", "Network+ Ready"],
+    "nextCohortDate": "2026-01-10"
+  },
+  {
+    "id": "it-support-specialist",
+    "slug": "it-support-specialist",
+    "title": "IT Support Specialist",
+    "cluster": "Business & IT",
+    "estWeeks": 14,
+    "estCost": 1600,
+    "years": 6,
+    "avgIncome": 42000,
+    "annualGrowthPct": 4.0,
+    "modules": [
+      { "slug": "mod-1-os-basics", "title": "OS & Hardware Basics", "minutes": 540 },
+      { "slug": "mod-2-troubleshooting", "title": "Troubleshooting & Ticketing", "minutes": 600 },
+      { "slug": "mod-3-service-desk", "title": "Service Desk Practicum", "minutes": 480 }
+    ],
+    "firstCredential": { "name": "CompTIA A+", "examCode": "220-1101/1102" },
+    "fundingHints": ["WIOA eligible", "Apprenticeship possible", "Employer tuition assist"],
+    "partners": [
+      { "name": "SecureCloud MSP", "url": "https://example.org/partners/securecloud" }
+    ],
+    "jobsMeta": {
+      "medianStart": 40000,
+      "openingsIndex": 76,
+      "localEmployers": ["SecureCloud MSP", "RetailTech", "City Schools IT"]
+    },
+    "demand": "high",
+    "progressPct": 28,
+    "skills": ["Help desk", "Ticket systems", "Customer support", "Basic networking"],
+    "badges": ["A+ Core 1", "A+ Core 2"],
+    "nextCohortDate": "2025-12-01"
+  },
+  {
+    "id": "cdl-class-a",
+    "slug": "cdl-class-a",
+    "title": "Commercial Driver (CDL Class A)",
+    "cluster": "Logistics",
+    "estWeeks": 8,
+    "estCost": 4800,
+    "years": 6,
+    "avgIncome": 52000,
+    "annualGrowthPct": 3.0,
+    "modules": [
+      { "slug": "mod-1-permit", "title": "Permit & ELDT Theory", "minutes": 420 },
+      { "slug": "mod-2-yard-skills", "title": "Yard Skills & Backing", "minutes": 480 },
+      { "slug": "mod-3-road", "title": "Road Hours & Endorsements", "minutes": 600 }
+    ],
+    "firstCredential": { "name": "CDL Class A" },
+    "fundingHints": ["WIOA eligible", "State ETPL", "Employer sponsorship"],
+    "partners": [
+      { "name": "RoadRunner Freight", "url": "https://example.org/partners/roadrunner" }
+    ],
+    "jobsMeta": {
+      "medianStart": 50000,
+      "openingsIndex": 88,
+      "localEmployers": ["RoadRunner Freight", "Midwest Logistics", "FreshGrocer DC"]
+    },
+    "demand": "very high",
+    "progressPct": 0,
+    "skills": ["Vehicle inspection", "Backing", "Hours of Service", "Trip planning"],
+    "badges": ["ELDT Theory", "Air Brakes"],
+    "nextCohortDate": "2025-10-28"
+  },
+  {
+    "id": "hvac-technician",
+    "slug": "hvac-technician",
+    "title": "HVAC Technician (Entry)",
+    "cluster": "Skilled Trades",
+    "estWeeks": 20,
+    "estCost": 3500,
+    "years": 8,
+    "avgIncome": 47000,
+    "annualGrowthPct": 3.5,
+    "modules": [
+      { "slug": "mod-1-safety-tools", "title": "Safety, Tools & Electricity", "minutes": 540 },
+      { "slug": "mod-2-systems", "title": "Heating & Cooling Systems", "minutes": 720 },
+      { "slug": "mod-3-field", "title": "Field Practicum", "minutes": 600 }
+    ],
+    "firstCredential": { "name": "EPA 608" },
+    "fundingHints": ["WIOA eligible", "Union apprenticeship pathways"],
+    "partners": [
+      { "name": "CoolTech Services", "url": "https://example.org/partners/cooltech" }
+    ],
+    "jobsMeta": {
+      "medianStart": 44000,
+      "openingsIndex": 70,
+      "localEmployers": ["CoolTech", "City Facilities", "HomeCare HVAC"]
+    },
+    "demand": "high",
+    "progressPct": 18,
+    "skills": ["Electrical basics", "Refrigeration cycle", "Diagnostics", "Customer service"],
+    "badges": ["EPA 608 Prep", "OSHA-10 Construction"],
+    "nextCohortDate": "2025-11-20"
+  },
+  {
+    "id": "electrical-apprentice",
+    "slug": "electrical-apprentice",
+    "title": "Electrical Apprentice (Pre-Apprenticeship)",
+    "cluster": "Skilled Trades",
+    "estWeeks": 12,
+    "estCost": 1200,
+    "years": 8,
+    "avgIncome": 50000,
+    "annualGrowthPct": 3.2,
+    "modules": [
+      { "slug": "mod-1-safety", "title": "Safety & Code Basics (NEC)", "minutes": 480 },
+      { "slug": "mod-2-wiring", "title": "Wiring & Conduit", "minutes": 600 },
+      { "slug": "mod-3-lab", "title": "Lab & Job Readiness", "minutes": 360 }
+    ],
+    "firstCredential": { "name": "OSHA-10 Construction" },
+    "fundingHints": ["WIOA eligible", "State ETPL", "Union apprenticeship"],
+    "partners": [
+      { "name": "IBEW Local", "url": "https://example.org/partners/ibew" },
+      { "name": "City Facilities", "url": "https://example.org/partners/city-facilities" }
+    ],
+    "jobsMeta": {
+      "medianStart": 46000,
+      "openingsIndex": 68,
+      "localEmployers": ["IBEW Contractors", "City Facilities", "SunBuild Electric"]
+    },
+    "demand": "high",
+    "progressPct": 7,
+    "skills": ["NEC basics", "Conduit bending", "Tools & safety"],
+    "badges": ["OSHA-10", "First Aid"],
+    "nextCohortDate": "2025-12-08"
+  },
+  {
+    "id": "advanced-manufacturing-tech",
+    "slug": "advanced-manufacturing-tech",
+    "title": "Advanced Manufacturing Technician",
+    "cluster": "Advanced Manufacturing",
+    "estWeeks": 16,
+    "estCost": 2600,
+    "years": 6,
+    "avgIncome": 46000,
+    "annualGrowthPct": 3.9,
+    "modules": [
+      { "slug": "mod-1-safety-lean", "title": "Safety, Quality & Lean", "minutes": 480 },
+      { "slug": "mod-2-cnc-basics", "title": "CNC & Mechatronics Basics", "minutes": 600 },
+      { "slug": "mod-3-pm", "title": "Maintenance & Troubleshooting", "minutes": 540 }
+    ],
+    "firstCredential": { "name": "OSHA-10 General Industry" },
+    "fundingHints": ["WIOA eligible", "ETPL", "Employer tuition assist"],
+    "partners": [
+      { "name": "NorthWorks Manufacturing", "url": "https://example.org/partners/northworks" }
+    ],
+    "jobsMeta": {
+      "medianStart": 44000,
+      "openingsIndex": 66,
+      "localEmployers": ["NorthWorks", "City Plastics", "SteelFab"]
+    },
+    "demand": "medium",
+    "progressPct": 10,
+    "skills": ["5S/Lean", "CNC basics", "Quality control"],
+    "badges": ["OSHA-10", "Six Sigma White Belt"],
+    "nextCohortDate": "2025-11-03"
+  },
+  {
+    "id": "solar-installer",
+    "slug": "solar-installer",
+    "title": "Solar Photovoltaic Installer",
+    "cluster": "Green Jobs",
+    "estWeeks": 10,
+    "estCost": 1800,
+    "years": 6,
+    "avgIncome": 42000,
+    "annualGrowthPct": 7.0,
+    "modules": [
+      { "slug": "mod-1-solar-fundamentals", "title": "Solar Fundamentals & Safety", "minutes": 420 },
+      { "slug": "mod-2-system-install", "title": "System Install & Wiring", "minutes": 540 },
+      { "slug": "mod-3-fieldwork", "title": "Fieldwork & Commissioning", "minutes": 480 }
+    ],
+    "firstCredential": { "name": "NABCEP Associate (optional)" },
+    "fundingHints": ["WIOA eligible", "Green energy grants (local)", "Employer sponsorship"],
+    "partners": [
+      { "name": "BrightSky Solar", "url": "https://example.org/partners/brightsky" }
+    ],
+    "jobsMeta": {
+      "medianStart": 40000,
+      "openingsIndex": 72,
+      "localEmployers": ["BrightSky", "SunBuild Electric", "EcoRoof Co."]
+    },
+    "demand": "rising",
+    "progressPct": 3,
+    "skills": ["Fall protection", "PV wiring", "Racking systems"],
+    "badges": ["OSHA-10 Construction"],
+    "nextCohortDate": "2025-10-21"
+  },
+  {
+    "id": "paraeducator-education-aide",
+    "slug": "paraeducator-education-aide",
+    "title": "Paraeducator / Education Aide",
+    "cluster": "Education Aide",
+    "estWeeks": 12,
+    "estCost": 750,
+    "years": 5,
+    "avgIncome": 31000,
+    "annualGrowthPct": 2.5,
+    "modules": [
+      { "slug": "mod-1-child-dev", "title": "Child Development & Classroom Basics", "minutes": 480 },
+      { "slug": "mod-2-interventions", "title": "Reading & Math Interventions", "minutes": 540 },
+      { "slug": "mod-3-practicum", "title": "School Practicum", "minutes": 420 }
+    ],
+    "firstCredential": { "name": "ParaPro (ETS) — optional" },
+    "fundingHints": ["WIOA eligible", "District stipend (where available)"],
+    "partners": [
+      { "name": "City Schools", "url": "https://example.org/partners/city-schools" }
+    ],
+    "jobsMeta": {
+      "medianStart": 30000,
+      "openingsIndex": 64,
+      "localEmployers": ["City Schools", "County Schools", "Learning Center"]
+    },
+    "demand": "steady",
+    "progressPct": 22,
+    "skills": ["Classroom support", "IEP basics", "De-escalation"],
+    "badges": ["Crisis Prevention Basics"],
+    "nextCohortDate": "2025-11-12"
+  }
+]

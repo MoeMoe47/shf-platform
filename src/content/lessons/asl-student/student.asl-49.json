@@ -1,0 +1,69 @@
+{
+  "id": "asl-49",
+  "title": "ASL 6.6 — Integration (Route + Dialogue Scene) 🧭💬",
+  "estMinutes": 30,
+  "objectives": [
+    "Blend anchored landmarks with classifier paths to give/retell a route",
+    "Switch cleanly between narration and dialogue using RS + neutral returns",
+    "Show at least one obstacle and fix with clear NMM and FINISH markers"
+  ],
+  "vocab": [
+    { "term": "ANCHORS", "def": "Stable loci for places/people reused across clauses." },
+    { "term": "CL:3 / CL:1 / CL:B", "def": "Vehicle, person, surface for routes & layouts." },
+    { "term": "ROLE-SHIFT (RS)", "def": "Giver/asker or driver/walker voice; return to neutral to narrate." },
+    { "term": "FINISH", "def": "Marks a completed leg or solved problem." },
+    { "term": "NMM (URGENCY/DISTANCE)", "def": "Faces for far/near, traffic, worry→relief." }
+  ],
+  "sections": [
+    {
+      "heading": "Warm-Up: Lock Anchors + Quick Paths",
+      "media": { "src": "/media/asl/unit-6/anchors-4.png", "alt": "HOME, SCHOOL, STORE, GYM", "caption": "Point once, reuse exactly" },
+      "body": "Anchor **HOME (center)**, **SCHOOL (left)**, **STORE (right-up)**, **GYM (right-down)**. Trace **CL:3** HOME→SCHOOL and **CL:1** SCHOOL→STORE. Keep paths small with crisp stops.",
+      "microCheck": {
+        "q": "Path readability improves most when you…",
+        "options": ["Make huge arcs", "Keep small, distinct paths with clear stops", "Stare at hands", "Skip pauses"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Model: Route + Dialogue",
+      "media": { "src": "/media/asl/unit-6/route-dialogue.mp4", "alt": "RS exchanges inside a route story", "caption": "Narrate → RS ask → RS give → narrate" },
+      "body": "Example:\n• **TODAY CL:3 HOME→SCHOOL. TRAFFIC DELAY.** (frustrated NMM)\n• **RS→ASKER:** **HOW-TO STORE?**\n• **RS→GIVER:** **FROM SCHOOL STRAIGHT, RIGHT, STORE ARRIVE.**\n• **Narrator:** **ARRIVE STORE FINISH.**"
+    },
+    {
+      "heading": "Partner Practice: Obstacles & Fixes",
+      "body": "A narrates a 2-leg route with **1 obstacle** (CL:B block or traffic) and **1 fix** (detour or ask officer). B plays helper (RS) to give the fix. Swap roles.",
+      "callouts": [
+        { "type": "tip", "title": "Neutral Returns", "body": "Between RS lines, pop back to center so anchors stay clear." }
+      ],
+      "microCheck": {
+        "q": "Between character lines you should…",
+        "options": ["Stay in RS", "Return to neutral narrator", "Move anchors around", "Talk aloud"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Mini-Showcase",
+      "body": "Record **18–25s**: route + dialogue including **time-first**, **1 CL:3 path**, **1 CL:1 path**, **1 obstacle + fix**, **2 RS lines**, **FINISH** at the end of a leg.",
+      "teacherNote": "Caption which anchors you used and where the obstacle/fix occurred."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 6.6 — Integration Check",
+    "items": [
+      { "type": "mcq", "q": "What keeps dialogue readable inside routes?", "options": ["Stay in RS", "Return to neutral between lines", "Bigger hand waves", "No pauses"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Best marker for a completed segment:", "options": ["FINISH", "NEVER", "HOLD", "PAUSE ONLY"], "answerIndex": 0 },
+      { "type": "mcq", "q": "Which classifier shows a road layout/wall block?", "options": ["CL:1", "CL:3", "CL:B", "5-hand"], "answerIndex": 2 },
+      { "type": "short", "q": "Write a 3-clause gloss: time-first route, obstacle + fix, FINISH." },
+      { "type": "reflection", "prompt": "Which piece needs polish—anchors, RS returns, or NMM for obstacles? Plan a 2-minute drill." }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Upload your 18–25s clip (route + dialogue). Caption anchors, obstacle, fix, and where FINISH landed.",
+  "summary": "You integrated routes, RS dialogue, obstacles/fixes, and FINISH markers into one compact scene with stable anchors.",
+  "nextSlug": "asl-50",
+  "games": [
+    { "id": "leg-lock", "title": "Leg Lock", "route": "/arcade/asl/leg-lock", "estMinutes": 5, "xp": 50, "outcomes": ["End legs cleanly with FINISH"] },
+    { "id": "rs-swap", "title": "RS Swap", "route": "/arcade/asl/rs-swap", "estMinutes": 5, "xp": 50, "outcomes": ["Neutral returns between RS lines"] }
+  ]
+}

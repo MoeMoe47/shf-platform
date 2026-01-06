@@ -1,0 +1,273 @@
+=====================================================================
+ SILICON HEARTLAND FOUNDATION  –  MULTI-APP SYSTEM INDEX (TERMINAL)
+=====================================================================
+
+STATUS TAGS:
+    [LIVE]       Used in production / active build
+    [EXPERIMENT] Working but unstable or incomplete
+    [DEPRECATED] Old version, kept for reference only
+
+=====================================================================
+1. CIVIC ENGINE + GRANT BINDER + INVESTOR VIEW
+=====================================================================
+
+[LIVE] Entry + Router + Layout
+    entries/civic.main.jsx
+    router/CivicRoutes.jsx
+    layouts/CivicLayout.jsx
+
+[LIVE] Shell Components
+    components/civic/CivicHeader.jsx
+    components/civic/CivicSidebar.jsx
+
+[LIVE] Logging Engine
+    utils/civicLogs.js
+    shared/ns/events.js
+
+[LIVE] Admin + Funder Tools
+    pages/AdminAnalytics.jsx
+    pages/admin/GrantBinder.jsx
+    pages/admin/InvestorNorthstar.jsx
+    pages/admin/MasterNarrativeViewer.jsx
+
+[LIVE] Student Civic Pages
+    pages/civic/CivicDashboard.jsx
+    pages/civic/DashboardNorthstar.jsx
+    pages/civic/GrantStory.jsx
+    pages/civic/Badges.jsx
+    pages/civic/Leaderboard.jsx
+    pages/civic/Missions.jsx
+    pages/civic/Mission.jsx
+
+[LIVE] Shell Styles
+    styles/civic-shell.css
+
+Next Steps:
+    - Add Program Outcomes card to AdminAnalytics.jsx
+    - Extend logging to: Career, Curriculum, Arcade
+    - Implement Funders PDF bundle
+
+=====================================================================
+2. LORD OF OUTCOMES™ – REGIONAL ANALYTICS SYSTEM
+=====================================================================
+
+[LIVE] Entry + Router + Layout
+    entries/lordOutcomes.main.jsx
+    router/LordOutcomesRoutes.jsx
+    layouts/LordOutcomesLayout.jsx
+
+[LIVE] Components (Charts, Filters, Shell)
+    components/lordOutcomes/charts/RegionHeatmap.jsx
+    components/lordOutcomes/filters/OutcomeFilterBar.jsx
+    components/lordOutcomes/summary/KpiStrip.jsx
+    components/lordOutcomes/tables/*.jsx
+
+[LIVE] Pages
+    pages/lordOutcomes/LordOutcomesHome.jsx
+    pages/lordOutcomes/StateOutcomesPage.jsx
+    pages/lordOutcomes/ProgramOutcomesPage.jsx
+    pages/lordOutcomes/EmployerImpactPage.jsx
+    pages/lordOutcomes/FundingImpactPage.jsx
+
+[LIVE] Data
+    utils/lordOutcomes/mockOutcomesData.js
+    utils/lordOutcomes/outcomesApi.js
+
+[LIVE] Styles
+    styles/lordOutcomes.css
+
+Next Steps:
+    - Add CSV/JSON export
+    - Add regional composite score
+    - Plan future integration with event spine
+
+=====================================================================
+3. EMPLOYER + SALES – INCENTIVE/REIMBURSEMENT ENGINE
+=====================================================================
+
+Shared Logic (both apps rely on these)
+    data/employer/programs.ohio.json
+    shared/employer/eligibility.js
+    shared/employer/salesBridge.js
+    shared/sales/leadInbox.js
+    shared/sales/pitchPack.js
+
+---------------------------------------------------------------------
+Employer App
+---------------------------------------------------------------------
+[LIVE]
+    entries/employer.main.jsx
+    router/EmployerRoutes.jsx
+    layouts/EmployerLayout.jsx
+    styles/employer-shell.css
+
+Pages (some ready, some partial)
+    pages/employer/Dashboard.jsx
+    pages/employer/Analytics.jsx
+    pages/employer/FundingFinder.jsx
+    pages/employer/ReimbursementCalculator.jsx
+    pages/employer/Compliance.jsx
+    pages/employer/Exports.jsx
+
+---------------------------------------------------------------------
+Sales App
+---------------------------------------------------------------------
+[EXPERIMENT / REBUILDING]
+    entries/sales.main.jsx
+    router/SalesRoutes.jsx          (new)
+    router/SalesRoutes.jsx.bak      (old)
+    layouts/SalesLayout.jsx         (new)
+    layouts/SalesLayout.jsx.bak     (old)
+    _archive/components.sales.*     (legacy UI kit)
+    _archive/pages.sales.*          (legacy pages)
+
+Next Steps:
+    - Implement FundingFinder + eligibility.js wiring
+    - Trigger salesBridge events from Employer app
+    - Render leadInbox inside Sales app as Lead Inbox
+
+=====================================================================
+4. PUBLIC APPS GALLERY (VIDEO + IMAGE CARDS)
+=====================================================================
+
+Assets (Videos)
+    public/media/*.mp4
+
+Assets (Images)
+    public/assets/apps/*.webp
+
+Registry
+    data/admin.apps.js   (video/image/featured)
+
+Main Component
+    pages/foundation/PublicApps.jsx
+
+Styles
+    styles/apps-gallery.css
+
+Next Steps:
+    - Add fade-in animation
+    - Optional: Details modal on click
+
+=====================================================================
+5. ARCADE APP (HUD, DASHBOARD, HISTORY, LEDGER)
+=====================================================================
+
+[LIVE]
+    entries/arcade.main.jsx
+    router/ArcadeRoutes.jsx
+    layouts/ArcadeLayout.jsx
+
+[LIVE]
+    pages/arcade/Arcade.jsx
+    pages/arcade/ArcadeDashboard.jsx
+    pages/arcade/ArcadeDashboardNorthstar.jsx
+    pages/arcade/ArcadeHistory.jsx
+    pages/arcade/Leaderboard.jsx
+    pages/arcade/Rewards.jsx
+    pages/arcade/Tournaments.jsx
+
+[LIVE] Components
+    components/arcade/ArcadeSidebarHud.jsx
+
+[EXPERIMENT] Ledger + History Hooks
+    shared/arcade/useArcadeHistory.js
+    shared/arcade/useArcadeLedger.js
+    shared/arcade/arcadeRules.js
+
+Next Steps:
+    - Verify useArcadeLedger wiring
+    - Migrate arcade events to logging spine
+    - Build L1X-style fullscreen hero layout
+
+=====================================================================
+6. CREDIT / DEBT / TREASURY (FINANCE STACK)
+=====================================================================
+
+Credit App
+    layouts/CreditLayout.jsx
+    router/CreditRoutes.jsx
+    utils/creditEngine.js
+    utils/creditMath.js
+    utils/creditLedger.js
+    shared/credit/CreditProvider.jsx
+
+Debt App
+    layouts/DebtLayout.jsx
+    router/DebtRoutes.jsx
+    pages/debt/*.jsx
+
+Treasury App
+    layouts/TreasuryLayout.jsx
+    router/TreasuryRoutes.jsx
+    pages/treasury/*.jsx
+
+Next Steps:
+    - Choose one finance app to polish first
+    - Log finance events to logging spine
+    - Add CSV/JSON exports where needed
+
+=====================================================================
+7. EVENT LOGGING SPINE (CROSS-APP)
+=====================================================================
+
+[LIVE] Files
+    utils/civicLogs.js
+    shared/ns/events.js
+    shared/ledger/ledgerClient.js
+    shared/ledger/schema.js
+    shared/ledger/LedgerProvider.jsx
+
+Event Format:
+    duration
+    fundingStreams
+    siteId
+    appId
+    chapter
+    toolName
+    event
+    at
+
+Next Steps:
+    - Extend this structure to Career, Curriculum, Arcade, Employer
+    - Create helper: logAppEvent(appId, payload)
+
+=====================================================================
+8. SHARED SHELL + THEME SYSTEM
+=====================================================================
+
+Shared Styles
+    styles/unified-shell.css
+    styles/theme-shf.css
+    styles/foundation.css
+    styles/sidebar.css
+    styles/dashboard-shared.css
+
+App Shells
+    styles/civic-shell.css
+    styles/arcade-shell.css
+    styles/employer-shell.css
+    styles/sales-shell.css
+    styles/career-shell.css
+    styles/credit-shell.css
+    styles/debt-shell.css
+    styles/treasury-shell.css
+
+Next Steps:
+    - Mark deprecated shell files
+    - Move colors/spacings into shared tokens
+    - Enforce crb-shell structure in all apps
+
+=====================================================================
+9. NEXT 5 ENGINEERING MOVES
+=====================================================================
+
+1. Implement Employer → Sales lead bridge.
+2. Add CSV/JSON export to Lord of Outcomes.
+3. Extend logging spine to one more app (Career or Curriculum).
+4. Add Program Outcomes card to AdminAnalytics.jsx.
+5. Standardize shells across all apps.
+
+=====================================================================
+ END OF SYSTEM INDEX
+=====================================================================

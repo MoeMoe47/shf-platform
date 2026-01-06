@@ -1,0 +1,359 @@
+
+
+/* ----------------------------------------------------
+   SHARED FOUNDATION (Cleaned & Theme-aware)
+   Works across shells; sidebar never overlaps content.
+---------------------------------------------------- */
+
+/* ---- Core tokens (lean; defer to theme-solutions when present) ---- */
+:root{
+  --bg:#fff; --page:#fff; --card:#fff;
+  --ink:#0a0a0a; --ink-soft:#6b7280;
+  --ring: rgba(0,0,0,.12);
+  --brand:#e11d2d; --brand-ink:#fff;
+
+  --radius:14px; --radius-pill:999px;
+  --shadow-sm:0 1px 0 rgba(0,0,0,.02);
+  --shadow-md:0 2px 10px rgba(0,0,0,.04);
+
+  /* Layout sizing */
+  --header-h:56px;
+  /* Sidebar width comes from the app (SalesLayout sets --sb-w).
+     Fallback here keeps legacy rails working. */
+  --rail-w: 220px; --rail-w-collapsed: 72px;
+  --sb-w: var(--rail-w);
+}
+
+/* Legacy collapse hook (optional) */
+.app-root.is-collapsed{ --rail-w: var(--rail-w-collapsed); }
+
+*{ box-sizing:border-box; }
+html, body, #root { height:100%; }
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","Roboto","Segoe UI",system-ui,Arial,sans-serif;
+}
+
+/* A11y & motion */
+.sh-srOnly{ position:absolute!important; width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; scroll-behavior:auto!important; }
+}
+
+/* Thin scrollbars (WebKit) */
+*::-webkit-scrollbar{ height:10px; width:10px; }
+*::-webkit-scrollbar-thumb{ background:#dcdad3; border-radius:8px; }
+*::-webkit-scrollbar-track{ background:transparent; }
+
+/* ===================== Frame ===================== */
+.sh-root{ display:flex; min-height:100vh; background:var(--bg); color:var(--ink); }
+.sh-left{ display:flex; flex-direction:column; }
+.sh-right{ display:flex; flex-direction:column; flex:1; min-width:0; }
+
+/* ===================== Header ===================== */
+.app-header{
+  height: var(--header-h);
+  min-height: var(--header-h);
+  display:grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  align-items:center;
+  position: sticky; top:0; z-index:40;
+  border-bottom: 1px solid var(--ring);
+  backdrop-filter: saturate(1.05) blur(10px);
+  background: var(--header-bg, #0a0a0a);
+  color: var(--header-ink, #fff);
+}
+.app-headerRight{ display:flex; align-items:center; justify-content:flex-end; gap:8px; padding:0 12px; }
+.app-toggleBtn{
+  height:32px; min-width:36px; padding:0 10px;
+  border-radius:10px; border:1px solid var(--ring);
+  background:transparent; color:inherit; cursor:pointer; font-weight:700;
+}
+.app-toggleBtn:hover{ background:rgba(255,255,255,.08); }
+
+/* ===================== Body / Sidebar / Main ===================== */
+/* Grid next to sidebar; the JS sets --sb-w so content never sits under it */
+.app-body{
+  display:grid;
+  grid-template-columns: var(--sb-w, 0px) 1fr;
+  height: calc(100dvh - var(--header-h));
+}
+@supports not (height: 100dvh){
+  .app-body{ height: calc(100vh - var(--header-h)); }
+}
+
+/* Keep Sales’ padding animation (expand/contract on collapse) */
+.theme-solutions .sal-body{
+  padding-inline-start: var(--sb-w, 0px);
+  transition: padding-inline-start .25s ease;
+}
+@media (max-width:1024px){ .theme-solutions .sal-body{ padding-inline-start: 0; } }
+
+.app-sidebar{
+  width: var(--sb-w, var(--rail-w));
+  background: var(--page);
+  border-right:1px solid var(--ring);
+  position:relative; overflow:visible;
+}
+.app-sidebar__inner{
+  height:100%; overflow:auto; -webkit-overflow-scrolling:touch;
+  padding:12px;
+}
+
+/* Content column */
+.app-main{
+  background: var(--page);
+  padding: 16px 24px 40px;
+  min-width:0; overflow:auto; -webkit-overflow-scrolling:touch;
+}
+
+/* ===================== Sidebar Nav ===================== */
+.app-nav{ display:flex; flex-direction:column; gap:6px; padding:6px; }
+.app-nav__item{
+  display:flex; align-items:center; gap:10px;
+  padding:10px 12px; border-radius:10px; color:var(--ink);
+  text-decoration:none; border:1px solid transparent;
+  transition: background .12s ease, color .12s ease, border-color .12s ease;
+}
+.app-nav__item:hover{ background:rgba(0,0,0,.04); }
+.app-nav__item.is-active,
+.app-nav__item[aria-current="page"]{
+  background:#fff; border-color:var(--ring); color:#111827; font-weight:600;
+}
+.app-ico{ width:18px; display:grid; place-items:center; }
+.app-label{ font-size:12px; color:var(--ink-soft); padding:4px 12px 0; }
+
+/* Collapsed rail (emoji-only) */
+.app-root.is-collapsed .app-nav__item{ justify-content:center; padding:10px; min-height:40px; }
+.app-root.is-collapsed .app-nav__item span:not(.app-ico){ display:none!important; }
+.app-root.is-collapsed .app-ico{ margin:0; font-size:20px; }
+
+/* Hover flyouts for collapsed labels */
+.app-root.is-collapsed .app-nav__item[data-label]{ position:relative; }
+.app-root.is-collapsed .app-nav__item[data-label]::after{
+  content: attr(data-label);
+  position:absolute; left:calc(100% + 8px); top:50%; transform:translateY(-50%);
+  white-space:nowrap; background:#111827; color:#fff; border-radius:8px;
+  padding:6px 8px; font-size:12px; box-shadow:0 8px 24px rgba(0,0,0,.18);
+  opacity:0; visibility:hidden; transition:opacity .15s ease, transform .15s ease; z-index:1000;
+}
+.app-root.is-collapsed .app-nav__item[data-label]:hover::after,
+.app-root.is-collapsed .app-nav__item[data-label]:focus-visible::after{
+  opacity:1; visibility:visible; transform:translate(4px,-50%);
+}
+
+/* ===================== Mobile Drawer ===================== */
+@media (max-width:840px){
+  .app-body{ grid-template-columns: 1fr; }
+  .app-sidebar{
+    position:fixed; inset:0 auto 0 0; width:min(88vw,320px);
+    transform:translateX(-100%); transition:transform .18s ease; z-index:50;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+  }
+  .app-root.drawer-open .app-sidebar{ transform:translateX(0); }
+  .app-scrim{ position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:45; display:none; }
+  .app-root.drawer-open .app-scrim{ display:block; }
+}
+
+/* ===================== Minimal UI helpers ===================== */
+.card{ background:var(--card); border:1px solid var(--ring); border-radius:12px; }
+.card--pad{ padding:16px; }
+.skel{ display:block; border-radius:10px;
+  background:linear-gradient(90deg, rgba(0,0,0,.06), rgba(0,0,0,.12), rgba(0,0,0,.06));
+  background-size:200% 100%; animation:skel 1.2s linear infinite; }
+@keyframes skel{ 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+.sh-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:8px 12px;
+  font-weight:700; border-radius:10px; border:1px solid var(--ring);
+  background:#fff; color:var(--ink); text-decoration:none; cursor:pointer;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.sh-btn:hover{ transform:translateY(-1px); box-shadow:0 2px 10px rgba(0,0,0,.06); }
+.sh-btn--soft{ background:#f3f4f6; }
+
+/* ===================== Dashboard Shell (once) ===================== */
+.db-shell{ display:block; }
+.db-head{ display:grid; grid-template-columns:1fr auto; align-items:center; gap:12px; padding:12px 8px 8px; border-bottom:1px solid var(--ring); }
+.db-title{ margin:0; font-size:20px; line-height:1.2; color:var(--ink); }
+.db-subtitle{ margin:4px 0 0; font-size:13px; color:var(--ink-soft); }
+.db-headR{ display:flex; gap:8px; align-items:center; }
+.db-tabs{ display:flex; gap:6px; padding:8px; position:sticky; top:var(--header-h); background:var(--page); z-index:6; }
+.db-tab{ padding:8px 12px; border-radius:10px; border:1px solid var(--ring); background:#fff; color:var(--ink); cursor:pointer; font-weight:600; }
+.db-tab.is-active{ background:var(--brand); color:var(--brand-ink); border-color:var(--brand); }
+.db-content{ padding:16px 8px 24px; }
+
+.db-grid{ display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); margin:12px 0 24px; }
+.db-grid--kpis .card{ display:grid; gap:6px; padding:16px; border-radius:14px; }
+.kpi-label{ font-size:12px; color:var(--ink-soft); }
+.kpi-value{ font-size:22px; font-weight:800; letter-spacing:.2px; }
+
+/* ===================== Lux Pack (Apple × Tesla vibe) ===================== */
+.lux-hero{
+  display:grid; grid-template-columns:1.25fr 1fr; gap:20px;
+  padding:22px; border-radius:20px; color:#fff; position:relative; overflow:hidden;
+  background: radial-gradient(1200px 600px at -20% -60%, rgba(255,79,0,.25), transparent 60%),
+             linear-gradient(180deg, #0d0f12 0%, #101418 100%);
+  border:1px solid rgba(255,255,255,.08); box-shadow:0 20px 40px rgba(0,0,0,.18);
+}
+.lux-hero::after{
+  content:""; position:absolute; inset:-15%;
+  background:
+    radial-gradient(700px 380px at 115% 10%, rgba(225,29,45,.22), transparent 60%),
+    radial-gradient(800px 420px at -10% 140%, rgba(255,255,255,.08), transparent 60%);
+  pointer-events:none;
+}
+.frost{ backdrop-filter:saturate(1.2) blur(6px); }
+.lux-heroL{ display:grid; gap:10px; align-content:center; }
+.lux-eyebrow{ font-size:12px; letter-spacing:.16em; text-transform:uppercase; opacity:.75; }
+.lux-title{ margin:0; font-size:28px; line-height:1.2; letter-spacing:.2px; }
+.lux-sub{ margin:0; opacity:.75; }
+.lux-cta{ display:flex; gap:10px; margin-top:6px; }
+.lux-heroKpis{ display:grid; gap:12px; align-content:center; }
+.lux-kpi{ padding:14px; border-radius:16px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); }
+.lux-kpi-label{ font-size:12px; opacity:.9; }
+.lux-kpi-value{ font-size:22px; font-weight:800; letter-spacing:.2px; }
+.lux-kpi-meter{ height:8px; border-radius:999px; background:rgba(255,255,255,.14); margin-top:8px; overflow:hidden; }
+.lux-kpi-meter>span{ display:block; height:8px; background:var(--brand); }
+
+/* Micro-motion + table polish */
+.hover-lift{ transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+.hover-lift:hover{ transform:translateY(-2px); box-shadow:0 14px 34px rgba(0,0,0,.10); border-color:var(--brand); }
+.lux-table td,.lux-table th{ border:none; }
+.lux-table tbody tr td{ background:#fff; border:1px solid var(--ring); }
+.lux-table tbody tr td:first-child{ border-radius:12px 0 0 12px; }
+.lux-table tbody tr td:last-child{ border-radius:0 12px 12px 0; }
+
+/* ===================== Pro Dashboard Grid (single source) ===================== */
+.dash-pro{ display:grid; gap:16px; }
+.pro-kpis{ display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); }
+.pro-grid{ display:grid; gap:16px; grid-template-columns:1fr; }      /* container for main + aside */
+.pro-main{ display:grid; gap:16px; grid-template-columns:repeat(2,minmax(0,1fr)); align-content:start; }
+.pro-main .widget{ grid-column:span 1; }
+.pro-main .widget.span-2{ grid-column:1 / -1; }
+.pro-aside{ display:grid; gap:16px; grid-template-columns:1fr; }
+@media (max-width:1200px){ .pro-main{ grid-template-columns:1fr; } }
+
+/* ===================== Pipeline list (once) ===================== */
+.pipe-list{ display:grid; gap:8px; margin:8px 0 0; }
+.pipe-row{
+  display:grid; grid-template-columns:1fr auto; align-items:center;
+  gap:12px; padding:10px 12px; border:1px solid var(--ring);
+  background:var(--card); border-radius:12px;
+}
+.pipe-title{ font-weight:700; color:var(--ink); }
+.pipe-meta{ display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; font-size:12px; color:var(--ink-soft); }
+.badge{ padding:2px 8px; border-radius:999px; border:1px solid var(--ring); background:#fff; font-weight:700; font-size:12px; }
+
+/* ===================== Safety ===================== */
+.sal-content{ min-width:0; }  /* prevents overflow on grids */
+/* ===== Motivation Calculator (theme-aware) ===== */
+.mot-wrap{ display:grid; gap:16px; }
+
+/* use existing .lux-hero for the hero; .mot-hero is just a hook if needed */
+.mot-hero{ grid-column: 1 / -1; }
+.mot-card .widget-body{ padding-top: 12px; }
+
+/* --- calculator layout --- */
+.calc-grid{
+  display:grid; gap:12px;
+  grid-template-columns: repeat(12, minmax(0,1fr));
+}
+.calc-row{ grid-column: span 6; display:grid; gap:6px; }
+.calc-row.is-compact{ grid-column: span 6; }
+
+@media (max-width: 980px){
+  .calc-row{ grid-column: 1 / -1; }
+}
+
+.calc-label{ font-size:12px; color: var(--ink-soft,#6b7280); }
+.calc-controls{ display:flex; gap:10px; align-items:center; }
+.calc-controls input[type="range"]{ flex:1; accent-color: var(--brand,#e11d2d); }
+.calc-num{
+  width:120px; height:34px; padding:0 8px; border-radius:10px;
+  border:1px solid var(--ring,rgba(0,0,0,.12)); background:#fff; color: var(--ink,#111);
+}
+.calc-pct{ display:flex; align-items:center; gap:6px; }
+.toggle{ display:flex; align-items:center; gap:6px; font-size:13px; }
+.toggle input{ accent-color: var(--brand,#e11d2d); }
+.spacer{ flex:1; }
+
+/* --- hero KPI progress (separate from lux-kpi-meter) --- */
+.mot-meter{
+  height:8px; border-radius:999px; background:rgba(255,255,255,.14);
+  margin-top:8px; overflow:hidden;
+}
+.mot-meter > span{ display:block; height:8px; background:var(--brand,#e11d2d); }
+
+/* --- “What this buys you” goals --- */
+.goals-grid{
+  display:grid; gap:12px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+.goal-card{
+  display:grid; grid-template-columns: 72px 1fr; gap:12px;
+  padding:12px; border-radius:16px;
+  background: var(--card,#fff);
+  border:1px solid var(--ring,rgba(0,0,0,.1));
+  transition: border-color .16s ease, box-shadow .16s ease, transform .16s ease;
+}
+.goal-card.is-done{
+  border-color: rgba(34,197,94,.45);
+  box-shadow: 0 10px 30px rgba(34,197,94,.08);
+}
+
+.goal-visual{
+  display:grid; place-items:center;
+  border-radius:12px; color:#fff;
+  background:
+    radial-gradient(140px 80px at 30% -30%, rgba(225,29,45,.18), transparent 60%),
+    #0e1116;
+}
+.goal-emoji{ font-size:32px; line-height:1; }
+
+.goal-title{ font-weight:800; color: var(--ink,#0a0a0a); }
+.goal-meta{ font-size:12px; color: var(--ink-soft,#6b7280); }
+
+.goal-bar{
+  height:8px; border-radius:999px; background: rgba(0,0,0,.06);
+  margin-top:8px; overflow:hidden;
+}
+.goal-bar > span{ display:block; height:8px; background: var(--brand,#e11d2d); }
+
+.goal-foot{ font-size:12px; color: var(--ink-soft,#6b7280); margin-top:6px; }
+
+/* optional subtle card lift on hover (matches Lux pack) */
+.goal-card.hover-lift:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0,0,0,.10);
+  border-color: var(--brand,#e11d2d);
+}
+/* Motivation Calculator – image variant */
+.goal-visual img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+/* Page subheader area (hero lives here) */
+.app-subheader{
+  background: var(--page, #fff);
+  padding: 16px 24px 0;
+  padding-inline-start: var(--sb-w, 0px); /* align with sidebar */
+  transition: padding-inline-start .25s ease;
+  position: sticky;                 /* stick under the site header */
+  top: var(--header-h, 56px);
+  z-index: 35;
+}
+
+/* Make the body column fill the space next to the sidebar */
+.theme-solutions .sal-body > .sal-content{
+  max-width: none;   /* remove legacy centering */
+  margin: 0;
+  padding: 16px 24px 40px;
+}
+
+

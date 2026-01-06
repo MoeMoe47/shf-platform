@@ -1,0 +1,82 @@
+{
+  "id": "asl-54",
+  "title": "ASL 7.4 — Clinic Dialogues II (Tests • Results • Follow-Ups) 🧪📋",
+  "estMinutes": 30,
+  "objectives": [
+    "Discuss medical tests and results using clear WH and Y/N structures",
+    "Confirm understanding of next steps with repeat-back and neutral returns",
+    "Use time-first framing for scheduling follow-up appointments"
+  ],
+  "vocab": [
+    { "term": "TEST / BLOOD / X-RAY", "def": "Common exam terms; point to location (blood = arm, x-ray = chest)." },
+    { "term": "RESULT / POSITIVE / NEGATIVE", "def": "Outcome signs; use clear facial affect for each." },
+    { "term": "NORMAL / NOT-NORMAL", "def": "Status terms for results." },
+    { "term": "FOLLOW-UP / NEXT APPOINTMENT", "def": "Future clinic visit scheduling." },
+    { "term": "CHECK / MONITOR", "def": "Ongoing observation verbs." },
+    { "term": "TAKE-BLOOD / GIVE-SAMPLE", "def": "Action verbs for tests; pair with time markers." },
+    { "term": "REPEAT-BACK", "def": "Confirm next steps; ensure patient repeats provider lines." },
+    { "term": "ROLE-SHIFT (RS)", "def": "Provider ↔ patient with clear neutral returns." }
+  ],
+  "sections": [
+    {
+      "heading": "Warm-Up: Test Vocabulary + NMM",
+      "media": { "src": "/media/asl/unit-7/test-vocab.png", "alt": "Blood test, X-ray, sample signs", "caption": "Pair test type with location" },
+      "body": "Practice: **BLOOD TEST ARM**, **X-RAY CHEST**, **GIVE-SAMPLE URINE**. Add **NORMAL / NOT-NORMAL** with affect: neutral face for normal, tight brows for not-normal.",
+      "microCheck": {
+        "q": "How do you show an abnormal result?",
+        "options": ["Smile only", "NOT-NORMAL with tense NMM", "Spell A-B-N", "Neutral expression"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Model: Provider Gives Results",
+      "media": { "src": "/media/asl/unit-7/results-demo.mp4", "alt": "Provider explains test outcome", "caption": "Time-first → test → result" },
+      "body": "Sequence:\n• **YESTERDAY BLOOD TEST. RESULT NORMAL.**\n• **X-RAY SHOW SMALL PROBLEM.**\n• **FOLLOW-UP APPT NEXT-WEEK.**\nKeep clauses short, 3–5 signs, with tiny pauses.",
+      "microCheck": {
+        "q": "Best order for clarity is…",
+        "options": ["Result → Time → Test", "Time-first → Test → Result → Next step", "Next step only", "Random order"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "RS Drill: Patient ↔ Provider",
+      "body": "• **RS→PROVIDER:** **TEST RESULT NORMAL. BUT MONITOR.**\n• **RS→PATIENT (repeat-back):** **OK RESULT NORMAL. MONITOR.**\n• **RS→PROVIDER:** **FOLLOW-UP APPT NEXT-MONTH.**\n• **RS→PATIENT (repeat-back):** **OK NEXT-MONTH.**",
+      "callouts": [
+        { "type": "tip", "title": "Neutral Returns", "body": "Always pause in neutral before repeating or switching roles." }
+      ],
+      "microCheck": {
+        "q": "What shows the patient understood the provider?",
+        "options": ["Nod only", "Repeat-back the key info", "Look away", "Spell R-E-S-U-L-T"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Questions Toolkit",
+      "body": "Patient → Provider:\n• **RESULT POSITIVE? NEGATIVE?** (Y/N)\n• **FOLLOW-UP WHEN?** (WH)\n• **MEDICINE NEED CONTINUE?**\nProvider → Patient:\n• **HOW-FEEL NOW?**\n• **NEXT-APPT POSSIBLE?**\n• **STOP / CONTINUE MEDICINE?**"
+    },
+    {
+      "heading": "Mini-Showcase",
+      "body": "Record **15–20s**: provider explains one test result + follow-up, patient repeats back. Must include **time-first**, **NORMAL/NOT-NORMAL**, **one WH or Y/N question**, and **neutral return**.",
+      "teacherNote": "Caption which test type you used (blood, x-ray, sample) and the follow-up schedule."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 7.4 — Clinic Dialogues II Quiz",
+    "items": [
+      { "type": "mcq", "q": "Which order is most clear for test results?", "options": ["Time-first → Test → Result → Next step", "Result → Time → Test", "Random order", "Next step only"], "answerIndex": 0 },
+      { "type": "mcq", "q": "Which NMM shows something is not normal?", "options": ["Relaxed face", "Tense brows/serious affect", "Smile", "Neutral look"], "answerIndex": 1 },
+      { "type": "mcq", "q": "How should the patient confirm understanding?", "options": ["Stay silent", "Repeat-back key points", "Nod only", "Say YES"], "answerIndex": 1 },
+      { "type": "short", "q": "Write a gloss: TODAY BLOOD TEST. RESULT NOT-NORMAL. FOLLOW-UP NEXT-WEEK. OK?" },
+      { "type": "reflection", "prompt": "Was it harder to keep clauses short or to remember repeat-back confirmations? What will you practice next?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Upload your 15–20s test result + follow-up role-play. Caption test type, result, and next step.",
+  "summary": "You practiced clear test result dialogues with time-first framing, patient repeat-backs, and next-step follow-ups using RS with neutral returns.",
+  "nextSlug": "asl-55",
+  "games": [
+    { "id": "result-match", "title": "Result Match", "route": "/arcade/asl/result-match", "estMinutes": 5, "xp": 50, "outcomes": ["Match test type to result"] },
+    { "id": "repeat-back-check", "title": "Repeat-Back Check", "route": "/arcade/asl/repeat-back-check", "estMinutes": 5, "xp": 50, "outcomes": ["Practice confirmation clarity"] },
+    { "id": "appt-timer", "title": "Appt Timer", "route": "/arcade/asl/appt-timer", "estMinutes": 5, "xp": 50, "outcomes": ["Frame follow-up with time-first clarity"] }
+  ]
+}

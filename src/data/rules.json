@@ -1,0 +1,17 @@
+[
+    {
+      "id": "lesson-complete-evu",
+      "when": { "app": "curriculum", "type": "progress", "tags": ["lesson.completed"] },
+      "then": [
+        { "app": "credit", "type": "earn", "amount": 10, "tags": ["evu", "lesson.reward"] }
+      ]
+    },
+    {
+      "id": "debt-streak-badge",
+      "when": { "app": "debt", "type": "debt", "tags": ["payment.onTime.3x"] },
+      "then": [
+        { "app": "credit", "type": "badge", "amount": 0, "tags": ["discipline.bronze"] }
+      ]
+    }
+  ]
+  

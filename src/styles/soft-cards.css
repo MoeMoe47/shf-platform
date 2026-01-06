@@ -1,0 +1,38 @@
+
+
+/* src/styles/soft-cards.css */
+/* Subtle “paper” surface used in lessons and civic pages */
+
+:root {
+  --surface-bg: color-mix(in srgb, #ffffff 82%, #eef2f7);
+  --surface-border: rgba(0,0,0,.06);
+  --surface-shadow: 0 1px 1px rgba(0,0,0,.03), 0 2px 6px rgba(0,0,0,.04);
+  --surface-radius: 16px;
+}
+
+.surface-soft {
+  background: var(--surface-bg);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--surface-radius);
+  box-shadow: var(--surface-shadow);
+}
+
+/* Apply soft cards to lesson blocks WITHOUT changing your JSX everywhere.
+   We wrap the lesson body once (see LessonBody.jsx), then give all direct
+   children a gentle surface. */
+.lesson-surface > * {
+  background: var(--surface-bg);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--surface-radius);
+  box-shadow: var(--surface-shadow);
+  padding: 16px;
+  margin: 12px 0;
+}
+
+/* Tighten headings inside soft cards just a bit */
+.lesson-surface > * h2,
+.lesson-surface > * h3 {
+  margin-top: 4px;
+}
+
+

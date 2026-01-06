@@ -1,0 +1,9 @@
+import "@/boot.jsx";
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { HashRouter } from "react-router-dom";
+import FoundationApp from "@/router/FoundationRoutes.jsx";
+
+function App(){ return (<HashRouter><FoundationApp /></HashRouter>); }
+const mount = document.getElementById("root") || document.getElementById("app");
+createRoot(mount).render(<App />);

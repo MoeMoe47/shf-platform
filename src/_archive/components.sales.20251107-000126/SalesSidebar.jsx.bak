@@ -1,0 +1,134 @@
+// src/components/sales/SalesSidebar.jsx
+import React from "react";
+import { NavLink } from "react-router-dom";
+
+const KEY = "sales:rail:collapsed";
+
+const Item = ({ to, icon, children, end = false }) => (
+  <li>
+    <NavLink
+      to={to}
+      end={end}
+      className={({ isActive }) => (isActive ? "crb-link is-active" : "crb-link")}
+      title={typeof children === "string" ? children : undefined}
+      aria-label={typeof children === "string" ? children : undefined}
+    >
+      <span className="crb-linkIcon" aria-hidden>{icon}</span>
+      <span className="crb-linkLabel">{children}</span>
+    </NavLink>
+  </li>
+);
+
+const ItemExt = ({ href, icon, children }) => (
+  <li>
+    <a
+      className="crb-link"
+      href={href}
+      title={typeof children === "string" ? children : undefined}
+      aria-label={typeof children === "string" ? children : undefined}
+    >
+      <span className="crb-linkIcon" aria-hidden>{icon}</span>
+      <span className="crb-linkLabel">{children}</span>
+    </a>
+  </li>
+);
+
+export default function SalesSidebar() {
+  const [collapsed, setCollapsed] = React.useState(() => {
+    try { return localStorage.getItem(KEY) === "1"; } catch { return false; }
+  });
+
+  React.useEffect(() => {
+    try { localStorage.setItem(KEY, collapsed ? "1" : "0"); } catch {}
+    const html = document.documentElement;
+    if (collapsed) html.setAttribute("data-rail", "collapsed");
+    else html.removeAttribute("data-rail");
+  }, [collapsed]);
+
+  return (
+    <nav className="crb-nav" aria-label="Sales Navigation">
+      {/* OVERVIEW */}
+      <div className="crb-navSection">
+        <div className="crb-navTitle">OVERVIEW</div>
+        <ul className="crb-list">
+          <Item to="/dashboard" icon="📊" end>Dashboard</Item>
+          <Item to="/pipeline"  icon="📈">Pipeline</Item>
+          <Item to="/analytics" icon="📉">Analytics</Item>
+          <Item to="/exports"   icon="📑">Exports</Item>
+        </ul>
+      </div>
+
+      {/* REVENUE WORK */}
+      <div className="crb-navSection">
+        <div className="crb-navTitle">REVENUE</div>
+        <ul className="crb-list">
+          <Item to="/leads"         icon="🧲">Leads</Item>
+          <Item to="/opportunities" icon="💼">Opportunities</Item>
+          <Item to="/accounts"      icon="👥">Accounts</Item>
+          <Item to="/quotes"        icon="🧾">Quotes</Item>
+          <Item to="/orders"        icon="🛒">Orders</Item>
+          <Item to="/invoices"      icon="📬">Invoices</Item>
+          <Item to="/ledger"        icon="📒">Ledger</Item>
+        </ul>
+      </div>
+
+      {/* CATALOG & PRICING */}
+      <div className="crb-navSection">
+        <div className="crb-navTitle">CATALOG</div>
+        <ul className="crb-list">
+          <Item to="/bundles"  icon="🧰">Bundles</Item>
+          <Item to="/pricing"  icon="🏷️">Pricing</Item>
+          <Item to="/proposal" icon="📝">Proposals</Item>
+        </ul>
+      </div>
+
+      {/* TOOLS */}
+      <div className="crb-navSection">
+        <div className="crb-navTitle">TOOLS</div>
+        <ul className="crb-list">
+          <Item to="/calculator" icon="🧮">Calculator</Item>
+          <Item to="/roi"        icon="📈">ROI</Item>
+          <Item to="/verifier"   icon="✅">Verifier</Item>
+          <Item to="/coach"      icon="🤖">Coach</Item>
+          <Item to="/demo"       icon="🎬">Demo Hub</Item>
+        </ul>
+      </div>
+
+      {/* CROSS APPS */}
+      <div className="crb-navSection">
+        <div className="crb-navTitle">CROSS APPS</div>
+        <ul className="crb-list">
+          <ItemExt href="/treasury.html#/dashboard" icon="🏦">Treasury</ItemExt>
+          <ItemExt href="/career.html#/dashboard"   icon="🧭">Career</ItemExt>
+          <ItemExt href="/employer.html#/dashboard" icon="🏢">Employer</ItemExt>
+          <ItemExt href="/credit.html#/report"      icon="🧾">Credit</ItemExt>
+          <ItemExt href="/debt.html#/dashboard"     icon="⏱️">Debt</ItemExt>
+        </ul>
+      </div>
+
+      {/* APP */}
+      <div className="crb-navSection">
+        <div className="crb-navTitle">APP</div>
+        <ul className="crb-list">
+          <Item to="/settings" icon="⚙️">Settings</Item>
+          <Item to="/help"     icon="❓">Help</Item>
+        </ul>
+      </div>
+
+      {/* Collapse control */}
+      <div className="crb-railToggleWrap">
+        <button
+          type="button"
+          className="crb-railToggle"
+          onClick={() => setCollapsed((c) => !c)}
+          aria-pressed={collapsed}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          <span className="lbl-emoji" aria-hidden>{collapsed ? "➡️" : "⬅️"}</span>
+          <span className="lbl-text">{collapsed ? "Expand" : "Collapse"}</span>
+        </button>
+      </div>
+    </nav>
+  );
+}

@@ -1,0 +1,67 @@
+/* Lord of Outcomes — DYM Pattern Layer (grid + film grain)
+   ONE JOB: background atmosphere behind the UI
+*/
+
+/* Base canvas only */
+html, body {
+  background: #07070a;
+}
+
+/* The app wrapper */
+.loo-dymApp {
+  position: relative;
+}
+
+/* Make sure overlays exist and sit behind UI */
+.loo-dymApp .loo-dymGrid,
+.loo-dymApp .loo-dymNoise,
+.loo-dymApp .loo-vignette{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* GRID */
+.loo-dymApp .loo-dymGrid{
+  z-index: -3;
+  opacity: 0.18;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,0.06) 0px,
+      rgba(255,255,255,0.06) 1px,
+      transparent 1px,
+      transparent 64px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.06) 0px,
+      rgba(255,255,255,0.06) 1px,
+      transparent 1px,
+      transparent 64px
+    );
+  mix-blend-mode: screen;
+}
+
+/* NOISE */
+.loo-dymApp .loo-dymNoise{
+  z-index: -2;
+  opacity: 0.08;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.10) 0 1px, transparent 1px),
+    radial-gradient(circle at 70% 60%, rgba(255,255,255,0.08) 0 1px, transparent 1px),
+    radial-gradient(circle at 40% 80%, rgba(255,255,255,0.08) 0 1px, transparent 1px);
+  background-size: 120px 120px, 140px 140px, 160px 160px;
+  mix-blend-mode: overlay;
+}
+
+/* VIGNETTE (LIGHTER — this was your “blanket”) */
+.loo-dymApp .loo-vignette{
+  z-index: -1;
+  background: radial-gradient(1200px 700px at 50% 18%, transparent 35%, rgba(0,0,0,0.18) 86%);
+}
+
+/* Keep UI above all decorative layers */
+.looPage { position: relative; z-index: 1; }
+.looTopHeader { position: relative; z-index: 10; }
+.looMain { position: relative; z-index: 5; }

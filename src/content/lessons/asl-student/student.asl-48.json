@@ -1,0 +1,82 @@
+{
+  "id": "asl-48",
+  "title": "ASL 6.5 — Navigation Stories (Multi-Obstacle Journeys) 🧭🚗🧱",
+  "estMinutes": 30,
+  "objectives": [
+    "Tell multi-step journeys using anchored landmarks and classifier paths",
+    "Portray at least two obstacles and fixes (detours, delays) with clear NMMs",
+    "Blend narration and dialogue via role-shift with neutral returns and time-first sequencing"
+  ],
+  "vocab": [
+    { "term": "CL:3 / CL:1 / CL:B", "def": "Vehicle / person / surface for routes, blocks, and layouts." },
+    { "term": "OBSTACLE (BLOCK)", "def": "CL:B wall, construction, crowd; use tense NMM." },
+    { "term": "DETOUR", "def": "Path shifts around obstacle; show new route clearly." },
+    { "term": "DELAY / TRAFFIC", "def": "Wavy/stop–go motion; frustrated NMM." },
+    { "term": "ARRIVE / FINISH", "def": "Landing point and completion marker at the end of a segment." },
+    { "term": "TIME-FIRST", "def": "PAST/NOW/FUTURE frames each segment." },
+    { "term": "ROLE-SHIFT (RS)", "def": "Short lines for driver/walker/guide; return to neutral to narrate." }
+  ],
+  "sections": [
+    {
+      "heading": "Warm-Up: Landmarks Grid (4 Points)",
+      "media": { "src": "/media/asl/unit-6/landmarks-grid-4.png", "alt": "HOME, SCHOOL, STORE, HOSPITAL anchored", "caption": "Anchor 4 loci and reuse" },
+      "body": "Anchor **HOME (center)**, **SCHOOL (left)**, **STORE (right-up)**, **HOSPITAL (right-down)**. Point to lock them; reuse exactly."
+    },
+    {
+      "heading": "Model: Journey With Two Obstacles",
+      "media": { "src": "/media/asl/unit-6/nav-model.mp4", "alt": "CL:3 route with two detours", "caption": "Time-first • obstacle • fix • finish" },
+      "body": "Example:\n• **MORNING CL:3 HOME→SCHOOL. TRAFFIC DELAY.** (frustrated NMM)\n• **DETOUR RIGHT AROUND CONSTRUCTION (CL:B BLOCK).**\n• **NEXT SCHOOL→HOSPITAL VISIT. STREET CLOSED (CL:B).**\n• **ASK (RS→OFFICER): HOW-TO? (RS→OFFICER) DETOUR LEFT.**\n• **ARRIVE HOSPITAL FINISH.** Keep each clause 3–5 signs with tiny pauses.",
+      "microCheck": {
+        "q": "Where should FINISH appear?",
+        "options": ["Before time", "After a completed segment (e.g., ARRIVE)", "Randomly anywhere", "Never use it"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Technique: Path Readability",
+      "body": "Use **Place → Orient → Move** rhythm for each leg. Keep paths small and distinct; stop points crisp. For perspective changes, insert a **VV CUT** (tiny pause + snap) before continuing.",
+      "callouts": [
+        { "type": "tip", "title": "One Camera", "body": "Stay top-down for routes; switch to street view only after a clear cut for RS dialogue." }
+      ],
+      "microCheck": {
+        "q": "Best way to change perspective mid-story:",
+        "options": ["Switch suddenly", "Use a VV cut first", "Wave arms bigger", "Talk aloud"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Partner Practice: Three-Leg Route",
+      "media": { "src": "/media/asl/unit-6/three-leg.gif", "alt": "Three legs with two obstacles", "caption": "Leg A → Leg B → Leg C" },
+      "body": "Plan **3 legs** with **2 obstacles** and **2 fixes**. Must include: **1 CL:3** route, **1 CL:1** action (walk), **1 RS** help line, **2 FINISH** markers (end of legs A & C).",
+      "microCheck": {
+        "q": "Minimum technique set for this drill:",
+        "options": ["Only classifiers", "CL:3 + CL:1 + RS line + 2× FINISH", "RS only", "Just fingerspelling"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Mini-Showcase",
+      "body": "Record **18–25s**: multi-leg navigation story with **time-first framing**, **2 obstacles** (block/traffic), **2 fixes** (detour/ask), **1 RS** line, and **ARRIVE FINISH**. Caption the obstacles and fixes you used.",
+      "teacherNote": "If anchors drift, re-point once before your next RS line."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 6.5 — Navigation Stories Quiz",
+    "items": [
+      { "type": "mcq", "q": "Which classifier shows a roadblock best?", "options": ["CL:1", "CL:3", "CL:B", "5-hand"], "answerIndex": 2 },
+      { "type": "mcq", "q": "What improves multi-leg clarity most?", "options": ["Huge arm swings", "Place → Orient → Move rhythm", "No pauses", "Talking while signing"], "answerIndex": 1 },
+      { "type": "mcq", "q": "After an RS help line, you should…", "options": ["Stay in RS", "Return to neutral narrator", "Change anchors", "Speed up"], "answerIndex": 1 },
+      { "type": "short", "q": "Write a 3-leg gloss with TWO obstacles and fixes (use CL:3/CL:1 and FINISH twice)." },
+      { "type": "reflection", "prompt": "Which part was hardest—path size, obstacle clarity, or RS timing? What cue will you practice?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Upload your 18–25s navigation story; caption your two obstacles and their fixes.",
+  "summary": "You built multi-leg navigation stories using anchored landmarks, clean classifier paths, obstacle/fix pairs, and brief RS lines, sequenced with time-first and marked with FINISH.",
+  "nextSlug": "asl-49",
+  "games": [
+    { "id": "detour-dash", "title": "Detour Dash", "route": "/arcade/asl/detour-dash", "estMinutes": 5, "xp": 50, "outcomes": ["Spot and reroute around blocks"] },
+    { "id": "traffic-tune", "title": "Traffic Tune", "route": "/arcade/asl/traffic-tune", "estMinutes": 5, "xp": 50, "outcomes": ["NMM for delay/effort"] },
+    { "id": "cut-clear", "title": "Cut Clear", "route": "/arcade/asl/cut-clear", "estMinutes": 5, "xp": 50, "outcomes": ["Use VV cut before perspective shifts"] }
+  ]
+}

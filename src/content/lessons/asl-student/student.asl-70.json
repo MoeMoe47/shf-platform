@@ -1,0 +1,81 @@
+{
+  "id": "asl-70",
+  "title": "ASL 9.4 — Community Announcements & Public Signing 📣",
+  "estMinutes": 35,
+  "objectives": [
+    "Deliver short announcements clearly in ASL",
+    "Apply role-shift and eye gaze to address a group",
+    "Sequence information using time–topic–comment structure",
+    "Use attention-getting strategies (tap, wave, light flicker)"
+  ],
+  "vocab": [
+    { "term": "ANNOUNCE", "def": "Both hands move out from mouth, like sharing to group." },
+    { "term": "MEETING", "def": "Two hands come together, representing people gathering." },
+    { "term": "ATTENTION", "def": "Wave/tap to direct focus." },
+    { "term": "TIME–TOPIC–COMMENT", "def": "Typical ASL order: WHEN + WHAT + DETAILS." },
+    { "term": "AUDIENCE GAZE", "def": "Scanning eye contact across group." }
+  ],
+  "sections": [
+    {
+      "heading": "Context: Deaf Club Meeting",
+      "media": {
+        "src": "/media/asl/unit-9/announcement.gif",
+        "alt": "Signer making ANNOUNCE gesture",
+        "caption": "Public signing at Deaf events"
+      },
+      "body": "Announcements require clarity, pacing, and audience scanning. Begin with **ATTENTION** strategy before signing."
+    },
+    {
+      "heading": "Structure Practice",
+      "body": "Use **TIME → TOPIC → COMMENT** order. Example: **TOMORROW NIGHT → MEETING → DISCUSS NEW EVENT.**",
+      "microCheck": {
+        "q": "Which comes first in ASL announcements?",
+        "options": ["Topic", "Comment", "Time", "Audience gaze only"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "heading": "Partner Drill",
+      "body": "Take turns announcing simple items (party, game, meeting). Partner gives feedback on clarity + audience gaze.",
+      "callouts": [
+        {
+          "type": "example",
+          "title": "Sample",
+          "body": "FRIDAY AFTERNOON → GAME → NEED 4 PLAYERS."
+        }
+      ]
+    }
+  ],
+  "quiz": {
+    "title": "ASL 9.4 — Community Announcements Quiz",
+    "items": [
+      { "type": "mcq", "q": "What is the correct ASL order for announcements?", "options": ["Topic–Time–Comment", "Time–Topic–Comment", "Comment–Time–Topic", "Random"], "answerIndex": 1 },
+      { "type": "mcq", "q": "What sign is used to draw group focus?", "options": ["ANNOUNCE", "ATTENTION", "MEETING", "LOOK-AT"], "answerIndex": 1 },
+      { "type": "mcq", "q": "What does audience gaze mean?", "options": ["Look at one person only", "Scan group with eye contact", "Ignore group", "Blink often"], "answerIndex": 1 },
+      { "type": "short", "q": "Gloss: 'Tomorrow morning → class canceled' in ASL order." },
+      { "type": "reflection", "prompt": "How confident are you signing to a group? Which part needs practice: gaze, pacing, or order?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Record yourself giving a 20–30s announcement (meeting, class, or event).",
+  "summary": "You can now deliver clear ASL announcements using time–topic–comment, attention-getting strategies, and audience gaze.",
+  "nextSlug": "asl-71",
+  "games": [
+    {
+      "id": "announcement-order",
+      "title": "Announcement Order",
+      "route": "/arcade/asl/announcement-order",
+      "estMinutes": 5,
+      "xp": 50,
+      "outcomes": ["Reorder sentences to match Time–Topic–Comment"]
+    },
+    {
+      "id": "audience-gaze",
+      "title": "Audience Gaze",
+      "route": "/arcade/asl/audience-gaze",
+      "estMinutes": 5,
+      "xp": 50,
+      "outcomes": ["Practice scanning across a group"]
+    }
+  ]
+}

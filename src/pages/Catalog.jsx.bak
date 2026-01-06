@@ -1,0 +1,29 @@
+import React from "react";
+import CatalogHeader from "@/components/catalog/CatalogHeader.jsx";
+import CatalogFilterBar from "@/components/catalog/CatalogFilterBar.jsx";
+import CatalogGrid from "@/components/catalog/CatalogGrid.jsx";
+import SubmitProofModal from "@/components/catalog/SubmitProofModal.jsx";
+import "@/styles/catalog.css";
+
+export default function Catalog() {
+  const [open, setOpen] = React.useState(false);
+  const [courseId, setCourseId] = React.useState(null);
+
+  function handleProof(course){
+    setCourseId(course.id || course.courseId);
+    setOpen(true);
+  }
+  function closeModal(submitted){
+    setOpen(false);
+    if (submitted) alert("Thanks! We queued your proof for verification.");
+  }
+
+  return (
+    <div className="cat-page">
+      <CatalogHeader />
+      <CatalogFilterBar />
+      <CatalogGrid onProof={handleProof} />
+      <SubmitProofModal open={open} onClose={closeModal} courseId={courseId} />
+    </div>
+  );
+}

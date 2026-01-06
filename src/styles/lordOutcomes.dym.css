@@ -1,0 +1,907 @@
+/* src/styles/lordOutcomes.dym.css
+   Lord of Outcomes — “Foundation Dashboard” skin
+   Colors: Black + White + International Orange
+*/
+
+/* ===== DYM OVERLAYS (grid + noise + vignette) ===== */
+.loo-dymGrid,
+.loo-dymNoise,
+.loo-vignette{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.loo-dymGrid{
+  z-index: 0;
+  opacity: 0.55;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+  /* soften grid like the reference */
+  mask-image: radial-gradient(900px 520px at 56% 18%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 78%);
+  -webkit-mask-image: radial-gradient(900px 520px at 56% 18%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 78%);
+}
+
+.loo-dymNoise{
+  z-index: 1;
+  opacity: 0.18;
+  background-image:
+    radial-gradient(circle at 18% 24%, rgba(255,255,255,0.12) 0 1px, transparent 1px),
+    radial-gradient(circle at 72% 58%, rgba(255,255,255,0.09) 0 1px, transparent 1px),
+    radial-gradient(circle at 44% 82%, rgba(255,255,255,0.08) 0 1px, transparent 1px);
+  background-size: 120px 120px, 140px 140px, 160px 160px;
+  mix-blend-mode: overlay;
+}
+
+.loo-vignette{
+  z-index: 2;
+  background: radial-gradient(1200px 700px at 50% 16%, transparent 28%, rgba(0,0,0,0.70) 86%);
+}
+
+/* Brand tokens */
+:root{
+  --io: #ff4d00;                 /* International Orange */
+  --io2: rgba(255, 77, 0, 0.22); /* glow */
+  --bg0: #07070a;
+  --bg1: #0b0b10;
+  --panel: rgba(18, 18, 22, 0.62);
+  --panel2: rgba(16, 16, 20, 0.78);
+  --border: rgba(255,255,255,0.10);
+  --border2: rgba(255,255,255,0.16);
+  --text: rgba(255,255,255,0.92);
+  --muted: rgba(255,255,255,0.62);
+  --radius: 18px;
+  --max: 1180px;
+}
+
+/* =========================
+   APP BACKDROP (grid + noise)
+   ========================= */
+
+.loo-dymApp{
+  min-height: 100vh;
+  color: var(--text);
+  background: transparent;
+  position: relative;
+  isolation: isolate; /* keeps overlays clean */
+}
+
+/* Base gradients + warm “band” like the reference */
+.loo-dymApp::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+
+  background:
+    /* warm band */
+    radial-gradient(900px 520px at 64% 22%, rgba(255, 77, 0, 0.18), transparent 58%),
+    radial-gradient(1200px 680px at 22% 18%, rgba(255, 255, 255, 0.08), transparent 60%),
+
+    /* deep background */
+    linear-gradient(180deg, var(--bg0), var(--bg1));
+}
+
+/* Grid overlay (VERY subtle) */
+.loo-dymApp::after{
+  content:"";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events:none;
+
+  background:
+    /* vertical grid */
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,0.055) 0px,
+      rgba(255,255,255,0.055) 1px,
+      transparent 1px,
+      transparent 64px
+    ),
+    /* horizontal grid */
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.045) 0px,
+      rgba(255,255,255,0.045) 1px,
+      transparent 1px,
+      transparent 64px
+    );
+
+  opacity: 0.16;
+  mix-blend-mode: overlay;
+}
+
+/* =========================
+   LAYOUT CONTAINERS
+   ========================= */
+
+.loo-dymHeader{
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  /* upgraded bar like the reference */
+  background:
+    linear-gradient(180deg, rgba(12,12,16,0.78), rgba(10,10,14,0.62));
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+  box-shadow:
+    0 18px 60px rgba(0,0,0,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+.loo-dymHeaderInner{
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 12px 16px; /* tighter like screenshot */
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 10px;
+  align-items: center;
+}
+
+.loo-dymMain{
+  padding: 26px 18px 84px;
+}
+
+.loo-dymContainer{
+  max-width: var(--max);
+  margin: 0 auto;
+}
+
+.loo-dymFooter{
+  position: sticky;
+  bottom: 0;
+  z-index: 40;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  background: rgba(10, 10, 14, 0.62);
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+/* =========================
+   NAV TABS + MENU (older rail version kept)
+   NOTE: These only apply if your header uses .loo-tabs/.loo-tab
+   ========================= */
+
+/* Primary tabs container = single rail */
+.loo-tabs{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0;                 /* rail style */
+  padding: 6px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(0,0,0,0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    0 16px 48px rgba(0,0,0,0.35);
+}
+
+/* Warm sheen behind the rail */
+.loo-tabs::before{
+  content:"";
+  position:absolute;
+  inset: 0;
+  border-radius: 14px;
+  pointer-events:none;
+  background:
+    radial-gradient(420px 120px at 20% 0%, rgba(255,255,255,0.06), transparent 62%),
+    radial-gradient(520px 160px at 70% 0%, rgba(255,77,0,0.10), transparent 68%);
+  opacity: 0.85;
+}
+
+/* Tabs (embedded, not pill) */
+.loo-tab{
+  position: relative;
+  border-radius: 10px;
+  padding: 8px 14px;
+  border: 1px solid transparent;
+  background: transparent;
+  box-shadow: none;
+  color: rgba(255,255,255,0.86);
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  cursor: pointer;
+  transition: background .12s ease, border-color .12s ease, box-shadow .12s ease;
+}
+
+.loo-tab:hover{
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.10);
+}
+
+/* Active = warm glow + subtle underline */
+.loo-tab.is-active{
+  background: linear-gradient(180deg, rgba(255,77,0,0.18), rgba(255,255,255,0.05));
+  border-color: rgba(255,77,0,0.30);
+  box-shadow:
+    0 12px 40px rgba(0,0,0,0.45),
+    0 0 0 3px rgba(255,77,0,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+.loo-tab.is-active::after{
+  content:"";
+  position:absolute;
+  left: 10px;
+  right: 10px;
+  bottom: -6px;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(255,77,0,0.85);
+  box-shadow: 0 0 18px rgba(255,77,0,0.30);
+}
+
+/* Ember separators between tabs (tiny orange dots) */
+.loo-tab + .loo-tab{
+  margin-left: 10px; /* room for ember */
+}
+.loo-tab + .loo-tab::before{
+  content:"";
+  position:absolute;
+  left: -9px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  transform: translateY(-50%);
+  border-radius: 999px;
+  background: rgba(255,77,0,0.55);
+  box-shadow:
+    0 0 0 3px rgba(255,77,0,0.10),
+    0 0 18px rgba(255,77,0,0.18);
+  opacity: 0.90;
+}
+
+@media (max-width: 640px){
+  .loo-tab{ padding: 8px 10px; }
+  .loo-tab + .loo-tab::before{ opacity: 0.60; }
+}
+
+/* Right-side actions wrapper (dropdown anchor) */
+.loo-actions{
+  justify-self: end;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Menu button (tight + premium like reference) */
+.loo-menuBtn{
+  border-radius: 12px;
+  padding: 9px 14px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.88);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    0 16px 48px rgba(0,0,0,0.38);
+  cursor: pointer;
+}
+.loo-menuBtn:hover{
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(255,255,255,0.18);
+}
+.loo-menuBtn.is-open{
+  border-color: rgba(255,77,0,0.26);
+  box-shadow:
+    0 22px 64px rgba(0,0,0,0.55),
+    0 0 0 3px rgba(255,77,0,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+}
+.loo-menuIcon{ opacity: 0.9; }
+
+/* Dropdown panel (screenshot style) */
+.loo-menu{
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  width: 290px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: linear-gradient(180deg, rgba(18,18,24,0.92), rgba(10,10,14,0.86));
+  box-shadow: 0 28px 80px rgba(0,0,0,0.70), inset 0 1px 0 rgba(255,255,255,0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 8px;
+  z-index: 90;
+}
+
+.loo-menuDivider{
+  height: 1px;
+  background: rgba(255,255,255,0.10);
+  margin: 8px 8px;
+}
+
+.loo-menuItem{
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: rgba(255,255,255,0.86);
+  padding: 10px 10px;
+  border-radius: 12px;
+  display: grid;
+  grid-template-columns: 24px 1fr 18px;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  cursor: pointer;
+}
+.loo-menuItem:hover{
+  background: rgba(255,255,255,0.06);
+}
+.loo-miIcon{
+  width: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.9;
+}
+.loo-miLabel{
+  font-weight: 650;
+  letter-spacing: 0.01em;
+}
+.loo-miCheck{
+  justify-self: end;
+  opacity: 0.9;
+  color: rgba(255,255,255,0.82);
+}
+.loo-menuItem.is-checked .loo-miCheck{
+  color: rgba(255, 77, 0,  0.95);
+}
+.loo-menuItem.is-parent .loo-miChevron{
+  justify-self: end;
+  opacity: 0.75;
+}
+
+/* Right flyout submenu (Export) */
+.loo-flyout{
+  position: absolute;
+  top: 0;
+  right: calc(100% + 10px);
+  width: 280px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: linear-gradient(180deg, rgba(18,18,24,0.92), rgba(10,10,14,0.86));
+  box-shadow: 0 28px 80px rgba(0,0,0,0.70), inset 0 1px 0 rgba(255,255,255,0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 8px;
+  z-index: 95;
+}
+
+/* =========================
+   TYPE + HEADER
+   ========================= */
+
+.loo-pageHeader{ margin-bottom: 14px; }
+.loo-h1{
+  margin: 0;
+  font-size: 44px;
+  letter-spacing: -0.02em;
+}
+.loo-sub{
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+/* =========================
+   CARDS (bevel + inner highlight)
+   ========================= */
+
+.loo-card{
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(22,22,28,0.72), rgba(10,10,14,0.62));
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow:
+    0 22px 64px rgba(0,0,0,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.loo-card::before{
+  content:"";
+  position:absolute;
+  inset: 0;
+  background:
+    radial-gradient(800px 240px at 20% 0%, rgba(255,255,255,0.08), transparent 55%),
+    radial-gradient(700px 260px at 80% 10%, rgba(255, 77, 0, 0.08), transparent 60%);
+  opacity: 0.9;
+  pointer-events:none;
+}
+
+.loo-cardPad{ padding: 16px; }
+
+.loo-cardTitle{
+  font-size: 11px;
+  color: rgba(255,255,255,0.60);
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  margin-bottom: 10px;
+}
+
+/* KPI tiles */
+.loo-tiles{
+  display:grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.loo-tile{
+  grid-column: span 4;
+  min-height: 94px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow:
+    0 18px 50px rgba(0,0,0,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+  padding: 12px 14px;
+}
+@media (max-width: 980px){ .loo-tile{ grid-column: span 6; } }
+@media (max-width: 640px){ .loo-tile{ grid-column: span 12; } }
+
+/* Tables auto-skin */
+.loo-dymApp table{
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.04);
+}
+.loo-dymApp th, .loo-dymApp td{
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.88);
+}
+.loo-dymApp th{
+  color: rgba(255,255,255,0.62);
+  font-weight: 600;
+  background: rgba(255,255,255,0.05);
+}
+
+/* Inputs */
+.loo-input, .loo-textarea, .loo-dymApp input, .loo-dymApp select, .loo-dymApp textarea{
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  color: rgba(255,255,255,0.92);
+  padding: 10px 12px;
+  outline: none;
+}
+.loo-input:focus, .loo-textarea:focus,
+.loo-dymApp input:focus, .loo-dymApp select:focus, .loo-dymApp textarea:focus{
+  border-color: rgba(255, 77, 0, 0.35);
+  box-shadow: 0 0 0 4px rgba(255, 77, 0, 0.12);
+}
+
+/* Kill light backgrounds from any inherited shells */
+.loo-dymApp main,
+.loo-dymApp .app-shell-main,
+.loo-dymApp .appShellMain,
+.loo-dymApp .shellMain,
+.loo-dymApp [class*="Main"],
+.loo-dymApp [class*="main"]{
+  background: transparent !important;
+}
+
+/* =========================
+   Collapsible header polish
+   (kept for compatibility — but you may not need collapse anymore)
+   ========================= */
+
+.looHdrCollapseBtn{
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(0,0,0,0.18);
+  color: rgba(255,255,255,0.86);
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.looHdrCollapseBtn:hover{
+  border-color: rgba(255,122,24,0.30);
+}
+.looHdrCollapseIcon{
+  transform: translateY(-1px);
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.looHdr.is-collapsed .looHdrTabs{
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.looHdrCollapsedMeta{
+  padding: 8px 12px 12px;
+  gap: 12px;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.looHdrMiniMeta{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 240px;
+}
+.looHdrMiniText{
+  font-size: 12px;
+  color: rgba(255,255,255,0.78);
+}
+.looHdrMiniUpdated{
+  font-size: 12px;
+  color: rgba(255,255,255,0.62);
+}
+
+/* =========================================================
+   APPENDAGE: Reference Header (matches screenshot layout)
+   Uses .looTopBar / .looHeaderPanel / .looPill / .looCat
+   ========================================================= */
+
+.looTopBar{
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.looBrand{
+  padding: 10px 0;
+  cursor: pointer;
+  user-select: none;
+}
+.looBrandTitle{
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  font-size: 13px;
+  color: rgba(255,255,255,0.86);
+}
+.looBrandSub{
+  margin-top: 2px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.55);
+}
+
+.looHeaderPanel{
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: linear-gradient(180deg, rgba(18,18,22,0.72), rgba(10,10,14,0.55));
+  box-shadow: 0 26px 80px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06);
+  overflow: hidden;
+}
+
+.looHeaderRow{
+  padding: 10px 12px;
+}
+
+.looHeaderRowTop{
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.looPills{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.looPill{
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.85);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-weight: 650;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+}
+.looPill:hover{
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,255,255,0.14);
+}
+.looPill.is-active{
+  border-color: rgba(255,77,0,0.35);
+  background: linear-gradient(180deg, rgba(255,77,0,0.20), rgba(255,255,255,0.06));
+  box-shadow: 0 0 0 3px rgba(255,77,0,0.08), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+.looPillDrop .looCaret{
+  margin-left: 6px;
+  opacity: 0.85;
+}
+
+.looDropWrap{
+  position: relative;
+}
+
+.looDropMenu{
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 280px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: linear-gradient(180deg, rgba(18,18,24,0.92), rgba(10,10,14,0.86));
+  box-shadow: 0 28px 80px rgba(0,0,0,0.70), inset 0 1px 0 rgba(255,255,255,0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 8px;
+  z-index: 200;
+}
+
+.looDropGroup + .looDropGroup{
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.10);
+}
+
+.looDropGroupTitle{
+  font-size: 11px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  margin: 0 8px 6px;
+}
+
+.looDropItem{
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  color: rgba(255,255,255,0.86);
+  padding: 10px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.looDropItem:hover{
+  background: rgba(255,255,255,0.06);
+}
+
+.looHeaderRowCats{
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.looCats{
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.looCat{
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(0,0,0,0.12);
+  color: rgba(255,255,255,0.82);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.looCat:hover{
+  background: rgba(255,255,255,0.05);
+}
+.looCat.is-active{
+  border-color: rgba(255,77,0,0.35);
+  box-shadow: 0 0 0 3px rgba(255,77,0,0.08);
+  background: linear-gradient(180deg, rgba(255,77,0,0.14), rgba(255,255,255,0.05));
+}
+
+.looHeaderRowMeta{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: rgba(255,255,255,0.70);
+  font-size: 12px;
+}
+
+.looMetaLeft{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 240px;
+}
+
+.looDot{
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255,77,0,0.85);
+  box-shadow: 0 0 18px rgba(255,77,0,0.20);
+}
+
+.looMetaRight{
+  color: rgba(255,255,255,0.55);
+}
+
+@media (max-width: 880px){
+  .looTopBar{ grid-template-columns: 1fr; }
+  .looMetaRight{ display: none; }
+}
+
+/* =========================
+   SUBNAV + CONTEXT BAR (MAX FUNDABLE)
+   ========================= */
+
+.looSubnavWrap{
+  max-width: var(--max);
+  margin: 10px auto 0;
+  padding: 0 16px;
+}
+
+.looSubnavRow{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(0,0,0,0.18);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 16px 46px rgba(0,0,0,0.22);
+}
+
+.looSubnavRail{
+  display:flex;
+  align-items:center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.looSubnavChip{
+  appearance:none;
+  border: 1px solid transparent;
+  background: transparent;
+  color: rgba(255,255,255,0.82);
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-weight: 650;
+  cursor:pointer;
+  transition: background .12s ease, border-color .12s ease, box-shadow .12s ease;
+}
+
+.looSubnavChip:hover{
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.10);
+}
+
+.looSubnavChip.is-active{
+  background: linear-gradient(180deg, rgba(255,77,0,0.18), rgba(255,255,255,0.04));
+  border-color: rgba(255,77,0,0.30);
+  box-shadow: 0 0 0 3px rgba(255,77,0,0.08), inset 0 1px 0 rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.92);
+}
+
+/* "More" menu (states overflow) */
+.looSubnavMore{ position: relative; }
+.looSubnavMoreBtn{
+  list-style:none;
+  cursor:pointer;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.86);
+  font-weight: 650;
+}
+.looSubnavMore[open] .looSubnavMoreBtn{
+  border-color: rgba(255,77,0,0.26);
+  box-shadow: 0 0 0 3px rgba(255,77,0,0.08);
+}
+.looSubnavMoreMenu{
+  position:absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  min-width: 220px;
+  padding: 8px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: linear-gradient(180deg, rgba(18,18,24,0.92), rgba(10,10,14,0.86));
+  box-shadow: 0 28px 80px rgba(0,0,0,0.70), inset 0 1px 0 rgba(255,255,255,0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 100;
+}
+.looSubnavMenuItem{
+  width:100%;
+  border:0;
+  background: transparent;
+  color: rgba(255,255,255,0.86);
+  padding: 10px 10px;
+  border-radius: 12px;
+  text-align:left;
+  cursor:pointer;
+}
+.looSubnavMenuItem:hover{ background: rgba(255,255,255,0.06); }
+.looSubnavMenuItem.is-active{ outline: 1px solid rgba(255,77,0,0.30); }
+
+/* Right filters */
+.looSubnavRight{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+}
+
+.looSubnavSelect{
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  color: rgba(255,255,255,0.90);
+  padding: 8px 10px;
+  outline:none;
+}
+
+/* Context bar */
+.looContextBar{
+  margin-top: 10px;
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(0,0,0,0.14);
+}
+
+.looContextLeft{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.looContextDot{
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255,77,0,0.70);
+  box-shadow: 0 0 0 4px rgba(255,77,0,0.10), 0 0 18px rgba(255,77,0,0.18);
+}
+
+.looContextText{
+  font-size: 12px;
+  color: rgba(255,255,255,0.72);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.looContextRight{ display:flex; align-items:center; gap: 10px; }
+.looContextLink{
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.10);
+  color: rgba(255,255,255,0.82);
+  border-radius: 12px;
+  padding: 7px 10px;
+  cursor:pointer;
+}
+.looContextLink:hover{
+  border-color: rgba(255,77,0,0.24);
+  background: rgba(255,255,255,0.04);
+}
+
+@media (max-width: 860px){
+  .looSubnavRow{ flex-direction: column; align-items: stretch; }
+  .looSubnavRight{ justify-content: flex-start; }
+}

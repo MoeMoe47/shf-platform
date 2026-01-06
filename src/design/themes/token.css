@@ -1,0 +1,27 @@
+:root{
+    /* neutral primitives */
+    --gray-0:#fff; --gray-1:#f7f8fa; --gray-3:#e2e8f0; --gray-6:#64748b; --gray-9:#0b1220;
+  
+    /* brand accents */
+    --accent-1:#ff4d00; /* International Orange */
+    --accent-2:#0ea5e9; --accent-3:#10b981; --accent-4:#f59e0b; --accent-5:#ef4444;
+  
+    /* semantics used by apps */
+    --bg:#fff; --surface:#fff; --text:#0b1220; --muted:var(--gray-6);
+    --border:var(--gray-3); --link:var(--accent-2);
+    --primary:var(--accent-1); --primary-contrast:#fff;
+  
+    /* radii/shadows/scale */
+    --radius-sm:8px; --radius-md:12px; --radius-lg:20px;
+    --shadow-1:0 4px 16px rgba(16,19,26,.08);
+  
+    /* fluid type & spacing */
+    --fs-1: clamp(14px, 0.88rem + 0.2vw, 16px);
+    --fs-2: clamp(16px, 1.00rem + 0.4vw, 18px);
+    --sp-2: clamp(10px, 0.50rem + 0.4vw, 14px);
+    --sp-3: clamp(14px, 0.75rem + 0.6vw, 20px);
+  
+    /* containers */
+    --container-lg: 1280px;
+  }
+  

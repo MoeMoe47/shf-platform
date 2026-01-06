@@ -1,0 +1,23 @@
+import "@/dev/aiMock.fetch-shim.js";
+import "@/dev/mockApi.js";
+import React from "react";
+import { createRoot } from "react-dom/client";
+import "@/styles/theme-solutions.css";
+import "@/styles/ai-compass.css";
+import "@/styles/ai-compass.solutions.css";
+import "@/styles/ticker.css";
+import "@/styles/promo.css";
+import "mapbox-gl/dist/mapbox-gl.css";
+
+import { HashRouter } from "react-router-dom";
+import SolutionsRoutes from "@/router/SolutionsRoutes.jsx";
+
+function App() {
+  return (
+    <HashRouter>
+      <SolutionsRoutes />
+    </HashRouter>
+  );
+}
+
+createRoot(document.getElementById("sol-root")).render(<App />);

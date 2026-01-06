@@ -1,0 +1,458 @@
+~// src/pages/solutions/SolutionsMarketplace.jsx
+import React from "react";
+
+/* --- adapters + providers --- */
+import { useCatalog } from "@/adapters/catalog.js";
+import { useFlags } from "@/context/FlagsContext.jsx";
+import { usePolygon } from "@/shared/chain/PolygonProvider.jsx";
+import { appendEntry } from "@/utils/creditLedger.js";
+import { chargeCard, payWithPolygon } from "@/adapters/payments.mock.js";
+
+/**
+ * SolutionsMarketplace.jsx
+ * ------------------------------------------------------------
+ * Staff route:  /sales.html#/marketplace   (guarded)
+ * Public route: /store.html#/marketplace   (Store app)
+ *
+ * Notes:
+ *  - CSS injected once via <style id="solutions-marketplace-css">.
+ *  - Uses adapters (catalog + payments mock).
+ *  - Credits + Polygon sim integrated; on-chain logging gated by flag.
+ */
+
+export default function SolutionsMarketplace() {
+  // --- inject page CSS once ---
+  React.useEffect(() => {
+    if (!document.getElementById("solutions-marketplace-css")) {
+      const el = document.createElement("style");
+      el.id = "solutions-marketplace-css";
+      el.textContent = CSS;
+      document.head.appendChild(el);
+    }
+  }, []);
+
+  // --- flags + chain provider ---
+  const { flags } = useFlags?.() ?? { flags: {} };
+  const poly = usePolygon?.();
+
+  // --- catalog (adapter) with fallback to mock data ---
+  const catalog = useCatalog?.() ?? [];
+  const items = catalog.length ? catalog : React.useMemo(() => MOCK_PRODUCTS, []);
+
+  // --- state ---
+  const [query, setQuery] = React.useState("");
+  const [sort, setSort] = React.useState("new");
+  const [origin, setOrigin] = React.useState("any"); // any | fresh | recycled
+  const [marketFilters, setMarketFilters] = React.useState({
+    degenphone: true,
+    getgems: false,
+    other: false,
+  });
+  const [rarity, setRarity] = React.useState({
+    bronze: false,
+    common: true,
+    community: true,
+    diamond: false,
+    gold: false,
+    legendary: false,
+  });
+
+  // --- computed list ---
+  const filtered = items
+    .filter((p) => (origin === "any" ? true : p.origin === origin))
+    .filter((p) => {
+      if (marketFilters.degenphone && p.market === "degenphone") return true;
+      if (marketFilters.getgems && p.market === "getgems") return true;
+      if (marketFilters.other && p.market === "other") return true;
+      return !marketFilters.degenphone && !marketFilters.getgems && !marketFilters.other; // if none checked, show all
+    })
+    .filter((p) => Object.entries(rarity).some(([k, v]) => v && p.rarity === k))
+    .filter(
+      (p) =>
+        !query ||
+        p.title.toLowerCase().includes(query.toLowerCase()) ||
+        String(p.number).toLowerCase().includes(query.toLowerCase())
+    )
+    .sort((a, b) => {
+      switch (sort) {
+        case "price-asc":
+          return a.price - b.price;
+        case "price-desc":
+          return b.price - a.price;
+        case "rarity":
+          return (RARITY_RANK[a.rarity] ?? 99) - (RARITY_RANK[b.rarity] ?? 99);
+        default:
+          return b.id - a.id; // "new"
+      }
+    });
+
+  // --- buy flow (credits / card / polygon sim) ---
+  const pickMethod = React.useCallback(() => {
+    const rails = [
+      flags?.pay?.cards !== false && "card",
+      flags?.pay?.credits !== false && "credits",
+      flags?.pay?.polygon !== false && "polygon",
+    ].filter(Boolean);
+    const def = rails[0] || "credits";
+    const sel = window.prompt(`Pay with: ${rails.join(" / ")}`, def);
+    return rails.includes(sel) ? sel : def;
+  }, [flags]);
+
+  async function buy(item, method = pickMethod()) {
+    const amountUSD = Number(item.price || 0);
+
+    if (method === "credits") {
+      // negative delta = spend credits
+      appendEntry?.({
+        action: "market.buy",
+        currencyDelta: -amountUSD,
+        meta: { itemId: item.id, title: item.title, method },
+      });
+    } else if (method === "card") {
+      await chargeCard?.({ amountUSD, item });
+    } else if (method === "polygon") {
+      await payWithPolygon?.({ amountUSD, item, polygon: poly });
+    }
+
+    // optional on-chain reporting toggle
+    const shouldReport =
+      (typeof flags?.chainReporting === "boolean" && flags.chainReporting) ||
+      import.meta.env.VITE_CHAIN_REPORTING === "1";
+
+    if (shouldReport) {
+      try {
+        await poly?.logEvent?.("market.buy", { itemId: item.id, amountUSD, method });
+      } catch {
+        // swallow logging errors in FE-only mode
+      }
+    }
+
+    // simple toast
+    try {
+      window?.dispatchEvent?.(
+        new CustomEvent("toast", {
+          detail: { type: "success", text: `Purchased ${item.title} via ${method}` },
+        })
+      );
+    } catch {}
+  }
+
+  return (
+    <div className="smp-wrap">
+      {/* Top App Bar */}
+      <header className="smp-appbar">
+        <div className="smp-brand">
+          <span className="dot" />
+          <span className="name">SILICON HEARTLAND</span>
+          <span className="sub">solutions</span>
+        </div>
+        <nav className="smp-nav">
+          <a className="active" href="#/marketplace">Market</a>
+          <a href="#/my">My Items</a>
+          <a href="#/verify">Verify</a>
+          <a href="#/referral">Referral</a>
+          <a href="#/faq">FAQ</a>
+          <a href="#/about">About</a>
+        </nav>
+        <div className="smp-actions">
+          <button className="ghost" aria-label="search"><SearchIcon/></button>
+          <button className="wallet" onClick={() => poly?.connect?.()}>Connect Wallet</button>
+        </div>
+      </header>
+
+      {/* Collection hero + stats */}
+      <section className="smp-hero">
+        <div className="smp-hero__title">MARKETPLACE</div>
+        <div className="smp-hero__stats">
+          <Stat label="Items (listed)" value="3.2k" sub="8%"/>
+          <Stat label="Owners (unique)" value="625" sub="19%"/>
+          <Stat label="Floor" value="102" sub="fresh / 94 recycled"/>
+          <Stat label="Total Volume" value="51k"/>
+          <Stat label="Reward Pool" value="$868.20" tone="good"/>
+        </div>
+      </section>
+
+      {/* Toolbar */}
+      <section className="smp-toolbar">
+        <div className="smp-search">
+          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search number, title…" />
+        </div>
+        <div className="smp-order">
+          <label>Order</label>
+          <select value={sort} onChange={(e) => setSort(e.target.value)}>
+            <option value="new">Newest</option>
+            <option value="price-asc">Price: Low → High</option>
+            <option value="price-desc">Price: High → Low</option>
+            <option value="rarity">Rarity</option>
+          </select>
+        </div>
+      </section>
+
+      <main className="smp-main">
+        {/* Filters */}
+        <aside className="smp-filters">
+          <h3>Filters</h3>
+
+          <div className="flt-block">
+            <div className="flt-title">Origin</div>
+            <div className="flt-group">
+              <label className={origin === "any" ? "on" : ""}><input type="radio" name="origin" checked={origin === "any"} onChange={() => setOrigin("any")} />Any</label>
+              <label className={origin === "fresh" ? "on" : ""}><input type="radio" name="origin" checked={origin === "fresh"} onChange={() => setOrigin("fresh")} />Fresh</label>
+              <label className={origin === "recycled" ? "on" : ""}><input type="radio" name="origin" checked={origin === "recycled"} onChange={() => setOrigin("recycled")} />Recycled</label>
+            </div>
+          </div>
+
+          <div className="flt-block">
+            <div className="flt-title">Marketplace</div>
+            <div className="flt-group">
+              <Toggle label="Degenphone" checked={marketFilters.degenphone} onChange={(v)=>setMarketFilters(s=>({...s,degenphone:v}))} />
+              <Toggle label="GetGems" checked={marketFilters.getgems} onChange={(v)=>setMarketFilters(s=>({...s,getgems:v}))} />
+              <Toggle label="Other" checked={marketFilters.other} onChange={(v)=>setMarketFilters(s=>({...s,other:v}))} />
+            </div>
+          </div>
+
+          <div className="flt-block">
+            <div className="flt-title">Rarity</div>
+            <div className="flt-group grid">
+              {Object.keys(rarity).map((key) => (
+                <label key={key} className={rarity[key] ? "on" : ""}>
+                  <input type="checkbox" checked={rarity[key]} onChange={(e)=>setRarity((r)=>({...r,[key]:e.target.checked}))} />{key}
+                </label>
+              ))}
+            </div>
+          </div>
+        </aside>
+
+        {/* Product grid */}
+        <section className="smp-grid">
+          {filtered.map((p) => (
+            <Card key={p.id} item={p} onBuy={buy} />
+          ))}
+          {filtered.length === 0 && (
+            <div className="smp-empty">No results. Try clearing filters.</div>
+          )}
+        </section>
+      </main>
+
+      {/* Footer note */}
+      <footer className="smp-foot">© {new Date().getFullYear()} Silicon Heartland Solutions · Marketplace</footer>
+    </div>
+  );
+}
+
+/* ---------------------------- components ---------------------------- */
+function Stat({ label, value, sub, tone }) {
+  return (
+    <div className={`stat ${tone || ""}`}>
+      <div className="v">{value}</div>
+      <div className="l">
+        {label}
+        {sub ? <span className="sub">{sub}</span> : null}
+      </div>
+    </div>
+  );
+}
+
+function Toggle({ label, checked, onChange }) {
+  return (
+    <label className={`tgl ${checked ? "on" : ""}`}>
+      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} />
+      <span className="knob"/>
+      <span className="lab">{label}</span>
+    </label>
+  );
+}
+
+function Card({ item, onBuy }) {
+  const badge = item.badge ? <span className={`badge ${String(item.badge).toLowerCase()}`}>{item.badge}</span> : null;
+  return (
+    <article className="card">
+      <div className="art">
+        {badge}
+        <ImgFrame hue={item.hue} />
+      </div>
+      <div className="meta">
+        <div className="row1">
+          <span className={`pill ${item.rarity}`}>{item.rarity}</span>
+        </div>
+        {item.origin === "recycled" && <span className="pill recycled">recycled</span>}
+        <div className="title">{item.title}</div>
+        <div className="number">{item.number}</div>
+        <div className="row2">
+          <div className="price"><TonIcon/> {item.price}</div>
+          <button className="buy" onClick={() => onBuy?.(item)}>Buy</button>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function ImgFrame({ hue=340 }) {
+  const style = {
+    background: `radial-gradient(120% 120% at 10% 10%, hsl(${hue},85%,55%) 0%, rgba(255,255,255,0) 45%),
+                 linear-gradient(145deg, rgba(255,255,255,.06), rgba(255,255,255,0))`,
+  };
+  return (
+    <div className="imgframe" style={style}>
+      <svg viewBox="0 0 512 512" className="phone" aria-hidden>
+        <defs>
+          <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0%" stopColor="white"/>
+            <stop offset="100%" stopColor="#d9d9d9"/>
+          </linearGradient>
+        </defs>
+        <rect x="68" y="68" width="376" height="376" rx="64" fill="url(#g)" />
+        <rect x="90" y="96" width="332" height="344" rx="40" fill="#111" />
+      </svg>
+    </div>
+  );
+}
+
+/* ------------------------------ icons ------------------------------ */
+function TonIcon(){
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden>
+      <path fill="currentColor" d="M12 2l9 6-9 14L3 8l9-6Zm0 3.2L6.4 8.4 12 17l5.6-8.6L12 5.2Z"/>
+    </svg>
+  );
+}
+function SearchIcon(){
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden>
+      <path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.71.71l.27.28v.79l5 5 1.5-1.5-5-5Zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14Z"/>
+    </svg>
+  );
+}
+
+/* ------------------------------ styles ----------------------------- */
+const CSS = `
+:root{
+  --sol-primary:#ff4f00; /* International Orange */
+  --sol-primary-700:#cc3f00; /* darker IO */
+  --sol-bg:#0b0c0e;      /* near black */
+  --sol-surface:#121317; /* card bg */
+  --sol-ghost:#1a1c22;   /* rail */
+  --sol-line:#23252b;    /* borders */
+  --sol-text:#f5f6f7;    /* white */
+  --sol-dim:#9aa0aa;     /* gray */
+  --sol-good:#00d394;    /* accent for positive */
+}
+*{box-sizing:border-box}
+html,body,#root{height:100%}
+body{background:var(--sol-bg); color:var(--sol-text);}
+
+.smp-wrap{max-width:1280px;margin:0 auto;padding:12px 16px 64px}
+
+/* App bar */
+.smp-appbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:16px;padding:12px 16px;border:1px solid var(--sol-line);border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.00));backdrop-filter:blur(6px)}
+.smp-brand{display:flex;align-items:baseline;gap:10px;font-weight:700;letter-spacing:.08em}
+.smp-brand .dot{width:10px;height:10px;border-radius:50%;background:var(--sol-primary)}
+.smp-brand .name{font-size:13px;color:#ffffff}
+.smp-brand .sub{font-size:12px;color:var(--sol-dim);text-transform:uppercase}
+
+.smp-nav{display:flex;gap:14px;margin-left:8px}
+.smp-nav a{padding:8px 10px;border-radius:10px;color:var(--sol-dim);text-decoration:none;border:1px solid transparent}
+.smp-nav a:hover{color:white;border-color:var(--sol-line)}
+.smp-nav a.active{color:white;border-color:var(--sol-primary);background:rgba(255,79,0,.08)}
+
+
+.smp-actions{margin-left:auto;display:flex;gap:8px}
+.smp-actions .ghost{border:1px solid var(--sol-line);background:var(--sol-ghost);color:var(--sol-text);padding:8px;border-radius:10px}
+.smp-actions .wallet{border:1px solid var(--sol-primary);background:var(--sol-primary);color:white;padding:8px 12px;border-radius:10px;font-weight:600}
+.smp-actions .wallet:hover{filter:brightness(.96)}
+
+/* Hero */
+.smp-hero{padding:18px 4px 8px}
+.smp-hero__title{font-size:28px;font-weight:800;letter-spacing:.02em}
+.smp-hero__stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:12px}
+.stat{border:1px solid var(--sol-line);background:var(--sol-surface);border-radius:14px;padding:12px}
+.stat.good{border-color:rgba(0,211,148,.35)}
+.stat .v{font-weight:800;font-size:18px}
+.stat .l{font-size:12px;color:var(--sol-dim)}
+.stat .l .sub{margin-left:8px;color:#c6cbd4}
+
+/* Toolbar */
+.smp-toolbar{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:10px 0;margin-top:6px}
+.smp-search input{width:100%;min-width:260px;background:var(--sol-surface);border:1px solid var(--sol-line);border-radius:10px;padding:10px 12px;color:var(--sol-text)}
+.smp-order{display:flex;align-items:center;gap:8px}
+.smp-order label{color:var(--sol-dim);font-size:12px}
+.smp-order select{background:var(--sol-surface);border:1px solid var(--sol-line);border-radius:10px;color:var(--sol-text);padding:8px 10px}
+
+/* Main */
+.smp-main{display:grid;grid-template-columns:260px 1fr;gap:16px;margin-top:8px}
+.smp-filters{border:1px solid var(--sol-line);background:var(--sol-surface);border-radius:16px;padding:14px}
+.smp-filters h3{margin:0 0 6px;font-size:14px}
+.flt-block{border-top:1px dashed var(--sol-line);padding:10px 0}
+.flt-block:first-of-type{border-top:none;padding-top:4px}
+.flt-title{font-size:12px;color:var(--sol-dim);margin-bottom:8px}
+.flt-group{display:flex;flex-wrap:wrap;gap:8px}
+.flt-group.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.flt-group label{border:1px solid var(--sol-line);background:var(--sol-ghost);color:#cfd3da;padding:8px 10px;border-radius:10px;font-size:12px;display:flex;gap:8px;align-items:center;cursor:pointer}
+.flt-group label.on{border-color:var(--sol-primary);box-shadow:0 0 0 2px rgba(225,29,45,.15) inset}
+.flt-group input{accent-color:var(--sol-primary)}
+.tgl{display:flex;align-items:center;gap:10px}
+.tgl .knob{width:30px;height:18px;border-radius:20px;background:#343741;border:1px solid var(--sol-line);position:relative}
+.tgl.on .knob{background:var(--sol-primary)}
+.tgl .knob::after{content:"";position:absolute;top:50%;left:3px;transform:translateY(-50%);width:12px;height:12px;border-radius:999px;background:white;transition:left .15s ease}
+.tgl.on .knob::after{left:15px}
+.tgl .lab{font-size:12px;color:#cfd3da}
+
+/* Grid */
+.smp-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{border:1px solid var(--sol-line);background:var(--sol-surface);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.card .art{position:relative;aspect-ratio:4/3;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0));display:grid;place-items:center}
+.badge{position:absolute;top:10px;left:10px;background:rgba(225,29,45,.15);border:1px solid var(--sol-primary);color:white;font-size:11px;padding:4px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.06em}
+.badge.community{background:rgba(255,255,255,.05);border-color:#c9cdd5;color:#e9edf4}
+.imgframe{width:86%;height:72%;border-radius:18px;border:1px solid var(--sol-line);display:grid;place-items:center;background:#0f1014}
+.imgframe .phone{width:72%;opacity:.9}
+
+.card .meta{padding:12px 12px 14px}
+.card .row1{display:flex;gap:8px;margin-bottom:6px}
+.pill{border:1px solid var(--sol-line);background:var(--sol-ghost);color:#e6e8ec;padding:2px 8px;border-radius:999px;font-size:10px;text-transform:uppercase;letter-spacing:.08em}
+.pill.community{border-color:#b6bcc8}
+.pill.diamond{border-color:#a8e6ff}
+.pill.gold{border-color:#ffd166}
+.pill.legendary{border-color:#c084fc}
+.pill.recycled{color:#b9ffea;border-color:#35efb2;background:rgba(53,239,178,.07)}
+
+.card .title{font-weight:700}
+.card .number{color:#cdd2db;font-size:13px;margin:2px 0 8px}
+.card .row2{display:flex;align-items:center;justify-content:space-between}
+.card .price{display:flex;align-items:center;gap:6px;color:#dfe4ed}
+.card .buy{background:var(--sol-primary);border:1px solid var(--sol-primary);padding:8px 10px;border-radius:10px;color:white;font-weight:700}
+.card .buy:hover{background:var(--sol-primary-700);border-color:var(--sol-primary-700)}
+
+.smp-empty{border:1px dashed var(--sol-line);padding:24px;border-radius:12px;text-align:center;color:var(--sol-dim)}
+
+/* Footer */
+.smp-foot{opacity:.7;text-align:center;margin-top:24px;font-size:12px}
+
+/* Responsive */
+@media (max-width: 1080px){
+  .smp-hero__stats{grid-template-columns:repeat(3,1fr)}
+  .smp-main{grid-template-columns:220px 1fr}
+  .smp-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width: 760px){
+  .smp-nav{display:none}
+  .smp-main{grid-template-columns:1fr}
+  .smp-grid{grid-template-columns:1fr}
+}
+`;
+
+/* --------------------------- demo data --------------------------- */
+const RARITY_RANK = { bronze: 6, common: 5, community: 4, gold: 3, diamond: 2, legendary: 1 };
+const MOCK_PRODUCTS = [
+  { id: 12, title: "OG",        number: "+37281491170", price: 97,  rarity: "common",    origin: "fresh",    market: "degenphone", badge: "OG",        hue: 350 },
+  { id: 11, title: "OG",        number: "+37257448960", price: 97,  rarity: "common",    origin: "fresh",    market: "degenphone", badge: "OG",        hue: 5   },
+  { id: 10, title: "Community", number: "+37257448634", price: 98,  rarity: "community", origin: "recycled", market: "other",      badge: "Community", hue: 12  },
+  { id: 9,  title: "Community", number: "+37257449261", price: 97,  rarity: "community", origin: "recycled", market: "getgems",    badge: "Community", hue: 356 },
+  { id: 8,  title: "OG",        number: "+3725749054",  price: 98,  rarity: "common",    origin: "recycled", market: "degenphone", badge: "OG",        hue: 210 },
+  { id: 7,  title: "OG",        number: "+37281432392", price: 94,  rarity: "common",    origin: "fresh",    market: "degenphone", badge: "OG",        hue: 280 },
+  { id: 6,  title: "Legendary", number: "+1 440 555 0199", price: 540, rarity: "legendary", origin: "fresh", market: "other",                   hue: 320 },
+  { id: 5,  title: "Gold",      number: "+1 216 555 0054", price: 220, rarity: "gold",      origin: "fresh", market: "getgems",                 hue: 26  },
+  { id: 4,  title: "Diamond",   number: "+1 614 555 0031", price: 320, rarity: "diamond",   origin: "recycled", market: "degenphone",           hue: 200 },
+  { id: 3,  title: "Community", number: "+1 937 555 0002", price: 88,  rarity: "community", origin: "recycled", market: "other",                hue: 350 },
+  { id: 2,  title: "Common",    number: "+1 330 555 0142", price: 66,  rarity: "common",    origin: "fresh",    market: "degenphone",           hue: 8   },
+  { id: 1,  title: "Bronze",    number: "+1 740 555 0137", price: 40,  rarity: "bronze",    origin: "fresh",    market: "other",                hue: 0   },
+];

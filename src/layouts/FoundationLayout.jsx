@@ -1,0 +1,32 @@
+// src/layouts/FoundationLayout.jsx
+import React from "react";
+import { NavLink, Outlet } from "react-router-dom";
+
+const ID = "foundation-css";
+const CSS = `
+html[data-app="foundation"] body { background:#fff; }
+.fd-wrap { max-width: 1280px; margin: 0 auto; padding: 12px 16px 56px; }
+.fd-appbar{position:sticky;top:0;z-index:10;display:flex;gap:12px;align-items:center;border:1px solid #e7e5e4;border-radius:16px;background:#fff;padding:10px 12px}
+.fd-nav a{padding:8px 10px;border-radius:10px;text-decoration:none;color:#667085;border:1px solid transparent}
+.fd-nav a.active{color:#0f172a;border-color:#e7e5e4;background:#fafafa}
+`;
+
+function ensureCss(){
+  if(document.getElementById(ID)) return;
+  const el=document.createElement("style"); el.id=ID; el.textContent=CSS; document.head.appendChild(el);
+}
+
+export default function FoundationLayout(){
+  React.useEffect(()=>{ document.documentElement.dataset.app="foundation"; ensureCss(); },[]);
+  return (
+    <div className="app-shell fd-wrap">
+      <header className="fd-appbar">
+        <strong>Foundation</strong>
+        <nav className="fd-nav">
+          <NavLink to="/top">Top</NavLink>
+        </nav>
+      </header>
+      <Outlet />
+    </div>
+  );
+}

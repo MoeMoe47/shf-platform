@@ -1,0 +1,227 @@
+/* src/styles/foundation.css
+   ------------------------------------------------------------------
+   Silicon Heartland – Base Foundations
+   - Normalizes box sizing
+   - Sets base typography + background
+   - Provides a few generic layout helpers
+   - Keeps styles low-specificity so app-level CSS can override
+   ------------------------------------------------------------------ */
+
+/* 1. Global reset-ish */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* 2. Root-level tokens (very general; app themes can override) */
+:root {
+  --shf-bg: #050609;
+  --shf-surface: #101117;
+  --shf-surface-soft: #14161d;
+  --shf-border-subtle: rgba(255, 255, 255, 0.06);
+
+  --shf-text: #f5f6f7;
+  --shf-text-dim: #9aa0aa;
+  --shf-text-soft: #7b8290;
+
+  --shf-primary: #ff4f00;   /* International Orange */
+  --shf-primary-soft: rgba(255, 79, 0, 0.1);
+  --shf-primary-strong: #cc3f00;
+
+  --shf-accent-good: #00d394;
+  --shf-accent-warn: #facc15;
+  --shf-accent-bad: #f97373;
+
+  --shf-radius-xs: 6px;
+  --shf-radius-sm: 10px;
+  --shf-radius-md: 14px;
+  --shf-radius-lg: 18px;
+  --shf-radius-xl: 24px;
+
+  --shf-gap-xs: 4px;
+  --shf-gap-sm: 8px;
+  --shf-gap-md: 12px;
+  --shf-gap-lg: 16px;
+  --shf-gap-xl: 24px;
+
+  --shf-shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.55);
+  --shf-shadow-subtle: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* 3. Base body + root container */
+html {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Segoe UI", sans-serif;
+  font-size: 16px;
+  background-color: var(--shf-bg);
+  color: var(--shf-text);
+}
+
+body {
+  min-height: 100vh;
+  background: radial-gradient(circle at top left, rgba(255, 79, 0, 0.14), transparent),
+              radial-gradient(circle at bottom right, rgba(0, 211, 148, 0.14), transparent),
+              var(--shf-bg);
+  color: var(--shf-text);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Let React roots stretch nicely */
+#root,
+#app {
+  min-height: 100vh;
+}
+
+/* 4. Typography defaults */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 0.4em;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+p {
+  margin: 0 0 0.6em;
+  line-height: 1.5;
+}
+
+small {
+  font-size: 0.8rem;
+  color: var(--shf-text-soft);
+}
+
+/* 5. Generic links + buttons */
+a {
+  color: var(--shf-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* 6. Utility layout helpers (low specificity) */
+
+.shf-page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px 16px 40px;
+}
+
+.shf-row {
+  display: flex;
+  align-items: stretch;
+  gap: var(--shf-gap-md);
+}
+
+.shf-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--shf-gap-sm);
+}
+
+/* Simple card shell */
+.shf-card {
+  background: var(--shf-surface);
+  border-radius: var(--shf-radius-md);
+  border: 1px solid var(--shf-border-subtle);
+  padding: 12px 14px;
+  box-shadow: var(--shf-shadow-subtle);
+}
+
+/* Header-style card (for KPIs or top bars) */
+.shf-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--shf-gap-md);
+}
+
+/* Soft text utilities */
+.shf-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--shf-text-dim);
+}
+
+.shf-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(15, 17, 22, 0.9);
+  font-size: 0.72rem;
+  color: var(--shf-text-soft);
+}
+
+/* 7. Simple “glass” top bar helper (can be reused by shell) */
+.shf-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: var(--shf-gap-md);
+  padding: 10px 14px;
+  margin: -12px -16px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  background: linear-gradient(
+    to bottom,
+    rgba(5, 6, 10, 0.96),
+    rgba(5, 6, 10, 0.88)
+  );
+  backdrop-filter: blur(12px);
+}
+
+/* 8. Tiny helper for orange accent text */
+.shf-text-primary {
+  color: var(--shf-primary);
+}
+
+.shf-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(12, 13, 18, 0.95);
+  font-size: 0.75rem;
+  color: var(--shf-text-soft);
+}
+
+.shf-pill--primary {
+  border-color: var(--shf-primary);
+  background: var(--shf-primary-soft);
+  color: var(--shf-text);
+}
+
+/* 9. Basic responsive helpers */
+@media (max-width: 768px) {
+  .shf-page {
+    padding-inline: 12px;
+  }
+
+  .shf-row {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,65 @@
+import React from "react";
+import "@/styles/catalog.css";
+import heroImg from "@/assets/brand/catalog-hero.jpg"; // put your rocket photo here
+
+const tracks = ["All","AI Innovation Track","Smart Contracts","Silicon Stack","Deaf Pilot"];
+
+const cards = [
+  { id:"ai-101", title:"Intro to AI", by:"Billy Gateson", hours:2, pct:80 },
+  { id:"cloud-101", title:"Cloud Computing Basics", by:"Billy Gateson", hours:2, pct:0 },
+  { id:"google-it", title:"Google IT Support", by:"Coursera", hours:20, pct:0, external:true },
+  // …add more as needed
+];
+
+export default function Catalog(){
+  const [active, setActive] = React.useState("All");
+  return (
+    <div className="catalog" style={{"--hero-url": `url(${heroImg})`}}>
+      {/* HERO */}
+      <section className="cat-hero">
+        <div className="hero-inner">
+          <h1>Choose Your Path,<br/>Build the Future</h1>
+          <p>Browse our curriculum by track below. Start learning when you're ready.</p>
+        </div>
+      </section>
+
+      {/* FILTER PILLS */}
+      <div className="cat-pills">
+        {tracks.map(t => (
+          <button
+            key={t}
+            className={`cat-pill ${t===active ? "is-active" : ""}`}
+            onClick={()=>setActive(t)}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+
+      {/* GRID */}
+      <section className="cat-grid">
+        {cards.map(c => (
+          <article key={c.id} className="cat-card">
+            <h3>{c.title}</h3>
+            <div className="cat-meta">{c.by}  ·  {c.hours} hours</div>
+            <div className="cat-bar" aria-label="progress">
+              <i style={{"--w": `${c.pct||0}%`}} />
+            </div>
+            <div style={{display:"flex",gap:10,marginTop:2}}>
+              {c.external ? (
+                <>
+                  <a className="btn btn-primary" href="#" onClick={(e)=>{e.preventDefault(); window.dispatchEvent(new CustomEvent('shf:click',{detail:{provider:'coursera'}})); window.open('https://www.coursera.org', '_blank');}}>Launch on Coursera</a>
+                  <button className="btn btn-ghost" onClick={() => window.dispatchEvent(new CustomEvent('shf:submit-proof',{detail:{courseId:c.id}}))}>
+                    Submit Proof
+                  </button>
+                </>
+              ) : (
+                <a className="btn btn-primary" href={`#/lesson/${c.id}`}>{(c.pct||0)>0 ? "Resume" : "Start"}</a>
+              )}
+            </div>
+          </article>
+        ))}
+      </section>
+    </div>
+  );
+}

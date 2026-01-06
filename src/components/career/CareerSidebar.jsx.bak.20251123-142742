@@ -1,0 +1,103 @@
+// src/components/career/CareerSidebar.jsx
+import React from "react";
+import AppLink from "@/components/nav/AppLink.jsx";
+import { NavLink } from "react-router-dom";
+
+const Item = ({ to, icon, children }) => (
+  <li>
+    <NavLink
+      to={to}
+      className={({ isActive }) => (isActive ? "car-link is-active" : "car-link")}
+      aria-current={({ isActive }) => (isActive ? "page" : undefined)}
+    >
+      <span className="car-linkIcon" aria-hidden>{icon}</span>
+      <span className="car-linkLabel">{children}</span>
+    </AppLink>
+  </li>
+);
+
+const Section = ({ title, children }) => (
+  <div className="car-navSection">
+    <div className="car-navTitle">{title}</div>
+    <ul className="car-list">{children}</ul>
+  </div>
+);
+
+export default function CareerSidebar() {
+  // DEV-only sanity: warn if key links are missing in the rendered markup
+  React.useEffect(() => {
+    if (!import.meta.env.DEV) return;
+    const required = [
+      "/dashboard",
+      "/dashboard-ns",
+      "/assignments",
+      "/calendar",
+      "/portfolio",
+      "/learn",
+      "/vocab",
+      "/planner",
+      "/explore",
+      "/career/pathways",
+      "/resume",
+      "/rewards",
+      "/credit/report",
+      "/marketplace",
+      "/coach",
+      "/help",
+      "/settings",
+    ];
+    const isPresent = (p) =>
+      !!document.querySelector(
+        `a[href="#${p}"], a[href="${p}"], a[href$="#${p}"]`
+      );
+    const missing = required.filter((p) => !isPresent(p));
+    if (missing.length) {
+      console.warn(
+        `⚠️ [CareerSidebar] Missing links: ${missing.join(
+          ", "
+        )}. Ensure the sidebar includes these routes.`
+      );
+    }
+  }, []);
+
+  return (
+    <nav className="car-nav" aria-label="Main">
+      <div className="car-navBrand">
+        <img src="/logo-foundation.png" alt="" />
+      </div>
+
+      {/* Learn / Daily work */}
+      <Section title="LEARN">
+        <Item to="/dashboard"   icon="📊">Dashboard</Item>
+        <Item to="/dashboard-ns" icon="⭐">Northstar Dashboard</Item>
+        <Item to="/assignments" icon="📝">Assignments</Item>
+        <Item to="/calendar"    icon="📅">Calendar</Item>
+        <Item to="/portfolio"   icon="📁">Portfolio</Item>
+        <Item to="/learn"       icon="📚">Continue learning</Item>
+        <Item to="/vocab"       icon="🔤">Vocabulary</Item>
+      </Section>
+
+      {/* Career planning */}
+      <Section title="CAREER">
+        <Item to="/planner"          icon="🧭">Planner</Item>
+        <Item to="/explore"          icon="🗺️">Explore</Item>
+        <Item to="/career/pathways"  icon="🧩">Career Pathways</Item>
+        <Item to="/resume"           icon="📄">Resume Builder</Item>
+      </Section>
+
+      {/* Wallet / Credit / Marketplace */}
+      <Section title="TOOLS">
+        <Item to="/rewards"        icon="🏆">Rewards Wallet</Item>
+        <Item to="/credit/report"  icon="💳">Credit Report</Item>
+        <Item to="/marketplace"    icon="🛍️">Marketplace</Item>
+      </Section>
+
+      {/* Support */}
+      <Section title="SUPPORT">
+        <Item to="/coach"    icon="🧠">Coach</Item>
+        <Item to="/help"     icon="❓">Help</Item>
+        <Item to="/settings" icon="⚙️">Settings</Item>
+      </Section>
+    </nav>
+  );
+}

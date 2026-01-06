@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "scale": { "min": -2, "max": 2, "labels": ["Strongly Disagree","Disagree","Neutral","Agree","Strongly Agree"] },
+  "axes": [
+    { "id": "fiscal",  "label": "Fiscal Policy" },
+    { "id": "social",  "label": "Social Policy" },
+    { "id": "govern",  "label": "Governance & Institutions" },
+    { "id": "civic",   "label": "Civic Participation" }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "text": "Public investment in education and job training should increase even if it raises near-term taxes.",
+      "axis": "fiscal",
+      "weight": 1.0
+    },
+    {
+      "id": "q2",
+      "text": "Balanced budgets should be prioritized even when the economy slows.",
+      "axis": "fiscal",
+      "weight": 1.0,
+      "invert": true
+    },
+    {
+      "id": "q3",
+      "text": "Individual rights on social issues should be broadly protected from government interference.",
+      "axis": "social",
+      "weight": 1.0
+    },
+    {
+      "id": "q4",
+      "text": "Community standards should take precedence over individual preferences on key social issues.",
+      "axis": "social",
+      "weight": 1.0,
+      "invert": true
+    },
+    {
+      "id": "q5",
+      "text": "Government transparency and anti-corruption rules should expand, even if compliance adds cost.",
+      "axis": "govern",
+      "weight": 1.0
+    },
+    {
+      "id": "q6",
+      "text": "Independent institutions (courts, auditors) should have stronger powers to check leaders.",
+      "axis": "govern",
+      "weight": 1.0
+    },
+    {
+      "id": "q7",
+      "text": "Civic participation (voting, meetings, volunteering) should be expected of all residents.",
+      "axis": "civic",
+      "weight": 1.0
+    },
+    {
+      "id": "q8",
+      "text": "Youth should have structured opportunities to deliberate and propose local policy ideas.",
+      "axis": "civic",
+      "weight": 1.0
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "id": "asl-46",
+  "title": "ASL 6.3 — Spatial Stories (Maps + CLs + RS) 🧭🎬",
+  "estMinutes": 30,
+  "objectives": [
+    "Combine anchored landmarks with classifier paths to narrate movement-based stories",
+    "Use role-shift (RS) for character lines and neutral returns for narration",
+    "Sequence events with time-first framing (PAST/NEXT/FUTURE) and FINISH to mark completion"
+  ],
+  "vocab": [
+    { "term": "ANCHOR (LOCUS)", "def": "Fixed point in space for a person/place reused across clauses." },
+    { "term": "CL:1 / CL:3 / CL:B", "def": "Person, vehicle, and surface classifiers for spatial scenes." },
+    { "term": "ROLE-SHIFT (RS)", "def": "Brief shoulder/eye shift to portray a character’s perspective." },
+    { "term": "FINISH", "def": "Completion marker to end an action or segment." },
+    { "term": "TIME-FIRST", "def": "Lead with WHEN (PAST/TODAY/FUTURE) before who/what." }
+  ],
+  "sections": [
+    {
+      "heading": "Warm-Up: Anchor • Path • Line",
+      "media": { "src": "/media/asl/unit-6/warmup-anchor-path-line.png", "alt": "Three icons: pin, path arrow, speech bubble", "caption": "Anchor a place, trace a path, add a line" },
+      "body": "Pick **HOME (center)**, **SCHOOL (left)**, **STORE (right-up)**. Trace **CL:3** HOME→SCHOOL, then give a short character line with **RS→STUDENT**: **LATE!** Return to neutral.",
+      "microCheck": {
+        "q": "What restores clarity after a character line?",
+        "options": ["Stay in RS", "Return to neutral narrator", "Switch anchors", "Speed up"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Model: Time-First Spatial Narrative",
+      "media": { "src": "/media/asl/unit-6/spatial-model.mp4", "alt": "Sequence using PAST/NEXT/FUTURE and classifiers", "caption": "PAST → NEXT → FUTURE with FINISH" },
+      "body": "Example:\n• **PAST MORNING CL:3 HOME→SCHOOL.**\n• **NEXT CLASS FINISH. CL:1 I WALK SCHOOL→STORE.**\n• **RS→CLERK:** **HELLO.** (neutral) **BUY SNACK FINISH.**\n• **FUTURE AFTERNOON CL:3 STORE→HOME.** Keep clauses **3–5 signs**; add tiny pauses.",
+      "microCheck": {
+        "q": "Where does FINISH belong?",
+        "options": ["Before time", "After completed action", "Randomly anywhere", "Never use it"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Perspective: Top-Down vs. Street View",
+      "body": "Choose a single **camera** per scene:\n- **Top-Down:** map-like turns (great for CL:3 routes).\n- **Street View:** character eye level (great for RS dialogue and CA).",
+      "callouts": [
+        { "type": "tip", "title": "Lock the Camera", "body": "Don’t switch perspectives mid-scene. If needed, insert a clear **VV CUT** first." }
+      ],
+      "microCheck": {
+        "q": "Best way to change perspective mid-story:",
+        "options": ["Switch suddenly", "Use a VV cut (pause + snap) then continue", "Talk aloud", "Make huge motions"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Partner Practice: 3-Beat Spatial Story",
+      "media": { "src": "/media/asl/unit-6/three-beats-map.gif", "alt": "Three-beat storyboard over a map", "caption": "Beat 1 → Beat 2 → Beat 3" },
+      "body": "Co-create a **3-beat** story using your anchors. Include **1 CL:3 route**, **1 CL:1 action**, and **1 RS line**. Example beats:\n1) **PAST**: **CL:3 HOME→SCHOOL.**\n2) **NEXT**: **RS→FRIEND:** **HELP?** (neutral) **CL:1 WE WALK GYM.**\n3) **FUTURE**: **GAME START FINISH.**",
+      "callouts": [
+        { "type": "caution", "title": "Anchor Drift", "body": "If STORE slides, re-point once, then continue." }
+      ],
+      "microCheck": {
+        "q": "Minimum technique set for the drill:",
+        "options": ["Only CLs", "CL:3 + CL:1 + one RS", "RS only", "None"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Mini-Showcase",
+      "body": "Record **15–20s**: a spatial story with **time-first sequencing**, **1 CL:3 path**, **1 CL:1 action**, **1 RS line**, and **one FINISH**. Optional: one **VV cut** before a perspective change.",
+      "teacherNote": "Caption should list your anchors and where FINISH appears."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 6.3 — Spatial Stories Quiz",
+    "items": [
+      { "type": "mcq", "q": "Which classifier best shows a vehicle route?", "options": ["CL:1", "CL:3", "CL:B", "5-hand"], "answerIndex": 1 },
+      { "type": "mcq", "q": "After an RS line, you should…", "options": ["Stay in RS", "Return to neutral narrator", "Switch anchors", "Speed up"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Best base order for clear narration:", "options": ["SUBJECT → ACTION → TIME", "TIME → SUBJECT → ACTION", "ACTION → TIME → SUBJECT", "Random"], "answerIndex": 1 },
+      { "type": "short", "q": "Write a 3-clause gloss using PAST, NEXT, FUTURE with one FINISH and one RS line." },
+      { "type": "reflection", "prompt": "Which part challenged you more—keeping paths small/clean or managing RS returns? What cue will you practice?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Upload your 15–20s spatial story. Caption anchors used, where FINISH landed, and whether you used a VV cut.",
+  "summary": "You built spatial narratives that anchor places, trace classifier paths, and weave in character lines via role-shift, sequenced with time-first and marked completion with FINISH.",
+  "nextSlug": "asl-47",
+  "games": [
+    { "id": "camera-lock", "title": "Camera Lock", "route": "/arcade/asl/camera-lock", "estMinutes": 5, "xp": 50, "outcomes": ["Hold one perspective per scene"] },
+    { "id": "route-weave", "title": "Route Weave", "route": "/arcade/asl/route-weave", "estMinutes": 5, "xp": 50, "outcomes": ["Interleave CL:3 paths with RS lines"] },
+    { "id": "finish-flag", "title": "Finish Flag", "route": "/arcade/asl/finish-flag", "estMinutes": 5, "xp": 50, "outcomes": ["Use FINISH to mark completion"] }
+  ]
+}

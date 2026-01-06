@@ -1,0 +1,24 @@
+// src/router/FoundationRoutes.jsx
+import React from "react";
+import { Suspense } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import FoundationLayout from "@/layouts/FoundationLayout.jsx";
+import FoundationTop from "@/pages/foundation/Top.jsx";
+import DevDocsViewer from "@/pages/dev/Docs.jsx"; // ⬅️ added
+
+export default function FoundationRoutes() {
+  return (
+    <Suspense fallback={<div style={{padding:16}}>Loading…</div>}><Routes>
+      {/* Out-of-shell docs viewer (no layout chrome) */}
+      <Route path="/__docs" element={<DevDocsViewer />} />
+
+      <Route path="/" element={<FoundationLayout />}>
+        <Route index element={<Navigate to="top" replace />} />
+        <Route path="top" element={<FoundationTop />} />
+        <Route path="*" element={<Navigate to="top" replace />} />
+      </Route>
+      <Route path="admin/placement-kpis" element={<PlacementKPIs/>} />
+  <Route path="admin/partner-jobs" element={<PartnerJobs/>} />
+</Routes></Suspense>
+  );
+}

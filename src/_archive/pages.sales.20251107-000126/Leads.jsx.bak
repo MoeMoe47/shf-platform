@@ -1,0 +1,56 @@
+// src/pages/sales/Leads.jsx
+import React from "react";
+import { readLeadQueue, onLeadQueueUpdate, clearLeadQueue } from "@/shared/sales/leadInbox.js";
+import { buildPitchPack } from "@/shared/sales/pitchPack.js";
+import LeadBridgeStrip from "@/components/sales/LeadBridgeStrip.jsx";
+
+export default function Leads() {
+  const [leads, setLeads] = React.useState(readLeadQueue());
+  React.useEffect(() => onLeadQueueUpdate(setLeads), []);
+
+  return (
+    <section className="db-shell">
+      <header className="db-head">
+        <div>
+          <h1 className="db-title">Live Employer Leads</h1>
+          <p className="db-subtitle">Generated from Employer app calculator & finder</p>
+        </div>
+        <div className="db-actions">
+          <button className="btn" onClick={clearLeadQueue}>Clear Local Queue</button>
+        </div>
+      </header>
+
+      {!leads.length && <div className="card card--pad">No new leads yet.</div>}
+
+      {leads.map((lead, idx) => {
+        const pack = buildPitchPack({
+          pathway: lead.pathway || "tech",
+          wage: lead.wage || 16,
+          hours: lead.hours || 120,
+          programIds: lead.programs || []
+        });
+        return (
+          <div key={idx} className="card card--pad" style={{marginBottom:12}}>
+            <div className="muted small">{new Date(lead.ts).toLocaleString()}</div>
+            <h3 style={{marginTop:6}}>{pack.headline}</h3>
+            <ul>{pack.bullets.map((b,i)=><li key={i}>{b}</li>)}</ul>
+            <table className="simple">
+              <thead><tr><th>Program</th><th>Rate</th><th>Cap</th><th>Est. payout</th></tr></thead>
+              <tbody>
+                {pack.items.map(it=>(
+                  <tr key={it.id}>
+                    <td>{it.name}</td>
+                    <td>{it.ratePct}%</td>
+                    <td>{it.cap ? `$${it.cap.toLocaleString()}` : "—"}</td>
+                    <td>${it.est.toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <p className="small">{pack.items.map(it=>it.notes).join(" ")}</p>
+          </div>
+        );
+      })}
+    </section>
+  );
+}

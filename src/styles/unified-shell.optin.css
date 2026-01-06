@@ -1,0 +1,22 @@
+/* Only apply when data-shell="unified" and NOT Solutions/Foundation */
+[data-shell="unified"]:not([data-app="solutions"]):not([data-app="foundation"]) {
+  --wash: #f6f7f9;
+}
+
+[data-shell="unified"] .unified-body { display: grid; grid-template-columns: 280px 1fr; gap: 16px; }
+@media (max-width: 960px) {
+  [data-shell="unified"] .unified-body { grid-template-columns: 1fr; }
+}
+
+[data-shell="unified"] .unified-main .sh-card {
+  background: #fff; border-radius: 16px; padding: 16px; margin: 16px 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+
+/* Lesson progress strip used by common apps only */
+[data-shell="unified"] .sh-progress {
+  position: sticky; top: 0; z-index: 10; background: var(--wash);
+  padding: 8px; border-bottom: 1px solid rgba(0,0,0,.06);
+  display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center;
+}
+[data-shell="unified"] .sh-progressText { font-size: 12px; opacity: .7; }

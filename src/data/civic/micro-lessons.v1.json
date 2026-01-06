@@ -1,0 +1,197 @@
+{
+  "version": "v1",
+  "items": [
+    {
+      "id": "intro-missions",
+      "title": "How Micro-lessons Work",
+      "objective": "Learn how missions, rewards, and attestations work across the Civic app.",
+      "minutes": 4,
+      "attestationTags": ["onboarding", "rewards"],
+      "content": [
+        "Micro-lessons are short, verifiable tasks that teach you how to use the Civic app.",
+        "When you finish a mission you earn points (and sometimes a badge).",
+        "Your completion is recorded as an attestation (local now; chain later)."
+      ],
+      "assessments": [
+        { "id": "q1", "type": "mc", "prompt": "What do you earn for completing missions?", "choices": ["Bragging rights", "Points (and sometimes a badge)", "Nothing"] }
+      ],
+      "tasks": [
+        { "id": "t-open-missions", "type": "nav", "label": "Open the Micro-lessons page from the sidebar", "route": "/missions" },
+        { "id": "t-sub", "type": "social_follow", "label": "Subscribe to Silicon Heartland", "platforms": ["YouTube", "TikTok", "Instagram"] },
+        { "id": "t-share", "type": "social_share", "label": "Share today’s post", "platforms": ["Any"] }
+      ],
+      "rewards": { "points": 25, "badgeId": "onboarder" }
+    },
+    {
+      "id": "dashboard-basics",
+      "title": "Dashboard Tour",
+      "objective": "Understand the Civic dashboard layout and quick actions.",
+      "minutes": 6,
+      "attestationTags": ["dashboard"],
+      "content": [
+        "The Dashboard shows your recent activity, KPI tiles, and quick links.",
+        "Use the left rail to jump between Surveys, Elections, Proposals, and Treasury."
+      ],
+      "assessments": [
+        { "id": "q1", "type": "short", "prompt": "Name one thing you can check on the Dashboard." }
+      ],
+      "tasks": [
+        { "id": "t-open-dash", "type": "nav", "label": "Open Dashboard", "route": "/dashboard" },
+        { "id": "t-like", "type": "social_share", "label": "Paste a link to a post you liked about civic engagement" }
+      ],
+      "rewards": { "points": 20, "badgeId": "civic-dash" }
+    },
+    {
+      "id": "northstar-kpis",
+      "title": "Northstar Dashboard KPIs",
+      "objective": "Learn how Northstar KPIs track impact and participation.",
+      "minutes": 6,
+      "attestationTags": ["kpi", "analytics"],
+      "content": [
+        "Northstar KPIs summarize participation and learning momentum.",
+        "Your micro-lesson completions increment KPI counters in real time."
+      ],
+      "assessments": [
+        { "id": "q1", "type": "mc", "prompt": "What bumps a KPI?", "choices": ["Random chance", "Completing micro-lessons", "Page refresh"] }
+      ],
+      "tasks": [
+        { "id": "t-open-ns", "type": "nav", "label": "Open Northstar Dashboard", "route": "/dashboard-ns" },
+        { "id": "t-sub", "type": "social_follow", "label": "Confirm you’re subscribed to our channel" }
+      ],
+      "rewards": { "points": 25, "badgeId": "kpi-aware" }
+    },
+    {
+      "id": "elections-howto",
+      "title": "Elections: Practice Voting",
+      "objective": "See how mock elections, ballots, and results work.",
+      "minutes": 8,
+      "attestationTags": ["elections", "civic-practice"],
+      "content": [
+        "Mock elections simulate ballots so you can practice evaluating options.",
+        "You’ll see proposals, candidate statements, and voting outcomes."
+      ],
+      "assessments": [
+        { "id": "q1", "type": "short", "prompt": "What’s one benefit of practicing with mock elections?" }
+      ],
+      "tasks": [
+        { "id": "t-open-elec", "type": "nav", "label": "Open Elections", "route": "/elections" },
+        { "id": "t-share", "type": "social_share", "label": "Share a link to a reliable civics resource you recommend" }
+      ],
+      "rewards": { "points": 30, "badgeId": "ballot-ready" }
+    },
+    {
+      "id": "proposals-howto",
+      "title": "Proposals: Create & Debate",
+      "objective": "Learn to submit, review, and vote on policy proposals.",
+      "minutes": 10,
+      "attestationTags": ["proposals", "debate"],
+      "content": [
+        "Proposals let the community submit ideas, provide rationale, and budget impacts.",
+        "Debate and voting refine the best ideas into actionable items."
+      ],
+      "assessments": [
+        { "id": "q1", "type": "mc", "prompt": "A good proposal should include…", "choices": ["Memes", "Rationale and budget impact", "Only a title"] }
+      ],
+      "tasks": [
+        { "id": "t-open-prop", "type": "nav", "label": "Open Proposals", "route": "/proposals" },
+        { "id": "t-like", "type": "social_share", "label": "Paste a link to a post where you summarized a proposal in one sentence" }
+      ],
+      "rewards": { "points": 35, "badgeId": "policy-crafter" }
+    },
+    {
+      "id": "treasury-sim",
+      "title": "Treasury Simulator",
+      "objective": "Balance trade-offs by allocating a limited budget to programs.",
+      "minutes": 12,
+      "attestationTags": ["treasury", "budget"],
+      "content": [
+        "The Treasury Simulator teaches constraints: choosing A often means not choosing B.",
+        "Experiment with sliders or allocations and note the downstream impact."
+      ],
+      "assessments": [
+        { "id": "q1", "type": "short", "prompt": "Describe one trade-off you noticed while rebalancing." }
+      ],
+      "tasks": [
+        { "id": "t-open-treasury", "type": "nav", "label": "Open Treasury Simulator", "route": "/treasury" },
+        { "id": "t-share", "type": "social_share", "label": "Share a post that explains your budget choice in 1–2 lines" }
+      ],
+      "rewards": { "points": 40, "badgeId": "budgeteer" }
+    },
+    {
+      "id": "survey-howto",
+      "title": "Issue Survey",
+      "objective": "Answer neutrally framed questions to map your Civic Profile.",
+      "minutes": 7,
+      "attestationTags": ["survey", "profile"],
+      "content": [
+        "The Issue Survey uses a Likert scale to map your positions across axes.",
+        "Aim for honesty; your profile improves as you answer more questions."
+      ],
+      "assessments": [
+        { "id": "q1", "type": "mc", "prompt": "How many points are on the Likert scale here?", "choices": ["3", "5", "10"] }
+      ],
+      "tasks": [
+        { "id": "t-open-survey", "type": "nav", "label": "Open Survey", "route": "/survey" },
+        { "id": "t-sub", "type": "social_follow", "label": "Confirm you’re subscribed" }
+      ],
+      "rewards": { "points": 25, "badgeId": "self-aware" }
+    },
+    {
+      "id": "profile-reading",
+      "title": "Reading Your Profile",
+      "objective": "Interpret axes, quadrant placement, and confidence.",
+      "minutes": 5,
+      "attestationTags": ["profile"],
+      "content": [
+        "Your profile shows normalized axis values and a 2D placement.",
+        "Confidence rises as you answer more questions and complete missions."
+      ],
+      "assessments": [
+        { "id": "q1", "type": "short", "prompt": "What could you do to raise confidence in your profile reading?" }
+      ],
+      "tasks": [
+        { "id": "t-open-profile", "type": "nav", "label": "Open Profile Results", "route": "/profile" },
+        { "id": "t-share", "type": "social_share", "label": "Share a (non-political) learning insight you gained" }
+      ],
+      "rewards": { "points": 20, "badgeId": "profile-pro" }
+    },
+    {
+      "id": "rewards-wallet",
+      "title": "Rewards Wallet",
+      "objective": "View total points, badges, and recent attestations.",
+      "minutes": 3,
+      "attestationTags": ["rewards"],
+      "content": [
+        "Your wallet shows points earned and badges collected from micro-lessons.",
+        "More missions = more points; some missions grant unique badges."
+      ],
+      "assessments": [
+        { "id": "q1", "type": "mc", "prompt": "Where can you see badges?", "choices": ["Dashboard", "Rewards Wallet", "Settings only"] }
+      ],
+      "tasks": [
+        { "id": "t-open-rewards", "type": "nav", "label": "Open Rewards Wallet", "route": "/rewards" },
+        { "id": "t-like", "type": "social_share", "label": "Paste a link to any SHF post you liked" }
+      ],
+      "rewards": { "points": 15, "badgeId": "wallet-tour" }
+    },
+    {
+      "id": "settings-basics",
+      "title": "Settings & Privacy",
+      "objective": "Adjust preferences and understand what gets published.",
+      "minutes": 4,
+      "attestationTags": ["settings", "privacy"],
+      "content": [
+        "Settings centralize your preferences and privacy choices.",
+        "We guard against publishing political content externally without approval."
+      ],
+      "assessments": [
+        { "id": "q1", "type": "short", "prompt": "Name one privacy safeguard mentioned in the app." }
+      ],
+      "tasks": [
+        { "id": "t-open-settings", "type": "nav", "label": "Open Settings", "route": "/settings" },
+        { "id": "t-sub", "type": "social_follow", "label": "Confirm you’re subscribed" }
+      ],
+      "rewards": { "points": 15, "badgeId": "privacy-aware" }
+    }
+  ]
+}

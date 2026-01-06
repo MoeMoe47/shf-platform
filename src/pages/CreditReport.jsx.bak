@@ -1,0 +1,280 @@
+// src/pages/CreditReport.jsx
+import React from "react";
+import { useCreditCtx } from "@/shared/credit/CreditProvider.jsx";
+import TaskFeed from "@/components/credit/TaskFeed.jsx";
+import CreditCoachAgent from "@/components/credit/CreditCoachAgent.jsx";
+import { usePolygon } from "@/shared/chain/PolygonProvider.jsx";
+import scoreRules from "@/data/score-rules.json";
+
+/* KPI + wash helpers */
+import KpiCard from "@/components/ui/KpiCard.jsx";
+import {
+  getScoreWash,
+  getPercentWash,
+  getLowerIsBetterWash,
+  getWashClass,
+} from "@/utils/getWashClass.js";
+
+export default function CreditReport() {
+  const { score, tier, points, log = [], clearLocal, metrics } = useCreditCtx();
+  const poly = usePolygon?.() || null;
+
+  // Prefer provider metrics; fallback to safe defaults
+  const kpis = React.useMemo(
+    () => ({
+      score: Number(score ?? metrics?.score ?? 0),
+      utilizationPct: Number(metrics?.utilizationPct ?? 0),
+      onTimePct: Number(metrics?.onTimePct ?? 0),
+      derogCount: Number(metrics?.derogCount ?? 0),
+      inquiries12m: Number(metrics?.inquiries12m ?? 0),
+      avgAgeYears: Number(metrics?.avgAgeYears ?? 0),
+    }),
+    [score, metrics]
+  );
+
+  // Score thresholds (from data/score-rules.json or defaults)
+  const GOOD = scoreRules?.tiers?.good ?? 670;
+  const POOR = scoreRules?.tiers?.poor ?? 580;
+
+  // Wash classes
+  const scoreWash = getScoreWash(kpis.score, { good: GOOD, poor: POOR });          // higher is better
+  const utilWash  = getLowerIsBetterWash(kpis.utilizationPct, { intensity: 10 });  // lower is better
+  const payWash   = getPercentWash(kpis.onTimePct, { intensity: 10 });             // higher is better
+
+  // Simple count-based bands (lower is better)
+  const countWash = (n) =>
+    n <= 0 ? "wash--celebrate-10" : n === 1 ? "wash--warn-10" : "wash--danger-10";
+  const derogsWash = countWash(kpis.derogCount);
+  const inqWash    = countWash(kpis.inquiries12m);
+
+  // Avg age (yrs) higher is better — rough bands
+  const ageWash = getWashClass(kpis.avgAgeYears, {
+    direction: "higherIsBetter",
+    intensity: 10,
+    breakpoints: { danger: 2, warn: 4, ok: 7, celebrate: 10 },
+  });
+
+  // Recent log list (latest first)
+  const recent = React.useMemo(() => [...log].slice(-16).reverse(), [log]);
+
+  // Movers aggregation
+  const movers = React.useMemo(() => {
+    const agg = new Map();
+    for (const e of log) {
+      const key = e.key || "unknown";
+      const prev = agg.get(key) || { key, delta: 0, count: 0, capped: 0 };
+      const applied = typeof e.delta === "number" ? e.delta : 0;
+      const capped = applied === 0 && e.reason && e.reason.startsWith("cap");
+      agg.set(key, {
+        key,
+        delta: prev.delta + applied,
+        count: prev.count + 1,
+        capped: prev.capped + (capped ? 1 : 0),
+      });
+    }
+    const arr = [...agg.values()];
+    const pos = arr.filter((x) => x.delta > 0).sort((a, b) => b.delta - a.delta).slice(0, 5);
+    const neg = arr.filter((x) => x.delta < 0).sort((a, b) => a.delta - b.delta).slice(0, 5);
+    return { pos, neg };
+  }, [log]);
+
+  const onExport = React.useCallback(() => {
+    const payload = {
+      exportedAt: new Date().toISOString(),
+      kpis,
+      score: kpis.score,
+      tier,
+      points,
+      entries: log,
+      meta: {
+        app: "Credit Report",
+        note: "Educational/simulated; not a consumer credit disclosure.",
+      },
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `credit-report-${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [kpis, tier, points, log]);
+
+  return (
+    <div className="page pad" data-scope="credit-report" style={{ display: "grid", gap: 16 }}>
+      <header className="card card--pad" role="group" aria-label="Credit overview">
+        <div style={{ display: "flex", gap: 12, alignItems: "baseline", flexWrap: "wrap" }}>
+          <h1 style={{ margin: 0 }}>FICO® Score</h1>
+          <span style={{ color: "var(--ink-soft)" }}>(educational/simulated)</span>
+          <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
+            <button className="sh-btn sh-btn--secondary" onClick={onExport} aria-label="Export credit report JSON">
+              Export JSON
+            </button>
+            <button
+              className="sh-btn sh-btn--soft"
+              onClick={() => {
+                if (confirm("Clear local credit history? (Demo only)")) clearLocal();
+              }}
+            >
+              Reset (demo)
+            </button>
+          </div>
+        </div>
+
+        {/* KPI row */}
+        <div
+          style={{
+            marginTop: 8,
+            display: "grid",
+            gap: 8,
+            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+          }}
+        >
+          <KpiCard
+            washClass={scoreWash}
+            label="FICO® Score"
+            value={String(kpis.score)}
+            sub={tier?.name || "—"}
+            icon="📈"
+            trend="up"
+            delta="+6"
+          />
+          <KpiCard
+            washClass={utilWash}
+            label="Utilization"
+            value={`${kpis.utilizationPct}%`}
+            sub="lower is better"
+            icon="🧮"
+            trend={kpis.utilizationPct <= 30 ? "up" : "down"}
+            delta={kpis.utilizationPct <= 30 ? "-2%" : "+1%"}
+          />
+          <KpiCard
+            washClass={payWash}
+            label="On-time payments"
+            value={`${kpis.onTimePct}%`}
+            sub="last 12 months"
+            icon="⏱️"
+            trend="up"
+            delta="+0.3%"
+          />
+          <KpiCard
+            washClass={derogsWash}
+            label="Derogatories"
+            value={String(kpis.derogCount)}
+            sub="lower is better"
+            icon="🧹"
+            trend={kpis.derogCount === 0 ? "up" : "down"}
+            delta={kpis.derogCount === 0 ? "0" : "+1"}
+          />
+          <KpiCard
+            washClass={inqWash}
+            label="Hard inquiries (12m)"
+            value={String(kpis.inquiries12m)}
+            sub="lower is better"
+            icon="🔎"
+            trend={kpis.inquiries12m <= 1 ? "up" : "down"}
+            delta={kpis.inquiries12m <= 1 ? "-1" : "+1"}
+          />
+          <KpiCard
+            washClass={ageWash}
+            label="Avg. age of accounts"
+            value={`${Number.isFinite(kpis.avgAgeYears) ? kpis.avgAgeYears.toFixed(1) : "—"} yrs`}
+            sub="higher is better"
+            icon="🧭"
+            trend={kpis.avgAgeYears >= 4 ? "up" : "down"}
+            delta={kpis.avgAgeYears >= 4 ? "+0.1" : "-0.1"}
+          />
+        </div>
+      </header>
+
+      <div className="grid" style={{ display: "grid", gap: 16, gridTemplateColumns: "2fr 1fr" }}>
+        <section className="card card--pad" aria-labelledby="history-h">
+          <h2 id="history-h" style={{ margin: 0, fontSize: 18 }}>Recent changes</h2>
+          <ul className="clean-list" style={{ marginTop: 10, display: "grid", gap: 6 }}>
+            {recent.map((e, i) => (
+              <li
+                key={`${e.ts || i}-${i}`}
+                className="row"
+                style={{ display: "flex", justifyContent: "space-between", gap: 10 }}
+              >
+                <span style={{ opacity: 0.85 }}>
+                  <code style={{ fontSize: 12, opacity: 0.7 }}>
+                    {new Date(e.ts || Date.now()).toLocaleString()}
+                  </code>{" "}
+                  {labelForKey(e.key)}
+                  {e.reason && e.reason.startsWith("cap") && (
+                    <em style={{ marginLeft: 6, color: "var(--ink-soft)" }}>({e.reason})</em>
+                  )}
+                </span>
+                <strong style={{ color: (e.delta ?? 0) >= 0 ? "var(--ok)" : "var(--danger)" }}>
+                  {(e.delta ?? 0) > 0 ? "+" : ""}
+                  {e.delta ?? 0}
+                </strong>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <TaskFeed />
+      </div>
+
+      <section className="card card--pad" aria-labelledby="movers-h">
+        <h2 id="movers-h" style={{ margin: 0, fontSize: 18 }}>What moved your score</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 10, alignItems: "start" }}>
+          <MoversList title="Top positives" items={movers.pos} positive />
+          <MoversList title="Top negatives" items={movers.neg} />
+        </div>
+        <div style={{ marginTop: 8 }}>
+          <a className="sh-btn sh-btn--secondary" href="/credit.html#/disputes">
+            Open Dispute Center
+          </a>
+        </div>
+      </section>
+
+      <CreditCoachAgent />
+
+      <footer className="card card--pad" style={{ color: "var(--ink-soft)" }}>
+        FICO® Score shown here is educational/simulated from SHF activity; it is <strong>not</strong> a consumer credit disclosure.
+      </footer>
+    </div>
+  );
+}
+
+/* ---------- helpers ---------- */
+function labelForKey(key) {
+  switch (key) {
+    case "edu.attendance.logged": return "Attendance";
+    case "edu.grade.posted": return "Grade posted";
+    case "edu.microcert.earned": return "Micro-cert earned";
+    case "eng.assignment.submitted": return "Assignment submitted";
+    case "social.action": return "Social engagement";
+    case "credit.payment.posted": return "Payment posted";
+    case "credit.dispute.resolved": return "Dispute resolved";
+    case "credit.derog.added": return "Derogatory item";
+    default: return key || "Event";
+  }
+}
+
+function MoversList({ title, items = [], positive = false }) {
+  const color = positive ? "var(--ok)" : "var(--danger)";
+  return (
+    <div>
+      <div style={{ fontWeight: 700, marginBottom: 6 }}>{title}</div>
+      {items.length ? (
+        <ul className="clean-list" style={{ display: "grid", gap: 6 }}>
+          {items.map((m) => (
+            <li key={m.key} style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
+              <span>
+                {labelForKey(m.key)}
+                {!!m.capped && <em style={{ marginLeft: 6, color: "var(--ink-soft)" }}>({m.capped}× capped)</em>}
+              </span>
+              <strong style={{ color }}>{m.delta > 0 ? "+" : ""}{m.delta}</strong>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div style={{ color: "var(--ink-soft)" }}>No data yet.</div>
+      )}
+    </div>
+  );
+}

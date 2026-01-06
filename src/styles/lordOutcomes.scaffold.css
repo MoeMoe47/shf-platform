@@ -1,0 +1,47 @@
+/* ===== DYM PAGE SCAFFOLD ===== */
+
+.dym-page {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 28px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px 64px;
+}
+
+.dym-pageHeader {
+  max-width: 720px;
+}
+
+.dym-title {
+  font-size: 42px;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  margin-bottom: 10px;
+}
+
+.dym-subtitle {
+  font-size: 15px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.6;
+}
+
+.dym-pageBody {
+  display: grid;
+  gap: 32px;
+}
+
+/* Section rhythm */
+.dym-section {
+  display: grid;
+  gap: 16px;
+}
+
+/* Card base */
+.dym-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 20px;
+  backdrop-filter: blur(12px);
+}

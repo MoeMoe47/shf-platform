@@ -1,0 +1,24 @@
+:root{
+  --surface:#fff;
+  --surface-tint:rgba(15,23,42,.04);
+  --surface-border:rgba(2,6,23,.08);
+  --surface-shadow:0 1px 2px rgba(2,6,23,.04), 0 6px 18px rgba(2,6,23,.06);
+}
+.lesson-body{ padding:8px; background:transparent; }
+.lesson-surface{
+  background: linear-gradient(180deg,var(--surface),var(--surface));
+  box-shadow: var(--surface-shadow);
+  border:1px solid var(--surface-border);
+  border-radius:14px; padding:14px;
+}
+.sh-card{
+  background: color-mix(in oklab, var(--surface) 94%, var(--surface-tint));
+  border:1px solid var(--surface-border);
+  border-radius:12px; box-shadow:0 1px 1px rgba(2,6,23,.03);
+}
+.sh-cardBody{ background:transparent; }
+.sh-footer{
+  background: color-mix(in oklab, var(--surface) 96%, var(--surface-tint));
+  border-top:1px solid var(--surface-border);
+  backdrop-filter:saturate(1.2) blur(6px);
+}

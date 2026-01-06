@@ -1,0 +1,16 @@
+
+
+/* src/styles/accreditation.css */
+[data-acc="panel"] .acc-grid {
+  display: grid;
+  gap: 12px;
+}
+@media (min-width: 900px) {
+  [data-acc="panel"] .acc-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.acc-block { background: var(--wash, #fafafa); border-radius: 12px; padding: 12px; }
+.acc-h3 { margin: 0 0 6px 0; font-size: 15px; opacity: .9; }
+
+

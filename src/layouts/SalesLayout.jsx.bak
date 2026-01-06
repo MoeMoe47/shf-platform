@@ -1,0 +1,31 @@
+import React from "react";
+import { Outlet } from "react-router-dom";
+import SalesHeader from "@/components/sales/SalesHeader.jsx";
+import SalesSidebar from "@/components/sales/SalesSidebar.jsx";
+
+/* Load the proper Sales skin (tokens, layout, spacing) */
+import "@/styles/global.css";
+import "@/styles/unified-shell.css";
+import "@/styles/sales-shell.css";
+
+export default function SalesLayout() {
+  return (
+    <div className="crb-root" data-app="sales">
+      <a className="crb-skip" href="#sales-main">Skip to main content</a>
+
+      <header className="crb-header">
+        <SalesHeader />
+      </header>
+
+      <div className="crb-body">
+        <aside className="crb-sidebar" aria-label="Primary">
+          <SalesSidebar />
+        </aside>
+
+        <main id="sales-main" className="crb-main" role="main" aria-live="polite">
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
+}

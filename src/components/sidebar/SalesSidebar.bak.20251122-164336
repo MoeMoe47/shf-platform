@@ -1,0 +1,72 @@
+import React from "react";
+import AppLink from "@/components/nav/AppLink.jsx";
+import { NavLink } from "react-router-dom";
+
+const NAV = [
+  { to: "/sales/dashboard", label: "Dashboard", icon: "🏠" },
+  { to: "/sales/brand",     label: "Brand Kit", icon: "🎨" },
+  { to: "/sales/pricing",   label: "Pricing",   icon: "🏷️" },
+  { to: "/sales/bundles",   label: "Bundles",   icon: "🧩" },
+  { to: "/sales/calc",      label: "Impact Calc", icon: "🧮" },
+  { to: "/sales/roi",       label: "ROI",       icon: "📈" },
+  { to: "/sales/proposal",  label: "Proposal",  icon: "📄" },
+  { to: "/sales/ledger",    label: "Ledger",    icon: "🧾" },
+  { to: "/sales/verifier",  label: "Verifier",  icon: "🛡️" },
+  { to: "/sales/demo",      label: "Demo Hub",  icon: "🎬" },
+  { to: "/sales/coach",     label: "Coach",     icon: "🤖" },
+];
+
+export default function SalesSidebar({
+  open,
+  collapsed,
+  width,
+  onToggleCollapsed,
+  onStartResize,
+}) {
+  const cls =
+    "sal-sidebar" +
+    (open ? " is-open" : "") +
+    (collapsed ? " is-collapsed" : "");
+
+  return (
+    <aside className={cls} style={{ width: collapsed ? 72 : width }}>
+      <div className="sal-sb-head">
+        <button
+          className="sal-sb-collapse"
+          onClick={onToggleCollapsed}
+          title={collapsed ? "Expand" : "Collapse"}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          {collapsed ? "›" : "‹"}
+        </button>
+        {!collapsed && <span className="sal-sb-title">Sales</span>}
+      </div>
+
+      <nav className="sal-sb-nav" aria-label="Sales">
+        {NAV.map((item) => (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            className={({ isActive }) =>
+              "sal-sb-link" + (isActive ? " is-active" : "")
+            }
+            title={collapsed ? item.label : undefined}
+          >
+            <span className="sal-sb-ic" aria-hidden>
+              {item.icon}
+            </span>
+            {!collapsed && <span className="sal-sb-label">{item.label}</span>}
+          </AppLink>
+        ))}
+      </nav>
+
+      <div
+        className="sal-sb-resizer"
+        onMouseDown={onStartResize}
+        role="separator"
+        aria-orientation="vertical"
+        aria-label="Resize sidebar"
+      />
+    </aside>
+  );
+}

@@ -1,0 +1,71 @@
+// src/router/CivicRoutes.jsx
+import React, { lazy, Suspense } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import CivicLayout from "@/layouts/CivicLayout.jsx";
+import RouteFallback from "@/components/RouteFallback.jsx";
+
+const CivicDashboard      = lazy(() => import("@/pages/civic/Dashboard.jsx"));
+const CivicDashboardNS    = lazy(() => import("@/pages/civic/DashboardNorthstar.jsx"));
+const CivicElections      = lazy(() => import("@/pages/civic/Elections.jsx"));
+const CivicProposals      = lazy(() => import("@/pages/civic/Proposals.jsx"));
+const CivicTreasurySim    = lazy(() => import("@/pages/civic/TreasurySim.jsx"));
+const CivicDebtClock      = lazy(() => import("@/pages/civic/DebtClock.jsx"));
+const CivicSnapshots      = lazy(() => import("@/pages/civic/TreasurySnapshots.jsx"));
+const CivicSurvey         = lazy(() => import("@/pages/civic/IssueSurvey.jsx"));
+const CivicProfile        = lazy(() => import("@/pages/civic/ProfileResults.jsx"));
+const CivicNotes          = lazy(() => import("@/pages/civic/Notes.jsx"));
+const CivicPortfolio      = lazy(() => import("@/pages/civic/Portfolio.jsx"));
+const CivicRewards        = lazy(() => import("@/pages/civic/Rewards.jsx"));
+const CivicSettings       = lazy(() => import("@/pages/civic/Settings.jsx"));
+const CivicHelp           = lazy(() => import("@/pages/civic/Help.jsx"));
+
+// Lessons
+const CivicLesson         = lazy(() => import("@/pages/civic/Lesson.jsx"));
+const CivicAssignments    = lazy(() => import("@/pages/civic/Assignments.jsx"));
+
+export default function CivicRoutes() {
+  return (
+    <Suspense fallback={<div className="skeleton pad">Loading…</div>}>
+      <Routes>
+        <Route element={<CivicLayout />}>
+          {/* Default redirect */}
+          <Route index element={<Navigate to="dashboard" replace />} />
+
+          {/* Overview */}
+          <Route path="dashboard"      element={<CivicDashboard />} />
+          <Route path="dashboard-ns"   element={<CivicDashboardNS />} />
+
+          {/* Civic features */}
+          <Route path="micro-lessons"  element={<CivicAssignments />} />
+          <Route path="assignments"    element={<CivicAssignments />} />
+          <Route path="lesson"         element={<CivicLesson />} />    {/* supports ?id=... */}
+          <Route path="lesson/:id"     element={<CivicLesson />} />    {/* supports /lesson/<id> */}
+
+          <Route path="elections"      element={<CivicElections />} />
+          <Route path="proposals"      element={<CivicProposals />} />
+          <Route path="treasury-sim"   element={<CivicTreasurySim />} />
+          <Route path="debtclock"      element={<CivicDebtClock />} />
+          <Route path="snapshots"      element={<CivicSnapshots />} />
+          <Route path="survey"         element={<CivicSurvey />} />
+          <Route path="profile"        element={<CivicProfile />} />
+
+          {/* Core nav pages */}
+          <Route path="notes"          element={<CivicNotes />} />
+          <Route path="portfolio"      element={<CivicPortfolio />} />
+
+          {/* App */}
+          <Route path="rewards"        element={<CivicRewards />} />
+          <Route path="settings"       element={<CivicSettings />} />
+          <Route path="help"           element={<CivicHelp />} />
+
+          {/* Aliases */}
+          <Route path="missions"       element={<Navigate to="../micro-lessons" replace />} />
+          <Route path="treasury"       element={<Navigate to="../treasury-sim" replace />} />
+
+          {/* 404 */}
+          <Route path="*"              element={<RouteFallback />} />
+        </Route>
+      </Routes>
+    </Suspense>
+  );
+}

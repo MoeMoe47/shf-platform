@@ -1,0 +1,19 @@
+
+
+/* Solutions theme: black / international orange / white */
+:root{
+  --sol-bg:#000; --sol-panel:#0B0B0B; --sol-ring:#272727; --sol-text:#FFF; --sol-muted:#B9B9B9; --sol-orange:#FF4F00;
+}
+.ai-compass--solutions{ color:var(--sol-text); background:var(--sol-bg); }
+.ai-head--solutions{ background:color-mix(in srgb, var(--sol-panel) 92%, transparent); border-bottom:1px solid var(--sol-ring); }
+.ai-brand{ display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.2px; color:var(--sol-text); }
+.ai-brandLogo{ display:block; border-radius:6px; background:#000; }
+.ai-brandText{ opacity:.95; }
+.ai-btn--solutions{ background:var(--sol-orange); color:#000; border:0; font-weight:700; }
+.ai-compass--solutions .ai-legend{ border-color:var(--sol-ring); background:color-mix(in srgb, var(--sol-panel) 88%, transparent); }
+.ai-compass--solutions .ai-drawer{ background:color-mix(in srgb, var(--sol-panel) 90%, transparent); border-top-color:var(--sol-ring); }
+.ai-compass--solutions .ai-clockItem{ background:rgba(255,255,255,.06); border-color:var(--sol-ring); }
+.ticker-wrap{ border-top-color: var(--sol-ring); }
+.promo{ border-color: var(--sol-ring); }
+
+

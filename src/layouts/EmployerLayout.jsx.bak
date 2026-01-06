@@ -1,0 +1,36 @@
+// src/layouts/EmployerLayout.jsx
+import React from "react";
+import { Outlet } from "react-router-dom";
+import EmployerHeader from "@/components/employer/EmployerHeader.jsx";
+import EmployerSidebar from "@/components/employer/EmployerSidebar.jsx";
+
+export default function EmployerLayout() {
+  return (
+    <div className="crb-root" data-app="employer">
+      {/* Accessibility: jump straight to main */}
+      <a href="#employer-main" className="sr-only crb-skip">Skip to main content</a>
+
+      <header className="crb-header" role="banner">
+        <EmployerHeader />
+        {/* Optional: some pages use a header portal slot */}
+        <div id="page-header-portal" aria-hidden="true" />
+      </header>
+
+      <div className="crb-body">
+        <aside className="crb-sidebar" aria-label="Employer navigation">
+          <EmployerSidebar />
+        </aside>
+
+        <main
+          id="employer-main"
+          className="crb-main"
+          role="main"
+          aria-live="polite"
+          tabIndex={-1}
+        >
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
+}

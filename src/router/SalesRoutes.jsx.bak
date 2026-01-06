@@ -1,0 +1,27 @@
+// src/router/SalesRoutes.jsx
+import React, { Suspense, lazy } from "react";
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
+import SalesLayout from "@/layouts/SalesLayout.jsx";
+
+/* Lazy pages */
+const DashboardNorthstar = lazy(() => import("@/pages/sales/DashboardNorthstar.jsx"));
+const Leads    = lazy(() => import("@/pages/sales/Leads.jsx"));
+const Pipeline = lazy(() => import("@/pages/sales/Pipeline.jsx"));
+
+export default function SalesRoutes() {
+  return (
+    <HashRouter>
+      <Suspense fallback={<div style={{ padding:16 }}>Loading…</div>}>
+        <Routes>
+          <Route path="/" element={<SalesLayout />}>
+            <Route index element={<DashboardNorthstar />} />
+            <Route path="dashboard" element={<DashboardNorthstar />} />
+            <Route path="leads" element={<Leads />} />
+            <Route path="pipeline" element={<Pipeline />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Route>
+        </Routes>
+      </Suspense>
+    </HashRouter>
+  );
+}

@@ -1,0 +1,53 @@
+{
+  "id": "student.asl-04",
+  "title": "ASL 1.4 — Family & Relationships 👨‍👩‍👧‍👦",
+  "estMinutes": 25,
+  "objectives": [
+    "Produce core family signs and set up family members in space",
+    "Ask/answer about siblings and children using HOW-MANY",
+    "Introduce relatives using indexing and possessives"
+  ],
+  "vocab": [
+    { "term": "FAMILY", "def": "F-hands circle to show a group." },
+    { "term": "MOTHER / FATHER", "def": "Hand taps chin/forehead." },
+    { "term": "BROTHER / SISTER", "def": "From forehead/chin to L-shape at other hand." },
+    { "term": "SON / DAUGHTER / CHILDREN", "def": "Baby motion from chin; CHILDREN hands move outward." },
+    { "term": "MARRIED / SINGLE", "def": "Relationship status signs." },
+    { "term": "HOW-MANY (SIBLINGS/CHILDREN)", "def": "WH-NMM; answer with number-first." }
+  ],
+  "sections": [
+    {
+      "heading": "Set Up a Family Map",
+      "body": "Anchor **MOTHER (left)**, **FATHER (right)**, siblings in front. Reuse the same space when referring back."
+    },
+    {
+      "heading": "Introduce Relatives",
+      "body": "Example: **FAMILY ME. MOTHER NAME J-A-N-E. FATHER NAME L-E-O.** Use indexing to point back to each."
+    },
+    {
+      "heading": "Siblings & Children",
+      "body": "Ask **HOW-MANY SIBLING YOU?** Answer with number-first: **TWO BROTHER ONE SISTER.**"
+    },
+    {
+      "heading": "Partner Drill",
+      "body": "A introduces family members (names can be fingerspelled). B asks **HOW-MANY**, then repeats back one detail to confirm."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 1.4 — Family Quiz",
+    "items": [
+      { "type": "mcq", "q": "Which order is most natural?", "options": ["Name → Family → Point", "Family → Name → Index back", "Point → Name → Family", "Random"], "answerIndex": 1 },
+      { "type": "mcq", "q": "HOW-MANY requires which NMM?", "options": ["Brows up", "Brows down", "Pursed lips", "None"], "answerIndex": 1 },
+      { "type": "short", "q": "Gloss: 'I have one brother, two sisters' (number-first)." },
+      { "type": "reflection", "prompt": "Which relative signs feel tricky? Why?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Record a 20–30s family intro with at least 3 relatives.",
+  "summary": "You mapped family members in space, asked HOW-MANY, and used indexing to refer back clearly.",
+  "nextSlug": "student.asl-05",
+  "games": [
+    { "id": "fam-map", "title": "Family Map", "route": "/arcade/asl/fam-map", "estMinutes": 5, "xp": 50, "outcomes": ["Consistent spatial anchors"] },
+    { "id": "sib-count", "title": "Sibling Count", "route": "/arcade/asl/sib-count", "estMinutes": 5, "xp": 50, "outcomes": ["Number-first answers"] }
+  ]
+}

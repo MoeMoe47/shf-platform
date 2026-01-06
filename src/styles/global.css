@@ -1,0 +1,295 @@
+
+
+/* =========================================================
+   GLOBAL (tokens, reset, components) + APP SHELL (.app-*)
+   This powers the dashboard and any page using AppLayout.
+   — Left “brand cell” = sidebar width; stacked SVG centered.
+========================================================= */
+
+/* ---------- Tokens ---------- */
+:root{
+  /* Brand */
+  --beige:#efe7dc;
+  --ivory:#faf8f3;
+  --orange:#ff4f00;
+  --slate:#0f172a;
+  --text:#374151;
+  --line:#dcd7ce;
+  --ring:var(--line);
+
+  /* Text */
+  --ink:var(--slate);
+  --ink-soft:#6b7280;
+
+  /* Surfaces */
+  --card:#fff;
+  --muted:#f5f2ec;
+
+  /* Radius / shadows */
+  --radius:14px;
+  --radius-pill:999px;
+  --shadow-sm:0 1px 0 rgba(0,0,0,.02);
+  --shadow-md:0 8px 28px rgba(0,0,0,.06);
+
+  /* Shell sizing */
+  --header-h:56px;          /* compact header height */
+  --sidebar-w:280px;        /* desktop rail width */
+
+  /* Brand image sizing inside the header’s brand cell */
+  --brand-pad:8px;          /* inner padding around the logo */
+  --brand-scale:1.06;       /* “just a little bigger” */
+}
+
+/* ---------- Base / Reset ---------- */
+*,
+*::before,
+*::after{ box-sizing:border-box; }
+html, body, #root{ height:100%; }
+body{
+  margin:0;
+  background:var(--beige);
+  color:var(--text);
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+img,svg,video{ display:block; max-width:100%; height:auto; }
+button,input,select,textarea{ font:inherit; color:inherit; }
+:focus-visible{ outline:2px solid rgba(255,79,0,.55); outline-offset:2px; }
+.sr-only{
+  position:absolute!important; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+}
+
+/* ---------- Simple UI primitives (cards, buttons) ---------- */
+.card{ background:#fff; border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow-md); }
+.card--pad{ padding:16px; }
+.btn{
+  display:inline-flex; align-items:center; gap:.5rem;
+  padding:.6rem .9rem; border-radius:var(--radius-pill);
+  border:1px solid var(--line); background:#fff; cursor:pointer; text-decoration:none;
+}
+.btn--primary{ background:var(--orange); border-color:var(--orange); color:#fff; }
+
+/* =========================================================
+   APP SHELL (header + left sidebar) — .app-*
+========================================================= */
+
+/* Root frame */
+.app-root{
+  min-height:100vh;
+  display:flex; flex-direction:column;
+  background:var(--beige); color:var(--text);
+}
+
+/* Sticky header — brand cell on the left equals sidebar width */
+.app-header{
+  height:var(--header-h);
+  min-height:var(--header-h);
+  display:grid;
+  grid-template-columns: var(--sidebar-w) minmax(0,1fr);
+  align-items:stretch;
+  background:var(--ivory);
+  border-bottom:1px solid var(--ring);
+  padding:0;
+  position:sticky; top:0; z-index:40;
+  overflow:hidden;
+}
+
+/* Left brand cell (clickable home link) */
+.app-headerBrand{
+  display:grid; place-items:center;
+  border-right:1px solid var(--ring);
+  background:#fff;
+  text-decoration:none;
+  overflow:hidden;
+}
+
+/* Brand image — expects transparent SVG at /brand/shf-logo-stacked.svg */
+.app-brandImg{
+  width:100%;
+  height:100%;
+  padding:var(--brand-pad);
+  object-fit:contain;
+  object-position:center center;
+  transform:scale(var(--brand-scale));
+  transform-origin:center;
+  background:transparent;
+}
+
+/* Header right controls */
+.app-headerRight{
+  height:100%;
+  display:flex; align-items:center; gap:12px;
+  justify-content:flex-end;
+  padding:0 12px;
+  overflow:hidden;
+}
+.app-breadcrumbs{ color:var(--ink-soft); font-size:14px; }
+
+/* Two-column body (independent scrolling) */
+.app-body{
+  display:grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  height: calc(100dvh - var(--header-h));
+  overflow: hidden;
+}
+@supports not (height: 100dvh){
+  .app-body{ height: calc(100vh - var(--header-h)); }
+}
+
+/* Sidebar rail */
+.app-sidebar{
+  background:var(--ivory);
+  border-right:1px solid var(--ring);
+  position:relative;
+  overflow:hidden; /* keep scroll on inner only */
+}
+.app-sidebar__inner{
+  position:static;
+  height:100%;
+  overflow:auto;                 /* ← sidebar scrolls */
+  -webkit-overflow-scrolling:touch;
+  padding:14px 12px;
+}
+
+/* Vertical nav */
+.app-nav{ display:grid; gap:6px; margin:10px 0 16px; }
+.app-nav__item{
+  display:flex; align-items:center; gap:10px;
+  padding:10px 12px; border-radius:10px;
+  text-decoration:none; color:var(--ink);
+  border:1px solid transparent;
+}
+.app-nav__item:hover{ background:#f5f2ec; }
+.app-nav__item.active{ background:#fff; border-color:var(--ring); }
+
+/* Main area */
+.app-main{
+  padding:18px; min-width:0; background:var(--beige);
+  max-width:1200px; margin:0 auto;
+  overflow:auto;                 /* ← main scrolls */
+  -webkit-overflow-scrolling:touch;
+}
+
+/* Collapse state shrinks both the rail and the brand cell */
+.app-root.is-collapsed{ --sidebar-w:72px; }
+.app-root.is-collapsed .app-nav__item span{ display:none; } /* hide labels if you render them */
+
+/* Drawer on mobile */
+@media (max-width: 840px){
+  .app-header{ grid-template-columns: 72px 1fr; }
+  .app-body{ grid-template-columns:1fr; }
+
+  .app-sidebar{
+    position:fixed; inset:0 auto 0 0; width:min(88vw,320px);
+    transform:translateX(-100%); transition:transform .18s ease; z-index:50;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+  }
+  .app-root.drawer-open .app-sidebar{ transform:translateX(0); }
+  .app-scrim{ position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:45; display:none; }
+  .app-root.drawer-open .app-scrim{ display:block; }
+
+  :root{ --brand-scale:1.0; } /* smaller logo on phones */
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.01ms!important; transition-duration:.01ms!important; }
+}
+
+/* Forced colors */
+@media (forced-colors: active){
+  .app-nav__item.active{ outline: 1px solid Highlight; }
+}
+
+/* Print */
+@media print{
+  .app-header, .app-sidebar{ display:none !important; }
+  .app-main{ padding:0 !important; background:#fff !important; }
+}
+/* ================================
+   International Orange Scrollbars
+   (Sidebar + SimpleBar)
+   ================================ */
+
+/* 1) Native scrollbar (Firefox + WebKit) for the rail's scroller */
+.app-sidebar__inner {
+  /* Firefox */
+  scrollbar-color: #FF4F00 transparent;
+  scrollbar-width: thin;
+}
+/* WebKit (Chrome/Edge/Safari) */
+.app-sidebar__inner::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.app-sidebar__inner::-webkit-scrollbar-thumb {
+  background-color: #FF4F00;       /* International Orange */
+  border-radius: 8px;
+  border: 2px solid transparent;   /* keeps a nice inset look */
+  background-clip: padding-box;
+}
+.app-sidebar__inner::-webkit-scrollbar-thumb:hover {
+  filter: brightness(0.95);
+}
+.app-sidebar__inner::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* 2) SimpleBar (the sidebar uses SimpleBar inside .app-sidebar__scroller) */
+.app-sidebar__scroller .simplebar-track.simplebar-vertical {
+  width: 10px;
+  background: transparent;
+}
+.app-sidebar__scroller .simplebar-scrollbar::before {
+  background: #FF4F00 !important;  /* International Orange */
+  border-radius: 8px;
+  opacity: 1;                       /* ensure fully visible */
+}
+.app-sidebar__scroller .simplebar-scrollbar.simplebar-visible::before {
+  opacity: 1;
+}
+
+/* Optional: give the main content its own subtle orange scrollbar too */
+.app-main {
+  scrollbar-color: #FF4F00 transparent;
+  scrollbar-width: thin;
+}
+.app-main::-webkit-scrollbar { width: 10px; height: 10px; }
+.app-main::-webkit-scrollbar-thumb {
+  background-color: #FF4F00;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.app-main::-webkit-scrollbar-track { background: transparent; }
+@keyframes skl { 0%{background-position: 200% 0} 100%{background-position: -200% 0} }
+/* --- Shared brand logo styles (used across apps) --- */
+.sh-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.sh-brand__logo {
+  height: 20px;
+  width: auto;
+  display: block;
+}
+
+.sh-brand__name {
+  font-size: 13px;
+  color: #ffffff;
+}
+
+.sh-brand__sub {
+  font-size: 12px;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+

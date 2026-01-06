@@ -1,0 +1,23 @@
+import programsOH from "@/data/employer/programs.ohio.json";
+import { estimateReimbursement } from "@/shared/employer/eligibility.js";
+
+export function buildPitchPack({ pathway = "tech", wage = 16, hours = 120, programIds = [] }) {
+  const set = programsOH.filter(p => (programIds.length ? programIds.includes(p.id) : true));
+  const items = set.map(p => ({
+    id: p.id,
+    name: p.name,
+    ratePct: Math.round((p.reimbursementPercent || 0) * 100),
+    cap: p.maxPerIntern || null,
+    est: estimateReimbursement({ program: p, wage, hours }),
+    notes: p.notes
+  }));
+  const headline = items.length
+    ? `Unlock up to ${Math.max(...items.map(i => i.ratePct))}% wage reimbursement on interns in ${pathway}.`
+    : `Let’s map your roles to Ohio reimbursement programs.`;
+  const bullets = [
+    `Estimated payout shown at $${wage}/hr × ${hours} hours.`,
+    `We handle compliance and paperwork — you focus on production.`,
+    `Public recognition + badge tiers included (CSR/ESG-friendly).`
+  ];
+  return { headline, bullets, items };
+}

@@ -1,0 +1,30 @@
+// src/components/CurriculumSidebar.jsx
+import React from "react";
+import { useParams } from "react-router-dom";
+import AppLink from "@/components/nav/AppLink.jsx";
+import { inApp, INSTRUCTOR, MASTER } from "@/router/paths.js";
+
+export default function CurriculumSidebar({ collapsed, onNavigate }) {
+  const params = useParams();
+  const cur = (params.curriculum || params.cur || "asl").toLowerCase();
+  const linkClass = "sh-sidebarItem cur-link";
+
+  return (
+    <nav className="sh-sidebarNav cur-nav" data-collapsed={collapsed ? "true" : "false"}>
+      <ul className="sh-sidebarGroup cur-group">
+        <li><AppLink app="curriculum" to={inApp.curriculum(cur).dashboard()}   className={linkClass} onClick={onNavigate}>📊 <span className="cur-label">Dashboard</span></AppLink></li>
+        <li><AppLink app="curriculum" to={inApp.curriculum(cur).calendar()}    className={linkClass} onClick={onNavigate}>🗓️ <span className="cur-label">Calendar</span></AppLink></li>
+        <li><AppLink app="curriculum" to={inApp.curriculum(cur).portfolio()}   className={linkClass} onClick={onNavigate}>🧰 <span className="cur-label">Portfolio</span></AppLink></li>
+        <li><AppLink app="curriculum" to={inApp.curriculum(cur).lessons()}     className={linkClass} onClick={onNavigate}>📒 <span className="cur-label">Lessons</span></AppLink></li>
+        <li><AppLink app="curriculum" to={inApp.curriculum(cur).assignments()} className={linkClass} onClick={onNavigate}>✅ <span className="cur-label">Assignments</span></AppLink></li>
+        <li><AppLink app="curriculum" to={`/${cur}/help`}                      className={linkClass} onClick={onNavigate}>❓ <span className="cur-label">Help</span></AppLink></li>
+      </ul>
+
+      <div className="sh-sidebarSectionLabel cur-sectionLabel">Instructor</div>
+      <ul className="sh-sidebarGroup cur-group">
+        <li><AppLink app="curriculum" to={INSTRUCTOR(cur)} className={linkClass} onClick={onNavigate}>👩‍🏫 <span className="cur-label">Instructor</span></AppLink></li>
+        <li><AppLink app="curriculum" to={MASTER(cur)}     className={linkClass} onClick={onNavigate}>🧭 <span className="cur-label">Master View</span></AppLink></li>
+      </ul>
+    </nav>
+  );
+}

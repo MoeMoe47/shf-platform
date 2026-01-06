@@ -1,0 +1,71 @@
+// src/entries/launch.main.jsx
+
+/* ---------------- PWA (non-blocking) ---------------- */
+if ("serviceWorker" in navigator) {
+  import("@/entries/register-sw.js").catch(() => {});
+}
+
+/* ---------------- Dev mocks (no top-level await) ---------------- */
+if (import.meta.env.DEV) {
+  import("@/dev/mockApi.js").catch(() => {});
+}
+
+/* ---------------- Tag <html> before CSS ---------------- */
+try {
+  const html = document.documentElement;
+  html.setAttribute("data-app", "launch");
+  // html.setAttribute("data-theme", "foundation"); // or "solutions"
+} catch {}
+
+/* ---------------- Base CSS (order matters) ---------------- */
+import "@/styles/foundation.css";
+import "@/styles/global.css";
+import "@/styles/shell.css";
+import "@/styles/skeleton.css";
+import "@/styles/util-wash.css";
+/* Optional shared visuals your pages often use */
+import "@/styles/emoji.css";
+import "@/styles/lesson-soft.css";
+/* Minimal layout safety for any device (load LAST) */
+import "@/styles/app-shell.css";
+
+/* ---------------- React / Router ---------------- */
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { HashRouter } from "react-router-dom";
+
+/* ---------------- App bits ---------------- */
+import RootProviders from "@/entries/RootProviders.jsx";
+import LaunchRoutes from "@/router/LaunchRoutes.jsx";
+import GlobalErrorBoundary from "@/components/GlobalErrorBoundary.jsx";
+import { RoleProvider } from "@/context/RoleCtx.jsx";
+
+/* Robust mount finder */
+function getMount() {
+  return (
+    document.querySelector('[data-app="launch"]') ||
+    document.getElementById("root") ||
+    document.getElementById("app")
+  );
+}
+
+const rootEl = getMount();
+if (!rootEl) {
+  console.error(
+    '[ENTRY:launch] mount not found. Ensure launch.html includes <div id="root" data-app="launch"></div> and <script type="module" src="/src/entries/launch.main.jsx"></script>.'
+  );
+} else {
+  createRoot(rootEl).render(
+    <React.StrictMode>
+      <GlobalErrorBoundary>
+        <RootProviders appScope="launch">
+          <RoleProvider initial="student">
+            <HashRouter>
+              <LaunchRoutes />
+            </HashRouter>
+          </RoleProvider>
+        </RootProviders>
+      </GlobalErrorBoundary>
+    </React.StrictMode>
+  );
+}

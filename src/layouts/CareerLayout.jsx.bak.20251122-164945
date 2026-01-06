@@ -1,0 +1,32 @@
+// src/layouts/CareerLayout.jsx
+import React from "react";
+import { Outlet } from "react-router-dom";
+import CareerHeader from "@/components/career/CareerHeader.jsx";
+import CareerSidebar from "@/components/career/CareerSidebar.jsx";
+
+export default function CareerLayout() {
+  return (
+    <div className="car-root" data-app="career">
+      <a className="car-skip" href="#car-main">
+        Skip to main content
+      </a>
+
+      <CareerHeader />
+
+      <div className="car-body">
+        <aside className="car-sidebar" aria-label="Primary career navigation">
+          <CareerSidebar />
+        </aside>
+
+        <main
+          id="car-main"
+          className="car-main"
+          role="main"
+          aria-live="polite"
+        >
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
+}

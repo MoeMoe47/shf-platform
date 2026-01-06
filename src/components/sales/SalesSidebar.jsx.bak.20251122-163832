@@ -1,0 +1,135 @@
+// src/components /sales/CivicSidebar.jsx
+import React from "react";
+import AppLink from "@/components/nav/AppLink.jsx";
+import { NavLink } from "react-router-dom";
+import { useRewards } from "@/hooks/useRewards.js";
+
+const KEY = "civic:rail:collapsed";
+
+const Item = ({ to, icon, children, end = false }) => (
+  <li>
+    <NavLink
+      to={to}
+      end={end}
+      className={({ isActive }) => (isActive ? "crb-link is-active" : "crb-link")}
+      title={typeof children === "string" ? children : undefined}
+      aria-label={typeof children === "string" ? children : undefined}
+    >
+      <span className="crb-linkIcon" aria-hidden>{icon}</span>
+      <span className="crb-linkLabel">{children}</span>
+    </AppLink>
+  </li>
+);
+
+const ItemExt = ({ href, icon, children }) => (
+  <li>
+    <a className="crb-link" href={href} title={children} aria-label={children}>
+      <span className="crb-linkIcon" aria-hidden>{icon}</span>
+      <span className="crb-linkLabel">{children}</span>
+    </a>
+  </li>
+);
+
+function CivicSidebar() {
+  const [collapsed, setCollapsed] = React.useState(() => {
+    try { return localStorage.getItem(KEY) === "1"; } catch { return false; }
+  });
+
+  const { badgeCount = 0, badges = [] } =
+    (typeof useRewards === "function" ? useRewards() : {}) || {};
+
+  React.useEffect(() => {
+    try { localStorage.setItem(KEY, collapsed ? "1" : "0"); } catch {}
+    const html = document.documentElement;
+    if (collapsed) html.setAttribute("data-rail", "collapsed");
+    else html.removeAttribute("data-rail");
+  }, [collapsed]);
+
+  return (
+    <nav className="crb-nav" aria-label="Civic Navigation">
+      {/* OVERVIEW */}
+      <div className="crb-navSection">
+        <div className="crb-navTitle">OVERVIEW</div>
+        <ul className="crb-list">
+          <Item to="dashboard"     icon="🏛️" end>Dashboard</Item>
+          <Item to="dashboard-ns"  icon="⭐">Northstar Dashboard</Item>
+        </ul>
+      </div>
+
+      {/* CIVIC FEATURES */}
+      <div className="crb-navSection">
+        <div className="crb-navTitle">CIVIC</div>
+        <ul className="crb-list">
+          <Item to="assignments"   icon="🎯">Assignments</Item> {/* was micro-lessons */}
+          <Item to="lesson"        icon="📘">Lesson</Item>
+          <Item to="elections"     icon="🗳️">Elections</Item>
+          <Item to="proposals"     icon="📜">Proposals</Item>
+          <Item to="treasury-sim"  icon="🏦">Treasury Simulator</Item>
+          <Item to="survey"        icon="🧭">Issue Survey</Item>
+          <Item to="profile"       icon="🧬">Profile Results</Item>
+          <Item to="portfolio"     icon="🗂️">Portfolio</Item>
+        </ul>
+      </div>
+
+      {/* APP */}
+      <div className="crb-navSection">
+        <div className="crb-navTitle">APP</div>
+        <ul className="crb-list">
+          <Item to="settings" icon="⚙️">Settings</Item>
+          <Item to="rewards"  icon="🏅">Rewards Wallet</Item>
+          <Item to="help"     icon="❓">Help</Item>
+        </ul>
+      </div>
+
+      {/* CROSS APPS */}
+      <div className="crb-navSection">
+        <div className="crb-navTitle">CROSS APPS</div>
+        <ul className="crb-list">
+          <ItemExt href="/treasury.html#/dashboard" icon="🏦">Treasury</ItemExt>
+          <ItemExt href="/debt.html#/dashboard"     icon="📉">Debt</ItemExt>
+          <ItemExt href="/career.html#/dashboard"   icon="🧭">Career</ItemExt>
+        </ul>
+      </div>
+
+      {/* BADGES */}
+      <div className="crb-navSection">
+        <div className="crb-navTitle">BADGES</div>
+        <ul className="crb-list">
+          <li>
+            <div className="crb-link" title="Your earned badges">
+              <span className="crb-linkIcon" aria-hidden>🎖️</span>
+              <span className="crb-linkLabel">
+                {badgeCount ? `${badgeCount} earned` : "No badges yet"}
+              </span>
+            </div>
+          </li>
+          {(badges || []).slice(-3).reverse().map((id) => (
+            <li key={id}>
+              <div className="crb-link" title={id}>
+                <span className="crb-linkIcon" aria-hidden>🏵️</span>
+                <span className="crb-linkLabel">{id}</span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Collapse toggle */}
+      <div className="crb-railToggleWrap">
+        <button
+          type="button"
+          className="crb-railToggle"
+          onClick={() => setCollapsed(c => !c)}
+          aria-pressed={collapsed}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          <span className="lbl-emoji" aria-hidden>{collapsed ? "➡️" : "⬅️"}</span>
+          <span className="lbl-text">{collapsed ? "Expand" : "Collapse"}</span>
+        </button>
+      </div>
+    </nav>
+  );
+}
+
+export default CivicSidebar;

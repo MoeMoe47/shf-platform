@@ -1,0 +1,89 @@
+{
+  "id": "asl-53",
+  "title": "ASL 7.3 — Injuries & First Aid (Describe • Locate • Simple Care) 🚑",
+  "estMinutes": 30,
+  "objectives": [
+    "Describe incidents with time-first framing and concise clauses",
+    "Localize injuries on the body using precise placement + severity NMM",
+    "Role-shift patient/helper to give/confirm simple first-aid steps"
+  ],
+  "vocab": [
+    { "term": "ACCIDENT / FALL", "def": "General incident; pair with time and location." },
+    { "term": "CUT / BLEED / BRUISE / SPRAIN", "def": "Common injury set; place at exact body location." },
+    { "term": "PAIN (HURT) + LOCATION", "def": "Index placement with HURT twist at body part." },
+    { "term": "ICE / CLEAN / BANDAGE", "def": "Basic first-aid actions (apply ice, clean wound, cover)." },
+    { "term": "ELEVATE / REST", "def": "Care steps for swelling and recovery." },
+    { "term": "CALL / EMERGENCY (911)", "def": "Escalation terms; use urgent NMM when appropriate." },
+    { "term": "SEVERITY NMM", "def": "Mild→medium→strong via face; add duration (1-HOUR / 2-DAY)." },
+    { "term": "ROLE-SHIFT (RS)", "def": "Patient ↔ helper/provider; return to neutral for narration." }
+  ],
+  "sections": [
+    {
+      "heading": "Warm-Up: Injury Placement + Severity",
+      "media": { "src": "/media/asl/unit-7/injury-map.png", "alt": "Head/arm/ankle placement points", "caption": "Point exactly where the injury is" },
+      "body": "Practice: **HURT ANKLE (strong NMM)**, **CUT HAND (medium) BLEED LITTLE**, **BRUISE KNEE (mild)**. Keep touch precise—don’t hover.",
+      "microCheck": {
+        "q": "Most accurate way to show a cut on the hand:",
+        "options": ["HURT near chest neutral face", "Tap hand location + CUT + medium NMM", "Spell C-U-T only", "Wave both hands"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Model: Incident → Injury → Care",
+      "media": { "src": "/media/asl/unit-7/incident-model.mp4", "alt": "Short sequence: fall, hurt, care", "caption": "Time-first, then injury, then care" },
+      "body": "Example sequence:\n• **TODAY MORNING I FALL STAIRS.**\n• **HURT ANKLE STRONG. SWELL.**\n• **ICE 20-MIN, ELEVATE, REST.**\nOptional escalation: **IF WORSE, CALL EMERGENCY.**",
+      "microCheck": {
+        "q": "Best base order for clarity is…",
+        "options": ["Care → Incident → Injury", "Incident → Injury → Care", "Injury → Care → Incident", "Random"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "RS Drill: Patient ↔ Helper",
+      "body": "• **RS→PATIENT:** **CUT FINGER BLEED LITTLE.**\n• **RS→HELPER:** **OK CLEAN, BANDAGE. OK?** (Y/N face)\n• **RS→PATIENT:** **OK. THANK-YOU.** Return to neutral between RS lines.",
+      "callouts": [
+        { "type": "tip", "title": "Confirm Step-by-Step", "body": "Have the patient repeat back **CLEAN → BANDAGE → REST** for safety/clarity." }
+      ],
+      "microCheck": {
+        "q": "Between RS lines you should…",
+        "options": ["Stay in RS", "Return to neutral narrator", "Move anchors around", "Talk aloud"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Care Toolkit (Simple Steps)",
+      "body": "Common pairs:\n• **SPRAIN ANKLE → ICE 20-MIN, ELEVATE, REST.**\n• **CUT SMALL → CLEAN, BANDAGE, WATCH.**\n• **BRUISE → ICE SHORT, REST.**\nUse **time markers** (e.g., **EVERY 2-HOUR ICE**)."
+    },
+    {
+      "heading": "Safety Language",
+      "body": "Escalation lines:\n• **IF BLEED CONTINUE, CALL EMERGENCY.**\n• **IF PAIN STRONG / WORSE, CONTACT CLINIC.**\nKeep clauses **3–5 signs** with tiny pauses.",
+      "callouts": [
+        { "type": "caution", "title": "Course Disclaimer", "body": "For language practice only—not medical advice. Real care = follow a licensed provider or emergency services." }
+      ]
+    },
+    {
+      "heading": "Mini-Showcase",
+      "body": "Record **15–20s**: incident + injury + care. Include **time-first**, **precise location**, **severity NMM**, and **one RS confirmation**. Example close: **REST TONIGHT, TOMORROW CHECK.**",
+      "teacherNote": "Caption the injury location and care steps you used (e.g., ICE/ELEVATE)."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 7.3 — Injuries & First Aid Quiz",
+    "items": [
+      { "type": "mcq", "q": "Best order to explain what happened:", "options": ["Care → Injury → Incident", "Incident → Injury → Care", "Injury → Care → Random", "Random"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Which sign is an escalation step?", "options": ["REST", "ELEVATE", "CALL EMERGENCY", "ICE"], "answerIndex": 2 },
+      { "type": "mcq", "q": "How to mark swelling clearly:", "options": ["Say 'swell' aloud", "Show size with hands + NMM", "Skip NMM", "Look down"], "answerIndex": 1 },
+      { "type": "short", "q": "Write a 3-clause gloss: TODAY AFTERNOON I FALL. HURT WRIST STRONG. CLEAN BANDAGE, IF WORSE CALL EMERGENCY." },
+      { "type": "reflection", "prompt": "Which was harder—precise placement or RS confirmations? What will you drill next session?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Upload your 15–20s incident→injury→care clip. Caption injury location, severity, and care steps.",
+  "summary": "You practiced time-first incident reports, exact injury placement with severity NMM, and brief RS confirmations for simple first-aid steps with clear escalation language.",
+  "nextSlug": "asl-54",
+  "games": [
+    { "id": "triage-tiles", "title": "Triage Tiles", "route": "/arcade/asl/triage-tiles", "estMinutes": 5, "xp": 50, "outcomes": ["Incident → Injury → Care sequencing"] },
+    { "id": "ice-elevate", "title": "Ice & Elevate", "route": "/arcade/asl/ice-elevate", "estMinutes": 5, "xp": 50, "outcomes": ["NMM + timing for swelling"] },
+    { "id": "rs-confirm", "title": "RS Confirm", "route": "/arcade/asl/rs-confirm", "estMinutes": 5, "xp": 50, "outcomes": ["Clear patient/helper confirmations"] }
+  ]
+}

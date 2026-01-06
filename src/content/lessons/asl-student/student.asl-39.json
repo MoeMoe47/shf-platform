@@ -1,0 +1,81 @@
+{
+  "id": "asl-39",
+  "title": "ASL 5.3 — Deaf Art & Storytelling 🎭🖼️",
+  "estMinutes": 25,
+  "objectives": [
+    "Identify features of ASL storytelling and Visual Vernacular (VV): space, rhythm, role-shift",
+    "Discuss Deaf art themes (IDENTITY, ACCESS, COMMUNITY, PRIDE) using short clauses",
+    "Perform a micro-story using anchors, NMMs, and at least one role-shift"
+  ],
+  "vocab": [
+    { "term": "STORY / TELL-STORY", "def": "Narrative framing; neutral space with clear pacing." },
+    { "term": "VISUAL VERNACULAR (VV)", "def": "Highly visual, cinematic signing style; minimal lexical signs." },
+    { "term": "ROLE-SHIFT (RS)", "def": "Body/eye shift to portray characters." },
+    { "term": "ANCHOR (SPACE)", "def": "Fixed points for people/objects reused across clauses." },
+    { "term": "RHYTHM / BEAT", "def": "Timing of movements and NMMs to shape the story." },
+    { "term": "THEME: IDENTITY / ACCESS / PRIDE / COMMUNITY", "def": "Common ideas in Deaf art & narratives." }
+  ],
+  "sections": [
+    {
+      "heading": "Warm-Up: VV Micro-Moves",
+      "media": { "src": "/media/asl/unit-5/vv-moves.png", "alt": "Eyes-zoom, head pan, cut jump", "caption": "Cinematic feel: zoom/pan/cut with face & torso" },
+      "body": "Practice 3 VV tools: **ZOOM (eyes/chin lean)**, **PAN (head/eyes sweep)**, **CUT (tiny pause + snap to next pose)**. Keep hands minimal; let the **face/torso** carry the effect.",
+      "microCheck": {
+        "q": "Which primarily creates a VV ‘cut’?",
+        "options": ["Bigger signs", "Tiny pause + quick shift", "Fingerspelling", "Talking aloud"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Model: Art Themes → Short Clauses",
+      "media": { "src": "/media/asl/unit-5/art-themes.mp4", "alt": "IDENTITY, ACCESS, COMMUNITY, PRIDE captions", "caption": "3–5 sign statements" },
+      "body": "Examples:\n• **DEAF IDENTITY PROUD.**\n• **ACCESS IMPORTANT COMMUNITY.**\n• **ART SHOW STORY DEAF-LIFE.** Keep each clause 3–5 signs with a tiny pause."
+    },
+    {
+      "heading": "Anchors + RS: Character Moment",
+      "body": "Place **A** (left) and **B** (right). Narrate neutral; use **RS→A** for reaction, **RS→B** for reply, then return to neutral. Example:\n• **NEUTRAL:** **SHOW START.**\n• **RS→A:** **WOW!**\n• **RS→B:** **NICE!**",
+      "callouts": [
+        { "type": "tip", "title": "Return to Neutral", "body": "After each RS line, pop back to narrator so the audience tracks who speaks." }
+      ],
+      "microCheck": {
+        "q": "After a role-shift, what restores clarity?",
+        "options": ["Stay in RS", "Return to neutral narrator", "Change anchors", "Speed up"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Partner Practice: 10-Second VV",
+      "media": { "src": "/media/asl/unit-5/vv-10s.gif", "alt": "Two quick character beats", "caption": "Two anchors, one cut" },
+      "body": "Create a **10s VV**: one **ZOOM**, one **PAN**, one **CUT**, and **1 RS** line. Theme prompt (choose one): **PRIDE**, **ACCESS**, **COMMUNITY**. Swap roles and coach rhythm.",
+      "microCheck": {
+        "q": "Which pairing best improves VV clarity?",
+        "options": ["Huge arm swings + no face", "Small hands + strong NMM timing", "Talking while signing", "Random speed changes"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Mini-Showcase",
+      "body": "Record **12–18s**: state a theme (e.g., **ACCESS**), then perform a micro-story with **2 anchors**, **1 RS**, and **one VV cut**. Example close: **COMMUNITY STRONG.**",
+      "teacherNote": "Allow privacy submissions; caption should name the theme and where the ‘cut’ occurred."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 5.3 — Deaf Art & Storytelling Quiz",
+    "items": [
+      { "type": "mcq", "q": "Core VV technique for switching shots:", "options": ["Fingerspelling", "Cut (pause + snap)", "Louder voice", "Bigger arm circles"], "answerIndex": 1 },
+      { "type": "mcq", "q": "What maintains character clarity during dialogue?", "options": ["Stay in RS", "Return to neutral between lines", "Look at hands", "Speed up"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Typical Deaf art themes include…", "options": ["Access/Identity/Community", "Weather/Math/Recipes", "Cars/Planes/Boats", "Random"], "answerIndex": 0 },
+      { "type": "short", "q": "Write a 2-clause gloss with a theme (e.g., PRIDE) and one RS line." },
+      { "type": "reflection", "prompt": "Which VV tool (zoom, pan, cut) felt most natural? How will you practice its timing?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Upload your 12–18s VV micro-story. Caption the theme and note where your cut happened.",
+  "summary": "You explored ASL storytelling & VV: used anchors, role-shift, rhythm, and a clear ‘cut’ to deliver a themed micro-story tied to Deaf art and identity.",
+  "nextSlug": "asl-40",
+  "games": [
+    { "id": "vv-cuts", "title": "VV Cuts", "route": "/arcade/asl/vv-cuts", "estMinutes": 5, "xp": 50, "outcomes": ["Practice clean shot changes"] },
+    { "id": "anchor-dance", "title": "Anchor Dance", "route": "/arcade/asl/anchor-dance", "estMinutes": 5, "xp": 50, "outcomes": ["Anchor reuse + RS return"] },
+    { "id": "theme-sprint", "title": "Theme Sprint", "route": "/arcade/asl/theme-sprint", "estMinutes": 5, "xp": 50, "outcomes": ["Theme-to-clause mapping"] }
+  ]
+}

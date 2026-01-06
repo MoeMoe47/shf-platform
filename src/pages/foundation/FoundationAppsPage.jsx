@@ -1,0 +1,542 @@
+/* ----------------------------------------
+   ADMIN APPS GALLERY (white background)
+   ---------------------------------------- */
+
+.apps-gallery-root {
+  min-height: calc(100vh - 80px);
+  padding: 32px 40px 64px;
+  background: #ffffff;
+  color: #0f172a;
+}
+
+.apps-gallery-inner {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.apps-gallery-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.apps-gallery-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin: 0 0 6px;
+}
+
+.apps-gallery-header p {
+  margin: 0;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.apps-gallery-pill {
+  font-size: 11px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.apps-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.apps-gallery-card {
+  border-radius: 18px;
+  padding: 16px 18px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.apps-gallery-card h2 {
+  margin: 0 0 4px;
+  font-size: 18px;
+}
+
+.apps-gallery-card p {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.apps-gallery-tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  margin-right: 8px;
+}
+
+.apps-gallery-link {
+  font-size: 13px;
+  text-decoration: none;
+  color: #f97316;
+}
+
+.apps-gallery-link:hover {
+  text-decoration: underline;
+}
+
+/* ----------------------------------------
+   GLOBAL OSMOSIS-STYLE TOKENS + SHELL
+   ---------------------------------------- */
+
+:root {
+  --shf-osmo-bg: #020617;           /* deep navy */
+  --shf-osmo-surface: #050b1f;
+  --shf-osmo-surface-elevated: #0b1224;
+  --shf-osmo-purple: #7c3aed;
+  --shf-osmo-cyan: #22d3ee;
+  --shf-osmo-accent: #f97316;       /* SHF orange */
+  --shf-osmo-text: #e5e7eb;
+  --shf-osmo-text-muted: #9ca3af;
+  --shf-osmo-border-subtle: rgba(148, 163, 184, 0.25);
+}
+
+/* Public Apps + other dark views use this shell */
+.apps-shell {
+  min-height: 100vh;
+  padding: 32px 24px 80px;
+  background:
+    radial-gradient(circle at top left, rgba(56, 189, 248, 0.12) 0, transparent 40%),
+    radial-gradient(circle at bottom right, rgba(124, 58, 237, 0.16) 0, transparent 50%),
+    var(--shf-osmo-bg);
+  color: var(--shf-osmo-text);
+}
+
+/* If you wrap Admin Apps in .apps-shell--admin, it just tweaks spacing */
+.apps-shell--admin {
+  padding-top: 40px;
+}
+
+/* ----------------------------------------
+   PUBLIC APPS PAGE – Osmosis-style
+   ---------------------------------------- */
+
+.apps-header {
+  max-width: 1120px;
+  margin: 0 auto 32px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.apps-header-copy {
+  max-width: 640px;
+}
+
+.apps-eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #a5b4fc;
+  margin: 0 0 6px;
+}
+
+.apps-title {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin: 0 0 8px;
+}
+
+.apps-subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: #cbd5f5;
+}
+
+.apps-search input {
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(15, 23, 42, 0.85);
+  padding: 8px 14px;
+  min-width: 220px;
+  color: #e5e7eb;
+  font-size: 13px;
+}
+
+.apps-search input::placeholder {
+  color: #6b7280;
+}
+
+/* Featured card layout */
+
+.apps-featured-row {
+  max-width: 1120px;
+  margin: 0 auto 32px;
+}
+
+/* ----------------------------------------
+   CARD SHELL — bigger, Osmosis-style
+   ---------------------------------------- */
+
+/* shared card shell for featured + small cards */
+.apps-card {
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--shf-osmo-surface-elevated);
+  border: 1px solid var(--shf-osmo-border-subtle);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.65);
+  display: flex;
+  flex-direction: column;
+  min-height: 260px;      /* can grow if body needs more room */
+  padding: 0;             /* art + base handle their own padding */
+  transition: box-shadow 0.2s ease-out, border-color 0.2s ease-out;
+}
+
+/* glow only – whole card doesn’t move */
+.apps-card:hover {
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.9);
+  border-color: rgba(248, 250, 252, 0.25);
+}
+
+/* Featured card uses grid but not fixed height */
+.apps-card--featured {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(0, 1.6fr);
+  min-height: 260px;
+}
+
+/* ----------------------------------------
+   TOP MEDIA STRIP – BIGGER THAN THE BASE
+   ---------------------------------------- */
+
+.apps-card-media {
+  position: relative;
+  overflow: hidden;
+  /* tall strip just for artwork – bigger than base */
+  height: 180px; /* bump to 190–200px if you want even more art */
+  background: radial-gradient(
+    circle at top left,
+    rgba(148, 163, 184, 0.25),
+    transparent 60%
+  );
+}
+
+/* actual image on the card */
+.apps-card-media img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transform: scale(1);
+  transition: transform 0.45s ease, filter 0.45s ease, opacity 0.45s ease;
+}
+
+/* ONLY the picture zooms */
+.apps-card:hover .apps-card-media img {
+  transform: scale(1.06) translateY(-2px);
+  filter: saturate(1.2);
+}
+
+/* ----------------------------------------
+   OPTIONAL GRADIENT ART FOR FEATURED CARD
+   (hero strip at the top of the page)
+   ---------------------------------------- */
+
+.app-card-art {
+  position: relative;
+  overflow: hidden;
+  padding: 20px 22px;
+}
+
+.app-card-art-layer {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px 24px 0 0;
+  background: radial-gradient(circle at 0% 0%, #4f46e5, transparent 55%),
+    radial-gradient(circle at 100% 100%, #0ea5e9, transparent 55%);
+  opacity: 0.95;
+  transform: scale(1);
+  transition: transform 0.4s ease, opacity 0.4s ease, filter 0.4s ease;
+}
+
+/* Art content that floats above gradients */
+.app-card-art-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.app-card-art-content h2,
+.app-card-art-content h3 {
+  margin: 4px 0 0;
+}
+
+/* Smaller card art text */
+.app-card-art-content--small h3 {
+  font-size: 16px;
+}
+
+/* Hover motion only on the art strip */
+.apps-card:hover .app-card-art-layer {
+  transform: scale(1.05) translateY(-4px);
+  opacity: 1;
+  filter: saturate(1.2);
+}
+
+/* Art color variants per app (for hero / special cards) */
+
+.app-card-art.app-career .app-card-art-layer {
+  background:
+    radial-gradient(circle at 0% 0%, #f97316, transparent 55%),
+    radial-gradient(circle at 100% 100%, #4ade80, transparent 55%),
+    radial-gradient(circle at 60% 0%, #22c55e, transparent 55%);
+}
+
+.app-card-art.app-curriculum .app-card-art-layer {
+  background:
+    radial-gradient(circle at 0% 0%, #6366f1, transparent 55%),
+    radial-gradient(circle at 100% 100%, #ec4899, transparent 55%),
+    radial-gradient(circle at 40% 120%, #22d3ee, transparent 55%);
+}
+
+.app-card-art.app-arcade .app-card-art-layer {
+  background:
+    radial-gradient(circle at 0% 0%, #a855f7, transparent 55%),
+    radial-gradient(circle at 100% 100%, #f97316, transparent 55%),
+    radial-gradient(circle at 50% 50%, #22d3ee, transparent 60%);
+}
+
+.app-card-art.app-employer .app-card-art-layer {
+  background:
+    radial-gradient(circle at 0% 0%, #22c55e, transparent 55%),
+    radial-gradient(circle at 100% 0%, #0ea5e9, transparent 55%),
+    radial-gradient(circle at 80% 120%, #facc15, transparent 55%);
+}
+
+/* Pills and text in art area (for hero card) */
+
+.app-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  background: rgba(15, 23, 42, 0.88);
+  color: #e5e7eb;
+  border: 1px solid rgba(249, 250, 251, 0.45);
+}
+
+.app-pill--featured {
+  margin-bottom: 8px;
+}
+
+.app-category {
+  margin: 0;
+  font-size: 12px;
+  color: #e5e7eb;
+  opacity: 0.85;
+}
+
+/* ----------------------------------------
+   BASE / BODY AREA – SMALLER FOOTPRINT
+   ---------------------------------------- */
+
+.apps-card-body {
+  padding: 14px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1 0 auto; /* base is smaller but can grow if needed */
+}
+
+.apps-card-body--featured {
+  padding: 18px 20px 18px;
+}
+
+/* Typography + pills inside the base */
+
+.apps-card-body h2,
+.apps-card-body h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+
+.apps-card-tagline {
+  font-size: 0.78rem;
+  color: var(--shf-osmo-text-muted);
+  margin-top: 2px;
+}
+
+.apps-card-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  background: radial-gradient(
+    circle at top left,
+    rgba(248, 250, 252, 0.04),
+    transparent 60%
+  );
+  color: var(--shf-osmo-text-muted);
+}
+
+.apps-card-pill--role {
+  border-color: rgba(249, 115, 22, 0.7);
+  color: #fed7aa;
+}
+
+/* Remaining card text + actions */
+
+.apps-card-help {
+  margin: 0;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.apps-card-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.apps-primary-link {
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--shf-osmo-accent);
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 10px 30px rgba(248, 148, 64, 0.6);
+}
+
+.apps-primary-link:hover {
+  background: #fb923c;
+}
+
+.apps-card-meta {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+/* ----------------------------------------
+   GRID FOR SMALL CARDS
+   ---------------------------------------- */
+
+.apps-grid-section {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.apps-grid-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.apps-grid-header h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.apps-grid-header p {
+  margin: 0;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+/* All Apps grid – 3 cards per row like Osmosis */
+.apps-grid {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+/* 2 cards on tablet */
+@media (max-width: 1024px) {
+  .apps-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* 1 card on mobile */
+@media (max-width: 640px) {
+  .apps-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Footer line in each small card */
+
+.apps-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.apps-card-link {
+  font-size: 13px;
+  text-decoration: none;
+  color: var(--shf-osmo-accent);
+}
+
+.apps-card-link:hover {
+  text-decoration: underline;
+}
+
+/* Responsive tweaks */
+
+@media (max-width: 900px) {
+  .apps-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .apps-featured-row {
+    margin-bottom: 24px;
+  }
+
+  .apps-card--featured {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 260px;
+  }
+
+  .apps-card-body--featured {
+    padding-top: 18px;
+  }
+}
+
+@media (max-width: 640px) {
+  .apps-shell {
+    padding: 24px 16px 40px;
+  }
+}

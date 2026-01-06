@@ -1,0 +1,95 @@
+{
+  "id": "asl-31",
+  "title": "ASL 4.1 — Weather & Seasons ⛅🌧️❄️☀️",
+  "estMinutes": 25,
+  "objectives": [
+    "Sign core weather/season vocabulary and place descriptions in space",
+    "Use time-first framing (TODAY/TOMORROW/RECENT) to report weather",
+    "Ask/answer HOW-WEATHER?/TEMPERATURE? with correct NMMs and compact clauses"
+  ],
+  "vocab": [
+    { "term": "WEATHER / HOW-WEATHER?", "def": "General weather sign; WH-face for questions about conditions." },
+    { "term": "SUNNY • CLOUDY • RAIN • SNOW • WIND", "def": "High-frequency conditions signed in front of torso." },
+    { "term": "HOT • COLD • WARM • COOL", "def": "Temperature adjectives with appropriate NMM." },
+    { "term": "SEASONS: SPRING • SUMMER • FALL • WINTER", "def": "Season set for broader context." },
+    { "term": "TEMPERATURE?/DEGREE", "def": "Question about numeric temp; pair with numbers." },
+    { "term": "TIME-FIRST", "def": "Lead sentences with TODAY/TOMORROW/RECENT for clarity." }
+  ],
+  "sections": [
+    {
+      "heading": "Warm-Up: Season Strip",
+      "media": { "src": "/media/asl/unit-4/season-strip.png", "alt": "SPRING, SUMMER, FALL, WINTER icons", "caption": "Cycle seasons slowly with neutral wrist" },
+      "body": "Mirror **SPRING, SUMMER, FALL, WINTER**. Keep motions compact; add matching face (e.g., **WINTER** → slight **COLD** face).",
+      "microCheck": {
+        "q": "To make WINTER feel colder you primarily adjust…",
+        "options": ["Arm size", "Facial NMM/body tuck", "Handshape only", "Speed only"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Model: Weather Conditions + Time-First",
+      "media": { "src": "/media/asl/unit-4/weather-demo.mp4", "alt": "TODAY RAIN. TOMORROW SUNNY.", "caption": "Short, 3–5 sign clauses" },
+      "body": "Use **TIME → CONDITION → (TEMP/PLACE)**. Examples:\n• **TODAY RAIN COOL.**\n• **TOMORROW SUNNY WARM.**\n• **RECENT WIND STRONG.** Keep clauses compact with small pauses.",
+      "microCheck": {
+        "q": "Which order reads clearest?",
+        "options": [
+          "CONDITION → TIME",
+          "PLACE → TEMP → CONDITION",
+          "TIME → CONDITION → TEMP",
+          "Random order"
+        ],
+        "answerIndex": 2
+      }
+    },
+    {
+      "heading": "Questions: HOW-WEATHER? & TEMPERATURE?",
+      "body": "**HOW-WEATHER?** (WH-face). **TEMPERATURE?** (WH-face) → answer with number + **DEGREE** and adjective: **70 DEGREE WARM.**",
+      "callouts": [
+        { "type": "example", "title": "Frames", "body": "**TODAY HOW-WEATHER?** → **SUNNY WARM.**  **TEMPERATURE?** → **65 DEGREE COOL.**" }
+      ],
+      "microCheck": {
+        "q": "Correct NMM for HOW-WEATHER?",
+        "options": ["Brows up", "Brows down", "Neutral only", "Eyes closed"],
+        "answerIndex": 1
+      },
+      "teacherNote": "Coach tiny pauses between condition and temperature."
+    },
+    {
+      "heading": "Partner Practice: Two-City Report",
+      "media": { "src": "/media/asl/unit-4/two-city.png", "alt": "Left and right space points", "caption": "Anchor two cities in space" },
+      "body": "Anchor **CITY-A** on left and **CITY-B** on right. A reports **TODAY CITY-A RAIN COOL 58. CITY-B SUNNY WARM 75.** B asks **TEMPERATURE?** or **HOW-WEATHER?**; switch roles.",
+      "callouts": [
+        { "type": "tip", "title": "Space Consistency", "body": "Point to the same space for each city every time." }
+      ],
+      "microCheck": {
+        "q": "Best follow-up after CITY-B SUNNY?",
+        "options": ["Repeat SUNNY loudly", "TEMPERATURE? (WH-face)", "Change topic", "Spell city name only"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Mini-Showcase",
+      "body": "Record **10–15s**: **TODAY** weather + **TOMORROW** forecast (condition + temp word or degree). Example: **TODAY CLOUDY COOL. TOMORROW RAIN COLD.**",
+      "teacherNote": "Privacy submissions OK; caption should state if you used degree numbers or adjectives."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 4.1 — Weather & Seasons Quiz",
+    "items": [
+      { "type": "mcq", "q": "Clear order for a report:", "options": ["CONDITION → TIME", "TIME → CONDITION → TEMP", "TEMP → PLACE → TIME", "Random"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Correct NMM for HOW-WEATHER?", "options": ["Brows up", "Brows down", "Neutral only", "Eyes closed"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Space consistency means…", "options": ["Bigger motions", "Reusing the same points for places", "Talking while signing", "Random pointing"], "answerIndex": 1 },
+      { "type": "short", "q": "Write an ASL gloss: TODAY WIND STRONG. TOMORROW SUNNY WARM." },
+      { "type": "reflection", "prompt": "What helped your clarity more: time-first or space anchoring? What will you practice next?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Post a 10–15s two-day weather clip. Note whether you used degree numbers or adjectives.",
+  "summary": "You led with time, used compact weather clauses, and anchored places consistently for clear reports.",
+  "nextSlug": "asl-32",
+  "games": [
+    { "id": "forecast-snap", "title": "Forecast Snap", "route": "/arcade/asl/forecast-snap", "estMinutes": 5, "xp": 50, "outcomes": ["Quick condition recognition"] },
+    { "id": "degree-drop", "title": "Degree Drop", "route": "/arcade/asl/degree-drop", "estMinutes": 5, "xp": 50, "outcomes": ["Numbers → degree clarity"] },
+    { "id": "city-anchors", "title": "City Anchors", "route": "/arcade/asl/city-anchors", "estMinutes": 5, "xp": 50, "outcomes": ["Spatial consistency"] }
+  ]
+}

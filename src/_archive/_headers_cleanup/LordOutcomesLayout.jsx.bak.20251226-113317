@@ -1,0 +1,103 @@
+// src/layouts/LordOutcomesLayout.jsx
+import React from "react";
+import { Outlet, NavLink } from "react-router-dom";
+
+import "@/styles/unified-shell.css";
+import "@/styles/util-wash.css";
+import "@/styles/lordOutcomes.dym.css";
+
+const NAV = [
+  { key: "home", label: "Overview", to: "" },
+  { key: "states", label: "States", to: "states" },
+  { key: "programs", label: "Programs", to: "programs" },
+  { key: "employers", label: "Employers", to: "employers" },
+  { key: "funding", label: "Funding", to: "funding" },
+
+  // ✅ FIXED LINE (this is the one you asked about)
+  { key: "pilots", label: "Pilot Launchpad", to: "pilots/launch" },
+];
+
+function LordOutcomesHeader() {
+  return (
+    <header className="loo-dymHeaderWrap">
+      <div className="loo-dymHeaderInner">
+        {/* Brand */}
+        <div className="loo-brand">
+          <div className="loo-brandMark" />
+          <div>
+            <div className="loo-brandTitle">Lord of Outcomes</div>
+            <div className="loo-brandSub">Outcome intelligence & funding proof</div>
+          </div>
+        </div>
+
+        {/* Tabs */}
+        <nav className="loo-tabs">
+          {NAV.map((item) => (
+            <NavLink
+              key={item.key}
+              to={item.to}
+              end={item.to === ""}
+              className={({ isActive }) =>
+                `loo-tab ${isActive ? "is-active" : ""}`
+              }
+            >
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* Right actions (future dropdown, account, etc.) */}
+        <div className="loo-actions">
+          <button className="loo-menuBtn">
+            Menu <span className="loo-caret">▾</span>
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+function LordOutcomesFooter() {
+  return (
+    <footer className="loo-dymFooter">
+      <div className="loo-dymFooterInner">
+        <div className="loo-footNav">
+          {NAV.map((item) => (
+            <NavLink
+              key={item.key}
+              to={item.to}
+              end={item.to === ""}
+              className={({ isActive }) =>
+                `loo-footLink ${isActive ? "is-active" : ""}`
+              }
+            >
+              {item.label}
+            </NavLink>
+          ))}
+        </div>
+
+        <div className="loo-status">
+          <span className="loo-pill">Audit-Ready</span>
+          <span className="loo-dot">•</span>
+          <span className="loo-muted">Grant-aligned • Evidence-first</span>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+export default function LordOutcomesLayout() {
+  return (
+    <div className="loo-dym">
+      <LordOutcomesHeader />
+
+      <main className="loo-dymMain">
+        <div className="loo-dymContainer">
+          <Outlet />
+        </div>
+      </main>
+
+      <LordOutcomesFooter />
+    </div>
+  );
+}

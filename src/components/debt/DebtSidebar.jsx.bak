@@ -1,0 +1,108 @@
+import React from "react";
+import { NavLink } from "react-router-dom";
+
+const KEY = "debt:rail:collapsed";
+
+const Item = ({ to, icon, children, end = false }) => (
+  <li>
+    <NavLink
+      to={to}
+      end={end}
+      className={({ isActive }) => (isActive ? "crb-link is-active" : "crb-link")}
+      title={typeof children === "string" ? children : undefined}
+      aria-label={typeof children === "string" ? children : undefined}
+    >
+      <span className="crb-linkIcon" aria-hidden>{icon}</span>
+      <span className="crb-linkLabel">{children}</span>
+    </NavLink>
+  </li>
+);
+
+const ItemExt = ({ href, icon, children }) => (
+  <li>
+    <a className="crb-link" href={href} title={children} aria-label={children}>
+      <span className="crb-linkIcon" aria-hidden>{icon}</span>
+      <span className="crb-linkLabel">{children}</span>
+    </a>
+  </li>
+);
+
+export default function DebtSidebar() {
+  const [collapsed, setCollapsed] = React.useState(() => {
+    try { return localStorage.getItem(KEY) === "1"; } catch { return false; }
+  });
+
+  React.useEffect(() => {
+    try { localStorage.setItem(KEY, collapsed ? "1" : "0"); } catch {}
+    const html = document.documentElement;
+    if (collapsed) html.setAttribute("data-rail", "collapsed");
+    else html.removeAttribute("data-rail");
+  }, [collapsed]);
+
+  return (
+    <nav className="crb-nav" aria-label="Debt Navigation">
+      {/* OVERVIEW */}
+      <div className="crb-navSection">
+        <div className="crb-navTitle">OVERVIEW</div>
+        <ul className="crb-list">
+          <Item to="/dashboard"    icon="📉" end>Dashboard</Item>
+          <Item to="/dashboard-ns" icon="⭐">Northstar Dashboard</Item> {/* ← added */}
+        </ul>
+      </div>
+
+      {/* ACCOUNTS & LEDGER */}
+      <div className="crb-navSection">
+        <div className="crb-navTitle">ACCOUNTS & LEDGER</div>
+        <ul className="crb-list">
+          <Item to="/accounts" icon="💼">Accounts</Item>
+          <Item to="/ledger"   icon="📜">Ledger</Item>
+          <Item to="/plan"     icon="🧮">Repayment Plan</Item>
+        </ul>
+      </div>
+
+      {/* INSIGHTS */}
+      <div className="crb-navSection">
+        <div className="crb-navTitle">INSIGHTS</div>
+        <ul className="crb-list">
+          <Item to="/ledger?view=upcoming"   icon="🗓️">Upcoming Payments</Item>
+          <Item to="/ledger?view=interest"   icon="💡">Interest Breakdown</Item>
+          <Item to="/ledger?view=delinquent" icon="⚠️">At Risk</Item>
+        </ul>
+      </div>
+
+      {/* CROSS APPS */}
+      <div className="crb-navSection">
+        <div className="crb-navTitle">CROSS APPS</div>
+        <ul className="crb-list">
+          <ItemExt href="/credit.html#/report"        icon="🧾">Credit Reports</ItemExt>
+          <ItemExt href="/treasury.html#/dashboard"   icon="🏦">Treasury</ItemExt>
+          <ItemExt href="/career.html#/dashboard"     icon="🧭">Career</ItemExt>
+        </ul>
+      </div>
+
+      {/* APP */}
+      <div className="crb-navSection">
+        <div className="crb-navTitle">APP</div>
+        <ul className="crb-list">
+          <Item to="/settings" icon="⚙️">Settings</Item>
+          <Item to="/help"     icon="❓">Help</Item>
+        </ul>
+      </div>
+
+      {/* Collapse control */}
+      <div className="crb-railToggleWrap">
+        <button
+          type="button"
+          className="crb-railToggle"
+          onClick={() => setCollapsed(c => !c)}
+          aria-pressed={collapsed}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          <span className="lbl-emoji" aria-hidden>{collapsed ? "➡️" : "⬅️"}</span>
+          <span className="lbl-text">{collapsed ? "Expand" : "Collapse"}</span>
+        </button>
+      </div>
+    </nav>
+  );
+}

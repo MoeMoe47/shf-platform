@@ -1,0 +1,63 @@
+// src/router/ArcadeRoutes.jsx
+import React from "react";
+import Portfolio from "@/pages/arcade/Portfolio.jsx";
+import { Routes, Route, Navigate } from "react-router-dom";
+import ArcadeLayout from "@/layouts/ArcadeLayout.jsx";
+import DevDocsViewer from "@/pages/dev/Docs.jsx";
+
+/* Pages */
+import ArcadeDashboard from "@/pages/arcade/ArcadeDashboard.jsx";
+import ArcadeDashboardNorthstar from "@/pages/arcade/ArcadeDashboardNorthstar.jsx";
+import GamesIndex from "@/pages/arcade/games/index.jsx";
+import Leaderboard from "@/pages/arcade/Leaderboard.jsx";
+import Profile from "@/pages/arcade/Profile.jsx";
+import Rewards from "@/pages/arcade/Rewards.jsx";
+import Help from "@/pages/arcade/Help.jsx";
+import Tournaments from "@/pages/arcade/Tournaments.jsx";
+import Tournament from "@/pages/arcade/Tournament.jsx";
+
+/* NEW: Lesson page */
+import Lesson from "@/pages/arcade/Lesson.jsx";
+
+/**
+ * NOTE:
+ * - Entry file (src/entries/arcade.main.jsx) must wrap this in <HashRouter>.
+ * - ArcadeLayout must render <Outlet />.
+ */
+export default function ArcadeRoutes() {
+  return (
+    <Routes>
+      {/* Dev index without layout chrome */}
+      <Route path="/__docs" element={<DevDocsViewer />} />
+
+      {/* Layout route */}
+      <Route path="/" element={<ArcadeLayout />}>
+        {/* Default → dashboard */}
+        <Route index element={<Navigate to="dashboard" replace />} />
+
+        {/* Dashboards */}
+        <Route path="dashboard" element={<ArcadeDashboard />} />
+        <Route path="dashboard-ns" element={<ArcadeDashboardNorthstar />} />
+
+        {/* App sections */}
+        <Route path="games" element={<GamesIndex />} />
+        <Route path="leaderboard" element={<Leaderboard />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="rewards" element={<Rewards />} />
+        <Route path="help" element={<Help />} />
+        <Route path="tournaments" element={<Tournaments />} />
+
+        {/* Tournament with/without id */}
+        <Route path="tournament" element={<Tournament />} />
+        <Route path="tournament/:id" element={<Tournament />} />
+
+        {/* NEW: Lesson route */}
+        <Route path="lesson/:id" element={<Lesson />} />
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="dashboard" replace />} />
+      </Route>
+          <Route path="portfolio" element={<Portfolio />} />
+        </Routes>
+  );
+}

@@ -1,0 +1,195 @@
+
+
+/* src/styles/util-wash.css
+   Minimal, token-driven background “washes” you can apply per page or per card.
+   Works with your tokens: --canvas, --bg (beige), --ink, --ring, --brand, --surface
+*/
+
+/* Base wash plumbing */
+.wash         { background: var(--wash, var(--surface, var(--canvas, #fff))); }
+.wash--canvas { --wash: var(--canvas, #fff); }
+.wash--beige  { --wash: var(--bg, #f8f5ef); }              /* your beige */
+.wash--ivory  { --wash: var(--ivory, #fdfcf8); }           /* optional alt */
+.wash--card   { --wash: var(--surface, var(--canvas, #fff)); }
+
+/* Brand-tinted washes (subtle) */
+.wash--brand-5  { --wash: color-mix(in oklab, var(--brand, #e11d2d) 5%,  var(--canvas, #fff)); }
+.wash--brand-10 { --wash: color-mix(in oklab, var(--brand, #e11d2d) 10%, var(--canvas, #fff)); }
+.wash--brand-15 { --wash: color-mix(in oklab, var(--brand, #e11d2d) 15%, var(--canvas, #fff)); }
+
+/* Semantic accent fallbacks (safe if your tokens don't define them) */
+:root, [data-app] {
+  --ok: #16a34a;       /* green 600 */
+  --danger: #dc2626;   /* red 600 */
+
+  /* New semantic hues */
+  --celebrate: #059669; /* emerald */
+  --nudge:     #2563eb; /* blue    */
+  --warn:      #d97706; /* amber   */
+}
+
+/* Subtle “tinted white” backgrounds by mixing with canvas */
+.wash--ok-5        { --wash: color-mix(in oklab, var(--ok)       6%,  var(--canvas, #fff)); }
+.wash--ok-10       { --wash: color-mix(in oklab, var(--ok)      12%,  var(--canvas, #fff)); }
+.wash--ok-15       { --wash: color-mix(in oklab, var(--ok)      18%,  var(--canvas, #fff)); }
+
+.wash--danger-5    { --wash: color-mix(in oklab, var(--danger)   6%,  var(--canvas, #fff)); }
+.wash--danger-10   { --wash: color-mix(in oklab, var(--danger)  12%,  var(--canvas, #fff)); }
+.wash--danger-15   { --wash: color-mix(in oklab, var(--danger)  18%,  var(--canvas, #fff)); }
+
+.wash--celebrate-5  { --wash: color-mix(in oklab, var(--celebrate)  6%, var(--canvas, #fff)); }
+.wash--celebrate-10 { --wash: color-mix(in oklab, var(--celebrate) 12%, var(--canvas, #fff)); }
+.wash--celebrate-15 { --wash: color-mix(in oklab, var(--celebrate) 18%, var(--canvas, #fff)); }
+
+.wash--nudge-5      { --wash: color-mix(in oklab, var(--nudge)      6%, var(--canvas, #fff)); }
+.wash--nudge-10     { --wash: color-mix(in oklab, var(--nudge)     12%, var(--canvas, #fff)); }
+.wash--nudge-15     { --wash: color-mix(in oklab, var(--nudge)     18%, var(--canvas, #fff)); }
+
+.wash--warn-5       { --wash: color-mix(in oklab, var(--warn)       6%, var(--canvas, #fff)); }
+.wash--warn-10      { --wash: color-mix(in oklab, var(--warn)      12%, var(--canvas, #fff)); }
+.wash--warn-15      { --wash: color-mix(in oklab, var(--warn)      18%, var(--canvas, #fff)); }
+
+/* Nice default “card” look you can opt into */
+.wash.card {
+  background: var(--wash, var(--canvas, #fff));
+  border: 1px solid var(--ring, #e5e7eb);
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgb(16 24 40 / 6%);
+}
+
+/* Global kill switch (per app or whole site) */
+[data-wash="off"] .wash { --wash: var(--canvas, #fff) !important; }
+
+/* Utility when you want to pass a custom color inline:
+   <div class="wash" style="--wash:#fff7ed">…</div>
+*/
+
+/* Fallback if color-mix unsupported (older browsers) */
+@supports not (background: color-mix(in oklab, #000 10%, #fff)) {
+  .wash--ok-5        { --wash: rgba(22,163,74,.06); }
+  .wash--ok-10       { --wash: rgba(22,163,74,.12); }
+  .wash--ok-15       { --wash: rgba(22,163,74,.18); }
+
+  .wash--danger-5    { --wash: rgba(220,38,38,.06); }
+  .wash--danger-10   { --wash: rgba(220,38,38,.12); }
+  .wash--danger-15   { --wash: rgba(220,38,38,.18); }
+
+  .wash--celebrate-5  { --wash: rgba(5,150,105,.06); }
+  .wash--celebrate-10 { --wash: rgba(5,150,105,.12); }
+  .wash--celebrate-15 { --wash: rgba(5,150,105,.18); }
+
+  .wash--warn-5      { --wash: rgba(217,119,6,.06); }
+  .wash--warn-10     { --wash: rgba(217,119,6,.12); }
+  .wash--warn-15     { --wash: rgba(217,119,6,.18); }
+
+  .wash--nudge-5     { --wash: rgba(37,99,235,.06); }
+  .wash--nudge-10    { --wash: rgba(37,99,235,.12); }
+  .wash--nudge-15    { --wash: rgba(37,99,235,.18); }
+}
+/* ==== KPI: lively layout & motion (non-invasive) ========================= */
+
+.kpi {
+  display: grid;
+  gap: 6px;
+  text-decoration: none;
+  transition: transform 140ms ease, box-shadow 140ms ease;
+  will-change: transform;
+}
+.kpi--compact { gap: 4px; }
+.kpi--link { cursor: pointer; }
+
+/* Lift on hover/focus */
+.kpi--alive:hover,
+.kpi--alive:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(2,6,23,.08);
+}
+
+/* Header row */
+.kpi-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.kpi-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--ink-soft, #6b7280);
+}
+.kpi-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* Main value */
+.kpi-value {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+/* Subline */
+.kpi-sub {
+  font-size: 12px;
+  opacity: .85;
+}
+
+/* Tiny trend chip */
+.kpi-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.06);
+  color: var(--ink, #111827);
+  user-select: none;
+}
+.kpi-trend .kpi-delta { margin-left: 2px; font-weight: 700; }
+
+/* Trend color hints (overridable by wash bg) */
+.kpi-trend.up    { background: rgba(16,185,129,.15); }
+.kpi-trend.down  { background: rgba(239,68,68,.15); }
+.kpi-trend.flat  { background: rgba(107,114,128,.15); }
+
+/* Animated gloss (respects reduced motion) */
+.kpi-gloss {
+  position: absolute; inset: -40%;
+  background: radial-gradient(120px 120px at var(--gx,10%) var(--gy,-20%), rgba(255,255,255,.33), rgba(255,255,255,0) 60%);
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  animation: kpiSweep 4800ms ease-in-out infinite;
+  opacity: .6;
+}
+@keyframes kpiSweep {
+  0%   { --gx: -30%; --gy: -40%; opacity: .25; }
+  50%  { --gx: 110%; --gy: -10%; opacity: .6;  }
+  100% { --gx: -30%; --gy: -40%; opacity: .25; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kpi-gloss { animation: none; opacity: .2; }
+}
+
+/* Skeleton shimmer for loading state */
+.kpi-skel {
+  display: inline-block;
+  height: 1em; width: 5ch;
+  border-radius: 6px;
+  background:
+    linear-gradient(90deg,
+      rgba(0,0,0,.08) 25%,
+      rgba(0,0,0,.15) 37%,
+      rgba(0,0,0,.08) 63%);
+  background-size: 400% 100%;
+  animation: kpiShimmer 1.2s ease-in-out infinite;
+}
+@keyframes kpiShimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}
+
+

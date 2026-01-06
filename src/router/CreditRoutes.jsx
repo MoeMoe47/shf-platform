@@ -1,0 +1,63 @@
+import React, { Suspense, lazy } from "react";
+const Portfolio = lazy(() => import("@/pages/credit/Portfolio.jsx"));
+// src/router/CreditRoutes.jsx
+import { Routes, Route, Navigate } from "react-router-dom";
+import CreditLayout from "@/layouts/CreditLayout.jsx";
+import DevDocsViewer from "@/pages/dev/Docs.jsx";
+
+/* Lazy pages (inside the Credit app shell) */
+const CreditDashboard = lazy(() => import("@/components/credit/Dashboard.jsx"));
+const CreditDashboardNorthstar = lazy(() => import("@/components/credit/DashboardNorthstar.jsx")); // ⬅️ NEW
+const CreditReport    = lazy(() => import("@/pages/CreditReport.jsx"));
+const Reports         = lazy(() => import("@/components/credit/Reports.jsx"));
+const Report          = lazy(() => import("@/components/credit/Report.jsx"));
+const Disputes        = lazy(() => import("@/components/credit/Disputes.jsx"));
+const SubmitDispute   = lazy(() => import("@/components/credit/SubmitDispute.jsx"));
+const Furnishers      = lazy(() => import("@/components/credit/Furnishers.jsx"));
+const Consumers       = lazy(() => import("@/components/credit/Consumers.jsx"));
+const Verifier        = lazy(() => import("@/components/credit/Verifier.jsx"));
+const CreditSettings  = lazy(() => import("@/components/credit/Settings.jsx"));
+const CreditHelp      = lazy(() => import("@/components/credit/Help.jsx"));
+
+export default function CreditRoutes() {
+  return (
+    <Suspense fallback={<div className="skeleton pad">Loading…</div>}>
+      <Routes>
+        {/* Out-of-shell docs */}
+        <Route path="/__docs" element={<DevDocsViewer />} />
+
+        {/* App shell */}
+        <Route path="/" element={<CreditLayout />}>
+          {/* Default → dashboard */}
+          <Route index element={<Navigate to="dashboard" replace />} />
+
+          {/* Dashboards */}
+          <Route path="dashboard" element={<CreditDashboard />} />                 {/* existing */}
+          <Route path="dashboard-ns" element={<CreditDashboardNorthstar />} />     {/* NEW */}
+
+          {/* Learner-facing report */}
+          <Route path="report" element={<CreditReport />} />
+
+          {/* Registry & disputes */}
+          <Route path="reports" element={<Reports />} />
+          <Route path="reports/:consumerId" element={<Report />} />
+          <Route path="disputes" element={<Disputes />} />
+          <Route path="disputes/new" element={<SubmitDispute />} />
+
+          {/* Participants & verification */}
+          <Route path="furnishers" element={<Furnishers />} />
+          <Route path="consumers" element={<Consumers />} />
+          <Route path="verifier" element={<Verifier />} />
+
+          {/* App support */}
+          <Route path="settings" element={<CreditSettings />} />
+          <Route path="help" element={<CreditHelp />} />
+
+          {/* Fallback */}
+          <Route path="*" element={<Navigate to="dashboard" replace />} />
+        </Route>
+          <Route path="portfolio" element={<Portfolio />} />
+        </Routes>
+    </Suspense>
+  );
+}

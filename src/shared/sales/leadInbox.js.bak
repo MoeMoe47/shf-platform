@@ -1,0 +1,17 @@
+const KEY = "sales:leadQueue";
+
+export function readLeadQueue() {
+  try { return JSON.parse(localStorage.getItem(KEY) || "[]"); }
+  catch { return []; }
+}
+
+export function clearLeadQueue() {
+  localStorage.removeItem(KEY);
+  window.dispatchEvent(new CustomEvent("sales:leadQueue:updated"));
+}
+
+export function onLeadQueueUpdate(cb) {
+  const handler = () => cb(readLeadQueue());
+  window.addEventListener("sales:leadQueue:updated", handler);
+  return () => window.removeEventListener("sales:leadQueue:updated", handler);
+}

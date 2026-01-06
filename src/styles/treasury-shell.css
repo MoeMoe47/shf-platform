@@ -1,0 +1,179 @@
+
+
+/* src/styles/treasury-shell.css */
+
+/* Root layout */
+.crb-root {
+    --crb-sidebar-w: 260px;
+    min-height: 100vh;
+    background: var(--wash, #fafafa);
+    color: var(--ink, #111);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Skip link */
+  .crb-skip {
+    position: absolute;
+    left: -9999px;
+  }
+  .crb-skip:focus {
+    left: 12px;
+    top: 8px;
+    z-index: 9999;
+    background: #fff;
+    padding: 8px 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  }
+  
+  /* Header */
+  .crb-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 64px;
+    padding: 0 16px;
+    background: #fff;
+    border-bottom: 1px solid var(--ring, #e6e6e6);
+  }
+  .crb-headerSpacer { flex: 1; }
+  
+  /* Brand */
+  .crb-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .crb-brandImg {
+    height: 36px; /* controls logo size */
+    width: auto;
+    display: block;
+  }
+  .crb-wordmark {
+    font-weight: 800;
+    letter-spacing: .4px;
+    color: var(--ink, #111);
+  }
+  
+  /* Cross-app strip (buttons already styled by shell.css) */
+  .crb-crossapp {
+    display: flex;
+    gap: 8px;
+  }
+  
+  /* Body grid */
+  .crb-body {
+    display: grid;
+    grid-template-columns: var(--crb-sidebar-w) 1fr;
+    gap: 0;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+  
+  /* ===== Sidebar (wash + border + spacing) ===== */
+  .crb-sidebar {
+    /* stronger internal padding + aesthetic wash */
+    background:
+      linear-gradient(180deg, #ffffff 0%, #fafbff 80%),
+      var(--sidebar-bg, transparent);
+    border-right: 1px solid var(--ring, #e6e6e6);
+    border-radius: 14px;
+    padding: 12px;
+  }
+  .crb-navTitle {
+    font-size: 12px;
+    letter-spacing: .6px;
+    color: var(--ink-soft, #666);
+    margin: 12px 0 6px;
+  }
+  .crb-navSection + .crb-navSection { margin-top: 12px; }
+  .crb-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 2px;
+  }
+  .crb-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--ink, #111);
+  }
+  .crb-link.is-active {
+    background: #fff;
+    box-shadow: 0 1px 0 var(--ring, #eee) inset, 0 0 0 1px var(--ring, #eee) inset;
+  }
+  .crb-linkIcon { width: 1.2em; text-align: center; }
+  
+  /* Collapse control */
+  .crb-railToggleWrap { margin-top: 12px; }
+  .crb-railToggle {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border: 1px solid var(--ring, #e6e6e6);
+    background: #fff;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .crb-railToggle:hover { background: #f7f7f7; }
+  
+  /* Main content */
+  .crb-main {
+    min-height: calc(100vh - 64px - 32px);
+    padding-left: 16px;
+  }
+  
+  /* Dashboard primitives (light polish so widgets look sane) */
+  .db-shell {}
+  .db-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .db-title { margin: 0; }
+  .db-subtitle { color: var(--ink-soft, #666); }
+  
+  /* Cards / wash use your existing shell/util-wash; these help spacing */
+  .card { background: #fff; border-radius: 14px; border: 1px solid var(--ring, #eee); }
+  .card--pad { padding: 14px; }
+  .db-grid { display: grid; gap: 12px; }
+  .db-grid--kpis { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  
+  /* Hero */
+  .lux-hero { display: grid; grid-template-columns: 1.6fr 1fr; gap: 16px; }
+  .lux-heroL {}
+  .lux-cta { display: flex; gap: 8px; margin-top: 8px; }
+  .lux-kpi { background:#fff; border:1px solid var(--ring,#eee); border-radius: 12px; padding: 10px; }
+  .lux-kpi-meter { height: 6px; background:#f0f0f0; border-radius: 999px; overflow: hidden; }
+  .lux-kpi-meter > span { display:block; height:100%; background: var(--brand, #ff5a1f); }
+  
+  /* ===== Collapsed rail (ChatGPT-style emoji-only) ===== */
+  :root[data-rail="collapsed"] .crb-body { grid-template-columns: 72px 1fr; }
+  :root[data-rail="collapsed"] .crb-sidebar { padding: 8px; }
+  :root[data-rail="collapsed"] .crb-link { justify-content: center; padding: 10px 0; }
+  :root[data-rail="collapsed"] .crb-linkLabel,
+  :root[data-rail="collapsed"] .crb-navTitle,
+  :root[data-rail="collapsed"] .crb-railToggle .lbl-text { display: none; }
+  :root[data-rail="collapsed"] .crb-railToggle { padding: 10px 0; }
+  
+  /* Keep emoji/icon readable when collapsed (overrides base) */
+  .crb-linkIcon { width: 1.25em; text-align: center; font-size: 18px; }
+  
+
+

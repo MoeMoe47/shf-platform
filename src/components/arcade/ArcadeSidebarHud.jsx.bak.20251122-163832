@@ -1,0 +1,138 @@
+// src/components/arcade/ArcadeSidebarHud.jsx
+// ------------------------------------------------------------
+// Tiny HUD for the arcade sidebar.
+// Shows:
+//   - XP this week
+//   - On-chain events this week
+//   - Badges earned this week
+//
+// Reads from the same credit ledger used by useArcadeLedger.
+// Expects creditLedger.listRecentEntries({ app, limit }) to exist.
+// If not, it fails gracefully and renders zeros.
+// ------------------------------------------------------------
+
+import React from "react";
+import * as creditLedger from "@/utils/creditLedger.js";
+import { ARCADE_EVENTS, getArcadeEventRule } from "@/shared/arcade/arcadeRules.js";
+
+const LOOKBACK_DAYS = 7;
+const FETCH_LIMIT = 200; // enough to cover a week of normal play
+
+export default function ArcadeSidebarHud() {
+  const [stats, setStats] = React.useState({
+    xpWeek: 0,
+    onChainWeek: 0,
+    badgesWeek: 0,
+    loading: true,
+  });
+
+  React.useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      const now = Date.now();
+      const cutoff = now - LOOKBACK_DAYS * 24 * 60 * 60 * 1000;
+
+      let rows = [];
+      try {
+        if (typeof creditLedger.listRecentEntries === "function") {
+          rows = await creditLedger.listRecentEntries({
+            app: "arcade",
+            limit: FETCH_LIMIT,
+          });
+        } else {
+          if (process.env.NODE_ENV !== "production") {
+            console.warn(
+              "[ArcadeSidebarHud] creditLedger.listRecentEntries not implemented. " +
+                "Stats will show as 0. Implement this helper when ready.",
+            );
+          }
+          rows = [];
+        }
+      } catch (err) {
+        if (process.env.NODE_ENV !== "production") {
+          console.error("[ArcadeSidebarHud] Failed to load ledger entries:", err);
+        }
+        rows = [];
+      }
+
+      if (cancelled) return;
+
+      const weekRows = Array.isArray(rows)
+        ? rows.filter((entry) => {
+            const ts = entry.timestamp || 0;
+            return ts >= cutoff;
+          })
+        : [];
+
+      let xpWeek = 0;
+      let onChainWeek = 0;
+      let badgesWeek = 0;
+
+      for (const entry of weekRows) {
+        const eventType = entry.eventType;
+        const xp = entry.xp || 0;
+        const evu = entry.evuDelta || 0; // not shown, but could be used later
+
+        // XP
+        xpWeek += xp;
+
+        // On-chain?
+        const rule = getArcadeEventRule(eventType);
+        const onChainRule = rule?.onChain || false;
+        const onChainMeta = entry.ruleMeta?.onChain;
+        const isOnChain = typeof onChainMeta === "boolean" ? onChainMeta : onChainRule;
+        if (isOnChain) onChainWeek += 1;
+
+        // Badges
+        if (eventType === ARCADE_EVENTS.BADGE_CLAIMED) {
+          badgesWeek += 1;
+        }
+      }
+
+      setStats({
+        xpWeek,
+        onChainWeek,
+        badgesWeek,
+        loading: false,
+      });
+    }
+
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return (
+    <div className="arcade-hud">
+      <div className="arcade-hud__header">
+        <span className="arcade-hud__dot" />
+        <span className="arcade-hud__label">Arcade Pulse · 7 days</span>
+      </div>
+      <div className="arcade-hud__grid">
+        <SidebarStat
+          label="XP this week"
+          value={stats.loading ? "…" : stats.xpWeek}
+        />
+        <SidebarStat
+          label="On-chain events"
+          value={stats.loading ? "…" : stats.onChainWeek}
+        />
+        <SidebarStat
+          label="Badges earned"
+          value={stats.loading ? "…" : stats.badgesWeek}
+        />
+      </div>
+    </div>
+  );
+}
+
+function SidebarStat({ label, value }) {
+  return (
+    <div className="arcade-hud__stat">
+      <div className="arcade-hud__stat-value">{value}</div>
+      <div className="arcade-hud__stat-label">{label}</div>
+    </div>
+  );
+}

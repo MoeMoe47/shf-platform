@@ -30,3 +30,5 @@ export const CANON_LAYERS = [
 
   { number: 25, key: "exit_portability_institutional_independence", title: "Exit, Portability & Institutional Independence", locked: true },
 ];
+
+export { L26 } from "./L26_efficiency_throughput/index.js";

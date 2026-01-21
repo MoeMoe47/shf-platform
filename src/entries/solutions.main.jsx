@@ -27,7 +27,6 @@ import "@/styles/theme-solutions.css";       // night-launch palette
 import "@/styles/ai-compass.solutions.css";  // (present in your tree; optional)
 
 /* 5) Map library CSS (you’re using MapLibre elsewhere) */
-import "maplibre-gl/dist/maplibre-gl.css";
 
 /* 6) React / Router / Providers */
 import React from "react";

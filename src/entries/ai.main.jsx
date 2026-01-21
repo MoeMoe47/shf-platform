@@ -2,7 +2,6 @@ import "@/styles/unified-shell.css";
 // --- CSS: keep your app styles first, shell last ---
 import "@/styles/ai-compass.css";          // your existing AI styles (keep!)
 import "@/styles/ai-compass.solutions.css"; // optional theme file if you use it
-import "maplibre-gl/dist/maplibre-gl.css";  // lib CSS
 import "@/styles/app-shell.css";             // ← LAST: minimal responsive/layout guard
 
 import React from "react";

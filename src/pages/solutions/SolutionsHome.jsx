@@ -64,7 +64,7 @@ const aiManifest = loadManifest("ai");
 
         <div className="sh-heroRow">
           {aiHref ? (
-          <a className="sh-btn" href={aiHref}>Open AI Workforce Compass</a>
+          <a className="sh-btn" href={aiHref || "#/"}>Open AI Workforce Compass</a>
         ) : (
           <button className="sh-btn" disabled title="AI app entry not available">Open AI Workforce Compass</button>
         )}

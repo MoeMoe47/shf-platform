@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { getAppRegistry } from "@/apps/manifest/registry.js";
+import ControlPlaneStrip from "@/components/admin/ControlPlaneStrip.jsx";
 import { buildOpenHref } from "@/apps/manifest/href.js";
-import { setAppOverride, clearAppOverride } from "@/apps/manifest/overrides.js";
+import { setAppOverride, clearAppOverride, setSessionOverride, clearSessionOverride, getOverrideEvents } from "@/apps/manifest/overrides.js";
 
 function pillClass(active) {
   return active ? "ar-pill ar-pillOn" : "ar-pill";
@@ -27,6 +28,18 @@ export default function AppRegistry() {
 
   const [query, setQuery] = useState("");
   const [showDisabled, setShowDisabled] = useState(true);
+  const [events, setEvents] = useState(() => {
+    try { return getOverrideEvents() || []; } catch { return []; }
+  });
+
+  React.useEffect(() => {
+    function onState() {
+      setTick((n) => n + 1);
+      try { setEvents(getOverrideEvents() || []); } catch {}
+    }
+    window.addEventListener("shf:app-state", onState);
+    return () => window.removeEventListener("shf:app-state", onState);
+  }, []);
 
   const registry = useMemo(() => getAppRegistry(), [tick]);
   const list = useMemo(() => {
@@ -78,6 +91,8 @@ export default function AppRegistry() {
           </label>
         </div>
       </header>
+
+      <ControlPlaneStrip contractVersion={String(document?.documentElement?.dataset?.contractVersion || "?")} />
 
       <section className="ar-grid">
         {list.map(({ id, manifest: m, caps, enabled }) => {
@@ -134,33 +149,46 @@ export default function AppRegistry() {
                     No entry
                   </button>
                 )}
-                
-                <button
-                  className="ar-btn"
-                  onClick={() => toggleEnabled(id, true)}
-                  disabled={enabled}
-                  title="Enable this app (runtime override)"
-                >
-                  Enable
-                </button>
 
-                <button
-                  className="ar-btn"
-                  onClick={() => toggleEnabled(id, false)}
-                  disabled={!enabled}
-                  title="Disable this app (runtime override)"
-                >
-                  Disable
-                </button>
+                <div className="ar-splitBtns" aria-label="Override controls">
+                  <button
+                    className="ar-btn ar-btnGhost"
+                    onClick={() => toggleEnabledSession(id, true)}
+                    title="Enable for this session (Demo override)"
+                  >
+                    Enable (Demo)
+                  </button>
+                  <button
+                    className="ar-btn ar-btnGhost"
+                    onClick={() => toggleEnabledSession(id, false)}
+                    title="Disable for this session (Demo override)"
+                  >
+                    Disable (Demo)
+                  </button>
 
-                <button
-                  className="ar-btn ar-btnGhost"
-                  onClick={() => resetEnabled(id)}
-                  title="Reset override (revert to manifest default)"
-                >
-                  Reset
-                </button>
-  
+                  <button
+                    className="ar-btn"
+                    onClick={() => toggleEnabled(id, true)}
+                    title="Enable and save (Persisted override)"
+                  >
+                    Enable (Saved)
+                  </button>
+                  <button
+                    className="ar-btn"
+                    onClick={() => toggleEnabled(id, false)}
+                    title="Disable and save (Persisted override)"
+                  >
+                    Disable (Saved)
+                  </button>
+
+                  <button
+                    className="ar-btn ar-btnGhost"
+                    onClick={() => resetEnabled(id)}
+                    title="Reset overrides (session + saved) back to manifest default"
+                  >
+                    Reset
+                  </button>
+                </div>
 
                 <button
                   className="ar-btn ar-btnGhost"
@@ -179,6 +207,44 @@ export default function AppRegistry() {
         })}
       </section>
 
+      <section className="ar-log">
+        <div className="ar-logHead">
+          <div>
+            <div className="ar-kicker">Control Plane</div>
+            <h2 className="ar-logTitle">Override Event Log</h2>
+            <div className="ar-sub">Last 25 override actions (read-only).</div>
+          </div>
+          <button
+            className="ar-btn ar-btnGhost"
+            onClick={() => {
+              try { setEvents(getOverrideEvents() || []); } catch {}
+            }}
+            title="Refresh"
+          >
+            Refresh
+          </button>
+        </div>
+
+        <div className="ar-logList">
+          {(events && events.length ? events : []).map((e, idx) => (
+            <div key={idx} className="ar-logItem">
+              <div className="ar-logTop">
+                <span className="ar-pill ar-pillOn">{(e.scope || "unknown").toUpperCase()}</span>
+                <span className="ar-mono ar-logApp">{e.appId}</span>
+              </div>
+              <div className="ar-logMsg">
+                <span className="ar-mono">{e.ts || "—"}</span>
+                <span className="ar-dot">•</span>
+                <span className="ar-mono">{JSON.stringify(e.patch)}</span>
+              </div>
+            </div>
+          ))}
+          {(!events || !events.length) && (
+            <div className="ar-logEmpty">No override events yet.</div>
+          )}
+        </div>
+      </section>
+
       <style>{`
         .ar-wrap{ padding: 22px; max-width: 1280px; margin: 0 auto; }
         .ar-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:16px; padding: 6px 0 18px; border-bottom: 1px solid rgba(255,255,255,.08); }
@@ -187,6 +253,7 @@ export default function AppRegistry() {
         .ar-sub{ opacity:.75; font-size:13px; max-width: 560px; }
 
         .ar-actions{ display:flex; align-items:center; gap:14px; }
+        .ar-splitBtns{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
         .ar-search{ position:relative; }
         .ar-search input{
           width: 320px; max-width: 46vw;
@@ -246,6 +313,20 @@ export default function AppRegistry() {
         .ar-value{ flex:1; font-size:12px; opacity:.85; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
         .ar-chips{ display:flex; flex-wrap:wrap; gap:8px; }
+        .ar-log{ padding-top: 18px; }
+        .ar-logHead{ display:flex; align-items:flex-end; justify-content:space-between; gap:12px; padding: 14px 0 10px; border-top: 1px solid rgba(255,255,255,.08); margin-top: 16px; }
+        .ar-logTitle{ margin:4px 0 6px; font-size:18px; line-height:1.1; }
+        .ar-logList{ display:grid; gap:10px; padding: 10px 0 6px; }
+        .ar-logItem{
+          border-radius: 14px;
+          border: 1px solid rgba(255,255,255,.10);
+          background: rgba(255,255,255,.03);
+          padding: 10px 12px;
+        }
+        .ar-logTop{ display:flex; align-items:center; gap:10px; }
+        .ar-logApp{ opacity:.9; font-size:12px; }
+        .ar-logMsg{ margin-top: 6px; font-size:12px; opacity:.8; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+        .ar-logEmpty{ opacity:.65; font-size:12px; padding: 10px 0; }
         .ar-chip{
           font-size:11px;
           padding: 4px 8px;

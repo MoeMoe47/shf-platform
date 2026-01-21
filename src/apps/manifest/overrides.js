@@ -1,54 +1,61 @@
-const KEY = "shf.appOverrides.v1";
-const SESSION_KEY = "__SHF_APP_OVERRIDES__";
+const KEY_PERSIST = "shf.appOverrides.v1";
+const KEY_SESSION = "shf.appOverrides.session.v1";
+
+const EVT = "shf:app-state";
+const MAX_LOG = 25;
+
+let _log = []; // in-memory ring buffer (not persisted)
 
 function safeParse(s) {
   try { return JSON.parse(s); } catch { return null; }
 }
 
-function isObj(x) {
-  return !!x && typeof x === "object" && !Array.isArray(x);
+function nowIso() {
+  try { return new Date().toISOString(); } catch { return String(Date.now()); }
 }
 
-function getSessionStore() {
-  if (typeof window === "undefined") return null;
-  if (!isObj(window[SESSION_KEY])) window[SESSION_KEY] = {};
-  return window[SESSION_KEY];
+function emit(payload) {
+  if (typeof window === "undefined") return;
+  try {
+    window.dispatchEvent(new CustomEvent(EVT, { detail: payload }));
+  } catch {}
 }
 
-/** Session (in-memory) overrides — best for demos */
-export function getSessionOverrides() {
-  const store = getSessionStore();
-  return store ? store : {};
+function pushLog(e) {
+  _log = [e, ..._log].slice(0, MAX_LOG);
 }
 
-export function setSessionOverride(appId, patch) {
-  const store = getSessionStore();
-  if (!store) return {};
-  const cur = isObj(store[appId]) ? store[appId] : {};
-  store[appId] = { ...cur, ...(patch || {}) };
-  return store;
+export function getOverrideEvents() {
+  return _log.slice();
 }
 
-export function clearSessionOverride(appId) {
-  const store = getSessionStore();
-  if (!store) return {};
-  if (appId in store) delete store[appId];
-  return store;
+export function isDemoMode() {
+  if (typeof window === "undefined") return false;
+  // Demo mode = any session overrides present
+  const o = getSessionOverrides();
+  return !!(o && Object.keys(o).length);
 }
 
-/** Persisted overrides — survive refresh */
+/* ---------------------------
+   Persisted overrides
+--------------------------- */
 export function getAppOverrides() {
   if (typeof window === "undefined") return {};
-  const raw = window.localStorage.getItem(KEY);
+  const raw = window.localStorage.getItem(KEY_PERSIST);
   const parsed = safeParse(raw);
-  return isObj(parsed) ? parsed : {};
+  return (parsed && typeof parsed === "object") ? parsed : {};
 }
 
 export function setAppOverride(appId, patch) {
   if (typeof window === "undefined") return {};
   const cur = getAppOverrides();
   const next = { ...cur, [appId]: { ...(cur[appId] || {}), ...(patch || {}) } };
-  window.localStorage.setItem(KEY, JSON.stringify(next));
+  window.localStorage.setItem(KEY_PERSIST, JSON.stringify(next));
+
+  const e = { ts: nowIso(), scope: "persist", appId, patch };
+  pushLog(e);
+  emit({ type: "override", ...e, persist: next, session: getSessionOverrides() });
+
   return next;
 }
 
@@ -58,37 +65,85 @@ export function clearAppOverride(appId) {
   if (!(appId in cur)) return cur;
   const next = { ...cur };
   delete next[appId];
-  window.localStorage.setItem(KEY, JSON.stringify(next));
+  window.localStorage.setItem(KEY_PERSIST, JSON.stringify(next));
+
+  const e = { ts: nowIso(), scope: "persist", appId, patch: null };
+  pushLog(e);
+  emit({ type: "override", ...e, persist: next, session: getSessionOverrides() });
+
   return next;
 }
 
-/**
- * Resolve enabled with source:
- * session override wins, then persisted override, then manifest.enabled, else default true
- */
-export function resolveAppEnabledWithSource(appId, manifest) {
+/* ---------------------------
+   Session overrides (Demo)
+--------------------------- */
+export function getSessionOverrides() {
+  if (typeof window === "undefined") return {};
+  // sessionStorage preferred; fallback to memory if blocked
+  try {
+    const raw = window.sessionStorage.getItem(KEY_SESSION);
+    const parsed = safeParse(raw);
+    return (parsed && typeof parsed === "object") ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+export function setSessionOverride(appId, patch) {
+  if (typeof window === "undefined") return {};
+  const cur = getSessionOverrides();
+  const next = { ...cur, [appId]: { ...(cur[appId] || {}), ...(patch || {}) } };
+
+  try {
+    window.sessionStorage.setItem(KEY_SESSION, JSON.stringify(next));
+  } catch {}
+
+  const e = { ts: nowIso(), scope: "session", appId, patch };
+  pushLog(e);
+  emit({ type: "override", ...e, persist: getAppOverrides(), session: next });
+
+  return next;
+}
+
+export function clearSessionOverride(appId) {
+  if (typeof window === "undefined") return {};
+  const cur = getSessionOverrides();
+  if (!(appId in cur)) return cur;
+  const next = { ...cur };
+  delete next[appId];
+
+  try {
+    window.sessionStorage.setItem(KEY_SESSION, JSON.stringify(next));
+  } catch {}
+
+  const e = { ts: nowIso(), scope: "session", appId, patch: null };
+  pushLog(e);
+  emit({ type: "override", ...e, persist: getAppOverrides(), session: next });
+
+  return next;
+}
+
+/* ---------------------------
+   Resolution
+--------------------------- */
+export function resolveAppEnabled(appId, manifest) {
+  // precedence: session override -> persisted override -> manifest -> default true
   const sess = getSessionOverrides();
   const s = sess?.[appId];
-  if (s && typeof s.enabled === "boolean") return { enabled: s.enabled, source: "session" };
+  if (s && typeof s.enabled === "boolean") return s.enabled;
 
   const ov = getAppOverrides();
-  const p = ov?.[appId];
-  if (p && typeof p.enabled === "boolean") return { enabled: p.enabled, source: "persisted" };
+  const o = ov?.[appId];
+  if (o && typeof o.enabled === "boolean") return o.enabled;
 
-  if (manifest && typeof manifest.enabled === "boolean") {
-    return { enabled: manifest.enabled, source: "manifest" };
-  }
-
-  return { enabled: true, source: "default" };
+  if (manifest && typeof manifest.enabled === "boolean") return manifest.enabled;
+  return true;
 }
 
-// Back-compat helper (existing callers)
-export function resolveAppEnabled(appId, manifest) {
-  return resolveAppEnabledWithSource(appId, manifest).enabled;
-}
-
-export function hasAnyOverride() {
-  const sess = getSessionOverrides();
-  const pers = getAppOverrides();
-  return (sess && Object.keys(sess).length > 0) || (pers && Object.keys(pers).length > 0);
+export function countAllOverrides() {
+  const p = getAppOverrides();
+  const s = getSessionOverrides();
+  const pCount = p ? Object.keys(p).length : 0;
+  const sCount = s ? Object.keys(s).length : 0;
+  return { persisted: pCount, session: sCount, total: pCount + sCount };
 }

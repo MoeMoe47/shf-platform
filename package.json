@@ -4,7 +4,12 @@
     "build": "vite build",
     "build:one": "vite build",
     "preview": "vite preview --port 5174 --strictPort --host",
-    "guardrails": "bash scripts/guardrails.sh"
+    "guardrails": "bash scripts/guardrails.sh",
+    "manifests:validate": "node scripts/validate-manifests.mjs",
+    "manifests:normalize": "node scripts/normalize-manifests.mjs",
+    "predev": "npm run manifests:validate",
+    "prebuild": "npm run manifests:validate",
+    "pretest": "npm run manifests:validate"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^5.1.0",

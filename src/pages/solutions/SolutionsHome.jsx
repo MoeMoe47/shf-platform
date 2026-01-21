@@ -1,5 +1,19 @@
 import React from "react";
+import { loadManifest } from "@/apps/manifest/index.js";
 import { Link } from "react-router-dom";
+
+
+function toEntryHref(m, fallbackEntry) {
+  const entry = (m && typeof m.entry === "string" && m.entry.trim()) ? m.entry.trim() : fallbackEntry;
+  const homeHash = (m && typeof m.homeHash === "string" && m.homeHash.trim()) ? m.homeHash.trim() : "/";
+
+  // Normalize: entry should look like "/ai.html" and hash should look like "/job-compass"
+  const entryNorm = entry.startsWith("/") ? entry : ("/" + entry);
+  const hashNorm = homeHash.startsWith("/") ? homeHash : ("/" + homeHash);
+
+  // Final: "/ai.html#/job-compass"
+  return `${entryNorm}#${hashNorm}`;
+}
 
 const Card = ({ title, desc, tag, to }) => {
   const inner = (
@@ -25,6 +39,19 @@ const Card = ({ title, desc, tag, to }) => {
 };
 
 export default function SolutionsHome() {
+  
+  const aiHref = (() => {
+    try {
+      const m = loadManifest("ai");
+      return buildOpenHref(m) || "";
+    } catch {
+      return "";
+    }
+  })();
+
+const aiManifest = loadManifest("ai");
+  const aiHref = toEntryHref(aiManifest, "/ai.html");
+
   return (
     <div className="sh-solutions">
       <div className="sh-hero">
@@ -36,7 +63,11 @@ export default function SolutionsHome() {
         </p>
 
         <div className="sh-heroRow">
-          <a className="sh-btn" href="/ai.html#/job-compass">Open AI Workforce Compass</a>
+          {aiHref ? (
+          <a className="sh-btn" href={aiHref}>Open AI Workforce Compass</a>
+        ) : (
+          <button className="sh-btn" disabled title="AI app entry not available">Open AI Workforce Compass</button>
+        )}
           <div className="sh-muted">Map stays in AI app by design.</div>
         </div>
       </div>

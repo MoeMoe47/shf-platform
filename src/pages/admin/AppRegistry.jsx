@@ -1,5 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { getAppRegistry } from "@/apps/manifest/registry.js";
+import { buildOpenHref } from "@/apps/manifest/href.js";
+import { setAppOverride, clearAppOverride } from "@/apps/manifest/overrides.js";
 
 function pillClass(active) {
   return active ? "ar-pill ar-pillOn" : "ar-pill";
@@ -10,10 +12,23 @@ function capChip(on) {
 }
 
 export default function AppRegistry() {
+  const [tick, setTick] = React.useState(0);
+
+  function toggleEnabled(appId, nextEnabled) {
+    setAppOverride(appId, { enabled: !!nextEnabled });
+    setTick((n) => n + 1);
+  }
+
+  function resetEnabled(appId) {
+    clearAppOverride(appId);
+    setTick((n) => n + 1);
+  }
+
+
   const [query, setQuery] = useState("");
   const [showDisabled, setShowDisabled] = useState(true);
 
-  const registry = useMemo(() => getAppRegistry(), []);
+  const registry = useMemo(() => getAppRegistry(), [tick]);
   const list = useMemo(() => {
     const q = query.trim().toLowerCase();
 
@@ -24,7 +39,7 @@ export default function AppRegistry() {
         const match = !q || name.includes(q) || id.includes(q);
         if (!match) return false;
 
-        const enabled = (r.manifest?.enabled ?? true) === true;
+        const enabled = r.enabled === true;
         if (!showDisabled && !enabled) return false;
 
         return true;
@@ -65,15 +80,9 @@ export default function AppRegistry() {
       </header>
 
       <section className="ar-grid">
-        {list.map(({ id, manifest: m, caps }) => {
-          const enabled = (m?.enabled ?? true) === true;
-
-          const entry = m?.entry || "";
-          const homeHash = m?.homeHash || m?.hashBase || "/home";
-          const openHref =
-            typeof entry === "string" && entry.endsWith(".html")
-              ? `${entry}#${homeHash.startsWith("/") ? homeHash : `/${homeHash}`}`
-              : "";
+        {list.map(({ id, manifest: m, caps, enabled }) => {
+          
+          const openHref = buildOpenHref(m);
 
           return (
             <article key={id} className={enabled ? "ar-card" : "ar-card ar-cardDisabled"}>
@@ -125,6 +134,33 @@ export default function AppRegistry() {
                     No entry
                   </button>
                 )}
+                
+                <button
+                  className="ar-btn"
+                  onClick={() => toggleEnabled(id, true)}
+                  disabled={enabled}
+                  title="Enable this app (runtime override)"
+                >
+                  Enable
+                </button>
+
+                <button
+                  className="ar-btn"
+                  onClick={() => toggleEnabled(id, false)}
+                  disabled={!enabled}
+                  title="Disable this app (runtime override)"
+                >
+                  Disable
+                </button>
+
+                <button
+                  className="ar-btn ar-btnGhost"
+                  onClick={() => resetEnabled(id)}
+                  title="Reset override (revert to manifest default)"
+                >
+                  Reset
+                </button>
+  
 
                 <button
                   className="ar-btn ar-btnGhost"

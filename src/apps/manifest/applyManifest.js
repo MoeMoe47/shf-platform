@@ -9,26 +9,48 @@ function setClass(el, cls, on) {
 
 export function applyManifest(appId) {
   const m = loadManifest(appId);
-  const caps = computeCapabilityFlags(appId, m);
+  if (!m) throw new Error(`[manifest] loadManifest("${appId}") returned null/undefined`);
 
-  const docEl = document.documentElement;
-  docEl.dataset.app = appId;
-  docEl.dataset.contractVersion = String(m.contractVersion || 1);
-
-  setClass(docEl, "cap-map", caps.map);
-  setClass(docEl, "cap-ledger", caps.ledger);
-  setClass(docEl, "cap-analytics", caps.analytics);
-  setClass(docEl, "cap-payments", caps.payments);
-
-  window.__APP__ = {
-    id: appId,
-    manifest: m,
-    caps
-  };
-
-  if (typeof console !== "undefined") {
-    console.log("[manifest] applied", { appId, caps, contractVersion: m.contractVersion });
+  // 🔒 Contract must be explicit (no silent defaults)
+  if (m.contractVersion == null) {
+    throw new Error(`[manifest] "${m.id || appId}" missing required "contractVersion"`);
   }
 
-  return window.__APP__;
+  // ✅ Manifest is the source of truth for id
+  const id = String(m.id || appId).trim();
+
+  const caps = computeCapabilityFlags(id, m);
+
+  const docEl = document.documentElement;
+  docEl.dataset.app = id;
+  docEl.dataset.contractVersion = String(m.contractVersion);
+
+  setClass(docEl, "cap-map", !!caps.map);
+  setClass(docEl, "cap-ledger", !!caps.ledger);
+  setClass(docEl, "cap-analytics", !!caps.analytics);
+  setClass(docEl, "cap-payments", !!caps.payments);
+
+  const appObj = {
+    id,
+    manifest: m,
+    caps,
+    contractVersion: m.contractVersion
+  };
+
+  // Keep global (useful), but define it cleanly
+  try {
+    Object.defineProperty(window, "__APP__", {
+      value: appObj,
+      writable: true,
+      configurable: true
+    });
+  } catch {
+    window.__APP__ = appObj;
+  }
+
+  if (typeof console !== "undefined") {
+    console.log("[manifest] applied", { appId: id, caps, contractVersion: m.contractVersion });
+  }
+
+  return appObj;
 }

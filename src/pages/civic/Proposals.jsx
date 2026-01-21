@@ -1,5 +1,6 @@
 // src/pages/civic/Proposals.jsx
 import React from "react";
+import MissionLogButtons from "@/components/civic/MissionLogButtons.jsx";
 import { useToasts } from "@/context/Toasts.jsx";
 import { useRewards } from "@/hooks/useRewards.js";
 import { readJSON, saveJSON, logWallet } from "@/shared/rewards/history.js";
@@ -319,7 +320,16 @@ export default function Proposals() {
               ))}
             </div>
           )}
-        </section>
+        <MissionLogButtons
+  missionId="civic-proposals-mission"
+  missionTitle="Constitution Proposal Mission"
+  chapter="Constitution Lab 1"
+  defaultDuration={60}
+  defaultSummary=""
+  defaultOutcome=""
+/>
+
+</section>
       </div>
 
       <div style={{ marginTop: 10, fontSize: 12, opacity: .75 }}>

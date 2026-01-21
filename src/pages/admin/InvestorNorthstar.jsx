@@ -1,368 +1,185 @@
-// src/pages/admin/InvestorNorthstar.jsx
 import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { buildUnifiedLogSummary, APP_CONFIG, FUNDING_STREAM_LABELS } from "@/utils/logAggregator.js";
 
-const ADMIN_LOG_KEY = "shf.adminToolLogs.v1";
-const CIVIC_LOG_KEY = "shf.civicMissionLogs.v1";
-
-const APP_CONFIG = [
-  { id: "civic", label: "Civic", emoji: "🏛" },
-  { id: "career", label: "Career", emoji: "💼" },
-  { id: "curriculum", label: "Curriculum", emoji: "📚" },
-  { id: "arcade", label: "Arcade", emoji: "🕹️" },
-];
-
-const FUNDING_STREAM_LABELS = {
-  perkins: "Perkins V",
-  wioa: "WIOA",
-  essa: "ESSA Title IV",
-  medicaid: "Medicaid",
-  idea: "IDEA",
-  workforce: "Workforce",
-  philanthropy: "Philanthropy",
-  civics: "Civics / Democracy",
-};
-
-function readJSON(key, fallback) {
-  try {
-    const raw = localStorage.getItem(key);
-    if (!raw) return fallback;
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) || typeof parsed === "object" ? parsed : fallback;
-  } catch {
-    return fallback;
-  }
+function useQuery() {
+  const { search } = useLocation();
+  return React.useMemo(() => new URLSearchParams(search || ""), [search]);
 }
 
-function normalizeAppId(raw) {
-  if (!raw) return null;
-  const v = String(raw).toLowerCase();
-  if (v.includes("civic")) return "civic";
-  if (v.includes("career")) return "career";
-  if (v.includes("curriculum")) return "curriculum";
-  if (v.includes("arcade")) return "arcade";
-  return null;
+function clampMode(v) {
+  const x = String(v || "").toLowerCase().trim();
+  if (x === "public") return "public";
+  if (x === "funder") return "funder";
+  return "admin";
 }
 
-function normalizeFundingTag(tag) {
-  if (!tag) return null;
-  const v = String(tag).toLowerCase().trim();
-
-  if (v.startsWith("perkins")) return "perkins";
-  if (v.startsWith("wioa")) return "wioa";
-  if (v.startsWith("essa")) return "essa";
-  if (v.includes("medicaid")) return "medicaid";
-  if (v.startsWith("idea")) return "idea";
-  if (v.includes("workforce")) return "workforce";
-  if (v.includes("civic")) return "civics";
-  if (v.includes("philanth")) return "philanthropy";
-
-  return null;
-}
-
-function buildSummary() {
-  const adminLogs = readJSON(ADMIN_LOG_KEY, []);
-  const civicLogs = readJSON(CIVIC_LOG_KEY, []);
-
-  const civicTagged = (civicLogs || []).map((log) => ({
-    ...log,
-    _app: "civic",
-  }));
-
-  const adminTagged = (adminLogs || []).map((log) => {
-    const fallbackApp =
-      normalizeAppId(
-        log.appId ||
-          log.app ||
-          log.siteId ||
-          log.sourceApp ||
-          log.appSlug ||
-          log.source
-      ) || "admin";
-
-    return {
-      ...log,
-      _app: fallbackApp,
-    };
-  });
-
-  const allLogs = [...civicTagged, ...adminTagged];
-
-  const totalMinutes = allLogs.reduce(
-    (sum, log) => sum + Number(log.duration || 0),
-    0
-  );
-  const totalEntries = allLogs.length;
-
-  const minutesByApp = {};
-  const minutesByFunding = {};
-
-  APP_CONFIG.forEach((a) => {
-    minutesByApp[a.id] = 0;
-  });
-
-  for (const log of allLogs) {
-    const appId = log._app;
-    const duration = Number(log.duration || 0);
-
-    if (APP_CONFIG.some((a) => a.id === appId)) {
-      minutesByApp[appId] = (minutesByApp[appId] || 0) + duration;
-    }
-
-    const tags =
-      log.fundingStreams ||
-      log.fundingTags ||
-      log.fundingStream ||
-      log.tags ||
-      [];
-
-    (Array.isArray(tags) ? tags : [tags]).forEach((tag) => {
-      const norm = normalizeFundingTag(tag);
-      if (!norm) return;
-      minutesByFunding[norm] = (minutesByFunding[norm] || 0) + duration;
-    });
-  }
-
-  return {
-    totalMinutes,
-    totalEntries,
-    minutesByApp,
-    minutesByFunding,
-  };
+function redactNumbersForPublic(n, mode) {
+  const val = Number(n || 0);
+  if (mode === "admin") return val;
+  if (val <= 0) return 0;
+  if (val < 10) return "1–9";
+  if (val < 50) return "10–49";
+  if (val < 200) return "50–199";
+  if (val < 1000) return "200–999";
+  return "1000+";
 }
 
 export default function InvestorNorthstar() {
-  const [summary, setSummary] = React.useState(null);
+  const q = useQuery();
+  const navigate = useNavigate();
 
-  React.useEffect(() => {
-    const s = buildSummary();
-    setSummary(s);
-  }, []);
+  const identity = clampMode(q.get("identity") || "funder");
+  const app = (q.get("app") || "").trim().toLowerCase();
+  const funding = (q.get("funding") || "").trim().toLowerCase();
 
-  if (!summary) {
-    return (
-      <section className="app-main" aria-label="Investor dashboard loading">
-        <div className="card card--pad">Loading investor view…</div>
-      </section>
-    );
+  const summary = React.useMemo(() => {
+    return buildUnifiedLogSummary({
+      app: app || undefined,
+      funding: funding || undefined,
+    });
+  }, [app, funding]);
+
+  function setParam(next) {
+    const p = new URLSearchParams(q.toString());
+    Object.entries(next).forEach(([k, v]) => {
+      if (v === null || v === undefined || v === "") p.delete(k);
+      else p.set(k, String(v));
+    });
+    navigate({ search: `?${p.toString()}` }, { replace: true });
   }
 
-  const { totalMinutes, totalEntries, minutesByApp, minutesByFunding } = summary;
-
-  const fundingEntries = Object.entries(minutesByFunding).sort(
-    (a, b) => b[1] - a[1]
-  );
+  const totalMinutes = redactNumbersForPublic(summary.totalMinutes, identity);
+  const totalEntries = redactNumbersForPublic(summary.totalEntries, identity);
 
   return (
-    <section className="app-main" aria-labelledby="investor-ns-title">
+    <section className="app-main" aria-labelledby="inv-title">
       <header className="app-header">
         <div>
-          <h1 id="investor-ns-title">Investor &amp; Grant Northstar</h1>
+          <h1 id="inv-title">Investor / Grant Northstar</h1>
           <p className="app-subtitle">
-            Cross-app view of SHF usage by app and funding stream —
-            ready for pitch decks, grant portals, and board reports.
+            Cross-app outcomes view driven by the same unified analytics spine.
           </p>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            gap: 8,
-            flexWrap: "wrap",
-            alignItems: "center",
-          }}
-        >
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
           <span className="sh-badge">
-            Total minutes logged: <strong>{totalMinutes}</strong>
+            Total minutes: <strong>{String(totalMinutes)}</strong>
           </span>
           <span className="sh-badge is-ghost">
-            Total log entries: <strong>{totalEntries}</strong>
+            Total entries: <strong>{String(totalEntries)}</strong>
           </span>
-          <a
-            href="/admin.html#/binder"
-            className="sh-btn is-ghost"
-            style={{ fontSize: 13 }}
+
+          <select
+            className="sh-select"
+            value={identity}
+            onChange={(e) => setParam({ identity: e.target.value })}
+            style={{ minWidth: 180 }}
           >
+            <option value="admin">Admin mode</option>
+            <option value="funder">Funder-safe mode</option>
+            <option value="public">Public-safe mode</option>
+          </select>
+
+          <a className="sh-btn is-ghost" href="/admin.html#/binder" style={{ fontSize: 13 }}>
             Open Grant Binder →
           </a>
         </div>
       </header>
 
+      <div className="card card--pad" style={{ marginBottom: 12 }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gap: 10,
+            alignItems: "end",
+          }}
+        >
+          <div>
+            <div style={{ fontSize: 12, opacity: 0.75, marginBottom: 6 }}>App</div>
+            <select
+              className="sh-select"
+              value={app}
+              onChange={(e) => setParam({ app: e.target.value })}
+              style={{ width: "100%" }}
+            >
+              <option value="">All apps</option>
+              {APP_CONFIG.map((a) => (
+                <option key={a.id} value={a.id}>
+                  {a.emoji} {a.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <div style={{ fontSize: 12, opacity: 0.75, marginBottom: 6 }}>Funding Stream</div>
+            <select
+              className="sh-select"
+              value={funding}
+              onChange={(e) => setParam({ funding: e.target.value })}
+              style={{ width: "100%" }}
+            >
+              <option value="">All funding</option>
+              {Object.keys(FUNDING_STREAM_LABELS).map((k) => (
+                <option key={k} value={k}>
+                  {FUNDING_STREAM_LABELS[k]}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", alignItems: "center" }}>
+            <button className="sh-btn is-ghost" type="button" onClick={() => navigate({ search: "" }, { replace: true })}>
+              Clear
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div
         className="app-grid"
         style={{
           display: "grid",
-          gridTemplateColumns: "minmax(0, 1.2fr) minmax(0, 1fr)",
+          gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
           gap: 12,
         }}
       >
-        {/* By app slice */}
-        <article className="card card--pad" aria-label="By application">
-          <strong style={{ fontSize: 16 }}>Usage by application</strong>
-          <p style={{ fontSize: 13, opacity: 0.8, marginTop: 4 }}>
-            Each card shows total minutes of AI-assisted work or missions
-            in that app, with its share of all logged minutes.
-          </p>
+        {APP_CONFIG.map((appRow) => {
+          const a = summary.appSummaries[appRow.id];
+          const minutes = redactNumbersForPublic(a?.minutes || 0, identity);
+          const entries = redactNumbersForPublic(a?.entries || 0, identity);
 
-          <div
-            style={{
-              marginTop: 10,
-              display: "grid",
-              gap: 8,
-            }}
-          >
-            {APP_CONFIG.map((app) => {
-              const mins = minutesByApp[app.id] || 0;
-              const pct =
-                totalMinutes > 0
-                  ? Math.round((mins / totalMinutes) * 1000) / 10
-                  : 0;
+          const top = (a?.fundingTop || []).map((x) => FUNDING_STREAM_LABELS[x.id] || x.label);
 
-              return (
-                <div
-                  key={app.id}
-                  style={{
-                    padding: "6px 8px",
-                    borderRadius: 8,
-                    border: "1px solid var(--line,#e5e7eb)",
-                    background: "#fff",
-                    display: "grid",
-                    gap: 4,
-                  }}
+          return (
+            <article key={appRow.id} className="card card--pad" aria-label={`${appRow.label} investor metrics`}>
+              <div style={{ fontSize: 18 }}>
+                <span style={{ marginRight: 8 }}>{appRow.emoji}</span>
+                {appRow.label}
+              </div>
+
+              <div style={{ fontSize: 12, opacity: 0.75, marginTop: 4 }}>
+                Minutes: <strong>{String(minutes)}</strong> · Entries: <strong>{String(entries)}</strong>
+              </div>
+
+              <div style={{ marginTop: 8, fontSize: 11, opacity: 0.8 }}>
+                Top funding signals: {top.length ? top.join(", ") : "—"}
+              </div>
+
+              <div style={{ marginTop: 10, display: "flex", justifyContent: "flex-end" }}>
+                <a
+                  className="sh-btn is-ghost"
+                  href={`/admin.html#/binder?app=${encodeURIComponent(appRow.id)}&identity=${encodeURIComponent(identity)}`}
+                  style={{ fontSize: 12 }}
                 >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "baseline",
-                    }}
-                  >
-                    <div style={{ fontSize: 14 }}>
-                      <span style={{ marginRight: 6 }}>{app.emoji}</span>
-                      {app.label}
-                    </div>
-                    <div style={{ fontSize: 11, opacity: 0.8 }}>
-                      {mins} min · {pct.toFixed(1)}%
-                    </div>
-                  </div>
-                  <div
-                    style={{
-                      height: 6,
-                      borderRadius: 999,
-                      background: "#e5e7eb",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: `${Math.max(0, Math.min(100, pct))}%`,
-                        height: "100%",
-                        background: "var(--brand,#22c55e)",
-                      }}
-                    />
-                  </div>
-                  <div style={{ marginTop: 2, fontSize: 11 }}>
-                    <a
-                      href={`/admin.html#/binder?app=${encodeURIComponent(
-                        app.id
-                      )}`}
-                      className="sh-link"
-                    >
-                      View {app.label} logs in Grant Binder →
-                    </a>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </article>
-
-        {/* By funding stream slice */}
-        <article className="card card--pad" aria-label="By funding stream">
-          <strong style={{ fontSize: 16 }}>Usage by funding stream</strong>
-          <p style={{ fontSize: 13, opacity: 0.8, marginTop: 4 }}>
-            Minutes tagged to Perkins, WIOA, ESSA, Medicaid, IDEA,
-            workforce, philanthropy, and civics narratives.
-          </p>
-
-          {fundingEntries.length === 0 ? (
-            <div
-              style={{
-                marginTop: 8,
-                fontSize: 12,
-                opacity: 0.75,
-              }}
-            >
-              No funding tags yet. Use the Funding presets in the Tool
-              Dashboard to start tagging sessions and missions.
-            </div>
-          ) : (
-            <div
-              style={{
-                marginTop: 8,
-                display: "grid",
-                gap: 6,
-              }}
-            >
-              {fundingEntries.map(([id, minutes]) => {
-                const label = FUNDING_STREAM_LABELS[id] || id;
-                const pct =
-                  totalMinutes > 0
-                    ? Math.round((minutes / totalMinutes) * 1000) / 10
-                    : 0;
-
-                return (
-                  <div
-                    key={id}
-                    style={{
-                      display: "grid",
-                      gap: 2,
-                      fontSize: 12,
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "baseline",
-                      }}
-                    >
-                      <span>{label}</span>
-                      <span style={{ opacity: 0.8 }}>
-                        {minutes} min · {pct.toFixed(1)}%
-                      </span>
-                    </div>
-                    <div
-                      style={{
-                        height: 6,
-                        borderRadius: 999,
-                        background: "#e5e7eb",
-                        overflow: "hidden",
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: `${Math.max(0, Math.min(100, pct))}%`,
-                          height: "100%",
-                          background: "#0ea5e9",
-                        }}
-                      />
-                    </div>
-                    <div style={{ fontSize: 11 }}>
-                      <a
-                        href={`/admin.html#/binder?funding=${encodeURIComponent(
-                          id
-                        )}`}
-                        className="sh-link"
-                      >
-                        View {label} logs in Grant Binder →
-                      </a>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </article>
+                  View in Binder →
+                </a>
+              </div>
+            </article>
+          );
+        })}
       </div>
     </section>
   );

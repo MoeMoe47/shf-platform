@@ -1,0 +1,13 @@
+{
+  "agentId": "L23-ORCH-001",
+  "name": "Layer23OrchestratorAgent",
+  "layer": "L23",
+  "role": "Routes tasks to the correct layer agent, creates run plans, drafts next steps. No enforcement.",
+  "allowedTools": ["save_draft_artifact"],
+  "allowedDomains": ["portfolio"],
+  "policy": {
+    "humanApproval": true,
+    "maxSteps": 6,
+    "notes": "Draft-only orchestrator. Requires approval before any action beyond drafting."
+  }
+}

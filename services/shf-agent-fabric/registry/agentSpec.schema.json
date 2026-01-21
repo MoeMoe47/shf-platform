@@ -1,0 +1,21 @@
+{
+  "type": "object",
+  "required": ["agentId","name","layer","role","allowedTools","allowedDomains","policy"],
+  "properties": {
+    "agentId": {"type":"string"},
+    "name": {"type":"string"},
+    "layer": {"type":"string"},
+    "role": {"type":"string"},
+    "allowedTools": {"type":"array","items":{"type":"string"}},
+    "allowedDomains": {"type":"array","items":{"type":"string"}},
+    "policy": {
+      "type":"object",
+      "required":["humanApproval","maxSteps","notes"],
+      "properties": {
+        "humanApproval":{"type":"boolean"},
+        "maxSteps":{"type":"integer"},
+        "notes":{"type":"string"}
+      }
+    }
+  }
+}

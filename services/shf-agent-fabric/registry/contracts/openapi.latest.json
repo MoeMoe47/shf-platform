@@ -1,0 +1,3547 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "SHF Agent Fabric",
+        "version": "0.1.0"
+    },
+    "paths": {
+        "/align/run": {
+            "post": {
+                "tags": [
+                    "alignment"
+                ],
+                "summary": "Run",
+                "operationId": "run_align_run_post",
+                "parameters": [
+                    {
+                        "name": "x-app-key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "X-App-Key"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AlignRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AlignResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/align/apps": {
+            "get": {
+                "tags": [
+                    "alignment-admin"
+                ],
+                "summary": "Apps",
+                "operationId": "apps_admin_align_apps_get",
+                "parameters": [
+                    {
+                        "name": "x-admin-key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "X-Admin-Key"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/align/apps/{app_id}/state": {
+            "patch": {
+                "tags": [
+                    "alignment-admin"
+                ],
+                "summary": "Set State",
+                "operationId": "set_state_admin_align_apps__app_id__state_patch",
+                "parameters": [
+                    {
+                        "name": "app_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "App Id"
+                        }
+                    },
+                    {
+                        "name": "x-admin-key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "X-Admin-Key"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchState"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/align/containment": {
+            "get": {
+                "tags": [
+                    "alignment-admin"
+                ],
+                "summary": "Get Containment",
+                "operationId": "get_containment_admin_align_containment_get",
+                "parameters": [
+                    {
+                        "name": "x-admin-key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "X-Admin-Key"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "alignment-admin"
+                ],
+                "summary": "Patch Containment",
+                "operationId": "patch_containment_admin_align_containment_patch",
+                "parameters": [
+                    {
+                        "name": "x-admin-key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "X-Admin-Key"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchContainment"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/align/containment/apps/{app_id}/{state}": {
+            "post": {
+                "tags": [
+                    "alignment-admin"
+                ],
+                "summary": "Force App",
+                "operationId": "force_app_admin_align_containment_apps__app_id___state__post",
+                "parameters": [
+                    {
+                        "name": "app_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "App Id"
+                        }
+                    },
+                    {
+                        "name": "state",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "enum": [
+                                "OFF",
+                                "LIMITED",
+                                "ON"
+                            ],
+                            "type": "string",
+                            "title": "State"
+                        }
+                    },
+                    {
+                        "name": "x-admin-key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "X-Admin-Key"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/align/containment/apps/{app_id}": {
+            "delete": {
+                "tags": [
+                    "alignment-admin"
+                ],
+                "summary": "Clear Forced",
+                "operationId": "clear_forced_admin_align_containment_apps__app_id__delete",
+                "parameters": [
+                    {
+                        "name": "app_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "App Id"
+                        }
+                    },
+                    {
+                        "name": "x-admin-key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "X-Admin-Key"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/align/plans": {
+            "get": {
+                "tags": [
+                    "alignment-admin-plans"
+                ],
+                "summary": "List Plans",
+                "operationId": "list_plans_admin_align_plans_get",
+                "parameters": [
+                    {
+                        "name": "X-Admin-Key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "X-Admin-Key"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/align/plans/{plan_id}/validate": {
+            "post": {
+                "tags": [
+                    "alignment-admin-plans"
+                ],
+                "summary": "Admin Validate",
+                "operationId": "admin_validate_admin_align_plans__plan_id__validate_post",
+                "parameters": [
+                    {
+                        "name": "plan_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Plan Id"
+                        }
+                    },
+                    {
+                        "name": "X-Admin-Key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "X-Admin-Key"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/align/plans/{plan_id}/dry-run": {
+            "post": {
+                "tags": [
+                    "alignment-admin-plans"
+                ],
+                "summary": "Admin Dry Run",
+                "operationId": "admin_dry_run_admin_align_plans__plan_id__dry_run_post",
+                "parameters": [
+                    {
+                        "name": "plan_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Plan Id"
+                        }
+                    },
+                    {
+                        "name": "X-Admin-Key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "X-Admin-Key"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/align/plans/{plan_id}/approve-execute": {
+            "post": {
+                "tags": [
+                    "alignment-admin-plans"
+                ],
+                "summary": "Admin Approve Execute",
+                "operationId": "admin_approve_execute_admin_align_plans__plan_id__approve_execute_post",
+                "parameters": [
+                    {
+                        "name": "plan_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Plan Id"
+                        }
+                    },
+                    {
+                        "name": "X-Admin-Key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "X-Admin-Key"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ApproveExecuteBody"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/apps": {
+            "get": {
+                "tags": [
+                    "api:v1"
+                ],
+                "summary": "List Apps",
+                "operationId": "list_apps_api_v1_apps_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/curriculum/chapters": {
+            "get": {
+                "tags": [
+                    "api:v1"
+                ],
+                "summary": "List Chapters",
+                "operationId": "list_chapters_api_v1_curriculum_chapters_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/curriculum/chapters/{curriculum_id}/{chapter}": {
+            "get": {
+                "tags": [
+                    "api:v1"
+                ],
+                "summary": "Get Chapter",
+                "operationId": "get_chapter_api_v1_curriculum_chapters__curriculum_id___chapter__get",
+                "parameters": [
+                    {
+                        "name": "curriculum_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Curriculum Id"
+                        }
+                    },
+                    {
+                        "name": "chapter",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "title": "Chapter"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/status": {
+            "get": {
+                "summary": "Status",
+                "operationId": "status_status_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loo/health": {
+            "get": {
+                "tags": [
+                    "loo"
+                ],
+                "summary": "Health",
+                "operationId": "health_loo_health_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loo/validate": {
+            "post": {
+                "tags": [
+                    "loo"
+                ],
+                "summary": "Validate Loo",
+                "operationId": "validate_loo_loo_validate_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LooValidateBody"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loo/score": {
+            "post": {
+                "tags": [
+                    "loo"
+                ],
+                "summary": "Score Loo",
+                "operationId": "score_loo_loo_score_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LooScoreBody"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loo/score_run": {
+            "post": {
+                "tags": [
+                    "loo"
+                ],
+                "summary": "Score Loo Run",
+                "operationId": "score_loo_run_loo_score_run_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LooScoreRunBody"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/artifacts/{artifact_id}": {
+            "get": {
+                "tags": [
+                    "artifacts"
+                ],
+                "summary": "Get Artifact",
+                "operationId": "get_artifact_artifacts__artifact_id__get",
+                "parameters": [
+                    {
+                        "name": "artifact_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Artifact Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/agents": {
+            "get": {
+                "summary": "Agents",
+                "operationId": "agents_agents_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/plan": {
+            "post": {
+                "summary": "Create Plan",
+                "operationId": "create_plan_plan_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PlanRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/plans/recent": {
+            "get": {
+                "summary": "Recent Plans",
+                "operationId": "recent_plans_plans_recent_get",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10,
+                            "title": "Limit"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/plan/{plan_id}": {
+            "get": {
+                "summary": "Get Plan",
+                "operationId": "get_plan_plan__plan_id__get",
+                "parameters": [
+                    {
+                        "name": "plan_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Plan Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/plan/{plan_id}/approve": {
+            "post": {
+                "summary": "Approve Plan",
+                "operationId": "approve_plan_plan__plan_id__approve_post",
+                "parameters": [
+                    {
+                        "name": "plan_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Plan Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/plan/{plan_id}/reject": {
+            "post": {
+                "summary": "Reject Plan",
+                "operationId": "reject_plan_plan__plan_id__reject_post",
+                "parameters": [
+                    {
+                        "name": "plan_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Plan Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/run": {
+            "post": {
+                "tags": [
+                    "run"
+                ],
+                "summary": "Run",
+                "operationId": "run_run_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RunBody"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/runs/reports/{run_id}/policy": {
+            "get": {
+                "tags": [
+                    "runs-report"
+                ],
+                "summary": "Get Run Policy",
+                "operationId": "get_run_policy_runs_reports__run_id__policy_get",
+                "parameters": [
+                    {
+                        "name": "run_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Run Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/runs/reports/{run_id}/publish": {
+            "post": {
+                "tags": [
+                    "runs-report"
+                ],
+                "summary": "Publish Report",
+                "operationId": "publish_report_runs_reports__run_id__publish_post",
+                "parameters": [
+                    {
+                        "name": "run_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Run Id"
+                        }
+                    },
+                    {
+                        "name": "x-force",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "X-Force"
+                        }
+                    },
+                    {
+                        "name": "x-force-reason",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "X-Force-Reason"
+                        }
+                    },
+                    {
+                        "name": "x-admin-key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "title": "X-Admin-Key"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/runs/published/{run_id}": {
+            "get": {
+                "tags": [
+                    "runs-report"
+                ],
+                "summary": "Published Report",
+                "operationId": "published_report_runs_published__run_id__get",
+                "parameters": [
+                    {
+                        "name": "run_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Run Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/runs/published/{run_id}/pdf": {
+            "get": {
+                "tags": [
+                    "runs-report"
+                ],
+                "summary": "Published Pdf",
+                "operationId": "published_pdf_runs_published__run_id__pdf_get",
+                "parameters": [
+                    {
+                        "name": "run_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Run Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/runs/published/{run_id}/proof": {
+            "get": {
+                "tags": [
+                    "runs-report"
+                ],
+                "summary": "Published Proof",
+                "operationId": "published_proof_runs_published__run_id__proof_get",
+                "parameters": [
+                    {
+                        "name": "run_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Run Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/runs/public/{run_id}": {
+            "get": {
+                "tags": [
+                    "runs-report"
+                ],
+                "summary": "Runs Public",
+                "operationId": "runs_public_runs_public__run_id__get",
+                "parameters": [
+                    {
+                        "name": "run_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Run Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tools": {
+            "get": {
+                "tags": [
+                    "tools"
+                ],
+                "summary": "Tools",
+                "operationId": "tools_tools_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/runs/validate": {
+            "post": {
+                "tags": [
+                    "runs"
+                ],
+                "summary": "Validate Run",
+                "operationId": "validate_run_runs_validate_post",
+                "parameters": [
+                    {
+                        "name": "X-Admin-Key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "X-Admin-Key"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "additionalProperties": true,
+                                "title": "Payload"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/runs/dry-run": {
+            "post": {
+                "tags": [
+                    "runs"
+                ],
+                "summary": "Dry Run",
+                "operationId": "dry_run_runs_dry_run_post",
+                "parameters": [
+                    {
+                        "name": "X-Admin-Key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "X-Admin-Key"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "additionalProperties": true,
+                                "title": "Payload"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/runs/execute": {
+            "post": {
+                "tags": [
+                    "runs"
+                ],
+                "summary": "Execute Run",
+                "operationId": "execute_run_runs_execute_post",
+                "parameters": [
+                    {
+                        "name": "X-Admin-Key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "X-Admin-Key"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "additionalProperties": true,
+                                "title": "Payload"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/runs/recent": {
+            "get": {
+                "tags": [
+                    "runs"
+                ],
+                "summary": "Recent Runs",
+                "operationId": "recent_runs_runs_recent_get",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 50,
+                            "title": "Limit"
+                        }
+                    },
+                    {
+                        "name": "X-Admin-Key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "X-Admin-Key"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/runs/loo/validate": {
+            "post": {
+                "tags": [
+                    "runs"
+                ],
+                "summary": "Loo Validate",
+                "operationId": "loo_validate_runs_loo_validate_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "additionalProperties": true,
+                                "type": "object",
+                                "title": "Body"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/agents": {
+            "get": {
+                "tags": [
+                    "admin-agents"
+                ],
+                "summary": "Admin List Agents",
+                "operationId": "admin_list_agents_admin_agents_get",
+                "parameters": [
+                    {
+                        "name": "x-admin-key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "title": "X-Admin-Key"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/agents/{name}/enabled": {
+            "get": {
+                "tags": [
+                    "admin-agents"
+                ],
+                "summary": "Admin Get Agent Enabled",
+                "operationId": "admin_get_agent_enabled_admin_agents__name__enabled_get",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Name"
+                        }
+                    },
+                    {
+                        "name": "x-admin-key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "title": "X-Admin-Key"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "admin-agents"
+                ],
+                "summary": "Admin Set Agent Enabled",
+                "operationId": "admin_set_agent_enabled_admin_agents__name__enabled_post",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Name"
+                        }
+                    },
+                    {
+                        "name": "x-admin-key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "title": "X-Admin-Key"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EnabledBody"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/layers": {
+            "get": {
+                "tags": [
+                    "admin-layers"
+                ],
+                "summary": "List Layers",
+                "operationId": "list_layers_admin_layers_get",
+                "parameters": [
+                    {
+                        "name": "x-admin-key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "title": "X-Admin-Key"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/layers/{layer}/enabled": {
+            "get": {
+                "tags": [
+                    "admin-layers"
+                ],
+                "summary": "Read Layer",
+                "operationId": "read_layer_admin_layers__layer__enabled_get",
+                "parameters": [
+                    {
+                        "name": "layer",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Layer"
+                        }
+                    },
+                    {
+                        "name": "x-admin-key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "title": "X-Admin-Key"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "admin-layers"
+                ],
+                "summary": "Update Layer",
+                "operationId": "update_layer_admin_layers__layer__enabled_post",
+                "parameters": [
+                    {
+                        "name": "layer",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Layer"
+                        }
+                    },
+                    {
+                        "name": "x-admin-key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "title": "X-Admin-Key"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EnabledBody"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/feedback": {
+            "post": {
+                "summary": "Create Feedback",
+                "operationId": "create_feedback_feedback_post",
+                "parameters": [
+                    {
+                        "name": "X-Admin-Key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "X-Admin-Key"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FeedbackBody"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/reports/snapshot": {
+            "get": {
+                "tags": [
+                    "reports"
+                ],
+                "summary": "Snapshot",
+                "operationId": "snapshot_reports_snapshot_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/reports/usage.csv": {
+            "get": {
+                "tags": [
+                    "reports"
+                ],
+                "summary": "Usage Csv",
+                "operationId": "usage_csv_reports_usage_csv_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/reports/containment.csv": {
+            "get": {
+                "tags": [
+                    "reports"
+                ],
+                "summary": "Containment Csv",
+                "operationId": "containment_csv_reports_containment_csv_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/reports/outcomes.csv": {
+            "get": {
+                "tags": [
+                    "reports"
+                ],
+                "summary": "Outcomes Csv",
+                "operationId": "outcomes_csv_reports_outcomes_csv_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/reports/system.csv": {
+            "get": {
+                "tags": [
+                    "reports"
+                ],
+                "summary": "System Csv",
+                "operationId": "system_csv_reports_system_csv_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/health": {
+            "get": {
+                "summary": "Health",
+                "operationId": "health_health_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/force/status": {
+            "get": {
+                "tags": [
+                    "admin-force"
+                ],
+                "summary": "Force Status",
+                "operationId": "force_status_admin_force_status_get",
+                "parameters": [
+                    {
+                        "name": "x-admin-key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "title": "X-Admin-Key"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loe/health": {
+            "get": {
+                "tags": [
+                    "loe"
+                ],
+                "summary": "Loe Health",
+                "operationId": "loe_health_loe_health_get",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 200000,
+                            "minimum": 10,
+                            "default": 5000,
+                            "title": "Limit"
+                        }
+                    },
+                    {
+                        "name": "app_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "App Id"
+                        }
+                    },
+                    {
+                        "name": "run_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Run Id"
+                        }
+                    },
+                    {
+                        "name": "since",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Since"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loe/signals": {
+            "get": {
+                "tags": [
+                    "loe"
+                ],
+                "summary": "Loe Signals",
+                "operationId": "loe_signals_loe_signals_get",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 200000,
+                            "minimum": 10,
+                            "default": 5000,
+                            "title": "Limit"
+                        }
+                    },
+                    {
+                        "name": "app_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "App Id"
+                        }
+                    },
+                    {
+                        "name": "run_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Run Id"
+                        }
+                    },
+                    {
+                        "name": "since",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Since"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/predict/health": {
+            "get": {
+                "tags": [
+                    "predict"
+                ],
+                "summary": "Predict Health",
+                "operationId": "predict_health_predict_health_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/predict/forecast": {
+            "get": {
+                "tags": [
+                    "predict"
+                ],
+                "summary": "Predict Forecast",
+                "operationId": "predict_forecast_predict_forecast_get",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 200000,
+                            "minimum": 10,
+                            "default": 5000,
+                            "title": "Limit"
+                        }
+                    },
+                    {
+                        "name": "app_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "App Id"
+                        }
+                    },
+                    {
+                        "name": "run_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Run Id"
+                        }
+                    },
+                    {
+                        "name": "since",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Since"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "predict"
+                ],
+                "summary": "Predict Forecast Post",
+                "operationId": "predict_forecast_post_predict_forecast_post",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PredictBody"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/predict/forecast_run": {
+            "post": {
+                "tags": [
+                    "predict"
+                ],
+                "summary": "Predict Forecast Run",
+                "operationId": "predict_forecast_run_predict_forecast_run_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PredictRunBody"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/events/ingest": {
+            "post": {
+                "tags": [
+                    "events"
+                ],
+                "summary": "Ingest",
+                "operationId": "ingest_events_ingest_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EventBody"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/events/normalize": {
+            "post": {
+                "tags": [
+                    "events"
+                ],
+                "summary": "Normalize Only",
+                "operationId": "normalize_only_events_normalize_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EventBody"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/runs/health": {
+            "get": {
+                "tags": [
+                    "runs"
+                ],
+                "summary": "Runs Health",
+                "operationId": "runs_health_runs_health_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/runs/register": {
+            "post": {
+                "tags": [
+                    "runs"
+                ],
+                "summary": "Runs Register",
+                "operationId": "runs_register_runs_register_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RunRegisterBody"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/runs": {
+            "get": {
+                "tags": [
+                    "runs"
+                ],
+                "summary": "Runs List",
+                "operationId": "runs_list_runs_get",
+                "parameters": [
+                    {
+                        "name": "app_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "App Id"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 500,
+                            "minimum": 1,
+                            "default": 50,
+                            "title": "Limit"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/runs/{run_id}": {
+            "get": {
+                "tags": [
+                    "runs"
+                ],
+                "summary": "Runs Get",
+                "operationId": "runs_get_runs__run_id__get",
+                "parameters": [
+                    {
+                        "name": "run_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Run Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/runs/{run_id}/loo_payload": {
+            "get": {
+                "tags": [
+                    "runs-loo-payload"
+                ],
+                "summary": "Get Loo Payload",
+                "operationId": "get_loo_payload_runs__run_id__loo_payload_get",
+                "parameters": [
+                    {
+                        "name": "run_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Run Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "runs-loo-payload"
+                ],
+                "summary": "Set Loo Payload",
+                "operationId": "set_loo_payload_runs__run_id__loo_payload_post",
+                "parameters": [
+                    {
+                        "name": "run_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Run Id"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LooPayloadBody"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AlignRequest": {
+                "properties": {
+                    "app_id": {
+                        "type": "string",
+                        "title": "App Id"
+                    },
+                    "user_id": {
+                        "type": "string",
+                        "title": "User Id"
+                    },
+                    "request_id": {
+                        "type": "string",
+                        "title": "Request Id"
+                    },
+                    "purpose": {
+                        "type": "string",
+                        "title": "Purpose"
+                    },
+                    "risk_level": {
+                        "type": "string",
+                        "enum": [
+                            "low",
+                            "medium",
+                            "high"
+                        ],
+                        "title": "Risk Level",
+                        "default": "low"
+                    },
+                    "requested_agents": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Requested Agents"
+                    },
+                    "requested_capabilities": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Requested Capabilities"
+                    },
+                    "payload": {
+                        "additionalProperties": true,
+                        "type": "object",
+                        "title": "Payload"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "app_id",
+                    "user_id",
+                    "request_id",
+                    "purpose"
+                ],
+                "title": "AlignRequest"
+            },
+            "AlignResponse": {
+                "properties": {
+                    "request_id": {
+                        "type": "string",
+                        "title": "Request Id"
+                    },
+                    "decision": {
+                        "type": "string",
+                        "enum": [
+                            "allowed",
+                            "blocked",
+                            "allowed_with_limits"
+                        ],
+                        "title": "Decision"
+                    },
+                    "reason": {
+                        "type": "string",
+                        "title": "Reason"
+                    },
+                    "enforced_state": {
+                        "type": "string",
+                        "enum": [
+                            "OFF",
+                            "LIMITED",
+                            "ON"
+                        ],
+                        "title": "Enforced State"
+                    },
+                    "limits_applied": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Limits Applied"
+                    },
+                    "result": {
+                        "additionalProperties": true,
+                        "type": "object",
+                        "title": "Result"
+                    },
+                    "audit_ref": {
+                        "type": "string",
+                        "title": "Audit Ref",
+                        "default": ""
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "request_id",
+                    "decision",
+                    "reason",
+                    "enforced_state"
+                ],
+                "title": "AlignResponse"
+            },
+            "ApproveExecuteBody": {
+                "properties": {
+                    "approved": {
+                        "type": "boolean",
+                        "title": "Approved",
+                        "default": true
+                    }
+                },
+                "type": "object",
+                "title": "ApproveExecuteBody"
+            },
+            "EnabledBody": {
+                "properties": {
+                    "enabled": {
+                        "type": "boolean",
+                        "title": "Enabled"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "enabled"
+                ],
+                "title": "EnabledBody"
+            },
+            "EventBody": {
+                "properties": {
+                    "event": {
+                        "additionalProperties": true,
+                        "type": "object",
+                        "title": "Event"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "event"
+                ],
+                "title": "EventBody"
+            },
+            "FeedbackBody": {
+                "properties": {
+                    "kind": {
+                        "type": "string",
+                        "title": "Kind",
+                        "default": "feedback"
+                    },
+                    "outcome": {
+                        "type": "string",
+                        "title": "Outcome",
+                        "default": "ok"
+                    },
+                    "agentName": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Agentname"
+                    },
+                    "agentId": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Agentid"
+                    },
+                    "layer": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Layer"
+                    },
+                    "message": {
+                        "type": "string",
+                        "title": "Message",
+                        "default": ""
+                    },
+                    "requestId": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Requestid"
+                    },
+                    "meta": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": true,
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Meta"
+                    }
+                },
+                "type": "object",
+                "title": "FeedbackBody"
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "LooPayloadBody": {
+                "properties": {
+                    "payload": {
+                        "additionalProperties": true,
+                        "type": "object",
+                        "title": "Payload"
+                    }
+                },
+                "type": "object",
+                "title": "LooPayloadBody"
+            },
+            "LooScoreBody": {
+                "properties": {
+                    "payload": {
+                        "additionalProperties": true,
+                        "type": "object",
+                        "title": "Payload"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "payload"
+                ],
+                "title": "LooScoreBody"
+            },
+            "LooScoreRunBody": {
+                "properties": {
+                    "run_id": {
+                        "type": "string",
+                        "minLength": 3,
+                        "title": "Run Id"
+                    },
+                    "payload": {
+                        "additionalProperties": true,
+                        "type": "object",
+                        "title": "Payload"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "run_id",
+                    "payload"
+                ],
+                "title": "LooScoreRunBody"
+            },
+            "LooValidateBody": {
+                "properties": {
+                    "schema_name": {
+                        "additionalProperties": true,
+                        "type": "object",
+                        "title": "Schema Name"
+                    },
+                    "payload": {
+                        "additionalProperties": true,
+                        "type": "object",
+                        "title": "Payload"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "schema_name",
+                    "payload"
+                ],
+                "title": "LooValidateBody"
+            },
+            "PatchContainment": {
+                "properties": {
+                    "block_agents": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Block Agents"
+                    },
+                    "block_capabilities": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Block Capabilities"
+                    }
+                },
+                "type": "object",
+                "title": "PatchContainment"
+            },
+            "PatchState": {
+                "properties": {
+                    "state": {
+                        "type": "string",
+                        "enum": [
+                            "OFF",
+                            "LIMITED",
+                            "ON"
+                        ],
+                        "title": "State"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "state"
+                ],
+                "title": "PatchState"
+            },
+            "PlanRequest": {
+                "properties": {
+                    "agentName": {
+                        "type": "string",
+                        "minLength": 1,
+                        "title": "Agentname"
+                    },
+                    "input": {
+                        "additionalProperties": true,
+                        "type": "object",
+                        "title": "Input"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "agentName"
+                ],
+                "title": "PlanRequest"
+            },
+            "PredictBody": {
+                "properties": {
+                    "loo_score": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": true,
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Loo Score"
+                    },
+                    "limit": {
+                        "type": "integer",
+                        "title": "Limit",
+                        "default": 5000
+                    },
+                    "app_id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "App Id"
+                    },
+                    "run_id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Run Id"
+                    },
+                    "since": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Since"
+                    }
+                },
+                "type": "object",
+                "title": "PredictBody"
+            },
+            "PredictRunBody": {
+                "properties": {
+                    "run_id": {
+                        "type": "string",
+                        "title": "Run Id"
+                    },
+                    "loo_payload": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": true,
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Loo Payload"
+                    },
+                    "limit": {
+                        "type": "integer",
+                        "title": "Limit",
+                        "default": 5000
+                    },
+                    "since": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Since"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "run_id"
+                ],
+                "title": "PredictRunBody"
+            },
+            "RunBody": {
+                "properties": {
+                    "agentName": {
+                        "type": "string",
+                        "title": "Agentname"
+                    },
+                    "input": {
+                        "additionalProperties": true,
+                        "type": "object",
+                        "title": "Input"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "agentName",
+                    "input"
+                ],
+                "title": "RunBody"
+            },
+            "RunRegisterBody": {
+                "properties": {
+                    "run_id": {
+                        "type": "string",
+                        "minLength": 3,
+                        "title": "Run Id"
+                    },
+                    "app_id": {
+                        "type": "string",
+                        "minLength": 2,
+                        "title": "App Id"
+                    },
+                    "name": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Name"
+                    },
+                    "owner": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Owner"
+                    },
+                    "mode": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Mode",
+                        "description": "pilot | system | dev"
+                    },
+                    "start_ts": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Start Ts",
+                        "description": "ISO timestamp string"
+                    },
+                    "end_ts": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "End Ts",
+                        "description": "ISO timestamp string"
+                    },
+                    "targets": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": true,
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Targets"
+                    },
+                    "meta": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": true,
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Meta"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "run_id",
+                    "app_id"
+                ],
+                "title": "RunRegisterBody"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        }
+    }
+}

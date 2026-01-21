@@ -1,0 +1,9 @@
+.shf-admin-badge{display:inline-flex;align-items:center;gap:8px;margin-left:10px;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.2px;border:1px solid rgba(255,106,0,.35);background:rgba(255,106,0,.12);color:#b84a00}
+.shf-confirm-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;z-index:9999}
+.shf-confirm-modal{width:min(520px,92vw);background:#fff;border-radius:18px;padding:18px;box-shadow:0 30px 90px rgba(0,0,0,.25)}
+.shf-confirm-title{font-size:18px;font-weight:800}
+.shf-confirm-desc{opacity:.8}
+.shf-confirm-input{width:100%;padding:10px;border-radius:12px;border:1px solid rgba(0,0,0,.15)}
+.shf-confirm-btn{padding:10px 12px;border-radius:12px;border:1px solid rgba(0,0,0,.12);font-weight:700}
+.shf-confirm-btn.primary{background:#ff6a00;color:#fff;border-color:#ff6a00}
+.shf-confirm-btn.primary[disabled]{opacity:.5}

@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+RUN_ID="{{RUN_ID}}"
+BASE_URL="{{BASE_URL}}"
+PYTHON_BIN="${PYTHON_BIN:-python3}"
+
+PROOF_JSON="$(curl -fsSL "$BASE_URL/runs/report/$RUN_ID/proof")"
+
+REPORT_SHA="$(printf '%s' "$PROOF_JSON" | "$PYTHON_BIN" -c 'import json,sys; p=json.load(sys.stdin); print(p.get("report_sha256",""))')"
+PDF_SHA="$(printf '%s' "$PROOF_JSON" | "$PYTHON_BIN" -c 'import json,sys; p=json.load(sys.stdin); print(p.get("pdf_sha256",""))')"
+
+REPORT_URL="$BASE_URL/runs/report/$RUN_ID"
+PDF_URL="$BASE_URL/runs/report/$RUN_ID/pdf"
+
+TMPDIR="$(mktemp -d)"
+trap "rm -rf $TMPDIR" EXIT
+
+curl -fsSL "$REPORT_URL" -o "$TMPDIR/report.json"
+curl -fsSL "$PDF_URL" -o "$TMPDIR/report.pdf"
+
+REPORT_HASH="$("$PYTHON_BIN" -c 'import json,hashlib,sys; p=json.load(open(sys.argv[1])); s=json.dumps(p,sort_keys=True,separators=(",",":"),ensure_ascii=False).encode("utf-8"); print(hashlib.sha256(s).hexdigest())' "$TMPDIR/report.json")"
+
+PDF_HASH="$("$PYTHON_BIN" -c 'import hashlib,re,sys; b=open(sys.argv[1],"rb").read(); ix=b.rfind(b"\nxref"); b=b[:ix] if ix!=-1 else b; b=re.sub(br"/CreationDate\s*\(D:[^)]+\)",b"",b); b=re.sub(br"/ModDate\s*\(D:[^)]+\)",b"",b); b=re.sub(br"/ID\s*\[[^\]]+\]",b"",b); print(hashlib.sha256(b).hexdigest())' "$TMPDIR/report.pdf")"
+
+echo "run_id=$RUN_ID"
+echo "computed_report_sha256=$REPORT_HASH"
+echo "computed_pdf_sha256=$PDF_HASH"
+echo "expected_report_sha256=$REPORT_SHA"
+echo "expected_pdf_sha256=$PDF_SHA"
+
+[[ -n "$REPORT_SHA" && "${REPORT_SHA,,}" != "${REPORT_HASH,,}" ]] && exit 2
+[[ -n "$PDF_SHA" && "${PDF_SHA,,}" != "${PDF_HASH,,}" ]] && exit 3
+
+exit 0

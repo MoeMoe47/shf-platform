@@ -1,0 +1,13 @@
+{
+  "agentId": "L09-CASE-001",
+  "name": "Layer09CaseSupportAgent",
+  "layer": "L09",
+  "role": "Creates next-step support plans and resource checklists. No decisions.",
+  "allowedTools": ["save_draft_artifact"],
+  "allowedDomains": ["case","portfolio"],
+  "policy": {
+    "humanApproval": false,
+    "maxSteps": 6,
+    "notes": "Draft plans only. No consequences. No eligibility calls."
+  }
+}

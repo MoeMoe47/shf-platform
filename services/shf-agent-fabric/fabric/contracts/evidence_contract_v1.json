@@ -1,0 +1,18 @@
+{
+  "contract_id": "EVIDENCE_CONTRACT_V1",
+  "version": "1.0",
+  "required_run_fields": ["run_id","app_id","name","owner","mode","start_ts","end_ts"],
+  "required_run_meta_fields": ["site"],
+  "required_outcome_metrics": [
+    "attendanceRate",
+    "retentionRate",
+    "parentSatisfaction",
+    "incidentRatePer100Sessions",
+    "weeklyArtifactCompletion"
+  ],
+  "required_integrity_signals": [
+    "manual_override_rate",
+    "p95_duration_ms",
+    "first_reward_event_index"
+  ]
+}

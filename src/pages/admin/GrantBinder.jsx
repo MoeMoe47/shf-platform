@@ -1,373 +1,325 @@
-// src/pages/admin/GrantBinder.jsx
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { loadMasterNarrativeFromStorage } from "@/utils/binderMerge.js";
+import {
+  buildUnifiedLogSummary,
+  APP_CONFIG,
+  FUNDING_STREAM_LABELS,
+} from "@/utils/logAggregator.js";
 
-/* ---------- Storage keys (same backbone as ToolDashboard) ---------- */
+function useQueryParams() {
+  const { search } = useLocation();
+  return React.useMemo(() => new URLSearchParams(search || ""), [search]);
+}
 
-const ADMIN_LOG_KEY = "shf.adminToolLogs.v1";
-const CIVIC_LOG_KEY = "shf.civicMissionLogs.v1";
+function clampIdentity(v) {
+  const x = String(v || "").toLowerCase().trim();
+  if (x === "public") return "public";
+  if (x === "funder") return "funder";
+  return "admin";
+}
 
-/* ---------- Funding stream IDs + labels (shared across app) ---------- */
-
-export const FUNDING_STREAM_IDS = [
-  "perkins",
-  "wioa",
-  "essa",
-  "medicaid",
-  "idea",
-  "workforce",
-  "philanthropy",
-  "civics",
-];
-
-const FUNDING_LABELS = {
-  perkins: "Perkins V",
-  wioa: "WIOA",
-  essa: "ESSA Title IV",
-  medicaid: "Medicaid",
-  idea: "IDEA / Special Ed",
-  workforce: "Workforce / Local Board",
-  philanthropy: "Private Philanthropy",
-  civics: "Civics / Democracy",
-};
-
-/* Apps / programs buckets for high-level grouping */
-const APP_LABELS = {
-  admin: "Admin",
-  civic: "Civic Lab",
-  career: "Career Center",
-  curriculum: "Curriculum",
-  arcade: "Arcade",
-  debt: "Debt Lab",
-  employer: "Employer",
-  treasury: "Treasury",
-  other: "Other / Misc",
-};
-
-/* ---------- Small helpers ---------- */
-
-function readJSON(key, fallback) {
-  try {
-    const raw = localStorage.getItem(key);
-    if (!raw) return fallback;
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) || typeof parsed === "object" ? parsed : fallback;
-  } catch {
-    return fallback;
+function toCsvSafe(v) {
+  const s = String(v ?? "");
+  if (s.includes('"') || s.includes(",") || s.includes("\n")) {
+    return `"${s.replaceAll('"', '""')}"`;
   }
+  return s;
 }
 
-function normalizeFundingId(tag) {
-  if (!tag || typeof tag !== "string") return null;
-  const s = tag.toLowerCase().trim();
+function redactLog(log, identity) {
+  if (identity === "admin") return log;
 
-  if (s.includes("perkins")) return "perkins";
-  if (s.includes("wioa")) return "wioa";
-  if (s.includes("essa")) return "essa";
-  if (s.includes("medicaid")) return "medicaid";
-  if (s.includes("idea")) return "idea";
-  if (s.includes("workforce")) return "workforce";
-  if (s.includes("civic")) return "civics";
-  if (s.includes("philanth")) return "philanthropy";
+  const drop = new Set([
+    "email",
+    "phone",
+    "ip",
+    "userAgent",
+    "deviceId",
+    "sessionId",
+    "raw",
+    "notes",
+    "freeText",
+    "prompt",
+    "response",
+    "evidenceText",
+  ]);
 
-  // already normalized?
-  if (FUNDING_STREAM_IDS.includes(s)) return s;
-  return null;
+  const masked = {};
+  Object.keys(log || {}).forEach((k) => {
+    if (drop.has(k)) return;
+    if (k.toLowerCase().includes("email")) return;
+    if (k.toLowerCase().includes("phone")) return;
+    if (k.toLowerCase().includes("ip")) return;
+    if (k.toLowerCase().includes("useragent")) return;
+    if (k.toLowerCase().includes("device")) return;
+    if (k.toLowerCase().includes("session")) return;
+    if (k.toLowerCase().includes("prompt")) return;
+    if (k.toLowerCase().includes("response")) return;
+    if (k.toLowerCase().includes("note")) return;
+    masked[k] = log[k];
+  });
+
+  if (masked.userId) masked.userId = "redacted";
+  if (masked.studentId) masked.studentId = "redacted";
+  if (masked.clientId) masked.clientId = "redacted";
+
+  return masked;
 }
 
-function normalizeApp(source, rawApp) {
-  const s = (rawApp || "").toLowerCase();
-  if (s.includes("civic")) return "civic";
-  if (s.includes("career")) return "career";
-  if (s.includes("curriculum")) return "curriculum";
-  if (s.includes("arcade")) return "arcade";
-  if (s.includes("debt")) return "debt";
-  if (s.includes("employer")) return "employer";
-  if (s.includes("treasury")) return "treasury";
-  if (s.includes("admin")) return "admin";
-  if (source === "civic") return "civic";
-  if (source === "admin") return "admin";
-  return "other";
-}
-
-function normalizeFundingArray(raw) {
-  if (!raw) return [];
-  const arr = Array.isArray(raw) ? raw : [raw];
-  const out = new Set();
-  for (const item of arr) {
-    if (typeof item === "string") {
-      // split "Perkins V, WIOA" style strings
-      const bits = item.split(/[;,/]+/);
-      for (const bit of bits) {
-        const id = normalizeFundingId(bit);
-        if (id) out.add(id);
-      }
-    }
-  }
-  return Array.from(out);
-}
-
-/**
- * Normalizes a single log entry from either Admin or Civic.
- * We keep this forgiving so older logs still render.
- */
-function normalizeEntry(source, item, idx) {
-  const ts = item.timestamp || item.at || Date.now();
-  const id = item.id || `${source}-${idx}-${ts}`;
-
-  const app = normalizeApp(source, item.app || item.appId);
-  const siteId = item.siteId || item.site || null;
-  const programId = item.programId || item.program || item.pathwayId || null;
-
-  // Try to extract funding tags from several possible shapes
-  const fundingStreams =
-    normalizeFundingArray(
-      item.fundingStreams ||
-        item.funding_tags ||
-        item.fundingTags ||
-        item.funding
-    );
-
-  const duration = Number(item.duration || item.minutes || 0);
-  const summary =
-    item.summary ||
-    item.missionTitle ||
-    item.title ||
-    item.goalLabel ||
-    "";
-  const outcome = item.outcome || item.notes || "";
-
-  return {
-    id,
-    source, // "admin" | "civic"
-    app,
-    siteId,
-    programId,
-    fundingStreams,
-    duration,
-    summary,
-    outcome,
-    timestamp: ts,
-    raw: item,
-  };
-}
-
-function getQueryFilters(location) {
-  const params = new URLSearchParams(location.search || "");
-  const funding = params.get("funding") || "";
-  const app = params.get("app") || "";
-  const site = params.get("site") || "";
-  return { funding, app, site };
-}
-
-function updateQuery(navigate, location, filters) {
-  const params = new URLSearchParams(location.search || "");
-  if (filters.funding) params.set("funding", filters.funding);
-  else params.delete("funding");
-
-  if (filters.app) params.set("app", filters.app);
-  else params.delete("app");
-
-  if (filters.site) params.set("site", filters.site);
-  else params.delete("site");
-
-  const search = params.toString();
-  navigate(
-    {
-      pathname: location.pathname,
-      search: search ? `?${search}` : "",
-    },
-    { replace: true }
+function normalizeSite(log) {
+  return (
+    log.site ||
+    log.siteId ||
+    log.program ||
+    log.programId ||
+    log.org ||
+    log.orgId ||
+    ""
   );
 }
 
-function exportBlob(filename, text, type = "text/plain;charset=utf-8") {
-  try {
-    const blob = new Blob([text], { type });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  } catch {
-    // ignore
-  }
+function normalizeApp(log) {
+  return log._app || log.appId || log.app || "";
 }
 
-function buildMarkdown(entries, labelForFunding) {
-  if (!entries.length) {
-    return "# Grant Binder Export\n\n_No entries match the current filters._\n";
-  }
+function normalizeFundingArray(log) {
+  const t =
+    log._funding ||
+    log.fundingStreams ||
+    log.fundingTags ||
+    log.fundingStream ||
+    log.tags ||
+    [];
+  const arr = Array.isArray(t) ? t : [t];
+  return arr
+    .map((x) => String(x || "").toLowerCase().trim())
+    .filter(Boolean);
+}
 
+function downloadBlob(filename, contentType, text) {
+  const blob = new Blob([text], { type: contentType });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function buildMarkdownExport({ identity, filters, summary, logs }) {
   const lines = [];
-  lines.push("# Grant Binder Export");
-  lines.push("");
-  lines.push(
-    `Total entries: ${entries.length}  ·  Total minutes: ${entries
-      .reduce((s, e) => s + (e.duration || 0), 0)
-      .toFixed(1)}`
-  );
-  lines.push("");
-
-  for (const e of entries) {
-    const funding = e.fundingStreams.map(labelForFunding).join(", ") || "—";
-    const site = e.siteId || "—";
-    const program = e.programId || "—";
-    const appLabel = APP_LABELS[e.app] || e.app || "Other";
-
-    lines.push(`## ${e.summary || "Untitled entry"}`);
-    lines.push("");
-    lines.push(`- Source: **${e.source}**`);
-    lines.push(`- App: **${appLabel}**`);
-    lines.push(`- Site: **${site}**`);
-    lines.push(`- Program: **${program}**`);
-    lines.push(`- Minutes: **${e.duration || 0}**`);
-    lines.push(`- Funding streams: **${funding}**`);
-    if (e.outcome) {
-      lines.push("");
-      lines.push("**Outcome / notes:**");
-      lines.push("");
-      lines.push(e.outcome);
-    }
-    lines.push("");
+  lines.push(`# Grant Binder Export`);
+  lines.push(``);
+  lines.push(`**Identity mode:** ${identity}`);
+  lines.push(``);
+  lines.push(`## Filters`);
+  lines.push(`- App: ${filters.app || "All"}`);
+  lines.push(`- Site/Program: ${filters.site || "All"}`);
+  lines.push(`- Funding Stream: ${filters.funding || "All"}`);
+  lines.push(``);
+  lines.push(`## Totals`);
+  lines.push(`- Minutes: ${summary.totalMinutes}`);
+  lines.push(`- Entries: ${summary.totalEntries}`);
+  lines.push(``);
+  lines.push(`## App Breakdown`);
+  Object.values(summary.appSummaries || {}).forEach((a) => {
+    lines.push(`- ${a.emoji} ${a.label}: ${a.minutes} min (${a.sharePct}%) · ${a.entries} entries`);
+  });
+  lines.push(``);
+  lines.push(`## Logs (filtered)`);
+  lines.push(``);
+  logs.slice(0, 250).forEach((l, idx) => {
+    const app = normalizeApp(l) || "unknown";
+    const site = normalizeSite(l) || "—";
+    const dur = Number(l.duration || 0);
+    const ts = l.ts || l.timestamp || l.createdAt || "";
+    const title = l.title || l.action || l.event || l.type || "log";
+    const funding = (normalizeFundingArray(l) || []).slice(0, 4).join(", ");
+    lines.push(`### ${idx + 1}. ${title}`);
+    lines.push(`- App: ${app}`);
+    lines.push(`- Site: ${site}`);
+    lines.push(`- Duration: ${dur}`);
+    if (ts) lines.push(`- Timestamp: ${ts}`);
+    if (funding) lines.push(`- Funding: ${funding}`);
+    lines.push(``);
+  });
+  if (logs.length > 250) {
+    lines.push(`(Showing first 250 logs. Total filtered logs: ${logs.length})`);
+    lines.push(``);
   }
-
   return lines.join("\n");
 }
 
-/* ---------- Component ---------- */
+const Chip = ({ children, onClear }) => (
+  <span
+    className="sh-badge is-ghost"
+    style={{
+      display: "inline-flex",
+      alignItems: "center",
+      gap: 6,
+      borderRadius: 999,
+    }}
+  >
+    <span>{children}</span>
+    {onClear ? (
+      <button
+        type="button"
+        className="sh-btn is-ghost"
+        onClick={onClear}
+        style={{
+          padding: "0 8px",
+          lineHeight: "18px",
+          borderRadius: 999,
+          fontSize: 12,
+        }}
+        aria-label="Clear filter"
+        title="Clear"
+      >
+        ✕
+      </button>
+    ) : null}
+  </span>
+);
 
 export default function GrantBinder() {
-  const location = useLocation();
+  const q = useQueryParams();
   const navigate = useNavigate();
 
-  // Narrative meta is written by ToolDashboard sync
-  const [{ meta }, setNarrative] = React.useState({
-    markdown: "",
-    meta: {},
-  });
+  const appQ = (q.get("app") || "").trim().toLowerCase();
+  const siteQ = (q.get("site") || "").trim();
+  const fundingQ = (q.get("funding") || "").trim().toLowerCase();
+  const identity = clampIdentity(q.get("identity") || "admin");
 
-  const [entries, setEntries] = React.useState([]);
-  const [fundingFilter, setFundingFilter] = React.useState("");
-  const [appFilter, setAppFilter] = React.useState("");
-  const [siteFilter, setSiteFilter] = React.useState("");
+  const summary = React.useMemo(() => {
+    const app = appQ || undefined;
+    const site = siteQ || undefined;
+    const funding = fundingQ || undefined;
+    return buildUnifiedLogSummary({ app, site, funding });
+  }, [appQ, siteQ, fundingQ]);
 
-  React.useEffect(() => {
-    // Load master narrative meta for global stats
-    try {
-      const loaded = loadMasterNarrativeFromStorage();
-      setNarrative(loaded);
-    } catch {
-      setNarrative({ markdown: "", meta: {} });
-    }
+  const allLogs = summary.logs || [];
 
-    // Load raw logs
-    const adminLogs = readJSON(ADMIN_LOG_KEY, []);
-    const civicLogs = readJSON(CIVIC_LOG_KEY, []);
-
-    const normalized = [
-      ...adminLogs.map((item, idx) => normalizeEntry("admin", item, idx)),
-      ...civicLogs.map((item, idx) => normalizeEntry("civic", item, idx)),
-    ].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-
-    setEntries(normalized);
-
-    // Initialize filters from query params
-    const { funding, app, site } = getQueryFilters(location);
-    if (funding) setFundingFilter(funding);
-    if (app) setAppFilter(app);
-    if (site) setSiteFilter(site);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // run once on mount
-
-  // Keep URL in sync when filters change
-  React.useEffect(() => {
-    updateQuery(navigate, location, {
-      funding: fundingFilter,
-      app: appFilter,
-      site: siteFilter,
+  const siteOptions = React.useMemo(() => {
+    const set = new Set();
+    allLogs.forEach((l) => {
+      const s = normalizeSite(l);
+      if (s) set.add(s);
     });
-  }, [fundingFilter, appFilter, siteFilter, navigate, location]);
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }, [allLogs]);
 
-  const allFundingUsed = React.useMemo(() => {
+  const fundingOptions = React.useMemo(() => {
     const set = new Set();
-    for (const e of entries) {
-      for (const f of e.fundingStreams || []) set.add(f);
-    }
-    return Array.from(set);
-  }, [entries]);
+    allLogs.forEach((l) => normalizeFundingArray(l).forEach((x) => set.add(x)));
+    const arr = Array.from(set);
+    arr.sort((a, b) => a.localeCompare(b));
+    return arr;
+  }, [allLogs]);
 
-  const allAppsUsed = React.useMemo(() => {
-    const set = new Set();
-    for (const e of entries) {
-      if (e.app) set.add(e.app);
-    }
-    return Array.from(set);
-  }, [entries]);
+  const redactedLogs = React.useMemo(() => {
+    return allLogs.map((l) => redactLog(l, identity));
+  }, [allLogs, identity]);
 
-  const allSitesUsed = React.useMemo(() => {
-    const set = new Set();
-    for (const e of entries) {
-      if (e.siteId) set.add(e.siteId);
-    }
-    return Array.from(set);
-  }, [entries]);
-
-  const filtered = React.useMemo(() => {
-    return entries.filter((e) => {
-      if (fundingFilter && !(e.fundingStreams || []).includes(fundingFilter)) {
-        return false;
-      }
-      if (appFilter && e.app !== appFilter) {
-        return false;
-      }
-      if (siteFilter && e.siteId !== siteFilter) {
-        return false;
-      }
-      return true;
+  function setParam(next) {
+    const p = new URLSearchParams(q.toString());
+    Object.entries(next).forEach(([k, v]) => {
+      if (v === null || v === undefined || v === "") p.delete(k);
+      else p.set(k, String(v));
     });
-  }, [entries, fundingFilter, appFilter, siteFilter]);
+    navigate({ search: `?${p.toString()}` }, { replace: true });
+  }
 
-  const totalMinutesAll = entries.reduce(
-    (sum, e) => sum + Number(e.duration || 0),
-    0
-  );
-  const totalMinutesFiltered = filtered.reduce(
-    (sum, e) => sum + Number(e.duration || 0),
-    0
-  );
-
-  const updatedAt = meta?.updatedAt || "—";
-
-  const handleExportJson = () => {
+  function exportJSON() {
     const payload = {
-      generatedAt: new Date().toISOString(),
-      filters: {
-        funding: fundingFilter || null,
-        app: appFilter || null,
-        site: siteFilter || null,
+      exportedAt: new Date().toISOString(),
+      identity,
+      filters: { app: appQ || null, site: siteQ || null, funding: fundingQ || null },
+      summary: {
+        totalMinutes: summary.totalMinutes,
+        totalEntries: summary.totalEntries,
+        appSummaries: summary.appSummaries,
       },
-      entries: filtered,
+      logs: redactedLogs,
     };
-    exportBlob(
-      "shf-grant-binder-export.json",
-      JSON.stringify(payload, null, 2),
-      "application/json;charset=utf-8"
+    downloadBlob(
+      `grant-binder.${identity}.${appQ || "all"}.${siteQ || "all"}.${fundingQ || "all"}.json`,
+      "application/json;charset=utf-8",
+      JSON.stringify(payload, null, 2)
     );
-  };
+  }
 
-  const handleExportMarkdown = () => {
-    const md = buildMarkdown(filtered, (id) => FUNDING_LABELS[id] || id);
-    exportBlob(
-      "shf-grant-binder-export.md",
-      md,
-      "text/markdown;charset=utf-8"
+  function exportMarkdown() {
+    const md = buildMarkdownExport({
+      identity,
+      filters: { app: appQ || null, site: siteQ || null, funding: fundingQ || null },
+      summary,
+      logs: redactedLogs,
+    });
+    downloadBlob(
+      `grant-binder.${identity}.${appQ || "all"}.${siteQ || "all"}.${fundingQ || "all"}.md`,
+      "text/markdown;charset=utf-8",
+      md
     );
-  };
+  }
+
+  function exportCSV() {
+    const cols = [
+      "title",
+      "app",
+      "site",
+      "duration",
+      "timestamp",
+      "funding",
+      "type",
+      "action",
+      "event",
+    ];
+    const header = cols.join(",");
+    const rows = redactedLogs.map((l) => {
+      const row = {
+        title: l.title || "",
+        app: normalizeApp(l) || "",
+        site: normalizeSite(l) || "",
+        duration: Number(l.duration || 0),
+        timestamp: l.ts || l.timestamp || l.createdAt || "",
+        funding: normalizeFundingArray(l).slice(0, 6).join("|"),
+        type: l.type || "",
+        action: l.action || "",
+        event: l.event || "",
+      };
+      return cols.map((c) => toCsvSafe(row[c])).join(",");
+    });
+    downloadBlob(
+      `grant-binder.${identity}.${appQ || "all"}.${siteQ || "all"}.${fundingQ || "all"}.csv`,
+      "text/csv;charset=utf-8",
+      [header, ...rows].join("\n")
+    );
+  }
+
+  const chips = [
+    appQ ? (
+      <Chip key="app" onClear={() => setParam({ app: "" })}>
+        App: {appQ}
+      </Chip>
+    ) : null,
+    siteQ ? (
+      <Chip key="site" onClear={() => setParam({ site: "" })}>
+        Site: {siteQ}
+      </Chip>
+    ) : null,
+    fundingQ ? (
+      <Chip key="funding" onClear={() => setParam({ funding: "" })}>
+        Funding: {FUNDING_STREAM_LABELS[fundingQ] || fundingQ}
+      </Chip>
+    ) : null,
+    identity !== "admin" ? (
+      <Chip key="identity" onClear={() => setParam({ identity: "admin" })}>
+        Identity: {identity}
+      </Chip>
+    ) : null,
+  ].filter(Boolean);
 
   return (
     <section className="app-main" aria-labelledby="binder-title">
@@ -375,349 +327,219 @@ export default function GrantBinder() {
         <div>
           <h1 id="binder-title">Grant Binder</h1>
           <p className="app-subtitle">
-            Slice your Admin + Civic logs by funding stream, app, and site.
-            Export filtered entries straight into Perkins, WIOA, ESSA, Medicaid,
-            and philanthropy packets.
+            Filtered, exportable, identity-safe reporting across the same log spine.
           </p>
-          <div
-            style={{
-              marginTop: 4,
-              fontSize: 12,
-              opacity: 0.8,
-            }}
-          >
-            Last narrative sync: <strong>{updatedAt}</strong> · Entries:{" "}
-            <strong>{entries.length}</strong> · Minutes (all logs):{" "}
-            <strong>{totalMinutesAll.toFixed(1)}</strong>
-          </div>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
-            <button
-              type="button"
-              className="sh-btn is-ghost"
-              onClick={handleExportJson}
-              disabled={!filtered.length}
-            >
-              Export JSON (filtered)
-            </button>
-            <button
-              type="button"
-              className="sh-btn is-ghost"
-              onClick={handleExportMarkdown}
-              disabled={!filtered.length}
-            >
-              Export Markdown (filtered)
-            </button>
-          </div>
-          <div
-            style={{
-              fontSize: 11,
-              opacity: 0.75,
-              textAlign: "right",
-            }}
-          >
-            Tip: Use <code>?funding=perkins</code> or{" "}
-            <code>?funding=wioa&amp;site=east-high</code> on the URL to deep
-            link from Investor / Grant dashboards.
-          </div>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+          <span className="sh-badge">
+            Minutes: <strong>{summary.totalMinutes}</strong>
+          </span>
+          <span className="sh-badge is-ghost">
+            Entries: <strong>{summary.totalEntries}</strong>
+          </span>
+          <button className="sh-btn" type="button" onClick={exportJSON}>
+            Export JSON
+          </button>
+          <button className="sh-btn is-ghost" type="button" onClick={exportMarkdown}>
+            Export Markdown
+          </button>
+          <button className="sh-btn is-ghost" type="button" onClick={exportCSV}>
+            Export CSV
+          </button>
         </div>
       </header>
 
-      <div className="app-grid" style={{ gridTemplateColumns: "280px 1fr" }}>
-        {/* ---------- Left rail: Filters & stats ---------- */}
-        <aside
-          className="card card--pad"
-          aria-label="Grant binder filters"
-          style={{ display: "grid", gap: 12 }}
+      <div className="card card--pad" style={{ marginBottom: 12 }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gap: 10,
+            alignItems: "end",
+          }}
         >
-          <strong style={{ fontSize: 15 }}>Filters</strong>
-
-          {/* Funding streams */}
           <div>
-            <div
-              style={{ fontSize: 12, opacity: 0.8, marginBottom: 4 }}
-            >
-              Funding streams
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: 6,
-              }}
-            >
-              <button
-                type="button"
-                className={
-                  fundingFilter ? "sh-btn is-ghost" : "sh-btn"
-                }
-                onClick={() => setFundingFilter("")}
-                style={{ fontSize: 12, paddingInline: 10 }}
-              >
-                All
-              </button>
-              {FUNDING_STREAM_IDS.filter((id) =>
-                allFundingUsed.includes(id)
-              ).map((id) => {
-                const active = fundingFilter === id;
-                const label = FUNDING_LABELS[id] || id;
-                return (
-                  <button
-                    key={id}
-                    type="button"
-                    className={
-                      active ? "sh-btn" : "sh-btn is-ghost"
-                    }
-                    onClick={() =>
-                      setFundingFilter(active ? "" : id)
-                    }
-                    style={{ fontSize: 12, paddingInline: 10 }}
-                  >
-                    {label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* App bucket */}
-          <div>
-            <div
-              style={{ fontSize: 12, opacity: 0.8, marginBottom: 4 }}
-            >
-              App / program bucket
-            </div>
+            <div style={{ fontSize: 12, opacity: 0.75, marginBottom: 6 }}>App</div>
             <select
-              className="sh-input"
-              value={appFilter}
-              onChange={(e) => setAppFilter(e.target.value)}
+              className="sh-select"
+              value={appQ}
+              onChange={(e) => setParam({ app: e.target.value })}
+              style={{ width: "100%" }}
             >
               <option value="">All apps</option>
-              {allAppsUsed.map((id) => (
-                <option key={id} value={id}>
-                  {APP_LABELS[id] || id}
+              {APP_CONFIG.map((a) => (
+                <option key={a.id} value={a.id}>
+                  {a.emoji} {a.label}
                 </option>
               ))}
             </select>
           </div>
 
-          {/* Site selector */}
           <div>
-            <div
-              style={{ fontSize: 12, opacity: 0.8, marginBottom: 4 }}
-            >
-              Site / partner
-            </div>
+            <div style={{ fontSize: 12, opacity: 0.75, marginBottom: 6 }}>Site / Program</div>
             <select
-              className="sh-input"
-              value={siteFilter}
-              onChange={(e) => setSiteFilter(e.target.value)}
+              className="sh-select"
+              value={siteQ}
+              onChange={(e) => setParam({ site: e.target.value })}
+              style={{ width: "100%" }}
             >
               <option value="">All sites</option>
-              {allSitesUsed.map((id) => (
-                <option key={id} value={id}>
-                  {id}
+              {siteOptions.map((s) => (
+                <option key={s} value={s}>
+                  {s}
                 </option>
               ))}
             </select>
           </div>
 
-          {/* Filtered stats */}
-          <div
-            style={{
-              marginTop: 4,
-              paddingTop: 8,
-              borderTop: "1px solid var(--line,#e5e7eb)",
-              fontSize: 12,
-              display: "grid",
-              gap: 4,
-            }}
-          >
-            <div>
-              Filtered entries:{" "}
-              <strong>{filtered.length}</strong>
-            </div>
-            <div>
-              Filtered minutes:{" "}
-              <strong>{totalMinutesFiltered.toFixed(1)}</strong>
-            </div>
-            <div style={{ opacity: 0.8 }}>
-              {totalMinutesAll > 0 ? (
-                <>
-                  This slice is{" "}
-                  <strong>
-                    {(
-                      (totalMinutesFiltered /
-                        Math.max(1, totalMinutesAll)) *
-                      100
-                    ).toFixed(1)}
-                    %
-                  </strong>{" "}
-                  of all logged minutes.
-                </>
-              ) : (
-                "Run a few admin + civic logs and sync the narrative to populate this binder."
-              )}
-            </div>
+          <div>
+            <div style={{ fontSize: 12, opacity: 0.75, marginBottom: 6 }}>Funding Stream</div>
+            <select
+              className="sh-select"
+              value={fundingQ}
+              onChange={(e) => setParam({ funding: e.target.value })}
+              style={{ width: "100%" }}
+            >
+              <option value="">All funding</option>
+              {fundingOptions.map((f) => (
+                <option key={f} value={f}>
+                  {FUNDING_STREAM_LABELS[f] || f}
+                </option>
+              ))}
+            </select>
           </div>
-        </aside>
 
-        {/* ---------- Right: Entries list ---------- */}
-        <section
-          className="card card--pad"
-          aria-label="Grant binder entries"
-          style={{ display: "grid", gap: 10 }}
-        >
-          <strong style={{ fontSize: 15 }}>
-            Entries ({filtered.length}) – ready for grant packets
-          </strong>
+          <div>
+            <div style={{ fontSize: 12, opacity: 0.75, marginBottom: 6 }}>Identity Mode</div>
+            <select
+              className="sh-select"
+              value={identity}
+              onChange={(e) => setParam({ identity: e.target.value })}
+              style={{ width: "100%" }}
+            >
+              <option value="admin">Admin (full detail)</option>
+              <option value="funder">Funder-safe</option>
+              <option value="public">Public-safe</option>
+            </select>
+          </div>
+        </div>
 
-          {!filtered.length && (
+        {chips.length ? (
+          <div style={{ marginTop: 10, display: "flex", gap: 6, flexWrap: "wrap" }}>
+            {chips}
+            <button
+              type="button"
+              className="sh-btn is-ghost"
+              onClick={() => navigate({ search: "" }, { replace: true })}
+              style={{ fontSize: 12 }}
+            >
+              Clear all
+            </button>
+          </div>
+        ) : null}
+      </div>
+
+      <div
+        className="app-grid"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+          gap: 12,
+          marginBottom: 12,
+        }}
+      >
+        {Object.values(summary.appSummaries || {}).map((a) => (
+          <article key={a.id} className="card card--pad">
+            <div style={{ fontSize: 18 }}>
+              <span style={{ marginRight: 8 }}>{a.emoji}</span>
+              {a.label}
+            </div>
+            <div style={{ fontSize: 12, opacity: 0.75 }}>
+              {a.minutes} minutes · {a.entries} entries · {a.sharePct}% share
+            </div>
             <div
               style={{
-                fontSize: 13,
-                opacity: 0.8,
-                padding: "10px 12px",
-                borderRadius: 8,
-                border: "1px dashed var(--line,#e5e7eb)",
+                marginTop: 8,
+                height: 8,
+                borderRadius: 999,
+                background: "#e5e7eb",
+                overflow: "hidden",
               }}
             >
-              No entries match the current filters. Try clearing the
-              funding stream, app, or site filters. Once you log more
-              Admin sessions and Civic missions (and sync the
-              narrative), they’ll show up here.
+              <div
+                style={{
+                  width: `${Math.max(0, Math.min(100, a.sharePct))}%`,
+                  height: "100%",
+                  background: "var(--brand,#22c55e)",
+                }}
+              />
             </div>
-          )}
+          </article>
+        ))}
+      </div>
 
-          <div
-            style={{
-              display: "grid",
-              gap: 8,
-              maxHeight: 520,
-              overflow: "auto",
-            }}
-          >
-            {filtered.map((e) => {
-              const appLabel = APP_LABELS[e.app] || e.app || "Other";
-              const funding =
-                e.fundingStreams && e.fundingStreams.length
-                  ? e.fundingStreams
-                  : [];
-              const ts = e.timestamp
-                ? new Date(e.timestamp).toLocaleString()
-                : "—";
-
-              return (
-                <article
-                  key={e.id}
-                  style={{
-                    borderRadius: 10,
-                    border: "1px solid var(--line,#e5e7eb)",
-                    padding: "8px 10px",
-                    background: "#fff",
-                    display: "grid",
-                    gap: 4,
-                    fontSize: 13,
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      gap: 8,
-                    }}
-                  >
-                    <div>
-                      <div
-                        style={{
-                          fontWeight: 600,
-                          marginBottom: 2,
-                        }}
-                      >
-                        {e.summary || "Untitled entry"}
-                      </div>
-                      <div
-                        style={{
-                          fontSize: 11,
-                          opacity: 0.75,
-                        }}
-                      >
-                        {ts}
-                      </div>
-                    </div>
-
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 4,
-                        alignItems: "flex-end",
-                      }}
-                    >
-                      <span className="sh-badge is-ghost">
-                        {appLabel}
-                      </span>
-                      {e.siteId && (
-                        <span
-                          className="sh-badge is-ghost"
-                          style={{ fontSize: 11 }}
-                        >
-                          Site: {e.siteId}
-                        </span>
-                      )}
-                      {e.programId && (
-                        <span
-                          className="sh-badge is-ghost"
-                          style={{ fontSize: 11 }}
-                        >
-                          Program: {e.programId}
-                        </span>
-                      )}
-                      <span className="sh-badge">
-                        {e.duration || 0} min
-                      </span>
-                    </div>
-                  </div>
-
-                  {funding.length > 0 && (
-                    <div
-                      style={{
-                        display: "flex",
-                        flexWrap: "wrap",
-                        gap: 4,
-                        marginTop: 4,
-                      }}
-                    >
-                      {funding.map((id) => (
-                        <span
-                          key={id}
-                          className="sh-badge is-ghost"
-                          style={{ fontSize: 11 }}
-                        >
-                          {FUNDING_LABELS[id] || id}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  {e.outcome && (
-                    <div
-                      style={{
-                        marginTop: 4,
-                        fontSize: 12,
-                        opacity: 0.9,
-                      }}
-                    >
-                      {e.outcome}
-                    </div>
-                  )}
-                </article>
-              );
-            })}
+      <div className="card card--pad">
+        <div style={{ display: "flex", justifyContent: "space-between", gap: 10, flexWrap: "wrap" }}>
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 700 }}>Filtered Logs</div>
+            <div style={{ fontSize: 12, opacity: 0.75 }}>
+              Showing <strong>{redactedLogs.length}</strong> entries
+              {identity !== "admin" ? " (redacted for safety)" : ""}
+            </div>
           </div>
-        </section>
+          <a
+            className="sh-btn is-ghost"
+            href={`/admin.html#/investor-northstar`}
+            style={{ fontSize: 12 }}
+          >
+            Open Investor Northstar →
+          </a>
+        </div>
+
+        <div style={{ marginTop: 10, overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+            <thead>
+              <tr>
+                <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e5e7eb" }}>App</th>
+                <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e5e7eb" }}>Site</th>
+                <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e5e7eb" }}>Title</th>
+                <th style={{ textAlign: "right", padding: "8px 6px", borderBottom: "1px solid #e5e7eb" }}>Minutes</th>
+                <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e5e7eb" }}>Funding</th>
+                <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e5e7eb" }}>Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {redactedLogs.slice(0, 200).map((l, idx) => {
+                const app = normalizeApp(l) || "—";
+                const site = normalizeSite(l) || "—";
+                const title = l.title || l.action || l.event || l.type || "log";
+                const mins = Number(l.duration || 0);
+                const ts = l.ts || l.timestamp || l.createdAt || "";
+                const funding = normalizeFundingArray(l)
+                  .slice(0, 3)
+                  .map((f) => FUNDING_STREAM_LABELS[f] || f)
+                  .join(", ");
+                return (
+                  <tr key={idx}>
+                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{app}</td>
+                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{site}</td>
+                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{title}</td>
+                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", textAlign: "right" }}>{mins}</td>
+                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{funding || "—"}</td>
+                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{ts || "—"}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+
+          {redactedLogs.length > 200 ? (
+            <div style={{ marginTop: 8, fontSize: 12, opacity: 0.75 }}>
+              Showing first 200 entries. Export to capture the full filtered set.
+            </div>
+          ) : null}
+        </div>
       </div>
     </section>
   );

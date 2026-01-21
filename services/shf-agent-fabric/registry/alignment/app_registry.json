@@ -1,0 +1,73 @@
+{
+  "curriculum": {
+    "app_id": "curriculum",
+    "display_name": "SHF Curriculum",
+    "owner": "admin",
+    "risk_profile": "medium",
+    "data_scopes": [
+      "curriculum.read",
+      "portfolio.write"
+    ],
+    "rate_limits": {
+      "rpm": 60,
+      "daily_budget_usd": 25.0
+    },
+    "swarm": {
+      "state": "LIMITED",
+      "allowed_agents": [
+        "summarizer",
+        "tutor",
+        "report_builder"
+      ],
+      "blocked_agents": [],
+      "allowed_capabilities": [
+        "read",
+        "summarize",
+        "draft_text",
+        "draft_report"
+      ],
+      "blocked_capabilities": [
+        "write_ledger",
+        "external_post",
+        "execute"
+      ]
+    },
+    "last_seen_at": "2026-01-10T04:17:35.057365+00:00"
+  },
+  "treasury": {
+    "app_id": "treasury",
+    "display_name": "SHF Treasury",
+    "owner": "admin",
+    "risk_profile": "high",
+    "data_scopes": [
+      "treasury.read",
+      "grants.read"
+    ],
+    "rate_limits": {
+      "rpm": 30,
+      "daily_budget_usd": 15.0
+    },
+    "swarm": {
+      "state": "LIMITED",
+      "allowed_agents": [
+        "policy_guard",
+        "report_builder"
+      ],
+      "blocked_agents": [
+        "ledger_writer"
+      ],
+      "allowed_capabilities": [
+        "read",
+        "summarize",
+        "draft_report"
+      ],
+      "blocked_capabilities": [
+        "write",
+        "write_ledger",
+        "external_post",
+        "execute"
+      ]
+    },
+    "last_seen_at": null
+  }
+}

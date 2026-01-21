@@ -30,6 +30,7 @@ import "@/styles/ai-compass.solutions.css";  // (present in your tree; optional)
 
 /* 6) React / Router / Providers */
 import React from "react";
+import { applyManifest } from "@/apps/manifest/applyManifest.js";
 import { createRoot } from "react-dom/client";
 import { HashRouter } from "react-router-dom";
 import GlobalErrorBoundary from "@/components/GlobalErrorBoundary.jsx";
@@ -54,7 +55,9 @@ if (!mount) {
     '[ENTRY:solutions] mount not found. Ensure solutions.html has <div id="root" data-app="solutions"></div> and loads /src/entries/solutions.main.jsx.'
   );
 } else {
-  createRoot(mount).render(
+  applyManifest("solutions");
+
+createRoot(mount).render(
     <React.StrictMode>
       <GlobalErrorBoundary>
         <RootProviders appScope="solutions">

@@ -1,0 +1,17 @@
+{
+  "contractVersion": 1,
+  "id": "store",
+  "name": "Store",
+  "entry": "src/entries/store.main.jsx",
+  "routes": "src/router/StoreRoutes.jsx",
+  "layout": "src/layouts/StoreLayout.jsx",
+  "shellCss": "src/styles/app-shell.css",
+  "dashboard": "src/pages/store/StoreCatalog.jsx",
+  "capabilities": {
+    "payments": true
+  },
+  "meta": {
+    "generated": true,
+    "createdAt": "2026-01-21T16:02:37.877Z"
+  }
+}

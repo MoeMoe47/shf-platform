@@ -5,6 +5,7 @@ import "@/styles/ai-compass.solutions.css"; // optional theme file if you use it
 import "@/styles/app-shell.css";             // ← LAST: minimal responsive/layout guard
 
 import React from "react";
+import { applyManifest } from "@/apps/manifest/applyManifest.js";
 import { createRoot } from "react-dom/client";
 import { HashRouter } from "react-router-dom";
 import RootProviders from "@/entries/RootProviders.jsx";

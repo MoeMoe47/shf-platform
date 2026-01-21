@@ -1,0 +1,18 @@
+{
+  "contractVersion": 1,
+  "id": "treasury",
+  "name": "Treasury",
+  "entry": "src/entries/treasury.main.jsx",
+  "routes": "src/router/TreasuryRoutes.jsx",
+  "layout": "src/layouts/TreasuryLayout.jsx",
+  "shellCss": "src/styles/treasury-shell.css",
+  "dashboard": "src/pages/treasury/Dashboard.jsx",
+  "capabilities": {
+    "ledger": true,
+    "payments": true
+  },
+  "meta": {
+    "generated": true,
+    "createdAt": "2026-01-21T16:02:37.876Z"
+  }
+}

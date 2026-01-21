@@ -3,7 +3,8 @@
     "dev": "vite",
     "build": "vite build",
     "build:one": "vite build",
-    "preview": "vite preview --port 5174 --strictPort --host"
+    "preview": "vite preview --port 5174 --strictPort --host",
+    "guardrails": "bash scripts/guardrails.sh"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^5.1.0",

@@ -1,21 +1,16 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import SalesLayout from "@/layouts/SalesLayout.jsx";
+import SolutionsLayout from "@/layouts/SolutionsLayout.jsx";
 
-// start simple, swap to your real pages next
-const Northstar = () => <div style={{padding:24,fontSize:22}}>Northstar OK</div>;
-const Leads     = () => <div style={{padding:24,fontSize:22}}>Leads OK</div>;
-const Pipeline  = () => <div style={{padding:24,fontSize:22}}>Pipeline OK</div>;
+import SolutionsHome from "@/pages/solutions/SolutionsHome.jsx";
 
-export default function SalesRoutes() {
+export default function SolutionsRoutes() {
   return (
     <Routes>
-      <Route element={<SalesLayout />}>
-        <Route index element={<Navigate to="dashboard" replace />} />
-        <Route path="dashboard" element={<Northstar />} />
-        <Route path="leads" element={<Leads />} />
-        <Route path="pipeline" element={<Pipeline />} />
-        <Route path="*" element={<div style={{padding:24}}>Not found (Sales)</div>} />
+      <Route element={<SolutionsLayout />}>
+        <Route index element={<Navigate to="home" replace />} />
+        <Route path="home" element={<SolutionsHome />} />
+        <Route path="*" element={<Navigate to="home" replace />} />
       </Route>
     </Routes>
   );

@@ -71,3 +71,5 @@ export function useMockWallet() {
 
   return { ...view, loading, connect, disconnect, addXP, mintNFT, reset };
 }
+
+export default useMockWallet;

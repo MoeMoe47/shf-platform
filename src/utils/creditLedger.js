@@ -132,3 +132,21 @@ export function appendLog(entry = {}) {
 }
 
 export function clearLogs() { return clearLedger(); }
+
+export async function listRecentEntries({ app, limit = 200, actorId } = {}) {
+  let rows = exportLedger(actorId);
+
+  if (app) {
+    rows = rows.filter((e) => {
+      const a = String(e?.action || "");
+      const m = e?.meta || {};
+      const metaApp =
+        m.app || m.appId || m.scope || m.source || m.module || m.product || null;
+
+      return metaApp === app || a.startsWith(app + ".") || a === app;
+    });
+  }
+
+  rows.sort((x, y) => Number(y?.ts || 0) - Number(x?.ts || 0));
+  return rows.slice(0, Math.max(0, Number(limit || 0)));
+}

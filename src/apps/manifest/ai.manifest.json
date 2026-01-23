@@ -3,10 +3,18 @@
   "id": "ai",
   "name": "AI Workforce Compass",
   "entry": "src/entries/ai.main.jsx",
-  "routes": "src/router/AIRoutes.jsx",
-  "layout": "src/layouts/AppShellLayout.jsx",
+  "routes": "/",
+  "layout": "shell",
   "shellCss": "src/styles/ai-compass.css",
   "capabilities": {
     "map": true
+  },
+  "meta": {
+    "shf": {
+      "status": "PILOT_ONLY",
+      "fundingReady": false,
+      "pilotOnly": true,
+      "systemOnly": false
+    }
   }
 }

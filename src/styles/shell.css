@@ -356,4 +356,63 @@ body{
   padding: 16px 24px 40px;
 }
 
+/* === FIX: Guarantee full-height shell (GLOBAL, REQUIRED) === */
+html, body, #root {
+  height: 100%;
+  min-height: 100%;
+}
 
+.sh-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.sh-shellBody {
+  flex: 1;
+  display: flex;
+}
+/* === END FIX === */
+
+
+/* === FIX #2: Paint background + fill viewport (GLOBAL) === */
+html, body {
+  height: 100%;
+  min-height: 100%;
+  background: var(--sh-bg, #0b0f14); /* fallback */
+}
+
+#root {
+  height: 100%;
+  min-height: 100%;
+  background: var(--sh-bg, #0b0f14);
+}
+
+/* Shell stretches and paints */
+.sh-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--sh-bg, #0b0f14);
+}
+
+/* Body row paints (prevents “black half”) */
+.sh-shellBody {
+  flex: 1;
+  display: flex;
+  min-height: 0;              /* IMPORTANT for flex layouts */
+  background: var(--sh-bg, #0b0f14);
+}
+
+/* Sidebar + Main both paint */
+.sh-sidebar {
+  background: var(--sh-bg, #0b0f14);
+}
+
+.sh-main {
+  flex: 1;
+  min-height: 0;              /* IMPORTANT */
+  background: var(--sh-bg, #0b0f14);
+  overflow: auto;
+}
+/* === END FIX #2 === */

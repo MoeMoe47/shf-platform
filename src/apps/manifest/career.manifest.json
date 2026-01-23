@@ -1,0 +1,41 @@
+{
+  "id": "career",
+  "name": "Career",
+  "entry": "career.html",
+  "contractVersion": 1,
+  "routes": "/",
+  "layout": "shell",
+  "shellCss": "src/styles/career-shell.css",
+  "capabilities": {
+    "map": true,
+    "ledger": true,
+    "analytics": true,
+    "payments": true
+  },
+  "meta": {
+    "shf": {
+      "status": "SYSTEM_CORE",
+      "fundingReady": true,
+      "pilotOnly": false,
+      "systemOnly": true,
+      "funnelPrimary": true
+    },
+    "funnelPrimary": true,
+    "systemCore": true
+  },
+  "contract": {
+    "owner": "SHF",
+    "riskTier": "low",
+    "dataAccess": [
+      "local",
+      "api"
+    ],
+    "fundingEligible": [
+      "WIOA",
+      "PerkinsV",
+      "ESSA"
+    ],
+    "killSwitch": true,
+    "pilotGate": false
+  }
+}

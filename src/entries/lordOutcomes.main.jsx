@@ -1,8 +1,11 @@
+import "@/styles/shell.css";
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { HashRouter } from "react-router-dom";
 import RootProviders from "@/providers/RootProviders.jsx";
 import LordOutcomesRoutes from "@/router/LordOutcomesRoutes.jsx";
+import "@/styles/unified-shell.css";
+import "@/styles/app-shell.css";
 
 /* =========================================================
    Base tokens / theme (load FIRST)

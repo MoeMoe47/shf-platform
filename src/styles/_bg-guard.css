@@ -1,0 +1,16 @@
+/* src/styles/_bg-guard.css
+   Global safety net: app is never transparent/blank. */
+:root{
+  --sh-bg:#F7F3EA;
+  --sh-fg:#141414;
+}
+
+html, body {
+  min-height: 100%;
+  background: var(--sh-bg);
+  color: var(--sh-fg);
+}
+
+#root {
+  min-height: 100dvh;
+}

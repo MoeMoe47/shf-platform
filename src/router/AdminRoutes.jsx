@@ -6,8 +6,9 @@ import AppRegistry from "@/pages/admin/AppRegistry.jsx";
 export default function AdminRoutes() {
   return (
     <Routes>
-      <Route path="app-registry" element={<AppRegistry />} />
-      <Route path="*" element={<Navigate to="app-registry" replace />} />
+      {/* Use absolute paths to avoid relative redirect loops */}
+      <Route path="/app-registry" element={<AppRegistry />} />
+      <Route path="*" element={<Navigate to="/app-registry" replace />} />
     </Routes>
   );
 }

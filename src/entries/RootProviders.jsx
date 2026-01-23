@@ -13,6 +13,7 @@ import CreditProvider from "@/shared/credit/CreditProvider.jsx";
 // NEW (already present in repo)
 import LedgerProvider from "@/shared/ledger/LedgerProvider.jsx";
 import ProgressProvider from "@/shared/progress/ProgressProvider.jsx";
+import { initMode } from "@/runtime/mode.js";
 
 /* ⬇️ Keep this LAST among CSS so it wins the cascade */
 import "@/styles/app-shell.css";
@@ -47,6 +48,9 @@ const DEFAULT_EMOJI = {
 };
 
 export default function RootProviders({ children, appScope }) {
+  // SHF global mode (PILOT vs SYSTEM)
+  React.useEffect(() => { try { initMode(); } catch {} }, []);
+
   // Minimal mock user/entitlements (dev-safe)
   const ent = React.useMemo(
     () => ({
@@ -93,6 +97,7 @@ export default function RootProviders({ children, appScope }) {
     try {
       if (appScope) document.documentElement.setAttribute("data-app", appScope);
       document.documentElement.setAttribute("data-emoji", "on");
+      try { document.documentElement.setAttribute("data-shf-mode", (window.__SHF_MODE__ || "PILOT")); } catch {}
     } catch {}
   }, [appScope]);
 

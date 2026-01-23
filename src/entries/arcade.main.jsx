@@ -1,4 +1,6 @@
+import "@/styles/shell.css";
 import "@/styles/unified-shell.css";
+import "@/styles/app-shell.css";
 // src/entries/arcade.main.jsx
 // ------------------------------------------------------------
 // L1X Arcade entry – standalone shell

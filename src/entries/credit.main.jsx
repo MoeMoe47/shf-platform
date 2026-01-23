@@ -1,4 +1,6 @@
+import "@/styles/shell.css";
 import "@/styles/unified-shell.css";
+import "@/styles/app-shell.css";
 // src/entries/credit.main.jsx
 
 // (optional) Register service worker when supported (no hard failure in dev)

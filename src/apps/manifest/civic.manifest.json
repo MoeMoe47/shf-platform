@@ -3,13 +3,19 @@
   "id": "civic",
   "name": "Civic",
   "entry": "src/entries/civic.main.jsx",
-  "routes": "src/router/CivicRoutes.jsx",
-  "layout": "src/layouts/CivicLayout.jsx",
+  "routes": "/",
+  "layout": "shell",
   "shellCss": "src/styles/civic-shell.css",
   "dashboard": "src/pages/civic/CivicDashboard.jsx",
   "capabilities": {},
   "meta": {
     "generated": true,
-    "createdAt": "2026-01-21T16:02:37.875Z"
+    "createdAt": "2026-01-21T16:02:37.875Z",
+    "shf": {
+      "status": "PILOT_ONLY",
+      "fundingReady": false,
+      "pilotOnly": true,
+      "systemOnly": false
+    }
   }
 }

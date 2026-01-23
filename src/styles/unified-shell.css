@@ -160,3 +160,15 @@
   
 
 
+
+
+/* === FIX: readable defaults === */
+:root{
+  --sh-bg:#F7F3EA;
+  --sh-fg:#141414;
+  --sh-card:#FFFFFF;
+  --sh-border:rgba(20,20,20,.12);
+}
+html,body{ background:var(--sh-bg); color:var(--sh-fg); }
+.sh-shell{ background:var(--sh-bg); color:var(--sh-fg); }
+.ar-card,.card,.panel{ background:var(--sh-card); border-color:var(--sh-border); }

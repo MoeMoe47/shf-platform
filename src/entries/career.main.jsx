@@ -1,15 +1,21 @@
 // src/entries/career.main.jsx
 import React from "react";
 import { createRoot } from "react-dom/client";
+window.addEventListener("shf:mode", () => {
+  window.location.reload();
+});
+window.addEventListener("shf:mode", () => {
+  window.location.reload();
+});
 import { HashRouter } from "react-router-dom";
 
 import RootProviders from "@/entries/RootProviders.jsx";
 
 // Shell + theme styles so the career app looks like the rest of SHF
 import "@/styles/theme-shf.css";
+import "@/styles/_bg-guard.css";
 import "@/styles/unified-shell.css";
-import "@/styles/unified-shell.optin.css";
-import "@/styles/app-shell.css";
+import "@/styles/shell.css";
 import "@/styles/career-shell.css";
 import "@/styles/util-wash.css";
 
@@ -40,12 +46,23 @@ function getMount(id = "root", appAttrValue = APP) {
 function bootstrap() {
   const mount = getMount("root", APP);
   const root = createRoot(mount);
+window.addEventListener("shf:mode", () => {
+  window.location.reload();
+});
+window.addEventListener("shf:mode", () => {
+  window.location.reload();
+});
 
   root.render(
     <React.StrictMode>
       <RootProviders appScope={APP}>
         <HashRouter>
-        </HashRouter>
+        <div className="shf-shell">
+          <div className="app-shell">
+            
+          </div>
+        </div>
+      </HashRouter>
       </RootProviders>
     </React.StrictMode>
   );

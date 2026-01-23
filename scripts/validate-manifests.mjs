@@ -35,8 +35,13 @@ for (const f of files) {
   if (ids.has(m.id)) fail(`duplicate id "${m.id}"`);
   ids.add(m.id);
 
-  for (const key of ["entry","routes","layout","shellCss"]) {
-    if (typeof m[key] !== "string" || !m[key].trim()) fail(`${f} ${key} must be a string path`);
+  // ROUTES MUST BE A ROUTE PATH (not a file)
+  if (typeof m.routes !== "string" || !m.routes.startsWith("/")) {
+    throw new Error(`${file} routes must be a string path starting with "/"`);
+  }
+
+  for (const key of ["entry","shellCss"]) {
+if (typeof m[key] !== "string" || !m[key].trim()) fail(`${f} ${key} must be a string path`);
     const p = path.join(ROOT, m[key]);
     if (!fs.existsSync(p)) {
       console.warn(`⚠️  ${f} references missing file: ${m[key]}`);

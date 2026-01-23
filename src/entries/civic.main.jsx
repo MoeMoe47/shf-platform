@@ -1,3 +1,6 @@
+import "@/styles/shell.css";
+import "@/styles/unified-shell.css";
+import "@/styles/app-shell.css";
 // src/entries/civic.main.jsx
 import React from "react";
 import ReactDOM from "react-dom/client";

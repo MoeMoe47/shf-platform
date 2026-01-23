@@ -3,13 +3,19 @@
   "id": "sales",
   "name": "Sales",
   "entry": "src/entries/sales.main.jsx",
-  "routes": "src/router/SalesRoutes.jsx",
-  "layout": "src/layouts/SalesLayout.jsx",
+  "routes": "/",
+  "layout": "shell",
   "shellCss": "src/styles/sales-shell.css",
   "dashboard": "src/pages/sales/Dashboard.jsx",
   "capabilities": {},
   "meta": {
     "generated": true,
-    "createdAt": "2026-01-21T16:02:37.876Z"
+    "createdAt": "2026-01-21T16:02:37.876Z",
+    "shf": {
+      "status": "PILOT_ONLY",
+      "fundingReady": false,
+      "pilotOnly": true,
+      "systemOnly": false
+    }
   }
 }

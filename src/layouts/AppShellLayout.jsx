@@ -1,5 +1,6 @@
 // src/layouts/AppShellLayout.jsx
 import React from "react";
+import ControlPlaneStrip from "@/components/platform/ControlPlaneStrip.jsx";
 import { Outlet } from "react-router-dom";
 import ToastHub from "@/components/ToastHub.jsx";
 import WalletButton from "@/components/WalletButton.jsx";
@@ -54,7 +55,12 @@ export default function AppShellLayout({ app="app", Sidebar, title="App", header
             {collapsed ? "Expand" : "Collapse"}
           </button>
         </div>
-      </header>
+      
+      {/* Control Plane (global) */}
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <ControlPlaneStrip />
+      </div>
+</header>
 
       <div className="sh-shellBody">
         <aside className={`sh-sidebar ${collapsed ? "is-collapsed" : ""}`} aria-label="Primary">

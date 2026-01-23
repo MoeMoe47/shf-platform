@@ -10,3 +10,27 @@ main, .app-main, .car-main, .civ-main, .sales-main, .treasury-main { min-height:
 @supports not (height: 100dvh) { :root { --vh: 1vh; } }
 #root, [data-app] { min-height: calc(var(--vh) * 100); }
 
+
+
+/* === FIX: Guarantee full-height shell (GLOBAL) === */
+html, body, #root {
+  height: 100%;
+  min-height: 100%;
+}
+
+.sh-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.sh-shellBody {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.sh-main {
+  flex: 1;
+  min-height: 0;
+}

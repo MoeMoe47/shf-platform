@@ -3,8 +3,8 @@
   "id": "credit",
   "name": "Credit Bureau",
   "entry": "src/entries/credit.main.jsx",
-  "routes": "src/router/CreditRoutes.jsx",
-  "layout": "src/layouts/CreditLayout.jsx",
+  "routes": "/",
+  "layout": "shell",
   "shellCss": "src/styles/credit-shell.css",
   "dashboard": "src/components/credit/Dashboard.jsx",
   "capabilities": {
@@ -12,6 +12,12 @@
   },
   "meta": {
     "generated": true,
-    "createdAt": "2026-01-21T16:02:37.875Z"
+    "createdAt": "2026-01-21T16:02:37.875Z",
+    "shf": {
+      "status": "SYSTEM_CORE",
+      "fundingReady": true,
+      "pilotOnly": false,
+      "systemOnly": false
+    }
   }
 }

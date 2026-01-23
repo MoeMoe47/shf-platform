@@ -3,8 +3,8 @@
   "id": "treasury",
   "name": "Treasury",
   "entry": "src/entries/treasury.main.jsx",
-  "routes": "src/router/TreasuryRoutes.jsx",
-  "layout": "src/layouts/TreasuryLayout.jsx",
+  "routes": "/",
+  "layout": "shell",
   "shellCss": "src/styles/treasury-shell.css",
   "dashboard": "src/pages/treasury/Dashboard.jsx",
   "capabilities": {
@@ -13,6 +13,12 @@
   },
   "meta": {
     "generated": true,
-    "createdAt": "2026-01-21T16:02:37.876Z"
+    "createdAt": "2026-01-21T16:02:37.876Z",
+    "shf": {
+      "status": "SYSTEM_CORE",
+      "fundingReady": true,
+      "pilotOnly": false,
+      "systemOnly": true
+    }
   }
 }

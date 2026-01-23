@@ -1,3 +1,4 @@
+import "@/styles/shell.css";
 import "@/styles/unified-shell.css";
 // --- CSS: keep your app styles first, shell last ---
 import "@/styles/ai-compass.css";          // your existing AI styles (keep!)

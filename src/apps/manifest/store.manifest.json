@@ -3,8 +3,8 @@
   "id": "store",
   "name": "Store",
   "entry": "src/entries/store.main.jsx",
-  "routes": "src/router/StoreRoutes.jsx",
-  "layout": "src/layouts/StoreLayout.jsx",
+  "routes": "/",
+  "layout": "shell",
   "shellCss": "src/styles/app-shell.css",
   "dashboard": "src/pages/store/StoreCatalog.jsx",
   "capabilities": {
@@ -12,6 +12,12 @@
   },
   "meta": {
     "generated": true,
-    "createdAt": "2026-01-21T16:02:37.877Z"
+    "createdAt": "2026-01-21T16:02:37.877Z",
+    "shf": {
+      "status": "PILOT_ONLY",
+      "fundingReady": false,
+      "pilotOnly": true,
+      "systemOnly": false
+    }
   }
 }

@@ -191,13 +191,13 @@ export default function CalendarCard({
       <div className="sh-cardBody">
         {/* Header row with collapse toggle */}
         <div className="sh-calHeader">
-          <button className="sh-btn sh-btn--secondary" onClick={goPrev} aria-label="Previous month">←</button>
+          <button className="sh-calBtn sh-calBtn--secondary" onClick={goPrev} aria-label="Previous month">←</button>
           <h2 id="calendar" className="sh-cardTitle" style={{margin:0}}>
             {monthNames[month]} {year}
           </h2>
           <div className="sh-calHeaderRight">
             <button
-              className="sh-btn sh-btn--secondary sh-collapseBtn"
+              className="sh-calBtn sh-calBtn--secondary sh-collapseBtn"
               onClick={() => setCollapsed(c => !c)}
               aria-expanded={!collapsed}
               aria-controls="calendar-body"
@@ -205,7 +205,7 @@ export default function CalendarCard({
             >
               {collapsed ? "Expand" : "Collapse"}
             </button>
-            <button className="sh-btn sh-btn--secondary" onClick={goNext} aria-label="Next month">→</button>
+            <button className="sh-calBtn sh-calBtn--secondary" onClick={goNext} aria-label="Next month">→</button>
           </div>
         </div>
 
@@ -299,9 +299,9 @@ export default function CalendarCard({
                   <div className="sh-dayHeader">
                     <strong id="dayDetails">{selectedISO}</strong>
                     <div style={{display:"flex",gap:8}}>
-                      <button className="sh-btn sh-btn--secondary" onClick={quickAddSelected}>+ quick</button>
-                      <button className="sh-btn sh-btn--secondary" onClick={exportSelectedCSV} disabled={selectedList.length===0}>Export Day CSV</button>
-                      <button className="sh-btn sh-btn--secondary" onClick={exportMonthCSV}>Export Month CSV</button>
+                      <button className="sh-calBtn sh-calBtn--secondary" onClick={quickAddSelected}>+ quick</button>
+                      <button className="sh-calBtn sh-calBtn--secondary" onClick={exportSelectedCSV} disabled={selectedList.length===0}>Export Day CSV</button>
+                      <button className="sh-calBtn sh-calBtn--secondary" onClick={exportMonthCSV}>Export Month CSV</button>
                       <button className="sh-linkBtn" onClick={()=>setSelectedISO(null)} aria-label="Clear selection">clear</button>
                     </div>
                   </div>
@@ -391,8 +391,8 @@ export default function CalendarCard({
                     <input name="link" type="url" placeholder="https://zoom.us/..." value={form.link} onChange={onFormChange} />
                   </label>
                   <div className="sh-devActions">
-                    <button type="submit" className="sh-btn">Add</button>
-                    <button type="button" className="sh-btn sh-btn--secondary" onClick={clearAdded}>Clear added</button>
+                    <button type="submit" className="sh-calBtn">Add</button>
+                    <button type="button" className="sh-calBtn sh-calBtn--secondary" onClick={clearAdded}>Clear added</button>
                   </div>
                 </form>
                 <p className="sh-hint">Dev-only: these events live in component state and reset on reload.</p>
@@ -468,14 +468,8 @@ export default function CalendarCard({
         .sh-tag{display:inline-block; font-size:11px; font-weight:700; letter-spacing:.3px; padding:2px 8px; border-radius:999px; border:1px solid var(--line); background:#fff; margin-right:2px; vertical-align:middle;}
         .sh-tag-zoom{ border-color:var(--orange); color:var(--orange) }
         .sh-tag-assignment{ border-color:var(--slate); color:var(--slate) }
-        .sh-tag-milestone{ border-color:#6b7280; color:#6b7280 }
-
-        /* buttons */
-        .sh-miniBtn{ padding:6px 10px; border-radius:999px; border:1px solid var(--line); background:#fff; color:var(--slate); font-size:12px; font-weight:600; cursor:pointer; text-decoration:none; }
-        .sh-miniBtn:hover{ border-color:var(--orange) }
-        .sh-miniBtn[aria-disabled="true"]{ opacity:.5; pointer-events:none }
-        .sh-btn{padding:8px 12px;border-radius:10px;border:1px solid var(--orange);background:var(--orange);color:#fff;font-weight:600;cursor:pointer}
-        .sh-btn--secondary{background:#fff;color:var(--slate);border-color:var(--line)}
+        .sh-tag-milestone{ border-color:#6b7280; color:#6b7280 }$1.sh-calBtn{padding:8px 12px;border-radius:10px;border:1px solid var(--orange);background:var(--orange);color:#fff;font-weight:600;cursor:pointer}
+        .sh-calBtn--secondary{background:#fff;color:var(--slate);border-color:var(--line)}
         .sh-linkBtn{background:none;border:none;color:var(--orange);cursor:pointer;padding:2px 6px}
 
         /* dev panel */

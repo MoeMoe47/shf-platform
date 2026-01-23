@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { getAppRegistry } from "@/apps/manifest/registry.js";
 import ControlPlaneStrip from "@/components/admin/ControlPlaneStrip.jsx";
+import "@/styles/admin.appRegistry.css";
 import { buildOpenHref } from "@/apps/manifest/href.js";
 import { setAppOverride, clearAppOverride, setSessionOverride, clearSessionOverride, getOverrideEvents } from "@/apps/manifest/overrides.js";
 
@@ -12,6 +13,52 @@ function capChip(on) {
   return on ? "ar-chip ar-chipOn" : "ar-chip";
 }
 
+function matchStatusFilter(m, statusFilter) {
+  const shf = (m && m.meta && m.meta.shf) ? m.meta.shf : {};
+  if (!statusFilter || statusFilter === "ALL") return true;
+
+  if (statusFilter === "FUNDING_READY") return !!shf.fundingReady;
+  if (statusFilter === "PILOT_ONLY") return !!shf.pilotOnly;
+  if (statusFilter === "SYSTEM_CORE") return (String(shf.status || "").toUpperCase() === "SYSTEM_CORE") || !!(m?.meta?.systemCore);
+  if (statusFilter === "FUNNEL") return !!(shf.funnelPrimary || m?.meta?.funnelPrimary);
+  return true;
+}
+
+function ShfBadge({ label, kind }) {
+  const cls =
+    kind === "core" ? "shf-badge shf-badge--core" :
+    kind === "pilot" ? "shf-badge shf-badge--pilot" :
+    kind === "funding" ? "shf-badge shf-badge--funding" :
+    kind === "funnel" ? "shf-badge shf-badge--funnel" :
+    "shf-badge";
+  return <span className={cls}>{label}</span>;
+}
+
+
+function getStatusBadges(id, m) {
+  const badges = [];
+
+  const contract = (m && typeof m.contract === "object") ? m.contract : {};
+  const meta = (m && typeof m.meta === "object") ? m.meta : {};
+
+  const isFunnel = meta.funnelPrimary === true || id === "career";
+  const isCore = meta.systemCore === true || ["admin","foundation","career","curriculum","credit","loo"].includes(id);
+
+  const pilotOnly = contract.pilotGate === true || meta.pilotOnly === true;
+
+  const fundingEligible = Array.isArray(contract.fundingEligible) ? contract.fundingEligible : [];
+  const killSwitch = contract.killSwitch === true;
+  const riskTier = String(contract.riskTier || "").toLowerCase();
+  const fundingReady = fundingEligible.length > 0 && killSwitch && (riskTier === "low" || riskTier === "medium");
+
+  if (fundingReady) badges.push({ label: "Funding Ready", kind: "funding" });
+  if (pilotOnly) badges.push({ label: "Pilot Only", kind: "pilot" });
+  if (isCore) badges.push({ label: "System Core", kind: "core" });
+  if (isFunnel) badges.push({ label: "Funnel", kind: "funnel" });
+
+  return badges;
+}
+
 export default function AppRegistry() {
   const [tick, setTick] = React.useState(0);
 
@@ -21,24 +68,37 @@ export default function AppRegistry() {
   }
 
   function resetEnabled(appId) {
+    clearSessionOverride(appId);
     clearAppOverride(appId);
     setTick((n) => n + 1);
   }
-
+  function toggleEnabledSession(appId, nextEnabled) {
+    if (nextEnabled === null || typeof nextEnabled === "undefined") {
+      clearSessionOverride(appId);
+    } else {
+      setSessionOverride(appId, { enabled: !!nextEnabled });
+    }
+    setTick((n) => n + 1);
+  }
 
   const [query, setQuery] = useState("");
   const [showDisabled, setShowDisabled] = useState(true);
+  const [statusFilter, setStatusFilter] = useState("ALL");
   const [events, setEvents] = useState(() => {
     try { return getOverrideEvents() || []; } catch { return []; }
   });
 
   React.useEffect(() => {
-    function onState() {
+    function bump() {
       setTick((n) => n + 1);
       try { setEvents(getOverrideEvents() || []); } catch {}
     }
-    window.addEventListener("shf:app-state", onState);
-    return () => window.removeEventListener("shf:app-state", onState);
+    window.addEventListener("shf:app-state", bump);
+    window.addEventListener("shf:mode", bump);
+    return () => {
+      window.removeEventListener("shf:app-state", bump);
+      window.removeEventListener("shf:mode", bump);
+    };
   }, []);
 
   const registry = useMemo(() => getAppRegistry(), [tick]);
@@ -47,17 +107,20 @@ export default function AppRegistry() {
 
     return registry
       .filter((r) => {
-        const name = (r.manifest?.name || "").toLowerCase();
-        const id = (r.id || "").toLowerCase();
+        const m = r.manifest || {};
+        const name = String(r.manifest?.name ?? "").toLowerCase();
+        const id = String(r.id ?? "").toLowerCase();
         const match = !q || name.includes(q) || id.includes(q);
         if (!match) return false;
 
         const enabled = r.enabled === true;
         if (!showDisabled && !enabled) return false;
 
+        if (!matchStatusFilter(r?.manifest, statusFilter)) return false;
+
         return true;
       });
-  }, [registry, query, showDisabled]);
+  }, [registry, query, showDisabled, statusFilter]);
 
   return (
     <div className="ar-wrap">
@@ -71,6 +134,7 @@ export default function AppRegistry() {
         </div>
 
         <div className="ar-actions">
+          
           <div className="ar-search">
             <span className="ar-searchIco">⌕</span>
             <input
@@ -89,15 +153,26 @@ export default function AppRegistry() {
             />
             <span>Show disabled</span>
           </label>
+        
+          <div className="ar-filters" role="group" aria-label="Status filters">
+            <button className={pillClass(statusFilter==="ALL")} onClick={() => setStatusFilter("ALL")}>All</button>
+            <button className={pillClass(statusFilter==="FUNNEL")} onClick={() => setStatusFilter("FUNNEL")}>Primary Funnel</button>
+            <button className={pillClass(statusFilter==="SYSTEM_CORE")} onClick={() => setStatusFilter("SYSTEM_CORE")}>System Core</button>
+            <button className={pillClass(statusFilter==="FUNDING_READY")} onClick={() => setStatusFilter("FUNDING_READY")}>Funding Ready</button>
+            <button className={pillClass(statusFilter==="PILOT_ONLY")} onClick={() => setStatusFilter("PILOT_ONLY")}>Pilot Only</button>
+          </div>
         </div>
       </header>
 
       <ControlPlaneStrip contractVersion={String(document?.documentElement?.dataset?.contractVersion || "?")} />
 
       <section className="ar-grid">
-        {list.map(({ id, manifest: m, caps, enabled }) => {
+        {list.map(({ id, manifest: m, caps, enabled, gatedBy }) => {
+          caps = caps || { map:false, ledger:false, analytics:false, payments:false };
           
           const openHref = buildOpenHref(m);
+          const entry = (m && m.entry) ? m.entry : (m?.entry || "");
+          const badges = getStatusBadges(id, m);
 
           return (
             <article key={id} className={enabled ? "ar-card" : "ar-card ar-cardDisabled"}>
@@ -115,12 +190,40 @@ export default function AppRegistry() {
                   <span className="ar-metaKey">contract:</span>{" "}
                   <span className="ar-mono">{String(m?.contractVersion ?? "?")}</span>
                 </div>
+
+                <div className="ar-badges">
+                  {badges.map((b) => (
+                    <ShfBadge key={b.kind + ":" + b.label} label={b.label} kind={b.kind} />
+                  ))}
+                </div>
+
+                <div className="shf-badges" aria-label="SHF status badges">
+                  {(() => {
+                    const shf = (m && m.meta && m.meta.shf) ? m.meta.shf : {};
+                    const status = String(shf.status || "").toUpperCase();
+                    const badges = [];
+
+                    if (shf.funnelPrimary || m?.meta?.funnelPrimary) badges.push({ label: "Primary Funnel", kind: "funnel" });
+                    if (status === "SYSTEM_CORE" || m?.meta?.systemCore) badges.push({ label: "System Core", kind: "core" });
+                    if (shf.fundingReady) badges.push({ label: "Funding Ready", kind: "funding" });
+                    if (shf.pilotOnly) badges.push({ label: "Pilot Only", kind: "pilot" });
+
+                    return badges.length
+                      ? badges.map((b, i) => <ShfBadge key={i} label={b.label} kind={b.kind} />)
+                      : <span className="ar-muted">—</span>;
+                  })()}
+                </div>
               </div>
 
               <div className="ar-body">
+{gatedBy && (
+  <div className="ar-gate">
+    Gated: {gatedBy === "SYSTEM_ONLY" ? "SYSTEM MODE REQUIRED" : "PILOT MODE REQUIRED"}
+  </div>
+)}
                 <div className="ar-row">
                   <div className="ar-label">Entry</div>
-                  <div className="ar-value ar-mono">{entry || "—"}</div>
+                  <div className="ar-value ar-mono">{m?.entry || "—"}</div>
                 </div>
 
                 <div className="ar-row">
@@ -308,6 +411,11 @@ export default function AppRegistry() {
         .ar-pillOn{ border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.06); opacity:.95; }
 
         .ar-body{ padding: 10px 14px 12px; border-top: 1px solid rgba(255,255,255,.06); border-bottom: 1px solid rgba(255,255,255,.06); }
+{gatedBy && (
+  <div className="ar-gate">
+    Gated: {gatedBy === "SYSTEM_ONLY" ? "SYSTEM MODE REQUIRED" : "PILOT MODE REQUIRED"}
+  </div>
+)}
         .ar-row{ display:flex; gap:10px; padding: 6px 0; }
         .ar-label{ width: 92px; font-size:12px; opacity:.65; }
         .ar-value{ flex:1; font-size:12px; opacity:.85; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }

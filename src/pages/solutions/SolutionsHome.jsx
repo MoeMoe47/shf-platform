@@ -48,10 +48,6 @@ export default function SolutionsHome() {
       return "";
     }
   })();
-
-const aiManifest = loadManifest("ai");
-  const aiHref = toEntryHref(aiManifest, "/ai.html");
-
   return (
     <div className="sh-solutions">
       <div className="sh-hero">
@@ -118,7 +114,7 @@ const aiManifest = loadManifest("ai");
         .sh-heroTitle{ font-size:34px; line-height:1.05; margin:10px 0 8px; }
         .sh-heroSub{ font-size:15px; opacity:.85; margin:0 0 14px; max-width:720px; }
         .sh-heroRow{ display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
-        .sh-btn{ display:inline-flex; align-items:center; gap:10px; padding:10px 14px; border-radius:14px; border:1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); text-decoration:none; }
+        .sh-solutions .sh-btn{ display:inline-flex; align-items:center; gap:10px; padding:10px 14px; border-radius:14px; border:1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); text-decoration:none; }
         .sh-muted{ font-size:12px; opacity:.7; }
 
         .sh-grid{ display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:14px; margin-top:14px; }

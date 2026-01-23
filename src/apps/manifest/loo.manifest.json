@@ -3,8 +3,8 @@
   "id": "loo",
   "name": "Lord of Outcomes",
   "entry": "src/entries/lordOutcomes.main.jsx",
-  "routes": "src/router/LordOutcomesRoutes.jsx",
-  "layout": "src/layouts/LordOutcomesLayout.jsx",
+  "routes": "/",
+  "layout": "shell",
   "shellCss": "src/styles/lordOutcomes.css",
   "dashboard": "src/pages/lordOutcomes/LordOutcomesHome.jsx",
   "capabilities": {
@@ -12,6 +12,12 @@
   },
   "meta": {
     "generated": true,
-    "createdAt": "2026-01-21T16:02:37.876Z"
+    "createdAt": "2026-01-21T16:02:37.876Z",
+    "shf": {
+      "status": "SYSTEM_CORE",
+      "fundingReady": true,
+      "pilotOnly": false,
+      "systemOnly": true
+    }
   }
 }

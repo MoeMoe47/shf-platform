@@ -41,9 +41,13 @@ export function isDemoMode() {
 --------------------------- */
 export function getAppOverrides() {
   if (typeof window === "undefined") return {};
-  const raw = window.localStorage.getItem(KEY_PERSIST);
-  const parsed = safeParse(raw);
-  return (parsed && typeof parsed === "object") ? parsed : {};
+  try {
+    const raw = window.localStorage.getItem(KEY_PERSIST);
+    const parsed = safeParse(raw);
+    return (parsed && typeof parsed === "object") ? parsed : {};
+  } catch {
+    return {};
+  }
 }
 
 export function setAppOverride(appId, patch) {
@@ -79,7 +83,6 @@ export function clearAppOverride(appId) {
 --------------------------- */
 export function getSessionOverrides() {
   if (typeof window === "undefined") return {};
-  // sessionStorage preferred; fallback to memory if blocked
   try {
     const raw = window.sessionStorage.getItem(KEY_SESSION);
     const parsed = safeParse(raw);
@@ -147,3 +150,52 @@ export function countAllOverrides() {
   const sCount = s ? Object.keys(s).length : 0;
   return { persisted: pCount, session: sCount, total: pCount + sCount };
 }
+
+
+/* === SHF FIX: exports expected by applyManifest.js ===
+   Keep logic minimal + safe. If overrides exist, source="override", else "manifest".
+*/
+export function hasAnyOverride(appId) {
+  try {
+    const p = getAppOverrides() || {};
+    const se = getSessionOverrides() || {};
+    if (!appId) return (Object.keys(p).length + Object.keys(se).length) > 0;
+    return !!(p[appId] || se[appId]);
+  } catch {
+    return false;
+  }
+}
+
+export function resolveAppEnabledWithSource(appId, manifest) {
+  const enabledRaw = (typeof resolveAppEnabled === "function")
+    ? resolveAppEnabled(appId, manifest)
+    : !!(manifest?.enabled ?? true);
+
+  const shf = (manifest && manifest.meta && manifest.meta.shf) ? manifest.meta.shf : {};
+  const mode = (typeof window !== "undefined")
+    ? String(window.__SHF_MODE__ || document?.documentElement?.dataset?.shfMode || "PILOT").toUpperCase()
+    : "PILOT";
+
+  // Mode gates (hard policy)
+  const systemOnly = !!shf.systemOnly;
+  const pilotOnly  = !!shf.pilotOnly;
+
+  if (mode === "PILOT" && systemOnly) return { enabled: false, source: "mode" };
+  if (mode === "SYSTEM" && pilotOnly) return { enabled: false, source: "mode" };
+
+  const enabled = !!enabledRaw;
+  const source = hasAnyOverride(appId) ? "override" : "manifest";
+  return { enabled, source };
+}
+
+/* === BEGIN SHF FIX ===
+   These exports are required by applyManifest.js for:
+   - enabled source attribution
+   - demo badge (runtime overrides)
+   Keep these as top-level named exports.
+=== */
+
+
+// scanner-friendly explicit named exports (harmless if already exported above)
+
+/* === END SHF FIX === */

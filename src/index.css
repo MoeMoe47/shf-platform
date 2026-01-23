@@ -66,7 +66,6 @@ body{
 }
 
 /* ---------------- Frame ---------------- */
-.sh-root{ display:flex; min-height:100vh; background:var(--beige); color:var(--text); }
 .sh-left{ display:flex; flex-direction:column; }
 .sh-right{ display:flex; flex-direction:column; flex:1; min-width:0; }
 
@@ -177,7 +176,6 @@ html[data-app="curriculum"] .sh-header{ display:none !important; }
 .sh-muted{ color:var(--ink-soft); }
 
 /* ------------- Buttons ------------- */
-.sh-btn{ font:inherit; cursor:pointer; border-radius:10px; padding:10px 14px; border:1px solid transparent; }
 .sh-btn--primary{ background:var(--accent); color:#fff; border-color:var(--accent); }
 .sh-btn--secondary{ background:var(--card); color:var(--accent); border-color:var(--accent); }
 .sh-btn--primary:hover{ filter:brightness(1.02); }

@@ -3,13 +3,19 @@
   "id": "arcade",
   "name": "Arcade",
   "entry": "src/entries/arcade.main.jsx",
-  "routes": "src/router/ArcadeRoutes.jsx",
-  "layout": "src/layouts/ArcadeLayout.jsx",
+  "routes": "/",
+  "layout": "shell",
   "shellCss": "src/styles/arcade-shell.css",
   "dashboard": "src/pages/arcade/ArcadeDashboard.jsx",
   "capabilities": {},
   "meta": {
     "generated": true,
-    "createdAt": "2026-01-21T16:02:37.875Z"
+    "createdAt": "2026-01-21T16:02:37.875Z",
+    "shf": {
+      "status": "PILOT_ONLY",
+      "fundingReady": false,
+      "pilotOnly": true,
+      "systemOnly": false
+    }
   }
 }

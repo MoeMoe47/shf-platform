@@ -3,8 +3,16 @@
   "id": "solutions",
   "name": "Solutions",
   "entry": "src/entries/solutions.main.jsx",
-  "routes": "src/router/SolutionsRoutes.jsx",
-  "layout": "src/layouts/SolutionsLayout.jsx",
+  "routes": "/",
+  "layout": "shell",
   "shellCss": "src/styles/theme-solutions.css",
-  "capabilities": {}
+  "capabilities": {},
+  "meta": {
+    "shf": {
+      "status": "PILOT_ONLY",
+      "fundingReady": false,
+      "pilotOnly": true,
+      "systemOnly": false
+    }
+  }
 }

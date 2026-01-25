@@ -1,0 +1,14 @@
+{
+  "id": "shf.admin.app-registry",
+  "status": "LOCKED",
+  "route": "/admin.html#/app-registry",
+  "file": "src/pages/admin/AppRegistry.jsx",
+  "must_have": {
+    "controls": ["search", "showDisabledToggle", "filterPills"],
+    "filterPills": ["ALL", "FUNNEL", "SYSTEM_CORE", "FUNDING_READY", "PILOT_ONLY"],
+    "grid": ["desktop:3", "tablet:2", "mobile:1"],
+    "gating": ["no-open-navigation", "show-lock-message", "gray-card"],
+    "actions": ["Enable (Demo)", "Disable (Demo)", "Enable (Saved)", "Disable (Saved)", "Reset"]
+  },
+  "lock_message": "🔒 Switch to SYSTEM mode to open"
+}

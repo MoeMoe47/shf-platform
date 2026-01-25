@@ -1,0 +1,55 @@
+{
+  "contractId": "shf.admin.appRegistry.ui",
+  "version": "1.0.0",
+  "description": "UI contract for Admin → App Registry. Ensures stable class hooks + essential UX states (gated/locked/disabled).",
+  "targets": [
+    {
+      "name": "AppRegistry.jsx source contract",
+      "file": "src/pages/admin/AppRegistry.jsx",
+      "requiredClassHooks": [
+        "ar-wrap",
+        "ar-head",
+        "ar-actions",
+        "ar-search",
+        "ar-toggle",
+        "ar-filters",
+        "ar-grid",
+        "ar-card",
+        "ar-cardDisabled",
+        "ar-cardGated",
+        "ar-lockRibbon",
+        "ar-gateNote",
+        "ar-btn",
+        "ar-btnPrimary",
+        "ar-btnLocked",
+        "ar-log",
+        "ar-logHead",
+        "ar-logList"
+      ],
+      "requiredSourceTokens": [
+        "canOpen",
+        "gatedBy",
+        "Switch to SYSTEM mode to open",
+        "Switch to PILOT mode to open",
+        "Copy manifest",
+        "Override Event Log"
+      ]
+    },
+    {
+      "name": "CSS file presence contract",
+      "file": "src/styles/admin.appRegistry.css",
+      "requiredFileOnly": true
+    },
+    {
+      "name": "Registry contract (gate resolver must exist)",
+      "file": "src/apps/manifest/registry.js",
+      "requiredSourceTokens": [
+        "export function resolveGate",
+        "gatedBy",
+        "canOpen",
+        "safeLoadManifest",
+        "getAppRegistry"
+      ]
+    }
+  ]
+}

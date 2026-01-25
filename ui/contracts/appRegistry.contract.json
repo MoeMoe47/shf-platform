@@ -1,0 +1,22 @@
+{
+  "id": "app-registry",
+  "version": 3,
+  "component": "src/pages/admin/AppRegistry.jsx",
+  "requiredClassHooks": [
+    "ar-wrap",
+    "ar-head",
+    "ar-actions",
+    "ar-search",
+    "ar-toggle",
+    "ar-filters",
+    "ar-grid",
+    "ar-card",
+    "ar-cardDisabled",
+    "ar-cardGated",
+    "ar-btn",
+    "ar-btnGhost",
+    "ar-btnLocked",
+    "ar-gate"
+  ],
+  "notes": "If this contract file changes, bump version. Validator requires each hook to appear within className=... strings in the component."
+}

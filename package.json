@@ -7,11 +7,17 @@
     "guardrails": "bash scripts/guardrails.sh",
     "manifests:validate": "node scripts/validate-manifests.mjs",
     "manifests:normalize": "node scripts/normalize-manifests.mjs",
-    "predev": "npm run manifests:validate",
+    "predev": "npm run manifests:validate && npm run ui:validate",
     "prebuild": "npm run manifests:validate",
-    "pretest": "npm run manifests:validate"
+    "pretest": "npm run manifests:validate",
+    "ui:validate": "node scripts/validate-ui-contracts.mjs",
+    "ui:snap": "playwright test tests/ui/appRegistry.spec.mjs",
+    "ui:snap:update": "playwright test tests/ui/appRegistry.spec.mjs --update-snapshots",
+    "ui:style": "playwright test tests/ui/appRegistry.styles.spec.mjs",
+    "ci:ui": "npm run manifests:validate && npm run ui:validate && npm run ui:style && npm run ui:snap"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.0",
     "@vitejs/plugin-react": "^5.1.0",
     "patch-package": "^8.0.1",
     "vite": "^7.2.2"

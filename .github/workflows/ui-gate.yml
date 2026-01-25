@@ -1,0 +1,42 @@
+name: UI Gate
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  ui_gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Start Vite
+        run: |
+          nohup npm run dev -- --host 127.0.0.1 --port 5173 --strictPort > vite.log 2>&1 &
+          node -e "const http=require('http');let n=0;const ping=()=>http.get('http://127.0.0.1:5173/',res=>{console.log('✅ Vite up');process.exit(0)}).on('error',()=>{if(n++>60){console.error('❌ Vite did not start');process.exit(1)};setTimeout(ping,500)});ping();"
+
+      - name: Run UI gates
+        run: npm run ci:ui
+
+      - name: Upload Vite log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vite-log
+          path: vite.log

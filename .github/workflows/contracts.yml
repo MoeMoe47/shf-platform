@@ -1,0 +1,20 @@
+name: contracts
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  registry-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: npm ci
+
+      - name: Registry UI contract smoketest
+        run: node --import tsx scripts/registry_ui_smoketest.mjs

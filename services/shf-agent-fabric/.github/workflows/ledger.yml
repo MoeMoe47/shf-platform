@@ -1,0 +1,38 @@
+name: ledger-precommit
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  verify-ledger:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt || true
+
+      - name: Verify registry ledger
+        env:
+          ADMIN_API_KEY: dummy-ci-key
+        run: |
+          python scripts/rebase_registry_ledger.py --dry-run
+          python - <<'PY'
+          from fabric.registry_event_ledger import verify_ledger
+          v = verify_ledger()
+          assert v.get("ok") and v.get("pass"), v
+          print("LEDGER PASS")
+          PY
+

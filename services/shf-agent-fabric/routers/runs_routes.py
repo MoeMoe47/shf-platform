@@ -7,8 +7,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from fastapi import APIRouter, HTTPException, Header
 from fabric.loo.validator import validate_report
-
 from fabric.security import require_admin_key
+from fabric.layers.global_gate import assert_global_execution_allowed
 
 router = APIRouter(prefix="/runs", tags=["runs"])
 
@@ -62,21 +62,10 @@ def _validate_pilot_steps(psteps: list[dict]) -> dict:
     msgs = []
     north = None
     if not step_nums:
-        return {
-            "ok": True,
-            "pilotStepsCount": len(psteps),
-            "stepNums": step_nums,
-            "northStar": north,
-            "errors": [],
-        }
+        return {"ok": True, "pilotStepsCount": len(psteps), "stepNums": step_nums, "northStar": north, "errors": []}
     if max(step_nums) < 6:
-        return {
-            "ok": True,
-            "pilotStepsCount": len(psteps),
-            "stepNums": step_nums,
-            "northStar": north,
-            "errors": [],
-        }
+        return {"ok": True, "pilotStepsCount": len(psteps), "stepNums": step_nums, "northStar": north, "errors": []}
+
     s6 = [s for s in psteps if s.get("step") == 6]
     if not s6:
         msgs.append("Step 6 missing")
@@ -85,18 +74,13 @@ def _validate_pilot_steps(psteps: list[dict]) -> dict:
         north = m.get("northStar")
         if not isinstance(north, dict):
             msgs.append("Step 6 northStar metrics required")
+
     ok = len(msgs) == 0
-    return {
-        "ok": ok,
-        "pilotStepsCount": len(psteps),
-        "stepNums": step_nums,
-        "northStar": north,
-        "errors": [] if ok else msgs,
-    }
+    return {"ok": ok, "pilotStepsCount": len(psteps), "stepNums": step_nums, "northStar": north, "errors": [] if ok else msgs}
+
 def _validate_plan_for_pilot(plan: dict) -> dict:
     psteps = _extract_pilot_steps_from_plan(plan)
-    v = _validate_pilot_steps(psteps)
-    return v
+    return _validate_pilot_steps(psteps)
 
 @router.post("/validate")
 def validate_run(payload: dict, x_admin_key: str | None = Header(default=None, alias="X-Admin-Key")):
@@ -131,6 +115,10 @@ def dry_run(payload: dict, x_admin_key: str | None = Header(default=None, alias=
 
 @router.post("/execute")
 def execute_run(payload: dict, x_admin_key: str | None = Header(default=None, alias="X-Admin-Key")):
+    assert_global_execution_allowed(route="/runs/execute")
+
+    # GLOBAL EXECUTION GATE (auditor truth)
+
     require_admin_key(x_admin_key)
 
     plan_id = payload.get("planId")
@@ -181,17 +169,8 @@ def execute_run(payload: dict, x_admin_key: str | None = Header(default=None, al
 
         _write_json(artifact_path, artifact)
 
-        artifacts_written.append({
-            "artifactId": artifact_id,
-            "path": str(artifact_path),
-            "sha256": artifact_hash,
-        })
-
-        results.append({
-            "step": s.get("step"),
-            "ok": True,
-            "result": artifacts_written[-1],
-        })
+        artifacts_written.append({"artifactId": artifact_id, "path": str(artifact_path), "sha256": artifact_hash})
+        results.append({"step": s.get("step"), "ok": True, "result": artifacts_written[-1]})
 
     plan["approved"] = True
     plan["status"] = "DONE"
@@ -222,10 +201,8 @@ def execute_run(payload: dict, x_admin_key: str | None = Header(default=None, al
 @router.get("/recent")
 def recent_runs(limit: int = 50, x_admin_key: str | None = Header(default=None, alias="X-Admin-Key")):
     require_admin_key(x_admin_key)
-
     if not RUNS_LOG.exists():
         return {"events": []}
-
     lines = RUNS_LOG.read_text(encoding="utf-8").splitlines()
     events = []
     for line in reversed(lines):

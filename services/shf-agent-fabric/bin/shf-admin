@@ -1,0 +1,155 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+BASE_URL="${SHF_BASE_URL:-http://127.0.0.1:8090}"
+ENV_PATH="${SHF_ENV:-/Users/mikeslate/Desktop/shrv1/services/shf-agent-fabric/.env}"
+
+PRETTY=0
+DRYRUN=0
+
+usage() {
+  cat <<'USAGE'
+shf-admin [--pretty] [--dry-run] [--base URL] [--env PATH] <command...> [-- curl_args...]
+
+Examples:
+  shf-admin --pretty agents
+  shf-admin --pretty /admin/agents
+  shf-admin --pretty registry
+  shf-admin --pretty registry events
+  shf-admin --pretty registry get Layer09CaseSupportAgent
+  shf-admin --dry-run --pretty registry upsert -X POST -H 'Content-Type: application/json' --data @payload.json
+
+Main commands:
+  agents          -> GET /admin/agents
+  layers          -> GET /admin/layers
+  apps            -> GET /api/v1/apps
+  openapi         -> GET /openapi.json
+  health          -> GET /health
+
+Registry commands:
+  registry                     -> GET  /admin/registry
+  registry events              -> GET  /admin/registry/events
+  registry get <entity_id>     -> GET  /admin/registry/<entity_id>
+  registry upsert              -> POST /admin/registry/upsert      (pass -H/-d etc after)
+  registry attest <entity_id>  -> POST /admin/registry/<id>/attest
+  registry lifecycle <entity_id> -> POST /admin/registry/<id>/lifecycle
+
+Notes:
+- If you pass a full URL (http://...), it is used as-is.
+- If you pass a path starting with /, it is joined to BASE_URL.
+- Use "--" to pass raw curl args after the command.
+USAGE
+}
+
+# flags
+while [[ ${1:-} == --* ]]; do
+  case "${1:-}" in
+    --pretty) PRETTY=1; shift ;;
+    --dry-run) DRYRUN=1; shift ;;
+    --base) BASE_URL="${2:-}"; shift 2 ;;
+    --env) ENV_PATH="${2:-}"; shift 2 ;;
+    -h|--help) usage; exit 0 ;;
+    --) shift; break ;;
+    *) echo "ERR: unknown flag: $1" >&2; usage; exit 2 ;;
+  esac
+done
+
+CMD="${1:-}"
+if [[ -z "${CMD:-}" ]]; then usage; exit 2; fi
+shift || true
+
+# Read ADMIN_API_KEY (first match)
+KEY="$(/usr/bin/env rg -m 1 -No '^ADMIN_API_KEY=.*' "$ENV_PATH" 2>/dev/null \
+  | /usr/bin/env sed 's/^ADMIN_API_KEY=//' \
+  | /usr/bin/env tr -d '\r' \
+  | /usr/bin/env tr -d '"' \
+  | /usr/bin/env xargs || true)"
+
+if [[ -z "${KEY:-}" ]]; then
+  echo "ERR: ADMIN_API_KEY not found in $ENV_PATH" >&2
+  exit 2
+fi
+
+build_url() {
+  local target="$1"
+  if [[ "$target" =~ ^https?:// ]]; then
+    printf "%s" "$target"
+  else
+    [[ "$target" == /* ]] || target="/$target"
+    printf "%s%s" "${BASE_URL%/}" "$target"
+  fi
+}
+
+do_request() {
+  local method="$1"; shift
+  local target="$1"; shift
+  local url; url="$(build_url "$target")"
+  local -a CURL=(/usr/bin/env curl -sS -X "$method" -H "X-Admin-Key: $KEY" "$url" "$@")
+
+  if [[ $DRYRUN -eq 1 ]]; then
+    echo "DRYRUN:" >&2
+    printf '  %q' "${CURL[@]}" >&2
+    echo >&2
+    exit 0
+  fi
+
+  if [[ $PRETTY -eq 1 ]]; then
+    "${CURL[@]}" | /usr/bin/env python3 -m json.tool
+  else
+    "${CURL[@]}"
+    echo
+  fi
+}
+
+case "$CMD" in
+  agents)   do_request GET  "/admin/agents" "$@" ;;
+  layers)   do_request GET  "/admin/layers" "$@" ;;
+  apps)     do_request GET  "/api/v1/apps" "$@" ;;
+  openapi)  do_request GET  "/openapi.json" "$@" ;;
+  health)   do_request GET  "/health" "$@" ;;
+
+  registry)
+    SUB="${1:-}"
+    case "$SUB" in
+      "" )
+        do_request GET "/admin/registry" "${@:1}"
+        ;;
+      events )
+        shift
+        do_request GET "/admin/registry/events" "$@"
+        ;;
+      get )
+        ID="${2:-}"
+        if [[ -z "${ID:-}" ]]; then echo "ERR: missing entity_id" >&2; exit 2; fi
+        shift 2
+        do_request GET "/admin/registry/$ID" "$@"
+        ;;
+      upsert )
+        shift
+        do_request POST "/admin/registry/upsert" "$@"
+        ;;
+      attest )
+        ID="${2:-}"
+        if [[ -z "${ID:-}" ]]; then echo "ERR: missing entity_id" >&2; exit 2; fi
+        shift 2
+        do_request POST "/admin/registry/$ID/attest" "$@"
+        ;;
+      lifecycle )
+        ID="${2:-}"
+        if [[ -z "${ID:-}" ]]; then echo "ERR: missing entity_id" >&2; exit 2; fi
+        shift 2
+        do_request POST "/admin/registry/$ID/lifecycle" "$@"
+        ;;
+      * )
+        echo "ERR: unknown registry subcommand: ${SUB:-}" >&2
+        usage
+        exit 2
+        ;;
+    esac
+    ;;
+
+  *)
+    # allow direct paths or full URLs (default GET)
+    do_request GET "$CMD" "$@"
+    ;;
+esac

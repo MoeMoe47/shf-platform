@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+BASE_URL="${BASE_URL:-http://127.0.0.1:8090}"
+
+need_key() {
+  : "${ADMIN_KEY:?ERR: ADMIN_KEY not set. Run: shfkey}"
+}
+
+fetch_json_to_tmp() {
+  local url="$1"
+  local tmp
+  tmp="$(mktemp)"
+  curl -fsS -H "X-Admin-Key: ${ADMIN_KEY}" "$url" > "$tmp"
+  echo "$tmp"
+}
+
+cmd="${1:-}"
+shift || true
+
+case "$cmd" in
+  smoke)
+    need_key
+    curl -fsS -o /dev/null -w "HTTP=%{http_code}\n" \
+      -H "X-Admin-Key: ${ADMIN_KEY}" \
+      "${BASE_URL}/admin/registry/events?limit=1"
+    ;;
+
+  events)
+    need_key
+    limit="${1:-20}"
+    tmp="$(fetch_json_to_tmp "${BASE_URL}/admin/registry/events?limit=${limit}")"
+
+    python3 - "$tmp" <<'PY'
+import json, sys
+
+path = sys.argv[1]
+raw = open(path, "r", encoding="utf-8", errors="replace").read().strip()
+if not raw:
+    raise SystemExit("ERR: empty response")
+
+d = json.loads(raw)
+for e in d.get("items", []):
+    ts = e.get("ts")
+    kind = e.get("kind")
+    action = e.get("action")
+    entity_id = e.get("entityId")
+    print(f"{ts} {kind} {action} {entity_id}")
+PY
+
+    rm -f "$tmp"
+    ;;
+
+  reg:list)
+    need_key
+    kind="${1:-}"
+    if [[ -z "$kind" ]]; then
+      echo "Usage: bin/shfcli reg:list <app|agent|business>" >&2
+      exit 2
+    fi
+
+    tmp="$(fetch_json_to_tmp "${BASE_URL}/admin/registry?kind=${kind}")"
+
+    python3 - "$tmp" <<'PY'
+import json, sys
+
+path = sys.argv[1]
+raw = open(path, "r", encoding="utf-8", errors="replace").read().strip()
+if not raw:
+    raise SystemExit("ERR: empty response")
+
+d = json.loads(raw)
+for x in d.get("items", []):
+    print(x.get("id"))
+PY
+
+    rm -f "$tmp"
+    ;;
+
+  *)
+    echo "Usage:"
+    echo "  bin/shfcli smoke"
+    echo "  bin/shfcli events [limit]"
+    echo "  bin/shfcli reg:list <app|agent|business>"
+    exit 2
+    ;;
+esac

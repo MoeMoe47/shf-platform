@@ -1,0 +1,145 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+BASE_URL="${BASE_URL:-http://127.0.0.1:8090}"
+
+need_key() {
+  : "${ADMIN_KEY:?ERR: ADMIN_KEY not set. Run: shfkey}"
+}
+
+fetch_json() {
+  local url="$1"
+  local tmp code body
+  tmp="$(mktemp)"
+  code="$(curl -sS -H "X-Admin-Key: ${ADMIN_KEY}" -o "$tmp" -w "%{http_code}" "$url" || true)"
+  body="$(cat "$tmp" 2>/dev/null || true)"
+  rm -f "$tmp"
+
+  body="$(printf '%s' "$body" | tr -d '\r' | sed -e 's/^[[:space:]]\+//' -e 's/[[:space:]]\+$//')"
+
+  if [[ -z "${code}" ]]; then
+    echo "ERR: curl failed (no HTTP code) for: $url" >&2
+    return 1
+  fi
+  if [[ "${code}" != "200" ]]; then
+    echo "ERR: HTTP=${code} for: $url" >&2
+    if [[ -n "${body}" ]]; then
+      echo "BODY (first 800 chars):" >&2
+      printf '%s' "$body" | head -c 800 >&2
+      echo >&2
+    fi
+    return 1
+  fi
+  if [[ -z "${body}" ]]; then
+    echo "ERR: empty response body for: $url" >&2
+    return 1
+  fi
+
+  case "${body}" in
+    \{*|\[* ) ;;
+    *)
+      echo "ERR: non-JSON response for: $url" >&2
+      echo "BODY (first 300 chars):" >&2
+      printf '%s' "$body" | head -c 300 >&2
+      echo >&2
+      return 1
+      ;;
+  esac
+
+  printf '%s' "${body}"
+}
+
+cmd="${1:-}"
+shift || true
+
+case "${cmd}" in
+  status)
+    curl -fsS "${BASE_URL}/health" && echo
+    ;;
+
+  status:short)
+    curl -fsS "${BASE_URL}/health" \
+    | python3 -c 'import sys,json
+d=json.load(sys.stdin)
+print("OK", d.get("service"), "git="+str(d.get("git")), "fingerprint="+str(d.get("codeFingerprint")), "ts="+str(d.get("ts")) )'
+    ;;
+
+  whoami)
+    need_key
+    curl -fsS -o /dev/null -w "OK AUTH HTTP=%{http_code}\n" \
+      -H "X-Admin-Key: ${ADMIN_KEY}" \
+      "${BASE_URL}/admin/registry?kind=app"
+    ;;
+
+  reg)
+    need_key
+    sub="${1:-}"; shift || true
+    if [[ "${sub}" != "list" ]]; then
+      echo "Usage: shf reg list <app|agent|business>" >&2
+      exit 2
+    fi
+    kind="${1:-}"
+    if [[ -z "${kind}" ]]; then
+      echo "Usage: shf reg list <app|agent|business>" >&2
+      exit 2
+    fi
+
+    fetch_json "${BASE_URL}/admin/registry?kind=${kind}" \
+    | python3 -c 'import sys,json
+d=json.load(sys.stdin)
+for x in d.get("items", []):
+    print(x.get("id"))'
+    ;;
+
+  events)
+    need_key
+
+    limit="20"
+    kind_filter=""
+    action_filter=""
+    id_filter=""
+
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --limit)  shift; limit="${1:-20}" ;;
+        --kind)   shift; kind_filter="${1:-}" ;;
+        --action) shift; action_filter="${1:-}" ;;
+        --id)     shift; id_filter="${1:-}" ;;
+        *)
+          if [[ "$1" =~ ^[0-9]+$ ]]; then
+            limit="$1"
+          else
+            echo "ERR: unknown arg: $1" >&2
+            echo "Usage: shf events [limit] [--kind K] [--action A] [--id ID] [--limit N]" >&2
+            exit 2
+          fi
+          ;;
+      esac
+      shift || true
+    done
+
+    KIND_FILTER="$kind_filter" ACTION_FILTER="$action_filter" ID_FILTER="$id_filter" \
+    fetch_json "${BASE_URL}/admin/registry/events?limit=${limit}" \
+    | python3 -c 'import os,sys,json
+d=json.load(sys.stdin)
+kf=os.environ.get("KIND_FILTER","")
+af=os.environ.get("ACTION_FILTER","")
+idf=os.environ.get("ID_FILTER","")
+for e in d.get("items", []):
+    if kf and e.get("kind") != kf: continue
+    if af and e.get("action") != af: continue
+    if idf and e.get("entityId") != idf: continue
+    print(f"{e.get(\"ts\")} {e.get(\"kind\")} {e.get(\"action\")} {e.get(\"entityId\")}")'
+    ;;
+
+  *)
+    echo "Usage:"
+    echo "  shf status"
+    echo "  shf status:short"
+    echo "  shf whoami"
+    echo "  shf reg list <app|agent|business>"
+    echo "  shf events [limit]"
+    echo "  shf events --limit N [--kind K] [--action A] [--id ID]"
+    exit 2
+    ;;
+esac

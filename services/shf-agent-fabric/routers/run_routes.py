@@ -6,6 +6,7 @@ from fabric.agent_state import agent_allowed
 from fabric.feedback import log_event
 from fabric.planner import build_plan
 from fabric.run_ledger import write_run_event
+from fabric.layers.global_gate import assert_global_execution_allowed
 import secrets
 
 router = APIRouter(tags=["run"])
@@ -16,6 +17,10 @@ class RunBody(BaseModel):
 
 @router.post("/run")
 def run(body: RunBody):
+    assert_global_execution_allowed(route="/run")
+
+    # GLOBAL EXECUTION GATE (auditor truth)
+
     request_id = secrets.token_hex(6)
 
     if get_mode() != "ON":

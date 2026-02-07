@@ -1,0 +1,2349 @@
+{
+  "layers": [
+    {
+      "applies_to": [
+        "agent",
+        "app",
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": false
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [],
+      "description": "Who can do what. AuthN/AuthZ, roles, org boundaries.",
+      "domain": "security",
+      "enforcement": {
+        "alignment_checks": [
+          "align.execution.mode_on_required"
+        ],
+        "fail_behavior": "halt",
+        "policy_checks": [
+          "policy.identity.agent_id_present",
+          "policy.identity.layer_key_present"
+        ],
+        "required": true,
+        "risk_checks": [
+          "risk.payload.max_input_kb_64",
+          "risk.payload.no_secrets_in_input"
+        ]
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 1,
+      "layer_key": "L01",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Identity & Access Control",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L01",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "agent",
+        "app",
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": false
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L01"
+      ],
+      "description": "Defines data types, sensitivity, retention, and allowed flows.",
+      "domain": "security",
+      "enforcement": {
+        "alignment_checks": [
+          "align.execution.mode_on_required"
+        ],
+        "fail_behavior": "halt",
+        "policy_checks": [
+          "policy.identity.agent_id_present",
+          "policy.identity.layer_key_present"
+        ],
+        "required": true,
+        "risk_checks": [
+          "risk.payload.max_input_kb_64",
+          "risk.payload.no_secrets_in_input"
+        ]
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 2,
+      "layer_key": "L02",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Data Classification & Handling",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L02",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "agent",
+        "app",
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": false
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L02"
+      ],
+      "description": "Ensures use of data matches consent/purpose (education, operations, reporting).",
+      "domain": "compliance",
+      "enforcement": {
+        "alignment_checks": [
+          "align.execution.mode_on_required"
+        ],
+        "fail_behavior": "halt",
+        "policy_checks": [
+          "policy.identity.agent_id_present",
+          "policy.identity.layer_key_present"
+        ],
+        "required": true,
+        "risk_checks": [
+          "risk.payload.max_input_kb_64",
+          "risk.payload.no_secrets_in_input"
+        ]
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 3,
+      "layer_key": "L03",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Consent & Purpose Limitation",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L03",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "agent",
+        "app",
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": false
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L01"
+      ],
+      "description": "Tamper-evident logs, traceability, evidence for audits and disputes.",
+      "domain": "governance",
+      "enforcement": {
+        "alignment_checks": [
+          "align.execution.mode_on_required"
+        ],
+        "fail_behavior": "halt",
+        "policy_checks": [
+          "policy.identity.agent_id_present",
+          "policy.identity.layer_key_present"
+        ],
+        "required": true,
+        "risk_checks": [
+          "risk.payload.max_input_kb_64",
+          "risk.payload.no_secrets_in_input"
+        ]
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 4,
+      "layer_key": "L04",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Audit Logging & Evidence",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L04",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "agent",
+        "app",
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": false
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L01",
+        "L04"
+      ],
+      "description": "Central place where enforceable policy checks live and are versioned.",
+      "domain": "governance",
+      "enforcement": {
+        "alignment_checks": [
+          "align.execution.mode_on_required"
+        ],
+        "fail_behavior": "halt",
+        "policy_checks": [
+          "policy.identity.agent_id_present",
+          "policy.identity.layer_key_present"
+        ],
+        "required": true,
+        "risk_checks": [
+          "risk.payload.max_input_kb_64",
+          "risk.payload.no_secrets_in_input"
+        ]
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 5,
+      "layer_key": "L05",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Policy Engine & Rules",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L05",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "agent",
+        "app",
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": false
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L05"
+      ],
+      "description": "Assigns risk levels to actions/agents; triggers throttling/quarantine.",
+      "domain": "governance",
+      "enforcement": {
+        "alignment_checks": [
+          "align.execution.mode_on_required"
+        ],
+        "fail_behavior": "halt",
+        "policy_checks": [
+          "policy.identity.agent_id_present",
+          "policy.identity.layer_key_present"
+        ],
+        "required": true,
+        "risk_checks": [
+          "risk.payload.max_input_kb_64",
+          "risk.payload.no_secrets_in_input"
+        ]
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 6,
+      "layer_key": "L06",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Risk Engine & Scoring",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L06",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "agent",
+        "app",
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin",
+          "governance_board"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": false
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L01",
+        "L05"
+      ],
+      "description": "Prevents authority creep; enforces decision levels and non-delegable actions.",
+      "domain": "alignment",
+      "enforcement": {
+        "alignment_checks": [
+          "align.execution.mode_on_required"
+        ],
+        "fail_behavior": "halt",
+        "policy_checks": [
+          "policy.identity.agent_id_present",
+          "policy.identity.layer_key_present"
+        ],
+        "required": true,
+        "risk_checks": [
+          "risk.payload.max_input_kb_64",
+          "risk.payload.no_secrets_in_input"
+        ]
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 7,
+      "layer_key": "L07",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Alignment & Authority Control",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L07",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "agent",
+        "app",
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": false
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L01"
+      ],
+      "description": "Protects keys/tokens; prevents secret exfiltration and unsafe config.",
+      "domain": "security",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "halt",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 8,
+      "layer_key": "L08",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Secrets & Key Management",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L08",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "agent",
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": false
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L01"
+      ],
+      "description": "Authoritative listing of agents, versions, capabilities, entitlements.",
+      "domain": "governance",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "halt",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 9,
+      "layer_key": "L09",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Agent Registry & Metadata",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L09",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "app",
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": false
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L01"
+      ],
+      "description": "Authoritative listing of apps, endpoints, UI surfaces, and owners.",
+      "domain": "governance",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "halt",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 10,
+      "layer_key": "L10",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "App Registry & Surface Governance",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L10",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": false
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L04",
+        "L09"
+      ],
+      "description": "Tracks runs, inputs/outputs, versions, and reproducible verification.",
+      "domain": "governance",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "halt",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 11,
+      "layer_key": "L11",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Run Registry & Reproducibility",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L11",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": false
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L04",
+        "L11"
+      ],
+      "description": "Hashes, signatures, verification endpoints, artifact attestations.",
+      "domain": "security",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "halt",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 12,
+      "layer_key": "L12",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Verification & Attestation",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L12",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "agent",
+        "app",
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": false
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L03",
+        "L04"
+      ],
+      "description": "Core compliance gates (privacy, records, program rules) by policy.",
+      "domain": "compliance",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "halt",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 13,
+      "layer_key": "L13",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Compliance Controls",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L13",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "app",
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": false,
+        "requires_human_approval": false
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L04"
+      ],
+      "description": "Health, metrics, tracing, alerts, dashboards for operations.",
+      "domain": "ops",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "log_only",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "warn",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 14,
+      "layer_key": "L14",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Observability & Monitoring",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L14",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "app",
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": true
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L04"
+      ],
+      "description": "Controls deploys, migrations, rollbacks, version pinning.",
+      "domain": "ops",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "halt",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 15,
+      "layer_key": "L15",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Change Control & Releases",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L15",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "agent",
+        "app",
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": false
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L02",
+        "L04"
+      ],
+      "description": "Schema validation, contract checks, input validation across systems.",
+      "domain": "data",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "halt",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 16,
+      "layer_key": "L16",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Data Integrity & Validation",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L16",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "agent",
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin",
+          "governance_board"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": false
+      },
+      "category": "critical",
+      "containment": {
+        "isolation_scope": "per_agent",
+        "lateral_access": "denied",
+        "quarantine_supported": true,
+        "rollback_supported": true
+      },
+      "dependencies": [
+        "L06",
+        "L07"
+      ],
+      "description": "Isolation, quarantine, rollback; prevents lateral failure propagation.",
+      "domain": "security",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "halt_and_quarantine",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 17,
+      "layer_key": "L17",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Containment & Blast Radius Control",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L17",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "agent",
+        "app",
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": true
+      },
+      "category": "critical",
+      "containment": {
+        "isolation_scope": "system",
+        "lateral_access": "denied",
+        "quarantine_supported": true,
+        "rollback_supported": true
+      },
+      "dependencies": [
+        "L17"
+      ],
+      "description": "System/agent kill switches, circuit breakers, emergency disable controls.",
+      "domain": "security",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "halt",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 18,
+      "layer_key": "L18",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Kill Switch & Emergency Stops",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L18",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "agent",
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": true
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L07"
+      ],
+      "description": "Approval gates for sensitive actions; prevents full autonomy drift.",
+      "domain": "governance",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "halt",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 19,
+      "layer_key": "L19",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Human-in-the-Loop Controls",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L19",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "agent",
+        "app",
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": false
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L02",
+        "L03"
+      ],
+      "description": "Redaction, minimization, and privacy-safe exports and views.",
+      "domain": "compliance",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "halt",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 20,
+      "layer_key": "L20",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Privacy Controls",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L20",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "app",
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": true
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L02",
+        "L03",
+        "L20"
+      ],
+      "description": "Controls exports/integration contracts and partner access.",
+      "domain": "data",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "halt",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 21,
+      "layer_key": "L21",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Data Sharing & Interop Governance",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L21",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": false,
+        "requires_human_approval": false
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L04",
+        "L11"
+      ],
+      "description": "Maps outputs to fundable standards and reporting requirements.",
+      "domain": "governance",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "log_only",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "warn",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 22,
+      "layer_key": "L22",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Standards & Funding Alignment",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L22",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin",
+          "governance_board"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": false
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "per_workflow",
+        "lateral_access": "denied",
+        "quarantine_supported": true,
+        "rollback_supported": true
+      },
+      "dependencies": [
+        "L05",
+        "L07",
+        "L09"
+      ],
+      "description": "Controls orchestration, routing, sequencing, and tool usage boundaries.",
+      "domain": "ops",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "halt",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 23,
+      "layer_key": "L23",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Orchestrator & Workflow Governance",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L23",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": false,
+        "requires_human_approval": false
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L05",
+        "L07"
+      ],
+      "description": "Automates routine work safely; prevents automation from bypassing rules.",
+      "domain": "ops",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "log_only",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "warn",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 24,
+      "layer_key": "L24",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Efficiency & Automation Controls",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L24",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": false,
+        "requires_human_approval": false
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L06",
+        "L16"
+      ],
+      "description": "Predictive analytics governance; prevents misleading or unsafe predictions.",
+      "domain": "analytics",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "log_only",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "warn",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 25,
+      "layer_key": "L25",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Prediction & Insight Controls",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L25",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": true
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L04",
+        "L20"
+      ],
+      "description": "Controls reporting, export formats, redaction, and approval rules.",
+      "domain": "analytics",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "halt",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 26,
+      "layer_key": "L26",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Reporting & Exports Governance",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L26",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": false
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L15",
+        "L16"
+      ],
+      "description": "Contract tests, CI gates, schema parity checks, release hard gates.",
+      "domain": "ops",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "halt",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 27,
+      "layer_key": "L27",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Quality Assurance & Testing Gates",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L27",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin",
+          "governance_board"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": false,
+        "requires_human_approval": false
+      },
+      "category": "critical",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L04",
+        "L17",
+        "L18"
+      ],
+      "description": "Playbooks, escalation paths, evidence capture, and response timelines.",
+      "domain": "security",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "log_only",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "warn",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 28,
+      "layer_key": "L28",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Incident Response & Escalation",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L28",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "app",
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": true
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L01",
+        "L21"
+      ],
+      "description": "Controls partner access, vendor risk, and contract obligations.",
+      "domain": "governance",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "halt",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 29,
+      "layer_key": "L29",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Partner & Vendor Governance",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L29",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "workflow",
+        "app"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin",
+          "governance_board"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": true
+      },
+      "category": "critical",
+      "containment": {
+        "isolation_scope": "system",
+        "lateral_access": "denied",
+        "quarantine_supported": true,
+        "rollback_supported": true
+      },
+      "dependencies": [
+        "L04",
+        "L22"
+      ],
+      "description": "Controls billing, grants, ledger proofs, and separation of funds.",
+      "domain": "finance",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "halt",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 30,
+      "layer_key": "L30",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Financial Controls & Ledger Integrity",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L30",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "app",
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": true
+      },
+      "category": "core",
+      "containment": {
+        "isolation_scope": "none",
+        "lateral_access": "n/a",
+        "quarantine_supported": false,
+        "rollback_supported": false
+      },
+      "dependencies": [
+        "L01",
+        "L30"
+      ],
+      "description": "Licensing, billing scope, entitlements for paid modules and partners.",
+      "domain": "revenue",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "halt",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 31,
+      "layer_key": "L31",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Marketplace & Licensing Controls",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L31",
+        "version": "1.0"
+      },
+      "status": "active"
+    },
+    {
+      "applies_to": [
+        "agent",
+        "app",
+        "workflow"
+      ],
+      "authority": {
+        "decision_level_required": "system",
+        "escalation_path": [
+          "human_admin",
+          "governance_board"
+        ],
+        "max_agent_authority": "execute_only",
+        "non_delegable": true,
+        "requires_human_approval": true
+      },
+      "category": "critical",
+      "containment": {
+        "isolation_scope": "system",
+        "lateral_access": "denied",
+        "quarantine_supported": true,
+        "rollback_supported": true
+      },
+      "dependencies": [
+        "L01",
+        "L08",
+        "L17",
+        "L18"
+      ],
+      "description": "Hardening: least privilege, defense-in-depth, secure-by-default invariants.",
+      "domain": "security",
+      "enforcement": {
+        "alignment_checks": [],
+        "fail_behavior": "halt_and_quarantine",
+        "policy_checks": [],
+        "required": true,
+        "risk_checks": []
+      },
+      "enforcement_mode": "block",
+      "enforcement_required": true,
+      "evidence": {
+        "audit_exportable": true,
+        "coverage_report_visible": true,
+        "hash_required": true,
+        "logs_required": true
+      },
+      "incentives": {
+        "anti_gaming_enabled": true,
+        "cross_signal_validation": true,
+        "fraud_signal_hooks": [],
+        "reward_throttling": true
+      },
+      "introduced_in_version": "32.0",
+      "layer_id": 32,
+      "layer_key": "L32",
+      "monetization": {
+        "allowed_revenue_types": [
+          "grant",
+          "license",
+          "usage"
+        ],
+        "billing_scope": "infrastructure",
+        "grant_commercial_separation": true,
+        "pricing_authority": "central_revenue_layer"
+      },
+      "name": "Military-Integrity Security Layer",
+      "policy_versioning": {
+        "backward_compatible": true,
+        "dominance": "current",
+        "drift_detection": true,
+        "policy_id": "L32",
+        "version": "1.0"
+      },
+      "status": "active"
+    }
+  ],
+  "schema_version": "1.0",
+  "system_invariants": {
+    "all_active_layers_must_pass": true,
+    "disabled_layer_requires_governance_approval": true,
+    "global_gate_required_layers": [
+      "L01",
+      "L02",
+      "L03",
+      "L04",
+      "L05",
+      "L06",
+      "L07"
+    ],
+    "missing_layer_definition_blocks_execution": true,
+    "no_agent_bypasses_layer": true
+  }
+}

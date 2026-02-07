@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+BASE_URL="${BASE_URL:-http://127.0.0.1:8090}"
+
+need_key() {
+  : "${ADMIN_KEY:?ERR: ADMIN_KEY not set. Run: shfkey}"
+}
+
+fetch_json() {
+  local url="$1"
+  local tmp code body
+
+  tmp="$(mktemp)"
+  code="$(curl -sS -H "X-Admin-Key: ${ADMIN_KEY}" -o "$tmp" -w "%{http_code}" "$url" || true)"
+  body="$(cat "$tmp" 2>/dev/null || true)"
+  rm -f "$tmp"
+
+  if [[ -z "${code}" ]]; then
+    echo "ERR: curl failed (no HTTP code) for: $url" >&2
+    return 1
+  fi
+
+  if [[ "${code}" != "200" ]]; then
+    echo "ERR: HTTP=${code} for: $url" >&2
+    if [[ -n "${body}" ]]; then
+      echo "BODY:" >&2
+      echo "${body}" | head -c 800 >&2
+      echo >&2
+    fi
+    return 1
+  fi
+
+  if [[ -z "${body}" ]]; then
+    echo "ERR: empty response body for: $url" >&2
+    return 1
+  fi
+
+  case "${body}" in
+    \{*|\[* ) ;;
+    * )
+      echo "ERR: non-JSON response for: $url" >&2
+      echo "BODY:" >&2
+      echo "${body}" | head -c 800 >&2
+      echo >&2
+      return 1
+      ;;
+  esac
+
+  printf "%s" "${body}"
+}
+
+cmd="${1:-}"
+shift || true
+
+case "${cmd}" in
+  status)
+    echo "OK: ${BASE_URL} up"
+    curl -sS "${BASE_URL}/health" && echo
+    ;;
+
+  reg)
+    need_key
+    sub="${1:-}"; shift || true
+    if [[ "${sub}" != "list" ]]; then
+      echo "Usage: shf reg list <app|agent|business>" >&2
+      exit 2
+    fi
+    kind="${1:-}"
+    if [[ -z "${kind}" ]]; then
+      echo "Usage: shf reg list <app|agent|business>" >&2
+      exit 2
+    fi
+
+    fetch_json "${BASE_URL}/admin/registry?kind=${kind}" | python3 - <<'PY'
+import sys, json
+d = json.load(sys.stdin)
+for x in d.get("items", []):
+    print(x.get("id"))
+PY
+    ;;
+
+  events)
+    need_key
+    limit="${1:-20}"
+    fetch_json "${BASE_URL}/admin/registry/events?limit=${limit}" | python3 - <<'PY'
+import sys, json
+d = json.load(sys.stdin)
+for e in d.get("items", []):
+    print(f"{e.get('ts')} {e.get('kind')} {e.get('action')} {e.get('entityId')}")
+PY
+    ;;
+
+  *)
+    echo "Usage:"
+    echo "  shf status"
+    echo "  shf reg list <app|agent|business>"
+    echo "  shf events [limit]"
+    exit 2
+    ;;
+esac

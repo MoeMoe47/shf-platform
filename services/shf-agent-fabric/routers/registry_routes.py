@@ -1,8 +1,7 @@
 from fastapi import APIRouter
-from fabric.registry import list_agents
 
-router = APIRouter()
+router = APIRouter(prefix="/registry", tags=["registry"])
 
-@router.get("/agents")
-def agents():
-    return {"agents": list_agents()}
+@router.get("/ping")
+def ping():
+    return {"ok": True, "service": "registry", "mode": "stub"}

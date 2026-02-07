@@ -1,4 +1,6 @@
-from typing import Any, Dict, List, Optional
+from __future__ import annotations
+
+from typing import Any, Dict, List
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
 
@@ -77,7 +79,9 @@ def _score_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
     checks.append(("attendanceRate", attendance_rate_est, t_att, attendance_rate_est >= t_att, "higher_is_better"))
     checks.append(("retentionRate", retention_rate, t_ret, retention_rate >= t_ret, "higher_is_better"))
     checks.append(("parentSatisfaction", parent_sat, t_ps, parent_sat >= t_ps, "higher_is_better"))
-    checks.append(("incidentRatePer100Sessions", incident_rate_per100, t_inc_max, incident_rate_per100 <= t_inc_max, "lower_is_better"))
+    checks.append(
+        ("incidentRatePer100Sessions", incident_rate_per100, t_inc_max, incident_rate_per100 <= t_inc_max, "lower_is_better")
+    )
     checks.append(("weeklyArtifactCompletion", weekly_artifact_completion, t_art, weekly_artifact_completion >= t_art, "higher_is_better"))
 
     per_metric_points = 20
@@ -97,13 +101,7 @@ def _score_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
         "weekly_artifact_completion": weekly_artifact_completion,
     }
 
-    return {
-        "ok": True,
-        "score": int(score),
-        "decision": decision,
-        "metrics": metrics,
-        "derived": derived,
-    }
+    return {"ok": True, "score": int(score), "decision": decision, "metrics": metrics, "derived": derived}
 
 
 def _inject_run_targets(payload: Dict[str, Any], targets: Dict[str, Any]) -> Dict[str, Any]:
@@ -116,7 +114,6 @@ def _inject_run_targets(payload: Dict[str, Any], targets: Dict[str, Any]) -> Dic
     ns = p.get("northStar") if isinstance(p.get("northStar"), dict) else {}
     ns2 = dict(ns)
     for k, v in (targets or {}).items():
-        # Only inject LOO target keys we recognize for scoring
         if k in (
             "attendanceRateTarget",
             "retentionTarget",
@@ -142,13 +139,7 @@ def validate_loo(body: LooValidateBody):
     errors: List[Dict[str, Any]] = []
     v = Draft202012Validator(body.schema_name, format_checker=FormatChecker())
     for e in sorted(v.iter_errors(body.payload), key=lambda x: list(x.absolute_path)):
-        errors.append(
-            {
-                "message": e.message,
-                "path": list(e.absolute_path),
-                "schema_path": list(e.absolute_schema_path),
-            }
-        )
+        errors.append({"message": e.message, "path": list(e.absolute_path), "schema_path": list(e.absolute_schema_path)})
 
     return {"ok": len(errors) == 0, "errors": errors}
 
@@ -171,17 +162,30 @@ def score_loo_run(body: LooScoreRunBody):
     targets = run.get("targets") if isinstance(run.get("targets"), dict) else {}
 
     payload2 = _inject_run_targets(payload, targets)
-
     scored = _score_payload(payload2)
+
     return {
         **scored,
         "run_id": body.run_id,
-        "run": {
-            "run_id": run.get("run_id"),
-            "app_id": run.get("app_id"),
-            "name": run.get("name"),
-            "mode": run.get("mode"),
-        },
+        "run": {"run_id": run.get("run_id"), "app_id": run.get("app_id"), "name": run.get("name"), "mode": run.get("mode")},
         "targets_used": payload2.get("northStar", {}),
         "note": "Targets were loaded from Run Registry and applied to payload.northStar before scoring.",
+    }
+
+
+@router.get("/programs")
+def loo_programs():
+    return {
+        "ok": True,
+        "programs": [
+            {
+                "program_id": "arena_observation_deck",
+                "app_id": "agent_arena",
+                "label": "Observation Deck (Agent Arena)",
+                "category": "arena",
+                "payload_endpoint": "/arena/loo/payload",
+                "metrics_endpoint": "/arena/metrics",
+                "notes": "Deterministic, spectator-safe. Auto-rollup on round finalize writes db/arena/loo_payload.latest.json",
+            }
+        ],
     }

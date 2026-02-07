@@ -1,0 +1,58 @@
+{
+  "agent_upsert_payload": {
+    "reason": "ui_upsert_agent",
+    "entity": {
+      "kind": "agent",
+      "id": "Layer10IntakeAgent",
+      "agentId": "L10-INTAKE-001",
+      "name": "Layer10IntakeAgent",
+      "title": "Layer10 Intake Agent",
+      "layer": "L10",
+      "lifecycle": { "status": "active" },
+      "policy": {
+        "humanApproval": false,
+        "maxSteps": 6,
+        "notes": "Intake support. No eligibility calls."
+      },
+      "legal": {
+        "classification": "internal",
+        "dataCategory": ["none"],
+        "authority": { "approvedBy": "shf-admin", "basis": "ui_saved" },
+        "jurisdiction": "US-OH",
+        "termsRef": "legal/terms/shf-registry-terms@1.0.0",
+        "disclaimerRef": "legal/disclaimers/default@1.0.0",
+        "retention": { "artifactsDays": 365, "auditLogsDays": 365, "deletionPolicy": "retire_only" },
+        "attestations": []
+      }
+    }
+  },
+  "app_upsert_payload": {
+    "reason": "ui_upsert_app",
+    "entity": {
+      "kind": "app",
+      "id": "admin",
+      "name": "Admin",
+      "title": "Admin",
+      "layer": "L00",
+      "entry": "src/entries/admin.main.jsx",
+      "home": "/admin.html#/home",
+      "capabilities": ["map", "ledger", "analytics", "payments"],
+      "lifecycle": { "status": "active" },
+      "policy": {
+        "humanApproval": false,
+        "maxSteps": 6,
+        "notes": "System core admin shell."
+      },
+      "legal": {
+        "classification": "internal",
+        "dataCategory": ["none"],
+        "authority": { "approvedBy": "shf-admin", "basis": "ui_saved" },
+        "jurisdiction": "US-OH",
+        "termsRef": "legal/terms/shf-registry-terms@1.0.0",
+        "disclaimerRef": "legal/disclaimers/default@1.0.0",
+        "retention": { "artifactsDays": 365, "auditLogsDays": 365, "deletionPolicy": "retire_only" },
+        "attestations": []
+      }
+    }
+  }
+}

@@ -1,17 +1,18 @@
 from fastapi import APIRouter
+from fabric.registry_canon import list_entities
 
 router = APIRouter(prefix="/apps", tags=["api:v1"])
 
 @router.get("")
 def list_apps():
-    return {
-        "ok": True,
-        "items": [
-            {"app_id": "foundation", "title": "Foundation", "entry": "/foundation.html"},
-            {"app_id": "curriculum", "title": "Curriculum", "entry": "/curriculum.html"},
-            {"app_id": "career", "title": "Career", "entry": "/career.html"},
-            {"app_id": "arcade", "title": "Arcade", "entry": "/arcade.html"},
-            {"app_id": "treasury", "title": "Treasury", "entry": "/treasury.html"},
-            {"app_id": "admin", "title": "Admin", "entry": "/admin.html"}
-        ]
-    }
+    items = []
+    for e in list_entities(kind="app"):
+        items.append({
+            "app_id": e.get("app_id") or e.get("id"),
+            "title": e.get("title") or e.get("name"),
+            "entry": e.get("entry"),
+            "lifecycle": (e.get("lifecycle") or {}).get("status", "draft"),
+            "legal": e.get("legal", {}),
+            "policy": e.get("policy", {}),
+        })
+    return {"ok": True, "items": items}

@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SHF_DIR="${SHF_DIR:-$HOME/Desktop/shrv1/services/shf-agent-fabric}"
+BASE_URL="${BASE_URL:-http://127.0.0.1:8090}"
+
+need_key() { : "${ADMIN_KEY:?ERR: ADMIN_KEY not set. Run: shfkey}"; }
+up() { curl -fsS "$BASE_URL/health" >/dev/null 2>&1; }
+
+ensure() {
+  if ! up; then
+    echo "Server not reachable on 8090 — starting..."
+    (cd "$SHF_DIR" && ./bin/restart_8090.sh >/dev/null) || true
+  fi
+  up || { echo "ERR: server still not reachable at $BASE_URL"; exit 1; }
+}
+
+fetch_json() {
+  local url="$1"
+  curl -fsS -H "X-Admin-Key: ${ADMIN_KEY}" "$url"
+}
+
+usage() {
+  cat <<'TXT'
+Usage:
+  shfctl status
+  shfctl events [limit]
+  shfctl reg list <app|agent|business>
+TXT
+}
+
+cmd="${1:-}"; shift || true
+
+case "$cmd" in
+  status)
+    if up; then
+      echo "OK: $BASE_URL up"
+      curl -fsS "$BASE_URL/health" && echo
+    else
+      echo "DOWN: $BASE_URL"
+      exit 1
+    fi
+    ;;
+
+  events)
+    need_key
+    ensure
+    limit="${1:-20}"
+    fetch_json "${BASE_URL}/admin/registry/events?limit=${limit}" \
+    | python3 - <<'PY'
+import sys, json
+d = json.load(sys.stdin)
+for e in d.get("items", []):
+    print(f"{e.get('ts')} {e.get('kind')} {e.get('action')} {e.get('entityId')}")
+PY
+    ;;
+
+  reg)
+    sub="${1:-}"; shift || true
+    case "$sub" in
+      list)
+        need_key
+        ensure
+        kind="${1:-}"
+        [[ -n "$kind" ]] || { echo "Usage: shfctl reg list <app|agent|business>" >&2; exit 2; }
+        fetch_json "${BASE_URL}/admin/registry?kind=${kind}" \
+        | python3 - <<'PY'
+import sys, json
+d = json.load(sys.stdin)
+for x in d.get("items", []):
+    print(x.get("id"))
+PY
+        ;;
+      *) usage; exit 2 ;;
+    esac
+    ;;
+
+  ""|help|-h|--help)
+    usage
+    ;;
+
+  *)
+    usage
+    exit 2
+    ;;
+esac

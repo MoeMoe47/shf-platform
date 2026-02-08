@@ -406,7 +406,8 @@ def build_arena_metrics(*, days: int = 30, baseline_weeks: int = 8) -> Dict[str,
     }
 
     return {
-        "window_days": int(days),
+        "metrics_contract_version": "v1",
+    "window_days": int(days),
         "enrolled_agents": int(enrolled),
         "active_agents": int(active),
         "active_rate": round(active_rate, 4),

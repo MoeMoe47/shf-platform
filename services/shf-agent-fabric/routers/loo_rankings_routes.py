@@ -5,8 +5,7 @@ import math
 
 from fastapi import APIRouter
 
-# ✅ IMPORTANT: no self-HTTP calls inside the server
-# We rank programs by calling their builders in-process.
+from fabric.loo.adapter_registry import PROGRAM_ADAPTERS
 
 router = APIRouter(prefix="/loo", tags=["loo"])
 
@@ -29,9 +28,6 @@ def _safe_float(x: Any, default: float = 0.0) -> float:
 
 
 def _health01_from_metrics(metrics: Dict[str, Any]) -> float:
-    """
-    Prefer health_01 if present (weekly last point), else infer a simple proxy.
-    """
     weekly = metrics.get("weekly_series")
     if isinstance(weekly, list) and weekly:
         last = weekly[-1]
@@ -53,9 +49,6 @@ def _health01_from_metrics(metrics: Dict[str, Any]) -> float:
 
 
 def _delta_pack(metrics: Dict[str, Any]) -> Tuple[float, str]:
-    """
-    Return (delta_score_01, trend_band) from baseline_compare if available.
-    """
     bc = metrics.get("baseline_compare")
     if isinstance(bc, dict):
         ds = _safe_float(bc.get("delta_score_01"), 0.0)
@@ -65,10 +58,6 @@ def _delta_pack(metrics: Dict[str, Any]) -> Tuple[float, str]:
 
 
 def _volume01(metrics: Dict[str, Any]) -> float:
-    """
-    Deterministic volume score: combines signals_total and rounds_finalized_total.
-    Uses log scaling so a huge program doesn't dominate.
-    """
     signals_total = max(0.0, _safe_float(metrics.get("signals_total"), 0.0))
     rounds_total = max(0.0, _safe_float(metrics.get("rounds_finalized_total"), 0.0))
 
@@ -78,13 +67,9 @@ def _volume01(metrics: Dict[str, Any]) -> float:
 
 
 def _quality01(metrics: Dict[str, Any]) -> float:
-    """
-    Deterministic quality: diversity + stability proxy.
-    """
     diversity = _clamp01(_safe_float(metrics.get("winner_strategy_diversity_01"), 0.0))
     median_gap = max(0.0, _safe_float(metrics.get("median_minutes_between_rounds"), 0.0))
 
-    # Stability proxy: peak around 10–60 minutes
     if median_gap <= 0:
         stability = 0.0
     elif median_gap < 10:
@@ -100,18 +85,16 @@ def _quality01(metrics: Dict[str, Any]) -> float:
 
 
 def _rank_score01(health01: float, delta01: float, volume01: float, quality01: float) -> float:
-    """
-    Single ranking score. Health dominates, then momentum, then volume/quality.
-    """
-    s = 0.55 * _clamp01(health01) + 0.20 * _clamp01(delta01) + 0.15 * _clamp01(volume01) + 0.10 * _clamp01(quality01)
+    s = (
+        0.55 * _clamp01(health01)
+        + 0.20 * _clamp01(delta01)
+        + 0.15 * _clamp01(volume01)
+        + 0.10 * _clamp01(quality01)
+    )
     return _clamp01(s)
 
 
 def _load_program_catalog() -> List[Dict[str, Any]]:
-    """
-    Source of truth: reuse the existing /loo/programs implementation in-process.
-    No HTTP.
-    """
     try:
         from routers.loo_routes import loo_programs  # type: ignore
         cat = loo_programs()
@@ -122,39 +105,30 @@ def _load_program_catalog() -> List[Dict[str, Any]]:
 
 
 def _metrics_for_program(program: Dict[str, Any], *, days: int, baseline_weeks: int) -> Dict[str, Any]:
-    """
-    In-process metrics fetch.
-    v1: supports Arena via fabric.arena.rollup.build_arena_metrics
-    Future: add mappings for other programs.
-    """
     program_id = str(program.get("program_id") or "")
-    metrics_ep = str(program.get("metrics_endpoint") or "")
+    adapter = PROGRAM_ADAPTERS.get(program_id)
+    if not adapter:
+        return {"__adapter_ok": False, "__adapter_error": "NO_ADAPTER"}
 
-    # Arena program mapping (current)
-    if program_id == "arena_observation_deck" or metrics_ep == "/arena/metrics":
-        from fabric.arena.rollup import build_arena_metrics  # type: ignore
-        # Your build_arena_metrics already supports baseline_weeks in your latest output.
-        try:
-            return build_arena_metrics(days=int(days), baseline_weeks=int(baseline_weeks))  # type: ignore
-        except TypeError:
-            # fallback if baseline_weeks not supported in some branch
-            return build_arena_metrics(days=int(days))  # type: ignore
+    try:
+        m = adapter(days=int(days), baseline_weeks=int(baseline_weeks))
+    except Exception as ex:
+        return {
+            "__adapter_ok": False,
+            "__adapter_error": f"ADAPTER_EXCEPTION:{type(ex).__name__}",
+            "__adapter_detail": str(ex),
+        }
 
-    # Unknown program
-    return {}
+    if not isinstance(m, dict):
+        return {"__adapter_ok": False, "__adapter_error": "NON_DICT_METRICS"}
+
+    m["__adapter_ok"] = True
+    m["__adapter_error"] = ""
+    return m
 
 
 @router.get("/rankings")
 def loo_rankings(days: int = 30, baseline_weeks: int = 8) -> Dict[str, Any]:
-    """
-    Cross-program comparator for LOO (deterministic, spectator-safe, no self-HTTP).
-
-    Steps:
-      1) Load program catalog from loo_programs() (in-process)
-      2) Call each program's metrics builder (in-process)
-      3) Compute: health_01, delta_score_01, volume_01, quality_01
-      4) Rank by rank_score_01 descending
-    """
     programs = _load_program_catalog()
     if not programs:
         return {"ok": False, "error": "PROGRAM_CATALOG_EMPTY", "detail": "No programs returned by loo_programs()"}
@@ -170,15 +144,20 @@ def loo_rankings(days: int = 30, baseline_weeks: int = 8) -> Dict[str, Any]:
         label = str(p.get("label") or program_id or app_id)
 
         metrics = _metrics_for_program(p, days=int(days), baseline_weeks=int(baseline_weeks))
-        if not isinstance(metrics, dict) or not metrics:
+
+        adapter_ok = bool(metrics.get("__adapter_ok") is True)
+        adapter_error = str(metrics.get("__adapter_error") or "")
+
+        if not adapter_ok:
             rows.append(
                 {
                     "program_id": program_id,
                     "app_id": app_id,
                     "label": label,
                     "ok": False,
-                    "error": "METRICS_UNAVAILABLE",
-                    "detail": {"program_id": program_id, "metrics_endpoint": p.get("metrics_endpoint")},
+                    "error": "ADAPTER_FAILED",
+                    "adapter_ok": False,
+                    "adapter_error": adapter_error,
                 }
             )
             continue
@@ -195,13 +174,15 @@ def loo_rankings(days: int = 30, baseline_weeks: int = 8) -> Dict[str, Any]:
                 "app_id": app_id,
                 "label": label,
                 "ok": True,
-                "rank_score_01": float(round(score01, 4)),
-                "health_01": float(round(health01, 4)),
-                "delta_score_01": float(round(delta01, 4)),
+                "adapter_ok": True,
+                "adapter_error": "",
+                "metrics_contract_version": str(metrics.get("metrics_contract_version") or ""),
+                "rank_score_01": round(score01, 4),
+                "health_01": round(health01, 4),
+                "delta_score_01": round(delta01, 4),
                 "trend_band": trend_band,
-                "volume_01": float(round(volume01, 4)),
-                "quality_01": float(round(quality01, 4)),
-                "metrics_endpoint": p.get("metrics_endpoint"),
+                "volume_01": round(volume01, 4),
+                "quality_01": round(quality01, 4),
                 "rank_formula_version": "v1",
             }
         )
@@ -217,5 +198,5 @@ def loo_rankings(days: int = 30, baseline_weeks: int = 8) -> Dict[str, Any]:
         "baseline_weeks": int(baseline_weeks),
         "count": len(rows),
         "rankings": rows,
-        "notes": "Deterministic cross-program comparator (no self-HTTP). Programs come from /loo/programs; metrics computed in-process.",
+        "notes": "Adapter-driven cross-program comparator. Add programs by registering adapters only.",
     }

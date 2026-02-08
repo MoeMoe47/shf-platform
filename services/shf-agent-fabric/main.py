@@ -9,6 +9,11 @@ import os
 import fabric.layers.checks_min  # noqa: F401
 
 from fastapi import FastAPI
+from fabric.loo.adapter_registry import PROGRAM_ADAPTERS, PROGRAM_ADAPTER_META
+from fabric.loo.adapter_contract import validate_program_adapters
+from fabric.loo.adapter_meta_parity import assert_adapter_meta_parity
+from fabric.loo.catalog_parity import validate_program_catalog_parity
+from fabric.loo.program_parity import validate_program_adapter_parity
 from fastapi.middleware.cors import CORSMiddleware
 
 from db.db import init_db
@@ -23,6 +28,7 @@ from routers.health_routes import router as health_router
 
 from routers.loo_routes import router as loo_router
 from routers.loo_rankings_routes import router as loo_rankings_router
+from routers.loo_adapters_routes import router as loo_adapters_router
 from routers.loe_routes import router as loe_router
 from routers.predict_routes import router as predict_router
 
@@ -90,6 +96,7 @@ app.include_router(health_router)
 
 app.include_router(loo_router)
 app.include_router(loo_rankings_router)
+app.include_router(loo_adapters_router)
 app.include_router(loe_router)
 app.include_router(predict_router)
 
@@ -148,3 +155,23 @@ def _startup_verify_registry_ledger() -> None:
         log.warning(
             "Registry ledger verify strict mode is OFF; continuing startup."
         )
+
+
+@app.on_event("startup")
+def _startup_validate_program_adapters() -> None:
+    # Fail fast if any program adapter violates the metrics contract.
+    validate_program_adapters(PROGRAM_ADAPTERS, days=30, baseline_weeks=8)
+
+
+@app.on_event("startup")
+def _startup_validate_adapter_meta_parity() -> None:
+    # Fail fast if adapter registry + meta drift out of sync.
+    # This prevents /loo/adapters from breaking due to missing meta keys.
+    assert_adapter_meta_parity(PROGRAM_ADAPTERS, PROGRAM_ADAPTER_META)
+
+
+@app.on_event("startup")
+def _startup_validate_program_catalog_parity() -> None:
+    # Fail fast if /loo/programs and PROGRAM_ADAPTERS drift.
+    validate_program_catalog_parity(PROGRAM_ADAPTERS)
+

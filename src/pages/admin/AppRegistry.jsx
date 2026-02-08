@@ -195,7 +195,12 @@ export default function AppRegistry() {
       <header className="ar-head">
         <div>
           <div className="ar-kicker">System</div>
-          <h1 className="ar-title">App Registry</h1>
+          <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:12 }}>
+            <h1 className="ar-title" style={{ margin:0 }}>App Registry</h1>
+            <a className="sh-btn is-ghost" href="/admin.html#/registry" style={{ fontSize:13 }}>
+              Registry
+            </a>
+          </div>
           <div className="ar-sub">
             Manifest-driven inventory of SHF apps (capabilities + status).
           </div>

@@ -68,3 +68,8 @@ export function buildAppUpsert(args: {
     reason: args.reason,
   } as any;
 }
+
+
+// UI-stable aliases (keep UI imports consistent)
+export const buildAgentPayload = buildAgentUpsert;
+export const buildAppPayload = buildAppUpsert;

@@ -45,7 +45,7 @@ export default function ControlPlaneStrip({ compact = false }) {
   const mode = status?.mode ?? "DEV";
   const overrides = status?.overridesCount ?? { persisted: 0, session: 0, total: 0 };
   const contractVersion = status?.contractVersion ?? "?";
-  const adminHref = status?.adminHref ?? "/admin.html#/app-registry";
+  const adminHref = status?.adminHref ?? "/admin.html#/registry";
 
   const isDemo = Number(overrides.session || 0) > 0;
 

@@ -1,0 +1,29 @@
+name: compliance-gate
+
+on:
+  pull_request:
+  push:
+    branches: [ main, develop, ci-test ]
+
+jobs:
+  compliance-gate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Generate compliance manifest
+        working-directory: services/shf-agent-fabric
+        run: |
+          python3 scripts/generate_compliance_manifest.py
+
+      - name: Verify complianceProfiles/index.json is up-to-date
+        working-directory: services/shf-agent-fabric
+        run: |
+          git diff --exit-code complianceProfiles/index.json

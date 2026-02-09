@@ -1,5 +1,8 @@
 from dotenv import load_dotenv
 
+from fabric.startup_verify import verify_compliance_gate_g_or_die
+verify_compliance_gate_g_or_die()
+
 load_dotenv()
 
 import logging
@@ -21,6 +24,7 @@ from db.db import init_db
 from routers.alignment.routes_gateway import router as alignment_gateway_router
 from routers.alignment.routes_admin import router as alignment_admin_router
 from routers.alignment.routes_plans_admin import router as alignment_plans_admin_router
+from routers.watchtower_routes import router as watchtower_router
 
 from routers.api_v1 import router as api_v1_router
 from routers.status_routes import router as status_router
@@ -88,6 +92,7 @@ app.include_router(alignment_gateway_router)
 app.include_router(alignment_admin_router)
 app.include_router(alignment_plans_admin_router)
 app.include_router(api_v1_router, prefix="/api/v1")
+app.include_router(watchtower_router)
 
 init_db()
 

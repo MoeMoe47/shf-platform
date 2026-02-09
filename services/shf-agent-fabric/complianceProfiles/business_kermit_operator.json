@@ -1,0 +1,57 @@
+{
+  "policyId": "business-kermit-operator-llc",
+  "version": "1.0.0",
+  "owner": "Kermit Recovery Services LLC",
+  "description": "Business compliance profile for the Kermit operating LLC. Regulated recovery operations posture. Downstream apps and agents may only restrict further; any downgrade hard-fails.",
+  "allowedDataClasses": [
+    "internal",
+    "confidential",
+    "regulated"
+  ],
+  "allowedJurisdictions": [
+    "US-OH"
+  ],
+  "allowedScopes": [
+    "registry.read",
+    "audit.read",
+    "audit.write",
+    "reporting.read",
+    "reporting.write"
+  ],
+  "allowedDataTypes": [
+    "identity_pii",
+    "financial_payment",
+    "health_phi",
+    "substance_use",
+    "minor_child"
+  ],
+  "restrictedDataTypes": [
+    "substance_use",
+    "health_phi"
+  ],
+  "prohibitedScopes": [
+    "data.export.regulated",
+    "data.share.partner.regulated",
+    "billing.submit",
+    "clinical.diagnosis",
+    "prescription.order"
+  ],
+  "neverExecuteActions": [
+    "terminate_service",
+    "deny_benefits",
+    "approve_medical_necessity",
+    "make_clinical_diagnosis"
+  ],
+  "auditLoggingRequired": true,
+  "traceIdRequired": true,
+  "attributionRequired": true,
+  "consentRequired": true,
+  "disclosureRequired": true,
+  "maxRetentionDays": 365,
+  "exportLimit": 0,
+  "maxRiskTier": "high",
+  "references": {
+    "auditProfileRef": "audit-kermit-operator-v1",
+    "retentionPolicyRef": "retention-global-365d-v1"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "policyId": "business-nonprofit-shf",
+  "version": "1.0.0",
+  "owner": "SHF",
+  "description": "Business compliance profile for the Silicon Heartland Foundation (nonprofit). Infrastructure + governance posture. Downstream apps may only restrict further.",
+  "allowedDataClasses": [
+    "public",
+    "internal",
+    "confidential"
+  ],
+  "allowedJurisdictions": [
+    "US-OH"
+  ],
+  "allowedScopes": [
+    "registry.read",
+    "registry.write",
+    "audit.read",
+    "audit.write",
+    "app.read",
+    "app.write",
+    "business.read",
+    "business.write",
+    "agent.read",
+    "agent.write",
+    "reporting.read",
+    "reporting.write"
+  ],
+  "allowedDataTypes": [
+    "identity_pii",
+    "student_records",
+    "financial_payment",
+    "minor_child"
+  ],
+  "restrictedDataTypes": [
+    "substance_use",
+    "health_phi"
+  ],
+  "prohibitedScopes": [
+    "data.export.regulated",
+    "data.share.partner.regulated",
+    "billing.submit",
+    "clinical.diagnosis",
+    "prescription.order"
+  ],
+  "neverExecuteActions": [
+    "terminate_service",
+    "deny_benefits",
+    "approve_medical_necessity",
+    "make_clinical_diagnosis"
+  ],
+  "auditLoggingRequired": true,
+  "traceIdRequired": true,
+  "attributionRequired": true,
+  "consentRequired": true,
+  "disclosureRequired": true,
+  "maxRetentionDays": 365,
+  "exportLimit": 0,
+  "maxRiskTier": "medium",
+  "references": {
+    "auditProfileRef": "audit-shf-nonprofit-v1",
+    "retentionPolicyRef": "retention-global-365d-v1"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "manifestId": "compliance-profiles-index",
+  "version": "1.0.0",
+  "generatedAt": "2026-02-09",
+  "description": "AUTO-GENERATED. Do not edit by hand. Generated from complianceProfiles/*.json.",
+  "global": {
+    "policyId": "global-compliance-policy",
+    "version": "1.0.0",
+    "file": "complianceProfiles/globalCompliancePolicy.json",
+    "sha256": "d580349fe9101463b2aa1da464c17245417330d403eeb41ed8051f5aeb72eb12",
+    "required": true
+  },
+  "profiles": [
+    {
+      "policyId": "app-kermit",
+      "version": "1.0.0",
+      "file": "complianceProfiles/app_kermit.json",
+      "sha256": "52a613ae062c57dc80de2ccb6a663be242cc85d120869e2b49097aad9bb8dabb",
+      "type": "app",
+      "required": true
+    },
+    {
+      "policyId": "business-kermit-operator-llc",
+      "version": "1.0.0",
+      "file": "complianceProfiles/business_kermit_operator.json",
+      "sha256": "d141716c9d7863ae8ce7f943c4022d70660b1bf57c6282c536d36223b2f82901",
+      "type": "business",
+      "required": true
+    },
+    {
+      "policyId": "business-nonprofit-shf",
+      "version": "1.0.0",
+      "file": "complianceProfiles/business_nonprofit_SHF.json",
+      "sha256": "d8b8cefa2ce97b3b33f15dfdfa7ade04727d3b1727c0862df547bf84eb0e5483",
+      "type": "business",
+      "required": true
+    }
+  ],
+  "ciGuards": {
+    "enforceUniquePolicyIds": true,
+    "enforceUniqueFiles": true,
+    "requireGlobalPolicy": true,
+    "requireReferencedPoliciesExist": true,
+    "requireVersionsMatchManifest": true,
+    "requireSha256Match": true,
+    "failOnUnknownPolicyRefs": true,
+    "gateGEnabled": true
+  }
+}

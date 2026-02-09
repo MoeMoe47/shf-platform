@@ -1,0 +1,53 @@
+{
+  "policyId": "app-kermit",
+  "version": "1.0.0",
+  "owner": "Kermit",
+  "description": "App compliance profile for Kermit. Regulated recovery context. Strict auditability, no regulated exports, and no clinical diagnosis actions by the system.",
+  "allowedDataClasses": [
+    "internal",
+    "confidential",
+    "regulated"
+  ],
+  "allowedJurisdictions": [
+    "US-OH"
+  ],
+  "allowedScopes": [
+    "reporting.read",
+    "reporting.write"
+  ],
+  "allowedDataTypes": [
+    "identity_pii",
+    "financial_payment",
+    "health_phi",
+    "substance_use"
+  ],
+  "restrictedDataTypes": [
+    "substance_use",
+    "health_phi"
+  ],
+  "prohibitedScopes": [
+    "data.export.regulated",
+    "data.share.partner.regulated",
+    "billing.submit",
+    "clinical.diagnosis",
+    "prescription.order"
+  ],
+  "neverExecuteActions": [
+    "terminate_service",
+    "deny_benefits",
+    "approve_medical_necessity",
+    "make_clinical_diagnosis"
+  ],
+  "auditLoggingRequired": true,
+  "traceIdRequired": true,
+  "attributionRequired": true,
+  "consentRequired": true,
+  "disclosureRequired": true,
+  "maxRetentionDays": 365,
+  "exportLimit": 0,
+  "maxRiskTier": "high",
+  "references": {
+    "auditProfileRef": "audit-kermit-v1",
+    "retentionPolicyRef": "retention-global-365d-v1"
+  }
+}

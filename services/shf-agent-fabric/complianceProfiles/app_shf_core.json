@@ -1,0 +1,34 @@
+{
+  "policyId": "app-shf-core",
+  "version": "1.0.0",
+  "description": "Default SHF core apps (admin/career/curriculum/etc). Must not exceed SHF nonprofit business policy. No regulated/PHI/SUD.",
+  "auditLoggingRequired": true,
+  "traceIdRequired": true,
+  "attributionRequired": true,
+  "consentRequired": true,
+  "disclosureRequired": true,
+  "maxRetentionDays": 365,
+  "exportLimit": 0,
+  "maxRiskTier": "medium",
+  "allowedDataClasses": [],
+  "allowedDataTypes": [],
+  "allowedJurisdictions": [],
+  "allowedScopes": [],
+  "restrictedDataTypes": [
+    "health_phi",
+    "substance_use"
+  ],
+  "prohibitedScopes": [
+    "data.export.regulated",
+    "data.share.partner.regulated",
+    "billing.submit",
+    "clinical.diagnosis",
+    "prescription.order"
+  ],
+  "neverExecuteActions": [
+    "terminate_service",
+    "deny_benefits",
+    "approve_medical_necessity",
+    "make_clinical_diagnosis"
+  ]
+}

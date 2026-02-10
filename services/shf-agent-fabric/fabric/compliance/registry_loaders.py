@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from typing import Any, Dict, List
-
 from fabric.registry_canon import load_registry
 
 
@@ -16,12 +15,6 @@ def _infer_entity_type(entity_id: str, entity: Dict[str, Any], payload: Dict[str
         v = payload.get(k) or entity.get(k)
         if isinstance(v, str) and v.strip():
             return v.strip().lower()
-
-    lid = (entity_id or "").lower()
-    if lid.startswith("business:") or lid.startswith("biz:"):
-        return "business"
-    if lid.startswith("app:"):
-        return "app"
     return ""
 
 
@@ -35,7 +28,6 @@ def _required(payload: Dict[str, Any], key: str, ctx: str) -> Any:
 def load_business_registry() -> List[Dict[str, Any]]:
     reg = load_registry()
     entities = reg.get("entities") or {}
-
     out: List[Dict[str, Any]] = []
 
     for entity_id, entity in entities.items():
@@ -45,23 +37,17 @@ def load_business_registry() -> List[Dict[str, Any]]:
             continue
 
         business_id = payload.get("businessId") or payload.get("id") or entity_id
-        if not business_id:
-            raise RuntimeError(f"[COMPLIANCE_BOOT_FAIL] Business missing businessId/id (entity_id={entity_id})")
-
         compliance_ref = _required(payload, "complianceProfileRef", f"business({business_id})")
-
         out.append({"businessId": business_id, "complianceProfileRef": compliance_ref})
 
     if not out:
         raise RuntimeError("[COMPLIANCE_BOOT_FAIL] No business entities found in registry.json (Gate G requires businesses).")
-
     return out
 
 
 def load_app_registry() -> List[Dict[str, Any]]:
     reg = load_registry()
     entities = reg.get("entities") or {}
-
     out: List[Dict[str, Any]] = []
 
     for entity_id, entity in entities.items():
@@ -71,9 +57,6 @@ def load_app_registry() -> List[Dict[str, Any]]:
             continue
 
         app_id = payload.get("appId") or payload.get("id") or entity_id
-        if not app_id:
-            raise RuntimeError(f"[COMPLIANCE_BOOT_FAIL] App missing appId/id (entity_id={entity_id})")
-
         owning_business_id = _required(payload, "owningBusinessId", f"app({app_id})")
         compliance_ref = _required(payload, "complianceProfileRef", f"app({app_id})")
 
@@ -85,5 +68,4 @@ def load_app_registry() -> List[Dict[str, Any]]:
 
     if not out:
         raise RuntimeError("[COMPLIANCE_BOOT_FAIL] No app entities found in registry.json (Gate G requires apps).")
-
     return out

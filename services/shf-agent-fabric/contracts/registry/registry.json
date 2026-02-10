@@ -1,0 +1,741 @@
+{
+  "entities": {
+    "Layer09CaseSupportAgent": {
+      "agentId": "L09-CASE-001",
+      "createdAt": "2026-01-26T18:36:06Z",
+      "createdAtMs": 1769452566479,
+      "hash": "95bcf79948d8aef2967130ddf2d3376088640f713b351f12ab88a2df2c196a6a",
+      "id": "Layer09CaseSupportAgent",
+      "kind": "agent",
+      "layer": "L09",
+      "legal": {
+        "attestations": [],
+        "authority": {
+          "approvedAt": "2026-01-26T18:36:06Z",
+          "approvedBy": "shf-admin",
+          "basis": "operational"
+        },
+        "classification": "internal",
+        "dataCategory": [
+          "none"
+        ],
+        "disclaimerRef": "legal/disclaimers/default@1.0.0",
+        "jurisdiction": "US-OH",
+        "retention": {
+          "artifactsDays": 365,
+          "auditLogsDays": 365,
+          "deletionPolicy": "retire_only"
+        },
+        "termsRef": "legal/terms/shf-registry-terms@1.0.0"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "name": "Layer09CaseSupportAgent",
+      "policy": {
+        "humanApproval": false,
+        "maxSteps": 6,
+        "notes": "Draft plans only. No consequences. No eligibility calls."
+      },
+      "title": "Layer09 Case Support Agent",
+      "updatedAt": "2026-01-26T18:36:06Z",
+      "updatedAtMs": 1769452566479
+    },
+    "Layer10IntakeAgent": {
+      "createdAt": "2026-01-26T23:50:30Z",
+      "createdAtMs": 1769471430501,
+      "hash": "c5dcf4c00a6e4212a59487088025026881650ca0245cf4e5cc633aacd8db0c9b",
+      "id": "Layer10IntakeAgent",
+      "kind": "agent",
+      "layer": "L10",
+      "legal": {
+        "attestations": [],
+        "authority": {
+          "approvedBy": "shf-admin",
+          "basis": "operational"
+        },
+        "classification": "internal",
+        "dataCategory": [
+          "none"
+        ],
+        "disclaimerRef": "legal/disclaimers/default@1.0.0",
+        "jurisdiction": "US-OH",
+        "retention": {
+          "artifactsDays": 365,
+          "auditLogsDays": 365,
+          "deletionPolicy": "retire_only"
+        },
+        "termsRef": "legal/terms/shf-registry-terms@1.0.0"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "name": "Layer10IntakeAgent",
+      "policy": {
+        "humanApproval": false,
+        "maxSteps": 6,
+        "notes": "Intake support. No eligibility calls."
+      },
+      "title": "Layer10 Intake Agent",
+      "updatedAt": "2026-01-26T23:50:30Z",
+      "updatedAtMs": 1769471430501
+    },
+    "Layer14GrantsDrafterAgent": {
+      "agentId": "L14-GRANT-001",
+      "createdAt": "2026-01-26T18:36:06Z",
+      "createdAtMs": 1769452566480,
+      "hash": "76c581bf35d3a9758e68259a90c9f604cd1382a9bd891c35e39ee700bb1b7999",
+      "id": "Layer14GrantsDrafterAgent",
+      "kind": "agent",
+      "layer": "L14",
+      "legal": {
+        "attestations": [],
+        "authority": {
+          "approvedAt": "2026-01-26T18:36:06Z",
+          "approvedBy": "shf-admin",
+          "basis": "operational"
+        },
+        "classification": "internal",
+        "dataCategory": [
+          "none"
+        ],
+        "disclaimerRef": "legal/disclaimers/default@1.0.0",
+        "jurisdiction": "US-OH",
+        "retention": {
+          "artifactsDays": 365,
+          "auditLogsDays": 365,
+          "deletionPolicy": "retire_only"
+        },
+        "termsRef": "legal/terms/shf-registry-terms@1.0.0"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "name": "Layer14GrantsDrafterAgent",
+      "policy": {
+        "humanApproval": true,
+        "maxSteps": 8,
+        "notes": "Draft-only. Never submits externally. Human must review."
+      },
+      "title": "Layer14 Grants Drafter Agent",
+      "updatedAt": "2026-01-26T18:36:06Z",
+      "updatedAtMs": 1769452566480
+    },
+    "Layer23OrchestratorAgent": {
+      "agentId": "L23-ORCH-001",
+      "createdAt": "2026-01-26T18:36:06Z",
+      "createdAtMs": 1769452566482,
+      "hash": "cc34298043c5d3d562264700826cdc442fc2d8cdf9da8e3241200637878e056a",
+      "id": "Layer23OrchestratorAgent",
+      "kind": "agent",
+      "layer": "L23",
+      "legal": {
+        "attestations": [],
+        "authority": {
+          "approvedAt": "2026-01-26T18:36:06Z",
+          "approvedBy": "shf-admin",
+          "basis": "operational"
+        },
+        "classification": "internal",
+        "dataCategory": [
+          "none"
+        ],
+        "disclaimerRef": "legal/disclaimers/default@1.0.0",
+        "jurisdiction": "US-OH",
+        "retention": {
+          "artifactsDays": 365,
+          "auditLogsDays": 365,
+          "deletionPolicy": "retire_only"
+        },
+        "termsRef": "legal/terms/shf-registry-terms@1.0.0"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "name": "Layer23OrchestratorAgent",
+      "policy": {
+        "humanApproval": true,
+        "maxSteps": 6,
+        "notes": "Draft-only orchestrator. Requires approval before any action beyond drafting."
+      },
+      "title": "Layer23 Orchestrator Agent",
+      "updatedAt": "2026-01-26T18:36:06Z",
+      "updatedAtMs": 1769452566482
+    },
+    "Layer99TestAgent": {
+      "createdAt": "2026-01-26T23:15:59Z",
+      "createdAtMs": 1769469359139,
+      "hash": "f7ee054fa806d3101f69a4e7a7e0a58fc0940a076b7a5dd6b54a3bc192bc5cb4",
+      "id": "Layer99TestAgent",
+      "kind": "agent",
+      "layer": "L99",
+      "legal": {
+        "attestations": [],
+        "authority": {
+          "approvedBy": "shf-admin",
+          "basis": "test"
+        },
+        "classification": "internal",
+        "dataCategory": [
+          "none"
+        ],
+        "disclaimerRef": "legal/disclaimers/default@1.0.0",
+        "jurisdiction": "US-OH",
+        "retention": {
+          "artifactsDays": 365,
+          "auditLogsDays": 365,
+          "deletionPolicy": "retire_only"
+        },
+        "termsRef": "legal/terms/shf-registry-terms@1.0.0"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "name": "Layer99TestAgent",
+      "policy": {
+        "humanApproval": false,
+        "maxSteps": 6,
+        "notes": "Test entity."
+      },
+      "title": "Layer99 Test Agent",
+      "updatedAt": "2026-01-26T23:15:59Z",
+      "updatedAtMs": 1769469359139
+    },
+    "admin": {
+      "createdAt": "2026-01-26T18:36:06Z",
+      "createdAtMs": 1769452566478,
+      "entry": "/admin.html",
+      "hash": "94c36f580d0a30a0a888547ccb73b508a91bf7c538c643663e22d303e06783f5",
+      "id": "admin",
+      "kind": "app",
+      "legal": {
+        "attestations": [],
+        "authority": {
+          "approvedAt": "2026-01-26T18:36:06Z",
+          "approvedBy": "shf-admin",
+          "basis": "operational"
+        },
+        "classification": "public",
+        "dataCategory": [
+          "none"
+        ],
+        "disclaimerRef": "legal/disclaimers/default@1.0.0",
+        "jurisdiction": "US-OH",
+        "retention": {
+          "artifactsDays": 365,
+          "auditLogsDays": 365,
+          "deletionPolicy": "retire_only"
+        },
+        "termsRef": "legal/terms/shf-registry-terms@1.0.0"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "name": "admin",
+      "policy": {
+        "humanApproval": true,
+        "maxSteps": 1,
+        "notes": "UI surface. No agent actions."
+      },
+      "title": "Admin",
+      "updatedAt": "2026-01-26T18:36:06Z",
+      "updatedAtMs": 1769452566478,
+      "complianceProfileRef": "app-shf-core",
+      "appId": "admin",
+      "entityType": "app",
+      "owningBusinessId": "shf_nonprofit"
+    },
+    "arcade": {
+      "createdAt": "2026-01-26T18:36:06Z",
+      "createdAtMs": 1769452566475,
+      "entry": "/arcade.html",
+      "hash": "d71dfc204b8190d7c82a6711ace92468f72b615c8d7c62221641c182c12adb74",
+      "id": "arcade",
+      "kind": "app",
+      "legal": {
+        "attestations": [],
+        "authority": {
+          "approvedAt": "2026-01-26T18:36:06Z",
+          "approvedBy": "shf-admin",
+          "basis": "operational"
+        },
+        "classification": "public",
+        "dataCategory": [
+          "none"
+        ],
+        "disclaimerRef": "legal/disclaimers/default@1.0.0",
+        "jurisdiction": "US-OH",
+        "retention": {
+          "artifactsDays": 365,
+          "auditLogsDays": 365,
+          "deletionPolicy": "retire_only"
+        },
+        "termsRef": "legal/terms/shf-registry-terms@1.0.0"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "name": "arcade",
+      "policy": {
+        "humanApproval": true,
+        "maxSteps": 1,
+        "notes": "UI surface. No agent actions."
+      },
+      "title": "Arcade",
+      "updatedAt": "2026-01-26T18:36:06Z",
+      "updatedAtMs": 1769452566475,
+      "complianceProfileRef": "app-shf-core",
+      "appId": "arcade",
+      "entityType": "app",
+      "owningBusinessId": "shf_nonprofit"
+    },
+    "biz_demo_002": {
+      "business": {
+        "complianceFlags": [
+          "mou-ready"
+        ],
+        "jurisdiction": "US-OH",
+        "riskTier": "low",
+        "servicesTags": [
+          "pilot-hosting"
+        ],
+        "type": "partner"
+      },
+      "createdAt": "2026-01-29T00:53:24Z",
+      "createdAtMs": 1769648004124,
+      "hash": "6a72a167f6d48879ef3a3d75b64d2c9db3e6ba7a4273db64e6d27e589af0ce81",
+      "id": "biz_demo_002",
+      "kind": "business",
+      "layer": "L00",
+      "legal": {
+        "attestations": [],
+        "authority": {
+          "approvedBy": "shf-admin",
+          "basis": "operational"
+        },
+        "classification": "internal",
+        "dataCategory": [
+          "none"
+        ],
+        "disclaimerRef": "legal/disclaimers/default@1.0.0",
+        "jurisdiction": "US-OH",
+        "retention": {
+          "artifactsDays": 365,
+          "auditLogsDays": 365,
+          "deletionPolicy": "retire_only"
+        },
+        "termsRef": "legal/terms/shf-registry-terms@1.0.0"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "name": "Demo Biz 002",
+      "policy": {
+        "humanApproval": true,
+        "maxSteps": 1,
+        "notes": "seed"
+      },
+      "title": "Demo Biz 002",
+      "updatedAt": "2026-01-29T00:53:24Z",
+      "updatedAtMs": 1769648004124,
+      "complianceProfileRef": "business-nonprofit-shf",
+      "businessId": "biz_demo_002"
+    },
+    "biz_shf_demo_employer": {
+      "business": {
+        "complianceFlags": [
+          "w9-on-file"
+        ],
+        "jurisdiction": "US-OH",
+        "riskTier": "low",
+        "servicesTags": [
+          "hiring",
+          "internships"
+        ],
+        "type": "employer"
+      },
+      "createdAt": "2026-01-29T01:02:10Z",
+      "createdAtMs": 1769648530250,
+      "hash": "0271a6f8c1ab50698d60012acd730c10582b8b31a778ab0cd8456266a0d5e6d7",
+      "id": "biz_shf_demo_employer",
+      "kind": "business",
+      "layer": "L00",
+      "legal": {
+        "attestations": [],
+        "authority": {
+          "approvedBy": "shf-admin",
+          "basis": "operational"
+        },
+        "classification": "internal",
+        "dataCategory": [
+          "none"
+        ],
+        "disclaimerRef": "legal/disclaimers/default@1.0.0",
+        "jurisdiction": "US-OH",
+        "retention": {
+          "artifactsDays": 365,
+          "auditLogsDays": 365,
+          "deletionPolicy": "retire_only"
+        },
+        "termsRef": "legal/terms/shf-registry-terms@1.0.0"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "name": "SHF Demo Employer",
+      "policy": {
+        "humanApproval": true,
+        "maxSteps": 1,
+        "notes": "Business entity (employer)"
+      },
+      "title": "SHF Demo Employer",
+      "updatedAt": "2026-01-29T01:02:10Z",
+      "updatedAtMs": 1769648530250,
+      "complianceProfileRef": "business-nonprofit-shf",
+      "businessId": "biz_shf_demo_employer"
+    },
+    "biz_shf_demo_partner": {
+      "business": {
+        "complianceFlags": [
+          "mou-ready"
+        ],
+        "jurisdiction": "US-OH",
+        "riskTier": "low",
+        "servicesTags": [
+          "pilot-hosting",
+          "referrals"
+        ],
+        "type": "partner"
+      },
+      "createdAt": "2026-01-29T01:02:10Z",
+      "createdAtMs": 1769648530222,
+      "hash": "6ea8b8549f74a90fbea8522c895656019b0ed88d93c17b881b4e2b786d70d704",
+      "id": "biz_shf_demo_partner",
+      "kind": "business",
+      "layer": "L00",
+      "legal": {
+        "attestations": [],
+        "authority": {
+          "approvedBy": "shf-admin",
+          "basis": "operational"
+        },
+        "classification": "internal",
+        "dataCategory": [
+          "none"
+        ],
+        "disclaimerRef": "legal/disclaimers/default@1.0.0",
+        "jurisdiction": "US-OH",
+        "retention": {
+          "artifactsDays": 365,
+          "auditLogsDays": 365,
+          "deletionPolicy": "retire_only"
+        },
+        "termsRef": "legal/terms/shf-registry-terms@1.0.0"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "name": "SHF Demo Partner",
+      "policy": {
+        "humanApproval": true,
+        "maxSteps": 1,
+        "notes": "Business entity (partner)"
+      },
+      "title": "SHF Demo Partner Organization",
+      "updatedAt": "2026-01-29T01:02:10Z",
+      "updatedAtMs": 1769648530222,
+      "complianceProfileRef": "business-nonprofit-shf",
+      "businessId": "biz_shf_demo_partner"
+    },
+    "biz_shf_demo_vendor": {
+      "business": {
+        "complianceFlags": [
+          "contract-ready"
+        ],
+        "jurisdiction": "US-OH",
+        "riskTier": "low",
+        "servicesTags": [
+          "software",
+          "support"
+        ],
+        "type": "vendor"
+      },
+      "createdAt": "2026-01-29T01:02:10Z",
+      "createdAtMs": 1769648530273,
+      "hash": "99e5965c0cb4970b909b38b9fadaf768f216fe671abf936d595a08d9098b0391",
+      "id": "biz_shf_demo_vendor",
+      "kind": "business",
+      "layer": "L00",
+      "legal": {
+        "attestations": [],
+        "authority": {
+          "approvedBy": "shf-admin",
+          "basis": "operational"
+        },
+        "classification": "internal",
+        "dataCategory": [
+          "none"
+        ],
+        "disclaimerRef": "legal/disclaimers/default@1.0.0",
+        "jurisdiction": "US-OH",
+        "retention": {
+          "artifactsDays": 365,
+          "auditLogsDays": 365,
+          "deletionPolicy": "retire_only"
+        },
+        "termsRef": "legal/terms/shf-registry-terms@1.0.0"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "name": "SHF Demo Vendor",
+      "policy": {
+        "humanApproval": true,
+        "maxSteps": 1,
+        "notes": "Business entity (vendor)"
+      },
+      "title": "SHF Demo Vendor",
+      "updatedAt": "2026-01-29T01:02:10Z",
+      "updatedAtMs": 1769648530273,
+      "complianceProfileRef": "business-nonprofit-shf",
+      "businessId": "biz_shf_demo_vendor"
+    },
+    "biz_test_001": {
+      "business": {
+        "complianceFlags": [
+          "mou-ready"
+        ],
+        "jurisdiction": "US-OH",
+        "riskTier": "low",
+        "servicesTags": [
+          "pilot-hosting"
+        ],
+        "type": "partner"
+      },
+      "createdAt": "2026-01-29T00:09:04Z",
+      "createdAtMs": 1769645344699,
+      "hash": "e2a4d1fbc291433d4240c21f6ac16c4b94448b59ddc9a6ed3275f3fe29398aa3",
+      "id": "biz_test_001",
+      "kind": "business",
+      "layer": "L00",
+      "legal": {
+        "attestations": [],
+        "authority": {
+          "approvedBy": "shf-admin",
+          "basis": "operational"
+        },
+        "classification": "internal",
+        "dataCategory": [
+          "none"
+        ],
+        "disclaimerRef": "legal/disclaimers/default@1.0.0",
+        "jurisdiction": "US-OH",
+        "retention": {
+          "artifactsDays": 365,
+          "auditLogsDays": 365,
+          "deletionPolicy": "retire_only"
+        },
+        "termsRef": "legal/terms/shf-registry-terms@1.0.0"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "name": "Biz Test 001",
+      "policy": {
+        "humanApproval": true,
+        "maxSteps": 1,
+        "notes": "test"
+      },
+      "title": "Biz Test 001",
+      "updatedAt": "2026-01-29T00:09:04Z",
+      "updatedAtMs": 1769645344699,
+      "complianceProfileRef": "business-nonprofit-shf",
+      "businessId": "biz_test_001"
+    },
+    "career": {
+      "createdAt": "2026-01-26T18:36:06Z",
+      "createdAtMs": 1769452566474,
+      "entry": "/career.html",
+      "hash": "433ce643d216d2939c0c7e0f6332aed705026e2fb9d4dbec2c70ede868137a85",
+      "id": "career",
+      "kind": "app",
+      "legal": {
+        "attestations": [],
+        "authority": {
+          "approvedAt": "2026-01-26T18:36:06Z",
+          "approvedBy": "shf-admin",
+          "basis": "operational"
+        },
+        "classification": "public",
+        "dataCategory": [
+          "none"
+        ],
+        "disclaimerRef": "legal/disclaimers/default@1.0.0",
+        "jurisdiction": "US-OH",
+        "retention": {
+          "artifactsDays": 365,
+          "auditLogsDays": 365,
+          "deletionPolicy": "retire_only"
+        },
+        "termsRef": "legal/terms/shf-registry-terms@1.0.0"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "name": "career",
+      "policy": {
+        "humanApproval": true,
+        "maxSteps": 1,
+        "notes": "UI surface. No agent actions."
+      },
+      "title": "Career",
+      "updatedAt": "2026-01-26T18:36:06Z",
+      "updatedAtMs": 1769452566474,
+      "complianceProfileRef": "app-shf-core",
+      "appId": "career",
+      "entityType": "app",
+      "owningBusinessId": "shf_nonprofit"
+    },
+    "curriculum": {
+      "createdAt": "2026-01-26T18:36:06Z",
+      "createdAtMs": 1769452566473,
+      "entry": "/curriculum.html",
+      "hash": "dadeb7aee26c50fc2f6c40fb7ce42793ed87c9d66e0a28095ab075acc0a0e159",
+      "id": "curriculum",
+      "kind": "app",
+      "legal": {
+        "attestations": [],
+        "authority": {
+          "approvedAt": "2026-01-26T18:36:06Z",
+          "approvedBy": "shf-admin",
+          "basis": "operational"
+        },
+        "classification": "public",
+        "dataCategory": [
+          "none"
+        ],
+        "disclaimerRef": "legal/disclaimers/default@1.0.0",
+        "jurisdiction": "US-OH",
+        "retention": {
+          "artifactsDays": 365,
+          "auditLogsDays": 365,
+          "deletionPolicy": "retire_only"
+        },
+        "termsRef": "legal/terms/shf-registry-terms@1.0.0"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "name": "curriculum",
+      "policy": {
+        "humanApproval": true,
+        "maxSteps": 1,
+        "notes": "UI surface. No agent actions."
+      },
+      "title": "Curriculum",
+      "updatedAt": "2026-01-26T18:36:06Z",
+      "updatedAtMs": 1769452566473,
+      "complianceProfileRef": "app-shf-core",
+      "appId": "curriculum",
+      "entityType": "app",
+      "owningBusinessId": "shf_nonprofit"
+    },
+    "foundation": {
+      "createdAt": "2026-01-26T18:36:06Z",
+      "createdAtMs": 1769452566472,
+      "entry": "/foundation.html",
+      "hash": "1599b25cd588dac92ff08cd6f1c70ae751196806834b24cdafbe159941731acc",
+      "id": "foundation",
+      "kind": "app",
+      "legal": {
+        "attestations": [],
+        "authority": {
+          "approvedAt": "2026-01-26T18:36:06Z",
+          "approvedBy": "shf-admin",
+          "basis": "operational"
+        },
+        "classification": "public",
+        "dataCategory": [
+          "none"
+        ],
+        "disclaimerRef": "legal/disclaimers/default@1.0.0",
+        "jurisdiction": "US-OH",
+        "retention": {
+          "artifactsDays": 365,
+          "auditLogsDays": 365,
+          "deletionPolicy": "retire_only"
+        },
+        "termsRef": "legal/terms/shf-registry-terms@1.0.0"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "name": "foundation",
+      "policy": {
+        "humanApproval": true,
+        "maxSteps": 1,
+        "notes": "UI surface. No agent actions."
+      },
+      "title": "Foundation",
+      "updatedAt": "2026-01-26T18:36:06Z",
+      "updatedAtMs": 1769452566472,
+      "complianceProfileRef": "app-shf-core",
+      "appId": "foundation",
+      "entityType": "app",
+      "owningBusinessId": "shf_nonprofit"
+    },
+    "treasury": {
+      "createdAt": "2026-01-26T18:36:06Z",
+      "createdAtMs": 1769452566476,
+      "entry": "/treasury.html",
+      "hash": "eb81c9fa510454f360282678877373db26df82611305d76dc78b2cb3afeadfae",
+      "id": "treasury",
+      "kind": "app",
+      "legal": {
+        "attestations": [],
+        "authority": {
+          "approvedAt": "2026-01-26T18:36:06Z",
+          "approvedBy": "shf-admin",
+          "basis": "operational"
+        },
+        "classification": "public",
+        "dataCategory": [
+          "none"
+        ],
+        "disclaimerRef": "legal/disclaimers/default@1.0.0",
+        "jurisdiction": "US-OH",
+        "retention": {
+          "artifactsDays": 365,
+          "auditLogsDays": 365,
+          "deletionPolicy": "retire_only"
+        },
+        "termsRef": "legal/terms/shf-registry-terms@1.0.0"
+      },
+      "lifecycle": {
+        "status": "active"
+      },
+      "name": "treasury",
+      "policy": {
+        "humanApproval": true,
+        "maxSteps": 1,
+        "notes": "UI surface. No agent actions."
+      },
+      "title": "Treasury",
+      "updatedAt": "2026-01-26T18:36:06Z",
+      "updatedAtMs": 1769452566476,
+      "complianceProfileRef": "app-shf-core",
+      "appId": "treasury",
+      "entityType": "app",
+      "owningBusinessId": "shf_nonprofit"
+    },
+    "business:shf_nonprofit": {
+      "payload": {
+        "entityType": "business",
+        "businessId": "shf_nonprofit",
+        "name": "Silicon Heartland Foundation (Nonprofit)",
+        "complianceProfileRef": "business-nonprofit-shf"
+      }
+    }
+  },
+  "version": 1
+}

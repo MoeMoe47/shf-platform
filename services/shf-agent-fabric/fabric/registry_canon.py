@@ -11,7 +11,7 @@ from threading import Lock
 ROOT = Path(__file__).resolve().parents[1]
 DB = ROOT / "db"
 
-REGISTRY_PATH = DB / "registry.json"
+REGISTRY_PATH = ROOT / "contracts/registry/registry.json"
 EVENTS_PATH = DB / "registry_events.jsonl"
 
 _lock = Lock()

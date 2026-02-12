@@ -1,0 +1,47 @@
+name: registry-and-gateg
+
+on:
+  pull_request:
+  push:
+    branches: [ main, develop, ci-test ]
+
+jobs:
+  registry-and-gateg:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install minimal deps (if any)
+        working-directory: services/shf-agent-fabric
+        run: |
+          python3 -V
+          # If you later add requirements.txt, uncomment:
+          # pip install -r requirements.txt
+
+      - name: Generate compliance manifest
+        working-directory: services/shf-agent-fabric
+        run: |
+          python3 scripts/generate_compliance_manifest.py
+
+      - name: Verify complianceProfiles/index.json is up-to-date
+        working-directory: services/shf-agent-fabric
+        run: |
+          git diff --exit-code complianceProfiles/index.json
+
+      - name: Verify registry contract
+        run: |
+          python3 services/shf-agent-fabric/scripts/verify_registry_contract.py
+
+      - name: Verify Gate G startup hard-pass (no server)
+        run: |
+          PYTHONPATH=services/shf-agent-fabric python3 - <<'PY'
+          from fabric.startup_verify import verify_compliance_gate_g_or_die
+          verify_compliance_gate_g_or_die()
+          print("✅ Gate G startup verifier PASSED in CI")
+          PY

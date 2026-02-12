@@ -186,6 +186,13 @@ def loo_programs():
                 "payload_endpoint": "/arena/loo/payload",
                 "metrics_endpoint": "/arena/metrics",
                 "notes": "Deterministic, spectator-safe. Auto-rollup on round finalize writes db/arena/loo_payload.latest.json",
-            }
+            },
+        {
+            "program_id": "watchtower_demo_program",
+            "app_id": "infrastructure",
+            "label": "Watchtower Demo Program (No Adapter Yet)",
+            "level": "infra",
+            "notes": "Intentionally missing adapter to prove Watchtower coverage + alerts Day 1."
+        }
         ],
     }

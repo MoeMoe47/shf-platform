@@ -1,9 +1,8 @@
 from dotenv import load_dotenv
+load_dotenv()
 
 from fabric.startup_verify import verify_compliance_gate_g_or_die
 verify_compliance_gate_g_or_die()
-
-load_dotenv()
 
 import logging
 import os
@@ -73,6 +72,7 @@ def _env_true(name: str, default: str = "1") -> bool:
 
 
 app = FastAPI(title="SHF Agent Fabric")
+
 
 app.add_middleware(
     CORSMiddleware,

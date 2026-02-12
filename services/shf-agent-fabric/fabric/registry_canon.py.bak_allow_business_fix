@@ -1,0 +1,294 @@
+from __future__ import annotations
+
+import json
+import os
+import time
+import hashlib
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+from threading import Lock
+
+ROOT = Path(__file__).resolve().parents[1]
+DB = ROOT / "db"
+
+REGISTRY_PATH = DB / "registry.json"
+EVENTS_PATH = DB / "registry_events.jsonl"
+
+_lock = Lock()
+
+ISO = "time"  # marker; we store epoch_ms and iso
+
+# ---------------------------
+# Helpers
+# ---------------------------
+
+def _now_epoch_ms() -> int:
+    return int(time.time() * 1000)
+
+def _now_iso() -> str:
+    # lightweight ISO-ish UTC without importing datetime heavy paths
+    return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+
+def _json_canon(obj: Any) -> str:
+    return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+
+def _sha256_text(s: str) -> str:
+    return hashlib.sha256(s.encode("utf-8")).hexdigest()
+
+def entity_hash(entity: Dict[str, Any]) -> str:
+    # hash everything except volatile keys that should not change hash meaningfully
+    e = dict(entity)
+    # keep timestamps in hash (legal/audit wants it), but exclude computed hash itself
+    e.pop("hash", None)
+    return _sha256_text(_json_canon(e))
+
+def _read_json(path: Path, default: Any) -> Any:
+    if not path.exists():
+        return default
+    try:
+        return json.loads(path.read_text(encoding="utf-8") or "")
+    except Exception:
+        return default
+
+def _write_json(path: Path, obj: Any):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(obj, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+def _append_event(evt: Dict[str, Any]):
+    EVENTS_PATH.parent.mkdir(parents=True, exist_ok=True)
+    line = _json_canon(evt) + "\n"
+    with EVENTS_PATH.open("a", encoding="utf-8") as f:
+        f.write(line)
+
+def _actor_from_env() -> Dict[str, Any]:
+    # keep simple, can enrich later with user/session/IP
+    return {
+        "actor": os.getenv("SHF_ACTOR", "shf-admin"),
+        "source": os.getenv("SHF_ACTOR_SOURCE", "cli"),
+    }
+
+# ---------------------------
+# Registry Schema (Canon)
+# ---------------------------
+
+LEGAL_CLASSIFICATIONS = {"public", "partner", "internal", "restricted", "regulated"}
+DATA_CATEGORIES = {
+    "none", "pii", "phi", "financial", "education_records", "case_notes", "children_data"
+}
+
+def default_policy() -> Dict[str, Any]:
+    return {"humanApproval": True, "maxSteps": 6, "notes": ""}
+
+def default_lifecycle() -> Dict[str, Any]:
+    return {"status": "draft"}  # draft|active|retired
+
+def default_legal() -> Dict[str, Any]:
+    return {
+        "classification": "internal",
+        "dataCategory": ["none"],
+        "authority": {"approvedBy": "shf-admin", "approvedAt": _now_iso(), "basis": "operational"},
+        "termsRef": "legal/terms/shf-registry-terms@1.0.0",
+        "disclaimerRef": "legal/disclaimers/default@1.0.0",
+        "retention": {
+            "auditLogsDays": 365,
+            "artifactsDays": 365,
+            "deletionPolicy": "retire_only",
+        },
+        "jurisdiction": "US-OH",
+        "attestations": [],
+    }
+
+def _normalize_legal(legal: Dict[str, Any]) -> Dict[str, Any]:
+    out = dict(default_legal())
+    out.update(legal or {})
+    cls = out.get("classification", "internal")
+    if cls not in LEGAL_CLASSIFICATIONS:
+        out["classification"] = "internal"
+    cats = out.get("dataCategory") or ["none"]
+    if isinstance(cats, str):
+        cats = [cats]
+    cats2 = []
+    for c in cats:
+        c = str(c)
+        if c in DATA_CATEGORIES:
+            cats2.append(c)
+    if not cats2:
+        cats2 = ["none"]
+    out["dataCategory"] = sorted(set(cats2))
+    out.setdefault("attestations", [])
+    return out
+
+def _regulated_gate(legal: Dict[str, Any]) -> bool:
+    cls = (legal or {}).get("classification")
+    cats = set((legal or {}).get("dataCategory") or [])
+    return cls == "regulated" or ("phi" in cats) or ("children_data" in cats)
+
+def _require_attestations_for_active(legal: Dict[str, Any]) -> Tuple[bool, str]:
+    if not _regulated_gate(legal):
+        return True, ""
+    att = (legal or {}).get("attestations") or []
+    types = {a.get("type") for a in att if isinstance(a, dict)}
+    need = {"compliance_review", "security_review"}
+    missing = sorted(list(need - types))
+    if missing:
+        return False, f"Missing attestations: {', '.join(missing)}"
+    return True, ""
+
+# ---------------------------
+# Canon Registry Operations
+# ---------------------------
+
+def load_registry() -> Dict[str, Any]:
+    reg = _read_json(REGISTRY_PATH, default={"version": 1, "entities": {}})
+    if not isinstance(reg, dict):
+        reg = {"version": 1, "entities": {}}
+    reg.setdefault("version", 1)
+    reg.setdefault("entities", {})
+    if not isinstance(reg["entities"], dict):
+        reg["entities"] = {}
+    return reg
+
+def save_registry(reg: Dict[str, Any]):
+    _write_json(REGISTRY_PATH, reg)
+
+def list_entities(kind: Optional[str] = None) -> List[Dict[str, Any]]:
+    reg = load_registry()
+    items = []
+    for _, e in reg["entities"].items():
+        if not isinstance(e, dict):
+            continue
+        if kind and e.get("kind") != kind:
+            continue
+        items.append(e)
+    items.sort(key=lambda x: (x.get("kind") or "", x.get("name") or ""))
+    return items
+
+def get_entity(entity_id: str) -> Optional[Dict[str, Any]]:
+    reg = load_registry()
+    e = reg["entities"].get(entity_id)
+    return e if isinstance(e, dict) else None
+
+def upsert_entity(entity: Dict[str, Any], reason: str = "upsert") -> Dict[str, Any]:
+    with _lock:
+        reg = load_registry()
+
+        entity_id = str(entity.get("id") or "").strip()
+        if not entity_id:
+            raise ValueError("Entity id is required")
+
+        before = reg["entities"].get(entity_id)
+        before_hash = before.get("hash") if isinstance(before, dict) else None
+
+        # normalize required blocks
+        entity["id"] = entity_id
+        entity["kind"] = str(entity.get("kind") or "").strip()  # app|agent
+        if entity["kind"] not in {"app", "agent"}:
+            raise ValueError("Entity kind must be 'app' or 'agent' or 'business'")
+
+        entity["name"] = str(entity.get("name") or "").strip()
+        if not entity["name"]:
+            raise ValueError("Entity name is required")
+
+        entity.setdefault("title", entity["name"])
+
+        entity["policy"] = dict(default_policy(), **(entity.get("policy") or {}))
+        entity["lifecycle"] = dict(default_lifecycle(), **(entity.get("lifecycle") or {}))
+        entity["legal"] = _normalize_legal(entity.get("legal") or {})
+
+        # LEGAL GATES (server-enforced)
+        if _regulated_gate(entity["legal"]):
+            # regulated always requires human approval
+            entity["policy"]["humanApproval"] = True
+
+        # lifecycle gate
+        status = (entity["lifecycle"] or {}).get("status", "draft")
+        if status == "active":
+            ok, msg = _require_attestations_for_active(entity["legal"])
+            if not ok:
+                raise ValueError(f"Cannot activate regulated entity: {msg}")
+
+        # timestamps
+        now_iso = _now_iso()
+        now_ms = _now_epoch_ms()
+        if isinstance(before, dict):
+            entity.setdefault("createdAt", before.get("createdAt") or now_iso)
+            entity.setdefault("createdAtMs", before.get("createdAtMs") or now_ms)
+        else:
+            entity.setdefault("createdAt", now_iso)
+            entity.setdefault("createdAtMs", now_ms)
+        entity["updatedAt"] = now_iso
+        entity["updatedAtMs"] = now_ms
+
+        # compute hash
+        entity["hash"] = entity_hash(entity)
+
+        reg["entities"][entity_id] = entity
+        save_registry(reg)
+
+        evt = {
+            "eventId": _sha256_text(f"{entity_id}:{now_ms}:{os.urandom(6).hex()}"),
+            "ts": now_iso,
+            "tsMs": now_ms,
+            **_actor_from_env(),
+            "action": "update" if before else "create",
+            "entityId": entity_id,
+            "kind": entity["kind"],
+            "name": entity["name"],
+            "reason": reason,
+            "beforeHash": before_hash,
+            "afterHash": entity["hash"],
+        }
+        _append_event(evt)
+        return entity
+
+def set_lifecycle(entity_id: str, status: str, reason: str) -> Dict[str, Any]:
+    if status not in {"draft", "active", "retired"}:
+        raise ValueError("status must be draft|active|retired")
+    e = get_entity(entity_id)
+    if not e:
+        raise ValueError("entity not found")
+    e = dict(e)
+    e["lifecycle"] = dict(e.get("lifecycle") or {})
+    e["lifecycle"]["status"] = status
+    return upsert_entity(e, reason=reason)
+
+def add_attestation(entity_id: str, att: Dict[str, Any], reason: str = "attest") -> Dict[str, Any]:
+    e = get_entity(entity_id)
+    if not e:
+        raise ValueError("entity not found")
+    e = dict(e)
+    legal = _normalize_legal(e.get("legal") or {})
+    attestations = list(legal.get("attestations") or [])
+
+    a = dict(att or {})
+    a.setdefault("attestationId", _sha256_text(f"{entity_id}:{_now_epoch_ms()}:{os.urandom(6).hex()}"))
+    a.setdefault("approvedAt", _now_iso())
+    a.setdefault("approvedBy", os.getenv("SHF_ACTOR", "shf-admin"))
+    a.setdefault("type", "compliance_review")
+    a.setdefault("note", "")
+    attestations.append(a)
+
+    legal["attestations"] = attestations
+    e["legal"] = legal
+    return upsert_entity(e, reason=reason)
+
+def read_events(limit: int = 200, entity_id: Optional[str] = None) -> List[Dict[str, Any]]:
+    if not EVENTS_PATH.exists():
+        return []
+    out: List[Dict[str, Any]] = []
+    with EVENTS_PATH.open("r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                evt = json.loads(line)
+            except Exception:
+                continue
+            if entity_id and evt.get("entityId") != entity_id:
+                continue
+            out.append(evt)
+    # newest last in file; return newest first for convenience
+    out = out[-max(limit, 1):]
+    out.reverse()
+    return out

@@ -5,7 +5,7 @@ from typing import Dict
 from .models import AppManifest
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-REGISTRY_PATH = os.getenv("ALIGN_REGISTRY_PATH", os.path.join(BASE_DIR, "registry", "alignment", "app_registry.json"))
+REGISTRY_PATH = os.path.join(BASE_DIR, "contracts", "registry", "registry.json")
 
 def _now_iso():
     return datetime.now(timezone.utc).isoformat()

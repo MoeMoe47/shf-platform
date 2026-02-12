@@ -1,4 +1,6 @@
 from __future__ import annotations
+DEFAULT_WINDOW_DAYS = 7
+
 
 from typing import Any, Dict, List, Tuple
 
@@ -56,6 +58,7 @@ def build_watchtower_program_rows(*, days: int = 30, baseline_weeks: int = 8) ->
             row = {**base, **r}
         else:
             row = {
+        "window_days": window_days,
                 **base,
                 "ok": False,
                 "adapter_ok": False,
@@ -72,8 +75,10 @@ def build_watchtower_program_rows(*, days: int = 30, baseline_weeks: int = 8) ->
                 "evidence": {"meta": {}, "contract_errors": ["NO_RANKING_ROW"]},
             }
 
-        rows.append(row)
+        row["window_days"] = days
+        row["baseline_weeks"] = baseline_weeks
 
+        rows.append(row)
     rows.sort(key=lambda x: ((x.get("rank") is None), x.get("rank") or 10**9, str(x.get("label") or "")))
 
     integrity = compute_integrity(rows, catalog=catalog)
@@ -101,7 +106,7 @@ def build_watchtower_summary(*, days: int = 30, baseline_weeks: int = 8, top_n: 
 # ------------------------------------------------------------
 # Backward-compat aliases (tests/contracts may import old names)
 # ------------------------------------------------------------
-def compute_watchtower_rows(*, days: int = 30, baseline_weeks: int = 8):
+def compute_watchtower_rows(*, days: int = 30, baseline_weeks: int = 8, window_days: int = 30):
     # legacy name used by early tests
     return build_watchtower_program_rows(days=days, baseline_weeks=baseline_weeks)
 

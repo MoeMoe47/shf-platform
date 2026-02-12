@@ -39,7 +39,9 @@
       },
       "title": "Layer09 Case Support Agent",
       "updatedAt": "2026-01-26T18:36:06Z",
-      "updatedAtMs": 1769452566479
+      "updatedAtMs": 1769452566479,
+      "complianceProfileRef": "app-shf-core",
+      "owningAppId": "admin"
     },
     "Layer10IntakeAgent": {
       "createdAt": "2026-01-26T23:50:30Z",
@@ -78,7 +80,9 @@
       },
       "title": "Layer10 Intake Agent",
       "updatedAt": "2026-01-26T23:50:30Z",
-      "updatedAtMs": 1769471430501
+      "updatedAtMs": 1769471430501,
+      "complianceProfileRef": "app-shf-core",
+      "owningAppId": "admin"
     },
     "Layer14GrantsDrafterAgent": {
       "agentId": "L14-GRANT-001",
@@ -119,7 +123,9 @@
       },
       "title": "Layer14 Grants Drafter Agent",
       "updatedAt": "2026-01-26T18:36:06Z",
-      "updatedAtMs": 1769452566480
+      "updatedAtMs": 1769452566480,
+      "complianceProfileRef": "app-shf-core",
+      "owningAppId": "admin"
     },
     "Layer23OrchestratorAgent": {
       "agentId": "L23-ORCH-001",
@@ -160,7 +166,9 @@
       },
       "title": "Layer23 Orchestrator Agent",
       "updatedAt": "2026-01-26T18:36:06Z",
-      "updatedAtMs": 1769452566482
+      "updatedAtMs": 1769452566482,
+      "complianceProfileRef": "app-shf-core",
+      "owningAppId": "admin"
     },
     "Layer99TestAgent": {
       "createdAt": "2026-01-26T23:15:59Z",
@@ -199,7 +207,9 @@
       },
       "title": "Layer99 Test Agent",
       "updatedAt": "2026-01-26T23:15:59Z",
-      "updatedAtMs": 1769469359139
+      "updatedAtMs": 1769469359139,
+      "complianceProfileRef": "app-shf-core",
+      "owningAppId": "admin"
     },
     "admin": {
       "createdAt": "2026-01-26T18:36:06Z",
@@ -243,7 +253,7 @@
       "complianceProfileRef": "app-shf-core",
       "appId": "admin",
       "entityType": "app",
-      "owningBusinessId": "shf_nonprofit"
+      "owningBusinessId": "business:shf_nonprofit"
     },
     "arcade": {
       "createdAt": "2026-01-26T18:36:06Z",
@@ -287,7 +297,7 @@
       "complianceProfileRef": "app-shf-core",
       "appId": "arcade",
       "entityType": "app",
-      "owningBusinessId": "shf_nonprofit"
+      "owningBusinessId": "business:shf_nonprofit"
     },
     "biz_demo_002": {
       "business": {
@@ -594,7 +604,7 @@
       "complianceProfileRef": "app-shf-core",
       "appId": "career",
       "entityType": "app",
-      "owningBusinessId": "shf_nonprofit"
+      "owningBusinessId": "business:shf_nonprofit"
     },
     "curriculum": {
       "createdAt": "2026-01-26T18:36:06Z",
@@ -638,7 +648,7 @@
       "complianceProfileRef": "app-shf-core",
       "appId": "curriculum",
       "entityType": "app",
-      "owningBusinessId": "shf_nonprofit"
+      "owningBusinessId": "business:shf_nonprofit"
     },
     "foundation": {
       "createdAt": "2026-01-26T18:36:06Z",
@@ -682,7 +692,7 @@
       "complianceProfileRef": "app-shf-core",
       "appId": "foundation",
       "entityType": "app",
-      "owningBusinessId": "shf_nonprofit"
+      "owningBusinessId": "business:shf_nonprofit"
     },
     "treasury": {
       "createdAt": "2026-01-26T18:36:06Z",
@@ -726,7 +736,7 @@
       "complianceProfileRef": "app-shf-core",
       "appId": "treasury",
       "entityType": "app",
-      "owningBusinessId": "shf_nonprofit"
+      "owningBusinessId": "business:shf_nonprofit"
     },
     "business:shf_nonprofit": {
       "payload": {

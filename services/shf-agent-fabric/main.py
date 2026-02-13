@@ -1,4 +1,6 @@
 from dotenv import load_dotenv
+from contextlib import asynccontextmanager
+import inspect
 load_dotenv()
 
 from fabric.startup_verify import verify_compliance_gate_g_or_die
@@ -11,6 +13,23 @@ import os
 import fabric.layers.checks_min  # noqa: F401
 
 from fastapi import FastAPI
+
+
+@asynccontextmanager
+async def lifespan(app: 'FastAPI'):
+    """Lifespan handler replacing deprecated on_event startup/shutdown."""
+    # startup
+    for fn in (_startup_verify_registry_ledger, _startup_validate_program_adapters, _startup_validate_adapter_meta_parity, _startup_validate_program_catalog_parity,):
+        if fn is None:
+            continue
+        res = fn()
+        if inspect.isawaitable(res):
+            await res
+
+    yield
+
+    # shutdown
+    # (no shutdown handlers detected)
 from fabric.loo.adapter_registry import PROGRAM_ADAPTERS, PROGRAM_ADAPTER_META
 from fabric.loo.adapter_contract import validate_program_adapters
 from fabric.loo.adapter_meta_parity import assert_adapter_meta_parity
@@ -72,9 +91,7 @@ def _env_true(name: str, default: str = "1") -> bool:
     return v in {"1", "true", "yes", "y", "on"}
 
 
-app = FastAPI(title="SHF Agent Fabric")
-
-
+app = FastAPI(lifespan=lifespan, title="SHF Agent Fabric")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -132,7 +149,6 @@ app.include_router(admin_layers_router)
 app.include_router(admin_gate_router)
 
 
-@app.on_event("startup")
 def _startup_verify_registry_ledger() -> None:
     """
     Step 6: auto-verify registry ledger on startup.
@@ -164,20 +180,17 @@ def _startup_verify_registry_ledger() -> None:
         )
 
 
-@app.on_event("startup")
 def _startup_validate_program_adapters() -> None:
     # Fail fast if any program adapter violates the metrics contract.
     validate_program_adapters(PROGRAM_ADAPTERS, days=30, baseline_weeks=8)
 
 
-@app.on_event("startup")
 def _startup_validate_adapter_meta_parity() -> None:
     # Fail fast if adapter registry + meta drift out of sync.
     # This prevents /loo/adapters from breaking due to missing meta keys.
     assert_adapter_meta_parity(PROGRAM_ADAPTERS, PROGRAM_ADAPTER_META)
 
 
-@app.on_event("startup")
 def _startup_validate_program_catalog_parity() -> None:
     # Fail fast if /loo/programs and PROGRAM_ADAPTERS drift.
     validate_program_catalog_parity(PROGRAM_ADAPTERS)

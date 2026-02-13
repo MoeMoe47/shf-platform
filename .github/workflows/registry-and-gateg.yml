@@ -38,6 +38,11 @@ jobs:
         run: |
           python3 services/shf-agent-fabric/scripts/verify_registry_contract.py
 
+
+      - name: Verify runtime enforcement lock
+        run: |
+          python3 services/shf-agent-fabric/scripts/verify_runtime_enforcement_lock.py
+
       - name: Verify Gate G startup hard-pass (no server)
         run: |
           PYTHONPATH=services/shf-agent-fabric python3 - <<'PY'

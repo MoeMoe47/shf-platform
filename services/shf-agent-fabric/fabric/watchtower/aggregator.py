@@ -1,13 +1,18 @@
 from __future__ import annotations
-DEFAULT_WINDOW_DAYS = 7
-
 
 from typing import Any, Dict, List, Tuple
 
 from fabric.watchtower.integrity import compute_integrity
 from fabric.watchtower.alerts import build_watchtower_alerts
 
+DEFAULT_WINDOW_DAYS = 7
+
+
 def _load_program_catalog() -> List[Dict[str, Any]]:
+    """
+    Prefer the canonical program list exposed by /loo/programs.
+    If anything goes wrong, return [] (Watchtower must be resilient).
+    """
     try:
         from routers.loo_routes import loo_programs  # type: ignore
         cat = loo_programs()
@@ -16,22 +21,30 @@ def _load_program_catalog() -> List[Dict[str, Any]]:
     except Exception:
         return []
 
+
 def _get_rankings(days: int, baseline_weeks: int) -> Dict[str, Any]:
+    """
+    Call the LOO rankings route function directly (in-process).
+    If it fails, return an error payload but do not crash Watchtower.
+    """
     try:
         from routers.loo_rankings_routes import loo_rankings  # type: ignore
         return loo_rankings(days=int(days), baseline_weeks=int(baseline_weeks))  # type: ignore
     except Exception as ex:
-        return {"ok": False, "error": f"RANKINGS_FAILED:{type(ex).__name__}", "rankings": []}
+        return {"ok": False, "error": f"RANKINGS_FAILED:{type(ex).__name__}:{ex}", "rankings": []}
+
 
 def build_watchtower_program_rows(*, days: int = 30, baseline_weeks: int = 8) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
     days = int(days)
     baseline_weeks = int(baseline_weeks)
 
     catalog = _load_program_catalog()
+
     rankings_payload = _get_rankings(days, baseline_weeks)
     rankings = rankings_payload.get("rankings") if isinstance(rankings_payload, dict) else None
     rankings_list: List[Dict[str, Any]] = rankings if isinstance(rankings, list) else []
 
+    # Index ranking rows by program_id
     by_id: Dict[str, Dict[str, Any]] = {}
     for r in rankings_list:
         if isinstance(r, dict):
@@ -51,14 +64,19 @@ def build_watchtower_program_rows(*, days: int = 30, baseline_weeks: int = 8) ->
             "program_id": pid,
             "app_id": str(p.get("app_id") or ""),
             "label": str(p.get("label") or pid),
+            "window_days": days,
+            "baseline_weeks": baseline_weeks,
         }
 
-        r = by_id.get(pid) or {}
+        r = by_id.get(pid)
         if isinstance(r, dict) and r:
+            # Merge base + ranking row
             row = {**base, **r}
+            row["window_days"] = days
+            row["baseline_weeks"] = baseline_weeks
         else:
+            # No ranking row available (adapter missing, or ranking route failed)
             row = {
-        "window_days": window_days,
                 **base,
                 "ok": False,
                 "adapter_ok": False,
@@ -75,19 +93,20 @@ def build_watchtower_program_rows(*, days: int = 30, baseline_weeks: int = 8) ->
                 "evidence": {"meta": {}, "contract_errors": ["NO_RANKING_ROW"]},
             }
 
-        row["window_days"] = days
-        row["baseline_weeks"] = baseline_weeks
-
         rows.append(row)
+
+    # Stable sort: ranked first, then by rank value, then by label
     rows.sort(key=lambda x: ((x.get("rank") is None), x.get("rank") or 10**9, str(x.get("label") or "")))
 
     integrity = compute_integrity(rows, catalog=catalog)
-    summary = {**integrity}
+    summary: Dict[str, Any] = {**integrity}
 
     alerts = build_watchtower_alerts(summary)
     summary["alerts_count"] = len(alerts)
     summary["alerts"] = alerts
+
     return rows, summary
+
 
 def build_watchtower_summary(*, days: int = 30, baseline_weeks: int = 8, top_n: int = 10) -> Dict[str, Any]:
     rows, integrity = build_watchtower_program_rows(days=days, baseline_weeks=baseline_weeks)
@@ -103,12 +122,15 @@ def build_watchtower_summary(*, days: int = 30, baseline_weeks: int = 8, top_n: 
         "notes": "Watchtower is infrastructure-level, cross-program, adapter-driven observability.",
     }
 
+
 # ------------------------------------------------------------
 # Backward-compat aliases (tests/contracts may import old names)
 # ------------------------------------------------------------
 def compute_watchtower_rows(*, days: int = 30, baseline_weeks: int = 8, window_days: int = 30):
     # legacy name used by early tests
+    _ = window_days
     return build_watchtower_program_rows(days=days, baseline_weeks=baseline_weeks)
+
 
 def compute_watchtower_summary(*, days: int = 30, baseline_weeks: int = 8, top_n: int = 10):
     # legacy name used by early tests

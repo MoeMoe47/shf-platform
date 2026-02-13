@@ -58,6 +58,7 @@ from routers.admin_agents_routes import router as admin_agents_router
 from routers.admin_registry_routes import router as admin_registry_router
 from routers.admin_layers_routes import router as admin_layers_router
 from routers.admin_gate_routes import router as admin_gate_router
+from routers.admin_infra_verify_routes import router as admin_infra_verify_router
 
 from fabric.registry_event_ledger import verify_ledger, auditor_one_liner
 
@@ -87,6 +88,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(admin_infra_verify_router)
 # Routers (public + admin)
 app.include_router(alignment_gateway_router)
 app.include_router(alignment_admin_router)

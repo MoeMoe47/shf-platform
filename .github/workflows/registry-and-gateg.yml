@@ -17,12 +17,28 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install minimal deps (if any)
+
+      - name: Install deps for tests
+        run: |
+          python3 -V
+          if [ -f services/shf-agent-fabric/requirements.txt ]; then
+            pip install -r services/shf-agent-fabric/requirements.txt
+          else
+            pip install fastapi uvicorn pytest httpx
+          fi
+
+            - name: Install test deps (fastapi/pytest/httpx)
         working-directory: services/shf-agent-fabric
         run: |
           python3 -V
-          # If you later add requirements.txt, uncomment:
-          # pip install -r requirements.txt
+          python3 -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          elif [ -f pyproject.toml ]; then
+            # best-effort for projects that moved to pyproject, keeps CI alive
+            pip install -e . || true
+          fi
+          pip install fastapi pytest httpx
 
       - name: Generate compliance manifest
         working-directory: services/shf-agent-fabric
@@ -43,7 +59,14 @@ jobs:
         run: |
           python3 services/shf-agent-fabric/scripts/verify_runtime_enforcement_lock.py
 
-      - name: Verify Gate G startup hard-pass (no server)
+            - name: Run pytest (service tests)
+        env:
+          PYTHONPATH: services/shf-agent-fabric
+          SHF_REPO_ROOT: ${{ github.workspace }}
+        run: |
+          pytest -q
+
+- name: Verify Gate G startup hard-pass (no server)
         run: |
           PYTHONPATH=services/shf-agent-fabric python3 - <<'PY'
           from fabric.startup_verify import verify_compliance_gate_g_or_die

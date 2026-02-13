@@ -10,7 +10,6 @@ from fabric.watchtower.risk_engine import apply_risk_fields
 from fabric.watchtower.store import get_quarantine_map
 from fabric.watchtower.audit import log_event
 
-
 router = APIRouter(prefix="/loo", tags=["loo"])
 
 
@@ -103,70 +102,6 @@ def _rank_score01(health01: float, delta01: float, volume01: float, quality01: f
 
 
 # -------------------------
-# Watchtower-aligned risk + quarantine gate
-# -------------------------
-
-def _as_list(x: Any) -> List[Any]:
-    if isinstance(x, list):
-        return x
-    return []
-
-
-def _risk_band_quarantine(row: Dict[str, Any]) -> Tuple[str, bool, List[str]]:
-    """
-    Returns (risk_band, quarantined, reasons).
-
-    Quarantine is a hard block: score forced to 0 and ranked last.
-    This is the core "top 1%" rule: unsafe programs cannot win.
-    """
-    reasons: List[str] = []
-
-    # Hard quarantine conditions
-    if not bool(row.get("ok")):
-        reasons.append("NOT_OK")
-    if not bool(row.get("adapter_ok")):
-        reasons.append("ADAPTER_NOT_OK")
-
-    evidence = row.get("evidence") if isinstance(row.get("evidence"), dict) else {}
-    contract_errors = _as_list(evidence.get("contract_errors"))
-    if contract_errors:
-        reasons.append("CONTRACT_ERRORS")
-
-    mcv = str(row.get("metrics_contract_version") or "").strip()
-    if not mcv:
-        reasons.append("MISSING_METRICS_CONTRACT_VERSION")
-
-    # If any hard reason -> quarantine
-    quarantined = len(reasons) > 0
-    if quarantined:
-        return ("QUARANTINE", True, reasons)
-
-    # Numeric risk signals
-    health = float(row.get("health_01") or 0.0)
-    rank_score = float(row.get("rank_score_01") or 0.0)
-    delta = float(row.get("delta_score_01") or 0.0)
-    trend = str(row.get("trend_band") or "").upper()
-
-    # RED conditions
-    if health < 0.40:
-        return ("RED", False, [])
-    if rank_score < 0.35:
-        return ("RED", False, [])
-    if trend == "DOWN" and delta < 0.25:
-        return ("RED", False, [])
-
-    # YELLOW conditions
-    if health < 0.60:
-        return ("YELLOW", False, [])
-    if rank_score < 0.55:
-        return ("YELLOW", False, [])
-    if trend == "FLAT" and delta < 0.35:
-        return ("YELLOW", False, [])
-
-    return ("GREEN", False, [])
-
-
-# -------------------------
 # Catalog + adapter metrics
 # -------------------------
 
@@ -215,6 +150,7 @@ def loo_rankings(days: int = 30, baseline_weeks: int = 8) -> Dict[str, Any]:
 
     rows: List[Dict[str, Any]] = []
 
+    # Build base rows (score first, then enforce via Watchtower)
     for p in programs:
         if not isinstance(p, dict):
             continue
@@ -224,11 +160,9 @@ def loo_rankings(days: int = 30, baseline_weeks: int = 8) -> Dict[str, Any]:
         label = str(p.get("label") or program_id or app_id)
 
         metrics = _metrics_for_program(p, days=int(days), baseline_weeks=int(baseline_weeks))
-
         adapter_ok = bool(metrics.get("__adapter_ok") is True)
         adapter_error = str(metrics.get("__adapter_error") or "")
 
-        # Adapter fail row (still included)
         if not adapter_ok:
             rows.append(
                 {
@@ -247,12 +181,6 @@ def loo_rankings(days: int = 30, baseline_weeks: int = 8) -> Dict[str, Any]:
                     "volume_01": 0.0,
                     "quality_01": 0.0,
                     "rank_formula_version": "v1",
-                # Enforcement-grade gating (Watchtower risk engine)
-                # Note: we fill risk fields after row construction.
-
-                    "risk_band": "QUARANTINE",
-                    "quarantined": True,
-                    "quarantine_reasons": ["ADAPTER_FAILED"],
                     "evidence": {"meta": {}, "contract_errors": ["ADAPTER_FAILED"]},
                 }
             )
@@ -266,62 +194,47 @@ def loo_rankings(days: int = 30, baseline_weeks: int = 8) -> Dict[str, Any]:
         raw_score01 = _rank_score01(health01, delta01, volume01, quality01)
         mcv = str(metrics.get("metrics_contract_version") or "").strip()
 
-        # evidence for Watchtower + audits
-        evidence = {
-            "meta": {
-                "days": int(days),
-                "baseline_weeks": int(baseline_weeks),
-            },
-            "contract_errors": [],
-        }
+        rows.append(
+            {
+                "program_id": program_id,
+                "app_id": app_id,
+                "label": label,
+                "ok": True,
+                "adapter_ok": True,
+                "adapter_error": "",
+                "metrics_contract_version": mcv,
+                "rank_score_01": round(raw_score01, 4),
+                "health_01": round(health01, 4),
+                "delta_score_01": round(delta01, 4),
+                "trend_band": str(trend_band or "FLAT").upper(),
+                "volume_01": round(volume01, 4),
+                "quality_01": round(quality01, 4),
+                "rank_formula_version": "v1",
+                "evidence": {
+                    "meta": {"days": int(days), "baseline_weeks": int(baseline_weeks)},
+                    "contract_errors": [],
+                },
+            }
+        )
 
-        base_row: Dict[str, Any] = {
-            "program_id": program_id,
-            "app_id": app_id,
-            "label": label,
-            "ok": True,
-            "adapter_ok": True,
-            "adapter_error": "",
-            "metrics_contract_version": mcv,
-            "rank_score_01": round(raw_score01, 4),
-            "health_01": round(health01, 4),
-            "delta_score_01": round(delta01, 4),
-            "trend_band": str(trend_band or "FLAT").upper(),
-            "volume_01": round(volume01, 4),
-            "quality_01": round(quality01, 4),
-            "rank_formula_version": "v1",
-                # Enforcement-grade gating (Watchtower risk engine)
-                # Note: we fill risk fields after row construction.
-
-            "evidence": evidence,
-        }
-
-        # Compute risk + quarantine AFTER scoring inputs exist
-        risk_band, quarantined, q_reasons = _risk_band_quarantine(base_row)
-
-        # Enforce: quarantined cannot compete
-        enforced_score01 = 0.0 if quarantined else float(base_row.get("rank_score_01") or 0.0)
-        base_row["rank_score_01"] = round(float(enforced_score01), 4)
-
-        base_row["risk_band"] = risk_band
-        base_row["quarantined"] = bool(quarantined)
-        base_row["quarantine_reasons"] = q_reasons
-
-        rows.append(base_row)
-
-    # Sort deterministically:
-    # 1) non-quarantined first
-    # 2) higher score first
-    # 3) higher health first
-    # 4) label stable
-    ## ENFORCEMENT POST-PROCESS (Watchtower consult before scoring)
+    # -------------------------
+    # ENFORCEMENT-GRADE GATING
+    # - Apply shared risk engine
+    # - Apply manual quarantine overrides
+    # - Hard-gate quarantined: score -> 0.0
+    # -------------------------
     qmap = get_quarantine_map()
+
     for r in rows:
         if not isinstance(r, dict):
             continue
-        # Apply shared risk engine
-        apply_risk_fields(r)
+
         pid = str(r.get("program_id") or "")
+
+        # Shared risk engine fills:
+        # risk_band, quarantined, quarantine_reasons, watchtower_action, etc.
+        apply_risk_fields(r)
+
         # Manual quarantine overrides everything
         if pid and pid in qmap:
             r["risk_band"] = "QUARANTINE"
@@ -330,14 +243,23 @@ def loo_rankings(days: int = 30, baseline_weeks: int = 8) -> Dict[str, Any]:
             r["quarantine_reasons"] = ["manual_quarantine"]
             r["manual_quarantine"] = qmap.get(pid)
 
-        # Hard gate: quarantined programs cannot compete
+        # Hard gate: quarantined cannot compete
         if bool(r.get("quarantined")):
             r["rank_score_01"] = 0.0
             try:
-                log_event({"risk_band": r.get("risk_band"), "reasons": r.get("quarantine_reasons")}, kind="loo_quarantine_gate", program_id=pid)
+                log_event(
+                    {"risk_band": r.get("risk_band"), "reasons": r.get("quarantine_reasons")},
+                    kind="loo_quarantine_gate",
+                    program_id=pid,
+                )
             except Exception:
                 pass
 
+    # Deterministic sort:
+    # 1) non-quarantined first
+    # 2) higher score first
+    # 3) higher health first
+    # 4) label stable
     rows.sort(
         key=lambda r: (
             bool(r.get("quarantined") is True),
@@ -347,7 +269,6 @@ def loo_rankings(days: int = 30, baseline_weeks: int = 8) -> Dict[str, Any]:
         )
     )
 
-    # Rank numbers assigned after sort
     for i, r in enumerate(rows, start=1):
         r["rank"] = i
 
@@ -357,5 +278,5 @@ def loo_rankings(days: int = 30, baseline_weeks: int = 8) -> Dict[str, Any]:
         "baseline_weeks": int(baseline_weeks),
         "count": len(rows),
         "rankings": rows,
-        "notes": "Adapter-driven comparator. Quarantine/risk gating is enforced so unsafe programs cannot win.",
+        "notes": "Adapter-driven comparator. Enforcement-grade risk/quarantine gating is applied so unsafe programs cannot win.",
     }

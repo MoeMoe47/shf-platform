@@ -1,0 +1,36 @@
+name: Funding Policy Guard Gate
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  funding-guard:
+    name: Funding Policy Guard Tests
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: services/shf-agent-fabric
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Run Funding Policy Guard tests
+        env:
+          PYTHONPATH: .
+        run: |
+          pytest -q tests/test_funding_policy_guard.py

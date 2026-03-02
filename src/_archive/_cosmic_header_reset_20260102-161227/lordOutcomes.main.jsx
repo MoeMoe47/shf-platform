@@ -1,4 +1,10 @@
 import React from "react";
+
+// === LOO CSS LOCK START ===
+import "@/styles/lordOutcomes.scaffold.css";
+import "@/styles/lordOutcomes.theme.css";
+import "@/styles/lordOutcomes.header.locked.css";
+// === LOO CSS LOCK END ===
 import { createRoot } from "react-dom/client";
 import { HashRouter } from "react-router-dom";
 import RootProviders from "@/providers/RootProviders.jsx";
@@ -6,7 +12,7 @@ import LordOutcomesRoutes from "@/router/LordOutcomesRoutes.jsx";
 
 /* Base tokens/theme (load FIRST) */
 import "@/styles/lordOutcomes.tokens.css";
-import "@/styles/lordOutcomes.theme.css";
+// import "@/styles/lordOutcomes.theme.css";
 
 /* Legacy styles (safe to keep) */
 import "@/styles/lordOutcomes.css";
@@ -18,7 +24,7 @@ import "@/styles/lordOutcomes.dym.pattern.css";
 import "@/styles/lordOutcomes._LOCKED.skeleton.css";
 
 /* Header dropdown/menu styling */
-import "@/styles/lordOutcomes.header.locked.css";
+// import "@/styles/lordOutcomes.header.locked.css";
 
 const mount = document.getElementById("root");
 

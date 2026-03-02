@@ -1,0 +1,14 @@
+services:
+  shf_postgres:
+    image: postgres:16
+    container_name: shf_postgres
+    environment:
+      POSTGRES_DB: shf
+      POSTGRES_USER: shf
+      POSTGRES_PASSWORD: shf_dev_password_change_me
+    ports:
+      - "5432:5432"
+    volumes:
+      - shf_pg_data:/var/lib/postgresql/data
+volumes:
+  shf_pg_data:

@@ -1,47 +1,24 @@
-import "@/styles/shell.css";
 import React from "react";
-import { createRoot } from "react-dom/client";
-import { HashRouter } from "react-router-dom";
-import RootProviders from "@/providers/RootProviders.jsx";
+import ReactDOM from "react-dom/client";
 import LordOutcomesRoutes from "@/router/LordOutcomesRoutes.jsx";
-import "@/styles/unified-shell.css";
-import "@/styles/app-shell.css";
-
-/* =========================================================
-   Base tokens / theme (load FIRST)
-========================================================= */
-import "@/styles/lordOutcomes.tokens.css";
-import "@/styles/lordOutcomes.theme.css";
-
-/* =========================================================
-   Base app styles
-========================================================= */
 import "@/styles/lordOutcomes.css";
+import "@/styles/lordOutcomes.deepSpace.patch.css";
 
-/* =========================================================
-   DYM visuals (backgrounds / patterns)
-========================================================= */
-import "@/styles/lordOutcomes.dym.pattern.css";
-import "@/styles/lordOutcomes.dym.css";
+// === LOO CORE STYLE STACK (NO MOCK THEMES) ===
 
-/* =========================================================
-   LOCKED layout rules (stable)
-========================================================= */
-import "@/styles/lordOutcomes._LOCKED.skeleton.css";
-import "@/styles/lordOutcomes.header.locked.css";
 
-/* =========================================================
-   ✅ Cosmic Header (single source of truth)
-========================================================= */
 
-const mount = document.getElementById("root");
 
-createRoot(mount).render(
+
+
+
+
+// === LOO ONLY BACKGROUND ===
+
+document.documentElement.setAttribute("data-app", "lordOutcomes");
+
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RootProviders>
-      <HashRouter>
-        <LordOutcomesRoutes />
-      </HashRouter>
-    </RootProviders>
+    <LordOutcomesRoutes />
   </React.StrictMode>
 );

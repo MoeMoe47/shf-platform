@@ -1,0 +1,98 @@
+/* =========================================================
+   LOO SPACE + 3D RING SYSTEM
+========================================================= */
+
+.loo-dymApp {
+  position: relative;
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 900px at 70% 30%, rgba(255,120,55,0.22), rgba(0,0,0,0) 60%),
+    linear-gradient(180deg, #090a0d, #050507);
+}
+
+/* subtle grid */
+.loo-dymApp::after {
+  content:"";
+  position: fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.08;
+  background-image:
+    linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px);
+  background-size:90px 90px;
+}
+
+/* =============================
+   3D ORBITAL RING SYSTEM
+============================= */
+
+.looPage::before,
+.looPage::after {
+  content:"";
+  position: fixed;
+  pointer-events:none;
+  right:-420px;
+  top:55%;
+  transform-origin:center;
+  z-index:2;
+  mix-blend-mode:screen;
+}
+
+/* OUTER RING */
+.looPage::before{
+  width:1000px;
+  height:1000px;
+  transform:
+    translateY(-50%)
+    perspective(1200px)
+    rotateX(68deg)
+    rotateZ(-14deg)
+    scaleY(.78);
+
+  background:
+    radial-gradient(circle at center,
+      transparent 61%,
+      rgba(255,150,80,.08) 63%,
+      rgba(255,150,80,.45) 64%,
+      rgba(255,100,40,.9) 65%,
+      rgba(255,150,80,.35) 66%,
+      transparent 69%
+    );
+
+  filter:
+    drop-shadow(0 0 30px rgba(255,120,55,.35))
+    blur(.3px);
+}
+
+/* INNER RING */
+.looPage::after{
+  width:700px;
+  height:700px;
+  transform:
+    translateY(-50%)
+    perspective(1200px)
+    rotateX(68deg)
+    rotateZ(-14deg)
+    scaleY(.78);
+
+  background:
+    radial-gradient(circle at center,
+      transparent 56%,
+      rgba(255,180,120,.06) 58%,
+      rgba(255,160,90,.6) 59%,
+      rgba(255,110,40,.95) 60%,
+      rgba(255,160,90,.25) 61%,
+      transparent 63%
+    );
+
+  filter:
+    drop-shadow(0 0 18px rgba(255,120,55,.45));
+}
+
+/* Ensure UI above */
+.looTopHeader,
+.looMain {
+  position:relative;
+  z-index:10;
+}

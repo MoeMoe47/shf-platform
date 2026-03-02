@@ -1,4 +1,5 @@
-import React, { Suspense } from "react";
+import React
+import "@/styles/universe.css";, { Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { HashRouter } from "react-router-dom";
 
@@ -34,6 +35,7 @@ export function bootApp(RoutesComponent, wrap) {
 
 // --- SHF Integrations metrics wiring (safe to include multiple times) ---
 import { bump } from "@/shared/integrations/metricsClient.js";
+import UniverseLayer from "@/components/universe/UniverseLayer";
 
 window.addEventListener("shf:li:share", ()=>bump("li_share", { provider:"linkedin" }), { once:false });
 window.addEventListener("shf:apply", (e)=>bump("apply", { provider:(e.detail||{}).provider }), { once:false });

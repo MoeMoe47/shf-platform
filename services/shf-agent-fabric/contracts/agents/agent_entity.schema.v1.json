@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SHF Agent Entity (v1)",
+  "type": "object",
+  "required": ["agent_id", "label", "version", "lifecycle", "policy", "capabilities"],
+  "properties": {
+    "agent_id": { "type": "string", "minLength": 2 },
+    "label": { "type": "string", "minLength": 2 },
+    "version": { "type": "string", "minLength": 1 },
+    "lifecycle": { "type": "string", "enum": ["active", "paused", "retired"] },
+    "policy": {
+      "type": "object",
+      "required": ["humanApproval", "maxSteps", "notes"],
+      "properties": {
+        "humanApproval": { "type": "boolean" },
+        "maxSteps": { "type": "integer", "minimum": 0, "maximum": 999 },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "capabilities": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "attestations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ts": { "type": "integer" },
+          "iso": { "type": "string" },
+          "actor": { "type": "string" },
+          "note": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" }
+  },
+  "additionalProperties": true
+}

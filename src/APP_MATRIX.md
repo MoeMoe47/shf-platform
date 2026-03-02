@@ -1,3 +1,6 @@
+import "@/styles/lordOutcomes.header.locked.css";
+import "@/styles/lordOutcomes.header.cosmicGlow.css";
+
 # SHF App Matrix (Quick Jump Map)
 
 Each row = one app.

@@ -4,6 +4,24 @@ from typing import Any, Dict, List
 from fabric.registry_canon import load_registry
 
 
+
+import json
+from pathlib import Path
+
+def _load_registry_entities() -> dict:
+    """Load canonical registry contract entities."""
+    # registry_loaders.py is at: services/shf-agent-fabric/fabric/compliance/registry_loaders.py
+    # service_root = .../services/shf-agent-fabric
+    service_root = Path(__file__).resolve().parents[2]
+    reg_path = service_root / "contracts" / "registry" / "registry.json"
+    if not reg_path.exists():
+        raise RuntimeError(f"[COMPLIANCE_BOOT_FAIL] Registry contract missing: {reg_path}")
+    reg = json.loads(reg_path.read_text(encoding="utf-8"))
+    ents = reg.get("entities", {})
+    if not isinstance(ents, dict):
+        raise RuntimeError("[COMPLIANCE_BOOT_FAIL] registry.json.entities must be an object/dict")
+    return ents
+
 def _get_payload(entity: Dict[str, Any]) -> Dict[str, Any]:
     if isinstance(entity.get("payload"), dict):
         return entity["payload"]
@@ -69,3 +87,35 @@ def load_app_registry() -> List[Dict[str, Any]]:
     if not out:
         raise RuntimeError("[COMPLIANCE_BOOT_FAIL] No app entities found in registry.json (Gate G requires apps).")
     return out
+
+
+def load_agent_registry() -> list[dict]:
+    entities = _load_registry_entities()
+    agents: list[dict] = []
+
+    for entity_key, ent_any in entities.items():
+        payload = ent_any.get("payload") if isinstance(ent_any, dict) and isinstance(ent_any.get("payload"), dict) else ent_any
+        if not isinstance(payload, dict):
+            continue
+
+        et = payload.get("entityType") or payload.get("type") or payload.get("kind") or payload.get("category")
+        if et != "agent":
+            continue
+
+        agent_id = payload.get("agentId") or payload.get("id") or payload.get("name")
+        if not isinstance(agent_id, str) or not agent_id.strip():
+            raise RuntimeError(f"[COMPLIANCE_BOOT_FAIL] Agent missing agentId in {entity_key}")
+
+        owning_app_id = _required(payload, "owningAppId", f"agent({agent_id})")
+        compliance_ref = _required(payload, "complianceProfileRef", f"agent({agent_id})")
+
+        agents.append({
+            "agentId": agent_id,
+            "owningAppId": owning_app_id,
+            "complianceProfileRef": compliance_ref,
+        })
+
+    if not agents:
+        raise RuntimeError("[COMPLIANCE_BOOT_FAIL] No agent entities found (Gate G requires agents).")
+
+    return agents

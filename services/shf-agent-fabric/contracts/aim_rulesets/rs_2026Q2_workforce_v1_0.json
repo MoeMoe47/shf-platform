@@ -1,0 +1,218 @@
+{
+  "schema_version": "AIM_RULESET_V1",
+  "ruleset_id": "rs_2026Q2_workforce_v1_0",
+  "ruleset_version": "1.0",
+  "status": "active",
+  "applies_to": {
+    "program_category": "workforce",
+    "metric_standard": "OMS_V1",
+    "scope": "cohort",
+    "eligible_geos": ["OH-FRANKLIN"],
+    "eligible_populations": ["opportunity_youth", "general"],
+    "effective_start": "2026-04-01",
+    "effective_end": "2026-06-30"
+  },
+  "currency": "USD",
+  "budget_controls": {
+    "max_total_payout": 250000,
+    "max_payout_per_cohort": 50000,
+    "max_payout_per_participant": 6000,
+    "bonus_pool_cap": 75000,
+    "burn_rate_guardrail": {
+      "enabled": true,
+      "max_over_linear_pct": 0.25
+    }
+  },
+  "stability_controls": {
+    "max_rule_change_pct_per_window": 0.15,
+    "adaptation_window": "monthly",
+    "freeze_on_watchtower_severity": "high",
+    "freeze_duration_days": 30
+  },
+  "definitions": {
+    "metric_keys": {
+      "enrolled": "participants_enrolled",
+      "completed": "participants_completed",
+      "completion_rate": "completion_rate",
+      "attendance_rate": "attendance_rate",
+      "job_placements": "job_placement_count",
+      "job_placement_rate": "job_placement_rate",
+      "cert_count": "certification_earned_count",
+      "verified_placement_rate": "verified_placement_rate",
+      "retention_3m_rate": "retention_3m_rate",
+      "retention_6m_rate": "retention_6m_rate",
+      "cost_total": "total_cost",
+      "cost_per_completion": "cost_per_completion",
+      "cost_per_placement": "cost_per_job_placement"
+    },
+    "outcome_event_types": {
+      "job_placement": "job_placement",
+      "certification_earned": "certification_earned"
+    }
+  },
+  "payout_rules": [
+    {
+      "rule_id": "base_enrollment",
+      "pay_type": "base",
+      "trigger": { "type": "per_participant_enrolled" },
+      "metric_key": "participants_enrolled",
+      "amount_per_unit": 250,
+      "unit": "participant",
+      "caps": { "max_per_cohort": 10000 }
+    },
+    {
+      "rule_id": "completion",
+      "pay_type": "base",
+      "trigger": { "type": "per_participant_completed" },
+      "metric_key": "participants_completed",
+      "amount_per_unit": 800,
+      "unit": "completion",
+      "eligibility": {
+        "min_attendance_rate": 0.70
+      },
+      "caps": { "max_per_cohort": 20000 }
+    },
+    {
+      "rule_id": "job_placement_verified",
+      "pay_type": "bonus",
+      "trigger": { "type": "per_verified_outcome" },
+      "outcome_event_type": "job_placement",
+      "verification_required": true,
+      "amount_per_unit": 2000,
+      "unit": "placement",
+      "caps": { "max_per_cohort": 25000 }
+    },
+    {
+      "rule_id": "job_placement_unverified_provisional",
+      "pay_type": "bonus",
+      "trigger": { "type": "per_outcome" },
+      "outcome_event_type": "job_placement",
+      "verification_required": false,
+      "amount_per_unit": 800,
+      "unit": "placement",
+      "conditions": {
+        "only_if_verified_rate_below": 0.70
+      },
+      "caps": { "max_per_cohort": 8000 }
+    },
+    {
+      "rule_id": "retention_3_month",
+      "pay_type": "bonus",
+      "trigger": { "type": "per_followup_success" },
+      "followup_months": 3,
+      "status_required": "employed",
+      "amount_per_unit": 1000,
+      "unit": "retained_3m",
+      "caps": { "max_per_cohort": 15000 }
+    },
+    {
+      "rule_id": "retention_6_month",
+      "pay_type": "bonus",
+      "trigger": { "type": "per_followup_success" },
+      "followup_months": 6,
+      "status_required": "employed",
+      "amount_per_unit": 1200,
+      "unit": "retained_6m",
+      "caps": { "max_per_cohort": 18000 }
+    },
+    {
+      "rule_id": "certification_earned",
+      "pay_type": "bonus",
+      "trigger": { "type": "per_outcome" },
+      "outcome_event_type": "certification_earned",
+      "amount_per_unit": 500,
+      "unit": "cert",
+      "caps": { "max_per_cohort": 10000 }
+    }
+  ],
+  "multipliers": {
+    "risk_adjustment": {
+      "enabled": true,
+      "index_key": "participant_opportunity_index",
+      "bands": [
+        { "min": 0.00, "max": 0.33, "multiplier": 0.90 },
+        { "min": 0.33, "max": 0.66, "multiplier": 1.00 },
+        { "min": 0.66, "max": 1.00, "multiplier": 1.15 }
+      ]
+    },
+    "benchmark_performance": {
+      "enabled": true,
+      "metric_key": "cost_per_job_placement",
+      "policy": "percentile",
+      "bands": [
+        { "percentile_max": 0.25, "multiplier": 1.10 },
+        { "percentile_max": 0.50, "multiplier": 1.00 },
+        { "percentile_max": 0.75, "multiplier": 0.95 },
+        { "percentile_max": 1.00, "multiplier": 0.85 }
+      ]
+    }
+  },
+  "anti_gaming_guardrails": {
+    "require_outcome_diversity": {
+      "enabled": true,
+      "min_distinct_outcome_types": 2,
+      "penalty_multiplier_if_failed": 0.85
+    },
+    "timing_anomaly": {
+      "enabled": true,
+      "watchtower_signal": "anomaly.outcome_timing_cluster",
+      "severity_penalties": {
+        "medium": 0.90,
+        "high": 0.75
+      }
+    },
+    "attendance_outcome_integrity": {
+      "enabled": true,
+      "rule": {
+        "if_attendance_rate_below": 0.50,
+        "and_job_placement_rate_above": 0.60,
+        "then": { "action": "freeze_ruleset_and_require_review" }
+      }
+    },
+    "verification_floor": {
+      "enabled": true,
+      "min_verified_rate": 0.40,
+      "below_floor_action": "reduce_unverified_payouts"
+    }
+  },
+  "watchtower_integration": {
+    "signals": [
+      { "signal": "risk_flag.attendance_drop", "severity": ["medium", "high"], "action": "shift_weight_to_retention" },
+      { "signal": "risk_flag.cost_overrun", "severity": ["high"], "action": "tighten_caps" },
+      { "signal": "integrity_alert.high", "severity": ["high"], "action": "freeze_ruleset" }
+    ]
+  },
+  "adaptation_policy": {
+    "enabled": true,
+    "objective": {
+      "primary": "maximize_verified_retention_outcomes",
+      "secondary": "minimize_cost_per_verified_outcome",
+      "tertiary": "minimize_gaming_risk"
+    },
+    "adjustable_parameters": [
+      "payout_rules.completion.amount_per_unit",
+      "payout_rules.job_placement_verified.amount_per_unit",
+      "payout_rules.retention_3_month.amount_per_unit",
+      "payout_rules.retention_6_month.amount_per_unit",
+      "payout_rules.job_placement_unverified_provisional.amount_per_unit",
+      "budget_controls.max_payout_per_participant"
+    ],
+    "constraints": {
+      "max_change_pct_per_window": 0.15,
+      "min_completion_payout": 400,
+      "max_job_placement_verified_payout": 3500,
+      "min_retention_weight_ratio": 0.40
+    }
+  },
+  "audit": {
+    "created_by": "shf_gto",
+    "created_at": "2026-02-28T00:00:00Z",
+    "change_log": [
+      {
+        "version": "1.0",
+        "reason": "initial workforce ruleset",
+        "notes": "baseline payouts + verification gating + retention weighting"
+      }
+    ]
+  }
+}

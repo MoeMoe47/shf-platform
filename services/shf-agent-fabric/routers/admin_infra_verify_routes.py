@@ -1,78 +1,138 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, Response, status
+import subprocess
+import time
+from pathlib import Path
+from typing import Any, Dict, List, Tuple
 
-router = APIRouter(prefix="/admin/infra", tags=["admin-infra"])
+from fastapi import APIRouter
+
+router = APIRouter(prefix="/admin/infra", tags=["admin", "infra"])
+
+
+def _repo_root_from_here() -> Path:
+    # routers/admin_infra_verify_routes.py -> routers -> services/shf-agent-fabric
+    return Path(__file__).resolve().parents[1]
+
+
+def _tail(s: str, n: int = 1400) -> str:
+    s = s or ""
+    if len(s) <= n:
+        return s
+    return s[-n:]
+
+
+def _run(cmd: List[str], *, cwd: Path) -> Tuple[bool, str, str]:
+    p = subprocess.run(
+        cmd,
+        cwd=str(cwd),
+        text=True,
+        capture_output=True,
+        env=None,
+    )
+    ok = (p.returncode == 0)
+    return ok, (p.stdout or ""), (p.stderr or "")
+
 
 @router.get("/verify")
-def admin_infra_verify():
+def admin_infra_verify() -> Dict[str, Any]:
     """
-    Infra verification endpoint.
-
-    Runs (in-process, no server needed):
-      - Registry contract verifier
-      - Runtime enforcement lock verifier
-      - Gate G startup verifier
-
-    Returns JSON with per-check status + details.
+    Stable contract v1:
+      {
+        "ok": bool,
+        "contract": "v1",
+        "ts": <unix seconds>,
+        "checks": [
+          {"name": "...", "ok": bool, "stdout_tail": "...", "stderr_tail": "..."}
+        ]
+      }
     """
-    results: dict = {"ok": True, "checks": {}}
+    repo_root = _repo_root_from_here()
+    checks: List[Dict[str, Any]] = []
 
     # 1) Registry contract
-    try:
-        import subprocess
-        import sys
-        p = subprocess.run(
-            [sys.executable, "services/shf-agent-fabric/scripts/verify_registry_contract.py"],
-            capture_output=True,
-            text=True,
-        )
-        results["checks"]["registry_contract"] = {
-            "ok": p.returncode == 0,
-            "stdout_tail": (p.stdout or "")[-2000:],
-            "stderr_tail": (p.stderr or "")[-2000:],
+    ok, out, err = _run(
+        ["python3", "services/shf-agent-fabric/scripts/verify_registry_contract.py"],
+        cwd=repo_root,
+    )
+    checks.append(
+        {
+            "name": "registry_contract",
+            "ok": ok,
+            "stdout_tail": _tail(out),
+            "stderr_tail": _tail(err),
         }
-        if p.returncode != 0:
-            results["ok"] = False
-    except Exception as e:
-        results["checks"]["registry_contract"] = {"ok": False, "error": repr(e)}
-        results["ok"] = False
+    )
 
     # 2) Runtime enforcement lock
-    try:
-        import subprocess
-        import sys
-        p = subprocess.run(
-            [sys.executable, "services/shf-agent-fabric/scripts/verify_runtime_enforcement_lock.py"],
-            capture_output=True,
-            text=True,
-        )
-        results["checks"]["runtime_enforcement_lock"] = {
-            "ok": p.returncode == 0,
-            "stdout_tail": (p.stdout or "")[-2000:],
-            "stderr_tail": (p.stderr or "")[-2000:],
+    ok, out, err = _run(
+        ["python3", "services/shf-agent-fabric/scripts/verify_runtime_enforcement_lock.py"],
+        cwd=repo_root,
+    )
+    checks.append(
+        {
+            "name": "runtime_enforcement_lock",
+            "ok": ok,
+            "stdout_tail": _tail(out),
+            "stderr_tail": _tail(err),
         }
-        if p.returncode != 0:
-            results["ok"] = False
-    except Exception as e:
-        results["checks"]["runtime_enforcement_lock"] = {"ok": False, "error": repr(e)}
-        results["ok"] = False
+    )
 
-    # 3) Gate G startup verifier
+    # 3) Gate G (in-process)
+    gate_ok = True
+    gate_err = ""
     try:
-        # Ensure import path works
         from fabric.startup_verify import verify_compliance_gate_g_or_die
+
         verify_compliance_gate_g_or_die()
-        results["checks"]["gate_g_startup"] = {"ok": True}
     except Exception as e:
-        results["checks"]["gate_g_startup"] = {"ok": False, "error": repr(e)}
-        results["ok"] = False
+        gate_ok = False
+        gate_err = f"{type(e).__name__}: {e}"
 
-    if not results["ok"]:
-        return Response(
-            content=str(results),
-            media_type="application/json",
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        )
+    checks.append(
+        {
+            "name": "gate_g_startup",
+            "ok": gate_ok,
+            "stdout_tail": "",
+            "stderr_tail": _tail(gate_err),
+        }
+    )
 
-    return results
+    # 4) Watchtower snapshot store usability (write + read + hash validation)
+    ok, out, err = _run(
+        ["python3", "services/shf-agent-fabric/scripts/verify_watchtower_snapshot_store.py"],
+        cwd=repo_root,
+    )
+    checks.append(
+        {
+            "name": "watchtower_snapshot_store_usability",
+            "ok": ok,
+            "stdout_tail": _tail(out),
+            "stderr_tail": _tail(err),
+        }
+    )
+
+    
+    # 4) Watchtower attestation (HMAC) verification (contract-safe: check item only)
+    att_ok, att_out, att_err = _run(
+        ["python3", "services/shf-agent-fabric/scripts/verify_watchtower_attestation.py"],
+        cwd=repo_root,
+    )
+    checks.append(
+        {
+            "name": "watchtower_attestation",
+            "ok": att_ok,
+            "stdout_tail": _tail(att_out),
+            "stderr_tail": _tail(att_err),
+        }
+    )
+
+
+    overall_ok = all(c.get("ok") is True for c in checks)
+
+    return {
+        "ok": overall_ok,
+        "contract": "v1",
+        "ts": int(time.time()),
+        "checks": checks,
+    }

@@ -18,6 +18,7 @@ import hashlib
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 from threading import Lock
+from fabric.registry_event_ledger import verify_ledger
 
 ROOT = Path(__file__).resolve().parents[1]
 DB = ROOT / "db"
@@ -507,4 +508,8 @@ def read_events(limit: int = 200, since_epoch_ms: Optional[int] = None) -> List[
             break
 
     return out
+
+def verify_registry() -> dict:
+    """Infra-facing verify: registry ledger integrity check (chained v1)."""
+    return verify_ledger(entity_id=None)
 

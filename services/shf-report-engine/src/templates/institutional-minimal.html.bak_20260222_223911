@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>{{title}}</title>
+  <style>
+    :root{
+      --ink:#111827;
+      --muted:#4b5563;
+      --rule:#cbd5e1;
+      --accent:#0F1C2E; /* SHF navy accent */
+      --bg:#ffffff;
+    }
+    @page { margin: 0.85in; }
+    body{
+      font-family: Georgia, "Times New Roman", Times, serif;
+      color:var(--ink);
+      background:var(--bg);
+      line-height:1.45;
+    }
+    .topbar{ height:10px; background:var(--accent); margin:-0.85in -0.85in 18px -0.85in; }
+    .header{
+      display:flex; align-items:flex-start; justify-content:space-between;
+      margin-bottom:14px;
+    }
+    .brand{
+      display:flex; gap:12px; align-items:center;
+    }
+    .logo{
+      width:128px;
+      height:auto;
+      border-radius:10px;
+      border:1px solid var(--rule);
+      object-fit:contain;
+      display:block;
+    }
+    .brand-title{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-weight:800;
+      letter-spacing:0.2px;
+      color:var(--accent);
+    }
+    .doc-meta{
+      text-align:right;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--muted);
+      font-size:12px;
+    }
+    h1{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size:22px; margin:10px 0 6px 0;
+    }
+    h2{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size:15px; margin:18px 0 8px 0; color:var(--accent);
+      border-top:2px solid var(--accent);
+      padding-top:10px;
+    }
+    .subtle{ color:var(--muted); font-size:12px; }
+    .rule{ border-top:1px solid var(--rule); margin:14px 0; }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size:12px;
+    }
+    th{
+      background: rgba(15,28,46,0.06);
+      color: var(--accent);
+      text-align:left;
+      padding:8px;
+      border:1px solid var(--rule);
+    }
+    td{
+      padding:8px;
+      border:1px solid var(--rule);
+    }
+    .footer{
+      position:fixed; left:0; right:0; bottom:-0.55in;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size:10px; color:var(--muted);
+      border-top:1px solid var(--rule);
+      padding:10px 0;
+    }
+    .footer-inner{
+      display:flex; justify-content:space-between;
+      width:100%;
+    }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+    .pill{
+      display:inline-block; padding:2px 8px; border:1px solid var(--rule);
+      border-radius:999px; font-size:11px; color:var(--muted);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar"></div>
+
+  <div class="header">
+    <div class="brand">
+      <!-- Put your SHF mark at: public/assets/brand/shf-mark.png -->
+      <img class="logo" src="{{logoUrl}}" alt="SHF" />
+      <div>
+        <div class="brand-title">Silicon Heartland Foundation</div>
+        <div class="subtle">{{productLine}}</div>
+      </div>
+    </div>
+    <div class="doc-meta">
+      <div><span class="pill">Methodology v{{methodologyVersion}}</span></div>
+      <div style="margin-top:6px;">{{reportDate}}</div>
+      <div class="mono">{{reportId}}</div>
+    </div>
+  </div>
+
+  <h1>{{title}}</h1>
+  <div class="subtle">{{subtitle}}</div>
+
+  <div class="rule"></div>
+
+  <!-- BODY INJECTED -->
+  {{bodyHtml}}
+
+  <div class="footer">
+    <div class="footer-inner">
+      <div>SHF Allocation Intelligence • Franklin County Pilot</div>
+      <div>Page <span class="pageNumber"></span> of <span class="totalPages"></span></div>
+    </div>
+  </div>
+
+  <script>
+    // Playwright will replace these with actual values via PDF footer/header options;
+    // These are here as a fallback if needed later.
+  </script>
+</body>
+</html>

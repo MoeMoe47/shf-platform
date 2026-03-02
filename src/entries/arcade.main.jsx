@@ -1,6 +1,9 @@
 import "@/styles/shell.css";
 import "@/styles/unified-shell.css";
 import "@/styles/app-shell.css";
+
+// DEV shim: intercept /growth/* so Tower never blacks out when API is offline
+import "@/dev/growthMock.fetch-shim.js";
 // src/entries/arcade.main.jsx
 // ------------------------------------------------------------
 // L1X Arcade entry – standalone shell
@@ -9,6 +12,7 @@ import "@/styles/app-shell.css";
 // ------------------------------------------------------------
 
 import React from "react";
+
 import ReactDOM from "react-dom/client";
 import { HashRouter } from "react-router-dom";
 
@@ -27,11 +31,11 @@ if (!mountEl) {
 }
 
 ReactDOM.createRoot(mountEl).render(
-  <React.StrictMode>
+  
     <RootProviders appId="arcade">
       <HashRouter>
         <ArcadeRoutes />
       </HashRouter>
     </RootProviders>
-  </React.StrictMode>,
+  ,
 );

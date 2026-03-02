@@ -20,7 +20,7 @@ def verify_registry_on_startup() -> None:
 # --- Gate G Runtime Compliance (hard-fail boot) ---
 from pathlib import Path
 from fabric.compliance.runtime_enforce import enforce_gate_g_on_startup
-from fabric.compliance.registry_loaders import load_business_registry, load_app_registry
+from fabric.compliance.registry_loaders import load_business_registry, load_app_registry, load_agent_registry
 from fabric.compliance.repo_root import get_repo_root
 
 
@@ -31,6 +31,7 @@ def verify_compliance_gate_g_or_die() -> None:
 
     businesses = load_business_registry()
     apps = load_app_registry()
+    agents = load_agent_registry()
 
-    enforce_gate_g_on_startup(repo_root=get_repo_root(),  businesses=businesses, apps=apps)
+    enforce_gate_g_on_startup(repo_root=get_repo_root(),  businesses=businesses, apps=apps, agents=agents)
     print("[COMPLIANCE] Gate G verified (startup hard-pass).")

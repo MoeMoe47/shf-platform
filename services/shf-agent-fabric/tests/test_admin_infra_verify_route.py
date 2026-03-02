@@ -1,32 +1,36 @@
 from fastapi.testclient import TestClient
 
-# Import app from the shf-agent-fabric service package (PYTHONPATH is handled by conftest/CI)
+# conftest.py sets PYTHONPATH so `from main import app` works when running from services/shf-agent-fabric
 from main import app  # type: ignore
 
 
-def test_admin_infra_verify_route_ok():
+def _checks_to_dict(checks):
+    return {c.get("name"): c for c in checks if isinstance(c, dict) and "name" in c}
+
+
+def test_admin_infra_verify_route_ok_contract_v1():
     client = TestClient(app)
     r = client.get("/admin/infra/verify")
     assert r.status_code == 200, r.text
 
     data = r.json()
-    assert data.get("ok") is True
+    assert data.get("contract") == "v1"
+    assert isinstance(data.get("ts"), int)
 
-    # Shape-tolerant: "checks" may be a dict (named checks) or a list (ordered checks)
-    assert "checks" in data
-    checks = data["checks"]
+    checks = data.get("checks")
+    assert isinstance(checks, list)
+    cd = _checks_to_dict(checks)
 
-    if isinstance(checks, list):
-        # minimal expectations for list form
-        assert len(checks) >= 1
-    elif isinstance(checks, dict):
-        # minimal expectations for dict form
-        assert len(checks.keys()) >= 1
-    else:
-        raise AssertionError(f"Unexpected checks type: {type(checks)}")
+    # Required checks exist
+    for name in ("registry_contract", "runtime_enforcement_lock", "gate_g_startup"):
+        assert name in cd, f"missing check: {name}"
 
-    # Optional, non-breaking: if known keys exist, they should contain ok=True
-    if isinstance(checks, dict):
-        for k in ("registry_contract", "runtime_enforcement_lock", "gate_g_startup"):
-            if k in checks:
-                assert checks[k].get("ok") is True
+    # Each check has ok + tails
+    for name, c in cd.items():
+        assert isinstance(c.get("ok"), bool), f"{name}.ok not bool"
+        assert "stdout_tail" in c
+        assert "stderr_tail" in c
+
+    # Overall ok should match all checks ok (route's intended meaning)
+    all_ok = all(cd[n]["ok"] is True for n in ("registry_contract", "runtime_enforcement_lock", "gate_g_startup"))
+    assert data.get("ok") == all_ok

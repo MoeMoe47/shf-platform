@@ -1,0 +1,122 @@
+{
+  "contract": "AIM_LOCK_TRIGGER_LIST_V1",
+  "description": "Defines conditions that require AIM to freeze, adjust, or review incentive rulesets",
+  "version": "1.0",
+  "enforcement_layer": "AIM + Watchtower",
+  "global_controls": {
+    "auto_freeze_enabled": true,
+    "manual_override_required": true,
+    "audit_log_required": true
+  },
+  "freeze_triggers": [
+    {
+      "trigger_id": "integrity_alert_high",
+      "source": "watchtower",
+      "signal": "integrity_alert.high",
+      "action": "freeze_ruleset",
+      "duration_days": 30,
+      "reason": "Potential fraud or data manipulation detected"
+    },
+    {
+      "trigger_id": "verification_rate_below_floor",
+      "source": "metrics",
+      "metric_key": "verified_placement_rate",
+      "condition": "below",
+      "threshold": 0.4,
+      "action": "freeze_ruleset_and_review",
+      "reason": "Too many unverified outcomes"
+    },
+    {
+      "trigger_id": "attendance_outcome_mismatch",
+      "source": "watchtower",
+      "signal": "integrity.attendance_outcome_mismatch",
+      "action": "freeze_ruleset_and_review",
+      "reason": "High outcomes with extremely low attendance"
+    },
+    {
+      "trigger_id": "budget_cap_exceeded",
+      "source": "funding_engine",
+      "metric_key": "total_payout",
+      "condition": "greater_than",
+      "threshold_source": "budget_controls.max_total_payout",
+      "action": "freeze_ruleset",
+      "reason": "Funding payout exceeded cap"
+    }
+  ],
+  "adaptive_adjustment_triggers": [
+    {
+      "trigger_id": "completion_rate_drop",
+      "source": "metrics",
+      "metric_key": "completion_rate",
+      "condition": "drop_pct",
+      "threshold": 0.2,
+      "window": "monthly",
+      "action": "increase_completion_incentive",
+      "max_adjustment_pct": 0.15
+    },
+    {
+      "trigger_id": "retention_rate_drop",
+      "source": "metrics",
+      "metric_key": "retention_3m_rate",
+      "condition": "drop_pct",
+      "threshold": 0.15,
+      "window": "monthly",
+      "action": "increase_retention_weight",
+      "max_adjustment_pct": 0.15
+    },
+    {
+      "trigger_id": "cost_per_outcome_spike",
+      "source": "metrics",
+      "metric_key": "cost_per_job_placement",
+      "condition": "increase_pct",
+      "threshold": 0.25,
+      "window": "monthly",
+      "action": "tighten_caps",
+      "max_adjustment_pct": 0.1
+    }
+  ],
+  "watchtower_signals": [
+    {
+      "signal": "risk_flag.attendance_drop",
+      "severity": [
+        "medium",
+        "high"
+      ],
+      "action": "shift_weight_to_completion"
+    },
+    {
+      "signal": "risk_flag.cost_overrun",
+      "severity": [
+        "high"
+      ],
+      "action": "tighten_budget_caps"
+    },
+    {
+      "signal": "anomaly.outcome_timing_cluster",
+      "severity": [
+        "medium",
+        "high"
+      ],
+      "action": "reduce_bonus_multiplier"
+    }
+  ],
+  "manual_review_required": [
+    {
+      "condition": "ruleset_frozen",
+      "required_role": "shf_admin"
+    },
+    {
+      "condition": "integrity_alert_triggered",
+      "required_role": "audit_officer"
+    }
+  ],
+  "audit": {
+    "created_by": "shf_gto",
+    "created_at": "2026-02-28T00:00:00Z",
+    "notes": "Defines hard triggers AIM must enforce before modifying incentive structures"
+  },
+  "schema_version": "AIM_LOCK_TRIGGERS_V1",
+  "ruleset_id": "aim_lock_triggers_v1",
+  "ruleset_version": "1.0",
+  "status": "active"
+}

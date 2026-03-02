@@ -1,0 +1,13 @@
+{
+  "name": "shf-report-engine",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "install:browsers": "playwright install --with-deps chromium",
+    "pdf:exec": "node src/render.js --mode executive",
+    "pdf:tech": "node src/render.js --mode technical"
+  },
+  "dependencies": {
+    "playwright": "^1.49.0"
+  }
+}

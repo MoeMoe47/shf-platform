@@ -1,5 +1,11 @@
 {
-  "version": 1,
+  "files": {
+    "fabric/watchtower/risk_engine.py": {
+      "notes": "Shared risk/quarantine classifier (enforcement-grade). Any drift must update lock.",
+      "required": true,
+      "sha256": "7f3f4832902930b87e8343f54d0099afb719ccadf3c01b64b7fb771bdb13f698"
+    }
+  },
   "repo_root": "/Users/mikeslate/Desktop/shrv1",
   "targets": [
     {
@@ -10,5 +16,7 @@
       "path": "services/shf-agent-fabric/fabric/compliance/runtime_enforce.py",
       "sha256": "cd3c50448c598f9475d17ca70a5270123665f9ee7953839dd1e813721eba5e69"
     }
-  ]
+  ],
+  "updated_utc": "2026-02-13T22:04:39.373723Z",
+  "version": 1
 }

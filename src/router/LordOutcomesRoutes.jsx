@@ -1,5 +1,8 @@
 // src/router/LordOutcomesRoutes.jsx
 import React from "react";
+
+// === LOO CSS LOCK START ===
+// === LOO CSS LOCK END ===
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import LordOutcomesLayout from "@/layouts/LordOutcomesLayout.jsx";
@@ -14,6 +17,10 @@ import FundingImpactPage from "@/pages/lordOutcomes/FundingImpactPage.jsx";
 import PilotLauncherPage from "@/pages/lordOutcomes/PilotLauncher.jsx";
 import ActivePilotsPage from "@/pages/lordOutcomes/pilots/ActivePilots.jsx";
 import PilotTemplatesPage from "@/pages/lordOutcomes/pilots/PilotTemplates.jsx";
+// import "@/styles/lordOutcomes.dym.css";
+// import "@/styles/lordOutcomes.scaffold.css";
+// import "@/styles/lordOutcomes.theme.css";
+// import "@/styles/lordOutcomes.header.locked.css";
 
 export default function LordOutcomesRoutes() {
   return (

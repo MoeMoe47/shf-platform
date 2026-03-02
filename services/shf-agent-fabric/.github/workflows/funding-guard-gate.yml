@@ -1,0 +1,35 @@
+name: Funding Guard Gate
+
+on:
+  pull_request:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  funding-guard-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            pip install -U pytest fastapi starlette python-dotenv
+          fi
+
+      - name: Run Funding Policy Guard test only
+        env:
+          PYTHONPATH: .
+        run: |
+          pytest -q tests/test_funding_policy_guard.py

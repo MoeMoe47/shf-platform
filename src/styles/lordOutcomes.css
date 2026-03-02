@@ -260,3 +260,129 @@
 .lo-exportBtn--ghost {
   background: transparent;
 }
+
+/* =========================================================
+   CANONICAL OVERRIDES — Deep Space (No Brown) + Subtle Grid
+   + Smaller Orbits/Rings
+   ========================================================= */
+:root[data-app="lordOutcomes"],
+:root[data-app="lordOutcomes"] body {
+  /* hard force: no warm brown wash */
+  background-color: #030409 !important;
+  color: rgba(255,255,255,.92);
+}
+
+/* Deep space gradient + star speckle + faint grid */
+:root[data-app="lordOutcomes"] body {
+  background-image:
+    /* faint grid */
+    linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px),
+
+    /* star speckle */
+    radial-gradient(circle at 12% 18%, rgba(255,255,255,.10) 0 1px, transparent 2px),
+    radial-gradient(circle at 78% 28%, rgba(255,255,255,.09) 0 1px, transparent 2px),
+    radial-gradient(circle at 55% 72%, rgba(255,255,255,.08) 0 1px, transparent 2px),
+    radial-gradient(circle at 22% 68%, rgba(255,255,255,.07) 0 1px, transparent 2px),
+
+    /* deep space blend (cool) */
+    radial-gradient(1200px 700px at 70% 20%, rgba(70,120,255,.12), transparent 60%),
+    radial-gradient(900px 600px at 20% 80%, rgba(120,70,255,.10), transparent 60%),
+    radial-gradient(1400px 900px at 10% 10%, rgba(0,0,0,.92), rgba(0,0,0,.96) 60%);
+
+  background-size:
+    64px 64px,
+    64px 64px,
+    520px 520px,
+    620px 620px,
+    700px 700px,
+    760px 760px,
+    auto,
+    auto,
+    auto;
+
+  background-position:
+    0 0,
+    0 0,
+    0 0,
+    0 0,
+    0 0,
+    0 0,
+    center,
+    center,
+    center;
+
+  background-repeat: repeat, repeat, repeat, repeat, repeat, repeat, no-repeat, no-repeat, no-repeat;
+}
+
+/* Kill any warm overlay gradients that may be applied by older theme layers */
+:root[data-app="lordOutcomes"] .hero,
+:root[data-app="lordOutcomes"] [class*="Hero"],
+:root[data-app="lordOutcomes"] [class*="hero"] {
+  background: transparent !important;
+}
+
+/* Smaller rings / orbits (targets common class patterns) */
+:root[data-app="lordOutcomes"] [class*="orbit"],
+:root[data-app="lordOutcomes"] [class*="Orbit"],
+:root[data-app="lordOutcomes"] [class*="ring"],
+:root[data-app="lordOutcomes"] [class*="Ring"] {
+  transform: scale(0.62) !important;
+  transform-origin: 100% 60% !important; /* keep them anchored to the right */
+  opacity: .85 !important;
+  filter: saturate(1.05) !important;
+}
+
+/* If rings are SVGs, clamp their size */
+:root[data-app="lordOutcomes"] svg[class*="orbit"],
+:root[data-app="lordOutcomes"] svg[class*="Orbit"],
+:root[data-app="lordOutcomes"] svg[class*="ring"],
+:root[data-app="lordOutcomes"] svg[class*="Ring"] {
+  width: min(520px, 42vw) !important;
+  height: auto !important;
+}
+
+/* Improve text contrast (your screenshot shows headings too dim) */
+:root[data-app="lordOutcomes"] h1,
+:root[data-app="lordOutcomes"] h2,
+:root[data-app="lordOutcomes"] .title,
+:root[data-app="lordOutcomes"] [class*="Title"] {
+  color: rgba(255,255,255,.92) !important;
+  text-shadow: 0 1px 18px rgba(0,0,0,.65);
+}
+
+:root[data-app="lordOutcomes"] .muted,
+:root[data-app="lordOutcomes"] [class*="muted"] {
+  color: rgba(255,255,255,.72) !important;
+}
+
+/* =====================================================
+   HARD RESET — Remove All Warm Header / Overlay Layers
+   ===================================================== */
+
+:root[data-app="lordOutcomes"] header,
+:root[data-app="lordOutcomes"] .header,
+:root[data-app="lordOutcomes"] [class*="Header"],
+:root[data-app="lordOutcomes"] [class*="header"],
+:root[data-app="lordOutcomes"] [class*="cosmic"],
+:root[data-app="lordOutcomes"] [class*="glow"],
+:root[data-app="lordOutcomes"] [class*="gradient"] {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove any top overlay pseudo elements */
+:root[data-app="lordOutcomes"] header::before,
+:root[data-app="lordOutcomes"] header::after,
+:root[data-app="lordOutcomes"] [class*="Header"]::before,
+:root[data-app="lordOutcomes"] [class*="Header"]::after {
+  display: none !important;
+}
+
+/* Force deep space base */
+:root[data-app="lordOutcomes"],
+:root[data-app="lordOutcomes"] body {
+  background-color: #030409 !important;
+}
+

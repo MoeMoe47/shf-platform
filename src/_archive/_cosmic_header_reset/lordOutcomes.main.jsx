@@ -1,4 +1,10 @@
 import React from "react";
+
+// === LOO CSS LOCK START ===
+import "@/styles/lordOutcomes.scaffold.css";
+import "@/styles/lordOutcomes.theme.css";
+import "@/styles/lordOutcomes.header.locked.css";
+// === LOO CSS LOCK END ===
 import { createRoot } from "react-dom/client";
 import { HashRouter } from "react-router-dom";
 import RootProviders from "@/providers/RootProviders.jsx";
@@ -13,12 +19,12 @@ import LordOutcomesRoutes from "@/router/LordOutcomesRoutes.jsx";
    5) cosmic header LAST (wins header look)
 ========================================================= */
 import "@/styles/lordOutcomes.tokens.css";
-import "@/styles/lordOutcomes.theme.css";
+// import "@/styles/lordOutcomes.theme.css";
 import "@/styles/lordOutcomes.css";
 
 /* Background visuals */
 import "@/styles/lordOutcomes.dym.pattern.css";
-import "@/styles/lordOutcomes.dym.css";
+// import "@/styles/lordOutcomes.dym.css";
 
 /* Layout safety rules */
 import "@/styles/lordOutcomes._LOCKED.skeleton.css";

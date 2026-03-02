@@ -16,6 +16,9 @@ import Rewards from "@/pages/arcade/Rewards.jsx";
 import Tournaments from "@/pages/arcade/Tournaments.jsx";
 import Help from "@/pages/arcade/Help.jsx";
 
+import GrowthObservationTower from "@/pages/metaverse/GrowthObservationTower.jsx";
+
+import InterplanetaryMission from "@/pages/metaverse/InterplanetaryMission.jsx";
 export default function ArcadeRoutes() {
   return (
     <Routes>
@@ -85,7 +88,18 @@ export default function ArcadeRoutes() {
         }
       />
 
-      {/* catch-all → dashboard */}
+      
+      <Route
+        path="/metaverse/growth-observatory"
+        element={
+          <ArcadeLayout>
+            <GrowthObservationTower />
+          </ArcadeLayout>
+        }
+      />
+
+      {/* catch-all → dashboard */}        <Route path="/metaverse/interplanetary-mission" element={<InterplanetaryMission />} />
+
       <Route
         path="*"
         element={

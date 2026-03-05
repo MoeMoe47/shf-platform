@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from main import app
+from fastapi.testclient import TestClient
+
 import json
 import os
 import time
@@ -7,6 +10,10 @@ from typing import Any, Dict
 
 import pytest
 import requests
+
+def client():
+    return TestClient(app)
+
 
 BASE = os.environ.get("FUNDING_BASE_URL", "http://127.0.0.1:8001")
 
@@ -17,13 +24,13 @@ def _j(obj: Any) -> str:
 
 
 def _post(path: str, payload: Dict[str, Any], timeout: float = 15.0) -> Dict[str, Any]:
-    r = requests.post(f"{BASE}{path}", json=payload, timeout=timeout)
+    r = client().post(f"{BASE}{path}", json=payload)
     r.raise_for_status()
     return r.json()
 
 
 def _get(path: str, timeout: float = 10.0) -> Dict[str, Any]:
-    r = requests.get(f"{BASE}{path}", timeout=timeout)
+    r = client().get(f"{BASE}{path}")
     r.raise_for_status()
     return r.json()
 
@@ -122,9 +129,9 @@ def test_funding_surface_is_compute_only():
     Verify policy: POST under /api/funding/* is blocked EXCEPT /simulate.
     (We check a representative endpoint that must always be blocked.)
     """
-    r = requests.post(f"{BASE}/api/funding/sdk", timeout=10)
+    r = client().post(f"{BASE}/api/funding/sdk")
     assert r.status_code == 405
 
     # simulate is allowed but may reject missing body
-    r2 = requests.post(f"{BASE}/api/funding/simulate", timeout=10)
+    r2 = client().post(f"{BASE}/api/funding/simulate")
     assert r2.status_code in (200, 422), "simulate must be reachable (200 or validation 422)"

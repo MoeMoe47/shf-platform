@@ -30,7 +30,7 @@ def funding_health() -> dict:
     return health_payload(app_version=None)
 
 
-@router.get("/capabilities")
+@router.get("/partner/capabilities")
 def funding_capabilities(req: Request) -> dict:
     return capabilities_payload(base_url=_base_url(req))
 

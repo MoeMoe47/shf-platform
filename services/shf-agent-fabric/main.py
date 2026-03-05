@@ -43,6 +43,7 @@ from routers.api_v1 import router as api_v1_router  # noqa: E402
 from routers.funding_simulator import router as funding_simulator_router
 from routers.status_routes import router as status_router  # noqa: E402
 from routers.health_routes import router as health_router  # noqa: E402
+from routers.funding_replay_crypto import router as funding_replay_crypto_router
 
 from routers.alignment.routes_gateway import router as alignment_gateway_router  # noqa: E402
 from routers.alignment.routes_admin import router as alignment_admin_router  # noqa: E402
@@ -94,6 +95,7 @@ from routers.funding_rulesets import router as funding_rulesets_router
 
 from routers.funding_capabilities import router as funding_capabilities_router
 from routers.funding_partner import router as funding_partner_router
+from routers.funding_replay import router as funding_replay_router
 log = logging.getLogger("shf-agent-fabric")
 logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO").upper())
 
@@ -301,7 +303,22 @@ from fastapi.responses import JSONResponse
 
 @app.middleware("http")
 async def funding_policy_guard(request: Request, call_next):
+    # === ALLOWLIST_REPLAY_TOP1P BEGIN ===
+    # Deterministic Policy Replay Engine endpoints must be writable for audit journaling.
+    try:
+        _pg_path = request.scope.get('path', '')
+    except Exception:
+        _pg_path = ''
+    if isinstance(_pg_path, str) and _pg_path.startswith('/api/funding/replay/'):
+        return await call_next(request)
+    # === ALLOWLIST_REPLAY_TOP1P END ===
+
     path = request.url.path
+    # ALLOWLIST: deterministic audit replay endpoints must be writable
+    # (record decisions + replay them later)
+    if str(path).startswith('/api/funding/replay/'):
+        return await call_next(request)
+
     method = request.method.upper()
 
     if path.startswith("/api/funding/"):
@@ -399,6 +416,8 @@ app.include_router(admin_observability_router)
 
 app.include_router(funding_capabilities_router)
 app.include_router(funding_partner_router)
+app.include_router(funding_replay_router)
+app.include_router(funding_replay_crypto_router)
 @app.get("/", tags=["meta"])
 def root() -> dict:
     return {"ok": True, "service": "shf-agent-fabric"}

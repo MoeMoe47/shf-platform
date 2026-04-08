@@ -8,6 +8,55 @@ from typing import Any, Dict, Optional, Tuple
 # We reuse the existing submission store
 from fabric.outcomes.store import get_submission_by_id
 
+
+def _resolve_policy_meta() -> tuple[str, str]:
+    """
+    Resolve the active policy identifiers used for verification.
+    Returns:
+        (ruleset_sha256, manifest_fingerprint)
+    """
+
+    ruleset_sha256 = "UNKNOWN"
+    manifest_fingerprint = "UNKNOWN"
+
+    # Ruleset SHA
+    try:
+        from fabric.funding.ruleset_hash import attach_ruleset_sha256
+        tmp = attach_ruleset_sha256({})
+        rs = (tmp.get("ruleset_sha256") or "").strip()
+        if rs:
+            ruleset_sha256 = rs
+    except Exception:
+        pass
+
+    # Manifest fingerprint
+    try:
+        import fabric.funding.manifest_signed as ms
+
+        for name in (
+            "get_manifest_fingerprint",
+            "manifest_fingerprint",
+            "current_manifest_fingerprint",
+            "fingerprint",
+        ):
+            fn = getattr(ms, name, None)
+            if callable(fn):
+                val = fn()
+                if isinstance(val, str) and val.strip():
+                    manifest_fingerprint = val.strip()
+                    break
+
+        if manifest_fingerprint == "UNKNOWN":
+            for cname in ("MANIFEST_FINGERPRINT", "MANIFEST_FP", "FINGERPRINT"):
+                val = getattr(ms, cname, None)
+                if isinstance(val, str) and val.strip():
+                    manifest_fingerprint = val.strip()
+                    break
+    except Exception:
+        pass
+
+    return ruleset_sha256, manifest_fingerprint
+
 VERIFIER_VERSION = "outcomes_verifier_v1"
 
 def _canonical_json(obj: Any) -> str:

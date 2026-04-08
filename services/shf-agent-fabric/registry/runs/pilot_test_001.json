@@ -1,0 +1,65 @@
+{
+  "run": {
+    "run_id": "pilot_test_001",
+    "name": "Gladden Workforce + Youth Pilot",
+    "mode": "PILOT",
+    "app_id": "curriculum",
+    "site": "gladden_community_center",
+    "owner": "SHF Pilot Ops",
+    "program_id": "gladden_community_center",
+    "start_ts": "2026-03-01T00:00:00Z",
+    "end_ts": "2026-03-31T23:59:59Z"
+  },
+  "targets": {
+    "attendanceRateTarget": 0.85,
+    "retentionTarget": 0.78,
+    "parentSatisfactionTarget": 4.2,
+    "behaviorIncidentRateMaxPer100Sessions": 5.0,
+    "weeklyArtifactCompletionTarget": 0.80
+  },
+  "outcomes": {
+    "daily": [
+      { "date": "2026-03-03", "attendance_count": 19 },
+      { "date": "2026-03-04", "attendance_count": 18 },
+      { "date": "2026-03-05", "attendance_count": 17 },
+      { "date": "2026-03-10", "attendance_count": 20 },
+      { "date": "2026-03-11", "attendance_count": 18 },
+      { "date": "2026-03-12", "attendance_count": 17 },
+      { "date": "2026-03-17", "attendance_count": 19 },
+      { "date": "2026-03-18", "attendance_count": 18 },
+      { "date": "2026-03-19", "attendance_count": 17 },
+      { "date": "2026-03-24", "attendance_count": 18 },
+      { "date": "2026-03-25", "attendance_count": 17 },
+      { "date": "2026-03-26", "attendance_count": 16 }
+    ],
+    "weekly": [
+      {
+        "week_start": "2026-03-02",
+        "artifact_count": 13,
+        "unique_students_served": 20
+      },
+      {
+        "week_start": "2026-03-09",
+        "artifact_count": 14,
+        "unique_students_served": 20
+      },
+      {
+        "week_start": "2026-03-16",
+        "artifact_count": 15,
+        "unique_students_served": 20
+      },
+      {
+        "week_start": "2026-03-23",
+        "artifact_count": 13,
+        "unique_students_served": 20
+      }
+    ],
+    "monthly": {
+      "enrolled_count": 20,
+      "retained_count": 15,
+      "retention_rate": 0.75,
+      "parent_satisfaction_avg": 4.3,
+      "incidents_total_level3_plus": 11
+    }
+  }
+}

@@ -1,23 +1,39 @@
-// src/components/ErrorBoundary.jsx
 import React from "react";
 
 export default class ErrorBoundary extends React.Component {
-  constructor(props){ super(props); this.state = { hasError:false }; }
-  static getDerivedStateFromError(){ return { hasError:true }; }
-  componentDidCatch(err, info){ console.error("UI Error:", err, info); }
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
 
-  render(){
-    if (this.state.hasError){
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, info) {
+    console.error("ErrorBoundary caught:", error, info);
+  }
+
+  render() {
+    if (this.state.hasError) {
       return (
-        <section role="alert" className="sh-card">
-          <div className="sh-cardStripe" />
-          <div className="sh-cardBody">
-            <h2 className="sh-cardTitle">Something went wrong</h2>
-            <p className="sh-muted">Please try reloading. If it keeps happening, let us know.</p>
+        <div style={{
+          padding: 16,
+          borderRadius: 12,
+          border: "1px solid rgba(255,110,110,0.25)",
+          background: "rgba(18,20,28,0.92)",
+          color: "#e9f2fa"
+        }}>
+          <div style={{ fontWeight: 800, marginBottom: 8 }}>
+            Module Error
           </div>
-        </section>
+          <div style={{ fontSize: 12, opacity: 0.8 }}>
+            {String(this.state.error)}
+          </div>
+        </div>
       );
     }
+
     return this.props.children;
   }
 }

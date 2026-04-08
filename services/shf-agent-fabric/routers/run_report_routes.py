@@ -1,4 +1,5 @@
 from __future__ import annotations
+from fabric.reports.institutional.platypus_preview import build_preview_pdf
 
 from pathlib import Path
 from typing import Optional, List, Dict, Any
@@ -428,3 +429,55 @@ def runs_public(request: Request, run_id: str):
         }
 
     return out
+@router.get("/report/{run_id}")
+def run_funder_report_json(
+    run_id: str,
+    limit: int = Query(default=5000, ge=1, le=50000),
+    since: Optional[str] = Query(default=None),
+    include_raw: bool = Query(default=False),
+):
+    rid = _rid(run_id)
+    report = build_funder_report(run_id=rid, limit=limit, since=since, include_raw=include_raw)
+    if not isinstance(report, dict) or not report.get("ok"):
+        raise HTTPException(status_code=400, detail=report)
+    return JSONResponse(report)
+
+
+@router.get("/report/{run_id}/pdf")
+def run_funder_report_pdf(
+    run_id: str,
+    limit: int = Query(default=5000, ge=1, le=50000),
+    since: Optional[str] = Query(default=None),
+):
+    rid = _rid(run_id)
+    report = build_funder_report(run_id=rid, limit=limit, since=since, include_raw=True)
+    if not isinstance(report, dict) or not report.get("ok"):
+        raise HTTPException(status_code=400, detail=report)
+    pdf_bytes = build_funder_report_pdf(report)
+    filename = f"shf_run_report_{rid}.pdf"
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'inline; filename="{filename}"'},
+    )
+
+
+@router.get("/report/{run_id}.pdf", include_in_schema=False)
+def run_funder_report_pdf_legacy(
+    run_id: str,
+    limit: int = Query(default=5000, ge=1, le=50000),
+    since: Optional[str] = Query(default=None),
+):
+    return run_funder_report_pdf(run_id=run_id, limit=limit, since=since)
+
+
+@router.get("/report/{run_id}/platypus-preview")
+def run_funder_report_platypus_preview(run_id: str):
+    report = build_funder_report(run_id)
+    pdf_bytes = build_preview_pdf(report)
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'inline; filename="{run_id}_platypus_preview.pdf"'},
+    )
+

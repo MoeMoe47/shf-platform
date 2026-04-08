@@ -1,0 +1,31 @@
+{
+  "version": "20260408T071729Z",
+  "label": "game_theory_rules",
+  "saved_at": "20260408T071729Z",
+  "rules": {
+    "weights": {
+      "risk_high": 50,
+      "risk_moderate": 30,
+      "risk_low": 10,
+      "funding_high": 32,
+      "funding_moderate": 18,
+      "funding_low": 8,
+      "time_urgent": 22,
+      "time_high": 12,
+      "time_medium": 6
+    },
+    "penalties": {
+      "low_confidence_scale": 44,
+      "weak_verification_scale": 54,
+      "suspicious_spike": 17,
+      "scenario_medium_risk_penalty": 9,
+      "scenario_high_risk_penalty": 20
+    },
+    "thresholds": {
+      "high_confidence_floor": 0.85,
+      "verification_floor": 0.8,
+      "score_prioritize": 90,
+      "score_stabilize": 65
+    }
+  }
+}

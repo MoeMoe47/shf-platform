@@ -1,0 +1,18 @@
+REPORT_PAGES = [
+    {"page_number": 1, "page_id": "cover", "title": "Cover", "footer_label": "Cover"},
+    {"page_number": 2, "page_id": "decision_summary", "title": "Decision Summary", "footer_label": "Page 2"},
+    {"page_number": 3, "page_id": "table_of_contents", "title": "Table of Contents", "footer_label": "Page 3"},
+    {"page_number": 4, "page_id": "executive_summary", "title": "Executive Summary", "footer_label": "Page 4"},
+    {"page_number": 5, "page_id": "program_profile", "title": "Program Profile", "footer_label": "Page 5"},
+    {"page_number": 6, "page_id": "population_context", "title": "Population Served and Operating Context", "footer_label": "Page 6"},
+    {"page_number": 7, "page_id": "kpi_dashboard", "title": "KPI Dashboard Overview", "footer_label": "Page 7"},
+    {"page_number": 8, "page_id": "outcome_performance", "title": "Outcome Performance: Actual vs Target", "footer_label": "Page 8"},
+    {"page_number": 9, "page_id": "trend_analysis", "title": "Trend Analysis", "footer_label": "Page 9"},
+    {"page_number": 10, "page_id": "evidence_scorecard", "title": "Evidence Scorecard", "footer_label": "Page 10"},
+    {"page_number": 11, "page_id": "operational_integrity", "title": "Operational Integrity and Verification", "footer_label": "Page 11"},
+    {"page_number": 12, "page_id": "risk_analysis", "title": "Risk Analysis", "footer_label": "Page 12"},
+    {"page_number": 13, "page_id": "funding_recommendation", "title": "Funding Recommendation", "footer_label": "Page 13"},
+    {"page_number": 14, "page_id": "funding_conditions", "title": "Conditions for Continuation or Scale", "footer_label": "Page 14"},
+    {"page_number": 15, "page_id": "improvement_plan", "title": "90-Day Improvement Plan and Milestones", "footer_label": "Page 15"},
+    {"page_number": 16, "page_id": "glossary_and_notes", "title": "Glossary and Report Notes", "footer_label": "Page 16"},
+]

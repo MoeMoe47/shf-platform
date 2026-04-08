@@ -1,31 +1,19 @@
-import "@/styles/shell.css";
-import "@/styles/unified-shell.css";
-import "@/styles/app-shell.css";
-// src/entries/foundation.main.jsx
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { HashRouter } from "react-router-dom";
+import FoundationApp from "../foundation/App";
 
-import RootProviders from "./RootProviders.jsx";
-import FoundationRoutes from "@/router/FoundationRoutes.jsx";
-
-import "@/styles/foundation.css";
-import "@/styles/apps-gallery.css";
-
-const mount =
-  document.querySelector('[data-app="foundation"]') ||
-  document.getElementById("root");
-
-if (!mount) {
-  throw new Error("Foundation mount element not found");
+if (window.location.hash === "#/top" || window.location.hash === "#top") {
+  history.replaceState(null, "", window.location.pathname + window.location.search);
 }
 
-ReactDOM.createRoot(mount).render(
+const mountNode = document.getElementById("root");
+
+if (!mountNode) {
+  throw new Error("Foundation mount failed: #root not found");
+}
+
+ReactDOM.createRoot(mountNode).render(
   <React.StrictMode>
-    <RootProviders appId="foundation">
-      <HashRouter>
-        <FoundationRoutes />
-      </HashRouter>
-    </RootProviders>
+    <FoundationApp />
   </React.StrictMode>
 );

@@ -1,0 +1,88 @@
+name: Funding Guard Gate
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  funding_guard_gate:
+    name: Funding Guard Gate (policy middleware)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install minimal deps
+        working-directory: services/shf-agent-fabric
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f pyproject.toml ]; then pip install -e . || true; fi
+
+      - name: Run Funding Policy Guard test only
+        working-directory: services/shf-agent-fabric
+        env:
+          PYTHONPATH: .
+        run: |
+          pytest -q tests/test_funding_policy_guard.py
+
+  ruleset_integrity_gate:
+    name: Ruleset Integrity Gate (sha256 ↔ file hash)
+    runs-on: ubuntu-latest
+    needs: [funding_guard_gate]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install minimal deps
+        working-directory: services/shf-agent-fabric
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f pyproject.toml ]; then pip install -e . || true; fi
+
+      - name: Run Ruleset Integrity Gate test only
+        working-directory: services/shf-agent-fabric
+        env:
+          PYTHONPATH: .
+        run: |
+          pytest -q tests/test_funding_ruleset_integrity_gate.py
+
+  manifest_signature_gate:
+    name: Manifest Signature Gate (ed25519)
+    runs-on: ubuntu-latest
+    needs: [ruleset_integrity_gate]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install minimal deps
+        working-directory: services/shf-agent-fabric
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f pyproject.toml ]; then pip install -e . || true; fi
+
+      - name: Run Manifest Signature Gate test only
+        working-directory: services/shf-agent-fabric
+        env:
+          PYTHONPATH: .
+        run: |
+          pytest -q tests/test_funding_manifest_signature_gate.py
+

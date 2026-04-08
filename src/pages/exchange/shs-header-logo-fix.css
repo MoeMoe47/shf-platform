@@ -1,0 +1,113 @@
+/* =========================
+   SHS HEADER LOGO FIX
+   ========================= */
+
+.shs-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+/* logo */
+.shs-header-logo {
+  height: 52px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+  max-width: none;
+  filter: drop-shadow(0 0 6px rgba(0, 180, 255, 0.25));
+}
+
+/* text */
+.shs-header-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.shs-header-text .title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e6edf3;
+  line-height: 1.05;
+}
+
+.shs-header-text .subtitle {
+  font-size: 11px;
+  color: rgba(180, 200, 220, 0.65);
+  letter-spacing: 0.04em;
+  line-height: 1.05;
+}
+
+/* =========================
+   HEADER CONTAINER FIX
+   ========================= */
+
+/* target common header containers safely */
+.command-header,
+.exchange-header,
+.shs-header,
+.top-header,
+.header-bar,
+.command-topbar,
+.mock-topbar {
+  min-height: 84px !important;
+  height: auto !important;
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* let left side breathe */
+.command-header__left,
+.exchange-header__left,
+.shs-header__left,
+.top-header__left,
+.header-bar__left,
+.command-topbar__left,
+.mock-topbar__left,
+.mock-brand {
+  display: flex !important;
+  align-items: center !important;
+  min-width: 0 !important;
+  flex: 0 0 auto !important;
+}
+
+/* prevent wrappers from crushing the logo */
+.mock-brand img,
+.mock-brand__lockup,
+.shs-header-left img {
+  height: 52px !important;
+  width: auto !important;
+  max-width: none !important;
+  flex-shrink: 0 !important;
+}
+
+/* optional: if the old tiny text lockup still exists, hide it */
+.mock-brand__logo,
+.mock-brand__copy {
+  display: none !important;
+}
+
+@media (max-width: 1200px) {
+  .shs-header-logo,
+  .mock-brand img,
+  .mock-brand__lockup,
+  .shs-header-left img {
+    height: 44px !important;
+  }
+
+  .command-header,
+  .exchange-header,
+  .shs-header,
+  .top-header,
+  .header-bar,
+  .command-topbar,
+  .mock-topbar {
+    min-height: 74px !important;
+  }
+}

@@ -1,0 +1,389 @@
+import React, { useEffect, useRef } from "react";
+import Globe from "react-globe.gl";
+import * as THREE from "three";
+
+const glass = {
+  background: "rgba(8,16,28,0.58)",
+  border: "1px solid rgba(127,199,255,0.18)",
+  backdropFilter: "blur(10px)",
+  boxShadow:
+    "0 0 0 1px rgba(127,199,255,0.04) inset, 0 10px 30px rgba(0,0,0,0.38)",
+  color: "#edf4fb",
+};
+
+export default function OutcomeGlobe() {
+  const globeRef = useRef();
+
+  useEffect(() => {
+    if (!globeRef.current) return;
+
+    const controls = globeRef.current.controls();
+    controls.autoRotate = false;
+    controls.enableZoom = false;
+    controls.enablePan = false;
+    controls.enableRotate = true;
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.rotateSpeed = 0.5;
+    controls.minDistance = 305;
+    controls.maxDistance = 305;
+
+    globeRef.current.pointOfView(
+      {
+        lat: 30,
+        lng: -28,
+        altitude: 1.48,
+      },
+      0
+    );
+
+    const scene = globeRef.current.scene();
+    scene.fog = new THREE.Fog(0x020814, 430, 1200);
+
+    const ambient = new THREE.AmbientLight(0xe5f2ff, 1.3);
+    scene.add(ambient);
+
+    const key = new THREE.DirectionalLight(0xffffff, 2.5);
+    key.position.set(260, 120, 220);
+    scene.add(key);
+
+    const fill = new THREE.DirectionalLight(0x7fc7ff, 1.05);
+    fill.position.set(-220, 30, -120);
+    scene.add(fill);
+
+    const rim = new THREE.PointLight(0x9bd7ff, 1.65, 0, 2);
+    rim.position.set(0, 0, -260);
+    scene.add(rim);
+  }, []);
+
+  const points = [
+    { lat: 39.9612, lng: -82.9988, color: "#f6ad55", size: 0.95 },
+    { lat: 39.1031, lng: -84.5120, color: "#7fc7ff", size: 0.42 },
+    { lat: 40.4173, lng: -82.9071, color: "#7fc7ff", size: 0.55 },
+    { lat: 40.1262, lng: -82.9291, color: "#7fc7ff", size: 0.52 },
+  ];
+
+  const rings = [
+    {
+      lat: 39.9612,
+      lng: -82.9988,
+      color: "#f6ad55",
+      maxR: 5.5,
+      propagationSpeed: 1.05,
+      repeatPeriod: 1600,
+    },
+  ];
+
+  return (
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        minHeight: 760,
+        position: "relative",
+        overflow: "hidden",
+        background:
+          "radial-gradient(circle at 58% 62%, rgba(48,106,186,0.20) 0%, rgba(4,10,19,0.96) 40%, rgba(2,6,12,1) 100%)",
+      }}
+    >
+      {/* Outer halo */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          pointerEvents: "none",
+          zIndex: 1,
+          background:
+            "radial-gradient(circle at 57% 62%, rgba(127,199,255,0.22) 0%, rgba(127,199,255,0.12) 14%, rgba(127,199,255,0.04) 26%, transparent 40%)",
+        }}
+      />
+
+      {/* Visible rim ring to mimic mock */}
+      <div
+        style={{
+          position: "absolute",
+          left: "50%",
+          top: "55%",
+          transform: "translate(-50%, -50%)",
+          width: "76%",
+          aspectRatio: "1 / 1",
+          borderRadius: "50%",
+          pointerEvents: "none",
+          zIndex: 2,
+          boxShadow:
+            "0 0 0 2px rgba(180,226,255,0.22), 0 0 44px rgba(127,199,255,0.22), 0 0 120px rgba(79,164,255,0.14)",
+        }}
+      />
+
+      {/* Globe stage */}
+      <div
+        style={{
+          position: "absolute",
+          left: "50%",
+          top: "55%",
+          transform: "translate(-50%, -50%)",
+          width: "112%",
+          height: "112%",
+          zIndex: 3,
+          pointerEvents: "auto",
+        }}
+      >
+        <Globe
+          ref={globeRef}
+          width={1500}
+          height={1500}
+          backgroundColor="rgba(0,0,0,0)"
+          backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
+          globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
+          bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
+          showAtmosphere
+          atmosphereColor="#a6dbff"
+          atmosphereAltitude={0.22}
+          pointsData={points}
+          pointColor={(d) => d.color}
+          pointAltitude={0.028}
+          pointRadius={(d) => d.size}
+          ringsData={rings}
+          ringColor={(d) => () => d.color}
+          ringMaxRadius={(d) => d.maxR}
+          ringPropagationSpeed={(d) => d.propagationSpeed}
+          ringRepeatPeriod={(d) => d.repeatPeriod}
+        />
+      </div>
+
+      {/* Route / map overlay layer */}
+      <svg
+        viewBox="0 0 1000 760"
+        preserveAspectRatio="none"
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 4,
+          pointerEvents: "none",
+        }}
+      >
+        <defs>
+          <filter id="blueGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="2.4" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+
+          <filter id="orangeGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="2.2" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        {/* subtle route mesh lines */}
+        <path
+          d="M 250 520 Q 410 450 560 420 T 870 430"
+          fill="none"
+          stroke="rgba(170,215,255,0.10)"
+          strokeWidth="1.1"
+        />
+        <path
+          d="M 290 360 Q 470 300 670 335 T 930 420"
+          fill="none"
+          stroke="rgba(170,215,255,0.08)"
+          strokeWidth="1"
+        />
+        <path
+          d="M 350 610 Q 510 540 670 565 T 905 610"
+          fill="none"
+          stroke="rgba(170,215,255,0.09)"
+          strokeWidth="1"
+        />
+
+        {/* main network arcs */}
+        <path
+          d="M 390 560 Q 520 405 690 350"
+          fill="none"
+          stroke="rgba(121,202,255,0.95)"
+          strokeWidth="2.2"
+          filter="url(#blueGlow)"
+        />
+        <path
+          d="M 500 610 Q 610 445 845 250"
+          fill="none"
+          stroke="rgba(255,176,103,0.92)"
+          strokeWidth="2.2"
+          filter="url(#orangeGlow)"
+        />
+        <path
+          d="M 535 585 Q 610 535 760 540"
+          fill="none"
+          stroke="rgba(121,202,255,0.86)"
+          strokeWidth="1.8"
+          filter="url(#blueGlow)"
+        />
+        <path
+          d="M 540 590 Q 640 610 780 640"
+          fill="none"
+          stroke="rgba(255,176,103,0.78)"
+          strokeWidth="1.7"
+          filter="url(#orangeGlow)"
+        />
+
+        {/* county box / region hint */}
+        <path
+          d="M 462 545 L 525 545 L 548 520 L 610 520 L 610 578 L 460 578 Z"
+          fill="none"
+          stroke="rgba(190,225,255,0.42)"
+          strokeWidth="1.2"
+        />
+      </svg>
+
+      {/* floating labels */}
+      <div
+        style={{
+          ...glass,
+          position: "absolute",
+          left: "44%",
+          top: "53%",
+          zIndex: 5,
+          padding: "12px 16px",
+          borderRadius: 14,
+          minWidth: 176,
+        }}
+      >
+        <div style={{ fontSize: 17, fontWeight: 800, lineHeight: 1.1 }}>
+          Franklin County
+        </div>
+        <div style={{ fontSize: 12, color: "#a8bccf", marginTop: 4 }}>
+          23 participants
+        </div>
+      </div>
+
+      <div
+        style={{
+          ...glass,
+          position: "absolute",
+          left: "26%",
+          top: "44%",
+          zIndex: 5,
+          padding: "10px 12px",
+          borderRadius: 14,
+          minWidth: 128,
+        }}
+      >
+        <div style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.1 }}>
+          Workforce Pool
+        </div>
+        <div style={{ fontSize: 11, color: "#a8bccf", marginTop: 3 }}>
+          funding rail
+        </div>
+      </div>
+
+      <div
+        style={{
+          ...glass,
+          position: "absolute",
+          left: "73%",
+          top: "45%",
+          zIndex: 5,
+          padding: "10px 12px",
+          borderRadius: 14,
+          minWidth: 138,
+        }}
+      >
+        <div style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.1 }}>
+          Workforce Program
+        </div>
+        <div style={{ fontSize: 11, color: "#a8bccf", marginTop: 3 }}>
+          outcome track
+        </div>
+      </div>
+
+      <div
+        style={{
+          ...glass,
+          position: "absolute",
+          left: "71%",
+          top: "66%",
+          zIndex: 5,
+          padding: "10px 12px",
+          borderRadius: 14,
+          minWidth: 128,
+        }}
+      >
+        <div style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.1 }}>
+          Hamilton County
+        </div>
+        <div style={{ fontSize: 11, color: "#a8bccf", marginTop: 3 }}>
+          regional node
+        </div>
+      </div>
+
+      <div
+        style={{
+          ...glass,
+          position: "absolute",
+          left: "30%",
+          top: "76%",
+          zIndex: 5,
+          padding: "10px 12px",
+          borderRadius: 14,
+          minWidth: 156,
+        }}
+      >
+        <div style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.1 }}>
+          Workforce Funding Pool
+        </div>
+        <div style={{ fontSize: 11, color: "#a8bccf", marginTop: 3 }}>
+          $2,500 escrow
+        </div>
+      </div>
+
+      {/* bottom mission strip */}
+      <div
+        style={{
+          position: "absolute",
+          left: 18,
+          right: 18,
+          bottom: 18,
+          height: 88,
+          zIndex: 6,
+          borderRadius: 14,
+          ...glass,
+          background: "rgba(8,16,28,0.50)",
+          display: "grid",
+          gridTemplateColumns: "1.2fr 1fr 1fr 1fr 1fr",
+          alignItems: "stretch",
+          overflow: "hidden",
+        }}
+      >
+        {[
+          ["305 Participants", "Pilot base"],
+          ["$2,500 Pool", "Current line"],
+          ["Validation Inquiry", "Open"],
+          ["Verifier Actioned", "Queued"],
+          ["Payment Release", "Pending"],
+        ].map(([title, sub], idx) => (
+          <div
+            key={title}
+            style={{
+              padding: "12px 14px",
+              borderLeft: idx === 0 ? "none" : "1px solid rgba(127,199,255,0.10)",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
+            <div style={{ fontSize: 11, color: "#7f9bb6", letterSpacing: ".04em" }}>
+              {sub}
+            </div>
+            <div style={{ fontSize: 22, fontWeight: 800, color: "#eaf4ff" }}>
+              {title}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

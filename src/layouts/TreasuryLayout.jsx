@@ -1,23 +1,57 @@
-// src/layouts/TreasuryLayout.jsx
 import React from "react";
 import { Outlet } from "react-router-dom";
-import TreasuryHeader from "@/components/treasury/TreasuryHeader.jsx";
-import TreasurySidebar from "@/components/treasury/TreasurySidebar.jsx";
-
-// Styles come from entry imports: shell.css, util-wash.css, treasury-shell.css
 
 export default function TreasuryLayout() {
   return (
-    <div className="crb-root" data-app="treasury">
-      <header className="crb-header">
-        <TreasuryHeader />
+    <div
+      data-app="treasury"
+      style={{
+        minHeight: "100vh",
+        background: "#f3f4f6",
+        color: "#111827",
+        fontFamily: "Arial, sans-serif",
+      }}
+    >
+      <header
+        style={{
+          padding: "16px 24px",
+          borderBottom: "1px solid #d1d5db",
+          background: "#ffffff",
+          fontWeight: 700,
+          fontSize: "20px",
+        }}
+      >
+        Treasury Shell
       </header>
-      <div className="crb-body">
-        <aside className="crb-sidebar">
-          <TreasurySidebar />
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "240px 1fr",
+          minHeight: "calc(100vh - 58px)",
+        }}
+      >
+        <aside
+          style={{
+            borderRight: "1px solid #d1d5db",
+            background: "#ffffff",
+            padding: "20px",
+          }}
+        >
+          <div style={{ fontWeight: 700, marginBottom: 16 }}>Navigation</div>
+          <div style={{ display: "grid", gap: 10 }}>
+            <a href="/treasury.html#/dashboard">Dashboard</a>
+            <a href="/treasury.html#/assets">Assets</a>
+            <a href="/treasury.html#/ledger">Ledger</a>
+            <a href="/treasury.html#/proofs">Proofs</a>
+            <a href="/treasury.html#/operator">Operator</a>
+            <a href="/treasury.html#/settings">Settings</a>
+            <a href="/treasury.html#/help">Help</a>
+          </div>
         </aside>
-        <main className="crb-main">
-          <Outlet /> {/* ← all pages render here */}
+
+        <main style={{ padding: "24px" }}>
+          <Outlet />
         </main>
       </div>
     </div>

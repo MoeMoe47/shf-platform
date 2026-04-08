@@ -1,4 +1,10 @@
 from __future__ import annotations
+from api.routes.operator_issuances_alias import router as operator_issuances_alias_router
+from api.routes.operator_allocations import router as operator_allocations_router
+from api.routes.operator_treasury_ledger import router as operator_treasury_ledger_router
+from api.routes.operator_contract_issuances import router as operator_contract_issuances_router
+from api.routes.operator_contracts import router as operator_contracts_router
+from api.routes.operator_actions import router as operator_actions_router
 import hashlib
 import inspect
 import json
@@ -76,7 +82,13 @@ from routers.runs_loo_payload_routes import router as runs_loo_payload_router  #
 
 from routers.reports_routes import router as reports_router  # noqa: E402
 from routers.feedback_routes import router as feedback_router  # noqa: E402
-from routers.events_routes import router as events_router  # noqa: E402
+from routers.events_routes import router as events_router
+from routers.live_optimizer_routes import router as live_optimizer_router
+from routers.comparison_routes import router as comparison_router  # noqa: E402
+from routers.lifecycle_routes import router as lifecycle_router  # noqa: E402
+from routers.rules_routes import router as rules_router  # noqa: E402
+from routers.decision_routes import router as decision_router  # noqa: E402
+from routers.ai_feedback_routes import router as ai_feedback_router  # noqa: E402
 
 # ✅ Arena (v1 frozen)
 from routers.arena_routes import router as arena_router  # noqa: E402
@@ -290,6 +302,27 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan, title="SHF Agent Fabric")
 
 
+# 🔥 AI SYSTEM ROUTES (NEW)
+app.include_router(lifecycle_router)
+app.include_router(rules_router)
+app.include_router(decision_router)
+app.include_router(ai_feedback_router)
+
+
+# 🔥 LIVE OPTIMIZER ROUTES
+app.include_router(live_optimizer_router)
+app.include_router(comparison_router)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1):(5173|5174|5175|5176)$",
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+
 # Top-1%: ruleset integrity hashes (sha256) for /rulesets + /discovery
 app.add_middleware(RulesetShaMiddleware)
 
@@ -434,3 +467,12 @@ if __name__ == "__main__":
         reload=_env_true("RELOAD", "0"),
     )
 
+
+
+
+app.include_router(operator_actions_router)
+app.include_router(operator_contracts_router)
+app.include_router(operator_contract_issuances_router)
+app.include_router(operator_treasury_ledger_router)
+app.include_router(operator_allocations_router)
+app.include_router(operator_issuances_alias_router)

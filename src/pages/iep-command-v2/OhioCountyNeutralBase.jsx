@@ -22,10 +22,12 @@ function normalizeCountyName(value) {
 export default function OhioCountyNeutralBase({
   activeCounty = "Franklin",
   onCountyClick,
+  onCentroidsChange,
 }) {
   const [geojson, setGeojson] = React.useState(null);
   const [error, setError] = React.useState("");
   const [cameraCounty, setCameraCounty] = React.useState(null);
+  const [hoveredCounty, setHoveredCounty] = React.useState(null);
 
   React.useEffect(() => {
     let alive = true;
@@ -127,6 +129,35 @@ export default function OhioCountyNeutralBase({
     };
   }, [selectedFeature, path]);
 
+  React.useEffect(() => {
+    if (!geojson || !path || !onCentroidsChange) return;
+
+    const [vx, vy, vw, vh] = currentViewBox.split(" ").map(Number);
+    if (![vx, vy, vw, vh].every((n) => Number.isFinite(n))) return;
+
+    const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+
+    const centroids = {};
+    geojson.features.forEach((feature) => {
+      const countyName = getCountyName(feature);
+      const normalized = normalizeCountyName(countyName);
+      const [cx, cy] = path.centroid(feature);
+
+      if (!Number.isFinite(cx) || !Number.isFinite(cy)) return;
+
+      const leftPct = clamp(((cx - vx) / vw) * 100, 2, 98);
+      const topPct = clamp(((cy - vy) / vh) * 100, 2, 98);
+
+      centroids[normalized] = {
+        left: `${leftPct}%`,
+        top: `${topPct}%`,
+        county: countyName,
+      };
+    });
+
+    onCentroidsChange(centroids);
+  }, [geojson, path, currentViewBox, onCentroidsChange]);
+
 
   const franklinMockRing1 = React.useMemo(
     () => new Set(["delaware", "licking", "fairfield", "pickaway", "madison", "union"]),
@@ -179,6 +210,19 @@ export default function OhioCountyNeutralBase({
     );
   }
 
+  const signalCentroids = {};
+  geojson.features.forEach((feature) => {
+    const name = getCountyName(feature);
+    const normalizedName = normalizeCountyName(name);
+    const signalSet = new Set(["franklin", "cuyahoga", "hamilton", "lucas", "summit"]);
+    if (!signalSet.has(normalizedName)) return;
+
+    const [cx, cy] = path.centroid(feature);
+    if (!Number.isFinite(cx) || !Number.isFinite(cy)) return;
+
+    signalCentroids[normalizedName] = { x: cx, y: cy, name };
+  });
+
   return (
     <div className={`ohio-map-root ${cameraMode}`}>
       <button
@@ -229,6 +273,7 @@ export default function OhioCountyNeutralBase({
 
         <path d={path(geojson) || ""} className="ohio-state-skin" />
 
+
         <g className="ohio-county-borders">
           {geojson.features.map((feature, i) => {
             const name = getCountyName(feature);
@@ -255,15 +300,253 @@ export default function OhioCountyNeutralBase({
                   .filter(Boolean)
                   .join(" ")}
                 data-county={name}
-                onClick={() => handleCountyClick(name)}
+                onMouseEnter={() => setHoveredCounty(normalizedName)}
+              onMouseLeave={() => setHoveredCounty(null)}
+              onClick={() => handleCountyClick(name)}
                 style={{ cursor: "pointer" }}
               />
             );
           })}
         </g>
 
+        {/* ===== SVG NETWORK LINES ===== */}
+        {(() => {
+          const connections = [
+            ["franklin", "cuyahoga"],
+            ["franklin", "hamilton"],
+            ["franklin", "lucas"],
+            ["franklin", "summit"],
+          ];
+
+          return connections.map(([a, b]) => {
+            const from = signalCentroids[a];
+            const to = signalCentroids[b];
+            if (!from || !to) return null;
+
+            const isHot =
+              normalizedActiveCounty === a ||
+              normalizedActiveCounty === b;
+
+            return (
+              <line
+                key={`link-${a}-${b}`}
+                x1={from.x}
+                y1={from.y}
+                x2={to.x}
+                y2={to.y}
+                stroke={isHot ? "rgba(255,160,90,0.34)" : "rgba(130,160,210,0.16)"}
+                strokeWidth={isHot ? 2.2 : 1.2}
+                strokeDasharray={isHot ? "0" : "4 6"}
+                pointerEvents="none"
+              />
+            );
+          });
+        })()}
+
+        {/* ===== SVG SIGNAL NODES ===== */}
+        {geojson.features.map((feature) => {
+          const name = getCountyName(feature);
+          const normalizedName = normalizeCountyName(name);
+
+          const signalSet = new Set([
+            "franklin",
+            "cuyahoga",
+            "hamilton",
+            "lucas",
+            "summit",
+          ]);
+
+          if (!signalSet.has(normalizedName)) return null;
+
+          const [cx, cy] = path.centroid(feature);
+          if (!Number.isFinite(cx) || !Number.isFinite(cy)) return null;
+
+          const isActive =
+            normalizedName === normalizedActiveCounty ||
+            normalizedName.includes(normalizedActiveCounty) ||
+            normalizedActiveCounty.includes(normalizedName);
+
+          const riskMap = {
+            franklin: "high",
+            cuyahoga: "verified",
+            hamilton: "high",
+            lucas: "attention",
+            summit: "stable",
+          };
+
+          const riskLevel = riskMap[normalizedName] || "stable";
+          const showLabel = hoveredCounty === normalizedName || isActive;
+
+          const fill =
+            riskLevel === "high" ? "#ff4d4d" :
+            riskLevel === "attention" ? "#f3b14f" :
+            riskLevel === "verified" ? "#7aa6ff" :
+            "#7fe0a1";
+
+          const haloR = isActive ? 36 : 22;
+          const coreR = isActive ? 11 : 7;
+          const haloOpacity = isActive ? 0.38 : 0.18;
+
+          return (
+            <g
+              key={`signal-${normalizedName}`}
+              className={`ohio-signal-node ${isActive ? "is-active" : ""}`}
+              style={{ cursor: "pointer" }}
+              onMouseEnter={() => setHoveredCounty(normalizedName)}
+              onMouseLeave={() => setHoveredCounty(null)}
+              onMouseEnter={() => setHoveredCounty(normalizedName)}
+              onMouseLeave={() => setHoveredCounty(null)}
+              onClick={() => handleCountyClick(name)}
+            >
+              <circle
+                className={isActive ? "ohio-signal-halo is-active" : "ohio-signal-halo"}
+                cx={cx}
+                cy={cy}
+                r={haloR}
+                fill={fill}
+                opacity={haloOpacity}
+              />
+              <circle
+                className={isActive ? "ohio-signal-core is-active" : "ohio-signal-core"}
+                cx={cx}
+                cy={cy}
+                r={coreR}
+                fill={fill}
+                stroke="rgba(255,255,255,0.96)"
+                strokeWidth={isActive ? 1.5 : 1}
+              />
+
+              {(hoveredCounty === normalizedName || isActive) && (
+                <g pointerEvents="none">
+                  <rect
+                    x={cx - 54}
+                    y={cy - 46}
+                    width={108}
+                    height={28}
+                    rx={5}
+                    fill="rgba(5,10,18,0.94)"
+                    stroke="rgba(255,160,90,0.18)"
+                    strokeWidth="1"
+                  />
+                  <text
+                    x={cx}
+                    y={cy - 29}
+                    textAnchor="middle"
+                    fontSize="11"
+                    fontWeight="900"
+                    letterSpacing="0.08em"
+                    fill="rgba(245,248,255,0.98)"
+                  >
+                    {name.toUpperCase()}
+                  </text>
+                  <text
+                    x={cx}
+                    y={cy - 17}
+                    textAnchor="middle"
+                    fontSize="7.5"
+                    fontWeight="800"
+                    letterSpacing="0.14em"
+                    fill="rgba(255,190,130,0.78)"
+                  >
+                    {riskLevel.toUpperCase()}
+                  </text>
+                </g>
+              )}
+
+              {showLabel ? (
+                <g className="ohio-signal-label" pointerEvents="none">
+                  <rect
+                    x={cx - 42}
+                    y={cy - 36}
+                    rx={6}
+                    ry={6}
+                    width={84}
+                    height={20}
+                    fill="rgba(8,14,24,0.92)"
+                    stroke="rgba(160,190,230,0.24)"
+                    strokeWidth="1"
+                  />
+                  <text
+                    x={cx}
+                    y={cy - 22}
+                    textAnchor="middle"
+                    fontSize="10"
+                    fontWeight="800"
+                    fill="rgba(235,242,255,0.96)"
+                    letterSpacing="0.04em"
+                  >
+                    {name.toUpperCase()}
+                  </text>
+                  <text
+                    x={cx}
+                    y={cy - 10}
+                    textAnchor="middle"
+                    fontSize="8"
+                    fontWeight="700"
+                    fill="rgba(190,205,228,0.78)"
+                    letterSpacing="0.08em"
+                  >
+                    {riskLevel.toUpperCase()}
+                  </text>
+                </g>
+              ) : null}
+            </g>
+          );
+        })}
+
         {selectedFeature ? (
           <>
+            {(() => {
+              const [cx, cy] = path.centroid(selectedFeature) || [];
+              if (!Number.isFinite(cx) || !Number.isFinite(cy)) return null;
+
+              return (
+                <ellipse
+                  cx={cx}
+                  cy={cy}
+                  rx="150"
+                  ry="110"
+                  fill="rgba(255,138,68,0.08)"
+                  pointerEvents="none"
+                >
+                  <animate
+                    attributeName="opacity"
+                    values="0.05;0.11;0.05"
+                    dur="3.2s"
+                    repeatCount="indefinite"
+                  />
+                </ellipse>
+              );
+            })()}
+            {(() => {
+              const [cx, cy] = path.centroid(selectedFeature) || [];
+              if (!Number.isFinite(cx) || !Number.isFinite(cy)) return null;
+
+              return (
+                <circle
+                  cx={cx}
+                  cy={cy}
+                  r="10"
+                  fill="none"
+                  stroke="rgba(255,138,68,0.32)"
+                  strokeWidth="2"
+                  pointerEvents="none"
+                >
+                  <animate
+                    attributeName="r"
+                    values="10;120"
+                    dur="1.8s"
+                    repeatCount="indefinite"
+                  />
+                  <animate
+                    attributeName="opacity"
+                    values="0.55;0"
+                    dur="1.8s"
+                    repeatCount="indefinite"
+                  />
+                </circle>
+              );
+            })()}
             <path
               d={path(selectedFeature) || ""}
               className="selected-county-halo-svg"
@@ -412,7 +695,9 @@ export default function OhioCountyNeutralBase({
                 d={path(feature) || ""}
                 className="ohio-county-hit-path"
                 data-county={name}
-                onClick={() => handleCountyClick(name)}
+                onMouseEnter={() => setHoveredCounty(normalizedName)}
+              onMouseLeave={() => setHoveredCounty(null)}
+              onClick={() => handleCountyClick(name)}
               />
             );
           })}

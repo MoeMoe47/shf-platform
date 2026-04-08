@@ -1,0 +1,8 @@
+from fastapi import APIRouter
+
+router = APIRouter(prefix="/health", tags=["health"])
+
+
+@router.get("")
+def health_check():
+    return {"ok": True, "service": "shf-ai-layer"}

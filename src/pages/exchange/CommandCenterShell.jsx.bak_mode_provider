@@ -1,0 +1,35 @@
+import React from "react";
+import CommandCenter from "./CommandCenter";
+import PredictionLayerPanel from "./PredictionLayerPanel";
+import ModuleBoundary from "./ModuleBoundary";
+import FeatureGate from "./FeatureGate";
+
+export default function CommandCenterShell() {
+  const [shellPrediction, setShellPrediction] = React.useState(null);
+  const [shellNarrative, setShellNarrative] = React.useState(null);
+
+  console.log("Shell prediction", shellPrediction);
+  console.log("Shell narrative", shellNarrative);
+
+  return (
+    <div style={{ display: "grid", gap: 12 }}>
+      <ModuleBoundary>
+      <FeatureGate feature="predictionPanel">
+      <PredictionLayerPanel
+        prediction={shellPrediction}
+        narrative={shellNarrative}
+      />
+      </FeatureGate>
+      </ModuleBoundary>
+
+      <ModuleBoundary>
+      <CommandCenter
+        onShellStateChange={({ predictive, narrative }) => {
+          setShellPrediction(predictive);
+          setShellNarrative(narrative);
+        }}
+      />
+      </ModuleBoundary>
+    </div>
+  );
+}

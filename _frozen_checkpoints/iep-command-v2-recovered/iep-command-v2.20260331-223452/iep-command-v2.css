@@ -1,0 +1,1263 @@
+:root {
+  --v2-bg: #05080d;
+  --v2-bg-2: #090d14;
+  --v2-panel: rgba(9, 13, 20, 0.96);
+  --v2-panel-2: rgba(12, 17, 26, 0.98);
+  --v2-line: rgba(255,255,255,0.10);
+  --v2-line-strong: rgba(255,255,255,0.16);
+  --v2-text: #f5f7fb;
+  --v2-muted: rgba(245,247,251,0.64);
+  --v2-orange: #ff7a1a;
+  --v2-orange-soft: rgba(255,122,26,0.14);
+  --v2-green: #7be05a;
+  --v2-amber: #ffb347;
+  --v2-red: #ff655c;
+}
+
+* { box-sizing: border-box; }
+
+.v2-page {
+  height: 100vh;
+  overflow: hidden;
+  padding: 12px;
+  display: grid;
+  grid-template-rows: 72px minmax(0, 1fr) 104px;
+  gap: 12px;
+  background:
+    linear-gradient(180deg, #05080d 0%, #090d14 100%);
+  color: var(--v2-text);
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.v2-topbar {
+  display: grid;
+  grid-template-columns: 330px minmax(0, 1fr) 280px;
+  gap: 12px;
+  align-items: center;
+  padding: 0 14px;
+  border: 1px solid var(--v2-line);
+  background: linear-gradient(180deg, rgba(12,17,26,0.98) 0%, rgba(7,11,18,0.98) 100%);
+  overflow: hidden;
+}
+
+.v2-brand-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.v2-logo-mark {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255,122,26,0.35);
+  display: grid;
+  place-items: center;
+  background: rgba(255,255,255,0.02);
+  box-shadow: 0 0 18px rgba(255,122,26,0.12);
+  flex: 0 0 auto;
+}
+
+.v2-logo-core {
+  width: 12px;
+  height: 12px;
+  background: var(--v2-orange);
+  box-shadow: 0 0 14px rgba(255,122,26,0.7);
+}
+
+.v2-brand-title {
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.v2-brand-subtitle {
+  font-size: 10px;
+  color: var(--v2-muted);
+  white-space: nowrap;
+}
+
+.v2-status-strip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.v2-pill {
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  border: 1px solid var(--v2-line-strong);
+  background: rgba(255,255,255,0.03);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.v2-pill.ok { background: rgba(123,224,90,0.10); }
+.v2-pill.warn { background: rgba(255,122,26,0.14); }
+.v2-pill.neutral { background: rgba(255,255,255,0.03); }
+
+.v2-context-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.v2-context-line {
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.v2-context-line.muted,
+.v2-muted {
+  color: var(--v2-muted);
+}
+
+.v2-main {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 272px minmax(0, 1fr) 296px;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.v2-left-rail {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 112px 170px 170px minmax(0, 1fr);
+  gap: 12px;
+  overflow: hidden;
+}
+
+.v2-right-rail {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 236px 156px 156px minmax(0, 1fr);
+  gap: 12px;
+  overflow: hidden;
+}
+
+.v2-center-stage {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 60px 46px minmax(0, 1fr);
+  gap: 10px;
+  overflow: hidden;
+}
+
+.v2-card,
+.v2-center-header,
+.v2-center-chips,
+.v2-hero-board {
+  min-height: 0;
+  border: 1px solid var(--v2-line);
+  background: linear-gradient(180deg, rgba(12,17,26,0.98) 0%, rgba(7,11,18,0.98) 100%);
+  overflow: hidden;
+}
+
+.v2-card {
+  padding: 14px;
+  overflow: auto;
+}
+
+.v2-card-title {
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.v2-card-body {
+  min-height: 0;
+}
+
+.v2-inline-pill {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--v2-line);
+  background: rgba(255,255,255,0.03);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+
+.v2-stack-sm {
+  display: grid;
+  gap: 10px;
+}
+
+.v2-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.v2-metric-tile {
+  padding: 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.025);
+}
+
+.v2-metric-label {
+  font-size: 10px;
+  color: var(--v2-muted);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.v2-metric-value {
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1.05;
+}
+
+.v2-list {
+  display: grid;
+  gap: 10px;
+}
+
+.v2-list.tight {
+  gap: 8px;
+}
+
+.v2-list-row,
+.stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  font-size: 10px;
+}
+
+.v2-list-row:last-child,
+.stat-row:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.danger { color: var(--v2-red); font-weight: 900; }
+.caution { color: var(--v2-amber); font-weight: 900; }
+.success { color: var(--v2-green); font-weight: 900; }
+
+.v2-action-card {
+  border-color: rgba(255,122,26,0.35);
+  box-shadow: inset 0 0 0 1px rgba(255,122,26,0.04);
+}
+
+.v2-action-title {
+  font-size: 15px;
+  line-height: 1.2;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+
+.v2-action-sub {
+  font-size: 10px;
+  color: var(--v2-muted);
+  line-height: 1.45;
+  margin-bottom: 14px;
+}
+
+.v2-primary-btn,
+.v2-secondary-btn {
+  font: inherit;
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.v2-primary-btn {
+  width: 100%;
+  height: 40px;
+  border: 1px solid rgba(255,122,26,0.45);
+  background: linear-gradient(180deg, #d95d00 0%, #a84600 100%);
+  color: white;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+
+.v2-secondary-btn {
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.03);
+  color: var(--v2-text);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+
+.v2-center-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px;
+}
+
+.v2-center-title {
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.v2-view-toggle {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+
+.v2-view-toggle button {
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.03);
+  color: var(--v2-text);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.v2-view-toggle button.active {
+  border-color: rgba(255,122,26,0.45);
+  background: rgba(255,122,26,0.12);
+  color: #ffd7ba;
+}
+
+.v2-center-chips {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  overflow: hidden;
+}
+
+.v2-chip {
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.v2-hero-board {
+  position: relative;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255,122,26,0.05), transparent 28%),
+    linear-gradient(180deg, rgba(8,12,20,0.99) 0%, rgba(5,8,13,0.99) 100%);
+}
+
+.v2-field-view,
+.v2-system-view {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.v2-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 46px 46px;
+  opacity: 0.22;
+}
+
+.v2-map-top-metrics {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  z-index: 2;
+}
+
+.v2-map-metric {
+  padding: 9px 10px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(9,13,20,0.82);
+}
+
+.metric-top-label {
+  display: block;
+  font-size: 10px;
+  color: var(--v2-muted);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.metric-top-value {
+  display: block;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+
+.v2-map-surface {
+  position: absolute;
+  inset: 64px 24px 86px 24px;
+  display: grid;
+  place-items: center;
+}
+
+.v2-ohio-wrap {
+  width: 76%;
+  height: 76%;
+  min-width: 460px;
+  min-height: 300px;
+  display: grid;
+  place-items: center;
+}
+
+.v2-ohio-outline {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  clip-path: polygon(16% 18%, 34% 10%, 56% 13%, 77% 20%, 84% 38%, 82% 58%, 73% 76%, 54% 88%, 30% 84%, 18% 68%, 12% 46%);
+  border: 1px solid rgba(255,255,255,0.16);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.04),
+    0 0 32px rgba(255,122,26,0.05);
+}
+
+.v2-county {
+  position: absolute;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,122,26,0.10);
+}
+
+.v2-county.active {
+  background: rgba(255,122,26,0.34);
+  border-color: rgba(255,240,228,0.95);
+  box-shadow:
+    0 0 18px rgba(255,122,26,0.45),
+    inset 0 0 18px rgba(255,122,26,0.10);
+}
+
+.county-1  { left: 12%; top: 12%; width: 17%; height: 16%; }
+.county-2  { left: 30%; top: 11%; width: 17%; height: 16%; }
+.county-3  { left: 48%; top: 13%; width: 18%; height: 16%; }
+.county-4  { left: 66%; top: 18%; width: 13%; height: 16%; }
+.county-5  { left: 18%; top: 31%; width: 17%; height: 16%; }
+.county-6  { left: 36%; top: 30%; width: 16%; height: 16%; }
+.county-7  { left: 53%; top: 32%; width: 16%; height: 16%; }
+.county-8  { left: 44%; top: 46%; width: 14%; height: 15%; }
+.county-9  { left: 23%; top: 50%; width: 16%; height: 16%; }
+.county-10 { left: 60%; top: 49%; width: 14%; height: 15%; }
+.county-11 { left: 31%; top: 66%; width: 16%; height: 14%; }
+.county-12 { left: 49%; top: 67%; width: 17%; height: 14%; }
+
+.v2-map-legend {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  min-width: 176px;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(9,13,20,0.84);
+  z-index: 2;
+}
+
+.legend-title {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 10px;
+  margin-bottom: 8px;
+}
+
+.legend-row:last-child { margin-bottom: 0; }
+
+.dot {
+  width: 11px;
+  height: 11px;
+}
+
+.dot.high { background: var(--v2-red); }
+.dot.warn { background: var(--v2-amber); }
+.dot.ok { background: var(--v2-green); }
+.dot.active {
+  background: var(--v2-orange);
+  box-shadow: 0 0 14px rgba(255,122,26,0.7);
+}
+
+.v2-county-card {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  width: 264px;
+  padding: 14px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(9,13,20,0.86);
+  z-index: 2;
+}
+
+.county-title {
+  font-size: 20px;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+
+.county-sub {
+  font-size: 10px;
+  color: var(--v2-muted);
+  margin-bottom: 12px;
+}
+
+.county-stats {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.v2-system-kpis {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 150px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  z-index: 2;
+}
+
+.v2-system-network {
+  position: absolute;
+  inset: 90px 70px 80px 70px;
+}
+
+.sys-node {
+  position: absolute;
+  border-radius: 999px;
+  box-shadow: 0 0 20px currentColor;
+}
+
+.sys-node.a { left: 12%; top: 24%; width: 18px; height: 18px; background: var(--v2-orange); color: var(--v2-orange); }
+.sys-node.b { left: 36%; top: 20%; width: 14px; height: 14px; background: #d8ff72; color: #d8ff72; }
+.sys-node.c { left: 63%; top: 28%; width: 18px; height: 18px; background: var(--v2-orange); color: var(--v2-orange); }
+.sys-node.d { left: 46%; top: 48%; width: 16px; height: 16px; background: var(--v2-green); color: var(--v2-green); }
+.sys-node.e { left: 26%; top: 62%; width: 14px; height: 14px; background: #8dd7ff; color: #8dd7ff; }
+
+.sys-line {
+  position: absolute;
+  border-top: 2px solid rgba(255,255,255,0.18);
+}
+
+.sys-line.l1 { left: 12%; right: 24%; top: 26%; }
+.sys-line.l2 { left: 26%; right: 30%; top: 48%; border-color: rgba(255,122,26,0.34); }
+.sys-line.l3 { left: 20%; right: 38%; top: 64%; border-color: rgba(141,215,255,0.34); }
+
+.v2-system-panel {
+  position: absolute;
+  padding: 8px 10px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(9,13,20,0.86);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  z-index: 2;
+}
+
+.sys-p1 { left: 5%; bottom: 34%; }
+.sys-p2 { left: 38%; bottom: 29%; }
+.sys-p3 { right: 6%; bottom: 34%; }
+.sys-p4 { left: 42%; bottom: 10%; }
+
+.v2-readiness-ring {
+  position: absolute;
+  right: 14px;
+  top: 84px;
+  width: 126px;
+  height: 126px;
+  border: 2px solid rgba(255,122,26,0.72);
+  box-shadow: 0 0 20px rgba(255,122,26,0.14), inset 0 0 20px rgba(255,122,26,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.v2-readiness-inner .score {
+  font-size: 38px;
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+}
+
+.v2-readiness-inner .label {
+  font-size: 10px;
+  color: var(--v2-muted);
+  text-align: center;
+  margin-top: 4px;
+  letter-spacing: 0.04em;
+}
+
+.v2-analyst-card {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.v2-analyst-text {
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.v2-analyst-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.v2-bottom-band {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  overflow: hidden;
+}
+
+.v2-bottom-card {
+  overflow: hidden;
+}
+
+.v2-bottom-metric {
+  font-size: 30px;
+  font-weight: 900;
+  line-height: 1.05;
+  margin-bottom: 6px;
+}
+
+@media (max-width: 1439px) {
+  .v2-page {
+    grid-template-rows: 68px minmax(0, 1fr) 96px;
+  }
+
+  .v2-topbar {
+    grid-template-columns: 300px minmax(0, 1fr) 250px;
+  }
+
+  .v2-main {
+    grid-template-columns: 252px minmax(0, 1fr) 276px;
+  }
+
+  .v2-left-rail {
+    grid-template-rows: 104px 160px 160px minmax(0, 1fr);
+  }
+
+  .v2-right-rail {
+    grid-template-rows: 220px 148px 148px minmax(0, 1fr);
+  }
+
+  .v2-ohio-wrap {
+    min-width: 390px;
+    min-height: 260px;
+  }
+}
+
+/* --- real Ohio county geometry layer --- */
+.v2-map-surface {
+  position: absolute;
+  inset: 64px 18px 78px 18px;
+  display: grid;
+  place-items: center;
+}
+
+.v2-ohio-real-map {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.v2-ohio-map-message {
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(9,13,20,0.72);
+  color: rgba(245,247,251,0.72);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.v2-ohio-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.v2-county-path {
+  fill: rgba(255,122,26,0.09);
+  stroke: rgba(255,190,145,0.28);
+  stroke-width: 1.15;
+  transition:
+    fill 180ms ease,
+    stroke 180ms ease,
+    filter 180ms ease,
+    opacity 180ms ease;
+  opacity: 0.95;
+}
+
+.v2-county-path.tone-high {
+  fill: rgba(255,101,92,0.18);
+}
+
+.v2-county-path.tone-warn {
+  fill: rgba(255,179,71,0.16);
+}
+
+.v2-county-path.tone-ok {
+  fill: rgba(123,224,90,0.08);
+}
+
+.v2-county-path.selected {
+  fill: rgba(255,122,26,0.42);
+  stroke: rgba(255,244,232,0.96);
+  stroke-width: 2.2;
+  filter: drop-shadow(0 0 10px rgba(255,122,26,0.85));
+}
+
+.v2-county-label-group {
+  pointer-events: none;
+}
+
+.v2-county-label-dot {
+  fill: #ff7a1a;
+  filter: drop-shadow(0 0 8px rgba(255,122,26,0.9));
+}
+
+.v2-county-label {
+  fill: #fff3e8;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  paint-order: stroke;
+  stroke: rgba(5,8,13,0.95);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 1439px) {
+  .v2-map-surface {
+    inset: 64px 14px 74px 14px;
+  }
+}
+
+/* --- landmass texture + mock color language override --- */
+.v2-map-surface {
+  position: absolute;
+  inset: 58px 10px 72px 10px;
+  display: grid;
+  place-items: center;
+}
+
+.v2-ohio-real-map {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.v2-ohio-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0 18px rgba(255,116,28,0.08));
+}
+
+.v2-ohio-map-message {
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(9,13,20,0.72);
+  color: rgba(245,247,251,0.72);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.v2-county-path {
+  vector-effect: non-scaling-stroke;
+  stroke-width: 1.05;
+  transition:
+    fill 180ms ease,
+    stroke 180ms ease,
+    filter 180ms ease,
+    opacity 180ms ease;
+  opacity: 0.96;
+}
+
+.v2-county-path.heat-base {
+  filter: drop-shadow(0 0 1px rgba(255,132,58,0.04));
+}
+
+.v2-county-path.heat-warm {
+  filter: drop-shadow(0 0 4px rgba(255,134,60,0.10));
+}
+
+.v2-county-path.heat-high {
+  filter: drop-shadow(0 0 6px rgba(255,120,44,0.16));
+}
+
+.v2-county-path.selected {
+  stroke-width: 2.1;
+  filter:
+    drop-shadow(0 0 10px rgba(255,122,36,0.62))
+    drop-shadow(0 0 20px rgba(255,122,36,0.22));
+}
+
+.v2-county-label-group {
+  pointer-events: none;
+}
+
+.v2-county-label-dot {
+  fill: #ff8a30;
+  filter: drop-shadow(0 0 8px rgba(255,138,48,0.95));
+}
+
+.v2-county-label {
+  fill: #fff5ea;
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  paint-order: stroke;
+  stroke: rgba(5,8,13,0.98);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 1439px) {
+  .v2-map-surface {
+    inset: 60px 8px 70px 8px;
+  }
+}
+
+/* --- stronger gritty terrain pass --- */
+.v2-map-surface {
+  position: absolute;
+  inset: 58px 8px 70px 8px;
+  display: grid;
+  place-items: center;
+}
+
+.v2-ohio-real-map {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.v2-ohio-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter:
+    drop-shadow(0 0 18px rgba(255,116,28,0.08))
+    drop-shadow(0 0 34px rgba(255,116,28,0.04));
+}
+
+.v2-county-path {
+  vector-effect: non-scaling-stroke;
+  stroke-width: 0.92;
+  transition:
+    fill 180ms ease,
+    stroke 180ms ease,
+    filter 180ms ease,
+    opacity 180ms ease;
+  opacity: 0.98;
+}
+
+.v2-county-path.heat-base {
+  filter: drop-shadow(0 0 1px rgba(255,132,58,0.02));
+}
+
+.v2-county-path.heat-warm {
+  filter: drop-shadow(0 0 4px rgba(255,134,60,0.06));
+}
+
+.v2-county-path.heat-high {
+  filter: drop-shadow(0 0 6px rgba(255,120,44,0.10));
+}
+
+.v2-county-path.selected {
+  stroke-width: 2.0;
+  filter:
+    drop-shadow(0 0 10px rgba(255,122,36,0.58))
+    drop-shadow(0 0 22px rgba(255,122,36,0.20));
+}
+
+.v2-county-label-dot {
+  fill: #ff8a30;
+  filter: drop-shadow(0 0 8px rgba(255,138,48,0.95));
+}
+
+.v2-county-label {
+  fill: #fff5ea;
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  paint-order: stroke;
+  stroke: rgba(5,8,13,0.98);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+/* --- raster terrain pass: the texture carries the look --- */
+.v2-map-surface {
+  position: absolute;
+  inset: 58px 8px 70px 8px;
+  display: grid;
+  place-items: center;
+}
+
+.v2-ohio-real-map {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.v2-ohio-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter:
+    drop-shadow(0 0 18px rgba(255,116,28,0.08))
+    drop-shadow(0 0 34px rgba(255,116,28,0.04));
+}
+
+.v2-county-path {
+  vector-effect: non-scaling-stroke;
+  stroke-width: 0.9;
+  transition:
+    fill 180ms ease,
+    stroke 180ms ease,
+    filter 180ms ease,
+    opacity 180ms ease;
+  opacity: 0.98;
+}
+
+.v2-county-path.heat-base {
+  filter: none;
+}
+
+.v2-county-path.heat-warm {
+  filter: drop-shadow(0 0 3px rgba(255,134,60,0.05));
+}
+
+.v2-county-path.heat-high {
+  filter: drop-shadow(0 0 5px rgba(255,120,44,0.08));
+}
+
+.v2-county-path.selected {
+  stroke-width: 2;
+  filter:
+    drop-shadow(0 0 10px rgba(255,122,36,0.58))
+    drop-shadow(0 0 22px rgba(255,122,36,0.20));
+}
+
+.v2-county-label-dot {
+  fill: #ff8a30;
+  filter: drop-shadow(0 0 8px rgba(255,138,48,0.95));
+}
+
+.v2-county-label {
+  fill: #fff5ea;
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  paint-order: stroke;
+  stroke: rgba(5,8,13,0.98);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+/* --- STEP 1 + STEP 2: neutral Ohio base + real county borders --- */
+.v2-map-surface {
+  position: absolute;
+  inset: 58px 8px 70px 8px;
+  display: grid;
+  place-items: center;
+}
+
+.v2-ohio-real-map {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.v2-ohio-map-message {
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(9,13,20,0.72);
+  color: rgba(245,247,251,0.72);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.v2-ohio-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter:
+    drop-shadow(0 0 16px rgba(255,116,28,0.06))
+    drop-shadow(0 0 28px rgba(255,116,28,0.03));
+}
+
+.v2-ohio-counties-neutral {
+  pointer-events: none;
+}
+
+.v2-county-neutral-path {
+  fill: none;
+  stroke: rgba(255, 166, 100, 0.34);
+  stroke-width: 1.15;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.96;
+}
+
+@media (max-width: 1439px) {
+  .v2-map-surface {
+    inset: 60px 8px 70px 8px;
+  }
+}
+
+/* === COUNTY TONE VISUALS START === */
+
+.v2-pill.tone-danger {
+  border-color: rgba(255, 120, 120, 0.45) !important;
+  background: rgba(120, 28, 28, 0.35) !important;
+  color: #ffd6d6 !important;
+}
+
+.v2-pill.tone-warn {
+  border-color: rgba(255, 184, 108, 0.45) !important;
+  background: rgba(120, 64, 18, 0.35) !important;
+  color: #ffe3bf !important;
+}
+
+.v2-pill.tone-neutral {
+  border-color: rgba(170, 182, 198, 0.28) !important;
+  background: rgba(34, 42, 54, 0.4) !important;
+  color: #d8e0ea !important;
+}
+
+.v2-chip.tone-danger {
+  border-color: rgba(255, 120, 120, 0.34) !important;
+  background: rgba(98, 24, 24, 0.24) !important;
+  color: #ffd6d6 !important;
+}
+
+.v2-chip.tone-warn {
+  border-color: rgba(255, 184, 108, 0.34) !important;
+  background: rgba(112, 56, 16, 0.24) !important;
+  color: #ffe3bf !important;
+}
+
+.v2-chip.tone-neutral {
+  border-color: rgba(170, 182, 198, 0.2) !important;
+  background: rgba(32, 38, 48, 0.3) !important;
+  color: #d8e0ea !important;
+}
+
+.metric-top-value.tone-danger {
+  color: #ffb8b8 !important;
+  text-shadow: 0 0 12px rgba(255, 86, 86, 0.18);
+}
+
+.metric-top-value.tone-warn {
+  color: #ffd7a0 !important;
+  text-shadow: 0 0 12px rgba(255, 148, 58, 0.18);
+}
+
+.metric-top-value.tone-neutral {
+  color: #dbe4ee !important;
+}
+
+.tone-card-danger {
+  box-shadow: inset 0 0 0 1px rgba(255, 120, 120, 0.14);
+}
+
+.tone-card-warn {
+  box-shadow: inset 0 0 0 1px rgba(255, 184, 108, 0.14);
+}
+
+.tone-card-neutral {
+  box-shadow: inset 0 0 0 1px rgba(170, 182, 198, 0.08);
+}
+
+.tone-card-danger .county-title,
+.tone-card-danger .v2-action-title {
+  color: #ffd0d0 !important;
+}
+
+.tone-card-warn .county-title,
+.tone-card-warn .v2-action-title {
+  color: #ffe0b5 !important;
+}
+
+.tone-card-neutral .county-title,
+.tone-card-neutral .v2-action-title {
+  color: #e3ebf5 !important;
+}
+
+/* === COUNTY TONE VISUALS END === */
+
+
+/* === SYSTEM VIEW COUNTY TONES START === */
+
+.tone-ring-danger {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 120, 120, 0.20),
+    0 0 18px rgba(255, 86, 86, 0.10);
+}
+
+.tone-ring-warn {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 184, 108, 0.20),
+    0 0 18px rgba(255, 148, 58, 0.10);
+}
+
+.tone-ring-neutral {
+  box-shadow:
+    inset 0 0 0 1px rgba(170, 182, 198, 0.12),
+    0 0 12px rgba(170, 182, 198, 0.06);
+}
+
+.tone-ring-danger .score {
+  color: #ffd0d0 !important;
+  text-shadow: 0 0 14px rgba(255, 86, 86, 0.16);
+}
+
+.tone-ring-warn .score {
+  color: #ffe0b5 !important;
+  text-shadow: 0 0 14px rgba(255, 148, 58, 0.16);
+}
+
+.tone-ring-neutral .score {
+  color: #e3ebf5 !important;
+}
+
+.tone-panel-danger {
+  border-color: rgba(255, 120, 120, 0.18) !important;
+  background: rgba(78, 20, 20, 0.18) !important;
+  color: #ffd6d6 !important;
+}
+
+.tone-panel-warn {
+  border-color: rgba(255, 184, 108, 0.18) !important;
+  background: rgba(92, 44, 14, 0.18) !important;
+  color: #ffe3bf !important;
+}
+
+.tone-panel-neutral {
+  border-color: rgba(170, 182, 198, 0.10) !important;
+  background: rgba(28, 34, 42, 0.18) !important;
+  color: #d8e0ea !important;
+}
+
+/* === SYSTEM VIEW COUNTY TONES END === */
+
+
+
+
+
+/* === EXPORT ACTIONS DOUBLE BUTTON FIX START === */
+.v2-bottom-card {
+  height: auto !important;
+  min-height: 148px !important;
+}
+
+.v2-bottom-card .v2-primary-btn,
+.v2-bottom-card .v2-secondary-btn,
+.v2-bottom-card .v2-export-memo-btn {
+  width: 100%;
+}
+
+
+.v2-bottom-card,
+.v2-card,
+.v2-section-card {
+  overflow: visible !important;
+}
+/* === EXPORT ACTIONS DOUBLE BUTTON FIX END === */
+
+
+
+/* === EXPORT ACTIONS HARD FIX START === */
+.v2-bottom-card:last-child {
+  height: auto !important;
+  min-height: 170px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  overflow: visible !important;
+}
+
+.v2-bottom-card:last-child .v2-primary-btn,
+.v2-bottom-card:last-child .v2-secondary-btn,
+.v2-bottom-card:last-child .v2-export-memo-btn {
+  display: block !important;
+  width: 100% !important;
+  flex: 0 0 auto !important;
+}
+
+.v2-bottom-card:last-child .v2-export-memo-btn {
+  margin-top: 10px !important;
+}
+
+.v2-bottom-card:last-child > * {
+  overflow: visible !important;
+}
+/* === EXPORT ACTIONS HARD FIX END === */
+
+
+
+/* === EXPORT ANALYST MEMO VISIBILITY OVERRIDE START === */
+.v2-bottom-card:last-child .v2-export-memo-btn {
+  display: block !important;
+  width: 100% !important;
+  min-height: 44px !important;
+  margin-top: 10px !important;
+  padding: 12px 14px !important;
+  border: 1px solid rgba(255, 158, 86, 0.42) !important;
+  background: rgba(255, 132, 44, 0.14) !important;
+  color: #ffd7ae !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 5 !important;
+}
+/* === EXPORT ANALYST MEMO VISIBILITY OVERRIDE END === */

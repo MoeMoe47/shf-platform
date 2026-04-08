@@ -771,3 +771,313 @@ html{ scroll-padding-top: var(--header-h); } /* anchors land below sticky header
 [data-focus="1"] .crb-nav { display: none; }
 [data-focus="1"] .crb-body { grid-template-columns: 1fr !important; }  — parent grid becomes single column
 */
+
+@keyframes orbitSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes flowPulse {
+  0% {
+    stroke-dashoffset: 10;
+    opacity: .3;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: .3;
+  }
+}
+
+/* Capital flow animation */
+@keyframes capitalFlow {
+  0% {
+    stroke-dashoffset: 40;
+    opacity: .35;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: .35;
+  }
+}
+
+/* Capital flow animation */
+@keyframes capitalFlow {
+  0% {
+    stroke-dashoffset: 40;
+    opacity: .35;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: .35;
+  }
+}
+
+/* =========================================
+   Cosmic Command Background (SHF Theme)
+   ========================================= */
+
+body {
+  background:
+    radial-gradient(circle at 20% 10%, rgba(80,140,255,0.15), transparent 40%),
+    radial-gradient(circle at 80% 0%, rgba(0,160,255,0.08), transparent 40%),
+    linear-gradient(180deg,#020712,#020b18 40%,#020814 100%),
+    url("/assets/cosmic/stars.png");
+
+  background-size:
+    cover,
+    cover,
+    cover,
+    512px;
+
+  background-repeat:
+    no-repeat,
+    no-repeat,
+    no-repeat,
+    repeat;
+
+  background-attachment: fixed;
+}
+
+/* =========================================
+   Command Header (Glass Over Space)
+   ========================================= */
+
+/* =========================================
+   Globe Command Halo (Centerpiece Effect)
+   ========================================= */
+
+.globe-command-panel {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(110,190,255,0.18),
+    0 0 60px rgba(68,146,234,0.18),
+    inset 0 0 40px rgba(0,40,90,0.35);
+}
+
+/* Atmospheric glow around globe */
+
+.globe-command-panel::before {
+  content: "";
+  position: absolute;
+  inset: -20px;
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at center,
+      rgba(80,140,255,0.18) 0%,
+      rgba(80,140,255,0.10) 35%,
+      rgba(80,140,255,0.04) 55%,
+      transparent 70%);
+  filter: blur(30px);
+  pointer-events: none;
+}
+
+/* =========================================
+   Globe Orbital Scan Effect
+   ========================================= */
+
+.globe-command-panel::after {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: linear-gradient(
+    120deg,
+    transparent 40%,
+    rgba(120,200,255,0.15) 50%,
+    transparent 60%
+  );
+  transform: rotate(0deg);
+  animation: globeScan 10s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes globeScan {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================
+   SHF Command Header Layout
+   ========================================= */
+
+/* Logo badge */
+
+.command-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(10,18,30,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 0 0 1px rgba(120,170,230,0.12),
+    0 0 18px rgba(68,146,234,0.18);
+}
+
+/* Header title */
+
+.command-title {
+  display: flex;
+  flex-direction: column;
+  margin-left: 12px;
+}
+
+.command-title-main {
+  font-size: 16px;
+  font-weight: 800;
+  color: #e7f2ff;
+  letter-spacing: -0.01em;
+}
+
+.command-title-sub {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6f89a2;
+}
+
+/* =====================================================
+   CINEMATIC GLOBE GLOW
+   Space light bleeding behind the globe panel
+   ===================================================== */
+
+.globe-command-panel {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.globe-command-panel::before {
+  content: "";
+  position: absolute;
+  inset: -40px;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(70,140,255,0.20) 0%,
+      rgba(40,90,160,0.15) 30%,
+      transparent 70%
+    );
+
+  filter: blur(40px);
+  z-index: 0;
+}
+
+.globe-command-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* =====================================================
+   PREMIUM BUTTON MICRO-INTERACTIONS
+   ===================================================== */
+
+button {
+  transition: all 0.18s ease;
+}
+
+button:hover {
+  border-color: rgba(120,200,255,0.5);
+  box-shadow:
+    0 0 12px rgba(80,160,255,0.35),
+    inset 0 0 0 1px rgba(255,255,255,0.05);
+}
+
+/* =====================================================
+   COSMIC HEADER STAR DRIFT
+   ===================================================== */
+
+@keyframes stars-drift {
+  from { transform: translateX(0px); }
+  to { transform: translateX(-200px); }
+}
+
+/* =====================================================
+   FIX HEADER STAR VISIBILITY
+   ===================================================== */
+
+/* make header children sit above the stars */
+
+/* =====================================================
+   PURE CSS HEADER STARFIELD
+   Replaces weak image-based stars with visible cosmic dots
+   ===================================================== */
+
+/* =====================================================
+   PURE CSS HEADER STARFIELD
+   Replaces weak image-based stars with visible cosmic dots
+   ===================================================== */
+
+/* =====================================================
+   FORCE VISIBLE COSMIC HEADER
+   ===================================================== */
+
+/* =====================================================
+   DEBUG HEADER LAYER TEST
+   ===================================================== */
+
+/* =====================================================
+   CANONICAL COMMAND HEADER
+   ===================================================== */
+
+.command-header {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(70,140,255,0.14), transparent 26%),
+    radial-gradient(circle at 78% 18%, rgba(70,140,255,0.08), transparent 22%),
+    linear-gradient(180deg, rgba(8,15,24,0.52) 0%, rgba(8,15,24,0.58) 100%);
+  backdrop-filter: blur(14px);
+}
+
+.command-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.55;
+  background:
+    radial-gradient(circle at 7% 28%, rgba(255,255,255,0.85) 0 1.1px, transparent 2px),
+    radial-gradient(circle at 16% 62%, rgba(255,255,255,0.48) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 26% 20%, rgba(255,255,255,0.72) 0 1.1px, transparent 1.9px),
+    radial-gradient(circle at 34% 56%, rgba(255,255,255,0.40) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 43% 24%, rgba(255,255,255,0.74) 0 1.1px, transparent 2px),
+    radial-gradient(circle at 52% 70%, rgba(255,255,255,0.46) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 61% 36%, rgba(255,255,255,0.62) 0 1.1px, transparent 1.9px),
+    radial-gradient(circle at 71% 18%, rgba(255,255,255,0.38) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 79% 60%, rgba(255,255,255,0.70) 0 1.1px, transparent 1.9px),
+    radial-gradient(circle at 88% 26%, rgba(255,255,255,0.44) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 95% 48%, rgba(255,255,255,0.82) 0 1.2px, transparent 2px);
+  animation: header-stars-drift-canonical 140s linear infinite;
+}
+
+.command-header > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes header-stars-drift-canonical {
+  from { transform: translateX(0px); }
+  to { transform: translateX(-80px); }
+}

@@ -1,0 +1,139 @@
+import React from "react"
+import { jurisdictions } from "@/registry/jurisdictions"
+import { outcomeFlows } from "@/registry/outcomeFlows"
+
+function convert(lat,lng){
+const x = (lng + 180) * (1000 / 360)
+const y = (90 - lat) * (640 / 180)
+return {x,y}
+}
+
+export default function GlobeScene(){
+
+const lookup = {}
+jurisdictions.forEach(j=>{
+lookup[j.id] = convert(j.lat,j.lng)
+})
+
+return(
+
+<div style={{
+width:"100%",
+height:"640px",
+position:"relative",
+overflow:"hidden",
+borderRadius:18,
+border:"1px solid rgba(120,170,245,0.28)"
+}}>
+
+<img
+src="/textures/earth-intelligence-8k.png?v=1"
+style={{
+position:"absolute",
+inset:0,
+width:"100%",
+height:"100%",
+objectFit:"contain"
+}}
+/>
+
+<svg
+viewBox="0 0 1000 640"
+style={{
+position:"absolute",
+inset:0,
+width:"100%",
+height:"100%"
+}}
+>
+
+{/* Flow arcs */}
+
+{outcomeFlows.map((f,i)=>{
+
+const a = lookup[f.from]
+const b = lookup[f.to]
+
+if(!a || !b) return null
+
+const mx = (a.x + b.x) / 2
+const my = (a.y + b.y) / 2 - 60
+
+const d = `
+M ${a.x} ${a.y}
+Q ${mx} ${my}
+${b.x} ${b.y}
+`
+
+return(
+
+<path
+key={i}
+d={d}
+fill="none"
+stroke="rgba(255,165,70,0.9)"
+strokeWidth="2"
+opacity="0.8"
+>
+
+<animate
+attributeName="stroke-dashoffset"
+values="0;200"
+dur="3s"
+repeatCount="indefinite"
+/>
+
+</path>
+
+)
+
+})}
+
+{/* Jurisdiction nodes */}
+
+{jurisdictions.map(j=>{
+
+const p = convert(j.lat,j.lng)
+
+return(
+
+<g key={j.id}>
+
+<circle
+cx={p.x}
+cy={p.y}
+r="6"
+fill="orange"
+>
+
+<animate
+attributeName="opacity"
+values="0.6;1;0.6"
+dur="1.5s"
+repeatCount="indefinite"
+/>
+
+</circle>
+
+<text
+x={p.x + 10}
+y={p.y + 4}
+fill="#dcecff"
+fontSize="12"
+>
+{j.county}
+</text>
+
+</g>
+
+)
+
+})}
+
+</svg>
+
+</div>
+
+)
+
+}

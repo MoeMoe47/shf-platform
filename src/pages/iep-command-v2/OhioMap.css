@@ -283,7 +283,7 @@
 /* original selected path should never own the fill */
 .ohio-map-root .ohio-county-path.selected {
   fill: transparent !important;
-  fill-opacity: 0 !important;
+  fill-opacity: 0.85 !important;
   stroke: transparent !important;
   filter: none !important;
 }
@@ -321,7 +321,7 @@
 
 /* selected county texture */
 .ohio-map-root.state .selected-county-texture-dark {
-  opacity: 0.10 !important;
+  opacity: 0.35 !important;
   mix-blend-mode: multiply !important;
   filter: contrast(1.35) brightness(0.92) saturate(0.92) !important;
 }
@@ -447,7 +447,7 @@
   fill: rgba(148, 72, 36, 0.14) !important;
   stroke: rgba(192, 122, 80, 0.24) !important;
   stroke-width: 0.92px !important;
-  opacity: 0.62 !important;
+  opacity: 0.78 !important;
   filter: none !important;
 }
 
@@ -533,13 +533,13 @@
   fill: rgba(138, 68, 34, 0.08) !important;
   stroke: rgba(182, 116, 76, 0.18) !important;
   stroke-width: 0.82px !important;
-  opacity: 0.42 !important;
+  opacity: 0.65 !important;
   filter: none !important;
 }
 
 /* all other counties recede harder */
 .ohio-map-root.regional .ohio-county-path:not(.selected):not(.mock-ring-1):not(.mock-ring-2) {
-  opacity: 0.10 !important;
+  opacity: 0.35 !important;
   fill: rgba(255,255,255,0.008) !important;
 }
 
@@ -593,4 +593,163 @@
 }
 
 /* === LOCAL FOCUS POLISH END === */
+
+
+
+.ohio-county-path:hover {
+  fill: rgba(140,180,255,0.35);
+  stroke: rgba(220,240,255,0.9);
+  transition: all 180ms ease;
+}
+
+/* ===== MAP SIZE RESTORE / FORCE FULL BOARD ===== */
+
+.v2-map-surface {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.ohio-map-root {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+}
+
+.ohio-map-svg {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+}
+
+.ohio-map-root.state .ohio-map-svg,
+.ohio-map-root.regional .ohio-map-svg {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+
+.ohio-map-root.regional {
+  inset: 0 !important;
+}
+
+.ohio-map-root.regional .ohio-map-svg {
+  preserveAspectRatio: xMidYMid meet;
+}
+
+.ohio-map-reset {
+  z-index: 20 !important;
+}
+
+
+/* ===== SVG NODE POLISH ===== */
+
+.ohio-signal-node {
+  pointer-events: auto;
+}
+
+.ohio-signal-halo,
+.ohio-signal-core {
+  transition: opacity 180ms ease, transform 180ms ease, r 180ms ease, filter 180ms ease;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.ohio-signal-node:hover .ohio-signal-halo {
+  opacity: 0.22;
+}
+
+.ohio-signal-node:hover .ohio-signal-core {
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.28));
+}
+
+.ohio-signal-node.is-active .ohio-signal-halo {
+  animation: ohioSignalHaloPulse 2.1s ease-in-out infinite;
+}
+
+.ohio-signal-node.is-active .ohio-signal-core {
+  animation: ohioSignalCorePulse 1.7s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(255,255,255,0.24));
+}
+
+@keyframes ohioSignalHaloPulse {
+  0%   { opacity: 0.16; }
+  50%  { opacity: 0.30; }
+  100% { opacity: 0.16; }
+}
+
+@keyframes ohioSignalCorePulse {
+  0%   { opacity: 0.94; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.94; }
+}
+
+/* ===== ACTIVE SVG NODE EMPHASIS ===== */
+
+.ohio-signal-halo.is-active {
+  animation: ohioSignalHaloPulse 1.8s ease-in-out infinite;
+}
+
+.ohio-signal-core.is-active {
+  animation: ohioSignalCorePulse 1.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.28));
+}
+
+/* ===== TOP 1% SIGNAL UPGRADE ===== */
+
+.ohio-signal-node {
+  pointer-events: auto;
+}
+
+/* Halo (outer glow) */
+.ohio-signal-halo {
+  opacity: 0.18;
+  filter: blur(2px);
+  transition: all 0.2s ease;
+}
+
+/* Core (main dot) */
+.ohio-signal-core {
+  transition: all 0.2s ease;
+}
+
+/* Hover = user focus */
+.ohio-signal-node:hover .ohio-signal-halo {
+  opacity: 0.35;
+  transform: scale(1.2);
+}
+
+.ohio-signal-node:hover .ohio-signal-core {
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.35));
+}
+
+/* Active county = strong pulse */
+.ohio-signal-node.is-active .ohio-signal-halo {
+  animation: shfPulseHalo 1.8s ease-in-out infinite;
+}
+
+.ohio-signal-node.is-active .ohio-signal-core {
+  animation: shfPulseCore 1.4s ease-in-out infinite;
+  filter: drop-shadow(0 0 12px rgba(255,255,255,0.4));
+}
+
+/* Animations */
+@keyframes shfPulseHalo {
+  0%   { transform: scale(1); opacity: 0.2; }
+  50%  { transform: scale(1.6); opacity: 0.35; }
+  100% { transform: scale(1); opacity: 0.2; }
+}
+
+@keyframes shfPulseCore {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
 

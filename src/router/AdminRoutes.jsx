@@ -9,6 +9,7 @@ import GrantBinder from "@/pages/admin/GrantBinder.jsx";
 import AlignmentSwitchboard from "@/pages/admin/AlignmentSwitchboard.jsx";
 import BuilderHub from "@/pages/admin/BuilderHub.jsx";
 import PartnerActionQueue from "@/pages/hub/PartnerActionQueue.jsx";
+import HubLeadershipDashboard from "@/pages/hub/HubLeadershipDashboard.jsx";
 
 export default function AdminRoutes() {
   return (
@@ -22,6 +23,7 @@ export default function AdminRoutes() {
       <Route path="/app-registry" element={<AppRegistry />} />
       <Route path="/registry" element={<Registry />} />
 
+      <Route path="/hub" element={<HubLeadershipDashboard />} />
       <Route path="/hub/queue" element={<PartnerActionQueue />} />
 
       <Route path="*" element={<Navigate to="/builder" replace />} />

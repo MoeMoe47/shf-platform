@@ -1,6 +1,6 @@
 import React from "react";
 import usePartnerQueue from "../../lib/hub/usePartnerQueue";
-import "./hub.css";
+import "@/styles/admin.appRegistry.css";
 
 function formatDate(value) {
   if (!value) return "—";
@@ -11,57 +11,80 @@ function formatDate(value) {
   }
 }
 
+function statusPillClass(status) {
+  const s = String(status || "").toLowerCase();
+  if (s === "open" || s === "assigned" || s === "in_review") return "rg-pill rg-pillGood";
+  if (s === "on_hold") return "rg-pill rg-pillOk";
+  return "rg-pill";
+}
+
 export default function PartnerActionQueue() {
   const { items, loading, error } = usePartnerQueue();
 
   return (
-    <div className="hub-page-shell">
-      <div className="hub-page-header">
+    <div className="ar-wrap">
+      <header className="ar-head">
         <div>
-          <div className="hub-eyebrow">SHS Hub Collaboration Layer</div>
-          <h1 className="hub-page-title">Partner Action Queue</h1>
-          <p className="hub-page-subtitle">
+          <div className="ar-kicker">SHS Hub Collaboration Layer</div>
+          <h1 className="ar-title">Partner Action Queue</h1>
+          <div className="ar-sub">
             Live referral queue powered by the SHS API.
-          </p>
+          </div>
         </div>
-      </div>
+      </header>
 
       {loading ? (
-        <div className="hub-state-card">Loading partner queue…</div>
+        <div className="rg-error" style={{ maxWidth: 1200 }}>
+          Loading partner queue…
+        </div>
       ) : error ? (
-        <div className="hub-state-card hub-state-card--error">
+        <div className="rg-error" style={{ maxWidth: 1200 }}>
           Failed to load partner queue: {error}
         </div>
       ) : items.length === 0 ? (
-        <div className="hub-state-card">No referrals found.</div>
+        <div className="rg-error" style={{ maxWidth: 1200 }}>
+          No referrals found.
+        </div>
       ) : (
-        <div className="hub-queue-grid">
+        <div className="ar-grid">
           {items.map((item) => (
-            <div className="hub-queue-card" key={item.case_id}>
-              <div className="hub-queue-card__top">
-                <div>
-                  <div className="hub-queue-card__label">Referral ID</div>
-                  <div className="hub-queue-card__value">{item.case_id}</div>
+            <div className="ar-card" key={item.case_id}>
+              <div className="ar-top">
+                <div className="ar-nameRow">
+                  <div className="ar-name">Referral</div>
+                  <span className={statusPillClass(item.status)}>
+                    {String(item.status || "unknown").toUpperCase()}
+                  </span>
                 </div>
-                <div className="hub-pill">{item.status}</div>
+
+                <div className="ar-meta">
+                  <span className="ar-mono">{item.case_id}</span>
+                </div>
               </div>
 
-              <div className="hub-queue-card__meta">
-                <div>
-                  <span className="hub-queue-card__meta-label">Sender:</span>{" "}
-                  {item.sendingOrganization || item.organization_id}
+              <div className="ar-body">
+                <div className="ar-row">
+                  <div className="ar-label">Sender</div>
+                  <div className="ar-value">
+                    {item.sendingOrganization || item.organization_id || "—"}
+                  </div>
                 </div>
-                <div>
-                  <span className="hub-queue-card__meta-label">Priority:</span>{" "}
-                  {item.priority || "—"}
+
+                <div className="ar-row">
+                  <div className="ar-label">Priority</div>
+                  <div className="ar-value">{item.priority || "—"}</div>
                 </div>
-                <div>
-                  <span className="hub-queue-card__meta-label">Created:</span>{" "}
-                  {formatDate(item.created_at)}
+
+                <div className="ar-row">
+                  <div className="ar-label">Created</div>
+                  <div className="ar-value">{formatDate(item.created_at)}</div>
                 </div>
-                <div>
-                  <span className="hub-queue-card__meta-label">Assigned User:</span>{" "}
-                  {item.assigned_user_id || "Unassigned"}
+
+                <div className="ar-row">
+                  <div className="ar-label">Assigned</div>
+                  <div className="ar-value">
+                    {item.assigned_user_id || "Unassigned"}
+                  </div>
                 </div>
               </div>
             </div>

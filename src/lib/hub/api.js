@@ -23,6 +23,14 @@ export async function fetchOrganizations() {
   return parseJson(res);
 }
 
+export async function fetchTaxonomy() {
+  const res = await fetch(`${HUB_API_BASE}/programs/taxonomy`, {
+    method: "GET",
+    headers: getAuthHeaders(),
+  });
+  return parseJson(res);
+}
+
 export async function fetchReferrals() {
   const res = await fetch(`${HUB_API_BASE}/cases/referrals`, {
     method: "GET",
@@ -33,5 +41,6 @@ export async function fetchReferrals() {
 
 export default {
   fetchOrganizations,
+  fetchTaxonomy,
   fetchReferrals,
 };

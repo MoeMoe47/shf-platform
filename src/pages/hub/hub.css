@@ -1,1 +1,98 @@
-/* placeholder */
+.hub-page-shell {
+  padding: 24px;
+  color: #e8eef8;
+  background: #0b1020;
+  min-height: 100vh;
+}
+
+.hub-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.hub-eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+
+.hub-page-title {
+  margin: 0;
+  font-size: 32px;
+  line-height: 1.1;
+}
+
+.hub-page-subtitle {
+  margin-top: 8px;
+  color: rgba(232, 238, 248, 0.72);
+}
+
+.hub-state-card {
+  padding: 18px 20px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  background: rgba(255,255,255,0.04);
+}
+
+.hub-state-card--error {
+  border-color: rgba(255, 99, 99, 0.35);
+}
+
+.hub-queue-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.hub-queue-card {
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  background: rgba(255,255,255,0.04);
+  padding: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.22);
+}
+
+.hub-queue-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.hub-queue-card__label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.62;
+  margin-bottom: 4px;
+}
+
+.hub-queue-card__value {
+  font-size: 14px;
+  word-break: break-word;
+}
+
+.hub-pill {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.hub-queue-card__meta {
+  display: grid;
+  gap: 8px;
+  font-size: 14px;
+  color: rgba(232, 238, 248, 0.88);
+}
+
+.hub-queue-card__meta-label {
+  opacity: 0.65;
+}

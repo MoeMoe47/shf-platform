@@ -8,8 +8,12 @@ import MasterNarrativeViewer from "@/pages/admin/MasterNarrativeViewer.jsx";
 import GrantBinder from "@/pages/admin/GrantBinder.jsx";
 import AlignmentSwitchboard from "@/pages/admin/AlignmentSwitchboard.jsx";
 import BuilderHub from "@/pages/admin/BuilderHub.jsx";
+
 import PartnerActionQueue from "@/pages/hub/PartnerActionQueue.jsx";
 import HubLeadershipDashboard from "@/pages/hub/HubLeadershipDashboard.jsx";
+import IntakeNavigatorConsole from "@/pages/hub/IntakeNavigatorConsole.jsx";
+import ReferralLifecycleView from "@/pages/hub/ReferralLifecycleView.jsx";
+import UnmetNeedsQueue from "@/pages/hub/UnmetNeedsQueue.jsx";
 
 export default function AdminRoutes() {
   return (
@@ -25,6 +29,9 @@ export default function AdminRoutes() {
 
       <Route path="/hub" element={<HubLeadershipDashboard />} />
       <Route path="/hub/queue" element={<PartnerActionQueue />} />
+      <Route path="/hub/intake" element={<IntakeNavigatorConsole />} />
+      <Route path="/hub/lifecycle" element={<ReferralLifecycleView />} />
+      <Route path="/hub/unmet-needs" element={<UnmetNeedsQueue />} />
 
       <Route path="*" element={<Navigate to="/builder" replace />} />
     </Routes>

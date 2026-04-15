@@ -1,0 +1,1 @@
+-- TODO: trust envelopes, aggregate snapshots, certified context objects

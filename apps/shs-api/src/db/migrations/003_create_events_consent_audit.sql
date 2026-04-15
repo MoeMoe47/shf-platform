@@ -1,0 +1,1 @@
+-- TODO: canonical events, consent records, audit logs

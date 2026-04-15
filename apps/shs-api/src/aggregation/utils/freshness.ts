@@ -1,0 +1,2 @@
+// Placeholder: freshness.ts
+export {};

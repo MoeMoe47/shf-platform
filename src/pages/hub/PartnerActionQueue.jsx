@@ -33,6 +33,11 @@ function nextActionsForStatus(status) {
   return [];
 }
 
+function previewNotes(text) {
+  if (!text) return "—";
+  return text.length > 120 ? `${text.slice(0, 120)}…` : text;
+}
+
 export default function PartnerActionQueue() {
   const orgs = useOrganizations();
   const [items, setItems] = useState([]);
@@ -149,8 +154,20 @@ export default function PartnerActionQueue() {
                   </div>
 
                   <div className="ar-row">
-                    <div className="ar-label">Priority</div>
-                    <div className="ar-value">{item.priority || "—"}</div>
+                    <div className="ar-label">Receiver</div>
+                    <div className="ar-value">
+                      {orgMap[item.receiving_organization_id] || item.receiving_organization_id || "—"}
+                    </div>
+                  </div>
+
+                  <div className="ar-row">
+                    <div className="ar-label">Need Category</div>
+                    <div className="ar-value">{item.need_category || "—"}</div>
+                  </div>
+
+                  <div className="ar-row">
+                    <div className="ar-label">Urgency</div>
+                    <div className="ar-value">{item.urgency_level || item.priority || "—"}</div>
                   </div>
 
                   <div className="ar-row">
@@ -161,6 +178,11 @@ export default function PartnerActionQueue() {
                   <div className="ar-row">
                     <div className="ar-label">Assigned</div>
                     <div className="ar-value">{item.assigned_user_id || "Unassigned"}</div>
+                  </div>
+
+                  <div className="ar-row">
+                    <div className="ar-label">Notes</div>
+                    <div className="ar-value">{previewNotes(item.notes)}</div>
                   </div>
 
                   {actions.length ? (

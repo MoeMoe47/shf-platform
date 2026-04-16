@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import HubAdminShell from "../../components/hub/HubAdminShell.jsx";
 import useReferrals from "../../lib/hub/useReferrals";
+import useOrganizations from "../../lib/hub/useOrganizations";
 import { transitionReferral } from "../../lib/hub/api";
 
 const STATUS_COLUMNS = [
@@ -42,11 +43,27 @@ function nextActionsForStatus(status) {
   return [];
 }
 
+function previewNotes(text) {
+  if (!text) return "—";
+  return text.length > 100 ? `${text.slice(0, 100)}…` : text;
+}
+
 export default function ReferralLifecycleView() {
   const { items, loading, error } = useReferrals();
+  const orgs = useOrganizations();
   const [busyId, setBusyId] = useState("");
   const [flash, setFlash] = useState("");
-  const [refreshTick, setRefreshTick] = useState(0);
+
+  const orgMap = useMemo(
+    () =>
+      Object.fromEntries(
+        (orgs.items || []).map((org) => [
+          org.organization_id,
+          org.organization_name || org.display_name || org.legal_name || org.organization_id,
+        ])
+      ),
+    [orgs.items]
+  );
 
   const grouped = useMemo(() => {
     const seed = Object.fromEntries(STATUS_COLUMNS.map((c) => [c.key, []]));
@@ -56,7 +73,7 @@ export default function ReferralLifecycleView() {
       seed[key].push(item);
     }
     return seed;
-  }, [items, refreshTick]);
+  }, [items]);
 
   const summary = useMemo(() => {
     const total = (items || []).length;
@@ -85,7 +102,6 @@ export default function ReferralLifecycleView() {
       setFlash(err?.message || "Failed to transition referral.");
     } finally {
       setBusyId("");
-      setRefreshTick((n) => n + 1);
     }
   }
 
@@ -108,13 +124,13 @@ export default function ReferralLifecycleView() {
         </div>
       ) : null}
 
-      {loading ? (
+      {loading || orgs.loading ? (
         <div className="rg-error" style={{ maxWidth: 1200 }}>
           Loading referral lifecycle…
         </div>
-      ) : error ? (
+      ) : error || orgs.error ? (
         <div className="rg-error" style={{ maxWidth: 1200 }}>
-          Failed to load referrals: {error}
+          Failed to load referrals: {error || orgs.error}
         </div>
       ) : (
         <>
@@ -220,8 +236,18 @@ export default function ReferralLifecycleView() {
                               <div className="ar-value ar-mono">{item.case_id}</div>
                             </div>
                             <div className="ar-row">
-                              <div className="ar-label">Priority</div>
-                              <div className="ar-value">{item.priority || "—"}</div>
+                              <div className="ar-label">Receiver</div>
+                              <div className="ar-value">
+                                {orgMap[item.receiving_organization_id] || item.receiving_organization_id || "—"}
+                              </div>
+                            </div>
+                            <div className="ar-row">
+                              <div className="ar-label">Need</div>
+                              <div className="ar-value">{item.need_category || "—"}</div>
+                            </div>
+                            <div className="ar-row">
+                              <div className="ar-label">Urgency</div>
+                              <div className="ar-value">{item.urgency_level || item.priority || "—"}</div>
                             </div>
                             <div className="ar-row">
                               <div className="ar-label">Created</div>
@@ -230,6 +256,10 @@ export default function ReferralLifecycleView() {
                             <div className="ar-row">
                               <div className="ar-label">Assigned</div>
                               <div className="ar-value">{item.assigned_user_id || "Unassigned"}</div>
+                            </div>
+                            <div className="ar-row">
+                              <div className="ar-label">Notes</div>
+                              <div className="ar-value">{previewNotes(item.notes)}</div>
                             </div>
 
                             {actions.length ? (

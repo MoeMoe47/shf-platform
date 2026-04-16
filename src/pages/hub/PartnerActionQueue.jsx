@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { fetchReferrals, transitionReferral } from "../../lib/hub/api";
+import { assignReferral, fetchReferrals, transitionReferral } from "../../lib/hub/api";
 import useOrganizations from "../../lib/hub/useOrganizations";
 import "@/styles/admin.appRegistry.css";
 
@@ -74,10 +74,29 @@ export default function PartnerActionQueue() {
     loadQueue();
   }, []);
 
+  async function handleAssignToMe(item) {
+    try {
+      setBusyId(item.case_id);
+      setFlash("");
+      setError("");
+      await assignReferral(item.case_id, {
+        assigned_user_id: "user_admin_001",
+        reason_text: "Assigned from hub queue to current operator",
+      });
+      setFlash(`Referral ${item.case_id} assigned to user_admin_001.`);
+      await loadQueue();
+    } catch (err) {
+      setError(err?.message || "Failed to assign referral.");
+    } finally {
+      setBusyId("");
+    }
+  }
+
   async function handleTransition(item, nextStatus) {
     try {
       setBusyId(item.case_id);
       setFlash("");
+      setError("");
       await transitionReferral(
         item.case_id,
         item.status,
@@ -138,6 +157,7 @@ export default function PartnerActionQueue() {
         <div className="ar-grid">
           {items.map((item) => {
             const actions = nextActionsForStatus(item.status);
+            const canAssignToMe = !item.assigned_user_id && item.status !== "closed";
             return (
               <div className="ar-card" key={item.case_id}>
                 <div className="ar-top">
@@ -193,21 +213,30 @@ export default function PartnerActionQueue() {
                     <div className="ar-value">{previewNotes(item.notes)}</div>
                   </div>
 
-                  {actions.length ? (
-                    <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12 }}>
-                      {actions.map((action) => (
-                        <button
-                          key={action.next}
-                          className={`ar-btn ${busyId === item.case_id ? "ar-btnLocked" : ""}`}
-                          type="button"
-                          disabled={busyId === item.case_id}
-                          onClick={() => handleTransition(item, action.next)}
-                        >
-                          {busyId === item.case_id ? "Updating…" : action.label}
-                        </button>
-                      ))}
-                    </div>
-                  ) : null}
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12 }}>
+                    {canAssignToMe ? (
+                      <button
+                        className={`ar-btn ${busyId === item.case_id ? "ar-btnLocked" : ""}`}
+                        type="button"
+                        disabled={busyId === item.case_id}
+                        onClick={() => handleAssignToMe(item)}
+                      >
+                        {busyId === item.case_id ? "Assigning…" : "Assign to Me"}
+                      </button>
+                    ) : null}
+
+                    {actions.map((action) => (
+                      <button
+                        key={action.next}
+                        className={`ar-btn ${busyId === item.case_id ? "ar-btnLocked" : ""}`}
+                        type="button"
+                        disabled={busyId === item.case_id}
+                        onClick={() => handleTransition(item, action.next)}
+                      >
+                        {busyId === item.case_id ? "Updating…" : action.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             );

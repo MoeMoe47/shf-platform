@@ -48,6 +48,15 @@ export async function createReferral(payload) {
   return parseJson(res);
 }
 
+export async function assignReferral(caseId, payload) {
+  const res = await fetch(`${HUB_API_BASE}/cases/${caseId}/assign`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(payload),
+  });
+  return parseJson(res);
+}
+
 export async function transitionReferral(caseId, currentStatus, nextStatus, reasonText = "") {
   const res = await fetch(`${HUB_API_BASE}/cases/${caseId}/transition`, {
     method: "POST",
@@ -66,5 +75,6 @@ export default {
   fetchTaxonomy,
   fetchReferrals,
   createReferral,
+  assignReferral,
   transitionReferral,
 };

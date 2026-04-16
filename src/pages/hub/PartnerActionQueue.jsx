@@ -109,7 +109,15 @@ export default function PartnerActionQueue() {
       </header>
 
       {flash ? (
-        <div className="rg-error" style={{ maxWidth: 1200, marginBottom: 14, borderColor: "rgba(70,180,110,0.30)", background: "rgba(70,180,110,0.10)" }}>
+        <div
+          className="rg-error"
+          style={{
+            maxWidth: 1200,
+            marginBottom: 14,
+            borderColor: "rgba(70,180,110,0.30)",
+            background: "rgba(70,180,110,0.10)"
+          }}
+        >
           {flash}
         </div>
       ) : null}

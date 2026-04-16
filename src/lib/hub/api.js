@@ -39,8 +39,32 @@ export async function fetchReferrals() {
   return parseJson(res);
 }
 
+export async function createReferral(payload) {
+  const res = await fetch(`${HUB_API_BASE}/cases/referrals`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(payload),
+  });
+  return parseJson(res);
+}
+
+export async function transitionReferral(caseId, currentStatus, nextStatus, reasonText = "") {
+  const res = await fetch(`${HUB_API_BASE}/cases/${caseId}/transition`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify({
+      current_status: currentStatus,
+      next_status: nextStatus,
+      reason_text: reasonText,
+    }),
+  });
+  return parseJson(res);
+}
+
 export default {
   fetchOrganizations,
   fetchTaxonomy,
   fetchReferrals,
+  createReferral,
+  transitionReferral,
 };

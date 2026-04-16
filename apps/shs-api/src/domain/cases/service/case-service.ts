@@ -51,6 +51,13 @@ export class CaseService {
       created_by_user_id: actor?.user_id || null,
     });
 
+    const details = await this.repo.upsertReferralDetails(created.case_id, {
+      receiving_organization_id: input?.receiving_organization_id || null,
+      need_category: input?.need_category || null,
+      urgency_level: input?.urgency_level || created.priority,
+      notes: input?.notes || null,
+    });
+
     await writeAuditEvent({
       audit_event_id: `audit_${randomUUID()}`,
       organization_id: created.organization_id,
@@ -60,10 +67,7 @@ export class CaseService {
       action_type: "referral.created",
       new_state_json: {
         ...created,
-        need_category: input?.need_category || null,
-        notes: input?.notes || null,
-        urgency_level: input?.urgency_level || created.priority,
-        receiving_organization_id: input?.receiving_organization_id || null,
+        ...details,
       },
       reason_text: input?.reason_text || "Referral created",
       correlation_id: `corr_${randomUUID()}`,
@@ -72,10 +76,7 @@ export class CaseService {
 
     return {
       ...created,
-      need_category: input?.need_category || null,
-      notes: input?.notes || null,
-      urgency_level: input?.urgency_level || created.priority,
-      receiving_organization_id: input?.receiving_organization_id || null,
+      ...details,
     };
   }
 

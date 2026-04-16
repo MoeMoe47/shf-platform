@@ -13,11 +13,13 @@ export class CaseRepo {
 
   async listReferralCases() {
     const res = await query(
-      `SELECT case_id, organization_id, program_id, case_type, status, priority,
-              assigned_team_id, assigned_user_id, created_by_user_id, created_at, updated_at
-       FROM cases
-       WHERE case_type = 'referral'
-       ORDER BY updated_at DESC`
+      `SELECT c.case_id, c.organization_id, c.program_id, c.case_type, c.status, c.priority,
+              c.assigned_team_id, c.assigned_user_id, c.created_by_user_id, c.created_at, c.updated_at,
+              rd.receiving_organization_id, rd.need_category, rd.urgency_level, rd.notes
+       FROM cases c
+       LEFT JOIN referral_details rd ON rd.case_id = c.case_id
+       WHERE c.case_type = 'referral'
+       ORDER BY c.updated_at DESC`
     );
     return res.rows;
   }
@@ -53,6 +55,31 @@ export class CaseRepo {
     );
     return res.rows[0];
   }
+
+  async upsertReferralDetails(caseId: string, payload: any) {
+    const res = await query(
+      `INSERT INTO referral_details (
+        case_id, receiving_organization_id, need_category, urgency_level, notes
+      ) VALUES ($1,$2,$3,$4,$5)
+      ON CONFLICT (case_id)
+      DO UPDATE SET
+        receiving_organization_id = EXCLUDED.receiving_organization_id,
+        need_category = EXCLUDED.need_category,
+        urgency_level = EXCLUDED.urgency_level,
+        notes = EXCLUDED.notes,
+        updated_at = NOW()
+      RETURNING case_id, receiving_organization_id, need_category, urgency_level, notes, created_at, updated_at`,
+      [
+        caseId,
+        payload.receiving_organization_id || null,
+        payload.need_category || null,
+        payload.urgency_level || null,
+        payload.notes || null,
+      ]
+    );
+    return res.rows[0];
+  }
+
 
   async assignCase(caseId: string, payload: any) {
     const res = await query(

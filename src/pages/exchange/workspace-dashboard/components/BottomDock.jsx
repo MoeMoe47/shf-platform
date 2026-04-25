@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { files, journalItems } from "../data/dashboardData";
-import { readJournalEntries } from "../dashboardUtils";
+import { readJournalEntries, readWorkspaceFiles } from "../dashboardUtils";
 
 export default function BottomDock() {
+  const [liveFiles, setLiveFiles] = useState(() => readWorkspaceFiles());
   const [liveJournalEntries, setLiveJournalEntries] = useState(() => readJournalEntries());
 
   useEffect(() => {
@@ -10,9 +11,32 @@ export default function BottomDock() {
       if (Array.isArray(event.detail)) setLiveJournalEntries(event.detail);
     }
 
+    function handleFilesUpdate(event) {
+      if (Array.isArray(event.detail)) setLiveFiles(event.detail);
+    }
+
     window.addEventListener("shsDash:journalUpdated", handleJournalUpdate);
-    return () => window.removeEventListener("shsDash:journalUpdated", handleJournalUpdate);
+    window.addEventListener("shsDash:filesUpdated", handleFilesUpdate);
+
+    return () => {
+      window.removeEventListener("shsDash:journalUpdated", handleJournalUpdate);
+      window.removeEventListener("shsDash:filesUpdated", handleFilesUpdate);
+    };
   }, []);
+
+  const fileRows = useMemo(() => {
+    const source = liveFiles.length ? liveFiles : files.map(([icon, name, meta]) => ({
+      icon,
+      name,
+      meta,
+    }));
+
+    return source.slice(0, 3).map((file) => [
+      file.icon || "📁",
+      file.name || "Workspace File",
+      file.size || file.meta || file.status || "Uploaded",
+    ]);
+  }, [liveFiles]);
 
   const journalRows = useMemo(() => {
     const source = liveJournalEntries.length ? liveJournalEntries : journalItems.map(([icon, name, meta, status]) => ({
@@ -30,7 +54,7 @@ export default function BottomDock() {
   }, [liveJournalEntries]);
 
   const dockCards = [
-    ["📁", "Recent Files", files],
+    ["📁", "Recent Files", fileRows],
     ["📌", "Pinned Tools", [["🔮", "Oracle Truth Package", "AI contradiction detection"], ["🛡", "Verification Dashboard", "Provider overview"], ["▤", "Audit Ledger Search", "Search audit logs"]]],
     ["✍", "Journal / Operator Notes", journalRows],
     ["▥", "My Dashboards", [["▧", "Executive Overview", "Last viewed May 16"], ["▧", "Verification Performance", "Last viewed May 15"], ["▧", "Funding & Impact Analysis", "Last viewed May 13"]]],

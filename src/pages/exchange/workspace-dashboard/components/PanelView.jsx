@@ -7,6 +7,7 @@ import RightStack from "./RightStack";
 import JournalPanel from "./JournalPanel";
 import CalendarPanel from "./CalendarPanel";
 import ConferencePanel from "./ConferencePanel";
+import FilesPanel from "./FilesPanel";
 
 function PanelPlaceholder({ title, subtitle, cards = [] }) {
   return (
@@ -72,6 +73,10 @@ export default function DashboardPanel({ activePanel, profile, setProfile }) {
         ]}
       />
     );
+  }
+
+  if (activePanel === "Files") {
+    return <FilesPanel />;
   }
 
   if (activePanel === "Conference") {

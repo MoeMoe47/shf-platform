@@ -119,3 +119,51 @@ export function createAgendaItem(item) {
 
   return nextItem;
 }
+
+export function readWorkspaceFiles() {
+  if (typeof window === "undefined") return [];
+
+  try {
+    const raw = localStorage.getItem("shs.workspaceFiles");
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function writeWorkspaceFiles(files) {
+  if (typeof window === "undefined") return;
+  localStorage.setItem("shs.workspaceFiles", JSON.stringify(files));
+}
+
+export function createWorkspaceFile(fileMeta) {
+  const current = readWorkspaceFiles();
+
+  const nextFile = {
+    id: `file-${Date.now()}`,
+    name: fileMeta.name || "Untitled File",
+    type: fileMeta.type || "Unknown",
+    size: fileMeta.size || "Unknown size",
+    category: fileMeta.category || "Workspace",
+    status: fileMeta.status || "Uploaded",
+    source: fileMeta.source || "Manual upload",
+    uploadedAt: new Date().toISOString(),
+  };
+
+  const nextFiles = [nextFile, ...current].slice(0, 40);
+  writeWorkspaceFiles(nextFiles);
+
+  window.dispatchEvent(new CustomEvent("shsDash:filesUpdated", { detail: nextFiles }));
+
+  return nextFile;
+}
+
+export function formatFileSize(bytes) {
+  if (!bytes && bytes !== 0) return "Unknown size";
+
+  const size = Number(bytes);
+  if (Number.isNaN(size)) return "Unknown size";
+  if (size < 1024) return `${size} B`;
+  if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;
+  return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+}

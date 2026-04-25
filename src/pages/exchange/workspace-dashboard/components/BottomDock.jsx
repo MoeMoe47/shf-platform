@@ -1,11 +1,38 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { files, journalItems } from "../data/dashboardData";
+import { readJournalEntries } from "../dashboardUtils";
 
 export default function BottomDock() {
+  const [liveJournalEntries, setLiveJournalEntries] = useState(() => readJournalEntries());
+
+  useEffect(() => {
+    function handleJournalUpdate(event) {
+      if (Array.isArray(event.detail)) setLiveJournalEntries(event.detail);
+    }
+
+    window.addEventListener("shsDash:journalUpdated", handleJournalUpdate);
+    return () => window.removeEventListener("shsDash:journalUpdated", handleJournalUpdate);
+  }, []);
+
+  const journalRows = useMemo(() => {
+    const source = liveJournalEntries.length ? liveJournalEntries : journalItems.map(([icon, name, meta, status]) => ({
+      icon,
+      title: name,
+      body: meta,
+      status,
+    }));
+
+    return source.slice(0, 3).map((entry) => [
+      entry.icon || "✍",
+      entry.title || "Journal Entry",
+      entry.body || entry.status || "Private",
+    ]);
+  }, [liveJournalEntries]);
+
   const dockCards = [
     ["📁", "Recent Files", files],
     ["📌", "Pinned Tools", [["🔮", "Oracle Truth Package", "AI contradiction detection"], ["🛡", "Verification Dashboard", "Provider overview"], ["▤", "Audit Ledger Search", "Search audit logs"]]],
-    ["✍", "Journal / Operator Notes", journalItems],
+    ["✍", "Journal / Operator Notes", journalRows],
     ["▥", "My Dashboards", [["▧", "Executive Overview", "Last viewed May 16"], ["▧", "Verification Performance", "Last viewed May 15"], ["▧", "Funding & Impact Analysis", "Last viewed May 13"]]],
   ];
 

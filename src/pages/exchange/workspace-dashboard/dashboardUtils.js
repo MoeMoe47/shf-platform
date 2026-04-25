@@ -42,3 +42,40 @@ export function handleWorkspaceTile(title) {
 
   goToExchangeRoute(routeMap[title] || "/exchange/dashboard");
 }
+
+export function readJournalEntries() {
+  if (typeof window === "undefined") return [];
+
+  try {
+    const raw = localStorage.getItem("shs.journalEntries");
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function writeJournalEntries(entries) {
+  if (typeof window === "undefined") return;
+  localStorage.setItem("shs.journalEntries", JSON.stringify(entries));
+}
+
+export function createJournalEntry(entry) {
+  const entries = readJournalEntries();
+
+  const nextEntry = {
+    id: `journal-${Date.now()}`,
+    title: entry.title || "Untitled Note",
+    body: entry.body || "",
+    visibility: entry.visibility || "Private",
+    contextType: entry.contextType || "Workspace",
+    createdAt: new Date().toISOString(),
+    status: entry.status || "Private",
+  };
+
+  const nextEntries = [nextEntry, ...entries].slice(0, 25);
+  writeJournalEntries(nextEntries);
+
+  window.dispatchEvent(new CustomEvent("shsDash:journalUpdated", { detail: nextEntries }));
+
+  return nextEntry;
+}

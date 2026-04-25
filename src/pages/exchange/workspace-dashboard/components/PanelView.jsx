@@ -4,6 +4,7 @@ import { goToExchangeRoute, handleWorkspaceTile, openDashboardPanel } from "../d
 import ProfileUploadCard from "./ProfileUploadCard";
 import WorkspaceLauncher from "./WorkspaceLauncher";
 import RightStack from "./RightStack";
+import JournalPanel from "./JournalPanel";
 
 function PanelPlaceholder({ title, subtitle, cards = [] }) {
   return (
@@ -69,6 +70,10 @@ export default function DashboardPanel({ activePanel, profile, setProfile }) {
         ]}
       />
     );
+  }
+
+  if (activePanel === "Journal") {
+    return <JournalPanel />;
   }
 
   if (activePanel === "Apps") {

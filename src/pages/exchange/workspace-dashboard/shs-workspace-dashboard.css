@@ -1705,3 +1705,277 @@ button.shsDash-appTile:hover {
   overflow: hidden !important;
   text-overflow: ellipsis !important;
 }
+
+/* =========================================================
+   JOURNAL ENTRY CREATION
+   Workspace notes and operator journal layer.
+   ========================================================= */
+
+.shsDash-journalPanel {
+  min-height: 580px;
+  overflow: hidden;
+}
+
+.shsDash-journalGrid {
+  padding: 12px 16px 18px;
+  display: grid;
+  grid-template-columns: 430px minmax(0, 1fr);
+  gap: 12px;
+}
+
+.shsDash-journalComposer,
+.shsDash-journalEntries {
+  border: 1px solid rgba(104, 139, 191, 0.18);
+  border-radius: 12px;
+  background: rgba(8, 21, 36, 0.78);
+  padding: 14px;
+}
+
+.shsDash-journalComposer {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.shsDash-journalComposer label {
+  display: grid;
+  gap: 7px;
+}
+
+.shsDash-journalComposer label span {
+  color: rgba(216, 229, 242, 0.72);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 900;
+}
+
+.shsDash-journalComposer input,
+.shsDash-journalComposer textarea,
+.shsDash-journalComposer select {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid rgba(116, 151, 181, 0.22);
+  background: rgba(4, 13, 24, 0.86);
+  color: #edf6ff;
+  padding: 0 12px;
+  outline: none;
+  font: inherit;
+}
+
+.shsDash-journalComposer input,
+.shsDash-journalComposer select {
+  height: 42px;
+}
+
+.shsDash-journalComposer textarea {
+  min-height: 146px;
+  padding-top: 12px;
+  resize: vertical;
+}
+
+.shsDash-journalComposer input:focus,
+.shsDash-journalComposer textarea:focus,
+.shsDash-journalComposer select:focus {
+  border-color: rgba(100, 182, 255, 0.58);
+  box-shadow: 0 0 0 3px rgba(100, 182, 255, 0.1);
+}
+
+.shsDash-journalFields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.shsDash-journalNote {
+  border-radius: 12px;
+  border: 1px solid rgba(199, 154, 255, 0.18);
+  background: rgba(199, 154, 255, 0.06);
+  padding: 12px;
+}
+
+.shsDash-journalNote strong {
+  color: #c79aff;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.shsDash-journalNote p {
+  margin: 7px 0 0;
+  color: rgba(216, 229, 242, 0.68);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.shsDash-journalEntries {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+.shsDash-journalEntry {
+  min-height: 76px;
+  border-top: 1px solid rgba(116, 151, 181, 0.12);
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+}
+
+.shsDash-journalEntry > span {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  background: rgba(199, 154, 255, 0.1);
+  color: #c79aff;
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+.shsDash-journalEntry strong {
+  display: block;
+  color: #edf6ff;
+  font-size: 13px;
+}
+
+.shsDash-journalEntry p {
+  margin: 4px 0;
+  color: rgba(216, 229, 242, 0.65);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.shsDash-journalEntry small {
+  color: rgba(216, 229, 242, 0.48);
+  font-size: 10.5px;
+}
+
+.shsDash-journalEntry b {
+  color: #f0a83e;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+@media (max-width: 1250px) {
+  .shsDash-journalGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   JOURNAL TYPOGRAPHY POLISH
+   Makes journal writing, notes, and dock text easier to read.
+   ========================================================= */
+
+.shsDash-journalPanel > .shsDash-workspaceHead h2 {
+  font-size: 18px !important;
+  letter-spacing: 0.14em !important;
+}
+
+.shsDash-journalPanel > .shsDash-workspaceHead p {
+  font-size: 15px !important;
+  line-height: 1.5 !important;
+  color: rgba(226, 238, 249, 0.76) !important;
+}
+
+.shsDash-journalComposer .shsDash-sectionHead h2,
+.shsDash-journalEntries .shsDash-sectionHead h2 {
+  font-size: 15px !important;
+  letter-spacing: 0.14em !important;
+}
+
+.shsDash-journalComposer label span {
+  font-size: 12px !important;
+  letter-spacing: 0.14em !important;
+}
+
+.shsDash-journalComposer input,
+.shsDash-journalComposer select {
+  height: 48px !important;
+  font-size: 17px !important;
+}
+
+.shsDash-journalComposer textarea {
+  min-height: 190px !important;
+  font-size: 17px !important;
+  line-height: 1.45 !important;
+  padding: 14px !important;
+}
+
+.shsDash-journalComposer input::placeholder,
+.shsDash-journalComposer textarea::placeholder {
+  font-size: 17px !important;
+  color: rgba(226, 238, 249, 0.42) !important;
+}
+
+.shsDash-journalNote strong {
+  font-size: 13px !important;
+}
+
+.shsDash-journalNote p {
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+}
+
+.shsDash-journalEntry {
+  min-height: 94px !important;
+  grid-template-columns: 42px minmax(0, 1fr) auto !important;
+  gap: 14px !important;
+  padding: 13px 0 !important;
+}
+
+.shsDash-journalEntry > span {
+  width: 36px !important;
+  height: 36px !important;
+  font-size: 18px !important;
+}
+
+.shsDash-journalEntry strong {
+  font-size: 16px !important;
+  line-height: 1.25 !important;
+}
+
+.shsDash-journalEntry p {
+  font-size: 14px !important;
+  line-height: 1.45 !important;
+  color: rgba(226, 238, 249, 0.76) !important;
+}
+
+.shsDash-journalEntry small {
+  font-size: 12px !important;
+  color: rgba(226, 238, 249, 0.58) !important;
+}
+
+.shsDash-journalEntry b {
+  font-size: 12px !important;
+}
+
+/* Make the Journal / Operator Notes dock more readable too */
+.shsDash-dockCard .shsDash-miniRow strong {
+  font-size: 14px !important;
+  line-height: 1.25 !important;
+}
+
+.shsDash-dockCard .shsDash-miniRow small {
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+}
+
+.shsDash-dockCard .shsDash-miniRow {
+  min-height: 40px !important;
+  grid-template-columns: 26px minmax(0, 1fr) auto !important;
+}
+
+/* Slightly widen journal composer so the writing area feels serious */
+.shsDash-journalGrid {
+  grid-template-columns: 480px minmax(0, 1fr) !important;
+}
+
+@media (max-width: 1250px) {
+  .shsDash-journalGrid {
+    grid-template-columns: 1fr !important;
+  }
+}

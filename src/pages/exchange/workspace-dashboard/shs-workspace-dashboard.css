@@ -2243,3 +2243,209 @@ button.shsDash-appTile:hover {
     grid-template-columns: 1fr !important;
   }
 }
+
+/* =========================================================
+   CONFERENCE ACTIONS
+   Schedules conference entries into the shared agenda system.
+   ========================================================= */
+
+.shsDash-conferencePanel {
+  min-height: auto !important;
+  overflow: visible !important;
+}
+
+.shsDash-conferencePanel > .shsDash-workspaceHead h2 {
+  font-size: 18px !important;
+  letter-spacing: 0.14em !important;
+}
+
+.shsDash-conferencePanel > .shsDash-workspaceHead p {
+  font-size: 15px !important;
+  line-height: 1.5 !important;
+  color: rgba(226, 238, 249, 0.76) !important;
+}
+
+.shsDash-conferenceGrid {
+  padding: 12px 16px 18px;
+  display: grid;
+  grid-template-columns: 480px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.shsDash-conferenceComposer,
+.shsDash-conferenceList {
+  border: 1px solid rgba(104, 139, 191, 0.18);
+  border-radius: 12px;
+  background: rgba(8, 21, 36, 0.78);
+  padding: 14px;
+}
+
+.shsDash-conferenceComposer {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.shsDash-conferenceComposer .shsDash-sectionHead h2,
+.shsDash-conferenceList .shsDash-sectionHead h2 {
+  font-size: 15px !important;
+  letter-spacing: 0.14em !important;
+}
+
+.shsDash-conferenceComposer label {
+  display: grid;
+  gap: 7px;
+}
+
+.shsDash-conferenceComposer label span {
+  color: rgba(216, 229, 242, 0.72);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 900;
+}
+
+.shsDash-conferenceComposer input,
+.shsDash-conferenceComposer textarea,
+.shsDash-conferenceComposer select {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid rgba(116, 151, 181, 0.22);
+  background: rgba(4, 13, 24, 0.86);
+  color: #edf6ff;
+  padding: 0 12px;
+  outline: none;
+  font: inherit;
+  font-size: 16px;
+}
+
+.shsDash-conferenceComposer input,
+.shsDash-conferenceComposer select {
+  height: 46px;
+}
+
+.shsDash-conferenceComposer textarea {
+  min-height: 120px;
+  max-height: 170px;
+  padding-top: 12px;
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.shsDash-conferenceFields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.shsDash-conferenceActions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.shsDash-conferenceActions button {
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(116, 151, 181, 0.22);
+  background: rgba(4, 13, 24, 0.86);
+  color: #9fcbff;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.shsDash-conferenceActions .is-primary {
+  border-color: rgba(82, 223, 210, 0.32);
+  color: #52dfd2;
+  background: rgba(82, 223, 210, 0.08);
+}
+
+.shsDash-conferenceNote {
+  border-radius: 12px;
+  border: 1px solid rgba(82, 223, 210, 0.18);
+  background: rgba(82, 223, 210, 0.06);
+  padding: 12px;
+}
+
+.shsDash-conferenceNote strong {
+  color: #52dfd2;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.shsDash-conferenceNote p {
+  margin: 7px 0 0;
+  color: rgba(216, 229, 242, 0.68);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.shsDash-conferenceList {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+.shsDash-conferenceItem {
+  min-height: 90px;
+  border-top: 1px solid rgba(116, 151, 181, 0.12);
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+}
+
+.shsDash-conferenceItem > span {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  background: rgba(82, 223, 210, 0.1);
+  color: #52dfd2;
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+.shsDash-conferenceItem strong {
+  display: block;
+  color: #edf6ff;
+  font-size: 16px;
+  line-height: 1.25;
+}
+
+.shsDash-conferenceItem p {
+  margin: 4px 0;
+  color: rgba(226, 238, 249, 0.76);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.shsDash-conferenceItem small {
+  color: rgba(226, 238, 249, 0.58);
+  font-size: 12px;
+}
+
+.shsDash-conferenceItem b {
+  color: #52dfd2;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.shsDash-conferenceItem b.is-high {
+  color: #f0a83e;
+}
+
+@media (max-width: 1250px) {
+  .shsDash-conferenceGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .shsDash-conferenceActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

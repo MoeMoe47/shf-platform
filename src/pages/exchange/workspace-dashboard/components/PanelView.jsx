@@ -6,6 +6,7 @@ import WorkspaceLauncher from "./WorkspaceLauncher";
 import RightStack from "./RightStack";
 import JournalPanel from "./JournalPanel";
 import CalendarPanel from "./CalendarPanel";
+import ConferencePanel from "./ConferencePanel";
 
 function PanelPlaceholder({ title, subtitle, cards = [] }) {
   return (
@@ -71,6 +72,10 @@ export default function DashboardPanel({ activePanel, profile, setProfile }) {
         ]}
       />
     );
+  }
+
+  if (activePanel === "Conference") {
+    return <ConferencePanel />;
   }
 
   if (activePanel === "Calendar") {

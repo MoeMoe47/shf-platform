@@ -1,8 +1,6 @@
 import React from "react";
-import "./shs-signal-layer.css";
-import "./command-surface/shs-layout-fix.css";
-import SHSCommandSurface from "./SHSCommandSurface";
+import SHSUnifiedTruthShell from "./unified-truth/SHSUnifiedTruthShell";
 
 export default function CommandCenter() {
-  return <SHSCommandSurface />;
+  return <SHSUnifiedTruthShell />;
 }

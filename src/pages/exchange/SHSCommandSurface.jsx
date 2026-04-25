@@ -1,5 +1,12 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import "./command-surface/shs-command-surface.css";
+import RecommendationStrip from "./command-center/RecommendationStrip";
+import DecisionActionBar from "./command-center/DecisionActionBar";
+import TacticalMapStage from "./map-stage/TacticalMapStage";
+import AnalystPredictionCard from "./AnalystPredictionCard";
+import PredictionLayerPanel from "./PredictionLayerPanel";
+import CommandCenterReportActions from "./CommandCenterReportActions";
+import SHSCommandHeader from "./components/SHSCommandHeader";
 
 function Panel({ title, children, className = "" }) {
   return (
@@ -23,53 +30,97 @@ function BulletList({ items = [] }) {
   );
 }
 
-function pickVersion(value) {
-  if (!value) return "—";
-  if (typeof value === "string") return value;
-  if (typeof value === "number") return String(value);
-  if (typeof value === "object") {
-    return value.version || value.label || value.reason || JSON.stringify(value);
-  }
-  return String(value);
+function KpiCard({ label, value, sub }) {
+  return (
+    <div
+      style={{
+        border: "1px solid rgba(104, 139, 191, 0.18)",
+        borderRadius: 10,
+        background: "rgba(10, 21, 36, 0.86)",
+        padding: "12px 14px",
+        minHeight: 92,
+      }}
+    >
+      <div
+        style={{
+          fontSize: 10,
+          textTransform: "uppercase",
+          letterSpacing: "0.12em",
+          color: "rgba(214, 226, 245, 0.74)",
+        }}
+      >
+        {label}
+      </div>
+      <div
+        style={{
+          marginTop: 8,
+          fontSize: 28,
+          fontWeight: 900,
+          lineHeight: 1,
+          color: "#eef4ff",
+        }}
+      >
+        {value}
+      </div>
+      <div
+        style={{
+          marginTop: 8,
+          fontSize: 12,
+          color: "rgba(214, 226, 245, 0.74)",
+        }}
+      >
+        {sub}
+      </div>
+    </div>
+  );
 }
 
-function pickText(value, fallback = "—") {
-  if (value == null) return fallback;
-  if (typeof value === "string" || typeof value === "number") return String(value);
-  if (typeof value === "object") {
-    return value.label || value.reason || value.version || JSON.stringify(value);
-  }
-  return fallback;
+function HeaderChip({ tone = "blue", title, value, sub }) {
+  return (
+    <div className={`utc-chip utc-chip--${tone}`}>
+      <div className="utc-chip__top">
+        <span className="utc-chip__dot" />
+        <span className="utc-chip__title">{title}</span>
+        {value ? <span className="utc-chip__value">{value}</span> : null}
+      </div>
+      <div className="utc-chip__sub">{sub}</div>
+    </div>
+  );
 }
 
-export default function SHSCommandSurface() {
-  const [lifecycle, setLifecycle] = useState(null);
+function reportNoop(label) {
+  return () => {
+    console.log(`${label} clicked`);
+  };
+}
 
-  useEffect(() => {
-    fetch("http://127.0.0.1:8090/lifecycle/state")
-      .then((res) => res.json())
-      .then(setLifecycle)
-      .catch(() => {
-        setLifecycle(null);
+export default function SHSCommandSurface({
+  loading,
+  error,
+  onRefresh,
+  activeCase,
+  activeAction,
+  setActiveAction,
+  selectedPanel,
+  recommendation,
+  agentAudience,
+  agentContext,
+  prediction,
+  narrative,
+  changeSummary,
+}) {
+  const confidencePct = Math.round((recommendation?.confidence ?? 0) * 100);
+
+  const timeLabel = useMemo(() => {
+    try {
+      return new Date().toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit",
       });
+    } catch {
+      return "10:42 AM";
+    }
   }, []);
-
-  const normalized = useMemo(() => {
-    const stableRaw = lifecycle?.stable_version ?? lifecycle?.stable;
-    const candidateRaw = lifecycle?.candidate_version ?? lifecycle?.candidate;
-
-    const stableVersion = pickVersion(stableRaw);
-    const candidateVersion = pickVersion(candidateRaw);
-    const candidateState = pickText(lifecycle?.candidate_state ?? lifecycle?.status, "evaluating");
-    const mode = pickText(lifecycle?.mode ?? lifecycle?.evaluation_mode, "loading...");
-
-    return {
-      mode,
-      stableVersion,
-      candidateVersion,
-      candidateState,
-    };
-  }, [lifecycle]);
 
   return (
     <div className="mock-shell mock-shell--tone-blue">
@@ -80,169 +131,188 @@ export default function SHSCommandSurface() {
         <div className="mock-ambient__pulse" />
       </div>
 
-      <header className="mock-topbar">
-        <div className="mock-brand">
-          <div className="mock-brand__logo">SHS</div>
-          <div className="mock-brand__copy">
-            <div className="mock-brand__title">SHS Exchange Command</div>
-            <div className="mock-brand__sub">Outcome Monitoring and Response Surface</div>
+      <SHSCommandHeader />
+
+      <section
+        style={{
+          marginTop: 10,
+          display: "grid",
+          gridTemplateColumns: "repeat(5, minmax(0, 1fr))",
+          gap: 10,
+        }}
+      >
+        <KpiCard label="Entities Under Watch" value="18" sub="System-wide monitoring" />
+        <KpiCard label="Verified Outcomes" value="8,217" sub="Evidence-backed" />
+        <KpiCard label="Open Contradictions" value="3" sub="Needs review" />
+        <KpiCard label="Trust Coverage" value="91%" sub="Verification-weighted" />
+        <KpiCard label="Recommendation Confidence" value={`${confidencePct}%`} sub="Current active case" />
+      </section>
+
+      <section
+        style={{
+          marginTop: 10,
+          border: "1px solid rgba(104, 139, 191, 0.18)",
+          borderRadius: 10,
+          background: "rgba(7,16,27,0.9)",
+          padding: "14px 16px",
+          display: "grid",
+          gridTemplateColumns: "minmax(0, 1fr) 220px",
+          gap: 14,
+          alignItems: "center",
+        }}
+      >
+        <div>
+          <div
+            style={{
+              fontSize: 11,
+              textTransform: "uppercase",
+              letterSpacing: "0.14em",
+              color: "rgba(214, 226, 245, 0.74)",
+              fontWeight: 900,
+            }}
+          >
+            Live Situation
+          </div>
+          <div style={{ marginTop: 6, fontSize: 28, fontWeight: 900 }}>
+            {activeCase?.label || "Active Case"} • Unified Truth Review
+          </div>
+          <div style={{ marginTop: 8, fontSize: 13, color: "rgba(229,236,249,0.9)" }}>
+            {changeSummary?.items?.[0] || "Initial load complete. No prior snapshot available yet."}
           </div>
         </div>
 
-        <div className="mock-topbar__center">
-          <span className="mock-badge mock-badge--live">
-            <span className="mock-badge__dot" />
-            <span className="mock-badge__text">System Active</span>
-            <span className="mock-badge__age">Live</span>
-          </span>
-          <span className="mock-topbar__divider" />
-          <span>Exchange Network Secure</span>
-          <span className="mock-topbar__divider" />
-          <span>Mode: Operations</span>
-        </div>
-
-        <div className="mock-topbar__right">
-          <button className="mock-iconBtn" aria-label="alerts">•</button>
-          <button className="mock-iconBtn" aria-label="menu">•</button>
-        </div>
-      </header>
-
-      <section className="mock-priority">
-        <div className="mock-priority__left">
-          <div className="mock-priority__eyebrow">Current Priority</div>
-          <h1 className="mock-priority__title">Chicago Placement Risk Spike</h1>
-          <p className="mock-priority__summary">
-            Credential-to-placement conversion dropped below threshold.
-            Recommended next move: open investigation.
-          </p>
-
-          <div className="mock-priority__actions">
-            <button className="mock-btn mock-btn--primary">Investigate</button>
-            <button className="mock-btn">Monitor</button>
+        <div
+          style={{
+            borderLeft: "1px solid rgba(110, 143, 195, 0.16)",
+            paddingLeft: 14,
+            display: "grid",
+            gap: 8,
+          }}
+        >
+          <div>
+            <div className="mock-statBlock__label">Active Case</div>
+            <div className="mock-statBlock__value">{activeCase?.label || "—"}</div>
           </div>
-        </div>
-
-        <div className="mock-priority__right">
-          <div className="mock-statBlock">
-            <span className="mock-statBlock__label">Severity</span>
-            <span className="mock-statBlock__value mock-statBlock__value--amber">Elevated</span>
+          <div>
+            <div className="mock-statBlock__label">Selected Panel</div>
+            <div className="mock-statBlock__value">{String(selectedPanel || "response_plan").replace(/_/g, " ")}</div>
           </div>
-          <div className="mock-statBlock">
-            <span className="mock-statBlock__label">Confidence</span>
-            <span className="mock-statBlock__value">82%</span>
-          </div>
-          <div className="mock-statBlock">
-            <span className="mock-statBlock__label">Urgency</span>
-            <span className="mock-statBlock__value mock-statBlock__value--red">High</span>
+          <div>
+            <div className="mock-statBlock__label">Audience</div>
+            <div className="mock-statBlock__value">{String(agentAudience || "operator")}</div>
           </div>
         </div>
       </section>
 
       <section className="mock-main">
         <aside className="mock-rail mock-rail--left">
-          <Panel title="Adaptive Decision System">
+          <Panel title="Intake & Queue">
             <BulletList
               items={[
-                `Mode: ${normalized.mode}`,
-                `Stable: ${normalized.stableVersion}`,
-                `Candidate: ${normalized.candidateVersion}`,
-                `Candidate State: ${normalized.candidateState}`,
-                `Comparison: temporarily disabled until endpoint payload is wired`,
+                `Active Case: ${activeCase?.label || "Franklin County"}`,
+                `Recommendation: ${String(recommendation?.action || "monitor").replace(/_/g, " ")}`,
+                "Pending Verification: 4",
+                "Flagged Entities: 3",
+                "Priority Queue: 7",
               ]}
             />
           </Panel>
 
-          <Panel title="System State">
+          <Panel title="Contradictions & Alerts">
             <BulletList
               items={[
-                "Stable Systems: 18",
-                "Monitoring: 07",
-                "Elevated: 03",
-                "Critical: 01",
+                "Duplicate outcome anomaly detected",
+                "Verification delay threshold nearing limit",
+                "Operator review advised before publication",
               ]}
             />
           </Panel>
 
-          <Panel title="Regional Outcome Signals">
-            <BulletList
-              items={[
-                "Midwest Placement Risk",
-                "Southern Capacity Overload",
-                "Western Verification Delay",
-                "East Coast Demand Spike",
-              ]}
-            />
+          <Panel title="System Change Summary">
+            <BulletList items={changeSummary?.items || ["No material dashboard metric changes detected on refresh."]} />
           </Panel>
         </aside>
 
         <main className="mock-center">
-          <Panel title="Tactical Map Stage">
-            <div>Exchange command surface baseline is live.</div>
+          <Panel title="Statewide Intelligence Surface">
+            <TacticalMapStage />
           </Panel>
         </main>
 
         <aside className="mock-rail mock-rail--right">
-          <Panel title="Recommended Action">
-            <div className="mock-actionCard">
-              <div className="mock-actionCard__title">Open Investigation</div>
-              <div className="mock-actionCard__text">
-                Severity increased while confidence remains above threshold.
-              </div>
-              <div className="mock-actionCard__meta">
-                Comparison panel will be re-enabled after endpoint payload wiring.
-              </div>
+          <Panel title="Oracle Truth Package">
+            <div style={{ display: "grid", gap: 8 }}>
+              <div><strong>Case:</strong> {prediction?.caseLabel || "Unknown Case"}</div>
+              <div><strong>Status:</strong> {prediction?.systemStatus || "—"}</div>
+              <div><strong>Risk:</strong> {prediction?.riskScore ?? 0}% • {prediction?.riskBand || "Low"}</div>
+              <div><strong>Confidence:</strong> {prediction?.confidence ?? 0}%</div>
+              <div><strong>Recommended Action:</strong> {prediction?.recommendedAction || "—"}</div>
+              <div><strong>Predicted Next Stage:</strong> {prediction?.predictedNextStage || "—"}</div>
             </div>
           </Panel>
 
-          <Panel title="Decision Controls">
-            <div className="mock-buttonGrid">
-              <button className="mock-btn mock-btn--primary">Investigate</button>
-              <button className="mock-btn">Assign</button>
-              <button className="mock-btn">Escalate</button>
-              <button className="mock-btn">Monitor</button>
-            </div>
-          </Panel>
-
-          <Panel title="Active Workflows">
-            <BulletList
-              items={[
-                "Outcome Verification Queue",
-                "Employer Routing Workflow",
-                "Capacity Reallocation",
-                "Midwest Follow-Up Sequence",
-              ]}
+          <Panel title="AI Analyst Narrative">
+            <AnalystPredictionCard
+              agentContext={agentContext}
+              agentAudience={agentAudience}
             />
+          </Panel>
+
+          <Panel title="Trust & Verification">
+            <PredictionLayerPanel prediction={prediction} narrative={narrative} />
           </Panel>
         </aside>
       </section>
 
-      <section className="mock-bottom">
-        <Panel title="Outcome Event Log">
-          <BulletList
-            items={[
-              "Chicago placement risk spike detected",
-              "Midwest verifier queue exceeded threshold",
-              "Route reassigned to regional team",
-            ]}
+      <section
+        style={{
+          marginTop: 8,
+          display: "grid",
+          gridTemplateColumns: "minmax(0, 1fr) auto",
+          gap: 12,
+          alignItems: "start",
+        }}
+      >
+        <RecommendationStrip
+          recommendation={{
+            title: "Recommended Next Move",
+            body:
+              narrative?.recommendationReason ||
+              "System recommendation reason not yet available.",
+          }}
+        />
+
+        <DecisionActionBar
+          activeAction={activeAction}
+          setActiveAction={setActiveAction}
+        />
+      </section>
+
+      <section
+        style={{
+          marginTop: 10,
+          display: "grid",
+          gridTemplateColumns: "minmax(0, 1fr) 320px",
+          gap: 12,
+        }}
+      >
+        <Panel title="Reporting Dock">
+          <div style={{ marginBottom: 10, color: "rgba(214, 226, 245, 0.74)" }}>
+            Generate or open the latest decision-grade brief tied to the current command state.
+          </div>
+          <CommandCenterReportActions
+            onGenerate={reportNoop("Generate Intelligence Brief")}
+            onOpenLatest={reportNoop("Open Latest Brief")}
           />
         </Panel>
 
-        <Panel title="Capacity Status">
+        <Panel title="System Status">
           <BulletList
             items={[
-              "Available Reviewers: 23",
-              "Verifier Capacity: 91%",
-              "Active Workflows: 12",
-            ]}
-          />
-        </Panel>
-
-        <Panel title="Situation Summary">
-          <BulletList
-            items={[
-              "Active Signals: 11",
-              "High Priority: 3",
-              "Resolved 24h: 17",
+              loading ? "Loading live command data…" : "Live command data loaded",
+              error ? `Error: ${error}` : "No active load error",
+              `Selected action: ${String(activeAction).toUpperCase()}`,
+              `Panel mode: ${String(selectedPanel || "response_plan").replace(/_/g, " ")}`,
             ]}
           />
         </Panel>

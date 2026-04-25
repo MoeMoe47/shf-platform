@@ -167,3 +167,72 @@ export function formatFileSize(bytes) {
   if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;
   return `${(size / (1024 * 1024)).toFixed(1)} MB`;
 }
+
+export function readWorkspaceReports() {
+  if (typeof window === "undefined") return [];
+
+  try {
+    const raw = localStorage.getItem("shs.workspaceReports");
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function writeWorkspaceReports(reports) {
+  if (typeof window === "undefined") return;
+  localStorage.setItem("shs.workspaceReports", JSON.stringify(reports));
+}
+
+export function createWorkspaceReport(reportMeta) {
+  const current = readWorkspaceReports();
+
+  const nextReport = {
+    id: `report-${Date.now()}`,
+    title: reportMeta.title || "Untitled Report",
+    reportType: reportMeta.reportType || "Operational Summary",
+    audience: reportMeta.audience || "Executive",
+    format: reportMeta.format || "PDF",
+    status: reportMeta.status || "Draft",
+    notes: reportMeta.notes || "",
+    createdAt: new Date().toISOString(),
+  };
+
+  const nextReports = [nextReport, ...current].slice(0, 40);
+  writeWorkspaceReports(nextReports);
+
+  window.dispatchEvent(new CustomEvent("shsDash:reportsUpdated", { detail: nextReports }));
+
+  return nextReport;
+}
+
+export function dedupeWorkspaceReports(reports = []) {
+  const seen = new Set();
+
+  return reports.filter((report) => {
+    const key = [
+      report.title || "",
+      report.reportType || "",
+      report.audience || "",
+      report.format || "",
+      report.status || "",
+      report.notes || "",
+    ].join("|").toLowerCase().trim();
+
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+export function cleanWorkspaceReports() {
+  const current = readWorkspaceReports();
+  const cleaned = dedupeWorkspaceReports(current);
+  writeWorkspaceReports(cleaned);
+
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent("shsDash:reportsUpdated", { detail: cleaned }));
+  }
+
+  return cleaned;
+}

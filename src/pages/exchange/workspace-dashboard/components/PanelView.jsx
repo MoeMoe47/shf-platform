@@ -8,6 +8,7 @@ import JournalPanel from "./JournalPanel";
 import CalendarPanel from "./CalendarPanel";
 import ConferencePanel from "./ConferencePanel";
 import FilesPanel from "./FilesPanel";
+import ReportsPanel from "./ReportsPanel";
 
 function PanelPlaceholder({ title, subtitle, cards = [] }) {
   return (
@@ -73,6 +74,10 @@ export default function DashboardPanel({ activePanel, profile, setProfile }) {
         ]}
       />
     );
+  }
+
+  if (activePanel === "Reports") {
+    return <ReportsPanel />;
   }
 
   if (activePanel === "Files") {

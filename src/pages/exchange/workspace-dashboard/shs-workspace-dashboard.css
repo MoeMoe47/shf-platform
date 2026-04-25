@@ -2449,3 +2449,73 @@ button.shsDash-appTile:hover {
     align-items: stretch;
   }
 }
+
+/* =========================================================
+   CONFERENCE PANEL HEIGHT POLISH
+   Prevents lower conference form content from feeling cut off.
+   ========================================================= */
+
+.shsDash-conferencePanel {
+  min-height: auto !important;
+  overflow: visible !important;
+  padding-bottom: 18px !important;
+}
+
+.shsDash-conferenceGrid {
+  align-items: start !important;
+  grid-template-columns: 470px minmax(0, 1fr) !important;
+  padding-bottom: 22px !important;
+}
+
+.shsDash-conferenceComposer {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+}
+
+.shsDash-conferenceComposer textarea {
+  min-height: 96px !important;
+  max-height: 145px !important;
+}
+
+.shsDash-conferenceActions {
+  margin-top: 2px !important;
+}
+
+.shsDash-conferenceNote {
+  margin-bottom: 2px !important;
+}
+
+.shsDash-conferenceItem {
+  min-height: 82px !important;
+}
+
+.shsDash-conferencePanel + .shsDash-bottomDock,
+.shsDash-workspace > .shsDash-bottomDock {
+  margin-top: 16px !important;
+}
+
+@media (max-height: 900px) {
+  .shsDash-conferenceComposer input,
+  .shsDash-conferenceComposer select {
+    height: 42px !important;
+  }
+
+  .shsDash-conferenceComposer textarea {
+    min-height: 78px !important;
+  }
+
+  .shsDash-conferenceFields {
+    gap: 8px !important;
+  }
+
+  .shsDash-conferenceGrid {
+    padding-bottom: 16px !important;
+  }
+}
+
+@media (max-width: 1250px) {
+  .shsDash-conferenceGrid {
+    grid-template-columns: 1fr !important;
+  }
+}

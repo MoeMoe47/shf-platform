@@ -27,7 +27,15 @@ export default function DashboardHeader({ profile }) {
         </div>
 
         <div className="shsDash-userAvatar">
-          {profile.photoUrl ? <img src={profile.photoUrl} alt="" /> : <span>AM</span>}
+          {profile.photoUrl ? (
+            <img
+              key={profile.photoUpdatedAt || profile.photoUrl}
+              src={profile.photoUrl}
+              alt=""
+            />
+          ) : (
+            <span>AM</span>
+          )}
           <i />
         </div>
       </div>

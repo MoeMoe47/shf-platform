@@ -4,15 +4,33 @@ import { writeProfile } from "../dashboardUtils";
 export default function ProfileUploadCard({ profile, setProfile }) {
   const inputRef = useRef(null);
 
+  function openPhotoPicker() {
+    if (inputRef.current) {
+      inputRef.current.value = "";
+      inputRef.current.click();
+    }
+  }
+
   function handleFile(file) {
     if (!file) return;
 
     const reader = new FileReader();
+
     reader.onload = () => {
-      const next = { ...profile, photoUrl: String(reader.result || "") };
+      const next = {
+        ...profile,
+        photoUrl: String(reader.result || ""),
+        photoUpdatedAt: Date.now(),
+      };
+
       setProfile(next);
       writeProfile(next);
+
+      if (inputRef.current) {
+        inputRef.current.value = "";
+      }
     };
+
     reader.readAsDataURL(file);
   }
 
@@ -25,7 +43,7 @@ export default function ProfileUploadCard({ profile, setProfile }) {
 
       <div
         className="shsDash-uploadBox"
-        onClick={() => inputRef.current?.click()}
+        onClick={openPhotoPicker}
         onDragOver={(event) => event.preventDefault()}
         onDrop={(event) => {
           event.preventDefault();
@@ -37,11 +55,22 @@ export default function ProfileUploadCard({ profile, setProfile }) {
           type="file"
           accept="image/png,image/jpeg,image/jpg,image/webp"
           hidden
-          onChange={(event) => handleFile(event.target.files?.[0])}
+          onChange={(event) => {
+            handleFile(event.target.files?.[0]);
+            event.target.value = "";
+          }}
         />
 
         <div className="shsDash-uploadAvatar">
-          {profile.photoUrl ? <img src={profile.photoUrl} alt="" /> : <span>AM</span>}
+          {profile.photoUrl ? (
+            <img
+              key={profile.photoUpdatedAt || profile.photoUrl}
+              src={profile.photoUrl}
+              alt=""
+            />
+          ) : (
+            <span>AM</span>
+          )}
           <b>📷</b>
         </div>
 
@@ -50,7 +79,7 @@ export default function ProfileUploadCard({ profile, setProfile }) {
       </div>
 
       <div className="shsDash-accountActions">
-        <button type="button" onClick={() => inputRef.current?.click()}>📷 Change Photo</button>
+        <button type="button" onClick={openPhotoPicker}>📷 Change Photo</button>
         <button type="button">•••</button>
       </div>
 

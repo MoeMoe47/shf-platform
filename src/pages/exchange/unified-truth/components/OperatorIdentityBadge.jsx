@@ -46,7 +46,15 @@ export default function OperatorIdentityBadge({ operator }) {
       </div>
 
       <div className="utc-operator-identity__avatar" aria-hidden="true">
-        {profile.photoUrl ? <img src={profile.photoUrl} alt="" /> : <span>{initials}</span>}
+        {profile.photoUrl ? (
+          <img
+            key={profile.photoUpdatedAt || profile.photoUrl}
+            src={profile.photoUrl}
+            alt=""
+          />
+        ) : (
+          <span>{initials}</span>
+        )}
         <i />
       </div>
     </div>

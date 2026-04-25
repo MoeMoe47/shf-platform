@@ -79,3 +79,43 @@ export function createJournalEntry(entry) {
 
   return nextEntry;
 }
+
+export function readAgendaItems() {
+  if (typeof window === "undefined") return [];
+
+  try {
+    const raw = localStorage.getItem("shs.agendaItems");
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function writeAgendaItems(items) {
+  if (typeof window === "undefined") return;
+  localStorage.setItem("shs.agendaItems", JSON.stringify(items));
+}
+
+export function createAgendaItem(item) {
+  const current = readAgendaItems();
+
+  const nextItem = {
+    id: `agenda-${Date.now()}`,
+    title: item.title || "Untitled Agenda Item",
+    type: item.type || "Meeting",
+    date: item.date || "",
+    time: item.time || "",
+    status: item.status || "Scheduled",
+    priority: item.priority || "Normal",
+    context: item.context || "Workspace",
+    notes: item.notes || "",
+    createdAt: new Date().toISOString(),
+  };
+
+  const nextItems = [nextItem, ...current].slice(0, 40);
+  writeAgendaItems(nextItems);
+
+  window.dispatchEvent(new CustomEvent("shsDash:agendaUpdated", { detail: nextItems }));
+
+  return nextItem;
+}

@@ -1,8 +1,34 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { agendaItems } from "../data/dashboardData";
+import { readAgendaItems } from "../dashboardUtils";
 import { openDashboardPanel } from "../dashboardUtils";
 
 export default function RightStack() {
+  const [liveAgendaItems, setLiveAgendaItems] = useState(() => readAgendaItems());
+
+  useEffect(() => {
+    function handleAgendaUpdate(event) {
+      if (Array.isArray(event.detail)) setLiveAgendaItems(event.detail);
+    }
+
+    window.addEventListener("shsDash:agendaUpdated", handleAgendaUpdate);
+    return () => window.removeEventListener("shsDash:agendaUpdated", handleAgendaUpdate);
+  }, []);
+
+  const agendaRows = useMemo(() => {
+    if (liveAgendaItems.length) {
+      return liveAgendaItems.slice(0, 3).map((item) => [
+        item.type === "Conference" ? "🎥" : item.type === "Deadline" ? "🛡" : item.type === "Review" ? "📅" : "📅",
+        item.title,
+        `${item.date || "Today"} · ${item.time || "Time TBD"}`,
+        item.status || "Scheduled",
+        item.priority === "High" ? "orange" : "teal",
+      ]);
+    }
+
+    return agendaItems;
+  }, [liveAgendaItems]);
+
   return (
     <aside className="shsDash-rightStack">
       <section className="shsDash-card shsDash-sideCard">
@@ -36,7 +62,7 @@ export default function RightStack() {
           <button type="button" onClick={() => openDashboardPanel("Calendar")}>Open Calendar →</button>
         </div>
 
-        {agendaItems.map(([icon, title, time, status, tone]) => (
+        {agendaRows.map(([icon, title, time, status, tone]) => (
           <article className="shsDash-agendaRow" key={title}>
             <span className={`shsDash-glow--${tone}`}>{icon}</span>
             <div>

@@ -2715,3 +2715,74 @@ button.shsDash-appTile:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* =========================================================
+   BOTTOM DOCK READABILITY POLISH
+   Prevents files, journal notes, and dashboard rows from crowding.
+   ========================================================= */
+
+.shsDash-bottomDock {
+  align-items: start !important;
+}
+
+.shsDash-dockCard,
+.shsDash-orgCard,
+.shsDash-helpCard,
+.shsDash-billingCard {
+  min-height: 150px !important;
+  overflow: hidden !important;
+}
+
+.shsDash-miniRow {
+  min-height: 44px !important;
+  grid-template-columns: 26px minmax(0, 1fr) auto !important;
+  gap: 10px !important;
+  overflow: hidden !important;
+}
+
+.shsDash-miniRow strong {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: normal !important;
+  line-height: 1.18 !important;
+  max-width: 100% !important;
+}
+
+.shsDash-miniRow small {
+  display: block !important;
+  max-width: 170px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  color: rgba(226, 238, 249, 0.55) !important;
+}
+
+.shsDash-dockCard .shsDash-sectionHead h2 {
+  max-width: 70% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.shsDash-dockCard .shsDash-sectionHead button {
+  flex: 0 0 auto !important;
+}
+
+@media (max-width: 1500px) {
+  .shsDash-miniRow small {
+    max-width: 130px !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .shsDash-bottomDock {
+    grid-template-columns: 1fr !important;
+  }
+
+  .shsDash-miniRow small {
+    max-width: 220px !important;
+  }
+}

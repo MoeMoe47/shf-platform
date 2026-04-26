@@ -4985,3 +4985,231 @@ article.shsCommandReactionLayer,
 .shsCommandContextDock .shsCommandReactionLayer ol::-webkit-scrollbar {
   display: none !important;
 }
+
+/* =========================================================
+   CONTEXT GUIDANCE DRAWER — NO DRIFT
+   Lives under Recommended Next Actions. Never above KPI/map area.
+   ========================================================= */
+
+.shsCommandContextBanner,
+.shsCommandReactionLayer,
+.shsCommandContextDock {
+  display: none !important;
+}
+
+.shsContextGuidanceDrawer {
+  width: 100% !important;
+  margin: 10px 0 12px !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(116, 151, 181, 0.18) !important;
+  background:
+    radial-gradient(circle at 2% 0%, rgba(82, 223, 210, 0.08), transparent 32%),
+    linear-gradient(180deg, rgba(8, 21, 36, 0.82), rgba(5, 13, 23, 0.86)) !important;
+  box-shadow:
+    0 0 22px rgba(82, 223, 210, 0.04),
+    inset 0 0 20px rgba(255, 255, 255, 0.018) !important;
+  overflow: hidden !important;
+}
+
+.shsContextGuidanceDrawer__toggle {
+  width: 100% !important;
+  min-height: 54px !important;
+  padding: 10px 13px !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: #edf6ff !important;
+  display: grid !important;
+  grid-template-columns: 34px minmax(0, 1fr) auto !important;
+  gap: 11px !important;
+  align-items: center !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  font: inherit !important;
+}
+
+.shsContextGuidanceDrawer__toggle > span {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 11px !important;
+  display: grid !important;
+  place-items: center !important;
+  background: rgba(82, 223, 210, 0.1) !important;
+  color: #52dfd2 !important;
+  filter: drop-shadow(0 0 8px rgba(82, 223, 210, 0.6)) !important;
+}
+
+.shsContextGuidanceDrawer__toggle strong {
+  display: block !important;
+  color: #f4f8ff !important;
+  font-size: 13px !important;
+  line-height: 1.15 !important;
+  font-weight: 950 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.11em !important;
+}
+
+.shsContextGuidanceDrawer__toggle small {
+  display: block !important;
+  margin-top: 4px !important;
+  color: rgba(226, 238, 249, 0.62) !important;
+  font-size: 12px !important;
+  line-height: 1.25 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.shsContextGuidanceDrawer__toggle b {
+  color: #9fcbff !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.12em !important;
+  white-space: nowrap !important;
+}
+
+.shsContextGuidanceDrawer__toggle:hover {
+  background: rgba(82, 223, 210, 0.035) !important;
+}
+
+.shsContextGuidanceDrawer__body {
+  border-top: 1px solid rgba(116, 151, 181, 0.14) !important;
+  padding: 12px 13px 13px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.9fr) !important;
+  gap: 12px !important;
+  align-items: start !important;
+}
+
+.shsContextGuidanceDrawer__summary,
+.shsContextGuidanceDrawer__actions {
+  border-radius: 13px !important;
+  border: 1px solid rgba(116, 151, 181, 0.14) !important;
+  background: rgba(4, 13, 24, 0.58) !important;
+  padding: 12px !important;
+  min-height: 116px !important;
+}
+
+.shsContextGuidanceDrawer__eyebrow {
+  color: #f0a83e !important;
+  font-size: 10px !important;
+  font-weight: 950 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.14em !important;
+  margin-bottom: 6px !important;
+}
+
+.shsContextGuidanceDrawer__summary h3,
+.shsContextGuidanceDrawer__actions h4 {
+  margin: 0 !important;
+  color: #f4f8ff !important;
+  font-size: 14px !important;
+  line-height: 1.2 !important;
+  font-weight: 950 !important;
+}
+
+.shsContextGuidanceDrawer__summary p {
+  margin: 7px 0 0 !important;
+  color: rgba(226, 238, 249, 0.68) !important;
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+}
+
+.shsContextGuidanceDrawer__summary small {
+  display: block !important;
+  margin-top: 8px !important;
+  color: #52dfd2 !important;
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+  font-weight: 800 !important;
+}
+
+.shsContextGuidanceDrawer__actions > div {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin-top: 10px !important;
+}
+
+.shsContextGuidanceDrawer__actions button,
+.shsContextGuidanceDrawer__footer button {
+  min-height: 32px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(116, 151, 181, 0.22) !important;
+  background: rgba(5, 15, 26, 0.82) !important;
+  color: #9fcbff !important;
+  font-size: 11px !important;
+  font-weight: 850 !important;
+  padding: 0 11px !important;
+  cursor: pointer !important;
+}
+
+.shsContextGuidanceDrawer__actions button:hover,
+.shsContextGuidanceDrawer__footer button:hover {
+  color: #52dfd2 !important;
+  border-color: rgba(82, 223, 210, 0.42) !important;
+  box-shadow: 0 0 16px rgba(82, 223, 210, 0.1) !important;
+}
+
+.shsContextGuidanceDrawer__footer {
+  grid-column: 1 / -1 !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+  padding-top: 2px !important;
+}
+
+.shsContextGuidanceDrawer__footer button:first-child {
+  color: #52dfd2 !important;
+  border-color: rgba(82, 223, 210, 0.32) !important;
+}
+
+@media (max-width: 1100px) {
+  .shsContextGuidanceDrawer__body {
+    grid-template-columns: 1fr !important;
+  }
+
+  .shsContextGuidanceDrawer__footer {
+    justify-content: flex-start !important;
+  }
+}
+
+/* =========================================================
+   HARD GUIDED DRAWER NAVIGATION TARGETS
+   Ensures drawer action clicks visibly move to exact sections.
+   ========================================================= */
+
+.utc-oracle-panel,
+.utc-trust-panel,
+.utc-intake,
+.utc-map,
+.utc-actions,
+.utc-reporting,
+.utc-action,
+.utc-report,
+.utc-card {
+  scroll-margin-top: 128px !important;
+}
+
+.shsGuidedActionFocus {
+  position: relative !important;
+  border-color: rgba(82, 223, 210, 0.78) !important;
+  box-shadow:
+    0 0 0 1px rgba(82, 223, 210, 0.24),
+    0 0 34px rgba(82, 223, 210, 0.25),
+    inset 0 0 24px rgba(82, 223, 210, 0.05) !important;
+}
+
+.shsGuidedActionFocus--strong {
+  animation: shsHardGuidedFocusPulse 0.78s ease-in-out infinite alternate !important;
+}
+
+@keyframes shsHardGuidedFocusPulse {
+  from {
+    filter: brightness(1);
+  }
+
+  to {
+    filter: brightness(1.22);
+  }
+}

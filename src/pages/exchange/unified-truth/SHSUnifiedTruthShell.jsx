@@ -449,6 +449,8 @@ function ActionRail() {
           </article>
         ))}
       </div>
+
+      <CommandContextGuidanceDrawer />
     </section>
   );
 }
@@ -674,6 +676,180 @@ function flashCommandTarget(node) {
   }, 3200);
 }
 
+
+function findGuidedTargetBySelector(selectors = []) {
+  if (typeof document === "undefined") return null;
+
+  for (const selector of selectors) {
+    const matches = Array.from(document.querySelectorAll(selector));
+
+    const usable = matches.find((node) => {
+      if (!node) return false;
+      if (
+        node.closest(".shsContextGuidanceDrawer") ||
+        node.closest(".shsCommandReactionLayer") ||
+        node.closest(".shsCommandContextBanner")
+      ) {
+        return false;
+      }
+
+      const rect = node.getBoundingClientRect();
+      return rect.width > 20 && rect.height > 20;
+    });
+
+    if (usable) return usable;
+  }
+
+  return null;
+}
+
+function getGuidedActionTarget(step = "") {
+  const normalized = String(step || "").toLowerCase();
+
+  if (normalized.includes("oracle")) {
+    return findGuidedTargetBySelector([
+      ".utc-oracle-panel",
+      "[class*='oracle' i]",
+      "[class*='Oracle' i]",
+    ]);
+  }
+
+  if (normalized.includes("contradiction")) {
+    return findGuidedTargetBySelector([
+      ".utc-intake-card",
+      ".utc-intake",
+      "[class*='intake' i]",
+      "[class*='contradiction' i]",
+      "[class*='risk' i]",
+    ]);
+  }
+
+  if (normalized.includes("franklin") || normalized.includes("dossier")) {
+    return findGuidedTargetBySelector([
+      ".utc-map",
+      ".utc-map-panel",
+      "[class*='map' i]",
+      "[class*='Map' i]",
+    ]);
+  }
+
+  if (normalized.includes("follow-up") || normalized.includes("review")) {
+    return findGuidedTargetBySelector([
+      ".utc-actions",
+      ".utc-action",
+      "[class*='action' i]",
+      "[class*='Action' i]",
+    ]);
+  }
+
+  if (normalized.includes("report") || normalized.includes("export")) {
+    return findGuidedTargetBySelector([
+      ".utc-reporting",
+      ".utc-report",
+      "[class*='report' i]",
+      "[class*='Report' i]",
+    ]);
+  }
+
+  if (normalized.includes("verification")) {
+    return findGuidedTargetBySelector([
+      ".utc-trust-panel",
+      "[class*='verification' i]",
+      "[class*='Verification' i]",
+      "[class*='trust' i]",
+      "[class*='Trust' i]",
+    ]);
+  }
+
+  return null;
+}
+
+function getScrollableParents(node) {
+  if (typeof window === "undefined" || !node) return [];
+
+  const parents = [];
+  let current = node.parentElement;
+
+  while (current && current !== document.body) {
+    const style = window.getComputedStyle(current);
+    const canScroll =
+      /(auto|scroll|overlay)/.test(style.overflowY) &&
+      current.scrollHeight > current.clientHeight + 8;
+
+    if (canScroll) parents.push(current);
+    current = current.parentElement;
+  }
+
+  parents.push(document.scrollingElement || document.documentElement);
+  return parents;
+}
+
+function forceGuidedScrollToTarget(target) {
+  if (!target || typeof window === "undefined") return;
+
+  const focusTarget =
+    target.closest(".utc-card, .utc-action, .utc-actions, .utc-map, .utc-intake, .utc-reporting, section, article") ||
+    target;
+
+  document.querySelectorAll(".shsGuidedActionFocus").forEach((node) => {
+    node.classList.remove("shsGuidedActionFocus", "shsGuidedActionFocus--strong");
+  });
+
+  focusTarget.classList.add("shsGuidedActionFocus");
+
+  const offset = 118;
+
+  // Native scrollIntoView first.
+  try {
+    focusTarget.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "nearest",
+    });
+  } catch {
+    // ignored
+  }
+
+  // Then force every scrollable parent, including the document.
+  const parents = getScrollableParents(focusTarget);
+
+  parents.forEach((parent) => {
+    const rect = focusTarget.getBoundingClientRect();
+
+    if (
+      parent === document.documentElement ||
+      parent === document.body ||
+      parent === document.scrollingElement
+    ) {
+      const top = window.scrollY + rect.top - offset;
+
+      window.scrollTo({
+        top: Math.max(0, top),
+        behavior: "smooth",
+      });
+
+      return;
+    }
+
+    const parentRect = parent.getBoundingClientRect();
+    const top = parent.scrollTop + rect.top - parentRect.top - offset;
+
+    parent.scrollTo({
+      top: Math.max(0, top),
+      behavior: "smooth",
+    });
+  });
+
+  window.setTimeout(() => {
+    focusTarget.classList.add("shsGuidedActionFocus--strong");
+  }, 450);
+
+  window.setTimeout(() => {
+    focusTarget.classList.remove("shsGuidedActionFocus", "shsGuidedActionFocus--strong");
+  }, 4200);
+}
+
+
 function writeGuidedAction(action) {
   if (typeof window === "undefined") return;
 
@@ -848,6 +1024,135 @@ function CommandContextReactionLayer() {
           </li>
         ))}
       </ol>
+    </section>
+  );
+}
+
+
+
+function CommandContextGuidanceDrawer() {
+  const [context, setContext] = useState(() => readCommandContext());
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    function syncContext() {
+      setContext(readCommandContext());
+    }
+
+    window.addEventListener("storage", syncContext);
+    window.addEventListener("shsCommandContext:update", syncContext);
+
+    const timer = window.setInterval(syncContext, 900);
+
+    return () => {
+      window.removeEventListener("storage", syncContext);
+      window.removeEventListener("shsCommandContext:update", syncContext);
+      window.clearInterval(timer);
+    };
+  }, []);
+
+  const reaction = getCommandReaction(context);
+
+  if (!context || !reaction) return null;
+
+  function clearContext() {
+    localStorage.removeItem("shs.commandContext");
+    setContext(null);
+    setIsOpen(false);
+
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("shsCommandContext:update"));
+    }
+  }
+
+  function returnToDashboard() {
+    window.location.hash = "/exchange/dashboard";
+  }
+
+  function handleDrawerStep(step) {
+    writeGuidedAction({
+      step,
+      contextKind: context.kind,
+      contextTitle: context.title,
+      county: context.county,
+      priority: context.priority,
+    });
+
+    const target = getGuidedActionTarget(step);
+
+    if (target) {
+      forceGuidedScrollToTarget(target);
+      return;
+    }
+
+    flashCommandTarget(findCommandNodeByText([context.title || "Command Context"]));
+  }
+
+  return (
+    <section className="shsContextGuidanceDrawer" aria-label="Context guidance drawer">
+      <button
+        className="shsContextGuidanceDrawer__toggle"
+        type="button"
+        onClick={() => setIsOpen((value) => !value)}
+        aria-expanded={isOpen}
+      >
+        <span>⚡</span>
+
+        <div>
+          <strong>Context Guidance</strong>
+          <small>
+            {context.title || "Command Context"} · {context.county || "Systemwide"} · Priority {context.priority || "Normal"}
+          </small>
+        </div>
+
+        <b>{isOpen ? "Collapse" : "Expand"}</b>
+      </button>
+
+      {isOpen && (
+        <div className="shsContextGuidanceDrawer__body">
+          <article className="shsContextGuidanceDrawer__summary">
+            <div className="shsContextGuidanceDrawer__eyebrow">
+              Opened from Workspace Dashboard
+            </div>
+
+            <h3>{reaction.title}</h3>
+
+            <p>{reaction.summary}</p>
+
+            {context.recommendedAction && (
+              <small>
+                Recommended Action: {context.recommendedAction}
+              </small>
+            )}
+          </article>
+
+          <article className="shsContextGuidanceDrawer__actions">
+            <h4>Guided Operator Actions</h4>
+
+            <div>
+              {reaction.steps.map((step) => (
+                <button
+                  type="button"
+                  key={step}
+                  onClick={() => handleDrawerStep(step)}
+                >
+                  {step}
+                </button>
+              ))}
+            </div>
+          </article>
+
+          <footer className="shsContextGuidanceDrawer__footer">
+            <button type="button" onClick={returnToDashboard}>
+              Return to Dashboard
+            </button>
+
+            <button type="button" onClick={clearContext}>
+              Clear Context
+            </button>
+          </footer>
+        </div>
+      )}
     </section>
   );
 }

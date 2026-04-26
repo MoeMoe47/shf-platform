@@ -422,7 +422,81 @@ function OraclePanel() {
   );
 }
 
+
+function saveCommandActionEvent(action) {
+  if (typeof window === "undefined") return null;
+
+  const event = {
+    id: `command-action-${Date.now()}`,
+    createdAt: new Date().toISOString(),
+    source: "shs-command-surface",
+    status: "confirmed",
+    ...action,
+  };
+
+  const current = JSON.parse(localStorage.getItem("shs.commandActionEvents") || "[]");
+  const next = [event, ...current].slice(0, 50);
+
+  localStorage.setItem("shs.commandActionEvents", JSON.stringify(next));
+  window.dispatchEvent(new CustomEvent("shsCommandActionEvent:created", { detail: event }));
+
+  return event;
+}
+
+function ActionConfirmationModal({ action, onCancel, onConfirm }) {
+  if (!action) return null;
+
+  return (
+    <div className="shsActionConfirmOverlay" role="presentation">
+      <section className="shsActionConfirmModal" role="dialog" aria-modal="true" aria-label="Confirm command action">
+        <div className="shsActionConfirmModal__header">
+          <span>{action.icon || "⚡"}</span>
+          <div>
+            <strong>Confirm Command Action</strong>
+            <small>{action.title}</small>
+          </div>
+        </div>
+
+        <p>{action.body || "Confirm that this operator action should be logged into the SHS command workflow."}</p>
+
+        <div className="shsActionConfirmModal__meta">
+          <div><span>Risk</span><b>{action.risk || "Normal"}</b></div>
+          <div><span>Confidence</span><b>{action.confidence || "N/A"}</b></div>
+          <div><span>Requirement</span><b>{action.requirement || "Operator"}</b></div>
+          <div><span>Expected Result</span><b>{action.result || "Action logged"}</b></div>
+        </div>
+
+        <div className="shsActionConfirmModal__footer">
+          <button type="button" onClick={onCancel}>Cancel</button>
+          <button type="button" onClick={() => onConfirm(action)}>Log Action</button>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+
 function ActionRail() {
+  const [pendingAction, setPendingAction] = useState(null);
+  const [lastLoggedAction, setLastLoggedAction] = useState(null);
+
+  function handleConfirmAction(action) {
+    const saved = saveCommandActionEvent({
+      type: "recommended_action",
+      title: action.title,
+      body: action.body,
+      icon: action.icon,
+      tone: action.tone,
+      risk: action.risk,
+      confidence: action.confidence,
+      result: action.result,
+      requirement: action.requirement,
+    });
+
+    setLastLoggedAction(saved);
+    setPendingAction(null);
+  }
+
   return (
     <section className="utc-actions">
       <div className="utc-section-title">
@@ -430,6 +504,14 @@ function ActionRail() {
         <h2>Recommended Next Actions</h2>
         <button type="button">View All Actions →</button>
       </div>
+
+      {lastLoggedAction && (
+        <div className="shsActionLoggedToast" role="status">
+          <span>✓</span>
+          <strong>Action Logged:</strong>
+          <small>{lastLoggedAction.title}</small>
+        </div>
+      )}
 
       <div className="utc-actions__grid">
         {actions.map((action) => (
@@ -445,12 +527,24 @@ function ActionRail() {
                 <div><dt>Requirement</dt><dd>{action.requirement}</dd></div>
               </dl>
             </div>
-            <button type="button">→</button>
+            <button
+              type="button"
+              aria-label={`Log action: ${action.title}`}
+              onClick={() => setPendingAction(action)}
+            >
+              →
+            </button>
           </article>
         ))}
       </div>
 
       <CommandContextGuidanceDrawer />
+
+      <ActionConfirmationModal
+        action={pendingAction}
+        onCancel={() => setPendingAction(null)}
+        onConfirm={handleConfirmAction}
+      />
     </section>
   );
 }

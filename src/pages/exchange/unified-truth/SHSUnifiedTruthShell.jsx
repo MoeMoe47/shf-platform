@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import OperatorIdentityBadge from "./components/OperatorIdentityBadge";
 import useOperatorIdentity from "./useOperatorIdentity";
 import "./shs-unified-truth-shell.css";
@@ -201,7 +201,8 @@ function Header() {
   const operatorIdentity = useOperatorIdentity();
 
   return (
-    <header className="utc-header">
+    <>
+      <header className="utc-header">
       <div className="utc-header__brand">
         <h1>Silicon Heartland Solutions</h1>
         <p>Command Center</p>
@@ -232,7 +233,7 @@ function Header() {
         <OperatorIdentityBadge operator={operatorIdentity} />
       </div>
     </header>
-  );
+    </>);
 }
 
 function KpiStrip() {
@@ -475,6 +476,382 @@ function ReportingDock() {
     </section>
   );
 }
+
+
+function readCommandContext() {
+  if (typeof window === "undefined") return null;
+
+  try {
+    const raw = localStorage.getItem("shs.commandContext");
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function CommandContextBanner() {
+  const [context, setContext] = useState(() => readCommandContext());
+
+  useEffect(() => {
+    function handleStorage() {
+      setContext(readCommandContext());
+    }
+
+    window.addEventListener("storage", handleStorage);
+    window.addEventListener("shsCommandContext:update", handleStorage);
+
+    return () => {
+      window.removeEventListener("storage", handleStorage);
+      window.removeEventListener("shsCommandContext:update", handleStorage);
+    };
+  }, []);
+
+  if (!context) return null;
+
+  function clearContext() {
+    localStorage.removeItem("shs.commandContext");
+    setContext(null);
+  }
+
+  function returnToDashboard() {
+    window.location.hash = "/exchange/dashboard";
+  }
+
+  return (
+    <section className="shsCommandContextBanner" aria-label="Command context">
+      <div className="shsCommandContextBanner__icon">⚠</div>
+
+      <div className="shsCommandContextBanner__body">
+        <div className="shsCommandContextBanner__eyebrow">
+          Command Context · Opened from Workspace Dashboard
+        </div>
+
+        <h2>{context.title || "Command Context"}</h2>
+
+        <p>
+          <strong>{context.county || "Systemwide"}</strong>
+          <span>•</span>
+          <strong>Priority {context.priority || "Normal"}</strong>
+        </p>
+
+        {context.summary && <small>{context.summary}</small>}
+
+        {context.recommendedAction && (
+          <div className="shsCommandContextBanner__recommendation">
+            Recommended Action: {context.recommendedAction}
+          </div>
+        )}
+      </div>
+
+      <div className="shsCommandContextBanner__actions">
+        <button type="button" onClick={returnToDashboard}>
+          Return to Dashboard
+        </button>
+
+        <button type="button" onClick={clearContext}>
+          Clear Context
+        </button>
+      </div>
+    </section>
+  );
+}
+
+
+
+function getCommandReaction(context) {
+  if (!context) return null;
+
+  if (context.kind === "contradiction_review") {
+    return {
+      tone: "orange",
+      title: "Guided Reaction: Contradiction Review",
+      summary: "The system is focusing the operator on contradiction state, Oracle truth package, and Franklin County review.",
+      steps: [
+        "Review Oracle Truth Package",
+        "Inspect contradiction status",
+        "Open Franklin County dossier",
+        "Trigger follow-up review if evidence is incomplete",
+      ],
+      highlightTerms: [
+        "Contradictions",
+        "Oracle Truth Package",
+        "Franklin County",
+        "Recommended Next Actions",
+        "Trigger Follow-up Review",
+      ],
+    };
+  }
+
+  if (context.kind === "report_ready") {
+    return {
+      tone: "green",
+      title: "Guided Reaction: Report Ready",
+      summary: "The system is focusing the operator on reporting readiness, reporting dock, and export review.",
+      steps: [
+        "Review reporting readiness",
+        "Open reporting dock",
+        "Confirm export package",
+        "Release board or executive brief",
+      ],
+      highlightTerms: [
+        "Reporting",
+        "Reporting Dock",
+        "Grant Readiness",
+        "Release Board Brief",
+        "Reports",
+      ],
+    };
+  }
+
+  if (context.kind === "verification_followup") {
+    return {
+      tone: "blue",
+      title: "Guided Reaction: Verification Follow-up",
+      summary: "The system is focusing the operator on verification state, source coverage, and evidence review.",
+      steps: [
+        "Review verification state",
+        "Check source coverage",
+        "Inspect pending verification queue",
+        "Escalate provider verification if needed",
+      ],
+      highlightTerms: [
+        "Verification",
+        "Trust & Verification",
+        "Pending Verification",
+        "Source Coverage",
+        "Escalate Provider Verification",
+      ],
+    };
+  }
+
+  return {
+    tone: "neutral",
+    title: "Guided Reaction: Command Context",
+    summary: "The Command Surface is reacting to workspace context.",
+    steps: [context.recommendedAction || "Review command context"],
+    highlightTerms: [],
+  };
+}
+
+
+function findCommandNodeByText(terms = []) {
+  if (typeof document === "undefined") return null;
+
+  const selectors = [
+    "section",
+    "article",
+    "button",
+    "[class*='card']",
+    "[class*='Card']",
+    "[class*='panel']",
+    "[class*='Panel']",
+    "[class*='map']",
+    "[class*='Map']",
+  ].join(",");
+
+  const nodes = Array.from(document.querySelectorAll(selectors));
+
+  return nodes.find((node) => {
+    const text = (node.textContent || "").replace(/\s+/g, " ").trim().toLowerCase();
+    if (!text) return false;
+
+    return terms.some((term) => text.includes(String(term).toLowerCase()));
+  });
+}
+
+function flashCommandTarget(node) {
+  if (!node) return;
+
+  document.querySelectorAll(".shsGuidedActionFocus").forEach((item) => {
+    item.classList.remove("shsGuidedActionFocus");
+  });
+
+  node.classList.add("shsGuidedActionFocus");
+  node.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+
+  window.setTimeout(() => {
+    node.classList.remove("shsGuidedActionFocus");
+  }, 3200);
+}
+
+function writeGuidedAction(action) {
+  if (typeof window === "undefined") return;
+
+  const current = JSON.parse(localStorage.getItem("shs.guidedActions") || "[]");
+
+  const next = [
+    {
+      id: `guided-${Date.now()}`,
+      action,
+      createdAt: new Date().toISOString(),
+      source: "command-context-reaction-layer",
+    },
+    ...current,
+  ].slice(0, 25);
+
+  localStorage.setItem("shs.guidedActions", JSON.stringify(next));
+  window.dispatchEvent(new CustomEvent("shsCommandGuidedAction", { detail: next[0] }));
+}
+
+
+function CommandContextReactionLayer() {
+  const [context, setContext] = useState(() => readCommandContext());
+
+  useEffect(() => {
+    function syncContext() {
+      setContext(readCommandContext());
+    }
+
+    window.addEventListener("storage", syncContext);
+    window.addEventListener("shsCommandContext:update", syncContext);
+
+    const timer = window.setInterval(syncContext, 800);
+
+    return () => {
+      window.removeEventListener("storage", syncContext);
+      window.removeEventListener("shsCommandContext:update", syncContext);
+      window.clearInterval(timer);
+    };
+  }, []);
+
+  const reaction = getCommandReaction(context);
+
+  useEffect(() => {
+    const root = document.documentElement;
+
+    root.classList.remove(
+      "shs-context-mode",
+      "shs-context-contradiction-review",
+      "shs-context-report-ready",
+      "shs-context-verification-followup"
+    );
+
+    document.querySelectorAll(".shsContextReactiveTarget").forEach((node) => {
+      node.classList.remove("shsContextReactiveTarget");
+    });
+
+    if (!context || !reaction) return;
+
+    root.classList.add("shs-context-mode");
+
+    if (context.kind === "contradiction_review") {
+      root.classList.add("shs-context-contradiction-review");
+    }
+
+    if (context.kind === "report_ready") {
+      root.classList.add("shs-context-report-ready");
+    }
+
+    if (context.kind === "verification_followup") {
+      root.classList.add("shs-context-verification-followup");
+    }
+
+    const terms = reaction.highlightTerms || [];
+    const candidates = Array.from(
+      document.querySelectorAll("section, article, button, .card, [class*='card'], [class*='Card'], [class*='panel'], [class*='Panel']")
+    );
+
+    candidates.forEach((node) => {
+      if (
+        node.closest(".shsCommandReactionLayer") ||
+        node.closest(".shsCommandContextBanner")
+      ) {
+        return;
+      }
+
+      const text = (node.textContent || "").replace(/\s+/g, " ").trim();
+      if (!text) return;
+
+      const matched = terms.some((term) =>
+        text.toLowerCase().includes(String(term).toLowerCase())
+      );
+
+      if (matched) {
+        node.classList.add("shsContextReactiveTarget");
+      }
+    });
+
+    return () => {
+      root.classList.remove(
+        "shs-context-mode",
+        "shs-context-contradiction-review",
+        "shs-context-report-ready",
+        "shs-context-verification-followup"
+      );
+
+      document.querySelectorAll(".shsContextReactiveTarget").forEach((node) => {
+        node.classList.remove("shsContextReactiveTarget");
+      });
+    };
+  }, [context, reaction]);
+
+  if (!context || !reaction) return null;
+
+  function handleGuidedStep(step) {
+    const normalized = String(step || "").toLowerCase();
+
+    writeGuidedAction({
+      step,
+      contextKind: context.kind,
+      contextTitle: context.title,
+      county: context.county,
+      priority: context.priority,
+    });
+
+    if (normalized.includes("oracle")) {
+      flashCommandTarget(findCommandNodeByText(["Oracle Truth Package", "Contradictions", "Readiness Judgment"]));
+      return;
+    }
+
+    if (normalized.includes("contradiction")) {
+      flashCommandTarget(findCommandNodeByText(["Contradictions", "3 Open", "Risk Alerts"]));
+      return;
+    }
+
+    if (normalized.includes("franklin") || normalized.includes("dossier")) {
+      flashCommandTarget(findCommandNodeByText(["Franklin County", "Ohio Statewide Intelligence Map", "View County Dossier"]));
+      return;
+    }
+
+    if (normalized.includes("follow-up") || normalized.includes("review")) {
+      flashCommandTarget(findCommandNodeByText(["Recommended Next Actions", "Trigger Follow-up Review", "Escalate Provider Verification"]));
+      return;
+    }
+
+    if (normalized.includes("report") || normalized.includes("export")) {
+      flashCommandTarget(findCommandNodeByText(["Reporting Dock", "Release Board Brief", "Grant Readiness"]));
+      return;
+    }
+
+    if (normalized.includes("verification")) {
+      flashCommandTarget(findCommandNodeByText(["Trust & Verification", "Pending Verification", "Source Coverage"]));
+      return;
+    }
+
+    flashCommandTarget(findCommandNodeByText([context.title || "Command Context"]));
+  }
+
+  return (
+    <section className={`shsCommandReactionLayer is-${reaction.tone}`}>
+      <div>
+        <span>⚡</span>
+        <strong>{reaction.title}</strong>
+        <p>{reaction.summary}</p>
+      </div>
+
+      <ol>
+        {reaction.steps.map((step) => (
+          <li key={step}>
+            <button type="button" onClick={() => handleGuidedStep(step)}>
+              {step}
+            </button>
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
+}
+
 
 export default function SHSUnifiedTruthShell() {
   return (

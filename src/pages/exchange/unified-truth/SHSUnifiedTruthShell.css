@@ -1,0 +1,115 @@
+
+/* =========================================================
+   COMMAND CONTEXT BANNER
+   Shows why an operator arrived from the Workspace Dashboard.
+   ========================================================= */
+
+.shsCommandContextBanner {
+  margin: 10px 0 14px;
+  border: 1px solid rgba(240, 168, 62, 0.36);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 2% 50%, rgba(240, 168, 62, 0.18), transparent 28%),
+    linear-gradient(180deg, rgba(22, 25, 31, 0.96), rgba(7, 14, 24, 0.96));
+  box-shadow:
+    0 0 32px rgba(240, 168, 62, 0.08),
+    inset 0 0 28px rgba(255, 255, 255, 0.02);
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  color: #edf6ff;
+}
+
+.shsCommandContextBanner__icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  background: rgba(240, 168, 62, 0.12);
+  color: #f0a83e;
+  filter: drop-shadow(0 0 10px currentColor);
+  font-size: 22px;
+}
+
+.shsCommandContextBanner__eyebrow {
+  color: #f0a83e;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  margin-bottom: 4px;
+}
+
+.shsCommandContextBanner h2 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+}
+
+.shsCommandContextBanner p {
+  margin: 6px 0 0;
+  color: rgba(226, 238, 249, 0.8);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+}
+
+.shsCommandContextBanner small {
+  display: block;
+  margin-top: 6px;
+  color: rgba(226, 238, 249, 0.64);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.shsCommandContextBanner__recommendation {
+  margin-top: 8px;
+  color: #52dfd2;
+  font-size: 12px;
+  line-height: 1.35;
+  font-weight: 800;
+}
+
+.shsCommandContextBanner__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.shsCommandContextBanner__actions button {
+  min-height: 38px;
+  border-radius: 10px;
+  border: 1px solid rgba(116, 151, 181, 0.24);
+  background: rgba(5, 15, 26, 0.86);
+  color: #9fcbff;
+  font-weight: 900;
+  padding: 0 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.shsCommandContextBanner__actions button:first-child {
+  border-color: rgba(82, 223, 210, 0.3);
+  color: #52dfd2;
+}
+
+.shsCommandContextBanner__actions button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 18px rgba(82, 223, 210, 0.1);
+}
+
+@media (max-width: 1000px) {
+  .shsCommandContextBanner {
+    grid-template-columns: 40px minmax(0, 1fr);
+  }
+
+  .shsCommandContextBanner__actions {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+}

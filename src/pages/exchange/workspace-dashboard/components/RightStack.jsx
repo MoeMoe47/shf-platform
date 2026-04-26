@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { agendaItems } from "../data/dashboardData";
 import {
+  goToExchangeRoute,
   openDashboardPanel,
   readAgendaItems,
   readWorkspaceReports,
@@ -63,6 +64,18 @@ export default function RightStack() {
     ];
   }, [liveReports]);
 
+  function openCommandContext(context) {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("shs.commandContext", JSON.stringify({
+        ...context,
+        openedFrom: "workspace-dashboard",
+        openedAt: new Date().toISOString(),
+      }));
+    }
+
+    goToExchangeRoute("/exchange/command");
+  }
+
   return (
     <aside className="shsDash-rightStack">
       <section className="shsDash-card shsDash-sideCard">
@@ -71,23 +84,45 @@ export default function RightStack() {
           <button type="button">View All →</button>
         </div>
 
-        <article className="shsDash-notice is-orange">
+        <button
+          className="shsDash-notice shsDash-noticeButton is-orange"
+          type="button"
+          onClick={() => openCommandContext({
+            kind: "contradiction_review",
+            county: "Franklin County",
+            title: "Contradiction Review Needed",
+            summary: "3 new contradictions require review in Franklin County dataset.",
+            priority: "High",
+            recommendedAction: "Open Oracle Truth Package and review contradiction state.",
+          })}
+        >
           <span>⚠</span>
           <div>
             <strong>Contradiction Review Needed</strong>
             <p>3 new contradictions require review in Franklin County dataset.</p>
           </div>
           <small>10:24 AM</small>
-        </article>
+        </button>
 
-        <article className="shsDash-notice is-violet">
+        <button
+          className="shsDash-notice shsDash-noticeButton is-violet"
+          type="button"
+          onClick={() => openCommandContext({
+            kind: "report_ready",
+            county: "Statewide",
+            title: "Report Ready",
+            summary: "Monthly Operational Summary Report is ready for download.",
+            priority: "Normal",
+            recommendedAction: "Review reporting readiness and export package.",
+          })}
+        >
           <span>✦</span>
           <div>
             <strong>Report Ready</strong>
             <p>Monthly Operational Summary Report is ready for download.</p>
           </div>
           <small>8:07 AM</small>
-        </article>
+        </button>
       </section>
 
       <section className="shsDash-card shsDash-sideCard shsDash-agendaCard">

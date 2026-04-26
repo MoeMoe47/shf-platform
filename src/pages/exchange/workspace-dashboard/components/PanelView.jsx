@@ -147,9 +147,66 @@ export default function DashboardPanel({ activePanel, profile, setProfile }) {
       title: "Notifications",
       subtitle: "Contradiction alerts, verification reminders, report-ready alerts, and assignments.",
       cards: [
-        { icon: "⚠", title: "Contradiction Alerts", body: "Review open contradictions that may require command action.", tone: "orange", action: "Open Command Context", onClick: () => goToExchangeRoute("/exchange/command") },
-        { icon: "🛡", title: "Verification Reminders", body: "See records waiting for verification follow-up.", tone: "green" },
-        { icon: "▤", title: "Report Ready Alerts", body: "View reports ready for download or review.", tone: "blue" },
+        {
+          icon: "⚠",
+          title: "Contradiction Alerts",
+          body: "Review open contradictions that may require command action.",
+          tone: "orange",
+          action: "Open Command Context",
+          onClick: () => {
+            localStorage.setItem("shs.commandContext", JSON.stringify({
+              kind: "contradiction_review",
+              county: "Franklin County",
+              title: "Contradiction Alerts",
+              summary: "Open contradictions require command review.",
+              priority: "High",
+              recommendedAction: "Review Oracle truth package and contradiction state.",
+              openedFrom: "workspace-dashboard",
+              openedAt: new Date().toISOString(),
+            }));
+            goToExchangeRoute("/exchange/command");
+          },
+        },
+        {
+          icon: "🛡",
+          title: "Verification Reminders",
+          body: "See records waiting for verification follow-up.",
+          tone: "green",
+          action: "Open Verification Context",
+          onClick: () => {
+            localStorage.setItem("shs.commandContext", JSON.stringify({
+              kind: "verification_followup",
+              county: "Statewide",
+              title: "Verification Reminders",
+              summary: "Records are waiting for verification follow-up.",
+              priority: "Medium",
+              recommendedAction: "Open verification and evidence review state.",
+              openedFrom: "workspace-dashboard",
+              openedAt: new Date().toISOString(),
+            }));
+            goToExchangeRoute("/exchange/command");
+          },
+        },
+        {
+          icon: "▤",
+          title: "Report Ready Alerts",
+          body: "View reports ready for download or review.",
+          tone: "blue",
+          action: "Open Reporting Context",
+          onClick: () => {
+            localStorage.setItem("shs.commandContext", JSON.stringify({
+              kind: "report_ready",
+              county: "Statewide",
+              title: "Report Ready Alerts",
+              summary: "Reports are ready for review or export.",
+              priority: "Normal",
+              recommendedAction: "Review reporting readiness and export package.",
+              openedFrom: "workspace-dashboard",
+              openedAt: new Date().toISOString(),
+            }));
+            goToExchangeRoute("/exchange/command");
+          },
+        },
       ],
     },
     Conference: {

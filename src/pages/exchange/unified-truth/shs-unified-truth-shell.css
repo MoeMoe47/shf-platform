@@ -2059,3 +2059,58 @@
   margin-top: 4px !important;
   font-size: 12px !important;
 }
+
+/* =========================================================
+   ACTION CARD LOGGED STATE
+   Shows when a recommended command action has been logged.
+   ========================================================= */
+
+.utc-action.is-action-logged {
+  border-color: rgba(82, 223, 210, 0.34) !important;
+  background:
+    radial-gradient(circle at 0% 50%, rgba(82, 223, 210, 0.08), transparent 36%),
+    rgba(6, 20, 31, 0.82) !important;
+  box-shadow:
+    0 0 0 1px rgba(82, 223, 210, 0.06),
+    0 0 22px rgba(82, 223, 210, 0.08),
+    inset 0 0 18px rgba(82, 223, 210, 0.025) !important;
+}
+
+.utc-action__titleRow {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+}
+
+.utc-action__titleRow strong {
+  min-width: 0 !important;
+}
+
+.utc-action__titleRow em {
+  min-height: 24px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(82, 223, 210, 0.28) !important;
+  background: rgba(82, 223, 210, 0.08) !important;
+  color: #52dfd2 !important;
+  font-size: 10px !important;
+  font-style: normal !important;
+  font-weight: 950 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  padding: 0 8px !important;
+  white-space: nowrap !important;
+}
+
+.utc-action.is-action-logged > button {
+  color: #52dfd2 !important;
+  border-color: rgba(82, 223, 210, 0.34) !important;
+  background: rgba(82, 223, 210, 0.08) !important;
+  box-shadow: 0 0 14px rgba(82, 223, 210, 0.1) !important;
+}
+
+.utc-action.is-action-logged .utc-action__icon {
+  filter: drop-shadow(0 0 10px rgba(82, 223, 210, 0.55)) !important;
+}

@@ -177,6 +177,8 @@ const reports = [
 function SlimRail() {
   return (
     <aside className="utc-rail">
+      <CommandOverviewHardNavigationGuard />
+      <CommandShellOverviewNavigationGuard />
       <div className="utc-rail__mark">
         <img src={SHS_LOGO_SRC} alt="Silicon Heartland Solutions" />
       </div>
@@ -502,6 +504,19 @@ function formatCommandActivityTime(value) {
   }
 }
 
+
+function isCommandActionLogged(events = [], title = "") {
+  const target = String(title || "").trim().toLowerCase();
+
+  if (!target) return false;
+
+  return events.some((event) => {
+    const eventTitle = String(event?.title || "").trim().toLowerCase();
+    return eventTitle === target;
+  });
+}
+
+
 function RecentCommandActivity() {
   const [events, setEvents] = useState(() => readCommandActionEvents());
 
@@ -570,6 +585,24 @@ function RecentCommandActivity() {
 function ActionRail() {
   const [pendingAction, setPendingAction] = useState(null);
   const [lastLoggedAction, setLastLoggedAction] = useState(null);
+  const [loggedActionEvents, setLoggedActionEvents] = useState(() => readCommandActionEvents());
+
+  useEffect(() => {
+    function syncLoggedActionEvents() {
+      setLoggedActionEvents(readCommandActionEvents());
+    }
+
+    window.addEventListener("storage", syncLoggedActionEvents);
+    window.addEventListener("shsCommandActionEvent:created", syncLoggedActionEvents);
+
+    const timer = window.setInterval(syncLoggedActionEvents, 1200);
+
+    return () => {
+      window.removeEventListener("storage", syncLoggedActionEvents);
+      window.removeEventListener("shsCommandActionEvent:created", syncLoggedActionEvents);
+      window.clearInterval(timer);
+    };
+  }, []);
 
   function handleConfirmAction(action) {
     const saved = saveCommandActionEvent({
@@ -585,6 +618,7 @@ function ActionRail() {
     });
 
     setLastLoggedAction(saved);
+    setLoggedActionEvents(readCommandActionEvents());
     setPendingAction(null);
   }
 
@@ -605,28 +639,42 @@ function ActionRail() {
       )}
 
       <div className="utc-actions__grid">
-        {actions.map((action) => (
-          <article className={`utc-action utc-glow--${action.tone}`} key={action.title}>
-            <span className="utc-action__icon">{action.icon}</span>
-            <div className="utc-action__body">
-              <strong>{action.title}</strong>
-              <p>{action.body}</p>
-              <dl>
-                <div><dt>Risk</dt><dd>{action.risk}</dd></div>
-                <div><dt>Confidence</dt><dd>{action.confidence}</dd></div>
-                <div><dt>Expected Result</dt><dd>{action.result}</dd></div>
-                <div><dt>Requirement</dt><dd>{action.requirement}</dd></div>
-              </dl>
-            </div>
-            <button
-              type="button"
-              aria-label={`Log action: ${action.title}`}
-              onClick={() => setPendingAction(action)}
+        {actions.map((action) => {
+          const actionLogged = isCommandActionLogged(loggedActionEvents, action.title);
+
+          return (
+            <article
+              className={`utc-action utc-glow--${action.tone} ${actionLogged ? "is-action-logged" : ""}`}
+              key={action.title}
             >
-              →
-            </button>
-          </article>
-        ))}
+              <span className="utc-action__icon">{action.icon}</span>
+
+              <div className="utc-action__body">
+                <div className="utc-action__titleRow">
+                  <strong>{action.title}</strong>
+                  {actionLogged && <em>Logged</em>}
+                </div>
+
+                <p>{action.body}</p>
+
+                <dl>
+                  <div><dt>Risk</dt><dd>{action.risk}</dd></div>
+                  <div><dt>Confidence</dt><dd>{action.confidence}</dd></div>
+                  <div><dt>Expected Result</dt><dd>{actionLogged ? "In Progress" : action.result}</dd></div>
+                  <div><dt>Requirement</dt><dd>{action.requirement}</dd></div>
+                </dl>
+              </div>
+
+              <button
+                type="button"
+                aria-label={actionLogged ? `Action logged: ${action.title}` : `Log action: ${action.title}`}
+                onClick={() => setPendingAction(action)}
+              >
+                {actionLogged ? "✓" : "→"}
+              </button>
+            </article>
+          );
+        })}
       </div>
 
       <CommandContextGuidanceDrawer />
@@ -666,6 +714,29 @@ function ReportingDock() {
   );
 }
 
+
+
+function goToWorkspaceDashboardOverview() {
+  if (typeof window === "undefined") return;
+
+  localStorage.setItem("shs.dashboard.activePanel", "Overview");
+  window.dispatchEvent(new CustomEvent("shsDash:panelChange", { detail: "Overview" }));
+  window.location.hash = "/exchange/dashboard";
+}
+
+
+function openWorkspaceDashboardOverview(event) {
+  if (event) {
+    event.preventDefault?.();
+    event.stopPropagation?.();
+  }
+
+  if (typeof window === "undefined") return;
+
+  localStorage.setItem("shs.dashboard.activePanel", "Overview");
+  window.dispatchEvent(new CustomEvent("shsDash:panelChange", { detail: "Overview" }));
+  window.location.hash = "/exchange/dashboard";
+}
 
 function readCommandContext() {
   if (typeof window === "undefined") return null;
@@ -1342,6 +1413,86 @@ function CommandContextGuidanceDrawer() {
       )}
     </section>
   );
+}
+
+
+
+function CommandShellOverviewNavigationGuard() {
+  useEffect(() => {
+    function handleClick(event) {
+      const target = event.target?.closest?.("button, a, [role='button'], [aria-label], [title]");
+      if (!target) return;
+
+      const textLabel = String(target.textContent || "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toLowerCase();
+
+      const ariaLabel = String(target.getAttribute?.("aria-label") || "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toLowerCase();
+
+      const titleLabel = String(target.getAttribute?.("title") || "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toLowerCase();
+
+      const href = String(target.getAttribute?.("href") || "").trim();
+
+      const label = `${textLabel} ${ariaLabel} ${titleLabel}`.trim();
+
+      const isOverview =
+        label === "overview" ||
+        label.includes("overview") ||
+        href === "#/exchange" ||
+        href === "#/exchange/command";
+
+      if (!isOverview) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      goToWorkspaceDashboardOverview();
+    }
+
+    document.addEventListener("click", handleClick, true);
+
+    return () => {
+      document.removeEventListener("click", handleClick, true);
+    };
+  }, []);
+
+  return null;
+}
+
+
+
+function CommandOverviewHardNavigationGuard() {
+  React.useEffect(() => {
+    function handleCommandOverviewClick(event) {
+      const target = event.target?.closest?.("button, a, [role='button']");
+      if (!target) return;
+
+      const label = String(target.textContent || "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toLowerCase();
+
+      const href = String(target.getAttribute?.("href") || "").trim();
+
+      if (label !== "overview" && !href.includes("#/exchange")) return;
+
+      openWorkspaceDashboardOverview(event);
+    }
+
+    document.addEventListener("click", handleCommandOverviewClick, true);
+
+    return () => {
+      document.removeEventListener("click", handleCommandOverviewClick, true);
+    };
+  }, []);
+
+  return null;
 }
 
 

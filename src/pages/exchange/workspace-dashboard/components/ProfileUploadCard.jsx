@@ -1,101 +1,151 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { writeProfile } from "../dashboardUtils";
 
-export default function ProfileUploadCard({ profile, setProfile }) {
-  const inputRef = useRef(null);
+const DEFAULT_PROFILE = {
+  name: "Alex Morgan",
+  role: "Senior Analyst",
+  clearanceLevel: "Tier 3 - High",
+  workspace: "Silicon Heartland Solutions",
+  accountStatus: "Active",
+  memberSince: "Jan 14, 2025",
+  photoUrl: "",
+};
 
-  function openPhotoPicker() {
-    if (inputRef.current) {
-      inputRef.current.value = "";
-      inputRef.current.click();
+export default function ProfileUploadCard({ profile = {}, setProfile }) {
+  const fileInputRef = useRef(null);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const mergedProfile = {
+    ...DEFAULT_PROFILE,
+    ...profile,
+  };
+
+  function updateProfile(nextProfile) {
+    writeProfile(nextProfile);
+    if (typeof setProfile === "function") {
+      setProfile(nextProfile);
     }
   }
 
-  function handleFile(file) {
+  function handlePhotoChange(event) {
+    const file = event.target.files?.[0];
     if (!file) return;
+
+    setIsUploading(true);
 
     const reader = new FileReader();
 
     reader.onload = () => {
-      const next = {
-        ...profile,
+      const nextProfile = {
+        ...mergedProfile,
         photoUrl: String(reader.result || ""),
-        photoUpdatedAt: Date.now(),
       };
 
-      setProfile(next);
-      writeProfile(next);
+      updateProfile(nextProfile);
+      setIsUploading(false);
+    };
 
-      if (inputRef.current) {
-        inputRef.current.value = "";
-      }
+    reader.onerror = () => {
+      setIsUploading(false);
     };
 
     reader.readAsDataURL(file);
   }
 
+  function openPhotoPicker() {
+    fileInputRef.current?.click();
+  }
+
   return (
-    <aside className="shsDash-card shsDash-account">
-      <div className="shsDash-cardTitle">
-        <span>♙</span>
-        <h2>My Account</h2>
-      </div>
-
-      <div
-        className="shsDash-uploadBox"
-        onClick={openPhotoPicker}
-        onDragOver={(event) => event.preventDefault()}
-        onDrop={(event) => {
-          event.preventDefault();
-          handleFile(event.dataTransfer.files?.[0]);
-        }}
-      >
-        <input
-          ref={inputRef}
-          type="file"
-          accept="image/png,image/jpeg,image/jpg,image/webp"
-          hidden
-          onChange={(event) => {
-            handleFile(event.target.files?.[0]);
-            event.target.value = "";
-          }}
-        />
-
-        <div className="shsDash-uploadAvatar">
-          {profile.photoUrl ? (
-            <img
-              key={profile.photoUpdatedAt || profile.photoUrl}
-              src={profile.photoUrl}
-              alt=""
-            />
-          ) : (
-            <span>AM</span>
-          )}
-          <b>📷</b>
+    <section className="shsDash-card shsDash-profileCardV2">
+      <div className="shsDash-profileCardV2__head">
+        <div>
+          <span>👤</span>
+          <small>My Account</small>
         </div>
 
-        <p>Drag & drop image here</p>
-        <button type="button">or click to upload</button>
+        <b>{mergedProfile.accountStatus}</b>
       </div>
 
-      <div className="shsDash-accountActions">
-        <button type="button" onClick={openPhotoPicker}>📷 Change Photo</button>
-        <button type="button">•••</button>
+      <div className="shsDash-profileCardV2__hero">
+        <button
+          className="shsDash-profileCardV2__photoButton"
+          type="button"
+          onClick={openPhotoPicker}
+          aria-label="Change profile photo"
+        >
+          {mergedProfile.photoUrl ? (
+            <img src={mergedProfile.photoUrl} alt={`${mergedProfile.name} profile`} />
+          ) : (
+            <span>{mergedProfile.name?.slice(0, 1) || "A"}</span>
+          )}
+        </button>
+
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handlePhotoChange}
+          hidden
+        />
+
+        <strong>{mergedProfile.name}</strong>
+        <p>{mergedProfile.role}</p>
+
+        <em>{mergedProfile.clearanceLevel} Clearance</em>
+
+        <small>
+          {isUploading
+            ? "Uploading photo..."
+            : "Upload or change your operator identity photo."}
+        </small>
       </div>
 
-      <div className="shsDash-accountRows">
-        <div><span>Name</span><strong>{profile.name || "Alex Morgan"} <b>Verified</b></strong></div>
-        <div><span>Role</span><strong>{profile.role || "Senior Analyst"}</strong></div>
-        <div><span>Workspace</span><strong>Silicon Heartland Solutions</strong></div>
-        <div><span>Clearance Level</span><strong><em>Tier 3 – High</em></strong></div>
-        <div><span>Account Status</span><strong className="is-green">● Active</strong></div>
-        <div><span>Member Since</span><strong>Jan 12, 2023</strong></div>
+      <div className="shsDash-profileCardV2__actions">
+        <button type="button" onClick={openPhotoPicker}>
+          Change Photo
+        </button>
+
+        <button type="button">
+          Edit Profile
+        </button>
+
+        <button type="button">
+          Manage Security
+        </button>
       </div>
 
-      <footer>
-        <button type="button">Edit Profile</button>
-        <button type="button">Manage Security</button>
-      </footer>
-    </aside>
+      <div className="shsDash-profileCardV2__details">
+        <article>
+          <span>Name</span>
+          <strong>{mergedProfile.name}</strong>
+        </article>
+
+        <article>
+          <span>Role</span>
+          <strong>{mergedProfile.role}</strong>
+        </article>
+
+        <article>
+          <span>Workspace</span>
+          <strong>{mergedProfile.workspace}</strong>
+        </article>
+
+        <article>
+          <span>Clearance Level</span>
+          <strong>{mergedProfile.clearanceLevel}</strong>
+        </article>
+
+        <article>
+          <span>Account Status</span>
+          <strong>{mergedProfile.accountStatus}</strong>
+        </article>
+
+        <article>
+          <span>Member Since</span>
+          <strong>{mergedProfile.memberSince}</strong>
+        </article>
+      </div>
+    </section>
   );
 }

@@ -604,6 +604,18 @@ function ActionRail() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!lastLoggedAction) return undefined;
+
+    const lastLoggedActionAutoDismissTimer = window.setTimeout(() => {
+      setLastLoggedAction(null);
+    }, 3200);
+
+    return () => {
+      window.clearTimeout(lastLoggedActionAutoDismissTimer);
+    };
+  }, [lastLoggedAction]);
+
   function handleConfirmAction(action) {
     const saved = saveCommandActionEvent({
       type: "recommended_action",
@@ -631,7 +643,7 @@ function ActionRail() {
       </div>
 
       {lastLoggedAction && (
-        <div className="shsActionLoggedToast" role="status">
+        <div className="shsActionLoggedToast" role="status" key={lastLoggedAction.id}>
           <span>✓</span>
           <strong>Action Logged:</strong>
           <small>{lastLoggedAction.title}</small>

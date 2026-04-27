@@ -5650,3 +5650,26 @@ article.shsCommandReactionLayer,
 .utc-action.is-action-logged .utc-action__icon {
   filter: drop-shadow(0 0 10px rgba(82, 223, 210, 0.55)) !important;
 }
+
+/* =========================================================
+   ACTION LOGGED TOAST AUTO-DISMISS
+   Toast confirms action, then leaves while activity log remains.
+   ========================================================= */
+
+.shsActionLoggedToast {
+  animation:
+    shsActionToastIn 0.28s ease-out both,
+    shsActionToastOut 0.38s ease-in 2.82s forwards !important;
+}
+
+@keyframes shsActionToastOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+}

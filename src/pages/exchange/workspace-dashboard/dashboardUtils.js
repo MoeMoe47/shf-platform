@@ -31,7 +31,11 @@ export function goToExchangeRoute(path) {
 
 export function openDashboardPanel(panel) {
   if (typeof window === "undefined") return;
-  window.dispatchEvent(new CustomEvent("shsDash:setPanel", { detail: panel }));
+
+  const nextPanel = normalizeDashboardPanel(panel);
+
+  localStorage.setItem("shs.dashboard.activePanel", nextPanel);
+  window.dispatchEvent(new CustomEvent("shsDash:setPanel", { detail: nextPanel }));
 }
 
 export function handleWorkspaceTile(title) {
@@ -271,4 +275,19 @@ export function openDashboardOverview() {
   if (window.location.hash !== "#/exchange/dashboard") {
     window.location.hash = "/exchange/dashboard";
   }
+}
+
+
+export function normalizeDashboardPanel(panel) {
+  const value = String(panel || "Overview").trim();
+
+  if (!value) return "Overview";
+
+  const lower = value.toLowerCase();
+
+  if (lower.includes("notification") || lower.includes("alert")) return "Notifications";
+  if (lower.includes("recent activity") || lower === "activity") return "Activity";
+  if (lower.includes("dashboard") || lower === "home") return "Overview";
+
+  return value;
 }

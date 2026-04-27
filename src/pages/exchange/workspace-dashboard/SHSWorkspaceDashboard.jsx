@@ -6,10 +6,13 @@ import DashboardHeader from "./components/DashboardHeader";
 import KpiStrip from "./components/KpiStrip";
 import DashboardPanel from "./components/PanelView";
 import BottomDock from "./components/BottomDock";
-import { readStoredProfile } from "./dashboardUtils";
+import { normalizeDashboardPanel, readStoredProfile } from "./dashboardUtils";
 
 export default function SHSWorkspaceDashboard() {
-  const [activePanel, setActivePanel] = useState("Overview");
+  const [activePanel, setActivePanel] = useState(() => {
+    if (typeof window === "undefined") return "Overview";
+    return normalizeDashboardPanel(localStorage.getItem("shs.dashboard.activePanel") || "Overview");
+  });
   const [profile, setProfile] = useState(() => ({
     name: "Alex Morgan",
     role: "Senior Analyst",
@@ -19,9 +22,21 @@ export default function SHSWorkspaceDashboard() {
 
   const shellProfile = useMemo(() => profile, [profile]);
 
+  function selectDashboardPanel(panel) {
+    const nextPanel = normalizeDashboardPanel(panel);
+
+    setActivePanel(nextPanel);
+
+    if (typeof window !== "undefined") {
+      localStorage.setItem("shs.dashboard.activePanel", nextPanel);
+      window.dispatchEvent(new CustomEvent("shsDash:panelChange", { detail: nextPanel }));
+    }
+  }
+
+
   useEffect(() => {
     function handlePanelEvent(event) {
-      if (event?.detail) setActivePanel(event.detail);
+      if (event?.detail) selectDashboardPanel(event.detail);
     }
 
     window.addEventListener("shsDash:setPanel", handlePanelEvent);
@@ -30,7 +45,7 @@ export default function SHSWorkspaceDashboard() {
 
   return (
     <div className="shsDash-shell">
-      <DashboardRail activePanel={activePanel} setActivePanel={setActivePanel} />
+      <DashboardRail activePanel={activePanel} setActivePanel={selectDashboardPanel} />
 
       <section className="shsDash-workspace">
         <DashboardHeader profile={shellProfile} />

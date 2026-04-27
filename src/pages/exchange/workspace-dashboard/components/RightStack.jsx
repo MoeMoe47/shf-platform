@@ -82,6 +82,7 @@ export default function RightStack() {
         openedFrom: "workspace-dashboard",
         openedAt: new Date().toISOString(),
       }));
+      window.dispatchEvent(new CustomEvent("shsCommandContext:update"));
     }
 
     goToExchangeRoute("/exchange/command");
@@ -92,7 +93,7 @@ export default function RightStack() {
       <section className="shsDash-card shsDash-sideCard">
         <div className="shsDash-sectionHead">
           <h2>🔔 Notifications</h2>
-          <button type="button">View All →</button>
+          <button type="button" onClick={() => openDashboardPanel("Notifications")}>View All →</button>
         </div>
 
         <button

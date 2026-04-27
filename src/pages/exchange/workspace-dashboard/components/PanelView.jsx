@@ -228,6 +228,7 @@ export default function DashboardPanel({ activePanel, profile, setProfile }) {
               openedFrom: "workspace-dashboard",
               openedAt: new Date().toISOString(),
             }));
+              window.dispatchEvent(new CustomEvent("shsCommandContext:update"));
             goToExchangeRoute("/exchange/command");
           },
         },
@@ -248,6 +249,7 @@ export default function DashboardPanel({ activePanel, profile, setProfile }) {
               openedFrom: "workspace-dashboard",
               openedAt: new Date().toISOString(),
             }));
+              window.dispatchEvent(new CustomEvent("shsCommandContext:update"));
             goToExchangeRoute("/exchange/command");
           },
         },
@@ -268,6 +270,7 @@ export default function DashboardPanel({ activePanel, profile, setProfile }) {
               openedFrom: "workspace-dashboard",
               openedAt: new Date().toISOString(),
             }));
+              window.dispatchEvent(new CustomEvent("shsCommandContext:update"));
             goToExchangeRoute("/exchange/command");
           },
         },

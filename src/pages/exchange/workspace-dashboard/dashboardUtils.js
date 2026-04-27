@@ -236,3 +236,39 @@ export function cleanWorkspaceReports() {
 
   return cleaned;
 }
+
+export function readCommandActionEvents() {
+  if (typeof window === "undefined") return [];
+
+  try {
+    const raw = localStorage.getItem("shs.commandActionEvents");
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+export function formatCommandActivityTime(value) {
+  if (!value) return "Just now";
+
+  try {
+    return new Date(value).toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  } catch {
+    return "Just now";
+  }
+}
+
+export function openDashboardOverview() {
+  if (typeof window === "undefined") return;
+
+  localStorage.setItem("shs.dashboard.activePanel", "Overview");
+  window.dispatchEvent(new CustomEvent("shsDash:panelChange", { detail: "Overview" }));
+
+  if (window.location.hash !== "#/exchange/dashboard") {
+    window.location.hash = "/exchange/dashboard";
+  }
+}

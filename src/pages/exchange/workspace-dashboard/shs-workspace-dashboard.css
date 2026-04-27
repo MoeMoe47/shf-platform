@@ -3810,3 +3810,315 @@ article.shsCommandReactionLayer,
 .shsCommandContextDock .shsCommandReactionLayer ol::-webkit-scrollbar {
   display: none !important;
 }
+
+/* =========================================================
+   DASHBOARD RECENT COMMAND ACTIVITY SYNC
+   Reads local command action events from the Command Surface.
+   ========================================================= */
+
+.shsDash-commandActivityCard {
+  border-color: rgba(82, 223, 210, 0.2) !important;
+}
+
+.shsDash-commandActivityRow {
+  min-height: 54px;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  border-radius: 14px;
+  border: 1px solid rgba(116, 151, 181, 0.14);
+  background: rgba(4, 13, 24, 0.42);
+  padding: 9px 10px;
+  margin-top: 8px;
+}
+
+.shsDash-commandActivityRow > span {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: rgba(82, 223, 210, 0.1);
+  color: #52dfd2;
+  filter: drop-shadow(0 0 8px rgba(82, 223, 210, 0.5));
+}
+
+.shsDash-commandActivityRow strong,
+.shsDash-commandActivityEmpty strong,
+.shsDash-commandActivityPanelRow strong {
+  display: block;
+  color: #f4f8ff;
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.shsDash-commandActivityRow small,
+.shsDash-commandActivityEmpty small {
+  display: block;
+  margin-top: 4px;
+  color: rgba(226, 238, 249, 0.58);
+  font-size: 11px;
+}
+
+.shsDash-commandActivityRow b {
+  min-height: 25px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(82, 223, 210, 0.26);
+  background: rgba(82, 223, 210, 0.07);
+  color: #52dfd2;
+  font-size: 10px;
+  font-weight: 950;
+  padding: 0 8px;
+  white-space: nowrap;
+}
+
+.shsDash-commandActivityEmpty {
+  border-radius: 14px;
+  border: 1px dashed rgba(116, 151, 181, 0.18);
+  background: rgba(4, 13, 24, 0.34);
+  padding: 12px;
+  margin-top: 8px;
+}
+
+.shsDash-activityPanel .shsDash-panelHero {
+  margin-bottom: 16px;
+}
+
+.shsDash-commandActivityList {
+  display: grid;
+  gap: 10px;
+}
+
+.shsDash-commandActivityPanelRow {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  border-radius: 16px;
+  border: 1px solid rgba(116, 151, 181, 0.16);
+  background:
+    radial-gradient(circle at 0% 50%, rgba(82, 223, 210, 0.08), transparent 34%),
+    rgba(4, 13, 24, 0.58);
+  padding: 13px;
+}
+
+.shsDash-commandActivityPanelRow > span {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(82, 223, 210, 0.1);
+  color: #52dfd2;
+}
+
+.shsDash-commandActivityPanelRow p {
+  margin: 5px 0 0;
+  color: rgba(226, 238, 249, 0.68);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.shsDash-commandActivityPanelRow small {
+  display: block;
+  margin-top: 6px;
+  color: rgba(226, 238, 249, 0.52);
+  font-size: 11px;
+}
+
+.shsDash-commandActivityPanelRow b {
+  border-radius: 999px;
+  border: 1px solid rgba(82, 223, 210, 0.26);
+  color: #52dfd2;
+  padding: 6px 9px;
+  font-size: 10px;
+  font-weight: 950;
+}
+
+/* =========================================================
+   ACTIVITY PANEL RENDER FIX
+   Ensures Recent Activity panel is not blank.
+   ========================================================= */
+
+.shsDash-activityPanel {
+  min-height: 520px;
+}
+
+.shsDash-commandActivityList {
+  display: grid;
+  gap: 10px;
+  padding: 0;
+}
+
+.shsDash-commandActivityPanelRow {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  border-radius: 16px;
+  border: 1px solid rgba(116, 151, 181, 0.16);
+  background:
+    radial-gradient(circle at 0% 50%, rgba(82, 223, 210, 0.08), transparent 34%),
+    rgba(4, 13, 24, 0.58);
+  padding: 13px;
+}
+
+.shsDash-commandActivityPanelRow > span {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(82, 223, 210, 0.1);
+  color: #52dfd2;
+  filter: drop-shadow(0 0 8px rgba(82, 223, 210, 0.45));
+}
+
+.shsDash-commandActivityPanelRow strong {
+  display: block;
+  color: #f4f8ff;
+  font-size: 14px;
+  font-weight: 950;
+  line-height: 1.2;
+}
+
+.shsDash-commandActivityPanelRow p {
+  margin: 5px 0 0;
+  color: rgba(226, 238, 249, 0.68);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.shsDash-commandActivityPanelRow small {
+  display: block;
+  margin-top: 6px;
+  color: rgba(226, 238, 249, 0.52);
+  font-size: 11px;
+}
+
+.shsDash-commandActivityPanelRow b {
+  border-radius: 999px;
+  border: 1px solid rgba(82, 223, 210, 0.26);
+  color: #52dfd2;
+  background: rgba(82, 223, 210, 0.07);
+  padding: 6px 9px;
+  font-size: 10px;
+  font-weight: 950;
+  white-space: nowrap;
+}
+
+.shsDash-emptyState {
+  border-radius: 16px;
+  border: 1px dashed rgba(116, 151, 181, 0.22);
+  background: rgba(4, 13, 24, 0.45);
+  padding: 18px;
+  color: rgba(226, 238, 249, 0.7);
+}
+
+.shsDash-emptyState strong {
+  display: block;
+  color: #f4f8ff;
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+.shsDash-emptyState p {
+  margin: 0;
+  font-size: 13px;
+}
+
+/* =========================================================
+   DASHBOARD ACTIVITY PANEL — CORRECT COMPONENT FIX
+   Renders command action events inside DashboardPanel.
+   ========================================================= */
+
+.shsDash-activityPanel {
+  min-height: 520px;
+}
+
+.shsDash-commandActivityList {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.shsDash-commandActivityPanelRow {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  border-radius: 16px;
+  border: 1px solid rgba(116, 151, 181, 0.16);
+  background:
+    radial-gradient(circle at 0% 50%, rgba(82, 223, 210, 0.08), transparent 34%),
+    rgba(4, 13, 24, 0.58);
+  padding: 13px;
+}
+
+.shsDash-commandActivityPanelRow > span {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(82, 223, 210, 0.1);
+  color: #52dfd2;
+  filter: drop-shadow(0 0 8px rgba(82, 223, 210, 0.45));
+}
+
+.shsDash-commandActivityPanelRow strong {
+  display: block;
+  color: #f4f8ff;
+  font-size: 14px;
+  font-weight: 950;
+  line-height: 1.2;
+}
+
+.shsDash-commandActivityPanelRow p {
+  margin: 5px 0 0;
+  color: rgba(226, 238, 249, 0.68);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.shsDash-commandActivityPanelRow small {
+  display: block;
+  margin-top: 6px;
+  color: rgba(226, 238, 249, 0.52);
+  font-size: 11px;
+}
+
+.shsDash-commandActivityPanelRow b {
+  border-radius: 999px;
+  border: 1px solid rgba(82, 223, 210, 0.26);
+  color: #52dfd2;
+  background: rgba(82, 223, 210, 0.07);
+  padding: 6px 9px;
+  font-size: 10px;
+  font-weight: 950;
+  white-space: nowrap;
+}
+
+.shsDash-emptyState {
+  border-radius: 16px;
+  border: 1px dashed rgba(116, 151, 181, 0.22);
+  background: rgba(4, 13, 24, 0.45);
+  padding: 18px;
+  color: rgba(226, 238, 249, 0.7);
+}
+
+.shsDash-emptyState strong {
+  display: block;
+  color: #f4f8ff;
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+.shsDash-emptyState p {
+  margin: 0;
+  font-size: 13px;
+}

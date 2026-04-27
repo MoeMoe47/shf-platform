@@ -1,6 +1,6 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { apps } from "../data/dashboardData";
-import { goToExchangeRoute, handleWorkspaceTile, openDashboardPanel } from "../dashboardUtils";
+import { formatCommandActivityTime, goToExchangeRoute, handleWorkspaceTile, openDashboardPanel, readCommandActionEvents } from "../dashboardUtils";
 import ProfileUploadCard from "./ProfileUploadCard";
 import WorkspaceLauncher from "./WorkspaceLauncher";
 import RightStack from "./RightStack";
@@ -11,6 +11,7 @@ import FilesPanel from "./FilesPanel";
 import ReportsPanel from "./ReportsPanel";
 
 function PanelPlaceholder({ title, subtitle, cards = [] }) {
+
   return (
     <section className="shsDash-card shsDash-panelView">
       <div className="shsDash-workspaceHead">
@@ -33,6 +34,65 @@ function PanelPlaceholder({ title, subtitle, cards = [] }) {
     </section>
   );
 }
+
+
+function ActivityPanel() {
+  const [commandEvents, setCommandEvents] = useState(() => readCommandActionEvents());
+
+  useEffect(() => {
+    function syncCommandEvents() {
+      setCommandEvents(readCommandActionEvents());
+    }
+
+    window.addEventListener("storage", syncCommandEvents);
+    window.addEventListener("shsCommandActionEvent:created", syncCommandEvents);
+
+    const timer = window.setInterval(syncCommandEvents, 1200);
+
+    return () => {
+      window.removeEventListener("storage", syncCommandEvents);
+      window.removeEventListener("shsCommandActionEvent:created", syncCommandEvents);
+      window.clearInterval(timer);
+    };
+  }, []);
+
+  return (
+    <section className="shsDash-card shsDash-panelView shsDash-activityPanel">
+      <div className="shsDash-workspaceHead">
+        <div>
+          <h2>Recent Activity</h2>
+          <p>Workspace and Command Surface activity from the SHS operating loop.</p>
+        </div>
+      </div>
+
+      <div className="shsDash-commandActivityList">
+        {commandEvents.length ? (
+          commandEvents.slice(0, 12).map((event) => (
+            <article className="shsDash-commandActivityPanelRow" key={event.id}>
+              <span>{event.icon || "✓"}</span>
+
+              <div>
+                <strong>{event.title || "Command action logged"}</strong>
+                <p>{event.body || "Operator confirmed a Command Surface action."}</p>
+                <small>
+                  Source: Command Surface · Status: {event.status || "confirmed"} · {formatCommandActivityTime(event.createdAt)}
+                </small>
+              </div>
+
+              <b>{event.confidence || "Logged"}</b>
+            </article>
+          ))
+        ) : (
+          <article className="shsDash-emptyState">
+            <strong>No command activity logged yet.</strong>
+            <p>After an operator confirms an action in the Command Surface, it will appear here.</p>
+          </article>
+        )}
+      </div>
+    </section>
+  );
+}
+
 
 export default function DashboardPanel({ activePanel, profile, setProfile }) {
   if (activePanel === "Overview") {
@@ -122,6 +182,10 @@ export default function DashboardPanel({ activePanel, profile, setProfile }) {
         </div>
       </section>
     );
+  }
+
+  if (activePanel === "Activity") {
+    return <ActivityPanel />;
   }
 
   const panelMap = {

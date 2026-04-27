@@ -4,12 +4,15 @@ import {
   goToExchangeRoute,
   openDashboardPanel,
   readAgendaItems,
+  readCommandActionEvents,
   readWorkspaceReports,
+  formatCommandActivityTime,
 } from "../dashboardUtils";
 
 export default function RightStack() {
   const [liveAgendaItems, setLiveAgendaItems] = useState(() => readAgendaItems());
   const [liveReports, setLiveReports] = useState(() => readWorkspaceReports());
+  const [liveCommandActions, setLiveCommandActions] = useState(() => readCommandActionEvents());
 
   useEffect(() => {
     function handleAgendaUpdate(event) {
@@ -20,12 +23,20 @@ export default function RightStack() {
       if (Array.isArray(event.detail)) setLiveReports(event.detail);
     }
 
+    function handleCommandActionUpdate() {
+      setLiveCommandActions(readCommandActionEvents());
+    }
+
     window.addEventListener("shsDash:agendaUpdated", handleAgendaUpdate);
     window.addEventListener("shsDash:reportsUpdated", handleReportsUpdate);
+    window.addEventListener("shsCommandActionEvent:created", handleCommandActionUpdate);
+    window.addEventListener("storage", handleCommandActionUpdate);
 
     return () => {
       window.removeEventListener("shsDash:agendaUpdated", handleAgendaUpdate);
       window.removeEventListener("shsDash:reportsUpdated", handleReportsUpdate);
+      window.removeEventListener("shsCommandActionEvent:created", handleCommandActionUpdate);
+      window.removeEventListener("storage", handleCommandActionUpdate);
     };
   }, []);
 
@@ -147,6 +158,36 @@ export default function RightStack() {
         <button className="shsDash-addTask" type="button">
           + Schedule Meeting
         </button>
+      </section>
+
+
+      <section className="shsDash-card shsDash-sideCard shsDash-commandActivityCard">
+        <div className="shsDash-sectionHead">
+          <h2>⚡ Recent Command Activity</h2>
+          <button type="button" onClick={() => openDashboardPanel("Activity")}>
+            View All →
+          </button>
+        </div>
+
+        {liveCommandActions.length ? (
+          liveCommandActions.slice(0, 3).map((event) => (
+            <article className="shsDash-commandActivityRow" key={event.id}>
+              <span>{event.icon || "✓"}</span>
+              <div>
+                <strong>{event.title || "Command action logged"}</strong>
+                <small>
+                  {event.status || "confirmed"} · {formatCommandActivityTime(event.createdAt)}
+                </small>
+              </div>
+              <b>{event.confidence || "Logged"}</b>
+            </article>
+          ))
+        ) : (
+          <article className="shsDash-commandActivityEmpty">
+            <strong>No command actions yet.</strong>
+            <small>Confirmed Command Surface actions will appear here.</small>
+          </article>
+        )}
       </section>
 
       <section className="shsDash-card shsDash-sideCard">

@@ -94,6 +94,25 @@ function ActivityPanel() {
 }
 
 
+
+function OverviewDashboardMockPanel({ profile, setProfile }) {
+  return (
+    <section className="shsDash-overviewMock">
+      <div className="shsDash-overviewMock__left">
+        <ProfileUploadCard profile={profile} setProfile={setProfile} />
+      </div>
+
+      <div className="shsDash-overviewMock__center">
+        <WorkspaceLauncher />
+      </div>
+
+      <div className="shsDash-overviewMock__right">
+        <RightStack />
+      </div>
+    </section>
+  );
+}
+
 export default function DashboardPanel({ activePanel, profile, setProfile }) {
   if (activePanel === "Overview") {
     return (

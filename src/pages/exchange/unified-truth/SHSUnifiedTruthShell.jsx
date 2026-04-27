@@ -476,6 +476,97 @@ function ActionConfirmationModal({ action, onCancel, onConfirm }) {
 }
 
 
+
+function readCommandActionEvents() {
+  if (typeof window === "undefined") return [];
+
+  try {
+    const raw = localStorage.getItem("shs.commandActionEvents");
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function formatCommandActivityTime(value) {
+  if (!value) return "Just now";
+
+  try {
+    return new Date(value).toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  } catch {
+    return "Just now";
+  }
+}
+
+function RecentCommandActivity() {
+  const [events, setEvents] = useState(() => readCommandActionEvents());
+
+  useEffect(() => {
+    function syncEvents(event) {
+      if (event?.detail) {
+        setEvents(readCommandActionEvents());
+        return;
+      }
+
+      setEvents(readCommandActionEvents());
+    }
+
+    window.addEventListener("storage", syncEvents);
+    window.addEventListener("shsCommandActionEvent:created", syncEvents);
+
+    const timer = window.setInterval(syncEvents, 1200);
+
+    return () => {
+      window.removeEventListener("storage", syncEvents);
+      window.removeEventListener("shsCommandActionEvent:created", syncEvents);
+      window.clearInterval(timer);
+    };
+  }, []);
+
+  const recentEvents = events.slice(0, 5);
+
+  return (
+    <section className="shsRecentCommandActivity" aria-label="Recent command activity">
+      <div className="shsRecentCommandActivity__head">
+        <span>◷</span>
+        <div>
+          <strong>Recent Command Activity</strong>
+          <small>Confirmed operator actions from this command workflow</small>
+        </div>
+      </div>
+
+      {recentEvents.length ? (
+        <div className="shsRecentCommandActivity__list">
+          {recentEvents.map((event) => (
+            <article className="shsRecentCommandActivity__row" key={event.id}>
+              <span>{event.icon || "✓"}</span>
+
+              <div>
+                <strong>{event.title || "Command action logged"}</strong>
+                <small>
+                  {event.type || "recommended_action"} · {event.status || "confirmed"} · {formatCommandActivityTime(event.createdAt)}
+                </small>
+              </div>
+
+              <b>{event.confidence || "Logged"}</b>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div className="shsRecentCommandActivity__empty">
+          <strong>No command actions logged yet.</strong>
+          <small>Confirmed actions will appear here after the operator logs them.</small>
+        </div>
+      )}
+    </section>
+  );
+}
+
+
 function ActionRail() {
   const [pendingAction, setPendingAction] = useState(null);
   const [lastLoggedAction, setLastLoggedAction] = useState(null);
@@ -539,6 +630,8 @@ function ActionRail() {
       </div>
 
       <CommandContextGuidanceDrawer />
+
+      <RecentCommandActivity />
 
       <ActionConfirmationModal
         action={pendingAction}

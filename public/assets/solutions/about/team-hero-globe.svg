@@ -1,0 +1,60 @@
+<svg width="980" height="520" viewBox="0 0 980 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="g1" cx="50%" cy="48%" r="54%">
+      <stop offset="0%" stop-color="#4bb8ff" stop-opacity=".75"/>
+      <stop offset="34%" stop-color="#1266b8" stop-opacity=".55"/>
+      <stop offset="72%" stop-color="#062344" stop-opacity=".82"/>
+      <stop offset="100%" stop-color="#010812" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="lights" cx="45%" cy="35%" r="55%">
+      <stop offset="0%" stop-color="#bdeaff" stop-opacity=".95"/>
+      <stop offset="100%" stop-color="#3fb8ff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="980" height="520" fill="transparent"/>
+  <circle cx="585" cy="255" r="260" fill="url(#g1)"/>
+  <circle cx="585" cy="255" r="260" stroke="#4dbbff" stroke-opacity=".25"/>
+
+  <g opacity=".25">
+    <path d="M335 250 C420 150, 735 130, 900 235" stroke="#74cfff"/>
+    <path d="M325 285 C465 215, 710 205, 910 300" stroke="#74cfff"/>
+    <path d="M390 95 C480 330, 590 435, 735 505" stroke="#74cfff"/>
+    <path d="M485 10 C515 195, 555 370, 625 510" stroke="#74cfff"/>
+    <path d="M635 5 C640 165, 665 355, 735 495" stroke="#74cfff"/>
+    <path d="M780 40 C690 185, 618 360, 565 510" stroke="#74cfff"/>
+  </g>
+
+  <g opacity=".55" stroke="#57bfff" stroke-width="1">
+    <path d="M190 220 C360 55, 760 60, 955 230"/>
+    <path d="M165 315 C315 145, 740 105, 960 350"/>
+    <path d="M300 415 C440 230, 720 170, 930 300"/>
+  </g>
+
+  <g filter="url(#glow)">
+    <circle cx="510" cy="175" r="4" fill="#9ee4ff"/>
+    <circle cx="555" cy="145" r="3.5" fill="#9ee4ff"/>
+    <circle cx="615" cy="190" r="3" fill="#9ee4ff"/>
+    <circle cx="665" cy="175" r="4" fill="#9ee4ff"/>
+    <circle cx="695" cy="230" r="3" fill="#9ee4ff"/>
+    <circle cx="725" cy="210" r="3" fill="#9ee4ff"/>
+    <circle cx="590" cy="230" r="3" fill="#9ee4ff"/>
+    <circle cx="640" cy="270" r="3.5" fill="#9ee4ff"/>
+    <circle cx="710" cy="300" r="3" fill="#9ee4ff"/>
+    <circle cx="535" cy="240" r="2.5" fill="#9ee4ff"/>
+    <circle cx="485" cy="220" r="2.5" fill="#9ee4ff"/>
+  </g>
+
+  <g opacity=".28">
+    <path d="M435 178 C470 150, 520 148, 560 175 C590 195, 630 195, 662 172 C690 151, 735 155, 767 188 C735 226, 675 232, 622 218 C575 206, 530 215, 494 240 C465 260, 425 250, 405 218 C410 203, 420 190, 435 178Z" fill="#c7eeff"/>
+    <path d="M610 275 C650 250, 705 255, 746 290 C710 318, 662 332, 620 320 C590 312, 585 290, 610 275Z" fill="#c7eeff"/>
+    <path d="M510 285 C535 275, 555 288, 570 310 C540 330, 500 322, 485 300 C490 294, 498 289, 510 285Z" fill="#c7eeff"/>
+  </g>
+</svg>

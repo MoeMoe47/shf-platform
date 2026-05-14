@@ -1,0 +1,8 @@
+import { Router } from "express";
+import { getOracleTruthHandler } from "../controllers/oracle.controller";
+
+const router = Router();
+
+router.get("/oracle/truth/:entityId", getOracleTruthHandler);
+
+export default router;

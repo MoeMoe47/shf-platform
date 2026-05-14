@@ -1,6 +1,122 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useSelectedEntity } from "@/system/context/SelectedEntityContext";
 import "./shf-impact-command-center.css";
+import { resolveCountyFromEntity } from "@/system/resolvers/entityToCounty";
+
+
+const SELF_AUDIT_BASE = "http://127.0.0.1:8090";
+
+const ORACLE_BASE = "http://127.0.0.1:8091";
+
+const ORACLE_ENDPOINTS = {
+  truth: "/oracle/truth",
+  compare: "/oracle/compare",
+  priority: "/oracle/priority",
+};
+
+async function fetchOracleBundle({ entityId, county }) {
+  const ids = entityId ? `${entityId},test_case_002` : "test_case_001,test_case_002";
+
+  const truthUrl = entityId
+    ? `${ORACLE_BASE}${ORACLE_ENDPOINTS.truth}/${encodeURIComponent(entityId)}`
+    : null;
+
+  const compareUrl = `${ORACLE_BASE}${ORACLE_ENDPOINTS.compare}?ids=${encodeURIComponent(ids)}`;
+  const priorityUrl = `${ORACLE_BASE}${ORACLE_ENDPOINTS.priority}?ids=${encodeURIComponent(ids)}`;
+
+  const [truthRes, compareRes, priorityRes] = await Promise.allSettled([
+    truthUrl ? fetch(truthUrl) : Promise.resolve(null),
+    fetch(compareUrl),
+    fetch(priorityUrl),
+  ]);
+
+  async function readSettled(res) {
+    if (!res || res.status !== "fulfilled") return null;
+    if (!res.value || !res.value.ok) return null;
+    try {
+      return await res.value.json();
+    } catch {
+      return null;
+    }
+  }
+
+  return {
+    truth: await readSettled(truthRes),
+    compare: await readSettled(compareRes),
+    priority: await readSettled(priorityRes),
+  };
+}
+
+function normalizeOracleInsight(bundle, county) {
+  const truth = bundle?.truth || {};
+  const priority = bundle?.priority || {};
+
+  return {
+    changedText:
+      truth?.recommendedNextAction ||
+      "No Oracle insight available",
+
+    whyPoints: [
+      `Truth Status: ${truth?.truthStatus || "unknown"}`,
+      `Verification: ${truth?.verificationStatus || "unknown"}`,
+      `Confidence: ${truth?.confidenceScore || "—"}`,
+    ],
+
+    nextMoveText:
+      truth?.recommendedNextAction ||
+      "Await further validation.",
+
+    actionLabel: "Execute Oracle recommendation",
+
+    confidence:
+      truth?.confidenceScore != null
+        ? String(truth.confidenceScore)
+        : null,
+
+    priorityLabel:
+      priority?.priority || "Monitor",
+
+    raw: { truth, priority }
+  };
+}
+
+async function fetchSelfAuditLatest() {
+  const res = await fetch(`${SELF_AUDIT_BASE}/self-audit/latest`);
+  if (!res.ok) throw new Error(`latest audit request failed: ${res.status}`);
+  return res.json();
+}
+
+async function fetchSelfAuditLatestBrief() {
+  const res = await fetch(`${SELF_AUDIT_BASE}/self-audit/latest/brief`);
+  if (!res.ok) throw new Error(`latest brief request failed: ${res.status}`);
+  return res.json();
+}
+
+async function runSelfAuditNow() {
+  const res = await fetch(`${SELF_AUDIT_BASE}/self-audit/run?requested_by=command_center`, {
+    method: "POST",
+  });
+  if (!res.ok) throw new Error(`manual self-audit failed: ${res.status}`);
+  return res.json();
+}
+
+function formatAuditDate(value) {
+  if (!value) return "—";
+  try {
+    return new Date(value).toLocaleString();
+  } catch {
+    return value;
+  }
+}
+
 import TourProvider from "@/system/tour/TourProvider";
+import { shfImpactTourSteps } from "./shfImpactTourSteps";
+import ImpactKpiBand from "./sections/ImpactKpiBand";
+import AIAnalystPanel from "./sections/AIAnalystPanel";
+import TrustVerificationPanel from "./sections/TrustVerificationPanel";
+import ReportsBriefingsPanel from "./sections/ReportsBriefingsPanel";
+import ImpactOverviewWheelPanel from "./sections/ImpactOverviewWheelPanel";
+import SHFImpactOhioMap from "./components/SHFImpactOhioMap";
 
 const KPIS = [
   { key: "people", label: "People Served", value: "12,482", delta: "+ 8.2%", sublabel: "Last 30 Days" },
@@ -69,13 +185,147 @@ const PROGRAMS = [
   },
 ];
 
-const ACTIONS = [
-  "Expand Career Launchpad to Summit County",
-  "Intervene at the Columbus Recovery Housing site due to declining client retention rates.",
-  "Prepare grant summary for Autism Awareness Initiative.",
-  "Verify missing placement reports submitted by one workforce network.",
-  "Generate donor brief for Barber Licensure Pathway program.",
-];
+function getActionsForCounty(selectedCounty) {
+  const countyName = selectedCounty?.name || "Selected County";
+  const countyShort = countyName.replace(/\s+County$/i, "").trim();
+
+  return [
+    `Expand Career Launchpad in ${countyName}`,
+    `Intervene in the ${countyShort} Recovery Housing network due to declining client retention rates.`,
+    `Prepare grant summary for Autism Awareness Initiative in ${countyName}.`,
+    `Verify missing placement reports submitted by the ${countyShort} workforce network.`,
+    `Generate donor brief for Barber Licensure Pathway activity in ${countyName}.`,
+  ];
+}
+
+function getSimulationScenario(action, selectedCounty) {
+  const normalized = String(action || "").toLowerCase();
+  const countyName = selectedCounty?.name || "Unknown County";
+  const region = countyName.replace(/\s+County$/i, "").trim();
+
+  let program = "general_program";
+  let issue = "Outcome risk + intervention flow";
+  let priority = "MEDIUM";
+  let demoCase = "emily";
+
+  if (normalized.includes("career launchpad")) {
+    program = "career_launchpad";
+    issue = "Workforce placement expansion + funding readiness";
+    priority = "HIGH";
+    demoCase = "jason";
+  } else if (normalized.includes("recovery housing")) {
+    program = "recovery_housing";
+    issue = "Retention decline + intervention pressure";
+    priority = "HIGH";
+    demoCase = "sophia";
+  } else if (normalized.includes("autism")) {
+    program = "autism_awareness";
+    issue = "Grant narrative + sponsor alignment";
+    priority = "MEDIUM";
+    demoCase = "emily";
+  } else if (normalized.includes("barber")) {
+    program = "barber_licensure";
+    issue = "Program visibility + donor brief readiness";
+    priority = "MEDIUM";
+    demoCase = "emily";
+  }
+
+  return {
+    case: demoCase,
+    contextCaseLabel: `${countyName} | ${program} | ${action}`,
+    region,
+    issue,
+    priority,
+    county: countyName,
+    program,
+    action,
+  };
+}
+function buildAiActionPayload(action, selectedCounty) {
+  const normalized = String(action || "").toLowerCase();
+
+  if (normalized.includes("expand")) {
+    return {
+      title: "AI Recommended Action",
+      summary: action,
+      priority: "High",
+      confidence: "90%",
+      urgency: "IMMEDIATE",
+      nextOutcome: "FUNDED",
+      reasonSignals: [
+        "Placement demand is rising in target county",
+        "Projected outcome lift exceeds intervention cost",
+        "Funding readiness is strong for expansion"
+      ],
+      metrics: [
+        { label: "Priority", value: "High" },
+        { label: "Confidence", value: "90%" },
+        { label: "Urgency", value: "Immediate" },
+        { label: "Next Outcome", value: "Funded" }
+      ],
+      actions: [
+        "Open affected record",
+        "Generate expansion memo",
+        "Assign county rollout review"
+      ],
+      simulationScenario: getSimulationScenario(action, selectedCounty),
+    };
+  }
+
+  if (normalized.includes("intervene")) {
+    return {
+      title: "AI Recommended Action",
+      summary: action,
+      priority: "Medium",
+      confidence: "83%",
+      urgency: "MONITOR",
+      nextOutcome: "STABILIZED",
+      reasonSignals: [
+        "Retention trend has weakened",
+        "Program condition shows intervention pressure",
+        "Delay could reduce funding efficiency"
+      ],
+      metrics: [
+        { label: "Priority", value: "Medium" },
+        { label: "Confidence", value: "83%" },
+        { label: "Urgency", value: "Monitor" },
+        { label: "Next Outcome", value: "Stabilized" }
+      ],
+      actions: [
+        "Open affected record",
+        "Generate intervention memo",
+        "Assign operations review"
+      ],
+      simulationScenario: getSimulationScenario(action, selectedCounty),
+    };
+  }
+
+  return {
+    title: "AI Recommended Action",
+    summary: action,
+    priority: "Low",
+    confidence: "76%",
+    urgency: "QUEUE",
+    nextOutcome: "REVIEWED",
+    reasonSignals: [
+      "Action is valuable but not urgent",
+      "Current system pressure is limited",
+      "Can be handled in the next review cycle"
+    ],
+    metrics: [
+      { label: "Priority", value: "Low" },
+      { label: "Confidence", value: "76%" },
+      { label: "Urgency", value: "Queue" },
+      { label: "Next Outcome", value: "Reviewed" }
+    ],
+    actions: [
+      "Open affected record",
+      "Generate summary memo",
+      "Queue for later review"
+    ],
+    simulationScenario: getSimulationScenario(action, selectedCounty),
+  };
+}
 
 const TRUST_ITEMS = [
   { key: "coverage", label: "Reporting Coverage", value: "92%" },
@@ -93,6 +343,13 @@ const EXPORT_ITEMS = [
   { label: "Program Health Memo", value: "" },
 ];
 
+
+
+function buildAIInsight() {
+  return null;
+}
+
+
 const WHEEL_SEGMENTS = [
   { label: "Outcome Verification", value: "18%", tone: "seg-1" },
   { label: "Funding", value: "17%", tone: "seg-2" },
@@ -108,113 +365,537 @@ const WHEEL_SEGMENTS = [
 ];
 
 function DetailDrawer({ selected, onClose }) {
+  const [simulation, setSimulation] = useState(null);
+  const [simLoading, setSimLoading] = useState(false);
+  const [simError, setSimError] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function runSimulation() {
+      if (!selected?.simulationScenario) {
+        setSimulation(null);
+        setSimError("");
+        return;
+      }
+
+      setSimLoading(true);
+      setSimError("");
+
+      try {
+        const res = await fetch("http://127.0.0.1:8090/simulate-outcome", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            case: selected.simulationScenario?.case || "emily",
+            region: selected.simulationScenario?.region || "Unknown region",
+            issue: selected.simulationScenario?.issue || "Outcome risk + intervention flow",
+            priority: selected.simulationScenario?.priority || "MEDIUM",
+          }),
+        });
+
+        if (!res.ok) {
+          throw new Error(`Simulation HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+        if (!cancelled) setSimulation(data);
+      } catch (err) {
+        if (!cancelled) {
+          setSimulation(null);
+          setSimError(String(err.message || err));
+        }
+      } finally {
+        if (!cancelled) setSimLoading(false);
+      }
+    }
+
+    if (selected) {
+      runSimulation();
+    } else {
+      setSimulation(null);
+      setSimError("");
+      setSimLoading(false);
+    }
+return () => {
+      cancelled = true;
+    };
+  }, [selected]);
+
   if (!selected) return null;
 
-  return (
-    <TourProvider>
-<div className="shf-drawer-backdrop" onClick={onClose}>
-      <aside className="shf-drawer" onClick={(e) => e.stopPropagation()}>
-        <div className="shf-drawer__header">
-          <div>
-            <div className="shf-eyebrow">Command Detail</div>
-            <h3>{selected.title}</h3>
+  const metrics = Array.isArray(selected.metrics) ? selected.metrics : [];
+  const actions = Array.isArray(selected.actions) ? selected.actions : [];
+  const reasonSignals = selected.reasonSignals || [];
+
+  const priorityMetric = selected.priority;
+  const confidenceMetric = selected.confidence;
+
+  function pct(value) {
+    if (value === null || value === undefined || Number.isNaN(Number(value))) return "—";
+
+    const num = Number(value);
+
+    if (num > 1) return `${Math.round(num)}%`;
+    return `${Math.round(num * 100)}%`;
+  }
+return (
+    <div className="shf-detail-drawer__backdrop" onClick={onClose}>
+      <aside
+        className="shf-detail-drawer shf-detail-drawer--command" data-tour="shf-impact-drawer"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="shf-detail-drawer__header">
+          <div style={{
+            marginBottom: 8,
+            fontSize: 11,
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+            color: "rgba(121,104,90,0.82)",
+            fontWeight: 700
+          }}>
+            DRAWER PACKET
           </div>
-          <button className="shf-icon-btn" onClick={onClose} type="button">
-            ✕
+          <div>
+            <div className="shf-detail-drawer__eyebrow">COMMAND DETAIL</div>
+            <h2>{selected.title || "AI Recommended Action"}</h2>
+          </div>
+
+          <button
+            type="button"
+            className="shf-detail-drawer__close"
+            onClick={onClose}
+            aria-label="Close drawer"
+          >
+            ×
           </button>
         </div>
 
-        <div className="shf-drawer__body">
-          <div className="shf-drawer-card">
-            <div className="shf-drawer-card__label">Summary</div>
-            <p>{selected.summary}</p>
+        <div className="shf-drawer-command-hero">
+          <div className="shf-drawer-command-hero__topline">
+            <span className="shf-command-chip">SYSTEM RECOMMENDS</span>
+            <span className="shf-command-urgency">{selected.urgency}</span>
           </div>
 
-          {selected.metrics?.length ? (
-            <div className="shf-drawer-card">
-              <div className="shf-drawer-card__label">Key Metrics</div>
-              <div className="shf-drawer-metrics">
-                {selected.metrics.map((item) => (
-                  <div key={item.label} className="shf-drawer-metric">
-                    <span>{item.label}</span>
-                    <strong>{item.value}</strong>
-                  </div>
-                ))}
+          <h3>{selected.summary}</h3>
+
+          <div className="shf-drawer-command-hero__metrics">
+            <div className="shf-drawer-command-hero__metric">
+              <span>Priority</span>
+              <strong>{priorityMetric}</strong>
+            </div>
+
+            <div className="shf-drawer-command-hero__metric">
+              <span>Confidence</span>
+              <strong>{confidenceMetric}</strong>
+            </div>
+          </div>
+        </div>
+
+        {selected.simulationScenario ? (
+          <div className="shf-sim-input-summary">
+            <span>Simulation Input</span>
+            <strong>{selected.simulationScenario.county || "Unknown County"}</strong>
+            <em>
+              {selected.simulationScenario.program || "general_program"} • {selected.simulationScenario.region || "Unknown region"} • {selected.simulationScenario.priority || "MEDIUM"}
+            </em>
+          </div>
+        ) : null}
+
+        <div className="shf-detail-drawer__section">
+          <div className="shf-detail-drawer__section-title">WHY THIS ACTION WAS SELECTED</div>
+
+          {reasonSignals.length ? (
+            <ul className="shf-detail-drawer__list">
+              {reasonSignals.map((r) => (
+                <li key={r}>{r}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>
+              This action ranks highest due to risk pressure, outcome improvement potential,
+              and projected funding impact.
+            </p>
+          )}
+        </div>
+
+        {metrics.length ? (
+          <div className="shf-detail-drawer__section">
+            <div className="shf-detail-drawer__section-title">KEY METRICS</div>
+            <div className="shf-detail-drawer__metric-grid">
+              {metrics.map((metric) => (
+                <div key={metric.label} className="shf-detail-drawer__metric-card">
+                  <span>{metric.label}</span>
+                  <strong>{metric.value}</strong>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        <div className="shf-detail-drawer__section">
+          <div className="shf-detail-drawer__section-title">SIMULATION OUTPUT</div>
+
+          {simLoading ? (
+            <div className="shf-sim-loading">Running simulation...</div>
+          ) : simError ? (
+            <div className="shf-sim-error">Simulation unavailable: {simError}</div>
+          ) : simulation ? (
+            <>
+              <div className="shf-detail-drawer__metric-grid">
+                <div className="shf-detail-drawer__metric-card">
+                  <span>Risk Now</span>
+                  <strong>{pct(simulation.output?.riskNow)}</strong>
+                </div>
+                <div className="shf-detail-drawer__metric-card">
+                  <span>Risk If Action</span>
+                  <strong>{pct(simulation.output?.riskIfAction)}</strong>
+                </div>
+                <div className="shf-detail-drawer__metric-card">
+                  <span>Risk If No Action</span>
+                  <strong>{pct(simulation.output?.riskIfNoAction)}</strong>
+                </div>
+                <div className="shf-detail-drawer__metric-card">
+                  <span>Confidence</span>
+                  <strong>{pct((simulation.output?.ai?.confidence ?? 0) / 100)}</strong>
+                </div>
+                <div className="shf-detail-drawer__metric-card">
+                  <span>Funding If Action</span>
+                  <strong>{simulation.output?.fundingIfAction ?? "—"}</strong>
+                </div>
+                <div className="shf-detail-drawer__metric-card">
+                  <span>Funding If No Action</span>
+                  <strong>{simulation.output?.fundingIfNoAction ?? "—"}</strong>
+                </div>
               </div>
-            </div>
-          ) : null}
 
-          {selected.actions?.length ? (
-            <div className="shf-drawer-card">
-              <div className="shf-drawer-card__label">Recommended Actions</div>
-              <ul className="shf-drawer-list">
-                {selected.actions.map((action) => (
-                  <li key={action}>{action}</li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
+              <div className="shf-delta-grid">
+                <div className="shf-delta-card shf-delta-card--positive">
+                  <span>Risk Reduction</span>
+                  <strong>
+                    {simulation.output?.riskNow != null && simulation.output?.riskIfAction != null
+                      ? `${Math.max(0, Math.round(simulation.output.riskNow - simulation.output.riskIfAction))}%`
+                      : "—"}
+                  </strong>
+                </div>
 
-          <div className="shf-drawer-card">
-            <div className="shf-drawer-card__label">Why It Matters</div>
-            <p>{selected.reason}</p>
+                <div className="shf-delta-card shf-delta-card--negative">
+                  <span>Risk Increase if No Action</span>
+                  <strong>
+                    {simulation.output?.riskNow != null && simulation.output?.riskIfNoAction != null
+                      ? `${Math.max(0, Math.round(simulation.output.riskIfNoAction - simulation.output.riskNow))}%`
+                      : "—"}
+                  </strong>
+                </div>
+
+                <div className="shf-delta-card">
+                  <span>Recommended Strategy</span>
+                  <strong>{simulation.output?.ai?.game_theory?.recommended_strategy ?? "—"}</strong>
+                </div>
+
+                <div className="shf-delta-card">
+                  <span>Time Sensitivity</span>
+                  <strong>{simulation.output?.ai?.time_sensitivity ?? simulation.output?.urgency ?? "—"}</strong>
+                </div>
+              </div>
+            </>
+          ) : (
+            <p>No simulation data available.</p>
+          )}
+        </div>
+
+        {actions.length ? (
+          <div className="shf-detail-drawer__section">
+            <div className="shf-detail-drawer__section-title">EXECUTION STEPS</div>
+            <ul className="shf-detail-drawer__list">
+              {actions.map((action) => (
+                <li key={action}>{action}</li>
+              ))}
+            </ul>
           </div>
+        ) : null}
+
+        <div className="shf-detail-drawer__section shf-detail-drawer__section--next">
+          <div className="shf-detail-drawer__section-title">NEXT MOVE AFTER EXECUTION</div>
+          <p>
+            Next likely outcome: <strong>{selected.nextOutcome}</strong>. System will re-evaluate the affected record, compare outcome performance against funding allocation, adjust intervention strategy, and issue the next optimized recommendation cycle.
+          </p>
         </div>
       </aside>
     </div>
-    </TourProvider>
   );
 }
 
+
+function normalizeCountyName(name = "") {
+  return String(name).replace(/\s+County$/i, "").trim().toLowerCase();
+}
+
+
+function buildDrawerPayload({
+  title = "Command Detail",
+  summary = "No summary provided.",
+  metrics = [],
+  actions = [],
+  reason = "No command rationale provided.",
+  priority = "Monitor",
+  confidence = "—",
+  nextOutcome = "REVIEWED",
+  simulationScenario = null,
+  reasonSignals = [],
+}) {
+  return {
+    title,
+    summary,
+    metrics: Array.isArray(metrics) ? metrics : [],
+    actions: Array.isArray(actions) ? actions : [],
+    reason,
+    priority,
+    confidence,
+    nextOutcome,
+    simulationScenario,
+    reasonSignals: Array.isArray(reasonSignals) ? reasonSignals : [],
+  };
+}
+
+function buildCountyFallback(county) {
+  const rawName =
+    county?.name ||
+    county?.county ||
+    county?.label ||
+    county?.properties?.name ||
+    county?.properties?.NAME ||
+    "Unknown County";
+
+  const properName = /county$/i.test(rawName) ? rawName : `${rawName} County`;
+
+  return {
+    id: normalizeCountyName(properName).replace(/\s+/g, "-"),
+    name: properName,
+    x: county?.x ?? 50,
+    y: county?.y ?? 50,
+    shade: county?.shade ?? "low",
+    programs: county?.programs ?? 1,
+    people: county?.people ?? "—",
+    funding: county?.funding ?? "—",
+    topOutcome: county?.topOutcome ?? "—",
+    risk: county?.risk ?? "Stable",
+  };
+}
+
+function resolveCountyRecord(county, counties) {
+  const rawName =
+    county?.name ||
+    county?.county ||
+    county?.label ||
+    county?.properties?.name ||
+    county?.properties?.NAME ||
+    county ||
+    "";
+
+  const clickedNorm = normalizeCountyName(rawName);
+
+  const found = counties.find((item) => {
+return (
+      normalizeCountyName(item.name) === clickedNorm ||
+      String(item.id || "").toLowerCase() === clickedNorm
+    );
+  });
+
+  return found || buildCountyFallback(county);
+}
+
+
+
 export default function SHFImpactCommandCenter() {
-  const [selectedCounty, setSelectedCounty] = useState(COUNTIES[0]);
+  // DAY 7 STABILITY CHECKPOINT: core command surface normalized through Days 1–7.
+  const { selectedEntityId, lastEntityAction, selectedEntity } = useSelectedEntity();
+
   const [selected, setSelected] = useState(null);
+  
+  
 
-  const trendPoints = useMemo(
-    () => [8, 12, 10, 14, 18, 16, 20, 24, 22, 28, 26, 30, 34, 33, 38, 42],
-    []
-  );
+  const [oracleBundle, setOracleBundle] = useState(null);
+  const [oracleLoading, setOracleLoading] = useState(false);
+  const [oracleError, setOracleError] = useState("");
+const [lastCountyClick, setLastCountyClick] = useState(null);
+  const [lastDrawerTitle, setLastDrawerTitle] = useState(null);
+const [selfAudit, setSelfAudit] = useState(null);
+  const [selfAuditBrief, setSelfAuditBrief] = useState(null);
+  const [selfAuditLoading, setSelfAuditLoading] = useState(false);
+  const [selfAuditError, setSelfAuditError] = useState("");
 
-  const openDrawer = (title, summary, metrics = [], actions = [], reason = "") => {
-    setSelected({ title, summary, metrics, actions, reason });
+  const selectedCounty = useMemo(() => {
+    return resolveCountyFromEntity(selectedEntity);
+  }, [selectedEntity]);
+
+  const oracleInsight = useMemo(() => {
+    if (!oracleBundle) return null;
+    return normalizeOracleInsight(oracleBundle, selectedCounty);
+  }, [oracleBundle, selectedCounty]);
+
+
+  const selectedCountyRecord = useMemo(() => {
+    if (!selectedCounty) return null;
+    return resolveCountyRecord(selectedCounty, COUNTIES);
+  }, [selectedCounty]);
+
+
+  const countyActions = useMemo(() => {
+    return getActionsForCounty(selectedCountyRecord || selectedCounty);
+  }, [selectedCountyRecord, selectedCounty]);
+
+
+  const oracleStatusLabel = useMemo(() => {
+    if (oracleLoading) return "ORACLE SYNCING";
+    if (oracleError) return "ORACLE FALLBACK MODE";
+    if (oracleBundle?.truth || oracleBundle?.compare || oracleBundle?.priority) {
+      return "ORACLE ACTIVE";
+    }
+    return "SYSTEM READY";
+  }, [oracleLoading, oracleError, oracleBundle]);
+
+
+  const surfaceReady = useMemo(() => {
+    return Boolean(
+      selectedEntityId !== undefined &&
+      selectedCounty !== undefined &&
+      oracleInsight &&
+      countyActions
+    );
+  }, [selectedEntityId, selectedCounty, oracleInsight, countyActions]);
+
+
+  const aiDisplayInsight = useMemo(() => {
+    const countyName =
+      selectedCountyRecord?.name ||
+      selectedCounty ||
+      "Unknown County";
+
+    return {
+      changedText: `${oracleInsight?.changedText || "No Oracle insight available"} Current county context: ${countyName}.`,
+      whyPoints: [
+        ...(oracleInsight?.whyPoints || []),
+        `Map context is currently bound to ${countyName}.`,
+      ],
+      nextMoveText: oracleInsight?.nextMoveText || "Await further validation.",
+    };
+  }, [oracleInsight, selectedCountyRecord, selectedCounty]);
+
+  const trendPoints = useMemo(() => {
+    return [8, 12, 10, 14, 18, 16, 20, 24, 22, 28, 26, 30, 34, 33, 38, 42];
+  }, []);
+
+  const loadSelfAudit = useCallback(async () => {
+    setSelfAuditLoading(true);
+    setSelfAuditError("");
+    try {
+      const [latest, brief] = await Promise.all([
+        fetchSelfAuditLatest(),
+        fetchSelfAuditLatestBrief().catch(() => null),
+      ]);
+      setSelfAudit(latest);
+      setSelfAuditBrief(brief);
+    } catch (err) {
+      setSelfAuditError(err?.message || "Unable to load self-audit");
+    } finally {
+      setSelfAuditLoading(false);
+    }
+  }, []);
+
+  const handleRunSelfAudit = useCallback(async () => {
+    setSelfAuditLoading(true);
+    setSelfAuditError("");
+    try {
+      const latest = await runSelfAuditNow();
+      setSelfAudit(latest);
+      try {
+        const brief = await fetchSelfAuditLatestBrief();
+        setSelfAuditBrief(brief);
+      } catch {
+        // keep audit payload even if brief fetch lags
+      }
+    } catch (err) {
+      setSelfAuditError(err?.message || "Unable to run self-audit");
+    } finally {
+      setSelfAuditLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadSelfAudit();
+  }, [loadSelfAudit]);
+
+  const selfAuditStatus = selfAudit?.status || "unknown";
+  const selfAuditScore = selfAudit?.scores?.institutional_integrity ?? "—";
+  const selfAuditTopChange =
+    selfAudit?.changes_since_prior?.[0]?.message || "No recent changes recorded.";
+  const selfAuditTopAction =
+    selfAudit?.recommended_actions?.[0]?.message || "No action needed.";
+
+  const openDrawer = (payload) => {
+    const normalized = buildDrawerPayload(payload || {});
+    setLastDrawerTitle(normalized.title || null);
+    setSelected(normalized);
   };
 
   const onKpiClick = (kpi) => {
-    openDrawer(
-      kpi.label,
-      `${kpi.label} is being tracked at the institutional layer for SHF command visibility.`,
-      [
+    openDrawer({
+      title: kpi.label,
+      summary: `${kpi.label} is being tracked at the institutional layer for SHF command visibility.`,
+      metrics: [
         { label: "Current Value", value: kpi.value },
         { label: "Change", value: kpi.delta || "—" },
-        { label: "Reporting Window", value: kpi.sublabel },
+        { label: "Context", value: kpi.sublabel || "System Wide" },
       ],
-      ["Open metric history", "Review county contributors", "Generate briefing note"],
-      "This metric influences leadership visibility, operational prioritization, and report readiness."
-    );
+      actions: [
+        "Review trend context",
+        "Compare to previous cycle",
+        "Include in export brief",
+      ],
+      reason: "KPI movement helps operators understand funding pressure, outcome momentum, and institutional readiness.",
+      priority: "Monitor",
+      confidence: "—",
+      nextOutcome: "REVIEWED",
+    });
   };
 
   const onCountyClick = (county) => {
-    setSelectedCounty(county);
-    openDrawer(
-      county.name,
-      `${county.name} is one of the active SHF command regions with measurable program and funding activity.`,
-      [
-        { label: "Programs Active", value: String(county.programs) },
-        { label: "People Served", value: county.people },
-        { label: "Funding Deployed", value: county.funding },
-        { label: "Top Outcome", value: county.topOutcome },
-        { label: "Risk Signal", value: county.risk },
+    const resolvedCounty = resolveCountyRecord(county, COUNTIES);
+    setLastCountyClick(resolvedCounty.name);
+
+    openDrawer({
+      title: resolvedCounty.name,
+      summary: `${resolvedCounty.name} is the active SHF command region for simulation context, measurable program activity, and funding movement.`,
+      metrics: [
+        { label: "Programs Active", value: String(resolvedCounty.programs) },
+        { label: "People Served", value: resolvedCounty.people },
+        { label: "Funding Deployed", value: resolvedCounty.funding },
+        { label: "Top Outcome", value: resolvedCounty.topOutcome },
+        { label: "Risk Signal", value: resolvedCounty.risk },
       ],
-      ["Open county profile", "Review site operators", "Generate county brief"],
-      "County drilldowns help leadership see where to expand, intervene, verify, or report."
-    );
+      actions: [
+        `Open ${resolvedCounty.name} profile`,
+        `Review ${resolvedCounty.name} operators`,
+        `Generate ${resolvedCounty.name} brief`,
+      ],
+      reason: "County drilldowns help leadership see where to expand, intervene, verify, or report.",
+      priority: resolvedCounty.risk === "Watch" ? "High" : "Monitor",
+      confidence: "—",
+      nextOutcome: "REVIEWED",
+      reasonSignals: [
+        `${resolvedCounty.name} selected from map surface`,
+        `County programs: ${resolvedCounty.programs}`,
+        `County funding: ${resolvedCounty.funding}`,
+      ],
+    });
   };
 
   const onProgramClick = (program) => {
-    openDrawer(
-      program.name,
-      program.note,
-      [
+    openDrawer({
+      title: program.name,
+      summary: program.note,
+      metrics: [
         { label: "Status", value: program.status },
         { label: "Locations", value: String(program.locations) },
         { label: "Funding", value: program.funding },
@@ -222,35 +903,108 @@ export default function SHFImpactCommandCenter() {
         { label: "Risk", value: program.risk },
         { label: "Served", value: program.served },
       ],
-      ["Open program command view", "Generate donor brief", "Review reporting completeness"],
-      "Program health drives expansion, intervention, and funding narrative quality."
-    );
+      actions: [
+        "Open program command view",
+        "Generate donor brief",
+        "Review reporting completeness",
+      ],
+      reason: "Program health drives expansion, intervention, and funding narrative quality.",
+      priority: program.risk === "Low" ? "Monitor" : "High",
+      confidence: "—",
+      nextOutcome: "REVIEWED",
+    });
+  };
+
+  const onAiActionClick = async (action) => {
+    if (!selectedEntityId || !action) return;
+
+    await fetch("http://127.0.0.1:8091/oracle/action", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        entityId: selectedEntityId,
+        action,
+      }),
+    });
+
+    await fetch("http://127.0.0.1:8090/events", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        event: {
+          entity_id: selectedEntityId,
+          action,
+          source: "command_center",
+        },
+      }),
+    });
+
+    try {
+      const bundle = await fetchOracleBundle({
+        entityId: selectedEntityId,
+        county: selectedCounty,
+      });
+      setOracleBundle(bundle);
+      setOracleError("");
+    } catch (err) {
+      setOracleError(err?.message || "Unable to refresh Oracle bundle after action.");
+    }
   };
 
   const onTrustClick = (item) => {
-    openDrawer(
-      item.label,
-      `${item.label} is part of the SHF proof and trust layer.`,
-      [
+    openDrawer({
+      title: item.label,
+      summary: `${item.label} is part of the SHF proof and trust layer.`,
+      metrics: [
         { label: "Status", value: item.value },
         { label: "Last Refresh", value: "Today" },
       ],
-      ["Open verification detail", "Review exceptions", "Generate trust memo"],
-      "This layer separates SHF from ordinary dashboards by proving integrity, not just claiming it."
-    );
+      actions: [
+        "Open verification detail",
+        "Review exceptions",
+        "Generate trust memo",
+      ],
+      reason: "This layer separates SHF from ordinary dashboards by proving integrity, not just claiming it.",
+      priority: "Monitor",
+      confidence: "—",
+      nextOutcome: "REVIEWED",
+    });
+  };
+
+  const onImpactOverviewClick = () => {
+    openDrawer({
+      title: "Impact Overview Wheel",
+      summary: "The outcome wheel visualizes the SHF operating balance across verification, funding, reporting, governance, and community impact.",
+      metrics: WHEEL_SEGMENTS.map((seg) => ({ label: seg.label, value: seg.value })),
+      actions: [
+        "Open segment breakdown",
+        "Compare weighting model",
+        "Generate strategic summary",
+      ],
+      reason: "This signature visual helps leadership understand how the institutional ecosystem is weighted and performing.",
+      priority: "Monitor",
+      confidence: "—",
+      nextOutcome: "REVIEWED",
+    });
   };
 
   const onExportClick = (item) => {
-    openDrawer(
-      item.label,
-      `${item.label} can be generated from the command center export system.`,
-      [
+    openDrawer({
+      title: item.label,
+      summary: `${item.label} can be generated from the command center export system.`,
+      metrics: [
         { label: "Status", value: item.value || "Available" },
-        { label: "Format", value: item.label.includes("Snapshot") ? "PDF / Share" : "PDF" },
+        {
+          label: "Format",
+          value: item.label.includes("Snapshot") ? "PDF / Share" : "PDF",
+        },
       ],
-      ["Generate now", "Preview content", "Send to leadership"],
-      "Exports turn command-center intelligence into board, donor, and grant-ready materials."
-    );
+      actions: ["Generate now", "Preview content", "Send to leadership"],
+      reason: "Exports turn command-center intelligence into board, donor, and grant-ready materials.",
+      priority: "Monitor",
+      confidence: "—",
+      nextOutcome: "REVIEWED",
+    });
   };
 
   return (
@@ -264,7 +1018,7 @@ export default function SHFImpactCommandCenter() {
             </div>
             <div className="shf-brand__text">Silicon Heartland</div>
             <div className="shf-brand__divider" />
-            <h1>SHF Impact Command Center</h1>
+            <h1 data-tour="shf-impact-hero">SHF Impact Command Center</h1>
           </div>
 
           <div className="shf-topbar__controls">
@@ -286,16 +1040,20 @@ export default function SHFImpactCommandCenter() {
               className="shf-export-btn"
               type="button"
               onClick={() =>
-                openDrawer(
-                  "Export Report",
-                  "Generate executive, donor, grant, and public-facing report outputs from this command surface.",
-                  [
+                openDrawer({
+                  title: "Export Report",
+                  summary: "Generate executive, donor, grant, and public-facing report outputs from this command surface.",
+                  metrics: [
                     { label: "Exports Ready", value: "5" },
                     { label: "PDF Engine", value: "Connected" },
                   ],
-                  ["Generate Executive Brief", "Generate Donor Summary", "Generate Grant Narrative"],
-                  "This is where command-center insight becomes a real funding and reporting asset."
-                )
+                  actions: [
+                    "Generate Executive Brief",
+                    "Generate Donor Summary",
+                    "Generate Grant Narrative",
+                  ],
+                  reason: "This is where command-center insight becomes a real funding and reporting asset.",
+                })
               }
             >
               Export Report
@@ -303,101 +1061,51 @@ export default function SHFImpactCommandCenter() {
           </div>
         </header>
 
-        <section className="shf-kpi-row">
-          {KPIS.map((kpi) => (
-            <button
-              key={kpi.key}
-              className={`shf-kpi-card shf-kpi-card--${kpi.key}`}
-              onClick={() => onKpiClick(kpi)}
-              type="button"
-            >
-              <div className="shf-kpi-card__label">{kpi.label}</div>
-              <div className="shf-kpi-card__value-row">
-                <strong>{kpi.value}</strong>
-                {kpi.delta ? <span>{kpi.delta}</span> : null}
-              </div>
-              <div className="shf-kpi-card__sub">{kpi.sublabel}</div>
-              <div className="shf-kpi-card__ghost" />
-            </button>
-          ))}
-        </section>
+        <div data-tour="shf-impact-kpis">
+        <ImpactKpiBand kpis={KPIS} onKpiClick={onKpiClick} />
+
+
+        <div className="shf-command-debug-strip" style={{
+          margin: "12px 0 0",
+          padding: "10px 14px",
+          borderRadius: 12,
+          border: "1px solid rgba(145,118,92,0.24)",
+          background: "rgba(255,255,255,0.45)",
+          color: "rgba(47,38,33,0.88)",
+          fontSize: 13,
+          fontWeight: 600
+        }}>
+          STATE CHAIN • entity: {selectedEntityId || "none"} • county: {selectedCounty || "none"}
+        </div>
+
+
+        <div className="shf-day4-sanity-strip shf-system-status-bar">
+          <div><strong>SURFACE:</strong> SHF Command Center</div>
+          <div><strong>ENTITY:</strong> {selectedEntityId || "none"}</div>
+          <div><strong>COUNTY:</strong> {selectedCountyRecord?.name || selectedCounty || "none"}</div>
+          <div><strong>ORACLE:</strong> {oracleStatusLabel}</div>
+          <div><strong>LAST MAP:</strong> {lastCountyClick || "none"}</div>
+          <div><strong>LAST DRAWER:</strong> {lastDrawerTitle || "none"}</div>
+          <div><strong>READY:</strong> {surfaceReady ? "YES" : "NO"}</div>
+          
+        </div>
 
         <main className="shf-main-grid">
           <section className="shf-left-col">
             <div className="shf-panel shf-map-panel">
               <div className="shf-panel__header">
-                <h2>Ohio Impact</h2>
-                <button
-                  type="button"
-                  className="shf-mini-filter"
-                  onClick={() =>
-                    openDrawer(
-                      "Ohio Impact Map",
-                      "The Ohio impact map shows where SHF activity, funding, and outcomes are concentrated.",
-                      [
-                        { label: "Active Counties", value: "18" },
-                        { label: "Hot Counties", value: "4" },
-                        { label: "Priority Interventions", value: "3" },
-                      ],
-                      ["Open statewide view", "Filter by program", "Open county overlays"],
-                      "Geographic command surfaces help leadership see distribution, opportunity, and risk."
-                    )
-                  }
-                >
-                  TODO AM
+                <h2 data-tour="shf-impact-map">Ohio Impact</h2>
+                <button type="button" className="shf-mini-filter">
+                  STATEWIDE
                 </button>
               </div>
 
-              <div className="shf-map-stage">
-                <div className="shf-map-toolbar">
-                  <button type="button">＋</button>
-                  <button type="button">－</button>
-                </div>
-
-                <div className="shf-map-canvas">
-                  <div className="shf-map-state">
-                    <div className="shf-map-state__lake" />
-                    {COUNTIES.map((county) => (
-                      <button
-                        key={county.id}
-                        type="button"
-                        className={`shf-county shf-county--${county.shade} ${selectedCounty.id === county.id ? "is-selected" : ""}`}
-                        style={{ left: `${county.x}%`, top: `${county.y}%` }}
-                        onClick={() => onCountyClick(county)}
-                        title={county.name}
-                      >
-                        <span className="shf-county__dot" />
-                      </button>
-                    ))}
-                  </div>
-
-                  <div className="shf-map-card">
-                    <div className="shf-map-card__title-row">
-                      <strong>{selectedCounty.name}</strong>
-                      <span>⌁</span>
-                    </div>
-                    <div className="shf-map-card__grid">
-                      <span>Programs Active:</span>
-                      <strong>{selectedCounty.programs}</strong>
-
-                      <span>People Served:</span>
-                      <strong>{selectedCounty.people}</strong>
-
-                      <span>Funding Deployed:</span>
-                      <strong>{selectedCounty.funding}</strong>
-
-                      <span>Top Outcome:</span>
-                      <strong>{selectedCounty.topOutcome}</strong>
-
-                      <span>Risk Signal:</span>
-                      <strong>{selectedCounty.risk}</strong>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="shf-map-footer">
-                  <span>ZOOMIN</span>
-                </div>
+              <div className="shf-map-stage shf-map-stage--real">
+                <div data-tour="shf-impact-map">
+                  <SHFImpactOhioMap
+                  selectedCounty={selectedCounty}
+                  onCountyClick={onCountyClick}
+                />
               </div>
             </div>
 
@@ -454,137 +1162,107 @@ export default function SHFImpactCommandCenter() {
           </section>
 
           <section className="shf-middle-col">
-            <div className="shf-panel">
-              <div className="shf-panel__header">
-                <h2>Impact Overview</h2>
+            <div data-tour="shf-impact-wheel">
+            <ImpactOverviewWheelPanel
+              wheelSegments={WHEEL_SEGMENTS}
+              trendPoints={trendPoints}
+              onWheelClick={onImpactOverviewClick}
+            />
+
+            <div data-tour="shf-impact-reports">
+            <ReportsBriefingsPanel
+              items={EXPORT_ITEMS}
+              onExportClick={onExportClick}
+            />
+
+            <section className="shf-self-audit-card">
+              <div className="shf-self-audit-card__header">
+                <div>
+                  <div className="shf-self-audit-card__eyebrow">Institutional Self-Audit Control</div>
+                  <h3 className="shf-self-audit-card__title">Daily Integrity Cycle</h3>
+                </div>
+                <div className={`shf-self-audit-card__status shf-self-audit-card__status--${selfAuditStatus}`}>
+                  {selfAuditStatus}
+                </div>
               </div>
 
-              <div className="shf-wheel-card">
+              <div className="shf-self-audit-card__scoreband">
+                <div className="shf-self-audit-card__score">
+                  <span className="shf-self-audit-card__score-value">{selfAuditScore}</span>
+                  <span className="shf-self-audit-card__score-label">Institutional Integrity</span>
+                </div>
+                <div className="shf-self-audit-card__meta">
+                  <div><span>Last Run</span><strong>{formatAuditDate(selfAudit?.metadata?.last_run_at || selfAudit?.timestamp)}</strong></div>
+                  <div><span>Next Run</span><strong>{formatAuditDate(selfAudit?.metadata?.next_scheduled_run)}</strong></div>
+                </div>
+              </div>
+
+              {selfAuditError ? (
+                <div className="shf-self-audit-card__error">{selfAuditError}</div>
+              ) : null}
+
+              <div className="shf-self-audit-card__body">
+                <div className="shf-self-audit-card__section">
+                  <div className="shf-self-audit-card__section-label">Top Change</div>
+                  <div className="shf-self-audit-card__section-text">{selfAuditTopChange}</div>
+                </div>
+
+                <div className="shf-self-audit-card__section">
+                  <div className="shf-self-audit-card__section-label">Recommended Action</div>
+                  <div className="shf-self-audit-card__section-text">{selfAuditTopAction}</div>
+                </div>
+
+                <div className="shf-self-audit-card__section">
+                  <div className="shf-self-audit-card__section-label">Executive Summary</div>
+                  <div className="shf-self-audit-card__section-text">
+                    {selfAuditBrief?.executive_summary || "Brief not available yet."}
+                  </div>
+                </div>
+              </div>
+
+              <div className="shf-self-audit-card__actions">
                 <button
                   type="button"
-                  className="shf-wheel"
-                  onClick={() =>
-                    openDrawer(
-                      "Impact Overview Wheel",
-                      "The outcome wheel visualizes the SHF operating balance across verification, funding, reporting, governance, and community impact.",
-                      WHEEL_SEGMENTS.map((seg) => ({ label: seg.label, value: seg.value })),
-                      ["Open segment breakdown", "Compare weighting model", "Generate strategic summary"],
-                      "This signature visual helps leadership understand how the institutional ecosystem is weighted and performing."
-                    )
-                  }
+                  className="shf-self-audit-card__button shf-self-audit-card__button--primary"
+                  onClick={handleRunSelfAudit}
+                  disabled={selfAuditLoading}
                 >
-                  <div className="shf-wheel__outer">
-                    {WHEEL_SEGMENTS.map((seg, idx) => (
-                      <div
-                        key={`${seg.label}-${idx}`}
-                        className={`shf-wheel-segment ${seg.tone}`}
-                        style={{ "--segment-index": idx }}
-                      >
-                        <span>{seg.value}</span>
-                      </div>
-                    ))}
-                    <div className="shf-wheel__center">
-                      <div className="shf-wheel__center-globe" />
-                      <strong>Silicon Heartland</strong>
-                      <span>INSTITUTIONAL ECOSYSTEM</span>
-                    </div>
-                  </div>
+                  {selfAuditLoading ? "Running..." : "Run Audit Now"}
+                </button>
+
+                <button
+                  type="button"
+                  className="shf-self-audit-card__button shf-self-audit-card__button--secondary"
+                  onClick={loadSelfAudit}
+                  disabled={selfAuditLoading}
+                >
+                  Refresh
                 </button>
               </div>
-
-              <div className="shf-trend-block">
-                <div className="shf-trend-block__header">
-                  <h3>Outcome Trends</h3>
-                  <span>Last 12 Months</span>
-                </div>
-                <div className="shf-trend-block__value-row">
-                  <strong>12,482</strong>
-                  <span>+ 8.2% ↑</span>
-                </div>
-                <svg viewBox="0 0 320 80" className="shf-trend-svg" aria-hidden="true">
-                  <polyline
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="3"
-                    points={trendPoints.map((p, i) => `${10 + i * 19},${70 - p}`).join(" ")}
-                  />
-                </svg>
-              </div>
-            </div>
-
-            <div className="shf-panel">
-              <div className="shf-panel__header">
-                <h2>Program Health</h2>
-                <span className="shf-panel__small-label">Last 12 Months</span>
-              </div>
-              <div className="shf-export-list">
-                {EXPORT_ITEMS.map((item) => (
-                  <button
-                    key={item.label}
-                    type="button"
-                    className="shf-export-row"
-                    onClick={() => onExportClick(item)}
-                  >
-                    <span>{item.label}</span>
-                    <strong>{item.value}</strong>
-                  </button>
-                ))}
-              </div>
-            </div>
+            </section>
           </section>
 
           <aside className="shf-right-col">
-            <div className="shf-panel shf-analyst-panel">
-              <div className="shf-panel__header">
-                <h2>AI Analyst</h2>
-                <span className="shf-bulb">💡</span>
-              </div>
+            <div data-tour="shf-impact-analyst">
+            <AIAnalystPanel
+              entityId={selectedEntityId}
+              oracleTruth={oracleBundle?.truth || null}
+              changedText={aiDisplayInsight.changedText}
+              whyPoints={aiDisplayInsight.whyPoints}
+              nextMoveText={aiDisplayInsight.nextMoveText}
+              actionLabel={
+                oracleLoading
+                  ? "Refreshing Oracle..."
+                  : oracleInsight?.actionLabel || "Execute Oracle recommendation"
+              }
+              onAction={() => onAiActionClick(oracleInsight?.nextMoveText || "request_data")}
+            />
 
-              <div className="shf-analyst-panel__section-title">Upcoming Actions</div>
-              <ul className="shf-action-list">
-                {ACTIONS.map((action) => (
-                  <li key={action}>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        openDrawer(
-                          "AI Recommended Action",
-                          action,
-                          [
-                            { label: "Priority", value: "High" },
-                            { label: "Confidence", value: "87%" },
-                          ],
-                          ["Open affected record", "Generate memo", "Assign review"],
-                          "The analyst layer explains what changed, why it matters, and what should happen next."
-                        )
-                      }
-                    >
-                      {action}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="shf-panel shf-trust-panel">
-              <div className="shf-panel__header">
-                <h2>Trust &amp; Verification</h2>
-              </div>
-
-              <div className="shf-trust-list">
-                {TRUST_ITEMS.map((item) => (
-                  <button
-                    key={item.key}
-                    type="button"
-                    className="shf-trust-row"
-                    onClick={() => onTrustClick(item)}
-                  >
-                    <span>{item.label}</span>
-                    <strong>{item.value}</strong>
-                  </button>
-                ))}
-              </div>
-            </div>
+            <div data-tour="shf-impact-trust">
+            <TrustVerificationPanel entityId={selectedEntityId}
+              items={TRUST_ITEMS}
+              onTrustClick={onTrustClick}
+            />
           </aside>
         </main>
       </div>
@@ -593,3 +1271,4 @@ export default function SHFImpactCommandCenter() {
     </div>
   );
 }
+

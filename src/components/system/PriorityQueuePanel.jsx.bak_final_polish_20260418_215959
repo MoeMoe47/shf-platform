@@ -1,0 +1,272 @@
+import React from "react";
+
+function getRankIcon(rank, readinessStatus) {
+  if (rank === 1) return "🥇";
+  if (rank === 2) return "🥈";
+  if (String(readinessStatus || "").toLowerCase() === "blocked") return "⚠️";
+  return "•";
+}
+
+export default function PriorityQueuePanel({ priorityData }) {
+  if (!priorityData) {
+    return (
+      <div className="section-card">
+        <h3 style={{ marginBottom: 12 }}>Priority Queue</h3>
+        <p style={{ color: "#94a3b8" }}>No priority data available.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="section-card">
+      <h3
+        style={{
+          marginBottom: 12,
+          color: "#f8fafc",
+          fontSize: 16,
+          fontWeight: 700,
+          letterSpacing: "0.01em",
+        }}
+      >
+        Priority Queue
+      </h3>
+
+      <div
+        style={{
+          marginBottom: 18,
+          padding: "14px 18px",
+          borderRadius: 14,
+          background:
+            "linear-gradient(90deg, rgba(16,185,129,0.25), rgba(2,6,23,1))",
+          border: "1px solid rgba(16,185,129,0.65)",
+          boxShadow: "0 0 24px rgba(16,185,129,0.18)",
+          color: "#ffffff",
+          fontWeight: 800,
+          fontSize: 16,
+          lineHeight: 1.6,
+        }}
+      >
+        ⚡ SYSTEM DECISION — {priorityData.summary}
+      </div>
+
+      <div>
+        {priorityData.ranked.map((item) => {
+          const isTop = item.rank === 1;
+          const isRisk = item.readinessStatus === "blocked";
+
+          return (
+            <div
+              key={item.entityId}
+              style={{
+                marginBottom: 14,
+                padding: 14,
+                borderRadius: 14,
+                background: "rgba(2,6,23,0.96)",
+                border: isTop
+                  ? "1px solid rgba(16,185,129,0.6)"
+                  : isRisk
+                  ? "1px solid rgba(239,68,68,0.5)"
+                  : "1px solid rgba(148,163,184,0.22)",
+                borderLeft: isTop
+                  ? "4px solid #22c55e"
+                  : isRisk
+                  ? "4px solid #ef4444"
+                  : "4px solid #64748b",
+                color: "#f8fafc",
+                boxShadow: isTop
+                  ? "0 0 24px rgba(16,185,129,0.25)"
+                  : isRisk
+                  ? "0 0 18px rgba(239,68,68,0.25)"
+                  : "none",
+                transform: isTop ? "scale(1.01)" : "scale(1)",
+                opacity: isTop ? 1 : isRisk ? 0.82 : 0.92,
+                transition: "all 180ms ease",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  gap: 14,
+                  flexWrap: "wrap",
+                  marginBottom: 10,
+                }}
+              >
+                <div
+                  style={{
+                    fontWeight: 800,
+                    color: "#ffffff",
+                    fontSize: isTop ? 18 : 17,
+                    letterSpacing: "0.01em",
+                  }}
+                >
+                  {getRankIcon(item.rank, item.readinessStatus)} #{item.rank} — {item.entityId}
+                </div>
+
+                <div
+                  style={{
+                    padding: "6px 10px",
+                    borderRadius: 999,
+                    fontSize: 11,
+                    fontWeight: 800,
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
+                    border: isTop
+                      ? "1px solid rgba(16,185,129,0.5)"
+                      : isRisk
+                      ? "1px solid rgba(239,68,68,0.45)"
+                      : "1px solid rgba(148,163,184,0.24)",
+                    background: isTop
+                      ? "rgba(16,185,129,0.10)"
+                      : isRisk
+                      ? "rgba(239,68,68,0.08)"
+                      : "rgba(148,163,184,0.08)",
+                    color: "#f8fafc",
+                  }}
+                >
+                  {item.readinessStatus}
+                </div>
+              </div>
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                  gap: 10,
+                }}
+              >
+                <div>
+                  <div
+                    style={{
+                      fontSize: 11,
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                      color: "rgba(148,163,184,0.88)",
+                      marginBottom: 6,
+                    }}
+                  >
+                    Confidence
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 15,
+                      fontWeight: 700,
+                      color: "#f8fafc",
+                    }}
+                  >
+                    {item.confidenceScore}
+                  </div>
+                </div>
+
+                <div>
+                  <div
+                    style={{
+                      fontSize: 11,
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                      color: "rgba(148,163,184,0.88)",
+                      marginBottom: 6,
+                    }}
+                  >
+                    Priority Score
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 15,
+                      fontWeight: 700,
+                      color: "#f8fafc",
+                    }}
+                  >
+                    {item.priorityScore}
+                  </div>
+                </div>
+
+                <div>
+                  <div
+                    style={{
+                      fontSize: 11,
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                      color: "rgba(148,163,184,0.88)",
+                      marginBottom: 6,
+                    }}
+                  >
+                    Truth Status
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 15,
+                      fontWeight: 700,
+                      color: "#f8fafc",
+                    }}
+                  >
+                    {item.truthStatus}
+                  </div>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  marginTop: 14,
+                  paddingTop: 12,
+                  borderTop: "1px solid rgba(148,163,184,0.10)",
+                  display: "grid",
+                  gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                  gap: 10,
+                }}
+              >
+                <div>
+                  <div
+                    style={{
+                      fontSize: 11,
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                      color: "rgba(148,163,184,0.88)",
+                      marginBottom: 6,
+                    }}
+                  >
+                    Contradictions
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 14,
+                      fontWeight: 700,
+                      color: "#f8fafc",
+                    }}
+                  >
+                    {item.contradictionStatus}
+                  </div>
+                </div>
+
+                <div>
+                  <div
+                    style={{
+                      fontSize: 11,
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                      color: "rgba(148,163,184,0.88)",
+                      marginBottom: 6,
+                    }}
+                  >
+                    Next Action
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 14,
+                      fontWeight: 600,
+                      color: "#f8fafc",
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    {item.recommendedNextAction || "Review before proceeding."}
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,202 @@
+import React from "react";
+import shfLogo from "@/assets/brand/shf-logo-stacked.svg";
+import heroCollage from "@/assets/brand/catalog-hero-2x1-1920.jpg";
+import cardEducation from "@/assets/brand/catalog-hero-16x9-1280.jpg";
+import cardWorkforce from "@/assets/brand/catalog-hero-2x1-1280.jpg";
+import cardRecovery from "@/assets/brand/catalog-hero-16x9-1920.jpg";
+import skylineImg from "@/assets/brand/hero-bg-ohio.png";
+import "@/styles/shf-home.css";
+
+function ProgramCard({ title, image, meta, linkText = "Learn More" }) {
+  return (
+    <article className="shf2-card">
+      <h3>{title}</h3>
+      <div
+        className="shf2-card__image"
+        style={{ backgroundImage: `url(${image})` }}
+        aria-hidden="true"
+      />
+      <div className="shf2-card__meta">{meta}</div>
+      <button className="shf2-linkBtn" type="button">
+        {linkText} <span aria-hidden="true">›</span>
+      </button>
+    </article>
+  );
+}
+
+export default function Top() {
+  return (
+    <div className="shf2-page">
+      <header className="shf2-topbar">
+        <div className="shf2-shell shf2-topbar__inner">
+          <a href="#/top" className="shf2-brand" aria-label="Silicon Heartland Foundation home">
+            <img src={shfLogo} alt="Silicon Heartland Foundation" />
+          </a>
+
+          <nav className="shf2-nav" aria-label="Primary">
+            <a href="#/about">About</a>
+            <a href="#/programs">Programs</a>
+            <a href="#/impact">Impact</a>
+            <a href="#/careers">Careers</a>
+            <a href="#/get-involved">Get Involved</a>
+            <a href="#/donate" className="shf2-btn shf2-btn--navy">
+              Donate
+            </a>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <section className="shf2-hero">
+          <div className="shf2-shell shf2-hero__inner">
+            <div className="shf2-hero__copy">
+              <h1>Launching Programs That Create Real Opportunity Across Ohio</h1>
+              <p>
+                We design and operate education, workforce, and recovery programs
+                that help individuals build stronger futures across Ohio communities.
+              </p>
+
+              <div className="shf2-hero__actions">
+                <button className="shf2-btn shf2-btn--copper" type="button">
+                  Explore Programs
+                </button>
+                <button className="shf2-btn shf2-btn--navy" type="button">
+                  Support the Mission
+                </button>
+              </div>
+            </div>
+
+            <div className="shf2-hero__art">
+              <div
+                className="shf2-hero__image"
+                style={{ backgroundImage: `url(${heroCollage})` }}
+                aria-hidden="true"
+              />
+            </div>
+          </div>
+        </section>
+
+        <section className="shf2-kpis">
+          <div className="shf2-shell shf2-kpis__inner">
+            <div className="shf2-kpi">
+              <strong>12,500+</strong>
+              <span>Lives Reached</span>
+            </div>
+            <div className="shf2-kpi">
+              <strong>4,200+</strong>
+              <span>Certifications Earned</span>
+            </div>
+            <div className="shf2-kpi">
+              <strong>85%</strong>
+              <span>Job Placement Rate</span>
+            </div>
+          </div>
+        </section>
+
+        <section className="shf2-section shf2-mission">
+          <div className="shf2-shell">
+            <div className="shf2-headingWrap">
+              <h2>Our Mission</h2>
+            </div>
+            <h3>Expanding Access to Education, Workforce and Recovery Pathways</h3>
+            <p className="shf2-centerText">
+              Silicon Heartland Foundation launches programs that support individuals,
+              strengthen communities, and create long-term opportunity through real
+              support, real training, and real pathways.
+            </p>
+          </div>
+        </section>
+
+        <section className="shf2-section shf2-programs">
+          <div className="shf2-shell">
+            <div className="shf2-headingWrap">
+              <h2>Programs That</h2>
+            </div>
+
+            <div className="shf2-cardGrid">
+              <ProgramCard
+                title="Education Pathways"
+                image={cardEducation}
+                meta="4,200+ Certifications Earned"
+              />
+              <ProgramCard
+                title="Workforce Training"
+                image={cardWorkforce}
+                meta="85% Job Placement Rate"
+              />
+              <ProgramCard
+                title="Recovery Support"
+                image={cardRecovery}
+                meta="Measured progress across active programs"
+              />
+            </div>
+          </div>
+        </section>
+
+        <section className="shf2-section shf2-information">
+          <div className="shf2-shell shf2-information__inner">
+            <div className="shf2-headingWrap">
+              <h2>Programs Backed by Better Information</h2>
+            </div>
+            <p className="shf2-centerText">
+              Our programs are strengthened by connected tools that help track progress,
+              improve performance, and guide smarter decisions over time.
+            </p>
+            <button className="shf2-btn shf2-btn--navy" type="button">
+              See How It Works
+            </button>
+          </div>
+        </section>
+
+        <section className="shf2-section shf2-support">
+          <div className="shf2-shell shf2-support__inner">
+            <div className="shf2-support__copy">
+              <div className="shf2-headingWrap">
+                <h2>Support the Mission</h2>
+              </div>
+              <h3>Invest in Programs That Change Lives</h3>
+              <p className="shf2-centerText">
+                Your support helps expand access to education, opportunity, and progress
+                across Ohio.
+              </p>
+
+              <div className="shf2-support__actions">
+                <button className="shf2-btn shf2-btn--copper" type="button">
+                  Donate Today
+                </button>
+                <button className="shf2-btn shf2-btn--navy" type="button">
+                  Become a Partner
+                </button>
+              </div>
+            </div>
+
+            <div className="shf2-support__art">
+              <div
+                className="shf2-support__image"
+                style={{ backgroundImage: `url(${skylineImg})` }}
+                aria-hidden="true"
+              />
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer className="shf2-footer">
+        <div className="shf2-shell shf2-footer__inner">
+          <div className="shf2-footer__row">
+            <a href="#/privacy">Privacy</a>
+            <div className="shf2-socials" aria-label="Social links">
+              <span>🐦</span>
+              <span>f</span>
+              <span>◔</span>
+            </div>
+            <div className="shf2-footer__brand">
+              <img src={shfLogo} alt="Silicon Heartland" />
+            </div>
+          </div>
+          <div className="shf2-footer__email">info@siliconheartland.org</div>
+        </div>
+      </footer>
+    </div>
+  );
+}

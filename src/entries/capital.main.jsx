@@ -1,39 +1,27 @@
 import React from "react";
+import { SelectedEntityProvider } from "@/system/context/SelectedEntityContext";
 import { createRoot } from "react-dom/client";
 import { HashRouter } from "react-router-dom";
 import CapitalRoutes from "@/router/CapitalRoutes.jsx";
+import { AuthProvider } from "../auth/auth-context";
 
-function getMount() {
-  let el =
-    document.querySelector('[data-app="capital"]') ||
-    document.getElementById("root") ||
-    document.getElementById("app");
-
-  if (!el) {
-    el = document.createElement("div");
-    el.id = "root";
-    el.dataset.app = "capital";
-    document.body.appendChild(el);
-  }
-  return el;
+function CapitalApp() {
+  return (
+    <React.StrictMode>
+      <SelectedEntityProvider>
+        <HashRouter>
+          <CapitalRoutes />
+        </HashRouter>
+      </SelectedEntityProvider>
+    </React.StrictMode>
+  );
 }
 
-const mount = getMount();
-
-// 🔥 SIMPLE GLOBAL TEST LISTENER
-if (typeof window !== "undefined") {
-  window.addEventListener("shf:ai_action", (e) => {
-    console.log("🔥 EVENT RECEIVED IN ENTRY:", e.detail);
-  });
+const rootEl = document.getElementById("root");
+if (!rootEl) {
+  throw new Error('Capital entry mount failed: missing #root element');
 }
 
-
-
-
-createRoot(mount).render(
-  <React.StrictMode>
-    <HashRouter>
-      <CapitalRoutes />
-    </HashRouter>
-  </React.StrictMode>
-);
+createRoot(rootEl).render(<AuthProvider>
+    <CapitalApp />
+  </AuthProvider>);

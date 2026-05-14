@@ -1,0 +1,71 @@
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { HashRouter, Routes, Route, useParams, Link } from "react-router-dom";
+import SHFImpactCommandCenter from "./pages/shf-command/SHFImpactCommandCenter.jsx";
+
+function CountyPage() {
+  const { slug } = useParams();
+
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#020617",
+        color: "#f8fafc",
+        padding: "24px",
+        fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
+      }}
+    >
+      <div style={{ marginBottom: 16 }}>
+        <Link to="/" style={{ color: "#93c5fd", textDecoration: "none" }}>
+          ← Back to Impact Command Center
+        </Link>
+      </div>
+
+      <div
+        style={{
+          padding: 20,
+          borderRadius: 16,
+          border: "1px solid rgba(59,130,246,0.25)",
+          background: "rgba(15,23,42,0.85)",
+          maxWidth: 900,
+        }}
+      >
+        <div
+          style={{
+            fontSize: 12,
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+            color: "rgba(148,163,184,0.9)",
+            marginBottom: 8,
+          }}
+        >
+          County Route Active
+        </div>
+
+        <h1 style={{ margin: 0, fontSize: 30 }}>
+          County: {slug}
+        </h1>
+
+        <p style={{ marginTop: 12, lineHeight: 1.7, color: "rgba(226,232,240,0.95)" }}>
+          This confirms the <code>#/county/:slug</code> route is now mounted correctly for SHF.
+          Next step is to replace this placeholder with your real county drilldown surface.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+const mount = document.getElementById("root");
+if (!mount) throw new Error('Missing "#root" mount');
+
+createRoot(mount).render(
+  <React.StrictMode>
+    <HashRouter>
+      <Routes>
+        <Route path="/" element={<SHFImpactCommandCenter />} />
+        <Route path="/county/:slug" element={<CountyPage />} />
+      </Routes>
+    </HashRouter>
+  </React.StrictMode>
+);

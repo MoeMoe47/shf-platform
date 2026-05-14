@@ -1,0 +1,51 @@
+{
+  "id": "student.asl-05",
+  "title": "ASL 1.5 — Colors & Descriptions 🎨",
+  "estMinutes": 25,
+  "objectives": [
+    "Produce core color signs and combine with nouns",
+    "Use simple descriptive adjectives (BIG/SMALL/OLD/NEW)",
+    "Describe clothing and objects with color + noun order"
+  ],
+  "vocab": [
+    { "term": "RED / BLUE / GREEN / YELLOW / BLACK / WHITE", "def": "Core color signs." },
+    { "term": "BROWN / ORANGE / PINK / GRAY / PURPLE", "def": "Additional colors." },
+    { "term": "BIG / SMALL / OLD / NEW", "def": "Common adjectives." },
+    { "term": "SHIRT / JACKET / HAT / SHOES", "def": "Clothing nouns to pair with colors." }
+  ],
+  "sections": [
+    {
+      "heading": "Color + Noun Order",
+      "body": "Use **COLOR + NOUN**: **RED SHIRT**, **BLUE HAT**. Keep descriptions 2–3 signs for clarity."
+    },
+    {
+      "heading": "Describe an Object",
+      "body": "Add one adjective: **BIG RED BACKPACK**, **SMALL GREEN BOOK**. Avoid stacking too many at once."
+    },
+    {
+      "heading": "Partner Drill",
+      "body": "A describes an item in the room using color and one adjective. B points to or identifies it."
+    },
+    {
+      "heading": "Clothing Quickfire",
+      "body": "Sign what you wear today: **BLACK SHIRT, BLUE JEANS.**"
+    }
+  ],
+  "quiz": {
+    "title": "ASL 1.5 — Colors & Descriptions Quiz",
+    "items": [
+      { "type": "mcq", "q": "Typical order is…", "options": ["Noun → Color", "Color → Noun", "Adjective → Noun → Color", "Random"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Which is most concise?", "options": ["The shirt is red", "RED SHIRT", "SHIRT RED REALLY", "RED COLOR SHIRT"], "answerIndex": 1 },
+      { "type": "short", "q": "Gloss two items you see (color + noun + one adjective)." },
+      { "type": "reflection", "prompt": "Which colors or adjective shapes need practice?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Record 20–30s describing 3 objects with color + noun + one adjective.",
+  "summary": "You combined color + noun order, added one adjective, and practiced concise descriptions.",
+  "nextSlug": "student.asl-06",
+  "games": [
+    { "id": "color-pick", "title": "Color Pick", "route": "/arcade/asl/color-pick", "estMinutes": 5, "xp": 50, "outcomes": ["Recognize/produce core colors"] },
+    { "id": "describe-snap", "title": "Describe Snap", "route": "/arcade/asl/describe-snap", "estMinutes": 5, "xp": 50, "outcomes": ["Color + noun speed"] }
+  ]
+}

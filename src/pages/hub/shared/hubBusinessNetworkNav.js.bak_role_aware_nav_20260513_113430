@@ -1,0 +1,21 @@
+export const HUB_ORBITER_LOGO = "/assets/shs/shs-orbiter-logo.png";
+
+export const HUB_BUSINESS_NAV_ITEMS = [
+  ["⌂", "Hub", "#/hub"],
+  ["◎", "Network", "#/hub/network"],
+  ["◇", "Intake", "#/hub/intake"],
+  ["▤", "Queue", "#/hub/queue"],
+  ["↻", "Life", "#/hub/lifecycle"],
+  ["✦", "Growth", "#/hub/growth-network"],
+  ["◉", "Intel", "#/hub/intelligence"],
+  ["▦", "Bundles", "#/hub/bundles"],
+  ["↗", "Opps", "#/hub/opportunities"],
+  ["$", "Sales", "#/hub/sales-pipeline"],
+  ["▧", "Reports", "#/hub/reports"],
+];
+
+export function setHubHash(hash) {
+  if (typeof window !== "undefined") {
+    window.location.hash = hash;
+  }
+}

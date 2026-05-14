@@ -1,0 +1,128 @@
+import React, { useEffect, useMemo, useState } from "react";
+import { geoMercator, geoPath } from "d3-geo";
+
+const VIEWBOX_WIDTH = 900;
+const VIEWBOX_HEIGHT = 620;
+
+function normalizeCountyName(name = "") {
+  return String(name).replace(/\s+County$/i, "").trim();
+}
+
+function countySlug(name = "") {
+  return normalizeCountyName(name).toLowerCase();
+}
+
+function getCountyName(feature) {
+  return normalizeCountyName(feature?.properties?.COUNTY || "");
+}
+
+export default function SHFRegionalCountyCluster({
+  selectedCounty,
+  hoveredCounty = null,
+  onCountyHover,
+  onCountyClick,
+}) {
+  const [geojson, setGeojson] = useState(null);
+  const [error, setError] = useState("");
+
+  const slug = countySlug(selectedCounty);
+
+  useEffect(() => {
+    let alive = true;
+    setGeojson(null);
+    setError("");
+
+    fetch(`/assets/maps/clusters/${slug}.geojson`, { cache: "no-store" })
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
+      .then((data) => {
+        if (!alive) return;
+        setGeojson(data);
+      })
+      .catch((err) => {
+        if (!alive) return;
+        setError(String(err.message || err));
+      });
+
+    return () => {
+      alive = false;
+    };
+  }, [slug]);
+
+  const mapState = useMemo(() => {
+    if (!geojson?.features?.length) {
+      return { features: [], path: null };
+    }
+    const projection = geoMercator().fitSize(
+      [VIEWBOX_WIDTH, VIEWBOX_HEIGHT],
+      geojson
+    );
+    const path = geoPath(projection);
+    return { features: geojson.features, path };
+  }, [geojson]);
+
+  const selectedName = normalizeCountyName(selectedCounty || "");
+  const hoveredName = normalizeCountyName(hoveredCounty || "");
+
+  if (error) {
+    return <div className="shf-regional-cluster-loading">Failed to load cluster: {error}</div>;
+  }
+
+  if (!geojson) {
+    return <div className="shf-regional-cluster-loading">Loading regional county view…</div>;
+  }
+
+  return (
+    <div className="shf-regional-cluster-surface">
+      <svg
+        viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`}
+        className="shf-regional-cluster-svg"
+        role="img"
+        aria-label={`${selectedCounty} regional county cluster`}
+      >
+        <defs>
+          <linearGradient id="shfRegionalSelectedGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#efc072" />
+            <stop offset="55%" stopColor="#dda04b" />
+            <stop offset="100%" stopColor="#b7742c" />
+          </linearGradient>
+          <filter id="shfRegionalGoldGlow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="8" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        <g className="shf-regional-counties">
+          {mapState.features.map((feature, idx) => {
+            const countyName = getCountyName(feature);
+            const isSelected = countyName === selectedName;
+            const isHovered = countyName === hoveredName;
+
+            return (
+              <path
+                key={countyName || idx}
+                d={mapState.path ? mapState.path(feature) : ""}
+                className={[
+                  "shf-regional-county",
+                  isSelected ? "is-selected" : "is-context",
+                  isHovered ? "is-hovered" : "",
+                ].filter(Boolean).join(" ")}
+                fill={isSelected ? "url(#shfRegionalSelectedGradient)" : undefined}
+                filter={isSelected ? "url(#shfRegionalGoldGlow)" : undefined}
+                data-county={countyName}
+                onMouseEnter={() => onCountyHover?.(countyName)}
+                onMouseLeave={() => onCountyHover?.(null)}
+                onClick={() => onCountyClick?.(countyName)}
+              />
+            );
+          })}
+        </g>
+      </svg>
+    </div>
+  );
+}

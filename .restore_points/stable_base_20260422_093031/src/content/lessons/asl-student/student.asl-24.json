@@ -1,0 +1,90 @@
+{
+  "id": "asl-24",
+  "title": "ASL 3.4 — Requests & Offers 🤲",
+  "estMinutes": 25,
+  "objectives": [
+    "Make simple requests using CAN, PLEASE, IF-POSSIBLE, WOULD-YOU?",
+    "Offer or ask for help with HELP-me / HELP-you (directional verbs)",
+    "Respond politely to requests using YES/NO NMM and short answers"
+  ],
+  "vocab": [
+    { "term": "CAN / CAN’T", "def": "Fists move down firmly for CAN; twist head/neg NMM for CAN’T" },
+    { "term": "HELP (HELP-me / HELP-you)", "def": "A-hand on palm; moves toward signer for HELP-me, toward partner for HELP-you" },
+    { "term": "PLEASE / THANK-YOU", "def": "Polite open-hand chest circle / chin-out gesture" },
+    { "term": "WOULD-YOU?", "def": "Soft Y-hand forward; often paired with polite face" },
+    { "term": "IF-POSSIBLE", "def": "IF + POSSIBLE (hands meet in downward motion)" },
+    { "term": "YES / NO", "def": "YES: fist nods; NO: index + middle close from thumb" },
+    { "term": "YES/NO FACE", "def": "Brows up; slight head tilt for questions" }
+  ],
+  "sections": [
+    {
+      "heading": "Warm-Up: CAN + HELP",
+      "media": { "src": "/media/asl/unit-3/can-help.png", "alt": "Practice CAN and HELP directional", "caption": "Drill CAN, CAN’T, HELP-me, HELP-you" },
+      "body": "Sign **CAN**, **CAN’T**, **HELP-me**, **HELP-you**. Focus on direction: toward chest = me, outward = you. Keep fists compact, avoid over-extending.",
+      "microCheck": {
+        "q": "Which face matches CAN YOU HELP-me?",
+        "options": ["Brows up", "Brows down", "Neutral", "Eyes closed"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "heading": "Model: Polite Requests",
+      "media": { "src": "/media/asl/unit-3/request-demo.mp4", "alt": "CAN YOU HELP-me PLEASE?", "caption": "CAN YOU HELP-me PLEASE? / IF-POSSIBLE" },
+      "body": "Frames:\n• **CAN YOU HELP-me PLEASE?**\n• **WOULD-YOU READ AGAIN IF-POSSIBLE?**\nKeep YES/NO face clear. Add PLEASE or IF-POSSIBLE for polite tone.",
+      "microCheck": {
+        "q": "Which makes a request more polite?",
+        "options": ["Bigger motions", "Adding PLEASE / IF-POSSIBLE", "Talking while signing", "Looking away"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Responses: YES / NO + Short Answer",
+      "body": "Keep replies short:\n• **YES, HELP.**\n• **NO, CAN’T.** (optional reason)\n• **YES PLEASE. THANK-YOU.**",
+      "callouts": [
+        { "type": "example", "title": "Mini Dialog", "body": "A: **CAN YOU HELP-me?** (brows up)  B: **YES PLEASE.**" }
+      ],
+      "microCheck": {
+        "q": "Clearer answer to CAN YOU HELP-me?",
+        "options": ["HELP", "YES HELP", "HELP CAN", "PLEASE CAN"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Partner Practice: Request & Offer Loop",
+      "media": { "src": "/media/asl/unit-3/request-loop.gif", "alt": "Partners trade requests/offers", "caption": "Switch roles every 30s" },
+      "body": "A asks **CAN YOU HELP-me?** → B answers. Then B asks a new request (e.g., **WOULD-YOU SIGN AGAIN?**). Switch roles. Keep each turn ~20–30s.",
+      "callouts": [
+        { "type": "tip", "title": "Feedback Stem", "body": "“Try brows up more on CAN? / Add PLEASE for polite tone.”" }
+      ],
+      "microCheck": {
+        "q": "Which improves clarity most in requests?",
+        "options": ["Fast motion", "YES/NO face with brows up", "Talking aloud", "Looking at your hands"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Mini-Showcase",
+      "body": "Record **10–15s**: 1 request + 1 response + 1 thank-you. Example: **CAN YOU HELP-me PLEASE?** → **YES. HELP. THANK-YOU.**",
+      "teacherNote": "Offer privacy submission; caption should note how politeness markers (PLEASE, IF-POSSIBLE) helped clarity."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 3.4 — Requests & Offers Quiz",
+    "items": [
+      { "type": "mcq", "q": "Correct NMM for CAN YOU HELP-me?", "options": ["Brows up", "Brows down", "Neutral", "Eyes closed"], "answerIndex": 0 },
+      { "type": "mcq", "q": "Which adds politeness to a request?", "options": ["PLEASE / IF-POSSIBLE", "Bigger motion", "Talking aloud", "Ignoring face"], "answerIndex": 0 },
+      { "type": "mcq", "q": "Best short response to YES/NO request:", "options": ["HELP", "YES HELP", "HELP CAN", "PLEASE CAN"], "answerIndex": 1 },
+      { "type": "short", "q": "Write an ASL gloss for: WOULD-YOU HELP-me IF-POSSIBLE? → YES, PLEASE." },
+      { "type": "reflection", "prompt": "Which was harder—keeping brows up for YES/NO or remembering to add polite markers? How will you practice?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Upload your 10–15s clip with a request + response + thank-you, caption how politeness improved clarity.",
+  "summary": "You made polite requests with CAN, HELP, WOULD-YOU, IF-POSSIBLE, and responded with short YES/NO answers and THANK-YOU.",
+  "nextSlug": "asl-25",
+  "games": [
+    { "id": "help-loop", "title": "Help Loop", "route": "/arcade/asl/help-loop", "estMinutes": 5, "xp": 50, "outcomes": ["HELP-me vs HELP-you direction"] },
+    { "id": "polite-match", "title": "Polite Match", "route": "/arcade/asl/polite-match", "estMinutes": 5, "xp": 50, "outcomes": ["PLEASE + IF-POSSIBLE practice"] },
+    { "id": "yn-boost", "title": "Y/N Boost", "route": "/arcade/asl/yn-boost", "estMinutes": 5, "xp": 50, "outcomes": ["YES/NO face clarity"] }
+  ]
+}

@@ -1,0 +1,65 @@
+.looTopMenuBtn,
+.looTopActionBtn{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.04);
+  color: rgba(255,255,255,.82);
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+.looTopMenuBtn:hover,
+.looTopActionBtn:hover{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.16);
+}
+
+.looTopMenuWrap{ position: relative; }
+.looTopMenuPop{
+  margin-top: 8px;
+  padding: 10px;
+  border-radius: 14px;
+  background: rgba(10,12,16,.92);
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 14px 40px rgba(0,0,0,.55);
+  min-width: 240px;
+}
+.looTopMenuGroup{ padding: 6px 6px 10px; }
+.looTopMenuTitle{
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  opacity: .7;
+  margin: 6px 0 8px;
+}
+.looTopMenuItem{
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.03);
+  color: rgba(255,255,255,.88);
+  cursor: pointer;
+  display:flex;
+  align-items:center;
+  gap: 10px;
+}
+.looTopMenuItem:hover{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.12);
+}
+.looTopMenuCheck{
+  width: 16px;
+  display:inline-flex;
+  justify-content:center;
+  opacity: .9;
+}
+.looTopMenuItem.is-checked{
+  border-color: rgba(255,140,70,.35);
+  background: rgba(255,140,70,.12);
+}

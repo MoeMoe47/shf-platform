@@ -1,0 +1,74 @@
+{
+  "id": "asl-63",
+  "title": "ASL 8.5 — Team Meetings (Agenda • Updates • Action Items) 📋",
+  "estMinutes": 30,
+  "objectives": [
+    "Run a short team meeting using clear signposting (AGENDA → UPDATES → ACTION)",
+    "Use time-first framing for deadlines and schedule mentions",
+    "Assign and confirm action items with repeat-back and FINISH when appropriate"
+  ],
+  "vocab": [
+    { "term": "AGENDA", "def": "Topic list; enumerate with 1-2-3." },
+    { "term": "UPDATE", "def": "Brief status: STILL / NOT-YET / FINISH." },
+    { "term": "ACTION-ITEM (TASK)", "def": "Point-assign to a person anchor; confirm with nod." },
+    { "term": "DUE / DEADLINE", "def": "Time target; pair with day/time anchors." },
+    { "term": "FOLLOW-UP / CHECK", "def": "Future review or meeting touchpoint." },
+    { "term": "STILL / NOT-YET / FINISH", "def": "Progress markers for quick reports." },
+    { "term": "ROLE-SHIFT (RS)", "def": "Facilitator ↔ teammate lines with neutral returns." }
+  ],
+  "sections": [
+    {
+      "heading": "Warm-Up: Anchors for People + Topics",
+      "media": { "src": "/media/asl/unit-8/anchors-people-topics.png", "alt": "Left/center/right anchors", "caption": "Anchors: A (left), B (center), C (right); topics numbered 1–3" },
+      "body": "Anchor **A/B/C** for teammates and **1/2/3** for agenda topics. Reuse exactly. Example: **AGENDA 1 EMAIL, 2 FLYER, 3 BUDGET.**"
+    },
+    {
+      "heading": "Model: 90-Second Stand-Up",
+      "media": { "src": "/media/asl/unit-8/standup-model.mp4", "alt": "Facilitator leading agenda, updates, action items", "caption": "Signpost each phase and keep clauses short" },
+      "body": "Flow:\n• **AGENDA:** **ONE EMAIL, TWO FLYER, THREE BUDGET.**\n• **UPDATES:** **A EMAIL FINISH. B FLYER STILL. C BUDGET NOT-YET.**\n• **ACTION:** **B MUST FINISH FLYER WEDNESDAY NIGHT. C START BUDGET TODAY AFTERNOON.**\n• **CONFIRM:** **RS→B** repeat-back; **RS→C** repeat-back. **FOLLOW-UP FRIDAY MORNING.**",
+      "microCheck": {
+        "q": "What keeps phases clear?",
+        "options": ["Bigger hands", "Signposting (AGENDA/UPDATES/ACTION) + brief pauses", "Talking aloud", "Skipping transitions"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Technique: Assigning Tasks",
+      "body": "Point to a **person anchor**, sign the **task**, add **DUE** with **time-first**: **FRIDAY REPORT DUE YOU.** Ask for **repeat-back** to confirm."
+    },
+    {
+      "heading": "Partner Drill: Mini-Meeting (3 Topics)",
+      "media": { "src": "/media/asl/unit-8/mini-meeting.gif", "alt": "Two signers assigning and confirming tasks", "caption": "Agenda → Updates → Action → Confirm" },
+      "body": "A = facilitator, B = teammate. A runs agenda 1–3, collects updates (STILL/NOT-YET/FINISH), assigns one action with **DUE**, and gets a **repeat-back**. Swap roles.",
+      "microCheck": {
+        "q": "Between RS lines you should…",
+        "options": ["Stay in RS", "Return to neutral narrator", "Move anchors randomly", "Drop eye gaze"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Mini-Showcase",
+      "body": "Record **25–35s**: run a stand-up with **AGENDA (3 items)** → **UPDATES (use STILL/NOT-YET/FINISH)** → **ACTION (assign 1 task with DUE)** → **repeat-back confirmation**. Close with **FOLLOW-UP time**.",
+      "teacherNote": "Caption the three agenda items, who received the task, and the DUE time."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 8.5 — Team Meetings Quiz",
+    "items": [
+      { "type": "mcq", "q": "Most readable meeting flow is…", "options": ["Random order", "AGENDA → UPDATES → ACTION", "ACTION → UPDATES → AGENDA", "UPDATES only"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Best way to confirm a task assignment:", "options": ["Smile", "Repeat-back the task + due time", "Wave bigger", "Skip confirmation"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Which sign marks a completed item?", "options": ["STILL", "NOT-YET", "FINISH", "NONE"], "answerIndex": 2 },
+      { "type": "short", "q": "Write a 3-line gloss: AGENDA (1–3), updates for A/B/C, assign one action with DUE FRIDAY." },
+      { "type": "reflection", "prompt": "Which needs work—signposting, time-first DUE lines, or RS confirmations? Name one cue you’ll use next meeting." }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Upload your 25–35s stand-up. Caption agenda 1–3, who got the action item, and the due time.",
+  "summary": "You led a concise team meeting with clear signposting, time-first deadlines, and confirmed action items using repeat-back.",
+  "nextSlug": "asl-64",
+  "games": [
+    { "id": "agenda-snap", "title": "Agenda Snap", "route": "/arcade/asl/agenda-snap", "estMinutes": 5, "xp": 50, "outcomes": ["Fast signposting 1–2–3"] },
+    { "id": "status-pop", "title": "Status Pop", "route": "/arcade/asl/status-pop", "estMinutes": 5, "xp": 50, "outcomes": ["Use STILL/NOT-YET/FINISH quickly"] },
+    { "id": "assign-lock", "title": "Assign & Lock", "route": "/arcade/asl/assign-lock", "estMinutes": 5, "xp": 50, "outcomes": ["Point-assign + repeat-back confirmation"] }
+  ]
+}

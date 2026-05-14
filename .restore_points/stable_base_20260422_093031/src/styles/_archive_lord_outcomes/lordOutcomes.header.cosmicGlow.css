@@ -1,0 +1,76 @@
+/* Lord Outcomes — Cosmic Orange Active Glow (tabs) */
+
+:root{
+  --loo-orange: rgba(255,120,40,.95);
+  --loo-glow-1: rgba(255,110,40,.35);
+  --loo-glow-2: rgba(255,150,80,.18);
+}
+
+/* Make sure tabs can host pseudo-elements */
+.looTopTabs .looTopTab,
+.looHdr .looTabs .looTab,
+.looHdr .looTabs a,
+.looHdr .looTabs button{
+  position: relative;
+  overflow: visible;
+}
+
+/* ACTIVE TAB — orange halo behind */
+.looTopTabs .looTopTab.is-active::before,
+.looTopTabs .looTopTab[aria-current="page"]::before,
+.looHdr .looTabs .looTab.is-active::before,
+.looHdr .looTabs a[aria-current="page"]::before,
+.looHdr .looTabs button[aria-selected="true"]::before{
+  content:"";
+  position:absolute;
+  inset:-10px -14px;
+  border-radius:999px;
+  background:
+    radial-gradient(160px 44px at 50% 50%, var(--loo-glow-1), transparent 70%),
+    radial-gradient(220px 70px at 50% 60%, var(--loo-glow-2), transparent 72%);
+  filter: blur(10px);
+  opacity: .95;
+  pointer-events:none;
+  z-index:-1;
+}
+
+/* ACTIVE TAB — thin orange “energy line” */
+.looTopTabs .looTopTab.is-active::after,
+.looTopTabs .looTopTab[aria-current="page"]::after,
+.looHdr .looTabs .looTab.is-active::after,
+.looHdr .looTabs a[aria-current="page"]::after,
+.looHdr .looTabs button[aria-selected="true"]::after{
+  content:"";
+  position:absolute;
+  left:18px;
+  right:18px;
+  bottom:-2px;
+  height:2px;
+  border-radius:999px;
+  background: linear-gradient(90deg, transparent, var(--loo-orange), transparent);
+  box-shadow: 0 0 14px rgba(255,95,20,.65);
+  pointer-events:none;
+}
+
+/* HOVER — subtle pre-glow (not as strong as active) */
+.looTopTabs .looTopTab:hover,
+.looHdr .looTabs .looTab:hover,
+.looHdr .looTabs a:hover,
+.looHdr .looTabs button:hover{
+  box-shadow:
+    0 0 0 1px rgba(255, 160, 96, .18),
+    0 10px 22px rgba(0,0,0,.55),
+    0 0 12px rgba(255, 140, 64, .18);
+}
+
+/* Mobile: shrink glow so it doesn't look foggy */
+@media (max-width: 560px){
+  .looTopTabs .looTopTab.is-active::before,
+  .looTopTabs .looTopTab[aria-current="page"]::before,
+  .looHdr .looTabs .looTab.is-active::before,
+  .looHdr .looTabs a[aria-current="page"]::before,
+  .looHdr .looTabs button[aria-selected="true"]::before{
+    inset:-4px -8px;
+    filter: blur(8px);
+  }
+}

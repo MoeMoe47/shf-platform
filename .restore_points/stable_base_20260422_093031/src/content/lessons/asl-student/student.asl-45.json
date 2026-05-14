@@ -1,0 +1,74 @@
+{
+  "id": "asl-45",
+  "title": "ASL 6.2 — Giving & Asking for Directions (Campus/City/Event) 🏫🏙️🎪",
+  "estMinutes": 30,
+  "objectives": [
+    "Ask for and give directions using time-first and space anchoring",
+    "Integrate common landmarks (SCHOOL, STORE, HOSPITAL, GYM, EVENT) with consistent loci",
+    "Use RS perspective shift between asker and giver of directions",
+    "Add NMM for distance (far vs near) and confirmation (nod vs puzzled face)"
+  ],
+  "vocab": [
+    { "term": "WHERE", "def": "W-hand side to side (question face)." },
+    { "term": "HOW-TO", "def": "Bent hands twist slightly (query)." },
+    { "term": "NEAR / FAR", "def": "NMM with CL path: puffed cheeks (far), small close space (near)." },
+    { "term": "HOSPITAL", "def": "H-hand taps shoulder in cross motion." },
+    { "term": "GYM", "def": "Fists pump like lifting weights." },
+    { "term": "EVENT / FESTIVAL", "def": "Bent hands open upward repeatedly (celebration)." }
+  ],
+  "sections": [
+    {
+      "heading": "Warm-Up: Asking Questions",
+      "media": { "src": "/media/asl/unit-6/asking-where.png", "alt": "WHERE and HOW-TO signs", "caption": "Practice with WH-face" },
+      "body": "Drill **WHERE, HOW-TO, HOSPITAL, GYM, EVENT.** Pair each with WH-NMM (furrowed brows). Example: **HOSPITAL WHERE?**",
+      "microCheck": {
+        "q": "Which NMM signals a WH-question?",
+        "options": ["Eyebrows up", "Eyebrows down (furrowed)", "Neutral face", "Smile only"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Model: Ask → Give → Confirm",
+      "media": { "src": "/media/asl/unit-6/directions-dialogue.mp4", "alt": "Asker and giver role-shifts", "caption": "RS swap: A asks, B gives" },
+      "body": "Sequence:\n• **RS→A (asker):** **EXCUSE WHERE GYM?**\n• **RS→B (giver):** **FROM HERE CL:1 STRAIGHT, LEFT, BUILDING GYM.**\n• **RS→A (confirm):** **OH I SEE, THANK-YOU.**"
+    },
+    {
+      "heading": "Partner Drill: City Map",
+      "media": { "src": "/media/asl/unit-6/city-map.png", "alt": "Grid map with school, store, hospital, gym", "caption": "Anchor 4 landmarks in space" },
+      "body": "Anchor **SCHOOL, STORE, HOSPITAL, GYM.** Partner A asks about one location, Partner B gives directions. Include **near/far NMM** and at least one **classifier path (CL:1 or CL:3)**.",
+      "microCheck": {
+        "q": "Best way to show FAR?",
+        "options": ["Move hands slowly close", "Extend path outward + puffed cheeks", "Say 'far' aloud", "Look down"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Model: Event Directions",
+      "body": "Add **EVENT/FESTIVAL** anchor. Example: **TOMORROW EVENT FESTIVAL. FROM SCHOOL DRIVE CL:3 STRAIGHT, RIGHT, ARRIVE.** Use **RS→giver** to explain; **RS→asker** nods to confirm."
+    },
+    {
+      "heading": "Mini-Showcase",
+      "body": "Record **20–25s**: one asker/giver dialogue. Include: **1 WH-question, 1 CL path, 2 landmarks, near/far NMM, RS swap, neutral return.**",
+      "teacherNote": "Captions should note which landmarks were anchored and how near/far was marked."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 6.2 — Giving & Asking for Directions Quiz",
+    "items": [
+      { "type": "mcq", "q": "Which NMM shows FAR?", "options": ["Eyebrows up", "Puffed cheeks", "Smile", "Neutral face"], "answerIndex": 1 },
+      { "type": "mcq", "q": "In a directions dialogue, what must happen after each RS line?", "options": ["Stay in RS", "Return to neutral narrator", "Switch anchors randomly", "Skip landmarks"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Gloss example: Asking where the hospital is:", "options": ["WHERE HOSPITAL?", "HOSPITAL LOOK", "HOSPITAL GO", "FIND HOSPITAL YES"], "answerIndex": 0 },
+      { "type": "short", "q": "Write a 3–clause gloss giving directions to the GYM from SCHOOL with near/far NMM." },
+      { "type": "reflection", "prompt": "What helped you more—anchoring landmarks or using NMM for distance? Why?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Upload your 20–25s dialogue. Caption landmarks used and how you showed near/far.",
+  "summary": "You practiced asking and giving directions with WH-questions, landmarks, classifiers, NMM for distance, and role-shift exchanges.",
+  "nextSlug": "asl-46",
+  "games": [
+    { "id": "landmark-lock", "title": "Landmark Lock", "route": "/arcade/asl/landmark-lock", "estMinutes": 5, "xp": 50, "outcomes": ["Keep landmarks consistent"] },
+    { "id": "nmm-distance", "title": "NMM Distance", "route": "/arcade/asl/nmm-distance", "estMinutes": 5, "xp": 50, "outcomes": ["Practice near/far faces"] },
+    { "id": "rs-dialogue", "title": "RS Dialogue", "route": "/arcade/asl/rs-dialogue", "estMinutes": 5, "xp": 50, "outcomes": ["Swap RS roles smoothly"] }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "id": "student.asl-03",
+  "title": "ASL 1.3 — Numbers & Counting 🔢",
+  "estMinutes": 25,
+  "objectives": [
+    "Produce numbers 1–20 with correct palm orientation",
+    "Count objects and answer HOW-MANY",
+    "Share age and phone number with natural chunking"
+  ],
+  "vocab": [
+    { "term": "1–5 (palm in)", "def": "Standard orientation toward self." },
+    { "term": "6–9 (touch thumb)", "def": "6=thumb+pinkie, 7=thumb+ring, 8=thumb+middle, 9=thumb+index." },
+    { "term": "10–20", "def": "Distinct movements; 11/12 flicks, 13–15 finger movements, 16–19 combine 6–9 with 'teen' movement." },
+    { "term": "HOW-MANY", "def": "WH-question (brows down)." },
+    { "term": "AGE", "def": "Age from chin outward with number." },
+    { "term": "PHONE-NUMBER", "def": "Number sequence; chunk 3–3–4 for clarity." }
+  ],
+  "sections": [
+    {
+      "heading": "Orientation Basics",
+      "body": "Practice **1–5 palm in**; avoid facing out. For **6–9**, contact the thumb with the correct finger."
+    },
+    {
+      "heading": "Counting Objects",
+      "body": "Count 1–10 items in a picture. Answer **HOW-MANY** with number-first: **THREE BOOK.**"
+    },
+    {
+      "heading": "Age & Phone",
+      "body": "Sign **AGE 15** (from chin). For phone, chunk like **555–123–4567** with micro-pauses."
+    },
+    {
+      "heading": "Partner Drill",
+      "body": "A asks **HOW-MANY** (pens, books). B answers and then states age (optional). Swap."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 1.3 — Numbers & Counting Quiz",
+    "items": [
+      { "type": "mcq", "q": "Palm orientation for 1–5 is…", "options": ["Out", "In", "Side", "Any"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Which is the 7 handshape?", "options": ["Thumb+index", "Thumb+middle", "Thumb+ring", "Thumb+pinkie"], "answerIndex": 2 },
+      { "type": "short", "q": "Gloss a response to HOW-MANY BOOK? (answer: 4)" },
+      { "type": "reflection", "prompt": "Which numbers feel awkward? Plan one strategy to fix them." }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Record 20s: count 1–10 items and sign your age.",
+  "summary": "You produced 1–20 with correct orientation, counted objects, and practiced age/phone chunking.",
+  "nextSlug": "student.asl-04",
+  "games": [
+    { "id": "num-flip", "title": "Number Flip", "route": "/arcade/asl/num-flip", "estMinutes": 5, "xp": 50, "outcomes": ["1–20 accuracy"] },
+    { "id": "howmany-pop", "title": "How Many Pop", "route": "/arcade/asl/howmany-pop", "estMinutes": 5, "xp": 50, "outcomes": ["HOW-MANY Q/A speed"] }
+  ]
+}

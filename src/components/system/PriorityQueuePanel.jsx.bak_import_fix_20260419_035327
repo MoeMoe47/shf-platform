@@ -1,0 +1,166 @@
+import React
+import { useSelectedEntity } from "@/system/context/SelectedEntityContext";, { useState } from "react";
+import { sendOracleAction } from "@/pages/admin/reporting/oracle-action-adapter";
+import { fetchOraclePriority } from "@/pages/admin/reporting/oracle-priority-adapter";
+
+function getRankIcon(rank, readinessStatus) {
+  const { setSelectedEntityId } = useSelectedEntity();
+  if (rank === 1) return "🥇";
+  if (rank === 2) return "🥈";
+  if (String(readinessStatus || "").toLowerCase() === "blocked") return "⚠️";
+  return "•";
+}
+
+export default function PriorityQueuePanel({ priorityData, setPriorityData }) {
+  const [actionMessage, setActionMessage] = useState("");
+  const [actionError, setActionError] = useState("");
+  const [busyKey, setBusyKey] = useState("");
+  const [actionLog, setActionLog] = useState([]);
+
+  async function handleAction(entityId, action) {
+    try {
+      setActionError("");
+      setActionMessage("");
+      setBusyKey(`${entityId}:${action}`);
+
+      const result = await sendOracleAction(entityId, action);
+
+      setActionMessage(result.message || "Action accepted.");
+
+      // 🔁 Add to local action log
+      setActionLog((prev) => [
+        {
+          entityId,
+          action,
+          time: new Date().toLocaleTimeString(),
+        },
+        ...prev.slice(0, 4),
+      ]);
+
+      // 🔁 REFRESH PRIORITY AFTER ACTION
+      const ids = priorityData?.ranked?.map((r) => r.entityId) || [];
+      if (ids.length) {
+        const refreshed = await fetchOraclePriority(ids);
+        if (refreshed && setPriorityData) {
+          setPriorityData(refreshed);
+        }
+      }
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : "Action failed");
+    } finally {
+      setBusyKey("");
+    }
+  }
+
+  if (!priorityData) {
+    return (
+      <div className="section-card">
+        <h3>Priority Queue</h3>
+        <p>No priority data available.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="section-card">
+      <h3 style={{ marginBottom: 12 }}>Priority Queue</h3>
+
+      {/* ⚡ SYSTEM DECISION */}
+      <div
+        style={{
+          marginTop: 4,
+          marginBottom: 12,
+          padding: "14px 18px",
+          borderRadius: 14,
+          background:
+            "linear-gradient(90deg, rgba(16,185,129,0.25), rgba(2,6,23,1))",
+          border: "1px solid rgba(16,185,129,0.65)",
+          color: "#ffffff",
+          fontSize: 16,
+          fontWeight: 800,
+        }}
+      >
+        ⚡ SYSTEM DECISION — {priorityData.summary}
+      </div>
+
+      {/* ✅ FEEDBACK */}
+      {actionMessage && (
+        <div style={{ color: "#22c55e", marginBottom: 10 }}>
+          {actionMessage}
+        </div>
+      )}
+
+      {actionError && (
+        <div style={{ color: "#ef4444", marginBottom: 10 }}>
+          {actionError}
+        </div>
+      )}
+
+      {/* 🧠 PRIORITY CARDS */}
+      {priorityData.ranked.map((item) => {
+        const isTop = item.rank === 1;
+        const isBlocked = item.readinessStatus === "blocked";
+
+        return (
+          <div
+            key={item.entityId} onClick={() => setSelectedEntityId(item.entityId)} style={{ cursor: "pointer" }}
+            style={{
+              marginBottom: 12,
+              padding: 14,
+              borderRadius: 14,
+              background: isBlocked
+                ? "linear-gradient(180deg, rgba(2,6,23,0.96), rgba(30,0,0,0.35))"
+                : "#020617",
+              border: isTop
+                ? "1px solid rgba(16,185,129,0.6)"
+                : isBlocked
+                ? "1px solid rgba(239,68,68,0.5)"
+                : "1px solid rgba(148,163,184,0.2)",
+              boxShadow: isBlocked
+                ? "0 0 18px rgba(239,68,68,0.25)"
+                : "none",
+              color: "#fff",
+            }}
+          >
+            <div style={{ fontSize: isTop ? 19 : 17, fontWeight: 800 }}>
+              {getRankIcon(item.rank, item.readinessStatus)} #{item.rank} —{" "}
+              {item.entityId}
+            </div>
+
+            <div>Confidence: {item.confidenceScore}</div>
+            <div>Score: {item.priorityScore}</div>
+            <div>Readiness: {item.readinessStatus}</div>
+
+            {isTop && (
+              <div style={{ marginTop: 10 }}>
+                <button onClick={() => handleAction(item.entityId, "execute")}>
+                  Execute
+                </button>
+                <button onClick={() => handleAction(item.entityId, "hold")}>
+                  Hold
+                </button>
+                <button
+                  onClick={() => handleAction(item.entityId, "request_data")}
+                >
+                  Request Data
+                </button>
+              </div>
+            )}
+          </div>
+        );
+      })}
+
+      {/* 📜 ACTION HISTORY (NEW 🔥) */}
+      {actionLog.length > 0 && (
+        <div style={{ marginTop: 16 }}>
+          <h4 style={{ marginBottom: 6 }}>Recent Actions</h4>
+          {actionLog.map((a, i) => (
+            <div key={i} style={{ fontSize: 12, opacity: 0.8 }}>
+              {a.time} — {a.entityId} → {a.action}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

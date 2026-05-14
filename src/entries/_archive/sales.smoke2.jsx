@@ -1,6 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { HashRouter, Routes, Route, Link, Navigate } from "react-router-dom";
+import SHSMeetTheTeamPage from "../../pages/solutions/SHSMeetTheTeamPage";
 
 function App() {
   return (
@@ -12,6 +13,8 @@ function App() {
         <Link to="/leads">Leads</Link>
       </nav>
       <Routes>
+          <Route path="company/team" element={<SHSMeetTheTeamPage />} />
+          <Route path="about/team" element={<SHSMeetTheTeamPage />} />
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<h2>Dashboard page</h2>} />
         <Route path="/leads" element={<h2>Leads page</h2>} />

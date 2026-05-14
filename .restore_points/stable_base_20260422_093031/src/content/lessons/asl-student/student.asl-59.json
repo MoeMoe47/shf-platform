@@ -1,0 +1,84 @@
+{
+  "id": "asl-59",
+  "title": "ASL 8.1 — School & Work Routines (Schedules • Tasks • Requests) 🗓️",
+  "estMinutes": 30,
+  "objectives": [
+    "Talk about daily/weekly schedules using time-first framing",
+    "Request, accept, and decline help politely using RS with neutral returns",
+    "Report tasks with FINISH/DUE and confirm next actions briefly"
+  ],
+  "vocab": [
+    { "term": "MONDAY–SUNDAY", "def": "Days of week; use as anchors for schedule." },
+    { "term": "MORNING / AFTERNOON / NIGHT", "def": "Time-of-day markers (time-first)." },
+    { "term": "CLASS / WORK / MEETING", "def": "Common routine activities." },
+    { "term": "HOMEWORK / PROJECT / EMAIL", "def": "Task set; pair with DUE/FINISH." },
+    { "term": "DUE / DEADLINE", "def": "Time target for tasks." },
+    { "term": "FINISH", "def": "Marks completed item/leg; brief head nod." },
+    { "term": "REQUEST (PLEASE) / HELP", "def": "Polite ask; add small forward lean." },
+    { "term": "CAN / CAN'T / MUST / SHOULD", "def": "Modals for permission/obligation/suggestion." },
+    { "term": "ROLE-SHIFT (RS)", "def": "Supervisor/teacher ↔ employee/student lines with neutral returns." }
+  ],
+  "sections": [
+    {
+      "heading": "Warm-Up: Calendar Anchors",
+      "media": { "src": "/media/asl/unit-8/calendar-anchors.png", "alt": "Week grid with days anchored in space", "caption": "Anchor M–F left→right; weekend to the side" },
+      "body": "Place **MONDAY → FRIDAY** across space (left→right). Put **SATURDAY/SUNDAY** slightly lower-right. Reuse these loci for schedule talk.",
+      "microCheck": {
+        "q": "Best way to keep days clear is to…",
+        "options": ["Point randomly each time", "Reuse the same anchored spots for each day", "Make giant motions", "Skip time markers"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Model: Time-First Schedule Lines",
+      "media": { "src": "/media/asl/unit-8/schedule-model.mp4", "alt": "Signer listing schedule items with pauses", "caption": "TIME → ACTIVITY → brief pause" },
+      "body": "Examples (3–5 signs each):\n• **MONDAY MORNING CLASS. AFTERNOON WORK.**\n• **TUESDAY NIGHT MEETING.**\n• **WEDNESDAY HOMEWORK DUE.**\nAdd **FINISH** after a completed item: **EMAIL SEND FINISH.**",
+      "microCheck": {
+        "q": "Where does FINISH land?",
+        "options": ["Before the task", "After a completed task/segment", "Random", "Never"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Requests & Replies (RS)",
+      "body": "RS→Requester: **PLEASE HELP PROJECT?** (eyebrows neutral/kind)  \nNeutral.  \nRS→Responder: **CAN TODAY AFTERNOON.** / **SORRY CAN'T, MEETING.**  \nUse **MUST/SHOULD** for obligations/suggestions: **MUST EMAIL TODAY. SHOULD START EARLY.**",
+      "callouts": [
+        { "type": "tip", "title": "Polite Package", "body": "Add PLEASE + small forward lean + nod when asking. Return to neutral between lines." }
+      ],
+      "microCheck": {
+        "q": "Between RS lines you should…",
+        "options": ["Stay in RS", "Return to neutral narrator", "Change anchors mid-dialogue", "Talk aloud"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Partner Drill: Task + Deadline + Ask",
+      "media": { "src": "/media/asl/unit-8/task-deadline.gif", "alt": "Two people signing request/confirm", "caption": "Requester ↔ Responder with repeat-back" },
+      "body": "A states schedule with one **DUE** item, then asks for help. B accepts or declines and proposes a time. A repeat-backs key detail.  \nExample:\n• **THURSDAY PROJECT DUE. PLEASE HELP WEDNESDAY NIGHT?**  \n• **B:** **CAN WEDNESDAY NIGHT.**  \n• **A (repeat-back):** **OK WEDNESDAY NIGHT HELP.**"
+    },
+    {
+      "heading": "Mini-Showcase",
+      "body": "Record **18–25s**: list **3 schedule items** (days/time-first), include **1 request** and **1 response**, and mark **FINISH** on one completed task. Include one short **repeat-back**.",
+      "teacherNote": "Caption which day/time anchors you used and which task was FINISHed."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 8.1 — School & Work Routines Quiz",
+    "items": [
+      { "type": "mcq", "q": "Most readable base order for routine lines:", "options": ["Activity → Time", "Time → Activity", "Random", "Activity only"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Which sign marks a task completed?", "options": ["DUE", "MUST", "FINISH", "PLEASE"], "answerIndex": 2 },
+      { "type": "mcq", "q": "Polite request bundle includes…", "options": ["Yell", "PLEASE + small lean + nod", "No NMM", "Look away"], "answerIndex": 1 },
+      { "type": "short", "q": "Write a 3-line gloss: MONDAY MORNING CLASS. TUESDAY NIGHT MEETING. WEDNESDAY HOMEWORK DUE." },
+      { "type": "reflection", "prompt": "Which needs practice—day anchors, FINISH placement, or RS request/response timing?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Upload your 18–25s routine clip. Caption your day anchors, one request/response, and which task was FINISHed.",
+  "summary": "You described weekly routines with day/time anchors, handled polite requests with RS and neutral returns, and marked completion with FINISH.",
+  "nextSlug": "asl-60",
+  "games": [
+    { "id": "day-lock", "title": "Day Lock", "route": "/arcade/asl/day-lock", "estMinutes": 5, "xp": 50, "outcomes": ["Consistent day anchors M–F+weekend"] },
+    { "id": "request-reply", "title": "Request & Reply", "route": "/arcade/asl/request-reply", "estMinutes": 5, "xp": 50, "outcomes": ["Polite RS requests and responses"] },
+    { "id": "finish-flag-u8", "title": "Finish Flag U8", "route": "/arcade/asl/finish-flag-u8", "estMinutes": 5, "xp": 50, "outcomes": ["Use FINISH at the right moment"] }
+  ]
+}

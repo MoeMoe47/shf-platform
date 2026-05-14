@@ -1,0 +1,86 @@
+@import "./emoji.css";
+
+
+/* Put @import FIRST (only if the file exists) */
+
+/* --- Dashboard shared helpers (used across apps) --- */
+.table-wrap { overflow-x: auto; }
+.linkcard { display:inline-block; padding:10px 12px; border:1px solid var(--ring,#eee); border-radius:10px; text-decoration:none; }
+.linkcard:hover { background:#fafafa; }
+
+/* KPI strip (generic) */
+.sh-kpi .sh-cardContent { padding-block: .5rem; }
+.sh-kpiRow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  list-style: none;
+  margin: 0; padding: 0;
+}
+.sh-kpiItem { display: flex; align-items: center; gap: 10px; }
+.sh-kpiIcon { font-size: 1.25rem; line-height: 1; }
+.sh-kpiLabel { font-size: 12px; color: var(--ink-soft); }
+.sh-kpiValue { font: 600 20px/1.2 system-ui, sans-serif; }
+.sh-kpiHint  { font-size: 12px; color: var(--ink-soft); }
+@media (max-width: 900px) { .sh-kpiRow { grid-template-columns: 1fr; } }
+
+/* Optional “dash-*” utilities (only if you’re using them globally) */
+.dash-grid { align-items: start; }
+.dash-hero .sh-actionsRow { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.dash-kv { display: grid; gap: 6px; margin-bottom: 10px; }
+.dash-k, .dash-v { font-size: 13px; color: var(--ink, #0f172a); }
+.dash-k { color: var(--ink-soft, #6b7280); margin-right: 8px; }
+.dash-mono { font-family: ui-monospace, Menlo, Monaco, Consolas, "Courier New", monospace; }
+
+.dash-statsRow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 10px;
+  margin: 10px 0 8px;
+}
+.dash-stat { border: 1px solid var(--line, #dcd7ce); border-radius: 10px; background: #fff; padding: 10px; text-align: center; }
+.dash-statVal { font-size: 18px; font-weight: 700; color: var(--ink, #0f172a); }
+.dash-unit { font-size: 12px; font-weight: 600; opacity: .7; margin-left: 4px; }
+.dash-statLabel { font-size: 12px; color: var(--ink-soft, #6b7280); margin-top: 2px; }
+
+.dash-pill { display: inline-flex; align-items: center; justify-content: center; padding: 4px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; border: 1px solid var(--line); }
+.dash-pill.ok   { background: #ecfdf5; color: #065f46; border-color: #10b981; }
+.dash-pill.warn { background: #fff7ed; color: #9a3412; border-color: #fed7aa; }
+
+.dash-list { list-style: none; padding: 0; margin: 8px 0 10px; display: grid; gap: 6px; }
+.dash-list .dash-k { color: var(--ink-soft, #6b7280); }
+.dash-list .dash-v { color: var(--ink, #0f172a); }
+
+.dash-plainList { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.dash-row { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; border: 1px solid var(--line, #dcd7ce); border-radius: 10px; background: #fff; padding: 8px 10px; }
+.dash-row.you { border-color: var(--orange, #ff4f00); box-shadow: 0 0 0 2px rgba(255,79,0,.12) inset; }
+.dash-rowMain { min-width: 0; }
+.dash-title { font-weight: 600; color: var(--ink, #0f172a); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dash-sub { font-size: 12px; color: var(--ink-soft, #6b7280); }
+.dash-rank { font-weight: 700; color: var(--ink, #0f172a); min-width: 30px; text-align: center; }
+.dash-tag { font-size: 12px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); background: #fff; }
+.dash-tag.warn { background: #fff7ed; border-color: #fed7aa; color: #9a3412; }
+.dash-tag.ok   { background: #ecfdf5; border-color: #10b981; color: #065f46; }
+.dash-dot { color: #d1d5db; }
+
+/* Skeletons */
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+.skel { border-radius: 10px; background: linear-gradient(90deg,#f3f4f6 25%,#e9ecef 37%,#f3f4f6 63%); background-size: 200% 100%; animation: shimmer 1.2s infinite linear; }
+.skel--row { height: 14px; margin: 6px 0; }
+.skel--text-1 { height: 14px; width: 60%; }
+.skel--text-2 { height: 14px; width: 90%; margin-bottom: 8px; }
+.skel--text-3 { height: 14px; width: 70%; }
+.skel--card-lg { height: 180px; width: 100%; }
+.skel--progress { height: 120px; width: 100%; }
+.skel--button { height: 36px; width: 140px; border-radius: 999px; }
+.skel-list { display: grid; gap: 8px; }
+.skel--chip { height: 26px; width: 80px; border-radius: 999px; }
+.skel--stat { height: 40px; width: 100%; border-radius: 10px; }
+
+/* ✅ close the media query properly */
+@media (max-width: 720px) {
+  .dash-statsRow { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+
+

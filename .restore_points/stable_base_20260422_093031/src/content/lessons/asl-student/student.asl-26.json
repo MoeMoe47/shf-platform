@@ -1,0 +1,79 @@
+{
+  "id": "asl-26",
+  "title": "ASL 3.6 — Small Talk & Check-Ins 👋",
+  "estMinutes": 25,
+  "objectives": [
+    "Use everyday small-talk phrases (HOW-ARE-YOU?, LONG-TIME-NO-SEE, WHAT’S-UP?)",
+    "Respond with short updates (BUSY, SAME, DIFFERENT, RECENT, GOOD, TIRED)",
+    "Keep exchanges compact with polite reactions and turn-taking"
+  ],
+  "vocab": [
+    { "term": "HOW-ARE-YOU?", "def": "Hands move outward from chest; polite greeting." },
+    { "term": "LONG-TIME-NO-SEE", "def": "Index circles outward near eye; extended absence." },
+    { "term": "WHAT’S-UP?", "def": "Middle fingers brush chest upward; casual greeting." },
+    { "term": "RECENT", "def": "X-hand brushes cheek backward once." },
+    { "term": "BUSY", "def": "B-hand shakes in front of non-dominant palm." },
+    { "term": "SAME / DIFFERENT", "def": "SAME: Y-hands move together; DIFFERENT: index fingers cross/diverge." },
+    { "term": "GOOD / TIRED", "def": "Core responses for status check." },
+    { "term": "POLITE NMM", "def": "Friendly face, slight nod, brows neutral." }
+  ],
+  "sections": [
+    {
+      "heading": "Warm-Up: Greeting Row",
+      "media": { "src": "/media/asl/unit-3/greeting-row.png", "alt": "HOW-ARE-YOU, LONG-TIME-NO-SEE, WHAT’S-UP", "caption": "Cycle greetings slowly" },
+      "body": "Drill **HOW-ARE-YOU?**, **LONG-TIME-NO-SEE**, **WHAT’S-UP?**. Add a slight nod and polite NMM. Keep motion compact.",
+      "microCheck": {
+        "q": "Which NMM matches polite greetings?",
+        "options": ["Brows up exaggerated", "Brows down WH-face", "Friendly face + slight nod", "Eyes closed"],
+        "answerIndex": 2
+      }
+    },
+    {
+      "heading": "Model: Status Updates",
+      "media": { "src": "/media/asl/unit-3/status-demo.mp4", "alt": "BUSY, SAME, DIFFERENT, RECENT", "caption": "Respond with 1–2 signs" },
+      "body": "Use short answers:\n• **BUSY.**\n• **GOOD. SAME.**\n• **TIRED RECENT.**\nKeep updates 1–3 signs, pause briefly before switching turns.",
+      "microCheck": {
+        "q": "Which is a compact answer to HOW-ARE-YOU?",
+        "options": ["I FEEL TIRED BECAUSE SCHOOL LOT HOMEWORK", "TIRED.", "GOOD I THINK BUT MAYBE BUSY YESTERDAY", "RECENT RECENT RECENT"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Partner Practice: Ping-Pong",
+      "media": { "src": "/media/asl/unit-3/pingpong.gif", "alt": "Quick check-in dialogue", "caption": "Swap turns every 20–30s" },
+      "body": "A: **WHAT’S-UP?** B: **BUSY.** → A: **I SEE.** Switch roles. Add SAME/DIFFERENT comments (e.g., **ME SAME.**). Keep exchanges ~15s.",
+      "callouts": [
+        { "type": "tip", "title": "Feedback Stem", "body": "“Good clarity—try **shorter answers** for small talk.”" }
+      ],
+      "microCheck": {
+        "q": "Best follow-up after partner signs BUSY?",
+        "options": ["Ignore", "I SEE / SAME / DIFFERENT", "Repeat BUSY 3x", "Change topic abruptly"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Mini-Showcase",
+      "body": "Record **10–15s**: greeting → status → reaction. Example: **LONG-TIME-NO-SEE!** → **GOOD RECENT.** → **I SEE NICE.**",
+      "teacherNote": "Allow privacy submissions; caption should note if you used SAME or DIFFERENT."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 3.6 — Small Talk & Check-Ins Quiz",
+    "items": [
+      { "type": "mcq", "q": "Which greeting is casual?", "options": ["LONG-TIME-NO-SEE", "WHAT’S-UP?", "HOW-ARE-YOU?", "SORRY"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Polite NMM for greetings:", "options": ["Brows down", "Exaggerated brows up", "Friendly face + nod", "Neutral blank"], "answerIndex": 2 },
+      { "type": "mcq", "q": "Compact answer to HOW-ARE-YOU?", "options": ["I FEEL SAD BECAUSE HOMEWORK LOT", "BUSY", "I THINK MAYBE GOOD", "LONG STORY"], "answerIndex": 1 },
+      { "type": "short", "q": "Write a gloss for: WHAT’S-UP? → SAME." },
+      { "type": "reflection", "prompt": "Which was harder—using short answers or reacting with SAME/DIFFERENT? How will you practice?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Upload a 10–15s check-in clip (greeting → status → reaction). Caption if you used SAME or DIFFERENT.",
+  "summary": "You practiced casual greetings, short updates, and polite reactions for everyday check-ins.",
+  "nextSlug": "asl-3-capstone",
+  "games": [
+    { "id": "checkin-snap", "title": "Check-In Snap", "route": "/arcade/asl/checkin-snap", "estMinutes": 5, "xp": 50, "outcomes": ["Quick greetings"] },
+    { "id": "status-pong", "title": "Status Pong", "route": "/arcade/asl/status-pong", "estMinutes": 5, "xp": 50, "outcomes": ["Compact responses"] },
+    { "id": "same-diff", "title": "Same or Different?", "route": "/arcade/asl/same-diff", "estMinutes": 5, "xp": 50, "outcomes": ["SAME/DIFFERENT practice"] }
+  ]
+}

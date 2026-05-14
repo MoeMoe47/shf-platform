@@ -1,0 +1,93 @@
+{
+  "id": "asl-55",
+  "title": "ASL 7.5 — Emergencies & Urgent Care (Call • Triage • Handoff) 🚑⚠️",
+  "estMinutes": 30,
+  "objectives": [
+    "Use urgent language and NMM to report emergencies clearly (what/where/who/severity)",
+    "Request an interpreter and provide critical info (allergies, meds, conditions) with repeat-back",
+    "Role-shift across caller, dispatcher/EMT, and patient for fast, accurate handoffs"
+  ],
+  "vocab": [
+    { "term": "EMERGENCY / 911", "def": "E-hand shake / number sign; pair with urgent NMM." },
+    { "term": "ACCIDENT / FALL / CRASH", "def": "Incident set for quick reports." },
+    { "term": "UNCONSCIOUS / BLEED / BREATH", "def": "Status terms; localize and show severity." },
+    { "term": "ALLERGY / MEDICINE / DIABETES / ASTHMA", "def": "Critical history items for handoff." },
+    { "term": "INTERPRETER REQUEST", "def": "SIGN LANGUAGE INTERPRETER PLEASE (polite assertive)." },
+    { "term": "LOCATION / ADDRESS / NEAR", "def": "Where the event is; use landmarks if no exact address." },
+    { "term": "REPEAT-BACK", "def": "Confirm instructions/handoff by echoing key info." },
+    { "term": "ROLE-SHIFT (RS)", "def": "Caller ↔ Dispatcher/EMT ↔ Patient; return to neutral between lines." },
+    { "term": "NMM: URGENCY", "def": "Wide eyes, tense mouth, quick head jolt; release to neutral after resolution." }
+  ],
+  "sections": [
+    {
+      "heading": "Warm-Up: Urgent Report Frame",
+      "media": { "src": "/media/asl/unit-7/urgent-frame.png", "alt": "What/Where/Who/Severity icons", "caption": "WHAT • WHERE • WHO • SEVERITY" },
+      "body": "Drill a 4-part emergency frame in **3–5 sign** clauses: **WHAT** (ACCIDENT/FALL/CRASH), **WHERE** (ADDRESS/NEAR LANDMARK), **WHO** (ADULT/CHILD/SELF), **SEVERITY** (BLEED/UNCONSCIOUS/BREATH PROBLEM).",
+      "microCheck": {
+        "q": "Best base order for an emergency report:",
+        "options": ["Who → severity → where → what", "WHAT → WHERE → WHO → SEVERITY", "Random", "Only severity"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Model: Call + Interpreter Request",
+      "media": { "src": "/media/asl/unit-7/911-call.mp4", "alt": "Caller signing to relay/dispatcher", "caption": "Time-first if helpful; keep clauses short" },
+      "body": "Example:\n• **EMERGENCY NOW.** **CRASH STREET NEAR SCHOOL.** **ADULT BLEED ARM STRONG.**\n• **INTERPRETER PLEASE.**\n• **DISPATCH (RS):** **AMBULANCE 5-MIN. APPLY PRESSURE.**\n• **CALLER (repeat-back):** **OK APPLY PRESSURE. 5-MIN.** Return to neutral between RS lines.",
+      "microCheck": {
+        "q": "What proves the caller understood dispatcher instructions?",
+        "options": ["Thumbs up only", "Repeat-back key steps and timing", "Smile", "Look away"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Triage Signs & NMM",
+      "body": "Prioritize life threats:\n• **BREATH OK?/NOT** (Y/N face)\n• **BLEED WHERE? HOW-MUCH?** (WH + amount NMM)\n• **CONSCIOUS?** (Y/N)\nUse urgent NMM during the problem, then **release** to neutral when stabilized.",
+      "callouts": [
+        { "type": "tip", "title": "One Urgent Thing at a Time", "body": "Short clauses beat run-ons. Solve **breathing** before **bleeding** if necessary and sign it in order." }
+      ]
+    },
+    {
+      "heading": "Handoff: EMT Arrives",
+      "media": { "src": "/media/asl/unit-7/emt-handoff.gif", "alt": "Signer handing off to EMT", "caption": "Critical info in one breath" },
+      "body": "Handoff template:\n• **WHAT:** **FALL STAIRS.**\n• **WHO:** **ADULT FEMALE.**\n• **SEVERITY:** **HURT ANKLE STRONG. BLEED LITTLE HAND.**\n• **HISTORY:** **ALLERGY PENICILLIN. ASTHMA.**\n• **ACTIONS DONE:** **ICE, BANDAGE, APPLY PRESSURE.**",
+      "microCheck": {
+        "q": "Which detail is MOST critical for EMT handoff?",
+        "options": ["Favorite color", "Allergies/Conditions/Actions done", "Lunch plans", "Weather"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Partner Practice: Call → Handoff",
+      "body": "A = caller, B = dispatcher. Do **call with interpreter request** + instruction **repeat-back**. Swap; then A = patient, B = EMT for **handoff** using the template. Keep every line 3–5 signs.",
+      "microCheck": {
+        "q": "Between RS lines you should…",
+        "options": ["Stay in RS", "Return to neutral narrator", "Wave arms bigger", "Talk aloud"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Mini-Showcase",
+      "body": "Record **18–25s**: **Call snippet (WHAT/WHERE/WHO/SEVERITY + interpreter request + repeat-back)** then **EMT handoff** (include **allergies or meds**).",
+      "teacherNote": "Caption: incident, location, one severity item, and any allergy/condition disclosed."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 7.5 — Emergencies & Urgent Care Quiz",
+    "items": [
+      { "type": "mcq", "q": "Clear order for an initial emergency report:", "options": ["WHAT → WHERE → WHO → SEVERITY", "WHO → WHAT → SEVERITY → WHERE", "Random", "Only severity"], "answerIndex": 0 },
+      { "type": "mcq", "q": "Best proof of understanding dispatcher steps:", "options": ["Smile", "Repeat-back key steps", "Shrug", "Say OK only"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Which is critical in a medical handoff?", "options": ["Allergies/conditions and what’s been done", "Favorite sport", "Pet name", "Weekend plans"], "answerIndex": 0 },
+      { "type": "short", "q": "Write a 2-part gloss: call (WHAT/WHERE/WHO/SEVERITY + interpreter request) → EMT handoff (include one allergy/condition)." },
+      { "type": "reflection", "prompt": "Which was harder—urgent NMM or concise handoff? What cue will you practice to keep it short?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Upload your 18–25s call→handoff clip; caption incident, location, severity, and disclosed allergy/condition.",
+  "summary": "You handled emergency language: urgent reports with interpreter requests, triage questions, instruction repeat-backs, and crisp EMT handoffs.",
+  "nextSlug": "asl-56",
+  "games": [
+    { "id": "urgent-frame", "title": "Urgent Frame", "route": "/arcade/asl/urgent-frame", "estMinutes": 5, "xp": 50, "outcomes": ["WHAT • WHERE • WHO • SEVERITY speed"] },
+    { "id": "repeat-back-rapid", "title": "Repeat-Back Rapid", "route": "/arcade/asl/repeat-back-rapid", "estMinutes": 5, "xp": 50, "outcomes": ["Fast, accurate confirmations"] },
+    { "id": "handoff-hitlist", "title": "Handoff Hitlist", "route": "/arcade/asl/handoff-hitlist", "estMinutes": 5, "xp": 50, "outcomes": ["Allergies/conditions/actions recall"] }
+  ]
+}

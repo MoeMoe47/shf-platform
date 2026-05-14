@@ -1,0 +1,72 @@
+import React, { useEffect, useState } from "react";
+import "@/styles/admin.appRegistry.css";
+
+const API_BASE =
+  window.__SHS_API_BASE__ ||
+  (import.meta.env.VITE_SHS_API_BASE || "/api");
+
+async function readJson(res) {
+  const text = await res.text();
+  try {
+    return text ? JSON.parse(text) : {};
+  } catch {
+    return { raw: text };
+  }
+}
+
+export default function AuditLogViewer() {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  async function loadAudit() {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/audit-logs`);
+      const data = await readJson(res);
+      setItems(data.items || []);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadAudit();
+  }, []);
+
+  if (loading) {
+    return <div className="ar-wrap"><div className="ar-sub">Loading audit logs…</div></div>;
+  }
+
+  return (
+    <div className="ar-wrap">
+      <header className="ar-head">
+        <div>
+          <div className="ar-kicker">System</div>
+          <h1 className="ar-title">Audit Log Viewer</h1>
+          <div className="ar-sub">Identity, invite, user status, and upload audit events.</div>
+        </div>
+      </header>
+
+      {items.length === 0 ? (
+        <section className="ar-card">
+          <div className="ar-sub">No audit events yet.</div>
+        </section>
+      ) : (
+        <div className="ar-grid">
+          {items.map((item) => (
+            <section key={item.id} className="ar-card">
+              <div style={{ fontWeight: 700, marginBottom: 6 }}>{item.action_type}</div>
+              <div className="ar-sub" style={{ marginBottom: 6 }}>
+                target: {item.target_type} / {item.target_id}
+              </div>
+              <div className="ar-sub" style={{ marginBottom: 10 }}>
+                actor: {item.actor_user_id} — org: {item.organization_id}
+              </div>
+              <pre className="ar-code">{JSON.stringify(item.metadata, null, 2)}</pre>
+            </section>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

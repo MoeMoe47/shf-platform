@@ -1,0 +1,70 @@
+{
+  "id": "asl-62",
+  "title": "ASL 8.4 — Reports & Presentations (Signposting • Clarity • Visuals) 🎤",
+  "estMinutes": 30,
+  "objectives": [
+    "Organize short ASL presentations using clear signposting (FIRST/NEXT/FINALLY)",
+    "Use time-first framing and anchor points for topics/sections",
+    "Handle brief Q&A with role-shift (audience ↔ presenter) and neutral returns"
+  ],
+  "vocab": [
+    { "term": "FIRST / NEXT / FINALLY", "def": "Signposts that structure a talk into sections." },
+    { "term": "TOPIC / EXAMPLE / SUMMARY", "def": "Section labels for clarity." },
+    { "term": "TRANSITION", "def": "Small pause + head shift + signpost to move sections." },
+    { "term": "VISUAL AID (CHART/IMAGE)", "def": "Point to screen-space; show simple up/down trends." },
+    { "term": "ROLE-SHIFT (RS)", "def": "Switch briefly to audience/questioner; return to neutral to answer." }
+  ],
+  "sections": [
+    {
+      "heading": "Warm-Up: Signpost Flow",
+      "media": { "src": "/media/asl/unit-8/signpost-flow.png", "alt": "FIRST → NEXT → FINALLY arrows", "caption": "Simple 3-part structure" },
+      "body": "Drill a 3-part frame with **micro-pauses**: **FIRST TOPIC.** (pause) **NEXT EXAMPLE.** (pause) **FINALLY SUMMARY.** Keep each clause **3–5 signs**."
+    },
+    {
+      "heading": "Model: Mini Presentation (30–45s)",
+      "media": { "src": "/media/asl/unit-8/mini-present.mp4", "alt": "Presenter using signposts and pointing to a chart", "caption": "Time-first + signposts + visual" },
+      "body": "Example gloss:\n• **TODAY REPORT SCHOOL CLUB. FIRST MEMBERS GROW.** (point right: chart up)\n• **NEXT EVENT LAST-WEEK SUCCESS.** (brief smile NMM)\n• **FINALLY PLAN NEXT-MONTH FUNDRAISER.** **SUMMARY: SUPPORT PLEASE.**"
+    },
+    {
+      "heading": "Technique: Visual Anchors",
+      "body": "Reserve **screen-space** on your right for visuals (charts/images). Use **point** + brief **hold** to connect content. Keep trends simple: **UP (increase)** / **DOWN (decrease)** with NMM to match."
+    },
+    {
+      "heading": "Q&A with RS",
+      "body": "Practice quick exchanges:\n• **RS→AUDIENCE:** **QUESTION: WHEN FUNDRAISER?** (brows down)\n• (neutral) **RS→PRESENTER:** **NEXT-MONTH SATURDAY.** (neutral)\nAlways **return to neutral** between lines to keep roles clear."
+    },
+    {
+      "heading": "Partner Practice: 3-Slide Talk",
+      "media": { "src": "/media/asl/unit-8/three-slide.gif", "alt": "Three-section layout in space", "caption": "Anchor sections left→center→right" },
+      "body": "Anchor three sections **left (FIRST)**, **center (NEXT)**, **right (FINALLY)**. A presents; B asks **1 Q** (RS). A answers, then **SUMMARY** close. Swap roles.",
+      "microCheck": {
+        "q": "What best marks a transition between sections?",
+        "options": ["Talk faster", "Small pause + head shift + signpost", "Bigger hands only", "Skip signposts"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Mini-Showcase",
+      "body": "Record **30–40s**: **FIRST/NEXT/FINALLY** structure, **one visual point**, **one Q&A RS**, and a **SUMMARY** line. Caption your three section labels."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 8.4 — Reports & Presentations Quiz",
+    "items": [
+      { "type": "mcq", "q": "Most readable structure for a short talk:", "options": ["Random order", "FIRST → NEXT → FINALLY", "Only examples", "Q&A only"], "answerIndex": 1 },
+      { "type": "mcq", "q": "What keeps roles clear during Q&A?", "options": ["Stay in RS", "Return to neutral between lines", "Wave bigger", "Skip questions"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Best way to reference a chart:", "options": ["Describe without pointing", "Point + brief hold at the visual space", "Spell C-H-A-R-T", "Look away"], "answerIndex": 1 },
+      { "type": "short", "q": "Write a 3-part gloss using FIRST/NEXT/FINALLY on any school/work topic." },
+      { "type": "reflection", "prompt": "Which needs practice—signposts, transitions, or Q&A RS timing? Name one cue you’ll use next time." }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Upload your 30–40s presentation. Caption your three section labels, where you pointed to the visual, and your Q&A question.",
+  "summary": "You structured a clear mini-presentation with signposts, simple visual references, and a brief Q&A using RS with clean neutral returns.",
+  "nextSlug": "asl-63",
+  "games": [
+    { "id": "signpost-snap", "title": "Signpost Snap", "route": "/arcade/asl/signpost-snap", "estMinutes": 5, "xp": 50, "outcomes": ["FIRST/NEXT/FINALLY speed"] },
+    { "id": "visual-point", "title": "Visual Point", "route": "/arcade/asl/visual-point", "estMinutes": 5, "xp": 50, "outcomes": ["Point + hold to a chart space"] },
+    { "id": "qa-ping", "title": "Q&A Ping", "route": "/arcade/asl/qa-ping", "estMinutes": 5, "xp": 50, "outcomes": ["Short RS question/answer cycle"] }
+  ]
+}

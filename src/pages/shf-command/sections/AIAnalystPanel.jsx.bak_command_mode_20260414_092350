@@ -1,0 +1,52 @@
+import React from "react";
+
+export default function AIAnalystPanel({ actions = [], onActionClick }) {
+  return (
+    <div className="shf-panel shf-analyst-panel" data-tour="analyst">
+      <div className="shf-panel__header">
+        <h2>AI Analyst</h2>
+        <span className="shf-bulb">💡</span>
+      </div>
+
+      <div className="shf-analyst-summary">
+        <span className="shf-analyst-status">ACTIVE ANALYSIS</span>
+        <p>
+          System is monitoring outcomes, funding flow, and risk signals across programs.
+          Recommended actions are ranked by priority and projected impact.
+        </p>
+      </div>
+
+      <div className="shf-analyst-panel__section-title">
+        Recommended Actions
+      </div>
+
+      <div className="shf-action-list">
+        {actions.map((action, index) => {
+          const priority = index === 0 ? "high" : index === 1 ? "medium" : "low";
+
+          return (
+            <button
+              key={action}
+              type="button"
+              className={`shf-action-card shf-action-${priority}`}
+              onClick={() => onActionClick?.(action)}
+            >
+              <div className="shf-action-card__left">
+                <span className="shf-action-priority">
+                  {priority.toUpperCase()}
+                </span>
+                <span className="shf-action-text">{action}</span>
+              </div>
+
+              <div className="shf-action-card__right">
+                <span className="shf-action-confidence">
+                  {90 - index * 7}%
+                </span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

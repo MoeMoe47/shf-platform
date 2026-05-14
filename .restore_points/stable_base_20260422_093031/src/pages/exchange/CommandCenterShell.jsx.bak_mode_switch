@@ -1,0 +1,64 @@
+import React from "react";
+import CommandCenter from "./CommandCenter";
+import PredictionLayerPanel from "./PredictionLayerPanel";
+import ModuleBoundary from "./ModuleBoundary";
+import { ModeProvider, useMode } from "./ModeContext";
+import FeatureGate from "./FeatureGate";
+
+export default function CommandCenterShell() {
+  function ModeSwitch() {
+    const { mode, setMode } = useMode();
+
+    return (
+      <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
+        {["operator", "investor", "auditor", "lite"].map((m) => (
+          <button
+            key={m}
+            onClick={() => setMode(m)}
+            style={{
+              padding: "6px 10px",
+              borderRadius: 8,
+              border: "1px solid rgba(92,140,198,0.2)",
+              background: mode === m ? "#1e293b" : "#0f172a",
+              color: "#e2e8f0",
+              cursor: "pointer",
+              fontSize: 12,
+            }}
+          >
+            {m}
+          </button>
+        ))}
+      </div>
+    );
+  }
+  const [shellPrediction, setShellPrediction] = React.useState(null);
+  const [shellNarrative, setShellNarrative] = React.useState(null);
+
+  console.log("Shell prediction", shellPrediction);
+  console.log("Shell narrative", shellNarrative);
+
+  return (
+    <ModeProvider>
+    <div style={{ display: "grid", gap: 12 }}>
+      <ModeSwitch />
+      <ModuleBoundary>
+      <FeatureGate feature="predictionPanel">
+      <PredictionLayerPanel
+        prediction={shellPrediction}
+        narrative={shellNarrative}
+      />
+      </FeatureGate>
+      </ModuleBoundary>
+
+      <ModuleBoundary>
+      <CommandCenter
+        onShellStateChange={({ predictive, narrative }) => {
+          setShellPrediction(predictive);
+          setShellNarrative(narrative);
+        }}
+      />
+      </ModuleBoundary>
+    </div>
+    </ModeProvider>
+  );
+}

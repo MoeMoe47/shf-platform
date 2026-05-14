@@ -1,0 +1,35 @@
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+
+import AppRegistry from "@/pages/admin/AppRegistry.jsx";
+import Registry from "@/pages/admin/Registry.jsx";
+
+import AdminDashboard from "@/pages/AdminDashboard.jsx";
+
+// 🔥 PROJECT / BUILD TOOLS
+import ToolDashboard from "@/pages/admin/ToolDashboard.jsx";
+import MasterNarrativeViewer from "@/pages/admin/MasterNarrativeViewer.jsx";
+import GrantBinder from "@/pages/admin/GrantBinder.jsx";
+import AlignmentSwitchboard from "@/pages/admin/AlignmentSwitchboard.jsx";
+
+export default function AdminRoutes() {
+  return (
+    <Routes>
+
+      {/* MAIN */}
+      <Route path="/admin-dashboard" element={<AdminDashboard />} />
+
+      {/* 🔥 PROJECT BUILDER SYSTEM */}
+      <Route path="/tools" element={<ToolDashboard />} />
+      <Route path="/narrative" element={<MasterNarrativeViewer />} />
+      <Route path="/grant-binder" element={<GrantBinder />} />
+      <Route path="/alignment" element={<AlignmentSwitchboard />} />
+
+      {/* EXISTING */}
+      <Route path="/app-registry" element={<AppRegistry />} />
+      <Route path="/registry" element={<Registry />} />
+
+      <Route path="*" element={<Navigate to="/tools" replace />} />
+    </Routes>
+  );
+}

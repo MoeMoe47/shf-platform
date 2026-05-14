@@ -1,0 +1,19 @@
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import ExchangeLayout from "@/pages/exchange/ExchangeLayout";
+import CommandCenter from "@/pages/exchange/CommandCenter";
+import OperatorDashboard from "@/pages/exchange/OperatorDashboard";
+import InvestorDashboard from "@/pages/exchange/InvestorDashboard";
+
+export default function ExchangeRoutes() {
+  return (
+    <Routes>
+      <Route path="/" element={<ExchangeLayout />}>
+        <Route index element={<CommandCenter />} />
+        <Route path="command" element={<CommandCenter />} />
+        <Route path="operator" element={<OperatorDashboard />} />
+        <Route path="investor" element={<InvestorDashboard />} />
+      </Route>
+    </Routes>
+  );
+}

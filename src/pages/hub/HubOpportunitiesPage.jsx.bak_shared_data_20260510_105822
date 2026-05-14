@@ -1,0 +1,613 @@
+import React from "react";
+import { HUB_BUSINESS_NAV_ITEMS as navItems, HUB_ORBITER_LOGO } from "./shared/hubBusinessNetworkNav.js";
+import "./hub-opportunities-page.css";
+
+const partners = [
+  {
+    id: "partner_workforce_001",
+    name: "Franklin Workforce Partner",
+    type: "Workforce Provider",
+    sector: "workforce",
+    serviceLanes: ["training", "job-placement", "case-support", "reporting"],
+    geography: ["Franklin County", "Central Ohio"],
+    capacity: 82,
+    responseSpeed: 91,
+    completionRate: 88,
+    verifiedOutcomeRate: 84,
+    trustScore: 89,
+    idealMatches: ["staffing", "transportation", "recovery"],
+  },
+  {
+    id: "partner_transport_001",
+    name: "Central Mobility Services",
+    type: "Transportation Partner",
+    sector: "transportation",
+    serviceLanes: ["transportation", "ride-coordination"],
+    geography: ["Franklin County"],
+    capacity: 68,
+    responseSpeed: 86,
+    completionRate: 81,
+    verifiedOutcomeRate: 74,
+    trustScore: 82,
+    idealMatches: ["workforce", "healthcare", "recovery"],
+  },
+  {
+    id: "partner_staffing_001",
+    name: "Central Staffing Group",
+    type: "Staffing Agency",
+    sector: "staffing",
+    serviceLanes: ["employment", "placement", "employer-services", "screening"],
+    geography: ["Central Ohio"],
+    capacity: 76,
+    responseSpeed: 89,
+    completionRate: 84,
+    verifiedOutcomeRate: 79,
+    trustScore: 86,
+    idealMatches: ["workforce", "training", "transportation"],
+  },
+  {
+    id: "partner_recovery_001",
+    name: "Kermit Recovery Support",
+    type: "Recovery Support Program",
+    sector: "recovery",
+    serviceLanes: ["recovery-support", "case-support", "peer-support"],
+    geography: ["Franklin County"],
+    capacity: 71,
+    responseSpeed: 78,
+    completionRate: 80,
+    verifiedOutcomeRate: 77,
+    trustScore: 83,
+    idealMatches: ["housing", "transportation", "workforce"],
+  },
+  {
+    id: "partner_shs_reporting_001",
+    name: "Silicon Heartland Solutions",
+    type: "Reporting + Verification Layer",
+    sector: "infrastructure",
+    serviceLanes: ["reporting", "verification", "audit", "outcome-proof"],
+    geography: ["Franklin County", "Central Ohio", "Statewide Ohio"],
+    capacity: 94,
+    responseSpeed: 92,
+    completionRate: 91,
+    verifiedOutcomeRate: 96,
+    trustScore: 95,
+    idealMatches: ["workforce", "healthcare", "recovery", "transportation"],
+  },
+];
+
+const opportunitiesSeed = [
+  {
+    id: "opp_001",
+    title: "County Reentry Workforce Proposal",
+    type: "Bundled Opportunity",
+    stage: "Open",
+    estimatedValue: 125000,
+    urgency: "High",
+    deadlineDays: 30,
+    neededLanes: ["training", "transportation", "case-support", "job-placement", "reporting"],
+    geography: "Franklin County",
+    source: "Hub referral pattern",
+    buyer: "Franklin County Workforce / Reentry",
+    nextAction: "Build multi-partner proposal bundle",
+  },
+  {
+    id: "opp_002",
+    title: "Healthcare Workforce Transportation Support",
+    type: "Cross-Sale Opportunity",
+    stage: "Suggested Match",
+    estimatedValue: 42000,
+    urgency: "Medium",
+    deadlineDays: 45,
+    neededLanes: ["transportation", "workforce", "healthcare-support"],
+    geography: "Central Ohio",
+    source: "Partner capacity signal",
+    buyer: "Healthcare Workforce Partner",
+    nextAction: "Introduce transportation partner and workforce lead",
+  },
+  {
+    id: "opp_003",
+    title: "Employer Placement Pipeline",
+    type: "Partner Relationship",
+    stage: "Sales Review",
+    estimatedValue: 68000,
+    urgency: "Medium",
+    deadlineDays: 60,
+    neededLanes: ["training", "placement", "employer-services"],
+    geography: "Central Ohio",
+    source: "Growth signal intelligence",
+    buyer: "Employer network",
+    nextAction: "Move to SHS sales team for relationship follow-up",
+  },
+  {
+    id: "opp_004",
+    title: "Recovery Support Transportation Bundle",
+    type: "Bundled Opportunity",
+    stage: "Proposal Building",
+    estimatedValue: 54000,
+    urgency: "High",
+    deadlineDays: 21,
+    neededLanes: ["recovery-support", "transportation", "case-support", "reporting"],
+    geography: "Franklin County",
+    source: "Unmet needs pattern",
+    buyer: "Community support partner",
+    nextAction: "Confirm service coverage and pricing position",
+  },
+  {
+    id: "opp_005",
+    title: "Verified Outcome Reporting Pilot",
+    type: "Pilot Opportunity",
+    stage: "Won / Active",
+    estimatedValue: 36000,
+    urgency: "Low",
+    deadlineDays: 90,
+    neededLanes: ["reporting", "verification", "audit"],
+    geography: "Statewide Ohio",
+    source: "SHS infrastructure demand",
+    buyer: "Program operator",
+    nextAction: "Move into active reporting setup",
+  },
+  {
+    id: "opp_006",
+    title: "Low-Fit Vendor Referral",
+    type: "Closed / Lost",
+    stage: "Closed / Lost",
+    estimatedValue: 18000,
+    urgency: "Low",
+    deadlineDays: 0,
+    neededLanes: ["unknown"],
+    geography: "Central Ohio",
+    source: "Manual lead",
+    buyer: "Unknown",
+    nextAction: "Archive and use as learning signal",
+  },
+];
+
+const stages = [
+  "Open",
+  "Suggested Match",
+  "Sales Review",
+  "Proposal Building",
+  "Won / Active",
+  "Closed / Lost",
+];
+
+
+function go(hash) {
+  window.location.hash = hash;
+}
+
+function money(value) {
+  if (!value) return "$0";
+  if (value >= 1000000) return `$${(value / 1000000).toFixed(1)}M`;
+  if (value >= 1000) return `$${Math.round(value / 1000)}K`;
+  return `$${value}`;
+}
+
+function average(values) {
+  const clean = values.filter((value) => typeof value === "number");
+  if (!clean.length) return 50;
+  return clean.reduce((sum, value) => sum + value, 0) / clean.length;
+}
+
+function calculatePartnerFit(partner, opportunity) {
+  const needed = opportunity.neededLanes || [];
+  const lanes = partner.serviceLanes || [];
+  const matches = needed.filter((lane) => lanes.includes(lane)).length;
+  const serviceFit = needed.length ? Math.round((matches / needed.length) * 100) : 50;
+
+  const geographyFit = (partner.geography || []).some((geo) =>
+    geo.toLowerCase().includes(opportunity.geography.toLowerCase()) ||
+    opportunity.geography.toLowerCase().includes(geo.toLowerCase())
+  )
+    ? 100
+    : 62;
+
+  const performance = average([
+    partner.capacity,
+    partner.responseSpeed,
+    partner.completionRate,
+    partner.verifiedOutcomeRate,
+    partner.trustScore,
+  ]);
+
+  return Math.round(serviceFit * 0.44 + geographyFit * 0.16 + performance * 0.4);
+}
+
+function getRecommendedPartners(opportunity) {
+  return partners
+    .map((partner) => ({
+      ...partner,
+      fitScore: calculatePartnerFit(partner, opportunity),
+    }))
+    .filter((partner) => partner.fitScore >= 55)
+    .sort((a, b) => b.fitScore - a.fitScore)
+    .slice(0, 4);
+}
+
+function getOpportunityScore(opportunity) {
+  const recommended = getRecommendedPartners(opportunity);
+  const coverage = opportunity.neededLanes.length
+    ? Math.round(
+        (opportunity.neededLanes.filter((lane) =>
+          recommended.some((partner) => partner.serviceLanes.includes(lane))
+        ).length /
+          opportunity.neededLanes.length) *
+          100
+      )
+    : 50;
+
+  const urgencyBoost = opportunity.urgency === "High" ? 10 : opportunity.urgency === "Medium" ? 5 : 0;
+  const valueBoost = Math.min(15, Math.round(opportunity.estimatedValue / 10000));
+  const stagePenalty = opportunity.stage === "Closed / Lost" ? 35 : 0;
+
+  return Math.max(0, Math.min(100, Math.round(coverage * 0.65 + urgencyBoost + valueBoost - stagePenalty)));
+}
+
+function readEvents() {
+  try {
+    return JSON.parse(localStorage.getItem("shs_hub_opportunity_events_v1") || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function writeEvents(events) {
+  localStorage.setItem("shs_hub_opportunity_events_v1", JSON.stringify(events));
+}
+
+export default function HubOpportunitiesPage() {
+  const [selectedStage, setSelectedStage] = React.useState("All");
+  const [events, setEvents] = React.useState(readEvents);
+
+  const opportunities = React.useMemo(() => {
+    return opportunitiesSeed.map((opp) => ({
+      ...opp,
+      score: getOpportunityScore(opp),
+      recommendedPartners: getRecommendedPartners(opp),
+    }));
+  }, []);
+
+  const visibleOpportunities =
+    selectedStage === "All"
+      ? opportunities
+      : opportunities.filter((opp) => opp.stage === selectedStage);
+
+  const activePipeline = opportunities
+    .filter((opp) => opp.stage !== "Closed / Lost")
+    .reduce((sum, opp) => sum + opp.estimatedValue, 0);
+
+  const highUrgency = opportunities.filter((opp) => opp.urgency === "High").length;
+  const proposalReady = opportunities.filter((opp) => opp.stage === "Proposal Building").length;
+  const wonActive = opportunities.filter((opp) => opp.stage === "Won / Active").length;
+
+  const topOpportunity = [...opportunities].sort((a, b) => b.score - a.score)[0];
+
+  const recordEvent = (type, opportunityId) => {
+    const event = {
+      id: `opp_event_${Date.now()}`,
+      type,
+      opportunityId,
+      createdAt: new Date().toISOString(),
+    };
+
+    const next = [event, ...events].slice(0, 75);
+    setEvents(next);
+    writeEvents(next);
+  };
+
+  return (
+    <main className="hop-shell">
+      <aside className="hop-rail">
+        <button className="hop-logo" onClick={() => go("#/hub")} aria-label="Go to SHS Hub">
+          <img src={HUB_ORBITER_LOGO} alt="SHS" onError={(event) => { event.currentTarget.style.display = "none"; }} />
+          <span>SHS</span>
+        </button>
+
+        <nav className="hop-nav" aria-label="Hub navigation">
+          {navItems.map(([icon, label, hash]) => (
+            <button
+              key={label}
+              className={label === "Opps" ? "is-active" : ""}
+              onClick={() => go(hash)}
+            >
+              <span>{icon}</span>
+              <small>{label}</small>
+            </button>
+          ))}
+        </nav>
+
+        <div className="hop-readiness">
+          <strong>OPPS</strong>
+          <div>86%</div>
+          <span>Active</span>
+        </div>
+      </aside>
+
+      <section className="hop-page">
+        <header className="hop-header">
+          <div>
+            <p>SHS HUB OPPORTUNITY BOARD</p>
+            <h1>Opportunities</h1>
+            <span>
+              Track cross-sales, bundled opportunities, suggested matches, sales review,
+              proposal building, and active network deals across the SHS Hub.
+            </span>
+
+            <div className="hop-headerNote">
+              V1 opportunity scores are simulated intelligence signals based on service fit,
+              partner coverage, urgency, value, and stage. Use them to prioritize operator action.
+            </div>
+          </div>
+
+          <div className="hop-actions">
+            <button onClick={() => go("#/hub/growth-network")}>Growth Network</button>
+            <button onClick={() => go("#/hub/bundles")}>Bundle Builder</button>
+            <button className="is-primary" onClick={() => recordEvent("opportunity_review_started", topOpportunity.id)}>
+              Start Review
+            </button>
+          </div>
+        </header>
+
+        <section className="hop-kpiStrip">
+          <article className="hop-kpi">
+            <span>↗</span>
+            <div>
+              <h3>Open Opportunities</h3>
+              <strong>{opportunities.filter((opp) => opp.stage === "Open").length}</strong>
+              <p>Ready for partner review</p>
+            </div>
+          </article>
+
+          <article className="hop-kpi">
+            <span>◎</span>
+            <div>
+              <h3>Suggested Matches</h3>
+              <strong>{opportunities.filter((opp) => opp.stage === "Suggested Match").length}</strong>
+              <p>Needs introduction action</p>
+            </div>
+          </article>
+
+          <article className="hop-kpi">
+            <span>▦</span>
+            <div>
+              <h3>Proposal Building</h3>
+              <strong>{proposalReady}</strong>
+              <p>Ready for bundle design</p>
+            </div>
+          </article>
+
+          <article className="hop-kpi">
+            <span>$</span>
+            <div>
+              <h3>Pipeline Value</h3>
+              <strong>{money(activePipeline)}</strong>
+              <p>Estimated active opportunity value</p>
+            </div>
+          </article>
+
+          <article className="hop-kpi">
+            <span>!</span>
+            <div>
+              <h3>High Urgency</h3>
+              <strong>{highUrgency}</strong>
+              <p>Needs quick action</p>
+            </div>
+          </article>
+
+          <article className="hop-kpi">
+            <span>✓</span>
+            <div>
+              <h3>Won / Active</h3>
+              <strong>{wonActive}</strong>
+              <p>Moved into execution</p>
+            </div>
+          </article>
+        </section>
+
+        <section className="hop-stageFilter">
+          <button className={selectedStage === "All" ? "is-active" : ""} onClick={() => setSelectedStage("All")}>
+            All
+          </button>
+          {stages.map((stage) => (
+            <button
+              key={stage}
+              className={selectedStage === stage ? "is-active" : ""}
+              onClick={() => setSelectedStage(stage)}
+            >
+              {stage}
+            </button>
+          ))}
+        </section>
+
+        <section className="hop-grid">
+          <div className="hop-main">
+            <article className="hop-panel hop-topMove">
+              <div className="hop-panelHead">
+                <div>
+                  <span className="hop-chip hop-chip--cyan">Recommended Opportunity</span>
+                  <h2>{topOpportunity.title}</h2>
+                  <small>{topOpportunity.type}</small>
+                </div>
+
+                <strong>{topOpportunity.score}% Priority</strong>
+              </div>
+
+              <p>{topOpportunity.nextAction}</p>
+
+              <div className="hop-topGrid">
+                <div>
+                  <span>Buyer</span>
+                  <strong>{topOpportunity.buyer}</strong>
+                </div>
+                <div>
+                  <span>Value</span>
+                  <strong>{money(topOpportunity.estimatedValue)}</strong>
+                </div>
+                <div>
+                  <span>Urgency</span>
+                  <strong>{topOpportunity.urgency}</strong>
+                </div>
+                <div>
+                  <span>Deadline</span>
+                  <strong>{topOpportunity.deadlineDays} days</strong>
+                </div>
+                <div>
+                  <span>Stage</span>
+                  <strong>{topOpportunity.stage}</strong>
+                </div>
+                <div>
+                  <span>Source</span>
+                  <strong>{topOpportunity.source}</strong>
+                </div>
+              </div>
+
+              <div className="hop-partnerLine">
+                {topOpportunity.recommendedPartners.map((partner) => (
+                  <span key={partner.id}>{partner.name} · {partner.fitScore}%</span>
+                ))}
+              </div>
+
+              <div className="hop-panelActions">
+                <button onClick={() => recordEvent("converted_to_bundle", topOpportunity.id)}>
+                  Convert to Bundle
+                </button>
+                <button onClick={() => recordEvent("sent_to_sales_pipeline", topOpportunity.id)}>
+                  Send to Sales Pipeline
+                </button>
+                <button onClick={() => recordEvent("partner_intro_started", topOpportunity.id)}>
+                  Start Partner Intro
+                </button>
+              </div>
+            </article>
+
+            <article className="hop-panel">
+              <div className="hop-panelHead">
+                <div>
+                  <span className="hop-chip hop-chip--blue">Opportunity Board</span>
+                  <h2>Cross-Sales Opportunity Board</h2>
+                </div>
+              </div>
+
+              <div className="hop-board">
+                {stages.map((stage) => (
+                  <div className="hop-column" key={stage}>
+                    <h3>{stage}</h3>
+
+                    {opportunities
+                      .filter((opp) => opp.stage === stage)
+                      .map((opp) => (
+                        <article className="hop-card" key={opp.id}>
+                          <div className="hop-cardTop">
+                            <span>{opp.type}</span>
+                            <strong>{opp.score}%</strong>
+                          </div>
+
+                          <h4>{opp.title}</h4>
+                          <p>{opp.nextAction}</p>
+
+                          <div className="hop-cardMeta">
+                            <b>{money(opp.estimatedValue)}</b>
+                            <em className={`urgency-${opp.urgency.toLowerCase()}`}>{opp.urgency}</em>
+                          </div>
+
+                          <div className="hop-lanes">
+                            {opp.neededLanes.slice(0, 4).map((lane) => (
+                              <span key={lane}>{lane}</span>
+                            ))}
+                          </div>
+
+                          <div className="hop-cardActions">
+                            <button onClick={() => recordEvent("opportunity_opened", opp.id)}>Review</button>
+                            <button onClick={() => recordEvent("opportunity_next_action", opp.id)}>Move</button>
+                          </div>
+                        </article>
+                      ))}
+                  </div>
+                ))}
+              </div>
+            </article>
+          </div>
+
+          <aside className="hop-side">
+            <article className="hop-panel">
+              <div className="hop-panelHead">
+                <div>
+                  <span className="hop-chip hop-chip--green">Partner Matches</span>
+                  <h2>Top Match List</h2>
+                </div>
+              </div>
+
+              <div className="hop-matchList">
+                {topOpportunity.recommendedPartners.map((partner) => (
+                  <div key={partner.id}>
+                    <span>{partner.type}</span>
+                    <strong>{partner.name}</strong>
+                    <small>{partner.fitScore}% fit · {partner.sector}</small>
+                  </div>
+                ))}
+              </div>
+            </article>
+
+            <article className="hop-panel">
+              <div className="hop-panelHead">
+                <div>
+                  <span className="hop-chip hop-chip--violet">Stage Summary</span>
+                  <h2>Pipeline Flow</h2>
+                </div>
+              </div>
+
+              <div className="hop-stageSummary">
+                {stages.map((stage) => {
+                  const stageItems = opportunities.filter((opp) => opp.stage === stage);
+                  const stageValue = stageItems.reduce((sum, opp) => sum + opp.estimatedValue, 0);
+
+                  return (
+                    <div key={stage}>
+                      <span>{stage}</span>
+                      <strong>{stageItems.length}</strong>
+                      <small>{money(stageValue)} value</small>
+                    </div>
+                  );
+                })}
+              </div>
+            </article>
+
+            <article className="hop-panel">
+              <div className="hop-panelHead">
+                <div>
+                  <span className="hop-chip hop-chip--orange">Action Log</span>
+                  <h2>Opportunity Events</h2>
+                </div>
+                <strong>{events.length}</strong>
+              </div>
+
+              <div className="hop-eventLog">
+                {events.length ? (
+                  events.slice(0, 6).map((event) => (
+                    <div key={event.id}>
+                      <span>{event.type.replaceAll("_", " ")}</span>
+                      <small>{new Date(event.createdAt).toLocaleString()}</small>
+                    </div>
+                  ))
+                ) : (
+                  <p>No opportunity events yet. Start review, convert to bundle, or send to sales pipeline.</p>
+                )}
+              </div>
+            </article>
+          </aside>
+        </section>
+
+        <footer className="hop-footer">
+          <div>
+            <strong>Silicon Heartland Solutions</strong>
+            <span>Opportunity Board · Cross-Sales Pipeline · Partner Matching · Bundle Conversion</span>
+          </div>
+
+          <p>
+            Powered by Silicon Heartland Solutions — identify opportunities, activate partner matches, and move network value into action.
+          </p>
+        </footer>
+      </section>
+    </main>
+  );
+}

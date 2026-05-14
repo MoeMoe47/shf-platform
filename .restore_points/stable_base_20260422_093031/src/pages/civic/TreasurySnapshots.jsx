@@ -1,0 +1,243 @@
+// src/pages/civic/TreasurySnapshots.jsx
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useToasts } from "@/context/Toasts.jsx";
+import RewardsChip from "@/components/rewards/RewardsChip.jsx";
+import { readJSON, saveJSON, logWallet } from "@/shared/rewards/history.js";
+import { useStorageGuard, StorageSoftReset, bumpKPI } from "@/shared/storage/guard"; // <- no .js
+
+const KEY_SNAPS = "civic:treasury:snapshots";   // JSON[ {id, name, note, state, at} ]
+const KEY_STATE = "civic:treasury:state";       // JSON (live sim state)
+const KPI_TSIMS = "civic:kpi:treasurySims";
+
+function uid(prefix = "snap") {
+  return `${prefix}_` + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+function fmtDate(ts) {
+  try { return new Date(ts).toLocaleString(); } catch { return String(ts); }
+}
+function downloadJSON(filename, dataObj) {
+  const blob = new Blob([JSON.stringify(dataObj, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 0);
+}
+
+export default function TreasurySnapshots() {
+  const { toast } = useToasts();
+  const nav = useNavigate();
+
+  // Guard malformed keys this page relies on (with toast feedback)
+  useStorageGuard([KEY_SNAPS, KEY_STATE], { toast });
+
+  const [snaps, setSnaps] = React.useState(() => readJSON(KEY_SNAPS, []));
+  const [name, setName] = React.useState("");
+  const [note, setNote] = React.useState("");
+
+  // UNDO buffer
+  const undoRef = React.useRef(null); // { type:"deleteSnap"|"clearAllSnaps", snapshot:any, timerId:number }
+
+  // Cross-tab sync
+  React.useEffect(() => {
+    const onStorage = (e) => {
+      if (!e || e.key == null) { setSnaps(readJSON(KEY_SNAPS, [])); return; }
+      if (e.key === KEY_SNAPS) setSnaps(readJSON(KEY_SNAPS, []));
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
+
+  const saveSnapshot = () => {
+    const state = readJSON(KEY_STATE, null);
+    if (!state) {
+      toast("No current treasury state found. Open Treasury and make changes first.", { type: "warning", duration: 5000 });
+      return;
+    }
+    const entry = { id: uid(), name: name.trim() || "Snapshot", note: note.trim(), state, at: Date.now() };
+    const next = [entry, ...readJSON(KEY_SNAPS, [])];
+    saveJSON(KEY_SNAPS, next); setSnaps(next); setName(""); setNote("");
+
+    bumpKPI(KPI_TSIMS, +1);
+    logWallet({ note: `Saved Treasury snapshot: ${entry.name}`, delta: 0 }); // capped in shared helper
+    toast("Snapshot saved! (Treasury Sims KPI +1)", { type: "success" });
+  };
+
+  const restoreSnapshot = (snap) => {
+    saveJSON(KEY_STATE, snap.state);
+    toast(`Snapshot “${snap.name}” restored. Opening Treasury…`, { type: "success" });
+    nav("/treasury");
+  };
+
+  const deleteSnapshot = (id) => {
+    const all = readJSON(KEY_SNAPS, []);
+    const found = all.find((s) => s.id === id);
+    const next = all.filter((s) => s.id !== id);
+    saveJSON(KEY_SNAPS, next);
+    setSnaps(next);
+
+    // Setup UNDO (7s)
+    if (undoRef.current?.timerId) clearTimeout(undoRef.current.timerId);
+    const timerId = setTimeout(() => { undoRef.current = null; }, 7000);
+    undoRef.current = { type: "deleteSnap", snapshot: found, timerId };
+
+    toast("Snapshot deleted.", {
+      type: "info",
+      duration: 7000,
+      action: {
+        label: "Undo",
+        onClick: () => {
+          if (undoRef.current?.type === "deleteSnap" && undoRef.current.snapshot) {
+            const restored = [undoRef.current.snapshot, ...readJSON(KEY_SNAPS, [])];
+            saveJSON(KEY_SNAPS, restored);
+            setSnaps(restored);
+            clearTimeout(undoRef.current.timerId);
+            undoRef.current = null;
+          }
+        },
+      },
+    });
+  };
+
+  const clearAll = () => {
+    const prev = readJSON(KEY_SNAPS, []);
+    saveJSON(KEY_SNAPS, []); setSnaps([]);
+
+    if (undoRef.current?.timerId) clearTimeout(undoRef.current.timerId);
+    const timerId = setTimeout(() => { undoRef.current = null; }, 7000);
+    undoRef.current = { type: "clearAllSnaps", snapshot: prev, timerId };
+
+    toast("All snapshots cleared.", {
+      type: "info",
+      duration: 7000,
+      action: {
+        label: "Undo",
+        onClick: () => {
+          if (undoRef.current?.type === "clearAllSnaps" && Array.isArray(undoRef.current.snapshot)) {
+            const restored = undoRef.current.snapshot;
+            saveJSON(KEY_SNAPS, restored);
+            setSnaps(restored);
+            clearTimeout(undoRef.current.timerId);
+            undoRef.current = null;
+          }
+        },
+      },
+    });
+  };
+
+  const exportSnapshot = (snap) => {
+    downloadJSON(`treasury-${snap.name || "snapshot"}.json`, snap);
+    toast("Download started.", { type: "success" });
+  };
+
+  const importFile = async (file) => {
+    try {
+      const text = await file.text();
+      const obj = JSON.parse(text);
+      if (!obj || !obj.state) throw new Error("Invalid snapshot file — missing .state");
+      const entry = { ...obj, id: obj.id || uid(), at: obj.at || Date.now() };
+      const next = [entry, ...readJSON(KEY_SNAPS, [])];
+      saveJSON(KEY_SNAPS, next);
+      setSnaps(next);
+      toast("Snapshot imported.", { type: "success" });
+    } catch (e) {
+      toast(`Import failed: ${e.message}`, { type: "error" });
+    }
+  };
+
+  return (
+    <section className="crb-main" aria-labelledby="ts-title">
+      <header className="db-head">
+        <div>
+          <h1 id="ts-title" className="db-title">Treasury Snapshots</h1>
+          <p className="db-subtitle">Save budget simulations, restore them later, and export/share JSON.</p>
+        </div>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <Link className="sh-btn is-ghost" to="/treasury">Open Treasury</Link>
+          <StorageSoftReset
+            keys={[KEY_SNAPS, KEY_STATE]}
+            label="Fix storage"
+            onDone={() => toast("Storage reset for Treasury keys.", { type: "info" })}
+          />
+          <RewardsChip />
+        </div>
+      </header>
+
+      {/* Create snapshot */}
+      <div className="db-grid">
+        <section className="card card--pad" aria-label="Create Snapshot">
+          <strong style={{ fontSize: 16 }}>Create Snapshot from Current Treasury</strong>
+          <div style={{ display: "grid", gap: 10, marginTop: 8 }}>
+            <label style={{ display: "grid", gap: 6 }}>
+              <span style={{ fontSize: 12, opacity: .8 }}>Name</span>
+              <input className="sh-input" value={name} onChange={e => setName(e.target.value)} placeholder="e.g., 'Balanced v2'" />
+            </label>
+            <label style={{ display: "grid", gap: 6 }}>
+              <span style={{ fontSize: 12, opacity: .8 }}>Note (optional)</span>
+              <input className="sh-input" value={note} onChange={e => setNote(e.target.value)} placeholder="What did you change?" />
+            </label>
+            <div style={{ display: "flex", gap: 8 }}>
+              <button className="sh-btn" onClick={saveSnapshot}>Save Snapshot</button>
+              <label className="sh-btn is-ghost" style={{ display: "inline-flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
+                Import JSON
+                <input
+                  type="file"
+                  accept="application/json"
+                  style={{ display: "none" }}
+                  onChange={(e) => e.target.files?.[0] && importFile(e.target.files[0])}
+                />
+              </label>
+              <button className="sh-btn is-ghost" onClick={clearAll}>Clear All</button>
+            </div>
+          </div>
+        </section>
+
+        {/* List */}
+        <section className="card card--pad" aria-label="Saved Snapshots">
+          <strong style={{ fontSize: 16 }}>Saved Snapshots</strong>
+          {!snaps.length ? (
+            <div style={{
+              marginTop: 8, padding: "12px 10px",
+              border: "1px dashed var(--ring,#e5e7eb)",
+              borderRadius: 10, background: "#fafafa"
+            }}>
+              No snapshots yet — open <Link to="/treasury">Treasury</Link>, make changes, then save.
+            </div>
+          ) : (
+            <ul style={{ listStyle: "none", padding: 0, margin: "10px 0 0", display: "grid", gap: 10 }}>
+              {snaps.map(snap => (
+                <li key={snap.id} className="card" style={{ padding: "10px 12px", display: "grid", gap: 8 }}>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+                    <strong>{snap.name || "Snapshot"}</strong>
+                    <span className="sh-badge is-ghost">{fmtDate(snap.at)}</span>
+                    <span style={{ marginLeft: "auto", fontSize: 12, opacity: .75 }}>
+                      {Array.isArray(snap.state?.allocations) ? `${snap.state.allocations.length} lines` : "—"}
+                    </span>
+                  </div>
+                  {snap.note && <div style={{ fontSize: 13, opacity: .85 }}>{snap.note}</div>}
+
+                  {/* quick preview row if common fields exist */}
+                  {snap.state && (
+                    <div style={{ fontSize: 12, opacity: .8, display: "flex", gap: 12, flexWrap: "wrap" }}>
+                      {"totalBudget" in (snap.state || {}) && <span>Total: <code>{snap.state.totalBudget}</code></span>}
+                      {"revenue" in (snap.state || {}) && <span>Revenue: <code>{snap.state.revenue}</code></span>}
+                      {"expense" in (snap.state || {}) && <span>Expense: <code>{snap.state.expense}</code></span>}
+                      {"balance" in (snap.state || {}) && <span>Balance: <code>{snap.state.balance}</code></span>}
+                    </div>
+                  )}
+
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <button className="sh-btn" onClick={() => restoreSnapshot(snap)}>Restore</button>
+                    <button className="sh-btn is-ghost" onClick={() => downloadJSON(`treasury-${snap.name || "snapshot"}.json`, snap)}>Download JSON</button>
+                    <button className="sh-btn is-ghost" onClick={() => deleteSnapshot(snap.id)}>Delete</button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      </div>
+    </section>
+  );
+}

@@ -1,0 +1,24 @@
+// src/components/sidebar/SalesSidebar  (intentionally extensionless)
+import React from "react";
+import AppLink from "@/components/nav/AppLink.jsx";
+import { inApp } from "@/router/paths.js";
+
+export default function SalesSidebar() {
+  const link = "sh-sidebarItem";
+  return (
+    <nav className="sh-sidebarNav">
+      <ul className="sh-sidebarGroup">
+        <li><AppLink app="sales" to={inApp.sales.dashboard()} className={link}>🏠 <span>Dashboard</span></AppLink></li>
+        <li><AppLink app="sales" to={inApp.sales.calc()}      className={link}>🧮 <span>Impact Calculator</span></AppLink></li>
+        <li><AppLink app="sales" to="/sales/leads"            className={link}>📥 <span>Leads</span></AppLink></li>
+        <li><AppLink app="sales" to="/sales/opportunities"    className={link}>📈 <span>Opportunities</span></AppLink></li>
+        <li><AppLink app="sales" to="/sales/pipeline"         className={link}>🗂️ <span>Pipeline</span></AppLink></li>
+        <li><AppLink app="sales" to="/sales/quotes"           className={link}>🧾 <span>Quotes</span></AppLink></li>
+        <li><AppLink app="sales" to="/sales/invoices"         className={link}>💳 <span>Invoices</span></AppLink></li>
+        <li><AppLink app="sales" to="/sales/roi"              className={link}>📊 <span>ROI</span></AppLink></li>
+        <li><AppLink app="sales" to="/sales/verifier"         className={link}>✅ <span>Verifier</span></AppLink></li>
+        <li><AppLink app="sales" to="/sales/settings"         className={link}>⚙️ <span>Settings</span></AppLink></li>
+      </ul>
+    </nav>
+  );
+}

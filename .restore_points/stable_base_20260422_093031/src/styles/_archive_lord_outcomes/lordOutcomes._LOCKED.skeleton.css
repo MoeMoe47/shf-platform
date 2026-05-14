@@ -1,0 +1,26 @@
+/* src/styles/lordOutcomes._LOCKED.skeleton.css
+   Minimal stable layout rules (NO "..." / no broken parsing)
+*/
+
+html, body, #root { height: 100%; }
+body { margin: 0; }
+
+/* App wrapper */
+.looApp{
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Page spacing below sticky header */
+.looMain{
+  flex: 1;
+  padding: 22px 22px 80px;
+}
+
+/* Prevent weird horizontal scroll from glow layers */
+.looApp, .looMain { overflow-x: clip; }
+
+@media (max-width: 720px){
+  .looMain{ padding: 16px 14px 70px; }
+}

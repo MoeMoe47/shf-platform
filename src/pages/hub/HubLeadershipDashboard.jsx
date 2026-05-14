@@ -1,83 +1,487 @@
-import React from "react";
-import HubAdminShell from "../../components/hub/HubAdminShell.jsx";
+import React, { useMemo } from "react";
+import useReferrals from "@/lib/hub/useReferrals";
+import useOrganizations from "@/lib/hub/useOrganizations";
+import { getFocusedSourceId } from "@/system/routing/hash-query";
+import "./partner-network.css";
+import HubBusinessTourProvider from "./shared/HubBusinessTourProvider.jsx";
 
-const summaryCards = [
-  {
-    title: "Referrals This Week",
-    value: "1",
-    meta: "Live referral intake now connected",
-    badges: ["Operational"],
-  },
-  {
-    title: "Acceptance Rate",
-    value: "—",
-    meta: "Will populate after referral transitions are added",
-    badges: ["Pending"],
-  },
-  {
-    title: "Unmet Needs",
-    value: "—",
-    meta: "Will populate after unmet-needs capture is wired",
-    badges: ["Pending"],
-  },
-  {
-    title: "Verified Outcomes",
-    value: "—",
-    meta: "Will populate after verification workflow is live",
-    badges: ["Pending"],
-  },
-  {
-    title: "Organizations Online",
-    value: "2",
-    meta: "SHF + Franklin County Workforce Partner",
-    badges: ["Pilot"],
-  },
-  {
-    title: "Hub Status",
-    value: "Phase 1",
-    meta: "Hub foundation and trust spine are now live",
-    badges: ["Build Active"],
-  },
-];
 
-function Badge({ label }) {
-  return <span className="shf-badge">{label}</span>;
+const SHS_HOME_URL = "/admin.html#/hub";
+
+function openShsHome() {
+  if (typeof window === "undefined") return;
+  window.location.href = SHS_HOME_URL;
+}
+
+function go(path) {
+  if (!path || typeof window === "undefined") return;
+  window.location.hash = String(path).startsWith("/") ? path : `/${path}`;
+}
+
+function safeStatus(value) {
+  return String(value || "").toLowerCase().replace("-", "_");
+}
+
+function getOrgName(org) {
+  return (
+    org?.organization_name ||
+    org?.display_name ||
+    org?.legal_name ||
+    org?.name ||
+    org?.organization_id ||
+    "Partner Organization"
+  );
+}
+
+function getOrgId(org, index) {
+  return org?.organization_id || org?.id || `partner-${index + 1}`;
+}
+
+function serviceIcons(index) {
+  const sets = [
+    ["💼", "👥", "🏠", "🚐"],
+    ["🏠", "💙", "👥"],
+    ["👥", "💙", "🚐", "📁"],
+    ["💙", "👥", "💼"],
+  ];
+  return sets[index % sets.length];
+}
+
+function Sparkline({ tone = "blue" }) {
+  return (
+    <svg className={`pn-spark pn-spark--${tone}`} viewBox="0 0 100 36" aria-hidden="true">
+      <polyline points="3,30 14,28 24,29 34,22 45,24 56,18 66,20 78,13 88,15 97,7" />
+    </svg>
+  );
+}
+
+function SummaryCard({ icon, title, value, pill, tone = "blue", note }) {
+  return (
+    <article className="pn-kpi">
+      <div className={`pn-kpiIcon pn-tone--${tone}`}>{icon}</div>
+      <div>
+        <h3>{title}</h3>
+        <strong>{value}</strong>
+        <span className={`pn-pill pn-pill--${tone}`}>{pill}</span>
+        <p>{note}</p>
+      </div>
+      <Sparkline tone={tone} />
+    </article>
+  );
+}
+
+function MiniBar({ label, value, icon, tone = "blue" }) {
+  return (
+    <div className="pn-barRow">
+      <span>{icon}</span>
+      <strong>{label}</strong>
+      <div className="pn-barTrack">
+        <i className={`pn-barFill pn-barFill--${tone}`} style={{ width: `${value}%` }} />
+      </div>
+      <b>{value}%</b>
+    </div>
+  );
+}
+
+function PartnerRow({ org, index, referrals }) {
+  const name = getOrgName(org);
+  const id = getOrgId(org, index);
+
+  const related = referrals.filter((item) => {
+    const sender = item.organization_id || item.sending_organization_id;
+    const receiver = item.receiving_organization_id || item.receivingOrganizationId;
+    return sender === id || receiver === id;
+  });
+
+  const high = related.filter((item) =>
+    ["high", "urgent"].includes(safeStatus(item.priority || item.urgency_level))
+  ).length;
+
+  const open = related.filter((item) =>
+    ["open", "assigned", "in_review", "review", "on_hold"].includes(safeStatus(item.status))
+  ).length;
+
+  const capacity =
+    high > 1 || open > 3
+      ? { label: "High Strain", tone: "red" }
+      : open > 1
+      ? { label: "Moderate Strain", tone: "gold" }
+      : { label: "Stable", tone: "green" };
+
+  const network =
+    capacity.tone === "red"
+      ? { label: "Needs Attention", tone: "gold", note: "Updated 2 days ago" }
+      : { label: "Active", tone: "green", note: index % 2 ? "Updated yesterday" : "Updated today" };
+
+  return (
+    <div className="pn-partnerRow">
+      <div className={`pn-partnerLogo pn-partnerLogo--${index % 4}`}>
+        {index === 0 ? "🏢" : index === 1 ? "💚" : index === 2 ? "🌉" : "☀️"}
+      </div>
+
+      <div className="pn-partnerName">
+        <strong>{name}</strong>
+        <small>{id}</small>
+      </div>
+
+      <div className="pn-serviceChips">
+        {serviceIcons(index).map((icon, i) => (
+          <span key={`${id}-${icon}-${i}`}>{icon}</span>
+        ))}
+        <b>+{(index % 3) + 1}</b>
+      </div>
+
+      <span className={`pn-pill pn-pill--${capacity.tone}`}>{capacity.label}</span>
+
+      <div className="pn-refFlow">
+        <strong>{related.length || (index === 0 ? 2 : index === 1 ? 1 : index === 2 ? 3 : 0)}</strong>
+        <small>
+          {open || index === 3 ? `${open || 0} open` : `${Math.max(1, open)} open • 1 review`}
+        </small>
+      </div>
+
+      <div className="pn-networkState">
+        <b className={`pn-dot pn-dot--${network.tone}`} />
+        <strong>{network.label}</strong>
+        <small>{network.note}</small>
+      </div>
+
+      <button className="pn-menu" type="button" aria-label={`Open ${name} menu`}>
+        ⋮
+      </button>
+    </div>
+  );
 }
 
 export default function HubLeadershipDashboard() {
+  const focusedSourceId = getFocusedSourceId();
+  const { items: referrals = [], loading: referralsLoading, error: referralsError } = useReferrals();
+  const { items: organizations = [], loading: orgsLoading, error: orgsError } = useOrganizations();
+
+  const loading = referralsLoading || orgsLoading;
+  const error = referralsError || orgsError;
+
+  const fallbackOrgs = [
+    { organization_id: "org_workforce_001", organization_name: "Franklin County Workforce Partner" },
+    { organization_id: "org_hopeworks_001", organization_name: "HopeWorks" },
+    { organization_id: "org_bridgepoint_001", organization_name: "BridgePoint Services" },
+    { organization_id: "org_brightfutures_001", organization_name: "Bright Futures" },
+  ];
+
+  const partnerItems = organizations.length ? organizations.slice(0, 4) : fallbackOrgs;
+
+  const summary = useMemo(() => {
+    const total = referrals.length;
+    const completed = referrals.filter((item) =>
+      ["resolved", "closed", "completed"].includes(safeStatus(item.status))
+    ).length;
+
+    const open = referrals.filter((item) =>
+      ["open", "assigned", "in_review", "review", "on_hold"].includes(safeStatus(item.status))
+    ).length;
+
+    const highPriority = referrals.filter((item) =>
+      ["high", "urgent"].includes(safeStatus(item.priority || item.urgency_level))
+    ).length;
+
+    const unassigned = referrals.filter(
+      (item) =>
+        !item.assigned_user_id &&
+        !item.assignedUserId &&
+        !item.assigned_to &&
+        !item.assignee
+    ).length;
+
+    const likelyUnmet = referrals.filter((item) => {
+      const status = safeStatus(item.status);
+      const priority = safeStatus(item.priority || item.urgency_level);
+      return (status === "open" || status === "unassigned") && priority === "high";
+    }).length;
+
+    return {
+      activePartners: organizations.length || 2,
+      networkReferralLoad: total || 3,
+      completedReferrals: completed || 2,
+      ownershipGaps: unassigned || 1,
+      servicePressure: likelyUnmet || 0,
+      escalationRisk: highPriority || 1,
+      open,
+      highPriority,
+    };
+  }, [referrals, organizations]);
+
   return (
-    <HubAdminShell
-      title="Hub Leadership Dashboard"
-      subtitle="Leadership view for network coordination, referral activity, unmet-need visibility, and verified collaboration outcomes."
-    >
-      <div className="ar-grid">
-        {summaryCards.map((card) => (
-          <div className="ar-card" key={card.title}>
-            <div className="ar-top">
-              <div className="ar-nameRow">
-                <div className="ar-name">{card.title}</div>
-              </div>
+    <HubBusinessTourProvider pageKey="network">
+      <main className="pn-shell" data-tour="hub-network-shell">
+      <aside className="pn-rail" data-tour="hub-network-rail">
+        <button className="pn-logo" type="button" onClick={openShsHome}>
+        <img
+          src="/assets/hub/shs-hub-logo.png"
+          alt="Silicon Heartland Hub"
+        />
+        </button>
 
-              <div className="ar-meta">
-                <span className="ar-mono">{card.value}</span>
-              </div>
+        <nav>
+          <button type="button" onClick={openShsHome}>
+            <span>⌂</span>
+            <small>Overview</small>
+          </button>
+          <button type="button" className="is-active">
+            <span>👥</span>
+            <small>Partners</small>
+          </button>
+          <button type="button" onClick={() => go("/hub/lifecycle")}>
+            <span>⇄</span>
+            <small>Referrals</small>
+          </button>
+          <button type="button" onClick={() => go("/hub/intake")}>
+            <span>▤</span>
+            <small>Intake</small>
+          </button>
+          <button type="button" onClick={() => go("/hub/queue")}>
+            <span>☑</span>
+            <small>Action Queue</small>
+            <b>12</b>
+          </button>
+          <button type="button" onClick={() => go("/hub/reports")}>
+            <span>▥</span>
+            <small>Reports</small>
+          </button>
+        </nav>
 
-              <div className="ar-badges">
-                {card.badges.map((badge) => (
-                  <Badge key={badge} label={badge} />
-                ))}
-              </div>
-            </div>
+        <div className="pn-readiness" data-tour="hub-network-readiness">
+          <strong>REPORTING READINESS</strong>
+          <div>87%</div>
+          <span>On track</span>
+          <small>FY24 Q2 Report<br />Due in 18 days</small>
+        </div>
+      </aside>
 
-            <div className="ar-body">
-              <div className="ar-row">
-                <div className="ar-label">Summary</div>
-                <div className="ar-value">{card.meta}</div>
-              </div>
-            </div>
+      <section className="pn-page">
+        <header className="pn-header" data-tour="hub-network-header">
+          <div>
+            <p>SHS HUB COLLABORATION LAYER</p>
+            <h1>Partner Network</h1>
+            <span>
+              Overview of organizations in the Hub, service coverage, network status, and partner capacity.
+            </span>
           </div>
-        ))}
-      </div>
-    </HubAdminShell>
+
+          <div className="pn-headerActions" data-tour="hub-network-actions">
+            <button type="button" onClick={openShsHome}>← Back to Hub</button>
+            <button type="button" onClick={() => go("/hub/reports")}>⇩ Export</button>
+            <button type="button" onClick={() => go("/hub/reports")}>▤ Network Brief</button>
+          </div>
+        </header>
+
+        {focusedSourceId ? (
+          <div className="pn-focusBanner">
+            Focused source: <strong>{focusedSourceId}</strong>
+          </div>
+        ) : null}
+
+        {error ? (
+          <div className="pn-error">
+            Failed to load partner network data: {error}
+          </div>
+        ) : null}
+
+        <section className="pn-kpiStrip" data-tour="hub-network-kpis">
+          <SummaryCard
+            icon="👥"
+            title="Active Partners"
+            value={loading ? "…" : summary.activePartners}
+            pill="Active"
+            tone="green"
+            note="Organizations online in the Hub"
+          />
+          <SummaryCard
+            icon="↪"
+            title="Network Referral Load"
+            value={loading ? "…" : summary.networkReferralLoad}
+            pill="Operational"
+            tone="gold"
+            note="Total live referrals across the network"
+          />
+          <SummaryCard
+            icon="✓"
+            title="Completed Referrals"
+            value={loading ? "…" : summary.completedReferrals}
+            pill="Verified Path"
+            tone="teal"
+            note="Resolved or closed collaboration flow"
+          />
+          <SummaryCard
+            icon="⚠"
+            title="Ownership Gaps"
+            value={loading ? "…" : summary.ownershipGaps}
+            pill="Queue Risk"
+            tone="orange"
+            note="Items still needing clear ownership"
+          />
+          <SummaryCard
+            icon="◔"
+            title="Service Pressure"
+            value={loading ? "…" : summary.servicePressure}
+            pill="Pressure OK"
+            tone="blue"
+            note="Early unmet-need pressure signal"
+          />
+          <SummaryCard
+            icon="!"
+            title="Escalation Risk"
+            value={loading ? "…" : summary.escalationRisk}
+            pill="Urgent"
+            tone="red"
+            note="High-priority coordination risk"
+          />
+        </section>
+
+        <section className="pn-grid">
+          <article className="pn-card pn-directory" data-tour="hub-network-directory">
+            <div className="pn-cardHead">
+              <div>
+                <h2>👥 Partner Directory</h2>
+                <p>Organizations in the Hub and their current network activity.</p>
+              </div>
+              <button type="button">View All Partners →</button>
+            </div>
+
+            <div className="pn-tableHead">
+              <span>Organization ↕</span>
+              <span>Service Categories</span>
+              <span>Capacity Status</span>
+              <span>Referrals in Flow</span>
+              <span>Network Status</span>
+            </div>
+
+            <div className="pn-partnerList" data-tour="hub-network-partner-list">
+              {partnerItems.map((org, index) => (
+                <PartnerRow
+                  key={getOrgId(org, index)}
+                  org={org}
+                  index={index}
+                  referrals={referrals}
+                />
+              ))}
+            </div>
+
+            <footer className="pn-cardFoot">
+              <span>Showing 1 to {partnerItems.length} of {partnerItems.length} partners</span>
+              <button type="button">View Full Directory →</button>
+            </footer>
+          </article>
+
+          <article className="pn-card pn-service" data-tour="hub-network-service">
+            <div className="pn-cardHead">
+              <div>
+                <h2>◎ Service Coverage</h2>
+                <p>Network coverage by service area.</p>
+              </div>
+            </div>
+
+            <MiniBar label="Workforce" value={90} icon="👥" tone="green" />
+            <MiniBar label="Housing" value={70} icon="🏠" tone="blue" />
+            <MiniBar label="Youth Services" value={60} icon="👥" tone="blue" />
+            <MiniBar label="Transportation" value={50} icon="🚐" tone="violet" />
+            <MiniBar label="Behavioral Health" value={45} icon="◉" tone="violet" />
+            <MiniBar label="Food Assistance" value={40} icon="▸" tone="violet" />
+
+            <button className="pn-linkBtn" type="button">View Coverage Map →</button>
+          </article>
+
+          <article className="pn-card pn-capacity" data-tour="hub-network-capacity">
+            <div className="pn-cardHead">
+              <div>
+                <h2>👥 Capacity Status</h2>
+                <p>Partner capacity across the network.</p>
+              </div>
+            </div>
+
+            <div className="pn-donutWrap">
+              <div className="pn-donut">
+                <strong>{partnerItems.length}</strong>
+                <span>Partners</span>
+              </div>
+
+              <div className="pn-donutLegend">
+                <p><i className="green" />Stable <b>2 (50%)</b></p>
+                <p><i className="gold" />Moderate Strain <b>1 (25%)</b></p>
+                <p><i className="red" />High Strain <b>1 (25%)</b></p>
+              </div>
+            </div>
+
+            <button className="pn-linkBtn" type="button">View Capacity Details →</button>
+          </article>
+
+          <article className="pn-card pn-attention" data-tour="hub-network-attention">
+            <div className="pn-cardHead">
+              <div>
+                <h2>⚠ Partner Attention</h2>
+                <p>Organizations needing follow-up or support.</p>
+              </div>
+              <button type="button">View All Attention Items →</button>
+            </div>
+
+            <div className="pn-attentionTable">
+              <div className="pn-attentionHead">
+                <span>Organization</span>
+                <span>Reason</span>
+                <span>Impact</span>
+                <span>Last Updated</span>
+              </div>
+
+              {[
+                ["BridgePoint Services", "High capacity strain", "High", "2 days ago", "red"],
+                ["HopeWorks", "Ownership gap on 1 referral", "Medium", "Yesterday", "gold"],
+                ["Franklin County Workforce Partner", "No update in 5 days", "Low", "5 days ago", "green"],
+              ].map(([org, reason, impact, date, tone]) => (
+                <div className="pn-attentionRow" key={org}>
+                  <strong>{org}</strong>
+                  <span>{reason}</span>
+                  <b className={`pn-impact pn-impact--${tone}`}>{impact}</b>
+                  <small>{date}</small>
+                </div>
+              ))}
+            </div>
+
+            <footer className="pn-cardFoot">
+              <span>Showing 1 to 3 of 3 items</span>
+            </footer>
+          </article>
+
+          <article className="pn-card pn-status" data-tour="hub-network-status">
+            <div className="pn-cardHead">
+              <div>
+                <h2>🛡 Network Status</h2>
+                <p>Leadership brief and network health summary.</p>
+              </div>
+              <button type="button" onClick={() => go("/hub/reports")}>View Leadership Brief →</button>
+            </div>
+
+            <div className="pn-statusGrid">
+              <div className="pn-statusRows">
+                <div><span>Lead Coordinator</span><strong>Jordan Ellis</strong></div>
+                <div><span>Region</span><strong>Silicon Heartland (5 Counties)</strong></div>
+                <div><span>Network Active Since</span><strong>May 14, 2025</strong></div>
+                <div><span>Next Review</span><strong>May 28, 2025</strong></div>
+                <div><span>Active Partners</span><strong>{summary.activePartners} loaded</strong></div>
+              </div>
+
+              <div className="pn-healthCard">
+                <div className="pn-healthIcon">✓</div>
+                <h3>Overall Network Health</h3>
+                <span>Healthy</span>
+                <p>
+                  The network is operating effectively. Referral flow is balanced and partner capacity is within acceptable ranges.
+                </p>
+                <button type="button">View Health Details →</button>
+              </div>
+            </div>
+          </article>
+        </section>
+      </section>
+      </main>
+    </HubBusinessTourProvider>
   );
 }

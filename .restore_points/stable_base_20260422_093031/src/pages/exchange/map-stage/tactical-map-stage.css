@@ -1,0 +1,40 @@
+.tactical-map-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 8.2;
+  min-height: 420px;
+  overflow: hidden;
+  isolation: isolate;
+  background: #050c18;
+}
+
+.tactical-map-stage > * {
+  position: absolute;
+  inset: 0;
+}
+
+.tactical-map-stage__bg {
+  z-index: 0;
+  background:
+    radial-gradient(circle at 50% 44%, rgba(70, 112, 184, 0.18) 0%, rgba(70, 112, 184, 0.08) 24%, rgba(0, 0, 0, 0) 54%),
+    radial-gradient(circle at 76% 58%, rgba(50, 92, 156, 0.10) 0%, rgba(50, 92, 156, 0.04) 18%, rgba(0, 0, 0, 0) 42%),
+    linear-gradient(180deg, #08111f 0%, #050b16 54%, #030812 100%);
+}
+
+.tactical-map-stage__atmosphere {
+  z-index: 2;
+  background:
+    radial-gradient(circle at 52% 45%, rgba(136, 178, 255, 0.08) 0%, rgba(136, 178, 255, 0.02) 26%, rgba(0, 0, 0, 0) 52%),
+    radial-gradient(circle at 24% 58%, rgba(255, 120, 60, 0.03) 0%, rgba(255, 120, 60, 0.01) 10%, rgba(0, 0, 0, 0) 28%);
+  filter: blur(26px);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.tactical-map-stage__polish {
+  z-index: 7;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0) 36%),
+    radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 62%, rgba(0, 0, 0, 0.22) 100%);
+}

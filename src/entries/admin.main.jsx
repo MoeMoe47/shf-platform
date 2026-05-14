@@ -4,6 +4,7 @@ import { HashRouter } from "react-router-dom";
 
 import RootProviders from "@/entries/RootProviders.jsx";
 import AdminRoutes from "@/router/AdminRoutes.jsx";
+import { SelectedEntityProvider } from "@/system/context/SelectedEntityContext";
 
 import "@/styles/_bg-guard.css";
 import "@/styles/unified-shell.css";
@@ -12,6 +13,7 @@ import "@/styles/app-shell.css";
 
 import { applyManifest } from "@/apps/manifest/applyManifest.js";
 import { getMode } from "@/runtime/mode.js";
+import { AuthProvider } from "../auth/auth-context";
 
 function Crash({ error }) {
   return (
@@ -33,7 +35,6 @@ class ErrorBoundary extends React.Component {
     return { error };
   }
   componentDidCatch(error) {
-    // also log to console
     try { console.error("[admin] render crash:", error); } catch {}
   }
   render() {
@@ -45,7 +46,7 @@ class ErrorBoundary extends React.Component {
 const mount = document.getElementById("root");
 if (!mount) throw new Error("Missing #root mount");
 
-try { applyManifest("admin"); } catch (e) { /* keep going */ }
+try { applyManifest("admin"); } catch (e) {}
 
 try {
   const m = String(getMode?.() || "PILOT").toUpperCase();
@@ -53,14 +54,16 @@ try {
   window.__SHF_MODE__ = m;
 } catch {}
 
-createRoot(mount).render(
-  <React.StrictMode>
+createRoot(mount).render(<AuthProvider>
+    <React.StrictMode>
     <ErrorBoundary>
       <RootProviders>
         <HashRouter>
-          <AdminRoutes />
+          <SelectedEntityProvider>
+            <AdminRoutes />
+          </SelectedEntityProvider>
         </HashRouter>
       </RootProviders>
     </ErrorBoundary>
   </React.StrictMode>
-);
+  </AuthProvider>);

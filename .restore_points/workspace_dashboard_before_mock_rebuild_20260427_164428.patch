@@ -1,0 +1,656 @@
+diff --git a/src/pages/exchange/workspace-dashboard/SHSWorkspaceDashboard.jsx b/src/pages/exchange/workspace-dashboard/SHSWorkspaceDashboard.jsx
+index 0726c9c..1228c5c 100644
+--- a/src/pages/exchange/workspace-dashboard/SHSWorkspaceDashboard.jsx
++++ b/src/pages/exchange/workspace-dashboard/SHSWorkspaceDashboard.jsx
+@@ -6,10 +6,13 @@ import DashboardHeader from "./components/DashboardHeader";
+ import KpiStrip from "./components/KpiStrip";
+ import DashboardPanel from "./components/PanelView";
+ import BottomDock from "./components/BottomDock";
+-import { readStoredProfile } from "./dashboardUtils";
++import { normalizeDashboardPanel, readStoredProfile } from "./dashboardUtils";
+ 
+ export default function SHSWorkspaceDashboard() {
+-  const [activePanel, setActivePanel] = useState("Overview");
++  const [activePanel, setActivePanel] = useState(() => {
++    if (typeof window === "undefined") return "Overview";
++    return normalizeDashboardPanel(localStorage.getItem("shs.dashboard.activePanel") || "Overview");
++  });
+   const [profile, setProfile] = useState(() => ({
+     name: "Alex Morgan",
+     role: "Senior Analyst",
+@@ -19,9 +22,21 @@ export default function SHSWorkspaceDashboard() {
+ 
+   const shellProfile = useMemo(() => profile, [profile]);
+ 
++  function selectDashboardPanel(panel) {
++    const nextPanel = normalizeDashboardPanel(panel);
++
++    setActivePanel(nextPanel);
++
++    if (typeof window !== "undefined") {
++      localStorage.setItem("shs.dashboard.activePanel", nextPanel);
++      window.dispatchEvent(new CustomEvent("shsDash:panelChange", { detail: nextPanel }));
++    }
++  }
++
++
+   useEffect(() => {
+     function handlePanelEvent(event) {
+-      if (event?.detail) setActivePanel(event.detail);
++      if (event?.detail) selectDashboardPanel(event.detail);
+     }
+ 
+     window.addEventListener("shsDash:setPanel", handlePanelEvent);
+@@ -30,7 +45,7 @@ export default function SHSWorkspaceDashboard() {
+ 
+   return (
+     <div className="shsDash-shell">
+-      <DashboardRail activePanel={activePanel} setActivePanel={setActivePanel} />
++      <DashboardRail activePanel={activePanel} setActivePanel={selectDashboardPanel} />
+ 
+       <section className="shsDash-workspace">
+         <DashboardHeader profile={shellProfile} />
+diff --git a/src/pages/exchange/workspace-dashboard/components/PanelView.jsx b/src/pages/exchange/workspace-dashboard/components/PanelView.jsx
+index 486f6da..ed10e9b 100644
+--- a/src/pages/exchange/workspace-dashboard/components/PanelView.jsx
++++ b/src/pages/exchange/workspace-dashboard/components/PanelView.jsx
+@@ -228,6 +228,7 @@ export default function DashboardPanel({ activePanel, profile, setProfile }) {
+               openedFrom: "workspace-dashboard",
+               openedAt: new Date().toISOString(),
+             }));
++              window.dispatchEvent(new CustomEvent("shsCommandContext:update"));
+             goToExchangeRoute("/exchange/command");
+           },
+         },
+@@ -248,6 +249,7 @@ export default function DashboardPanel({ activePanel, profile, setProfile }) {
+               openedFrom: "workspace-dashboard",
+               openedAt: new Date().toISOString(),
+             }));
++              window.dispatchEvent(new CustomEvent("shsCommandContext:update"));
+             goToExchangeRoute("/exchange/command");
+           },
+         },
+@@ -268,6 +270,7 @@ export default function DashboardPanel({ activePanel, profile, setProfile }) {
+               openedFrom: "workspace-dashboard",
+               openedAt: new Date().toISOString(),
+             }));
++              window.dispatchEvent(new CustomEvent("shsCommandContext:update"));
+             goToExchangeRoute("/exchange/command");
+           },
+         },
+diff --git a/src/pages/exchange/workspace-dashboard/components/ProfileUploadCard.jsx b/src/pages/exchange/workspace-dashboard/components/ProfileUploadCard.jsx
+index ad80ee3..32811b1 100644
+--- a/src/pages/exchange/workspace-dashboard/components/ProfileUploadCard.jsx
++++ b/src/pages/exchange/workspace-dashboard/components/ProfileUploadCard.jsx
+@@ -1,6 +1,26 @@
+ import React, { useRef } from "react";
+ import { writeProfile } from "../dashboardUtils";
+ 
++
++const PROFILE_PREVIEW_STYLE = {
++  width: "190px",
++  height: "190px",
++  minWidth: "190px",
++  minHeight: "190px",
++  maxWidth: "190px",
++  maxHeight: "190px",
++  aspectRatio: "1 / 1",
++  borderRadius: "999px",
++  objectFit: "cover",
++  objectPosition: "center",
++  display: "block",
++  flex: "0 0 190px",
++  overflow: "hidden",
++  border: "2px solid rgba(82, 223, 210, 0.35)",
++  boxShadow: "0 10px 28px rgba(0, 0, 0, 0.28)",
++  margin: "0 auto",
++};
++
+ export default function ProfileUploadCard({ profile, setProfile }) {
+   const inputRef = useRef(null);
+ 
+@@ -63,7 +83,7 @@ export default function ProfileUploadCard({ profile, setProfile }) {
+ 
+         <div className="shsDash-uploadAvatar">
+           {profile.photoUrl ? (
+-            <img
++            <img style={PROFILE_PREVIEW_STYLE} className="shsDash-profileImageLarge"
+               key={profile.photoUpdatedAt || profile.photoUrl}
+               src={profile.photoUrl}
+               alt=""
+@@ -98,4 +118,4 @@ export default function ProfileUploadCard({ profile, setProfile }) {
+       </footer>
+     </aside>
+   );
+-}
++}
+\ No newline at end of file
+diff --git a/src/pages/exchange/workspace-dashboard/components/RightStack.jsx b/src/pages/exchange/workspace-dashboard/components/RightStack.jsx
+index 6dbb6fa..2a50b0d 100644
+--- a/src/pages/exchange/workspace-dashboard/components/RightStack.jsx
++++ b/src/pages/exchange/workspace-dashboard/components/RightStack.jsx
+@@ -82,6 +82,7 @@ export default function RightStack() {
+         openedFrom: "workspace-dashboard",
+         openedAt: new Date().toISOString(),
+       }));
++      window.dispatchEvent(new CustomEvent("shsCommandContext:update"));
+     }
+ 
+     goToExchangeRoute("/exchange/command");
+@@ -92,7 +93,7 @@ export default function RightStack() {
+       <section className="shsDash-card shsDash-sideCard">
+         <div className="shsDash-sectionHead">
+           <h2>🔔 Notifications</h2>
+-          <button type="button">View All →</button>
++          <button type="button" onClick={() => openDashboardPanel("Notifications")}>View All →</button>
+         </div>
+ 
+         <button
+diff --git a/src/pages/exchange/workspace-dashboard/dashboardUtils.js b/src/pages/exchange/workspace-dashboard/dashboardUtils.js
+index fbf5acb..bc7181c 100644
+--- a/src/pages/exchange/workspace-dashboard/dashboardUtils.js
++++ b/src/pages/exchange/workspace-dashboard/dashboardUtils.js
+@@ -31,7 +31,11 @@ export function goToExchangeRoute(path) {
+ 
+ export function openDashboardPanel(panel) {
+   if (typeof window === "undefined") return;
+-  window.dispatchEvent(new CustomEvent("shsDash:setPanel", { detail: panel }));
++
++  const nextPanel = normalizeDashboardPanel(panel);
++
++  localStorage.setItem("shs.dashboard.activePanel", nextPanel);
++  window.dispatchEvent(new CustomEvent("shsDash:setPanel", { detail: nextPanel }));
+ }
+ 
+ export function handleWorkspaceTile(title) {
+@@ -272,3 +276,18 @@ export function openDashboardOverview() {
+     window.location.hash = "/exchange/dashboard";
+   }
+ }
++
++
++export function normalizeDashboardPanel(panel) {
++  const value = String(panel || "Overview").trim();
++
++  if (!value) return "Overview";
++
++  const lower = value.toLowerCase();
++
++  if (lower.includes("notification") || lower.includes("alert")) return "Notifications";
++  if (lower.includes("recent activity") || lower === "activity") return "Activity";
++  if (lower.includes("dashboard") || lower === "home") return "Overview";
++
++  return value;
++}
+diff --git a/src/pages/exchange/workspace-dashboard/shs-workspace-dashboard.css b/src/pages/exchange/workspace-dashboard/shs-workspace-dashboard.css
+index 87c7289..77f5bc1 100644
+--- a/src/pages/exchange/workspace-dashboard/shs-workspace-dashboard.css
++++ b/src/pages/exchange/workspace-dashboard/shs-workspace-dashboard.css
+@@ -4122,3 +4122,467 @@ article.shsCommandReactionLayer,
+   margin: 0;
+   font-size: 13px;
+ }
++
++/* =========================================================
++   PROFILE UPLOAD AREA — PROFESSIONAL V1 POLISH
++   Enlarges My Account upload zone without touching navigation.
++   ========================================================= */
++
++.shsDash-profileCard,
++.shsDash-accountCard,
++.shsDash-card:has(.shsDash-profileDrop),
++.shsDash-card:has(.shsDash-profileUpload) {
++  min-width: 0 !important;
++}
++
++.shsDash-profileDrop,
++.shsDash-profileUpload,
++.shsDash-photoDrop,
++.shsDash-avatarDrop {
++  min-height: 190px !important;
++  border-radius: 18px !important;
++  border: 1px dashed rgba(114, 174, 255, 0.42) !important;
++  background:
++    radial-gradient(circle at 50% 30%, rgba(82, 223, 210, 0.12), transparent 36%),
++    radial-gradient(circle at 50% 72%, rgba(111, 164, 255, 0.1), transparent 42%),
++    rgba(4, 13, 24, 0.42) !important;
++  box-shadow:
++    inset 0 0 24px rgba(255, 255, 255, 0.025),
++    0 0 28px rgba(82, 223, 210, 0.035) !important;
++  display: grid !important;
++  place-items: center !important;
++  padding: 22px 18px !important;
++  text-align: center !important;
++}
++
++.shsDash-profileDrop img,
++.shsDash-profileUpload img,
++.shsDash-photoDrop img,
++.shsDash-avatarDrop img,
++.shsDash-profileAvatar,
++.shsDash-avatarPreview,
++.shsDash-profilePhoto {
++  width: 96px !important;
++  height: 96px !important;
++  min-width: 96px !important;
++  min-height: 96px !important;
++  border-radius: 999px !important;
++  object-fit: cover !important;
++  border: 2px solid rgba(82, 223, 210, 0.36) !important;
++  box-shadow:
++    0 0 0 5px rgba(82, 223, 210, 0.06),
++    0 0 28px rgba(82, 223, 210, 0.22),
++    0 14px 34px rgba(0, 0, 0, 0.36) !important;
++}
++
++.shsDash-profileDrop strong,
++.shsDash-profileUpload strong,
++.shsDash-photoDrop strong,
++.shsDash-avatarDrop strong {
++  margin-top: 14px !important;
++  color: #f4f8ff !important;
++  font-size: 15px !important;
++  font-weight: 900 !important;
++  line-height: 1.25 !important;
++}
++
++.shsDash-profileDrop p,
++.shsDash-profileUpload p,
++.shsDash-photoDrop p,
++.shsDash-avatarDrop p {
++  margin: 8px 0 0 !important;
++  color: rgba(226, 238, 249, 0.7) !important;
++  font-size: 13px !important;
++  line-height: 1.35 !important;
++}
++
++.shsDash-profileDrop a,
++.shsDash-profileUpload a,
++.shsDash-photoDrop a,
++.shsDash-avatarDrop a,
++.shsDash-profileDrop button,
++.shsDash-profileUpload button,
++.shsDash-photoDrop button,
++.shsDash-avatarDrop button {
++  color: #8fc8ff !important;
++  font-weight: 900 !important;
++}
++
++.shsDash-profileActions,
++.shsDash-accountActions,
++.shsDash-photoActions {
++  display: grid !important;
++  grid-template-columns: 1fr auto !important;
++  gap: 10px !important;
++  margin-top: 12px !important;
++}
++
++.shsDash-profileActions button,
++.shsDash-accountActions button,
++.shsDash-photoActions button {
++  min-height: 42px !important;
++  border-radius: 12px !important;
++  font-size: 13px !important;
++  font-weight: 900 !important;
++}
++
++@media (max-width: 900px) {
++  .shsDash-profileDrop,
++  .shsDash-profileUpload,
++  .shsDash-photoDrop,
++  .shsDash-avatarDrop {
++    min-height: 170px !important;
++  }
++
++  .shsDash-profileDrop img,
++  .shsDash-profileUpload img,
++  .shsDash-photoDrop img,
++  .shsDash-avatarDrop img,
++  .shsDash-profileAvatar,
++  .shsDash-avatarPreview,
++  .shsDash-profilePhoto {
++    width: 84px !important;
++    height: 84px !important;
++    min-width: 84px !important;
++    min-height: 84px !important;
++  }
++}
++
++/* =========================================================
++   BIGGER / LONGER PROFILE PICTURE AREA
++   Stronger version for My Account upload zone
++   ========================================================= */
++
++.shsDash-profileDrop,
++.shsDash-profileUpload,
++.shsDash-photoDrop,
++.shsDash-avatarDrop {
++  min-height: 250px !important;
++  padding: 28px 20px !important;
++  border-radius: 18px !important;
++  display: flex !important;
++  flex-direction: column !important;
++  align-items: center !important;
++  justify-content: center !important;
++  gap: 12px !important;
++}
++
++.shsDash-profileDrop img,
++.shsDash-profileUpload img,
++.shsDash-photoDrop img,
++.shsDash-avatarDrop img,
++.shsDash-profileAvatar,
++.shsDash-avatarPreview,
++.shsDash-profilePhoto {
++  width: 118px !important;
++  height: 118px !important;
++  min-width: 118px !important;
++  min-height: 118px !important;
++  border-radius: 999px !important;
++  object-fit: cover !important;
++}
++
++.shsDash-profileDrop strong,
++.shsDash-profileUpload strong,
++.shsDash-photoDrop strong,
++.shsDash-avatarDrop strong {
++  font-size: 17px !important;
++  line-height: 1.3 !important;
++}
++
++.shsDash-profileDrop p,
++.shsDash-profileUpload p,
++.shsDash-photoDrop p,
++.shsDash-avatarDrop p {
++  font-size: 14px !important;
++  line-height: 1.45 !important;
++  max-width: 260px !important;
++}
++
++.shsDash-profileActions,
++.shsDash-accountActions,
++.shsDash-photoActions {
++  margin-top: 14px !important;
++}
++
++@media (max-width: 900px) {
++  .shsDash-profileDrop,
++  .shsDash-profileUpload,
++  .shsDash-photoDrop,
++  .shsDash-avatarDrop {
++    min-height: 220px !important;
++  }
++
++  .shsDash-profileDrop img,
++  .shsDash-profileUpload img,
++  .shsDash-photoDrop img,
++  .shsDash-avatarDrop img,
++  .shsDash-profileAvatar,
++  .shsDash-avatarPreview,
++  .shsDash-profilePhoto {
++    width: 100px !important;
++    height: 100px !important;
++    min-width: 100px !important;
++    min-height: 100px !important;
++  }
++}
++
++/* =========================================================
++   DIRECT PROFILE IMAGE JSX FIX
++   This targets the actual ProfileUploadCard image class.
++   ========================================================= */
++
++.shsDash-profileImageLarge {
++  width: 168px !important;
++  height: 168px !important;
++  min-width: 168px !important;
++  min-height: 168px !important;
++  max-width: 168px !important;
++  max-height: 168px !important;
++  border-radius: 999px !important;
++  object-fit: cover !important;
++  object-position: center !important;
++  display: block !important;
++  flex: 0 0 168px !important;
++}
++
++.shsDash-card:has(.shsDash-profileImageLarge) {
++  min-height: 520px !important;
++}
++
++.shsDash-card:has(.shsDash-profileImageLarge) [class*="Drop"],
++.shsDash-card:has(.shsDash-profileImageLarge) [class*="drop"],
++.shsDash-card:has(.shsDash-profileImageLarge) [class*="Upload"],
++.shsDash-card:has(.shsDash-profileImageLarge) [class*="upload"] {
++  min-height: 315px !important;
++  height: 315px !important;
++  padding: 30px 18px !important;
++  display: flex !important;
++  flex-direction: column !important;
++  align-items: center !important;
++  justify-content: center !important;
++  gap: 14px !important;
++}
++
++@media (max-width: 900px) {
++  .shsDash-profileImageLarge {
++    width: 140px !important;
++    height: 140px !important;
++    min-width: 140px !important;
++    min-height: 140px !important;
++    max-width: 140px !important;
++    max-height: 140px !important;
++  }
++}
++
++/* =========================================================
++   PROFILE IMAGE CIRCLE REPAIR
++   Fixes stretched capsule image and keeps upload preview circular.
++   ========================================================= */
++
++.shsDash-profileImageLarge {
++  width: 132px !important;
++  height: 132px !important;
++  min-width: 132px !important;
++  min-height: 132px !important;
++  max-width: 132px !important;
++  max-height: 132px !important;
++  aspect-ratio: 1 / 1 !important;
++  border-radius: 999px !important;
++  object-fit: cover !important;
++  object-position: center !important;
++  display: block !important;
++  flex: 0 0 132px !important;
++  overflow: hidden !important;
++}
++
++.shsDash-card:has(.shsDash-profileImageLarge) [class*="Drop"],
++.shsDash-card:has(.shsDash-profileImageLarge) [class*="drop"],
++.shsDash-card:has(.shsDash-profileImageLarge) [class*="Upload"],
++.shsDash-card:has(.shsDash-profileImageLarge) [class*="upload"] {
++  min-height: 260px !important;
++  height: auto !important;
++  padding: 26px 18px !important;
++  display: flex !important;
++  flex-direction: column !important;
++  align-items: center !important;
++  justify-content: center !important;
++  gap: 12px !important;
++}
++
++.shsDash-card:has(.shsDash-profileImageLarge) img.shsDash-profileImageLarge {
++  width: 132px !important;
++  height: 132px !important;
++  min-width: 132px !important;
++  min-height: 132px !important;
++  max-width: 132px !important;
++  max-height: 132px !important;
++}
++
++@media (max-width: 900px) {
++  .shsDash-profileImageLarge,
++  .shsDash-card:has(.shsDash-profileImageLarge) img.shsDash-profileImageLarge {
++    width: 112px !important;
++    height: 112px !important;
++    min-width: 112px !important;
++    min-height: 112px !important;
++    max-width: 112px !important;
++    max-height: 112px !important;
++  }
++}
++
++/* =========================================================
++   PROFILE UPLOAD BOX + TRUE CIRCLE FIX
++   ========================================================= */
++
++.shsDash-profileImageLarge {
++  width: 164px !important;
++  height: 164px !important;
++  min-width: 164px !important;
++  min-height: 164px !important;
++  max-width: 164px !important;
++  max-height: 164px !important;
++  aspect-ratio: 1 / 1 !important;
++  border-radius: 999px !important;
++  object-fit: cover !important;
++  object-position: center !important;
++  display: block !important;
++  flex: 0 0 164px !important;
++  overflow: hidden !important;
++}
++
++.shsDash-card:has(.shsDash-profileImageLarge),
++.shsDash-profileCard,
++.shsDash-profileUploadCard {
++  min-width: 340px !important;
++}
++
++.shsDash-card:has(.shsDash-profileImageLarge) [class*="Drop"],
++.shsDash-card:has(.shsDash-profileImageLarge) [class*="drop"],
++.shsDash-card:has(.shsDash-profileImageLarge) [class*="Upload"],
++.shsDash-card:has(.shsDash-profileImageLarge) [class*="upload"] {
++  width: 100% !important;
++  max-width: 100% !important;
++  min-height: 300px !important;
++  padding: 26px 22px !important;
++  display: flex !important;
++  flex-direction: column !important;
++  align-items: center !important;
++  justify-content: center !important;
++  gap: 14px !important;
++  box-sizing: border-box !important;
++}
++
++.shsDash-card:has(.shsDash-profileImageLarge) img.shsDash-profileImageLarge {
++  width: 164px !important;
++  height: 164px !important;
++  min-width: 164px !important;
++  min-height: 164px !important;
++  max-width: 164px !important;
++  max-height: 164px !important;
++}
++
++.shsDash-card:has(.shsDash-profileImageLarge) button,
++.shsDash-card:has(.shsDash-profileImageLarge) [role="button"] {
++  box-sizing: border-box;
++}
++
++@media (max-width: 900px) {
++  .shsDash-profileImageLarge,
++  .shsDash-card:has(.shsDash-profileImageLarge) img.shsDash-profileImageLarge {
++    width: 132px !important;
++    height: 132px !important;
++    min-width: 132px !important;
++    min-height: 132px !important;
++    max-width: 132px !important;
++    max-height: 132px !important;
++  }
++
++  .shsDash-card:has(.shsDash-profileImageLarge) [class*="Drop"],
++  .shsDash-card:has(.shsDash-profileImageLarge) [class*="drop"],
++  .shsDash-card:has(.shsDash-profileImageLarge) [class*="Upload"],
++  .shsDash-card:has(.shsDash-profileImageLarge) [class*="upload"] {
++    min-height: 260px !important;
++    padding: 22px 16px !important;
++  }
++}
++
++/* =========================================================
++   CLEAN PROFILE PHOTO CENTERING FIX
++   ========================================================= */
++
++.shsDash-profileImageLarge {
++  width: 190px !important;
++  height: 190px !important;
++  min-width: 190px !important;
++  min-height: 190px !important;
++  max-width: 190px !important;
++  max-height: 190px !important;
++  aspect-ratio: 1 / 1 !important;
++  border-radius: 999px !important;
++  object-fit: cover !important;
++  object-position: center !important;
++  display: block !important;
++  margin: 0 auto !important;
++  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28) !important;
++  border: 2px solid rgba(82, 223, 210, 0.35) !important;
++  background: rgba(7, 22, 40, 0.95) !important;
++}
++
++.shsDash-profileCard,
++.shsDash-profileUploadCard,
++.shsDash-card:has(.shsDash-profileImageLarge) {
++  min-width: 340px !important;
++}
++
++.shsDash-card:has(.shsDash-profileImageLarge) [class*="Drop"],
++.shsDash-card:has(.shsDash-profileImageLarge) [class*="drop"],
++.shsDash-card:has(.shsDash-profileImageLarge) [class*="Upload"],
++.shsDash-card:has(.shsDash-profileImageLarge) [class*="upload"] {
++  width: 100% !important;
++  min-height: 280px !important;
++  padding: 24px 18px !important;
++  display: flex !important;
++  flex-direction: column !important;
++  align-items: center !important;
++  justify-content: center !important;
++  text-align: center !important;
++  gap: 16px !important;
++  box-sizing: border-box !important;
++}
++
++.shsDash-card:has(.shsDash-profileImageLarge) img.shsDash-profileImageLarge {
++  width: 190px !important;
++  height: 190px !important;
++  min-width: 190px !important;
++  min-height: 190px !important;
++  max-width: 190px !important;
++  max-height: 190px !important;
++  border-radius: 999px !important;
++}
++
++.shsDash-card:has(.shsDash-profileImageLarge) .shsDash-profileUploadHint,
++.shsDash-card:has(.shsDash-profileImageLarge) .shsDash-uploadHint,
++.shsDash-card:has(.shsDash-profileImageLarge) p,
++.shsDash-card:has(.shsDash-profileImageLarge) small {
++  text-align: center !important;
++}
++
++@media (max-width: 900px) {
++  .shsDash-profileImageLarge,
++  .shsDash-card:has(.shsDash-profileImageLarge) img.shsDash-profileImageLarge {
++    width: 150px !important;
++    height: 150px !important;
++    min-width: 150px !important;
++    min-height: 150px !important;
++    max-width: 150px !important;
++    max-height: 150px !important;
++  }
++
++  .shsDash-card:has(.shsDash-profileImageLarge) [class*="Drop"],
++  .shsDash-card:has(.shsDash-profileImageLarge) [class*="drop"],
++  .shsDash-card:has(.shsDash-profileImageLarge) [class*="Upload"],
++  .shsDash-card:has(.shsDash-profileImageLarge) [class*="upload"] {
++    min-height: 240px !important;
++  }
++}

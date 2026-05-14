@@ -1,0 +1,97 @@
+from fastapi import APIRouter, HTTPException, Request, Query
+import hashlib
+import json
+import re
+
+from fabric.reports.funder_report import build_funder_report
+from fabric.reports.pdf_report import build_funder_report_pdf
+from typing import Optional
+
+router = APIRouter(prefix="/runs", tags=["runs-report"])
+
+def _canonical(obj):
+    return json.dumps(
+        obj,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False
+    ).encode("utf-8")
+
+def _normalize_pdf(b):
+    ix = b.rfind(b"\nxref")
+    if ix != -1:
+        b = b[:ix]
+    b = re.sub(br"/CreationDate\s*\(D:[^)]+\)", b"", b)
+    b = re.sub(br"/ModDate\s*\(D:[^)]+\)", b"", b)
+    b = re.sub(br"\s+", b" ", b)
+    return b
+
+@router.get("/report/{run_id}/verify")
+def run_report_verify(
+    request: Request,
+    run_id: str,
+    limit: int = Query(default=5000, ge=1, le=50000),
+    since: Optional[str] = Query(default=None),
+    expected_report_sha256: Optional[str] = Query(default=None),
+    expected_pdf_sha256: Optional[str] = Query(default=None),
+    fail_on_mismatch: bool = Query(default=False),
+):
+    import urllib.request
+
+    rid = _rid(run_id)
+    base_url = str(request.base_url).rstrip("/")
+
+    def _fetch_bytes(url: str) -> bytes:
+        req = urllib.request.Request(url, headers={"User-Agent": "shf-verify/1.0"})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            return r.read()
+
+    def _fetch_json(url: str):
+        return json.loads(_fetch_bytes(url).decode("utf-8"))
+
+    proof_url = f"{base_url}/runs/report/{rid}/proof"
+    proof = _fetch_json(proof_url)
+    if not isinstance(proof, dict) or not proof.get("ok"):
+        raise HTTPException(status_code=400, detail=proof)
+
+    urls = proof.get("urls") or {}
+    report_url = urls.get("report") or f"{base_url}/runs/report/{rid}"
+    pdf_url = urls.get("pdf") or f"{base_url}/runs/report/{rid}/pdf"
+
+    exp_report = (expected_report_sha256 or proof.get("report_sha256") or "").strip()
+    exp_pdf = (expected_pdf_sha256 or proof.get("pdf_sha256") or "").strip()
+
+    report_obj = _fetch_json(report_url)
+    report_hash = hashlib.sha256(_canonical_json_bytes(report_obj)).hexdigest()
+
+    pdf_bytes = _fetch_bytes(pdf_url)
+    pdf_hash = hashlib.sha256(_normalize_pdf_bytes(pdf_bytes)).hexdigest()
+
+    report_match = (exp_report.lower() == report_hash.lower()) if exp_report else None
+    pdf_match = (exp_pdf.lower() == pdf_hash.lower()) if exp_pdf else None
+
+    all_match = None
+    if report_match is not None or pdf_match is not None:
+        all_match = True
+        if report_match is False:
+            all_match = False
+        if pdf_match is False:
+            all_match = False
+
+    ok = (all_match is not False)
+
+    out = {
+        "ok": ok,
+        "run_id": rid,
+        "filters": {"limit": limit, "since": since},
+        "urls": {"proof": proof_url, "report": report_url, "pdf": pdf_url},
+        "computed": {"report_sha256": report_hash, "pdf_sha256": pdf_hash},
+        "expected": {"report_sha256": exp_report or None, "pdf_sha256": exp_pdf or None},
+        "match": {"report": report_match, "pdf": pdf_match, "all": all_match},
+    }
+
+    if fail_on_mismatch and all_match is False:
+        raise HTTPException(status_code=409, detail=out)
+
+    return JSONResponse(out)
+

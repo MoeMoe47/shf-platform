@@ -1,0 +1,78 @@
+{
+  "id": "asl-69",
+  "title": "ASL 8.6 — Storytelling: Problem → Attempt → Result (PAR) 🎯",
+  "estMinutes": 35,
+  "objectives": [
+    "Structure short narratives using the PAR frame for clarity",
+    "Signal stakes and outcomes with appropriate NMM and brief classifiers",
+    "Keep roles clear (neutral narrator ↔ character RS) with clean returns"
+  ],
+  "vocab": [
+    { "term": "PROBLEM", "def": "Obstacle/conflict; add tense brows or worry face." },
+    { "term": "ATTEMPT (TRY/ATTEMPT-1/ATTEMPT-2)", "def": "One or more tries; number them for clarity." },
+    { "term": "RESULT (SUCCESS/FAIL)", "def": "Outcome line; pair with matching affect." },
+    { "term": "STAKE", "def": "Why it matters (late, test, event starts); state briefly." },
+    { "term": "ROLE-SHIFT (RS)", "def": "Character POV line(s); always return to neutral narrator between beats." },
+    { "term": "CLASSIFIER CL:1 / CL:3 / CL:B", "def": "Use minimally to show motion or object in a beat." }
+  ],
+  "sections": [
+    {
+      "heading": "Warm-Up: PAR in 3 Cards",
+      "media": { "src": "/media/asl/unit-8/par-cards.png", "alt": "Three cards labeled Problem, Attempt, Result", "caption": "Keep each beat 3–6 signs" },
+      "body": "Lay three imaginary cards left→right: **PROBLEM (left)**, **ATTEMPT (center)**, **RESULT (right)**. Drill quick lines: \n• **PROBLEM:** **YESTERDAY ALARM FAIL.** \n• **ATTEMPT:** **CALL RIDE.** \n• **RESULT:** **ARRIVE LATE.**",
+      "microCheck": {
+        "q": "Best order for a clear mini-story:",
+        "options": ["Result → Attempt → Problem", "Problem → Attempt → Result", "Attempt → Result → Problem", "Random"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Model: One Attempt (Success)",
+      "media": { "src": "/media/asl/unit-8/par-model-1.mp4", "alt": "Single attempt that succeeds", "caption": "State the stake early" },
+      "body": "Example gloss:\n• **TODAY TEST IMPORTANT.** (stake)\n• **PROBLEM:** **BUS CANCEL.** (neutral)\n• **ATTEMPT:** **RS→STUDENT:** **CALL FRIEND RIDE.** (neutral)\n• **RESULT:** **ON-TIME ARRIVE SUCCESS.** (small smile NMM)"
+    },
+    {
+      "heading": "Model: Two Attempts (2→Fail/Success)",
+      "media": { "src": "/media/asl/unit-8/par-model-2.mp4", "alt": "Two attempts, second succeeds", "caption": "Number attempts: ONE…, TWO…" },
+      "body": "Example gloss:\n• **TONIGHT CLUB EVENT START 6.** (stake)\n• **PROBLEM:** **RAIN HEAVY.**\n• **ATTEMPT-ONE:** **BUS TRY (CL:3) FULL. FAIL.**\n• **ATTEMPT-TWO:** **RS→YOU:** **CALL RIDE-SHARE COME.**\n• **RESULT:** **ARRIVE 6:05 OK.**"
+    },
+    {
+      "heading": "Technique: Keep Beats Clean",
+      "body": "Rules:\n1) **One idea per beat** (no run-ons). \n2) **Stake early** (why it matters). \n3) **Number attempts** if more than one. \n4) **Return to neutral** after RS. \n5) Use classifiers sparingly to support, not distract."
+    },
+    {
+      "heading": "Partner Drill: PAR x2",
+      "media": { "src": "/media/asl/unit-8/par-drill.gif", "alt": "Two signers exchanging PAR minis", "caption": "Swap quick PAR stories" },
+      "body": "A tells **two** PAR minis (one with 1 attempt, one with 2 attempts). B identifies **stake**, **attempt count**, and **result**. Swap roles.",
+      "microCheck": {
+        "q": "Between RS lines you should…",
+        "options": ["Stay in RS", "Return to neutral narrator", "Change anchors randomly", "Drop eye contact"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Mini-Showcase",
+      "body": "Record **25–35s**: choose **school/work** or **daily-life** scenario. Include **stake**, **problem**, **attempt(s) (numbered if 2)**, and **result**. Add **one RS** line and return to neutral.",
+      "teacherNote": "Assess for clear stakes, numbered attempts, and matching NMM for success/fail."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 8.6 — PAR Structure Quiz",
+    "items": [
+      { "type": "mcq", "q": "Where should the stake appear?", "options": ["Not needed", "At the end", "Early, before/with the problem", "Only if result is fail"], "answerIndex": 2 },
+      { "type": "mcq", "q": "How to show two attempts most clearly?", "options": ["Sign faster", "Number them (ONE/TWO) and keep beats short", "Use more classifiers", "Skip RS"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Which NMM matches a failure result best?", "options": ["Big smile", "Neutral", "Slight frown/tight brows", "Tongue-out NOT-YET"], "answerIndex": 2 },
+      { "type": "short", "q": "Write a 3-beat gloss for a PAR mini-story (include a stake)."},
+      { "type": "reflection", "prompt": "Which beat is hardest for you—stating stakes, keeping attempts brief, or matching result affect? Why?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Upload your 25–35s PAR story. Caption the stake, number of attempts, and the result.",
+  "summary": "You built clear PAR mini-stories by stating stakes, keeping attempts numbered and brief, and matching result affect, with clean RS/neutral timing.",
+  "nextSlug": "asl-70",
+  "games": [
+    { "id": "par-flip", "title": "PAR Flip", "route": "/arcade/asl/par-flip", "estMinutes": 5, "xp": 50, "outcomes": ["Rearrange lines into P→A→R order"] },
+    { "id": "attempt-count", "title": "Attempt Count", "route": "/arcade/asl/attempt-count", "estMinutes": 5, "xp": 50, "outcomes": ["Number attempts clearly (ONE/TWO)"] },
+    { "id": "stake-spark", "title": "Stake Spark", "route": "/arcade/asl/stake-spark", "estMinutes": 5, "xp": 50, "outcomes": ["State why it matters in ≤5 signs"] }
+  ]
+}

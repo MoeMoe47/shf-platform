@@ -1,0 +1,158 @@
+from typing import Optional
+from fastapi import APIRouter, Query, HTTPException, Request
+from fastapi.responses import JSONResponse, Response
+import hashlib
+import json
+import re
+
+from fabric.reports.funder_report import build_funder_report
+from fabric.reports.pdf_report import build_funder_report_pdf
+
+router = APIRouter(prefix="/runs", tags=["runs-report-verify"])
+
+def _rid(run_id: str) -> str:
+    rid = (run_id or "").strip()
+    if rid.lower().endswith(".pdf"):
+        rid = rid[:-4]
+    return rid
+
+def _prune(x):
+    if isinstance(x, dict):
+        drop = {
+            "generated_ts","generated_at","computed_ts","computed_at","verified_ts","verified_at",
+            "rendered_ts","rendered_at","created_ts","created_at","updated_ts","updated_at",
+            "timestamp","ts","now","server_ts","server_time"
+        }
+        return {k: _prune(v) for k, v in x.items() if k not in drop}
+    if isinstance(x, list):
+        return [_prune(i) for i in x]
+    return x
+
+def _canonical_json_bytes(obj) -> bytes:
+    return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+
+def _normalize_pdf_bytes(b: bytes) -> bytes:
+    ix = b.rfind(b"\nxref")
+    if ix != -1:
+        b = b[:ix]
+    b = re.sub(br"/CreationDate\s*\(D:[^)]+\)", br"/CreationDate(D:00000000000000Z)", b)
+    b = re.sub(br"/ModDate\s*\(D:[^)]+\)", br"/ModDate(D:00000000000000Z)", b)
+    b = re.sub(br"/ID\s*\[\s*<[^>]*>\s*<[^>]*>\s*\]", br"/ID[<00000000000000000000000000000000><00000000000000000000000000000000>]", b)
+    b = re.sub(br"\s+", b" ", b)
+    return b
+
+@router.get("/report/{run_id}/verify")
+def run_report_verify(
+    run_id: str,
+    limit: int = Query(default=5000, ge=1, le=50000),
+    since: Optional[str] = Query(default=None),
+    expected_report_sha256: Optional[str] = Query(default=None),
+    expected_pdf_sha256: Optional[str] = Query(default=None),
+    fail_on_mismatch: bool = Query(default=False),
+):
+    rid = _rid(run_id)
+
+    report_obj = build_funder_report(run_id=rid, limit=limit, since=since, include_raw=False)
+    if not isinstance(report_obj, dict) or not report_obj.get("ok"):
+        raise HTTPException(status_code=400, detail=report_obj)
+    report_obj = _prune(report_obj)
+    report_sha = hashlib.sha256(_canonical_json_bytes(report_obj)).hexdigest()
+
+    report_full = build_funder_report(run_id=rid, limit=limit, since=since, include_raw=True)
+    if not isinstance(report_full, dict) or not report_full.get("ok"):
+        raise HTTPException(status_code=400, detail=report_full)
+    report_full.pop("raw", None)
+    report_full.pop("events", None)
+    report_full = _prune(report_full)
+    pdf_bytes = build_funder_report_pdf(report_full)
+    pdf_sha = hashlib.sha256(_normalize_pdf_bytes(pdf_bytes)).hexdigest()
+
+    report_match = None
+    pdf_match = None
+    all_match = None
+
+    if expected_report_sha256 is not None:
+        report_match = (expected_report_sha256.strip().lower() == report_sha.lower())
+    if expected_pdf_sha256 is not None:
+        pdf_match = (expected_pdf_sha256.strip().lower() == pdf_sha.lower())
+
+    if report_match is not None or pdf_match is not None:
+        all_match = True
+        if report_match is False:
+            all_match = False
+        if pdf_match is False:
+            all_match = False
+
+    out = {
+        "ok": True,
+        "run_id": rid,
+        "filters": {"limit": limit, "since": since},
+        "computed": {"report_sha256": report_sha, "pdf_sha256": pdf_sha},
+        "expected": {"report_sha256": expected_report_sha256, "pdf_sha256": expected_pdf_sha256},
+        "match": {"report": report_match, "pdf": pdf_match, "all": all_match},
+    }
+
+    if fail_on_mismatch and all_match is False:
+        raise HTTPException(status_code=409, detail=out)
+
+    return JSONResponse(out)
+
+@router.get("/report/{run_id}/verify.sh")
+def run_report_verify_sh(request: Request, run_id: str):
+    rid = _rid(run_id)
+    base_url = str(request.base_url).rstrip("/")
+
+    py_pick = (
+        "import json,sys;"
+        "p=json.loads(sys.stdin.read());"
+        "def pick(*paths):"
+        "  for path in paths:"
+        "    cur=p; ok=True;"
+        "    for k in path:"
+        "      if isinstance(cur,dict) and k in cur: cur=cur[k]"
+        "      else: ok=False; break"
+        "    if ok and cur is not None: return cur"
+        "  return None;"
+        "ru=pick(('report_url',),('urls','report'),('artifacts','report','url'),('report','url'));"
+        "rs=pick(('report_sha256',),('hashes','report'),('artifacts','report','sha256'),('report','sha256'));"
+        "pu=pick(('pdf_url',),('urls','pdf'),('artifacts','pdf','url'),('pdf','url'));"
+        "ps=pick(('pdf_sha256',),('hashes','pdf'),('artifacts','pdf','sha256'),('pdf','sha256'));"
+        "rid=p.get('run_id','') or '';"
+        "ru=ru or (f'/runs/report/{rid}' if rid else '');"
+        "pu=pu or (f'/runs/report/{rid}/pdf' if rid else '');"
+        "def n(u):"
+        "  return u if u.startswith('http') or u.startswith('/') else '/'+u;"
+        "print(n(ru), (rs or ''), n(pu), (ps or ''))"
+    )
+
+    lines = [
+        "#!/usr/bin/env bash",
+        "set -euo pipefail",
+        f'RUN_ID="{rid}"',
+        f'BASE_URL="${{BASE_URL:-{base_url}}}"',
+        'PYTHON_BIN="${PYTHON_BIN:-python3}"',
+        'PROOF_JSON="$(curl -fsSL "$BASE_URL/runs/report/$RUN_ID/proof")"',
+        f'OUT="$(printf "%s" "$PROOF_JSON" | "$PYTHON_BIN" -c "{py_pick}")"',
+        'REPORT_URL="$(printf "%s" "$OUT" | awk '{print $1}')"',
+        'REPORT_SHA="$(printf "%s" "$OUT" | awk '{print $2}')"',
+        'PDF_URL="$(printf "%s" "$OUT" | awk '{print $3}')"',
+        'PDF_SHA="$(printf "%s" "$OUT" | awk '{print $4}')"',
+        '[[ "$REPORT_URL" == http* ]] || REPORT_URL="$BASE_URL$REPORT_URL"',
+        '[[ "$PDF_URL" == http* ]] || PDF_URL="$BASE_URL$PDF_URL"',
+        'TMPDIR="$(mktemp -d)"',
+        'trap "rm -rf $TMPDIR" EXIT',
+        'curl -fsSL "$REPORT_URL" -o "$TMPDIR/report.json"',
+        'curl -fsSL "$PDF_URL" -o "$TMPDIR/report.pdf"',
+        'REPORT_HASH="$( "$PYTHON_BIN" -c "import hashlib,json,sys; p=json.load(open(sys.argv[1],\'rb\')); s=json.dumps(p,sort_keys=True,separators=(\',\',\':\'),ensure_ascii=False).encode(\'utf-8\'); print(hashlib.sha256(s).hexdigest())" "$TMPDIR/report.json" )"',
+        'PDF_HASH="$( "$PYTHON_BIN" -c "import hashlib,re,sys; b=open(sys.argv[1],\'rb\').read(); ix=b.rfind(b\'\\nxref\'); b=b[:ix] if ix!=-1 else b; b=re.sub(br\'/CreationDate\\s*\\(D:[^)]+\\)\', br\'/CreationDate(D:00000000000000Z)\', b); b=re.sub(br\'/ModDate\\s*\\(D:[^)]+\\)\', br\'/ModDate(D:00000000000000Z)\', b); b=re.sub(br\'/ID\\s*\\[\\s*<[^>]*>\\s*<[^>]*>\\s*\\]\', br\'/ID[<00000000000000000000000000000000><00000000000000000000000000000000>]\', b); b=re.sub(br\'\\s+\', b\' \', b); print(hashlib.sha256(b).hexdigest())" "$TMPDIR/report.pdf" )"',
+        'echo "run_id=$RUN_ID"',
+        'echo "computed_report_sha256=$REPORT_HASH"',
+        'echo "computed_pdf_sha256=$PDF_HASH"',
+        '[[ -n "$REPORT_SHA" ]] && echo "expected_report_sha256=$REPORT_SHA"',
+        '[[ -n "$PDF_SHA" ]] && echo "expected_pdf_sha256=$PDF_SHA"',
+        '[[ -n "$REPORT_SHA" && "${REPORT_SHA,,}" != "${REPORT_HASH,,}" ]] && exit 2',
+        '[[ -n "$PDF_SHA" && "${PDF_SHA,,}" != "${PDF_HASH,,}" ]] && exit 3',
+        "exit 0",
+    ]
+
+    return Response("\n".join(lines) + "\n", media_type="text/plain")

@@ -1,0 +1,85 @@
+{
+  "id": "asl-44",
+  "title": "ASL 6.1 — Maps & Directions (Classifier Paths + Landmarks) 🗺️",
+  "estMinutes": 30,
+  "objectives": [
+    "Use CL:3, CL:1, and CL:B to show vehicles, people, and surfaces",
+    "Trace routes in signing space with clear start → end paths",
+    "Anchor 2–3 landmarks (BUILDING, SCHOOL, STORE) in space consistently",
+    "Integrate role-shift for giving/receiving directions"
+  ],
+  "vocab": [
+    { "term": "CL:3", "def": "Vehicle classifier; shows movement of a car, bus, bike." },
+    { "term": "CL:1", "def": "Person classifier; shows walking path or standing position." },
+    { "term": "CL:B", "def": "Flat-surface classifier (roads, floors, maps)." },
+    { "term": "ANCHOR", "def": "Fixed locus in space for a landmark." },
+    { "term": "ROUTE TRACE", "def": "Path movement from start to finish using classifiers." },
+    { "term": "ROLE-SHIFT (RS)", "def": "Take perspective of giver or follower of directions." }
+  ],
+  "sections": [
+    {
+      "heading": "Warm-Up: Anchor 3 Landmarks",
+      "media": { "src": "/media/asl/unit-6/anchor-map-3.png", "alt": "Three points anchored in space", "caption": "Anchor SCHOOL left, STORE right, HOME center" },
+      "body": "Pick 3 anchors in front of you. Label: **SCHOOL, STORE, HOME.** Reuse these consistently.",
+      "microCheck": {
+        "q": "What makes anchors readable?",
+        "options": ["Change them each time", "Reuse the same space for the same landmark", "Make them huge", "Look only at your hands"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Model: CL Paths",
+      "media": { "src": "/media/asl/unit-6/cl-paths.mp4", "alt": "CL:3 tracing path", "caption": "Car (CL:3) goes SCHOOL → STORE" },
+      "body": "Example: **CL:3** drives from SCHOOL → STORE. Add **CL:1** walking path crossing. Use **CL:B** flat hand for road layout.",
+      "microCheck": {
+        "q": "Which classifier shows a car or bus?",
+        "options": ["CL:1", "CL:3", "CL:B", "None"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Role-Shift Directions",
+      "body": "Practice RS: **RS→Giver:** **FROM HOME DRIVE STRAIGHT, LEFT SCHOOL.** (neutral) **RS→Follower:** **OK.** Keep clauses 3–5 signs.",
+      "callouts": [
+        { "type": "tip", "title": "Return to Neutral", "body": "Always reset between RS lines to avoid confusion." }
+      ],
+      "microCheck": {
+        "q": "When giving directions, you should…",
+        "options": ["Stay in RS only", "Return to neutral between RS lines", "Change anchors randomly", "Skip landmarks"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Partner Drill: Map Exchange",
+      "media": { "src": "/media/asl/unit-6/map-exchange.gif", "alt": "Two people exchanging map directions", "caption": "Giver ↔ Follower using RS" },
+      "body": "1) Anchor 3 landmarks. 2) Partner A gives directions (RS Giver). 3) Partner B repeats path (RS Follower). Swap roles.",
+      "callouts": [
+        { "type": "caution", "title": "Anchor Drift", "body": "Re-point if SCHOOL or STORE shifts location over time." }
+      ]
+    },
+    {
+      "heading": "Mini-Showcase",
+      "body": "Record a **15–20s** clip giving directions from HOME to STORE with at least **2 landmarks**, **1 CL:3 path**, and **1 RS exchange**.",
+      "teacherNote": "Caption should name the landmarks anchored and which classifiers were used."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 6.1 — Maps & Directions Quiz",
+    "items": [
+      { "type": "mcq", "q": "Which classifier shows a vehicle?", "options": ["CL:1", "CL:3", "CL:B", "CL:5"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Best way to keep landmarks clear:", "options": ["Change anchors often", "Reuse same anchors consistently", "Use random handshapes", "Skip pauses"], "answerIndex": 1 },
+      { "type": "mcq", "q": "What improves clarity of directions?", "options": ["Rapid signing", "3–5 sign clauses + neutral returns", "Skipping landmarks", "Looking at hands only"], "answerIndex": 1 },
+      { "type": "short", "q": "Gloss: FROM HOME DRIVE STRAIGHT, RIGHT STORE." },
+      { "type": "reflection", "prompt": "Which was harder—anchors, CL paths, or RS perspective? How will you practice?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Upload your 15–20s directions clip with captions naming landmarks and classifiers.",
+  "summary": "You used classifiers (CL:1, CL:3, CL:B), anchored landmarks, and role-shift to give clear map directions.",
+  "nextSlug": "asl-45",
+  "games": [
+    { "id": "route-trace", "title": "Route Trace", "route": "/arcade/asl/route-trace", "estMinutes": 5, "xp": 50, "outcomes": ["Trace start → end paths"] },
+    { "id": "anchor-reset", "title": "Anchor Reset", "route": "/arcade/asl/anchor-reset", "estMinutes": 5, "xp": 50, "outcomes": ["Re-point drifting anchors"] },
+    { "id": "rs-giver-follower", "title": "RS Giver/Follower", "route": "/arcade/asl/rs-giver-follower", "estMinutes": 5, "xp": 50, "outcomes": ["Switch RS roles smoothly"] }
+  ]
+}

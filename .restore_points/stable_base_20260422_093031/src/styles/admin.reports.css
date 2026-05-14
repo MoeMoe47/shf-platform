@@ -1,0 +1,19 @@
+.shf-rp-shell{max-width:1120px;margin:0 auto;padding:22px 18px;color:rgba(255,255,255,.92)}
+.shf-rp-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:16px}
+.shf-rp-title{font-size:22px;font-weight:900;letter-spacing:-.02em;margin:0}
+.shf-rp-sub{margin:6px 0 0 0;opacity:.7;font-size:13px}
+.shf-rp-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.22);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-weight:800;font-size:12px}
+.shf-rp-dot{width:8px;height:8px;border-radius:999px;background:#ff6a00;box-shadow:0 0 24px rgba(255,106,0,.55)}
+.shf-rp-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}
+.shf-rp-card{grid-column:span 6;border-radius:18px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 18px 60px rgba(0,0,0,.22);padding:14px}
+@media (max-width:900px){.shf-rp-card{grid-column:span 12}}
+.shf-rp-card h3{margin:0;font-size:13px;opacity:.8;font-weight:900;letter-spacing:.01em}
+.shf-rp-metric{margin-top:10px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.shf-rp-num{font-size:34px;font-weight:950;letter-spacing:-.03em}
+.shf-rp-mini{font-size:12px;opacity:.7}
+.shf-rp-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.shf-rp-btn{appearance:none;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.18);color:rgba(255,255,255,.9);border-radius:12px;padding:10px 12px;font-weight:900;font-size:12px;cursor:pointer}
+.shf-rp-btn:hover{border-color:rgba(255,255,255,.28);background:rgba(0,0,0,.28)}
+.shf-rp-btn.primary{background:#ff6a00;border-color:#ff6a00;color:#fff;box-shadow:0 18px 50px rgba(255,106,0,.25)}
+.shf-rp-btn.primary:hover{filter:brightness(1.03)}
+.shf-rp-pre{margin-top:12px;border-radius:16px;border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.18);padding:12px;overflow:auto;max-height:320px;font-size:12px;line-height:1.35}

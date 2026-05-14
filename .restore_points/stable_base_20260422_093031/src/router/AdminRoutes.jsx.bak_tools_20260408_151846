@@ -1,0 +1,36 @@
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+
+import AppRegistry from "@/pages/admin/AppRegistry.jsx";
+import Registry from "@/pages/admin/Registry.jsx";
+
+import AdminDashboard from "@/pages/AdminDashboard.jsx";
+import AdminAnalytics from "@/pages/AdminAnalytics.jsx";
+import AdminAlerts from "@/pages/AdminAlerts.jsx";
+import AdminCompare from "@/pages/AdminCompare.jsx";
+import AdminCohorts from "@/pages/AdminCohorts.jsx";
+import AdminCreditDebug from "@/pages/AdminCreditDebug.jsx";
+import AdminLearningHeatmap from "@/pages/AdminLearningHeatmap.jsx";
+import AdminRelayer from "@/pages/AdminRelayer.jsx";
+import AdminZoom from "@/pages/AdminZoom.jsx";
+
+export default function AdminRoutes() {
+  return (
+    <Routes>
+      <Route path="/admin-dashboard" element={<AdminDashboard />} />
+      <Route path="/admin-analytics" element={<AdminAnalytics />} />
+      <Route path="/admin-alerts" element={<AdminAlerts />} />
+      <Route path="/admin-compare" element={<AdminCompare />} />
+      <Route path="/admin-cohorts" element={<AdminCohorts />} />
+      <Route path="/admin-credit-debug" element={<AdminCreditDebug />} />
+      <Route path="/admin-learning-heatmap" element={<AdminLearningHeatmap />} />
+      <Route path="/admin-relayer" element={<AdminRelayer />} />
+      <Route path="/admin-zoom" element={<AdminZoom />} />
+
+      <Route path="/app-registry" element={<AppRegistry />} />
+      <Route path="/registry" element={<Registry />} />
+
+      <Route path="*" element={<Navigate to="/admin-dashboard" replace />} />
+    </Routes>
+  );
+}

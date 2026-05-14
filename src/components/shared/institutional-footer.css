@@ -1,0 +1,167 @@
+.institutional-footer {
+  position: relative;
+  margin-top: 18px;
+  border: 1px solid rgba(84, 200, 255, 0.16);
+  border-radius: 18px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(34, 187, 255, 0.14), transparent 36%),
+    radial-gradient(circle at 100% 0%, rgba(111, 91, 255, 0.09), transparent 36%),
+    linear-gradient(145deg, rgba(5, 18, 34, 0.97), rgba(2, 9, 18, 0.98));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    0 24px 70px rgba(0, 0, 0, 0.28);
+}
+
+.institutional-footer__glow {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(77, 216, 255, 0.82), transparent);
+  opacity: 0.78;
+}
+
+.institutional-footer__inner {
+  display: grid;
+  grid-template-columns: 1.28fr 1fr 0.76fr;
+  gap: 22px;
+  padding: 18px 20px;
+}
+
+.institutional-footer__brandRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.institutional-footer__logo {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 50% 15%, rgba(84, 200, 255, 0.16), transparent 55%),
+    rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(84, 200, 255, 0.18);
+  padding: 5px;
+  box-shadow: 0 0 28px rgba(34, 187, 255, 0.14);
+}
+
+.institutional-footer__brand h3 {
+  margin: 0;
+  color: #f4fbff;
+  font-size: 19px;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+
+.institutional-footer__brand p {
+  margin: 8px 0 0;
+  max-width: 540px;
+  color: rgba(218, 235, 255, 0.72);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.institutional-footer__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 13px;
+}
+
+.institutional-footer__badges span {
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(84, 200, 255, 0.18);
+  background: rgba(84, 200, 255, 0.08);
+  color: #aeeeff;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.institutional-footer__links {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.institutional-footer__column h4 {
+  margin: 0 0 9px;
+  color: #9ddcff;
+  font-size: 10px;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.institutional-footer__column a {
+  display: block;
+  margin-bottom: 7px;
+  color: rgba(229, 240, 255, 0.82);
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.institutional-footer__column a:hover {
+  color: #ffffff;
+}
+
+.institutional-footer__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.institutional-footer__metaCard {
+  padding: 10px 12px;
+  border-radius: 13px;
+  border: 1px solid rgba(84, 200, 255, 0.14);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.institutional-footer__metaLabel {
+  display: block;
+  color: rgba(194, 220, 255, 0.65);
+  font-size: 9px;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.institutional-footer__metaCard strong {
+  display: block;
+  margin-top: 5px;
+  color: #f6fbff;
+  font-size: 13px;
+}
+
+.institutional-footer__metaCard .is-live {
+  color: #62f0ac;
+}
+
+.institutional-footer__copyright {
+  margin-top: 2px;
+  color: rgba(194, 220, 255, 0.6);
+  font-size: 11px;
+}
+
+@media (max-width: 1180px) {
+  .institutional-footer__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .institutional-footer__links {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .institutional-footer__links {
+    grid-template-columns: 1fr;
+  }
+
+  .institutional-footer__brandRow {
+    flex-direction: column;
+  }
+}

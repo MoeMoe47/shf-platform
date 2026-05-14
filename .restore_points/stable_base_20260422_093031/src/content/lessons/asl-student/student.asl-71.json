@@ -1,0 +1,72 @@
+{
+  "id": "asl-71",
+  "title": "ASL 9.5 — Event Logistics: Directions, Locations & Accessibility 🧭",
+  "estMinutes": 35,
+  "objectives": [
+    "Give and follow directions using clear spatial anchors and path signs",
+    "Describe event logistics with Time → Topic → Comment order",
+    "Include accessibility details (INTERPRETER, CAPTION, RAMP) in announcements"
+  ],
+  "vocab": [
+    { "term": "LOCATION/PLACE", "def": "Anchor a spot in space (LEFT/RIGHT/CENTER)." },
+    { "term": "CL:B (MAP/SURFACE)", "def": "Flat hand for map/table/room layout." },
+    { "term": "TURN-LEFT / TURN-RIGHT / STRAIGHT", "def": "Directional path signs across the CL:B surface." },
+    { "term": "UPSTAIRS / DOWNSTAIRS", "def": "Vertical path markers." },
+    { "term": "NEAR / FAR", "def": "Distance markers; pair with small or large movement." },
+    { "term": "PARKING / ENTRANCE / ROOM#", "def": "Key venue points for logistics." },
+    { "term": "INTERPRETER / CAPTION / RAMP", "def": "Accessibility features to include in event info." }
+  ],
+  "sections": [
+    {
+      "heading": "Context: Event Wayfinding",
+      "media": { "src": "/media/asl/unit-9/wayfinding.gif", "alt": "Signer mapping a simple route on a flat surface", "caption": "Use CL:B as a mini-map for clarity" },
+      "body": "For logistics, lay down a **CL:B surface** (map). Mark **ENTRANCE**, **PARKING**, **ROOM#**, then trace **path**: **ENTRANCE → STRAIGHT → TURN-RIGHT → ROOM 204.** Keep each step short."
+    },
+    {
+      "heading": "Structure: Time → Topic → Comment",
+      "body": "Announcements still use **TIME → TOPIC → COMMENT**. Example: **SATURDAY 2PM → WORKSHOP → ROOM 204, PARKING BACK-LOT, INTERPRETER PROVIDED.**",
+      "microCheck": {
+        "q": "Best order for logistics info?",
+        "options": ["Comment → Topic → Time", "Time → Topic → Comment", "Topic → Comment only", "Random"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Technique: Route Clarity on CL:B",
+      "body": "1) Place **start** and **destination** first. 2) Show **one path step** at a time. 3) Use **NEAR/FAR** and **UPSTAIRS/DOWNSTAIRS** if relevant. 4) Face/gaze follows the route, then make **eye contact** to confirm."
+    },
+    {
+      "heading": "Partner Drill: Ask & Guide",
+      "media": { "src": "/media/asl/unit-9/ask-guide.png", "alt": "Two signers asking and giving directions", "caption": "Follow-up questions keep routes accurate" },
+      "body": "A asks: **WHERE WORKSHOP?** B maps route on **CL:B** with **3 steps**, then adds **one accessibility detail**. A repeat-backs the path to confirm. Swap roles.",
+      "microCheck": {
+        "q": "Between steps you should…",
+        "options": ["Rush through", "Pause briefly so the listener can track", "Look away", "Change the map mid-way"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Mini-Showcase",
+      "body": "Record **25–35s**: **TIME → TOPIC → COMMENT** announcement including **location**, **3-step route** on **CL:B**, and **one accessibility feature** (e.g., **INTERPRETER**, **CAPTION**, or **RAMP**). Caption the three route steps."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 9.5 — Logistics & Directions Quiz",
+    "items": [
+      { "type": "mcq", "q": "What helps the audience visualize a route?", "options": ["CL:B surface with step-by-step path", "Spelling everything", "Talking aloud", "Skipping pauses"], "answerIndex": 0 },
+      { "type": "mcq", "q": "Where do accessibility details go in announcements?", "options": ["First", "Last only", "In the Comment part after Topic", "Never include"], "answerIndex": 2 },
+      { "type": "mcq", "q": "Best confirmation after giving directions:", "options": ["Smile only", "Ask for repeat-back", "Repeat the start point only", "Walk away"], "answerIndex": 1 },
+      { "type": "short", "q": "Gloss: 'Tomorrow 6PM → Club meeting → Room 120. From entrance: straight, turn-left, upstairs.'" },
+      { "type": "reflection", "prompt": "Which is hardest—keeping the CL:B map stable, pacing steps, or adding accessibility info? Why?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Upload your 25–35s logistics clip. Caption start point, destination, three steps, and the accessibility feature.",
+  "summary": "You delivered clear logistics using CL:B as a map, sequenced information with Time → Topic → Comment, and included accessibility details for inclusive events.",
+  "nextSlug": "asl-72",
+  "games": [
+    { "id": "map-steps", "title": "Map Steps", "route": "/arcade/asl/map-steps", "estMinutes": 5, "xp": 50, "outcomes": ["Break routes into 3 clear steps"] },
+    { "id": "anchor-lock", "title": "Anchor Lock", "route": "/arcade/asl/anchor-lock", "estMinutes": 5, "xp": 50, "outcomes": ["Keep start/destination anchors stable"] },
+    { "id": "access-ready", "title": "Access Ready", "route": "/arcade/asl/access-ready", "estMinutes": 5, "xp": 50, "outcomes": ["Add interpreter/caption/ramp info succinctly"] }
+  ]
+}

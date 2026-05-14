@@ -1,0 +1,17 @@
+{
+  "required": [
+    "id",
+    "name",
+    "entry",
+    "routes",
+    "layout",
+    "capabilities"
+  ],
+
+  "capabilities": {
+    "map": ["ai"],
+    "ledger": ["treasury", "credit"],
+    "analytics": ["admin", "loo"],
+    "payments": ["treasury", "store"]
+  }
+}

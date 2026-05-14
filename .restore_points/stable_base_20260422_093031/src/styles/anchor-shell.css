@@ -1,0 +1,250 @@
+
+
+/* One-piece frosted header that is EXACTLY as tall as the logo anchor.
+   The logo lives INSIDE the header (left anchor area), so there is no seam. */
+
+:root{
+  /* Size tokens */
+  --bar-h: 0px;                 /* keep 0 for a pure hero-style header (no extra top bar) */
+  --logo-h: 136px;              /* slightly bigger than 128px per feedback */
+  --header-h: calc(var(--logo-h) + var(--bar-h)); /* total glass height */
+
+  --anchor-w: 240px;            /* must match rail width */
+  --sidebar-w: 240px;
+  --sidebar-w-collapsed: 72px;
+
+  /* Logo internal padding + max width */
+  --logo-pad-v: 10px;           /* equal top & bottom breathing room */
+  --logo-pad-h: 8px;            /* left/right breathing room */
+
+  /* Theme */
+  --beige: #efe7dc;
+  --ivory: #faf8f3;
+  --ink: #0f172a;
+  --ink-soft: #6b7280;
+  --ring: #dcd7ce;
+  --accent: #ff4f00;
+
+  --card: #fff;
+  --radius: 14px;
+  --shadow-md: 0 8px 28px rgba(0,0,0,.06);
+}
+
+/* Anchor jumps land below the tall header */
+:root{ scroll-padding-top: var(--header-h); }
+
+/* Shell grid uses the tall header height */
+.at-shell{
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: var(--header-h) 1fr;
+  background: var(--beige);
+  color: var(--ink);
+}
+
+/* ---------------- Header: one slab of glass, full width ---------------- */
+.at-header{
+  position: sticky; top: 0; z-index: 100;
+  height: var(--header-h);
+  display: grid;
+  grid-template-columns: var(--anchor-w) 1fr; /* left = anchor area for logo */
+  align-items: center;
+  background: transparent;
+  border-bottom: none;
+  isolation: isolate; /* keeps glass behind content */
+  overflow: hidden;   /* clip any stray paint */
+}
+
+/* Full-width frosted glass (no seam) */
+.at-headerGlass{
+  position: absolute; inset: 0;
+  border-bottom: 1px solid rgba(0,0,0,.10);
+  background: rgba(250,248,243,.72);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  pointer-events: none;
+  z-index: 0;
+}
+@supports (background: color-mix(in oklab, white, black)){
+  .at-headerGlass{
+    background: color-mix(in oklab, var(--ivory), transparent 30%);
+    border-bottom-color: color-mix(in oklab, var(--ring), black 10%);
+  }
+}
+.at-header.is-scrolled .at-headerGlass{ border-bottom-color: rgba(0,0,0,.12); }
+
+/* Header content sits above the glass */
+.at-hLeft, .at-hRight{ position: relative; z-index: 1; }
+.at-hLeft{ display:flex; align-items:center; gap:10px; padding:0 12px; }
+.at-hRight{ display:flex; align-items:center; gap:12px; padding:0 12px; justify-self:end; }
+
+/* The big logo lives INSIDE the header’s left anchor area */
+.at-headerLogo{
+  position: absolute;
+  left: 0; top: 0;
+  width: var(--anchor-w);
+  height: var(--header-h);
+  display: grid; place-items: center;     /* ensures equal distance top & bottom */
+  padding: var(--logo-pad-v) var(--logo-pad-h);
+  pointer-events: none;                   /* decorative only; let links beneath receive clicks */
+  contain: paint;                         /* avoid any rendering bleed */
+}
+
+/* Image/SVG itself — sized to fit the box with equal margins */
+.at-headerLogo img,
+.at-headerLogo svg,
+.at-logoImg{
+  display: block;
+  width: calc(var(--anchor-w) - (var(--logo-pad-h) * 2));
+  height: calc(var(--logo-h) - (var(--logo-pad-v) * 2));
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center center;         /* perfect centering */
+  background: transparent;                /* ensure transparent bg for raster fallbacks */
+}
+
+/* Optional stacked text layout if you keep a composed panel (safe to remove) */
+.at-logoPanel{ display:flex; flex-direction:column; align-items:center; gap:8px; }
+.at-logoPanel .mark{
+  width:72px; height:72px; border-radius:12px;
+  display:grid; place-items:center; background:#fff;
+  border:1px solid var(--ring);
+}
+.at-brandName{
+  text-align:center; line-height:1.05; font-weight:800; color:var(--ink);
+  font-size:14px; letter-spacing:.02em;
+}
+.at-brandSub{ font-weight:700; font-size:11px; color:var(--ink-soft); }
+
+/* Header controls (we’ll add more later) */
+.at-toggleBtn{
+  background:none; border:1px solid var(--ring);
+  border-radius:10px; padding:6px 10px; cursor:pointer;
+}
+.at-role{
+  font-size:12px; color:var(--ink-soft); padding:2px 8px;
+  border:1px solid var(--ring); border-radius:999px; background:var(--card);
+}
+
+/* Keep header clean of collapse controls */
+.at-header .collapse-btn,
+.at-header .at-toggleBtn[title*="Collapse"],
+.at-header .at-toggleBtn[aria-label*="Collapse"]{ display:none !important; }
+
+/* ---------------- Body grid ---------------- */
+.at-body{
+  display:grid;
+  grid-template-columns: var(--sidebar-w) minmax(0,1fr);
+  min-height: calc(100vh - var(--header-h));
+  transition: grid-template-columns .18s ease;
+}
+
+/* Left column now ONLY contains the rail (logo moved into header) */
+.at-left{
+  background: var(--ivory);
+  border-right: none; /* the rail draws its own border */
+  display:block;
+  position: relative;
+}
+
+/* Rail */
+.at-sidebar{
+  position:relative;
+  background: var(--ivory);
+  border-right: 1px solid var(--ring);
+}
+.at-sidebar__inner{
+  position: sticky;
+  top: var(--header-h);                      /* starts below the tall header */
+  height: calc(100vh - var(--header-h));
+  overflow: auto;
+  padding:14px 12px;
+}
+
+/* Rail controls */
+.at-railControls{
+  position: sticky; top: 0;
+  display:flex; justify-content:flex-end; align-items:center;
+  padding: 8px;
+  margin: -8px -8px 10px;
+  background: var(--ivory);
+  border-bottom: 1px solid var(--ring);
+  z-index: 1;
+}
+.at-railBtn{
+  background:#fff; border:1px solid var(--ring);
+  border-radius:10px; padding:6px 10px; cursor:pointer;
+  transition: transform .18s ease, background .15s ease, border-color .15s ease;
+}
+.at-railBtn:hover{ background:#fffdfa; border-color: color-mix(in oklab, var(--ring), black 10%); }
+
+/* Collapse behavior — only icons remain */
+.at-shell.is-collapsed{ --sidebar-w: var(--sidebar-w-collapsed); }
+.at-shell.is-collapsed .at-railControls{ display:none; }
+.at-shell.is-collapsed .at-label{ display:none; }
+.at-shell.is-collapsed .at-nav__item{ justify-content:center; }
+
+/* Nav */
+.at-nav{ display:grid; gap:6px; margin:10px 0 16px; }
+.at-nav__item{
+  display:flex; align-items:center; gap:10px;
+  padding:10px 12px; border-radius:10px;
+  text-decoration:none; color:var(--ink);
+  border:1px solid transparent;
+}
+.at-nav__item:hover{ background:#f5f2ec; }
+.at-nav__item.active{ background:#fff; border-color:var(--ring); }
+.at-icon{ width:22px; height:22px; display:grid; place-items:center; }
+.at-label{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+/* Main */
+.at-main{
+  background:var(--beige);
+  padding:18px;
+  min-width:0;
+  max-width:1200px; width:100%; margin:0 auto;
+}
+
+/* ---------------- Mobile ---------------- */
+@media (max-width: 840px){
+  /* No tall header on phones — shrink the logo height to 0 */
+  :root{ --logo-h: 0px; --header-h: calc(var(--logo-h) + var(--bar-h)); }
+  .at-header{ grid-template-columns: 56px 1fr; }
+  .at-headerLogo{ display:none; }          /* hide big logo on mobile */
+
+  .at-body{ grid-template-columns: 1fr; }
+  .at-left{ display: contents; }
+  .at-sidebar{
+    position:fixed; inset:0 auto 0 0; width:min(88vw, 320px);
+    transform:translateX(-100%); transition:transform .18s ease; z-index:90;
+    background:var(--ivory); border-right:1px solid var(--ring);
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+  }
+  .at-shell.drawer-open .at-sidebar{ transform:translateX(0); }
+  .at-scrim{ position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:85; display:none; }
+  .at-shell.drawer-open .at-scrim{ display:block; }
+  .at-railControls{ display:none; }
+}
+
+/* Skip links, a11y, print */
+.skip-links{ position: fixed; top: 0; left: 0; z-index: 110; transform: translateY(-120%); }
+.skip-links:focus-within{ transform: translateY(0); }
+.skip-links a{
+  display:inline-block; margin:8px; padding:8px 12px;
+  border-radius:10px; background:#111; color:#fff; text-decoration:none;
+  border:1px solid #000; box-shadow:0 2px 8px rgba(0,0,0,.2);
+}
+
+:focus-visible{ outline:2px solid rgba(255,79,0,.55); outline-offset:2px; }
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.01ms!important; transition-duration:.01ms!important; }
+}
+@media (forced-colors: active){ .at-nav__item.active{ outline:1px solid Highlight; } }
+
+@media print{
+  .at-header, .at-left{ display:none !important; }
+  .at-main{ padding:0 !important; background:#fff !important; }
+}
+
+

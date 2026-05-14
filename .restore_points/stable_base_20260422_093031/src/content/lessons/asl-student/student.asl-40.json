@@ -1,0 +1,94 @@
+{
+  "id": "asl-40",
+  "title": "ASL 5.4 — Classifiers I (CL:1, CL:3, CL:B) 🚶🚗📄",
+  "estMinutes": 25,
+  "objectives": [
+    "Use core classifiers CL:1 (person/thin object), CL:3 (vehicle), and CL:B (flat surface/object) in short, clear clauses",
+    "Place and move classifiers in space with readable paths, orientation, and size",
+    "Describe simple scenes (person walking, car turning, object on table) with time-first framing"
+  ],
+  "vocab": [
+    { "term": "CL:1", "def": "Index-finger classifier for a person, thin/long thing; shows path, direction, speed." },
+    { "term": "CL:3", "def": "3-handshape for vehicles (car, bus); shows direction, turn, stop." },
+    { "term": "CL:B", "def": "Flat B-hand for surfaces/flat objects (table, paper), doors/walls." },
+    { "term": "PLACE / ORIENT / PATH", "def": "Place items, face them correctly, then move along a visible path." },
+    { "term": "SPEED / SIZE (NMM)", "def": "Mouth/face show fast/slow, small/big while hands stay compact." },
+    { "term": "TIME-FIRST", "def": "Set WHEN first (TODAY, PAST, FUTURE) for scene clarity." }
+  ],
+  "sections": [
+    {
+      "heading": "Warm-Up: Handshape Isolation",
+      "media": { "src": "/media/asl/unit-5/classifier-hs.png", "alt": "CL:1, CL:3, CL:B handshapes", "caption": "Hold steady; neutral wrist" },
+      "body": "Form **CL:1, CL:3, CL:B**—freeze each for 2 seconds. Check: wrist neutral, fingers crisp, small comfortable space.",
+      "microCheck": {
+        "q": "Which classifier best represents a car?",
+        "options": ["CL:1", "CL:3", "CL:B", "Fingerspell C-A-R only"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Model: Place → Orient → Move",
+      "media": { "src": "/media/asl/unit-5/place-orient-move.mp4", "alt": "CLs placed then moved", "caption": "Three-beat rhythm: place, orient, move" },
+      "body": "Use a **3-beat**: 1) **PLACE** object, 2) **ORIENT** (which way it faces), 3) **MOVE** with a clear **PATH**. Examples:\n• **TODAY CL:B-TABLE. CL:1 PERSON STAND-LEFT. WALK→RIGHT (slow).**\n• **PAST CL:3 CAR PLACE-CENTER. TURN-LEFT. STOP.**",
+      "microCheck": {
+        "q": "What most improves movement clarity?",
+        "options": ["Bigger arm swings", "Visible path + orientation + NMM speed", "Talking while signing", "Random pointing"],
+        "answerIndex": 1
+      },
+      "teacherNote": "Coach tiny path arcs and clear stop points; avoid huge travel."
+    },
+    {
+      "heading": "Perspective: Top-Down vs Front",
+      "body": "For **CL:3**, choose a view: **top-down** (map-like turns) or **front** (car coming toward/away). Stay consistent within a scene.",
+      "callouts": [
+        { "type": "tip", "title": "Lock the Camera", "body": "Pick one perspective per scene; switching mid-way confuses viewers." }
+      ],
+      "microCheck": {
+        "q": "How to keep perspective clear in a car scene?",
+        "options": ["Switch view often", "Choose one (top-down or front) and stick with it", "Wave hands bigger", "Look at your hands"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Partner Practice: Three Micro-Scenes",
+      "media": { "src": "/media/asl/unit-5/three-scenes.gif", "alt": "Person, car, flat-surface scenes", "caption": "20–30s each; swap roles" },
+      "body": "Scene A (**CL:1**): **TODAY PERSON WALK STRAIGHT → STOP.** \nScene B (**CL:3**): **PAST CAR TURN-RIGHT → PARK.** \nScene C (**CL:B**): **PAPER ON TABLE; SLIDE→LEFT.** Add NMM for speed/effort; keep clauses 3–5 signs.",
+      "callouts": [
+        { "type": "caution", "title": "Overuse", "body": "Don’t replace every noun with a classifier—introduce once, then use CL for movement/placement." }
+      ],
+      "microCheck": {
+        "q": "Best way to introduce a classifier referent:",
+        "options": [
+          "Start with CL immediately",
+          "Name once (CAR), then shift to CL:3 for movement",
+          "Never name, only CLs",
+          "Spell everything"
+        ],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Mini-Showcase",
+      "body": "Record **12–18s** choosing **one**: \n• **PERSON (CL:1) path** with start/stop, \n• **CAR (CL:3) turn/park**, or \n• **OBJECT (CL:B) slide/stack**. Use **TIME-FIRST** and the **place→orient→move** rhythm."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 5.4 — Classifiers I Quiz",
+    "items": [
+      { "type": "mcq", "q": "Best classifier for a person walking:", "options": ["CL:1", "CL:3", "CL:B", "Fingerspelling only"], "answerIndex": 0 },
+      { "type": "mcq", "q": "What parameter most clearly shows direction/turn?", "options": ["Path/orientation of the classifier", "Handshape only", "Mouthing only", "Speed only"], "answerIndex": 0 },
+      { "type": "mcq", "q": "Good sequencing for scenes:", "options": ["Move → Place → Orient", "Place → Orient → Move", "Orient → Move → Place", "Random order"], "answerIndex": 1 },
+      { "type": "short", "q": "Write a gloss: TODAY CAR TURN-LEFT PARK (use CL:3 after naming once)." },
+      { "type": "reflection", "prompt": "Which was harder—keeping paths small/clean or choosing a consistent perspective? What cue will you practice?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Upload your 12–18s classifier clip. Caption which CL you used and how you showed path/orientation.",
+  "summary": "You introduced and used CL:1, CL:3, and CL:B to place, orient, and move referents in small scenes with clear paths and perspective.",
+  "nextSlug": "asl-41",
+  "games": [
+    { "id": "path-pilot", "title": "Path Pilot", "route": "/arcade/asl/path-pilot", "estMinutes": 5, "xp": 50, "outcomes": ["Clean paths & stops"] },
+    { "id": "perspective-lock", "title": "Perspective Lock", "route": "/arcade/asl/perspective-lock", "estMinutes": 5, "xp": 50, "outcomes": ["Top-down vs front consistency"] },
+    { "id": "place-orient-move", "title": "Place • Orient • Move", "route": "/arcade/asl/place-orient-move", "estMinutes": 5, "xp": 50, "outcomes": ["3-beat rhythm"] }
+  ]
+}

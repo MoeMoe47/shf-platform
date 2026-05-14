@@ -1,0 +1,223 @@
+.ohio-tactical-map {
+  position: relative;
+  min-height: 420px;
+  border-radius: 26px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(248,243,236,0.94) 0%, rgba(240,234,226,0.98) 100%);
+}
+
+.ohio-tactical-map__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(122, 96, 70, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(122, 96, 70, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ohio-tactical-map__toolbar {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  display: flex;
+  gap: 10px;
+  z-index: 30;
+}
+
+.ohio-tactical-map__toolbar button {
+  border: 1px solid rgba(164, 137, 108, 0.18);
+  background: rgba(255,255,255,0.82);
+  color: #7a6249;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font: inherit;
+}
+
+.ohio-tactical-map__toolbar .is-active {
+  background: rgba(224, 179, 109, 0.24);
+  color: #6b4a2e;
+  box-shadow: 0 0 0 1px rgba(220, 165, 85, 0.10) inset;
+}
+
+.ohio-tactical-map__surface {
+  position: relative;
+  height: 338px;
+  margin: 14px 14px 0;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.ohio-tactical-map__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ohio-tactical-map__shape {
+  fill: rgba(225, 176, 112, 0.16);
+  stroke: rgba(112, 77, 46, 0.88);
+  stroke-width: 3.6;
+  vector-effect: non-scaling-stroke;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.ohio-tactical-map__signals {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+}
+
+.ohio-tactical-node {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  margin-top: -10px;
+  border: 0;
+  padding: 0;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.ohio-tactical-node__core {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(226,132,44,0.96) 0%, rgba(214,120,34,0.84) 58%, rgba(214,120,34,0.18) 100%);
+  box-shadow:
+    0 0 0 3px rgba(244, 223, 192, 0.72),
+    0 0 18px rgba(223, 131, 40, 0.18);
+}
+
+.ohio-tactical-node.is-secondary .ohio-tactical-node__core {
+  transform: scale(0.82);
+  opacity: 0.82;
+}
+
+.ohio-tactical-node.is-hovered .ohio-tactical-node__core,
+.ohio-tactical-node.is-selected .ohio-tactical-node__core {
+  box-shadow:
+    0 0 0 5px rgba(244, 223, 192, 0.9),
+    0 0 24px rgba(223, 131, 40, 0.3),
+    0 0 52px rgba(223, 131, 40, 0.16);
+}
+
+.ohio-tactical-node.is-processing::before {
+  content: "";
+  position: absolute;
+  inset: -14px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(232, 182, 96, 0.26) 0%, rgba(232,182,96,0.10) 46%, rgba(232,182,96,0.00) 74%);
+  animation: ohioTacticalPulse 1.9s ease-in-out infinite;
+}
+
+@keyframes ohioTacticalPulse {
+  0%, 100% { transform: scale(0.92); opacity: 0.76; }
+  50% { transform: scale(1.22); opacity: 1; }
+}
+
+.ohio-tactical-card {
+  position: absolute;
+  left: 28%;
+  top: 52%;
+  transform: translate(-50%, -50%);
+  z-index: 18;
+  min-width: 250px;
+  background: rgba(255,255,255,0.94);
+  border: 1px solid rgba(170, 137, 103, 0.16);
+  border-radius: 22px;
+  padding: 18px 18px 16px;
+  box-shadow: 0 16px 34px rgba(86, 58, 34, 0.08), 0 2px 0 rgba(255,255,255,0.78) inset;
+}
+
+.ohio-tactical-card__title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.ohio-tactical-card__title-row strong {
+  font-size: 18px;
+}
+
+.ohio-tactical-card__grid {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 8px 14px;
+  line-height: 1.45;
+}
+
+.ohio-tactical-card__grid strong {
+  text-align: right;
+}
+
+.ohio-tactical-status {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 24;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(520px, calc(100% - 180px));
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(166, 133, 97, 0.16);
+  background: rgba(255, 251, 245, 0.72);
+  backdrop-filter: blur(10px);
+  box-shadow:
+    0 6px 18px rgba(80, 56, 34, 0.06),
+    0 1px 0 rgba(255,255,255,0.66) inset;
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity 220ms ease, transform 260ms ease;
+}
+
+.ohio-tactical-status.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ohio-tactical-status__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  flex: 0 0 auto;
+  background: rgba(207, 148, 72, 0.95);
+  box-shadow: 0 0 0 4px rgba(230, 183, 109, 0.14);
+}
+
+.ohio-tactical-status__text {
+  font-size: 12px;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  color: rgba(99, 69, 43, 0.88);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ohio-tactical-map__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px 14px;
+  color: rgba(101, 74, 49, 0.84);
+  font-size: 13px;
+}
+
+.ohio-tactical-map__footer button {
+  border: 1px solid rgba(164, 137, 108, 0.18);
+  background: rgba(255,255,255,0.82);
+  color: #7a6249;
+  border-radius: 999px;
+  padding: 9px 14px;
+  font: inherit;
+}

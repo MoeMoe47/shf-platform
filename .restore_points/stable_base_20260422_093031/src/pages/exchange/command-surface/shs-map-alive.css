@@ -1,0 +1,81 @@
+
+/* =========================================================
+   MAP ALIVE SYSTEM (TOP 1% DEPTH)
+   ========================================================= */
+
+/* GRID MOTION */
+.mock-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background-image:
+    radial-gradient(circle, rgba(120,170,255,0.15) 1px, transparent 1px);
+
+  background-size: 26px 26px;
+
+  animation: gridDrift 40s linear infinite;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+@keyframes gridDrift {
+  0% {
+    transform: translate(0,0);
+  }
+  100% {
+    transform: translate(-120px, -80px);
+  }
+}
+
+/* ENERGY FLOW OVER MAP */
+.mock-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(circle at 60% 55%, rgba(255,90,90,0.12), transparent 40%),
+    radial-gradient(circle at 72% 60%, rgba(74,163,255,0.12), transparent 40%),
+    radial-gradient(circle at 70% 78%, rgba(60,255,155,0.12), transparent 40%);
+
+  animation: energyPulse 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes energyPulse {
+  0%,100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+}
+
+/* SOFT LIGHT SWEEP */
+.shs-light-sweep {
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    120deg,
+    transparent 20%,
+    rgba(120,170,255,0.08),
+    transparent 80%
+  );
+
+  animation: sweep 8s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+

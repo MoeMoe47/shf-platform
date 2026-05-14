@@ -1,0 +1,105 @@
+
+
+/* Print-optimized plan export (updated) */
+@media print {
+  /* Hide app chrome / non-essential UI */
+  .app-header,
+  .app-sidebar,
+  .app-sidebar__inner,
+  .app-sidebar__footer,
+  .ai-panel,
+  .ai-scrim,
+  .sb-emojiNav,
+  .CommandPalette,
+  .KeyboardOverlay,
+  nav,
+  footer { display: none !important; }
+
+  /* Page margins (A4/Letter friendly) */
+  @page { margin: 16mm; }
+
+  /* Neutral page colors */
+  html, body {
+    background: #fff !important;
+    color: #111 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Print ONLY the selected plan/drawer/summary area */
+  body * { visibility: hidden !important; }
+
+  /* Any element you want to print should have .printable */
+  .printable,
+  .printable * { visibility: visible !important; }
+
+  /* Common containers we may mark printable */
+  .pathwayDrawer,
+  .pathwayDrawer *,
+  .kb-card.printable,
+  .kb-card.printable * { visibility: visible !important; }
+
+  /* Lift printed target out of overlay positioning */
+  .printable,
+  .pathwayDrawer,
+  .kb-card.printable {
+    position: static !important;
+    overflow: visible !important;
+    inset: auto !important;
+    transform: none !important;
+    box-shadow: none !important;
+    background: #fff !important;
+    border: 0 !important;
+  }
+
+  /* Typography / tokens */
+  h1, h2, h3 { color: #111 !important; }
+  .subtle, .sh-muted { color: #333 !important; }
+
+  /* Convert chips/buttons to ink-friendly look */
+  .sh-chip,
+  .chip,
+  .btn,
+  .sh-btn {
+    background: transparent !important;
+    color: #111 !important;
+    border: 1px solid #444 !important;
+    box-shadow: none !important;
+  }
+
+  /* Hide interactive-only controls */
+  .sh-btn,
+  .btn,
+  .drawer-close,
+  .drawer-actions,
+  .non-print,
+  [aria-haspopup],
+  [role="button"] { display: none !important; }
+
+  /* Links show URL (useful on handouts) */
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-weight: normal;
+    font-size: 85%;
+    word-break: break-all;
+  }
+
+  /* PlanSummary grid → 1 column on paper */
+  .grid { display: block !important; }
+  .grid > * { break-inside: avoid; }
+
+  /* Keep cards/rows together when possible */
+  .card,
+  .sh-row,
+  .kb-card { page-break-inside: avoid; }
+
+  /* Page breaks: start big sections on new page if long */
+  .print-break { page-break-before: always; }
+
+  /* Tighter images/SVG colors for B/W printers */
+  img, svg { filter: none !important; }
+  .sh-axis, .sh-progressDot { stroke: #111 !important; fill: #111 !important; }
+  .sh-legendSwatch { background: #111 !important; }
+}
+
+

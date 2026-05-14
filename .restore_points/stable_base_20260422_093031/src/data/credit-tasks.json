@@ -1,0 +1,50 @@
+[
+  {
+    "id": "att-7-streak",
+    "title": "Attendance streak: 7 days",
+    "event": "edu.attendance.logged",
+    "capPerWeek": 1,
+    "estPoints": 15,
+    "params": { "streak": 7 }
+  },
+  {
+    "id": "grade-85-plus",
+    "title": "Score 85%+ on a module",
+    "event": "edu.grade.posted",
+    "capPerWeek": 2,
+    "estPoints": 12,
+    "params": { "minPct": 85 }
+  },
+  {
+    "id": "microcert-earn-1",
+    "title": "Earn a micro-cert",
+    "event": "edu.microcert.earned",
+    "capPerWeek": 3,
+    "estPoints": 20,
+    "params": {}
+  },
+  {
+    "id": "social-follow",
+    "title": "Follow SHF on a platform",
+    "event": "social.action",
+    "capPerWeek": 2,
+    "estPoints": 5,
+    "params": { "action": "follow" }
+  },
+  {
+    "id": "on-time-payment",
+    "title": "On-time payment",
+    "event": "credit.payment.posted",
+    "capPerMonth": 2,
+    "estPoints": 18,
+    "params": { "onTime": true }
+  },
+  {
+    "id": "dispute-deleted",
+    "title": "Dispute resolved (deleted)",
+    "event": "credit.dispute.resolved",
+    "capPerQuarter": 2,
+    "estPoints": 25,
+    "params": { "outcome": "deleted" }
+  }
+]

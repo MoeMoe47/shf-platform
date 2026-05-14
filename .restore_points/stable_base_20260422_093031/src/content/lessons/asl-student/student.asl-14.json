@@ -1,0 +1,69 @@
+{
+  "id": "asl-14",
+  "title": "ASL 2.8 — Integration Project 🎬",
+  "estMinutes": 30,
+  "objectives": [
+    "Plan and sign a 30–45s everyday-life scene using numbers, time, colors, places, food/drink",
+    "Demonstrate accurate NMMs, time-first, and compact descriptive order",
+    "Give/receive peer feedback using a simple rubric"
+  ],
+  "vocab": [
+    { "term": "SCENE BLOCKING", "def": "Mapping signs in space so locations/people stay consistent." },
+    { "term": "CONSISTENT ORDER", "def": "Use the same order for descriptions throughout the scene." },
+    { "term": "PEER FEEDBACK", "def": "One precise note on NMMs, clarity, or order." }
+  ],
+  "sections": [
+    {
+      "heading": "Plan Your Scene",
+      "media": { "src": "/media/asl/unit-2/scene-planner.png", "alt": "Scene planner worksheet", "caption": "Time blocks, places, props" },
+      "body": "Choose a context: **School day**, **Café meetup**, or **Library study**. Script 6–10 short clauses (3–5 signs each) with time-first.",
+      "microCheck": {
+        "q": "Best clause length for clarity is…",
+        "options": ["1–2 signs", "3–5 signs", "7–10 signs", "As many as possible"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Rehearse with NMMs",
+      "body": "Mark lines needing **YES/NO** vs **WH**. Practice with a mirror: brows up for Y/N, brows down for WH. Keep eye gaze to the imagined partner.",
+      "callouts": [
+        { "type": "tip", "title": "Space Consistency", "body": "Assign fixed points for **HOME**, **SCHOOL**, **STORE** and reuse them." }
+      ]
+    },
+    {
+      "heading": "Record: 30–45 Seconds",
+      "media": { "src": "/media/asl/unit-2/record-icon.png", "alt": "Recording icon", "caption": "Quiet background, chest-level framing" },
+      "body": "Record in one take if possible. Use at least **2 time words**, **2 places**, **1 color description**, and **1 food/drink exchange**.",
+      "microCheck": {
+        "q": "Which improves readability most?",
+        "options": ["Speeding up", "Time-first + small pauses", "Bigger motions", "Looking at your hands"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Peer Feedback",
+      "body": "Swap videos. Each partner gives **one strength** and **one suggestion** on NMMs or order. Sign feedback if possible; keep it kind and specific."
+    },
+    {
+      "heading": "Mini-Showcase",
+      "body": "Upload your video with a 1–2 line caption: **Which two choices (time-first, WH follow-up, order) helped most?**"
+    }
+  ],
+  "quiz": {
+    "title": "ASL 2.8 — Integration Check",
+    "items": [
+      { "type": "mcq", "q": "Which is a clear integration goal?", "options": ["Long monologue", "3–5 sign clauses with time-first", "No eye gaze", "Avoid questions"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Space consistency means…", "options": ["Random points", "Same locations reused for clarity", "Bigger motions", "Talking out loud"], "answerIndex": 1 },
+      { "type": "short", "q": "List 3 required elements you used (time words, places, color, food/drink, WH/YN)." },
+      { "type": "reflection", "prompt": "What will you carry into the capstone—NMM habits, time-first, or clarification follow-ups?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Post your 30–45s scene + a caption about two choices that improved clarity.",
+  "summary": "You planned and signed an everyday-life scene showing control of NMMs, time-first, and compact descriptive order.",
+  "nextSlug": "asl-2-capstone",
+  "games": [
+    { "id": "scene-blocker", "title": "Scene Blocker", "route": "/arcade/asl/scene-blocker", "estMinutes": 5, "xp": 50, "outcomes": ["Space consistency"] },
+    { "id": "nmm-trainer", "title": "NMM Trainer", "route": "/arcade/asl/nmm-trainer", "estMinutes": 5, "xp": 50, "outcomes": ["Switch Y/N ↔ WH"] }
+  ]
+}

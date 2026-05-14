@@ -1,0 +1,77 @@
+{
+  "id": "student.asl-77",
+  "title": "ASL 9.11 — Backstage Coordination: Timing, Cues, Contingencies 🎛️",
+  "estMinutes": 35,
+  "objectives": [
+    "Coordinate timing with clear hand signals and concise ASL lines",
+    "Use visual cue vocabulary for start/stop, ready, and transitions",
+    "Handle simple contingencies (late performer, tech issue) with calm, short updates"
+  ],
+  "vocab": [
+    { "term": "READY / SET", "def": "Palm up small nod; confirm position." },
+    { "term": "START / GO", "def": "Forward push; GO-TO-STAGE." },
+    { "term": "STOP / HOLD", "def": "Flat hand barrier; pause." },
+    { "term": "NEXT / SWITCH", "def": "Index move to next anchor; transition." },
+    { "term": "TIME-CHECK / MINUTE", "def": "Tap watch; show number." },
+    { "term": "LATE / NOT-YET", "def": "Tongue-out NOT-YET; show delay." },
+    { "term": "MIC / LIGHT / SCREEN", "def": "Tech terms; point to device anchor." },
+    { "term": "FIX-SHORT / PLAN-B", "def": "Quick repair or alternate; concise line." }
+  ],
+  "sections": [
+    {
+      "heading": "1) Visual Cues & Hand Signals",
+      "media": { "src": "/media/asl/unit-9/cues.png", "alt": "Backstage cue icons", "caption": "Keep cues big, simple, repeatable" },
+      "body": "Core set: **READY**, **GO**, **STOP**, **NEXT**. Agree backstage anchors and repeat the same signals every time.",
+      "microCheck": {
+        "q": "Which pair best controls flow?",
+        "options": ["HELLO / THANK-YOU", "READY / GO", "YES / MAYBE", "QUESTION / ANSWER"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "2) Timing Updates (≤ 6 signs)",
+      "body": "Use Time → Topic → Comment: **NOW → BAND → READY?** / **2-MIN → NEXT → DANCE.** Keep updates short so hands are free for pointing."
+    },
+    {
+      "heading": "3) Tech Fix Lines",
+      "body": "Fix fast, then confirm: **MIC PROBLEM. HOLD. FIX-SHORT. READY? GO.** Point to device and performer anchors while updating.",
+      "microCheck": {
+        "q": "After a quick fix you should…",
+        "options": ["Explain long", "Confirm READY then GO", "Skip confirmation", "Apologize repeatedly"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "4) Contingency: Late Performer",
+      "body": "Plan B template: **PERFORMER LATE / NOT-YET. SWITCH → NEXT ACT. AFTER ARRIVE → INSERT.** Keep audience calm with emcee line later."
+    },
+    {
+      "heading": "5) Partner Drill: Cue Chain",
+      "media": { "src": "/media/asl/unit-9/cue-chain.gif", "alt": "Two signers passing cues", "caption": "Pass READY → GO → STOP → NEXT cleanly" },
+      "body": "A (stage manager) cues B (performer) through **READY → GO**; inject a **STOP** and a **NEXT** switch. Swap roles."
+    },
+    {
+      "heading": "6) Mini-Scenario",
+      "body": "Choose one: **mic fails**, **lights too bright**, **video not playing**. Give two short updates and one confirmation before GO."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 9.11 — Backstage Coordination Quiz",
+    "items": [
+      { "type": "mcq", "q": "Best base order for updates:", "options": ["Topic → Comment → Time", "Time → Topic → Comment", "Comment → Time → Topic", "Random"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Most efficient flow signals are…", "options": ["HELLO / THANK-YOU", "READY / GO / STOP / NEXT", "YES / NO", "PLEASE / SORRY"], "answerIndex": 1 },
+      { "type": "mcq", "q": "After a tech fix you should…", "options": ["Explain details", "Confirm READY then GO", "Skip cues", "Restart entire show"], "answerIndex": 1 },
+      { "type": "short", "q": "Gloss a Plan B for 'late singer': switch to next, insert later." },
+      { "type": "reflection", "prompt": "Which needs most practice—cue clarity, timing lines, or Plan B phrasing? Why?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Record 20–30s: run a cue chain (READY → GO → STOP → NEXT) and handle one tech hiccup with a fix + confirmation.",
+  "summary": "You coordinated backstage flow using a stable cue set, concise timing lines, and calm contingency updates with confirmations.",
+  "nextSlug": "student.asl-78",
+  "games": [
+    { "id": "cue-click", "title": "Cue Click", "route": "/arcade/asl/cue-click", "estMinutes": 5, "xp": 50, "outcomes": ["READY/GO/STOP/NEXT accuracy"] },
+    { "id": "clock-tap", "title": "Clock Tap", "route": "/arcade/asl/clock-tap", "estMinutes": 5, "xp": 50, "outcomes": ["Time → Topic → Comment speed"] },
+    { "id": "planb-swap", "title": "Plan B Swap", "route": "/arcade/asl/planb-swap", "estMinutes": 5, "xp": 50, "outcomes": ["Quick, calm contingency lines"] }
+  ]
+}

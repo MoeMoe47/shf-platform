@@ -1,0 +1,1280 @@
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import "./command-surface/shs-command-surface.css";
+
+function Panel({ title, children, className = "", onClick, panelRef }) {
+  return (
+
+      <Panel title="Adaptive Decision System" className="mock-panel--highlight">
+        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+          <div>
+            <strong>Mode:</strong>{" "}
+            {lifecycle?.mode || lifecycle?.evaluation_mode || "loading..."}
+          </div>
+
+          <div>
+            <strong>Stable:</strong>{" "}
+            {lifecycle?.stable_version || lifecycle?.stable?.version || "—"}
+          </div>
+
+          <div>
+            <strong>Candidate:</strong>{" "}
+            {lifecycle?.candidate_version || lifecycle?.candidate?.version || "—"}
+          </div>
+
+          <div>
+            <strong>Candidate State:</strong>{" "}
+            {lifecycle?.candidate_state || lifecycle?.status || "evaluating"}
+          </div>
+
+          <div>
+            <strong>Stable Projected Value:</strong>{" "}
+            {comparison?.stable?.projected_value ?? "—"}
+          </div>
+
+          <div>
+            <strong>Candidate Projected Value:</strong>{" "}
+            {comparison?.candidate?.projected_value ?? "—"}
+          </div>
+
+          <div style={{ color: "#4ade80" }}>
+            <strong>Δ Improvement:</strong>{" "}
+            {comparison?.candidate?.projected_value != null && comparison?.stable?.projected_value != null
+              ? comparison.candidate.projected_value - comparison.stable.projected_value
+              : "—"}
+          </div>
+
+          <div>
+            <strong>Strategy:</strong>{" "}
+            {comparison?.candidate?.recommended_strategy ||
+              comparison?.stable?.recommended_strategy ||
+              "—"}
+          </div>
+        </div>
+      </Panel>
+
+    <section
+      ref={panelRef}
+      className={`mock-panel ${className}`.trim()}
+      onClick={onClick}
+    >
+      <div className="mock-panel__title">{title}</div>
+      <div className="mock-panel__body">{children}</div>
+    </section>
+  );
+}
+
+function BulletList({ items = [] }) {
+  return (
+    <div className="mock-list">
+      {items.map((item, i) => (
+        <div key={`${item}-${i}`} className="mock-list__row">
+          <span className="mock-list__dot" />
+          <span>{item}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const GUIDE_STORAGE_KEY = "shs-command-surface-guide-mode";
+const GUIDE_TOUR_ACTIVE_KEY = "shs-command-surface-tour-active";
+const GUIDE_TOUR_STEP_KEY = "shs-command-surface-tour-step";
+
+const GUIDE_STEPS = [
+  {
+    id: "review_priority",
+    title: "Step 1 — Review Current Priority",
+    body: "Start here. This card tells you the highest-priority issue in the system and what matters most right now.",
+    targets: ["priority"],
+  },
+  {
+    id: "review_map",
+    title: "Step 2 — Review Affected Region",
+    body: "Use the map to identify where the issue is happening. The highlighted signal shows the active region.",
+    targets: ["map", "pin-chicago"],
+  },
+  {
+    id: "review_recommendation",
+    title: "Step 3 — Review Recommendation",
+    body: "The system’s recommended next move appears here. Read this before taking action.",
+    targets: ["recommended"],
+  },
+  {
+    id: "execute_action",
+    title: "Step 4 — Execute the Next Step",
+    body: "Use the highlighted Investigate action to begin the operational response.",
+    targets: ["priority-investigate", "controls-investigate"],
+  },
+  {
+    id: "review_controls",
+    title: "Step 5 — Review Decision Controls",
+    body: "If conditions change, use these controls to choose a different response path.",
+    targets: ["controls"],
+  },
+  {
+    id: "track_workflow",
+    title: "Step 6 — Track Workflow Progress",
+    body: "Once action begins, monitor the workflow state here to follow execution.",
+    targets: ["workflows"],
+  },
+  {
+    id: "monitor_results",
+    title: "Step 7 — Monitor Results",
+    body: "Check events and capacity to confirm the response and detect any new operational strain.",
+    targets: ["events", "capacity"],
+  },
+  {
+    id: "live",
+    title: "Step 8 — Return to Live Monitoring",
+    body: "You are back in monitoring mode. Continue watching the map and active priority for change.",
+    targets: ["topbar", "map"],
+  },
+];
+
+const EVENT_TEMPLATES = [
+  "Signal confidence refreshed for Chicago placement risk",
+  "Regional verifier queue rebalanced for Midwest routing",
+  "Capacity check completed for outcome review team",
+  "Priority drift check completed with no critical regression",
+];
+
+function hasTarget(step, target) {
+  return step.targets.includes(target);
+}
+
+function getGuideTone(stepId) {
+  switch (stepId) {
+    case "review_map":
+    case "review_recommendation":
+    case "review_controls":
+    case "track_workflow":
+      return "blue";
+    case "monitor_results":
+      return "red";
+    case "live":
+      return "green";
+    case "review_priority":
+    case "execute_action":
+    default:
+      return "orange";
+  }
+}
+
+function getPrimaryTargetKey(stepId) {
+  switch (stepId) {
+    case "review_priority":
+      return "priority";
+    case "review_map":
+      return "map";
+    case "review_recommendation":
+      return "recommended";
+    case "execute_action":
+      return "priorityInvestigate";
+    case "review_controls":
+      return "controls";
+    case "track_workflow":
+      return "workflows";
+    case "monitor_results":
+      return "events";
+    case "live":
+      return "topbar";
+    default:
+      return "priority";
+  }
+}
+
+function getInitialGuideMode() {
+  if (typeof window === "undefined") return "guided";
+
+  const saved = window.localStorage.getItem(GUIDE_STORAGE_KEY);
+  if (saved === "guided" || saved === "assisted" || saved === "expert") {
+    return saved;
+  }
+
+  return "guided";
+}
+
+function getInitialTourActive() {
+  if (typeof window === "undefined") return true;
+  return window.localStorage.getItem(GUIDE_TOUR_ACTIVE_KEY) !== "false";
+}
+
+function getInitialTourStep() {
+  if (typeof window === "undefined") return 0;
+
+  const raw = window.localStorage.getItem(GUIDE_TOUR_STEP_KEY);
+  const parsed = Number(raw);
+
+  if (Number.isInteger(parsed) && parsed >= 0 && parsed < GUIDE_STEPS.length) {
+    return parsed;
+  }
+
+  return 0;
+}
+
+export default function SHSCommandSurface() {
+  const [isGuidedMode, setIsGuidedMode] = useState(getInitialTourActive);
+  const [guideMode, setGuideMode] = useState(getInitialGuideMode);
+  const [stepIndex, setStepIndex] = useState(getInitialTourStep);
+  const [transitionOn, setTransitionOn] = useState(false);
+  const [transitionDir, setTransitionDir] = useState("forward");
+  const [recommendationAge, setRecommendationAge] = useState(8);
+  const [recommendationPulse, setRecommendationPulse] = useState(false);
+  const [eventLogAge, setEventLogAge] = useState(5);
+  const [eventLogPulse, setEventLogPulse] = useState(false);
+  const [eventRows, setEventRows] = useState([
+    "Chicago placement risk spike detected",
+    "Midwest verifier queue exceeded threshold",
+    "Route reassigned to regional team",
+  ]);
+  const [systemHeartbeatAge, setSystemHeartbeatAge] = useState(3);
+  const [systemHeartbeatPulse, setSystemHeartbeatPulse] = useState(false);
+  const [mapSignalAge, setMapSignalAge] = useState(4);
+
+  // =========================
+  // 🔥 ADAPTIVE SYSTEM STATE
+  // =========================
+  const [lifecycle, setLifecycle] = useState(null);
+  const [comparison, setComparison] = useState(null);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:8090/lifecycle/state")
+      .then((res) => res.json())
+      .then(setLifecycle)
+      .catch(() => {});
+
+    fetch("http://127.0.0.1:8090/optimizer/compare/stable-vs-candidate", {
+      method: "POST",
+    })
+      .then((res) => res.json())
+      .then(setComparison)
+      .catch(() => {});
+  }, []);
+
+  const [mapSignalPulse, setMapSignalPulse] = useState(false);
+
+  const transitionTimerRef = useRef(null);
+  const focusTimerRef = useRef(null);
+
+  const topbarRef = useRef(null);
+  const priorityRef = useRef(null);
+  const mapRef = useRef(null);
+  const recommendedRef = useRef(null);
+  const controlsRef = useRef(null);
+  const workflowsRef = useRef(null);
+  const eventsRef = useRef(null);
+  const capacityRef = useRef(null);
+  const priorityInvestigateRef = useRef(null);
+  const controlsInvestigateRef = useRef(null);
+  const chicagoPinRef = useRef(null);
+
+  const safeStepIndex = Math.min(Math.max(stepIndex, 0), GUIDE_STEPS.length - 1);
+  const step = GUIDE_STEPS[safeStepIndex];
+  const guidedStep = isGuidedMode ? step : null;
+  const guideTone = guidedStep ? getGuideTone(guidedStep.id) : "orange";
+  const guideModeLabel =
+    guideMode === "guided"
+      ? "Guided Mode"
+      : guideMode === "assisted"
+        ? "Assisted Mode"
+        : "Expert Mode";
+  const showGuideBody = guideMode !== "expert";
+  const showGuideHint = guideMode === "guided";
+
+  const stepCounter = useMemo(
+    () => `${safeStepIndex + 1} / ${GUIDE_STEPS.length}`,
+    [safeStepIndex]
+  );
+
+  useEffect(() => {
+    return () => {
+      if (transitionTimerRef.current) clearTimeout(transitionTimerRef.current);
+      if (focusTimerRef.current) clearTimeout(focusTimerRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem(GUIDE_STORAGE_KEY, guideMode);
+  }, [guideMode]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem(
+      GUIDE_TOUR_ACTIVE_KEY,
+      isGuidedMode ? "true" : "false"
+    );
+  }, [isGuidedMode]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem(GUIDE_TOUR_STEP_KEY, String(safeStepIndex));
+  }, [safeStepIndex]);
+
+  useEffect(() => {
+    const ageInterval = setInterval(() => {
+      setRecommendationAge((value) => value + 1);
+    }, 1000);
+
+    const pulseInterval = setInterval(() => {
+      setRecommendationPulse(true);
+      setRecommendationAge(0);
+    }, 12000);
+
+    return () => {
+      clearInterval(ageInterval);
+      clearInterval(pulseInterval);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!recommendationPulse) return;
+    const timeout = setTimeout(() => {
+      setRecommendationPulse(false);
+    }, 1100);
+    return () => clearTimeout(timeout);
+  }, [recommendationPulse]);
+
+  useEffect(() => {
+    const ageInterval = setInterval(() => {
+      setEventLogAge((value) => value + 1);
+    }, 1000);
+
+    let eventIndex = 0;
+    const liveInterval = setInterval(() => {
+      const nextEvent = EVENT_TEMPLATES[eventIndex % EVENT_TEMPLATES.length];
+      eventIndex += 1;
+
+      setEventRows((current) => [nextEvent, ...current].slice(0, 3));
+      setEventLogAge(0);
+      setEventLogPulse(true);
+    }, 14000);
+
+    return () => {
+      clearInterval(ageInterval);
+      clearInterval(liveInterval);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!eventLogPulse) return;
+    const timeout = setTimeout(() => {
+      setEventLogPulse(false);
+    }, 1300);
+    return () => clearTimeout(timeout);
+  }, [eventLogPulse]);
+
+  useEffect(() => {
+    const ageInterval = setInterval(() => {
+      setSystemHeartbeatAge((value) => value + 1);
+    }, 1000);
+
+    const beatInterval = setInterval(() => {
+      setSystemHeartbeatAge(0);
+      setSystemHeartbeatPulse(true);
+    }, 9000);
+
+    return () => {
+      clearInterval(ageInterval);
+      clearInterval(beatInterval);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!systemHeartbeatPulse) return;
+    const timeout = setTimeout(() => {
+      setSystemHeartbeatPulse(false);
+    }, 950);
+    return () => clearTimeout(timeout);
+  }, [systemHeartbeatPulse]);
+
+  useEffect(() => {
+    const ageInterval = setInterval(() => {
+      setMapSignalAge((value) => value + 1);
+    }, 1000);
+
+    const pulseInterval = setInterval(() => {
+      setMapSignalAge(0);
+      setMapSignalPulse(true);
+    }, 11000);
+
+    return () => {
+      clearInterval(ageInterval);
+      clearInterval(pulseInterval);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!mapSignalPulse) return;
+    const timeout = setTimeout(() => {
+      setMapSignalPulse(false);
+    }, 1050);
+    return () => clearTimeout(timeout);
+  }, [mapSignalPulse]);
+
+  function triggerTransition(dir = "forward") {
+    if (transitionTimerRef.current) clearTimeout(transitionTimerRef.current);
+    setTransitionDir(dir);
+    setTransitionOn(false);
+    requestAnimationFrame(() => {
+      setTransitionOn(true);
+      transitionTimerRef.current = setTimeout(() => {
+        setTransitionOn(false);
+      }, 560);
+    });
+  }
+
+  function refreshRecommendation() {
+    setRecommendationAge(0);
+    setRecommendationPulse(true);
+  }
+
+  function pushLiveEvent(message) {
+    setEventRows((current) => [message, ...current].slice(0, 3));
+    setEventLogAge(0);
+    setEventLogPulse(true);
+  }
+
+  function refreshHeartbeat() {
+    setSystemHeartbeatAge(0);
+    setSystemHeartbeatPulse(true);
+  }
+
+  function refreshMapSignals() {
+    setMapSignalAge(0);
+    setMapSignalPulse(true);
+  }
+
+  function getNodeForKey(key) {
+    switch (key) {
+      case "topbar":
+        return topbarRef.current;
+      case "priority":
+        return priorityRef.current;
+      case "map":
+        return mapRef.current;
+      case "recommended":
+        return recommendedRef.current;
+      case "controls":
+        return controlsRef.current;
+      case "workflows":
+        return workflowsRef.current;
+      case "events":
+        return eventsRef.current;
+      case "capacity":
+        return capacityRef.current;
+      case "priorityInvestigate":
+        return priorityInvestigateRef.current;
+      case "controlsInvestigate":
+        return controlsInvestigateRef.current;
+      case "pin-chicago":
+        return chicagoPinRef.current;
+      default:
+        return null;
+    }
+  }
+
+  function pingNode(node) {
+    if (!node) return;
+    node.classList.remove("mock-refocus-ping");
+    void node.offsetWidth;
+    node.classList.add("mock-refocus-ping");
+
+    if (focusTimerRef.current) clearTimeout(focusTimerRef.current);
+    focusTimerRef.current = setTimeout(() => {
+      node.classList.remove("mock-refocus-ping");
+    }, 1400);
+  }
+
+  function focusActiveStep() {
+    if (!isGuidedMode || !guidedStep) return;
+
+    const key = getPrimaryTargetKey(guidedStep.id);
+    const node = getNodeForKey(key);
+
+    if (!node) return;
+
+    if (typeof node.scrollIntoView === "function") {
+      node.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "nearest",
+      });
+    }
+
+    pingNode(node);
+    refreshHeartbeat();
+    refreshMapSignals();
+    triggerTransition("forward");
+  }
+
+  function goNext() {
+    setStepIndex((i) => {
+      const next = Math.min(GUIDE_STEPS.length - 1, i + 1);
+      if (next !== i) triggerTransition("forward");
+      return next;
+    });
+  }
+
+  function goBack() {
+    setStepIndex((i) => {
+      const next = Math.max(0, i - 1);
+      if (next !== i) triggerTransition("backward");
+      return next;
+    });
+  }
+
+  function startGuidedTour() {
+    setIsGuidedMode(true);
+    refreshRecommendation();
+    refreshHeartbeat();
+    refreshMapSignals();
+    pushLiveEvent("Guided operator assist engaged");
+    triggerTransition("forward");
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        focusActiveStep();
+      }, 120);
+    });
+  }
+
+  function restartGuidedTour() {
+    setIsGuidedMode(true);
+    setStepIndex(0);
+    refreshRecommendation();
+    refreshHeartbeat();
+    refreshMapSignals();
+    pushLiveEvent("Guided tour restarted from Step 1");
+    triggerTransition("forward");
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        focusActiveStep();
+      }, 120);
+    });
+  }
+
+  function exitGuidedTour() {
+    setIsGuidedMode(false);
+    setTransitionOn(false);
+  }
+
+  function resetOperatorState() {
+    if (typeof window !== "undefined") {
+      window.localStorage.removeItem(GUIDE_STORAGE_KEY);
+      window.localStorage.removeItem(GUIDE_TOUR_ACTIVE_KEY);
+      window.localStorage.removeItem(GUIDE_TOUR_STEP_KEY);
+    }
+
+    setGuideMode("guided");
+    setIsGuidedMode(true);
+    setStepIndex(0);
+    setTransitionOn(false);
+    setTransitionDir("forward");
+    refreshRecommendation();
+    refreshHeartbeat();
+    refreshMapSignals();
+    pushLiveEvent("Operator guidance state reset");
+    triggerTransition("forward");
+
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        focusActiveStep();
+      }, 120);
+    });
+  }
+
+  function advanceFrom(actionKey) {
+    if (!isGuidedMode) return;
+
+    const currentId = GUIDE_STEPS[safeStepIndex]?.id;
+
+    if (currentId === "review_priority" && actionKey === "priority") {
+      goNext();
+      return;
+    }
+
+    if (
+      currentId === "review_map" &&
+      (actionKey === "map" || actionKey === "pin-chicago")
+    ) {
+      goNext();
+      return;
+    }
+
+    if (currentId === "review_recommendation" && actionKey === "recommended") {
+      goNext();
+      return;
+    }
+
+    if (currentId === "execute_action" && actionKey === "investigate") {
+      goNext();
+      return;
+    }
+
+    if (currentId === "review_controls" && actionKey === "controls") {
+      goNext();
+      return;
+    }
+
+    if (currentId === "track_workflow" && actionKey === "workflows") {
+      goNext();
+      return;
+    }
+
+    if (
+      currentId === "monitor_results" &&
+      (actionKey === "events" || actionKey === "capacity")
+    ) {
+      goNext();
+    }
+  }
+
+  return (
+    <div className={`mock-shell mock-shell--tone-${guideTone} ${isGuidedMode ? "mock-shell--guided-mode" : "mock-shell--manual-mode"} mock-shell--guidelevel-${guideMode}`}>
+      <div className="mock-ambient" aria-hidden="true">
+        <div className="mock-ambient__drift" />
+        <div className="mock-ambient__grid" />
+        <div className="mock-ambient__flow" />
+        <div className="mock-ambient__pulse" />
+      </div>
+
+      {isGuidedMode && transitionOn && (
+        <div
+          className={`mock-stepSweep mock-stepSweep--${transitionDir}`}
+          aria-hidden="true"
+        />
+      )}
+
+      <header
+        ref={topbarRef}
+        className={`mock-topbar ${
+          guidedStep && hasTarget(guidedStep, "topbar") ? "mock-guided-panel" : ""
+        }`}
+      >
+        <div className="mock-brand">
+          <div className="mock-brand__logo">SHS</div>
+          <div className="mock-brand__copy">
+            <div className="mock-brand__title">SHS Exchange Command</div>
+            <div className="mock-brand__sub">Outcome Monitoring and Response Surface</div>
+          </div>
+        </div>
+
+        <div className="mock-topbar__center">
+          <span className={`mock-badge mock-badge--live ${systemHeartbeatPulse ? "mock-badge--pulse" : ""}`}>
+            <span className={`mock-badge__dot ${systemHeartbeatPulse ? "mock-badge__dot--pulse" : ""}`} />
+            <span className="mock-badge__text">System Active</span>
+            <span className="mock-badge__age">Heartbeat {systemHeartbeatAge}s ago</span>
+          </span>
+          <span className="mock-topbar__divider" />
+          <span>Exchange Network Secure</span>
+          <span className="mock-topbar__divider" />
+          <span>Mode: Operations</span>
+          <span className="mock-topbar__divider" />
+          <span>02:15 UTC</span>
+        </div>
+
+        <div className="mock-topbar__right">
+          <button className="mock-iconBtn" aria-label="alerts">•</button>
+          <button className="mock-iconBtn" aria-label="menu">•</button>
+        </div>
+      </header>
+
+      <section
+        ref={priorityRef}
+        className={`mock-priority ${
+          guidedStep && hasTarget(guidedStep, "priority") ? "mock-guided-panel" : ""
+        } ${guidedStep ? "mock-clickable" : ""}`}
+        onClick={() => advanceFrom("priority")}
+      >
+        <div className="mock-priority__left">
+          {isGuidedMode ? (
+            <div className="mock-priorityGuide">
+              <div className="mock-priorityGuide__top">
+                <div className="mock-priorityGuide__meta">
+                  <div className="mock-priorityGuide__kicker">{guideModeLabel}</div>
+                  <div className="mock-priorityGuide__step">{guidedStep.title}</div>
+                  {showGuideBody && (
+                    <div className="mock-priorityGuide__body">{guidedStep.body}</div>
+                  )}
+                  {showGuideHint && (
+                    <div className="mock-priorityGuide__hint">
+                      Click the highlighted area to move naturally through the command flow.
+                    </div>
+                  )}
+
+                  <div className="mock-modeSwitch">
+                    <button
+                      className={`mock-modeSwitch__btn ${guideMode === "guided" ? "is-active" : ""}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setGuideMode("guided");
+                        refreshHeartbeat();
+                        triggerTransition("forward");
+                      }}
+                    >
+                      Guided
+                    </button>
+                    <button
+                      className={`mock-modeSwitch__btn ${guideMode === "assisted" ? "is-active" : ""}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setGuideMode("assisted");
+                        refreshHeartbeat();
+                        triggerTransition("forward");
+                      }}
+                    >
+                      Assisted
+                    </button>
+                    <button
+                      className={`mock-modeSwitch__btn ${guideMode === "expert" ? "is-active" : ""}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setGuideMode("expert");
+                        refreshHeartbeat();
+                        triggerTransition("forward");
+                      }}
+                    >
+                      Expert
+                    </button>
+                  </div>
+                </div>
+
+                <div className="mock-priorityGuide__controls">
+                  <div className="mock-priorityGuide__count">{stepCounter}</div>
+                  <div className="mock-priorityGuide__buttons">
+                    <button
+                      className="mock-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        goBack();
+                      }}
+                      disabled={safeStepIndex === 0}
+                    >
+                      Back
+                    </button>
+                    <button
+                      className="mock-btn mock-btn--primary"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        goNext();
+                      }}
+                      disabled={safeStepIndex === GUIDE_STEPS.length - 1}
+                    >
+                      Next
+                    </button>
+                    <button
+                      className="mock-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        restartGuidedTour();
+                      }}
+                    >
+                      Restart Tour
+                    </button>
+                    <button
+                      className="mock-btn mock-btn--reset"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        resetOperatorState();
+                      }}
+                    >
+                      Reset Operator State
+                    </button>
+                    <button
+                      className="mock-btn mock-btn--tour"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        exitGuidedTour();
+                      }}
+                    >
+                      Exit Guided Tour
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="mock-priorityGuide mock-priorityGuide--manual">
+              <div className="mock-priorityGuide__top">
+                <div className="mock-priorityGuide__meta">
+                  <div className="mock-priorityGuide__kicker">Manual Mode</div>
+                  <div className="mock-priorityGuide__step">Guided Tour Available</div>
+                  <div className="mock-priorityGuide__body">
+                    Resume the guided tour exactly where you left off, or restart from Step 1.
+                  </div>
+                </div>
+
+                <div className="mock-priorityGuide__controls">
+                  <div className="mock-priorityGuide__buttons">
+                    <button
+                      className="mock-btn mock-btn--primary mock-btn--guided"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        startGuidedTour();
+                      }}
+                    >
+                      Resume Guided Tour
+                    </button>
+                    <button
+                      className="mock-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        restartGuidedTour();
+                      }}
+                    >
+                      Restart from Step 1
+                    </button>
+                    <button
+                      className="mock-btn mock-btn--reset"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        resetOperatorState();
+                      }}
+                    >
+                      Reset Operator State
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="mock-priority__eyebrow">Current Priority</div>
+          <h1 className="mock-priority__title">Chicago Placement Risk Spike</h1>
+          <p className="mock-priority__summary">
+            Credential-to-placement conversion dropped below threshold in the last 8 minutes.
+            Recommended next move: open investigation.
+          </p>
+
+          <div className="mock-priority__actions">
+            <button
+              ref={priorityInvestigateRef}
+              className={`mock-btn mock-btn--primary ${
+                guidedStep && hasTarget(guidedStep, "priority-investigate")
+                  ? "mock-btn--guided"
+                  : ""
+              }`}
+              onClick={(e) => {
+                e.stopPropagation();
+                refreshRecommendation();
+                refreshMapSignals();
+                pushLiveEvent("Investigation opened for Chicago placement risk");
+                advanceFrom("investigate");
+              }}
+            >
+              Investigate
+            </button>
+            <button className="mock-btn">Monitor</button>
+          </div>
+        </div>
+
+        <div className="mock-priority__right">
+          <div className="mock-statBlock">
+            <span className="mock-statBlock__label">Severity</span>
+            <span className="mock-statBlock__value mock-statBlock__value--amber">Elevated</span>
+          </div>
+          <div className="mock-statBlock">
+            <span className="mock-statBlock__label">Confidence</span>
+            <span className="mock-statBlock__value">82%</span>
+          </div>
+          <div className="mock-statBlock">
+            <span className="mock-statBlock__label">Urgency</span>
+            <span className="mock-statBlock__value mock-statBlock__value--red">High</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="mock-main">
+        <aside className="mock-rail mock-rail--left">
+          <Panel title="System State">
+            <div className="mock-stateGrid">
+              <div className="mock-stateTile">
+                <div className="mock-stateTile__label">Stable</div>
+                <div className="mock-stateTile__value mock-stateTile__value--green">18</div>
+              </div>
+              <div className="mock-stateTile">
+                <div className="mock-stateTile__label">Monitoring</div>
+                <div className="mock-stateTile__value mock-stateTile__value--blue">07</div>
+              </div>
+              <div className="mock-stateTile">
+                <div className="mock-stateTile__label">Elevated</div>
+                <div className="mock-stateTile__value mock-stateTile__value--amber">03</div>
+              </div>
+              <div className="mock-stateTile">
+                <div className="mock-stateTile__label">Critical</div>
+                <div className="mock-stateTile__value mock-stateTile__value--red">01</div>
+              </div>
+            </div>
+          </Panel>
+
+          <Panel title="Regional Outcome Signals">
+            <BulletList
+              items={[
+                "Midwest Placement Risk",
+                "Southern Capacity Overload",
+                "Western Verification Delay",
+                "East Coast Demand Spike",
+              ]}
+            />
+          </Panel>
+
+          <Panel title="Operational Readiness">
+            <BulletList
+              items={[
+                "Verifier Capacity: 91%",
+                "Response Queue Health: Stable",
+                "Routing Readiness: Good",
+              ]}
+            />
+          </Panel>
+
+          <Panel title="Recent Changes">
+            <BulletList
+              items={[
+                "Chicago escalated 8m ago",
+                "Seattle delay resolved",
+                "Ohio forecast improved",
+              ]}
+            />
+          </Panel>
+        </aside>
+
+        <main className="mock-center">
+          <section
+            ref={mapRef}
+            className={`mock-mapPanel ${
+              guidedStep && hasTarget(guidedStep, "map") ? "mock-guided-panel" : ""
+            } ${guidedStep ? "mock-clickable" : ""}`}
+            onClick={() => {
+              refreshMapSignals();
+              advanceFrom("map");
+            }}
+          >
+            <div className="mock-mapPanel__header">
+              <div className="mock-mapPanel__title">Tactical Map Stage</div>
+              <div className={`mock-mapLive ${mapSignalPulse ? "mock-mapLive--pulse" : ""}`}>
+                <span className={`mock-mapLive__dot ${mapSignalPulse ? "mock-mapLive__dot--pulse" : ""}`} />
+                <span className="mock-mapLive__text">Primary signal Chicago · refreshed {mapSignalAge}s ago</span>
+              </div>
+              <div className="mock-mapPanel__sub">U.S. operating surface with primary and secondary signals</div>
+            </div>
+
+            <div className={`mock-mapStage ${mapSignalPulse ? "mock-mapStage--pulse" : ""}`}>
+              <div className="mock-mapStage__assetWrap">
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "18px",
+                    left: "18px",
+                    zIndex: 999999,
+                    background: "red",
+                    color: "white",
+                    padding: "10px 14px",
+                    fontWeight: 900,
+                    fontSize: "18px",
+                    border: "3px solid yellow"
+                  }}
+                >
+                  DOT TEST
+                </div>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    width: "26px",
+                    height: "26px",
+                    borderRadius: "999px",
+                    background: "#ff6e2f",
+                    transform: "translate(-50%, -50%)",
+                    zIndex: 999999,
+                    boxShadow: "0 0 24px rgba(255,110,47,1), 0 0 64px rgba(255,110,47,0.85)",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => setCenterOverlayOpen(true)}
+                  title="Active Case"
+                />
+                
+                <div className="mock-mapStage__gridMinor" />
+                <div className="mock-mapStage__gridMajor" />
+                <div className="mock-mapStage__gridDots" />
+                <div className="mock-mapStage__gridGlow" />
+                <div className="mock-mapStage__landShield" />
+
+                <img
+                  className="mock-mapStage__usaBase"
+                  src="/assets/maps/usa-base.svg"
+                  alt="United States operating surface"
+                />
+                <img
+                  className="mock-mapStage__usaLines"
+                  src="/assets/maps/usa-state-lines.svg"
+                  alt="United States state boundaries"
+                />
+                <div className="mock-mapStage__lightField" />
+                <div className="mock-mapStage__metroGlow" />
+                <div className="mock-mapStage__regionalWash" />
+                <div className="mock-mapStage__sparkField" />
+
+                <div className="mock-pin mock-pin--amber" style={{ left: "22.8%", top: "72.4%" }}>
+                  <span className="mock-pin__chip">Los Angeles</span>
+                  <span className="mock-pin__core" />
+                </div>
+
+                <div
+                  ref={chicagoPinRef}
+                  className={`mock-pin mock-pin--red mock-pin--focus mock-pin--signal-live ${
+                    mapSignalPulse ? "mock-pin--signal-pulse" : ""
+                  } ${
+                    guidedStep && hasTarget(guidedStep, "pin-chicago")
+                      ? "mock-pin--guided"
+                      : ""
+                  }`}
+                  style={{ left: "61.8%", top: "53.8%" }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    refreshMapSignals();
+                    advanceFrom("pin-chicago");
+                  }}
+                >
+                  <span className="mock-pin__chip">Chicago</span>
+                  <span className="mock-pin__core" />
+                </div>
+
+                <div className="mock-pin mock-pin--blue" style={{ left: "78.4%", top: "62.6%" }}>
+                  <span className="mock-pin__chip">New York</span>
+                  <span className="mock-pin__core" />
+                </div>
+
+                <div className="mock-pin mock-pin--green" style={{ left: "71.8%", top: "88.8%" }}>
+                  <span className="mock-pin__chip">Miami</span>
+                  <span className="mock-pin__core" />
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <aside className="mock-rail mock-rail--right">
+          <Panel
+            title="Recommended Action"
+            panelRef={recommendedRef}
+            className={`${
+              guidedStep && hasTarget(guidedStep, "recommended") ? "mock-guided-panel" : ""
+            } ${guidedStep ? "mock-clickable" : ""}`}
+            onClick={() => {
+              refreshRecommendation();
+              pushLiveEvent("Recommendation reviewed by operator");
+              advanceFrom("recommended");
+            }}
+          >
+            <div className={`mock-actionCard ${recommendationPulse ? "mock-actionCard--pulse" : ""}`}>
+              <div className="mock-recommendationLive">
+                <span className={`mock-recommendationLive__dot ${recommendationPulse ? "mock-recommendationLive__dot--pulse" : ""}`} />
+                <span className="mock-recommendationLive__text">Updated {recommendationAge}s ago</span>
+              </div>
+              <div className="mock-actionCard__title">Open Investigation</div>
+              <div className="mock-actionCard__text">
+                Severity increased while confidence remains above the threshold.
+              </div>
+              <div className="mock-actionCard__meta">
+                Confidence model is actively watching live signals and priority drift.
+              </div>
+            </div>
+          </Panel>
+
+          <Panel
+            title="Decision Controls"
+            panelRef={controlsRef}
+            className={`${
+              guidedStep && hasTarget(guidedStep, "controls") ? "mock-guided-panel" : ""
+            } ${guidedStep ? "mock-clickable" : ""}`}
+            onClick={() => advanceFrom("controls")}
+          >
+            <div className="mock-buttonGrid">
+              <button
+                ref={controlsInvestigateRef}
+                className={`mock-btn mock-btn--primary ${
+                  guidedStep && hasTarget(guidedStep, "controls-investigate")
+                    ? "mock-btn--guided"
+                    : ""
+                }`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  refreshRecommendation();
+                  refreshMapSignals();
+                  pushLiveEvent("Decision controls confirmed investigation path");
+                  advanceFrom("investigate");
+                }}
+              >
+                Investigate
+              </button>
+              <button className="mock-btn">Assign</button>
+              <button className="mock-btn">Escalate</button>
+              <button className="mock-btn">Monitor</button>
+            </div>
+          </Panel>
+
+          <Panel title="View / Layer Controls">
+            <div className="mock-controlList">
+              <div className="mock-controlRow"><span>Operations Mode</span><span>ON</span></div>
+              <div className="mock-controlRow"><span>State Boundaries</span><span>ON</span></div>
+              <div className="mock-controlRow"><span>Signal Labels</span><span>ON</span></div>
+              <div className="mock-controlRow"><span>Flows</span><span>OFF</span></div>
+            </div>
+          </Panel>
+
+          <Panel
+            title="Active Workflows"
+            panelRef={workflowsRef}
+            className={`${
+              guidedStep && hasTarget(guidedStep, "workflows") ? "mock-guided-panel" : ""
+            } ${guidedStep ? "mock-clickable" : ""}`}
+            onClick={() => advanceFrom("workflows")}
+          >
+            <BulletList
+              items={[
+                "Outcome Verification Queue",
+                "Employer Routing Workflow",
+                "Capacity Reallocation",
+                "Midwest Follow-Up Sequence",
+              ]}
+            />
+          </Panel>
+        </aside>
+      </section>
+
+      <section className="mock-bottom">
+        <Panel
+          title="Outcome Event Log"
+          panelRef={eventsRef}
+          className={`${
+            guidedStep && hasTarget(guidedStep, "events") ? "mock-guided-panel" : ""
+          } ${guidedStep ? "mock-clickable" : ""}`}
+          onClick={() => advanceFrom("events")}
+        >
+          <div className={`mock-eventLive ${eventLogPulse ? "mock-eventLive--pulse" : ""}`}>
+            <span className={`mock-eventLive__dot ${eventLogPulse ? "mock-eventLive__dot--pulse" : ""}`} />
+            <span className="mock-eventLive__text">Newest event {eventLogAge}s ago</span>
+          </div>
+
+          <div className="mock-eventFeed">
+            {eventRows.map((item, index) => (
+              <div
+                key={`${item}-${index}`}
+                className={`mock-eventFeed__row ${
+                  index === 0 ? "mock-eventFeed__row--newest" : ""
+                } ${
+                  index === 0 && eventLogPulse ? "mock-eventFeed__row--flash" : ""
+                }`}
+              >
+                <span className="mock-list__dot" />
+                <span>{item}</span>
+              </div>
+            ))}
+          </div>
+        </Panel>
+
+        <Panel
+          title="Capacity Status"
+          panelRef={capacityRef}
+          className={`${
+            guidedStep && hasTarget(guidedStep, "capacity") ? "mock-guided-panel" : ""
+          } ${guidedStep ? "mock-clickable" : ""}`}
+          onClick={() => advanceFrom("capacity")}
+        >
+          <BulletList
+            items={[
+              "Available Reviewers: 23",
+              "Verifier Capacity: 91%",
+              "Active Workflows: 12",
+            ]}
+          />
+        </Panel>
+
+        <Panel title="Situation Summary">
+          <div className="mock-summaryGrid">
+            <div className="mock-summaryTile">
+              <div className="mock-summaryTile__label">Active Signals</div>
+              <div className="mock-summaryTile__value">11</div>
+            </div>
+            <div className="mock-summaryTile">
+              <div className="mock-summaryTile__label">High Priority</div>
+              <div className="mock-summaryTile__value mock-summaryTile__value--amber">3</div>
+            </div>
+            <div className="mock-summaryTile">
+              <div className="mock-summaryTile__label">Resolved 24h</div>
+              <div className="mock-summaryTile__value mock-summaryTile__value--green">17</div>
+            </div>
+          </div>
+        </Panel>
+      </section>
+
+      {isGuidedMode && guideMode !== "expert" && (
+        <button
+          className="mock-nextAssist"
+          onClick={focusActiveStep}
+          type="button"
+        >
+          <span className="mock-nextAssist__kicker">
+            {guideMode === "guided" ? "Guided Assist" : "Quick Assist"}
+          </span>
+          <span className="mock-nextAssist__label">
+            {guideMode === "guided" ? "What do I do next?" : "Focus active step"}
+          </span>
+          <span className="mock-nextAssist__step">{guidedStep.title}</span>
+        </button>
+      )}
+
+      {centerOverlayOpen && (
+        <div className="mock-centerOverlay">
+          <div
+            className="mock-centerOverlay__backdrop"
+            onClick={() => setCenterOverlayOpen(false)}
+          />
+          <div className="mock-centerOverlay__panel">
+            <div className="mock-centerOverlay__header">
+              <span>ACTIVE CASE</span>
+              <button
+                className="mock-btn"
+                type="button"
+                onClick={() => setCenterOverlayOpen(false)}
+              >
+                Close
+              </button>
+            </div>
+
+            <div className="mock-centerOverlay__body">
+              <div className="mock-overlayStat">
+                <span className="mock-overlayStat__label">RISK</span>
+                <span className="mock-overlayStat__value mock-overlayStat__value--red">
+                  HIGH
+                </span>
+              </div>
+
+              <div className="mock-overlayStat">
+                <span className="mock-overlayStat__label">CONFIDENCE</span>
+                <span className="mock-overlayStat__value mock-overlayStat__value--amber">
+                  91%
+                </span>
+              </div>
+
+              <div className="mock-overlayInsight">
+                System recommends immediate intervention. Engagement signals are declining and risk is escalating.
+              </div>
+            </div>
+
+            <div className="mock-centerOverlay__actions">
+              <button className="mock-btn mock-btn--primary" type="button">
+                DEPLOY INTERVENTION
+              </button>
+              <button className="mock-btn" type="button">
+                RUN SIMULATION
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

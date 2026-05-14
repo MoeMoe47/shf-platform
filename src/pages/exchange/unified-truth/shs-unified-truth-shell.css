@@ -2137,3 +2137,384 @@
     transform: translateY(-8px) scale(0.98);
   }
 }
+
+/* =========================================================
+   COMMAND CENTER MOCK-LOCKED SHELL LAYOUT
+   Rebuilds JSX layout hierarchy while preserving working components.
+   ========================================================= */
+
+.utc-shell--mockLocked {
+  min-height: 100vh;
+}
+
+.utc-workspace--command {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+  min-width: 0 !important;
+}
+
+.utc-commandTop {
+  display: grid !important;
+  gap: 12px !important;
+}
+
+.utc-commandTheater {
+  display: grid !important;
+  grid-template-columns: minmax(230px, 0.72fr) minmax(620px, 1.95fr) minmax(300px, 0.95fr) !important;
+  gap: 12px !important;
+  align-items: stretch !important;
+  width: 100% !important;
+}
+
+.utc-commandTheater__left,
+.utc-commandTheater__map,
+.utc-commandTheater__right {
+  min-width: 0 !important;
+}
+
+.utc-commandTheater__left {
+  display: flex !important;
+}
+
+.utc-commandTheater__left .utc-intake {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.utc-commandTheater__map {
+  display: flex !important;
+  min-height: 520px !important;
+}
+
+.utc-commandTheater__map .utc-map {
+  width: 100% !important;
+  min-height: 520px !important;
+}
+
+.utc-commandTheater__map .utc-map__canvas {
+  min-height: 430px !important;
+}
+
+.utc-commandTheater__right {
+  display: flex !important;
+}
+
+.utc-commandTheater__right .utc-oracle {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.utc-commandLower {
+  display: grid !important;
+  gap: 12px !important;
+}
+
+.utc-commandLower .utc-actions,
+.utc-commandLower .utc-reporting {
+  width: 100% !important;
+}
+
+/* Keep map visually dominant */
+.utc-commandTheater .utc-map {
+  border-color: rgba(82, 223, 210, 0.18) !important;
+  box-shadow:
+    0 0 0 1px rgba(82, 223, 210, 0.035),
+    0 28px 70px rgba(0, 0, 0, 0.22),
+    inset 0 0 30px rgba(82, 223, 210, 0.025) !important;
+}
+
+/* Keep lower sections reachable but secondary */
+.utc-commandLower .utc-actions,
+.utc-commandLower .utc-reporting {
+  margin-top: 0 !important;
+}
+
+@media (max-width: 1280px) {
+  .utc-commandTheater {
+    grid-template-columns: minmax(220px, 0.72fr) minmax(520px, 1.6fr) minmax(280px, 0.88fr) !important;
+  }
+
+  .utc-commandTheater__map,
+  .utc-commandTheater__map .utc-map {
+    min-height: 470px !important;
+  }
+
+  .utc-commandTheater__map .utc-map__canvas {
+    min-height: 390px !important;
+  }
+}
+
+@media (max-width: 1100px) {
+  .utc-commandTheater {
+    grid-template-columns: 1fr !important;
+  }
+
+  .utc-commandTheater__map,
+  .utc-commandTheater__map .utc-map {
+    min-height: 440px !important;
+  }
+}
+
+/* =========================================================
+   COMMAND CENTER MAP DOMINANCE TUNE
+   Tightens top stack and gives the command theater more presence.
+   ========================================================= */
+
+.utc-workspace--command {
+  gap: 10px !important;
+}
+
+.utc-commandTop {
+  gap: 8px !important;
+}
+
+.utc-commandTop .utc-kpis {
+  margin-bottom: 0 !important;
+}
+
+.utc-commandTop .shsCommandContextBanner {
+  min-height: 78px !important;
+  padding: 12px 16px !important;
+  margin: 0 !important;
+}
+
+.utc-commandTop .shsCommandContextBanner__body {
+  gap: 2px !important;
+}
+
+.utc-commandTop .shsCommandContextBanner__eyebrow {
+  font-size: 11px !important;
+  letter-spacing: 0.16em !important;
+}
+
+.utc-commandTop .shsCommandContextBanner h2,
+.utc-commandTop .shsCommandContextBanner strong {
+  line-height: 1.1 !important;
+}
+
+.utc-commandTop .shsCommandContextBanner p {
+  margin: 2px 0 !important;
+  line-height: 1.2 !important;
+}
+
+.utc-commandTop .shsCommandContextBanner__recommendation {
+  margin-top: 2px !important;
+  line-height: 1.2 !important;
+}
+
+.utc-commandTheater {
+  min-height: 565px !important;
+}
+
+.utc-commandTheater__map,
+.utc-commandTheater__map .utc-map {
+  min-height: 565px !important;
+}
+
+.utc-commandTheater__map .utc-map__canvas {
+  min-height: 475px !important;
+}
+
+.utc-commandTheater__left .utc-intake,
+.utc-commandTheater__right .utc-side-stack,
+.utc-commandTheater__right .utc-oracle {
+  min-height: 565px !important;
+}
+
+.utc-side-stack {
+  gap: 10px !important;
+}
+
+.utc-side-stack .utc-card {
+  padding: 13px !important;
+}
+
+/* keep lower workflow closer but clearly secondary */
+.utc-commandLower {
+  gap: 10px !important;
+}
+
+@media (max-height: 900px) {
+  .utc-commandTop .shsCommandContextBanner {
+    min-height: 68px !important;
+    padding: 10px 14px !important;
+  }
+
+  .utc-commandTheater {
+    min-height: 520px !important;
+  }
+
+  .utc-commandTheater__map,
+  .utc-commandTheater__map .utc-map {
+    min-height: 520px !important;
+  }
+
+  .utc-commandTheater__map .utc-map__canvas {
+    min-height: 430px !important;
+  }
+}
+
+/* =========================================================
+   COMMAND ACTION LAYER OVERLAP FIX
+   Forces Recommended Actions and Reporting Dock below map theater.
+   ========================================================= */
+
+.utc-commandTheater {
+  position: relative !important;
+  z-index: 1 !important;
+  margin-bottom: 14px !important;
+}
+
+.utc-commandLower {
+  position: relative !important;
+  z-index: 2 !important;
+  display: grid !important;
+  gap: 12px !important;
+  margin-top: 0 !important;
+  clear: both !important;
+}
+
+.utc-commandLower .utc-actions,
+.utc-commandLower .utc-reporting,
+.utc-actions,
+.utc-reporting {
+  position: relative !important;
+  inset: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+  margin-top: 0 !important;
+}
+
+.utc-actions {
+  overflow: visible !important;
+}
+
+.utc-actions__grid {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Keep any drawer/modal above everything, but not action cards */
+.shsContextGuidanceDrawer,
+.shsActionToast,
+.shsActionModal,
+.shsActionModalBackdrop {
+  z-index: 50 !important;
+}
+
+/* On shorter screens, avoid forcing the map so tall that it collides with actions */
+@media (max-height: 900px) {
+  .utc-commandTheater {
+    min-height: 500px !important;
+  }
+
+  .utc-commandTheater__map,
+  .utc-commandTheater__map .utc-map {
+    min-height: 500px !important;
+  }
+
+  .utc-commandTheater__map .utc-map__canvas {
+    min-height: 410px !important;
+  }
+}
+
+/* =========================================================
+   HARD FIX: COMMAND ACTIONS MUST NOT OVERLAY MAP
+   This forces Recommended Next Actions back into normal page flow.
+   ========================================================= */
+
+.utc-workspace--command {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+.utc-commandTheater {
+  position: relative !important;
+  z-index: 1 !important;
+  display: grid !important;
+  margin-bottom: 18px !important;
+  isolation: isolate !important;
+}
+
+.utc-commandLower {
+  position: static !important;
+  z-index: auto !important;
+  display: grid !important;
+  gap: 14px !important;
+  margin-top: 0 !important;
+  width: 100% !important;
+  clear: both !important;
+  transform: none !important;
+}
+
+.utc-commandLower .utc-actions,
+.utc-commandLower .utc-reporting {
+  position: static !important;
+  z-index: auto !important;
+  inset: unset !important;
+  top: unset !important;
+  right: unset !important;
+  bottom: unset !important;
+  left: unset !important;
+  transform: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+/* Override older floating/sticky action rules anywhere in the CSS stack */
+.utc-actions:not(.shsContextGuidanceDrawer),
+.utc-reporting {
+  position: static !important;
+  inset: unset !important;
+  top: unset !important;
+  right: unset !important;
+  bottom: unset !important;
+  left: unset !important;
+  transform: none !important;
+  z-index: auto !important;
+  margin-top: 0 !important;
+}
+
+.utc-actions {
+  display: block !important;
+  overflow: visible !important;
+}
+
+.utc-actions__grid {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Keep only true overlays above content */
+.shsContextGuidanceDrawer,
+.shsActionToast,
+.shsActionModal,
+.shsActionModalBackdrop {
+  position: fixed;
+  z-index: 9999 !important;
+}
+
+/* Give the theater enough bottom clearance before actions start */
+.utc-commandTheater::after {
+  content: "";
+  display: block;
+  height: 0;
+  clear: both;
+}
+
+/* Slightly reduce map height on shorter screens so actions start below it */
+@media (max-height: 900px) {
+  .utc-commandTheater,
+  .utc-commandTheater__map,
+  .utc-commandTheater__map .utc-map {
+    min-height: 470px !important;
+  }
+
+  .utc-commandTheater__map .utc-map__canvas {
+    min-height: 380px !important;
+  }
+}

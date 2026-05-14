@@ -1,0 +1,48 @@
+[
+  {
+    "id": "oh-hsti-2025",
+    "name": "High School Tech Internship",
+    "state": "OH",
+    "level": "state",
+    "reimbursementPercent": 0.75,
+    "maxPerIntern": 5000,
+    "minHours": 120,
+    "requiresW2": true,
+    "eligiblePathways": ["tech"],
+    "notes": "HS students (≤19), W-2, paid; tech roles."
+  },
+  {
+    "id": "oh-college-tech-ctig",
+    "name": "College Technology Internship Grant",
+    "state": "OH",
+    "level": "state",
+    "reimbursementPercent": 0.667,
+    "maxPerIntern": 7500,
+    "minHours": 120,
+    "requiresW2": true,
+    "eligiblePathways": ["tech","manufacturing"],
+    "notes": "Tech/manufacturing interns; cap varies by round."
+  },
+  {
+    "id": "oh-ojt-generic",
+    "name": "OhioMeansJobs OJT (local)",
+    "state": "OH",
+    "level": "local",
+    "reimbursementPercent": 0.5,
+    "minHours": 160,
+    "requiresW2": true,
+    "eligiblePathways": ["any"],
+    "notes": "Varies by county; typical 50% up to local cap; 3–6 months."
+  },
+  {
+    "id": "oh-jobsohio-workforce-grant",
+    "name": "JobsOhio Workforce Grant",
+    "state": "OH",
+    "level": "state",
+    "reimbursementPercent": 0,
+    "covers": ["trainingCosts","equipment","materials"],
+    "requiresW2": false,
+    "eligiblePathways": ["tech","manufacturing","health"],
+    "notes": "Funds training costs; not a direct wage reimbursement."
+  }
+]

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import TourProvider from "@/system/tour/TourProvider";
 import OperatorIdentityBadge from "./components/OperatorIdentityBadge";
 import useOperatorIdentity from "./useOperatorIdentity";
 import "./shs-unified-truth-shell.css";
+import { unifiedTruthCommandTourSteps } from "./unifiedTruthCommandTourSteps";
 
 const SHS_LOGO_SRC = "/assets/branding/shs_orbiter_logo.png";
 
@@ -176,7 +178,7 @@ const reports = [
 
 function SlimRail() {
   return (
-    <aside className="utc-rail">
+    <aside className="utc-rail" data-tour="utc-rail">
       <CommandOverviewHardNavigationGuard />
       <CommandShellOverviewNavigationGuard />
       <div className="utc-rail__mark">
@@ -204,7 +206,7 @@ function Header() {
 
   return (
     <>
-      <header className="utc-header">
+      <header className="utc-header" data-tour="utc-header">
       <div className="utc-header__brand">
         <h1>Silicon Heartland Solutions</h1>
         <p>Command Center</p>
@@ -240,7 +242,7 @@ function Header() {
 
 function KpiStrip() {
   return (
-    <section className="utc-kpis" aria-label="SHS command KPIs">
+    <section className="utc-kpis" aria-label="SHS command KPIs" data-tour="utc-kpis">
       {kpis.map((kpi) => (
         <article className={`utc-kpi utc-glow--${kpi.tone}`} key={kpi.label}>
           <div className="utc-kpi__top">
@@ -267,7 +269,7 @@ function KpiStrip() {
 
 function IntakeQueue() {
   return (
-    <aside className="utc-card utc-intake">
+    <aside className="utc-card utc-intake" data-tour="utc-intake">
       <div className="utc-card__head">
         <h2>Operational Intake / Queue</h2>
         <button type="button">⌁</button>
@@ -300,7 +302,7 @@ function OhioMap() {
   ];
 
   return (
-    <main className="utc-card utc-map">
+    <main className="utc-card utc-map" data-tour="utc-map">
       <div className="utc-map__top">
         <div>
           <h2>Ohio Statewide Intelligence Map</h2>
@@ -363,7 +365,7 @@ function OhioMap() {
 
 function OraclePanel() {
   return (
-    <aside className="utc-side-stack">
+    <aside className="utc-side-stack" data-tour="utc-oracle">
       <section className="utc-card utc-oracle-panel">
         <div className="utc-panel-title utc-glow--gold">
           <span>🔮</span>
@@ -545,7 +547,7 @@ function RecentCommandActivity() {
   const recentEvents = events.slice(0, 5);
 
   return (
-    <section className="shsRecentCommandActivity" aria-label="Recent command activity">
+    <section className="shsRecentCommandActivity" aria-label="Recent command activity" data-tour="utc-activity">
       <div className="shsRecentCommandActivity__head">
         <span>◷</span>
         <div>
@@ -635,7 +637,7 @@ function ActionRail() {
   }
 
   return (
-    <section className="utc-actions">
+    <section className="utc-actions" data-tour="utc-actions">
       <div className="utc-section-title">
         <span>✦</span>
         <h2>Recommended Next Actions</h2>
@@ -704,7 +706,7 @@ function ActionRail() {
 
 function ReportingDock() {
   return (
-    <section className="utc-reporting">
+    <section className="utc-reporting" data-tour="utc-reporting">
       <div className="utc-section-title">
         <span>▤</span>
         <h2>Reporting Dock</h2>
@@ -790,7 +792,7 @@ function CommandContextBanner() {
   }
 
   return (
-    <section className="shsCommandContextBanner" aria-label="Command context">
+    <section className="shsCommandContextBanner" aria-label="Command context" data-tour="utc-context-banner">
       <div className="shsCommandContextBanner__icon">⚠</div>
 
       <div className="shsCommandContextBanner__body">
@@ -1359,7 +1361,7 @@ function CommandContextGuidanceDrawer() {
   }
 
   return (
-    <section className="shsContextGuidanceDrawer" aria-label="Context guidance drawer">
+    <section className="shsContextGuidanceDrawer" aria-label="Context guidance drawer" data-tour="utc-guidance">
       <button
         className="shsContextGuidanceDrawer__toggle"
         type="button"
@@ -1510,22 +1512,39 @@ function CommandOverviewHardNavigationGuard() {
 
 export default function SHSUnifiedTruthShell() {
   return (
-    <div className="utc-shell">
+    <TourProvider steps={unifiedTruthCommandTourSteps} buttonLabel="Start Tour">
+      <div className="utc-shell utc-shell--mockLocked">
       <SlimRail />
 
-      <section className="utc-workspace">
+      <main className="utc-workspace utc-workspace--command">
         <Header />
-        <KpiStrip />
 
-        <section className="utc-main-grid">
-          <IntakeQueue />
-          <OhioMap />
-          <OraclePanel />
+        <section className="utc-commandTop" data-tour="utc-command-top">
+          <KpiStrip />
+          <CommandContextBanner />
         </section>
 
-        <ActionRail />
-        <ReportingDock />
-      </section>
-    </div>
+        <section className="utc-commandTheater" aria-label="SHS command theater" data-tour="utc-theater">
+          <div className="utc-commandTheater__left">
+            <IntakeQueue />
+          </div>
+
+          <div className="utc-commandTheater__map">
+            <OhioMap />
+          </div>
+
+          <div className="utc-commandTheater__right">
+            <OraclePanel />
+          </div>
+        </section>
+
+        <section className="utc-commandLower" aria-label="Command workflow" data-tour="utc-lower">
+          <ActionRail />
+          <ReportingDock />
+        </section>
+      </main>
+      </div>
+    </TourProvider>
   );
 }
+

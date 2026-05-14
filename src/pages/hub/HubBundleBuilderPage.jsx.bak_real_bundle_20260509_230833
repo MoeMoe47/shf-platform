@@ -1,0 +1,19 @@
+import React from "react";
+import HubGrowthPlaceholder from "./HubGrowthPlaceholder.jsx";
+
+export default function HubBundleBuilderPage() {
+  return (
+    <HubGrowthPlaceholder
+      active="Bundles"
+      eyebrow="SHS HUB BUNDLE BUILDER"
+      title="Bundle Builder"
+      subtitle="Build stronger multi-partner proposals by combining the right services, partners, pricing position, and reporting layer."
+      cards={[
+        { value: "4", label: "Recommended Bundles" },
+        { value: "2", label: "Lowest-Cost Options" },
+        { value: "3", label: "High-Confidence Bundles" },
+        { value: "1", label: "Lowest-Risk Bundle" },
+      ]}
+    />
+  );
+}

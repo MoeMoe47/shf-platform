@@ -1,0 +1,207 @@
+import React, { useMemo, useState } from "react";
+import OhioCountyOfficialMapV2 from "@/pages/iep-command-v2/OhioCountyOfficialMapV2.jsx";
+import "./shf-impact-ohio-map.css";
+
+const COUNTY_DATA = {
+  Franklin:   { programs: "5", people: "3,824", funding: "$4.5M", outcome: "82%", condition: "Stable" },
+  Delaware:   { programs: "2", people: "1,120", funding: "$1.2M", outcome: "76%", condition: "Stable" },
+  Licking:    { programs: "2", people: "980",  funding: "$980K", outcome: "72%", condition: "Watch" },
+  Fairfield:  { programs: "1", people: "640",  funding: "$610K", outcome: "68%", condition: "Stable" },
+  Pickaway:   { programs: "1", people: "420",  funding: "$430K", outcome: "66%", condition: "Stable" },
+
+  Cuyahoga:   { programs: "4", people: "2,406", funding: "$3.2M", outcome: "79%", condition: "Watch" },
+  Lake:       { programs: "2", people: "870",   funding: "$860K", outcome: "71%", condition: "Stable" },
+  Geauga:     { programs: "1", people: "350",   funding: "$370K", outcome: "67%", condition: "Stable" },
+  Summit:     { programs: "2", people: "1,240", funding: "$1.4M", outcome: "71%", condition: "Opportunity" },
+  Lorain:     { programs: "2", people: "910",   funding: "$930K", outcome: "69%", condition: "Stable" },
+
+  Hamilton:   { programs: "3", people: "1,955", funding: "$2.1M", outcome: "74%", condition: "Stable" },
+  Butler:     { programs: "2", people: "820",   funding: "$810K", outcome: "70%", condition: "Stable" },
+  Warren:     { programs: "1", people: "510",   funding: "$500K", outcome: "68%", condition: "Stable" },
+  Clermont:   { programs: "1", people: "490",   funding: "$470K", outcome: "67%", condition: "Stable" },
+  Montgomery: { programs: "2", people: "1,112", funding: "$1.1M", outcome: "69%", condition: "Stable" },
+
+  Lucas:      { programs: "2", people: "913",   funding: "$940K", outcome: "67%", condition: "Stable" },
+  Ashtabula:  { programs: "1", people: "310",   funding: "$290K", outcome: "61%", condition: "Stable" },
+  Lawrence:   { programs: "1", people: "417",   funding: "$410K", outcome: "64%", condition: "Stable" },
+};
+
+const PROCESSING_COUNTIES = new Set(["Franklin", "Cuyahoga", "Hamilton"]);
+
+const COUNTY_CLUSTERS = {
+  Franklin: ["Franklin", "Delaware", "Licking", "Fairfield", "Pickaway"],
+  Cuyahoga: ["Cuyahoga", "Lake", "Geauga", "Summit", "Lorain"],
+  Hamilton: ["Hamilton", "Butler", "Warren", "Clermont", "Montgomery"],
+};
+
+const CLUSTER_POSITIONS = {
+  Franklin: {
+    Franklin:  { left: "50%", top: "50%", selected: true },
+    Delaware:  { left: "50%", top: "20%" },
+    Licking:   { left: "77%", top: "49%" },
+    Fairfield: { left: "60%", top: "80%" },
+    Pickaway:  { left: "34%", top: "74%" },
+  },
+  Cuyahoga: {
+    Cuyahoga: { left: "50%", top: "50%", selected: true },
+    Lake:     { left: "76%", top: "36%" },
+    Geauga:   { left: "70%", top: "18%" },
+    Summit:   { left: "45%", top: "78%" },
+    Lorain:   { left: "20%", top: "50%" },
+  },
+  Hamilton: {
+    Hamilton:  { left: "50%", top: "50%", selected: true },
+    Butler:    { left: "42%", top: "22%" },
+    Warren:    { left: "68%", top: "26%" },
+    Clermont:  { left: "76%", top: "60%" },
+    Montgomery:{ left: "28%", top: "42%" },
+  },
+};
+
+function normalizeCountyName(name = "") {
+  return String(name).replace(/\s+County$/i, "").trim();
+}
+
+function getShownData(activeCounty) {
+  if (!activeCounty) return null;
+  return COUNTY_DATA[activeCounty] || {
+    programs: "1",
+    people: "500",
+    funding: "$500K",
+    outcome: "70%",
+    condition: "Stable",
+  };
+}
+
+export default function SHFImpactOhioMap() {
+  const [hoveredCounty, setHoveredCounty] = useState(null);
+  const [selectedCounty, setSelectedCounty] = useState(null);
+
+  const regionalMode = Boolean(selectedCounty);
+  const activeCounty = hoveredCounty || selectedCounty || null;
+  const shown = getShownData(activeCounty);
+
+  const activeCluster = useMemo(() => {
+    if (!selectedCounty) return [];
+    return COUNTY_CLUSTERS[selectedCounty] || [selectedCounty];
+  }, [selectedCounty]);
+
+  const activeClusterPositions = useMemo(() => {
+    if (!selectedCounty) return {};
+    return CLUSTER_POSITIONS[selectedCounty] || {};
+  }, [selectedCounty]);
+
+  const handleCountyClick = (countyNameRaw) => {
+    const countyName = normalizeCountyName(countyNameRaw);
+    setSelectedCounty(countyName);
+    setHoveredCounty(null);
+  };
+
+  return (
+    <div className="shf-impact-map-root">
+      <div className="shf-impact-map-grid" />
+
+      <div className="shf-impact-map-toolbar">
+        <button
+          type="button"
+          onClick={() => {
+            setSelectedCounty(null);
+            setHoveredCounty(null);
+          }}
+        >
+          Reset View
+        </button>
+        <button type="button" className="is-active">
+          {regionalMode ? `${selectedCounty} Region` : "County View"}
+        </button>
+      </div>
+
+      <div className={`shf-impact-map-stage ${regionalMode ? "is-regional" : "is-statewide"}`}>
+        {!regionalMode ? (
+          <div className="shf-impact-map-surface">
+            <div className="shf-impact-map-ohio-body-slot" aria-hidden="true">
+              <OhioCountyOfficialMapV2
+                activeCounty={selectedCounty}
+                selectedCounty={selectedCounty}
+                hoveredCounty={hoveredCounty}
+                className="shf-impact-map-ohio-body"
+              />
+            </div>
+
+            <div className="shf-impact-map-focus-halo" aria-hidden="true" />
+
+            <div className="shf-impact-map-geo-slot" aria-hidden="true">
+              <OhioCountyOfficialMapV2
+                activeCounty={hoveredCounty || selectedCounty}
+                selectedCounty={selectedCounty}
+                hoveredCounty={hoveredCounty}
+                onCountyClick={handleCountyClick}
+                onCountyHover={(countyName) =>
+                  setHoveredCounty(countyName ? normalizeCountyName(countyName) : null)
+                }
+                className="shf-impact-map-geo"
+              />
+            </div>
+
+            <div className="shf-impact-map-processing-layer" aria-hidden="true">
+              {[...PROCESSING_COUNTIES].map((county) => (
+                <div
+                  key={county}
+                  className="shf-processing-beacon"
+                  data-county={county}
+                />
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="shf-regional-cluster-surface">
+            <div className="shf-regional-cluster-board" />
+            <div className="shf-regional-cluster-wrap">
+              {activeCluster.map((county) => {
+                const pos = activeClusterPositions[county] || { left: "50%", top: "50%" };
+                const isSelected = county === selectedCounty;
+                return (
+                  <button
+                    key={county}
+                    type="button"
+                    className={`shf-cluster-county ${isSelected ? "is-selected" : "is-context"} ${hoveredCounty === county ? "is-hovered" : ""}`}
+                    style={{ left: pos.left, top: pos.top }}
+                    onMouseEnter={() => setHoveredCounty(county)}
+                    onMouseLeave={() => setHoveredCounty(null)}
+                    onClick={() => setSelectedCounty(county)}
+                  >
+                    <span className="shf-cluster-county-label">{county}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className={`shf-impact-map-tooltip ${activeCounty && !regionalMode ? "is-visible" : ""}`}>
+        {activeCounty && shown && !regionalMode ? (
+          <>
+            <strong>{activeCounty} County</strong>
+            <div>Programs Active: {shown.programs}</div>
+            <div>People Served: {shown.people}</div>
+            <div>Funding Deployed: {shown.funding}</div>
+            <div>Top Outcome: {shown.outcome}</div>
+            <div>Program Condition: {shown.condition}</div>
+          </>
+        ) : null}
+      </div>
+
+      {regionalMode && shown ? (
+        <div className="shf-regional-detail-panel">
+          <strong>{selectedCounty} County</strong>
+          <div>Programs Active: {shown.programs}</div>
+          <div>People Served: {shown.people}</div>
+          <div>Funding Deployed: {shown.funding}</div>
+          <div>Top Outcome: {shown.outcome}</div>
+          <div>Program Condition: {shown.condition}</div>
+        </div>
+      ) : null}
+    </div>
+  );
+}

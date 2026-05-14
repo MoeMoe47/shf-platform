@@ -1,4 +1,5 @@
-import React from "react";
+import { openDashboardOverview } from "./workspace-dashboard/dashboardUtils";
+import React, { useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 
 const shellStyle = {
@@ -25,9 +26,10 @@ const topbarStyle = {
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  padding: "18px 26px",
+  padding: "10px 18px",
+  minHeight: 48,
   borderBottom: "1px solid rgba(255,255,255,0.08)",
-  background: "linear-gradient(180deg, rgba(8,18,46,0.96) 0%, rgba(7,16,40,0.92) 100%)",
+  background: "linear-gradient(180deg, rgba(8,18,46,0.92) 0%, rgba(7,16,40,0.88) 100%)",
 };
 
 const contentStyle = {
@@ -54,14 +56,49 @@ const linkStyle = ({ isActive }) => ({
 });
 
 export default function ExchangeLayout() {
+
+  useEffect(() => {
+    function handleOverviewNavigation(event) {
+      const target = event.target?.closest?.("a, button, [role='button'], [data-nav], .nav-item, .sidebar-item");
+      if (!target) return;
+
+      const label = String(target.textContent || "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toLowerCase();
+
+      const href = target.getAttribute?.("href") || "";
+
+      const isOverviewClick =
+        label === "overview" ||
+        label.startsWith("overview ") ||
+        href === "#/exchange" ||
+        href === "#/exchange/command";
+
+      if (!isOverviewClick) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      openDashboardOverview();
+    }
+
+    document.addEventListener("click", handleOverviewNavigation, true);
+
+    return () => {
+      document.removeEventListener("click", handleOverviewNavigation, true);
+    };
+  }, []);
+
   return (
     <div style={shellStyle}>
       <aside style={sidebarStyle}>
         <div style={{ fontSize: 14, opacity: 0.72, marginBottom: 6 }}>
-          SHF Infrastructure
+          Silicon Heartland Solutions
         </div>
         <div style={{ fontSize: 26, fontWeight: 800, lineHeight: 1.1 }}>
-          Capital Ops
+          Unified Truth
+          <br />
+          Command
         </div>
 
         <div style={navWrapStyle}>
@@ -85,13 +122,12 @@ export default function ExchangeLayout() {
 
       <div style={mainStyle}>
         <header style={topbarStyle}>
-          <div>
-            <div style={{ fontSize: 14, opacity: 0.72 }}>Infrastructure Control Plane</div>
-            <div style={{ fontSize: 22, fontWeight: 800 }}>Capital Operations</div>
+          <div style={{ fontSize: 12, fontWeight: 700, color: "rgba(232,238,252,0.72)", letterSpacing: "0.04em" }}>
+            SHS Exchange / Command Center
           </div>
 
-          <div style={{ fontSize: 14, opacity: 0.9 }}>
-            credits • pools • payouts • settlement • governance
+          <div style={{ fontSize: 12, color: "rgba(232,238,252,0.66)" }}>
+            operational command layer
           </div>
         </header>
 

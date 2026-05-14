@@ -1,24 +1,41 @@
 import React from "react";
-import "../styles/foundation.css";
 
 export default function FoundationFooter() {
   return (
-    <footer className="shf-footer">
-      <div className="shf-shell shf-footer__inner">
-        <div className="shf-footer__brand">
-          <div className="shf-footer__title">Silicon Heartland Foundation</div>
-          <p className="shf-footer__text">
-            Education, workforce pathways, and measurable community outcomes.
-          </p>
+    <footer className="shf-footer" id="get-involved">
+      <div className="shf-shell shf-footer__grid">
+        <div className="shf-footer__contact">
+          <div className="shf-footer__line">✉ info@shfoundation.org</div>
+          <div className="shf-footer__line">☎ (123) 456-7890</div>
         </div>
 
-        <div className="shf-footer__links">
-          <a href="/foundation/about">About</a>
-          <a href="/foundation/programs">Programs</a>
-          <a href="/foundation/impact">Impact</a>
-          <a href="/foundation/careers">Careers</a>
-          <a href="/foundation/donate">Donate</a>
+        <div className="shf-footer__cols">
+          <div>
+            <h4>About Us</h4>
+            <a href="#about">Our Story</a>
+            <a href="#partners">Partners</a>
+          </div>
+          <div>
+            <h4>Programs</h4>
+            <a href="#programs">Education & Training</a>
+            <a href="#programs">Recovery Support</a>
+          </div>
+          <div>
+            <h4>Resources</h4>
+            <a href="#reports">Impact Reports</a>
+            <a href="#reports">News & Updates</a>
+          </div>
         </div>
+
+        <div className="shf-footer__social">
+          <span>f</span>
+          <span>x</span>
+          <span>in</span>
+        </div>
+      </div>
+
+      <div className="shf-footer__bottom">
+        © 2029 SH Foundation. All rights reserved.
       </div>
     </footer>
   );

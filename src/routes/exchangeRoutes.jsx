@@ -6,11 +6,13 @@ import ProviderDashboard from "@/pages/exchange/ProviderDashboard";
 import InvestorDashboard from "@/pages/exchange/InvestorDashboard";
 import PublicTransparency from "@/pages/exchange/PublicTransparency";
 import CommandCenter from "@/pages/exchange/CommandCenter";
+import WorkspaceDashboard from "../pages/exchange/WorkspaceDashboard";
 
 export default function ExchangeRoutes() {
   return (
     <Route path="exchange" element={<ExchangeLayout />}>
       <Route index element={<CommandCenter />} />
+      <Route path="dashboard" element={<WorkspaceDashboard />} />
       <Route path="command" element={<CommandCenter />} />
       <Route path="operator" element={<OperatorDashboard />} />
       <Route path="provider" element={<ProviderDashboard />} />

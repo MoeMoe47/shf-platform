@@ -387,3 +387,131 @@ app.post('/api/mock/ai-score', async (req, res) => {
     console.warn("[mockApi] sales routes init failed", e);
   }
 })();
+
+
+/* ============================================================
+   SHS Hub Queue Mock Routes
+   Active file: src/dev/mockApi.js
+   Covers local dev backend-off calls:
+   - /cases/referrals
+   - /api/cases/referrals
+   - http://127.0.0.1:8091/cases/referrals
+   - http://localhost:8091/cases/referrals
+   ============================================================ */
+
+(function installHubReferralMockRoutes() {
+  if (typeof window === "undefined") return;
+  if (window.__shsHubReferralMockRoutesInstalled) return;
+  window.__shsHubReferralMockRoutesInstalled = true;
+
+  const mockReferralRows = [
+    {
+      id: "ref_hub_001",
+      referral_id: "ref_hub_001",
+      title: "Youth family check-in support",
+      needCategory: "youth_family_checkin",
+      priority: "high",
+      status: "Needs Review",
+      sourcePartnerName: "BrightPath Health",
+      receivingLane: "Kermit",
+      consentStatus: "confirmed",
+      assignedTo: "Kermit Intake",
+      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
+      notes: "Family support referral may fit Kermit check-ins and SHF support programming."
+    },
+    {
+      id: "ref_hub_002",
+      referral_id: "ref_hub_002",
+      title: "Medication access barrier",
+      needCategory: "medication_access",
+      priority: "high",
+      status: "New",
+      sourcePartnerName: "Community Care Co.",
+      receivingLane: "VerifiedRx Logistics",
+      consentStatus: "confirmed",
+      assignedTo: "Rx Ops",
+      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
+      notes: "Medication access and delivery barrier may fit VerifiedRx Logistics."
+    },
+    {
+      id: "ref_hub_003",
+      referral_id: "ref_hub_003",
+      title: "Workforce readiness referral",
+      needCategory: "workforce_readiness",
+      priority: "medium",
+      status: "Assigned",
+      sourcePartnerName: "Metro Health",
+      receivingLane: "Workforce Pipeline",
+      consentStatus: "confirmed",
+      assignedTo: "Pipeline Lead",
+      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+      notes: "Participant may be ready for workforce support and employer matching."
+    }
+  ];
+
+  function json(data, status = 200) {
+    return new Response(JSON.stringify(data), {
+      status,
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+
+  function isReferralUrl(input) {
+    const raw = typeof input === "string" ? input : input?.url || "";
+    return (
+      raw.includes("/cases/referrals") ||
+      raw.includes("/api/cases/referrals") ||
+      raw.includes("127.0.0.1:8091/cases/referrals") ||
+      raw.includes("localhost:8091/cases/referrals")
+    );
+  }
+
+  const previousFetch = window.fetch ? window.fetch.bind(window) : null;
+
+  window.fetch = async function shsHubReferralMockFetch(input, init = {}) {
+    const method = String(init?.method || "GET").toUpperCase();
+
+    if (isReferralUrl(input) && method === "GET") {
+      return json({
+        ok: true,
+        source: "src/dev/mockApi.js",
+        referrals: mockReferralRows,
+        data: mockReferralRows,
+        items: mockReferralRows,
+        count: mockReferralRows.length
+      });
+    }
+
+    if (isReferralUrl(input) && method === "POST") {
+      let body = {};
+      try {
+        body = JSON.parse(init?.body || "{}");
+      } catch {
+        body = {};
+      }
+
+      const created = {
+        id: `ref_hub_created_${Date.now()}`,
+        referral_id: `ref_hub_created_${Date.now()}`,
+        status: "New",
+        createdAt: new Date().toISOString(),
+        ...body
+      };
+
+      mockReferralRows.unshift(created);
+
+      return json({
+        ok: true,
+        source: "src/dev/mockApi.js",
+        referral: created,
+        data: created
+      });
+    }
+
+    if (previousFetch) return previousFetch(input, init);
+    return Promise.reject(new Error("fetch unavailable"));
+  };
+
+  console.info("[mockApi] hub referral routes ready → GET/POST /cases/referrals");
+})();
+

@@ -25,7 +25,7 @@ import PilotTemplatesPage from "@/pages/lordOutcomes/pilots/PilotTemplates.jsx";
 export default function LordOutcomesRoutes() {
   return (
     <Routes>
-      <Route element={<LordOutcomesLayout />}>
+<Route element={<LordOutcomesLayout />}>
         <Route index element={<LordOutcomesHome />} />
 
         <Route path="states" element={<StateOutcomesPage />} />

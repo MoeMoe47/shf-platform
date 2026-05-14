@@ -1,0 +1,48 @@
+import React from "react";
+import "./shs-signal-layer.css";
+import SHSCommandSurface from "./SHSCommandSurface";
+
+async function fetchAIAnalysis(systemData) {
+  try {
+    const res = await fetch("http://localhost:8010/ai/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(systemData),
+    });
+
+    const data = await res.json();
+    return data?.result || null;
+  } catch (err) {
+    console.error("AI ANALYSIS ERROR", err);
+    return null;
+  }
+}
+
+export default function CommandCenter() {
+
+  const [aiInsight, setAiInsight] = React.useState(null);
+
+  React.useEffect(() => {
+    if (!activeCase && !liveRecommendation) return;
+
+    const systemData = {
+      county: activeCase?.label || activeCase?.name || "Unknown",
+      state: activeCase?.state || "OH",
+      metric: liveRecommendation?.action || "Outcome",
+      value: activeCase?.value ?? 0,
+      previous_value: activeCase?.previousValue ?? 0,
+      risk_score: activeCase?.risk ?? 0.5,
+      confidence_score: liveRecommendation?.confidence ?? 0.5,
+      funding_status: activeCase?.status || "UNKNOWN",
+      recent_event: liveRecommendation?.reason || "No event",
+      benchmark: 80,
+    };
+
+    fetchAIAnalysis(systemData).then(setAiInsight);
+  }, [activeCase, liveRecommendation]);
+
+
+  return <SHSCommandSurface />;
+}
+import "./command-surface/shs-layout-fix.css";
+import IEPSystemCard from "./command-surface/IEPSystemCard";

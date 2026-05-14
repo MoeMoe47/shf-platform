@@ -1,0 +1,240 @@
+import React from "react";
+import "./reporting-command.css";
+import BriefingExportPanel from "./BriefingExportPanel.jsx";
+import ActionLogExportPanel from "./ActionLogExportPanel.jsx";
+import AnalystMemoExportPanel from "./AnalystMemoExportPanel.jsx";
+import AuditPackPanel from "./AuditPackPanel.jsx";
+import { evaluateReportingExportReadiness } from "./reporting-readiness";
+import { getFocusedArtifactId } from "@/system/routing/hash-query";
+
+const READINESS_INPUTS = [
+  {
+    exportKind: "briefing_export",
+    title: "Briefing Export",
+    format: "PDF",
+    audience: "Executive / Leadership",
+    summary:
+      "Decision-ready export for leadership review with key metrics, trust state, and recommended next steps.",
+    publicationMode: "admin_internal",
+    trustEnvelopePresent: true,
+    sourceToReportTraceCoverage: true,
+    bridgeReadiness: {
+      aggregationReady: true,
+      verificationReady: false,
+      reportingReady: false,
+      missingFields: ["toOrganizationId"],
+    },
+    verificationState: "pending",
+    artifactId: "rep_hub_case_demo_001",
+  },
+  {
+    exportKind: "action_log_export",
+    title: "Action Log Export",
+    format: "CSV",
+    audience: "Operations / Audit",
+    summary:
+      "Structured export of actions, timestamps, statuses, and operational trace details for downstream review.",
+    publicationMode: "admin_internal",
+    trustEnvelopePresent: true,
+    sourceToReportTraceCoverage: true,
+    bridgeReadiness: {
+      aggregationReady: true,
+      verificationReady: false,
+      reportingReady: false,
+      missingFields: [],
+    },
+    verificationState: "pending",
+    artifactId: "rep_action_log_demo_001",
+  },
+  {
+    exportKind: "analyst_memo_export",
+    title: "Analyst Memo Export",
+    format: "PDF / JSON",
+    audience: "Analyst / Internal",
+    summary:
+      "Narrative memo surface for institutional interpretation, bridge findings, and readiness-based recommendations.",
+    publicationMode: "admin_internal",
+    trustEnvelopePresent: true,
+    sourceToReportTraceCoverage: false,
+    bridgeReadiness: {
+      aggregationReady: true,
+      verificationReady: false,
+      reportingReady: false,
+      missingFields: ["toOrganizationId"],
+    },
+    verificationState: "pending",
+    artifactId: "rep_analyst_memo_demo_001",
+  },
+];
+
+function StatusBadge({ status }) {
+  const cls =
+    status === "ready"
+      ? "reporting-command__badge reporting-command__badge--ready"
+      : "reporting-command__badge reporting-command__badge--pending";
+
+  return <span className={cls}>{String(status).toUpperCase()}</span>;
+}
+
+export default function ReportingCommandSurface() {
+  const focusedArtifactId = getFocusedArtifactId();
+
+  const results = READINESS_INPUTS.map((item) => ({
+    ...item,
+    readiness: evaluateReportingExportReadiness(item),
+  }));
+
+  const readyCount = results.filter((item) => item.readiness.ready).length;
+  const pendingCount = results.length - readyCount;
+
+  return (
+    <main className="reporting-command">
+      {focusedArtifactId ? (
+        <div
+          style={{
+            padding: "12px 14px",
+            borderRadius: 14,
+            border: "1px solid rgba(34, 197, 94, 0.72)",
+            background: "rgba(34, 197, 94, 0.18)",
+            color: "rgba(20, 83, 45, 0.98)",
+            fontSize: 14,
+            fontWeight: 700,
+            lineHeight: 1.5,
+            boxShadow: "0 8px 24px rgba(34, 197, 94, 0.14)",
+          }}
+        >
+          Focused artifact: <strong>{focusedArtifactId}</strong>
+        </div>
+      ) : null}
+
+      <section className="reporting-command__hero">
+        <div>
+          <p className="reporting-command__eyebrow">Institutional Reporting Layer</p>
+          <h1 className="reporting-command__title">Reporting Command Surface</h1>
+          <p className="reporting-command__subtitle">
+            Central export surface for leadership briefings, action logs, analyst memos,
+            and trust-aware publication flows.
+          </p>
+        </div>
+
+        <div className="reporting-command__hero-actions">
+          <button type="button">Refresh Export State</button>
+          <button type="button">Generate Master Brief</button>
+        </div>
+      </section>
+
+      <section className="reporting-command__stats">
+        <article className="reporting-command__stat">
+          <span className="reporting-command__stat-label">Export Families</span>
+          <strong className="reporting-command__stat-value">{results.length}</strong>
+        </article>
+        <article className="reporting-command__stat">
+          <span className="reporting-command__stat-label">Ready Exports</span>
+          <strong className="reporting-command__stat-value">{readyCount}</strong>
+        </article>
+        <article className="reporting-command__stat">
+          <span className="reporting-command__stat-label">Pending Exports</span>
+          <strong className="reporting-command__stat-value">{pendingCount}</strong>
+        </article>
+        <article className="reporting-command__stat">
+          <span className="reporting-command__stat-label">Trust Mode</span>
+          <strong className="reporting-command__stat-value">Admin Internal</strong>
+        </article>
+      </section>
+
+      <section className="reporting-command__grid">
+        {results.map((card) => {
+          const isFocused = focusedArtifactId && card.artifactId === focusedArtifactId;
+
+          return (
+            <article
+              key={card.title}
+              className="reporting-command__card"
+              style={
+                isFocused
+                  ? {
+                      outline: "1px solid rgba(59, 130, 246, 0.24)",
+                      boxShadow:
+                        "0 20px 44px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(59, 130, 246, 0.18)",
+                    }
+                  : undefined
+              }
+            >
+              <div className="reporting-command__card-top">
+                <div>
+                  <p className="reporting-command__card-kicker">{card.format}</p>
+                  <h2 className="reporting-command__card-title">{card.title}</h2>
+                </div>
+                <StatusBadge status={card.readiness.status} />
+              </div>
+
+              <div className="reporting-command__meta">
+                <div>
+                  <span>Audience</span>
+                  <strong>{card.audience}</strong>
+                </div>
+              </div>
+
+              <p className="reporting-command__summary">{card.summary}</p>
+
+              {isFocused ? (
+                <div
+                  style={{
+                    padding: "10px 12px",
+                    borderRadius: 12,
+                    border: "1px solid rgba(59, 130, 246, 0.22)",
+                    background: "rgba(30, 64, 175, 0.12)",
+                    color: "rgba(191, 219, 254, 0.98)",
+                    fontSize: 13,
+                    lineHeight: 1.5,
+                  }}
+                >
+                  This card matches the focused artifact.
+                </div>
+              ) : null}
+
+              {card.readiness.reasons.length ? (
+                <div
+                  style={{
+                    padding: "10px 12px",
+                    borderRadius: 12,
+                    border: "1px solid rgba(245, 158, 11, 0.22)",
+                    background: "rgba(120, 53, 15, 0.16)",
+                    color: "rgba(253, 230, 138, 0.96)",
+                    fontSize: 13,
+                    lineHeight: 1.5,
+                  }}
+                >
+                  Blocked by: {card.readiness.reasons.join(", ")}
+                  {card.readiness.missingFields.length
+                    ? ` | Missing: ${card.readiness.missingFields.join(", ")}`
+                    : ""}
+                </div>
+              ) : null}
+
+              <div className="reporting-command__actions">
+                <button type="button">Open Surface</button>
+                <button
+                  type="button"
+                  disabled={!card.readiness.allowedActions.generate}
+                  style={
+                    !card.readiness.allowedActions.generate
+                      ? { opacity: 0.45, cursor: "not-allowed" }
+                      : undefined
+                  }
+                >
+                  Generate Export
+                </button>
+              </div>
+            </article>
+          );
+        })}
+      </section>
+
+      <BriefingExportPanel />
+      <ActionLogExportPanel />
+      <AnalystMemoExportPanel />
+      <AuditPackPanel />
+    </main>
+  );
+}

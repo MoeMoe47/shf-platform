@@ -1,10 +1,38 @@
+import { useEffect } from "react";
 import useTour from "./useTour";
 import TourOverlay from "./TourOverlay";
-import { tourSteps } from "./tourConfig";
+import { tourSteps as defaultTourSteps } from "./tourConfig";
 import "./tourStyles.css";
 
-export default function TourProvider({ children }) {
-  const tour = useTour(tourSteps.length);
+function clearTourBodyClasses() {
+  document.body.classList.remove("tour-active");
+
+  [...document.body.classList]
+    .filter((className) => className.startsWith("tour-step-"))
+    .forEach((className) => document.body.classList.remove(className));
+}
+
+export default function TourProvider({
+  children,
+  steps = defaultTourSteps,
+  buttonLabel = "Guided Tour",
+}) {
+  const activeSteps = Array.isArray(steps) && steps.length ? steps : defaultTourSteps;
+  const tour = useTour(activeSteps.length);
+
+  useEffect(() => {
+    clearTourBodyClasses();
+
+    if (tour.state.isActive) {
+      document.body.classList.add("tour-active");
+      const step = activeSteps[tour.state.currentStep];
+      if (step?.id) document.body.classList.add(`tour-step-${step.id}`);
+    }
+
+    return () => {
+      clearTourBodyClasses();
+    };
+  }, [tour.state.isActive, tour.state.currentStep, activeSteps]);
 
   return (
     <>
@@ -12,6 +40,7 @@ export default function TourProvider({ children }) {
 
       <TourOverlay
         state={tour.state}
+        steps={activeSteps}
         nextStep={tour.nextStep}
         prevStep={tour.prevStep}
         endTour={tour.endTour}
@@ -22,9 +51,9 @@ export default function TourProvider({ children }) {
           type="button"
           className="tour-start-btn"
           onClick={tour.startTour}
-          aria-label="Start guided system tour"
+          aria-label={buttonLabel}
         >
-          Guided Tour
+          {buttonLabel}
         </button>
       ) : null}
     </>

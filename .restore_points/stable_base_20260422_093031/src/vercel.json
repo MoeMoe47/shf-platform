@@ -1,0 +1,42 @@
+{
+    "rewrites": [
+      { "source": "/career",     "destination": "/career.html" },
+      { "source": "/career/",    "destination": "/career.html" },
+  
+      { "source": "/curriculum", "destination": "/curriculum.html" },
+      { "source": "/curriculum/","destination": "/curriculum.html" },
+  
+      { "source": "/sales",      "destination": "/sales.html" },
+      { "source": "/sales/",     "destination": "/sales.html" },
+  
+      { "source": "/store",      "destination": "/store.html" },
+      { "source": "/store/",     "destination": "/store.html" },
+  
+      { "source": "/arcade",     "destination": "/arcade.html" },
+      { "source": "/arcade/",    "destination": "/arcade.html" },
+  
+      { "source": "/debt",       "destination": "/debt.html" },
+      { "source": "/debt/",      "destination": "/debt.html" },
+  
+      { "source": "/employer",   "destination": "/employer.html" },
+      { "source": "/employer/",  "destination": "/employer.html" },
+  
+      { "source": "/credit",     "destination": "/credit.html" },
+      { "source": "/credit/",    "destination": "/credit.html" }
+    ],
+    "headers": [
+      {
+        "source": "/(.*)\\.html",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-store" }
+        ]
+      },
+      {
+        "source": "/assets/(.*)",
+        "headers": [
+          { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        ]
+      }
+    ]
+  }
+  

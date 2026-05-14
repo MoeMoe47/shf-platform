@@ -1,0 +1,52 @@
+{
+  "id": "student.asl-06",
+  "title": "ASL 1.6 — Daily Activities ⏰",
+  "estMinutes": 30,
+  "objectives": [
+    "Sign core daily actions (EAT, DRINK, STUDY, WORK, GO-TO)",
+    "Describe simple routines with time-first order",
+    "Sequence events using THEN and mark completion with FINISH"
+  ],
+  "vocab": [
+    { "term": "EAT / DRINK / STUDY / WORK", "def": "Daily actions." },
+    { "term": "GO-TO / COME", "def": "Movement verbs for routines." },
+    { "term": "SCHOOL / HOME / STORE", "def": "Common locations." },
+    { "term": "EVERY-MORNING / EVERY-NIGHT", "def": "Habit/time markers." },
+    { "term": "THEN / FINISH", "def": "Sequencing and completion markers." }
+  ],
+  "sections": [
+    {
+      "heading": "Time-First Routines",
+      "body": "In ASL routines, put **TIME first**: **MORNING STUDY. AFTERNOON WORK. NIGHT HOME EAT.** Keep lines 3–5 signs."
+    },
+    {
+      "heading": "Sequence with THEN",
+      "body": "Link actions: **MORNING WAKE-UP, THEN EAT, THEN GO-TO SCHOOL.**"
+    },
+    {
+      "heading": "Mark Completion",
+      "body": "Use **FINISH** to show a task done: **HOMEWORK FINISH. EMAIL SEND FINISH.**"
+    },
+    {
+      "heading": "Partner Drill",
+      "body": "A signs a 3-line routine (time-first). B repeats one line to confirm. Swap."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 1.6 — Daily Activities Quiz",
+    "items": [
+      { "type": "mcq", "q": "Best base order for routine lines:", "options": ["Action → Time", "Time → Action", "Random", "Noun → Verb only"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Which sign marks completion?", "options": ["THEN", "FINISH", "GO-TO", "EVERY-MORNING"], "answerIndex": 1 },
+      { "type": "short", "q": "Gloss your morning routine in 3 lines (time-first + THEN/FINISH as needed)." },
+      { "type": "reflection", "prompt": "Which part is hardest—time-first, sequencing, or FINISH timing?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Record 25–35s showing your daily routine with time-first lines and at least one FINISH.",
+  "summary": "You described routines with time-first framing, sequenced with THEN, and marked done steps with FINISH.",
+  "nextSlug": "student.asl-07",
+  "games": [
+    { "id": "time-first", "title": "Time First", "route": "/arcade/asl/time-first", "estMinutes": 5, "xp": 50, "outcomes": ["Time → action fluency"] },
+    { "id": "then-link", "title": "Then Link", "route": "/arcade/asl/then-link", "estMinutes": 5, "xp": 50, "outcomes": ["Sequencing quick practice"] }
+  ]
+}

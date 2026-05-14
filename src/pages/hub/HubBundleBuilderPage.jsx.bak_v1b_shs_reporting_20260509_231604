@@ -1,0 +1,660 @@
+import React from "react";
+import "./hub-bundle-builder-page.css";
+
+const partners = [
+  {
+    id: "partner_workforce_001",
+    name: "Franklin Workforce Partner",
+    type: "Workforce Provider",
+    sector: "workforce",
+    serviceLanes: ["training", "job-placement", "case-support"],
+    geography: ["Franklin County", "Central Ohio"],
+    capacity: 82,
+    responseSpeed: 91,
+    completionRate: 88,
+    verifiedOutcomeRate: 84,
+    pricingTier: "competitive",
+    trustScore: 89,
+  },
+  {
+    id: "partner_transport_001",
+    name: "Central Mobility Services",
+    type: "Transportation Partner",
+    sector: "transportation",
+    serviceLanes: ["transportation", "ride-coordination"],
+    geography: ["Franklin County"],
+    capacity: 68,
+    responseSpeed: 86,
+    completionRate: 81,
+    verifiedOutcomeRate: 74,
+    pricingTier: "competitive",
+    trustScore: 82,
+  },
+  {
+    id: "partner_staffing_001",
+    name: "Central Staffing Group",
+    type: "Staffing Agency",
+    sector: "staffing",
+    serviceLanes: ["employment", "placement", "employer-services"],
+    geography: ["Central Ohio"],
+    capacity: 76,
+    responseSpeed: 89,
+    completionRate: 84,
+    verifiedOutcomeRate: 79,
+    pricingTier: "premium",
+    trustScore: 86,
+  },
+  {
+    id: "partner_recovery_001",
+    name: "Kermit Recovery Support",
+    type: "Recovery Support Program",
+    sector: "recovery",
+    serviceLanes: ["recovery-support", "case-support", "peer-support"],
+    geography: ["Franklin County"],
+    capacity: 71,
+    responseSpeed: 78,
+    completionRate: 80,
+    verifiedOutcomeRate: 77,
+    pricingTier: "standard",
+    trustScore: 83,
+  },
+];
+
+const opportunities = [
+  {
+    id: "opp_001",
+    title: "County Reentry Workforce Proposal",
+    targetBuyer: "Franklin County Workforce / Reentry",
+    type: "Bundled Opportunity",
+    estimatedValue: 125000,
+    urgency: "High",
+    deadlineDays: 30,
+    neededLanes: ["training", "transportation", "case-support", "job-placement", "reporting"],
+    geography: "Franklin County",
+    riskTolerance: "Moderate",
+    pricingStrategy: "Competitive",
+  },
+  {
+    id: "opp_002",
+    title: "Healthcare Workforce Transportation Support",
+    targetBuyer: "Healthcare Workforce Partner",
+    type: "Cross-Sale Opportunity",
+    estimatedValue: 42000,
+    urgency: "Medium",
+    deadlineDays: 45,
+    neededLanes: ["transportation", "workforce", "healthcare-support"],
+    geography: "Central Ohio",
+    riskTolerance: "Low",
+    pricingStrategy: "Competitive",
+  },
+];
+
+const bundles = [
+  {
+    id: "bundle_001",
+    name: "Franklin Workforce Reentry Bundle",
+    opportunityId: "opp_001",
+    partners: [
+      "partner_workforce_001",
+      "partner_transport_001",
+      "partner_staffing_001",
+      "partner_recovery_001",
+    ],
+    requiredLanes: ["training", "transportation", "case-support", "job-placement", "reporting"],
+    pricingStrategy: "competitive",
+    estimatedPrice: 118000,
+    status: "Best Overall",
+  },
+  {
+    id: "bundle_002",
+    name: "Lowest-Cost Workforce Support Bundle",
+    opportunityId: "opp_001",
+    partners: ["partner_workforce_001", "partner_transport_001"],
+    requiredLanes: ["training", "transportation", "job-placement"],
+    pricingStrategy: "low-cost",
+    estimatedPrice: 92000,
+    status: "Lowest Cost",
+  },
+  {
+    id: "bundle_003",
+    name: "Highest-Confidence Reentry Bundle",
+    opportunityId: "opp_001",
+    partners: ["partner_workforce_001", "partner_staffing_001", "partner_recovery_001"],
+    requiredLanes: ["training", "case-support", "job-placement", "reporting"],
+    pricingStrategy: "premium",
+    estimatedPrice: 124000,
+    status: "Highest Confidence",
+  },
+  {
+    id: "bundle_004",
+    name: "Fastest Delivery Workforce Bundle",
+    opportunityId: "opp_001",
+    partners: ["partner_workforce_001", "partner_staffing_001"],
+    requiredLanes: ["training", "job-placement", "reporting"],
+    pricingStrategy: "standard",
+    estimatedPrice: 104000,
+    status: "Fastest Delivery",
+  },
+];
+
+function go(hash) {
+  window.location.hash = hash;
+}
+
+function money(value) {
+  if (!value) return "$0";
+  if (value >= 1000000) return `$${(value / 1000000).toFixed(1)}M`;
+  if (value >= 1000) return `$${Math.round(value / 1000)}K`;
+  return `$${value}`;
+}
+
+function average(values) {
+  const clean = values.filter((value) => typeof value === "number");
+  if (!clean.length) return 50;
+  return clean.reduce((sum, value) => sum + value, 0) / clean.length;
+}
+
+function getPartner(id) {
+  return partners.find((partner) => partner.id === id);
+}
+
+function getPartnerName(id) {
+  return getPartner(id)?.name || id;
+}
+
+function scoreBundle(bundle, opportunity) {
+  const selectedPartners = bundle.partners.map(getPartner).filter(Boolean);
+
+  const allLanes = selectedPartners.flatMap((partner) => partner.serviceLanes || []);
+  const covered = opportunity.neededLanes.filter((lane) => allLanes.includes(lane));
+  const serviceCoverage = Math.round((covered.length / opportunity.neededLanes.length) * 100);
+
+  const capacity = average(selectedPartners.map((partner) => partner.capacity));
+  const response = average(selectedPartners.map((partner) => partner.responseSpeed));
+  const completion = average(selectedPartners.map((partner) => partner.completionRate));
+  const outcomes = average(selectedPartners.map((partner) => partner.verifiedOutcomeRate));
+  const trust = average(selectedPartners.map((partner) => partner.trustScore));
+
+  const ratio = bundle.estimatedPrice / opportunity.estimatedValue;
+  const pricingCompetitiveness =
+    ratio <= 0.75 ? 96 : ratio <= 0.9 ? 88 : ratio <= 1 ? 76 : ratio <= 1.15 ? 58 : 42;
+
+  const deliveryReadiness = Math.round((capacity + response + completion) / 3);
+
+  const fitScore = Math.round(
+    serviceCoverage * 0.24 +
+      capacity * 0.14 +
+      response * 0.12 +
+      completion * 0.14 +
+      outcomes * 0.16 +
+      trust * 0.1 +
+      pricingCompetitiveness * 0.1
+  );
+
+  const riskScore = Math.round(
+    (100 - serviceCoverage) * 0.3 +
+      (100 - capacity) * 0.2 +
+      (100 - response) * 0.18 +
+      (100 - completion) * 0.18 +
+      (100 - pricingCompetitiveness) * 0.14
+  );
+
+  return {
+    fitScore,
+    serviceCoverage,
+    pricingCompetitiveness,
+    deliveryReadiness,
+    outcomeConfidence: Math.round(outcomes),
+    successProbability: Math.round((fitScore + outcomes + pricingCompetitiveness) / 3),
+    riskScore,
+    riskLevel: riskScore > 70 ? "High" : riskScore > 45 ? "Moderate" : "Low",
+  };
+}
+
+function explainBundle(bundle, score) {
+  const reasons = [];
+
+  if (score.serviceCoverage >= 80) reasons.push("covers most required service lanes");
+  if (score.pricingCompetitiveness >= 80) reasons.push("has a competitive estimated pricing position");
+  if (score.deliveryReadiness >= 80) reasons.push("has strong delivery readiness");
+  if (score.outcomeConfidence >= 80) reasons.push("has strong verified outcome potential");
+
+  if (!reasons.length) {
+    return `${bundle.name} needs operator review before it moves into proposal planning.`;
+  }
+
+  return `${bundle.name} is strong because it ${reasons.join(", ")}.`;
+}
+
+function readBundleEvents() {
+  try {
+    return JSON.parse(localStorage.getItem("shs_hub_bundle_recommendations_v1") || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function writeBundleEvents(events) {
+  localStorage.setItem("shs_hub_bundle_recommendations_v1", JSON.stringify(events));
+}
+
+const navItems = [
+  ["⌂", "Hub", "#/hub"],
+  ["◎", "Network", "#/hub/network"],
+  ["◇", "Intake", "#/hub/intake"],
+  ["▤", "Queue", "#/hub/queue"],
+  ["↻", "Life", "#/hub/lifecycle"],
+  ["✦", "Growth", "#/hub/growth-network"],
+  ["◉", "Intel", "#/hub/intelligence"],
+  ["▦", "Bundles", "#/hub/bundles"],
+  ["↗", "Opps", "#/hub/opportunities"],
+  ["$", "Sales", "#/hub/sales-pipeline"],
+  ["▧", "Reports", "#/hub/reports"],
+];
+
+export default function HubBundleBuilderPage() {
+  const [selectedOpportunityId, setSelectedOpportunityId] = React.useState("opp_001");
+  const [events, setEvents] = React.useState(readBundleEvents);
+
+  const selectedOpportunity =
+    opportunities.find((item) => item.id === selectedOpportunityId) || opportunities[0];
+
+  const scoredBundles = React.useMemo(() => {
+    return bundles
+      .filter((bundle) => bundle.opportunityId === selectedOpportunity.id)
+      .map((bundle) => ({
+        ...bundle,
+        score: scoreBundle(bundle, selectedOpportunity),
+      }))
+      .sort((a, b) => b.score.fitScore - a.score.fitScore);
+  }, [selectedOpportunity]);
+
+  const bestOverall = scoredBundles[0];
+  const lowestCost = [...scoredBundles].sort((a, b) => a.estimatedPrice - b.estimatedPrice)[0];
+  const highestConfidence = [...scoredBundles].sort(
+    (a, b) => b.score.outcomeConfidence - a.score.outcomeConfidence
+  )[0];
+  const fastestDelivery = [...scoredBundles].sort(
+    (a, b) => b.score.deliveryReadiness - a.score.deliveryReadiness
+  )[0];
+  const lowestRisk = [...scoredBundles].sort((a, b) => a.score.riskScore - b.score.riskScore)[0];
+
+  const recordEvent = (type, bundleId) => {
+    const event = {
+      id: `bundle_event_${Date.now()}`,
+      type,
+      bundleId,
+      opportunityId: selectedOpportunity.id,
+      createdAt: new Date().toISOString(),
+    };
+
+    const next = [event, ...events].slice(0, 75);
+    setEvents(next);
+    writeBundleEvents(next);
+  };
+
+  return (
+    <main className="hbb-shell">
+      <aside className="hbb-rail">
+        <button className="hbb-logo" onClick={() => go("#/hub")} aria-label="Go to SHS Hub">
+          <img src="/assets/shs/shs-orbiter-logo.png" alt="SHS" onError={(event) => { event.currentTarget.style.display = "none"; }} />
+          <span>SHS</span>
+        </button>
+
+        <nav className="hbb-nav" aria-label="Hub navigation">
+          {navItems.map(([icon, label, hash]) => (
+            <button
+              key={label}
+              className={label === "Bundles" ? "is-active" : ""}
+              onClick={() => go(hash)}
+            >
+              <span>{icon}</span>
+              <small>{label}</small>
+            </button>
+          ))}
+        </nav>
+
+        <div className="hbb-readiness">
+          <strong>BUNDLE</strong>
+          <div>88%</div>
+          <span>Ready</span>
+        </div>
+      </aside>
+
+      <section className="hbb-page">
+        <header className="hbb-header">
+          <div>
+            <p>SHS HUB BUNDLE BUILDER</p>
+            <h1>Bundle Builder</h1>
+            <span>
+              Build stronger multi-partner proposals by combining the right
+              partners, service lanes, pricing position, risk profile, and SHS
+              reporting layer.
+            </span>
+            <div className="hbb-headerNote">
+              V1 bundle scores are simulated estimates. Use them to compare
+              options, prepare proposal review, and guide operator decision-making.
+            </div>
+          </div>
+
+          <div className="hbb-actions">
+            <button onClick={() => go("#/hub/growth-network")}>Growth Network</button>
+            <button onClick={() => go("#/hub/intelligence")}>Hub Intelligence</button>
+            <button className="is-primary" onClick={() => recordEvent("bundle_review_started", bestOverall?.id)}>
+              Start Bundle Review
+            </button>
+          </div>
+        </header>
+
+        <section className="hbb-kpiStrip">
+          <article className="hbb-kpi">
+            <span>▦</span>
+            <div>
+              <h3>Bundle Options</h3>
+              <strong>{scoredBundles.length}</strong>
+              <p>Available for comparison</p>
+            </div>
+          </article>
+
+          <article className="hbb-kpi">
+            <span>$</span>
+            <div>
+              <h3>Lowest Cost</h3>
+              <strong>{money(lowestCost?.estimatedPrice)}</strong>
+              <p>{lowestCost?.name}</p>
+            </div>
+          </article>
+
+          <article className="hbb-kpi">
+            <span>✓</span>
+            <div>
+              <h3>Highest Confidence</h3>
+              <strong>{highestConfidence?.score.outcomeConfidence}%</strong>
+              <p>{highestConfidence?.name}</p>
+            </div>
+          </article>
+
+          <article className="hbb-kpi">
+            <span>↗</span>
+            <div>
+              <h3>Fastest Delivery</h3>
+              <strong>{fastestDelivery?.score.deliveryReadiness}%</strong>
+              <p>{fastestDelivery?.name}</p>
+            </div>
+          </article>
+
+          <article className="hbb-kpi">
+            <span>!</span>
+            <div>
+              <h3>Lowest Risk</h3>
+              <strong>{lowestRisk?.score.riskLevel}</strong>
+              <p>{lowestRisk?.name}</p>
+            </div>
+          </article>
+
+          <article className="hbb-kpi">
+            <span>↻</span>
+            <div>
+              <h3>Bundle Events</h3>
+              <strong>{events.length}</strong>
+              <p>Review actions logged</p>
+            </div>
+          </article>
+        </section>
+
+        <section className="hbb-grid">
+          <div className="hbb-main">
+            <article className="hbb-panel hbb-opportunity">
+              <div className="hbb-panelHead">
+                <div>
+                  <span className="hbb-chip hbb-chip--cyan">Opportunity Setup</span>
+                  <h2>{selectedOpportunity.title}</h2>
+                  <small>{selectedOpportunity.type}</small>
+                </div>
+
+                <select
+                  value={selectedOpportunityId}
+                  onChange={(event) => setSelectedOpportunityId(event.target.value)}
+                >
+                  {opportunities.map((opp) => (
+                    <option value={opp.id} key={opp.id}>
+                      {opp.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="hbb-opportunityGrid">
+                <div>
+                  <span>Target Buyer / Funder</span>
+                  <strong>{selectedOpportunity.targetBuyer}</strong>
+                </div>
+                <div>
+                  <span>Estimated Value</span>
+                  <strong>{money(selectedOpportunity.estimatedValue)}</strong>
+                </div>
+                <div>
+                  <span>Deadline</span>
+                  <strong>{selectedOpportunity.deadlineDays} days</strong>
+                </div>
+                <div>
+                  <span>Risk Tolerance</span>
+                  <strong>{selectedOpportunity.riskTolerance}</strong>
+                </div>
+                <div>
+                  <span>Pricing Strategy</span>
+                  <strong>{selectedOpportunity.pricingStrategy}</strong>
+                </div>
+                <div>
+                  <span>Geography</span>
+                  <strong>{selectedOpportunity.geography}</strong>
+                </div>
+              </div>
+
+              <div className="hbb-laneList">
+                {selectedOpportunity.neededLanes.map((lane) => (
+                  <span key={lane}>{lane}</span>
+                ))}
+              </div>
+            </article>
+
+            <article className="hbb-panel hbb-best">
+              <div className="hbb-panelHead">
+                <div>
+                  <span className="hbb-chip hbb-chip--gold">Final Recommendation</span>
+                  <h2>{bestOverall?.name}</h2>
+                  <small>Best overall bundle based on V1 scoring</small>
+                </div>
+                <strong>{bestOverall?.score.fitScore}% Fit</strong>
+              </div>
+
+              <p>{bestOverall ? explainBundle(bestOverall, bestOverall.score) : ""}</p>
+
+              <div className="hbb-scoreGrid">
+                <div>
+                  <span>Service Coverage</span>
+                  <strong>{bestOverall?.score.serviceCoverage}%</strong>
+                </div>
+                <div>
+                  <span>Pricing</span>
+                  <strong>{bestOverall?.score.pricingCompetitiveness}%</strong>
+                </div>
+                <div>
+                  <span>Readiness</span>
+                  <strong>{bestOverall?.score.deliveryReadiness}%</strong>
+                </div>
+                <div>
+                  <span>Outcomes</span>
+                  <strong>{bestOverall?.score.outcomeConfidence}%</strong>
+                </div>
+                <div>
+                  <span>Success</span>
+                  <strong>{bestOverall?.score.successProbability}%</strong>
+                </div>
+                <div>
+                  <span>Risk</span>
+                  <strong className={`risk-${bestOverall?.score.riskLevel.toLowerCase()}`}>
+                    {bestOverall?.score.riskLevel}
+                  </strong>
+                </div>
+              </div>
+
+              <div className="hbb-partnerLine">
+                {bestOverall?.partners.map((id) => (
+                  <span key={id}>{getPartnerName(id)}</span>
+                ))}
+              </div>
+
+              <div className="hbb-panelActions">
+                <button onClick={() => recordEvent("selected_best_bundle", bestOverall?.id)}>
+                  Select Bundle
+                </button>
+                <button onClick={() => recordEvent("proposal_packet_started", bestOverall?.id)}>
+                  Start Proposal Packet
+                </button>
+                <button onClick={() => recordEvent("pricing_review_requested", bestOverall?.id)}>
+                  Request Pricing Review
+                </button>
+              </div>
+            </article>
+
+            <article className="hbb-panel">
+              <div className="hbb-panelHead">
+                <div>
+                  <span className="hbb-chip hbb-chip--blue">Bundle Comparison</span>
+                  <h2>Compare Bundle Options</h2>
+                </div>
+              </div>
+
+              <div className="hbb-table">
+                <div className="hbb-tableHead">
+                  <span>Bundle</span>
+                  <span>Type</span>
+                  <span>Price</span>
+                  <span>Fit</span>
+                  <span>Pricing</span>
+                  <span>Readiness</span>
+                  <span>Risk</span>
+                </div>
+
+                {scoredBundles.map((bundle) => (
+                  <div className="hbb-tableRow" key={bundle.id}>
+                    <span>
+                      <strong>{bundle.name}</strong>
+                      <small>{bundle.partners.map(getPartnerName).join(" • ")}</small>
+                    </span>
+                    <b>{bundle.status}</b>
+                    <b>{money(bundle.estimatedPrice)}</b>
+                    <b>{bundle.score.fitScore}%</b>
+                    <b>{bundle.score.pricingCompetitiveness}%</b>
+                    <b>{bundle.score.deliveryReadiness}%</b>
+                    <em className={`risk-${bundle.score.riskLevel.toLowerCase()}`}>
+                      {bundle.score.riskLevel}
+                    </em>
+                  </div>
+                ))}
+              </div>
+            </article>
+          </div>
+
+          <aside className="hbb-side">
+            <article className="hbb-panel">
+              <div className="hbb-panelHead">
+                <div>
+                  <span className="hbb-chip hbb-chip--green">Suggested Partners</span>
+                  <h2>Lane Coverage</h2>
+                </div>
+              </div>
+
+              <div className="hbb-laneCoverage">
+                {selectedOpportunity.neededLanes.map((lane) => {
+                  const matched = partners.filter((partner) =>
+                    partner.serviceLanes.includes(lane)
+                  );
+
+                  return (
+                    <div key={lane}>
+                      <span>{lane}</span>
+                      <strong>{matched[0]?.name || "No direct partner"}</strong>
+                      <small>
+                        {matched.length
+                          ? `${matched.length} partner match${matched.length > 1 ? "es" : ""}`
+                          : "Gap to resolve"}
+                      </small>
+                    </div>
+                  );
+                })}
+              </div>
+            </article>
+
+            <article className="hbb-panel">
+              <div className="hbb-panelHead">
+                <div>
+                  <span className="hbb-chip hbb-chip--violet">Bundle Types</span>
+                  <h2>Best Options</h2>
+                </div>
+              </div>
+
+              <div className="hbb-optionList">
+                <div>
+                  <span>Best Overall</span>
+                  <strong>{bestOverall?.name}</strong>
+                </div>
+                <div>
+                  <span>Lowest Cost</span>
+                  <strong>{lowestCost?.name}</strong>
+                </div>
+                <div>
+                  <span>Highest Confidence</span>
+                  <strong>{highestConfidence?.name}</strong>
+                </div>
+                <div>
+                  <span>Fastest Delivery</span>
+                  <strong>{fastestDelivery?.name}</strong>
+                </div>
+                <div>
+                  <span>Lowest Risk</span>
+                  <strong>{lowestRisk?.name}</strong>
+                </div>
+              </div>
+            </article>
+
+            <article className="hbb-panel">
+              <div className="hbb-panelHead">
+                <div>
+                  <span className="hbb-chip hbb-chip--orange">Review Log</span>
+                  <h2>Bundle Events</h2>
+                </div>
+                <strong>{events.length}</strong>
+              </div>
+
+              <div className="hbb-eventLog">
+                {events.length ? (
+                  events.slice(0, 6).map((event) => (
+                    <div key={event.id}>
+                      <span>{event.type.replaceAll("_", " ")}</span>
+                      <small>{new Date(event.createdAt).toLocaleString()}</small>
+                    </div>
+                  ))
+                ) : (
+                  <p>No bundle review events yet. Select a bundle or start a proposal packet.</p>
+                )}
+              </div>
+            </article>
+          </aside>
+        </section>
+
+        <footer className="hbb-footer">
+          <div>
+            <strong>Silicon Heartland Solutions</strong>
+            <span>Bundle Builder · Multi-Partner Proposal Design · Pricing & Risk Comparison</span>
+          </div>
+
+          <p>
+            Powered by Silicon Heartland Solutions — build stronger bundles, compare risk, and move the right proposal forward.
+          </p>
+        </footer>
+      </section>
+    </main>
+  );
+}

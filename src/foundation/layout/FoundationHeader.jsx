@@ -1,52 +1,27 @@
 import React from "react";
-import "../styles/foundation.css";
 
 export default function FoundationHeader() {
-  const navItems = [
-    { label: "About", href: "/foundation/about" },
-    { label: "Programs", href: "/foundation/programs" },
-    { label: "Impact", href: "/foundation/impact" },
-    { label: "Careers", href: "/foundation/careers" },
-    { label: "Get Involved", href: "/foundation/get-involved" },
-    { label: "Donate", href: "/foundation/donate" },
-  ];
-
   return (
     <header className="shf-header">
-      <div className="shf-shell shf-header__inner">
-        <a className="shf-brand" href="/foundation">
-          <span className="shf-brand__mark" aria-hidden="true">
-            <img
-              src="/assets/branding/shf-header-logo.png"
-              alt=""
-              onError={(e) => {
-                e.currentTarget.style.display = "none";
-              }}
-            />
-            <span className="shf-brand__fallback">SHF</span>
+      <div className="shf-header__inner shf-shell">
+        <a className="shf-brand" href="/foundation.html">
+          <span className="shf-brand__mark">
+            <img src="/assets/branding/shf-impact-center-logo.png" alt="SH Foundation logo" />
           </span>
-
-          <span className="shf-brand__text">
-            <span className="shf-brand__title">Silicon Heartland</span>
-            <span className="shf-brand__subtitle">Foundation</span>
-          </span>
+          <span className="shf-brand__name">SH FOUNDATION</span>
         </a>
 
-        <nav className="shf-nav" aria-label="Primary">
-          {navItems.map((item) => (
-            <a key={item.label} className="shf-nav__link" href={item.href}>
-              {item.label}
-            </a>
-          ))}
+        <nav className="shf-nav" aria-label="Foundation navigation">
+          <a href="#about">About</a>
+          <a href="#programs">Programs</a>
+          <a href="#impact">Impact</a>
+          <a href="#get-involved">Get Involved</a>
+          <a href="#reports">Reports</a>
         </nav>
 
         <div className="shf-header__actions">
-          <a className="shf-btn shf-btn--ghost" href="/foundation/careers">
-            Careers
-          </a>
-          <a className="shf-btn shf-btn--primary" href="/foundation/donate">
-            Donate
-          </a>
+          <a className="shf-donate-pill" href="#donate">Donate</a>
+          <a className="shf-command-pill" href="/shf.html">SHF Command Center</a>
         </div>
       </div>
     </header>

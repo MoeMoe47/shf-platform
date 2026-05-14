@@ -1,0 +1,258 @@
+.shf-impact-map-root {
+  position: relative;
+  min-height: 520px;
+  border-radius: 26px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(248,243,236,0.94) 0%, rgba(240,234,226,0.98) 100%);
+}
+
+.shf-impact-map-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(122, 96, 70, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(122, 96, 70, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.shf-impact-map-toolbar {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  display: flex;
+  gap: 10px;
+  z-index: 20;
+}
+
+.shf-impact-map-toolbar button {
+  border: 1px solid rgba(164, 137, 108, 0.18);
+  background: rgba(255,255,255,0.82);
+  color: #7a6249;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font: inherit;
+}
+
+.shf-impact-map-toolbar .is-active {
+  background: rgba(224, 179, 109, 0.24);
+  color: #6b4a2e;
+  box-shadow: 0 0 0 1px rgba(220, 165, 85, 0.10) inset;
+}
+
+.shf-impact-map-stage {
+  position: relative;
+  height: 470px;
+  padding: 26px 18px 18px;
+  z-index: 1;
+}
+
+.shf-impact-map-surface {
+  position: absolute;
+  inset: 12px 12px 18px;
+}
+
+.shf-impact-map-ohio-body-slot,
+.shf-impact-map-geo-slot,
+.shf-impact-map-focus-halo,
+.shf-impact-map-processing-layer {
+  position: absolute;
+  inset: 1% 1% 10% 1%;
+}
+
+.shf-impact-map-ohio-body-slot {
+  z-index: 2;
+}
+
+.shf-impact-map-ohio-body-slot svg,
+.shf-impact-map-geo-slot svg {
+  width: 100%;
+  height: 100%;
+}
+
+.shf-impact-map-ohio-body-slot path,
+.shf-impact-map-ohio-body-slot polygon,
+.shf-impact-map-ohio-body-slot polyline {
+  fill: rgba(225, 176, 112, 0.34) !important;
+  stroke: rgba(134, 94, 59, 0.18) !important;
+  stroke-width: 0.9 !important;
+}
+
+.shf-impact-map-geo-slot {
+  z-index: 5;
+}
+
+.shf-impact-map-geo-slot path,
+.shf-impact-map-geo-slot polygon,
+.shf-impact-map-geo-slot polyline {
+  fill: transparent !important;
+  stroke: rgba(112, 77, 46, 0.88) !important;
+  stroke-width: 2.15 !important;
+  vector-effect: non-scaling-stroke;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.shf-impact-map-focus-halo {
+  z-index: 6;
+  pointer-events: none;
+}
+
+.shf-impact-map-processing-layer {
+  z-index: 4;
+  pointer-events: none;
+}
+
+.shf-processing-beacon {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  margin-left: -32px;
+  margin-top: -32px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle, rgba(232, 182, 96, 0.34) 0%, rgba(232, 182, 96, 0.18) 34%, rgba(232, 182, 96, 0.00) 74%);
+  animation: shfCountyPulseGold 1.9s ease-in-out infinite;
+}
+
+.shf-processing-beacon::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 999px;
+  box-shadow:
+    0 0 0 1px rgba(255, 231, 191, 0.34),
+    0 0 16px rgba(215, 156, 78, 0.18);
+}
+
+.shf-processing-beacon[data-county="Franklin"] { left: 52%; top: 56%; }
+.shf-processing-beacon[data-county="Cuyahoga"] { left: 66%; top: 23%; }
+.shf-processing-beacon[data-county="Hamilton"] { left: 35%; top: 78%; }
+
+@keyframes shfCountyPulseGold {
+  0%, 100% { transform: scale(0.94); opacity: 0.78; }
+  50% { transform: scale(1.18); opacity: 1; }
+}
+
+.shf-impact-map-tooltip {
+  position: absolute;
+  left: 18%;
+  bottom: 22%;
+  z-index: 30;
+  background: rgba(255,255,255,0.94);
+  border: 1px solid rgba(170, 137, 103, 0.16);
+  border-radius: 22px;
+  padding: 18px 18px 16px;
+  min-width: 238px;
+  box-shadow: 0 16px 34px rgba(86, 58, 34, 0.08), 0 2px 0 rgba(255,255,255,0.78) inset;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px) scale(0.985);
+  transition: opacity 180ms ease, transform 220ms ease;
+}
+
+.shf-impact-map-tooltip.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.shf-impact-map-tooltip strong,
+.shf-regional-detail-panel strong {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.shf-impact-map-tooltip div,
+.shf-regional-detail-panel div {
+  line-height: 1.55;
+}
+
+/* ===== REGIONAL 5-COUNTY VIEW ===== */
+.shf-regional-cluster-surface {
+  position: absolute;
+  inset: 18px 16px 16px;
+  border-radius: 26px;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.shf-regional-cluster-board {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(244,236,224,0.96) 0%, rgba(234,225,214,0.98) 100%);
+}
+
+.shf-regional-cluster-board::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(122, 96, 70, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(122, 96, 70, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+  opacity: 0.9;
+}
+
+.shf-regional-cluster-wrap {
+  position: absolute;
+  inset: 0;
+}
+
+.shf-cluster-county {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  min-width: 170px;
+  min-height: 120px;
+  border-radius: 18px;
+  border: 2px solid rgba(116, 80, 48, 0.82);
+  background: rgba(224, 179, 109, 0.18);
+  color: #6b4a2e;
+  box-shadow: 0 10px 22px rgba(86, 58, 34, 0.06);
+}
+
+.shf-cluster-county.is-context {
+  opacity: 0.55;
+  background: rgba(224, 179, 109, 0.10);
+}
+
+.shf-cluster-county.is-selected {
+  opacity: 1;
+  background:
+    linear-gradient(180deg, rgba(226, 162, 78, 0.86) 0%, rgba(201, 128, 46, 0.90) 100%);
+  border-color: rgba(137, 88, 44, 0.98);
+  box-shadow:
+    0 0 0 1px rgba(255, 232, 192, 0.26) inset,
+    0 0 26px rgba(218, 162, 82, 0.24),
+    0 14px 28px rgba(86, 58, 34, 0.14);
+}
+
+.shf-cluster-county.is-hovered:not(.is-selected) {
+  opacity: 0.75;
+  background: rgba(224, 179, 109, 0.16);
+}
+
+.shf-cluster-county-label {
+  position: absolute;
+  left: 12px;
+  top: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.shf-regional-detail-panel {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  z-index: 35;
+  min-width: 250px;
+  background: rgba(255,255,255,0.94);
+  border: 1px solid rgba(170, 137, 103, 0.16);
+  border-radius: 22px;
+  padding: 18px 18px 16px;
+  box-shadow:
+    0 18px 38px rgba(86, 58, 34, 0.12),
+    0 2px 0 rgba(255,255,255,0.78) inset;
+}

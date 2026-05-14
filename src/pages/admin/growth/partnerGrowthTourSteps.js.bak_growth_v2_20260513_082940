@@ -1,0 +1,197 @@
+export const partnerGrowthTourSteps = [
+  {
+    id: "pg-sidebar",
+    target: "[data-tour='pg-sidebar']",
+    title: "Step 1 — Start With the Growth Navigation",
+    content: {
+      primary:
+        "This left sidebar is how you move through the Growth Engine. It organizes opportunities, referrals, pilots, funding, employers, pharmacy, service lanes, partners, reports, documents, integrations, and settings.",
+      why:
+        "This page has a lot of information. The left rail keeps users from getting lost.",
+      action:
+        "Start on Overview first. Then use Opportunities, Referrals, Service Lanes, and Reports depending on the work you need to do.",
+    },
+  },
+  {
+    id: "pg-topbar",
+    target: "[data-tour='pg-topbar']",
+    title: "Step 2 — Confirm the Active Growth Surface",
+    content: {
+      primary:
+        "The top bar shows the current Growth Command Surface, the selected service lane, search, notifications, and help.",
+      why:
+        "Before making decisions, users should know which lane they are viewing and whether alerts need attention.",
+      action:
+        "Use search to find partners, opportunities, referrals, or lanes quickly.",
+    },
+  },
+  {
+    id: "pg-command-header",
+    target: "[data-tour='pg-command-header']",
+    title: "Step 3 — Understand the Page Purpose",
+    content: {
+      primary:
+        "This page is the SHS Partner Growth Engine. It helps manage sales, referrals, pilots, funding, and service-lane activation across the SHS ecosystem.",
+      why:
+        "The goal is to turn partner signals into real growth: meetings, pilots, contracts, funding, and report-ready value.",
+      action:
+        "Read the command summary, then use the action buttons only after reviewing the KPIs and recommendations.",
+    },
+  },
+  {
+    id: "pg-actions",
+    target: "[data-tour='pg-actions']",
+    title: "Step 4 — Use the Main Growth Actions",
+    content: {
+      primary:
+        "These buttons let you add an opportunity, create a referral, prepare a pilot packet, or export a growth brief.",
+      why:
+        "These are the main actions that turn insight into movement.",
+      action:
+        "Use Add Opportunity for a new lead, Create Referral for a partner handoff, Prepare Pilot Packet for a serious pilot, and Export Growth Brief for leadership or sales review.",
+    },
+  },
+  {
+    id: "pg-strategy",
+    target: "[data-tour='pg-strategy']",
+    title: "Step 5 — Check Strategy and Progress",
+    content: {
+      primary:
+        "This strip shows the strategic priority, Q2 progress, pipeline value, closed won value, and active partners.",
+      why:
+        "This tells leadership whether growth is moving toward the current business goal.",
+      action:
+        "If Q2 progress is low, focus on high-probability opportunities and pilot-ready partners.",
+    },
+  },
+  {
+    id: "pg-kpis",
+    target: "[data-tour='pg-kpis']",
+    title: "Step 6 — Read the Growth KPIs",
+    content: {
+      primary:
+        "Read these KPI cards from left to right: active opportunities, referral queue, pilot prospects, funding leads, employer leads, pharmacy leads, service lane fit, and report-ready partners.",
+      why:
+        "These numbers tell you what type of growth work needs attention first.",
+      action:
+        "Click a KPI when you want to inspect that part of the growth system.",
+    },
+  },
+  {
+    id: "pg-content-main",
+    target: "[data-tour='pg-content-main']",
+    title: "Step 7 — Work the Main Growth Area",
+    content: {
+      primary:
+        "The center area is where the main growth work happens: pipeline, service lanes, opportunities, and converted Hub signals.",
+      why:
+        "This is where the user should spend most of their time when reviewing partner growth activity.",
+      action:
+        "Start with the pipeline, then review service lanes and opportunities.",
+    },
+  },
+  {
+    id: "pg-pipeline",
+    target: "[data-tour='pg-pipeline']",
+    title: "Step 8 — Review the Opportunity Pipeline",
+    content: {
+      primary:
+        "The pipeline shows the path from new lead to discovery, service fit, proposal, pilot ready, contracting, active, and reporting.",
+      why:
+        "This shows where opportunities are moving and where they may be stuck.",
+      action:
+        "Click a stage to review that part of the pipeline. Watch Contracting closely because risk can increase there.",
+    },
+  },
+  {
+    id: "pg-service-lanes",
+    target: "[data-tour='pg-service-lanes']",
+    title: "Step 9 — Review Service Lanes",
+    content: {
+      primary:
+        "Service lanes show where growth is coming from: Kermit, VerifiedRx Logistics, Workforce Pipeline, SHF Programs, and SHS Infrastructure.",
+      why:
+        "Each lane has different sales language, partner fit, and next-step strategy.",
+      action:
+        "Click a lane to filter the page and focus only on that business lane.",
+    },
+  },
+  {
+    id: "pg-opportunities",
+    target: "[data-tour='pg-opportunities']",
+    title: "Step 10 — Review Top Opportunities",
+    content: {
+      primary:
+        "Opportunity cards show partner, stage, value, probability, priority score, risk, source, owner, due date, recommendation, and why the system thinks it matters.",
+      why:
+        "This is where the Growth Engine turns raw partner interest into a sales or pilot decision.",
+      action:
+        "Select an opportunity, review the recommendation, then choose the correct next action.",
+    },
+  },
+  {
+    id: "pg-ai-panel",
+    target: "[data-tour='pg-ai-panel']",
+    title: "Step 11 — Use the AI Growth Intelligence Panel",
+    content: {
+      primary:
+        "This panel explains the strongest growth signal, current lane insights, and why the system is recommending a move.",
+      why:
+        "This helps users understand the recommendation instead of blindly following a score.",
+      action:
+        "Read the focus recommendation, insights, and why box before creating a pilot packet or export.",
+    },
+  },
+  {
+    id: "pg-referrals",
+    target: "[data-tour='pg-referrals']",
+    title: "Step 12 — Check Referral Activity",
+    content: {
+      primary:
+        "The referral panel shows partner referrals, need type, lane, priority, consent status, age, owner, and confidence.",
+      why:
+        "Referrals can turn into new opportunities, pilots, or service-lane expansion.",
+      action:
+        "Prioritize high-priority referrals and referrals with confirmed consent.",
+    },
+  },
+  {
+    id: "pg-feed",
+    target: "[data-tour='pg-feed']",
+    title: "Step 13 — Review Growth Activity Feed",
+    content: {
+      primary:
+        "The activity feed shows recent changes such as pilots approved, opportunities added, contract risk, referrals received, and briefs exported.",
+      why:
+        "This helps the team understand what changed recently.",
+      action:
+        "Use the feed as a quick activity audit before making new decisions.",
+    },
+  },
+  {
+    id: "pg-friction",
+    target: "[data-tour='pg-friction']",
+    title: "Step 14 — Watch Adaptive Learning and Friction",
+    content: {
+      primary:
+        "This area tracks growth learning signals like experience score, recommendation click rate, referral friction, best source, fastest lane, and strongest expansion lane.",
+      why:
+        "The Growth Engine should learn which sources, lanes, and actions work best over time.",
+      action:
+        "Use this panel to find what is working and where users may be getting stuck.",
+    },
+  },
+  {
+    id: "pg-footer",
+    target: "[data-tour='pg-footer']",
+    title: "Step 15 — Confirm Institutional Context",
+    content: {
+      primary:
+        "The footer keeps the page tied back to Silicon Heartland Solutions and the institutional system.",
+      why:
+        "Growth activity should stay connected to SHS infrastructure, proof, reporting, and partner trust.",
+      action:
+        "After reviewing the page, choose the next action: create opportunity, create referral, prepare pilot packet, or export growth brief.",
+    },
+  },
+];

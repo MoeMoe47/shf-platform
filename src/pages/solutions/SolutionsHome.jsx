@@ -1,138 +1,287 @@
 import React from "react";
-import { loadManifest } from "@/apps/manifest/index.js";
-import { Link } from "react-router-dom";
+import "./shs-solutions-home.css";
 
+const benefits = [
+  ["Command Center Clarity", "See operations, outcomes, partners, reports, and risks in one place."],
+  ["Verified Outcomes", "Track what happened, collect evidence, and prove the work."],
+  ["Easier Reporting", "Turn daily activity into board-ready, funder-ready, and audit-ready reports."],
+  ["Partner Coordination", "Align referrals, tasks, handoffs, updates, and shared accountability."],
+  ["AI Analyst Support", "Surface risks, explain patterns, and recommend the next best move."],
+  ["Built to Scale", "Start with one program and grow into teams, partners, and service lanes."]
+];
 
-function toEntryHref(m, fallbackEntry) {
-  const entry = (m && typeof m.entry === "string" && m.entry.trim()) ? m.entry.trim() : fallbackEntry;
-  const homeHash = (m && typeof m.homeHash === "string" && m.homeHash.trim()) ? m.homeHash.trim() : "/";
+const metrics = [
+  ["235+", "Programs Powered"],
+  ["12,540+", "Reports Generated"],
+  ["85,000+", "Outcomes Verified"],
+  ["1,250+", "Partners Connected"],
+  ["18,600+", "Hours Saved in Reporting"],
+  ["$48M+", "Funding Supported"]
+];
 
-  // Normalize: entry should look like "/ai.html" and hash should look like "/job-compass"
-  const entryNorm = entry.startsWith("/") ? entry : ("/" + entry);
-  const hashNorm = homeHash.startsWith("/") ? homeHash : ("/" + homeHash);
+const audiences = [
+  ["Nonprofits", "Run programs, track outcomes, and prove impact."],
+  ["Workforce Programs", "Manage participants, services, placements, and results."],
+  ["Healthcare Services", "Coordinate care programs and track verified outcomes."],
+  ["Education Providers", "Manage students, programs, and reporting in one place."],
+  ["Government Partners", "Improve visibility, compliance, and service delivery."],
+  ["Logistics Operators", "Track operations, assets, and performance in real time."],
+  ["Service Businesses", "Streamline operations and scale with clarity."],
+  ["Funders & Foundations", "See proof, reduce risk, and increase confidence."]
+];
 
-  // Final: "/ai.html#/job-compass"
-  return `${entryNorm}#${hashNorm}`;
-}
-
-const Card = ({ title, desc, tag, to }) => {
-  const inner = (
-    <div className="sh-card">
-      <div className="sh-cardTop">
-        <div className="sh-cardTitle">{title}</div>
-        {tag ? <div className="sh-chip">{tag}</div> : null}
-      </div>
-      <div className="sh-cardDesc">{desc}</div>
-      <div className="sh-cardCta">Open →</div>
-    </div>
-  );
-
-  return to ? (
-    <Link to={to} className="sh-cardLink" aria-label={`Open ${title}`}>
-      {inner}
-    </Link>
-  ) : (
-    <div className="sh-cardLink sh-cardDisabled" aria-disabled="true">
-      {inner}
-    </div>
-  );
-};
-
-export default function SolutionsHome() {
-  
-  const aiHref = (() => {
-    try {
-      const m = loadManifest("ai");
-      return buildOpenHref(m) || "";
-    } catch {
-      return "";
-    }
-  })();
+export default function Home() {
   return (
-    <div className="sh-solutions">
-      <div className="sh-hero">
-        <div className="sh-heroKicker">Silicon Heartland Solutions</div>
-        <h1 className="sh-heroTitle">Launchpad for Deployable Products</h1>
-        <p className="sh-heroSub">
-          This is the commercial surface area: packaged pilots, dashboards, and tools
-          that can be deployed fast without touching the Foundation delivery layer.
-        </p>
+    <main className="shs-solutions-home">
+      <section className="shs-hero">
+        <div className="hero-base-layer" />
+        <img
+          className="hero-geo-image"
+          src="/assets/solutions/solutions-infrastructure-globe.png"
+          alt=""
+          aria-hidden="true"
+        />
+        <div className="hero-dark-overlay" />
+        <div className="hero-blue-glow" />
+        <div className="hero-grid-overlay" />
+        <div className="hero-particle-layer" />
 
-        <div className="sh-heroRow">
-          {aiHref ? (
-          <a className="sh-btn" href={aiHref || "#/"}>Open AI Workforce Compass</a>
-        ) : (
-          <button className="sh-btn" disabled title="AI app entry not available">Open AI Workforce Compass</button>
-        )}
-          <div className="sh-muted">Map stays in AI app by design.</div>
+        <div className="hero-safe">
+          <div className="hero-copy">
+            <p className="eyebrow">Silicon Heartland Solutions</p>
+
+            <h1>
+              Run your entire organization from{" "}
+              <span>one command center.</span>
+            </h1>
+
+            <p className="hero-subtext">
+              SHS helps your team manage operations, verify outcomes,
+              coordinate partners, and report results from one trusted
+              infrastructure layer.
+            </p>
+
+            <div className="hero-actions">
+              <a className="shs-btn shs-btn-primary" href="#/join">
+                Join Now <span>→</span>
+              </a>
+              <a className="shs-btn shs-btn-outline" href="#/commercial">
+                Watch Commercial
+              </a>
+              <a className="shs-btn shs-btn-outline" href="#/request-demo">
+                Request Demo
+              </a>
+            </div>
+
+            <div className="trust-strip">
+              <span>Secure & Compliant</span>
+              <span>Built for Outcomes</span>
+              <span>Trusted by Organizations</span>
+            </div>
+          </div>
+
+          <div className="command-wrap">
+            <div className="command-card">
+              <div className="command-top">
+                <strong>SHS Command Center</strong>
+                <span>● ● ●</span>
+              </div>
+
+              <div className="command-body">
+                <aside className="command-rail">
+                  <b>Overview</b>
+                  <span>Operations</span>
+                  <span>Programs</span>
+                  <span>Partners</span>
+                  <span>Outcomes</span>
+                  <span>Reports</span>
+                  <span>AI Analyst</span>
+                </aside>
+
+                <section className="command-main">
+                  <div className="command-mini">
+                    <small>Active Programs</small>
+                    <strong>23</strong>
+                    <em>+12% last month</em>
+                  </div>
+
+                  <div className="command-mini">
+                    <small>Outcomes Verified</small>
+                    <strong>1,248</strong>
+                    <em>This month</em>
+                  </div>
+
+                  <div className="command-mini">
+                    <small>Reports Ready</small>
+                    <strong>24</strong>
+                    <em>Ready to export</em>
+                  </div>
+
+                  <div className="command-mini command-alert">
+                    <small>Alerts</small>
+                    <strong>8</strong>
+                    <em>Needs attention</em>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div className="sh-grid">
-        <Card
-          title="Pilot Kits"
-          desc="Prebuilt program kits: scope, budget, metrics, and reporting templates."
-          tag="Pilot-ready"
-          to={null}
-        />
-        <Card
-          title="Compliance + Reporting"
-          desc="Evidence packs, audit trails, and exportable grant reporting."
-          tag="Coming soon"
-          to={null}
-        />
-        <Card
-          title="Employer Hub"
-          desc="Hiring pipeline, interview flows, and workforce analytics for partners."
-          tag="Coming soon"
-          to={null}
-        />
-        <Card
-          title="Marketplace"
-          desc="Digital + physical kits (curriculum, devices, and deployment bundles)."
-          tag="Coming soon"
-          to={null}
-        />
-        <Card
-          title="Open Ledger"
-          desc="Transparency layer for sponsors: funds → outcomes mapping."
-          tag="Optional"
-          to={null}
-        />
-        <Card
-          title="Integrations"
-          desc="Connectors: CSV, SIS/LMS, HRIS, and payment rails."
-          tag="Coming soon"
-          to={null}
-        />
-      </div>
+      <div className="dark-to-white-fade" />
 
-      <style>{`
-        .sh-solutions{ padding:24px; max-width:1100px; margin:0 auto; }
-        .sh-hero{ padding:18px 18px 14px; border:1px solid rgba(255,255,255,.08); border-radius:18px; background: rgba(255,255,255,.03); }
-        .sh-heroKicker{ font-size:12px; opacity:.75; letter-spacing:.08em; text-transform:uppercase; }
-        .sh-heroTitle{ font-size:34px; line-height:1.05; margin:10px 0 8px; }
-        .sh-heroSub{ font-size:15px; opacity:.85; margin:0 0 14px; max-width:720px; }
-        .sh-heroRow{ display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
-        .sh-solutions .sh-btn{ display:inline-flex; align-items:center; gap:10px; padding:10px 14px; border-radius:14px; border:1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); text-decoration:none; }
-        .sh-muted{ font-size:12px; opacity:.7; }
+      <section className="white-section">
+        <div className="section-heading">
+          <h2>Why Organizations Choose SHS</h2>
+          <p>
+            Everything needed to operate, prove, and grow — built into one
+            infrastructure.
+          </p>
+        </div>
 
-        .sh-grid{ display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:14px; margin-top:14px; }
-        @media (max-width: 980px){ .sh-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-        @media (max-width: 640px){ .sh-grid{ grid-template-columns: 1fr; } }
+        <div className="benefit-grid">
+          {benefits.map(([title, text]) => (
+            <article className="benefit-card" key={title}>
+              <div className="card-icon">✦</div>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
 
-        .sh-cardLink{ text-decoration:none; color:inherit; }
-        .sh-card{ padding:14px; border-radius:18px; border:1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.03); transition: transform .12s ease, border-color .12s ease, background .12s ease; min-height:118px; display:flex; flex-direction:column; justify-content:space-between; }
-        .sh-cardTop{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
-        .sh-cardTitle{ font-size:16px; font-weight:650; }
-        .sh-cardDesc{ font-size:13px; opacity:.82; margin-top:8px; }
-        .sh-cardCta{ font-size:12px; opacity:.7; margin-top:12px; }
-        .sh-chip{ font-size:11px; padding:4px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.05); white-space:nowrap; opacity:.85; }
+      <section className="metrics-band">
+        <h2>Proven Impact. Real Results.</h2>
 
-        .sh-cardLink:hover .sh-card{ transform: translateY(-1px); border-color: rgba(255,255,255,.16); background: rgba(255,255,255,.05); }
-        .sh-cardDisabled{ cursor:not-allowed; opacity:.7; }
-        .sh-cardDisabled:hover .sh-card{ transform:none; }
-      `}</style>
-    </div>
+        <div className="metrics-grid">
+          {metrics.map(([number, label]) => (
+            <div className="metric-card" key={label}>
+              <strong>{number}</strong>
+              <span>{label}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="white-section">
+        <div className="section-heading">
+          <h2>Who SHS Is Built For</h2>
+          <p>One command infrastructure for many kinds of organizations.</p>
+        </div>
+
+        <div className="audience-grid">
+          {audiences.map(([title, text]) => (
+            <article className="audience-card" key={title}>
+              <div className="card-icon">◎</div>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="method-section">
+        <div className="section-heading dark">
+          <h2>The SHS Command Method</h2>
+          <p>Operate clearly. Verify outcomes. Report with confidence.</p>
+        </div>
+
+        <div className="method-grid">
+          <article>
+            <span>1</span>
+            <h3>Operate</h3>
+            <p>
+              Manage workflows, tasks, people, cases, and partners from one
+              command center.
+            </p>
+          </article>
+
+          <article>
+            <span>2</span>
+            <h3>Verify</h3>
+            <p>
+              Track outcomes, collect evidence, and ensure quality, readiness,
+              and accountability.
+            </p>
+          </article>
+
+          <article>
+            <span>3</span>
+            <h3>Report</h3>
+            <p>
+              Generate dashboards, proof packets, and reports for leaders,
+              funders, partners, and boards.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section className="conversion-section">
+        <article className="built-card">
+          <div>
+            <p className="eyebrow light">Built on SHS</p>
+            <h2>Have a business that needs more than a website?</h2>
+            <p>
+              SHS helps selected founders and organizations build
+              command-center businesses with workflows, verified data, AI
+              support, reporting, and scalable infrastructure built in from day
+              one.
+            </p>
+
+            <ul>
+              <li>Full infrastructure and technology</li>
+              <li>Operations and workflow design</li>
+              <li>AI analyst and reporting</li>
+              <li>Growth and scale support</li>
+              <li>Equity or revenue share options</li>
+            </ul>
+
+            <a className="shs-btn shs-btn-gold" href="#/built-on-shs">
+              Apply to Build on SHS
+            </a>
+          </div>
+
+          <div className="laptop-visual" aria-hidden="true">
+            <div className="laptop-screen">
+              <div />
+              <div />
+              <div />
+              <div />
+            </div>
+            <div className="laptop-base" />
+          </div>
+        </article>
+
+        <article className="commercial-card" id="commercial">
+          <p className="eyebrow light">Commercial Story</p>
+          <h2>See the SHS Command Center Story</h2>
+          <p>
+            In 60 seconds, see how SHS turns scattered operations into verified
+            infrastructure for action, proof, reporting, and growth.
+          </p>
+
+          <div className="video-shell">
+            <button aria-label="Play commercial">▶</button>
+          </div>
+
+          <a href="#/commercial">Watch Commercial</a>
+        </article>
+      </section>
+
+      <section className="final-cta">
+        <h2>
+          Your organization is already doing the work.
+          <span> Now give it the infrastructure to prove it.</span>
+        </h2>
+
+        <div className="final-actions">
+          <a className="shs-btn shs-btn-primary" href="#/join">Join Now</a>
+          <a className="shs-btn shs-btn-outline" href="#/request-demo">
+            Request Demo
+          </a>
+        </div>
+      </section>
+    </main>
   );
 }

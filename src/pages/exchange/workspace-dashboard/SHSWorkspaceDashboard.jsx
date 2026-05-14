@@ -8,6 +8,7 @@ import DashboardPanel from "./components/PanelView";
 import BottomDock from "./components/BottomDock";
 import { normalizeDashboardPanel, readStoredProfile } from "./dashboardUtils";
 
+import InstitutionalFooter from "@/components/shared/InstitutionalFooter.jsx";
 export default function SHSWorkspaceDashboard() {
   const [activePanel, setActivePanel] = useState(() => {
     if (typeof window === "undefined") return "Overview";
@@ -45,6 +46,17 @@ export default function SHSWorkspaceDashboard() {
 
   return (
     <div className="shsDash-shell">
+
+      <div className="shs-workspace-official-brand">
+        <div className="shs-workspace-official-brand__mark">
+          <img src="/assets/shs/shs-logo-mark.svg" alt="Silicon Heartland Solutions" />
+        </div>
+        <div className="shs-workspace-official-brand__text">
+          <h1>Silicon Heartland Solutions</h1>
+          <span>Workspace Dashboard</span>
+        </div>
+      </div>
+
       <DashboardRail activePanel={activePanel} setActivePanel={selectDashboardPanel} />
 
       <section className="shsDash-workspace">
@@ -59,6 +71,13 @@ export default function SHSWorkspaceDashboard() {
 
         <BottomDock />
       </section>
-    </div>
+    
+      <InstitutionalFooter
+        logoSrc="/assets/shs/shs-logo-mark.svg"
+        version="Workspace Dashboard V1"
+        env="Local / Development"
+      />
+
+</div>
   );
 }

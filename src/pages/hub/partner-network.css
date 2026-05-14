@@ -1,0 +1,1416 @@
+.pn-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  background:
+    radial-gradient(circle at 40% -14%, rgba(36, 154, 255, 0.18), transparent 35%),
+    radial-gradient(circle at 95% 105%, rgba(59, 225, 199, 0.08), transparent 30%),
+    linear-gradient(180deg, #06111f, #030914 64%, #02070d);
+  color: #edf6ff;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.pn-rail {
+  border-right: 1px solid rgba(113, 160, 205, 0.2);
+  background: rgba(3, 12, 22, 0.94);
+  padding: 12px 8px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 10px;
+}
+
+.pn-logo {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto;
+  border-radius: 18px;
+  border: 1px solid rgba(74, 169, 255, 0.58);
+  background: rgba(5, 18, 31, 0.9);
+  color: #eaf7ff;
+  font-weight: 950;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.pn-rail nav {
+  display: grid;
+  gap: 7px;
+  align-content: start;
+}
+
+.pn-rail nav button {
+  min-height: 58px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  background: transparent;
+  color: rgba(218, 235, 247, 0.68);
+  display: grid;
+  place-items: center;
+  gap: 2px;
+  position: relative;
+  cursor: pointer;
+}
+
+.pn-rail nav button span {
+  font-size: 20px;
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+.pn-rail nav button small {
+  font-size: 10px;
+}
+
+.pn-rail nav button b {
+  position: absolute;
+  right: 12px;
+  top: 8px;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #ff8a3d;
+  color: #04101c;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+}
+
+.pn-rail nav button.is-active {
+  background: rgba(28, 116, 220, 0.46);
+  border-color: rgba(89, 173, 255, 0.62);
+  color: #f4fbff;
+  box-shadow: 0 0 20px rgba(49, 146, 255, 0.22);
+}
+
+.pn-readiness {
+  border: 1px solid rgba(94, 161, 223, 0.2);
+  border-radius: 12px;
+  background: rgba(5, 17, 30, 0.88);
+  padding: 12px 8px;
+  text-align: center;
+}
+
+.pn-readiness strong {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+}
+
+.pn-readiness div {
+  width: 64px;
+  height: 64px;
+  margin: 12px auto 8px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 19px;
+  font-weight: 950;
+  background:
+    radial-gradient(circle, #071421 56%, transparent 57%),
+    conic-gradient(#58b8ff 0 87%, rgba(58, 100, 140, 0.3) 87% 100%);
+}
+
+.pn-readiness span {
+  display: block;
+  color: #60e39c;
+  font-weight: 900;
+  font-size: 12px;
+}
+
+.pn-readiness small {
+  display: block;
+  margin-top: 8px;
+  color: rgba(217, 231, 243, 0.62);
+  font-size: 10px;
+}
+
+.pn-page {
+  min-width: 0;
+  padding: 12px 12px 24px;
+  overflow-x: hidden;
+}
+
+.pn-header {
+  min-height: 136px;
+  border: 1px solid rgba(116, 151, 181, 0.22);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 72% 40%, rgba(54, 151, 255, 0.14), transparent 30%),
+    linear-gradient(135deg, rgba(8, 28, 48, 0.96), rgba(4, 13, 24, 0.96));
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 16px;
+  padding: 22px 26px;
+  box-shadow: 0 26px 70px rgba(0, 0, 0, 0.22);
+}
+
+.pn-header p {
+  margin: 0 0 8px;
+  color: #62e0ff;
+  letter-spacing: 0.22em;
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.pn-header h1 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(42px, 4vw, 70px);
+  line-height: 0.95;
+}
+
+.pn-header span {
+  display: block;
+  margin-top: 12px;
+  color: rgba(225, 238, 247, 0.78);
+  font-size: 15px;
+}
+
+.pn-headerActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.pn-headerActions button,
+.pn-cardHead button,
+.pn-cardFoot button,
+.pn-linkBtn {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(96, 151, 204, 0.32);
+  background: rgba(4, 14, 25, 0.9);
+  color: #86c2ff;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.pn-focusBanner,
+.pn-error {
+  margin: 10px 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(98, 224, 255, 0.22);
+  background: rgba(98, 224, 255, 0.08);
+  color: rgba(230, 248, 255, 0.95);
+}
+
+.pn-error {
+  border-color: rgba(255, 111, 97, 0.28);
+  background: rgba(255, 111, 97, 0.09);
+}
+
+.pn-kpiStrip {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.pn-kpi,
+.pn-card {
+  border: 1px solid rgba(104, 139, 191, 0.22);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 92% 70%, rgba(64, 145, 255, 0.1), transparent 35%),
+    rgba(7, 17, 29, 0.92);
+  box-shadow: inset 0 0 22px rgba(255, 255, 255, 0.018), 0 20px 60px rgba(0, 0, 0, 0.14);
+}
+
+.pn-kpi {
+  min-height: 118px;
+  padding: 14px;
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.pn-kpiIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(98, 224, 255, 0.2);
+  background: rgba(9, 25, 42, 0.9);
+}
+
+.pn-kpi h3 {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pn-kpi strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 31px;
+  line-height: 1;
+}
+
+.pn-kpi p {
+  margin: 7px 0 0;
+  color: rgba(216, 229, 242, 0.64);
+  font-size: 11px;
+}
+
+.pn-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 0 9px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pn-pill--green { color: #60e39c; background: rgba(94, 226, 155, 0.12); border: 1px solid rgba(94, 226, 155, 0.24); }
+.pn-pill--teal { color: #52dfd2; background: rgba(82, 223, 210, 0.1); border: 1px solid rgba(82, 223, 210, 0.22); }
+.pn-pill--blue { color: #6da7ff; background: rgba(109, 167, 255, 0.12); border: 1px solid rgba(109, 167, 255, 0.26); }
+.pn-pill--gold { color: #f0a83e; background: rgba(240, 168, 62, 0.12); border: 1px solid rgba(240, 168, 62, 0.26); }
+.pn-pill--orange { color: #ff9a62; background: rgba(255, 138, 87, 0.12); border: 1px solid rgba(255, 138, 87, 0.28); }
+.pn-pill--red { color: #ff7b75; background: rgba(255, 91, 91, 0.12); border: 1px solid rgba(255, 91, 91, 0.28); }
+
+.pn-spark {
+  position: absolute;
+  right: 14px;
+  bottom: 16px;
+  width: 74px;
+  height: 28px;
+  color: #6da7ff;
+}
+
+.pn-spark polyline {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+.pn-spark--green { color: #5ee29b; }
+.pn-spark--teal { color: #52dfd2; }
+.pn-spark--gold { color: #f0a83e; }
+.pn-spark--orange { color: #ff8a57; }
+.pn-spark--red { color: #ff6f61; }
+
+.pn-grid {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(340px, 0.62fr) minmax(340px, 0.62fr);
+  gap: 10px;
+}
+
+.pn-card {
+  min-width: 0;
+  padding: 14px;
+}
+
+.pn-directory,
+.pn-attention {
+  grid-column: span 1;
+}
+
+.pn-status {
+  grid-column: span 2;
+}
+
+.pn-cardHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: start;
+  margin-bottom: 12px;
+}
+
+.pn-cardHead h2 {
+  margin: 0;
+  font-size: 17px;
+  letter-spacing: 0.02em;
+}
+
+.pn-cardHead p {
+  margin: 5px 0 0;
+  color: rgba(216, 229, 242, 0.64);
+  font-size: 12px;
+}
+
+.pn-tableHead,
+.pn-partnerRow {
+  display: grid;
+  grid-template-columns: 46px minmax(150px, 1.2fr) minmax(140px, 0.9fr) 130px 115px minmax(130px, 0.9fr) 24px;
+  gap: 8px;
+  align-items: center;
+}
+
+.pn-tableHead {
+  min-height: 36px;
+  padding: 0 10px;
+  border: 1px solid rgba(104, 139, 191, 0.16);
+  background: rgba(5, 16, 27, 0.55);
+  color: rgba(216, 229, 242, 0.64);
+  font-size: 12px;
+}
+
+.pn-tableHead span:first-child {
+  grid-column: 1 / span 2;
+}
+
+.pn-partnerRow {
+  min-height: 66px;
+  border-bottom: 1px solid rgba(116, 151, 181, 0.1);
+  font-size: 12px;
+}
+
+.pn-partnerLogo {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  background: rgba(74, 169, 255, 0.18);
+}
+
+.pn-partnerName strong,
+.pn-partnerName small {
+  display: block;
+}
+
+.pn-partnerName small,
+.pn-refFlow small,
+.pn-networkState small {
+  color: rgba(216, 229, 242, 0.58);
+  margin-top: 3px;
+}
+
+.pn-serviceChips {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pn-serviceChips span {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  background: rgba(120, 156, 190, 0.16);
+}
+
+.pn-serviceChips b {
+  color: rgba(216, 229, 242, 0.62);
+}
+
+.pn-networkState {
+  display: grid;
+  grid-template-columns: 8px 1fr;
+  column-gap: 7px;
+  align-items: center;
+}
+
+.pn-networkState small {
+  grid-column: 2;
+}
+
+.pn-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+}
+
+.pn-dot--green { background: #60e39c; }
+.pn-dot--gold { background: #f0a83e; }
+
+.pn-menu {
+  border: 0;
+  background: transparent;
+  color: rgba(216, 229, 242, 0.6);
+  font-size: 20px;
+}
+
+.pn-cardFoot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  color: rgba(216, 229, 242, 0.62);
+  font-size: 12px;
+}
+
+.pn-cardFoot button,
+.pn-linkBtn {
+  border: 0;
+  background: transparent;
+  color: #64c7ff;
+  font-weight: 900;
+}
+
+.pn-barRow {
+  display: grid;
+  grid-template-columns: 28px 120px minmax(0, 1fr) 42px;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  font-size: 12px;
+}
+
+.pn-barTrack {
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(112, 151, 190, 0.18);
+  overflow: hidden;
+}
+
+.pn-barFill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: #6da7ff;
+}
+
+.pn-barFill--green { background: #5ee29b; }
+.pn-barFill--blue { background: #4aa7ff; }
+.pn-barFill--violet { background: #8b76ff; }
+
+.pn-donutWrap {
+  min-height: 210px;
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 18px;
+  align-items: center;
+}
+
+.pn-donut {
+  width: 150px;
+  height: 150px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  background:
+    radial-gradient(circle, #071421 54%, transparent 55%),
+    conic-gradient(#5ee29b 0 50%, #f0a83e 50% 75%, #ff5b5b 75% 100%);
+}
+
+.pn-donut strong {
+  font-size: 30px;
+}
+
+.pn-donut span {
+  color: rgba(216, 229, 242, 0.62);
+}
+
+.pn-donutLegend {
+  display: grid;
+  gap: 12px;
+}
+
+.pn-donutLegend p {
+  display: grid;
+  grid-template-columns: 10px 1fr auto;
+  gap: 9px;
+  margin: 0;
+  align-items: center;
+  font-size: 12px;
+}
+
+.pn-donutLegend i {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+}
+
+.pn-donutLegend .green { background: #5ee29b; }
+.pn-donutLegend .gold { background: #f0a83e; }
+.pn-donutLegend .red { background: #ff5b5b; }
+
+.pn-attentionTable {
+  border: 1px solid rgba(104, 139, 191, 0.16);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.pn-attentionHead,
+.pn-attentionRow {
+  display: grid;
+  grid-template-columns: minmax(170px, 1.2fr) minmax(180px, 1fr) 80px 100px;
+  gap: 8px;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 10px;
+  border-bottom: 1px solid rgba(116, 151, 181, 0.1);
+  font-size: 12px;
+}
+
+.pn-attentionHead {
+  color: rgba(216, 229, 242, 0.62);
+  background: rgba(5, 16, 27, 0.55);
+}
+
+.pn-impact {
+  width: fit-content;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+}
+
+.pn-impact--red { color: #ff7b75; background: rgba(255, 91, 91, 0.13); }
+.pn-impact--gold { color: #f0a83e; background: rgba(240, 168, 62, 0.13); }
+.pn-impact--green { color: #5ee29b; background: rgba(94, 226, 155, 0.13); }
+
+.pn-statusGrid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 14px;
+}
+
+.pn-statusRows {
+  border: 1px solid rgba(104, 139, 191, 0.16);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.pn-statusRows div {
+  min-height: 38px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(116, 151, 181, 0.1);
+}
+
+.pn-statusRows span {
+  color: rgba(216, 229, 242, 0.62);
+}
+
+.pn-healthCard {
+  border: 1px solid rgba(94, 226, 155, 0.22);
+  border-radius: 12px;
+  background: rgba(94, 226, 155, 0.06);
+  padding: 18px;
+  position: relative;
+}
+
+.pn-healthIcon {
+  width: 74px;
+  height: 74px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  float: left;
+  margin-right: 18px;
+  border: 1px solid rgba(94, 226, 155, 0.36);
+  color: #5ee29b;
+  font-size: 34px;
+  box-shadow: 0 0 28px rgba(94, 226, 155, 0.18);
+}
+
+.pn-healthCard h3 {
+  margin: 0 0 8px;
+}
+
+.pn-healthCard span {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 999px;
+  color: #5ee29b;
+  background: rgba(94, 226, 155, 0.12);
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 950;
+}
+
+.pn-healthCard p {
+  color: rgba(216, 229, 242, 0.72);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.pn-healthCard button {
+  border: 0;
+  background: transparent;
+  color: #64c7ff;
+  font-weight: 900;
+}
+
+@media (max-width: 1500px) {
+  .pn-kpiStrip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .pn-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pn-status {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 900px) {
+  .pn-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .pn-rail {
+    display: none;
+  }
+
+  .pn-header {
+    grid-template-columns: 1fr;
+  }
+
+  .pn-kpiStrip {
+    grid-template-columns: 1fr;
+  }
+
+  .pn-tableHead,
+  .pn-partnerRow,
+  .pn-attentionHead,
+  .pn-attentionRow,
+  .pn-statusGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   PARTNER NETWORK DESKTOP COMPRESSION PASS
+   Keeps the page from stretching into too many full-width rows.
+   ========================================================= */
+
+@media (min-width: 1501px) {
+  .pn-page {
+    padding: 10px 10px 18px !important;
+  }
+
+  .pn-header {
+    min-height: 118px !important;
+    padding: 18px 24px !important;
+  }
+
+  .pn-header h1 {
+    font-size: clamp(44px, 3.25vw, 62px) !important;
+  }
+
+  .pn-header span {
+    margin-top: 8px !important;
+    font-size: 14px !important;
+  }
+
+  .pn-kpiStrip {
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .pn-kpi {
+    min-height: 98px !important;
+    padding: 12px !important;
+  }
+
+  .pn-kpi strong {
+    font-size: 27px !important;
+  }
+
+  .pn-kpi p {
+    margin-top: 5px !important;
+    font-size: 10.5px !important;
+  }
+
+  .pn-spark {
+    width: 62px !important;
+    height: 23px !important;
+    bottom: 12px !important;
+  }
+
+  .pn-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.62fr) minmax(300px, 0.62fr) !important;
+    gap: 8px !important;
+    align-items: stretch !important;
+  }
+
+  .pn-card {
+    padding: 12px !important;
+    min-height: 0 !important;
+  }
+
+  .pn-directory {
+    grid-column: 1 / 2 !important;
+    grid-row: 1 / 3 !important;
+  }
+
+  .pn-service {
+    grid-column: 2 / 3 !important;
+    grid-row: 1 / 2 !important;
+  }
+
+  .pn-capacity {
+    grid-column: 3 / 4 !important;
+    grid-row: 1 / 2 !important;
+  }
+
+  .pn-attention {
+    grid-column: 1 / 2 !important;
+    grid-row: 3 / 4 !important;
+  }
+
+  .pn-status {
+    grid-column: 2 / 4 !important;
+    grid-row: 2 / 4 !important;
+  }
+
+  .pn-cardHead {
+    margin-bottom: 8px !important;
+  }
+
+  .pn-cardHead h2 {
+    font-size: 15px !important;
+  }
+
+  .pn-cardHead p {
+    font-size: 11px !important;
+  }
+
+  .pn-tableHead {
+    min-height: 32px !important;
+  }
+
+  .pn-partnerRow {
+    min-height: 56px !important;
+  }
+
+  .pn-partnerLogo {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .pn-serviceChips span {
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  .pn-barRow {
+    min-height: 29px !important;
+    grid-template-columns: 24px 108px minmax(0, 1fr) 38px !important;
+  }
+
+  .pn-donutWrap {
+    min-height: 150px !important;
+    grid-template-columns: 128px 1fr !important;
+    gap: 12px !important;
+  }
+
+  .pn-donut {
+    width: 118px !important;
+    height: 118px !important;
+  }
+
+  .pn-donut strong {
+    font-size: 25px !important;
+  }
+
+  .pn-donutLegend {
+    gap: 8px !important;
+  }
+
+  .pn-attentionHead,
+  .pn-attentionRow {
+    min-height: 31px !important;
+  }
+
+  .pn-statusGrid {
+    grid-template-columns: 0.95fr 1.05fr !important;
+    gap: 10px !important;
+  }
+
+  .pn-statusRows div {
+    min-height: 34px !important;
+  }
+
+  .pn-healthCard {
+    padding: 14px !important;
+  }
+
+  .pn-healthIcon {
+    width: 58px !important;
+    height: 58px !important;
+    font-size: 28px !important;
+  }
+}
+
+/* =========================================================
+   PARTNER NETWORK TRUE DESKTOP GRID FIX
+   Forces the page into the intended SHS layout on normal screens.
+   ========================================================= */
+
+@media (min-width: 1100px) {
+  .pn-page {
+    padding: 10px 10px 18px !important;
+  }
+
+  .pn-header {
+    min-height: 112px !important;
+    padding: 17px 24px !important;
+  }
+
+  .pn-header h1 {
+    font-size: clamp(42px, 3.1vw, 60px) !important;
+  }
+
+  .pn-header span {
+    margin-top: 7px !important;
+    font-size: 14px !important;
+  }
+
+  .pn-kpiStrip {
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .pn-kpi {
+    min-height: 94px !important;
+    padding: 11px !important;
+  }
+
+  .pn-kpi h3 {
+    font-size: 10px !important;
+  }
+
+  .pn-kpi strong {
+    font-size: 25px !important;
+  }
+
+  .pn-kpi p {
+    font-size: 10px !important;
+  }
+
+  .pn-spark {
+    width: 56px !important;
+    height: 22px !important;
+    right: 10px !important;
+    bottom: 10px !important;
+  }
+
+  .pn-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.62fr) minmax(280px, 0.62fr) !important;
+    grid-auto-flow: row !important;
+    gap: 8px !important;
+    align-items: stretch !important;
+  }
+
+  .pn-directory {
+    grid-column: 1 / 2 !important;
+    grid-row: 1 / 3 !important;
+  }
+
+  .pn-service {
+    grid-column: 2 / 3 !important;
+    grid-row: 1 / 2 !important;
+  }
+
+  .pn-capacity {
+    grid-column: 3 / 4 !important;
+    grid-row: 1 / 2 !important;
+  }
+
+  .pn-attention {
+    grid-column: 1 / 2 !important;
+    grid-row: 3 / 4 !important;
+  }
+
+  .pn-status {
+    grid-column: 2 / 4 !important;
+    grid-row: 2 / 4 !important;
+  }
+
+  .pn-card {
+    padding: 12px !important;
+    min-height: 0 !important;
+  }
+
+  .pn-cardHead {
+    margin-bottom: 8px !important;
+  }
+
+  .pn-cardHead h2 {
+    font-size: 15px !important;
+  }
+
+  .pn-cardHead p {
+    font-size: 11px !important;
+  }
+
+  .pn-tableHead,
+  .pn-partnerRow {
+    grid-template-columns: 42px minmax(130px, 1.2fr) minmax(110px, 0.8fr) 112px 92px minmax(110px, 0.9fr) 20px !important;
+  }
+
+  .pn-tableHead {
+    min-height: 30px !important;
+    font-size: 10.5px !important;
+  }
+
+  .pn-partnerRow {
+    min-height: 52px !important;
+    font-size: 10.5px !important;
+  }
+
+  .pn-partnerLogo {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .pn-serviceChips span {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .pn-barRow {
+    min-height: 27px !important;
+    grid-template-columns: 22px 96px minmax(0, 1fr) 34px !important;
+    font-size: 11px !important;
+  }
+
+  .pn-donutWrap {
+    min-height: 142px !important;
+    grid-template-columns: 112px 1fr !important;
+    gap: 10px !important;
+  }
+
+  .pn-donut {
+    width: 104px !important;
+    height: 104px !important;
+  }
+
+  .pn-donut strong {
+    font-size: 23px !important;
+  }
+
+  .pn-donutLegend {
+    gap: 7px !important;
+  }
+
+  .pn-donutLegend p {
+    font-size: 11px !important;
+  }
+
+  .pn-attentionHead,
+  .pn-attentionRow {
+    min-height: 30px !important;
+    font-size: 11px !important;
+  }
+
+  .pn-statusGrid {
+    grid-template-columns: 0.95fr 1.05fr !important;
+    gap: 10px !important;
+  }
+
+  .pn-statusRows div {
+    min-height: 32px !important;
+  }
+
+  .pn-healthCard {
+    padding: 13px !important;
+  }
+
+  .pn-healthIcon {
+    width: 54px !important;
+    height: 54px !important;
+    font-size: 26px !important;
+  }
+
+  .pn-healthCard p {
+    font-size: 12px !important;
+  }
+}
+
+@media (max-width: 1099px) {
+  .pn-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .pn-status,
+  .pn-directory,
+  .pn-service,
+  .pn-capacity,
+  .pn-attention {
+    grid-column: auto !important;
+    grid-row: auto !important;
+  }
+}
+
+/* =========================================================
+   PARTNER NETWORK STATUS CARD READABILITY FIX
+   Prevents label/value crowding in Network Status.
+   ========================================================= */
+
+@media (min-width: 1100px) {
+  .pn-statusGrid {
+    grid-template-columns: minmax(300px, 0.95fr) minmax(340px, 1.05fr) !important;
+    align-items: stretch !important;
+  }
+
+  .pn-statusRows div {
+    display: grid !important;
+    grid-template-columns: minmax(130px, 0.9fr) minmax(150px, 1.1fr) !important;
+    gap: 12px !important;
+    min-height: 34px !important;
+    padding: 0 12px !important;
+  }
+
+  .pn-statusRows span {
+    font-size: 13px !important;
+    line-height: 1.15 !important;
+    white-space: normal !important;
+  }
+
+  .pn-statusRows strong {
+    font-size: 13px !important;
+    line-height: 1.15 !important;
+    text-align: right !important;
+    white-space: normal !important;
+  }
+
+  .pn-healthCard {
+    display: grid !important;
+    grid-template-columns: 64px minmax(0, 1fr) !important;
+    column-gap: 14px !important;
+    align-items: center !important;
+  }
+
+  .pn-healthIcon {
+    float: none !important;
+    margin: 0 !important;
+    grid-row: span 4 !important;
+  }
+
+  .pn-healthCard h3,
+  .pn-healthCard span,
+  .pn-healthCard p,
+  .pn-healthCard button {
+    grid-column: 2 !important;
+  }
+
+  .pn-healthCard h3 {
+    margin: 0 !important;
+    font-size: 19px !important;
+    line-height: 1.1 !important;
+  }
+
+  .pn-healthCard p {
+    margin: 8px 0 !important;
+    font-size: 12px !important;
+    line-height: 1.35 !important;
+  }
+}
+
+/* =========================================================
+   NETWORK HEALTH OVERLAP FIX
+   Keeps Overall Network Health inside the Network Status card.
+   ========================================================= */
+
+.pn-status {
+  overflow: hidden !important;
+}
+
+.pn-statusGrid {
+  display: grid !important;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(320px, 1.1fr) !important;
+  gap: 12px !important;
+  align-items: stretch !important;
+}
+
+.pn-statusRows {
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+.pn-statusRows div {
+  display: grid !important;
+  grid-template-columns: minmax(120px, 0.85fr) minmax(130px, 1.15fr) !important;
+  gap: 10px !important;
+  align-items: center !important;
+}
+
+.pn-statusRows span,
+.pn-statusRows strong {
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+  white-space: normal !important;
+}
+
+.pn-statusRows strong {
+  text-align: right !important;
+}
+
+.pn-healthCard {
+  position: relative !important;
+  float: none !important;
+  width: auto !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  display: grid !important;
+  grid-template-columns: 58px minmax(0, 1fr) !important;
+  column-gap: 14px !important;
+  align-items: center !important;
+  z-index: 0 !important;
+}
+
+.pn-healthIcon {
+  float: none !important;
+  margin: 0 !important;
+  grid-column: 1 !important;
+  grid-row: 1 / span 4 !important;
+  width: 54px !important;
+  height: 54px !important;
+}
+
+.pn-healthCard h3,
+.pn-healthCard span,
+.pn-healthCard p,
+.pn-healthCard button {
+  grid-column: 2 !important;
+  min-width: 0 !important;
+}
+
+.pn-healthCard h3 {
+  margin: 0 0 4px !important;
+  font-size: 18px !important;
+  line-height: 1.1 !important;
+}
+
+.pn-healthCard p {
+  margin: 7px 0 !important;
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+}
+
+@media (max-width: 1250px) {
+  .pn-statusGrid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .pn-statusRows strong {
+    text-align: left !important;
+  }
+}
+
+/* =========================================================
+   FORCE NETWORK HEALTH STACK
+   Final fix: prevents Overall Network Health from covering page.
+   ========================================================= */
+
+.pn-status {
+  overflow: hidden !important;
+}
+
+.pn-statusGrid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 10px !important;
+  align-items: stretch !important;
+}
+
+.pn-statusRows {
+  width: 100% !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+.pn-statusRows div {
+  display: grid !important;
+  grid-template-columns: minmax(120px, 0.8fr) minmax(140px, 1.2fr) !important;
+  gap: 12px !important;
+  align-items: center !important;
+  min-height: 32px !important;
+  padding: 0 12px !important;
+}
+
+.pn-statusRows span,
+.pn-statusRows strong {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow-wrap: anywhere !important;
+  white-space: normal !important;
+  line-height: 1.2 !important;
+}
+
+.pn-statusRows strong {
+  text-align: right !important;
+}
+
+.pn-healthCard {
+  position: static !important;
+  float: none !important;
+  clear: both !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  z-index: auto !important;
+
+  display: grid !important;
+  grid-template-columns: 56px minmax(0, 1fr) !important;
+  column-gap: 14px !important;
+  align-items: center !important;
+
+  padding: 12px 14px !important;
+}
+
+.pn-healthIcon {
+  position: static !important;
+  float: none !important;
+  margin: 0 !important;
+  width: 52px !important;
+  height: 52px !important;
+  grid-column: 1 !important;
+  grid-row: 1 / span 4 !important;
+}
+
+.pn-healthCard h3,
+.pn-healthCard span,
+.pn-healthCard p,
+.pn-healthCard button {
+  grid-column: 2 !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+.pn-healthCard h3 {
+  margin: 0 0 4px !important;
+  font-size: 18px !important;
+  line-height: 1.1 !important;
+}
+
+.pn-healthCard span {
+  width: fit-content !important;
+}
+
+.pn-healthCard p {
+  margin: 6px 0 !important;
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+  overflow-wrap: anywhere !important;
+}
+
+.pn-healthCard button {
+  width: fit-content !important;
+}
+
+/* =========================================================
+   PARTNER DIRECTORY EMPTY SPACE FIX
+   Reduces unused space when partner count is low.
+   ========================================================= */
+
+@media (min-width: 1100px) {
+  .pn-directory {
+    grid-row: 1 / 2 !important;
+    min-height: auto !important;
+  }
+
+  .pn-attention {
+    grid-column: 1 / 2 !important;
+    grid-row: 2 / 4 !important;
+  }
+
+  .pn-service {
+    grid-column: 2 / 3 !important;
+    grid-row: 1 / 2 !important;
+  }
+
+  .pn-capacity {
+    grid-column: 3 / 4 !important;
+    grid-row: 1 / 2 !important;
+  }
+
+  .pn-status {
+    grid-column: 2 / 4 !important;
+    grid-row: 2 / 4 !important;
+  }
+
+  .pn-partnerList {
+    min-height: 0 !important;
+  }
+
+  .pn-cardFoot {
+    margin-top: 8px !important;
+  }
+
+  .pn-grid {
+    align-items: start !important;
+  }
+}
+
+/* Hub real logo */
+.pn-logo img {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+  display: block;
+}
+
+/* ===== HUB LOGO SIZE OVERRIDE ===== */
+.hubWs-logo,
+.pn-logo,
+.intakeShs-logo,
+.paq-logo,
+.rt-logo {
+  width: 88px !important;
+  height: 88px !important;
+  min-width: 88px !important;
+  min-height: 88px !important;
+  padding: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+
+.hubWs-logo img,
+.pn-logo img,
+.intakeShs-logo img,
+.paq-logo img,
+.rt-logo img {
+  width: 68px !important;
+  height: 68px !important;
+  max-width: 68px !important;
+  max-height: 68px !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+
+/* ===== HUB LOGO IMAGE FILL OVERRIDE ===== */
+.hubWs-logo,
+.pn-logo,
+.intakeShs-logo,
+.paq-logo,
+.rt-logo {
+  padding: 3px !important;
+}
+
+.hubWs-logo img,
+.pn-logo img,
+.intakeShs-logo img,
+.paq-logo img,
+.rt-logo img {
+  width: 84px !important;
+  height: 84px !important;
+  max-width: 84px !important;
+  max-height: 84px !important;
+  object-fit: contain !important;
+  transform: scale(1.12) !important;
+  transform-origin: center center !important;
+}

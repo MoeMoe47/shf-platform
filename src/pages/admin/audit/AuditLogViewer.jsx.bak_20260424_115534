@@ -1,0 +1,12 @@
+import React from "react";
+
+export default function AuditLogViewer() {
+  return (
+    <div style={{ padding: 24, color: "#1f2937" }}>
+      <h1 style={{ color: "#0f172a", fontWeight: 800 }}>Audit Log Viewer</h1>
+      <p style={{ opacity: 1 }}>
+        Starter placeholder for identity, upload, export, and verification audit events.
+      </p>
+    </div>
+  );
+}

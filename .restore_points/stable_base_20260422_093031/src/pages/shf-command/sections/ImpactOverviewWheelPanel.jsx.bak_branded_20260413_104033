@@ -1,0 +1,59 @@
+import React from "react";
+
+export default function ImpactOverviewWheelPanel({
+  wheelSegments = [],
+  trendPoints = [],
+  onWheelClick,
+}) {
+  return (
+    <div className="shf-panel">
+      <div className="shf-panel__header">
+        <h2>Impact Overview</h2>
+      </div>
+
+      <div className="shf-wheel-card">
+        <button
+          type="button"
+          className="shf-wheel"
+          onClick={() => onWheelClick?.()}
+        >
+          <div className="shf-wheel__outer">
+            {wheelSegments.map((seg, idx) => (
+              <div
+                key={`${seg.label}-${idx}`}
+                className={`shf-wheel-segment ${seg.tone}`}
+                style={{ "--segment-index": idx }}
+              >
+                <span>{seg.value}</span>
+              </div>
+            ))}
+            <div className="shf-wheel__center">
+              <div className="shf-wheel__center-globe" />
+              <strong>Silicon Heartland</strong>
+              <span>INSTITUTIONAL ECOSYSTEM</span>
+            </div>
+          </div>
+        </button>
+      </div>
+
+      <div className="shf-trend-block">
+        <div className="shf-trend-block__header">
+          <h3>Outcome Trends</h3>
+          <span>Last 12 Months</span>
+        </div>
+        <div className="shf-trend-block__value-row">
+          <strong>12,482</strong>
+          <span>+ 8.2% ↑</span>
+        </div>
+        <svg viewBox="0 0 320 80" className="shf-trend-svg" aria-hidden="true">
+          <polyline
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="3"
+            points={trendPoints.map((p, i) => `${10 + i * 19},${70 - p}`).join(" ")}
+          />
+        </svg>
+      </div>
+    </div>
+  );
+}

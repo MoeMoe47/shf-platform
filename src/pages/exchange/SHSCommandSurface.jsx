@@ -1,5 +1,7 @@
 import React, { useMemo } from "react";
+import TourProvider from "@/system/tour/TourProvider";
 import "./command-surface/shs-command-surface.css";
+import { commandSurfaceTourSteps } from "./command-surface/commandSurfaceTourSteps";
 import RecommendationStrip from "./command-center/RecommendationStrip";
 import DecisionActionBar from "./command-center/DecisionActionBar";
 import TacticalMapStage from "./map-stage/TacticalMapStage";
@@ -123,7 +125,8 @@ export default function SHSCommandSurface({
   }, []);
 
   return (
-    <div className="mock-shell mock-shell--tone-blue">
+    <TourProvider steps={commandSurfaceTourSteps} buttonLabel="Start Tour">
+      <div className="mock-shell mock-shell--tone-blue" data-tour="command-surface-shell">
       <div className="mock-ambient" aria-hidden="true">
         <div className="mock-ambient__drift" />
         <div className="mock-ambient__grid" />
@@ -131,9 +134,12 @@ export default function SHSCommandSurface({
         <div className="mock-ambient__pulse" />
       </div>
 
-      <SHSCommandHeader />
+      <div data-tour="command-surface-header">
+        <SHSCommandHeader />
+      </div>
 
       <section
+        data-tour="command-surface-kpis"
         style={{
           marginTop: 10,
           display: "grid",
@@ -149,6 +155,7 @@ export default function SHSCommandSurface({
       </section>
 
       <section
+        data-tour="command-surface-live-situation"
         style={{
           marginTop: 10,
           border: "1px solid rgba(104, 139, 191, 0.18)",
@@ -205,7 +212,7 @@ export default function SHSCommandSurface({
       </section>
 
       <section className="mock-main">
-        <aside className="mock-rail mock-rail--left">
+        <aside className="mock-rail mock-rail--left" data-tour="command-surface-left-rail">
           <Panel title="Intake & Queue">
             <BulletList
               items={[
@@ -233,13 +240,13 @@ export default function SHSCommandSurface({
           </Panel>
         </aside>
 
-        <main className="mock-center">
+        <main className="mock-center" data-tour="command-surface-map">
           <Panel title="Statewide Intelligence Surface">
             <TacticalMapStage />
           </Panel>
         </main>
 
-        <aside className="mock-rail mock-rail--right">
+        <aside className="mock-rail mock-rail--right" data-tour="command-surface-right-rail">
           <Panel title="Oracle Truth Package">
             <div style={{ display: "grid", gap: 8 }}>
               <div><strong>Case:</strong> {prediction?.caseLabel || "Unknown Case"}</div>
@@ -265,6 +272,7 @@ export default function SHSCommandSurface({
       </section>
 
       <section
+        data-tour="command-surface-recommendation"
         style={{
           marginTop: 8,
           display: "grid",
@@ -282,10 +290,12 @@ export default function SHSCommandSurface({
           }}
         />
 
-        <DecisionActionBar
-          activeAction={activeAction}
-          setActiveAction={setActiveAction}
-        />
+        <div data-tour="command-surface-decision-actions">
+          <DecisionActionBar
+            activeAction={activeAction}
+            setActiveAction={setActiveAction}
+          />
+        </div>
       </section>
 
       <section
@@ -296,7 +306,8 @@ export default function SHSCommandSurface({
           gap: 12,
         }}
       >
-        <Panel title="Reporting Dock">
+        <div data-tour="command-surface-reporting">
+          <Panel title="Reporting Dock">
           <div style={{ marginBottom: 10, color: "rgba(214, 226, 245, 0.74)" }}>
             Generate or open the latest decision-grade brief tied to the current command state.
           </div>
@@ -304,9 +315,11 @@ export default function SHSCommandSurface({
             onGenerate={reportNoop("Generate Intelligence Brief")}
             onOpenLatest={reportNoop("Open Latest Brief")}
           />
-        </Panel>
+          </Panel>
+        </div>
 
-        <Panel title="System Status">
+        <div data-tour="command-surface-status">
+          <Panel title="System Status">
           <BulletList
             items={[
               loading ? "Loading live command data…" : "Live command data loaded",
@@ -315,8 +328,10 @@ export default function SHSCommandSurface({
               `Panel mode: ${String(selectedPanel || "response_plan").replace(/_/g, " ")}`,
             ]}
           />
-        </Panel>
+          </Panel>
+        </div>
       </section>
-    </div>
+      </div>
+    </TourProvider>
   );
 }

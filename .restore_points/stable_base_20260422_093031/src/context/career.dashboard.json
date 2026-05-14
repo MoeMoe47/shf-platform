@@ -1,0 +1,52 @@
+{
+    "user": {
+      "id": "u_123",
+      "name": "Jordan",
+      "targetRole": "IT Support Specialist",
+      "baselineWage": 14
+    },
+  
+    "kpis": {
+      "onTrackPct": 72,
+      "skillsLeft": 3,
+      "interviewsThisWeek": 2,
+      "etaDays": 19
+    },
+  
+    "path": {
+      "title": "IT Support (CompTIA A+)",
+      "nextActions": [
+        { "id": "a1", "label": "Apply to Service Desk Associate @ City Schools", "type": "apply", "due": "2025-10-29" },
+        { "id": "a2", "label": "Practice: Troubleshoot a Wi-Fi outage", "type": "practice", "due": "2025-10-27" },
+        { "id": "a3", "label": "Schedule mock interview", "type": "coach", "due": "2025-10-28" }
+      ]
+    },
+  
+    "skills": [
+      { "id": "s1", "title": "Ticket triage & escalation", "type": "hard", "status": "verified", "evidence": ["TicketRunbook.pdf"] },
+      { "id": "s2", "title": "Customer de-escalation", "type": "soft", "status": "pending", "evidence": [] },
+      { "id": "s3", "title": "Windows imaging (DISM)", "type": "hard", "status": "pending", "evidence": [] },
+      { "id": "s4", "title": "Network basics (DHCP/DNS)", "type": "hard", "status": "verified", "evidence": ["lab-net-basics.md"] }
+    ],
+  
+    "pipeline": [
+      { "id": "ap1", "employer": "City Schools", "role": "Service Desk Associate", "stage": "Applied", "updated": "2025-10-24" },
+      { "id": "ap2", "employer": "Acme Logistics", "role": "IT Support Tech", "stage": "Interview", "updated": "2025-10-23" }
+    ],
+  
+    "opportunities": [
+      { "id": "o1", "employer": "Metro Health", "role": "Help Desk Tech", "wage": 22, "remote": false, "skills": ["ticketing", "windows"], "location": "Columbus, OH" },
+      { "id": "o2", "employer": "Cloudy Co.", "role": "Support Associate (Remote)", "wage": 24, "remote": true, "skills": ["chat support", "network basics"], "location": "Remote" }
+    ],
+  
+    "benefits": [
+      { "id": "b1", "title": "Transit pass (50% off)", "provider": "COTA", "eligibility": "Enrolled learners", "applyUrl": "#" },
+      { "id": "b2", "title": "Childcare stipend", "provider": "City Workforce Board", "eligibility": "Interview scheduled", "applyUrl": "#" }
+    ],
+  
+    "evidence": [
+      { "id": "ev1", "title": "Help Desk Project: Printer queue fix", "file": "printer_queue_fix.mp4", "linkedSkillId": "s1" },
+      { "id": "ev2", "title": "Network lab report", "file": "lab-net-basics.md", "linkedSkillId": "s4" }
+    ]
+  }
+  

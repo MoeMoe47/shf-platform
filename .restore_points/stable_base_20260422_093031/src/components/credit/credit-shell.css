@@ -1,0 +1,93 @@
+/* src/styles/credit-shell.css */
+
+/* ===== Root layout ===== */
+.crb-root { display: grid; grid-template-rows: auto 1fr; min-height: 100dvh; background: var(--bg, #f8fafc); }
+.crb-skip { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+.crb-skip:focus { position:static; width:auto; height:auto; padding:8px; background:#fff; border:1px solid #000; }
+
+.crb-header { display:flex; align-items:center; gap:12px; padding:10px 14px; border-bottom:1px solid rgba(0,0,0,.06); background:#fff; }
+.crb-brand { display:flex; align-items:center; gap:8px; text-decoration:none; color:inherit; font-weight:800; letter-spacing:.06em; }
+.crb-brandImg { width:28px; height:28px; object-fit:contain; }
+.crb-wordmark { font-size:14px; }
+.crb-crossapp { display:flex; gap:8px; margin-left:12px; }
+.crb-headerSpacer { flex:1; }
+
+.crb-body { display:grid; grid-template-columns: 240px 1fr; gap:0; min-height:0; }
+.crb-sidebar { border-right:1px solid rgba(0,0,0,.06); background:#fff; }
+.crb-main { padding:14px; min-width:0; }
+
+.crb-nav { padding:12px; display:grid; gap:14px; }
+.crb-navTitle { font-size:11px; font-weight:800; color:#64748b; letter-spacing:.08em; }
+.crb-list { list-style:none; padding:0; margin:8px 0 0; display:grid; gap:6px; }
+.crb-link { display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:8px; text-decoration:none; color:#0f172a; }
+.crb-link:hover { background:#f1f5f9; }
+.crb-link.is-active { background:#e2e8f0; font-weight:700; }
+.crb-linkIcon { width:22px; text-align:center; }
+
+/* Responsive: stack sidebar on small screens */
+@media (max-width: 960px) {
+  .crb-body { grid-template-columns: 1fr; }
+  .crb-sidebar { position: sticky; top: 0; z-index: 2; }
+}
+
+/* ===== Shared Dashboard Shell ===== */
+.db-shell{display:block;}
+.db-head{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;padding:12px 8px 8px;border-bottom:1px solid var(--ring,rgba(0,0,0,.1));}
+.db-title{margin:0;font-size:20px;line-height:1.2;color:var(--ink,#111827);}
+.db-subtitle{margin:4px 0 0;font-size:13px;color:var(--ink-soft,#6b7280);}
+.db-headR{display:flex;gap:8px;align-items:center;}
+.db-tabs{display:flex;gap:6px;padding:8px;border-bottom:1px solid var(--ring,rgba(0,0,0,.1));}
+.db-tab{padding:8px 12px;border-radius:10px;border:1px solid var(--ring,rgba(0,0,0,.12));background:#fff;color:var(--ink,#111827);cursor:pointer;font-weight:600;}
+.db-tab.is-active{background:var(--brand,#e11d2d);color:var(--brand-ink,#fff);border-color:var(--brand,#e11d2d);}
+.db-content{padding:16px 8px 24px;}
+.db-grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin:12px 0 24px;}
+
+/* Card chrome for KPIs (neutral) */
+.db-grid--kpis .card{
+  display:grid;gap:6px;padding:14px;border-radius:14px;
+  background:var(--card,#fff);border:1px solid var(--ring,rgba(0,0,0,.1));
+}
+.kpi-label{font-size:12px;color:var(--ink-soft,#6b7280);}
+.kpi-value{font-size:22px;font-weight:800;letter-spacing:.2px;}
+.linkcard{padding:14px;border-radius:14px;text-decoration:none;color:inherit;background:var(--card,#fff);border:1px solid var(--ring,rgba(0,0,0,.1));transition:transform .08s ease,box-shadow .12s ease,border-color .12s ease;}
+.linkcard:hover{transform:translateY(-1px);border-color:var(--brand,#e11d2d);box-shadow:0 6px 20px rgba(0,0,0,.06);}
+
+/* =========================================================
+   Credit Report: Color Wash System (scoped to credit shell)
+   ========================================================= */
+.crb-root .wash {
+  --wash-bg: rgba(0,0,0,0.04);
+  --wash-border: rgba(0,0,0,0.12);
+  background: linear-gradient(0deg, var(--wash-bg), var(--wash-bg));
+  border: 1px solid var(--wash-border);
+  border-radius: 12px;
+}
+
+/* Score band tiers (FICO-like labels, UI only) */
+.crb-root .wash--excellent { --wash-bg: rgba(34,197,94,.12); --wash-border: rgba(34,197,94,.40); } /* brighter green */
+.crb-root .wash--good      { --wash-bg: rgba(16,185,129,.10); --wash-border: rgba(16,185,129,.30); }
+.crb-root .wash--info      { --wash-bg: rgba(59,130,246,.12); --wash-border: rgba(59,130,246,.35); }
+.crb-root .wash--warn      { --wash-bg: rgba(245,158,11,.12); --wash-border: rgba(245,158,11,.35); }
+.crb-root .wash--bad       { --wash-bg: rgba(239,68,68,.12);  --wash-border: rgba(239,68,68,.35); }
+
+/* Wash sections */
+.crb-root .wash-header {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--wash-border);
+}
+.crb-root .wash-body { padding: 14px; }
+
+/* Subtle, row-level accent for tables */
+.crb-root .wash-left {
+  border-left: 4px solid var(--wash-border);
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--wash-bg), transparent 40%);
+}
+
+/* Make washed KPIs match your card sizing */
+.db-grid--kpis .wash {
+  display:grid; gap:6px; padding:14px; border-radius:14px;
+}
+
+/* Optional: respect brand tint in headers without overpowering */
+.crb-root .wash-header strong { color: var(--ink,#0f172a); }

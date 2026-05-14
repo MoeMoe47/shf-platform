@@ -1,0 +1,43 @@
+import React from "react";
+import { Outlet } from "react-router-dom";
+
+/* 🔒 LOCKED: Lord of Outcomes visual skeleton */
+import "@/styles/lordOutcomes._LOCKED.skeleton.css";
+
+import DymHeader from "@/components/lordOutcomes/dym/DymHeader.jsx";
+import DymFooter from "@/components/lordOutcomes/dym/DymFooter.jsx";
+
+export default function LordOutcomesLayout(){
+  return (
+    <div className="looApp">
+      {/* ===== VISUAL CANVAS (DO NOT TOUCH ORDER) ===== */}
+      <div className="looGrid" aria-hidden="true" />
+      <div className="looNoise" aria-hidden="true" />
+      <div className="looRightOrbits" aria-hidden="true" />
+      <div className="looVignette" aria-hidden="true" />
+      {/* ============================================ */}
+
+      <header className="looHeader">
+        <div className="looShellInner">
+          <DymHeader />
+        </div>
+      </header>
+
+      <main className="looMain">
+        <div className="looContainer">
+          <Outlet />
+        </div>
+      </main>
+
+      <footer className="looFooter">
+        <div className="looShellInner">
+          <DymFooter />
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+/* DEBUG: make right-orbits obvious for 30 seconds */
+.looRightOrbits::before { opacity: 1 !important; }
+.looRightOrbits::after { opacity: 0.35 !important; }

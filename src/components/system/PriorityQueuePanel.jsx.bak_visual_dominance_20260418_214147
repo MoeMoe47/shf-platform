@@ -1,0 +1,89 @@
+import React from "react";
+
+export default function PriorityQueuePanel({ priorityData }) {
+  if (!priorityData) {
+    return (
+      <div className="section-card">
+        <h3 style={{ marginBottom: 12 }}>Priority Queue</h3>
+        <p style={{ color: "#94a3b8" }}>No priority data available.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="section-card">
+      <h3 style={{ marginBottom: 12 }}>Priority Queue</h3>
+
+      {/* Summary */}
+      <div
+        style={{
+          marginBottom: 16,
+          padding: "14px 18px",
+          borderRadius: 12,
+          background: "rgba(15,23,42,0.95)",
+          border: "1px solid rgba(34,197,94,0.3)",
+          color: "#e2e8f0",
+          fontWeight: 600,
+        }}
+      >
+        {priorityData.summary}
+      </div>
+
+      {/* Ranked List */}
+      <div>
+        {priorityData.ranked.map((item) => {
+          const isTop = item.rank === 1;
+          const isRisk = item.readinessStatus === "blocked";
+
+          return (
+            <div
+              key={item.entityId}
+              style={{
+                marginBottom: 12,
+                padding: 14,
+                borderRadius: 12,
+                background: "rgba(2,6,23,0.96)",
+                border: isTop
+                  ? "1px solid rgba(16,185,129,0.6)"
+                  : isRisk
+                  ? "1px solid rgba(239,68,68,0.5)"
+                  : "1px solid rgba(148,163,184,0.25)",
+                color: "#f1f5f9",
+                boxShadow: isTop
+                  ? "0 0 18px rgba(16,185,129,0.22)"
+                  : isRisk
+                  ? "0 0 12px rgba(239,68,68,0.20)"
+                  : "none",
+              }}
+            >
+              {/* Title */}
+              <div
+                style={{
+                  fontWeight: 700,
+                  marginBottom: 6,
+                  color: "#ffffff",
+                  fontSize: 16,
+                }}
+              >
+                #{item.rank} — {item.entityId}
+              </div>
+
+              {/* Details */}
+              <div style={{ fontSize: 13, opacity: 0.9 }}>
+                Readiness: <strong>{item.readinessStatus}</strong>
+              </div>
+
+              <div style={{ fontSize: 13, opacity: 0.9 }}>
+                Confidence: <strong>{item.confidenceScore}</strong>
+              </div>
+
+              <div style={{ fontSize: 13, opacity: 0.9 }}>
+                Priority Score: <strong>{item.priorityScore}</strong>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

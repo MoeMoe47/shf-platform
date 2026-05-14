@@ -1,0 +1,74 @@
+{
+  "id": "student.asl-76",
+  "title": "ASL 9.10 — On-Site Hosting & Emcee Skills 🎤",
+  "estMinutes": 35,
+  "objectives": [
+    "Open an event with clear Time → Topic → Housekeeping framing",
+    "Manage turn-taking, transitions, and quick clarifications in ASL",
+    "Announce accessibility info (INTERPRETER, CAPTION, LIGHTING, SEATING) confidently",
+    "Close segments with clear button lines and hand-offs"
+  ],
+  "vocab": [
+    { "term": "WELCOME / THANK-YOU", "def": "Open/close markers with warm NMM." },
+    { "term": "ANNOUNCE", "def": "Share info outward to audience." },
+    { "term": "HOUSEKEEPING", "def": "Logistics: RESTROOM, EXIT, BREAK, PHONE-SILENT." },
+    { "term": "TURN-TAKE / INTRODUCE", "def": "Gesture give-floor; name + role + point." },
+    { "term": "CAPTION-ON / INTERPRETER PROVIDED", "def": "Accessibility confirmations." },
+    { "term": "LIGHTS / SEE-CLEAR", "def": "Adjust lighting/visibility; palm sweep to audience." },
+    { "term": "HOLD / WAIT", "def": "Pause gesture to control flow." },
+    { "term": "BUTTON LINE", "def": "Short final line signaling end of a segment." }
+  ],
+  "sections": [
+    {
+      "heading": "1) Opener Template",
+      "media": { "src": "/media/asl/unit-9/emcee-open.mp4", "alt": "Host signing welcome and today schedule", "caption": "Time → Topic → Housekeeping" },
+      "body": "Use **TIME → TOPIC → HOUSEKEEPING**: \n**TONIGHT 7—9 → DEAF CLUB TALENT SHOW → HOUSEKEEPING SHORT.** Then list 2–3 quick items: **RESTROOM THERE, CAPTION-ON, PHONE SILENT PLEASE.**"
+    },
+    {
+      "heading": "2) Intros & Hand-Offs",
+      "body": "Introduce with name + role + anchor: **NOW INTRODUCE A-L-E-X, HOST BAND.** (point to stage anchor). Hand-off: **ALEX, FLOOR-YOU.** Step back, eyes to performer.",
+      "microCheck": {
+        "q": "Best signal for giving the floor is…",
+        "options": ["Keep signing", "TURN-TAKE + point to anchor", "Look down", "Wave randomly"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "3) Managing Flow",
+      "body": "Use **HOLD/WAIT** to pause; **CLARIFY-SHORT** for simple fixes (mic, lights, seating). Keep fixes ≤1–2 lines, then return to program with a **button line**: **READY? CONTINUE.**"
+    },
+    {
+      "heading": "4) Accessibility Reminders",
+      "media": { "src": "/media/asl/unit-9/access-remind.png", "alt": "Icons for captions, interpreter, seating, lighting", "caption": "Keep access visible and brief" },
+      "body": "Confirm: **CAPTION-ON OK? INTERPRETER PROVIDED FRONT-RIGHT.** Offer seating: **NEED SEE-CLEAR? FRONT ROW AVAILABLE.**"
+    },
+    {
+      "heading": "5) Partner Drill: Open → Intro → Close",
+      "body": "A plays Emcee: opener (time→topic→housekeeping), intro a performer, then close with button line. B is audience and gives a one-line feedback on clarity. Swap roles.",
+      "teacherNote": "Assess eye gaze sweep, hand-off clarity, and concise housekeeping."
+    },
+    {
+      "heading": "6) Button Lines (Closers)",
+      "body": "Keep closers short: **THAT FINISH. NEXT COMING.** / **THANK-YOU SUPPORT. BREAK 5 MIN. BACK 8:10.**"
+    }
+  ],
+  "quiz": {
+    "title": "ASL 9.10 — Emcee Skills Quiz",
+    "items": [
+      { "type": "mcq", "q": "Strong opener order is…", "options": ["Topic → Housekeeping → Time", "Time → Topic → Housekeeping", "Housekeeping → Time → Topic", "Random"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Best way to give the floor:", "options": ["Keep signing while they start", "TURN-TAKE gesture + point + step back", "Clap loudly", "Walk offstage silently"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Which belongs in housekeeping?", "options": ["Performer bio", "Mic stand brand", "RESTROOM/EXIT/CAPTION/INTERPRETER", "Ticket prices"], "answerIndex": 2 },
+      { "type": "short", "q": "Gloss a 2-line close for a 10-minute break with return time." },
+      { "type": "reflection", "prompt": "Which needs practice—opener pacing, hand-off clarity, or button lines? Why?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Record 25–35s: opener (time→topic→housekeeping), intro one performer, and a button-line close.",
+  "summary": "You hosted a segment using time-first framing, clear housekeeping, confident hand-offs, and concise button lines while keeping accessibility visible.",
+  "nextSlug": "student.asl-77",
+  "games": [
+    { "id": "open-lock", "title": "Open Lock", "route": "/arcade/asl/open-lock", "estMinutes": 5, "xp": 50, "outcomes": ["Time → Topic → Housekeeping fluency"] },
+    { "id": "handoff-hot", "title": "Hand-Off Hotseat", "route": "/arcade/asl/handoff-hot", "estMinutes": 5, "xp": 50, "outcomes": ["Clean turn-taking signals"] },
+    { "id": "button-bite", "title": "Button Bite", "route": "/arcade/asl/button-bite", "estMinutes": 5, "xp": 50, "outcomes": ["Short, strong closers"] }
+  ]
+}

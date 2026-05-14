@@ -1,0 +1,631 @@
+export const hubTourSteps = {
+  growth: [
+    {
+      id: "hub-growth-hero",
+      target: "[data-tour='hub-growth-hero']",
+      title: "Step 1 — Start With the Purpose",
+      content: {
+        primary:
+          "This page is the overview of the Hub Business Network. Use it to see whether the Hub is creating referrals, partner matches, cross-sales, bundled opportunities, and sales value.",
+        why:
+          "This page is the starting point before going deeper into Intelligence, Bundles, Opportunities, or Sales.",
+        action:
+          "Read the page title and opening message first. Then move down to the relationship section and KPI row.",
+      },
+    },
+    {
+      id: "hub-growth-fit",
+      target: "[data-tour='hub-growth-fit']",
+      title: "Step 2 — Understand Where This Page Fits",
+      content: {
+        primary:
+          "This section explains the difference between the Hub Growth Network and the Partner Growth Engine.",
+        why:
+          "The Hub Growth Network handles partner matching, bundles, referrals, and network value. The Growth Engine converts bigger signals into pilots, sales, and funding moves.",
+        action:
+          "Use this section to understand the role of this page before reviewing the numbers.",
+      },
+    },
+    {
+      id: "hub-growth-kpis",
+      target: "[data-tour='hub-growth-kpis']",
+      title: "Step 3 — Check the Network Pulse",
+      content: {
+        primary:
+          "Read these cards from left to right. They show warm referrals, partner matches, cross-sales, sales touches, bundled deals, and estimated network value.",
+        why:
+          "These numbers tell you if the business network is actually creating movement.",
+        action:
+          "If the numbers are low, the operator should look for more partner introductions, bundle opportunities, or sales actions.",
+      },
+    },
+    {
+      id: "hub-growth-recommended",
+      target: "[data-tour='hub-growth-recommended']",
+      title: "Step 4 — Review the Recommended Move",
+      content: {
+        primary:
+          "This is the most important action the Growth Network sees right now.",
+        why:
+          "It helps the operator avoid guessing and focus on the strongest next move.",
+        action:
+          "Read the recommendation, check the fit score, then decide whether this should move into Intelligence, Bundle Builder, Opportunities, or Sales Pipeline.",
+      },
+    },
+    {
+      id: "hub-growth-matches",
+      target: "[data-tour='hub-growth-matches']",
+      title: "Step 5 — Review Relationship Matches",
+      content: {
+        primary:
+          "This area shows partner relationships that may create value through referrals, bundles, or cross-sales.",
+        why:
+          "The Hub should not only coordinate services. It should help partners grow by making the right introductions.",
+        action:
+          "Look for high-fit matches and decide which partners should be introduced.",
+      },
+    },
+    {
+      id: "hub-growth-opportunities",
+      target: "[data-tour='hub-growth-opportunities']",
+      title: "Step 6 — Look for Opportunities",
+      content: {
+        primary:
+          "This section points to business opportunities that may need partner matching, bundling, or sales follow-up.",
+        why:
+          "This is how the Hub turns network activity into real business value.",
+        action:
+          "If an opportunity looks strong, move it to the Opportunities page or Bundle Builder.",
+      },
+    },
+    {
+      id: "hub-growth-sales",
+      target: "[data-tour='hub-growth-sales']",
+      title: "Step 7 — Check Sales Motion",
+      content: {
+        primary:
+          "This area shows whether opportunities are moving into sales touches, meetings, proposals, and deal activity.",
+        why:
+          "A business network is only valuable if introductions and opportunities turn into action.",
+        action:
+          "Use the Sales Pipeline page when an opportunity needs follow-up, proposal work, or deal tracking.",
+      },
+    },
+  ],
+
+  intelligence: [
+    {
+      id: "hub-intel-hero",
+      target: "[data-tour='hub-intel-hero']",
+      title: "Step 1 — Start Here",
+      content: {
+        primary:
+          "This page is the Hub's recommendation brain. Use it when you need to decide what partner match, bundle, or opportunity should move forward next.",
+        why:
+          "The page is designed to guide you in order: read the signals, review the top recommendation, check the scores, make a decision, then log what happened.",
+        action:
+          "Begin by reading the title and the orange note. Then move down to the signal summary cards.",
+      },
+    },
+    {
+      id: "hub-intel-kpis",
+      target: "[data-tour='hub-intel-kpis']",
+      title: "Step 2 — Read the Signal Summary",
+      content: {
+        primary:
+          "Read these cards from left to right. They tell you how many recommendations exist, how many were accepted, how many bundle suggestions are active, and whether pricing or risk needs review.",
+        why:
+          "This helps you understand the current state before making a decision.",
+        action:
+          "If Risk Alerts or Pricing Flags are high, slow down. If the signals look ready, continue to the Top Recommendation.",
+      },
+    },
+    {
+      id: "hub-intel-recommendation",
+      target: "[data-tour='hub-intel-recommendation']",
+      title: "Step 3 — Review the Top Recommendation",
+      content: {
+        primary:
+          "This is the main recommendation the system wants you to review first. Read the recommendation name and the short explanation under it.",
+        why:
+          "This card is the fastest way to see what the Hub thinks should move next.",
+        action:
+          "Do not click a button yet. First, review the score boxes below the recommendation.",
+      },
+    },
+    {
+      id: "hub-intel-score-grid",
+      target: "[data-tour='hub-intel-score-grid']",
+      title: "Step 4 — Understand the Scores",
+      content: {
+        primary:
+          "Review each score: Service Coverage shows whether the needed services are covered. Pricing Fit shows if the price looks competitive. Readiness shows delivery strength. Outcomes show proof potential. Success Probability estimates how likely the move is to work. Risk tells you how careful to be.",
+        why:
+          "These scores help you decide whether the recommendation is ready, needs review, or should be rejected.",
+        action:
+          "A strong recommendation usually has high Fit, strong Coverage, strong Readiness, and Low or Moderate Risk.",
+      },
+    },
+    {
+      id: "hub-intel-partner-line",
+      target: "[data-tour='hub-intel-partner-line']",
+      title: "Step 5 — Check the Partners Included",
+      content: {
+        primary:
+          "These partner chips show who is included in the recommended bundle or opportunity.",
+        why:
+          "Before moving forward, make sure the right partners are involved and that SHS is included when reporting, proof, or verification is needed.",
+        action:
+          "If a needed partner is missing, do not accept yet. Review the bundle or send it back for adjustment.",
+      },
+    },
+    {
+      id: "hub-intel-decision-buttons",
+      target: "[data-tour='hub-intel-decision-buttons']",
+      title: "Step 6 — Choose the Right Action",
+      content: {
+        primary:
+          "Use these buttons after you review the recommendation. Accept Recommendation means it looks good. Mark Meeting Scheduled means a real meeting is set. Mark Proposal Created means this moved into proposal work. Reject means it should not move forward.",
+        why:
+          "These buttons turn analysis into action and create a record of what happened.",
+        action:
+          "Click the button that matches the real decision. If you are only testing, click one button and watch the Feedback Events count increase.",
+      },
+    },
+    {
+      id: "hub-intel-matches",
+      target: "[data-tour='hub-intel-matches']",
+      title: "Step 7 — Review Partner Relationship Matches",
+      content: {
+        primary:
+          "This list shows partner-to-partner matches. Each row explains who should connect, the match strength, cross-sale potential, and risk level.",
+        why:
+          "This is where the Hub helps create business relationships across the network.",
+        action:
+          "Use Introduce when a partner connection should be started.",
+      },
+    },
+    {
+      id: "hub-intel-bundle-table",
+      target: "[data-tour='hub-intel-bundle-table']",
+      title: "Step 8 — Compare Bundle Options",
+      content: {
+        primary:
+          "This table compares different bundles by fit, pricing, readiness, and risk.",
+        why:
+          "Sometimes the top recommendation is not the only option. This table helps you compare alternatives before sending something to Bundle Builder.",
+        action:
+          "Look for the best balance, not just the cheapest option. A strong bundle should have good pricing, strong readiness, and manageable risk.",
+      },
+    },
+    {
+      id: "hub-intel-why-list",
+      target: "[data-tour='hub-intel-why-list']",
+      title: "Step 9 — Read Why the System Recommends It",
+      content: {
+        primary:
+          "This section explains the reason behind the recommendation in plain language.",
+        why:
+          "This protects the operator from blindly trusting a score. The system should explain why it thinks the move is strong.",
+        action:
+          "If the reason makes sense, move forward. If the reason does not match reality, use feedback to correct the system.",
+      },
+    },
+    {
+      id: "hub-intel-feedback-actions",
+      target: "[data-tour='hub-intel-feedback-actions']",
+      title: "Step 10 — Teach the System What Happened",
+      content: {
+        primary:
+          "These buttons are for feedback. Accept, Reject, Intro Made, Won, Lost, and Outcome Verified tell the Hub what happened after the recommendation.",
+        why:
+          "This is the learning loop. Over time, the Hub can learn which matches, bundles, and prices work best.",
+        action:
+          "After a real action happens, click the matching feedback button.",
+      },
+    },
+    {
+      id: "hub-intel-feedback-log",
+      target: "[data-tour='hub-intel-feedback-log']",
+      title: "Step 11 — Confirm the Action Was Logged",
+      content: {
+        primary:
+          "This log shows the latest feedback events saved by the page.",
+        why:
+          "It confirms that the system recorded the decision or outcome.",
+        action:
+          "After clicking a feedback button, check this log and the Feedback Events KPI to make sure the count increased.",
+      },
+    },
+    {
+      id: "hub-intel-next-action",
+      target: "[data-tour='hub-intel-next-action']",
+      title: "Step 12 — Move to the Next Page",
+      content: {
+        primary:
+          "This section tells the operator what to do next after the recommendation is reviewed.",
+        why:
+          "The Hub should not leave the user stuck. Every page should point to the next action.",
+        action:
+          "If the recommendation is ready, open Bundle Builder or move the item toward proposal planning.",
+      },
+    },
+  ],
+
+  bundles: [
+    {
+      id: "hub-bundles-hero",
+      target: "[data-tour='hub-bundles-hero']",
+      title: "Step 1 — Understand the Bundle Builder",
+      content: {
+        primary:
+          "This page helps you build a multi-partner proposal package around one opportunity.",
+        why:
+          "Instead of selling one partner at a time, SHS can package several partners into one stronger offer.",
+        action:
+          "Start by reading the page purpose, then check the KPI row.",
+      },
+    },
+    {
+      id: "hub-bundles-kpis",
+      target: "[data-tour='hub-bundles-kpis']",
+      title: "Step 2 — Check Bundle Summary Signals",
+      content: {
+        primary:
+          "These cards show how many bundle options exist, the best value, highest confidence, fastest delivery, lowest risk, and logged bundle events.",
+        why:
+          "This gives you a quick sense of whether the opportunity has a strong proposal path.",
+        action:
+          "Use these cards to know whether to compare options or move toward a proposal packet.",
+      },
+    },
+    {
+      id: "hub-bundles-opportunity",
+      target: "[data-tour='hub-bundles-opportunity']",
+      title: "Step 3 — Review the Opportunity Setup",
+      content: {
+        primary:
+          "This section explains the buyer, estimated value, deadline, risk tolerance, pricing strategy, geography, and required service lanes.",
+        why:
+          "The bundle must fit the opportunity. This section tells you what the proposal needs to solve.",
+        action:
+          "Read the required lanes before reviewing the recommended bundle.",
+      },
+    },
+    {
+      id: "hub-bundles-shs-layer",
+      target: "[data-tour='hub-bundles-shs-layer']",
+      title: "Step 4 — Confirm the SHS Layer",
+      content: {
+        primary:
+          "This note confirms that SHS is included as the reporting, verification, audit, and proof layer.",
+        why:
+          "This is the infrastructure value. SHS makes the bundle more credible by proving outcomes and preparing reports.",
+        action:
+          "Make sure every serious proposal includes this SHS reporting and verification layer.",
+      },
+    },
+    {
+      id: "hub-bundles-recommendation",
+      target: "[data-tour='hub-bundles-recommendation']",
+      title: "Step 5 — Review the Final Recommendation",
+      content: {
+        primary:
+          "This card recommends the strongest bundle based on fit, pricing, readiness, outcomes, success, and risk.",
+        why:
+          "This helps the operator avoid picking only the cheapest option and instead choose the best balanced proposal.",
+        action:
+          "Review the score boxes before clicking Select Bundle or Generate Proposal Packet.",
+      },
+    },
+    {
+      id: "hub-bundles-score-grid",
+      target: "[data-tour='hub-bundles-score-grid']",
+      title: "Step 6 — Read the Bundle Scores",
+      content: {
+        primary:
+          "Service Coverage shows whether the required lanes are covered. Pricing shows competitiveness. Readiness shows delivery strength. Outcomes show proof potential. Success estimates the chance of working. Risk shows caution level.",
+        why:
+          "These scores help decide if the bundle is ready for a proposal or needs adjustment.",
+        action:
+          "A strong bundle should have high coverage, strong readiness, and low or moderate risk.",
+      },
+    },
+    {
+      id: "hub-bundles-actions",
+      target: "[data-tour='hub-bundles-actions']",
+      title: "Step 7 — Choose the Proposal Action",
+      content: {
+        primary:
+          "Select Bundle means this is the chosen package. Generate Proposal Packet means prepare it for proposal work. Request Pricing Review means the price needs more review.",
+        why:
+          "These actions move the bundle from analysis into execution.",
+        action:
+          "Click Generate Proposal Packet when the bundle is ready for proposal review.",
+      },
+    },
+    {
+      id: "hub-bundles-comparison",
+      target: "[data-tour='hub-bundles-comparison']",
+      title: "Step 8 — Compare Bundle Options",
+      content: {
+        primary:
+          "This table compares all bundle options by type, price, fit, pricing, readiness, and risk.",
+        why:
+          "This helps you explain why one bundle is better than another.",
+        action:
+          "Use this table before finalizing a proposal packet.",
+      },
+    },
+    {
+      id: "hub-bundles-lane-coverage",
+      target: "[data-tour='hub-bundles-lane-coverage']",
+      title: "Step 9 — Check Lane Coverage",
+      content: {
+        primary:
+          "This section shows which partner covers each required service lane.",
+        why:
+          "It helps identify coverage, SHS-owned layers, partial coverage, and gaps.",
+        action:
+          "If a lane shows a gap, fix the bundle before creating the proposal.",
+      },
+    },
+    {
+      id: "hub-bundles-events",
+      target: "[data-tour='hub-bundles-events']",
+      title: "Step 10 — Confirm Bundle Events",
+      content: {
+        primary:
+          "This log shows bundle actions such as selected bundle, proposal packet started, or pricing review requested.",
+        why:
+          "It confirms the operator action was recorded.",
+        action:
+          "After clicking a bundle action, check this log to make sure the event appears.",
+      },
+    },
+  ],
+
+  opportunities: [
+    {
+      id: "hub-opps-hero",
+      target: "[data-tour='hub-opps-hero']",
+      title: "Step 1 — Understand the Opportunity Board",
+      content: {
+        primary:
+          "This page shows open opportunities, cross-sales, suggested matches, sales review, proposal building, won or active deals, and closed or lost items.",
+        why:
+          "Use this page to decide what opportunity should move next and who should be involved.",
+        action:
+          "Start by reading the title and note, then check the KPI row.",
+      },
+    },
+    {
+      id: "hub-opps-kpis",
+      target: "[data-tour='hub-opps-kpis']",
+      title: "Step 2 — Check Opportunity Signals",
+      content: {
+        primary:
+          "These cards show open opportunities, suggested matches, proposal building, pipeline value, high urgency, and won or active items.",
+        why:
+          "This tells you whether the pipeline has value, urgency, or items ready for proposal work.",
+        action:
+          "If High Urgency is high, review those items first.",
+      },
+    },
+    {
+      id: "hub-opps-filters",
+      target: "[data-tour='hub-opps-filters']",
+      title: "Step 3 — Filter the Board",
+      content: {
+        primary:
+          "Use these stage buttons to focus on one part of the opportunity flow.",
+        why:
+          "Filtering helps operators avoid being overwhelmed.",
+        action:
+          "Click a stage like Sales Review or Proposal Building when you only want to see that group.",
+      },
+    },
+    {
+      id: "hub-opps-recommended",
+      target: "[data-tour='hub-opps-recommended']",
+      title: "Step 4 — Review the Recommended Opportunity",
+      content: {
+        primary:
+          "This is the opportunity the system thinks deserves attention first.",
+        why:
+          "It combines priority, urgency, value, partner coverage, and stage.",
+        action:
+          "Read the buyer, value, urgency, stage, source, and recommended partners before choosing an action.",
+      },
+    },
+    {
+      id: "hub-opps-actions",
+      target: "[data-tour='hub-opps-actions']",
+      title: "Step 5 — Choose the Opportunity Action",
+      content: {
+        primary:
+          "Convert to Bundle moves the opportunity toward Bundle Builder. Send to Sales Pipeline moves it to sales execution. Start Partner Intro begins a relationship action.",
+        why:
+          "This is where the opportunity becomes real workflow.",
+        action:
+          "Choose Convert to Bundle when the opportunity needs a multi-partner proposal. Choose Sales Pipeline when it needs sales follow-up.",
+      },
+    },
+    {
+      id: "hub-opps-board",
+      target: "[data-tour='hub-opps-board']",
+      title: "Step 6 — Use the Opportunity Board",
+      content: {
+        primary:
+          "This board shows every opportunity by stage. Each card includes type, score, next action, value, urgency, and service lanes.",
+        why:
+          "It shows where every opportunity sits and what needs movement.",
+        action:
+          "Use Review to inspect an item. Use Move when it should advance to the next step.",
+      },
+    },
+    {
+      id: "hub-opps-matches",
+      target: "[data-tour='hub-opps-matches']",
+      title: "Step 7 — Review Top Partner Matches",
+      content: {
+        primary:
+          "This list shows which partners best match the recommended opportunity.",
+        why:
+          "It helps operators decide who should be included in the opportunity, bundle, or sales conversation.",
+        action:
+          "If the match looks right, start the partner intro or convert the opportunity into a bundle.",
+      },
+    },
+    {
+      id: "hub-opps-flow",
+      target: "[data-tour='hub-opps-flow']",
+      title: "Step 8 — Read Pipeline Flow",
+      content: {
+        primary:
+          "This summary shows how many opportunities sit in each stage and how much value is attached to each stage.",
+        why:
+          "It helps leadership see where the pipeline is moving or stuck.",
+        action:
+          "If too much value is stuck in one stage, focus operator attention there.",
+      },
+    },
+    {
+      id: "hub-opps-events",
+      target: "[data-tour='hub-opps-events']",
+      title: "Step 9 — Confirm Opportunity Events",
+      content: {
+        primary:
+          "This log records review, move, bundle conversion, sales pipeline, and partner intro actions.",
+        why:
+          "It confirms the opportunity action was saved.",
+        action:
+          "After clicking an action, check this log to make sure the event appears.",
+      },
+    },
+  ],
+
+  sales: [
+    {
+      id: "hub-sales-hero",
+      target: "[data-tour='hub-sales-hero']",
+      title: "Step 1 — Understand the Sales Pipeline",
+      content: {
+        primary:
+          "This page tracks how SHS turns Hub opportunities into introductions, meetings, proposals, negotiations, wins, losses, and follow-ups.",
+        why:
+          "This is where network value becomes sales execution.",
+        action:
+          "Start by reading the page purpose, then check the KPI row.",
+      },
+    },
+    {
+      id: "hub-sales-kpis",
+      target: "[data-tour='hub-sales-kpis']",
+      title: "Step 2 — Read Sales Pipeline Signals",
+      content: {
+        primary:
+          "These cards show active pipeline value, won value, due-soon items, high-priority items, proposal-stage items, and sales events.",
+        why:
+          "This shows what the sales team should focus on first.",
+        action:
+          "If Due Soon or High Priority is high, review the Next Best Sales Move immediately.",
+      },
+    },
+    {
+      id: "hub-sales-filters",
+      target: "[data-tour='hub-sales-filters']",
+      title: "Step 3 — Filter by Sales Stage",
+      content: {
+        primary:
+          "Use these buttons to focus on one stage like Introduced, Meeting Scheduled, Proposal Building, Negotiation, Won, Lost, or Follow-Up Later.",
+        why:
+          "Filtering makes the pipeline easier to manage.",
+        action:
+          "Click a stage when you only want to work that part of the pipeline.",
+      },
+    },
+    {
+      id: "hub-sales-next-move",
+      target: "[data-tour='hub-sales-next-move']",
+      title: "Step 4 — Follow the Next Best Sales Move",
+      content: {
+        primary:
+          "This card tells the sales team what action should happen next.",
+        why:
+          "It keeps the team focused on the most urgent or valuable move.",
+        action:
+          "Read the stage, priority, owner, due date, partners, and next action before clicking a button.",
+      },
+    },
+    {
+      id: "hub-sales-actions",
+      target: "[data-tour='hub-sales-actions']",
+      title: "Step 5 — Log the Sales Action",
+      content: {
+        primary:
+          "Use these buttons to record the sales movement: Intro Made, Meeting Scheduled, Proposal Created, or Mark Won.",
+        why:
+          "These actions create the sales activity record.",
+        action:
+          "Click the button that matches the real-world sales action.",
+      },
+    },
+    {
+      id: "hub-sales-board",
+      target: "[data-tour='hub-sales-board']",
+      title: "Step 6 — Use the Sales Execution Board",
+      content: {
+        primary:
+          "This board shows each deal by stage. Empty stages show that no deals need action there right now.",
+        why:
+          "It gives the sales team a clear view of what is moving and what is stuck.",
+        action:
+          "Use Review, Advance, Proposal Packet, or Archive depending on the card's stage.",
+      },
+    },
+    {
+      id: "hub-sales-due-soon",
+      target: "[data-tour='hub-sales-due-soon']",
+      title: "Step 7 — Work Due-Soon Items",
+      content: {
+        primary:
+          "This list shows items that need action soon.",
+        why:
+          "Sales follow-up is time sensitive. This panel keeps important items from slipping.",
+        action:
+          "Handle due-soon items before lower-priority pipeline work.",
+      },
+    },
+    {
+      id: "hub-sales-flow",
+      target: "[data-tour='hub-sales-flow']",
+      title: "Step 8 — Review Pipeline Flow",
+      content: {
+        primary:
+          "This summary shows how many deals and how much value sit in each sales stage.",
+        why:
+          "It helps leadership understand whether deals are progressing or stuck.",
+        action:
+          "If value is stuck in Proposal Building or Negotiation, focus follow-up there.",
+      },
+    },
+    {
+      id: "hub-sales-events",
+      target: "[data-tour='hub-sales-events']",
+      title: "Step 9 — Confirm Sales Events",
+      content: {
+        primary:
+          "This log shows the latest sales actions recorded by the page.",
+        why:
+          "It confirms the sales movement was saved.",
+        action:
+          "After clicking a sales button, check this log to make sure the event appears.",
+      },
+    },
+  ],
+};
+
+export function getHubTourSteps(pageKey) {
+  return hubTourSteps[pageKey] || [];
+}

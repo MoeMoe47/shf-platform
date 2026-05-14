@@ -1,0 +1,656 @@
+// src/components/credit/LessonBody.jsx
+import React from "react";
+import { useToasts } from "@/context/Toasts.jsx";
+import earn from "@/shared/credit/earn-shim.js";
+import { enqueue } from "@/shared/offline/queue.js";
+import { touchStreak } from "@/shared/engagement/streaks.js";
+import { award } from "@/shared/rewards/shim.js";
+import { useLocale } from "@/context/LocaleProvider.jsx";
+import { useReadingLevel } from "@/context/ReadingLevelProvider.jsx";
+import { getVariant } from "@/shared/reading-level/getVariant.js";
+
+const APP = "credit";
+
+/* ---- small helpers --------------------- */
+function ping(name, data = {}) {
+  try { window.dispatchEvent(new CustomEvent("analytics:ping", { detail: { name, ...data } })); } catch {}
+}
+function useSpeech() {
+  const synth = typeof window !== "undefined" ? window.speechSynthesis : null;
+  const [speaking, setSpeaking] = React.useState(false);
+  const speak = React.useCallback((text, opts = {}) => {
+    if (!synth || !text) return;
+    try {
+      synth.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      if (opts.lang) u.lang = opts.lang;
+      if (opts.rate) u.rate = opts.rate;
+      if (opts.pitch) u.pitch = opts.pitch;
+      u.onstart = () => setSpeaking(true);
+      u.onend = () => setSpeaking(false);
+      synth.speak(u);
+    } catch {}
+  }, [synth]);
+  const stop = React.useCallback(() => { try { synth?.cancel(); setSpeaking(false); } catch {} }, [synth]);
+  return { speak, stop, speaking };
+}
+
+/* ---- MicroQuiz (same API as Civic) ----- */
+function MicroQuiz(props) {
+  const { toast } = useToasts?.() || { toast: (m) => alert(m) };
+  const lessonId = props.lessonId || "";
+  const KEY = `${APP}:quiz:${lessonId}`;
+
+  const questions = React.useMemo(() => {
+    if (props.questions && Array.isArray(props.questions)) return props.questions;
+    if (props.qid != null) {
+      return [{
+        q: props.stem ?? "",
+        a: Array.isArray(props.choices) ? props.choices : [],
+        correct: Number(props.correctIndex ?? -1),
+        hint: props.hint ?? undefined,
+        _qid: props.qid,
+      }];
+    }
+    return [];
+  }, [props.questions, props.qid, props.stem, props.choices, props.correctIndex, props.hint]);
+
+  if (!questions.length) return null;
+
+  const [answers, setAnswers] = React.useState(() => {
+    try { return JSON.parse(localStorage.getItem(KEY) || "{}"); } catch { return {}; }
+  });
+  const [showHintIdx, setShowHintIdx] = React.useState(null);
+
+  const onPick = (i, choiceIdx) => {
+    const next = { ...answers, [i]: choiceIdx };
+    try { localStorage.setItem(KEY, JSON.stringify(next)); } catch {}
+    setAnswers(next);
+  };
+
+  const onCheck = () => {
+    let got = 0;
+    questions.forEach((q, i) => {
+      if (Number(answers[i]) === Number(q.correct)) got += 1;
+    });
+
+    if (got > 0) {
+      earn({ kind: "microquiz", points: got, meta: { lessonId } });
+      window.dispatchEvent(new Event("rewards:update"));
+      window.dispatchEvent(new Event("rewards:pulse"));
+      ping(`${APP}.lesson.quiz.submit`, { lessonId, correct: got, total: questions.length });
+      (toast || alert)(`+${got} point${got === 1 ? "" : "s"} from Micro-Quiz!`, { type: "success" });
+
+      try {
+        const K_ANY = `${APP}:quiz:anyCorrect`;
+        const K_TOT = `${APP}:quiz:correctTotal`;
+        localStorage.setItem(K_ANY, "1");
+        const tot = got + Number(localStorage.getItem(K_TOT) || "0");
+        localStorage.setItem(K_TOT, String(tot));
+        if (tot >= 5) award("quiz_5");
+        window.dispatchEvent(new Event("rewards:update"));
+      } catch {}
+    } else {
+      (toast || alert)("No correct answers yet — try again! (Hints can help)", { type: "info" });
+    }
+  };
+
+  return (
+    <section className="sh-mcq" aria-label="Micro-Quiz">
+      <h3 className="sh-mcqQ">Quick Check</h3>
+      <div className="sh-mcqBody" style={{ display: "grid", gap: 10 }}>
+        {questions.map((q, i) => {
+          const picked = answers[i];
+          const correct = Number(picked) === Number(q.correct);
+          const stateClass = picked == null ? "" : (correct ? "is-correct" : "is-wrong");
+          return (
+            <div key={i} className={`sh-mcq ${stateClass}`} style={{ marginTop: 0 }}>
+              <div className="sh-mcqQ" style={{ marginBottom: 6 }}>{q.q}</div>
+              <div className="sh-mcqOpts">
+                {(q.a || []).map((opt, idx) => (
+                  <button
+                    key={idx}
+                    className={`sh-mcqBtn ${picked === idx ? "is-picked" : ""}`}
+                    onClick={() => onPick(i, idx)}
+                    aria-pressed={picked === idx}
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </div>
+              <div className="sh-mcqFeedback">
+                <button className="sh-linkBtn" onClick={() => setShowHintIdx(showHintIdx === i ? null : i)}>
+                  {showHintIdx === i ? "Hide hint" : "Need a hint?"}
+                </button>
+                {showHintIdx === i && q.hint ? (
+                  <div className="sh-callout sh-callout--tip" style={{ marginTop: 8 }}>
+                    <div className="sh-calloutHead">
+                      <span className="sh-calloutIcon">💡</span>
+                      <strong>Hint</strong>
+                    </div>
+                    <div className="sh-calloutBody">{q.hint}</div>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+        <button className="sh-btn sh-btn--primary" onClick={onCheck}>Check Answers</button>
+        <button className="sh-btn sh-btn--secondary" onClick={() => window.dispatchEvent(new CustomEvent("coach:open", { detail: { lessonId } }))}>
+          Ask Coach
+        </button>
+      </div>
+    </section>
+  );
+}
+
+/* ---- Notes modal (same as Civic) -------- */
+function NotesModal({ open, onClose, onSave }) {
+  const [text, setText] = React.useState("");
+  if (!open) return null;
+  return (
+    <div className="kb-overlay" onClick={(e)=>{ if (e.target === e.currentTarget) onClose?.(); }}>
+      <div className="kb-card" role="dialog" aria-modal="true" aria-label="Add Note">
+        <strong style={{ fontSize: 16 }}>Add Note</strong>
+        <textarea
+          className="sh-input"
+          rows={6}
+          style={{ marginTop: 8, resize: "vertical" }}
+          placeholder="What’s important here? Summarize or highlight a key idea."
+          value={text}
+          onChange={e=>setText(e.target.value)}
+        />
+        <div className="sh-actionsRow" style={{ marginTop: 8 }}>
+          <button className="sh-btn" onClick={() => { onSave?.(text.trim()); setText(""); onClose?.(); }} disabled={!text.trim()}>Save to Portfolio</button>
+          <button className="sh-btn is-ghost" onClick={onClose}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---- Main (mirrored from Civic, scoped to APP) ---- */
+export default function LessonBody({ lesson, nextId, onGoNext }) {
+  const { toast } = useToasts?.() || { toast: (m) => alert(m) };
+  const { t, locale } = useLocale?.() || { t: (s)=>s, locale: "en" };
+  const { level } = useReadingLevel?.() || { level: "standard" };
+
+  const vLesson = React.useMemo(() => getVariant(lesson, { locale, level }), [lesson, locale, level]);
+
+  const id = String(lesson?.id || "unknown");
+  const totalSections = 4;
+
+  React.useEffect(() => {
+    try {
+      localStorage.setItem(`${APP}:lastLessonId`, String(id));
+      localStorage.setItem(`${APP}:lesson:${id}:title`, vLesson?.title || "");
+    } catch {}
+  }, [id, vLesson?.title]);
+
+  React.useEffect(() => {
+    const s = touchStreak();
+    if (s === 3) award("streak_3");
+    if (s === 7) award("streak_7");
+  }, []);
+
+  React.useEffect(() => {
+    ping(`${APP}.lesson.view`, { id, title: vLesson?.title || "" });
+  }, [id, vLesson?.title]);
+
+  const SECTION_IDS = ["objectives", "vocab", "content", "reflection"];
+  const sectionRefs = React.useRef(Object.fromEntries(SECTION_IDS.map(s => [s, React.createRef()])));
+  const [seen, setSeen] = React.useState(() => {
+    try { return new Set(JSON.parse(localStorage.getItem(`${APP}:lesson:${id}:seen`) || "[]")); }
+    catch { return new Set(); }
+  });
+
+  const [isComplete, setIsComplete] = React.useState(() => {
+    try { return localStorage.getItem(`${APP}:lesson:${id}:complete`) === "1"; } catch { return false; }
+  });
+
+  React.useEffect(() => {
+    const key = `${APP}:lesson:${id}:seen`;
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          const section = e.target.getAttribute("data-section");
+          if (section && SECTION_IDS.includes(section)) {
+            setSeen((prev) => {
+              if (prev.has(section)) return prev;
+              const next = new Set(prev); next.add(section);
+              try { localStorage.setItem(key, JSON.stringify([...next])); } catch {}
+              document.documentElement.style.setProperty("--lessonProgress",
+                Math.min(100, Math.round(((next.size + (isComplete ? 1 : 0)) / (totalSections + 1)) * 100)) + "%"
+              );
+              ping(`${APP}.lesson.seen`, { id, section });
+              return next;
+            });
+          }
+        }
+      });
+    }, { rootMargin: "0px 0px -30% 0px", threshold: 0.15 });
+
+    SECTION_IDS.forEach((s) => {
+      const el = sectionRefs.current[s]?.current;
+      if (el) obs.observe(el);
+    });
+    return () => obs.disconnect();
+  }, [id, isComplete]);
+
+  const [reflection, setReflection] = React.useState(() => {
+    try { return localStorage.getItem(`${APP}:lesson:${id}:reflection`) || ""; } catch { return ""; }
+  });
+
+  const lastReflectionRef = React.useRef("");
+  const refTextarea = React.useRef(null);
+
+  React.useEffect(() => {
+    const onSuggest = (e) => {
+      const text = (e.detail?.text || "").trim();
+      if (!text) return;
+      lastReflectionRef.current = reflection;
+      setReflection(prev => (prev ? prev + "\n\n" + text : text));
+      try {
+        const undo = () => setReflection(lastReflectionRef.current);
+        if (typeof toast === "function") {
+          toast("Suggestion inserted.", { actionText: "Undo", onAction: undo, type: "success" });
+        } else {
+          window.dispatchEvent(new CustomEvent("toast:show", {
+            detail: { msg: "Suggestion inserted.", actionText: "Undo", action: undo }
+          }));
+        }
+      } catch {}
+      refTextarea.current?.focus?.();
+    };
+    window.addEventListener("coach:suggest", onSuggest);
+    return () => window.removeEventListener("coach:suggest", onSuggest);
+  }, [reflection, toast]);
+
+  const progressPct = React.useMemo(() => {
+    const base = seen.size;
+    return Math.min(100, Math.round(((base + (isComplete ? 1 : 0)) / (totalSections + 1)) * 100));
+  }, [seen, isComplete]);
+
+  React.useEffect(() => {
+    const tmo = setTimeout(() => {
+      try { localStorage.setItem(`${APP}:lesson:${id}:reflection`, reflection); } catch {}
+
+      if ((reflection || "").trim().length >= 120) {
+        const hitKey = `${APP}:lesson:${id}:reflectionAwarded`;
+        const already = localStorage.getItem(hitKey) === "1";
+        if (!already) {
+          earn({ kind: "reflection", points: 2, meta: { id } });
+          try { localStorage.setItem(hitKey, "1"); } catch {}
+          window.dispatchEvent(new CustomEvent("rewards:earned", { detail: { points: 2, kind: "reflection", id } }));
+          window.dispatchEvent(new Event("rewards:update"));
+          window.dispatchEvent(new Event("rewards:pulse"));
+          award("first_reflection");
+          enqueue("reflection", { lessonId: id, body: reflection.slice(0, 2000) });
+          ping(`${APP}.lesson.reflection_award`, { id, points: 2 });
+        }
+      }
+    }, 300);
+    return () => clearTimeout(tmo);
+  }, [reflection, id]);
+
+  React.useEffect(() => {
+    const onQuiz = () => {
+      try {
+        const kTot = `${APP}:quiz:correctTotal`;
+        let total = 0;
+        const sRaw = localStorage.getItem(`${APP}:quiz:${id}`) || "{}";
+        const s = JSON.parse(sRaw);
+        Object.values(s).forEach((v) => {
+          if (typeof v === "number") total += 0; // legacy noop
+        });
+        const prev = Number(localStorage.getItem(kTot) || "0");
+        if (total > prev) localStorage.setItem(kTot, String(total));
+        if (total >= 5) award("quiz_5");
+        window.dispatchEvent(new Event("rewards:update"));
+      } catch {}
+    };
+    window.addEventListener("storage", onQuiz);
+    return () => window.removeEventListener("storage", onQuiz);
+  }, [id]);
+
+  const onComplete = React.useCallback(() => {
+    if (isComplete) return;
+    try { localStorage.setItem(`${APP}:lesson:${id}:complete`, "1"); } catch {}
+    setIsComplete(true);
+    earn({ kind: "complete", points: 5, meta: { id } });
+    window.dispatchEvent(new CustomEvent("rewards:earned", { detail: { points: 5, kind: "complete", id } }));
+    window.dispatchEvent(new Event("rewards:update"));
+    window.dispatchEvent(new Event("rewards:pulse"));
+
+    let totalCompleted = 0;
+    try {
+      const k = Object.keys(localStorage);
+      totalCompleted = k.filter(key => key.startsWith(`${APP}:lesson:`) && key.endsWith(":complete") && localStorage.getItem(key) === "1").length;
+    } catch {}
+    if (totalCompleted >= 5) award("five_lessons");
+
+    ping(`${APP}.lesson.complete`, { id, points: 5, totalCompleted });
+    if (nextId) (useToasts?.() || {}).toast?.("Nice! Ready for the next lesson?");
+  }, [isComplete, id, nextId]);
+
+  React.useEffect(() => {
+    const handler = (e) => {
+      if (!e || e.altKey || e.ctrlKey || e.metaKey) return;
+      if (e.key === "m") onComplete();
+      if (e.key === "r") {
+        const el = sectionRefs.current.reflection?.current?.querySelector("textarea");
+        el?.focus();
+      }
+      if (e.key === "f") {
+        const cur = document.documentElement.dataset.focus === "1";
+        document.documentElement.dataset.focus = cur ? "0" : "1";
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [onComplete]);
+
+  const addToPortfolio = React.useCallback(() => {
+    const key = "portfolio:items";
+    try {
+      const arr = JSON.parse(localStorage.getItem(key) || "[]");
+      const artifact = {
+        id: `lesson-${id}-${Date.now()}`,
+        kind: "lesson",
+        title: vLesson?.title || `Credit Lesson ${id}`,
+        lessonId: id,
+        createdAt: Date.now(),
+        tags: ["credit", "lesson"],
+        pathwayId: null,
+        reflection: (localStorage.getItem(`${APP}:lesson:${id}:reflection`) || "").slice(0, 1000),
+        progress: seen.size ? Math.round((seen.size / totalSections) * 100) : 0,
+        meta: {
+          pointsAwarded: {
+            reflection: localStorage.getItem(`${APP}:lesson:${id}:reflectionAwarded`) === "1" ? 2 : 0,
+            complete: localStorage.getItem(`${APP}:lesson:${id}:complete`) === "1" ? 5 : 0,
+          }
+        }
+      };
+      arr.unshift(artifact);
+      localStorage.setItem(key, JSON.stringify(arr));
+      enqueue("portfolio", { lessonId: id, title: artifact.title, tags: artifact.tags });
+      (useToasts?.() || {}).toast?.("Added to Portfolio", { type: "success" });
+      window.dispatchEvent(new CustomEvent("portfolio:update"));
+      ping(`${APP}.lesson.portfolio.add`, { id });
+    } catch {
+      (useToasts?.() || {}).toast?.("Couldn’t add to Portfolio", { type: "error" });
+    }
+  }, [id, vLesson?.title, seen.size]);
+
+  const { speak, stop, speaking } = useSpeech();
+  const lang = locale === "es" ? "es-ES" : "en-US";
+  const ttsText = {
+    objectives: (vLesson?.objectives || []).join(". "),
+    vocab: (vLesson?.vocab || []).map(v => typeof v === "string" ? v : `${v.term}: ${v.def || ""}`).join(". "),
+    content: Array.isArray(vLesson?.content) ? vLesson.content.join(" ") : (vLesson?.content || ""),
+    reflection: t("reflection_instructions") || "Write at least 120 characters to earn two points."
+  };
+
+  if (!lesson) {
+    return (
+      <div className="card card--pad">
+        <h2 className="sh-title" style={{ marginTop: 0 }}>Lesson not found</h2>
+        <p className="sh-sub">The lesson you’re looking for doesn’t exist.</p>
+      </div>
+    );
+  }
+
+  const [noteOpen, setNoteOpen] = React.useState(false);
+
+  return (
+    <div className="lesson-body" data-surface="soft">
+      <div className="lesson-surface">
+        <div className="sh-grid" style={{ gap: 12 }}>
+          {/* Title */}
+          <header className="sh-card">
+            <div className="sh-cardStripe" aria-hidden />
+            <div className="sh-cardBody sh-cardBody--flat">
+              <h1 id="lesson-title" className="sh-title" style={{ marginTop: 0 }}>
+                💳 {vLesson.title}
+              </h1>
+              {vLesson.overview && (
+                <p className="sh-sub" style={{ margin: "6px 0 0" }}>
+                  {Array.isArray(vLesson.overview) ? vLesson.overview.join(" ") : vLesson.overview}
+                </p>
+              )}
+            </div>
+          </header>
+
+          {/* Objectives */}
+          <section ref={sectionRefs.current.objectives} data-section="objectives" className="sh-card" aria-labelledby="sec-objectives">
+            <div className="sh-cardStripe" aria-hidden />
+            <div className="sh-cardBody">
+              <div className="sh-cardHead">
+                <h2 id="sec-objectives" className="sh-cardTitle">Objectives</h2>
+                <div className="sh-actionsRow">
+                  <button className="sh-btn sh-btn--secondary" onClick={() => speak(ttsText.objectives, { lang })} title="Listen">
+                    🔊 Listen
+                  </button>
+                  {speaking ? <button className="sh-btn" onClick={stop}>Stop</button> : null}
+                </div>
+              </div>
+              <div className="sh-cardContent">
+                <ul className="sh-list">
+                  {(vLesson.objectives || []).map((o, i) => (
+                    <li key={i} className="sh-listItem">
+                      <span className="sh-dot" aria-hidden /> <span className="sh-listMain">{o}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          {/* Vocab */}
+          <section ref={sectionRefs.current.vocab} data-section="vocab" className="sh-card" aria-labelledby="sec-vocab">
+            <div className="sh-cardStripe" aria-hidden />
+            <div className="sh-cardBody">
+              <div className="sh-cardHead">
+                <h2 id="sec-vocab" className="sh-cardTitle">Vocabulary</h2>
+                <div className="sh-actionsRow">
+                  <button className="sh-btn sh-btn--secondary" onClick={() => speak(ttsText.vocab, { lang })} title="Listen">
+                    🔊 Listen
+                  </button>
+                  {speaking ? <button className="sh-btn" onClick={stop}>Stop</button> : null}
+                </div>
+              </div>
+              <div className="sh-cardContent">
+                <ul className="sh-list">
+                  {(vLesson.vocab || []).map((v, i) => {
+                    const term = typeof v === "string" ? v : v.term;
+                    const def  = typeof v === "string" ? "" : (v.def || "");
+                    return (
+                      <li key={i} className="sh-listItem">
+                        <strong className="sh-listMain">{term}</strong>
+                        {def ? <span className="sh-listMeta"> — {def}</span> : null}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          {/* Content */}
+          <section ref={sectionRefs.current.content} data-section="content" className="sh-card" aria-labelledby="sec-content">
+            <div className="sh-cardStripe" aria-hidden />
+            <div className="sh-cardBody">
+              <div className="sh-cardHead">
+                <h2 id="sec-content" className="sh-cardTitle">Lesson</h2>
+                <div className="sh-actionsRow">
+                  <button className="sh-btn sh-btn--secondary" onClick={() => speak(ttsText.content, { lang })} title="Listen">
+                    🔊 Listen
+                  </button>
+                  {speaking ? <button className="sh-btn" onClick={stop}>Stop</button> : null}
+                  <button className="sh-btn is-ghost" onClick={() => setNoteOpen(true)} title="Add Note">🖊️ Add Note</button>
+                </div>
+              </div>
+
+              <div className="sh-cardContent">
+                {Array.isArray(lesson?.content)
+                  ? lesson.content.map((p, i) => (
+                      <React.Fragment key={i}>
+                        <p style={{ marginTop: 0 }}>{p}</p>
+                        {Array.isArray(lesson?.quizzes) &&
+                          lesson.quizzes
+                            .filter(q => Number(q.afterParagraphIndex) === i)
+                            .map(q => (
+                              <div key={q.id ?? `q-${i}`} style={{ marginTop: 8 }}>
+                                <MicroQuiz
+                                  lessonId={id}
+                                  qid={q.id}
+                                  stem={q.stem}
+                                  choices={q.choices}
+                                  correctIndex={q.correctIndex}
+                                  hint={q.hint}
+                                />
+                              </div>
+                            ))}
+                      </React.Fragment>
+                    ))
+                  : (
+                    <>
+                      <p style={{ marginTop: 0 }}>{vLesson?.content || lesson?.content || "—"}</p>
+                      {Array.isArray(lesson?.quizzes) &&
+                        lesson.quizzes
+                          .filter(q => q.afterParagraphIndex == null)
+                          .map(q => (
+                            <div key={q.id ?? "q-end"} style={{ marginTop: 8 }}>
+                              <MicroQuiz
+                                lessonId={id}
+                                qid={q.id}
+                                stem={q.stem}
+                                choices={q.choices}
+                                correctIndex={q.correctIndex}
+                                hint={q.hint}
+                              />
+                            </div>
+                          ))}
+                    </>
+                  )}
+
+                {lesson?.media?.url && (
+                  <div className="sh-callout sh-callout--example" style={{ marginTop: 10 }}>
+                    <div className="sh-calloutHead">
+                      <span className="sh-calloutIcon">🧾</span>
+                      <strong>Media</strong>
+                    </div>
+                    <div className="sh-calloutBody">
+                      <a className="sh-link" href={lesson.media.url} target="_blank" rel="noreferrer">
+                        Open media in new tab
+                      </a>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {Array.isArray(vLesson?.quiz) && vLesson.quiz.length > 0 && (
+                <div style={{ marginTop: 12 }}>
+                  <MicroQuiz questions={vLesson.quiz} lessonId={id} />
+                </div>
+              )}
+
+              <details className="sh-collapse" style={{ marginTop: 10 }}>
+                <summary className="sh-collapseSummary">📜 Transcript</summary>
+                <div className="sh-collapseBody">
+                  <p style={{ marginTop: 0, whiteSpace: "pre-wrap" }}>
+                    {Array.isArray(vLesson?.content) ? vLesson.content.join("\n\n") : (vLesson?.content || lesson?.content || "")}
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          {/* Reflection */}
+          <section ref={sectionRefs.current.reflection} data-section="reflection" className="sh-card" aria-labelledby="sec-reflection">
+            <div className="sh-cardStripe" aria-hidden />
+            <div className="sh-cardBody">
+              <div className="sh-cardHead">
+                <h2 id="sec-reflection" className="sh-cardTitle">Reflection</h2>
+                <div className="sh-actionsRow">
+                  <button className="sh-btn sh-btn--secondary" onClick={() => speak(ttsText.reflection, { lang })} title="Listen">
+                    🔊 Listen
+                  </button>
+                  {speaking ? <button className="sh-btn" onClick={stop}>Stop</button> : null}
+                </div>
+              </div>
+              <div className="sh-cardContent">
+                <p className="sh-hint">Write at least 120 characters to earn +2 points automatically.</p>
+                <textarea
+                  ref={refTextarea}
+                  value={reflection}
+                  onChange={(e) => setReflection(e.target.value)}
+                  rows={6}
+                  className="sh-inputText"
+                  style={{ width: "100%", fontSize: 15 }}
+                  placeholder={"What did you take away from this credit lesson? Any actions you’ll take (e.g., lower utilization, pay dates)?"}
+                />
+                <div className="sh-hint" aria-live="polite" style={{ marginTop: 6 }}>
+                  {Math.max(0, 120 - (reflection || "").trim().length)} characters to +2
+                </div>
+                <div className="sh-actionsRow" style={{ marginTop: 10 }}>
+                  <button className="sh-btn sh-btn--secondary" onClick={addToPortfolio}>Add to Portfolio</button>
+                  <button className="sh-btn is-ghost" onClick={() => window.dispatchEvent(new CustomEvent("coach:open", { detail: { lessonId: id } }))}>
+                    💬 Ask Coach
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Sticky footer */}
+          <footer className="sh-footer" style={{ position: "sticky", bottom: 0, zIndex: 5 }}>
+            <div className="sh-footerInner" style={{ justifyContent: "space-between" }}>
+              <div className="sh-progressWrap" aria-label="Progress">
+                <div className="sh-progressBar" style={{ width: `${progressPct}%` }} />
+              </div>
+              <div className="sh-actionsRow">
+                <span className="sh-chip soft">Progress: <strong style={{ marginLeft: 6 }}>{progressPct}%</strong></span>
+                <button className="sh-btn sh-btn--primary" onClick={onComplete} disabled={isComplete} title="Mark as Complete (+5) (m)">
+                  {isComplete ? "Completed ✓" : "Mark as Complete (+5)"}
+                </button>
+                <button className="sh-btn sh-btn--secondary" disabled={!nextId} onClick={() => nextId && onGoNext?.()} title={nextId ? "Next lesson (n)" : "No next lesson"}>
+                  Next Lesson ➜
+                </button>
+              </div>
+            </div>
+          </footer>
+
+          <NotesModal
+            open={noteOpen}
+            onClose={() => setNoteOpen(false)}
+            onSave={(text) => {
+              try {
+                const key = "portfolio:items";
+                const arr = JSON.parse(localStorage.getItem(key) || "[]");
+                const art = {
+                  id: `note-${id}-${Date.now()}`,
+                  kind: "note",
+                  title: `${vLesson?.title || "Lesson"} — Note`,
+                  lessonId: id,
+                  createdAt: Date.now(),
+                  tags: [APP, "note", "lesson"],
+                  pathwayId: null,
+                  desc: text,
+                };
+                arr.unshift(art);
+                localStorage.setItem(key, JSON.stringify(arr));
+                enqueue("portfolio", { lessonId: id, title: art.title, tags: art.tags });
+                (useToasts?.() || {}).toast?.("Note saved to Portfolio", { type: "success" });
+                window.dispatchEvent(new CustomEvent("portfolio:update"));
+                ping(`${APP}.lesson.note.add`, { id });
+              } catch {}
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}

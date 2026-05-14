@@ -1,0 +1,63 @@
+{
+  "id": "asl-58",
+  "title": "ASL 7.8 — Pharmacy & Prescriptions",
+  "estMinutes": 25,
+  "objectives": [
+    "Recognize and produce pharmacy-related vocabulary",
+    "Ask/answer about prescriptions and dosage",
+    "Use time-sequencing (morning, night, weekly) in context"
+  ],
+  "vocab": [
+    { "term": "PHARMACY", "def": "Location sign; cross + medicine handshape." },
+    { "term": "PRESCRIPTION", "def": "Write + give motion." },
+    { "term": "PILL", "def": "F-handshape moving to palm." },
+    { "term": "TAKE-MEDICINE", "def": "Mime putting pill in mouth." },
+    { "term": "ONCE-A-DAY", "def": "Index strikes palm + 'DAY' motion." }
+  ],
+  "sections": [
+    {
+      "heading": "Context: Pharmacy Visit",
+      "media": {
+        "src": "/media/asl/unit-7/pharmacy.gif",
+        "alt": "Signing PHARMACY and PRESCRIPTION",
+        "caption": "Doctor → Pharmacy → Prescription pick-up"
+      },
+      "body": "Use clear directional verbs: DOCTOR GIVE-ME PRESCRIPTION. PHARMACY GIVE-ME PILL."
+    },
+    {
+      "heading": "Dosage & Timing",
+      "body": "Practice expressions: TAKE PILL MORNING NIGHT. TAKE MEDICINE 3-DAY. Stress **time-first** rule (TIME + ACTION).",
+      "microCheck": {
+        "q": "What comes first when signing instructions?",
+        "options": ["The medicine name", "The time expression", "Random order"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Partner Dialogue",
+      "body": "Role-play: A is pharmacist, B is patient.\n1. Ask for prescription.\n2. Clarify dosage.\n3. Close with THANK-YOU.",
+      "callouts": [
+        { "type": "example", "title": "Sample Exchange", "body": "A: YOU HAVE PRESCRIPTION?  B: YES, DOCTOR GIVE-ME.  A: TAKE PILL ONCE-A-DAY.  B: THANK-YOU." }
+      ]
+    }
+  ],
+  "quiz": {
+    "title": "ASL 7.8 — Pharmacy & Prescriptions Quiz",
+    "items": [
+      { "type": "mcq", "q": "Which sign means 'pharmacy'?", "options": ["PILL", "PHARMACY", "DOCTOR", "HOSPITAL"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Time-first rule means:", "options": ["Always sign 'medicine' first", "Start with time expression (e.g., MORNING)", "Ignore time", "Sign slowly only"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Correct gloss: Take medicine 3 times a day", "options": ["TAKE MEDICINE 3-DAY", "MEDICINE TAKE 3", "DAY 3 TAKE", "TAKE 3"], "answerIndex": 0 },
+      { "type": "short", "q": "Write an ASL gloss for 'Take one pill at night'." },
+      { "type": "reflection", "prompt": "How comfortable are you explaining dosage? Which signs need more practice?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Record yourself signing: 'Doctor give-me prescription. Pharmacy give-me medicine. Take one pill every morning.'",
+  "summary": "You can now discuss prescriptions and dosage clearly, using time-first rules and pharmacy vocabulary.",
+  "nextSlug": "asl-59",
+  "games": [
+    { "id": "dosage-match", "title": "Dosage Match", "route": "/arcade/asl/dosage-match", "estMinutes": 5, "xp": 50, "outcomes": ["Match correct time with dosage"] },
+    { "id": "pharmacy-role", "title": "Pharmacy Roleplay", "route": "/arcade/asl/pharmacy-role", "estMinutes": 5, "xp": 50, "outcomes": ["Pharmacist/patient dialogue"] },
+    { "id": "pill-rush", "title": "Pill Rush", "route": "/arcade/asl/pill-rush", "estMinutes": 5, "xp": 50, "outcomes": ["Quickly sign time-first medicine actions"] }
+  ]
+}

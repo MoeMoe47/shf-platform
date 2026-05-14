@@ -1,0 +1,19 @@
+import React from "react";
+import HubGrowthPlaceholder from "./HubGrowthPlaceholder.jsx";
+
+export default function HubIntelligencePage() {
+  return (
+    <HubGrowthPlaceholder
+      active="Intel"
+      eyebrow="SHS HUB INTELLIGENCE ENGINE"
+      title="Hub Intelligence"
+      subtitle="Explainable recommendation intelligence for partner matches, bundled opportunities, pricing, delivery readiness, risk, and network growth."
+      cards={[
+        { value: "24", label: "Recommendations Generated" },
+        { value: "8", label: "Accepted Recommendations" },
+        { value: "5", label: "Active Bundle Suggestions" },
+        { value: "3", label: "Pricing Flags" },
+      ]}
+    />
+  );
+}

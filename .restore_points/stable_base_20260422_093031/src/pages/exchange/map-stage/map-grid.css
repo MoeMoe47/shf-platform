@@ -1,0 +1,41 @@
+.map-grid,
+.map-grid__fine,
+.map-grid__major,
+.map-grid__glow,
+.map-grid__fade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.map-grid {
+  z-index: 3;
+}
+
+.map-grid__fine {
+  background-image:
+    linear-gradient(rgba(124, 170, 245, 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 170, 245, 0.11) 1px, transparent 1px);
+  background-size: 38px 38px;
+  opacity: 0.28;
+}
+
+.map-grid__major {
+  background-image:
+    linear-gradient(rgba(182, 216, 255, 0.13) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(182, 216, 255, 0.13) 1px, transparent 1px);
+  background-size: 190px 190px;
+  opacity: 0.22;
+}
+
+.map-grid__glow {
+  background:
+    radial-gradient(circle at 50% 48%, rgba(120, 170, 255, 0.06) 0%, rgba(120, 170, 255, 0.02) 24%, transparent 58%);
+  filter: blur(8px);
+}
+
+.map-grid__fade {
+  background:
+    linear-gradient(180deg, rgba(4, 10, 20, 0.10) 0%, rgba(4, 10, 20, 0) 16%, rgba(4, 10, 20, 0) 84%, rgba(4, 10, 20, 0.12) 100%),
+    linear-gradient(90deg, rgba(4, 10, 20, 0.16) 0%, rgba(4, 10, 20, 0) 10%, rgba(4, 10, 20, 0) 90%, rgba(4, 10, 20, 0.16) 100%);
+}

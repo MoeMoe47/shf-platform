@@ -1,0 +1,5 @@
+import { getOracleTruth, compareOracleEntities } from "../controllers/oracle.controller";
+
+export function registerOracleRoutes(app: any) {
+  app.get("/oracle/truth/:entityId", getOracleTruth);
+}

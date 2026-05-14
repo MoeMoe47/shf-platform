@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "lessons": [
+    {
+      "id": "micro-001",
+      "title": "How to Write an Ethical Civic Speech",
+      "objective": "Learn structure + ethical constraints of public speeches.",
+      "minutes": 8,
+      "tags": ["civics", "speech"],
+      "assessment": {
+        "type": "short",
+        "prompt": "Write a 2-sentence opening for a speech on youth turnout and explain one ethical rule you’ll follow."
+      },
+      "social": {
+        "requireFollow": ["@SiliconHeartland"],
+        "requireShare": true,
+        "note": "Follow official channel; share your takeaway once."
+      }
+    },
+    {
+      "id": "micro-002",
+      "title": "Budget Trade-offs: 60-Second Primer",
+      "objective": "Understand opportunity cost in public budgets.",
+      "minutes": 6,
+      "tags": ["treasury", "budget"],
+      "assessment": {
+        "type": "mcq",
+        "q": "If you increase program A, which must also be true?",
+        "choices": [
+          "Taxes always fall",
+          "Another line item is reduced or new revenue is found",
+          "Debt disappears"
+        ],
+        "answerIndex": 1
+      },
+      "social": { "requireFollow": ["@SiliconHeartland"], "requireShare": false }
+    }
+  ]
+}

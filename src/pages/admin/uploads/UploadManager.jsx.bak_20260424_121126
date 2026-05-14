@@ -1,0 +1,165 @@
+import React, { useState } from "react";
+import useAuth from "../../../auth/useAuth";
+
+const API_BASE =
+  window.__SHS_API_BASE__ ||
+  (import.meta.env.VITE_SHS_API_BASE || "/api");
+
+async function readJson(res) {
+  const text = await res.text();
+  try {
+    return text ? JSON.parse(text) : {};
+  } catch {
+    return { raw: text };
+  }
+}
+
+export default function UploadManager() {
+  const auth = useAuth();
+  const [file, setFile] = useState(null);
+  const [visibility, setVisibility] = useState("internal");
+  const [status, setStatus] = useState("");
+  const [recentUploads, setRecentUploads] = useState([]);
+
+  const canUpload =
+    auth.hasPermission("uploads.internal") ||
+    auth.hasPermission("uploads.evidence") ||
+    auth.hasPermission("uploads.video");
+
+  if (!canUpload) {
+    return <div style={{ padding: 24, color: "#991b1b" }}>You do not have upload access.</div>;
+  }
+
+  async function handleUpload(e) {
+    e.preventDefault();
+    setStatus("");
+
+    if (!file) {
+      setStatus("Please choose a file first.");
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_BASE}/uploads`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          file_name: file.name,
+          visibility,
+        }),
+      });
+
+      const data = await readJson(res);
+      if (!res.ok) throw new Error(data?.error || "Upload failed.");
+
+      setStatus(`Upload completed for ${data?.upload?.file_name || file.name}.`);
+      setRecentUploads((prev) => [data.upload, ...prev]);
+      setFile(null);
+
+      const input = document.getElementById("upload-demo-input");
+      if (input) input.value = "";
+    } catch (err) {
+      setStatus(err?.message || "Upload failed.");
+    }
+  }
+
+  return (
+    <div style={{ padding: 24, color: "#1f2937" }}>
+      <h1 style={{ color: "#0f172a", fontWeight: 800 }}>Upload Manager</h1>
+      <p style={{ opacity: 1, marginBottom: 24 }}>
+        Demo upload surface using metadata-backed uploads for V1 testing.
+      </p>
+
+      <form
+        onSubmit={handleUpload}
+        style={{
+          display: "grid",
+          gap: 12,
+          maxWidth: 820,
+          padding: 16,
+          border: "1px solid #cbd5e1",
+          borderRadius: 16,
+          background: "#ffffff",
+          marginBottom: 24,
+        }}
+      >
+        <h2 style={{ margin: 0, color: "#0f172a", fontWeight: 700 }}>Upload File</h2>
+
+        <input
+          id="upload-demo-input"
+          type="file"
+          onChange={(e) => setFile(e.target.files?.[0] || null)}
+        />
+
+        <select
+          value={visibility}
+          onChange={(e) => setVisibility(e.target.value)}
+          style={{ padding: 12, borderRadius: 10, color: "#111827", background: "#ffffff", border: "1px solid #cbd5e1" }}
+        >
+          <option value="public">public</option>
+          <option value="internal">internal</option>
+          <option value="org_only">org_only</option>
+          <option value="restricted_case">restricted_case</option>
+          <option value="leadership_only">leadership_only</option>
+        </select>
+
+        <button
+          type="submit"
+          disabled={!file}
+          style={{
+            padding: 12,
+            borderRadius: 10,
+            cursor: "pointer",
+            opacity: !file ? 0.6 : 1,
+            background: "#0f172a",
+            color: "#ffffff",
+            border: "1px solid #0f172a",
+            fontWeight: 700,
+          }}
+        >
+          Upload
+        </button>
+
+        {status ? (
+          <div
+            style={{
+              color: status.toLowerCase().includes("failed") || status.toLowerCase().includes("please")
+                ? "#fca5a5"
+                : "#86efac",
+              fontWeight: 600,
+              padding: "10px 12px",
+              borderRadius: 10,
+              background: "#ecfdf5",
+            }}
+          >
+            {status}
+          </div>
+        ) : null}
+      </form>
+
+      <div
+        style={{
+          marginBottom: 24,
+          padding: 16,
+          border: "1px solid #cbd5e1",
+          borderRadius: 16,
+          background: "#ffffff",
+          maxWidth: 820,
+        }}
+      >
+        <h2 style={{ color: "#0f172a", fontWeight: 700 }}>Recent Uploads</h2>
+        {recentUploads.length === 0 ? (
+          <div style={{ opacity: 0.9 }}>No uploads created in this session yet.</div>
+        ) : (
+          <ul>
+            {recentUploads.map((upload, idx) => (
+              <li key={upload?.id || idx}>
+                {upload?.file_name || "unknown"} — {upload?.visibility || "internal"} — {upload?.status || "uploaded"}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  );
+}

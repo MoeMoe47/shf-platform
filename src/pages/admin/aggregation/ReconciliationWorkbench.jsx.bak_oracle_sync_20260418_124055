@@ -1,0 +1,81 @@
+import React from "react";
+import { getReconciliationItems } from "./adapters";
+
+function priorityBadgeClass(value) {
+  const normalized = String(value || "").toLowerCase();
+
+  if (normalized === "high") return "is-high";
+  if (normalized === "medium") return "is-medium";
+  if (normalized === "low") return "is-low";
+  return "is-neutral";
+}
+
+function statusBadgeClass(value) {
+  const normalized = String(value || "").toLowerCase();
+
+  if (normalized === "accepted" || normalized === "completed") return "is-verified";
+  if (normalized === "blocked") return "is-rejected";
+  if (normalized === "queued" || normalized === "in_progress") return "is-pending";
+  return "is-neutral";
+}
+
+export default function ReconciliationWorkbench() {
+  const items = getReconciliationItems();
+
+  return (
+    <section className="admin-aggregation-reconciliation">
+      <div className="admin-aggregation-reconciliation__header">
+        <div>
+          <p className="admin-aggregation-reconciliation__eyebrow">Conflict + Alignment Review</p>
+          <h2 className="admin-aggregation-reconciliation__title">Reconciliation Workbench</h2>
+          <p className="admin-aggregation-reconciliation__subtitle">
+            Referral-level reconciliation items aligned to the shared contract layer.
+          </p>
+        </div>
+      </div>
+
+      <div className="admin-aggregation-reconciliation__table-wrap">
+        <table className="admin-aggregation-reconciliation__table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>County</th>
+              <th>Status</th>
+              <th>Priority</th>
+              <th>Confidence</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item) => (
+              <tr key={item.id}>
+                <td>{item.id}</td>
+                <td>{item.county}</td>
+                <td>
+                  <span
+                    className={[
+                      "admin-aggregation-badge",
+                      statusBadgeClass(item.status),
+                    ].join(" ")}
+                  >
+                    {item.status}
+                  </span>
+                </td>
+                <td>
+                  <span
+                    className={[
+                      "admin-aggregation-badge",
+                      priorityBadgeClass(item.priority),
+                    ].join(" ")}
+                  >
+                    {item.priority}
+                  </span>
+                </td>
+                <td>{item.confidenceScore}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}

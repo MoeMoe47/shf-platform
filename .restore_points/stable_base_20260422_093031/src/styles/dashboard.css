@@ -1,0 +1,183 @@
+
+
+/* ========= Dashboard — premium mock add-ons (append-only) ========= */
+
+.dash-grid { align-items: start; }
+
+.dash-hero .sh-actionsRow { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* Wallet / Career stat rows */
+.dash-kv { display: grid; gap: 6px; margin-bottom: 10px; }
+.dash-k,
+.dash-v { font-size: 13px; color: var(--ink, #0f172a); }
+.dash-k { color: var(--ink-soft, #6b7280); margin-right: 8px; }
+.dash-mono { font-family: ui-monospace, Menlo, Monaco, Consolas, "Courier New", monospace; }
+
+.dash-statsRow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 10px;
+  margin: 10px 0 8px;
+}
+.dash-stat {
+  border: 1px solid var(--line, #dcd7ce);
+  border-radius: 10px;
+  background: #fff;
+  padding: 10px;
+  text-align: center;
+}
+.dash-statVal { font-size: 18px; font-weight: 700; color: var(--ink, #0f172a); }
+.dash-unit { font-size: 12px; font-weight: 600; opacity: .7; margin-left: 4px; }
+.dash-statLabel { font-size: 12px; color: var(--ink-soft, #6b7280); margin-top: 2px; }
+
+.dash-pill {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 4px 8px; border-radius: 999px; font-size: 12px; font-weight: 700;
+  border: 1px solid var(--line);
+}
+.dash-pill.ok   { background: #ecfdf5; color: #065f46; border-color: #10b981; }
+.dash-pill.warn { background: #fff7ed; color: #9a3412; border-color: #fed7aa; }
+
+/* Generic tiny list */
+.dash-list { list-style: none; padding: 0; margin: 8px 0 10px; display: grid; gap: 6px; }
+.dash-list .dash-k { color: var(--ink-soft, #6b7280); }
+.dash-list .dash-v { color: var(--ink, #0f172a); }
+
+/* Plain rows */
+.dash-plainList { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.dash-row {
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px;
+  border: 1px solid var(--line, #dcd7ce); border-radius: 10px; background: #fff; padding: 8px 10px;
+}
+.dash-row.you { border-color: var(--orange, #ff4f00); box-shadow: 0 0 0 2px rgba(255,79,0,.12) inset; }
+.dash-rowMain { min-width: 0; }
+.dash-title { font-weight: 600; color: var(--ink, #0f172a); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dash-sub { font-size: 12px; color: var(--ink-soft, #6b7280); }
+.dash-rank { font-weight: 700; color: var(--ink, #0f172a); min-width: 30px; text-align: center; }
+.dash-tag {
+  font-size: 12px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); background: #fff;
+}
+.dash-tag.warn { background: #fff7ed; border-color: #fed7aa; color: #9a3412; }
+.dash-tag.ok   { background: #ecfdf5; border-color: #10b981; color: #065f46; }
+.dash-dot { color: #d1d5db; }
+
+/* Achievements chips */
+.dash-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.dash-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 10px; border-radius: 999px; border: 1px solid var(--line);
+  background: #fff; font-size: 13px; color: var(--ink);
+}
+.dash-chip.badge { background: #eef2ff; border-color: #c7d2fe; color: #3730a3; }
+.dash-chip.streak { background: #fff1f2; border-color: #fecdd3; color: #be123c; }
+.dash-chip.nft   { background: #ecfeff; border-color: #a5f3fc; color: #155e75; }
+
+/* Card tweaks */
+.dash-career .prg-row { display: flex; align-items: center; justify-content: space-between; }
+.dash-career .prg-meter { height: 10px; background: #f3f4f6; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+.dash-career .prg-meterFill { height: 100%; background: var(--orange); }
+
+/* Responsive */
+@media (max-width: 720px){
+  .dash-statsRow { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+
+/* ======================
+   Dashboard Skeletons
+   ====================== */
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skel {
+  border-radius: 10px;
+  background: linear-gradient(
+    90deg,
+    #f3f4f6 25%,
+    #e9ecef 37%,
+    #f3f4f6 63%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.2s infinite linear;
+}
+
+/* Row-sized shimmer */
+.skel--row {
+  height: 14px;
+  margin: 6px 0;
+}
+
+/* Text blocks */
+.skel--text-1 { height: 14px; width: 60%; }
+.skel--text-2 { height: 14px; width: 90%; margin-bottom: 8px; }
+.skel--text-3 { height: 14px; width: 70%; }
+
+/* Larger card placeholders */
+.skel--card-lg {
+  height: 180px;
+  width: 100%;
+}
+
+.skel--progress {
+  height: 120px;
+  width: 100%;
+}
+
+/* Button placeholder */
+.skel--button {
+  height: 36px;
+  width: 140px;
+  border-radius: 999px;
+}
+
+/* Lists */
+.skel-list { display: grid; gap: 8px; }
+
+/* Tiny variant for quick actions / chips */
+.skel--chip {
+  height: 26px;
+  width: 80px;
+  border-radius: 999px;
+}
+
+/* For stats cards */
+.skel--stat {
+  height: 40px;
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* KPI strip */
+.sh-kpi .sh-cardContent { padding-block: .5rem; }
+.sh-kpiRow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  list-style: none;
+  margin: 0; padding: 0;
+}
+.sh-kpiItem { display: flex; align-items: center; gap: 10px; }
+.sh-kpiIcon { font-size: 1.25rem; line-height: 1; }
+.sh-kpiLabel { font-size: 12px; color: var(--ink-soft); }
+.sh-kpiValue { font: 600 20px/1.2 system-ui, sans-serif; }
+.sh-kpiHint  { font-size: 12px; color: var(--ink-soft); }
+@media (max-width: 900px) { .sh-kpiRow { grid-template-columns: 1fr; } }
+
+/* --- Career dashboard niceties (added) --- */
+.table-wrap { overflow-x: auto; }
+.linkcard { display:inline-block; padding:10px 12px; border:1px solid var(--ring,#eee); border-radius:10px; text-decoration:none; }
+.linkcard:hover { background:#fafafa; }
+
+/* Small KPI helpers (complementary to .sh-kpi*) */
+.kpi { display:grid; gap:4px; }
+.kpi .kpi-label { color: var(--ink-soft); font-size: 12px; }
+.kpi .kpi-value { font: 600 22px/1.1 system-ui, sans-serif; }
+.table-wrap { overflow-x: auto; }
+.linkcard { display:inline-block; padding:10px 12px; border:1px solid var(--ring,#eee); border-radius:10px; text-decoration:none; }
+.linkcard:hover { background:#fafafa; }
+.kpi .kpi-label { color: var(--ink-soft); font-size: 12px; }
+.kpi .kpi-value { font: 600 22px/1.1 system-ui, sans-serif; }
+
+

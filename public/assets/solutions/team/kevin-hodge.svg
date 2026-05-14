@@ -1,0 +1,26 @@
+<svg width="420" height="420" viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg3" cx="50%" cy="18%" r="70%">
+      <stop offset="0%" stop-color="#3a9bea" stop-opacity=".72"/>
+      <stop offset="55%" stop-color="#0b2948"/>
+      <stop offset="100%" stop-color="#020914"/>
+    </radialGradient>
+    <linearGradient id="suit3" x1="85" y1="270" x2="335" y2="420">
+      <stop stop-color="#07111f"/>
+      <stop offset="1" stop-color="#102947"/>
+    </linearGradient>
+    <filter id="glow3">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="420" height="420" fill="url(#bg3)"/>
+  <circle cx="210" cy="142" r="82" stroke="#72caff" stroke-opacity=".25"/>
+  <circle cx="210" cy="142" r="58" fill="#0a1728" stroke="#79d5ff" stroke-opacity=".35"/>
+  <circle cx="210" cy="122" r="36" fill="#dbe8f1" fill-opacity=".82"/>
+  <path d="M148 210 C165 172, 190 156, 210 156 C230 156, 255 172, 272 210 C252 238, 168 238, 148 210Z" fill="#cedce8" fill-opacity=".72"/>
+  <path d="M85 420 C96 315, 142 255, 210 255 C278 255, 324 315, 335 420H85Z" fill="url(#suit3)"/>
+  <path d="M160 420 L195 276 H225 L260 420H160Z" fill="#0e1d31"/>
+  <text x="210" y="151" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="48" font-weight="900" fill="#e6f6ff" filter="url(#glow3)">KH</text>
+</svg>

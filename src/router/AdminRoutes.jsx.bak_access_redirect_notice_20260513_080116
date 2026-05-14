@@ -1,0 +1,129 @@
+import React from "react";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { canAccessHubRoute } from "@/system/identity/hubAccessControl";
+import { getCurrentIdentity } from "@/system/identity/identityRouting";
+
+import AppRegistry from "@/pages/admin/AppRegistry.jsx";
+import Registry from "@/pages/admin/Registry.jsx";
+import ToolDashboard from "@/pages/admin/ToolDashboard.jsx";
+import MasterNarrativeViewer from "@/pages/admin/MasterNarrativeViewer.jsx";
+import GrantBinder from "@/pages/admin/GrantBinder.jsx";
+import AlignmentSwitchboard from "@/pages/admin/AlignmentSwitchboard.jsx";
+import BuilderHub from "@/pages/admin/BuilderHub.jsx";
+
+import AggregationDashboard from "@/pages/admin/aggregation/AggregationDashboard.jsx";
+import ReportingCommandSurface from "@/pages/admin/reporting/ReportingCommandSurface.jsx";
+import VerificationAuditSurface from "@/pages/admin/reporting/VerificationAuditSurface.jsx";
+
+import HubWorkspaceDashboard from "@/pages/hub/HubWorkspaceDashboard.jsx";
+import SHSLoginPage from "@/pages/auth/SHSLoginPage.jsx";
+import HubLeadershipDashboard from "@/pages/hub/HubLeadershipDashboard.jsx";
+import IntakeNavigatorConsole from "@/pages/hub/IntakeNavigatorConsole.jsx";
+import PartnerActionQueue from "@/pages/hub/PartnerActionQueue.jsx";
+import ReferralLifecycleView from "@/pages/hub/ReferralLifecycleView.jsx";
+import UnmetNeedsQueue from "@/pages/hub/UnmetNeedsQueue.jsx";
+import HubFilesImports from "@/pages/hub/HubFilesImports.jsx";
+import HubReports from "@/pages/hub/HubReports.jsx";
+import HubGrowthNetwork from "@/pages/hub/HubGrowthNetwork.jsx";
+import HubSalesPipelinePage from "@/pages/hub/HubSalesPipelinePage.jsx";
+import HubOpportunitiesPage from "@/pages/hub/HubOpportunitiesPage.jsx";
+import HubBundleBuilderPage from "@/pages/hub/HubBundleBuilderPage.jsx";
+import HubIntelligencePage from "@/pages/hub/HubIntelligencePage.jsx";
+
+import IdentityManagement from "../pages/admin/identity/IdentityManagement";
+import UploadManager from "../pages/admin/uploads/UploadManager";
+import AuditLogViewer from "../pages/admin/audit/AuditLogViewer";
+
+import AuthGuard from "../auth/AuthGuard";
+import SolutionsInfrastructurePage from "@/pages/solutions/SolutionsInfrastructurePage.jsx";
+import SHSPartnerGrowthEngine from "@/pages/admin/growth/SHSPartnerGrowthEngine.jsx";
+
+
+function ProtectedHubRoute({ path, children }) {
+  const location = useLocation();
+  const identity = getCurrentIdentity();
+  const routePath = path || location.pathname || "/hub";
+
+  if (!identity.isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (!canAccessHubRoute(identity.role, routePath)) {
+    console.warn("[identity] blocked route", {
+      route: routePath,
+      role: identity.role,
+      user: identity.email,
+    });
+
+    return <Navigate to="/hub" replace />;
+  }
+
+  return children;
+}
+
+function protect(path, element) {
+  return (
+    <ProtectedHubRoute path={path}>
+      {element}
+    </ProtectedHubRoute>
+  );
+}
+
+export default function AdminRoutes() {
+  return (
+    <AuthGuard>
+      <Routes>
+        <Route path="/login" element={<SHSLoginPage />} />
+        {/* Default */}
+        <Route path="/" element={<Navigate to="/hub" replace />} />
+
+        {/* SHS Hub */}
+        <Route path="/hub" element={protect("/hub", <HubWorkspaceDashboard />)} />
+        <Route path="/hub/network" element={protect("/hub/network", <HubLeadershipDashboard />)} />
+        <Route path="/hub/leadership" element={protect("/hub/leadership", <HubLeadershipDashboard />)} />
+        <Route path="/hub/intake" element={protect("/hub/intake", <IntakeNavigatorConsole />)} />
+        <Route path="/hub/queue" element={protect("/hub/queue", <PartnerActionQueue />)} />
+        <Route path="/hub/action-queue" element={protect("/hub/action-queue", <PartnerActionQueue />)} />
+        <Route path="/hub/lifecycle" element={protect("/hub/lifecycle", <ReferralLifecycleView />)} />
+        <Route path="/hub/referrals" element={protect("/hub/referrals", <ReferralLifecycleView />)} />
+        <Route path="/hub/unmet-needs" element={protect("/hub/unmet-needs", <UnmetNeedsQueue />)} />
+        <Route path="/hub/imports" element={protect("/hub/imports", <HubFilesImports />)} />
+        <Route path="/hub/reports" element={protect("/hub/reports", <HubReports />)} />
+        <Route path="/hub/growth-network" element={protect("/hub/growth-network", <HubGrowthNetwork />)} />
+        <Route path="/hub/sales-pipeline" element={protect("/hub/sales-pipeline", <HubSalesPipelinePage />)} />
+        <Route path="/hub/opportunities" element={protect("/hub/opportunities", <HubOpportunitiesPage />)} />
+        <Route path="/hub/bundles" element={protect("/hub/bundles", <HubBundleBuilderPage />)} />
+        <Route path="/hub/intelligence" element={protect("/hub/intelligence", <HubIntelligencePage />)} />
+
+        {/* Shared SHS admin/infrastructure surfaces */}
+        <Route path="/uploads" element={protect("/uploads", <UploadManager />)} />
+        <Route path="/imports" element={protect("/imports", <HubFilesImports />)} />
+        <Route path="/aggregation" element={protect("/aggregation", <AggregationDashboard />)} />
+        <Route path="/reporting" element={protect("/reporting", <ReportingCommandSurface />)} />
+        <Route path="/verification-audit" element={protect("/verification-audit", <VerificationAuditSurface />)} />
+        <Route path="/audit" element={protect("/audit", <AuditLogViewer />)} />
+        <Route path="/identity" element={protect("/identity", <IdentityManagement />)} />
+
+        {/* Admin builder / registry */}
+        <Route path="/app-registry" element={protect("/app-registry", <AppRegistry />)} />
+        <Route path="/registry" element={protect("/registry", <Registry />)} />
+        <Route path="/builder" element={protect("/builder", <BuilderHub />)} />
+        <Route path="/builder/tools" element={protect("/builder/tools", <ToolDashboard />)} />
+        <Route path="/tools" element={protect("/tools", <ToolDashboard />)} />
+        <Route path="/master-narrative" element={protect("/master-narrative", <MasterNarrativeViewer />)} />
+        <Route path="/grant-binder" element={protect("/grant-binder", <GrantBinder />)} />
+        <Route path="/alignment" element={protect("/alignment", <AlignmentSwitchboard />)} />
+
+        {/* Partner Growth Engine */}
+        <Route path="/growth" element={protect("/growth", <SHSPartnerGrowthEngine />)} />
+
+        {/* Fallback */}
+        <Route path="/solutions" element={protect("/solutions", <SolutionsInfrastructurePage />)} />\n        <Route path="/solutions/infrastructure" element={protect("/solutions/infrastructure", <SolutionsInfrastructurePage />)} />\n\n        <Route path="*" element={<Navigate to="/hub" replace />} />
+      
+        <Route path="/solutions" element={protect("/solutions", <SolutionsInfrastructurePage />)} />
+        <Route path="/solutions/infrastructure" element={protect("/solutions/infrastructure", <SolutionsInfrastructurePage />)} />
+
+</Routes>
+    </AuthGuard>
+  );
+}

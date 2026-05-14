@@ -1,0 +1,166 @@
+.shf-impact-map-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+  border-radius: 16px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 40%, rgba(255,255,255,0.92), rgba(241,233,223,0.98) 72%),
+    linear-gradient(180deg, rgba(247,241,234,1), rgba(235,227,216,1));
+}
+
+.shf-impact-map-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image:
+    linear-gradient(rgba(90, 66, 48, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(90, 66, 48, 0.04) 1px, transparent 1px);
+  background-size: 44px 44px;
+  pointer-events: none;
+  opacity: 0.30;
+}
+
+/* bigger visible state, less dead space */
+.shf-impact-map-frame {
+  position: absolute;
+  left: 4%;
+  top: -4%;
+  width: 92%;
+  height: 106%;
+  z-index: 2;
+}
+
+.shf-impact-map-base {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform: scale(1.16);
+  transform-origin: center center;
+  opacity: 1;
+  mix-blend-mode: multiply;
+  filter:
+    brightness(0.82)
+    contrast(1.22)
+    saturate(0.92)
+    sepia(0.08)
+    drop-shadow(0 10px 24px rgba(89, 62, 44, 0.08));
+}
+
+.shf-impact-node-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+}
+
+.shf-impact-node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+.shf-impact-node-core {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: relative;
+  z-index: 2;
+  background: radial-gradient(circle at 35% 35%, #ffe6c5 0%, #e6a462 28%, #cc6c2f 68%, #92491c 100%);
+  box-shadow:
+    0 0 0 1px rgba(255, 244, 228, 0.34),
+    0 0 4px rgba(224, 123, 42, 0.20);
+}
+
+.shf-impact-node-pulse {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  top: -12px;
+  left: -12px;
+  border-radius: 50%;
+  z-index: 1;
+  background: radial-gradient(circle, rgba(255, 170, 90, 0.30) 0%, rgba(255, 140, 60, 0.18) 40%, rgba(255, 200, 140, 0.06) 70%, transparent 100%);
+  opacity: 0;
+}
+
+.shf-impact-node.is-active .shf-impact-node-core {
+  box-shadow:
+    0 0 0 1px rgba(255, 242, 220, 0.52),
+    0 0 6px rgba(224, 123, 42, 0.92),
+    0 0 18px rgba(224, 123, 42, 0.58),
+    0 0 40px rgba(255, 190, 122, 0.24);
+}
+
+.shf-impact-node.is-active .shf-impact-node-pulse {
+  opacity: 1;
+  animation: shfImpactPulse 2.15s ease-out infinite;
+}
+
+.shf-impact-node:hover .shf-impact-node-core {
+  transform: scale(1.08);
+}
+
+.shf-impact-node:hover .shf-impact-node-pulse {
+  opacity: 1;
+  animation: shfImpactPulse 1.8s ease-out infinite;
+}
+
+.shf-impact-node--sm .shf-impact-node-core { width: 8px; height: 8px; }
+.shf-impact-node--md .shf-impact-node-core { width: 12px; height: 12px; }
+.shf-impact-node--lg .shf-impact-node-core { width: 18px; height: 18px; }
+
+.shf-impact-map-tooltip {
+  position: absolute;
+  left: 27%;
+  top: 60%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 251, 247, 0.96);
+  border: 1px solid rgba(194, 163, 136, 0.42);
+  padding: 14px 16px;
+  border-radius: 16px;
+  box-shadow:
+    0 10px 30px rgba(79, 53, 40, 0.10),
+    0 2px 8px rgba(79, 53, 40, 0.05);
+  font-size: 13px;
+  line-height: 1.55;
+  color: #4f3528;
+  z-index: 6;
+  min-width: 220px;
+}
+
+.shf-impact-map-tooltip strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 16px;
+  color: #2f2118;
+}
+
+@keyframes shfImpactPulse {
+  0% { transform: scale(0.52); opacity: 0.65; }
+  65% { transform: scale(1.48); opacity: 0; }
+  100% { transform: scale(1.48); opacity: 0; }
+}
+
+@media (max-width: 980px) {
+  .shf-impact-map-frame {
+    left: 1%;
+    top: 0%;
+    width: 98%;
+    height: 96%;
+  }
+
+  .shf-impact-map-base {
+    transform: scale(1.08);
+  }
+
+  .shf-impact-map-tooltip {
+    left: 18px;
+    top: auto;
+    bottom: 18px;
+    transform: none;
+    min-width: 210px;
+  }
+}

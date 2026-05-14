@@ -1,0 +1,248 @@
+
+
+/* src/styles/treasury-polish.css
+   Treasury-only polish (scoped by [data-app="treasury"]) */
+
+/* ---------------- Tokens (light) ---------------- */
+:root {
+    --tre-bg: #ffffff;
+    --tre-card-bg: #ffffff;
+    --tre-text: #3d403b;
+    --tre-muted: #5d615b;
+    --tre-border: #ece8df;
+  
+    --tre-presets-border: #e5e2da;
+    --tre-presets-bg: #ffffff;
+    --tre-presets-hover: #faf7f0;
+  
+    --tre-badge: #f4f1ea;
+    --tre-badge-ok-bg: #ecf3e9;
+    --tre-badge-ok-fg: #2e5f3a;
+    --tre-badge-warn-bg: #fff1e6;
+    --tre-badge-warn-fg: #8a4f28;
+  
+    --tre-delta-ok: #2e5f3a;
+    --tre-delta-warn: #8b3b2e;
+  
+    --tre-prog-track: #ebe8df;
+    --tre-prog-fill: #738a55;
+  
+    --tre-chip-bg: #eef0ea;
+    --tre-chip-fg: #40503e;
+    --tre-chip-ok-bg: #ecf3e9;
+    --tre-chip-ok-fg: #2e5f3a;
+    --tre-chip-bad-bg: #fde8e8;
+    --tre-chip-bad-fg: #8b2d2d;
+  
+    --tre-table-head-bg: #ffffff;
+    --tre-table-row-hover: #faf7f0;
+    --tre-table-row-selected: #f1efe6;
+    --tre-table-row-selected-border: #738a55;
+  
+    --tre-rail-scrim: rgba(0,0,0,.18);
+  
+    --tre-bar-muted: #dfe4d7;
+    --tre-bar: #738a55;
+    --tre-highlight: #ff6a00;
+  }
+  
+  /* ---------------- Tokens (dark) ---------------- */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --tre-bg: #0f1110;
+      --tre-card-bg: #151816;
+      --tre-text: #e6e7e5;
+      --tre-muted: #a7aca3;
+      --tre-border: #2a2e2a;
+  
+      --tre-presets-border: #2a2e2a;
+      --tre-presets-bg: #171a18;
+      --tre-presets-hover: #1c201d;
+  
+      --tre-badge: #1d201d;
+      --tre-badge-ok-bg: #18331f;
+      --tre-badge-ok-fg: #a7e0b3;
+      --tre-badge-warn-bg: #3a241a;
+      --tre-badge-warn-fg: #f6c6a4;
+  
+      --tre-delta-ok: #a7e0b3;
+      --tre-delta-warn: #f3a293;
+  
+      --tre-prog-track: #202421;
+      --tre-prog-fill: #7fb36a;
+  
+      --tre-chip-bg: #1e231f;
+      --tre-chip-fg: #c8d1c6;
+      --tre-chip-ok-bg: #1a2a1e;
+      --tre-chip-ok-fg: #b7f0c3;
+      --tre-chip-bad-bg: #3b1e1e;
+      --tre-chip-bad-fg: #ffb2a8;
+  
+      --tre-table-head-bg: #151816;
+      --tre-table-row-hover: #1a1e1b;
+      --tre-table-row-selected: #1e231f;
+      --tre-table-row-selected-border: #7fb36a;
+  
+      --tre-rail-scrim: rgba(0,0,0,.35);
+  
+      --tre-bar-muted: #2a302a;
+      --tre-bar: #7fb36a;
+      --tre-highlight: #ff8a3c;
+    }
+  }
+  
+  /* Ensure the app area uses the tokens */
+  [data-app="treasury"] {
+    color: var(--tre-text);
+    background: var(--tre-bg);
+  }
+  
+  /* ---------------- Topbar ---------------- */
+  [data-app="treasury"] .treasury-topbar {
+    display: grid;
+    grid-template-columns: 1fr auto auto 1fr;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  [data-app="treasury"] .tre-range { display: flex; align-items: center; gap: 6px; }
+  
+  [data-app="treasury"] .tre-presets { display: flex; gap: 6px; }
+  [data-app="treasury"] .tre-presets button {
+    border: 1px solid var(--tre-presets-border); background: var(--tre-presets-bg);
+    border-radius: 8px; padding: 6px 8px; font-size: 12px;
+    cursor: pointer; color: var(--tre-text);
+    transition: background-color .2s ease, border-color .2s ease, transform .08s ease;
+  }
+  [data-app="treasury"] .tre-presets button:hover { background: var(--tre-presets-hover); }
+  [data-app="treasury"] .tre-presets button:active { transform: translateY(1px); }
+  
+  [data-app="treasury"] .tre-filter-count {
+    margin-left: 8px; padding: 2px 8px; border-radius: 999px;
+    background: #f0f3ed; color: #3e4a2a; font-size: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    [data-app="treasury"] .tre-filter-count {
+      background: #1e231f; color: #b7f0c3;
+    }
+  }
+  
+  [data-app="treasury"] .topbar-summary {
+    justify-self: end; color: var(--tre-muted); font-size: 12px;
+  }
+  
+  /* ---------------- KPI tiles ---------------- */
+  [data-app="treasury"] .tre-card {
+    position: relative;
+    border: 1px solid var(--tre-border);
+    border-radius: 12px;
+    background: var(--tre-card-bg);
+    padding: 12px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  }
+  
+  [data-app="treasury"] .tre-kpi .value {
+    font-weight: 800; font-size: 22px; letter-spacing: .2px;
+  }
+  
+  [data-app="treasury"] .tre-kpi .label {
+    color: var(--tre-muted); font-size: 12px;
+  }
+  
+  [data-app="treasury"] .tre-badge {
+    position: absolute; top: 8px; right: 8px;
+    font-size: 11px; padding: 3px 6px;
+    border-radius: 999px; letter-spacing: .1px;
+    background: var(--tre-badge);
+  }
+  [data-app="treasury"] .tre-badge--ok   { background: var(--tre-badge-ok-bg);   color: var(--tre-badge-ok-fg); }
+  [data-app="treasury"] .tre-badge--warn { background: var(--tre-badge-warn-bg); color: var(--tre-badge-warn-fg); }
+  
+  [data-app="treasury"] .kpi-delta { margin-top: 4px; font-size: 12px; color: var(--tre-muted); }
+  [data-app="treasury"] .kpi-delta.up   { color: var(--tre-delta-ok); }
+  [data-app="treasury"] .kpi-delta.down { color: var(--tre-delta-warn); }
+  
+  /* tiny progress bar */
+  [data-app="treasury"] .tre-prog {
+    height: 6px; border-radius: 999px; background: var(--tre-prog-track);
+    overflow: hidden; margin-top: 6px;
+  }
+  [data-app="treasury"] .tre-prog i {
+    display: block; height: 100%; background: var(--tre-prog-fill);
+    transition: width .35s ease, background-color .2s ease;
+  }
+  
+  /* also animate the right-rail bar fill */
+  [data-app="treasury"] .barlist .bar i { transition: width .35s ease, background-color .2s ease; }
+  
+  /* ---------------- Table polish ---------------- */
+  [data-app="treasury"] .table-wrap { overflow: auto; }
+  
+  [data-app="treasury"] .sh-table thead th {
+    position: sticky; top: 0; background: var(--tre-table-head-bg); z-index: 1;
+    border-bottom: 1px solid var(--tre-border);
+  }
+  
+  [data-app="treasury"] .sh-table tbody tr:hover { background: var(--tre-table-row-hover); }
+  
+  /* Selected row styling (either class or aria-selected) */
+  [data-app="treasury"] .sh-table tbody tr.is-selected,
+  [data-app="treasury"] .sh-table tbody tr[aria-selected="true"] {
+    background: var(--tre-table-row-selected);
+    outline: 2px solid var(--tre-table-row-selected-border);
+    outline-offset: -2px;
+  }
+  [data-app="treasury"] .sh-table tbody tr.is-selected .tx-chip,
+  [data-app="treasury"] .sh-table tbody tr[aria-selected="true"] .tx-chip {
+    filter: saturate(1.1);
+  }
+  
+  /* smart chips */
+  [data-app="treasury"] .tx-chip {
+    margin-left: 8px; font-size: 11px; padding: 2px 6px;
+    border-radius: 999px; background: var(--tre-chip-bg); color: var(--tre-chip-fg);
+  }
+  [data-app="treasury"] .tx-chip.ok  { background: var(--tre-chip-ok-bg);  color: var(--tre-chip-ok-fg); }
+  [data-app="treasury"] .tx-chip.bad { background: var(--tre-chip-bad-bg); color: var(--tre-chip-bad-fg); }
+  
+  /* ---------------- Right-rail bars ---------------- */
+  [data-app="treasury"] .barlist .barrow {
+    display: flex; align-items: center; gap: 8px; width: 100%;
+    background: transparent; border: 0; padding: 4px 0;
+    text-align: left; cursor: pointer; color: var(--tre-text);
+    transition: background-color .2s ease;
+  }
+  [data-app="treasury"] .barlist .bar {
+    flex: 1; background: var(--tre-bar-muted);
+    border-radius: 999px; height: 8px; overflow: hidden;
+  }
+  [data-app="treasury"] .barlist .bar i {
+    display: block; height: 100%; background: var(--tre-bar);
+  }
+  [data-app="treasury"] .barlist .barrow.is-active .bar i { background: var(--tre-highlight); }
+  [data-app="treasury"] .barlist .barrow:hover { background: color-mix(in oklab, var(--tre-bar-muted) 20%, transparent); }
+  [data-app="treasury"] .barlist .barrow:hover span { text-decoration: underline; }
+  
+  /* ---------------- Drawer ---------------- */
+  [data-app="treasury"] .tre-drawer-scrim {
+    position: fixed; inset: 0; background: var(--tre-rail-scrim);
+  }
+  
+  [data-app="treasury"] .tre-drawer {
+    position: fixed; top: 0; right: 0; height: 100dvh; width: 380px;
+    background: var(--tre-card-bg); border-left: 1px solid var(--tre-border);
+    box-shadow: -10px 0 20px rgba(0,0,0,.06);
+    display: flex; flex-direction: column;
+  }
+  
+  [data-app="treasury"] .tre-drawer-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 14px; border-bottom: 1px solid var(--tre-border);
+  }
+  
+  [data-app="treasury"] .tre-drawer-body {
+    padding: 14px; overflow: auto;
+  }
+ 
+
+

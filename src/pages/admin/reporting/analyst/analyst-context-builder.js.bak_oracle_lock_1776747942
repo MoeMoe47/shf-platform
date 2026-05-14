@@ -1,0 +1,41 @@
+export function buildAnalystContext(oracleTruth) {
+  if (!oracleTruth) {
+    return {
+      summary: "No certified truth available.",
+      riskLevel: "unknown",
+      recommendation: "Await verification before proceeding.",
+    };
+  }
+
+  const {
+    truthStatus,
+    confidenceScore,
+    confidenceBand,
+    contradictionStatus,
+    readinessStatus,
+    recommendedNextAction,
+  } = oracleTruth;
+
+  let riskLevel = "low";
+
+  if (confidenceScore < 70) riskLevel = "high";
+  else if (confidenceScore < 85) riskLevel = "medium";
+
+  if (contradictionStatus !== "none" && contradictionStatus !== "resolved") {
+    riskLevel = "high";
+  }
+
+  let summary = `Case is ${truthStatus} with ${confidenceScore} (${confidenceBand}) confidence.`;
+
+  if (contradictionStatus !== "none") {
+    summary += ` Contradiction state: ${contradictionStatus}.`;
+  }
+
+  summary += ` Readiness: ${readinessStatus}.`;
+
+  return {
+    summary,
+    riskLevel,
+    recommendation: recommendedNextAction || "Review case before action.",
+  };
+}

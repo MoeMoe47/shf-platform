@@ -5,6 +5,7 @@ import SHSExchangeMissionControl from "@/pages/exchange/SHSExchangeMissionContro
 
 // NEW SHF PAGE
 import SHFImpactCommandCenter from "./pages/shf-command/SHFImpactCommandCenter";
+import { installGlobalButtonClickSound } from "./shared/ui/globalButtonClickSound.js";
 
 export default function App() {
   return (
@@ -21,3 +22,5 @@ export default function App() {
     </Router>
   );
 }
+
+installGlobalButtonClickSound();

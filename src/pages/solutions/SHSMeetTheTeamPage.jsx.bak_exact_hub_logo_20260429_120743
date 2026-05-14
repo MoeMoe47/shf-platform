@@ -1,0 +1,231 @@
+import React from "react";
+import "./shs-meet-team.css";
+
+const values = [
+  {
+    icon: "✓",
+    title: "Integrity First",
+    text: "We are transparent, accountable, and committed to doing the right thing.",
+  },
+  {
+    icon: "◎",
+    title: "Community Driven",
+    text: "We work alongside partners and communities to solve real problems.",
+  },
+  {
+    icon: "◉",
+    title: "Outcome Focused",
+    text: "We measure what matters and design every decision around verifiable impact.",
+  },
+  {
+    icon: "▣",
+    title: "Secure by Design",
+    text: "Security, privacy, and governance are built in — never bolted on.",
+  },
+];
+
+const leaders = [
+  {
+    name: "Abdur Rashid",
+    role: "Founder & CEO",
+    initials: "AR",
+    image: "/assets/solutions/team/abdur-rashid-card.png",
+    image: "/assets/solutions/team/abdur-rashid-card.png",
+    bio: "Visionary builder and strategist passionate about turning data into verified impact and lasting community change.",
+  },
+  {
+    name: "Michele Johnson",
+    role: "Chief Operating Officer",
+    initials: "MJ",
+    image: "/assets/solutions/team/michele-johnson.svg",
+    bio: "Operations leader focused on building efficient systems, strong partnerships, and scalable impact.",
+  },
+  {
+    name: "Dr. Kevin Hodge",
+    role: "Chief Data & Analytics Officer",
+    initials: "KH",
+    image: "/assets/solutions/team/kevin-hodge.svg",
+    bio: "Data strategist focused on accuracy, verification, and intelligence that drives every outcome.",
+  },
+  {
+    name: "Linh Tran",
+    role: "Chief Technology Officer",
+    initials: "LT",
+    image: "/assets/solutions/team/linh-tran.svg",
+    bio: "Technology leader building secure, scalable infrastructure that powers real-time community intelligence.",
+  },
+  {
+    name: "Marcus Stewart",
+    role: "Head of Partnerships",
+    initials: "MS",
+    image: "/assets/solutions/team/marcus-stewart.svg",
+    bio: "Connector and collaborator focused on building strong networks and driving collective impact.",
+  },
+];
+
+const advisors = [
+  {
+    name: "Nancy L. Merritt",
+    role: "Public Policy Advisor",
+    initials: "NM",
+    image: "/assets/solutions/team/nancy-merritt.svg",
+    text: "Former county executive with deep experience in public sector leadership and strategy.",
+  },
+  {
+    name: "David Ramirez",
+    role: "Nonprofit Strategy Advisor",
+    initials: "DR",
+    image: "/assets/solutions/team/david-ramirez.svg",
+    text: "Nonprofit leader and strategist helping organizations scale impact and strengthen communities.",
+  },
+  {
+    name: "Dr. James O'Leary",
+    role: "Workforce & Education Advisor",
+    initials: "JO",
+    image: "/assets/solutions/team/james-oleary.svg",
+    text: "Education leader focused on workforce development, training systems, and student outcomes.",
+  },
+];
+
+export default function SHSMeetTheTeamPage() {
+  return (
+    <main className="shs-team-page">
+      <header className="shs-team-nav">
+        <a className="shs-team-brand shs-team-brand--image" href="#/home" aria-label="Silicon Heartland Solutions">
+          <img
+            src="/assets/branding/shs-exchange-command-header.png"
+            alt="Silicon Heartland Solutions"
+            className="shs-team-brand-img"
+          />
+        </a>
+
+        <nav className="shs-team-nav-links" aria-label="Primary navigation">
+          <a href="#/solutions">Solutions</a>
+          <a href="#/solutions/infrastructure">Infrastructure</a>
+          <a href="#/platform">Platform</a>
+          <a className="active" href="#/about/team">About</a>
+          <a href="#/resources">Resources</a>
+          <a href="#/contact">Contact</a>
+        </nav>
+
+        <a className="shs-team-demo-btn" href="#/contact">
+          Request Demo
+        </a>
+      </header>
+
+      <section className="shs-team-hero">
+        <div className="shs-team-hero-copy">
+          <p className="shs-team-eyebrow">About Us</p>
+          <h1>Meet the Team</h1>
+          <p className="shs-team-lead">
+            SHS is led by builders, operators, and technologists united by a shared mission:
+            to turn data into verified outcomes that strengthen communities.
+          </p>
+
+          <div className="shs-team-belief">
+            <span />
+            <p>
+              We build with integrity. We operate with purpose.
+              <strong> We succeed when our partners succeed.</strong>
+            </p>
+          </div>
+        </div>
+
+        <div className="shs-team-globe-card" aria-label="Connected infrastructure globe">
+          <img
+            src="/assets/solutions/about/team-hero-globe-transparent.png"
+            alt=""
+            className="shs-team-globe-img"
+          />
+        </div>
+      </section>
+
+      <section className="shs-team-values">
+        {values.map((item) => (
+          <article className="shs-team-value-card" key={item.title}>
+            <div className="shs-team-icon">{item.icon}</div>
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </article>
+        ))}
+      </section>
+
+      <section className="shs-team-section">
+        <div className="shs-team-section-heading">
+          <h2>Our Leadership Team</h2>
+          <span />
+        </div>
+
+        <div className="shs-team-leader-grid">
+          {leaders.map((person) => (
+            <article className="shs-team-profile-card" key={person.name}>
+              <div className="shs-team-portrait">
+                <img src={person.image} alt={`${person.name} portrait placeholder`} />
+              </div>
+              <div className="shs-team-profile-body">
+                <h3>{person.name}</h3>
+                <p className="role">{person.role}</p>
+                <p>{person.bio}</p>
+                <a href="#/about/team" aria-label={`${person.name} LinkedIn`}>
+                  in
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="shs-team-section">
+        <div className="shs-team-section-heading">
+          <h2>Advisors</h2>
+          <span />
+        </div>
+
+        <div className="shs-team-advisors">
+          {advisors.map((advisor) => (
+            <article className="shs-team-advisor-card" key={advisor.name}>
+              <img className="advisor-avatar-img" src={advisor.image} alt={`${advisor.name} portrait placeholder`} />
+              <div>
+                <h3>{advisor.name}</h3>
+                <p className="role">{advisor.role}</p>
+                <p>{advisor.text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="shs-team-cta">
+        <div className="shs-team-cta-icon">◎</div>
+        <div>
+          <h2>Built for Impact. Driven by People.</h2>
+          <p>
+            We combine deep experience, advanced technology, and a shared commitment to
+            integrity to help organizations create measurable, verifiable outcomes that change lives.
+          </p>
+        </div>
+        <a href="#/contact">Request Demo <span>→</span></a>
+      </section>
+
+      <footer className="shs-team-footer">
+        <div className="shs-team-footer-brand">
+          <span className="shs-team-logo">SHS</span>
+          <span className="shs-team-brand-divider" />
+          <span className="shs-team-brand-text">
+            Silicon Heartland
+            <br />
+            Solutions
+          </span>
+        </div>
+
+        <p>© 2025 Silicon Heartland Solutions. All rights reserved.</p>
+
+        <div className="shs-team-socials">
+          <a href="#/about/team" aria-label="LinkedIn">in</a>
+          <a href="#/about/team" aria-label="Twitter">𝕏</a>
+          <a href="#/contact" aria-label="Email">✉</a>
+        </div>
+      </footer>
+    </main>
+  );
+}

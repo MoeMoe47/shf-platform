@@ -1,0 +1,58 @@
+import React, { useState } from "react";
+import "./shf-impact-ohio-map.css";
+
+/*
+  Coordinates below are relative to the INNER OHIO FRAME, not the whole panel.
+  0..100 left/top inside the actual visible Ohio graphic box.
+*/
+const COUNTY_POINTS = [
+  { name: "Franklin", x: 56.5, y: 63.5, size: "lg", active: true },
+  { name: "Cuyahoga", x: 84.5, y: 20.5, size: "md", active: false },
+  { name: "Hamilton", x: 30.5, y: 90.5, size: "md", active: false },
+  { name: "Summit", x: 77.5, y: 36.0, size: "sm", active: false },
+  { name: "Montgomery", x: 43.5, y: 77.5, size: "sm", active: false },
+  { name: "Lucas", x: 80.5, y: 5.5, size: "sm", active: false },
+];
+
+export default function SHFImpactOhioMap() {
+  const [hovered, setHovered] = useState(null);
+
+  return (
+    <div className="shf-impact-map-root">
+      <div className="shf-impact-map-grid" />
+
+      <div className="shf-impact-map-frame">
+        <img
+          src="/assets/shf-command/maps/shf-impact-ohio-base.png"
+          alt="Ohio map"
+          className="shf-impact-map-base"
+        />
+
+        <div className="shf-impact-node-layer">
+          {COUNTY_POINTS.map((n) => (
+            <div
+              key={n.name}
+              className={`shf-impact-node shf-impact-node--${n.size} ${n.active ? "is-active" : ""}`}
+              style={{ left: `${n.x}%`, top: `${n.y}%` }}
+              onMouseEnter={() => setHovered(n)}
+              onMouseLeave={() => setHovered(null)}
+            >
+              <div className="shf-impact-node-core" />
+              <div className="shf-impact-node-pulse" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {hovered ? (
+        <div className="shf-impact-map-tooltip">
+          <strong>{hovered.name} County</strong>
+          <div>Programs Active: 5</div>
+          <div>People Served: 3,824</div>
+          <div>Funding: $4.5M</div>
+          <div>Outcome: 82%</div>
+        </div>
+      ) : null}
+    </div>
+  );
+}

@@ -1,0 +1,2685 @@
+import GlobeScene from "./GlobeScene";
+import React from "react";
+import { useCommandCenterData } from "./useCommandCenterData";
+import "./exchange-focus-framing.css";
+import "./exchange-recommendation-polish.css";
+import "./exchange-confidence-boost.css";
+import "./exchange-live-layer.css";
+import useExchangeSimulation from "./sim/useExchangeSimulation";
+import "./exchange-alive-mode.css";
+
+const PAGE_PADDING = 14;
+
+
+
+
+
+const HEADER_H = 64;
+const STATS_H = 88;
+const TABS_H = 44;
+const MAIN_H = 528;
+const TIMELINE_H = 118;
+
+const LEFT_W = 300;
+const RIGHT_W = 312;
+const GAP = 12;
+
+const pageBg =
+  "radial-gradient(circle at 50% 18%, rgba(18,38,58,0.22) 0%, rgba(5,9,15,1) 46%, rgba(3,6,10,1) 100%)";
+
+const panel = {
+  background: "linear-gradient(180deg, rgba(8,14,22,0.94) 0%, rgba(7,12,19,0.96) 100%)",
+  border: "1px solid rgba(92,140,198,0.16)",
+  borderRadius: 16,
+  boxShadow:
+    "inset 0 0 0 1px rgba(255,255,255,0.015), 0 10px 28px rgba(0,0,0,0.26), 0 0 34px rgba(26,74,128,0.08)",
+  overflow: "hidden",
+};
+
+const innerModule = {
+  borderRadius: 12,
+  border: "1px solid rgba(100,150,215,0.12)",
+  background: "linear-gradient(180deg, rgba(10,18,28,0.88) 0%, rgba(9,15,24,0.92) 100%)",
+  boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.015)",
+};
+
+const sectionHeaderStyle = {
+  padding: "15px 16px 13px 16px",
+  borderBottom: "1px solid rgba(92,140,198,0.14)",
+  color: "#dde8f4",
+  fontWeight: 700,
+  fontSize: 13,
+  letterSpacing: "0.02em",
+};
+
+const badgeStyles = {
+  low: {
+    color: "#8ee0b4",
+    border: "1px solid rgba(94,214,154,0.22)",
+    background: "rgba(17,60,44,0.45)",
+  },
+  medium: {
+    color: "#f0b27a",
+    border: "1px solid rgba(240,178,122,0.22)",
+    background: "rgba(76,52,24,0.46)",
+  },
+  critical: {
+    color: "#ff8e8e",
+    border: "1px solid rgba(255,142,142,0.22)",
+    background: "rgba(76,26,26,0.46)",
+  },
+  hold: {
+    color: "#f0b27a",
+    border: "1px solid rgba(240,178,122,0.22)",
+    background: "rgba(76,52,24,0.46)",
+  },
+  ready: {
+    color: "#8ee0b4",
+    border: "1px solid rgba(94,214,154,0.22)",
+    background: "rgba(17,60,44,0.45)",
+  },
+  live: {
+    color: "#7fd8ff",
+    border: "1px solid rgba(127,216,255,0.22)",
+    background: "rgba(18,48,74,0.48)",
+  },
+};
+
+function Badge({ level = "low", children }) {
+  const style = badgeStyles[level] || badgeStyles.low;
+  return (
+      
+    <span
+      style={{
+        ...style,
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: 24,
+        minWidth: 54,
+        padding: "0 10px",
+        borderRadius: 8,
+        fontSize: 11,
+        fontWeight: 700,
+        letterSpacing: "0.04em",
+        textTransform: "uppercase",
+      }}>
+      {children}
+    </span>
+  );
+}
+
+function CommandLogo() {
+  return (
+    <img
+      src="/assets/brand/exchange-logo.png"
+      alt="Silicon Heartland Outcomes Exchange logo"
+      style={{
+        width: "112%",
+        height: "112%",
+        objectFit: "cover",
+        display: "block",
+        borderRadius: "50%",
+        transform: "scale(1.08)",
+        transformOrigin: "center",
+        filter: "drop-shadow(0 0 6px rgba(98,207,255,0.08))",
+      }}
+    />
+  );
+}
+
+function HeaderBar({ refresh, resetToLiveState }) {
+  return (
+    <div className="command-header"
+      style={{
+        ...panel,
+        height: 78,
+        display: "grid",
+        gridTemplateColumns: "auto 1fr auto",
+
+
+
+
+        alignItems: "center",
+        padding: "0 16px",
+        background: "rgba(8,15,24,0.52)",
+        backdropFilter: "blur(14px)",
+        border: "1px solid rgba(92,140,198,0.14)",
+        boxShadow:
+          "inset 0 0 0 1px rgba(255,255,255,0.015), 0 10px 28px rgba(0,0,0,0.24), 0 0 34px rgba(26,74,128,0.08)",
+      }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          {["✚", "▪", "◔"].map((icon, i) => (
+            <div key={i}
+              style={{
+                width: 32,
+                height: 32,
+                borderRadius: 9,
+                border: "1px solid rgba(120,170,230,0.16)",
+                background: "rgba(8,15,24,0.74)",
+                color: "#8ed2ff",
+                display: "grid",
+                placeItems: "center",
+                fontSize: 13,
+                boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.015)",
+              }}>
+              {icon}
+            </div>
+          ))}
+        </div>
+
+        <div style={{
+            width: 1,
+            height: 28,
+            background:
+              "linear-gradient(180deg, rgba(120,170,230,0) 0%, rgba(120,170,230,0.24) 50%, rgba(120,170,230,0) 100%)",
+            margin: "0 4px 0 2px",
+          }}
+        />
+
+        <div className="command-logo"
+          style={{
+            width: 58,
+            height: 58,
+            borderRadius: "50%",
+            background: "transparent",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            border: "0.35px solid rgba(255,255,255,0.55)",
+            boxShadow:
+              "0 0 0 1px rgba(120,170,230,0.04), 0 0 12px rgba(68,146,234,0.08)",
+            flexShrink: 0,
+            overflow: "hidden",
+            padding: 0,
+          }}>
+          <CommandLogo />
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+          <div style={{
+              color: "#edf5fe",
+              fontSize: 17,
+              fontWeight: 800,
+              letterSpacing: "-0.01em",
+              lineHeight: 1.05,
+            }}>
+            Silicon Heartland Outcome Exchange
+          </div>
+          <div style={{
+              color: "#7a92a9",
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: "0.16em",
+              textTransform: "uppercase",
+              lineHeight: 1,
+            }}>
+            Operational Command Layer
+          </div>
+        </div>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <div style={{
+            height: 34,
+            padding: "0 18px",
+            borderRadius: 999,
+            background: "rgba(20,70,52,0.52)",
+            border: "1px solid rgba(94,214,154,0.16)",
+            color: "#abf2c9",
+            fontSize: 12,
+            fontWeight: 800,
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            boxShadow: "0 0 20px rgba(40,140,95,0.10)",
+            whiteSpace: "nowrap",
+          }}>
+          Unclassified / Operational Data
+        </div>
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <div style={{
+            width: 348,
+            height: 40,
+            borderRadius: 12,
+            border: "1px solid rgba(120,170,230,0.14)",
+            background: "rgba(8,15,24,0.72)",
+            color: "#7e97ac",
+            display: "flex",
+            alignItems: "center",
+            padding: "0 16px",
+            fontSize: 14,
+            boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.015)",
+          }}>
+          ⌕&nbsp; Search
+        </div>
+
+        <button
+          onClick={resetToLiveState}
+          style={{
+            height: 40,
+            padding: "0 16px",
+            borderRadius: 12,
+            border: "1px solid rgba(122,224,178,0.18)",
+            background: "rgba(17,60,44,0.34)",
+            color: "#cffff0",
+            fontWeight: 800,
+            cursor: "pointer",
+            boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.015)",
+            whiteSpace: "nowrap",
+          }}>
+          Reset to Live
+        </button>
+
+        <button
+          onClick={refresh}
+          style={{
+            height: 40,
+            padding: "0 18px",
+            borderRadius: 12,
+            border: "1px solid rgba(120,170,230,0.16)",
+            background: "rgba(8,15,24,0.76)",
+            color: "#edf5fe",
+            fontWeight: 800,
+            cursor: "pointer",
+            boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.015)",
+            whiteSpace: "nowrap",
+          }}>
+          Refresh
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// --- SAFE FUNCTION BREAK ---
+
+function ProofRow({ proofMetrics, selectedMetric, setSelectedMetric, setSelectedPanel, onExplainFocus }) {
+  const metrics = [
+    ["Verified Outcomes", proofMetrics?.verifiedOutcomes || 0],
+    ["Capital Deployed", `$${Number(proofMetrics?.capitalDeployed || 0).toLocaleString()}`],
+    ["Cost Per Outcome", `$${Number(proofMetrics?.costPerOutcome || 0).toLocaleString()}`],
+    ["High-Risk Participants", proofMetrics?.highRiskParticipants || 0],
+    ["Open Disputes", proofMetrics?.openDisputeCount || 0],
+    ["Pool Count", proofMetrics?.poolCount || 0],
+  ];
+
+  return (
+    <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(6, minmax(0, 1fr))",
+
+
+
+
+        gap: 12,
+        minHeight: STATS_H,
+      }}>
+      {metrics.map(([label, value]) => {
+        const metricKey = String(label).toLowerCase().replace(/[^a-z0-9]+/g, "_");
+        const isActive = selectedMetric === metricKey;
+
+        return (
+          <div key={label}
+            onClick={() => {
+              setSelectedMetric?.(metricKey);
+              setSelectedPanel?.("top_metrics");
+              onExplainFocus?.({
+                type: "metric",
+                title: label,
+                value,
+                metricKey,
+                explanation: `This metric is currently focused in the analyst. It represents ${label.toLowerCase()} for the active case and should be interpreted in the context of the current operational state.`
+              });
+            }}
+            style={{
+              ...panel,
+              height: STATS_H,
+              cursor: "pointer",
+              boxShadow: isActive
+                ? "inset 0 0 0 1px rgba(120,200,255,0.05), 0 10px 28px rgba(0,0,0,0.26), 0 0 34px rgba(68,146,234,0.14)"
+                : panel.boxShadow,
+              outline: isActive ? "1px solid rgba(110,190,255,0.18)" : "none",
+            }}>
+            <div style={{ padding: "12px 15px 11px 15px" }}>
+              <div style={{
+                  color: isActive ? "#9edfff" : "#7b93a8",
+                  fontSize: 10,
+                  fontWeight: 700,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                }}>
+                {label}
+              </div>
+              <div style={{
+                  color: "#edf5fe",
+                  fontSize: 28,
+                  fontWeight: 800,
+                  marginTop: 10,
+                  lineHeight: 1,
+                }}>
+                {value}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function TopTabs() {
+  return (
+    <div style={{
+        ...panel,
+        height: TABS_H,
+        display: "flex",
+        alignItems: "stretch",
+        overflow: "hidden",
+      }}>
+      {[
+        ["Situations", true],
+        ["Ops", false],
+        ["Data", false],
+      ].map(([label, active]) => (
+        <div key={label}
+          style={{
+            minWidth: 128,
+            padding: "0 26px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: active ? "#d2eeff" : "#8da5ba",
+            fontSize: 14,
+            fontWeight: active ? 700 : 500,
+            borderBottom: active ? "2px solid #5ec9ff" : "2px solid transparent",
+            background: active ? "rgba(18,48,74,0.22)" : "transparent",
+          }}>
+          {label}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function RailPanel({ id, title, children, selectedPanel, setSelectedPanel, onExplainFocus, grow = 1 }) {
+  const isActive = selectedPanel === id;
+
+  return (
+    <div onClick={() => {
+        setSelectedPanel?.(id);
+        onExplainFocus?.({
+          type: id,
+          title,
+          value: typeof children === "string" ? children : id,
+          explanation: `This module is currently focused in the analyst. "${title}" summarizes the current state of this module and how it relates to the active case.`
+        });
+      }}
+      style={{
+        ...panel,
+        cursor: "pointer",
+        minHeight: 0,
+        height: "100%",
+        overflow: "hidden",
+        boxShadow: isActive
+          ? "inset 0 0 0 1px rgba(120,200,255,0.05), 0 10px 28px rgba(0,0,0,0.26), 0 0 34px rgba(68,146,234,0.14)"
+          : panel.boxShadow,
+        outline: isActive ? "1px solid rgba(110,190,255,0.18)" : "none",
+      }}>
+      <div style={sectionHeaderStyle}>{title}</div>
+      <div style={{
+          padding: 13,
+          color: "#8da5ba",
+          lineHeight: 1.42,
+          height: "calc(100% - 46px)",
+          overflow: "hidden",
+        }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function LeftRail({ leftPanel, activeCase, selectedPanel, setSelectedPanel, onExplainFocus }) {
+  const situation = leftPanel?.situation || {};
+  const intelligence = leftPanel?.intelligence || [];
+  const alerts = leftPanel?.alerts || [];
+  const plans = leftPanel?.plans || [];
+
+  return (
+    <div style={{
+        width: LEFT_W,
+        height: MAIN_H,
+        display: "grid",
+        gridTemplateRows: "minmax(0, 1.22fr) minmax(0, 0.84fr) minmax(0, 0.84fr) minmax(0, 0.84fr) minmax(0, 0.78fr)",
+        gap: 12,
+        overflowY: "auto",
+        overflowX: "hidden",
+        paddingRight: 2,
+      }}>
+      <div onClick={() => {
+          setSelectedPanel?.("risk_situation");
+          onExplainFocus?.({
+            type: "risk_situation",
+            title: situation.title || "Threats to Outcome Integrity",
+            value: situation.level || "{activeRightPanel.severity}",
+            explanation: "This risk situation summarizes the current integrity concern affecting the active case, including severity, significance, and why the case is under attention."
+          });
+        }}
+        style={{
+          ...panel,
+          cursor: "pointer",
+          display: "flex",
+          flexDirection: "column",
+          minHeight: 0,
+          height: "100%",
+          overflow: "hidden",
+          boxShadow: selectedPanel === "risk_situation"
+            ? "inset 0 0 0 1px rgba(120,200,255,0.05), 0 10px 28px rgba(0,0,0,0.26), 0 0 34px rgba(68,146,234,0.14)"
+            : panel.boxShadow,
+          outline: selectedPanel === "risk_situation" ? "1px solid rgba(110,190,255,0.18)" : "none",
+        }}>
+        <div style={sectionHeaderStyle} data-focus-frame="left-rail">Risk Situation</div>
+        <div style={{
+            padding: 15,
+            flex: 1,
+            minHeight: 0,
+            overflowY: "auto",
+            overflowX: "hidden",
+          }}>
+          <div style={{ color: "#eff5fb", fontWeight: 800, fontSize: 16, marginBottom: 9, letterSpacing: "-0.01em" }}>
+            {situation.title || "Threats to Outcome Integrity"}
+          </div>
+          <div style={{ color: "#9bb0c2", fontSize: 12, marginBottom: 8 }}>
+            {situation.meta || "Detected by AAL"}
+          </div>
+          <div style={{ color: "#7fd8ff", fontSize: 11, marginBottom: 11, letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 700 }}>
+            Active Case: {activeCase?.label || "Franklin County"}
+          </div>
+          <div style={{ marginBottom: 14 }}>
+            <Badge level={(situation.level || "low").toLowerCase()}>{situation.level || "{activeRightPanel.severity}"}</Badge>
+          </div>
+          <div style={{ color: "#d8e3ef", lineHeight: 1.48, fontSize: 13 }}>
+            {situation.body || "No material integrity threat detected."}
+          </div>
+        </div>
+      </div>
+
+      <RailPanel
+        id="aal_intelligence"
+        title="AAL Intelligence"
+        selectedPanel={selectedPanel}
+        setSelectedPanel={setSelectedPanel}
+        onExplainFocus={onExplainFocus}>
+        {intelligence.length ? intelligence[0]?.label : "No active intelligence signals."}
+      </RailPanel>
+
+      <RailPanel
+        id="watchtower_alerts"
+        title="Watchtower Alerts"
+        selectedPanel={selectedPanel}
+        setSelectedPanel={setSelectedPanel}
+        onExplainFocus={onExplainFocus}>
+        {alerts.length ? alerts[0] : "No material live alerts."}
+      </RailPanel>
+
+      <RailPanel
+        id="response_plans"
+        title="Response Plans"
+        selectedPanel={selectedPanel}
+        setSelectedPanel={setSelectedPanel}
+        onExplainFocus={onExplainFocus}>
+        {plans.length ? plans[0]?.title : "No response options available."}
+      </RailPanel>
+
+      <RailPanel
+        id="execution_timeline"
+        title="Execution Timeline"
+        selectedPanel={selectedPanel}
+        setSelectedPanel={setSelectedPanel}
+        onExplainFocus={onExplainFocus}>
+        Detailed flow appears in the lower command strip.
+      </RailPanel>
+    </div>
+  );
+}
+
+function MetricBlock({ label, value, badge }) {
+  return (
+    <div style={{
+        ...innerModule,
+        padding: 12,
+        borderRadius: 11,
+        boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.012)",
+      }}>
+      <div style={{ color: "#96aec2", fontSize: 11, marginBottom: 7, textTransform: "uppercase", letterSpacing: "0.07em", fontWeight: 700 }}>{label}</div>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8 }}>
+        <div style={{ color: "#f1f6fb", fontWeight: 800, fontSize: 18 }}>{value}</div>
+        {badge}
+      </div>
+    </div>
+  );
+}
+
+function RightDecisionPanel({ rightPanel, activeCase, selectedPanel, setSelectedPanel, setRecommendation, setSystemStatus, setTimelineStep, timelineStep, onExplainFocus, recommendation = null }) {
+  const metrics = rightPanel?.metrics || {};
+  const requirements = rightPanel?.requirements || [];
+  const summary = rightPanel?.summary || [];
+  const isActive = selectedPanel === "response_plan";  const panelMap = {
+    risk_signal: {
+      title: "Risk Signal Detected",
+      status: "ALERT",
+      severity: "HIGH",
+      severityLevel: "critical",
+    },
+    anomaly_clear: {
+      title: "Anomaly Cleared",
+      status: "STABLE",
+      severity: "LOW",
+      severityLevel: "low",
+    },
+    verification_inquiry: {
+      title: "Verification Inquiry",
+      status: "REVIEW",
+      severity: "MEDIUM",
+      severityLevel: "medium",
+    },
+    action_queued: {
+      title: "Action Queued",
+      status: "READY",
+      severity: "LOW",
+      severityLevel: "low",
+    },
+    queue_operator_review: {
+      title: "Operator Review Required",
+      status: "REVIEW",
+      severity: "MEDIUM",
+      severityLevel: "medium",
+    },
+    outcome_pending: {
+      title: "Outcome Pending",
+      status: "TRACKING",
+      severity: "LOW",
+      severityLevel: "low",
+    },
+    payment_pending: {
+      title: "Payment Pending",
+      status: "FUNDING",
+      severity: "LOW",
+      severityLevel: "low",
+    },
+  };
+
+  const panelUI = panelMap[timelineStep] || panelMap.risk_signal;
+  const status = String(panelUI.status).toUpperCase();
+
+  const handleApprove = () => {
+    const currentStep = timelineStep || "risk_signal";
+    const nextStep = approveTransitionMap[currentStep] || "verification_inquiry";
+    const nextRecommendation = approveRecommendationMap[nextStep] || approveRecommendationMap.verification_inquiry;
+
+    setSelectedPanel?.("response_plan");
+    setTimelineStep?.(nextStep);
+    setSystemStatus?.(approveStatusMap[nextStep] || "review_in_progress");
+    setRecommendation?.(nextRecommendation);
+
+    const nextTitle = panelMap[nextStep]?.title || "Response Plan Updated";
+    const nextStatus = panelMap[nextStep]?.status || "UPDATED";
+
+    onExplainFocus?.({
+      type: "response_plan",
+      title: nextTitle,
+      value: nextStep,
+      explanation: `The system advanced to ${nextTitle} (${nextStatus}). The right panel, timeline, and recommendation engine are now aligned to this state.`,
+      context: {
+        timelineStep: nextStep,
+        systemStatus: approveStatusMap[nextStep] || "review_in_progress"
+      }
+    });
+  };
+
+  const handleHold = () => {
+    setSelectedPanel?.("response_plan");
+    setSystemStatus?.("manual_review_required");
+    setTimelineStep?.("queue_operator_review");
+    setRecommendation?.({
+      action: "queue_operator_review",
+      reason: "Operator validation is recommended before automated escalation.",
+      confidence: 0.75,
+      blockers: ["manual_review_pending"],
+      prerequisites: ["funding_pool_ready", "contract_present"],
+    });
+
+    onExplainFocus?.({
+      type: "response_plan",
+      title: panelMap.queue_operator_review.title,
+      value: "queue_operator_review",
+      explanation: "The case has been redirected into operator review before the next automated step can occur."
+    });
+  };
+
+  return (
+    <div onClick={() => {
+        setSelectedPanel?.("response_plan");
+        onExplainFocus?.({
+          type: "response_plan",
+          title: panelUI.title,
+          value: panelUI.status,
+          explanation: "This response plan is the active decision cockpit for the selected case. It summarizes the current path, core requirements, and the recommended action."
+        });
+      }}
+      style={{
+        ...panel,
+        width: RIGHT_W,
+        height: MAIN_H,
+        overflow: "hidden",
+        borderRadius: 15,
+        display: "flex",
+        flexDirection: "column",
+        boxShadow: isActive
+          ? "inset 0 0 0 1px rgba(120,200,255,0.05), 0 10px 28px rgba(0,0,0,0.26), 0 0 34px rgba(68,146,234,0.14)"
+          : panel.boxShadow,
+      }}>
+      <div style={{
+          ...sectionHeaderStyle,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+       data-focus-frame="right-rail">
+        <span>Outcome Response Plan</span>
+        <span style={{ color: "#8da5ba", fontSize: 18 }}>×</span>
+      </div>
+
+      <div style={{
+          padding: 14,
+          flex: 1,
+          minHeight: 0,
+          overflowY: "auto",
+          overflowX: "hidden",
+        }}>
+        <div style={{
+            borderRadius: 14,
+            border: "1px solid rgba(92,140,198,0.16)",
+            background: "linear-gradient(180deg, rgba(10,18,28,0.92) 0%, rgba(9,15,24,0.96) 100%)",
+            overflow: "hidden",
+            boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.015)",
+          }}>
+          <div style={{ padding: "15px 16px 14px 16px", borderBottom: "1px solid rgba(92,140,198,0.14)", background: "linear-gradient(180deg, rgba(12,22,34,0.52) 0%, rgba(8,15,24,0.18) 100%)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "flex-start" }}>
+              <div>
+                <div style={{ color: "#eff5fb", fontWeight: 800, fontSize: 16 }}>
+                  {panelUI.title}
+                </div>
+                <div style={{ color: "#8da5ba", fontSize: 13, marginTop: 8 }}>
+                  Proposed by: {rightPanel?.proposedBy || "AAL"}
+                </div>
+                <div style={{ color: "#7fd8ff", fontSize: 11, marginTop: 7, letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 700 }}>
+                  Active Case · {activeCase?.label || "Franklin County"}
+                </div>
+              </div>
+              <Badge level={status === "ON HOLD" ? "hold" : "ready"}>{status}</Badge>
+            </div>
+          </div>
+
+          <div style={{ padding: 14 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 12 }}>
+
+
+
+
+              <MetricBlock label="Time Estimate" value={panelUI.timeEstimate} badge={<Badge level={panelUI.timeLevel}>{panelUI.timeLevel}</Badge>} />
+              <MetricBlock label="Severity" value={panelUI.severity} badge={<Badge level={panelUI.severityLevel}>{panelUI.severity.toLowerCase()}</Badge>} />
+              <MetricBlock label="Confidence" value={metrics.confidence || "8.1x"} badge={<Badge level="live">high</Badge>} />
+              <MetricBlock label="Complexity" value={metrics.complexity || "5x"} badge={<Badge level="medium">medium</Badge>} />
+            </div>
+
+            <div style={{ color: "#dbe6f1", fontWeight: 800, marginBottom: 8, letterSpacing: "-0.01em" }}>Requirements</div>
+            <div style={{ display: "grid", gap: 8, marginBottom: 12, padding: "9px 11px", borderRadius: 12, background: "rgba(8,15,24,0.42)", border: "1px solid rgba(92,140,198,0.10)" }}>
+              {(requirements.length
+                ? requirements
+                : [
+                    { label: "Verifier Needed", value: "Readied", ok: true },
+                    { label: "Funding Pool", value: "Workforce Pool A", ok: true },
+                    { label: "Contract", value: "Workforce Job90", ok: true },
+                    { label: "Feasibility", value: "Initial Review", ok: true },
+                  ]
+              ).map((r) => (
+                <div key={r.label}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "16px auto 12px 1fr",
+
+
+
+
+                    gap: 8,
+                    alignItems: "center",
+                    color: "#cfdcea",
+                  }}>
+                  <span style={{ color: r.ok ? "#8ee0b4" : "#ff8e8e" }}>{r.ok ? "✓" : "✕"}</span>
+                  <span style={{ color: "#eff4fa", fontWeight: 600 }}>{r.label}</span>
+                  <span style={{ color: "#93a7b8" }}>/</span>
+                  <span style={{ color: "#a8bac9" }}>{r.value}</span>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
+
+
+
+
+              <button onClick={handleApprove} style={approveBtn}>Approve</button>
+              <button onClick={handleHold} style={holdBtn}>Hold / Suspend</button>
+            </div>
+
+            <div style={{ color: "#dbe6f1", fontWeight: 800, marginBottom: 8, letterSpacing: "-0.01em" }}>Summary</div>
+            <div style={{ display: "grid", gap: 8, color: "#cbd8e4", fontSize: 12, lineHeight: 1.4, padding: "9px 11px", borderRadius: 12, background: "rgba(8,15,24,0.42)", border: "1px solid rgba(92,140,198,0.10)" }}>
+              {([
+                ...(recommendation?.reason ? [recommendation.reason] : []),
+
+                ...(recommendation?.confidence !== undefined
+                  ? [`Confidence: ${(recommendation.confidence * 100).toFixed(0)}% (${recommendation.confidenceLabel || "—"})`]
+                  : []),
+
+                ...(recommendation?.alternatives?.length
+                  ? [`Alternatives: ${recommendation.alternatives.join(", ")}`]
+                  : []),
+
+                ...(summary.length
+                  ? summary
+                  : [
+                      "Risk duplicate outcomes noticed in Franklin County.",
+                      "Escrow line release: $2500",
+                    ])
+              ]).map((item, idx) => (
+                <div key={idx} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+                  <span style={{ color: "#7fd8ff" }}>▴</span>
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BottomTimeline({ bottomTimeline, proofMetrics, systemStatus, timelineStep, onExplainFocus, setSelectedPanel }) {
+  const defaultItems = [
+    { step: "risk_signal", label: "risk signal", meta: "AAL" },
+    { step: "anomaly_clear", label: "anomaly clear", meta: "Watchtower" },
+    { step: "verification_inquiry", label: "verification inquiry", meta: "Control" },
+    { step: "action_queued", label: "action queued", meta: "Execution" },
+    { step: "outcome_pending", label: "outcome pending", meta: "Outcome" },
+    { step: "payment_pending", label: "payment pending", meta: "Funding" },
+  ];
+
+  const items = (bottomTimeline?.length ? bottomTimeline : defaultItems).map((item, idx) => ({
+    ...defaultItems[idx],
+    ...item,
+    step: item?.step || defaultItems[idx]?.step,
+  }));
+
+  const steps = [
+    "risk_signal",
+    "anomaly_clear",
+    "verification_inquiry",
+    "action_queued",
+    "outcome_pending",
+    "payment_pending"
+  ];
+
+  const currentStep = timelineStep || "risk_signal";
+
+  const activeStage = items.findIndex(item => item.step === currentStep) !== -1
+    ? items.findIndex(item => item.step === currentStep)
+    : 0;
+  const timelineProgressWidth = `${((activeStage + 1) / items.length) * 100}%`;
+
+  const getTimelineDotColor = (idx) => {
+    if (idx > activeStage) return "rgba(104,128,150,0.55)";
+    if (idx === activeStage) return "#8fd1ff";
+    return idx === 0 ? "#ff8e8e" : idx === items.length - 1 ? "#7ae0b2" : "#8fd1ff";
+  };
+
+  const getTimelineTextColor = (idx) => (idx > activeStage ? "#7e97ac" : "#dbe5ef");
+  const getTimelineMetaColor = (idx) => (idx > activeStage ? "#607588" : "#7e97ac");
+
+  return (
+    <div style={{
+        ...panel,
+        height: TIMELINE_H,
+      }}>
+      <div style={{
+          height: 86,
+          padding: "15px 18px 10px 18px",
+          borderBottom: "1px solid rgba(92,140,198,0.14)",
+          position: "relative",
+        }}>
+        <div style={{
+            position: "absolute",
+            left: 24,
+            right: 24,
+            top: 46,
+            height: 2,
+            background:
+              systemStatus === "on_hold"
+                ? "linear-gradient(90deg, rgba(255,120,120,0.10), rgba(255,120,120,0.34), rgba(255,170,120,0.18), rgba(255,120,120,0.08))"
+                : systemStatus === "approval_queued"
+                ? "linear-gradient(90deg, rgba(120,190,255,0.12), rgba(120,190,255,0.34), rgba(122,224,178,0.24), rgba(120,190,255,0.10))"
+                : "linear-gradient(90deg, rgba(120,190,255,0.12), rgba(120,190,255,0.34), rgba(243,163,92,0.22), rgba(120,190,255,0.10))",
+          }}
+        />
+        <div
+          className="timeline-progress-line"
+          style={{
+            position: "absolute",
+            left: 24,
+            top: 46,
+            height: 2,
+            width: `calc((100% - 48px) * ${timelineProgressWidth} / 100)`,
+            background:
+              systemStatus === "on_hold"
+                ? "linear-gradient(90deg, rgba(255,142,142,0.85), rgba(255,170,120,0.52))"
+                : systemStatus === "approval_queued"
+                ? "linear-gradient(90deg, rgba(143,209,255,0.88), rgba(122,224,178,0.82))"
+                : "linear-gradient(90deg, rgba(143,209,255,0.86), rgba(243,163,92,0.50))",
+            boxShadow:
+              systemStatus === "on_hold"
+                ? "0 0 12px rgba(255,142,142,0.30)"
+                : systemStatus === "approval_queued"
+                ? "0 0 12px rgba(122,224,178,0.28)"
+                : "0 0 12px rgba(143,209,255,0.26)",
+            borderRadius: 999,
+            zIndex: 0,
+          }}
+        />
+        <div style={{
+            display: "grid",
+            gridTemplateColumns: `repeat(${items.length}, 1fr)`,
+
+
+
+
+            gap: 10,
+            position: "relative",
+            zIndex: 1,
+          }}>
+          {items.map((item, idx) => (
+            <div key={idx}
+              className={`timeline-node ${idx < activeStage ? "completed" : idx === activeStage ? "active" : "future"}`}
+              onClick={() => {
+                setSelectedPanel?.("execution_timeline");
+                onExplainFocus?.({
+                  type: "timeline_step",
+                  title: item.label,
+                  value: item.meta,
+                  explanation: `This timeline step shows where the active case currently sits in the execution flow. The step "${item.label}" should be interpreted in relation to the current system status and downstream action path.`
+                });
+              }}
+              style={{ cursor: "pointer", paddingRight: 4 }}>
+              <div
+                className={`timeline-dot ${idx < activeStage ? "completed" : idx === activeStage ? "active" : "future"}`}
+                style={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: "50%",
+                  background: getTimelineDotColor(idx),
+                  boxShadow: `0 0 10px ${getTimelineDotColor(idx)}`,
+                  marginBottom: 10,
+                }}
+              />
+              <div style={{
+                  color: getTimelineTextColor(idx),
+                  fontSize: 12,
+                  fontWeight: 700
+                }}>
+                {item.label}
+              </div>
+              <div style={{
+                  color: getTimelineMetaColor(idx),
+                  fontSize: 10,
+                  marginTop: 2,
+                  letterSpacing: "0.02em"
+                }}>
+                {item.meta}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{
+          height: 52,
+          display: "grid",
+          gridTemplateColumns: "1.15fr 1fr 1fr 1fr 1fr 1fr",
+
+
+
+
+        }}>
+        {[
+          ["Participants", 305],
+          ["Cost Per Outcome", `$${Number(proofMetrics?.costPerOutcome || 0).toLocaleString()}`],
+          ["Payment State", proofMetrics?.capitalDeployed> 0 ? "ACTIVE" : "PENDING"],
+          ["Anomalies", proofMetrics?.anomalyCount || 0],
+          ["Released", `$${Number(proofMetrics?.capitalDeployed || 0).toLocaleString()}`],
+          ["Top Program", proofMetrics?.topProgram || "—"],
+        ].map(([label, value], i) => (
+          <div key={label}
+            style={{
+              padding: "9px 14px",
+              borderRight: i < 5 ? "1px solid rgba(92,140,198,0.12)" : "none",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}>
+            <div style={{ color: "#7f98af", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700 }}>
+              {label}
+            </div>
+            <div style={{ color: i === 4 ? "#7ae0b2" : "#edf4fb", fontWeight: 800, fontSize: 15, marginTop: 3 }}>
+              {value}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
+
+function RecommendedNextMove({ recommendation, activeCase }) {
+  return (
+    <div style={{
+        ...panel,
+        padding: "12px 16px",
+        display: "grid",
+        gridTemplateColumns: "auto 1fr auto",
+
+
+
+
+        alignItems: "center",
+        gap: 14,
+        background: "linear-gradient(180deg, rgba(11,17,26,0.96) 0%, rgba(10,16,24,0.96) 100%)",
+      }}>
+      <div style={{
+          height: 32,
+          padding: "0 12px",
+          borderRadius: 999,
+          border: "1px solid rgba(94,214,154,0.18)",
+          background: "linear-gradient(180deg, rgba(17,60,44,0.42) 0%, rgba(14,46,34,0.42) 100%)",
+          color: "#b7ffd8",
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: 11,
+          fontWeight: 700,
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
+        }}>
+        Recommended Next Move
+      </div>
+
+      <div style={{ minWidth: 0 }}>
+        <div style={{ color: "#edf5fe", fontSize: 15, fontWeight: 800, marginBottom: 4, letterSpacing: "-0.01em" }}>
+          {recommendation?.action || "assign_verifier"}
+        </div>
+        <div style={{ color: "#9ab2c6", fontSize: 12, lineHeight: 1.45 }}>
+          <span style={{ color: "#7fd8ff", fontWeight: 700 }}>Active case:</span> {activeCase?.label || "Franklin County"} · {recommendation?.reason || "No recommendation reason available."}
+        </div>
+      </div>
+
+      <div style={{
+          color: "#7fd8ff",
+          fontSize: 12,
+          fontWeight: 800,
+          letterSpacing: "0.06em",
+          whiteSpace: "nowrap",
+          textTransform: "uppercase",
+        }}>
+        {Math.round(recommendation?.confidence || 0)}% confidence
+      </div>
+    </div>
+  );
+}
+
+
+
+function buildPredictiveAnalyst(agentContext, agentAudience) {
+  const timelineStep = agentContext?.timelineStep || "risk_signal";
+  const systemStatus = agentContext?.systemStatus || "review_in_progress";
+  const recommendation = agentContext?.recommendation || {};
+  const prerequisites = recommendation?.prerequisites || [];
+  const blockers = recommendation?.blockers || [];
+
+  const nextStageMap = {
+    risk_signal: "verification_inquiry",
+    anomaly_clear: "verification_inquiry",
+    verification_inquiry: "action_queued",
+    queue_operator_review: "action_queued",
+    action_queued: "outcome_pending",
+    outcome_pending: "payment_pending",
+    payment_pending: "payment_pending",
+  };
+
+  const predictedNextStage = nextStageMap[timelineStep] || "verification_inquiry";
+
+  let riskScore = 14;
+  if (timelineStep === "risk_signal") riskScore = 32;
+  else if (timelineStep === "verification_inquiry") riskScore = 24;
+  else if (timelineStep === "queue_operator_review") riskScore = 37;
+  else if (timelineStep === "action_queued") riskScore = 18;
+  else if (timelineStep === "outcome_pending") riskScore = 16;
+  else if (timelineStep === "payment_pending") riskScore = 12;
+
+  if (!prerequisites.includes("funding_pool_ready")) riskScore += 14;
+  if (!prerequisites.includes("contract_present")) riskScore += 11;
+  if (!prerequisites.includes("verifier_assigned")) riskScore += 9;
+  if (blockers.includes("manual_review_pending")) riskScore += 19;
+  if (systemStatus === "manual_review_required") riskScore += 16;
+  if (systemStatus === "on_hold") riskScore += 22;
+
+  riskScore = Math.max(5, Math.min(92, riskScore));
+
+  let riskLabel = "Low";
+  if (riskScore >= 60) riskLabel = "High";
+  else if (riskScore >= 30) riskLabel = "Medium";
+
+  let riskReason = "No major execution blocker is currently dominant.";
+  if (blockers.includes("manual_review_pending")) {
+    riskReason = "Manual review is still pending, which raises execution uncertainty.";
+  } else if (!prerequisites.includes("verifier_assigned")) {
+    riskReason = "Missing verifier assignment increases the chance of a stalled transition.";
+  } else if (!prerequisites.includes("contract_present")) {
+    riskReason = "Missing contract confirmation increases legal and execution risk.";
+  } else if (!prerequisites.includes("funding_pool_ready")) {
+    riskReason = "Funding readiness is not fully confirmed, increasing release risk.";
+  }
+
+  let override = "No manual override recommended right now.";
+  if (riskScore >= 60 || blockers.includes("manual_review_pending")) {
+    override = "Recommend manual hold before funding or release progression.";
+  } else if (timelineStep === "verification_inquiry" && !prerequisites.includes("verifier_assigned")) {
+    override = "Recommend assigning a verifier before advancing into action queued.";
+  } else if (timelineStep === "action_queued" && !prerequisites.includes("funding_pool_ready")) {
+    override = "Recommend operator review before downstream funding commitment.";
+  }
+
+  const audienceLead = {
+    operator: "Operational forecast",
+    executive: "Executive forecast",
+    investor: "Capital readiness forecast",
+    auditor: "Traceability forecast",
+  }[agentAudience] || "Operational forecast";
+
+  return {
+    predictedNextStage,
+    riskScore,
+    riskLabel,
+    riskReason,
+    override,
+    summary: `${audienceLead}: system likely to move to ${predictedNextStage.replace(/_/g, " ")} if current prerequisites remain intact.`,
+  };
+}
+
+
+function buildPredictiveOutlook(ctx, audience) {
+  const safe = ctx || {};
+  const step = safe?.timelineStep || "unknown";
+  const recommendation = safe?.recommendation || {};
+  const prerequisites = Array.isArray(recommendation?.prerequisites) ? recommendation.prerequisites : [];
+  const blockers = Array.isArray(recommendation?.blockers) ? recommendation.blockers : [];
+  const action = recommendation?.action || "";
+
+  let predictedNextStage = "verification_inquiry";
+  let riskScore = 18;
+  let riskLabel = "Low";
+  let riskReason = "System is progressing normally.";
+  let override = null;
+
+  const factors = [];
+
+  const addFactor = (label, points, tone = "warn") => {
+    factors.push({ label, points, tone });
+    riskScore += points;
+  };
+
+  if (step === "risk_signal") {
+    predictedNextStage = "verification_inquiry";
+    riskScore = 24;
+    riskReason = "System is moving from risk detection into verification.";
+  } else if (step === "verification_inquiry") {
+    predictedNextStage = "verification_passed";
+    riskScore = 32;
+    riskReason = "Awaiting verification confirmation.";
+  } else if (step === "verification_passed") {
+    predictedNextStage = "action_queued";
+    riskScore = 22;
+    riskReason = "Verification cleared. System is preparing action queue progression.";
+  } else if (step === "action_queued") {
+    predictedNextStage = "outcome_pending";
+    riskScore = 20;
+    riskReason = "Action has been queued and is awaiting downstream execution.";
+  } else if (step === "outcome_pending") {
+    predictedNextStage = "payment_pending";
+    riskScore = 26;
+    riskReason = "Outcome is pending final confirmation.";
+  } else if (step === "payment_pending") {
+    predictedNextStage = "payment_pending";
+    riskScore = 14;
+    riskReason = "System is waiting on payment completion.";
+  } else if (step === "intake") {
+    predictedNextStage = "verification_inquiry";
+    riskScore = 16;
+    riskReason = "System is moving from intake toward verification.";
+  }
+
+  const reasons = [];
+
+  if (!action) {
+    addFactor("No recommended action present", 30, "high");
+    reasons.push("No recommended action is present.");
+    override = "Recommend manual review before progression.";
+  }
+
+  const verifierMissing =
+    action === "assign_verifier" ||
+    action === "queue_operator_review" ||
+    !prerequisites.includes("verifier_assigned");
+
+  if (verifierMissing && step !== "payment_pending") {
+    addFactor("Verifier assignment not confirmed", 18, "high");
+    reasons.push("Verifier assignment is not fully confirmed.");
+    if (!override) {
+      override = "Recommend assigning a verifier before advancing.";
+    }
+  }
+
+  const missingFunding = !prerequisites.includes("funding_pool_ready");
+  const missingContract = !prerequisites.includes("contract_present");
+
+  if (missingFunding) {
+    addFactor("Funding pool readiness not confirmed", 14, "warn");
+    reasons.push("Funding pool readiness is not fully confirmed.");
+    if (!override) {
+      override = "Recommend validating funding readiness before advancement.";
+    }
+  }
+
+  if (missingContract) {
+    addFactor("Contract confirmation not present", 12, "warn");
+    reasons.push("Contract confirmation is not fully present.");
+    if (!override) {
+      override = "Recommend validating contract readiness before advancement.";
+    }
+  }
+
+  if (prerequisites.length > 0) {
+    addFactor("Prerequisite validation still active", 4, "info");
+  }
+
+  if (blockers.length > 0) {
+    addFactor(`Active blockers: ${blockers.join(", ")}`, 22, "high");
+    reasons.push(`Active blockers detected: ${blockers.join(", ")}.`);
+    override = "Recommend resolving blockers before progression.";
+  }
+
+  const systemStatus = safe?.systemStatus || "";
+  if (systemStatus === "manual_review_required") {
+    addFactor("Manual review required", 16, "high");
+    reasons.push("System is in manual review required status.");
+    override = "Recommend operator review before progression.";
+  }
+
+  if (systemStatus === "on_hold") {
+    addFactor("System is on hold", 24, "high");
+    reasons.push("System is currently on hold.");
+    override = "Recommend clearing hold conditions before progression.";
+  }
+
+  if (systemStatus === "review_in_progress" && step === "risk_signal") {
+    addFactor("Early-stage review still in progress", 8, "warn");
+    reasons.push("System remains in early review while still at risk signal stage.");
+  }
+
+  if (action === "queue_operator_review") {
+    addFactor("Operator review path indicates mixed confidence", 10, "warn");
+    reasons.push("Operator review path indicates mixed confidence.");
+  }
+
+  if (action === "assign_verifier") {
+    addFactor("Verifier assignment is still an intermediate action", 6, "info");
+    reasons.push("Verifier assignment is still an intermediate action, not final execution.");
+  }
+
+  riskScore = Math.max(5, Math.min(95, riskScore));
+
+  if (riskScore >= 60) riskLabel = "High";
+  else if (riskScore >= 30) riskLabel = "Moderate";
+  else riskLabel = "Low";
+
+  if (reasons.length > 0) {
+    riskReason = reasons[0];
+  }
+
+  const audienceLead = {
+    operator: "Operator outlook",
+    executive: "Executive forecast",
+    investor: "Capital readiness forecast",
+    auditor: "Traceability forecast",
+  }[audience] || "Operational forecast";
+
+  const summary =
+    riskScore >= 60
+      ? `${audienceLead}: elevated failure risk detected before ${String(predictedNextStage).replace(/_/g, " ")}.`
+      : `${audienceLead}: system likely moving toward ${String(predictedNextStage).replace(/_/g, " ")}.`;
+
+  let fundingGate = {
+    status: "PROCEED",
+    label: "Proceed",
+    color: "#b8f5d6",
+    reason: "Risk is low enough for controlled progression.",
+    guidance: "Safe to proceed with standard execution monitoring.",
+  };
+
+  if (riskScore >= 60 || blockers.length > 0 || systemStatus === "on_hold") {
+    fundingGate = {
+      status: "HOLD",
+      label: "Hold",
+      color: "#ffb3b3",
+      reason: "Funding should not move while execution risk remains elevated.",
+      guidance: override || "Resolve blockers and verification issues before release.",
+    };
+  } else if (riskScore >= 30 || verifierMissing || missingFunding || missingContract) {
+    fundingGate = {
+      status: "REVIEW",
+      label: "Review",
+      color: "#f0c188",
+      reason: "Funding should remain gated until validation checks are completed.",
+      guidance: override || "Review prerequisites and confirm readiness before release.",
+    };
+  }
+
+  // ---------------------------------
+  // Align Recommended Action with Funding Gate
+  // ---------------------------------
+  let alignedAction = recommendation?.action || "no_action";
+
+  if (fundingGate.status === "HOLD") {
+    alignedAction = "pause_execution";
+  } else if (fundingGate.status === "REVIEW") {
+    if (!alignedAction || alignedAction === "no_action") {
+      alignedAction = "manual_review";
+    }
+  } else if (fundingGate.status === "PROCEED") {
+    if (!alignedAction || alignedAction === "no_action") {
+      alignedAction = "continue_execution";
+    }
+  }
+
+  const rawConfidence =
+    recommendation?.confidence <= 1
+      ? Math.round((recommendation?.confidence || 0) * 100)
+      : Math.round(recommendation?.confidence || 0);
+
+  const effectiveConfidence = rawConfidence;
+  const confidenceDelta = 0;
+  const confidenceFactors = [];
+
+  return {
+    predictedNextStage,
+    riskScore,
+    riskLabel,
+    riskReason,
+    override,
+    summary,
+    factors,
+    fundingGate,
+    alignedAction,
+    rawConfidence,
+    effectiveConfidence,
+    confidenceDelta,
+    confidenceFactors,
+  };
+}
+
+
+
+function buildOutcomeProbabilities(ctx) {
+  const risk = ctx?.riskScore || 0;
+  const gate = ctx?.fundingGate?.status || "PROCEED";
+
+  let success = 70 - risk * 0.4;
+  let delay = 20 + risk * 0.3;
+  let failure = 10 + risk * 0.2;
+
+  if (gate === "HOLD") {
+    success -= 20;
+    delay += 10;
+    failure += 10;
+  } else if (gate === "REVIEW") {
+    success -= 10;
+    delay += 8;
+    failure += 2;
+  }
+
+  success = Math.max(5, Math.min(90, success));
+  delay = Math.max(5, Math.min(70, delay));
+  failure = Math.max(5, Math.min(60, failure));
+
+  const total = success + delay + failure;
+
+  return {
+    success: Math.round((success / total) * 100),
+    delay: Math.round((delay / total) * 100),
+    failure: Math.round((failure / total) * 100),
+  };
+}
+
+function buildScenarioSimulator(ctx, audience) {
+  const safe = ctx || {};
+  const base = buildPredictiveOutlook(safe, audience);
+
+  const proceedRisk = Math.min(95, Math.max(5, base.riskScore + (base.fundingGate?.status === "HOLD" ? 10 : 6)));
+  const reviewRisk = Math.max(5, base.riskScore - 14);
+  const holdRisk = Math.max(5, base.riskScore - 22);
+
+  const toLabel = (score) => {
+    if (score >= 60) return "High";
+    if (score >= 30) return "Moderate";
+    return "Low";
+  };
+
+  const proceedGate =
+    proceedRisk >= 60 ? "HOLD" : proceedRisk >= 30 ? "REVIEW" : "PROCEED";
+  const reviewGate =
+    reviewRisk >= 60 ? "HOLD" : reviewRisk >= 30 ? "REVIEW" : "PROCEED";
+  const holdGate = "HOLD";
+
+  return [
+    {
+      id: "proceed_now",
+      title: "Proceed Now",
+      projectedRisk: proceedRisk,
+      projectedRiskLabel: toLabel(proceedRisk),
+      projectedGate: proceedGate,
+      nextStage: base.predictedNextStage,
+      summary:
+        proceedGate === "HOLD"
+          ? "Proceeding now increases the chance of failure before safe execution."
+          : "Proceeding now advances the case, but only with elevated monitoring.",
+    },
+    {
+      id: "review_first",
+      title: "Review First",
+      projectedRisk: reviewRisk,
+      projectedRiskLabel: toLabel(reviewRisk),
+      projectedGate: reviewGate,
+      nextStage: base.predictedNextStage,
+      summary:
+        "Reviewing first reduces uncertainty and improves execution readiness before progression.",
+    },
+    {
+      id: "hold_funding",
+      title: "Hold Funding",
+      projectedRisk: holdRisk,
+      projectedRiskLabel: toLabel(holdRisk),
+      projectedGate: holdGate,
+      nextStage: safe?.timelineStep || "risk_signal",
+      summary:
+        "Holding funding reduces immediate exposure and preserves control while issues are resolved.",
+    },
+  ];
+}
+
+// 🔥 GLOBAL ACTION LOG
+if (typeof window !== "undefined" && !window.__SHF_ACTION_LOG__) {
+  window.__SHF_ACTION_LOG__ = [];
+}
+
+function AIAnalystDrawer({ isOpen, onClose, agentContext, agentAudience, analystFocus }) {
+  if (!isOpen) return null;
+
+  React.useEffect(() => {
+    const handler = () => {
+      if (window.__SHF_AUDIT_LOG__) {
+        setAuditLog([...window.__SHF_AUDIT_LOG__]);
+      }
+    };
+
+    window.addEventListener("shf:audit", handler);
+    return () => window.removeEventListener("shf:audit", handler);
+  }, []);
+
+  const safeAgentContext = agentContext || {};
+  const [auditLog, setAuditLog] = React.useState([]);
+
+const predictive = buildPredictiveOutlook(safeAgentContext, agentAudience);
+  const scenarios = buildScenarioSimulator(safeAgentContext, agentAudience);
+  const probabilities = buildOutcomeProbabilities(predictive);
+  const rawConfidence = safeAgentContext?.recommendation?.confidence || 0;
+  
+  const executeAction = (type) => {
+
+    try {
+      if (typeof window !== "undefined") {
+        window.__SHF_ACTION_LOG__.unshift({
+          type,
+          time: new Date().toLocaleTimeString(),
+          risk: predictive?.riskScore || 0,
+          gate: predictive?.fundingGate?.status || "—",
+        });
+      }
+    } catch (e) {}
+
+
+    if (!safeAgentContext) return;
+
+    const next = { ...safeAgentContext };
+
+    if (type === "execute") {
+      next.timelineStep = predictive.predictedNextStage || "action_queued";
+      next.systemStatus = "in_progress";
+    }
+
+    if (type === "hold") {
+      next.systemStatus = "on_hold";
+    }
+
+    if (type === "review") {
+      next.systemStatus = "manual_review_required";
+      next.timelineStep = "verification_inquiry";
+    }
+
+    // force update via parent context if exists
+    if (typeof window !== "undefined") {
+      window.__SHF_SIMULATION_STATE__ = next;
+      window.dispatchEvent(new Event("shf:update"));
+    }
+  };
+
+const confidencePct = Math.round(rawConfidence <= 1 ? rawConfidence * 100 : rawConfidence);
+
+  return (
+    <div style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 200,
+        pointerEvents: "none",
+      }}>
+      <div onClick={onClose}
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "rgba(2,6,12,0.42)",
+          backdropFilter: "blur(4px)",
+          pointerEvents: "auto",
+        }}
+      />
+
+      <div style={{
+          position: "absolute",
+          top: 18,
+          right: 18,
+          bottom: 18,
+          width: 440,
+          borderRadius: 20,
+          border: "1px solid rgba(92,140,198,0.20)",
+          background: "linear-gradient(180deg, rgba(8,14,22,0.985) 0%, rgba(7,12,19,0.99) 100%)",
+          boxShadow: "0 22px 58px rgba(0,0,0,0.38), 0 0 46px rgba(68,146,234,0.12)",
+          padding: 18,
+          overflow: "auto",
+          pointerEvents: "auto",
+        }}>
+        <div style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: 14,
+          }}>
+          <div>
+            <div style={{ color: "#edf5fe", fontSize: 18, fontWeight: 800, letterSpacing: "-0.01em" }}>
+              AI Analyst
+            </div>
+            <div style={{ color: "#7fd8ff", fontSize: 10, marginTop: 4, letterSpacing: "0.08em", textTransform: "uppercase" }}>
+              Context-Adaptive Intelligence
+            </div>
+            <div style={{ color: "#8ea7bc", fontSize: 12, marginTop: 6 }}>
+              Audience: {agentAudience} · Case: {safeAgentContext?.activeCase?.label || "—"}
+            </div>
+          </div>
+
+          <button
+            onClick={onClose}
+            style={{
+              height: 34,
+              padding: "0 13px",
+              borderRadius: 11,
+              border: "1px solid rgba(120,170,230,0.16)",
+              background: "rgba(8,15,24,0.76)",
+              color: "#edf5fe",
+              fontWeight: 700,
+              cursor: "pointer",
+            }}>
+            Close
+          </button>
+        </div>
+
+        <div className="command-center-grid" style={{ display: "grid", gap: 14 }}>
+          {analystFocus ? (
+            <div style={{ borderRadius: 14, border: "1px solid rgba(120,200,255,0.18)", background: "linear-gradient(180deg, rgba(10,20,32,0.82) 0%, rgba(9,18,28,0.84) 100%)", padding: "13px 14px", boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.015)" }}>
+              <div style={{ color: "#7fd8ff", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: 8 }}>
+                Explain This
+              </div>
+              <div style={{ color: "#edf5fe", fontSize: 15, fontWeight: 800, marginBottom: 6, letterSpacing: "-0.01em" }}>
+                {analystFocus?.title || "Focused object"}
+              </div>
+              <div style={{ color: "#9ab2c6", fontSize: 12, marginBottom: 8 }}>
+                {analystFocus?.value != null ? String(analystFocus.value) : "—"}
+              </div>
+              <div style={{ color: "#dbe8f4", fontSize: 13, lineHeight: 1.45 }}>
+                {(() => {
+                  const base = analystFocus?.explanation || "No focused explanation available.";
+
+                  const audienceFocused = {
+                    operator: base,
+                    executive:
+                      analystFocus?.type === "aal_intelligence"
+                        ? "This intelligence panel summarizes the strongest machine-detected signal tied to the active case. At the executive level, it should be read as an indicator of current operational pressure and risk posture."
+                        : analystFocus?.type === "watchtower_alerts"
+                        ? "This alerts panel summarizes the most important live operational alert tied to the active case. At the executive level, it should be read as a signal of current system attention demand."
+                        : analystFocus?.type === "response_plans"
+                        ? "This response-plans panel shows what operational response paths are currently available. At the executive level, it should be read as a view into current decision options and execution readiness."
+                        : analystFocus?.type === "execution_timeline" || analystFocus?.type === "timeline_step"
+                        ? "This timeline view should be read as progress status and stage positioning for the active case. At the executive level, it explains where the case sits in the operational sequence and whether it is advancing or stalling."
+                        : analystFocus?.type === "center_scene"
+                        ? "This center scene should be read as the primary command surface for the active case. At the executive level, it frames current state, direction of travel, and operational posture."
+                        : base,
+                    investor:
+                      analystFocus?.type === "aal_intelligence"
+                        ? "This intelligence panel should be read as an integrity signal. For an investor audience, it helps explain whether the active case is moving in a controlled and trustworthy direction."
+                        : analystFocus?.type === "watchtower_alerts"
+                        ? "This alerts panel should be read as an operational risk signal. For an investor audience, it highlights whether current conditions could affect reliable capital execution."
+                        : analystFocus?.type === "response_plans"
+                        ? "This response-plans panel should be read as a capital-readiness signal. For an investor audience, it shows whether the system has a credible path forward for the active case."
+                        : analystFocus?.type === "execution_timeline" || analystFocus?.type === "timeline_step"
+                        ? "This timeline view should be read as a flow-of-execution signal. For an investor audience, it helps explain where the case currently sits before release, hold, or payout movement."
+                        : analystFocus?.type === "center_scene"
+                        ? "This center scene should be read as the visual state surface for the active case. For an investor audience, it indicates whether the case is in review, moving toward execution, or being held due to risk."
+                        : base,
+                    auditor:
+                      analystFocus?.type === "aal_intelligence"
+                        ? "This intelligence panel should be read as a traceable detection layer. For an auditor audience, it helps explain which signal influenced current attention on the active case."
+                        : analystFocus?.type === "watchtower_alerts"
+                        ? "This alerts panel should be read as a traceable operations notice. For an auditor audience, it helps identify what live condition or alert affected the current dashboard state."
+                        : analystFocus?.type === "response_plans"
+                        ? "This response-plans panel should be read as a traceable decision-path artifact. For an auditor audience, it shows which response option is active and why it matters."
+                        : analystFocus?.type === "execution_timeline" || analystFocus?.type === "timeline_step"
+                        ? "This timeline view should be read as a traceable process-stage artifact. For an auditor audience, it shows where the case currently sits in the sequence of operational events."
+                        : analystFocus?.type === "center_scene"
+                        ? "This center scene should be read as a traceable state surface. For an auditor audience, it reflects the current dashboard mode, state emphasis, and visible operational posture tied to the active case."
+                        : base,
+                  };
+
+                  return audienceFocused[agentAudience] || base;
+                })()}
+              </div>
+            </div>
+          ) : null}
+
+          <div style={{ borderRadius: 14, border: "1px solid rgba(92,140,198,0.12)", background: "linear-gradient(180deg, rgba(8,15,24,0.72) 0%, rgba(8,14,22,0.74) 100%)", padding: "13px 14px", boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.012)" }}>
+            <div style={{ color: "#7fd8ff", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: 8 }}>
+              Current State
+            </div>
+            <div style={{ color: "#dbe8f4", fontSize: 13, lineHeight: 1.45 }}>
+              Selected panel: {safeAgentContext?.selectedPanel || "—"}. Current system status: {safeAgentContext?.systemStatus || "—"}. Active timeline step (LIVE): {safeAgentContext?.timelineStep || "—"}.
+            </div>
+          </div>
+
+          <div style={{ borderRadius: 14, border: "1px solid rgba(92,140,198,0.12)", background: "linear-gradient(180deg, rgba(8,15,24,0.72) 0%, rgba(8,14,22,0.74) 100%)", padding: "13px 14px", boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.012)" }}>
+            <div style={{ color: "#7fd8ff", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: 8 }}>
+              What Changed
+            </div>
+            <div style={{ display: "grid", gap: 6 }}>
+              {((agentContext?.simulationAnalyst?.whatChanged
+                ? [safeAgentContext.simulationAnalyst.whatChanged]
+                : (safeAgentContext?.changeSummary?.items || ["No change data available."]))
+              ).map((item, idx) => (
+                <div key={idx} style={{ color: "#dbe8f4", fontSize: 13, lineHeight: 1.4 }}>
+                  • {item}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ borderRadius: 14, border: "1px solid rgba(92,140,198,0.12)", background: "linear-gradient(180deg, rgba(8,15,24,0.72) 0%, rgba(8,14,22,0.74) 100%)", padding: "13px 14px", boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.012)" }}>
+            <div style={{ color: "#7fd8ff", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: 8 }}>
+              Predictive Outlook
+            </div>
+
+            <div style={{ color: "#edf5fe", fontSize: 14, fontWeight: 700, marginBottom: 6 }}>
+              Next Stage: {predictive.predictedNextStage}
+            </div>
+
+            <div style={{ color: "#dbe8f4", fontSize: 13, lineHeight: 1.45, marginBottom: 8 }}>
+              {predictive.summary}
+            </div>
+
+            <div style={{ color: "#edf5fe", fontSize: 13, marginBottom: 6 }}>
+              Risk: {predictive.riskScore}% ({predictive.riskLabel})
+            </div>
+
+            <div style={{ color: "#9ab2c6", fontSize: 12, lineHeight: 1.45 }}>
+              {predictive.riskReason}
+            </div>
+
+            {!!predictive?.factors?.length && (
+              <div style={{ marginTop: 10, display: "grid", gap: 6 }}>
+                <div style={{ color: "#7f98af", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                  Risk Factors
+                </div>
+                {predictive.factors.map((factor, idx) => (
+                  <div
+                    key={`${factor.label}-${idx}`}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      gap: 10,
+                      borderRadius: 10,
+                      padding: "8px 10px",
+                      background: "rgba(10,18,28,0.72)",
+                      border: "1px solid rgba(92,140,198,0.10)",
+                    }}
+                  >
+                    <div
+                      style={{
+                        color:
+                          factor.tone === "high"
+                            ? "#ffb3b3"
+                            : factor.tone === "warn"
+                            ? "#f0c188"
+                            : "#9ab2c6",
+                        fontSize: 12,
+                        lineHeight: 1.35,
+                      }}
+                    >
+                      ⚠ {factor.label}
+                    </div>
+                    <div
+                      style={{
+                        color:
+                          factor.tone === "high"
+                            ? "#ffb3b3"
+                            : factor.tone === "warn"
+                            ? "#f0c188"
+                            : "#b8f5d6",
+                        fontSize: 12,
+                        fontWeight: 700,
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      +{factor.points}%
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {predictive.override && (
+              <div style={{ color: "#ffb3b3", fontSize: 12, lineHeight: 1.45, marginTop: 8 }}>
+                ⚠ {predictive.override}
+              </div>
+            )}
+
+            <div
+              style={{
+                marginTop: 10,
+                borderRadius: 12,
+                padding: "10px 12px",
+                background: "rgba(10,18,28,0.72)",
+                border: "1px solid rgba(92,140,198,0.10)",
+              }}
+            >
+              <div style={{ color: "#7f98af", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 6 }}>
+                Funding Gate
+              </div>
+
+              <div style={{ color: predictive.fundingGate.color, fontSize: 14, fontWeight: 800, marginBottom: 6 }}>
+                {predictive.fundingGate.status === "PROCEED" ? "🟢" : predictive.fundingGate.status === "REVIEW" ? "🟡" : "🔴"} {predictive.fundingGate.label}
+              </div>
+
+              <div style={{ color: "#dbe8f4", fontSize: 12, lineHeight: 1.45, marginBottom: 6 }}>
+                {predictive.fundingGate.reason}
+              </div>
+
+              <div style={{ color: "#9ab2c6", fontSize: 12, lineHeight: 1.45 }}>
+                {predictive.fundingGate.guidance}
+              </div>
+            </div>
+
+            <div
+              style={{
+                marginTop: 10,
+                borderRadius: 12,
+                padding: "10px 12px",
+                background: "rgba(10,18,28,0.72)",
+                border: "1px solid rgba(92,140,198,0.10)",
+              }}
+            >
+              <div style={{ color: "#7f98af", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>
+                Outcome Probability
+              </div>
+
+              <div style={{ display: "grid", gap: 8 }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+                  <div style={{ color: "#b8f5d6", fontSize: 12, fontWeight: 700 }}>
+                    Success
+                  </div>
+                  <div style={{ color: "#edf5fe", fontSize: 12, fontWeight: 700 }}>
+                    {probabilities.success}%
+                  </div>
+                </div>
+
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+                  <div style={{ color: "#f0c188", fontSize: 12, fontWeight: 700 }}>
+                    Delay
+                  </div>
+                  <div style={{ color: "#edf5fe", fontSize: 12, fontWeight: 700 }}>
+                    {probabilities.delay}%
+                  </div>
+                </div>
+
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+                  <div style={{ color: "#ffb3b3", fontSize: 12, fontWeight: 700 }}>
+                    Failure
+                  </div>
+                  <div style={{ color: "#edf5fe", fontSize: 12, fontWeight: 700 }}>
+                    {probabilities.failure}%
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              style={{
+                marginTop: 10,
+                borderRadius: 12,
+                padding: "10px 12px",
+                background: "rgba(10,18,28,0.72)",
+                border: "1px solid rgba(92,140,198,0.10)",
+              }}
+            >
+              <div style={{ color: "#7f98af", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>
+                Scenario Simulator
+              </div>
+
+              <div style={{ display: "grid", gap: 8 }}>
+                {scenarios.map((scenario) => (
+                  <div
+                    key={scenario.id}
+                    style={{
+                      borderRadius: 10,
+                      padding: "10px 11px",
+                      background: "rgba(8,15,24,0.78)",
+                      border: "1px solid rgba(92,140,198,0.10)",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 6 }}>
+                      <div style={{ color: "#edf5fe", fontSize: 13, fontWeight: 700 }}>
+                        {scenario.title}
+                      </div>
+                      <div style={{ color: scenario.projectedGate === "HOLD" ? "#ffb3b3" : scenario.projectedGate === "REVIEW" ? "#f0c188" : "#b8f5d6", fontSize: 12, fontWeight: 700 }}>
+                        {scenario.projectedGate}
+                      </div>
+                    </div>
+
+                    <div style={{ color: "#9ab2c6", fontSize: 12, lineHeight: 1.45, marginBottom: 6 }}>
+                      {scenario.summary}
+                    </div>
+
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+                      <div style={{ color: "#dbe8f4", fontSize: 12 }}>
+                        Next: {scenario.nextStage}
+                      </div>
+                      <div style={{ color: "#dbe8f4", fontSize: 12 }}>
+                        Risk: {scenario.projectedRisk}% ({scenario.projectedRiskLabel})
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div style={{ borderRadius: 14, border: "1px solid rgba(92,140,198,0.12)", background: "linear-gradient(180deg, rgba(8,15,24,0.72) 0%, rgba(8,14,22,0.74) 100%)", padding: "13px 14px", boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.012)" }}>
+            <div style={{ color: "#7fd8ff", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: 8 }}>
+              Recommended Action
+            </div>
+            <div style={{ color: "#edf5fe", fontSize: 14, fontWeight: 700, marginBottom: 6 }}>
+              {predictive.alignedAction || safeAgentContext?.recommendation?.action || "—"}
+            </div>
+            <div style={{ color: "#dbe8f4", fontSize: 13, lineHeight: 1.45, marginBottom: 8 }}>
+              {safeAgentContext?.simulationAnalyst?.whyThisAction || safeAgentContext?.recommendation?.reason || "No recommendation reasoning available."}
+            </div>
+            <div style={{ color: "#9ab2c6", fontSize: 12, lineHeight: 1.4 }}>
+              <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+              <button
+                onClick={() => executeAction("execute")}
+                style={{
+                  padding: "6px 10px",
+                  borderRadius: 8,
+                  border: "1px solid rgba(92,140,198,0.2)",
+                  background: "#0f1c2b",
+                  color: "#b8f5d6",
+                  cursor: "pointer"
+                }}
+              >
+                ✅ Execute
+              </button>
+
+              <button
+                onClick={() => executeAction("hold")}
+                style={{
+                  padding: "6px 10px",
+                  borderRadius: 8,
+                  border: "1px solid rgba(92,140,198,0.2)",
+                  background: "#0f1c2b",
+                  color: "#ffb3b3",
+                  cursor: "pointer"
+                }}
+              >
+                ⏸ Hold
+              </button>
+
+              <button
+                onClick={() => executeAction("review")}
+                style={{
+                  padding: "6px 10px",
+                  borderRadius: 8,
+                  border: "1px solid rgba(92,140,198,0.2)",
+                  background: "#0f1c2b",
+                  color: "#f0c188",
+                  cursor: "pointer"
+                }}
+              >
+                🔁 Review
+              </button>
+            </div>
+Confidence: {confidencePct}%
+
+            
+
+
+            
+
+
+            
+
+            </div>
+            {!!safeAgentContext?.recommendation?.prerequisites?.length && (
+              <div style={{ color: "#9ab2c6", fontSize: 12, lineHeight: 1.4, marginTop: 6 }}>
+                Prerequisites: {safeAgentContext.recommendation.prerequisites.join(", ")}
+              </div>
+            )}
+            {!!safeAgentContext?.recommendation?.blockers?.length && (
+              <div style={{ color: "#ffb3b3", fontSize: 12, lineHeight: 1.4, marginTop: 6 }}>
+                Blockers: {safeAgentContext.recommendation.blockers.join(", ")}
+              </div>
+            )}
+          </div>
+
+          <div style={{ borderRadius: 14, border: "1px solid rgba(92,140,198,0.12)", background: "linear-gradient(180deg, rgba(8,15,24,0.72) 0%, rgba(8,14,22,0.74) 100%)", padding: "13px 14px", boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.012)" }}>
+            <div style={{ color: "#7fd8ff", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.10em", marginBottom: 8 }}>
+              Action Timeline
+
+{auditLog?.length ? auditLog.map((e) => (
+  <div key={e.id} style={{marginBottom:6}}>
+    <div style={{fontSize:12,fontWeight:600}}>{e.title}</div>
+    <div style={{fontSize:11,color:"#9ab2c6"}}>
+      {e.before.timelineStep} → {e.after.timelineStep}
+    </div>
+  </div>
+)) : "No actions yet"}
+
+Live Context
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+
+
+
+
+              {[
+                ["Case", safeAgentContext?.activeCase?.label || "—"],
+                ["Mode", safeAgentContext?.viewMode || "—"],
+                ["Panel", safeAgentContext?.selectedPanel || "—"],
+                ["Status", safeAgentContext?.systemStatus || "—"],
+                ["Metric", safeAgentContext?.selectedMetric || "—"],
+                ["Timeline", safeAgentContext?.timelineStep || "—"],
+                ["Audience", agentAudience || "—"],
+                ["Action", safeAgentContext?.recommendation?.action || "—"],
+              ].map(([label, value]) => (
+                <div key={label} style={{ borderRadius: 11, border: "1px solid rgba(92,140,198,0.12)", background: "rgba(10,18,28,0.76)", padding: "10px 11px", boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.01)" }}>
+                  <div style={{ color: "#7f98af", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 6 }}>
+                    {label}
+                  </div>
+                  <div style={{ color: "#edf5fe", fontSize: 13, fontWeight: 700, lineHeight: 1.25, wordBreak: "break-word" }}>
+                    {String(value)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AgentContextPreview({ agentContext, agentAudience, setAgentAudience, onOpenDrawer }) {
+  const panelExplanations = {
+    risk_situation:
+      agentContext?.simulationAnalyst?.summary || "The dashboard is focused on the active risk situation. This panel explains the current integrity threat, its severity, and why the case is being watched.",
+    aal_intelligence:
+      "The dashboard is focused on AAL intelligence. This panel summarizes the strongest machine-detected signal affecting the active case.",
+    watchtower_alerts:
+      "The dashboard is focused on Watchtower alerts. This panel surfaces the most important live operational alert tied to the active case.",
+    response_plans:
+      "The dashboard is focused on response plans. This panel shows the currently available operational response path for the active case.",
+    execution_timeline:
+      "The dashboard is focused on execution timeline context. This panel explains where the current case sits in the operational sequence.",
+    center_scene:
+      agentContext?.simulationAnalyst?.summary || "The dashboard is focused on the center scene. This view shows the active case visually in either executive or operations mode.",
+    response_plan:
+      agentContext?.simulationAnalyst?.summary || "The dashboard is focused on the center scene. This view shows the active case visually in either executive or operations mode.",
+    top_metrics:
+      "The dashboard is focused on the top metrics row. This panel explains the selected performance indicator and how it relates to the active case."
+  };
+
+  const baseExplanation =
+    panelExplanations[agentContext?.selectedPanel] ||
+    "The AI analyst is tracking the current dashboard context and can explain the active case, the current state, and the recommended next move.";
+
+  const audienceExplanations = {
+    operator:
+      baseExplanation,
+    executive:
+      "This summary is framed for an executive audience. It emphasizes operational status, overall risk posture, and the current decision path without requiring low-level workflow detail.",
+    investor:
+      "This summary is framed for an investor audience. It emphasizes integrity, deployment readiness, change signals, and why the current action supports reliable capital execution.",
+    auditor:
+      "This summary is framed for an auditor audience. It emphasizes traceability, verification status, material changes, and the reasoning behind the current recommended action."
+  };
+
+  const explanation =
+    audienceExplanations[agentAudience] || baseExplanation;
+
+  const rawChanges =
+    agentContext?.changeSummary?.items || ["No change data available."];
+
+  const changeItems = rawChanges.map((item) => {
+    if (agentAudience === "executive") {
+      return item.replace("Verified outcomes", "Outcome throughput")
+        .replace("Capital deployed", "Capital movement")
+        .replace("Open disputes", "Dispute exposure")
+        .replace("Pool count", "Active funding pools");
+    }
+
+    if (agentAudience === "investor") {
+      return item.replace("Verified outcomes", "Verified outcome volume")
+        .replace("Capital deployed", "Capital deployment")
+        .replace("Open disputes", "Integrity dispute count")
+        .replace("Pool count", "Available pool count");
+    }
+
+    if (agentAudience === "auditor") {
+      return item.replace("Verified outcomes", "Verified outcome record count")
+        .replace("Capital deployed", "Capital execution amount")
+        .replace("Open disputes", "Open dispute record count")
+        .replace("Pool count", "Funding pool registry count");
+    }
+
+    return item;
+  });
+
+  return (
+    <div style={{
+        ...panel,
+        padding: 14,
+        minHeight: 112,
+      }}>
+      <div style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: 10,
+          gap: 12,
+        }}>
+        <div style={{ color: "#e7f2ff", fontWeight: 700, fontSize: 13 }}>
+
+
+AI Analyst Context
+        </div>
+        </div>
+
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              padding: 4,
+              borderRadius: 999,
+              background: "rgba(8,15,24,0.68)",
+              border: "1px solid rgba(92,140,198,0.12)",
+            }}>
+            {["operator", "executive", "investor", "auditor"].map((audience) => {
+              const active = agentAudience === audience;
+              return (
+                <button
+                  key={audience}
+                  onClick={() => setAgentAudience?.(audience)}
+                  style={{
+                    height: 28,
+                    padding: "0 10px",
+                    borderRadius: 999,
+                    border: active
+                      ? "1px solid rgba(120,200,255,0.18)"
+                      : "1px solid transparent",
+                    background: active ? "rgba(18,48,74,0.34)" : "transparent",
+                    color: active ? "#dff3ff" : "#8da5ba",
+                    fontSize: 11,
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.05em",
+                    cursor: "pointer",
+                  }}>
+                  {audience}
+                </button>
+              );
+            })}
+          </div>
+
+          <button
+            onClick={onOpenDrawer}
+            style={{
+              height: 28,
+              padding: "0 10px",
+              borderRadius: 999,
+              border: "1px solid rgba(120,200,255,0.18)",
+              background: "rgba(18,48,74,0.34)",
+              color: "#dff3ff",
+              fontSize: 11,
+              fontWeight: 700,
+              textTransform: "uppercase",
+              letterSpacing: "0.05em",
+              cursor: "pointer",
+            }}>
+            Open Analyst
+          </button>
+
+          <div style={{
+              color: "#7fd8ff",
+              fontSize: 11,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+            }}>
+            Live
+          </div>
+        </div>
+      </div>
+
+      <div style={{
+          borderRadius: 12,
+          border: "1px solid rgba(92,140,198,0.12)",
+          background: "rgba(8,15,24,0.68)",
+          padding: "12px 13px",
+          marginBottom: 10,
+        }}>
+        <div style={{
+            color: "#7fd8ff",
+            fontSize: 10,
+            textTransform: "uppercase",
+            letterSpacing: "0.08em",
+            marginBottom: 6,
+          }}>
+          Analyst Summary
+
+        </div>
+        <div style={{
+            color: "#dbe8f4",
+            fontSize: 13,
+            lineHeight: 1.45,
+          }}>
+          {explanation}
+        </div>
+      </div>
+
+      <div style={{
+          borderRadius: 12,
+          border: "1px solid rgba(92,140,198,0.12)",
+          background: "rgba(8,15,24,0.68)",
+          padding: "12px 13px",
+          marginBottom: 10,
+        }}>
+        <div style={{
+            color: "#7fd8ff",
+            fontSize: 10,
+            textTransform: "uppercase",
+            letterSpacing: "0.08em",
+            marginBottom: 8,
+          }}>
+          What Changed
+        </div>
+        <div style={{ display: "grid", gap: 6 }}>
+          {(agentContext?.simulationAnalyst?.whatChanged
+            ? [agentContext.simulationAnalyst.whatChanged]
+            : changeItems
+          ).map((item, idx) => (
+            <div key={idx}
+              style={{
+                color: "#dbe8f4",
+                fontSize: 13,
+                lineHeight: 1.4,
+              }}>
+              • {item}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{
+          borderRadius: 12,
+          border: "1px solid rgba(92,140,198,0.12)",
+          background: "rgba(8,15,24,0.68)",
+          padding: "12px 13px",
+          marginBottom: 10,
+        }}>
+        <div style={{
+            color: "#7fd8ff",
+            fontSize: 10,
+            textTransform: "uppercase",
+            letterSpacing: "0.08em",
+            marginBottom: 8,
+          }}>
+          Why This Action
+        </div>
+
+        <div style={{ display: "grid", gap: 7 }}>
+          {(() => {
+            const baseReason =
+              agentContext?.recommendation?.reason || "No recommendation reasoning available.";
+            const rawConfidence = agentContext?.recommendation?.confidence || 0;
+  const confidencePct = Math.round(rawConfidence <= 1 ? rawConfidence * 100 : rawConfidence);
+            const prerequisites = agentContext?.recommendation?.prerequisites || [];
+            const blockers = agentContext?.recommendation?.blockers || [];
+
+            const audienceReasoning = {
+              operator: `${baseReason} Execute the next operational step only after prerequisites are confirmed.`,
+              executive: `The system is recommending this action because it is the most direct path to preserve integrity while keeping the case moving. Current confidence is ${confidencePct}%.`,
+              investor: `The system is recommending this action because it supports controlled capital execution, protects integrity, and reduces the chance of premature release. Current confidence is ${confidencePct}%.`,
+              auditor: `The system is recommending this action because the current verification state supports it, the rationale is traceable, and the decision can be justified against the active prerequisites. Current confidence is ${confidencePct}%.`,
+            };
+
+            const reasoningText = audienceReasoning[agentAudience] || baseReason;
+
+            return (
+              <>
+                <div style={{ color: "#dbe8f4", fontSize: 13, lineHeight: 1.4 }}>
+                  {reasoningText}
+                </div>
+
+                <div style={{ color: "#9ab2c6", fontSize: 12, lineHeight: 1.4 }}>
+                  Confidence: {confidencePct}%
+                </div>
+
+                {!!prerequisites.length && (
+                  <div style={{ color: "#9ab2c6", fontSize: 12, lineHeight: 1.4 }}>
+                    Prerequisites: {prerequisites.join(", ")}
+                  </div>
+                )}
+
+                {!!blockers.length && (
+                  <div style={{ color: "#ffb3b3", fontSize: 12, lineHeight: 1.4 }}>
+                    Blockers: {blockers.join(", ")}
+                  </div>
+                )}
+              </>
+            );
+          })()}
+        </div>
+      </div>
+
+      <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+
+
+
+
+          gap: 10,
+        }}>
+        {[
+          ["Case", agentContext?.activeCase?.label || "—"],
+          ["Mode", agentContext?.viewMode || "—"],
+          ["Panel", agentContext?.selectedPanel || "—"],
+          ["Status", agentContext?.systemStatus || "—"],
+          ["Metric", agentContext?.selectedMetric || "—"],
+          ["Timeline", agentContext?.timelineStep || "—"],
+          ["Audience", agentAudience || "—"],
+          ["Action", agentContext?.recommendation?.action || "—"],
+        ].map(([label, value]) => (
+          <div key={label}
+            style={{
+              borderRadius: 10,
+              border: "1px solid rgba(92,140,198,0.12)",
+              background: "rgba(8,15,24,0.68)",
+              padding: "10px 11px",
+            }}>
+            <div style={{
+                color: "#7f98af",
+                fontSize: 10,
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                marginBottom: 6,
+              }}>
+              {label}
+            </div>
+            <div style={{
+                color: "#edf5fe",
+                fontSize: 13,
+                fontWeight: 700,
+                lineHeight: 1.25,
+                wordBreak: "break-word",
+              }}>
+              {String(value)}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function LoadingView() {
+  return (
+    <div style={{
+        minHeight: "100vh",
+        background: pageBg,
+        color: "#e9f2fa",
+        display: "grid",
+        placeItems: "center",
+        fontSize: 18,
+      }}>
+      Loading SHS Command Center…
+    </div>
+  );
+}
+
+function ErrorView({ error, refresh }) {
+  return (
+    <div style={{
+        minHeight: "100vh",
+        background: pageBg,
+        color: "#e9f2fa",
+        display: "grid",
+        placeItems: "center",
+      }}>
+      <div style={{
+          width: 520,
+          padding: 24,
+          borderRadius: 16,
+          border: "1px solid rgba(255,110,110,0.25)",
+          background: "rgba(18,20,28,0.92)",
+        }}>
+        <div style={{ fontSize: 22, fontWeight: 800, marginBottom: 12 }}>Command Center Load Error</div>
+        <div style={{ color: "#cfd8e3", lineHeight: 1.5, marginBottom: 18 }}>{error}</div>
+        <button
+          onClick={refresh}
+          style={{
+            height: 40,
+            padding: "0 16px",
+            borderRadius: 10,
+            border: "1px solid rgba(118,164,212,0.22)",
+            background: "rgba(16,27,40,0.85)",
+            color: "#d7e3f0",
+            fontWeight: 700,
+            cursor: "pointer",
+          }}>
+          Retry
+        </button>
+      </div>
+    </div>
+  );
+}
+
+const approveBtn = {
+  height: 42,
+  borderRadius: 10,
+  border: "1px solid rgba(85,210,170,0.35)",
+  background: "linear-gradient(180deg, rgba(30,158,116,0.88) 0%, rgba(20,112,90,0.88) 100%)",
+  color: "#dffaf0",
+  fontSize: 15,
+  fontWeight: 700,
+  textTransform: "uppercase",
+  letterSpacing: "0.04em",
+  cursor: "pointer",
+};
+
+const holdBtn = {
+  height: 42,
+  borderRadius: 10,
+  border: "1px solid rgba(218,106,106,0.35)",
+  background: "linear-gradient(180deg, rgba(156,68,68,0.92) 0%, rgba(108,45,45,0.92) 100%)",
+  color: "#ffe4e4",
+  fontSize: 15,
+  fontWeight: 700,
+  textTransform: "uppercase",
+  letterSpacing: "0.04em",
+  cursor: "pointer",
+};
+
+export default function CommandCenter() {
+  const [liveAgentContext, setLiveAgentContext] = React.useState(null);
+
+  React.useEffect(() => {
+    const handler = () => {
+      if (typeof window !== "undefined" && window.__SHF_SIMULATION_STATE__) {
+        setLiveAgentContext({ ...window.__SHF_SIMULATION_STATE__ });
+      }
+    };
+
+    if (typeof window !== "undefined" && window.__SHF_SIMULATION_STATE__) {
+      setLiveAgentContext({ ...window.__SHF_SIMULATION_STATE__ });
+    }
+
+    window.addEventListener("shf:update", handler);
+    return () => window.removeEventListener("shf:update", handler);
+  }, []);
+
+  const [isAnalystDrawerOpen, setIsAnalystDrawerOpen] = React.useState(false);
+  const [analystFocus, setAnalystFocus] = React.useState(null);
+  const {
+    data,
+    loading,
+    error,
+    refresh,
+    activeCase,
+    viewMode,
+    setViewMode,
+    selectedPanel,
+    setSelectedPanel,
+    selectedMetric,
+    setSelectedMetric,
+    agentAudience,
+    setAgentAudience,
+    systemStatus,
+    setSystemStatus,
+    recommendation,
+    setRecommendation,
+    timelineStep,
+    setTimelineStep,
+    resetToLiveState,
+    agentContext,
+  } = useCommandCenterData();
+
+  const simulationFrame = useExchangeSimulation({ enabled: true, tickMs: 5000 });
+  const simRecommendation = simulationFrame?.recommendation || null;
+  const simAnalyst = simulationFrame?.analystSummary || null;
+  const liveTimelineStep =
+    simulationFrame?.currentStage ||
+    agentContext?.timelineStep ||
+    timelineStep ||
+    "risk_signal";
+
+  const liveRecommendation = simRecommendation
+    ? {
+        ...recommendation,
+        ...simRecommendation,
+        reason: simRecommendation.note || recommendation?.reason,
+      }
+    : recommendation;
+
+
+  
+  const rightPanelConfig = {
+    risk_signal: {
+      title: "Risk Signal Detected",
+      status: "ALERT",
+      severity: "HIGH",
+      description: "Initial anomaly detected. Monitoring required before escalation.",
+    },
+    anomaly_clear: {
+      title: "Anomaly Cleared",
+      status: "STABLE",
+      severity: "{activeRightPanel.severity}",
+      description: "No further issues detected. System stabilized.",
+    },
+    verification_inquiry: {
+      title: "Verification Inquiry",
+      status: "REVIEW",
+      severity: "MEDIUM",
+      description: "Verification required before proceeding with action.",
+    },
+    action_queued: {
+      title: "Action Queued",
+      status: "{activeRightPanel.status}",
+      severity: "{activeRightPanel.severity}",
+      description: "Operator review required before execution.",
+    },
+    outcome_pending: {
+      title: "Outcome Pending",
+      status: "TRACKING",
+      severity: "{activeRightPanel.severity}",
+      description: "Outcome being monitored before validation.",
+    },
+    payment_pending: {
+      title: "Payment Pending",
+      status: "FUNDING",
+      severity: "{activeRightPanel.severity}",
+      description: "Awaiting funding release and final confirmation.",
+    },
+  };
+
+  const activeRightPanel = rightPanelConfig[liveTimelineStep] || rightPanelConfig["risk_signal"];
+
+
+
+  const rightPanelDisplay = {
+    risk_signal: {
+      title: "Risk Signal Detected",
+      status: "ALERT",
+      severity: "HIGH"
+    },
+    anomaly_clear: {
+      title: "Anomaly Cleared",
+      status: "STABLE",
+      severity: "LOW"
+    },
+    verification_inquiry: {
+      title: "Verification Inquiry",
+      status: "REVIEW",
+      severity: "MEDIUM"
+    },
+    action_queued: {
+      title: "Action Queued",
+      status: "READY",
+      severity: "LOW"
+    },
+    outcome_pending: {
+      title: "Outcome Pending",
+      status: "TRACKING",
+      severity: "LOW"
+    },
+    payment_pending: {
+      title: "Payment Pending",
+      status: "FUNDING",
+      severity: "LOW"
+    }
+  };
+
+  const panelUI = rightPanelDisplay[liveTimelineStep] || rightPanelDisplay["risk_signal"];
+
+const computedAgentContext = {
+    ...agentContext,
+    recommendation: liveRecommendation,
+    simulationAnalyst: simAnalyst,
+    timelineStep: liveTimelineStep,
+  };
+
+  if (loading && !data) return <LoadingView />;
+  if (error && !data) return <ErrorView error={error} refresh={refresh} />;
+
+  return (
+    <div style={{
+        minHeight: "100vh",
+        background: pageBg,
+        padding: PAGE_PADDING,
+        color: "#e9f2fa",
+        fontFamily: "Inter, system-ui, sans-serif",
+      }}>
+      <AIAnalystDrawer
+        isOpen={isAnalystDrawerOpen}
+        onClose={() => setIsAnalystDrawerOpen(false)}
+        agentContext={liveAgentContext || computedAgentContext}
+        agentAudience={agentAudience}
+        analystFocus={analystFocus}
+      />
+
+      <div style={{ display: "grid", gap: 14 }}>
+        <HeaderBar refresh={refresh} resetToLiveState={resetToLiveState} />
+        <ProofRow
+          proofMetrics={data?.proofMetrics}
+          selectedMetric={selectedMetric}
+          setSelectedMetric={setSelectedMetric}
+          setSelectedPanel={setSelectedPanel}
+          onExplainFocus={(focus) => {
+            setAnalystFocus(focus);
+            setIsAnalystDrawerOpen(true);
+          }}
+        />
+        <TopTabs />
+        <div className="alive-recommendation">
+
+          <RecommendedNextMove
+          recommendation={liveRecommendation}
+          activeCase={activeCase}
+        />
+
+        </div>
+
+        <div style={{
+            display: "grid",
+            gridTemplateColumns: `${LEFT_W}px minmax(0, 1fr) ${RIGHT_W}px`,
+
+
+
+
+            gap: GAP,
+            alignItems: "start",
+          }}>
+          <LeftRail
+            leftPanel={data?.leftPanel}
+            activeCase={activeCase}
+            selectedPanel={selectedPanel}
+            setSelectedPanel={setSelectedPanel}
+            onExplainFocus={(focus) => {
+              setAnalystFocus(focus);
+              setIsAnalystDrawerOpen(true);
+            }}
+          />
+          <div style={{
+              minWidth: 0,
+              cursor: "pointer",
+              borderRadius: 22,
+              boxShadow:
+                systemStatus === "on_hold"
+                  ? "0 0 0 1px rgba(255,142,142,0.18), 0 0 34px rgba(200,70,70,0.14)"
+                  : systemStatus === "approval_queued"
+                  ? "0 0 0 1px rgba(122,224,178,0.18), 0 0 34px rgba(52,150,108,0.14)"
+                  : selectedPanel === "center_scene"
+                  ? "0 0 0 1px rgba(110,190,255,0.18), 0 0 34px rgba(68,146,234,0.12)"
+                  : "none"
+            }}
+            onClick={() => {
+              setSelectedPanel?.("center_scene");
+              setAnalystFocus({
+                type: "center_scene",
+                title: viewMode === "executive" ? "Executive View" : "Operations View",
+                value: systemStatus,
+                explanation:
+                  viewMode === "executive"
+                    ? "This center scene is the executive view of the active case. It frames current state, status, and recommended action in a premium narrative surface."
+                    : "This center scene is the operations view of the active case. It shows jurisdiction context, active routes, and state-aware operational emphasis."
+              });
+              setIsAnalystDrawerOpen(true);
+            }}>
+            
+<div className="globe-command-panel">
+  <GlobeScene
+    viewMode={viewMode}
+    setViewMode={setViewMode}
+    activeCase={activeCase}
+    systemStatus={systemStatus}
+    recommendation={liveRecommendation}
+    timelineStep={liveTimelineStep}
+  />
+</div>
+
+          </div>
+          <div style={{ minWidth: 0 }}>
+            <RightDecisionPanel
+              rightPanel={data?.rightPanel}
+              activeCase={activeCase}
+              selectedPanel={selectedPanel}
+              setSelectedPanel={setSelectedPanel}
+              setRecommendation={setRecommendation}
+              setSystemStatus={setSystemStatus}
+              setTimelineStep={setTimelineStep}
+              timelineStep={liveTimelineStep}
+              onExplainFocus={(focus) => {
+                setAnalystFocus(focus);
+                setIsAnalystDrawerOpen(true);
+              }}
+            />
+          </div>
+        </div>
+
+        <BottomTimeline
+          timelineStep={liveTimelineStep}
+          bottomTimeline={data?.bottomTimeline}
+          proofMetrics={data?.proofMetrics}
+          systemStatus={systemStatus}
+          setSelectedPanel={setSelectedPanel}
+          onExplainFocus={(focus) => {
+            setAnalystFocus(focus);
+            setIsAnalystDrawerOpen(true);
+          }}
+        />
+
+        <div className="alive-analyst">
+
+
+          <AgentContextPreview
+          agentContext={liveAgentContext || computedAgentContext}
+          agentAudience={agentAudience}
+          setAgentAudience={setAgentAudience}
+          onOpenDrawer={() => setIsAnalystDrawerOpen(true)}
+        />
+
+
+        </div>
+
+      </div>
+    </div>
+  );
+}

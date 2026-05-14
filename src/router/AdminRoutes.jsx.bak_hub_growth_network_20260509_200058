@@ -1,0 +1,84 @@
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+
+import AppRegistry from "@/pages/admin/AppRegistry.jsx";
+import Registry from "@/pages/admin/Registry.jsx";
+import ToolDashboard from "@/pages/admin/ToolDashboard.jsx";
+import MasterNarrativeViewer from "@/pages/admin/MasterNarrativeViewer.jsx";
+import GrantBinder from "@/pages/admin/GrantBinder.jsx";
+import AlignmentSwitchboard from "@/pages/admin/AlignmentSwitchboard.jsx";
+import BuilderHub from "@/pages/admin/BuilderHub.jsx";
+
+import AggregationDashboard from "@/pages/admin/aggregation/AggregationDashboard.jsx";
+import ReportingCommandSurface from "@/pages/admin/reporting/ReportingCommandSurface.jsx";
+import VerificationAuditSurface from "@/pages/admin/reporting/VerificationAuditSurface.jsx";
+
+import HubWorkspaceDashboard from "@/pages/hub/HubWorkspaceDashboard.jsx";
+import HubLeadershipDashboard from "@/pages/hub/HubLeadershipDashboard.jsx";
+import IntakeNavigatorConsole from "@/pages/hub/IntakeNavigatorConsole.jsx";
+import PartnerActionQueue from "@/pages/hub/PartnerActionQueue.jsx";
+import ReferralLifecycleView from "@/pages/hub/ReferralLifecycleView.jsx";
+import UnmetNeedsQueue from "@/pages/hub/UnmetNeedsQueue.jsx";
+import HubFilesImports from "@/pages/hub/HubFilesImports.jsx";
+import HubReports from "@/pages/hub/HubReports.jsx";
+
+import IdentityManagement from "../pages/admin/identity/IdentityManagement";
+import UploadManager from "../pages/admin/uploads/UploadManager";
+import AuditLogViewer from "../pages/admin/audit/AuditLogViewer";
+
+import AuthGuard from "../auth/AuthGuard";
+import SolutionsInfrastructurePage from "@/pages/solutions/SolutionsInfrastructurePage.jsx";
+import SHSPartnerGrowthEngine from "@/pages/admin/growth/SHSPartnerGrowthEngine.jsx";
+
+export default function AdminRoutes() {
+  return (
+    <AuthGuard>
+      <Routes>
+        {/* Default */}
+        <Route path="/" element={<Navigate to="/hub" replace />} />
+
+        {/* SHS Hub */}
+        <Route path="/hub" element={<HubWorkspaceDashboard />} />
+        <Route path="/hub/network" element={<HubLeadershipDashboard />} />
+        <Route path="/hub/leadership" element={<HubLeadershipDashboard />} />
+        <Route path="/hub/intake" element={<IntakeNavigatorConsole />} />
+        <Route path="/hub/queue" element={<PartnerActionQueue />} />
+        <Route path="/hub/action-queue" element={<PartnerActionQueue />} />
+        <Route path="/hub/lifecycle" element={<ReferralLifecycleView />} />
+        <Route path="/hub/referrals" element={<ReferralLifecycleView />} />
+        <Route path="/hub/unmet-needs" element={<UnmetNeedsQueue />} />
+        <Route path="/hub/imports" element={<HubFilesImports />} />
+        <Route path="/hub/reports" element={<HubReports />} />
+
+        {/* Shared SHS admin/infrastructure surfaces */}
+        <Route path="/uploads" element={<UploadManager />} />
+        <Route path="/imports" element={<HubFilesImports />} />
+        <Route path="/aggregation" element={<AggregationDashboard />} />
+        <Route path="/reporting" element={<ReportingCommandSurface />} />
+        <Route path="/verification-audit" element={<VerificationAuditSurface />} />
+        <Route path="/audit" element={<AuditLogViewer />} />
+        <Route path="/identity" element={<IdentityManagement />} />
+
+        {/* Admin builder / registry */}
+        <Route path="/app-registry" element={<AppRegistry />} />
+        <Route path="/registry" element={<Registry />} />
+        <Route path="/builder" element={<BuilderHub />} />
+        <Route path="/builder/tools" element={<ToolDashboard />} />
+        <Route path="/tools" element={<ToolDashboard />} />
+        <Route path="/master-narrative" element={<MasterNarrativeViewer />} />
+        <Route path="/grant-binder" element={<GrantBinder />} />
+        <Route path="/alignment" element={<AlignmentSwitchboard />} />
+
+        {/* Partner Growth Engine */}
+        <Route path="/growth" element={<SHSPartnerGrowthEngine />} />
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/hub" replace />} />
+      
+        <Route path="/solutions" element={<SolutionsInfrastructurePage />} />
+        <Route path="/solutions/infrastructure" element={<SolutionsInfrastructurePage />} />
+
+</Routes>
+    </AuthGuard>
+  );
+}

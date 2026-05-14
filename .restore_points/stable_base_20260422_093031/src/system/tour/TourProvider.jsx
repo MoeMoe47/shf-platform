@@ -1,0 +1,60 @@
+import { useEffect } from "react";
+import useTour from "./useTour";
+import TourOverlay from "./TourOverlay";
+import { tourSteps } from "./tourConfig";
+import "./tourStyles.css";
+
+export default function TourProvider({ children }) {
+  const tour = useTour(tourSteps.length);
+
+  useEffect(() => {
+    const body = document.body;
+    body.classList.remove(
+      "tour-active",
+      "tour-step-kpis",
+      "tour-step-map",
+      "tour-step-analyst",
+      "tour-step-trust"
+    );
+
+    if (tour.state.isActive) {
+      body.classList.add("tour-active");
+      const step = tourSteps[tour.state.currentStep];
+      if (step?.id) body.classList.add(`tour-step-${step.id}`);
+    }
+
+    return () => {
+      body.classList.remove(
+        "tour-active",
+        "tour-step-kpis",
+        "tour-step-map",
+        "tour-step-analyst",
+        "tour-step-trust"
+      );
+    };
+  }, [tour.state.isActive, tour.state.currentStep]);
+
+  return (
+    <>
+      {children}
+
+      <TourOverlay
+        state={tour.state}
+        nextStep={tour.nextStep}
+        prevStep={tour.prevStep}
+        endTour={tour.endTour}
+      />
+
+      {!tour.state.isActive ? (
+        <button
+          type="button"
+          className="tour-start-btn"
+          onClick={tour.startTour}
+          aria-label="Start guided tour"
+        >
+          Guided Tour
+        </button>
+      ) : null}
+    </>
+  );
+}

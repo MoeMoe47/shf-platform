@@ -8,6 +8,8 @@ import FoundationTop from "@/pages/foundation/Top.jsx";
 // Lazy-loaded pages
 const DevDocsViewer     = lazy(() => import("@/pages/dev/Docs.jsx"));
 const PublicApps        = lazy(() => import("@/pages/foundation/PublicApps.jsx"));
+const FoundationAbout   = lazy(() => import("@/pages/foundation/About.jsx"));
+const SHFImpactCommandCenter = lazy(() => import("@/pages/shf-command/SHFImpactCommandCenter.jsx"));
 const AdminAppsGallery  = lazy(() => import("@/pages/foundation/AdminAppsGallery.jsx"));
 
 const PlacementKPIs     = lazy(() => import("@/pages/admin/PlacementKPIs.jsx"));
@@ -17,6 +19,9 @@ const TalentSources     = lazy(() => import("@/pages/admin/TalentSources.jsx"));
 const Attribution       = lazy(() => import("@/pages/admin/Attribution.jsx"));
 
 import RequireAdmin from "@/components/RequireAdmin.jsx";
+import AuthGuard from "../auth/AuthGuard";
+import RoleGuard from "../auth/RoleGuard";
+import FoundationMissionPage from "@/foundation/pages/FoundationMissionPage.jsx";
 
 export default function FoundationRoutes() {
   return (
@@ -32,6 +37,9 @@ export default function FoundationRoutes() {
 
           {/* Top tab */}
           <Route path="top" element={<FoundationTop />} />
+        <Route path="mission" element={<FoundationMissionPage />} />
+          <Route path="about" element={<FoundationAbout />} />
+          <Route path="impact" element={<SHFImpactCommandCenter />} />
 
           {/* PUBLIC apps gallery – anyone can see */}
           <Route path="apps" element={<PublicApps />} />

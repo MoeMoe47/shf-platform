@@ -1,0 +1,1279 @@
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useSelectedEntity } from "@/system/context/SelectedEntityContext";
+import "./shf-impact-command-center.css";
+import { resolveCountyFromEntity } from "@/system/resolvers/entityToCounty";
+
+
+const SELF_AUDIT_BASE = "http://127.0.0.1:8090";
+
+const ORACLE_BASE = "http://127.0.0.1:8090";
+
+const ORACLE_ENDPOINTS = {
+  truth: "/oracle/truth",
+  compare: "/oracle/compare",
+  priority: "/oracle/priority",
+};
+
+async function fetchOracleBundle({ entityId, county }) {
+  const params = new URLSearchParams();
+  if (entityId) params.set("entity_id", entityId);
+  if (county) params.set("county", county);
+
+  const qs = params.toString() ? `?${params.toString()}` : "";
+
+  const [truthRes, compareRes, priorityRes] = await Promise.allSettled([
+    fetch(`${ORACLE_BASE}${ORACLE_ENDPOINTS.truth}${qs}`),
+    fetch(`${ORACLE_BASE}${ORACLE_ENDPOINTS.compare}${qs}`),
+    fetch(`${ORACLE_BASE}${ORACLE_ENDPOINTS.priority}${qs}`),
+  ]);
+
+  async function readSettled(res) {
+    if (res.status !== "fulfilled") return null;
+    if (!res.value.ok) return null;
+    try {
+      return await res.value.json();
+    } catch {
+      return null;
+    }
+  }
+
+  return {
+    truth: await readSettled(truthRes),
+    compare: await readSettled(compareRes),
+    priority: await readSettled(priorityRes),
+  };
+}
+
+function normalizeOracleInsight(bundle, fallbackInsight, county) {
+  const truth = bundle?.truth || {};
+  const compare = bundle?.compare || {};
+  const priority = bundle?.priority || {};
+
+  const countyName =
+    typeof county === "string"
+      ? county
+      : county?.name || "Unknown County";
+
+  const confidence =
+    truth?.confidence ??
+    truth?.oracle_truth_package?.confidence ??
+    compare?.confidence ??
+    priority?.confidence ??
+    null;
+
+  const priorityLabel =
+    priority?.priority ??
+    priority?.recommended_priority ??
+    truth?.priority ??
+    "Monitor";
+
+  const changedText =
+    truth?.summary ||
+    truth?.judgment ||
+    truth?.oracle_truth_package?.summary ||
+    fallbackInsight.changedText;
+
+  const whyPoints =
+    truth?.reasons ||
+    truth?.why ||
+    compare?.drivers ||
+    compare?.differences ||
+    priority?.signals ||
+    fallbackInsight.whyPoints;
+
+  const nextMoveText =
+    priority?.recommended_action ||
+    priority?.next_move ||
+    truth?.recommended_action ||
+    compare?.recommended_action ||
+    fallbackInsight.nextMoveText;
+
+  const actionLabel =
+    priority?.cta_label ||
+    "Execute Oracle recommendation";
+
+  return {
+    changedText,
+    whyPoints: Array.isArray(whyPoints) ? whyPoints : fallbackInsight.whyPoints,
+    nextMoveText,
+    actionLabel,
+    confidence: confidence == null ? null : String(confidence),
+    priorityLabel,
+    raw: { truth, compare, priority },
+    countyName,
+  };
+}
+
+async function fetchSelfAuditLatest() {
+  const res = await fetch(`${SELF_AUDIT_BASE}/self-audit/latest`);
+  if (!res.ok) throw new Error(`latest audit request failed: ${res.status}`);
+  return res.json();
+}
+
+async function fetchSelfAuditLatestBrief() {
+  const res = await fetch(`${SELF_AUDIT_BASE}/self-audit/latest/brief`);
+  if (!res.ok) throw new Error(`latest brief request failed: ${res.status}`);
+  return res.json();
+}
+
+async function runSelfAuditNow() {
+  const res = await fetch(`${SELF_AUDIT_BASE}/self-audit/run?requested_by=command_center`, {
+    method: "POST",
+  });
+  if (!res.ok) throw new Error(`manual self-audit failed: ${res.status}`);
+  return res.json();
+}
+
+function formatAuditDate(value) {
+  if (!value) return "—";
+  try {
+    return new Date(value).toLocaleString();
+  } catch {
+    return value;
+  }
+}
+
+import TourProvider from "@/system/tour/TourProvider";
+import ImpactKpiBand from "./sections/ImpactKpiBand";
+import AIAnalystPanel from "./sections/AIAnalystPanel";
+import TrustVerificationPanel from "./sections/TrustVerificationPanel";
+import ReportsBriefingsPanel from "./sections/ReportsBriefingsPanel";
+import ImpactOverviewWheelPanel from "./sections/ImpactOverviewWheelPanel";
+import SHFImpactOhioMap from "./components/SHFImpactOhioMap";
+
+const KPIS = [
+  { key: "people", label: "People Served", value: "12,482", delta: "+ 8.2%", sublabel: "Last 30 Days" },
+  { key: "programs", label: "Programs Active", value: "18", delta: "+ 1", sublabel: "System Wide" },
+  { key: "verified", label: "Verified Outcomes", value: "8,217", delta: "+ 6.4%", sublabel: "Last 30 Days" },
+  { key: "funding", label: "Funding Deployed", value: "$29.5M", delta: "+ $1.2M", sublabel: "Last 30 Days" },
+  { key: "risk", label: "Risk Alerts", value: "3", delta: "", sublabel: "Priority Watchlist" },
+  { key: "readiness", label: "Grant Readiness", value: "91%", delta: "Readiness", sublabel: "Institutional Score" },
+];
+
+const COUNTIES = [
+  { id: "franklin", name: "Franklin County", x: 58, y: 33, shade: "high", programs: 5, people: "3,824", funding: "$4.5M", topOutcome: "82%", risk: "Stable" },
+  { id: "cuyahoga", name: "Cuyahoga County", x: 66, y: 18, shade: "high", programs: 4, people: "2,406", funding: "$3.2M", topOutcome: "79%", risk: "Watch" },
+  { id: "hamilton", name: "Hamilton County", x: 34, y: 66, shade: "mid", programs: 3, people: "1,955", funding: "$2.1M", topOutcome: "74%", risk: "Stable" },
+  { id: "summit", name: "Summit County", x: 63, y: 28, shade: "mid", programs: 2, people: "1,240", funding: "$1.4M", topOutcome: "71%", risk: "Opportunity" },
+  { id: "montgomery", name: "Montgomery County", x: 40, y: 52, shade: "mid", programs: 2, people: "1,112", funding: "$1.1M", topOutcome: "69%", risk: "Stable" },
+  { id: "lucas", name: "Lucas County", x: 52, y: 8, shade: "mid", programs: 2, people: "913", funding: "$940K", topOutcome: "67%", risk: "Stable" },
+  { id: "delaware", name: "Delaware County", x: 58, y: 27, shade: "low", programs: 1, people: "622", funding: "$610K", topOutcome: "73%", risk: "Stable" },
+  { id: "licking", name: "Licking County", x: 65, y: 37, shade: "low", programs: 1, people: "508", funding: "$525K", topOutcome: "66%", risk: "Watch" },
+];
+
+const PROGRAMS = [
+  {
+    id: "career-launchpad",
+    name: "Career Launchpad",
+    status: "Expanding",
+    locations: 20,
+    funding: "$5.45M",
+    trend: "+4.6M",
+    risk: "Low",
+    served: "5,450",
+    note: "Strong placement momentum and high grant narrative value.",
+  },
+  {
+    id: "recovery-housing",
+    name: "Recovery Housing Pilot",
+    status: "Intervene",
+    locations: 8,
+    funding: "$1,208",
+    trend: "+3.8M",
+    risk: "Elevated",
+    served: "1,280",
+    note: "Retention dip requires operator review and client-flow analysis.",
+  },
+  {
+    id: "barber-pathway",
+    name: "Barber Licensure Pathway",
+    status: "In Progress",
+    locations: 12,
+    funding: "$1,434",
+    trend: "+5.3M",
+    risk: "Moderate",
+    served: "980",
+    note: "Healthy demand and certification path appeal.",
+  },
+  {
+    id: "autism-awareness",
+    name: "Autism Awareness Initiative",
+    status: "Growing",
+    locations: 9,
+    funding: "$338",
+    trend: "+2.6M",
+    risk: "Low",
+    served: "742",
+    note: "Strong public narrative value and sponsor alignment potential.",
+  },
+];
+
+function getActionsForCounty(selectedCounty) {
+  const countyName = selectedCounty?.name || "Selected County";
+  const countyShort = countyName.replace(/\s+County$/i, "").trim();
+
+  return [
+    `Expand Career Launchpad in ${countyName}`,
+    `Intervene in the ${countyShort} Recovery Housing network due to declining client retention rates.`,
+    `Prepare grant summary for Autism Awareness Initiative in ${countyName}.`,
+    `Verify missing placement reports submitted by the ${countyShort} workforce network.`,
+    `Generate donor brief for Barber Licensure Pathway activity in ${countyName}.`,
+  ];
+}
+
+function getSimulationScenario(action, selectedCounty) {
+  const normalized = String(action || "").toLowerCase();
+  const countyName = selectedCounty?.name || "Unknown County";
+  const region = countyName.replace(/\s+County$/i, "").trim();
+
+  let program = "general_program";
+  let issue = "Outcome risk + intervention flow";
+  let priority = "MEDIUM";
+  let demoCase = "emily";
+
+  if (normalized.includes("career launchpad")) {
+    program = "career_launchpad";
+    issue = "Workforce placement expansion + funding readiness";
+    priority = "HIGH";
+    demoCase = "jason";
+  } else if (normalized.includes("recovery housing")) {
+    program = "recovery_housing";
+    issue = "Retention decline + intervention pressure";
+    priority = "HIGH";
+    demoCase = "sophia";
+  } else if (normalized.includes("autism")) {
+    program = "autism_awareness";
+    issue = "Grant narrative + sponsor alignment";
+    priority = "MEDIUM";
+    demoCase = "emily";
+  } else if (normalized.includes("barber")) {
+    program = "barber_licensure";
+    issue = "Program visibility + donor brief readiness";
+    priority = "MEDIUM";
+    demoCase = "emily";
+  }
+
+  return {
+    case: demoCase,
+    contextCaseLabel: `${countyName} | ${program} | ${action}`,
+    region,
+    issue,
+    priority,
+    county: countyName,
+    program,
+    action,
+  };
+}
+function buildAiActionPayload(action, selectedCounty) {
+  const normalized = String(action || "").toLowerCase();
+
+  if (normalized.includes("expand")) {
+    return {
+      title: "AI Recommended Action",
+      summary: action,
+      priority: "High",
+      confidence: "90%",
+      urgency: "IMMEDIATE",
+      nextOutcome: "FUNDED",
+      reasonSignals: [
+        "Placement demand is rising in target county",
+        "Projected outcome lift exceeds intervention cost",
+        "Funding readiness is strong for expansion"
+      ],
+      metrics: [
+        { label: "Priority", value: "High" },
+        { label: "Confidence", value: "90%" },
+        { label: "Urgency", value: "Immediate" },
+        { label: "Next Outcome", value: "Funded" }
+      ],
+      actions: [
+        "Open affected record",
+        "Generate expansion memo",
+        "Assign county rollout review"
+      ],
+      simulationScenario: getSimulationScenario(action, selectedCounty),
+    };
+  }
+
+  if (normalized.includes("intervene")) {
+    return {
+      title: "AI Recommended Action",
+      summary: action,
+      priority: "Medium",
+      confidence: "83%",
+      urgency: "MONITOR",
+      nextOutcome: "STABILIZED",
+      reasonSignals: [
+        "Retention trend has weakened",
+        "Program condition shows intervention pressure",
+        "Delay could reduce funding efficiency"
+      ],
+      metrics: [
+        { label: "Priority", value: "Medium" },
+        { label: "Confidence", value: "83%" },
+        { label: "Urgency", value: "Monitor" },
+        { label: "Next Outcome", value: "Stabilized" }
+      ],
+      actions: [
+        "Open affected record",
+        "Generate intervention memo",
+        "Assign operations review"
+      ],
+      simulationScenario: getSimulationScenario(action, selectedCounty),
+    };
+  }
+
+  return {
+    title: "AI Recommended Action",
+    summary: action,
+    priority: "Low",
+    confidence: "76%",
+    urgency: "QUEUE",
+    nextOutcome: "REVIEWED",
+    reasonSignals: [
+      "Action is valuable but not urgent",
+      "Current system pressure is limited",
+      "Can be handled in the next review cycle"
+    ],
+    metrics: [
+      { label: "Priority", value: "Low" },
+      { label: "Confidence", value: "76%" },
+      { label: "Urgency", value: "Queue" },
+      { label: "Next Outcome", value: "Reviewed" }
+    ],
+    actions: [
+      "Open affected record",
+      "Generate summary memo",
+      "Queue for later review"
+    ],
+    simulationScenario: getSimulationScenario(action, selectedCounty),
+  };
+}
+
+const TRUST_ITEMS = [
+  { key: "coverage", label: "Reporting Coverage", value: "92%" },
+  { key: "audit", label: "Audit Integrity", value: "PASS" },
+  { key: "ledger", label: "Ledger Sync", value: "ACTIVE" },
+  { key: "missing", label: "Missing Reports", value: "2" },
+  { key: "memo", label: "Program Health Memo", value: "READY" },
+];
+
+const EXPORT_ITEMS = [
+  { label: "Board Brief", value: "92%" },
+  { label: "Grant Narrative", value: "PASS" },
+  { label: "Donor Summary", value: "ACTIVE" },
+  { label: "Public Impact Snapshot", value: "" },
+  { label: "Program Health Memo", value: "" },
+];
+
+
+
+function buildAIInsight(entity, county) {
+  if (!entity) {
+    return {
+      changedText: "No active entity selected.",
+      whyPoints: ["Select a county or action to activate the decision engine."],
+      nextMoveText: "Select a case or trigger an action to begin.",
+    };
+  }
+
+  const countyName =
+    typeof county === "string"
+      ? county
+      : county?.name || "Unknown County";
+
+  return {
+    changedText: `${countyName} is showing increased activity after recent system updates and decision actions.`,
+    whyPoints: [
+      "Outcome verification improved system confidence.",
+      "Funding readiness signals have increased.",
+      "Program alignment is strengthening across services."
+    ],
+    nextMoveText: `Advance ${countyName} into execution by confirming reports and preparing funding actions.`,
+  };
+}
+
+
+const WHEEL_SEGMENTS = [
+  { label: "Outcome Verification", value: "18%", tone: "seg-1" },
+  { label: "Funding", value: "17%", tone: "seg-2" },
+  { label: "Funding", value: "17%", tone: "seg-3" },
+  { label: "Funding", value: "10%", tone: "seg-4" },
+  { label: "Community Impact", value: "9%", tone: "seg-5" },
+  { label: "Community Impact", value: "9%", tone: "seg-6" },
+  { label: "Community Impact", value: "10%", tone: "seg-7" },
+  { label: "Funding Engine", value: "11%", tone: "seg-8" },
+  { label: "Reporting", value: "10%", tone: "seg-9" },
+  { label: "Governance", value: "10%", tone: "seg-10" },
+  { label: "Outcome Verification", value: "14%", tone: "seg-11" },
+];
+
+function DetailDrawer({ selected, onClose }) {
+  const [simulation, setSimulation] = useState(null);
+  const [simLoading, setSimLoading] = useState(false);
+  const [simError, setSimError] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function runSimulation() {
+      if (!selected?.simulationScenario) {
+        setSimulation(null);
+        setSimError("");
+        return;
+      }
+
+      setSimLoading(true);
+      setSimError("");
+
+      try {
+        const res = await fetch("http://127.0.0.1:8090/simulate-outcome", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            case: selected.simulationScenario?.case || "emily",
+            region: selected.simulationScenario?.region || "Unknown region",
+            issue: selected.simulationScenario?.issue || "Outcome risk + intervention flow",
+            priority: selected.simulationScenario?.priority || "MEDIUM",
+          }),
+        });
+
+        if (!res.ok) {
+          throw new Error(`Simulation HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+        if (!cancelled) setSimulation(data);
+      } catch (err) {
+        if (!cancelled) {
+          setSimulation(null);
+          setSimError(String(err.message || err));
+        }
+      } finally {
+        if (!cancelled) setSimLoading(false);
+      }
+    }
+
+    if (selected) {
+      runSimulation();
+    } else {
+      setSimulation(null);
+      setSimError("");
+      setSimLoading(false);
+    }
+return () => {
+      cancelled = true;
+    };
+  }, [selected]);
+
+  if (!selected) return null;
+
+  const metrics = Array.isArray(selected.metrics) ? selected.metrics : [];
+  const actions = Array.isArray(selected.actions) ? selected.actions : [];
+  const reasonSignals = selected.reasonSignals || [];
+
+  const priorityMetric = selected.priority;
+  const confidenceMetric = selected.confidence;
+
+  function pct(value) {
+    if (value === null || value === undefined || Number.isNaN(Number(value))) return "—";
+
+    const num = Number(value);
+
+    if (num > 1) return `${Math.round(num)}%`;
+    return `${Math.round(num * 100)}%`;
+  }
+return (
+    <div className="shf-detail-drawer__backdrop" onClick={onClose}>
+      <aside
+        className="shf-detail-drawer shf-detail-drawer--command"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="shf-detail-drawer__header">
+          <div style={{
+            marginBottom: 8,
+            fontSize: 11,
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+            color: "rgba(121,104,90,0.82)",
+            fontWeight: 700
+          }}>
+            DRAWER PACKET
+          </div>
+          <div>
+            <div className="shf-detail-drawer__eyebrow">COMMAND DETAIL</div>
+            <h2>{selected.title || "AI Recommended Action"}</h2>
+          </div>
+
+          <button
+            type="button"
+            className="shf-detail-drawer__close"
+            onClick={onClose}
+            aria-label="Close drawer"
+          >
+            ×
+          </button>
+        </div>
+
+        <div className="shf-drawer-command-hero">
+          <div className="shf-drawer-command-hero__topline">
+            <span className="shf-command-chip">SYSTEM RECOMMENDS</span>
+            <span className="shf-command-urgency">{selected.urgency}</span>
+          </div>
+
+          <h3>{selected.summary}</h3>
+
+          <div className="shf-drawer-command-hero__metrics">
+            <div className="shf-drawer-command-hero__metric">
+              <span>Priority</span>
+              <strong>{priorityMetric}</strong>
+            </div>
+
+            <div className="shf-drawer-command-hero__metric">
+              <span>Confidence</span>
+              <strong>{confidenceMetric}</strong>
+            </div>
+          </div>
+        </div>
+
+        {selected.simulationScenario ? (
+          <div className="shf-sim-input-summary">
+            <span>Simulation Input</span>
+            <strong>{selected.simulationScenario.county || "Unknown County"}</strong>
+            <em>
+              {selected.simulationScenario.program || "general_program"} • {selected.simulationScenario.region || "Unknown region"} • {selected.simulationScenario.priority || "MEDIUM"}
+            </em>
+          </div>
+        ) : null}
+
+        <div className="shf-detail-drawer__section">
+          <div className="shf-detail-drawer__section-title">WHY THIS ACTION WAS SELECTED</div>
+
+          {reasonSignals.length ? (
+            <ul className="shf-detail-drawer__list">
+              {reasonSignals.map((r) => (
+                <li key={r}>{r}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>
+              This action ranks highest due to risk pressure, outcome improvement potential,
+              and projected funding impact.
+            </p>
+          )}
+        </div>
+
+        {metrics.length ? (
+          <div className="shf-detail-drawer__section">
+            <div className="shf-detail-drawer__section-title">KEY METRICS</div>
+            <div className="shf-detail-drawer__metric-grid">
+              {metrics.map((metric) => (
+                <div key={metric.label} className="shf-detail-drawer__metric-card">
+                  <span>{metric.label}</span>
+                  <strong>{metric.value}</strong>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        <div className="shf-detail-drawer__section">
+          <div className="shf-detail-drawer__section-title">SIMULATION OUTPUT</div>
+
+          {simLoading ? (
+            <div className="shf-sim-loading">Running simulation...</div>
+          ) : simError ? (
+            <div className="shf-sim-error">Simulation unavailable: {simError}</div>
+          ) : simulation ? (
+            <>
+              <div className="shf-detail-drawer__metric-grid">
+                <div className="shf-detail-drawer__metric-card">
+                  <span>Risk Now</span>
+                  <strong>{pct(simulation.output?.riskNow)}</strong>
+                </div>
+                <div className="shf-detail-drawer__metric-card">
+                  <span>Risk If Action</span>
+                  <strong>{pct(simulation.output?.riskIfAction)}</strong>
+                </div>
+                <div className="shf-detail-drawer__metric-card">
+                  <span>Risk If No Action</span>
+                  <strong>{pct(simulation.output?.riskIfNoAction)}</strong>
+                </div>
+                <div className="shf-detail-drawer__metric-card">
+                  <span>Confidence</span>
+                  <strong>{pct((simulation.output?.ai?.confidence ?? 0) / 100)}</strong>
+                </div>
+                <div className="shf-detail-drawer__metric-card">
+                  <span>Funding If Action</span>
+                  <strong>{simulation.output?.fundingIfAction ?? "—"}</strong>
+                </div>
+                <div className="shf-detail-drawer__metric-card">
+                  <span>Funding If No Action</span>
+                  <strong>{simulation.output?.fundingIfNoAction ?? "—"}</strong>
+                </div>
+              </div>
+
+              <div className="shf-delta-grid">
+                <div className="shf-delta-card shf-delta-card--positive">
+                  <span>Risk Reduction</span>
+                  <strong>
+                    {simulation.output?.riskNow != null && simulation.output?.riskIfAction != null
+                      ? `${Math.max(0, Math.round(simulation.output.riskNow - simulation.output.riskIfAction))}%`
+                      : "—"}
+                  </strong>
+                </div>
+
+                <div className="shf-delta-card shf-delta-card--negative">
+                  <span>Risk Increase if No Action</span>
+                  <strong>
+                    {simulation.output?.riskNow != null && simulation.output?.riskIfNoAction != null
+                      ? `${Math.max(0, Math.round(simulation.output.riskIfNoAction - simulation.output.riskNow))}%`
+                      : "—"}
+                  </strong>
+                </div>
+
+                <div className="shf-delta-card">
+                  <span>Recommended Strategy</span>
+                  <strong>{simulation.output?.ai?.game_theory?.recommended_strategy ?? "—"}</strong>
+                </div>
+
+                <div className="shf-delta-card">
+                  <span>Time Sensitivity</span>
+                  <strong>{simulation.output?.ai?.time_sensitivity ?? simulation.output?.urgency ?? "—"}</strong>
+                </div>
+              </div>
+            </>
+          ) : (
+            <p>No simulation data available.</p>
+          )}
+        </div>
+
+        {actions.length ? (
+          <div className="shf-detail-drawer__section">
+            <div className="shf-detail-drawer__section-title">EXECUTION STEPS</div>
+            <ul className="shf-detail-drawer__list">
+              {actions.map((action) => (
+                <li key={action}>{action}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        <div className="shf-detail-drawer__section shf-detail-drawer__section--next">
+          <div className="shf-detail-drawer__section-title">NEXT MOVE AFTER EXECUTION</div>
+          <p>
+            Next likely outcome: <strong>{selected.nextOutcome}</strong>. System will re-evaluate the affected record, compare outcome performance against funding allocation, adjust intervention strategy, and issue the next optimized recommendation cycle.
+          </p>
+        </div>
+      </aside>
+    </div>
+  );
+}
+
+
+function normalizeCountyName(name = "") {
+  return String(name).replace(/\s+County$/i, "").trim().toLowerCase();
+}
+
+
+function buildDrawerPayload({
+  title = "Command Detail",
+  summary = "No summary provided.",
+  metrics = [],
+  actions = [],
+  reason = "No command rationale provided.",
+  priority = "Monitor",
+  confidence = "—",
+  nextOutcome = "REVIEWED",
+  simulationScenario = null,
+  reasonSignals = [],
+}) {
+  return {
+    title,
+    summary,
+    metrics: Array.isArray(metrics) ? metrics : [],
+    actions: Array.isArray(actions) ? actions : [],
+    reason,
+    priority,
+    confidence,
+    nextOutcome,
+    simulationScenario,
+    reasonSignals: Array.isArray(reasonSignals) ? reasonSignals : [],
+  };
+}
+
+function buildCountyFallback(county) {
+  const rawName =
+    county?.name ||
+    county?.county ||
+    county?.label ||
+    county?.properties?.name ||
+    county?.properties?.NAME ||
+    "Unknown County";
+
+  const properName = /county$/i.test(rawName) ? rawName : `${rawName} County`;
+
+  return {
+    id: normalizeCountyName(properName).replace(/\s+/g, "-"),
+    name: properName,
+    x: county?.x ?? 50,
+    y: county?.y ?? 50,
+    shade: county?.shade ?? "low",
+    programs: county?.programs ?? 1,
+    people: county?.people ?? "—",
+    funding: county?.funding ?? "—",
+    topOutcome: county?.topOutcome ?? "—",
+    risk: county?.risk ?? "Stable",
+  };
+}
+
+function resolveCountyRecord(county, counties) {
+  const rawName =
+    county?.name ||
+    county?.county ||
+    county?.label ||
+    county?.properties?.name ||
+    county?.properties?.NAME ||
+    county ||
+    "";
+
+  const clickedNorm = normalizeCountyName(rawName);
+
+  const found = counties.find((item) => {
+return (
+      normalizeCountyName(item.name) === clickedNorm ||
+      String(item.id || "").toLowerCase() === clickedNorm
+    );
+  });
+
+  return found || buildCountyFallback(county);
+}
+
+
+
+export default function SHFImpactCommandCenter() {
+  // DAY 7 STABILITY CHECKPOINT: core command surface normalized through Days 1–7.
+  const { selectedEntityId, lastEntityAction, selectedEntity } = useSelectedEntity();
+
+  const [selected, setSelected] = useState(null);
+  
+  const [lastCountyClick, setLastCountyClick] = useState(null);
+  const [lastDrawerTitle, setLastDrawerTitle] = useState(null);
+const [selfAudit, setSelfAudit] = useState(null);
+  const [selfAuditBrief, setSelfAuditBrief] = useState(null);
+  const [selfAuditLoading, setSelfAuditLoading] = useState(false);
+  const [selfAuditError, setSelfAuditError] = useState("");
+
+  const selectedCounty = useMemo(() => {
+    return resolveCountyFromEntity(selectedEntity);
+  }, [selectedEntity]);
+
+  const aiInsight = useMemo(() => {
+    return buildAIInsight(selectedEntity, selectedCounty);
+  }, [selectedEntity, selectedCounty]);
+
+
+  const selectedCountyRecord = useMemo(() => {
+    if (!selectedCounty) return null;
+    return resolveCountyRecord(selectedCounty, COUNTIES);
+  }, [selectedCounty]);
+
+
+  const countyActions = useMemo(() => {
+    return getActionsForCounty(selectedCountyRecord || selectedCounty);
+  }, [selectedCountyRecord, selectedCounty]);
+
+
+  const oracleStatusLabel = useMemo(() => {
+    if (oracleLoading) return "ORACLE SYNCING";
+    if (oracleError) return "ORACLE FALLBACK MODE";
+    if (oracleBundle?.truth || oracleBundle?.compare || oracleBundle?.priority) {
+      return "ORACLE ACTIVE";
+    }
+    return "SYSTEM READY";
+  }, [oracleLoading, oracleError, oracleBundle]);
+
+
+  const surfaceReady = useMemo(() => {
+    return Boolean(
+      selectedEntityId !== undefined &&
+      selectedCounty !== undefined &&
+      aiInsight &&
+      countyActions
+    );
+  }, [selectedEntityId, selectedCounty, aiInsight, countyActions]);
+
+
+  const aiDisplayInsight = useMemo(() => {
+    const countyName =
+      selectedCountyRecord?.name ||
+      selectedCounty ||
+      "Unknown County";
+
+    return {
+      changedText: `${aiInsight.changedText} Current county context: ${countyName}.`,
+      whyPoints: [
+        ...aiInsight.whyPoints,
+        `Map context is currently bound to ${countyName}.`,
+      ],
+      nextMoveText: aiInsight.nextMoveText,
+    };
+  }, [aiInsight, selectedCountyRecord, selectedCounty]);
+
+  const trendPoints = useMemo(() => {
+    return [8, 12, 10, 14, 18, 16, 20, 24, 22, 28, 26, 30, 34, 33, 38, 42];
+  }, []);
+
+  const loadSelfAudit = useCallback(async () => {
+    setSelfAuditLoading(true);
+    setSelfAuditError("");
+    try {
+      const [latest, brief] = await Promise.all([
+        fetchSelfAuditLatest(),
+        fetchSelfAuditLatestBrief().catch(() => null),
+      ]);
+      setSelfAudit(latest);
+      setSelfAuditBrief(brief);
+    } catch (err) {
+      setSelfAuditError(err?.message || "Unable to load self-audit");
+    } finally {
+      setSelfAuditLoading(false);
+    }
+  }, []);
+
+  const handleRunSelfAudit = useCallback(async () => {
+    setSelfAuditLoading(true);
+    setSelfAuditError("");
+    try {
+      const latest = await runSelfAuditNow();
+      setSelfAudit(latest);
+      try {
+        const brief = await fetchSelfAuditLatestBrief();
+        setSelfAuditBrief(brief);
+      } catch {
+        // keep audit payload even if brief fetch lags
+      }
+    } catch (err) {
+      setSelfAuditError(err?.message || "Unable to run self-audit");
+    } finally {
+      setSelfAuditLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadSelfAudit();
+  }, [loadSelfAudit]);
+
+  const selfAuditStatus = selfAudit?.status || "unknown";
+  const selfAuditScore = selfAudit?.scores?.institutional_integrity ?? "—";
+  const selfAuditTopChange =
+    selfAudit?.changes_since_prior?.[0]?.message || "No recent changes recorded.";
+  const selfAuditTopAction =
+    selfAudit?.recommended_actions?.[0]?.message || "No action needed.";
+
+  const openDrawer = (payload) => {
+    const normalized = buildDrawerPayload(payload || {});
+    setLastDrawerTitle(normalized.title || null);
+    setSelected(normalized);
+  };
+
+  const onKpiClick = (kpi) => {
+    openDrawer({
+      title: kpi.label,
+      summary: `${kpi.label} is being tracked at the institutional layer for SHF command visibility.`,
+      metrics: [
+        { label: "Current Value", value: kpi.value },
+        { label: "Change", value: kpi.delta || "—" },
+        { label: "Context", value: kpi.sublabel || "System Wide" },
+      ],
+      actions: [
+        "Review trend context",
+        "Compare to previous cycle",
+        "Include in export brief",
+      ],
+      reason: "KPI movement helps operators understand funding pressure, outcome momentum, and institutional readiness.",
+      priority: "Monitor",
+      confidence: "—",
+      nextOutcome: "REVIEWED",
+    });
+  };
+
+  const onCountyClick = (county) => {
+    const resolvedCounty = resolveCountyRecord(county, COUNTIES);
+    setLastCountyClick(resolvedCounty.name);
+
+    openDrawer({
+      title: resolvedCounty.name,
+      summary: `${resolvedCounty.name} is the active SHF command region for simulation context, measurable program activity, and funding movement.`,
+      metrics: [
+        { label: "Programs Active", value: String(resolvedCounty.programs) },
+        { label: "People Served", value: resolvedCounty.people },
+        { label: "Funding Deployed", value: resolvedCounty.funding },
+        { label: "Top Outcome", value: resolvedCounty.topOutcome },
+        { label: "Risk Signal", value: resolvedCounty.risk },
+      ],
+      actions: [
+        `Open ${resolvedCounty.name} profile`,
+        `Review ${resolvedCounty.name} operators`,
+        `Generate ${resolvedCounty.name} brief`,
+      ],
+      reason: "County drilldowns help leadership see where to expand, intervene, verify, or report.",
+      priority: resolvedCounty.risk === "Watch" ? "High" : "Monitor",
+      confidence: "—",
+      nextOutcome: "REVIEWED",
+      reasonSignals: [
+        `${resolvedCounty.name} selected from map surface`,
+        `County programs: ${resolvedCounty.programs}`,
+        `County funding: ${resolvedCounty.funding}`,
+      ],
+    });
+  };
+
+  const onProgramClick = (program) => {
+    openDrawer({
+      title: program.name,
+      summary: program.note,
+      metrics: [
+        { label: "Status", value: program.status },
+        { label: "Locations", value: String(program.locations) },
+        { label: "Funding", value: program.funding },
+        { label: "Trend", value: program.trend },
+        { label: "Risk", value: program.risk },
+        { label: "Served", value: program.served },
+      ],
+      actions: [
+        "Open program command view",
+        "Generate donor brief",
+        "Review reporting completeness",
+      ],
+      reason: "Program health drives expansion, intervention, and funding narrative quality.",
+      priority: program.risk === "Low" ? "Monitor" : "High",
+      confidence: "—",
+      nextOutcome: "REVIEWED",
+    });
+  };
+
+  const onAiActionClick = (action) => {
+    const currentCounty = selectedCountyRecord || selectedCounty;
+    const payload = buildAiActionPayload(action, currentCounty);
+    setSelected(payload);
+  };
+
+  const onTrustClick = (item) => {
+    openDrawer({
+      title: item.label,
+      summary: `${item.label} is part of the SHF proof and trust layer.`,
+      metrics: [
+        { label: "Status", value: item.value },
+        { label: "Last Refresh", value: "Today" },
+      ],
+      actions: [
+        "Open verification detail",
+        "Review exceptions",
+        "Generate trust memo",
+      ],
+      reason: "This layer separates SHF from ordinary dashboards by proving integrity, not just claiming it.",
+      priority: "Monitor",
+      confidence: "—",
+      nextOutcome: "REVIEWED",
+    });
+  };
+
+  const onImpactOverviewClick = () => {
+    openDrawer({
+      title: "Impact Overview Wheel",
+      summary: "The outcome wheel visualizes the SHF operating balance across verification, funding, reporting, governance, and community impact.",
+      metrics: WHEEL_SEGMENTS.map((seg) => ({ label: seg.label, value: seg.value })),
+      actions: [
+        "Open segment breakdown",
+        "Compare weighting model",
+        "Generate strategic summary",
+      ],
+      reason: "This signature visual helps leadership understand how the institutional ecosystem is weighted and performing.",
+      priority: "Monitor",
+      confidence: "—",
+      nextOutcome: "REVIEWED",
+    });
+  };
+
+  const onExportClick = (item) => {
+    openDrawer({
+      title: item.label,
+      summary: `${item.label} can be generated from the command center export system.`,
+      metrics: [
+        { label: "Status", value: item.value || "Available" },
+        {
+          label: "Format",
+          value: item.label.includes("Snapshot") ? "PDF / Share" : "PDF",
+        },
+      ],
+      actions: ["Generate now", "Preview content", "Send to leadership"],
+      reason: "Exports turn command-center intelligence into board, donor, and grant-ready materials.",
+      priority: "Monitor",
+      confidence: "—",
+      nextOutcome: "REVIEWED",
+    });
+  };
+
+  return (
+    <div className="shf-page">
+      <div className="shf-shell">
+        <header className="shf-topbar">
+          <div className="shf-brand">
+            <div className="shf-brand__mark">
+              <span className="shf-brand__mark-top" />
+              <span className="shf-brand__mark-bottom" />
+            </div>
+            <div className="shf-brand__text">Silicon Heartland</div>
+            <div className="shf-brand__divider" />
+            <h1>SHF Impact Command Center</h1>
+          </div>
+
+          <div className="shf-topbar__controls">
+            <select className="shf-select" defaultValue="reporting">
+              <option value="reporting">Reporting Period</option>
+              <option>Last 30 Days</option>
+              <option>Last 90 Days</option>
+              <option>Last 12 Months</option>
+            </select>
+
+            <select className="shf-select" defaultValue="ohio">
+              <option value="ohio">Ohio : Statewide</option>
+              <option>Franklin County</option>
+              <option>Cuyahoga County</option>
+              <option>Hamilton County</option>
+            </select>
+
+            <button
+              className="shf-export-btn"
+              type="button"
+              onClick={() =>
+                openDrawer({
+                  title: "Export Report",
+                  summary: "Generate executive, donor, grant, and public-facing report outputs from this command surface.",
+                  metrics: [
+                    { label: "Exports Ready", value: "5" },
+                    { label: "PDF Engine", value: "Connected" },
+                  ],
+                  actions: [
+                    "Generate Executive Brief",
+                    "Generate Donor Summary",
+                    "Generate Grant Narrative",
+                  ],
+                  reason: "This is where command-center insight becomes a real funding and reporting asset.",
+                })
+              }
+            >
+              Export Report
+            </button>
+          </div>
+        </header>
+
+        <ImpactKpiBand kpis={KPIS} onKpiClick={onKpiClick} />
+
+
+        <div className="shf-command-debug-strip" style={{
+          margin: "12px 0 0",
+          padding: "10px 14px",
+          borderRadius: 12,
+          border: "1px solid rgba(145,118,92,0.24)",
+          background: "rgba(255,255,255,0.45)",
+          color: "rgba(47,38,33,0.88)",
+          fontSize: 13,
+          fontWeight: 600
+        }}>
+          STATE CHAIN • entity: {selectedEntityId || "none"} • county: {selectedCounty || "none"}
+        </div>
+
+
+        <div className="shf-day4-sanity-strip shf-system-status-bar">
+          <div><strong>SURFACE:</strong> SHF Command Center</div>
+          <div><strong>ENTITY:</strong> {selectedEntityId || "none"}</div>
+          <div><strong>COUNTY:</strong> {selectedCountyRecord?.name || selectedCounty || "none"}</div>
+          <div><strong>ORACLE:</strong> {oracleStatusLabel}</div>
+          <div><strong>LAST MAP:</strong> {lastCountyClick || "none"}</div>
+          <div><strong>LAST DRAWER:</strong> {lastDrawerTitle || "none"}</div>
+          <div><strong>READY:</strong> {surfaceReady ? "YES" : "NO"}</div>
+          <div><strong>READY:</strong> {surfaceReady ? "YES" : "NO"}</div>
+        </div>
+
+        <main className="shf-main-grid">
+          <section className="shf-left-col">
+            <div className="shf-panel shf-map-panel">
+              <div className="shf-panel__header">
+                <h2>Ohio Impact</h2>
+                <button type="button" className="shf-mini-filter">
+                  STATEWIDE
+                </button>
+              </div>
+
+              <div className="shf-map-stage shf-map-stage--real">
+                <SHFImpactOhioMap
+                  selectedCounty={selectedCounty}
+                  onCountyClick={onCountyClick}
+                />
+              </div>
+            </div>
+
+            <div className="shf-panel shf-program-table-panel">
+              <div className="shf-panel__header">
+                <h2>Program Health</h2>
+                <div className="shf-table-filters">
+                  <button type="button" className="shf-mini-filter">STAGE</button>
+                  <button type="button" className="shf-mini-filter">LOCATIONS</button>
+                  <button type="button" className="shf-mini-filter">FUNDING</button>
+                </div>
+              </div>
+
+              <div className="shf-program-table">
+                {PROGRAMS.map((program) => (
+                  <button
+                    key={program.id}
+                    type="button"
+                    className="shf-program-row"
+                    onClick={() => onProgramClick(program)}
+                  >
+                    <div className="shf-program-row__name">
+                      <strong>{program.name}</strong>
+                      <span>{program.served} served</span>
+                    </div>
+
+                    <div className={`shf-status-pill shf-status-pill--${program.status.toLowerCase().replace(/\s+/g, "-")}`}>
+                      {program.status}
+                    </div>
+
+                    <div className="shf-program-row__metric">
+                      <span>Locations</span>
+                      <strong>{program.locations}</strong>
+                    </div>
+
+                    <div className="shf-program-row__metric">
+                      <span>Funding</span>
+                      <strong>{program.funding}</strong>
+                    </div>
+
+                    <div className="shf-program-row__metric">
+                      <span>Trend</span>
+                      <strong>{program.trend}</strong>
+                    </div>
+
+                    <div className="shf-program-row__metric shf-program-row__metric--risk">
+                      <span>Risk Level</span>
+                      <strong>{program.risk}</strong>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section className="shf-middle-col">
+            <ImpactOverviewWheelPanel
+              wheelSegments={WHEEL_SEGMENTS}
+              trendPoints={trendPoints}
+              onWheelClick={onImpactOverviewClick}
+            />
+
+            <ReportsBriefingsPanel
+              items={EXPORT_ITEMS}
+              onExportClick={onExportClick}
+            />
+
+            <section className="shf-self-audit-card">
+              <div className="shf-self-audit-card__header">
+                <div>
+                  <div className="shf-self-audit-card__eyebrow">Institutional Self-Audit Control</div>
+                  <h3 className="shf-self-audit-card__title">Daily Integrity Cycle</h3>
+                </div>
+                <div className={`shf-self-audit-card__status shf-self-audit-card__status--${selfAuditStatus}`}>
+                  {selfAuditStatus}
+                </div>
+              </div>
+
+              <div className="shf-self-audit-card__scoreband">
+                <div className="shf-self-audit-card__score">
+                  <span className="shf-self-audit-card__score-value">{selfAuditScore}</span>
+                  <span className="shf-self-audit-card__score-label">Institutional Integrity</span>
+                </div>
+                <div className="shf-self-audit-card__meta">
+                  <div><span>Last Run</span><strong>{formatAuditDate(selfAudit?.metadata?.last_run_at || selfAudit?.timestamp)}</strong></div>
+                  <div><span>Next Run</span><strong>{formatAuditDate(selfAudit?.metadata?.next_scheduled_run)}</strong></div>
+                </div>
+              </div>
+
+              {selfAuditError ? (
+                <div className="shf-self-audit-card__error">{selfAuditError}</div>
+              ) : null}
+
+              <div className="shf-self-audit-card__body">
+                <div className="shf-self-audit-card__section">
+                  <div className="shf-self-audit-card__section-label">Top Change</div>
+                  <div className="shf-self-audit-card__section-text">{selfAuditTopChange}</div>
+                </div>
+
+                <div className="shf-self-audit-card__section">
+                  <div className="shf-self-audit-card__section-label">Recommended Action</div>
+                  <div className="shf-self-audit-card__section-text">{selfAuditTopAction}</div>
+                </div>
+
+                <div className="shf-self-audit-card__section">
+                  <div className="shf-self-audit-card__section-label">Executive Summary</div>
+                  <div className="shf-self-audit-card__section-text">
+                    {selfAuditBrief?.executive_summary || "Brief not available yet."}
+                  </div>
+                </div>
+              </div>
+
+              <div className="shf-self-audit-card__actions">
+                <button
+                  type="button"
+                  className="shf-self-audit-card__button shf-self-audit-card__button--primary"
+                  onClick={handleRunSelfAudit}
+                  disabled={selfAuditLoading}
+                >
+                  {selfAuditLoading ? "Running..." : "Run Audit Now"}
+                </button>
+
+                <button
+                  type="button"
+                  className="shf-self-audit-card__button shf-self-audit-card__button--secondary"
+                  onClick={loadSelfAudit}
+                  disabled={selfAuditLoading}
+                >
+                  Refresh
+                </button>
+              </div>
+            </section>
+          </section>
+
+          <aside className="shf-right-col">
+            <AIAnalystPanel
+              changedText={aiDisplayInsight.changedText}
+              whyPoints={aiDisplayInsight.whyPoints}
+              nextMoveText={aiDisplayInsight.nextMoveText}
+              onAction={() => onAiActionClick(aiInsight.nextMoveText)}
+              headerExtra={
+                <div className="shf-ai-live-signal">
+                  <span className="shf-ai-live-dot" />
+                  <span className="shf-ai-live-text">
+                    {selectedEntityId
+                      ? `${oracleStatusLabel} • ${selectedEntityId}${lastEntityAction ? ` • ${lastEntityAction.action}` : ""}`
+                      : oracleStatusLabel}
+                  </span>
+                </div>
+              }
+            />
+
+            <TrustVerificationPanel
+              items={TRUST_ITEMS}
+              onTrustClick={onTrustClick}
+            />
+          </aside>
+        </main>
+      </div>
+
+      <DetailDrawer selected={selected} onClose={() => setSelected(null)} />
+    </div>
+  );
+}
+

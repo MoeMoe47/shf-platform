@@ -1,0 +1,70 @@
+{
+  "id": "asl-37",
+  "title": "ASL 5.1 — Deaf Culture Basics 👐🌍",
+  "estMinutes": 25,
+  "objectives": [
+    "Identify key concepts in Deaf culture (COMMUNITY, DEAF-WORLD, IDENTITY)",
+    "Introduce cultural vocabulary (DEAF, HARD-OF-HEARING, HEARING, CODA)",
+    "Recognize the difference between medical and cultural models of deafness"
+  ],
+  "vocab": [
+    { "term": "DEAF", "def": "Index finger from ear to mouth; identity, not just condition." },
+    { "term": "HARD-OF-HEARING", "def": "H-hand makes small hops along midline." },
+    { "term": "HEARING", "def": "Index finger circles in front of lips; describes hearing people." },
+    { "term": "CODA", "def": "Child of Deaf Adults (usually fingerspelled)." },
+    { "term": "DEAF-WORLD / COMMUNITY", "def": "Shared language, values, traditions of Deaf people." },
+    { "term": "IDENTITY", "def": "Relating to self and group membership." }
+  ],
+  "sections": [
+    {
+      "heading": "Warm-Up: Culture Words",
+      "media": { "src": "/media/asl/unit-5/culture-terms.png", "alt": "DEAF, HARD-OF-HEARING, HEARING signs", "caption": "Compare movements" },
+      "body": "Drill **DEAF, HARD-OF-HEARING, HEARING** slowly. Focus on meaning difference — not just sign shape.",
+      "microCheck": {
+        "q": "Which sign means cultural community, not just a medical condition?",
+        "options": ["HEARING", "DEAF", "CODA", "IDENTITY"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Model: Cultural vs. Medical View",
+      "media": { "src": "/media/asl/unit-5/culture-vs-medical.mp4", "alt": "Comparison chart ASL vs. speech-only", "caption": "Culture-first model" },
+      "body": "Medical model = problem/deficit. Cultural model = identity/language. Example: **DEAF PROUD COMMUNITY.**"
+    },
+    {
+      "heading": "Community & Identity",
+      "media": { "src": "/media/asl/unit-5/community.png", "alt": "Group signing", "caption": "DEAF-WORLD" },
+      "body": "Signs: **COMMUNITY, DEAF-WORLD, IDENTITY**. Practice in short clauses:\n• **DEAF COMMUNITY STRONG.**\n• **I DEAF IDENTITY PROUD.**",
+      "microCheck": {
+        "q": "Best gloss for community pride?",
+        "options": ["DEAF COMMUNITY STRONG", "I HEARING", "HEARING TALK", "SAME SAME"],
+        "answerIndex": 0
+      }
+    },
+    {
+      "heading": "Partner Practice: Introductions",
+      "body": "Introduce with cultural lens: **I DEAF.** or **I CODA.** Add: **I LEARN ASL CONNECT COMMUNITY.** Swap turns."
+    },
+    {
+      "heading": "Mini-Showcase",
+      "body": "Record **10–15s**: introduce yourself, then explain why Deaf culture is important. Example: **I HEARING, LEARN ASL, WANT CONNECT DEAF-WORLD.**"
+    }
+  ],
+  "quiz": {
+    "title": "ASL 5.1 — Deaf Culture Basics Quiz",
+    "items": [
+      { "type": "mcq", "q": "Which model sees deafness as identity and culture?", "options": ["Medical", "Cultural", "Random", "Neither"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Correct gloss for community pride:", "options": ["DEAF COMMUNITY STRONG", "HEARING TALK", "I HEARING", "SAME SAME"], "answerIndex": 0 },
+      { "type": "short", "q": "Write a gloss for: I am hearing, I learn ASL, I want connect Deaf community." },
+      { "type": "reflection", "prompt": "What does Deaf culture add beyond language? How does it shape identity?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Post a clip: introduce yourself with cultural lens (DEAF, HOH, HEARING, CODA) and one sentence about community.",
+  "summary": "You explored Deaf culture basics: DEAF, HOH, HEARING, CODA, COMMUNITY, IDENTITY. You contrasted medical vs cultural models and connected to community pride.",
+  "nextSlug": "asl-38",
+  "games": [
+    { "id": "culture-match", "title": "Culture Match", "route": "/arcade/asl/culture-match", "estMinutes": 5, "xp": 50, "outcomes": ["Vocabulary recognition"] },
+    { "id": "identity-path", "title": "Identity Path", "route": "/arcade/asl/identity-path", "estMinutes": 5, "xp": 50, "outcomes": ["Practice community statements"] }
+  ]
+}

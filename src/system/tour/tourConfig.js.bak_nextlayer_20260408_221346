@@ -1,0 +1,58 @@
+export const tourSteps = [
+  {
+    id: "kpis",
+    target: "[data-tour='kpis']",
+    placement: "bottom",
+    title: "System Pulse",
+    content: {
+      primary:
+        "These KPIs give a quick read on the foundation’s scale, verified impact, funding movement, and current state.",
+      why:
+        "This is the fastest way to understand whether the system is healthy before going deeper.",
+      action:
+        "Next, move into the main body of the command center.",
+    },
+  },
+  {
+    id: "programs-panel",
+    target: ".shf-program-table-panel",
+    placement: "top",
+    title: "Program Performance Panel",
+    content: {
+      primary:
+        "This panel is where side-by-side operational comparison begins.",
+      why:
+        "This section helps leadership and funders evaluate where performance is strong and where intervention may be needed.",
+      action:
+        "Now inspect the program table itself.",
+    },
+  },
+  {
+    id: "programs-table",
+    target: ".shf-program-table",
+    placement: "top",
+    title: "Program Table",
+    content: {
+      primary:
+        "This table compares programs directly so you can judge strength, trend, and relative importance.",
+      why:
+        "Comparison is where operational prioritization becomes possible.",
+      action:
+        "After reviewing program performance, confirm trust and proof.",
+    },
+  },
+  {
+    id: "trust",
+    target: ".shf-trust-panel",
+    placement: "top",
+    title: "Trust, Proof & Compliance",
+    content: {
+      primary:
+        "This section validates system credibility, reporting strength, and institutional trustworthiness.",
+      why:
+        "A command center becomes funder-grade when proof is visible, not implied.",
+      action:
+        "Once this is strong, decision-making can move forward with confidence.",
+    },
+  },
+];

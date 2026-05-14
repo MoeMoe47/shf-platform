@@ -1,0 +1,119 @@
+import React from "react";
+import { matchPrograms, estimateReimbursement } from "@/shared/employer/eligibility.js";
+import { salesLeadSync } from "@/shared/employer/salesBridge.js";
+import { usePersistedState } from "@/shared/usePersistedState.js";
+import { fireClaim } from "@/shared/employer/salesBridge.js";
+export default function ReimbursementCalculator({ defaultPathway = "tech" }) {
+  const [form, setForm] = usePersistedState("employer:calc", {
+    state: "OH",
+    pathway: defaultPathway,
+    wage: 16,
+    hours: 180,
+    isW2: true,
+  });
+
+  const programs = React.useMemo(() => matchPrograms({
+    state: form.state,
+    pathway: form.pathway,
+    plannedHours: form.hours,
+    isW2: form.isW2,
+  }), [form.state, form.pathway, form.hours, form.isW2]);
+
+  const lastSigRef = React.useRef("");
+  const programIds = programs.map(p => p.id).join(",");
+
+  React.useEffect(() => {
+    if (!programs.length) return;
+    const sig = `${form.state}|${form.pathway}|${form.wage}|${form.hours}|${programIds}`;
+    if (sig === lastSigRef.current) return;
+    lastSigRef.current = sig;
+
+    fireClaim({
+      kind: "employer_interest",
+      state: form.state,
+      pathway: form.pathway,
+      wage: form.wage,
+      hours: form.hours,
+      programs: programs.map(p => p.id),
+      ts: Date.now(),
+    });
+  }, [form.state, form.pathway, form.wage, form.hours, programIds, programs]);
+
+  const clampNumber = (v, min, max) => Math.max(min, Math.min(max, Number(v) || 0));
+
+  return (
+    <section className="card">
+      <h3 style={{ marginTop: 0 }}>Reimbursement Estimator</h3>
+
+      <div className="grid">
+        <label>Pathway
+          <select value={form.pathway} onChange={e => setForm(f => ({ ...f, pathway: e.target.value }))}>
+            <option value="tech">Tech</option>
+            <option value="manufacturing">Manufacturing</option>
+            <option value="health">Health</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+        <label>Wage ($/hr)
+          <input type="number" inputMode="decimal" min={0} step="0.25"
+                 value={form.wage} onChange={e => setForm(f => ({ ...f, wage: clampNumber(e.target.value, 0, 500) }))}/>
+        </label>
+        <label>Planned hours
+          <input type="number" inputMode="numeric" min={0} step="1"
+                 value={form.hours} onChange={e => setForm(f => ({ ...f, hours: clampNumber(e.target.value, 0, 2000) }))}/>
+        </label>
+        <label>W-2?
+          <input type="checkbox" checked={form.isW2}
+                 onChange={e => setForm(f => ({ ...f, isW2: e.target.checked }))}/>
+        </label>
+      </div>
+
+      <div className="prog-results" style={{ marginTop: 12 }}>
+        {!programs.length && (
+          <p>No matching programs yet — try Tech, increase hours, or enable W-2.</p>
+        )}
+        {programs.map(p => {
+          const est = estimateReimbursement({ program: p, wage: form.wage, hours: form.hours });
+          const pct = Math.round((p.reimbursementPercent || 0) * 100);
+          const capHit = p.maxPerIntern && est >= p.maxPerIntern;
+
+          return (
+            <div key={p.id} className="prog-line" style={{ padding: "8px 0" }}>
+              <div>
+                <strong>{p.name}</strong>
+                {" • "}
+                {pct ? <em>{pct}%</em> : "Training support (non-wage)"}
+                {p.maxPerIntern ? <span> • Cap ${p.maxPerIntern.toLocaleString()}</span> : null}
+                {capHit && <span className="small" style={{ marginLeft: 8 }}>• cap reached</span>}
+              </div>
+              {pct > 0 && (
+                <div className="muted">
+                  Estimated payout: <strong>${est.toLocaleString()}</strong>
+                </div>
+              )}
+              {p.notes && <div className="small muted">{p.notes}</div>}
+              <div style={{ marginTop: 6 }}>
+                <button type="button"
+                  className="btn"
+                  onClick={() =>
+                    fireClaim({
+                      kind: "start_claim",
+                      programId: p.id,
+                      state: form.state,
+                      pathway: form.pathway,
+                      wage: form.wage,
+                      hours: form.hours,
+                      ts: Date.now(),
+                    })
+                  }
+                >
+                  Start claim →
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}

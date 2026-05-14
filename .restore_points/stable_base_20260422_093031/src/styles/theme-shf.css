@@ -1,0 +1,48 @@
+
+
+/* Silicon Heartland Foundation – brand tokens
+   Tweak hex values to match your exact palette. Fallbacks keep it safe. */
+   :root{
+    --shf-bg:            #f7f1e8;   /* sand background */
+    --shf-surface:       #ffffff;   /* cards */
+    --shf-border:        #e7e1d7;   /* subtle borders */
+    --shf-text:          #111111;   /* primary text */
+    --shf-muted:         #6b655c;   /* secondary text */
+  
+    --shf-brand:         #ff6a00;   /* primary orange */
+    --shf-brand-ink:     #ffffff;
+    --shf-brand-weak:    #ffe1cc;   /* light tint for chips */
+  
+    --shf-success:       #16a34a;
+    --shf-warning:       #f59e0b;
+    --shf-danger:        #dc2626;
+    --shf-info:          #0ea5e9;
+  
+    --shf-radius:        12px;
+    --shf-radius-lg:     16px;
+    --shf-shadow:        0 1px 2px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.06);
+  }
+  
+  /* small brand utilities (non-destructive) */
+  .shf-btn {
+    display:inline-flex; align-items:center; gap:8px;
+    padding:8px 12px; border-radius:var(--shf-radius);
+    background:var(--shf-brand); color:var(--shf-brand-ink);
+    border:1px solid color-mix(in oklab, var(--shf-brand) 60%, black);
+    text-decoration:none; cursor:pointer;
+  }
+  .shf-chip {
+    display:inline-block; padding:4px 8px; border-radius:999px;
+    background:var(--shf-brand-weak); color:var(--shf-text);
+    border:1px solid var(--shf-border);
+  }
+  
+
+
+
+/* --- SHF International Orange --- */
+.btn-orange {
+  background:#FF4F00; color:#fff; border:0; border-radius:12px;
+  padding:10px 14px; font-weight:800; cursor:pointer; text-decoration:none;
+}
+.btn-orange:hover { filter: brightness(0.95); }

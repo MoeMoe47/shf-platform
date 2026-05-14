@@ -1,0 +1,317 @@
+import React from "react";
+import "./shs-blockchain-transparency.css";
+
+const transparencyCards = [
+  {
+    icon: "🔒",
+    title: "Immutable Records",
+    text: "Once anchored, records cannot be changed or deleted. History is permanent.",
+  },
+  {
+    icon: "👥",
+    title: "Independent Verification",
+    text: "Anyone with access can independently check proofs without relying on SHS.",
+  },
+  {
+    icon: "⬡",
+    title: "Tamper Resistance",
+    text: "Blockchain immutability and cryptographic hashing ensure records stay intact.",
+  },
+  {
+    icon: "🌐",
+    title: "Public-Safe Transparency",
+    text: "Share proof, not personal data. Protect privacy while proving integrity.",
+  },
+  {
+    icon: "▤",
+    title: "Audit Integrity",
+    text: "Every verified outcome has a complete, tamper-proof audit trail.",
+  },
+];
+
+const processSteps = [
+  {
+    n: "1",
+    icon: "☑",
+    title: "Outcome Verified",
+    text: "Outcomes are verified using SHS rules, evidence, and trust envelopes.",
+  },
+  {
+    n: "2",
+    icon: "✉",
+    title: "Trust Envelope Created",
+    text: "A trust envelope is created containing verification details and evidence references.",
+  },
+  {
+    n: "3",
+    icon: "⌬",
+    title: "Hash Anchored On-Chain",
+    text: "A cryptographic hash of the trust envelope is anchored to the blockchain.",
+  },
+  {
+    n: "4",
+    icon: "▣",
+    title: "Record ID Published",
+    text: "A unique record ID is published for transparent reference and lookup.",
+  },
+  {
+    n: "5",
+    icon: "👥",
+    title: "Verification Available",
+    text: "Partners, funders, and the public can verify the record anytime, anywhere.",
+  },
+];
+
+const verificationFields = [
+  ["Outcome ID", "Unique identifier for every verified result.", "▤"],
+  ["Timestamp", "Exact time of verification and anchoring.", "◷"],
+  ["Verification Status", "Pass / Fail with verification details.", "✓"],
+  ["Evidence Hash", "Secure hash of the evidence package.", "#"],
+  ["Source Lineage", "Who produced the outcome and how.", "⌬"],
+  ["Ledger Confirmation", "On-chain block and confirmation details.", "⬡"],
+];
+
+const snapshotMetrics = [
+  ["Verified Outcomes Anchored", "248,731", "+14.7% this month"],
+  ["Ledger Confirmations", "1,982,453", "+9.3% this month"],
+  ["Active Trust Envelopes", "63,284", "+8.1% this month"],
+  ["Public Checks Completed", "532,871", "+21.6% this month"],
+];
+
+const verifySteps = [
+  {
+    n: "1",
+    icon: "⌕",
+    title: "Lookup Outcome ID",
+    text: "Enter the Record ID in the SHS public verification portal or API.",
+  },
+  {
+    n: "2",
+    icon: "#",
+    title: "Check Ledger Hash",
+    text: "Compare the on-chain hash and confirmation details to ensure integrity.",
+  },
+  {
+    n: "3",
+    icon: "⬡",
+    title: "Confirm Verification Status",
+    text: "View verification status, timestamp, and source lineage. Done.",
+  },
+];
+
+function Header() {
+  return (
+    <header className="bt-header">
+      <a className="bt-brand" href="#/home" aria-label="Silicon Heartland Solutions">
+        <span className="bt-brand-main">SHS</span>
+        <span className="bt-brand-divider" />
+        <span className="bt-brand-text">
+          <strong>Silicon Heartland</strong>
+          <span>Solutions</span>
+        </span>
+      </a>
+
+      <nav className="bt-nav" aria-label="Primary navigation">
+        <a href="#/home">Solutions <span className="bt-nav-caret">⌄</span></a>
+        <a href="#/infrastructure">Infrastructure</a>
+        <a href="#/platform">Platform</a>
+        <a href="#/about/team">About</a>
+        <a href="#/resources">Resources <span className="bt-nav-caret">⌄</span></a>
+        <a href="#/contact">Contact</a>
+      </nav>
+
+      <a className="bt-demo" href="#/request-demo">Request Demo</a>
+    </header>
+  );
+}
+
+function HeroVisual() {
+  return (
+    <div className="bt-hero-visual bt-hero-image-stage" aria-hidden="true">
+      <img
+        className="bt-hero-image"
+        src="/assets/solutions/blockchain/blockchain-transparency-hero.png"
+        alt=""
+      />
+      <div className="bt-energy-pulse bt-energy-pulse-a" />
+      <div className="bt-energy-pulse bt-energy-pulse-b" />
+      <div className="bt-energy-scan" />
+    </div>
+  );
+}
+
+export default function SHSBlockchainTransparencyPage() {
+  return (
+    <main className="bt-page">
+      <Header />
+
+      <section className="bt-hero">
+        <div className="bt-hero-copy">
+          <p className="bt-eyebrow">Blockchain Transparency</p>
+          <h1 className="bt-hero-title">
+            <span className="bt-title-line">Immutable Outcomes.</span>
+            <span className="bt-title-line"><em>Verifiable</em> by Anyone.</span>
+          </h1>
+          <p className="bt-lead">
+            SHS anchors verified outcomes to a blockchain-backed ledger so records cannot be silently changed, trust can be independently checked, and every verified outcome carries a permanent proof trail.
+          </p>
+          <div className="bt-actions">
+            <a href="#/blockchain-transparency#why" className="bt-primary">Explore Transparency <span>→</span></a>
+            <a href="#/request-demo" className="bt-secondary">Request Demo</a>
+          </div>
+        </div>
+        <HeroVisual />
+      </section>
+
+      <section id="why" className="bt-section">
+        <div className="bt-section-title">
+          <span />
+          <h2>Why Blockchain Transparency Matters</h2>
+          <span />
+        </div>
+
+        <div className="bt-card-grid five">
+          {transparencyCards.map((card) => (
+            <article className="bt-info-card" key={card.title}>
+              <div className="bt-icon">{card.icon}</div>
+              <h3>{card.title}</h3>
+              <p>{card.text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="bt-section">
+        <div className="bt-section-title">
+          <span />
+          <h2>How SHS Writes Verified Outcomes to the Blockchain</h2>
+          <span />
+        </div>
+
+        <div className="bt-process">
+          {processSteps.map((step, index) => (
+            <React.Fragment key={step.title}>
+              <article className="bt-process-step">
+                <b>{step.n}</b>
+                <div className="bt-process-icon">{step.icon}</div>
+                <h3>{step.title}</h3>
+                <p>{step.text}</p>
+              </article>
+              {index < processSteps.length - 1 ? <div className="bt-arrow">→</div> : null}
+            </React.Fragment>
+          ))}
+        </div>
+      </section>
+
+      <section className="bt-dashboard-row">
+        <article className="bt-panel bt-verify-panel">
+          <h2>What Can Be Verified</h2>
+          <div className="bt-verify-grid">
+            {verificationFields.map(([title, text, icon]) => (
+              <div className="bt-mini-card" key={title}>
+                <h3>{title}</h3>
+                <p>{text}</p>
+                <i>{icon}</i>
+              </div>
+            ))}
+          </div>
+        </article>
+
+        <article className="bt-panel bt-snapshot">
+          <h2>Live Transparency Snapshot</h2>
+          <div className="bt-snapshot-grid">
+            {snapshotMetrics.map(([label, value, change]) => (
+              <div className="bt-metric" key={label}>
+                <span>{label}</span>
+                <strong>{value}</strong>
+                <small>{change}</small>
+                <em />
+              </div>
+            ))}
+          </div>
+          <div className="bt-chart-row">
+            <div className="bt-bars">
+              <span /><span /><span /><span /><span />
+            </div>
+            <div className="bt-donut">
+              <span>99.98%</span>
+            </div>
+          </div>
+          <p className="bt-snapshot-note">Audit Match Rate — Consistent over 30 days</p>
+        </article>
+      </section>
+
+      <section className="bt-lower-row">
+        <article className="bt-panel bt-privacy">
+          <h2>What Stays Private, What Becomes Verifiable</h2>
+          <div className="bt-privacy-grid">
+            <div className="bt-private">
+              <h3>🔒 Stays Private</h3>
+              <ul>
+                <li>Personal and sensitive data</li>
+                <li>Raw documents and files</li>
+                <li>Internal system details</li>
+                <li>PII and confidential records</li>
+              </ul>
+              <small>Protected by design. Never published on-chain.</small>
+            </div>
+
+            <div className="bt-divider-pill">›</div>
+
+            <div className="bt-public">
+              <h3>◎ Becomes Verifiable</h3>
+              <ul>
+                <li>Proof of verification</li>
+                <li>Timestamps</li>
+                <li>Record IDs</li>
+                <li>Hashes and confirmations</li>
+              </ul>
+              <small>Publicly checkable. No secrets exposed.</small>
+            </div>
+          </div>
+        </article>
+
+        <article className="bt-panel bt-how">
+          <h2>How to Verify an Outcome <span>→</span></h2>
+          <div className="bt-how-grid">
+            {verifySteps.map((step) => (
+              <div className="bt-how-card" key={step.title}>
+                <b>{step.n}</b>
+                <i>{step.icon}</i>
+                <h3>{step.title}</h3>
+                <p>{step.text}</p>
+              </div>
+            ))}
+          </div>
+        </article>
+      </section>
+
+      <section className="bt-cta">
+        <div className="bt-cta-icon">⬡</div>
+        <div>
+          <h2>Trust That Can Be <span>Checked.</span></h2>
+          <p>
+            SHS combines verified outcomes, trust envelopes, and blockchain anchoring so institutions can prove integrity instead of asking for blind trust.
+          </p>
+        </div>
+        <div className="bt-cta-actions">
+          <a href="#/request-demo" className="bt-primary">Request Demo <span>→</span></a>
+          <a href="#/infrastructure" className="bt-secondary">View Infrastructure <span>→</span></a>
+        </div>
+      </section>
+
+      <footer className="bt-footer">
+        <div className="bt-footer-brand">
+          <strong>SHS</strong>
+          <span>Silicon Heartland Solutions</span>
+        </div>
+        <p>Outcome Infrastructure for a More Trusted Future</p>
+        <small>© 2025 Silicon Heartland Solutions. All rights reserved.</small>
+        <nav>
+          <a href="#/privacy">Privacy Policy</a>
+          <a href="#/terms">Terms of Service</a>
+        </nav>
+      </footer>
+    </main>
+  );
+}

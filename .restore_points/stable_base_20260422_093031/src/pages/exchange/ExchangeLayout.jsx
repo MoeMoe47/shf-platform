@@ -1,0 +1,104 @@
+import React from "react";
+import { NavLink, Outlet } from "react-router-dom";
+
+const shellStyle = {
+  minHeight: "100vh",
+  display: "grid",
+  gridTemplateColumns: "286px 1fr",
+  background: "#06122b",
+  color: "#e8eefc",
+};
+
+const sidebarStyle = {
+  borderRight: "1px solid rgba(255,255,255,0.08)",
+  padding: "22px 20px",
+  background: "linear-gradient(180deg, #0a1433 0%, #09122c 100%)",
+};
+
+const mainStyle = {
+  display: "flex",
+  flexDirection: "column",
+  minWidth: 0,
+};
+
+const topbarStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  padding: "18px 26px",
+  borderBottom: "1px solid rgba(255,255,255,0.08)",
+  background: "linear-gradient(180deg, rgba(8,18,46,0.96) 0%, rgba(7,16,40,0.92) 100%)",
+};
+
+const contentStyle = {
+  flex: 1,
+  minHeight: 0,
+};
+
+const navWrapStyle = {
+  display: "flex",
+  flexDirection: "column",
+  gap: "10px",
+  marginTop: "36px",
+};
+
+const linkStyle = ({ isActive }) => ({
+  display: "block",
+  padding: "12px 14px",
+  borderRadius: "12px",
+  textDecoration: "none",
+  color: isActive ? "#ffffff" : "rgba(232,238,252,0.88)",
+  background: isActive ? "rgba(255,255,255,0.08)" : "transparent",
+  border: `1px solid ${isActive ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.04)"}`,
+  fontWeight: 700,
+});
+
+export default function ExchangeLayout() {
+  return (
+    <div style={shellStyle}>
+      <aside style={sidebarStyle}>
+        <div style={{ fontSize: 14, opacity: 0.72, marginBottom: 6 }}>
+          SHF Infrastructure
+        </div>
+        <div style={{ fontSize: 26, fontWeight: 800, lineHeight: 1.1 }}>
+          Capital Ops
+        </div>
+
+        <div style={navWrapStyle}>
+          <NavLink to="/exchange/command" style={linkStyle}>
+            Command Center
+          </NavLink>
+          <NavLink to="/exchange/operator" style={linkStyle}>
+            Operator Panel
+          </NavLink>
+          <NavLink to="/exchange/provider" style={linkStyle}>
+            Provider View
+          </NavLink>
+          <NavLink to="/exchange/investor" style={linkStyle}>
+            Investor View
+          </NavLink>
+          <NavLink to="/exchange/public" style={linkStyle}>
+            Public Transparency
+          </NavLink>
+        </div>
+      </aside>
+
+      <div style={mainStyle}>
+        <header style={topbarStyle}>
+          <div>
+            <div style={{ fontSize: 14, opacity: 0.72 }}>Infrastructure Control Plane</div>
+            <div style={{ fontSize: 22, fontWeight: 800 }}>Capital Operations</div>
+          </div>
+
+          <div style={{ fontSize: 14, opacity: 0.9 }}>
+            credits • pools • payouts • settlement • governance
+          </div>
+        </header>
+
+        <main style={contentStyle}>
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
+}

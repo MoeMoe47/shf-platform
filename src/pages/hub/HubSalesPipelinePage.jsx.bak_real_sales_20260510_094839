@@ -1,0 +1,19 @@
+import React from "react";
+import HubGrowthPlaceholder from "./HubGrowthPlaceholder.jsx";
+
+export default function HubSalesPipelinePage() {
+  return (
+    <HubGrowthPlaceholder
+      active="Sales"
+      eyebrow="SHS SALES TEAM PIPELINE"
+      title="Sales Pipeline"
+      subtitle="Track introductions, meetings, follow-ups, proposals in progress, deals influenced, relationship notes, and next best actions."
+      cards={[
+        { value: "3", label: "Introductions Made" },
+        { value: "2", label: "Meetings Scheduled" },
+        { value: "2", label: "Proposals In Progress" },
+        { value: "$235K", label: "Deals Influenced" },
+      ]}
+    />
+  );
+}

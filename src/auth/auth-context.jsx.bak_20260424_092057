@@ -1,0 +1,137 @@
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+
+const AuthContext = createContext(null);
+
+const API_BASE =
+  window.__SHS_API_BASE__ ||
+  (import.meta.env.VITE_SHS_API_BASE || "http://127.0.0.1:8091");
+
+async function safeJson(res) {
+  const text = await res.text();
+  try {
+    return text ? JSON.parse(text) : {};
+  } catch {
+    return { raw: text };
+  }
+}
+
+export function AuthProvider({ children }) {
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const [memberships, setMemberships] = useState([]);
+  const [permissions, setPermissions] = useState([]);
+  const [error, setError] = useState("");
+
+  const refreshAuth = useCallback(async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch(`${API_BASE}/auth/me`, {
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        setUser(null);
+        setMemberships([]);
+        setPermissions([]);
+        setLoading(false);
+        return;
+      }
+
+      const data = await safeJson(res);
+      setUser(data.user || null);
+      setMemberships(data.memberships || []);
+      setPermissions(data.permissions || []);
+    } catch (err) {
+      setError(err?.message || "Failed to load session.");
+      setUser(null);
+      setMemberships([]);
+      setPermissions([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    refreshAuth();
+  }, [refreshAuth]);
+
+  const login = useCallback(async ({ email, password }) => {
+    setError("");
+    const res = await fetch(`${API_BASE}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await safeJson(res);
+    if (!res.ok) {
+      throw new Error(data?.error || "Login failed.");
+    }
+    await refreshAuth();
+    return data;
+  }, [refreshAuth]);
+
+  const logout = useCallback(async () => {
+    setError("");
+    await fetch(`${API_BASE}/auth/logout`, {
+      method: "POST",
+    });
+    await refreshAuth();
+  }, [refreshAuth]);
+
+  const hasRole = useCallback((roleName) => {
+    return memberships.some((m) => m?.role === roleName || m?.role_name === roleName);
+  }, [memberships]);
+
+  const hasPermission = useCallback((permissionKey) => {
+    return permissions.includes(permissionKey);
+  }, [permissions]);
+
+  const belongsToOrg = useCallback((orgIdOrType) => {
+    return memberships.some(
+      (m) =>
+        m?.organization_id === orgIdOrType ||
+        m?.org_id === orgIdOrType ||
+        m?.organization_type === orgIdOrType ||
+        m?.org_type === orgIdOrType
+    );
+  }, [memberships]);
+
+  const value = useMemo(() => ({
+    loading,
+    error,
+    user,
+    memberships,
+    permissions,
+    isAuthenticated: !!user,
+    refreshAuth,
+    login,
+    logout,
+    hasRole,
+    hasPermission,
+    belongsToOrg,
+  }), [
+    loading,
+    error,
+    user,
+    memberships,
+    permissions,
+    refreshAuth,
+    login,
+    logout,
+    hasRole,
+    hasPermission,
+    belongsToOrg,
+  ]);
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+export function useAuthContext() {
+  const ctx = useContext(AuthContext);
+  if (!ctx) {
+    throw new Error("useAuthContext must be used inside AuthProvider");
+  }
+  return ctx;
+}

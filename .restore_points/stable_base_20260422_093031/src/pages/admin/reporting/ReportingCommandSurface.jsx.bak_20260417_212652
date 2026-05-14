@@ -1,0 +1,356 @@
+import React, { useMemo, useState } from "react";
+import "./reporting-command.css";
+import BriefingExportPanel from "./BriefingExportPanel.jsx";
+import ActionLogExportPanel from "./ActionLogExportPanel.jsx";
+import AnalystMemoExportPanel from "./AnalystMemoExportPanel.jsx";
+import AuditPackPanel from "./AuditPackPanel.jsx";
+import { evaluateReportingExportReadiness } from "./reporting-readiness";
+import { getFocusedArtifactId } from "@/system/routing/hash-query";
+import {
+  deriveBridgeWorkflowReadiness,
+  getBridgeWorkflowState,
+} from "./bridge-workflow-store";
+import {
+  generateBriefingExport,
+  generateActionLogExport,
+  generateAnalystMemoExport,
+  generateAuditPackExport,
+} from "./reporting-actions";
+
+function StatusBadge({ status }) {
+  const cls =
+    status === "ready"
+      ? "reporting-command__badge reporting-command__badge--ready"
+      : "reporting-command__badge reporting-command__badge--pending";
+
+  return <span className={cls}>{String(status).toUpperCase()}</span>;
+}
+
+function scrollToSurface(surfaceId) {
+  const el = document.getElementById(surfaceId);
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
+export default function ReportingCommandSurface() {
+  const focusedArtifactId = getFocusedArtifactId();
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [flash, setFlash] = useState("");
+
+  const bridgeState = useMemo(() => getBridgeWorkflowState(), [refreshKey]);
+  const bridgeReadiness = useMemo(
+    () => deriveBridgeWorkflowReadiness(bridgeState),
+    [bridgeState]
+  );
+
+  const cards = useMemo(() => {
+    return [
+      {
+        exportKind: "briefing_export",
+        title: "Briefing Export",
+        format: "PDF",
+        audience: "Executive / Leadership",
+        summary:
+          "Decision-ready export for leadership review with key metrics, trust state, and recommended next steps.",
+        artifactId: "rep_hub_case_demo_001",
+        surfaceId: "briefing-export-surface",
+      },
+      {
+        exportKind: "action_log_export",
+        title: "Action Log Export",
+        format: "CSV",
+        audience: "Operations / Audit",
+        summary:
+          "Structured export of actions, timestamps, statuses, and operational trace details for downstream review.",
+        artifactId: "rep_action_log_demo_001",
+        surfaceId: "action-log-export-surface",
+      },
+      {
+        exportKind: "analyst_memo_export",
+        title: "Analyst Memo Export",
+        format: "PDF / JSON",
+        audience: "Analyst / Internal",
+        summary:
+          "Narrative memo surface for institutional interpretation, bridge findings, and readiness-based recommendations.",
+        artifactId: "rep_analyst_memo_demo_001",
+        surfaceId: "analyst-memo-export-surface",
+      },
+      {
+        exportKind: "audit_pack_export",
+        title: "Audit Pack",
+        format: "PDF",
+        audience: "Audit / Institutional",
+        summary:
+          "Consolidated audit-pack surface for evidence review, verification coverage, bridge status, and trace-aware export generation.",
+        artifactId: "rep_audit_pack_demo_001",
+        surfaceId: "audit-pack-export-surface",
+      },
+    ].map((card) => {
+      const readiness = evaluateReportingExportReadiness({
+        exportKind: card.exportKind,
+        bridgeReadiness,
+        verificationState: bridgeState.verificationState,
+        sourceToReportTraceCoverage: bridgeState.sourceToReportTraceCoverage,
+        publicationMode: bridgeState.publicationMode || "admin_internal",
+        trustEnvelopePresent: true,
+      });
+
+      return {
+        ...card,
+        readiness,
+      };
+    });
+  }, [bridgeReadiness, bridgeState]);
+
+  const readyCount = cards.filter((item) => item.readiness.ready).length;
+  const pendingCount = cards.length - readyCount;
+
+  function handleRefresh() {
+    setRefreshKey((value) => value + 1);
+    setFlash("Reporting surface refreshed from shared workflow state.");
+  }
+
+  async function handleCardGenerate(card) {
+    if (!card.readiness.allowedActions.generate) return;
+
+    const payload = {
+      publicationMode: bridgeState.publicationMode || "admin_internal",
+      relatedEntityIds: [
+        bridgeState.caseId || "hub_case_demo_001",
+        card.artifactId,
+      ],
+      requestedBy: "user_admin_001",
+      reportArtifactId: card.artifactId,
+    };
+
+    let result;
+
+    switch (card.exportKind) {
+      case "briefing_export":
+        result = await generateBriefingExport(payload);
+        break;
+      case "action_log_export":
+        result = await generateActionLogExport(payload);
+        break;
+      case "analyst_memo_export":
+        result = await generateAnalystMemoExport(payload);
+        break;
+      case "audit_pack_export":
+        result = await generateAuditPackExport(payload);
+        break;
+      default:
+        return;
+    }
+
+    setFlash(result.message || `${card.title} export completed.`);
+  }
+
+  async function handleGenerateMasterBrief() {
+    const briefingCard = cards.find((card) => card.exportKind === "briefing_export");
+    if (!briefingCard || !briefingCard.readiness.allowedActions.generate) return;
+
+    const result = await generateBriefingExport({
+      publicationMode: bridgeState.publicationMode || "admin_internal",
+      relatedEntityIds: [
+        bridgeState.caseId || "hub_case_demo_001",
+        briefingCard.artifactId,
+      ],
+      requestedBy: "user_admin_001",
+      reportArtifactId: briefingCard.artifactId,
+    });
+
+    setFlash(result.message || "Master brief opened.");
+  }
+
+  return (
+    <main className="reporting-command">
+      {focusedArtifactId ? (
+        <div
+          style={{
+            padding: "12px 14px",
+            borderRadius: 14,
+            border: "1px solid rgba(34, 197, 94, 0.52)",
+            background: "linear-gradient(180deg, rgba(9, 18, 36, 0.96), rgba(8, 15, 30, 0.98))",
+            color: "rgba(134, 239, 172, 0.98)",
+            fontSize: 14,
+            fontWeight: 700,
+            lineHeight: 1.5,
+            boxShadow: "0 14px 34px rgba(2, 6, 23, 0.28), inset 0 0 0 1px rgba(34, 197, 94, 0.06)",
+          }}
+        >
+          Focused artifact: <strong>{focusedArtifactId}</strong>
+        </div>
+      ) : null}
+
+      {flash ? (
+        <div
+          style={{
+            marginTop: 12,
+            padding: "12px 14px",
+            borderRadius: 14,
+            border: "1px solid rgba(34, 197, 94, 0.52)",
+            background: "linear-gradient(180deg, rgba(9, 18, 36, 0.96), rgba(8, 15, 30, 0.98))",
+            color: "rgba(134, 239, 172, 0.98)",
+            fontSize: 13,
+            lineHeight: 1.5,
+          }}
+        >
+          {flash}
+        </div>
+      ) : null}
+
+      <section className="reporting-command__hero">
+        <div>
+          <p className="reporting-command__eyebrow">Institutional Reporting Layer</p>
+          <h1 className="reporting-command__title">Reporting Command Surface</h1>
+          <p className="reporting-command__subtitle">
+            Central export surface for leadership briefings, action logs, analyst memos,
+            and trust-aware publication flows.
+          </p>
+        </div>
+
+        <div className="reporting-command__hero-actions">
+          <button type="button" onClick={handleRefresh}>
+            Refresh Export State
+          </button>
+          <button type="button" onClick={handleGenerateMasterBrief}>
+            Generate Master Brief
+          </button>
+        </div>
+      </section>
+
+      <section className="reporting-command__stats">
+        <article className="reporting-command__stat">
+          <span className="reporting-command__stat-label">Export Families</span>
+          <strong className="reporting-command__stat-value">{cards.length}</strong>
+        </article>
+        <article className="reporting-command__stat">
+          <span className="reporting-command__stat-label">Ready Exports</span>
+          <strong className="reporting-command__stat-value">{readyCount}</strong>
+        </article>
+        <article className="reporting-command__stat">
+          <span className="reporting-command__stat-label">Pending Exports</span>
+          <strong className="reporting-command__stat-value">{pendingCount}</strong>
+        </article>
+        <article className="reporting-command__stat">
+          <span className="reporting-command__stat-label">Trust Mode</span>
+          <strong className="reporting-command__stat-value">
+            {bridgeState.publicationMode || "admin_internal"}
+          </strong>
+        </article>
+      </section>
+
+      <section className="reporting-command__grid">
+        {cards.map((card) => {
+          const isFocused = focusedArtifactId && card.artifactId === focusedArtifactId;
+
+          return (
+            <article
+              key={card.title}
+              className="reporting-command__card"
+              style={
+                isFocused
+                  ? {
+                      outline: "1px solid rgba(59, 130, 246, 0.24)",
+                      boxShadow:
+                        "0 20px 44px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(59, 130, 246, 0.18)",
+                    }
+                  : undefined
+              }
+            >
+              <div className="reporting-command__card-top">
+                <div>
+                  <p className="reporting-command__card-kicker">{card.format}</p>
+                  <h2 className="reporting-command__card-title">{card.title}</h2>
+                </div>
+                <StatusBadge status={card.readiness.status} />
+              </div>
+
+              <div className="reporting-command__meta">
+                <div>
+                  <span>Audience</span>
+                  <strong>{card.audience}</strong>
+                </div>
+              </div>
+
+              <p className="reporting-command__summary">{card.summary}</p>
+
+              {isFocused ? (
+                <div
+                  style={{
+                    padding: "10px 12px",
+                    borderRadius: 12,
+                    border: "1px solid rgba(59, 130, 246, 0.22)",
+                    background: "rgba(30, 64, 175, 0.12)",
+                    color: "rgba(191, 219, 254, 0.98)",
+                    fontSize: 13,
+                    lineHeight: 1.5,
+                  }}
+                >
+                  This card matches the focused artifact.
+                </div>
+              ) : null}
+
+              {card.readiness.reasons.length ? (
+                <div
+                  style={{
+                    padding: "10px 12px",
+                    borderRadius: 12,
+                    border: "1px solid rgba(245, 158, 11, 0.22)",
+                    background: "rgba(120, 53, 15, 0.16)",
+                    color: "rgba(253, 230, 138, 0.96)",
+                    fontSize: 13,
+                    lineHeight: 1.5,
+                  }}
+                >
+                  Blocked by: {card.readiness.reasons.join(", ")}
+                  {card.readiness.missingFields.length
+                    ? ` | Missing: ${card.readiness.missingFields.join(", ")}`
+                    : ""}
+                </div>
+              ) : null}
+
+              <div className="reporting-command__actions">
+                <button
+                  type="button"
+                  onClick={() => scrollToSurface(card.surfaceId)}
+                >
+                  Open Surface
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleCardGenerate(card)}
+                  disabled={!card.readiness.allowedActions.generate}
+                  style={
+                    !card.readiness.allowedActions.generate
+                      ? { opacity: 0.45, cursor: "not-allowed" }
+                      : undefined
+                  }
+                >
+                  Generate Export
+                </button>
+              </div>
+            </article>
+          );
+        })}
+      </section>
+
+      <div id="briefing-export-surface">
+        <BriefingExportPanel />
+      </div>
+
+      <div id="action-log-export-surface">
+        <ActionLogExportPanel />
+      </div>
+
+      <div id="analyst-memo-export-surface">
+        <AnalystMemoExportPanel />
+      </div>
+
+      <div id="audit-pack-export-surface">
+        <AuditPackPanel />
+      </div>
+    </main>
+  );
+}

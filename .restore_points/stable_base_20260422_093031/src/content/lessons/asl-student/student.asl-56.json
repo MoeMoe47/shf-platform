@@ -1,0 +1,80 @@
+{
+  "id": "asl-56",
+  "title": "ASL 7.6 — Integration (Clinic Scenario + Handoff) 🏥➡️🚑",
+  "estMinutes": 30,
+  "objectives": [
+    "Integrate check-in, symptoms, tests/results, and follow-up in one concise scene",
+    "Switch cleanly between patient/provider with RS + neutral returns and repeat-backs",
+    "Escalate to urgent handoff if needed (allergies, meds, actions done)"
+  ],
+  "vocab": [
+    { "term": "APPT / CHECK-IN", "def": "Front-desk flow with time-first framing." },
+    { "term": "HURT + LOCATION", "def": "Place pain precisely with severity NMM and duration." },
+    { "term": "TEST / RESULT / NORMAL / NOT-NORMAL", "def": "Explain tests and outcomes; affect matches result." },
+    { "term": "FOLLOW-UP / NEXT-WEEK", "def": "Scheduling next steps with repeat-back." },
+    { "term": "ESCALATE / HANDOFF", "def": "When symptoms worsen: brief EMT-style handoff (allergies/meds/actions)." },
+    { "term": "ROLE-SHIFT (RS) + NEUTRAL RETURN", "def": "Swap roles briefly; reset for narration between lines." }
+  ],
+  "sections": [
+    {
+      "heading": "Warm-Up: 4-Beat Clinic Frame",
+      "media": { "src": "/media/asl/unit-7/clinic-4beat.png", "alt": "Check-in → Symptoms → Result → Next step", "caption": "Keep each beat 3–5 signs" },
+      "body": "Plan four beats: **(1) CHECK-IN**, **(2) SYMPTOMS (place+severity+duration)**, **(3) RESULT (normal/not)**, **(4) NEXT STEP (follow-up or escalate)**. Keep clauses compact with tiny pauses.",
+      "microCheck": {
+        "q": "Best order for clarity:",
+        "options": ["Symptoms → Result → Check-in → Next step", "Check-in → Symptoms → Result → Next step", "Random", "Next step only"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Model: Patient/Provider + Repeat-Back",
+      "media": { "src": "/media/asl/unit-7/integration-model.mp4", "alt": "RS swap with neutral returns", "caption": "Time-first • RS • repeat-back" },
+      "body": "Example:\n• **TODAY APPT I.** (neutral)\n• **RS→PATIENT:** **HURT THROAT 2-DAY, FEVER LITTLE.** (neutral)\n• **RS→PROVIDER:** **TEST TODAY; RESULT TOMORROW ONLINE. WATER-A-LOT.** (neutral)\n• **RS→PATIENT (repeat-back):** **OK TEST TODAY, RESULT TOMORROW, WATER-A-LOT.**"
+    },
+    {
+      "heading": "Escalation Branch (If Needed)",
+      "body": "If symptoms severe: **RS→PROVIDER:** **RESULT NOT-NORMAL. EMERGENCY GO-NOW.** (neutral) **HANDOFF TEMPLATE:** WHAT, WHO, SEVERITY, ALLERGIES/MEDS, ACTIONS DONE.",
+      "callouts": [
+        { "type": "tip", "title": "Only If Needed", "body": "Use the handoff branch when your result or status requires urgent care." }
+      ],
+      "microCheck": {
+        "q": "Which detail belongs in a handoff?",
+        "options": ["Favorite food", "Allergies/meds and actions already done", "Weekend plan", "Pet name"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Partner Practice: Two Paths",
+      "media": { "src": "/media/asl/unit-7/two-paths.gif", "alt": "Follow-up vs. urgent paths", "caption": "Follow-up path OR urgent path" },
+      "body": "Do both versions:\n• **A) Follow-Up Path:** result normal → schedule next-week → patient repeat-back.\n• **B) Urgent Path:** result not-normal → brief handoff (include one allergy/med) → patient confirms understanding.",
+      "microCheck": {
+        "q": "Between RS lines you should…",
+        "options": ["Stay in RS", "Return to neutral narrator", "Move anchors mid-scene", "Talk aloud"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Mini-Showcase",
+      "body": "Record **20–25s**: 4-beat clinic scene. Include **time-first check-in**, **precise symptom placement+severity**, **one result line**, **one next step**, and at least **one repeat-back**. Optional: show the **urgent handoff** variant in a second 10–12s clip.",
+      "teacherNote": "Caption whether you used the follow-up or urgent branch and list any allergy/med if used."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 7.6 — Integration Check",
+    "items": [
+      { "type": "mcq", "q": "Most readable sequence:", "options": ["Random details", "Check-in → Symptoms → Result → Next step", "Result → Next step → Check-in → Symptoms", "Only next step"], "answerIndex": 1 },
+      { "type": "mcq", "q": "What proves understanding?", "options": ["Smile", "Repeat-back key instructions", "Look down", "Wave hands bigger"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Handoff must include…", "options": ["Allergies/meds and actions done", "Pet’s name", "Hobby", "Weather"], "answerIndex": 0 },
+      { "type": "short", "q": "Write a 4-beat gloss integrating check-in, symptoms (place+severity), result, and next step." },
+      { "type": "reflection", "prompt": "Which piece needs polish—placement+severity, repeat-back, or next-step timing? Plan a drill." }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Upload your 20–25s clinic scene (follow-up or urgent). Caption your symptom location, severity, result, and next step.",
+  "summary": "You integrated clinic dialogue skills into one compact scene, including precise symptom placement, results, next steps, and repeat-backs—with an optional urgent handoff branch.",
+  "nextSlug": "asl-57",
+  "games": [
+    { "id": "four-beat", "title": "Four-Beat Flow", "route": "/arcade/asl/four-beat", "estMinutes": 5, "xp": 50, "outcomes": ["Sequence consistency"] },
+    { "id": "repeat-lock", "title": "Repeat-Lock", "route": "/arcade/asl/repeat-lock", "estMinutes": 5, "xp": 50, "outcomes": ["Reliable repeat-back"] }
+  ]
+}

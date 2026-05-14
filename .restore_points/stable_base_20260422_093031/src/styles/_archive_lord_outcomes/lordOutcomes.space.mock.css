@@ -1,0 +1,209 @@
+/* =========================================================
+   Lord Outcomes — SPACE MOCK LAYER (single source of truth)
+   Goal: deep space + stars + faint grid + smaller 3D rings (right)
+   Load this LAST to override.
+========================================================= */
+
+/* ---------- DEBUG OUTLINE (toggle) ----------
+   To enable, change `--loo-debug: 0` to `1`
+------------------------------------------------ */
+:root { --loo-debug: 0; }
+
+.loo-dymApp {
+  position: relative;
+  min-height: 100vh;
+  background: radial-gradient(1200px 700px at 70% 40%,
+      rgba(255, 120, 30, 0.12),
+      rgba(0, 0, 0, 0) 60%),
+    radial-gradient(900px 700px at 30% 70%,
+      rgba(120, 40, 20, 0.10),
+      rgba(0, 0, 0, 0) 65%),
+    radial-gradient(900px 700px at 20% 10%,
+      rgba(255, 180, 120, 0.06),
+      rgba(0, 0, 0, 0) 55%),
+    linear-gradient(180deg, #05060a 0%, #030409 40%, #05030a 100%);
+  overflow: hidden;
+}
+
+/* if your page wrapper exists, keep it above the FX layers */
+.looPage, .looTopHeader, .looMain {
+  position: relative;
+  z-index: 10;
+}
+
+/* =========================================================
+   FX Layer Container
+========================================================= */
+.looSpaceFx {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* DEBUG outline to prove CSS is loading */
+.looSpaceFx::after{
+  content:"";
+  position:absolute;
+  inset: 16px;
+  outline: calc(var(--loo-debug) * 2px) solid rgba(255,120,0,0.95);
+  border-radius: 18px;
+}
+
+/* =========================================================
+   Stars (two layers)
+========================================================= */
+.looStarsA,
+.looStarsB{
+  position:absolute;
+  inset:-20%;
+  opacity: 0.9;
+  mix-blend-mode: screen;
+  transform: translateZ(0);
+  filter: contrast(1.05) brightness(1.05);
+}
+
+.looStarsA{
+  background:
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.55) 0 1px, transparent 2px),
+    radial-gradient(1px 1px at 30% 70%, rgba(255,255,255,0.40) 0 1px, transparent 2px),
+    radial-gradient(1px 1px at 70% 40%, rgba(255,255,255,0.45) 0 1px, transparent 2px),
+    radial-gradient(1px 1px at 85% 22%, rgba(255,255,255,0.35) 0 1px, transparent 2px),
+    radial-gradient(1px 1px at 55% 85%, rgba(255,255,255,0.30) 0 1px, transparent 2px),
+    radial-gradient(1px 1px at 22% 45%, rgba(255,255,255,0.28) 0 1px, transparent 2px);
+  background-size: 320px 320px;
+  opacity: 0.45;
+}
+
+.looStarsB{
+  background:
+    radial-gradient(1px 1px at 12% 18%, rgba(255,220,180,0.35) 0 1px, transparent 2px),
+    radial-gradient(1px 1px at 44% 62%, rgba(255,255,255,0.28) 0 1px, transparent 2px),
+    radial-gradient(1px 1px at 76% 30%, rgba(255,255,255,0.25) 0 1px, transparent 2px),
+    radial-gradient(1px 1px at 88% 78%, rgba(255,255,255,0.22) 0 1px, transparent 2px);
+  background-size: 420px 420px;
+  opacity: 0.35;
+  filter: blur(0.15px);
+}
+
+/* =========================================================
+   Faint Grid (mock-like, subtle)
+========================================================= */
+.looGridFaint{
+  position:absolute;
+  inset: 0;
+  opacity: 0.18;
+  background:
+    linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(900px 650px at 50% 55%, rgba(0,0,0,0.9), transparent 70%);
+  -webkit-mask-image: radial-gradient(900px 650px at 50% 55%, rgba(0,0,0,0.9), transparent 70%);
+}
+
+/* =========================================================
+   Rings (smaller + 3D illusion)
+   We use:
+   - perspective + rotateX to “tilt”
+   - multiple concentric rings
+   - bright rim + soft glow + inner shadow
+========================================================= */
+.looRings{
+  position:absolute;
+  right: -320px;
+  top: 140px;
+  width: 980px;
+  height: 980px;
+  transform: perspective(900px) rotateX(62deg) rotateZ(-12deg);
+  transform-origin: 70% 55%;
+  opacity: 0.9;
+  filter: saturate(1.05);
+}
+
+.looRings::before,
+.looRings::after{
+  content:"";
+  position:absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events:none;
+}
+
+/* Outer ring group */
+.looRings::before{
+  background:
+    /* outer rim */
+    radial-gradient(closest-side,
+      transparent 74%,
+      rgba(255,130,35,0.55) 75%,
+      rgba(255,90,20,0.55) 76%,
+      transparent 77%),
+    /* glow */
+    radial-gradient(closest-side,
+      transparent 71%,
+      rgba(255,120,30,0.18) 74%,
+      transparent 78%),
+    /* inner soft shadow for 3D */
+    radial-gradient(closest-side,
+      transparent 60%,
+      rgba(0,0,0,0.20) 72%,
+      transparent 80%);
+  filter: blur(0.2px);
+  mix-blend-mode: screen;
+}
+
+/* Inner rings (smaller set) */
+.looRings::after{
+  inset: 140px;
+  background:
+    radial-gradient(closest-side,
+      transparent 70%,
+      rgba(255,170,90,0.35) 71%,
+      rgba(255,110,30,0.40) 72%,
+      transparent 73%),
+    radial-gradient(closest-side,
+      transparent 61%,
+      rgba(255,120,30,0.18) 64%,
+      transparent 70%),
+    radial-gradient(closest-side,
+      transparent 50%,
+      rgba(0,0,0,0.22) 60%,
+      transparent 78%);
+  mix-blend-mode: screen;
+  filter: blur(0.15px);
+}
+
+/* A third “thin” ring, slightly offset (matches mock multi-ring feel) */
+.looRingThin{
+  position:absolute;
+  right: -260px;
+  top: 260px;
+  width: 760px;
+  height: 760px;
+  border-radius: 50%;
+  transform: perspective(900px) rotateX(62deg) rotateZ(-12deg) translate3d(60px, 40px, 0);
+  background:
+    radial-gradient(closest-side,
+      transparent 74.6%,
+      rgba(255,120,30,0.30) 75%,
+      transparent 75.8%);
+  opacity: 0.75;
+  mix-blend-mode: screen;
+  filter: blur(0.1px);
+}
+
+/* Vignette to deepen space */
+.looVignetteDeep{
+  position:absolute;
+  inset: 0;
+  background:
+    radial-gradient(1400px 900px at 60% 40%, rgba(0,0,0,0.15), rgba(0,0,0,0.72) 70%),
+    radial-gradient(900px 700px at 10% 70%, rgba(0,0,0,0.10), rgba(0,0,0,0.75) 80%);
+  z-index: 2;
+  pointer-events:none;
+}
+
+/* Keep your header glow crisp */
+.looTopHeader{
+  z-index: 20;
+}

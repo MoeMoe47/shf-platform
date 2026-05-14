@@ -1,0 +1,27 @@
+import express from "express";
+import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
+
+import { buildRouter } from "./api/router";
+import { authMiddleware } from "./auth/auth-middleware";
+import { errorHandler } from "./api/error-handler";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const app = express();
+const PORT = 8091;
+
+app.use(cors());
+app.use("/uploads", express.static(path.resolve(__dirname, "../uploads")));
+app.use(express.json());
+app.use(authMiddleware);
+
+buildRouter(app);
+
+app.use(errorHandler);
+
+app.listen(PORT, () => {
+  console.log(`SHS API running on http://localhost:${PORT}`);
+});

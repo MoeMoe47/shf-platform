@@ -1,0 +1,16 @@
+export async function fetchOraclePriority(entityIds = []) {
+  const BASE = "http://localhost:8091";
+
+  if (!entityIds.length) {
+    throw new Error("No entity ids provided for priority queue");
+  }
+
+  const query = encodeURIComponent(entityIds.join(","));
+  const res = await fetch(`${BASE}/oracle/priority?ids=${query}`);
+
+  if (!res.ok) {
+    throw new Error("Oracle priority fetch failed");
+  }
+
+  return res.json();
+}

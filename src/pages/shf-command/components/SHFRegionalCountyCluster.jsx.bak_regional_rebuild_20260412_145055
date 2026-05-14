@@ -1,0 +1,199 @@
+import React, { useEffect, useId, useMemo, useState } from "react";
+import { geoMercator, geoPath } from "d3-geo";
+
+const W = 980;
+const H = 620;
+const PAD_X = 80;
+const PAD_Y = 50;
+
+const GEOJSON_URLS = [
+  "/geo/ohio-counties.geojson",
+  "/assets/maps/ohio-counties.geojson",
+];
+
+function normalizeCountyName(name = "") {
+  return String(name)
+    .replace(/\s+County$/i, "")
+    .replace(/\s+Parish$/i, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toUpperCase();
+}
+
+function getFeatureCountyName(feature) {
+  const props = feature?.properties || {};
+  return normalizeCountyName(props.COUNTY || "");
+}
+
+export default function SHFRegionalCountyCluster({
+  selectedCounty,
+  clusterCounties = [],
+  hoveredCounty = null,
+  onCountyHover,
+  onCountyClick,
+}) {
+  const [geojson, setGeojson] = useState(null);
+  const [loadError, setLoadError] = useState("");
+  const gradientId = useId().replace(/:/g, "_");
+  const glowId = `${gradientId}_glow`;
+
+  useEffect(() => {
+    let alive = true;
+
+    async function load() {
+      setLoadError("");
+      for (const url of GEOJSON_URLS) {
+        try {
+          const res = await fetch(url, { cache: "no-store" });
+          if (!res.ok) continue;
+          const json = await res.json();
+          if (json?.features?.length) {
+            if (alive) setGeojson(json);
+            return;
+          }
+        } catch (_) {}
+      }
+
+      if (alive) {
+        setGeojson(null);
+        setLoadError("Could not load Ohio county GeoJSON.");
+      }
+    }
+
+    load();
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const normalizedSelectedCounty = normalizeCountyName(selectedCounty);
+  const normalizedCluster = useMemo(
+    () => clusterCounties.map(normalizeCountyName),
+    [clusterCounties]
+  );
+
+  const filteredCollection = useMemo(() => {
+    if (!geojson?.features?.length) return null;
+
+    const wanted = new Set(normalizedCluster);
+    const features = geojson.features.filter((feature) => {
+      const county = getFeatureCountyName(feature);
+      return wanted.has(county);
+    });
+
+    if (!features.length) return null;
+    return { type: "FeatureCollection", features };
+  }, [geojson, normalizedCluster]);
+
+  const projection = useMemo(() => {
+    if (!filteredCollection) return null;
+    const proj = geoMercator();
+    proj.fitExtent(
+      [
+        [PAD_X, PAD_Y],
+        [W - PAD_X, H - PAD_Y],
+      ],
+      filteredCollection
+    );
+    return proj;
+  }, [filteredCollection]);
+
+  const pathGen = useMemo(() => {
+    if (!projection) return null;
+    return geoPath(projection);
+  }, [projection]);
+
+  const features = filteredCollection?.features || [];
+
+  if (loadError) {
+    return <div className="shf-regional-cluster-loading">{loadError}</div>;
+  }
+
+  if (!geojson) {
+    return <div className="shf-regional-cluster-loading">Loading regional county view…</div>;
+  }
+
+  if (!features.length || !pathGen) {
+    return (
+      <div className="shf-regional-cluster-loading">
+        No matching county shapes found for {selectedCounty}.
+      </div>
+    );
+  }
+
+  const contextFeatures = features.filter(
+    (feature) => getFeatureCountyName(feature) !== normalizedSelectedCounty
+  );
+  const selectedFeature = features.find(
+    (feature) => getFeatureCountyName(feature) === normalizedSelectedCounty
+  );
+
+  return (
+    <div className="shf-regional-cluster-surface">
+      <svg
+        className="shf-regional-cluster-svg"
+        viewBox={`0 0 ${W} ${H}`}
+        preserveAspectRatio="xMidYMid meet"
+        role="img"
+        aria-label={`${selectedCounty} regional county cluster`}
+      >
+        <defs>
+          <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="rgba(240,187,107,1)" />
+            <stop offset="55%" stopColor="rgba(220,155,72,1)" />
+            <stop offset="100%" stopColor="rgba(176,114,42,1)" />
+          </linearGradient>
+          <filter id={glowId} x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="8" result="blur" />
+            <feColorMatrix
+              in="blur"
+              type="matrix"
+              values="
+                1 0 0 0 0.72
+                0 1 0 0 0.50
+                0 0 1 0 0.22
+                0 0 0 1 0
+              "
+              result="goldglow"
+            />
+            <feMerge>
+              <feMergeNode in="goldglow" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        {contextFeatures.map((feature) => {
+          const county = getFeatureCountyName(feature);
+          const countyLabel =
+            county.charAt(0) + county.slice(1).toLowerCase();
+          const d = pathGen(feature);
+          return (
+            <path
+              key={county}
+              d={d || ""}
+              className={`shf-regional-county shf-regional-county--context ${
+                hoveredCounty && normalizeCountyName(hoveredCounty) === county ? "is-hovered" : ""
+              }`}
+              onMouseEnter={() => onCountyHover?.(countyLabel)}
+              onMouseLeave={() => onCountyHover?.(null)}
+              onClick={() => onCountyClick?.(countyLabel)}
+            />
+          );
+        })}
+
+        {selectedFeature ? (
+          <path
+            d={pathGen(selectedFeature) || ""}
+            className="shf-regional-county shf-regional-county--selected"
+            fill={`url(#${gradientId})`}
+            filter={`url(#${glowId})`}
+            onMouseEnter={() => onCountyHover?.(selectedCounty)}
+            onMouseLeave={() => onCountyHover?.(null)}
+            onClick={() => onCountyClick?.(selectedCounty)}
+          />
+        ) : null}
+      </svg>
+    </div>
+  );
+}

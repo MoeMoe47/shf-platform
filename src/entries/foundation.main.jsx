@@ -1,6 +1,7 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
+import { createRoot } from "react-dom/client";
 import FoundationApp from "../foundation/App";
+import { AuthProvider } from "../auth/auth-context";
 
 if (window.location.hash === "#/top" || window.location.hash === "#top") {
   history.replaceState(null, "", window.location.pathname + window.location.search);
@@ -12,8 +13,8 @@ if (!mountNode) {
   throw new Error("Foundation mount failed: #root not found");
 }
 
-ReactDOM.createRoot(mountNode).render(
-  <React.StrictMode>
+createRoot(mountNode).render(<AuthProvider>
+    <React.StrictMode>
     <FoundationApp />
   </React.StrictMode>
-);
+  </AuthProvider>);

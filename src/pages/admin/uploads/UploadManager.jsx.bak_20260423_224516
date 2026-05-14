@@ -1,0 +1,65 @@
+import React, { useState } from "react";
+import useAuth from "../../../auth/useAuth";
+
+const API_BASE =
+  window.__SHS_API_BASE__ ||
+  (import.meta.env.VITE_SHS_API_BASE || "http://127.0.0.1:8091");
+
+export default function UploadManager() {
+  const auth = useAuth();
+  const [file, setFile] = useState(null);
+  const [visibility, setVisibility] = useState("internal");
+  const [status, setStatus] = useState("");
+
+  const canUpload =
+    auth.hasPermission("uploads.internal") ||
+    auth.hasPermission("uploads.evidence") ||
+    auth.hasPermission("uploads.video");
+
+  async function handleUpload(e) {
+    e.preventDefault();
+    if (!file) return;
+    setStatus("");
+
+    const fd = new FormData();
+    fd.append("file", file);
+    fd.append("visibility", visibility);
+
+    try {
+      const res = await fetch(`${API_BASE}/uploads`, {
+        method: "POST",
+        body: fd,
+      });
+      const text = await res.text();
+      if (!res.ok) throw new Error(text || "Upload failed.");
+      setStatus("Upload completed.");
+      setFile(null);
+    } catch (err) {
+      setStatus(err?.message || "Upload failed.");
+    }
+  }
+
+  if (!canUpload) {
+    return <div style={{ padding: 24, color: "#fca5a5" }}>You do not have upload access.</div>;
+  }
+
+  return (
+    <div style={{ padding: 24, color: "#e2e8f0" }}>
+      <h1>Upload Manager</h1>
+      <p style={{ opacity: 0.8 }}>Manage documents, evidence, media, and video uploads.</p>
+
+      <form onSubmit={handleUpload} style={{ display: "grid", gap: 12, maxWidth: 640 }}>
+        <input type="file" onChange={(e) => setFile(e.target.files?.[0] || null)} />
+        <select value={visibility} onChange={(e) => setVisibility(e.target.value)} style={{ padding: 12 }}>
+          <option value="public">public</option>
+          <option value="internal">internal</option>
+          <option value="org_only">org_only</option>
+          <option value="restricted_case">restricted_case</option>
+          <option value="leadership_only">leadership_only</option>
+        </select>
+        <button type="submit" style={{ padding: 12, cursor: "pointer" }}>Upload</button>
+        {status ? <div style={{ color: "#93c5fd" }}>{status}</div> : null}
+      </form>
+    </div>
+  );
+}

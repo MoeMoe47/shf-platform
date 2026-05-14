@@ -1,0 +1,75 @@
+
+
+/* Debt Clock – dashboard layout (SHF brand) */
+.debt-wrap { display: grid; gap: 12px; }
+
+/* Top bar */
+.debt-topbar {
+  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px;
+  background: var(--shf-surface, #fff); border: 1px solid var(--shf-border, #e7e1d7);
+  border-radius: var(--shf-radius-lg, 16px);
+}
+.brand-left { display: flex; align-items: center; gap: 10px; }
+.brand-left .app-title { font-weight: 700; opacity: .75; }
+.status-right { justify-self: end; }
+.badge { padding: 6px 10px; border-radius: 999px; border: 1px solid var(--shf-border); font-size: 12px; }
+.badge--ok { background: var(--shf-brand-weak, #ffe1cc); }
+
+/* Big EVU block */
+.evu-total { padding: 14px 16px; }
+.evu-head { display: flex; align-items: center; justify-content: space-between; }
+.evu-head h2 { margin: 0; letter-spacing: .4px; }
+.evu-head small { opacity: .7; font-weight: 500; }
+.evu-rocket { font-size: 28px; opacity: .7; }
+.evu-number {
+  font-size: clamp(24px, 4.2vw, 44px);
+  font-weight: 800;
+  letter-spacing: .5px;
+  color: var(--shf-brand-ink, #1a1a1a);
+  background:
+    linear-gradient(0deg, transparent 56%, rgba(255,106,0,.08) 56% 100%);
+  padding: 8px 10px; border-radius: 12px;
+}
+
+/* Upper KPI grid */
+.metric-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+.metric-grid .card h3 { margin: 4px 0 6px; opacity: .85; }
+.metric-spacer { height: 10px; }
+
+/* Lower panels */
+.lower-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* Student metrics box */
+.metric-box {
+  background: var(--shf-surface, #fff);
+  border: 1px solid var(--shf-border, #e7e1d7);
+  border-radius: 12px; padding: 10px;
+}
+.metric-row {
+  display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 6px 0;
+  border-top: 1px solid var(--shf-border, #eee4d8);
+}
+.metric-row:first-child { border-top: 0; }
+.m-label { opacity: .8; }
+.m-value { font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* Mini stat pills on the right panel */
+.mini-metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 12px; }
+.mini {
+  display: flex; gap: 8px; align-items: center;
+  border: 1px solid var(--shf-border, #e7e1d7); border-radius: 12px; padding: 8px 10px;
+}
+.mini__icon { width: 26px; height: 26px; display: grid; place-items: center; border-radius: 8px;
+  background: var(--shf-brand-weak, #ffe1cc); font-weight: 700; }
+.mini--good .mini__icon { background: rgba(22,163,74,.12); }
+.mini__value { font-weight: 800; }
+.mini__label { font-size: 12px; opacity: .7; }
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .metric-grid, .lower-panels { grid-template-columns: 1fr; }
+}
+
+

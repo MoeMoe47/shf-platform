@@ -1,0 +1,251 @@
+import React, { useEffect, useMemo, useState } from "react";
+import useAuth from "../../../auth/useAuth";
+
+const API_BASE =
+  window.__SHS_API_BASE__ ||
+  (import.meta.env.VITE_SHS_API_BASE || "/api");
+
+async function readJson(res) {
+  const text = await res.text();
+  try {
+    return text ? JSON.parse(text) : {};
+  } catch {
+    return { raw: text };
+  }
+}
+
+export default function IdentityManagement() {
+  const auth = useAuth();
+
+  const [users, setUsers] = useState([]);
+  const [orgs, setOrgs] = useState([]);
+  const [roles, setRoles] = useState([]);
+  const [invites, setInvites] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState("");
+  const [inviteForm, setInviteForm] = useState({
+    email: "",
+    organization_id: "",
+    role_id: "",
+  });
+
+  const canManage = useMemo(() => {
+    return auth.hasRole("super_admin") || auth.hasRole("shs_admin");
+  }, [auth]);
+
+  const authDebug = {
+    loading: auth.loading,
+    error: auth.error,
+    isAuthenticated: auth.isAuthenticated,
+    user: auth.user,
+    memberships: auth.memberships,
+    permissions: auth.permissions,
+    hasSuperAdmin: auth.hasRole("super_admin"),
+    hasShsAdmin: auth.hasRole("shs_admin"),
+  };
+
+  async function loadData() {
+    setLoading(true);
+    setStatus("");
+    try {
+      const [usersRes, orgsRes, rolesRes] = await Promise.all([
+        fetch(`${API_BASE}/users`),
+        fetch(`${API_BASE}/organizations`),
+        fetch(`${API_BASE}/roles`),
+      ]);
+
+      const [usersData, orgsData, rolesData] = await Promise.all([
+        readJson(usersRes),
+        readJson(orgsRes),
+        readJson(rolesRes),
+      ]);
+
+      setUsers(usersData.items || usersData.users || []);
+      setOrgs(orgsData.items || orgsData.organizations || []);
+      setRoles(rolesData.items || rolesData.roles || []);
+    } catch (err) {
+      setStatus(err?.message || "Failed to load identity data.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  async function sendInvite(e) {
+    e.preventDefault();
+    setStatus("");
+
+    if (!inviteForm.email || !inviteForm.organization_id || !inviteForm.role_id) {
+      setStatus("Please complete all invite fields.");
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_BASE}/invites`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(inviteForm),
+      });
+
+      const data = await readJson(res);
+      if (!res.ok) throw new Error(data?.error || "Invite failed.");
+
+      setStatus(`Invite created for ${data?.invite?.email || inviteForm.email}.`);
+      setInvites((prev) => [data.invite, ...prev]);
+      setInviteForm({ email: "", organization_id: "", role_id: "" });
+    } catch (err) {
+      setStatus(err?.message || "Invite failed.");
+    }
+  }
+
+  if (loading) {
+    return <div style={{ padding: 24, color: "#cbd5e1" }}>Loading identity management…</div>;
+  }
+
+  if (!canManage) {
+    return (
+      <div style={{ padding: 24, color: "#fca5a5" }}>
+        <div style={{ marginBottom: 12 }}>You do not have access to Identity Management.</div>
+        <pre style={{ color: "#cbd5e1", whiteSpace: "pre-wrap", fontSize: 12, lineHeight: 1.4 }}>
+          {JSON.stringify(authDebug, null, 2)}
+        </pre>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ padding: 24, color: "#e2e8f0" }}>
+      <h1 style={{ marginBottom: 8 }}>Identity Management</h1>
+      <p style={{ opacity: 0.8, marginBottom: 24 }}>
+        Manage users, organizations, roles, and invitations for SHS / SHF V1.
+      </p>
+
+      <form
+        onSubmit={sendInvite}
+        style={{
+          display: "grid",
+          gap: 12,
+          maxWidth: 820,
+          padding: 16,
+          border: "1px solid rgba(148,163,184,0.2)",
+          borderRadius: 16,
+          marginBottom: 24,
+        }}
+      >
+        <h2 style={{ margin: 0 }}>Invite User</h2>
+
+        <input
+          value={inviteForm.email}
+          onChange={(e) => setInviteForm((v) => ({ ...v, email: e.target.value }))}
+          placeholder="Email"
+          style={{ padding: 12, borderRadius: 10 }}
+        />
+
+        <select
+          value={inviteForm.organization_id}
+          onChange={(e) => setInviteForm((v) => ({ ...v, organization_id: e.target.value }))}
+          style={{ padding: 12, borderRadius: 10 }}
+        >
+          <option value="">Select organization</option>
+          {orgs.map((org) => (
+            <option key={org.id} value={org.id}>
+              {org.name || org.id}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={inviteForm.role_id}
+          onChange={(e) => setInviteForm((v) => ({ ...v, role_id: e.target.value }))}
+          style={{ padding: 12, borderRadius: 10 }}
+        >
+          <option value="">Select role</option>
+          {roles.map((role) => (
+            <option key={role.id} value={role.id}>
+              {role.name || role.key || role.id}
+            </option>
+          ))}
+        </select>
+
+        <button
+          type="submit"
+          disabled={!inviteForm.email || !inviteForm.organization_id || !inviteForm.role_id}
+          style={{
+            padding: 12,
+            borderRadius: 10,
+            cursor: "pointer",
+            opacity: !inviteForm.email || !inviteForm.organization_id || !inviteForm.role_id ? 0.6 : 1,
+          }}
+        >
+          Send Invite
+        </button>
+
+        {status ? (
+          <div
+            style={{
+              color: status.toLowerCase().includes("failed") || status.toLowerCase().includes("please")
+                ? "#fca5a5"
+                : "#86efac",
+              fontWeight: 600,
+              padding: "10px 12px",
+              borderRadius: 10,
+              background: "rgba(255,255,255,0.04)",
+            }}
+          >
+            {status}
+          </div>
+        ) : null}
+      </form>
+
+      <div
+        style={{
+          marginBottom: 24,
+          padding: 16,
+          border: "1px solid rgba(148,163,184,0.2)",
+          borderRadius: 16,
+          maxWidth: 820,
+        }}
+      >
+        <h2>Recent Invites</h2>
+        {invites.length === 0 ? (
+          <div style={{ opacity: 0.7 }}>No invites created in this session yet.</div>
+        ) : (
+          <ul>
+            {invites.map((invite, idx) => (
+              <li key={invite?.id || idx}>
+                {invite?.email || "unknown"} — {invite?.organization_id || "no org"} — {invite?.role_id || "no role"} — {invite?.status || "created"}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <div style={{ display: "grid", gap: 24, gridTemplateColumns: "1fr 1fr" }}>
+        <section style={{ padding: 16, border: "1px solid rgba(148,163,184,0.2)", borderRadius: 16 }}>
+          <h2>Users</h2>
+          <ul>
+            {users.map((user) => (
+              <li key={user.id}>
+                {user.email || user.id} — {user.status || "unknown"}
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section style={{ padding: 16, border: "1px solid rgba(148,163,184,0.2)", borderRadius: 16 }}>
+          <h2>Organizations</h2>
+          <ul>
+            {orgs.map((org) => (
+              <li key={org.id}>
+                {org.name || org.id} {org.org_type ? `(${org.org_type})` : ""}
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
+    </div>
+  );
+}

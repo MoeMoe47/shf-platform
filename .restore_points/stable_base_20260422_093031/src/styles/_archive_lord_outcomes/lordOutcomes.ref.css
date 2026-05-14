@@ -1,0 +1,114 @@
+/* Lord of Outcomes – Reference Skin (single source of truth)
+   Black + international orange + white, with grid pattern.
+*/
+
+/* 1) Kill any inherited page backgrounds that hide the pattern */
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  background: #07070a;
+}
+
+/* 2) Attach the entire cinematic background + grid to BODY.
+      This avoids z-index stacking bugs inside React components. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(980px 620px at 72% 26%, rgba(255, 122, 24, 0.26), transparent 62%),
+    radial-gradient(820px 520px at 28% 18%, rgba(255, 255, 255, 0.08), transparent 64%),
+    linear-gradient(180deg, #07070a 0%, #0b0b10 55%, #07070a 100%);
+}
+
+/* GRID + DOTS layer (the “design/pattern”) */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+
+  background-image:
+    /* big grid */
+    linear-gradient(rgba(255,255,255,0.10) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.10) 1px, transparent 1px),
+    /* micro grid */
+    linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px),
+    /* dots */
+    radial-gradient(rgba(255,255,255,0.09) 1px, transparent 1px);
+
+  background-size:
+    72px 72px,
+    72px 72px,
+    24px 24px,
+    24px 24px,
+    18px 18px;
+
+  background-position:
+    0 0,
+    0 0,
+    0 0,
+    0 0,
+    2px 2px;
+
+  opacity: 0.38; /* visible but not screaming */
+}
+
+/* Vignette */
+.loo-vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(1200px 720px at 50% 18%, transparent 38%, rgba(0,0,0,0.62) 90%);
+}
+
+/* Noise */
+.loo-noise {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0.10;
+  background:
+    repeating-linear-gradient(0deg,
+      rgba(255,255,255,0.05) 0px,
+      rgba(255,255,255,0.05) 1px,
+      transparent 2px,
+      transparent 4px
+    );
+  mix-blend-mode: overlay;
+}
+
+/* 3) App layout wrapper (content above background layers) */
+.loo-app {
+  position: relative;
+  z-index: 10;        /* above body::before/after */
+  min-height: 100vh;
+  color: rgba(255,255,255,0.92);
+}
+
+/* Cards / tiles (match reference vibe) */
+.loo-card {
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(20, 20, 24, 0.55);
+  border-radius: 18px;
+  box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+}
+.loo-cardPad { padding: 16px; }
+
+.loo-tiles { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
+.loo-tile { grid-column: span 4; padding: 14px; border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.10); background: rgba(255,255,255,0.06);
+}
+@media (max-width: 980px) { .loo-tile { grid-column: span 6; } }
+@media (max-width: 640px) { .loo-tile { grid-column: span 12; } }
+
+/* Tables auto-skin */
+.loo-app table { width: 100%; border-collapse: collapse; border: 1px solid rgba(255,255,255,0.10); border-radius: 14px; overflow: hidden; background: rgba(255,255,255,0.04); }
+.loo-app th, .loo-app td { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.loo-app th { color: rgba(255,255,255,0.65); background: rgba(255,255,255,0.05); text-align: left; }

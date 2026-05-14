@@ -1,0 +1,33 @@
+/* Dopamine -> Fog reaction bridge
+   We control these vars on :root or page wrapper:
+   --dopamine: 0..1
+   --dopamine-pulse: 0..1
+*/
+
+:root {
+  --dopamine: 0;
+  --dopamine-pulse: 0;
+}
+
+/* Make fog brighter + slightly denser on events */
+.got-backdrop-fog {
+  opacity: calc(0.18 + (var(--dopamine) * 0.18) + (var(--dopamine-pulse) * 0.18));
+  filter: blur(calc(16px + (var(--dopamine) * 8px)));
+}
+
+/* Slight highlight bloom on sharp art layer during pulses */
+.got-backdrop-art--sharp {
+  opacity: calc(0.26 + (var(--dopamine-pulse) * 0.12));
+  filter: saturate(calc(1.02 + (var(--dopamine) * 0.08))) contrast(1.08);
+}
+
+/* Subtle “energy” overlay */
+.got-backdrop-overlay {
+  background:
+    radial-gradient(1200px 700px at 30% 10%,
+      rgba(2,6,23,0.55),
+      rgba(2,6,23,0.90) 70%),
+    linear-gradient(to bottom,
+      rgba(2,6,23,calc(0.30 - (var(--dopamine) * 0.06))),
+      rgba(2,6,23,0.92));
+}

@@ -1,0 +1,26 @@
+import React from "react";
+
+export default function AIAnalystPanel({ actions = [], onActionClick }) {
+  return (
+    <div className="shf-panel shf-analyst-panel">
+      <div className="shf-panel__header">
+        <h2>AI Analyst</h2>
+        <span className="shf-bulb">💡</span>
+      </div>
+
+      <div className="shf-analyst-panel__section-title">Upcoming Actions</div>
+      <ul className="shf-action-list">
+        {actions.map((action) => (
+          <li key={action}>
+            <button
+              type="button"
+              onClick={() => onActionClick?.(action)}
+            >
+              {action}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}

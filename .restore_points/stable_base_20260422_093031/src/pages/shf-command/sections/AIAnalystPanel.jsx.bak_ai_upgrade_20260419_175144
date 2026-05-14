@@ -1,0 +1,117 @@
+import React from "react";
+
+function getPriority(index) {
+  if (index === 0) return "high";
+  if (index === 1) return "medium";
+  return "low";
+}
+
+function getOutcome(index) {
+  if (index === 0) return "Next Likely Outcome → FUNDED";
+  if (index === 1) return "Next Likely Outcome → STABILIZED";
+  return "Next Likely Outcome → REVIEWED";
+}
+
+function getUrgency(index) {
+  if (index === 0) return "IMMEDIATE";
+  if (index === 1) return "MONITOR";
+  return "QUEUE";
+}
+
+export default function AIAnalystPanel({ actions = [], onActionClick }) {
+  const topAction = actions[0] || null;
+  const supportingActions = actions.slice(1);
+
+  return (
+    <div className="shf-panel shf-analyst-panel shf-analyst-panel--command" data-tour="analyst">
+      <div className="shf-panel__header">
+        <h2>AI Analyst</h2>
+        <span className="shf-bulb">💡</span>
+      </div>
+
+      <div className="shf-analyst-summary">
+        <span className="shf-analyst-status">ACTIVE ANALYSIS</span>
+        <p>
+          System recommends the next highest-impact move based on risk, funding flow,
+          and cross-program outcome pressure.
+        </p>
+      </div>
+
+      {topAction ? (
+        <button
+          type="button"
+          className="shf-command-card shf-command-card--high"
+          onClick={() => onActionClick?.(topAction)}
+        >
+          <div className="shf-command-card__topline">
+            <span className="shf-command-chip">SYSTEM RECOMMENDS</span>
+            <span className="shf-command-urgency">{getUrgency(0)}</span>
+          </div>
+
+          <div className="shf-command-card__title">
+            {topAction}
+          </div>
+
+          <div className="shf-command-card__meta">
+            <div className="shf-command-metric">
+              <span>Priority</span>
+              <strong>High</strong>
+            </div>
+            <div className="shf-command-metric">
+              <span>Confidence</span>
+              <strong>90%</strong>
+            </div>
+          </div>
+
+          <div className="shf-command-card__outcome">
+            {getOutcome(0)}
+          </div>
+        </button>
+      ) : null}
+
+      {supportingActions.length ? (
+        <>
+          <div className="shf-analyst-panel__section-title">
+            Supporting Actions
+          </div>
+
+          <div className="shf-action-list shf-action-list--supporting">
+            {supportingActions.map((action, idx) => {
+              const realIndex = idx + 1;
+              const priority = getPriority(realIndex);
+
+              return (
+                <button
+                  key={action}
+                  type="button"
+                  className={`shf-action-card shf-action-${priority}`}
+                  onClick={() => onActionClick?.(action)}
+                >
+                  <div className="shf-action-card__left">
+                    <div className="shf-action-card__eyebrow-row">
+                      <span className="shf-action-priority">
+                        {priority.toUpperCase()}
+                      </span>
+                      <span className="shf-action-urgency">
+                        {getUrgency(realIndex)}
+                      </span>
+                    </div>
+
+                    <span className="shf-action-text">{action}</span>
+                    <span className="shf-action-outcome">{getOutcome(realIndex)}</span>
+                  </div>
+
+                  <div className="shf-action-card__right">
+                    <span className="shf-action-confidence">
+                      {90 - realIndex * 7}%
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </>
+      ) : null}
+    </div>
+  );
+}

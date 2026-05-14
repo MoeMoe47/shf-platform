@@ -1,0 +1,44 @@
+import { registerProgramRoutes } from "../domain/programs/api/routes";
+import { registerCaseRoutes } from "../domain/cases/api/routes";
+import { registerAuditRoutes } from "../domain/audit/api/routes";
+import { registerIdentityRoutes } from "../domain/identity/api/routes";
+import { registerReportingRoutes } from "../domain/reporting/routes";
+import { registerOracleRoutes } from "../oracle/routes/oracle.routes";
+import aggregationRoutes from "../aggregation/routes/aggregation.routes";
+import { IdentityService } from "../domain/identity/service/identity-service";
+import { ok, fail } from "./response-envelope";
+
+const identityService = new IdentityService();
+
+export function buildRouter(app: any) {
+  app.post("/auth/login", async (req: any, res: any) => {
+    try {
+      const { email, password } = req.body || {};
+      const result = await identityService.login(email, password);
+      res.json(ok(result));
+    } catch (err: any) {
+      res.status(401).json(fail("AUTH_FAILED", err.message || "Invalid credentials"));
+    }
+  });
+
+  app.get("/me", async (req: any, res: any) => {
+    if (!req.user) {
+      return res.status(401).json(fail("AUTH_REQUIRED", "Authentication required."));
+    }
+    res.json(ok(req.user));
+  });
+
+  registerIdentityRoutes(app);
+  registerProgramRoutes(app);
+  registerCaseRoutes(app);
+  registerAuditRoutes(app);
+  registerReportingRoutes(app);
+  app.use("/aggregation", aggregationRoutes);
+  registerOracleRoutes(app);
+
+  app.get("/health", (_req: any, res: any) => {
+    res.json({ ok: true, service: "shs-api" });
+  });
+
+  return app;
+}

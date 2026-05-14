@@ -1,0 +1,186 @@
+
+
+/* =========================================================
+   CURRICULUM SHELL (.cur-*)
+   Layout: [anchor] [header………………]
+           [anchor] [sidebar] [main……………………………………]
+   Tweaks: centered stacked logo in anchor, slightly larger,
+           equal top/bottom breathing room, no overflow.
+========================================================= */
+
+/* Sizing for curriculum chrome */
+:root{
+  --cur-header-h:56px;         /* header height */
+  --cur-anchor-w:220px;        /* narrow logo block */
+  --cur-sidebar-w:260px;       /* curriculum navigation rail */
+
+  /* Brand sizing inside the anchor */
+  --cur-logo-pad:12px;         /* equal top/bottom/side padding within anchor */
+  --cur-logo-scale:1.06;       /* “a little bit bigger” */
+  --cur-logo-max-h:220px;      /* cap so it never looks comically huge */
+}
+
+/* Grid frame */
+.cur-shell{
+  display:grid;
+  grid-template-columns: var(--cur-anchor-w) var(--cur-sidebar-w) 1fr;
+  grid-template-rows: var(--cur-header-h) 1fr;
+  grid-template-areas:
+    "anchor header header"
+    "anchor sidebar main";
+  min-height:100vh;
+  background:var(--beige);
+  color:var(--text);
+}
+
+/* Anchor (left-most column; spans both rows) */
+.cur-anchor{
+  grid-area: anchor;
+  border-right:1px solid var(--ring);
+  background:var(--ivory);
+  position:sticky; top:0; align-self:start;
+  height:100vh;                 /* full-height stickiness */
+  display:flex; align-items:center; justify-content:center;
+  padding:var(--cur-logo-pad);
+  overflow:hidden;              /* prevent logo bleed if scaled */
+}
+
+/* Centered stacked logo box */
+.cur-logoBox{
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  width:100%; height:100%;
+  justify-content:center;       /* equal distance top/bottom */
+  text-align:center;
+  pointer-events:auto;          /* keep links clickable if logo is wrapped */
+}
+
+/* The logo image/SVG itself */
+.cur-logoImg{
+  display:block;
+  width:calc(var(--cur-anchor-w) - var(--cur-logo-pad)*2);
+  max-width:100%;
+  height:auto;
+  max-height:min(var(--cur-logo-max-h), calc(100vh - var(--cur-logo-pad)*2));
+  object-fit:contain;           /* preserve aspect ratio */
+  object-position:center center;
+  background:transparent;       /* ensure transparent bg if raster fallback */
+  transform:scale(var(--cur-logo-scale));
+  transform-origin:center;
+  /* Improve raster crispness; harmless for SVG */
+  image-rendering:-webkit-optimize-contrast;
+  image-rendering:crisp-edges;
+}
+
+/* Optional brand caption lines (if you keep them) */
+.cur-logoName{
+  font-size:11px; line-height:1.1; color:var(--ink);
+  font-weight:800; letter-spacing:.02em;
+}
+.cur-logoSub{ font-size:10px; color:var(--ink-soft); }
+
+/* Header (spans columns 2–3) */
+.cur-header{
+  grid-area: header;
+  position:sticky; top:0; z-index:30;
+  height:var(--cur-header-h);
+  display:flex; align-items:center; justify-content:space-between;
+  background:var(--ivory);
+  border-bottom:1px solid var(--ring);
+  padding:0 16px;
+}
+.cur-crumbs{
+  color:var(--ink-soft);
+  font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.cur-actions{ display:flex; align-items:center; gap:10px; }
+
+/* Sidebar (under header, to the left of main) */
+.cur-sidebar{
+  grid-area: sidebar;
+  border-right:1px solid var(--ring);
+  background:var(--ivory);
+  position:relative;
+}
+.cur-sidebar__inner{
+  position:sticky; top:var(--cur-header-h);
+  height:calc(100vh - var(--cur-header-h));
+  overflow:auto;
+  padding:14px 12px;
+}
+
+/* Sidebar navigation & sections */
+.cur-nav{ display:grid; gap:6px; }
+.cur-nav__item{
+  display:flex; align-items:center; gap:10px;
+  padding:10px 12px; border-radius:10px;
+  text-decoration:none; color:var(--ink);
+  border:1px solid transparent;
+}
+.cur-nav__item:hover{ background:#f5f2ec; }
+.cur-nav__item.active{ background:#fff; border-color:var(--ring); }
+.cur-label{ font-size:12px; color:var(--ink-soft); margin:10px 0 6px 4px; }
+
+/* Main lesson area */
+.cur-main{
+  grid-area: main;
+  min-width:0; background:var(--beige);
+  padding:18px; display:flex; flex-direction:column; gap:16px;
+  max-width:1200px; width:100%; margin:0 auto;
+}
+
+/* Mobile: anchor hidden, sidebar becomes drawer */
+@media (max-width: 900px){
+  .cur-shell{
+    grid-template-columns: 1fr;
+    grid-template-rows: var(--cur-header-h) 1fr;
+    grid-template-areas:
+      "header"
+      "main";
+  }
+  .cur-anchor{ display:none; }
+  .cur-sidebar{
+    position:fixed; inset:0 auto 0 0; width:min(88vw,320px);
+    transform:translateX(-100%); transition:transform .18s ease; z-index:50;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+  }
+  .cur-shell.drawer-open .cur-sidebar{ transform:translateX(0); }
+  .cur-scrim{ position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:45; display:none; }
+  .cur-shell.drawer-open .cur-scrim{ display:block; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.01ms!important; transition-duration:.01ms!important; }
+}
+
+/* Print */
+@media print{
+  .cur-anchor, .cur-header, .cur-sidebar{ display:none !important; }
+  .cur-main{ padding:0 !important; background:#fff !important; }
+}
+/* --- bridge: map layout classnames to shell styles --- */
+.cur-root { display: contents; }
+.cur-body  { display:grid; grid-template-columns: var(--cur-sidebar-w) 1fr; }
+.cur-sidebarInner { position:sticky; top:var(--cur-header-h); height:calc(100vh - var(--cur-header-h)); overflow:auto; padding:14px 12px; }
+
+/* nav name aliases */
+.cur-navList { list-style:none; margin:0; padding:0; }
+.cur-navLi {}
+.cur-navItem { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px; text-decoration:none; color:var(--ink); border:1px solid transparent; }
+.cur-navItem:hover { background:#f5f2ec; }
+.cur-navItem.is-active { background:#fff; border-color:var(--ring); }
+.cur-navIcon { width:1.25em; display:inline-grid; place-items:center; }
+.cur-navText { font-size:14px; }
+
+/* header bits already exist; ensure logo link is nice */
+.cur-logoAnchor { display:flex; align-items:center; }
+.cur-logoLink { display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; }
+
+/* mobile drawer helpers */
+.cur-hideDesktop { display:none; }
+@media (max-width: 900px){
+  .cur-hideDesktop { display:initial; }
+  .cur-hideMobile  { display:none; }
+}
+
+

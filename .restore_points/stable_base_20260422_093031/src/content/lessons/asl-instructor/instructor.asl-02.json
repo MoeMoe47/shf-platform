@@ -1,0 +1,116 @@
+{
+  "id": "instructor.asl-02",
+  "title": "Instructor • ASL 02 — Numbers & Counting",
+  "mirrorsStudent": "student.asl-02",
+  "estMinutes": 30,
+
+  "pacing": [
+    { "segment": "Prime (Why numbers?)", "min": 2, "notes": "Signal relevance: ages, class periods, phone numbers, prices." },
+    { "segment": "Model 1–5 / 6–9 orientation", "min": 6, "notes": "Exaggerate palm orientation for 6–9; show side view for clarity." },
+    { "segment": "Guided practice (choral → rows)", "min": 8, "notes": "Count sets (books, students, chairs). Vary tempo and hand dominance." },
+    { "segment": "Applied Q&A (age/how-many?)", "min": 8, "notes": "HOW-OLD? HOW-MANY CLASS? SIBLINGS? Rotate partners; enforce NMM." },
+    { "segment": "Exit + artifact brief", "min": 6, "notes": "2 quick checks; explain portfolio clip + rubric focus." }
+  ],
+
+  "alignment": {
+    "standards": [
+      "World-Readiness Standards for Learning Languages: Interpersonal & Interpretive",
+      "CCSS.ELA-LITERACY.SL.9-10.1 (collaborative discussions)",
+      "UDL 2.5 (pattern recognition): stable handshape/orientation patterns for 6–9"
+    ],
+    "grantsTags": [
+      "CTE/Perkins: numeracy in workplace communication (counts, quantities)",
+      "ESSA Title IV-A: well-rounded education, world language access"
+    ]
+  },
+
+  "sel7": {
+    "signals": ["Chunk", "Check", "Coach"],
+    "coachPhrases": [
+      "👍 Clear handshape—now lock palm **out** for 6–9.",
+      "Nice pacing. Try one notch slower to keep orientation crisp.",
+      "Great repair! You self-corrected 13–15 without stopping."
+    ],
+    "communityCare": "Normalize repair: model brief pause + repeat with clear orientation; celebrate accurate retries."
+  },
+
+  "materials": [
+    "Number wall strip (1–20) with orientation arrows for 6–9",
+    "Small countable objects (erasers, cards) for quick sets",
+    "Timer (30–45s bursts) for tempo ladders"
+  ],
+
+  "teachingTips": [
+    "Stand ¾ profile so learners can mirror your 6–9 orientation correctly.",
+    "Use **tempo ladders**: slow → medium → fast; reset to slow after errors.",
+    "Anchor counting in space (L→R) and keep it consistent the whole class.",
+    "For 13–15, minimize extra motion—keep the movement tight and uniform."
+  ],
+
+  "formativeChecks": [
+    { "type": "flash", "prompt": "Sign 6, 7, 8, 9 with correct palm orientation." },
+    { "type": "micro-QA", "prompt": "Partner A asks HOW-OLD? Partner B answers; swap." },
+    { "type": "listening", "prompt": "Instructor signs a number sequence; students write the three values." }
+  ],
+
+  "rubric": {
+    "criteria": [
+      {
+        "skill": "Handshape & Orientation (1–9)",
+        "levels": ["Inconsistent orientation", "Mostly clear; 1–2 slips", "Consistently clear orientation"]
+      },
+      {
+        "skill": "Accuracy (Values)",
+        "levels": ["Frequent value errors", "Occasional errors", "Accurate values throughout"]
+      },
+      {
+        "skill": "Applied Q&A",
+        "levels": ["Minimal/unclear", "Developing with prompts", "Effective, independent Q&A"]
+      }
+    ]
+  },
+
+  "answerKey": {
+    "quiz": [
+      { "q": "Orientation for 6–9?", "answer": "Palm out (toward interlocutor), compact finger tucks." },
+      { "q": "Gloss for 'How old are you?'", "answer": "YOU OLD HOW" },
+      { "q": "Two appropriate number uses in daily school life", "answer": "Class periods; locker numbers; due dates; scores (any two)" }
+    ]
+  },
+
+  "accommodations": [
+    "Provide number charts including **arrow cues** for palm orientation.",
+    "Allow practice with video replay at 0.75× speed.",
+    "Offer tactile/hand-under-hand guidance (when appropriate and consented) for orientation feel."
+  ],
+
+  "portfolio": {
+    "artifact": "10–15s video: student signs age + two number facts (e.g., siblings, class period).",
+    "reviewSteps": [
+      "Play once without pausing; rate each rubric row.",
+      "Replay only the 6–9 portion; give one **Coach** phrase.",
+      "Student states one micro-goal for next attempt."
+    ],
+    "feedbackStem": "Your handshape clarity was __/3, orientation __/3. Next time, try __ to keep 6–9 consistent.",
+    "dopamine": "“Those 6–9 orientations were crisp—love the control! 💪 Keep that pace.”"
+  },
+
+  "progressTracking": {
+    "fields": ["attemptDate", "6to9Orientation", "valueAccuracy", "appliedQA", "coachNote", "grade"],
+    "gradeScale": { "A": "Mastery", "B": "Proficient", "C": "Developing", "IP": "In progress" }
+  },
+
+  "instructorView": {
+    "sectionsGuide": [
+      { "section": "Model 1–20", "whatToWatch": ["Finger tucks for 6–9", "Reduced extra motion on 13–15"] },
+      { "section": "Guided practice", "whatToWatch": ["Tempo control", "Consistent left→right spatial anchor"] },
+      { "section": "Partner Q&A", "whatToWatch": ["Clear WH/NMM on HOW-OLD", "Repair strategy if value error occurs"] }
+    ]
+  },
+
+  "admin": {
+    "version": 1,
+    "createdBy": "system",
+    "notes": "Mirrors student.asl-02; update pacing if your bell schedule differs."
+  }
+}

@@ -1,0 +1,18 @@
+-- 003_cases.sql
+
+CREATE TABLE IF NOT EXISTS cases (
+  case_id TEXT PRIMARY KEY,
+  organization_id TEXT NOT NULL REFERENCES organizations(organization_id),
+  program_id TEXT REFERENCES programs(program_id),
+  case_type TEXT NOT NULL,
+  status TEXT NOT NULL,
+  priority TEXT NOT NULL,
+  assigned_team_id TEXT REFERENCES teams(team_id),
+  assigned_user_id TEXT REFERENCES users(user_id),
+  source_system TEXT,
+  source_record_id TEXT,
+  metadata_json JSONB,
+  created_by_user_id TEXT REFERENCES users(user_id),
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+);

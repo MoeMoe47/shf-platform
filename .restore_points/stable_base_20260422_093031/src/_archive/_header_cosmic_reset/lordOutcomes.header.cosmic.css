@@ -1,0 +1,256 @@
+/* Lord of Outcomes — COSMIC COPPER HEADER (single source of truth)
+   Goal: match the copper space header reference (tabs + pill filters + dropdown feel)
+   This file should load LAST for LordOutcomes app. */
+
+/* --- Hard guard: keep header/UI readable (kills any accidental global veil) --- */
+.loo-dymApp, .looPage, #root {
+  filter: none !important;
+}
+
+/* Make sure the app sits above background layers */
+.looPage { position: relative; z-index: 1; }
+.looMain { position: relative; z-index: 5; }
+
+/* =========================
+   HEADER CONTAINER
+========================= */
+.looTopHeader,
+.loo-dymApp .looTopHeader,
+.looHeader,
+.loo-dymApp .looHeader {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-radius: 14px;
+  margin: 12px 12px 10px;
+  padding: 12px 12px 10px;
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow:
+    0 18px 60px rgba(0,0,0,0.65),
+    inset 0 1px 0 rgba(255,255,255,0.10);
+  backdrop-filter: blur(14px) saturate(1.25);
+  -webkit-backdrop-filter: blur(14px) saturate(1.25);
+
+  /* cosmic copper */
+  background:
+    radial-gradient(900px 220px at 12% 0%, rgba(255,120,40,0.30), transparent 62%),
+    radial-gradient(900px 220px at 75% -10%, rgba(255,170,110,0.18), transparent 70%),
+    radial-gradient(1200px 420px at 70% 120%, rgba(255,90,0,0.16), transparent 65%),
+    linear-gradient(180deg, rgba(10,8,10,0.92), rgba(12,10,14,0.84));
+}
+
+/* subtle star/dust specks */
+.looTopHeader::before,
+.looHeader::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.18) 0 1px, transparent 1px),
+    radial-gradient(circle at 60% 40%, rgba(255,255,255,0.14) 0 1px, transparent 1px),
+    radial-gradient(circle at 35% 70%, rgba(255,255,255,0.12) 0 1px, transparent 1px),
+    radial-gradient(circle at 80% 55%, rgba(255,255,255,0.10) 0 1px, transparent 1px);
+  background-size: 180px 180px, 220px 220px, 260px 260px, 300px 300px;
+  mix-blend-mode: screen;
+}
+
+.looTopHeader > * ,
+.looHeader > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================
+   BRAND ROW (title)
+========================= */
+.looBrand,
+.looTopHeader .looBrand,
+.looHeader .looBrand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 2px 4px 8px;
+  color: rgba(255,255,255,0.92);
+}
+
+.looBrandTitle,
+.looBrand h1,
+.looBrand .title {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  text-shadow: 0 8px 30px rgba(0,0,0,0.60);
+}
+
+/* =========================
+   TOP NAV TABS (Overview/States/Programs/… + Menu)
+   We target multiple possible class names safely.
+========================= */
+.looTabs,
+.looTopHeader .looTabs,
+.looHeader .looTabs,
+.looNav,
+.looTopHeader .looNav,
+.looHeader .looNav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 4px 10px;
+  flex-wrap: wrap;
+}
+
+.loo-tab,
+.looTabs a,
+.looNav a,
+.looTopHeader a.loo-tab,
+.looTopHeader .looTabs a,
+.looHeader .looTabs a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.10);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  box-shadow:
+    0 10px 26px rgba(0,0,0,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+  backdrop-filter: blur(10px) saturate(1.1);
+  -webkit-backdrop-filter: blur(10px) saturate(1.1);
+}
+
+.loo-tab:hover,
+.looTabs a:hover,
+.looNav a:hover {
+  color: rgba(255,255,255,0.95);
+  border-color: rgba(255,170,110,0.30);
+  box-shadow: 0 14px 34px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.10);
+}
+
+.is-active.loo-tab,
+.looTabs a.active,
+.looTabs a[aria-current="page"],
+.looNav a.active,
+.looNav a[aria-current="page"] {
+  color: rgba(255,255,255,0.98);
+  border-color: rgba(255,140,70,0.55);
+  background:
+    radial-gradient(220px 60px at 30% 0%, rgba(255,120,40,0.35), transparent 70%),
+    linear-gradient(180deg, rgba(255,120,40,0.14), rgba(0,0,0,0.18));
+}
+
+/* Menu button look */
+.looMenuBtn,
+.looTopHeader .looMenuBtn,
+.looHeader .looMenuBtn,
+button.looMenu,
+button[aria-label="Menu"] {
+  margin-left: auto;
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.90);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+  box-shadow: 0 14px 34px rgba(0,0,0,0.50), inset 0 1px 0 rgba(255,255,255,0.10);
+}
+
+/* =========================
+   FILTER ROW (Mode / Region / Stream / Range + actions)
+========================= */
+.looFilters,
+.looFiltersRow,
+.looTopHeader .looFilters,
+.looTopHeader .looFiltersRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 4px 8px;
+  flex-wrap: wrap;
+}
+
+/* pill shell (works for your input/select pills) */
+.loo-pill,
+.looPill,
+.looTopHeader .loo-pill,
+.looTopHeader .looPill,
+.looFilters .pill,
+.looFiltersRow .pill,
+.looFilters input,
+.looFilters select,
+.looFiltersRow input,
+.looFiltersRow select {
+  border-radius: 999px !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  background: linear-gradient(180deg, rgba(18,18,24,0.82), rgba(10,10,14,0.62)) !important;
+  color: rgba(255,255,255,0.88) !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(12px) saturate(1.15);
+  -webkit-backdrop-filter: blur(12px) saturate(1.15);
+}
+
+.looFilters input::placeholder,
+.looFiltersRow input::placeholder {
+  color: rgba(255,255,255,0.45);
+}
+
+/* right-side actions */
+.looActions,
+.looTopHeader .looActions,
+.looHeader .looActions {
+  margin-left: auto;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* buttons in header (Reset / Export / Save View) */
+.looTopHeader button,
+.looHeader button,
+.looTopHeader .btn,
+.looHeader .btn {
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  color: rgba(255,255,255,0.88);
+  padding: 9px 12px;
+  box-shadow: 0 12px 34px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+.looTopHeader button:hover,
+.looHeader button:hover,
+.looTopHeader .btn:hover,
+.looHeader .btn:hover {
+  border-color: rgba(255,140,70,0.35);
+  color: rgba(255,255,255,0.96);
+}
+
+/* Dropdown panels (menu) */
+.looDropdown,
+.looMenuPanel,
+[role="menu"],
+[role="listbox"] {
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background:
+    radial-gradient(420px 120px at 20% 0%, rgba(255,255,255,0.06), transparent 62%),
+    radial-gradient(520px 160px at 80% 10%, rgba(255,120,40,0.14), transparent 68%),
+    linear-gradient(180deg, rgba(18,18,24,0.92), rgba(10,10,14,0.86));
+  box-shadow: 0 28px 80px rgba(0,0,0,0.70);
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+}
+
+/* Small separators / divider lines if present */
+.looTopHeader hr,
+.looHeader hr,
+.looDivider {
+  border: 0;
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+}

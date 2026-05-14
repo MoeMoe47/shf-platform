@@ -1,0 +1,92 @@
+import { useEffect, useLayoutEffect, useState } from "react";
+import { tourSteps } from "./tourConfig";
+import TourStepCard from "./TourStepCard";
+
+function findTarget(selectorString) {
+  if (!selectorString) return null;
+  const selectors = selectorString
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  for (const selector of selectors) {
+    const el = document.querySelector(selector);
+    if (el) return el;
+  }
+  return null;
+}
+
+export default function TourOverlay({ state, nextStep, prevStep, endTour }) {
+  const step = tourSteps[state.currentStep];
+  const [rect, setRect] = useState(null);
+
+  useLayoutEffect(() => {
+    if (!state.isActive || !step) return;
+
+    const el = step.target === "body" ? null : findTarget(step.target);
+
+    const updateRect = () => {
+      if (!el) {
+        setRect(null);
+        return;
+      }
+      const r = el.getBoundingClientRect();
+      setRect({
+        top: Math.max(8, r.top - 8),
+        left: Math.max(8, r.left - 8),
+        width: Math.max(0, r.width + 16),
+        height: Math.max(0, r.height + 16),
+      });
+    };
+
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+    }
+
+    const t1 = setTimeout(updateRect, 50);
+    const t2 = setTimeout(updateRect, 250);
+
+    window.addEventListener("resize", updateRect);
+    window.addEventListener("scroll", updateRect, true);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      window.removeEventListener("resize", updateRect);
+      window.removeEventListener("scroll", updateRect, true);
+    };
+  }, [state.isActive, state.currentStep, step]);
+
+  useEffect(() => {
+    if (!state.isActive) setRect(null);
+  }, [state.isActive]);
+
+  if (!state.isActive || !step) return null;
+
+  return (
+    <>
+      <div className="tour-backdrop" />
+
+      {rect ? (
+        <div
+          className="tour-highlight"
+          style={{
+            top: `${rect.top}px`,
+            left: `${rect.left}px`,
+            width: `${rect.width}px`,
+            height: `${rect.height}px`,
+          }}
+        />
+      ) : null}
+
+      <TourStepCard
+        step={step}
+        stepIndex={state.currentStep}
+        total={tourSteps.length}
+        onNext={nextStep}
+        onBack={prevStep}
+        onClose={endTour}
+      />
+    </>
+  );
+}

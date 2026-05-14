@@ -1,0 +1,30 @@
+
+
+/* src/styles/FocusMode.css */
+
+/* Blur + dim chrome so the lesson body takes center stage */
+:root[data-focus="1"] .car-header,
+:root[data-focus="1"] .car-sidebar {
+  filter: blur(2px) brightness(.9);
+  pointer-events: none; /* prevent stray clicks */
+}
+
+/* Light highlight for the working areas */
+:root[data-focus="1"] [data-section="content"],
+:root[data-focus="1"] [data-section="reflection"] {
+  box-shadow: 0 0 0 3px rgba(255,165,0,.2); /* subtle orange ring */
+}
+
+/* Optional: reduce motion for folks who prefer it */
+@media (prefers-reduced-motion: no-preference) {
+  .car-header, .car-sidebar, [data-section="content"], [data-section="reflection"] {
+    transition: filter .2s ease, box-shadow .2s ease;
+  }
+}
+
+/* Optional: prevent background scroll when focused */
+:root[data-focus="1"] body {
+  overflow: hidden;
+}
+
+

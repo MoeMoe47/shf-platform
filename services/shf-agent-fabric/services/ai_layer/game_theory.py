@@ -128,6 +128,8 @@ def _score_county(
 
 
 def run_game_theory(context, risk_result, intervention_result, funding_result, rules=None):
+    rules_meta = {}
+
     region = context.get("region") or "Unknown region"
 
     single = _score_county(

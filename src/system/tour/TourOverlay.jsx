@@ -1,137 +1,118 @@
-import { useEffect, useMemo, useState } from "react";
-import { tourSteps } from "./tourConfig";
+import { useLayoutEffect, useState } from "react";
 import TourStepCard from "./TourStepCard";
 
-function pickTarget(step) {
-  if (!step?.target) return null;
-  const selectors = step.target
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
-
-  for (const selector of selectors) {
-    const el = document.querySelector(selector);
-    if (el) return el;
-  }
-  return null;
+function findTarget(selector) {
+  return selector ? document.querySelector(selector) : null;
 }
 
-function getPlacementStyle(rect, placement) {
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
-  const cardWidth = Math.min(380, vw - 32);
-  const gap = 16;
+function buildRectForStep(step) {
+  const el = findTarget(step.target);
+  if (!el) return null;
 
-  if (!rect || placement === "center") {
-    return {
-      left: Math.max(16, (vw - cardWidth) / 2),
-      top: Math.max(24, (vh - 260) / 2),
-      width: cardWidth,
-    };
+  if (step.id === "kpis") {
+    const cards = [...el.querySelectorAll(".shf-kpi-card")];
+    const drawer = document.querySelector(".shf-drawer");
+
+    if (cards.length) {
+      const first = cards[0].getBoundingClientRect();
+      const drawerLeft = drawer
+        ? drawer.getBoundingClientRect().left
+        : window.innerWidth;
+
+      const visibleCards = cards.filter((card) => {
+        const r = card.getBoundingClientRect();
+        return r.right < drawerLeft - 8;
+      });
+
+      const lastCard =
+        visibleCards.length > 0
+          ? visibleCards[visibleCards.length - 1]
+          : cards[0];
+
+      const last = lastCard.getBoundingClientRect();
+
+      return {
+        top: Math.max(8, first.top - 6),
+        left: Math.max(8, first.left - 6),
+        width: Math.max(40, last.right - first.left + 12),
+        height: Math.max(40, first.height + 12),
+      };
+    }
   }
 
-  if (placement === "left") {
-    return {
-      left: Math.max(16, rect.left - cardWidth - gap),
-      top: Math.max(24, rect.top),
-      width: cardWidth,
-    };
-  }
-
-  if (placement === "right") {
-    return {
-      left: Math.min(vw - cardWidth - 16, rect.right + gap),
-      top: Math.max(24, rect.top),
-      width: cardWidth,
-    };
-  }
-
-  if (placement === "top") {
-    return {
-      left: Math.min(vw - cardWidth - 16, Math.max(16, rect.left)),
-      top: Math.max(24, rect.top - 240 - gap),
-      width: cardWidth,
-    };
-  }
+  const r = el.getBoundingClientRect();
 
   return {
-    left: Math.min(vw - cardWidth - 16, Math.max(16, rect.left)),
-    top: Math.min(vh - 260 - 16, rect.bottom + gap),
-    width: cardWidth,
+    top: Math.max(8, r.top - 8),
+    left: Math.max(8, r.left - 8),
+    width: Math.max(40, r.width + 16),
+    height: Math.max(40, r.height + 16),
   };
 }
 
-export default function TourOverlay({ state, nextStep, prevStep, endTour }) {
-  const step = tourSteps[state.currentStep];
+export default function TourOverlay({
+  state,
+  steps = [],
+  nextStep,
+  prevStep,
+  endTour,
+}) {
+  const step = steps[state.currentStep];
   const [rect, setRect] = useState(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!state.isActive || !step) return;
 
-    const el = pickTarget(step);
-    if (!el || step.target === "body") {
-      setRect(null);
-      return;
+    const target = findTarget(step.target);
+
+    if (target) {
+      target.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
     }
 
-    const update = () => {
-      const r = el.getBoundingClientRect();
-      setRect({
-        top: Math.max(8, r.top - 8),
-        left: Math.max(8, r.left - 8),
-        width: Math.max(0, r.width + 16),
-        height: Math.max(0, r.height + 16),
-        right: r.right + 8,
-        bottom: r.bottom + 8,
-      });
+    const updateRect = () => {
+      setRect(buildRectForStep(step));
     };
 
-    update();
-    el.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+    const t1 = setTimeout(updateRect, 80);
+    const t2 = setTimeout(updateRect, 260);
 
-    window.addEventListener("resize", update);
-    window.addEventListener("scroll", update, true);
+    window.addEventListener("resize", updateRect);
+    window.addEventListener("scroll", updateRect, true);
 
     return () => {
-      window.removeEventListener("resize", update);
-      window.removeEventListener("scroll", update, true);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      window.removeEventListener("resize", updateRect);
+      window.removeEventListener("scroll", updateRect, true);
     };
   }, [state.isActive, state.currentStep, step]);
-
-  const cardStyle = useMemo(
-    () => getPlacementStyle(rect, step?.placement || "bottom"),
-    [rect, step]
-  );
 
   if (!state.isActive || !step) return null;
 
   return (
     <>
       <div className="tour-backdrop" />
-      {rect ? (
+
+      {rect && (
         <div
           className="tour-highlight"
           style={{
-            top: `${rect.top}px`,
-            left: `${rect.left}px`,
-            width: `${rect.width}px`,
-            height: `${rect.height}px`,
+            top: rect.top,
+            left: rect.left,
+            width: rect.width,
+            height: rect.height,
           }}
         />
-      ) : null}
+      )}
 
-      <div
-        className="tour-card-wrap"
-        style={{
-          left: `${cardStyle.left}px`,
-          top: `${cardStyle.top}px`,
-          width: `${cardStyle.width}px`,
-        }}
-      >
+      <div className="tour-card-wrap">
         <TourStepCard
           step={step}
           stepIndex={state.currentStep}
-          total={tourSteps.length}
+          total={steps.length}
           onNext={nextStep}
           onBack={prevStep}
           onClose={endTour}

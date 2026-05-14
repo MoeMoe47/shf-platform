@@ -1,0 +1,269 @@
+/* src/styles/lordOutcomes.header.cosmic.css
+   Cosmic header: tabs + pills + dropdown menus
+*/
+
+:root{
+  --loo-hdr-radius: 14px;
+  --loo-hdr-border: rgba(255,255,255,.10);
+  --loo-hdr-glow: rgba(255,140,60,.18);
+  --loo-hdr-text: rgba(255,255,255,.88);
+  --loo-hdr-muted: rgba(255,255,255,.58);
+  --loo-hdr-bgA: rgba(10,10,12,.74);
+  --loo-hdr-bgB: rgba(22,12,10,.58);
+  --loo-hdr-shadow: 0 18px 60px rgba(0,0,0,.55);
+}
+
+/* Header shell */
+.looHeader{
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  padding: 14px 14px 10px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  background:
+    radial-gradient(1200px 420px at 70% 0%, rgba(210,90,35,.18), transparent 55%),
+    radial-gradient(900px 360px at 25% 15%, rgba(255,255,255,.06), transparent 55%),
+    linear-gradient(180deg, rgba(0,0,0,.72), rgba(0,0,0,.40));
+  backdrop-filter: blur(10px);
+}
+
+.looHdrPanel{
+  border: 1px solid var(--loo-hdr-border);
+  border-radius: var(--loo-hdr-radius);
+  box-shadow: var(--loo-hdr-shadow);
+  overflow: hidden;
+  background:
+    radial-gradient(900px 400px at 75% 0%, rgba(255,110,40,.22), transparent 62%),
+    linear-gradient(180deg, var(--loo-hdr-bgA), var(--loo-hdr-bgB));
+}
+
+/* Top row: brand / tabs / actions */
+.looHdrTop{
+  display: grid;
+  grid-template-columns: 320px 1fr 320px;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+}
+
+.looHdrBrand{
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  color: var(--loo-hdr-text);
+}
+.looHdrBrandTitle{
+  font-weight: 700;
+  letter-spacing: .2px;
+  font-size: 14px;
+}
+.looHdrBrandSub{
+  font-size: 12px;
+  color: var(--loo-hdr-muted);
+  margin-top: 2px;
+}
+
+.looHdrTabs{
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.looTab{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.10);
+  color: rgba(255,255,255,.78);
+  text-decoration: none;
+  background: rgba(0,0,0,.18);
+  transition: transform .12s ease, border-color .12s ease, background .12s ease;
+}
+.looTab:hover{
+  transform: translateY(-1px);
+  border-color: rgba(255,255,255,.18);
+  background: rgba(0,0,0,.28);
+}
+.looTab.is-active{
+  color: rgba(255,255,255,.92);
+  border-color: rgba(255,160,90,.28);
+  box-shadow: 0 0 0 3px rgba(255,130,60,.10);
+  background: linear-gradient(180deg, rgba(255,140,60,.18), rgba(0,0,0,.22));
+}
+
+.looHdrActions{
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Dropdown (details/summary) */
+.looDrop{
+  position: relative;
+}
+.looDrop > summary{
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+}
+.looDrop > summary::-webkit-details-marker{ display:none; }
+
+.looBtn{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.10);
+  color: rgba(255,255,255,.84);
+  background: rgba(0,0,0,.22);
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+.looBtn:hover{
+  border-color: rgba(255,255,255,.18);
+  background: rgba(0,0,0,.30);
+}
+.looCaret{ opacity: .75; font-size: 12px; transform: translateY(-1px); }
+
+.looMenu{
+  position: absolute;
+  right: 0;
+  top: 42px;
+  min-width: 240px;
+  padding: 8px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background:
+    radial-gradient(600px 240px at 70% 0%, rgba(255,120,60,.18), transparent 60%),
+    rgba(8,8,10,.92);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 22px 60px rgba(0,0,0,.60);
+}
+
+.looMenuHeader{
+  font-size: 12px;
+  color: rgba(255,255,255,.62);
+  padding: 6px 10px 6px;
+}
+.looMenuItem{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 10px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: rgba(255,255,255,.86);
+  text-decoration: none;
+  cursor: pointer;
+}
+.looMenuItem:hover{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.10);
+}
+.looMenuItem small{ color: rgba(255,255,255,.55); }
+
+.looMenuSep{
+  height: 1px;
+  margin: 6px 6px;
+  background: rgba(255,255,255,.08);
+}
+
+/* Second row: filters */
+.looHdrFilters{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px 12px;
+  border-top: 1px solid rgba(255,255,255,.06);
+}
+
+.looPill{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  padding: 0 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.20);
+  color: rgba(255,255,255,.88);
+}
+.looPillLabel{
+  font-size: 12px;
+  color: rgba(255,255,255,.58);
+}
+.looSelect{
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: rgba(255,255,255,.90);
+  font-weight: 600;
+  padding-right: 18px;
+}
+.looSelectWrap{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.looSelectWrap:after{
+  content: "▾";
+  position: absolute;
+  right: 0;
+  opacity: .65;
+  pointer-events: none;
+}
+
+.looHdrSpacer{ flex: 1; }
+
+.looReset{
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.22);
+  color: rgba(255,255,255,.86);
+}
+.looReset:hover{
+  border-color: rgba(255,255,255,.18);
+  background: rgba(0,0,0,.30);
+}
+
+/* Meta line */
+.looHdrMeta{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border-top: 1px solid rgba(255,255,255,.06);
+  color: rgba(255,255,255,.55);
+  font-size: 12px;
+}
+.looDot{
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255,140,60,.80);
+  box-shadow: 0 0 0 3px rgba(255,140,60,.14);
+}
+
+/* Responsive */
+@media (max-width: 980px){
+  .looHdrTop{
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+  .looHdrTabs{ justify-content: flex-start; }
+  .looHdrActions{ justify-content: flex-start; }
+}

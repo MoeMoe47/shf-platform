@@ -1,0 +1,73 @@
+
+
+/* CURRICULUM · Day theme (scoped to the Curriculum app) */
+:where(html)[data-app="curriculum"].cur-theme-light {
+  color-scheme: light;
+
+  /* map to your global tokens + fallbacks */
+  --bg:    var(--beige, #efe7dc);
+  --panel: var(--ivory, #faf8f3);
+  --paper: var(--ivory, #faf8f3);
+  --ring:  var(--line,  #e6e4de);
+
+  /* accent (International Orange) */
+  --brand:     var(--orange, #ff4f00);
+  --brand-ink: #fff;
+}
+
+/* repaint root + shell */
+:where(html)[data-app="curriculum"].cur-theme-light body,
+:where(html)[data-app="curriculum"].cur-theme-light #root,
+:where(html)[data-app="curriculum"].cur-theme-light .cur-shell {
+  background: var(--bg) !important;
+  color: var(--text, #111827) !important;
+}
+
+/* main regions */
+:where(html)[data-app="curriculum"].cur-theme-light .cur-header,
+:where(html)[data-app="curriculum"].cur-theme-light .cur-sidebar,
+:where(html)[data-app="curriculum"].cur-theme-light .cur-main {
+  background: var(--panel) !important;
+  color: var(--text, #111827) !important;
+  border-color: var(--ring) !important;
+}
+
+/* right rail */
+:where(html)[data-app="curriculum"].cur-theme-light .on-this-lesson,
+:where(html)[data-app="curriculum"].cur-theme-light .lesson-rail,
+:where(html)[data-app="curriculum"].cur-theme-light .rail {
+  background: var(--paper) !important;
+  color: var(--text, #111827) !important;
+  border-color: var(--ring) !important;
+}
+:where(html)[data-app="curriculum"].cur-theme-light .on-this-lesson *,
+:where(html)[data-app="curriculum"].cur-theme-light .lesson-rail *,
+:where(html)[data-app="curriculum"].cur-theme-light .rail * {
+  color: var(--text, #111827) !important;
+  -webkit-text-fill-color: var(--text, #111827) !important; /* WebKit fix */
+}
+
+/* CTAs pick up International Orange */
+:where(html)[data-app="curriculum"].cur-theme-light .btn-primary,
+:where(html)[data-app="curriculum"].cur-theme-light .button.primary,
+:where(html)[data-app="curriculum"].cur-theme-light .cta,
+:where(html)[data-app="curriculum"].cur-theme-light .accent {
+  background: var(--brand) !important;
+  color: var(--brand-ink) !important;
+  border-color: var(--brand) !important;
+}
+:where(html)[data-app="curriculum"].cur-theme-light a {
+  color: var(--ink, var(--text, #111827)) !important;
+}
+
+/* collapse the left logo/anchor if toggled */
+:where(html)[data-app="curriculum"].no-anchor .cur-anchor { display: none !important; }
+:where(html)[data-app="curriculum"].no-anchor .cur-shell {
+  --cur-anchor-w: 0px !important;
+  grid-template-columns: var(--cur-sidebar-w) 1fr !important;
+  grid-template-areas:
+    "header header"
+    "sidebar main" !important;
+}
+
+

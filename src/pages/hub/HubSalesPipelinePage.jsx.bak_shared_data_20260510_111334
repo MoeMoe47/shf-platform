@@ -1,0 +1,516 @@
+import React from "react";
+import { HUB_BUSINESS_NAV_ITEMS as navItems, HUB_ORBITER_LOGO } from "./shared/hubBusinessNetworkNav.js";
+import "./hub-sales-pipeline-page.css";
+
+const pipelineSeed = [
+  {
+    id: "sale_001",
+    title: "Intro: Workforce Partner to Staffing Agency",
+    stage: "Introduced",
+    owner: "SHS Sales Team",
+    estimatedValue: 68000,
+    priority: "High",
+    dueInDays: 4,
+    relatedOpportunity: "Employer Placement Pipeline",
+    relatedPartners: ["Franklin Workforce Partner", "Central Staffing Group"],
+    nextAction: "Schedule employer placement meeting",
+    notes: "Strong partner alignment. Staffing partner needs trained workers; workforce partner needs employer placements.",
+  },
+  {
+    id: "sale_002",
+    title: "County Reentry Bundle Proposal",
+    stage: "Proposal Building",
+    owner: "SHS Sales Team",
+    estimatedValue: 125000,
+    priority: "High",
+    dueInDays: 7,
+    relatedOpportunity: "County Reentry Workforce Proposal",
+    relatedPartners: ["Franklin Workforce Partner", "Central Mobility Services", "Kermit Recovery Support", "SHS Reporting Layer"],
+    nextAction: "Finalize service lanes, pricing position, and reporting role",
+    notes: "Best-value bundle is ready for proposal packet generation.",
+  },
+  {
+    id: "sale_003",
+    title: "Transportation Support for Healthcare Workforce",
+    stage: "Meeting Scheduled",
+    owner: "SHS Sales Team",
+    estimatedValue: 42000,
+    priority: "Medium",
+    dueInDays: 2,
+    relatedOpportunity: "Healthcare Workforce Transportation Support",
+    relatedPartners: ["Central Mobility Services", "Franklin Workforce Partner"],
+    nextAction: "Confirm transportation capacity and route coverage",
+    notes: "Useful cross-sale opportunity between workforce and mobility support.",
+  },
+  {
+    id: "sale_004",
+    title: "Recovery Support Transportation Bundle",
+    stage: "Negotiation",
+    owner: "SHS Sales Team",
+    estimatedValue: 54000,
+    priority: "High",
+    dueInDays: 5,
+    relatedOpportunity: "Recovery Support Transportation Bundle",
+    relatedPartners: ["Kermit Recovery Support", "Central Mobility Services", "SHS Reporting Layer"],
+    nextAction: "Confirm final price and service schedule",
+    notes: "High urgency. Needs clear scope and proof/reporting lane.",
+  },
+  {
+    id: "sale_005",
+    title: "Verified Outcome Reporting Pilot",
+    stage: "Won",
+    owner: "SHS Sales Team",
+    estimatedValue: 36000,
+    priority: "Low",
+    dueInDays: 0,
+    relatedOpportunity: "Verified Outcome Reporting Pilot",
+    relatedPartners: ["Silicon Heartland Solutions"],
+    nextAction: "Move into active reporting setup",
+    notes: "Won pilot. Convert into active implementation and proof workflow.",
+  },
+  {
+    id: "sale_006",
+    title: "Low-Fit Vendor Referral",
+    stage: "Lost",
+    owner: "SHS Sales Team",
+    estimatedValue: 18000,
+    priority: "Low",
+    dueInDays: 0,
+    relatedOpportunity: "Low-Fit Vendor Referral",
+    relatedPartners: ["Unknown Vendor"],
+    nextAction: "Archive as learning signal",
+    notes: "Weak fit. Not aligned to Hub service lanes.",
+  },
+  {
+    id: "sale_007",
+    title: "Community Partner Follow-Up",
+    stage: "Follow-Up Later",
+    owner: "SHS Sales Team",
+    estimatedValue: 28000,
+    priority: "Medium",
+    dueInDays: 14,
+    relatedOpportunity: "Future Community Support Bundle",
+    relatedPartners: ["Community Support Partner", "SHS Reporting Layer"],
+    nextAction: "Follow up after partner capacity resets",
+    notes: "Good relationship, but not ready this cycle.",
+  },
+];
+
+const stages = [
+  "Identified",
+  "Introduced",
+  "Meeting Scheduled",
+  "Proposal Building",
+  "Negotiation",
+  "Won",
+  "Lost",
+  "Follow-Up Later",
+];
+
+
+function go(hash) {
+  window.location.hash = hash;
+}
+
+function money(value) {
+  if (!value) return "$0";
+  if (value >= 1000000) return `$${(value / 1000000).toFixed(1)}M`;
+  if (value >= 1000) return `$${Math.round(value / 1000)}K`;
+  return `$${value}`;
+}
+
+function readEvents() {
+  try {
+    return JSON.parse(localStorage.getItem("shs_hub_sales_pipeline_events_v1") || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function writeEvents(events) {
+  localStorage.setItem("shs_hub_sales_pipeline_events_v1", JSON.stringify(events));
+}
+
+function getStageValue(items, stage) {
+  return items
+    .filter((item) => item.stage === stage)
+    .reduce((sum, item) => sum + item.estimatedValue, 0);
+}
+
+function getPriorityClass(priority) {
+  return String(priority || "medium").toLowerCase();
+}
+
+export default function HubSalesPipelinePage() {
+  const [selectedStage, setSelectedStage] = React.useState("All");
+  const [events, setEvents] = React.useState(readEvents);
+
+  const visibleItems =
+    selectedStage === "All"
+      ? pipelineSeed
+      : pipelineSeed.filter((item) => item.stage === selectedStage);
+
+  const activeItems = pipelineSeed.filter(
+    (item) => !["Won", "Lost"].includes(item.stage)
+  );
+
+  const activePipelineValue = activeItems.reduce(
+    (sum, item) => sum + item.estimatedValue,
+    0
+  );
+
+  const wonValue = getStageValue(pipelineSeed, "Won");
+  const dueSoon = pipelineSeed.filter(
+    (item) => item.dueInDays > 0 && item.dueInDays <= 7 && !["Won", "Lost"].includes(item.stage)
+  );
+
+  const highPriority = pipelineSeed.filter(
+    (item) => item.priority === "High" && !["Won", "Lost"].includes(item.stage)
+  );
+
+  const topMove =
+    dueSoon.find((item) => item.priority === "High") ||
+    highPriority[0] ||
+    activeItems[0];
+
+  const recordEvent = (type, saleId) => {
+    const event = {
+      id: `sales_event_${Date.now()}`,
+      type,
+      saleId,
+      createdAt: new Date().toISOString(),
+    };
+
+    const next = [event, ...events].slice(0, 75);
+    setEvents(next);
+    writeEvents(next);
+  };
+
+  return (
+    <main className="hsp-shell">
+      <aside className="hsp-rail">
+        <button className="hsp-logo" onClick={() => go("#/hub")} aria-label="Go to SHS Hub">
+          <img src={HUB_ORBITER_LOGO} alt="SHS" onError={(event) => { event.currentTarget.style.display = "none"; }} />
+          <span>SHS</span>
+        </button>
+
+        <nav className="hsp-nav" aria-label="Hub navigation">
+          {navItems.map(([icon, label, hash]) => (
+            <button
+              key={label}
+              className={label === "Sales" ? "is-active" : ""}
+              onClick={() => go(hash)}
+            >
+              <span>{icon}</span>
+              <small>{label}</small>
+            </button>
+          ))}
+        </nav>
+
+        <div className="hsp-readiness">
+          <strong>SALES</strong>
+          <div>89%</div>
+          <span>Active</span>
+        </div>
+      </aside>
+
+      <section className="hsp-page">
+        <header className="hsp-header">
+          <div>
+            <p>SHS SALES TEAM PIPELINE</p>
+            <h1>Sales Pipeline</h1>
+            <span>
+              Track introductions, meetings, follow-ups, proposals, negotiations,
+              deals influenced, relationship notes, and next-best actions across the SHS Hub.
+            </span>
+
+            <div className="hsp-headerNote">
+              This page shows how Hub opportunities become real sales motion.
+              It connects partner introductions, bundles, proposal packets, and SHS sales follow-up.
+            </div>
+          </div>
+
+          <div className="hsp-actions">
+            <button onClick={() => go("#/hub/opportunities")}>Opportunities</button>
+            <button onClick={() => go("#/hub/bundles")}>Bundle Builder</button>
+            <button className="is-primary" onClick={() => recordEvent("sales_review_started", topMove?.id)}>
+              Start Sales Review
+            </button>
+          </div>
+        </header>
+
+        <section className="hsp-kpiStrip">
+          <article className="hsp-kpi">
+            <span>$</span>
+            <div>
+              <h3>Active Pipeline</h3>
+              <strong>{money(activePipelineValue)}</strong>
+              <p>Open sales motion</p>
+            </div>
+          </article>
+
+          <article className="hsp-kpi">
+            <span>✓</span>
+            <div>
+              <h3>Won Value</h3>
+              <strong>{money(wonValue)}</strong>
+              <p>Moved into execution</p>
+            </div>
+          </article>
+
+          <article className="hsp-kpi">
+            <span>!</span>
+            <div>
+              <h3>Due Soon</h3>
+              <strong>{dueSoon.length}</strong>
+              <p>Needs action within 7 days</p>
+            </div>
+          </article>
+
+          <article className="hsp-kpi">
+            <span>↗</span>
+            <div>
+              <h3>High Priority</h3>
+              <strong>{highPriority.length}</strong>
+              <p>Top sales focus</p>
+            </div>
+          </article>
+
+          <article className="hsp-kpi">
+            <span>▦</span>
+            <div>
+              <h3>Proposal Stage</h3>
+              <strong>{pipelineSeed.filter((item) => item.stage === "Proposal Building").length}</strong>
+              <p>Needs packet support</p>
+            </div>
+          </article>
+
+          <article className="hsp-kpi">
+            <span>↻</span>
+            <div>
+              <h3>Sales Events</h3>
+              <strong>{events.length}</strong>
+              <p>Logged actions</p>
+            </div>
+          </article>
+        </section>
+
+        <section className="hsp-stageFilter">
+          <button className={selectedStage === "All" ? "is-active" : ""} onClick={() => setSelectedStage("All")}>
+            All
+          </button>
+          {stages.map((stage) => (
+            <button
+              key={stage}
+              className={selectedStage === stage ? "is-active" : ""}
+              onClick={() => setSelectedStage(stage)}
+            >
+              {stage}
+            </button>
+          ))}
+        </section>
+
+        <section className="hsp-grid">
+          <div className="hsp-main">
+            <article className="hsp-panel hsp-topMove">
+              <div className="hsp-panelHead">
+                <div>
+                  <span className="hsp-chip hsp-chip--cyan">Next Best Sales Move</span>
+                  <h2>{topMove?.title}</h2>
+                  <small>{topMove?.relatedOpportunity}</small>
+                </div>
+
+                <strong>{money(topMove?.estimatedValue)}</strong>
+              </div>
+
+              <p>{topMove?.nextAction}</p>
+
+              <div className="hsp-topGrid">
+                <div>
+                  <span>Stage</span>
+                  <strong>{topMove?.stage}</strong>
+                </div>
+                <div>
+                  <span>Priority</span>
+                  <strong className={`priority-${getPriorityClass(topMove?.priority)}`}>{topMove?.priority}</strong>
+                </div>
+                <div>
+                  <span>Owner</span>
+                  <strong>{topMove?.owner}</strong>
+                </div>
+                <div>
+                  <span>Due</span>
+                  <strong>{topMove?.dueInDays ? `${topMove.dueInDays} days` : "Now"}</strong>
+                </div>
+              </div>
+
+              <div className="hsp-partnerLine">
+                {topMove?.relatedPartners.map((partner) => (
+                  <span key={partner}>{partner}</span>
+                ))}
+              </div>
+
+              <div className="hsp-panelActions">
+                <button onClick={() => recordEvent("intro_made", topMove?.id)}>Intro Made</button>
+                <button onClick={() => recordEvent("meeting_scheduled", topMove?.id)}>Meeting Scheduled</button>
+                <button onClick={() => recordEvent("proposal_created", topMove?.id)}>Proposal Created</button>
+                <button onClick={() => recordEvent("marked_won", topMove?.id)}>Mark Won</button>
+              </div>
+            </article>
+
+            <article className="hsp-panel">
+              <div className="hsp-panelHead">
+                <div>
+                  <span className="hsp-chip hsp-chip--blue">Execution Board</span>
+                  <h2>Sales Execution Pipeline</h2>
+                </div>
+              </div>
+
+              <div className="hsp-board">
+                {stages.map((stage) => (
+                  <div className={`hsp-column hsp-column--${stage.toLowerCase().replaceAll(" ", "-").replaceAll("/", "").replaceAll("-", "-")}`} key={stage}>
+                    <h3>{stage}</h3>
+
+                    {visibleItems.filter((item) => item.stage === stage).length === 0 ? (
+                      <div className="hsp-emptyStage">
+                        <strong>No deals in this stage</strong>
+                        <span>Nothing needs action here right now.</span>
+                      </div>
+                    ) : (
+                      visibleItems
+                        .filter((item) => item.stage === stage)
+                        .map((item) => {
+                          const isWon = item.stage === "Won";
+                          const isLost = item.stage === "Lost";
+                          const isProposal = item.stage === "Proposal Building";
+
+                          return (
+                            <article
+                              className={`hsp-card ${isWon ? "hsp-card--won" : ""} ${isLost ? "hsp-card--lost" : ""}`}
+                              key={item.id}
+                            >
+                              <div className="hsp-cardTop">
+                                <span>{item.owner}</span>
+                                <strong>{money(item.estimatedValue)}</strong>
+                              </div>
+
+                              <h4>{item.title}</h4>
+                              <p>{item.nextAction}</p>
+
+                              <div className="hsp-cardMeta">
+                                <b className={`priority-${getPriorityClass(item.priority)}`}>
+                                  {isWon ? "Won" : isLost ? "Lost" : item.priority}
+                                </b>
+                                <em>{item.dueInDays ? `Due in ${item.dueInDays} days` : "Final state"}</em>
+                              </div>
+
+                              <div className="hsp-lanes">
+                                {item.relatedPartners.slice(0, 3).map((partner) => (
+                                  <span key={partner}>{partner}</span>
+                                ))}
+                              </div>
+
+                              <div className="hsp-cardActions">
+                                <button onClick={() => recordEvent("sales_item_reviewed", item.id)}>Review</button>
+                                {isProposal ? (
+                                  <button onClick={() => recordEvent("proposal_packet_created", item.id)}>Proposal Packet</button>
+                                ) : isWon || isLost ? (
+                                  <button onClick={() => recordEvent("sales_item_archived", item.id)}>Archive</button>
+                                ) : (
+                                  <button onClick={() => recordEvent("sales_item_advanced", item.id)}>Advance</button>
+                                )}
+                              </div>
+                            </article>
+                          );
+                        })
+                    )}
+                  </div>
+                ))}
+              </div>
+            </article>
+          </div>
+
+          <aside className="hsp-side">
+            <article className="hsp-panel">
+              <div className="hsp-panelHead">
+                <div>
+                  <span className="hsp-chip hsp-chip--green">Follow-Up Focus</span>
+                  <h2>Due Soon</h2>
+                </div>
+              </div>
+
+              <div className="hsp-followList">
+                {dueSoon.map((item) => (
+                  <div key={item.id}>
+                    <span>{item.stage}</span>
+                    <strong>{item.title}</strong>
+                    <small>{item.nextAction}</small>
+                    <em>Due in {item.dueInDays} days</em>
+                  </div>
+                ))}
+              </div>
+            </article>
+
+            <article className="hsp-panel">
+              <div className="hsp-panelHead">
+                <div>
+                  <span className="hsp-chip hsp-chip--violet">Stage Summary</span>
+                  <h2>Pipeline Flow</h2>
+                </div>
+              </div>
+
+              <div className="hsp-stageSummary">
+                {stages.map((stage) => {
+                  const stageItems = pipelineSeed.filter((item) => item.stage === stage);
+                  const stageValue = stageItems.reduce((sum, item) => sum + item.estimatedValue, 0);
+
+                  return (
+                    <div key={stage}>
+                      <span>{stage}</span>
+                      <strong>{stageItems.length}</strong>
+                      <small>{money(stageValue)} value</small>
+                    </div>
+                  );
+                })}
+              </div>
+            </article>
+
+            <article className="hsp-panel">
+              <div className="hsp-panelHead">
+                <div>
+                  <span className="hsp-chip hsp-chip--orange">Action Log</span>
+                  <h2>Sales Events</h2>
+                </div>
+                <strong>{events.length}</strong>
+              </div>
+
+              <div className="hsp-eventLog">
+                {events.length ? (
+                  events.slice(0, 6).map((event) => (
+                    <div key={event.id}>
+                      <span>{event.type.replaceAll("_", " ")}</span>
+                      <small>{new Date(event.createdAt).toLocaleString()}</small>
+                    </div>
+                  ))
+                ) : (
+                  <p>No sales events yet. Start review, log an intro, schedule a meeting, or create a proposal.</p>
+                )}
+              </div>
+            </article>
+          </aside>
+        </section>
+
+        <footer className="hsp-footer">
+          <div>
+            <strong>Silicon Heartland Solutions</strong>
+            <span>Sales Pipeline · Introductions · Meetings · Proposals · Deals Influenced</span>
+          </div>
+
+          <p>
+            Powered by Silicon Heartland Solutions — move Hub opportunities into real relationships, proposals, and closed deals.
+          </p>
+        </footer>
+      </section>
+    </main>
+  );
+}

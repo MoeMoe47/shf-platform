@@ -1,0 +1,84 @@
+{
+  "id": "asl-51",
+  "title": "ASL 7.1 — Health & Appointments (Clinic Dialogues + Symptoms) 🏥",
+  "estMinutes": 30,
+  "objectives": [
+    "Ask/answer health questions using Y/N and WH forms",
+    "Localize symptoms on the body with clear placement and NMM for severity",
+    "Role-shift patient/provider to schedule/check in and describe basic concerns"
+  ],
+  "vocab": [
+    { "term": "APPOINTMENT (APPT)", "def": "A-hands link/lock (schedule/meeting)." },
+    { "term": "CLINIC / HOSPITAL", "def": "Medical location signs; use as anchors." },
+    { "term": "SICK / HURT (PAIN)", "def": "SICK: middle fingers to forehead/stomach; HURT: index fingers twist toward each other at location." },
+    { "term": "FEVER / COUGH / COLD", "def": "Common symptom set (fever hand to forehead; cough at chest; cold sniffling)." },
+    { "term": "ALLERGIES", "def": "Index flicks from nose outward." },
+    { "term": "CHECK-IN / WAIT / CALL", "def": "Front-desk verbs for clinic flow." },
+    { "term": "WHERE / HOW-LONG / WHEN", "def": "WH set for details; brows down." },
+    { "term": "SEVERITY NMM", "def": "Mild = relaxed; medium = tight; strong = clenched + squint." },
+    { "term": "ROLE-SHIFT (RS)", "def": "Patient ↔ provider with eye gaze to the other’s anchor." }
+  ],
+  "sections": [
+    {
+      "heading": "Warm-Up: Symptom Placement + NMM",
+      "media": { "src": "/media/asl/unit-7/symptom-placement.png", "alt": "Point maps: head, throat, chest, stomach", "caption": "Place PAIN where it occurs" },
+      "body": "Practice **HURT** at **head/throat/chest/stomach**. Pair with **SEVERITY NMM** (mild → strong). Keep touch precise, not vague.",
+      "microCheck": {
+        "q": "Best way to show strong pain at the throat:",
+        "options": ["HURT near chest with neutral face", "HURT at throat + strong NMM", "Sign SICK only", "Fingerspell P-A-I-N"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Model: Check-In + Reason for Visit",
+      "media": { "src": "/media/asl/unit-7/checkin-demo.mp4", "alt": "Front desk exchange", "caption": "Time-first → reason" },
+      "body": "Sequence:\n• **TODAY APPT I.**\n• **RS→STAFF:** **NAME? WHEN APPT?** (WH/Y-N as needed)\n• **RS→PATIENT:** **NAME J-A-Y. TIME 2:30.**\n• **STAFF:** **REASON?**\n• **PATIENT:** **HURT THROAT 2-DAY. FEVER LITTLE.**"
+    },
+    {
+      "heading": "Questions Toolkit",
+      "body": "Use short WH/Y-N forms:\n• **PAIN WHERE?**\n• **PAIN HOW-LONG?**\n• **FEVER?** (Y/N face)\nKeep clauses **3–5 signs** with tiny pauses.",
+      "callouts": [
+        { "type": "tip", "title": "Time-First Helps", "body": "Lead with **TODAY / YESTERDAY / 2-DAY** to frame symptoms." }
+      ],
+      "microCheck": {
+        "q": "Which NMM matches WH-questions like WHERE/HOW-LONG?",
+        "options": ["Brows up", "Brows down", "Smile only", "Neutral"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Partner Practice: Patient ↔ Provider",
+      "media": { "src": "/media/asl/unit-7/patient-provider.gif", "alt": "Two anchors facing each other", "caption": "RS swap with neutral returns" },
+      "body": "A = patient, B = provider. Build 4 lines:\n1) **RS→PATIENT:** **TODAY I SICK.**\n2) **RS→PROVIDER:** **PAIN WHERE? HOW-LONG?**\n3) **RS→PATIENT:** **HURT HEAD 3-DAY. COUGH.**\n4) **RS→PROVIDER:** **OK MEDICINE RECOMMEND. APPT FOLLOW-UP NEXT-WEEK.**\nReturn to neutral between RS lines.",
+      "microCheck": {
+        "q": "Between RS lines you should…",
+        "options": ["Stay in RS", "Return to neutral narrator", "Change anchors randomly", "Talk aloud"],
+        "answerIndex": 1
+      }
+    },
+    {
+      "heading": "Mini-Showcase",
+      "body": "Record **15–20s**: check-in + symptom summary. Include **time-first**, **1 WH question**, **1 severity NMM**, and **neutral return**. Example close: **APPT NEXT-WEEK CONFIRM.**",
+      "teacherNote": "Caption which symptom location you used and the severity level."
+    }
+  ],
+  "quiz": {
+    "title": "ASL 7.1 — Health & Appointments Quiz",
+    "items": [
+      { "type": "mcq", "q": "Best way to show ‘throat pain for two days’:", "options": ["HURT chest; neutral face", "HURT throat + ‘2-DAY’ with appropriate NMM", "SICK only", "COUGH only"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Which NMM signals a WH-question?", "options": ["Brows up", "Brows down", "Smile", "Closed eyes"], "answerIndex": 1 },
+      { "type": "mcq", "q": "Good order for clinic reason:", "options": ["REASON last", "Time-first → reason", "Reason → random time", "No time given"], "answerIndex": 1 },
+      { "type": "short", "q": "Write a gloss: TODAY APPT I. HURT STOMACH 1-DAY. FEVER LITTLE." },
+      { "type": "reflection", "prompt": "Which felt harder—precise placement or severity NMM? What drill will you use to improve?" }
+    ]
+  },
+  "portfolioFlag": true,
+  "reflectionPrompt": "Upload your 15–20s clinic intro + symptoms. Caption the location and severity you showed.",
+  "summary": "You practiced clinic check-in, localized symptoms with strong placement and NMM, and used clean patient/provider RS with neutral returns.",
+  "nextSlug": "asl-52",
+  "games": [
+    { "id": "symptom-spot", "title": "Symptom Spot", "route": "/arcade/asl/symptom-spot", "estMinutes": 5, "xp": 50, "outcomes": ["Accurate placement + severity NMM"] },
+    { "id": "triage-turns", "title": "Triage Turns", "route": "/arcade/asl/triage-turns", "estMinutes": 5, "xp": 50, "outcomes": ["RS swaps with neutral returns"] },
+    { "id": "when-why", "title": "When & Why", "route": "/arcade/asl/when-why", "estMinutes": 5, "xp": 50, "outcomes": ["Time-first + WH forms"] }
+  ]
+}

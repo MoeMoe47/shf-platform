@@ -1,0 +1,169 @@
+
+
+/* ───────────────────────────────────────────────────────────────
+   Debt “Pro” — Light Panel Board Skin
+   Palette: Beige canvas, White panels, International Orange accents
+   ---------------------------------------------------------------- */
+   .app-shell.debt-shell.debt-pro.light {
+    --beige: #f4efe6;              /* canvas */
+    --panel: #ffffff;              /* cards / panels */
+    --panel-2: #ffffff;
+    --border: #e7e1d6;             /* soft line */
+    --ink: #1f2937;                /* slate-900-ish */
+    --ink-dim: #6b7280;            /* slate-500-ish */
+    --intl-orange: #ff4f00;        /* International Orange (aerospace) */
+    --accent: var(--intl-orange);
+    --good: #2aa77b;               /* mint */
+    --bad: #b24a3b;                /* brick */
+    --pill-ink: #1f1f1f;
+  
+    background: var(--beige);
+    color: var(--ink);
+  }
+  
+  /* Typography */
+  .app-shell.debt-shell.debt-pro.light h1,
+  .app-shell.debt-shell.debt-pro.light h2,
+  .app-shell.debt-shell.debt-pro.light h3 {
+    color: var(--ink);
+    letter-spacing: .2px;
+  }
+  
+  /* Section stack + panels */
+  .app-shell.debt-shell.debt-pro.light .section-stack {
+    display: grid;
+    gap: 16px;
+  }
+  
+  .app-shell.debt-shell.debt-pro.light .section {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px 18px;
+    box-shadow:
+      0 0 0 1px rgba(0,0,0,.02),
+      0 6px 12px rgba(0,0,0,.04);
+  }
+  
+  /* Hero (first section) rests directly on beige */
+  .app-shell.debt-shell.debt-pro.light .section:first-of-type {
+    background: var(--beige);
+    border: 1px solid transparent;
+    box-shadow: none;
+    padding-bottom: 8px;
+  }
+  
+  /* Headlines */
+  .app-shell.debt-shell.debt-pro.light .section-title {
+    font-weight: 800;
+  }
+  
+  /* EVU number styling (Intl Orange highlight) */
+  .app-shell.debt-shell.debt-pro.light .headline.number {
+    font-size: 34px !important;
+    font-weight: 800;
+    letter-spacing: .5px;
+    color: var(--accent);
+    padding: 12px 16px;
+    border-radius: 12px;
+    display: inline-block;
+    background: color-mix(in oklab, var(--accent) 7%, #ffffff);
+    border: 1px solid color-mix(in oklab, var(--accent) 30%, var(--border));
+  }
+  
+  /* Subtle text */
+  .app-shell.debt-shell.debt-pro.light .subtle { color: var(--ink-dim); }
+  
+  /* KPI grid */
+  .app-shell.debt-shell.debt-pro.light .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 14px;
+    margin-top: 10px;
+  }
+  @media (max-width: 900px) {
+    .app-shell.debt-shell.debt-pro.light .kpi-row { grid-template-columns: 1fr; }
+  }
+  
+  /* KpiCard normalization (works with your existing component) */
+  .app-shell.debt-shell.debt-pro.light .kpi-card,
+  .app-shell.debt-shell.debt-pro.light .KpiCard,
+  .app-shell.debt-shell.debt-pro.light .kpi {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: var(--ink);
+  }
+  
+  /* Labels */
+  .app-shell.debt-shell.debt-pro.light .kpi-card .label,
+  .app-shell.debt-shell.debt-pro.light .kpi .label {
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    margin-bottom: 6px;
+  }
+  
+  /* Value pill */
+  .app-shell.debt-shell.debt-pro.light .kpi-card .value,
+  .app-shell.debt-shell.debt-pro.light .kpi .value {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 800;
+    font-size: 18px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: #ffffff;
+    color: var(--pill-ink);
+    border: 1px solid var(--border);
+  }
+  
+  /* Good / Bad intents */
+  .app-shell.debt-shell.debt-pro.light .kpi-card[data-intent="good"] .value,
+  .app-shell.debt-shell.debt-pro.light .kpi.good .value {
+    background: color-mix(in oklab, var(--good) 10%, #ffffff);
+    border-color: color-mix(in oklab, var(--good) 40%, var(--border));
+    color: #0f5132;
+  }
+  
+  .app-shell.debt-shell.debt-pro.light .kpi-card[data-intent="bad"] .value,
+  .app-shell.debt-shell.debt-pro.light .kpi.bad .value {
+    background: color-mix(in oklab, var(--bad) 10%, #ffffff);
+    border-color: color-mix(in oklab, var(--bad) 40%, var(--border));
+    color: #6b2620;
+  }
+  
+  /* Anchor rail chips on light canvas */
+  .app-shell.debt-shell.debt-pro.light .anchor-rail {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0 0;
+    background: transparent;
+    border: none;
+  }
+  .app-shell.debt-shell.debt-pro.light .anchor-rail .chip {
+    background: #ffffff;
+    color: var(--ink);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 12px;
+    text-decoration: none;
+  }
+  .app-shell.debt-shell.debt-pro.light .anchor-rail .chip:hover {
+    border-color: color-mix(in oklab, var(--accent) 30%, var(--border));
+  }
+  
+  /* Little “Stable” badges (if your KpiCard renders them) */
+  .app-shell.debt-shell.debt-pro.light .badge,
+  .app-shell.debt-shell.debt-pro.light .trend-pill {
+    background: #fff;
+    color: var(--ink-dim);
+    border: 1px solid var(--border);
+  }
+  
+
+

@@ -1,0 +1,45 @@
+import { useEffect } from "react";
+import useTour from "./useTour";
+import TourOverlay from "./TourOverlay";
+import { tourSteps } from "./tourConfig";
+import "./tourStyles.css";
+
+export default function TourProvider({ children }) {
+  const tour = useTour(tourSteps.length);
+
+  useEffect(() => {
+    if (tour.state.isActive) {
+      document.body.classList.add("tour-active");
+    } else {
+      document.body.classList.remove("tour-active");
+    }
+
+    return () => {
+      document.body.classList.remove("tour-active");
+    };
+  }, [tour.state.isActive]);
+
+  return (
+    <>
+      {children}
+
+      <TourOverlay
+        state={tour.state}
+        nextStep={tour.nextStep}
+        prevStep={tour.prevStep}
+        endTour={tour.endTour}
+      />
+
+      {!tour.state.isActive ? (
+        <button
+          type="button"
+          className="tour-start-btn"
+          onClick={tour.startTour}
+          aria-label="Start guided tour"
+        >
+          Guided Tour
+        </button>
+      ) : null}
+    </>
+  );
+}

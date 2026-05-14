@@ -1,0 +1,2067 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
+:root {
+  --shs-bg: #020812;
+  --shs-panel: rgba(9, 22, 38, 0.82);
+  --shs-panel-2: rgba(12, 31, 52, 0.72);
+  --shs-line: rgba(82, 171, 255, 0.22);
+  --shs-line-strong: rgba(82, 171, 255, 0.48);
+  --shs-blue: #36a8ff;
+  --shs-blue-2: #7bc7ff;
+  --shs-text: #f3f7fb;
+  --shs-muted: #aebccd;
+}
+
+.shs-team-page {
+  min-height: 100vh;
+  color: var(--shs-text);
+  background:
+    radial-gradient(circle at 78% 13%, rgba(41, 142, 255, 0.22), transparent 28%),
+    radial-gradient(circle at 15% 45%, rgba(27, 121, 221, 0.12), transparent 32%),
+    linear-gradient(180deg, #020812 0%, #061321 48%, #020812 100%);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  overflow-x: hidden;
+}
+
+.shs-team-page * {
+  box-sizing: border-box;
+}
+
+.shs-team-nav {
+  height: 74px;
+  padding: 0 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(90, 170, 255, 0.1);
+  background: rgba(2, 8, 18, 0.82);
+  backdrop-filter: blur(18px);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.shs-team-brand,
+.shs-team-footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #fff;
+}
+
+.shs-team-logo {
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  font-size: 33px;
+  line-height: 1;
+  color: var(--shs-blue);
+}
+
+.shs-team-brand-divider {
+  width: 1px;
+  height: 30px;
+  background: rgba(255,255,255,0.35);
+}
+
+.shs-team-brand-text {
+  font-size: 11px;
+  line-height: 1.08;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.shs-team-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 34px;
+}
+
+.shs-team-nav-links a {
+  color: rgba(255,255,255,0.86);
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding: 28px 0 24px;
+  border-bottom: 2px solid transparent;
+}
+
+.shs-team-nav-links a.active,
+.shs-team-nav-links a:hover {
+  color: var(--shs-blue-2);
+  border-bottom-color: var(--shs-blue);
+}
+
+.shs-team-demo-btn,
+.shs-team-cta a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 24px;
+  border: 1px solid rgba(75, 171, 255, 0.75);
+  border-radius: 5px;
+  color: #8ed2ff;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.07em;
+  background: rgba(11, 38, 69, 0.42);
+  box-shadow: 0 0 22px rgba(26, 135, 255, 0.12);
+}
+
+.shs-team-hero {
+  width: min(1180px, calc(100% - 76px));
+  margin: 0 auto;
+  min-height: 430px;
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  align-items: center;
+  gap: 34px;
+  position: relative;
+}
+
+.shs-team-eyebrow {
+  margin: 0 0 18px;
+  color: var(--shs-blue);
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.shs-team-hero h1 {
+  margin: 0;
+  font-size: clamp(48px, 5vw, 70px);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+  font-weight: 900;
+}
+
+.shs-team-lead {
+  margin: 24px 0 0;
+  max-width: 610px;
+  color: rgba(238, 246, 255, 0.86);
+  font-size: 20px;
+  line-height: 1.55;
+}
+
+.shs-team-belief {
+  margin-top: 34px;
+  display: flex;
+  gap: 17px;
+  align-items: flex-start;
+  max-width: 560px;
+}
+
+.shs-team-belief span {
+  width: 3px;
+  min-height: 62px;
+  display: block;
+  background: linear-gradient(180deg, var(--shs-blue), transparent);
+  box-shadow: 0 0 16px rgba(54, 168, 255, 0.8);
+}
+
+.shs-team-belief p {
+  margin: 0;
+  color: rgba(255,255,255,0.86);
+  font-size: 19px;
+  line-height: 1.45;
+}
+
+.shs-team-belief strong {
+  display: block;
+  color: var(--shs-blue);
+  font-weight: 700;
+}
+
+.shs-team-globe-card {
+  height: 410px;
+  position: relative;
+  overflow: hidden;
+}
+
+.shs-team-globe {
+  position: absolute;
+  right: -5%;
+  top: 7%;
+  width: 610px;
+  height: 360px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 55% 38%, rgba(91, 191, 255, 0.42), transparent 10%),
+    radial-gradient(circle at 50% 45%, rgba(34, 123, 225, 0.36), transparent 42%),
+    radial-gradient(circle at 50% 50%, rgba(16, 60, 112, 0.92), rgba(3, 13, 26, 0.1) 67%);
+  filter: drop-shadow(0 0 54px rgba(42, 148, 255, 0.22));
+  opacity: 0.96;
+}
+
+.globe-grid {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    repeating-linear-gradient(80deg, transparent 0 34px, rgba(108, 193, 255, 0.15) 35px 36px),
+    repeating-linear-gradient(0deg, transparent 0 31px, rgba(108, 193, 255, 0.12) 32px 33px);
+  mask-image: radial-gradient(circle, black 52%, transparent 72%);
+}
+
+.globe-core {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  border: 1px solid rgba(116, 204, 255, 0.23);
+  box-shadow: inset 0 0 32px rgba(0,0,0,0.75), 0 0 35px rgba(28,145,255,0.28);
+}
+
+.globe-dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #9ddcff;
+  box-shadow: 0 0 18px #2fafff;
+}
+
+.dot-a { left: 22%; top: 35%; }
+.dot-b { left: 44%; top: 25%; }
+.dot-c { right: 23%; top: 42%; }
+.dot-d { right: 38%; bottom: 28%; }
+
+.globe-arc {
+  position: absolute;
+  border: 1px solid rgba(105, 193, 255, 0.34);
+  border-color: rgba(105, 193, 255, 0.42) transparent transparent transparent;
+  border-radius: 50%;
+  transform: rotate(-12deg);
+}
+
+.arc-a { width: 82%; height: 55%; left: 6%; top: 21%; }
+.arc-b { width: 96%; height: 70%; left: -8%; top: 10%; transform: rotate(12deg); }
+.arc-c { width: 72%; height: 46%; right: 0%; bottom: 16%; transform: rotate(-31deg); }
+
+.shs-team-values,
+.shs-team-section,
+.shs-team-cta,
+.shs-team-footer {
+  width: min(1180px, calc(100% - 76px));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.shs-team-values {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1px solid rgba(113, 188, 255, 0.24);
+  background: linear-gradient(180deg, rgba(11, 26, 45, 0.84), rgba(7, 18, 32, 0.72));
+  border-radius: 7px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+.shs-team-value-card {
+  padding: 34px 34px;
+  text-align: center;
+  border-right: 1px solid rgba(113, 188, 255, 0.22);
+}
+
+.shs-team-value-card:last-child {
+  border-right: 0;
+}
+
+.shs-team-icon {
+  width: 66px;
+  height: 66px;
+  margin: 0 auto 18px;
+  display: grid;
+  place-items: center;
+  color: var(--shs-blue);
+  font-size: 34px;
+  border-radius: 18px;
+  border: 1px solid rgba(92, 184, 255, 0.35);
+  background: rgba(29, 113, 213, 0.12);
+  box-shadow: 0 0 24px rgba(24, 144, 255, 0.16);
+}
+
+.shs-team-value-card h3,
+.shs-team-profile-card h3,
+.shs-team-advisor-card h3 {
+  margin: 0;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+}
+
+.shs-team-value-card p,
+.shs-team-profile-card p,
+.shs-team-advisor-card p,
+.shs-team-cta p {
+  color: rgba(224, 235, 248, 0.78);
+  line-height: 1.55;
+}
+
+.shs-team-section {
+  margin-top: 42px;
+}
+
+.shs-team-section-heading {
+  margin-bottom: 17px;
+}
+
+.shs-team-section-heading h2 {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: -0.035em;
+}
+
+.shs-team-section-heading span {
+  display: block;
+  width: 52px;
+  height: 2px;
+  margin-top: 10px;
+  background: var(--shs-blue);
+  box-shadow: 0 0 18px rgba(54, 168, 255, 0.7);
+}
+
+.shs-team-leader-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+}
+
+.shs-team-profile-card {
+  overflow: hidden;
+  border: 1px solid rgba(112, 188, 255, 0.23);
+  border-radius: 6px;
+  background: linear-gradient(180deg, rgba(13, 31, 52, 0.88), rgba(5, 14, 26, 0.94));
+}
+
+.shs-team-portrait {
+  height: 205px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 30%, rgba(80, 174, 255, 0.28), transparent 34%),
+    linear-gradient(145deg, rgba(18, 54, 91, 0.9), rgba(4, 12, 23, 0.98));
+}
+
+.portrait-halo {
+  position: absolute;
+  width: 132px;
+  height: 132px;
+  border-radius: 999px;
+  border: 1px solid rgba(112, 198, 255, 0.22);
+  box-shadow: 0 0 38px rgba(25, 139, 255, 0.18);
+}
+
+.shs-team-portrait span {
+  width: 96px;
+  height: 96px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  font-size: 32px;
+  font-weight: 900;
+  color: #d9f2ff;
+  border: 1px solid rgba(95, 182, 255, 0.36);
+  background: linear-gradient(180deg, rgba(57, 151, 255, 0.2), rgba(9, 23, 42, 0.86));
+}
+
+.shs-team-profile-body {
+  padding: 20px 18px 22px;
+}
+
+.shs-team-profile-body .role,
+.shs-team-advisor-card .role {
+  margin: 5px 0 13px;
+  color: var(--shs-blue);
+}
+
+.shs-team-profile-body a {
+  display: inline-block;
+  margin-top: 10px;
+  color: var(--shs-blue);
+  text-decoration: none;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.shs-team-advisors {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid rgba(112, 188, 255, 0.23);
+  border-radius: 7px;
+  background: linear-gradient(180deg, rgba(12, 29, 49, 0.9), rgba(6, 17, 30, 0.9));
+}
+
+.shs-team-advisor-card {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 22px;
+  align-items: center;
+  padding: 30px;
+  border-right: 1px solid rgba(112, 188, 255, 0.2);
+}
+
+.shs-team-advisor-card:last-child {
+  border-right: 0;
+}
+
+.advisor-avatar {
+  width: 86px;
+  height: 86px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  color: #dff5ff;
+  font-weight: 900;
+  font-size: 26px;
+  border: 1px solid rgba(102, 190, 255, 0.28);
+  background: radial-gradient(circle at 50% 25%, rgba(84, 179, 255, 0.28), rgba(8, 20, 36, 0.94));
+}
+
+.shs-team-cta {
+  margin-top: 34px;
+  padding: 36px 42px;
+  display: grid;
+  grid-template-columns: 110px 1fr auto;
+  gap: 34px;
+  align-items: center;
+  border: 1px solid rgba(112, 188, 255, 0.25);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 82% 50%, rgba(37, 133, 255, 0.16), transparent 30%),
+    linear-gradient(180deg, rgba(13, 31, 52, 0.9), rgba(6, 17, 30, 0.9));
+}
+
+.shs-team-cta-icon {
+  width: 90px;
+  height: 90px;
+  display: grid;
+  place-items: center;
+  border-radius: 22px;
+  color: var(--shs-blue);
+  font-size: 48px;
+  border: 2px solid rgba(80, 179, 255, 0.6);
+  box-shadow: 0 0 34px rgba(25, 147, 255, 0.18);
+}
+
+.shs-team-cta h2 {
+  margin: 0;
+  font-size: 30px;
+  letter-spacing: -0.04em;
+}
+
+.shs-team-cta p {
+  margin: 10px 0 0;
+  max-width: 720px;
+}
+
+.shs-team-cta a {
+  min-width: 230px;
+  gap: 16px;
+}
+
+.shs-team-footer {
+  margin-top: 48px;
+  padding: 24px 0 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: rgba(220, 232, 247, 0.76);
+  border-top: 1px solid rgba(112, 188, 255, 0.12);
+}
+
+.shs-team-socials {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.shs-team-socials a {
+  color: var(--shs-blue);
+  text-decoration: none;
+  font-size: 21px;
+  font-weight: 900;
+}
+
+@media (max-width: 1100px) {
+  .shs-team-nav-links {
+    display: none;
+  }
+
+  .shs-team-hero {
+    grid-template-columns: 1fr;
+    padding: 48px 0 20px;
+  }
+
+  .shs-team-globe-card {
+    height: 280px;
+  }
+
+  .shs-team-globe {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+  }
+
+  .shs-team-values,
+  .shs-team-leader-grid,
+  .shs-team-advisors {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .shs-team-value-card:nth-child(2) {
+    border-right: 0;
+  }
+
+  .shs-team-advisor-card {
+    border-right: 0;
+    border-bottom: 1px solid rgba(112, 188, 255, 0.2);
+  }
+
+  .shs-team-cta {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .shs-team-nav,
+  .shs-team-hero,
+  .shs-team-values,
+  .shs-team-section,
+  .shs-team-cta,
+  .shs-team-footer {
+    width: calc(100% - 34px);
+  }
+
+  .shs-team-nav {
+    width: 100%;
+    padding: 0 17px;
+  }
+
+  .shs-team-demo-btn {
+    display: none;
+  }
+
+  .shs-team-values,
+  .shs-team-leader-grid,
+  .shs-team-advisors {
+    grid-template-columns: 1fr;
+  }
+
+  .shs-team-value-card {
+    border-right: 0;
+    border-bottom: 1px solid rgba(112, 188, 255, 0.2);
+  }
+
+  .shs-team-value-card:last-child {
+    border-bottom: 0;
+  }
+
+  .shs-team-advisor-card {
+    grid-template-columns: 1fr;
+  }
+
+  .shs-team-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+}
+
+/* ===== SHS Meet Team visual polish pass ===== */
+
+.shs-team-page {
+  background:
+    radial-gradient(circle at 78% 11%, rgba(38, 145, 255, 0.28), transparent 31%),
+    radial-gradient(circle at 16% 42%, rgba(35, 119, 220, 0.14), transparent 33%),
+    linear-gradient(180deg, #020712 0%, #061625 45%, #020711 100%);
+}
+
+.shs-team-hero {
+  min-height: 470px;
+}
+
+.shs-team-globe-card {
+  min-height: 430px;
+}
+
+.shs-team-globe {
+  right: -3%;
+  top: 3%;
+  width: 650px;
+  height: 410px;
+  border-radius: 52% 48% 51% 49%;
+  background:
+    radial-gradient(circle at 58% 38%, rgba(142, 218, 255, 0.78) 0 1.2%, transparent 1.3%),
+    radial-gradient(circle at 31% 32%, rgba(142, 218, 255, 0.72) 0 1.1%, transparent 1.2%),
+    radial-gradient(circle at 74% 45%, rgba(142, 218, 255, 0.7) 0 1%, transparent 1.1%),
+    radial-gradient(circle at 63% 67%, rgba(142, 218, 255, 0.62) 0 1%, transparent 1.1%),
+    radial-gradient(circle at 54% 46%, rgba(66, 166, 255, 0.42), transparent 18%),
+    radial-gradient(circle at 48% 50%, rgba(13, 82, 153, 0.84), rgba(2, 9, 18, 0.14) 68%);
+  box-shadow:
+    inset 0 0 54px rgba(0, 0, 0, 0.78),
+    inset 0 0 140px rgba(22, 125, 235, 0.26),
+    0 0 80px rgba(39, 148, 255, 0.22);
+  overflow: hidden;
+}
+
+.shs-team-globe::before {
+  content: "";
+  position: absolute;
+  inset: -8%;
+  border-radius: inherit;
+  background:
+    repeating-linear-gradient(78deg, transparent 0 33px, rgba(106, 196, 255, 0.16) 34px 35px),
+    repeating-linear-gradient(0deg, transparent 0 31px, rgba(106, 196, 255, 0.11) 32px 33px);
+  transform: rotate(-8deg);
+  mask-image: radial-gradient(ellipse at center, black 0 56%, transparent 75%);
+}
+
+.shs-team-globe::after {
+  content: "";
+  position: absolute;
+  inset: 9%;
+  border-radius: inherit;
+  border: 1px solid rgba(126, 211, 255, 0.2);
+  box-shadow:
+    inset 0 0 26px rgba(115, 202, 255, 0.08),
+    0 0 48px rgba(44, 154, 255, 0.19);
+}
+
+.globe-grid {
+  opacity: 0;
+}
+
+.globe-core {
+  inset: 18% 13%;
+  border-color: rgba(126, 211, 255, 0.26);
+  background:
+    radial-gradient(circle at 58% 40%, rgba(94, 189, 255, 0.24), transparent 18%),
+    transparent;
+}
+
+.globe-arc {
+  border-color: rgba(128, 213, 255, 0.44) transparent transparent transparent;
+  filter: drop-shadow(0 0 10px rgba(65, 172, 255, 0.35));
+}
+
+.arc-a {
+  width: 90%;
+  height: 62%;
+  left: 1%;
+  top: 18%;
+}
+
+.arc-b {
+  width: 105%;
+  height: 76%;
+  left: -10%;
+  top: 8%;
+}
+
+.arc-c {
+  width: 82%;
+  height: 52%;
+  right: -4%;
+  bottom: 14%;
+}
+
+.globe-dot {
+  z-index: 3;
+  width: 9px;
+  height: 9px;
+  background: #9ee0ff;
+  box-shadow:
+    0 0 12px #43b9ff,
+    0 0 28px rgba(67, 185, 255, 0.65);
+}
+
+/* portrait cards: stronger executive-photo placeholder style */
+.shs-team-portrait {
+  height: 225px;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(117, 202, 255, 0.33), transparent 22%),
+    linear-gradient(180deg, rgba(19, 63, 107, 0.88), rgba(4, 12, 22, 0.98));
+}
+
+.shs-team-portrait::before {
+  content: "";
+  position: absolute;
+  width: 118px;
+  height: 118px;
+  top: 38px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 50% 34%, rgba(230, 243, 255, 0.9) 0 18%, transparent 19%),
+    radial-gradient(circle at 50% 78%, rgba(80, 161, 223, 0.72) 0 34%, transparent 35%);
+  opacity: 0.72;
+  filter: blur(0.2px);
+}
+
+.shs-team-portrait::after {
+  content: "";
+  position: absolute;
+  bottom: -18px;
+  width: 150px;
+  height: 92px;
+  border-radius: 46% 46% 0 0;
+  background:
+    linear-gradient(135deg, rgba(8, 16, 30, 0.96), rgba(24, 58, 94, 0.88));
+  border-top: 1px solid rgba(111, 195, 255, 0.18);
+}
+
+.shs-team-portrait span {
+  position: relative;
+  z-index: 2;
+  margin-top: -18px;
+  width: 86px;
+  height: 86px;
+  background: rgba(4, 13, 25, 0.55);
+  border-color: rgba(117, 204, 255, 0.34);
+  backdrop-filter: blur(2px);
+}
+
+.portrait-halo {
+  z-index: 1;
+  top: 26px;
+}
+
+.shs-team-profile-card {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 20px 40px rgba(0,0,0,0.16);
+}
+
+.shs-team-profile-card:hover {
+  border-color: rgba(83, 177, 255, 0.52);
+  transform: translateY(-2px);
+  transition: 180ms ease;
+}
+
+.shs-team-advisors {
+  overflow: hidden;
+}
+
+.shs-team-advisor-card {
+  min-height: 175px;
+}
+
+.shs-team-cta {
+  margin-bottom: 10px;
+}
+
+@media (max-width: 1100px) {
+  .shs-team-globe {
+    width: 570px;
+    height: 330px;
+  }
+}
+
+
+/* =========================================================
+   Final mock-alignment pass: simple About / Team page
+   ========================================================= */
+
+.shs-team-page {
+  background:
+    radial-gradient(circle at 76% 12%, rgba(28, 117, 212, 0.24), transparent 33%),
+    linear-gradient(180deg, #020813 0%, #061524 45%, #020813 100%);
+}
+
+.shs-team-nav {
+  height: 78px;
+}
+
+.shs-team-hero {
+  min-height: 430px;
+  grid-template-columns: 0.93fr 1.07fr;
+  gap: 28px;
+  padding: 44px 0 20px;
+}
+
+.shs-team-hero h1 {
+  font-size: clamp(54px, 5vw, 76px);
+  letter-spacing: -0.065em;
+}
+
+.shs-team-lead {
+  max-width: 590px;
+  font-size: 20px;
+  line-height: 1.55;
+}
+
+.shs-team-belief {
+  margin-top: 30px;
+}
+
+.shs-team-globe-card {
+  height: 365px;
+  min-height: 365px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0;
+}
+
+/* Hide the older oval globe if any old markup remains */
+.shs-team-globe {
+  display: none !important;
+}
+
+/* New mock-style digital globe: flatter, cleaner, and more intentional */
+.shs-team-digital-globe {
+  position: absolute;
+  right: 0;
+  top: 18px;
+  width: 650px;
+  height: 330px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 58% 42%, rgba(90, 182, 255, 0.56), transparent 16%),
+    radial-gradient(circle at 50% 50%, rgba(18, 100, 180, 0.58), rgba(2, 12, 25, 0.18) 66%),
+    linear-gradient(120deg, rgba(7, 29, 54, 0.25), rgba(30, 117, 204, 0.17));
+  box-shadow:
+    inset 0 0 90px rgba(0,0,0,0.82),
+    inset 0 0 170px rgba(46, 150, 255, 0.18),
+    0 0 75px rgba(35, 139, 255, 0.22);
+  transform: perspective(900px) rotateX(8deg) rotateZ(-3deg);
+  overflow: hidden;
+}
+
+.shs-team-digital-globe::before {
+  content: "";
+  position: absolute;
+  inset: -10%;
+  background:
+    repeating-linear-gradient(79deg, transparent 0 33px, rgba(121, 204, 255, 0.14) 34px 35px),
+    repeating-linear-gradient(-4deg, transparent 0 34px, rgba(121, 204, 255, 0.105) 35px 36px);
+  transform: rotate(-9deg);
+  opacity: 0.86;
+  mask-image: radial-gradient(ellipse at center, black 0 56%, transparent 75%);
+}
+
+.shs-team-digital-globe::after {
+  content: "";
+  position: absolute;
+  inset: 9% 10%;
+  border-radius: 999px;
+  border: 1px solid rgba(135, 214, 255, 0.2);
+  box-shadow:
+    inset 0 0 30px rgba(95, 192, 255, 0.07),
+    0 0 28px rgba(63, 164, 255, 0.16);
+}
+
+.globe-ring {
+  position: absolute;
+  border-radius: 999px;
+  border: 1px solid rgba(117, 203, 255, 0.25);
+  border-color: rgba(117, 203, 255, 0.42) transparent transparent transparent;
+  pointer-events: none;
+}
+
+.ring-one {
+  width: 94%;
+  height: 56%;
+  left: 3%;
+  top: 16%;
+  transform: rotate(-10deg);
+}
+
+.ring-two {
+  width: 84%;
+  height: 47%;
+  left: 7%;
+  top: 30%;
+  transform: rotate(17deg);
+}
+
+.ring-three {
+  width: 102%;
+  height: 70%;
+  left: -7%;
+  top: 5%;
+  transform: rotate(-26deg);
+  opacity: 0.65;
+}
+
+.globe-line {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(132, 214, 255, 0.35), transparent);
+  transform-origin: center;
+  pointer-events: none;
+}
+
+.line-one {
+  width: 78%;
+  left: 9%;
+  top: 36%;
+  transform: rotate(-7deg);
+}
+
+.line-two {
+  width: 67%;
+  left: 17%;
+  top: 52%;
+  transform: rotate(16deg);
+}
+
+.line-three {
+  width: 62%;
+  left: 18%;
+  top: 62%;
+  transform: rotate(-25deg);
+}
+
+.globe-node {
+  position: absolute;
+  z-index: 3;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #9edcff;
+  box-shadow:
+    0 0 12px #46b8ff,
+    0 0 28px rgba(70, 184, 255, 0.58);
+}
+
+.node-one { left: 24%; top: 33%; }
+.node-two { left: 33%; top: 27%; }
+.node-three { left: 57%; top: 19%; }
+.node-four { right: 23%; top: 41%; }
+.node-five { right: 34%; bottom: 23%; }
+
+.globe-glow {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  width: 140px;
+  height: 140px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(73, 176, 255, 0.55), transparent 66%);
+  transform: translate(-50%, -50%);
+  filter: blur(4px);
+}
+
+.shs-team-values {
+  margin-top: 6px;
+}
+
+.shs-team-value-card {
+  min-height: 230px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.shs-team-icon {
+  border-radius: 18px;
+  font-size: 34px;
+}
+
+/* Leadership cards */
+.shs-team-leader-grid {
+  gap: 14px;
+}
+
+.shs-team-profile-card {
+  min-height: 488px;
+  background:
+    linear-gradient(180deg, rgba(13, 38, 64, 0.94), rgba(4, 13, 24, 0.98));
+}
+
+.shs-team-portrait {
+  height: 225px;
+  background:
+    radial-gradient(circle at 50% 23%, rgba(100, 190, 255, 0.25), transparent 30%),
+    linear-gradient(180deg, rgba(19, 63, 107, 0.86), rgba(4, 12, 22, 0.98));
+}
+
+/* Replace awkward fake body with clean executive badge placeholder */
+.shs-team-portrait::before,
+.shs-team-portrait::after {
+  display: none !important;
+}
+
+.portrait-halo {
+  width: 146px;
+  height: 146px;
+  top: 36px;
+  border-color: rgba(117, 204, 255, 0.22);
+  background:
+    radial-gradient(circle, rgba(35, 117, 196, 0.25), transparent 66%);
+}
+
+.shs-team-portrait span {
+  width: 96px;
+  height: 96px;
+  margin-top: 0;
+  font-size: 30px;
+  background:
+    radial-gradient(circle at 50% 28%, rgba(118, 204, 255, 0.22), rgba(5, 17, 32, 0.88));
+  border: 1px solid rgba(117, 204, 255, 0.32);
+  box-shadow:
+    inset 0 0 26px rgba(76, 171, 255, 0.1),
+    0 0 32px rgba(51, 151, 255, 0.18);
+}
+
+.shs-team-profile-body {
+  padding: 23px 22px 26px;
+}
+
+.shs-team-profile-body h3 {
+  font-size: 19px;
+}
+
+.shs-team-profile-body p {
+  font-size: 15.5px;
+  line-height: 1.55;
+}
+
+.shs-team-profile-body .role {
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.shs-team-advisors {
+  background:
+    linear-gradient(180deg, rgba(12, 29, 49, 0.84), rgba(5, 15, 28, 0.94));
+}
+
+.shs-team-advisor-card {
+  min-height: 190px;
+  grid-template-columns: 98px 1fr;
+}
+
+.advisor-avatar {
+  border-radius: 10px;
+}
+
+.shs-team-cta {
+  min-height: 150px;
+}
+
+.shs-team-footer {
+  padding-bottom: 40px;
+}
+
+@media (max-width: 1100px) {
+  .shs-team-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .shs-team-digital-globe {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%) perspective(900px) rotateX(8deg) rotateZ(-3deg);
+  }
+}
+
+
+/* =========================================================
+   Final correction: remove layout feel + make hero globe round
+   ========================================================= */
+
+/* Make this page own the full visual surface. */
+.shs-team-page {
+  width: 100%;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 78% 18%, rgba(35, 137, 255, 0.28), transparent 32%),
+    radial-gradient(circle at 20% 32%, rgba(16, 67, 122, 0.18), transparent 35%),
+    linear-gradient(180deg, #020812 0%, #061524 46%, #020812 100%) !important;
+}
+
+/* More like the mock: simple hero, not a giant technical infrastructure section. */
+.shs-team-hero {
+  min-height: 390px !important;
+  padding: 54px 0 20px !important;
+  grid-template-columns: 0.93fr 1.07fr !important;
+}
+
+.shs-team-hero h1 {
+  font-size: clamp(58px, 5.3vw, 82px) !important;
+  letter-spacing: -0.07em !important;
+}
+
+.shs-team-lead {
+  max-width: 620px !important;
+  font-size: 20px !important;
+  line-height: 1.55 !important;
+}
+
+.shs-team-belief {
+  margin-top: 30px !important;
+}
+
+/* Kill old oval/pill visual completely. */
+.shs-team-globe,
+.shs-team-digital-globe {
+  display: none !important;
+}
+
+/* New globe container */
+.shs-team-globe-card {
+  height: 355px !important;
+  min-height: 355px !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* Real circular globe built with CSS, cropped like the mock. */
+.shs-team-globe-card::before {
+  content: "";
+  position: absolute;
+  width: 540px;
+  height: 540px;
+  right: -20px;
+  top: -110px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 62% 46%, rgba(130, 214, 255, 0.7) 0 1.2%, transparent 1.35%),
+    radial-gradient(circle at 42% 34%, rgba(130, 214, 255, 0.7) 0 1.1%, transparent 1.25%),
+    radial-gradient(circle at 75% 42%, rgba(130, 214, 255, 0.7) 0 1.05%, transparent 1.2%),
+    radial-gradient(circle at 63% 66%, rgba(130, 214, 255, 0.62) 0 1%, transparent 1.15%),
+    radial-gradient(circle at 52% 44%, rgba(59, 170, 255, 0.45), transparent 18%),
+    radial-gradient(circle at 50% 50%, rgba(20, 96, 171, 0.82), rgba(2, 10, 21, 0.06) 67%);
+  box-shadow:
+    inset 0 0 95px rgba(0, 0, 0, 0.8),
+    inset 0 0 160px rgba(35, 132, 242, 0.2),
+    0 0 90px rgba(38, 145, 255, 0.22);
+}
+
+.shs-team-globe-card::after {
+  content: "";
+  position: absolute;
+  width: 570px;
+  height: 570px;
+  right: -34px;
+  top: -125px;
+  border-radius: 50%;
+  background:
+    repeating-linear-gradient(78deg, transparent 0 35px, rgba(126, 207, 255, 0.15) 36px 37px),
+    repeating-linear-gradient(-7deg, transparent 0 36px, rgba(126, 207, 255, 0.1) 37px 38px);
+  mask-image: radial-gradient(circle, black 0 58%, transparent 76%);
+  transform: rotate(-10deg);
+  opacity: 0.85;
+}
+
+/* Draw clean orbital lines on top of globe. */
+.shs-team-globe-card .ring-one,
+.shs-team-globe-card .ring-two,
+.shs-team-globe-card .ring-three,
+.shs-team-globe-card .line-one,
+.shs-team-globe-card .line-two,
+.shs-team-globe-card .line-three,
+.shs-team-globe-card .node-one,
+.shs-team-globe-card .node-two,
+.shs-team-globe-card .node-three,
+.shs-team-globe-card .node-four,
+.shs-team-globe-card .node-five,
+.shs-team-globe-card .globe-glow {
+  display: none !important;
+}
+
+/* Cleaner value strip spacing */
+.shs-team-values {
+  margin-top: 18px !important;
+}
+
+.shs-team-value-card {
+  min-height: 220px !important;
+}
+
+/* Leadership section should breathe but not look oversized */
+.shs-team-section {
+  margin-top: 48px !important;
+}
+
+.shs-team-leader-grid {
+  gap: 14px !important;
+}
+
+.shs-team-profile-card {
+  min-height: 470px !important;
+}
+
+.shs-team-portrait {
+  height: 210px !important;
+}
+
+/* Keep the cards simple until real photos are available. */
+.shs-team-portrait::before,
+.shs-team-portrait::after {
+  display: none !important;
+}
+
+.shs-team-portrait span {
+  width: 100px !important;
+  height: 100px !important;
+  font-size: 31px !important;
+}
+
+/* Advisor section alignment */
+.shs-team-advisors {
+  min-height: 205px !important;
+}
+
+.shs-team-advisor-card {
+  min-height: 205px !important;
+}
+
+/* CTA closer to mock */
+.shs-team-cta {
+  margin-top: 38px !important;
+  min-height: 145px !important;
+}
+
+/* Responsive cleanup */
+@media (max-width: 1100px) {
+  .shs-team-hero {
+    grid-template-columns: 1fr !important;
+  }
+
+  .shs-team-globe-card {
+    display: none !important;
+  }
+}
+
+/* =========================================================
+   Asset pass: use image-based mock placeholders
+   ========================================================= */
+
+.shs-team-globe-card {
+  height: 360px !important;
+  min-height: 360px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  overflow: visible !important;
+}
+
+.shs-team-globe-card::before,
+.shs-team-globe-card::after,
+.shs-team-globe,
+.shs-team-digital-globe {
+  display: none !important;
+}
+
+.shs-team-globe-img {
+  width: min(720px, 100%);
+  height: auto;
+  display: block;
+  opacity: 0.98;
+  filter: drop-shadow(0 0 46px rgba(52, 164, 255, 0.26));
+  transform: translateX(20px);
+}
+
+.shs-team-profile-card {
+  min-height: 485px !important;
+  overflow: hidden;
+}
+
+.shs-team-portrait {
+  height: 220px !important;
+  padding: 0 !important;
+  display: block !important;
+  background: #071422 !important;
+  overflow: hidden !important;
+}
+
+.shs-team-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.95) contrast(1.05);
+}
+
+.shs-team-portrait span,
+.shs-team-portrait .portrait-halo,
+.shs-team-portrait::before,
+.shs-team-portrait::after {
+  display: none !important;
+}
+
+.shs-team-profile-body {
+  padding: 20px 18px 22px !important;
+}
+
+.shs-team-advisor-card {
+  grid-template-columns: 100px 1fr !important;
+  gap: 24px !important;
+}
+
+.advisor-avatar,
+.advisor-avatar-img {
+  width: 86px !important;
+  height: 86px !important;
+  border-radius: 8px !important;
+  object-fit: cover !important;
+  border: 1px solid rgba(102, 190, 255, 0.28) !important;
+  box-shadow: 0 0 22px rgba(43, 154, 255, 0.14) !important;
+  background: rgba(8, 20, 36, 0.94) !important;
+}
+
+.shs-team-values .shs-team-icon {
+  font-size: 0 !important;
+}
+
+.shs-team-values .shs-team-value-card:nth-child(1) .shs-team-icon::before {
+  content: "♢";
+  font-size: 40px;
+}
+
+.shs-team-values .shs-team-value-card:nth-child(2) .shs-team-icon::before {
+  content: "◎";
+  font-size: 42px;
+}
+
+.shs-team-values .shs-team-value-card:nth-child(3) .shs-team-icon::before {
+  content: "◉";
+  font-size: 42px;
+}
+
+.shs-team-values .shs-team-value-card:nth-child(4) .shs-team-icon::before {
+  content: "▣";
+  font-size: 38px;
+}
+
+@media (max-width: 1100px) {
+  .shs-team-globe-card {
+    display: none !important;
+  }
+}
+
+/* =========================================================
+   Real hero globe PNG placement
+   ========================================================= */
+
+.shs-team-globe-card {
+  height: 390px !important;
+  min-height: 390px !important;
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  overflow: visible !important;
+  isolation: isolate;
+}
+
+.shs-team-globe-card::before,
+.shs-team-globe-card::after,
+.shs-team-globe,
+.shs-team-digital-globe {
+  display: none !important;
+}
+
+.shs-team-globe-img {
+  width: min(760px, 112%) !important;
+  max-width: none !important;
+  height: auto !important;
+  display: block !important;
+  object-fit: contain !important;
+  transform: translateX(36px) translateY(-8px) scale(1.02);
+  filter:
+    drop-shadow(0 0 28px rgba(55, 169, 255, 0.42))
+    drop-shadow(0 0 68px rgba(18, 112, 235, 0.24));
+  animation: shsHeroGlobeFloat 7s ease-in-out infinite;
+  transform-origin: center center;
+  opacity: 0.96;
+}
+
+@keyframes shsHeroGlobeFloat {
+  0% {
+    transform: translateX(36px) translateY(-8px) scale(1.02) rotate(0deg);
+  }
+  50% {
+    transform: translateX(28px) translateY(-18px) scale(1.035) rotate(0.8deg);
+  }
+  100% {
+    transform: translateX(36px) translateY(-8px) scale(1.02) rotate(0deg);
+  }
+}
+
+.shs-team-globe-card:hover .shs-team-globe-img {
+  animation-duration: 4.5s;
+  filter:
+    drop-shadow(0 0 36px rgba(77, 188, 255, 0.55))
+    drop-shadow(0 0 90px rgba(18, 112, 235, 0.34));
+}
+
+@media (max-width: 1100px) {
+  .shs-team-globe-card {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shs-team-globe-img {
+    animation: none !important;
+  }
+}
+
+/* =========================================================
+   Fix hero globe white image background
+   ========================================================= */
+
+.shs-team-hero {
+  overflow: hidden !important;
+}
+
+.shs-team-globe-card {
+  height: 390px !important;
+  min-height: 390px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  display: block !important;
+  border-radius: 0 !important;
+  background:
+    radial-gradient(circle at 62% 48%, rgba(47, 153, 255, 0.26), transparent 34%),
+    transparent !important;
+}
+
+.shs-team-globe-card::before,
+.shs-team-globe-card::after,
+.shs-team-globe,
+.shs-team-digital-globe {
+  display: none !important;
+}
+
+.shs-team-globe-img {
+  position: absolute !important;
+  right: -185px !important;
+  top: -54px !important;
+  width: 780px !important;
+  height: 520px !important;
+  max-width: none !important;
+  object-fit: cover !important;
+  object-position: 75% 50% !important;
+
+  /*
+    This makes the white background behave more like light/glow
+    instead of a hard white rectangle.
+  */
+  mix-blend-mode: screen !important;
+  opacity: 0.82 !important;
+
+  /*
+    This hides the square edges and fades the globe into the SHS dark hero.
+  */
+  -webkit-mask-image:
+    radial-gradient(ellipse at 68% 50%, black 0%, black 48%, transparent 72%);
+  mask-image:
+    radial-gradient(ellipse at 68% 50%, black 0%, black 48%, transparent 72%);
+
+  filter:
+    saturate(1.15)
+    contrast(1.08)
+    brightness(0.72)
+    drop-shadow(0 0 28px rgba(55, 169, 255, 0.36))
+    drop-shadow(0 0 76px rgba(18, 112, 235, 0.22)) !important;
+
+  animation: shsHeroGlobeFloatClean 7.5s ease-in-out infinite !important;
+  transform-origin: center center !important;
+}
+
+@keyframes shsHeroGlobeFloatClean {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1.02) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(-10px, -10px, 0) scale(1.045) rotate(0.6deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.02) rotate(0deg);
+  }
+}
+
+.shs-team-globe-card:hover .shs-team-globe-img {
+  opacity: 0.92 !important;
+  animation-duration: 5s !important;
+}
+
+@media (max-width: 1100px) {
+  .shs-team-globe-card {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shs-team-globe-img {
+    animation: none !important;
+  }
+}
+
+/* =========================================================
+   True transparent globe placement
+   ========================================================= */
+
+.shs-team-hero {
+  min-height: 430px !important;
+  overflow: hidden !important;
+}
+
+.shs-team-globe-card {
+  height: 390px !important;
+  min-height: 390px !important;
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  overflow: visible !important;
+  background:
+    radial-gradient(circle at 70% 48%, rgba(45, 155, 255, 0.18), transparent 42%),
+    transparent !important;
+}
+
+.shs-team-globe-card::before,
+.shs-team-globe-card::after,
+.shs-team-globe,
+.shs-team-digital-globe {
+  display: none !important;
+}
+
+.shs-team-globe-img {
+  position: absolute !important;
+  right: -90px !important;
+  top: -34px !important;
+  width: 690px !important;
+  height: auto !important;
+  max-width: none !important;
+  object-fit: contain !important;
+  object-position: center !important;
+
+  mix-blend-mode: normal !important;
+  opacity: 0.98 !important;
+
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+
+  filter:
+    saturate(1.08)
+    contrast(1.08)
+    brightness(0.92)
+    drop-shadow(0 0 26px rgba(55, 169, 255, 0.36))
+    drop-shadow(0 0 76px rgba(18, 112, 235, 0.24)) !important;
+
+  animation: shsHeroGlobeFloatReal 7s ease-in-out infinite !important;
+  transform-origin: center center !important;
+}
+
+@keyframes shsHeroGlobeFloatReal {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-10px, -12px, 0) scale(1.025);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+.shs-team-globe-card:hover .shs-team-globe-img {
+  animation-duration: 4.8s !important;
+  filter:
+    saturate(1.14)
+    contrast(1.1)
+    brightness(1)
+    drop-shadow(0 0 34px rgba(77, 188, 255, 0.52))
+    drop-shadow(0 0 90px rgba(18, 112, 235, 0.35)) !important;
+}
+
+@media (max-width: 1100px) {
+  .shs-team-globe-card {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shs-team-globe-img {
+    animation: none !important;
+  }
+}
+
+/* =========================================================
+   Fine tune Meet the Team hero globe position
+   ========================================================= */
+
+.shs-team-globe-card {
+  height: 390px !important;
+  min-height: 390px !important;
+  overflow: visible !important;
+}
+
+.shs-team-globe-img {
+  right: -18px !important;
+  top: -42px !important;
+  width: 610px !important;
+  opacity: 0.96 !important;
+  transform-origin: center center !important;
+}
+
+@keyframes shsHeroGlobeFloatReal {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-8px, -10px, 0) scale(1.018);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* =========================================================
+   Slow + subtle globe motion override
+   ========================================================= */
+
+.shs-team-globe-img {
+  animation: shsHeroGlobeFloatRealSlow 18s ease-in-out infinite !important;
+  will-change: transform;
+}
+
+@keyframes shsHeroGlobeFloatRealSlow {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-3px, -4px, 0) scale(1.008);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* Hover should not speed up dramatically */
+.shs-team-globe-card:hover .shs-team-globe-img {
+  animation-duration: 16s !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shs-team-globe-img {
+    animation: none !important;
+  }
+}
+
+/* =========================================================
+   Typography alignment pass for Meet the Team page
+   ========================================================= */
+
+.shs-team-page,
+.shs-team-page * {
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+}
+
+/* Small label: ABOUT US */
+.shs-team-eyebrow,
+.shs-team-kicker,
+.shs-team-overline {
+  font-size: 14px !important;
+  line-height: 1 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+}
+
+/* Main title */
+.shs-team-hero h1,
+.shs-team-title {
+  font-size: clamp(64px, 5.5vw, 88px) !important;
+  line-height: 0.95 !important;
+  letter-spacing: -0.065em !important;
+  font-weight: 800 !important;
+  margin: 0 0 26px 0 !important;
+}
+
+/* Main hero paragraph */
+.shs-team-lead,
+.shs-team-hero p,
+.shs-team-intro {
+  font-size: 17px !important;
+  line-height: 1.6 !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.01em !important;
+  max-width: 560px !important;
+}
+
+/* Quote / belief line */
+.shs-team-belief,
+.shs-team-belief p,
+.shs-team-quote {
+  font-size: 16px !important;
+  line-height: 1.65 !important;
+  font-weight: 500 !important;
+}
+
+.shs-team-belief strong,
+.shs-team-belief b {
+  font-weight: 700 !important;
+}
+
+/* Section headings */
+.shs-team-section h2,
+.shs-team-section-title,
+.shs-team-page h2 {
+  font-size: 24px !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.04em !important;
+  font-weight: 800 !important;
+  margin-bottom: 18px !important;
+}
+
+/* Value cards */
+.shs-team-value-card h3,
+.shs-team-values h3 {
+  font-size: 18px !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.03em !important;
+  font-weight: 700 !important;
+  margin-top: 20px !important;
+  margin-bottom: 10px !important;
+}
+
+.shs-team-value-card p,
+.shs-team-values p {
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* Leadership cards */
+.shs-team-profile-body h3,
+.shs-team-profile-card h3 {
+  font-size: 19px !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.03em !important;
+  font-weight: 700 !important;
+  margin-bottom: 8px !important;
+}
+
+.shs-team-profile-body .role,
+.shs-team-profile-card .role {
+  font-size: 15px !important;
+  line-height: 1.4 !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.01em !important;
+}
+
+.shs-team-profile-body p,
+.shs-team-profile-card p {
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* Advisor cards */
+.shs-team-advisor-card h3,
+.shs-team-advisors h3 {
+  font-size: 18px !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.03em !important;
+  font-weight: 700 !important;
+  margin-bottom: 8px !important;
+}
+
+.shs-team-advisor-card .role,
+.shs-team-advisors .role {
+  font-size: 15px !important;
+  line-height: 1.4 !important;
+  font-weight: 500 !important;
+}
+
+.shs-team-advisor-card p,
+.shs-team-advisors p {
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+  font-weight: 500 !important;
+}
+
+/* CTA band */
+.shs-team-cta h3,
+.shs-team-cta-title {
+  font-size: 24px !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.04em !important;
+  font-weight: 800 !important;
+}
+
+.shs-team-cta p {
+  font-size: 16px !important;
+  line-height: 1.6 !important;
+  font-weight: 500 !important;
+}
+
+/* Nav text on this page */
+.shs-team-nav a,
+.shs-team-page nav a,
+.shs-team-header a {
+  font-size: 14px !important;
+  line-height: 1 !important;
+  letter-spacing: 0.04em !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+}
+
+/* Buttons */
+.shs-team-page .btn,
+.shs-team-page button,
+.shs-team-page .shs-button {
+  font-size: 14px !important;
+  line-height: 1 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+}
+
+/* =========================================================
+   Team card polish: closer to mock density and executive feel
+   ========================================================= */
+
+.shs-team-section {
+  margin-top: 42px !important;
+}
+
+.shs-team-leader-grid {
+  gap: 12px !important;
+}
+
+.shs-team-profile-card {
+  min-height: 430px !important;
+  border-color: rgba(80, 158, 220, 0.28) !important;
+  background:
+    linear-gradient(180deg, rgba(9, 25, 43, 0.96), rgba(3, 11, 21, 0.98)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.035),
+    0 18px 32px rgba(0,0,0,0.18) !important;
+}
+
+.shs-team-portrait {
+  height: 172px !important;
+  background:
+    radial-gradient(circle at 50% 16%, rgba(72, 166, 255, 0.32), transparent 30%),
+    linear-gradient(180deg, rgba(13, 45, 78, 0.86), rgba(2, 10, 20, 0.98)) !important;
+}
+
+.shs-team-portrait img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center 20% !important;
+  opacity: 0.9 !important;
+  filter: saturate(0.9) contrast(1.08) brightness(0.9) !important;
+}
+
+.shs-team-profile-body {
+  padding: 18px 18px 20px !important;
+}
+
+.shs-team-profile-body h3,
+.shs-team-profile-card h3 {
+  font-size: 18px !important;
+  margin-bottom: 5px !important;
+}
+
+.shs-team-profile-body .role,
+.shs-team-profile-card .role {
+  font-size: 14px !important;
+  margin-bottom: 13px !important;
+}
+
+.shs-team-profile-body p,
+.shs-team-profile-card p {
+  font-size: 14px !important;
+  line-height: 1.55 !important;
+}
+
+.shs-team-profile-body a {
+  margin-top: 8px !important;
+  font-size: 20px !important;
+}
+
+/* Advisor row closer to mock */
+.shs-team-advisors {
+  min-height: 160px !important;
+  background:
+    linear-gradient(180deg, rgba(9, 25, 43, 0.9), rgba(3, 11, 21, 0.96)) !important;
+}
+
+.shs-team-advisor-card {
+  min-height: 160px !important;
+  padding: 24px 28px !important;
+  grid-template-columns: 82px 1fr !important;
+  gap: 20px !important;
+  align-items: center !important;
+}
+
+.advisor-avatar-img {
+  width: 72px !important;
+  height: 72px !important;
+  opacity: 0.92 !important;
+}
+
+.shs-team-advisor-card h3,
+.shs-team-advisors h3 {
+  font-size: 17px !important;
+  margin-bottom: 4px !important;
+}
+
+.shs-team-advisor-card .role,
+.shs-team-advisors .role {
+  font-size: 14px !important;
+  margin-bottom: 10px !important;
+}
+
+.shs-team-advisor-card p,
+.shs-team-advisors p {
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+}
+
+/* CTA slightly tighter */
+.shs-team-cta {
+  min-height: 132px !important;
+  padding-top: 28px !important;
+  padding-bottom: 28px !important;
+}
+
+.shs-team-cta h2 {
+  font-size: 26px !important;
+}
+
+.shs-team-cta p {
+  font-size: 15px !important;
+}
+
+/* =========================================================
+   Clean placeholder portraits so cards feel intentional
+   ========================================================= */
+
+.shs-team-profile-card {
+  min-height: 405px !important;
+  border-radius: 6px !important;
+  overflow: hidden !important;
+}
+
+.shs-team-portrait {
+  height: 145px !important;
+  position: relative !important;
+  background:
+    radial-gradient(circle at 50% 28%, rgba(55, 150, 235, 0.26), transparent 36%),
+    linear-gradient(180deg, rgba(9, 31, 55, 0.95), rgba(2, 10, 19, 0.98)) !important;
+}
+
+.shs-team-portrait img {
+  opacity: 0 !important;
+  display: none !important;
+}
+
+.shs-team-portrait::before {
+  content: "";
+  display: block !important;
+  position: absolute;
+  left: 50%;
+  top: 28px;
+  width: 70px;
+  height: 70px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 50% 36%, rgba(169, 218, 245, 0.95) 0 22%, transparent 23%),
+    radial-gradient(circle at 50% 85%, rgba(73, 132, 178, 0.84) 0 38%, transparent 39%),
+    rgba(4, 15, 28, 0.86);
+  border: 1px solid rgba(112, 198, 255, 0.28);
+  box-shadow:
+    0 0 0 18px rgba(58, 151, 240, 0.055),
+    0 0 26px rgba(45, 150, 255, 0.2);
+}
+
+.shs-team-portrait::after {
+  content: attr(data-initials);
+  display: block !important;
+  position: absolute;
+  left: 50%;
+  top: 53px;
+  transform: translateX(-50%);
+  color: rgba(235, 248, 255, 0.9);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+/* Use existing img alt fallback is not enough, so hide letters in SVG and draw clean initials from order */
+.shs-team-leader-grid .shs-team-profile-card:nth-child(1) .shs-team-portrait::after { content: "AR"; }
+.shs-team-leader-grid .shs-team-profile-card:nth-child(2) .shs-team-portrait::after { content: "MJ"; }
+.shs-team-leader-grid .shs-team-profile-card:nth-child(3) .shs-team-portrait::after { content: "KH"; }
+.shs-team-leader-grid .shs-team-profile-card:nth-child(4) .shs-team-portrait::after { content: "LT"; }
+.shs-team-leader-grid .shs-team-profile-card:nth-child(5) .shs-team-portrait::after { content: "MS"; }
+
+.shs-team-profile-body {
+  padding: 18px 18px 19px !important;
+}
+
+.shs-team-profile-body h3 {
+  font-size: 17px !important;
+}
+
+.shs-team-profile-body .role {
+  font-size: 13.5px !important;
+}
+
+.shs-team-profile-body p {
+  font-size: 13.5px !important;
+  line-height: 1.5 !important;
+}
+
+/* Advisors: make placeholders smaller and less cartoon-like */
+.advisor-avatar-img {
+  opacity: 0 !important;
+  display: none !important;
+}
+
+.shs-team-advisor-card {
+  position: relative !important;
+  grid-template-columns: 72px 1fr !important;
+}
+
+.shs-team-advisor-card::before {
+  content: "";
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 50% 32%, rgba(166, 220, 248, 0.92) 0 16%, transparent 17%),
+    radial-gradient(circle at 50% 88%, rgba(16, 42, 70, 0.92) 0 34%, transparent 35%),
+    linear-gradient(180deg, rgba(35, 104, 162, 0.82), rgba(4, 15, 29, 0.95));
+  border: 1px solid rgba(102, 190, 255, 0.25);
+  box-shadow: 0 0 22px rgba(43, 154, 255, 0.12);
+}
+
+.shs-team-advisor-card::after {
+  position: absolute;
+  left: 48px;
+  top: 72px;
+  color: rgba(235, 248, 255, 0.9);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.shs-team-advisors .shs-team-advisor-card:nth-child(1)::after { content: "NM"; }
+.shs-team-advisors .shs-team-advisor-card:nth-child(2)::after { content: "DR"; }
+.shs-team-advisors .shs-team-advisor-card:nth-child(3)::after { content: "JO"; }
+
+.shs-team-advisor-card h3 {
+  font-size: 16px !important;
+}
+
+.shs-team-advisor-card .role,
+.shs-team-advisor-card p {
+  font-size: 13.5px !important;
+}

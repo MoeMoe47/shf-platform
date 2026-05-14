@@ -1,0 +1,58 @@
+export const tourSteps = [
+  {
+    id: "kpis",
+    target: "[data-tour='kpis']",
+    placement: "bottom",
+    title: "System Pulse",
+    content: {
+      primary:
+        "These KPIs give a quick read on the foundation’s scale, verified impact, funding movement, and current state.",
+      why:
+        "This is the fastest way to understand whether the system is healthy before going deeper.",
+      action:
+        "Next, move into the map to see where impact is concentrated.",
+    },
+  },
+  {
+    id: "map",
+    target: "[data-tour='map']",
+    placement: "right",
+    title: "Geographic Impact",
+    content: {
+      primary:
+        "This map shows where SHF activity, funding, and outcomes are concentrated across Ohio.",
+      why:
+        "Geography turns abstract impact into visible operating territory.",
+      action:
+        "Next, review the analyst layer to see what the system believes should happen next.",
+    },
+  },
+  {
+    id: "analyst",
+    target: "[data-tour='analyst']",
+    placement: "left",
+    title: "AI Analyst",
+    content: {
+      primary:
+        "This panel surfaces recommended actions, risk cues, and the next operational priorities.",
+      why:
+        "This is the decision layer that helps leadership move from visibility to action.",
+      action:
+        "Next, inspect trust and verification to understand why the system is funder-ready.",
+    },
+  },
+  {
+    id: "trust",
+    target: "[data-tour='trust']",
+    placement: "top",
+    title: "Trust, Proof & Compliance",
+    content: {
+      primary:
+        "This section validates reporting coverage, audit integrity, and proof strength.",
+      why:
+        "Funders and institutional partners need visible trust signals before action.",
+      action:
+        "Tour complete. From here, you can move into deeper program and export actions.",
+    },
+  },
+];

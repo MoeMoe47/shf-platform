@@ -1,0 +1,140 @@
+/* =========================================================
+   SHS HUB INTERACTION LAYER
+   Sidebar magnetic movement + soft click pulse.
+   ========================================================= */
+
+.hbr-nav button,
+.hfi-nav button,
+.hpa-nav button,
+.hrl-nav button,
+.hin-nav button,
+.hld-nav button,
+.hwd-nav button,
+.hub-nav button,
+.hbr-rail nav button,
+.hfi-rail nav button,
+.hpa-rail nav button,
+.hrl-rail nav button,
+.hin-rail nav button,
+.hld-rail nav button,
+.hwd-rail nav button,
+.hub-rail nav button,
+aside nav button {
+  --hub-mouse-x: 0px;
+  --hub-mouse-y: 0px;
+  --hub-tilt: 0deg;
+  transform:
+    translate3d(var(--hub-mouse-x), var(--hub-mouse-y), 0)
+    rotate(var(--hub-tilt))
+    scale(1);
+  transition:
+    transform 150ms ease,
+    background 150ms ease,
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    color 150ms ease,
+    filter 150ms ease;
+  will-change: transform;
+}
+
+.hbr-nav button.shs-hub-magnetic-active,
+.hfi-nav button.shs-hub-magnetic-active,
+.hpa-nav button.shs-hub-magnetic-active,
+.hrl-nav button.shs-hub-magnetic-active,
+.hin-nav button.shs-hub-magnetic-active,
+.hld-nav button.shs-hub-magnetic-active,
+.hwd-nav button.shs-hub-magnetic-active,
+.hub-nav button.shs-hub-magnetic-active,
+aside nav button.shs-hub-magnetic-active {
+  background: rgba(28, 116, 220, 0.34) !important;
+  border-color: rgba(98, 224, 255, 0.55) !important;
+  color: #f3fbff !important;
+  box-shadow:
+    0 0 0 1px rgba(98, 224, 255, 0.12),
+    0 0 24px rgba(48, 149, 255, 0.28),
+    inset 0 0 18px rgba(98, 224, 255, 0.05) !important;
+  filter: brightness(1.08);
+}
+
+.hbr-nav button.shs-hub-magnetic-active span,
+.hfi-nav button.shs-hub-magnetic-active span,
+.hpa-nav button.shs-hub-magnetic-active span,
+.hrl-nav button.shs-hub-magnetic-active span,
+.hin-nav button.shs-hub-magnetic-active span,
+.hld-nav button.shs-hub-magnetic-active span,
+.hwd-nav button.shs-hub-magnetic-active span,
+.hub-nav button.shs-hub-magnetic-active span,
+aside nav button.shs-hub-magnetic-active span {
+  filter: drop-shadow(0 0 10px rgba(98, 224, 255, 0.75));
+}
+
+@keyframes shsHubClickPulse {
+  0% {
+    transform:
+      translate3d(var(--hub-mouse-x, 0px), var(--hub-mouse-y, 0px), 0)
+      rotate(var(--hub-tilt, 0deg))
+      scale(1);
+    box-shadow:
+      0 0 0 rgba(98, 224, 255, 0),
+      inset 0 0 0 rgba(98, 224, 255, 0);
+  }
+
+  45% {
+    transform:
+      translate3d(var(--hub-mouse-x, 0px), var(--hub-mouse-y, 0px), 0)
+      rotate(var(--hub-tilt, 0deg))
+      scale(0.965);
+    box-shadow:
+      0 0 0 2px rgba(98, 224, 255, 0.2),
+      0 0 22px rgba(43, 145, 255, 0.34),
+      inset 0 0 18px rgba(98, 224, 255, 0.08);
+  }
+
+  100% {
+    transform:
+      translate3d(var(--hub-mouse-x, 0px), var(--hub-mouse-y, 0px), 0)
+      rotate(var(--hub-tilt, 0deg))
+      scale(1);
+    box-shadow:
+      0 0 0 rgba(98, 224, 255, 0),
+      inset 0 0 0 rgba(98, 224, 255, 0);
+  }
+}
+
+.shs-hub-click-pulse {
+  animation: shsHubClickPulse 240ms ease both !important;
+}
+
+/* Keep the selected item visually stronger after routing */
+.hbr-nav button.is-active,
+.hfi-nav button.is-active,
+.hpa-nav button.is-active,
+.hrl-nav button.is-active,
+.hin-nav button.is-active,
+.hld-nav button.is-active,
+.hwd-nav button.is-active,
+.hub-nav button.is-active,
+aside nav button.is-active {
+  box-shadow:
+    0 0 0 1px rgba(98, 224, 255, 0.16),
+    0 0 22px rgba(43, 145, 255, 0.32),
+    inset 0 0 22px rgba(98, 224, 255, 0.05) !important;
+}
+
+/* Motion safety */
+@media (prefers-reduced-motion: reduce) {
+  .hbr-nav button,
+  .hfi-nav button,
+  .hpa-nav button,
+  .hrl-nav button,
+  .hin-nav button,
+  .hld-nav button,
+  .hwd-nav button,
+  .hub-nav button,
+  aside nav button,
+  .shs-hub-click-pulse {
+    animation: none !important;
+    transition-duration: 0.001ms !important;
+    transform: none !important;
+  }
+}

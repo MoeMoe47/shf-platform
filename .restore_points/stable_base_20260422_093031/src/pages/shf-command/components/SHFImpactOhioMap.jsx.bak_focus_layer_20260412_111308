@@ -1,0 +1,93 @@
+import React, { useMemo, useState } from "react";
+import OhioCountyOfficialMapV2 from "@/pages/iep-command-v2/OhioCountyOfficialMapV2.jsx";
+import "./shf-impact-ohio-map.css";
+
+const COUNTY_DATA = {
+  Franklin:   { programs: "5", people: "3,824", funding: "$4.5M", outcome: "82%", condition: "Stable" },
+  Cuyahoga:   { programs: "4", people: "2,406", funding: "$3.2M", outcome: "79%", condition: "Watch" },
+  Hamilton:   { programs: "3", people: "1,955", funding: "$2.1M", outcome: "74%", condition: "Stable" },
+  Summit:     { programs: "2", people: "1,240", funding: "$1.4M", outcome: "71%", condition: "Opportunity" },
+  Montgomery: { programs: "2", people: "1,112", funding: "$1.1M", outcome: "69%", condition: "Stable" },
+  Lucas:      { programs: "2", people: "913",   funding: "$940K", outcome: "67%", condition: "Stable" },
+  Delaware:   { programs: "1", people: "622",   funding: "$610K", outcome: "73%", condition: "Stable" },
+  Licking:    { programs: "1", people: "508",   funding: "$525K", outcome: "66%", condition: "Watch" },
+};
+
+function normalizeCountyName(name = "") {
+  return String(name).replace(/\s+County$/i, "").trim();
+}
+
+export default function SHFImpactOhioMap() {
+  const [hoveredCounty, setHoveredCounty] = useState(null);
+  const [selectedCounty, setSelectedCounty] = useState("Franklin");
+
+  const shownName = hoveredCounty || selectedCounty || "Franklin";
+  const shown = COUNTY_DATA[shownName] || COUNTY_DATA.Franklin;
+
+  const countyZoom = useMemo(() => {
+    const zooms = {
+      Franklin:   { scale: 1.08, tx: "-1%", ty: "-2%" },
+      Cuyahoga:   { scale: 1.14, tx: "-5%", ty: "2%"  },
+      Hamilton:   { scale: 1.14, tx: "4%",  ty: "-5%" },
+      Summit:     { scale: 1.12, tx: "-3%", ty: "-1%" },
+      Montgomery: { scale: 1.11, tx: "2%",  ty: "-4%" },
+      Lucas:      { scale: 1.15, tx: "-5%", ty: "5%"  },
+      Delaware:   { scale: 1.08, tx: "-1%", ty: "-2%" },
+      Licking:    { scale: 1.08, tx: "-2%", ty: "-2%" },
+    };
+    return zooms[selectedCounty] || { scale: 1, tx: "0%", ty: "0%" };
+  }, [selectedCounty]);
+
+  return (
+    <div className="shf-impact-map-root">
+      <div className="shf-impact-map-grid" />
+
+      <div className="shf-impact-map-toolbar">
+        <button type="button" onClick={() => setSelectedCounty("Franklin")}>Reset View</button>
+        <button type="button" className="is-active">{selectedCounty} County</button>
+      </div>
+
+      <div
+        className={`shf-impact-map-stage ${selectedCounty ? "is-zoomed" : ""}`}
+        style={{
+          "--map-scale": countyZoom.scale,
+          "--map-tx": countyZoom.tx,
+          "--map-ty": countyZoom.ty,
+        }}
+      >
+        <div className="shf-impact-map-surface">
+          {/* Geo-truth Ohio body */}
+          <div className="shf-impact-map-ohio-body-slot" aria-hidden="true">
+            <OhioCountyOfficialMapV2
+              activeCounty={selectedCounty}
+              selectedCounty={selectedCounty}
+              hoveredCounty={hoveredCounty}
+              className="shf-impact-map-ohio-body"
+            />
+          </div>
+
+          {/* County line truth layer */}
+          <div className="shf-impact-map-geo-slot" aria-hidden="true">
+            <OhioCountyOfficialMapV2
+              activeCounty={hoveredCounty || selectedCounty}
+              selectedCounty={selectedCounty}
+              hoveredCounty={hoveredCounty}
+              onCountyClick={(countyName) => setSelectedCounty(normalizeCountyName(countyName))}
+              onCountyHover={(countyName) => setHoveredCounty(countyName ? normalizeCountyName(countyName) : null)}
+              className="shf-impact-map-geo"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="shf-impact-map-tooltip">
+        <strong>{shownName} County</strong>
+        <div>Programs Active: {shown.programs}</div>
+        <div>People Served: {shown.people}</div>
+        <div>Funding Deployed: {shown.funding}</div>
+        <div>Top Outcome: {shown.outcome}</div>
+        <div>Program Condition: {shown.condition}</div>
+      </div>
+    </div>
+  );
+}

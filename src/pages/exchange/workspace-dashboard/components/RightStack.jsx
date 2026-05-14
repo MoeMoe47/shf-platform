@@ -9,6 +9,61 @@ import {
   formatCommandActivityTime,
 } from "../dashboardUtils";
 
+
+function UpcomingTasksPanel() {
+  const tasks = [
+    {
+      icon: "⚠",
+      title: "Review Franklin contradiction packet",
+      meta: "Oracle / Verification",
+      due: "Today",
+      status: "High",
+      tone: "orange",
+    },
+    {
+      icon: "▤",
+      title: "Prepare operational report export",
+      meta: "Reporting Module",
+      due: "Tomorrow",
+      status: "Ready",
+      tone: "green",
+    },
+    {
+      icon: "🛡",
+      title: "Confirm provider verification status",
+      meta: "Verification Workbench",
+      due: "2 days",
+      status: "Open",
+      tone: "blue",
+    },
+  ];
+
+  return (
+    <section className="shsDash-card shsDash-sideCard shsDash-upcomingTasksCard">
+      <div className="shsDash-sectionHead">
+        <h2>✅ Upcoming Tasks</h2>
+        <button type="button">View All →</button>
+      </div>
+
+      <div className="shsDash-taskStack">
+        {tasks.map((task) => (
+          <article className={`shsDash-taskItem is-${task.tone}`} key={task.title}>
+            <span>{task.icon}</span>
+
+            <div>
+              <strong>{task.title}</strong>
+              <p>{task.meta} · Due {task.due}</p>
+            </div>
+
+            <b>{task.status}</b>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+
 export default function RightStack() {
   const [liveAgendaItems, setLiveAgendaItems] = useState(() => readAgendaItems());
   const [liveReports, setLiveReports] = useState(() => readWorkspaceReports());
@@ -232,6 +287,7 @@ export default function RightStack() {
           </article>
         ))}
       </section>
-    </aside>
+          <UpcomingTasksPanel />
+</aside>
   );
 }

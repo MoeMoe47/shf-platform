@@ -2,11 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import useOrganizations from "@/lib/hub/useOrganizations";
 import {
   createBackendReferral,
-  referralToTruthSpineRecord,
-  upsertTruthSpineRecord,
-  appendTruthSpineEvent,
-  EVENT_TYPES,
-  createTruthSpineRecordsFromHubReferrals,
+  createTruthSpineReferralFromIntake,
   getTruthSpineSnapshot,
 } from "@/shared/truth-spine";
 import "./intake-navigator-shs.css";
@@ -153,41 +149,22 @@ export default function IntakeNavigatorConsole() {
     setTruthEngineStatus("syncing");
 
     try {
-      const engineResult = createTruthSpineRecordsFromHubReferrals(
-        [referralInput],
-        "hub_intake_navigator"
-      );
-
-      const saved =
-        Array.isArray(engineResult)
-          ? engineResult[0]
-          : engineResult?.record || engineResult;
-
-      if (!saved?.entityId) {
-        throw new Error("Truth Spine Engine did not return a saved record.");
-      }
-
-      appendTruthSpineEvent({
-        eventType: EVENT_TYPES.HUB_REFERRAL_CREATED,
-        entityId: saved.entityId,
-        entityType: saved.entityType,
+      const result = createTruthSpineReferralFromIntake(referralInput, {
         sourceSurface: "hub_intake_navigator",
-        traceId: saved.trustEnvelope?.traceId,
+        backend,
+        intake: payload,
         actorId: "demo-user-1",
         actorRole: "hub_operator",
-        organizationId: saved.organizationId || "shf-core",
-        payload: {
-          backend,
-          intake: payload,
-          engineRouted: true,
-        },
+        organizationId: "shf-core",
       });
 
       const snapshot = await getTruthSpineSnapshot({ includeBackend: false });
 
-      setTruthEngineStatus("connected");
+      setTruthEngineStatus(result.mode === "fallback" ? "fallback" : "connected");
       setTruthEngineNotice(
-        `Truth Spine Engine captured referral. Records: ${snapshot?.summary?.totalRecords ?? "updated"}`
+        result.mode === "fallback"
+          ? "Truth Spine Engine fallback used; local proof preserved."
+          : `Truth Spine Engine captured referral. Records: ${snapshot?.summary?.totalRecords ?? "updated"}`
       );
 
       window.clearTimeout(window.__intakeTruthEngineNotice);
@@ -195,41 +172,22 @@ export default function IntakeNavigatorConsole() {
         setTruthEngineNotice("");
       }, 4200);
 
-      return saved;
+      return result.record;
     } catch (error) {
-      console.warn("[Truth Spine Engine] Intake engine save failed; using legacy fallback", error);
-
-      const fallbackRecord = referralToTruthSpineRecord(referralInput, "hub_intake_navigator");
-      const saved = upsertTruthSpineRecord(fallbackRecord);
-
-      appendTruthSpineEvent({
-        eventType: EVENT_TYPES.HUB_REFERRAL_CREATED,
-        entityId: saved.entityId,
-        entityType: saved.entityType,
-        sourceSurface: "hub_intake_navigator",
-        traceId: saved.trustEnvelope?.traceId,
-        actorId: "demo-user-1",
-        actorRole: "hub_operator",
-        organizationId: saved.organizationId || "shf-core",
-        payload: {
-          backend,
-          intake: payload,
-          engineFallback: true,
-          error: error?.message || "Truth Spine Engine save failed",
-        },
-      });
+      console.warn("[Truth Spine Engine] Intake save failed", error);
 
       setTruthEngineStatus("fallback");
-      setTruthEngineNotice("Truth Spine Engine fallback used; local proof preserved.");
+      setTruthEngineNotice("Truth Spine Engine save needs review.");
 
       window.clearTimeout(window.__intakeTruthEngineNotice);
       window.__intakeTruthEngineNotice = window.setTimeout(() => {
         setTruthEngineNotice("");
       }, 4200);
 
-      return saved;
+      throw error;
     }
   }
+
 
   async function handleCreateReferral() {
     submittedRef.current = true;

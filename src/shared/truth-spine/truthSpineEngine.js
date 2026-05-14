@@ -2,6 +2,7 @@ import {
   getTruthSpineRecords,
   getTruthSpineRecord,
   patchTruthSpineRecord,
+  upsertTruthSpineRecord,
 } from "./truthSpineStore.js";
 
 import {
@@ -13,6 +14,7 @@ import {
 import {
   seedHubReferralsIntoTruthSpine,
   recordHubReferralAction,
+  referralToTruthSpineRecord,
 } from "./hubTruthAdapter.js";
 
 import {
@@ -197,6 +199,61 @@ export async function getTruthSpineSnapshot(options = {}) {
 
 export function createTruthSpineRecordsFromHubReferrals(referrals = [], sourceSurface = "truth_spine_engine") {
   return seedHubReferralsIntoTruthSpine(referrals, sourceSurface);
+}
+
+export function createTruthSpineReferralFromIntake(referralInput = {}, options = {}) {
+  const sourceSurface = options.sourceSurface || "hub_intake_navigator";
+  const backend = options.backend || null;
+  const intake = options.intake || {};
+  const actorId = options.actorId || "demo-user-1";
+  const actorRole = options.actorRole || "hub_operator";
+  const organizationId = options.organizationId || "shf-core";
+
+  let saved = null;
+  let mode = "engine";
+
+  try {
+    const engineResult = seedHubReferralsIntoTruthSpine([referralInput], sourceSurface);
+
+    saved =
+      Array.isArray(engineResult)
+        ? engineResult[0]
+        : engineResult?.record || engineResult;
+
+    if (!saved?.entityId) {
+      throw new Error("Truth Spine Engine did not return a saved referral record.");
+    }
+  } catch (error) {
+    console.warn("[Truth Spine Engine] Intake create fallback activated", error);
+
+    const fallbackRecord = referralToTruthSpineRecord(referralInput, sourceSurface);
+    saved = upsertTruthSpineRecord(fallbackRecord);
+    mode = "fallback";
+  }
+
+  appendTruthSpineEvent({
+    eventType: EVENT_TYPES.HUB_REFERRAL_CREATED,
+    entityId: saved.entityId,
+    entityType: saved.entityType,
+    sourceSurface,
+    traceId: saved.trustEnvelope?.traceId,
+    actorId,
+    actorRole,
+    organizationId: saved.organizationId || organizationId,
+    payload: {
+      backend,
+      intake,
+      engineRouted: mode === "engine",
+      engineFallback: mode === "fallback",
+      fallback: Boolean(referralInput?.fallback),
+      backendError: referralInput?.backendError,
+    },
+  });
+
+  return {
+    record: saved,
+    mode,
+  };
 }
 
 export async function recordTruthSpineQueueAction(referral, action, options = {}) {

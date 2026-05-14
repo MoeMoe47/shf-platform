@@ -1,3 +1,10 @@
+
+function go(path) {
+  if (!path || typeof window === "undefined") return;
+  window.location.hash = String(path).startsWith("/") ? path : `/${path}`;
+}
+
+const SHS_HUB_LOGO = "/assets/hub/shs-hub-logo.png";
 import React from "react";
 import {
   recordHubReferralAction,
@@ -252,19 +259,47 @@ function Sidebar() {
 
   return (
     <aside className="paq2-sidebar" data-tour="hub-queue-sidebar">
-      <div className="paq2-logoCard">
-        <div className="paq2-logoOrb">◆</div>
-        <strong>SHS</strong>
-      </div>
+      <button
+        className="paq2-logo"
+        type="button"
+        onClick={() => (window.location.href = SHS_HOME_URL)}
+        aria-label="Go to SHS Hub Overview"
+        title="Go to SHS Hub Overview"
+      >
+        <img src={SHS_HUB_LOGO} alt="Silicon Heartland Hub" />
+      </button>
 
-      <nav className="paq2-nav">
-        {items.map(([icon, label, active]) => (
-          <button type="button" className={active ? "is-active" : ""} key={label}>
-            <span>{icon}</span>
-            <em>{label}</em>
+<nav className="paq2-nav" data-tour="hub-queue-sidebar">
+          <button type="button" onClick={() => go("/hub")} title="Overview">
+            <span>⌂</span>
+            <small>Overview</small>
           </button>
-        ))}
-      </nav>
+
+          <button type="button" onClick={() => go("/hub/network")} title="Partners">
+            <span>👥</span>
+            <small>Partners</small>
+          </button>
+
+          <button type="button" onClick={() => go("/hub/lifecycle")} title="Referrals">
+            <span>↔</span>
+            <small>Referrals</small>
+          </button>
+
+          <button type="button" onClick={() => go("/hub/intake")} title="Intake">
+            <span>▤</span>
+            <small>Intake</small>
+          </button>
+
+          <button type="button" className="is-active" onClick={() => go("/hub/queue")} title="Action Queue">
+            <span>☑</span>
+            <small>Action<br />Queue</small>
+          </button>
+
+          <button type="button" onClick={() => go("/hub/reports")} title="Reports">
+            <span>▥</span>
+            <small>Reports</small>
+          </button>
+        </nav>
 
       <div className="paq2-readiness" data-tour="hub-queue-readiness">
         <span>Reporting Readiness</span>
@@ -763,7 +798,7 @@ function RightRail() {
 export default function PartnerActionQueueV2() {
   return (
     <HubBusinessTourProvider pageKey="queue">
-      <div className="paq2-page" data-tour="hub-queue-shell">
+      <div className="paq2-page" data-tour="hub-queue-shell" data-hub-tour-page="queue">
       <Sidebar />
 
       <main className="paq2-main">
@@ -778,14 +813,68 @@ export default function PartnerActionQueueV2() {
 
           <RightRail />
         </div>
-
-        <footer className="paq2-footer" data-tour="hub-queue-footer">
-          <span>SHS Hub Collaboration Layer</span>
-          <span>Secure. Connected. Impact Driven.</span>
-          <span>© 2026 Silicon Heartland Solutions</span>
-        </footer>
       </main>
       </div>
+      <footer className="paq2-institutionalFooter" data-tour="hub-queue-footer">
+          <section className="paq2-footerBrand">
+            <div className="paq2-footerLogo">
+              <img src={SHS_HUB_LOGO} alt="Silicon Heartland Solutions" />
+            </div>
+            <div>
+              <h3>Silicon Heartland Solutions</h3>
+              <p>
+                Truth Spine reporting infrastructure for referrals, queue actions,
+                verification, audit trace, and institutional proof.
+              </p>
+              <div className="paq2-footerPills">
+                <span>Secure Infrastructure</span>
+                <span>Audit Ready</span>
+                <span>Institutional Reporting</span>
+                <span>Adaptive Growth Intelligence</span>
+              </div>
+            </div>
+          </section>
+
+          <section className="paq2-footerLinks">
+            <div>
+              <strong>Growth</strong>
+              <span>Growth Engine</span>
+              <span>Referrals</span>
+              <span>Hub Network</span>
+              <span>Hub Reports</span>
+            </div>
+            <div>
+              <strong>Infrastructure</strong>
+              <span>Command Surface</span>
+              <span>Aggregation</span>
+              <span>Verification</span>
+              <span>Reporting</span>
+            </div>
+            <div>
+              <strong>Trust Layer</strong>
+              <span>Audit Ledger</span>
+              <span>Identity</span>
+              <span>Files & Imports</span>
+              <span>Alignment</span>
+            </div>
+          </section>
+
+          <section className="paq2-footerStatus">
+            <div>
+              <small>Version</small>
+              <strong>Truth Spine V1</strong>
+            </div>
+            <div>
+              <small>Environment</small>
+              <strong>Local / Development</strong>
+            </div>
+            <div>
+              <small>Status</small>
+              <strong className="is-operational">Operational</strong>
+            </div>
+            <p>© 2026 Silicon Heartland Solutions</p>
+          </section>
+        </footer>
     </HubBusinessTourProvider>
   );
 }

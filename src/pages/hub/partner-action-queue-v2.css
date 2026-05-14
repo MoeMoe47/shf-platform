@@ -1350,3 +1350,531 @@
     max-width: none !important;
   }
 }
+
+/* SHS Queue KPI Visibility Fix
+   Keeps KPI cards in their own protected lane under the header.
+   Prevents the Adaptive Growth Bridge from visually covering them.
+*/
+.paq2-kpis {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(190px, 1fr)) !important;
+  gap: 16px !important;
+  margin: 18px 0 18px !important;
+  padding: 0 !important;
+  position: relative !important;
+  z-index: 5 !important;
+  min-height: 150px !important;
+  overflow: visible !important;
+  clear: both !important;
+}
+
+.paq2-kpis > * {
+  min-height: 138px !important;
+  position: relative !important;
+  z-index: 6 !important;
+}
+
+.paq2-bridge {
+  position: relative !important;
+  z-index: 2 !important;
+  margin-top: 0 !important;
+  clear: both !important;
+}
+
+/* If the page is opened in a narrower viewport, stack KPI cards cleanly
+   instead of letting them hide behind the next section. */
+@media (max-width: 1180px) {
+  .paq2-kpis {
+    grid-template-columns: repeat(2, minmax(220px, 1fr)) !important;
+    min-height: auto !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .paq2-kpis {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* SHS Queue Header + Tour Restore Fix
+   Protects the header, KPI lane, and tour button from being clipped.
+*/
+.paq2-page,
+.paq2-shell,
+.paq2-main,
+.paq2-content {
+  min-height: 100vh !important;
+  overflow: visible !important;
+}
+
+.paq2-page {
+  align-items: stretch !important;
+}
+
+.paq2-header {
+  position: relative !important;
+  z-index: 20 !important;
+  min-height: 156px !important;
+  height: auto !important;
+  overflow: visible !important;
+  padding-top: 26px !important;
+  padding-bottom: 28px !important;
+  margin-bottom: 18px !important;
+}
+
+.paq2-header h1,
+.paq2-header .paq2-title,
+.paq2-header p {
+  position: relative !important;
+  z-index: 21 !important;
+  overflow: visible !important;
+  max-height: none !important;
+}
+
+.paq2-headerActions {
+  position: relative !important;
+  z-index: 22 !important;
+  flex-wrap: wrap !important;
+}
+
+/* Keep the KPI row below the header and above the growth bridge. */
+.paq2-kpis {
+  position: relative !important;
+  z-index: 10 !important;
+  margin-top: 18px !important;
+  margin-bottom: 18px !important;
+  clear: both !important;
+}
+
+/* Prevent the growth bridge from climbing up over the KPI/header lane. */
+.paq2-bridge {
+  position: relative !important;
+  z-index: 4 !important;
+  margin-top: 18px !important;
+  clear: both !important;
+}
+
+/* Tour target safety: make tour-highlighted areas measurable. */
+[data-tour="hub-queue-header"],
+[data-tour="hub-queue-kpis"],
+[data-tour="hub-queue-growth-bridge"],
+[data-tour="hub-queue-referrals"],
+[data-tour="hub-queue-guidance"] {
+  scroll-margin-top: 24px !important;
+}
+
+/* SHS Queue Logo + Institutional Footer Restore */
+.paq2-sidebar,
+.paq2-rail {
+  overflow: visible !important;
+}
+
+.paq2-logo {
+  width: 96px !important;
+  height: 96px !important;
+  min-height: 96px !important;
+  margin: 18px auto 18px !important;
+  padding: 9px !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(56, 189, 248, 0.48) !important;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(37, 99, 235, 0.42), transparent 58%),
+    rgba(5, 18, 32, 0.94) !important;
+  box-shadow:
+    0 0 0 1px rgba(96, 165, 250, 0.14),
+    0 0 34px rgba(37, 99, 235, 0.34),
+    inset 0 0 24px rgba(14, 165, 233, 0.12) !important;
+  display: grid !important;
+  place-items: center !important;
+  cursor: pointer !important;
+}
+
+.paq2-logo img {
+  width: 72px !important;
+  height: 72px !important;
+  object-fit: contain !important;
+  display: block !important;
+  filter: drop-shadow(0 0 18px rgba(59, 130, 246, 0.72)) !important;
+}
+
+.paq2-institutionalFooter {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(320px, 1.2fr) minmax(340px, 1fr) minmax(260px, 0.8fr);
+  gap: 26px;
+  margin: 36px 0 0;
+  padding: 24px;
+  border: 1px solid rgba(56, 189, 248, 0.34);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(14, 165, 233, 0.18), transparent 38%),
+    radial-gradient(circle at 100% 0%, rgba(37, 99, 235, 0.12), transparent 36%),
+    rgba(4, 16, 29, 0.96);
+  box-shadow:
+    0 -10px 40px rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.paq2-footerBrand {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.paq2-footerLogo {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  border: 1px solid rgba(103, 232, 249, 0.3);
+  background: rgba(8, 47, 73, 0.45);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.paq2-footerLogo img {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+}
+
+.paq2-footerBrand h3 {
+  margin: 0 0 8px;
+  color: #f8fafc;
+  font-size: 1.18rem;
+  font-weight: 950;
+}
+
+.paq2-footerBrand p {
+  margin: 0;
+  color: rgba(226, 232, 240, 0.74);
+  line-height: 1.45;
+  max-width: 620px;
+}
+
+.paq2-footerPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.paq2-footerPills span {
+  border: 1px solid rgba(103, 232, 249, 0.28);
+  border-radius: 999px;
+  background: rgba(8, 47, 73, 0.44);
+  color: #a5f3fc;
+  padding: 6px 10px;
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.paq2-footerLinks {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(90px, 1fr));
+  gap: 20px;
+}
+
+.paq2-footerLinks div,
+.paq2-footerStatus div {
+  display: grid;
+  gap: 7px;
+}
+
+.paq2-footerLinks strong,
+.paq2-footerStatus small {
+  color: #67e8f9;
+  font-size: 0.7rem;
+  font-weight: 1000;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.paq2-footerLinks span {
+  color: rgba(226, 232, 240, 0.78);
+  font-size: 0.88rem;
+}
+
+.paq2-footerStatus {
+  display: grid;
+  gap: 10px;
+}
+
+.paq2-footerStatus div {
+  padding: 12px 14px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.58);
+}
+
+.paq2-footerStatus strong {
+  color: #f8fafc;
+  font-size: 0.92rem;
+}
+
+.paq2-footerStatus .is-operational {
+  color: #6ee7b7;
+}
+
+.paq2-footerStatus p {
+  margin: 3px 0 0;
+  color: rgba(148, 163, 184, 0.72);
+  font-size: 0.78rem;
+}
+
+@media (max-width: 1180px) {
+  .paq2-institutionalFooter {
+    grid-template-columns: 1fr;
+  }
+
+  .paq2-footerLinks {
+    grid-template-columns: repeat(3, minmax(100px, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .paq2-footerBrand {
+    grid-template-columns: 1fr;
+  }
+
+  .paq2-footerLinks {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* SHS Queue Placeholder Removal + Full Width Footer Fix */
+
+/* Hide any remaining legacy placeholder brand blocks without affecting the real image logo. */
+.paq2-brand,
+.paq2-brandText,
+.paq2-placeholderLogo,
+.paq2-diamondLogo {
+  display: none !important;
+}
+
+/* Keep only the real image logo visible in the upper-left rail. */
+.paq2-sidebar > .paq2-logo,
+.paq2-rail > .paq2-logo {
+  display: grid !important;
+}
+
+/* Make Queue shell/footer allow a full-width institutional footer. */
+.paq2-page {
+  position: relative !important;
+  overflow: visible !important;
+}
+
+/* Full-width footer: spans the viewport below the page content instead of only the center column. */
+.paq2-institutionalFooter {
+  width: calc(100vw - 32px) !important;
+  max-width: none !important;
+  margin: 42px 16px 0 16px !important;
+  box-sizing: border-box !important;
+  grid-column: 1 / -1 !important;
+  clear: both !important;
+}
+
+/* If footer is still inside a grid/content wrapper, force it to break across. */
+.paq2-content .paq2-institutionalFooter,
+.paq2-main .paq2-institutionalFooter,
+.paq2-page .paq2-institutionalFooter {
+  width: calc(100vw - 32px) !important;
+  margin-left: calc(-1 * max(0px, var(--paq2-content-left-offset, 0px))) !important;
+}
+
+/* Simpler fallback for this layout: pull footer left toward viewport edge when nested. */
+@supports (width: 100vw) {
+  .paq2-page .paq2-institutionalFooter {
+    margin-left: calc(-1 * 0px) !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .paq2-institutionalFooter {
+    width: calc(100vw - 20px) !important;
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+  }
+}
+
+
+
+/* SHS Queue Sidebar Restore + Bottom Footer Layout */
+
+/* Main page should stack normally and leave room for footer. */
+.paq2-page {
+  min-height: auto !important;
+  overflow: visible !important;
+  position: relative !important;
+}
+
+/* Sidebar: keep real logo, nav, and readiness visible. */
+.paq2-sidebar,
+.paq2-rail {
+  overflow: visible !important;
+}
+
+.paq2-sidebar .paq2-logo,
+.paq2-rail .paq2-logo {
+  display: grid !important;
+  width: 96px !important;
+  height: 96px !important;
+  min-height: 96px !important;
+  margin: 18px auto 22px !important;
+  padding: 9px !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(56, 189, 248, 0.48) !important;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(37, 99, 235, 0.42), transparent 58%),
+    rgba(5, 18, 32, 0.94) !important;
+  box-shadow:
+    0 0 0 1px rgba(96, 165, 250, 0.14),
+    0 0 34px rgba(37, 99, 235, 0.34),
+    inset 0 0 24px rgba(14, 165, 233, 0.12) !important;
+  place-items: center !important;
+  cursor: pointer !important;
+}
+
+.paq2-sidebar .paq2-logo img,
+.paq2-rail .paq2-logo img {
+  width: 72px !important;
+  height: 72px !important;
+  object-fit: contain !important;
+  display: block !important;
+  filter: drop-shadow(0 0 18px rgba(59, 130, 246, 0.72)) !important;
+}
+
+.paq2-sidebar .paq2-nav,
+.paq2-rail .paq2-nav {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+}
+
+.paq2-sidebar .paq2-nav button,
+.paq2-rail .paq2-nav button {
+  display: grid !important;
+}
+
+.paq2-sidebar .paq2-readiness,
+.paq2-rail .paq2-readiness {
+  display: grid !important;
+  margin-top: auto !important;
+}
+
+/* Hide only legacy placeholder brand blocks. Do not hide nav/readiness. */
+.paq2-brand,
+.paq2-brandText,
+.paq2-placeholderLogo,
+.paq2-diamondLogo,
+.paq2-sidebarBrand,
+.paq2-brandBlock {
+  display: none !important;
+}
+
+/* Footer belongs below all queue content, not overlaying cards. */
+.paq2-institutionalFooter {
+  position: relative !important;
+  z-index: 1 !important;
+  width: calc(100vw - 32px) !important;
+  max-width: none !important;
+  margin: 48px 16px 0 16px !important;
+  clear: both !important;
+  box-sizing: border-box !important;
+}
+
+/* Prevent footer from floating over the referral queue. */
+.paq2-referrals,
+.paq2-rightRail,
+.paq2-panel,
+.paq2-bridge {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.paq2-institutionalFooter {
+  z-index: 0 !important;
+}
+
+@media (max-width: 900px) {
+  .paq2-institutionalFooter {
+    width: calc(100vw - 20px) !important;
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+  }
+}
+
+/* SHS Queue Bigger Logo + Wired Sidebar Polish */
+.paq2-sidebar .paq2-logo,
+.paq2-rail .paq2-logo {
+  width: 112px !important;
+  height: 112px !important;
+  min-height: 112px !important;
+  padding: 6px !important;
+  margin: 18px auto 24px !important;
+  border-radius: 24px !important;
+}
+
+.paq2-sidebar .paq2-logo img,
+.paq2-rail .paq2-logo img {
+  width: 96px !important;
+  height: 96px !important;
+  object-fit: contain !important;
+}
+
+.paq2-sidebar .paq2-nav,
+.paq2-rail .paq2-nav {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+  width: 100% !important;
+  align-items: center !important;
+}
+
+.paq2-sidebar .paq2-nav button,
+.paq2-rail .paq2-nav button {
+  width: 112px !important;
+  min-height: 58px !important;
+  display: grid !important;
+  place-items: center !important;
+  gap: 4px !important;
+  border-radius: 16px !important;
+  border: 1px solid transparent !important;
+  background: transparent !important;
+  color: rgba(226, 232, 240, 0.78) !important;
+  cursor: pointer !important;
+}
+
+.paq2-sidebar .paq2-nav button span,
+.paq2-rail .paq2-nav button span {
+  font-size: 1.08rem !important;
+  line-height: 1 !important;
+}
+
+.paq2-sidebar .paq2-nav button small,
+.paq2-rail .paq2-nav button small {
+  font-size: 0.74rem !important;
+  font-weight: 850 !important;
+  line-height: 1.08 !important;
+  text-align: center !important;
+}
+
+.paq2-sidebar .paq2-nav button:hover,
+.paq2-rail .paq2-nav button:hover {
+  border-color: rgba(103, 232, 249, 0.28) !important;
+  background: rgba(8, 47, 73, 0.42) !important;
+  color: #ffffff !important;
+}
+
+.paq2-sidebar .paq2-nav button.is-active,
+.paq2-rail .paq2-nav button.is-active {
+  border-color: rgba(96, 165, 250, 0.7) !important;
+  background: linear-gradient(135deg, rgba(29, 78, 216, 0.84), rgba(14, 116, 144, 0.58)) !important;
+  color: #ffffff !important;
+  box-shadow:
+    0 0 0 1px rgba(96, 165, 250, 0.18),
+    0 0 26px rgba(37, 99, 235, 0.28) !important;
+}

@@ -1,10 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import useTour from "./useTour";
 import TourOverlay from "./TourOverlay";
 import { tourSteps as defaultTourSteps } from "./tourConfig";
 import "./tourStyles.css";
 
 function clearTourBodyClasses() {
+  if (typeof document === "undefined") return;
+
   document.body.classList.remove("tour-active");
 
   [...document.body.classList]
@@ -17,7 +19,10 @@ export default function TourProvider({
   steps = defaultTourSteps,
   buttonLabel = "Guided Tour",
 }) {
-  const activeSteps = Array.isArray(steps) && steps.length ? steps : defaultTourSteps;
+  const activeSteps = useMemo(() => {
+    return Array.isArray(steps) && steps.length ? steps : defaultTourSteps;
+  }, [steps]);
+
   const tour = useTour(activeSteps.length);
 
   useEffect(() => {
@@ -25,8 +30,11 @@ export default function TourProvider({
 
     if (tour.state.isActive) {
       document.body.classList.add("tour-active");
+
       const step = activeSteps[tour.state.currentStep];
-      if (step?.id) document.body.classList.add(`tour-step-${step.id}`);
+      if (step?.id) {
+        document.body.classList.add(`tour-step-${step.id}`);
+      }
     }
 
     return () => {
@@ -52,6 +60,7 @@ export default function TourProvider({
           className="tour-start-btn"
           onClick={tour.startTour}
           aria-label={buttonLabel}
+          data-tour-control="start"
         >
           {buttonLabel}
         </button>

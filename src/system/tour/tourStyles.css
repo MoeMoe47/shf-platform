@@ -117,3 +117,291 @@
     bottom: 80px;
   }
 }
+
+/* Hub Tour V1 restore / hardening */
+.tour-start-btn {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 99990;
+  border: 1px solid rgba(103, 232, 249, 0.38);
+  border-radius: 999px;
+  background: rgba(4, 18, 32, 0.94);
+  color: #e8fbff;
+  padding: 11px 16px;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.34), 0 0 22px rgba(56, 189, 248, 0.18);
+  cursor: pointer;
+}
+
+.tour-start-btn:hover {
+  border-color: rgba(103, 232, 249, 0.72);
+  color: #ffffff;
+}
+
+.tour-overlayRoot {
+  position: fixed;
+  inset: 0;
+  z-index: 99980;
+  pointer-events: none;
+}
+
+.tour-dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(1, 7, 16, 0.62);
+  pointer-events: auto;
+}
+
+.tour-spotlight {
+  position: fixed;
+  border: 2px solid rgba(103, 232, 249, 0.9);
+  border-radius: 18px;
+  box-shadow:
+    0 0 0 9999px rgba(1, 7, 16, 0.45),
+    0 0 34px rgba(56, 189, 248, 0.42);
+  pointer-events: none;
+  transition: top 160ms ease, left 160ms ease, width 160ms ease, height 160ms ease;
+}
+
+.tour-card {
+  position: fixed;
+  width: min(380px, calc(100vw - 40px));
+  z-index: 99995;
+  pointer-events: auto;
+  border: 1px solid rgba(103, 232, 249, 0.32);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(56, 189, 248, 0.16), transparent 36%),
+    rgba(4, 18, 32, 0.98);
+  color: #e8fbff;
+  padding: 18px;
+  box-shadow: 0 24px 54px rgba(0, 0, 0, 0.48);
+}
+
+.tour-cardTop,
+.tour-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.tour-cardTop span,
+.tour-progress {
+  color: #67e8f9;
+  font-size: 0.72rem;
+  font-weight: 1000;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.tour-cardTop button,
+.tour-actions button {
+  border: 1px solid rgba(148, 163, 184, 0.26);
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.82);
+  color: #e2e8f0;
+  padding: 8px 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.tour-actions button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.tour-actions .is-primary {
+  border-color: rgba(103, 232, 249, 0.46);
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.92), rgba(37, 99, 235, 0.92));
+  color: #ffffff;
+}
+
+.tour-card h3 {
+  margin: 10px 0 10px;
+  font-size: 1.1rem;
+  color: #ffffff;
+}
+
+.tour-card p {
+  margin: 0 0 10px;
+  color: rgba(226, 246, 255, 0.84);
+  line-height: 1.45;
+}
+
+.tour-contentBlock {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgba(103, 232, 249, 0.16);
+  border-radius: 14px;
+  background: rgba(8, 47, 73, 0.34);
+}
+
+.tour-contentBlock strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #8fffd0;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.tour-contentBlock span {
+  display: block;
+  color: rgba(226, 246, 255, 0.8);
+  line-height: 1.38;
+}
+
+.tour-missingTarget {
+  margin: 10px 0;
+  color: #facc15;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+/* Hub Tour V1 restore / hardening */
+.tour-start-btn {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 99990;
+  border: 1px solid rgba(103, 232, 249, 0.38);
+  border-radius: 999px;
+  background: rgba(4, 18, 32, 0.94);
+  color: #e8fbff;
+  padding: 11px 16px;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.34), 0 0 22px rgba(56, 189, 248, 0.18);
+  cursor: pointer;
+}
+
+.tour-start-btn:hover {
+  border-color: rgba(103, 232, 249, 0.72);
+  color: #ffffff;
+}
+
+.tour-overlayRoot {
+  position: fixed;
+  inset: 0;
+  z-index: 99980;
+  pointer-events: none;
+}
+
+.tour-dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(1, 7, 16, 0.62);
+  pointer-events: auto;
+}
+
+.tour-spotlight {
+  position: fixed;
+  border: 2px solid rgba(103, 232, 249, 0.9);
+  border-radius: 18px;
+  box-shadow:
+    0 0 0 9999px rgba(1, 7, 16, 0.45),
+    0 0 34px rgba(56, 189, 248, 0.42);
+  pointer-events: none;
+  transition: top 160ms ease, left 160ms ease, width 160ms ease, height 160ms ease;
+}
+
+.tour-card {
+  position: fixed;
+  width: min(380px, calc(100vw - 40px));
+  z-index: 99995;
+  pointer-events: auto;
+  border: 1px solid rgba(103, 232, 249, 0.32);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(56, 189, 248, 0.16), transparent 36%),
+    rgba(4, 18, 32, 0.98);
+  color: #e8fbff;
+  padding: 18px;
+  box-shadow: 0 24px 54px rgba(0, 0, 0, 0.48);
+}
+
+.tour-cardTop,
+.tour-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.tour-cardTop span,
+.tour-progress {
+  color: #67e8f9;
+  font-size: 0.72rem;
+  font-weight: 1000;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.tour-cardTop button,
+.tour-actions button {
+  border: 1px solid rgba(148, 163, 184, 0.26);
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.82);
+  color: #e2e8f0;
+  padding: 8px 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.tour-actions button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.tour-actions .is-primary {
+  border-color: rgba(103, 232, 249, 0.46);
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.92), rgba(37, 99, 235, 0.92));
+  color: #ffffff;
+}
+
+.tour-card h3 {
+  margin: 10px 0 10px;
+  font-size: 1.1rem;
+  color: #ffffff;
+}
+
+.tour-card p {
+  margin: 0 0 10px;
+  color: rgba(226, 246, 255, 0.84);
+  line-height: 1.45;
+}
+
+.tour-contentBlock {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgba(103, 232, 249, 0.16);
+  border-radius: 14px;
+  background: rgba(8, 47, 73, 0.34);
+}
+
+.tour-contentBlock strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #8fffd0;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.tour-contentBlock span {
+  display: block;
+  color: rgba(226, 246, 255, 0.8);
+  line-height: 1.38;
+}
+
+.tour-missingTarget {
+  margin: 10px 0;
+  color: #facc15;
+  font-size: 0.82rem;
+  font-weight: 800;
+}

@@ -2,43 +2,18 @@ import { useLayoutEffect, useState } from "react";
 import TourStepCard from "./TourStepCard";
 
 function findTarget(selector) {
-  return selector ? document.querySelector(selector) : null;
+  if (!selector || typeof document === "undefined") return null;
+
+  try {
+    return document.querySelector(selector);
+  } catch {
+    return null;
+  }
 }
 
 function buildRectForStep(step) {
-  const el = findTarget(step.target);
+  const el = findTarget(step?.target);
   if (!el) return null;
-
-  if (step.id === "kpis") {
-    const cards = [...el.querySelectorAll(".shf-kpi-card")];
-    const drawer = document.querySelector(".shf-drawer");
-
-    if (cards.length) {
-      const first = cards[0].getBoundingClientRect();
-      const drawerLeft = drawer
-        ? drawer.getBoundingClientRect().left
-        : window.innerWidth;
-
-      const visibleCards = cards.filter((card) => {
-        const r = card.getBoundingClientRect();
-        return r.right < drawerLeft - 8;
-      });
-
-      const lastCard =
-        visibleCards.length > 0
-          ? visibleCards[visibleCards.length - 1]
-          : cards[0];
-
-      const last = lastCard.getBoundingClientRect();
-
-      return {
-        top: Math.max(8, first.top - 6),
-        left: Math.max(8, first.left - 6),
-        width: Math.max(40, last.right - first.left + 12),
-        height: Math.max(40, first.height + 12),
-      };
-    }
-  }
 
   const r = el.getBoundingClientRect();
 
@@ -61,7 +36,7 @@ export default function TourOverlay({
   const [rect, setRect] = useState(null);
 
   useLayoutEffect(() => {
-    if (!state.isActive || !step) return;
+    if (!state.isActive || !step) return undefined;
 
     const target = findTarget(step.target);
 
@@ -69,6 +44,7 @@ export default function TourOverlay({
       target.scrollIntoView({
         behavior: "smooth",
         block: "center",
+        inline: "nearest",
       });
     }
 
@@ -76,15 +52,15 @@ export default function TourOverlay({
       setRect(buildRectForStep(step));
     };
 
-    const t1 = setTimeout(updateRect, 80);
-    const t2 = setTimeout(updateRect, 260);
+    const t1 = window.setTimeout(updateRect, 80);
+    const t2 = window.setTimeout(updateRect, 280);
 
     window.addEventListener("resize", updateRect);
     window.addEventListener("scroll", updateRect, true);
 
     return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
       window.removeEventListener("resize", updateRect);
       window.removeEventListener("scroll", updateRect, true);
     };
@@ -92,13 +68,16 @@ export default function TourOverlay({
 
   if (!state.isActive || !step) return null;
 
-  return (
-    <>
-      <div className="tour-backdrop" />
+  const totalSteps = steps.length || 1;
+  const stepNumber = state.currentStep + 1;
 
-      {rect && (
+  return (
+    <div className="tour-overlayRoot" data-tour-overlay="active">
+      <div className="tour-dim" onClick={endTour} />
+
+      {rect ? (
         <div
-          className="tour-highlight"
+          className="tour-spotlight"
           style={{
             top: rect.top,
             left: rect.left,
@@ -106,18 +85,17 @@ export default function TourOverlay({
             height: rect.height,
           }}
         />
-      )}
+      ) : null}
 
-      <div className="tour-card-wrap">
-        <TourStepCard
-          step={step}
-          stepIndex={state.currentStep}
-          total={steps.length}
-          onNext={nextStep}
-          onBack={prevStep}
-          onClose={endTour}
-        />
-      </div>
-    </>
+      <TourStepCard
+        step={step}
+        rect={rect}
+        stepNumber={stepNumber}
+        totalSteps={totalSteps}
+        nextStep={nextStep}
+        prevStep={prevStep}
+        endTour={endTour}
+      />
+    </div>
   );
 }

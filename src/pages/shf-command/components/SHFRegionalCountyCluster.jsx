@@ -9,7 +9,7 @@ function normalizeCountyName(name = "") {
 }
 
 function countySlug(name = "") {
-  return normalizeCountyName(name).toLowerCase();
+  return normalizeCountyName(name).toLowerCase().replace(/\s+/g, "-");
 }
 
 function getCountyName(feature) {
@@ -27,6 +27,92 @@ function getCountyName(feature) {
   return normalizeCountyName(rawName);
 }
 
+function toFeatureCollection(features) {
+  return {
+    type: "FeatureCollection",
+    features,
+  };
+}
+
+function buildFallbackCluster(fullOhioGeojson, selectedCounty) {
+  const features = fullOhioGeojson?.features || [];
+  const selectedName = normalizeCountyName(selectedCounty || "");
+
+  if (!features.length || !selectedName) {
+    return fullOhioGeojson;
+  }
+
+  const selectedFeature = features.find(
+    (feature) => getCountyName(feature).toLowerCase() === selectedName.toLowerCase()
+  );
+
+  if (!selectedFeature) {
+    return fullOhioGeojson;
+  }
+
+  // First projection is only used to estimate which counties are closest.
+  const statewideProjection = geoMercator().fitExtent(
+    [
+      [70, 46],
+      [VIEWBOX_WIDTH - 70, VIEWBOX_HEIGHT - 56],
+    ],
+    fullOhioGeojson
+  );
+
+  const statewidePath = geoPath(statewideProjection);
+  const selectedCentroid = statewidePath.centroid(selectedFeature);
+
+  const ranked = features
+    .map((feature) => {
+      const centroid = statewidePath.centroid(feature);
+      const dx = centroid[0] - selectedCentroid[0];
+      const dy = centroid[1] - selectedCentroid[1];
+      return {
+        feature,
+        countyName: getCountyName(feature),
+        distance: Math.sqrt(dx * dx + dy * dy),
+      };
+    })
+    .sort((a, b) => a.distance - b.distance);
+
+  // Selected county + nearest surrounding counties.
+  const clusterFeatures = ranked.slice(0, 7).map((item) => item.feature);
+
+  return toFeatureCollection(clusterFeatures);
+}
+
+async function loadRegionalGeojson(slug, selectedCounty) {
+  const clusterPath = `/assets/maps/clusters/${slug}.geojson`;
+
+  try {
+    const clusterRes = await fetch(clusterPath, { cache: "no-store" });
+    if (clusterRes.ok) {
+      return {
+        data: await clusterRes.json(),
+        source: "custom_cluster",
+        path: clusterPath,
+      };
+    }
+  } catch {
+    // Continue to fallback below.
+  }
+
+  const fallbackPath = "/assets/maps/ohio-counties.geojson";
+  const fullRes = await fetch(fallbackPath, { cache: "no-store" });
+
+  if (!fullRes.ok) {
+    throw new Error(`HTTP ${fullRes.status} while loading ${fallbackPath}`);
+  }
+
+  const fullOhioGeojson = await fullRes.json();
+
+  return {
+    data: buildFallbackCluster(fullOhioGeojson, selectedCounty),
+    source: "statewide_fallback_cluster",
+    path: fallbackPath,
+  };
+}
+
 export default function SHFRegionalCountyCluster({
   selectedCounty,
   hoveredCounty = null,
@@ -34,6 +120,7 @@ export default function SHFRegionalCountyCluster({
   onCountyClick,
 }) {
   const [geojson, setGeojson] = useState(null);
+  const [sourceInfo, setSourceInfo] = useState(null);
   const [error, setError] = useState("");
 
   const slug = countySlug(selectedCounty);
@@ -41,16 +128,14 @@ export default function SHFRegionalCountyCluster({
   useEffect(() => {
     let alive = true;
     setGeojson(null);
+    setSourceInfo(null);
     setError("");
 
-    fetch(`/assets/maps/clusters/${slug}.geojson`, { cache: "no-store" })
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-      })
-      .then((data) => {
+    loadRegionalGeojson(slug, selectedCounty)
+      .then((result) => {
         if (!alive) return;
-        setGeojson(data);
+        setGeojson(result.data);
+        setSourceInfo(result);
       })
       .catch((err) => {
         if (!alive) return;
@@ -60,7 +145,7 @@ export default function SHFRegionalCountyCluster({
     return () => {
       alive = false;
     };
-  }, [slug]);
+  }, [slug, selectedCounty]);
 
   const mapState = useMemo(() => {
     if (!geojson?.features?.length) {
@@ -83,7 +168,7 @@ export default function SHFRegionalCountyCluster({
   const hoveredName = normalizeCountyName(hoveredCounty || "");
 
   if (error) {
-    return <div className="shf-regional-cluster-loading">Failed to load cluster: {error}</div>;
+    return <div className="shf-regional-cluster-loading">Failed to load regional county view: {error}</div>;
   }
 
   if (!geojson) {
@@ -92,6 +177,10 @@ export default function SHFRegionalCountyCluster({
 
   return (
     <div className="shf-regional-cluster-surface">
+      <div className="shf-regional-cluster-source">
+        {sourceInfo?.source === "custom_cluster" ? "Custom regional cluster" : "Generated regional cluster"}
+      </div>
+
       <svg
         viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`}
         className="shf-regional-cluster-svg"
@@ -137,8 +226,10 @@ export default function SHFRegionalCountyCluster({
         <g className="shf-regional-counties">
           {mapState.features.map((feature, idx) => {
             const countyName = getCountyName(feature);
-            const isSelected = countyName === selectedName;
-            const isHovered = countyName === hoveredName;
+            const isSelected =
+              countyName.toLowerCase() === selectedName.toLowerCase();
+            const isHovered =
+              countyName.toLowerCase() === hoveredName.toLowerCase();
 
             return (
               <path

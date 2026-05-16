@@ -2909,3 +2909,3132 @@ body.tour-step-analyst [data-tour="analyst"] .shf-action-list button {
 .shf-action-low {
   border-left: 3px solid #a69484;
 }
+
+/* Agent Fabric Sync — AI Analyst Context Adapter V1 */
+.shf-agent-sync-card {
+  margin: 12px 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  border-radius: 16px;
+  background:
+    linear-gradient(135deg, rgba(8, 47, 73, 0.72), rgba(15, 23, 42, 0.68));
+  box-shadow: 0 14px 34px rgba(2, 6, 23, 0.22);
+}
+
+.shf-agent-sync-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #e0f2fe;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+}
+
+.shf-agent-sync-top em {
+  margin-left: auto;
+  color: #93c5fd;
+  font-style: normal;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+}
+
+.shf-agent-sync-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: #f59e0b;
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.65);
+}
+
+.shf-agent-sync-dot.is-synced {
+  background: #22c55e;
+  box-shadow: 0 0 16px rgba(34, 197, 94, 0.72);
+}
+
+.shf-agent-sync-dot.is-offline {
+  background: #ef4444;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.7);
+}
+
+.shf-agent-sync-card p {
+  margin: 8px 0 0;
+  color: rgba(226, 232, 240, 0.9);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.shf-agent-sync-card small {
+  display: block;
+  margin-top: 8px;
+  color: rgba(125, 211, 252, 0.92);
+  line-height: 1.35;
+}
+
+.shf-regional-cluster-source {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  z-index: 4;
+  padding: 5px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(251, 191, 36, 0.26);
+  background: rgba(15, 23, 42, 0.72);
+  color: rgba(254, 243, 199, 0.92);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Regional county focus card — lighter frosted overlay so the zoom/glow layer stays visible */
+.shf-regional-detail-panel {
+  background: rgba(255, 250, 242, 0.62) !important;
+  border: 1px solid rgba(199, 130, 54, 0.18) !important;
+  box-shadow: 0 18px 46px rgba(76, 43, 18, 0.16) !important;
+  backdrop-filter: blur(14px) saturate(1.18) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.18) !important;
+}
+
+.shf-regional-detail-panel::before {
+  opacity: 0.18 !important;
+}
+
+.shf-regional-detail-grid,
+.shf-regional-detail-stats {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.shf-regional-detail-item {
+  background: rgba(255, 255, 255, 0.34) !important;
+  border-color: rgba(154, 91, 35, 0.16) !important;
+}
+
+.shf-regional-detail-panel__action {
+  box-shadow: 0 10px 22px rgba(140, 72, 20, 0.18) !important;
+}
+
+/* Regional county detail card — clearer glass pass */
+.shf-regional-detail-panel {
+  width: min(330px, 38%) !important;
+  background: rgba(255, 250, 242, 0.46) !important;
+  border: 1px solid rgba(199, 130, 54, 0.16) !important;
+  box-shadow: 0 18px 42px rgba(76, 43, 18, 0.12) !important;
+  backdrop-filter: blur(18px) saturate(1.22) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.22) !important;
+}
+
+.shf-regional-detail-panel .shf-regional-detail-item,
+.shf-regional-detail-panel .shf-regional-detail-stats > div {
+  background: rgba(255, 255, 255, 0.24) !important;
+  border-color: rgba(154, 91, 35, 0.12) !important;
+}
+
+.shf-regional-detail-panel__action {
+  background: linear-gradient(135deg, rgba(202, 104, 30, 0.88), rgba(190, 91, 22, 0.88)) !important;
+}
+
+/* Regional county detail card — move farther right so selected county remains visible */
+.shf-regional-detail-panel {
+  right: 18px !important;
+  left: auto !important;
+  width: min(300px, 34%) !important;
+  max-width: 300px !important;
+  transform: translateX(8px) !important;
+  background: rgba(255, 250, 242, 0.42) !important;
+  backdrop-filter: blur(18px) saturate(1.18) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.18) !important;
+}
+
+.shf-regional-detail-panel h2,
+.shf-regional-detail-panel strong {
+  text-shadow: 0 1px 8px rgba(255, 255, 255, 0.42) !important;
+}
+
+.shf-regional-detail-grid {
+  gap: 8px !important;
+}
+
+.shf-regional-detail-item {
+  padding: 10px 10px !important;
+}
+
+.shf-regional-detail-stats {
+  margin-top: 10px !important;
+}
+
+.shf-regional-detail-panel__action {
+  margin-top: 10px !important;
+}
+
+/* Regional county detail card — compact side rail so it does not cover the glowing county */
+.shf-regional-detail-panel {
+  right: 10px !important;
+  left: auto !important;
+  top: 74px !important;
+  width: 168px !important;
+  max-width: 168px !important;
+  min-height: auto !important;
+  max-height: 420px !important;
+  overflow: hidden !important;
+  transform: translateX(0) !important;
+  background: rgba(255, 250, 242, 0.36) !important;
+  border: 1px solid rgba(199, 130, 54, 0.15) !important;
+  box-shadow: 0 14px 34px rgba(76, 43, 18, 0.1) !important;
+  backdrop-filter: blur(20px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.2) !important;
+  transition:
+    width 180ms ease,
+    max-width 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease;
+}
+
+/* Expand only when the operator hovers/focuses the card */
+.shf-regional-detail-panel:hover,
+.shf-regional-detail-panel:focus-within {
+  width: 284px !important;
+  max-width: 284px !important;
+  background: rgba(255, 250, 242, 0.72) !important;
+  box-shadow: 0 18px 44px rgba(76, 43, 18, 0.16) !important;
+}
+
+/* Keep the header readable in compact mode */
+.shf-regional-detail-panel__eyebrow {
+  font-size: 0.58rem !important;
+  letter-spacing: 0.12em !important;
+  white-space: nowrap !important;
+}
+
+.shf-regional-detail-panel > strong {
+  display: block !important;
+  font-size: 0.94rem !important;
+  line-height: 1.1 !important;
+  margin-bottom: 10px !important;
+}
+
+/* Hide heavier details until hover so the map stays visible */
+.shf-regional-detail-panel:not(:hover):not(:focus-within) .shf-regional-detail-grid,
+.shf-regional-detail-panel:not(:hover):not(:focus-within) .shf-regional-detail-stats,
+.shf-regional-detail-panel:not(:hover):not(:focus-within) .shf-regional-detail-panel__action {
+  opacity: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Compact mode hint */
+.shf-regional-detail-panel:not(:hover):not(:focus-within)::after {
+  content: "Hover for details";
+  display: block;
+  margin-top: 8px;
+  font-size: 0.68rem;
+  color: rgba(120, 74, 34, 0.78);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* AI Analyst Sync Finalization V1 */
+.shf-agent-sync-card--final {
+  border-color: rgba(45, 212, 191, 0.26) !important;
+  background:
+    radial-gradient(circle at top left, rgba(20, 184, 166, 0.14), transparent 34%),
+    linear-gradient(135deg, rgba(7, 22, 39, 0.86), rgba(11, 42, 61, 0.72)) !important;
+}
+
+.shf-agent-sync-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.shf-agent-sync-grid > div {
+  padding: 8px 9px;
+  border-radius: 12px;
+  border: 1px solid rgba(125, 211, 252, 0.15);
+  background: rgba(15, 23, 42, 0.42);
+}
+
+.shf-agent-sync-grid span {
+  display: block;
+  color: rgba(186, 230, 253, 0.72);
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 3px;
+}
+
+.shf-agent-sync-grid strong {
+  display: block;
+  color: rgba(240, 249, 255, 0.95);
+  font-size: 0.76rem;
+  line-height: 1.2;
+  text-transform: capitalize;
+}
+
+.shf-agent-sync-footer {
+  display: grid;
+  gap: 4px;
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px solid rgba(125, 211, 252, 0.14);
+  color: rgba(125, 211, 252, 0.86);
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+
+/* AI Analyst Sync card — SHF warm command color correction */
+.shf-agent-sync-card,
+.shf-agent-sync-card--final {
+  border: 1px solid rgba(199, 130, 54, 0.28) !important;
+  background:
+    radial-gradient(circle at top left, rgba(255, 190, 92, 0.18), transparent 36%),
+    linear-gradient(135deg, rgba(57, 35, 20, 0.82), rgba(24, 19, 15, 0.78)) !important;
+  box-shadow:
+    0 18px 42px rgba(55, 32, 14, 0.28),
+    inset 0 1px 0 rgba(255, 235, 190, 0.14) !important;
+}
+
+.shf-agent-sync-top {
+  color: rgba(255, 239, 204, 0.96) !important;
+}
+
+.shf-agent-sync-top em {
+  color: rgba(255, 190, 92, 0.92) !important;
+}
+
+.shf-agent-sync-dot {
+  background: #d98b2d !important;
+  box-shadow: 0 0 14px rgba(217, 139, 45, 0.72) !important;
+}
+
+.shf-agent-sync-dot.is-synced {
+  background: #f6b04f !important;
+  box-shadow:
+    0 0 10px rgba(246, 176, 79, 0.85),
+    0 0 22px rgba(217, 139, 45, 0.55) !important;
+}
+
+.shf-agent-sync-dot.is-offline {
+  background: #b45309 !important;
+  box-shadow: 0 0 16px rgba(180, 83, 9, 0.72) !important;
+}
+
+.shf-agent-sync-card p {
+  color: rgba(255, 246, 225, 0.9) !important;
+}
+
+.shf-agent-sync-grid > div {
+  border: 1px solid rgba(199, 130, 54, 0.2) !important;
+  background:
+    linear-gradient(135deg, rgba(255, 246, 225, 0.09), rgba(91, 54, 24, 0.18)) !important;
+}
+
+.shf-agent-sync-grid span {
+  color: rgba(255, 204, 128, 0.78) !important;
+}
+
+.shf-agent-sync-grid strong {
+  color: rgba(255, 250, 235, 0.96) !important;
+}
+
+.shf-agent-sync-footer {
+  border-top: 1px solid rgba(199, 130, 54, 0.2) !important;
+  color: rgba(255, 204, 128, 0.84) !important;
+}
+
+.shf-agent-sync-card small {
+  color: rgba(255, 211, 141, 0.86) !important;
+}
+
+/* ==========================================================
+   SHF Impact Command Center — Top 1 Percent Polish Pass 1
+   Goal: remove unfinished/default UI feel without touching logic
+   ========================================================== */
+
+/* Overall page polish */
+.shf-impact-command-center,
+.shf-command-center,
+.shf-impact-shell {
+  background:
+    radial-gradient(circle at 18% 8%, rgba(196, 119, 45, 0.08), transparent 30%),
+    linear-gradient(180deg, rgba(252, 248, 241, 0.98), rgba(246, 239, 228, 0.96)) !important;
+}
+
+/* Main panels: softer enterprise paper/glass finish */
+.shf-panel,
+.shf-map-panel {
+  border: 1px solid rgba(121, 83, 48, 0.14) !important;
+  box-shadow:
+    0 18px 44px rgba(65, 42, 24, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 253, 249, 0.92), rgba(250, 244, 236, 0.86)) !important;
+}
+
+/* Hide or soften developer/debug state text if it is rendered inside the command shell */
+.shf-state-chain,
+.shf-debug-chain,
+.shf-oracle-debug,
+.shf-command-debug {
+  display: none !important;
+}
+
+/* If debug text is not classed, make common diagnostic blocks look intentional */
+.shf-command-state-strip,
+.shf-system-trace-strip {
+  border: 1px solid rgba(128, 88, 52, 0.14) !important;
+  border-radius: 14px !important;
+  background: rgba(255, 250, 242, 0.78) !important;
+  color: rgba(54, 38, 27, 0.72) !important;
+  font-size: 0.76rem !important;
+  line-height: 1.35 !important;
+  padding: 10px 12px !important;
+}
+
+/* KPI cards */
+.shf-kpi-card,
+.shf-kpi {
+  border: 1px solid rgba(130, 86, 44, 0.13) !important;
+  box-shadow: 0 14px 30px rgba(76, 45, 19, 0.06) !important;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.95), rgba(250,244,236,0.86)) !important;
+}
+
+/* AI card: make it belong to SHF, not a separate blue/tech product */
+.shf-agent-sync-card,
+.shf-agent-sync-card--final {
+  border: 1px solid rgba(190, 120, 48, 0.26) !important;
+  border-radius: 18px !important;
+  background:
+    radial-gradient(circle at top left, rgba(219, 132, 45, 0.18), transparent 34%),
+    linear-gradient(135deg, rgba(70, 45, 26, 0.88), rgba(38, 28, 20, 0.84)) !important;
+  box-shadow:
+    0 18px 40px rgba(56, 35, 20, 0.22),
+    inset 0 1px 0 rgba(255, 230, 190, 0.14) !important;
+}
+
+.shf-agent-sync-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 7px !important;
+}
+
+.shf-agent-sync-grid > div {
+  padding: 7px 8px !important;
+  border-radius: 12px !important;
+  background: rgba(255, 244, 224, 0.08) !important;
+  border: 1px solid rgba(222, 158, 82, 0.16) !important;
+}
+
+.shf-agent-sync-grid span {
+  color: rgba(244, 190, 115, 0.82) !important;
+}
+
+.shf-agent-sync-grid strong {
+  color: rgba(255, 250, 238, 0.96) !important;
+}
+
+/* Right rail spacing */
+.shf-right-col {
+  display: grid !important;
+  gap: 16px !important;
+  align-content: start !important;
+}
+
+/* Trust / verification panel: remove browser-default button look */
+.shf-right-col button,
+.shf-panel button,
+.shf-self-audit-card__button {
+  border: 1px solid rgba(142, 93, 45, 0.22) !important;
+  border-radius: 12px !important;
+  background:
+    linear-gradient(135deg, rgba(255, 251, 244, 0.96), rgba(242, 229, 211, 0.88)) !important;
+  color: rgba(61, 43, 30, 0.92) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.01em !important;
+  padding: 8px 12px !important;
+  box-shadow:
+    0 8px 18px rgba(72, 45, 21, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+  cursor: pointer !important;
+}
+
+.shf-right-col button:hover,
+.shf-panel button:hover,
+.shf-self-audit-card__button:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 12px 24px rgba(72, 45, 21, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Self-audit section polish */
+.shf-self-audit-card,
+.shf-self-audit-panel,
+.shf-self-audit,
+section[class*="self-audit"] {
+  border: 1px solid rgba(126, 83, 44, 0.14) !important;
+  border-radius: 22px !important;
+  background:
+    linear-gradient(180deg, rgba(255, 253, 249, 0.94), rgba(248, 240, 229, 0.88)) !important;
+  box-shadow: 0 16px 38px rgba(70, 43, 22, 0.07) !important;
+  padding: 18px !important;
+}
+
+/* Program rows */
+.shf-program-row,
+.shf-program-health-row {
+  border-radius: 14px !important;
+  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+}
+
+.shf-program-row:hover,
+.shf-program-health-row:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 248, 238, 0.72) !important;
+  box-shadow: 0 10px 24px rgba(72, 45, 21, 0.06) !important;
+}
+
+/* Map buttons */
+.shf-mini-filter,
+.shf-impact-map-toolbar button {
+  border-radius: 999px !important;
+  border: 1px solid rgba(151, 97, 44, 0.24) !important;
+  background:
+    linear-gradient(135deg, rgba(255, 252, 247, 0.96), rgba(243, 231, 213, 0.9)) !important;
+  color: rgba(78, 51, 32, 0.82) !important;
+  font-weight: 800 !important;
+  box-shadow: 0 8px 18px rgba(72, 45, 21, 0.08) !important;
+}
+
+/* Prevent focus ring from looking like raw browser default */
+.shf-mini-filter:focus,
+.shf-impact-map-toolbar button:focus,
+.shf-panel button:focus {
+  outline: none !important;
+  box-shadow:
+    0 0 0 3px rgba(217, 139, 45, 0.18),
+    0 8px 18px rgba(72, 45, 21, 0.08) !important;
+}
+
+/* Report cards */
+.shf-report-card,
+.shf-export-card,
+.shf-report-item {
+  border-radius: 14px !important;
+  border: 1px solid rgba(122, 82, 47, 0.12) !important;
+  background: rgba(255, 253, 249, 0.84) !important;
+  box-shadow: 0 10px 22px rgba(72, 45, 21, 0.05) !important;
+}
+
+/* Typography refinement */
+.shf-panel__small-label,
+.shf-regional-cluster-source,
+.shf-regional-detail-panel__eyebrow {
+  color: rgba(148, 93, 43, 0.72) !important;
+  font-weight: 800 !important;
+}
+
+.shf-panel h2,
+.shf-map-panel h2,
+.shf-right-col h2 {
+  letter-spacing: -0.02em !important;
+}
+
+/* Make command sections feel less raw at the bottom */
+.shf-impact-command-center pre,
+.shf-impact-command-center code {
+  border-radius: 12px !important;
+  background: rgba(70, 45, 26, 0.06) !important;
+  padding: 8px 10px !important;
+  color: rgba(62, 42, 27, 0.84) !important;
+}
+
+/* ==========================================================
+   SHF Header / Summary / Footer Polish
+   ========================================================== */
+
+.shf-command-brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-width: 0;
+}
+
+.shf-command-logo {
+  width: 172px;
+  max-height: 72px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 24px rgba(72, 45, 21, 0.08));
+}
+
+.shf-brand__mark--fallback {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255,255,255,.8), transparent 32%),
+    linear-gradient(135deg, rgba(214, 124, 42, .96), rgba(92, 65, 45, .82));
+  display: grid;
+  place-items: center;
+}
+
+.shf-command-brand-eyebrow {
+  color: rgba(158, 99, 44, 0.76);
+  font-weight: 900;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.shf-command-brand-lockup h1 {
+  margin: 0;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+
+.shf-command-brand-lockup p {
+  margin: 8px 0 0;
+  max-width: 680px;
+  color: rgba(73, 54, 39, 0.72);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* Polished command context strip replaces raw developer-looking status text */
+.shf-command-context-strip {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+  margin: 16px 0 18px;
+  padding: 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(134, 89, 49, 0.16);
+  background:
+    radial-gradient(circle at left, rgba(214, 124, 42, 0.10), transparent 32%),
+    linear-gradient(135deg, rgba(255, 252, 247, 0.94), rgba(248, 239, 226, 0.84));
+  box-shadow:
+    0 14px 34px rgba(72, 45, 21, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78);
+}
+
+.shf-command-context-strip > div {
+  min-width: 0;
+  padding: 10px 11px;
+  border-radius: 15px;
+  border: 1px solid rgba(151, 97, 44, 0.12);
+  background: rgba(255, 255, 255, 0.46);
+}
+
+.shf-command-context-strip span {
+  display: block;
+  color: rgba(153, 96, 43, 0.72);
+  font-size: 0.64rem;
+  font-weight: 900;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.shf-command-context-strip strong {
+  display: block;
+  color: rgba(50, 37, 27, 0.94);
+  font-size: 0.83rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Hide old raw diagnostic text if it remains after fallback insertion */
+.shf-command-state-strip + div,
+.shf-command-state-strip + div + div,
+.shf-command-state-strip + div + div + div,
+.shf-command-state-strip + div + div + div + div,
+.shf-command-state-strip + div + div + div + div + div,
+.shf-command-state-strip + div + div + div + div + div + div,
+.shf-command-state-strip + div + div + div + div + div + div + div {
+  display: none !important;
+}
+
+.shf-command-state-strip {
+  display: none !important;
+}
+
+/* Footer */
+.shf-command-footer {
+  margin: 28px 0 0;
+  padding: 22px 26px;
+  border-radius: 26px;
+  border: 1px solid rgba(134, 89, 49, 0.15);
+  background:
+    radial-gradient(circle at 10% 20%, rgba(214, 124, 42, 0.12), transparent 32%),
+    linear-gradient(135deg, rgba(255, 252, 247, 0.96), rgba(245, 235, 220, 0.9));
+  box-shadow:
+    0 18px 44px rgba(72, 45, 21, 0.07),
+    inset 0 1px 0 rgba(255,255,255,0.82);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 22px;
+}
+
+.shf-command-footer__brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.shf-command-footer__brand img {
+  width: 118px;
+  max-height: 52px;
+  object-fit: contain;
+}
+
+.shf-footer-mark {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  color: #fff7ed;
+  font-weight: 900;
+  background: linear-gradient(135deg, #c76f2d, #5b3f2c);
+  box-shadow: 0 12px 28px rgba(91, 63, 44, 0.2);
+}
+
+.shf-command-footer__brand strong {
+  display: block;
+  color: rgba(48, 35, 25, 0.94);
+  font-size: 1rem;
+}
+
+.shf-command-footer__brand span {
+  display: block;
+  color: rgba(91, 67, 48, 0.68);
+  margin-top: 3px;
+  font-size: 0.84rem;
+}
+
+.shf-command-footer__meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.shf-command-footer__meta span {
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(151, 97, 44, 0.16);
+  background: rgba(255, 255, 255, 0.48);
+  color: rgba(95, 61, 35, 0.78);
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+/* Self-audit block polish if still raw */
+.shf-self-audit-control,
+.shf-self-audit-card,
+.shf-self-audit-panel {
+  overflow: hidden;
+}
+
+/* Better responsive behavior */
+@media (max-width: 1100px) {
+  .shf-command-context-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .shf-command-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .shf-command-footer__meta {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 760px) {
+  .shf-command-context-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .shf-command-brand-lockup {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+/* SHF visible page footer */
+.shf-command-footer {
+  margin: 34px 0 0 !important;
+  padding: 22px 26px !important;
+  border-radius: 26px !important;
+  border: 1px solid rgba(134, 89, 49, 0.16) !important;
+  background:
+    radial-gradient(circle at 10% 20%, rgba(214, 124, 42, 0.12), transparent 32%),
+    linear-gradient(135deg, rgba(255, 252, 247, 0.97), rgba(245, 235, 220, 0.92)) !important;
+  box-shadow:
+    0 18px 44px rgba(72, 45, 21, 0.08),
+    inset 0 1px 0 rgba(255,255,255,0.82) !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 22px !important;
+}
+
+.shf-command-footer__brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+}
+
+.shf-footer-mark {
+  width: 52px !important;
+  height: 52px !important;
+  border-radius: 17px !important;
+  display: grid !important;
+  place-items: center !important;
+  color: #fff7ed !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.04em !important;
+  background: linear-gradient(135deg, #c76f2d, #5b3f2c) !important;
+  box-shadow: 0 12px 28px rgba(91, 63, 44, 0.22) !important;
+}
+
+.shf-command-footer__brand strong {
+  display: block !important;
+  color: rgba(48, 35, 25, 0.96) !important;
+  font-size: 1rem !important;
+}
+
+.shf-command-footer__brand span {
+  display: block !important;
+  color: rgba(91, 67, 48, 0.7) !important;
+  margin-top: 3px !important;
+  font-size: 0.84rem !important;
+}
+
+.shf-command-footer__meta {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+}
+
+.shf-command-footer__meta span {
+  padding: 8px 10px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(151, 97, 44, 0.16) !important;
+  background: rgba(255, 255, 255, 0.52) !important;
+  color: rgba(95, 61, 35, 0.8) !important;
+  font-size: 0.76rem !important;
+  font-weight: 800 !important;
+}
+
+/* ==========================================================
+   SHF Command Footer — hard visible footer
+   ========================================================== */
+
+.shf-command-footer {
+  clear: both !important;
+  width: 100% !important;
+  margin: 42px 0 0 !important;
+  padding: 24px 28px !important;
+  border-radius: 28px !important;
+  border: 1px solid rgba(133, 90, 50, 0.18) !important;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(214, 124, 42, 0.14), transparent 34%),
+    linear-gradient(135deg, rgba(255, 253, 248, 0.98), rgba(244, 233, 217, 0.94)) !important;
+  box-shadow:
+    0 20px 46px rgba(72, 45, 21, 0.09),
+    inset 0 1px 0 rgba(255,255,255,0.86) !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 24px !important;
+  position: relative !important;
+  z-index: 5 !important;
+}
+
+.shf-command-footer__brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 15px !important;
+}
+
+.shf-footer-logo-mark {
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 18px !important;
+  display: grid !important;
+  place-items: center !important;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,0.42), transparent 30%),
+    linear-gradient(135deg, #c76f2d, #5b3f2c) !important;
+  box-shadow: 0 14px 30px rgba(91, 63, 44, 0.22) !important;
+}
+
+.shf-footer-logo-mark span {
+  color: #fff7ed !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.05em !important;
+  font-size: 0.92rem !important;
+}
+
+.shf-command-footer__brand strong {
+  display: block !important;
+  color: rgba(47, 34, 24, 0.96) !important;
+  font-size: 1.04rem !important;
+  letter-spacing: -0.01em !important;
+}
+
+.shf-command-footer__brand p {
+  margin: 4px 0 0 !important;
+  color: rgba(91, 67, 48, 0.72) !important;
+  font-size: 0.86rem !important;
+}
+
+.shf-command-footer__links {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-end !important;
+  gap: 9px !important;
+}
+
+.shf-command-footer__links span {
+  padding: 8px 11px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(151, 97, 44, 0.17) !important;
+  background: rgba(255, 255, 255, 0.56) !important;
+  color: rgba(95, 61, 35, 0.82) !important;
+  font-size: 0.75rem !important;
+  font-weight: 800 !important;
+}
+
+@media (max-width: 900px) {
+  .shf-command-footer {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+  }
+
+  .shf-command-footer__links {
+    justify-content: flex-start !important;
+  }
+}
+
+/* ==========================================================
+   SHF Footer — full width across command page
+   ========================================================== */
+
+.shf-command-footer {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  max-width: none !important;
+  align-self: stretch !important;
+  justify-self: stretch !important;
+  box-sizing: border-box !important;
+  margin: 42px 0 0 !important;
+  padding: 26px 30px !important;
+  border-radius: 28px !important;
+}
+
+.shf-command-footer__brand {
+  min-width: 280px !important;
+}
+
+.shf-command-footer__links {
+  flex: 1 !important;
+  justify-content: flex-end !important;
+}
+
+/* If footer was inserted inside a grid column, force it to escape visually */
+.shf-command-footer {
+  position: relative !important;
+}
+
+/* Stronger full-width footer balance */
+.shf-command-footer::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  background:
+    linear-gradient(90deg, rgba(199, 111, 45, 0.08), transparent 38%, rgba(91, 63, 44, 0.05)) !important;
+}
+
+/* Keep footer content above decorative pass */
+.shf-command-footer__brand,
+.shf-command-footer__links {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+@media (max-width: 900px) {
+  .shf-command-footer {
+    grid-column: 1 / -1 !important;
+  }
+
+  .shf-command-footer__links {
+    justify-content: flex-start !important;
+  }
+}
+
+/* ==========================================================
+   SHF Footer — full-width brown/copper command footer
+   ========================================================== */
+
+.shf-command-footer {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  max-width: none !important;
+  align-self: stretch !important;
+  justify-self: stretch !important;
+  box-sizing: border-box !important;
+  margin: 42px 0 0 !important;
+  padding: 28px 32px !important;
+  border-radius: 28px !important;
+  border: 1px solid rgba(255, 206, 138, 0.22) !important;
+  background:
+    radial-gradient(circle at 12% 20%, rgba(214, 124, 42, 0.34), transparent 34%),
+    linear-gradient(135deg, #4a2e1d 0%, #2f2118 46%, #1f1712 100%) !important;
+  box-shadow:
+    0 24px 52px rgba(55, 32, 14, 0.22),
+    inset 0 1px 0 rgba(255, 230, 190, 0.16) !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 24px !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.shf-command-footer::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  background:
+    linear-gradient(90deg, rgba(255, 184, 92, 0.16), transparent 42%, rgba(255, 236, 195, 0.06)) !important;
+}
+
+.shf-command-footer__brand,
+.shf-command-footer__links {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.shf-command-footer__brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 15px !important;
+  min-width: 300px !important;
+}
+
+.shf-footer-logo-mark {
+  width: 58px !important;
+  height: 58px !important;
+  border-radius: 18px !important;
+  display: grid !important;
+  place-items: center !important;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,0.42), transparent 30%),
+    linear-gradient(135deg, #d88a35, #7a431f) !important;
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 236, 196, 0.24) !important;
+}
+
+.shf-footer-logo-mark span {
+  color: #fff7ed !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.05em !important;
+  font-size: 0.94rem !important;
+}
+
+.shf-command-footer__brand strong {
+  display: block !important;
+  color: rgba(255, 248, 235, 0.98) !important;
+  font-size: 1.08rem !important;
+  letter-spacing: -0.01em !important;
+}
+
+.shf-command-footer__brand p,
+.shf-command-footer__brand span {
+  display: block !important;
+  margin: 4px 0 0 !important;
+  color: rgba(255, 221, 176, 0.76) !important;
+  font-size: 0.86rem !important;
+}
+
+.shf-command-footer__links {
+  display: flex !important;
+  flex: 1 !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-end !important;
+  gap: 9px !important;
+}
+
+.shf-command-footer__links span,
+.shf-command-footer__meta span {
+  padding: 8px 11px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 205, 138, 0.2) !important;
+  background: rgba(255, 244, 224, 0.08) !important;
+  color: rgba(255, 231, 194, 0.9) !important;
+  font-size: 0.75rem !important;
+  font-weight: 800 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08) !important;
+}
+
+@media (max-width: 900px) {
+  .shf-command-footer {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+  }
+
+  .shf-command-footer__links {
+    justify-content: flex-start !important;
+  }
+}
+
+/* SHF header globe logo integration */
+.shf-command-brand-lockup {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  min-width: 0 !important;
+}
+
+.shf-command-logo {
+  width: 72px !important;
+  height: 72px !important;
+  object-fit: contain !important;
+  flex: 0 0 auto !important;
+  border-radius: 999px !important;
+  filter:
+    drop-shadow(0 10px 20px rgba(104, 64, 31, 0.14))
+    drop-shadow(0 0 18px rgba(214, 124, 42, 0.10)) !important;
+}
+
+.shf-command-wordmark {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+
+.shf-brand__text {
+  font-size: clamp(1.45rem, 2vw, 2rem) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.035em !important;
+  color: rgba(44, 34, 27, 0.96) !important;
+  white-space: nowrap !important;
+}
+
+.shf-brand__divider {
+  height: 78px !important;
+  margin: 0 18px !important;
+  background: rgba(130, 86, 44, 0.16) !important;
+}
+
+@media (max-width: 900px) {
+  .shf-command-logo {
+    width: 58px !important;
+    height: 58px !important;
+  }
+
+  .shf-brand__text {
+    font-size: 1.35rem !important;
+  }
+}
+
+/* SHF header globe logo — hard replacement */
+.shf-brand--with-globe,
+.shf-brand {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.shf-command-brand-lockup {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.shf-command-logo {
+  width: 72px !important;
+  height: 72px !important;
+  object-fit: contain !important;
+  display: block !important;
+  flex: 0 0 auto !important;
+  border-radius: 999px !important;
+  filter:
+    drop-shadow(0 10px 20px rgba(104, 64, 31, 0.14))
+    drop-shadow(0 0 18px rgba(214, 124, 42, 0.10)) !important;
+}
+
+.shf-brand__mark {
+  display: none !important;
+}
+
+.shf-brand__text {
+  font-size: clamp(1.45rem, 2vw, 2rem) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.035em !important;
+  color: rgba(44, 34, 27, 0.96) !important;
+  white-space: nowrap !important;
+}
+
+.shf-brand__divider {
+  height: 78px !important;
+  margin: 0 22px !important;
+  background: rgba(130, 86, 44, 0.16) !important;
+}
+
+/* SHF header globe logo — force visible */
+.shf-brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.shf-command-logo {
+  display: block !important;
+  width: 72px !important;
+  height: 72px !important;
+  min-width: 72px !important;
+  min-height: 72px !important;
+  object-fit: contain !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: relative !important;
+  z-index: 10 !important;
+  border-radius: 999px !important;
+  filter:
+    drop-shadow(0 10px 20px rgba(104, 64, 31, 0.16))
+    drop-shadow(0 0 18px rgba(214, 124, 42, 0.12)) !important;
+}
+
+.shf-brand__mark {
+  display: none !important;
+}
+
+.shf-brand__text {
+  display: block !important;
+  white-space: nowrap !important;
+}
+
+/* ==========================================================
+   SHF header globe tune
+   Bigger logo + visually thinner white ring
+   ========================================================== */
+
+.shf-brand,
+.shf-brand--with-globe,
+.shf-command-brand-lockup {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+}
+
+.shf-command-logo {
+  width: 96px !important;
+  height: 96px !important;
+  min-width: 96px !important;
+  min-height: 96px !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  display: block !important;
+  border-radius: 999px !important;
+
+  /* This makes the white ring look thinner visually */
+  transform: scale(1.08) !important;
+  transform-origin: center center !important;
+
+  filter:
+    drop-shadow(0 10px 22px rgba(104, 64, 31, 0.16))
+    drop-shadow(0 0 18px rgba(214, 124, 42, 0.10)) !important;
+}
+
+.shf-brand__text {
+  font-size: clamp(1.55rem, 2.1vw, 2.15rem) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.035em !important;
+}
+
+.shf-brand__divider {
+  height: 84px !important;
+  margin: 0 22px !important;
+}
+
+@media (max-width: 900px) {
+  .shf-command-logo {
+    width: 78px !important;
+    height: 78px !important;
+    min-width: 78px !important;
+    min-height: 78px !important;
+    transform: scale(1.06) !important;
+  }
+
+  .shf-brand__text {
+    font-size: 1.38rem !important;
+  }
+}
+
+/* SHF footer globe logo replacement */
+.shf-footer-globe-logo {
+  width: 72px !important;
+  height: 72px !important;
+  min-width: 72px !important;
+  min-height: 72px !important;
+  object-fit: contain !important;
+  display: block !important;
+  border-radius: 999px !important;
+  background: rgba(255, 248, 235, 0.08) !important;
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, 0.22),
+    0 0 26px rgba(214, 124, 42, 0.18) !important;
+}
+
+.shf-footer-logo-mark {
+  display: none !important;
+}
+
+.shf-command-footer__brand {
+  align-items: center !important;
+  gap: 18px !important;
+}
+
+/* ==========================================================
+   AI Analyst Decision Text V1
+   ========================================================== */
+
+.shf-ai-analyst-panel .shf-panel__body {
+  padding-top: 12px !important;
+}
+
+.shf-ai-decision-stack {
+  display: grid;
+  gap: 16px;
+}
+
+.shf-ai-decision-block {
+  padding: 12px 0 0;
+  border-top: 1px solid rgba(135, 91, 50, 0.13);
+  color: rgba(46, 34, 25, 0.9);
+  line-height: 1.42;
+}
+
+.shf-ai-decision-block:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.shf-ai-decision-label {
+  color: rgba(132, 83, 39, 0.86);
+  font-weight: 900;
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 7px;
+}
+
+.shf-ai-decision-block ul {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+}
+
+.shf-ai-decision-block li {
+  color: rgba(52, 38, 28, 0.88);
+}
+
+.shf-ai-decision-action {
+  width: 100%;
+  justify-content: center;
+}
+
+/* AI Analyst drawer launcher */
+.shf-ai-panel-header {
+  align-items: flex-start !important;
+  gap: 12px !important;
+}
+
+.shf-ai-expand-button {
+  flex: 0 0 auto !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(156, 96, 42, 0.24) !important;
+  background:
+    linear-gradient(135deg, rgba(255, 250, 242, 0.96), rgba(239, 218, 190, 0.88)) !important;
+  color: rgba(78, 48, 27, 0.94) !important;
+  font-size: 0.72rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  padding: 8px 11px !important;
+  box-shadow:
+    0 10px 22px rgba(72, 45, 21, 0.08),
+    inset 0 1px 0 rgba(255,255,255,0.78) !important;
+  cursor: pointer !important;
+}
+
+.shf-ai-expand-button:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 14px 28px rgba(72, 45, 21, 0.12),
+    inset 0 1px 0 rgba(255,255,255,0.86) !important;
+}
+
+/* ==========================================================
+   Top-left map chip readability fix
+   ========================================================== */
+
+/* Shared readable chip class if we wire it directly */
+.shf-readable-map-cluster-chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 10px 14px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, rgba(69, 75, 91, 0.98), rgba(56, 61, 75, 0.98)) !important;
+  color: #d98a3c !important;
+  border: 1px solid rgba(235, 183, 120, 0.18) !important;
+  font-size: 0.78rem !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.09em !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 1px 0 rgba(34, 20, 10, 0.55) !important;
+  box-shadow:
+    0 10px 22px rgba(26, 19, 13, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Fallbacks for likely map chip classes already in use */
+.shf-ohio-impact-map .shf-map-chip,
+.shf-ohio-impact-map .shf-map-badge,
+.shf-ohio-impact-map .shf-map-status-chip,
+.shf-ohio-impact-map .shf-map-cluster-chip,
+.shf-ohio-impact-map .shf-regional-cluster-chip,
+.shf-ohio-impact-map .shf-region-label-chip,
+.shf-ohio-impact-map .shf-region-chip,
+.shf-ohio-impact-map .shf-cluster-pill,
+.shf-ohio-impact-map .shf-cluster-badge {
+  background: linear-gradient(135deg, rgba(69, 75, 91, 0.98), rgba(56, 61, 75, 0.98)) !important;
+  color: #d98a3c !important;
+  border: 1px solid rgba(235, 183, 120, 0.18) !important;
+  font-size: 0.78rem !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.09em !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 1px 0 rgba(34, 20, 10, 0.55) !important;
+  box-shadow:
+    0 10px 22px rgba(26, 19, 13, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+@media (max-width: 900px) {
+  .shf-readable-map-cluster-chip,
+  .shf-ohio-impact-map .shf-map-chip,
+  .shf-ohio-impact-map .shf-map-badge,
+  .shf-ohio-impact-map .shf-map-status-chip,
+  .shf-ohio-impact-map .shf-map-cluster-chip,
+  .shf-ohio-impact-map .shf-regional-cluster-chip,
+  .shf-ohio-impact-map .shf-region-label-chip,
+  .shf-ohio-impact-map .shf-region-chip,
+  .shf-ohio-impact-map .shf-cluster-pill,
+  .shf-ohio-impact-map .shf-cluster-badge {
+    font-size: 0.72rem !important;
+    padding: 9px 12px !important;
+  }
+}
+
+/* ==========================================================
+   Top-left map chip readability fix
+   ========================================================== */
+
+/* Shared readable chip class if we wire it directly */
+.shf-readable-map-cluster-chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 10px 14px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, rgba(69, 75, 91, 0.98), rgba(56, 61, 75, 0.98)) !important;
+  color: #d98a3c !important;
+  border: 1px solid rgba(235, 183, 120, 0.18) !important;
+  font-size: 0.78rem !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.09em !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 1px 0 rgba(34, 20, 10, 0.55) !important;
+  box-shadow:
+    0 10px 22px rgba(26, 19, 13, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Fallbacks for likely map chip classes already in use */
+.shf-ohio-impact-map .shf-map-chip,
+.shf-ohio-impact-map .shf-map-badge,
+.shf-ohio-impact-map .shf-map-status-chip,
+.shf-ohio-impact-map .shf-map-cluster-chip,
+.shf-ohio-impact-map .shf-regional-cluster-chip,
+.shf-ohio-impact-map .shf-region-label-chip,
+.shf-ohio-impact-map .shf-region-chip,
+.shf-ohio-impact-map .shf-cluster-pill,
+.shf-ohio-impact-map .shf-cluster-badge {
+  background: linear-gradient(135deg, rgba(69, 75, 91, 0.98), rgba(56, 61, 75, 0.98)) !important;
+  color: #d98a3c !important;
+  border: 1px solid rgba(235, 183, 120, 0.18) !important;
+  font-size: 0.78rem !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.09em !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 1px 0 rgba(34, 20, 10, 0.55) !important;
+  box-shadow:
+    0 10px 22px rgba(26, 19, 13, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+@media (max-width: 900px) {
+  .shf-readable-map-cluster-chip,
+  .shf-ohio-impact-map .shf-map-chip,
+  .shf-ohio-impact-map .shf-map-badge,
+  .shf-ohio-impact-map .shf-map-status-chip,
+  .shf-ohio-impact-map .shf-map-cluster-chip,
+  .shf-ohio-impact-map .shf-regional-cluster-chip,
+  .shf-ohio-impact-map .shf-region-label-chip,
+  .shf-ohio-impact-map .shf-region-chip,
+  .shf-ohio-impact-map .shf-cluster-pill,
+  .shf-ohio-impact-map .shf-cluster-badge {
+    font-size: 0.72rem !important;
+    padding: 9px 12px !important;
+  }
+}
+
+/* ==========================================================
+   SHF Command Tour V1
+   Explains how to use the page in the right operating order.
+   ========================================================== */
+
+.shf-command-tour-launch {
+  border-radius: 999px !important;
+  border: 1px solid rgba(151, 97, 44, 0.2) !important;
+  background:
+    linear-gradient(135deg, rgba(255, 250, 242, 0.98), rgba(237, 217, 190, 0.92)) !important;
+  color: rgba(78, 49, 31, 0.94) !important;
+  font-weight: 900 !important;
+  padding: 10px 14px !important;
+  box-shadow: 0 10px 22px rgba(72, 45, 21, 0.08) !important;
+}
+
+.shf-command-tour-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center end;
+  padding: 28px;
+}
+
+.shf-command-tour-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(214, 124, 42, 0.18), transparent 36%),
+    rgba(35, 24, 16, 0.36);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.shf-command-tour-card {
+  position: relative;
+  z-index: 1;
+  width: min(440px, calc(100vw - 40px));
+  border-radius: 28px;
+  border: 1px solid rgba(255, 215, 160, 0.22);
+  background:
+    radial-gradient(circle at top left, rgba(218, 132, 45, 0.18), transparent 36%),
+    linear-gradient(135deg, rgba(76, 45, 25, 0.98), rgba(35, 25, 18, 0.98));
+  color: rgba(255, 248, 235, 0.96);
+  box-shadow:
+    0 28px 80px rgba(30, 18, 10, 0.42),
+    inset 0 1px 0 rgba(255, 230, 190, 0.16);
+  padding: 24px;
+}
+
+.shf-command-tour-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: rgba(255, 199, 125, 0.82);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.shf-command-tour-card h3 {
+  margin: 0;
+  color: #fff7ed;
+  font-size: 1.55rem;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.shf-command-tour-card p {
+  margin: 14px 0 0;
+  color: rgba(255, 239, 213, 0.86);
+  line-height: 1.5;
+}
+
+.shf-command-tour-action {
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 205, 138, 0.18);
+  background: rgba(255, 244, 224, 0.08);
+}
+
+.shf-command-tour-action span {
+  display: block;
+  color: rgba(255, 199, 125, 0.82);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.shf-command-tour-action strong {
+  display: block;
+  color: rgba(255, 248, 235, 0.96);
+  line-height: 1.35;
+}
+
+.shf-command-tour-target {
+  margin-top: 14px;
+  color: rgba(255, 221, 176, 0.78);
+  font-size: 0.78rem;
+}
+
+.shf-command-tour-controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.shf-command-tour-controls button,
+.shf-command-tour-close {
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 205, 138, 0.2) !important;
+  background: rgba(255, 244, 224, 0.1) !important;
+  color: rgba(255, 248, 235, 0.95) !important;
+  font-weight: 900 !important;
+  padding: 9px 13px !important;
+  cursor: pointer !important;
+}
+
+.shf-command-tour-controls button:disabled {
+  opacity: 0.38;
+  cursor: not-allowed !important;
+}
+
+.shf-command-tour-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 0.68rem !important;
+  padding: 7px 10px !important;
+}
+
+[data-tour-section] {
+  scroll-margin-top: 120px;
+}
+
+@media (max-width: 760px) {
+  .shf-command-tour-overlay {
+    place-items: end center;
+    padding: 18px;
+  }
+
+  .shf-command-tour-card {
+    width: 100%;
+  }
+}
+
+/* ==========================================================
+   SHF Command Tour V1
+   Explains how to use the page in the right operating order.
+   ========================================================== */
+
+.shf-command-tour-launch {
+  border-radius: 999px !important;
+  border: 1px solid rgba(151, 97, 44, 0.2) !important;
+  background:
+    linear-gradient(135deg, rgba(255, 250, 242, 0.98), rgba(237, 217, 190, 0.92)) !important;
+  color: rgba(78, 49, 31, 0.94) !important;
+  font-weight: 900 !important;
+  padding: 10px 14px !important;
+  box-shadow: 0 10px 22px rgba(72, 45, 21, 0.08) !important;
+}
+
+.shf-command-tour-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center end;
+  padding: 28px;
+}
+
+.shf-command-tour-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(214, 124, 42, 0.18), transparent 36%),
+    rgba(35, 24, 16, 0.36);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.shf-command-tour-card {
+  position: relative;
+  z-index: 1;
+  width: min(440px, calc(100vw - 40px));
+  border-radius: 28px;
+  border: 1px solid rgba(255, 215, 160, 0.22);
+  background:
+    radial-gradient(circle at top left, rgba(218, 132, 45, 0.18), transparent 36%),
+    linear-gradient(135deg, rgba(76, 45, 25, 0.98), rgba(35, 25, 18, 0.98));
+  color: rgba(255, 248, 235, 0.96);
+  box-shadow:
+    0 28px 80px rgba(30, 18, 10, 0.42),
+    inset 0 1px 0 rgba(255, 230, 190, 0.16);
+  padding: 24px;
+}
+
+.shf-command-tour-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: rgba(255, 199, 125, 0.82);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.shf-command-tour-card h3 {
+  margin: 0;
+  color: #fff7ed;
+  font-size: 1.55rem;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.shf-command-tour-card p {
+  margin: 14px 0 0;
+  color: rgba(255, 239, 213, 0.86);
+  line-height: 1.5;
+}
+
+.shf-command-tour-action {
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 205, 138, 0.18);
+  background: rgba(255, 244, 224, 0.08);
+}
+
+.shf-command-tour-action span {
+  display: block;
+  color: rgba(255, 199, 125, 0.82);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.shf-command-tour-action strong {
+  display: block;
+  color: rgba(255, 248, 235, 0.96);
+  line-height: 1.35;
+}
+
+.shf-command-tour-target {
+  margin-top: 14px;
+  color: rgba(255, 221, 176, 0.78);
+  font-size: 0.78rem;
+}
+
+.shf-command-tour-controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.shf-command-tour-controls button,
+.shf-command-tour-close {
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 205, 138, 0.2) !important;
+  background: rgba(255, 244, 224, 0.1) !important;
+  color: rgba(255, 248, 235, 0.95) !important;
+  font-weight: 900 !important;
+  padding: 9px 13px !important;
+  cursor: pointer !important;
+}
+
+.shf-command-tour-controls button:disabled {
+  opacity: 0.38;
+  cursor: not-allowed !important;
+}
+
+.shf-command-tour-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 0.68rem !important;
+  padding: 7px 10px !important;
+}
+
+[data-tour-section] {
+  scroll-margin-top: 120px;
+}
+
+@media (max-width: 760px) {
+  .shf-command-tour-overlay {
+    place-items: end center;
+    padding: 18px;
+  }
+
+  .shf-command-tour-card {
+    width: 100%;
+  }
+}
+
+/* ==========================================================
+   SHF Command Tour — forced visible launcher
+   ========================================================== */
+
+.shf-command-tour-floating-button {
+  position: fixed !important;
+  right: 28px !important;
+  bottom: 28px !important;
+  z-index: 9998 !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 205, 138, 0.26) !important;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 190, 92, 0.28), transparent 38%),
+    linear-gradient(135deg, #6b3f22, #2f2118) !important;
+  color: #fff7ed !important;
+  font-size: 0.82rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  padding: 13px 18px !important;
+  box-shadow:
+    0 18px 42px rgba(55, 32, 14, 0.28),
+    inset 0 1px 0 rgba(255, 230, 190, 0.18) !important;
+  cursor: pointer !important;
+}
+
+.shf-command-tour-floating-button:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 24px 54px rgba(55, 32, 14, 0.34),
+    inset 0 1px 0 rgba(255, 230, 190, 0.2) !important;
+}
+
+.shf-command-tour-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center end;
+  padding: 28px;
+}
+
+.shf-command-tour-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(214, 124, 42, 0.18), transparent 36%),
+    rgba(35, 24, 16, 0.38);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.shf-command-tour-card {
+  position: relative;
+  z-index: 1;
+  width: min(440px, calc(100vw - 40px));
+  border-radius: 28px;
+  border: 1px solid rgba(255, 215, 160, 0.22);
+  background:
+    radial-gradient(circle at top left, rgba(218, 132, 45, 0.18), transparent 36%),
+    linear-gradient(135deg, rgba(76, 45, 25, 0.98), rgba(35, 25, 18, 0.98));
+  color: rgba(255, 248, 235, 0.96);
+  box-shadow:
+    0 28px 80px rgba(30, 18, 10, 0.42),
+    inset 0 1px 0 rgba(255, 230, 190, 0.16);
+  padding: 24px;
+}
+
+.shf-command-tour-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: rgba(255, 199, 125, 0.82);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.shf-command-tour-card h3 {
+  margin: 0;
+  color: #fff7ed;
+  font-size: 1.55rem;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.shf-command-tour-card p {
+  margin: 14px 0 0;
+  color: rgba(255, 239, 213, 0.86);
+  line-height: 1.5;
+}
+
+.shf-command-tour-action {
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 205, 138, 0.18);
+  background: rgba(255, 244, 224, 0.08);
+}
+
+.shf-command-tour-action span {
+  display: block;
+  color: rgba(255, 199, 125, 0.82);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.shf-command-tour-action strong {
+  display: block;
+  color: rgba(255, 248, 235, 0.96);
+  line-height: 1.35;
+}
+
+.shf-command-tour-controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.shf-command-tour-controls button,
+.shf-command-tour-close {
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 205, 138, 0.2) !important;
+  background: rgba(255, 244, 224, 0.1) !important;
+  color: rgba(255, 248, 235, 0.95) !important;
+  font-weight: 900 !important;
+  padding: 9px 13px !important;
+  cursor: pointer !important;
+}
+
+.shf-command-tour-controls button:disabled {
+  opacity: 0.38;
+  cursor: not-allowed !important;
+}
+
+.shf-command-tour-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 0.68rem !important;
+  padding: 7px 10px !important;
+}
+
+/* ==========================================================
+   SHF Command Tour V2
+   High launcher + numbered steps + highlighted sections
+   ========================================================== */
+
+.shf-command-tour-floating-button--high {
+  position: fixed !important;
+  right: 28px !important;
+  top: 118px !important;
+  bottom: auto !important;
+  z-index: 9998 !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 205, 138, 0.28) !important;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 190, 92, 0.28), transparent 38%),
+    linear-gradient(135deg, #6b3f22, #2f2118) !important;
+  color: #fff7ed !important;
+  font-size: 0.82rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  padding: 13px 18px !important;
+  box-shadow:
+    0 18px 42px rgba(55, 32, 14, 0.28),
+    inset 0 1px 0 rgba(255, 230, 190, 0.18) !important;
+  cursor: pointer !important;
+}
+
+.shf-tour-highlight {
+  position: relative !important;
+  z-index: 9997 !important;
+  outline: 4px solid rgba(223, 125, 38, 0.72) !important;
+  outline-offset: 8px !important;
+  box-shadow:
+    0 0 0 10px rgba(255, 184, 92, 0.16),
+    0 0 42px rgba(223, 125, 38, 0.36) !important;
+  border-radius: 22px !important;
+  transition: outline 180ms ease, box-shadow 180ms ease !important;
+}
+
+.shf-command-tour-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  display: grid !important;
+  place-items: center end !important;
+  padding: 28px !important;
+  pointer-events: auto !important;
+}
+
+.shf-command-tour-backdrop {
+  position: absolute !important;
+  inset: 0 !important;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(214, 124, 42, 0.18), transparent 36%),
+    rgba(35, 24, 16, 0.38) !important;
+  backdrop-filter: blur(5px) !important;
+  -webkit-backdrop-filter: blur(5px) !important;
+}
+
+.shf-command-tour-card {
+  position: relative !important;
+  z-index: 10000 !important;
+  width: min(470px, calc(100vw - 40px)) !important;
+  border-radius: 28px !important;
+  border: 1px solid rgba(255, 215, 160, 0.22) !important;
+  background:
+    radial-gradient(circle at top left, rgba(218, 132, 45, 0.18), transparent 36%),
+    linear-gradient(135deg, rgba(76, 45, 25, 0.98), rgba(35, 25, 18, 0.98)) !important;
+  color: rgba(255, 248, 235, 0.96) !important;
+  box-shadow:
+    0 28px 80px rgba(30, 18, 10, 0.42),
+    inset 0 1px 0 rgba(255, 230, 190, 0.16) !important;
+  padding: 24px !important;
+}
+
+.shf-command-tour-step-badge {
+  width: 58px;
+  height: 58px;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 16px;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,0.22), transparent 30%),
+    linear-gradient(135deg, #d77b28, #7b451f);
+  color: #fff7ed;
+  font-size: 1.35rem;
+  font-weight: 950;
+  box-shadow:
+    0 14px 30px rgba(0,0,0,0.24),
+    inset 0 1px 0 rgba(255,255,255,0.18);
+}
+
+.shf-command-tour-card__top {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  color: rgba(255, 199, 125, 0.82) !important;
+  font-size: 0.72rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  margin-bottom: 14px !important;
+}
+
+.shf-command-tour-card h3 {
+  margin: 0 !important;
+  color: #fff7ed !important;
+  font-size: 1.55rem !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.03em !important;
+}
+
+.shf-command-tour-card p {
+  margin: 14px 0 0 !important;
+  color: rgba(255, 239, 213, 0.86) !important;
+  line-height: 1.5 !important;
+}
+
+.shf-command-tour-action {
+  margin-top: 18px !important;
+  padding: 14px !important;
+  border-radius: 18px !important;
+  border: 1px solid rgba(255, 205, 138, 0.18) !important;
+  background: rgba(255, 244, 224, 0.08) !important;
+}
+
+.shf-command-tour-action span {
+  display: block !important;
+  color: rgba(255, 199, 125, 0.82) !important;
+  font-size: 0.68rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  margin-bottom: 6px !important;
+}
+
+.shf-command-tour-action strong {
+  display: block !important;
+  color: rgba(255, 248, 235, 0.96) !important;
+  line-height: 1.35 !important;
+}
+
+.shf-command-tour-target {
+  margin-top: 12px !important;
+  color: rgba(255, 221, 176, 0.78) !important;
+  font-size: 0.78rem !important;
+}
+
+.shf-command-tour-dots {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  margin-top: 18px !important;
+}
+
+.shf-command-tour-dots button {
+  width: 34px !important;
+  height: 30px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 205, 138, 0.2) !important;
+  background: rgba(255, 244, 224, 0.08) !important;
+  color: rgba(255, 231, 194, 0.82) !important;
+  font-size: 0.68rem !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+}
+
+.shf-command-tour-dots button.is-active {
+  background: rgba(217, 125, 38, 0.92) !important;
+  color: #fff7ed !important;
+  border-color: rgba(255, 231, 194, 0.4) !important;
+}
+
+.shf-command-tour-controls {
+  display: flex !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  margin-top: 22px !important;
+}
+
+.shf-command-tour-controls button,
+.shf-command-tour-close {
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 205, 138, 0.2) !important;
+  background: rgba(255, 244, 224, 0.1) !important;
+  color: rgba(255, 248, 235, 0.95) !important;
+  font-weight: 900 !important;
+  padding: 9px 13px !important;
+  cursor: pointer !important;
+}
+
+.shf-command-tour-controls button:disabled {
+  opacity: 0.38 !important;
+  cursor: not-allowed !important;
+}
+
+.shf-command-tour-close {
+  position: absolute !important;
+  top: 16px !important;
+  right: 16px !important;
+  font-size: 0.68rem !important;
+  padding: 7px 10px !important;
+}
+
+@media (max-width: 760px) {
+  .shf-command-tour-floating-button--high {
+    top: auto !important;
+    bottom: 20px !important;
+    right: 20px !important;
+  }
+
+  .shf-command-tour-overlay {
+    place-items: end center !important;
+    padding: 18px !important;
+  }
+
+  .shf-command-tour-card {
+    width: 100% !important;
+  }
+}
+
+/* ==========================================================
+   SHF Command Tour V3
+   Active section only: metallic orange glowing spotlight
+   ========================================================== */
+
+@keyframes shfTourMetallicPulse {
+  0% {
+    outline-color: rgba(255, 132, 31, 0.82);
+    box-shadow:
+      0 0 0 5px rgba(255, 132, 31, 0.22),
+      0 0 26px rgba(255, 132, 31, 0.52),
+      0 0 58px rgba(255, 169, 66, 0.32),
+      inset 0 0 0 1px rgba(255, 238, 205, 0.28);
+  }
+
+  50% {
+    outline-color: rgba(255, 190, 84, 1);
+    box-shadow:
+      0 0 0 8px rgba(255, 132, 31, 0.28),
+      0 0 38px rgba(255, 132, 31, 0.78),
+      0 0 88px rgba(255, 169, 66, 0.52),
+      inset 0 0 0 1px rgba(255, 248, 225, 0.44);
+  }
+
+  100% {
+    outline-color: rgba(255, 132, 31, 0.82);
+    box-shadow:
+      0 0 0 5px rgba(255, 132, 31, 0.22),
+      0 0 26px rgba(255, 132, 31, 0.52),
+      0 0 58px rgba(255, 169, 66, 0.32),
+      inset 0 0 0 1px rgba(255, 238, 205, 0.28);
+  }
+}
+
+/* Dim page strongly during tour */
+body:has(.shf-command-tour-overlay) .shf-impact-command-center > *:not(.shf-command-tour-overlay):not(.shf-command-tour-floating-button) {
+  filter: blur(5px) brightness(0.42) saturate(0.72) !important;
+  transition: filter 180ms ease !important;
+}
+
+/* Pull the active section above the dimmed page */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight {
+  filter: none !important;
+  position: relative !important;
+  z-index: 9998 !important;
+  isolation: isolate !important;
+  background:
+    linear-gradient(180deg, rgba(255, 253, 248, 0.98), rgba(250, 239, 224, 0.94)) !important;
+  outline: 4px solid rgba(255, 132, 31, 0.95) !important;
+  outline-offset: 10px !important;
+  border-radius: 24px !important;
+  animation: shfTourMetallicPulse 1.45s ease-in-out infinite !important;
+}
+
+/* Add a metallic orange corner shine to the focused section */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: -12px !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+  background:
+    linear-gradient(135deg, rgba(255, 227, 185, 0.24), transparent 22%, transparent 72%, rgba(255, 132, 31, 0.2)),
+    radial-gradient(circle at top left, rgba(255, 190, 84, 0.3), transparent 34%) !important;
+}
+
+/* Tour backdrop should be darker so only highlighted section feels active */
+.shf-command-tour-backdrop {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(214, 124, 42, 0.14), transparent 32%),
+    rgba(24, 15, 9, 0.72) !important;
+  backdrop-filter: blur(8px) saturate(0.7) brightness(0.55) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(0.7) brightness(0.55) !important;
+}
+
+/* Keep the tour card above the highlighted section */
+.shf-command-tour-card {
+  z-index: 10002 !important;
+}
+
+/* Keep launcher out of the way while tour is open */
+body:has(.shf-command-tour-overlay) .shf-command-tour-floating-button {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Make highlighted text readable even if target has nested cards */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight,
+body:has(.shf-command-tour-overlay) .shf-tour-highlight * {
+  visibility: visible !important;
+}
+
+/* If a highlighted section is inside a grid/card, make sure it does not get clipped */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight {
+  overflow: visible !important;
+}
+
+/* Stronger focus for smaller panels like proof layer or AI card */
+body:has(.shf-command-tour-overlay) .shf-ai-analyst-panel.shf-tour-highlight,
+body:has(.shf-command-tour-overlay) .shf-proof-layer.shf-tour-highlight,
+body:has(.shf-command-tour-overlay) .shf-trust-verification-panel.shf-tour-highlight {
+  outline-offset: 8px !important;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  body:has(.shf-command-tour-overlay) .shf-tour-highlight {
+    animation: none !important;
+  }
+}
+
+/* ==========================================================
+   SHF Command Tour V3
+   Active section only: metallic orange glowing spotlight
+   ========================================================== */
+
+@keyframes shfTourMetallicPulse {
+  0% {
+    outline-color: rgba(255, 132, 31, 0.82);
+    box-shadow:
+      0 0 0 5px rgba(255, 132, 31, 0.22),
+      0 0 26px rgba(255, 132, 31, 0.52),
+      0 0 58px rgba(255, 169, 66, 0.32),
+      inset 0 0 0 1px rgba(255, 238, 205, 0.28);
+  }
+
+  50% {
+    outline-color: rgba(255, 190, 84, 1);
+    box-shadow:
+      0 0 0 8px rgba(255, 132, 31, 0.28),
+      0 0 38px rgba(255, 132, 31, 0.78),
+      0 0 88px rgba(255, 169, 66, 0.52),
+      inset 0 0 0 1px rgba(255, 248, 225, 0.44);
+  }
+
+  100% {
+    outline-color: rgba(255, 132, 31, 0.82);
+    box-shadow:
+      0 0 0 5px rgba(255, 132, 31, 0.22),
+      0 0 26px rgba(255, 132, 31, 0.52),
+      0 0 58px rgba(255, 169, 66, 0.32),
+      inset 0 0 0 1px rgba(255, 238, 205, 0.28);
+  }
+}
+
+/* Dim page strongly during tour */
+body:has(.shf-command-tour-overlay) .shf-impact-command-center > *:not(.shf-command-tour-overlay):not(.shf-command-tour-floating-button) {
+  filter: blur(5px) brightness(0.42) saturate(0.72) !important;
+  transition: filter 180ms ease !important;
+}
+
+/* Pull the active section above the dimmed page */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight {
+  filter: none !important;
+  position: relative !important;
+  z-index: 9998 !important;
+  isolation: isolate !important;
+  background:
+    linear-gradient(180deg, rgba(255, 253, 248, 0.98), rgba(250, 239, 224, 0.94)) !important;
+  outline: 4px solid rgba(255, 132, 31, 0.95) !important;
+  outline-offset: 10px !important;
+  border-radius: 24px !important;
+  animation: shfTourMetallicPulse 1.45s ease-in-out infinite !important;
+}
+
+/* Add a metallic orange corner shine to the focused section */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: -12px !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+  background:
+    linear-gradient(135deg, rgba(255, 227, 185, 0.24), transparent 22%, transparent 72%, rgba(255, 132, 31, 0.2)),
+    radial-gradient(circle at top left, rgba(255, 190, 84, 0.3), transparent 34%) !important;
+}
+
+/* Tour backdrop should be darker so only highlighted section feels active */
+.shf-command-tour-backdrop {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(214, 124, 42, 0.14), transparent 32%),
+    rgba(24, 15, 9, 0.72) !important;
+  backdrop-filter: blur(8px) saturate(0.7) brightness(0.55) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(0.7) brightness(0.55) !important;
+}
+
+/* Keep the tour card above the highlighted section */
+.shf-command-tour-card {
+  z-index: 10002 !important;
+}
+
+/* Keep launcher out of the way while tour is open */
+body:has(.shf-command-tour-overlay) .shf-command-tour-floating-button {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Make highlighted text readable even if target has nested cards */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight,
+body:has(.shf-command-tour-overlay) .shf-tour-highlight * {
+  visibility: visible !important;
+}
+
+/* If a highlighted section is inside a grid/card, make sure it does not get clipped */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight {
+  overflow: visible !important;
+}
+
+/* Stronger focus for smaller panels like proof layer or AI card */
+body:has(.shf-command-tour-overlay) .shf-ai-analyst-panel.shf-tour-highlight,
+body:has(.shf-command-tour-overlay) .shf-proof-layer.shf-tour-highlight,
+body:has(.shf-command-tour-overlay) .shf-trust-verification-panel.shf-tour-highlight {
+  outline-offset: 8px !important;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  body:has(.shf-command-tour-overlay) .shf-tour-highlight {
+    animation: none !important;
+  }
+}
+
+/* ==========================================================
+   SHF Command Tour V4 — SHS Hub Style Spotlight
+   This fixes the blackout problem.
+   ========================================================== */
+
+/* Stop the old V3 blackout/blur from hiding the page */
+body:has(.shf-command-tour-overlay) .shf-impact-command-center > *:not(.shf-command-tour-overlay):not(.shf-command-tour-floating-button) {
+  filter: none !important;
+}
+
+/* The page remains visible; dimming is created by the spotlight shadow instead */
+.shf-command-tour-backdrop {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Metallic orange spotlight window */
+.shf-command-tour-spotlight {
+  position: fixed !important;
+  z-index: 10000 !important;
+  border-radius: 26px !important;
+  pointer-events: none !important;
+  border: 4px solid rgba(255, 132, 31, 0.98) !important;
+  outline: 1px solid rgba(255, 231, 194, 0.72) !important;
+  outline-offset: -7px !important;
+  box-shadow:
+    0 0 0 9999px rgba(24, 15, 9, 0.72),
+    0 0 0 10px rgba(255, 132, 31, 0.18),
+    0 0 34px rgba(255, 132, 31, 0.78),
+    0 0 88px rgba(255, 190, 84, 0.44),
+    inset 0 0 22px rgba(255, 190, 84, 0.18) !important;
+  animation: shfTourSpotlightPulse 1.45s ease-in-out infinite !important;
+}
+
+@keyframes shfTourSpotlightPulse {
+  0% {
+    border-color: rgba(255, 132, 31, 0.9);
+    box-shadow:
+      0 0 0 9999px rgba(24, 15, 9, 0.72),
+      0 0 0 8px rgba(255, 132, 31, 0.16),
+      0 0 28px rgba(255, 132, 31, 0.62),
+      0 0 70px rgba(255, 190, 84, 0.34),
+      inset 0 0 18px rgba(255, 190, 84, 0.14);
+  }
+
+  50% {
+    border-color: rgba(255, 202, 104, 1);
+    box-shadow:
+      0 0 0 9999px rgba(24, 15, 9, 0.72),
+      0 0 0 12px rgba(255, 132, 31, 0.24),
+      0 0 44px rgba(255, 132, 31, 0.92),
+      0 0 104px rgba(255, 190, 84, 0.58),
+      inset 0 0 26px rgba(255, 190, 84, 0.22);
+  }
+
+  100% {
+    border-color: rgba(255, 132, 31, 0.9);
+    box-shadow:
+      0 0 0 9999px rgba(24, 15, 9, 0.72),
+      0 0 0 8px rgba(255, 132, 31, 0.16),
+      0 0 28px rgba(255, 132, 31, 0.62),
+      0 0 70px rgba(255, 190, 84, 0.34),
+      inset 0 0 18px rgba(255, 190, 84, 0.14);
+  }
+}
+
+/* Do not try to lift the original element above the overlay.
+   The spotlight rectangle handles the visual isolation. */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight {
+  outline: none !important;
+  box-shadow: none !important;
+  animation: none !important;
+  filter: none !important;
+}
+
+/* Make tour card sit above spotlight and remain readable */
+.shf-command-tour-card {
+  z-index: 10002 !important;
+}
+
+/* Keep close button readable */
+.shf-command-tour-close {
+  z-index: 10003 !important;
+}
+
+/* Keep the tour button high but hide it while tour is active */
+body:has(.shf-command-tour-overlay) .shf-command-tour-floating-button {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shf-command-tour-spotlight {
+    animation: none !important;
+  }
+}
+
+/* ==========================================================
+   SHF Command Tour V5 — SHS Hub style four-panel spotlight
+   ========================================================== */
+
+/* Remove old blackout behavior */
+body:has(.shf-command-tour-overlay) .shf-impact-command-center > *:not(.shf-command-tour-overlay):not(.shf-command-tour-floating-button) {
+  filter: none !important;
+}
+
+.shf-command-tour-backdrop {
+  background: rgba(24, 15, 9, 0.70) !important;
+  backdrop-filter: blur(3px) saturate(0.7) !important;
+  -webkit-backdrop-filter: blur(3px) saturate(0.7) !important;
+}
+
+.shf-command-tour-dim {
+  position: fixed !important;
+  z-index: 9998 !important;
+  background: rgba(9, 6, 4, 0.74) !important;
+  backdrop-filter: blur(5px) brightness(0.62) saturate(0.75) !important;
+  -webkit-backdrop-filter: blur(5px) brightness(0.62) saturate(0.75) !important;
+  pointer-events: auto !important;
+}
+
+.shf-command-tour-dim--top {
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+}
+
+.shf-command-tour-dim--left {
+  left: 0 !important;
+}
+
+.shf-command-tour-dim--right {
+  right: 0 !important;
+}
+
+.shf-command-tour-dim--bottom {
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+}
+
+.shf-command-tour-spotlight {
+  position: fixed !important;
+  z-index: 9999 !important;
+  border-radius: 26px !important;
+  pointer-events: none !important;
+  border: 3px solid rgba(255, 134, 31, 0.98) !important;
+  outline: 1px solid rgba(255, 232, 194, 0.82) !important;
+  outline-offset: -7px !important;
+  background: transparent !important;
+  box-shadow:
+    0 0 0 2px rgba(255, 232, 194, 0.24),
+    0 0 0 9px rgba(255, 134, 31, 0.16),
+    0 0 34px rgba(255, 134, 31, 0.78),
+    0 0 88px rgba(255, 190, 84, 0.52),
+    inset 0 0 26px rgba(255, 190, 84, 0.16) !important;
+  animation: shfTourSpotlightPulseV5 1.45s ease-in-out infinite !important;
+}
+
+@keyframes shfTourSpotlightPulseV5 {
+  0% {
+    border-color: rgba(255, 134, 31, 0.92);
+    box-shadow:
+      0 0 0 2px rgba(255, 232, 194, 0.22),
+      0 0 0 8px rgba(255, 134, 31, 0.14),
+      0 0 28px rgba(255, 134, 31, 0.62),
+      0 0 70px rgba(255, 190, 84, 0.34),
+      inset 0 0 20px rgba(255, 190, 84, 0.12);
+  }
+  50% {
+    border-color: rgba(255, 205, 118, 1);
+    box-shadow:
+      0 0 0 2px rgba(255, 232, 194, 0.36),
+      0 0 0 12px rgba(255, 134, 31, 0.24),
+      0 0 46px rgba(255, 134, 31, 0.9),
+      0 0 104px rgba(255, 190, 84, 0.58),
+      inset 0 0 32px rgba(255, 190, 84, 0.22);
+  }
+  100% {
+    border-color: rgba(255, 134, 31, 0.92);
+    box-shadow:
+      0 0 0 2px rgba(255, 232, 194, 0.22),
+      0 0 0 8px rgba(255, 134, 31, 0.14),
+      0 0 28px rgba(255, 134, 31, 0.62),
+      0 0 70px rgba(255, 190, 84, 0.34),
+      inset 0 0 20px rgba(255, 190, 84, 0.12);
+  }
+}
+
+/* Keep the highlighted section visually clear under the spotlight */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight {
+  position: relative !important;
+  z-index: 9997 !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+/* Tour card: similar to SHS guided tour panel, but SHF brown/copper */
+.shf-command-tour-card {
+  z-index: 10002 !important;
+  border: 1px solid rgba(255, 205, 138, 0.28) !important;
+  background:
+    radial-gradient(circle at top left, rgba(218, 132, 45, 0.20), transparent 34%),
+    linear-gradient(135deg, rgba(76, 45, 25, 0.98), rgba(28, 19, 13, 0.98)) !important;
+}
+
+.shf-command-tour-action--why {
+  border-color: rgba(255, 205, 138, 0.22) !important;
+  background: rgba(255, 244, 224, 0.075) !important;
+}
+
+.shf-command-tour-action--why span {
+  color: rgba(255, 199, 125, 0.88) !important;
+}
+
+body:has(.shf-command-tour-overlay) .shf-command-tour-floating-button {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shf-command-tour-spotlight {
+    animation: none !important;
+  }
+}
+
+/* ==========================================================
+   SHF Command Tour V6 — SHS quality guided-tour polish
+   Goal: SHS-style layout, lighter blur, clear section highlight,
+   no numbered dot row.
+   ========================================================== */
+
+/* Keep page visible. SHS style is dim + readable, not blackout. */
+.shf-command-tour-dim {
+  background: rgba(18, 12, 8, 0.46) !important;
+  backdrop-filter: blur(2.5px) brightness(0.78) saturate(0.88) !important;
+  -webkit-backdrop-filter: blur(2.5px) brightness(0.78) saturate(0.88) !important;
+}
+
+/* If fallback backdrop appears, keep it light too */
+.shf-command-tour-backdrop {
+  background: rgba(18, 12, 8, 0.46) !important;
+  backdrop-filter: blur(2.5px) brightness(0.78) saturate(0.88) !important;
+  -webkit-backdrop-filter: blur(2.5px) brightness(0.78) saturate(0.88) !important;
+}
+
+/* Active section spotlight: SHF metallic orange version of SHS cyan border */
+.shf-command-tour-spotlight {
+  border-radius: 24px !important;
+  border: 3px solid rgba(255, 126, 32, 0.96) !important;
+  outline: 1px solid rgba(255, 232, 194, 0.72) !important;
+  outline-offset: -6px !important;
+  background: transparent !important;
+  box-shadow:
+    0 0 0 2px rgba(255, 232, 194, 0.24),
+    0 0 0 7px rgba(255, 126, 32, 0.16),
+    0 0 28px rgba(255, 126, 32, 0.64),
+    0 0 64px rgba(255, 185, 84, 0.38) !important;
+  animation: shfTourSpotlightPulseV6 1.65s ease-in-out infinite !important;
+}
+
+@keyframes shfTourSpotlightPulseV6 {
+  0% {
+    border-color: rgba(255, 126, 32, 0.9);
+    box-shadow:
+      0 0 0 2px rgba(255, 232, 194, 0.2),
+      0 0 0 6px rgba(255, 126, 32, 0.12),
+      0 0 24px rgba(255, 126, 32, 0.52),
+      0 0 54px rgba(255, 185, 84, 0.28);
+  }
+
+  50% {
+    border-color: rgba(255, 198, 106, 1);
+    box-shadow:
+      0 0 0 2px rgba(255, 232, 194, 0.34),
+      0 0 0 10px rgba(255, 126, 32, 0.22),
+      0 0 38px rgba(255, 126, 32, 0.82),
+      0 0 86px rgba(255, 185, 84, 0.48);
+  }
+
+  100% {
+    border-color: rgba(255, 126, 32, 0.9);
+    box-shadow:
+      0 0 0 2px rgba(255, 232, 194, 0.2),
+      0 0 0 6px rgba(255, 126, 32, 0.12),
+      0 0 24px rgba(255, 126, 32, 0.52),
+      0 0 54px rgba(255, 185, 84, 0.28);
+  }
+}
+
+/* Tour card should feel closer to SHS quality, but SHF brown/copper */
+.shf-command-tour-card {
+  width: min(430px, calc(100vw - 40px)) !important;
+  border-radius: 24px !important;
+  border: 1px solid rgba(255, 187, 104, 0.34) !important;
+  background:
+    radial-gradient(circle at top left, rgba(221, 132, 45, 0.22), transparent 34%),
+    linear-gradient(135deg, rgba(64, 36, 20, 0.98), rgba(28, 19, 13, 0.98)) !important;
+  box-shadow:
+    0 28px 70px rgba(16, 9, 5, 0.42),
+    inset 0 1px 0 rgba(255, 230, 190, 0.16) !important;
+  padding: 22px !important;
+}
+
+/* Top tour label like SHS */
+.shf-command-tour-card__top {
+  margin-bottom: 12px !important;
+  color: rgba(255, 199, 125, 0.9) !important;
+  font-size: 0.72rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.13em !important;
+  text-transform: uppercase !important;
+}
+
+/* Hide the large square number badge; SHS style uses step text in header */
+.shf-command-tour-step-badge {
+  display: none !important;
+}
+
+/* Main tour title */
+.shf-command-tour-card h3 {
+  margin: 0 !important;
+  color: #fff7ed !important;
+  font-size: 1.22rem !important;
+  line-height: 1.18 !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* Body text */
+.shf-command-tour-card p {
+  margin: 13px 0 0 !important;
+  color: rgba(255, 239, 213, 0.88) !important;
+  font-size: 0.96rem !important;
+  line-height: 1.52 !important;
+}
+
+/* Why + Operator blocks */
+.shf-command-tour-action {
+  margin-top: 14px !important;
+  padding: 13px 14px !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(255, 205, 138, 0.2) !important;
+  background: rgba(255, 244, 224, 0.075) !important;
+}
+
+.shf-command-tour-action span {
+  display: block !important;
+  color: rgba(255, 199, 125, 0.9) !important;
+  font-size: 0.68rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.11em !important;
+  text-transform: uppercase !important;
+  margin-bottom: 6px !important;
+}
+
+.shf-command-tour-action strong {
+  display: block !important;
+  color: rgba(255, 248, 235, 0.96) !important;
+  font-size: 0.95rem !important;
+  line-height: 1.42 !important;
+}
+
+/* Remove target text if it feels too technical */
+.shf-command-tour-target {
+  display: none !important;
+}
+
+/* Remove dot number row entirely */
+.shf-command-tour-dots {
+  display: none !important;
+}
+
+/* Controls: SHS-like Back / End / Next only */
+.shf-command-tour-controls {
+  display: grid !important;
+  grid-template-columns: 1fr auto 1fr !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-top: 18px !important;
+}
+
+.shf-command-tour-controls button {
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 205, 138, 0.22) !important;
+  background: rgba(255, 244, 224, 0.08) !important;
+  color: rgba(255, 248, 235, 0.9) !important;
+  font-weight: 900 !important;
+  padding: 9px 14px !important;
+  cursor: pointer !important;
+}
+
+.shf-command-tour-controls button:last-child {
+  justify-self: end !important;
+  background:
+    linear-gradient(135deg, rgba(221, 132, 45, 0.96), rgba(130, 72, 30, 0.96)) !important;
+  color: #fff7ed !important;
+  border-color: rgba(255, 218, 174, 0.32) !important;
+  box-shadow:
+    0 10px 22px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+
+.shf-command-tour-controls button:disabled {
+  opacity: 0.42 !important;
+}
+
+/* Close button like SHS small circle */
+.shf-command-tour-close {
+  top: 16px !important;
+  right: 16px !important;
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  border-radius: 999px !important;
+  font-size: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+}
+
+.shf-command-tour-close::before {
+  content: "×" !important;
+  font-size: 1rem !important;
+  color: rgba(255, 248, 235, 0.9) !important;
+  line-height: 1 !important;
+}
+
+/* Keep tour button high */
+.shf-command-tour-floating-button--high {
+  top: 118px !important;
+  right: 28px !important;
+  bottom: auto !important;
+}
+
+/* Let highlighted source remain clear beneath the spotlight */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight {
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+@media (max-width: 760px) {
+  .shf-command-tour-card {
+    width: 100% !important;
+  }
+
+  .shf-command-tour-controls {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+/* ==========================================================
+   SHF Command Tour V7 — true SHS-style guided highlight
+   ========================================================== */
+
+/* Tour launcher */
+.shf-command-tour-floating-button--high {
+  position: fixed !important;
+  right: 28px !important;
+  top: 118px !important;
+  bottom: auto !important;
+  z-index: 9998 !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 205, 138, 0.28) !important;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 190, 92, 0.28), transparent 38%),
+    linear-gradient(135deg, #6b3f22, #2f2118) !important;
+  color: #fff7ed !important;
+  font-size: 0.82rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  padding: 13px 18px !important;
+  box-shadow:
+    0 18px 42px rgba(55, 32, 14, 0.28),
+    inset 0 1px 0 rgba(255, 230, 190, 0.18) !important;
+  cursor: pointer !important;
+}
+
+/* Overlay wrapper lets the page remain visible */
+.shf-command-tour-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  pointer-events: none !important;
+}
+
+/* Light SHS-style dim. Not a blackout. */
+.shf-command-tour-soft-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  background: rgba(21, 13, 8, 0.48) !important;
+  backdrop-filter: blur(2.5px) brightness(0.78) saturate(0.82) !important;
+  -webkit-backdrop-filter: blur(2.5px) brightness(0.78) saturate(0.82) !important;
+  pointer-events: auto !important;
+}
+
+/* Actual glowing border around the section being taught */
+.shf-command-tour-spotlight {
+  position: fixed !important;
+  z-index: 10000 !important;
+  pointer-events: none !important;
+  border-radius: 24px !important;
+  border: 3px solid rgba(255, 126, 32, 0.98) !important;
+  outline: 1px solid rgba(255, 232, 194, 0.72) !important;
+  outline-offset: -6px !important;
+  background: transparent !important;
+  box-shadow:
+    0 0 0 2px rgba(255, 232, 194, 0.22),
+    0 0 0 7px rgba(255, 126, 32, 0.14),
+    0 0 30px rgba(255, 126, 32, 0.72),
+    0 0 74px rgba(255, 185, 84, 0.42) !important;
+  animation: shfTourGlowPulseV7 1.55s ease-in-out infinite !important;
+}
+
+/* Put the actual target above the blur so it stays clear, like SHS */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight {
+  position: relative !important;
+  z-index: 10001 !important;
+  filter: none !important;
+  opacity: 1 !important;
+  isolation: isolate !important;
+  border-radius: 22px !important;
+}
+
+@keyframes shfTourGlowPulseV7 {
+  0% {
+    border-color: rgba(255, 126, 32, 0.9);
+    box-shadow:
+      0 0 0 2px rgba(255, 232, 194, 0.20),
+      0 0 0 6px rgba(255, 126, 32, 0.12),
+      0 0 24px rgba(255, 126, 32, 0.58),
+      0 0 58px rgba(255, 185, 84, 0.30);
+  }
+  50% {
+    border-color: rgba(255, 198, 106, 1);
+    box-shadow:
+      0 0 0 2px rgba(255, 232, 194, 0.34),
+      0 0 0 10px rgba(255, 126, 32, 0.22),
+      0 0 42px rgba(255, 126, 32, 0.88),
+      0 0 96px rgba(255, 185, 84, 0.52);
+  }
+  100% {
+    border-color: rgba(255, 126, 32, 0.9);
+    box-shadow:
+      0 0 0 2px rgba(255, 232, 194, 0.20),
+      0 0 0 6px rgba(255, 126, 32, 0.12),
+      0 0 24px rgba(255, 126, 32, 0.58),
+      0 0 58px rgba(255, 185, 84, 0.30);
+  }
+}
+
+/* Clean SHS-style tour panel, SHF color system */
+.shf-command-tour-card {
+  position: fixed !important;
+  right: 28px !important;
+  top: 108px !important;
+  z-index: 10003 !important;
+  width: min(430px, calc(100vw - 40px)) !important;
+  border-radius: 24px !important;
+  border: 1px solid rgba(255, 187, 104, 0.34) !important;
+  background:
+    radial-gradient(circle at top left, rgba(221, 132, 45, 0.24), transparent 34%),
+    linear-gradient(135deg, rgba(64, 36, 20, 0.98), rgba(28, 19, 13, 0.98)) !important;
+  color: rgba(255, 248, 235, 0.96) !important;
+  box-shadow:
+    0 28px 70px rgba(16, 9, 5, 0.42),
+    inset 0 1px 0 rgba(255, 230, 190, 0.16) !important;
+  padding: 22px !important;
+  pointer-events: auto !important;
+}
+
+.shf-command-tour-card__top {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 14px !important;
+  margin-bottom: 16px !important;
+  color: rgba(255, 199, 125, 0.9) !important;
+  font-size: 0.72rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.13em !important;
+  text-transform: uppercase !important;
+}
+
+.shf-command-tour-card h3 {
+  margin: 0 !important;
+  color: #fff7ed !important;
+  font-size: 1.22rem !important;
+  line-height: 1.18 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.shf-command-tour-card p {
+  margin: 13px 0 0 !important;
+  color: rgba(255, 239, 213, 0.88) !important;
+  font-size: 0.96rem !important;
+  line-height: 1.52 !important;
+}
+
+.shf-command-tour-action {
+  margin-top: 14px !important;
+  padding: 13px 14px !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(255, 205, 138, 0.2) !important;
+  background: rgba(255, 244, 224, 0.075) !important;
+}
+
+.shf-command-tour-action span {
+  display: block !important;
+  color: rgba(255, 199, 125, 0.9) !important;
+  font-size: 0.68rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.11em !important;
+  text-transform: uppercase !important;
+  margin-bottom: 6px !important;
+}
+
+.shf-command-tour-action strong {
+  display: block !important;
+  color: rgba(255, 248, 235, 0.96) !important;
+  font-size: 0.95rem !important;
+  line-height: 1.42 !important;
+}
+
+/* No numbers/dots row */
+.shf-command-tour-dots,
+.shf-command-tour-target,
+.shf-command-tour-step-badge {
+  display: none !important;
+}
+
+/* Back / End / Next like SHS */
+.shf-command-tour-controls {
+  display: grid !important;
+  grid-template-columns: 1fr auto 1fr !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-top: 18px !important;
+}
+
+.shf-command-tour-controls button {
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 205, 138, 0.22) !important;
+  background: rgba(255, 244, 224, 0.08) !important;
+  color: rgba(255, 248, 235, 0.9) !important;
+  font-weight: 900 !important;
+  padding: 9px 14px !important;
+  cursor: pointer !important;
+}
+
+.shf-command-tour-controls button:last-child {
+  justify-self: end !important;
+  background:
+    linear-gradient(135deg, rgba(221, 132, 45, 0.96), rgba(130, 72, 30, 0.96)) !important;
+  color: #fff7ed !important;
+  border-color: rgba(255, 218, 174, 0.32) !important;
+  box-shadow:
+    0 10px 22px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+
+.shf-command-tour-controls button:disabled {
+  opacity: 0.42 !important;
+}
+
+.shf-command-tour-close {
+  top: 16px !important;
+  right: 16px !important;
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  border-radius: 999px !important;
+  font-size: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  position: absolute !important;
+}
+
+.shf-command-tour-close::before {
+  content: "×" !important;
+  font-size: 1rem !important;
+  color: rgba(255, 248, 235, 0.9) !important;
+  line-height: 1 !important;
+}
+
+/* Hide launcher while tour is open */
+body:has(.shf-command-tour-overlay) .shf-command-tour-floating-button {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .shf-command-tour-spotlight {
+    animation: none !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .shf-command-tour-card {
+    top: auto !important;
+    right: 18px !important;
+    left: 18px !important;
+    bottom: 18px !important;
+    width: auto !important;
+  }
+
+  .shf-command-tour-floating-button--high {
+    top: auto !important;
+    bottom: 22px !important;
+    right: 22px !important;
+  }
+}

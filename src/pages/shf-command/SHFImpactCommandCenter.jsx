@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import { useSelectedEntity } from "@/system/context/SelectedEntityContext";
 import "./shf-impact-command-center.css";
 import { resolveCountyFromEntity } from "@/system/resolvers/entityToCounty";
@@ -110,10 +110,123 @@ function formatAuditDate(value) {
 }
 
 import TourProvider from "@/system/tour/TourProvider";
-import { shfImpactTourSteps } from "./shfImpactTourSteps";
 import ImpactKpiBand from "./sections/ImpactKpiBand";
 import AIAnalystPanel from "./sections/AIAnalystPanel";
 import TrustVerificationPanel from "./sections/TrustVerificationPanel";
+
+const SHF_COMMAND_LOGO_SRC = "/assets/shf-command/brand/shf-globe-logo.png";
+
+const SHF_COMMAND_TOUR_STEPS = [
+  {
+    number: "01",
+    target: "header",
+    selector: ".shf-brand",
+    title: "Start With the Command Header",
+    body: "Use the header first. Confirm this is the SHF Impact Command Center, set the reporting period, confirm the Ohio statewide scope, and save Export Report for the end.",
+    why: "The header sets the operating context for every number and recommendation on the page.",
+    action: "Confirm reporting period and scope before reading the dashboard."
+  },
+  {
+    number: "02",
+    target: "kpis",
+    selector: ".shf-kpi-grid, .shf-kpi-row, .shf-metrics-grid",
+    title: "Read the KPI Row Before You Drill Down",
+    body: "Use the KPI cards as the executive snapshot: people served, active programs, verified outcomes, funding deployed, risk alerts, and grant readiness.",
+    why: "This tells you whether the system is healthy before you inspect counties or reports.",
+    action: "Start with Risk Alerts and Grant Readiness. If either is weak, investigate before export."
+  },
+  {
+    number: "03",
+    target: "state",
+    selector: ".shf-command-state-strip, .shf-command-context-strip",
+    title: "Confirm the System Context",
+    body: "This area shows what the system thinks is selected: entity, county, Oracle state, last map action, last drawer action, and readiness.",
+    why: "A report is only trustworthy if the selected context matches what the operator is reviewing.",
+    action: "Check that the county, entity, and Oracle state match your current decision."
+  },
+  {
+    number: "04",
+    target: "map",
+    selector: ".shf-map-panel, .shf-impact-map-root, .shf-impact-map-stage",
+    title: "Use the Ohio Map as the Control Surface",
+    body: "Click a county to move from statewide mode into county focus. The selected county should glow, the regional layer should open, and the AI Analyst should update.",
+    why: "The map is the main operator control for moving from statewide oversight into local county action.",
+    action: "Click a county, then confirm the AI Analyst shows the same county."
+  },
+  {
+    number: "05",
+    target: "county",
+    selector: ".shf-regional-detail-panel, .shf-impact-map-stage",
+    title: "Use County Focus for Local Decisions",
+    body: "County focus shows the selected county, risk state, funding state, confidence, and next county packet step.",
+    why: "This turns the statewide map into a local decision surface.",
+    action: "Use county focus to decide whether the county needs review, funding analysis, or a county packet."
+  },
+  {
+    number: "06",
+    target: "ai",
+    selector: ".shf-ai-analyst-panel",
+    title: "Use the AI Analyst After Selecting a County",
+    body: "The AI Analyst explains what changed, why it matters, and what to do next based on map, drawer, and Oracle context.",
+    why: "The analyst is strongest after the map and selected county are synchronized.",
+    action: "If Oracle is unknown, refresh Oracle before treating the recommendation as final."
+  },
+  {
+    number: "07",
+    target: "impact",
+    selector: ".shf-impact-overview, .shf-overview-panel, [data-tour-section='impact']",
+    title: "Read the Impact Overview",
+    body: "Use the impact overview to explain verification, funding, governance, reporting, audit, reserves, and community impact.",
+    why: "This gives leadership and funders a simple view of the ecosystem’s proof structure.",
+    action: "Use this section when preparing leadership or funder explanations."
+  },
+  {
+    number: "08",
+    target: "programs",
+    selector: ".shf-program-health, [data-tour-section='programs']",
+    title: "Review Program Health",
+    body: "Review which programs are expanding, growing, in progress, or need intervention.",
+    why: "Program health tells operators where to focus before reports are generated.",
+    action: "Prioritize rows marked intervention, elevated risk, or low readiness."
+  },
+  {
+    number: "09",
+    target: "reports",
+    selector: ".shf-reports-briefings, [data-tour-section='reports']",
+    title: "Review Reports and Briefings",
+    body: "This section shows whether leadership-ready materials are available: board brief, grant narrative, donor summary, public impact snapshot, and program health memo.",
+    why: "Different audiences need different report types.",
+    action: "Only export when the report needed for the audience is ready."
+  },
+  {
+    number: "10",
+    target: "proof",
+    selector: ".shf-proof-layer, .shf-trust-verification-panel, [data-tour-section='proof']",
+    title: "Confirm the Proof Layer",
+    body: "The proof layer checks reporting coverage, audit integrity, ledger sync, missing reports, and memo readiness.",
+    why: "This prevents weak or incomplete proof from becoming a formal report.",
+    action: "Fix missing reports or evidence gaps before export."
+  },
+  {
+    number: "11",
+    target: "audit",
+    selector: ".shf-self-audit-card, .shf-self-audit-panel, .shf-self-audit",
+    title: "Run the Self-Audit",
+    body: "The Daily Integrity Cycle checks whether the system is in a healthy operating state before major decisions.",
+    why: "The self-audit protects the institution before board, funder, or public-facing outputs.",
+    action: "Run Audit Now before important exports or executive summaries."
+  },
+  {
+    number: "12",
+    target: "footer",
+    selector: ".shf-command-footer",
+    title: "Finish With the Operating Footer",
+    body: "The footer confirms this page is part of the Silicon Heartland Foundation impact system powered by SHS infrastructure.",
+    why: "It closes the workflow by reinforcing the verified outcomes and infrastructure story.",
+    action: "Finish only after outcomes, readiness, Oracle truth, proof layer, and reports are checked."
+  }
+];
+
 import ReportsBriefingsPanel from "./sections/ReportsBriefingsPanel";
 import ImpactOverviewWheelPanel from "./sections/ImpactOverviewWheelPanel";
 import SHFImpactOhioMap from "./components/SHFImpactOhioMap";
@@ -442,7 +555,7 @@ return () => {
 return (
     <div className="shf-detail-drawer__backdrop" onClick={onClose}>
       <aside
-        className="shf-detail-drawer shf-detail-drawer--command" data-tour="shf-impact-drawer"
+        className="shf-detail-drawer shf-detail-drawer--command"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="shf-detail-drawer__header">
@@ -708,6 +821,99 @@ return (
 
 
 export default function SHFImpactCommandCenter() {
+
+  const [tourOpen, setTourOpen] = useState(false);
+  const [tourSpotlightRect, setTourSpotlightRect] = useState(null);
+  const [tourStepIndex, setTourStepIndex] = useState(0);
+
+  const activeTourStep = SHF_COMMAND_TOUR_STEPS[tourStepIndex] || SHF_COMMAND_TOUR_STEPS[0];
+  const tourProgress = `${tourStepIndex + 1} / ${SHF_COMMAND_TOUR_STEPS.length}`;
+
+  useEffect(() => {
+    document.querySelectorAll(".shf-tour-highlight").forEach((node) => {
+      node.classList.remove("shf-tour-highlight");
+    });
+
+    if (!tourOpen || !activeTourStep?.selector) {
+      setTourSpotlightRect(null);
+      return;
+    }
+
+    const findTarget = () => {
+      const selectors = activeTourStep.selector
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+
+      for (const selector of selectors) {
+        const found = document.querySelector(selector);
+        if (found) return found;
+      }
+
+      return null;
+    };
+
+    const updateTarget = () => {
+      const target = findTarget();
+
+      if (!target) {
+        setTourSpotlightRect(null);
+        return;
+      }
+
+      target.classList.add("shf-tour-highlight");
+
+      const rect = target.getBoundingClientRect();
+      const pad = 12;
+
+      setTourSpotlightRect({
+        top: Math.max(rect.top - pad, 14),
+        left: Math.max(rect.left - pad, 14),
+        width: Math.min(rect.width + pad * 2, window.innerWidth - 28),
+        height: Math.min(rect.height + pad * 2, window.innerHeight - 28),
+      });
+    };
+
+    const target = findTarget();
+
+    if (target) {
+      target.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "nearest",
+      });
+    }
+
+    const timer = window.setTimeout(updateTarget, 380);
+
+    window.addEventListener("resize", updateTarget);
+    window.addEventListener("scroll", updateTarget, true);
+
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("resize", updateTarget);
+      window.removeEventListener("scroll", updateTarget, true);
+
+      document.querySelectorAll(".shf-tour-highlight").forEach((node) => {
+        node.classList.remove("shf-tour-highlight");
+      });
+    };
+  }, [tourOpen, tourStepIndex, activeTourStep]);
+
+
+  const goToNextTourStep = () => {
+    setTourStepIndex((current) => Math.min(current + 1, SHF_COMMAND_TOUR_STEPS.length - 1));
+  };
+
+  const goToPreviousTourStep = () => {
+    setTourStepIndex((current) => Math.max(current - 1, 0));
+  };
+
+  const closeTour = () => {
+    setTourOpen(false);
+    setTourStepIndex(0);
+  };
+
   // DAY 7 STABILITY CHECKPOINT: core command surface normalized through Days 1–7.
   const { selectedEntityId, lastEntityAction, selectedEntity } = useSelectedEntity();
 
@@ -1016,9 +1222,14 @@ const [selfAudit, setSelfAudit] = useState(null);
               <span className="shf-brand__mark-top" />
               <span className="shf-brand__mark-bottom" />
             </div>
+            <img
+              src={SHF_COMMAND_LOGO_SRC}
+              alt="Silicon Heartland Foundation globe"
+              className="shf-command-logo"
+            />
             <div className="shf-brand__text">Silicon Heartland</div>
             <div className="shf-brand__divider" />
-            <h1 data-tour="shf-impact-hero">SHF Impact Command Center</h1>
+            <h1>SHF Impact Command Center</h1>
           </div>
 
           <div className="shf-topbar__controls">
@@ -1061,7 +1272,6 @@ const [selfAudit, setSelfAudit] = useState(null);
           </div>
         </header>
 
-        <div data-tour="shf-impact-kpis">
         <ImpactKpiBand kpis={KPIS} onKpiClick={onKpiClick} />
 
 
@@ -1094,15 +1304,14 @@ const [selfAudit, setSelfAudit] = useState(null);
           <section className="shf-left-col">
             <div className="shf-panel shf-map-panel">
               <div className="shf-panel__header">
-                <h2 data-tour="shf-impact-map">Ohio Impact</h2>
+                <h2>Ohio Impact</h2>
                 <button type="button" className="shf-mini-filter">
                   STATEWIDE
                 </button>
               </div>
 
               <div className="shf-map-stage shf-map-stage--real">
-                <div data-tour="shf-impact-map">
-                  <SHFImpactOhioMap
+                <SHFImpactOhioMap
                   selectedCounty={selectedCounty}
                   onCountyClick={onCountyClick}
                 />
@@ -1162,14 +1371,12 @@ const [selfAudit, setSelfAudit] = useState(null);
           </section>
 
           <section className="shf-middle-col">
-            <div data-tour="shf-impact-wheel">
             <ImpactOverviewWheelPanel
               wheelSegments={WHEEL_SEGMENTS}
               trendPoints={trendPoints}
               onWheelClick={onImpactOverviewClick}
             />
 
-            <div data-tour="shf-impact-reports">
             <ReportsBriefingsPanel
               items={EXPORT_ITEMS}
               onExportClick={onExportClick}
@@ -1243,7 +1450,6 @@ const [selfAudit, setSelfAudit] = useState(null);
           </section>
 
           <aside className="shf-right-col">
-            <div data-tour="shf-impact-analyst">
             <AIAnalystPanel
               entityId={selectedEntityId}
               oracleTruth={oracleBundle?.truth || null}
@@ -1258,13 +1464,186 @@ const [selfAudit, setSelfAudit] = useState(null);
               onAction={() => onAiActionClick(oracleInsight?.nextMoveText || "request_data")}
             />
 
-            <div data-tour="shf-impact-trust">
             <TrustVerificationPanel entityId={selectedEntityId}
               items={TRUST_ITEMS}
               onTrustClick={onTrustClick}
             />
           </aside>
-        </main>
+        
+      <footer className="shf-command-footer">
+        <div className="shf-command-footer__brand">
+          <img
+            src={SHF_COMMAND_LOGO_SRC}
+            alt="Silicon Heartland Foundation globe"
+            className="shf-footer-globe-logo"
+          />
+          <div>
+            <strong>Silicon Heartland Foundation</strong>
+            <p>Powered by Silicon Heartland Solutions infrastructure.</p>
+          </div>
+        </div>
+
+        <div className="shf-command-footer__links">
+          <span>Verified Outcomes</span>
+          <span>Funding Readiness</span>
+          <span>Oracle Truth Layer</span>
+          <span>Impact Command System</span>
+        </div>
+      </footer>
+{tourOpen ? (
+        <div className="shf-command-tour-overlay" role="dialog" aria-modal="true" aria-label="SHF Command Tour">
+          <div className="shf-command-tour-backdrop" onClick={closeTour} />
+
+          {tourSpotlightRect ? (
+            <div
+              className="shf-command-tour-spotlight"
+              style={{
+                top: `${tourSpotlightRect.top}px`,
+                left: `${tourSpotlightRect.left}px`,
+                width: `${tourSpotlightRect.width}px`,
+                height: `${tourSpotlightRect.height}px`,
+              }}
+            />
+          ) : null}
+
+          <aside className="shf-command-tour-card">
+            <div className="shf-command-tour-card__top">
+              <span>Command Tour</span>
+              <strong>{tourProgress}</strong>
+            </div>
+
+            <h3>{activeTourStep.title}</h3>
+            <p>{activeTourStep.body}</p>
+
+            {activeTourStep.why ? (
+              <div className="shf-command-tour-action shf-command-tour-action--why">
+                <span>Why it matters</span>
+                <strong>{activeTourStep.why}</strong>
+              </div>
+            ) : null}
+
+            <div className="shf-command-tour-action">
+              <span>Operator action</span>
+              <strong>{activeTourStep.action}</strong>
+            </div>
+
+            <div className="shf-command-tour-controls">
+              <button
+                type="button"
+                onClick={() => setTourStepIndex((current) => Math.max(current - 1, 0))}
+                disabled={tourStepIndex === 0}
+              >
+                Back
+              </button>
+
+              {tourStepIndex >= SHF_COMMAND_TOUR_STEPS.length - 1 ? (
+                <button type="button" onClick={closeTour}>
+                  Finish Tour
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() =>
+                    setTourStepIndex((current) =>
+                      Math.min(current + 1, SHF_COMMAND_TOUR_STEPS.length - 1)
+                    )
+                  }
+                >
+                  Next Step
+                </button>
+              )}
+            </div>
+
+            <button type="button" className="shf-command-tour-close" onClick={closeTour}>
+              Close
+            </button>
+          </aside>
+        </div>
+      ) : null}
+      <button
+        type="button"
+        className="shf-command-tour-floating-button shf-command-tour-floating-button--high"
+        onClick={() => setTourOpen(true)}
+      >
+        Start Tour
+      </button>
+
+      {tourOpen ? (
+        <div className="shf-command-tour-overlay" role="dialog" aria-modal="true" aria-label="SHF Command Tour">
+          <div className="shf-command-tour-soft-backdrop" />
+
+          {tourSpotlightRect ? (
+            <div
+              className="shf-command-tour-spotlight"
+              style={{
+                top: `${tourSpotlightRect.top}px`,
+                left: `${tourSpotlightRect.left}px`,
+                width: `${tourSpotlightRect.width}px`,
+                height: `${tourSpotlightRect.height}px`,
+              }}
+            />
+          ) : null}
+
+          <aside className="shf-command-tour-card">
+            <div className="shf-command-tour-card__top">
+              <span>SHF Guided Command Tour</span>
+              <strong>Step {tourStepIndex + 1} of {SHF_COMMAND_TOUR_STEPS.length}</strong>
+            </div>
+
+            <h3>{activeTourStep.title}</h3>
+            <p>{activeTourStep.body}</p>
+
+            {activeTourStep.why ? (
+              <div className="shf-command-tour-action shf-command-tour-action--why">
+                <span>Why it matters</span>
+                <strong>{activeTourStep.why}</strong>
+              </div>
+            ) : null}
+
+            <div className="shf-command-tour-action">
+              <span>Operator action</span>
+              <strong>{activeTourStep.action}</strong>
+            </div>
+
+            <div className="shf-command-tour-controls">
+              <button
+                type="button"
+                onClick={() => setTourStepIndex((current) => Math.max(current - 1, 0))}
+                disabled={tourStepIndex === 0}
+              >
+                Back
+              </button>
+
+              <button type="button" onClick={closeTour}>
+                End
+              </button>
+
+              {tourStepIndex >= SHF_COMMAND_TOUR_STEPS.length - 1 ? (
+                <button type="button" onClick={closeTour}>
+                  Finish
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() =>
+                    setTourStepIndex((current) =>
+                      Math.min(current + 1, SHF_COMMAND_TOUR_STEPS.length - 1)
+                    )
+                  }
+                >
+                  Next
+                </button>
+              )}
+            </div>
+
+            <button type="button" className="shf-command-tour-close" onClick={closeTour}>
+              Close
+            </button>
+          </aside>
+        </div>
+      ) : null}
+
+    </main>
       </div>
 
       <DetailDrawer selected={selected} onClose={() => setSelected(null)} />

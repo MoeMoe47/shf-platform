@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import OhioCountyOfficialMapV2 from "@/pages/iep-command-v2/OhioCountyOfficialMapV2.jsx";
 import SHFRegionalCountyCluster from "./SHFRegionalCountyCluster.jsx";
 import "./shf-impact-ohio-map.css";
@@ -136,6 +136,44 @@ function getCommandState(activeCounty, shown, regionalMode) {
   };
 }
 
+
+function dispatchSHFMapCountyContext(countyName, source = "map_click") {
+  if (typeof window === "undefined" || !countyName) return;
+
+  window.dispatchEvent(
+    new CustomEvent("shf:map-county-context", {
+      detail: {
+        county: countyName,
+        source,
+        surface: "impact_command_center",
+        page: "shf_impact_map",
+        map_mode: "county_or_regional_focus",
+        timestamp: new Date().toISOString(),
+      },
+    })
+  );
+}
+
+
+function dispatchSHFDrawerContext(countyName, source = "drawer_event", open = true) {
+  if (typeof window === "undefined") return;
+
+  window.dispatchEvent(
+    new CustomEvent("shf:drawer-context", {
+      detail: {
+        drawer: "county_detail",
+        open,
+        county: countyName || null,
+        source,
+        surface: "impact_command_center",
+        page: "shf_impact_map",
+        active_tab: "county_detail",
+        timestamp: new Date().toISOString(),
+      },
+    })
+  );
+}
+
 export default function SHFImpactOhioMap() {
   const [hoveredCounty, setHoveredCounty] = useState(null);
   const [selectedCounty, setSelectedCounty] = useState("Franklin");
@@ -145,7 +183,10 @@ export default function SHFImpactOhioMap() {
   const [countyCentroids, setCountyCentroids] = useState({});
   const [isCountyDrawerOpen, setIsCountyDrawerOpen] = useState(false);
 
+  // Regional mode opens the zoom/glow layer after a county click.
+  // The regional layer now supports all counties through GeoJSON fallback.
   const regionalMode = isDrilldownOpen && Boolean(selectedCounty);
+  const countyFocusMode = regionalMode;
   const activeCounty = hoveredCounty || selectedCounty || null;
   const shown = getShownData(activeCounty);
   const commandState = getCommandState(activeCounty, shown, regionalMode);
@@ -215,10 +256,43 @@ export default function SHFImpactOhioMap() {
       return;
     }
     setSelectedCounty(countyName);
+    dispatchSHFMapCountyContext(countyName, "statewide_county_click");
     setHoveredCounty(null);
     setIsDrilldownOpen(true);
     showStatus(`County selection received · ${countyName} · opening regional drilldown…`, 1800);
   };
+
+  const returnToStatewideView = () => {
+    setSelectedCounty("Franklin");
+    dispatchSHFMapCountyContext("Franklin", "statewide_view");
+    setHoveredCounty(null);
+    setIsDrilldownOpen(false);
+    setIsCountyDrawerOpen(false);
+    dispatchSHFDrawerContext("Franklin", "statewide_view_drawer_closed", false);
+    showStatus("Statewide county view restored.", 1400);
+  };
+
+
+
+  useEffect(() => {
+    function handleStaticStatewideButtonClick(event) {
+      const button = event.target?.closest?.(".shf-mini-filter");
+      if (!button) return;
+
+      const label = String(button.textContent || "").trim().toUpperCase();
+      if (label !== "STATEWIDE") return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      returnToStatewideView();
+    }
+
+    document.addEventListener("click", handleStaticStatewideButtonClick);
+
+    return () => {
+      document.removeEventListener("click", handleStaticStatewideButtonClick);
+    };
+  }, []);
 
   return (
     <div className="shf-impact-map-root">
@@ -232,22 +306,17 @@ export default function SHFImpactOhioMap() {
       <div className="shf-impact-map-toolbar">
         <button
           type="button"
-          onClick={() => {
-            setSelectedCounty("Franklin");
-            setHoveredCounty(null);
-            setIsDrilldownOpen(false);
-            setIsCountyDrawerOpen(false);
-            showStatus("Statewide command surface restored.", 1400);
-          }}
+          onClick={returnToStatewideView}
+          aria-label="Return to statewide Ohio county view"
         >
-          Reset View
+          {regionalMode || countyFocusMode ? "Statewide View" : "Reset View"}
         </button>
         <button type="button" className="is-active">
-          {regionalMode ? `${selectedCounty} Region` : "County View"}
+          {countyFocusMode ? `${selectedCounty} Focus` : "County View"}
         </button>
       </div>
 
-      {regionalMode ? (
+      {countyFocusMode ? (
         <div className="shf-command-strip">
           <div className="shf-command-strip__label">Operational Command Layer</div>
           <div className="shf-command-strip__chips">
@@ -364,6 +433,7 @@ export default function SHFImpactOhioMap() {
                 const normalized = countyName ? normalizeCountyName(countyName) : null;
                 if (!normalized) return;
                 setSelectedCounty(normalized);
+                dispatchSHFMapCountyContext(normalized, "regional_county_click");
                 showStatus(`Regional selection updated · ${normalized}…`, 1200);
               }}
             />
@@ -399,7 +469,7 @@ export default function SHFImpactOhioMap() {
         ) : null}
       </div>
 
-      {regionalMode && shown ? (
+      {countyFocusMode && shown ? (
         <div className="shf-regional-detail-panel">
           <div className="shf-regional-detail-panel__eyebrow">Ohio Tactical County View</div>
           <strong>{activeCounty || selectedCounty} County</strong>
@@ -434,8 +504,10 @@ export default function SHFImpactOhioMap() {
             type="button"
             className="shf-regional-detail-panel__action"
             onClick={() => {
+              const drawerCounty = activeCounty || selectedCounty;
               setIsCountyDrawerOpen(true);
-              showStatus(`Opening county detail · ${activeCounty || selectedCounty}…`, 1400);
+              dispatchSHFDrawerContext(drawerCounty, "county_detail_open", true);
+              showStatus(`Opening county detail · ${drawerCounty}…`, 1400);
             }}
           >
             Open County Detail

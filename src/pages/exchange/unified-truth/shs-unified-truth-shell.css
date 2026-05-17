@@ -6818,3 +6818,268 @@ button.utc-tour-launcher,
     min-width: 96px !important;
   }
 }
+
+/* ==========================================================
+   SHS Mapbox V7E — Cinematic Map Final Polish
+   CSS-only safe pass after v7d-jsx-repaired restore point.
+   Goal: stronger State / Region / County mood without touching JSX.
+   ========================================================== */
+
+/* ---------- STATE: clearer Ohio command-board surface ---------- */
+
+.shs-mapbox-cinematic--state .shs-mapbox-stage,
+.shs-mapbox-mode--state .shs-mapbox-stage {
+  border-color: rgba(125, 211, 252, 0.78) !important;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(248, 250, 252, 0.64), transparent 36%),
+    radial-gradient(circle at 50% 48%, rgba(56, 189, 248, 0.24), transparent 58%),
+    linear-gradient(180deg, #020817 0%, #010612 100%) !important;
+  box-shadow:
+    0 42px 140px rgba(0, 0, 0, 0.68),
+    0 0 110px rgba(56, 189, 248, 0.32),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.46),
+    inset 0 0 110px rgba(15, 35, 70, 0.22) !important;
+}
+
+.shs-mapbox-cinematic--state .shs-mapbox-canvas,
+.shs-mapbox-mode--state .shs-mapbox-canvas {
+  filter:
+    brightness(1.05)
+    contrast(1.34)
+    saturate(0.72) !important;
+}
+
+.shs-mapbox-cinematic--state .shs-mapbox-atmosphere,
+.shs-mapbox-mode--state .shs-mapbox-atmosphere {
+  opacity: 0.92 !important;
+  mix-blend-mode: multiply !important;
+  background:
+    linear-gradient(90deg, rgba(2, 8, 23, 0.68), transparent 18%, transparent 82%, rgba(2, 8, 23, 0.76)),
+    radial-gradient(circle at 50% 48%, rgba(255, 255, 255, 0.18), transparent 28%),
+    radial-gradient(circle at 50% 48%, rgba(56, 189, 248, 0.14), transparent 62%) !important;
+}
+
+/* ---------- REGION: stronger electric cluster ---------- */
+
+.shs-mapbox-cinematic--region .shs-mapbox-stage,
+.shs-mapbox-mode--region .shs-mapbox-stage {
+  border-color: rgba(96, 165, 250, 0.95) !important;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.68), transparent 31%),
+    radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.34), transparent 48%),
+    radial-gradient(circle at 62% 42%, rgba(34, 211, 238, 0.18), transparent 38%),
+    linear-gradient(180deg, #020817 0%, #010612 100%) !important;
+  box-shadow:
+    0 44px 150px rgba(0, 0, 0, 0.72),
+    0 0 130px rgba(59, 130, 246, 0.56),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.34),
+    inset 0 0 120px rgba(37, 99, 235, 0.22) !important;
+}
+
+.shs-mapbox-cinematic--region .shs-mapbox-canvas,
+.shs-mapbox-mode--region .shs-mapbox-canvas {
+  filter:
+    brightness(0.50)
+    contrast(1.58)
+    saturate(1.42)
+    hue-rotate(10deg) !important;
+}
+
+.shs-mapbox-cinematic--region .shs-mapbox-atmosphere,
+.shs-mapbox-mode--region .shs-mapbox-atmosphere {
+  opacity: 1 !important;
+  mix-blend-mode: screen !important;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(96, 165, 250, 0.48), transparent 28%),
+    radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.28), transparent 43%),
+    linear-gradient(90deg, rgba(2, 8, 23, 0.52), transparent 24%, transparent 76%, rgba(2, 8, 23, 0.62)) !important;
+}
+
+/* Make the region network overlay feel more intentional */
+.shs-mapbox-cinematic--region .shs-mapbox-v7d-region-network::before,
+.shs-mapbox-mode--region .shs-mapbox-v7d-region-network::before {
+  border-color: rgba(191, 219, 254, 0.44) !important;
+  background:
+    radial-gradient(circle, rgba(147, 197, 253, 0.42), rgba(59, 130, 246, 0.24) 36%, transparent 70%) !important;
+  box-shadow:
+    0 0 56px rgba(96, 165, 250, 0.58),
+    inset 0 0 42px rgba(147, 197, 253, 0.28) !important;
+}
+
+.shs-mapbox-cinematic--region .shs-mapbox-v7d-region-network i,
+.shs-mapbox-mode--region .shs-mapbox-v7d-region-network i {
+  height: 3px !important;
+  opacity: 0.9 !important;
+  background:
+    linear-gradient(90deg, transparent, rgba(191, 219, 254, 0.95), rgba(96, 165, 250, 0.7), transparent) !important;
+  filter:
+    drop-shadow(0 0 8px rgba(96, 165, 250, 0.85))
+    drop-shadow(0 0 18px rgba(59, 130, 246, 0.38)) !important;
+}
+
+/* ---------- COUNTY: darker tactical orange command mode ---------- */
+
+.shs-mapbox-cinematic--county .shs-mapbox-stage,
+.shs-mapbox-mode--county .shs-mapbox-stage {
+  border-color: rgba(251, 146, 60, 0.96) !important;
+  background:
+    radial-gradient(circle at 47% 50%, rgba(249, 115, 22, 0.48), transparent 30%),
+    radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.96), transparent 74%),
+    linear-gradient(180deg, #020817 0%, #010612 100%) !important;
+  box-shadow:
+    0 46px 155px rgba(0, 0, 0, 0.76),
+    0 0 130px rgba(249, 115, 22, 0.50),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.30),
+    inset 0 0 130px rgba(124, 45, 18, 0.18) !important;
+}
+
+.shs-mapbox-cinematic--county .shs-mapbox-canvas,
+.shs-mapbox-mode--county .shs-mapbox-canvas {
+  filter:
+    brightness(0.56)
+    contrast(1.58)
+    saturate(1.28) !important;
+}
+
+.shs-mapbox-cinematic--county .shs-mapbox-atmosphere,
+.shs-mapbox-mode--county .shs-mapbox-atmosphere {
+  opacity: 1 !important;
+  mix-blend-mode: screen !important;
+  background:
+    radial-gradient(circle at 47% 50%, rgba(249, 115, 22, 0.48), transparent 28%),
+    radial-gradient(circle at 47% 50%, rgba(251, 191, 36, 0.20), transparent 46%),
+    linear-gradient(90deg, rgba(2, 8, 23, 0.58), transparent 25%, transparent 75%, rgba(2, 8, 23, 0.66)) !important;
+}
+
+.shs-mapbox-cinematic--county .shs-mapbox-v7d-county-core,
+.shs-mapbox-mode--county .shs-mapbox-v7d-county-core {
+  width: 136px !important;
+  height: 136px !important;
+  background:
+    radial-gradient(circle, rgba(255,255,255,0.94) 0 5px, rgba(249,115,22,1) 6px 15px, transparent 16px),
+    repeating-radial-gradient(circle, rgba(249,115,22,0.38) 0 2px, transparent 2px 16px) !important;
+  box-shadow:
+    0 0 52px rgba(249, 115, 22, 0.88),
+    0 0 110px rgba(249, 115, 22, 0.46) !important;
+}
+
+/* ---------- Dossiers: more premium, less bulky ---------- */
+
+.shs-mapbox-layer-card {
+  max-width: 318px !important;
+  padding: 14px !important;
+  border-radius: 22px !important;
+  background:
+    radial-gradient(circle at 10% 8%, rgba(96, 165, 250, 0.14), transparent 24%),
+    linear-gradient(180deg, rgba(8, 24, 52, 0.97), rgba(3, 10, 24, 0.98)) !important;
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.60),
+    0 0 44px rgba(96, 165, 250, 0.16),
+    inset 0 1px 0 rgba(255,255,255,0.14) !important;
+}
+
+.shs-mapbox-layer-card h3 {
+  font-size: 0.96rem !important;
+  line-height: 1.12 !important;
+}
+
+.shs-mapbox-layer-card p {
+  font-size: 0.72rem !important;
+  line-height: 1.38 !important;
+}
+
+.shs-mapbox-signal-summary {
+  padding: 8px !important;
+  gap: 6px !important;
+  margin: 9px 0 7px !important;
+}
+
+.shs-mapbox-signal-summary span {
+  font-size: 0.48rem !important;
+}
+
+.shs-mapbox-signal-summary strong {
+  font-size: 0.76rem !important;
+}
+
+.shs-mapbox-next-move {
+  padding: 8px 9px !important;
+}
+
+/* ---------- HUD: shrink, do not overpower the map ---------- */
+
+.shs-mapbox-hud {
+  max-width: 390px !important;
+  gap: 6px !important;
+}
+
+.shs-mapbox-hud div {
+  min-width: 78px !important;
+  padding: 7px 9px !important;
+  border-radius: 12px !important;
+}
+
+.shs-mapbox-hud span {
+  font-size: 0.50rem !important;
+}
+
+.shs-mapbox-hud strong {
+  font-size: 0.68rem !important;
+}
+
+/* ---------- Lower metrics: keep readable but not too loud ---------- */
+
+.shs-mapbox-v7d-command-metrics {
+  bottom: 72px !important;
+  gap: 7px !important;
+}
+
+.shs-mapbox-v7d-command-metrics div {
+  min-width: 102px !important;
+  padding: 8px 10px !important;
+  border-radius: 14px !important;
+  background:
+    linear-gradient(180deg, rgba(5, 18, 40, 0.78), rgba(3, 10, 24, 0.88)) !important;
+}
+
+.shs-mapbox-v7d-command-metrics span {
+  font-size: 0.48rem !important;
+}
+
+.shs-mapbox-v7d-command-metrics strong {
+  font-size: 0.70rem !important;
+}
+
+/* ---------- Preserve Community and Location improvements ---------- */
+
+.shs-mapbox-cinematic--community .shs-mapbox-stage,
+.shs-mapbox-mode--community .shs-mapbox-stage {
+  box-shadow:
+    0 40px 130px rgba(0,0,0,0.62),
+    0 0 92px rgba(45,212,191,0.24),
+    inset 0 0 0 1px rgba(255,255,255,0.38) !important;
+}
+
+.shs-mapbox-cinematic--location .shs-mapbox-stage,
+.shs-mapbox-mode--location .shs-mapbox-stage {
+  box-shadow:
+    0 40px 135px rgba(0,0,0,0.66),
+    0 0 98px rgba(139,92,246,0.34),
+    inset 0 0 0 1px rgba(255,255,255,0.34) !important;
+}
+
+/* Laptop safety */
+@media (max-width: 1480px) {
+  .shs-mapbox-layer-card {
+    max-width: 292px !important;
+    padding: 12px !important;
+  }
+
+  .shs-mapbox-hud {
+    max-width: 350px !important;
+  }
+
+  .shs-mapbox-v7d-command-metrics div {
+    min-width: 88px !important;
+  }
+}

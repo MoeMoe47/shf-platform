@@ -7083,3 +7083,267 @@ button.utc-tour-launcher,
     min-width: 88px !important;
   }
 }
+
+/* ==========================================================
+   SHS Mapbox V7F — Layer-Specific Final Correction
+   CSS-only safe pass after V7E lock.
+   Restore point before this:
+   shs-mapbox-v7e-cinematic-visual-base
+   ========================================================== */
+
+
+/* ==========================================================
+   STATE VIEW
+   Problem: too much white glare / washed-out left side.
+   Goal: premium statewide intelligence board with readable Ohio.
+   ========================================================== */
+
+.shs-mapbox-cinematic--state .shs-mapbox-stage,
+.shs-mapbox-mode--state .shs-mapbox-stage {
+  background:
+    radial-gradient(circle at 52% 50%, rgba(239, 246, 255, 0.46), transparent 34%),
+    radial-gradient(circle at 52% 50%, rgba(56, 189, 248, 0.18), transparent 58%),
+    linear-gradient(90deg, rgba(2, 8, 23, 0.42), transparent 18%, transparent 78%, rgba(2, 8, 23, 0.62)),
+    linear-gradient(180deg, #020817 0%, #010612 100%) !important;
+  box-shadow:
+    0 42px 140px rgba(0, 0, 0, 0.70),
+    0 0 90px rgba(56, 189, 248, 0.26),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.42),
+    inset 0 0 120px rgba(2, 8, 23, 0.30) !important;
+}
+
+.shs-mapbox-cinematic--state .shs-mapbox-canvas,
+.shs-mapbox-mode--state .shs-mapbox-canvas {
+  filter:
+    brightness(0.96)
+    contrast(1.42)
+    saturate(0.78) !important;
+}
+
+.shs-mapbox-cinematic--state .shs-mapbox-atmosphere,
+.shs-mapbox-mode--state .shs-mapbox-atmosphere {
+  opacity: 0.98 !important;
+  mix-blend-mode: multiply !important;
+  background:
+    linear-gradient(90deg, rgba(2, 8, 23, 0.78), transparent 20%, transparent 74%, rgba(2, 8, 23, 0.80)),
+    radial-gradient(circle at 52% 50%, rgba(255, 255, 255, 0.10), transparent 24%),
+    radial-gradient(circle at 52% 50%, rgba(56, 189, 248, 0.10), transparent 58%) !important;
+}
+
+.shs-mapbox-cinematic--state .shs-mapbox-v7d-state-glow,
+.shs-mapbox-mode--state .shs-mapbox-v7d-state-glow {
+  opacity: 0.56 !important;
+  mix-blend-mode: soft-light !important;
+}
+
+
+/* ==========================================================
+   REGION VIEW
+   Keep current direction, but sharpen network energy.
+   ========================================================== */
+
+.shs-mapbox-cinematic--region .shs-mapbox-stage,
+.shs-mapbox-mode--region .shs-mapbox-stage {
+  border-color: rgba(96, 165, 250, 0.92) !important;
+  box-shadow:
+    0 44px 150px rgba(0, 0, 0, 0.74),
+    0 0 120px rgba(59, 130, 246, 0.50),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.32),
+    inset 0 0 110px rgba(37, 99, 235, 0.24) !important;
+}
+
+.shs-mapbox-cinematic--region .shs-mapbox-canvas,
+.shs-mapbox-mode--region .shs-mapbox-canvas {
+  filter:
+    brightness(0.54)
+    contrast(1.62)
+    saturate(1.44)
+    hue-rotate(9deg) !important;
+}
+
+.shs-mapbox-cinematic--region .shs-mapbox-v7d-region-network::before,
+.shs-mapbox-mode--region .shs-mapbox-v7d-region-network::before {
+  opacity: 0.92 !important;
+  width: 190px !important;
+  height: 190px !important;
+}
+
+.shs-mapbox-cinematic--region .shs-mapbox-v7d-region-network i,
+.shs-mapbox-mode--region .shs-mapbox-v7d-region-network i {
+  opacity: 0.96 !important;
+}
+
+
+/* ==========================================================
+   COUNTY VIEW
+   Problem: orange is strong but county surface is too muddy.
+   Goal: darker tactical mode but still readable roads/details.
+   ========================================================== */
+
+.shs-mapbox-cinematic--county .shs-mapbox-stage,
+.shs-mapbox-mode--county .shs-mapbox-stage {
+  background:
+    radial-gradient(circle at 48% 50%, rgba(249, 115, 22, 0.40), transparent 31%),
+    radial-gradient(circle at 48% 50%, rgba(251, 191, 36, 0.12), transparent 48%),
+    linear-gradient(90deg, rgba(2, 8, 23, 0.46), transparent 22%, transparent 74%, rgba(2, 8, 23, 0.62)),
+    linear-gradient(180deg, #020817 0%, #010612 100%) !important;
+  box-shadow:
+    0 46px 155px rgba(0, 0, 0, 0.74),
+    0 0 116px rgba(249, 115, 22, 0.44),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.30),
+    inset 0 0 118px rgba(124, 45, 18, 0.14) !important;
+}
+
+.shs-mapbox-cinematic--county .shs-mapbox-canvas,
+.shs-mapbox-mode--county .shs-mapbox-canvas {
+  filter:
+    brightness(0.76)
+    contrast(1.48)
+    saturate(1.18) !important;
+}
+
+.shs-mapbox-cinematic--county .shs-mapbox-atmosphere,
+.shs-mapbox-mode--county .shs-mapbox-atmosphere {
+  opacity: 0.86 !important;
+  mix-blend-mode: screen !important;
+  background:
+    radial-gradient(circle at 48% 50%, rgba(249, 115, 22, 0.36), transparent 26%),
+    radial-gradient(circle at 48% 50%, rgba(251, 191, 36, 0.14), transparent 44%),
+    linear-gradient(90deg, rgba(2, 8, 23, 0.34), transparent 24%, transparent 76%, rgba(2, 8, 23, 0.48)) !important;
+}
+
+.shs-mapbox-cinematic--county .shs-mapbox-v7d-county-core,
+.shs-mapbox-mode--county .shs-mapbox-v7d-county-core {
+  opacity: 0.82 !important;
+  width: 120px !important;
+  height: 120px !important;
+  box-shadow:
+    0 0 44px rgba(249, 115, 22, 0.72),
+    0 0 88px rgba(249, 115, 22, 0.36) !important;
+}
+
+
+/* ==========================================================
+   COMMUNITY VIEW
+   Problem: still too bright/soft.
+   Goal: keep local cards but bring more contrast and depth.
+   ========================================================== */
+
+.shs-mapbox-cinematic--community .shs-mapbox-stage,
+.shs-mapbox-mode--community .shs-mapbox-stage {
+  background:
+    radial-gradient(circle at 34% 58%, rgba(16, 185, 129, 0.26), transparent 32%),
+    radial-gradient(circle at 66% 36%, rgba(249, 115, 22, 0.18), transparent 28%),
+    radial-gradient(circle at 72% 58%, rgba(139, 92, 246, 0.16), transparent 28%),
+    linear-gradient(90deg, rgba(2, 8, 23, 0.34), transparent 20%, transparent 78%, rgba(2, 8, 23, 0.46)),
+    linear-gradient(180deg, #020817, #010612) !important;
+  box-shadow:
+    0 40px 130px rgba(0, 0, 0, 0.66),
+    0 0 86px rgba(45, 212, 191, 0.22),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.34) !important;
+}
+
+.shs-mapbox-cinematic--community .shs-mapbox-canvas,
+.shs-mapbox-mode--community .shs-mapbox-canvas {
+  filter:
+    brightness(0.88)
+    contrast(1.34)
+    saturate(1.20) !important;
+}
+
+.shs-mapbox-community-media--v7c .shs-mapbox-media-card,
+.shs-mapbox-need-strip {
+  box-shadow:
+    0 24px 58px rgba(0, 0, 0, 0.34),
+    0 0 34px rgba(45, 212, 191, 0.16),
+    inset 0 1px 0 rgba(255,255,255,0.88) !important;
+}
+
+
+/* ==========================================================
+   LOCATION VIEW
+   Goal: make proof mode feel more official and less soft.
+   ========================================================== */
+
+.shs-mapbox-cinematic--location .shs-mapbox-stage,
+.shs-mapbox-mode--location .shs-mapbox-stage {
+  background:
+    radial-gradient(circle at 56% 50%, rgba(139, 92, 246, 0.32), transparent 32%),
+    radial-gradient(circle at 44% 50%, rgba(14, 165, 233, 0.24), transparent 30%),
+    radial-gradient(circle at 70% 38%, rgba(249, 115, 22, 0.11), transparent 26%),
+    linear-gradient(90deg, rgba(2, 8, 23, 0.32), transparent 20%, transparent 80%, rgba(2, 8, 23, 0.48)),
+    linear-gradient(180deg, #020817, #010612) !important;
+  box-shadow:
+    0 40px 138px rgba(0, 0, 0, 0.70),
+    0 0 104px rgba(139, 92, 246, 0.38),
+    inset 0 0 0 1px rgba(255,255,255,0.32) !important;
+}
+
+.shs-mapbox-cinematic--location .shs-mapbox-canvas,
+.shs-mapbox-mode--location .shs-mapbox-canvas {
+  filter:
+    brightness(0.88)
+    contrast(1.38)
+    saturate(1.22) !important;
+}
+
+.shs-mapbox-site-preview--v7c {
+  border-color: rgba(167, 139, 250, 0.46) !important;
+  box-shadow:
+    0 28px 68px rgba(0,0,0,0.34),
+    0 0 44px rgba(139,92,246,0.24),
+    inset 0 1px 0 rgba(255,255,255,0.92) !important;
+}
+
+.shs-mapbox-proof-route-card {
+  border-color: rgba(56, 189, 248, 0.50) !important;
+  box-shadow:
+    0 20px 46px rgba(0,0,0,0.40),
+    0 0 42px rgba(56,189,248,0.36) !important;
+}
+
+
+/* ==========================================================
+   GLOBAL MAP POLISH
+   ========================================================== */
+
+/* Make the bottom legend readable without feeling heavy */
+.shs-mapbox-legend {
+  background:
+    linear-gradient(180deg, rgba(248,250,252,0.94), rgba(226,232,240,0.88)) !important;
+  border-color: rgba(147, 197, 253, 0.35) !important;
+  box-shadow:
+    0 18px 42px rgba(0,0,0,0.28),
+    inset 0 1px 0 rgba(255,255,255,0.88) !important;
+}
+
+/* Stop the lower metrics from fighting the legend */
+.shs-mapbox-v7d-command-metrics {
+  bottom: 86px !important;
+}
+
+/* Give the map frame a cleaner premium bevel */
+.shs-mapbox-stage::before {
+  border-radius: inherit !important;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.28), transparent 18%, transparent 78%, rgba(255,255,255,0.10)) !important;
+  opacity: 0.74 !important;
+}
+
+/* Keep the tour bar from visually crushing the bottom of the map */
+.shs-command-tour-launcher,
+.shs-hub-tour-launcher,
+.shs-mapbox-tour-launcher {
+  opacity: 0.92 !important;
+}
+
+/* Laptop safety */
+@media (max-width: 1480px) {
+  .shs-mapbox-v7d-command-metrics {
+    bottom: 82px !important;
+  }
+
+  .shs-mapbox-layer-card {
+    max-width: 286px !important;
+  }
+}

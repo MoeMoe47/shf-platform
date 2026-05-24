@@ -384,15 +384,15 @@ function applySHSBaseMapTone(map, activeLayer) {
       fillOpacity: 0.78,
     },
     community: {
-      background: "#b7daf0",
-      land: "#b7daf0",
-      water: "#9bd4ee",
-      landuse: "rgba(96, 165, 250, 0.30)",
-      structure: "rgba(56, 189, 248, 0.22)",
-      road: "rgba(59, 130, 246, 0.72)",
+      background: "#0b3f63",
+      land: "#0b3f63",
+      water: "#0b4a72",
+      landuse: "rgba(37, 99, 235, 0.28)",
+      structure: "rgba(96, 165, 250, 0.18)",
+      road: "rgba(96, 165, 250, 0.72)",
       roadOpacity: 0.9,
-      boundary: "rgba(37, 99, 235, 0.38)",
-      label: "#1e3a5f",
+      boundary: "rgba(147, 197, 253, 0.40)",
+      label: "#dbeafe",
       labelHalo: "rgba(224, 242, 254, 0.95)",
       labelOpacity: 0.92,
       fillOpacity: 0.82,
@@ -401,15 +401,15 @@ function applySHSBaseMapTone(map, activeLayer) {
       waterOpacity: 0.86,
     },
     location: {
-      background: "#b7daf0",
-      land: "#b7daf0",
-      water: "#9bd4ee",
-      landuse: "rgba(96, 165, 250, 0.30)",
-      structure: "rgba(56, 189, 248, 0.22)",
-      road: "rgba(59, 130, 246, 0.72)",
+      background: "#0b3f63",
+      land: "#0b3f63",
+      water: "#0b4a72",
+      landuse: "rgba(37, 99, 235, 0.28)",
+      structure: "rgba(96, 165, 250, 0.18)",
+      road: "rgba(96, 165, 250, 0.72)",
       roadOpacity: 0.9,
-      boundary: "rgba(37, 99, 235, 0.38)",
-      label: "#1e3a5f",
+      boundary: "rgba(147, 197, 253, 0.40)",
+      label: "#dbeafe",
       labelHalo: "rgba(224, 242, 254, 0.95)",
       labelOpacity: 0.92,
       fillOpacity: 0.82,
@@ -593,12 +593,166 @@ function applySHSCommunityLocationVisualOverrides(map, activeLayer) {
 }
 
 
+
+
+
+
+
+const SHS_MAP_SURFACE_THEME = {
+  // This is the single source of truth for the Community + Location map surface.
+  // Goal: light blue command-map surface, not gray, not purple, not white.
+  background: "#d9f3ff",
+  land: "#c7ecfb",
+  landAlt: "#b7e2f5",
+  water: "#9ed8f2",
+  building: "#b7dded",
+  road: "rgba(37, 99, 235, 0.54)",
+  roadStrong: "rgba(30, 64, 175, 0.68)",
+  boundary: "rgba(14, 116, 144, 0.36)",
+  label: "#12324a",
+  labelHalo: "rgba(240, 249, 255, 0.94)",
+  countyFill: "rgba(219, 234, 254, 0.18)",
+  countyLine: "rgba(56, 189, 248, 0.48)",
+  communityFillOpacity: 0.055,
+  communityLineOpacity: 0.72,
+  selectedFillOpacity: 0.055,
+  selectedLineOpacity: 0.38,
+  connectionLine: "#0ea5e9"
+};
+
+function applySHSUnifiedMapSurfaceTheme(map, activeLayer) {
+  if (!map || !map.getStyle || !map.setPaintProperty) return;
+  if (!["community", "location"].includes(activeLayer)) return;
+
+  let style;
+  try {
+    if (map.isStyleLoaded && !map.isStyleLoaded()) return;
+    style = map.getStyle();
+  } catch {
+    return;
+  }
+
+  const layers = Array.isArray(style?.layers) ? style.layers : [];
+  const t = SHS_MAP_SURFACE_THEME;
+
+  const safePaint = (layerId, property, value) => {
+    try {
+      if (!map.getLayer || !map.getLayer(layerId)) return;
+      map.setPaintProperty(layerId, property, value);
+    } catch {
+      // Cosmetic only. Never break the map because a style layer does not support a paint key.
+    }
+  };
+
+  const has = (layer, words) => {
+    const haystack = `${layer.id || ""} ${layer["source-layer"] || ""}`.toLowerCase();
+    return words.some((word) => haystack.includes(word));
+  };
+
+  layers.forEach((layer) => {
+    if (!layer || !layer.id) return;
+
+    if (layer.type === "background") {
+      safePaint(layer.id, "background-color", t.background);
+      safePaint(layer.id, "background-opacity", 1);
+      return;
+    }
+
+    if (layer.type === "fill") {
+      if (has(layer, ["water", "waterway"])) {
+        safePaint(layer.id, "fill-color", t.water);
+        safePaint(layer.id, "fill-opacity", 0.94);
+        return;
+      }
+
+      if (has(layer, ["building", "structure", "aeroway"])) {
+        safePaint(layer.id, "fill-color", t.building);
+        safePaint(layer.id, "fill-opacity", 0.32);
+        return;
+      }
+
+      if (has(layer, ["park", "national-park", "landuse"])) {
+        safePaint(layer.id, "fill-color", t.landAlt);
+        safePaint(layer.id, "fill-opacity", 0.76);
+        return;
+      }
+
+      if (has(layer, ["land"])) {
+        safePaint(layer.id, "fill-color", t.land);
+        safePaint(layer.id, "fill-opacity", 0.96);
+        return;
+      }
+
+      safePaint(layer.id, "fill-color", t.land);
+      safePaint(layer.id, "fill-opacity", 0.82);
+    }
+
+    if (layer.type === "line") {
+      if (has(layer, ["motorway", "primary", "secondary", "tertiary"])) {
+        safePaint(layer.id, "line-color", t.roadStrong);
+        safePaint(layer.id, "line-opacity", 0.76);
+        return;
+      }
+
+      if (has(layer, ["road", "street", "bridge", "tunnel", "path"])) {
+        safePaint(layer.id, "line-color", t.road);
+        safePaint(layer.id, "line-opacity", 0.68);
+        return;
+      }
+
+      if (has(layer, ["admin", "boundary"])) {
+        safePaint(layer.id, "line-color", t.boundary);
+        safePaint(layer.id, "line-opacity", 0.58);
+      }
+    }
+
+    if (layer.type === "symbol") {
+      const layout = layer.layout || {};
+      if (layout["text-field"] || has(layer, ["label"])) {
+        safePaint(layer.id, "text-color", t.label);
+        safePaint(layer.id, "text-halo-color", t.labelHalo);
+        safePaint(layer.id, "text-halo-width", 1.05);
+        safePaint(layer.id, "text-opacity", 0.86);
+      }
+    }
+  });
+
+  // SHS custom overlays: keep the operational shapes, but stop them from muddying the base.
+  safePaint("shs-ohio-county-fill", "fill-color", t.countyFill);
+  safePaint("shs-ohio-county-fill", "fill-opacity", activeLayer === "community" ? 0.14 : 0.10);
+  safePaint("shs-ohio-county-line", "line-color", t.countyLine);
+  safePaint("shs-ohio-county-line", "line-opacity", 0.58);
+
+  safePaint("shs-selected-county-fill", "fill-opacity", t.selectedFillOpacity);
+  safePaint("shs-selected-county-line", "line-opacity", t.selectedLineOpacity);
+
+  safePaint("shs-community-fill", "fill-opacity", activeLayer === "community" ? t.communityFillOpacity : 0.04);
+  safePaint("shs-community-line", "line-opacity", activeLayer === "community" ? t.communityLineOpacity : 0.56);
+
+  safePaint("shs-connection-line", "line-color", t.connectionLine);
+  safePaint("shs-connection-line", "line-opacity", 0.9);
+
+  try {
+    if (map.setFog) {
+      map.setFog({
+        color: "rgba(224, 242, 254, 0.66)",
+        "high-color": "rgba(186, 230, 253, 0.56)",
+        "space-color": "rgba(2, 6, 23, 0.18)",
+        "horizon-blend": 0.02
+      });
+    }
+  } catch {
+    // Cosmetic only.
+  }
+}
+
 function applySHSHardLayerPaint(map, activeLayer) {
   if (!map) return;
 
   const profile = SHS_LAYER_PAINT_PROFILES[activeLayer] || SHS_LAYER_PAINT_PROFILES.state;
 
   applySHSBaseMapTone(map, activeLayer);
+  applySHSUnifiedMapSurfaceTheme(map, activeLayer);
   applySHSMapFog(map, activeLayer);
 
   const countyFillLayers = [
@@ -1039,7 +1193,7 @@ function boostMapboxRoadAndLabelReadability(map, activeLayer) {
       }
 
       if (isLabel) {
-        map.setPaintProperty(id, "text-color", "#1e3a5f");
+        map.setPaintProperty(id, "text-color", "#dbeafe");
         map.setPaintProperty(id, "text-halo-color", "rgba(224, 242, 254, 0.95)");
         map.setPaintProperty(id, "text-halo-width", 1.65);
         map.setPaintProperty(id, "text-halo-blur", 0.18);
@@ -1115,9 +1269,9 @@ function applyRoadReadability(map, activeLayer) {
     )
     .map((layer) => layer.id);
 
-  const roadLineColor = activeLayer === "location" ? "rgba(59, 130, 246, 0.78)" : "rgba(59, 130, 246, 0.78)";
-  const roadCasingColor = "rgba(37, 99, 235, 0.34)";
-  const roadLabelColor = "#1e3a5f";
+  const roadLineColor = activeLayer === "location" ? "rgba(147, 197, 253, 0.82)" : "rgba(147, 197, 253, 0.82)";
+  const roadCasingColor = "rgba(96, 165, 250, 0.34)";
+  const roadLabelColor = "#dbeafe";
   const roadHaloColor = "rgba(224, 242, 254, 0.95)";
 
   roadLineLayerIds.forEach((id) => {
@@ -1704,7 +1858,7 @@ function buildShsMapEvidenceImage(label, accent = "#38bdf8") {
       <rect x="42" y="42" width="232" height="48" rx="24" fill="#020817" opacity=".76"/>
       <text x="66" y="73" fill="#fbbf24" font-family="Arial" font-size="18" font-weight="800" letter-spacing="4">VERIFIED IMAGE</text>
       <text x="48" y="354" fill="#f8fafc" font-family="Arial" font-size="34" font-weight="900">${safeLabel}</text>
-      <text x="50" y="386" fill="#9bd4ee" font-family="Arial" font-size="18" font-weight="700">SHS operational evidence capture</text>
+      <text x="50" y="386" fill="#0b4a72" font-family="Arial" font-size="18" font-weight="700">SHS operational evidence capture</text>
     </svg>
   `;
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
@@ -1984,7 +2138,7 @@ const [selectedCountyName, setSelectedCountyName] = useState("Franklin");
 
     mapRef.current = new mapboxgl.Map({
       container: mapContainerRef.current,
-      style: "mapbox://styles/mapbox/light-v11",
+      style: "mapbox://styles/mapbox/dark-v11",
       center: LAYER_STEPS[0].center,
       zoom: LAYER_STEPS[0].zoom,
       pitch: LAYER_STEPS[0].pitch,
@@ -2337,7 +2491,7 @@ const [selectedCountyName, setSelectedCountyName] = useState("Franklin");
                     borderRadius: "999px",
                     background: "rgba(14,165,233,.13)",
                     border: "1px solid rgba(56,189,248,.22)",
-                    color: "#9bd4ee",
+                    color: "#0b4a72",
                     fontSize: "10px",
                     fontWeight: 900,
                     letterSpacing: ".12em",
@@ -2728,7 +2882,7 @@ const [selectedCountyName, setSelectedCountyName] = useState("Franklin");
                       ? {
                           top: "#67e8f9",
                           mid: "#06b6d4",
-                          bottom: "#1e3a5f",
+                          bottom: "#dbeafe",
                           glow: "rgba(34, 211, 238, 0.58)",
                         }
                       : pin.type === "live_stream"

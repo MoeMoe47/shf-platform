@@ -1670,11 +1670,11 @@
 
 @keyframes shsHardGuidedFocusPulse {
   from {
-    filter: none;
+    filter: brightness(1);
   }
 
   to {
-    filter: none;
+    filter: brightness(1.22);
   }
 }
 
@@ -3245,7 +3245,10 @@ button:has(+ .utc-tour-launcher),
 
 .shs-mapbox-canvas .mapboxgl-map,
 .shs-mapbox-canvas canvas {
-  filter: none;
+  filter:
+    saturate(0.78)
+    contrast(0.94)
+    brightness(1.08) !important;
 }
 
 /* HUD on white map: navy glass cards */
@@ -3347,7 +3350,7 @@ button:has(+ .utc-tour-launcher),
 }
 
 .shs-mapbox-stage .mapboxgl-ctrl button {
-  filter: none;
+  filter: saturate(0.8) contrast(1.05) !important;
 }
 
 /* Missing token fallback should also be white/navy */
@@ -3667,7 +3670,10 @@ button:has(+ .utc-tour-launcher),
 /* Darken the light map just enough so roads/borders read better */
 .shs-mapbox-canvas .mapboxgl-map,
 .shs-mapbox-canvas canvas {
-  filter: none;
+  filter:
+    saturate(0.88)
+    contrast(1.04)
+    brightness(1.02) !important;
 }
 
 /* Make the HUD feel pinned to the map, not floating randomly */
@@ -4399,7 +4405,7 @@ button.utc-tour-launcher,
   pointer-events: none !important;
   background:
     linear-gradient(135deg, rgba(96, 165, 250, 0.34), transparent 38%, rgba(34, 211, 238, 0.18)) !important;
-  opacity: 0.04 !important;
+  opacity: 0.68 !important;
   z-index: -1 !important;
 }
 
@@ -4517,7 +4523,7 @@ button.utc-tour-launcher,
     radial-gradient(circle at 48% 52%, rgba(59, 130, 246, 0.08), transparent 34%),
     radial-gradient(circle at 56% 58%, rgba(249, 115, 22, 0.06), transparent 28%),
     linear-gradient(180deg, rgba(255,255,255,0.02), rgba(15, 35, 70, 0.04)) !important;
-  mix-blend-mode: normal;
+  mix-blend-mode: multiply !important;
 }
 
 /* Make the map edge feel like a protected command viewport */
@@ -5071,7 +5077,10 @@ button.utc-tour-launcher,
 /* Make the Mapbox canvas itself brighter and less washed out */
 .shs-mapbox-canvas .mapboxgl-map,
 .shs-mapbox-canvas canvas {
-  filter: none;
+  filter:
+    saturate(0.94)
+    contrast(1.08)
+    brightness(1.02) !important;
 }
 
 /* Keep Start Tour from covering the bottom of the viewport */
@@ -5178,7 +5187,7 @@ button.utc-tour-launcher,
 .shs-mapbox-atmosphere {
   z-index: 2 !important;
   opacity: 0.9 !important;
-  mix-blend-mode: normal;
+  mix-blend-mode: multiply !important;
   transition: background 260ms ease, opacity 260ms ease !important;
 }
 
@@ -5279,10 +5288,10 @@ button.utc-tour-launcher,
    ------------------------------ */
 .shs-mapbox-cinematic--community .shs-mapbox-atmosphere {
   background:
-    radial-gradient(circle at 26% 24%, rgba(186, 230, 253, 0.18), transparent 34%),
-    radial-gradient(circle at 72% 68%, rgba(56, 189, 248, 0.12), transparent 42%),
-    linear-gradient(135deg, rgba(224, 242, 254, 0.08), rgba(14, 165, 233, 0.06)) !important;
-  opacity: 0.55 !important;
+    radial-gradient(circle at 34% 62%, rgba(16, 185, 129, 0.18), transparent 32%),
+    radial-gradient(circle at 62% 44%, rgba(249, 115, 22, 0.12), transparent 28%),
+    radial-gradient(circle at 78% 58%, rgba(139, 92, 246, 0.10), transparent 24%),
+    linear-gradient(135deg, rgba(16, 185, 129, 0.09), transparent 56%) !important;
 }
 
 .shs-mapbox-cinematic--community .shs-mapbox-stage {
@@ -5299,10 +5308,10 @@ button.utc-tour-launcher,
    ------------------------------ */
 .shs-mapbox-cinematic--location .shs-mapbox-atmosphere {
   background:
-    radial-gradient(circle at 28% 22%, rgba(224, 242, 254, 0.22), transparent 34%),
-    radial-gradient(circle at 72% 72%, rgba(56, 189, 248, 0.14), transparent 42%),
-    linear-gradient(135deg, rgba(186, 230, 253, 0.10), rgba(14, 165, 233, 0.06)) !important;
-  opacity: 0.50 !important;
+    radial-gradient(circle at 56% 54%, rgba(139, 92, 246, 0.18), transparent 34%),
+    radial-gradient(circle at 42% 46%, rgba(14, 165, 233, 0.12), transparent 28%),
+    radial-gradient(circle at 70% 62%, rgba(249, 115, 22, 0.08), transparent 24%),
+    linear-gradient(135deg, rgba(139, 92, 246, 0.10), transparent 58%) !important;
 }
 
 .shs-mapbox-cinematic--location .shs-mapbox-stage {
@@ -5488,12 +5497,15 @@ button.utc-tour-launcher,
 }
 
 .shs-mapbox-cinematic--state .shs-mapbox-canvas {
-  filter: none;
+  filter:
+    brightness(1.05)
+    contrast(1.12)
+    saturate(0.86) !important;
 }
 
 .shs-mapbox-cinematic--state .shs-mapbox-atmosphere {
   opacity: 1 !important;
-  mix-blend-mode: normal;
+  mix-blend-mode: soft-light !important;
   background:
     radial-gradient(circle at 54% 52%, rgba(191, 219, 254, 0.34), transparent 36%),
     radial-gradient(circle at 52% 48%, rgba(56, 189, 248, 0.18), transparent 50%),
@@ -5515,12 +5527,15 @@ button.utc-tour-launcher,
 }
 
 .shs-mapbox-cinematic--region .shs-mapbox-canvas {
-  filter: none;
+  filter:
+    brightness(0.9)
+    contrast(1.18)
+    saturate(1.08) !important;
 }
 
 .shs-mapbox-cinematic--region .shs-mapbox-atmosphere {
   opacity: 1 !important;
-  mix-blend-mode: normal;
+  mix-blend-mode: screen !important;
   background:
     radial-gradient(circle at 50% 50%, rgba(59,130,246,0.34), transparent 34%),
     radial-gradient(circle at 52% 50%, rgba(139,92,246,0.18), transparent 28%),
@@ -5657,20 +5672,27 @@ button.utc-tour-launcher,
 /* Force State to look like a bright Ohio command board */
 .shs-mapbox-cinematic--state .shs-mapbox-canvas,
 .shs-mapbox-mode--state .shs-mapbox-canvas {
-  filter: none;
+  filter:
+    brightness(1.08)
+    contrast(1.24)
+    saturate(0.78) !important;
 }
 
 /* Force Region to look like darker blue cluster intelligence */
 .shs-mapbox-cinematic--region .shs-mapbox-canvas,
 .shs-mapbox-mode--region .shs-mapbox-canvas {
-  filter: none;
+  filter:
+    brightness(0.62)
+    contrast(1.36)
+    saturate(1.25)
+    hue-rotate(8deg) !important;
 }
 
 /* Strong dark/blue cinematic wash */
 .shs-mapbox-cinematic--state .shs-mapbox-atmosphere,
 .shs-mapbox-mode--state .shs-mapbox-atmosphere {
   opacity: 1 !important;
-  mix-blend-mode: normal;
+  mix-blend-mode: multiply !important;
   background:
     linear-gradient(90deg, rgba(2,8,23,0.64), transparent 16%, transparent 82%, rgba(2,8,23,0.74)),
     radial-gradient(circle at 52% 48%, rgba(191,219,254,0.22), transparent 38%),
@@ -5680,7 +5702,7 @@ button.utc-tour-launcher,
 .shs-mapbox-cinematic--region .shs-mapbox-atmosphere,
 .shs-mapbox-mode--region .shs-mapbox-atmosphere {
   opacity: 1 !important;
-  mix-blend-mode: normal;
+  mix-blend-mode: screen !important;
   background:
     radial-gradient(circle at 50% 50%, rgba(59,130,246,0.46), transparent 32%),
     radial-gradient(circle at 50% 50%, rgba(139,92,246,0.28), transparent 24%),
@@ -5963,7 +5985,10 @@ button.utc-tour-launcher,
 
 .shs-mapbox-cinematic--community .shs-mapbox-canvas,
 .shs-mapbox-mode--community .shs-mapbox-canvas {
-  filter: none;
+  filter:
+    brightness(0.98)
+    contrast(1.24)
+    saturate(1.18) !important;
 }
 
 /* Location should feel more like forensic proof mode */
@@ -5983,7 +6008,10 @@ button.utc-tour-launcher,
 
 .shs-mapbox-cinematic--location .shs-mapbox-canvas,
 .shs-mapbox-mode--location .shs-mapbox-canvas {
-  filter: none;
+  filter:
+    brightness(0.93)
+    contrast(1.28)
+    saturate(1.18) !important;
 }
 
 /* Layer tabs should show teal/purple identities */
@@ -6066,7 +6094,7 @@ button.utc-tour-launcher,
       rgba(15,35,70,0.70) 51px 60px
     ) !important;
   border-radius: 4px 4px 0 0 !important;
-  opacity: 0.04 !important;
+  opacity: 0.75 !important;
 }
 
 .shs-mapbox-media-thumb--skyline span {
@@ -6248,7 +6276,7 @@ button.utc-tour-launcher,
       rgba(15,35,70,0.78) 55px 70px
     ) !important;
   border-radius: 5px !important;
-  opacity: 0.04 !important;
+  opacity: 0.72 !important;
 }
 
 .shs-mapbox-site-preview__image--v7c span {
@@ -6441,7 +6469,7 @@ button.utc-tour-launcher,
   box-shadow:
     inset 0 0 90px rgba(255,255,255,0.08),
     0 0 90px rgba(56,189,248,0.20) !important;
-  mix-blend-mode: normal;
+  mix-blend-mode: screen !important;
 }
 
 .shs-mapbox-cinematic--state .shs-mapbox-v7d-state-glow,
@@ -6590,7 +6618,10 @@ button.utc-tour-launcher,
 
 .shs-mapbox-cinematic--state .shs-mapbox-canvas,
 .shs-mapbox-mode--state .shs-mapbox-canvas {
-  filter: none;
+  filter:
+    brightness(1.14)
+    contrast(1.22)
+    saturate(0.78) !important;
 }
 
 /* Stronger Region View: more like the locked electric regional cluster */
@@ -6609,7 +6640,11 @@ button.utc-tour-launcher,
 
 .shs-mapbox-cinematic--region .shs-mapbox-canvas,
 .shs-mapbox-mode--region .shs-mapbox-canvas {
-  filter: none;
+  filter:
+    brightness(0.56)
+    contrast(1.46)
+    saturate(1.34)
+    hue-rotate(8deg) !important;
 }
 
 /* Stronger County View: less pale, more tactical */
@@ -6628,7 +6663,10 @@ button.utc-tour-launcher,
 
 .shs-mapbox-cinematic--county .shs-mapbox-canvas,
 .shs-mapbox-mode--county .shs-mapbox-canvas {
-  filter: none;
+  filter:
+    brightness(0.68)
+    contrast(1.42)
+    saturate(1.16) !important;
 }
 
 /* Dossier cards: slimmer, cleaner, less bulky */
@@ -6805,13 +6843,16 @@ button.utc-tour-launcher,
 
 .shs-mapbox-cinematic--state .shs-mapbox-canvas,
 .shs-mapbox-mode--state .shs-mapbox-canvas {
-  filter: none;
+  filter:
+    brightness(1.05)
+    contrast(1.34)
+    saturate(0.72) !important;
 }
 
 .shs-mapbox-cinematic--state .shs-mapbox-atmosphere,
 .shs-mapbox-mode--state .shs-mapbox-atmosphere {
   opacity: 0.92 !important;
-  mix-blend-mode: normal;
+  mix-blend-mode: multiply !important;
   background:
     linear-gradient(90deg, rgba(2, 8, 23, 0.68), transparent 18%, transparent 82%, rgba(2, 8, 23, 0.76)),
     radial-gradient(circle at 50% 48%, rgba(255, 255, 255, 0.18), transparent 28%),
@@ -6837,13 +6878,17 @@ button.utc-tour-launcher,
 
 .shs-mapbox-cinematic--region .shs-mapbox-canvas,
 .shs-mapbox-mode--region .shs-mapbox-canvas {
-  filter: none;
+  filter:
+    brightness(0.50)
+    contrast(1.58)
+    saturate(1.42)
+    hue-rotate(10deg) !important;
 }
 
 .shs-mapbox-cinematic--region .shs-mapbox-atmosphere,
 .shs-mapbox-mode--region .shs-mapbox-atmosphere {
   opacity: 1 !important;
-  mix-blend-mode: normal;
+  mix-blend-mode: screen !important;
   background:
     radial-gradient(circle at 50% 50%, rgba(96, 165, 250, 0.48), transparent 28%),
     radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.28), transparent 43%),
@@ -6890,13 +6935,16 @@ button.utc-tour-launcher,
 
 .shs-mapbox-cinematic--county .shs-mapbox-canvas,
 .shs-mapbox-mode--county .shs-mapbox-canvas {
-  filter: none;
+  filter:
+    brightness(0.56)
+    contrast(1.58)
+    saturate(1.28) !important;
 }
 
 .shs-mapbox-cinematic--county .shs-mapbox-atmosphere,
 .shs-mapbox-mode--county .shs-mapbox-atmosphere {
   opacity: 1 !important;
-  mix-blend-mode: normal;
+  mix-blend-mode: screen !important;
   background:
     radial-gradient(circle at 47% 50%, rgba(249, 115, 22, 0.48), transparent 28%),
     radial-gradient(circle at 47% 50%, rgba(251, 191, 36, 0.20), transparent 46%),
@@ -7066,13 +7114,16 @@ button.utc-tour-launcher,
 
 .shs-mapbox-cinematic--state .shs-mapbox-canvas,
 .shs-mapbox-mode--state .shs-mapbox-canvas {
-  filter: none;
+  filter:
+    brightness(0.96)
+    contrast(1.42)
+    saturate(0.78) !important;
 }
 
 .shs-mapbox-cinematic--state .shs-mapbox-atmosphere,
 .shs-mapbox-mode--state .shs-mapbox-atmosphere {
   opacity: 0.98 !important;
-  mix-blend-mode: normal;
+  mix-blend-mode: multiply !important;
   background:
     linear-gradient(90deg, rgba(2, 8, 23, 0.78), transparent 20%, transparent 74%, rgba(2, 8, 23, 0.80)),
     radial-gradient(circle at 52% 50%, rgba(255, 255, 255, 0.10), transparent 24%),
@@ -7082,7 +7133,7 @@ button.utc-tour-launcher,
 .shs-mapbox-cinematic--state .shs-mapbox-v7d-state-glow,
 .shs-mapbox-mode--state .shs-mapbox-v7d-state-glow {
   opacity: 0.56 !important;
-  mix-blend-mode: normal;
+  mix-blend-mode: soft-light !important;
 }
 
 
@@ -7103,12 +7154,16 @@ button.utc-tour-launcher,
 
 .shs-mapbox-cinematic--region .shs-mapbox-canvas,
 .shs-mapbox-mode--region .shs-mapbox-canvas {
-  filter: none;
+  filter:
+    brightness(0.54)
+    contrast(1.62)
+    saturate(1.44)
+    hue-rotate(9deg) !important;
 }
 
 .shs-mapbox-cinematic--region .shs-mapbox-v7d-region-network::before,
 .shs-mapbox-mode--region .shs-mapbox-v7d-region-network::before {
-  opacity: 0.04 !important;
+  opacity: 0.92 !important;
   width: 190px !important;
   height: 190px !important;
 }
@@ -7141,13 +7196,16 @@ button.utc-tour-launcher,
 
 .shs-mapbox-cinematic--county .shs-mapbox-canvas,
 .shs-mapbox-mode--county .shs-mapbox-canvas {
-  filter: none;
+  filter:
+    brightness(0.76)
+    contrast(1.48)
+    saturate(1.18) !important;
 }
 
 .shs-mapbox-cinematic--county .shs-mapbox-atmosphere,
 .shs-mapbox-mode--county .shs-mapbox-atmosphere {
   opacity: 0.86 !important;
-  mix-blend-mode: normal;
+  mix-blend-mode: screen !important;
   background:
     radial-gradient(circle at 48% 50%, rgba(249, 115, 22, 0.36), transparent 26%),
     radial-gradient(circle at 48% 50%, rgba(251, 191, 36, 0.14), transparent 44%),
@@ -7187,7 +7245,10 @@ button.utc-tour-launcher,
 
 .shs-mapbox-cinematic--community .shs-mapbox-canvas,
 .shs-mapbox-mode--community .shs-mapbox-canvas {
-  filter: none;
+  filter:
+    brightness(0.88)
+    contrast(1.34)
+    saturate(1.20) !important;
 }
 
 .shs-mapbox-community-media--v7c .shs-mapbox-media-card,
@@ -7220,7 +7281,10 @@ button.utc-tour-launcher,
 
 .shs-mapbox-cinematic--location .shs-mapbox-canvas,
 .shs-mapbox-mode--location .shs-mapbox-canvas {
-  filter: none;
+  filter:
+    brightness(0.88)
+    contrast(1.38)
+    saturate(1.22) !important;
 }
 
 .shs-mapbox-site-preview--v7c {
@@ -7263,7 +7327,7 @@ button.utc-tour-launcher,
   border-radius: inherit !important;
   background:
     linear-gradient(135deg, rgba(255,255,255,0.28), transparent 18%, transparent 78%, rgba(255,255,255,0.10)) !important;
-  opacity: 0.04 !important;
+  opacity: 0.74 !important;
 }
 
 /* Keep the tour bar from visually crushing the bottom of the map */
@@ -7284,2492 +7348,64 @@ button.utc-tour-launcher,
   }
 }
 
-/* ==========================================================
-   SHS Mapbox V7G-1 — State View Mock-Match Premium Pass
-   Focus: State View only.
-   Goal: make Ohio feel like a premium command-intelligence object.
-   Restore point before this:
-   shs-mapbox-v7f-layer-cinematic-correction
-   ========================================================== */
+/* =========================================================
+   SHS Unified Truth Map — CLEAN FINAL LIGHT BLUE SURFACE
+   Single final CSS layer. Do not add more map-surface color
+   blocks below this.
+   ========================================================= */
 
-
-/* ---------- STATE STAGE: darker intelligence board around Ohio ---------- */
-
-.shs-mapbox-cinematic--state .shs-mapbox-stage,
-.shs-mapbox-mode--state .shs-mapbox-stage {
-  border-color: rgba(125, 211, 252, 0.92) !important;
-  background:
-    radial-gradient(circle at 52% 49%, rgba(241, 245, 249, 0.56), transparent 27%),
-    radial-gradient(circle at 52% 49%, rgba(56, 189, 248, 0.22), transparent 44%),
-    radial-gradient(circle at 52% 49%, rgba(15, 23, 42, 0.10), transparent 60%),
-    linear-gradient(90deg, rgba(2, 8, 23, 0.82), rgba(15, 23, 42, 0.30) 18%, rgba(15, 23, 42, 0.18) 66%, rgba(2, 8, 23, 0.86)),
-    linear-gradient(180deg, #020817 0%, #010612 100%) !important;
-  box-shadow:
-    0 46px 160px rgba(0, 0, 0, 0.76),
-    0 0 130px rgba(56, 189, 248, 0.30),
-    0 0 34px rgba(147, 197, 253, 0.28),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.46),
-    inset 0 0 150px rgba(2, 8, 23, 0.38) !important;
-  overflow: hidden !important;
+.shs-mapbox-cinematic--community .mapboxgl-canvas,
+.shs-mapbox-mode--community .mapboxgl-canvas,
+.shs-mapbox-cinematic--location .mapboxgl-canvas,
+.shs-mapbox-mode--location .mapboxgl-canvas {
+  filter: brightness(1.06) contrast(1.04) saturate(1.20) hue-rotate(0deg) !important;
 }
 
-/* ---------- STATE MAP CANVAS: sharper county lines and less flat white ---------- */
-
-.shs-mapbox-cinematic--state .shs-mapbox-canvas,
-.shs-mapbox-mode--state .shs-mapbox-canvas {
-  filter: none;
-}
-
-/* ---------- STATE ATMOSPHERE: dark edge vignette with Ohio glow center ---------- */
-
-.shs-mapbox-cinematic--state .shs-mapbox-atmosphere,
-.shs-mapbox-mode--state .shs-mapbox-atmosphere {
-  opacity: 1 !important;
-  mix-blend-mode: normal;
-  background:
-    radial-gradient(circle at 52% 49%, rgba(255, 255, 255, 0.05), transparent 22%),
-    radial-gradient(circle at 52% 49%, rgba(56, 189, 248, 0.08), transparent 43%),
-    linear-gradient(90deg, rgba(2, 8, 23, 0.92), rgba(2, 8, 23, 0.26) 20%, transparent 48%, rgba(2, 8, 23, 0.30) 76%, rgba(2, 8, 23, 0.94)),
-    linear-gradient(180deg, rgba(2, 8, 23, 0.28), transparent 22%, transparent 72%, rgba(2, 8, 23, 0.48)) !important;
-}
-
-/* ---------- STATE HERO GLOW: make the Ohio operating picture feel intentional ---------- */
-
-.shs-mapbox-cinematic--state .shs-mapbox-v7d-state-glow,
-.shs-mapbox-mode--state .shs-mapbox-v7d-state-glow {
-  opacity: 0.84 !important;
-  mix-blend-mode: normal;
-  background:
-    radial-gradient(circle at 52% 49%, rgba(255, 255, 255, 0.42), transparent 18%),
-    radial-gradient(circle at 52% 49%, rgba(125, 211, 252, 0.24), transparent 34%),
-    radial-gradient(circle at 52% 49%, rgba(37, 99, 235, 0.18), transparent 54%) !important;
-  filter:
-    blur(0.2px)
-    drop-shadow(0 0 34px rgba(96, 165, 250, 0.32)) !important;
-}
-
-/* ---------- STATE LIGHT GRID: subtle institutional texture, not noisy ---------- */
-
-.shs-mapbox-cinematic--state .shs-mapbox-v7d-lightgrid,
-.shs-mapbox-mode--state .shs-mapbox-v7d-lightgrid {
-  opacity: 0.22 !important;
-  background-size: 42px 42px !important;
-  mask-image:
-    radial-gradient(circle at 52% 49%, black 0%, black 48%, transparent 76%) !important;
-  -webkit-mask-image:
-    radial-gradient(circle at 52% 49%, black 0%, black 48%, transparent 76%) !important;
-}
-
-/* ---------- STATE DOSSIER: premium command card treatment ---------- */
-
-.shs-mapbox-cinematic--state .shs-mapbox-layer-card,
-.shs-mapbox-mode--state .shs-mapbox-layer-card {
-  border-color: rgba(96, 165, 250, 0.56) !important;
-  background:
-    radial-gradient(circle at 0% 0%, rgba(96, 165, 250, 0.18), transparent 28%),
-    linear-gradient(180deg, rgba(9, 30, 66, 0.98), rgba(3, 10, 24, 0.98)) !important;
-  box-shadow:
-    0 34px 100px rgba(0, 0, 0, 0.64),
-    0 0 54px rgba(96, 165, 250, 0.24),
-    inset 0 1px 0 rgba(255, 255, 255, 0.16),
-    inset 0 0 42px rgba(15, 23, 42, 0.28) !important;
-}
-
-.shs-mapbox-cinematic--state .shs-mapbox-layer-card::before,
-.shs-mapbox-mode--state .shs-mapbox-layer-card::before {
-  opacity: 0.04 !important;
-}
-
-/* ---------- STATE SIGNAL DOTS: make operating signals feel alive ---------- */
-
-.shs-mapbox-cinematic--state .shs-mapbox-signal,
-.shs-mapbox-mode--state .shs-mapbox-signal {
-  transform: scale(1.08) !important;
-  box-shadow:
-    0 0 0 5px rgba(255,255,255,0.78),
-    0 0 22px currentColor,
-    0 0 46px currentColor !important;
-}
-
-.shs-mapbox-cinematic--state .shs-mapbox-signal::after,
-.shs-mapbox-mode--state .shs-mapbox-signal::after {
-  opacity: 0.04 !important;
-  animation: shsMapStateSignalPulse 2.8s ease-in-out infinite !important;
-}
-
-@keyframes shsMapStateSignalPulse {
-  0% {
-    transform: translate(-50%, -50%) scale(0.82);
-    opacity: 0.70;
-  }
-  60% {
-    transform: translate(-50%, -50%) scale(2.35);
-    opacity: 0.10;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(2.65);
-    opacity: 0;
-  }
-}
-
-/* ---------- STATE BOTTOM CHIPS: cleaner, less crowding ---------- */
-
-.shs-mapbox-cinematic--state .shs-mapbox-v7d-command-metrics,
-.shs-mapbox-mode--state .shs-mapbox-v7d-command-metrics {
-  bottom: 82px !important;
-  left: 20px !important;
-  gap: 8px !important;
-}
-
-.shs-mapbox-cinematic--state .shs-mapbox-v7d-command-metrics div,
-.shs-mapbox-mode--state .shs-mapbox-v7d-command-metrics div {
-  min-width: 118px !important;
-  padding: 9px 11px !important;
-  border-radius: 14px !important;
-  border-color: rgba(125, 211, 252, 0.24) !important;
-  background:
-    linear-gradient(180deg, rgba(8, 24, 52, 0.92), rgba(3, 10, 24, 0.92)) !important;
-  box-shadow:
-    0 18px 44px rgba(0, 0, 0, 0.44),
-    inset 0 1px 0 rgba(255,255,255,0.10) !important;
-}
-
-.shs-mapbox-cinematic--state .shs-mapbox-v7d-command-metrics span,
-.shs-mapbox-mode--state .shs-mapbox-v7d-command-metrics span {
-  color: rgba(191, 219, 254, 0.86) !important;
-}
-
-.shs-mapbox-cinematic--state .shs-mapbox-v7d-command-metrics strong,
-.shs-mapbox-mode--state .shs-mapbox-v7d-command-metrics strong {
-  color: rgba(255, 255, 255, 0.96) !important;
-}
-
-/* ---------- STATE LEGEND: keep readable but lighter ---------- */
-
-.shs-mapbox-cinematic--state .shs-mapbox-legend,
-.shs-mapbox-mode--state .shs-mapbox-legend {
-  background:
-    linear-gradient(180deg, rgba(248, 250, 252, 0.90), rgba(226, 232, 240, 0.84)) !important;
-  border-color: rgba(147, 197, 253, 0.44) !important;
-  box-shadow:
-    0 18px 42px rgba(0, 0, 0, 0.30),
-    0 0 30px rgba(96, 165, 250, 0.14),
-    inset 0 1px 0 rgba(255,255,255,0.92) !important;
-}
-
-/* ---------- STATE HUD: premium but smaller ---------- */
-
-.shs-mapbox-cinematic--state .shs-mapbox-hud div,
-.shs-mapbox-mode--state .shs-mapbox-hud div {
-  background:
-    linear-gradient(180deg, rgba(248, 250, 252, 0.94), rgba(226, 232, 240, 0.90)) !important;
-  border-color: rgba(147, 197, 253, 0.45) !important;
-  box-shadow:
-    0 14px 34px rgba(15, 23, 42, 0.20),
-    inset 0 1px 0 rgba(255,255,255,0.92) !important;
-}
-
-/* ---------- STATE BUTTON ACTIVE: more confident state identity ---------- */
-
-.shs-mapbox-cinematic--state .shs-mapbox-layer-tab.is-active,
-.shs-mapbox-mode--state .shs-mapbox-layer-tab.is-active {
-  background:
-    radial-gradient(circle at 50% 0%, rgba(255,255,255,0.28), transparent 34%),
-    linear-gradient(180deg, #3b82f6, #1d4ed8) !important;
-  border-color: rgba(147, 197, 253, 0.86) !important;
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.20),
-    0 0 24px rgba(59,130,246,0.72),
-    0 12px 30px rgba(37,99,235,0.36),
-    inset 0 1px 0 rgba(255,255,255,0.30) !important;
-}
-
-/* ---------- Laptop safety ---------- */
-
-@media (max-width: 1480px) {
-  .shs-mapbox-cinematic--state .shs-mapbox-v7d-command-metrics,
-  .shs-mapbox-mode--state .shs-mapbox-v7d-command-metrics {
-    bottom: 80px !important;
-    left: 18px !important;
-  }
-
-  .shs-mapbox-cinematic--state .shs-mapbox-v7d-command-metrics div,
-  .shs-mapbox-mode--state .shs-mapbox-v7d-command-metrics div {
-    min-width: 106px !important;
-    padding: 8px 10px !important;
-  }
-}
-
-/* ==========================================================
-   SHS Mapbox V7G-2 — State Hero Object Pass
-   Focus: State View only.
-   Goal: make Ohio feel like a glowing command object.
-   Restore point before this:
-   shs-mapbox-v7f-layer-cinematic-correction / V7G-1 working state
-   ========================================================== */
-
-
-/* STATE — stronger command-board frame */
-.shs-mapbox-cinematic--state .shs-mapbox-stage,
-.shs-mapbox-mode--state .shs-mapbox-stage {
-  border-color: rgba(125, 211, 252, 0.95) !important;
-  background:
-    radial-gradient(circle at 52% 49%, rgba(248, 250, 252, 0.64), transparent 24%),
-    radial-gradient(circle at 52% 49%, rgba(96, 165, 250, 0.30), transparent 39%),
-    radial-gradient(circle at 52% 49%, rgba(14, 165, 233, 0.14), transparent 54%),
-    linear-gradient(90deg, rgba(1, 7, 19, 0.96), rgba(3, 10, 24, 0.54) 19%, rgba(3, 10, 24, 0.20) 48%, rgba(3, 10, 24, 0.58) 77%, rgba(1, 7, 19, 0.98)),
-    linear-gradient(180deg, #020817 0%, #010611 100%) !important;
-  box-shadow:
-    0 52px 170px rgba(0, 0, 0, 0.82),
-    0 0 150px rgba(56, 189, 248, 0.34),
-    0 0 42px rgba(147, 197, 253, 0.28),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.44),
-    inset 0 0 160px rgba(2, 8, 23, 0.46) !important;
-}
-
-/* STATE — make the Mapbox layer less flat and sharper */
-.shs-mapbox-cinematic--state .shs-mapbox-canvas,
-.shs-mapbox-mode--state .shs-mapbox-canvas {
-  filter: none;
-}
-
-/* STATE — darken outside edges so Ohio feels separated */
-.shs-mapbox-cinematic--state .shs-mapbox-atmosphere,
-.shs-mapbox-mode--state .shs-mapbox-atmosphere {
-  opacity: 1 !important;
-  mix-blend-mode: normal;
-  background:
-    radial-gradient(circle at 52% 49%, rgba(255, 255, 255, 0.00) 0%, rgba(255, 255, 255, 0.00) 29%, rgba(2, 8, 23, 0.14) 47%, rgba(2, 8, 23, 0.78) 83%),
-    linear-gradient(90deg, rgba(2, 8, 23, 0.96), rgba(2, 8, 23, 0.36) 19%, transparent 46%, rgba(2, 8, 23, 0.36) 74%, rgba(2, 8, 23, 0.98)),
-    linear-gradient(180deg, rgba(2, 8, 23, 0.34), transparent 23%, transparent 70%, rgba(2, 8, 23, 0.56)) !important;
-}
-
-/* STATE — glowing Ohio hero center */
-.shs-mapbox-cinematic--state .shs-mapbox-v7d-state-glow,
-.shs-mapbox-mode--state .shs-mapbox-v7d-state-glow {
-  opacity: 0.98 !important;
-  mix-blend-mode: normal;
-  background:
-    radial-gradient(circle at 52% 49%, rgba(255, 255, 255, 0.48), transparent 15%),
-    radial-gradient(circle at 52% 49%, rgba(191, 219, 254, 0.34), transparent 28%),
-    radial-gradient(circle at 52% 49%, rgba(96, 165, 250, 0.28), transparent 42%),
-    radial-gradient(circle at 52% 49%, rgba(37, 99, 235, 0.20), transparent 58%) !important;
-  filter:
-    blur(0.1px)
-    drop-shadow(0 0 44px rgba(96, 165, 250, 0.42))
-    drop-shadow(0 0 90px rgba(14, 165, 233, 0.20)) !important;
-}
-
-/* STATE — add subtle scan texture over the hero object */
-.shs-mapbox-cinematic--state .shs-mapbox-v7d-lightgrid,
-.shs-mapbox-mode--state .shs-mapbox-v7d-lightgrid {
-  opacity: 0.30 !important;
-  background-image:
-    linear-gradient(rgba(147,197,253,0.18) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(147,197,253,0.16) 1px, transparent 1px) !important;
-  background-size: 38px 38px !important;
-  mask-image: radial-gradient(circle at 52% 49%, black 0%, black 49%, transparent 78%) !important;
-  -webkit-mask-image: radial-gradient(circle at 52% 49%, black 0%, black 49%, transparent 78%) !important;
-}
-
-/* STATE — dossier moved slightly so Ohio breathes */
-.shs-mapbox-cinematic--state .shs-mapbox-layer-card,
-.shs-mapbox-mode--state .shs-mapbox-layer-card {
-  right: 24px !important;
-  top: 30% !important;
-  max-width: 322px !important;
-  border-color: rgba(125, 211, 252, 0.64) !important;
-  background:
-    radial-gradient(circle at 0% 0%, rgba(96, 165, 250, 0.22), transparent 30%),
-    radial-gradient(circle at 100% 100%, rgba(14, 165, 233, 0.10), transparent 28%),
-    linear-gradient(180deg, rgba(10, 34, 72, 0.98), rgba(3, 10, 24, 0.99)) !important;
-  box-shadow:
-    0 34px 110px rgba(0, 0, 0, 0.68),
-    0 0 62px rgba(96, 165, 250, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    inset 0 0 46px rgba(15, 23, 42, 0.30) !important;
-}
-
-/* STATE — stronger signal presence */
-.shs-mapbox-cinematic--state .shs-mapbox-signal,
-.shs-mapbox-mode--state .shs-mapbox-signal {
-  width: 15px !important;
-  height: 15px !important;
-  transform: scale(1.12) !important;
-  box-shadow:
-    0 0 0 5px rgba(255, 255, 255, 0.82),
-    0 0 24px currentColor,
-    0 0 54px currentColor,
-    0 0 86px rgba(96, 165, 250, 0.18) !important;
-}
-
-/* STATE — pulse rings need to feel alive, not loud */
-.shs-mapbox-cinematic--state .shs-mapbox-signal::after,
-.shs-mapbox-mode--state .shs-mapbox-signal::after {
-  border-width: 2px !important;
-  opacity: 0.04 !important;
-}
-
-/* STATE — make bottom metrics cleaner and slightly lower */
-.shs-mapbox-cinematic--state .shs-mapbox-v7d-command-metrics,
-.shs-mapbox-mode--state .shs-mapbox-v7d-command-metrics {
-  bottom: 92px !important;
-  left: 22px !important;
-  gap: 8px !important;
-  z-index: 15 !important;
-}
-
-/* STATE — reduce heavy black chip feeling */
-.shs-mapbox-cinematic--state .shs-mapbox-v7d-command-metrics div,
-.shs-mapbox-mode--state .shs-mapbox-v7d-command-metrics div {
-  min-width: 122px !important;
-  border-radius: 14px !important;
-  border: 1px solid rgba(125, 211, 252, 0.28) !important;
-  background:
-    radial-gradient(circle at 0% 0%, rgba(96, 165, 250, 0.20), transparent 42%),
-    linear-gradient(180deg, rgba(8, 24, 52, 0.90), rgba(3, 10, 24, 0.88)) !important;
-  box-shadow:
-    0 18px 46px rgba(0, 0, 0, 0.42),
-    0 0 26px rgba(56, 189, 248, 0.10),
-    inset 0 1px 0 rgba(255,255,255,0.12) !important;
-}
-
-/* STATE — legend should not visually fight the chips */
-.shs-mapbox-cinematic--state .shs-mapbox-legend,
-.shs-mapbox-mode--state .shs-mapbox-legend {
-  bottom: 28px !important;
-  left: 22px !important;
-  background:
-    linear-gradient(180deg, rgba(248, 250, 252, 0.88), rgba(226, 232, 240, 0.82)) !important;
-  border: 1px solid rgba(147, 197, 253, 0.46) !important;
-  box-shadow:
-    0 16px 40px rgba(0, 0, 0, 0.30),
-    0 0 32px rgba(96, 165, 250, 0.14),
-    inset 0 1px 0 rgba(255,255,255,0.92) !important;
-}
-
-/* STATE — map border feels more premium */
-.shs-mapbox-cinematic--state .shs-mapbox-stage::before,
-.shs-mapbox-mode--state .shs-mapbox-stage::before {
-  opacity: 0.04 !important;
-  background:
-    linear-gradient(135deg, rgba(255,255,255,0.34), transparent 18%, transparent 74%, rgba(125,211,252,0.18)),
-    radial-gradient(circle at 52% 49%, rgba(125,211,252,0.15), transparent 52%) !important;
-}
-
-/* STATE — small screen safety */
-@media (max-width: 1480px) {
-  .shs-mapbox-cinematic--state .shs-mapbox-layer-card,
-  .shs-mapbox-mode--state .shs-mapbox-layer-card {
-    right: 18px !important;
-    top: 31% !important;
-    max-width: 300px !important;
-  }
-
-  .shs-mapbox-cinematic--state .shs-mapbox-v7d-command-metrics,
-  .shs-mapbox-mode--state .shs-mapbox-v7d-command-metrics {
-    bottom: 88px !important;
-    left: 18px !important;
-  }
-
-  .shs-mapbox-cinematic--state .shs-mapbox-legend,
-  .shs-mapbox-mode--state .shs-mapbox-legend {
-    left: 18px !important;
-    bottom: 24px !important;
-  }
-}
-
-/* ==========================================================
-   SHS Mapbox V7G-3 — Color Map / Keep Ohio White
-   Goal:
-   - Color the surrounding map field
-   - Keep Ohio reading white / bright
-   - State view only
-   ========================================================== */
-
-/* STATE — richer board underlay */
-.shs-mapbox-cinematic--state .shs-mapbox-stage,
-.shs-mapbox-mode--state .shs-mapbox-stage {
-  background:
-    radial-gradient(circle at 52% 48%, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 18%, rgba(96,165,250,0.08) 34%, rgba(7,29,56,0.24) 54%, rgba(2,8,23,0.76) 82%, rgba(2,8,23,0.94) 100%),
-    linear-gradient(135deg, rgba(5,22,44,0.96) 0%, rgba(9,32,60,0.90) 28%, rgba(5,16,31,0.96) 74%, rgba(2,8,23,1) 100%) !important;
-}
-
-/* STATE — keep map crisp but slightly cooler */
-.shs-mapbox-cinematic--state .shs-mapbox-canvas,
-.shs-mapbox-mode--state .shs-mapbox-canvas {
-  filter: none;
-}
-
-/* STATE — color the non-Ohio field while leaving Ohio bright */
-.shs-mapbox-cinematic--state .shs-mapbox-atmosphere,
-.shs-mapbox-mode--state .shs-mapbox-atmosphere {
-  opacity: 1 !important;
-  mix-blend-mode: normal;
-  background:
-    radial-gradient(
-      circle at 52% 48%,
-      rgba(255,255,255,0.00) 0%,
-      rgba(255,255,255,0.00) 18%,
-      rgba(147,197,253,0.06) 28%,
-      rgba(59,130,246,0.14) 40%,
-      rgba(14,52,92,0.30) 58%,
-      rgba(6,24,46,0.58) 76%,
-      rgba(2,8,23,0.82) 100%
-    ),
-    linear-gradient(
-      90deg,
-      rgba(5,22,44,0.74) 0%,
-      rgba(11,43,78,0.22) 22%,
-      rgba(11,43,78,0.10) 50%,
-      rgba(11,43,78,0.22) 78%,
-      rgba(5,22,44,0.74) 100%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(8,30,54,0.20) 0%,
-      transparent 20%,
-      transparent 78%,
-      rgba(2,8,23,0.34) 100%
-    ) !important;
-}
-
-/* STATE — Ohio spotlight stays bright and white */
-.shs-mapbox-cinematic--state .shs-mapbox-v7d-state-glow,
-.shs-mapbox-mode--state .shs-mapbox-v7d-state-glow {
-  opacity: 0.72 !important;
-  mix-blend-mode: normal;
-  background:
-    radial-gradient(circle at 52% 48%, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.18) 18%, rgba(191,219,254,0.10) 31%, rgba(96,165,250,0.06) 44%, transparent 64%) !important;
-  filter:
-    drop-shadow(0 0 28px rgba(255,255,255,0.20))
-    drop-shadow(0 0 36px rgba(96,165,250,0.12)) !important;
-}
-
-/* STATE — soften the heavy white wash on the edges of Ohio area */
-.shs-mapbox-cinematic--state .shs-mapbox-stage::before,
-.shs-mapbox-mode--state .shs-mapbox-stage::before {
-  background:
-    linear-gradient(135deg, rgba(255,255,255,0.18), transparent 16%, transparent 78%, rgba(56,189,248,0.10)),
-    radial-gradient(circle at 52% 48%, rgba(255,255,255,0.08), transparent 54%) !important;
-  opacity: 0.04 !important;
-}
-
-/* STATE — keep the command chips readable over the newly colored field */
-.shs-mapbox-cinematic--state .shs-mapbox-v7d-command-metrics div,
-.shs-mapbox-mode--state .shs-mapbox-v7d-command-metrics div {
-  background:
-    radial-gradient(circle at 0% 0%, rgba(96,165,250,0.14), transparent 40%),
-    linear-gradient(180deg, rgba(10,23,44,0.92), rgba(3,10,24,0.92)) !important;
-  border: 1px solid rgba(125,211,252,0.24) !important;
-}
-
-/* STATE — legend stays clean against the new map tint */
-.shs-mapbox-cinematic--state .shs-mapbox-legend,
-.shs-mapbox-mode--state .shs-mapbox-legend {
-  background:
-    linear-gradient(180deg, rgba(248,250,252,0.92), rgba(226,232,240,0.88)) !important;
-  border: 1px solid rgba(148,163,184,0.40) !important;
-}
-
-
-/* ==========================================================
-   SHS Mapbox V7G-3 — Color Map / Keep Ohio White
-   Goal:
-   - Color the surrounding map field
-   - Keep Ohio reading white / bright
-   - State view only
-   ========================================================== */
-
-/* STATE — richer board underlay */
-.shs-mapbox-cinematic--state .shs-mapbox-stage,
-.shs-mapbox-mode--state .shs-mapbox-stage {
-  background:
-    radial-gradient(circle at 52% 48%, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 18%, rgba(96,165,250,0.08) 34%, rgba(7,29,56,0.24) 54%, rgba(2,8,23,0.76) 82%, rgba(2,8,23,0.94) 100%),
-    linear-gradient(135deg, rgba(5,22,44,0.96) 0%, rgba(9,32,60,0.90) 28%, rgba(5,16,31,0.96) 74%, rgba(2,8,23,1) 100%) !important;
-}
-
-/* STATE — keep map crisp but slightly cooler */
-.shs-mapbox-cinematic--state .shs-mapbox-canvas,
-.shs-mapbox-mode--state .shs-mapbox-canvas {
-  filter: none;
-}
-
-/* STATE — color the non-Ohio field while leaving Ohio bright */
-.shs-mapbox-cinematic--state .shs-mapbox-atmosphere,
-.shs-mapbox-mode--state .shs-mapbox-atmosphere {
-  opacity: 1 !important;
-  mix-blend-mode: normal;
-  background:
-    radial-gradient(
-      circle at 52% 48%,
-      rgba(255,255,255,0.00) 0%,
-      rgba(255,255,255,0.00) 18%,
-      rgba(147,197,253,0.06) 28%,
-      rgba(59,130,246,0.14) 40%,
-      rgba(14,52,92,0.30) 58%,
-      rgba(6,24,46,0.58) 76%,
-      rgba(2,8,23,0.82) 100%
-    ),
-    linear-gradient(
-      90deg,
-      rgba(5,22,44,0.74) 0%,
-      rgba(11,43,78,0.22) 22%,
-      rgba(11,43,78,0.10) 50%,
-      rgba(11,43,78,0.22) 78%,
-      rgba(5,22,44,0.74) 100%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(8,30,54,0.20) 0%,
-      transparent 20%,
-      transparent 78%,
-      rgba(2,8,23,0.34) 100%
-    ) !important;
-}
-
-/* STATE — Ohio spotlight stays bright and white */
-.shs-mapbox-cinematic--state .shs-mapbox-v7d-state-glow,
-.shs-mapbox-mode--state .shs-mapbox-v7d-state-glow {
-  opacity: 0.72 !important;
-  mix-blend-mode: normal;
-  background:
-    radial-gradient(circle at 52% 48%, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.18) 18%, rgba(191,219,254,0.10) 31%, rgba(96,165,250,0.06) 44%, transparent 64%) !important;
-  filter:
-    drop-shadow(0 0 28px rgba(255,255,255,0.20))
-    drop-shadow(0 0 36px rgba(96,165,250,0.12)) !important;
-}
-
-/* STATE — soften the heavy white wash on the edges of Ohio area */
-.shs-mapbox-cinematic--state .shs-mapbox-stage::before,
-.shs-mapbox-mode--state .shs-mapbox-stage::before {
-  background:
-    linear-gradient(135deg, rgba(255,255,255,0.18), transparent 16%, transparent 78%, rgba(56,189,248,0.10)),
-    radial-gradient(circle at 52% 48%, rgba(255,255,255,0.08), transparent 54%) !important;
-  opacity: 0.04 !important;
-}
-
-/* STATE — keep the command chips readable over the newly colored field */
-.shs-mapbox-cinematic--state .shs-mapbox-v7d-command-metrics div,
-.shs-mapbox-mode--state .shs-mapbox-v7d-command-metrics div {
-  background:
-    radial-gradient(circle at 0% 0%, rgba(96,165,250,0.14), transparent 40%),
-    linear-gradient(180deg, rgba(10,23,44,0.92), rgba(3,10,24,0.92)) !important;
-  border: 1px solid rgba(125,211,252,0.24) !important;
-}
-
-/* STATE — legend stays clean against the new map tint */
-.shs-mapbox-cinematic--state .shs-mapbox-legend,
-.shs-mapbox-mode--state .shs-mapbox-legend {
-  background:
-    linear-gradient(180deg, rgba(248,250,252,0.92), rgba(226,232,240,0.88)) !important;
-  border: 1px solid rgba(148,163,184,0.40) !important;
-}
-
-
-/* ==========================================================
-   SHS Mapbox V7G-3A — Visible State Surface Hit Test
-   Purpose:
-   If this does not visibly change State View, CSS is not reaching
-   the live State map surface and we must patch JSX/Mapbox paint.
-   ========================================================== */
-
-/* Hit every likely State mode selector */
-.shs-mapbox-cinematic--state .shs-mapbox-stage,
-.shs-mapbox-mode--state .shs-mapbox-stage,
-[data-map-layer="state"] .shs-mapbox-stage,
-[data-active-layer="state"] .shs-mapbox-stage,
-.shs-operational-mapbox--state .shs-mapbox-stage,
-.shs-map-layer-state .shs-mapbox-stage {
+.shs-mapbox-cinematic--community .mapboxgl-map,
+.shs-mapbox-mode--community .mapboxgl-map,
+.shs-mapbox-cinematic--location .mapboxgl-map,
+.shs-mapbox-mode--location .mapboxgl-map {
   position: relative !important;
-  background: #061a33 !important;
+  isolation: isolate !important;
 }
 
-/* Put an obvious color overlay ABOVE the Mapbox canvas */
-.shs-mapbox-cinematic--state .shs-mapbox-stage::after,
-.shs-mapbox-mode--state .shs-mapbox-stage::after,
-[data-map-layer="state"] .shs-mapbox-stage::after,
-[data-active-layer="state"] .shs-mapbox-stage::after,
-.shs-operational-mapbox--state .shs-mapbox-stage::after,
-.shs-map-layer-state .shs-mapbox-stage::after {
+.shs-mapbox-cinematic--community .mapboxgl-map::after,
+.shs-mapbox-mode--community .mapboxgl-map::after,
+.shs-mapbox-cinematic--location .mapboxgl-map::after,
+.shs-mapbox-mode--location .mapboxgl-map::after {
   content: "" !important;
   position: absolute !important;
   inset: 0 !important;
-  z-index: 3 !important;
+  z-index: 1 !important;
   pointer-events: none !important;
-  border-radius: inherit !important;
   background:
-    radial-gradient(circle at 52% 50%,
-      rgba(255,255,255,0.00) 0%,
-      rgba(255,255,255,0.00) 26%,
-      rgba(59,130,246,0.18) 39%,
-      rgba(14,52,92,0.48) 63%,
-      rgba(2,8,23,0.82) 100%
-    ),
-    linear-gradient(90deg,
-      rgba(2,8,23,0.88) 0%,
-      rgba(14,52,92,0.30) 24%,
-      rgba(255,255,255,0.00) 50%,
-      rgba(14,52,92,0.30) 76%,
-      rgba(2,8,23,0.88) 100%
+    linear-gradient(
+      180deg,
+      rgba(125, 211, 252, 0.20) 0%,
+      rgba(56, 189, 248, 0.16) 46%,
+      rgba(14, 165, 233, 0.14) 100%
     ) !important;
-  mix-blend-mode: normal;
-}
-
-/* Keep HUD/card overlays above the test overlay */
-.shs-mapbox-hud,
-.shs-mapbox-layer-card,
-.shs-mapbox-legend,
-.shs-mapbox-v7d-command-metrics,
-.shs-mapbox-v7d-command-sync,
-.shs-mapbox-signal,
-.shs-mapbox-v7d-state-glow,
-.shs-mapbox-v7d-lightgrid {
-  z-index: 10 !important;
-}
-
-/* Make the test obvious on State View only */
-.shs-mapbox-cinematic--state .shs-mapbox-canvas,
-.shs-mapbox-mode--state .shs-mapbox-canvas,
-[data-map-layer="state"] .shs-mapbox-canvas,
-[data-active-layer="state"] .shs-mapbox-canvas,
-.shs-operational-mapbox--state .shs-mapbox-canvas,
-.shs-map-layer-state .shs-mapbox-canvas {
-  filter: none;
-}
-
-
-
-/* SHS clean white Ohio override — removes dirty/noisy map wash */
-.shs-map-cinematic-texture,
-.shs-map-cinematic-texture::before,
-.shs-map-cinematic-texture::after,
-.shs-operational-map-texture,
-.shs-operational-map-texture::before,
-.shs-operational-map-texture::after,
-.map-cinematic-texture,
-.map-cinematic-texture::before,
-.map-cinematic-texture::after {
-  opacity: 0.035 !important;
-  mix-blend-mode: normal !important;
-  filter: none !important;
-  background-image: none !important;
-}
-
-.shs-mapbox-map,
-.shs-operational-mapbox-map,
-.shs-operational-map-surface {
-  background: #020817 !important;
-}
-
-.shs-map-layer-state .mapboxgl-canvas,
-.shs-map-state .mapboxgl-canvas {
-  filter: none !important;
-}
-
-/* ==========================================================
-   SHS WHITE OHIO TARGETED PASS
-   Goal: dark outside map surface, clean white Ohio, readable county lines.
-   ========================================================== */
-
-.shs-mapbox-shell,
-.shs-operational-mapbox-shell,
-.shs-operational-map-surface,
-.shs-map-intelligence-map,
-.shs-map-stage,
-.shs-mapbox-frame {
-  background:
-    radial-gradient(circle at 52% 42%, rgba(29, 78, 216, 0.20), transparent 42%),
-    linear-gradient(135deg, #020817 0%, #03111f 42%, #020617 100%) !important;
-}
-
-/* Do not let dirty/noisy overlays sit above the map. */
-.shs-mapbox-shell::before,
-.shs-mapbox-shell::after,
-.shs-operational-mapbox-shell::before,
-.shs-operational-mapbox-shell::after,
-.shs-operational-map-surface::before,
-.shs-operational-map-surface::after,
-.shs-map-intelligence-map::before,
-.shs-map-intelligence-map::after,
-.shs-map-stage::before,
-.shs-map-stage::after,
-.shs-mapbox-frame::before,
-.shs-mapbox-frame::after {
-  opacity: 0.035 !important;
-  mix-blend-mode: normal !important;
-  filter: none !important;
-}
-
-/* Keep the actual map canvas clean instead of dirty gray. */
-.shs-mapbox-shell .mapboxgl-canvas,
-.shs-operational-mapbox-shell .mapboxgl-canvas,
-.shs-operational-map-surface .mapboxgl-canvas,
-.shs-map-intelligence-map .mapboxgl-canvas,
-.shs-map-stage .mapboxgl-canvas,
-.shs-mapbox-frame .mapboxgl-canvas {
-  filter: brightness(1.12) contrast(1.04) saturate(0.86) !important;
-}
-
-/* State layer should feel like white paper over dark command glass. */
-.shs-layer-state .mapboxgl-canvas,
-.shs-map-layer-state .mapboxgl-canvas,
-[data-map-layer="state"] .mapboxgl-canvas {
-  filter: brightness(1.24) contrast(1.08) saturate(0.72) !important;
-}
-
-/* Region and county keep cinematic darkness. */
-.shs-layer-region .mapboxgl-canvas,
-.shs-map-layer-region .mapboxgl-canvas,
-[data-map-layer="region"] .mapboxgl-canvas {
-  filter: brightness(0.68) contrast(1.18) saturate(1.22) !important;
-}
-
-.shs-layer-county .mapboxgl-canvas,
-.shs-map-layer-county .mapboxgl-canvas,
-[data-map-layer="county"] .mapboxgl-canvas {
-  filter: brightness(0.74) contrast(1.2) saturate(1.18) !important;
-}
-
-/* Community and location should stay bright and usable. */
-.shs-layer-community .mapboxgl-canvas,
-.shs-map-layer-community .mapboxgl-canvas,
-[data-map-layer="community"] .mapboxgl-canvas,
-.shs-layer-location .mapboxgl-canvas,
-.shs-map-layer-location .mapboxgl-canvas,
-[data-map-layer="location"] .mapboxgl-canvas {
-  filter: brightness(1.15) contrast(1.06) saturate(1.06) !important;
-}
-
-/* ==========================================================
-   SHS FINAL MAP DOMINANCE OVERRIDE
-   Goal: slim side rails and make the operational map dominant.
-   Added last on purpose so it wins over older grid-template rules.
-   ========================================================== */
-
-.utc-command-grid,
-.utc-main-grid,
-.utc-body-grid,
-.utc-operational-grid,
-.utc-workspace-grid,
-.utc-command-center-grid,
-.utc-dashboard-grid,
-.utc-three-column-grid {
-  grid-template-columns: 220px minmax(980px, 1fr) 285px !important;
-  gap: 14px !important;
-  align-items: start !important;
-}
-
-/* Left rail: tighter, less visual weight */
-.utc-intake-panel,
-.utc-left-panel,
-.utc-left-rail,
-.utc-operational-intake,
-.utc-intake-queue {
-  max-width: 220px !important;
-  width: 220px !important;
-}
-
-/* Right rail: slimmer but still readable */
-.utc-right-panel,
-.utc-right-rail,
-.utc-oracle-panel,
-.utc-truth-rail,
-.utc-oracle-truth-rail {
-  max-width: 285px !important;
-  width: 285px !important;
-}
-
-/* Center map area should breathe */
-.utc-map-column,
-.utc-center-column,
-.utc-command-center-main,
-.utc-operational-map-column,
-.utc-map-intelligence-column {
-  min-width: 0 !important;
-  width: 100% !important;
-}
-
-/* Make the map card use available center width */
-.utc-map-shell,
-.utc-map-card,
-.utc-operational-map-shell,
-.utc-operational-map-card,
-.shs-operational-map-shell,
-.shs-operational-map-card {
-  width: 100% !important;
-  max-width: none !important;
-}
-
-/* Give the Mapbox canvas more presence */
-.utc-mapbox-wrap,
-.utc-mapbox-stage,
-.utc-mapbox-canvas-wrap,
-.shs-mapbox-wrap,
-.shs-mapbox-stage,
-.shs-operational-mapbox {
-  width: 100% !important;
-  max-width: none !important;
-  min-height: 620px !important;
-}
-
-/* Keep queue cards readable after rail slimming */
-.utc-queue-card,
-.utc-intake-card,
-.utc-queue-item {
-  padding: 14px 12px !important;
-}
-
-/* Slightly reduce rail text scale so content does not feel cramped */
-.utc-intake-panel,
-.utc-left-panel,
-.utc-left-rail,
-.utc-right-panel,
-.utc-right-rail,
-.utc-oracle-panel,
-.utc-truth-rail {
-  font-size: 0.94rem !important;
-}
-
-/* Laptop safety */
-@media (max-width: 1500px) {
-  .utc-command-grid,
-  .utc-main-grid,
-  .utc-body-grid,
-  .utc-operational-grid,
-  .utc-workspace-grid,
-  .utc-command-center-grid,
-  .utc-dashboard-grid,
-  .utc-three-column-grid {
-    grid-template-columns: 205px minmax(780px, 1fr) 270px !important;
-    gap: 12px !important;
-  }
-
-  .utc-intake-panel,
-  .utc-left-panel,
-  .utc-left-rail,
-  .utc-operational-intake,
-  .utc-intake-queue {
-    max-width: 205px !important;
-    width: 205px !important;
-  }
-
-  .utc-right-panel,
-  .utc-right-rail,
-  .utc-oracle-panel,
-  .utc-truth-rail,
-  .utc-oracle-truth-rail {
-    max-width: 270px !important;
-    width: 270px !important;
-  }
-}
-
-/* Tablet / narrow desktop safety */
-@media (max-width: 1250px) {
-  .utc-command-grid,
-  .utc-main-grid,
-  .utc-body-grid,
-  .utc-operational-grid,
-  .utc-workspace-grid,
-  .utc-command-center-grid,
-  .utc-dashboard-grid,
-  .utc-three-column-grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  .utc-intake-panel,
-  .utc-left-panel,
-  .utc-left-rail,
-  .utc-operational-intake,
-  .utc-intake-queue,
-  .utc-right-panel,
-  .utc-right-rail,
-  .utc-oracle-panel,
-  .utc-truth-rail,
-  .utc-oracle-truth-rail {
-    width: 100% !important;
-    max-width: none !important;
-  }
-}
-
-/* ==========================================================
-   SHS COMMAND THEATER — FINAL REAL CLASS OVERRIDE
-   Purpose:
-   - Slim the left intake rail
-   - Slim the right Oracle/trust rail
-   - Give the operational map the dominant center stage
-   ========================================================== */
-
-.utc-shell--mockLocked .utc-commandTheater,
-.utc-workspace--command .utc-commandTheater,
-.utc-commandTheater {
-  display: grid !important;
-  grid-template-columns: 218px minmax(960px, 1fr) 294px !important;
-  gap: 14px !important;
-  align-items: stretch !important;
-  width: 100% !important;
-  max-width: none !important;
-}
-
-/* Left intake rail: slimmer and tighter */
-.utc-commandTheater__left {
-  width: 218px !important;
-  min-width: 218px !important;
-  max-width: 218px !important;
-  overflow: visible !important;
-}
-
-.utc-commandTheater__left .utc-card,
-.utc-commandTheater__left .utc-intake {
-  padding: 14px !important;
-  border-radius: 16px !important;
-}
-
-.utc-commandTheater__left .utc-card__head h2,
-.utc-commandTheater__left h2 {
-  font-size: 14px !important;
-  line-height: 1.08 !important;
-  letter-spacing: 0.14em !important;
-}
-
-.utc-commandTheater__left .utc-intake__list {
-  gap: 10px !important;
-}
-
-.utc-commandTheater__left .utc-intake__row {
-  min-height: 74px !important;
-  padding: 10px 12px !important;
-  gap: 10px !important;
-}
-
-.utc-commandTheater__left .utc-intake__icon {
-  width: 34px !important;
-  height: 34px !important;
-  min-width: 34px !important;
-}
-
-.utc-commandTheater__left .utc-intake__row strong,
-.utc-commandTheater__left .utc-intake__row b {
-  font-size: 26px !important;
-}
-
-.utc-commandTheater__left .utc-intake__row small,
-.utc-commandTheater__left .utc-intake__row span,
-.utc-commandTheater__left .utc-intake__row div {
-  line-height: 1.05 !important;
-}
-
-/* Center map: dominant theater area */
-.utc-commandTheater__map {
-  min-width: 0 !important;
-  width: 100% !important;
-  max-width: none !important;
-}
-
-.utc-commandTheater__map > *,
-.utc-commandTheater__map .shsOperationalMapbox,
-.utc-commandTheater__map .shs-operational-mapbox,
-.utc-commandTheater__map [class*="Mapbox"],
-.utc-commandTheater__map [class*="mapbox"] {
-  max-width: none !important;
-}
-
-/* Map visual should fill its available center stage */
-.utc-commandTheater__map .mapboxgl-map,
-.utc-commandTheater__map .mapboxgl-canvas-container,
-.utc-commandTheater__map .mapboxgl-canvas {
-  width: 100% !important;
-}
-
-/* Right Oracle/trust rail: slimmer but still readable */
-.utc-commandTheater__right {
-  width: 294px !important;
-  min-width: 294px !important;
-  max-width: 294px !important;
-  overflow: visible !important;
-}
-
-.utc-commandTheater__right .utc-side-stack {
-  gap: 12px !important;
-}
-
-.utc-commandTheater__right .utc-card {
-  padding: 14px !important;
-  border-radius: 16px !important;
-}
-
-.utc-commandTheater__right .utc-panel-title {
-  padding: 9px 10px !important;
-  font-size: 12px !important;
-  letter-spacing: 0.16em !important;
-}
-
-.utc-commandTheater__right .utc-oracle-grid,
-.utc-commandTheater__right .utc-trust-metrics {
-  gap: 8px !important;
-}
-
-.utc-commandTheater__right .utc-oracle-copy,
-.utc-commandTheater__right p {
-  font-size: 13px !important;
-  line-height: 1.35 !important;
-}
-
-/* Keep lower workflow from visually fighting the map */
-.utc-commandLower {
-  margin-top: 14px !important;
-}
-
-/* Large laptop / desktop tuning */
-@media (max-width: 1500px) {
-  .utc-shell--mockLocked .utc-commandTheater,
-  .utc-workspace--command .utc-commandTheater,
-  .utc-commandTheater {
-    grid-template-columns: 205px minmax(820px, 1fr) 276px !important;
-    gap: 12px !important;
-  }
-
-  .utc-commandTheater__left {
-    width: 205px !important;
-    min-width: 205px !important;
-    max-width: 205px !important;
-  }
-
-  .utc-commandTheater__right {
-    width: 276px !important;
-    min-width: 276px !important;
-    max-width: 276px !important;
-  }
-}
-
-/* Tablet fallback */
-@media (max-width: 1180px) {
-  .utc-shell--mockLocked .utc-commandTheater,
-  .utc-workspace--command .utc-commandTheater,
-  .utc-commandTheater {
-    grid-template-columns: 1fr !important;
-  }
-
-  .utc-commandTheater__left,
-  .utc-commandTheater__right {
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: none !important;
-  }
-}
-
-
-/* ==========================================================
-   SHS COMMAND THEATER — BALANCED FINAL OVERRIDE
-   Fix:
-   - Left rail was too narrow and clipping text
-   - Keep map dominant
-   - Keep right Oracle rail compact but readable
-   ========================================================== */
-
-.utc-shell--mockLocked .utc-commandTheater,
-.utc-workspace--command .utc-commandTheater,
-.utc-commandTheater {
-  display: grid !important;
-  grid-template-columns: 250px minmax(880px, 1fr) 310px !important;
-  gap: 14px !important;
-  align-items: start !important;
-  width: 100% !important;
-  max-width: none !important;
-}
-
-/* Left intake rail: compact but no clipping */
-.utc-commandTheater__left {
-  width: 250px !important;
-  min-width: 250px !important;
-  max-width: 250px !important;
-  overflow: visible !important;
-}
-
-.utc-commandTheater__left .utc-card,
-.utc-commandTheater__left .utc-intake {
-  padding: 16px !important;
-  border-radius: 18px !important;
-  overflow: hidden !important;
-}
-
-.utc-commandTheater__left .utc-intake__row {
-  min-height: 82px !important;
-  padding: 12px 14px !important;
-  display: grid !important;
-  grid-template-columns: 40px 1fr auto !important;
-  gap: 12px !important;
-  align-items: center !important;
-}
-
-.utc-commandTheater__left .utc-intake__icon {
-  width: 38px !important;
-  height: 38px !important;
-  min-width: 38px !important;
-}
-
-.utc-commandTheater__left .utc-intake__row * {
-  white-space: normal !important;
-  overflow: visible !important;
-  text-overflow: clip !important;
-}
-
-.utc-commandTheater__left .utc-intake__row strong,
-.utc-commandTheater__left .utc-intake__row b {
-  font-size: 28px !important;
-  line-height: 1 !important;
-}
-
-/* Center map gets the main stage */
-.utc-commandTheater__map {
-  width: 100% !important;
-  min-width: 0 !important;
-  max-width: none !important;
-}
-
-/* Right rail: smaller than before, but still useful */
-.utc-commandTheater__right {
-  width: 310px !important;
-  min-width: 310px !important;
-  max-width: 310px !important;
-  overflow: visible !important;
-}
-
-.utc-commandTheater__right .utc-card {
-  padding: 16px !important;
-  border-radius: 18px !important;
-}
-
-.utc-commandTheater__right .utc-panel-title {
-  font-size: 12px !important;
-  letter-spacing: 0.16em !important;
-}
-
-/* Make the map card feel intentional and cinematic */
-.utc-commandTheater__map .mapboxgl-map,
-.utc-commandTheater__map .mapboxgl-canvas-container,
-.utc-commandTheater__map .mapboxgl-canvas {
-  width: 100% !important;
-}
-
-
-
-/* Laptop tuning */
-@media (max-width: 1500px) {
-  .utc-shell--mockLocked .utc-commandTheater,
-  .utc-workspace--command .utc-commandTheater,
-  .utc-commandTheater {
-    grid-template-columns: 238px minmax(760px, 1fr) 292px !important;
-    gap: 12px !important;
-  }
-
-  .utc-commandTheater__left {
-    width: 238px !important;
-    min-width: 238px !important;
-    max-width: 238px !important;
-  }
-
-  .utc-commandTheater__right {
-    width: 292px !important;
-    min-width: 292px !important;
-    max-width: 292px !important;
-  }
-}
-
-
-/* ==========================================================
-   SHS COMMAND THEATER — SAFE MAP LAYOUT RECOVERY
-   Purpose:
-   - Restore broken map area
-   - Restore Layers / expand buttons
-   - Keep rails compact without hitting Mapbox internals
-   ========================================================== */
-
-.utc-commandTheater {
-  display: grid !important;
-  grid-template-columns: 260px minmax(760px, 1fr) 320px !important;
-  gap: 16px !important;
-  align-items: start !important;
-}
-
-/* Left rail readable */
-.utc-commandTheater__left {
-  width: 260px !important;
-  min-width: 260px !important;
-  max-width: 260px !important;
-  overflow: hidden !important;
-}
-
-/* Center map owns remaining space */
-.utc-commandTheater__map {
-  width: 100% !important;
-  min-width: 0 !important;
-  max-width: none !important;
-  overflow: visible !important;
-}
-
-/* Right rail compact */
-.utc-commandTheater__right {
-  width: 320px !important;
-  min-width: 320px !important;
-  max-width: 320px !important;
-  overflow: visible !important;
-}
-
-/* Restore map shell height without touching Mapbox internal controls */
-.utc-commandTheater__map > section,
-.utc-commandTheater__map > div {
-  min-height: 620px;
-}
-
-/* Restore top-right map buttons */
-.utc-commandTheater__map button,
-.utc-commandTheater__map .shsMapLayerButton,
-.utc-commandTheater__map .shsMapExpandButton,
-.utc-commandTheater__map [aria-label*="Layer"],
-.utc-commandTheater__map [aria-label*="Expand"] {
-  width: auto !important;
-  min-width: 56px !important;
-  max-width: none !important;
-  height: 48px !important;
-  min-height: 48px !important;
-  max-height: 48px !important;
-  padding: 0 18px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  writing-mode: horizontal-tb !important;
-  transform: none !important;
-}
-
-/* Never allow map controls to become vertical columns */
-.mapboxgl-ctrl,
-.mapboxgl-ctrl-group,
-.mapboxgl-ctrl button {
-  width: auto !important;
-  height: auto !important;
-  min-height: 0 !important;
-  writing-mode: horizontal-tb !important;
-}
-
-/* Laptop-safe version */
-@media (max-width: 1500px) {
-  .utc-commandTheater {
-    grid-template-columns: 245px minmax(700px, 1fr) 300px !important;
-    gap: 14px !important;
-  }
-
-  .utc-commandTheater__left {
-    width: 245px !important;
-    min-width: 245px !important;
-    max-width: 245px !important;
-  }
-
-  .utc-commandTheater__right {
-    width: 300px !important;
-    min-width: 300px !important;
-    max-width: 300px !important;
-  }
-}
-
-
-/* ==========================================================
-   SHS MAP — COMPACT FLOATING DOSSIER CARD
-   Fix:
-   - In-map card was covering too much of the map
-   - Keep full map visible
-   - Use compact summary card inside map
-   ========================================================== */
-
-/* Common possible map dossier/card selectors */
-.shs-map-dossier,
-.shsMapDossier,
-.shs-map-intel-card,
-.shsMapIntelCard,
-.shsOperationalMapDossier,
-.shs-operational-map-dossier,
-.shsMapFloatingCard,
-.shs-map-floating-card,
-.utc-commandTheater__map [class*="Dossier"],
-.utc-commandTheater__map [class*="dossier"],
-.utc-commandTheater__map [class*="IntelCard"],
-.utc-commandTheater__map [class*="intelCard"],
-.utc-commandTheater__map [class*="FloatingCard"],
-.utc-commandTheater__map [class*="floatingCard"] {
-  width: 300px !important;
-  max-width: 300px !important;
-  min-width: 0 !important;
-  padding: 18px !important;
-  border-radius: 20px !important;
-  right: 22px !important;
-  top: 50% !important;
-  bottom: auto !important;
-  transform: translateY(-50%) !important;
-  z-index: 7 !important;
-}
-
-/* Reduce card text density */
-.utc-commandTheater__map [class*="Dossier"] h2,
-.utc-commandTheater__map [class*="Dossier"] h3,
-.utc-commandTheater__map [class*="dossier"] h2,
-.utc-commandTheater__map [class*="dossier"] h3,
-.utc-commandTheater__map [class*="IntelCard"] h2,
-.utc-commandTheater__map [class*="IntelCard"] h3,
-.utc-commandTheater__map [class*="FloatingCard"] h2,
-.utc-commandTheater__map [class*="FloatingCard"] h3 {
-  font-size: 18px !important;
-  line-height: 1.15 !important;
-  margin-bottom: 10px !important;
-}
-
-.utc-commandTheater__map [class*="Dossier"] p,
-.utc-commandTheater__map [class*="dossier"] p,
-.utc-commandTheater__map [class*="IntelCard"] p,
-.utc-commandTheater__map [class*="FloatingCard"] p {
-  font-size: 13px !important;
-  line-height: 1.35 !important;
-  margin-bottom: 12px !important;
-}
-
-/* Compress metric rows inside the card */
-.utc-commandTheater__map [class*="Dossier"] [class*="metric"],
-.utc-commandTheater__map [class*="dossier"] [class*="metric"],
-.utc-commandTheater__map [class*="IntelCard"] [class*="metric"],
-.utc-commandTheater__map [class*="FloatingCard"] [class*="metric"],
-.utc-commandTheater__map [class*="summary"],
-.utc-commandTheater__map [class*="Summary"] {
-  gap: 8px !important;
-  padding: 10px !important;
-  font-size: 12px !important;
-}
-
-/* Keep action button compact */
-.utc-commandTheater__map [class*="Dossier"] button,
-.utc-commandTheater__map [class*="dossier"] button,
-.utc-commandTheater__map [class*="IntelCard"] button,
-.utc-commandTheater__map [class*="FloatingCard"] button {
-  min-height: 38px !important;
-  height: 38px !important;
-  padding: 0 14px !important;
-  font-size: 12px !important;
-  border-radius: 999px !important;
-}
-
-/* The tiny stat chips at bottom should not compete with the main map */
-.utc-commandTheater__map [class*="bottom"],
-.utc-commandTheater__map [class*="Bottom"] {
-  z-index: 6 !important;
-}
-
-/* Laptop safety: move card lower-right and smaller */
-@media (max-width: 1500px) {
-  .shs-map-dossier,
-  .shsMapDossier,
-  .shs-map-intel-card,
-  .shsMapIntelCard,
-  .shsOperationalMapDossier,
-  .shs-operational-map-dossier,
-  .shsMapFloatingCard,
-  .shs-map-floating-card,
-  .utc-commandTheater__map [class*="Dossier"],
-  .utc-commandTheater__map [class*="dossier"],
-  .utc-commandTheater__map [class*="IntelCard"],
-  .utc-commandTheater__map [class*="intelCard"],
-  .utc-commandTheater__map [class*="FloatingCard"],
-  .utc-commandTheater__map [class*="floatingCard"] {
-    width: 270px !important;
-    max-width: 270px !important;
-    padding: 15px !important;
-    right: 18px !important;
-    top: 54% !important;
-  }
-}
-
-
-/* ============================================================
-   LOCKED — Top 1% transparent orange-outline map dossier
-   Purpose:
-   - Match the transparent black/orange mock direction
-   - Make the card smaller so it stops covering half the map
-   - Keep card readable without hiding too much map intelligence
-   ============================================================ */
-
-.utc-commandTheater__map .shs-mapbox-layer-card,
-.shs-mapbox-layer-card {
-  width: min(350px, 31vw) !important;
-  max-width: 350px !important;
-  min-height: auto !important;
-  padding: 18px 18px 16px !important;
-
-  background:
-    linear-gradient(135deg, rgba(3, 10, 20, 0.54), rgba(8, 18, 34, 0.38)) !important;
-  border: 1px solid rgba(249, 115, 22, 0.78) !important;
-  border-radius: 22px !important;
-
-  box-shadow:
-    0 24px 58px rgba(0, 0, 0, 0.46),
-    0 0 0 1px rgba(255, 255, 255, 0.035) inset,
-    0 0 30px rgba(249, 115, 22, 0.18) !important;
-
-  backdrop-filter: blur(13px) saturate(128%) !important;
-  -webkit-backdrop-filter: blur(13px) saturate(128%) !important;
-
-  color: rgba(245, 248, 255, 0.96) !important;
-  overflow: hidden !important;
-}
-
-/* soft inner glass shine, not a solid panel */
-.utc-commandTheater__map .shs-mapbox-layer-card::before,
-.shs-mapbox-layer-card::before {
-  content: "" !important;
-  position: absolute !important;
-  inset: 0 !important;
-  pointer-events: none !important;
-  border-radius: inherit !important;
-  background:
-    radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.16), transparent 34%),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.04), transparent 42%, rgba(249, 115, 22, 0.05)) !important;
-  opacity: 0.72 !important;
-}
-
-/* orange command labels like the mock */
-.utc-commandTheater__map .shs-mapbox-layer-card__top,
-.utc-commandTheater__map .shs-mapbox-location-card__top,
-.shs-mapbox-layer-card__top,
-.shs-mapbox-location-card__top {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 12px !important;
-  margin-bottom: 12px !important;
-}
-
-.utc-commandTheater__map .shs-mapbox-layer-card__top span,
-.utc-commandTheater__map .shs-mapbox-location-card__top span,
-.shs-mapbox-layer-card__top span,
-.shs-mapbox-location-card__top span {
-  color: #fb923c !important;
-  font-size: 0.66rem !important;
-  font-weight: 900 !important;
-  letter-spacing: 0.16em !important;
-  text-transform: uppercase !important;
-}
-
-.utc-commandTheater__map .shs-mapbox-layer-card__top strong,
-.utc-commandTheater__map .shs-mapbox-location-card__top strong,
-.shs-mapbox-layer-card__top strong,
-.shs-mapbox-location-card__top strong {
-  color: #fbbf24 !important;
-  font-size: 0.66rem !important;
-  font-weight: 900 !important;
-  letter-spacing: 0.13em !important;
-  text-transform: uppercase !important;
-}
-
-/* tighter title/body so the card is smaller */
-.utc-commandTheater__map .shs-mapbox-layer-card h3,
-.shs-mapbox-layer-card h3 {
-  margin: 0 0 12px !important;
-  color: #ffffff !important;
-  font-size: 1.05rem !important;
-  line-height: 1.12 !important;
-  font-weight: 900 !important;
-}
-
-.utc-commandTheater__map .shs-mapbox-layer-card p,
-.shs-mapbox-layer-card p {
-  margin: 0 0 14px !important;
-  color: rgba(226, 236, 255, 0.9) !important;
-  font-size: 0.82rem !important;
-  line-height: 1.42 !important;
-}
-
-/* metric strip: transparent with orange outline */
-.utc-commandTheater__map .shs-mapbox-layer-card [class*="metric"],
-.utc-commandTheater__map .shs-mapbox-layer-card [class*="summary"],
-.shs-mapbox-layer-card [class*="metric"],
-.shs-mapbox-layer-card [class*="summary"] {
-  background: rgba(4, 12, 24, 0.28) !important;
-  border: 1px solid rgba(249, 115, 22, 0.32) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.055) !important;
-}
-
-/* next move box: smaller, transparent, orange-led */
-.utc-commandTheater__map .shs-mapbox-layer-card [class*="next"],
-.shs-mapbox-layer-card [class*="next"] {
-  background: rgba(3, 10, 20, 0.30) !important;
-  border: 1px solid rgba(249, 115, 22, 0.34) !important;
-}
-
-/* CTA button: transparent orange command button */
-.utc-commandTheater__map .shs-mapbox-layer-card button,
-.shs-mapbox-layer-card button {
-  min-height: 42px !important;
-  height: 42px !important;
-  margin-top: 8px !important;
-  border-radius: 999px !important;
-  border: 1px solid rgba(249, 115, 22, 0.62) !important;
-  background: rgba(5, 14, 26, 0.30) !important;
-  color: #f59e0b !important;
-  font-size: 0.82rem !important;
-  font-weight: 900 !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    0 0 20px rgba(249, 115, 22, 0.12) !important;
-}
-
-.utc-commandTheater__map .shs-mapbox-layer-card button:hover,
-.shs-mapbox-layer-card button:hover {
-  background: rgba(249, 115, 22, 0.13) !important;
-  color: #ffb454 !important;
-  transform: translateY(-1px);
-}
-
-/* State card placement: smaller and less map-blocking */
-.shs-mapbox-cinematic--state .shs-mapbox-layer-card,
-.shs-mapbox-mode--state .shs-mapbox-layer-card {
-  right: 22px !important;
-  top: 34% !important;
-  transform: translateY(-10%) !important;
-}
-
-/* Region card placement */
-.shs-mapbox-cinematic--region .shs-mapbox-layer-card,
-.shs-mapbox-mode--region .shs-mapbox-layer-card {
-  right: 22px !important;
-  top: 32% !important;
-  transform: translateY(-4%) !important;
-}
-
-/* County card placement */
-.shs-mapbox-cinematic--county .shs-mapbox-layer-card,
-.shs-mapbox-mode--county .shs-mapbox-layer-card {
-  right: 22px !important;
-  top: 34% !important;
-  transform: translateY(-4%) !important;
-}
-
-/* Community and location need a little more space but still smaller than before */
-.shs-mapbox-cinematic--community .shs-mapbox-layer-card,
-.shs-mapbox-mode--community .shs-mapbox-layer-card,
-.shs-mapbox-cinematic--location .shs-mapbox-layer-card,
-.shs-mapbox-mode--location .shs-mapbox-layer-card {
-  width: min(360px, 32vw) !important;
-  max-width: 360px !important;
-  right: 22px !important;
-  top: 34% !important;
-  transform: translateY(-2%) !important;
-}
-
-/* Laptop safety */
-@media (max-width: 1400px) {
-  .utc-commandTheater__map .shs-mapbox-layer-card,
-  .shs-mapbox-layer-card {
-    width: min(320px, 30vw) !important;
-    max-width: 320px !important;
-    padding: 15px 15px 14px !important;
-  }
-
-  .utc-commandTheater__map .shs-mapbox-layer-card h3,
-  .shs-mapbox-layer-card h3 {
-    font-size: 0.98rem !important;
-  }
-
-  .utc-commandTheater__map .shs-mapbox-layer-card p,
-  .shs-mapbox-layer-card p {
-    font-size: 0.78rem !important;
-    line-height: 1.35 !important;
-  }
-}
-
-/* ============================================================
-   FINAL LOCK — Map dossier style isolation
-   Fix:
-   - Stop transparent/orange state card from bleeding into all layers
-   - Give every layer its own visual identity
-   - Keep cards smaller so the map remains the hero
-   ============================================================ */
-
-/* Base dossier sizing for all layers */
-.shs-mapbox-layer-card {
-  width: min(330px, 30vw) !important;
-  max-width: 330px !important;
-  min-height: auto !important;
-  padding: 16px 16px 14px !important;
-  border-radius: 20px !important;
-  backdrop-filter: blur(12px) saturate(130%) !important;
-  -webkit-backdrop-filter: blur(12px) saturate(130%) !important;
-  box-shadow:
-    0 22px 54px rgba(0, 0, 0, 0.46),
-    inset 0 1px 0 rgba(255, 255, 255, 0.055) !important;
-}
-
-.shs-mapbox-layer-card h3 {
-  margin: 0 0 10px !important;
-  font-size: 1rem !important;
-  line-height: 1.12 !important;
-  font-weight: 900 !important;
-}
-
-.shs-mapbox-layer-card p {
-  margin: 0 0 12px !important;
-  font-size: 0.8rem !important;
-  line-height: 1.38 !important;
-}
-
-/* Keep common top labels tight */
-.shs-mapbox-layer-card__top,
-.shs-mapbox-location-card__top {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 10px !important;
-  margin-bottom: 10px !important;
-}
-
-.shs-mapbox-layer-card__top span,
-.shs-mapbox-location-card__top span {
-  font-size: 0.62rem !important;
-  font-weight: 900 !important;
-  letter-spacing: 0.15em !important;
-  text-transform: uppercase !important;
-}
-
-.shs-mapbox-layer-card__top strong,
-.shs-mapbox-location-card__top strong {
-  font-size: 0.62rem !important;
-  font-weight: 900 !important;
-  letter-spacing: 0.13em !important;
-  text-transform: uppercase !important;
-}
-
-/* ------------------------------------------------------------
-   STATE ONLY — transparent black/orange mock card
-   ------------------------------------------------------------ */
-.shs-mapbox-cinematic--state .shs-mapbox-layer-card,
-.shs-mapbox-mode--state .shs-mapbox-layer-card {
-  right: 22px !important;
-  top: 35% !important;
-  transform: translateY(-8%) !important;
-  background:
-    linear-gradient(135deg, rgba(3, 10, 20, 0.55), rgba(8, 18, 34, 0.38)) !important;
-  border: 1px solid rgba(249, 115, 22, 0.78) !important;
-  color: rgba(245, 248, 255, 0.96) !important;
-  box-shadow:
-    0 24px 58px rgba(0, 0, 0, 0.46),
-    0 0 30px rgba(249, 115, 22, 0.16) !important;
-}
-
-.shs-mapbox-cinematic--state .shs-mapbox-layer-card__top span,
-.shs-mapbox-mode--state .shs-mapbox-layer-card__top span {
-  color: #fb923c !important;
-}
-
-.shs-mapbox-cinematic--state .shs-mapbox-layer-card__top strong,
-.shs-mapbox-mode--state .shs-mapbox-layer-card__top strong {
-  color: #fbbf24 !important;
-}
-
-.shs-mapbox-cinematic--state .shs-mapbox-layer-card button,
-.shs-mapbox-mode--state .shs-mapbox-layer-card button {
-  border: 1px solid rgba(249, 115, 22, 0.62) !important;
-  background: rgba(5, 14, 26, 0.30) !important;
-  color: #f59e0b !important;
-}
-
-/* ------------------------------------------------------------
-   REGION — electric blue network card
-   ------------------------------------------------------------ */
-.shs-mapbox-cinematic--region .shs-mapbox-layer-card,
-.shs-mapbox-mode--region .shs-mapbox-layer-card {
-  right: 22px !important;
-  top: 35% !important;
-  transform: translateY(-6%) !important;
-  background:
-    linear-gradient(135deg, rgba(6, 22, 54, 0.86), rgba(12, 44, 92, 0.68)) !important;
-  border: 1px solid rgba(96, 165, 250, 0.78) !important;
-  color: rgba(239, 247, 255, 0.98) !important;
-  box-shadow:
-    0 24px 58px rgba(0, 0, 0, 0.48),
-    0 0 34px rgba(59, 130, 246, 0.28) !important;
-}
-
-.shs-mapbox-cinematic--region .shs-mapbox-layer-card__top span,
-.shs-mapbox-mode--region .shs-mapbox-layer-card__top span,
-.shs-mapbox-cinematic--region .shs-mapbox-layer-card__top strong,
-.shs-mapbox-mode--region .shs-mapbox-layer-card__top strong {
-  color: #93c5fd !important;
-}
-
-.shs-mapbox-cinematic--region .shs-mapbox-layer-card button,
-.shs-mapbox-mode--region .shs-mapbox-layer-card button {
-  border: 1px solid rgba(96, 165, 250, 0.62) !important;
-  background: rgba(15, 44, 88, 0.54) !important;
-  color: #dbeafe !important;
-}
-
-/* ------------------------------------------------------------
-   COUNTY — orange command card, smaller and darker
-   ------------------------------------------------------------ */
-.shs-mapbox-cinematic--county .shs-mapbox-layer-card,
-.shs-mapbox-mode--county .shs-mapbox-layer-card {
-  right: 22px !important;
-  top: 36% !important;
-  transform: translateY(-6%) !important;
-  background:
-    linear-gradient(135deg, rgba(24, 14, 9, 0.78), rgba(14, 28, 54, 0.64)) !important;
-  border: 1px solid rgba(249, 115, 22, 0.82) !important;
-  color: rgba(255, 247, 237, 0.98) !important;
-  box-shadow:
-    0 24px 58px rgba(0, 0, 0, 0.48),
-    0 0 34px rgba(249, 115, 22, 0.22) !important;
-}
-
-.shs-mapbox-cinematic--county .shs-mapbox-layer-card__top span,
-.shs-mapbox-mode--county .shs-mapbox-layer-card__top span {
-  color: #fb923c !important;
-}
-
-.shs-mapbox-cinematic--county .shs-mapbox-layer-card__top strong,
-.shs-mapbox-mode--county .shs-mapbox-layer-card__top strong {
-  color: #fbbf24 !important;
-}
-
-.shs-mapbox-cinematic--county .shs-mapbox-layer-card button,
-.shs-mapbox-mode--county .shs-mapbox-layer-card button {
-  border: 1px solid rgba(249, 115, 22, 0.62) !important;
-  background: rgba(48, 20, 10, 0.42) !important;
-  color: #fbbf24 !important;
-}
-
-/* ------------------------------------------------------------
-   COMMUNITY — light blue service-zone card
-   ------------------------------------------------------------ */
-.shs-mapbox-cinematic--community .shs-mapbox-layer-card,
-.shs-mapbox-mode--community .shs-mapbox-layer-card {
-  right: 22px !important;
-  top: 36% !important;
-  transform: translateY(-4%) !important;
-  background:
-    linear-gradient(135deg, rgba(224, 242, 254, 0.88), rgba(186, 230, 253, 0.74)) !important;
-  border: 1px solid rgba(125, 211, 252, 0.82) !important;
-  color: rgba(7, 35, 61, 0.98) !important;
-  box-shadow:
-    0 24px 58px rgba(0, 0, 0, 0.34),
-    0 0 34px rgba(125, 211, 252, 0.28) !important;
-}
-
-.shs-mapbox-cinematic--community .shs-mapbox-layer-card__top span,
-.shs-mapbox-mode--community .shs-mapbox-layer-card__top span,
-.shs-mapbox-cinematic--community .shs-mapbox-layer-card__top strong,
-.shs-mapbox-mode--community .shs-mapbox-layer-card__top strong {
-  color: #0369a1 !important;
-}
-
-.shs-mapbox-cinematic--community .shs-mapbox-layer-card button,
-.shs-mapbox-mode--community .shs-mapbox-layer-card button {
-  border: 1px solid rgba(14, 165, 233, 0.48) !important;
-  background: rgba(14, 165, 233, 0.14) !important;
-  color: #075985 !important;
-}
-
-/* ------------------------------------------------------------
-   LOCATION — light blue proof dossier card
-   ------------------------------------------------------------ */
-.shs-mapbox-cinematic--location .shs-mapbox-layer-card,
-.shs-mapbox-mode--location .shs-mapbox-layer-card {
-  right: 22px !important;
-  top: 36% !important;
-  transform: translateY(-4%) !important;
-  background:
-    linear-gradient(135deg, rgba(224, 242, 254, 0.90), rgba(191, 219, 254, 0.76)) !important;
-  border: 1px solid rgba(56, 189, 248, 0.82) !important;
-  color: rgba(7, 35, 61, 0.98) !important;
-  box-shadow:
-    0 24px 58px rgba(0, 0, 0, 0.34),
-    0 0 34px rgba(56, 189, 248, 0.30) !important;
-}
-
-.shs-mapbox-cinematic--location .shs-mapbox-layer-card__top span,
-.shs-mapbox-mode--location .shs-mapbox-layer-card__top span,
-.shs-mapbox-cinematic--location .shs-mapbox-layer-card__top strong,
-.shs-mapbox-mode--location .shs-mapbox-layer-card__top strong {
-  color: #0284c7 !important;
-}
-
-.shs-mapbox-cinematic--location .shs-mapbox-layer-card button,
-.shs-mapbox-mode--location .shs-mapbox-layer-card button {
-  border: 1px solid rgba(14, 165, 233, 0.50) !important;
-  background: rgba(14, 165, 233, 0.15) !important;
-  color: #075985 !important;
-}
-
-/* Make all dossier CTAs compact */
-.shs-mapbox-layer-card button {
-  min-height: 40px !important;
-  height: 40px !important;
-  margin-top: 8px !important;
-  border-radius: 999px !important;
-  font-size: 0.8rem !important;
-  font-weight: 900 !important;
-}
-
-/* Prevent dossier from eating map on laptop */
-@media (max-width: 1450px) {
-  .shs-mapbox-layer-card {
-    width: min(300px, 28vw) !important;
-    max-width: 300px !important;
-    padding: 14px 14px 13px !important;
-  }
-
-  .shs-mapbox-layer-card h3 {
-    font-size: 0.94rem !important;
-  }
-
-  .shs-mapbox-layer-card p {
-    font-size: 0.75rem !important;
-    line-height: 1.32 !important;
-  }
-}
-
-
-/* ============================================================
-   FINAL LOCK — Community + Location cleanup
-   Purpose:
-   - Remove muddy red/purple wash from Community and Location
-   - Keep the map readable
-   - Make the right dossier smaller and cleaner
-   ============================================================ */
-
-/* COMMUNITY: clean civic service-zone look */
-.shs-mapbox-cinematic--community .mapboxgl-canvas,
-.shs-mapbox-mode--community .mapboxgl-canvas {
-  filter:
-    brightness(1.12)
-    contrast(0.96)
-    saturate(1.08)
-    hue-rotate(0deg) !important;
-}
-
-/* soften any heavy overlay sitting over Community */
-.shs-mapbox-cinematic--community::before,
-.shs-mapbox-cinematic--community::after,
-.shs-mapbox-mode--community::before,
-.shs-mapbox-mode--community::after {
-  opacity: 0.18 !important;
-}
-
-/* Community card should be light blue, not orange/red */
-.shs-mapbox-cinematic--community .shs-mapbox-layer-card,
-.shs-mapbox-mode--community .shs-mapbox-layer-card {
-  width: min(300px, 27vw) !important;
-  max-width: 300px !important;
-  right: 20px !important;
-  top: 39% !important;
-  transform: translateY(-6%) !important;
-  padding: 14px 14px 13px !important;
-
-  background:
-    linear-gradient(135deg, rgba(224, 242, 254, 0.88), rgba(186, 230, 253, 0.74)) !important;
-  border: 1px solid rgba(125, 211, 252, 0.82) !important;
-  box-shadow:
-    0 18px 44px rgba(0, 0, 0, 0.30),
-    0 0 24px rgba(125, 211, 252, 0.26) !important;
-}
-
-.shs-mapbox-cinematic--community .shs-mapbox-layer-card__top span,
-.shs-mapbox-mode--community .shs-mapbox-layer-card__top span,
-.shs-mapbox-cinematic--community .shs-mapbox-layer-card__top strong,
-.shs-mapbox-mode--community .shs-mapbox-layer-card__top strong {
-  color: #0369a1 !important;
-}
-
-.shs-mapbox-cinematic--community .shs-mapbox-layer-card button,
-.shs-mapbox-mode--community .shs-mapbox-layer-card button {
-  border: 1px solid rgba(14, 165, 233, 0.48) !important;
-  background: rgba(14, 165, 233, 0.14) !important;
-  color: #075985 !important;
-}
-
-/* LOCATION: proof-dossier street intelligence, not purple flood */
-.shs-mapbox-cinematic--location .mapboxgl-canvas,
-.shs-mapbox-mode--location .mapboxgl-canvas {
-  filter:
-    brightness(1.12)
-    contrast(0.96)
-    saturate(1.08)
-    hue-rotate(0deg) !important;
-}
-
-/* soften any heavy overlay sitting over Location */
-.shs-mapbox-cinematic--location::before,
-.shs-mapbox-cinematic--location::after,
-.shs-mapbox-mode--location::before,
-.shs-mapbox-mode--location::after {
-  opacity: 0.16 !important;
-}
-
-/* Location card should be smaller and more refined */
-.shs-mapbox-cinematic--location .shs-mapbox-layer-card,
-.shs-mapbox-mode--location .shs-mapbox-layer-card {
-  width: min(310px, 28vw) !important;
-  max-width: 310px !important;
-  right: 20px !important;
-  top: 40% !important;
-  transform: translateY(-6%) !important;
-  padding: 14px 14px 13px !important;
-
-  background:
-    linear-gradient(135deg, rgba(224, 242, 254, 0.90), rgba(191, 219, 254, 0.76)) !important;
-  border: 1px solid rgba(56, 189, 248, 0.82) !important;
-  box-shadow:
-    0 18px 44px rgba(0, 0, 0, 0.30),
-    0 0 24px rgba(56, 189, 248, 0.28) !important;
-}
-
-.shs-mapbox-cinematic--location .shs-mapbox-layer-card__top span,
-.shs-mapbox-mode--location .shs-mapbox-layer-card__top span,
-.shs-mapbox-cinematic--location .shs-mapbox-layer-card__top strong,
-.shs-mapbox-mode--location .shs-mapbox-layer-card__top strong {
-  color: #0284c7 !important;
-}
-
-.shs-mapbox-cinematic--location .shs-mapbox-layer-card button,
-.shs-mapbox-mode--location .shs-mapbox-layer-card button {
-  border: 1px solid rgba(14, 165, 233, 0.50) !important;
-  background: rgba(14, 165, 233, 0.15) !important;
-  color: #075985 !important;
-}
-
-/* Community and Location card text cleanup */
-.shs-mapbox-cinematic--community .shs-mapbox-layer-card h3,
-.shs-mapbox-mode--community .shs-mapbox-layer-card h3,
-.shs-mapbox-cinematic--location .shs-mapbox-layer-card h3,
-.shs-mapbox-mode--location .shs-mapbox-layer-card h3 {
-  font-size: 0.98rem !important;
-  line-height: 1.12 !important;
-  margin-bottom: 9px !important;
-}
-
-.shs-mapbox-cinematic--community .shs-mapbox-layer-card p,
-.shs-mapbox-mode--community .shs-mapbox-layer-card p,
-.shs-mapbox-cinematic--location .shs-mapbox-layer-card p,
-.shs-mapbox-mode--location .shs-mapbox-layer-card p {
-  font-size: 0.76rem !important;
-  line-height: 1.32 !important;
-}
-
-/* Keep preview cards clean on Community and Location */
-.shs-mapbox-cinematic--community [class*="preview"],
-.shs-mapbox-mode--community [class*="preview"],
-.shs-mapbox-cinematic--location [class*="preview"],
-.shs-mapbox-mode--location [class*="preview"] {
-  box-shadow:
-    0 16px 34px rgba(0, 0, 0, 0.20),
-    inset 0 1px 0 rgba(255, 255, 255, 0.62) !important;
-}
-
-/* Laptop safety */
-@media (max-width: 1450px) {
-  .shs-mapbox-cinematic--community .shs-mapbox-layer-card,
-  .shs-mapbox-mode--community .shs-mapbox-layer-card,
-  .shs-mapbox-cinematic--location .shs-mapbox-layer-card,
-  .shs-mapbox-mode--location .shs-mapbox-layer-card {
-    width: min(280px, 26vw) !important;
-    max-width: 280px !important;
-    padding: 12px 12px 11px !important;
-    right: 18px !important;
-  }
-}
-
-/* =========================================================
-   SHS Unified Truth Map — Light Base Calibration Test
-   Purpose: allow the light Mapbox base to show through clearly.
-   This affects only Community/Location map canvas treatment.
-   ========================================================= */
-
-.shs-mapbox-cinematic--community .mapboxgl-canvas,
-.shs-mapbox-mode--community .mapboxgl-canvas,
-.shs-mapbox-cinematic--location .mapboxgl-canvas,
-.shs-mapbox-mode--location .mapboxgl-canvas {
-  filter: brightness(1.02) contrast(1.02) saturate(1.04) hue-rotate(0deg) !important;
+  mix-blend-mode: screen !important;
 }
 
 .shs-mapbox-cinematic--community .shs-mapbox-atmosphere,
 .shs-mapbox-mode--community .shs-mapbox-atmosphere,
 .shs-mapbox-cinematic--location .shs-mapbox-atmosphere,
 .shs-mapbox-mode--location .shs-mapbox-atmosphere {
-  opacity: 0.12 !important;
+  opacity: 0.06 !important;
   background:
-    radial-gradient(circle at 30% 25%, rgba(186, 230, 253, 0.08), transparent 38%),
-    radial-gradient(circle at 74% 70%, rgba(56, 189, 248, 0.06), transparent 46%) !important;
-  mix-blend-mode: normal !important;
-  pointer-events: none !important;
-}
-
-.shs-mapbox-cinematic--community .shs-mapbox-cinematic-vignette,
-.shs-mapbox-mode--community .shs-mapbox-cinematic-vignette,
-.shs-mapbox-cinematic--location .shs-mapbox-cinematic-vignette,
-.shs-mapbox-mode--location .shs-mapbox-cinematic-vignette {
-  opacity: 0.03 !important;
-  background: transparent !important;
-  mix-blend-mode: normal !important;
-  backdrop-filter: none !important;
-  pointer-events: none !important;
-}
-
-
-/* =========================================================
-   SHS Unified Truth Map — Surface Color Lock Only
-   Purpose:
-   - Preserve current pin/map alignment.
-   - Do not touch Mapbox JS, zoom, camera, markers, or cards.
-   - Bring Community and Location map surface back toward the
-     bright icy-blue mock without making Location blank white.
-   ========================================================= */
-
-.shs-mapbox-cinematic--community .mapboxgl-canvas,
-.shs-mapbox-mode--community .mapboxgl-canvas,
-.shs-mapbox-cinematic--location .mapboxgl-canvas,
-.shs-mapbox-mode--location .mapboxgl-canvas {
-  filter: brightness(1.12) contrast(0.98) saturate(1.12) hue-rotate(0deg) !important;
-}
-
-/* Remove the dark/purple/green tinted glass sitting above the map. */
-.shs-mapbox-cinematic--community .shs-mapbox-cinematic-vignette,
-.shs-mapbox-mode--community .shs-mapbox-cinematic-vignette,
-.shs-mapbox-cinematic--location .shs-mapbox-cinematic-vignette,
-.shs-mapbox-mode--location .shs-mapbox-cinematic-vignette {
-  opacity: 0.02 !important;
-  background: transparent !important;
-  mix-blend-mode: normal !important;
-  backdrop-filter: none !important;
-  pointer-events: none !important;
-}
-
-/* Add a controlled icy-blue surface wash.
-   This is intentionally light, not a white blanket. */
-.shs-mapbox-cinematic--community .shs-mapbox-atmosphere,
-.shs-mapbox-mode--community .shs-mapbox-atmosphere,
-.shs-mapbox-cinematic--location .shs-mapbox-atmosphere,
-.shs-mapbox-mode--location .shs-mapbox-atmosphere {
-  opacity: 0.34 !important;
-  background:
-    radial-gradient(circle at 28% 24%, rgba(186, 230, 253, 0.16), transparent 36%),
-    radial-gradient(circle at 72% 70%, rgba(56, 189, 248, 0.10), transparent 44%),
-    linear-gradient(135deg, rgba(224, 242, 254, 0.10), rgba(14, 165, 233, 0.06)) !important;
+    radial-gradient(circle at 30% 24%, rgba(125, 211, 252, 0.08), transparent 40%),
+    radial-gradient(circle at 70% 70%, rgba(14, 165, 233, 0.06), transparent 48%) !important;
   mix-blend-mode: screen !important;
   pointer-events: none !important;
 }
 
-/* Kill hidden dark overlays only for Community and Location. */
-.shs-mapbox-cinematic--community .shs-mapbox-stage::before,
-.shs-mapbox-mode--community .shs-mapbox-stage::before,
-.shs-mapbox-cinematic--community .shs-mapbox-stage::after,
-.shs-mapbox-mode--community .shs-mapbox-stage::after,
-.shs-mapbox-cinematic--location .shs-mapbox-stage::before,
-.shs-mapbox-mode--location .shs-mapbox-stage::before,
-.shs-mapbox-cinematic--location .shs-mapbox-stage::after,
-.shs-mapbox-mode--location .shs-mapbox-stage::after,
-.shs-mapbox-cinematic--community .shs-mapbox-canvas::before,
-.shs-mapbox-mode--community .shs-mapbox-canvas::before,
-.shs-mapbox-cinematic--community .shs-mapbox-canvas::after,
-.shs-mapbox-mode--community .shs-mapbox-canvas::after,
-.shs-mapbox-cinematic--location .shs-mapbox-canvas::before,
-.shs-mapbox-mode--location .shs-mapbox-canvas::before,
-.shs-mapbox-cinematic--location .shs-mapbox-canvas::after,
-.shs-mapbox-mode--location .shs-mapbox-canvas::after {
-  opacity: 0.02 !important;
-  background: transparent !important;
-  backdrop-filter: none !important;
-  mix-blend-mode: normal !important;
-  pointer-events: none !important;
-}
-
-
-/* =========================================================
-   SHS Unified Truth Map — Final Surface Balance
-   Purpose:
-   - Keep current pin alignment
-   - Pull the map away from blank white
-   - Restore more road/detail contrast
-   - Keep Community and Location visually consistent
-   ========================================================= */
-
-.shs-mapbox-cinematic--community .mapboxgl-canvas,
-.shs-mapbox-mode--community .mapboxgl-canvas,
-.shs-mapbox-cinematic--location .mapboxgl-canvas,
-.shs-mapbox-mode--location .mapboxgl-canvas {
-  filter: brightness(0.90) contrast(1.14) saturate(1.00) hue-rotate(0deg) !important;
-}
-
-/* Reduce the white haze even more */
-.shs-mapbox-cinematic--community .shs-mapbox-atmosphere,
-.shs-mapbox-mode--community .shs-mapbox-atmosphere,
-.shs-mapbox-cinematic--location .shs-mapbox-atmosphere,
-.shs-mapbox-mode--location .shs-mapbox-atmosphere {
-  opacity: 0.08 !important;
-  background:
-    radial-gradient(circle at 28% 24%, rgba(125, 211, 252, 0.05), transparent 40%),
-    radial-gradient(circle at 72% 70%, rgba(14, 116, 144, 0.04), transparent 48%),
-    linear-gradient(135deg, rgba(191, 219, 254, 0.035), rgba(14, 116, 144, 0.02)) !important;
-  mix-blend-mode: normal !important;
-  pointer-events: none !important;
-}
-
-/* Remove remaining whitening/glass effect */
 .shs-mapbox-cinematic--community .shs-mapbox-cinematic-vignette,
 .shs-mapbox-mode--community .shs-mapbox-cinematic-vignette,
 .shs-mapbox-cinematic--location .shs-mapbox-cinematic-vignette,
 .shs-mapbox-mode--location .shs-mapbox-cinematic-vignette {
-  opacity: 0 !important;
-  background: transparent !important;
-  mix-blend-mode: normal !important;
-  backdrop-filter: none !important;
+  opacity: 0.01 !important;
   pointer-events: none !important;
 }
 
-.shs-mapbox-cinematic--community .shs-mapbox-stage::before,
-.shs-mapbox-mode--community .shs-mapbox-stage::before,
-.shs-mapbox-cinematic--community .shs-mapbox-stage::after,
-.shs-mapbox-mode--community .shs-mapbox-stage::after,
-.shs-mapbox-cinematic--location .shs-mapbox-stage::before,
-.shs-mapbox-mode--location .shs-mapbox-stage::before,
-.shs-mapbox-cinematic--location .shs-mapbox-stage::after,
-.shs-mapbox-mode--location .shs-mapbox-stage::after,
-.shs-mapbox-cinematic--community .shs-mapbox-canvas::before,
-.shs-mapbox-mode--community .shs-mapbox-canvas::before,
-.shs-mapbox-cinematic--community .shs-mapbox-canvas::after,
-.shs-mapbox-mode--community .shs-mapbox-canvas::after,
-.shs-mapbox-cinematic--location .shs-mapbox-canvas::before,
-.shs-mapbox-mode--location .shs-mapbox-canvas::before,
-.shs-mapbox-cinematic--location .shs-mapbox-canvas::after,
-.shs-mapbox-mode--location .shs-mapbox-canvas::after {
-  opacity: 0 !important;
-  background: transparent !important;
-  backdrop-filter: none !important;
-  mix-blend-mode: normal !important;
-  pointer-events: none !important;
-}
-
-
-/* =========================================================
-   SHS Unified Truth Map — Final Blue Depth Lock
-   Purpose:
-   - Preserve pin alignment
-   - Keep the light operational map direction
-   - Pull the surface away from white
-   - Restore blue-gray map depth and road readability
-   ========================================================= */
-
-.shs-mapbox-cinematic--community .mapboxgl-canvas,
-.shs-mapbox-mode--community .mapboxgl-canvas,
-.shs-mapbox-cinematic--location .mapboxgl-canvas,
-.shs-mapbox-mode--location .mapboxgl-canvas {
-  filter: brightness(0.78) contrast(1.24) saturate(0.96) hue-rotate(0deg) !important;
-}
-
-/* Use a controlled blue-gray tint instead of white haze */
-.shs-mapbox-cinematic--community .shs-mapbox-atmosphere,
-.shs-mapbox-mode--community .shs-mapbox-atmosphere,
-.shs-mapbox-cinematic--location .shs-mapbox-atmosphere,
-.shs-mapbox-mode--location .shs-mapbox-atmosphere {
-  opacity: 0.28 !important;
-  background:
-    linear-gradient(135deg, rgba(15, 23, 42, 0.10), rgba(14, 116, 144, 0.12)),
-    radial-gradient(circle at 30% 28%, rgba(14, 116, 144, 0.12), transparent 42%),
-    radial-gradient(circle at 72% 72%, rgba(37, 99, 235, 0.08), transparent 48%) !important;
-  mix-blend-mode: multiply !important;
-  pointer-events: none !important;
-}
-
-/* Keep vignette off so we do not return to the dark muddy version */
-.shs-mapbox-cinematic--community .shs-mapbox-cinematic-vignette,
-.shs-mapbox-mode--community .shs-mapbox-cinematic-vignette,
-.shs-mapbox-cinematic--location .shs-mapbox-cinematic-vignette,
-.shs-mapbox-mode--location .shs-mapbox-cinematic-vignette {
-  opacity: 0 !important;
-  background: transparent !important;
-  backdrop-filter: none !important;
-  mix-blend-mode: normal !important;
-  pointer-events: none !important;
-}
-
-/* Keep hidden washes disabled */
-.shs-mapbox-cinematic--community .shs-mapbox-stage::before,
-.shs-mapbox-mode--community .shs-mapbox-stage::before,
-.shs-mapbox-cinematic--community .shs-mapbox-stage::after,
-.shs-mapbox-mode--community .shs-mapbox-stage::after,
-.shs-mapbox-cinematic--location .shs-mapbox-stage::before,
-.shs-mapbox-mode--location .shs-mapbox-stage::before,
-.shs-mapbox-cinematic--location .shs-mapbox-stage::after,
-.shs-mapbox-mode--location .shs-mapbox-stage::after,
-.shs-mapbox-cinematic--community .shs-mapbox-canvas::before,
-.shs-mapbox-mode--community .shs-mapbox-canvas::before,
-.shs-mapbox-cinematic--community .shs-mapbox-canvas::after,
-.shs-mapbox-mode--community .shs-mapbox-canvas::after,
-.shs-mapbox-cinematic--location .shs-mapbox-canvas::before,
-.shs-mapbox-mode--location .shs-mapbox-canvas::before,
-.shs-mapbox-cinematic--location .shs-mapbox-canvas::after,
-.shs-mapbox-mode--location .shs-mapbox-canvas::after {
-  opacity: 0 !important;
-  background: transparent !important;
-  backdrop-filter: none !important;
-  mix-blend-mode: normal !important;
-  pointer-events: none !important;
-}
-
-
-/* =========================================================
-   SHS Unified Truth Map — Match Right Card Surface
-   Goal:
-   Make the map surface visually match the cool blue-gray tone
-   of the right-side card in the locked mock.
-   Do not affect pin alignment or map geometry.
-   ========================================================= */
-
-.shs-mapbox-cinematic--community .mapboxgl-canvas,
-.shs-mapbox-mode--community .mapboxgl-canvas,
-.shs-mapbox-cinematic--location .mapboxgl-canvas,
-.shs-mapbox-mode--location .mapboxgl-canvas {
-  filter: brightness(0.84) contrast(1.08) saturate(0.82) hue-rotate(0deg) !important;
-}
-
-/* This is the main color-match layer.
-   It pushes the surface toward the right-card blue-gray. */
-.shs-mapbox-cinematic--community .shs-mapbox-atmosphere,
-.shs-mapbox-mode--community .shs-mapbox-atmosphere,
-.shs-mapbox-cinematic--location .shs-mapbox-atmosphere,
-.shs-mapbox-mode--location .shs-mapbox-atmosphere {
-  opacity: 0.52 !important;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(123, 141, 155, 0.34) 0%,
-      rgba(104, 124, 139, 0.38) 48%,
-      rgba(92, 110, 126, 0.42) 100%
-    ),
-    radial-gradient(
-      circle at 30% 28%,
-      rgba(160, 181, 196, 0.14),
-      transparent 42%
-    ),
-    radial-gradient(
-      circle at 72% 72%,
-      rgba(92, 110, 126, 0.12),
-      transparent 48%
-    ) !important;
-  mix-blend-mode: multiply !important;
-  pointer-events: none !important;
-}
-
-/* Kill extra white haze and competing washes */
-.shs-mapbox-cinematic--community .shs-mapbox-cinematic-vignette,
-.shs-mapbox-mode--community .shs-mapbox-cinematic-vignette,
-.shs-mapbox-cinematic--location .shs-mapbox-cinematic-vignette,
-.shs-mapbox-mode--location .shs-mapbox-cinematic-vignette {
-  opacity: 0 !important;
-  background: transparent !important;
-  backdrop-filter: none !important;
-  mix-blend-mode: normal !important;
-  pointer-events: none !important;
-}
-
-.shs-mapbox-cinematic--community .shs-mapbox-stage::before,
-.shs-mapbox-mode--community .shs-mapbox-stage::before,
-.shs-mapbox-cinematic--community .shs-mapbox-stage::after,
-.shs-mapbox-mode--community .shs-mapbox-stage::after,
-.shs-mapbox-cinematic--location .shs-mapbox-stage::before,
-.shs-mapbox-mode--location .shs-mapbox-stage::before,
-.shs-mapbox-cinematic--location .shs-mapbox-stage::after,
-.shs-mapbox-mode--location .shs-mapbox-stage::after,
-.shs-mapbox-cinematic--community .shs-mapbox-canvas::before,
-.shs-mapbox-mode--community .shs-mapbox-canvas::before,
-.shs-mapbox-cinematic--community .shs-mapbox-canvas::after,
-.shs-mapbox-mode--community .shs-mapbox-canvas::after,
-.shs-mapbox-cinematic--location .shs-mapbox-canvas::before,
-.shs-mapbox-mode--location .shs-mapbox-canvas::before,
-.shs-mapbox-cinematic--location .shs-mapbox-canvas::after,
-.shs-mapbox-mode--location .shs-mapbox-canvas::after {
-  opacity: 0 !important;
-  background: transparent !important;
-  backdrop-filter: none !important;
-  mix-blend-mode: normal !important;
-  pointer-events: none !important;
-}
-
-
-/* =========================================================
-   SHS Unified Truth Map — Direct Mapbox Surface Overlay
-   Goal:
-   Force the actual Mapbox surface toward the blue-gray card tone.
-   This does not touch pins, camera, marker logic, zoom, or layout.
-   ========================================================= */
-
-/* Make sure the map container can hold a surface tint layer */
-.shs-mapbox-cinematic--community .mapboxgl-map,
-.shs-mapbox-mode--community .mapboxgl-map,
-.shs-mapbox-cinematic--location .mapboxgl-map,
-.shs-mapbox-mode--location .mapboxgl-map {
-  position: relative !important;
-  isolation: isolate !important;
-}
-
-/* This is the real surface tint over the Mapbox canvas */
-.shs-mapbox-cinematic--community .mapboxgl-map::after,
-.shs-mapbox-mode--community .mapboxgl-map::after,
-.shs-mapbox-cinematic--location .mapboxgl-map::after,
-.shs-mapbox-mode--location .mapboxgl-map::after {
-  content: "" !important;
-  position: absolute !important;
-  inset: 0 !important;
-  z-index: 2 !important;
-  pointer-events: none !important;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(95, 113, 128, 0.38) 0%,
-      rgba(111, 132, 148, 0.30) 45%,
-      rgba(84, 101, 116, 0.36) 100%
-    ),
-    radial-gradient(circle at 28% 30%, rgba(165, 185, 198, 0.16), transparent 42%),
-    radial-gradient(circle at 72% 72%, rgba(76, 96, 112, 0.16), transparent 48%) !important;
-  mix-blend-mode: multiply !important;
-}
-
-/* Keep the canvas from staying too white underneath */
-.shs-mapbox-cinematic--community .mapboxgl-canvas,
-.shs-mapbox-mode--community .mapboxgl-canvas,
-.shs-mapbox-cinematic--location .mapboxgl-canvas,
-.shs-mapbox-mode--location .mapboxgl-canvas {
-  filter: brightness(0.88) contrast(1.12) saturate(0.90) hue-rotate(0deg) !important;
-}
-
-/* Keep older atmosphere/vignette experiments from fighting the direct overlay */
-.shs-mapbox-cinematic--community .shs-mapbox-atmosphere,
-.shs-mapbox-mode--community .shs-mapbox-atmosphere,
-.shs-mapbox-cinematic--location .shs-mapbox-atmosphere,
-.shs-mapbox-mode--location .shs-mapbox-atmosphere,
-.shs-mapbox-cinematic--community .shs-mapbox-cinematic-vignette,
-.shs-mapbox-mode--community .shs-mapbox-cinematic-vignette,
-.shs-mapbox-cinematic--location .shs-mapbox-cinematic-vignette,
-.shs-mapbox-mode--location .shs-mapbox-cinematic-vignette {
-  opacity: 0 !important;
-  background: transparent !important;
-  backdrop-filter: none !important;
-  mix-blend-mode: normal !important;
-  pointer-events: none !important;
-}
-
-
-/* =========================================================
-   SHS Unified Truth Map — Direct Mapbox Surface Overlay
-   Goal:
-   Force the actual Mapbox surface toward the blue-gray card tone.
-   This does not touch pins, camera, marker logic, zoom, or layout.
-   ========================================================= */
-
-/* Make sure the map container can hold a surface tint layer */
-.shs-mapbox-cinematic--community .mapboxgl-map,
-.shs-mapbox-mode--community .mapboxgl-map,
-.shs-mapbox-cinematic--location .mapboxgl-map,
-.shs-mapbox-mode--location .mapboxgl-map {
-  position: relative !important;
-  isolation: isolate !important;
-}
-
-/* This is the real surface tint over the Mapbox canvas */
-.shs-mapbox-cinematic--community .mapboxgl-map::after,
-.shs-mapbox-mode--community .mapboxgl-map::after,
-.shs-mapbox-cinematic--location .mapboxgl-map::after,
-.shs-mapbox-mode--location .mapboxgl-map::after {
-  content: "" !important;
-  position: absolute !important;
-  inset: 0 !important;
-  z-index: 2 !important;
-  pointer-events: none !important;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(95, 113, 128, 0.38) 0%,
-      rgba(111, 132, 148, 0.30) 45%,
-      rgba(84, 101, 116, 0.36) 100%
-    ),
-    radial-gradient(circle at 28% 30%, rgba(165, 185, 198, 0.16), transparent 42%),
-    radial-gradient(circle at 72% 72%, rgba(76, 96, 112, 0.16), transparent 48%) !important;
-  mix-blend-mode: multiply !important;
-}
-
-/* Keep the canvas from staying too white underneath */
-.shs-mapbox-cinematic--community .mapboxgl-canvas,
-.shs-mapbox-mode--community .mapboxgl-canvas,
-.shs-mapbox-cinematic--location .mapboxgl-canvas,
-.shs-mapbox-mode--location .mapboxgl-canvas {
-  filter: brightness(0.88) contrast(1.12) saturate(0.90) hue-rotate(0deg) !important;
-}
-
-/* Keep older atmosphere/vignette experiments from fighting the direct overlay */
-.shs-mapbox-cinematic--community .shs-mapbox-atmosphere,
-.shs-mapbox-mode--community .shs-mapbox-atmosphere,
-.shs-mapbox-cinematic--location .shs-mapbox-atmosphere,
-.shs-mapbox-mode--location .shs-mapbox-atmosphere,
-.shs-mapbox-cinematic--community .shs-mapbox-cinematic-vignette,
-.shs-mapbox-mode--community .shs-mapbox-cinematic-vignette,
-.shs-mapbox-cinematic--location .shs-mapbox-cinematic-vignette,
-.shs-mapbox-mode--location .shs-mapbox-cinematic-vignette {
-  opacity: 0 !important;
-  background: transparent !important;
-  backdrop-filter: none !important;
-  mix-blend-mode: normal !important;
-  pointer-events: none !important;
-}
-
-
-/* =========================================================
-   SHS Unified Truth Map — FINAL MOCK BLUE SURFACE LOCK
-   This is the final visual override for Community + Location.
-   It preserves pins/alignment and only affects surface color.
-   ========================================================= */
-
-.shs-mapbox-cinematic--community .mapboxgl-map::after,
-.shs-mapbox-mode--community .mapboxgl-map::after,
-.shs-mapbox-cinematic--location .mapboxgl-map::after,
-.shs-mapbox-mode--location .mapboxgl-map::after {
-  content: "" !important;
-  position: absolute !important;
-  inset: 0 !important;
-  z-index: 2 !important;
-  pointer-events: none !important;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(111, 173, 211, 0.16) 0%,
-      rgba(151, 205, 232, 0.12) 42%,
-      rgba(86, 142, 183, 0.14) 100%
-    ) !important;
-  mix-blend-mode: color-burn !important;
-}
-
-.shs-mapbox-cinematic--community .mapboxgl-canvas,
-.shs-mapbox-mode--community .mapboxgl-canvas,
-.shs-mapbox-cinematic--location .mapboxgl-canvas,
-.shs-mapbox-mode--location .mapboxgl-canvas {
-  filter: brightness(0.82) contrast(1.22) saturate(1.18) hue-rotate(0deg) !important;
-}
-
-/* Kill all older haze/wash layers so they stop fighting this final lock */
-.shs-mapbox-cinematic--community .shs-mapbox-atmosphere,
-.shs-mapbox-mode--community .shs-mapbox-atmosphere,
-.shs-mapbox-cinematic--location .shs-mapbox-atmosphere,
-.shs-mapbox-mode--location .shs-mapbox-atmosphere,
-.shs-mapbox-cinematic--community .shs-mapbox-cinematic-vignette,
-.shs-mapbox-mode--community .shs-mapbox-cinematic-vignette,
-.shs-mapbox-cinematic--location .shs-mapbox-cinematic-vignette,
-.shs-mapbox-mode--location .shs-mapbox-cinematic-vignette {
-  opacity: 0 !important;
-  background: transparent !important;
-  backdrop-filter: none !important;
-  mix-blend-mode: normal !important;
-  pointer-events: none !important;
-}
 

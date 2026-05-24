@@ -1,9 +1,10 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { SelectedEntityProvider } from "@/system/context/SelectedEntityContext";
 import { createRoot } from "react-dom/client";
 import { HashRouter } from "react-router-dom";
 import CapitalRoutes from "@/router/CapitalRoutes.jsx";
 import { AuthProvider } from "../auth/auth-context";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 function CapitalApp() {
   return (

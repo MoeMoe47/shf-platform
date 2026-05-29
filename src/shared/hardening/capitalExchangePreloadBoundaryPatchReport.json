@@ -1,0 +1,427 @@
+{
+  "generatedAt": "2026-05-23T18:30:05.615Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 22",
+  "mode": "CAPITAL_EXCHANGE_PRELOAD_BOUNDARY_PATCH",
+  "capitalExchangePreloadBoundaryPatchStatus": "build_passed_preload_still_detected",
+  "capitalExchangePreloadBoundaryPatchLabel": "Capital Exchange Preload Boundary Patch Applied",
+  "productionDecision": "The build passed, but capital.html still references vendor-mapbox. More preload-chain work is required.",
+  "changedFiles": [
+    "src/entries/capital.main.jsx",
+    "src/routes/exchangeRoutes.jsx"
+  ],
+  "priorAuditStatus": "findings_ready_preload_chain_detected",
+  "priorLikelyCause": [
+    "capital entry generated chunk contains __vite__mapDeps for pages-exchange that includes vendor-mapbox.",
+    "pages-exchange generated chunk references vendor-mapbox, likely through Unified Truth / SHSOperationalMapboxMap.",
+    "dist/capital.html preloads vendor-mapbox directly, meaning the Capital entry is causing early Mapbox network pressure."
+  ],
+  "boundaryPatchDetected": {
+    "capitalEntry": "src/entries/capital.main.jsx",
+    "capitalUsesLazyExchangeRoutes": false,
+    "capitalUsesLazyMissionControl": false,
+    "capitalHasLazyBoundaryHelper": false,
+    "exchangeRoutesUsesLazyExchangeLayout": false,
+    "exchangeRoutesHasLazyBoundaryHelper": true,
+    "chunkWarningLimitRemains700": true
+  },
+  "generatedCapitalPreload": {
+    "capitalHtmlIncludesVendorMapboxJs": true,
+    "capitalHtmlIncludesVendorMapboxCss": true,
+    "capitalHtmlIncludesPagesExchange": true,
+    "capitalHtmlIncludesModulepreloadVendorMapbox": true
+  },
+  "keyAssetsAfterPatch": {
+    "capitalJs": {
+      "fileName": "capital-44WuCrlc.js",
+      "rawKb": 4.64,
+      "gzipKb": 1.74,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    "pagesExchangeJs": {
+      "fileName": "pages-exchange-Dmwe2jKp.js",
+      "rawKb": 144.37,
+      "gzipKb": 34.65,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    "mapboxJs": {
+      "fileName": "vendor-mapbox-uaDf4Z7d.js",
+      "rawKb": 1781.94,
+      "gzipKb": 492.1,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    "mapboxCss": {
+      "fileName": "vendor-mapbox-C5-Kj3x0.css",
+      "rawKb": 40.95,
+      "gzipKb": 5.59,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    "maplibreJs": {
+      "fileName": "vendor-maplibre-JLoBlj2z.js",
+      "rawKb": 1011.59,
+      "gzipKb": 274.26,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    }
+  },
+  "bundleSummaryAfterPatch": {
+    "totalAssetsParsed": 90,
+    "largeAssets": 2,
+    "largestAssetFileName": "vendor-mapbox-uaDf4Z7d.js",
+    "largestAssetRawKb": 1781.94,
+    "buildWarningDetected": true,
+    "frontendBuildPassed": true
+  },
+  "largestAssetsAfterPatch": [
+    {
+      "fileName": "vendor-mapbox-uaDf4Z7d.js",
+      "rawKb": 1781.94,
+      "gzipKb": 492.1,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "vendor-maplibre-JLoBlj2z.js",
+      "rawKb": 1011.59,
+      "gzipKb": 274.26,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "shared-eNuYgzDM.js",
+      "rawKb": 453.73,
+      "gzipKb": 43.97,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-Ca4qtZ2F.js",
+      "rawKb": 399.82,
+      "gzipKb": 87.57,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-admin-Bhjlr7vA.js",
+      "rawKb": 354.31,
+      "gzipKb": 81.47,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-hub-CJA6oJYr.js",
+      "rawKb": 290.71,
+      "gzipKb": 68.82,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-hub-CJzl8uZY.css",
+      "rawKb": 247.56,
+      "gzipKb": 34.84,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-exchange-Dwpvmain.css",
+      "rawKb": 245.21,
+      "gzipKb": 35.68,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-react-DWUxBteQ.js",
+      "rawKb": 229.75,
+      "gzipKb": 73.56,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-CiOMc1g0.css",
+      "rawKb": 221.11,
+      "gzipKb": 42.47,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "components-CDuVLeKw.js",
+      "rawKb": 174.68,
+      "gzipKb": 47.33,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-exchange-Dmwe2jKp.js",
+      "rawKb": 144.37,
+      "gzipKb": 34.65,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-admin-CrqIvWoe.css",
+      "rawKb": 76.61,
+      "gzipKb": 12.25,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-motion-Bndiu9g1.js",
+      "rawKb": 74.48,
+      "gzipKb": 23.92,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-CH_-0t41.js",
+      "rawKb": 71.27,
+      "gzipKb": 25.88,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-maplibre-kWVbv8B-.css",
+      "rawKb": 69.34,
+      "gzipKb": 9.97,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-lord-Ww_74URf.css",
+      "rawKb": 48.13,
+      "gzipKb": 5.79,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-mapbox-C5-Kj3x0.css",
+      "rawKb": 40.95,
+      "gzipKb": 5.59,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-foundation-B-hjKNft.js",
+      "rawKb": 39.43,
+      "gzipKb": 9.38,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-lord-BEn2tiDI.js",
+      "rawKb": 31.89,
+      "gzipKb": 7.46,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-foundation-BvjTgYP3.css",
+      "rawKb": 28.83,
+      "gzipKb": 6.18,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-charts-20wW2Z-x.js",
+      "rawKb": 22.02,
+      "gzipKb": 8.6,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "allocation-DGaB2vEX.js",
+      "rawKb": 19.62,
+      "gzipKb": 6.98,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "arcade-Cuohn2B4.css",
+      "rawKb": 19.56,
+      "gzipKb": 4.48,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "components-3KDTfcSy.css",
+      "rawKb": 16.2,
+      "gzipKb": 3.88,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "shell-DHjp85iC.css",
+      "rawKb": 11.99,
+      "gzipKb": 3.22,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "curriculum-BQjQ7RnG.css",
+      "rawKb": 10.63,
+      "gzipKb": 2.56,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "sales-C5XjbxN2.css",
+      "rawKb": 9.44,
+      "gzipKb": 2.59,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "ledger-cNRK8cm9.css",
+      "rawKb": 9.33,
+      "gzipKb": 2.45,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "catalog-9NU3OlVj.css",
+      "rawKb": 6.61,
+      "gzipKb": 2.01,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "util-wash-Qos2WW4c.css",
+      "rawKb": 6.54,
+      "gzipKb": 2.02,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "admin-XyXMHTcs.js",
+      "rawKb": 6.24,
+      "gzipKb": 2.28,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "curriculum-BioJZTRa.js",
+      "rawKb": 6.05,
+      "gzipKb": 2.03,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "global-BLOBr7rh.css",
+      "rawKb": 5.93,
+      "gzipKb": 1.98,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "app-shell-RKUFR9JW.css",
+      "rawKb": 5.57,
+      "gzipKb": 1.59,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "employer-CY-ImTiC.js",
+      "rawKb": 5.24,
+      "gzipKb": 1.58,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "debt-BVH4hd71.css",
+      "rawKb": 5.17,
+      "gzipKb": 1.63,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "credit-DDexnHvq.js",
+      "rawKb": 4.67,
+      "gzipKb": 1.35,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "capital-44WuCrlc.js",
+      "rawKb": 4.64,
+      "gzipKb": 1.74,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "arcade-BRq6mr18.js",
+      "rawKb": 4.47,
+      "gzipKb": 1.95,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    }
+  ],
+  "nextRecommendedActions": [
+    {
+      "step": 1,
+      "label": "Compare preload impact",
+      "action": "Compare this report to Patch 21 and verify whether capital.html no longer preloads vendor-mapbox."
+    },
+    {
+      "step": 2,
+      "label": "Browser test capital route",
+      "action": "Open capital.html with Network filter vendor-map and confirm Mapbox does not load until a map surface appears."
+    },
+    {
+      "step": 3,
+      "label": "If preload remains, audit pages-exchange internals next",
+      "action": "If capital.html still preloads vendor-mapbox, the next patch should isolate Unified Truth / Mapbox route inside pages-exchange."
+    }
+  ],
+  "nextPatchRecommendation": {
+    "id": "post_v1_bundle_patch_23_exchange_unified_truth_route_isolation_audit",
+    "label": "Exchange Unified Truth Route Isolation Audit",
+    "goal": "Audit pages-exchange internals to isolate Unified Truth / Mapbox from the base Exchange route chunk."
+  }
+}

@@ -1,0 +1,6040 @@
+:root {
+  --shf-bg: #f5f0ea;
+  --shf-bg-2: #efe8df;
+  --shf-panel: rgba(255, 252, 248, 0.82);
+  --shf-panel-solid: #f8f2eb;
+  --shf-border: rgba(165, 139, 114, 0.18);
+  --shf-border-strong: rgba(145, 118, 92, 0.28);
+  --shf-text: #2f2621;
+  --shf-text-soft: #79685a;
+  --shf-text-faint: #a69484;
+  --shf-orange: #da6f2d;
+  --shf-orange-2: #f08a39;
+  --shf-orange-3: #e7b37d;
+  --shf-cream: #efe3d4;
+  --shf-shadow:
+    0 1px 0 rgba(255,255,255,0.6) inset,
+    0 10px 24px rgba(113, 85, 57, 0.06);
+  --shf-radius: 18px;
+  --shf-radius-sm: 12px;
+  --shf-font-serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  --shf-font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,0.7), transparent 35%),
+    linear-gradient(180deg, #f6f1eb 0%, #efe7de 100%);
+}
+
+.shf-page {
+  min-height: 100vh;
+  padding: 28px;
+  color: var(--shf-text);
+  font-family: var(--shf-font-sans);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.45), rgba(255,255,255,0.12)),
+    repeating-linear-gradient(
+      180deg,
+      rgba(255,255,255,0.04),
+      rgba(255,255,255,0.04) 2px,
+      rgba(0,0,0,0.008) 2px,
+      rgba(0,0,0,0.008) 3px
+    ),
+    var(--shf-bg);
+}
+
+.shf-shell {
+  width: min(1440px, 100%);
+  margin: 0 auto;
+  border: 1px solid var(--shf-border);
+  border-radius: 0;
+  overflow: hidden;
+  background: rgba(255, 250, 245, 0.55);
+  box-shadow: 0 18px 40px rgba(77, 58, 40, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.shf-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--shf-border);
+  background: rgba(255,255,255,0.18);
+}
+
+.shf-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.shf-brand__mark {
+  position: relative;
+  width: 18px;
+  height: 28px;
+  flex: 0 0 auto;
+}
+
+.shf-brand__mark-top,
+.shf-brand__mark-bottom {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+}
+
+.shf-brand__mark-top {
+  top: 0;
+  width: 14px;
+  height: 16px;
+  background: linear-gradient(180deg, #b2a192, #d9cbbd);
+}
+
+.shf-brand__mark-bottom {
+  bottom: 0;
+  width: 16px;
+  height: 12px;
+  background: linear-gradient(180deg, #ef7f35, #c95c20);
+}
+
+.shf-brand__text,
+.shf-brand h1 {
+  white-space: nowrap;
+}
+
+.shf-brand__text {
+  font-family: var(--shf-font-serif);
+  font-size: 24px;
+  letter-spacing: -0.02em;
+}
+
+.shf-brand__divider {
+  width: 1px;
+  height: 30px;
+  background: var(--shf-border-strong);
+}
+
+.shf-brand h1 {
+  margin: 0;
+  font-family: var(--shf-font-serif);
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.shf-topbar__controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.shf-select,
+.shf-export-btn,
+.shf-mini-filter,
+.shf-icon-btn {
+  border: 1px solid var(--shf-border-strong);
+  background: rgba(255,255,255,0.42);
+  color: var(--shf-text);
+  border-radius: 10px;
+  font-family: var(--shf-font-sans);
+}
+
+.shf-select {
+  min-width: 180px;
+  height: 38px;
+  padding: 0 14px;
+  font-size: 14px;
+}
+
+.shf-export-btn {
+  height: 42px;
+  padding: 0 18px;
+  font-size: 14px;
+  font-weight: 600;
+  background: linear-gradient(180deg, #78856c, #6a775f);
+  color: #fff8ee;
+  box-shadow: 0 8px 18px rgba(76, 92, 64, 0.22);
+}
+
+.shf-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 14px;
+  padding: 18px 28px;
+  border-bottom: 1px solid var(--shf-border);
+}
+
+.shf-kpi-card {
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+  border: 1px solid var(--shf-border);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.36);
+  box-shadow: var(--shf-shadow);
+  padding: 16px 18px 14px;
+  cursor: pointer;
+  min-height: 112px;
+}
+
+.shf-kpi-card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(218, 111, 45, 0.28);
+}
+
+.shf-kpi-card__label {
+  font-size: 16px;
+  color: var(--shf-text);
+  margin-bottom: 10px;
+}
+
+.shf-kpi-card__value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.shf-kpi-card__value-row strong {
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.shf-kpi-card__value-row span {
+  color: #b26e3c;
+  font-size: 16px;
+}
+
+.shf-kpi-card__sub {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--shf-text-faint);
+}
+
+.shf-kpi-card__ghost {
+  position: absolute;
+  right: 8px;
+  bottom: 10px;
+  width: 82px;
+  height: 42px;
+  opacity: 0.23;
+  background:
+    linear-gradient(180deg, rgba(236, 223, 210, 0.2), rgba(201, 169, 139, 0.42)),
+    linear-gradient(90deg, transparent 0 8%, rgba(255,255,255,0.65) 8% 14%, transparent 14% 22%, rgba(255,255,255,0.45) 22% 32%, transparent 32% 100%);
+  clip-path: polygon(0 100%, 0 82%, 12% 82%, 12% 58%, 30% 58%, 30% 38%, 48% 38%, 48% 18%, 68% 18%, 68% 0, 100% 0, 100% 100%);
+}
+
+.shf-main-grid {
+  display: grid;
+  grid-template-columns: 1.58fr 0.92fr 0.46fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.shf-left-col,
+.shf-middle-col,
+.shf-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.shf-panel {
+  border: 1px solid var(--shf-border);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.34);
+  box-shadow: var(--shf-shadow);
+  overflow: hidden;
+}
+
+.shf-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 16px 18px 10px;
+}
+
+.shf-panel__header h2 {
+  margin: 0;
+  font-family: var(--shf-font-serif);
+  font-size: 25px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.shf-panel__small-label {
+  font-size: 12px;
+  color: var(--shf-text-faint);
+}
+
+.shf-mini-filter {
+  height: 30px;
+  padding: 0 12px;
+  font-size: 12px;
+  color: var(--shf-text-soft);
+  background: rgba(255,255,255,0.3);
+}
+
+.shf-map-stage {
+  position: relative;
+  padding: 0 12px 12px;
+}
+
+.shf-map-toolbar {
+  position: absolute;
+  left: 24px;
+  top: 62px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--shf-border-strong);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.65);
+}
+
+.shf-map-toolbar button {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  background: transparent;
+  font-size: 22px;
+  color: var(--shf-text-soft);
+}
+
+.shf-map-canvas {
+  position: relative;
+  height: 390px;
+  border: 1px solid rgba(173, 153, 130, 0.16);
+  background:
+    radial-gradient(circle at 55% 44%, rgba(219, 177, 135, 0.12), transparent 18%),
+    radial-gradient(circle at 30% 68%, rgba(196, 171, 145, 0.08), transparent 20%),
+    linear-gradient(180deg, rgba(255,255,255,0.22), rgba(236,229,221,0.44)),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,0.03),
+      rgba(255,255,255,0.03) 32px,
+      rgba(147, 124, 101, 0.03) 32px,
+      rgba(147, 124, 101, 0.03) 33px
+    );
+  border-radius: 0 0 14px 14px;
+  overflow: hidden;
+}
+
+.shf-map-canvas::before,
+.shf-map-canvas::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.shf-map-canvas::before {
+  background:
+    radial-gradient(circle at 18% 24%, rgba(145, 118, 92, 0.12) 0 1px, transparent 1px 100%),
+    radial-gradient(circle at 30% 15%, rgba(145, 118, 92, 0.12) 0 1px, transparent 1px 100%),
+    radial-gradient(circle at 48% 20%, rgba(145, 118, 92, 0.12) 0 1px, transparent 1px 100%),
+    radial-gradient(circle at 72% 24%, rgba(145, 118, 92, 0.12) 0 1px, transparent 1px 100%),
+    radial-gradient(circle at 88% 52%, rgba(145, 118, 92, 0.12) 0 1px, transparent 1px 100%);
+}
+
+.shf-map-canvas::after {
+  background:
+    linear-gradient(90deg, transparent 0 18%, rgba(125, 106, 89, 0.08) 18% 18.2%, transparent 18.2% 100%),
+    linear-gradient(180deg, transparent 0 72%, rgba(125, 106, 89, 0.08) 72% 72.2%, transparent 72.2% 100%);
+  mix-blend-mode: multiply;
+}
+
+.shf-map-state {
+  position: absolute;
+  inset: 0;
+}
+
+.shf-map-state__lake {
+  position: absolute;
+  left: 34%;
+  top: 0;
+  width: 45%;
+  height: 22%;
+  background: rgba(170, 165, 163, 0.22);
+  clip-path: polygon(0 100%, 8% 70%, 28% 56%, 62% 42%, 100% 20%, 100% 0, 0 0);
+}
+
+.shf-county {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.shf-county__dot {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 2px solid rgba(255,255,255,0.82);
+  box-shadow: 0 0 0 6px rgba(255,255,255,0.18);
+}
+
+.shf-county--high .shf-county__dot {
+  background: linear-gradient(180deg, #f18a38, #c96127);
+}
+
+.shf-county--mid .shf-county__dot {
+  background: linear-gradient(180deg, #e4b57f, #d18a49);
+}
+
+.shf-county--low .shf-county__dot {
+  background: linear-gradient(180deg, #e8d6c2, #cfb292);
+}
+
+.shf-county.is-selected .shf-county__dot {
+  box-shadow:
+    0 0 0 6px rgba(236, 161, 100, 0.16),
+    0 0 28px rgba(215, 105, 40, 0.35);
+}
+
+.shf-map-card {
+  position: absolute;
+  left: 27%;
+  top: 25%;
+  z-index: 2;
+  width: 200px;
+  border: 1px solid var(--shf-border-strong);
+  border-radius: 16px;
+  padding: 14px 14px 12px;
+  background: rgba(253, 248, 241, 0.82);
+  box-shadow: 0 16px 32px rgba(84, 61, 41, 0.12);
+  backdrop-filter: blur(8px);
+}
+
+.shf-map-card__title-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.shf-map-card__title-row strong {
+  font-size: 16px;
+}
+
+.shf-map-card__grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 12px;
+}
+
+.shf-map-card__grid span {
+  font-size: 12px;
+  color: var(--shf-text-soft);
+}
+
+.shf-map-card__grid strong {
+  font-size: 14px;
+}
+
+.shf-map-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px 14px 12px;
+}
+
+.shf-program-table-panel {
+  padding-bottom: 8px;
+}
+
+.shf-table-filters {
+  display: flex;
+  gap: 8px;
+}
+
+.shf-program-table {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 0 12px 12px;
+}
+
+.shf-program-row {
+  display: grid;
+  grid-template-columns: minmax(200px, 1.45fr) 120px repeat(4, minmax(80px, 1fr));
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  padding: 16px 12px;
+  border: 1px solid rgba(170, 145, 121, 0.12);
+  background: rgba(255,255,255,0.18);
+  cursor: pointer;
+}
+
+.shf-program-row:hover {
+  background: rgba(255,255,255,0.34);
+  border-color: rgba(218, 111, 45, 0.24);
+}
+
+.shf-program-row__name strong {
+  display: block;
+  font-size: 19px;
+  font-weight: 500;
+}
+
+.shf-program-row__name span,
+.shf-program-row__metric span {
+  display: block;
+  font-size: 12px;
+  color: var(--shf-text-faint);
+  margin-top: 4px;
+}
+
+.shf-program-row__metric strong {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.shf-program-row__metric--risk strong {
+  color: #b56c37;
+}
+
+.shf-status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 0 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  border: 1px solid rgba(214, 162, 110, 0.2);
+  background: rgba(241, 212, 181, 0.5);
+  color: #89592f;
+}
+
+.shf-status-pill--intervene {
+  background: linear-gradient(180deg, rgba(237, 170, 114, 0.75), rgba(219, 135, 73, 0.72));
+  color: #5b2d12;
+}
+
+.shf-status-pill--expanding,
+.shf-status-pill--growing,
+.shf-status-pill--in-progress {
+  background: rgba(241, 224, 203, 0.75);
+}
+
+.shf-wheel-card {
+  padding: 4px 14px 14px;
+}
+
+.shf-wheel {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+.shf-wheel__outer {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: 310px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, rgba(255,255,255,0.92) 0 29%, rgba(232, 214, 196, 0.9) 29% 31%, transparent 31% 32%),
+    conic-gradient(
+      from -90deg,
+      #d66a2d 0 32deg,
+      #eb8c37 32deg 64deg,
+      #f0a748 64deg 96deg,
+      #efd9c6 96deg 128deg,
+      #ecd6c0 128deg 160deg,
+      #ead4be 160deg 192deg,
+      #e3cdb8 192deg 224deg,
+      #df9150 224deg 256deg,
+      #e28138 256deg 288deg,
+      #d1b49a 288deg 320deg,
+      #d7c2ae 320deg 360deg
+    );
+  box-shadow:
+    0 0 0 8px rgba(233, 224, 216, 0.72),
+    inset 0 0 0 2px rgba(255,255,255,0.82);
+}
+
+.shf-wheel__outer::before {
+  content: "";
+  position: absolute;
+  inset: 16px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(255,255,255,0.86) 0 44%, transparent 44%),
+    repeating-conic-gradient(
+      from -90deg,
+      rgba(255,255,255,0.4) 0deg 2deg,
+      rgba(0,0,0,0.02) 2deg 30deg
+    );
+  box-shadow: inset 0 0 0 6px rgba(225, 211, 198, 0.68);
+}
+
+.shf-wheel-segment {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 42%;
+  height: 18px;
+  transform-origin: 0 50%;
+  transform: rotate(calc(var(--segment-index) * 32deg - 74deg)) translateX(108px);
+  color: #fff7ef;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.shf-wheel-segment span {
+  display: inline-block;
+  transform: rotate(calc((var(--segment-index) * -32deg) + 74deg));
+  color: #fff8f0;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+}
+
+.shf-wheel-segment.seg-4 span,
+.shf-wheel-segment.seg-5 span,
+.shf-wheel-segment.seg-6 span,
+.shf-wheel-segment.seg-7 span,
+.shf-wheel-segment.seg-10 span,
+.shf-wheel-segment.seg-11 span {
+  color: #6e5645;
+  text-shadow: none;
+}
+
+.shf-wheel__center {
+  position: absolute;
+  inset: 28%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, rgba(255,255,255,0.95), rgba(228, 214, 201, 0.95));
+  box-shadow: inset 0 0 0 8px rgba(208, 190, 173, 0.58);
+  text-align: center;
+}
+
+.shf-wheel__center-globe {
+  position: absolute;
+  inset: 10%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 45% 35%, rgba(255,255,255,0.55), transparent 30%),
+    radial-gradient(circle at center, rgba(210, 185, 160, 0.16), transparent 62%),
+    radial-gradient(circle at 52% 58%, rgba(182, 155, 129, 0.18), transparent 24%);
+  opacity: 0.7;
+}
+
+.shf-wheel__center strong {
+  position: relative;
+  z-index: 1;
+  font-family: var(--shf-font-serif);
+  font-size: 18px;
+  line-height: 1.05;
+  max-width: 120px;
+}
+
+.shf-wheel__center span {
+  position: relative;
+  z-index: 1;
+  margin-top: 6px;
+  font-size: 9px;
+  color: var(--shf-text-soft);
+  letter-spacing: 0.14em;
+}
+
+.shf-trend-block {
+  border-top: 1px solid var(--shf-border);
+  padding: 14px 18px 16px;
+}
+
+.shf-trend-block__header,
+.shf-trend-block__value-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.shf-trend-block__header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.shf-trend-block__header span,
+.shf-trend-block__value-row span {
+  font-size: 12px;
+  color: var(--shf-text-faint);
+}
+
+.shf-trend-block__value-row {
+  margin-top: 6px;
+}
+
+.shf-trend-block__value-row strong {
+  font-size: 28px;
+  font-weight: 500;
+}
+
+.shf-trend-block__value-row span {
+  color: #6f8a63;
+  font-size: 14px;
+}
+
+.shf-trend-svg {
+  width: 100%;
+  height: 62px;
+  margin-top: 4px;
+  color: #d87c38;
+  opacity: 0.86;
+}
+
+.shf-analyst-panel__section-title {
+  padding: 6px 18px 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--shf-text);
+}
+
+.shf-action-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.shf-action-list li {
+  position: relative;
+  padding-left: 16px;
+}
+
+.shf-action-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #d6a36e;
+}
+
+.shf-action-list button {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+  color: var(--shf-text);
+  line-height: 1.45;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.shf-bulb {
+  font-size: 18px;
+}
+
+.shf-trust-list,
+.shf-export-list {
+  padding: 0 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.shf-trust-row,
+.shf-export-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 48px;
+  border: 1px solid rgba(173, 153, 130, 0.16);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.16);
+  padding: 0 14px;
+  color: var(--shf-text);
+  cursor: pointer;
+}
+
+.shf-trust-row strong,
+.shf-export-row strong {
+  font-weight: 600;
+}
+
+.shf-trust-row:hover,
+.shf-export-row:hover {
+  border-color: rgba(218, 111, 45, 0.24);
+  background: rgba(255,255,255,0.3);
+}
+
+.shf-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(35, 26, 20, 0.28);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.shf-drawer {
+  width: min(460px, 100%);
+  height: 100%;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.88), rgba(245, 236, 226, 0.95)),
+    var(--shf-bg);
+  border-left: 1px solid var(--shf-border-strong);
+  box-shadow: -24px 0 48px rgba(58, 39, 22, 0.16);
+  display: flex;
+  flex-direction: column;
+}
+
+.shf-drawer__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 22px 22px 14px;
+  border-bottom: 1px solid var(--shf-border);
+}
+
+.shf-eyebrow {
+  font-size: 12px;
+  color: var(--shf-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.shf-drawer__header h3 {
+  margin: 6px 0 0;
+  font-family: var(--shf-font-serif);
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.shf-icon-btn {
+  width: 38px;
+  height: 38px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.shf-drawer__body {
+  padding: 18px 22px 28px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.shf-drawer-card {
+  border: 1px solid var(--shf-border);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.42);
+  padding: 16px;
+  box-shadow: var(--shf-shadow);
+}
+
+.shf-drawer-card__label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--shf-text-faint);
+  margin-bottom: 8px;
+}
+
+.shf-drawer-card p {
+  margin: 0;
+  line-height: 1.55;
+  color: var(--shf-text);
+}
+
+.shf-drawer-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.shf-drawer-metric {
+  border: 1px solid rgba(173, 153, 130, 0.18);
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(255,255,255,0.35);
+}
+
+.shf-drawer-metric span {
+  display: block;
+  font-size: 12px;
+  color: var(--shf-text-faint);
+  margin-bottom: 4px;
+}
+
+.shf-drawer-metric strong {
+  font-size: 16px;
+}
+
+.shf-drawer-list {
+  margin: 0;
+  padding-left: 18px;
+  line-height: 1.6;
+}
+
+@media (max-width: 1280px) {
+  .shf-kpi-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .shf-main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .shf-topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .shf-topbar__controls {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 780px) {
+  .shf-page {
+    padding: 14px;
+  }
+
+  .shf-kpi-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 14px;
+  }
+
+  .shf-main-grid {
+    padding: 14px;
+  }
+
+  .shf-program-row {
+    grid-template-columns: 1fr;
+  }
+
+  .shf-brand {
+    flex-wrap: wrap;
+  }
+
+  .shf-brand__divider {
+    display: none;
+  }
+
+  .shf-select {
+    min-width: 140px;
+  }
+}\n\n
+/* ===== Guided Tour Target Helpers ===== */
+.command-header,
+.shf-command-header,
+.shf-impact-header,
+.kpi-row,
+.shf-kpi-row,
+.impact-map,
+.shf-impact-map,
+.ai-analyst,
+.analyst-panel,
+.program-table,
+.program-performance,
+.export-panel,
+.decision-exports,
+.trust-panel,
+.trust-proof-panel {
+  scroll-margin-top: 96px;
+}
+
+/* Guided tour precision wrapper */
+
+@media (max-width: 1100px) {
+  
+}
+
+@media (max-width: 720px) {
+  
+}
+
+/* ===== Guided Tour: Next Layer ===== */
+
+body.tour-step-map [data-tour="map"] {
+  position: relative;
+  z-index: 2;
+  box-shadow:
+    0 0 0 1px rgba(255, 183, 106, 0.18),
+    0 0 26px rgba(255, 166, 79, 0.18);
+}
+
+body.tour-step-map [data-tour="map"]::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 22px;
+  pointer-events: none;
+  border: 1px solid rgba(255, 183, 106, 0.28);
+  box-shadow:
+    0 0 22px rgba(255, 166, 79, 0.18),
+    inset 0 0 18px rgba(255, 183, 106, 0.05);
+  animation: shfTourPanelPulse 2.8s ease-in-out infinite;
+}
+
+body.tour-step-map .shf-county-node,
+body.tour-step-map .shf-map-node,
+body.tour-step-map [class*="county-node"],
+body.tour-step-map [class*="map-node"] {
+  animation: shfTourNodePulse 2.2s ease-in-out infinite;
+}
+
+body.tour-step-analyst [data-tour="analyst"] {
+  position: relative;
+  z-index: 2;
+  box-shadow:
+    0 0 0 1px rgba(255, 183, 106, 0.18),
+    0 0 26px rgba(255, 166, 79, 0.18);
+}
+
+body.tour-step-analyst [data-tour="analyst"]::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 22px;
+  pointer-events: none;
+  border: 1px solid rgba(255, 183, 106, 0.28);
+  box-shadow:
+    0 0 20px rgba(255, 166, 79, 0.18),
+    inset 0 0 16px rgba(255, 183, 106, 0.04);
+  animation: shfTourPanelPulse 2.6s ease-in-out infinite;
+}
+
+body.tour-step-analyst [data-tour="analyst"] .shf-action-list li,
+body.tour-step-analyst [data-tour="analyst"] .shf-action-list button {
+  animation: shfTourListGlow 2.4s ease-in-out infinite;
+}
+
+body.tour-step-trust [data-tour="trust"] {
+  position: relative;
+  z-index: 2;
+  box-shadow:
+    0 0 0 1px rgba(255, 183, 106, 0.18),
+    0 0 26px rgba(255, 166, 79, 0.18);
+}
+
+body.tour-step-trust [data-tour="trust"]::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 22px;
+  pointer-events: none;
+  border: 1px solid rgba(255, 183, 106, 0.28);
+  box-shadow:
+    0 0 20px rgba(255, 166, 79, 0.18),
+    inset 0 0 16px rgba(255, 183, 106, 0.04);
+  animation: shfTourPanelPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes shfTourPanelPulse {
+  0% {
+    opacity: 0.72;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.003);
+  }
+  100% {
+    opacity: 0.76;
+    transform: scale(1);
+  }
+}
+
+@keyframes shfTourNodePulse {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.08);
+    filter: brightness(1.08);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+@keyframes shfTourListGlow {
+  0% {
+    opacity: 0.92;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.92;
+  }
+}
+
+.shf-map-wrapper {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: radial-gradient(circle at center, #f5efe6 0%, #efe7dc 100%);
+}
+
+.shf-map-wrapper svg {
+  width: 100%;
+  height: 100%;
+}
+
+
+/* ===== Locked Guided Tour Emphasis ===== */
+body.tour-step-map [data-tour="map"],
+body.tour-step-analyst [data-tour="analyst"],
+body.tour-step-trust [data-tour="trust"] {
+  position: relative;
+  z-index: 2;
+}
+
+body.tour-step-map [data-tour="map"]::after,
+body.tour-step-analyst [data-tour="analyst"]::after,
+body.tour-step-trust [data-tour="trust"]::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 20px;
+  pointer-events: none;
+  border: 1px solid rgba(255, 183, 106, 0.28);
+  box-shadow:
+    0 0 20px rgba(255, 166, 79, 0.18),
+    inset 0 0 14px rgba(255, 183, 106, 0.05);
+  animation: shfTourPanelPulse 2.6s ease-in-out infinite;
+}
+
+body.tour-step-analyst [data-tour="analyst"] .shf-action-list li,
+body.tour-step-analyst [data-tour="analyst"] .shf-action-list button {
+  animation: shfTourListGlow 2.4s ease-in-out infinite;
+}
+
+@keyframes shfTourPanelPulse {
+  0% { opacity: 0.74; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.003); }
+  100% { opacity: 0.76; transform: scale(1); }
+}
+
+@keyframes shfTourListGlow {
+  0% { opacity: 0.92; }
+  50% { opacity: 1; }
+  100% { opacity: 0.92; }
+}
+
+
+/* 🔥 MAP HEIGHT FIX */
+.shf-map-panel {
+  height: 520px !important;
+  padding: 0 !important;
+}
+
+
+/* ===== Force SHF map mount ===== */
+.shf-map-panel {
+  min-height: 620px;
+}
+
+.shf-map-stage {
+  height: 100%;
+  min-height: 390px;
+  padding: 0;
+}
+
+
+
+/* =========================
+   SHF MAP COUNTIES (WHITE LINES FIX)
+========================= */
+.shf-map-counties {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 2;
+  pointer-events: none;
+
+  filter: brightness(0) invert(1) opacity(0.85);
+}
+
+
+/* =========================
+   SHF MAP SCALE FIX (MAKE OHIO BIGGER)
+========================= */
+.shf-impact-map {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.shf-map-texture,
+.shf-map-counties {
+  transform: scale(1.25);
+  transform-origin: center;
+}
+
+
+/* =========================
+   SHF MAP POLISH PASS
+========================= */
+.shf-impact-map {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.shf-map-texture,
+.shf-map-counties {
+  transform: scale(1.34);
+  transform-origin: center;
+}
+
+.shf-map-counties {
+  filter:
+    brightness(0) invert(1) opacity(0.82)
+    drop-shadow(0 0 2px rgba(255,255,255,0.10));
+}
+
+/* =========================================================
+   PHASE 3 — IMPACT ECOSYSTEM WHEEL / IDLE LIFE
+   ========================================================= */
+.shf-wheel {
+  position: relative;
+  isolation: isolate;
+}
+
+.shf-wheel__outer {
+  position: relative;
+}
+
+.shf-wheel__center {
+  animation: shfWheelCenterBreathe 7.5s ease-in-out infinite;
+}
+
+.shf-wheel__center-globe {
+  animation: shfWheelGlobeGlow 8.5s ease-in-out infinite;
+}
+
+.shf-wheel-segment {
+  transition:
+    transform 320ms ease,
+    filter 320ms ease,
+    opacity 320ms ease,
+    box-shadow 320ms ease;
+  animation: shfWheelSegmentShimmer 12s ease-in-out infinite;
+  animation-delay: calc(var(--segment-index, 0) * 180ms);
+  will-change: transform, filter, opacity;
+}
+
+.shf-wheel::after {
+  content: "";
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      rgba(255,255,255,0.00) 38deg,
+      rgba(255,255,255,0.18) 52deg,
+      rgba(255,255,255,0.00) 66deg,
+      transparent 360deg
+    );
+  mix-blend-mode: screen;
+  opacity: 0.45;
+  animation: shfWheelSweep 16s linear infinite;
+}
+
+@keyframes shfWheelCenterBreathe {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.018);
+    filter: brightness(1.06);
+  }
+}
+
+@keyframes shfWheelGlobeGlow {
+  0%, 100% {
+    opacity: 0.72;
+    filter: blur(0px) brightness(1);
+  }
+  50% {
+    opacity: 0.96;
+    filter: blur(1.5px) brightness(1.08);
+  }
+}
+
+@keyframes shfWheelSegmentShimmer {
+  0%, 100% {
+    opacity: 0.92;
+    transform: scale(1);
+    filter: saturate(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.01);
+    filter: saturate(1.08) brightness(1.04);
+  }
+}
+
+@keyframes shfWheelSweep {
+  0% { transform: rotate(0deg); opacity: 0.22; }
+  50% { opacity: 0.38; }
+  100% { transform: rotate(360deg); opacity: 0.22; }
+}
+
+/* =========================================================
+   PHASE 4 — IMPACT ECOSYSTEM WHEEL / STATE RESPONSES
+   ========================================================= */
+.shf-wheel[data-wheel-state="processing"]::after {
+  animation-duration: 3.5s;
+  opacity: 0.58;
+}
+
+.shf-wheel[data-wheel-state="processing"] .shf-wheel__center,
+.shf-wheel[data-wheel-state="region"] .shf-wheel__center,
+.shf-wheel[data-wheel-state="program"] .shf-wheel__center,
+.shf-wheel[data-wheel-state="review"] .shf-wheel__center,
+.shf-wheel[data-wheel-state="export"] .shf-wheel__center {
+  filter: brightness(1.12);
+  transform: scale(1.028);
+}
+
+.shf-wheel[data-wheel-state="region"] .seg-5,
+.shf-wheel[data-wheel-state="region"] .seg-1,
+.shf-wheel[data-wheel-state="region"] .seg-2 {
+  transform: scale(1.045);
+  filter: brightness(1.16) saturate(1.14);
+}
+
+.shf-wheel[data-wheel-state="program"] .seg-2,
+.shf-wheel[data-wheel-state="program"] .seg-6,
+.shf-wheel[data-wheel-state="program"] .seg-3 {
+  transform: scale(1.045);
+  filter: brightness(1.16) saturate(1.14);
+}
+
+.shf-wheel[data-wheel-state="review"] .seg-7,
+.shf-wheel[data-wheel-state="review"] .seg-8,
+.shf-wheel[data-wheel-state="review"] .seg-9,
+.shf-wheel[data-wheel-state="review"] .seg-3 {
+  transform: scale(1.05);
+  filter: brightness(1.18) saturate(1.18);
+}
+
+.shf-wheel[data-wheel-state="export"] .seg-10,
+.shf-wheel[data-wheel-state="export"] .seg-8,
+.shf-wheel[data-wheel-state="export"] .seg-7 {
+  transform: scale(1.05);
+  filter: brightness(1.18) saturate(1.18);
+}
+
+/* =========================================================
+   PHASE 5 — COPY / HIERARCHY POLISH
+   ========================================================= */
+.shf-title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.shf-title-subtitle {
+  margin: 0;
+  max-width: 720px;
+  font-size: 12px;
+  line-height: 1.45;
+  opacity: 0.78;
+}
+
+.shf-panel__helper {
+  margin: 4px 0 0;
+  max-width: 440px;
+  font-size: 12px;
+  line-height: 1.45;
+  opacity: 0.74;
+}
+
+.shf-panel__header > div {
+  min-width: 0;
+}
+
+/* =========================================================
+   DEBUG BOOST — MAKE WHEEL MOTION OBVIOUS FOR TESTING
+   ========================================================= */
+
+/* Stronger idle life */
+.shf-wheel {
+  position: relative;
+  isolation: isolate;
+}
+
+.shf-wheel__center {
+  animation: shfWheelCenterBreatheDebug 2.2s ease-in-out infinite !important;
+}
+
+.shf-wheel__center-globe {
+  animation: shfWheelGlobeGlowDebug 2s ease-in-out infinite !important;
+}
+
+.shf-wheel-segment {
+  animation: shfWheelSegmentShimmerDebug 2.8s ease-in-out infinite !important;
+  animation-delay: calc(var(--segment-index, 0) * 90ms) !important;
+  transform-origin: center center;
+}
+
+.shf-wheel::after {
+  content: "";
+  position: absolute;
+  inset: 6%;
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    conic-gradient(
+      from 0deg,
+      rgba(255,255,255,0.00) 0deg,
+      rgba(255,255,255,0.00) 25deg,
+      rgba(255,255,255,0.55) 42deg,
+      rgba(255,255,255,0.00) 58deg,
+      rgba(255,255,255,0.00) 360deg
+    ) !important;
+  mix-blend-mode: screen;
+  opacity: 0.9 !important;
+  animation: shfWheelSweepDebug 2.8s linear infinite !important;
+  z-index: 5;
+}
+
+/* Make the center easier to see moving */
+.shf-wheel__center {
+  box-shadow:
+    0 0 0 2px rgba(214, 146, 67, 0.18),
+    0 0 18px rgba(214, 146, 67, 0.18),
+    0 0 36px rgba(214, 146, 67, 0.10) !important;
+}
+
+/* Stronger triggered states */
+.shf-wheel[data-wheel-state="processing"]::after {
+  animation-duration: 0.95s !important;
+  opacity: 1 !important;
+}
+
+.shf-wheel[data-wheel-state="processing"] .shf-wheel__center {
+  transform: scale(1.08) !important;
+  filter: brightness(1.22) saturate(1.15) !important;
+}
+
+.shf-wheel[data-wheel-state="region"] .seg-5,
+.shf-wheel[data-wheel-state="region"] .seg-1,
+.shf-wheel[data-wheel-state="region"] .seg-2 {
+  transform: scale(1.1) !important;
+  filter: brightness(1.32) saturate(1.35) !important;
+  box-shadow: 0 0 22px rgba(220, 137, 52, 0.45) !important;
+}
+
+.shf-wheel[data-wheel-state="program"] .seg-2,
+.shf-wheel[data-wheel-state="program"] .seg-6,
+.shf-wheel[data-wheel-state="program"] .seg-3 {
+  transform: scale(1.1) !important;
+  filter: brightness(1.32) saturate(1.35) !important;
+  box-shadow: 0 0 22px rgba(220, 137, 52, 0.45) !important;
+}
+
+.shf-wheel[data-wheel-state="review"] .seg-7,
+.shf-wheel[data-wheel-state="review"] .seg-8,
+.shf-wheel[data-wheel-state="review"] .seg-9,
+.shf-wheel[data-wheel-state="review"] .seg-3 {
+  transform: scale(1.12) !important;
+  filter: brightness(1.38) saturate(1.45) !important;
+  box-shadow: 0 0 24px rgba(223, 123, 33, 0.52) !important;
+}
+
+.shf-wheel[data-wheel-state="export"] .seg-10,
+.shf-wheel[data-wheel-state="export"] .seg-8,
+.shf-wheel[data-wheel-state="export"] .seg-7 {
+  transform: scale(1.12) !important;
+  filter: brightness(1.38) saturate(1.45) !important;
+  box-shadow: 0 0 24px rgba(223, 123, 33, 0.52) !important;
+}
+
+.shf-wheel[data-wheel-state="processing"] .shf-wheel-segment,
+.shf-wheel[data-wheel-state="region"] .shf-wheel-segment,
+.shf-wheel[data-wheel-state="program"] .shf-wheel-segment,
+.shf-wheel[data-wheel-state="review"] .shf-wheel-segment,
+.shf-wheel[data-wheel-state="export"] .shf-wheel-segment {
+  transition:
+    transform 180ms ease,
+    filter 180ms ease,
+    opacity 180ms ease,
+    box-shadow 180ms ease !important;
+}
+
+/* Debug keyframes */
+@keyframes shfWheelCenterBreatheDebug {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.05);
+    filter: brightness(1.15);
+  }
+}
+
+@keyframes shfWheelGlobeGlowDebug {
+  0%, 100% {
+    opacity: 0.7;
+    filter: blur(0px) brightness(1);
+  }
+  50% {
+    opacity: 1;
+    filter: blur(2px) brightness(1.18);
+  }
+}
+
+@keyframes shfWheelSegmentShimmerDebug {
+  0%, 100% {
+    opacity: 0.86;
+    transform: scale(1);
+    filter: saturate(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.045);
+    filter: saturate(1.25) brightness(1.18);
+  }
+}
+
+@keyframes shfWheelSweepDebug {
+  0% {
+    transform: rotate(0deg);
+    opacity: 0.72;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(360deg);
+    opacity: 0.72;
+  }
+}
+
+/* =========================================================
+   FINAL CLEANUP — DIAL DEBUG WHEEL BACK TO PREMIUM
+   ========================================================= */
+
+/* Calm the idle motion down from debug mode */
+.shf-wheel__center {
+  animation: shfWheelCenterBreatheFinal 6.8s ease-in-out infinite !important;
+}
+
+.shf-wheel__center-globe {
+  animation: shfWheelGlobeGlowFinal 7.6s ease-in-out infinite !important;
+}
+
+.shf-wheel-segment {
+  animation: shfWheelSegmentShimmerFinal 10.5s ease-in-out infinite !important;
+  animation-delay: calc(var(--segment-index, 0) * 140ms) !important;
+}
+
+.shf-wheel::after {
+  inset: 7.5%;
+  opacity: 0.38 !important;
+  animation: shfWheelSweepFinal 13.5s linear infinite !important;
+}
+
+/* Reduce center debug halo */
+.shf-wheel__center {
+  box-shadow:
+    0 0 0 1px rgba(214, 146, 67, 0.10),
+    0 0 10px rgba(214, 146, 67, 0.10),
+    0 0 20px rgba(214, 146, 67, 0.05) !important;
+}
+
+/* Keep interaction states visible, but more disciplined */
+.shf-wheel[data-wheel-state="processing"]::after {
+  animation-duration: 2.4s !important;
+  opacity: 0.62 !important;
+}
+
+.shf-wheel[data-wheel-state="processing"] .shf-wheel__center {
+  transform: scale(1.04) !important;
+  filter: brightness(1.12) saturate(1.08) !important;
+}
+
+.shf-wheel[data-wheel-state="region"] .seg-5,
+.shf-wheel[data-wheel-state="region"] .seg-1,
+.shf-wheel[data-wheel-state="region"] .seg-2 {
+  transform: scale(1.055) !important;
+  filter: brightness(1.18) saturate(1.16) !important;
+  box-shadow: 0 0 12px rgba(220, 137, 52, 0.24) !important;
+}
+
+.shf-wheel[data-wheel-state="program"] .seg-2,
+.shf-wheel[data-wheel-state="program"] .seg-6,
+.shf-wheel[data-wheel-state="program"] .seg-3 {
+  transform: scale(1.055) !important;
+  filter: brightness(1.18) saturate(1.16) !important;
+  box-shadow: 0 0 12px rgba(220, 137, 52, 0.24) !important;
+}
+
+.shf-wheel[data-wheel-state="review"] .seg-7,
+.shf-wheel[data-wheel-state="review"] .seg-8,
+.shf-wheel[data-wheel-state="review"] .seg-9,
+.shf-wheel[data-wheel-state="review"] .seg-3 {
+  transform: scale(1.065) !important;
+  filter: brightness(1.2) saturate(1.18) !important;
+  box-shadow: 0 0 14px rgba(223, 123, 33, 0.28) !important;
+}
+
+.shf-wheel[data-wheel-state="export"] .seg-10,
+.shf-wheel[data-wheel-state="export"] .seg-8,
+.shf-wheel[data-wheel-state="export"] .seg-7 {
+  transform: scale(1.065) !important;
+  filter: brightness(1.2) saturate(1.18) !important;
+  box-shadow: 0 0 14px rgba(223, 123, 33, 0.28) !important;
+}
+
+.shf-wheel[data-wheel-state="processing"] .shf-wheel-segment,
+.shf-wheel[data-wheel-state="region"] .shf-wheel-segment,
+.shf-wheel[data-wheel-state="program"] .shf-wheel-segment,
+.shf-wheel[data-wheel-state="review"] .shf-wheel-segment,
+.shf-wheel[data-wheel-state="export"] .shf-wheel-segment {
+  transition:
+    transform 260ms ease,
+    filter 260ms ease,
+    opacity 260ms ease,
+    box-shadow 260ms ease !important;
+}
+
+/* Final keyframes */
+@keyframes shfWheelCenterBreatheFinal {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.018);
+    filter: brightness(1.06);
+  }
+}
+
+@keyframes shfWheelGlobeGlowFinal {
+  0%, 100% {
+    opacity: 0.72;
+    filter: blur(0px) brightness(1);
+  }
+  50% {
+    opacity: 0.9;
+    filter: blur(1.1px) brightness(1.07);
+  }
+}
+
+@keyframes shfWheelSegmentShimmerFinal {
+  0%, 100% {
+    opacity: 0.9;
+    transform: scale(1);
+    filter: saturate(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.012);
+    filter: saturate(1.08) brightness(1.05);
+  }
+}
+
+@keyframes shfWheelSweepFinal {
+  0% {
+    transform: rotate(0deg);
+    opacity: 0.26;
+  }
+  50% {
+    opacity: 0.42;
+  }
+  100% {
+    transform: rotate(360deg);
+    opacity: 0.26;
+  }
+}
+
+/* =========================================================
+   IMPACT GUIDANCE — GROUPED PANEL POLISH
+   ========================================================= */
+.shf-guidance-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.shf-guidance-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.shf-guidance-group__title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  opacity: 0.72;
+}
+
+.shf-action-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding-left: 18px;
+}
+
+.shf-action-list li {
+  margin: 0;
+}
+
+.shf-action-list button {
+  text-align: left;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  line-height: 1.45;
+}
+
+.shf-action-list button:hover {
+  opacity: 0.86;
+}
+
+/* =========================================================
+   FINAL POLISH — HEADER STATUS + WHEEL TYPOGRAPHY
+   ========================================================= */
+.shf-live-status {
+  margin-top: 4px;
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  opacity: 0.64;
+}
+
+.shf-mini-filter {
+  min-width: 110px;
+}
+
+.shf-wheel__center strong {
+  display: block;
+  max-width: 130px;
+  margin: 0 auto;
+  text-align: center;
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  font-size: clamp(15px, 1.15vw, 20px);
+}
+
+.shf-wheel__center span {
+  display: block;
+  max-width: 118px;
+  margin: 6px auto 0;
+  text-align: center;
+  line-height: 1.18;
+  letter-spacing: 0.02em;
+  font-size: 10px;
+}
+
+@media (max-width: 1200px) {
+  .shf-wheel__center strong {
+    max-width: 118px;
+    font-size: 15px;
+  }
+
+  .shf-wheel__center span {
+    max-width: 108px;
+    font-size: 9.5px;
+  }
+}
+
+/* =========================================================
+   DRAWER POLISH PASS — PREMIUM DETAIL PANEL
+   ========================================================= */
+
+.shf-drawer-backdrop {
+  backdrop-filter: blur(6px);
+  background: rgba(66, 47, 33, 0.14);
+}
+
+.shf-drawer {
+  width: min(460px, 92vw);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(248,243,236,0.98) 100%);
+  border-left: 1px solid rgba(166, 129, 92, 0.22);
+  box-shadow:
+    -24px 0 50px rgba(61, 43, 28, 0.10),
+    -8px 0 18px rgba(61, 43, 28, 0.06);
+}
+
+.shf-drawer__header {
+  padding: 22px 22px 18px;
+  border-bottom: 1px solid rgba(166, 129, 92, 0.16);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.28) 100%);
+}
+
+.shf-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.56;
+  margin-bottom: 8px;
+}
+
+.shf-drawer__header h3 {
+  margin: 0;
+  font-size: clamp(28px, 2.2vw, 38px);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+}
+
+.shf-icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: 1px solid rgba(166, 129, 92, 0.18);
+  background: rgba(255,255,255,0.65);
+  box-shadow: 0 2px 10px rgba(61, 43, 28, 0.05);
+}
+
+.shf-drawer__body {
+  padding: 18px 18px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.shf-drawer-card {
+  padding: 16px 16px 15px;
+  border-radius: 16px;
+  border: 1px solid rgba(166, 129, 92, 0.14);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(250,246,239,0.95) 100%);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.7) inset,
+    0 6px 18px rgba(61, 43, 28, 0.04);
+}
+
+.shf-drawer-card__label {
+  margin-bottom: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.56;
+}
+
+.shf-drawer-card p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.shf-drawer-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.shf-drawer-metric {
+  padding: 12px 12px 11px;
+  border-radius: 14px;
+  border: 1px solid rgba(166, 129, 92, 0.12);
+  background: rgba(255,255,255,0.72);
+}
+
+.shf-drawer-metric span {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  line-height: 1.35;
+  opacity: 0.62;
+}
+
+.shf-drawer-metric strong {
+  display: block;
+  font-size: 26px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.shf-drawer-list {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.shf-drawer-list li {
+  line-height: 1.5;
+  padding-left: 2px;
+}
+
+.shf-drawer-card:last-child {
+  border-color: rgba(196, 140, 79, 0.18);
+  background:
+    linear-gradient(180deg, rgba(255,251,245,0.95) 0%, rgba(250,244,234,0.98) 100%);
+}
+
+@media (max-width: 900px) {
+  .shf-drawer {
+    width: 100vw;
+    max-width: 100vw;
+  }
+
+  .shf-drawer__header {
+    padding: 18px 16px 14px;
+  }
+
+  .shf-drawer__body {
+    padding: 14px 14px 20px;
+  }
+
+  .shf-drawer-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .shf-drawer__header h3 {
+    font-size: 28px;
+  }
+}
+
+/* =========================================================
+   SHF TOP-LEFT LOGO
+   ========================================================= */
+.shf-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.shf-brand__logo {
+  display: block;
+  width: auto;
+  height: 42px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 900px) {
+  .shf-brand__logo {
+    height: 34px;
+  }
+}
+
+/* =========================================================
+   SHF TOP-LEFT LOGO
+   ========================================================= */
+.shf-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.shf-brand__logo {
+  display: block;
+  width: auto;
+  height: 42px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 900px) {
+  .shf-brand__logo {
+    height: 34px;
+  }
+}
+
+/* =========================================================
+   SHF LOGO SIZE BOOST
+   ========================================================= */
+.shf-brand {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.shf-brand__logo {
+  display: block;
+  width: auto;
+  height: 72px !important;
+  max-width: 260px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 1200px) {
+  .shf-brand__logo {
+    height: 60px !important;
+    max-width: 220px;
+  }
+}
+
+@media (max-width: 900px) {
+  .shf-brand__logo {
+    height: 48px !important;
+    max-width: 180px;
+  }
+}
+
+/* =========================================================
+   SHF LOGO SIZE BOOST
+   ========================================================= */
+.shf-brand {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.shf-brand__logo {
+  display: block;
+  width: auto;
+  height: 72px !important;
+  max-width: 260px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 1200px) {
+  .shf-brand__logo {
+    height: 60px !important;
+    max-width: 220px;
+  }
+}
+
+@media (max-width: 900px) {
+  .shf-brand__logo {
+    height: 48px !important;
+    max-width: 180px;
+  }
+}
+
+/* =========================================================
+   SHF LOGO SIZE BOOST
+   ========================================================= */
+.shf-brand {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.shf-brand__logo {
+  display: block;
+  width: auto;
+  height: 72px !important;
+  max-width: 320px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 1200px) {
+  .shf-brand__logo {
+    height: 60px !important;
+    max-width: 260px;
+  }
+}
+
+@media (max-width: 900px) {
+  .shf-brand__logo {
+    height: 46px !important;
+    max-width: 200px;
+  }
+}
+
+/* =========================================================
+   SHF HEADER LOGO — STRONGER BRAND ANCHOR
+   ========================================================= */
+.shf-brand {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.shf-brand__logo {
+  display: block;
+  width: auto;
+  height: 96px !important;
+  max-width: 420px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+.shf-brand__text {
+  font-size: clamp(28px, 2vw, 42px);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+.shf-brand__divider {
+  height: 54px;
+  align-self: center;
+}
+
+@media (max-width: 1200px) {
+  .shf-brand__logo {
+    height: 78px !important;
+    max-width: 340px;
+  }
+
+  .shf-brand__text {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 900px) {
+  .shf-brand__logo {
+    height: 58px !important;
+    max-width: 240px;
+  }
+
+  .shf-brand__text {
+    font-size: 24px;
+  }
+
+  .shf-brand__divider {
+    height: 38px;
+  }
+}
+
+/* =========================================================
+   SHF LOGO — LARGER HERO HEADER SIZE
+   ========================================================= */
+.shf-brand__logo {
+  display: block;
+  width: auto;
+  height: 124px !important;
+  max-width: 520px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 1200px) {
+  .shf-brand__logo {
+    height: 96px !important;
+    max-width: 420px;
+  }
+}
+
+@media (max-width: 900px) {
+  .shf-brand__logo {
+    height: 68px !important;
+    max-width: 280px;
+  }
+}
+
+/* =========================================================
+   SHF HEADER BRAND CONSISTENCY PASS
+   ========================================================= */
+.shf-topbar {
+  align-items: center;
+}
+
+.shf-brand {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  min-width: 0;
+}
+
+.shf-brand__logo {
+  display: block;
+  width: auto;
+  height: 132px !important;
+  max-width: 540px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+.shf-brand__divider {
+  width: 1px;
+  height: 72px;
+  background: rgba(120, 92, 67, 0.16);
+  flex: 0 0 auto;
+}
+
+.shf-title-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.shf-title-block h1 {
+  margin: 0;
+  font-size: clamp(30px, 2.2vw, 44px);
+  line-height: 0.96;
+  letter-spacing: -0.025em;
+}
+
+.shf-title-subtitle {
+  max-width: 560px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.shf-live-status {
+  font-size: 12px;
+  line-height: 1.4;
+  opacity: 0.68;
+}
+
+.shf-topbar__controls {
+  align-self: flex-start;
+  padding-top: 10px;
+}
+
+.shf-mini-filter {
+  min-width: 122px;
+}
+
+@media (max-width: 1280px) {
+  .shf-brand__logo {
+    height: 108px !important;
+    max-width: 460px;
+  }
+
+  .shf-brand__divider {
+    height: 62px;
+  }
+
+  .shf-title-block h1 {
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 980px) {
+  .shf-brand {
+    gap: 16px;
+  }
+
+  .shf-brand__logo {
+    height: 82px !important;
+    max-width: 340px;
+  }
+
+  .shf-brand__divider {
+    height: 48px;
+  }
+
+  .shf-title-block h1 {
+    font-size: 28px;
+  }
+
+  .shf-title-subtitle {
+    font-size: 13px;
+  }
+
+  .shf-topbar__controls {
+    padding-top: 0;
+  }
+}
+
+/* =========================================================
+   SHF HEADER BRAND CONSISTENCY PASS
+   ========================================================= */
+.shf-topbar {
+  align-items: center;
+}
+
+.shf-brand {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  min-width: 0;
+}
+
+.shf-brand__logo {
+  display: block;
+  width: auto;
+  height: 132px !important;
+  max-width: 540px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+.shf-brand__divider {
+  width: 1px;
+  height: 72px;
+  background: rgba(120, 92, 67, 0.16);
+  flex: 0 0 auto;
+}
+
+.shf-title-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.shf-title-block h1 {
+  margin: 0;
+  font-size: clamp(30px, 2.2vw, 44px);
+  line-height: 0.96;
+  letter-spacing: -0.025em;
+}
+
+.shf-title-subtitle {
+  max-width: 560px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.shf-live-status {
+  font-size: 12px;
+  line-height: 1.4;
+  opacity: 0.68;
+}
+
+.shf-topbar__controls {
+  align-self: flex-start;
+  padding-top: 10px;
+}
+
+.shf-mini-filter {
+  min-width: 122px;
+}
+
+@media (max-width: 1280px) {
+  .shf-brand__logo {
+    height: 108px !important;
+    max-width: 460px;
+  }
+
+  .shf-brand__divider {
+    height: 62px;
+  }
+
+  .shf-title-block h1 {
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 980px) {
+  .shf-brand {
+    gap: 16px;
+  }
+
+  .shf-brand__logo {
+    height: 82px !important;
+    max-width: 340px;
+  }
+
+  .shf-brand__divider {
+    height: 48px;
+  }
+
+  .shf-title-block h1 {
+    font-size: 28px;
+  }
+
+  .shf-title-subtitle {
+    font-size: 13px;
+  }
+
+  .shf-topbar__controls {
+    padding-top: 0;
+  }
+}
+
+/* =========================================================
+   SHF LOGO LOCKUP — BIGGER
+   ========================================================= */
+.shf-brand__lockup {
+  min-width: 260px !important;
+  gap: 10px !important;
+}
+
+.shf-brand__logo {
+  height: 120px !important;
+  max-width: 260px !important;
+}
+
+.shf-brand__lockup-line1 {
+  font-size: 24px !important;
+  line-height: 1 !important;
+}
+
+.shf-brand__lockup-line2 {
+  font-size: 13px !important;
+  letter-spacing: 0.22em !important;
+}
+
+.shf-brand__divider {
+  height: 96px !important;
+}
+
+@media (max-width: 1200px) {
+  .shf-brand__lockup {
+    min-width: 220px !important;
+  }
+
+  .shf-brand__logo {
+    height: 98px !important;
+    max-width: 220px !important;
+  }
+
+  .shf-brand__lockup-line1 {
+    font-size: 20px !important;
+  }
+
+  .shf-brand__lockup-line2 {
+    font-size: 11px !important;
+  }
+
+  .shf-brand__divider {
+    height: 82px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .shf-brand__lockup {
+    min-width: 170px !important;
+  }
+
+  .shf-brand__logo {
+    height: 72px !important;
+    max-width: 170px !important;
+  }
+
+  .shf-brand__lockup-line1 {
+    font-size: 16px !important;
+  }
+
+  .shf-brand__lockup-line2 {
+    font-size: 9px !important;
+    letter-spacing: 0.16em !important;
+  }
+
+  .shf-brand__divider {
+    height: 62px !important;
+  }
+}
+
+/* =========================================================
+   SHF LOGO LOCKUP — FINAL BIGGER PASS
+   ========================================================= */
+.shf-brand__lockup {
+  min-width: 320px !important;
+  gap: 12px !important;
+}
+
+.shf-brand__logo {
+  height: 148px !important;
+  max-width: 320px !important;
+}
+
+.shf-brand__lockup-line1 {
+  font-size: 30px !important;
+  line-height: 0.98 !important;
+  font-weight: 600 !important;
+}
+
+.shf-brand__lockup-line2 {
+  font-size: 15px !important;
+  letter-spacing: 0.24em !important;
+  line-height: 1 !important;
+}
+
+.shf-brand__divider {
+  height: 112px !important;
+}
+
+@media (max-width: 1200px) {
+  .shf-brand__lockup {
+    min-width: 270px !important;
+  }
+
+  .shf-brand__logo {
+    height: 118px !important;
+    max-width: 270px !important;
+  }
+
+  .shf-brand__lockup-line1 {
+    font-size: 24px !important;
+  }
+
+  .shf-brand__lockup-line2 {
+    font-size: 12px !important;
+  }
+
+  .shf-brand__divider {
+    height: 92px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .shf-brand__lockup {
+    min-width: 210px !important;
+  }
+
+  .shf-brand__logo {
+    height: 86px !important;
+    max-width: 210px !important;
+  }
+
+  .shf-brand__lockup-line1 {
+    font-size: 18px !important;
+  }
+
+  .shf-brand__lockup-line2 {
+    font-size: 10px !important;
+    letter-spacing: 0.18em !important;
+  }
+
+  .shf-brand__divider {
+    height: 68px !important;
+  }
+}
+
+/* =========================================================
+   SHF LOGO LOCKUP — FINAL BALANCE TUNE
+   ========================================================= */
+.shf-brand {
+  gap: 18px !important;
+}
+
+.shf-brand__lockup {
+  min-width: 360px !important;
+  gap: 10px !important;
+}
+
+.shf-brand__logo {
+  height: 162px !important;
+  max-width: 360px !important;
+}
+
+.shf-brand__lockup-line1 {
+  font-size: 32px !important;
+}
+
+.shf-brand__lockup-line2 {
+  font-size: 16px !important;
+  letter-spacing: 0.24em !important;
+}
+
+.shf-brand__divider {
+  height: 118px !important;
+}
+
+@media (max-width: 1200px) {
+  .shf-brand__lockup {
+    min-width: 300px !important;
+  }
+
+  .shf-brand__logo {
+    height: 128px !important;
+    max-width: 300px !important;
+  }
+
+  .shf-brand__lockup-line1 {
+    font-size: 26px !important;
+  }
+
+  .shf-brand__lockup-line2 {
+    font-size: 13px !important;
+  }
+}
+
+/* =========================================================
+   SHF LOGO LOCKUP — TOP 1% MICRO POLISH
+   ========================================================= */
+.shf-brand {
+  gap: 14px !important;
+  align-items: center !important;
+}
+
+.shf-brand__lockup {
+  min-width: 340px !important;
+  gap: 6px !important;
+  transform: translateY(-2px);
+}
+
+.shf-brand__logo {
+  height: 154px !important;
+  max-width: 340px !important;
+  display: block;
+  margin: 0 auto;
+}
+
+.shf-brand__lockup-text {
+  gap: 0 !important;
+  transform: translateY(-2px);
+}
+
+.shf-brand__lockup-line1 {
+  font-size: 30px !important;
+  line-height: 0.94 !important;
+  letter-spacing: -0.02em !important;
+  margin: 0 !important;
+}
+
+.shf-brand__lockup-line2 {
+  font-size: 14px !important;
+  line-height: 0.95 !important;
+  letter-spacing: 0.22em !important;
+  margin-top: 2px !important;
+}
+
+.shf-brand__divider {
+  height: 108px !important;
+  margin-left: 2px;
+  margin-right: 6px;
+  opacity: 0.72;
+}
+
+@media (max-width: 1200px) {
+  .shf-brand {
+    gap: 12px !important;
+  }
+
+  .shf-brand__lockup {
+    min-width: 290px !important;
+  }
+
+  .shf-brand__logo {
+    height: 126px !important;
+    max-width: 290px !important;
+  }
+
+  .shf-brand__lockup-line1 {
+    font-size: 25px !important;
+  }
+
+  .shf-brand__lockup-line2 {
+    font-size: 12px !important;
+  }
+
+  .shf-brand__divider {
+    height: 92px !important;
+  }
+}
+
+/* =========================================================
+   HEADER MICRO POLISH — SPACE BETWEEN BRAND AND TITLE
+   ========================================================= */
+.shf-topbar {
+  display: grid !important;
+  grid-template-columns: auto 1fr auto !important;
+  column-gap: 28px !important;
+  align-items: center !important;
+}
+
+.shf-brand {
+  margin-right: 6px !important;
+}
+
+.shf-title-block {
+  padding-left: 4px !important;
+}
+
+@media (max-width: 1200px) {
+  .shf-topbar {
+    column-gap: 22px !important;
+  }
+
+  .shf-brand {
+    margin-right: 2px !important;
+  }
+
+  .shf-title-block {
+    padding-left: 2px !important;
+  }
+}
+
+/* =========================================================
+   BRANDED FLYWHEEL
+   ========================================================= */
+
+.shf-wheel-card--branded {
+  padding: 0 6px 2px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 470px;
+}
+
+.shf-branded-flywheel {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 410px;
+  margin: -10px auto 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.shf-branded-flywheel__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 20px;
+}
+
+.shf-branded-flywheel__overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.shf-flywheel-hotspot {
+  position: absolute;
+  border-radius: 999px;
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 240ms ease, transform 280ms ease;
+  box-shadow:
+    0 0 0 1px rgba(255, 193, 108, 0.18),
+    0 0 18px rgba(243, 145, 44, 0.18),
+    0 0 42px rgba(243, 145, 44, 0.14);
+}
+
+.shf-flywheel-hotspot.is-active {
+  opacity: 1;
+  transform: scale(1);
+  animation: shfFlywheelPulse 2.2s ease-in-out infinite;
+}
+
+@keyframes shfFlywheelPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px rgba(255, 193, 108, 0.22),
+      0 0 18px rgba(243, 145, 44, 0.22),
+      0 0 42px rgba(243, 145, 44, 0.16);
+    filter: saturate(1);
+  }
+  50% {
+    box-shadow:
+      0 0 0 2px rgba(255, 215, 140, 0.34),
+      0 0 26px rgba(247, 153, 54, 0.34),
+      0 0 60px rgba(247, 153, 54, 0.24);
+    filter: saturate(1.08);
+  }
+}
+
+.shf-flywheel-hotspot--verification {
+  left: 39%;
+  top: 10%;
+  width: 21%;
+  height: 14%;
+}
+.shf-flywheel-hotspot--funding {
+  right: 18%;
+  top: 14%;
+  width: 18%;
+  height: 19%;
+}
+.shf-flywheel-hotspot--treasury {
+  right: 8%;
+  top: 38%;
+  width: 14%;
+  height: 20%;
+}
+.shf-flywheel-hotspot--community {
+  right: 21%;
+  bottom: 11%;
+  width: 24%;
+  height: 14%;
+}
+.shf-flywheel-hotspot--audit {
+  left: 22%;
+  bottom: 12%;
+  width: 22%;
+  height: 16%;
+}
+.shf-flywheel-hotspot--reporting {
+  left: 8%;
+  top: 39%;
+  width: 14%;
+  height: 18%;
+}
+.shf-flywheel-hotspot--governance {
+  left: 17%;
+  top: 17%;
+  width: 18%;
+  height: 17%;
+}
+
+/* ===== AI ANALYST PANEL ===== */
+
+.shf-analyst-summary {
+  padding: 0 18px 12px;
+}
+
+.shf-analyst-status {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--shf-orange);
+  margin-bottom: 6px;
+}
+
+.shf-analyst-summary p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--shf-text-soft);
+  line-height: 1.4;
+}
+
+.shf-analyst-panel__section-title {
+  padding: 0 18px 10px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--shf-text-faint);
+}
+
+/* ACTION CARDS */
+
+.shf-action-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 14px 16px;
+}
+
+.shf-action-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--shf-border);
+  background: rgba(255,255,255,0.5);
+  transition: all 0.15s ease;
+  text-align: left;
+  cursor: pointer;
+}
+
+.shf-action-card:hover {
+  transform: translateY(-1px);
+  border-color: var(--shf-orange);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+}
+
+/* LEFT SIDE */
+
+.shf-action-card__left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.shf-action-priority {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--shf-text-faint);
+}
+
+.shf-action-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--shf-text);
+}
+
+/* RIGHT SIDE */
+
+.shf-action-card__right {
+  flex: 0 0 auto;
+}
+
+.shf-action-confidence {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--shf-orange);
+}
+
+/* PRIORITY COLORS */
+
+.shf-action-high {
+  border-left: 3px solid #c94c2c;
+}
+
+.shf-action-medium {
+  border-left: 3px solid #d98b2d;
+}
+
+.shf-action-low {
+  border-left: 3px solid #a69484;
+}
+
+/* Agent Fabric Sync — AI Analyst Context Adapter V1 */
+.shf-agent-sync-card {
+  margin: 12px 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  border-radius: 16px;
+  background:
+    linear-gradient(135deg, rgba(8, 47, 73, 0.72), rgba(15, 23, 42, 0.68));
+  box-shadow: 0 14px 34px rgba(2, 6, 23, 0.22);
+}
+
+.shf-agent-sync-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #e0f2fe;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+}
+
+.shf-agent-sync-top em {
+  margin-left: auto;
+  color: #93c5fd;
+  font-style: normal;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+}
+
+.shf-agent-sync-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: #f59e0b;
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.65);
+}
+
+.shf-agent-sync-dot.is-synced {
+  background: #22c55e;
+  box-shadow: 0 0 16px rgba(34, 197, 94, 0.72);
+}
+
+.shf-agent-sync-dot.is-offline {
+  background: #ef4444;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.7);
+}
+
+.shf-agent-sync-card p {
+  margin: 8px 0 0;
+  color: rgba(226, 232, 240, 0.9);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.shf-agent-sync-card small {
+  display: block;
+  margin-top: 8px;
+  color: rgba(125, 211, 252, 0.92);
+  line-height: 1.35;
+}
+
+.shf-regional-cluster-source {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  z-index: 4;
+  padding: 5px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(251, 191, 36, 0.26);
+  background: rgba(15, 23, 42, 0.72);
+  color: rgba(254, 243, 199, 0.92);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Regional county focus card — lighter frosted overlay so the zoom/glow layer stays visible */
+.shf-regional-detail-panel {
+  background: rgba(255, 250, 242, 0.62) !important;
+  border: 1px solid rgba(199, 130, 54, 0.18) !important;
+  box-shadow: 0 18px 46px rgba(76, 43, 18, 0.16) !important;
+  backdrop-filter: blur(14px) saturate(1.18) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.18) !important;
+}
+
+.shf-regional-detail-panel::before {
+  opacity: 0.18 !important;
+}
+
+.shf-regional-detail-grid,
+.shf-regional-detail-stats {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.shf-regional-detail-item {
+  background: rgba(255, 255, 255, 0.34) !important;
+  border-color: rgba(154, 91, 35, 0.16) !important;
+}
+
+.shf-regional-detail-panel__action {
+  box-shadow: 0 10px 22px rgba(140, 72, 20, 0.18) !important;
+}
+
+/* Regional county detail card — clearer glass pass */
+.shf-regional-detail-panel {
+  width: min(330px, 38%) !important;
+  background: rgba(255, 250, 242, 0.46) !important;
+  border: 1px solid rgba(199, 130, 54, 0.16) !important;
+  box-shadow: 0 18px 42px rgba(76, 43, 18, 0.12) !important;
+  backdrop-filter: blur(18px) saturate(1.22) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.22) !important;
+}
+
+.shf-regional-detail-panel .shf-regional-detail-item,
+.shf-regional-detail-panel .shf-regional-detail-stats > div {
+  background: rgba(255, 255, 255, 0.24) !important;
+  border-color: rgba(154, 91, 35, 0.12) !important;
+}
+
+.shf-regional-detail-panel__action {
+  background: linear-gradient(135deg, rgba(202, 104, 30, 0.88), rgba(190, 91, 22, 0.88)) !important;
+}
+
+/* Regional county detail card — move farther right so selected county remains visible */
+.shf-regional-detail-panel {
+  right: 18px !important;
+  left: auto !important;
+  width: min(300px, 34%) !important;
+  max-width: 300px !important;
+  transform: translateX(8px) !important;
+  background: rgba(255, 250, 242, 0.42) !important;
+  backdrop-filter: blur(18px) saturate(1.18) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.18) !important;
+}
+
+.shf-regional-detail-panel h2,
+.shf-regional-detail-panel strong {
+  text-shadow: 0 1px 8px rgba(255, 255, 255, 0.42) !important;
+}
+
+.shf-regional-detail-grid {
+  gap: 8px !important;
+}
+
+.shf-regional-detail-item {
+  padding: 10px 10px !important;
+}
+
+.shf-regional-detail-stats {
+  margin-top: 10px !important;
+}
+
+.shf-regional-detail-panel__action {
+  margin-top: 10px !important;
+}
+
+/* Regional county detail card — compact side rail so it does not cover the glowing county */
+.shf-regional-detail-panel {
+  right: 10px !important;
+  left: auto !important;
+  top: 74px !important;
+  width: 168px !important;
+  max-width: 168px !important;
+  min-height: auto !important;
+  max-height: 420px !important;
+  overflow: hidden !important;
+  transform: translateX(0) !important;
+  background: rgba(255, 250, 242, 0.36) !important;
+  border: 1px solid rgba(199, 130, 54, 0.15) !important;
+  box-shadow: 0 14px 34px rgba(76, 43, 18, 0.1) !important;
+  backdrop-filter: blur(20px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.2) !important;
+  transition:
+    width 180ms ease,
+    max-width 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease;
+}
+
+/* Expand only when the operator hovers/focuses the card */
+.shf-regional-detail-panel:hover,
+.shf-regional-detail-panel:focus-within {
+  width: 284px !important;
+  max-width: 284px !important;
+  background: rgba(255, 250, 242, 0.72) !important;
+  box-shadow: 0 18px 44px rgba(76, 43, 18, 0.16) !important;
+}
+
+/* Keep the header readable in compact mode */
+.shf-regional-detail-panel__eyebrow {
+  font-size: 0.58rem !important;
+  letter-spacing: 0.12em !important;
+  white-space: nowrap !important;
+}
+
+.shf-regional-detail-panel > strong {
+  display: block !important;
+  font-size: 0.94rem !important;
+  line-height: 1.1 !important;
+  margin-bottom: 10px !important;
+}
+
+/* Hide heavier details until hover so the map stays visible */
+.shf-regional-detail-panel:not(:hover):not(:focus-within) .shf-regional-detail-grid,
+.shf-regional-detail-panel:not(:hover):not(:focus-within) .shf-regional-detail-stats,
+.shf-regional-detail-panel:not(:hover):not(:focus-within) .shf-regional-detail-panel__action {
+  opacity: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Compact mode hint */
+.shf-regional-detail-panel:not(:hover):not(:focus-within)::after {
+  content: "Hover for details";
+  display: block;
+  margin-top: 8px;
+  font-size: 0.68rem;
+  color: rgba(120, 74, 34, 0.78);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* AI Analyst Sync Finalization V1 */
+.shf-agent-sync-card--final {
+  border-color: rgba(45, 212, 191, 0.26) !important;
+  background:
+    radial-gradient(circle at top left, rgba(20, 184, 166, 0.14), transparent 34%),
+    linear-gradient(135deg, rgba(7, 22, 39, 0.86), rgba(11, 42, 61, 0.72)) !important;
+}
+
+.shf-agent-sync-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.shf-agent-sync-grid > div {
+  padding: 8px 9px;
+  border-radius: 12px;
+  border: 1px solid rgba(125, 211, 252, 0.15);
+  background: rgba(15, 23, 42, 0.42);
+}
+
+.shf-agent-sync-grid span {
+  display: block;
+  color: rgba(186, 230, 253, 0.72);
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 3px;
+}
+
+.shf-agent-sync-grid strong {
+  display: block;
+  color: rgba(240, 249, 255, 0.95);
+  font-size: 0.76rem;
+  line-height: 1.2;
+  text-transform: capitalize;
+}
+
+.shf-agent-sync-footer {
+  display: grid;
+  gap: 4px;
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px solid rgba(125, 211, 252, 0.14);
+  color: rgba(125, 211, 252, 0.86);
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+
+/* AI Analyst Sync card — SHF warm command color correction */
+.shf-agent-sync-card,
+.shf-agent-sync-card--final {
+  border: 1px solid rgba(199, 130, 54, 0.28) !important;
+  background:
+    radial-gradient(circle at top left, rgba(255, 190, 92, 0.18), transparent 36%),
+    linear-gradient(135deg, rgba(57, 35, 20, 0.82), rgba(24, 19, 15, 0.78)) !important;
+  box-shadow:
+    0 18px 42px rgba(55, 32, 14, 0.28),
+    inset 0 1px 0 rgba(255, 235, 190, 0.14) !important;
+}
+
+.shf-agent-sync-top {
+  color: rgba(255, 239, 204, 0.96) !important;
+}
+
+.shf-agent-sync-top em {
+  color: rgba(255, 190, 92, 0.92) !important;
+}
+
+.shf-agent-sync-dot {
+  background: #d98b2d !important;
+  box-shadow: 0 0 14px rgba(217, 139, 45, 0.72) !important;
+}
+
+.shf-agent-sync-dot.is-synced {
+  background: #f6b04f !important;
+  box-shadow:
+    0 0 10px rgba(246, 176, 79, 0.85),
+    0 0 22px rgba(217, 139, 45, 0.55) !important;
+}
+
+.shf-agent-sync-dot.is-offline {
+  background: #b45309 !important;
+  box-shadow: 0 0 16px rgba(180, 83, 9, 0.72) !important;
+}
+
+.shf-agent-sync-card p {
+  color: rgba(255, 246, 225, 0.9) !important;
+}
+
+.shf-agent-sync-grid > div {
+  border: 1px solid rgba(199, 130, 54, 0.2) !important;
+  background:
+    linear-gradient(135deg, rgba(255, 246, 225, 0.09), rgba(91, 54, 24, 0.18)) !important;
+}
+
+.shf-agent-sync-grid span {
+  color: rgba(255, 204, 128, 0.78) !important;
+}
+
+.shf-agent-sync-grid strong {
+  color: rgba(255, 250, 235, 0.96) !important;
+}
+
+.shf-agent-sync-footer {
+  border-top: 1px solid rgba(199, 130, 54, 0.2) !important;
+  color: rgba(255, 204, 128, 0.84) !important;
+}
+
+.shf-agent-sync-card small {
+  color: rgba(255, 211, 141, 0.86) !important;
+}
+
+/* ==========================================================
+   SHF Impact Command Center — Top 1 Percent Polish Pass 1
+   Goal: remove unfinished/default UI feel without touching logic
+   ========================================================== */
+
+/* Overall page polish */
+.shf-impact-command-center,
+.shf-command-center,
+.shf-impact-shell {
+  background:
+    radial-gradient(circle at 18% 8%, rgba(196, 119, 45, 0.08), transparent 30%),
+    linear-gradient(180deg, rgba(252, 248, 241, 0.98), rgba(246, 239, 228, 0.96)) !important;
+}
+
+/* Main panels: softer enterprise paper/glass finish */
+.shf-panel,
+.shf-map-panel {
+  border: 1px solid rgba(121, 83, 48, 0.14) !important;
+  box-shadow:
+    0 18px 44px rgba(65, 42, 24, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 253, 249, 0.92), rgba(250, 244, 236, 0.86)) !important;
+}
+
+/* Hide or soften developer/debug state text if it is rendered inside the command shell */
+.shf-state-chain,
+.shf-debug-chain,
+.shf-oracle-debug,
+.shf-command-debug {
+  display: none !important;
+}
+
+/* If debug text is not classed, make common diagnostic blocks look intentional */
+.shf-command-state-strip,
+.shf-system-trace-strip {
+  border: 1px solid rgba(128, 88, 52, 0.14) !important;
+  border-radius: 14px !important;
+  background: rgba(255, 250, 242, 0.78) !important;
+  color: rgba(54, 38, 27, 0.72) !important;
+  font-size: 0.76rem !important;
+  line-height: 1.35 !important;
+  padding: 10px 12px !important;
+}
+
+/* KPI cards */
+.shf-kpi-card,
+.shf-kpi {
+  border: 1px solid rgba(130, 86, 44, 0.13) !important;
+  box-shadow: 0 14px 30px rgba(76, 45, 19, 0.06) !important;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.95), rgba(250,244,236,0.86)) !important;
+}
+
+/* AI card: make it belong to SHF, not a separate blue/tech product */
+.shf-agent-sync-card,
+.shf-agent-sync-card--final {
+  border: 1px solid rgba(190, 120, 48, 0.26) !important;
+  border-radius: 18px !important;
+  background:
+    radial-gradient(circle at top left, rgba(219, 132, 45, 0.18), transparent 34%),
+    linear-gradient(135deg, rgba(70, 45, 26, 0.88), rgba(38, 28, 20, 0.84)) !important;
+  box-shadow:
+    0 18px 40px rgba(56, 35, 20, 0.22),
+    inset 0 1px 0 rgba(255, 230, 190, 0.14) !important;
+}
+
+.shf-agent-sync-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 7px !important;
+}
+
+.shf-agent-sync-grid > div {
+  padding: 7px 8px !important;
+  border-radius: 12px !important;
+  background: rgba(255, 244, 224, 0.08) !important;
+  border: 1px solid rgba(222, 158, 82, 0.16) !important;
+}
+
+.shf-agent-sync-grid span {
+  color: rgba(244, 190, 115, 0.82) !important;
+}
+
+.shf-agent-sync-grid strong {
+  color: rgba(255, 250, 238, 0.96) !important;
+}
+
+/* Right rail spacing */
+.shf-right-col {
+  display: grid !important;
+  gap: 16px !important;
+  align-content: start !important;
+}
+
+/* Trust / verification panel: remove browser-default button look */
+.shf-right-col button,
+.shf-panel button,
+.shf-self-audit-card__button {
+  border: 1px solid rgba(142, 93, 45, 0.22) !important;
+  border-radius: 12px !important;
+  background:
+    linear-gradient(135deg, rgba(255, 251, 244, 0.96), rgba(242, 229, 211, 0.88)) !important;
+  color: rgba(61, 43, 30, 0.92) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.01em !important;
+  padding: 8px 12px !important;
+  box-shadow:
+    0 8px 18px rgba(72, 45, 21, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+  cursor: pointer !important;
+}
+
+.shf-right-col button:hover,
+.shf-panel button:hover,
+.shf-self-audit-card__button:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 12px 24px rgba(72, 45, 21, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Self-audit section polish */
+.shf-self-audit-card,
+.shf-self-audit-panel,
+.shf-self-audit,
+section[class*="self-audit"] {
+  border: 1px solid rgba(126, 83, 44, 0.14) !important;
+  border-radius: 22px !important;
+  background:
+    linear-gradient(180deg, rgba(255, 253, 249, 0.94), rgba(248, 240, 229, 0.88)) !important;
+  box-shadow: 0 16px 38px rgba(70, 43, 22, 0.07) !important;
+  padding: 18px !important;
+}
+
+/* Program rows */
+.shf-program-row,
+.shf-program-health-row {
+  border-radius: 14px !important;
+  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+}
+
+.shf-program-row:hover,
+.shf-program-health-row:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 248, 238, 0.72) !important;
+  box-shadow: 0 10px 24px rgba(72, 45, 21, 0.06) !important;
+}
+
+/* Map buttons */
+.shf-mini-filter,
+.shf-impact-map-toolbar button {
+  border-radius: 999px !important;
+  border: 1px solid rgba(151, 97, 44, 0.24) !important;
+  background:
+    linear-gradient(135deg, rgba(255, 252, 247, 0.96), rgba(243, 231, 213, 0.9)) !important;
+  color: rgba(78, 51, 32, 0.82) !important;
+  font-weight: 800 !important;
+  box-shadow: 0 8px 18px rgba(72, 45, 21, 0.08) !important;
+}
+
+/* Prevent focus ring from looking like raw browser default */
+.shf-mini-filter:focus,
+.shf-impact-map-toolbar button:focus,
+.shf-panel button:focus {
+  outline: none !important;
+  box-shadow:
+    0 0 0 3px rgba(217, 139, 45, 0.18),
+    0 8px 18px rgba(72, 45, 21, 0.08) !important;
+}
+
+/* Report cards */
+.shf-report-card,
+.shf-export-card,
+.shf-report-item {
+  border-radius: 14px !important;
+  border: 1px solid rgba(122, 82, 47, 0.12) !important;
+  background: rgba(255, 253, 249, 0.84) !important;
+  box-shadow: 0 10px 22px rgba(72, 45, 21, 0.05) !important;
+}
+
+/* Typography refinement */
+.shf-panel__small-label,
+.shf-regional-cluster-source,
+.shf-regional-detail-panel__eyebrow {
+  color: rgba(148, 93, 43, 0.72) !important;
+  font-weight: 800 !important;
+}
+
+.shf-panel h2,
+.shf-map-panel h2,
+.shf-right-col h2 {
+  letter-spacing: -0.02em !important;
+}
+
+/* Make command sections feel less raw at the bottom */
+.shf-impact-command-center pre,
+.shf-impact-command-center code {
+  border-radius: 12px !important;
+  background: rgba(70, 45, 26, 0.06) !important;
+  padding: 8px 10px !important;
+  color: rgba(62, 42, 27, 0.84) !important;
+}
+
+/* ==========================================================
+   SHF Header / Summary / Footer Polish
+   ========================================================== */
+
+.shf-command-brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-width: 0;
+}
+
+.shf-command-logo {
+  width: 172px;
+  max-height: 72px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 24px rgba(72, 45, 21, 0.08));
+}
+
+.shf-brand__mark--fallback {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255,255,255,.8), transparent 32%),
+    linear-gradient(135deg, rgba(214, 124, 42, .96), rgba(92, 65, 45, .82));
+  display: grid;
+  place-items: center;
+}
+
+.shf-command-brand-eyebrow {
+  color: rgba(158, 99, 44, 0.76);
+  font-weight: 900;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.shf-command-brand-lockup h1 {
+  margin: 0;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+
+.shf-command-brand-lockup p {
+  margin: 8px 0 0;
+  max-width: 680px;
+  color: rgba(73, 54, 39, 0.72);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* Polished command context strip replaces raw developer-looking status text */
+.shf-command-context-strip {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+  margin: 16px 0 18px;
+  padding: 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(134, 89, 49, 0.16);
+  background:
+    radial-gradient(circle at left, rgba(214, 124, 42, 0.10), transparent 32%),
+    linear-gradient(135deg, rgba(255, 252, 247, 0.94), rgba(248, 239, 226, 0.84));
+  box-shadow:
+    0 14px 34px rgba(72, 45, 21, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78);
+}
+
+.shf-command-context-strip > div {
+  min-width: 0;
+  padding: 10px 11px;
+  border-radius: 15px;
+  border: 1px solid rgba(151, 97, 44, 0.12);
+  background: rgba(255, 255, 255, 0.46);
+}
+
+.shf-command-context-strip span {
+  display: block;
+  color: rgba(153, 96, 43, 0.72);
+  font-size: 0.64rem;
+  font-weight: 900;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.shf-command-context-strip strong {
+  display: block;
+  color: rgba(50, 37, 27, 0.94);
+  font-size: 0.83rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Hide old raw diagnostic text if it remains after fallback insertion */
+.shf-command-state-strip + div,
+.shf-command-state-strip + div + div,
+.shf-command-state-strip + div + div + div,
+.shf-command-state-strip + div + div + div + div,
+.shf-command-state-strip + div + div + div + div + div,
+.shf-command-state-strip + div + div + div + div + div + div,
+.shf-command-state-strip + div + div + div + div + div + div + div {
+  display: none !important;
+}
+
+.shf-command-state-strip {
+  display: none !important;
+}
+
+/* Footer */
+.shf-command-footer {
+  margin: 28px 0 0;
+  padding: 22px 26px;
+  border-radius: 26px;
+  border: 1px solid rgba(134, 89, 49, 0.15);
+  background:
+    radial-gradient(circle at 10% 20%, rgba(214, 124, 42, 0.12), transparent 32%),
+    linear-gradient(135deg, rgba(255, 252, 247, 0.96), rgba(245, 235, 220, 0.9));
+  box-shadow:
+    0 18px 44px rgba(72, 45, 21, 0.07),
+    inset 0 1px 0 rgba(255,255,255,0.82);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 22px;
+}
+
+.shf-command-footer__brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.shf-command-footer__brand img {
+  width: 118px;
+  max-height: 52px;
+  object-fit: contain;
+}
+
+.shf-footer-mark {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  color: #fff7ed;
+  font-weight: 900;
+  background: linear-gradient(135deg, #c76f2d, #5b3f2c);
+  box-shadow: 0 12px 28px rgba(91, 63, 44, 0.2);
+}
+
+.shf-command-footer__brand strong {
+  display: block;
+  color: rgba(48, 35, 25, 0.94);
+  font-size: 1rem;
+}
+
+.shf-command-footer__brand span {
+  display: block;
+  color: rgba(91, 67, 48, 0.68);
+  margin-top: 3px;
+  font-size: 0.84rem;
+}
+
+.shf-command-footer__meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.shf-command-footer__meta span {
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(151, 97, 44, 0.16);
+  background: rgba(255, 255, 255, 0.48);
+  color: rgba(95, 61, 35, 0.78);
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+/* Self-audit block polish if still raw */
+.shf-self-audit-control,
+.shf-self-audit-card,
+.shf-self-audit-panel {
+  overflow: hidden;
+}
+
+/* Better responsive behavior */
+@media (max-width: 1100px) {
+  .shf-command-context-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .shf-command-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .shf-command-footer__meta {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 760px) {
+  .shf-command-context-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .shf-command-brand-lockup {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+/* SHF visible page footer */
+.shf-command-footer {
+  margin: 34px 0 0 !important;
+  padding: 22px 26px !important;
+  border-radius: 26px !important;
+  border: 1px solid rgba(134, 89, 49, 0.16) !important;
+  background:
+    radial-gradient(circle at 10% 20%, rgba(214, 124, 42, 0.12), transparent 32%),
+    linear-gradient(135deg, rgba(255, 252, 247, 0.97), rgba(245, 235, 220, 0.92)) !important;
+  box-shadow:
+    0 18px 44px rgba(72, 45, 21, 0.08),
+    inset 0 1px 0 rgba(255,255,255,0.82) !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 22px !important;
+}
+
+.shf-command-footer__brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+}
+
+.shf-footer-mark {
+  width: 52px !important;
+  height: 52px !important;
+  border-radius: 17px !important;
+  display: grid !important;
+  place-items: center !important;
+  color: #fff7ed !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.04em !important;
+  background: linear-gradient(135deg, #c76f2d, #5b3f2c) !important;
+  box-shadow: 0 12px 28px rgba(91, 63, 44, 0.22) !important;
+}
+
+.shf-command-footer__brand strong {
+  display: block !important;
+  color: rgba(48, 35, 25, 0.96) !important;
+  font-size: 1rem !important;
+}
+
+.shf-command-footer__brand span {
+  display: block !important;
+  color: rgba(91, 67, 48, 0.7) !important;
+  margin-top: 3px !important;
+  font-size: 0.84rem !important;
+}
+
+.shf-command-footer__meta {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+}
+
+.shf-command-footer__meta span {
+  padding: 8px 10px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(151, 97, 44, 0.16) !important;
+  background: rgba(255, 255, 255, 0.52) !important;
+  color: rgba(95, 61, 35, 0.8) !important;
+  font-size: 0.76rem !important;
+  font-weight: 800 !important;
+}
+
+/* ==========================================================
+   SHF Command Footer — hard visible footer
+   ========================================================== */
+
+.shf-command-footer {
+  clear: both !important;
+  width: 100% !important;
+  margin: 42px 0 0 !important;
+  padding: 24px 28px !important;
+  border-radius: 28px !important;
+  border: 1px solid rgba(133, 90, 50, 0.18) !important;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(214, 124, 42, 0.14), transparent 34%),
+    linear-gradient(135deg, rgba(255, 253, 248, 0.98), rgba(244, 233, 217, 0.94)) !important;
+  box-shadow:
+    0 20px 46px rgba(72, 45, 21, 0.09),
+    inset 0 1px 0 rgba(255,255,255,0.86) !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 24px !important;
+  position: relative !important;
+  z-index: 5 !important;
+}
+
+.shf-command-footer__brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 15px !important;
+}
+
+.shf-footer-logo-mark {
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 18px !important;
+  display: grid !important;
+  place-items: center !important;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,0.42), transparent 30%),
+    linear-gradient(135deg, #c76f2d, #5b3f2c) !important;
+  box-shadow: 0 14px 30px rgba(91, 63, 44, 0.22) !important;
+}
+
+.shf-footer-logo-mark span {
+  color: #fff7ed !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.05em !important;
+  font-size: 0.92rem !important;
+}
+
+.shf-command-footer__brand strong {
+  display: block !important;
+  color: rgba(47, 34, 24, 0.96) !important;
+  font-size: 1.04rem !important;
+  letter-spacing: -0.01em !important;
+}
+
+.shf-command-footer__brand p {
+  margin: 4px 0 0 !important;
+  color: rgba(91, 67, 48, 0.72) !important;
+  font-size: 0.86rem !important;
+}
+
+.shf-command-footer__links {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-end !important;
+  gap: 9px !important;
+}
+
+.shf-command-footer__links span {
+  padding: 8px 11px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(151, 97, 44, 0.17) !important;
+  background: rgba(255, 255, 255, 0.56) !important;
+  color: rgba(95, 61, 35, 0.82) !important;
+  font-size: 0.75rem !important;
+  font-weight: 800 !important;
+}
+
+@media (max-width: 900px) {
+  .shf-command-footer {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+  }
+
+  .shf-command-footer__links {
+    justify-content: flex-start !important;
+  }
+}
+
+/* ==========================================================
+   SHF Footer — full width across command page
+   ========================================================== */
+
+.shf-command-footer {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  max-width: none !important;
+  align-self: stretch !important;
+  justify-self: stretch !important;
+  box-sizing: border-box !important;
+  margin: 42px 0 0 !important;
+  padding: 26px 30px !important;
+  border-radius: 28px !important;
+}
+
+.shf-command-footer__brand {
+  min-width: 280px !important;
+}
+
+.shf-command-footer__links {
+  flex: 1 !important;
+  justify-content: flex-end !important;
+}
+
+/* If footer was inserted inside a grid column, force it to escape visually */
+.shf-command-footer {
+  position: relative !important;
+}
+
+/* Stronger full-width footer balance */
+.shf-command-footer::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  background:
+    linear-gradient(90deg, rgba(199, 111, 45, 0.08), transparent 38%, rgba(91, 63, 44, 0.05)) !important;
+}
+
+/* Keep footer content above decorative pass */
+.shf-command-footer__brand,
+.shf-command-footer__links {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+@media (max-width: 900px) {
+  .shf-command-footer {
+    grid-column: 1 / -1 !important;
+  }
+
+  .shf-command-footer__links {
+    justify-content: flex-start !important;
+  }
+}
+
+/* ==========================================================
+   SHF Footer — full-width brown/copper command footer
+   ========================================================== */
+
+.shf-command-footer {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  max-width: none !important;
+  align-self: stretch !important;
+  justify-self: stretch !important;
+  box-sizing: border-box !important;
+  margin: 42px 0 0 !important;
+  padding: 28px 32px !important;
+  border-radius: 28px !important;
+  border: 1px solid rgba(255, 206, 138, 0.22) !important;
+  background:
+    radial-gradient(circle at 12% 20%, rgba(214, 124, 42, 0.34), transparent 34%),
+    linear-gradient(135deg, #4a2e1d 0%, #2f2118 46%, #1f1712 100%) !important;
+  box-shadow:
+    0 24px 52px rgba(55, 32, 14, 0.22),
+    inset 0 1px 0 rgba(255, 230, 190, 0.16) !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 24px !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.shf-command-footer::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  background:
+    linear-gradient(90deg, rgba(255, 184, 92, 0.16), transparent 42%, rgba(255, 236, 195, 0.06)) !important;
+}
+
+.shf-command-footer__brand,
+.shf-command-footer__links {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.shf-command-footer__brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 15px !important;
+  min-width: 300px !important;
+}
+
+.shf-footer-logo-mark {
+  width: 58px !important;
+  height: 58px !important;
+  border-radius: 18px !important;
+  display: grid !important;
+  place-items: center !important;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,0.42), transparent 30%),
+    linear-gradient(135deg, #d88a35, #7a431f) !important;
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 236, 196, 0.24) !important;
+}
+
+.shf-footer-logo-mark span {
+  color: #fff7ed !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.05em !important;
+  font-size: 0.94rem !important;
+}
+
+.shf-command-footer__brand strong {
+  display: block !important;
+  color: rgba(255, 248, 235, 0.98) !important;
+  font-size: 1.08rem !important;
+  letter-spacing: -0.01em !important;
+}
+
+.shf-command-footer__brand p,
+.shf-command-footer__brand span {
+  display: block !important;
+  margin: 4px 0 0 !important;
+  color: rgba(255, 221, 176, 0.76) !important;
+  font-size: 0.86rem !important;
+}
+
+.shf-command-footer__links {
+  display: flex !important;
+  flex: 1 !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-end !important;
+  gap: 9px !important;
+}
+
+.shf-command-footer__links span,
+.shf-command-footer__meta span {
+  padding: 8px 11px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 205, 138, 0.2) !important;
+  background: rgba(255, 244, 224, 0.08) !important;
+  color: rgba(255, 231, 194, 0.9) !important;
+  font-size: 0.75rem !important;
+  font-weight: 800 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08) !important;
+}
+
+@media (max-width: 900px) {
+  .shf-command-footer {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+  }
+
+  .shf-command-footer__links {
+    justify-content: flex-start !important;
+  }
+}
+
+/* SHF header globe logo integration */
+.shf-command-brand-lockup {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  min-width: 0 !important;
+}
+
+.shf-command-logo {
+  width: 72px !important;
+  height: 72px !important;
+  object-fit: contain !important;
+  flex: 0 0 auto !important;
+  border-radius: 999px !important;
+  filter:
+    drop-shadow(0 10px 20px rgba(104, 64, 31, 0.14))
+    drop-shadow(0 0 18px rgba(214, 124, 42, 0.10)) !important;
+}
+
+.shf-command-wordmark {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+
+.shf-brand__text {
+  font-size: clamp(1.45rem, 2vw, 2rem) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.035em !important;
+  color: rgba(44, 34, 27, 0.96) !important;
+  white-space: nowrap !important;
+}
+
+.shf-brand__divider {
+  height: 78px !important;
+  margin: 0 18px !important;
+  background: rgba(130, 86, 44, 0.16) !important;
+}
+
+@media (max-width: 900px) {
+  .shf-command-logo {
+    width: 58px !important;
+    height: 58px !important;
+  }
+
+  .shf-brand__text {
+    font-size: 1.35rem !important;
+  }
+}
+
+/* SHF header globe logo — hard replacement */
+.shf-brand--with-globe,
+.shf-brand {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.shf-command-brand-lockup {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.shf-command-logo {
+  width: 72px !important;
+  height: 72px !important;
+  object-fit: contain !important;
+  display: block !important;
+  flex: 0 0 auto !important;
+  border-radius: 999px !important;
+  filter:
+    drop-shadow(0 10px 20px rgba(104, 64, 31, 0.14))
+    drop-shadow(0 0 18px rgba(214, 124, 42, 0.10)) !important;
+}
+
+.shf-brand__mark {
+  display: none !important;
+}
+
+.shf-brand__text {
+  font-size: clamp(1.45rem, 2vw, 2rem) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.035em !important;
+  color: rgba(44, 34, 27, 0.96) !important;
+  white-space: nowrap !important;
+}
+
+.shf-brand__divider {
+  height: 78px !important;
+  margin: 0 22px !important;
+  background: rgba(130, 86, 44, 0.16) !important;
+}
+
+/* SHF header globe logo — force visible */
+.shf-brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.shf-command-logo {
+  display: block !important;
+  width: 72px !important;
+  height: 72px !important;
+  min-width: 72px !important;
+  min-height: 72px !important;
+  object-fit: contain !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: relative !important;
+  z-index: 10 !important;
+  border-radius: 999px !important;
+  filter:
+    drop-shadow(0 10px 20px rgba(104, 64, 31, 0.16))
+    drop-shadow(0 0 18px rgba(214, 124, 42, 0.12)) !important;
+}
+
+.shf-brand__mark {
+  display: none !important;
+}
+
+.shf-brand__text {
+  display: block !important;
+  white-space: nowrap !important;
+}
+
+/* ==========================================================
+   SHF header globe tune
+   Bigger logo + visually thinner white ring
+   ========================================================== */
+
+.shf-brand,
+.shf-brand--with-globe,
+.shf-command-brand-lockup {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+}
+
+.shf-command-logo {
+  width: 96px !important;
+  height: 96px !important;
+  min-width: 96px !important;
+  min-height: 96px !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  display: block !important;
+  border-radius: 999px !important;
+
+  /* This makes the white ring look thinner visually */
+  transform: scale(1.08) !important;
+  transform-origin: center center !important;
+
+  filter:
+    drop-shadow(0 10px 22px rgba(104, 64, 31, 0.16))
+    drop-shadow(0 0 18px rgba(214, 124, 42, 0.10)) !important;
+}
+
+.shf-brand__text {
+  font-size: clamp(1.55rem, 2.1vw, 2.15rem) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.035em !important;
+}
+
+.shf-brand__divider {
+  height: 84px !important;
+  margin: 0 22px !important;
+}
+
+@media (max-width: 900px) {
+  .shf-command-logo {
+    width: 78px !important;
+    height: 78px !important;
+    min-width: 78px !important;
+    min-height: 78px !important;
+    transform: scale(1.06) !important;
+  }
+
+  .shf-brand__text {
+    font-size: 1.38rem !important;
+  }
+}
+
+/* SHF footer globe logo replacement */
+.shf-footer-globe-logo {
+  width: 72px !important;
+  height: 72px !important;
+  min-width: 72px !important;
+  min-height: 72px !important;
+  object-fit: contain !important;
+  display: block !important;
+  border-radius: 999px !important;
+  background: rgba(255, 248, 235, 0.08) !important;
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, 0.22),
+    0 0 26px rgba(214, 124, 42, 0.18) !important;
+}
+
+.shf-footer-logo-mark {
+  display: none !important;
+}
+
+.shf-command-footer__brand {
+  align-items: center !important;
+  gap: 18px !important;
+}
+
+/* ==========================================================
+   AI Analyst Decision Text V1
+   ========================================================== */
+
+.shf-ai-analyst-panel .shf-panel__body {
+  padding-top: 12px !important;
+}
+
+.shf-ai-decision-stack {
+  display: grid;
+  gap: 16px;
+}
+
+.shf-ai-decision-block {
+  padding: 12px 0 0;
+  border-top: 1px solid rgba(135, 91, 50, 0.13);
+  color: rgba(46, 34, 25, 0.9);
+  line-height: 1.42;
+}
+
+.shf-ai-decision-block:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.shf-ai-decision-label {
+  color: rgba(132, 83, 39, 0.86);
+  font-weight: 900;
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 7px;
+}
+
+.shf-ai-decision-block ul {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+}
+
+.shf-ai-decision-block li {
+  color: rgba(52, 38, 28, 0.88);
+}
+
+.shf-ai-decision-action {
+  width: 100%;
+  justify-content: center;
+}
+
+/* AI Analyst drawer launcher */
+.shf-ai-panel-header {
+  align-items: flex-start !important;
+  gap: 12px !important;
+}
+
+.shf-ai-expand-button {
+  flex: 0 0 auto !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(156, 96, 42, 0.24) !important;
+  background:
+    linear-gradient(135deg, rgba(255, 250, 242, 0.96), rgba(239, 218, 190, 0.88)) !important;
+  color: rgba(78, 48, 27, 0.94) !important;
+  font-size: 0.72rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  padding: 8px 11px !important;
+  box-shadow:
+    0 10px 22px rgba(72, 45, 21, 0.08),
+    inset 0 1px 0 rgba(255,255,255,0.78) !important;
+  cursor: pointer !important;
+}
+
+.shf-ai-expand-button:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 14px 28px rgba(72, 45, 21, 0.12),
+    inset 0 1px 0 rgba(255,255,255,0.86) !important;
+}
+
+/* ==========================================================
+   Top-left map chip readability fix
+   ========================================================== */
+
+/* Shared readable chip class if we wire it directly */
+.shf-readable-map-cluster-chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 10px 14px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, rgba(69, 75, 91, 0.98), rgba(56, 61, 75, 0.98)) !important;
+  color: #d98a3c !important;
+  border: 1px solid rgba(235, 183, 120, 0.18) !important;
+  font-size: 0.78rem !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.09em !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 1px 0 rgba(34, 20, 10, 0.55) !important;
+  box-shadow:
+    0 10px 22px rgba(26, 19, 13, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Fallbacks for likely map chip classes already in use */
+.shf-ohio-impact-map .shf-map-chip,
+.shf-ohio-impact-map .shf-map-badge,
+.shf-ohio-impact-map .shf-map-status-chip,
+.shf-ohio-impact-map .shf-map-cluster-chip,
+.shf-ohio-impact-map .shf-regional-cluster-chip,
+.shf-ohio-impact-map .shf-region-label-chip,
+.shf-ohio-impact-map .shf-region-chip,
+.shf-ohio-impact-map .shf-cluster-pill,
+.shf-ohio-impact-map .shf-cluster-badge {
+  background: linear-gradient(135deg, rgba(69, 75, 91, 0.98), rgba(56, 61, 75, 0.98)) !important;
+  color: #d98a3c !important;
+  border: 1px solid rgba(235, 183, 120, 0.18) !important;
+  font-size: 0.78rem !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.09em !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 1px 0 rgba(34, 20, 10, 0.55) !important;
+  box-shadow:
+    0 10px 22px rgba(26, 19, 13, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+@media (max-width: 900px) {
+  .shf-readable-map-cluster-chip,
+  .shf-ohio-impact-map .shf-map-chip,
+  .shf-ohio-impact-map .shf-map-badge,
+  .shf-ohio-impact-map .shf-map-status-chip,
+  .shf-ohio-impact-map .shf-map-cluster-chip,
+  .shf-ohio-impact-map .shf-regional-cluster-chip,
+  .shf-ohio-impact-map .shf-region-label-chip,
+  .shf-ohio-impact-map .shf-region-chip,
+  .shf-ohio-impact-map .shf-cluster-pill,
+  .shf-ohio-impact-map .shf-cluster-badge {
+    font-size: 0.72rem !important;
+    padding: 9px 12px !important;
+  }
+}
+
+/* ==========================================================
+   Top-left map chip readability fix
+   ========================================================== */
+
+/* Shared readable chip class if we wire it directly */
+.shf-readable-map-cluster-chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 10px 14px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, rgba(69, 75, 91, 0.98), rgba(56, 61, 75, 0.98)) !important;
+  color: #d98a3c !important;
+  border: 1px solid rgba(235, 183, 120, 0.18) !important;
+  font-size: 0.78rem !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.09em !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 1px 0 rgba(34, 20, 10, 0.55) !important;
+  box-shadow:
+    0 10px 22px rgba(26, 19, 13, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Fallbacks for likely map chip classes already in use */
+.shf-ohio-impact-map .shf-map-chip,
+.shf-ohio-impact-map .shf-map-badge,
+.shf-ohio-impact-map .shf-map-status-chip,
+.shf-ohio-impact-map .shf-map-cluster-chip,
+.shf-ohio-impact-map .shf-regional-cluster-chip,
+.shf-ohio-impact-map .shf-region-label-chip,
+.shf-ohio-impact-map .shf-region-chip,
+.shf-ohio-impact-map .shf-cluster-pill,
+.shf-ohio-impact-map .shf-cluster-badge {
+  background: linear-gradient(135deg, rgba(69, 75, 91, 0.98), rgba(56, 61, 75, 0.98)) !important;
+  color: #d98a3c !important;
+  border: 1px solid rgba(235, 183, 120, 0.18) !important;
+  font-size: 0.78rem !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.09em !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 1px 0 rgba(34, 20, 10, 0.55) !important;
+  box-shadow:
+    0 10px 22px rgba(26, 19, 13, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+@media (max-width: 900px) {
+  .shf-readable-map-cluster-chip,
+  .shf-ohio-impact-map .shf-map-chip,
+  .shf-ohio-impact-map .shf-map-badge,
+  .shf-ohio-impact-map .shf-map-status-chip,
+  .shf-ohio-impact-map .shf-map-cluster-chip,
+  .shf-ohio-impact-map .shf-regional-cluster-chip,
+  .shf-ohio-impact-map .shf-region-label-chip,
+  .shf-ohio-impact-map .shf-region-chip,
+  .shf-ohio-impact-map .shf-cluster-pill,
+  .shf-ohio-impact-map .shf-cluster-badge {
+    font-size: 0.72rem !important;
+    padding: 9px 12px !important;
+  }
+}
+
+/* ==========================================================
+   SHF Command Tour V1
+   Explains how to use the page in the right operating order.
+   ========================================================== */
+
+.shf-command-tour-launch {
+  border-radius: 999px !important;
+  border: 1px solid rgba(151, 97, 44, 0.2) !important;
+  background:
+    linear-gradient(135deg, rgba(255, 250, 242, 0.98), rgba(237, 217, 190, 0.92)) !important;
+  color: rgba(78, 49, 31, 0.94) !important;
+  font-weight: 900 !important;
+  padding: 10px 14px !important;
+  box-shadow: 0 10px 22px rgba(72, 45, 21, 0.08) !important;
+}
+
+.shf-command-tour-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center end;
+  padding: 28px;
+}
+
+.shf-command-tour-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(214, 124, 42, 0.18), transparent 36%),
+    rgba(35, 24, 16, 0.36);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.shf-command-tour-card {
+  position: relative;
+  z-index: 1;
+  width: min(440px, calc(100vw - 40px));
+  border-radius: 28px;
+  border: 1px solid rgba(255, 215, 160, 0.22);
+  background:
+    radial-gradient(circle at top left, rgba(218, 132, 45, 0.18), transparent 36%),
+    linear-gradient(135deg, rgba(76, 45, 25, 0.98), rgba(35, 25, 18, 0.98));
+  color: rgba(255, 248, 235, 0.96);
+  box-shadow:
+    0 28px 80px rgba(30, 18, 10, 0.42),
+    inset 0 1px 0 rgba(255, 230, 190, 0.16);
+  padding: 24px;
+}
+
+.shf-command-tour-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: rgba(255, 199, 125, 0.82);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.shf-command-tour-card h3 {
+  margin: 0;
+  color: #fff7ed;
+  font-size: 1.55rem;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.shf-command-tour-card p {
+  margin: 14px 0 0;
+  color: rgba(255, 239, 213, 0.86);
+  line-height: 1.5;
+}
+
+.shf-command-tour-action {
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 205, 138, 0.18);
+  background: rgba(255, 244, 224, 0.08);
+}
+
+.shf-command-tour-action span {
+  display: block;
+  color: rgba(255, 199, 125, 0.82);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.shf-command-tour-action strong {
+  display: block;
+  color: rgba(255, 248, 235, 0.96);
+  line-height: 1.35;
+}
+
+.shf-command-tour-target {
+  margin-top: 14px;
+  color: rgba(255, 221, 176, 0.78);
+  font-size: 0.78rem;
+}
+
+.shf-command-tour-controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.shf-command-tour-controls button,
+.shf-command-tour-close {
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 205, 138, 0.2) !important;
+  background: rgba(255, 244, 224, 0.1) !important;
+  color: rgba(255, 248, 235, 0.95) !important;
+  font-weight: 900 !important;
+  padding: 9px 13px !important;
+  cursor: pointer !important;
+}
+
+.shf-command-tour-controls button:disabled {
+  opacity: 0.38;
+  cursor: not-allowed !important;
+}
+
+.shf-command-tour-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 0.68rem !important;
+  padding: 7px 10px !important;
+}
+
+[data-tour-section] {
+  scroll-margin-top: 120px;
+}
+
+@media (max-width: 760px) {
+  .shf-command-tour-overlay {
+    place-items: end center;
+    padding: 18px;
+  }
+
+  .shf-command-tour-card {
+    width: 100%;
+  }
+}
+
+/* ==========================================================
+   SHF Command Tour V1
+   Explains how to use the page in the right operating order.
+   ========================================================== */
+
+.shf-command-tour-launch {
+  border-radius: 999px !important;
+  border: 1px solid rgba(151, 97, 44, 0.2) !important;
+  background:
+    linear-gradient(135deg, rgba(255, 250, 242, 0.98), rgba(237, 217, 190, 0.92)) !important;
+  color: rgba(78, 49, 31, 0.94) !important;
+  font-weight: 900 !important;
+  padding: 10px 14px !important;
+  box-shadow: 0 10px 22px rgba(72, 45, 21, 0.08) !important;
+}
+
+.shf-command-tour-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center end;
+  padding: 28px;
+}
+
+.shf-command-tour-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(214, 124, 42, 0.18), transparent 36%),
+    rgba(35, 24, 16, 0.36);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.shf-command-tour-card {
+  position: relative;
+  z-index: 1;
+  width: min(440px, calc(100vw - 40px));
+  border-radius: 28px;
+  border: 1px solid rgba(255, 215, 160, 0.22);
+  background:
+    radial-gradient(circle at top left, rgba(218, 132, 45, 0.18), transparent 36%),
+    linear-gradient(135deg, rgba(76, 45, 25, 0.98), rgba(35, 25, 18, 0.98));
+  color: rgba(255, 248, 235, 0.96);
+  box-shadow:
+    0 28px 80px rgba(30, 18, 10, 0.42),
+    inset 0 1px 0 rgba(255, 230, 190, 0.16);
+  padding: 24px;
+}
+
+.shf-command-tour-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: rgba(255, 199, 125, 0.82);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.shf-command-tour-card h3 {
+  margin: 0;
+  color: #fff7ed;
+  font-size: 1.55rem;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.shf-command-tour-card p {
+  margin: 14px 0 0;
+  color: rgba(255, 239, 213, 0.86);
+  line-height: 1.5;
+}
+
+.shf-command-tour-action {
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 205, 138, 0.18);
+  background: rgba(255, 244, 224, 0.08);
+}
+
+.shf-command-tour-action span {
+  display: block;
+  color: rgba(255, 199, 125, 0.82);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.shf-command-tour-action strong {
+  display: block;
+  color: rgba(255, 248, 235, 0.96);
+  line-height: 1.35;
+}
+
+.shf-command-tour-target {
+  margin-top: 14px;
+  color: rgba(255, 221, 176, 0.78);
+  font-size: 0.78rem;
+}
+
+.shf-command-tour-controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.shf-command-tour-controls button,
+.shf-command-tour-close {
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 205, 138, 0.2) !important;
+  background: rgba(255, 244, 224, 0.1) !important;
+  color: rgba(255, 248, 235, 0.95) !important;
+  font-weight: 900 !important;
+  padding: 9px 13px !important;
+  cursor: pointer !important;
+}
+
+.shf-command-tour-controls button:disabled {
+  opacity: 0.38;
+  cursor: not-allowed !important;
+}
+
+.shf-command-tour-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 0.68rem !important;
+  padding: 7px 10px !important;
+}
+
+[data-tour-section] {
+  scroll-margin-top: 120px;
+}
+
+@media (max-width: 760px) {
+  .shf-command-tour-overlay {
+    place-items: end center;
+    padding: 18px;
+  }
+
+  .shf-command-tour-card {
+    width: 100%;
+  }
+}
+
+/* ==========================================================
+   SHF Command Tour — forced visible launcher
+   ========================================================== */
+
+.shf-command-tour-floating-button {
+  position: fixed !important;
+  right: 28px !important;
+  bottom: 28px !important;
+  z-index: 9998 !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 205, 138, 0.26) !important;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 190, 92, 0.28), transparent 38%),
+    linear-gradient(135deg, #6b3f22, #2f2118) !important;
+  color: #fff7ed !important;
+  font-size: 0.82rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  padding: 13px 18px !important;
+  box-shadow:
+    0 18px 42px rgba(55, 32, 14, 0.28),
+    inset 0 1px 0 rgba(255, 230, 190, 0.18) !important;
+  cursor: pointer !important;
+}
+
+.shf-command-tour-floating-button:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 24px 54px rgba(55, 32, 14, 0.34),
+    inset 0 1px 0 rgba(255, 230, 190, 0.2) !important;
+}
+
+.shf-command-tour-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center end;
+  padding: 28px;
+}
+
+.shf-command-tour-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(214, 124, 42, 0.18), transparent 36%),
+    rgba(35, 24, 16, 0.38);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.shf-command-tour-card {
+  position: relative;
+  z-index: 1;
+  width: min(440px, calc(100vw - 40px));
+  border-radius: 28px;
+  border: 1px solid rgba(255, 215, 160, 0.22);
+  background:
+    radial-gradient(circle at top left, rgba(218, 132, 45, 0.18), transparent 36%),
+    linear-gradient(135deg, rgba(76, 45, 25, 0.98), rgba(35, 25, 18, 0.98));
+  color: rgba(255, 248, 235, 0.96);
+  box-shadow:
+    0 28px 80px rgba(30, 18, 10, 0.42),
+    inset 0 1px 0 rgba(255, 230, 190, 0.16);
+  padding: 24px;
+}
+
+.shf-command-tour-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: rgba(255, 199, 125, 0.82);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.shf-command-tour-card h3 {
+  margin: 0;
+  color: #fff7ed;
+  font-size: 1.55rem;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.shf-command-tour-card p {
+  margin: 14px 0 0;
+  color: rgba(255, 239, 213, 0.86);
+  line-height: 1.5;
+}
+
+.shf-command-tour-action {
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 205, 138, 0.18);
+  background: rgba(255, 244, 224, 0.08);
+}
+
+.shf-command-tour-action span {
+  display: block;
+  color: rgba(255, 199, 125, 0.82);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.shf-command-tour-action strong {
+  display: block;
+  color: rgba(255, 248, 235, 0.96);
+  line-height: 1.35;
+}
+
+.shf-command-tour-controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.shf-command-tour-controls button,
+.shf-command-tour-close {
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 205, 138, 0.2) !important;
+  background: rgba(255, 244, 224, 0.1) !important;
+  color: rgba(255, 248, 235, 0.95) !important;
+  font-weight: 900 !important;
+  padding: 9px 13px !important;
+  cursor: pointer !important;
+}
+
+.shf-command-tour-controls button:disabled {
+  opacity: 0.38;
+  cursor: not-allowed !important;
+}
+
+.shf-command-tour-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 0.68rem !important;
+  padding: 7px 10px !important;
+}
+
+/* ==========================================================
+   SHF Command Tour V2
+   High launcher + numbered steps + highlighted sections
+   ========================================================== */
+
+.shf-command-tour-floating-button--high {
+  position: fixed !important;
+  right: 28px !important;
+  top: 118px !important;
+  bottom: auto !important;
+  z-index: 9998 !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 205, 138, 0.28) !important;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 190, 92, 0.28), transparent 38%),
+    linear-gradient(135deg, #6b3f22, #2f2118) !important;
+  color: #fff7ed !important;
+  font-size: 0.82rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  padding: 13px 18px !important;
+  box-shadow:
+    0 18px 42px rgba(55, 32, 14, 0.28),
+    inset 0 1px 0 rgba(255, 230, 190, 0.18) !important;
+  cursor: pointer !important;
+}
+
+.shf-tour-highlight {
+  position: relative !important;
+  z-index: 9997 !important;
+  outline: 4px solid rgba(223, 125, 38, 0.72) !important;
+  outline-offset: 8px !important;
+  box-shadow:
+    0 0 0 10px rgba(255, 184, 92, 0.16),
+    0 0 42px rgba(223, 125, 38, 0.36) !important;
+  border-radius: 22px !important;
+  transition: outline 180ms ease, box-shadow 180ms ease !important;
+}
+
+.shf-command-tour-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  display: grid !important;
+  place-items: center end !important;
+  padding: 28px !important;
+  pointer-events: auto !important;
+}
+
+.shf-command-tour-backdrop {
+  position: absolute !important;
+  inset: 0 !important;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(214, 124, 42, 0.18), transparent 36%),
+    rgba(35, 24, 16, 0.38) !important;
+  backdrop-filter: blur(5px) !important;
+  -webkit-backdrop-filter: blur(5px) !important;
+}
+
+.shf-command-tour-card {
+  position: relative !important;
+  z-index: 10000 !important;
+  width: min(470px, calc(100vw - 40px)) !important;
+  border-radius: 28px !important;
+  border: 1px solid rgba(255, 215, 160, 0.22) !important;
+  background:
+    radial-gradient(circle at top left, rgba(218, 132, 45, 0.18), transparent 36%),
+    linear-gradient(135deg, rgba(76, 45, 25, 0.98), rgba(35, 25, 18, 0.98)) !important;
+  color: rgba(255, 248, 235, 0.96) !important;
+  box-shadow:
+    0 28px 80px rgba(30, 18, 10, 0.42),
+    inset 0 1px 0 rgba(255, 230, 190, 0.16) !important;
+  padding: 24px !important;
+}
+
+.shf-command-tour-step-badge {
+  width: 58px;
+  height: 58px;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 16px;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,0.22), transparent 30%),
+    linear-gradient(135deg, #d77b28, #7b451f);
+  color: #fff7ed;
+  font-size: 1.35rem;
+  font-weight: 950;
+  box-shadow:
+    0 14px 30px rgba(0,0,0,0.24),
+    inset 0 1px 0 rgba(255,255,255,0.18);
+}
+
+.shf-command-tour-card__top {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  color: rgba(255, 199, 125, 0.82) !important;
+  font-size: 0.72rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  margin-bottom: 14px !important;
+}
+
+.shf-command-tour-card h3 {
+  margin: 0 !important;
+  color: #fff7ed !important;
+  font-size: 1.55rem !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.03em !important;
+}
+
+.shf-command-tour-card p {
+  margin: 14px 0 0 !important;
+  color: rgba(255, 239, 213, 0.86) !important;
+  line-height: 1.5 !important;
+}
+
+.shf-command-tour-action {
+  margin-top: 18px !important;
+  padding: 14px !important;
+  border-radius: 18px !important;
+  border: 1px solid rgba(255, 205, 138, 0.18) !important;
+  background: rgba(255, 244, 224, 0.08) !important;
+}
+
+.shf-command-tour-action span {
+  display: block !important;
+  color: rgba(255, 199, 125, 0.82) !important;
+  font-size: 0.68rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  margin-bottom: 6px !important;
+}
+
+.shf-command-tour-action strong {
+  display: block !important;
+  color: rgba(255, 248, 235, 0.96) !important;
+  line-height: 1.35 !important;
+}
+
+.shf-command-tour-target {
+  margin-top: 12px !important;
+  color: rgba(255, 221, 176, 0.78) !important;
+  font-size: 0.78rem !important;
+}
+
+.shf-command-tour-dots {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  margin-top: 18px !important;
+}
+
+.shf-command-tour-dots button {
+  width: 34px !important;
+  height: 30px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 205, 138, 0.2) !important;
+  background: rgba(255, 244, 224, 0.08) !important;
+  color: rgba(255, 231, 194, 0.82) !important;
+  font-size: 0.68rem !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+}
+
+.shf-command-tour-dots button.is-active {
+  background: rgba(217, 125, 38, 0.92) !important;
+  color: #fff7ed !important;
+  border-color: rgba(255, 231, 194, 0.4) !important;
+}
+
+.shf-command-tour-controls {
+  display: flex !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  margin-top: 22px !important;
+}
+
+.shf-command-tour-controls button,
+.shf-command-tour-close {
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 205, 138, 0.2) !important;
+  background: rgba(255, 244, 224, 0.1) !important;
+  color: rgba(255, 248, 235, 0.95) !important;
+  font-weight: 900 !important;
+  padding: 9px 13px !important;
+  cursor: pointer !important;
+}
+
+.shf-command-tour-controls button:disabled {
+  opacity: 0.38 !important;
+  cursor: not-allowed !important;
+}
+
+.shf-command-tour-close {
+  position: absolute !important;
+  top: 16px !important;
+  right: 16px !important;
+  font-size: 0.68rem !important;
+  padding: 7px 10px !important;
+}
+
+@media (max-width: 760px) {
+  .shf-command-tour-floating-button--high {
+    top: auto !important;
+    bottom: 20px !important;
+    right: 20px !important;
+  }
+
+  .shf-command-tour-overlay {
+    place-items: end center !important;
+    padding: 18px !important;
+  }
+
+  .shf-command-tour-card {
+    width: 100% !important;
+  }
+}
+
+/* ==========================================================
+   SHF Command Tour V3
+   Active section only: metallic orange glowing spotlight
+   ========================================================== */
+
+@keyframes shfTourMetallicPulse {
+  0% {
+    outline-color: rgba(255, 132, 31, 0.82);
+    box-shadow:
+      0 0 0 5px rgba(255, 132, 31, 0.22),
+      0 0 26px rgba(255, 132, 31, 0.52),
+      0 0 58px rgba(255, 169, 66, 0.32),
+      inset 0 0 0 1px rgba(255, 238, 205, 0.28);
+  }
+
+  50% {
+    outline-color: rgba(255, 190, 84, 1);
+    box-shadow:
+      0 0 0 8px rgba(255, 132, 31, 0.28),
+      0 0 38px rgba(255, 132, 31, 0.78),
+      0 0 88px rgba(255, 169, 66, 0.52),
+      inset 0 0 0 1px rgba(255, 248, 225, 0.44);
+  }
+
+  100% {
+    outline-color: rgba(255, 132, 31, 0.82);
+    box-shadow:
+      0 0 0 5px rgba(255, 132, 31, 0.22),
+      0 0 26px rgba(255, 132, 31, 0.52),
+      0 0 58px rgba(255, 169, 66, 0.32),
+      inset 0 0 0 1px rgba(255, 238, 205, 0.28);
+  }
+}
+
+/* Dim page strongly during tour */
+body:has(.shf-command-tour-overlay) .shf-impact-command-center > *:not(.shf-command-tour-overlay):not(.shf-command-tour-floating-button) {
+  filter: blur(5px) brightness(0.42) saturate(0.72) !important;
+  transition: filter 180ms ease !important;
+}
+
+/* Pull the active section above the dimmed page */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight {
+  filter: none !important;
+  position: relative !important;
+  z-index: 9998 !important;
+  isolation: isolate !important;
+  background:
+    linear-gradient(180deg, rgba(255, 253, 248, 0.98), rgba(250, 239, 224, 0.94)) !important;
+  outline: 4px solid rgba(255, 132, 31, 0.95) !important;
+  outline-offset: 10px !important;
+  border-radius: 24px !important;
+  animation: shfTourMetallicPulse 1.45s ease-in-out infinite !important;
+}
+
+/* Add a metallic orange corner shine to the focused section */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: -12px !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+  background:
+    linear-gradient(135deg, rgba(255, 227, 185, 0.24), transparent 22%, transparent 72%, rgba(255, 132, 31, 0.2)),
+    radial-gradient(circle at top left, rgba(255, 190, 84, 0.3), transparent 34%) !important;
+}
+
+/* Tour backdrop should be darker so only highlighted section feels active */
+.shf-command-tour-backdrop {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(214, 124, 42, 0.14), transparent 32%),
+    rgba(24, 15, 9, 0.72) !important;
+  backdrop-filter: blur(8px) saturate(0.7) brightness(0.55) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(0.7) brightness(0.55) !important;
+}
+
+/* Keep the tour card above the highlighted section */
+.shf-command-tour-card {
+  z-index: 10002 !important;
+}
+
+/* Keep launcher out of the way while tour is open */
+body:has(.shf-command-tour-overlay) .shf-command-tour-floating-button {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Make highlighted text readable even if target has nested cards */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight,
+body:has(.shf-command-tour-overlay) .shf-tour-highlight * {
+  visibility: visible !important;
+}
+
+/* If a highlighted section is inside a grid/card, make sure it does not get clipped */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight {
+  overflow: visible !important;
+}
+
+/* Stronger focus for smaller panels like proof layer or AI card */
+body:has(.shf-command-tour-overlay) .shf-ai-analyst-panel.shf-tour-highlight,
+body:has(.shf-command-tour-overlay) .shf-proof-layer.shf-tour-highlight,
+body:has(.shf-command-tour-overlay) .shf-trust-verification-panel.shf-tour-highlight {
+  outline-offset: 8px !important;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  body:has(.shf-command-tour-overlay) .shf-tour-highlight {
+    animation: none !important;
+  }
+}
+
+/* ==========================================================
+   SHF Command Tour V3
+   Active section only: metallic orange glowing spotlight
+   ========================================================== */
+
+@keyframes shfTourMetallicPulse {
+  0% {
+    outline-color: rgba(255, 132, 31, 0.82);
+    box-shadow:
+      0 0 0 5px rgba(255, 132, 31, 0.22),
+      0 0 26px rgba(255, 132, 31, 0.52),
+      0 0 58px rgba(255, 169, 66, 0.32),
+      inset 0 0 0 1px rgba(255, 238, 205, 0.28);
+  }
+
+  50% {
+    outline-color: rgba(255, 190, 84, 1);
+    box-shadow:
+      0 0 0 8px rgba(255, 132, 31, 0.28),
+      0 0 38px rgba(255, 132, 31, 0.78),
+      0 0 88px rgba(255, 169, 66, 0.52),
+      inset 0 0 0 1px rgba(255, 248, 225, 0.44);
+  }
+
+  100% {
+    outline-color: rgba(255, 132, 31, 0.82);
+    box-shadow:
+      0 0 0 5px rgba(255, 132, 31, 0.22),
+      0 0 26px rgba(255, 132, 31, 0.52),
+      0 0 58px rgba(255, 169, 66, 0.32),
+      inset 0 0 0 1px rgba(255, 238, 205, 0.28);
+  }
+}
+
+/* Dim page strongly during tour */
+body:has(.shf-command-tour-overlay) .shf-impact-command-center > *:not(.shf-command-tour-overlay):not(.shf-command-tour-floating-button) {
+  filter: blur(5px) brightness(0.42) saturate(0.72) !important;
+  transition: filter 180ms ease !important;
+}
+
+/* Pull the active section above the dimmed page */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight {
+  filter: none !important;
+  position: relative !important;
+  z-index: 9998 !important;
+  isolation: isolate !important;
+  background:
+    linear-gradient(180deg, rgba(255, 253, 248, 0.98), rgba(250, 239, 224, 0.94)) !important;
+  outline: 4px solid rgba(255, 132, 31, 0.95) !important;
+  outline-offset: 10px !important;
+  border-radius: 24px !important;
+  animation: shfTourMetallicPulse 1.45s ease-in-out infinite !important;
+}
+
+/* Add a metallic orange corner shine to the focused section */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: -12px !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+  background:
+    linear-gradient(135deg, rgba(255, 227, 185, 0.24), transparent 22%, transparent 72%, rgba(255, 132, 31, 0.2)),
+    radial-gradient(circle at top left, rgba(255, 190, 84, 0.3), transparent 34%) !important;
+}
+
+/* Tour backdrop should be darker so only highlighted section feels active */
+.shf-command-tour-backdrop {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(214, 124, 42, 0.14), transparent 32%),
+    rgba(24, 15, 9, 0.72) !important;
+  backdrop-filter: blur(8px) saturate(0.7) brightness(0.55) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(0.7) brightness(0.55) !important;
+}
+
+/* Keep the tour card above the highlighted section */
+.shf-command-tour-card {
+  z-index: 10002 !important;
+}
+
+/* Keep launcher out of the way while tour is open */
+body:has(.shf-command-tour-overlay) .shf-command-tour-floating-button {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Make highlighted text readable even if target has nested cards */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight,
+body:has(.shf-command-tour-overlay) .shf-tour-highlight * {
+  visibility: visible !important;
+}
+
+/* If a highlighted section is inside a grid/card, make sure it does not get clipped */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight {
+  overflow: visible !important;
+}
+
+/* Stronger focus for smaller panels like proof layer or AI card */
+body:has(.shf-command-tour-overlay) .shf-ai-analyst-panel.shf-tour-highlight,
+body:has(.shf-command-tour-overlay) .shf-proof-layer.shf-tour-highlight,
+body:has(.shf-command-tour-overlay) .shf-trust-verification-panel.shf-tour-highlight {
+  outline-offset: 8px !important;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  body:has(.shf-command-tour-overlay) .shf-tour-highlight {
+    animation: none !important;
+  }
+}
+
+/* ==========================================================
+   SHF Command Tour V4 — SHS Hub Style Spotlight
+   This fixes the blackout problem.
+   ========================================================== */
+
+/* Stop the old V3 blackout/blur from hiding the page */
+body:has(.shf-command-tour-overlay) .shf-impact-command-center > *:not(.shf-command-tour-overlay):not(.shf-command-tour-floating-button) {
+  filter: none !important;
+}
+
+/* The page remains visible; dimming is created by the spotlight shadow instead */
+.shf-command-tour-backdrop {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Metallic orange spotlight window */
+.shf-command-tour-spotlight {
+  position: fixed !important;
+  z-index: 10000 !important;
+  border-radius: 26px !important;
+  pointer-events: none !important;
+  border: 4px solid rgba(255, 132, 31, 0.98) !important;
+  outline: 1px solid rgba(255, 231, 194, 0.72) !important;
+  outline-offset: -7px !important;
+  box-shadow:
+    0 0 0 9999px rgba(24, 15, 9, 0.72),
+    0 0 0 10px rgba(255, 132, 31, 0.18),
+    0 0 34px rgba(255, 132, 31, 0.78),
+    0 0 88px rgba(255, 190, 84, 0.44),
+    inset 0 0 22px rgba(255, 190, 84, 0.18) !important;
+  animation: shfTourSpotlightPulse 1.45s ease-in-out infinite !important;
+}
+
+@keyframes shfTourSpotlightPulse {
+  0% {
+    border-color: rgba(255, 132, 31, 0.9);
+    box-shadow:
+      0 0 0 9999px rgba(24, 15, 9, 0.72),
+      0 0 0 8px rgba(255, 132, 31, 0.16),
+      0 0 28px rgba(255, 132, 31, 0.62),
+      0 0 70px rgba(255, 190, 84, 0.34),
+      inset 0 0 18px rgba(255, 190, 84, 0.14);
+  }
+
+  50% {
+    border-color: rgba(255, 202, 104, 1);
+    box-shadow:
+      0 0 0 9999px rgba(24, 15, 9, 0.72),
+      0 0 0 12px rgba(255, 132, 31, 0.24),
+      0 0 44px rgba(255, 132, 31, 0.92),
+      0 0 104px rgba(255, 190, 84, 0.58),
+      inset 0 0 26px rgba(255, 190, 84, 0.22);
+  }
+
+  100% {
+    border-color: rgba(255, 132, 31, 0.9);
+    box-shadow:
+      0 0 0 9999px rgba(24, 15, 9, 0.72),
+      0 0 0 8px rgba(255, 132, 31, 0.16),
+      0 0 28px rgba(255, 132, 31, 0.62),
+      0 0 70px rgba(255, 190, 84, 0.34),
+      inset 0 0 18px rgba(255, 190, 84, 0.14);
+  }
+}
+
+/* Do not try to lift the original element above the overlay.
+   The spotlight rectangle handles the visual isolation. */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight {
+  outline: none !important;
+  box-shadow: none !important;
+  animation: none !important;
+  filter: none !important;
+}
+
+/* Make tour card sit above spotlight and remain readable */
+.shf-command-tour-card {
+  z-index: 10002 !important;
+}
+
+/* Keep close button readable */
+.shf-command-tour-close {
+  z-index: 10003 !important;
+}
+
+/* Keep the tour button high but hide it while tour is active */
+body:has(.shf-command-tour-overlay) .shf-command-tour-floating-button {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shf-command-tour-spotlight {
+    animation: none !important;
+  }
+}
+
+/* ==========================================================
+   SHF Command Tour V5 — SHS Hub style four-panel spotlight
+   ========================================================== */
+
+/* Remove old blackout behavior */
+body:has(.shf-command-tour-overlay) .shf-impact-command-center > *:not(.shf-command-tour-overlay):not(.shf-command-tour-floating-button) {
+  filter: none !important;
+}
+
+.shf-command-tour-backdrop {
+  background: rgba(24, 15, 9, 0.70) !important;
+  backdrop-filter: blur(3px) saturate(0.7) !important;
+  -webkit-backdrop-filter: blur(3px) saturate(0.7) !important;
+}
+
+.shf-command-tour-dim {
+  position: fixed !important;
+  z-index: 9998 !important;
+  background: rgba(9, 6, 4, 0.74) !important;
+  backdrop-filter: blur(5px) brightness(0.62) saturate(0.75) !important;
+  -webkit-backdrop-filter: blur(5px) brightness(0.62) saturate(0.75) !important;
+  pointer-events: auto !important;
+}
+
+.shf-command-tour-dim--top {
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+}
+
+.shf-command-tour-dim--left {
+  left: 0 !important;
+}
+
+.shf-command-tour-dim--right {
+  right: 0 !important;
+}
+
+.shf-command-tour-dim--bottom {
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+}
+
+.shf-command-tour-spotlight {
+  position: fixed !important;
+  z-index: 9999 !important;
+  border-radius: 26px !important;
+  pointer-events: none !important;
+  border: 3px solid rgba(255, 134, 31, 0.98) !important;
+  outline: 1px solid rgba(255, 232, 194, 0.82) !important;
+  outline-offset: -7px !important;
+  background: transparent !important;
+  box-shadow:
+    0 0 0 2px rgba(255, 232, 194, 0.24),
+    0 0 0 9px rgba(255, 134, 31, 0.16),
+    0 0 34px rgba(255, 134, 31, 0.78),
+    0 0 88px rgba(255, 190, 84, 0.52),
+    inset 0 0 26px rgba(255, 190, 84, 0.16) !important;
+  animation: shfTourSpotlightPulseV5 1.45s ease-in-out infinite !important;
+}
+
+@keyframes shfTourSpotlightPulseV5 {
+  0% {
+    border-color: rgba(255, 134, 31, 0.92);
+    box-shadow:
+      0 0 0 2px rgba(255, 232, 194, 0.22),
+      0 0 0 8px rgba(255, 134, 31, 0.14),
+      0 0 28px rgba(255, 134, 31, 0.62),
+      0 0 70px rgba(255, 190, 84, 0.34),
+      inset 0 0 20px rgba(255, 190, 84, 0.12);
+  }
+  50% {
+    border-color: rgba(255, 205, 118, 1);
+    box-shadow:
+      0 0 0 2px rgba(255, 232, 194, 0.36),
+      0 0 0 12px rgba(255, 134, 31, 0.24),
+      0 0 46px rgba(255, 134, 31, 0.9),
+      0 0 104px rgba(255, 190, 84, 0.58),
+      inset 0 0 32px rgba(255, 190, 84, 0.22);
+  }
+  100% {
+    border-color: rgba(255, 134, 31, 0.92);
+    box-shadow:
+      0 0 0 2px rgba(255, 232, 194, 0.22),
+      0 0 0 8px rgba(255, 134, 31, 0.14),
+      0 0 28px rgba(255, 134, 31, 0.62),
+      0 0 70px rgba(255, 190, 84, 0.34),
+      inset 0 0 20px rgba(255, 190, 84, 0.12);
+  }
+}
+
+/* Keep the highlighted section visually clear under the spotlight */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight {
+  position: relative !important;
+  z-index: 9997 !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+/* Tour card: similar to SHS guided tour panel, but SHF brown/copper */
+.shf-command-tour-card {
+  z-index: 10002 !important;
+  border: 1px solid rgba(255, 205, 138, 0.28) !important;
+  background:
+    radial-gradient(circle at top left, rgba(218, 132, 45, 0.20), transparent 34%),
+    linear-gradient(135deg, rgba(76, 45, 25, 0.98), rgba(28, 19, 13, 0.98)) !important;
+}
+
+.shf-command-tour-action--why {
+  border-color: rgba(255, 205, 138, 0.22) !important;
+  background: rgba(255, 244, 224, 0.075) !important;
+}
+
+.shf-command-tour-action--why span {
+  color: rgba(255, 199, 125, 0.88) !important;
+}
+
+body:has(.shf-command-tour-overlay) .shf-command-tour-floating-button {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shf-command-tour-spotlight {
+    animation: none !important;
+  }
+}
+
+/* ==========================================================
+   SHF Command Tour V6 — SHS quality guided-tour polish
+   Goal: SHS-style layout, lighter blur, clear section highlight,
+   no numbered dot row.
+   ========================================================== */
+
+/* Keep page visible. SHS style is dim + readable, not blackout. */
+.shf-command-tour-dim {
+  background: rgba(18, 12, 8, 0.46) !important;
+  backdrop-filter: blur(2.5px) brightness(0.78) saturate(0.88) !important;
+  -webkit-backdrop-filter: blur(2.5px) brightness(0.78) saturate(0.88) !important;
+}
+
+/* If fallback backdrop appears, keep it light too */
+.shf-command-tour-backdrop {
+  background: rgba(18, 12, 8, 0.46) !important;
+  backdrop-filter: blur(2.5px) brightness(0.78) saturate(0.88) !important;
+  -webkit-backdrop-filter: blur(2.5px) brightness(0.78) saturate(0.88) !important;
+}
+
+/* Active section spotlight: SHF metallic orange version of SHS cyan border */
+.shf-command-tour-spotlight {
+  border-radius: 24px !important;
+  border: 3px solid rgba(255, 126, 32, 0.96) !important;
+  outline: 1px solid rgba(255, 232, 194, 0.72) !important;
+  outline-offset: -6px !important;
+  background: transparent !important;
+  box-shadow:
+    0 0 0 2px rgba(255, 232, 194, 0.24),
+    0 0 0 7px rgba(255, 126, 32, 0.16),
+    0 0 28px rgba(255, 126, 32, 0.64),
+    0 0 64px rgba(255, 185, 84, 0.38) !important;
+  animation: shfTourSpotlightPulseV6 1.65s ease-in-out infinite !important;
+}
+
+@keyframes shfTourSpotlightPulseV6 {
+  0% {
+    border-color: rgba(255, 126, 32, 0.9);
+    box-shadow:
+      0 0 0 2px rgba(255, 232, 194, 0.2),
+      0 0 0 6px rgba(255, 126, 32, 0.12),
+      0 0 24px rgba(255, 126, 32, 0.52),
+      0 0 54px rgba(255, 185, 84, 0.28);
+  }
+
+  50% {
+    border-color: rgba(255, 198, 106, 1);
+    box-shadow:
+      0 0 0 2px rgba(255, 232, 194, 0.34),
+      0 0 0 10px rgba(255, 126, 32, 0.22),
+      0 0 38px rgba(255, 126, 32, 0.82),
+      0 0 86px rgba(255, 185, 84, 0.48);
+  }
+
+  100% {
+    border-color: rgba(255, 126, 32, 0.9);
+    box-shadow:
+      0 0 0 2px rgba(255, 232, 194, 0.2),
+      0 0 0 6px rgba(255, 126, 32, 0.12),
+      0 0 24px rgba(255, 126, 32, 0.52),
+      0 0 54px rgba(255, 185, 84, 0.28);
+  }
+}
+
+/* Tour card should feel closer to SHS quality, but SHF brown/copper */
+.shf-command-tour-card {
+  width: min(430px, calc(100vw - 40px)) !important;
+  border-radius: 24px !important;
+  border: 1px solid rgba(255, 187, 104, 0.34) !important;
+  background:
+    radial-gradient(circle at top left, rgba(221, 132, 45, 0.22), transparent 34%),
+    linear-gradient(135deg, rgba(64, 36, 20, 0.98), rgba(28, 19, 13, 0.98)) !important;
+  box-shadow:
+    0 28px 70px rgba(16, 9, 5, 0.42),
+    inset 0 1px 0 rgba(255, 230, 190, 0.16) !important;
+  padding: 22px !important;
+}
+
+/* Top tour label like SHS */
+.shf-command-tour-card__top {
+  margin-bottom: 12px !important;
+  color: rgba(255, 199, 125, 0.9) !important;
+  font-size: 0.72rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.13em !important;
+  text-transform: uppercase !important;
+}
+
+/* Hide the large square number badge; SHS style uses step text in header */
+.shf-command-tour-step-badge {
+  display: none !important;
+}
+
+/* Main tour title */
+.shf-command-tour-card h3 {
+  margin: 0 !important;
+  color: #fff7ed !important;
+  font-size: 1.22rem !important;
+  line-height: 1.18 !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* Body text */
+.shf-command-tour-card p {
+  margin: 13px 0 0 !important;
+  color: rgba(255, 239, 213, 0.88) !important;
+  font-size: 0.96rem !important;
+  line-height: 1.52 !important;
+}
+
+/* Why + Operator blocks */
+.shf-command-tour-action {
+  margin-top: 14px !important;
+  padding: 13px 14px !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(255, 205, 138, 0.2) !important;
+  background: rgba(255, 244, 224, 0.075) !important;
+}
+
+.shf-command-tour-action span {
+  display: block !important;
+  color: rgba(255, 199, 125, 0.9) !important;
+  font-size: 0.68rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.11em !important;
+  text-transform: uppercase !important;
+  margin-bottom: 6px !important;
+}
+
+.shf-command-tour-action strong {
+  display: block !important;
+  color: rgba(255, 248, 235, 0.96) !important;
+  font-size: 0.95rem !important;
+  line-height: 1.42 !important;
+}
+
+/* Remove target text if it feels too technical */
+.shf-command-tour-target {
+  display: none !important;
+}
+
+/* Remove dot number row entirely */
+.shf-command-tour-dots {
+  display: none !important;
+}
+
+/* Controls: SHS-like Back / End / Next only */
+.shf-command-tour-controls {
+  display: grid !important;
+  grid-template-columns: 1fr auto 1fr !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-top: 18px !important;
+}
+
+.shf-command-tour-controls button {
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 205, 138, 0.22) !important;
+  background: rgba(255, 244, 224, 0.08) !important;
+  color: rgba(255, 248, 235, 0.9) !important;
+  font-weight: 900 !important;
+  padding: 9px 14px !important;
+  cursor: pointer !important;
+}
+
+.shf-command-tour-controls button:last-child {
+  justify-self: end !important;
+  background:
+    linear-gradient(135deg, rgba(221, 132, 45, 0.96), rgba(130, 72, 30, 0.96)) !important;
+  color: #fff7ed !important;
+  border-color: rgba(255, 218, 174, 0.32) !important;
+  box-shadow:
+    0 10px 22px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+
+.shf-command-tour-controls button:disabled {
+  opacity: 0.42 !important;
+}
+
+/* Close button like SHS small circle */
+.shf-command-tour-close {
+  top: 16px !important;
+  right: 16px !important;
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  border-radius: 999px !important;
+  font-size: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+}
+
+.shf-command-tour-close::before {
+  content: "×" !important;
+  font-size: 1rem !important;
+  color: rgba(255, 248, 235, 0.9) !important;
+  line-height: 1 !important;
+}
+
+/* Keep tour button high */
+.shf-command-tour-floating-button--high {
+  top: 118px !important;
+  right: 28px !important;
+  bottom: auto !important;
+}
+
+/* Let highlighted source remain clear beneath the spotlight */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight {
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+@media (max-width: 760px) {
+  .shf-command-tour-card {
+    width: 100% !important;
+  }
+
+  .shf-command-tour-controls {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+/* ==========================================================
+   SHF Command Tour V7 — true SHS-style guided highlight
+   ========================================================== */
+
+/* Tour launcher */
+.shf-command-tour-floating-button--high {
+  position: fixed !important;
+  right: 28px !important;
+  top: 118px !important;
+  bottom: auto !important;
+  z-index: 9998 !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 205, 138, 0.28) !important;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 190, 92, 0.28), transparent 38%),
+    linear-gradient(135deg, #6b3f22, #2f2118) !important;
+  color: #fff7ed !important;
+  font-size: 0.82rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  padding: 13px 18px !important;
+  box-shadow:
+    0 18px 42px rgba(55, 32, 14, 0.28),
+    inset 0 1px 0 rgba(255, 230, 190, 0.18) !important;
+  cursor: pointer !important;
+}
+
+/* Overlay wrapper lets the page remain visible */
+.shf-command-tour-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  pointer-events: none !important;
+}
+
+/* Light SHS-style dim. Not a blackout. */
+.shf-command-tour-soft-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  background: rgba(21, 13, 8, 0.48) !important;
+  backdrop-filter: blur(2.5px) brightness(0.78) saturate(0.82) !important;
+  -webkit-backdrop-filter: blur(2.5px) brightness(0.78) saturate(0.82) !important;
+  pointer-events: auto !important;
+}
+
+/* Actual glowing border around the section being taught */
+.shf-command-tour-spotlight {
+  position: fixed !important;
+  z-index: 10000 !important;
+  pointer-events: none !important;
+  border-radius: 24px !important;
+  border: 3px solid rgba(255, 126, 32, 0.98) !important;
+  outline: 1px solid rgba(255, 232, 194, 0.72) !important;
+  outline-offset: -6px !important;
+  background: transparent !important;
+  box-shadow:
+    0 0 0 2px rgba(255, 232, 194, 0.22),
+    0 0 0 7px rgba(255, 126, 32, 0.14),
+    0 0 30px rgba(255, 126, 32, 0.72),
+    0 0 74px rgba(255, 185, 84, 0.42) !important;
+  animation: shfTourGlowPulseV7 1.55s ease-in-out infinite !important;
+}
+
+/* Put the actual target above the blur so it stays clear, like SHS */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight {
+  position: relative !important;
+  z-index: 10001 !important;
+  filter: none !important;
+  opacity: 1 !important;
+  isolation: isolate !important;
+  border-radius: 22px !important;
+}
+
+@keyframes shfTourGlowPulseV7 {
+  0% {
+    border-color: rgba(255, 126, 32, 0.9);
+    box-shadow:
+      0 0 0 2px rgba(255, 232, 194, 0.20),
+      0 0 0 6px rgba(255, 126, 32, 0.12),
+      0 0 24px rgba(255, 126, 32, 0.58),
+      0 0 58px rgba(255, 185, 84, 0.30);
+  }
+  50% {
+    border-color: rgba(255, 198, 106, 1);
+    box-shadow:
+      0 0 0 2px rgba(255, 232, 194, 0.34),
+      0 0 0 10px rgba(255, 126, 32, 0.22),
+      0 0 42px rgba(255, 126, 32, 0.88),
+      0 0 96px rgba(255, 185, 84, 0.52);
+  }
+  100% {
+    border-color: rgba(255, 126, 32, 0.9);
+    box-shadow:
+      0 0 0 2px rgba(255, 232, 194, 0.20),
+      0 0 0 6px rgba(255, 126, 32, 0.12),
+      0 0 24px rgba(255, 126, 32, 0.58),
+      0 0 58px rgba(255, 185, 84, 0.30);
+  }
+}
+
+/* Clean SHS-style tour panel, SHF color system */
+.shf-command-tour-card {
+  position: fixed !important;
+  right: 28px !important;
+  top: 108px !important;
+  z-index: 10003 !important;
+  width: min(430px, calc(100vw - 40px)) !important;
+  border-radius: 24px !important;
+  border: 1px solid rgba(255, 187, 104, 0.34) !important;
+  background:
+    radial-gradient(circle at top left, rgba(221, 132, 45, 0.24), transparent 34%),
+    linear-gradient(135deg, rgba(64, 36, 20, 0.98), rgba(28, 19, 13, 0.98)) !important;
+  color: rgba(255, 248, 235, 0.96) !important;
+  box-shadow:
+    0 28px 70px rgba(16, 9, 5, 0.42),
+    inset 0 1px 0 rgba(255, 230, 190, 0.16) !important;
+  padding: 22px !important;
+  pointer-events: auto !important;
+}
+
+.shf-command-tour-card__top {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 14px !important;
+  margin-bottom: 16px !important;
+  color: rgba(255, 199, 125, 0.9) !important;
+  font-size: 0.72rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.13em !important;
+  text-transform: uppercase !important;
+}
+
+.shf-command-tour-card h3 {
+  margin: 0 !important;
+  color: #fff7ed !important;
+  font-size: 1.22rem !important;
+  line-height: 1.18 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.shf-command-tour-card p {
+  margin: 13px 0 0 !important;
+  color: rgba(255, 239, 213, 0.88) !important;
+  font-size: 0.96rem !important;
+  line-height: 1.52 !important;
+}
+
+.shf-command-tour-action {
+  margin-top: 14px !important;
+  padding: 13px 14px !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(255, 205, 138, 0.2) !important;
+  background: rgba(255, 244, 224, 0.075) !important;
+}
+
+.shf-command-tour-action span {
+  display: block !important;
+  color: rgba(255, 199, 125, 0.9) !important;
+  font-size: 0.68rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.11em !important;
+  text-transform: uppercase !important;
+  margin-bottom: 6px !important;
+}
+
+.shf-command-tour-action strong {
+  display: block !important;
+  color: rgba(255, 248, 235, 0.96) !important;
+  font-size: 0.95rem !important;
+  line-height: 1.42 !important;
+}
+
+/* No numbers/dots row */
+.shf-command-tour-dots,
+.shf-command-tour-target,
+.shf-command-tour-step-badge {
+  display: none !important;
+}
+
+/* Back / End / Next like SHS */
+.shf-command-tour-controls {
+  display: grid !important;
+  grid-template-columns: 1fr auto 1fr !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-top: 18px !important;
+}
+
+.shf-command-tour-controls button {
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 205, 138, 0.22) !important;
+  background: rgba(255, 244, 224, 0.08) !important;
+  color: rgba(255, 248, 235, 0.9) !important;
+  font-weight: 900 !important;
+  padding: 9px 14px !important;
+  cursor: pointer !important;
+}
+
+.shf-command-tour-controls button:last-child {
+  justify-self: end !important;
+  background:
+    linear-gradient(135deg, rgba(221, 132, 45, 0.96), rgba(130, 72, 30, 0.96)) !important;
+  color: #fff7ed !important;
+  border-color: rgba(255, 218, 174, 0.32) !important;
+  box-shadow:
+    0 10px 22px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+
+.shf-command-tour-controls button:disabled {
+  opacity: 0.42 !important;
+}
+
+.shf-command-tour-close {
+  top: 16px !important;
+  right: 16px !important;
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  border-radius: 999px !important;
+  font-size: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  position: absolute !important;
+}
+
+.shf-command-tour-close::before {
+  content: "×" !important;
+  font-size: 1rem !important;
+  color: rgba(255, 248, 235, 0.9) !important;
+  line-height: 1 !important;
+}
+
+/* Hide launcher while tour is open */
+body:has(.shf-command-tour-overlay) .shf-command-tour-floating-button {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .shf-command-tour-spotlight {
+    animation: none !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .shf-command-tour-card {
+    top: auto !important;
+    right: 18px !important;
+    left: 18px !important;
+    bottom: 18px !important;
+    width: auto !important;
+  }
+
+  .shf-command-tour-floating-button--high {
+    top: auto !important;
+    bottom: 22px !important;
+    right: 22px !important;
+  }
+}

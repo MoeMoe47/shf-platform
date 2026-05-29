@@ -195,7 +195,7 @@ export default function OperatorControlPanel() {
                 >
                   <option value="approved">approved</option>
                   <option value="rejected">rejected</option>
-                  <option value="needs_review">needs_review</option>
+                  <option value="not_ready">not_ready</option>
                 </select>
                 <input
                   value={resolveForm.actor_id}

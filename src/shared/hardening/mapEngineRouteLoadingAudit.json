@@ -1,0 +1,391 @@
+{
+  "generatedAt": "2026-05-23T17:38:12.583Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 19",
+  "mode": "MAP_ENGINE_ROUTE_LOADING_AUDIT_NO_CODE_CHANGES",
+  "mapEngineRouteLoadingAuditStatus": "map_engine_preload_risk_detected",
+  "mapEngineRouteLoadingAuditLabel": "Map Engine Preload Risk Detected",
+  "productionDecision": "No source code was changed. This audit checks whether vendor-mapbox and vendor-maplibre are being pulled into initial HTML/modulepreload too early or only referenced from route/runtime chunks.",
+  "priorPatch18Status": "build_safe_split_successful_but_two_large_map_engines_remain",
+  "priorPatch17Summary": {
+    "totalAssetsParsed": 90,
+    "totalJsAssets": 63,
+    "totalCssAssets": 27,
+    "largeAssets": 2,
+    "largestAssetFileName": "vendor-mapbox-uaDf4Z7d.js",
+    "largestAssetRawKb": 1781.94,
+    "buildWarningDetected": true,
+    "frontendBuildPassed": true
+  },
+  "mapChunkNames": {
+    "mapboxJs": "vendor-mapbox-uaDf4Z7d.js",
+    "maplibreJs": "vendor-maplibre-JLoBlj2z.js",
+    "mapboxCss": "vendor-mapbox-C5-Kj3x0.css",
+    "maplibreCss": "vendor-maplibre-kWVbv8B-.css"
+  },
+  "bundleSummary": {
+    "totalAssetsParsed": 90,
+    "largeAssets": 2,
+    "largestAssetFileName": "vendor-mapbox-uaDf4Z7d.js",
+    "largestAssetRawKb": 1781.94,
+    "buildWarningDetected": true,
+    "frontendBuildPassed": true
+  },
+  "routeOnlyLoadingAssessment": {
+    "mapboxPreloadedInHtml": true,
+    "maplibrePreloadedInHtml": false,
+    "mapboxReferencedByRouteChunks": [
+      "dist/assets/capital-44WuCrlc.js",
+      "dist/assets/pages-exchange-Dmwe2jKp.js"
+    ],
+    "maplibreReferencedByRouteChunks": [
+      "dist/assets/components-CDuVLeKw.js"
+    ]
+  },
+  "htmlMapReferences": [
+    {
+      "file": "dist/capital.html",
+      "hits": [
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 17,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-mapbox-uaDf4Z7d.js\">"
+        },
+        {
+          "term": "vendor-map",
+          "lineNumber": 17,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-mapbox-uaDf4Z7d.js\">"
+        },
+        {
+          "term": "vendor-mapbox-uaDf4Z7d.js",
+          "lineNumber": 17,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-mapbox-uaDf4Z7d.js\">"
+        },
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 22,
+          "line": "<link rel=\"stylesheet\" crossorigin href=\"/assets/vendor-mapbox-C5-Kj3x0.css\">"
+        },
+        {
+          "term": "vendor-map",
+          "lineNumber": 22,
+          "line": "<link rel=\"stylesheet\" crossorigin href=\"/assets/vendor-mapbox-C5-Kj3x0.css\">"
+        },
+        {
+          "term": "vendor-mapbox-C5-Kj3x0.css",
+          "lineNumber": 22,
+          "line": "<link rel=\"stylesheet\" crossorigin href=\"/assets/vendor-mapbox-C5-Kj3x0.css\">"
+        }
+      ]
+    }
+  ],
+  "htmlModulepreloadMapReferences": [
+    {
+      "file": "dist/capital.html",
+      "hits": [
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 17,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-mapbox-uaDf4Z7d.js\">"
+        },
+        {
+          "term": "vendor-map",
+          "lineNumber": 17,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-mapbox-uaDf4Z7d.js\">"
+        },
+        {
+          "term": "vendor-mapbox-uaDf4Z7d.js",
+          "lineNumber": 17,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-mapbox-uaDf4Z7d.js\">"
+        }
+      ]
+    }
+  ],
+  "directHtmlScriptMapReferences": [],
+  "jsMapReferences": [
+    {
+      "file": "dist/assets/capital-44WuCrlc.js",
+      "hits": [
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);"
+        },
+        {
+          "term": "vendor-map",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);"
+        },
+        {
+          "term": "vendor-mapbox-uaDf4Z7d.js",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);"
+        },
+        {
+          "term": "vendor-mapbox-C5-Kj3x0.css",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);"
+        },
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>imp"
+        },
+        {
+          "term": "vendor-map",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>imp"
+        },
+        {
+          "term": "vendor-mapbox-uaDf4Z7d.js",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>imp"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/components-CDuVLeKw.js",
+      "hits": [
+        {
+          "term": "vendor-maplibre",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/vendor-maplibre-JLoBlj2z.js\",\"assets/vendor-CH_-0t41.js\",\"assets/vendor-maplibre-kWVbv8B-.css\"])))=>i.map(i=>d[i]);"
+        },
+        {
+          "term": "vendor-map",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/vendor-maplibre-JLoBlj2z.js\",\"assets/vendor-CH_-0t41.js\",\"assets/vendor-maplibre-kWVbv8B-.css\"])))=>i.map(i=>d[i]);"
+        },
+        {
+          "term": "vendor-maplibre-JLoBlj2z.js",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/vendor-maplibre-JLoBlj2z.js\",\"assets/vendor-CH_-0t41.js\",\"assets/vendor-maplibre-kWVbv8B-.css\"])))=>i.map(i=>d[i]);"
+        },
+        {
+          "term": "vendor-maplibre-kWVbv8B-.css",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/vendor-maplibre-JLoBlj2z.js\",\"assets/vendor-CH_-0t41.js\",\"assets/vendor-maplibre-kWVbv8B-.css\"])))=>i.map(i=>d[i]);"
+        },
+        {
+          "term": "vendor-maplibre",
+          "lineNumber": 53,
+          "line": "`})]})}function Mi(s){if(typeof s!=\"string\")return\"\";let t=s.trim();return t?(t=t.replace(/^\\//,\"\"),t):\"\"}function Ii(s){if(typeof s!=\"string\")return\"#/home\";const t=s.trim();return t?t.startsWith(\"#\")?t:t.startsWith(\"/\")?`#${t}`:`#/${t}`:\"#/home\"}function Li(s){if(!s)return\"\";const t=Mi(s.entry);if(!t)return\"\";const n=s.homeHash||s.hashBase||\"/home\";return`${\"/\".replace(/\\/?$/,\"/\")}${t}${Ii(n)}`}function Ai(s){return String(s||\"\").toLowerCase().trim()}function Ri(s,t=null){const n=Ai(s),a=Number(t||0);return n===\"verified\"?{label:\"Ready\",tone:\"ready\",description:\"Verification passed.\"}:n===\"d"
+        },
+        {
+          "term": "vendor-map",
+          "lineNumber": 53,
+          "line": "`})]})}function Mi(s){if(typeof s!=\"string\")return\"\";let t=s.trim();return t?(t=t.replace(/^\\//,\"\"),t):\"\"}function Ii(s){if(typeof s!=\"string\")return\"#/home\";const t=s.trim();return t?t.startsWith(\"#\")?t:t.startsWith(\"/\")?`#${t}`:`#/${t}`:\"#/home\"}function Li(s){if(!s)return\"\";const t=Mi(s.entry);if(!t)return\"\";const n=s.homeHash||s.hashBase||\"/home\";return`${\"/\".replace(/\\/?$/,\"/\")}${t}${Ii(n)}`}function Ai(s){return String(s||\"\").toLowerCase().trim()}function Ri(s,t=null){const n=Ai(s),a=Number(t||0);return n===\"verified\"?{label:\"Ready\",tone:\"ready\",description:\"Verification passed.\"}:n===\"d"
+        },
+        {
+          "term": "vendor-maplibre-JLoBlj2z.js",
+          "lineNumber": 53,
+          "line": "`})]})}function Mi(s){if(typeof s!=\"string\")return\"\";let t=s.trim();return t?(t=t.replace(/^\\//,\"\"),t):\"\"}function Ii(s){if(typeof s!=\"string\")return\"#/home\";const t=s.trim();return t?t.startsWith(\"#\")?t:t.startsWith(\"/\")?`#${t}`:`#/${t}`:\"#/home\"}function Li(s){if(!s)return\"\";const t=Mi(s.entry);if(!t)return\"\";const n=s.homeHash||s.hashBase||\"/home\";return`${\"/\".replace(/\\/?$/,\"/\")}${t}${Ii(n)}`}function Ai(s){return String(s||\"\").toLowerCase().trim()}function Ri(s,t=null){const n=Ai(s),a=Number(t||0);return n===\"verified\"?{label:\"Ready\",tone:\"ready\",description:\"Verification passed.\"}:n===\"d"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/pages-exchange-Dmwe2jKp.js",
+      "hits": [
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 1,
+          "line": "import{j as e,r as h,R as Ne,N as H,O as ke}from\"./vendor-react-DWUxBteQ.js\";import{O as De}from\"./pages-Ca4qtZ2F.js\";import{_ as Ae,a6 as Re}from\"./components-CDuVLeKw.js\";import{u as Ee,T as Le}from\"./pages-admin-Bhjlr7vA.js\";import{m as B}from\"./vendor-mapbox-uaDf4Z7d.js\";function Ys(){return e.jsx(De,{})}function Xs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Provider Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This"
+        },
+        {
+          "term": "vendor-map",
+          "lineNumber": 1,
+          "line": "import{j as e,r as h,R as Ne,N as H,O as ke}from\"./vendor-react-DWUxBteQ.js\";import{O as De}from\"./pages-Ca4qtZ2F.js\";import{_ as Ae,a6 as Re}from\"./components-CDuVLeKw.js\";import{u as Ee,T as Le}from\"./pages-admin-Bhjlr7vA.js\";import{m as B}from\"./vendor-mapbox-uaDf4Z7d.js\";function Ys(){return e.jsx(De,{})}function Xs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Provider Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This"
+        },
+        {
+          "term": "vendor-mapbox-uaDf4Z7d.js",
+          "lineNumber": 1,
+          "line": "import{j as e,r as h,R as Ne,N as H,O as ke}from\"./vendor-react-DWUxBteQ.js\";import{O as De}from\"./pages-Ca4qtZ2F.js\";import{_ as Ae,a6 as Re}from\"./components-CDuVLeKw.js\";import{u as Ee,T as Le}from\"./pages-admin-Bhjlr7vA.js\";import{m as B}from\"./vendor-mapbox-uaDf4Z7d.js\";function Ys(){return e.jsx(De,{})}function Xs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Provider Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/vendor-mapbox-uaDf4Z7d.js",
+      "hits": [
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 1,
+          "line": "import{g as _2}from\"./vendor-CH_-0t41.js\";var Om={exports:{}},g2=Om.exports,fb;function y2(){return fb||(fb=1,(function(mb,v2){(function(Gu,qu){mb.exports=qu()})(g2,(function(){let Gu,qu,Bm;function km(c,Z){if(!Gu)Gu=Z;else if(!qu)qu=Z;else{const Or={};Gu(void 0,Or),Bm=Z(Or);const $i=\"self.onerror = function() { console.error('An error occurred while parsing the WebWorker bundle. This is most likely due to improper transpilation by Babel; please see https://docs.mapbox.com/mapbox-gl-js/guides/install/#transpiling'); }; var sharedChunk = {}; (\"+Gu+\")(undefined, sharedChunk); (\"+qu+\")(sharedChun"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 2,
+          "line": "This is most likely a bug, please report this via https://github.com/mapbox/mapbox-gl-js/issues/new?assignees=&labels=&template=Bug_report.md"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 7,
+          "line": "`)}let h=null,f=null;if(n!==\"background\"&&n!==\"sky\"&&n!==\"slot\"){f=de[`filter_${n}`];const x=Ns(l,f,e,t);if(x.result===\"error\")throw new Error(x.value.map(b=>`${b.key}: ${b.message}`).join(\", \"));h=(b,w,I)=>x.value.evaluate(b,w,{},I)}let p=null,g=null;if(l!==s){const x=Ns(s,f,e,t);if(x.result===\"error\")throw new Error(x.value.map(b=>`${b.key}: ${b.message}`).join(\", \"));p=(b,w,I,E,M)=>x.value.evaluate(b,w,{},I,void 0,void 0,E,M),g=!Os(x.value.expression)}return{filter:h,dynamicFilter:p||void 0,needGeometry:pp(l),needFeature:!!g}}function Qh(r){if(!Array.isArray(r))return r;const e=(function(t)"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 3281,
+          "line": "`}_calculateXYTransform(){const i=this._pos,o=this._map,u=this.getPitchAlignment();if(!o||!i||u!==\"map\")return\"\";if(!o._showingGlobe()){const v=o.getPitch();return v?`rotateX(${v}deg)`:\"\"}const d=c.cL(c.f5(o.transform,this._lngLat)),m=i.sub(c.f6(o.transform)),_=Math.abs(m.x)+Math.abs(m.y);if(_===0)return\"\";const y=d/_;return`rotateX(${-m.y*y}deg) rotateY(${m.x*y}deg)`}_calculateZTransform(){const i=this._pos,o=this._map;if(!o||!i)return\"\";let u=0;const d=this.getRotationAlignment();if(d===\"map\")if(o._showingGlobe()){const m=o.project(new c.aY(this._lngLat.lng,this._lngLat.lat+.001),this._altit"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 3283,
+          "line": "(${u.data.width}, ${u.data.height})`)));const v=!(i instanceof HTMLImageElement||ImageBitmap&&i instanceof ImageBitmap);let T=!1;u.usvg?(u.data=new c.q({width:m,height:_},new Uint8Array(y)),u.usvg=!1,u.icon=void 0,T=!0):u.data.replace(y,v),this.style.updateImage(o,u,T)}hasImage(a){return a?!!this.style&&!!this.style.getImage(c.I.from(a)):(this.fire(new c.B(new Error(\"Missing required image id\"))),!1)}removeImage(a){this.style.removeImage(c.I.from(a))}loadImage(a,i){c.n(this._requestManager.transformRequest(a,c.R.Image),(o,u)=>{i(o,u)})}listImages(){return this.style.listImages().map(a=>a.name)"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/vendor-maplibre-JLoBlj2z.js",
+      "hits": [
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 2,
+          "line": "Use an identity property function instead: \\`{ \"type\": \"identity\", \"property\": ${JSON.stringify(w[1])} }\\`.`)];const S=[];return r.layerType===\"symbol\"&&f===\"text-font\"&&ja(fn(u))&&Ot(u.type)===\"identity\"&&S.push(new Te(i,u,'\"text-font\" does not support identity functions')),S.concat(s({key:r.key,value:u,valueSpec:v,style:o,styleSpec:c,expressionContext:\"property\",propertyType:e,propertyKey:f}))}function Cc(r){return Ac(r,\"paint\")}function Dc(r){return Ac(r,\"layout\")}function zc(r){let e=[];const i=r.value,s=r.key,o=r.style,c=r.styleSpec;if(Xe(i)!==\"object\")return[new Te(s,i,`object expected, "
+        }
+      ]
+    }
+  ],
+  "cssMapReferences": [],
+  "likelyRouteChunkReferences": [
+    {
+      "file": "dist/assets/capital-44WuCrlc.js",
+      "hits": [
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);"
+        },
+        {
+          "term": "vendor-map",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);"
+        },
+        {
+          "term": "vendor-mapbox-uaDf4Z7d.js",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);"
+        },
+        {
+          "term": "vendor-mapbox-C5-Kj3x0.css",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);"
+        },
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>imp"
+        },
+        {
+          "term": "vendor-map",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>imp"
+        },
+        {
+          "term": "vendor-mapbox-uaDf4Z7d.js",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>imp"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/components-CDuVLeKw.js",
+      "hits": [
+        {
+          "term": "vendor-maplibre",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/vendor-maplibre-JLoBlj2z.js\",\"assets/vendor-CH_-0t41.js\",\"assets/vendor-maplibre-kWVbv8B-.css\"])))=>i.map(i=>d[i]);"
+        },
+        {
+          "term": "vendor-map",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/vendor-maplibre-JLoBlj2z.js\",\"assets/vendor-CH_-0t41.js\",\"assets/vendor-maplibre-kWVbv8B-.css\"])))=>i.map(i=>d[i]);"
+        },
+        {
+          "term": "vendor-maplibre-JLoBlj2z.js",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/vendor-maplibre-JLoBlj2z.js\",\"assets/vendor-CH_-0t41.js\",\"assets/vendor-maplibre-kWVbv8B-.css\"])))=>i.map(i=>d[i]);"
+        },
+        {
+          "term": "vendor-maplibre-kWVbv8B-.css",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/vendor-maplibre-JLoBlj2z.js\",\"assets/vendor-CH_-0t41.js\",\"assets/vendor-maplibre-kWVbv8B-.css\"])))=>i.map(i=>d[i]);"
+        },
+        {
+          "term": "vendor-maplibre",
+          "lineNumber": 53,
+          "line": "`})]})}function Mi(s){if(typeof s!=\"string\")return\"\";let t=s.trim();return t?(t=t.replace(/^\\//,\"\"),t):\"\"}function Ii(s){if(typeof s!=\"string\")return\"#/home\";const t=s.trim();return t?t.startsWith(\"#\")?t:t.startsWith(\"/\")?`#${t}`:`#/${t}`:\"#/home\"}function Li(s){if(!s)return\"\";const t=Mi(s.entry);if(!t)return\"\";const n=s.homeHash||s.hashBase||\"/home\";return`${\"/\".replace(/\\/?$/,\"/\")}${t}${Ii(n)}`}function Ai(s){return String(s||\"\").toLowerCase().trim()}function Ri(s,t=null){const n=Ai(s),a=Number(t||0);return n===\"verified\"?{label:\"Ready\",tone:\"ready\",description:\"Verification passed.\"}:n===\"d"
+        },
+        {
+          "term": "vendor-map",
+          "lineNumber": 53,
+          "line": "`})]})}function Mi(s){if(typeof s!=\"string\")return\"\";let t=s.trim();return t?(t=t.replace(/^\\//,\"\"),t):\"\"}function Ii(s){if(typeof s!=\"string\")return\"#/home\";const t=s.trim();return t?t.startsWith(\"#\")?t:t.startsWith(\"/\")?`#${t}`:`#/${t}`:\"#/home\"}function Li(s){if(!s)return\"\";const t=Mi(s.entry);if(!t)return\"\";const n=s.homeHash||s.hashBase||\"/home\";return`${\"/\".replace(/\\/?$/,\"/\")}${t}${Ii(n)}`}function Ai(s){return String(s||\"\").toLowerCase().trim()}function Ri(s,t=null){const n=Ai(s),a=Number(t||0);return n===\"verified\"?{label:\"Ready\",tone:\"ready\",description:\"Verification passed.\"}:n===\"d"
+        },
+        {
+          "term": "vendor-maplibre-JLoBlj2z.js",
+          "lineNumber": 53,
+          "line": "`})]})}function Mi(s){if(typeof s!=\"string\")return\"\";let t=s.trim();return t?(t=t.replace(/^\\//,\"\"),t):\"\"}function Ii(s){if(typeof s!=\"string\")return\"#/home\";const t=s.trim();return t?t.startsWith(\"#\")?t:t.startsWith(\"/\")?`#${t}`:`#/${t}`:\"#/home\"}function Li(s){if(!s)return\"\";const t=Mi(s.entry);if(!t)return\"\";const n=s.homeHash||s.hashBase||\"/home\";return`${\"/\".replace(/\\/?$/,\"/\")}${t}${Ii(n)}`}function Ai(s){return String(s||\"\").toLowerCase().trim()}function Ri(s,t=null){const n=Ai(s),a=Number(t||0);return n===\"verified\"?{label:\"Ready\",tone:\"ready\",description:\"Verification passed.\"}:n===\"d"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/pages-exchange-Dmwe2jKp.js",
+      "hits": [
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 1,
+          "line": "import{j as e,r as h,R as Ne,N as H,O as ke}from\"./vendor-react-DWUxBteQ.js\";import{O as De}from\"./pages-Ca4qtZ2F.js\";import{_ as Ae,a6 as Re}from\"./components-CDuVLeKw.js\";import{u as Ee,T as Le}from\"./pages-admin-Bhjlr7vA.js\";import{m as B}from\"./vendor-mapbox-uaDf4Z7d.js\";function Ys(){return e.jsx(De,{})}function Xs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Provider Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This"
+        },
+        {
+          "term": "vendor-map",
+          "lineNumber": 1,
+          "line": "import{j as e,r as h,R as Ne,N as H,O as ke}from\"./vendor-react-DWUxBteQ.js\";import{O as De}from\"./pages-Ca4qtZ2F.js\";import{_ as Ae,a6 as Re}from\"./components-CDuVLeKw.js\";import{u as Ee,T as Le}from\"./pages-admin-Bhjlr7vA.js\";import{m as B}from\"./vendor-mapbox-uaDf4Z7d.js\";function Ys(){return e.jsx(De,{})}function Xs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Provider Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This"
+        },
+        {
+          "term": "vendor-mapbox-uaDf4Z7d.js",
+          "lineNumber": 1,
+          "line": "import{j as e,r as h,R as Ne,N as H,O as ke}from\"./vendor-react-DWUxBteQ.js\";import{O as De}from\"./pages-Ca4qtZ2F.js\";import{_ as Ae,a6 as Re}from\"./components-CDuVLeKw.js\";import{u as Ee,T as Le}from\"./pages-admin-Bhjlr7vA.js\";import{m as B}from\"./vendor-mapbox-uaDf4Z7d.js\";function Ys(){return e.jsx(De,{})}function Xs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Provider Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This"
+        }
+      ]
+    }
+  ],
+  "mapChunksReferencedBy": {
+    "mapbox": [
+      "dist/assets/capital-44WuCrlc.js",
+      "dist/assets/pages-exchange-Dmwe2jKp.js"
+    ],
+    "maplibre": [
+      "dist/assets/components-CDuVLeKw.js"
+    ]
+  },
+  "interpretation": [
+    "Mapbox chunk appears in generated HTML, which may mean it is being preloaded too early.",
+    "MapLibre chunk does not appear directly in generated HTML/modulepreload scan.",
+    "Mapbox route-only loading was not fully proven by this audit.",
+    "MapLibre appears to be referenced from JS/runtime chunks rather than directly from HTML.",
+    "If both engines are route-only loaded, the remaining warnings may be acceptable for map-heavy routes, but browser route signoff is required."
+  ],
+  "decisionOptions": [
+    {
+      "option": "A",
+      "label": "Accept current map chunk warnings as intentional route-heavy assets",
+      "risk": "low",
+      "recommendedWhen": "Use if map chunks are not preloaded in HTML and only load when map routes need them."
+    },
+    {
+      "option": "B",
+      "label": "Audit runtime network loading in browser",
+      "risk": "low_medium",
+      "recommendedWhen": "Use if static build scan is not enough to prove route-only loading."
+    },
+    {
+      "option": "C",
+      "label": "Plan future map-engine consolidation",
+      "risk": "high",
+      "recommendedWhen": "Use only as a later product refactor, not as a quick patch."
+    }
+  ],
+  "recommendedDecision": "Run a browser network loading signoff before deciding whether more bundle tuning is needed.",
+  "nextPatchRecommendation": {
+    "id": "post_v1_bundle_patch_20_runtime_map_loading_signoff",
+    "label": "Runtime Map Loading Signoff",
+    "goal": "Use browser/network verification to confirm when vendor-mapbox and vendor-maplibre load."
+  }
+}

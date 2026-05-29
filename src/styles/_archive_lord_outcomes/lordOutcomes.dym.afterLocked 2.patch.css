@@ -1,0 +1,44 @@
+/* =========================================================
+   LORD OF OUTCOMES — FINAL VISUAL SAFETY PATCH
+   This file OVERRIDES all cinematic darkness issues
+========================================================= */
+
+/* 🔥 REMOVE ALL CINEMATIC VEILS */
+.loo-dymApp::before,
+.loo-dymApp::after,
+.looPage::before,
+.looPage::after {
+  content: none !important;
+  display: none !important;
+  opacity: 0 !important;
+  background: none !important;
+  filter: none !important;
+}
+
+/* 🧠 CONTROL DECORATIVE OVERLAYS (NOT CONTENT) */
+.loo-dymGrid {
+  opacity: 0.18 !important;
+}
+
+.loo-dymNoise {
+  opacity: 0.06 !important;
+}
+
+.loo-vignette {
+  opacity: 0.12 !important;
+}
+
+/* 🧱 ENSURE CONTENT ALWAYS WINS Z-ORDER */
+#root,
+.looPage,
+.looMain,
+.looTopHeader {
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+/* 🧼 GUARANTEE BACKGROUND IS NOT DOUBLE-DARKENED */
+html,
+body {
+  background: #07070a !important;
+}

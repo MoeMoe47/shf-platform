@@ -1,0 +1,153 @@
+{
+  "generatedAt": "2026-05-23T17:34:23.959Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 18",
+  "mode": "VENDOR_MAP_SPLIT_IMPACT_COMPARISON_NO_CODE_CHANGES",
+  "vendorMapSplitImpactStatus": "build_safe_split_successful_but_two_large_map_engines_remain",
+  "vendorMapSplitImpactLabel": "Vendor Map Split Worked; Two Large Map Engines Remain",
+  "productionDecision": "Patch 17 successfully split the old vendor-map bucket into separate Mapbox and MapLibre chunks. This is structurally cleaner and build-safe, but both map engines remain large. The next decision should be strategic: keep both engines with route-only loading, consolidate to one map engine, or remove one from production.",
+  "patch17Result": {
+    "buildPassed": true,
+    "splitDetected": {
+      "vendorMapboxDetected": true,
+      "vendorMaplibreDetected": true,
+      "vendorGeoDetected": true,
+      "vendorMapSupportDetected": true,
+      "broadVendorMapReturnRemoved": true,
+      "chunkWarningLimitRemains700": true
+    },
+    "bundleSummaryAfterPatch": {
+      "totalAssetsParsed": 90,
+      "totalJsAssets": 63,
+      "totalCssAssets": 27,
+      "largeAssets": 2,
+      "largestAssetFileName": "vendor-mapbox-uaDf4Z7d.js",
+      "largestAssetRawKb": 1781.94,
+      "buildWarningDetected": true,
+      "frontendBuildPassed": true
+    }
+  },
+  "comparison": {
+    "beforePatch17SingleVendorMap": {
+      "fileName": "vendor-map-tnG_vlE9.js",
+      "rawKb": 2816.49,
+      "gzipKb": 773.75,
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    "afterPatch17VendorMapbox": {
+      "fileName": "vendor-mapbox-uaDf4Z7d.js",
+      "rawKb": 1781.94,
+      "gzipKb": 492.1,
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    "afterPatch17VendorMaplibre": {
+      "fileName": "vendor-maplibre-JLoBlj2z.js",
+      "rawKb": 1011.59,
+      "gzipKb": 274.26,
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    "combinedSplitRawKb": 2793.53,
+    "combinedSplitGzipKb": 766.36,
+    "splitVsSingleRawKbDelta": -22.96,
+    "splitVsSingleGzipKbDelta": -7.39,
+    "largeAssetsBeforePatch17": 1,
+    "largeAssetsAfterPatch17": 2,
+    "largeAssetNamesAfterPatch17": [
+      "vendor-mapbox-uaDf4Z7d.js",
+      "vendor-maplibre-JLoBlj2z.js"
+    ]
+  },
+  "interpretation": [
+    "Patch 17 did not eliminate the map warning, but it exposed the true structure of the problem.",
+    "Before Patch 17, Mapbox and MapLibre were hidden together inside one large vendor-map chunk.",
+    "After Patch 17, Mapbox and MapLibre are separated into two independent chunks.",
+    "This proves the remaining issue is not just manualChunks grouping; SHS currently includes two heavy map engines.",
+    "The correct next move is not to raise chunkSizeWarningLimit. The correct next move is to decide whether SHS should keep both map engines or consolidate to one."
+  ],
+  "mapEngineDecision": {
+    "currentState": "dual_map_engine_production_bundle",
+    "mapbox": {
+      "file": "src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+      "package": "mapbox-gl",
+      "chunk": {
+        "fileName": "vendor-mapbox-uaDf4Z7d.js",
+        "rawKb": 1781.94,
+        "gzipKb": 492.1,
+        "isLarge": true,
+        "isVeryLarge": true
+      },
+      "role": "Unified Truth / operational command map"
+    },
+    "maplibre": {
+      "files": [
+        "src/components/globe/OperationalMap.jsx",
+        "src/components/ai-compass/MapHero.jsx"
+      ],
+      "package": "maplibre-gl",
+      "chunk": {
+        "fileName": "vendor-maplibre-JLoBlj2z.js",
+        "rawKb": 1011.59,
+        "gzipKb": 274.26,
+        "isLarge": true,
+        "isVeryLarge": true
+      },
+      "role": "Operational map/globe and AI compass visual map surfaces"
+    }
+  },
+  "decisionOptions": [
+    {
+      "option": "A",
+      "label": "Keep both Mapbox and MapLibre",
+      "risk": "low",
+      "performanceResult": "Two large map chunks remain, but the app keeps current behavior.",
+      "recommendedWhen": "Use this if Mapbox is required for Unified Truth and MapLibre is required for other map/globe surfaces.",
+      "nextAction": "Move to browser route signoff and accept map chunks as intentional heavy route assets."
+    },
+    {
+      "option": "B",
+      "label": "Route-only load map engines",
+      "risk": "medium",
+      "performanceResult": "Can reduce initial route pressure if map chunks are only loaded on map routes.",
+      "recommendedWhen": "Use this if both engines must stay, but only specific routes should trigger them.",
+      "nextAction": "Audit generated HTML/modulepreload behavior and route loading to confirm whether map chunks preload too early."
+    },
+    {
+      "option": "C",
+      "label": "Consolidate core Unified Truth map from Mapbox to MapLibre",
+      "risk": "high",
+      "performanceResult": "Potentially removes Mapbox from production bundle and eliminates the largest map chunk.",
+      "recommendedWhen": "Use this if MapLibre can fully replace Mapbox features and design quality in Unified Truth.",
+      "nextAction": "Create a separate future refactor plan, not a quick bundle patch."
+    },
+    {
+      "option": "D",
+      "label": "Remove MapLibre surfaces from production",
+      "risk": "medium_high",
+      "performanceResult": "Potentially removes MapLibre chunk, but may break OperationalMap or AI compass visuals.",
+      "recommendedWhen": "Use this only if those surfaces are not needed in V1 production.",
+      "nextAction": "Audit routes/components using OperationalMap and MapHero before removing anything."
+    }
+  ],
+  "recommendedDecision": "Choose Option B next: audit whether map chunks are route-only loaded or preloaded too early. Do not consolidate map engines yet inside the bundle optimization lane.",
+  "nextPatchRecommendation": {
+    "id": "post_v1_bundle_patch_19_map_engine_route_loading_audit",
+    "label": "Map Engine Route Loading Audit",
+    "goal": "Determine whether vendor-mapbox and vendor-maplibre are only loaded on routes that need them, or whether generated HTML/modulepreload behavior is pulling them too early."
+  },
+  "doNotDo": [
+    {
+      "label": "Do not raise chunkSizeWarningLimit",
+      "reason": "That hides the warning and does not improve load behavior."
+    },
+    {
+      "label": "Do not rollback Patch 15B or Patch 17",
+      "reason": "They created a cleaner bundle structure and exposed the true map-engine issue."
+    },
+    {
+      "label": "Do not convert Unified Truth from Mapbox to MapLibre as a quick patch",
+      "reason": "That is a product/design refactor, not a safe bundle patch."
+    }
+  ]
+}

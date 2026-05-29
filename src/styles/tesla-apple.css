@@ -67,7 +67,7 @@ h3 { font-weight: 700; font-size: var(--h3); margin: 0 0 6px; }
 
 /* Links */
 a { color: var(--accent); text-decoration: none; }
-a:hover { filter: brightness(1.05); }
+a:hover { filter: none; }
 
 /* Buttons */
 .btn, .btn-orange {
@@ -84,7 +84,7 @@ a:hover { filter: brightness(1.05); }
   transform: translateZ(0);
   transition: transform .06s ease, filter .15s ease, box-shadow .15s ease;
 }
-.btn:hover, .btn-orange:hover { filter: brightness(.96); }
+.btn:hover, .btn-orange:hover { filter: none; }
 .btn:active, .btn-orange:active { transform: translateY(1px); }
 .btn.ghost {
   background: color-mix(in srgb, var(--accent) 10%, transparent);
@@ -250,4 +250,32 @@ a:hover { filter: brightness(1.05); }
 /* Accent focus ring for inputs in chrome */
 .app-shell input:focus, .app-shell select:focus, .app-shell textarea:focus {
   box-shadow: var(--ring);
+}
+
+
+/* SHS clean white Ohio override — removes dirty/noisy map wash */
+.shs-map-cinematic-texture,
+.shs-map-cinematic-texture::before,
+.shs-map-cinematic-texture::after,
+.shs-operational-map-texture,
+.shs-operational-map-texture::before,
+.shs-operational-map-texture::after,
+.map-cinematic-texture,
+.map-cinematic-texture::before,
+.map-cinematic-texture::after {
+  opacity: 0.035 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  background-image: none !important;
+}
+
+.shs-mapbox-map,
+.shs-operational-mapbox-map,
+.shs-operational-map-surface {
+  background: #020817 !important;
+}
+
+.shs-map-layer-state .mapboxgl-canvas,
+.shs-map-state .mapboxgl-canvas {
+  filter: none !important;
 }

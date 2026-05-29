@@ -1,0 +1,623 @@
+{
+  "generatedAt": "2026-05-23T17:12:47.277Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 15B",
+  "mode": "MANUAL_CHUNKS_STRATEGY_PATCH_REPORT_FIXED",
+  "manualChunksStrategyPatchStatus": "build_passed",
+  "manualChunksStrategyPatchLabel": "ManualChunks Strategy Patch Applied; Report Fixed",
+  "productionDecision": "vite.config.js manualChunks was split into narrower vendor and page buckets without raising chunkSizeWarningLimit. Production build passed. Broad vendor/pages chunks improved, but vendor-map became oversized and needs a follow-up map chunk audit/tuning pass.",
+  "changedFile": "vite.config.js",
+  "priorAuditSummary": {
+    "viteConfigFilesFound": 1,
+    "manualChunksDetected": true,
+    "chunkWarningLimitDetected": true,
+    "vendorMapRuleDetected": true,
+    "pagesRuleDetected": true,
+    "sharedRuleDetected": true,
+    "currentLargeAssets": 4,
+    "mainVendorRawKb": 1959.5,
+    "pagesRawKb": 1100.44,
+    "vendorMapRawKb": 1011.59,
+    "pagesCssRawKb": 831.75
+  },
+  "manualChunksPatchDetected": {
+    "normalizedIdDetected": true,
+    "vendorChartsDetected": true,
+    "vendorMotionDetected": true,
+    "vendorUiDetected": true,
+    "vendorExportDetected": true,
+    "vendorDataDetected": true,
+    "pagesExchangeDetected": true,
+    "pagesAdminDetected": true,
+    "pagesFoundationDetected": true,
+    "chunkWarningLimitRemains700": true
+  },
+  "chunkBucketDetected": {
+    "vendor-react": true,
+    "vendor-map": true,
+    "vendor-charts": true,
+    "vendor-motion": true,
+    "vendor-ui": false,
+    "vendor-export": false,
+    "vendor-data": false,
+    "vendor": true,
+    "pages-exchange": true,
+    "pages-admin": true,
+    "pages-hub": true,
+    "pages-foundation": true,
+    "pages-public": false,
+    "pages-lord": true,
+    "pages": true,
+    "components": true,
+    "shared": true
+  },
+  "keyAssetsAfterPatch": {
+    "vendor": {
+      "fileName": "vendor-map-tnG_vlE9.js",
+      "rawKb": 2816.49,
+      "gzipKb": 773.75,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    "vendorReact": {
+      "fileName": "vendor-react-DWUxBteQ.js",
+      "rawKb": 229.75,
+      "gzipKb": 73.56,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    "vendorMap": {
+      "fileName": "vendor-map-tnG_vlE9.js",
+      "rawKb": 2816.49,
+      "gzipKb": 773.75,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    "vendorCharts": {
+      "fileName": "vendor-charts-20wW2Z-x.js",
+      "rawKb": 22.02,
+      "gzipKb": 8.6,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    "vendorMotion": {
+      "fileName": "vendor-motion-Bndiu9g1.js",
+      "rawKb": 74.48,
+      "gzipKb": 23.92,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    "vendorUi": null,
+    "pages": {
+      "fileName": "pages-BngemEl7.js",
+      "rawKb": 399.82,
+      "gzipKb": 87.57,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    "pagesExchange": {
+      "fileName": "pages-exchange-CyAs2PcB.js",
+      "rawKb": 144.36,
+      "gzipKb": 34.64,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    "pagesAdmin": {
+      "fileName": "pages-admin-BbWJKztC.js",
+      "rawKb": 354.31,
+      "gzipKb": 81.47,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    "pagesHub": {
+      "fileName": "pages-hub-QoCCshwt.js",
+      "rawKb": 290.71,
+      "gzipKb": 68.82,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    "pagesFoundation": {
+      "fileName": "pages-foundation-BffeuCAE.js",
+      "rawKb": 39.43,
+      "gzipKb": 9.37,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    "shared": {
+      "fileName": "shared-QlY17BcJ.js",
+      "rawKb": 453.73,
+      "gzipKb": 43.97,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    "components": {
+      "fileName": "components-D7pPpSp4.js",
+      "rawKb": 174.66,
+      "gzipKb": 47.33,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    }
+  },
+  "bundleSummaryAfterPatch": {
+    "totalAssetsParsed": 88,
+    "totalJsAssets": 62,
+    "totalCssAssets": 26,
+    "largeAssets": 1,
+    "largestAssetFileName": "vendor-map-tnG_vlE9.js",
+    "largestAssetRawKb": 2816.49,
+    "buildWarningDetected": true,
+    "frontendBuildPassed": true
+  },
+  "largestAssetsAfterPatch": [
+    {
+      "fileName": "vendor-map-tnG_vlE9.js",
+      "rawKb": 2816.49,
+      "gzipKb": 773.75,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "shared-QlY17BcJ.js",
+      "rawKb": 453.73,
+      "gzipKb": 43.97,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-BngemEl7.js",
+      "rawKb": 399.82,
+      "gzipKb": 87.57,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-admin-BbWJKztC.js",
+      "rawKb": 354.31,
+      "gzipKb": 81.47,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-hub-QoCCshwt.js",
+      "rawKb": 290.71,
+      "gzipKb": 68.82,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-hub-CJzl8uZY.css",
+      "rawKb": 247.56,
+      "gzipKb": 34.84,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-exchange-Dwpvmain.css",
+      "rawKb": 245.21,
+      "gzipKb": 35.68,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-react-DWUxBteQ.js",
+      "rawKb": 229.75,
+      "gzipKb": 73.56,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-CiOMc1g0.css",
+      "rawKb": 221.11,
+      "gzipKb": 42.47,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "components-D7pPpSp4.js",
+      "rawKb": 174.66,
+      "gzipKb": 47.33,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-exchange-CyAs2PcB.js",
+      "rawKb": 144.36,
+      "gzipKb": 34.64,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-map-D813yQrJ.css",
+      "rawKb": 110.29,
+      "gzipKb": 15.12,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-admin-CrqIvWoe.css",
+      "rawKb": 76.61,
+      "gzipKb": 12.25,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-motion-Bndiu9g1.js",
+      "rawKb": 74.48,
+      "gzipKb": 23.92,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-CH_-0t41.js",
+      "rawKb": 71.27,
+      "gzipKb": 25.88,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-lord-Ww_74URf.css",
+      "rawKb": 48.13,
+      "gzipKb": 5.79,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-foundation-BffeuCAE.js",
+      "rawKb": 39.43,
+      "gzipKb": 9.37,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-lord-DitzO0wq.js",
+      "rawKb": 31.89,
+      "gzipKb": 7.46,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-foundation-BvjTgYP3.css",
+      "rawKb": 28.83,
+      "gzipKb": 6.18,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-charts-20wW2Z-x.js",
+      "rawKb": 22.02,
+      "gzipKb": 8.6,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "allocation-DGaB2vEX.js",
+      "rawKb": 19.62,
+      "gzipKb": 6.98,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "arcade-Cuohn2B4.css",
+      "rawKb": 19.56,
+      "gzipKb": 4.48,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "components-3KDTfcSy.css",
+      "rawKb": 16.2,
+      "gzipKb": 3.88,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "shell-DHjp85iC.css",
+      "rawKb": 11.99,
+      "gzipKb": 3.22,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "curriculum-BQjQ7RnG.css",
+      "rawKb": 10.63,
+      "gzipKb": 2.56,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "sales-C5XjbxN2.css",
+      "rawKb": 9.44,
+      "gzipKb": 2.59,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "ledger-cNRK8cm9.css",
+      "rawKb": 9.33,
+      "gzipKb": 2.45,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "catalog-9NU3OlVj.css",
+      "rawKb": 6.61,
+      "gzipKb": 2.01,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "util-wash-Qos2WW4c.css",
+      "rawKb": 6.54,
+      "gzipKb": 2.02,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "admin-BTmV4CcU.js",
+      "rawKb": 6.24,
+      "gzipKb": 2.28,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "curriculum-7q-u_Vy2.js",
+      "rawKb": 6.05,
+      "gzipKb": 2.03,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "global-BLOBr7rh.css",
+      "rawKb": 5.93,
+      "gzipKb": 1.98,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "app-shell-RKUFR9JW.css",
+      "rawKb": 5.57,
+      "gzipKb": 1.59,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "employer-CFWKX9Wl.js",
+      "rawKb": 5.24,
+      "gzipKb": 1.58,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "debt-BVH4hd71.css",
+      "rawKb": 5.17,
+      "gzipKb": 1.63,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "credit-DT0oGjqC.js",
+      "rawKb": 4.67,
+      "gzipKb": 1.35,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "capital-D4hYpatV.js",
+      "rawKb": 4.63,
+      "gzipKb": 1.74,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "arcade-DvVyFXB8.js",
+      "rawKb": 4.47,
+      "gzipKb": 1.95,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "sales-B9IqPklI.js",
+      "rawKb": 4.05,
+      "gzipKb": 1.43,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "debt-H3Tjw7eZ.js",
+      "rawKb": 3.87,
+      "gzipKb": 1.22,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "dashboard-shared-CEFeaRKS.css",
+      "rawKb": 3.73,
+      "gzipKb": 1.26,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "fuel-BzenZM_n.js",
+      "rawKb": 3.62,
+      "gzipKb": 1.3,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "TreasuryRoutes-CWAVgcuX.js",
+      "rawKb": 3.55,
+      "gzipKb": 1.08,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "solutions-bhb39pWH.js",
+      "rawKb": 3.48,
+      "gzipKb": 1.39,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "store-CeptCNci.js",
+      "rawKb": 3.3,
+      "gzipKb": 1.19,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "index-BHbIs6AR.js",
+      "rawKb": 3.2,
+      "gzipKb": 1.38,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "LordOutcomesLayout-D5ljnylL.js",
+      "rawKb": 3.02,
+      "gzipKb": 0.78,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "employer-0Z1nGege.css",
+      "rawKb": 2.88,
+      "gzipKb": 1.05,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "asl-3-descriptions-space-DgLFPgaA.js",
+      "rawKb": 2.67,
+      "gzipKb": 1.41,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "student.asl-04-rPgKUkcv.js",
+      "rawKb": 2.48,
+      "gzipKb": 1.29,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    }
+  ],
+  "largeAssetsAfterPatch": [
+    {
+      "fileName": "vendor-map-tnG_vlE9.js",
+      "rawKb": 2816.49,
+      "gzipKb": 773.75,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    }
+  ],
+  "detectedChunkBuckets": [
+    "vendor-react",
+    "vendor-map",
+    "vendor-charts",
+    "vendor-motion",
+    "vendor",
+    "pages-exchange",
+    "pages-admin",
+    "pages-hub",
+    "pages-foundation",
+    "pages-lord",
+    "pages",
+    "components",
+    "shared"
+  ],
+  "impactInterpretation": [
+    "ManualChunks strategy successfully split the old large pages chunk into smaller route/domain buckets.",
+    "The old broad vendor chunk is no longer the largest issue; vendor is now much smaller.",
+    "The remaining major problem is vendor-map, which grew into the largest chunk after map/geospatial dependencies were grouped together.",
+    "This is better structured than before, but not finished. The next step should audit which packages are inside vendor-map and split heavy map/geospatial packages more carefully.",
+    "Do not raise chunkSizeWarningLimit as the solution."
+  ],
+  "nextRecommendedActions": [
+    {
+      "step": 1,
+      "label": "Lock Patch 15 as build-safe but incomplete",
+      "action": "Document that manualChunks improved broad vendor/pages chunks but made vendor-map oversized."
+    },
+    {
+      "step": 2,
+      "label": "Run vendor-map composition audit",
+      "action": "Identify which map/geospatial packages are inside vendor-map and decide whether to split mapbox, maplibre, geojson, supercluster, and map workers."
+    },
+    {
+      "step": 3,
+      "label": "Tune vendor-map next",
+      "action": "Patch map/geospatial chunk grouping in one measured pass."
+    },
+    {
+      "step": 4,
+      "label": "Browser recheck major routes",
+      "action": "Open Main Home, Admin Home, Exchange Mission, Unified Truth, Hub Dashboard, and Reporting Command Surface."
+    }
+  ],
+  "nextPatchRecommendation": {
+    "id": "post_v1_bundle_patch_16_vendor_map_composition_audit",
+    "label": "Vendor Map Composition Audit",
+    "goal": "Inspect why vendor-map became oversized after manualChunks tuning and identify a safer split strategy for map/geospatial dependencies."
+  }
+}

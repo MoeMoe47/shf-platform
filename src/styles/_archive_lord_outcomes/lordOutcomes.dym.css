@@ -38,7 +38,7 @@ import "@/styles/lordOutcomes.header.locked.css";
     radial-gradient(circle at 72% 58%, rgba(255,255,255,0.09) 0 1px, transparent 1px),
     radial-gradient(circle at 44% 82%, rgba(255,255,255,0.08) 0 1px, transparent 1px);
   background-size: 120px 120px, 140px 140px, 160px 160px;
-  mix-blend-mode: overlay;
+  mix-blend-mode: normal;
 }
 
 .loo-vignette{
@@ -117,7 +117,7 @@ import "@/styles/lordOutcomes.header.locked.css";
     );
 
   opacity: 0.16;
-  mix-blend-mode: overlay;
+  mix-blend-mode: normal;
 }
 
 /* =========================
@@ -910,4 +910,32 @@ import "@/styles/lordOutcomes.header.locked.css";
 @media (max-width: 860px){
   .looSubnavRow{ flex-direction: column; align-items: stretch; }
   .looSubnavRight{ justify-content: flex-start; }
+}
+
+
+/* SHS clean white Ohio override — removes dirty/noisy map wash */
+.shs-map-cinematic-texture,
+.shs-map-cinematic-texture::before,
+.shs-map-cinematic-texture::after,
+.shs-operational-map-texture,
+.shs-operational-map-texture::before,
+.shs-operational-map-texture::after,
+.map-cinematic-texture,
+.map-cinematic-texture::before,
+.map-cinematic-texture::after {
+  opacity: 0.035 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  background-image: none !important;
+}
+
+.shs-mapbox-map,
+.shs-operational-mapbox-map,
+.shs-operational-map-surface {
+  background: #020817 !important;
+}
+
+.shs-map-layer-state .mapboxgl-canvas,
+.shs-map-state .mapboxgl-canvas {
+  filter: none !important;
 }

@@ -15,5 +15,32 @@
 .shf-rp-btn{appearance:none;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.18);color:rgba(255,255,255,.9);border-radius:12px;padding:10px 12px;font-weight:900;font-size:12px;cursor:pointer}
 .shf-rp-btn:hover{border-color:rgba(255,255,255,.28);background:rgba(0,0,0,.28)}
 .shf-rp-btn.primary{background:#ff6a00;border-color:#ff6a00;color:#fff;box-shadow:0 18px 50px rgba(255,106,0,.25)}
-.shf-rp-btn.primary:hover{filter:brightness(1.03)}
-.shf-rp-pre{margin-top:12px;border-radius:16px;border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.18);padding:12px;overflow:auto;max-height:320px;font-size:12px;line-height:1.35}
+.shf-rp-btn.primary:hover{filter: none;border-radius:16px;border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.18);padding:12px;overflow:auto;max-height:320px;font-size:12px;line-height:1.35}
+
+
+/* SHS clean white Ohio override — removes dirty/noisy map wash */
+.shs-map-cinematic-texture,
+.shs-map-cinematic-texture::before,
+.shs-map-cinematic-texture::after,
+.shs-operational-map-texture,
+.shs-operational-map-texture::before,
+.shs-operational-map-texture::after,
+.map-cinematic-texture,
+.map-cinematic-texture::before,
+.map-cinematic-texture::after {
+  opacity: 0.035 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  background-image: none !important;
+}
+
+.shs-mapbox-map,
+.shs-operational-mapbox-map,
+.shs-operational-map-surface {
+  background: #020817 !important;
+}
+
+.shs-map-layer-state .mapboxgl-canvas,
+.shs-map-state .mapboxgl-canvas {
+  filter: none !important;
+}

@@ -1,0 +1,645 @@
+{
+  "generatedAt": "2026-05-23T17:29:26.591Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 17",
+  "mode": "VENDOR_MAP_SPLIT_STRATEGY_PATCH",
+  "vendorMapSplitPatchStatus": "build_passed",
+  "vendorMapSplitPatchLabel": "Vendor Map Split Strategy Applied",
+  "productionDecision": "vite.config.js now splits map/geospatial dependencies into narrower buckets without raising chunkSizeWarningLimit. Production build passed after the vendor map split strategy patch.",
+  "changedFile": "vite.config.js",
+  "priorVendorMapAsset": {
+    "fileName": "vendor-map-tnG_vlE9.js",
+    "rawKb": 2816.49,
+    "gzipKb": 773.75,
+    "type": "js",
+    "isLarge": true,
+    "isVeryLarge": true
+  },
+  "vendorMapSplitDetected": {
+    "vendorMapboxDetected": true,
+    "vendorMaplibreDetected": true,
+    "vendorGeoDetected": true,
+    "vendorMapSupportDetected": true,
+    "broadVendorMapReturnRemoved": true,
+    "chunkWarningLimitRemains700": true
+  },
+  "keyAssetsAfterPatch": {
+    "vendorMapbox": {
+      "fileName": "vendor-mapbox-uaDf4Z7d.js",
+      "rawKb": 1781.94,
+      "gzipKb": 492.1,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    "vendorMaplibre": {
+      "fileName": "vendor-maplibre-JLoBlj2z.js",
+      "rawKb": 1011.59,
+      "gzipKb": 274.26,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    "vendorGeo": null,
+    "vendorMapSupport": null,
+    "vendorMap": null,
+    "vendorReact": {
+      "fileName": "vendor-react-DWUxBteQ.js",
+      "rawKb": 229.75,
+      "gzipKb": 73.56,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    "vendor": {
+      "fileName": "vendor-mapbox-uaDf4Z7d.js",
+      "rawKb": 1781.94,
+      "gzipKb": 492.1,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    "pages": {
+      "fileName": "pages-Ca4qtZ2F.js",
+      "rawKb": 399.82,
+      "gzipKb": 87.57,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    "pagesExchange": {
+      "fileName": "pages-exchange-Dmwe2jKp.js",
+      "rawKb": 144.37,
+      "gzipKb": 34.65,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    "pagesAdmin": {
+      "fileName": "pages-admin-Bhjlr7vA.js",
+      "rawKb": 354.31,
+      "gzipKb": 81.47,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    "shared": {
+      "fileName": "shared-eNuYgzDM.js",
+      "rawKb": 453.73,
+      "gzipKb": 43.97,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    "components": {
+      "fileName": "components-CDuVLeKw.js",
+      "rawKb": 174.68,
+      "gzipKb": 47.33,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    }
+  },
+  "detectedMapBuckets": [
+    "vendor-mapbox",
+    "vendor-maplibre"
+  ],
+  "bundleSummaryAfterPatch": {
+    "totalAssetsParsed": 90,
+    "totalJsAssets": 63,
+    "totalCssAssets": 27,
+    "largeAssets": 2,
+    "largestAssetFileName": "vendor-mapbox-uaDf4Z7d.js",
+    "largestAssetRawKb": 1781.94,
+    "buildWarningDetected": true,
+    "frontendBuildPassed": true
+  },
+  "largestAssetsAfterPatch": [
+    {
+      "fileName": "vendor-mapbox-uaDf4Z7d.js",
+      "rawKb": 1781.94,
+      "gzipKb": 492.1,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "vendor-maplibre-JLoBlj2z.js",
+      "rawKb": 1011.59,
+      "gzipKb": 274.26,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "shared-eNuYgzDM.js",
+      "rawKb": 453.73,
+      "gzipKb": 43.97,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-Ca4qtZ2F.js",
+      "rawKb": 399.82,
+      "gzipKb": 87.57,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-admin-Bhjlr7vA.js",
+      "rawKb": 354.31,
+      "gzipKb": 81.47,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-hub-CJA6oJYr.js",
+      "rawKb": 290.71,
+      "gzipKb": 68.82,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-hub-CJzl8uZY.css",
+      "rawKb": 247.56,
+      "gzipKb": 34.84,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-exchange-Dwpvmain.css",
+      "rawKb": 245.21,
+      "gzipKb": 35.68,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-react-DWUxBteQ.js",
+      "rawKb": 229.75,
+      "gzipKb": 73.56,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-CiOMc1g0.css",
+      "rawKb": 221.11,
+      "gzipKb": 42.47,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "components-CDuVLeKw.js",
+      "rawKb": 174.68,
+      "gzipKb": 47.33,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-exchange-Dmwe2jKp.js",
+      "rawKb": 144.37,
+      "gzipKb": 34.65,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-admin-CrqIvWoe.css",
+      "rawKb": 76.61,
+      "gzipKb": 12.25,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-motion-Bndiu9g1.js",
+      "rawKb": 74.48,
+      "gzipKb": 23.92,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-CH_-0t41.js",
+      "rawKb": 71.27,
+      "gzipKb": 25.88,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-maplibre-kWVbv8B-.css",
+      "rawKb": 69.34,
+      "gzipKb": 9.97,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-lord-Ww_74URf.css",
+      "rawKb": 48.13,
+      "gzipKb": 5.79,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-mapbox-C5-Kj3x0.css",
+      "rawKb": 40.95,
+      "gzipKb": 5.59,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-foundation-B-hjKNft.js",
+      "rawKb": 39.43,
+      "gzipKb": 9.38,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-lord-BEn2tiDI.js",
+      "rawKb": 31.89,
+      "gzipKb": 7.46,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "pages-foundation-BvjTgYP3.css",
+      "rawKb": 28.83,
+      "gzipKb": 6.18,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-charts-20wW2Z-x.js",
+      "rawKb": 22.02,
+      "gzipKb": 8.6,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "allocation-DGaB2vEX.js",
+      "rawKb": 19.62,
+      "gzipKb": 6.98,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "arcade-Cuohn2B4.css",
+      "rawKb": 19.56,
+      "gzipKb": 4.48,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "components-3KDTfcSy.css",
+      "rawKb": 16.2,
+      "gzipKb": 3.88,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "shell-DHjp85iC.css",
+      "rawKb": 11.99,
+      "gzipKb": 3.22,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "curriculum-BQjQ7RnG.css",
+      "rawKb": 10.63,
+      "gzipKb": 2.56,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "sales-C5XjbxN2.css",
+      "rawKb": 9.44,
+      "gzipKb": 2.59,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "ledger-cNRK8cm9.css",
+      "rawKb": 9.33,
+      "gzipKb": 2.45,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "catalog-9NU3OlVj.css",
+      "rawKb": 6.61,
+      "gzipKb": 2.01,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "util-wash-Qos2WW4c.css",
+      "rawKb": 6.54,
+      "gzipKb": 2.02,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "admin-XyXMHTcs.js",
+      "rawKb": 6.24,
+      "gzipKb": 2.28,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "curriculum-BioJZTRa.js",
+      "rawKb": 6.05,
+      "gzipKb": 2.03,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "global-BLOBr7rh.css",
+      "rawKb": 5.93,
+      "gzipKb": 1.98,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "app-shell-RKUFR9JW.css",
+      "rawKb": 5.57,
+      "gzipKb": 1.59,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "employer-CY-ImTiC.js",
+      "rawKb": 5.24,
+      "gzipKb": 1.58,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "debt-BVH4hd71.css",
+      "rawKb": 5.17,
+      "gzipKb": 1.63,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "credit-DDexnHvq.js",
+      "rawKb": 4.67,
+      "gzipKb": 1.35,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "capital-44WuCrlc.js",
+      "rawKb": 4.64,
+      "gzipKb": 1.74,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "arcade-BRq6mr18.js",
+      "rawKb": 4.47,
+      "gzipKb": 1.95,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "sales-CR8eVpoq.js",
+      "rawKb": 4.05,
+      "gzipKb": 1.43,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "debt-CnW8cTpR.js",
+      "rawKb": 3.87,
+      "gzipKb": 1.22,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "dashboard-shared-CEFeaRKS.css",
+      "rawKb": 3.73,
+      "gzipKb": 1.26,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "fuel-DAsoloHH.js",
+      "rawKb": 3.62,
+      "gzipKb": 1.3,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "TreasuryRoutes-DDuXFv7e.js",
+      "rawKb": 3.55,
+      "gzipKb": 1.08,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "solutions-CILPucpV.js",
+      "rawKb": 3.48,
+      "gzipKb": 1.38,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "store-DuVdGLoo.js",
+      "rawKb": 3.3,
+      "gzipKb": 1.19,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "index-Bov2_cCh.js",
+      "rawKb": 3.2,
+      "gzipKb": 1.38,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "LordOutcomesLayout-D5ljnylL.js",
+      "rawKb": 3.02,
+      "gzipKb": 0.78,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "employer-0Z1nGege.css",
+      "rawKb": 2.88,
+      "gzipKb": 1.05,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "asl-3-descriptions-space-DgLFPgaA.js",
+      "rawKb": 2.67,
+      "gzipKb": 1.41,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "student.asl-04-rPgKUkcv.js",
+      "rawKb": 2.48,
+      "gzipKb": 1.29,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "student.asl-03-BDYHc7pG.js",
+      "rawKb": 2.37,
+      "gzipKb": 1.24,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "lesson-soft-CAeIdSXL.css",
+      "rawKb": 2.33,
+      "gzipKb": 0.86,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "student.asl-02-BajOz_GM.js",
+      "rawKb": 2.32,
+      "gzipKb": 1.13,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "student.asl-06-C8quR9SY.js",
+      "rawKb": 2.31,
+      "gzipKb": 1.16,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "student.asl-05-BxtEGo8c.js",
+      "rawKb": 2.27,
+      "gzipKb": 1.15,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "theme-solutions-CJFsxlYC.css",
+      "rawKb": 2.07,
+      "gzipKb": 0.46,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "asl-4-classifiers-movement-C-wWD9EL.js",
+      "rawKb": 1.91,
+      "gzipKb": 1.04,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "launch-8DWouvfb.js",
+      "rawKb": 1.83,
+      "gzipKb": 0.81,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    }
+  ],
+  "largeAssetsAfterPatch": [
+    {
+      "fileName": "vendor-mapbox-uaDf4Z7d.js",
+      "rawKb": 1781.94,
+      "gzipKb": 492.1,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "vendor-maplibre-JLoBlj2z.js",
+      "rawKb": 1011.59,
+      "gzipKb": 274.26,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    }
+  ],
+  "impactInterpretation": [
+    "The broad vendor-map rule has been replaced with narrower buckets.",
+    "Mapbox and MapLibre now have separate chunk targets.",
+    "GeoJSON and supercluster helpers now have a vendor-geo target.",
+    "Scoped @mapbox/@maplibre support packages now have a vendor-map-support target.",
+    "The next step is to compare whether large asset count dropped and whether any map bucket remains oversized."
+  ],
+  "nextRecommendedActions": [
+    {
+      "step": 1,
+      "label": "Compare vendor map split impact",
+      "action": "Compare this report against Patch 16 vendorMapAsset and Patch 15B large asset count."
+    },
+    {
+      "step": 2,
+      "label": "Browser recheck map routes",
+      "action": "Open Unified Truth map, Exchange Mission, SHF Impact map, and any MapLibre globe/map route."
+    },
+    {
+      "step": 3,
+      "label": "Only patch again if one map bucket remains oversized",
+      "action": "If one map bucket remains over 700 kB, audit that bucket specifically before changing more config."
+    }
+  ],
+  "nextPatchRecommendation": {
+    "id": "post_v1_bundle_patch_18_vendor_map_split_impact_comparison",
+    "label": "Vendor Map Split Impact Comparison",
+    "goal": "Compare Patch 17 bundle output against Patch 15B and Patch 16 to decide whether bundle optimization is complete or needs one more targeted pass."
+  }
+}

@@ -2,7 +2,7 @@ import React from "react";
 
 export default function ReportsBriefingsPanel({ items = [], onExportClick }) {
   return (
-    <div className="shf-panel">
+    <div className="shf-panel shf-reports-briefings" data-tour-section="reports">
       <div className="shf-panel__header">
         <h2>Reports & Briefings</h2>
         <span className="shf-panel__small-label">Last 12 Months</span>

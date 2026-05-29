@@ -107,7 +107,7 @@
 }
 
 .ohio-texture-img {
-  filter: brightness(0.45) contrast(1.1) saturate(0.6);
+  filter: none;
 }
 
 @keyframes metallicRadiance {
@@ -145,10 +145,7 @@
   height: 100%;
   object-fit: cover;
 
-  filter:
-    brightness(0.35)
-    contrast(1.2)
-    saturate(0.4);
+  filter: none;
 
   opacity: 0.9;
 }
@@ -160,10 +157,7 @@
   height: 100%;
   object-fit: cover;
 
-  filter:
-    brightness(0.55)
-    contrast(1.25)
-    saturate(0.2);
+  filter: none;
 
   opacity: 0.85;
 }
@@ -176,7 +170,7 @@
 
 .ohio-map-stage.zoom-franklin {
   transform: scale(1.25) translate(-6%, -4%);
-  filter: brightness(1.05);
+  filter: none;
 }
 
 /* 🔥 Franklin Lava Pulse */
@@ -208,7 +202,7 @@
 .ohio-map-root.zoom-franklin {
   transform: scale(1.25) translate(-6%, -4%);
   transform-origin: center;
-  filter: brightness(1.05);
+  filter: none;
 }
 
 
@@ -263,7 +257,7 @@
 }
 
 .ohio-map-root.regional .ohio-map-svg {
-  filter: brightness(1.02) contrast(1.06) saturate(1.04) !important;
+  filter: none;
 }
 
 .ohio-map-root.regional::after {
@@ -322,26 +316,26 @@
 /* selected county texture */
 .ohio-map-root.state .selected-county-texture-dark {
   opacity: 0.35 !important;
-  mix-blend-mode: multiply !important;
-  filter: contrast(1.35) brightness(0.92) saturate(0.92) !important;
+  mix-blend-mode: normal;
+  filter: none;
 }
 
 .ohio-map-root.regional .selected-county-texture-dark {
   opacity: 0.16 !important;
-  mix-blend-mode: multiply !important;
-  filter: contrast(1.55) brightness(0.88) saturate(0.92) !important;
+  mix-blend-mode: normal;
+  filter: none;
 }
 
 .ohio-map-root.state .selected-county-texture-light {
   opacity: 0.04 !important;
-  mix-blend-mode: screen !important;
-  filter: contrast(1.10) brightness(1.08) saturate(0.94) !important;
+  mix-blend-mode: normal;
+  filter: none;
 }
 
 .ohio-map-root.regional .selected-county-texture-light {
   opacity: 0.08 !important;
-  mix-blend-mode: screen !important;
-  filter: contrast(1.18) brightness(1.14) saturate(0.96) !important;
+  mix-blend-mode: normal;
+  filter: none;
 }
 
 /* selected county pulse halo from SVG animate */
@@ -392,7 +386,7 @@
 /* cluster hotspot = tiny flare only */
 .cluster-hotspot-bloom,
 .cluster-hotspot-core {
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
 }
 
 .ohio-map-root.state .cluster-hotspot-bloom,
@@ -753,3 +747,31 @@
   100% { transform: scale(1); }
 }
 
+
+
+/* SHS clean white Ohio override — removes dirty/noisy map wash */
+.shs-map-cinematic-texture,
+.shs-map-cinematic-texture::before,
+.shs-map-cinematic-texture::after,
+.shs-operational-map-texture,
+.shs-operational-map-texture::before,
+.shs-operational-map-texture::after,
+.map-cinematic-texture,
+.map-cinematic-texture::before,
+.map-cinematic-texture::after {
+  opacity: 0.035 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  background-image: none !important;
+}
+
+.shs-mapbox-map,
+.shs-operational-mapbox-map,
+.shs-operational-map-surface {
+  background: #020817 !important;
+}
+
+.shs-map-layer-state .mapboxgl-canvas,
+.shs-map-state .mapboxgl-canvas {
+  filter: none !important;
+}

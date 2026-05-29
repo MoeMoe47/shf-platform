@@ -94,3 +94,8 @@ export interface TruthPackage {
 
   trustEnvelope: TrustEnvelope;
 }
+
+// ---------- BACKWARD-COMPAT REPOSITORY ALIAS ----------
+// Older repository code imports OracleTruthRecord.
+// V1 contract uses TruthPackage as the official Oracle truth object.
+export type OracleTruthRecord = TruthPackage;

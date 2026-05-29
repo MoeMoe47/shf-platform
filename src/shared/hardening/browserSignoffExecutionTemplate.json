@@ -1,0 +1,566 @@
+{
+  "generatedAt": "2026-05-23T19:24:04.141Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 31",
+  "mode": "BROWSER_SIGNOFF_EXECUTION_TEMPLATE_NO_CODE_CHANGES",
+  "browserSignoffExecutionTemplateStatus": "template_ready_manual_execution_required",
+  "browserSignoffExecutionTemplateLabel": "Browser Signoff Execution Template Ready",
+  "productionDecision": "No source code was changed. This template gives the exact browser checks needed to close the preload, map, and route signoff lane.",
+  "priorPatch30Status": "registry_ready_layers_tracked",
+  "priorPatch29Status": "registry_ready_all_entries_exist",
+  "priorPatch28Status": "registry_ready_preload_lane_resolved",
+  "buildSummary": {
+    "frontendBuildPassed": true,
+    "manifestValidationPassed": true,
+    "totalAssetsParsed": 89,
+    "largeAssets": 2,
+    "largestAssetFileName": "vendor-mapbox-CVOD2Ov6.js",
+    "largestAssetRawKb": 1781.94,
+    "buildWarningDetected": true
+  },
+  "executionSummary": {
+    "totalRoutes": 8,
+    "pending": 8,
+    "passed": 0,
+    "failed": 0,
+    "needsFollowup": 0
+  },
+  "executionTemplate": [
+    {
+      "order": 1,
+      "routeId": "capital-entry",
+      "label": "Capital Entry",
+      "url": "http://localhost:5173/capital.html",
+      "layer": "Capital / Exchange entry",
+      "manualStatus": "pending",
+      "tester": "",
+      "testedAt": "",
+      "browser": "Chrome",
+      "devServer": "http://localhost:5173",
+      "requiredSetup": [
+        "Run npm run dev from /Users/mikeslate/Desktop/shrv1.",
+        "Open Chrome DevTools.",
+        "Go to Network tab.",
+        "Enable Disable cache.",
+        "Filter Network by vendor-map.",
+        "Open Console tab after page load and check for errors."
+      ],
+      "expectedBehavior": [
+        "capital JS may load",
+        "pages-exchange may load",
+        "vendor-mapbox should NOT load on initial page load",
+        "vendor-maplibre should NOT load on initial page load"
+      ],
+      "passCriteria": [
+        "Page opens without blank screen.",
+        "No console crash.",
+        "vendor-mapbox JS is not loaded before map UI is requested.",
+        "vendor-mapbox CSS is not loaded before map UI is requested.",
+        "vendor-maplibre JS is not loaded before map UI is requested."
+      ],
+      "networkChecks": {
+        "vendorMapboxShouldLoadOnInitialRoute": false,
+        "vendorMaplibreShouldLoadOnInitialRoute": false,
+        "vendorMapboxMustNotLoadBeforeMapVisible": true,
+        "vendorMaplibreMustNotLoadBeforeMapVisible": true,
+        "pagesExchangeAllowed": true
+      },
+      "resultFieldsToFill": {
+        "pageOpened": null,
+        "blankScreen": null,
+        "consoleErrors": [],
+        "vendorMapboxLoadedImmediately": null,
+        "vendorMapboxCssLoadedImmediately": null,
+        "vendorMaplibreLoadedImmediately": null,
+        "mapVisibleOnRoute": false,
+        "mapRenderedCorrectly": "not_applicable",
+        "fallbackCleared": null,
+        "refreshWorked": null,
+        "notes": "",
+        "finalDecision": "pending"
+      },
+      "failIf": [
+        "Page shows a blank screen.",
+        "Console has uncaught runtime errors.",
+        "Route refresh breaks.",
+        "vendor-mapbox loads before any visible Mapbox map is needed.",
+        "vendor-maplibre loads before any visible MapLibre map is needed."
+      ]
+    },
+    {
+      "order": 2,
+      "routeId": "exchange-surface",
+      "label": "Exchange Surface",
+      "url": "http://localhost:5173/capital.html#/exchange",
+      "layer": "Exchange route surface",
+      "manualStatus": "pending",
+      "tester": "",
+      "testedAt": "",
+      "browser": "Chrome",
+      "devServer": "http://localhost:5173",
+      "requiredSetup": [
+        "Run npm run dev from /Users/mikeslate/Desktop/shrv1.",
+        "Open Chrome DevTools.",
+        "Go to Network tab.",
+        "Enable Disable cache.",
+        "Filter Network by vendor-map.",
+        "Open Console tab after page load and check for errors."
+      ],
+      "expectedBehavior": [
+        "pages-exchange may load",
+        "Mapbox should not load unless Unified Truth map is visible",
+        "MapLibre should not load unless a MapLibre visual is visible"
+      ],
+      "passCriteria": [
+        "Exchange route opens.",
+        "Route fallback clears.",
+        "No console crash.",
+        "No early Mapbox load unless the route visibly renders the map."
+      ],
+      "networkChecks": {
+        "vendorMapboxShouldLoadOnInitialRoute": false,
+        "vendorMaplibreShouldLoadOnInitialRoute": false,
+        "vendorMapboxMustNotLoadBeforeMapVisible": true,
+        "vendorMaplibreMustNotLoadBeforeMapVisible": true,
+        "pagesExchangeAllowed": true
+      },
+      "resultFieldsToFill": {
+        "pageOpened": null,
+        "blankScreen": null,
+        "consoleErrors": [],
+        "vendorMapboxLoadedImmediately": null,
+        "vendorMapboxCssLoadedImmediately": null,
+        "vendorMaplibreLoadedImmediately": null,
+        "mapVisibleOnRoute": false,
+        "mapRenderedCorrectly": "not_applicable",
+        "fallbackCleared": null,
+        "refreshWorked": null,
+        "notes": "",
+        "finalDecision": "pending"
+      },
+      "failIf": [
+        "Page shows a blank screen.",
+        "Console has uncaught runtime errors.",
+        "Route refresh breaks.",
+        "vendor-mapbox loads before any visible Mapbox map is needed.",
+        "vendor-maplibre loads before any visible MapLibre map is needed."
+      ]
+    },
+    {
+      "order": 3,
+      "routeId": "unified-truth-map",
+      "label": "Unified Truth Map Route",
+      "url": "http://localhost:5173/capital.html#/exchange/unified-truth",
+      "layer": "Unified Truth / Mapbox operational map",
+      "manualStatus": "pending",
+      "tester": "",
+      "testedAt": "",
+      "browser": "Chrome",
+      "devServer": "http://localhost:5173",
+      "requiredSetup": [
+        "Run npm run dev from /Users/mikeslate/Desktop/shrv1.",
+        "Open Chrome DevTools.",
+        "Go to Network tab.",
+        "Enable Disable cache.",
+        "Filter Network by vendor-map.",
+        "Open Console tab after page load and check for errors."
+      ],
+      "expectedBehavior": [
+        "vendor-mapbox may load here",
+        "Mapbox runtime CSS may be injected by SHSOperationalMapboxMap",
+        "Map should render without CSS/layout breakage"
+      ],
+      "passCriteria": [
+        "Unified Truth route opens.",
+        "Map fallback displays while loading.",
+        "Mapbox JS loads only on this map route.",
+        "Runtime Mapbox CSS loads after the component mounts.",
+        "Map renders correctly.",
+        "No blinking/remount loop."
+      ],
+      "networkChecks": {
+        "vendorMapboxShouldLoadOnInitialRoute": true,
+        "vendorMaplibreShouldLoadOnInitialRoute": false,
+        "vendorMapboxMustNotLoadBeforeMapVisible": false,
+        "vendorMaplibreMustNotLoadBeforeMapVisible": true,
+        "pagesExchangeAllowed": true
+      },
+      "resultFieldsToFill": {
+        "pageOpened": null,
+        "blankScreen": null,
+        "consoleErrors": [],
+        "vendorMapboxLoadedImmediately": null,
+        "vendorMapboxCssLoadedImmediately": null,
+        "vendorMaplibreLoadedImmediately": null,
+        "mapVisibleOnRoute": null,
+        "mapRenderedCorrectly": null,
+        "fallbackCleared": null,
+        "refreshWorked": null,
+        "notes": "",
+        "finalDecision": "pending"
+      },
+      "failIf": [
+        "Page shows a blank screen.",
+        "Console has uncaught runtime errors.",
+        "Route refresh breaks.",
+        "vendor-maplibre loads before any visible MapLibre map is needed.",
+        "Mapbox route opens but map does not render."
+      ]
+    },
+    {
+      "order": 4,
+      "routeId": "maplibre-surfaces",
+      "label": "MapLibre Surfaces",
+      "url": "http://localhost:5173/solutions.html",
+      "layer": "MapLibre / globe / AI compass surfaces",
+      "manualStatus": "pending",
+      "tester": "",
+      "testedAt": "",
+      "browser": "Chrome",
+      "devServer": "http://localhost:5173",
+      "requiredSetup": [
+        "Run npm run dev from /Users/mikeslate/Desktop/shrv1.",
+        "Open Chrome DevTools.",
+        "Go to Network tab.",
+        "Enable Disable cache.",
+        "Filter Network by vendor-map.",
+        "Open Console tab after page load and check for errors."
+      ],
+      "expectedBehavior": [
+        "vendor-maplibre should only load if a MapLibre visual is actually visible"
+      ],
+      "passCriteria": [
+        "Page opens.",
+        "MapLibre is not loaded on unrelated pages.",
+        "MapLibre visual routes render correctly when opened."
+      ],
+      "networkChecks": {
+        "vendorMapboxShouldLoadOnInitialRoute": false,
+        "vendorMaplibreShouldLoadOnInitialRoute": false,
+        "vendorMapboxMustNotLoadBeforeMapVisible": false,
+        "vendorMaplibreMustNotLoadBeforeMapVisible": true,
+        "pagesExchangeAllowed": false
+      },
+      "resultFieldsToFill": {
+        "pageOpened": null,
+        "blankScreen": null,
+        "consoleErrors": [],
+        "vendorMapboxLoadedImmediately": null,
+        "vendorMapboxCssLoadedImmediately": null,
+        "vendorMaplibreLoadedImmediately": null,
+        "mapVisibleOnRoute": null,
+        "mapRenderedCorrectly": null,
+        "fallbackCleared": null,
+        "refreshWorked": null,
+        "notes": "",
+        "finalDecision": "pending"
+      },
+      "failIf": [
+        "Page shows a blank screen.",
+        "Console has uncaught runtime errors.",
+        "Route refresh breaks.",
+        "vendor-maplibre loads before any visible MapLibre map is needed."
+      ]
+    },
+    {
+      "order": 5,
+      "routeId": "admin-entry",
+      "label": "Admin Entry",
+      "url": "http://localhost:5173/admin.html",
+      "layer": "Admin / internal command",
+      "manualStatus": "pending",
+      "tester": "",
+      "testedAt": "",
+      "browser": "Chrome",
+      "devServer": "http://localhost:5173",
+      "requiredSetup": [
+        "Run npm run dev from /Users/mikeslate/Desktop/shrv1.",
+        "Open Chrome DevTools.",
+        "Go to Network tab.",
+        "Enable Disable cache.",
+        "Filter Network by vendor-map.",
+        "Open Console tab after page load and check for errors."
+      ],
+      "expectedBehavior": [
+        "Admin chunks may load",
+        "Mapbox should not load unless a map route appears",
+        "MapLibre should not load unless a map route appears"
+      ],
+      "passCriteria": [
+        "Admin opens without blank screen.",
+        "Auth/me does not crash the page.",
+        "Internal layout renders.",
+        "No early vendor-mapbox or vendor-maplibre load unless map UI is visible."
+      ],
+      "networkChecks": {
+        "vendorMapboxShouldLoadOnInitialRoute": false,
+        "vendorMaplibreShouldLoadOnInitialRoute": false,
+        "vendorMapboxMustNotLoadBeforeMapVisible": true,
+        "vendorMaplibreMustNotLoadBeforeMapVisible": true,
+        "pagesExchangeAllowed": false
+      },
+      "resultFieldsToFill": {
+        "pageOpened": null,
+        "blankScreen": null,
+        "consoleErrors": [],
+        "vendorMapboxLoadedImmediately": null,
+        "vendorMapboxCssLoadedImmediately": null,
+        "vendorMaplibreLoadedImmediately": null,
+        "mapVisibleOnRoute": false,
+        "mapRenderedCorrectly": "not_applicable",
+        "fallbackCleared": null,
+        "refreshWorked": null,
+        "notes": "",
+        "finalDecision": "pending"
+      },
+      "failIf": [
+        "Page shows a blank screen.",
+        "Console has uncaught runtime errors.",
+        "Route refresh breaks.",
+        "vendor-mapbox loads before any visible Mapbox map is needed.",
+        "vendor-maplibre loads before any visible MapLibre map is needed."
+      ]
+    },
+    {
+      "order": 6,
+      "routeId": "foundation-entry",
+      "label": "Foundation Entry",
+      "url": "http://localhost:5173/foundation.html",
+      "layer": "SHF public / impact",
+      "manualStatus": "pending",
+      "tester": "",
+      "testedAt": "",
+      "browser": "Chrome",
+      "devServer": "http://localhost:5173",
+      "requiredSetup": [
+        "Run npm run dev from /Users/mikeslate/Desktop/shrv1.",
+        "Open Chrome DevTools.",
+        "Go to Network tab.",
+        "Enable Disable cache.",
+        "Filter Network by vendor-map.",
+        "Open Console tab after page load and check for errors."
+      ],
+      "expectedBehavior": [
+        "Foundation chunks may load",
+        "Map vendors should not load unless an impact map is visible"
+      ],
+      "passCriteria": [
+        "Foundation page opens.",
+        "No internal/admin-only content leaks.",
+        "No early map-engine load unless a map is visible."
+      ],
+      "networkChecks": {
+        "vendorMapboxShouldLoadOnInitialRoute": false,
+        "vendorMaplibreShouldLoadOnInitialRoute": false,
+        "vendorMapboxMustNotLoadBeforeMapVisible": true,
+        "vendorMaplibreMustNotLoadBeforeMapVisible": true,
+        "pagesExchangeAllowed": false
+      },
+      "resultFieldsToFill": {
+        "pageOpened": null,
+        "blankScreen": null,
+        "consoleErrors": [],
+        "vendorMapboxLoadedImmediately": null,
+        "vendorMapboxCssLoadedImmediately": null,
+        "vendorMaplibreLoadedImmediately": null,
+        "mapVisibleOnRoute": false,
+        "mapRenderedCorrectly": "not_applicable",
+        "fallbackCleared": null,
+        "refreshWorked": null,
+        "notes": "",
+        "finalDecision": "pending"
+      },
+      "failIf": [
+        "Page shows a blank screen.",
+        "Console has uncaught runtime errors.",
+        "Route refresh breaks.",
+        "vendor-mapbox loads before any visible Mapbox map is needed.",
+        "vendor-maplibre loads before any visible MapLibre map is needed."
+      ]
+    },
+    {
+      "order": 7,
+      "routeId": "solutions-entry",
+      "label": "Solutions Entry",
+      "url": "http://localhost:5173/solutions.html",
+      "layer": "SHS public sales / solutions",
+      "manualStatus": "pending",
+      "tester": "",
+      "testedAt": "",
+      "browser": "Chrome",
+      "devServer": "http://localhost:5173",
+      "requiredSetup": [
+        "Run npm run dev from /Users/mikeslate/Desktop/shrv1.",
+        "Open Chrome DevTools.",
+        "Go to Network tab.",
+        "Enable Disable cache.",
+        "Filter Network by vendor-map.",
+        "Open Console tab after page load and check for errors."
+      ],
+      "expectedBehavior": [
+        "Solutions chunks may load",
+        "No Mapbox unless a Mapbox surface is visible",
+        "No MapLibre unless a MapLibre surface is visible"
+      ],
+      "passCriteria": [
+        "Solutions page opens.",
+        "Sales message is visible.",
+        "No blank sections.",
+        "No early map vendor load unless map/globe visual is present."
+      ],
+      "networkChecks": {
+        "vendorMapboxShouldLoadOnInitialRoute": false,
+        "vendorMaplibreShouldLoadOnInitialRoute": false,
+        "vendorMapboxMustNotLoadBeforeMapVisible": true,
+        "vendorMaplibreMustNotLoadBeforeMapVisible": true,
+        "pagesExchangeAllowed": false
+      },
+      "resultFieldsToFill": {
+        "pageOpened": null,
+        "blankScreen": null,
+        "consoleErrors": [],
+        "vendorMapboxLoadedImmediately": null,
+        "vendorMapboxCssLoadedImmediately": null,
+        "vendorMaplibreLoadedImmediately": null,
+        "mapVisibleOnRoute": false,
+        "mapRenderedCorrectly": "not_applicable",
+        "fallbackCleared": null,
+        "refreshWorked": null,
+        "notes": "",
+        "finalDecision": "pending"
+      },
+      "failIf": [
+        "Page shows a blank screen.",
+        "Console has uncaught runtime errors.",
+        "Route refresh breaks.",
+        "vendor-mapbox loads before any visible Mapbox map is needed.",
+        "vendor-maplibre loads before any visible MapLibre map is needed."
+      ]
+    },
+    {
+      "order": 8,
+      "routeId": "index-entry",
+      "label": "Main Public Entry",
+      "url": "http://localhost:5173/index.html",
+      "layer": "SHS public homepage",
+      "manualStatus": "pending",
+      "tester": "",
+      "testedAt": "",
+      "browser": "Chrome",
+      "devServer": "http://localhost:5173",
+      "requiredSetup": [
+        "Run npm run dev from /Users/mikeslate/Desktop/shrv1.",
+        "Open Chrome DevTools.",
+        "Go to Network tab.",
+        "Enable Disable cache.",
+        "Filter Network by vendor-map.",
+        "Open Console tab after page load and check for errors."
+      ],
+      "expectedBehavior": [
+        "Homepage chunks may load",
+        "No map vendors unless map UI is visible"
+      ],
+      "passCriteria": [
+        "Homepage opens.",
+        "No console crash.",
+        "No early map vendor load."
+      ],
+      "networkChecks": {
+        "vendorMapboxShouldLoadOnInitialRoute": false,
+        "vendorMaplibreShouldLoadOnInitialRoute": false,
+        "vendorMapboxMustNotLoadBeforeMapVisible": true,
+        "vendorMaplibreMustNotLoadBeforeMapVisible": true,
+        "pagesExchangeAllowed": false
+      },
+      "resultFieldsToFill": {
+        "pageOpened": null,
+        "blankScreen": null,
+        "consoleErrors": [],
+        "vendorMapboxLoadedImmediately": null,
+        "vendorMapboxCssLoadedImmediately": null,
+        "vendorMaplibreLoadedImmediately": null,
+        "mapVisibleOnRoute": false,
+        "mapRenderedCorrectly": "not_applicable",
+        "fallbackCleared": null,
+        "refreshWorked": null,
+        "notes": "",
+        "finalDecision": "pending"
+      },
+      "failIf": [
+        "Page shows a blank screen.",
+        "Console has uncaught runtime errors.",
+        "Route refresh breaks.",
+        "vendor-mapbox loads before any visible Mapbox map is needed.",
+        "vendor-maplibre loads before any visible MapLibre map is needed."
+      ]
+    }
+  ],
+  "browserSignoffOrder": [
+    {
+      "order": 1,
+      "routeId": "capital-entry",
+      "label": "Capital Entry",
+      "url": "http://localhost:5173/capital.html",
+      "manualStatus": "pending"
+    },
+    {
+      "order": 2,
+      "routeId": "exchange-surface",
+      "label": "Exchange Surface",
+      "url": "http://localhost:5173/capital.html#/exchange",
+      "manualStatus": "pending"
+    },
+    {
+      "order": 3,
+      "routeId": "unified-truth-map",
+      "label": "Unified Truth Map Route",
+      "url": "http://localhost:5173/capital.html#/exchange/unified-truth",
+      "manualStatus": "pending"
+    },
+    {
+      "order": 4,
+      "routeId": "maplibre-surfaces",
+      "label": "MapLibre Surfaces",
+      "url": "http://localhost:5173/solutions.html",
+      "manualStatus": "pending"
+    },
+    {
+      "order": 5,
+      "routeId": "admin-entry",
+      "label": "Admin Entry",
+      "url": "http://localhost:5173/admin.html",
+      "manualStatus": "pending"
+    },
+    {
+      "order": 6,
+      "routeId": "foundation-entry",
+      "label": "Foundation Entry",
+      "url": "http://localhost:5173/foundation.html",
+      "manualStatus": "pending"
+    },
+    {
+      "order": 7,
+      "routeId": "solutions-entry",
+      "label": "Solutions Entry",
+      "url": "http://localhost:5173/solutions.html",
+      "manualStatus": "pending"
+    },
+    {
+      "order": 8,
+      "routeId": "index-entry",
+      "label": "Main Public Entry",
+      "url": "http://localhost:5173/index.html",
+      "manualStatus": "pending"
+    }
+  ],
+  "howToRecordResults": [
+    "After each browser test, change manualStatus to pass, fail, or needs_followup.",
+    "Fill pageOpened, blankScreen, consoleErrors, vendorMapboxLoadedImmediately, vendorMapboxCssLoadedImmediately, vendorMaplibreLoadedImmediately, fallbackCleared, refreshWorked, and finalDecision.",
+    "If a route fails, add a short notes value describing what failed.",
+    "Do not mark the lane complete until all routes are pass or intentional/accepted follow-up."
+  ],
+  "nextPatchRecommendation": {
+    "id": "post_v1_bundle_patch_32_browser_signoff_result_template",
+    "label": "Browser Signoff Result Registry",
+    "goal": "After manual browser testing, create or update a results registry that records pass/fail outcomes for all signoff routes."
+  }
+}

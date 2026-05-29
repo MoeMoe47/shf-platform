@@ -1,36 +1,67 @@
-export function buildOracleReportingGate(oracleTruth: any) {
+import { normalizePublicationMode } from "./reporting-readiness";
+
+export function buildOracleReportingGate(oracleTruth: any, options: { publicationMode?: string } = {}) {
   const reasons: string[] = [];
+  const publicationMode = normalizePublicationMode(
+    options.publicationMode ||
+      oracleTruth?.trustEnvelope?.publicationMode ||
+      oracleTruth?.publicationMode ||
+      "internal"
+  );
 
   if (!oracleTruth) reasons.push("oracle_missing");
   if (!oracleTruth?.trustEnvelope) reasons.push("trust_envelope_missing");
 
-  if ((oracleTruth?.truthStatus || "unknown") !== "certified") {
-    reasons.push(`oracle_truth_${oracleTruth?.truthStatus || "unknown"}`);
-  }
-
+  const truthStatus = String(oracleTruth?.truthStatus || "unknown").toLowerCase();
+  const verificationStatus = String(oracleTruth?.verificationStatus || "unknown").toLowerCase();
   const contradiction = String(oracleTruth?.contradictionStatus || "none").toLowerCase();
-  if (contradiction !== "none" && contradiction !== "resolved") {
-    reasons.push(`oracle_contradiction_${oracleTruth?.contradictionStatus || "unknown"}`);
-  }
-
   const readiness = String(oracleTruth?.readinessStatus || "unknown").toLowerCase();
-  if (readiness === "blocked" || readiness === "not_ready" || readiness === "unknown") {
-    reasons.push(`oracle_readiness_${oracleTruth?.readinessStatus || "unknown"}`);
+  const confidenceScore = Number(oracleTruth?.confidenceScore || 0);
+
+  if (!publicationMode) {
+    reasons.push("publication_mode_invalid");
   }
 
-  if ((oracleTruth?.confidenceScore || 0) < 90) {
-    reasons.push(`oracle_confidence_${oracleTruth?.confidenceScore || 0}`);
+  if (truthStatus !== "certified") {
+    reasons.push(`oracle_truth_${truthStatus}`);
+  }
+
+  if (verificationStatus !== "verified") {
+    reasons.push(`oracle_verification_${verificationStatus}`);
+  }
+
+  if (contradiction !== "none" && contradiction !== "resolved") {
+    reasons.push(`oracle_contradiction_${contradiction}`);
+  }
+
+  if (readiness === "blocked" || readiness === "not_ready" || readiness === "unknown") {
+    reasons.push(`oracle_readiness_${readiness}`);
+  }
+
+  if (publicationMode === "public_safe" && confidenceScore < 90) {
+    reasons.push(`oracle_confidence_public_${confidenceScore}`);
+  }
+
+  if (publicationMode === "deidentified_funder" && confidenceScore < 75) {
+    reasons.push(`oracle_confidence_funder_${confidenceScore}`);
+  }
+
+  if (
+    (publicationMode === "leadership" || publicationMode === "partner_scoped") &&
+    confidenceScore < 55
+  ) {
+    reasons.push(`oracle_confidence_leadership_${confidenceScore}`);
   }
 
   return {
     allowed: reasons.length === 0,
-    reasons,
+    reasons: Array.from(new Set(reasons)),
     label: reasons.length === 0 ? "ORACLE LOCKED" : "ORACLE BLOCKED",
   };
 }
 
-export function ensureOracleExportAllowed(oracleTruth: any) {
-  const gate = buildOracleReportingGate(oracleTruth);
+export function ensureOracleExportAllowed(oracleTruth: any, options: { publicationMode?: string } = {}) {
+  const gate = buildOracleReportingGate(oracleTruth, options);
   if (!gate.allowed) {
     throw new Error(`Oracle export blocked: ${gate.reasons.join(", ")}`);
   }

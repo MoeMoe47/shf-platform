@@ -329,7 +329,7 @@
   transform: scale(1.08);
   transform-origin: center center;
   opacity: 0.985;
-  filter: contrast(1.05) saturate(0.98) brightness(0.95);
+  filter: none;
 }
 
 .mock-pin {
@@ -718,7 +718,7 @@
       0 0 0 1px rgba(255, 173, 87, 0.10),
       0 0 14px rgba(255, 145, 56, 0.26),
       0 0 28px rgba(255, 145, 56, 0.10);
-    filter: brightness(1);
+    filter: none;
   }
   50% {
     box-shadow:
@@ -727,7 +727,7 @@
       0 0 0 1px rgba(255, 191, 109, 0.16),
       0 0 18px rgba(255, 150, 60, 0.34),
       0 0 38px rgba(255, 150, 60, 0.18);
-    filter: brightness(1.04);
+    filter: none;
   }
 }
 
@@ -802,11 +802,11 @@
 @keyframes extreme-guided-pulse {
   0%, 100% {
     transform: scale(1);
-    filter: brightness(1);
+    filter: none;
   }
   50% {
     transform: scale(1.04);
-    filter: brightness(1.14);
+    filter: none;
   }
 }
 
@@ -959,11 +959,11 @@
 @keyframes mock-guided-button-pulse {
   0%, 100% {
     transform: scale(1);
-    filter: brightness(1);
+    filter: none;
   }
   50% {
     transform: scale(1.04);
-    filter: brightness(1.14);
+    filter: none;
   }
 }
 
@@ -1389,7 +1389,7 @@
   z-index: 1;
   pointer-events: none;
   overflow: hidden;
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
 }
 
 .mock-stepSweep::before {
@@ -2129,7 +2129,7 @@
 .mock-shell--guided-mode .mock-rail .mock-panel:not(.mock-guided-panel),
 .mock-shell--guided-mode .mock-bottom .mock-panel:not(.mock-guided-panel) {
   opacity: 0.58;
-  filter: saturate(0.88) brightness(0.90);
+  filter: none;
   transform: scale(0.992);
 }
 
@@ -2138,7 +2138,7 @@
 .mock-shell--guided-mode .mock-priority:not(.mock-guided-panel),
 .mock-shell--guided-mode .mock-topbar:not(.mock-guided-panel) {
   opacity: 0.82;
-  filter: saturate(0.94) brightness(0.95);
+  filter: none;
 }
 
 /* soften text inside inactive side/bottom cards */
@@ -2155,7 +2155,7 @@
 /* the active guided target lifts above the rest */
 .mock-shell--guided-mode .mock-guided-panel {
   opacity: 1 !important;
-  filter: saturate(1.04) brightness(1.02);
+  filter: none;
   transform: translateY(-2px) scale(1.008);
   z-index: 4;
 }
@@ -2172,7 +2172,7 @@
 /* inactive clickable areas still feel available, but not loud */
 .mock-shell--guided-mode .mock-clickable:not(.mock-guided-panel):hover {
   opacity: 0.72;
-  filter: saturate(0.94) brightness(0.97);
+  filter: none;
 }
 
 /* make the active target feel like the present moment */
@@ -2240,7 +2240,7 @@
 .mock-shell--guidelevel-guided.mock-shell--guided-mode .mock-rail .mock-panel:not(.mock-guided-panel),
 .mock-shell--guidelevel-guided.mock-shell--guided-mode .mock-bottom .mock-panel:not(.mock-guided-panel) {
   opacity: 0.56;
-  filter: saturate(0.86) brightness(0.89);
+  filter: none;
   transform: scale(0.992);
 }
 
@@ -2248,7 +2248,7 @@
 .mock-shell--guidelevel-guided.mock-shell--guided-mode .mock-priority:not(.mock-guided-panel),
 .mock-shell--guidelevel-guided.mock-shell--guided-mode .mock-topbar:not(.mock-guided-panel) {
   opacity: 0.80;
-  filter: saturate(0.93) brightness(0.95);
+  filter: none;
 }
 
 .mock-shell--guidelevel-guided.mock-shell--guided-mode .mock-guided-panel {
@@ -2259,7 +2259,7 @@
 .mock-shell--guidelevel-assisted.mock-shell--guided-mode .mock-rail .mock-panel:not(.mock-guided-panel),
 .mock-shell--guidelevel-assisted.mock-shell--guided-mode .mock-bottom .mock-panel:not(.mock-guided-panel) {
   opacity: 0.74;
-  filter: saturate(0.94) brightness(0.95);
+  filter: none;
   transform: scale(0.996);
 }
 
@@ -2267,7 +2267,7 @@
 .mock-shell--guidelevel-assisted.mock-shell--guided-mode .mock-priority:not(.mock-guided-panel),
 .mock-shell--guidelevel-assisted.mock-shell--guided-mode .mock-topbar:not(.mock-guided-panel) {
   opacity: 0.90;
-  filter: saturate(0.98) brightness(0.98);
+  filter: none;
 }
 
 .mock-shell--guidelevel-assisted.mock-shell--guided-mode .mock-guided-panel {
@@ -2357,13 +2357,8 @@
   pointer-events: none;
   z-index: 1;
   opacity: 0.32;
-  mix-blend-mode: screen;
-  filter:
-    brightness(1.18)
-    contrast(1.08)
-    saturate(0.82)
-    drop-shadow(0 0 18px rgba(170, 215, 255, 0.12))
-    drop-shadow(0 10px 20px rgba(0, 0, 0, 0.20));
+  mix-blend-mode: normal;
+  filter: none;
 }
 
 .mock-mapStage__asset {
@@ -2410,25 +2405,16 @@
 .mock-mapStage__usaBase {
   z-index: 1;
   opacity: 0.18;
-  mix-blend-mode: screen;
-  filter:
-    brightness(0.92)
-    contrast(1.06)
-    saturate(0.62)
-    drop-shadow(0 0 14px rgba(170, 215, 255, 0.08))
-    drop-shadow(0 10px 16px rgba(0, 0, 0, 0.16));
+  mix-blend-mode: normal;
+  filter: none;
 }
 
 /* state line overlay */
 .mock-mapStage__usaLines {
   z-index: 2;
   opacity: 0.18;
-  mix-blend-mode: screen;
-  filter:
-    brightness(1.12)
-    contrast(1.04)
-    saturate(0.70)
-    drop-shadow(0 0 6px rgba(210, 232, 255, 0.06));
+  mix-blend-mode: normal;
+  filter: none;
 }
 
 /* subtle tactical center haze over the land plate */
@@ -2471,7 +2457,7 @@
 .mock-mapStage__lightField {
   z-index: 2;
   opacity: 0.26;
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
   background:
     radial-gradient(circle at 18% 58%, rgba(255, 188, 92, 0.95) 0%, rgba(255, 188, 92, 0) 0.9%),
     radial-gradient(circle at 27% 54%, rgba(255, 178, 88, 0.82) 0%, rgba(255, 178, 88, 0) 0.7%),
@@ -2488,7 +2474,7 @@
 .mock-mapStage__metroGlow {
   z-index: 3;
   opacity: 0.28;
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
   background:
     radial-gradient(circle at 18% 58%, rgba(255, 112, 40, 0.28) 0%, rgba(255, 112, 40, 0.10) 4%, rgba(255, 112, 40, 0) 14%),
     radial-gradient(circle at 61% 45%, rgba(255, 82, 40, 0.34) 0%, rgba(255, 82, 40, 0.12) 5%, rgba(255, 82, 40, 0) 16%),
@@ -2501,7 +2487,7 @@
 .mock-mapStage__regionalWash {
   z-index: 3;
   opacity: 0.24;
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
   background:
     radial-gradient(circle at 16% 60%, rgba(255, 86, 36, 0.18) 0%, rgba(255, 86, 36, 0.05) 10%, rgba(255, 86, 36, 0) 22%),
     radial-gradient(circle at 61% 45%, rgba(255, 66, 36, 0.22) 0%, rgba(255, 66, 36, 0.06) 11%, rgba(255, 66, 36, 0) 24%),
@@ -2514,7 +2500,7 @@
 .mock-mapStage__sparkField {
   z-index: 4;
   opacity: 0.34;
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
   background:
     radial-gradient(circle at 18% 58%, rgba(255, 220, 132, 1) 0%, rgba(255, 220, 132, 0) 1.1%),
     radial-gradient(circle at 53% 50%, rgba(255, 214, 124, 0.92) 0%, rgba(255, 214, 124, 0) 0.9%),
@@ -2525,21 +2511,12 @@
 
 .mock-mapStage__usaBase {
   opacity: 0.14;
-  filter:
-    brightness(0.88)
-    contrast(1.04)
-    saturate(0.56)
-    drop-shadow(0 0 14px rgba(170, 215, 255, 0.08))
-    drop-shadow(0 10px 16px rgba(0, 0, 0, 0.16));
+  filter: none;
 }
 
 .mock-mapStage__usaLines {
   opacity: 0.16;
-  filter:
-    brightness(1.08)
-    contrast(1.02)
-    saturate(0.64)
-    drop-shadow(0 0 6px rgba(210, 232, 255, 0.05));
+  filter: none;
 }
 
 
@@ -2590,21 +2567,12 @@
 /* slightly calmer plate, slightly clearer state lines */
 .mock-mapStage__usaBase {
   opacity: 0.12 !important;
-  filter:
-    brightness(0.84)
-    contrast(1.06)
-    saturate(0.52)
-    drop-shadow(0 0 12px rgba(170, 215, 255, 0.06))
-    drop-shadow(0 10px 16px rgba(0, 0, 0, 0.14)) !important;
+  filter: none;
 }
 
 .mock-mapStage__usaLines {
   opacity: 0.22 !important;
-  filter:
-    brightness(1.12)
-    contrast(1.04)
-    saturate(0.66)
-    drop-shadow(0 0 5px rgba(210, 232, 255, 0.04)) !important;
+  filter: none;
 }
 
 /* denser population intelligence */
@@ -2863,7 +2831,7 @@
     linear-gradient(90deg, rgba(108, 162, 245, 0.18) 1px, transparent 1px) !important;
   background-size: 26px 26px !important;
   opacity: 0.58 !important;
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
 }
 
 /* stronger major grid divisions */
@@ -2875,7 +2843,7 @@
     linear-gradient(90deg, rgba(182, 220, 255, 0.22) 1px, transparent 1px) !important;
   background-size: 130px 130px !important;
   opacity: 0.52 !important;
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
 }
 
 /* brighter center field + edge control so it feels like a display */
@@ -2922,7 +2890,7 @@
   z-index: 2;
   pointer-events: none;
   opacity: 0.78;
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
   background-image:
     radial-gradient(circle, rgba(116, 170, 255, 0.24) 0 0.8px, transparent 1.2px),
     radial-gradient(circle, rgba(198, 228, 255, 0.32) 0 1.15px, transparent 1.8px);
@@ -2978,7 +2946,7 @@
   inset: 0 !important;
   z-index: 2 !important;
   opacity: 1 !important;
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
   background-image:
     radial-gradient(circle, rgba(116, 176, 255, 0.52) 0 1.45px, transparent 1.95px),
     radial-gradient(circle, rgba(214, 236, 255, 0.76) 0 2.2px, transparent 3px) !important;
@@ -3077,7 +3045,7 @@
     26px 26px,
     26px 26px !important;
   opacity: 0.86 !important;
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
 }
 
 /* stronger major divisions */
@@ -3095,7 +3063,7 @@
     130px 130px,
     130px 130px !important;
   opacity: 0.82 !important;
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
 }
 
 /* let the lines read more clearly by calming the dot field slightly */
@@ -3139,12 +3107,7 @@
 /* slightly lift the map visually so it fills the stage like the mock */
 .mock-mapStage__usaBase {
   opacity: 0.10 !important;
-  filter:
-    brightness(0.84)
-    contrast(1.04)
-    saturate(0.52)
-    drop-shadow(0 0 12px rgba(170, 215, 255, 0.05))
-    drop-shadow(0 10px 16px rgba(0, 0, 0, 0.14)) !important;
+  filter: none;
 }
 
 .mock-mapStage__usaLines {
@@ -4651,11 +4614,11 @@
 
 @keyframes shsGuidedActionFocusPulse {
   from {
-    filter: brightness(1);
+    filter: none;
   }
 
   to {
-    filter: brightness(1.18);
+    filter: none;
   }
 }
 
@@ -5206,11 +5169,11 @@ article.shsCommandReactionLayer,
 
 @keyframes shsHardGuidedFocusPulse {
   from {
-    filter: brightness(1);
+    filter: none;
   }
 
   to {
-    filter: brightness(1.22);
+    filter: none;
   }
 }
 
@@ -5672,4 +5635,32 @@ article.shsCommandReactionLayer,
     opacity: 0;
     transform: translateY(-8px) scale(0.98);
   }
+}
+
+
+/* SHS clean white Ohio override — removes dirty/noisy map wash */
+.shs-map-cinematic-texture,
+.shs-map-cinematic-texture::before,
+.shs-map-cinematic-texture::after,
+.shs-operational-map-texture,
+.shs-operational-map-texture::before,
+.shs-operational-map-texture::after,
+.map-cinematic-texture,
+.map-cinematic-texture::before,
+.map-cinematic-texture::after {
+  opacity: 0.035 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  background-image: none !important;
+}
+
+.shs-mapbox-map,
+.shs-operational-mapbox-map,
+.shs-operational-map-surface {
+  background: #020817 !important;
+}
+
+.shs-map-layer-state .mapboxgl-canvas,
+.shs-map-state .mapboxgl-canvas {
+  filter: none !important;
 }

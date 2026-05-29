@@ -162,7 +162,7 @@
   position: absolute; inset: -40%;
   background: radial-gradient(120px 120px at var(--gx,10%) var(--gy,-20%), rgba(255,255,255,.33), rgba(255,255,255,0) 60%);
   pointer-events: none;
-  mix-blend-mode: soft-light;
+  mix-blend-mode: normal;
   animation: kpiSweep 4800ms ease-in-out infinite;
   opacity: .6;
 }
@@ -194,3 +194,31 @@
 }
 
 
+
+
+/* SHS clean white Ohio override — removes dirty/noisy map wash */
+.shs-map-cinematic-texture,
+.shs-map-cinematic-texture::before,
+.shs-map-cinematic-texture::after,
+.shs-operational-map-texture,
+.shs-operational-map-texture::before,
+.shs-operational-map-texture::after,
+.map-cinematic-texture,
+.map-cinematic-texture::before,
+.map-cinematic-texture::after {
+  opacity: 0.035 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  background-image: none !important;
+}
+
+.shs-mapbox-map,
+.shs-operational-mapbox-map,
+.shs-operational-map-surface {
+  background: #020817 !important;
+}
+
+.shs-map-layer-state .mapboxgl-canvas,
+.shs-map-state .mapboxgl-canvas {
+  filter: none !important;
+}

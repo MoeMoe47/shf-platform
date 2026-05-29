@@ -52,7 +52,7 @@
     radial-gradient(circle at 20% 30%, rgba(255,255,255,0.10) 0 1px, transparent 1px),
     radial-gradient(circle at 70% 60%, rgba(255,255,255,0.08) 0 1px, transparent 1px),
     radial-gradient(circle at 40% 80%, rgba(255,255,255,0.08) 0 1px, transparent 1px);
-  mix-blend-mode: overlay;
+  mix-blend-mode: normal;
 }
 
 /* Strong vignette like mock */
@@ -63,4 +63,32 @@
   pointer-events: none;
   z-index: 0;
   background: radial-gradient(1200px 760px at 50% 18%, transparent 30%, rgba(0,0,0,0.68) 82%);
+}
+
+
+/* SHS clean white Ohio override — removes dirty/noisy map wash */
+.shs-map-cinematic-texture,
+.shs-map-cinematic-texture::before,
+.shs-map-cinematic-texture::after,
+.shs-operational-map-texture,
+.shs-operational-map-texture::before,
+.shs-operational-map-texture::after,
+.map-cinematic-texture,
+.map-cinematic-texture::before,
+.map-cinematic-texture::after {
+  opacity: 0.035 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  background-image: none !important;
+}
+
+.shs-mapbox-map,
+.shs-operational-mapbox-map,
+.shs-operational-map-surface {
+  background: #020817 !important;
+}
+
+.shs-map-layer-state .mapboxgl-canvas,
+.shs-map-state .mapboxgl-canvas {
+  filter: none !important;
 }

@@ -16,7 +16,7 @@ export default function ImpactOverviewWheelPanel({
   activeSegment = "reporting",
 }) {
   return (
-    <div className="shf-panel">
+    <div className="shf-panel shf-impact-overview" data-tour-section="impact">
       <div className="shf-panel__header">
         <h2>Impact Overview</h2>
       </div>

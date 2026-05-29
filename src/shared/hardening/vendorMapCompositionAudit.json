@@ -1,0 +1,2515 @@
+{
+  "generatedAt": "2026-05-23T17:19:59.153Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 16",
+  "mode": "VENDOR_MAP_COMPOSITION_AUDIT_NO_CODE_CHANGES",
+  "vendorMapCompositionAuditStatus": "findings_ready",
+  "vendorMapCompositionAuditLabel": "Vendor Map Composition Findings Ready",
+  "productionDecision": "No code was changed. Patch 15B improved broad vendor/pages chunks, but vendor-map is oversized because map renderers and geospatial helpers are grouped too broadly.",
+  "priorPatch15Status": "build_passed",
+  "vendorMapAsset": {
+    "fileName": "vendor-map-tnG_vlE9.js",
+    "rawKb": 2816.49,
+    "gzipKb": 773.75,
+    "type": "js",
+    "isLarge": true,
+    "isVeryLarge": true
+  },
+  "currentVendorMapStatus": "oversized",
+  "likelyCause": [
+    "mapbox-gl is explicitly grouped into vendor-map.",
+    "maplibre-gl is explicitly grouped into vendor-map.",
+    "@mapbox packages are explicitly grouped into vendor-map.",
+    "@maplibre packages are explicitly grouped into vendor-map.",
+    "supercluster is explicitly grouped into vendor-map.",
+    "geojson-related packages are explicitly grouped into vendor-map."
+  ],
+  "dependencyFindings": [
+    {
+      "packageName": "d3-geo",
+      "version": "^3.1.1",
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium"
+    },
+    {
+      "packageName": "mapbox-gl",
+      "version": "^3.23.1",
+      "groupId": "mapbox_core",
+      "groupLabel": "Mapbox GL core",
+      "suggestedBucket": "vendor-mapbox",
+      "risk": "medium_high"
+    },
+    {
+      "packageName": "maplibre-gl",
+      "version": "^5.12.0",
+      "groupId": "maplibre_core",
+      "groupLabel": "MapLibre GL core",
+      "suggestedBucket": "vendor-maplibre",
+      "risk": "medium"
+    }
+  ],
+  "sourceFindings": [
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/_patchbak/admin.20260122T145718Z/AnomalyBadge.jsx",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3",
+          "lineNumber": 15,
+          "line": "med:  { background:\"#ffe4e6\", color:\"#9f1239\", borderColor:\"#fecdd3\" },",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/components/admin/AnomalyBadge.jsx",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3",
+          "lineNumber": 15,
+          "line": "med:  { background:\"#ffe4e6\", color:\"#9f1239\", borderColor:\"#fecdd3\" },",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "maplibre_core",
+      "groupLabel": "MapLibre GL core",
+      "file": "src/components/ai-compass/MapHero.jsx",
+      "suggestedBucket": "vendor-maplibre",
+      "risk": "medium",
+      "hits": [
+        {
+          "term": "maplibre-gl",
+          "lineNumber": 19,
+          "line": "await import(\"maplibre-gl/dist/maplibre-gl.css\");",
+          "importKind": "dynamic_import"
+        },
+        {
+          "term": "maplibre-gl",
+          "lineNumber": 22,
+          "line": "const mod = await import(\"maplibre-gl\");",
+          "importKind": "dynamic_import"
+        }
+      ]
+    },
+    {
+      "groupId": "geojson_helpers",
+      "groupLabel": "GeoJSON helpers",
+      "file": "src/components/globe/OperationalGlobe.jsx",
+      "suggestedBucket": "vendor-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "geojson",
+          "lineNumber": 40,
+          "line": "fetch(\"/geo/us-states.geojson\").then((r) => {",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 41,
+          "line": "if (!r.ok) throw new Error(\"Missing /geo/us-states.geojson\");",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 44,
+          "line": "fetch(\"/geo/us-counties.geojson\").then((r) => {",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 45,
+          "line": "if (!r.ok) throw new Error(\"Missing /geo/us-counties.geojson\");",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "maplibre_core",
+      "groupLabel": "MapLibre GL core",
+      "file": "src/components/globe/OperationalMap.jsx",
+      "suggestedBucket": "vendor-maplibre",
+      "risk": "medium",
+      "hits": [
+        {
+          "term": "maplibre-gl",
+          "lineNumber": 8,
+          "line": "import(\"maplibre-gl\"),",
+          "importKind": "dynamic_import"
+        },
+        {
+          "term": "maplibre-gl",
+          "lineNumber": 9,
+          "line": "import(\"maplibre-gl/dist/maplibre-gl.css\"),",
+          "importKind": "dynamic_import"
+        }
+      ]
+    },
+    {
+      "groupId": "geojson_helpers",
+      "groupLabel": "GeoJSON helpers",
+      "file": "src/components/globe/OperationalMap.jsx",
+      "suggestedBucket": "vendor-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "geojson",
+          "lineNumber": 158,
+          "line": "type: \"geojson\",",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 166,
+          "line": "type: \"geojson\",",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 174,
+          "line": "type: \"geojson\",",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "geojson_helpers",
+      "groupLabel": "GeoJSON helpers",
+      "file": "src/components/globe/RealGlobe.jsx",
+      "suggestedBucket": "vendor-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "geojson",
+          "lineNumber": 14,
+          "line": "fetch(\"https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json\")",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/components/globe/RealGlobe.jsx",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3-geo",
+          "lineNumber": 3,
+          "line": "import * as d3 from \"d3-geo\";",
+          "importKind": "static_import"
+        },
+        {
+          "term": "d3",
+          "lineNumber": 3,
+          "line": "import * as d3 from \"d3-geo\";",
+          "importKind": "static_import"
+        }
+      ]
+    },
+    {
+      "groupId": "geojson_helpers",
+      "groupLabel": "GeoJSON helpers",
+      "file": "src/components/maps/OhioBaseMap.jsx",
+      "suggestedBucket": "vendor-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "geojson",
+          "lineNumber": 27,
+          "line": "const [geojson, setGeojson] = React.useState(null);",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 35,
+          "line": "fetch(\"/geo/ohio-counties.geojson\")",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 54,
+          "line": "if (!geojson) return null;",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 62,
+          "line": "geojson",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 64,
+          "line": "}, [geojson]);",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 77,
+          "line": "if (!geojson) return null;",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 80,
+          "line": "geojson.features.find((feature) => {",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 89,
+          "line": "}, [geojson, normalizedActiveCounty]);",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 93,
+          "line": "if (!geojson || !cameraCounty) return null;",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 95,
+          "line": "geojson.features.find(",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 99,
+          "line": "}, [geojson, cameraCounty]);",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 133,
+          "line": "if (!geojson || !path || !onCentroidsChange) return;",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 141,
+          "line": "geojson.features.forEach((feature) => {",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 159,
+          "line": "}, [geojson, path, currentViewBox, onCentroidsChange]);",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 205,
+          "line": "if (!geojson || !path) {",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 214,
+          "line": "geojson.features.forEach((feature) => {",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 244,
+          "line": "<path d={path(geojson) || \"\"} />",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 274,
+          "line": "<path d={path(geojson) || \"\"} className=\"ohio-state-skin\" />",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 278,
+          "line": "{geojson.features.map((feature, i) => {",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 347,
+          "line": "{geojson.features.map((feature) => {",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 687,
+          "line": "<path d={path(geojson) || \"\"} className=\"ohio-state-outline\" />",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 690,
+          "line": "{geojson.features.map((feature, i) => {",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/components/maps/OhioBaseMap.jsx",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3-geo",
+          "lineNumber": 2,
+          "line": "import { geoIdentity, geoPath } from \"d3-geo\";",
+          "importKind": "static_import"
+        },
+        {
+          "term": "d3",
+          "lineNumber": 2,
+          "line": "import { geoIdentity, geoPath } from \"d3-geo\";",
+          "importKind": "static_import"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/foundation/styles/foundation-mission-page.css",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3",
+          "lineNumber": 11,
+          "line": "--shf-gold: #c98d3a;",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/index.css",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3",
+          "lineNumber": 57,
+          "line": "*::-webkit-scrollbar-thumb{ background:#dcdad3; border-radius:8px; }",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/pages/admin/growth/shs-partner-growth-engine.css",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3",
+          "lineNumber": 69,
+          "line": "color: #71d3ff;",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/pages/capital/OperatorControlPanel.base.jsx",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3",
+          "lineNumber": 65,
+          "line": "warn: { bg: \"rgba(245,158,11,0.16)\", fg: \"#fcd34d\" },",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/pages/exchange/command-surface/shs-command-surface.css",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3",
+          "lineNumber": 1258,
+          "line": "--guide-strong: #34d399;",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/pages/exchange/unified-truth/SHSUnifiedTruthShell.css",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3",
+          "lineNumber": 10400,
+          "line": "color: #0b1d33 !important;",
+          "importKind": "reference"
+        },
+        {
+          "term": "d3",
+          "lineNumber": 12790,
+          "line": "background: radial-gradient(circle at 42% 32%, #ffffff 0 10%, #22d3ee 11% 30%, #0891b2 31% 58%, #082f49 59% 100%) !important;",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "mapbox_core",
+      "groupLabel": "Mapbox GL core",
+      "file": "src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+      "suggestedBucket": "vendor-mapbox",
+      "risk": "medium_high",
+      "hits": [
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 2,
+          "line": "import mapboxgl from \"mapbox-gl\";",
+          "importKind": "static_import"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 3,
+          "line": "import \"mapbox-gl/dist/mapbox-gl.css\";",
+          "importKind": "static_import"
+        }
+      ]
+    },
+    {
+      "groupId": "geojson_helpers",
+      "groupLabel": "GeoJSON helpers",
+      "file": "src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+      "suggestedBucket": "vendor-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "geojson",
+          "lineNumber": 8,
+          "line": "\"https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json\";",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 1079,
+          "line": "type: \"geojson\",",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 1084,
+          "line": "type: \"geojson\",",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 1089,
+          "line": "type: \"geojson\",",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 1094,
+          "line": "type: \"geojson\",",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 1099,
+          "line": "type: \"geojson\",",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 1104,
+          "line": "type: \"geojson\",",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/pages/foundation/About.jsx",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3",
+          "lineNumber": 6,
+          "line": "import card3 from \"@/assets/brand/catalog-hero-16x9-1920.jpg\";",
+          "importKind": "static_import"
+        },
+        {
+          "term": "d3",
+          "lineNumber": 126,
+          "line": "image={card3}",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/pages/foundation/FoundationAppsPage.jsx",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3",
+          "lineNumber": 107,
+          "line": "--shf-osmo-cyan: #22d3ee;",
+          "importKind": "reference"
+        },
+        {
+          "term": "d3",
+          "lineNumber": 313,
+          "line": "radial-gradient(circle at 40% 120%, #22d3ee, transparent 55%);",
+          "importKind": "reference"
+        },
+        {
+          "term": "d3",
+          "lineNumber": 320,
+          "line": "radial-gradient(circle at 50% 50%, #22d3ee, transparent 60%);",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/pages/hub/hub-workspace-dashboard.css",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3",
+          "lineNumber": 109,
+          "line": "background: #ff8d3b;",
+          "importKind": "reference"
+        },
+        {
+          "term": "d3",
+          "lineNumber": 234,
+          "line": "background: #ff8d3b;",
+          "importKind": "reference"
+        },
+        {
+          "term": "d3",
+          "lineNumber": 586,
+          "line": "background: #ff8d3b;",
+          "importKind": "reference"
+        },
+        {
+          "term": "d3",
+          "lineNumber": 761,
+          "line": ".hubV1-legend .orange { background: #ff8d3b; }",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "geojson_helpers",
+      "groupLabel": "GeoJSON helpers",
+      "file": "src/pages/iep-command-v2/OhioCountyNeutralBase.jsx",
+      "suggestedBucket": "vendor-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "geojson",
+          "lineNumber": 24,
+          "line": "const [geojson, setGeojson] = useState(null);",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 30,
+          "line": "fetch(\"/assets/maps/ohio-counties.geojson\")",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 43,
+          "line": "console.error(\"Failed to load /assets/maps/ohio-counties.geojson\", err);",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 54,
+          "line": "if (!geojson?.features?.length) {",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 64,
+          "line": "geojson",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 69,
+          "line": "for (const feature of geojson.features) {",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 90,
+          "line": "features: geojson.features,",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 94,
+          "line": "}, [geojson]);",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/pages/iep-command-v2/OhioCountyNeutralBase.jsx",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3-geo",
+          "lineNumber": 2,
+          "line": "import { geoPath, geoMercator, geoCentroid } from \"d3-geo\";",
+          "importKind": "static_import"
+        },
+        {
+          "term": "d3",
+          "lineNumber": 2,
+          "line": "import { geoPath, geoMercator, geoCentroid } from \"d3-geo\";",
+          "importKind": "static_import"
+        }
+      ]
+    },
+    {
+      "groupId": "geojson_helpers",
+      "groupLabel": "GeoJSON helpers",
+      "file": "src/pages/iep-command-v2/OhioCountyOfficialMapV2.jsx",
+      "suggestedBucket": "vendor-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "geojson",
+          "lineNumber": 22,
+          "line": "const [geojson, setGeojson] = useState(null);",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 28,
+          "line": "fetch(\"/assets/maps/ohio-counties.geojson\")",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 50,
+          "line": "if (!geojson?.features?.length) {",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 59,
+          "line": "geojson",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 64,
+          "line": "for (const feature of geojson.features) {",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 80,
+          "line": "features: geojson.features,",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 84,
+          "line": "}, [geojson]);",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/pages/iep-command-v2/OhioCountyOfficialMapV2.jsx",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3-geo",
+          "lineNumber": 3,
+          "line": "import { geoPath, geoMercator, geoCentroid } from \"d3-geo\";",
+          "importKind": "static_import"
+        },
+        {
+          "term": "d3",
+          "lineNumber": 3,
+          "line": "import { geoPath, geoMercator, geoCentroid } from \"d3-geo\";",
+          "importKind": "static_import"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/pages/shf-command/SHFImpactCommandCenter.jsx",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3",
+          "lineNumber": 122,
+          "line": "color: \"#7dd3fc\",",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "geojson_helpers",
+      "groupLabel": "GeoJSON helpers",
+      "file": "src/pages/shf-command/SHFOhioMap.jsx",
+      "suggestedBucket": "vendor-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "geojson",
+          "lineNumber": 27,
+          "line": "const [geojson, setGeojson] = React.useState(null);",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 35,
+          "line": "fetch(\"/geo/ohio-counties.geojson\")",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 54,
+          "line": "if (!geojson) return null;",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 62,
+          "line": "geojson",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 64,
+          "line": "}, [geojson]);",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 77,
+          "line": "if (!geojson) return null;",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 80,
+          "line": "geojson.features.find((feature) => {",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 89,
+          "line": "}, [geojson, normalizedActiveCounty]);",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 93,
+          "line": "if (!geojson || !cameraCounty) return null;",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 95,
+          "line": "geojson.features.find(",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 99,
+          "line": "}, [geojson, cameraCounty]);",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 133,
+          "line": "if (!geojson || !path || !onCentroidsChange) return;",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 141,
+          "line": "geojson.features.forEach((feature) => {",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 159,
+          "line": "}, [geojson, path, currentViewBox, onCentroidsChange]);",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 205,
+          "line": "if (!geojson || !path) {",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 214,
+          "line": "geojson.features.forEach((feature) => {",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 244,
+          "line": "<path d={path(geojson) || \"\"} />",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 274,
+          "line": "<path d={path(geojson) || \"\"} className=\"ohio-state-skin\" />",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 278,
+          "line": "{geojson.features.map((feature, i) => {",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 347,
+          "line": "{geojson.features.map((feature) => {",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 687,
+          "line": "<path d={path(geojson) || \"\"} className=\"ohio-state-outline\" />",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 690,
+          "line": "{geojson.features.map((feature, i) => {",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/pages/shf-command/SHFOhioMap.jsx",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3-geo",
+          "lineNumber": 2,
+          "line": "import { geoIdentity, geoPath } from \"d3-geo\";",
+          "importKind": "static_import"
+        },
+        {
+          "term": "d3",
+          "lineNumber": 2,
+          "line": "import { geoIdentity, geoPath } from \"d3-geo\";",
+          "importKind": "static_import"
+        }
+      ]
+    },
+    {
+      "groupId": "geojson_helpers",
+      "groupLabel": "GeoJSON helpers",
+      "file": "src/pages/shf-command/components/SHFRegionalCountyCluster.jsx",
+      "suggestedBucket": "vendor-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "geojson",
+          "lineNumber": 85,
+          "line": "const clusterPath = `/assets/maps/clusters/${slug}.geojson`;",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 100,
+          "line": "const fallbackPath = \"/assets/maps/ohio-counties.geojson\";",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 122,
+          "line": "const [geojson, setGeojson] = useState(null);",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 151,
+          "line": "if (!geojson?.features?.length) {",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 160,
+          "line": "geojson",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 164,
+          "line": "return { features: geojson.features, path };",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 165,
+          "line": "}, [geojson]);",
+          "importKind": "reference"
+        },
+        {
+          "term": "geojson",
+          "lineNumber": 174,
+          "line": "if (!geojson) {",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/pages/shf-command/components/SHFRegionalCountyCluster.jsx",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3-geo",
+          "lineNumber": 2,
+          "line": "import { geoMercator, geoPath } from \"d3-geo\";",
+          "importKind": "static_import"
+        },
+        {
+          "term": "d3",
+          "lineNumber": 2,
+          "line": "import { geoMercator, geoPath } from \"d3-geo\";",
+          "importKind": "static_import"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/pages/solutions/SolutionsMarketplace.jsx",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3",
+          "lineNumber": 394,
+          "line": "--sol-good:#00d394;    /* accent for positive */",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/pages/solutions/shs-blockchain-transparency.css",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3",
+          "lineNumber": 170,
+          "line": "color: #c7d3e0;",
+          "importKind": "reference"
+        },
+        {
+          "term": "d3",
+          "lineNumber": 587,
+          "line": "color: #b9c5d3;",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/pages/solutions/shs-solutions-home.css",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3",
+          "lineNumber": 4,
+          "line": "--shs-bg-navy-2: #081d36;",
+          "importKind": "reference"
+        },
+        {
+          "term": "d3",
+          "lineNumber": 9,
+          "line": "--shs-gold: #f5bd38;",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/pages/solutions/solutions-infrastructure.css",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3",
+          "lineNumber": 202,
+          "line": ".land3 { width: 36px; height: 22px; right: 30px; top: 54px; border-radius: 50%; }",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/styles/apps-gallery.css",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3",
+          "lineNumber": 107,
+          "line": "--shf-osmo-cyan: #22d3ee;",
+          "importKind": "reference"
+        },
+        {
+          "term": "d3",
+          "lineNumber": 308,
+          "line": "radial-gradient(circle at 40% 120%, #22d3ee, transparent 55%);",
+          "importKind": "reference"
+        },
+        {
+          "term": "d3",
+          "lineNumber": 315,
+          "line": "radial-gradient(circle at 50% 50%, #22d3ee, transparent 60%);",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/styles/dashboard.css",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3",
+          "lineNumber": 72,
+          "line": ".dash-chip.streak { background: #fff1f2; border-color: #fecdd3; color: #be123c; }",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/styles/shell.css",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3",
+          "lineNumber": 47,
+          "line": "*::-webkit-scrollbar-thumb{ background:#dcdad3; border-radius:8px; }",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/styles/shf-home 2.css",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3",
+          "lineNumber": 95,
+          "line": "background: linear-gradient(180deg, #c56d38 0%, var(--shf-copper-deep) 100%);",
+          "importKind": "reference"
+        }
+      ]
+    },
+    {
+      "groupId": "d3_geo",
+      "groupLabel": "D3 geo utilities",
+      "file": "src/styles/shf-home.css",
+      "suggestedBucket": "vendor-charts-or-geo",
+      "risk": "low_medium",
+      "hits": [
+        {
+          "term": "d3",
+          "lineNumber": 95,
+          "line": "background: linear-gradient(180deg, #c56d38 0%, var(--shf-copper-deep) 100%);",
+          "importKind": "reference"
+        }
+      ]
+    }
+  ],
+  "sourceFindingsByGroup": {
+    "d3_geo": [
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/_patchbak/admin.20260122T145718Z/AnomalyBadge.jsx",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3",
+            "lineNumber": 15,
+            "line": "med:  { background:\"#ffe4e6\", color:\"#9f1239\", borderColor:\"#fecdd3\" },",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/components/admin/AnomalyBadge.jsx",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3",
+            "lineNumber": 15,
+            "line": "med:  { background:\"#ffe4e6\", color:\"#9f1239\", borderColor:\"#fecdd3\" },",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/components/globe/RealGlobe.jsx",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3-geo",
+            "lineNumber": 3,
+            "line": "import * as d3 from \"d3-geo\";",
+            "importKind": "static_import"
+          },
+          {
+            "term": "d3",
+            "lineNumber": 3,
+            "line": "import * as d3 from \"d3-geo\";",
+            "importKind": "static_import"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/components/maps/OhioBaseMap.jsx",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3-geo",
+            "lineNumber": 2,
+            "line": "import { geoIdentity, geoPath } from \"d3-geo\";",
+            "importKind": "static_import"
+          },
+          {
+            "term": "d3",
+            "lineNumber": 2,
+            "line": "import { geoIdentity, geoPath } from \"d3-geo\";",
+            "importKind": "static_import"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/foundation/styles/foundation-mission-page.css",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3",
+            "lineNumber": 11,
+            "line": "--shf-gold: #c98d3a;",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/index.css",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3",
+            "lineNumber": 57,
+            "line": "*::-webkit-scrollbar-thumb{ background:#dcdad3; border-radius:8px; }",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/pages/admin/growth/shs-partner-growth-engine.css",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3",
+            "lineNumber": 69,
+            "line": "color: #71d3ff;",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/pages/capital/OperatorControlPanel.base.jsx",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3",
+            "lineNumber": 65,
+            "line": "warn: { bg: \"rgba(245,158,11,0.16)\", fg: \"#fcd34d\" },",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/pages/exchange/command-surface/shs-command-surface.css",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3",
+            "lineNumber": 1258,
+            "line": "--guide-strong: #34d399;",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/pages/exchange/unified-truth/SHSUnifiedTruthShell.css",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3",
+            "lineNumber": 10400,
+            "line": "color: #0b1d33 !important;",
+            "importKind": "reference"
+          },
+          {
+            "term": "d3",
+            "lineNumber": 12790,
+            "line": "background: radial-gradient(circle at 42% 32%, #ffffff 0 10%, #22d3ee 11% 30%, #0891b2 31% 58%, #082f49 59% 100%) !important;",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/pages/foundation/About.jsx",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3",
+            "lineNumber": 6,
+            "line": "import card3 from \"@/assets/brand/catalog-hero-16x9-1920.jpg\";",
+            "importKind": "static_import"
+          },
+          {
+            "term": "d3",
+            "lineNumber": 126,
+            "line": "image={card3}",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/pages/foundation/FoundationAppsPage.jsx",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3",
+            "lineNumber": 107,
+            "line": "--shf-osmo-cyan: #22d3ee;",
+            "importKind": "reference"
+          },
+          {
+            "term": "d3",
+            "lineNumber": 313,
+            "line": "radial-gradient(circle at 40% 120%, #22d3ee, transparent 55%);",
+            "importKind": "reference"
+          },
+          {
+            "term": "d3",
+            "lineNumber": 320,
+            "line": "radial-gradient(circle at 50% 50%, #22d3ee, transparent 60%);",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/pages/hub/hub-workspace-dashboard.css",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3",
+            "lineNumber": 109,
+            "line": "background: #ff8d3b;",
+            "importKind": "reference"
+          },
+          {
+            "term": "d3",
+            "lineNumber": 234,
+            "line": "background: #ff8d3b;",
+            "importKind": "reference"
+          },
+          {
+            "term": "d3",
+            "lineNumber": 586,
+            "line": "background: #ff8d3b;",
+            "importKind": "reference"
+          },
+          {
+            "term": "d3",
+            "lineNumber": 761,
+            "line": ".hubV1-legend .orange { background: #ff8d3b; }",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/pages/iep-command-v2/OhioCountyNeutralBase.jsx",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3-geo",
+            "lineNumber": 2,
+            "line": "import { geoPath, geoMercator, geoCentroid } from \"d3-geo\";",
+            "importKind": "static_import"
+          },
+          {
+            "term": "d3",
+            "lineNumber": 2,
+            "line": "import { geoPath, geoMercator, geoCentroid } from \"d3-geo\";",
+            "importKind": "static_import"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/pages/iep-command-v2/OhioCountyOfficialMapV2.jsx",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3-geo",
+            "lineNumber": 3,
+            "line": "import { geoPath, geoMercator, geoCentroid } from \"d3-geo\";",
+            "importKind": "static_import"
+          },
+          {
+            "term": "d3",
+            "lineNumber": 3,
+            "line": "import { geoPath, geoMercator, geoCentroid } from \"d3-geo\";",
+            "importKind": "static_import"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/pages/shf-command/SHFImpactCommandCenter.jsx",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3",
+            "lineNumber": 122,
+            "line": "color: \"#7dd3fc\",",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/pages/shf-command/SHFOhioMap.jsx",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3-geo",
+            "lineNumber": 2,
+            "line": "import { geoIdentity, geoPath } from \"d3-geo\";",
+            "importKind": "static_import"
+          },
+          {
+            "term": "d3",
+            "lineNumber": 2,
+            "line": "import { geoIdentity, geoPath } from \"d3-geo\";",
+            "importKind": "static_import"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/pages/shf-command/components/SHFRegionalCountyCluster.jsx",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3-geo",
+            "lineNumber": 2,
+            "line": "import { geoMercator, geoPath } from \"d3-geo\";",
+            "importKind": "static_import"
+          },
+          {
+            "term": "d3",
+            "lineNumber": 2,
+            "line": "import { geoMercator, geoPath } from \"d3-geo\";",
+            "importKind": "static_import"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/pages/solutions/SolutionsMarketplace.jsx",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3",
+            "lineNumber": 394,
+            "line": "--sol-good:#00d394;    /* accent for positive */",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/pages/solutions/shs-blockchain-transparency.css",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3",
+            "lineNumber": 170,
+            "line": "color: #c7d3e0;",
+            "importKind": "reference"
+          },
+          {
+            "term": "d3",
+            "lineNumber": 587,
+            "line": "color: #b9c5d3;",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/pages/solutions/shs-solutions-home.css",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3",
+            "lineNumber": 4,
+            "line": "--shs-bg-navy-2: #081d36;",
+            "importKind": "reference"
+          },
+          {
+            "term": "d3",
+            "lineNumber": 9,
+            "line": "--shs-gold: #f5bd38;",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/pages/solutions/solutions-infrastructure.css",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3",
+            "lineNumber": 202,
+            "line": ".land3 { width: 36px; height: 22px; right: 30px; top: 54px; border-radius: 50%; }",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/styles/apps-gallery.css",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3",
+            "lineNumber": 107,
+            "line": "--shf-osmo-cyan: #22d3ee;",
+            "importKind": "reference"
+          },
+          {
+            "term": "d3",
+            "lineNumber": 308,
+            "line": "radial-gradient(circle at 40% 120%, #22d3ee, transparent 55%);",
+            "importKind": "reference"
+          },
+          {
+            "term": "d3",
+            "lineNumber": 315,
+            "line": "radial-gradient(circle at 50% 50%, #22d3ee, transparent 60%);",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/styles/dashboard.css",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3",
+            "lineNumber": 72,
+            "line": ".dash-chip.streak { background: #fff1f2; border-color: #fecdd3; color: #be123c; }",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/styles/shell.css",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3",
+            "lineNumber": 47,
+            "line": "*::-webkit-scrollbar-thumb{ background:#dcdad3; border-radius:8px; }",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/styles/shf-home 2.css",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3",
+            "lineNumber": 95,
+            "line": "background: linear-gradient(180deg, #c56d38 0%, var(--shf-copper-deep) 100%);",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "d3_geo",
+        "groupLabel": "D3 geo utilities",
+        "file": "src/styles/shf-home.css",
+        "suggestedBucket": "vendor-charts-or-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "d3",
+            "lineNumber": 95,
+            "line": "background: linear-gradient(180deg, #c56d38 0%, var(--shf-copper-deep) 100%);",
+            "importKind": "reference"
+          }
+        ]
+      }
+    ],
+    "maplibre_core": [
+      {
+        "groupId": "maplibre_core",
+        "groupLabel": "MapLibre GL core",
+        "file": "src/components/ai-compass/MapHero.jsx",
+        "suggestedBucket": "vendor-maplibre",
+        "risk": "medium",
+        "hits": [
+          {
+            "term": "maplibre-gl",
+            "lineNumber": 19,
+            "line": "await import(\"maplibre-gl/dist/maplibre-gl.css\");",
+            "importKind": "dynamic_import"
+          },
+          {
+            "term": "maplibre-gl",
+            "lineNumber": 22,
+            "line": "const mod = await import(\"maplibre-gl\");",
+            "importKind": "dynamic_import"
+          }
+        ]
+      },
+      {
+        "groupId": "maplibre_core",
+        "groupLabel": "MapLibre GL core",
+        "file": "src/components/globe/OperationalMap.jsx",
+        "suggestedBucket": "vendor-maplibre",
+        "risk": "medium",
+        "hits": [
+          {
+            "term": "maplibre-gl",
+            "lineNumber": 8,
+            "line": "import(\"maplibre-gl\"),",
+            "importKind": "dynamic_import"
+          },
+          {
+            "term": "maplibre-gl",
+            "lineNumber": 9,
+            "line": "import(\"maplibre-gl/dist/maplibre-gl.css\"),",
+            "importKind": "dynamic_import"
+          }
+        ]
+      }
+    ],
+    "geojson_helpers": [
+      {
+        "groupId": "geojson_helpers",
+        "groupLabel": "GeoJSON helpers",
+        "file": "src/components/globe/OperationalGlobe.jsx",
+        "suggestedBucket": "vendor-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "geojson",
+            "lineNumber": 40,
+            "line": "fetch(\"/geo/us-states.geojson\").then((r) => {",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 41,
+            "line": "if (!r.ok) throw new Error(\"Missing /geo/us-states.geojson\");",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 44,
+            "line": "fetch(\"/geo/us-counties.geojson\").then((r) => {",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 45,
+            "line": "if (!r.ok) throw new Error(\"Missing /geo/us-counties.geojson\");",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "geojson_helpers",
+        "groupLabel": "GeoJSON helpers",
+        "file": "src/components/globe/OperationalMap.jsx",
+        "suggestedBucket": "vendor-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "geojson",
+            "lineNumber": 158,
+            "line": "type: \"geojson\",",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 166,
+            "line": "type: \"geojson\",",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 174,
+            "line": "type: \"geojson\",",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "geojson_helpers",
+        "groupLabel": "GeoJSON helpers",
+        "file": "src/components/globe/RealGlobe.jsx",
+        "suggestedBucket": "vendor-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "geojson",
+            "lineNumber": 14,
+            "line": "fetch(\"https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json\")",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "geojson_helpers",
+        "groupLabel": "GeoJSON helpers",
+        "file": "src/components/maps/OhioBaseMap.jsx",
+        "suggestedBucket": "vendor-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "geojson",
+            "lineNumber": 27,
+            "line": "const [geojson, setGeojson] = React.useState(null);",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 35,
+            "line": "fetch(\"/geo/ohio-counties.geojson\")",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 54,
+            "line": "if (!geojson) return null;",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 62,
+            "line": "geojson",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 64,
+            "line": "}, [geojson]);",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 77,
+            "line": "if (!geojson) return null;",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 80,
+            "line": "geojson.features.find((feature) => {",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 89,
+            "line": "}, [geojson, normalizedActiveCounty]);",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 93,
+            "line": "if (!geojson || !cameraCounty) return null;",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 95,
+            "line": "geojson.features.find(",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 99,
+            "line": "}, [geojson, cameraCounty]);",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 133,
+            "line": "if (!geojson || !path || !onCentroidsChange) return;",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 141,
+            "line": "geojson.features.forEach((feature) => {",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 159,
+            "line": "}, [geojson, path, currentViewBox, onCentroidsChange]);",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 205,
+            "line": "if (!geojson || !path) {",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 214,
+            "line": "geojson.features.forEach((feature) => {",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 244,
+            "line": "<path d={path(geojson) || \"\"} />",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 274,
+            "line": "<path d={path(geojson) || \"\"} className=\"ohio-state-skin\" />",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 278,
+            "line": "{geojson.features.map((feature, i) => {",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 347,
+            "line": "{geojson.features.map((feature) => {",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 687,
+            "line": "<path d={path(geojson) || \"\"} className=\"ohio-state-outline\" />",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 690,
+            "line": "{geojson.features.map((feature, i) => {",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "geojson_helpers",
+        "groupLabel": "GeoJSON helpers",
+        "file": "src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+        "suggestedBucket": "vendor-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "geojson",
+            "lineNumber": 8,
+            "line": "\"https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json\";",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 1079,
+            "line": "type: \"geojson\",",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 1084,
+            "line": "type: \"geojson\",",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 1089,
+            "line": "type: \"geojson\",",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 1094,
+            "line": "type: \"geojson\",",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 1099,
+            "line": "type: \"geojson\",",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 1104,
+            "line": "type: \"geojson\",",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "geojson_helpers",
+        "groupLabel": "GeoJSON helpers",
+        "file": "src/pages/iep-command-v2/OhioCountyNeutralBase.jsx",
+        "suggestedBucket": "vendor-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "geojson",
+            "lineNumber": 24,
+            "line": "const [geojson, setGeojson] = useState(null);",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 30,
+            "line": "fetch(\"/assets/maps/ohio-counties.geojson\")",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 43,
+            "line": "console.error(\"Failed to load /assets/maps/ohio-counties.geojson\", err);",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 54,
+            "line": "if (!geojson?.features?.length) {",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 64,
+            "line": "geojson",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 69,
+            "line": "for (const feature of geojson.features) {",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 90,
+            "line": "features: geojson.features,",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 94,
+            "line": "}, [geojson]);",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "geojson_helpers",
+        "groupLabel": "GeoJSON helpers",
+        "file": "src/pages/iep-command-v2/OhioCountyOfficialMapV2.jsx",
+        "suggestedBucket": "vendor-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "geojson",
+            "lineNumber": 22,
+            "line": "const [geojson, setGeojson] = useState(null);",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 28,
+            "line": "fetch(\"/assets/maps/ohio-counties.geojson\")",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 50,
+            "line": "if (!geojson?.features?.length) {",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 59,
+            "line": "geojson",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 64,
+            "line": "for (const feature of geojson.features) {",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 80,
+            "line": "features: geojson.features,",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 84,
+            "line": "}, [geojson]);",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "geojson_helpers",
+        "groupLabel": "GeoJSON helpers",
+        "file": "src/pages/shf-command/SHFOhioMap.jsx",
+        "suggestedBucket": "vendor-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "geojson",
+            "lineNumber": 27,
+            "line": "const [geojson, setGeojson] = React.useState(null);",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 35,
+            "line": "fetch(\"/geo/ohio-counties.geojson\")",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 54,
+            "line": "if (!geojson) return null;",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 62,
+            "line": "geojson",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 64,
+            "line": "}, [geojson]);",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 77,
+            "line": "if (!geojson) return null;",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 80,
+            "line": "geojson.features.find((feature) => {",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 89,
+            "line": "}, [geojson, normalizedActiveCounty]);",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 93,
+            "line": "if (!geojson || !cameraCounty) return null;",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 95,
+            "line": "geojson.features.find(",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 99,
+            "line": "}, [geojson, cameraCounty]);",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 133,
+            "line": "if (!geojson || !path || !onCentroidsChange) return;",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 141,
+            "line": "geojson.features.forEach((feature) => {",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 159,
+            "line": "}, [geojson, path, currentViewBox, onCentroidsChange]);",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 205,
+            "line": "if (!geojson || !path) {",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 214,
+            "line": "geojson.features.forEach((feature) => {",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 244,
+            "line": "<path d={path(geojson) || \"\"} />",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 274,
+            "line": "<path d={path(geojson) || \"\"} className=\"ohio-state-skin\" />",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 278,
+            "line": "{geojson.features.map((feature, i) => {",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 347,
+            "line": "{geojson.features.map((feature) => {",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 687,
+            "line": "<path d={path(geojson) || \"\"} className=\"ohio-state-outline\" />",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 690,
+            "line": "{geojson.features.map((feature, i) => {",
+            "importKind": "reference"
+          }
+        ]
+      },
+      {
+        "groupId": "geojson_helpers",
+        "groupLabel": "GeoJSON helpers",
+        "file": "src/pages/shf-command/components/SHFRegionalCountyCluster.jsx",
+        "suggestedBucket": "vendor-geo",
+        "risk": "low_medium",
+        "hits": [
+          {
+            "term": "geojson",
+            "lineNumber": 85,
+            "line": "const clusterPath = `/assets/maps/clusters/${slug}.geojson`;",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 100,
+            "line": "const fallbackPath = \"/assets/maps/ohio-counties.geojson\";",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 122,
+            "line": "const [geojson, setGeojson] = useState(null);",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 151,
+            "line": "if (!geojson?.features?.length) {",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 160,
+            "line": "geojson",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 164,
+            "line": "return { features: geojson.features, path };",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 165,
+            "line": "}, [geojson]);",
+            "importKind": "reference"
+          },
+          {
+            "term": "geojson",
+            "lineNumber": 174,
+            "line": "if (!geojson) {",
+            "importKind": "reference"
+          }
+        ]
+      }
+    ],
+    "mapbox_core": [
+      {
+        "groupId": "mapbox_core",
+        "groupLabel": "Mapbox GL core",
+        "file": "src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+        "suggestedBucket": "vendor-mapbox",
+        "risk": "medium_high",
+        "hits": [
+          {
+            "term": "mapbox-gl",
+            "lineNumber": 2,
+            "line": "import mapboxgl from \"mapbox-gl\";",
+            "importKind": "static_import"
+          },
+          {
+            "term": "mapbox-gl",
+            "lineNumber": 3,
+            "line": "import \"mapbox-gl/dist/mapbox-gl.css\";",
+            "importKind": "static_import"
+          }
+        ]
+      }
+    ]
+  },
+  "staticMapboxImports": [
+    {
+      "groupId": "mapbox_core",
+      "groupLabel": "Mapbox GL core",
+      "file": "src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+      "suggestedBucket": "vendor-mapbox",
+      "risk": "medium_high",
+      "hits": [
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 2,
+          "line": "import mapboxgl from \"mapbox-gl\";",
+          "importKind": "static_import"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 3,
+          "line": "import \"mapbox-gl/dist/mapbox-gl.css\";",
+          "importKind": "static_import"
+        }
+      ]
+    }
+  ],
+  "dynamicMaplibreImports": [
+    {
+      "groupId": "maplibre_core",
+      "groupLabel": "MapLibre GL core",
+      "file": "src/components/ai-compass/MapHero.jsx",
+      "suggestedBucket": "vendor-maplibre",
+      "risk": "medium",
+      "hits": [
+        {
+          "term": "maplibre-gl",
+          "lineNumber": 19,
+          "line": "await import(\"maplibre-gl/dist/maplibre-gl.css\");",
+          "importKind": "dynamic_import"
+        },
+        {
+          "term": "maplibre-gl",
+          "lineNumber": 22,
+          "line": "const mod = await import(\"maplibre-gl\");",
+          "importKind": "dynamic_import"
+        }
+      ]
+    },
+    {
+      "groupId": "maplibre_core",
+      "groupLabel": "MapLibre GL core",
+      "file": "src/components/globe/OperationalMap.jsx",
+      "suggestedBucket": "vendor-maplibre",
+      "risk": "medium",
+      "hits": [
+        {
+          "term": "maplibre-gl",
+          "lineNumber": 8,
+          "line": "import(\"maplibre-gl\"),",
+          "importKind": "dynamic_import"
+        },
+        {
+          "term": "maplibre-gl",
+          "lineNumber": 9,
+          "line": "import(\"maplibre-gl/dist/maplibre-gl.css\"),",
+          "importKind": "dynamic_import"
+        }
+      ]
+    }
+  ],
+  "viteMapGroupingLines": [
+    {
+      "lineNumber": 74,
+      "line": "normalizedId.includes(\"mapbox-gl\") ||"
+    },
+    {
+      "lineNumber": 75,
+      "line": "normalizedId.includes(\"maplibre-gl\") ||"
+    },
+    {
+      "lineNumber": 76,
+      "line": "normalizedId.includes(\"@mapbox\") ||"
+    },
+    {
+      "lineNumber": 77,
+      "line": "normalizedId.includes(\"@maplibre\") ||"
+    },
+    {
+      "lineNumber": 78,
+      "line": "normalizedId.includes(\"supercluster\") ||"
+    },
+    {
+      "lineNumber": 79,
+      "line": "normalizedId.includes(\"geojson\")"
+    },
+    {
+      "lineNumber": 81,
+      "line": "return \"vendor-map\";"
+    }
+  ],
+  "auditSummary": {
+    "vendorMapRawKb": 2816.49,
+    "vendorMapGzipKb": 773.75,
+    "dependencyFindings": 3,
+    "sourceFindings": 39,
+    "packageGroupsDetected": 4,
+    "staticMapboxImportFiles": 1,
+    "dynamicMaplibreImportFiles": 2,
+    "viteMapGroupingLines": 7
+  },
+  "recommendedSplitStrategy": [
+    {
+      "step": 1,
+      "label": "Separate Mapbox and MapLibre",
+      "action": "Split mapbox-gl into vendor-mapbox and maplibre-gl into vendor-maplibre.",
+      "reason": "Both renderers should not be forced into one vendor-map chunk if they serve different routes."
+    },
+    {
+      "step": 2,
+      "label": "Move geospatial helpers out of renderer chunk",
+      "action": "Move supercluster and geojson helpers into vendor-geo.",
+      "reason": "Clustering and data utilities can be cached separately from renderer engines."
+    },
+    {
+      "step": 3,
+      "label": "Keep @mapbox / @maplibre scoped packages separate",
+      "action": "Split scoped helper packages into support chunks if they are still large.",
+      "reason": "Scoped helper packages can inflate the renderer chunk."
+    },
+    {
+      "step": 4,
+      "label": "Avoid grouping all map terms into one vendor-map",
+      "action": "Do not use one broad vendor-map bucket for all geospatial packages.",
+      "reason": "Patch 15B proved this creates one oversized chunk."
+    },
+    {
+      "step": 5,
+      "label": "Build and compare",
+      "action": "After tuning, compare large asset count and route-specific map chunks.",
+      "reason": "We need measured proof that vendor-map shrinks without exploding too many new chunks."
+    }
+  ],
+  "recommendedPatch": {
+    "id": "post_v1_bundle_patch_17_vendor_map_split_strategy",
+    "label": "Vendor Map Split Strategy Patch",
+    "goal": "Patch vite.config.js to split vendor-map into vendor-mapbox, vendor-maplibre, vendor-geo, and map support chunks in one measured pass.",
+    "risk": "medium"
+  },
+  "doNotDo": [
+    {
+      "label": "Do not rollback Patch 15B",
+      "reason": "Patch 15B reduced broad vendor/pages pressure and left only one oversized chunk."
+    },
+    {
+      "label": "Do not raise chunkSizeWarningLimit",
+      "reason": "That hides the warning without improving performance."
+    },
+    {
+      "label": "Do not edit core map internals yet",
+      "reason": "Manual chunk tuning is lower risk and should be tried before touching SHSOperationalMapboxMap.jsx internals."
+    }
+  ],
+  "nextPatchRecommendation": {
+    "id": "post_v1_bundle_patch_17_vendor_map_split_strategy",
+    "label": "Vendor Map Split Strategy Patch",
+    "goal": "Patch vite.config.js to split vendor-map into vendor-mapbox, vendor-maplibre, vendor-geo, and map support chunks in one measured pass.",
+    "risk": "medium"
+  }
+}

@@ -4,89 +4,136 @@ import {
   READINESS_STATUSES,
   TRUTH_STATUSES,
   VERIFICATION_STATUSES,
+  getConfidenceBand,
+  normalizeContradictionStatus,
+  normalizeReadinessStatus,
+  normalizeTruthStatus,
+  normalizeVerificationStatus,
 } from "./truthSpineTypes.js";
 
-export function getConfidenceBand(score = 0) {
-  const numeric = Number(score) || 0;
-  if (numeric >= 80) return CONFIDENCE_BANDS.HIGH;
-  if (numeric >= 55) return CONFIDENCE_BANDS.MEDIUM;
-  return CONFIDENCE_BANDS.LOW;
-}
+export { getConfidenceBand };
 
-export function calculateOracleTruth(record) {
+export function calculateOracleTruth(record = {}) {
   const evidenceCount = Number(record?.verification?.evidenceCount || 0);
-  const verificationStatus = record?.verification?.verificationStatus;
-  const contradictionStatus = record?.reconciliation?.contradictionStatus;
+  const verificationStatus = normalizeVerificationStatus(
+    record?.verification?.verificationStatus
+  );
+  const contradictionStatus = normalizeContradictionStatus(
+    record?.reconciliation?.contradictionStatus
+  );
   const currentStatus = String(record?.currentStatus || "").toLowerCase();
 
-  if (contradictionStatus === CONTRADICTION_STATUSES.ACTIVE) {
+  if (
+    contradictionStatus === CONTRADICTION_STATUSES.UNRESOLVED_CONFLICT ||
+    contradictionStatus === CONTRADICTION_STATUSES.ESCALATED
+  ) {
     return {
-      truthStatus: TRUTH_STATUSES.CONFLICTED,
+      truthStatus: TRUTH_STATUSES.DISPUTED,
       confidenceScore: 25,
       confidenceBand: CONFIDENCE_BANDS.LOW,
+      verificationStatus,
+      contradictionStatus,
       readinessStatus: READINESS_STATUSES.BLOCKED,
+      sourceSummary: record?.sourceSummary || ["frontend_truth_spine"],
+      unresolvedItems: record?.reconciliation?.unresolvedItems || ["contradiction_unresolved"],
       recommendedNextAction: "Resolve contradiction before reporting or export.",
     };
   }
 
   if (verificationStatus === VERIFICATION_STATUSES.VERIFIED) {
+    const confidenceScore = Number(record?.oracle?.confidenceScore || 88);
     return {
-      truthStatus: TRUTH_STATUSES.VERIFIED_TRUE,
-      confidenceScore: 88,
-      confidenceBand: CONFIDENCE_BANDS.HIGH,
-      readinessStatus: READINESS_STATUSES.REPORT_READY,
-      recommendedNextAction: "Generate report or audit packet.",
+      truthStatus: TRUTH_STATUSES.CERTIFIED,
+      confidenceScore,
+      confidenceBand: getConfidenceBand(confidenceScore),
+      verificationStatus,
+      contradictionStatus,
+      readinessStatus:
+        confidenceScore >= 90
+          ? READINESS_STATUSES.FUNDER_READY
+          : READINESS_STATUSES.LEADERSHIP_READY,
+      sourceSummary: record?.sourceSummary || ["frontend_truth_spine"],
+      unresolvedItems: [],
+      recommendedNextAction: "Generate report, audit packet, or leadership review.",
     };
   }
 
   if (evidenceCount > 0) {
+    const confidenceScore = 68;
     return {
-      truthStatus: TRUTH_STATUSES.LIKELY_TRUE,
-      confidenceScore: 68,
-      confidenceBand: CONFIDENCE_BANDS.MEDIUM,
-      readinessStatus: READINESS_STATUSES.REVIEW_REQUIRED,
+      truthStatus: TRUTH_STATUSES.CANDIDATE,
+      confidenceScore,
+      confidenceBand: getConfidenceBand(confidenceScore),
+      verificationStatus: VERIFICATION_STATUSES.IN_REVIEW,
+      contradictionStatus,
+      readinessStatus: READINESS_STATUSES.NOT_READY,
+      sourceSummary: record?.sourceSummary || ["frontend_truth_spine"],
+      unresolvedItems: record?.verification?.missingEvidence || ["verification_review_required"],
       recommendedNextAction: "Review attached evidence and approve verification.",
     };
   }
 
   if (currentStatus.includes("resolved") || currentStatus.includes("closed")) {
+    const confidenceScore = 50;
     return {
-      truthStatus: TRUTH_STATUSES.PENDING,
-      confidenceScore: 50,
-      confidenceBand: CONFIDENCE_BANDS.LOW,
-      readinessStatus: READINESS_STATUSES.REVIEW_REQUIRED,
+      truthStatus: TRUTH_STATUSES.CANDIDATE,
+      confidenceScore,
+      confidenceBand: getConfidenceBand(confidenceScore),
+      verificationStatus: VERIFICATION_STATUSES.IN_REVIEW,
+      contradictionStatus,
+      readinessStatus: READINESS_STATUSES.NOT_READY,
+      sourceSummary: record?.sourceSummary || ["frontend_truth_spine"],
+      unresolvedItems: ["closure_evidence_missing"],
       recommendedNextAction: "Attach closure evidence before final reporting.",
     };
   }
 
+  const confidenceScore = 35;
   return {
-    truthStatus: TRUTH_STATUSES.PENDING,
-    confidenceScore: 35,
-    confidenceBand: CONFIDENCE_BANDS.LOW,
+    truthStatus: TRUTH_STATUSES.CANDIDATE,
+    confidenceScore,
+    confidenceBand: getConfidenceBand(confidenceScore),
+    verificationStatus,
+    contradictionStatus,
     readinessStatus: READINESS_STATUSES.NOT_READY,
+    sourceSummary: record?.sourceSummary || ["frontend_truth_spine"],
+    unresolvedItems: ["evidence_missing"],
     recommendedNextAction: "Attach evidence before reporting.",
   };
 }
 
-export function calculateReportingReadiness(record) {
+export function calculateReportingReadiness(record = {}) {
   const oracle = record?.oracle || calculateOracleTruth(record);
-  const verificationStatus = record?.verification?.verificationStatus;
-  const contradictionStatus = record?.reconciliation?.contradictionStatus;
+  const verificationStatus = normalizeVerificationStatus(
+    oracle?.verificationStatus || record?.verification?.verificationStatus
+  );
+  const contradictionStatus = normalizeContradictionStatus(
+    oracle?.contradictionStatus || record?.reconciliation?.contradictionStatus
+  );
+  const readinessStatus = normalizeReadinessStatus(oracle?.readinessStatus);
+  const truthStatus = normalizeTruthStatus(oracle?.truthStatus);
 
   const reportingReady =
-    oracle.readinessStatus === READINESS_STATUSES.REPORT_READY &&
+    truthStatus === TRUTH_STATUSES.CERTIFIED &&
     verificationStatus === VERIFICATION_STATUSES.VERIFIED &&
-    contradictionStatus !== CONTRADICTION_STATUSES.ACTIVE;
+    contradictionStatus !== CONTRADICTION_STATUSES.UNRESOLVED_CONFLICT &&
+    contradictionStatus !== CONTRADICTION_STATUSES.ESCALATED &&
+    readinessStatus !== READINESS_STATUSES.BLOCKED &&
+    readinessStatus !== READINESS_STATUSES.NOT_READY;
 
   const auditReady =
-    Boolean(record?.trustEnvelope?.traceId) &&
-    contradictionStatus !== CONTRADICTION_STATUSES.ACTIVE;
+    Boolean(record?.trustEnvelope?.traceId || oracle?.traceId || oracle?.trustEnvelope?.traceId) &&
+    contradictionStatus !== CONTRADICTION_STATUSES.UNRESOLVED_CONFLICT &&
+    contradictionStatus !== CONTRADICTION_STATUSES.ESCALATED;
 
   return {
     reportingReady,
     auditReady,
-    readinessStatus: oracle.readinessStatus,
-    confidenceScore: oracle.confidenceScore,
-    confidenceBand: getConfidenceBand(oracle.confidenceScore),
+    readinessStatus,
+    confidenceScore: Number(oracle?.confidenceScore || 0),
+    confidenceBand: getConfidenceBand(oracle?.confidenceScore || 0),
+    truthStatus,
+    verificationStatus,
+    contradictionStatus,
   };
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./hub-workspace-dashboard.css";
 import HubBusinessTourProvider from "./shared/HubBusinessTourProvider.jsx";
+import { buildHubWorkflowReadiness, hubWorkflowStatusClass, hubWorkflowStepClass } from "./shared/hubWorkflowReadiness";
 import { canAccessHubRoute, filterHubGoalsByRole, getHubRoleLabel, normalizeHubRole } from "@/system/identity/hubAccessControl";
 import { clearIdentitySession, getCurrentIdentity } from "@/system/identity/identityRouting";
 import { useAdaptiveExperience } from "@/system/adaptive-experience/useAdaptiveExperience";
@@ -206,6 +207,203 @@ const guidedWorkflowGoals = [
   },
 ];
 
+
+
+
+const adaptiveWorkflowSignals = {
+  readinessPercent: 43,
+  reportReadyPercent: 87,
+  openReferrals: 1,
+  assignedReferrals: 2,
+  agingReferrals: 1,
+  capacityRisk: 2,
+  verifiedOutcomes: 2,
+  completionRate: 67,
+  blockers: [
+    "unassigned_referrals",
+    "referrals_on_hold",
+    "aging_referrals",
+    "partner_capacity_risk",
+    "partner_response_risk",
+    "reporting_pending_records",
+  ],
+};
+
+function getAdaptiveWorkflowRecommendation(activeRole = "client") {
+  const signals = adaptiveWorkflowSignals;
+
+  if (signals.agingReferrals > 0 || signals.capacityRisk > 0) {
+    return {
+      tone: "risk",
+      label: "Workflow risk detected",
+      title: "Open Action Queue",
+      goalId: "work-referrals",
+      route: "/hub/queue",
+      confidence: 91,
+      reason:
+        "SHS detected aging pressure and partner capacity risk. The fastest next move is to work the Action Queue before reporting this workflow externally.",
+      evidence: [
+        `${signals.agingReferrals} aging referral${signals.agingReferrals === 1 ? "" : "s"}`,
+        `${signals.capacityRisk} partner capacity risk signal${signals.capacityRisk === 1 ? "" : "s"}`,
+        `${signals.blockers.length} active blockers`,
+      ],
+      next:
+        "After queue actions are logged, open Referral Lifecycle to confirm movement.",
+    };
+  }
+
+  if (signals.reportReadyPercent >= 85 && signals.readinessPercent < 70) {
+    const adminMode = activeRole === "client_admin" || activeRole === "shs_admin";
+    return {
+      tone: "review",
+      label: "Proof review recommended",
+      title: adminMode ? "Review proof or audit readiness" : "Generate Hub Report",
+      goalId: adminMode ? "review-proof" : "generate-report",
+      route: adminMode ? "/reporting" : "/hub/reports",
+      confidence: 88,
+      reason:
+        "Report readiness is strong, but workflow readiness is still blocked. SHS recommends checking proof, audit readiness, and unresolved blockers before publishing externally.",
+      evidence: [
+        `${signals.reportReadyPercent}% report readiness`,
+        `${signals.readinessPercent}% workflow readiness`,
+        "Audit review recommended",
+      ],
+      next:
+        "Resolve missing evidence or blockers, then return to Hub Reports.",
+    };
+  }
+
+  return {
+    tone: "ready",
+    label: "Workflow path ready",
+    title: "Generate Hub Report",
+    goalId: "generate-report",
+    route: "/hub/reports",
+    confidence: 84,
+    reason:
+      "The Hub has enough activity to start preparing a leadership-ready report.",
+    evidence: [
+      `${signals.reportReadyPercent}% report readiness`,
+      `${signals.verifiedOutcomes} verified records`,
+      `${signals.completionRate}% completion signal`,
+    ],
+    next:
+      "After report review, open proof or audit readiness if deeper verification is needed.",
+  };
+}
+
+function buildGuidedWorkflowRoute(goal, recommendation) {
+  if (!goal?.route) return "/hub";
+
+  const params = new URLSearchParams();
+  params.set("guided", "true");
+  params.set("tour", "start");
+  params.set("from", "hub-workspace");
+  params.set("goal", goal.id || recommendation?.goalId || "guided-workflow");
+
+  if (recommendation?.confidence) {
+    params.set("confidence", String(recommendation.confidence));
+  }
+
+  return `${goal.route}?${params.toString()}`;
+}
+
+function HubWorkflowReadinessStrip() {
+  const demoReferrals = [
+    {
+      id: "case_fdea72ed-ec6e-4eb5-96f9-1cdf84ca44cf",
+      status: "on_hold",
+      priority: "medium",
+      assigned_user_id: "user_admin_001",
+      created_at: "2026-04-15T22:35:08",
+    },
+    {
+      id: "case_1dfc9e8d-1daf-43a8-b892-360cfe068620",
+      status: "closed",
+      priority: "high",
+      assigned_user_id: "user_admin_001",
+      created_at: "2026-04-15T16:20:38",
+    },
+    {
+      id: "case_1302bd05-7c7e-4915-bf96-b1e8426a5a8e",
+      status: "closed",
+      priority: "medium",
+      assigned_user_id: "Unassigned",
+      created_at: "2026-04-15T18:30:29",
+    },
+  ];
+
+  const demoPartners = [
+    { id: "partner_workforce_001", capacity: 82, responseSpeed: 91, verifiedOutcomeRate: 84 },
+    { id: "partner_transport_001", capacity: 68, responseSpeed: 86, verifiedOutcomeRate: 74 },
+    { id: "partner_recovery_001", capacity: 71, responseSpeed: 78, verifiedOutcomeRate: 77 },
+  ];
+
+  const model = buildHubWorkflowReadiness({
+    referrals: demoReferrals,
+    partners: demoPartners,
+    truthSummary: {
+      reportReadyCount: 2,
+      pendingCount: 1,
+      verifiedCount: 2,
+      readinessPercent: 87,
+    },
+    source: "hub_workspace_dashboard",
+  });
+
+  const statRows = [
+    ["Open", model.metrics.openReferrals],
+    ["Assigned", model.metrics.assignedReferrals],
+    ["Aging", model.metrics.agingReferrals],
+    ["Capacity Risk", model.metrics.capacityRiskPartners],
+    ["Report Ready", `${model.metrics.readinessPercent}%`],
+  ];
+
+  return (
+    <section className={["hub-workflow-readiness", hubWorkflowStatusClass(model.headlineStatus)].join(" ")}>
+      <div className="hub-workflow-readiness__header">
+        <div>
+          <p className="hub-workflow-readiness__eyebrow">Hub Workflow Readiness</p>
+          <h2>{model.headline}</h2>
+          <p>{model.recommendedNextAction}</p>
+        </div>
+
+        <div className="hub-workflow-readiness__score">
+          <span>Workflow Ready</span>
+          <strong>{model.workflowReadinessPercent}%</strong>
+        </div>
+      </div>
+
+      <div className="hub-workflow-readiness__stats">
+        {statRows.map(([label, value]) => (
+          <article key={label}>
+            <span>{label}</span>
+            <strong>{value}</strong>
+          </article>
+        ))}
+      </div>
+
+      <div className="hub-workflow-readiness__steps">
+        {model.steps.map((step, index) => (
+          <article key={step.key} className={hubWorkflowStepClass(step.status)}>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <strong>{step.label}</strong>
+            <p>{step.detail}</p>
+          </article>
+        ))}
+      </div>
+
+      {model.blockers.length ? (
+        <div className="hub-workflow-readiness__blockers">
+          <strong>Active workflow blockers</strong>
+          <p>{model.blockers.join(", ")}</p>
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
+
 function GuidedWorkflowLauncher({ adaptive }) {
   const demoRole =
     localStorage.getItem("shsHubDemoRole") ||
@@ -226,6 +424,13 @@ function GuidedWorkflowLauncher({ adaptive }) {
   const [selectedGoalId, setSelectedGoalId] = useState(safeGoals[0]?.id || guidedWorkflowGoals[0].id);
   const selectedGoal = safeGoals.find((goal) => goal.id === selectedGoalId) || safeGoals[0] || guidedWorkflowGoals[0];
 
+  const adaptiveRecommendation = getAdaptiveWorkflowRecommendation(activeRole);
+  const recommendedGoal =
+    safeGoals.find((goal) => goal.id === adaptiveRecommendation.goalId) ||
+    safeGoals.find((goal) => goal.route === adaptiveRecommendation.route) ||
+    safeGoals[0] ||
+    guidedWorkflowGoals[0];
+
   function openGoal(goal) {
     setSelectedGoalId(goal.id);
 
@@ -241,18 +446,117 @@ function GuidedWorkflowLauncher({ adaptive }) {
   }
 
   function goToSelectedGoal() {
-    adaptive.track({
-      eventType: ADAPTIVE_EVENT_TYPES.BUTTON_CLICKED,
+    if (!selectedGoal?.route) return;
+
+    const guidedRoute = buildGuidedWorkflowRoute(selectedGoal, adaptiveRecommendation);
+
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem(
+        "shsHubGuidedWorkflowIntent",
+        JSON.stringify({
+          goalId: selectedGoal.id,
+          page: selectedGoal.page,
+          route: selectedGoal.route,
+          recommendedBy: selectedGoal.id === recommendedGoal?.id ? "adaptive-workflow-intelligence" : "operator-selected",
+          confidence: adaptiveRecommendation?.confidence || null,
+          reason: selectedGoal.id === recommendedGoal?.id ? adaptiveRecommendation.reason : selectedGoal.why,
+          next: selectedGoal.id === recommendedGoal?.id ? adaptiveRecommendation.next : selectedGoal.next,
+          startTour: true,
+          createdAt: new Date().toISOString(),
+        })
+      );
+    }
+
+    logAdaptiveEvent({
+      type: ADAPTIVE_EVENT_TYPES.ACTION,
+      role: ADAPTIVE_ROLES.OPERATOR,
+      surface: ADAPTIVE_SURFACES.HUB,
       target: `guided_workflow_go_${selectedGoal.id}`,
       metadata: {
         goal: selectedGoal.title,
         route: selectedGoal.route,
         page: selectedGoal.page,
+        recommendedGoal: recommendedGoal?.id,
+        confidence: adaptiveRecommendation?.confidence,
       },
     });
 
-    go(selectedGoal.route);
+    go(guidedRoute);
   }
+
+  function getGuidedWorkflowHref(goal = selectedGoal) {
+    if (!goal?.route) return "#/hub";
+
+    return `#${buildGuidedWorkflowRoute(goal, adaptiveRecommendation)}`;
+  }
+
+  function prepareGuidedWorkflowIntent(goal = selectedGoal) {
+    if (!goal?.route || typeof window === "undefined") return;
+
+    window.sessionStorage.setItem(
+      "shsHubGuidedWorkflowIntent",
+      JSON.stringify({
+        goalId: goal.id,
+        page: goal.page,
+        route: goal.route,
+        recommendedBy:
+          goal.id === recommendedGoal?.id
+            ? "adaptive-workflow-intelligence"
+            : "operator-selected",
+        confidence:
+          goal.id === recommendedGoal?.id
+            ? adaptiveRecommendation?.confidence || null
+            : null,
+        reason:
+          goal.id === recommendedGoal?.id
+            ? adaptiveRecommendation?.reason || goal.why
+            : goal.why,
+        next:
+          goal.id === recommendedGoal?.id
+            ? adaptiveRecommendation?.next || goal.next
+            : goal.next,
+        startTour: true,
+        createdAt: new Date().toISOString(),
+      })
+    );
+
+    logAdaptiveEvent({
+      type: ADAPTIVE_EVENT_TYPES.ACTION,
+      role: ADAPTIVE_ROLES.OPERATOR,
+      surface: ADAPTIVE_SURFACES.HUB,
+      target: `guided_workflow_start_${goal.id}`,
+      metadata: {
+        goal: goal.title,
+        route: goal.route,
+        page: goal.page,
+        recommendedGoal: recommendedGoal?.id,
+        confidence: adaptiveRecommendation?.confidence,
+      },
+    });
+  }
+
+
+  function previewRecommendedGoal() {
+    const goal = recommendedGoal || selectedGoal;
+    if (!goal?.id) return;
+
+    setSelectedGoalId(goal.id);
+
+    logAdaptiveEvent({
+      type: ADAPTIVE_EVENT_TYPES.ACTION,
+      role: ADAPTIVE_ROLES.OPERATOR,
+      surface: ADAPTIVE_SURFACES.HUB,
+      target: `adaptive_recommendation_preview_${goal.id}`,
+      metadata: {
+        goal: goal.title,
+        route: goal.route,
+        page: goal.page,
+        confidence: adaptiveRecommendation?.confidence,
+        recommendedBy: "adaptive-workflow-intelligence",
+      },
+    });
+  }
+
 
   return (
     <section className="hubV1-guidedWorkflow" data-tour="hub-workspace-guided-workflow">
@@ -305,13 +609,34 @@ function GuidedWorkflowLauncher({ adaptive }) {
         </div>
       </div>
 
+      <article className={`hubV1-adaptiveWorkflow hubV1-adaptiveWorkflow--${adaptiveRecommendation.tone}`} data-tour="hub-workspace-adaptive-workflow">
+        <div className="hubV1-adaptiveWorkflowMain">
+          <span className="hubV1-adaptiveWorkflowLabel">{adaptiveRecommendation.label}</span>
+          <h3>{adaptiveRecommendation.title}</h3>
+          <p>{adaptiveRecommendation.reason}</p>
+          <div className="hubV1-adaptiveEvidence">
+            {adaptiveRecommendation.evidence.map((item) => (
+              <span key={item}>{item}</span>
+            ))}
+          </div>
+        </div>
+
+        <aside className="hubV1-adaptiveConfidence">
+          <span>Recommended path confidence</span>
+          <strong>{adaptiveRecommendation.confidence}%</strong>
+          <button type="button" onClick={previewRecommendedGoal}>
+            Preview recommendation
+          </button>
+        </aside>
+      </article>
+
       <div className="hubV1-guidedBody">
         <div className="hubV1-goalGrid" data-tour="hub-workspace-guided-goals">
           {safeGoals.map((goal) => (
             <button
               key={goal.id}
               type="button"
-              className={`hubV1-goalCard ${selectedGoal.id === goal.id ? "is-selected" : ""}`}
+              className={`hubV1-goalCard ${selectedGoal.id === goal.id ? "is-selected" : ""} ${recommendedGoal?.id === goal.id ? "is-recommended" : ""}`}
               onClick={() => openGoal(goal)}
             >
               <span>{goal.icon}</span>
@@ -330,6 +655,15 @@ function GuidedWorkflowLauncher({ adaptive }) {
             </div>
           </div>
 
+          <div className="hubV1-guidedIntelligenceNote">
+            <span>Adaptive Workflow Intelligence</span>
+            <p>
+              {selectedGoal.id === recommendedGoal?.id
+                ? `SHS recommends this path with ${adaptiveRecommendation.confidence}% confidence.`
+                : `SHS currently recommends ${recommendedGoal?.page || adaptiveRecommendation.title}, but you can still open this page if it fits the task.`}
+            </p>
+          </div>
+
           <div className="hubV1-guidedExplain">
             <div>
               <b>Why go here?</b>
@@ -345,14 +679,23 @@ function GuidedWorkflowLauncher({ adaptive }) {
             </div>
           </div>
 
-          <button type="button" className="hubV1-guidedLaunchBtn" onClick={goToSelectedGoal}>
-            Go to {selectedGoal.page} →
-          </button>
+          <div className="hubV1-guidedActionRow">
+            <a
+              className="hubV1-guidedLaunchBtn"
+              href={getGuidedWorkflowHref(selectedGoal)}
+              onClick={() => prepareGuidedWorkflowIntent(selectedGoal)}
+            >
+              Start guided workflow →
+            </a>
+            <p className="hubV1-guidedTourHint">
+              After the page opens, SHS saves guided intent so the page tour can start from the selected workflow context.
+            </p>
+          </div>
         </article>
       </div>
 
       <div className="hubV1-guidedPath" data-tour="hub-workspace-guided-path">
-        <span>Recommended client path:</span>
+        <span>Recommended client path · each page has a guided tour:</span>
         <strong>Files & Imports</strong>
         <i>→</i>
         <strong>Partner Network</strong>
@@ -412,8 +755,13 @@ function signOutOfHub() {
 
 
 function go(path) {
-  if (!path) return;
-  window.location.hash = path;
+  if (!path || typeof window === "undefined") return;
+
+  const normalizedPath = String(path).startsWith("#")
+    ? String(path).replace(/^#/, "")
+    : String(path);
+
+  window.location.hash = normalizedPath;
 }
 
 function Spark({ tone = "blue" }) {
@@ -1013,6 +1361,8 @@ export default function HubWorkspaceDashboard() {
         <section className="hubV1-kpiRow" data-tour="hub-workspace-kpis">
           {kpis.map((item) => <KpiCard key={item.label} item={item} />)}
         </section>
+
+        <HubWorkflowReadinessStrip />
 
         <GuidedWorkflowLauncher adaptive={adaptive} />
 

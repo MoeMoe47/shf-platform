@@ -1,3 +1,4 @@
+import useAuth from "../../../auth/useAuth";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelectedEntity } from "@/system/context/SelectedEntityContext";
 import "./reporting-command.css";
@@ -6,6 +7,10 @@ import ActionLogExportPanel from "./ActionLogExportPanel.jsx";
 import AnalystMemoExportPanel from "./AnalystMemoExportPanel.jsx";
 import AuditPackPanel from "./AuditPackPanel.jsx";
 import { evaluateReportingExportReadiness } from "./reporting-readiness";
+import { buildOracleReportingGate } from "./oracle-reporting-guard";
+import { buildReportingCommandModel, reportingCommandStatusClass } from "./reporting-command-model";
+import { readExportAuditTrail } from "./export-audit-trail";
+import { SHS_SECURITY_PERMISSIONS } from "@/system/security/security-permissions";
 import { getFocusedArtifactId } from "@/system/routing/hash-query";
 import {
   deriveBridgeWorkflowReadiness,
@@ -62,81 +67,198 @@ function normalizeOracleReadinessStatus(status) {
   return "pending";
 }
 
-function buildOracleGate(oracleTruth) {
-  if (!oracleTruth) {
-    return {
-      allowExport: true,
-      warning: false,
-      reasons: [],
-    };
-  }
+function buildOracleGate(oracleTruth, publicationMode = "internal") {
+  const gate = buildOracleReportingGate(oracleTruth, { publicationMode });
+  const readiness = String(oracleTruth?.readinessStatus || "").toLowerCase();
+  const confidenceScore = Number(oracleTruth?.confidenceScore || 0);
 
-  const reasons = [];
-
-  if (oracleTruth.truthStatus !== "certified") {
-    reasons.push(`oracle_truth_${oracleTruth.truthStatus}`);
-  }
-
-  if ((oracleTruth.contradictionStatus || "none") !== "none" &&
-      (oracleTruth.contradictionStatus || "none") !== "resolved") {
-    reasons.push(`oracle_contradiction_${oracleTruth.contradictionStatus}`);
-  }
-
-  if (
-    (oracleTruth.readinessStatus || "").toLowerCase() === "blocked" ||
-    (oracleTruth.readinessStatus || "").toLowerCase() === "not_ready"
-  ) {
-    reasons.push(`oracle_readiness_${oracleTruth.readinessStatus}`);
-  }
-
-  const allowExport = reasons.length === 0;
   const warning =
-    (oracleTruth.confidenceScore || 0) < 90 ||
-    (oracleTruth.readinessStatus || "").toLowerCase() === "leadership_ready" ||
-    (oracleTruth.readinessStatus || "").toLowerCase() === "internally_ready";
+    gate.allowed &&
+    (confidenceScore < 90 ||
+      readiness === "leadership_ready" ||
+      readiness === "internally_ready");
 
   return {
-    allowExport,
+    allowExport: gate.allowed,
     warning,
-    reasons,
+    reasons: gate.reasons || [],
+    label: gate.label,
   };
 }
 
-function applyOracleInfluence(readiness, oracleTruth) {
+function applyOracleInfluence(readiness, oracleTruth, publicationMode = "internal") {
   if (!oracleTruth) return readiness;
 
-  const reasons = [...(readiness.reasons || [])];
-  const allowedActions = { ...(readiness.allowedActions || {}) };
+  const gate = buildOracleGate(oracleTruth, publicationMode);
+  const reasons = Array.from(
+    new Set([...(readiness.reasons || []), ...(gate.reasons || [])])
+  );
 
-  if (oracleTruth.truthStatus !== "certified") {
-    reasons.push(`oracle_truth_${oracleTruth.truthStatus}`);
-    allowedActions.generate = false;
-  }
+  const allowedActions = {
+    ...(readiness.allowedActions || {}),
+    preview: Boolean(readiness.allowedActions?.preview ?? true),
+    generate: Boolean(readiness.allowedActions?.generate && gate.allowExport),
+  };
 
-  if (
-    (oracleTruth.contradictionStatus || "none") !== "none" &&
-    (oracleTruth.contradictionStatus || "none") !== "resolved"
-  ) {
-    reasons.push(`oracle_contradiction_${oracleTruth.contradictionStatus}`);
-    allowedActions.generate = false;
-  }
-
-  if (
-    (oracleTruth.readinessStatus || "").toLowerCase() === "blocked" ||
-    (oracleTruth.readinessStatus || "").toLowerCase() === "not_ready"
-  ) {
-    reasons.push(`oracle_readiness_${oracleTruth.readinessStatus}`);
-    allowedActions.generate = false;
-  }
+  const ready = Boolean(readiness.ready && gate.allowExport);
 
   return {
     ...readiness,
-    reasons: Array.from(new Set(reasons)),
+    ready,
+    status: ready ? "ready" : "pending",
+    reasons,
     allowedActions,
+    oracleGate: gate,
   };
 }
 
+
+
+function ExportAuditTrailViewer({ records = [], onRefresh }) {
+  const visibleRecords = records.slice(0, 8);
+
+  return (
+    <section className="reporting-export-audit-viewer" aria-label="Export audit trail viewer">
+      <div className="reporting-export-audit-viewer__header">
+        <div>
+          <p className="reporting-export-audit-viewer__eyebrow">Export Audit Trail</p>
+          <h2>Recent Export Attempts</h2>
+          <p>
+            Local V1 trail showing export attempts, permission posture, Oracle state, trace coverage, and result status.
+          </p>
+        </div>
+
+        <button type="button" onClick={onRefresh}>
+          Refresh Trail
+        </button>
+      </div>
+
+      {visibleRecords.length ? (
+        <div className="reporting-export-audit-viewer__table-wrap">
+          <table className="reporting-export-audit-viewer__table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Export</th>
+                <th>Artifact</th>
+                <th>Allowed</th>
+                <th>Oracle</th>
+                <th>Trace</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              {visibleRecords.map((record) => (
+                <tr key={record.id}>
+                  <td>{record.createdAt || "—"}</td>
+                  <td>{String(record.exportKind || "unknown").replace(/_/g, " ")}</td>
+                  <td>{record.artifactId || "—"}</td>
+                  <td>
+                    <span
+                      className={[
+                        "reporting-export-audit-viewer__pill",
+                        record.allowed ? "is-ready" : "is-blocked",
+                      ].join(" ")}
+                    >
+                      {record.allowed ? "allowed" : "blocked"}
+                    </span>
+                  </td>
+                  <td>{record.oracle?.truthStatus || "unknown"}</td>
+                  <td>{record.trace?.traceCoverageStatus || "unknown"}</td>
+                  <td>{record.result?.status || record.status || "attempted"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <div className="reporting-export-audit-viewer__empty">
+          No export audit records yet. Generate or attempt an export to create the first trail record.
+        </div>
+      )}
+    </section>
+  );
+}
+
+
+function ReportingCommandModelStrip({ model }) {
+  if (!model) return null;
+
+  const rows = [
+    ["Ready", model.readyCount],
+    ["Review", model.reviewCount],
+    ["Blocked", model.blockedCount],
+    ["Total", model.totalCount],
+  ];
+
+  return (
+    <section
+      className={[
+        "reporting-command-model",
+        reportingCommandStatusClass(model.commandStatus),
+      ].join(" ")}
+      aria-label="Reporting readiness command model"
+    >
+      <div className="reporting-command-model__header">
+        <div>
+          <p className="reporting-command-model__eyebrow">Reporting Command Model</p>
+          <h2>{model.commandLabel}</h2>
+          <p>{model.commandMeaning}</p>
+        </div>
+
+        <div className="reporting-command-model__score">
+          <span>Readiness</span>
+          <strong>{model.readinessPercent}%</strong>
+        </div>
+      </div>
+
+      <div className="reporting-command-model__grid">
+        {rows.map(([label, value]) => (
+          <article key={label} className="reporting-command-model__stat">
+            <span>{label}</span>
+            <strong>{value}</strong>
+          </article>
+        ))}
+
+        <article className="reporting-command-model__stat">
+          <span>Oracle</span>
+          <strong>{model.oracle.truthStatus}</strong>
+        </article>
+
+        <article className="reporting-command-model__stat">
+          <span>Trace</span>
+          <strong>{model.bridge.traceCoverageComplete ? "complete" : "missing"}</strong>
+        </article>
+
+        <article className="reporting-command-model__stat">
+          <span>Trust Envelope</span>
+          <strong>{model.oracle.trustEnvelopePresent ? "present" : "missing"}</strong>
+        </article>
+
+        <article className="reporting-command-model__stat">
+          <span>Permission</span>
+          <strong>{model.security.canExportReports ? "allowed" : "blocked"}</strong>
+        </article>
+      </div>
+
+      <div className="reporting-command-model__next">
+        <strong>Next recommended action</strong>
+        <p>{model.recommendedNextAction}</p>
+      </div>
+
+      {model.allReasons.length ? (
+        <div className="reporting-command-model__reasons">
+          <strong>Active blockers / reasons</strong>
+          <p>{model.allReasons.join(", ")}</p>
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
+
 export default function ReportingCommandSurface() {
+  const auth = useAuth();
   const { selectedEntityId } = useSelectedEntity();
 
   const focusedArtifactId = getFocusedArtifactId();
@@ -154,6 +276,7 @@ export default function ReportingCommandSurface() {
   const [oraclePriorityError, setOraclePriorityError] = useState("");
   const [oraclePriorityLoading, setOraclePriorityLoading] = useState(false);
   const [oracleError, setOracleError] = useState("");
+  const [exportAuditTrail, setExportAuditTrail] = useState(() => readExportAuditTrail());
 
   const bridgeState = useMemo(() => getBridgeWorkflowState(), [refreshKey]);
   const bridgeReadiness = useMemo(
@@ -164,6 +287,21 @@ export default function ReportingCommandSurface() {
   useEffect(() => {
     fetchExports().then(setRecentExports).catch(() => {});
   }, [refreshKey]);
+
+  useEffect(() => {
+    function refreshAuditTrail() {
+      setExportAuditTrail(readExportAuditTrail());
+    }
+
+    window.addEventListener("shs:reporting-export-audit-recorded", refreshAuditTrail);
+    window.addEventListener("storage", refreshAuditTrail);
+
+    return () => {
+      window.removeEventListener("shs:reporting-export-audit-recorded", refreshAuditTrail);
+      window.removeEventListener("storage", refreshAuditTrail);
+    };
+  }, []);
+
 
   useEffect(() => {
     let isActive = true;
@@ -219,6 +357,8 @@ export default function ReportingCommandSurface() {
       if (data) setPriorityData(data);
     });
   }, []);
+
+  const canExportReports = auth.hasPermission(SHS_SECURITY_PERMISSIONS.REPORTS_EXPORT);
 
   const oracleGate = useMemo(() => buildOracleGate(oracleTruth), [oracleTruth]);
 
@@ -292,6 +432,26 @@ export default function ReportingCommandSurface() {
   const readyCount = cards.filter((item) => (oracleTruth?.readinessStatus === "funder_ready" || item.readiness.ready)).length;
   const pendingCount = cards.length - readyCount;
 
+  const reportingCommandModel = useMemo(() => {
+    return buildReportingCommandModel({
+      cards,
+      bridgeState,
+      bridgeReadiness,
+      oracleTruth,
+      oracleGate,
+      canExportReports,
+      recentExports,
+    });
+  }, [
+    cards,
+    bridgeState,
+    bridgeReadiness,
+    oracleTruth,
+    oracleGate,
+    canExportReports,
+    recentExports,
+  ]);
+
   const systemSummary = useMemo(() => {
     const ready = readyCount || 0;
     const pending = pendingCount || 0;
@@ -333,7 +493,7 @@ export default function ReportingCommandSurface() {
   }
 
   async function handleCardGenerate(card) {
-    if (!card.readiness.allowedActions.generate || !oracleGate.allowExport) return;
+    if (!card.readiness.allowedActions.generate || !oracleGate.allowExport || !canExportReports) return;
 
     const payload = {
       publicationMode: bridgeState.publicationMode || "admin_internal",
@@ -392,7 +552,8 @@ export default function ReportingCommandSurface() {
     if (
       !briefingCard ||
       !briefingCard.readiness.allowedActions.generate ||
-      !oracleGate.allowExport
+      !oracleGate.allowExport ||
+      !canExportReports
     ) {
       return;
     }
@@ -491,7 +652,14 @@ export default function ReportingCommandSurface() {
         </div>
       ) : null}
 
-      <section className="reporting-command__hero">
+            <ReportingCommandModelStrip model={reportingCommandModel} />
+
+            <ExportAuditTrailViewer
+              records={exportAuditTrail}
+              onRefresh={() => setExportAuditTrail(readExportAuditTrail())}
+            />
+
+<section className="reporting-command__hero">
         <div>
           <p className="reporting-command__eyebrow">Institutional Reporting Layer</p>
           <h1 className="reporting-command__title">Reporting Command Surface</h1>
@@ -508,9 +676,9 @@ export default function ReportingCommandSurface() {
           <button
             type="button"
             onClick={handleGenerateMasterBrief}
-            disabled={!oracleGate.allowExport}
+            disabled={!oracleGate.allowExport || !canExportReports}
             style={
-              !oracleGate.allowExport
+              (!oracleGate.allowExport || !canExportReports)
                 ? { opacity: 0.45, cursor: "not-allowed" }
                 : undefined
             }
@@ -563,6 +731,22 @@ export default function ReportingCommandSurface() {
           ) : (
             <div>Loading Oracle...</div>
           )}
+
+          {!canExportReports ? (
+            <div
+              style={{
+                padding: "10px 12px",
+                borderRadius: 12,
+                border: "1px solid rgba(248, 113, 113, 0.24)",
+                background: "rgba(127, 29, 29, 0.16)",
+                color: "rgba(254, 202, 202, 0.96)",
+                fontSize: 13,
+                lineHeight: 1.5,
+              }}
+            >
+              Missing permission: reports.export
+            </div>
+          ) : null}
 
           {oracleGate.reasons.length ? (
             <div

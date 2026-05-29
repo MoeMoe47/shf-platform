@@ -1,0 +1,753 @@
+{
+  "generatedAt": "2026-05-23T18:20:26.746Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 21",
+  "mode": "CAPITAL_EXCHANGE_PRELOAD_CHAIN_AUDIT_NO_CODE_CHANGES",
+  "capitalExchangePreloadChainAuditStatus": "findings_ready_preload_chain_detected",
+  "capitalExchangePreloadChainAuditLabel": "Capital Exchange Preload Chain Findings Ready",
+  "productionDecision": "No source code was changed. The audit identifies why capital.html preloads vendor-mapbox and prepares a targeted Capital/Exchange preload boundary patch.",
+  "priorPatch20Status": "manual_browser_signoff_required_preload_risk_detected",
+  "priorPatch19Status": "map_engine_preload_risk_detected",
+  "assetsDetected": {
+    "capitalJs": "capital-44WuCrlc.js",
+    "pagesExchangeJs": "pages-exchange-Dmwe2jKp.js",
+    "mapboxJs": "vendor-mapbox-uaDf4Z7d.js",
+    "mapboxCss": "vendor-mapbox-C5-Kj3x0.css"
+  },
+  "sourceChainFindings": [
+    {
+      "id": "capital_entry_imports_exchange",
+      "status": "not_detected",
+      "risk": "medium",
+      "interpretation": "If capital entry imports ExchangeRoutes statically, Rollup may include Exchange dependencies in capital preload graph."
+    },
+    {
+      "id": "capital_entry_imports_exchange_mission",
+      "status": "not_detected",
+      "risk": "medium",
+      "interpretation": "If capital entry imports SHSExchangeMissionControl statically, it may pull Exchange/map dependency metadata early."
+    },
+    {
+      "id": "exchange_chunk_references_vendor_mapbox",
+      "status": "detected",
+      "risk": "medium_high",
+      "interpretation": "If pages-exchange chunk references vendor-mapbox, any static preload of pages-exchange may also preload Mapbox."
+    },
+    {
+      "id": "capital_js_mapdeps_includes_vendor_mapbox",
+      "status": "detected",
+      "risk": "high",
+      "interpretation": "Vite helper __vite__mapDeps in capital chunk can cause vendor-mapbox to be included in the preload dependency list for a dynamic import."
+    },
+    {
+      "id": "capital_html_preloads_vendor_mapbox",
+      "status": "detected",
+      "risk": "high",
+      "interpretation": "capital.html directly preloads vendor-mapbox. This confirms early load risk at the generated HTML level."
+    }
+  ],
+  "preloadChainLikelyCause": [
+    "capital entry generated chunk contains __vite__mapDeps for pages-exchange that includes vendor-mapbox.",
+    "pages-exchange generated chunk references vendor-mapbox, likely through Unified Truth / SHSOperationalMapboxMap.",
+    "dist/capital.html preloads vendor-mapbox directly, meaning the Capital entry is causing early Mapbox network pressure."
+  ],
+  "capitalHtmlScan": {
+    "file": "dist/capital.html",
+    "exists": true,
+    "hits": [
+      {
+        "term": "capital-44WuCrlc.js",
+        "lineNumber": 7,
+        "line": "<script type=\"module\" crossorigin src=\"/assets/capital-44WuCrlc.js\"></script>",
+        "kind": "reference"
+      },
+      {
+        "term": "modulepreload",
+        "lineNumber": 8,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/modulepreload-polyfill-B5Qt9EMX.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "modulepreload",
+        "lineNumber": 9,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-CH_-0t41.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "modulepreload",
+        "lineNumber": 10,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-react-DWUxBteQ.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "modulepreload",
+        "lineNumber": 11,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-charts-20wW2Z-x.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "modulepreload",
+        "lineNumber": 12,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-Ca4qtZ2F.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "modulepreload",
+        "lineNumber": 13,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/shared-eNuYgzDM.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "modulepreload",
+        "lineNumber": 14,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-admin-Bhjlr7vA.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "modulepreload",
+        "lineNumber": 15,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-motion-Bndiu9g1.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "modulepreload",
+        "lineNumber": 16,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/components-CDuVLeKw.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "modulepreload",
+        "lineNumber": 17,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-mapbox-uaDf4Z7d.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "vendor-mapbox",
+        "lineNumber": 17,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-mapbox-uaDf4Z7d.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "vendor-mapbox-uaDf4Z7d.js",
+        "lineNumber": 17,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-mapbox-uaDf4Z7d.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "modulepreload",
+        "lineNumber": 18,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-exchange-Dmwe2jKp.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "pages-exchange-Dmwe2jKp.js",
+        "lineNumber": 18,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-exchange-Dmwe2jKp.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "vendor-mapbox",
+        "lineNumber": 22,
+        "line": "<link rel=\"stylesheet\" crossorigin href=\"/assets/vendor-mapbox-C5-Kj3x0.css\">",
+        "kind": "reference"
+      },
+      {
+        "term": "vendor-mapbox-C5-Kj3x0.css",
+        "lineNumber": 22,
+        "line": "<link rel=\"stylesheet\" crossorigin href=\"/assets/vendor-mapbox-C5-Kj3x0.css\">",
+        "kind": "reference"
+      }
+    ]
+  },
+  "capitalJsScan": {
+    "file": "dist/assets/capital-44WuCrlc.js",
+    "exists": true,
+    "hits": [
+      {
+        "term": "__vite__mapDeps",
+        "lineNumber": 1,
+        "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+        "kind": "reference"
+      },
+      {
+        "term": "vendor-mapbox",
+        "lineNumber": 1,
+        "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+        "kind": "reference"
+      },
+      {
+        "term": "vendor-mapbox-uaDf4Z7d.js",
+        "lineNumber": 1,
+        "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+        "kind": "reference"
+      },
+      {
+        "term": "vendor-mapbox-C5-Kj3x0.css",
+        "lineNumber": 1,
+        "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+        "kind": "reference"
+      },
+      {
+        "term": "pages-exchange-Dmwe2jKp.js",
+        "lineNumber": 1,
+        "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+        "kind": "reference"
+      },
+      {
+        "term": "pages-exchange",
+        "lineNumber": 1,
+        "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+        "kind": "reference"
+      },
+      {
+        "term": "__vite__mapDeps",
+        "lineNumber": 2,
+        "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96)",
+        "kind": "dynamic_import"
+      },
+      {
+        "term": "vendor-mapbox",
+        "lineNumber": 2,
+        "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96)",
+        "kind": "dynamic_import"
+      },
+      {
+        "term": "vendor-mapbox-uaDf4Z7d.js",
+        "lineNumber": 2,
+        "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96)",
+        "kind": "dynamic_import"
+      },
+      {
+        "term": "pages-exchange-Dmwe2jKp.js",
+        "lineNumber": 2,
+        "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96)",
+        "kind": "dynamic_import"
+      },
+      {
+        "term": "pages-exchange",
+        "lineNumber": 2,
+        "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96)",
+        "kind": "dynamic_import"
+      },
+      {
+        "term": "import(",
+        "lineNumber": 2,
+        "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96)",
+        "kind": "dynamic_import"
+      }
+    ]
+  },
+  "pagesExchangeScan": {
+    "file": "dist/assets/pages-exchange-Dmwe2jKp.js",
+    "exists": true,
+    "hits": [
+      {
+        "term": "vendor-mapbox",
+        "lineNumber": 1,
+        "line": "import{j as e,r as h,R as Ne,N as H,O as ke}from\"./vendor-react-DWUxBteQ.js\";import{O as De}from\"./pages-Ca4qtZ2F.js\";import{_ as Ae,a6 as Re}from\"./components-CDuVLeKw.js\";import{u as Ee,T as Le}from\"./pages-admin-Bhjlr7vA.js\";import{m as B}from\"./vendor-mapbox-uaDf4Z7d.js\";function Ys(){return e.jsx(De,{})}function Xs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Provider Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This surface will handle outcome submissions, evidence uploads, verification status, disputes, and payout pipeline visibility for programs and providers.\"})]})}function Zs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},childre",
+        "kind": "reference"
+      },
+      {
+        "term": "vendor-mapbox-uaDf4Z7d.js",
+        "lineNumber": 1,
+        "line": "import{j as e,r as h,R as Ne,N as H,O as ke}from\"./vendor-react-DWUxBteQ.js\";import{O as De}from\"./pages-Ca4qtZ2F.js\";import{_ as Ae,a6 as Re}from\"./components-CDuVLeKw.js\";import{u as Ee,T as Le}from\"./pages-admin-Bhjlr7vA.js\";import{m as B}from\"./vendor-mapbox-uaDf4Z7d.js\";function Ys(){return e.jsx(De,{})}function Xs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Provider Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This surface will handle outcome submissions, evidence uploads, verification status, disputes, and payout pipeline visibility for programs and providers.\"})]})}function Zs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},childre",
+        "kind": "reference"
+      }
+    ]
+  },
+  "sourceScans": [
+    {
+      "file": "src/App.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "SHSExchangeMissionControl",
+          "lineNumber": 5,
+          "line": "const SHSExchangeMissionControl = lazy(() => import(\"@/pages/exchange/SHSExchangeMissionControl.jsx\"));",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "import(",
+          "lineNumber": 5,
+          "line": "const SHSExchangeMissionControl = lazy(() => import(\"@/pages/exchange/SHSExchangeMissionControl.jsx\"));",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "lazy(()",
+          "lineNumber": 5,
+          "line": "const SHSExchangeMissionControl = lazy(() => import(\"@/pages/exchange/SHSExchangeMissionControl.jsx\"));",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "SHSExchangeMissionControl",
+          "lineNumber": 39,
+          "line": "<Route path=\"/exchange-mission\" element={withAppLazyBoundary(<SHSExchangeMissionControl />)} />",
+          "kind": "reference"
+        }
+      ]
+    },
+    {
+      "file": "src/routes/exchangeRoutes.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "ExchangeLayout",
+          "lineNumber": 3,
+          "line": "const ExchangeLayout = lazy(() => import(\"@/pages/exchange/ExchangeLayout\"));",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "import(",
+          "lineNumber": 3,
+          "line": "const ExchangeLayout = lazy(() => import(\"@/pages/exchange/ExchangeLayout\"));",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "lazy(()",
+          "lineNumber": 3,
+          "line": "const ExchangeLayout = lazy(() => import(\"@/pages/exchange/ExchangeLayout\"));",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "ExchangeRoutes",
+          "lineNumber": 33,
+          "line": "export default function ExchangeRoutes() {",
+          "kind": "reference"
+        },
+        {
+          "term": "ExchangeLayout",
+          "lineNumber": 35,
+          "line": "<Route path=\"exchange\" element={withExchangeLazyBoundary(<ExchangeLayout />)}>",
+          "kind": "reference"
+        }
+      ]
+    },
+    {
+      "file": "src/pages/exchange/ExchangeLayout.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "ExchangeLayout",
+          "lineNumber": 58,
+          "line": "export default function ExchangeLayout() {",
+          "kind": "reference"
+        }
+      ]
+    },
+    {
+      "file": "src/pages/exchange/SHSExchangeMissionControl.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "SHSExchangeMissionControl",
+          "lineNumber": 117,
+          "line": "export default function SHSExchangeMissionControl() {",
+          "kind": "reference"
+        }
+      ]
+    },
+    {
+      "file": "src/pages/exchange/unified-truth/SHSUnifiedTruthShell.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "SHSOperationalMapboxMap",
+          "lineNumber": 7,
+          "line": "const SHSOperationalMapboxMap = lazy(() => import(\"./components/SHSOperationalMapboxMap\"));",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "import(",
+          "lineNumber": 7,
+          "line": "const SHSOperationalMapboxMap = lazy(() => import(\"./components/SHSOperationalMapboxMap\"));",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "lazy(()",
+          "lineNumber": 7,
+          "line": "const SHSOperationalMapboxMap = lazy(() => import(\"./components/SHSOperationalMapboxMap\"));",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "SHSOperationalMapboxMap",
+          "lineNumber": 298,
+          "line": "return withUnifiedTruthMapBoundary(<SHSOperationalMapboxMap />);",
+          "kind": "reference"
+        },
+        {
+          "term": "SHSUnifiedTruthShell",
+          "lineNumber": 1473,
+          "line": "export default function SHSUnifiedTruthShell() {",
+          "kind": "reference"
+        }
+      ]
+    },
+    {
+      "file": "src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 2,
+          "line": "import mapboxgl from \"mapbox-gl\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 3,
+          "line": "import \"mapbox-gl/dist/mapbox-gl.css\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "SHSOperationalMapboxMap",
+          "lineNumber": 1560,
+          "line": "export default function SHSOperationalMapboxMap() {",
+          "kind": "reference"
+        }
+      ]
+    },
+    {
+      "file": "vite.config.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 73,
+          "line": "if (normalizedId.includes(\"mapbox-gl\")) {",
+          "kind": "reference"
+        },
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 74,
+          "line": "return \"vendor-mapbox\";",
+          "kind": "reference"
+        }
+      ]
+    },
+    {
+      "file": "src/pages/exchange/CommandCenter.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "SHSUnifiedTruthShell",
+          "lineNumber": 2,
+          "line": "import SHSUnifiedTruthShell from \"./unified-truth/SHSUnifiedTruthShell\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "SHSUnifiedTruthShell",
+          "lineNumber": 5,
+          "line": "return <SHSUnifiedTruthShell />;",
+          "kind": "reference"
+        }
+      ]
+    }
+  ],
+  "distScans": [
+    {
+      "file": "dist/capital.html",
+      "exists": true,
+      "hits": [
+        {
+          "term": "capital-44WuCrlc.js",
+          "lineNumber": 7,
+          "line": "<script type=\"module\" crossorigin src=\"/assets/capital-44WuCrlc.js\"></script>",
+          "kind": "reference"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 8,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/modulepreload-polyfill-B5Qt9EMX.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 9,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-CH_-0t41.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 10,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-react-DWUxBteQ.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 11,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-charts-20wW2Z-x.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 12,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-Ca4qtZ2F.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 13,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/shared-eNuYgzDM.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 14,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-admin-Bhjlr7vA.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 15,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-motion-Bndiu9g1.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 16,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/components-CDuVLeKw.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 17,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-mapbox-uaDf4Z7d.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "vendor-mapbox-uaDf4Z7d.js",
+          "lineNumber": 17,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-mapbox-uaDf4Z7d.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 17,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-mapbox-uaDf4Z7d.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "pages-exchange-Dmwe2jKp.js",
+          "lineNumber": 18,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-exchange-Dmwe2jKp.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 18,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-exchange-Dmwe2jKp.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 22,
+          "line": "<link rel=\"stylesheet\" crossorigin href=\"/assets/vendor-mapbox-C5-Kj3x0.css\">",
+          "kind": "reference"
+        },
+        {
+          "term": "vendor-mapbox-C5-Kj3x0.css",
+          "lineNumber": 22,
+          "line": "<link rel=\"stylesheet\" crossorigin href=\"/assets/vendor-mapbox-C5-Kj3x0.css\">",
+          "kind": "reference"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/capital-44WuCrlc.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+          "kind": "reference"
+        },
+        {
+          "term": "vendor-mapbox-uaDf4Z7d.js",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+          "kind": "reference"
+        },
+        {
+          "term": "vendor-mapbox-C5-Kj3x0.css",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+          "kind": "reference"
+        },
+        {
+          "term": "pages-exchange-Dmwe2jKp.js",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+          "kind": "reference"
+        },
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+          "kind": "reference"
+        },
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96)",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "vendor-mapbox-uaDf4Z7d.js",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96)",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "pages-exchange-Dmwe2jKp.js",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96)",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96)",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96)",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "import(",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96)",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "lazy(()",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96)",
+          "kind": "dynamic_import"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/pages-exchange-Dmwe2jKp.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 1,
+          "line": "import{j as e,r as h,R as Ne,N as H,O as ke}from\"./vendor-react-DWUxBteQ.js\";import{O as De}from\"./pages-Ca4qtZ2F.js\";import{_ as Ae,a6 as Re}from\"./components-CDuVLeKw.js\";import{u as Ee,T as Le}from\"./pages-admin-Bhjlr7vA.js\";import{m as B}from\"./vendor-mapbox-uaDf4Z7d.js\";function Ys(){return e.jsx(De,{})}function Xs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Provider Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This surface will handle outcome submissions, evidence uploads, verification status, disputes, and payout pipeline visibility for programs and providers.\"})]})}function Zs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},childre",
+          "kind": "reference"
+        },
+        {
+          "term": "vendor-mapbox-uaDf4Z7d.js",
+          "lineNumber": 1,
+          "line": "import{j as e,r as h,R as Ne,N as H,O as ke}from\"./vendor-react-DWUxBteQ.js\";import{O as De}from\"./pages-Ca4qtZ2F.js\";import{_ as Ae,a6 as Re}from\"./components-CDuVLeKw.js\";import{u as Ee,T as Le}from\"./pages-admin-Bhjlr7vA.js\";import{m as B}from\"./vendor-mapbox-uaDf4Z7d.js\";function Ys(){return e.jsx(De,{})}function Xs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Provider Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This surface will handle outcome submissions, evidence uploads, verification status, disputes, and payout pipeline visibility for programs and providers.\"})]})}function Zs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},childre",
+          "kind": "reference"
+        },
+        {
+          "term": "lazy(()",
+          "lineNumber": 1,
+          "line": "import{j as e,r as h,R as Ne,N as H,O as ke}from\"./vendor-react-DWUxBteQ.js\";import{O as De}from\"./pages-Ca4qtZ2F.js\";import{_ as Ae,a6 as Re}from\"./components-CDuVLeKw.js\";import{u as Ee,T as Le}from\"./pages-admin-Bhjlr7vA.js\";import{m as B}from\"./vendor-mapbox-uaDf4Z7d.js\";function Ys(){return e.jsx(De,{})}function Xs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Provider Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This surface will handle outcome submissions, evidence uploads, verification status, disputes, and payout pipeline visibility for programs and providers.\"})]})}function Zs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},childre",
+          "kind": "reference"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/vendor-mapbox-uaDf4Z7d.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 1,
+          "line": "import{g as _2}from\"./vendor-CH_-0t41.js\";var Om={exports:{}},g2=Om.exports,fb;function y2(){return fb||(fb=1,(function(mb,v2){(function(Gu,qu){mb.exports=qu()})(g2,(function(){let Gu,qu,Bm;function km(c,Z){if(!Gu)Gu=Z;else if(!qu)qu=Z;else{const Or={};Gu(void 0,Or),Bm=Z(Or);const $i=\"self.onerror = function() { console.error('An error occurred while parsing the WebWorker bundle. This is most likely due to improper transpilation by Babel; please see https://docs.mapbox.com/mapbox-gl-js/guides/install/#transpiling'); }; var sharedChunk = {}; (\"+Gu+\")(undefined, sharedChunk); (\"+qu+\")(sharedChunk); self.onerror = null;\";typeof window<\"u\"&&window&&window.URL&&window.URL.createObjectURL&&(Bm.workerUrl=window.URL.createObjectURL(new Blob([$i],{type:\"text/javascript\"})))}}km([\"require\",\"exports\"],function(c,Z){var Or=1e-6,$i=typeof Float32Array<\"u\"?Float32Array:Array;function dc(r,e){var t=e[0",
+          "kind": "reference"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 2,
+          "line": "This is most likely a bug, please report this via https://github.com/mapbox/mapbox-gl-js/issues/new?assignees=&labels=&template=Bug_report.md",
+          "kind": "reference"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 7,
+          "line": "`)}let h=null,f=null;if(n!==\"background\"&&n!==\"sky\"&&n!==\"slot\"){f=de[`filter_${n}`];const x=Ns(l,f,e,t);if(x.result===\"error\")throw new Error(x.value.map(b=>`${b.key}: ${b.message}`).join(\", \"));h=(b,w,I)=>x.value.evaluate(b,w,{},I)}let p=null,g=null;if(l!==s){const x=Ns(s,f,e,t);if(x.result===\"error\")throw new Error(x.value.map(b=>`${b.key}: ${b.message}`).join(\", \"));p=(b,w,I,E,M)=>x.value.evaluate(b,w,{},I,void 0,void 0,E,M),g=!Os(x.value.expression)}return{filter:h,dynamicFilter:p||void 0,needGeometry:pp(l),needFeature:!!g}}function Qh(r){if(!Array.isArray(r))return r;const e=(function(t){if(c_.has(t[0])){for(let n=1;n<t.length;n++)if(qa(t[n]))return!0}return t})(r);return e===!0?e:e.map(t=>Qh(t))}function fp(r){let e=!1;const t=[];if(r[0]===\"case\"){for(let n=1;n<r.length-1;n+=2)e=e||qa(r[n]),t.push(r[n+1]);t.push(r[r.length-1])}else if(r[0]===\"match\"){e=e||qa(r[1]);for(let n=2;n<r.",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "import(",
+          "lineNumber": 7,
+          "line": "`)}let h=null,f=null;if(n!==\"background\"&&n!==\"sky\"&&n!==\"slot\"){f=de[`filter_${n}`];const x=Ns(l,f,e,t);if(x.result===\"error\")throw new Error(x.value.map(b=>`${b.key}: ${b.message}`).join(\", \"));h=(b,w,I)=>x.value.evaluate(b,w,{},I)}let p=null,g=null;if(l!==s){const x=Ns(s,f,e,t);if(x.result===\"error\")throw new Error(x.value.map(b=>`${b.key}: ${b.message}`).join(\", \"));p=(b,w,I,E,M)=>x.value.evaluate(b,w,{},I,void 0,void 0,E,M),g=!Os(x.value.expression)}return{filter:h,dynamicFilter:p||void 0,needGeometry:pp(l),needFeature:!!g}}function Qh(r){if(!Array.isArray(r))return r;const e=(function(t){if(c_.has(t[0])){for(let n=1;n<t.length;n++)if(qa(t[n]))return!0}return t})(r);return e===!0?e:e.map(t=>Qh(t))}function fp(r){let e=!1;const t=[];if(r[0]===\"case\"){for(let n=1;n<r.length-1;n+=2)e=e||qa(r[n]),t.push(r[n+1]);t.push(r[r.length-1])}else if(r[0]===\"match\"){e=e||qa(r[1]);for(let n=2;n<r.",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 3281,
+          "line": "`}_calculateXYTransform(){const i=this._pos,o=this._map,u=this.getPitchAlignment();if(!o||!i||u!==\"map\")return\"\";if(!o._showingGlobe()){const v=o.getPitch();return v?`rotateX(${v}deg)`:\"\"}const d=c.cL(c.f5(o.transform,this._lngLat)),m=i.sub(c.f6(o.transform)),_=Math.abs(m.x)+Math.abs(m.y);if(_===0)return\"\";const y=d/_;return`rotateX(${-m.y*y}deg) rotateY(${m.x*y}deg)`}_calculateZTransform(){const i=this._pos,o=this._map;if(!o||!i)return\"\";let u=0;const d=this.getRotationAlignment();if(d===\"map\")if(o._showingGlobe()){const m=o.project(new c.aY(this._lngLat.lng,this._lngLat.lat+.001),this._altitude),_=o.project(new c.aY(this._lngLat.lng,this._lngLat.lat-.001),this._altitude).sub(m);u=c.cL(Math.atan2(_.y,_.x))-90}else u=-o.getBearing();else if(d===\"horizon\"){const m=c.aj(4,6,o.getZoom()),_=c.f6(o.transform);_.y+=m*o.transform.height;const y=i.sub(_),v=c.cL(Math.atan2(y.y,y.x));u=(v>90?v-270",
+          "kind": "reference"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 3283,
+          "line": "(${u.data.width}, ${u.data.height})`)));const v=!(i instanceof HTMLImageElement||ImageBitmap&&i instanceof ImageBitmap);let T=!1;u.usvg?(u.data=new c.q({width:m,height:_},new Uint8Array(y)),u.usvg=!1,u.icon=void 0,T=!0):u.data.replace(y,v),this.style.updateImage(o,u,T)}hasImage(a){return a?!!this.style&&!!this.style.getImage(c.I.from(a)):(this.fire(new c.B(new Error(\"Missing required image id\"))),!1)}removeImage(a){this.style.removeImage(c.I.from(a))}loadImage(a,i){c.n(this._requestManager.transformRequest(a,c.R.Image),(o,u)=>{i(o,u)})}listImages(){return this.style.listImages().map(a=>a.name)}addModel(a,i){this._lazyInitEmptyStyle(),this.style.addModel(a,i)}hasModel(a){return a?this.style.hasModel(a):(this.fire(new c.B(new Error(\"Missing required model id\"))),!1)}removeModel(a){this.style.removeModel(a)}listModels(){return this.style.listModels()}addLayer(a,i){return this._isValidId(a.i",
+          "kind": "reference"
+        }
+      ]
+    }
+  ],
+  "bundleSummary": {
+    "totalAssetsParsed": 90,
+    "largeAssets": 2,
+    "largestAssetFileName": "vendor-mapbox-uaDf4Z7d.js",
+    "largestAssetRawKb": 1781.94,
+    "buildWarningDetected": true,
+    "frontendBuildPassed": true
+  },
+  "recommendedNextActions": [
+    {
+      "step": 1,
+      "label": "Patch Capital entry preload chain",
+      "action": "Lazy-load the Exchange route tree or Exchange Mission route from the Capital entry so pages-exchange does not pull vendor-mapbox into capital.html preload.",
+      "risk": "medium"
+    },
+    {
+      "step": 2,
+      "label": "Keep Unified Truth shell lazy boundary",
+      "action": "Do not remove the Patch 12B SHSUnifiedTruthShell lazy map boundary.",
+      "risk": "low"
+    },
+    {
+      "step": 3,
+      "label": "Do not convert Mapbox to MapLibre yet",
+      "action": "This is a product refactor, not the next safe bundle patch.",
+      "risk": "high_if_rushed"
+    },
+    {
+      "step": 4,
+      "label": "Rebuild and rescan capital.html",
+      "action": "After the preload-chain patch, confirm capital.html no longer modulepreloads vendor-mapbox unless the first route visibly needs it.",
+      "risk": "low"
+    }
+  ],
+  "nextPatchRecommendation": {
+    "id": "post_v1_bundle_patch_22_capital_exchange_preload_boundary_patch",
+    "label": "Capital Exchange Preload Boundary Patch",
+    "goal": "Patch the Capital entry route/import chain so vendor-mapbox is not modulepreloaded by capital.html before a map route is actually needed.",
+    "risk": "medium"
+  },
+  "doNotDo": [
+    {
+      "label": "Do not raise chunkSizeWarningLimit",
+      "reason": "The issue is early preload behavior, not just the warning number."
+    },
+    {
+      "label": "Do not rollback manualChunks patches",
+      "reason": "They improved chunk clarity and exposed the actual preload chain."
+    },
+    {
+      "label": "Do not replace Mapbox with MapLibre as a quick fix",
+      "reason": "That is a larger map product refactor."
+    }
+  ]
+}

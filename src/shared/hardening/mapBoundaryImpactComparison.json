@@ -1,0 +1,99 @@
+{
+  "generatedAt": "2026-05-23T16:23:06.490Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 5",
+  "mode": "MAP_BOUNDARY_IMPACT_COMPARISON_NO_CODE_CHANGES",
+  "impactStatus": "safe_patch_no_size_reduction",
+  "impactLabel": "Map Boundary Patch Safe, But Bundle Size Unchanged",
+  "productionDecision": "Patch 4 safely converted OperationalMap.jsx to dynamic MapLibre loading and the build passed. The largest bundle chunks did not meaningfully shrink, so the next optimization should target route-level lazy loading or the remaining core static map import with caution.",
+  "changedFile": "src/components/globe/OperationalMap.jsx",
+  "patch4Result": {
+    "buildPassed": true,
+    "staticImportsRemoved": {
+      "maplibreJsStaticImportRemoved": true,
+      "maplibreCssStaticImportRemoved": true
+    },
+    "dynamicBoundaryDetected": {
+      "helperDetected": true,
+      "dynamicJsImportDetected": true,
+      "dynamicCssImportDetected": true
+    }
+  },
+  "comparison": {
+    "vendorMap": {
+      "beforeFileName": "vendor-map-CPoydKcy.js",
+      "afterFileName": "vendor-map-CPoydKcy.js",
+      "beforeRawKb": 1011.59,
+      "afterRawKb": 1011.59,
+      "rawKbDelta": 0,
+      "beforeGzipKb": 274.26,
+      "afterGzipKb": 274.26,
+      "gzipKbDelta": 0
+    },
+    "pagesJs": {
+      "beforeFileName": "pages-4ojuxR1S.js",
+      "afterFileName": "pages-4ojuxR1S.js",
+      "beforeRawKb": 1100.44,
+      "afterRawKb": 1100.44,
+      "rawKbDelta": 0,
+      "beforeGzipKb": 249.45,
+      "afterGzipKb": 249.45,
+      "gzipKbDelta": 0
+    },
+    "vendor": {
+      "beforeFileName": "vendor-BtYAkRhV.js",
+      "afterFileName": "vendor-BtYAkRhV.js",
+      "beforeRawKb": 1959.5,
+      "afterRawKb": 1959.5,
+      "rawKbDelta": 0,
+      "beforeGzipKb": 553.85,
+      "afterGzipKb": 553.85,
+      "gzipKbDelta": 0
+    },
+    "largeAssetsBefore": 4,
+    "largeAssetsAfter": 4,
+    "buildWarningBefore": true,
+    "buildWarningAfter": true,
+    "frontendBuildBefore": true,
+    "frontendBuildAfter": true
+  },
+  "interpretation": [
+    "OperationalMap.jsx was safely moved behind a dynamic MapLibre boundary.",
+    "The map vendor chunk did not meaningfully decrease after this first safe boundary patch.",
+    "This likely means the remaining map vendor weight is still pulled by another static map import, a route/page bundle path, or Vite chunk grouping.",
+    "The map import boundary plan identified SHSOperationalMapboxMap.jsx as the other static map import, but it is higher risk because it is a core map component."
+  ],
+  "remainingMapRisk": {
+    "coreMapCandidate": "src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+    "risk": "medium_high_core_map",
+    "reason": "The file is a core operational map component and likely still imports Mapbox statically. It may affect Unified Truth / Operational Command map behavior."
+  },
+  "recommendedNextOptions": [
+    {
+      "option": "A",
+      "label": "Route-level lazy loading first",
+      "risk": "lower",
+      "action": "Find where map-heavy Exchange/Unified Truth surfaces are imported and lazy-load those route components.",
+      "reason": "This may reduce pages/vendor pressure without changing core map internals directly."
+    },
+    {
+      "option": "B",
+      "label": "Core Mapbox dynamic import patch",
+      "risk": "medium_high",
+      "action": "Convert SHSOperationalMapboxMap.jsx static Mapbox imports to dynamic imports using the same one-file guarded pattern.",
+      "reason": "This directly targets the remaining static map library import but touches a core map surface."
+    },
+    {
+      "option": "C",
+      "label": "Vite manualChunks tuning",
+      "risk": "medium",
+      "action": "Adjust manualChunks to isolate map libraries into route-loaded chunks after confirming import boundaries.",
+      "reason": "Manual chunking can improve caching and separation, but can also hide real lazy-loading issues if done too early."
+    }
+  ],
+  "recommendedDecision": "Choose Option A first if the goal is safest optimization. Choose Option B only if you are ready to visually recheck the core map route immediately after patching.",
+  "nextPatchRecommendation": {
+    "id": "post_v1_bundle_patch_6_route_level_map_lazy_audit",
+    "label": "Route-Level Map Lazy Audit",
+    "goal": "Find the route/component import path that pulls Exchange/Unified Truth map surfaces into the pages bundle before touching the core map internals."
+  }
+}

@@ -1,0 +1,244 @@
+{
+  "generatedAt": "2026-05-23T16:21:06.401Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 4",
+  "mode": "MAP_BOUNDARY_PATCH_1_OPERATIONAL_MAP_DYNAMIC_IMPORT",
+  "mapBoundaryPatchStatus": "build_passed",
+  "mapBoundaryPatchLabel": "OperationalMap MapLibre Dynamic Boundary Applied",
+  "productionDecision": "OperationalMap.jsx no longer uses static MapLibre imports. Build passed after the first map boundary patch.",
+  "changedFile": "src/components/globe/OperationalMap.jsx",
+  "staticImportsRemoved": {
+    "maplibreJsStaticImportRemoved": true,
+    "maplibreCssStaticImportRemoved": true
+  },
+  "dynamicBoundaryDetected": {
+    "helperDetected": true,
+    "dynamicJsImportDetected": true,
+    "dynamicCssImportDetected": true
+  },
+  "bundleSummaryAfterPatch": {
+    "totalAssetsParsed": 57,
+    "largeAssets": 4,
+    "largestAssetFileName": "vendor-BtYAkRhV.js",
+    "largestAssetRawKb": 1959.5,
+    "buildWarningDetected": true,
+    "frontendBuildPassed": true
+  },
+  "largestAssetsAfterPatch": [
+    {
+      "fileName": "vendor-BtYAkRhV.js",
+      "rawKb": 1959.5,
+      "gzipKb": 553.85,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "pages-4ojuxR1S.js",
+      "rawKb": 1100.44,
+      "gzipKb": 249.45,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "vendor-map-CPoydKcy.js",
+      "rawKb": 1011.59,
+      "gzipKb": 274.26,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "pages-CEreUFyW.css",
+      "rawKb": 831.75,
+      "gzipKb": 126.96,
+      "type": "css",
+      "isLarge": true,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "shared-B7TgAbA2.js",
+      "rawKb": 453.73,
+      "gzipKb": 43.97,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-react-Ca3dWI2b.js",
+      "rawKb": 226.03,
+      "gzipKb": 72.22,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "components-uyCbdsXT.js",
+      "rawKb": 171.22,
+      "gzipKb": 46.47,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "dashboards-Bcp_4Ozc.js",
+      "rawKb": 134.61,
+      "gzipKb": 36.15,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-map-kWVbv8B-.css",
+      "rawKb": 69.34,
+      "gzipKb": 9.97,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-C5-Kj3x0.css",
+      "rawKb": 40.95,
+      "gzipKb": 5.59,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "content-DE5-6dIU.js",
+      "rawKb": 34.23,
+      "gzipKb": 11.23,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "foundation-BvjTgYP3.css",
+      "rawKb": 28.83,
+      "gzipKb": 6.18,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "foundation-CzIi6v2G.js",
+      "rawKb": 25.26,
+      "gzipKb": 5.5,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "ai-BtHrJQMZ.css",
+      "rawKb": 23.65,
+      "gzipKb": 5.7,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "allocation-DXLNNfaS.js",
+      "rawKb": 19.62,
+      "gzipKb": 6.98,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "arcade-Cuohn2B4.css",
+      "rawKb": 19.56,
+      "gzipKb": 4.48,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "components-3KDTfcSy.css",
+      "rawKb": 16.2,
+      "gzipKb": 3.88,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "curriculum-BQjQ7RnG.css",
+      "rawKb": 10.63,
+      "gzipKb": 2.56,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "sales-C5XjbxN2.css",
+      "rawKb": 9.44,
+      "gzipKb": 2.59,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "ledger-cNRK8cm9.css",
+      "rawKb": 9.33,
+      "gzipKb": 2.45,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    }
+  ],
+  "largeAssetsAfterPatch": [
+    {
+      "fileName": "vendor-BtYAkRhV.js",
+      "rawKb": 1959.5,
+      "gzipKb": 553.85,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "pages-4ojuxR1S.js",
+      "rawKb": 1100.44,
+      "gzipKb": 249.45,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "vendor-map-CPoydKcy.js",
+      "rawKb": 1011.59,
+      "gzipKb": 274.26,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "pages-CEreUFyW.css",
+      "rawKb": 831.75,
+      "gzipKb": 126.96,
+      "type": "css",
+      "isLarge": true,
+      "isVeryLarge": false
+    }
+  ],
+  "nextRecommendedActions": [
+    {
+      "step": 1,
+      "label": "Compare inventory before/after",
+      "action": "Review whether vendor-map changed after OperationalMap dynamic boundary."
+    },
+    {
+      "step": 2,
+      "label": "Do not touch core map yet",
+      "action": "Avoid SHSOperationalMapboxMap.jsx until this patch is confirmed visually."
+    },
+    {
+      "step": 3,
+      "label": "Regenerate bundle inventory",
+      "action": "Create a new inventory snapshot after this patch for measured comparison."
+    },
+    {
+      "step": 4,
+      "label": "Manual map route check",
+      "action": "Open any route using OperationalMap.jsx and confirm the map still renders."
+    }
+  ]
+}

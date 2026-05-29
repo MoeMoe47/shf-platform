@@ -1,0 +1,701 @@
+{
+  "generatedAt": "2026-05-23T16:58:48.007Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 14",
+  "mode": "VITE_MANUAL_CHUNKS_AUDIT_NO_CODE_CHANGES",
+  "viteManualChunksAuditStatus": "findings_ready",
+  "viteManualChunksAuditLabel": "Vite ManualChunks Findings Ready",
+  "productionDecision": "No code was changed. Multiple source-level lazy boundaries are build-safe but large chunks remain, so manualChunks grouping is now the safest next optimization area to inspect before editing core map internals.",
+  "priorImpactStatus": "safe_patch_no_meaningful_size_reduction",
+  "priorImpactComparison": {
+    "vendor": {
+      "beforeFileName": "vendor-BtYAkRhV.js",
+      "afterFileName": "vendor-BH_ulZiA.js",
+      "beforeRawKb": 1959.5,
+      "afterRawKb": 1959.5,
+      "rawKbDelta": 0,
+      "beforeGzipKb": 553.85,
+      "afterGzipKb": 553.53,
+      "gzipKbDelta": -0.32
+    },
+    "pagesJs": {
+      "beforeFileName": "pages-4ojuxR1S.js",
+      "afterFileName": "pages-smZgCU8-.js",
+      "beforeRawKb": 1100.44,
+      "afterRawKb": 1101.18,
+      "rawKbDelta": 0.74,
+      "beforeGzipKb": 249.45,
+      "afterGzipKb": 249.07,
+      "gzipKbDelta": -0.38
+    },
+    "vendorMap": {
+      "beforeFileName": "vendor-map-CPoydKcy.js",
+      "afterFileName": "vendor-map-Dq8ojDkP.js",
+      "beforeRawKb": 1011.59,
+      "afterRawKb": 1011.59,
+      "rawKbDelta": 0,
+      "beforeGzipKb": 274.26,
+      "afterGzipKb": 274.26,
+      "gzipKbDelta": 0
+    },
+    "pagesCss": {
+      "beforeFileName": "pages-CEreUFyW.css",
+      "afterFileName": "pages-CEreUFyW.css",
+      "beforeRawKb": 831.75,
+      "afterRawKb": 831.75,
+      "rawKbDelta": 0,
+      "beforeGzipKb": 126.96,
+      "afterGzipKb": 126.96,
+      "gzipKbDelta": 0
+    },
+    "largeAssetsBefore": 4,
+    "largeAssetsAfter": 4,
+    "buildWarningBefore": true,
+    "buildWarningAfter": true,
+    "frontendBuildBefore": true,
+    "frontendBuildAfter": true
+  },
+  "completedSourceBoundaries": [
+    {
+      "checkpoint": 4,
+      "file": "src/components/globe/OperationalMap.jsx",
+      "target": "MapLibre dynamic import boundary",
+      "status": "build_passed",
+      "impact": "safe_no_meaningful_size_reduction"
+    },
+    {
+      "checkpoint": 7,
+      "file": "src/routes/exchangeRoutes.jsx",
+      "target": "ExchangeLayout route lazy boundary",
+      "status": "build_passed",
+      "impact": "safe_no_meaningful_size_reduction"
+    },
+    {
+      "checkpoint": 10,
+      "file": "src/App.jsx",
+      "target": "SHSExchangeMissionControl lazy boundary",
+      "status": "build_passed",
+      "impact": "safe_no_meaningful_size_reduction"
+    },
+    {
+      "checkpoint": 12,
+      "file": "src/pages/exchange/unified-truth/SHSUnifiedTruthShell.jsx",
+      "target": "SHSOperationalMapboxMap shell lazy boundary",
+      "status": "build_passed",
+      "impact": "safe_no_meaningful_size_reduction"
+    }
+  ],
+  "currentLargeAssets": [
+    {
+      "fileName": "vendor-BtYAkRhV.js",
+      "rawKb": 1959.5,
+      "gzipKb": 553.85,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "pages-4ojuxR1S.js",
+      "rawKb": 1100.44,
+      "gzipKb": 249.45,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "vendor-map-CPoydKcy.js",
+      "rawKb": 1011.59,
+      "gzipKb": 274.26,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "pages-CEreUFyW.css",
+      "rawKb": 831.75,
+      "gzipKb": 126.96,
+      "type": "css",
+      "isLarge": true,
+      "isVeryLarge": false
+    }
+  ],
+  "auditSummary": {
+    "viteConfigFilesFound": 1,
+    "manualChunksDetected": true,
+    "chunkWarningLimitDetected": true,
+    "vendorMapRuleDetected": true,
+    "pagesRuleDetected": true,
+    "sharedRuleDetected": true,
+    "currentLargeAssets": 4,
+    "mainVendorRawKb": 1959.5,
+    "pagesRawKb": 1100.44,
+    "vendorMapRawKb": 1011.59,
+    "pagesCssRawKb": 831.75
+  },
+  "viteAudits": [
+    {
+      "file": "vite.config.js",
+      "exists": true,
+      "summary": {
+        "totalHits": 15,
+        "manualChunkHits": 1,
+        "chunkWarningHits": 1,
+        "vendorMapHits": 2,
+        "vendorHits": 3,
+        "pagesHits": 5,
+        "sharedHits": 1
+      },
+      "hits": [
+        {
+          "term": "manualChunks",
+          "lineNumber": 60,
+          "line": "manualChunks(id) {",
+          "kind": "manual_chunks"
+        },
+        {
+          "term": "chunkSizeWarningLimit",
+          "lineNumber": 30,
+          "line": "chunkSizeWarningLimit: 700,",
+          "kind": "chunk_warning_limit"
+        },
+        {
+          "term": "vendor-map",
+          "lineNumber": 66,
+          "line": "if (id.includes(\"maplibre\")) return \"vendor-map\";",
+          "kind": "vendor_map_rule"
+        },
+        {
+          "term": "vendor-react",
+          "lineNumber": 65,
+          "line": "if (id.includes(\"react\")) return \"vendor-react\";",
+          "kind": "vendor_react_rule"
+        },
+        {
+          "term": "vendor",
+          "lineNumber": 65,
+          "line": "if (id.includes(\"react\")) return \"vendor-react\";",
+          "kind": "vendor_react_rule"
+        },
+        {
+          "term": "vendor",
+          "lineNumber": 66,
+          "line": "if (id.includes(\"maplibre\")) return \"vendor-map\";",
+          "kind": "vendor_map_rule"
+        },
+        {
+          "term": "vendor",
+          "lineNumber": 67,
+          "line": "return \"vendor\";",
+          "kind": "vendor_rule"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 74,
+          "line": "id.includes(\"/src/pages/ai/\") ||",
+          "kind": "pages_rule"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 85,
+          "line": "id.includes(\"/src/pages/lord/\") ||",
+          "kind": "pages_rule"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 86,
+          "line": "id.includes(\"/src/pages/lord-of-outcomes\") ||",
+          "kind": "pages_rule"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 96,
+          "line": "id.includes(\"/src/pages/\") &&",
+          "kind": "pages_rule"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 107,
+          "line": "if (id.includes(\"/src/pages/\")) return \"pages\";",
+          "kind": "pages_rule"
+        },
+        {
+          "term": "shared",
+          "lineNumber": 109,
+          "line": "if (id.includes(\"/src/shared/\")) return \"shared\";",
+          "kind": "shared_rule"
+        },
+        {
+          "term": "dashboards",
+          "lineNumber": 101,
+          "line": "return \"dashboards\";",
+          "kind": "reference"
+        },
+        {
+          "term": "components",
+          "lineNumber": 108,
+          "line": "if (id.includes(\"/src/components/\")) return \"components\";",
+          "kind": "reference"
+        }
+      ],
+      "manualChunkHits": [
+        {
+          "term": "manualChunks",
+          "lineNumber": 60,
+          "line": "manualChunks(id) {",
+          "kind": "manual_chunks"
+        }
+      ],
+      "chunkWarningHits": [
+        {
+          "term": "chunkSizeWarningLimit",
+          "lineNumber": 30,
+          "line": "chunkSizeWarningLimit: 700,",
+          "kind": "chunk_warning_limit"
+        }
+      ],
+      "vendorMapHits": [
+        {
+          "term": "vendor-map",
+          "lineNumber": 66,
+          "line": "if (id.includes(\"maplibre\")) return \"vendor-map\";",
+          "kind": "vendor_map_rule"
+        },
+        {
+          "term": "vendor",
+          "lineNumber": 66,
+          "line": "if (id.includes(\"maplibre\")) return \"vendor-map\";",
+          "kind": "vendor_map_rule"
+        }
+      ],
+      "vendorHits": [
+        {
+          "term": "vendor-react",
+          "lineNumber": 65,
+          "line": "if (id.includes(\"react\")) return \"vendor-react\";",
+          "kind": "vendor_react_rule"
+        },
+        {
+          "term": "vendor",
+          "lineNumber": 65,
+          "line": "if (id.includes(\"react\")) return \"vendor-react\";",
+          "kind": "vendor_react_rule"
+        },
+        {
+          "term": "vendor",
+          "lineNumber": 67,
+          "line": "return \"vendor\";",
+          "kind": "vendor_rule"
+        }
+      ],
+      "pagesHits": [
+        {
+          "term": "pages",
+          "lineNumber": 74,
+          "line": "id.includes(\"/src/pages/ai/\") ||",
+          "kind": "pages_rule"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 85,
+          "line": "id.includes(\"/src/pages/lord/\") ||",
+          "kind": "pages_rule"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 86,
+          "line": "id.includes(\"/src/pages/lord-of-outcomes\") ||",
+          "kind": "pages_rule"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 96,
+          "line": "id.includes(\"/src/pages/\") &&",
+          "kind": "pages_rule"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 107,
+          "line": "if (id.includes(\"/src/pages/\")) return \"pages\";",
+          "kind": "pages_rule"
+        }
+      ],
+      "sharedHits": [
+        {
+          "term": "shared",
+          "lineNumber": 109,
+          "line": "if (id.includes(\"/src/shared/\")) return \"shared\";",
+          "kind": "shared_rule"
+        }
+      ],
+      "nearbyManualChunksBlock": [
+        {
+          "lineNumber": 49,
+          "line": "        launch: path.resolve(__dirname, \"launch.html\"),"
+        },
+        {
+          "lineNumber": 50,
+          "line": "        ledger: path.resolve(__dirname, \"ledger.html\"),"
+        },
+        {
+          "lineNumber": 51,
+          "line": "        \"lord-of-outcomes\": path.resolve(__dirname, \"lord-of-outcomes.html\"),"
+        },
+        {
+          "lineNumber": 52,
+          "line": "        sales: path.resolve(__dirname, \"sales.html\"),"
+        },
+        {
+          "lineNumber": 53,
+          "line": "        solutions: path.resolve(__dirname, \"solutions.html\"),"
+        },
+        {
+          "lineNumber": 54,
+          "line": "        store: path.resolve(__dirname, \"store.html\"),"
+        },
+        {
+          "lineNumber": 55,
+          "line": "        treasury: path.resolve(__dirname, \"treasury.html\"),"
+        },
+        {
+          "lineNumber": 56,
+          "line": "        verifier: path.resolve(__dirname, \"verifier.html\"),"
+        },
+        {
+          "lineNumber": 57,
+          "line": "      },"
+        },
+        {
+          "lineNumber": 58,
+          "line": ""
+        },
+        {
+          "lineNumber": 59,
+          "line": "      output: {"
+        },
+        {
+          "lineNumber": 60,
+          "line": "        manualChunks(id) {"
+        },
+        {
+          "lineNumber": 61,
+          "line": "          // ---------------------------"
+        },
+        {
+          "lineNumber": 62,
+          "line": "          // Vendor chunking"
+        },
+        {
+          "lineNumber": 63,
+          "line": "          // ---------------------------"
+        },
+        {
+          "lineNumber": 64,
+          "line": "          if (id.includes(\"node_modules\")) {"
+        },
+        {
+          "lineNumber": 65,
+          "line": "            if (id.includes(\"react\")) return \"vendor-react\";"
+        },
+        {
+          "lineNumber": 66,
+          "line": "            if (id.includes(\"maplibre\")) return \"vendor-map\";"
+        },
+        {
+          "lineNumber": 67,
+          "line": "            return \"vendor\";"
+        },
+        {
+          "lineNumber": 68,
+          "line": "          }"
+        },
+        {
+          "lineNumber": 69,
+          "line": ""
+        },
+        {
+          "lineNumber": 70,
+          "line": "          // ---------------------------"
+        },
+        {
+          "lineNumber": 71,
+          "line": "          // AI-heavy routes & logic"
+        },
+        {
+          "lineNumber": 72,
+          "line": "          // ---------------------------"
+        },
+        {
+          "lineNumber": 73,
+          "line": "          if ("
+        },
+        {
+          "lineNumber": 74,
+          "line": "            id.includes(\"/src/pages/ai/\") ||"
+        },
+        {
+          "lineNumber": 75,
+          "line": "            id.includes(\"/src/entries/ai\") ||"
+        },
+        {
+          "lineNumber": 76,
+          "line": "            id.includes(\"/src/ai/\")"
+        },
+        {
+          "lineNumber": 77,
+          "line": "          ) {"
+        },
+        {
+          "lineNumber": 78,
+          "line": "            return \"ai\";"
+        },
+        {
+          "lineNumber": 79,
+          "line": "          }"
+        },
+        {
+          "lineNumber": 80,
+          "line": ""
+        },
+        {
+          "lineNumber": 81,
+          "line": "          // ---------------------------"
+        },
+        {
+          "lineNumber": 82,
+          "line": "          // Lord of Outcomes (LOO)"
+        },
+        {
+          "lineNumber": 83,
+          "line": "          // ---------------------------"
+        },
+        {
+          "lineNumber": 84,
+          "line": "          if ("
+        },
+        {
+          "lineNumber": 85,
+          "line": "            id.includes(\"/src/pages/lord/\") ||"
+        },
+        {
+          "lineNumber": 86,
+          "line": "            id.includes(\"/src/pages/lord-of-outcomes\") ||"
+        },
+        {
+          "lineNumber": 87,
+          "line": "            id.includes(\"/src/loo/\")"
+        },
+        {
+          "lineNumber": 88,
+          "line": "          ) {"
+        },
+        {
+          "lineNumber": 89,
+          "line": "            return \"loo\";"
+        },
+        {
+          "lineNumber": 90,
+          "line": "          }"
+        },
+        {
+          "lineNumber": 91,
+          "line": ""
+        },
+        {
+          "lineNumber": 92,
+          "line": "          // ---------------------------"
+        },
+        {
+          "lineNumber": 93,
+          "line": "          // Dashboards & analytics views"
+        },
+        {
+          "lineNumber": 94,
+          "line": "          // ---------------------------"
+        },
+        {
+          "lineNumber": 95,
+          "line": "          if ("
+        },
+        {
+          "lineNumber": 96,
+          "line": "            id.includes(\"/src/pages/\") &&"
+        },
+        {
+          "lineNumber": 97,
+          "line": "            (id.includes(\"Dashboard\") ||"
+        },
+        {
+          "lineNumber": 98,
+          "line": "              id.includes(\"Reports\") ||"
+        },
+        {
+          "lineNumber": 99,
+          "line": "              id.includes(\"Analytics\"))"
+        },
+        {
+          "lineNumber": 100,
+          "line": "          ) {"
+        },
+        {
+          "lineNumber": 101,
+          "line": "            return \"dashboards\";"
+        },
+        {
+          "lineNumber": 102,
+          "line": "          }"
+        },
+        {
+          "lineNumber": 103,
+          "line": ""
+        },
+        {
+          "lineNumber": 104,
+          "line": "          // ---------------------------"
+        },
+        {
+          "lineNumber": 105,
+          "line": "          // Core app structure splits"
+        },
+        {
+          "lineNumber": 106,
+          "line": "          // ---------------------------"
+        },
+        {
+          "lineNumber": 107,
+          "line": "          if (id.includes(\"/src/pages/\")) return \"pages\";"
+        },
+        {
+          "lineNumber": 108,
+          "line": "          if (id.includes(\"/src/components/\")) return \"components\";"
+        },
+        {
+          "lineNumber": 109,
+          "line": "          if (id.includes(\"/src/shared/\")) return \"shared\";"
+        },
+        {
+          "lineNumber": 110,
+          "line": "          if (id.includes(\"/src/content/\")) return \"content\";"
+        },
+        {
+          "lineNumber": 111,
+          "line": ""
+        },
+        {
+          "lineNumber": 112,
+          "line": "          // everything else: let Rollup decide"
+        },
+        {
+          "lineNumber": 113,
+          "line": "        },"
+        },
+        {
+          "lineNumber": 114,
+          "line": "      },"
+        },
+        {
+          "lineNumber": 115,
+          "line": "    },"
+        },
+        {
+          "lineNumber": 116,
+          "line": "  },"
+        },
+        {
+          "lineNumber": 117,
+          "line": "});"
+        },
+        {
+          "lineNumber": 118,
+          "line": ""
+        }
+      ]
+    }
+  ],
+  "riskFindings": [
+    {
+      "id": "manual_chunks_detected",
+      "status": "detected",
+      "risk": "medium",
+      "interpretation": "Vite/Rollup manualChunks rules exist and may be forcing large shared groups."
+    },
+    {
+      "id": "vendor_map_grouping",
+      "status": "detected",
+      "risk": "medium",
+      "interpretation": "Map libraries appear to be explicitly grouped, which can keep vendor-map large even after source lazy boundaries."
+    },
+    {
+      "id": "pages_grouping",
+      "status": "detected",
+      "risk": "medium",
+      "interpretation": "Page modules may be grouped into a large pages chunk, limiting route-level lazy improvement."
+    },
+    {
+      "id": "shared_grouping",
+      "status": "detected",
+      "risk": "medium",
+      "interpretation": "Shared modules may be grouped broadly; review if shared chunk is pulling route-specific code."
+    },
+    {
+      "id": "warning_limit_config",
+      "status": "detected",
+      "risk": "low",
+      "interpretation": "A chunkSizeWarningLimit setting exists. Raising it would hide warnings but not optimize performance."
+    }
+  ],
+  "recommendedChunkStrategy": [
+    {
+      "step": 1,
+      "label": "Do not raise warning limit yet",
+      "action": "Keep the warning visible while real optimization is underway.",
+      "reason": "Raising chunkSizeWarningLimit hides the signal instead of improving performance."
+    },
+    {
+      "step": 2,
+      "label": "Split vendor into narrower stable buckets",
+      "action": "Separate React core, map libraries, chart/visualization libraries, export/PDF libraries, and general vendor packages.",
+      "reason": "The main vendor chunk is nearly 2 MB raw and is likely carrying unrelated dependencies together."
+    },
+    {
+      "step": 3,
+      "label": "Keep map libraries isolated",
+      "action": "Keep mapbox-gl/maplibre-gl in vendor-map, but ensure only map routes preload it.",
+      "reason": "vendor-map remains about 1 MB raw after source-level lazy boundaries."
+    },
+    {
+      "step": 4,
+      "label": "Avoid one giant pages chunk",
+      "action": "Review any rule that groups all src/pages into a single pages chunk.",
+      "reason": "The pages JS chunk remains above 1.1 MB raw and did not improve after route lazy patches."
+    },
+    {
+      "step": 5,
+      "label": "Patch manualChunks in one controlled pass",
+      "action": "Create a measured manualChunks strategy patch, then build and compare.",
+      "reason": "Manual chunk changes can affect caching and load order, so they must be measured carefully."
+    }
+  ],
+  "likelyPatchTargets": [
+    {
+      "priority": 1,
+      "file": "vite.config.js",
+      "target": "manualChunks",
+      "proposedPatch": "Replace broad vendor/pages grouping with more focused chunks: vendor-react, vendor-map, vendor-charts, vendor-ui, vendor-export, shared, and smaller route chunks.",
+      "risk": "medium",
+      "reason": "Multiple source-level lazy patches are build-safe but the chunk sizes are not moving. Chunk grouping is now the likely bottleneck."
+    },
+    {
+      "priority": 2,
+      "file": "src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+      "target": "mapbox-gl",
+      "proposedPatch": "Convert core Mapbox static imports to dynamic imports only after manualChunks behavior is understood.",
+      "risk": "medium_high_core_map",
+      "reason": "This directly touches the core map internals and should remain second choice."
+    }
+  ],
+  "recommendedDecision": "Patch manualChunks next in one controlled measured pass. Do not raise chunkSizeWarningLimit as the solution, and do not touch core map internals until after manualChunks is measured.",
+  "nextPatchRecommendation": {
+    "id": "post_v1_bundle_patch_15_manual_chunks_strategy_patch",
+    "label": "ManualChunks Strategy Patch",
+    "goal": "Adjust Vite manualChunks grouping to reduce oversized vendor/pages chunks while keeping map, React, charts, UI, export, shared, and page code separated more cleanly."
+  }
+}

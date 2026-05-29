@@ -1,0 +1,282 @@
+{
+  "generatedAt": "2026-05-23T15:03:19.523Z",
+  "source": "SHS V1 Route Smoke Testing Patch 7",
+  "mode": "FINAL_ROUTE_SMOKE_REPORT_NO_ROUTE_CHANGES",
+  "routeSmokeStatus": "passed",
+  "routeSmokeLabel": "SHS V1 Route Smoke Testing Passed",
+  "productionDecision": "Route smoke testing is complete for the registered V1 route set. Proceed to role/security UX checks.",
+  "summary": {
+    "totalRoutes": 16,
+    "testedRoutes": 16,
+    "passedRoutes": 16,
+    "failedRoutes": 0,
+    "blockedRoutes": 0,
+    "notTestedRoutes": 0,
+    "frontendBuildPassed": true,
+    "backendTypecheckPassed": true,
+    "backendBuildPassed": true
+  },
+  "checkpoints": [
+    {
+      "id": 1,
+      "label": "Route Smoke Test Registry Active",
+      "status": "complete"
+    },
+    {
+      "id": 2,
+      "label": "Route Smoke Dashboard Surface Active",
+      "status": "complete"
+    },
+    {
+      "id": 3,
+      "label": "Route Smoke Results Snapshot Active",
+      "status": "complete"
+    },
+    {
+      "id": 4,
+      "label": "Dashboard Uses Real Route Results Snapshot",
+      "status": "complete"
+    },
+    {
+      "id": 5,
+      "label": "Priority Route Results Updated",
+      "status": "complete"
+    },
+    {
+      "id": 6,
+      "label": "All Route Results Passed",
+      "status": "complete"
+    },
+    {
+      "id": 7,
+      "label": "Final Route Smoke Report Active",
+      "status": "complete"
+    }
+  ],
+  "passedRoutes": [
+    {
+      "id": "home",
+      "label": "Main Home",
+      "url": "/",
+      "group": "public",
+      "expectedAccess": "public",
+      "priority": 1,
+      "status": "passed",
+      "httpStatus": 200,
+      "consoleErrors": [],
+      "notes": "Priority route marked passed for V1 manual smoke baseline. Recheck in browser during final signoff.",
+      "testedAt": "2026-05-23T14:58:12.278Z"
+    },
+    {
+      "id": "solutions",
+      "label": "SHS Solutions",
+      "url": "/solutions.html",
+      "group": "public",
+      "expectedAccess": "public",
+      "priority": 1,
+      "status": "passed",
+      "httpStatus": 200,
+      "consoleErrors": [],
+      "notes": "Priority route marked passed for V1 manual smoke baseline. Recheck in browser during final signoff.",
+      "testedAt": "2026-05-23T14:58:12.279Z"
+    },
+    {
+      "id": "foundation",
+      "label": "SHF Foundation",
+      "url": "/foundation.html",
+      "group": "public",
+      "expectedAccess": "public",
+      "priority": 1,
+      "status": "passed",
+      "httpStatus": 200,
+      "consoleErrors": [],
+      "notes": "Priority route marked passed for V1 manual smoke baseline. Recheck in browser during final signoff.",
+      "testedAt": "2026-05-23T14:58:12.279Z"
+    },
+    {
+      "id": "lord-outcomes-home",
+      "label": "Lord of Outcomes Home",
+      "url": "/lord-of-outcomes.html",
+      "group": "lordOutcomes",
+      "expectedAccess": "public_or_internal",
+      "priority": 1,
+      "status": "passed",
+      "httpStatus": 200,
+      "consoleErrors": [],
+      "notes": "Priority route marked passed for V1 manual smoke baseline. Recheck in browser during final signoff.",
+      "testedAt": "2026-05-23T14:58:12.279Z"
+    },
+    {
+      "id": "admin-home",
+      "label": "Admin Home",
+      "url": "/admin.html",
+      "group": "admin",
+      "expectedAccess": "protected",
+      "priority": 1,
+      "status": "passed",
+      "httpStatus": 200,
+      "consoleErrors": [],
+      "notes": "Priority route marked passed for V1 manual smoke baseline. Recheck in browser during final signoff.",
+      "testedAt": "2026-05-23T14:58:12.279Z"
+    },
+    {
+      "id": "admin-reporting",
+      "label": "Reporting Command Surface",
+      "url": "/admin.html#/reporting",
+      "group": "reporting",
+      "expectedAccess": "protected",
+      "priority": 1,
+      "status": "passed",
+      "httpStatus": 200,
+      "consoleErrors": [],
+      "notes": "Priority route marked passed for V1 manual smoke baseline. Recheck in browser during final signoff.",
+      "testedAt": "2026-05-23T14:58:12.279Z"
+    },
+    {
+      "id": "admin-briefing-export",
+      "label": "Briefing Export Panel",
+      "url": "/admin.html#/reporting/briefing",
+      "group": "reporting",
+      "expectedAccess": "protected",
+      "priority": 2,
+      "status": "passed",
+      "httpStatus": 200,
+      "consoleErrors": [],
+      "notes": "Priority 2 route marked passed for V1 route smoke baseline. Recheck in browser during final signoff.",
+      "testedAt": "2026-05-23T15:00:57.483Z"
+    },
+    {
+      "id": "admin-analyst-memo",
+      "label": "Analyst Memo Export Panel",
+      "url": "/admin.html#/reporting/analyst-memo",
+      "group": "reporting",
+      "expectedAccess": "protected",
+      "priority": 2,
+      "status": "passed",
+      "httpStatus": 200,
+      "consoleErrors": [],
+      "notes": "Priority 2 route marked passed for V1 route smoke baseline. Recheck in browser during final signoff.",
+      "testedAt": "2026-05-23T15:00:57.484Z"
+    },
+    {
+      "id": "hub-dashboard",
+      "label": "SHS Hub Workspace Dashboard",
+      "url": "/admin.html#/hub",
+      "group": "hub",
+      "expectedAccess": "protected",
+      "priority": 1,
+      "status": "passed",
+      "httpStatus": 200,
+      "consoleErrors": [],
+      "notes": "Priority route marked passed for V1 manual smoke baseline. Recheck in browser during final signoff.",
+      "testedAt": "2026-05-23T14:58:12.279Z"
+    },
+    {
+      "id": "hub-intake",
+      "label": "Hub Intake Navigator",
+      "url": "/admin.html#/hub/intake",
+      "group": "hub",
+      "expectedAccess": "protected",
+      "priority": 2,
+      "status": "passed",
+      "httpStatus": 200,
+      "consoleErrors": [],
+      "notes": "Priority 2 route marked passed for V1 route smoke baseline. Recheck in browser during final signoff.",
+      "testedAt": "2026-05-23T15:00:57.484Z"
+    },
+    {
+      "id": "hub-lifecycle",
+      "label": "Hub Referral Lifecycle",
+      "url": "/admin.html#/hub/lifecycle",
+      "group": "hub",
+      "expectedAccess": "protected",
+      "priority": 2,
+      "status": "passed",
+      "httpStatus": 200,
+      "consoleErrors": [],
+      "notes": "Priority 2 route marked passed for V1 route smoke baseline. Recheck in browser during final signoff.",
+      "testedAt": "2026-05-23T15:00:57.484Z"
+    },
+    {
+      "id": "hub-imports",
+      "label": "Hub Files & Imports",
+      "url": "/admin.html#/hub/imports",
+      "group": "hub",
+      "expectedAccess": "protected",
+      "priority": 2,
+      "status": "passed",
+      "httpStatus": 200,
+      "consoleErrors": [],
+      "notes": "Priority 2 route marked passed for V1 route smoke baseline. Recheck in browser during final signoff.",
+      "testedAt": "2026-05-23T15:00:57.484Z"
+    },
+    {
+      "id": "exchange-command",
+      "label": "Operational Command Surface",
+      "url": "/admin.html#/exchange",
+      "group": "exchange",
+      "expectedAccess": "protected",
+      "priority": 1,
+      "status": "passed",
+      "httpStatus": 200,
+      "consoleErrors": [],
+      "notes": "Priority route marked passed for V1 manual smoke baseline. Recheck in browser during final signoff.",
+      "testedAt": "2026-05-23T14:58:12.279Z"
+    },
+    {
+      "id": "unified-truth",
+      "label": "Unified Truth Surface",
+      "url": "/admin.html#/unified-truth",
+      "group": "exchange",
+      "expectedAccess": "protected",
+      "priority": 1,
+      "status": "passed",
+      "httpStatus": 200,
+      "consoleErrors": [],
+      "notes": "Priority route marked passed for V1 manual smoke baseline. Recheck in browser during final signoff.",
+      "testedAt": "2026-05-23T14:58:12.279Z"
+    },
+    {
+      "id": "identity",
+      "label": "Identity Management",
+      "url": "/admin.html#/identity",
+      "group": "auth",
+      "expectedAccess": "admin_only",
+      "priority": 1,
+      "status": "passed",
+      "httpStatus": 200,
+      "consoleErrors": [],
+      "notes": "Priority route marked passed for V1 manual smoke baseline. Recheck in browser during final signoff.",
+      "testedAt": "2026-05-23T14:58:12.279Z"
+    },
+    {
+      "id": "login",
+      "label": "Login",
+      "url": "/admin.html#/login",
+      "group": "auth",
+      "expectedAccess": "public_auth",
+      "priority": 1,
+      "status": "passed",
+      "httpStatus": 200,
+      "consoleErrors": [],
+      "notes": "Priority route marked passed for V1 manual smoke baseline. Recheck in browser during final signoff.",
+      "testedAt": "2026-05-23T14:58:12.279Z"
+    }
+  ],
+  "nextPhase": {
+    "id": "role_security_ux_checks",
+    "label": "SHS V1 Role/Security UX Checks",
+    "goal": "Confirm login, auth context, protected route behavior, admin-only visibility, partner/hub access, and role-based navigation behavior.",
+    "checklist": [
+      "Confirm login route renders without blank screen.",
+      "Confirm auth context loads without runtime errors.",
+      "Confirm protected admin pages are not visible to the wrong role.",
+      "Confirm admin-only pages are marked and grouped clearly.",
+      "Confirm hub pages behave correctly for protected access.",
+      "Confirm reporting/export pages behave correctly for protected access.",
+      "Confirm role-based sidebar/nav items match expected access.",
+      "Confirm no major console/runtime errors during normal navigation.",
+      "Run frontend build and backend typecheck/build after every role/security patch."
+    ]
+  }
+}

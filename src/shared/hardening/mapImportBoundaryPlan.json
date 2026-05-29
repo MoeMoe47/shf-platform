@@ -1,0 +1,1568 @@
+{
+  "generatedAt": "2026-05-23T16:18:20.930Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 3",
+  "mode": "MAP_IMPORT_BOUNDARY_PLAN_NO_CODE_CHANGES",
+  "mapBoundaryStatus": "plan_ready",
+  "mapBoundaryLabel": "Map Import Boundary Plan Ready",
+  "productionDecision": "No code was changed. The plan separates real JS map imports from CSS-only selectors so the first optimization patch can be surgical and safer.",
+  "bundleContext": {
+    "largeMapAsset": {
+      "fileName": "vendor-map-CPoydKcy.js",
+      "rawKb": 1011.59,
+      "gzipKb": 274.26,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true,
+      "bucket": "map_vendor",
+      "recommendation": "Move map-heavy libraries behind route-level lazy loading where possible.",
+      "priority": 1
+    },
+    "bundleWarningDetected": true,
+    "frontendBuildPassed": true
+  },
+  "summary": {
+    "totalMapFindings": 37,
+    "realCodeMapImports": 3,
+    "staticMapImports": 2,
+    "dynamicMapImports": 1,
+    "mixedMapImports": 0,
+    "cssOnlyMapSelectors": 34,
+    "mapRouteCandidates": 3,
+    "safeFirstTouchCandidates": 2,
+    "doNotTouchYet": 44
+  },
+  "realCodeMapImports": [
+    {
+      "auditId": "maplibre_gl",
+      "auditLabel": "MapLibre GL",
+      "file": "src/components/ai-compass/MapHero.jsx",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "splitRecommendation": "Lazy-load MapLibre/map surfaces only on routes that need map rendering.",
+      "patternHits": [
+        {
+          "pattern": "maplibre-gl",
+          "matches": [
+            {
+              "lineNumber": 19,
+              "line": "await import(\"maplibre-gl/dist/maplibre-gl.css\");"
+            },
+            {
+              "lineNumber": 22,
+              "line": "const mod = await import(\"maplibre-gl\");"
+            }
+          ],
+          "matchCount": 2
+        },
+        {
+          "pattern": "maplibregl",
+          "matches": [
+            {
+              "lineNumber": 23,
+              "line": "const maplibregl = mod?.default || mod;"
+            },
+            {
+              "lineNumber": 27,
+              "line": "map = new maplibregl.Map({"
+            },
+            {
+              "lineNumber": 36,
+              "line": "new maplibregl.NavigationControl({ visualizePitch: false }),"
+            }
+          ],
+          "matchCount": 3
+        }
+      ],
+      "staticImport": false,
+      "dynamicImport": true,
+      "matches": [
+        {
+          "pattern": "maplibre-gl",
+          "lineNumber": 19,
+          "line": "await import(\"maplibre-gl/dist/maplibre-gl.css\");"
+        },
+        {
+          "pattern": "maplibre-gl",
+          "lineNumber": 22,
+          "line": "const mod = await import(\"maplibre-gl\");"
+        },
+        {
+          "pattern": "maplibregl",
+          "lineNumber": 23,
+          "line": "const maplibregl = mod?.default || mod;"
+        },
+        {
+          "pattern": "maplibregl",
+          "lineNumber": 27,
+          "line": "map = new maplibregl.Map({"
+        },
+        {
+          "pattern": "maplibregl",
+          "lineNumber": 36,
+          "line": "new maplibregl.NavigationControl({ visualizePitch: false }),"
+        }
+      ]
+    },
+    {
+      "auditId": "maplibre_gl",
+      "auditLabel": "MapLibre GL",
+      "file": "src/components/globe/OperationalMap.jsx",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "splitRecommendation": "Lazy-load MapLibre/map surfaces only on routes that need map rendering.",
+      "patternHits": [
+        {
+          "pattern": "maplibre-gl",
+          "matches": [
+            {
+              "lineNumber": 2,
+              "line": "import maplibregl from \"maplibre-gl\";"
+            },
+            {
+              "lineNumber": 3,
+              "line": "import \"maplibre-gl/dist/maplibre-gl.css\";"
+            }
+          ],
+          "matchCount": 2
+        },
+        {
+          "pattern": "maplibregl",
+          "matches": [
+            {
+              "lineNumber": 2,
+              "line": "import maplibregl from \"maplibre-gl\";"
+            },
+            {
+              "lineNumber": 87,
+              "line": "const map = new maplibregl.Map({"
+            },
+            {
+              "lineNumber": 265,
+              "line": "const bounds = new maplibregl.LngLatBounds();"
+            }
+          ],
+          "matchCount": 3
+        }
+      ],
+      "staticImport": true,
+      "dynamicImport": false,
+      "matches": [
+        {
+          "pattern": "maplibre-gl",
+          "lineNumber": 2,
+          "line": "import maplibregl from \"maplibre-gl\";"
+        },
+        {
+          "pattern": "maplibre-gl",
+          "lineNumber": 3,
+          "line": "import \"maplibre-gl/dist/maplibre-gl.css\";"
+        },
+        {
+          "pattern": "maplibregl",
+          "lineNumber": 2,
+          "line": "import maplibregl from \"maplibre-gl\";"
+        },
+        {
+          "pattern": "maplibregl",
+          "lineNumber": 87,
+          "line": "const map = new maplibregl.Map({"
+        },
+        {
+          "pattern": "maplibregl",
+          "lineNumber": 265,
+          "line": "const bounds = new maplibregl.LngLatBounds();"
+        }
+      ]
+    },
+    {
+      "auditId": "mapbox_gl",
+      "auditLabel": "Mapbox GL",
+      "file": "src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "splitRecommendation": "Lazy-load Mapbox/map surfaces only on routes that need live maps.",
+      "patternHits": [
+        {
+          "pattern": "mapbox-gl",
+          "matches": [
+            {
+              "lineNumber": 2,
+              "line": "import mapboxgl from \"mapbox-gl\";"
+            },
+            {
+              "lineNumber": 3,
+              "line": "import \"mapbox-gl/dist/mapbox-gl.css\";"
+            }
+          ],
+          "matchCount": 2
+        },
+        {
+          "pattern": "mapboxgl",
+          "matches": [
+            {
+              "lineNumber": 2,
+              "line": "import mapboxgl from \"mapbox-gl\";"
+            },
+            {
+              "lineNumber": 1716,
+              "line": "mapboxgl.accessToken = MAPBOX_TOKEN;"
+            },
+            {
+              "lineNumber": 1720,
+              "line": "mapRef.current = new mapboxgl.Map({"
+            },
+            {
+              "lineNumber": 1732,
+              "line": "new mapboxgl.NavigationControl({"
+            },
+            {
+              "lineNumber": 1813,
+              "line": "const marker = new mapboxgl.Marker({"
+            }
+          ],
+          "matchCount": 5
+        }
+      ],
+      "staticImport": true,
+      "dynamicImport": false,
+      "matches": [
+        {
+          "pattern": "mapbox-gl",
+          "lineNumber": 2,
+          "line": "import mapboxgl from \"mapbox-gl\";"
+        },
+        {
+          "pattern": "mapbox-gl",
+          "lineNumber": 3,
+          "line": "import \"mapbox-gl/dist/mapbox-gl.css\";"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 2,
+          "line": "import mapboxgl from \"mapbox-gl\";"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 1716,
+          "line": "mapboxgl.accessToken = MAPBOX_TOKEN;"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 1720,
+          "line": "mapRef.current = new mapboxgl.Map({"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 1732,
+          "line": "new mapboxgl.NavigationControl({"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 1813,
+          "line": "const marker = new mapboxgl.Marker({"
+        }
+      ]
+    }
+  ],
+  "staticMapImports": [
+    {
+      "auditId": "maplibre_gl",
+      "auditLabel": "MapLibre GL",
+      "file": "src/components/globe/OperationalMap.jsx",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "splitRecommendation": "Lazy-load MapLibre/map surfaces only on routes that need map rendering.",
+      "patternHits": [
+        {
+          "pattern": "maplibre-gl",
+          "matches": [
+            {
+              "lineNumber": 2,
+              "line": "import maplibregl from \"maplibre-gl\";"
+            },
+            {
+              "lineNumber": 3,
+              "line": "import \"maplibre-gl/dist/maplibre-gl.css\";"
+            }
+          ],
+          "matchCount": 2
+        },
+        {
+          "pattern": "maplibregl",
+          "matches": [
+            {
+              "lineNumber": 2,
+              "line": "import maplibregl from \"maplibre-gl\";"
+            },
+            {
+              "lineNumber": 87,
+              "line": "const map = new maplibregl.Map({"
+            },
+            {
+              "lineNumber": 265,
+              "line": "const bounds = new maplibregl.LngLatBounds();"
+            }
+          ],
+          "matchCount": 3
+        }
+      ],
+      "staticImport": true,
+      "dynamicImport": false,
+      "matches": [
+        {
+          "pattern": "maplibre-gl",
+          "lineNumber": 2,
+          "line": "import maplibregl from \"maplibre-gl\";"
+        },
+        {
+          "pattern": "maplibre-gl",
+          "lineNumber": 3,
+          "line": "import \"maplibre-gl/dist/maplibre-gl.css\";"
+        },
+        {
+          "pattern": "maplibregl",
+          "lineNumber": 2,
+          "line": "import maplibregl from \"maplibre-gl\";"
+        },
+        {
+          "pattern": "maplibregl",
+          "lineNumber": 87,
+          "line": "const map = new maplibregl.Map({"
+        },
+        {
+          "pattern": "maplibregl",
+          "lineNumber": 265,
+          "line": "const bounds = new maplibregl.LngLatBounds();"
+        }
+      ]
+    },
+    {
+      "auditId": "mapbox_gl",
+      "auditLabel": "Mapbox GL",
+      "file": "src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "splitRecommendation": "Lazy-load Mapbox/map surfaces only on routes that need live maps.",
+      "patternHits": [
+        {
+          "pattern": "mapbox-gl",
+          "matches": [
+            {
+              "lineNumber": 2,
+              "line": "import mapboxgl from \"mapbox-gl\";"
+            },
+            {
+              "lineNumber": 3,
+              "line": "import \"mapbox-gl/dist/mapbox-gl.css\";"
+            }
+          ],
+          "matchCount": 2
+        },
+        {
+          "pattern": "mapboxgl",
+          "matches": [
+            {
+              "lineNumber": 2,
+              "line": "import mapboxgl from \"mapbox-gl\";"
+            },
+            {
+              "lineNumber": 1716,
+              "line": "mapboxgl.accessToken = MAPBOX_TOKEN;"
+            },
+            {
+              "lineNumber": 1720,
+              "line": "mapRef.current = new mapboxgl.Map({"
+            },
+            {
+              "lineNumber": 1732,
+              "line": "new mapboxgl.NavigationControl({"
+            },
+            {
+              "lineNumber": 1813,
+              "line": "const marker = new mapboxgl.Marker({"
+            }
+          ],
+          "matchCount": 5
+        }
+      ],
+      "staticImport": true,
+      "dynamicImport": false,
+      "matches": [
+        {
+          "pattern": "mapbox-gl",
+          "lineNumber": 2,
+          "line": "import mapboxgl from \"mapbox-gl\";"
+        },
+        {
+          "pattern": "mapbox-gl",
+          "lineNumber": 3,
+          "line": "import \"mapbox-gl/dist/mapbox-gl.css\";"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 2,
+          "line": "import mapboxgl from \"mapbox-gl\";"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 1716,
+          "line": "mapboxgl.accessToken = MAPBOX_TOKEN;"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 1720,
+          "line": "mapRef.current = new mapboxgl.Map({"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 1732,
+          "line": "new mapboxgl.NavigationControl({"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 1813,
+          "line": "const marker = new mapboxgl.Marker({"
+        }
+      ]
+    }
+  ],
+  "dynamicMapImports": [
+    {
+      "auditId": "maplibre_gl",
+      "auditLabel": "MapLibre GL",
+      "file": "src/components/ai-compass/MapHero.jsx",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "splitRecommendation": "Lazy-load MapLibre/map surfaces only on routes that need map rendering.",
+      "patternHits": [
+        {
+          "pattern": "maplibre-gl",
+          "matches": [
+            {
+              "lineNumber": 19,
+              "line": "await import(\"maplibre-gl/dist/maplibre-gl.css\");"
+            },
+            {
+              "lineNumber": 22,
+              "line": "const mod = await import(\"maplibre-gl\");"
+            }
+          ],
+          "matchCount": 2
+        },
+        {
+          "pattern": "maplibregl",
+          "matches": [
+            {
+              "lineNumber": 23,
+              "line": "const maplibregl = mod?.default || mod;"
+            },
+            {
+              "lineNumber": 27,
+              "line": "map = new maplibregl.Map({"
+            },
+            {
+              "lineNumber": 36,
+              "line": "new maplibregl.NavigationControl({ visualizePitch: false }),"
+            }
+          ],
+          "matchCount": 3
+        }
+      ],
+      "staticImport": false,
+      "dynamicImport": true,
+      "matches": [
+        {
+          "pattern": "maplibre-gl",
+          "lineNumber": 19,
+          "line": "await import(\"maplibre-gl/dist/maplibre-gl.css\");"
+        },
+        {
+          "pattern": "maplibre-gl",
+          "lineNumber": 22,
+          "line": "const mod = await import(\"maplibre-gl\");"
+        },
+        {
+          "pattern": "maplibregl",
+          "lineNumber": 23,
+          "line": "const maplibregl = mod?.default || mod;"
+        },
+        {
+          "pattern": "maplibregl",
+          "lineNumber": 27,
+          "line": "map = new maplibregl.Map({"
+        },
+        {
+          "pattern": "maplibregl",
+          "lineNumber": 36,
+          "line": "new maplibregl.NavigationControl({ visualizePitch: false }),"
+        }
+      ]
+    }
+  ],
+  "mixedMapImports": [],
+  "cssOnlyMapSelectors": [
+    {
+      "file": "src/components/maps/ohio-map.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 774,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 775,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/components/maps/shf-ohio-map.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 257,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 258,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/pages/exchange/command-center/background-system.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 257,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 258,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/pages/exchange/command-surface/shs-command-surface.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 5663,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 5664,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/pages/exchange/exchange-controls-polish.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 136,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 137,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/pages/exchange/exchange-focus-framing.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 94,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 95,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/pages/exchange/globe-polish.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 110,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 111,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/pages/exchange/unified-truth/SHSUnifiedTruthShell.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 2631,
+          "line": ".shs-mapbox-canvas .mapboxgl-canvas {"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 2860,
+          "line": ".shs-mapbox-canvas .mapboxgl-map,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 2861,
+          "line": ".shs-mapbox-canvas .mapboxgl-canvas-container,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 3044,
+          "line": ".shs-mapbox-canvas .mapboxgl-map,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 3045,
+          "line": ".shs-mapbox-canvas .mapboxgl-canvas-container,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 3246,
+          "line": ".shs-mapbox-canvas .mapboxgl-map,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 3343,
+          "line": ".shs-mapbox-stage .mapboxgl-ctrl-group {"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 3349,
+          "line": ".shs-mapbox-stage .mapboxgl-ctrl button {"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 3668,
+          "line": ".shs-mapbox-canvas .mapboxgl-map,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 4473,
+          "line": ".shs-mapbox-stage .mapboxgl-canvas {"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 5072,
+          "line": ".shs-mapbox-canvas .mapboxgl-map,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 5593,
+          "line": ".shs-mapbox-cinematic--state .mapboxgl-canvas,"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/pages/exchange/unified-truth/shs-unified-truth-shell.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 2631,
+          "line": ".shs-mapbox-canvas .mapboxgl-canvas {"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 2860,
+          "line": ".shs-mapbox-canvas .mapboxgl-map,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 2861,
+          "line": ".shs-mapbox-canvas .mapboxgl-canvas-container,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 3044,
+          "line": ".shs-mapbox-canvas .mapboxgl-map,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 3045,
+          "line": ".shs-mapbox-canvas .mapboxgl-canvas-container,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 3246,
+          "line": ".shs-mapbox-canvas .mapboxgl-map,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 3343,
+          "line": ".shs-mapbox-stage .mapboxgl-ctrl-group {"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 3349,
+          "line": ".shs-mapbox-stage .mapboxgl-ctrl button {"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 3668,
+          "line": ".shs-mapbox-canvas .mapboxgl-map,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 4473,
+          "line": ".shs-mapbox-stage .mapboxgl-canvas {"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 5072,
+          "line": ".shs-mapbox-canvas .mapboxgl-map,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 5593,
+          "line": ".shs-mapbox-cinematic--state .mapboxgl-canvas,"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/pages/exchange/workspace-dashboard/shs-workspace-dashboard.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 4667,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 4668,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/FocusMode.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 55,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 56,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.deepSpace.patch.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 144,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 145,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.dym.afterLocked.patch.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 69,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 70,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.dym.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 938,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 939,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.dym.patch.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 180,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 181,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.dym.pattern.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 92,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 93,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.header.mock.locked.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 258,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 259,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.ref.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 139,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 140,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.space.mock.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 234,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 235,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.theme.mock.cinematic.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 1024,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 1025,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.theme.mock.locked.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 91,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 92,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/admin.reports.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 43,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 44,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/arcade.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 1009,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 1010,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/catalog.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 218,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 219,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/global.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 320,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 321,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/growth-observatory.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 421,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 422,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/growth-observatory.dopamine.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 58,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 59,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/lesson-soft.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 87,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 88,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/loo.mock.space.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 189,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 190,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/sales-shell.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 206,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 207,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/tesla-apple.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 278,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 279,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/theme-shf.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 73,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 74,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/unified-shell.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 199,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 200,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    },
+    {
+      "file": "src/styles/util-wash.css",
+      "auditLabel": "Mapbox GL",
+      "likelyChunk": "vendor-map",
+      "priority": 1,
+      "matches": [
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 221,
+          "line": ".shs-map-layer-state .mapboxgl-canvas,"
+        },
+        {
+          "pattern": "mapboxgl",
+          "lineNumber": 222,
+          "line": ".shs-map-state .mapboxgl-canvas {"
+        }
+      ],
+      "classification": "css_only_selector",
+      "recommendation": "Do not treat CSS selectors as map library imports. Review later under CSS bundle optimization."
+    }
+  ],
+  "mapRouteCandidates": [
+    {
+      "file": "src/components/ai-compass/MapHero.jsx",
+      "staticImport": false,
+      "dynamicImport": true,
+      "auditLabel": "MapLibre GL",
+      "recommendation": "Already uses dynamic import or needs manual review."
+    },
+    {
+      "file": "src/components/globe/OperationalMap.jsx",
+      "staticImport": true,
+      "dynamicImport": false,
+      "auditLabel": "MapLibre GL",
+      "recommendation": "Candidate for lazy boundary or dynamic map import wrapper."
+    },
+    {
+      "file": "src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+      "staticImport": true,
+      "dynamicImport": false,
+      "auditLabel": "Mapbox GL",
+      "recommendation": "Candidate for lazy boundary or dynamic map import wrapper."
+    }
+  ],
+  "safeFirstTouchCandidates": [
+    {
+      "file": "src/components/globe/OperationalMap.jsx",
+      "auditLabel": "MapLibre GL",
+      "reason": "Real source file with static map import and not inside archive.",
+      "proposedChange": "Replace static map library import with dynamic import inside effect/load function, or move component behind React.lazy route boundary.",
+      "risk": "medium"
+    },
+    {
+      "file": "src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+      "auditLabel": "Mapbox GL",
+      "reason": "Real source file with static map import and not inside archive.",
+      "proposedChange": "Replace static map library import with dynamic import inside effect/load function, or move component behind React.lazy route boundary.",
+      "risk": "medium_high_core_map"
+    }
+  ],
+  "knownAlreadySafe": [
+    {
+      "file": "src/components/ai-compass/MapHero.jsx",
+      "auditLabel": "MapLibre GL",
+      "reason": "Uses dynamic import for map library. Likely already safer than static imports.",
+      "matches": [
+        {
+          "pattern": "maplibre-gl",
+          "lineNumber": 19,
+          "line": "await import(\"maplibre-gl/dist/maplibre-gl.css\");"
+        },
+        {
+          "pattern": "maplibre-gl",
+          "lineNumber": 22,
+          "line": "const mod = await import(\"maplibre-gl\");"
+        },
+        {
+          "pattern": "maplibregl",
+          "lineNumber": 23,
+          "line": "const maplibregl = mod?.default || mod;"
+        },
+        {
+          "pattern": "maplibregl",
+          "lineNumber": 27,
+          "line": "map = new maplibregl.Map({"
+        },
+        {
+          "pattern": "maplibregl",
+          "lineNumber": 36,
+          "line": "new maplibregl.NavigationControl({ visualizePitch: false }),"
+        }
+      ]
+    }
+  ],
+  "doNotTouchYet": [
+    {
+      "file": "src/components/maps/ohio-map.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/components/maps/shf-ohio-map.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/pages/exchange/command-center/background-system.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/pages/exchange/command-surface/shs-command-surface.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/pages/exchange/exchange-controls-polish.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/pages/exchange/exchange-focus-framing.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/pages/exchange/globe-polish.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/pages/exchange/unified-truth/SHSUnifiedTruthShell.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/pages/exchange/unified-truth/shs-unified-truth-shell.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/pages/exchange/workspace-dashboard/shs-workspace-dashboard.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/FocusMode.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.deepSpace.patch.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.dym.afterLocked.patch.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.dym.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.dym.patch.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.dym.pattern.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.header.mock.locked.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.ref.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.space.mock.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.theme.mock.cinematic.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.theme.mock.locked.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/admin.reports.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/arcade.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/catalog.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/global.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/growth-observatory.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/growth-observatory.dopamine.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/lesson-soft.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/loo.mock.space.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/sales-shell.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/tesla-apple.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/theme-shf.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/unified-shell.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/util-wash.css",
+      "reason": "CSS-only Mapbox selector. Handle in CSS optimization pass, not JS map isolation."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.deepSpace.patch.css",
+      "reason": "Archive/reference file. Do not change during active bundle optimization unless confirmed imported."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.dym.afterLocked.patch.css",
+      "reason": "Archive/reference file. Do not change during active bundle optimization unless confirmed imported."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.dym.css",
+      "reason": "Archive/reference file. Do not change during active bundle optimization unless confirmed imported."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.dym.patch.css",
+      "reason": "Archive/reference file. Do not change during active bundle optimization unless confirmed imported."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.dym.pattern.css",
+      "reason": "Archive/reference file. Do not change during active bundle optimization unless confirmed imported."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.header.mock.locked.css",
+      "reason": "Archive/reference file. Do not change during active bundle optimization unless confirmed imported."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.ref.css",
+      "reason": "Archive/reference file. Do not change during active bundle optimization unless confirmed imported."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.space.mock.css",
+      "reason": "Archive/reference file. Do not change during active bundle optimization unless confirmed imported."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.theme.mock.cinematic.css",
+      "reason": "Archive/reference file. Do not change during active bundle optimization unless confirmed imported."
+    },
+    {
+      "file": "src/styles/_archive_lord_outcomes/lordOutcomes.theme.mock.locked.css",
+      "reason": "Archive/reference file. Do not change during active bundle optimization unless confirmed imported."
+    }
+  ],
+  "recommendedPatchOrder": [
+    {
+      "step": 1,
+      "label": "Confirm first real static map import file",
+      "action": "Review safeFirstTouchCandidates and choose the lowest-risk real JS/JSX static map import.",
+      "reason": "CSS-only selector files cannot reduce JS vendor-map weight."
+    },
+    {
+      "step": 2,
+      "label": "Avoid archive and CSS files",
+      "action": "Do not touch _archive files or CSS selectors in the first map isolation patch.",
+      "reason": "Archive and CSS changes can create noise without reducing the JS map chunk."
+    },
+    {
+      "step": 3,
+      "label": "Patch one map boundary only",
+      "action": "Convert one static map library import to dynamic import or wrap one map component with React.lazy.",
+      "reason": "One patch at a time keeps route behavior easy to verify."
+    },
+    {
+      "step": 4,
+      "label": "Build and compare bundle inventory",
+      "action": "Run npm build and regenerate inventory after the first map patch.",
+      "reason": "We need measured proof that vendor-map or pages chunk moved in the right direction."
+    },
+    {
+      "step": 5,
+      "label": "Then decide next map split",
+      "action": "Only continue if build passes and route/browser signoff still looks good.",
+      "reason": "Map surfaces are visually sensitive and should not be bulk-edited."
+    }
+  ]
+}

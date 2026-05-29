@@ -51,7 +51,7 @@
     radial-gradient(circle at 35% 70%, rgba(255,255,255,0.12) 0 1px, transparent 1px),
     radial-gradient(circle at 80% 55%, rgba(255,255,255,0.10) 0 1px, transparent 1px);
   background-size: 180px 180px, 220px 220px, 260px 260px, 300px 300px;
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
 }
 
 /* inner rail keeps it "designed" like the mock */
@@ -230,4 +230,32 @@ button.loo-tab{
   box-shadow: 0 28px 90px rgba(0,0,0,0.75);
   backdrop-filter: blur(16px) saturate(1.2);
   -webkit-backdrop-filter: blur(16px) saturate(1.2);
+}
+
+
+/* SHS clean white Ohio override — removes dirty/noisy map wash */
+.shs-map-cinematic-texture,
+.shs-map-cinematic-texture::before,
+.shs-map-cinematic-texture::after,
+.shs-operational-map-texture,
+.shs-operational-map-texture::before,
+.shs-operational-map-texture::after,
+.map-cinematic-texture,
+.map-cinematic-texture::before,
+.map-cinematic-texture::after {
+  opacity: 0.035 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  background-image: none !important;
+}
+
+.shs-mapbox-map,
+.shs-operational-mapbox-map,
+.shs-operational-map-surface {
+  background: #020817 !important;
+}
+
+.shs-map-layer-state .mapboxgl-canvas,
+.shs-map-state .mapboxgl-canvas {
+  filter: none !important;
 }

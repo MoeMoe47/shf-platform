@@ -14,6 +14,7 @@ import {
 } from "@/shared/truth-spine";
 import "./partner-action-queue-v2.css";
 import HubBusinessTourProvider from "./shared/HubBusinessTourProvider.jsx";
+import { buildQueueWorkflowSignal, queueWorkflowSignalClass } from "./shared/hubQueueWorkflowSignals";
 
 const HUB_SIGNAL_KEY = "shs_hub_growth_signals_v1";
 const HUB_SIGNAL_EVENT_KEY = "shs_hub_growth_signal_events_v1";
@@ -242,6 +243,35 @@ function Sparkline({ tone = "blue" }) {
     </svg>
   );
 }
+
+
+function QueueWorkflowSignal({ referral }) {
+  const signal = buildQueueWorkflowSignal(referral);
+
+  return (
+    <div className="paq2-workflowSignalBox">
+      <div
+        className={[
+          "paq2-workflowSignal",
+          queueWorkflowSignalClass(signal.tone),
+        ].join(" ")}
+        title={signal.reason}
+      >
+        <span>{signal.label}</span>
+        <strong>{signal.ageDays}d age</strong>
+      </div>
+
+      <p>{signal.nextAction}</p>
+
+      {signal.blockers.length ? (
+        <small>{signal.blockers.join(", ")}</small>
+      ) : (
+        <small>clear_for_next_action</small>
+      )}
+    </div>
+  );
+}
+
 
 function Badge({ children, tone = "blue" }) {
   return <span className={`paq2-badge paq2-badge--${tone}`}>{children}</span>;

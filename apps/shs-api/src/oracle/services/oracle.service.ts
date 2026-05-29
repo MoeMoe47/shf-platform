@@ -1,6 +1,6 @@
 import { buildTruthPackage } from "./truth-package-builder";
 import { setTruth } from "../repositories/truth.repo";
-import type { TruthPackage, VerificationStatus } from "../domain/types";
+import type { TruthPackage, VerificationStatus, TruthStatus, ReadinessStatus } from "../domain/types";
 import { getLatestOracleAction } from "../controllers/oracle.controller";
 
 type PipelineResponse = {
@@ -65,31 +65,31 @@ export async function resolveTruth(entityId: string): Promise<TruthPackage> {
   const sourceCount =
     pipeline?.aggregation?.sourceCount || sourceSummary.length;
 
-  let truthStatus =
+  let truthStatus: TruthStatus =
     verificationStatus === "verified" && conflictCount === 0
       ? "certified"
       : verificationStatus === "in_review"
       ? "candidate"
       : "candidate";
 
-  let readinessStatus =
+  let readinessStatus: ReadinessStatus =
     verificationStatus === "verified" && conflictCount === 0
       ? "internally_ready"
       : conflictCount > 0
       ? "blocked"
-      : "needs_review";
+      : "not_ready";
 
   let recommendedNextAction =
     pipeline?.recommendedNextAction || "Await further validation.";
 
   if (latestAction?.action === "promote_case") {
-    readinessStatus = "execution_mode";
+    readinessStatus = "leadership_ready";
     truthStatus = "certified";
     recommendedNextAction = "Proceed with reporting and institutional review.";
   }
 
   if (latestAction?.action === "hold_for_verification") {
-    readinessStatus = "verification_hold";
+    readinessStatus = "not_ready";
     recommendedNextAction = "Resolve verification gaps before execution.";
   }
 

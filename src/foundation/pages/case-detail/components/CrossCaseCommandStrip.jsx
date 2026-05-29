@@ -22,7 +22,7 @@ function getRiskSignal(item) {
     };
   }
 
-  if (readiness === "verification_hold" || confidence < 85) {
+  if (readiness === "not_ready" || confidence < 85) {
     return {
       label: "Medium Risk",
       color: "#92400e",
@@ -65,9 +65,9 @@ export default function CrossCaseCommandStrip({
         : null;
 
     return {
-      executionMode: ranked.filter((c) => c.readinessStatus === "execution_mode").length,
+      executionMode: ranked.filter((c) => c.readinessStatus === "leadership_ready").length,
       blocked: ranked.filter((c) => c.readinessStatus === "blocked").length,
-      verificationHold: ranked.filter((c) => c.readinessStatus === "verification_hold").length,
+      verificationHold: ranked.filter((c) => c.readinessStatus === "not_ready").length,
       internallyReady: ranked.filter((c) => c.readinessStatus === "internally_ready").length,
       topPriority: ranked[0]?.entityId || "—",
       currentRank: currentPriority?.rank ?? "—",

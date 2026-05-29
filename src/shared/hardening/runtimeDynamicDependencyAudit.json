@@ -1,0 +1,1048 @@
+{
+  "generatedAt": "2026-05-23T18:52:16.659Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 25",
+  "mode": "RUNTIME_DYNAMIC_DEPENDENCY_AUDIT_NO_CODE_CHANGES",
+  "runtimeDynamicDependencyAuditStatus": "findings_ready",
+  "runtimeDynamicDependencyAuditLabel": "Runtime Dynamic Dependency Findings Ready",
+  "productionDecision": "No source code was changed. Patch 25 identifies whether the remaining Capital Mapbox preload is caused by JS, CSS, pages-exchange, or Vite dependency metadata.",
+  "priorPatch24Status": "build_passed_preload_still_detected",
+  "priorPatch24Preload": {
+    "capitalHtmlIncludesVendorMapboxJs": false,
+    "capitalHtmlIncludesVendorMapboxCss": true,
+    "capitalHtmlIncludesPagesExchange": true,
+    "capitalHtmlIncludesModulepreloadVendorMapbox": true,
+    "capitalHtmlIncludesVendorMaplibre": false
+  },
+  "priorPatch23Status": "findings_ready",
+  "detectedAssets": {
+    "capitalJs": "capital-44WuCrlc.js",
+    "pagesExchangeJs": "pages-exchange-Dmwe2jKp.js",
+    "pagesExchangeCss": "pages-exchange-Dwpvmain.css",
+    "mapboxJs": "vendor-mapbox-uaDf4Z7d.js",
+    "mapboxCss": "vendor-mapbox-C5-Kj3x0.css",
+    "maplibreJs": "vendor-maplibre-JLoBlj2z.js",
+    "maplibreCss": "vendor-maplibre-kWVbv8B-.css"
+  },
+  "findings": [
+    {
+      "id": "capital_html_still_references_mapbox_css",
+      "status": "detected",
+      "risk": "high_if_detected",
+      "interpretation": "Capital HTML still references Mapbox CSS, meaning CSS preload behavior remains even after Mapbox JS was filtered."
+    },
+    {
+      "id": "capital_html_references_mapbox_js",
+      "status": "not_detected",
+      "risk": "high_if_detected",
+      "interpretation": "Capital HTML still references Mapbox JS. Patch 24 should have removed this if the modulePreload filter worked."
+    },
+    {
+      "id": "capital_html_references_pages_exchange",
+      "status": "detected",
+      "risk": "medium_high",
+      "interpretation": "Capital still preloads pages-exchange. If pages-exchange CSS/JS carries Mapbox CSS, Mapbox CSS may continue to preload."
+    },
+    {
+      "id": "source_static_mapbox_css_import_detected",
+      "status": "detected",
+      "risk": "high_if_in_route_component",
+      "interpretation": "A static import of mapbox-gl CSS can force Vite to include Mapbox CSS in upstream CSS dependency graphs."
+    },
+    {
+      "id": "source_static_mapbox_js_import_detected",
+      "status": "detected",
+      "risk": "expected_in_map_component_only",
+      "interpretation": "Static Mapbox JS import is acceptable only if isolated inside an async map component that is not preloaded."
+    },
+    {
+      "id": "capital_js_vite_mapdeps_detected",
+      "status": "detected",
+      "risk": "medium_high",
+      "interpretation": "Capital generated JS still contains Vite dependency metadata, which may be responsible for preload behavior."
+    }
+  ],
+  "likelyCause": [
+    "Patch 24 removed Mapbox JS from capital.html, but Mapbox CSS remains. The next patch should target the static Mapbox CSS import path.",
+    "A source file still statically imports mapbox-gl/dist/mapbox-gl.css. That CSS should likely move behind the same async boundary as the Mapbox component.",
+    "capital.html still preloads pages-exchange, so any CSS dependency attached to pages-exchange can still be pulled early."
+  ],
+  "sourceMapboxCssImports": [
+    {
+      "file": "src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 2,
+          "line": "import mapboxgl from \"mapbox-gl\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "mapbox-gl/dist/mapbox-gl.css",
+          "lineNumber": 3,
+          "line": "import \"mapbox-gl/dist/mapbox-gl.css\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 3,
+          "line": "import \"mapbox-gl/dist/mapbox-gl.css\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "SHSOperationalMapboxMap",
+          "lineNumber": 1560,
+          "line": "export default function SHSOperationalMapboxMap() {",
+          "kind": "reference"
+        }
+      ]
+    }
+  ],
+  "sourceMapboxJsImports": [
+    {
+      "file": "src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 2,
+          "line": "import mapboxgl from \"mapbox-gl\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "mapbox-gl/dist/mapbox-gl.css",
+          "lineNumber": 3,
+          "line": "import \"mapbox-gl/dist/mapbox-gl.css\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 3,
+          "line": "import \"mapbox-gl/dist/mapbox-gl.css\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "SHSOperationalMapboxMap",
+          "lineNumber": 1560,
+          "line": "export default function SHSOperationalMapboxMap() {",
+          "kind": "reference"
+        }
+      ]
+    }
+  ],
+  "capitalHtmlScan": {
+    "file": "dist/capital.html",
+    "exists": true,
+    "hits": [
+      {
+        "term": "modulepreload",
+        "lineNumber": 8,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/modulepreload-polyfill-B5Qt9EMX.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "modulepreload",
+        "lineNumber": 9,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-CH_-0t41.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "modulepreload",
+        "lineNumber": 10,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-react-DWUxBteQ.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "modulepreload",
+        "lineNumber": 11,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-charts-20wW2Z-x.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "modulepreload",
+        "lineNumber": 12,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-Ca4qtZ2F.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "modulepreload",
+        "lineNumber": 13,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/shared-eNuYgzDM.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "modulepreload",
+        "lineNumber": 14,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-admin-Bhjlr7vA.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "modulepreload",
+        "lineNumber": 15,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-motion-Bndiu9g1.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "modulepreload",
+        "lineNumber": 16,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/components-CDuVLeKw.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "pages-exchange-Dmwe2jKp.js",
+        "lineNumber": 17,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-exchange-Dmwe2jKp.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "modulepreload",
+        "lineNumber": 17,
+        "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-exchange-Dmwe2jKp.js\">",
+        "kind": "modulepreload"
+      },
+      {
+        "term": "vendor-mapbox",
+        "lineNumber": 21,
+        "line": "<link rel=\"stylesheet\" crossorigin href=\"/assets/vendor-mapbox-C5-Kj3x0.css\">",
+        "kind": "reference"
+      },
+      {
+        "term": "vendor-mapbox-C5-Kj3x0.css",
+        "lineNumber": 21,
+        "line": "<link rel=\"stylesheet\" crossorigin href=\"/assets/vendor-mapbox-C5-Kj3x0.css\">",
+        "kind": "reference"
+      },
+      {
+        "term": "pages-exchange-Dwpvmain.css",
+        "lineNumber": 22,
+        "line": "<link rel=\"stylesheet\" crossorigin href=\"/assets/pages-exchange-Dwpvmain.css\">",
+        "kind": "reference"
+      }
+    ]
+  },
+  "capitalJsScan": {
+    "file": "dist/assets/capital-44WuCrlc.js",
+    "exists": true,
+    "hits": [
+      {
+        "term": "vendor-mapbox",
+        "lineNumber": 1,
+        "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/components-3KDTfcSy.css\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+        "kind": "vite_map_deps"
+      },
+      {
+        "term": "vendor-mapbox-uaDf4Z7d.js",
+        "lineNumber": 1,
+        "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/components-3KDTfcSy.css\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+        "kind": "vite_map_deps"
+      },
+      {
+        "term": "vendor-mapbox-C5-Kj3x0.css",
+        "lineNumber": 1,
+        "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/components-3KDTfcSy.css\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+        "kind": "vite_map_deps"
+      },
+      {
+        "term": "pages-exchange-Dmwe2jKp.js",
+        "lineNumber": 1,
+        "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/components-3KDTfcSy.css\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+        "kind": "vite_map_deps"
+      },
+      {
+        "term": "pages-exchange-Dwpvmain.css",
+        "lineNumber": 1,
+        "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/components-3KDTfcSy.css\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+        "kind": "vite_map_deps"
+      },
+      {
+        "term": "__vite__mapDeps",
+        "lineNumber": 1,
+        "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/components-3KDTfcSy.css\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+        "kind": "vite_map_deps"
+      },
+      {
+        "term": "vendor-mapbox",
+        "lineNumber": 2,
+        "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96), rgba(3,10,22,.98))\"},children:\"Loading SHS Exchange surface…\"})}function R(r){return e.jsx(n.Suspense,{fallback:e.jsx(W,{}),children:r})}function I(){return e.jsxs(t,{path:\"exchange\",element:R(e.jsx(P,{})),children:[e.jsx(t,{index:!0,element:e.jsx(o,{})}),e.jsx(t,{path:\"dashboard\",element:e.jsx(j,",
+        "kind": "dynamic_import"
+      },
+      {
+        "term": "vendor-mapbox-uaDf4Z7d.js",
+        "lineNumber": 2,
+        "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96), rgba(3,10,22,.98))\"},children:\"Loading SHS Exchange surface…\"})}function R(r){return e.jsx(n.Suspense,{fallback:e.jsx(W,{}),children:r})}function I(){return e.jsxs(t,{path:\"exchange\",element:R(e.jsx(P,{})),children:[e.jsx(t,{index:!0,element:e.jsx(o,{})}),e.jsx(t,{path:\"dashboard\",element:e.jsx(j,",
+        "kind": "dynamic_import"
+      },
+      {
+        "term": "pages-exchange-Dmwe2jKp.js",
+        "lineNumber": 2,
+        "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96), rgba(3,10,22,.98))\"},children:\"Loading SHS Exchange surface…\"})}function R(r){return e.jsx(n.Suspense,{fallback:e.jsx(W,{}),children:r})}function I(){return e.jsxs(t,{path:\"exchange\",element:R(e.jsx(P,{})),children:[e.jsx(t,{index:!0,element:e.jsx(o,{})}),e.jsx(t,{path:\"dashboard\",element:e.jsx(j,",
+        "kind": "dynamic_import"
+      },
+      {
+        "term": "__vite__mapDeps",
+        "lineNumber": 2,
+        "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96), rgba(3,10,22,.98))\"},children:\"Loading SHS Exchange surface…\"})}function R(r){return e.jsx(n.Suspense,{fallback:e.jsx(W,{}),children:r})}function I(){return e.jsxs(t,{path:\"exchange\",element:R(e.jsx(P,{})),children:[e.jsx(t,{index:!0,element:e.jsx(o,{})}),e.jsx(t,{path:\"dashboard\",element:e.jsx(j,",
+        "kind": "dynamic_import"
+      },
+      {
+        "term": "modulepreload",
+        "lineNumber": 2,
+        "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96), rgba(3,10,22,.98))\"},children:\"Loading SHS Exchange surface…\"})}function R(r){return e.jsx(n.Suspense,{fallback:e.jsx(W,{}),children:r})}function I(){return e.jsxs(t,{path:\"exchange\",element:R(e.jsx(P,{})),children:[e.jsx(t,{index:!0,element:e.jsx(o,{})}),e.jsx(t,{path:\"dashboard\",element:e.jsx(j,",
+        "kind": "dynamic_import"
+      }
+    ]
+  },
+  "pagesExchangeJsScan": {
+    "file": "dist/assets/pages-exchange-Dmwe2jKp.js",
+    "exists": true,
+    "hits": [
+      {
+        "term": "vendor-mapbox",
+        "lineNumber": 1,
+        "line": "import{j as e,r as h,R as Ne,N as H,O as ke}from\"./vendor-react-DWUxBteQ.js\";import{O as De}from\"./pages-Ca4qtZ2F.js\";import{_ as Ae,a6 as Re}from\"./components-CDuVLeKw.js\";import{u as Ee,T as Le}from\"./pages-admin-Bhjlr7vA.js\";import{m as B}from\"./vendor-mapbox-uaDf4Z7d.js\";function Ys(){return e.jsx(De,{})}function Xs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Provider Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This surface will handle outcome submissions, evidence uploads, verification status, disputes, and payout pipeline visibility for programs and providers.\"})]})}function Zs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Investor Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This surface will show pool performance, capital deployment, verified outcomes, rankings, risk monitoring, and allocation controls for funders and investors.\"",
+        "kind": "reference"
+      },
+      {
+        "term": "vendor-mapbox-uaDf4Z7d.js",
+        "lineNumber": 1,
+        "line": "import{j as e,r as h,R as Ne,N as H,O as ke}from\"./vendor-react-DWUxBteQ.js\";import{O as De}from\"./pages-Ca4qtZ2F.js\";import{_ as Ae,a6 as Re}from\"./components-CDuVLeKw.js\";import{u as Ee,T as Le}from\"./pages-admin-Bhjlr7vA.js\";import{m as B}from\"./vendor-mapbox-uaDf4Z7d.js\";function Ys(){return e.jsx(De,{})}function Xs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Provider Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This surface will handle outcome submissions, evidence uploads, verification status, disputes, and payout pipeline visibility for programs and providers.\"})]})}function Zs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Investor Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This surface will show pool performance, capital deployment, verified outcomes, rankings, risk monitoring, and allocation controls for funders and investors.\"",
+        "kind": "reference"
+      }
+    ]
+  },
+  "pagesExchangeCssScan": {
+    "file": "dist/assets/pages-exchange-Dwpvmain.css",
+    "exists": true,
+    "hits": []
+  },
+  "mapboxCssScan": {
+    "file": "dist/assets/vendor-mapbox-C5-Kj3x0.css",
+    "exists": true,
+    "hits": []
+  },
+  "sourceScans": [
+    {
+      "file": "src/pages/exchange/CommandCenter.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "SHSUnifiedTruthShell",
+          "lineNumber": 2,
+          "line": "import SHSUnifiedTruthShell from \"./unified-truth/SHSUnifiedTruthShell\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "SHSUnifiedTruthShell",
+          "lineNumber": 5,
+          "line": "return <SHSUnifiedTruthShell />;",
+          "kind": "reference"
+        }
+      ]
+    },
+    {
+      "file": "src/pages/exchange/unified-truth/SHSUnifiedTruthShell.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "SHSOperationalMapboxMap",
+          "lineNumber": 7,
+          "line": "const SHSOperationalMapboxMap = lazy(() => import(\"./components/SHSOperationalMapboxMap\"));",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "SHSOperationalMapboxMap",
+          "lineNumber": 298,
+          "line": "return withUnifiedTruthMapBoundary(<SHSOperationalMapboxMap />);",
+          "kind": "reference"
+        },
+        {
+          "term": "SHSUnifiedTruthShell",
+          "lineNumber": 1473,
+          "line": "export default function SHSUnifiedTruthShell() {",
+          "kind": "reference"
+        }
+      ]
+    },
+    {
+      "file": "src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 2,
+          "line": "import mapboxgl from \"mapbox-gl\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "mapbox-gl/dist/mapbox-gl.css",
+          "lineNumber": 3,
+          "line": "import \"mapbox-gl/dist/mapbox-gl.css\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 3,
+          "line": "import \"mapbox-gl/dist/mapbox-gl.css\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "SHSOperationalMapboxMap",
+          "lineNumber": 1560,
+          "line": "export default function SHSOperationalMapboxMap() {",
+          "kind": "reference"
+        }
+      ]
+    }
+  ],
+  "distScans": [
+    {
+      "file": "dist/capital.html",
+      "exists": true,
+      "hits": [
+        {
+          "term": "modulepreload",
+          "lineNumber": 8,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/modulepreload-polyfill-B5Qt9EMX.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 9,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-CH_-0t41.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 10,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-react-DWUxBteQ.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 11,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-charts-20wW2Z-x.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 12,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-Ca4qtZ2F.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 13,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/shared-eNuYgzDM.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 14,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-admin-Bhjlr7vA.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 15,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-motion-Bndiu9g1.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 16,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/components-CDuVLeKw.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "pages-exchange-Dmwe2jKp.js",
+          "lineNumber": 17,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-exchange-Dmwe2jKp.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 17,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-exchange-Dmwe2jKp.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 21,
+          "line": "<link rel=\"stylesheet\" crossorigin href=\"/assets/vendor-mapbox-C5-Kj3x0.css\">",
+          "kind": "reference"
+        },
+        {
+          "term": "vendor-mapbox-C5-Kj3x0.css",
+          "lineNumber": 21,
+          "line": "<link rel=\"stylesheet\" crossorigin href=\"/assets/vendor-mapbox-C5-Kj3x0.css\">",
+          "kind": "reference"
+        },
+        {
+          "term": "pages-exchange-Dwpvmain.css",
+          "lineNumber": 22,
+          "line": "<link rel=\"stylesheet\" crossorigin href=\"/assets/pages-exchange-Dwpvmain.css\">",
+          "kind": "reference"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/TreasuryRoutes-DDuXFv7e.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-Ca4qtZ2F.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/components-3KDTfcSy.css\",\"assets/pages-CiOMc1g0.css\"])))=>i.map(i=>d[i]);",
+          "kind": "vite_map_deps"
+        },
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 2,
+          "line": "import{_ as a}from\"./components-CDuVLeKw.js\";import{j as e,O as i,r as s,g as l,f as r,b as o}from\"./vendor-react-DWUxBteQ.js\";import{D as n}from\"./pages-Ca4qtZ2F.js\";function d(){return e.jsxs(\"div\",{\"data-app\":\"treasury\",style:{minHeight:\"100vh\",background:\"#f3f4f6\",color:\"#111827\",fontFamily:\"Arial, sans-serif\"},children:[e.jsx(\"header\",{style:{padding:\"16px 24px\",borderBottom:\"1px solid #d1d5db\",background:\"#ffffff\",fontWeight:700,fontSize:\"20px\"},children:\"Treasury Shell\"}),e.jsxs(\"div\",{style:{display:\"grid\",gridTemplateColumns:\"240px 1fr\",minHeight:\"calc(100vh - 58px)\"},children:[e.jsxs(\"aside\",{style:{borderRight:\"1px solid #d1d5db\",background:\"#ffffff\",padding:\"20px\"},children:[e.jsx(\"div\",{style:{fontWeight:700,marginBottom:16},children:\"Navigation\"}),e.jsxs(\"div\",{style:{display:\"grid\",gap:10},children:[e.jsx(\"a\",{href:\"/treasury.html#/dashboard\",children:\"Dashboard\"}),e.jsx(\"a\",{href:\"/treasury.html#/assets\",children:\"Assets\"}),e.jsx(\"a\",{href:\"/treasury.html#/ledger\",children:\"Ledger\"}),e.jsx(\"a\",{href:\"/treasury.html#/proofs\",children:\"Proofs\"}),e.jsx(\"a\",{href:\"/treasury.html#/operator\",children:\"Operator\"}),e.jsx(\"a\",{href:\"/treasury.html#/settings\",children:\"Settin",
+          "kind": "dynamic_import"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/admin-XyXMHTcs.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "modulepreload",
+          "lineNumber": 1,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{j as e,g as S,f as t,b as h,e as R,R as d,h as I,H as w}from\"./vendor-react-DWUxBteQ.js\";import{R as E}from\"./RootProviders-BD-VKPyg.js\";import{S as P,h as H,c as p,i as m}from\"./pages-Ca4qtZ2F.js\";import{u as y,S as u,U as v,d as k,R as N,V as _,e as M,I as T,h as V,i as C,j as D,B as O,k as x,M as G,G as L,l as U,A as B}from\"./pages-admin-Bhjlr7vA.js\";import{H as j,a as W,b as g,I as F,P as b,R as f,U as q,c as Y,d as Q,e as J,f as z,g as K,h as X}from\"./pages-hub-CJA6oJYr.js\";import{F as Z}from\"./shared-eNuYgzDM.js\";import{ai as $,ah as ee}from\"./components-CDuVLeKw.js\";/* empty css                  */import{a as te}from\"./applyManifest-IEycFjdl.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-charts-20wW2Z-x.js\";import\"./vendor-motion-Bndiu9g1.js\";function se({children:r,fallback:a=null}){const i=y();return i.loading?e.jsx(\"div\",{style:{padding:24,color:\"#cbd5e1\"},children:\"Loading session…\"}):i.isAuthenticated?r:a||e.jsx(\"div\",{style:{padding:24,color:\"#fca5a5\"},children:\"Access denied. Please log in.\"})}function re({permissions:r=[]}){return e.jsxs(\"div\",{style:{padding:24,borderRadius:16,border:\"1px solid rgba(248, 113, 113",
+          "kind": "modulepreload"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/ai-DCHzxojs.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "modulepreload",
+          "lineNumber": 1,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{j as t,g as a,f as r,b as i,h as m,R as n,H as p}from\"./vendor-react-DWUxBteQ.js\";/* empty css              *//* empty css                  */import{J as c}from\"./pages-Ca4qtZ2F.js\";import{R as d}from\"./RootProviders-BD-VKPyg.js\";import\"./vendor-CH_-0t41.js\";import\"./components-CDuVLeKw.js\";import\"./pages-admin-Bhjlr7vA.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./vendor-charts-20wW2Z-x.js\";function u(){return t.jsxs(a,{children:[t.jsx(r,{path:\"job-compass\",element:t.jsx(c,{})}),t.jsx(r,{path:\"*\",element:t.jsx(i,{to:\"/job-compass\",replace:!0})})]})}function l(o=\"ai\"){let e=document.querySelector(`[data-app=\"${o}\"]`)||document.getElementById(`${o}-root`)||document.getElementById(\"root\");return e||(e=document.createElement(\"div\"),e.id=\"root\",e.dataset.app=o,document.body.appendChild(e)),e}const s=\"ai\",j=l(s);m.createRoot(j).render(t.jsx(n.StrictMode,{children:t.jsx(d,{appScope:s,children:t.jsx(p,{children:t.jsx(u,{})})})}));",
+          "kind": "modulepreload"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/allocation-DGaB2vEX.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "modulepreload",
+          "lineNumber": 1,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as j,j as e,h as ne,R as ie}from\"./vendor-react-DWUxBteQ.js\";import\"./vendor-CH_-0t41.js\";function ae(t){let n=document.querySelector(`[data-app=\"${t}\"]`);n||(n=document.getElementById(\"app\")),n||(n=document.getElementById(\"root\")),n||(n=document.createElement(\"div\"),n.id=\"root\",document.body.appendChild(n));try{n.setAttribute(\"data-app\",t)}catch{}return n}const re=`# Franklin County Allocation Intelligence — Methodology v1.0",
+          "kind": "modulepreload"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/arcade-BRq6mr18.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "modulepreload",
+          "lineNumber": 1,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{j as t,g,f as s,b as j,i as E,H as A}from\"./vendor-react-DWUxBteQ.js\";/* empty css              *//* empty css                  */import{R as I}from\"./RootProviders-BD-VKPyg.js\";import{A as R,j as T,k as N,L as b,m as k,T as D,o as S,G as B,B as v}from\"./pages-Ca4qtZ2F.js\";import\"./vendor-CH_-0t41.js\";import\"./shared-eNuYgzDM.js\";import\"./components-CDuVLeKw.js\";import\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./vendor-charts-20wW2Z-x.js\";const H={BASE_URL:\"/\",DEV:!1,MODE:\"production\",PROD:!0,SSR:!1,VITE_ENABLE_ADMIN:\"false\",VITE_GROWTH_PROVIDER:\"simulator\",VITE_MAPBOX_TOKEN:\"pk.eyJ1IjoibW9lMjIxMTQ3IiwiYSI6ImNtcDhxbzR0eDBoZDIzM3B4czBmczNwZG0ifQ.OyQYlfEyvJtQxMB9KiD0Nw\",VITE_SHF_AGENT_ADMIN_KEY:\"hh0mcT8DBKTaicTHJVMEXf9U4J7Ft55HhJ5OFYrfPGs\",VITE_SHF_AGENT_FABRIC_BASE:\"http://127.0.0.1:8090\"};(function(){try{let d=function(e){try{return new URL(e,window.location.origin).pathname}catch{return String(e||\"\")}},h=function(e,n){return e===\"/growth/\"+n||e===\"/api/growth/\"+n},p=function(e){return JSON.stringify(e)};if(!(typeof import.meta<\"u\"&&H&&!1||!1)||window.__shf_growth_mock_installed__)return;window.__shf_gr",
+          "kind": "modulepreload"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/capital-44WuCrlc.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/components-3KDTfcSy.css\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+          "kind": "vite_map_deps"
+        },
+        {
+          "term": "vendor-mapbox-uaDf4Z7d.js",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/components-3KDTfcSy.css\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+          "kind": "vite_map_deps"
+        },
+        {
+          "term": "vendor-mapbox-C5-Kj3x0.css",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/components-3KDTfcSy.css\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+          "kind": "vite_map_deps"
+        },
+        {
+          "term": "pages-exchange-Dmwe2jKp.js",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/components-3KDTfcSy.css\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+          "kind": "vite_map_deps"
+        },
+        {
+          "term": "pages-exchange-Dwpvmain.css",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/components-3KDTfcSy.css\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+          "kind": "vite_map_deps"
+        },
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/components-3KDTfcSy.css\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+          "kind": "vite_map_deps"
+        },
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96), rgba(3,10,22,.98))\"},children:\"Loading SHS Exchange surface…\"})}function R(r){return e.jsx(n.Suspense,{fallback:e.jsx(W,{}),children:r})}function I(){return e.jsxs(t,{path:\"exchange\",element:R(e.jsx(P,{})),children:[e.jsx(t,{index:!0,element:e.jsx(o,{})}),e.jsx(t,{path:\"dashboard\",element:e.jsx(j,",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "vendor-mapbox-uaDf4Z7d.js",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96), rgba(3,10,22,.98))\"},children:\"Loading SHS Exchange surface…\"})}function R(r){return e.jsx(n.Suspense,{fallback:e.jsx(W,{}),children:r})}function I(){return e.jsxs(t,{path:\"exchange\",element:R(e.jsx(P,{})),children:[e.jsx(t,{index:!0,element:e.jsx(o,{})}),e.jsx(t,{path:\"dashboard\",element:e.jsx(j,",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "pages-exchange-Dmwe2jKp.js",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96), rgba(3,10,22,.98))\"},children:\"Loading SHS Exchange surface…\"})}function R(r){return e.jsx(n.Suspense,{fallback:e.jsx(W,{}),children:r})}function I(){return e.jsxs(t,{path:\"exchange\",element:R(e.jsx(P,{})),children:[e.jsx(t,{index:!0,element:e.jsx(o,{})}),e.jsx(t,{path:\"dashboard\",element:e.jsx(j,",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96), rgba(3,10,22,.98))\"},children:\"Loading SHS Exchange surface…\"})}function R(r){return e.jsx(n.Suspense,{fallback:e.jsx(W,{}),children:r})}function I(){return e.jsxs(t,{path:\"exchange\",element:R(e.jsx(P,{})),children:[e.jsx(t,{index:!0,element:e.jsx(o,{})}),e.jsx(t,{path:\"dashboard\",element:e.jsx(j,",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96), rgba(3,10,22,.98))\"},children:\"Loading SHS Exchange surface…\"})}function R(r){return e.jsx(n.Suspense,{fallback:e.jsx(W,{}),children:r})}function I(){return e.jsxs(t,{path:\"exchange\",element:R(e.jsx(P,{})),children:[e.jsx(t,{index:!0,element:e.jsx(o,{})}),e.jsx(t,{path:\"dashboard\",element:e.jsx(j,",
+          "kind": "dynamic_import"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/catalog-BVm8Tt3o.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "modulepreload",
+          "lineNumber": 1,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{h as r,j as i}from\"./vendor-react-DWUxBteQ.js\";/* empty css              */import{C as a}from\"./pages-Ca4qtZ2F.js\";/* empty css                  */import\"./vendor-CH_-0t41.js\";import\"./components-CDuVLeKw.js\";import\"./pages-admin-Bhjlr7vA.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./vendor-charts-20wW2Z-x.js\";const n=(()=>{try{const t=String(window?.location?.pathname||\"\").includes(\"admin\"),e=String(window?.location?.href||\"\").includes(\"admin.html\"),o=String(document?.querySelector(\"[data-app]\")?.getAttribute(\"data-app\")||\"\")===\"admin\";return!!(t||e||o)}catch{return!1}})();typeof window<\"u\"&&(n&&window.addEventListener(\"error\",t=>{const e=(t?.error?.stack||t?.message||String(t)).slice(0,4e3),o=document.createElement(\"pre\");o.style.cssText=\"position:fixed;inset:auto 8px 8px 8px;max-height:40vh;overflow:auto;background:#111;color:#0f0;padding:12px;border-radius:8px;z-index:99999;font:12px/1.4 ui-monospace,monospace\",o.textContent=`Window Error:",
+          "kind": "modulepreload"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/components-CDuVLeKw.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/vendor-maplibre-JLoBlj2z.js\",\"assets/vendor-CH_-0t41.js\",\"assets/vendor-maplibre-kWVbv8B-.css\"])))=>i.map(i=>d[i]);",
+          "kind": "vite_map_deps"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 2,
+          "line": "import{r as H,j as e,R as u,L as ee,u as lr,N as vs,a as _e,b as or,c as cr}from\"./vendor-react-DWUxBteQ.js\";import{f as dr,s as ur,a as hr}from\"./pages-admin-Bhjlr7vA.js\";import{k as as,P as k}from\"./vendor-CH_-0t41.js\";import{m as mr}from\"./vendor-motion-Bndiu9g1.js\";import{u as oe,a as pr}from\"./shared-eNuYgzDM.js\";const Ns=H.createContext({selectedEntity:null,setSelectedEntity:()=>{},clearSelectedEntity:()=>{}});function Zl({children:s}){const[t,n]=H.useState(null),a=H.useMemo(()=>({selectedEntity:t,setSelectedEntity:n,clearSelectedEntity:()=>n(null)}),[t]);return e.jsx(Ns.Provider,{value:a,children:s})}function ws(){return H.useContext(Ns)}const fr=\"modulepreload\",xr=function(s){return\"/\"+s},rs={},is=function(t,n,a){let r=Promise.resolve();if(n&&n.length>0){let c=function(d){return Promise.all(d.map(h=>Promise.resolve(h).then(b=>({status:\"fulfilled\",value:b}),b=>({status:\"rejected\",reason:b}))))};document.getElementsByTagName(\"link\");const l=document.querySelector(\"meta[property=csp-nonce]\"),o=l?.nonce||l?.getAttribute(\"nonce\");r=c(n.map(d=>{if(d=xr(d),d in rs)return;rs[d]=!0;const h=d.endsWith(\".css\"),b=h?'[rel=\"stylesheet\"]':\"\";if(document.querySelector(`link[href=\"${d}\"]${b",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 53,
+          "line": "`})]})}function Mi(s){if(typeof s!=\"string\")return\"\";let t=s.trim();return t?(t=t.replace(/^\\//,\"\"),t):\"\"}function Ii(s){if(typeof s!=\"string\")return\"#/home\";const t=s.trim();return t?t.startsWith(\"#\")?t:t.startsWith(\"/\")?`#${t}`:`#/${t}`:\"#/home\"}function Li(s){if(!s)return\"\";const t=Mi(s.entry);if(!t)return\"\";const n=s.homeHash||s.hashBase||\"/home\";return`${\"/\".replace(/\\/?$/,\"/\")}${t}${Ii(n)}`}function Ai(s){return String(s||\"\").toLowerCase().trim()}function Ri(s,t=null){const n=Ai(s),a=Number(t||0);return n===\"verified\"?{label:\"Ready\",tone:\"ready\",description:\"Verification passed.\"}:n===\"disputed\"?{label:\"Conflict\",tone:\"conflict\",description:\"Verification has a dispute.\"}:n===\"rejected\"?{label:\"Not Ready\",tone:\"blocked\",description:\"Verification rejected.\"}:a>=90?{label:\"Review\",tone:\"review\",description:\"High confidence, but verification still needs review.\"}:n===\"pending\"?{label:\"Needs Review\",tone:\"review\",description:\"Verification pending.\"}:{label:\"Unreviewed\",tone:\"neutral\",description:\"Verification state has not been finalized.\"}}function jo({value:s,confidenceScore:t=null,compact:n=!1}){const a=Ri(s,t);return e.jsx(\"span\",{className:[\"admin-aggregation-signal-pill\",`ad",
+          "kind": "dynamic_import"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/credit-DDexnHvq.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-Ca4qtZ2F.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/components-3KDTfcSy.css\",\"assets/pages-CiOMc1g0.css\"])))=>i.map(i=>d[i]);",
+          "kind": "vite_map_deps"
+        },
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{j as e,O as n,r as s,g as d,f as r,b as o,h as l,R as m,H as c}from\"./vendor-react-DWUxBteQ.js\";/* empty css              *//* empty css                  *//* empty css                  *//* empty css               *//* empty css                    *//* empty css                         */import{aj as p,ak as _,_ as a,al as h}from\"./components-CDuVLeKw.js\";import{R as x}from\"./RootProviders-BD-VKPyg.js\";import{D as j}from\"./pages-Ca4qtZ2F.js\";import\"./vendor-CH_-0t41.js\";import\"./pages-admin-Bhjlr7vA.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./vendor-charts-20wW2Z-x.js\";function u(){return e.jsxs(\"div\",{className:\"crb-root\",\"data-app\":\"credit\",\"data-theme\":\"solutions\",children:[e.jsx(\"a\",{href:\"#credit-main\",className:\"crb-skip\",children:\"Skip to main content\"}),e.jsxs(\"header\",{className:\"crb-header\",role:\"banner\",children:[e.jsx(p,{}),e.jsx(\"div\",{className:\"crb-headerSpacer\"})]}),e.jsxs(\"div\",{className:\"crb-body\",children:[e.jsx(\"aside\",{className:\"crb-sidebar\",role:\"complementary\",\"aria-label\":\"Credit navigation\",children:e.jsx(_,{})}),e.jsx(\"main\",{id:\"credit-main\",className:\"crb-main\",role:",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{j as e,O as n,r as s,g as d,f as r,b as o,h as l,R as m,H as c}from\"./vendor-react-DWUxBteQ.js\";/* empty css              *//* empty css                  *//* empty css                  *//* empty css               *//* empty css                    *//* empty css                         */import{aj as p,ak as _,_ as a,al as h}from\"./components-CDuVLeKw.js\";import{R as x}from\"./RootProviders-BD-VKPyg.js\";import{D as j}from\"./pages-Ca4qtZ2F.js\";import\"./vendor-CH_-0t41.js\";import\"./pages-admin-Bhjlr7vA.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./vendor-charts-20wW2Z-x.js\";function u(){return e.jsxs(\"div\",{className:\"crb-root\",\"data-app\":\"credit\",\"data-theme\":\"solutions\",children:[e.jsx(\"a\",{href:\"#credit-main\",className:\"crb-skip\",children:\"Skip to main content\"}),e.jsxs(\"header\",{className:\"crb-header\",role:\"banner\",children:[e.jsx(p,{}),e.jsx(\"div\",{className:\"crb-headerSpacer\"})]}),e.jsxs(\"div\",{className:\"crb-body\",children:[e.jsx(\"aside\",{className:\"crb-sidebar\",role:\"complementary\",\"aria-label\":\"Credit navigation\",children:e.jsx(_,{})}),e.jsx(\"main\",{id:\"credit-main\",className:\"crb-main\",role:",
+          "kind": "dynamic_import"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/curriculum-BioJZTRa.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-Ca4qtZ2F.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/components-3KDTfcSy.css\",\"assets/pages-CiOMc1g0.css\"])))=>i.map(i=>d[i]);",
+          "kind": "vite_map_deps"
+        },
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{R as h,j as e,O as x,e as _,r as a,g as b,f as t,b as u,h as f,H as y}from\"./vendor-react-DWUxBteQ.js\";/* empty css                  *//* empty css                  *//* empty css               *//* empty css                    *//* empty css              *//* empty css                         */import{R as E}from\"./RootProviders-BD-VKPyg.js\";import{W as g,am as v,an as L,ao as N,_ as r,al as R}from\"./components-CDuVLeKw.js\";import{p as S}from\"./pages-Ca4qtZ2F.js\";import\"./vendor-CH_-0t41.js\";import\"./shared-eNuYgzDM.js\";import\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./vendor-charts-20wW2Z-x.js\";function A({app:s=\"app\",Sidebar:l,title:c=\"App\",headerRight:n,children:i}){const[o,p]=h.useState(()=>{try{return JSON.parse(localStorage.getItem(`${s}.sidebar.collapsed`)||\"false\")}catch{return!1}});return h.useEffect(()=>{try{localStorage.setItem(`${s}.sidebar.collapsed`,JSON.stringify(o))}catch{}},[s,o]),h.useEffect(()=>{const m=d=>{(d.altKey||d.metaKey)&&(d.key===\"s\"||d.key===\"S\")&&(d.preventDefault(),p(j=>!j))};return window.addEventListener(\"keydown\",m),()=>window.removeEventListener(\"keydown\",m)},[]),e.j",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{R as h,j as e,O as x,e as _,r as a,g as b,f as t,b as u,h as f,H as y}from\"./vendor-react-DWUxBteQ.js\";/* empty css                  *//* empty css                  *//* empty css               *//* empty css                    *//* empty css              *//* empty css                         */import{R as E}from\"./RootProviders-BD-VKPyg.js\";import{W as g,am as v,an as L,ao as N,_ as r,al as R}from\"./components-CDuVLeKw.js\";import{p as S}from\"./pages-Ca4qtZ2F.js\";import\"./vendor-CH_-0t41.js\";import\"./shared-eNuYgzDM.js\";import\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./vendor-charts-20wW2Z-x.js\";function A({app:s=\"app\",Sidebar:l,title:c=\"App\",headerRight:n,children:i}){const[o,p]=h.useState(()=>{try{return JSON.parse(localStorage.getItem(`${s}.sidebar.collapsed`)||\"false\")}catch{return!1}});return h.useEffect(()=>{try{localStorage.setItem(`${s}.sidebar.collapsed`,JSON.stringify(o))}catch{}},[s,o]),h.useEffect(()=>{const m=d=>{(d.altKey||d.metaKey)&&(d.key===\"s\"||d.key===\"S\")&&(d.preventDefault(),p(j=>!j))};return window.addEventListener(\"keydown\",m),()=>window.removeEventListener(\"keydown\",m)},[]),e.j",
+          "kind": "dynamic_import"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/debt-CnW8cTpR.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-Ca4qtZ2F.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/components-3KDTfcSy.css\",\"assets/pages-CiOMc1g0.css\"])))=>i.map(i=>d[i]);",
+          "kind": "vite_map_deps"
+        },
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{j as e,O as i,r,g as d,f as s,b as a,h as l,R as m,H as p}from\"./vendor-react-DWUxBteQ.js\";/* empty css                  *//* empty css                  *//* empty css               *//* empty css                    *//* empty css              *//* empty css                         *//* empty css            */import{R as c}from\"./RootProviders-BD-VKPyg.js\";import{ap as h,aq as _,_ as o,al as x}from\"./components-CDuVLeKw.js\";import{D as j}from\"./pages-Ca4qtZ2F.js\";import{R as u}from\"./RoleCtx-Bh2wc-iD.js\";import{s as b}from\"./setAppScope-BOafGZJl.js\";import\"./vendor-CH_-0t41.js\";import\"./shared-eNuYgzDM.js\";import\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./vendor-charts-20wW2Z-x.js\";function E(){return e.jsxs(\"div\",{className:\"crb-root\",\"data-app\":\"debt\",children:[e.jsx(\"header\",{className:\"crb-header\",children:e.jsx(h,{})}),e.jsxs(\"div\",{className:\"crb-body\",children:[e.jsx(\"aside\",{className:\"crb-sidebar\",children:e.jsx(_,{})}),e.jsxs(\"main\",{className:\"crb-main\",children:[e.jsx(i,{}),\" \"]})]})]})}const R=r.lazy(()=>o(()=>import(\"./pages-Ca4qtZ2F.js\").then(t=>t.W),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{j as e,O as i,r,g as d,f as s,b as a,h as l,R as m,H as p}from\"./vendor-react-DWUxBteQ.js\";/* empty css                  *//* empty css                  *//* empty css               *//* empty css                    *//* empty css              *//* empty css                         *//* empty css            */import{R as c}from\"./RootProviders-BD-VKPyg.js\";import{ap as h,aq as _,_ as o,al as x}from\"./components-CDuVLeKw.js\";import{D as j}from\"./pages-Ca4qtZ2F.js\";import{R as u}from\"./RoleCtx-Bh2wc-iD.js\";import{s as b}from\"./setAppScope-BOafGZJl.js\";import\"./vendor-CH_-0t41.js\";import\"./shared-eNuYgzDM.js\";import\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./vendor-charts-20wW2Z-x.js\";function E(){return e.jsxs(\"div\",{className:\"crb-root\",\"data-app\":\"debt\",children:[e.jsx(\"header\",{className:\"crb-header\",children:e.jsx(h,{})}),e.jsxs(\"div\",{className:\"crb-body\",children:[e.jsx(\"aside\",{className:\"crb-sidebar\",children:e.jsx(_,{})}),e.jsxs(\"main\",{className:\"crb-main\",children:[e.jsx(i,{}),\" \"]})]})]})}const R=r.lazy(()=>o(()=>import(\"./pages-Ca4qtZ2F.js\").then(t=>t.W),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,",
+          "kind": "dynamic_import"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/employer-CY-ImTiC.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-Ca4qtZ2F.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/components-3KDTfcSy.css\",\"assets/pages-CiOMc1g0.css\"])))=>i.map(i=>d[i]);",
+          "kind": "vite_map_deps"
+        },
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import\"./vendor-CH_-0t41.js\";import{R as n}from\"./@react-refresh-CXH4G1Bp.js\";import{j as e,O as l,r as o,g as p,f as r,b as s,h as m,R as d,H as c}from\"./vendor-react-DWUxBteQ.js\";/* empty css                  *//* empty css                  *//* empty css               *//* empty css              *//* empty css                         *//* empty css            *//* empty css                    */import{R as _}from\"./RootProviders-BD-VKPyg.js\";import{ar as h,as as x,_ as a,al as j}from\"./components-CDuVLeKw.js\";import{D as u}from\"./pages-Ca4qtZ2F.js\";import{R as E}from\"./RoleCtx-Bh2wc-iD.js\";import{s as y}from\"./setAppScope-BOafGZJl.js\";import\"./shared-eNuYgzDM.js\";import\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./vendor-charts-20wW2Z-x.js\";n.injectIntoGlobalHook(window);window.$RefreshReg$=()=>{};window.$RefreshSig$=()=>t=>t;window.__vite_plugin_react_preamble_installed__=!0;function R(){return e.jsxs(\"div\",{className:\"app-shell crb-root\",\"data-app\":\"employer\",children:[e.jsx(\"a\",{href:\"#employer-main\",className:\"sr-only crb-skip\",children:\"Skip to main content\"}),e.jsxs(\"header\",{className:\"crb-header\",rol",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import\"./vendor-CH_-0t41.js\";import{R as n}from\"./@react-refresh-CXH4G1Bp.js\";import{j as e,O as l,r as o,g as p,f as r,b as s,h as m,R as d,H as c}from\"./vendor-react-DWUxBteQ.js\";/* empty css                  *//* empty css                  *//* empty css               *//* empty css              *//* empty css                         *//* empty css            *//* empty css                    */import{R as _}from\"./RootProviders-BD-VKPyg.js\";import{ar as h,as as x,_ as a,al as j}from\"./components-CDuVLeKw.js\";import{D as u}from\"./pages-Ca4qtZ2F.js\";import{R as E}from\"./RoleCtx-Bh2wc-iD.js\";import{s as y}from\"./setAppScope-BOafGZJl.js\";import\"./shared-eNuYgzDM.js\";import\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./vendor-charts-20wW2Z-x.js\";n.injectIntoGlobalHook(window);window.$RefreshReg$=()=>{};window.$RefreshSig$=()=>t=>t;window.__vite_plugin_react_preamble_installed__=!0;function R(){return e.jsxs(\"div\",{className:\"app-shell crb-root\",\"data-app\":\"employer\",children:[e.jsx(\"a\",{href:\"#employer-main\",className:\"sr-only crb-skip\",children:\"Skip to main content\"}),e.jsxs(\"header\",{className:\"crb-header\",rol",
+          "kind": "dynamic_import"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/foundation-CD8x4PTv.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "modulepreload",
+          "lineNumber": 1,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import\"./vendor-CH_-0t41.js\";import{R as r}from\"./@react-refresh-CXH4G1Bp.js\";import{h as e,j as o,R as n}from\"./vendor-react-DWUxBteQ.js\";import{F as a}from\"./pages-foundation-B-hjKNft.js\";import{A as m}from\"./pages-admin-Bhjlr7vA.js\";import\"./shared-eNuYgzDM.js\";import\"./components-CDuVLeKw.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./pages-Ca4qtZ2F.js\";import\"./vendor-charts-20wW2Z-x.js\";r.injectIntoGlobalHook(window);window.$RefreshReg$=()=>{};window.$RefreshSig$=()=>i=>i;window.__vite_plugin_react_preamble_installed__=!0;(window.location.hash===\"#/top\"||window.location.hash===\"#top\")&&history.replaceState(null,\"\",window.location.pathname+window.location.search);const t=document.getElementById(\"root\");if(!t)throw new Error(\"Foundation mount failed: #root not found\");e.createRoot(t).render(o.jsx(m,{children:o.jsx(n.StrictMode,{children:o.jsx(a,{})})}));",
+          "kind": "modulepreload"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/fuel-DAsoloHH.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-admin-Bhjlr7vA.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/components-CDuVLeKw.js\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/components-3KDTfcSy.css\",\"assets/pages-admin-CrqIvWoe.css\"])))=>i.map(i=>d[i]);",
+          "kind": "vite_map_deps"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{R as d,j as t,O as p,r as s,g as m,f as n,b as a,h as c,H as u}from\"./vendor-react-DWUxBteQ.js\";/* empty css                  *//* empty css                  *//* empty css               *//* empty css              *//* empty css                    */import{R as h}from\"./RootProviders-BD-VKPyg.js\";import{_ as r,at as o,al as x}from\"./components-CDuVLeKw.js\";import{D as j,q as f,P as _,s as E}from\"./pages-Ca4qtZ2F.js\";import\"./vendor-CH_-0t41.js\";import\"./shared-eNuYgzDM.js\";import\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./vendor-charts-20wW2Z-x.js\";const i=\"foundation-css-reset\",y=`",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 16,
+          "line": "`;function v(){if(document.getElementById(i))return;const e=document.createElement(\"style\");e.id=i,e.textContent=y,document.head.appendChild(e)}function R(){return d.useEffect(()=>{document.documentElement.dataset.app=\"foundation\",v()},[]),t.jsx(\"div\",{className:\"fd-clean-shell\",children:t.jsx(p,{})})}const g=s.lazy(()=>r(()=>import(\"./pages-admin-Bhjlr7vA.js\").then(e=>e.P),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10]))),P=s.lazy(()=>r(()=>import(\"./pages-admin-Bhjlr7vA.js\").then(e=>e.m),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10]))),b=s.lazy(()=>r(()=>import(\"./pages-admin-Bhjlr7vA.js\").then(e=>e.n),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10]))),A=s.lazy(()=>r(()=>import(\"./pages-admin-Bhjlr7vA.js\").then(e=>e.o),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10]))),I=s.lazy(()=>r(()=>import(\"./pages-admin-Bhjlr7vA.js\").then(e=>e.p),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10])));function D(){return t.jsx(s.Suspense,{fallback:t.jsx(\"div\",{style:{padding:16},children:\"Loading…\"}),children:t.jsxs(m,{children:[t.jsx(n,{path:\"/__docs\",element:t.jsx(j,{})}),t.jsxs(n,{path:\"/\",element:t.jsx(R,{}),children:[t.jsx(n,{index:!0,element:t.jsx(a,{to:\"top\",replace:!0})}),t.jsx(n,{path:\"top\",element:t.jsx(f,{})}),t.jsx",
+          "kind": "dynamic_import"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/index-Bov2_cCh.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "modulepreload",
+          "lineNumber": 1,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{h as l,j as e}from\"./vendor-react-DWUxBteQ.js\";/* empty css               *//* empty css              *//* empty css                  */import{R as o}from\"./RootProviders-BD-VKPyg.js\";import\"./vendor-CH_-0t41.js\";import\"./shared-eNuYgzDM.js\";import\"./components-CDuVLeKw.js\";import\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./pages-Ca4qtZ2F.js\";import\"./vendor-charts-20wW2Z-x.js\";function n(){const r=[{key:\"foundation\",label:\"Foundation\",href:\"/foundation.html#/\"},{key:\"solutions\",label:\"Solutions\",href:\"/solutions.html#/\"},{key:\"sales\",label:\"Sales\",href:\"/sales.html#/\"},{key:\"career\",label:\"Career Center\",href:\"/career.html#/\"},{key:\"curriculum\",label:\"Curriculum\",href:\"/curriculum.html#/\"},{key:\"civic\",label:\"Civic\",href:\"/civic.html#/\"},{key:\"credit\",label:\"Credit Bureau\",href:\"/credit.html#/\"},{key:\"debt\",label:\"Debt Clock\",href:\"/debt.html#/\"},{key:\"treasury\",label:\"Treasury\",href:\"/treasury.html#/\"},{key:\"arcade\",label:\"Arcade\",href:\"/arcade.html#/\"},{key:\"fuel\",label:\"Fuel Tank\",href:\"/fuel.html#/\"},{key:\"store\",label:\"Store\",href:\"/store.html#/\"},{key:\"lord\",label:\"Lord of Outcomes™\",href:\"/lord-",
+          "kind": "modulepreload"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/launch-8DWouvfb.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "modulepreload",
+          "lineNumber": 1,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{j as t,g as s,f as e,b as o,h as a,R as n,H as m}from\"./vendor-react-DWUxBteQ.js\";/* empty css                  *//* empty css                  *//* empty css               *//* empty css              *//* empty css                    */import{R as i}from\"./RootProviders-BD-VKPyg.js\";import{L as p}from\"./LordOutcomesLayout-D5ljnylL.js\";import{L as l,S as c,P as u,E as d,F as x}from\"./pages-lord-BEn2tiDI.js\";import{af as h,al as j}from\"./components-CDuVLeKw.js\";import{R as f}from\"./RoleCtx-Bh2wc-iD.js\";import\"./vendor-CH_-0t41.js\";import\"./shared-eNuYgzDM.js\";import\"./pages-Ca4qtZ2F.js\";import\"./vendor-charts-20wW2Z-x.js\";import\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-motion-Bndiu9g1.js\";function g(){return t.jsx(s,{children:t.jsxs(e,{element:t.jsx(p,{}),children:[t.jsx(e,{index:!0,element:t.jsx(l,{})}),t.jsx(e,{path:\"states\",element:t.jsx(c,{})}),t.jsx(e,{path:\"programs\",element:t.jsx(u,{})}),t.jsx(e,{path:\"employers\",element:t.jsx(d,{})}),t.jsx(e,{path:\"funding\",element:t.jsx(x,{})}),t.jsx(e,{path:\"pilots\",element:t.jsx(h,{})}),t.jsx(e,{path:\"pilot-launcher\",element:t.jsx(o,{to:\"/pilots\",replace:!0})}),t.jsx(e,{path:\"*\",elemen",
+          "kind": "modulepreload"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/ledger-B18sWn3Y.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "modulepreload",
+          "lineNumber": 1,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{h as o,j as r,R as e,H as i}from\"./vendor-react-DWUxBteQ.js\";/* empty css                  *//* empty css                  *//* empty css               *//* empty css              *//* empty css                         *//* empty css            *//* empty css                    */import{R as m}from\"./RootProviders-BD-VKPyg.js\";import{T as s}from\"./TreasuryRoutes-DDuXFv7e.js\";import{al as a}from\"./components-CDuVLeKw.js\";import{R as p}from\"./RoleCtx-Bh2wc-iD.js\";import\"./vendor-CH_-0t41.js\";import\"./shared-eNuYgzDM.js\";import\"./pages-Ca4qtZ2F.js\";import\"./vendor-charts-20wW2Z-x.js\";import\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-motion-Bndiu9g1.js\";try{document.documentElement.setAttribute(\"data-app\",\"treasury\")}catch{}function n(){return document.querySelector('[data-app=\"treasury\"]')||document.getElementById(\"root\")||document.getElementById(\"app\")}const t=n();t?o.createRoot(t).render(r.jsx(e.StrictMode,{children:r.jsx(a,{children:r.jsx(m,{appScope:\"treasury\",children:r.jsx(p,{initial:\"admin\",children:r.jsx(i,{children:r.jsx(s,{})})})})})})):console.error('[ENTRY:ledger] mount not found. Ensure ledger.html includes <div id=\"root",
+          "kind": "modulepreload"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/lord-of-outcomes-CWfCme1t.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "modulepreload",
+          "lineNumber": 1,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{j as e,g as a,f as t,b as s,i as o,R as m}from\"./vendor-react-DWUxBteQ.js\";import{L as r}from\"./LordOutcomesLayout-D5ljnylL.js\";import{L as n,S as p,P as i,E as l,F as x,a as j,A as c,b as u}from\"./pages-lord-BEn2tiDI.js\";import\"./vendor-CH_-0t41.js\";import\"./components-CDuVLeKw.js\";import\"./pages-admin-Bhjlr7vA.js\";import\"./shared-eNuYgzDM.js\";import\"./pages-Ca4qtZ2F.js\";import\"./vendor-charts-20wW2Z-x.js\";import\"./vendor-motion-Bndiu9g1.js\";function d(){return e.jsx(a,{children:e.jsxs(t,{element:e.jsx(r,{}),children:[e.jsx(t,{index:!0,element:e.jsx(n,{})}),e.jsx(t,{path:\"states\",element:e.jsx(p,{})}),e.jsx(t,{path:\"programs\",element:e.jsx(i,{})}),e.jsx(t,{path:\"employers\",element:e.jsx(l,{})}),e.jsx(t,{path:\"funding\",element:e.jsx(x,{})}),e.jsxs(t,{path:\"pilots\",children:[e.jsx(t,{index:!0,element:e.jsx(s,{to:\"launch\",replace:!0})}),e.jsx(t,{path:\"launch\",element:e.jsx(j,{})}),e.jsx(t,{path:\"active\",element:e.jsx(c,{})}),e.jsx(t,{path:\"templates\",element:e.jsx(u,{})})]}),e.jsx(t,{path:\"*\",element:e.jsx(s,{to:\"/\",replace:!0})})]})})}document.documentElement.setAttribute(\"data-app\",\"lordOutcomes\");o.createRoot(document.getElementB",
+          "kind": "modulepreload"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/modulepreload-polyfill-B5Qt9EMX.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "modulepreload",
+          "lineNumber": 1,
+          "line": "(function(){const t=document.createElement(\"link\").relList;if(t&&t.supports&&t.supports(\"modulepreload\"))return;for(const e of document.querySelectorAll('link[rel=\"modulepreload\"]'))i(e);new MutationObserver(e=>{for(const r of e)if(r.type===\"childList\")for(const o of r.addedNodes)o.tagName===\"LINK\"&&o.rel===\"modulepreload\"&&i(o)}).observe(document,{childList:!0,subtree:!0});function s(e){const r={};return e.integrity&&(r.integrity=e.integrity),e.referrerPolicy&&(r.referrerPolicy=e.referrerPolicy),e.crossOrigin===\"use-credentials\"?r.credentials=\"include\":e.crossOrigin===\"anonymous\"?r.credentials=\"omit\":r.credentials=\"same-origin\",r}function i(e){if(e.ep)return;e.ep=!0;const r=s(e);fetch(e.href,r)}})();",
+          "kind": "modulepreload"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/pages-exchange-Dmwe2jKp.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 1,
+          "line": "import{j as e,r as h,R as Ne,N as H,O as ke}from\"./vendor-react-DWUxBteQ.js\";import{O as De}from\"./pages-Ca4qtZ2F.js\";import{_ as Ae,a6 as Re}from\"./components-CDuVLeKw.js\";import{u as Ee,T as Le}from\"./pages-admin-Bhjlr7vA.js\";import{m as B}from\"./vendor-mapbox-uaDf4Z7d.js\";function Ys(){return e.jsx(De,{})}function Xs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Provider Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This surface will handle outcome submissions, evidence uploads, verification status, disputes, and payout pipeline visibility for programs and providers.\"})]})}function Zs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Investor Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This surface will show pool performance, capital deployment, verified outcomes, rankings, risk monitoring, and allocation controls for funders and investors.\"",
+          "kind": "reference"
+        },
+        {
+          "term": "vendor-mapbox-uaDf4Z7d.js",
+          "lineNumber": 1,
+          "line": "import{j as e,r as h,R as Ne,N as H,O as ke}from\"./vendor-react-DWUxBteQ.js\";import{O as De}from\"./pages-Ca4qtZ2F.js\";import{_ as Ae,a6 as Re}from\"./components-CDuVLeKw.js\";import{u as Ee,T as Le}from\"./pages-admin-Bhjlr7vA.js\";import{m as B}from\"./vendor-mapbox-uaDf4Z7d.js\";function Ys(){return e.jsx(De,{})}function Xs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Provider Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This surface will handle outcome submissions, evidence uploads, verification status, disputes, and payout pipeline visibility for programs and providers.\"})]})}function Zs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Investor Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This surface will show pool performance, capital deployment, verified outcomes, rankings, risk monitoring, and allocation controls for funders and investors.\"",
+          "kind": "reference"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/sales-CR8eVpoq.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-Ca4qtZ2F.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/components-3KDTfcSy.css\",\"assets/pages-CiOMc1g0.css\"])))=>i.map(i=>d[i]);",
+          "kind": "vite_map_deps"
+        },
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import\"./vendor-CH_-0t41.js\";import{j as e,N as o,O as n,r as a,g as d,f as t,b as p,h as m,R as c,H as h}from\"./vendor-react-DWUxBteQ.js\";import{R as x}from\"./RootProviders-BD-VKPyg.js\";import{_ as r,au as l,al as j}from\"./components-CDuVLeKw.js\";/* empty css                  *//* empty css               *//* empty css              *//* empty css                  *//* empty css                         *//* empty css            */import\"./shared-eNuYgzDM.js\";import\"./pages-Ca4qtZ2F.js\";import\"./vendor-charts-20wW2Z-x.js\";import\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-motion-Bndiu9g1.js\";function u(){return e.jsxs(\"div\",{\"data-app\":\"sales\",style:{minHeight:\"100vh\",display:\"grid\",gridTemplateRows:\"56px 1fr\"},children:[e.jsxs(\"header\",{style:{display:\"flex\",gap:12,alignItems:\"center\",padding:\"12px 16px\",borderBottom:\"1px solid #e5e7eb\"},children:[e.jsx(\"strong\",{children:\"SHF SALES\"}),e.jsxs(\"nav\",{style:{display:\"flex\",gap:12},children:[e.jsx(o,{to:\"/dashboard\",children:\"Dashboard\"}),e.jsx(o,{to:\"/leads\",children:\"Leads\"}),e.jsx(o,{to:\"/pipeline\",children:\"Pipeline\"})]})]}),e.jsxs(\"div\",{style:{display:\"grid\",gridTemplateColumns:\"240px ",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import\"./vendor-CH_-0t41.js\";import{j as e,N as o,O as n,r as a,g as d,f as t,b as p,h as m,R as c,H as h}from\"./vendor-react-DWUxBteQ.js\";import{R as x}from\"./RootProviders-BD-VKPyg.js\";import{_ as r,au as l,al as j}from\"./components-CDuVLeKw.js\";/* empty css                  *//* empty css               *//* empty css              *//* empty css                  *//* empty css                         *//* empty css            */import\"./shared-eNuYgzDM.js\";import\"./pages-Ca4qtZ2F.js\";import\"./vendor-charts-20wW2Z-x.js\";import\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-motion-Bndiu9g1.js\";function u(){return e.jsxs(\"div\",{\"data-app\":\"sales\",style:{minHeight:\"100vh\",display:\"grid\",gridTemplateRows:\"56px 1fr\"},children:[e.jsxs(\"header\",{style:{display:\"flex\",gap:12,alignItems:\"center\",padding:\"12px 16px\",borderBottom:\"1px solid #e5e7eb\"},children:[e.jsx(\"strong\",{children:\"SHF SALES\"}),e.jsxs(\"nav\",{style:{display:\"flex\",gap:12},children:[e.jsx(o,{to:\"/dashboard\",children:\"Dashboard\"}),e.jsx(o,{to:\"/leads\",children:\"Leads\"}),e.jsx(o,{to:\"/pipeline\",children:\"Pipeline\"})]})]}),e.jsxs(\"div\",{style:{display:\"grid\",gridTemplateColumns:\"240px ",
+          "kind": "dynamic_import"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/shared-eNuYgzDM.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "SHSUnifiedTruthShell",
+          "lineNumber": 37,
+          "line": "`,document.head.appendChild(e)}function $e(e){const i=wi(e);i&&(i.classList.remove(\"shs-ui-click-pulse\"),i.offsetWidth,i.classList.add(\"shs-ui-click-pulse\"),window.clearTimeout(i.__shsClickPulseTimer),i.__shsClickPulseTimer=window.setTimeout(()=>{i.classList.remove(\"shs-ui-click-pulse\")},220))}function We(){if(typeof window>\"u\")return;const e=performance.now();if(!(e-Ue<80)){Ue=e;try{const i=ts();if(!i)return;i.state===\"suspended\"&&i.resume?.();const t=i.createOscillator(),s=i.createGain();t.type=\"triangle\",t.frequency.setValueAtTime(480,i.currentTime),t.frequency.exponentialRampToValueAtTime(880,i.currentTime+.04),s.gain.setValueAtTime(1e-4,i.currentTime),s.gain.exponentialRampToValueAtTime(.09,i.currentTime+.008),s.gain.exponentialRampToValueAtTime(1e-4,i.currentTime+.085),t.connect(s),s.connect(i.destination),t.start(i.currentTime),t.stop(i.currentTime+.095)}catch(i){console.warn(\"[SHS UI] Button click sound unavailable\",i)}}}function lr(){if(typeof window>\"u\"||Ve)return;Ve=!0,ss();const e=i=>{Ke(i.target)&&($e(i.target),We())};window.addEventListener(\"pointerdown\",e,!0),window.addEventListener(\"keydown\",i=>{(i.key===\"Enter\"||i.key===\" \")&&Ke(i.target)&&($e(i.target),We())},!0),",
+          "kind": "reference"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/solutions-CILPucpV.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "modulepreload",
+          "lineNumber": 1,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import\"./vendor-CH_-0t41.js\";import{R as d}from\"./@react-refresh-CXH4G1Bp.js\";import{R as m,j as e,N as c,O as x,g as u,f as t,b as r,h as j,H as h}from\"./vendor-react-DWUxBteQ.js\";/* empty css                  *//* empty css                  *//* empty css               *//* empty css              *//* empty css                        */import{t as o,u as a,v as n,w as i,H as f}from\"./pages-Ca4qtZ2F.js\";import{a as g}from\"./applyManifest-IEycFjdl.js\";import{al as b}from\"./components-CDuVLeKw.js\";import{R as y}from\"./RootProviders-BD-VKPyg.js\";import{R}from\"./RoleCtx-Bh2wc-iD.js\";import\"./vendor-charts-20wW2Z-x.js\";import\"./shared-eNuYgzDM.js\";import\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-motion-Bndiu9g1.js\";d.injectIntoGlobalHook(window);window.$RefreshReg$=()=>{};window.$RefreshSig$=()=>s=>s;window.__vite_plugin_react_preamble_installed__=!0;const l=\"solutions-css\",S=`",
+          "kind": "modulepreload"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/store-DuVdGLoo.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-Ca4qtZ2F.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/components-3KDTfcSy.css\",\"assets/pages-CiOMc1g0.css\"])))=>i.map(i=>d[i]);",
+          "kind": "vite_map_deps"
+        },
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{j as e,N as r,O as i,r as o,g as l,f as t,b as n,h as m,R as d,H as p}from\"./vendor-react-DWUxBteQ.js\";/* empty css                  *//* empty css                  *//* empty css               *//* empty css              */import{W as x,_ as c,al as j}from\"./components-CDuVLeKw.js\";import{R as h}from\"./RootProviders-BD-VKPyg.js\";/* empty css                        */import{D as u}from\"./pages-Ca4qtZ2F.js\";import\"./vendor-CH_-0t41.js\";import\"./pages-admin-Bhjlr7vA.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./vendor-charts-20wW2Z-x.js\";function g(){return e.jsxs(\"div\",{\"data-app\":\"store\",children:[e.jsxs(\"header\",{className:\"smp-appbar\",style:{margin:12},children:[e.jsxs(\"div\",{className:\"smp-brand\",children:[e.jsx(\"span\",{className:\"dot\"}),e.jsx(\"span\",{className:\"name\",children:\"SILICON HEARTLAND\"}),e.jsx(\"span\",{className:\"sub\",children:\"store\"})]}),e.jsxs(\"nav\",{className:\"smp-nav\",children:[e.jsx(r,{to:\"/marketplace\",children:\"Marketplace\"}),e.jsx(r,{to:\"/catalog\",children:\"Catalog\"})]}),e.jsx(\"div\",{className:\"smp-actions\",style:{marginLeft:\"auto\"},children:e.jsx(x,{})})]}),e.jsx(\"main\",{style",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{j as e,N as r,O as i,r as o,g as l,f as t,b as n,h as m,R as d,H as p}from\"./vendor-react-DWUxBteQ.js\";/* empty css                  *//* empty css                  *//* empty css               *//* empty css              */import{W as x,_ as c,al as j}from\"./components-CDuVLeKw.js\";import{R as h}from\"./RootProviders-BD-VKPyg.js\";/* empty css                        */import{D as u}from\"./pages-Ca4qtZ2F.js\";import\"./vendor-CH_-0t41.js\";import\"./pages-admin-Bhjlr7vA.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./vendor-charts-20wW2Z-x.js\";function g(){return e.jsxs(\"div\",{\"data-app\":\"store\",children:[e.jsxs(\"header\",{className:\"smp-appbar\",style:{margin:12},children:[e.jsxs(\"div\",{className:\"smp-brand\",children:[e.jsx(\"span\",{className:\"dot\"}),e.jsx(\"span\",{className:\"name\",children:\"SILICON HEARTLAND\"}),e.jsx(\"span\",{className:\"sub\",children:\"store\"})]}),e.jsxs(\"nav\",{className:\"smp-nav\",children:[e.jsx(r,{to:\"/marketplace\",children:\"Marketplace\"}),e.jsx(r,{to:\"/catalog\",children:\"Catalog\"})]}),e.jsx(\"div\",{className:\"smp-actions\",style:{marginLeft:\"auto\"},children:e.jsx(x,{})})]}),e.jsx(\"main\",{style",
+          "kind": "dynamic_import"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/treasury-BS2mOf1Y.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "modulepreload",
+          "lineNumber": 1,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{h as o,j as r,R as m,H as a}from\"./vendor-react-DWUxBteQ.js\";/* empty css                  */import{al as i}from\"./components-CDuVLeKw.js\";import{R as s}from\"./RootProviders-BD-VKPyg.js\";import{R as n}from\"./RoleCtx-Bh2wc-iD.js\";import{T as p}from\"./TreasuryRoutes-DDuXFv7e.js\";import{s as d}from\"./setAppScope-BOafGZJl.js\";import\"./vendor-CH_-0t41.js\";import\"./pages-admin-Bhjlr7vA.js\";import\"./shared-eNuYgzDM.js\";import\"./pages-Ca4qtZ2F.js\";import\"./vendor-charts-20wW2Z-x.js\";import\"./vendor-motion-Bndiu9g1.js\";try{document.documentElement.setAttribute(\"data-app\",\"treasury\")}catch{}d(\"treasury\");function c(e){let t=document.querySelector(`[data-app=\"${e}\"]`)||document.getElementById(\"root\")||document.getElementById(\"app\");return t||(t=document.createElement(\"div\"),t.id=\"root\",t.dataset.app=e,document.body.appendChild(t)),t}const u=c(\"treasury\");o.createRoot(u).render(r.jsx(m.StrictMode,{children:r.jsx(i,{children:r.jsx(s,{appScope:\"treasury\",children:r.jsx(n,{initial:\"admin\",children:r.jsx(a,{children:r.jsx(p,{})})})})})}));",
+          "kind": "modulepreload"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/vendor-mapbox-uaDf4Z7d.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 1,
+          "line": "import{g as _2}from\"./vendor-CH_-0t41.js\";var Om={exports:{}},g2=Om.exports,fb;function y2(){return fb||(fb=1,(function(mb,v2){(function(Gu,qu){mb.exports=qu()})(g2,(function(){let Gu,qu,Bm;function km(c,Z){if(!Gu)Gu=Z;else if(!qu)qu=Z;else{const Or={};Gu(void 0,Or),Bm=Z(Or);const $i=\"self.onerror = function() { console.error('An error occurred while parsing the WebWorker bundle. This is most likely due to improper transpilation by Babel; please see https://docs.mapbox.com/mapbox-gl-js/guides/install/#transpiling'); }; var sharedChunk = {}; (\"+Gu+\")(undefined, sharedChunk); (\"+qu+\")(sharedChunk); self.onerror = null;\";typeof window<\"u\"&&window&&window.URL&&window.URL.createObjectURL&&(Bm.workerUrl=window.URL.createObjectURL(new Blob([$i],{type:\"text/javascript\"})))}}km([\"require\",\"exports\"],function(c,Z){var Or=1e-6,$i=typeof Float32Array<\"u\"?Float32Array:Array;function dc(r,e){var t=e[0],n=e[1],s=e[2],l=e[3],h=t*l-s*n;return h?(r[0]=l*(h=1/h),r[1]=-n*h,r[2]=-s*h,r[3]=t*h,r):null}function ul(){var r=new $i(9);return $i!=Float32Array&&(r[1]=0,r[2]=0,r[3]=0,r[5]=0,r[6]=0,r[7]=0),r[0]=1,r[4]=1,r[8]=1,r}function bo(r,e){var t=e[0],n=e[1],s=e[2],l=e[3],h=e[4],f=e[5],p=e[6],g=e[7],x=e[8]",
+          "kind": "reference"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 2,
+          "line": "This is most likely a bug, please report this via https://github.com/mapbox/mapbox-gl-js/issues/new?assignees=&labels=&template=Bug_report.md",
+          "kind": "reference"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 7,
+          "line": "`)}let h=null,f=null;if(n!==\"background\"&&n!==\"sky\"&&n!==\"slot\"){f=de[`filter_${n}`];const x=Ns(l,f,e,t);if(x.result===\"error\")throw new Error(x.value.map(b=>`${b.key}: ${b.message}`).join(\", \"));h=(b,w,I)=>x.value.evaluate(b,w,{},I)}let p=null,g=null;if(l!==s){const x=Ns(s,f,e,t);if(x.result===\"error\")throw new Error(x.value.map(b=>`${b.key}: ${b.message}`).join(\", \"));p=(b,w,I,E,M)=>x.value.evaluate(b,w,{},I,void 0,void 0,E,M),g=!Os(x.value.expression)}return{filter:h,dynamicFilter:p||void 0,needGeometry:pp(l),needFeature:!!g}}function Qh(r){if(!Array.isArray(r))return r;const e=(function(t){if(c_.has(t[0])){for(let n=1;n<t.length;n++)if(qa(t[n]))return!0}return t})(r);return e===!0?e:e.map(t=>Qh(t))}function fp(r){let e=!1;const t=[];if(r[0]===\"case\"){for(let n=1;n<r.length-1;n+=2)e=e||qa(r[n]),t.push(r[n+1]);t.push(r[r.length-1])}else if(r[0]===\"match\"){e=e||qa(r[1]);for(let n=2;n<r.length-1;n+=2)t.push(r[n+1]);t.push(r[r.length-1])}else if(r[0]===\"step\"){e=e||qa(r[1]);for(let n=1;n<r.length-1;n+=2)t.push(r[n+1])}e&&(r.length=0,r.push(\"any\",...t));for(let n=1;n<r.length;n++)fp(r[n])}function qa(r){if(!Array.isArray(r))return!1;if((e=r[0])===\"pitch\"||e===\"distance-from-center\")r",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 3281,
+          "line": "`}_calculateXYTransform(){const i=this._pos,o=this._map,u=this.getPitchAlignment();if(!o||!i||u!==\"map\")return\"\";if(!o._showingGlobe()){const v=o.getPitch();return v?`rotateX(${v}deg)`:\"\"}const d=c.cL(c.f5(o.transform,this._lngLat)),m=i.sub(c.f6(o.transform)),_=Math.abs(m.x)+Math.abs(m.y);if(_===0)return\"\";const y=d/_;return`rotateX(${-m.y*y}deg) rotateY(${m.x*y}deg)`}_calculateZTransform(){const i=this._pos,o=this._map;if(!o||!i)return\"\";let u=0;const d=this.getRotationAlignment();if(d===\"map\")if(o._showingGlobe()){const m=o.project(new c.aY(this._lngLat.lng,this._lngLat.lat+.001),this._altitude),_=o.project(new c.aY(this._lngLat.lng,this._lngLat.lat-.001),this._altitude).sub(m);u=c.cL(Math.atan2(_.y,_.x))-90}else u=-o.getBearing();else if(d===\"horizon\"){const m=c.aj(4,6,o.getZoom()),_=c.f6(o.transform);_.y+=m*o.transform.height;const y=i.sub(_),v=c.cL(Math.atan2(y.y,y.x));u=(v>90?v-270:v+90)*(1-m)}return u+=this._rotation,u?`rotateZ(${u}deg)`:\"\"}_update(i){cancelAnimationFrame(this._updateFrameId);const o=this._map;o&&(o.transform.renderWorldCopies&&(this._lngLat=oi(this._lngLat,this._pos,o.transform)),this._pos=o.project(this._lngLat,this._altitude),i===!0?this._updateFrameId=re",
+          "kind": "reference"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 3283,
+          "line": "(${u.data.width}, ${u.data.height})`)));const v=!(i instanceof HTMLImageElement||ImageBitmap&&i instanceof ImageBitmap);let T=!1;u.usvg?(u.data=new c.q({width:m,height:_},new Uint8Array(y)),u.usvg=!1,u.icon=void 0,T=!0):u.data.replace(y,v),this.style.updateImage(o,u,T)}hasImage(a){return a?!!this.style&&!!this.style.getImage(c.I.from(a)):(this.fire(new c.B(new Error(\"Missing required image id\"))),!1)}removeImage(a){this.style.removeImage(c.I.from(a))}loadImage(a,i){c.n(this._requestManager.transformRequest(a,c.R.Image),(o,u)=>{i(o,u)})}listImages(){return this.style.listImages().map(a=>a.name)}addModel(a,i){this._lazyInitEmptyStyle(),this.style.addModel(a,i)}hasModel(a){return a?this.style.hasModel(a):(this.fire(new c.B(new Error(\"Missing required model id\"))),!1)}removeModel(a){this.style.removeModel(a)}listModels(){return this.style.listModels()}addLayer(a,i){return this._isValidId(a.id)?(this._lazyInitEmptyStyle(),this.style.addLayer(a,i),this._update(!0)):this}getSlot(a){const i=this.getLayer(a);return i&&i.slot||null}setSlot(a,i){return this.style.setSlot(a,i),this.style.mergeLayers(),this._update(!0)}addImport(a,i){return this.style.addImport(a,i).catch(o=>this.fire(new c.B(n",
+          "kind": "reference"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/vendor-maplibre-JLoBlj2z.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 2,
+          "line": "Use an identity property function instead: \\`{ \"type\": \"identity\", \"property\": ${JSON.stringify(w[1])} }\\`.`)];const S=[];return r.layerType===\"symbol\"&&f===\"text-font\"&&ja(fn(u))&&Ot(u.type)===\"identity\"&&S.push(new Te(i,u,'\"text-font\" does not support identity functions')),S.concat(s({key:r.key,value:u,valueSpec:v,style:o,styleSpec:c,expressionContext:\"property\",propertyType:e,propertyKey:f}))}function Cc(r){return Ac(r,\"paint\")}function Dc(r){return Ac(r,\"layout\")}function zc(r){let e=[];const i=r.value,s=r.key,o=r.style,c=r.styleSpec;if(Xe(i)!==\"object\")return[new Te(s,i,`object expected, ${Xe(i)} found`)];i.type||i.ref||e.push(new Te(s,i,'either \"type\" or \"ref\" is required'));let u=Ot(i.type);const f=Ot(i.ref);if(i.id){const g=Ot(i.id);for(let y=0;y<r.arrayIndex;y++){const v=o.layers[y];Ot(v.id)===g&&e.push(new Te(s,i.id,`duplicate layer id \"${i.id}\", previously used at line ${v.id.__line__}`))}}if(\"ref\"in i){let g;[\"type\",\"source\",\"source-layer\",\"filter\",\"layout\"].forEach((y=>{y in i&&e.push(new Te(s,i[y],`\"${y}\" is prohibited for ref layers`))})),o.layers.forEach((y=>{Ot(y.id)===f&&(g=y)})),g?g.ref?e.push(new Te(s,i.ref,\"ref cannot reference another ref layer\")):u=Ot(g.type)",
+          "kind": "reference"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/vendor-react-DWUxBteQ.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "modulepreload",
+          "lineNumber": 9,
+          "line": "`).replace(py,\"\")}function md(t,l){return l=hd(l),hd(t)===l}function yt(t,l,e,a,u,n){switch(e){case\"children\":typeof a==\"string\"?l===\"body\"||l===\"textarea\"&&a===\"\"||la(t,a):(typeof a==\"number\"||typeof a==\"bigint\")&&l!==\"body\"&&la(t,\"\"+a);break;case\"className\":Xu(t,\"class\",a);break;case\"tabIndex\":Xu(t,\"tabindex\",a);break;case\"dir\":case\"role\":case\"viewBox\":case\"width\":case\"height\":Xu(t,e,a);break;case\"style\":mo(t,a,n);break;case\"data\":if(l!==\"object\"){Xu(t,\"data\",a);break}case\"src\":case\"href\":if(a===\"\"&&(l!==\"a\"||e!==\"href\")){t.removeAttribute(e);break}if(a==null||typeof a==\"function\"||typeof a==\"symbol\"||typeof a==\"boolean\"){t.removeAttribute(e);break}a=Zu(\"\"+a),t.setAttribute(e,a);break;case\"action\":case\"formAction\":if(typeof a==\"function\"){t.setAttribute(e,\"javascript:throw new Error('A React form was unexpectedly submitted. If you called form.submit() manually, consider using form.requestSubmit() instead. If you\\\\'re trying to use event.stopPropagation() in a submit event handler, consider also calling event.preventDefault().')\");break}else typeof n==\"function\"&&(e===\"formAction\"?(l!==\"input\"&&yt(t,l,\"name\",u.name,u,null),yt(t,l,\"formEncType\",u.formEncType,u,null),yt(t,l,\"formMet",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 11,
+          "line": "Please change the parent <Route path=\"${L}\"> to <Route path=\"${L===\"/\"?\"*\":`${L}/*`}\">.`)}let q=ee(),Q;if(r){let L=typeof r==\"string\"?$e(r):r;At(N===\"/\"||L.pathname?.startsWith(N),`When overriding the location using \\`<Routes location>\\` or \\`useRoutes(routes, location)\\`, the location pathname must begin with the portion of the URL pathname that was matched by all parent routes. The current pathname base is \"${N}\" but pathname \"${L.pathname}\" was given in the \\`location\\` prop.`),Q=L}else Q=q;let W=Q.pathname||\"/\",Z=W;if(N!==\"/\"){let L=N.replace(/^\\//,\"\").split(\"/\");Z=\"/\"+W.replace(/^\\//,\"\").split(\"/\").slice(L.length).join(\"/\")}let G=rh(f,{pathname:Z});dl(R||G!=null,`No routes matched location \"${Q.pathname}${Q.search}${Q.hash}\" `),dl(G==null||G[G.length-1].route.element!==void 0||G[G.length-1].route.Component!==void 0||G[G.length-1].route.lazy!==void 0,`Matched leaf route at location \"${Q.pathname}${Q.search}${Q.hash}\" does not have an element or Component. This means it will render an <Outlet /> with a null value by default resulting in an \"empty\" page.`);let K=Fv(G&&G.map(L=>Object.assign({},L,{params:Object.assign({},b,L.params),pathname:te([N,m.encodeLocation?m.encodeLocation",
+          "kind": "dynamic_import"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/verifier-BmeEQChq.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "modulepreload",
+          "lineNumber": 1,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{h as r,j as t}from\"./vendor-react-DWUxBteQ.js\";/* empty css              */import{V as o}from\"./pages-Ca4qtZ2F.js\";/* empty css                  */import\"./vendor-CH_-0t41.js\";import\"./components-CDuVLeKw.js\";import\"./pages-admin-Bhjlr7vA.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./vendor-charts-20wW2Z-x.js\";r.createRoot(document.getElementById(\"app\")).render(t.jsx(o,{}));",
+          "kind": "modulepreload"
+        }
+      ]
+    }
+  ],
+  "bundleSummary": {
+    "totalAssetsParsed": 90,
+    "largeAssets": 2,
+    "largestAssetFileName": "vendor-mapbox-uaDf4Z7d.js",
+    "largestAssetRawKb": 1781.94,
+    "buildWarningDetected": true,
+    "frontendBuildPassed": true
+  },
+  "nextPatchRecommendation": {
+    "id": "post_v1_bundle_patch_26_mapbox_css_async_boundary_patch",
+    "label": "Mapbox CSS Async Boundary Patch",
+    "goal": "Move Mapbox CSS loading behind the same async map route boundary so capital.html no longer preloads vendor-mapbox CSS."
+  }
+}

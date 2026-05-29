@@ -9,6 +9,8 @@ import {
 } from "@/shared/truth-spine";
 import "./hub-reports.css";
 import HubBusinessTourProvider from "./shared/HubBusinessTourProvider.jsx";
+import { buildHubWorkflowReadiness, hubWorkflowStatusClass, hubWorkflowStepClass } from "./shared/hubWorkflowReadiness";
+import { hubPartners } from "./shared/hubBusinessNetworkData";
 import InstitutionalFooter from "@/components/shared/InstitutionalFooter.jsx";
 
 const LOGO_SRC = "/assets/hub/shs-hub-logo.png";
@@ -168,6 +170,106 @@ function ReportCard({ icon, title, format, audience, readiness, updated, tone = 
     </article>
   );
 }
+
+
+const HUB_REPORT_WORKFLOW_REFERRALS = [
+  {
+    id: "case_fdea72ed-ec6e-4eb5-96f9-1cdf84ca44cf",
+    status: "on_hold",
+    priority: "medium",
+    assigned_user_id: "user_admin_001",
+    created_at: "2026-04-15T22:35:08",
+  },
+  {
+    id: "case_1dfc9e8d-1daf-43a8-b892-360cfe068620",
+    status: "closed",
+    priority: "high",
+    assigned_user_id: "user_admin_001",
+    created_at: "2026-04-15T16:20:38",
+  },
+  {
+    id: "case_1302bd05-7c7e-4915-bf96-b1e8426a5a8e",
+    status: "closed",
+    priority: "medium",
+    assigned_user_id: "Unassigned",
+    created_at: "2026-04-15T18:30:29",
+  },
+];
+
+function HubReportWorkflowReadinessBridge({ truthSummary }) {
+  const model = buildHubWorkflowReadiness({
+    referrals: HUB_REPORT_WORKFLOW_REFERRALS,
+    partners: hubPartners,
+    truthSummary,
+    source: "hub_reports",
+  });
+
+  const rows = [
+    ["Workflow Ready", `${model.workflowReadinessPercent}%`],
+    ["Open Referrals", model.metrics.openReferrals],
+    ["Unassigned", model.metrics.unassignedReferrals],
+    ["Aging", model.metrics.agingReferrals],
+    ["Capacity Risk", model.metrics.capacityRiskPartners],
+    ["Report Ready", `${model.metrics.readinessPercent}%`],
+    ["Verified", model.metrics.verifiedCount],
+    ["Pending", model.metrics.pendingCount],
+  ];
+
+  return (
+    <section
+      className={[
+        "hbr-workflowBridge",
+        hubWorkflowStatusClass(model.headlineStatus),
+      ].join(" ")}
+      data-tour="hub-reports-workflow-readiness"
+    >
+      <div className="hbr-workflowBridge__header">
+        <div>
+          <p>Hub Workflow Readiness Bridge</p>
+          <h2>{model.headline}</h2>
+          <span>{model.recommendedNextAction}</span>
+        </div>
+
+        <div className="hbr-workflowBridge__score">
+          <small>Report Posture</small>
+          <strong>{model.workflowReadinessPercent}%</strong>
+        </div>
+      </div>
+
+      <div className="hbr-workflowBridge__rows">
+        {rows.map(([label, value]) => (
+          <article key={label}>
+            <span>{label}</span>
+            <strong>{value}</strong>
+          </article>
+        ))}
+      </div>
+
+      <div className="hbr-workflowBridge__steps">
+        {model.steps.map((step, index) => (
+          <article key={step.key} className={hubWorkflowStepClass(step.status)}>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <strong>{step.label}</strong>
+            <p>{step.detail}</p>
+          </article>
+        ))}
+      </div>
+
+      {model.blockers.length ? (
+        <div className="hbr-workflowBridge__blockers">
+          <strong>Fix before leadership/funder reporting</strong>
+          <p>{model.blockers.join(", ")}</p>
+        </div>
+      ) : (
+        <div className="hbr-workflowBridge__clear">
+          <strong>Reporting lane clear</strong>
+          <p>Hub workflow, partner capacity, and Truth Spine readiness are aligned for this reporting view.</p>
+        </div>
+      )}
+    </section>
+  );
+}
+
 
 function GuidanceRow({ icon, title, text, tone = "blue" }) {
   return (
@@ -338,6 +440,8 @@ export default function HubReports() {
             <p>{exportNotice}</p>
           </div>
         )}
+
+        <HubReportWorkflowReadinessBridge truthSummary={truthSummary} />
 
         <section className="hbr-kpiStrip" data-tour="hub-reports-kpis">
           <KpiCard

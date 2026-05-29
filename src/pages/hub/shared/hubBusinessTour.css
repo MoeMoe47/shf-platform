@@ -172,3 +172,50 @@
 .hubTour-highlight {
   pointer-events: none !important;
 }
+
+/* =========================================================
+   SHS Hub Tour — Guided Workflow Context
+   ========================================================= */
+
+.hubTour-guidedIntent {
+  margin: 10px 0 14px;
+  padding: 12px;
+  border: 1px solid rgba(125, 211, 252, 0.22);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at top left, rgba(14, 165, 233, 0.16), transparent 42%),
+    rgba(8, 24, 44, 0.84);
+}
+
+.hubTour-guidedIntent span {
+  display: block;
+  margin-bottom: 4px;
+  color: #7dd3fc;
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hubTour-guidedIntent strong {
+  display: block;
+  color: #f8fafc;
+  font-size: 0.96rem;
+  line-height: 1.25;
+}
+
+.hubTour-guidedIntent p {
+  margin: 8px 0 0;
+  color: rgba(226, 232, 240, 0.78);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.hubTour-guidedIntent small {
+  display: block;
+  margin-top: 8px;
+  color: #bae6fd;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+

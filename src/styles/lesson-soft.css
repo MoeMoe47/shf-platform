@@ -30,7 +30,7 @@
 .sh-footer{
   background: color-mix(in oklab, var(--surface) 96%, var(--surface-tint));
   border-top:1px solid var(--surface-border);
-  backdrop-filter:saturate(1.2) blur(6px);
+  backdrop-filter: none;
 }
 
 /* ✓ Completed section tick spacing (additive) */
@@ -51,7 +51,7 @@
   background: var(--orange, #ff4f00);
   border-color: var(--orange, #ff4f00);
 }
-.mast button:hover { filter: brightness(0.96); }
+.mast button:hover { filter: none; }
 .mast button:focus { outline:2px solid var(--ring,#0ea5e9); outline-offset:2px; }
 
 .sr-only {
@@ -60,3 +60,31 @@
 }
 
 
+
+
+/* SHS clean white Ohio override — removes dirty/noisy map wash */
+.shs-map-cinematic-texture,
+.shs-map-cinematic-texture::before,
+.shs-map-cinematic-texture::after,
+.shs-operational-map-texture,
+.shs-operational-map-texture::before,
+.shs-operational-map-texture::after,
+.map-cinematic-texture,
+.map-cinematic-texture::before,
+.map-cinematic-texture::after {
+  opacity: 0.035 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  background-image: none !important;
+}
+
+.shs-mapbox-map,
+.shs-operational-mapbox-map,
+.shs-operational-map-surface {
+  background: #020817 !important;
+}
+
+.shs-map-layer-state .mapboxgl-canvas,
+.shs-map-state .mapboxgl-canvas {
+  filter: none !important;
+}

@@ -7,6 +7,22 @@ import {
   aggregationSignals,
   aggregationVerificationRecords,
 } from "./mockData";
+import { buildOracleRowReadiness, oracleReadinessClass } from "./oracle-row-readiness";
+
+function mappingSignal(row) {
+  const status = String(row.status || "").toLowerCase();
+  const count = Number(row.count || 0);
+
+  if (status === "active" && count > 0) {
+    return { label: "Ready", tone: "ready" };
+  }
+
+  if (status === "active") {
+    return { label: "Needs Data", tone: "review" };
+  }
+
+  return { label: "Not Ready", tone: "blocked" };
+}
 
 function buildMappingRows() {
   return [
@@ -78,19 +94,50 @@ export default function MappingRegistry() {
               <th>Mapped To</th>
               <th>Count</th>
               <th>Status</th>
+              <th>Operator Signal</th>
+              <th>Oracle Readiness</th>
               <th>Notes</th>
             </tr>
           </thead>
           <tbody>
-            {rows.map((row) => (
+            {rows.map((row) => {
+              const oracleReadiness = buildOracleRowReadiness({
+                type: "mapping",
+                status: row.status,
+                count: row.count,
+              });
+
+              return (
               <tr key={row.source}>
                 <td>{row.source}</td>
                 <td>{row.mappedTo}</td>
                 <td>{row.count}</td>
                 <td>{row.status}</td>
+                <td>
+                  <span
+                    className={[
+                      "admin-aggregation-signal-pill",
+                      `admin-aggregation-signal-pill--${mappingSignal(row).tone}`,
+                    ].join(" ")}
+                  >
+                    {mappingSignal(row).label}
+                  </span>
+                </td>
+                <td>
+                  <span
+                    className={[
+                      "admin-aggregation-oracle-ready",
+                      oracleReadinessClass(oracleReadiness.tone),
+                    ].join(" ")}
+                    title={oracleReadiness.nextAction}
+                  >
+                    {oracleReadiness.label}
+                  </span>
+                </td>
                 <td>{row.note}</td>
               </tr>
-            ))}
+              );
+            })}
           </tbody>
         </table>
       </div>

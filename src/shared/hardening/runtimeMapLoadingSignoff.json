@@ -1,0 +1,149 @@
+{
+  "generatedAt": "2026-05-23T17:42:24.860Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 20",
+  "mode": "RUNTIME_MAP_LOADING_SIGNOFF_NO_CODE_CHANGES",
+  "runtimeMapLoadingSignoffStatus": "manual_browser_signoff_required_preload_risk_detected",
+  "runtimeMapLoadingSignoffLabel": "Runtime Map Loading Signoff Checklist Ready",
+  "productionDecision": "No source code was changed. Patch 20 creates the browser/network signoff checklist needed before changing Capital or Exchange route imports.",
+  "priorPatch19Status": "map_engine_preload_risk_detected",
+  "priorPatch18Status": "build_safe_split_successful_but_two_large_map_engines_remain",
+  "preloadRiskDetected": true,
+  "knownRiskSummary": {
+    "mapboxPreloadedInHtml": true,
+    "maplibrePreloadedInHtml": false,
+    "htmlMapReferencesCount": 1,
+    "mapboxChunk": "vendor-mapbox-uaDf4Z7d.js",
+    "maplibreChunk": "vendor-maplibre-JLoBlj2z.js",
+    "mapboxCss": "vendor-mapbox-C5-Kj3x0.css",
+    "maplibreCss": "vendor-maplibre-kWVbv8B-.css"
+  },
+  "signoffRoutes": [
+    {
+      "group": "Non-map entry route",
+      "url": "http://localhost:5173/",
+      "expected": {
+        "shouldLoad": [
+          "vendor-react",
+          "vendor",
+          "pages"
+        ],
+        "shouldNotLoadEarly": [
+          "vendor-mapbox-uaDf4Z7d.js",
+          "vendor-maplibre-JLoBlj2z.js",
+          "vendor-mapbox-C5-Kj3x0.css",
+          "vendor-maplibre-kWVbv8B-.css"
+        ]
+      },
+      "passCondition": "Mapbox and MapLibre chunks should not appear in Network before a map route is opened."
+    },
+    {
+      "group": "Admin entry route",
+      "url": "http://localhost:5173/admin.html#/hub",
+      "expected": {
+        "shouldLoad": [
+          "vendor-react",
+          "pages-admin",
+          "pages-hub"
+        ],
+        "shouldNotLoadEarly": [
+          "vendor-mapbox-uaDf4Z7d.js",
+          "vendor-maplibre-JLoBlj2z.js",
+          "vendor-mapbox-C5-Kj3x0.css",
+          "vendor-maplibre-kWVbv8B-.css"
+        ]
+      },
+      "passCondition": "Hub dashboard should load without pulling Mapbox or MapLibre chunks unless a map view is opened."
+    },
+    {
+      "group": "Capital entry risk route",
+      "url": "http://localhost:5173/capital.html",
+      "expected": {
+        "shouldLoad": [
+          "capital entry assets"
+        ],
+        "shouldNotLoadEarly": [
+          "vendor-mapbox-uaDf4Z7d.js",
+          "vendor-mapbox-C5-Kj3x0.css"
+        ]
+      },
+      "passCondition": "Capital entry should not preload Mapbox unless the Exchange/Unified Truth map route is immediately rendered.",
+      "knownRisk": "Patch 19 detected Mapbox preload references in dist/capital.html."
+    },
+    {
+      "group": "Exchange mission route",
+      "url": "http://localhost:5173/capital.html#/exchange",
+      "expected": {
+        "shouldLoad": [
+          "pages-exchange"
+        ],
+        "shouldLoadOnlyIfMapVisible": [
+          "vendor-mapbox-uaDf4Z7d.js",
+          "vendor-mapbox-C5-Kj3x0.css"
+        ]
+      },
+      "passCondition": "Mapbox should load only when the Unified Truth/operational map surface is actually mounted."
+    },
+    {
+      "group": "Unified Truth map route",
+      "url": "http://localhost:5173/capital.html#/exchange",
+      "expected": {
+        "shouldLoadWhenMapVisible": [
+          "vendor-mapbox-uaDf4Z7d.js",
+          "vendor-mapbox-C5-Kj3x0.css"
+        ],
+        "shouldNotRequire": [
+          "vendor-maplibre-JLoBlj2z.js",
+          "vendor-maplibre-kWVbv8B-.css"
+        ]
+      },
+      "passCondition": "Mapbox can load here because this is the Mapbox-powered Unified Truth/operational map path."
+    },
+    {
+      "group": "MapLibre route",
+      "url": "http://localhost:5173/",
+      "expected": {
+        "shouldLoadWhenMapHeroOrOperationalMapVisible": [
+          "vendor-maplibre-JLoBlj2z.js",
+          "vendor-maplibre-kWVbv8B-.css"
+        ],
+        "shouldNotRequire": [
+          "vendor-mapbox-uaDf4Z7d.js",
+          "vendor-mapbox-C5-Kj3x0.css"
+        ]
+      },
+      "passCondition": "MapLibre can load only when MapHero/OperationalMap surfaces are rendered."
+    }
+  ],
+  "browserSteps": [
+    "Run npm run dev.",
+    "Open Chrome DevTools.",
+    "Go to Network tab.",
+    "Check Disable cache.",
+    "Filter by vendor-map.",
+    "Hard refresh each test route.",
+    "Record whether vendor-mapbox and vendor-maplibre load immediately.",
+    "Navigate to the map route and confirm the correct map engine loads only then.",
+    "Take note of any route where map chunks load before map UI appears."
+  ],
+  "signoffPassRules": [
+    "Non-map routes should not load vendor-mapbox or vendor-maplibre immediately.",
+    "Capital entry should not preload vendor-mapbox unless the visible first route actually needs the Exchange/Unified Truth map.",
+    "Unified Truth map route may load vendor-mapbox.",
+    "MapLibre visual routes may load vendor-maplibre.",
+    "Mapbox route should not require MapLibre unless both map systems are visible.",
+    "MapLibre route should not require Mapbox unless both map systems are visible."
+  ],
+  "signoffFailRules": [
+    "vendor-mapbox loads on a non-map route before any map UI appears.",
+    "vendor-maplibre loads on a non-map route before any map UI appears.",
+    "capital.html always preloads vendor-mapbox even when the first visible route is not a map.",
+    "Both map engines load for a route that only displays one map system."
+  ],
+  "recommendedDecision": "Run browser signoff. If capital.html loads vendor-mapbox before the map appears, Patch 21 should audit the Capital/Exchange preload chain.",
+  "nextPatchRecommendation": {
+    "id": "post_v1_bundle_patch_21_capital_exchange_preload_chain_audit",
+    "label": "Capital Exchange Preload Chain Audit",
+    "goal": "Audit capital.html / capital entry route imports to find why vendor-mapbox is preloaded before the actual map route.",
+    "risk": "low_medium"
+  }
+}

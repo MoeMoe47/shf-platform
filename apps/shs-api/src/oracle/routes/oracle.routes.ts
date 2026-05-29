@@ -1,3 +1,5 @@
+import { requirePermission } from "../../auth/permission-guard";
+import { SHS_SECURITY_PERMISSIONS } from "../../auth/security-permissions";
 import {
   getOracleTruth,
   compareOracleEntities,
@@ -7,9 +9,33 @@ import {
 } from "../controllers/oracle.controller";
 
 export function registerOracleRoutes(app: any) {
-  app.get("/oracle/truth/:entityId", getOracleTruth);
-  app.get("/oracle/compare", compareOracleEntities);
-  app.get("/oracle/priority", getOraclePriorityQueue);
-  app.post("/oracle/action", postOracleAction);
-  app.get("/oracle/actions", getOracleActions);
+  app.get(
+    "/oracle/truth/:entityId",
+    requirePermission(SHS_SECURITY_PERMISSIONS.ORACLE_VIEW),
+    getOracleTruth
+  );
+
+  app.get(
+    "/oracle/compare",
+    requirePermission(SHS_SECURITY_PERMISSIONS.ORACLE_COMPARE),
+    compareOracleEntities
+  );
+
+  app.get(
+    "/oracle/priority",
+    requirePermission(SHS_SECURITY_PERMISSIONS.ORACLE_PRIORITY),
+    getOraclePriorityQueue
+  );
+
+  app.post(
+    "/oracle/action",
+    requirePermission(SHS_SECURITY_PERMISSIONS.ORACLE_ACTION),
+    postOracleAction
+  );
+
+  app.get(
+    "/oracle/actions",
+    requirePermission(SHS_SECURITY_PERMISSIONS.ORACLE_VIEW),
+    getOracleActions
+  );
 }

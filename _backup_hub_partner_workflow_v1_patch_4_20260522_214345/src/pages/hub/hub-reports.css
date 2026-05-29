@@ -1,0 +1,2134 @@
+html, body, #root { background: #02070d !important; }
+
+.hbr-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  background:
+    radial-gradient(circle at 40% -14%, rgba(36,154,255,.18), transparent 35%),
+    radial-gradient(circle at 95% 105%, rgba(59,225,199,.08), transparent 30%),
+    linear-gradient(180deg, #06111f, #030914 64%, #02070d);
+  color: #edf6ff;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.hbr-rail {
+  border-right: 1px solid rgba(113,160,205,.2);
+  background: rgba(3,12,22,.94);
+  padding: 12px 8px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 10px;
+}
+
+.hbr-logo {
+  width: 88px; height: 88px; margin: 0 auto;
+  border-radius: 18px;
+  border: 1px solid rgba(74,169,255,.58);
+  background: rgba(5,18,31,.9);
+  display: flex; align-items: center; justify-content: center;
+  padding: 3px; overflow: hidden; cursor: pointer;
+}
+
+.hbr-logo img {
+  width: 84px; height: 84px; max-width: 84px; max-height: 84px;
+  object-fit: contain; transform: scale(1.12);
+}
+
+.hbr-nav { display: grid; gap: 7px; align-content: start; }
+.hbr-nav button {
+  min-height: 58px; border: 1px solid transparent; border-radius: 11px;
+  background: transparent; color: rgba(218,235,247,.68);
+  display: grid; place-items: center; gap: 2px; cursor: pointer; position: relative;
+}
+.hbr-nav span { font-size: 20px; filter: drop-shadow(0 0 8px currentColor); }
+.hbr-nav small { font-size: 10px; }
+.hbr-nav b {
+  position: absolute; right: 12px; top: 8px; min-width: 18px; height: 18px;
+  border-radius: 999px; background: #ff8a3d; color: #04101c;
+  display: grid; place-items: center; font-size: 10px;
+}
+.hbr-nav .is-active {
+  background: rgba(28,116,220,.46);
+  border-color: rgba(89,173,255,.62);
+  color: #f4fbff;
+  box-shadow: 0 0 20px rgba(49,146,255,.22);
+}
+
+.hbr-readiness {
+  border: 1px solid rgba(94,161,223,.2);
+  border-radius: 12px;
+  background: rgba(5,17,30,.88);
+  padding: 12px 8px;
+  text-align: center;
+}
+.hbr-readiness strong { font-size: 10px; letter-spacing: .16em; }
+.hbr-readiness div {
+  width: 64px; height: 64px; margin: 12px auto 8px; border-radius: 999px;
+  display: grid; place-items: center; font-size: 19px; font-weight: 950;
+  background: radial-gradient(circle,#071421 56%,transparent 57%),
+              conic-gradient(#58b8ff 0 87%,rgba(58,100,140,.3) 87% 100%);
+}
+.hbr-readiness span { display: block; color: #60e39c; font-weight: 900; font-size: 12px; }
+.hbr-readiness small { display: block; margin-top: 8px; color: rgba(217,231,243,.62); font-size: 10px; }
+
+.hbr-page { min-width: 0; padding: 12px 12px 24px; }
+
+.hbr-header, .hbr-kpi, .hbr-panel, .hbr-reportCard {
+  border: 1px solid rgba(104,139,191,.24);
+  border-radius: 16px;
+  background: radial-gradient(circle at 92% 70%, rgba(64,145,255,.1), transparent 35%), rgba(7,17,29,.92);
+  box-shadow: inset 0 0 22px rgba(255,255,255,.018), 0 20px 60px rgba(0,0,0,.14);
+}
+
+.hbr-header {
+  min-height: 116px;
+  padding: 18px 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 16px;
+  background: radial-gradient(circle at 72% 40%, rgba(54,151,255,.14), transparent 30%),
+              linear-gradient(135deg, rgba(8,28,48,.96), rgba(4,13,24,.96));
+}
+.hbr-header p {
+  margin: 0 0 8px; color: #62e0ff; letter-spacing: .22em;
+  font-size: 12px; font-weight: 950;
+}
+.hbr-header h1 {
+  margin: 0; font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(42px, 3.35vw, 64px); line-height: .95;
+}
+.hbr-header span {
+  display: block; margin-top: 10px; color: rgba(225,238,247,.78); font-size: 15px;
+}
+
+.hbr-actions { display: flex; gap: 10px; }
+.hbr-actions button, .hbr-panel button, .hbr-reportActions button {
+  height: 40px; padding: 0 16px; border-radius: 10px;
+  border: 1px solid rgba(96,151,204,.32);
+  background: rgba(4,14,25,.9);
+  color: #86c2ff;
+  font-weight: 900;
+  cursor: pointer;
+}
+.hbr-actions .is-primary, .hbr-reportActions .is-primary {
+  background: linear-gradient(135deg,#1680ff,#1d59d7);
+  border-color: rgba(113,190,255,.6);
+  color: #fff;
+  box-shadow: 0 0 20px rgba(45,132,255,.28);
+}
+
+.hbr-kpiStrip {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0,1fr));
+  gap: 8px;
+}
+.hbr-kpi {
+  min-height: 108px;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+.hbr-kpiIcon, .hbr-reportIcon, .hbr-guideIcon {
+  width: 38px; height: 38px; border-radius: 12px;
+  display: grid; place-items: center;
+  background: rgba(9,25,42,.9);
+  border: 1px solid rgba(98,224,255,.2);
+}
+.hbr-kpi h3 {
+  margin: 0; font-size: 12px; text-transform: uppercase; letter-spacing: .08em;
+}
+.hbr-kpi strong { display: block; margin-top: 7px; font-size: 29px; line-height: 1; }
+.hbr-kpi p { margin: 8px 0 0; color: rgba(216,229,242,.68); font-size: 11px; }
+
+.hbr-chip, .hbr-status {
+  display: inline-flex; align-items: center; min-height: 22px; padding: 0 10px;
+  border-radius: 999px; font-size: 10px; font-weight: 950; text-transform: uppercase; letter-spacing: .04em;
+}
+.hbr-chip--blue { color:#66bcff; background:rgba(86,168,255,.12); border:1px solid rgba(86,168,255,.3); }
+.hbr-chip--cyan { color:#62e0ff; background:rgba(98,224,255,.1); border:1px solid rgba(98,224,255,.28); }
+.hbr-chip--green { color:#5ee29b; background:rgba(94,226,155,.12); border:1px solid rgba(94,226,155,.28); }
+.hbr-chip--gold { color:#f0a83e; background:rgba(240,168,62,.12); border:1px solid rgba(240,168,62,.28); }
+.hbr-chip--violet { color:#b3a6ff; background:rgba(139,118,255,.13); border:1px solid rgba(139,118,255,.28); }
+
+.hbr-spark {
+  position: absolute; right: 12px; bottom: 12px;
+  width: 62px; height: 24px; color: #6da7ff;
+}
+.hbr-spark polyline {
+  fill: none; stroke: currentColor; stroke-width: 3;
+  stroke-linecap: round; stroke-linejoin: round;
+  filter: drop-shadow(0 0 6px currentColor);
+}
+.hbr-spark--green { color:#5ee29b; }
+.hbr-spark--gold { color:#f0a83e; }
+.hbr-spark--cyan { color:#62e0ff; }
+.hbr-spark--violet { color:#b3a6ff; }
+
+.hbr-workGrid {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 390px;
+  gap: 10px;
+}
+.hbr-mainColumn, .hbr-sideColumn { display: grid; gap: 10px; align-content: start; }
+.hbr-panel { padding: 14px; }
+.hbr-panelHead { display: flex; align-items: start; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.hbr-panel h2 { margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: .16em; }
+.hbr-panel p { margin: 5px 0 0; color: rgba(216,229,242,.68); font-size: 13px; }
+
+.hbr-reportGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 10px;
+}
+.hbr-reportCard {
+  padding: 14px;
+  min-height: 240px;
+  display: grid;
+  align-content: start;
+  gap: 12px;
+}
+.hbr-reportTop { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
+.hbr-reportTop h3 { margin: 0; font-size: 18px; }
+.hbr-reportTop p { margin: 4px 0 0; color: rgba(216,229,242,.66); font-size: 12px; }
+
+.hbr-reportCard dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 8px 12px;
+  border-top: 1px solid rgba(116,151,181,.14);
+  padding-top: 12px;
+}
+.hbr-reportCard dt {
+  color: #62e0ff;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-size: 10px;
+}
+.hbr-reportCard dd { margin: 0; font-size: 12px; font-weight: 800; }
+.hbr-reportActions { display: flex; gap: 8px; margin-top: 4px; }
+
+.hbr-traceGrid {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 8px;
+}
+.hbr-traceGrid div {
+  border: 1px solid rgba(104,139,191,.18);
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(5,16,27,.5);
+}
+.hbr-traceGrid strong, .hbr-traceGrid span, .hbr-traceGrid b { display: block; }
+.hbr-traceGrid span { margin: 6px 0 10px; color: rgba(216,229,242,.66); font-size: 12px; }
+.hbr-traceGrid b { width: fit-content; padding: 4px 9px; border-radius: 999px; font-size: 10px; text-transform: uppercase; }
+.good { color:#5ee29b; background:rgba(94,226,155,.12); border:1px solid rgba(94,226,155,.25); }
+.warn { color:#f0a83e; background:rgba(240,168,62,.12); border:1px solid rgba(240,168,62,.25); }
+.hold { color:#b3a6ff; background:rgba(139,118,255,.12); border:1px solid rgba(139,118,255,.25); }
+
+.hbr-exportTable {
+  border: 1px solid rgba(104,139,191,.16);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.hbr-tableHead, .hbr-tableRow {
+  display: grid;
+  grid-template-columns: 1.4fr .7fr .9fr 1fr 1fr;
+  gap: 10px;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 12px;
+}
+.hbr-tableHead {
+  background: rgba(3,14,25,.55);
+  color: rgba(216,229,242,.62);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.hbr-tableRow {
+  border-top: 1px solid rgba(116,151,181,.12);
+  font-size: 12px;
+}
+
+.hbr-guideRow {
+  min-height: 62px;
+  display: grid;
+  grid-template-columns: 42px minmax(0,1fr);
+  gap: 12px;
+  align-items: center;
+  border-top: 1px solid rgba(116,151,181,.12);
+}
+.hbr-guideRow strong, .hbr-guideRow span { display: block; }
+.hbr-guideRow span { margin-top: 2px; color: rgba(216,229,242,.66); font-size: 12px; }
+
+.hbr-recentList { display: grid; }
+.hbr-recentList div {
+  min-height: 58px;
+  display: grid;
+  grid-template-columns: 34px minmax(0,1fr);
+  gap: 10px;
+  align-items: center;
+  border-top: 1px solid rgba(116,151,181,.12);
+}
+.hbr-recentList b {
+  width: 28px; height: 28px; display: grid; place-items: center;
+  border-radius: 999px;
+}
+.hbr-recentList strong, .hbr-recentList small { display: block; }
+.hbr-recentList small { margin-top: 3px; color: rgba(216,229,242,.62); }
+
+.hbr-commandLink {
+  border-color: rgba(98,224,255,.32);
+  background:
+    radial-gradient(circle at 80% 10%, rgba(98,224,255,.12), transparent 42%),
+    rgba(7,17,29,.92);
+}
+.hbr-commandLink button {
+  margin-top: 14px;
+  width: 100%;
+}
+
+@keyframes hbrFadeLift { from { opacity:0; transform:translateY(10px); filter:blur(2px); } to { opacity:1; transform:translateY(0); filter:blur(0); } }
+@keyframes hbrSparkDraw { from { stroke-dashoffset:140; opacity:.3; } to { stroke-dashoffset:0; opacity:1; } }
+
+.hbr-header, .hbr-kpi, .hbr-panel { animation: hbrFadeLift 480ms ease both; }
+.hbr-kpi:nth-child(1){animation-delay:80ms}.hbr-kpi:nth-child(2){animation-delay:140ms}.hbr-kpi:nth-child(3){animation-delay:200ms}.hbr-kpi:nth-child(4){animation-delay:260ms}.hbr-kpi:nth-child(5){animation-delay:320ms}.hbr-kpi:nth-child(6){animation-delay:380ms}
+.hbr-spark polyline { stroke-dasharray:140; stroke-dashoffset:140; animation:hbrSparkDraw 1100ms ease forwards; animation-delay:720ms; }
+
+@media (max-width: 1500px) {
+  .hbr-workGrid { grid-template-columns: 1fr; }
+  .hbr-sideColumn { grid-template-columns: repeat(3, minmax(0,1fr)); }
+}
+@media (max-width: 1200px) {
+  .hbr-kpiStrip, .hbr-reportGrid, .hbr-sideColumn, .hbr-traceGrid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+@media (max-width: 900px) {
+  .hbr-shell { grid-template-columns: 1fr; }
+  .hbr-rail { display: none; }
+  .hbr-header, .hbr-kpiStrip, .hbr-reportGrid, .hbr-sideColumn, .hbr-traceGrid { grid-template-columns: 1fr; }
+  .hbr-tableHead, .hbr-tableRow { grid-template-columns: 1fr; padding: 10px; }
+}
+
+/* ===== HUB REPORTS RECENT REPORTS POLISH ===== */
+.hbr-recentList--polished {
+  display: grid;
+}
+
+.hbr-recentReportItem {
+  min-height: 64px;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  border-top: 1px solid rgba(116, 151, 181, 0.12);
+}
+
+.hbr-recentReportItem b {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  font-size: 13px;
+}
+
+.hbr-recentReportItem strong {
+  display: block;
+  color: #edf6ff;
+  font-size: 15px;
+  line-height: 1.15;
+}
+
+.hbr-recentReportItem small {
+  margin-top: 5px;
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  color: rgba(216, 229, 242, 0.66);
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.hbr-recentReportItem small i {
+  font-style: normal;
+  opacity: 0.55;
+}
+
+/* ===== HUB REPORTS RECENT REPORTS WIDTH FIX ===== */
+.hbr-recentList--polished {
+  width: 100%;
+}
+
+.hbr-recentReportItem {
+  grid-template-columns: 34px minmax(0, 1fr) !important;
+  column-gap: 14px !important;
+  align-items: center !important;
+  padding: 12px 0 !important;
+}
+
+.hbr-recentReportItem > div {
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+.hbr-recentReportItem strong {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  line-height: 1.2 !important;
+  font-size: 16px !important;
+}
+
+.hbr-recentReportItem small {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 6px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-top: 6px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.hbr-recentReportItem small span {
+  display: inline !important;
+  white-space: nowrap !important;
+  color: rgba(216, 229, 242, 0.68) !important;
+  font-size: 12px !important;
+  line-height: 1.1 !important;
+}
+
+.hbr-recentReportItem small i {
+  display: inline !important;
+  font-style: normal !important;
+  opacity: 0.55 !important;
+  flex: 0 0 auto !important;
+}
+
+/* Prevent older .hbr-recentList div rules from forcing bad wrapping */
+.hbr-recentList--polished div {
+  min-height: unset;
+}
+
+.hbr-recentList--polished .hbr-recentReportItem {
+  min-height: 64px !important;
+}
+
+/* ===== HUB REPORTS RECENT REPORTS FINAL LAYOUT FIX ===== */
+.hbr-recentList--polished {
+  display: grid !important;
+  width: 100% !important;
+}
+
+.hbr-recentList--polished .hbr-recentReportItem {
+  display: grid !important;
+  grid-template-columns: 34px minmax(170px, 1fr) auto !important;
+  gap: 12px !important;
+  align-items: center !important;
+  min-height: 58px !important;
+  padding: 10px 0 !important;
+  border-top: 1px solid rgba(116, 151, 181, 0.12) !important;
+}
+
+.hbr-recentList--polished .hbr-recentReportItem > b {
+  width: 28px !important;
+  height: 28px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 999px !important;
+  flex: none !important;
+}
+
+.hbr-recentList--polished .hbr-recentReportItem > div {
+  display: contents !important;
+}
+
+.hbr-recentList--polished .hbr-recentReportItem strong {
+  grid-column: 2 !important;
+  display: block !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  width: auto !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  color: #edf6ff !important;
+  font-size: 15px !important;
+  line-height: 1.15 !important;
+}
+
+.hbr-recentList--polished .hbr-recentReportItem small {
+  grid-column: 3 !important;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  gap: 6px !important;
+  width: auto !important;
+  max-width: 210px !important;
+  margin-top: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  color: rgba(216, 229, 242, 0.68) !important;
+  font-size: 12px !important;
+  line-height: 1.1 !important;
+}
+
+.hbr-recentList--polished .hbr-recentReportItem small span,
+.hbr-recentList--polished .hbr-recentReportItem small i {
+  display: inline !important;
+  white-space: nowrap !important;
+  flex: 0 0 auto !important;
+}
+
+.hbr-recentList--polished .hbr-recentReportItem small i {
+  font-style: normal !important;
+  opacity: 0.55 !important;
+}
+
+/* Mobile fallback */
+@media (max-width: 900px) {
+  .hbr-recentList--polished .hbr-recentReportItem {
+    grid-template-columns: 34px minmax(0, 1fr) !important;
+  }
+
+  .hbr-recentList--polished .hbr-recentReportItem strong {
+    grid-column: 2 !important;
+  }
+
+  .hbr-recentList--polished .hbr-recentReportItem small {
+    grid-column: 2 !important;
+    justify-content: flex-start !important;
+    max-width: 100% !important;
+    margin-top: 5px !important;
+  }
+}
+
+/* ===== SHS HUB LOGO HOVER MOTION ===== */
+.hub-logo,
+.hfi-logo,
+.hbr-logo,
+.hpa-logo,
+.hrl-logo,
+.hin-logo,
+.hld-logo,
+.hwd-logo,
+[class*="logo"] {
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease,
+    filter 180ms ease;
+}
+
+.hub-logo:hover,
+.hfi-logo:hover,
+.hbr-logo:hover,
+.hpa-logo:hover,
+.hrl-logo:hover,
+.hin-logo:hover,
+.hld-logo:hover,
+.hwd-logo:hover,
+[class*="logo"]:hover {
+  transform: translateY(-3px) scale(1.035);
+  border-color: rgba(98, 224, 255, 0.88) !important;
+  box-shadow:
+    0 0 0 1px rgba(98, 224, 255, 0.18),
+    0 0 22px rgba(43, 145, 255, 0.42),
+    0 14px 34px rgba(0, 0, 0, 0.38) !important;
+  filter: brightness(1.08);
+}
+
+.hub-logo:hover img,
+.hfi-logo:hover img,
+.hbr-logo:hover img,
+.hpa-logo:hover img,
+.hrl-logo:hover img,
+.hin-logo:hover img,
+.hld-logo:hover img,
+.hwd-logo:hover img,
+[class*="logo"]:hover img {
+  transform: scale(1.18);
+  transition: transform 180ms ease, filter 180ms ease;
+  filter: drop-shadow(0 0 12px rgba(92, 184, 255, 0.55));
+}
+
+/* =========================================================
+   SHS HUB LIVING MOTION LAYER
+   Purpose: make charts/cards feel alive after page load
+   Scope: Hub dashboard, partner network, intake, queue,
+          referral tracker, files/imports, hub reports
+   ========================================================= */
+
+@keyframes shsHubFadeLiftIn {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes shsHubChartDraw {
+  0% {
+    stroke-dashoffset: 180;
+    opacity: 0.25;
+  }
+  55% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes shsHubSoftPulse {
+  0%, 100% {
+    filter: brightness(1);
+    box-shadow:
+      inset 0 0 22px rgba(255, 255, 255, 0.018),
+      0 20px 60px rgba(0, 0, 0, 0.14);
+  }
+  50% {
+    filter: brightness(1.06);
+    box-shadow:
+      inset 0 0 28px rgba(98, 224, 255, 0.035),
+      0 0 26px rgba(43, 145, 255, 0.16),
+      0 20px 60px rgba(0, 0, 0, 0.2);
+  }
+}
+
+@keyframes shsHubBarGrow {
+  0% {
+    transform: scaleX(0);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+@keyframes shsHubRingWake {
+  0% {
+    transform: rotate(-70deg) scale(0.94);
+    opacity: 0.45;
+    filter: brightness(0.8);
+  }
+  65% {
+    transform: rotate(8deg) scale(1.02);
+    opacity: 1;
+    filter: brightness(1.12);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+@keyframes shsHubStatusPulse {
+  0%, 100% {
+    filter: brightness(1);
+    box-shadow: 0 0 0 rgba(98, 224, 255, 0);
+  }
+  50% {
+    filter: brightness(1.12);
+    box-shadow: 0 0 14px rgba(98, 224, 255, 0.18);
+  }
+}
+
+@keyframes shsHubTinyFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+/* Page sections wake in */
+[class*="hfi-header"],
+[class*="hbr-header"],
+[class*="hpa-header"],
+[class*="hrl-header"],
+[class*="hub-header"],
+[class*="hwd-header"],
+[class*="hld-header"],
+[class*="hin-header"],
+[class*="panel"],
+[class*="Panel"],
+[class*="card"],
+[class*="Card"] {
+  animation: shsHubFadeLiftIn 480ms ease both;
+}
+
+/* Stagger common cards */
+[class*="kpi"]:nth-child(1),
+[class*="Kpi"]:nth-child(1),
+[class*="metric"]:nth-child(1),
+[class*="Metric"]:nth-child(1),
+[class*="card"]:nth-child(1),
+[class*="Card"]:nth-child(1) {
+  animation-delay: 70ms;
+}
+
+[class*="kpi"]:nth-child(2),
+[class*="Kpi"]:nth-child(2),
+[class*="metric"]:nth-child(2),
+[class*="Metric"]:nth-child(2),
+[class*="card"]:nth-child(2),
+[class*="Card"]:nth-child(2) {
+  animation-delay: 130ms;
+}
+
+[class*="kpi"]:nth-child(3),
+[class*="Kpi"]:nth-child(3),
+[class*="metric"]:nth-child(3),
+[class*="Metric"]:nth-child(3),
+[class*="card"]:nth-child(3),
+[class*="Card"]:nth-child(3) {
+  animation-delay: 190ms;
+}
+
+[class*="kpi"]:nth-child(4),
+[class*="Kpi"]:nth-child(4),
+[class*="metric"]:nth-child(4),
+[class*="Metric"]:nth-child(4),
+[class*="card"]:nth-child(4),
+[class*="Card"]:nth-child(4) {
+  animation-delay: 250ms;
+}
+
+[class*="kpi"]:nth-child(5),
+[class*="Kpi"]:nth-child(5),
+[class*="metric"]:nth-child(5),
+[class*="Metric"]:nth-child(5),
+[class*="card"]:nth-child(5),
+[class*="Card"]:nth-child(5) {
+  animation-delay: 310ms;
+}
+
+[class*="kpi"]:nth-child(6),
+[class*="Kpi"]:nth-child(6),
+[class*="metric"]:nth-child(6),
+[class*="Metric"]:nth-child(6),
+[class*="card"]:nth-child(6),
+[class*="Card"]:nth-child(6) {
+  animation-delay: 370ms;
+}
+
+/* Mini sparklines draw after page opens */
+svg[class*="spark"] polyline,
+svg[class*="Spark"] polyline,
+svg[class*="spark"] path,
+svg[class*="Spark"] path,
+[class*="spark"] svg polyline,
+[class*="spark"] svg path,
+[class*="Spark"] svg polyline,
+[class*="Spark"] svg path {
+  stroke-dasharray: 180 !important;
+  stroke-dashoffset: 180 !important;
+  animation: shsHubChartDraw 1150ms ease forwards !important;
+  animation-delay: 580ms !important;
+}
+
+/* Keep tiny charts gently alive after drawing */
+svg[class*="spark"],
+svg[class*="Spark"],
+[class*="spark"],
+[class*="Spark"] {
+  animation:
+    shsHubFadeLiftIn 420ms ease both,
+    shsHubTinyFloat 3600ms ease-in-out infinite;
+  animation-delay: 420ms, 1800ms;
+}
+
+/* Donut/ring charts wake in */
+[class*="donut"],
+[class*="Donut"],
+[class*="ring"],
+[class*="Ring"],
+[class*="readiness"] div,
+[class*="Readiness"] div {
+  transform-origin: center;
+  animation: shsHubRingWake 900ms cubic-bezier(.2,.85,.2,1) both;
+  animation-delay: 520ms;
+}
+
+/* Progress bars grow after load */
+[class*="bar"] > span,
+[class*="Bar"] > span,
+[class*="progress"] > span,
+[class*="Progress"] > span,
+[class*="coverage"] span,
+[class*="Coverage"] span {
+  transform-origin: left center;
+  animation: shsHubBarGrow 900ms ease forwards;
+  animation-delay: 520ms;
+}
+
+/* SVG progress or chart paths */
+svg circle,
+svg path,
+svg polyline {
+  transform-origin: center;
+}
+
+/* Status chips breathe very lightly */
+[class*="chip"],
+[class*="Chip"],
+[class*="status"],
+[class*="Status"],
+[class*="badge"],
+[class*="Badge"] {
+  animation: shsHubStatusPulse 4200ms ease-in-out infinite;
+  animation-delay: 1600ms;
+}
+
+/* Important work cards get one soft wake pulse only */
+[class*="kpi"],
+[class*="Kpi"],
+[class*="metric"],
+[class*="Metric"],
+[class*="reportCard"],
+[class*="ReportCard"],
+[class*="laneTile"],
+[class*="LaneTile"] {
+  animation:
+    shsHubFadeLiftIn 480ms ease both,
+    shsHubSoftPulse 1200ms ease 900ms 1;
+}
+
+/* Hover still feels premium, but controlled */
+[class*="kpi"]:hover,
+[class*="Kpi"]:hover,
+[class*="metric"]:hover,
+[class*="Metric"]:hover,
+[class*="panel"]:hover,
+[class*="Panel"]:hover,
+[class*="card"]:hover,
+[class*="Card"]:hover {
+  transform: translateY(-2px);
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    filter 180ms ease;
+  border-color: rgba(98, 224, 255, 0.34);
+  box-shadow:
+    inset 0 0 24px rgba(255, 255, 255, 0.02),
+    0 0 28px rgba(43, 145, 255, 0.14),
+    0 20px 60px rgba(0, 0, 0, 0.22);
+}
+
+/* Motion safety */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =========================================================
+   SHS HUB KPI SPARKLINE RESTORE PATCH
+   Restores mini chart lines and animates them after page load.
+   ========================================================= */
+
+@keyframes shsHubSparklineReveal {
+  0% {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+    transform: translateY(3px);
+  }
+  100% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes shsHubSparklineFloat {
+  0%, 100% {
+    transform: translateY(0);
+    filter: brightness(1);
+  }
+  50% {
+    transform: translateY(-1px);
+    filter: brightness(1.12);
+  }
+}
+
+/* Make real SVG sparklines visible again */
+svg[class*="spark"],
+svg[class*="Spark"],
+[class*="spark"] svg,
+[class*="Spark"] svg {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  overflow: visible !important;
+  pointer-events: none !important;
+}
+
+svg[class*="spark"] polyline,
+svg[class*="Spark"] polyline,
+svg[class*="spark"] path,
+svg[class*="Spark"] path,
+[class*="spark"] svg polyline,
+[class*="spark"] svg path,
+[class*="Spark"] svg polyline,
+[class*="Spark"] svg path {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  fill: none !important;
+  stroke-width: 3px !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  stroke-dasharray: none !important;
+  stroke-dashoffset: 0 !important;
+  animation: none !important;
+  filter: drop-shadow(0 0 8px currentColor) !important;
+}
+
+/* Fallback sparkline for KPI cards that lost their SVG lines */
+.hbr-kpi,
+.hfi-kpi,
+.hpa-kpi,
+.hrl-kpi,
+.hld-kpi,
+.hwd-kpi,
+.hub-kpi,
+.hub-stat-card,
+.hub-metric-card,
+.hub-dashboard-kpi,
+[class*="kpiCard"],
+[class*="KpiCard"],
+[class*="metricCard"],
+[class*="MetricCard"] {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* Default fallback line */
+.hbr-kpi::after,
+.hfi-kpi::after,
+.hpa-kpi::after,
+.hrl-kpi::after,
+.hld-kpi::after,
+.hwd-kpi::after,
+.hub-kpi::after,
+.hub-stat-card::after,
+.hub-metric-card::after,
+.hub-dashboard-kpi::after,
+[class*="kpiCard"]::after,
+[class*="KpiCard"]::after,
+[class*="metricCard"]::after,
+[class*="MetricCard"]::after {
+  content: "" !important;
+  position: absolute !important;
+  right: 14px !important;
+  bottom: 14px !important;
+  width: 76px !important;
+  height: 30px !important;
+  opacity: 0;
+  pointer-events: none !important;
+  background-repeat: no-repeat !important;
+  background-size: 100% 100% !important;
+  background-position: center !important;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='36' viewBox='0 0 100 36' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='3,30 14,27 25,29 36,20 47,23 58,15 69,18 80,10 90,13 98,5' fill='none' stroke='%236da7ff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  filter: drop-shadow(0 0 8px rgba(109, 167, 255, 0.72)) !important;
+  animation:
+    shsHubSparklineReveal 900ms ease forwards,
+    shsHubSparklineFloat 3600ms ease-in-out infinite;
+  animation-delay: 520ms, 1800ms;
+}
+
+/* Green / healthy cards */
+.hbr-kpi:nth-child(2)::after,
+.hbr-kpi:nth-child(4)::after,
+.hfi-kpi:nth-child(2)::after,
+.hpa-kpi:nth-child(6)::after,
+.hrl-kpi:nth-child(1)::after,
+.hrl-kpi:nth-child(3)::after,
+.hub-kpi:nth-child(1)::after,
+.hub-kpi:nth-child(3)::after,
+.hub-kpi:nth-child(6)::after {
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='36' viewBox='0 0 100 36' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='3,30 14,27 25,29 36,20 47,23 58,15 69,18 80,10 90,13 98,5' fill='none' stroke='%235ee29b' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  filter: drop-shadow(0 0 8px rgba(94, 226, 155, 0.72)) !important;
+}
+
+/* Gold / attention cards */
+.hbr-kpi:nth-child(3)::after,
+.hfi-kpi:nth-child(3)::after,
+.hrl-kpi:nth-child(4)::after,
+.hpa-kpi:nth-child(4)::after,
+.hub-kpi:nth-child(2)::after {
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='36' viewBox='0 0 100 36' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='3,30 14,27 25,29 36,20 47,23 58,15 69,18 80,10 90,13 98,5' fill='none' stroke='%23f0a83e' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  filter: drop-shadow(0 0 8px rgba(240, 168, 62, 0.72)) !important;
+}
+
+/* Red / urgent cards */
+.hrl-kpi:nth-child(5)::after,
+.hpa-kpi:nth-child(5)::after,
+.hfi-kpi:nth-child(4)::after {
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='36' viewBox='0 0 100 36' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='3,30 14,27 25,29 36,20 47,23 58,15 69,18 80,10 90,13 98,5' fill='none' stroke='%23ff6b63' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  filter: drop-shadow(0 0 8px rgba(255, 107, 99, 0.72)) !important;
+}
+
+/* Cyan / data cards */
+.hbr-kpi:nth-child(5)::after,
+.hfi-kpi:nth-child(5)::after {
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='36' viewBox='0 0 100 36' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='3,30 14,27 25,29 36,20 47,23 58,15 69,18 80,10 90,13 98,5' fill='none' stroke='%2362e0ff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  filter: drop-shadow(0 0 8px rgba(98, 224, 255, 0.72)) !important;
+}
+
+/* Violet / trace cards */
+.hbr-kpi:nth-child(6)::after,
+.hfi-kpi:nth-child(6)::after {
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='36' viewBox='0 0 100 36' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='3,30 14,27 25,29 36,20 47,23 58,15 69,18 80,10 90,13 98,5' fill='none' stroke='%23b3a6ff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  filter: drop-shadow(0 0 8px rgba(179, 166, 255, 0.72)) !important;
+}
+
+/* Do not double-stack fallback over real visible sparkline when class exists directly inside KPI */
+.hbr-kpi:has(svg[class*="spark"])::after,
+.hfi-kpi:has(svg[class*="spark"])::after,
+.hpa-kpi:has(svg[class*="spark"])::after,
+.hrl-kpi:has(svg[class*="spark"])::after,
+.hld-kpi:has(svg[class*="spark"])::after,
+.hwd-kpi:has(svg[class*="spark"])::after,
+.hub-kpi:has(svg[class*="spark"])::after {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hbr-kpi::after,
+  .hfi-kpi::after,
+  .hpa-kpi::after,
+  .hrl-kpi::after,
+  .hld-kpi::after,
+  .hwd-kpi::after,
+  .hub-kpi::after,
+  .hub-stat-card::after,
+  .hub-metric-card::after,
+  .hub-dashboard-kpi::after,
+  [class*="kpiCard"]::after,
+  [class*="KpiCard"]::after,
+  [class*="metricCard"]::after,
+  [class*="MetricCard"]::after {
+    animation: none !important;
+    opacity: 1 !important;
+    clip-path: none !important;
+  }
+}
+
+/* =========================================================
+   SHS HUB CHART LINE DRAW ANIMATION
+   Makes SVG chart lines draw from left to right after load.
+   ========================================================= */
+
+@keyframes shsHubDrawChartLine {
+  0% {
+    stroke-dashoffset: 220;
+    opacity: 0;
+    filter: drop-shadow(0 0 0 rgba(98, 224, 255, 0));
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+    filter: drop-shadow(0 0 8px currentColor);
+  }
+}
+
+@keyframes shsHubChartLineBreathe {
+  0%, 100% {
+    filter: drop-shadow(0 0 5px currentColor);
+    opacity: 0.85;
+  }
+
+  50% {
+    filter: drop-shadow(0 0 12px currentColor);
+    opacity: 1;
+  }
+}
+
+/* Target common Hub sparkline SVG line elements */
+.hub-spark polyline,
+.hub-spark path,
+.hbr-spark polyline,
+.hbr-spark path,
+.hfi-spark polyline,
+.hfi-spark path,
+.hpa-spark polyline,
+.hpa-spark path,
+.hrl-spark polyline,
+.hrl-spark path,
+.hld-spark polyline,
+.hld-spark path,
+.hwd-spark polyline,
+.hwd-spark path,
+svg[class*="spark"] polyline,
+svg[class*="spark"] path,
+svg[class*="Spark"] polyline,
+svg[class*="Spark"] path {
+  fill: none !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  stroke-width: 3px !important;
+
+  stroke-dasharray: 220 !important;
+  stroke-dashoffset: 220 !important;
+
+  animation:
+    shsHubDrawChartLine 1100ms cubic-bezier(0.22, 0.8, 0.22, 1) forwards,
+    shsHubChartLineBreathe 3600ms ease-in-out infinite !important;
+  animation-delay: 520ms, 1800ms !important;
+}
+
+/* Stagger chart line timing inside KPI rows */
+[class*="kpi"]:nth-child(1) svg[class*="spark"] polyline,
+[class*="Kpi"]:nth-child(1) svg[class*="spark"] polyline {
+  animation-delay: 420ms, 1800ms !important;
+}
+
+[class*="kpi"]:nth-child(2) svg[class*="spark"] polyline,
+[class*="Kpi"]:nth-child(2) svg[class*="spark"] polyline {
+  animation-delay: 520ms, 1900ms !important;
+}
+
+[class*="kpi"]:nth-child(3) svg[class*="spark"] polyline,
+[class*="Kpi"]:nth-child(3) svg[class*="spark"] polyline {
+  animation-delay: 620ms, 2000ms !important;
+}
+
+[class*="kpi"]:nth-child(4) svg[class*="spark"] polyline,
+[class*="Kpi"]:nth-child(4) svg[class*="spark"] polyline {
+  animation-delay: 720ms, 2100ms !important;
+}
+
+[class*="kpi"]:nth-child(5) svg[class*="spark"] polyline,
+[class*="Kpi"]:nth-child(5) svg[class*="spark"] polyline {
+  animation-delay: 820ms, 2200ms !important;
+}
+
+[class*="kpi"]:nth-child(6) svg[class*="spark"] polyline,
+[class*="Kpi"]:nth-child(6) svg[class*="spark"] polyline {
+  animation-delay: 920ms, 2300ms !important;
+}
+
+/* Keep fallback pseudo-chart lines animated too */
+.hbr-kpi::after,
+.hfi-kpi::after,
+.hpa-kpi::after,
+.hrl-kpi::after,
+.hld-kpi::after,
+.hwd-kpi::after,
+.hub-kpi::after,
+.hub-stat-card::after,
+.hub-metric-card::after,
+.hub-dashboard-kpi::after,
+[class*="kpiCard"]::after,
+[class*="KpiCard"]::after,
+[class*="metricCard"]::after,
+[class*="MetricCard"]::after {
+  animation:
+    shsHubPseudoChartReveal 1000ms ease forwards,
+    shsHubPseudoChartBreathe 3600ms ease-in-out infinite !important;
+  animation-delay: 520ms, 1800ms !important;
+}
+
+@keyframes shsHubPseudoChartReveal {
+  0% {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+    transform: translateY(4px);
+  }
+
+  100% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes shsHubPseudoChartBreathe {
+  0%, 100% {
+    filter: drop-shadow(0 0 5px rgba(98, 224, 255, 0.5));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 12px rgba(98, 224, 255, 0.85));
+  }
+}
+
+/* Motion safety */
+@media (prefers-reduced-motion: reduce) {
+  .hub-spark polyline,
+  .hub-spark path,
+  .hbr-spark polyline,
+  .hbr-spark path,
+  .hfi-spark polyline,
+  .hfi-spark path,
+  .hpa-spark polyline,
+  .hpa-spark path,
+  .hrl-spark polyline,
+  .hrl-spark path,
+  .hld-spark polyline,
+  .hld-spark path,
+  .hwd-spark polyline,
+  .hwd-spark path,
+  svg[class*="spark"] polyline,
+  svg[class*="spark"] path,
+  svg[class*="Spark"] polyline,
+  svg[class*="Spark"] path,
+  .hbr-kpi::after,
+  .hfi-kpi::after,
+  .hpa-kpi::after,
+  .hrl-kpi::after,
+  .hld-kpi::after,
+  .hwd-kpi::after,
+  .hub-kpi::after,
+  .hub-stat-card::after,
+  .hub-metric-card::after,
+  .hub-dashboard-kpi::after,
+  [class*="kpiCard"]::after,
+  [class*="KpiCard"]::after,
+  [class*="metricCard"]::after,
+  [class*="MetricCard"]::after {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+    opacity: 1 !important;
+    clip-path: none !important;
+  }
+}
+
+/* =========================================================
+   FINAL SHS HUB CHART LINE RESTORE
+   This intentionally overrides earlier motion patches.
+   It forces KPI mini chart lines to show again.
+   ========================================================= */
+
+@keyframes shsFinalChartReveal {
+  0% {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+    transform: translateY(3px);
+  }
+
+  100% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes shsFinalChartGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 6px rgba(109, 167, 255, 0.62));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 13px rgba(109, 167, 255, 0.95));
+  }
+}
+
+/* Stop previous broken SVG dash animations from hiding real SVG lines */
+svg[class*="spark"],
+svg[class*="Spark"],
+[class*="spark"] svg,
+[class*="Spark"] svg {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+svg[class*="spark"] polyline,
+svg[class*="Spark"] polyline,
+svg[class*="spark"] path,
+svg[class*="Spark"] path,
+[class*="spark"] svg polyline,
+[class*="spark"] svg path,
+[class*="Spark"] svg polyline,
+[class*="Spark"] svg path {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  stroke-dasharray: none !important;
+  stroke-dashoffset: 0 !important;
+  animation: none !important;
+}
+
+/* Make KPI cards eligible for fallback chart overlay */
+.hbr-kpi,
+.hfi-kpi,
+.hpa-kpi,
+.hrl-kpi,
+.hld-kpi,
+.hwd-kpi,
+.hub-kpi,
+.hub-stat-card,
+.hub-metric-card,
+.hub-dashboard-kpi,
+[class*="kpi"],
+[class*="Kpi"],
+[class*="metric"],
+[class*="Metric"] {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* Force fallback mini chart line visible on all KPI/metric cards */
+.hbr-kpi::after,
+.hfi-kpi::after,
+.hpa-kpi::after,
+.hrl-kpi::after,
+.hld-kpi::after,
+.hwd-kpi::after,
+.hub-kpi::after,
+.hub-stat-card::after,
+.hub-metric-card::after,
+.hub-dashboard-kpi::after,
+[class*="kpi"]::after,
+[class*="Kpi"]::after,
+[class*="metric"]::after,
+[class*="Metric"]::after {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  right: 14px !important;
+  bottom: 13px !important;
+  width: 74px !important;
+  height: 28px !important;
+  opacity: 0;
+  pointer-events: none !important;
+  z-index: 5 !important;
+
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 100% 100% !important;
+
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='36' viewBox='0 0 100 36' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='3,30 14,27 25,29 36,20 47,23 58,15 69,18 80,10 90,13 98,5' fill='none' stroke='%236da7ff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+
+  animation:
+    shsFinalChartReveal 850ms ease forwards,
+    shsFinalChartGlow 3600ms ease-in-out infinite !important;
+  animation-delay: 420ms, 1600ms !important;
+}
+
+/* IMPORTANT: override earlier :has() hide rules */
+.hbr-kpi:has(svg[class*="spark"])::after,
+.hfi-kpi:has(svg[class*="spark"])::after,
+.hpa-kpi:has(svg[class*="spark"])::after,
+.hrl-kpi:has(svg[class*="spark"])::after,
+.hld-kpi:has(svg[class*="spark"])::after,
+.hwd-kpi:has(svg[class*="spark"])::after,
+.hub-kpi:has(svg[class*="spark"])::after {
+  display: block !important;
+}
+
+/* Green chart cards */
+.hbr-kpi:nth-child(2)::after,
+.hbr-kpi:nth-child(4)::after,
+.hfi-kpi:nth-child(2)::after,
+.hpa-kpi:nth-child(6)::after,
+.hrl-kpi:nth-child(1)::after,
+.hrl-kpi:nth-child(3)::after,
+.hub-kpi:nth-child(1)::after,
+.hub-kpi:nth-child(3)::after,
+.hub-kpi:nth-child(6)::after,
+[class*="kpi"]:nth-child(2)::after,
+[class*="Kpi"]:nth-child(2)::after,
+[class*="metric"]:nth-child(2)::after,
+[class*="Metric"]:nth-child(2)::after {
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='36' viewBox='0 0 100 36' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='3,30 14,27 25,29 36,20 47,23 58,15 69,18 80,10 90,13 98,5' fill='none' stroke='%235ee29b' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+}
+
+/* Gold chart cards */
+.hbr-kpi:nth-child(3)::after,
+.hfi-kpi:nth-child(3)::after,
+.hrl-kpi:nth-child(4)::after,
+.hpa-kpi:nth-child(4)::after,
+[class*="kpi"]:nth-child(3)::after,
+[class*="Kpi"]:nth-child(3)::after,
+[class*="metric"]:nth-child(3)::after,
+[class*="Metric"]:nth-child(3)::after {
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='36' viewBox='0 0 100 36' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='3,30 14,27 25,29 36,20 47,23 58,15 69,18 80,10 90,13 98,5' fill='none' stroke='%23f0a83e' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+}
+
+/* Red urgent cards */
+.hrl-kpi:nth-child(5)::after,
+.hpa-kpi:nth-child(5)::after,
+.hfi-kpi:nth-child(4)::after,
+[class*="kpi"]:nth-child(5)::after,
+[class*="Kpi"]:nth-child(5)::after,
+[class*="metric"]:nth-child(5)::after,
+[class*="Metric"]:nth-child(5)::after {
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='36' viewBox='0 0 100 36' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='3,30 14,27 25,29 36,20 47,23 58,15 69,18 80,10 90,13 98,5' fill='none' stroke='%23ff6b63' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+}
+
+/* Cyan/violet later cards */
+.hbr-kpi:nth-child(5)::after,
+.hfi-kpi:nth-child(5)::after,
+[class*="kpi"]:nth-child(4)::after,
+[class*="Kpi"]:nth-child(4)::after,
+[class*="metric"]:nth-child(4)::after,
+[class*="Metric"]:nth-child(4)::after {
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='36' viewBox='0 0 100 36' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='3,30 14,27 25,29 36,20 47,23 58,15 69,18 80,10 90,13 98,5' fill='none' stroke='%2362e0ff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+}
+
+.hbr-kpi:nth-child(6)::after,
+.hfi-kpi:nth-child(6)::after,
+[class*="kpi"]:nth-child(6)::after,
+[class*="Kpi"]:nth-child(6)::after,
+[class*="metric"]:nth-child(6)::after,
+[class*="Metric"]:nth-child(6)::after {
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='36' viewBox='0 0 100 36' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='3,30 14,27 25,29 36,20 47,23 58,15 69,18 80,10 90,13 98,5' fill='none' stroke='%23b3a6ff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+}
+
+/* =========================================================
+   SHS HUB CHART DUPLICATE CLEANUP
+   Removes accidental chart overlays from icons/inner elements.
+   Keeps one animated chart line at bottom-right of KPI cards.
+   ========================================================= */
+
+/* Stop accidental pseudo charts on inner KPI/icon elements */
+[class*="Icon"]::after,
+[class*="icon"]::after,
+[class*="chip"]::after,
+[class*="Chip"]::after,
+[class*="badge"]::after,
+[class*="Badge"]::after,
+[class*="status"]::after,
+[class*="Status"]::after,
+.hbr-kpiIcon::after,
+.hfi-kpiIcon::after,
+.hpa-kpiIcon::after,
+.hrl-kpiIcon::after,
+.hld-kpiIcon::after,
+.hwd-kpiIcon::after,
+.hub-kpiIcon::after {
+  content: none !important;
+  display: none !important;
+  background-image: none !important;
+  animation: none !important;
+}
+
+/* Remove generic overreach from previous patches */
+[class*="kpi"]::after,
+[class*="Kpi"]::after,
+[class*="metric"]::after,
+[class*="Metric"]::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Re-enable only actual top KPI/card containers */
+.hbr-kpi::after,
+.hfi-kpi::after,
+.hpa-kpi::after,
+.hrl-kpi::after,
+.hld-kpi::after,
+.hwd-kpi::after,
+.hub-kpi::after,
+.hub-stat-card::after,
+.hub-metric-card::after,
+.hub-dashboard-kpi::after {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  right: 14px !important;
+  bottom: 13px !important;
+  width: 74px !important;
+  height: 28px !important;
+  opacity: 0;
+  pointer-events: none !important;
+  z-index: 5 !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 100% 100% !important;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='36' viewBox='0 0 100 36' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='3,30 14,27 25,29 36,20 47,23 58,15 69,18 80,10 90,13 98,5' fill='none' stroke='%236da7ff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  filter: drop-shadow(0 0 8px rgba(109, 167, 255, 0.72)) !important;
+  animation:
+    shsFinalChartReveal 850ms ease forwards,
+    shsFinalChartGlow 3600ms ease-in-out infinite !important;
+  animation-delay: 420ms, 1600ms !important;
+}
+
+/* Make sure KPI containers hold the chart correctly */
+.hbr-kpi,
+.hfi-kpi,
+.hpa-kpi,
+.hrl-kpi,
+.hld-kpi,
+.hwd-kpi,
+.hub-kpi,
+.hub-stat-card,
+.hub-metric-card,
+.hub-dashboard-kpi {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* Hide real SVG sparklines if fallback overlay is now being used */
+.hbr-kpi svg[class*="spark"],
+.hfi-kpi svg[class*="spark"],
+.hpa-kpi svg[class*="spark"],
+.hrl-kpi svg[class*="spark"],
+.hld-kpi svg[class*="spark"],
+.hwd-kpi svg[class*="spark"],
+.hub-kpi svg[class*="spark"],
+.hub-stat-card svg[class*="spark"],
+.hub-metric-card svg[class*="spark"],
+.hub-dashboard-kpi svg[class*="spark"] {
+  display: none !important;
+}
+
+/* Color mapping */
+.hbr-kpi:nth-child(2)::after,
+.hbr-kpi:nth-child(4)::after,
+.hfi-kpi:nth-child(2)::after,
+.hpa-kpi:nth-child(6)::after,
+.hrl-kpi:nth-child(1)::after,
+.hrl-kpi:nth-child(3)::after,
+.hub-kpi:nth-child(1)::after,
+.hub-kpi:nth-child(3)::after,
+.hub-kpi:nth-child(6)::after,
+.hub-stat-card:nth-child(1)::after,
+.hub-stat-card:nth-child(3)::after,
+.hub-stat-card:nth-child(6)::after {
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='36' viewBox='0 0 100 36' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='3,30 14,27 25,29 36,20 47,23 58,15 69,18 80,10 90,13 98,5' fill='none' stroke='%235ee29b' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  filter: drop-shadow(0 0 8px rgba(94, 226, 155, 0.72)) !important;
+}
+
+.hbr-kpi:nth-child(3)::after,
+.hfi-kpi:nth-child(3)::after,
+.hrl-kpi:nth-child(4)::after,
+.hpa-kpi:nth-child(4)::after,
+.hub-stat-card:nth-child(2)::after {
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='36' viewBox='0 0 100 36' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='3,30 14,27 25,29 36,20 47,23 58,15 69,18 80,10 90,13 98,5' fill='none' stroke='%23f0a83e' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  filter: drop-shadow(0 0 8px rgba(240, 168, 62, 0.72)) !important;
+}
+
+.hrl-kpi:nth-child(5)::after,
+.hpa-kpi:nth-child(5)::after,
+.hfi-kpi:nth-child(4)::after {
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='36' viewBox='0 0 100 36' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='3,30 14,27 25,29 36,20 47,23 58,15 69,18 80,10 90,13 98,5' fill='none' stroke='%23ff6b63' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  filter: drop-shadow(0 0 8px rgba(255, 107, 99, 0.72)) !important;
+}
+
+.hbr-kpi:nth-child(5)::after,
+.hfi-kpi:nth-child(5)::after {
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='36' viewBox='0 0 100 36' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='3,30 14,27 25,29 36,20 47,23 58,15 69,18 80,10 90,13 98,5' fill='none' stroke='%2362e0ff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  filter: drop-shadow(0 0 8px rgba(98, 224, 255, 0.72)) !important;
+}
+
+.hbr-kpi:nth-child(6)::after,
+.hfi-kpi:nth-child(6)::after {
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='36' viewBox='0 0 100 36' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='3,30 14,27 25,29 36,20 47,23 58,15 69,18 80,10 90,13 98,5' fill='none' stroke='%23b3a6ff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  filter: drop-shadow(0 0 8px rgba(179, 166, 255, 0.72)) !important;
+}
+
+/* SHS Hub Reports Footer */
+@media (max-width: 900px) {
+  
+}
+
+
+/* Shared institutional footer wrapper */
+.hbr-institutionalFooter {
+  margin-top: 24px;
+  width: 100%;
+}
+
+.hbr-institutionalFooter .institutional-footer {
+  width: 100%;
+}
+
+/* Hub Reports shared institutional footer placement fix */
+.hbr-institutionalFooter {
+  grid-column: 1 / -1;
+  width: 100%;
+  max-width: none;
+  margin: 32px 0 0;
+  padding: 0;
+  clear: both;
+}
+
+.hbr-institutionalFooter .institutional-footer {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+.hbr-institutionalFooter .institutional-footer__inner {
+  width: 100%;
+  max-width: none;
+}
+
+.hbr-institutionalFooter .institutional-footer__brand,
+.hbr-institutionalFooter .institutional-footer__links,
+.hbr-institutionalFooter .institutional-footer__meta {
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .hbr-institutionalFooter {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+}
+
+/* Hub Reports sidebar spacing polish */
+.hbr-sidebar,
+.hbr-rail,
+.hbr-leftRail {
+  gap: 16px;
+}
+
+.hbr-sidebar nav,
+.hbr-rail nav,
+.hbr-leftRail nav {
+  gap: 14px;
+}
+
+.hbr-sidebar a,
+.hbr-sidebar button,
+.hbr-rail a,
+.hbr-rail button,
+.hbr-leftRail a,
+.hbr-leftRail button {
+  min-height: 64px;
+  padding: 12px 10px;
+  border-radius: 16px;
+}
+
+.hbr-sidebar svg,
+.hbr-sidebar img,
+.hbr-rail svg,
+.hbr-rail img,
+.hbr-leftRail svg,
+.hbr-leftRail img {
+  width: 24px;
+  height: 24px;
+}
+
+.hbr-sidebar span,
+.hbr-sidebar small,
+.hbr-rail span,
+.hbr-rail small,
+.hbr-leftRail span,
+.hbr-leftRail small {
+  font-size: 0.78rem;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+
+.hbr-sidebar .is-active,
+.hbr-sidebar [aria-current="page"],
+.hbr-rail .is-active,
+.hbr-rail [aria-current="page"],
+.hbr-leftRail .is-active,
+.hbr-leftRail [aria-current="page"] {
+  min-height: 70px;
+  border-radius: 18px;
+  box-shadow:
+    0 0 0 1px rgba(91, 190, 255, 0.36),
+    0 14px 34px rgba(35, 132, 255, 0.22);
+}
+
+@media (max-width: 900px) {
+  .hbr-sidebar a,
+  .hbr-sidebar button,
+  .hbr-rail a,
+  .hbr-rail button,
+  .hbr-leftRail a,
+  .hbr-leftRail button {
+    min-height: 56px;
+  }
+}
+
+/* Hub Reports sidebar logo restore + vertical rhythm fix */
+.hbr-sidebar,
+.hbr-rail,
+.hbr-leftRail {
+  align-items: center;
+}
+
+/* Restore the logo mark to its original stronger presence */
+.hbr-sidebar > button:first-child,
+.hbr-sidebar > a:first-child,
+.hbr-sidebar .hbr-logo,
+.hbr-sidebar .hbr-brand,
+.hbr-rail > button:first-child,
+.hbr-rail > a:first-child,
+.hbr-rail .hbr-logo,
+.hbr-rail .hbr-brand,
+.hbr-leftRail > button:first-child,
+.hbr-leftRail > a:first-child,
+.hbr-leftRail .hbr-logo,
+.hbr-leftRail .hbr-brand {
+  width: 88px;
+  height: 88px;
+  min-height: 88px;
+  padding: 14px;
+  margin-bottom: 34px;
+  border-radius: 20px;
+}
+
+/* Make the actual logo image larger again */
+.hbr-sidebar > button:first-child img,
+.hbr-sidebar > a:first-child img,
+.hbr-sidebar .hbr-logo img,
+.hbr-sidebar .hbr-brand img,
+.hbr-rail > button:first-child img,
+.hbr-rail > a:first-child img,
+.hbr-rail .hbr-logo img,
+.hbr-rail .hbr-brand img,
+.hbr-leftRail > button:first-child img,
+.hbr-leftRail > a:first-child img,
+.hbr-leftRail .hbr-logo img,
+.hbr-leftRail .hbr-brand img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
+
+/* Push the nav group down so items use more of the sidebar height */
+.hbr-sidebar nav,
+.hbr-rail nav,
+.hbr-leftRail nav {
+  margin-top: 18px;
+  gap: 22px;
+}
+
+/* Give each nav item a bigger, cleaner hit area */
+.hbr-sidebar nav a,
+.hbr-sidebar nav button,
+.hbr-rail nav a,
+.hbr-rail nav button,
+.hbr-leftRail nav a,
+.hbr-leftRail nav button {
+  min-height: 72px;
+  padding: 14px 10px;
+  border-radius: 18px;
+}
+
+/* Slightly bigger icons/labels without crowding */
+.hbr-sidebar nav svg,
+.hbr-sidebar nav img,
+.hbr-rail nav svg,
+.hbr-rail nav img,
+.hbr-leftRail nav svg,
+.hbr-leftRail nav img {
+  width: 25px;
+  height: 25px;
+}
+
+.hbr-sidebar nav span,
+.hbr-sidebar nav small,
+.hbr-rail nav span,
+.hbr-rail nav small,
+.hbr-leftRail nav span,
+.hbr-leftRail nav small {
+  font-size: 0.82rem;
+  line-height: 1.22;
+}
+
+/* Keep active item strong but not oversized */
+.hbr-sidebar nav .is-active,
+.hbr-sidebar nav [aria-current="page"],
+.hbr-rail nav .is-active,
+.hbr-rail nav [aria-current="page"],
+.hbr-leftRail nav .is-active,
+.hbr-leftRail nav [aria-current="page"] {
+  min-height: 78px;
+}
+
+/* Keep Start Tour from crowding the lower rail */
+.hbr-sidebar [data-tour],
+.hbr-rail [data-tour],
+.hbr-leftRail [data-tour] {
+  margin-top: auto;
+}
+
+/* Hub Reports sidebar unpush fix
+   The previous broad [data-tour] selector pushed nav items to the bottom.
+   This restores normal vertical flow while keeping better spacing. */
+.hbr-sidebar [data-tour],
+.hbr-rail [data-tour],
+.hbr-leftRail [data-tour] {
+  margin-top: 0;
+}
+
+.hbr-sidebar nav,
+.hbr-rail nav,
+.hbr-leftRail nav {
+  margin-top: 28px;
+  gap: 18px;
+  justify-content: flex-start;
+}
+
+/* Keep the reporting readiness widget and tour button lower, not the whole nav */
+.hbr-sidebar .hbr-readiness,
+.hbr-sidebar .hbr-reportingReadiness,
+.hbr-sidebar [data-tour="hub-reports-readiness"],
+.hbr-rail .hbr-readiness,
+.hbr-rail .hbr-reportingReadiness,
+.hbr-rail [data-tour="hub-reports-readiness"],
+.hbr-leftRail .hbr-readiness,
+.hbr-leftRail .hbr-reportingReadiness,
+.hbr-leftRail [data-tour="hub-reports-readiness"] {
+  margin-top: auto;
+}
+
+.hbr-sidebar .hbr-tourButton,
+.hbr-sidebar [data-tour="hub-reports-tour"],
+.hbr-sidebar [data-tour="start-tour"],
+.hbr-rail .hbr-tourButton,
+.hbr-rail [data-tour="hub-reports-tour"],
+.hbr-rail [data-tour="start-tour"],
+.hbr-leftRail .hbr-tourButton,
+.hbr-leftRail [data-tour="hub-reports-tour"],
+.hbr-leftRail [data-tour="start-tour"] {
+  margin-top: 18px;
+}
+
+/* Preserve the restored logo size */
+.hbr-sidebar > button:first-child,
+.hbr-sidebar > a:first-child,
+.hbr-rail > button:first-child,
+.hbr-rail > a:first-child,
+.hbr-leftRail > button:first-child,
+.hbr-leftRail > a:first-child {
+  margin-bottom: 24px;
+}
+
+/* Keep nav items comfortably sized without forcing them down */
+.hbr-sidebar nav a,
+.hbr-sidebar nav button,
+.hbr-rail nav a,
+.hbr-rail nav button,
+.hbr-leftRail nav a,
+.hbr-leftRail nav button {
+  min-height: 68px;
+}
+
+/* Hub Reports sidebar full-height command rail polish */
+.hbr-sidebar,
+.hbr-rail,
+.hbr-leftRail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Keep the logo strong at the top */
+.hbr-sidebar > button:first-child,
+.hbr-sidebar > a:first-child,
+.hbr-rail > button:first-child,
+.hbr-rail > a:first-child,
+.hbr-leftRail > button:first-child,
+.hbr-leftRail > a:first-child {
+  width: 88px;
+  height: 88px;
+  min-height: 88px;
+  margin: 0 0 22px;
+  padding: 12px;
+  border-radius: 20px;
+}
+
+.hbr-sidebar > button:first-child img,
+.hbr-sidebar > a:first-child img,
+.hbr-rail > button:first-child img,
+.hbr-rail > a:first-child img,
+.hbr-leftRail > button:first-child img,
+.hbr-leftRail > a:first-child img {
+  width: 66px;
+  height: 66px;
+  object-fit: contain;
+}
+
+/* Start nav near the top and let it run down the first screen */
+.hbr-sidebar nav,
+.hbr-rail nav,
+.hbr-leftRail nav {
+  width: 100%;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(18px, 3.2vh, 34px);
+  min-height: calc(100vh - 260px);
+}
+
+/* Larger, clearer sidebar items */
+.hbr-sidebar nav a,
+.hbr-sidebar nav button,
+.hbr-rail nav a,
+.hbr-rail nav button,
+.hbr-leftRail nav a,
+.hbr-leftRail nav button {
+  min-height: 72px;
+  width: 100%;
+  padding: 12px 8px;
+  border-radius: 18px;
+}
+
+/* Bigger sidebar emoji/icon visuals */
+.hbr-sidebar nav svg,
+.hbr-sidebar nav img,
+.hbr-rail nav svg,
+.hbr-rail nav img,
+.hbr-leftRail nav svg,
+.hbr-leftRail nav img {
+  width: 30px;
+  height: 30px;
+}
+
+/* If sidebar icons are text/emoji spans, enlarge them too */
+.hbr-sidebar nav a > span:first-child,
+.hbr-sidebar nav button > span:first-child,
+.hbr-rail nav a > span:first-child,
+.hbr-rail nav button > span:first-child,
+.hbr-leftRail nav a > span:first-child,
+.hbr-leftRail nav button > span:first-child {
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+/* Keep labels readable */
+.hbr-sidebar nav span,
+.hbr-sidebar nav small,
+.hbr-rail nav span,
+.hbr-rail nav small,
+.hbr-leftRail nav span,
+.hbr-leftRail nav small {
+  font-size: 0.86rem;
+  line-height: 1.18;
+}
+
+/* Strong active item without squeezing the rail */
+.hbr-sidebar nav .is-active,
+.hbr-sidebar nav [aria-current="page"],
+.hbr-rail nav .is-active,
+.hbr-rail nav [aria-current="page"],
+.hbr-leftRail nav .is-active,
+.hbr-leftRail nav [aria-current="page"] {
+  min-height: 78px;
+  box-shadow:
+    0 0 0 1px rgba(91, 190, 255, 0.42),
+    0 16px 38px rgba(35, 132, 255, 0.24);
+}
+
+/* Keep Start Tour at bottom but do not pull the nav down */
+.hbr-sidebar .hbr-tourButton,
+.hbr-sidebar [data-tour="hub-reports-tour"],
+.hbr-sidebar [data-tour="start-tour"],
+.hbr-rail .hbr-tourButton,
+.hbr-rail [data-tour="hub-reports-tour"],
+.hbr-rail [data-tour="start-tour"],
+.hbr-leftRail .hbr-tourButton,
+.hbr-leftRail [data-tour="hub-reports-tour"],
+.hbr-leftRail [data-tour="start-tour"] {
+  margin-top: 20px;
+  flex-shrink: 0;
+}
+
+/* On shorter screens, tighten just enough to keep everything visible */
+@media (max-height: 820px) {
+  .hbr-sidebar nav,
+  .hbr-rail nav,
+  .hbr-leftRail nav {
+    gap: 16px;
+    min-height: calc(100vh - 230px);
+  }
+
+  .hbr-sidebar nav a,
+  .hbr-sidebar nav button,
+  .hbr-rail nav a,
+  .hbr-rail nav button,
+  .hbr-leftRail nav a,
+  .hbr-leftRail nav button {
+    min-height: 64px;
+  }
+}
+
+/* Truth Spine V1 Health Panel */
+.hbr-truthHealthPanel {
+  margin: 0 0 14px;
+  padding: 20px;
+  border: 1px solid rgba(94, 234, 212, 0.24);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(56, 189, 248, 0.16), transparent 34%),
+    linear-gradient(135deg, rgba(5, 20, 34, 0.96), rgba(3, 12, 22, 0.98));
+  box-shadow: 0 20px 46px rgba(0, 0, 0, 0.28);
+}
+
+.hbr-truthHealthHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 16px;
+}
+
+.hbr-truthHealthHeader span {
+  color: #67e8f9;
+  font-size: 0.72rem;
+  font-weight: 1000;
+  letter-spacing: 0.22em;
+}
+
+.hbr-truthHealthHeader h2 {
+  margin: 6px 0 6px;
+  color: #f7fbff;
+  font-size: 1.35rem;
+  letter-spacing: 0.04em;
+}
+
+.hbr-truthHealthHeader p {
+  max-width: 760px;
+  margin: 0;
+  color: rgba(219, 231, 245, 0.78);
+  line-height: 1.45;
+}
+
+.hbr-truthHealthBadge {
+  padding: 10px 14px;
+  border: 1px solid rgba(94, 234, 212, 0.32);
+  border-radius: 999px;
+  background: rgba(8, 47, 73, 0.56);
+  color: #8fffd0;
+  font-size: 0.78rem;
+  font-weight: 1000;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.hbr-truthHealthBadge--fallback {
+  border-color: rgba(251, 191, 36, 0.42);
+  color: #facc15;
+}
+
+.hbr-truthHealthBadge--loading {
+  border-color: rgba(96, 165, 250, 0.42);
+  color: #93c5fd;
+}
+
+.hbr-truthHealthGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.hbr-truthHealthGrid article {
+  padding: 14px;
+  border: 1px solid rgba(74, 197, 255, 0.18);
+  border-radius: 18px;
+  background: rgba(5, 18, 32, 0.76);
+}
+
+.hbr-truthHealthGrid small {
+  display: block;
+  color: #67e8f9;
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hbr-truthHealthGrid strong {
+  display: block;
+  margin-top: 6px;
+  color: #ffffff;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.hbr-truthHealthGrid span {
+  display: block;
+  margin-top: 8px;
+  color: rgba(219, 231, 245, 0.68);
+  font-size: 0.78rem;
+  line-height: 1.25;
+}
+
+.hbr-truthHealthFooter {
+  display: grid;
+  grid-template-columns: 0.8fr 1.4fr 1fr;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.hbr-truthHealthFooter span {
+  padding: 12px;
+  border: 1px solid rgba(94, 234, 212, 0.16);
+  border-radius: 16px;
+  background: rgba(7, 24, 40, 0.7);
+  color: rgba(219, 231, 245, 0.78);
+  font-size: 0.82rem;
+}
+
+.hbr-truthHealthFooter b {
+  color: #f7fbff;
+}
+
+@media (max-width: 1100px) {
+  .hbr-truthHealthGrid {
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+  }
+
+  .hbr-truthHealthFooter {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Truth Spine health manual refresh */
+.hbr-truthHealthRefresh {
+  border: 1px solid rgba(94, 234, 212, 0.28);
+  border-radius: 999px;
+  background: rgba(8, 47, 73, 0.52);
+  color: #67e8f9;
+  padding: 9px 12px;
+  font-size: 0.74rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.hbr-truthHealthRefresh:hover {
+  border-color: rgba(94, 234, 212, 0.52);
+  color: #ffffff;
+}

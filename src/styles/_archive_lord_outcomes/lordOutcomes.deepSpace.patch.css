@@ -52,7 +52,7 @@ html, body, #root { height: 100%; background: #02030a; }
     radial-gradient(1px 1px at 72% 58%, rgba(255,255,255,0.28) 0, rgba(255,255,255,0) 2px),
     radial-gradient(1px 1px at 84% 35%, rgba(255,255,255,0.30) 0, rgba(255,255,255,0) 2px),
     radial-gradient(1px 1px at 91% 76%, rgba(255,255,255,0.24) 0, rgba(255,255,255,0) 2px);
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
 }
 
 /* grid + vignette */
@@ -98,7 +98,7 @@ html, body, #root { height: 100%; background: #02030a; }
     scale(0.92);
   opacity: 0.72;
   pointer-events:none;
-  filter: saturate(0.92) contrast(1.10);
+  filter: none;
 }
 
 /* stronger highlight + softer falloff */
@@ -116,4 +116,32 @@ html, body, #root { height: 100%; background: #02030a; }
 .looRings svg circle{
   stroke: rgba(255,135,45,0.30) !important;
   filter: drop-shadow(0 0 10px rgba(255,135,45,0.18));
+}
+
+
+/* SHS clean white Ohio override — removes dirty/noisy map wash */
+.shs-map-cinematic-texture,
+.shs-map-cinematic-texture::before,
+.shs-map-cinematic-texture::after,
+.shs-operational-map-texture,
+.shs-operational-map-texture::before,
+.shs-operational-map-texture::after,
+.map-cinematic-texture,
+.map-cinematic-texture::before,
+.map-cinematic-texture::after {
+  opacity: 0.035 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  background-image: none !important;
+}
+
+.shs-mapbox-map,
+.shs-operational-mapbox-map,
+.shs-operational-map-surface {
+  background: #020817 !important;
+}
+
+.shs-map-layer-state .mapboxgl-canvas,
+.shs-map-state .mapboxgl-canvas {
+  filter: none !important;
 }

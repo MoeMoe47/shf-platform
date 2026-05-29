@@ -249,8 +249,8 @@ export default function HubSignalIntelligencePanel({ selectedLane = "All Lanes" 
           <button type="button" onClick={() => sendFeedback(selected, "accepted_recommendation")}>
             Mark Useful
           </button>
-          <button type="button" onClick={() => sendFeedback(selected, "needs_review")}>
-            Needs Review
+          <button type="button" onClick={() => sendFeedback(selected, "not_ready")}>
+            Not Ready
           </button>
         </div>
       </article>

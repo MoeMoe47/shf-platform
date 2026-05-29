@@ -1,0 +1,221 @@
+{
+  "generatedAt": "2026-05-23T19:04:00.524Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 27",
+  "mode": "PRELOAD_IMPACT_COMPARISON_NO_CODE_CHANGES",
+  "preloadImpactComparisonStatus": "capital_mapbox_preload_resolved",
+  "preloadImpactComparisonLabel": "Capital Mapbox Preload Risk Resolved",
+  "productionDecision": "Patch 26B resolved the Capital Mapbox preload issue. capital.html no longer references vendor-mapbox JS, vendor-mapbox CSS, vendor-maplibre, or modulepreload vendor-mapbox. The remaining large map chunks are documented route-heavy assets and should be verified through browser route signoff.",
+  "comparedReports": {
+    "patch24": {
+      "mode": "EXCHANGE_UNIFIED_TRUTH_ROUTE_ISOLATION_PATCH",
+      "status": "build_passed_preload_still_detected",
+      "generatedCapitalPreload": {
+        "capitalHtmlIncludesVendorMapboxJs": false,
+        "capitalHtmlIncludesVendorMapboxCss": true,
+        "capitalHtmlIncludesPagesExchange": true,
+        "capitalHtmlIncludesModulepreloadVendorMapbox": true,
+        "capitalHtmlIncludesVendorMaplibre": false
+      }
+    },
+    "patch25": {
+      "mode": "RUNTIME_DYNAMIC_DEPENDENCY_AUDIT_NO_CODE_CHANGES",
+      "status": "findings_ready",
+      "findings": [
+        {
+          "id": "capital_html_still_references_mapbox_css",
+          "status": "detected",
+          "risk": "high_if_detected",
+          "interpretation": "Capital HTML still references Mapbox CSS, meaning CSS preload behavior remains even after Mapbox JS was filtered."
+        },
+        {
+          "id": "capital_html_references_mapbox_js",
+          "status": "not_detected",
+          "risk": "high_if_detected",
+          "interpretation": "Capital HTML still references Mapbox JS. Patch 24 should have removed this if the modulePreload filter worked."
+        },
+        {
+          "id": "capital_html_references_pages_exchange",
+          "status": "detected",
+          "risk": "medium_high",
+          "interpretation": "Capital still preloads pages-exchange. If pages-exchange CSS/JS carries Mapbox CSS, Mapbox CSS may continue to preload."
+        },
+        {
+          "id": "source_static_mapbox_css_import_detected",
+          "status": "detected",
+          "risk": "high_if_in_route_component",
+          "interpretation": "A static import of mapbox-gl CSS can force Vite to include Mapbox CSS in upstream CSS dependency graphs."
+        },
+        {
+          "id": "source_static_mapbox_js_import_detected",
+          "status": "detected",
+          "risk": "expected_in_map_component_only",
+          "interpretation": "Static Mapbox JS import is acceptable only if isolated inside an async map component that is not preloaded."
+        },
+        {
+          "id": "capital_js_vite_mapdeps_detected",
+          "status": "detected",
+          "risk": "medium_high",
+          "interpretation": "Capital generated JS still contains Vite dependency metadata, which may be responsible for preload behavior."
+        }
+      ],
+      "likelyCause": [
+        "Patch 24 removed Mapbox JS from capital.html, but Mapbox CSS remains. The next patch should target the static Mapbox CSS import path.",
+        "A source file still statically imports mapbox-gl/dist/mapbox-gl.css. That CSS should likely move behind the same async boundary as the Mapbox component.",
+        "capital.html still preloads pages-exchange, so any CSS dependency attached to pages-exchange can still be pulled early."
+      ]
+    },
+    "patch26B": {
+      "mode": "MAPBOX_CSS_ASYNC_BOUNDARY_VALIDATION_FIX",
+      "status": "build_passed_preload_removed",
+      "generatedCapitalPreload": {
+        "capitalHtmlIncludesVendorMapboxJs": false,
+        "capitalHtmlIncludesVendorMapboxCss": false,
+        "capitalHtmlIncludesPagesExchange": true,
+        "capitalHtmlIncludesModulepreloadVendorMapbox": false,
+        "capitalHtmlIncludesVendorMaplibre": false
+      },
+      "patchDetected": {
+        "asyncCssHelperDetected": true,
+        "ensureMapboxCssCallDetected": true,
+        "staticMapboxCssImportRemoved": true,
+        "mapboxJsImportStillPresent": true,
+        "backupBlinkingImportIgnored": true
+      }
+    }
+  },
+  "beforePatch24CapitalPreload": {
+    "capitalHtmlIncludesVendorMapboxJs": false,
+    "capitalHtmlIncludesVendorMapboxCss": true,
+    "capitalHtmlIncludesPagesExchange": true,
+    "capitalHtmlIncludesModulepreloadVendorMapbox": true,
+    "capitalHtmlIncludesVendorMaplibre": false
+  },
+  "afterPatch26BCapitalPreload": {
+    "capitalHtmlIncludesVendorMapboxJs": false,
+    "capitalHtmlIncludesVendorMapboxCss": false,
+    "capitalHtmlIncludesPagesExchange": true,
+    "capitalHtmlIncludesModulepreloadVendorMapbox": false,
+    "capitalHtmlIncludesVendorMaplibre": false
+  },
+  "finalCapitalPreload": {
+    "capitalHtmlIncludesVendorMapboxJs": false,
+    "capitalHtmlIncludesVendorMapboxCss": false,
+    "capitalHtmlIncludesPagesExchange": true,
+    "capitalHtmlIncludesPagesExchangeCss": true,
+    "capitalHtmlIncludesModulepreloadVendorMapbox": false,
+    "capitalHtmlIncludesVendorMaplibre": false
+  },
+  "resolvedChecks": {
+    "mapboxJsRemovedFromCapitalHtml": false,
+    "mapboxCssRemovedFromCapitalHtml": true,
+    "modulepreloadVendorMapboxRemoved": true,
+    "maplibreNotPreloaded": true,
+    "frontendBuildPassed": true
+  },
+  "keyAssetsAfterComparison": {
+    "capitalJs": {
+      "fileName": "capital-Cxn_SlH5.js",
+      "rawKb": 4.6,
+      "gzipKb": 1.73,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    "pagesExchangeJs": {
+      "fileName": "pages-exchange-DOiypiDj.js",
+      "rawKb": 144.67,
+      "gzipKb": 34.78,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    "pagesExchangeCss": {
+      "fileName": "pages-exchange-Dwpvmain.css",
+      "rawKb": 245.21,
+      "gzipKb": 35.68,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    "mapboxJs": {
+      "fileName": "vendor-mapbox-CVOD2Ov6.js",
+      "rawKb": 1781.94,
+      "gzipKb": 492.1,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    "mapboxCss": null,
+    "maplibreJs": {
+      "fileName": "vendor-maplibre-JLoBlj2z.js",
+      "rawKb": 1011.59,
+      "gzipKb": 274.26,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    "maplibreCss": {
+      "fileName": "vendor-maplibre-kWVbv8B-.css",
+      "rawKb": 69.34,
+      "gzipKb": 9.97,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    }
+  },
+  "bundleSummaryAfterComparison": {
+    "totalAssetsParsed": 89,
+    "largeAssets": 2,
+    "largestAssetFileName": "vendor-mapbox-CVOD2Ov6.js",
+    "largestAssetRawKb": 1781.94,
+    "buildWarningDetected": true,
+    "frontendBuildPassed": true
+  },
+  "remainingLargeAssets": [
+    {
+      "fileName": "vendor-mapbox-CVOD2Ov6.js",
+      "rawKb": 1781.94,
+      "gzipKb": 492.1,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "vendor-maplibre-JLoBlj2z.js",
+      "rawKb": 1011.59,
+      "gzipKb": 274.26,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    }
+  ],
+  "interpretation": [
+    "Patch 24 removed Mapbox JS preload from capital.html.",
+    "Patch 25 proved the remaining issue was a static Mapbox CSS import in SHSOperationalMapboxMap.jsx.",
+    "Patch 26B removed the static CSS import from the active component and moved CSS loading behind the runtime map component boundary.",
+    "capital.html now still preloads pages-exchange, but it no longer preloads vendor-mapbox JS or CSS directly.",
+    "The remaining vendor-mapbox and vendor-maplibre bundle-size warnings are acceptable only if browser route signoff confirms they load on map-needed routes, not on ordinary Capital entry load."
+  ],
+  "nextRecommendedActions": [
+    {
+      "step": 1,
+      "label": "Run browser route signoff",
+      "action": "Open capital.html and verify in Network that vendor-mapbox and vendor-maplibre do not load before map UI is requested."
+    },
+    {
+      "step": 2,
+      "label": "Verify Unified Truth map still renders",
+      "action": "Open the Unified Truth / operational map route and confirm Mapbox CSS loads at runtime and the map renders correctly."
+    },
+    {
+      "step": 3,
+      "label": "Create V1 page readiness registry",
+      "action": "After browser signoff, start the page readiness registry for the remaining SHS V1 surfaces."
+    }
+  ],
+  "nextPatchRecommendation": {
+    "id": "post_v1_bundle_patch_28_browser_route_signoff_registry",
+    "label": "Browser Route Signoff Registry",
+    "goal": "Create a formal browser signoff registry for Capital, Exchange, Unified Truth, and map-heavy routes after the preload issue is resolved."
+  }
+}

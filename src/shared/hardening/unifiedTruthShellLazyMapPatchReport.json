@@ -1,0 +1,320 @@
+{
+  "generatedAt": "2026-05-23T16:52:40.232Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 12B",
+  "mode": "UNIFIED_TRUTH_SHELL_LAZY_MAP_BOUNDARY_PATCH_FIXED",
+  "unifiedTruthShellPatchStatus": "build_passed",
+  "unifiedTruthShellPatchLabel": "Unified Truth Shell Lazy Map Boundary Applied and Syntax Fixed",
+  "productionDecision": "SHSUnifiedTruthShell.jsx now lazy-loads SHSOperationalMapboxMap with valid JSX return syntax. Production build passed after Patch 12B.",
+  "changedFile": "src/pages/exchange/unified-truth/SHSUnifiedTruthShell.jsx",
+  "target": "SHSOperationalMapboxMap",
+  "shellLazyDetected": {
+    "reactLazyImported": true,
+    "mapComponentLazy": true,
+    "shellLazyBoundaryHelper": true,
+    "fallbackDetected": true,
+    "staticMapImportRemoved": true,
+    "mapRenderWrapped": true,
+    "malformedReturnRemoved": true
+  },
+  "bundleSummaryAfterPatch": {
+    "totalAssetsParsed": 57,
+    "largeAssets": 4,
+    "largestAssetFileName": "vendor-BH_ulZiA.js",
+    "largestAssetRawKb": 1959.5,
+    "buildWarningDetected": true,
+    "frontendBuildPassed": true
+  },
+  "largestAssetsAfterPatch": [
+    {
+      "fileName": "vendor-BH_ulZiA.js",
+      "rawKb": 1959.5,
+      "gzipKb": 553.53,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "pages-smZgCU8-.js",
+      "rawKb": 1101.18,
+      "gzipKb": 249.07,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "vendor-map-Dq8ojDkP.js",
+      "rawKb": 1011.59,
+      "gzipKb": 274.26,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "pages-CEreUFyW.css",
+      "rawKb": 831.75,
+      "gzipKb": 126.96,
+      "type": "css",
+      "isLarge": true,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "shared-BtqPem8c.js",
+      "rawKb": 453.73,
+      "gzipKb": 43.97,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-react-BelDl1tu.js",
+      "rawKb": 226.03,
+      "gzipKb": 72.22,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "components-TOQ6JYIo.js",
+      "rawKb": 171.22,
+      "gzipKb": 46.45,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "dashboards-DH7WoxJK.js",
+      "rawKb": 134.61,
+      "gzipKb": 36.15,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-map-kWVbv8B-.css",
+      "rawKb": 69.34,
+      "gzipKb": 9.97,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-C5-Kj3x0.css",
+      "rawKb": 40.95,
+      "gzipKb": 5.59,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "content-DE5-6dIU.js",
+      "rawKb": 34.23,
+      "gzipKb": 11.23,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "foundation-BvjTgYP3.css",
+      "rawKb": 28.83,
+      "gzipKb": 6.18,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "foundation-BfTP7xQV.js",
+      "rawKb": 25.26,
+      "gzipKb": 5.5,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "ai-BtHrJQMZ.css",
+      "rawKb": 23.65,
+      "gzipKb": 5.7,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "allocation-YWYHg3eQ.js",
+      "rawKb": 19.62,
+      "gzipKb": 6.98,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "arcade-Cuohn2B4.css",
+      "rawKb": 19.56,
+      "gzipKb": 4.48,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "components-3KDTfcSy.css",
+      "rawKb": 16.2,
+      "gzipKb": 3.88,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "curriculum-BQjQ7RnG.css",
+      "rawKb": 10.63,
+      "gzipKb": 2.56,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "sales-C5XjbxN2.css",
+      "rawKb": 9.44,
+      "gzipKb": 2.59,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "ledger-cNRK8cm9.css",
+      "rawKb": 9.33,
+      "gzipKb": 2.45,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "ai-t-911knF.js",
+      "rawKb": 6.92,
+      "gzipKb": 2.61,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "catalog-9NU3OlVj.css",
+      "rawKb": 6.61,
+      "gzipKb": 2.01,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "util-wash-Qos2WW4c.css",
+      "rawKb": 6.54,
+      "gzipKb": 2.02,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "admin-BQMAL1Yg.js",
+      "rawKb": 6.07,
+      "gzipKb": 2.22,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "global-BLOBr7rh.css",
+      "rawKb": 5.93,
+      "gzipKb": 1.98,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "curriculum-CiF9XpiF.js",
+      "rawKb": 5.89,
+      "gzipKb": 2.01,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "debt-BVH4hd71.css",
+      "rawKb": 5.17,
+      "gzipKb": 1.63,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "employer-D07HkrqU.js",
+      "rawKb": 5.08,
+      "gzipKb": 1.57,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "credit-cQiNCHJo.js",
+      "rawKb": 4.51,
+      "gzipKb": 1.31,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "arcade-B43bMDZm.js",
+      "rawKb": 4.34,
+      "gzipKb": 1.89,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    }
+  ],
+  "largeAssetsAfterPatch": [
+    {
+      "fileName": "vendor-BH_ulZiA.js",
+      "rawKb": 1959.5,
+      "gzipKb": 553.53,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "pages-smZgCU8-.js",
+      "rawKb": 1101.18,
+      "gzipKb": 249.07,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "vendor-map-Dq8ojDkP.js",
+      "rawKb": 1011.59,
+      "gzipKb": 274.26,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "pages-CEreUFyW.css",
+      "rawKb": 831.75,
+      "gzipKb": 126.96,
+      "type": "css",
+      "isLarge": true,
+      "isVeryLarge": false
+    }
+  ],
+  "nextRecommendedActions": [
+    {
+      "step": 1,
+      "label": "Compare Unified Truth shell lazy impact",
+      "action": "Compare this build against Patch 11 and original bundle inventory."
+    },
+    {
+      "step": 2,
+      "label": "Browser recheck Unified Truth route",
+      "action": "Open /admin.html#/unified-truth and confirm the map loads after fallback."
+    },
+    {
+      "step": 3,
+      "label": "Decide core map or manualChunks next",
+      "action": "If bundle does not improve, choose between core Mapbox dynamic import or Vite manualChunks audit."
+    }
+  ]
+}

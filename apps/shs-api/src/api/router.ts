@@ -7,6 +7,19 @@ import { registerOracleRoutes } from "../oracle/routes/oracle.routes";
 import aggregationRoutes from "../aggregation/routes/aggregation.routes";
 import { IdentityService } from "../domain/identity/service/identity-service";
 import { ok, fail } from "./response-envelope";
+import { mergeRolePermissions } from "../auth/security-permissions";
+import { writeSecurityAuditEvent } from "../auth/security-audit";
+
+
+type MutableApiUser = {
+  id: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  status: string;
+  organization_id?: string;
+  role_id?: string;
+};
 
 const identityService = new IdentityService();
 
@@ -105,23 +118,7 @@ export function buildRouter(app: any) {
         },
       ];
 
-      const permissions = [
-        "identity.manage",
-        "org.manage",
-        "aggregation.view",
-        "aggregation.resolve",
-        "reconciliation.run",
-        "verification.review",
-        "verification.approve",
-        "reports.view",
-        "reports.export",
-        "reports.publish",
-        "uploads.internal",
-        "uploads.evidence",
-        "uploads.video",
-        "uploads.approve_public",
-        "settings.manage",
-      ];
+      const permissions = mergeRolePermissions(["super_admin"]);
 
       return res.json({
         ok: true,
@@ -190,7 +187,7 @@ app.post("/auth/login", async (req: any, res: any) => {
   app.patch("/users/:id/status", async (req: any, res: any) => {
     const { id } = req.params;
     const { status } = req.body || {};
-    const user = DEMO_USERS.find((u) => u.id === id);
+    const user = DEMO_USERS.find((u) => u.id === id) as MutableApiUser | undefined;
     if (!user) return res.status(404).json({ error: "User not found." });
     user.status = status || user.status;
     return res.json({ ok: true, user });
@@ -200,28 +197,39 @@ app.post("/auth/login", async (req: any, res: any) => {
   app.post("/uploads", async (req: any, res: any) => {
     try {
       const body = req.body || {};
+      const upload = {
+        id: `upload-${Date.now()}`,
+        file_name: body.file_name || "demo-file",
+        visibility: body.visibility || "internal",
+        status: "uploaded",
+        uploaded_by: req.user?.user_id || req.user?.id || "demo-user-1",
+        organization_id: req.user?.organization_id || "shs-core",
+        created_at: new Date().toISOString(),
+      };
+
       DEMO_AUDIT_LOGS.unshift({
         id: `audit-${Date.now()}`,
-        actor_user_id: "demo-user-1",
-        organization_id: "shs-core",
+        actor_user_id: upload.uploaded_by,
+        organization_id: upload.organization_id,
         action_type: "upload.created",
         target_type: "upload",
-        target_id: `upload-${Date.now()}`,
+        target_id: upload.id,
         metadata: body,
         created_at: new Date().toISOString(),
       });
 
+      await writeSecurityAuditEvent(req, {
+        action_type: "upload.created",
+        target_object_type: "upload",
+        target_object_id: upload.id,
+        new_state_json: upload,
+        reason_code: "upload_created",
+        reason_text: "Upload created.",
+      });
+
       return res.json({
         ok: true,
-        upload: {
-          id: `upload-${Date.now()}`,
-          file_name: body.file_name || "demo-file",
-          visibility: body.visibility || "internal",
-          status: "uploaded",
-          uploaded_by: "demo-user-1",
-          organization_id: "shs-core",
-          created_at: new Date().toISOString(),
-        },
+        upload,
       });
     } catch (error: any) {
       return res.status(500).json({
@@ -234,7 +242,7 @@ app.post("/auth/login", async (req: any, res: any) => {
   app.patch("/users/:id/membership", async (req: any, res: any) => {
     const { id } = req.params;
     const { organization_id, role_id } = req.body || {};
-    const user = DEMO_USERS.find((u) => u.id === id);
+    const user = DEMO_USERS.find((u) => u.id === id) as MutableApiUser | undefined;
     if (!user) return res.status(404).json({ error: "User not found." });
 
     if (organization_id) user.organization_id = organization_id;

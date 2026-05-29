@@ -18,7 +18,7 @@
 /* Slight highlight bloom on sharp art layer during pulses */
 .got-backdrop-art--sharp {
   opacity: calc(0.26 + (var(--dopamine-pulse) * 0.12));
-  filter: saturate(calc(1.02 + (var(--dopamine) * 0.08))) contrast(1.08);
+  filter: none;
 }
 
 /* Subtle “energy” overlay */
@@ -30,4 +30,32 @@
     linear-gradient(to bottom,
       rgba(2,6,23,calc(0.30 - (var(--dopamine) * 0.06))),
       rgba(2,6,23,0.92));
+}
+
+
+/* SHS clean white Ohio override — removes dirty/noisy map wash */
+.shs-map-cinematic-texture,
+.shs-map-cinematic-texture::before,
+.shs-map-cinematic-texture::after,
+.shs-operational-map-texture,
+.shs-operational-map-texture::before,
+.shs-operational-map-texture::after,
+.map-cinematic-texture,
+.map-cinematic-texture::before,
+.map-cinematic-texture::after {
+  opacity: 0.035 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  background-image: none !important;
+}
+
+.shs-mapbox-map,
+.shs-operational-mapbox-map,
+.shs-operational-map-surface {
+  background: #020817 !important;
+}
+
+.shs-map-layer-state .mapboxgl-canvas,
+.shs-map-state .mapboxgl-canvas {
+  filter: none !important;
 }

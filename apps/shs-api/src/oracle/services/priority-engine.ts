@@ -7,7 +7,7 @@ function computePriorityScore(item: any) {
     base += 10;
   }
 
-  if (item.readinessStatus === "execution_mode") {
+  if (item.readinessStatus === "leadership_ready") {
     base += 25;
   }
 

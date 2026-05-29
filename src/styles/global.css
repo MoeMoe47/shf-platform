@@ -232,7 +232,7 @@ button,input,select,textarea{ font:inherit; color:inherit; }
   background-clip: padding-box;
 }
 .app-sidebar__inner::-webkit-scrollbar-thumb:hover {
-  filter: brightness(0.95);
+  filter: none;
 }
 .app-sidebar__inner::-webkit-scrollbar-track {
   background: transparent;
@@ -293,3 +293,31 @@ button,input,select,textarea{ font:inherit; color:inherit; }
 }
 
 
+
+
+/* SHS clean white Ohio override — removes dirty/noisy map wash */
+.shs-map-cinematic-texture,
+.shs-map-cinematic-texture::before,
+.shs-map-cinematic-texture::after,
+.shs-operational-map-texture,
+.shs-operational-map-texture::before,
+.shs-operational-map-texture::after,
+.map-cinematic-texture,
+.map-cinematic-texture::before,
+.map-cinematic-texture::after {
+  opacity: 0.035 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  background-image: none !important;
+}
+
+.shs-mapbox-map,
+.shs-operational-mapbox-map,
+.shs-operational-map-surface {
+  background: #020817 !important;
+}
+
+.shs-map-layer-state .mapboxgl-canvas,
+.shs-map-state .mapboxgl-canvas {
+  filter: none !important;
+}

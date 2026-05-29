@@ -1,0 +1,149 @@
+{
+  "generatedAt": "2026-05-23T16:32:57.053Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 8",
+  "mode": "ROUTE_LAZY_IMPACT_COMPARISON_NO_CODE_CHANGES",
+  "routeLazyImpactStatus": "safe_patch_no_meaningful_size_reduction",
+  "routeLazyImpactLabel": "Route Lazy Boundary Safe, But Bundle Size Mostly Unchanged",
+  "productionDecision": "Patch 7 safely added a lazy route boundary for ExchangeRoutes and the build passed. The largest chunks did not meaningfully reduce, so the next step should audit App.jsx and ExchangeLayout.jsx before touching core map internals.",
+  "changedFile": "src/routes/exchangeRoutes.jsx",
+  "patch7Result": {
+    "buildPassed": true,
+    "routeLazyDetected": {
+      "reactLazyImported": true,
+      "exchangeLayoutLazy": true,
+      "missionControlLazy": false,
+      "lazyBoundaryHelper": true,
+      "fallbackDetected": true
+    }
+  },
+  "comparison": {
+    "vendor": {
+      "beforeFileName": "vendor-BtYAkRhV.js",
+      "afterFileName": "vendor-BtYAkRhV.js",
+      "beforeRawKb": 1959.5,
+      "afterRawKb": 1959.5,
+      "rawKbDelta": 0,
+      "beforeGzipKb": 553.85,
+      "afterGzipKb": 553.85,
+      "gzipKbDelta": 0
+    },
+    "pagesJs": {
+      "beforeFileName": "pages-4ojuxR1S.js",
+      "afterFileName": "pages-ByCRJx3G.js",
+      "beforeRawKb": 1100.44,
+      "afterRawKb": 1100.56,
+      "rawKbDelta": 0.12,
+      "beforeGzipKb": 249.45,
+      "afterGzipKb": 248.84,
+      "gzipKbDelta": -0.61
+    },
+    "vendorMap": {
+      "beforeFileName": "vendor-map-CPoydKcy.js",
+      "afterFileName": "vendor-map-CPoydKcy.js",
+      "beforeRawKb": 1011.59,
+      "afterRawKb": 1011.59,
+      "rawKbDelta": 0,
+      "beforeGzipKb": 274.26,
+      "afterGzipKb": 274.26,
+      "gzipKbDelta": 0
+    },
+    "pagesCss": {
+      "beforeFileName": "pages-CEreUFyW.css",
+      "afterFileName": "pages-CEreUFyW.css",
+      "beforeRawKb": 831.75,
+      "afterRawKb": 831.75,
+      "rawKbDelta": 0,
+      "beforeGzipKb": 126.96,
+      "afterGzipKb": 126.96,
+      "gzipKbDelta": 0
+    },
+    "largeAssetsBefore": 4,
+    "largeAssetsAfter": 4,
+    "buildWarningBefore": true,
+    "buildWarningAfter": true,
+    "frontendBuildBefore": true,
+    "frontendBuildAfter": true
+  },
+  "interpretation": [
+    "ExchangeRoutes.jsx lazy boundary was applied and detected successfully.",
+    "The pages JS chunk did not meaningfully decrease after lazy-loading ExchangeLayout.",
+    "The vendor-map chunk did not meaningfully decrease after lazy-loading ExchangeLayout.",
+    "This suggests another static import path, nested Exchange layout import, or Vite chunk grouping still keeps heavy code in large shared chunks.",
+    "The safest next inspection targets are App.jsx and ExchangeLayout.jsx, before editing SHSOperationalMapboxMap.jsx."
+  ],
+  "routeAuditSummary": {
+    "sourceFilesScanned": 1302,
+    "totalFindings": 59,
+    "coreMapImportFindings": 2,
+    "unifiedTruthFindings": 7,
+    "exchangeFindings": 47,
+    "mapLibraryFindings": 3,
+    "staticImportFindings": 19,
+    "dynamicImportFindings": 2,
+    "candidateRouteFiles": 34,
+    "likelyLazyTargets": 34,
+    "doNotTouchYet": 1
+  },
+  "likelyNextTargets": [
+    {
+      "file": "src/App.jsx",
+      "reason": "Route lazy audit flagged App.jsx as a priority static route/import target. If App.jsx still imports ExchangeRoutes or Exchange Mission Control statically, it can keep Exchange code in the main pages bundle.",
+      "risk": "medium",
+      "recommendedAction": "Audit App.jsx static imports and lazy-load exchange mission/control routes if still static."
+    },
+    {
+      "file": "src/pages/exchange/ExchangeLayout.jsx",
+      "reason": "ExchangeRoutes now lazy-loads ExchangeLayout, but ExchangeLayout may still statically import heavy child surfaces such as Unified Truth or command/map panels.",
+      "risk": "medium",
+      "recommendedAction": "Audit ExchangeLayout child imports and lazy-load heavy nested surfaces one at a time."
+    },
+    {
+      "file": "src/pages/exchange/unified-truth/SHSUnifiedTruthShell.jsx",
+      "reason": "This shell imports SHSOperationalMapboxMap, which the audit identified as a core map import path. It is higher risk than route shell changes.",
+      "risk": "medium_high",
+      "recommendedAction": "Only patch after App.jsx and ExchangeLayout are checked."
+    },
+    {
+      "file": "vite.config.*",
+      "reason": "If route boundaries do not move chunks, manualChunks may be grouping map/vendor/page code together.",
+      "risk": "medium",
+      "recommendedAction": "Audit manualChunks configuration after source import paths are understood."
+    }
+  ],
+  "recommendedNextOptions": [
+    {
+      "option": "A",
+      "label": "App.jsx + ExchangeLayout source audit",
+      "risk": "low_medium",
+      "action": "Generate an audit focused only on App.jsx, ExchangeLayout.jsx, nested Exchange route imports, and Vite manualChunks.",
+      "reason": "This is safer than touching core map internals and should reveal why route lazy loading did not move chunks."
+    },
+    {
+      "option": "B",
+      "label": "Lazy-load ExchangeLayout children",
+      "risk": "medium",
+      "action": "Patch one nested ExchangeLayout child import if the next audit confirms it is static and heavy.",
+      "reason": "This may split the pages bundle more effectively than lazy-loading only the parent route."
+    },
+    {
+      "option": "C",
+      "label": "Core Mapbox dynamic patch",
+      "risk": "medium_high",
+      "action": "Convert SHSOperationalMapboxMap.jsx static Mapbox imports to dynamic imports.",
+      "reason": "This directly targets vendor-map but is higher risk because it touches the core map."
+    },
+    {
+      "option": "D",
+      "label": "Manual chunks audit",
+      "risk": "medium",
+      "action": "Inspect vite.config manualChunks and chunk grouping behavior.",
+      "reason": "Vite may be intentionally grouping map/vendor/page code, limiting the effect of lazy imports."
+    }
+  ],
+  "recommendedDecision": "Choose Option A next: audit App.jsx, ExchangeLayout.jsx, and Vite manualChunks before another code-moving patch.",
+  "nextPatchRecommendation": {
+    "id": "post_v1_bundle_patch_9_app_exchange_layout_chunk_audit",
+    "label": "App + ExchangeLayout Chunk Path Audit",
+    "goal": "Identify whether App.jsx, ExchangeLayout.jsx, nested Exchange imports, or Vite manualChunks are keeping Exchange/map code inside the large pages/vendor chunks."
+  }
+}

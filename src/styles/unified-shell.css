@@ -56,7 +56,7 @@
     padding: 8px 12px;
     transition: filter .12s ease, transform .06s ease;
   }
-  .shf-shell .shf-btn-primary:hover  { filter: brightness(1.06); }
+  .shf-shell .shf-btn-primary:hover  { filter: none; }
   .shf-shell .shf-btn-primary:active { transform: translateY(1px); }
   .shf-shell .shf-btn-primary:disabled { opacity:.6; cursor:not-allowed; }
   
@@ -137,7 +137,7 @@
     padding: 8px 12px;
     transition: filter .12s ease, transform .06s ease;
   }
-  .shf-btn-primary:hover { filter: brightness(1.06); }
+  .shf-btn-primary:hover { filter: none; }
   .shf-btn-primary:active { transform: translateY(1px); }
   .shf-btn-primary:disabled { opacity: .6; cursor: not-allowed; }
   /* --- Treasury KPI cards --- */
@@ -172,3 +172,31 @@
 html,body{ background:var(--sh-bg); color:var(--sh-fg); }
 .sh-shell{ background:var(--sh-bg); color:var(--sh-fg); }
 .ar-card,.card,.panel{ background:var(--sh-card); border-color:var(--sh-border); }
+
+
+/* SHS clean white Ohio override — removes dirty/noisy map wash */
+.shs-map-cinematic-texture,
+.shs-map-cinematic-texture::before,
+.shs-map-cinematic-texture::after,
+.shs-operational-map-texture,
+.shs-operational-map-texture::before,
+.shs-operational-map-texture::after,
+.map-cinematic-texture,
+.map-cinematic-texture::before,
+.map-cinematic-texture::after {
+  opacity: 0.035 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  background-image: none !important;
+}
+
+.shs-mapbox-map,
+.shs-operational-mapbox-map,
+.shs-operational-map-surface {
+  background: #020817 !important;
+}
+
+.shs-map-layer-state .mapboxgl-canvas,
+.shs-map-state .mapboxgl-canvas {
+  filter: none !important;
+}

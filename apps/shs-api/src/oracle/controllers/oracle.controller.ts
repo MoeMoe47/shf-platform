@@ -1,6 +1,7 @@
 import { resolveTruth } from "../services/oracle.service";
 import { runOracleCompare } from "../services/compare.service";
 import { runOraclePriority } from "../services/priority.service";
+import { writeSecurityAuditEvent } from "../../auth/security-audit";
 
 export type OracleActionRecord = {
   entityId: string;
@@ -96,6 +97,15 @@ export async function postOracleAction(req: any, res: any) {
     };
 
     oracleActions.unshift(record);
+
+    await writeSecurityAuditEvent(req, {
+      action_type: "oracle.action",
+      target_object_type: "oracle_entity",
+      target_object_id: String(entityId),
+      new_state_json: record,
+      reason_code: String(action),
+      reason_text: `Oracle action recorded: ${action}`,
+    });
 
     return res.json({
       success: true,

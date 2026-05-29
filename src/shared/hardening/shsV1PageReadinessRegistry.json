@@ -1,0 +1,944 @@
+{
+  "generatedAt": "2026-05-23T19:15:41.685Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 29",
+  "mode": "SHS_V1_PAGE_READINESS_REGISTRY_NO_CODE_CHANGES",
+  "shsV1PageReadinessRegistryStatus": "registry_ready_all_entries_exist",
+  "shsV1PageReadinessRegistryLabel": "SHS V1 Page Readiness Registry Ready",
+  "productionDecision": "No source code was changed. This registry turns the remaining V1 page work into a trackable pass/fail system before final SHS layer completion.",
+  "priorPatch28Status": "registry_ready_preload_lane_resolved",
+  "priorPatch27Status": "capital_mapbox_preload_resolved",
+  "buildSummary": {
+    "frontendBuildPassed": true,
+    "manifestValidationPassed": true,
+    "htmlEntries": [
+      "admin.html",
+      "ai.html",
+      "allocation.html",
+      "arcade.html",
+      "capital.html",
+      "catalog.html",
+      "civic.html",
+      "credit.html",
+      "curriculum.html",
+      "debt.html",
+      "employer.html",
+      "foundation.html",
+      "fuel.html",
+      "index.html",
+      "launch.html",
+      "ledger.html",
+      "lord-of-outcomes.html",
+      "sales.html",
+      "solutions.html",
+      "store.html",
+      "treasury.html",
+      "verifier.html"
+    ],
+    "totalAssetsParsed": 89,
+    "largeAssets": 2,
+    "largestAssetFileName": "vendor-mapbox-CVOD2Ov6.js",
+    "largestAssetRawKb": 1781.94,
+    "buildWarningDetected": true
+  },
+  "pageGroups": [
+    {
+      "groupId": "technical-preload-and-route-stability",
+      "label": "Technical Preload + Route Stability",
+      "purpose": "Finish the active page-loading and browser signoff lane before deeper V1 layer work.",
+      "pages": [
+        {
+          "id": "capital-entry",
+          "label": "Capital Entry",
+          "entry": "capital.html",
+          "route": "http://localhost:5173/capital.html",
+          "layer": "Capital / Exchange entry",
+          "currentStatus": "automated_preload_resolved_browser_signoff_pending",
+          "v1RequiredWork": [
+            "Browser network signoff",
+            "Confirm no early vendor-mapbox load",
+            "Confirm no early vendor-maplibre load",
+            "Confirm no blank screen",
+            "Confirm console is clean"
+          ],
+          "blockers": []
+        },
+        {
+          "id": "exchange-surface",
+          "label": "Exchange Surface",
+          "entry": "capital.html",
+          "route": "http://localhost:5173/capital.html#/exchange",
+          "layer": "Exchange / Capital route",
+          "currentStatus": "browser_signoff_pending",
+          "v1RequiredWork": [
+            "Open route directly",
+            "Confirm lazy fallback clears",
+            "Confirm Exchange UI renders",
+            "Confirm Mapbox does not load unless map UI is visible"
+          ],
+          "blockers": []
+        },
+        {
+          "id": "unified-truth-map",
+          "label": "Unified Truth Map Route",
+          "entry": "capital.html",
+          "route": "http://localhost:5173/capital.html#/exchange/unified-truth",
+          "layer": "Unified Truth / Mapbox operational map",
+          "currentStatus": "browser_signoff_pending",
+          "v1RequiredWork": [
+            "Confirm Mapbox loads on the map route",
+            "Confirm runtime Mapbox CSS injection works",
+            "Confirm map renders",
+            "Confirm no blinking/remount loop",
+            "Confirm fallback state is acceptable"
+          ],
+          "blockers": []
+        },
+        {
+          "id": "maplibre-surfaces",
+          "label": "MapLibre Surfaces",
+          "entry": "solutions.html",
+          "route": "http://localhost:5173/solutions.html",
+          "layer": "MapLibre / globe / visual map surfaces",
+          "currentStatus": "browser_signoff_pending",
+          "v1RequiredWork": [
+            "Confirm MapLibre only loads when visual surface needs it",
+            "Confirm non-map pages do not load MapLibre",
+            "Confirm visual surface renders if used"
+          ],
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "groupId": "core-internal-shs-pages",
+      "label": "Core Internal SHS Pages",
+      "purpose": "Make the internal command system stable, role-safe, and operator-ready.",
+      "pages": [
+        {
+          "id": "admin-entry",
+          "label": "Admin Entry / Admin Hub",
+          "entry": "admin.html",
+          "route": "http://localhost:5173/admin.html",
+          "layer": "Admin / internal command",
+          "currentStatus": "v1_pass_pending",
+          "v1RequiredWork": [
+            "Browser signoff",
+            "Auth/me failure handling",
+            "Role-gated navigation check",
+            "No blank screen on refresh",
+            "No internal route leaks"
+          ],
+          "blockers": [
+            "Confirm /auth/me 500 issue is handled cleanly if backend is unavailable"
+          ]
+        },
+        {
+          "id": "operational-command-surface",
+          "label": "SHS Operational Command Surface",
+          "entry": "admin.html",
+          "route": "http://localhost:5173/admin.html#/command",
+          "layer": "Command Surface",
+          "currentStatus": "v1_pass_pending",
+          "v1RequiredWork": [
+            "Selected state clarity",
+            "Action feedback after click",
+            "Oracle/truth context visible",
+            "AI analyst panel sync",
+            "No confusing cards"
+          ],
+          "blockers": []
+        },
+        {
+          "id": "reporting-command-surface",
+          "label": "Reporting Command Surface",
+          "entry": "admin.html",
+          "route": "http://localhost:5173/admin.html#/reporting",
+          "layer": "Reporting / Export",
+          "currentStatus": "v1_pass_pending",
+          "v1RequiredWork": [
+            "Readiness gate check",
+            "Briefing Export check",
+            "Action Log Export check",
+            "Analyst Memo check",
+            "Audit Pack check",
+            "Trust envelope included"
+          ],
+          "blockers": []
+        },
+        {
+          "id": "verification-audit-surface",
+          "label": "Verification Audit Surface",
+          "entry": "admin.html",
+          "route": "http://localhost:5173/admin.html#/verification",
+          "layer": "Verification / Audit",
+          "currentStatus": "v1_pass_pending",
+          "v1RequiredWork": [
+            "Verification state is clear",
+            "Audit trace visible",
+            "Blocked/ready status works",
+            "No fake completed state without evidence"
+          ],
+          "blockers": []
+        },
+        {
+          "id": "oracle-truth-surface",
+          "label": "Oracle / Truth Surface",
+          "entry": "admin.html",
+          "route": "http://localhost:5173/admin.html#/oracle",
+          "layer": "Oracle / Unified Truth",
+          "currentStatus": "v1_pass_pending",
+          "v1RequiredWork": [
+            "Truth status visible",
+            "Confidence score visible",
+            "Readiness status visible",
+            "Contradiction state visible",
+            "Trace ID visible"
+          ],
+          "blockers": []
+        }
+      ]
+    },
+    {
+      "groupId": "hub-collaboration-pages",
+      "label": "SHS Hub Collaboration Pages",
+      "purpose": "Make the Hub Collaboration Layer usable for nonprofit/partner workflows.",
+      "pages": [
+        {
+          "id": "hub-dashboard",
+          "label": "Hub Dashboard",
+          "entry": "admin.html",
+          "route": "http://localhost:5173/admin.html#/hub",
+          "layer": "Hub Collaboration",
+          "currentStatus": "v1_pass_pending",
+          "v1RequiredWork": [
+            "Hub KPIs visible",
+            "Recent activity visible",
+            "Referral aging visible",
+            "Capacity strain visible",
+            "Reporting readiness visible"
+          ],
+          "blockers": []
+        },
+        {
+          "id": "hub-intake",
+          "label": "Intake Navigator Console",
+          "entry": "admin.html",
+          "route": "http://localhost:5173/admin.html#/hub/intake",
+          "layer": "Hub Intake",
+          "currentStatus": "v1_pass_pending",
+          "v1RequiredWork": [
+            "Sending organization selector works",
+            "Receiving organization selector works",
+            "Need category works",
+            "Priority works",
+            "Create referral action has clear feedback"
+          ],
+          "blockers": []
+        },
+        {
+          "id": "hub-lifecycle",
+          "label": "Referral Lifecycle Tracker",
+          "entry": "admin.html",
+          "route": "http://localhost:5173/admin.html#/hub/lifecycle",
+          "layer": "Referral Lifecycle",
+          "currentStatus": "v1_pass_pending",
+          "v1RequiredWork": [
+            "Open/assigned/review/hold/resolved/closed states visible",
+            "Cards have clear status",
+            "Click/hover behavior is understandable",
+            "No hidden state changes"
+          ],
+          "blockers": []
+        },
+        {
+          "id": "hub-imports",
+          "label": "Files & Imports",
+          "entry": "admin.html",
+          "route": "http://localhost:5173/admin.html#/hub/imports",
+          "layer": "Import / Integration",
+          "currentStatus": "v1_pass_pending",
+          "v1RequiredWork": [
+            "Import lane visible",
+            "Supported formats visible",
+            "Mapping/validation state visible",
+            "API-ready state visible"
+          ],
+          "blockers": []
+        },
+        {
+          "id": "partner-directory",
+          "label": "Partner Directory / Coordination",
+          "entry": "admin.html",
+          "route": "http://localhost:5173/admin.html#/hub/partners",
+          "layer": "Partner Coordination",
+          "currentStatus": "needs_confirmation_or_route",
+          "v1RequiredWork": [
+            "Confirm route exists",
+            "Partner list visible",
+            "Partner status visible",
+            "Partner permissions/scopes visible"
+          ],
+          "blockers": [
+            "Route may need confirmation"
+          ]
+        },
+        {
+          "id": "unmet-needs",
+          "label": "Unmet Needs",
+          "entry": "admin.html",
+          "route": "http://localhost:5173/admin.html#/hub/unmet-needs",
+          "layer": "Unmet Needs / Escalation",
+          "currentStatus": "needs_confirmation_or_route",
+          "v1RequiredWork": [
+            "Confirm route exists",
+            "Unmet need list visible",
+            "Escalation status visible",
+            "Partner routing visible"
+          ],
+          "blockers": [
+            "Route may need confirmation"
+          ]
+        }
+      ]
+    },
+    {
+      "groupId": "public-shs-sales-pages",
+      "label": "SHS Public Sales Pages",
+      "purpose": "Make SHS clear and sellable to organizations.",
+      "pages": [
+        {
+          "id": "index-entry",
+          "label": "Main Public Entry",
+          "entry": "index.html",
+          "route": "http://localhost:5173/index.html",
+          "layer": "Public SHS homepage",
+          "currentStatus": "browser_signoff_pending",
+          "v1RequiredWork": [
+            "Homepage opens",
+            "No console crash",
+            "Sales/value message clear",
+            "CTA visible",
+            "No early map vendor load"
+          ],
+          "blockers": []
+        },
+        {
+          "id": "solutions-entry",
+          "label": "Solutions Page",
+          "entry": "solutions.html",
+          "route": "http://localhost:5173/solutions.html",
+          "layer": "Public SHS sales",
+          "currentStatus": "browser_signoff_pending",
+          "v1RequiredWork": [
+            "Sales story clear",
+            "Pain/problem/solution/proof/CTA present",
+            "Visual quality top-tier",
+            "No internal command clutter"
+          ],
+          "blockers": []
+        },
+        {
+          "id": "sales-entry",
+          "label": "Sales Page",
+          "entry": "sales.html",
+          "route": "http://localhost:5173/sales.html",
+          "layer": "Sales / conversion",
+          "currentStatus": "v1_pass_pending",
+          "v1RequiredWork": [
+            "Offer is clear",
+            "CTA is clear",
+            "Demo/request path exists",
+            "No vague infrastructure language"
+          ],
+          "blockers": []
+        },
+        {
+          "id": "built-on-shs",
+          "label": "Built on SHS Page",
+          "entry": "solutions.html",
+          "route": "http://localhost:5173/solutions.html#/built-on-shs",
+          "layer": "Built on SHS business lane",
+          "currentStatus": "needs_confirmation_or_route",
+          "v1RequiredWork": [
+            "Confirm route exists or create route",
+            "Explain infrastructure studio model",
+            "Explain who should apply",
+            "CTA: Apply to Build on SHS"
+          ],
+          "blockers": [
+            "May need route/page creation"
+          ]
+        },
+        {
+          "id": "request-demo",
+          "label": "Request Demo / Contact Page",
+          "entry": "sales.html",
+          "route": "http://localhost:5173/sales.html#/request-demo",
+          "layer": "Conversion / lead capture",
+          "currentStatus": "needs_confirmation_or_route",
+          "v1RequiredWork": [
+            "Confirm route exists or create route",
+            "Lead form or CTA visible",
+            "No broken form behavior"
+          ],
+          "blockers": [
+            "May need route/page creation"
+          ]
+        }
+      ]
+    },
+    {
+      "groupId": "public-shf-pages",
+      "label": "SHF Public / Impact Pages",
+      "purpose": "Make the nonprofit side funder-ready and donor-ready.",
+      "pages": [
+        {
+          "id": "foundation-entry",
+          "label": "Foundation Entry",
+          "entry": "foundation.html",
+          "route": "http://localhost:5173/foundation.html",
+          "layer": "SHF public foundation",
+          "currentStatus": "browser_signoff_pending",
+          "v1RequiredWork": [
+            "Page opens",
+            "No internal/admin-only content leaks",
+            "Foundation mission clear",
+            "Donor/partner path clear"
+          ],
+          "blockers": []
+        },
+        {
+          "id": "impact-page",
+          "label": "SHF Impact Page",
+          "entry": "foundation.html",
+          "route": "http://localhost:5173/foundation.html#/impact",
+          "layer": "Impact proof / public transparency",
+          "currentStatus": "v1_pass_pending",
+          "v1RequiredWork": [
+            "Proof-focused impact language",
+            "No heavy donation-sales push",
+            "Outcome metrics visible",
+            "Transparency/proof visible"
+          ],
+          "blockers": []
+        },
+        {
+          "id": "workforce-community-pipeline",
+          "label": "Workforce & Community Pipeline Page",
+          "entry": "foundation.html",
+          "route": "http://localhost:5173/foundation.html#/workforce",
+          "layer": "SHF mission pipeline",
+          "currentStatus": "needs_confirmation_or_route",
+          "v1RequiredWork": [
+            "Confirm route exists",
+            "Explain training/workforce/community pathway",
+            "Connect SHF mission to SHS-powered outcomes"
+          ],
+          "blockers": [
+            "May need route confirmation or page creation"
+          ]
+        },
+        {
+          "id": "donor-support",
+          "label": "Donor / Partner Support Page",
+          "entry": "foundation.html",
+          "route": "http://localhost:5173/foundation.html#/support",
+          "layer": "Donor conversion",
+          "currentStatus": "needs_confirmation_or_route",
+          "v1RequiredWork": [
+            "Confirm route exists",
+            "Clear donor reason",
+            "Clear partner reason",
+            "Donation/partner CTA visible"
+          ],
+          "blockers": [
+            "May need route confirmation or page creation"
+          ]
+        }
+      ]
+    }
+  ],
+  "allPages": [
+    {
+      "id": "capital-entry",
+      "label": "Capital Entry",
+      "entry": "capital.html",
+      "route": "http://localhost:5173/capital.html",
+      "layer": "Capital / Exchange entry",
+      "currentStatus": "automated_preload_resolved_browser_signoff_pending",
+      "v1RequiredWork": [
+        "Browser network signoff",
+        "Confirm no early vendor-mapbox load",
+        "Confirm no early vendor-maplibre load",
+        "Confirm no blank screen",
+        "Confirm console is clean"
+      ],
+      "blockers": [],
+      "groupId": "technical-preload-and-route-stability",
+      "groupLabel": "Technical Preload + Route Stability",
+      "entryExistsInDist": true
+    },
+    {
+      "id": "exchange-surface",
+      "label": "Exchange Surface",
+      "entry": "capital.html",
+      "route": "http://localhost:5173/capital.html#/exchange",
+      "layer": "Exchange / Capital route",
+      "currentStatus": "browser_signoff_pending",
+      "v1RequiredWork": [
+        "Open route directly",
+        "Confirm lazy fallback clears",
+        "Confirm Exchange UI renders",
+        "Confirm Mapbox does not load unless map UI is visible"
+      ],
+      "blockers": [],
+      "groupId": "technical-preload-and-route-stability",
+      "groupLabel": "Technical Preload + Route Stability",
+      "entryExistsInDist": true
+    },
+    {
+      "id": "unified-truth-map",
+      "label": "Unified Truth Map Route",
+      "entry": "capital.html",
+      "route": "http://localhost:5173/capital.html#/exchange/unified-truth",
+      "layer": "Unified Truth / Mapbox operational map",
+      "currentStatus": "browser_signoff_pending",
+      "v1RequiredWork": [
+        "Confirm Mapbox loads on the map route",
+        "Confirm runtime Mapbox CSS injection works",
+        "Confirm map renders",
+        "Confirm no blinking/remount loop",
+        "Confirm fallback state is acceptable"
+      ],
+      "blockers": [],
+      "groupId": "technical-preload-and-route-stability",
+      "groupLabel": "Technical Preload + Route Stability",
+      "entryExistsInDist": true
+    },
+    {
+      "id": "maplibre-surfaces",
+      "label": "MapLibre Surfaces",
+      "entry": "solutions.html",
+      "route": "http://localhost:5173/solutions.html",
+      "layer": "MapLibre / globe / visual map surfaces",
+      "currentStatus": "browser_signoff_pending",
+      "v1RequiredWork": [
+        "Confirm MapLibre only loads when visual surface needs it",
+        "Confirm non-map pages do not load MapLibre",
+        "Confirm visual surface renders if used"
+      ],
+      "blockers": [],
+      "groupId": "technical-preload-and-route-stability",
+      "groupLabel": "Technical Preload + Route Stability",
+      "entryExistsInDist": true
+    },
+    {
+      "id": "admin-entry",
+      "label": "Admin Entry / Admin Hub",
+      "entry": "admin.html",
+      "route": "http://localhost:5173/admin.html",
+      "layer": "Admin / internal command",
+      "currentStatus": "v1_pass_pending",
+      "v1RequiredWork": [
+        "Browser signoff",
+        "Auth/me failure handling",
+        "Role-gated navigation check",
+        "No blank screen on refresh",
+        "No internal route leaks"
+      ],
+      "blockers": [
+        "Confirm /auth/me 500 issue is handled cleanly if backend is unavailable"
+      ],
+      "groupId": "core-internal-shs-pages",
+      "groupLabel": "Core Internal SHS Pages",
+      "entryExistsInDist": true
+    },
+    {
+      "id": "operational-command-surface",
+      "label": "SHS Operational Command Surface",
+      "entry": "admin.html",
+      "route": "http://localhost:5173/admin.html#/command",
+      "layer": "Command Surface",
+      "currentStatus": "v1_pass_pending",
+      "v1RequiredWork": [
+        "Selected state clarity",
+        "Action feedback after click",
+        "Oracle/truth context visible",
+        "AI analyst panel sync",
+        "No confusing cards"
+      ],
+      "blockers": [],
+      "groupId": "core-internal-shs-pages",
+      "groupLabel": "Core Internal SHS Pages",
+      "entryExistsInDist": true
+    },
+    {
+      "id": "reporting-command-surface",
+      "label": "Reporting Command Surface",
+      "entry": "admin.html",
+      "route": "http://localhost:5173/admin.html#/reporting",
+      "layer": "Reporting / Export",
+      "currentStatus": "v1_pass_pending",
+      "v1RequiredWork": [
+        "Readiness gate check",
+        "Briefing Export check",
+        "Action Log Export check",
+        "Analyst Memo check",
+        "Audit Pack check",
+        "Trust envelope included"
+      ],
+      "blockers": [],
+      "groupId": "core-internal-shs-pages",
+      "groupLabel": "Core Internal SHS Pages",
+      "entryExistsInDist": true
+    },
+    {
+      "id": "verification-audit-surface",
+      "label": "Verification Audit Surface",
+      "entry": "admin.html",
+      "route": "http://localhost:5173/admin.html#/verification",
+      "layer": "Verification / Audit",
+      "currentStatus": "v1_pass_pending",
+      "v1RequiredWork": [
+        "Verification state is clear",
+        "Audit trace visible",
+        "Blocked/ready status works",
+        "No fake completed state without evidence"
+      ],
+      "blockers": [],
+      "groupId": "core-internal-shs-pages",
+      "groupLabel": "Core Internal SHS Pages",
+      "entryExistsInDist": true
+    },
+    {
+      "id": "oracle-truth-surface",
+      "label": "Oracle / Truth Surface",
+      "entry": "admin.html",
+      "route": "http://localhost:5173/admin.html#/oracle",
+      "layer": "Oracle / Unified Truth",
+      "currentStatus": "v1_pass_pending",
+      "v1RequiredWork": [
+        "Truth status visible",
+        "Confidence score visible",
+        "Readiness status visible",
+        "Contradiction state visible",
+        "Trace ID visible"
+      ],
+      "blockers": [],
+      "groupId": "core-internal-shs-pages",
+      "groupLabel": "Core Internal SHS Pages",
+      "entryExistsInDist": true
+    },
+    {
+      "id": "hub-dashboard",
+      "label": "Hub Dashboard",
+      "entry": "admin.html",
+      "route": "http://localhost:5173/admin.html#/hub",
+      "layer": "Hub Collaboration",
+      "currentStatus": "v1_pass_pending",
+      "v1RequiredWork": [
+        "Hub KPIs visible",
+        "Recent activity visible",
+        "Referral aging visible",
+        "Capacity strain visible",
+        "Reporting readiness visible"
+      ],
+      "blockers": [],
+      "groupId": "hub-collaboration-pages",
+      "groupLabel": "SHS Hub Collaboration Pages",
+      "entryExistsInDist": true
+    },
+    {
+      "id": "hub-intake",
+      "label": "Intake Navigator Console",
+      "entry": "admin.html",
+      "route": "http://localhost:5173/admin.html#/hub/intake",
+      "layer": "Hub Intake",
+      "currentStatus": "v1_pass_pending",
+      "v1RequiredWork": [
+        "Sending organization selector works",
+        "Receiving organization selector works",
+        "Need category works",
+        "Priority works",
+        "Create referral action has clear feedback"
+      ],
+      "blockers": [],
+      "groupId": "hub-collaboration-pages",
+      "groupLabel": "SHS Hub Collaboration Pages",
+      "entryExistsInDist": true
+    },
+    {
+      "id": "hub-lifecycle",
+      "label": "Referral Lifecycle Tracker",
+      "entry": "admin.html",
+      "route": "http://localhost:5173/admin.html#/hub/lifecycle",
+      "layer": "Referral Lifecycle",
+      "currentStatus": "v1_pass_pending",
+      "v1RequiredWork": [
+        "Open/assigned/review/hold/resolved/closed states visible",
+        "Cards have clear status",
+        "Click/hover behavior is understandable",
+        "No hidden state changes"
+      ],
+      "blockers": [],
+      "groupId": "hub-collaboration-pages",
+      "groupLabel": "SHS Hub Collaboration Pages",
+      "entryExistsInDist": true
+    },
+    {
+      "id": "hub-imports",
+      "label": "Files & Imports",
+      "entry": "admin.html",
+      "route": "http://localhost:5173/admin.html#/hub/imports",
+      "layer": "Import / Integration",
+      "currentStatus": "v1_pass_pending",
+      "v1RequiredWork": [
+        "Import lane visible",
+        "Supported formats visible",
+        "Mapping/validation state visible",
+        "API-ready state visible"
+      ],
+      "blockers": [],
+      "groupId": "hub-collaboration-pages",
+      "groupLabel": "SHS Hub Collaboration Pages",
+      "entryExistsInDist": true
+    },
+    {
+      "id": "partner-directory",
+      "label": "Partner Directory / Coordination",
+      "entry": "admin.html",
+      "route": "http://localhost:5173/admin.html#/hub/partners",
+      "layer": "Partner Coordination",
+      "currentStatus": "needs_confirmation_or_route",
+      "v1RequiredWork": [
+        "Confirm route exists",
+        "Partner list visible",
+        "Partner status visible",
+        "Partner permissions/scopes visible"
+      ],
+      "blockers": [
+        "Route may need confirmation"
+      ],
+      "groupId": "hub-collaboration-pages",
+      "groupLabel": "SHS Hub Collaboration Pages",
+      "entryExistsInDist": true
+    },
+    {
+      "id": "unmet-needs",
+      "label": "Unmet Needs",
+      "entry": "admin.html",
+      "route": "http://localhost:5173/admin.html#/hub/unmet-needs",
+      "layer": "Unmet Needs / Escalation",
+      "currentStatus": "needs_confirmation_or_route",
+      "v1RequiredWork": [
+        "Confirm route exists",
+        "Unmet need list visible",
+        "Escalation status visible",
+        "Partner routing visible"
+      ],
+      "blockers": [
+        "Route may need confirmation"
+      ],
+      "groupId": "hub-collaboration-pages",
+      "groupLabel": "SHS Hub Collaboration Pages",
+      "entryExistsInDist": true
+    },
+    {
+      "id": "index-entry",
+      "label": "Main Public Entry",
+      "entry": "index.html",
+      "route": "http://localhost:5173/index.html",
+      "layer": "Public SHS homepage",
+      "currentStatus": "browser_signoff_pending",
+      "v1RequiredWork": [
+        "Homepage opens",
+        "No console crash",
+        "Sales/value message clear",
+        "CTA visible",
+        "No early map vendor load"
+      ],
+      "blockers": [],
+      "groupId": "public-shs-sales-pages",
+      "groupLabel": "SHS Public Sales Pages",
+      "entryExistsInDist": true
+    },
+    {
+      "id": "solutions-entry",
+      "label": "Solutions Page",
+      "entry": "solutions.html",
+      "route": "http://localhost:5173/solutions.html",
+      "layer": "Public SHS sales",
+      "currentStatus": "browser_signoff_pending",
+      "v1RequiredWork": [
+        "Sales story clear",
+        "Pain/problem/solution/proof/CTA present",
+        "Visual quality top-tier",
+        "No internal command clutter"
+      ],
+      "blockers": [],
+      "groupId": "public-shs-sales-pages",
+      "groupLabel": "SHS Public Sales Pages",
+      "entryExistsInDist": true
+    },
+    {
+      "id": "sales-entry",
+      "label": "Sales Page",
+      "entry": "sales.html",
+      "route": "http://localhost:5173/sales.html",
+      "layer": "Sales / conversion",
+      "currentStatus": "v1_pass_pending",
+      "v1RequiredWork": [
+        "Offer is clear",
+        "CTA is clear",
+        "Demo/request path exists",
+        "No vague infrastructure language"
+      ],
+      "blockers": [],
+      "groupId": "public-shs-sales-pages",
+      "groupLabel": "SHS Public Sales Pages",
+      "entryExistsInDist": true
+    },
+    {
+      "id": "built-on-shs",
+      "label": "Built on SHS Page",
+      "entry": "solutions.html",
+      "route": "http://localhost:5173/solutions.html#/built-on-shs",
+      "layer": "Built on SHS business lane",
+      "currentStatus": "needs_confirmation_or_route",
+      "v1RequiredWork": [
+        "Confirm route exists or create route",
+        "Explain infrastructure studio model",
+        "Explain who should apply",
+        "CTA: Apply to Build on SHS"
+      ],
+      "blockers": [
+        "May need route/page creation"
+      ],
+      "groupId": "public-shs-sales-pages",
+      "groupLabel": "SHS Public Sales Pages",
+      "entryExistsInDist": true
+    },
+    {
+      "id": "request-demo",
+      "label": "Request Demo / Contact Page",
+      "entry": "sales.html",
+      "route": "http://localhost:5173/sales.html#/request-demo",
+      "layer": "Conversion / lead capture",
+      "currentStatus": "needs_confirmation_or_route",
+      "v1RequiredWork": [
+        "Confirm route exists or create route",
+        "Lead form or CTA visible",
+        "No broken form behavior"
+      ],
+      "blockers": [
+        "May need route/page creation"
+      ],
+      "groupId": "public-shs-sales-pages",
+      "groupLabel": "SHS Public Sales Pages",
+      "entryExistsInDist": true
+    },
+    {
+      "id": "foundation-entry",
+      "label": "Foundation Entry",
+      "entry": "foundation.html",
+      "route": "http://localhost:5173/foundation.html",
+      "layer": "SHF public foundation",
+      "currentStatus": "browser_signoff_pending",
+      "v1RequiredWork": [
+        "Page opens",
+        "No internal/admin-only content leaks",
+        "Foundation mission clear",
+        "Donor/partner path clear"
+      ],
+      "blockers": [],
+      "groupId": "public-shf-pages",
+      "groupLabel": "SHF Public / Impact Pages",
+      "entryExistsInDist": true
+    },
+    {
+      "id": "impact-page",
+      "label": "SHF Impact Page",
+      "entry": "foundation.html",
+      "route": "http://localhost:5173/foundation.html#/impact",
+      "layer": "Impact proof / public transparency",
+      "currentStatus": "v1_pass_pending",
+      "v1RequiredWork": [
+        "Proof-focused impact language",
+        "No heavy donation-sales push",
+        "Outcome metrics visible",
+        "Transparency/proof visible"
+      ],
+      "blockers": [],
+      "groupId": "public-shf-pages",
+      "groupLabel": "SHF Public / Impact Pages",
+      "entryExistsInDist": true
+    },
+    {
+      "id": "workforce-community-pipeline",
+      "label": "Workforce & Community Pipeline Page",
+      "entry": "foundation.html",
+      "route": "http://localhost:5173/foundation.html#/workforce",
+      "layer": "SHF mission pipeline",
+      "currentStatus": "needs_confirmation_or_route",
+      "v1RequiredWork": [
+        "Confirm route exists",
+        "Explain training/workforce/community pathway",
+        "Connect SHF mission to SHS-powered outcomes"
+      ],
+      "blockers": [
+        "May need route confirmation or page creation"
+      ],
+      "groupId": "public-shf-pages",
+      "groupLabel": "SHF Public / Impact Pages",
+      "entryExistsInDist": true
+    },
+    {
+      "id": "donor-support",
+      "label": "Donor / Partner Support Page",
+      "entry": "foundation.html",
+      "route": "http://localhost:5173/foundation.html#/support",
+      "layer": "Donor conversion",
+      "currentStatus": "needs_confirmation_or_route",
+      "v1RequiredWork": [
+        "Confirm route exists",
+        "Clear donor reason",
+        "Clear partner reason",
+        "Donation/partner CTA visible"
+      ],
+      "blockers": [
+        "May need route confirmation or page creation"
+      ],
+      "groupId": "public-shf-pages",
+      "groupLabel": "SHF Public / Impact Pages",
+      "entryExistsInDist": true
+    }
+  ],
+  "pageReadinessSummary": {
+    "totalPagesTracked": 24,
+    "statusCounts": {
+      "automated_preload_resolved_browser_signoff_pending": 1,
+      "browser_signoff_pending": 6,
+      "v1_pass_pending": 11,
+      "needs_confirmation_or_route": 6
+    },
+    "missingEntryCount": 0,
+    "missingEntries": [],
+    "browserSignoffPending": 7,
+    "v1PassPending": 11,
+    "needsConfirmationOrRoute": 6
+  },
+  "nextRecommendedOrder": [
+    "Finish browser route signoff for Patch 28 routes.",
+    "Confirm or create missing/uncertain routes.",
+    "Run core internal SHS page pass.",
+    "Run Hub Collaboration page pass.",
+    "Run public SHS sales page pass.",
+    "Run SHF public/funder page pass.",
+    "Then move to SHS V1 layer readiness registry."
+  ],
+  "nextPatchRecommendation": {
+    "id": "post_v1_bundle_patch_30_v1_layer_readiness_registry",
+    "label": "V1 Layer Readiness Registry",
+    "goal": "Create the master layer-readiness tracker after page readiness is formalized."
+  }
+}

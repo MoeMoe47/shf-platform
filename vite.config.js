@@ -27,6 +27,28 @@ export default defineConfig({
 
   build: {
     // raise warning threshold slightly (no functional impact)
+      modulePreload: {
+        resolveDependencies(filename, deps, context) {
+          // SHS_CAPITAL_MAPBOX_PRELOAD_FILTER_PATCH
+          // Capital should not preload Mapbox until a Mapbox route actually needs it.
+          const normalizedFileName = String(filename || "");
+          const normalizedHostId = String(context?.hostId || "");
+          const isCapitalPreloadHost =
+            normalizedFileName.includes("capital") ||
+            normalizedHostId.includes("/src/entries/capital") ||
+            normalizedHostId.includes("capital.main");
+
+          if (!isCapitalPreloadHost) {
+            return deps;
+          }
+
+          return deps.filter((dep) => {
+            const normalizedDep = String(dep || "");
+            return !normalizedDep.includes("vendor-mapbox-");
+          });
+        },
+      },
+
     chunkSizeWarningLimit: 700,
 
     rollupOptions: {
@@ -58,58 +80,106 @@ export default defineConfig({
 
       output: {
         manualChunks(id) {
-          // ---------------------------
-          // Vendor chunking
-          // ---------------------------
-          if (id.includes("node_modules")) {
-            if (id.includes("react")) return "vendor-react";
-            if (id.includes("maplibre")) return "vendor-map";
+          const normalizedId = id.replace(/\\/g, "/");
+
+          if (normalizedId.includes("/node_modules/")) {
+            if (
+              normalizedId.includes("/react/") ||
+              normalizedId.includes("/react-dom/") ||
+              normalizedId.includes("/react-router") ||
+              normalizedId.includes("/scheduler/")
+            ) {
+              return "vendor-react";
+            }
+
+            if (normalizedId.includes("mapbox-gl")) {
+              return "vendor-mapbox";
+            }
+
+            if (normalizedId.includes("maplibre-gl")) {
+              return "vendor-maplibre";
+            }
+
+            if (
+              normalizedId.includes("supercluster") ||
+              normalizedId.includes("geojson")
+            ) {
+              return "vendor-geo";
+            }
+
+            if (
+              normalizedId.includes("@mapbox") ||
+              normalizedId.includes("@maplibre")
+            ) {
+              return "vendor-map-support";
+            }
+
+            if (
+              normalizedId.includes("recharts") ||
+              normalizedId.includes("d3") ||
+              normalizedId.includes("victory") ||
+              normalizedId.includes("chart.js")
+            ) {
+              return "vendor-charts";
+            }
+
+            if (
+              normalizedId.includes("framer-motion") ||
+              normalizedId.includes("@motionone")
+            ) {
+              return "vendor-motion";
+            }
+
+            if (
+              normalizedId.includes("lucide-react") ||
+              normalizedId.includes("@radix-ui") ||
+              normalizedId.includes("clsx") ||
+              normalizedId.includes("tailwind-merge") ||
+              normalizedId.includes("class-variance-authority")
+            ) {
+              return "vendor-ui";
+            }
+
+            if (
+              normalizedId.includes("html2canvas") ||
+              normalizedId.includes("jspdf") ||
+              normalizedId.includes("pdf-lib") ||
+              normalizedId.includes("xlsx") ||
+              normalizedId.includes("file-saver")
+            ) {
+              return "vendor-export";
+            }
+
+            if (
+              normalizedId.includes("@tanstack") ||
+              normalizedId.includes("axios") ||
+              normalizedId.includes("zod")
+            ) {
+              return "vendor-data";
+            }
+
             return "vendor";
           }
 
-          // ---------------------------
-          // AI-heavy routes & logic
-          // ---------------------------
+          if (normalizedId.includes("/src/pages/exchange/")) return "pages-exchange";
+          if (normalizedId.includes("/src/pages/admin/")) return "pages-admin";
+          if (normalizedId.includes("/src/pages/hub/")) return "pages-hub";
+          if (normalizedId.includes("/src/pages/shf-command/")) return "pages-foundation";
+          if (normalizedId.includes("/src/foundation/")) return "pages-foundation";
+          if (normalizedId.includes("/src/pages/public/")) return "pages-public";
           if (
-            id.includes("/src/pages/ai/") ||
-            id.includes("/src/entries/ai") ||
-            id.includes("/src/ai/")
+            normalizedId.includes("/src/pages/lord/") ||
+            normalizedId.includes("/src/pages/lord-of-outcomes") ||
+            normalizedId.includes("/src/pages/lordOutcomes/")
           ) {
-            return "ai";
+            return "pages-lord";
           }
 
-          // ---------------------------
-          // Lord of Outcomes (LOO)
-          // ---------------------------
-          if (
-            id.includes("/src/pages/lord/") ||
-            id.includes("/src/pages/lord-of-outcomes") ||
-            id.includes("/src/loo/")
-          ) {
-            return "loo";
-          }
+          if (normalizedId.includes("/src/pages/")) return "pages";
+          if (normalizedId.includes("/src/components/")) return "components";
+          if (normalizedId.includes("/src/shared/")) return "shared";
 
-          // ---------------------------
-          // Dashboards & analytics views
-          // ---------------------------
-          if (
-            id.includes("/src/pages/") &&
-            (id.includes("Dashboard") ||
-              id.includes("Reports") ||
-              id.includes("Analytics"))
-          ) {
-            return "dashboards";
-          }
-
-          // ---------------------------
-          // Core app structure splits
-          // ---------------------------
-          if (id.includes("/src/pages/")) return "pages";
-          if (id.includes("/src/components/")) return "components";
-          if (id.includes("/src/shared/")) return "shared";
-          if (id.includes("/src/content/")) return "content";
-
-          // everything else: let Rollup decide
+          return undefined;
         },
       },
     },

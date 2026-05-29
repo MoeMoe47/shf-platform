@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, lazy, Suspense } from "react";
 import TourProvider from "@/system/tour/TourProvider";
 import OperatorIdentityBadge from "./components/OperatorIdentityBadge";
 import useOperatorIdentity from "./useOperatorIdentity";
 import "./shs-unified-truth-shell.css";
 import { unifiedTruthCommandTourSteps } from "./unifiedTruthCommandTourSteps";
+const SHSOperationalMapboxMap = lazy(() => import("./components/SHSOperationalMapboxMap"));
 
 const SHS_LOGO_SRC = "/assets/branding/shs_orbiter_logo.png";
 
@@ -294,73 +295,7 @@ function IntakeQueue() {
 }
 
 function OhioMap() {
-  const nodes = [
-    ["blue", 14, 33], ["blue", 24, 45], ["gold", 34, 38], ["blue", 49, 35],
-    ["gold", 61, 50], ["blue", 72, 38], ["gold", 82, 47], ["blue", 18, 61],
-    ["gold", 32, 70], ["gold", 50, 56], ["blue", 66, 66], ["blue", 76, 70],
-    ["gold", 44, 82], ["blue", 58, 82], ["blue", 28, 84], ["gold", 86, 80],
-  ];
-
-  return (
-    <main className="utc-card utc-map" data-tour="utc-map">
-      <div className="utc-map__top">
-        <div>
-          <h2>Ohio Statewide Intelligence Map</h2>
-          <p>
-            <span>Impact Intensity</span>
-            <b>Low</b>
-            <i />
-            <b>High</b>
-            <span>High Impact</span>
-            <span>Active Programs</span>
-            <span>AI-Risk</span>
-            <span>Data Gap</span>
-          </p>
-        </div>
-
-        <div className="utc-map__tools">
-          <button type="button">Layers⌄</button>
-          <button type="button">↗</button>
-        </div>
-      </div>
-
-      <div className="utc-map__canvas">
-        <div className="utc-ohio-shape">
-          <div className="utc-county-grid" />
-
-          {nodes.map(([tone, x, y], index) => (
-            <span
-              key={index}
-              className={`utc-node utc-node--${tone}`}
-              style={{ left: `${x}%`, top: `${y}%` }}
-            />
-          ))}
-
-          <div className="utc-franklin">
-            <span />
-            <strong>FRANKLIN</strong>
-          </div>
-
-          <article className="utc-county-popup">
-            <button type="button">×</button>
-            <h3>Franklin County</h3>
-            <p>High Impact</p>
-
-            <dl>
-              <div><dt>Programs Active</dt><dd>18</dd></div>
-              <div><dt>People Served</dt><dd>85,429</dd></div>
-              <div><dt>Verified Outcomes</dt><dd>46,231</dd></div>
-              <div><dt>Funding Deployed</dt><dd>$18.6M</dd></div>
-              <div><dt>Readiness</dt><dd>High</dd></div>
-              <div><dt>Risk Posture</dt><dd>Moderate</dd></div>
-            </dl>
-
-            <footer>View County Dossier →</footer>
-          </article>
-        </div>
-      </div>
-    </main>
-  );
+  return withUnifiedTruthMapBoundary(<SHSOperationalMapboxMap />);
 }
 
 function OraclePanel() {
@@ -1510,6 +1445,31 @@ function CommandOverviewHardNavigationGuard() {
 }
 
 
+
+function UnifiedTruthMapFallback() {
+  return (
+    <div
+      className="shs-unified-truth-map-fallback"
+      style={{
+        minHeight: "360px",
+        display: "grid",
+        placeItems: "center",
+        padding: "32px",
+        borderRadius: "24px",
+        border: "1px solid rgba(45, 212, 191, 0.22)",
+        color: "rgba(226, 232, 240, 0.92)",
+        background: "linear-gradient(180deg, rgba(8,24,44,.96), rgba(3,10,22,.98))",
+      }}
+    >
+      Loading SHS operational truth map…
+    </div>
+  );
+}
+
+function withUnifiedTruthMapBoundary(element) {
+  return <Suspense fallback={<UnifiedTruthMapFallback />}>{element}</Suspense>;
+}
+
 export default function SHSUnifiedTruthShell() {
   return (
     <TourProvider steps={unifiedTruthCommandTourSteps} buttonLabel="Start Tour">
@@ -1547,4 +1507,3 @@ export default function SHSUnifiedTruthShell() {
     </TourProvider>
   );
 }
-

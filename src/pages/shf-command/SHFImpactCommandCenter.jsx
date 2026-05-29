@@ -47,6 +47,199 @@ async function fetchOracleBundle({ entityId, county }) {
   };
 }
 
+
+function SHFAIAnalystTruthDrawer({ drawerState, onClose }) {
+  if (!drawerState?.open) return null;
+
+  const context = drawerState.truthContext || {};
+  const mapContext = drawerState.mapContext || {};
+  const source = drawerState.source || "ai_analyst_panel";
+
+  const rows = [
+    ["Truth Status", context.truthStatus || "unknown"],
+    ["Verification", context.verificationStatus || "unknown"],
+    ["Readiness", context.readinessStatus || "unknown"],
+    ["Risk Level", context.riskLevel || "unknown"],
+    ["Decision Posture", context.decisionPosture || "unknown"],
+    ["Confidence", context.confidenceScore != null ? `${context.confidenceScore} (${context.confidenceBand || "unknown"})` : "—"],
+    ["Trust Envelope", context.trustEnvelopePresent ? "present" : "missing"],
+    ["Trace Coverage", context.traceCoverageStatus || "unknown"],
+    ["Trace ID", context.traceId || "—"],
+    ["Publication Mode", context.publicationMode || "internal"],
+    ["Selected County", context.selectedCounty || mapContext.selected_county || mapContext.county || "Ohio"],
+    ["Selected Entity", context.selectedEntityId || "shf-impact-command-center"],
+    ["Source", source],
+  ];
+
+  return (
+    <div
+      className="shf-ai-truth-drawer-backdrop"
+      role="presentation"
+      onClick={onClose}
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 9998,
+        background: "rgba(2, 6, 23, 0.58)",
+        backdropFilter: "blur(4px)",
+      }}
+    >
+      <aside
+        className="shf-ai-truth-drawer"
+        role="dialog"
+        aria-modal="true"
+        aria-label="AI Analyst Truth Context"
+        onClick={(event) => event.stopPropagation()}
+        style={{
+          position: "fixed",
+          top: 18,
+          right: 18,
+          bottom: 18,
+          width: "min(520px, calc(100vw - 36px))",
+          zIndex: 9999,
+          borderRadius: 24,
+          border: "1px solid rgba(125, 211, 252, 0.25)",
+          background:
+            "linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(2, 6, 23, 0.98))",
+          color: "#e5eefb",
+          boxShadow: "0 30px 80px rgba(0, 0, 0, 0.45)",
+          padding: 22,
+          overflow: "auto",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            gap: 16,
+            alignItems: "flex-start",
+            marginBottom: 18,
+          }}
+        >
+          <div>
+            <div
+              style={{
+                color: "#7dd3fc",
+                fontSize: 12,
+                fontWeight: 800,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+              }}
+            >
+              AI Analyst Drawer V1
+            </div>
+            <h2 style={{ margin: "6px 0 0", fontSize: 24 }}>
+              Truth Spine Context
+            </h2>
+            <p
+              style={{
+                margin: "8px 0 0",
+                color: "rgba(203, 213, 225, 0.86)",
+                lineHeight: 1.55,
+              }}
+            >
+              This drawer shows the certified context the analyst is using before recommending action.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            style={{
+              border: "1px solid rgba(148, 163, 184, 0.3)",
+              background: "rgba(15, 23, 42, 0.85)",
+              color: "#e5eefb",
+              borderRadius: 999,
+              padding: "8px 12px",
+              cursor: "pointer",
+            }}
+          >
+            Close
+          </button>
+        </div>
+
+        <div
+          style={{
+            padding: 14,
+            borderRadius: 18,
+            border: "1px solid rgba(34, 197, 94, 0.22)",
+            background: "rgba(34, 197, 94, 0.08)",
+            marginBottom: 16,
+          }}
+        >
+          <div
+            style={{
+              color: "#bbf7d0",
+              fontWeight: 800,
+              marginBottom: 6,
+            }}
+          >
+            Recommended Next Move
+          </div>
+          <div style={{ lineHeight: 1.6 }}>
+            {context.recommendation || "Await verified Truth Spine context before action."}
+          </div>
+        </div>
+
+        <div
+          style={{
+            display: "grid",
+            gap: 10,
+            marginBottom: 18,
+          }}
+        >
+          {rows.map(([label, value]) => (
+            <div
+              key={label}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "150px 1fr",
+                gap: 12,
+                padding: "10px 12px",
+                borderRadius: 14,
+                background: "rgba(15, 23, 42, 0.72)",
+                border: "1px solid rgba(148, 163, 184, 0.14)",
+              }}
+            >
+              <span style={{ color: "rgba(148, 163, 184, 0.96)", fontSize: 13 }}>
+                {label}
+              </span>
+              <strong style={{ color: "#f8fafc", fontSize: 13 }}>
+                {String(value)}
+              </strong>
+            </div>
+          ))}
+        </div>
+
+        <div
+          style={{
+            padding: 14,
+            borderRadius: 18,
+            border: "1px solid rgba(125, 211, 252, 0.18)",
+            background: "rgba(14, 165, 233, 0.07)",
+          }}
+        >
+          <div
+            style={{
+              color: "#bae6fd",
+              fontWeight: 800,
+              marginBottom: 8,
+            }}
+          >
+            Why It Matters
+          </div>
+          <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.7 }}>
+            {(context.whyPoints || []).slice(0, 10).map((point, index) => (
+              <li key={`${point}-${index}`}>{point}</li>
+            ))}
+          </ul>
+        </div>
+      </aside>
+    </div>
+  );
+}
+
+
 function normalizeOracleInsight(bundle, county) {
   const truth = bundle?.truth || {};
   const priority = bundle?.priority || {};
@@ -120,7 +313,7 @@ const SHF_COMMAND_TOUR_STEPS = [
   {
     number: "01",
     target: "header",
-    selector: ".shf-brand",
+    selector: "[data-tour-section='header'], .shf-brand",
     title: "Start With the Command Header",
     body: "Use the header first. Confirm this is the SHF Impact Command Center, set the reporting period, confirm the Ohio statewide scope, and save Export Report for the end.",
     why: "The header sets the operating context for every number and recommendation on the page.",
@@ -174,7 +367,7 @@ const SHF_COMMAND_TOUR_STEPS = [
   {
     number: "07",
     target: "impact",
-    selector: ".shf-impact-overview, .shf-overview-panel, [data-tour-section='impact']",
+    selector: "[data-tour-section='impact'], .shf-impact-overview, .shf-overview-panel",
     title: "Read the Impact Overview",
     body: "Use the impact overview to explain verification, funding, governance, reporting, audit, reserves, and community impact.",
     why: "This gives leadership and funders a simple view of the ecosystem’s proof structure.",
@@ -192,7 +385,7 @@ const SHF_COMMAND_TOUR_STEPS = [
   {
     number: "09",
     target: "reports",
-    selector: ".shf-reports-briefings, [data-tour-section='reports']",
+    selector: "[data-tour-section='reports'], .shf-reports-briefings",
     title: "Review Reports and Briefings",
     body: "This section shows whether leadership-ready materials are available: board brief, grant narrative, donor summary, public impact snapshot, and program health memo.",
     why: "Different audiences need different report types.",
@@ -201,7 +394,7 @@ const SHF_COMMAND_TOUR_STEPS = [
   {
     number: "10",
     target: "proof",
-    selector: ".shf-proof-layer, .shf-trust-verification-panel, [data-tour-section='proof']",
+    selector: "[data-tour-section='proof'], .shf-trust-verification-panel, .shf-proof-layer",
     title: "Confirm the Proof Layer",
     body: "The proof layer checks reporting coverage, audit integrity, ledger sync, missing reports, and memo readiness.",
     why: "This prevents weak or incomplete proof from becoming a formal report.",
@@ -821,6 +1014,30 @@ return (
 
 
 export default function SHFImpactCommandCenter() {
+  const [aiTruthDrawer, setAiTruthDrawer] = useState({ open: false });
+
+  useEffect(() => {
+    function handleAIAnalystDrawerRequest(event) {
+      const detail = event?.detail || {};
+      setAiTruthDrawer({
+        open: true,
+        source: detail.source || "ai_analyst_panel",
+        surface: detail.surface || "impact_command_center",
+        action: detail.action || "open_ai_drawer",
+        truthContext: detail.truthContext || null,
+        mapContext: detail.mapContext || null,
+        drawerContext: detail.drawerContext || null,
+        timestamp: detail.timestamp || new Date().toISOString(),
+      });
+    }
+
+    window.addEventListener("shf:ai-drawer-request", handleAIAnalystDrawerRequest);
+
+    return () => {
+      window.removeEventListener("shf:ai-drawer-request", handleAIAnalystDrawerRequest);
+    };
+  }, []);
+
 
   const [tourOpen, setTourOpen] = useState(false);
   const [tourSpotlightRect, setTourSpotlightRect] = useState(null);
@@ -1217,7 +1434,22 @@ const [selfAudit, setSelfAudit] = useState(null);
     <div className="shf-page">
       <div className="shf-shell">
         <header className="shf-topbar">
-          <div className="shf-brand">
+          <div
+              className="shf-brand shf-brand-home-link"
+              data-tour-section="header"
+              role="button"
+              tabIndex={0}
+              title="Go to Silicon Heartland Foundation home page"
+              onClick={() => {
+                window.location.href = "/foundation.html";
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  window.location.href = "/foundation.html";
+                }
+              }}
+            >
             <div className="shf-brand__mark">
               <span className="shf-brand__mark-top" />
               <span className="shf-brand__mark-bottom" />
@@ -1289,15 +1521,14 @@ const [selfAudit, setSelfAudit] = useState(null);
         </div>
 
 
-        <div className="shf-day4-sanity-strip shf-system-status-bar">
-          <div><strong>SURFACE:</strong> SHF Command Center</div>
-          <div><strong>ENTITY:</strong> {selectedEntityId || "none"}</div>
-          <div><strong>COUNTY:</strong> {selectedCountyRecord?.name || selectedCounty || "none"}</div>
-          <div><strong>ORACLE:</strong> {oracleStatusLabel}</div>
-          <div><strong>LAST MAP:</strong> {lastCountyClick || "none"}</div>
-          <div><strong>LAST DRAWER:</strong> {lastDrawerTitle || "none"}</div>
-          <div><strong>READY:</strong> {surfaceReady ? "YES" : "NO"}</div>
-          
+        <div className="shf-command-status-strip" data-tour-section="state">
+          <span><strong>Surface</strong> SHF Command Center</span>
+          <span><strong>Entity</strong> {selectedEntityId || "none"}</span>
+          <span><strong>County</strong> {selectedCountyRecord?.name || selectedCounty || "none"}</span>
+          <span><strong>Oracle</strong> {oracleStatusLabel}</span>
+          <span><strong>Map</strong> {lastCountyClick || "none"}</span>
+          <span><strong>Drawer</strong> {lastDrawerTitle || "none"}</span>
+          <span><strong>Ready</strong> {surfaceReady ? "YES" : "NO"}</span>
         </div>
 
         <main className="shf-main-grid">
@@ -1648,6 +1879,12 @@ const [selfAudit, setSelfAudit] = useState(null);
 
       <DetailDrawer selected={selected} onClose={() => setSelected(null)} />
     </div>
+
+      <SHFAIAnalystTruthDrawer
+        drawerState={aiTruthDrawer}
+        onClose={() => setAiTruthDrawer({ open: false })}
+      />
+
   );
 }
 

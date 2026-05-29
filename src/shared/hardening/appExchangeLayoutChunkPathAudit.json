@@ -1,0 +1,1130 @@
+{
+  "generatedAt": "2026-05-23T16:36:42.320Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 9",
+  "mode": "APP_EXCHANGE_LAYOUT_CHUNK_PATH_AUDIT_NO_CODE_CHANGES",
+  "chunkPathAuditStatus": "findings_ready",
+  "chunkPathAuditLabel": "App + ExchangeLayout Chunk Path Findings Ready",
+  "productionDecision": "No code was changed. This audit identifies whether App.jsx, ExchangeLayout.jsx, Unified Truth shell, core map internals, or Vite manualChunks are still holding Exchange/map code in large chunks.",
+  "priorRouteLazyImpactStatus": "safe_patch_no_meaningful_size_reduction",
+  "priorRouteLazyComparison": {
+    "vendor": {
+      "beforeFileName": "vendor-BtYAkRhV.js",
+      "afterFileName": "vendor-BtYAkRhV.js",
+      "beforeRawKb": 1959.5,
+      "afterRawKb": 1959.5,
+      "rawKbDelta": 0,
+      "beforeGzipKb": 553.85,
+      "afterGzipKb": 553.85,
+      "gzipKbDelta": 0
+    },
+    "pagesJs": {
+      "beforeFileName": "pages-4ojuxR1S.js",
+      "afterFileName": "pages-ByCRJx3G.js",
+      "beforeRawKb": 1100.44,
+      "afterRawKb": 1100.56,
+      "rawKbDelta": 0.12,
+      "beforeGzipKb": 249.45,
+      "afterGzipKb": 248.84,
+      "gzipKbDelta": -0.61
+    },
+    "vendorMap": {
+      "beforeFileName": "vendor-map-CPoydKcy.js",
+      "afterFileName": "vendor-map-CPoydKcy.js",
+      "beforeRawKb": 1011.59,
+      "afterRawKb": 1011.59,
+      "rawKbDelta": 0,
+      "beforeGzipKb": 274.26,
+      "afterGzipKb": 274.26,
+      "gzipKbDelta": 0
+    },
+    "pagesCss": {
+      "beforeFileName": "pages-CEreUFyW.css",
+      "afterFileName": "pages-CEreUFyW.css",
+      "beforeRawKb": 831.75,
+      "afterRawKb": 831.75,
+      "rawKbDelta": 0,
+      "beforeGzipKb": 126.96,
+      "afterGzipKb": 126.96,
+      "gzipKbDelta": 0
+    },
+    "largeAssetsBefore": 4,
+    "largeAssetsAfter": 4,
+    "buildWarningBefore": true,
+    "buildWarningAfter": true,
+    "frontendBuildBefore": true,
+    "frontendBuildAfter": true
+  },
+  "routeAuditSummary": {
+    "sourceFilesScanned": 1302,
+    "totalFindings": 59,
+    "coreMapImportFindings": 2,
+    "unifiedTruthFindings": 7,
+    "exchangeFindings": 47,
+    "mapLibraryFindings": 3,
+    "staticImportFindings": 19,
+    "dynamicImportFindings": 2,
+    "candidateRouteFiles": 34,
+    "likelyLazyTargets": 34,
+    "doNotTouchYet": 1
+  },
+  "auditedFiles": [
+    {
+      "file": "src/App.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "SHSExchangeMissionControl",
+          "lineNumber": 4,
+          "line": "import SHSExchangeMissionControl from \"@/pages/exchange/SHSExchangeMissionControl.jsx\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "SHSExchangeMissionControl",
+          "lineNumber": 16,
+          "line": "<Route path=\"/exchange-mission\" element={<SHSExchangeMissionControl />} />",
+          "kind": "reference"
+        },
+        {
+          "term": "CommandCenter",
+          "lineNumber": 7,
+          "line": "import SHFImpactCommandCenter from \"./pages/shf-command/SHFImpactCommandCenter\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "CommandCenter",
+          "lineNumber": 19,
+          "line": "<Route path=\"/shf-command\" element={<SHFImpactCommandCenter />} />",
+          "kind": "reference"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 4,
+          "line": "import SHSExchangeMissionControl from \"@/pages/exchange/SHSExchangeMissionControl.jsx\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 7,
+          "line": "import SHFImpactCommandCenter from \"./pages/shf-command/SHFImpactCommandCenter\";",
+          "kind": "static_import"
+        }
+      ],
+      "staticImports": [
+        {
+          "term": "SHSExchangeMissionControl",
+          "lineNumber": 4,
+          "line": "import SHSExchangeMissionControl from \"@/pages/exchange/SHSExchangeMissionControl.jsx\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "CommandCenter",
+          "lineNumber": 7,
+          "line": "import SHFImpactCommandCenter from \"./pages/shf-command/SHFImpactCommandCenter\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 4,
+          "line": "import SHSExchangeMissionControl from \"@/pages/exchange/SHSExchangeMissionControl.jsx\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 7,
+          "line": "import SHFImpactCommandCenter from \"./pages/shf-command/SHFImpactCommandCenter\";",
+          "kind": "static_import"
+        }
+      ],
+      "dynamicImports": [],
+      "manualChunkHits": [],
+      "summary": {
+        "totalHits": 6,
+        "staticImports": 4,
+        "dynamicImports": 0,
+        "manualChunkHits": 0
+      }
+    },
+    {
+      "file": "src/routes/exchangeRoutes.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "ExchangeRoutes",
+          "lineNumber": 33,
+          "line": "export default function ExchangeRoutes() {",
+          "kind": "reference"
+        },
+        {
+          "term": "ExchangeLayout",
+          "lineNumber": 3,
+          "line": "const ExchangeLayout = lazy(() => import(\"@/pages/exchange/ExchangeLayout\"));",
+          "kind": "react_lazy"
+        },
+        {
+          "term": "ExchangeLayout",
+          "lineNumber": 35,
+          "line": "<Route path=\"exchange\" element={withExchangeLazyBoundary(<ExchangeLayout />)}>",
+          "kind": "reference"
+        },
+        {
+          "term": "CommandCenter",
+          "lineNumber": 8,
+          "line": "import CommandCenter from \"@/pages/exchange/CommandCenter\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "CommandCenter",
+          "lineNumber": 36,
+          "line": "<Route index element={<CommandCenter />} />",
+          "kind": "reference"
+        },
+        {
+          "term": "CommandCenter",
+          "lineNumber": 38,
+          "line": "<Route path=\"command\" element={<CommandCenter />} />",
+          "kind": "reference"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 3,
+          "line": "const ExchangeLayout = lazy(() => import(\"@/pages/exchange/ExchangeLayout\"));",
+          "kind": "react_lazy"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 4,
+          "line": "import OperatorDashboard from \"@/pages/exchange/OperatorDashboard\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 5,
+          "line": "import ProviderDashboard from \"@/pages/exchange/ProviderDashboard\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 6,
+          "line": "import InvestorDashboard from \"@/pages/exchange/InvestorDashboard\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 7,
+          "line": "import PublicTransparency from \"@/pages/exchange/PublicTransparency\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 8,
+          "line": "import CommandCenter from \"@/pages/exchange/CommandCenter\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 9,
+          "line": "import WorkspaceDashboard from \"../pages/exchange/WorkspaceDashboard\";",
+          "kind": "static_import"
+        }
+      ],
+      "staticImports": [
+        {
+          "term": "CommandCenter",
+          "lineNumber": 8,
+          "line": "import CommandCenter from \"@/pages/exchange/CommandCenter\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 4,
+          "line": "import OperatorDashboard from \"@/pages/exchange/OperatorDashboard\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 5,
+          "line": "import ProviderDashboard from \"@/pages/exchange/ProviderDashboard\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 6,
+          "line": "import InvestorDashboard from \"@/pages/exchange/InvestorDashboard\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 7,
+          "line": "import PublicTransparency from \"@/pages/exchange/PublicTransparency\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 8,
+          "line": "import CommandCenter from \"@/pages/exchange/CommandCenter\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 9,
+          "line": "import WorkspaceDashboard from \"../pages/exchange/WorkspaceDashboard\";",
+          "kind": "static_import"
+        }
+      ],
+      "dynamicImports": [
+        {
+          "term": "ExchangeLayout",
+          "lineNumber": 3,
+          "line": "const ExchangeLayout = lazy(() => import(\"@/pages/exchange/ExchangeLayout\"));",
+          "kind": "react_lazy"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 3,
+          "line": "const ExchangeLayout = lazy(() => import(\"@/pages/exchange/ExchangeLayout\"));",
+          "kind": "react_lazy"
+        }
+      ],
+      "manualChunkHits": [],
+      "summary": {
+        "totalHits": 13,
+        "staticImports": 7,
+        "dynamicImports": 2,
+        "manualChunkHits": 0
+      }
+    },
+    {
+      "file": "src/pages/exchange/ExchangeLayout.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "ExchangeLayout",
+          "lineNumber": 58,
+          "line": "export default function ExchangeLayout() {",
+          "kind": "reference"
+        }
+      ],
+      "staticImports": [],
+      "dynamicImports": [],
+      "manualChunkHits": [],
+      "summary": {
+        "totalHits": 1,
+        "staticImports": 0,
+        "dynamicImports": 0,
+        "manualChunkHits": 0
+      }
+    },
+    {
+      "file": "src/pages/exchange/CommandCenter.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "CommandCenter",
+          "lineNumber": 4,
+          "line": "export default function CommandCenter() {",
+          "kind": "reference"
+        },
+        {
+          "term": "SHSUnifiedTruthShell",
+          "lineNumber": 2,
+          "line": "import SHSUnifiedTruthShell from \"./unified-truth/SHSUnifiedTruthShell\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "SHSUnifiedTruthShell",
+          "lineNumber": 5,
+          "line": "return <SHSUnifiedTruthShell />;",
+          "kind": "reference"
+        }
+      ],
+      "staticImports": [
+        {
+          "term": "SHSUnifiedTruthShell",
+          "lineNumber": 2,
+          "line": "import SHSUnifiedTruthShell from \"./unified-truth/SHSUnifiedTruthShell\";",
+          "kind": "static_import"
+        }
+      ],
+      "dynamicImports": [],
+      "manualChunkHits": [],
+      "summary": {
+        "totalHits": 3,
+        "staticImports": 1,
+        "dynamicImports": 0,
+        "manualChunkHits": 0
+      }
+    },
+    {
+      "file": "src/pages/exchange/SHSCommandSurface.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "CommandCenter",
+          "lineNumber": 10,
+          "line": "import CommandCenterReportActions from \"./CommandCenterReportActions\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "CommandCenter",
+          "lineNumber": 314,
+          "line": "<CommandCenterReportActions",
+          "kind": "reference"
+        },
+        {
+          "term": "SHSCommandSurface",
+          "lineNumber": 99,
+          "line": "export default function SHSCommandSurface({",
+          "kind": "reference"
+        }
+      ],
+      "staticImports": [
+        {
+          "term": "CommandCenter",
+          "lineNumber": 10,
+          "line": "import CommandCenterReportActions from \"./CommandCenterReportActions\";",
+          "kind": "static_import"
+        }
+      ],
+      "dynamicImports": [],
+      "manualChunkHits": [],
+      "summary": {
+        "totalHits": 3,
+        "staticImports": 1,
+        "dynamicImports": 0,
+        "manualChunkHits": 0
+      }
+    },
+    {
+      "file": "src/pages/exchange/SHSExchangeMissionControl.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "SHSExchangeMissionControl",
+          "lineNumber": 117,
+          "line": "export default function SHSExchangeMissionControl() {",
+          "kind": "reference"
+        }
+      ],
+      "staticImports": [],
+      "dynamicImports": [],
+      "manualChunkHits": [],
+      "summary": {
+        "totalHits": 1,
+        "staticImports": 0,
+        "dynamicImports": 0,
+        "manualChunkHits": 0
+      }
+    },
+    {
+      "file": "src/pages/exchange/unified-truth/SHSUnifiedTruthShell.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "SHSUnifiedTruthShell",
+          "lineNumber": 1448,
+          "line": "export default function SHSUnifiedTruthShell() {",
+          "kind": "reference"
+        },
+        {
+          "term": "SHSOperationalMapboxMap",
+          "lineNumber": 7,
+          "line": "import SHSOperationalMapboxMap from \"./components/SHSOperationalMapboxMap\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "SHSOperationalMapboxMap",
+          "lineNumber": 298,
+          "line": "return <SHSOperationalMapboxMap />;",
+          "kind": "reference"
+        }
+      ],
+      "staticImports": [
+        {
+          "term": "SHSOperationalMapboxMap",
+          "lineNumber": 7,
+          "line": "import SHSOperationalMapboxMap from \"./components/SHSOperationalMapboxMap\";",
+          "kind": "static_import"
+        }
+      ],
+      "dynamicImports": [],
+      "manualChunkHits": [],
+      "summary": {
+        "totalHits": 3,
+        "staticImports": 1,
+        "dynamicImports": 0,
+        "manualChunkHits": 0
+      }
+    },
+    {
+      "file": "src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "SHSOperationalMapboxMap",
+          "lineNumber": 1560,
+          "line": "export default function SHSOperationalMapboxMap() {",
+          "kind": "reference"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 2,
+          "line": "import mapboxgl from \"mapbox-gl\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 3,
+          "line": "import \"mapbox-gl/dist/mapbox-gl.css\";",
+          "kind": "static_import"
+        }
+      ],
+      "staticImports": [
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 2,
+          "line": "import mapboxgl from \"mapbox-gl\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 3,
+          "line": "import \"mapbox-gl/dist/mapbox-gl.css\";",
+          "kind": "static_import"
+        }
+      ],
+      "dynamicImports": [],
+      "manualChunkHits": [],
+      "summary": {
+        "totalHits": 3,
+        "staticImports": 2,
+        "dynamicImports": 0,
+        "manualChunkHits": 0
+      }
+    },
+    {
+      "file": "vite.config.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "manualChunks",
+          "lineNumber": 60,
+          "line": "manualChunks(id) {",
+          "kind": "manual_chunks_config"
+        },
+        {
+          "term": "chunkSizeWarningLimit",
+          "lineNumber": 30,
+          "line": "chunkSizeWarningLimit: 700,",
+          "kind": "chunk_warning_config"
+        },
+        {
+          "term": "vendor-map",
+          "lineNumber": 66,
+          "line": "if (id.includes(\"maplibre\")) return \"vendor-map\";",
+          "kind": "reference"
+        },
+        {
+          "term": "vendor",
+          "lineNumber": 65,
+          "line": "if (id.includes(\"react\")) return \"vendor-react\";",
+          "kind": "reference"
+        },
+        {
+          "term": "vendor",
+          "lineNumber": 66,
+          "line": "if (id.includes(\"maplibre\")) return \"vendor-map\";",
+          "kind": "reference"
+        },
+        {
+          "term": "vendor",
+          "lineNumber": 67,
+          "line": "return \"vendor\";",
+          "kind": "reference"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 74,
+          "line": "id.includes(\"/src/pages/ai/\") ||",
+          "kind": "reference"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 85,
+          "line": "id.includes(\"/src/pages/lord/\") ||",
+          "kind": "reference"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 86,
+          "line": "id.includes(\"/src/pages/lord-of-outcomes\") ||",
+          "kind": "reference"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 96,
+          "line": "id.includes(\"/src/pages/\") &&",
+          "kind": "reference"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 107,
+          "line": "if (id.includes(\"/src/pages/\")) return \"pages\";",
+          "kind": "reference"
+        }
+      ],
+      "staticImports": [],
+      "dynamicImports": [],
+      "manualChunkHits": [
+        {
+          "term": "manualChunks",
+          "lineNumber": 60,
+          "line": "manualChunks(id) {",
+          "kind": "manual_chunks_config"
+        }
+      ],
+      "summary": {
+        "totalHits": 11,
+        "staticImports": 0,
+        "dynamicImports": 0,
+        "manualChunkHits": 1
+      }
+    }
+  ],
+  "appAudit": {
+    "file": "src/App.jsx",
+    "exists": true,
+    "hits": [
+      {
+        "term": "SHSExchangeMissionControl",
+        "lineNumber": 4,
+        "line": "import SHSExchangeMissionControl from \"@/pages/exchange/SHSExchangeMissionControl.jsx\";",
+        "kind": "static_import"
+      },
+      {
+        "term": "SHSExchangeMissionControl",
+        "lineNumber": 16,
+        "line": "<Route path=\"/exchange-mission\" element={<SHSExchangeMissionControl />} />",
+        "kind": "reference"
+      },
+      {
+        "term": "CommandCenter",
+        "lineNumber": 7,
+        "line": "import SHFImpactCommandCenter from \"./pages/shf-command/SHFImpactCommandCenter\";",
+        "kind": "static_import"
+      },
+      {
+        "term": "CommandCenter",
+        "lineNumber": 19,
+        "line": "<Route path=\"/shf-command\" element={<SHFImpactCommandCenter />} />",
+        "kind": "reference"
+      },
+      {
+        "term": "pages",
+        "lineNumber": 4,
+        "line": "import SHSExchangeMissionControl from \"@/pages/exchange/SHSExchangeMissionControl.jsx\";",
+        "kind": "static_import"
+      },
+      {
+        "term": "pages",
+        "lineNumber": 7,
+        "line": "import SHFImpactCommandCenter from \"./pages/shf-command/SHFImpactCommandCenter\";",
+        "kind": "static_import"
+      }
+    ],
+    "staticImports": [
+      {
+        "term": "SHSExchangeMissionControl",
+        "lineNumber": 4,
+        "line": "import SHSExchangeMissionControl from \"@/pages/exchange/SHSExchangeMissionControl.jsx\";",
+        "kind": "static_import"
+      },
+      {
+        "term": "CommandCenter",
+        "lineNumber": 7,
+        "line": "import SHFImpactCommandCenter from \"./pages/shf-command/SHFImpactCommandCenter\";",
+        "kind": "static_import"
+      },
+      {
+        "term": "pages",
+        "lineNumber": 4,
+        "line": "import SHSExchangeMissionControl from \"@/pages/exchange/SHSExchangeMissionControl.jsx\";",
+        "kind": "static_import"
+      },
+      {
+        "term": "pages",
+        "lineNumber": 7,
+        "line": "import SHFImpactCommandCenter from \"./pages/shf-command/SHFImpactCommandCenter\";",
+        "kind": "static_import"
+      }
+    ],
+    "dynamicImports": [],
+    "manualChunkHits": [],
+    "summary": {
+      "totalHits": 6,
+      "staticImports": 4,
+      "dynamicImports": 0,
+      "manualChunkHits": 0
+    }
+  },
+  "exchangeRoutesAudit": {
+    "file": "src/routes/exchangeRoutes.jsx",
+    "exists": true,
+    "hits": [
+      {
+        "term": "ExchangeRoutes",
+        "lineNumber": 33,
+        "line": "export default function ExchangeRoutes() {",
+        "kind": "reference"
+      },
+      {
+        "term": "ExchangeLayout",
+        "lineNumber": 3,
+        "line": "const ExchangeLayout = lazy(() => import(\"@/pages/exchange/ExchangeLayout\"));",
+        "kind": "react_lazy"
+      },
+      {
+        "term": "ExchangeLayout",
+        "lineNumber": 35,
+        "line": "<Route path=\"exchange\" element={withExchangeLazyBoundary(<ExchangeLayout />)}>",
+        "kind": "reference"
+      },
+      {
+        "term": "CommandCenter",
+        "lineNumber": 8,
+        "line": "import CommandCenter from \"@/pages/exchange/CommandCenter\";",
+        "kind": "static_import"
+      },
+      {
+        "term": "CommandCenter",
+        "lineNumber": 36,
+        "line": "<Route index element={<CommandCenter />} />",
+        "kind": "reference"
+      },
+      {
+        "term": "CommandCenter",
+        "lineNumber": 38,
+        "line": "<Route path=\"command\" element={<CommandCenter />} />",
+        "kind": "reference"
+      },
+      {
+        "term": "pages",
+        "lineNumber": 3,
+        "line": "const ExchangeLayout = lazy(() => import(\"@/pages/exchange/ExchangeLayout\"));",
+        "kind": "react_lazy"
+      },
+      {
+        "term": "pages",
+        "lineNumber": 4,
+        "line": "import OperatorDashboard from \"@/pages/exchange/OperatorDashboard\";",
+        "kind": "static_import"
+      },
+      {
+        "term": "pages",
+        "lineNumber": 5,
+        "line": "import ProviderDashboard from \"@/pages/exchange/ProviderDashboard\";",
+        "kind": "static_import"
+      },
+      {
+        "term": "pages",
+        "lineNumber": 6,
+        "line": "import InvestorDashboard from \"@/pages/exchange/InvestorDashboard\";",
+        "kind": "static_import"
+      },
+      {
+        "term": "pages",
+        "lineNumber": 7,
+        "line": "import PublicTransparency from \"@/pages/exchange/PublicTransparency\";",
+        "kind": "static_import"
+      },
+      {
+        "term": "pages",
+        "lineNumber": 8,
+        "line": "import CommandCenter from \"@/pages/exchange/CommandCenter\";",
+        "kind": "static_import"
+      },
+      {
+        "term": "pages",
+        "lineNumber": 9,
+        "line": "import WorkspaceDashboard from \"../pages/exchange/WorkspaceDashboard\";",
+        "kind": "static_import"
+      }
+    ],
+    "staticImports": [
+      {
+        "term": "CommandCenter",
+        "lineNumber": 8,
+        "line": "import CommandCenter from \"@/pages/exchange/CommandCenter\";",
+        "kind": "static_import"
+      },
+      {
+        "term": "pages",
+        "lineNumber": 4,
+        "line": "import OperatorDashboard from \"@/pages/exchange/OperatorDashboard\";",
+        "kind": "static_import"
+      },
+      {
+        "term": "pages",
+        "lineNumber": 5,
+        "line": "import ProviderDashboard from \"@/pages/exchange/ProviderDashboard\";",
+        "kind": "static_import"
+      },
+      {
+        "term": "pages",
+        "lineNumber": 6,
+        "line": "import InvestorDashboard from \"@/pages/exchange/InvestorDashboard\";",
+        "kind": "static_import"
+      },
+      {
+        "term": "pages",
+        "lineNumber": 7,
+        "line": "import PublicTransparency from \"@/pages/exchange/PublicTransparency\";",
+        "kind": "static_import"
+      },
+      {
+        "term": "pages",
+        "lineNumber": 8,
+        "line": "import CommandCenter from \"@/pages/exchange/CommandCenter\";",
+        "kind": "static_import"
+      },
+      {
+        "term": "pages",
+        "lineNumber": 9,
+        "line": "import WorkspaceDashboard from \"../pages/exchange/WorkspaceDashboard\";",
+        "kind": "static_import"
+      }
+    ],
+    "dynamicImports": [
+      {
+        "term": "ExchangeLayout",
+        "lineNumber": 3,
+        "line": "const ExchangeLayout = lazy(() => import(\"@/pages/exchange/ExchangeLayout\"));",
+        "kind": "react_lazy"
+      },
+      {
+        "term": "pages",
+        "lineNumber": 3,
+        "line": "const ExchangeLayout = lazy(() => import(\"@/pages/exchange/ExchangeLayout\"));",
+        "kind": "react_lazy"
+      }
+    ],
+    "manualChunkHits": [],
+    "summary": {
+      "totalHits": 13,
+      "staticImports": 7,
+      "dynamicImports": 2,
+      "manualChunkHits": 0
+    }
+  },
+  "exchangeLayoutAudit": {
+    "file": "src/pages/exchange/ExchangeLayout.jsx",
+    "exists": true,
+    "hits": [
+      {
+        "term": "ExchangeLayout",
+        "lineNumber": 58,
+        "line": "export default function ExchangeLayout() {",
+        "kind": "reference"
+      }
+    ],
+    "staticImports": [],
+    "dynamicImports": [],
+    "manualChunkHits": [],
+    "summary": {
+      "totalHits": 1,
+      "staticImports": 0,
+      "dynamicImports": 0,
+      "manualChunkHits": 0
+    }
+  },
+  "unifiedTruthAudit": {
+    "file": "src/pages/exchange/unified-truth/SHSUnifiedTruthShell.jsx",
+    "exists": true,
+    "hits": [
+      {
+        "term": "SHSUnifiedTruthShell",
+        "lineNumber": 1448,
+        "line": "export default function SHSUnifiedTruthShell() {",
+        "kind": "reference"
+      },
+      {
+        "term": "SHSOperationalMapboxMap",
+        "lineNumber": 7,
+        "line": "import SHSOperationalMapboxMap from \"./components/SHSOperationalMapboxMap\";",
+        "kind": "static_import"
+      },
+      {
+        "term": "SHSOperationalMapboxMap",
+        "lineNumber": 298,
+        "line": "return <SHSOperationalMapboxMap />;",
+        "kind": "reference"
+      }
+    ],
+    "staticImports": [
+      {
+        "term": "SHSOperationalMapboxMap",
+        "lineNumber": 7,
+        "line": "import SHSOperationalMapboxMap from \"./components/SHSOperationalMapboxMap\";",
+        "kind": "static_import"
+      }
+    ],
+    "dynamicImports": [],
+    "manualChunkHits": [],
+    "summary": {
+      "totalHits": 3,
+      "staticImports": 1,
+      "dynamicImports": 0,
+      "manualChunkHits": 0
+    }
+  },
+  "coreMapAudit": {
+    "file": "src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+    "exists": true,
+    "hits": [
+      {
+        "term": "SHSOperationalMapboxMap",
+        "lineNumber": 1560,
+        "line": "export default function SHSOperationalMapboxMap() {",
+        "kind": "reference"
+      },
+      {
+        "term": "mapbox-gl",
+        "lineNumber": 2,
+        "line": "import mapboxgl from \"mapbox-gl\";",
+        "kind": "static_import"
+      },
+      {
+        "term": "mapbox-gl",
+        "lineNumber": 3,
+        "line": "import \"mapbox-gl/dist/mapbox-gl.css\";",
+        "kind": "static_import"
+      }
+    ],
+    "staticImports": [
+      {
+        "term": "mapbox-gl",
+        "lineNumber": 2,
+        "line": "import mapboxgl from \"mapbox-gl\";",
+        "kind": "static_import"
+      },
+      {
+        "term": "mapbox-gl",
+        "lineNumber": 3,
+        "line": "import \"mapbox-gl/dist/mapbox-gl.css\";",
+        "kind": "static_import"
+      }
+    ],
+    "dynamicImports": [],
+    "manualChunkHits": [],
+    "summary": {
+      "totalHits": 3,
+      "staticImports": 2,
+      "dynamicImports": 0,
+      "manualChunkHits": 0
+    }
+  },
+  "viteAudits": [
+    {
+      "file": "vite.config.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "manualChunks",
+          "lineNumber": 60,
+          "line": "manualChunks(id) {",
+          "kind": "manual_chunks_config"
+        },
+        {
+          "term": "chunkSizeWarningLimit",
+          "lineNumber": 30,
+          "line": "chunkSizeWarningLimit: 700,",
+          "kind": "chunk_warning_config"
+        },
+        {
+          "term": "vendor-map",
+          "lineNumber": 66,
+          "line": "if (id.includes(\"maplibre\")) return \"vendor-map\";",
+          "kind": "reference"
+        },
+        {
+          "term": "vendor",
+          "lineNumber": 65,
+          "line": "if (id.includes(\"react\")) return \"vendor-react\";",
+          "kind": "reference"
+        },
+        {
+          "term": "vendor",
+          "lineNumber": 66,
+          "line": "if (id.includes(\"maplibre\")) return \"vendor-map\";",
+          "kind": "reference"
+        },
+        {
+          "term": "vendor",
+          "lineNumber": 67,
+          "line": "return \"vendor\";",
+          "kind": "reference"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 74,
+          "line": "id.includes(\"/src/pages/ai/\") ||",
+          "kind": "reference"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 85,
+          "line": "id.includes(\"/src/pages/lord/\") ||",
+          "kind": "reference"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 86,
+          "line": "id.includes(\"/src/pages/lord-of-outcomes\") ||",
+          "kind": "reference"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 96,
+          "line": "id.includes(\"/src/pages/\") &&",
+          "kind": "reference"
+        },
+        {
+          "term": "pages",
+          "lineNumber": 107,
+          "line": "if (id.includes(\"/src/pages/\")) return \"pages\";",
+          "kind": "reference"
+        }
+      ],
+      "staticImports": [],
+      "dynamicImports": [],
+      "manualChunkHits": [
+        {
+          "term": "manualChunks",
+          "lineNumber": 60,
+          "line": "manualChunks(id) {",
+          "kind": "manual_chunks_config"
+        }
+      ],
+      "summary": {
+        "totalHits": 11,
+        "staticImports": 0,
+        "dynamicImports": 0,
+        "manualChunkHits": 1
+      }
+    }
+  ],
+  "pathFindings": [
+    {
+      "id": "app_static_exchange_routes",
+      "file": "src/App.jsx",
+      "status": "not_detected_or_dynamic",
+      "risk": "low",
+      "recommendation": "No static ExchangeRoutes import detected in App.jsx, or already dynamic."
+    },
+    {
+      "id": "app_static_exchange_mission",
+      "file": "src/App.jsx",
+      "status": "static_import_detected",
+      "risk": "medium",
+      "recommendation": "Lazy-load SHSExchangeMissionControl at App.jsx route level."
+    },
+    {
+      "id": "exchange_layout_static_children",
+      "file": "src/pages/exchange/ExchangeLayout.jsx",
+      "status": "no_static_children_detected",
+      "risk": "low",
+      "recommendation": "ExchangeLayout does not appear to statically import the heavy children found by this audit."
+    },
+    {
+      "id": "unified_truth_static_core_map",
+      "file": "src/pages/exchange/unified-truth/SHSUnifiedTruthShell.jsx",
+      "status": "static_core_map_detected",
+      "risk": "medium_high",
+      "recommendation": "Prefer lazy-loading SHSOperationalMapboxMap inside SHSUnifiedTruthShell before editing core map internals."
+    },
+    {
+      "id": "core_map_static_mapbox",
+      "file": "src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+      "status": "static_mapbox_detected",
+      "risk": "medium_high_core_map",
+      "recommendation": "Touch only after shell-level lazy loading is tried, because this is core map internals."
+    },
+    {
+      "id": "vite_manual_chunks",
+      "file": "vite.config.js",
+      "status": "manual_chunks_detected",
+      "risk": "medium",
+      "recommendation": "Review manualChunks grouping after source-level lazy paths are tested."
+    }
+  ],
+  "priorityPatchCandidates": [
+    {
+      "priority": 1,
+      "file": "src/App.jsx",
+      "target": "SHSExchangeMissionControl",
+      "proposedPatch": "Convert SHSExchangeMissionControl route import to React.lazy/Suspense.",
+      "risk": "medium",
+      "reason": "App.jsx top-level static route imports can keep Exchange code in the large pages bundle."
+    },
+    {
+      "priority": 2,
+      "file": "src/pages/exchange/unified-truth/SHSUnifiedTruthShell.jsx",
+      "target": "SHSOperationalMapboxMap",
+      "proposedPatch": "Lazy-load SHSOperationalMapboxMap with Suspense inside the shell.",
+      "risk": "medium",
+      "reason": "Shell-level lazy loading is safer than editing core map internals directly."
+    },
+    {
+      "priority": 4,
+      "file": "vite.config.js",
+      "target": "manualChunks",
+      "proposedPatch": "Tune manualChunks only after source-level import paths are patched.",
+      "risk": "medium",
+      "reason": "ManualChunks can improve grouping but may hide real eager-loading issues if patched too early."
+    }
+  ],
+  "recommendedFirstCandidate": {
+    "priority": 1,
+    "file": "src/App.jsx",
+    "target": "SHSExchangeMissionControl",
+    "proposedPatch": "Convert SHSExchangeMissionControl route import to React.lazy/Suspense.",
+    "risk": "medium",
+    "reason": "App.jsx top-level static route imports can keep Exchange code in the large pages bundle."
+  },
+  "recommendedPatchOrder": [
+    {
+      "step": 1,
+      "label": "Patch safest top-level static import first",
+      "action": "Start with src/App.jsx targeting SHSExchangeMissionControl.",
+      "reason": "App.jsx top-level static route imports can keep Exchange code in the large pages bundle."
+    },
+    {
+      "step": 2,
+      "label": "Build and compare",
+      "action": "Run production build and compare vendor/pages/vendor-map chunks.",
+      "reason": "Each optimization must show measured improvement or be documented as safe/no-impact."
+    },
+    {
+      "step": 3,
+      "label": "Browser recheck affected route",
+      "action": "Open the affected route and confirm no blank screen.",
+      "reason": "Lazy boundary changes can fail at runtime if route exports or fallback placement are wrong."
+    },
+    {
+      "step": 4,
+      "label": "Defer core map internals",
+      "action": "Do not edit SHSOperationalMapboxMap.jsx until shell/top-level lazy paths are tested.",
+      "reason": "Core map internals are higher risk."
+    },
+    {
+      "step": 5,
+      "label": "ManualChunks last",
+      "action": "Tune Vite manualChunks after import paths are clean.",
+      "reason": "Manual chunking should organize code after the real eager-loading paths are fixed."
+    }
+  ],
+  "nextPatchRecommendation": {
+    "id": "post_v1_bundle_patch_10_first_chunk_path_patch",
+    "label": "First App/Exchange Chunk Path Patch",
+    "goal": "Apply the first safe lazy boundary from this audit: src/App.jsx → SHSExchangeMissionControl."
+  }
+}

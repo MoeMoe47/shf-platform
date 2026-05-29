@@ -1,5 +1,8 @@
 import React from "react";
+import VerificationPill from "@/components/aggregation/VerificationPill";
+import LineageTraceButton from "@/components/aggregation/LineageTraceButton";
 import { getEntityResolutionItems } from "./adapters";
+import { buildOracleRowReadiness, oracleReadinessClass } from "./oracle-row-readiness";
 
 function verificationBadgeClass(value) {
   const normalized = String(value || "").toLowerCase();
@@ -43,11 +46,21 @@ export default function EntityResolutionQueue() {
               <th>Status</th>
               <th>Confidence</th>
               <th>Verification</th>
+              <th>Operator Signal</th>
+              <th>Oracle Readiness</th>
               <th>Lineage</th>
             </tr>
           </thead>
           <tbody>
-            {items.map((item) => (
+            {items.map((item) => {
+              const oracleReadiness = buildOracleRowReadiness({
+                type: "entity",
+                verificationState: item.verificationState,
+                confidenceScore: item.confidenceScore,
+                lineageId: item.lineageId,
+              });
+
+              return (
               <tr key={item.id}>
                 <td>{item.name}</td>
                 <td>{item.county}</td>
@@ -72,9 +85,29 @@ export default function EntityResolutionQueue() {
                     {item.verificationState}
                   </span>
                 </td>
-                <td>{item.lineageId}</td>
+                <td>
+                  <VerificationPill
+                    value={item.verificationState}
+                    confidenceScore={item.confidenceScore}
+                  />
+                </td>
+                <td>
+                  <span
+                    className={[
+                      "admin-aggregation-oracle-ready",
+                      oracleReadinessClass(oracleReadiness.tone),
+                    ].join(" ")}
+                    title={oracleReadiness.nextAction}
+                  >
+                    {oracleReadiness.label}
+                  </span>
+                </td>
+                <td>
+                  <LineageTraceButton lineageId={item.lineageId} compact />
+                </td>
               </tr>
-            ))}
+              );
+            })}
           </tbody>
         </table>
       </div>

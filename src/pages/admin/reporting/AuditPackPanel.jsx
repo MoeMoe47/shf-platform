@@ -1,7 +1,12 @@
+import useAuth from "../../../auth/useAuth";
 import React, { useMemo, useState } from "react";
 import { evaluateReportingExportReadiness } from "./reporting-readiness";
+import ExportReadinessCard from "./ExportReadinessCard.jsx";
+import { recordExportAuditTrail } from "./export-audit-trail";
+import { SHS_SECURITY_PERMISSIONS } from "@/system/security/security-permissions";
 import { generateAuditPackExport } from "./reporting-actions";
 import { buildReportingTraceRouteMap } from "./reporting-trace-routes";
+import { buildReportingTraceRecord, getReportingTraceRows } from "./reporting-trace";
 import { findBridgeLinkBySourceCaseId } from "./bridge-record-links";
 import {
   deriveBridgeWorkflowReadiness,
@@ -18,6 +23,7 @@ function StatusBadge({ status }) {
 }
 
 export default function AuditPackPanel() {
+  const auth = useAuth();
   const [flash, setFlash] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -51,6 +57,11 @@ export default function AuditPackPanel() {
     [bridgeReadiness, bridgeState]
   );
 
+
+  const canGenerateExport =
+    readiness.allowedActions.generate &&
+    auth.hasPermission(SHS_SECURITY_PERMISSIONS.REPORTS_EXPORT);
+
   const traceTargets = {
     sourceObjectId: link.sourceCaseId || bridgeState.caseId || "hub_case_demo_001",
     bridgeTraceId:
@@ -58,9 +69,27 @@ export default function AuditPackPanel() {
       `live_bridge_${bridgeState.caseId || "hub_case_demo_001"}`,
     verificationRecordId: link.verificationRecordId || "ver_hub_case_demo_001",
     reportArtifactId: "rep_audit_pack_demo_001",
+    canonicalEntityId: link.sourceCaseId || bridgeState.caseId || "hub_case_demo_001",
+    lineageId: `lineage_${link.sourceCaseId || bridgeState.caseId || "hub_case_demo_001"}_v1`,
+    oracleTraceId: `trace_${link.sourceCaseId || bridgeState.caseId || "hub_case_demo_001"}`,
+    trustEnvelopeTraceId: `trace_${link.sourceCaseId || bridgeState.caseId || "hub_case_demo_001"}`,
+    publicationMode: bridgeState.publicationMode || "internal",
   };
 
-  const traceRoutes = buildReportingTraceRouteMap(traceTargets);
+  const traceRecord = buildReportingTraceRecord(
+    "audit_pack_export",
+    {
+      ...traceTargets,
+      traceCoverageStatus: bridgeState.sourceToReportTraceCoverage ? "complete" : "missing",
+    }
+  );
+
+  const traceRows = getReportingTraceRows(
+    "audit_pack_export",
+    traceRecord
+  );
+
+  const traceRoutes = buildReportingTraceRouteMap(traceRecord);
 
   const auditPackItems = useMemo(
     () => [
@@ -80,10 +109,10 @@ export default function AuditPackPanel() {
       },
       {
         artifact: "Trace Linkage Register",
-        status: bridgeState.sourceToReportTraceCoverage ? "ready" : "pending",
-        detail: bridgeState.sourceToReportTraceCoverage
-          ? "Source case, bridge trace, verification record, and report artifact linkage included."
-          : "Trace linkage remains incomplete until source-to-report coverage is enabled.",
+        status: traceRecord.traceCoverageStatus === "complete" ? "ready" : "pending",
+        detail: traceRecord.traceCoverageStatus === "complete"
+          ? "Source, bridge, canonical entity, verification, report artifact, lineage, Oracle trace, and trust envelope linkage included."
+          : `Trace linkage is ${traceRecord.traceCoverageStatus}; missing fields: ${traceRecord.missingTraceFields.join(", ") || "none"}.`,
       },
       {
         artifact: "Analyst Memo Snapshot",
@@ -97,7 +126,22 @@ export default function AuditPackPanel() {
   );
 
   async function handleGenerate() {
-    if (!readiness.allowedActions.generate) return;
+    if (!canGenerateExport) {
+      recordExportAuditTrail({
+        exportKind: "audit_pack_export",
+        artifactId: traceTargets.reportArtifactId,
+        publicationMode: bridgeState.publicationMode || "admin_internal",
+        requestedBy: "user_admin_001",
+        readiness,
+        traceRecord,
+        oracleTruth: typeof oracleTruth !== "undefined" ? oracleTruth : null,
+        oracleGate: typeof oracleGate !== "undefined" ? oracleGate : null,
+        canGenerateExport,
+        status: "blocked",
+        source: "audit_pack_export_panel",
+      });
+      return;
+    }
 
     const result = await generateAuditPackExport({
       publicationMode: bridgeState.publicationMode || "admin_internal",
@@ -109,6 +153,21 @@ export default function AuditPackPanel() {
       ],
       requestedBy: "user_admin_001",
       reportArtifactId: traceTargets.reportArtifactId,
+    });
+
+    recordExportAuditTrail({
+      exportKind: "audit_pack_export",
+      artifactId: traceTargets.reportArtifactId,
+      publicationMode: bridgeState.publicationMode || "admin_internal",
+      requestedBy: "user_admin_001",
+      readiness,
+      traceRecord,
+      oracleTruth: typeof oracleTruth !== "undefined" ? oracleTruth : null,
+      oracleGate: typeof oracleGate !== "undefined" ? oracleGate : null,
+      canGenerateExport,
+      result,
+      status: result?.status || "generated",
+      source: "audit_pack_export_panel",
     });
 
     setFlash(result.message || `Audit Pack export completed: ${result.exportId}`);
@@ -134,6 +193,17 @@ export default function AuditPackPanel() {
         and trace-aware export generation.
       </p>
 
+      <ExportReadinessCard
+        exportKind="audit_pack_export"
+        audience="Audit / Institutional"
+        format="PDF"
+        readiness={readiness}
+        traceRecord={traceRecord}
+        oracleTruth={typeof oracleTruth !== "undefined" ? oracleTruth : null}
+        oracleGate={typeof oracleGate !== "undefined" ? oracleGate : null}
+        canGenerateExport={canGenerateExport}
+      />
+
       {flash ? (
         <div
           style={{
@@ -148,6 +218,22 @@ export default function AuditPackPanel() {
           }}
         >
           {flash}
+        </div>
+      ) : null}
+
+      {!auth.hasPermission(SHS_SECURITY_PERMISSIONS.REPORTS_EXPORT) ? (
+        <div
+          style={{
+            padding: "10px 12px",
+            borderRadius: 12,
+            border: "1px solid rgba(248, 113, 113, 0.24)",
+            background: "rgba(127, 29, 29, 0.16)",
+            color: "rgba(254, 202, 202, 0.96)",
+            fontSize: 13,
+            lineHeight: 1.5,
+          }}
+        >
+          Missing permission: reports.export
         </div>
       ) : null}
 
@@ -202,7 +288,7 @@ export default function AuditPackPanel() {
               Source-to-Report Trace
             </h3>
           </div>
-          <StatusBadge status={bridgeState.sourceToReportTraceCoverage ? "ready" : "pending"} />
+          <StatusBadge status={traceRecord.traceCoverageStatus === "complete" ? "ready" : "pending"} />
         </div>
 
         <div style={{ display: "grid", gap: 12 }}>
@@ -291,9 +377,9 @@ export default function AuditPackPanel() {
         <button
           type="button"
           onClick={handleGenerate}
-          disabled={!readiness.allowedActions.generate}
+          disabled={!canGenerateExport}
           style={
-            !readiness.allowedActions.generate
+            !canGenerateExport
               ? { opacity: 0.45, cursor: "not-allowed" }
               : undefined
           }

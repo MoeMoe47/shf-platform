@@ -746,6 +746,234 @@ function applySHSUnifiedMapSurfaceTheme(map, activeLayer) {
   }
 }
 
+
+
+function inspectSHSVisibleMapboxLayers(map, activeLayer) {
+  if (!map || !map.getStyle) return;
+  if (!["community", "location"].includes(activeLayer)) return;
+
+  try {
+    const style = map.getStyle();
+    const layers = Array.isArray(style?.layers) ? style.layers : [];
+
+    const rows = layers.map((layer) => {
+      let visibility = "visible";
+      try {
+        visibility = map.getLayoutProperty(layer.id, "visibility") || "visible";
+      } catch {
+        visibility = "unknown";
+      }
+
+      let paint = {};
+      try {
+        paint = map.getPaintProperty ? {
+          backgroundColor: layer.type === "background" ? map.getPaintProperty(layer.id, "background-color") : undefined,
+          backgroundOpacity: layer.type === "background" ? map.getPaintProperty(layer.id, "background-opacity") : undefined,
+
+          fillColor: layer.type === "fill" ? map.getPaintProperty(layer.id, "fill-color") : undefined,
+          fillOpacity: layer.type === "fill" ? map.getPaintProperty(layer.id, "fill-opacity") : undefined,
+
+          lineColor: layer.type === "line" ? map.getPaintProperty(layer.id, "line-color") : undefined,
+          lineOpacity: layer.type === "line" ? map.getPaintProperty(layer.id, "line-opacity") : undefined,
+          lineWidth: layer.type === "line" ? map.getPaintProperty(layer.id, "line-width") : undefined,
+
+          textColor: layer.type === "symbol" ? map.getPaintProperty(layer.id, "text-color") : undefined,
+          textOpacity: layer.type === "symbol" ? map.getPaintProperty(layer.id, "text-opacity") : undefined,
+          textHaloColor: layer.type === "symbol" ? map.getPaintProperty(layer.id, "text-halo-color") : undefined,
+        } : {};
+      } catch {
+        paint = {};
+      }
+
+      return {
+        id: layer.id,
+        type: layer.type,
+        source: layer.source || "",
+        sourceLayer: layer["source-layer"] || "",
+        visibility,
+        paint
+      };
+    });
+
+    const visibleRows = rows.filter((row) => row.visibility !== "none");
+
+    const baseRows = visibleRows.filter((row) => {
+      const haystack = `${row.id} ${row.sourceLayer}`.toLowerCase();
+      return (
+        row.type === "background" ||
+        haystack.includes("land") ||
+        haystack.includes("water") ||
+        haystack.includes("road") ||
+        haystack.includes("street") ||
+        haystack.includes("bridge") ||
+        haystack.includes("tunnel") ||
+        haystack.includes("building") ||
+        haystack.includes("structure") ||
+        haystack.includes("admin") ||
+        haystack.includes("boundary") ||
+        haystack.includes("label")
+      );
+    });
+
+    const shsRows = visibleRows.filter((row) => row.id.toLowerCase().includes("shs"));
+
+    console.group(`SHS MAPBOX LAYER INSPECTOR — ${activeLayer}`);
+    console.log("Active layer:", activeLayer);
+    console.log("Style URI/name:", style?.sprite || style?.name || "unknown");
+    console.log("Total layers:", layers.length);
+    console.log("Visible layers:", visibleRows.length);
+    console.table(baseRows);
+    console.table(shsRows);
+    console.log("Base layer JSON:", JSON.stringify(baseRows, null, 2));
+    console.log("SHS layer JSON:", JSON.stringify(shsRows, null, 2));
+    console.groupEnd();
+
+    window.__SHS_MAPBOX_LAYER_INSPECTOR__ = window.__SHS_MAPBOX_LAYER_INSPECTOR__ || {};
+    window.__SHS_MAPBOX_LAYER_INSPECTOR__[activeLayer] = {
+      activeLayer,
+      totalLayers: layers.length,
+      visibleLayers: visibleRows.length,
+      baseRows,
+      shsRows
+    };
+  } catch (error) {
+    console.warn("[SHS Mapbox Layer Inspector] failed", error);
+  }
+}
+
+
+
+function applySHSHardBlueProofPaint(map, activeLayer) {
+  if (!map || !map.getStyle || !map.setPaintProperty) return;
+  if (!["community", "location"].includes(activeLayer)) return;
+
+  const safePaint = (layerId, property, value) => {
+    try {
+      if (!map.getLayer || !map.getLayer(layerId)) return;
+      map.setPaintProperty(layerId, property, value);
+    } catch {
+      // proof mode only
+    }
+  };
+
+  const safeLayout = (layerId, property, value) => {
+    try {
+      if (!map.getLayer || !map.getLayer(layerId)) return;
+      map.setLayoutProperty(layerId, property, value);
+    } catch {
+      // proof mode only
+    }
+  };
+
+  const repaint = () => {
+    let style;
+    try {
+      if (map.isStyleLoaded && !map.isStyleLoaded()) return;
+      style = map.getStyle();
+    } catch {
+      return;
+    }
+
+    const layers = Array.isArray(style?.layers) ? style.layers : [];
+    console.log("[SHS HARD BLUE PROOF] repainting", activeLayer, "layers:", layers.length);
+
+    layers.forEach((layer) => {
+      if (!layer || !layer.id) return;
+
+      const haystack = `${layer.id || ""} ${layer["source-layer"] || ""}`.toLowerCase();
+
+      safeLayout(layer.id, "visibility", "visible");
+
+      if (layer.type === "background") {
+        safePaint(layer.id, "background-color", "#075985");
+        safePaint(layer.id, "background-opacity", 1);
+        return;
+      }
+
+      if (layer.type === "fill") {
+        if (haystack.includes("water") || haystack.includes("waterway")) {
+          safePaint(layer.id, "fill-color", "#0284c7");
+          safePaint(layer.id, "fill-opacity", 0.96);
+          return;
+        }
+
+        if (haystack.includes("building") || haystack.includes("structure")) {
+          safePaint(layer.id, "fill-color", "#0ea5e9");
+          safePaint(layer.id, "fill-opacity", 0.42);
+          return;
+        }
+
+        safePaint(layer.id, "fill-color", "#0f6ea8");
+        safePaint(layer.id, "fill-opacity", 0.96);
+        return;
+      }
+
+      if (layer.type === "line") {
+        if (
+          haystack.includes("road") ||
+          haystack.includes("street") ||
+          haystack.includes("bridge") ||
+          haystack.includes("tunnel") ||
+          haystack.includes("path")
+        ) {
+          safePaint(layer.id, "line-color", "rgba(191, 219, 254, 0.95)");
+          safePaint(layer.id, "line-opacity", 0.95);
+          safePaint(layer.id, "line-width", 1.6);
+          return;
+        }
+
+        safePaint(layer.id, "line-color", "rgba(125, 211, 252, 0.78)");
+        safePaint(layer.id, "line-opacity", 0.82);
+        return;
+      }
+
+      if (layer.type === "symbol") {
+        safePaint(layer.id, "text-color", "#e0f2fe");
+        safePaint(layer.id, "text-halo-color", "rgba(2, 6, 23, 0.85)");
+        safePaint(layer.id, "text-halo-width", 1.2);
+        safePaint(layer.id, "text-opacity", 0.92);
+      }
+    });
+
+    // Custom SHS layers should not muddy the proof.
+    safePaint("shs-ohio-county-fill", "fill-color", "rgba(14, 165, 233, 0.18)");
+    safePaint("shs-ohio-county-fill", "fill-opacity", 0.14);
+    safePaint("shs-ohio-county-line", "line-color", "rgba(191, 219, 254, 0.72)");
+    safePaint("shs-ohio-county-line", "line-opacity", 0.72);
+
+    safePaint("shs-community-fill", "fill-opacity", 0.025);
+    safePaint("shs-community-line", "line-color", "rgba(191, 219, 254, 0.78)");
+    safePaint("shs-community-line", "line-opacity", 0.64);
+
+    safePaint("shs-selected-county-fill", "fill-opacity", 0.035);
+    safePaint("shs-selected-county-line", "line-color", "rgba(224, 242, 254, 0.95)");
+    safePaint("shs-selected-county-line", "line-opacity", 0.52);
+
+    safePaint("shs-connection-line", "line-color", "#38bdf8");
+    safePaint("shs-connection-line", "line-opacity", 0.92);
+
+    try {
+      if (map.setFog) {
+        map.setFog({
+          color: "rgba(7, 89, 133, 0.85)",
+          "high-color": "rgba(14, 165, 233, 0.65)",
+          "space-color": "rgba(2, 6, 23, 0.85)",
+          "horizon-blend": 0.04
+        });
+      }
+    } catch {
+      // proof mode only
+    }
+  };
+
+  repaint();
+
+  // Repeat because Mapbox sometimes reapplies style paint after load/styledata.
+  [250, 750, 1500, 3000, 5000].forEach((delay) => {
+    setTimeout(repaint, delay);
+  });
+}
+
 function applySHSHardLayerPaint(map, activeLayer) {
   if (!map) return;
 
@@ -753,6 +981,7 @@ function applySHSHardLayerPaint(map, activeLayer) {
 
   applySHSBaseMapTone(map, activeLayer);
   applySHSUnifiedMapSurfaceTheme(map, activeLayer);
+  setTimeout(() => inspectSHSVisibleMapboxLayers(map, activeLayer), 600);
   applySHSMapFog(map, activeLayer);
 
   const countyFillLayers = [
@@ -853,6 +1082,7 @@ function applySHSHardLayerPaint(map, activeLayer) {
   if (canvasWrap) {
     canvasWrap.style.filter = profile.canvasFilter;
   }
+  applySHSHardBlueProofPaint(map, activeLayer);
 }
 
 const LAYER_INTELLIGENCE = {

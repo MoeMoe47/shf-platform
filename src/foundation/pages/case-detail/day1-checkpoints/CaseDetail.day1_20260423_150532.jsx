@@ -70,8 +70,8 @@ function entityToProgram(entityId = "") {
 }
 
 function entityToStage(entityId = "", readinessStatus = "") {
-  if (readinessStatus === "execution_mode") return "Execution Mode";
-  if (readinessStatus === "verification_hold") return "Verification Hold";
+  if (readinessStatus === "leadership_ready") return "Leadership Ready";
+  if (readinessStatus === "not_ready") return "Not Ready";
   if (entityId === "test_case_001") return "Execution Ready";
   if (entityId === "test_case_002") return "Verification Gap";
   if (entityId === "test_case_003") return "Conflict Review";
@@ -100,7 +100,7 @@ function getRiskSignal(item) {
     };
   }
 
-  if (readiness === "verification_hold" || confidence < 85) {
+  if (readiness === "not_ready" || confidence < 85) {
     return {
       label: "Medium Risk",
       color: "#92400e",
@@ -284,9 +284,9 @@ function CrossCaseCommandStrip({ priorityState, currentPriority, safeEntityId })
         : null;
 
     return {
-      executionMode: ranked.filter((c) => c.readinessStatus === "execution_mode").length,
+      executionMode: ranked.filter((c) => c.readinessStatus === "leadership_ready").length,
       blocked: ranked.filter((c) => c.readinessStatus === "blocked").length,
-      verificationHold: ranked.filter((c) => c.readinessStatus === "verification_hold").length,
+      verificationHold: ranked.filter((c) => c.readinessStatus === "not_ready").length,
       internallyReady: ranked.filter((c) => c.readinessStatus === "internally_ready").length,
       topPriority: ranked[0]?.entityId || "—",
       currentRank: currentPriority?.rank ?? "—",
@@ -371,7 +371,7 @@ function CrossCaseCommandStrip({ priorityState, currentPriority, safeEntityId })
       >
         {[
           {
-            label: "Execution Mode",
+            label: "Leadership Ready",
             value: summary.executionMode,
             sub: "active cases",
             accent: "#065f46",
@@ -386,7 +386,7 @@ function CrossCaseCommandStrip({ priorityState, currentPriority, safeEntityId })
             border: "1px solid rgba(239,68,68,0.18)",
           },
           {
-            label: "Verification Hold",
+            label: "Not Ready",
             value: summary.verificationHold,
             accent: "#92400e",
             bg: "rgba(245,158,11,0.06)",
@@ -635,8 +635,8 @@ export default function CaseDetail() {
   const statusText =
     loading || actionBusy
       ? "⚡ ORACLE STATUS — Updating Oracle..."
-      : truthState?.readinessStatus === "execution_mode"
-      ? "⚡ ORACLE STATUS — Promoted • Execution Mode • Stable"
+      : truthState?.readinessStatus === "leadership_ready"
+      ? "⚡ ORACLE STATUS — Promoted • Leadership Ready • Stable"
       : "⚡ ORACLE STATUS — Case Active • Decision Surface Live";
 
   return (
@@ -756,7 +756,7 @@ export default function CaseDetail() {
                 </div>
                 <div style={{ fontWeight: 700, marginBottom: 6 }}>What changed</div>
                 <div style={{ marginBottom: 16 }}>
-                  {truthState?.readinessStatus === "execution_mode"
+                  {truthState?.readinessStatus === "leadership_ready"
                     ? "Case has entered execution mode and is ready for operational follow-through."
                     : "Oracle truth is live and ready for review."}
                 </div>
@@ -770,7 +770,7 @@ export default function CaseDetail() {
                 </ul>
                 <div style={{ fontWeight: 700, marginBottom: 6 }}>Next move</div>
                 <div>
-                  {truthState?.readinessStatus === "execution_mode"
+                  {truthState?.readinessStatus === "leadership_ready"
                     ? "Proceed with reporting and institutional review."
                     : "Continue operator review and monitor Oracle truth."}
                 </div>
@@ -829,16 +829,16 @@ export default function CaseDetail() {
                 {
                   label: "Next",
                   value:
-                    truthState?.readinessStatus === "execution_mode"
+                    truthState?.readinessStatus === "leadership_ready"
                       ? "reporting"
                       : "operator_review",
                 },
                 {
                   label: "Alternate",
                   value:
-                    truthState?.readinessStatus === "execution_mode"
+                    truthState?.readinessStatus === "leadership_ready"
                       ? "hold_for_verification"
-                      : "verification_hold",
+                      : "not_ready",
                 },
               ]}
             />

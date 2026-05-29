@@ -58,9 +58,9 @@
   position:absolute;
   inset:-20%;
   opacity: 0.9;
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
   transform: translateZ(0);
-  filter: contrast(1.05) brightness(1.05);
+  filter: none;
 }
 
 .looStarsA{
@@ -117,7 +117,7 @@
   transform: perspective(900px) rotateX(62deg) rotateZ(-12deg);
   transform-origin: 70% 55%;
   opacity: 0.9;
-  filter: saturate(1.05);
+  filter: none;
 }
 
 .looRings::before,
@@ -149,7 +149,7 @@
       rgba(0,0,0,0.20) 72%,
       transparent 80%);
   filter: blur(0.2px);
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
 }
 
 /* Inner rings (smaller set) */
@@ -169,7 +169,7 @@
       transparent 50%,
       rgba(0,0,0,0.22) 60%,
       transparent 78%);
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
   filter: blur(0.15px);
 }
 
@@ -188,7 +188,7 @@
       rgba(255,120,30,0.30) 75%,
       transparent 75.8%);
   opacity: 0.75;
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
   filter: blur(0.1px);
 }
 
@@ -206,4 +206,32 @@
 /* Keep your header glow crisp */
 .looTopHeader{
   z-index: 20;
+}
+
+
+/* SHS clean white Ohio override — removes dirty/noisy map wash */
+.shs-map-cinematic-texture,
+.shs-map-cinematic-texture::before,
+.shs-map-cinematic-texture::after,
+.shs-operational-map-texture,
+.shs-operational-map-texture::before,
+.shs-operational-map-texture::after,
+.map-cinematic-texture,
+.map-cinematic-texture::before,
+.map-cinematic-texture::after {
+  opacity: 0.035 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  background-image: none !important;
+}
+
+.shs-mapbox-map,
+.shs-operational-mapbox-map,
+.shs-operational-map-surface {
+  background: #020817 !important;
+}
+
+.shs-map-layer-state .mapboxgl-canvas,
+.shs-map-state .mapboxgl-canvas {
+  filter: none !important;
 }

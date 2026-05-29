@@ -33,7 +33,7 @@ export default function TrustVerificationPanel({
         ];
 
   return (
-    <section className="shf-panel">
+    <section className="shf-panel shf-trust-verification-panel" data-tour-section="proof">
       <div className="shf-panel__header">
         <div>
           <div className="shf-panel__small-label">TRUST + VERIFICATION</div>

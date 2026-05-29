@@ -1,0 +1,967 @@
+{
+  "generatedAt": "2026-05-23T18:36:29.886Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 23",
+  "mode": "EXCHANGE_UNIFIED_TRUTH_ROUTE_ISOLATION_AUDIT_NO_CODE_CHANGES",
+  "exchangeUnifiedTruthRouteIsolationAuditStatus": "findings_ready",
+  "exchangeUnifiedTruthRouteIsolationAuditLabel": "Exchange Unified Truth Route Isolation Findings Ready",
+  "productionDecision": "No source code was changed. Patch 23 audits which Exchange route or shell file still pulls Unified Truth / Mapbox into the base pages-exchange preload chain.",
+  "priorPatch22Status": "build_passed_preload_still_detected",
+  "priorPatch22Preload": {
+    "capitalHtmlIncludesVendorMapboxJs": true,
+    "capitalHtmlIncludesVendorMapboxCss": true,
+    "capitalHtmlIncludesPagesExchange": true,
+    "capitalHtmlIncludesModulepreloadVendorMapbox": true
+  },
+  "priorPatch21LikelyCause": [
+    "capital entry generated chunk contains __vite__mapDeps for pages-exchange that includes vendor-mapbox.",
+    "pages-exchange generated chunk references vendor-mapbox, likely through Unified Truth / SHSOperationalMapboxMap.",
+    "dist/capital.html preloads vendor-mapbox directly, meaning the Capital entry is causing early Mapbox network pressure."
+  ],
+  "detectedAssets": {
+    "capitalJs": "capital-44WuCrlc.js",
+    "pagesExchangeJs": "pages-exchange-Dmwe2jKp.js",
+    "pagesExchangeCss": "pages-exchange-Dwpvmain.css",
+    "mapboxJs": "vendor-mapbox-uaDf4Z7d.js",
+    "mapboxCss": "vendor-mapbox-C5-Kj3x0.css",
+    "maplibreJs": "vendor-maplibre-JLoBlj2z.js"
+  },
+  "findings": [
+    {
+      "id": "exchange_layout_static_imports_unified_truth",
+      "status": "not_detected",
+      "risk": "high_if_detected",
+      "interpretation": "If ExchangeLayout statically imports SHSUnifiedTruthShell, the base Exchange page chunk can pull the Unified Truth map path early."
+    },
+    {
+      "id": "exchange_layout_lazy_imports_unified_truth",
+      "status": "not_detected",
+      "risk": "low_if_detected",
+      "interpretation": "Lazy importing SHSUnifiedTruthShell inside ExchangeLayout helps isolate Unified Truth from the base Exchange chunk."
+    },
+    {
+      "id": "mission_static_imports_unified_truth",
+      "status": "not_detected",
+      "risk": "high_if_detected",
+      "interpretation": "If SHSExchangeMissionControl statically imports SHSUnifiedTruthShell, the mission page can pull the Mapbox path into pages-exchange."
+    },
+    {
+      "id": "mission_lazy_imports_unified_truth",
+      "status": "not_detected",
+      "risk": "low_if_detected",
+      "interpretation": "Lazy importing SHSUnifiedTruthShell inside SHSExchangeMissionControl helps isolate Unified Truth map code."
+    },
+    {
+      "id": "unified_truth_shell_static_imports_mapbox_component",
+      "status": "not_detected",
+      "risk": "high_if_detected",
+      "interpretation": "If SHSUnifiedTruthShell still statically imports SHSOperationalMapboxMap, Patch 12B was defeated or drifted."
+    },
+    {
+      "id": "unified_truth_shell_lazy_imports_mapbox_component",
+      "status": "detected",
+      "risk": "low_if_detected",
+      "interpretation": "Lazy importing SHSOperationalMapboxMap inside SHSUnifiedTruthShell is the intended shell-level map boundary."
+    },
+    {
+      "id": "mapbox_component_static_imports_mapbox_gl",
+      "status": "detected",
+      "risk": "expected_but_heavy",
+      "interpretation": "The Mapbox component imports mapbox-gl. This is expected, but should only load when the map component is actually needed."
+    },
+    {
+      "id": "pages_exchange_dist_references_vendor_mapbox",
+      "status": "detected",
+      "risk": "high",
+      "interpretation": "The generated pages-exchange chunk still references vendor-mapbox. This keeps Mapbox in the Capital preload dependency graph."
+    },
+    {
+      "id": "capital_html_modulepreloads_vendor_mapbox",
+      "status": "detected",
+      "risk": "high",
+      "interpretation": "capital.html still modulepreloads vendor-mapbox, confirming the early preload problem is not resolved yet."
+    },
+    {
+      "id": "exchange_routes_lazy_layout_boundary_detected",
+      "status": "detected",
+      "risk": "low_if_detected",
+      "interpretation": "ExchangeRoutes lazy-loads ExchangeLayout. If Mapbox still preloads, the remaining issue is deeper inside ExchangeLayout or mission/unified-truth route code."
+    }
+  ],
+  "likelyCause": [
+    "Generated pages-exchange chunk references vendor-mapbox, keeping Mapbox in the Capital preload graph."
+  ],
+  "scans": {
+    "exchangeRoutesScan": {
+      "file": "src/routes/exchangeRoutes.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "ExchangeLayout",
+          "lineNumber": 3,
+          "line": "const ExchangeLayout = lazy(() => import(\"@/pages/exchange/ExchangeLayout\"));",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "lazy(()",
+          "lineNumber": 3,
+          "line": "const ExchangeLayout = lazy(() => import(\"@/pages/exchange/ExchangeLayout\"));",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "import(",
+          "lineNumber": 3,
+          "line": "const ExchangeLayout = lazy(() => import(\"@/pages/exchange/ExchangeLayout\"));",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "ExchangeLayout",
+          "lineNumber": 35,
+          "line": "<Route path=\"exchange\" element={withExchangeLazyBoundary(<ExchangeLayout />)}>",
+          "kind": "reference"
+        },
+        {
+          "term": "Route path",
+          "lineNumber": 35,
+          "line": "<Route path=\"exchange\" element={withExchangeLazyBoundary(<ExchangeLayout />)}>",
+          "kind": "reference"
+        },
+        {
+          "term": "Route path",
+          "lineNumber": 37,
+          "line": "<Route path=\"dashboard\" element={<WorkspaceDashboard />} />",
+          "kind": "reference"
+        },
+        {
+          "term": "Route path",
+          "lineNumber": 38,
+          "line": "<Route path=\"command\" element={<CommandCenter />} />",
+          "kind": "reference"
+        },
+        {
+          "term": "Route path",
+          "lineNumber": 39,
+          "line": "<Route path=\"operator\" element={<OperatorDashboard />} />",
+          "kind": "reference"
+        },
+        {
+          "term": "Route path",
+          "lineNumber": 40,
+          "line": "<Route path=\"provider\" element={<ProviderDashboard />} />",
+          "kind": "reference"
+        },
+        {
+          "term": "Route path",
+          "lineNumber": 41,
+          "line": "<Route path=\"investor\" element={<InvestorDashboard />} />",
+          "kind": "reference"
+        },
+        {
+          "term": "Route path",
+          "lineNumber": 42,
+          "line": "<Route path=\"public\" element={<PublicTransparency />} />",
+          "kind": "reference"
+        }
+      ]
+    },
+    "exchangeLayoutScan": {
+      "file": "src/pages/exchange/ExchangeLayout.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "ExchangeLayout",
+          "lineNumber": 58,
+          "line": "export default function ExchangeLayout() {",
+          "kind": "reference"
+        }
+      ]
+    },
+    "missionScan": {
+      "file": "src/pages/exchange/SHSExchangeMissionControl.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "SHSExchangeMissionControl",
+          "lineNumber": 117,
+          "line": "export default function SHSExchangeMissionControl() {",
+          "kind": "reference"
+        }
+      ]
+    },
+    "unifiedTruthShellScan": {
+      "file": "src/pages/exchange/unified-truth/SHSUnifiedTruthShell.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "unified-truth",
+          "lineNumber": 5,
+          "line": "import \"./shs-unified-truth-shell.css\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "SHSOperationalMapboxMap",
+          "lineNumber": 7,
+          "line": "const SHSOperationalMapboxMap = lazy(() => import(\"./components/SHSOperationalMapboxMap\"));",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "lazy(()",
+          "lineNumber": 7,
+          "line": "const SHSOperationalMapboxMap = lazy(() => import(\"./components/SHSOperationalMapboxMap\"));",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "import(",
+          "lineNumber": 7,
+          "line": "const SHSOperationalMapboxMap = lazy(() => import(\"./components/SHSOperationalMapboxMap\"));",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "SHSOperationalMapboxMap",
+          "lineNumber": 298,
+          "line": "return withUnifiedTruthMapBoundary(<SHSOperationalMapboxMap />);",
+          "kind": "reference"
+        },
+        {
+          "term": "UnifiedTruth",
+          "lineNumber": 298,
+          "line": "return withUnifiedTruthMapBoundary(<SHSOperationalMapboxMap />);",
+          "kind": "reference"
+        },
+        {
+          "term": "UnifiedTruth",
+          "lineNumber": 1449,
+          "line": "function UnifiedTruthMapFallback() {",
+          "kind": "reference"
+        },
+        {
+          "term": "unified-truth",
+          "lineNumber": 1452,
+          "line": "className=\"shs-unified-truth-map-fallback\"",
+          "kind": "reference"
+        },
+        {
+          "term": "UnifiedTruth",
+          "lineNumber": 1469,
+          "line": "function withUnifiedTruthMapBoundary(element) {",
+          "kind": "reference"
+        },
+        {
+          "term": "UnifiedTruth",
+          "lineNumber": 1470,
+          "line": "return <Suspense fallback={<UnifiedTruthMapFallback />}>{element}</Suspense>;",
+          "kind": "reference"
+        },
+        {
+          "term": "SHSUnifiedTruthShell",
+          "lineNumber": 1473,
+          "line": "export default function SHSUnifiedTruthShell() {",
+          "kind": "reference"
+        },
+        {
+          "term": "UnifiedTruth",
+          "lineNumber": 1473,
+          "line": "export default function SHSUnifiedTruthShell() {",
+          "kind": "reference"
+        }
+      ]
+    },
+    "mapboxComponentScan": {
+      "file": "src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 2,
+          "line": "import mapboxgl from \"mapbox-gl\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 3,
+          "line": "import \"mapbox-gl/dist/mapbox-gl.css\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "mapbox-gl/dist/mapbox-gl.css",
+          "lineNumber": 3,
+          "line": "import \"mapbox-gl/dist/mapbox-gl.css\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "SHSOperationalMapboxMap",
+          "lineNumber": 1560,
+          "line": "export default function SHSOperationalMapboxMap() {",
+          "kind": "reference"
+        }
+      ]
+    },
+    "pagesExchangeDistScan": {
+      "file": "dist/assets/pages-exchange-Dmwe2jKp.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "unified-truth",
+          "lineNumber": 1,
+          "line": "import{j as e,r as h,R as Ne,N as H,O as ke}from\"./vendor-react-DWUxBteQ.js\";import{O as De}from\"./pages-Ca4qtZ2F.js\";import{_ as Ae,a6 as Re}from\"./components-CDuVLeKw.js\";import{u as Ee,T as Le}from\"./pages-admin-Bhjlr7vA.js\";import{m as B}from\"./vendor-mapbox-uaDf4Z7d.js\";function Ys(){return e.jsx(De,{})}function Xs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Provider Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This surface will handle outcome submissions, evidence uploads, verification status, disputes, and payout pipeline visibility for programs and providers.\"})]})}function Zs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Investor Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\"",
+          "kind": "react_lazy"
+        },
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 1,
+          "line": "import{j as e,r as h,R as Ne,N as H,O as ke}from\"./vendor-react-DWUxBteQ.js\";import{O as De}from\"./pages-Ca4qtZ2F.js\";import{_ as Ae,a6 as Re}from\"./components-CDuVLeKw.js\";import{u as Ee,T as Le}from\"./pages-admin-Bhjlr7vA.js\";import{m as B}from\"./vendor-mapbox-uaDf4Z7d.js\";function Ys(){return e.jsx(De,{})}function Xs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Provider Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This surface will handle outcome submissions, evidence uploads, verification status, disputes, and payout pipeline visibility for programs and providers.\"})]})}function Zs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Investor Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\"",
+          "kind": "react_lazy"
+        },
+        {
+          "term": "vendor-mapbox-uaDf4Z7d.js",
+          "lineNumber": 1,
+          "line": "import{j as e,r as h,R as Ne,N as H,O as ke}from\"./vendor-react-DWUxBteQ.js\";import{O as De}from\"./pages-Ca4qtZ2F.js\";import{_ as Ae,a6 as Re}from\"./components-CDuVLeKw.js\";import{u as Ee,T as Le}from\"./pages-admin-Bhjlr7vA.js\";import{m as B}from\"./vendor-mapbox-uaDf4Z7d.js\";function Ys(){return e.jsx(De,{})}function Xs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Provider Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This surface will handle outcome submissions, evidence uploads, verification status, disputes, and payout pipeline visibility for programs and providers.\"})]})}function Zs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Investor Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\"",
+          "kind": "react_lazy"
+        },
+        {
+          "term": "lazy(()",
+          "lineNumber": 1,
+          "line": "import{j as e,r as h,R as Ne,N as H,O as ke}from\"./vendor-react-DWUxBteQ.js\";import{O as De}from\"./pages-Ca4qtZ2F.js\";import{_ as Ae,a6 as Re}from\"./components-CDuVLeKw.js\";import{u as Ee,T as Le}from\"./pages-admin-Bhjlr7vA.js\";import{m as B}from\"./vendor-mapbox-uaDf4Z7d.js\";function Ys(){return e.jsx(De,{})}function Xs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Provider Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This surface will handle outcome submissions, evidence uploads, verification status, disputes, and payout pipeline visibility for programs and providers.\"})]})}function Zs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Investor Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\"",
+          "kind": "react_lazy"
+        }
+      ]
+    },
+    "capitalHtmlScan": {
+      "file": "dist/capital.html",
+      "exists": true,
+      "hits": [
+        {
+          "term": "modulepreload",
+          "lineNumber": 8,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/modulepreload-polyfill-B5Qt9EMX.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 9,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-CH_-0t41.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 10,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-react-DWUxBteQ.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 11,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-charts-20wW2Z-x.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 12,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-Ca4qtZ2F.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 13,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/shared-eNuYgzDM.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 14,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-admin-Bhjlr7vA.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 15,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-motion-Bndiu9g1.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 16,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/components-CDuVLeKw.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 17,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-mapbox-uaDf4Z7d.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "vendor-mapbox-uaDf4Z7d.js",
+          "lineNumber": 17,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-mapbox-uaDf4Z7d.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 17,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-mapbox-uaDf4Z7d.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "pages-exchange-Dmwe2jKp.js",
+          "lineNumber": 18,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-exchange-Dmwe2jKp.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 18,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-exchange-Dmwe2jKp.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 22,
+          "line": "<link rel=\"stylesheet\" crossorigin href=\"/assets/vendor-mapbox-C5-Kj3x0.css\">",
+          "kind": "reference"
+        },
+        {
+          "term": "vendor-mapbox-C5-Kj3x0.css",
+          "lineNumber": 22,
+          "line": "<link rel=\"stylesheet\" crossorigin href=\"/assets/vendor-mapbox-C5-Kj3x0.css\">",
+          "kind": "reference"
+        }
+      ]
+    }
+  },
+  "sourceScans": [
+    {
+      "file": "src/routes/exchangeRoutes.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "ExchangeLayout",
+          "lineNumber": 3,
+          "line": "const ExchangeLayout = lazy(() => import(\"@/pages/exchange/ExchangeLayout\"));",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "lazy(()",
+          "lineNumber": 3,
+          "line": "const ExchangeLayout = lazy(() => import(\"@/pages/exchange/ExchangeLayout\"));",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "import(",
+          "lineNumber": 3,
+          "line": "const ExchangeLayout = lazy(() => import(\"@/pages/exchange/ExchangeLayout\"));",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "ExchangeLayout",
+          "lineNumber": 35,
+          "line": "<Route path=\"exchange\" element={withExchangeLazyBoundary(<ExchangeLayout />)}>",
+          "kind": "reference"
+        },
+        {
+          "term": "Route path",
+          "lineNumber": 35,
+          "line": "<Route path=\"exchange\" element={withExchangeLazyBoundary(<ExchangeLayout />)}>",
+          "kind": "reference"
+        },
+        {
+          "term": "Route path",
+          "lineNumber": 37,
+          "line": "<Route path=\"dashboard\" element={<WorkspaceDashboard />} />",
+          "kind": "reference"
+        },
+        {
+          "term": "Route path",
+          "lineNumber": 38,
+          "line": "<Route path=\"command\" element={<CommandCenter />} />",
+          "kind": "reference"
+        },
+        {
+          "term": "Route path",
+          "lineNumber": 39,
+          "line": "<Route path=\"operator\" element={<OperatorDashboard />} />",
+          "kind": "reference"
+        },
+        {
+          "term": "Route path",
+          "lineNumber": 40,
+          "line": "<Route path=\"provider\" element={<ProviderDashboard />} />",
+          "kind": "reference"
+        },
+        {
+          "term": "Route path",
+          "lineNumber": 41,
+          "line": "<Route path=\"investor\" element={<InvestorDashboard />} />",
+          "kind": "reference"
+        },
+        {
+          "term": "Route path",
+          "lineNumber": 42,
+          "line": "<Route path=\"public\" element={<PublicTransparency />} />",
+          "kind": "reference"
+        }
+      ]
+    },
+    {
+      "file": "src/pages/exchange/ExchangeLayout.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "ExchangeLayout",
+          "lineNumber": 58,
+          "line": "export default function ExchangeLayout() {",
+          "kind": "reference"
+        }
+      ]
+    },
+    {
+      "file": "src/pages/exchange/SHSExchangeMissionControl.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "SHSExchangeMissionControl",
+          "lineNumber": 117,
+          "line": "export default function SHSExchangeMissionControl() {",
+          "kind": "reference"
+        }
+      ]
+    },
+    {
+      "file": "src/pages/exchange/unified-truth/SHSUnifiedTruthShell.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "unified-truth",
+          "lineNumber": 5,
+          "line": "import \"./shs-unified-truth-shell.css\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "SHSOperationalMapboxMap",
+          "lineNumber": 7,
+          "line": "const SHSOperationalMapboxMap = lazy(() => import(\"./components/SHSOperationalMapboxMap\"));",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "lazy(()",
+          "lineNumber": 7,
+          "line": "const SHSOperationalMapboxMap = lazy(() => import(\"./components/SHSOperationalMapboxMap\"));",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "import(",
+          "lineNumber": 7,
+          "line": "const SHSOperationalMapboxMap = lazy(() => import(\"./components/SHSOperationalMapboxMap\"));",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "SHSOperationalMapboxMap",
+          "lineNumber": 298,
+          "line": "return withUnifiedTruthMapBoundary(<SHSOperationalMapboxMap />);",
+          "kind": "reference"
+        },
+        {
+          "term": "UnifiedTruth",
+          "lineNumber": 298,
+          "line": "return withUnifiedTruthMapBoundary(<SHSOperationalMapboxMap />);",
+          "kind": "reference"
+        },
+        {
+          "term": "UnifiedTruth",
+          "lineNumber": 1449,
+          "line": "function UnifiedTruthMapFallback() {",
+          "kind": "reference"
+        },
+        {
+          "term": "unified-truth",
+          "lineNumber": 1452,
+          "line": "className=\"shs-unified-truth-map-fallback\"",
+          "kind": "reference"
+        },
+        {
+          "term": "UnifiedTruth",
+          "lineNumber": 1469,
+          "line": "function withUnifiedTruthMapBoundary(element) {",
+          "kind": "reference"
+        },
+        {
+          "term": "UnifiedTruth",
+          "lineNumber": 1470,
+          "line": "return <Suspense fallback={<UnifiedTruthMapFallback />}>{element}</Suspense>;",
+          "kind": "reference"
+        },
+        {
+          "term": "SHSUnifiedTruthShell",
+          "lineNumber": 1473,
+          "line": "export default function SHSUnifiedTruthShell() {",
+          "kind": "reference"
+        },
+        {
+          "term": "UnifiedTruth",
+          "lineNumber": 1473,
+          "line": "export default function SHSUnifiedTruthShell() {",
+          "kind": "reference"
+        }
+      ]
+    },
+    {
+      "file": "src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 2,
+          "line": "import mapboxgl from \"mapbox-gl\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 3,
+          "line": "import \"mapbox-gl/dist/mapbox-gl.css\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "mapbox-gl/dist/mapbox-gl.css",
+          "lineNumber": 3,
+          "line": "import \"mapbox-gl/dist/mapbox-gl.css\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "SHSOperationalMapboxMap",
+          "lineNumber": 1560,
+          "line": "export default function SHSOperationalMapboxMap() {",
+          "kind": "reference"
+        }
+      ]
+    },
+    {
+      "file": "src/pages/exchange/CommandCenter.jsx",
+      "exists": true,
+      "hits": [
+        {
+          "term": "SHSUnifiedTruthShell",
+          "lineNumber": 2,
+          "line": "import SHSUnifiedTruthShell from \"./unified-truth/SHSUnifiedTruthShell\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "unified-truth",
+          "lineNumber": 2,
+          "line": "import SHSUnifiedTruthShell from \"./unified-truth/SHSUnifiedTruthShell\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "UnifiedTruth",
+          "lineNumber": 2,
+          "line": "import SHSUnifiedTruthShell from \"./unified-truth/SHSUnifiedTruthShell\";",
+          "kind": "static_import"
+        },
+        {
+          "term": "SHSUnifiedTruthShell",
+          "lineNumber": 5,
+          "line": "return <SHSUnifiedTruthShell />;",
+          "kind": "reference"
+        },
+        {
+          "term": "UnifiedTruth",
+          "lineNumber": 5,
+          "line": "return <SHSUnifiedTruthShell />;",
+          "kind": "reference"
+        }
+      ]
+    }
+  ],
+  "distScans": [
+    {
+      "file": "dist/capital.html",
+      "exists": true,
+      "hits": [
+        {
+          "term": "modulepreload",
+          "lineNumber": 8,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/modulepreload-polyfill-B5Qt9EMX.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 9,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-CH_-0t41.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 10,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-react-DWUxBteQ.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 11,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-charts-20wW2Z-x.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 12,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-Ca4qtZ2F.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 13,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/shared-eNuYgzDM.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 14,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-admin-Bhjlr7vA.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 15,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-motion-Bndiu9g1.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 16,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/components-CDuVLeKw.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 17,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-mapbox-uaDf4Z7d.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "vendor-mapbox-uaDf4Z7d.js",
+          "lineNumber": 17,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-mapbox-uaDf4Z7d.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 17,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/vendor-mapbox-uaDf4Z7d.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "pages-exchange-Dmwe2jKp.js",
+          "lineNumber": 18,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-exchange-Dmwe2jKp.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 18,
+          "line": "<link rel=\"modulepreload\" crossorigin href=\"/assets/pages-exchange-Dmwe2jKp.js\">",
+          "kind": "modulepreload"
+        },
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 22,
+          "line": "<link rel=\"stylesheet\" crossorigin href=\"/assets/vendor-mapbox-C5-Kj3x0.css\">",
+          "kind": "reference"
+        },
+        {
+          "term": "vendor-mapbox-C5-Kj3x0.css",
+          "lineNumber": 22,
+          "line": "<link rel=\"stylesheet\" crossorigin href=\"/assets/vendor-mapbox-C5-Kj3x0.css\">",
+          "kind": "reference"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/capital-44WuCrlc.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+          "kind": "vite_map_deps"
+        },
+        {
+          "term": "vendor-mapbox-uaDf4Z7d.js",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+          "kind": "vite_map_deps"
+        },
+        {
+          "term": "vendor-mapbox-C5-Kj3x0.css",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+          "kind": "vite_map_deps"
+        },
+        {
+          "term": "pages-exchange-Dmwe2jKp.js",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+          "kind": "vite_map_deps"
+        },
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 1,
+          "line": "const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=[\"assets/pages-exchange-Dmwe2jKp.js\",\"assets/vendor-react-DWUxBteQ.js\",\"assets/vendor-CH_-0t41.js\",\"assets/pages-Ca4qtZ2F.js\",\"assets/components-CDuVLeKw.js\",\"assets/pages-admin-Bhjlr7vA.js\",\"assets/shared-eNuYgzDM.js\",\"assets/pages-admin-CrqIvWoe.css\",\"assets/vendor-motion-Bndiu9g1.js\",\"assets/components-3KDTfcSy.css\",\"assets/vendor-charts-20wW2Z-x.js\",\"assets/pages-CiOMc1g0.css\",\"assets/vendor-mapbox-uaDf4Z7d.js\",\"assets/vendor-mapbox-C5-Kj3x0.css\",\"assets/pages-exchange-Dwpvmain.css\"])))=>i.map(i=>d[i]);",
+          "kind": "vite_map_deps"
+        },
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96), rgba(3,10,22,.98))\"},children:\"Loading SHS Exchange surface…\"})}function R(r){return e.jsx(n.Suspe",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "vendor-mapbox-uaDf4Z7d.js",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96), rgba(3,10,22,.98))\"},children:\"Loading SHS Exchange surface…\"})}function R(r){return e.jsx(n.Suspe",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "pages-exchange-Dmwe2jKp.js",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96), rgba(3,10,22,.98))\"},children:\"Loading SHS Exchange surface…\"})}function R(r){return e.jsx(n.Suspe",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "__vite__mapDeps",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96), rgba(3,10,22,.98))\"},children:\"Loading SHS Exchange surface…\"})}function R(r){return e.jsx(n.Suspe",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "modulepreload",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96), rgba(3,10,22,.98))\"},children:\"Loading SHS Exchange surface…\"})}function R(r){return e.jsx(n.Suspe",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "lazy(()",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96), rgba(3,10,22,.98))\"},children:\"Loading SHS Exchange surface…\"})}function R(r){return e.jsx(n.Suspe",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "import(",
+          "lineNumber": 2,
+          "line": "import\"./modulepreload-polyfill-B5Qt9EMX.js\";import{r as n,j as e,f as t,N as s,O as d,g as l,b as a,h as x,R as h,H as p}from\"./vendor-react-DWUxBteQ.js\";import{_ as c,ah as m}from\"./components-CDuVLeKw.js\";import{C as o,W as j,O as f,P as g,I as u,a as b,S as y}from\"./pages-exchange-Dmwe2jKp.js\";import{O as v,I as E,d as S,e as w}from\"./pages-Ca4qtZ2F.js\";import{A as C}from\"./pages-admin-Bhjlr7vA.js\";import\"./vendor-CH_-0t41.js\";import\"./vendor-motion-Bndiu9g1.js\";import\"./shared-eNuYgzDM.js\";import\"./vendor-mapbox-uaDf4Z7d.js\";import\"./vendor-charts-20wW2Z-x.js\";const P=n.lazy(()=>c(()=>import(\"./pages-exchange-Dmwe2jKp.js\").then(r=>r.E),__vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14])));function W(){return e.jsx(\"div\",{style:{minHeight:\"320px\",display:\"grid\",placeItems:\"center\",padding:\"32px\",color:\"rgba(226, 232, 240, 0.92)\",background:\"linear-gradient(180deg, rgba(8,24,44,.96), rgba(3,10,22,.98))\"},children:\"Loading SHS Exchange surface…\"})}function R(r){return e.jsx(n.Suspe",
+          "kind": "dynamic_import"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/pages-exchange-Dmwe2jKp.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "unified-truth",
+          "lineNumber": 1,
+          "line": "import{j as e,r as h,R as Ne,N as H,O as ke}from\"./vendor-react-DWUxBteQ.js\";import{O as De}from\"./pages-Ca4qtZ2F.js\";import{_ as Ae,a6 as Re}from\"./components-CDuVLeKw.js\";import{u as Ee,T as Le}from\"./pages-admin-Bhjlr7vA.js\";import{m as B}from\"./vendor-mapbox-uaDf4Z7d.js\";function Ys(){return e.jsx(De,{})}function Xs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Provider Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This surface will handle outcome submissions, evidence uploads, verification status, disputes, and payout pipeline visibility for programs and providers.\"})]})}function Zs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Investor Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\"",
+          "kind": "react_lazy"
+        },
+        {
+          "term": "vendor-mapbox",
+          "lineNumber": 1,
+          "line": "import{j as e,r as h,R as Ne,N as H,O as ke}from\"./vendor-react-DWUxBteQ.js\";import{O as De}from\"./pages-Ca4qtZ2F.js\";import{_ as Ae,a6 as Re}from\"./components-CDuVLeKw.js\";import{u as Ee,T as Le}from\"./pages-admin-Bhjlr7vA.js\";import{m as B}from\"./vendor-mapbox-uaDf4Z7d.js\";function Ys(){return e.jsx(De,{})}function Xs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Provider Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This surface will handle outcome submissions, evidence uploads, verification status, disputes, and payout pipeline visibility for programs and providers.\"})]})}function Zs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Investor Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\"",
+          "kind": "react_lazy"
+        },
+        {
+          "term": "vendor-mapbox-uaDf4Z7d.js",
+          "lineNumber": 1,
+          "line": "import{j as e,r as h,R as Ne,N as H,O as ke}from\"./vendor-react-DWUxBteQ.js\";import{O as De}from\"./pages-Ca4qtZ2F.js\";import{_ as Ae,a6 as Re}from\"./components-CDuVLeKw.js\";import{u as Ee,T as Le}from\"./pages-admin-Bhjlr7vA.js\";import{m as B}from\"./vendor-mapbox-uaDf4Z7d.js\";function Ys(){return e.jsx(De,{})}function Xs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Provider Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This surface will handle outcome submissions, evidence uploads, verification status, disputes, and payout pipeline visibility for programs and providers.\"})]})}function Zs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Investor Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\"",
+          "kind": "react_lazy"
+        },
+        {
+          "term": "lazy(()",
+          "lineNumber": 1,
+          "line": "import{j as e,r as h,R as Ne,N as H,O as ke}from\"./vendor-react-DWUxBteQ.js\";import{O as De}from\"./pages-Ca4qtZ2F.js\";import{_ as Ae,a6 as Re}from\"./components-CDuVLeKw.js\";import{u as Ee,T as Le}from\"./pages-admin-Bhjlr7vA.js\";import{m as B}from\"./vendor-mapbox-uaDf4Z7d.js\";function Ys(){return e.jsx(De,{})}function Xs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Provider Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\",lineHeight:1.6,marginBottom:0},children:\"This surface will handle outcome submissions, evidence uploads, verification status, disputes, and payout pipeline visibility for programs and providers.\"})]})}function Zs(){return e.jsxs(\"section\",{style:{background:\"#111827\",border:\"1px solid rgba(255,255,255,0.08)\",borderRadius:16,padding:20},children:[e.jsx(\"h2\",{style:{marginTop:0},children:\"Investor Dashboard\"}),e.jsx(\"p\",{style:{color:\"#cbd5e1\"",
+          "kind": "react_lazy"
+        }
+      ]
+    },
+    {
+      "file": "dist/assets/vendor-mapbox-uaDf4Z7d.js",
+      "exists": true,
+      "hits": [
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 1,
+          "line": "import{g as _2}from\"./vendor-CH_-0t41.js\";var Om={exports:{}},g2=Om.exports,fb;function y2(){return fb||(fb=1,(function(mb,v2){(function(Gu,qu){mb.exports=qu()})(g2,(function(){let Gu,qu,Bm;function km(c,Z){if(!Gu)Gu=Z;else if(!qu)qu=Z;else{const Or={};Gu(void 0,Or),Bm=Z(Or);const $i=\"self.onerror = function() { console.error('An error occurred while parsing the WebWorker bundle. This is most likely due to improper transpilation by Babel; please see https://docs.mapbox.com/mapbox-gl-js/guides/install/#transpiling'); }; var sharedChunk = {}; (\"+Gu+\")(undefined, sharedChunk); (\"+qu+\")(sharedChunk); self.onerror = null;\";typeof window<\"u\"&&window&&window.URL&&window.URL.createObjectURL&&(Bm.workerUrl=window.URL.createObjectURL(new Blob([$i],{type:\"text/javascript\"})))}}km([\"require\",\"exports\"],function(c,Z){var Or=1e-6,$i=typeof Float32Array<\"u\"?Float32Array:Array;function dc(r,e){var t=e[0],n=e[1],s=e[2],l=e[3],h=t*l-s*n;return h?(r[0]=l*(h=1/h),r[1]=-n*h,r[2]=-s*h,r[3]=t*h,r):null}funct",
+          "kind": "reference"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 2,
+          "line": "This is most likely a bug, please report this via https://github.com/mapbox/mapbox-gl-js/issues/new?assignees=&labels=&template=Bug_report.md",
+          "kind": "reference"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 7,
+          "line": "`)}let h=null,f=null;if(n!==\"background\"&&n!==\"sky\"&&n!==\"slot\"){f=de[`filter_${n}`];const x=Ns(l,f,e,t);if(x.result===\"error\")throw new Error(x.value.map(b=>`${b.key}: ${b.message}`).join(\", \"));h=(b,w,I)=>x.value.evaluate(b,w,{},I)}let p=null,g=null;if(l!==s){const x=Ns(s,f,e,t);if(x.result===\"error\")throw new Error(x.value.map(b=>`${b.key}: ${b.message}`).join(\", \"));p=(b,w,I,E,M)=>x.value.evaluate(b,w,{},I,void 0,void 0,E,M),g=!Os(x.value.expression)}return{filter:h,dynamicFilter:p||void 0,needGeometry:pp(l),needFeature:!!g}}function Qh(r){if(!Array.isArray(r))return r;const e=(function(t){if(c_.has(t[0])){for(let n=1;n<t.length;n++)if(qa(t[n]))return!0}return t})(r);return e===!0?e:e.map(t=>Qh(t))}function fp(r){let e=!1;const t=[];if(r[0]===\"case\"){for(let n=1;n<r.length-1;n+=2)e=e||qa(r[n]),t.push(r[n+1]);t.push(r[r.length-1])}else if(r[0]===\"match\"){e=e||qa(r[1]);for(let n=2;n<r.length-1;n+=2)t.push(r[n+1]);t.push(r[r.length-1])}else if(r[0]===\"step\"){e=e||qa(r[1]);for(let n=1;",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "import(",
+          "lineNumber": 7,
+          "line": "`)}let h=null,f=null;if(n!==\"background\"&&n!==\"sky\"&&n!==\"slot\"){f=de[`filter_${n}`];const x=Ns(l,f,e,t);if(x.result===\"error\")throw new Error(x.value.map(b=>`${b.key}: ${b.message}`).join(\", \"));h=(b,w,I)=>x.value.evaluate(b,w,{},I)}let p=null,g=null;if(l!==s){const x=Ns(s,f,e,t);if(x.result===\"error\")throw new Error(x.value.map(b=>`${b.key}: ${b.message}`).join(\", \"));p=(b,w,I,E,M)=>x.value.evaluate(b,w,{},I,void 0,void 0,E,M),g=!Os(x.value.expression)}return{filter:h,dynamicFilter:p||void 0,needGeometry:pp(l),needFeature:!!g}}function Qh(r){if(!Array.isArray(r))return r;const e=(function(t){if(c_.has(t[0])){for(let n=1;n<t.length;n++)if(qa(t[n]))return!0}return t})(r);return e===!0?e:e.map(t=>Qh(t))}function fp(r){let e=!1;const t=[];if(r[0]===\"case\"){for(let n=1;n<r.length-1;n+=2)e=e||qa(r[n]),t.push(r[n+1]);t.push(r[r.length-1])}else if(r[0]===\"match\"){e=e||qa(r[1]);for(let n=2;n<r.length-1;n+=2)t.push(r[n+1]);t.push(r[r.length-1])}else if(r[0]===\"step\"){e=e||qa(r[1]);for(let n=1;",
+          "kind": "dynamic_import"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 3281,
+          "line": "`}_calculateXYTransform(){const i=this._pos,o=this._map,u=this.getPitchAlignment();if(!o||!i||u!==\"map\")return\"\";if(!o._showingGlobe()){const v=o.getPitch();return v?`rotateX(${v}deg)`:\"\"}const d=c.cL(c.f5(o.transform,this._lngLat)),m=i.sub(c.f6(o.transform)),_=Math.abs(m.x)+Math.abs(m.y);if(_===0)return\"\";const y=d/_;return`rotateX(${-m.y*y}deg) rotateY(${m.x*y}deg)`}_calculateZTransform(){const i=this._pos,o=this._map;if(!o||!i)return\"\";let u=0;const d=this.getRotationAlignment();if(d===\"map\")if(o._showingGlobe()){const m=o.project(new c.aY(this._lngLat.lng,this._lngLat.lat+.001),this._altitude),_=o.project(new c.aY(this._lngLat.lng,this._lngLat.lat-.001),this._altitude).sub(m);u=c.cL(Math.atan2(_.y,_.x))-90}else u=-o.getBearing();else if(d===\"horizon\"){const m=c.aj(4,6,o.getZoom()),_=c.f6(o.transform);_.y+=m*o.transform.height;const y=i.sub(_),v=c.cL(Math.atan2(y.y,y.x));u=(v>90?v-270:v+90)*(1-m)}return u+=this._rotation,u?`rotateZ(${u}deg)`:\"\"}_update(i){cancelAnimationFrame(this._",
+          "kind": "reference"
+        },
+        {
+          "term": "mapbox-gl",
+          "lineNumber": 3283,
+          "line": "(${u.data.width}, ${u.data.height})`)));const v=!(i instanceof HTMLImageElement||ImageBitmap&&i instanceof ImageBitmap);let T=!1;u.usvg?(u.data=new c.q({width:m,height:_},new Uint8Array(y)),u.usvg=!1,u.icon=void 0,T=!0):u.data.replace(y,v),this.style.updateImage(o,u,T)}hasImage(a){return a?!!this.style&&!!this.style.getImage(c.I.from(a)):(this.fire(new c.B(new Error(\"Missing required image id\"))),!1)}removeImage(a){this.style.removeImage(c.I.from(a))}loadImage(a,i){c.n(this._requestManager.transformRequest(a,c.R.Image),(o,u)=>{i(o,u)})}listImages(){return this.style.listImages().map(a=>a.name)}addModel(a,i){this._lazyInitEmptyStyle(),this.style.addModel(a,i)}hasModel(a){return a?this.style.hasModel(a):(this.fire(new c.B(new Error(\"Missing required model id\"))),!1)}removeModel(a){this.style.removeModel(a)}listModels(){return this.style.listModels()}addLayer(a,i){return this._isValidId(a.id)?(this._lazyInitEmptyStyle(),this.style.addLayer(a,i),this._update(!0)):this}getSlot(a){const i=th",
+          "kind": "reference"
+        }
+      ]
+    }
+  ],
+  "bundleSummary": {
+    "totalAssetsParsed": 90,
+    "largeAssets": 2,
+    "largestAssetFileName": "vendor-mapbox-uaDf4Z7d.js",
+    "largestAssetRawKb": 1781.94,
+    "buildWarningDetected": true,
+    "frontendBuildPassed": true
+  },
+  "recommendedNextActions": [
+    {
+      "step": 1,
+      "label": "Patch only the proven early import source",
+      "action": "Patch ExchangeLayout or SHSExchangeMissionControl only if this audit shows a static Unified Truth import.",
+      "risk": "medium"
+    },
+    {
+      "step": 2,
+      "label": "Keep Patch 12B map shell boundary",
+      "action": "Do not remove SHSUnifiedTruthShell lazy loading of SHSOperationalMapboxMap.",
+      "risk": "low"
+    },
+    {
+      "step": 3,
+      "label": "Do not touch core Mapbox internals yet",
+      "action": "Only isolate route imports before editing SHSOperationalMapboxMap.jsx.",
+      "risk": "high_if_rushed"
+    },
+    {
+      "step": 4,
+      "label": "Rebuild and check capital.html",
+      "action": "After the isolation patch, confirm capital.html no longer references vendor-mapbox directly.",
+      "risk": "low"
+    }
+  ],
+  "nextPatchRecommendation": {
+    "id": "post_v1_bundle_patch_24_exchange_unified_truth_route_isolation_patch",
+    "label": "Exchange Unified Truth Route Isolation Patch",
+    "goal": "Patch the specific Exchange file that still imports Unified Truth / Mapbox too early, so pages-exchange does not reference vendor-mapbox unless the Unified Truth route is requested.",
+    "risk": "medium"
+  }
+}

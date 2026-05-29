@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
+import ReconciliationStatusPill from "@/components/aggregation/ReconciliationStatusPill";
 import { getReconciliationItems } from "./adapters";
 import { fetchOracleTruth } from "../reporting/oracle-backend-adapter";
+import { buildOracleRowReadiness, oracleReadinessClass } from "./oracle-row-readiness";
 
 function priorityBadgeClass(value) {
   const normalized = String(value || "").toLowerCase();
@@ -258,10 +260,19 @@ export default function ReconciliationWorkbench() {
               <th>Status</th>
               <th>Priority</th>
               <th>Confidence</th>
+              <th>Operator Signal</th>
+              <th>Oracle Readiness</th>
             </tr>
           </thead>
           <tbody>
-            {items.map((item) => (
+            {items.map((item) => {
+              const oracleReadiness = buildOracleRowReadiness({
+                type: "reconciliation",
+                status: item.status,
+                confidenceScore: item.confidenceScore,
+              });
+
+              return (
               <tr key={item.id}>
                 <td>{item.id}</td>
                 <td>{item.county}</td>
@@ -286,8 +297,27 @@ export default function ReconciliationWorkbench() {
                   </span>
                 </td>
                 <td>{item.confidenceScore}</td>
+                <td>
+                  <ReconciliationStatusPill
+                    status={item.status}
+                    priority={item.priority}
+                    confidenceScore={item.confidenceScore}
+                  />
+                </td>
+                <td>
+                  <span
+                    className={[
+                      "admin-aggregation-oracle-ready",
+                      oracleReadinessClass(oracleReadiness.tone),
+                    ].join(" ")}
+                    title={oracleReadiness.nextAction}
+                  >
+                    {oracleReadiness.label}
+                  </span>
+                </td>
               </tr>
-            ))}
+              );
+            })}
           </tbody>
         </table>
       </div>

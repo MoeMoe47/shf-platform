@@ -1,0 +1,680 @@
+{
+  "generatedAt": "2026-05-23T19:21:43.004Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 30",
+  "mode": "SHS_V1_LAYER_READINESS_REGISTRY_NO_CODE_CHANGES",
+  "shsV1LayerReadinessRegistryStatus": "registry_ready_layers_tracked",
+  "shsV1LayerReadinessRegistryLabel": "SHS V1 Layer Readiness Registry Ready",
+  "productionDecision": "No source code was changed. This registry turns SHS V1 layer completion into a trackable pass/fail system after the page registry.",
+  "priorPatch29Status": "registry_ready_all_entries_exist",
+  "priorPatch28Status": "registry_ready_preload_lane_resolved",
+  "priorPatch27Status": "capital_mapbox_preload_resolved",
+  "buildSummary": {
+    "frontendBuildPassed": true,
+    "manifestValidationPassed": true,
+    "totalAssetsParsed": 89,
+    "largeAssets": 2,
+    "largestAssetFileName": "vendor-mapbox-CVOD2Ov6.js",
+    "largestAssetRawKb": 1781.94,
+    "buildWarningDetected": true
+  },
+  "layerGroups": [
+    {
+      "id": "app-shell-routing-layer",
+      "label": "App Shell / Routing Layer",
+      "v1Status": "partially_ready",
+      "purpose": "Make every entry and hash route open cleanly, refresh safely, and avoid blank screens.",
+      "currentEvidence": [
+        "All tracked HTML entries exist.",
+        "Capital Mapbox preload risk resolved.",
+        "Browser route signoff registry is ready."
+      ],
+      "requiredForV1": [
+        "Complete browser route signoff for all Patch 28 routes.",
+        "Confirm direct URL and refresh behavior for major hash routes.",
+        "Confirm lazy fallbacks render and clear.",
+        "Confirm no blank screen routes.",
+        "Confirm no route imports pull heavy map assets early."
+      ],
+      "linkedPages": [
+        "capital-entry",
+        "exchange-surface",
+        "unified-truth-map",
+        "admin-entry",
+        "foundation-entry",
+        "solutions-entry",
+        "index-entry"
+      ],
+      "blockers": [
+        "Manual browser signoff still pending."
+      ],
+      "nextAction": "Complete Patch 28 browser signoff routes."
+    },
+    {
+      "id": "bundle-performance-layer",
+      "label": "Bundle / Performance Layer",
+      "v1Status": "mostly_ready_with_documented_map_warnings",
+      "purpose": "Keep initial loads clean and document intentional heavy route assets.",
+      "currentEvidence": [
+        "Capital no longer preloads vendor-mapbox JS.",
+        "Capital no longer preloads vendor-mapbox CSS.",
+        "Capital no longer preloads vendor-maplibre.",
+        "Two large map chunks remain as documented route-heavy assets."
+      ],
+      "requiredForV1": [
+        "Browser-confirm vendor-mapbox loads only on map-needed route.",
+        "Browser-confirm vendor-maplibre loads only when MapLibre visual is visible.",
+        "Create final performance budget / warning policy.",
+        "Keep chunkSizeWarningLimit at 700; do not hide warnings."
+      ],
+      "linkedPages": [
+        "capital-entry",
+        "unified-truth-map",
+        "maplibre-surfaces"
+      ],
+      "blockers": [
+        "Browser confirmation needed for runtime loading."
+      ],
+      "nextAction": "Run network signoff for map-heavy routes."
+    },
+    {
+      "id": "identity-access-layer",
+      "label": "Identity / Access Layer",
+      "v1Status": "needs_v1_pass",
+      "purpose": "Protect internal surfaces and make user/operator identity reliable.",
+      "currentEvidence": [
+        "Admin entry is tracked.",
+        "Role-gated navigation is listed as required work."
+      ],
+      "requiredForV1": [
+        "Confirm login page path.",
+        "Confirm /auth/me success and failure handling.",
+        "Confirm protected routes do not leak internal pages.",
+        "Confirm access denied state.",
+        "Confirm sign-out behavior.",
+        "Confirm operator profile/role appears in command surfaces."
+      ],
+      "linkedPages": [
+        "admin-entry",
+        "operational-command-surface",
+        "oracle-truth-surface"
+      ],
+      "blockers": [
+        "Past logs showed /api/auth/me 500 risk; needs clean fallback handling."
+      ],
+      "nextAction": "Run Admin Entry identity/access V1 pass."
+    },
+    {
+      "id": "oracle-truth-layer",
+      "label": "Oracle / Unified Truth Layer",
+      "v1Status": "needs_v1_pass",
+      "purpose": "Make truth, confidence, readiness, contradictions, trace IDs, and trust package visible and usable.",
+      "currentEvidence": [
+        "Oracle / Truth Surface is tracked.",
+        "Unified Truth Map route is tracked.",
+        "Truth pipeline doctrine is locked."
+      ],
+      "requiredForV1": [
+        "Confirm /oracle/truth/:entityId works.",
+        "Confirm truthStatus is visible.",
+        "Confirm confidenceScore is visible.",
+        "Confirm verificationStatus is visible.",
+        "Confirm contradictionStatus is visible.",
+        "Confirm readinessStatus is visible.",
+        "Confirm traceId and trust envelope appear where needed.",
+        "Confirm actions can change truth/readiness state."
+      ],
+      "linkedPages": [
+        "oracle-truth-surface",
+        "unified-truth-map",
+        "operational-command-surface",
+        "reporting-command-surface"
+      ],
+      "blockers": [
+        "Needs end-to-end truth package signoff."
+      ],
+      "nextAction": "Run Oracle / Truth Surface V1 pass."
+    },
+    {
+      "id": "trust-envelope-audit-layer",
+      "label": "Trust Envelope / Audit Layer",
+      "v1Status": "needs_v1_pass",
+      "purpose": "Attach proof, source, confidence, actor, timestamp, and trace to serious outputs.",
+      "currentEvidence": [
+        "Verification Audit Surface is tracked.",
+        "Reporting Command Surface is tracked."
+      ],
+      "requiredForV1": [
+        "Confirm every major report has trust envelope.",
+        "Confirm every serious action creates audit event.",
+        "Confirm export proof appendix exists or is planned.",
+        "Confirm blocked/ready state is clear.",
+        "Confirm audit trace is visible to operator."
+      ],
+      "linkedPages": [
+        "verification-audit-surface",
+        "reporting-command-surface",
+        "oracle-truth-surface"
+      ],
+      "blockers": [
+        "Trust envelope validator may still need implementation or confirmation."
+      ],
+      "nextAction": "Run Verification + Reporting trust envelope pass."
+    },
+    {
+      "id": "reporting-export-layer",
+      "label": "Reporting / Export Layer",
+      "v1Status": "needs_v1_pass",
+      "purpose": "Generate funder/partner/operator-ready outputs with readiness gates.",
+      "currentEvidence": [
+        "Reporting Command Surface is tracked.",
+        "Export types are locked: Briefing, Action Log, Analyst Memo, Audit Pack."
+      ],
+      "requiredForV1": [
+        "Confirm Briefing Export.",
+        "Confirm Action Log Export.",
+        "Confirm Analyst Memo Export.",
+        "Confirm Audit Pack Export.",
+        "Confirm export readiness gates.",
+        "Confirm blocked export states.",
+        "Confirm trust envelope and trace ID in exports."
+      ],
+      "linkedPages": [
+        "reporting-command-surface",
+        "verification-audit-surface",
+        "impact-page"
+      ],
+      "blockers": [
+        "Export preview/history/redaction may need confirmation."
+      ],
+      "nextAction": "Run Reporting Command Surface V1 pass."
+    },
+    {
+      "id": "command-surface-layer",
+      "label": "Operational Command Surface Layer",
+      "v1Status": "needs_v1_pass",
+      "purpose": "Give operators a clear cockpit showing state, risk, recommendation, confidence, and next action.",
+      "currentEvidence": [
+        "Operational Command Surface is tracked.",
+        "Command surface purpose is locked separately from Outcomes Exchange."
+      ],
+      "requiredForV1": [
+        "Confirm main command surface opens.",
+        "Confirm selected card/drawer/map/AI panel sync.",
+        "Confirm action buttons visibly change state.",
+        "Confirm AI analyst explains current context.",
+        "Confirm no confusing card behavior.",
+        "Confirm loading/error states."
+      ],
+      "linkedPages": [
+        "operational-command-surface",
+        "admin-entry",
+        "unified-truth-map"
+      ],
+      "blockers": [
+        "Manual UI behavior pass required."
+      ],
+      "nextAction": "Run Operational Command Surface V1 pass."
+    },
+    {
+      "id": "map-layer",
+      "label": "Map Layer",
+      "v1Status": "mostly_ready_browser_signoff_required",
+      "purpose": "Support operational visual context without hurting non-map route performance.",
+      "currentEvidence": [
+        "Mapbox CSS async boundary patch complete.",
+        "Capital no longer preloads Mapbox.",
+        "Unified Truth map route is tracked.",
+        "MapLibre surfaces are tracked."
+      ],
+      "requiredForV1": [
+        "Confirm Unified Truth map renders.",
+        "Confirm runtime Mapbox CSS loads correctly.",
+        "Confirm no blinking/remount loop.",
+        "Confirm MapLibre does not load on unrelated pages.",
+        "Confirm fallback/error states.",
+        "Confirm token-missing state if token is unavailable."
+      ],
+      "linkedPages": [
+        "unified-truth-map",
+        "maplibre-surfaces",
+        "capital-entry"
+      ],
+      "blockers": [
+        "Browser route signoff required."
+      ],
+      "nextAction": "Run map route browser network and visual signoff."
+    },
+    {
+      "id": "ai-agent-analyst-layer",
+      "label": "AI Analyst / Agent Layer",
+      "v1Status": "needs_v1_pass",
+      "purpose": "Use under-the-hood agents and one clean analyst surface to explain, recommend, and prepare next actions.",
+      "currentEvidence": [
+        "Agent fabric exists in the ecosystem memory.",
+        "One clean Hub Intelligence Engine strategy is locked."
+      ],
+      "requiredForV1": [
+        "Confirm visible AI analyst panel works.",
+        "Confirm agent output includes reason/confidence/source/next action.",
+        "Confirm agent output uses active dashboard context.",
+        "Confirm behind-the-scenes agents are not shown as clutter.",
+        "Confirm recommendations are logged or ready to log."
+      ],
+      "linkedPages": [
+        "operational-command-surface",
+        "hub-dashboard",
+        "reporting-command-surface"
+      ],
+      "blockers": [
+        "Agent/context sync needs page-level verification."
+      ],
+      "nextAction": "Run AI analyst sync pass after core command pages."
+    },
+    {
+      "id": "hub-collaboration-layer",
+      "label": "SHS Hub Collaboration Layer",
+      "v1Status": "needs_v1_pass",
+      "purpose": "Coordinate referrals, partners, unmet needs, lifecycle movement, and collaboration reporting.",
+      "currentEvidence": [
+        "Hub Dashboard is tracked.",
+        "Hub Intake is tracked.",
+        "Hub Lifecycle is tracked.",
+        "Hub Imports is tracked.",
+        "Partner Directory and Unmet Needs need route confirmation."
+      ],
+      "requiredForV1": [
+        "Confirm Hub dashboard route.",
+        "Confirm intake workflow.",
+        "Confirm referral lifecycle board.",
+        "Confirm import lane.",
+        "Confirm partner directory route or create it.",
+        "Confirm unmet needs route or create it.",
+        "Confirm reporting readiness card."
+      ],
+      "linkedPages": [
+        "hub-dashboard",
+        "hub-intake",
+        "hub-lifecycle",
+        "hub-imports",
+        "partner-directory",
+        "unmet-needs"
+      ],
+      "blockers": [
+        "Partner Directory route may need confirmation.",
+        "Unmet Needs route may need confirmation."
+      ],
+      "nextAction": "Run Hub page confirmation pass."
+    },
+    {
+      "id": "integration-fabric-layer",
+      "label": "Integration Fabric Layer",
+      "v1Status": "needs_v1_pass",
+      "purpose": "Prove SHS can connect, normalize, verify, audit, and export instead of replacing partner systems.",
+      "currentEvidence": [
+        "Hub Imports is tracked.",
+        "API/backend typecheck and build are passing."
+      ],
+      "requiredForV1": [
+        "Confirm API health check.",
+        "Confirm import demo lane.",
+        "Confirm webhook/event placeholder.",
+        "Confirm batch import status.",
+        "Confirm partner connector registry or placeholder.",
+        "Confirm no fake integration claims beyond V1 capability."
+      ],
+      "linkedPages": [
+        "hub-imports",
+        "verification-audit-surface",
+        "reporting-command-surface"
+      ],
+      "blockers": [
+        "Connector registry may need route/page confirmation."
+      ],
+      "nextAction": "Run imports/integration V1 pass."
+    },
+    {
+      "id": "data-model-entity-layer",
+      "label": "Data Model / Entity Layer",
+      "v1Status": "needs_registry_or_contract",
+      "purpose": "Make organizations, users, programs, cases, referrals, outcomes, reports, audit events, and trust envelopes consistent.",
+      "currentEvidence": [
+        "Page readiness registry now exists.",
+        "Hardening reports now provide structured JSON governance."
+      ],
+      "requiredForV1": [
+        "Create canonical entity registry.",
+        "Confirm object IDs are consistent.",
+        "Confirm report artifacts connect to source cases.",
+        "Confirm recommendations and audit events have trace IDs.",
+        "Remove duplicate confusing mock entities."
+      ],
+      "linkedPages": [
+        "reporting-command-surface",
+        "verification-audit-surface",
+        "hub-dashboard",
+        "oracle-truth-surface"
+      ],
+      "blockers": [
+        "Canonical entity contract may need its own patch."
+      ],
+      "nextAction": "Create entity/data contract registry after layer registry."
+    },
+    {
+      "id": "security-compliance-layer",
+      "label": "Security / Compliance Layer",
+      "v1Status": "needs_v1_pass",
+      "purpose": "Protect internal surfaces, avoid data leaks, and keep public/private boundaries clean.",
+      "currentEvidence": [
+        "Admin Entry includes role-gating required work.",
+        "Public pages are separated from internal tracked surfaces."
+      ],
+      "requiredForV1": [
+        "Confirm protected route behavior.",
+        "Confirm no secrets in client bundle.",
+        "Confirm no sensitive data in console logs.",
+        "Confirm public pages do not leak internal components.",
+        "Confirm access denied and sign-out states.",
+        "Confirm privacy/consent language if participant data appears."
+      ],
+      "linkedPages": [
+        "admin-entry",
+        "foundation-entry",
+        "index-entry",
+        "solutions-entry"
+      ],
+      "blockers": [
+        "Security review checklist needed."
+      ],
+      "nextAction": "Run security/public-private boundary pass."
+    },
+    {
+      "id": "qa-browser-signoff-layer",
+      "label": "QA / Browser Signoff Layer",
+      "v1Status": "ready_to_execute",
+      "purpose": "Turn route testing into a visible pass/fail process.",
+      "currentEvidence": [
+        "Browser Route Signoff Registry exists.",
+        "V1 Page Readiness Registry exists."
+      ],
+      "requiredForV1": [
+        "Complete all pending browser signoffs.",
+        "Record pass/fail/needs followup.",
+        "Confirm console clean for each route.",
+        "Confirm Network behavior for map vendors.",
+        "Confirm refresh behavior."
+      ],
+      "linkedPages": [
+        "capital-entry",
+        "exchange-surface",
+        "unified-truth-map",
+        "index-entry",
+        "solutions-entry",
+        "foundation-entry"
+      ],
+      "blockers": [
+        "Manual browser testing still required."
+      ],
+      "nextAction": "Execute browser signoff checklist."
+    },
+    {
+      "id": "design-system-layer",
+      "label": "Design System / Visual Consistency Layer",
+      "v1Status": "needs_v1_pass",
+      "purpose": "Make all SHS/SHF pages feel like one professional product family.",
+      "currentEvidence": [
+        "Page registry separates internal, public, hub, and foundation surfaces."
+      ],
+      "requiredForV1": [
+        "Confirm logo placement.",
+        "Confirm typography consistency.",
+        "Confirm button family.",
+        "Confirm card spacing.",
+        "Confirm command surfaces do not look like public sales pages.",
+        "Confirm public pages do not look like internal dashboards.",
+        "Confirm mobile/tablet pass."
+      ],
+      "linkedPages": [
+        "index-entry",
+        "solutions-entry",
+        "foundation-entry",
+        "admin-entry",
+        "hub-dashboard"
+      ],
+      "blockers": [
+        "Visual QA pass required."
+      ],
+      "nextAction": "Run page group design consistency pass."
+    },
+    {
+      "id": "public-sales-conversion-layer",
+      "label": "Public Sales / Conversion Layer",
+      "v1Status": "needs_v1_pass_and_route_confirmation",
+      "purpose": "Make SHS understandable and sellable to customers, partners, and builders.",
+      "currentEvidence": [
+        "Index, Solutions, Sales, Built on SHS, Request Demo are tracked.",
+        "Built on SHS and Request Demo need route confirmation."
+      ],
+      "requiredForV1": [
+        "Confirm SHS homepage message.",
+        "Confirm Solutions page story.",
+        "Confirm Sales page offer.",
+        "Confirm Built on SHS route or create it.",
+        "Confirm Request Demo route or create it.",
+        "Confirm CTA path."
+      ],
+      "linkedPages": [
+        "index-entry",
+        "solutions-entry",
+        "sales-entry",
+        "built-on-shs",
+        "request-demo"
+      ],
+      "blockers": [
+        "Built on SHS route may need creation.",
+        "Request Demo route may need creation."
+      ],
+      "nextAction": "Run public sales page confirmation pass."
+    },
+    {
+      "id": "shf-public-impact-layer",
+      "label": "SHF Public / Impact Layer",
+      "v1Status": "needs_v1_pass_and_route_confirmation",
+      "purpose": "Make the nonprofit side mission-clear, proof-centered, funder-ready, and donor-ready.",
+      "currentEvidence": [
+        "Foundation Entry, Impact Page, Workforce Pipeline, Donor Support are tracked.",
+        "Workforce and Donor Support need route confirmation."
+      ],
+      "requiredForV1": [
+        "Confirm Foundation page mission.",
+        "Confirm Impact page is proof-focused.",
+        "Confirm Workforce & Community Pipeline route or create it.",
+        "Confirm Donor Support route or create it.",
+        "Confirm donor/partner path without weakening impact proof."
+      ],
+      "linkedPages": [
+        "foundation-entry",
+        "impact-page",
+        "workforce-community-pipeline",
+        "donor-support"
+      ],
+      "blockers": [
+        "Workforce route may need creation.",
+        "Donor Support route may need creation."
+      ],
+      "nextAction": "Run SHF public page confirmation pass."
+    },
+    {
+      "id": "release-readiness-layer",
+      "label": "Release Readiness Layer",
+      "v1Status": "not_started",
+      "purpose": "Bundle all page, route, layer, security, and browser signoff results into one launch decision.",
+      "currentEvidence": [
+        "Page and browser registries exist.",
+        "Layer registry is being created by this patch."
+      ],
+      "requiredForV1": [
+        "Create V1 launch checklist.",
+        "Confirm all critical pages pass.",
+        "Confirm high-risk routes pass.",
+        "Confirm security pass.",
+        "Confirm export/trust proof pass.",
+        "Confirm known warnings are documented."
+      ],
+      "linkedPages": [
+        "all"
+      ],
+      "blockers": [
+        "Depends on page and layer readiness completion."
+      ],
+      "nextAction": "Create release readiness registry near the end of V1 hardening."
+    }
+  ],
+  "layerReadinessSummary": {
+    "totalLayersTracked": 18,
+    "statusCounts": {
+      "partially_ready": 1,
+      "mostly_ready_with_documented_map_warnings": 1,
+      "needs_v1_pass": 10,
+      "mostly_ready_browser_signoff_required": 1,
+      "needs_registry_or_contract": 1,
+      "ready_to_execute": 1,
+      "needs_v1_pass_and_route_confirmation": 2,
+      "not_started": 1
+    },
+    "highPriorityLayerCount": 8,
+    "highPriorityLayers": [
+      {
+        "id": "identity-access-layer",
+        "label": "Identity / Access Layer",
+        "v1Status": "needs_v1_pass",
+        "nextAction": "Run Admin Entry identity/access V1 pass."
+      },
+      {
+        "id": "oracle-truth-layer",
+        "label": "Oracle / Unified Truth Layer",
+        "v1Status": "needs_v1_pass",
+        "nextAction": "Run Oracle / Truth Surface V1 pass."
+      },
+      {
+        "id": "trust-envelope-audit-layer",
+        "label": "Trust Envelope / Audit Layer",
+        "v1Status": "needs_v1_pass",
+        "nextAction": "Run Verification + Reporting trust envelope pass."
+      },
+      {
+        "id": "reporting-export-layer",
+        "label": "Reporting / Export Layer",
+        "v1Status": "needs_v1_pass",
+        "nextAction": "Run Reporting Command Surface V1 pass."
+      },
+      {
+        "id": "command-surface-layer",
+        "label": "Operational Command Surface Layer",
+        "v1Status": "needs_v1_pass",
+        "nextAction": "Run Operational Command Surface V1 pass."
+      },
+      {
+        "id": "hub-collaboration-layer",
+        "label": "SHS Hub Collaboration Layer",
+        "v1Status": "needs_v1_pass",
+        "nextAction": "Run Hub page confirmation pass."
+      },
+      {
+        "id": "security-compliance-layer",
+        "label": "Security / Compliance Layer",
+        "v1Status": "needs_v1_pass",
+        "nextAction": "Run security/public-private boundary pass."
+      },
+      {
+        "id": "qa-browser-signoff-layer",
+        "label": "QA / Browser Signoff Layer",
+        "v1Status": "ready_to_execute",
+        "nextAction": "Execute browser signoff checklist."
+      }
+    ]
+  },
+  "executionOrder": [
+    {
+      "order": 1,
+      "label": "Finish Browser Signoff",
+      "layers": [
+        "qa-browser-signoff-layer",
+        "bundle-performance-layer",
+        "map-layer"
+      ],
+      "reason": "This closes the preload optimization lane and proves map chunks are route-safe."
+    },
+    {
+      "order": 2,
+      "label": "Finish Core Internal Trust Stack",
+      "layers": [
+        "identity-access-layer",
+        "oracle-truth-layer",
+        "trust-envelope-audit-layer",
+        "reporting-export-layer",
+        "command-surface-layer"
+      ],
+      "reason": "This makes SHS internally usable and trusted."
+    },
+    {
+      "order": 3,
+      "label": "Finish Hub Collaboration Stack",
+      "layers": [
+        "hub-collaboration-layer",
+        "integration-fabric-layer",
+        "data-model-entity-layer"
+      ],
+      "reason": "This makes the partner/referral/collaboration lane real."
+    },
+    {
+      "order": 4,
+      "label": "Finish Public SHS/SHF Surfaces",
+      "layers": [
+        "public-sales-conversion-layer",
+        "shf-public-impact-layer",
+        "design-system-layer"
+      ],
+      "reason": "This makes the system understandable to customers, partners, funders, and donors."
+    },
+    {
+      "order": 5,
+      "label": "Finish Security and Release Readiness",
+      "layers": [
+        "security-compliance-layer",
+        "release-readiness-layer"
+      ],
+      "reason": "This creates a serious V1 launch gate."
+    }
+  ],
+  "missingOrFutureLayersToConsider": [
+    {
+      "id": "product-analytics-layer",
+      "label": "Product Analytics Layer",
+      "reason": "Track page usage, route failures, CTA clicks, export usage, and operator behavior after V1.",
+      "v1Decision": "optional_for_v1_recommended_for_post_v1"
+    },
+    {
+      "id": "support-issue-reporting-layer",
+      "label": "Support / Issue Reporting Layer",
+      "reason": "Operators and partners need a way to report issues from inside the product.",
+      "v1Decision": "optional_for_v1_but_high_value"
+    },
+    {
+      "id": "feature-flag-environment-layer",
+      "label": "Feature Flag / Environment Mode Layer",
+      "reason": "Separate demo, staging, production, public-safe, and internal-only behavior.",
+      "v1Decision": "recommended_for_v1_if_time_allows"
+    },
+    {
+      "id": "canonical-entity-contract-layer",
+      "label": "Canonical Entity Contract Layer",
+      "reason": "The data model/entity layer should eventually have a formal contract file for every core object.",
+      "v1Decision": "recommended_as_next_registry_after_layers"
+    }
+  ],
+  "nextPatchRecommendation": {
+    "id": "post_v1_bundle_patch_31_browser_signoff_execution_template",
+    "label": "Browser Signoff Execution Template",
+    "goal": "Create a checklist/template to record manual browser pass/fail results for the routes listed in Patch 28."
+  }
+}

@@ -1,4 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { mergeRolePermissions } from "@/system/security/security-permissions";
 
 const AuthContext = createContext(null);
 
@@ -50,18 +51,7 @@ function createLocalDevAuthSession() {
         role_name: "shf_admin",
       },
     ],
-    permissions: [
-      "identity.manage",
-      "aggregation.view",
-      "verification.approve",
-      "reports.export",
-      "uploads.video",
-      "settings.manage",
-      "growth.view",
-      "growth.manage",
-      "partners.manage",
-      "referrals.manage",
-    ],
+    permissions: mergeRolePermissions(["super_admin"]),
   };
 }
 

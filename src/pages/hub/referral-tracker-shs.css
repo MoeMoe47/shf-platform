@@ -1594,195 +1594,102 @@ body,
   line-height: 1.45;
 }
 
-/* Truth Spine verification notice */
-.rt-verifyNotice {
-  margin-top: 10px;
-  padding: 10px 12px;
-  border: 1px solid rgba(80, 220, 170, 0.34);
-  border-radius: 14px;
-  background: rgba(20, 118, 86, 0.16);
-  color: #8fffd0;
-  font-size: 0.84rem;
-  font-weight: 800;
-  letter-spacing: 0.01em;
-}
-
-/* Truth Spine verification notice */
-.rt-verifyNotice {
-  margin-top: 10px;
-  padding: 10px 12px;
-  border: 1px solid rgba(80, 220, 170, 0.34);
-  border-radius: 14px;
-  background: rgba(20, 118, 86, 0.16);
-  color: #8fffd0;
-  font-size: 0.84rem;
-  font-weight: 800;
-}
-
-/* Referral Tracker verify button click hardening */
-.rt-stageReferral {
-  position: relative;
-}
-
-.rt-verifyButton {
-  position: relative;
-  z-index: 12;
-  pointer-events: auto;
-  cursor: pointer;
-}
-
-.rt-verifyButton.is-verified {
-  border-color: rgba(93, 255, 178, 0.55);
-  background: rgba(22, 163, 112, 0.18);
-  color: #8fffd0;
-}
-
-.rt-stageReferral .rt-hoverPreview {
-  pointer-events: none;
-}
-
-.rt-stageReferral button {
-  position: relative;
-  z-index: 10;
-}
-
-/* Truth Spine verified/report-ready visual state */
-.rt-stageReferral.is-report-ready {
-  border-color: rgba(93, 255, 178, 0.62);
-  box-shadow:
-    0 0 0 1px rgba(93, 255, 178, 0.22),
-    0 0 28px rgba(22, 163, 112, 0.24),
-    inset 0 0 22px rgba(22, 163, 112, 0.08);
-}
-
-.rt-stageReferral.is-report-ready header strong {
-  color: #dcfff0;
-}
-
-.rt-chip--reportReady {
-  border-color: rgba(93, 255, 178, 0.52);
-  background: rgba(22, 163, 112, 0.22);
-  color: #8fffd0;
-  box-shadow: 0 0 16px rgba(22, 163, 112, 0.2);
-}
-
-.rt-verifyButton.is-verified,
-.rt-stageReferral.is-report-ready .rt-verifyButton {
-  border-color: rgba(93, 255, 178, 0.62) !important;
-  background: rgba(22, 163, 112, 0.22) !important;
-  color: #8fffd0 !important;
-  cursor: default;
-  opacity: 1;
-  box-shadow: 0 0 16px rgba(22, 163, 112, 0.18);
-}
-
-.rt-stageReferral.is-report-ready::after {
-  content: "✓";
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 20px;
-  height: 20px;
-  border-radius: 999px;
+.rt-lifecycleSignalBox {
   display: grid;
-  place-items: center;
-  color: #071b14;
-  background: #8fffd0;
-  font-size: 0.78rem;
-  font-weight: 1000;
-  box-shadow: 0 0 16px rgba(143, 255, 208, 0.42);
-}
-
-/* Referral Tracker bigger lifecycle cards */
-.rt-lifecycleBoard,
-.rt-stageBoard,
-.rt-board {
-  gap: 16px;
-}
-
-/* Widen each lifecycle column so referral cards are not squeezed */
-.rt-stage {
-  min-width: 190px;
-}
-
-/* Bigger referral card body */
-.rt-stageReferral {
-  min-height: 238px;
-  padding: 14px 14px 16px;
-  border-radius: 18px;
-}
-
-/* Stronger card header */
-.rt-stageReferral header strong {
-  font-size: 0.92rem;
-  line-height: 1.18;
-  letter-spacing: 0.01em;
-}
-
-/* Better chip spacing */
-.rt-stageReferral .rt-cardChips {
   gap: 7px;
-  margin: 10px 0 12px;
-  flex-wrap: wrap;
+  margin: 12px 0;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(90, 155, 220, 0.2);
+  background:
+    radial-gradient(circle at top left, rgba(45, 156, 255, 0.1), transparent 36%),
+    rgba(3, 12, 22, 0.6);
 }
 
-.rt-stageReferral .rt-chip {
-  font-size: 0.68rem;
-  padding: 5px 8px;
-}
-
-/* Make card details easier to read */
-.rt-stageReferral dl {
-  gap: 7px 10px;
-  margin: 10px 0 12px;
-}
-
-.rt-stageReferral dt {
-  font-size: 0.66rem;
-}
-
-.rt-stageReferral dd {
-  font-size: 0.72rem;
-  line-height: 1.22;
-}
-
-/* Make buttons feel clickable */
-.rt-stageReferral button {
-  min-height: 34px;
+.rt-lifecycleSignal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   padding: 8px 10px;
-  font-size: 0.76rem;
-  border-radius: 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(15, 23, 42, 0.72);
 }
 
-.rt-stageReferral .rt-verifyButton {
-  margin-top: 6px;
+.rt-lifecycleSignal span,
+.rt-stageSignal {
+  font-size: 10px;
+  font-weight: 950;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(248, 250, 252, 0.98);
+}
+
+.rt-lifecycleSignal strong {
+  font-size: 10px;
   font-weight: 900;
+  color: rgba(203, 213, 225, 0.86);
 }
 
-/* Compact cards should still be readable */
-.rt-stageReferral.is-compact {
-  min-height: 220px;
+.rt-lifecycleSignalBox p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: rgba(203, 213, 225, 0.88);
 }
 
-/* Give the board more horizontal breathing room on wide screens */
-@media (min-width: 1100px) {
-  .rt-stage {
-    min-width: 205px;
-  }
-
-  .rt-stageReferral {
-    min-height: 252px;
-  }
+.rt-lifecycleSignalBox small,
+.rt-stageSignalWrap small {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.9);
 }
 
-/* Prevent cards from becoming too large on smaller screens */
-@media (max-width: 900px) {
-  .rt-stage {
-    min-width: 175px;
-  }
+.rt-stageSignalWrap {
+  display: grid;
+  gap: 6px;
+  margin: 0 12px 12px;
+}
 
-  .rt-stageReferral {
-    min-height: 220px;
-    padding: 12px;
-  }
+.rt-stageSignal {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(15, 23, 42, 0.72);
+}
+
+.rt-lifecycleSignal--ready,
+.rt-stageSignal.rt-lifecycleSignal--ready {
+  border-color: rgba(34, 197, 94, 0.32);
+  background: rgba(34, 197, 94, 0.11);
+}
+
+.rt-lifecycleSignal--reportable,
+.rt-stageSignal.rt-lifecycleSignal--reportable {
+  border-color: rgba(125, 211, 252, 0.32);
+  background: rgba(14, 165, 233, 0.12);
+}
+
+.rt-lifecycleSignal--review,
+.rt-stageSignal.rt-lifecycleSignal--review {
+  border-color: rgba(250, 204, 21, 0.32);
+  background: rgba(250, 204, 21, 0.11);
+}
+
+.rt-lifecycleSignal--blocked,
+.rt-stageSignal.rt-lifecycleSignal--blocked {
+  border-color: rgba(248, 113, 113, 0.34);
+  background: rgba(127, 29, 29, 0.2);
+}
+
+.rt-lifecycleSignal--neutral,
+.rt-stageSignal.rt-lifecycleSignal--neutral {
+  border-color: rgba(148, 163, 184, 0.22);
+  background: rgba(71, 85, 105, 0.16);
 }

@@ -6038,3 +6038,750 @@ body:has(.shf-command-tour-overlay) .shf-command-tour-floating-button {
     right: 22px !important;
   }
 }
+
+/* ==========================================================
+   SHF Command Tour — keep controls above highlighted section
+   Fixes AI panel covering Back / End / Next buttons.
+   ========================================================== */
+
+/* Keep dim layer lowest */
+.shf-command-tour-soft-backdrop {
+  z-index: 9990 !important;
+}
+
+/* Keep glow outline above backdrop */
+.shf-command-tour-spotlight {
+  z-index: 9995 !important;
+}
+
+/* Highlighted real section should be visible, but not above the tour card */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight {
+  z-index: 9996 !important;
+  pointer-events: none !important;
+}
+
+/* Tour card must always sit above the active highlighted section */
+.shf-command-tour-card {
+  z-index: 30000 !important;
+  pointer-events: auto !important;
+}
+
+/* Controls must sit above every tour visual layer */
+.shf-command-tour-controls,
+.shf-command-tour-controls button,
+.shf-command-tour-close {
+  position: relative !important;
+  z-index: 30001 !important;
+  pointer-events: auto !important;
+}
+
+/* Make sure the final Next button is always clickable */
+.shf-command-tour-controls button:last-child {
+  position: relative !important;
+  z-index: 30002 !important;
+  pointer-events: auto !important;
+}
+
+/* During tour, do not let highlighted cards intercept clicks */
+body:has(.shf-command-tour-overlay) [data-tour-section],
+body:has(.shf-command-tour-overlay) .shf-ai-analyst-panel,
+body:has(.shf-command-tour-overlay) .shf-panel,
+body:has(.shf-command-tour-overlay) .shf-map-panel {
+  pointer-events: none !important;
+}
+
+/* But keep the tour card fully interactive */
+body:has(.shf-command-tour-overlay) .shf-command-tour-card,
+body:has(.shf-command-tour-overlay) .shf-command-tour-card * {
+  pointer-events: auto !important;
+}
+
+/* ==========================================================
+   SHF Tour Repair
+   Restore good highlight behavior + prevent highlighted card
+   from covering Back / End / Next controls.
+   ========================================================== */
+
+/* Keep page visible, not blacked out */
+.shf-command-tour-soft-backdrop,
+.shf-command-tour-backdrop {
+  background: rgba(21, 13, 8, 0.46) !important;
+  backdrop-filter: blur(2.5px) brightness(0.78) saturate(0.82) !important;
+  -webkit-backdrop-filter: blur(2.5px) brightness(0.78) saturate(0.82) !important;
+}
+
+/* The active spotlight glow should stay strong and visible */
+.shf-command-tour-spotlight {
+  z-index: 10000 !important;
+  border: 3px solid rgba(255, 126, 32, 0.98) !important;
+  outline: 1px solid rgba(255, 232, 194, 0.72) !important;
+  outline-offset: -6px !important;
+  border-radius: 24px !important;
+  background: transparent !important;
+  box-shadow:
+    0 0 0 2px rgba(255, 232, 194, 0.22),
+    0 0 0 7px rgba(255, 126, 32, 0.14),
+    0 0 30px rgba(255, 126, 32, 0.72),
+    0 0 74px rgba(255, 185, 84, 0.42) !important;
+}
+
+/* The real highlighted section should be clear, but never above the tour card */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight {
+  position: relative !important;
+  z-index: 10001 !important;
+  filter: none !important;
+  opacity: 1 !important;
+  isolation: isolate !important;
+  border-radius: 22px !important;
+  pointer-events: none !important;
+}
+
+/* The tour card and all its buttons must always win the stack */
+.shf-command-tour-card {
+  z-index: 50000 !important;
+  pointer-events: auto !important;
+}
+
+.shf-command-tour-card *,
+.shf-command-tour-controls,
+.shf-command-tour-controls button,
+.shf-command-tour-close {
+  position: relative !important;
+  z-index: 50001 !important;
+  pointer-events: auto !important;
+}
+
+/* Hide launcher during active tour */
+body:has(.shf-command-tour-overlay) .shf-command-tour-floating-button {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Steps that now have real anchors */
+[data-tour-section="impact"],
+[data-tour-section="reports"],
+[data-tour-section="proof"] {
+  scroll-margin-top: 120px !important;
+}
+
+/* ==========================================================
+   SHF Command Tour — Center tour card to avoid right-panel overlap
+   ========================================================== */
+
+.shf-command-tour-card {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 50000 !important;
+  width: min(460px, calc(100vw - 48px)) !important;
+  max-height: calc(100vh - 72px) !important;
+  overflow-y: auto !important;
+  pointer-events: auto !important;
+}
+
+/* Keep all tour buttons clickable */
+.shf-command-tour-card *,
+.shf-command-tour-controls,
+.shf-command-tour-controls button,
+.shf-command-tour-close {
+  position: relative !important;
+  z-index: 50001 !important;
+  pointer-events: auto !important;
+}
+
+/* Keep highlighted section visible but never above the centered tour card */
+body:has(.shf-command-tour-overlay) .shf-tour-highlight {
+  z-index: 10001 !important;
+  pointer-events: none !important;
+}
+
+/* Keep the orange spotlight below the card */
+.shf-command-tour-spotlight {
+  z-index: 10000 !important;
+}
+
+/* Mobile: keep it centered but slightly lower for thumb reach */
+@media (max-width: 760px) {
+  .shf-command-tour-card {
+    top: 54% !important;
+    left: 50% !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: translate(-50%, -50%) !important;
+    width: calc(100vw - 36px) !important;
+  }
+}
+
+/* ==========================================================
+   SHF Command Tour — shift card left so highlighted sections show
+   ========================================================== */
+
+.shf-command-tour-card {
+  left: 39% !important;
+  top: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+  width: min(455px, calc(100vw - 48px)) !important;
+  max-height: calc(100vh - 72px) !important;
+  overflow-y: auto !important;
+}
+
+/* On smaller screens, keep it centered so it does not fall off-screen */
+@media (max-width: 980px) {
+  .shf-command-tour-card {
+    left: 50% !important;
+    top: 52% !important;
+    transform: translate(-50%, -50%) !important;
+    width: calc(100vw - 36px) !important;
+  }
+}
+
+/* ==========================================================
+   SHF Above-Fold Alignment Pass V1
+   Goal: header + KPI + context + full map row visible before scroll.
+   ========================================================== */
+
+/* Reduce overall page air so first screen feels like a command cockpit */
+.shf-impact-command-center,
+.shf-command-page,
+.shf-command-shell {
+  padding-top: 22px !important;
+}
+
+/* Tighten the main page frame */
+.shf-command-frame,
+.shf-command-main,
+.shf-command-center-shell {
+  gap: 14px !important;
+}
+
+/* Header should be premium but not oversized */
+.shf-command-header,
+.shf-header {
+  min-height: 112px !important;
+  padding-top: 18px !important;
+  padding-bottom: 18px !important;
+}
+
+/* Header logo tuning for better above-fold balance */
+.shf-command-logo {
+  width: 82px !important;
+  height: 82px !important;
+  min-width: 82px !important;
+  min-height: 82px !important;
+}
+
+.shf-brand__divider {
+  height: 72px !important;
+}
+
+/* KPI row should be visible but tighter */
+.shf-kpi-row,
+.shf-kpi-grid,
+.shf-metrics-grid {
+  gap: 14px !important;
+  margin-top: 14px !important;
+  margin-bottom: 12px !important;
+}
+
+.shf-kpi-card {
+  min-height: 104px !important;
+  padding: 18px 20px !important;
+}
+
+.shf-kpi-card__label {
+  margin-bottom: 10px !important;
+}
+
+.shf-kpi-card__value-row {
+  margin-bottom: 6px !important;
+}
+
+/* State chain/debug strip should not consume command-screen height */
+.shf-command-context-strip,
+.shf-command-state-strip {
+  margin-top: 8px !important;
+  margin-bottom: 8px !important;
+  padding: 8px 14px !important;
+  min-height: 34px !important;
+}
+
+/* If the raw state text is outside the pill, compress it */
+.shf-state-chain,
+.shf-command-debug,
+.shf-command-context-debug {
+  margin: 0 0 8px 0 !important;
+  line-height: 1.15 !important;
+  font-size: 0.86rem !important;
+}
+
+/* First command grid should fit above fold better */
+.shf-command-grid,
+.shf-command-main-grid,
+.shf-dashboard-grid {
+  align-items: start !important;
+  gap: 16px !important;
+}
+
+/* Main panels should be tighter and even */
+.shf-panel {
+  border-radius: 18px !important;
+}
+
+.shf-panel__header {
+  padding-top: 16px !important;
+  padding-bottom: 10px !important;
+}
+
+.shf-panel__header h2 {
+  line-height: 1.05 !important;
+}
+
+/* Map panel: keep full map visible in first screen */
+.shf-map-panel {
+  min-height: 560px !important;
+  height: 560px !important;
+  overflow: hidden !important;
+}
+
+.shf-map-stage,
+.shf-map-stage--real,
+.shf-impact-map-root {
+  min-height: 470px !important;
+  height: 470px !important;
+}
+
+/* Prevent map inner content from pushing below first fold */
+.shf-impact-map-stage {
+  min-height: 470px !important;
+  height: 470px !important;
+}
+
+/* Keep the map drawer/card from making the map row feel cut off */
+.shf-county-drawer,
+.shf-regional-detail-panel,
+.shf-impact-map-tooltip {
+  max-height: 420px !important;
+}
+
+/* Right-side AI panel should align with the map top and not stretch awkwardly */
+.shf-ai-analyst-panel {
+  min-height: 560px !important;
+  max-height: 560px !important;
+  overflow: hidden !important;
+}
+
+.shf-ai-analyst-panel .shf-panel__body {
+  max-height: 390px !important;
+  overflow-y: auto !important;
+}
+
+/* Impact overview should match first-row height better */
+.shf-impact-overview,
+.shf-overview-panel,
+.shf-panel:has(.shf-trend-block) {
+  min-height: 560px !important;
+  max-height: 560px !important;
+  overflow: hidden !important;
+}
+
+/* Push lower content clearly below first command row */
+.shf-program-table-panel,
+.shf-self-audit-card,
+.shf-reports-briefings,
+.shf-trust-verification-panel {
+  margin-top: 18px !important;
+}
+
+/* Tour button should not interrupt the KPI row */
+.shf-command-tour-floating-button--high {
+  top: 138px !important;
+  right: 28px !important;
+}
+
+/* Laptop safety */
+@media (max-height: 820px) {
+  .shf-command-header,
+  .shf-header {
+    min-height: 96px !important;
+    padding-top: 14px !important;
+    padding-bottom: 14px !important;
+  }
+
+  .shf-command-logo {
+    width: 72px !important;
+    height: 72px !important;
+    min-width: 72px !important;
+    min-height: 72px !important;
+  }
+
+  .shf-kpi-card {
+    min-height: 92px !important;
+    padding: 14px 18px !important;
+  }
+
+  .shf-map-panel,
+  .shf-ai-analyst-panel,
+  .shf-impact-overview,
+  .shf-overview-panel,
+  .shf-panel:has(.shf-trend-block) {
+    min-height: 520px !important;
+    height: 520px !important;
+    max-height: 520px !important;
+  }
+
+  .shf-map-stage,
+  .shf-map-stage--real,
+  .shf-impact-map-root,
+  .shf-impact-map-stage {
+    min-height: 430px !important;
+    height: 430px !important;
+  }
+}
+
+@media (max-width: 1100px) {
+  .shf-map-panel,
+  .shf-ai-analyst-panel,
+  .shf-impact-overview,
+  .shf-overview-panel,
+  .shf-panel:has(.shf-trend-block) {
+    height: auto !important;
+    max-height: none !important;
+  }
+}
+
+/* ==========================================================
+   SHF Above-Fold Alignment V2
+   Compress debug/state area so the full map bottom is visible.
+   ========================================================== */
+
+/* Reduce vertical space after KPI row */
+.shf-command-context-strip,
+.shf-command-state-strip {
+  margin: 6px 0 4px !important;
+  padding: 7px 14px !important;
+  min-height: 30px !important;
+  font-size: 0.78rem !important;
+}
+
+/* Compress any raw state/debug text block under the state chain */
+.shf-command-context-strip + div,
+.shf-command-state-strip + div {
+  margin-top: 4px !important;
+}
+
+/* Generic compression for the visible stacked debug labels */
+.shf-command-debug,
+.shf-command-context-debug,
+.shf-state-debug,
+.shf-state-chain-debug {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px 12px !important;
+  align-items: center !important;
+  font-size: 0.75rem !important;
+  line-height: 1.05 !important;
+  margin: 4px 0 6px !important;
+  padding: 0 !important;
+}
+
+/* If those debug labels are plain text in a wrapper, compress the wrapper spacing */
+.shf-impact-command-center main > div,
+.shf-command-page main > div {
+  line-height: 1.12 !important;
+}
+
+/* Pull main command row upward */
+.shf-map-panel,
+.shf-panel.shf-map-panel {
+  margin-top: 4px !important;
+}
+
+/* Give the map row a little more usable height while keeping it above fold */
+.shf-map-panel {
+  height: 540px !important;
+  min-height: 540px !important;
+}
+
+.shf-map-stage,
+.shf-map-stage--real,
+.shf-impact-map-root,
+.shf-impact-map-stage {
+  height: 450px !important;
+  min-height: 450px !important;
+}
+
+/* Tighten panel heading area */
+.shf-map-panel .shf-panel__header,
+.shf-panel__header {
+  padding-top: 12px !important;
+  padding-bottom: 8px !important;
+}
+
+/* Make map title less vertically expensive */
+.shf-map-panel h2,
+.shf-panel__header h2 {
+  margin: 0 !important;
+}
+
+/* Keep Start Tour from sitting on top of Grant Readiness card */
+.shf-command-tour-floating-button--high {
+  top: 156px !important;
+  right: 30px !important;
+}
+
+/* Laptop height safety */
+@media (max-height: 820px) {
+  .shf-map-panel {
+    height: 510px !important;
+    min-height: 510px !important;
+  }
+
+  .shf-map-stage,
+  .shf-map-stage--real,
+  .shf-impact-map-root,
+  .shf-impact-map-stage {
+    height: 420px !important;
+    min-height: 420px !important;
+  }
+}
+
+/* ==========================================================
+   SHF Command Status Strip
+   Replaces tall stacked debug block above the map.
+   ========================================================== */
+
+.shf-command-status-strip {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 7px !important;
+  margin: 6px 0 8px !important;
+  padding: 7px 10px !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(139, 97, 60, 0.16) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 252, 247, 0.94), rgba(247, 236, 221, 0.72)) !important;
+  box-shadow:
+    0 8px 18px rgba(70, 45, 22, 0.04),
+    inset 0 1px 0 rgba(255,255,255,0.76) !important;
+}
+
+.shf-command-status-strip span {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 5px 8px !important;
+  border-radius: 999px !important;
+  background: rgba(255, 247, 235, 0.82) !important;
+  border: 1px solid rgba(150, 101, 58, 0.12) !important;
+  color: rgba(53, 39, 30, 0.84) !important;
+  font-size: 0.7rem !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+.shf-command-status-strip strong {
+  color: rgba(128, 78, 36, 0.92) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  font-size: 0.62rem !important;
+}
+
+/* Tighten the state chain pill above it */
+.shf-command-debug-strip {
+  margin: 6px 0 0 !important;
+  padding: 7px 12px !important;
+  border-radius: 14px !important;
+  font-size: 0.76rem !important;
+  line-height: 1 !important;
+}
+
+/* Pull command row upward after status compression */
+.shf-main-grid {
+  margin-top: 8px !important;
+}
+
+/* Move Start Tour away from Grant Readiness card */
+.shf-command-tour-floating-button--high {
+  top: 188px !important;
+  right: 34px !important;
+}
+
+/* ==========================================================
+   SHF Header Logo — interactive home link
+   ========================================================== */
+
+.shf-brand-home-link {
+  text-decoration: none !important;
+  color: inherit !important;
+  cursor: pointer !important;
+  position: relative !important;
+  border-radius: 999px !important;
+  transition:
+    transform 180ms ease,
+    filter 180ms ease,
+    opacity 180ms ease !important;
+}
+
+.shf-brand-home-link:hover {
+  transform: translateY(-2px) !important;
+  filter: drop-shadow(0 16px 28px rgba(152, 88, 33, 0.18)) !important;
+}
+
+.shf-brand-home-link:active {
+  transform: translateY(0) scale(0.99) !important;
+}
+
+.shf-brand-home-link:focus-visible {
+  outline: 3px solid rgba(218, 132, 45, 0.72) !important;
+  outline-offset: 8px !important;
+}
+
+/* Glow ring behind the logo on hover */
+.shf-brand-home-link::before {
+  content: "" !important;
+  position: absolute !important;
+  left: -10px !important;
+  top: 50% !important;
+  width: 96px !important;
+  height: 96px !important;
+  transform: translateY(-50%) scale(0.88) !important;
+  border-radius: 999px !important;
+  background:
+    radial-gradient(circle, rgba(218, 132, 45, 0.24), transparent 64%) !important;
+  opacity: 0 !important;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease !important;
+  pointer-events: none !important;
+}
+
+.shf-brand-home-link:hover::before {
+  opacity: 1 !important;
+  transform: translateY(-50%) scale(1) !important;
+}
+
+/* Globe movement */
+.shf-brand-home-link:hover .shf-command-logo,
+.shf-brand-home-link:hover .shf-command-logo-img,
+.shf-brand-home-link:hover img {
+  animation: shfLogoFloatPulse 1.9s ease-in-out infinite !important;
+}
+
+@keyframes shfLogoFloatPulse {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: translateY(-3px) rotate(-1.4deg) scale(1.035);
+  }
+
+  100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+}
+
+/* Small helper label for interactivity */
+.shf-brand-home-link::after {
+  content: "Foundation Home" !important;
+  position: absolute !important;
+  left: 28px !important;
+  bottom: -18px !important;
+  padding: 4px 8px !important;
+  border-radius: 999px !important;
+  background: rgba(88, 52, 28, 0.92) !important;
+  color: rgba(255, 247, 235, 0.94) !important;
+  font-size: 0.62rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  opacity: 0 !important;
+  transform: translateY(-3px) !important;
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease !important;
+  pointer-events: none !important;
+  white-space: nowrap !important;
+  box-shadow: 0 12px 28px rgba(50, 28, 12, 0.18) !important;
+}
+
+.shf-brand-home-link:hover::after {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shf-brand-home-link:hover .shf-command-logo,
+  .shf-brand-home-link:hover .shf-command-logo-img,
+  .shf-brand-home-link:hover img {
+    animation: none !important;
+  }
+}
+
+/* ==========================================================
+   SHF Command Status Strip
+   Replaces tall stacked debug block above the map.
+   ========================================================== */
+
+.shf-command-status-strip {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 7px !important;
+  margin: 6px 0 8px !important;
+  padding: 7px 10px !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(139, 97, 60, 0.16) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 252, 247, 0.94), rgba(247, 236, 221, 0.72)) !important;
+  box-shadow:
+    0 8px 18px rgba(70, 45, 22, 0.04),
+    inset 0 1px 0 rgba(255,255,255,0.76) !important;
+}
+
+.shf-command-status-strip span {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 5px 8px !important;
+  border-radius: 999px !important;
+  background: rgba(255, 247, 235, 0.82) !important;
+  border: 1px solid rgba(150, 101, 58, 0.12) !important;
+  color: rgba(53, 39, 30, 0.84) !important;
+  font-size: 0.7rem !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+.shf-command-status-strip strong {
+  color: rgba(128, 78, 36, 0.92) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  font-size: 0.62rem !important;
+}
+
+/* Tighten the state chain pill above it */
+.shf-command-debug-strip {
+  margin: 6px 0 0 !important;
+  padding: 7px 12px !important;
+  border-radius: 14px !important;
+  font-size: 0.76rem !important;
+  line-height: 1 !important;
+}
+
+/* Pull command row upward after status compression */
+.shf-main-grid {
+  margin-top: 8px !important;
+}
+
+/* Keep Start Tour clear of the KPI cards */
+.shf-command-tour-floating-button--high {
+  top: 188px !important;
+  right: 34px !important;
+}

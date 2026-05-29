@@ -126,7 +126,7 @@
   background-position: center 88%;
   opacity: 0.98;
   pointer-events: none;
-  filter: brightness(1.12) contrast(1.08) saturate(1.02);
+  filter: none;
 }
 
 /* stronger atmosphere arc */
@@ -229,4 +229,32 @@
   0%   { opacity: 0.52; }
   50%  { opacity: 0.78; }
   100% { opacity: 0.58; }
+}
+
+
+/* SHS clean white Ohio override — removes dirty/noisy map wash */
+.shs-map-cinematic-texture,
+.shs-map-cinematic-texture::before,
+.shs-map-cinematic-texture::after,
+.shs-operational-map-texture,
+.shs-operational-map-texture::before,
+.shs-operational-map-texture::after,
+.map-cinematic-texture,
+.map-cinematic-texture::before,
+.map-cinematic-texture::after {
+  opacity: 0.035 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  background-image: none !important;
+}
+
+.shs-mapbox-map,
+.shs-operational-mapbox-map,
+.shs-operational-map-surface {
+  background: #020817 !important;
+}
+
+.shs-map-layer-state .mapboxgl-canvas,
+.shs-map-state .mapboxgl-canvas {
+  filter: none !important;
 }

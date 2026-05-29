@@ -1,7 +1,17 @@
 import React, { useEffect, useRef } from "react";
-import maplibregl from "maplibre-gl";
-import "maplibre-gl/dist/maplibre-gl.css";
 
+let operationalMaplibreModulePromise = null;
+
+async function loadOperationalMaplibre() {
+  if (!operationalMaplibreModulePromise) {
+    operationalMaplibreModulePromise = Promise.all([
+      import("maplibre-gl"),
+      import("maplibre-gl/dist/maplibre-gl.css"),
+    ]).then(([mod]) => mod?.default || mod);
+  }
+
+  return operationalMaplibreModulePromise;
+}
 const FLOW_NODES = [
   {
     id: "franklin",
@@ -82,6 +92,15 @@ export default function OperationalMap() {
   const mapRef = useRef(null);
 
   useEffect(() => {
+    let cancelled = false;
+    let maplibregl;
+
+    async function initializeOperationalMap() {
+      maplibregl = await loadOperationalMaplibre();
+
+      if (cancelled) return;
+
+
     if (!mapContainerRef.current || mapRef.current) return;
 
     const map = new maplibregl.Map({
@@ -271,7 +290,13 @@ export default function OperationalMap() {
       });
     });
 
-    return () => {
+    
+    }
+
+    initializeOperationalMap();
+
+return () => {
+      cancelled = true;
       if (mapRef.current) {
         mapRef.current.remove();
         mapRef.current = null;

@@ -166,13 +166,13 @@
 
 .got-backdrop-art--sharp{
   opacity: 0.32;
-  filter: saturate(1.05) contrast(1.08);
+  filter: none;
 }
 
 .got-backdrop-art--blur{
   opacity: 0.85;
   filter: blur(28px) saturate(1.1) contrast(1.02);
-  mix-blend-mode: screen; /* makes highlights feel “cinematic” */
+  mix-blend-mode: normal; /* makes highlights feel “cinematic” */
 }
 
 /* fog layers */
@@ -185,7 +185,7 @@
   opacity: 0.30;
   transform: translate3d(0,0,0);
   will-change: transform;
-  mix-blend-mode: overlay;
+  mix-blend-mode: normal;
 }
 
 .got-backdrop-fog--1{
@@ -383,7 +383,7 @@ main{
    ============================================================ */
 .got-backdrop-art--sharp{
   opacity: 0.70 !important;
-  filter: saturate(1.1) contrast(1.06) !important;
+  filter: none;
 }
 .got-backdrop-art--blur{
   opacity: 0.40 !important;
@@ -393,4 +393,32 @@ main{
 }
 .got-backdrop-vignette{
   opacity: 0.30 !important;
+}
+
+
+/* SHS clean white Ohio override — removes dirty/noisy map wash */
+.shs-map-cinematic-texture,
+.shs-map-cinematic-texture::before,
+.shs-map-cinematic-texture::after,
+.shs-operational-map-texture,
+.shs-operational-map-texture::before,
+.shs-operational-map-texture::after,
+.map-cinematic-texture,
+.map-cinematic-texture::before,
+.map-cinematic-texture::after {
+  opacity: 0.035 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  background-image: none !important;
+}
+
+.shs-mapbox-map,
+.shs-operational-mapbox-map,
+.shs-operational-map-surface {
+  background: #020817 !important;
+}
+
+.shs-map-layer-state .mapboxgl-canvas,
+.shs-map-state .mapboxgl-canvas {
+  filter: none !important;
 }

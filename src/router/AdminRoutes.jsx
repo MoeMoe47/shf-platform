@@ -35,9 +35,11 @@ import UploadManager from "../pages/admin/uploads/UploadManager";
 import AuditLogViewer from "../pages/admin/audit/AuditLogViewer";
 
 import AuthGuard from "../auth/AuthGuard";
+import PermissionGuard from "../auth/PermissionGuard";
 import SolutionsInfrastructurePage from "@/pages/solutions/SolutionsInfrastructurePage.jsx";
 import SHSPartnerGrowthEngine from "@/pages/admin/growth/SHSPartnerGrowthEngine.jsx";
 import { installGlobalButtonClickSound } from "../shared/ui/globalButtonClickSound.js";
+import { SHS_SECURITY_PERMISSIONS } from "@/system/security/security-permissions";
 
 installGlobalButtonClickSound();
 
@@ -82,10 +84,16 @@ function ProtectedHubRoute({ path, children }) {
   return children;
 }
 
-function protect(path, element) {
+function protect(path, element, permissions = []) {
+  const wrapped = permissions.length ? (
+    <PermissionGuard permissions={permissions}>{element}</PermissionGuard>
+  ) : (
+    element
+  );
+
   return (
     <ProtectedHubRoute path={path}>
-      {element}
+      {wrapped}
     </ProtectedHubRoute>
   );
 }
@@ -117,13 +125,13 @@ export default function AdminRoutes() {
         <Route path="/hub/intelligence" element={protect("/hub/intelligence", <HubIntelligencePage />)} />
 
         {/* Shared SHS admin/infrastructure surfaces */}
-        <Route path="/uploads" element={protect("/uploads", <UploadManager />)} />
-        <Route path="/imports" element={protect("/imports", <HubFilesImports />)} />
-        <Route path="/aggregation" element={protect("/aggregation", <AggregationDashboard />)} />
-        <Route path="/reporting" element={protect("/reporting", <ReportingCommandSurface />)} />
-        <Route path="/verification-audit" element={protect("/verification-audit", <VerificationAuditSurface />)} />
-        <Route path="/audit" element={protect("/audit", <AuditLogViewer />)} />
-        <Route path="/identity" element={protect("/identity", <IdentityManagement />)} />
+        <Route path="/uploads" element={protect("/uploads", <UploadManager />, [SHS_SECURITY_PERMISSIONS.UPLOADS_INTERNAL])} />
+        <Route path="/imports" element={protect("/imports", <HubFilesImports />, [SHS_SECURITY_PERMISSIONS.UPLOADS_INTERNAL])} />
+        <Route path="/aggregation" element={protect("/aggregation", <AggregationDashboard />, [SHS_SECURITY_PERMISSIONS.AGGREGATION_VIEW])} />
+        <Route path="/reporting" element={protect("/reporting", <ReportingCommandSurface />, [SHS_SECURITY_PERMISSIONS.REPORTS_VIEW])} />
+        <Route path="/verification-audit" element={protect("/verification-audit", <VerificationAuditSurface />, [SHS_SECURITY_PERMISSIONS.VERIFICATION_VIEW])} />
+        <Route path="/audit" element={protect("/audit", <AuditLogViewer />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
+        <Route path="/identity" element={protect("/identity", <IdentityManagement />, [SHS_SECURITY_PERMISSIONS.IDENTITY_VIEW])} />
 
         {/* Admin builder / registry */}
         <Route path="/app-registry" element={protect("/app-registry", <AppRegistry />)} />
@@ -136,7 +144,7 @@ export default function AdminRoutes() {
         <Route path="/alignment" element={protect("/alignment", <AlignmentSwitchboard />)} />
 
         {/* Partner Growth Engine */}
-        <Route path="/growth" element={protect("/growth", <SHSPartnerGrowthEngine />)} />
+        <Route path="/growth" element={protect("/growth", <SHSPartnerGrowthEngine />, [SHS_SECURITY_PERMISSIONS.GROWTH_VIEW])} />
 
         {/* Fallback */}
         <Route path="/solutions" element={protect("/solutions", <SolutionsInfrastructurePage />)} />

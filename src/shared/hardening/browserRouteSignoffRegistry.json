@@ -1,0 +1,267 @@
+{
+  "generatedAt": "2026-05-23T19:09:35.981Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 28",
+  "mode": "BROWSER_ROUTE_SIGNOFF_REGISTRY_NO_CODE_CHANGES",
+  "browserRouteSignoffRegistryStatus": "registry_ready_preload_lane_resolved",
+  "browserRouteSignoffRegistryLabel": "Browser Route Signoff Registry Ready",
+  "productionDecision": "Capital Mapbox preload is resolved at generated HTML level. Browser signoff is now required to confirm route runtime behavior and lock the preload optimization lane.",
+  "priorPatch27Status": "capital_mapbox_preload_resolved",
+  "priorPatch26Status": "build_passed_preload_removed",
+  "capitalPreloadCheck": {
+    "capitalHtmlIncludesVendorMapboxJs": false,
+    "capitalHtmlIncludesVendorMapboxCss": false,
+    "capitalHtmlIncludesModulepreloadVendorMapbox": false,
+    "capitalHtmlIncludesVendorMaplibre": false,
+    "capitalHtmlIncludesPagesExchange": true,
+    "capitalHtmlIncludesPagesExchangeCss": true
+  },
+  "keyAssets": {
+    "capitalJs": {
+      "fileName": "capital-Cxn_SlH5.js",
+      "rawKb": 4.6,
+      "gzipKb": 1.73,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    "pagesExchangeJs": {
+      "fileName": "pages-exchange-DOiypiDj.js",
+      "rawKb": 144.67,
+      "gzipKb": 34.78,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    "pagesExchangeCss": {
+      "fileName": "pages-exchange-Dwpvmain.css",
+      "rawKb": 245.21,
+      "gzipKb": 35.68,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    "mapboxJs": {
+      "fileName": "vendor-mapbox-CVOD2Ov6.js",
+      "rawKb": 1781.94,
+      "gzipKb": 492.1,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    "mapboxCss": null,
+    "maplibreJs": {
+      "fileName": "vendor-maplibre-JLoBlj2z.js",
+      "rawKb": 1011.59,
+      "gzipKb": 274.26,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    "maplibreCss": {
+      "fileName": "vendor-maplibre-kWVbv8B-.css",
+      "rawKb": 69.34,
+      "gzipKb": 9.97,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    }
+  },
+  "bundleSummary": {
+    "totalAssetsParsed": 89,
+    "largeAssets": 2,
+    "largestAssetFileName": "vendor-mapbox-CVOD2Ov6.js",
+    "largestAssetRawKb": 1781.94,
+    "buildWarningDetected": true,
+    "frontendBuildPassed": true
+  },
+  "remainingLargeAssets": [
+    {
+      "fileName": "vendor-mapbox-CVOD2Ov6.js",
+      "rawKb": 1781.94,
+      "gzipKb": 492.1,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "vendor-maplibre-JLoBlj2z.js",
+      "rawKb": 1011.59,
+      "gzipKb": 274.26,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    }
+  ],
+  "routeGroups": [
+    {
+      "id": "capital-entry",
+      "label": "Capital Entry",
+      "url": "http://localhost:5173/capital.html",
+      "layer": "Capital / Exchange entry",
+      "expectedInitialNetwork": [
+        "capital JS may load",
+        "pages-exchange may load",
+        "vendor-mapbox should NOT load on initial page load",
+        "vendor-maplibre should NOT load on initial page load"
+      ],
+      "passCriteria": [
+        "Page opens without blank screen.",
+        "No console crash.",
+        "vendor-mapbox JS is not loaded before map UI is requested.",
+        "vendor-mapbox CSS is not loaded before map UI is requested.",
+        "vendor-maplibre JS is not loaded before map UI is requested."
+      ],
+      "currentAutomatedStatus": "preload_resolved_needs_browser_signoff",
+      "manualStatus": "pending"
+    },
+    {
+      "id": "exchange-surface",
+      "label": "Exchange Surface",
+      "url": "http://localhost:5173/capital.html#/exchange",
+      "layer": "Exchange route surface",
+      "expectedInitialNetwork": [
+        "pages-exchange may load",
+        "Mapbox should not load unless Unified Truth map is visible",
+        "MapLibre should not load unless a MapLibre visual is visible"
+      ],
+      "passCriteria": [
+        "Exchange route opens.",
+        "Route fallback clears.",
+        "No console crash.",
+        "No early Mapbox load unless the route visibly renders the map."
+      ],
+      "currentAutomatedStatus": "needs_browser_signoff",
+      "manualStatus": "pending"
+    },
+    {
+      "id": "unified-truth-map",
+      "label": "Unified Truth Map Route",
+      "url": "http://localhost:5173/capital.html#/exchange/unified-truth",
+      "layer": "Unified Truth / Mapbox operational map",
+      "expectedInitialNetwork": [
+        "vendor-mapbox may load here",
+        "Mapbox runtime CSS may be injected by SHSOperationalMapboxMap",
+        "Map should render without CSS/layout breakage"
+      ],
+      "passCriteria": [
+        "Unified Truth route opens.",
+        "Map fallback displays while loading.",
+        "Mapbox JS loads only on this map route.",
+        "Runtime Mapbox CSS loads after the component mounts.",
+        "Map renders correctly.",
+        "No blinking/remount loop."
+      ],
+      "currentAutomatedStatus": "needs_browser_signoff",
+      "manualStatus": "pending"
+    },
+    {
+      "id": "maplibre-surfaces",
+      "label": "MapLibre Surfaces",
+      "url": "http://localhost:5173/solutions.html",
+      "layer": "MapLibre / globe / AI compass surfaces",
+      "expectedInitialNetwork": [
+        "vendor-maplibre should only load if a MapLibre visual is actually visible"
+      ],
+      "passCriteria": [
+        "Page opens.",
+        "MapLibre is not loaded on unrelated pages.",
+        "MapLibre visual routes render correctly when opened."
+      ],
+      "currentAutomatedStatus": "needs_browser_signoff",
+      "manualStatus": "pending"
+    },
+    {
+      "id": "admin-entry",
+      "label": "Admin Entry",
+      "url": "http://localhost:5173/admin.html",
+      "layer": "Admin / internal command",
+      "expectedInitialNetwork": [
+        "Admin chunks may load",
+        "Mapbox should not load unless a map route appears",
+        "MapLibre should not load unless a map route appears"
+      ],
+      "passCriteria": [
+        "Admin opens without blank screen.",
+        "Auth/me does not crash the page.",
+        "Internal layout renders.",
+        "No early vendor-mapbox or vendor-maplibre load unless map UI is visible."
+      ],
+      "currentAutomatedStatus": "needs_browser_signoff",
+      "manualStatus": "pending"
+    },
+    {
+      "id": "foundation-entry",
+      "label": "Foundation Entry",
+      "url": "http://localhost:5173/foundation.html",
+      "layer": "SHF public / impact",
+      "expectedInitialNetwork": [
+        "Foundation chunks may load",
+        "Map vendors should not load unless an impact map is visible"
+      ],
+      "passCriteria": [
+        "Foundation page opens.",
+        "No internal/admin-only content leaks.",
+        "No early map-engine load unless a map is visible."
+      ],
+      "currentAutomatedStatus": "needs_browser_signoff",
+      "manualStatus": "pending"
+    },
+    {
+      "id": "solutions-entry",
+      "label": "Solutions Entry",
+      "url": "http://localhost:5173/solutions.html",
+      "layer": "SHS public sales / solutions",
+      "expectedInitialNetwork": [
+        "Solutions chunks may load",
+        "No Mapbox unless a Mapbox surface is visible",
+        "No MapLibre unless a MapLibre surface is visible"
+      ],
+      "passCriteria": [
+        "Solutions page opens.",
+        "Sales message is visible.",
+        "No blank sections.",
+        "No early map vendor load unless map/globe visual is present."
+      ],
+      "currentAutomatedStatus": "needs_browser_signoff",
+      "manualStatus": "pending"
+    },
+    {
+      "id": "index-entry",
+      "label": "Main Public Entry",
+      "url": "http://localhost:5173/index.html",
+      "layer": "SHS public homepage",
+      "expectedInitialNetwork": [
+        "Homepage chunks may load",
+        "No map vendors unless map UI is visible"
+      ],
+      "passCriteria": [
+        "Homepage opens.",
+        "No console crash.",
+        "No early map vendor load."
+      ],
+      "currentAutomatedStatus": "needs_browser_signoff",
+      "manualStatus": "pending"
+    }
+  ],
+  "browserTestingInstructions": [
+    "Start Vite with npm run dev from /Users/mikeslate/Desktop/shrv1.",
+    "Open Chrome DevTools > Network.",
+    "Enable Disable cache.",
+    "Filter Network by vendor-map.",
+    "Load each listed route directly.",
+    "Record whether vendor-mapbox or vendor-maplibre loads before the page visibly needs a map.",
+    "Open Console and record any errors.",
+    "Update manualStatus for each route as pass, fail, or needs_followup."
+  ],
+  "signoffStatuses": {
+    "pending": 8,
+    "passed": 0,
+    "failed": 0,
+    "needsFollowup": 0
+  },
+  "nextPatchRecommendation": {
+    "id": "post_v1_bundle_patch_29_v1_page_readiness_registry",
+    "label": "V1 Page Readiness Registry",
+    "goal": "Create the master registry for remaining page passes after browser route signoff registry is in place."
+  }
+}

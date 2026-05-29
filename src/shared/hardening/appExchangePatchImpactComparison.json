@@ -1,0 +1,190 @@
+{
+  "generatedAt": "2026-05-23T16:43:56.340Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 11",
+  "mode": "APP_EXCHANGE_PATCH_IMPACT_COMPARISON_NO_CODE_CHANGES",
+  "appExchangeImpactStatus": "safe_patch_no_meaningful_size_reduction",
+  "appExchangeImpactLabel": "App Exchange Lazy Patch Safe, But Bundle Size Mostly Unchanged",
+  "productionDecision": "Patch 10 safely lazy-loaded SHSExchangeMissionControl in App.jsx and the build passed. The largest chunks did not meaningfully reduce, so the next safest code-moving target is the Unified Truth shell lazy-loading SHSOperationalMapboxMap before editing core map internals or manualChunks.",
+  "changedFile": "src/App.jsx",
+  "patch10Result": {
+    "buildPassed": true,
+    "target": "SHSExchangeMissionControl",
+    "appLazyDetected": {
+      "reactLazyImported": true,
+      "missionControlLazy": true,
+      "appLazyBoundaryHelper": true,
+      "fallbackDetected": true,
+      "staticMissionControlImportRemoved": true,
+      "missionControlRouteWrapped": true
+    }
+  },
+  "comparison": {
+    "vendor": {
+      "beforeFileName": "vendor-BtYAkRhV.js",
+      "afterFileName": "vendor-BtYAkRhV.js",
+      "beforeRawKb": 1959.5,
+      "afterRawKb": 1959.5,
+      "rawKbDelta": 0,
+      "beforeGzipKb": 553.85,
+      "afterGzipKb": 553.85,
+      "gzipKbDelta": 0
+    },
+    "pagesJs": {
+      "beforeFileName": "pages-4ojuxR1S.js",
+      "afterFileName": "pages-ByCRJx3G.js",
+      "beforeRawKb": 1100.44,
+      "afterRawKb": 1100.56,
+      "rawKbDelta": 0.12,
+      "beforeGzipKb": 249.45,
+      "afterGzipKb": 248.84,
+      "gzipKbDelta": -0.61
+    },
+    "vendorMap": {
+      "beforeFileName": "vendor-map-CPoydKcy.js",
+      "afterFileName": "vendor-map-CPoydKcy.js",
+      "beforeRawKb": 1011.59,
+      "afterRawKb": 1011.59,
+      "rawKbDelta": 0,
+      "beforeGzipKb": 274.26,
+      "afterGzipKb": 274.26,
+      "gzipKbDelta": 0
+    },
+    "pagesCss": {
+      "beforeFileName": "pages-CEreUFyW.css",
+      "afterFileName": "pages-CEreUFyW.css",
+      "beforeRawKb": 831.75,
+      "afterRawKb": 831.75,
+      "rawKbDelta": 0,
+      "beforeGzipKb": 126.96,
+      "afterGzipKb": 126.96,
+      "gzipKbDelta": 0
+    },
+    "largeAssetsBefore": 4,
+    "largeAssetsAfter": 4,
+    "buildWarningBefore": true,
+    "buildWarningAfter": true,
+    "frontendBuildBefore": true,
+    "frontendBuildAfter": true
+  },
+  "interpretation": [
+    "App.jsx successfully lazy-loads SHSExchangeMissionControl and no longer statically imports it.",
+    "The pages JS chunk did not meaningfully decrease after the App.jsx lazy patch.",
+    "The vendor-map chunk did not meaningfully decrease after the App.jsx lazy patch.",
+    "The main vendor chunk did not meaningfully decrease after the App.jsx lazy patch.",
+    "This means the remaining bundle pressure is likely inside the Unified Truth shell, the core Mapbox component, or Vite manualChunks grouping.",
+    "The next safest source-level move is shell-level lazy loading: SHSUnifiedTruthShell.jsx should lazy-load SHSOperationalMapboxMap before touching SHSOperationalMapboxMap.jsx internals."
+  ],
+  "priorRouteLazyImpact": {
+    "status": "safe_patch_no_meaningful_size_reduction",
+    "comparison": {
+      "vendor": {
+        "beforeFileName": "vendor-BtYAkRhV.js",
+        "afterFileName": "vendor-BtYAkRhV.js",
+        "beforeRawKb": 1959.5,
+        "afterRawKb": 1959.5,
+        "rawKbDelta": 0,
+        "beforeGzipKb": 553.85,
+        "afterGzipKb": 553.85,
+        "gzipKbDelta": 0
+      },
+      "pagesJs": {
+        "beforeFileName": "pages-4ojuxR1S.js",
+        "afterFileName": "pages-ByCRJx3G.js",
+        "beforeRawKb": 1100.44,
+        "afterRawKb": 1100.56,
+        "rawKbDelta": 0.12,
+        "beforeGzipKb": 249.45,
+        "afterGzipKb": 248.84,
+        "gzipKbDelta": -0.61
+      },
+      "vendorMap": {
+        "beforeFileName": "vendor-map-CPoydKcy.js",
+        "afterFileName": "vendor-map-CPoydKcy.js",
+        "beforeRawKb": 1011.59,
+        "afterRawKb": 1011.59,
+        "rawKbDelta": 0,
+        "beforeGzipKb": 274.26,
+        "afterGzipKb": 274.26,
+        "gzipKbDelta": 0
+      },
+      "pagesCss": {
+        "beforeFileName": "pages-CEreUFyW.css",
+        "afterFileName": "pages-CEreUFyW.css",
+        "beforeRawKb": 831.75,
+        "afterRawKb": 831.75,
+        "rawKbDelta": 0,
+        "beforeGzipKb": 126.96,
+        "afterGzipKb": 126.96,
+        "gzipKbDelta": 0
+      },
+      "largeAssetsBefore": 4,
+      "largeAssetsAfter": 4,
+      "buildWarningBefore": true,
+      "buildWarningAfter": true,
+      "frontendBuildBefore": true,
+      "frontendBuildAfter": true
+    }
+  },
+  "remainingRiskPath": [
+    {
+      "step": 1,
+      "file": "src/pages/exchange/unified-truth/SHSUnifiedTruthShell.jsx",
+      "target": "SHSOperationalMapboxMap",
+      "risk": "medium",
+      "reason": "This is safer than changing the core map component because it only adds a shell-level lazy boundary."
+    },
+    {
+      "step": 2,
+      "file": "src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+      "target": "mapbox-gl",
+      "risk": "medium_high_core_map",
+      "reason": "This directly targets static Mapbox imports but touches the core map internals."
+    },
+    {
+      "step": 3,
+      "file": "vite.config.js",
+      "target": "manualChunks",
+      "risk": "medium",
+      "reason": "Manual chunking should come after source-level lazy boundaries are tested."
+    }
+  ],
+  "recommendedNextCandidate": {
+    "priority": 2,
+    "file": "src/pages/exchange/unified-truth/SHSUnifiedTruthShell.jsx",
+    "target": "SHSOperationalMapboxMap",
+    "proposedPatch": "Lazy-load SHSOperationalMapboxMap with Suspense inside the shell.",
+    "risk": "medium",
+    "reason": "Shell-level lazy loading is safer than editing core map internals directly."
+  },
+  "recommendedPatchOrder": [
+    {
+      "step": 1,
+      "label": "Patch Unified Truth shell lazy boundary",
+      "action": "Lazy-load SHSOperationalMapboxMap inside SHSUnifiedTruthShell.jsx using React.lazy/Suspense.",
+      "reason": "This targets the remaining core map path without editing the core map internals directly."
+    },
+    {
+      "step": 2,
+      "label": "Build and compare",
+      "action": "Run production build and compare vendor/pages/vendor-map chunks.",
+      "reason": "We need measured proof of whether shell-level lazy loading moves the map chunk."
+    },
+    {
+      "step": 3,
+      "label": "Browser recheck Unified Truth route",
+      "action": "Open /admin.html#/unified-truth or the active Unified Truth route and confirm no blank screen.",
+      "reason": "Shell-level lazy loading can break if export/fallback placement is wrong."
+    },
+    {
+      "step": 4,
+      "label": "Only then patch core map or manualChunks",
+      "action": "If shell-level lazy loading does not move chunks, choose between core Mapbox dynamic import or Vite manualChunks audit.",
+      "reason": "The remaining targets are higher risk and should be documented one at a time."
+    }
+  ],
+  "nextPatchRecommendation": {
+    "id": "post_v1_bundle_patch_12_unified_truth_shell_lazy_map",
+    "label": "Unified Truth Shell Lazy Map Boundary Patch",
+    "goal": "Lazy-load SHSOperationalMapboxMap inside SHSUnifiedTruthShell.jsx before editing core map internals."
+  }
+}

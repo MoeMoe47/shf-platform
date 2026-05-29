@@ -1,0 +1,317 @@
+{
+  "generatedAt": "2026-05-23T16:29:25.609Z",
+  "source": "SHS Post-V1 Bundle Optimization Patch 7",
+  "mode": "ROUTE_LAZY_BOUNDARY_PATCH_1_EXCHANGE_ROUTES",
+  "routeLazyPatchStatus": "build_passed",
+  "routeLazyPatchLabel": "Exchange Routes Lazy Boundary Applied",
+  "productionDecision": "Exchange route-level lazy boundary was applied and production build passed. Compare resulting chunks before continuing deeper optimization.",
+  "changedFile": "src/routes/exchangeRoutes.jsx",
+  "routeLazyDetected": {
+    "reactLazyImported": true,
+    "exchangeLayoutLazy": true,
+    "missionControlLazy": false,
+    "lazyBoundaryHelper": true,
+    "fallbackDetected": true
+  },
+  "bundleSummaryAfterPatch": {
+    "totalAssetsParsed": 57,
+    "largeAssets": 4,
+    "largestAssetFileName": "vendor-BtYAkRhV.js",
+    "largestAssetRawKb": 1959.5,
+    "buildWarningDetected": true,
+    "frontendBuildPassed": true
+  },
+  "largestAssetsAfterPatch": [
+    {
+      "fileName": "vendor-BtYAkRhV.js",
+      "rawKb": 1959.5,
+      "gzipKb": 553.85,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "pages-ByCRJx3G.js",
+      "rawKb": 1100.56,
+      "gzipKb": 248.84,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "vendor-map-CPoydKcy.js",
+      "rawKb": 1011.59,
+      "gzipKb": 274.26,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "pages-CEreUFyW.css",
+      "rawKb": 831.75,
+      "gzipKb": 126.96,
+      "type": "css",
+      "isLarge": true,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "shared-CxvNeVaT.js",
+      "rawKb": 453.73,
+      "gzipKb": 43.97,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-react-Ca3dWI2b.js",
+      "rawKb": 226.03,
+      "gzipKb": 72.22,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "components-Dzu_crOf.js",
+      "rawKb": 171.22,
+      "gzipKb": 46.45,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "dashboards-3EVVy3Id.js",
+      "rawKb": 134.61,
+      "gzipKb": 36.15,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-map-kWVbv8B-.css",
+      "rawKb": 69.34,
+      "gzipKb": 9.97,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "vendor-C5-Kj3x0.css",
+      "rawKb": 40.95,
+      "gzipKb": 5.59,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "content-DE5-6dIU.js",
+      "rawKb": 34.23,
+      "gzipKb": 11.23,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "foundation-BvjTgYP3.css",
+      "rawKb": 28.83,
+      "gzipKb": 6.18,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "foundation-DBRqHlT9.js",
+      "rawKb": 25.26,
+      "gzipKb": 5.5,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "ai-BtHrJQMZ.css",
+      "rawKb": 23.65,
+      "gzipKb": 5.7,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "allocation-DXLNNfaS.js",
+      "rawKb": 19.62,
+      "gzipKb": 6.98,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "arcade-Cuohn2B4.css",
+      "rawKb": 19.56,
+      "gzipKb": 4.48,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "components-3KDTfcSy.css",
+      "rawKb": 16.2,
+      "gzipKb": 3.88,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "curriculum-BQjQ7RnG.css",
+      "rawKb": 10.63,
+      "gzipKb": 2.56,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "sales-C5XjbxN2.css",
+      "rawKb": 9.44,
+      "gzipKb": 2.59,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "ledger-cNRK8cm9.css",
+      "rawKb": 9.33,
+      "gzipKb": 2.45,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "ai-kGwPcaVt.js",
+      "rawKb": 6.92,
+      "gzipKb": 2.61,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "catalog-9NU3OlVj.css",
+      "rawKb": 6.61,
+      "gzipKb": 2.01,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "util-wash-Qos2WW4c.css",
+      "rawKb": 6.54,
+      "gzipKb": 2.02,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "admin-D5jblsn4.js",
+      "rawKb": 6.07,
+      "gzipKb": 2.22,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "global-BLOBr7rh.css",
+      "rawKb": 5.93,
+      "gzipKb": 1.98,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "curriculum-YfyJW9ZD.js",
+      "rawKb": 5.89,
+      "gzipKb": 2.01,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "debt-BVH4hd71.css",
+      "rawKb": 5.17,
+      "gzipKb": 1.63,
+      "type": "css",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "employer-DEaVRioK.js",
+      "rawKb": 5.08,
+      "gzipKb": 1.57,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "credit-Dn_cjC-g.js",
+      "rawKb": 4.51,
+      "gzipKb": 1.31,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    },
+    {
+      "fileName": "arcade-CwpggYtO.js",
+      "rawKb": 4.34,
+      "gzipKb": 1.9,
+      "type": "js",
+      "isLarge": false,
+      "isVeryLarge": false
+    }
+  ],
+  "largeAssetsAfterPatch": [
+    {
+      "fileName": "vendor-BtYAkRhV.js",
+      "rawKb": 1959.5,
+      "gzipKb": 553.85,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "pages-ByCRJx3G.js",
+      "rawKb": 1100.56,
+      "gzipKb": 248.84,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "vendor-map-CPoydKcy.js",
+      "rawKb": 1011.59,
+      "gzipKb": 274.26,
+      "type": "js",
+      "isLarge": true,
+      "isVeryLarge": true
+    },
+    {
+      "fileName": "pages-CEreUFyW.css",
+      "rawKb": 831.75,
+      "gzipKb": 126.96,
+      "type": "css",
+      "isLarge": true,
+      "isVeryLarge": false
+    }
+  ],
+  "nextRecommendedActions": [
+    {
+      "step": 1,
+      "label": "Compare pages/vendor chunks",
+      "action": "Compare this build against bundleOptimizationInventory.json and mapBoundaryImpactComparison.json."
+    },
+    {
+      "step": 2,
+      "label": "Browser recheck exchange route",
+      "action": "Open /admin.html#/exchange or related Exchange route and confirm no blank screen."
+    },
+    {
+      "step": 3,
+      "label": "Avoid core map internals until comparison",
+      "action": "Do not patch SHSOperationalMapboxMap.jsx until route-level impact is documented."
+    }
+  ]
+}

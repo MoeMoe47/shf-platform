@@ -18,10 +18,40 @@ function getAdminKey() {
   }
 }
 
+function getAdminRole() {
+  try {
+    return (
+      globalThis?.localStorage?.getItem("ADMIN_ROLE") ||
+      globalThis?.localStorage?.getItem("X-Admin-Role") ||
+      globalThis?.localStorage?.getItem("shf_admin_role") ||
+      ""
+    );
+  } catch {
+    return "";
+  }
+}
+
+function getOrgId() {
+  try {
+    return (
+      globalThis?.localStorage?.getItem("ORG_ID") ||
+      globalThis?.localStorage?.getItem("X-Org-Id") ||
+      globalThis?.localStorage?.getItem("shf_org_id") ||
+      ""
+    );
+  } catch {
+    return "";
+  }
+}
+
 async function api(path, { method = "GET", body } = {}) {
   const headers = { "Content-Type": "application/json" };
   const k = getAdminKey();
   if (k) headers["X-Admin-Key"] = k;
+  const role = getAdminRole();
+  if (role) headers["X-Admin-Role"] = role;
+  const orgId = getOrgId();
+  if (orgId) headers["X-Org-Id"] = orgId;
 
   const res = await fetch(path, {
     method,

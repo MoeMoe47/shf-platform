@@ -43,6 +43,7 @@ const SECTIONS = [
   {
     title: "System",
     items: [
+      { to: "/registry", icon: "R", label: "Registry" },
       { to: "/truth-spine", icon: "T", label: "Truth Spine", badge: "V1" },
       { to: "/oracle", icon: "O", label: "Oracle", badge: "V1" },
       { to: "/ai-guardrails", icon: "A", label: "AI Guardrails", badge: "V1" },

@@ -166,6 +166,7 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 
 - Layer Type: Automation
 - Owns: Summaries, assistance, coordination, and agent task support.
+- Agent Fabric/Governance Boundary: Agent Fabric is an AI/Swarm operating capability governed by this layer, Governance Layer policy, and Layer Control System registry enforcement; it is not a separate unregistered layer.
 - Must Not Own: Verification, approval, report readiness, or architecture registration.
 - Upstream: Truth Spine, Alignment Layer, Context-Adaptive Analyst
 - Downstream: Apps/Programs, Reports, ClientOps

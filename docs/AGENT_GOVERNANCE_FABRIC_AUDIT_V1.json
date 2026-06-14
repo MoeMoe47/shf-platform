@@ -1,0 +1,369 @@
+{
+  "audit_name": "Agent Governance & Agent Fabric Integration Audit V1",
+  "date": "2026-06-14",
+  "official_agent_system": {
+    "backend_root": "services/shf-agent-fabric",
+    "canonical_agent_registry": "services/shf-agent-fabric/contracts/agents/agents.json",
+    "canonical_agent_service": "services/shf-agent-fabric/fabric/agent_canon.py",
+    "agent_event_ledger": "services/shf-agent-fabric/fabric/agent_event_ledger.py",
+    "admin_router": "services/shf-agent-fabric/routers/admin_agents_routes.py",
+    "layer_control_router": "services/shf-agent-fabric/routers/admin_layers_routes.py",
+    "frontend_admin_surface": "src/pages/admin/Registry.jsx",
+    "frontend_route": "admin.html#/registry",
+    "agent_count": 11
+  },
+  "files_inspected": [
+    "services/shf-agent-fabric/main.py",
+    "services/shf-agent-fabric/routers/admin_agents_routes.py",
+    "services/shf-agent-fabric/routers/admin_layers_routes.py",
+    "services/shf-agent-fabric/routers/watchtower_routes.py",
+    "services/shf-agent-fabric/routers/reports_routes.py",
+    "services/shf-agent-fabric/routers/loo_routes.py",
+    "services/shf-agent-fabric/routers/truth_routes.py",
+    "services/shf-agent-fabric/routers/oracle_routes.py",
+    "services/shf-agent-fabric/routers/ai_guardrails_routes.py",
+    "services/shf-agent-fabric/routers/game_theory_routes.py",
+    "services/shf-agent-fabric/fabric/agent_canon.py",
+    "services/shf-agent-fabric/fabric/agent_event_ledger.py",
+    "services/shf-agent-fabric/fabric/admin_auth.py",
+    "services/shf-agent-fabric/contracts/agents/agents.json",
+    "src/router/AdminRoutes.jsx",
+    "src/components/admin/AdminSidebar.jsx",
+    "src/pages/admin/Registry.jsx",
+    "src/system/identity/hubAccessControl.js",
+    "src/system/identity/identityRouting.js",
+    "docs/MASTER_LAYER_REGISTRY.md",
+    "docs/TRUTH_SPINE_GUARDRAILS.md",
+    "docs/AI_SWARM_GUARDRAILS_V1.md",
+    "docs/GAME_THEORY_LAYER_V1.md",
+    "docs/ORACLE_LAYER_V1.md"
+  ],
+  "routes_found": [
+    "/admin/agents",
+    "/admin/agents/verify",
+    "/admin/agents/events",
+    "/admin/agents/summary/health",
+    "/admin/agents/summary/execution-readiness",
+    "/admin/agents/{agent_id}",
+    "/admin/agents/{agent_id}/dry-run",
+    "/admin/agents/{agent_id}/page-context-dry-run",
+    "/admin/agents/{agent_id}/enabled",
+    "/admin/agents/{agent_id}/lifecycle",
+    "/admin/agents/{agent_id}/attest",
+    "/admin/layers",
+    "/admin/layers/coverage",
+    "/admin/layers/gate/status",
+    "/admin/layers/registry",
+    "/admin/layers/{layer}/enabled",
+    "/truth/*",
+    "/oracle/*",
+    "/ai-guardrails/*",
+    "/game-theory/*",
+    "/watchtower/*",
+    "/reports/*",
+    "/loo/*",
+    "/runs/*",
+    "/arena/*"
+  ],
+  "routes_mounted": [
+    "admin_agents_router",
+    "admin_layers_router",
+    "truth_router",
+    "oracle_router",
+    "ai_guardrails_router",
+    "game_theory_router",
+    "watchtower_router",
+    "reports_router",
+    "loo_router",
+    "runs_router",
+    "arena_router"
+  ],
+  "admin_ui": {
+    "dedicated_agent_page_exists": false,
+    "registry_page_exists": true,
+    "registry_route": "/registry",
+    "agents_tab_visible": true,
+    "sidebar_registry_link_exists": true,
+    "candidate_agent_hash_routes": {
+      "/admin/agents": "fallback_to_hub",
+      "/agents": "fallback_to_hub",
+      "/agent-fabric": "fallback_to_hub"
+    },
+    "public_exposure_found": false,
+    "result": "PASS_WITH_EXISTING_REGISTRY_SURFACE"
+  },
+  "permissions": {
+    "backend_admin_agents": {
+      "requires_admin_key": true,
+      "unauthorized_status": 401,
+      "authorized_status": 200
+    },
+    "backend_admin_layers": {
+      "requires_admin_key": true,
+      "authorized_status": 200
+    },
+    "backend_admin_registry": {
+      "requires_admin_key": true,
+      "requires_admin_role": true,
+      "requires_org_id": true,
+      "authorized_status": 200
+    },
+    "frontend_registry": {
+      "route": "/registry",
+      "hub_role": "shs_admin",
+      "passes_role_org_headers_when_present": true
+    },
+    "dev_identity_fallback": {
+      "vite_dev_only": true,
+      "localhost_only": true
+    }
+  },
+  "registry_status": {
+    "truth_spine": "registered",
+    "oracle_layer": "registered",
+    "ai_swarm_layer": "registered_with_agent_fabric_boundary_note",
+    "game_theory_layer": "registered",
+    "loo": "registered",
+    "watchtower": "registered",
+    "governance_layer": "registered",
+    "reports": "registered",
+    "layer_control_system": "registered",
+    "agent_fabric_as_separate_layer": false,
+    "agent_governance_as_separate_layer": false
+  },
+  "governance_connections": {
+    "truth_spine": {
+      "status": "bounded",
+      "notes": "Agent outputs do not verify claims; truth package and trust envelope inputs are present in agent definitions."
+    },
+    "oracle": {
+      "status": "bounded",
+      "notes": "oracle_truth_agent reads and explains Oracle truth packages but does not replace Oracle rulings."
+    },
+    "ai_guardrails": {
+      "status": "connected",
+      "notes": "AI/Swarm Guardrails document agent boundaries; ai_guardrails_service records agent_id and review requirements."
+    },
+    "game_theory": {
+      "status": "bounded",
+      "notes": "Game Theory remains separate; agents may consume strategy context without approving facts or rulings."
+    },
+    "watchtower": {
+      "status": "partially_connected",
+      "notes": "watchtower_agent exists and Watchtower routes are mounted; agent health is primarily visible through /admin/agents/summary routes."
+    },
+    "reports": {
+      "status": "connected",
+      "notes": "report_narrator_agent uses verified outcomes, trust envelopes, audit traces, and readiness state; human approval required for publication."
+    },
+    "loo": {
+      "status": "available_but_not_dedicated",
+      "notes": "LOO route family is mounted and smoke-tested; no dedicated agent-to-LOO scoring route was found."
+    },
+    "master_layer_registry": {
+      "status": "registered_boundary",
+      "notes": "Agent Fabric/Governance is documented as an AI/Swarm operating capability governed by Governance and Layer Control."
+    }
+  },
+  "audit_trace": {
+    "ledger_file": "services/shf-agent-fabric/db/agent_events.jsonl",
+    "ledger_hash_chained": true,
+    "verify_endpoint": "/admin/agents/verify",
+    "verify_result": {
+      "pass": true,
+      "events": 138
+    },
+    "agent_record_fields": [
+      "agent_id",
+      "agentId",
+      "name",
+      "layer",
+      "role",
+      "visibility",
+      "lifecycle",
+      "version",
+      "policy",
+      "inputs",
+      "outputs",
+      "memoryScope",
+      "eventLogging",
+      "healthCheck"
+    ]
+  },
+  "duplicates_or_legacy": [
+    "services/shf-agent-fabric/_LOCKED_AGENT_FABRIC_V1_20260514_183731/",
+    "services/shf-agent-fabric/_backup_agents_registry_v1_20260514_180419/",
+    "services/shf-agent-fabric/_backup_agent_dry_run_v1_20260514_183022/",
+    "services/shf-agent-fabric/_backup_agent_execution_readiness_20260514_182334/",
+    "services/shf-agent-fabric/_backup_page_context_dry_run_20260514_183431/",
+    "services/shf-agent-fabric/_backup_force_agent_health_route_20260514_182019/",
+    "services/shf-agent-fabric/_backup_admin_agents_health_summary_20260514_181031/",
+    "services/shf-agent-fabric/_backup_admin_agents_routes_clean_20260514_175018/",
+    "services/shf-agent-fabric/fabric/agent_store.py.bak.*"
+  ],
+  "browser_smoke": {
+    "requested_port_5173_available": false,
+    "tested_base_url": "http://127.0.0.1:5174/admin.html",
+    "registry_route": {
+      "path": "/registry",
+      "heading": "Registry",
+      "agents_tab_visible": true,
+      "sidebar_registry_visible": true,
+      "blank": false,
+      "result": "PASS"
+    },
+    "candidate_agent_routes": {
+      "/admin/agents": "fallback_to_hub",
+      "/agents": "fallback_to_hub",
+      "/agent-fabric": "fallback_to_hub"
+    },
+    "console_notes": [
+      "Non-blocking local dev /api/auth/me 404 before identity fallback."
+    ]
+  },
+  "backend_smoke": {
+    "/admin/agents_without_key": {
+      "status": 401,
+      "ok": false,
+      "expected": true
+    },
+    "/admin/agents": {
+      "status": 200,
+      "ok": true,
+      "count": 11
+    },
+    "/admin/agents/verify": {
+      "status": 200,
+      "ok": true,
+      "ledger_pass": true
+    },
+    "/admin/agents/summary/health": {
+      "status": 200,
+      "ok": true,
+      "total": 11,
+      "warning": 0
+    },
+    "/admin/agents/summary/execution-readiness": {
+      "status": 200,
+      "ok": true,
+      "auto_ready": 7,
+      "approval_required": 4,
+      "blocked": 0
+    },
+    "/admin/layers": {
+      "status": 200,
+      "ok": true,
+      "count": 32
+    },
+    "/admin/layers/gate/status": {
+      "status": 200,
+      "ok": true,
+      "gate_pass": false
+    },
+    "/admin/registry": {
+      "status": 200,
+      "ok": true
+    },
+    "/truth/health": {
+      "status": 200,
+      "ok": true
+    },
+    "/oracle/health": {
+      "status": 200,
+      "ok": true
+    },
+    "/ai-guardrails/health": {
+      "status": 200,
+      "ok": true
+    },
+    "/game-theory/health": {
+      "status": 200,
+      "ok": true
+    },
+    "/watchtower/summary": {
+      "status": 200,
+      "ok": true
+    },
+    "/reports/snapshot": {
+      "status": 200,
+      "ok": true
+    },
+    "/loo/health": {
+      "status": 200,
+      "ok": true
+    },
+    "openapi": {
+      "admin_agent_paths_present": true,
+      "admin_layer_paths_present": true,
+      "duplicate_paths": []
+    }
+  },
+  "fixes_applied": [
+    {
+      "file": "docs/MASTER_LAYER_REGISTRY.md",
+      "change": "Added explicit Agent Fabric/Governance boundary wording under AI/Swarm Layer."
+    },
+    {
+      "file": "src/components/admin/AdminSidebar.jsx",
+      "change": "Added sidebar link to the existing /registry route."
+    },
+    {
+      "file": "src/pages/admin/Registry.jsx",
+      "change": "Forward X-Admin-Role and X-Org-Id from local storage when present."
+    }
+  ],
+  "files_changed": [
+    "docs/MASTER_LAYER_REGISTRY.md",
+    "docs/AGENT_GOVERNANCE_FABRIC_AUDIT_V1.md",
+    "docs/AGENT_GOVERNANCE_FABRIC_AUDIT_V1.json",
+    "src/components/admin/AdminSidebar.jsx",
+    "src/pages/admin/Registry.jsx"
+  ],
+  "validation": {
+    "json_report_valid": {
+      "command": "python3 -m json.tool docs/AGENT_GOVERNANCE_FABRIC_AUDIT_V1.json",
+      "result": "PASS"
+    },
+    "check_master_layer_registry": {
+      "command": "python3 scripts/check_master_layer_registry.py",
+      "result": "PASS"
+    },
+    "check_truth_spine_freeze": {
+      "command": "python3 scripts/check_truth_spine_freeze.py",
+      "result": "PASS"
+    },
+    "check_oracle_layer": {
+      "command": "python3 scripts/check_oracle_layer.py",
+      "result": "PASS"
+    },
+    "check_ai_guardrails_layer": {
+      "command": "python3 scripts/check_ai_guardrails_layer.py",
+      "result": "PASS"
+    },
+    "check_game_theory_layer": {
+      "command": "python3 scripts/check_game_theory_layer.py",
+      "result": "PASS"
+    },
+    "check_governance": {
+      "command": "npm run check:governance",
+      "result": "PASS"
+    },
+    "focused_pytest": {
+      "command": "python3 -m pytest services/shf-agent-fabric/tests/test_truth_routes.py services/shf-agent-fabric/tests/test_oracle_routes.py services/shf-agent-fabric/tests/test_ai_guardrails_routes.py services/shf-agent-fabric/tests/test_game_theory_routes.py services/shf-agent-fabric/tests/test_agent_canon_basics.py",
+      "result": "PASS",
+      "summary": "25 passed"
+    },
+    "build": {
+      "command": "npm run build",
+      "result": "PASS",
+      "note": "Build completed with existing large-chunk warning."
+    }
+  },
+  "remaining_risks": [
+    "No dedicated Agent Fabric admin page exists; current UI visibility is via the general Registry page.",
+    "/admin/layers/gate/status returns gate_pass=false due to not-enforced-ready blockers for later layers.",
+    "Backup/locked agent files remain in the repo and were reported but not moved or deleted.",
+    "Local dev /api/auth/me returns a non-blocking 404 before seeded identity fallback."
+  ],
+  "v1_complete": true
+}

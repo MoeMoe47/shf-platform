@@ -1,0 +1,579 @@
+{
+  "generated_at": "2026-06-14T10:43:52",
+  "source_reports": [
+    "docs/GIT_STATUS_STABILIZATION_REPORT.md",
+    "docs/GIT_STATUS_STABILIZATION_REPORT.json",
+    "docs/GIT_NEEDS_REVIEW_DECISION_REPORT.md",
+    "docs/GIT_NEEDS_REVIEW_DECISION_REPORT.json",
+    "docs/DUPLICATE_LAYER_AUDIT.md",
+    "docs/MASTER_LAYER_REGISTRY.md"
+  ],
+  "scope_note": "Review-only human decision packet for the 11 INVESTIGATE files. No source, package, route, service, or behavior edits were made.",
+  "summary": {
+    "total": 11,
+    "keep_active": 0,
+    "stage_after_owner_approval": 11,
+    "archive_after_owner_approval": 0,
+    "split_or_merge_required": 0,
+    "restore_or_revert_after_owner_approval": 0,
+    "ignore_runtime": 0,
+    "blocked_pending_human_decision": 0
+  },
+  "why_marked_investigate": [
+    "The files touch active entrypoints, admin routes, public Website Studio routing, SHF Impact map/report data, Identity & Access, or Production Ops.",
+    "Prior stabilization could not confidently tie these changes to the frozen governance sprint and therefore required owner review before staging.",
+    "Several untracked files are imported by active modified code, so archiving them without coordinated source changes would break build or routes."
+  ],
+  "items": [
+    {
+      "path": "src/entries/index.main.jsx",
+      "status": "M",
+      "tracked": true,
+      "active_references": [
+        "active entrypoint for index.html",
+        "imports src/pages/public/WebMakerPage.jsx",
+        "special-cases window.location.pathname === /studio/templates"
+      ],
+      "related_layers": [
+        "Website Studio",
+        "Public Page",
+        "API Gateway/Entry Routing"
+      ],
+      "classification": "STAGE_AFTER_OWNER_APPROVAL",
+      "risk_if_staged": "Makes /studio/templates a public index.html route and couples index entry behavior to an untracked WebMaker page.",
+      "risk_if_archived": "Not archivable; this is an active tracked entrypoint. Reverting/removing without approval could remove intended public Website Studio routing.",
+      "recommended_next_action": "Keep in repo. Stage only with WebMakerPage.jsx and web-maker.css after owner confirms /studio/templates should be public from index.html.",
+      "owner_question": "Should /studio/templates be a public index route, or should Website Studio live only under admin.html hash routes?"
+    },
+    {
+      "path": "src/pages/admin/BuilderHub.jsx",
+      "status": "M",
+      "tracked": true,
+      "active_references": [
+        "imported by src/router/AdminRoutes.jsx",
+        "mounted at /builder, /web-maker, and /studio/templates in admin hash routes",
+        "imports src/pages/admin/web-maker.css"
+      ],
+      "related_layers": [
+        "Website Studio",
+        "Admin",
+        "Production Ops"
+      ],
+      "classification": "STAGE_AFTER_OWNER_APPROVAL",
+      "risk_if_staged": "Could unintentionally remove/replace the internal BuilderHub navigation and blur admin/public Website Studio boundaries.",
+      "risk_if_archived": "Not archivable; active AdminRoutes depends on this page for /builder and Website Studio aliases.",
+      "recommended_next_action": "Stage after owner approval as active BuilderHub/WebMaker work; keep BuilderHub as the admin/internal control surface for now.",
+      "owner_question": "Resolved: owner approved BuilderHub as admin/internal control surface."
+    },
+    {
+      "path": "src/pages/shf-command/SHFImpactCommandCenter.jsx",
+      "status": "M",
+      "tracked": true,
+      "active_references": [
+        "imported by src/App.jsx route /shf-command",
+        "imported by src/shf-entry.jsx root route",
+        "lazy imported by src/router/FoundationRoutes.jsx path impact",
+        "imports SHFImpactOhioMap.jsx"
+      ],
+      "related_layers": [
+        "SHF Impact Command Center",
+        "Reports",
+        "Oracle Layer",
+        "Truth Spine",
+        "Public Impact Map"
+      ],
+      "classification": "STAGE_AFTER_OWNER_APPROVAL",
+      "risk_if_staged": "Exposes/report-links a Foundation impact report route; wrong dev/prod URL could create broken navigation or premature report workflow.",
+      "risk_if_archived": "Not archivable; mounted active route. Removing or reverting without approval may drop intended report generator access.",
+      "recommended_next_action": "Keep active. Stage only after owner confirms the report generator route and dev/prod href are correct.",
+      "owner_question": "Is the report generator link approved for the SHF Command header, and should dev use 127.0.0.1:5174?"
+    },
+    {
+      "path": "src/pages/shf-command/components/SHFImpactOhioMap.jsx",
+      "status": "M",
+      "tracked": true,
+      "active_references": [
+        "imported by SHFImpactCommandCenter.jsx",
+        "imports src/data/shfImpactData.js",
+        "imports shf-impact-ohio-map.css"
+      ],
+      "related_layers": [
+        "Public Impact Map",
+        "SHF Impact Command Center",
+        "Public Approval",
+        "Reports"
+      ],
+      "classification": "STAGE_AFTER_OWNER_APPROVAL",
+      "risk_if_staged": "Public impact map semantics change; sample numbers become centralized and public-approved labels may be mistaken for verified impact if not owner-approved.",
+      "risk_if_archived": "Not archivable; active map route would lose current modifications and may fail if coupled data file is removed.",
+      "recommended_next_action": "Stage only as part of SHF Impact Data Spine bundle with shfImpactData.js and CSS after owner validates public/sample language.",
+      "owner_question": "Are the sample county records and public-approved wording approved for SHF map display?"
+    },
+    {
+      "path": "src/pages/shf-command/components/shf-impact-ohio-map.css",
+      "status": "M",
+      "tracked": true,
+      "active_references": [
+        "imported by SHFImpactOhioMap.jsx",
+        "defines .shf-map-data-spine-status classes added by map diff"
+      ],
+      "related_layers": [
+        "Public Impact Map",
+        "SHF Impact Command Center"
+      ],
+      "classification": "STAGE_AFTER_OWNER_APPROVAL",
+      "risk_if_staged": "May alter map layout on desktop/mobile; visual overlap risk without screenshot review.",
+      "risk_if_archived": "Not archivable; active CSS. Removing without reverting JSX would leave unstyled status panel and potential layout issues.",
+      "recommended_next_action": "Stage only with SHFImpactOhioMap.jsx after owner visual review of desktop/mobile map panel.",
+      "owner_question": "Does the Data Spine status panel placement pass visual approval on SHF map viewports?"
+    },
+    {
+      "path": "src/system/identity/hubAccessControl.js",
+      "status": "M",
+      "tracked": true,
+      "active_references": [
+        "imported by src/router/AdminRoutes.jsx",
+        "imported by src/pages/hub/HubWorkspaceDashboard.jsx",
+        "imported by src/pages/hub/shared/hubBusinessNetworkNav.js",
+        "imported by identityRouting.js"
+      ],
+      "related_layers": [
+        "Identity & Access",
+        "Admin",
+        "Website Studio",
+        "Production Ops",
+        "Truth Spine",
+        "Oracle Layer",
+        "AI/Swarm Layer",
+        "Game Theory Layer"
+      ],
+      "classification": "STAGE_AFTER_OWNER_APPROVAL",
+      "risk_if_staged": "Changes access boundaries for admin/governance/ops pages; any missing or extra role could expose or block internal surfaces.",
+      "risk_if_archived": "Not archivable; active identity file. Reverting without route review may block newly mounted governance or ops pages.",
+      "recommended_next_action": "Stage only with AdminRoutes/AdminSidebar and ops/governance route bundle after owner confirms role policy.",
+      "owner_question": "Should all /ops/*, /web-maker, /studio/templates, and V1 governance admin pages be shs_admin-only?"
+    },
+    {
+      "path": "src/system/identity/identityRouting.js",
+      "status": "M",
+      "tracked": true,
+      "active_references": [
+        "imported by src/router/AdminRoutes.jsx",
+        "imported by src/pages/auth/SHSLoginPage.jsx",
+        "imported by src/pages/hub/HubWorkspaceDashboard.jsx",
+        "exposes window.SHS_DEV_IDENTITY only in import.meta.env.DEV and local host"
+      ],
+      "related_layers": [
+        "Identity & Access",
+        "Security/Privacy",
+        "Admin"
+      ],
+      "classification": "STAGE_AFTER_OWNER_APPROVAL",
+      "risk_if_staged": "Security-sensitive identity behavior change; if guards are misunderstood or compiled unexpectedly, it could create improper admin override expectations.",
+      "risk_if_archived": "Not archivable; active identity file. Reverting may remove intended dev admin recovery path for protected admin/ops pages.",
+      "recommended_next_action": "Owner/security approval required before staging; confirm production builds cannot expose the override and that localStorage keys are acceptable.",
+      "owner_question": "Is the local dev SHS admin override an approved development-only recovery tool?"
+    },
+    {
+      "path": "src/data/shfImpactData.js",
+      "status": "??",
+      "tracked": false,
+      "active_references": [
+        "imported by src/pages/shf-command/components/SHFImpactOhioMap.jsx",
+        "exports SHF_DATA_FLOW_RULE and public-approved impact helpers",
+        "comment says it mirrors /Users/mikeslate/shf-next/src/data/shfImpactData.ts"
+      ],
+      "related_layers": [
+        "SHF Impact Command Center",
+        "Public Impact Map",
+        "Public Approval",
+        "Reports",
+        "Data Ownership/IP"
+      ],
+      "classification": "STAGE_AFTER_OWNER_APPROVAL",
+      "risk_if_staged": "Introduces sample public impact data and publicApproved fields that may be mistaken for verified public truth without owner/data approval.",
+      "risk_if_archived": "Build or route behavior may break because active SHFImpactOhioMap.jsx imports it.",
+      "recommended_next_action": "Keep active. Stage only with SHF map bundle after owner validates data, labels, and source-of-truth relationship with shf-next.",
+      "owner_question": "Should shrv1 own this JS mirror of the shf-next SHF Impact Data Spine, or should the data contract live elsewhere?"
+    },
+    {
+      "path": "src/pages/admin/ops/",
+      "status": "??",
+      "tracked": false,
+      "active_references": [
+        "multiple files imported by src/router/AdminRoutes.jsx",
+        "AdminSidebar links /ops/* routes",
+        "hubAccessControl.js adds /ops/* shs_admin-only entries"
+      ],
+      "related_layers": [
+        "Production Ops",
+        "QA + Delivery",
+        "Website Studio",
+        "Admin",
+        "Identity & Access"
+      ],
+      "classification": "STAGE_AFTER_OWNER_APPROVAL",
+      "risk_if_staged": "Adds a substantial new admin workflow surface outside the governance sprint; may need registry/process approval and UX review.",
+      "risk_if_archived": "AdminRoutes/AdminSidebar and access-control changes would point at missing files; build would fail if imports remain.",
+      "recommended_next_action": "Stage only as a Production Ops bundle with AdminRoutes/AdminSidebar/hubAccessControl after owner confirms it is current official Production Ops work.",
+      "owner_question": "Is the new /ops/* Production Ops workflow approved as active architecture under the registered Production Ops layer?"
+    },
+    {
+      "path": "src/pages/admin/web-maker.css",
+      "status": "??",
+      "tracked": false,
+      "active_references": [
+        "imported by src/pages/admin/BuilderHub.jsx",
+        "imported by src/pages/public/WebMakerPage.jsx"
+      ],
+      "related_layers": [
+        "Website Studio",
+        "Admin",
+        "Public Page"
+      ],
+      "classification": "STAGE_AFTER_OWNER_APPROVAL",
+      "risk_if_staged": "Shared admin/public stylesheet may create coupling and future drift if admin and public WebMaker diverge.",
+      "risk_if_archived": "Both active WebMaker/BuilderHub imports would fail or render unstyled if archived without code changes.",
+      "recommended_next_action": "Stage after owner approval as the shared current stylesheet for BuilderHub/WebMaker; shared assets may be refactored later.",
+      "owner_question": "Resolved: owner approved web-maker.css as shared current stylesheet for now."
+    },
+    {
+      "path": "src/pages/public/WebMakerPage.jsx",
+      "status": "??",
+      "tracked": false,
+      "active_references": [
+        "imported by src/entries/index.main.jsx",
+        "uses src/pages/admin/web-maker.css",
+        "renders for pathname /studio/templates in index entrypoint"
+      ],
+      "related_layers": [
+        "Website Studio",
+        "Public Page",
+        "Production Ops"
+      ],
+      "classification": "STAGE_AFTER_OWNER_APPROVAL",
+      "risk_if_staged": "Creates a new public-facing Website Studio route and duplicates admin BuilderHub behavior; public/admin boundary needs owner approval.",
+      "risk_if_archived": "index.main.jsx import would break build unless the entrypoint change is also reverted.",
+      "recommended_next_action": "Stage after owner approval as active public/user-facing WebMaker builder page.",
+      "owner_question": "Resolved: owner approved WebMakerPage as public/user-facing builder page."
+    }
+  ],
+  "detailed_items": [
+    {
+      "path": "src/entries/index.main.jsx",
+      "status": "M",
+      "tracked": true,
+      "modified": true,
+      "untracked": false,
+      "active_references": [
+        "active entrypoint for index.html",
+        "imports src/pages/public/WebMakerPage.jsx",
+        "special-cases window.location.pathname === /studio/templates"
+      ],
+      "related_layers": [
+        "Website Studio",
+        "Public Page",
+        "API Gateway/Entry Routing"
+      ],
+      "what_it_is": "Main index entrypoint and launcher surface.",
+      "why_dirty": "Adds a public /studio/templates path branch that renders WebMakerPage instead of the normal app launcher.",
+      "active": true,
+      "summary_of_diff_or_content": "One new import plus pathname routing branch for /studio/templates.",
+      "classification": "STAGE_AFTER_OWNER_APPROVAL",
+      "risk_if_staged": "Makes /studio/templates a public index.html route and couples index entry behavior to an untracked WebMaker page.",
+      "risk_if_archived": "Not archivable; this is an active tracked entrypoint. Reverting/removing without approval could remove intended public Website Studio routing.",
+      "recommended_next_action": "Keep in repo. Stage only with WebMakerPage.jsx and web-maker.css after owner confirms /studio/templates should be public from index.html.",
+      "owner_question": "Should /studio/templates be a public index route, or should Website Studio live only under admin.html hash routes?"
+    },
+    {
+      "path": "src/pages/admin/BuilderHub.jsx",
+      "status": "M",
+      "tracked": true,
+      "modified": true,
+      "untracked": false,
+      "active_references": [
+        "imported by src/router/AdminRoutes.jsx",
+        "mounted at /builder, /web-maker, and /studio/templates in admin hash routes",
+        "imports src/pages/admin/web-maker.css"
+      ],
+      "related_layers": [
+        "Website Studio",
+        "Admin",
+        "Production Ops"
+      ],
+      "what_it_is": "Tracked active admin BuilderHub page.",
+      "why_dirty": "Original internal BuilderHub links/cards were replaced by a Website Studio/WebMaker landing page with template previews and sound toggle.",
+      "active": true,
+      "summary_of_diff_or_content": "Large rewrite from internal builder navigation to Website Studio marketing/workflow UI; duplicates much of WebMakerPage.jsx content.",
+      "classification": "STAGE_AFTER_OWNER_APPROVAL",
+      "risk_if_staged": "Could unintentionally remove/replace the internal BuilderHub navigation and blur admin/public Website Studio boundaries.",
+      "risk_if_archived": "Not archivable; active AdminRoutes depends on this page for /builder and Website Studio aliases.",
+      "recommended_next_action": "Stage after owner approval as active BuilderHub/WebMaker work; keep BuilderHub as the admin/internal control surface for now.",
+      "owner_question": "Resolved: owner approved BuilderHub as admin/internal control surface.",
+      "owner_decision_note": "Owner approved BuilderHub/WebMaker boundary as active work. BuilderHub is the admin/internal control surface, WebMakerPage is the public/user-facing builder page, and web-maker.css remains the shared current stylesheet for now. Shared assets may be refactored later but should not block staging."
+    },
+    {
+      "path": "src/pages/shf-command/SHFImpactCommandCenter.jsx",
+      "status": "M",
+      "tracked": true,
+      "modified": true,
+      "untracked": false,
+      "active_references": [
+        "imported by src/App.jsx route /shf-command",
+        "imported by src/shf-entry.jsx root route",
+        "lazy imported by src/router/FoundationRoutes.jsx path impact",
+        "imports SHFImpactOhioMap.jsx"
+      ],
+      "related_layers": [
+        "SHF Impact Command Center",
+        "Reports",
+        "Oracle Layer",
+        "Truth Spine",
+        "Public Impact Map"
+      ],
+      "what_it_is": "Active SHF Impact Command Center surface.",
+      "why_dirty": "Adds SHF impact report generator href and header link, plus a React fragment around the page/drawer output.",
+      "active": true,
+      "summary_of_diff_or_content": "Adds Generate SHF Impact Report link using dev/prod href logic.",
+      "classification": "STAGE_AFTER_OWNER_APPROVAL",
+      "risk_if_staged": "Exposes/report-links a Foundation impact report route; wrong dev/prod URL could create broken navigation or premature report workflow.",
+      "risk_if_archived": "Not archivable; mounted active route. Removing or reverting without approval may drop intended report generator access.",
+      "recommended_next_action": "Keep active. Stage only after owner confirms the report generator route and dev/prod href are correct.",
+      "owner_question": "Is the report generator link approved for the SHF Command header, and should dev use 127.0.0.1:5174?"
+    },
+    {
+      "path": "src/pages/shf-command/components/SHFImpactOhioMap.jsx",
+      "status": "M",
+      "tracked": true,
+      "modified": true,
+      "untracked": false,
+      "active_references": [
+        "imported by SHFImpactCommandCenter.jsx",
+        "imports src/data/shfImpactData.js",
+        "imports shf-impact-ohio-map.css"
+      ],
+      "related_layers": [
+        "Public Impact Map",
+        "SHF Impact Command Center",
+        "Public Approval",
+        "Reports"
+      ],
+      "what_it_is": "Active SHF Ohio impact map component.",
+      "why_dirty": "Replaces local hardcoded county data with SHF Impact Data Spine functions and public-approved/sample data labeling.",
+      "active": true,
+      "summary_of_diff_or_content": "Adds SHF Data Spine import, public approved county selection, public data status panel content, and label changes from funding/outcome claims to sample/public data fields.",
+      "classification": "STAGE_AFTER_OWNER_APPROVAL",
+      "risk_if_staged": "Public impact map semantics change; sample numbers become centralized and public-approved labels may be mistaken for verified impact if not owner-approved.",
+      "risk_if_archived": "Not archivable; active map route would lose current modifications and may fail if coupled data file is removed.",
+      "recommended_next_action": "Stage only as part of SHF Impact Data Spine bundle with shfImpactData.js and CSS after owner validates public/sample language.",
+      "owner_question": "Are the sample county records and public-approved wording approved for SHF map display?"
+    },
+    {
+      "path": "src/pages/shf-command/components/shf-impact-ohio-map.css",
+      "status": "M",
+      "tracked": true,
+      "modified": true,
+      "untracked": false,
+      "active_references": [
+        "imported by SHFImpactOhioMap.jsx",
+        "defines .shf-map-data-spine-status classes added by map diff"
+      ],
+      "related_layers": [
+        "Public Impact Map",
+        "SHF Impact Command Center"
+      ],
+      "what_it_is": "Active CSS for SHF Ohio impact map.",
+      "why_dirty": "Adds Data Spine status panel styling and mobile spacing for the new map status UI.",
+      "active": true,
+      "summary_of_diff_or_content": "Adds .shf-map-data-spine-status block and responsive positioning/padding changes.",
+      "classification": "STAGE_AFTER_OWNER_APPROVAL",
+      "risk_if_staged": "May alter map layout on desktop/mobile; visual overlap risk without screenshot review.",
+      "risk_if_archived": "Not archivable; active CSS. Removing without reverting JSX would leave unstyled status panel and potential layout issues.",
+      "recommended_next_action": "Stage only with SHFImpactOhioMap.jsx after owner visual review of desktop/mobile map panel.",
+      "owner_question": "Does the Data Spine status panel placement pass visual approval on SHF map viewports?"
+    },
+    {
+      "path": "src/system/identity/hubAccessControl.js",
+      "status": "M",
+      "tracked": true,
+      "modified": true,
+      "untracked": false,
+      "active_references": [
+        "imported by src/router/AdminRoutes.jsx",
+        "imported by src/pages/hub/HubWorkspaceDashboard.jsx",
+        "imported by src/pages/hub/shared/hubBusinessNetworkNav.js",
+        "imported by identityRouting.js"
+      ],
+      "related_layers": [
+        "Identity & Access",
+        "Admin",
+        "Website Studio",
+        "Production Ops",
+        "Truth Spine",
+        "Oracle Layer",
+        "AI/Swarm Layer",
+        "Game Theory Layer"
+      ],
+      "what_it_is": "Active role and route access-control matrix.",
+      "why_dirty": "Adds access entries for Website Studio aliases, governance pages, tool-dashboard, and /ops/* routes.",
+      "active": true,
+      "summary_of_diff_or_content": "Adds shs_admin-only access for /web-maker, /studio/templates, /truth-spine, /ai-guardrails, /game-theory, and Production Ops routes.",
+      "classification": "STAGE_AFTER_OWNER_APPROVAL",
+      "risk_if_staged": "Changes access boundaries for admin/governance/ops pages; any missing or extra role could expose or block internal surfaces.",
+      "risk_if_archived": "Not archivable; active identity file. Reverting without route review may block newly mounted governance or ops pages.",
+      "recommended_next_action": "Stage only with AdminRoutes/AdminSidebar and ops/governance route bundle after owner confirms role policy.",
+      "owner_question": "Should all /ops/*, /web-maker, /studio/templates, and V1 governance admin pages be shs_admin-only?"
+    },
+    {
+      "path": "src/system/identity/identityRouting.js",
+      "status": "M",
+      "tracked": true,
+      "modified": true,
+      "untracked": false,
+      "active_references": [
+        "imported by src/router/AdminRoutes.jsx",
+        "imported by src/pages/auth/SHSLoginPage.jsx",
+        "imported by src/pages/hub/HubWorkspaceDashboard.jsx",
+        "exposes window.SHS_DEV_IDENTITY only in import.meta.env.DEV and local host"
+      ],
+      "related_layers": [
+        "Identity & Access",
+        "Security/Privacy",
+        "Admin"
+      ],
+      "what_it_is": "Active identity session and landing-route helper.",
+      "why_dirty": "Adds local-development SHS admin override helpers, localStorage override key, and dev-only window.SHS_DEV_IDENTITY helper.",
+      "active": true,
+      "summary_of_diff_or_content": "Adds local dev admin recovery helper guarded by import.meta.env.DEV and localhost, and modifies getCurrentIdentity role resolution.",
+      "classification": "STAGE_AFTER_OWNER_APPROVAL",
+      "risk_if_staged": "Security-sensitive identity behavior change; if guards are misunderstood or compiled unexpectedly, it could create improper admin override expectations.",
+      "risk_if_archived": "Not archivable; active identity file. Reverting may remove intended dev admin recovery path for protected admin/ops pages.",
+      "recommended_next_action": "Owner/security approval required before staging; confirm production builds cannot expose the override and that localStorage keys are acceptable.",
+      "owner_question": "Is the local dev SHS admin override an approved development-only recovery tool?"
+    },
+    {
+      "path": "src/data/shfImpactData.js",
+      "status": "??",
+      "tracked": false,
+      "modified": false,
+      "untracked": true,
+      "active_references": [
+        "imported by src/pages/shf-command/components/SHFImpactOhioMap.jsx",
+        "exports SHF_DATA_FLOW_RULE and public-approved impact helpers",
+        "comment says it mirrors /Users/mikeslate/shf-next/src/data/shfImpactData.ts"
+      ],
+      "related_layers": [
+        "SHF Impact Command Center",
+        "Public Impact Map",
+        "Public Approval",
+        "Reports",
+        "Data Ownership/IP"
+      ],
+      "what_it_is": "Untracked SHF Impact Data Spine adapter for public map/report outputs.",
+      "why_dirty": "New untracked data file added to support SHF map public-approved/sample data contract.",
+      "active": true,
+      "summary_of_diff_or_content": "Defines SHF data flow rule, sample program lanes, sample county records, public-approved filters, and totals/status helpers.",
+      "classification": "STAGE_AFTER_OWNER_APPROVAL",
+      "risk_if_staged": "Introduces sample public impact data and publicApproved fields that may be mistaken for verified public truth without owner/data approval.",
+      "risk_if_archived": "Build or route behavior may break because active SHFImpactOhioMap.jsx imports it.",
+      "recommended_next_action": "Keep active. Stage only with SHF map bundle after owner validates data, labels, and source-of-truth relationship with shf-next.",
+      "owner_question": "Should shrv1 own this JS mirror of the shf-next SHF Impact Data Spine, or should the data contract live elsewhere?"
+    },
+    {
+      "path": "src/pages/admin/ops/",
+      "status": "??",
+      "tracked": false,
+      "modified": false,
+      "untracked": true,
+      "active_references": [
+        "multiple files imported by src/router/AdminRoutes.jsx",
+        "AdminSidebar links /ops/* routes",
+        "hubAccessControl.js adds /ops/* shs_admin-only entries"
+      ],
+      "related_layers": [
+        "Production Ops",
+        "QA + Delivery",
+        "Website Studio",
+        "Admin",
+        "Identity & Access"
+      ],
+      "what_it_is": "Untracked internal Production Ops admin workflow directory.",
+      "why_dirty": "New admin pages/data/storage/CSS for production workflow, page specs, build packets, screenshot QA, and learning loop.",
+      "active": true,
+      "summary_of_diff_or_content": "Contains OpsProductionDashboard plus wrapper pages, opsData, opsStorage, and ops-production.css. Uses localStorage and is mounted by active AdminRoutes changes.",
+      "classification": "STAGE_AFTER_OWNER_APPROVAL",
+      "risk_if_staged": "Adds a substantial new admin workflow surface outside the governance sprint; may need registry/process approval and UX review.",
+      "risk_if_archived": "AdminRoutes/AdminSidebar and access-control changes would point at missing files; build would fail if imports remain.",
+      "recommended_next_action": "Stage only as a Production Ops bundle with AdminRoutes/AdminSidebar/hubAccessControl after owner confirms it is current official Production Ops work.",
+      "owner_question": "Is the new /ops/* Production Ops workflow approved as active architecture under the registered Production Ops layer?"
+    },
+    {
+      "path": "src/pages/admin/web-maker.css",
+      "status": "??",
+      "tracked": false,
+      "modified": false,
+      "untracked": true,
+      "active_references": [
+        "imported by src/pages/admin/BuilderHub.jsx",
+        "imported by src/pages/public/WebMakerPage.jsx"
+      ],
+      "related_layers": [
+        "Website Studio",
+        "Admin",
+        "Public Page"
+      ],
+      "what_it_is": "Untracked shared CSS for Website Studio/WebMaker pages.",
+      "why_dirty": "New stylesheet added for both admin BuilderHub and public WebMakerPage.",
+      "active": true,
+      "summary_of_diff_or_content": "Large page-level CSS for WebMaker hero, cards, templates, responsive layout, and interaction styling.",
+      "classification": "STAGE_AFTER_OWNER_APPROVAL",
+      "risk_if_staged": "Shared admin/public stylesheet may create coupling and future drift if admin and public WebMaker diverge.",
+      "risk_if_archived": "Both active WebMaker/BuilderHub imports would fail or render unstyled if archived without code changes.",
+      "recommended_next_action": "Stage after owner approval as the shared current stylesheet for BuilderHub/WebMaker; shared assets may be refactored later.",
+      "owner_question": "Resolved: owner approved web-maker.css as shared current stylesheet for now.",
+      "owner_decision_note": "Owner approved BuilderHub/WebMaker boundary as active work. BuilderHub is the admin/internal control surface, WebMakerPage is the public/user-facing builder page, and web-maker.css remains the shared current stylesheet for now. Shared assets may be refactored later but should not block staging."
+    },
+    {
+      "path": "src/pages/public/WebMakerPage.jsx",
+      "status": "??",
+      "tracked": false,
+      "modified": false,
+      "untracked": true,
+      "active_references": [
+        "imported by src/entries/index.main.jsx",
+        "uses src/pages/admin/web-maker.css",
+        "renders for pathname /studio/templates in index entrypoint"
+      ],
+      "related_layers": [
+        "Website Studio",
+        "Public Page",
+        "Production Ops"
+      ],
+      "what_it_is": "Untracked public Website Studio/WebMaker page.",
+      "why_dirty": "New public page added and wired through the modified index entrypoint.",
+      "active": true,
+      "summary_of_diff_or_content": "Public-facing WebMaker page content nearly mirrors the modified BuilderHub Website Studio experience.",
+      "classification": "STAGE_AFTER_OWNER_APPROVAL",
+      "risk_if_staged": "Creates a new public-facing Website Studio route and duplicates admin BuilderHub behavior; public/admin boundary needs owner approval.",
+      "risk_if_archived": "index.main.jsx import would break build unless the entrypoint change is also reverted.",
+      "recommended_next_action": "Stage after owner approval as active public/user-facing WebMaker builder page.",
+      "owner_question": "Resolved: owner approved WebMakerPage as public/user-facing builder page.",
+      "owner_decision_note": "Owner approved BuilderHub/WebMaker boundary as active work. BuilderHub is the admin/internal control surface, WebMakerPage is the public/user-facing builder page, and web-maker.css remains the shared current stylesheet for now. Shared assets may be refactored later but should not block staging."
+    }
+  ],
+  "no_action_confirmation": {
+    "git_add": false,
+    "git_commit": false,
+    "git_restore": false,
+    "git_reset": false,
+    "delete": false,
+    "move": false,
+    "source_edit": false,
+    "package_edit": false,
+    "route_or_behavior_edit": false
+  },
+  "owner_decisions": [
+    "Owner approved BuilderHub/WebMaker boundary as active work. BuilderHub is the admin/internal control surface, WebMakerPage is the public/user-facing builder page, and web-maker.css remains the shared current stylesheet for now. Shared assets may be refactored later but should not block staging."
+  ],
+  "updated_at": "2026-06-14T11:02:46"
+}

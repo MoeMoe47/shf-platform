@@ -216,6 +216,88 @@
   text-overflow: ellipsis;
 }
 
+.shf-map-data-spine-status {
+  position: absolute;
+  top: 62px;
+  left: 18px;
+  z-index: 24;
+  width: min(360px, calc(100% - 390px));
+  border: 1px solid rgba(14, 53, 90, 0.14);
+  border-left: 3px solid rgba(201, 111, 45, 0.92);
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(255, 251, 245, 0.9), rgba(255, 250, 242, 0.76)),
+    radial-gradient(circle at 100% 0%, rgba(201, 111, 45, 0.08), transparent 38%);
+  backdrop-filter: blur(10px);
+  box-shadow:
+    0 12px 28px rgba(6, 17, 31, 0.08),
+    0 1px 0 rgba(255,255,255,0.62) inset;
+  color: #173c5e;
+  padding: 12px 13px 11px;
+}
+
+.shf-map-data-spine-status__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 9px;
+}
+
+.shf-map-data-spine-status__head span {
+  color: #c96f2d;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.shf-map-data-spine-status__head strong {
+  border: 1px solid rgba(201, 111, 45, 0.26);
+  border-radius: 999px;
+  background: rgba(201, 111, 45, 0.09);
+  color: #123a63;
+  padding: 4px 8px;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.shf-map-data-spine-status dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 10px;
+  margin: 0;
+}
+
+.shf-map-data-spine-status div {
+  min-width: 0;
+}
+
+.shf-map-data-spine-status dt {
+  color: rgba(122, 96, 70, 0.78);
+  font-size: 8.5px;
+  font-weight: 900;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.shf-map-data-spine-status dd {
+  margin: 3px 0 0;
+  color: #173c5e;
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1.18;
+  overflow-wrap: anywhere;
+}
+
+.shf-map-data-spine-status p {
+  margin: 9px 0 0;
+  color: rgba(23, 60, 94, 0.84);
+  font-size: 11px;
+  font-weight: 750;
+  line-height: 1.32;
+}
+
 .shf-regional-detail-panel {
   position: absolute;
   right: 18px;
@@ -305,6 +387,10 @@
 }
 
 @media (max-width: 980px) {
+  .shf-map-data-spine-status {
+    width: min(360px, calc(100% - 36px));
+  }
+
   .shf-command-strip {
     right: 18px;
   }
@@ -324,6 +410,35 @@
 }
 
 @media (max-width: 760px) {
+  .shf-impact-map-toolbar {
+    top: 14px;
+    right: 14px;
+    left: 14px;
+    justify-content: flex-end;
+  }
+
+  .shf-system-status {
+    top: 64px;
+    left: 14px;
+    right: 14px;
+    max-width: none;
+  }
+
+  .shf-map-data-spine-status {
+    top: 108px;
+    left: 14px;
+    right: 14px;
+    width: auto;
+  }
+
+  .shf-map-data-spine-status dl {
+    grid-template-columns: 1fr;
+  }
+
+  .shf-map-data-spine-status p {
+    display: none;
+  }
+
   .shf-command-strip {
     left: 18px;
     right: 18px;
@@ -335,6 +450,7 @@
   }
 
   .shf-impact-map-stage {
+    padding-top: 204px;
     padding-bottom: 148px;
   }
 }

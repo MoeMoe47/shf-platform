@@ -1,0 +1,213 @@
+{
+  "generated_at": "2026-06-14T10:22:45",
+  "source_report": "docs/GIT_STATUS_STABILIZATION_REPORT.json",
+  "scope": {
+    "needs_review_modified": 7,
+    "needs_review_untracked": 11,
+    "total_reviewed": 18,
+    "actions_not_performed": [
+      "git add",
+      "git commit",
+      "git restore",
+      "git reset",
+      "delete",
+      "move",
+      "source edits",
+      "package edits",
+      "route edits",
+      "behavior edits"
+    ]
+  },
+  "summary": {
+    "total_reviewed": 18,
+    "keep": 0,
+    "stage_later": 0,
+    "ignore_runtime": 0,
+    "archive_later": 7,
+    "investigate": 11,
+    "safe_to_stage_later": 0,
+    "not_safe_to_stage_without_human_decision": 18
+  },
+  "items": [
+    {
+      "path": "src/entries/index.main.jsx",
+      "status": "M",
+      "classification": "INVESTIGATE",
+      "reason": "Active index entrypoint now special-cases /studio/templates and imports the untracked public WebMaker page. This changes public routing behavior and should be owner-reviewed with WebMakerPage.jsx and web-maker.css before staging.",
+      "risk": "high",
+      "protected_layer": true,
+      "safe_to_stage_later": false,
+      "recommended_action": "Review route intent and public/admin boundary; stage only with the Website Studio/WebMaker bundle if approved."
+    },
+    {
+      "path": "src/pages/admin/BuilderHub.jsx",
+      "status": "M",
+      "classification": "INVESTIGATE",
+      "reason": "Active admin BuilderHub was replaced with a Website Studio/WebMaker landing experience and imports the new shared web-maker stylesheet. This is active admin behavior outside the governance stabilization scope.",
+      "risk": "high",
+      "protected_layer": true,
+      "safe_to_stage_later": false,
+      "recommended_action": "Owner should confirm BuilderHub is intended to become Website Studio before staging with AdminRoutes/AdminSidebar/hub access changes."
+    },
+    {
+      "path": "src/pages/shf-command/SHFImpactCommandCenter.jsx",
+      "status": "M",
+      "classification": "INVESTIGATE",
+      "reason": "Active SHF Impact Command Center now adds an impact report generator link and fragment wrapper. This is a mounted SHF route and impacts a protected reporting/data surface.",
+      "risk": "high",
+      "protected_layer": true,
+      "safe_to_stage_later": false,
+      "recommended_action": "Owner should verify the report URL behavior in dev/prod and stage only with related SHF impact/report work if approved."
+    },
+    {
+      "path": "src/pages/shf-command/components/SHFImpactOhioMap.jsx",
+      "status": "M",
+      "classification": "INVESTIGATE",
+      "reason": "Active SHF map now depends on untracked src/data/shfImpactData.js and switches from hardcoded county metrics to SHF public-approved sample data. This is governance-sensitive public impact data behavior.",
+      "risk": "high",
+      "protected_layer": true,
+      "safe_to_stage_later": false,
+      "recommended_action": "Review data contract, public approval labeling, and map behavior; stage only with shfImpactData.js and CSS if approved."
+    },
+    {
+      "path": "src/pages/shf-command/components/shf-impact-ohio-map.css",
+      "status": "M",
+      "classification": "INVESTIGATE",
+      "reason": "Active SHF map styling adds Data Spine status UI and mobile layout changes. It is coupled to the map/data-spine behavior change.",
+      "risk": "medium",
+      "protected_layer": true,
+      "safe_to_stage_later": false,
+      "recommended_action": "Stage only if the SHF Impact Data Spine map changes are approved and visually checked."
+    },
+    {
+      "path": "src/system/identity/hubAccessControl.js",
+      "status": "M",
+      "classification": "INVESTIGATE",
+      "reason": "Identity/access matrix adds Website Studio, governance pages, and /ops/* admin-only routes. Access-control changes are protected and should not be staged casually.",
+      "risk": "high",
+      "protected_layer": true,
+      "safe_to_stage_later": false,
+      "recommended_action": "Review against AdminRoutes and intended role boundaries; stage only with matching approved route additions."
+    },
+    {
+      "path": "src/system/identity/identityRouting.js",
+      "status": "M",
+      "classification": "INVESTIGATE",
+      "reason": "Identity routing adds local development admin override helpers and window.SHS_DEV_IDENTITY exposure in dev localhost. Although guarded by DEV/local host checks, identity behavior needs owner/security review.",
+      "risk": "high",
+      "protected_layer": true,
+      "safe_to_stage_later": false,
+      "recommended_action": "Human security review required before staging; confirm production build cannot expose the override."
+    },
+    {
+      "path": "SHS_FOCUSED_REVIEW.txt",
+      "status": "??",
+      "classification": "ARCHIVE_LATER",
+      "reason": "Generated root-level review snapshot from shs_focused_review.sh; not runtime, not governance source of truth, and stale as of June 1, 2026.",
+      "risk": "low",
+      "protected_layer": false,
+      "safe_to_stage_later": false,
+      "recommended_action": "Move to external archive later if preserving historical review output; do not stage into active repo."
+    },
+    {
+      "path": "SHS_LIVE_ONLY_REVIEW.txt",
+      "status": "??",
+      "classification": "ARCHIVE_LATER",
+      "reason": "Generated root-level live-only review snapshot from shs_live_only_review.sh; not runtime, not current governance documentation.",
+      "risk": "low",
+      "protected_layer": false,
+      "safe_to_stage_later": false,
+      "recommended_action": "Move to external archive later; do not stage."
+    },
+    {
+      "path": "SHS_PROJECT_REVIEW_SNAPSHOT.txt",
+      "status": "??",
+      "classification": "ARCHIVE_LATER",
+      "reason": "Generated root-level project snapshot from shs_project_snapshot.sh; large historical inspection artifact, not active source.",
+      "risk": "low",
+      "protected_layer": false,
+      "safe_to_stage_later": false,
+      "recommended_action": "Move to external archive later; do not stage."
+    },
+    {
+      "path": "shs_focused_review.sh",
+      "status": "??",
+      "classification": "ARCHIVE_LATER",
+      "reason": "Ad hoc snapshot generator at repo root that writes SHS_FOCUSED_REVIEW.txt. Useful historically, but not an official script under scripts/ and not part of governance checks.",
+      "risk": "low",
+      "protected_layer": false,
+      "safe_to_stage_later": false,
+      "recommended_action": "Archive later with its generated output unless owner wants to formalize it under scripts/ in a separate task."
+    },
+    {
+      "path": "shs_live_only_review.sh",
+      "status": "??",
+      "classification": "ARCHIVE_LATER",
+      "reason": "Ad hoc live-only snapshot generator at repo root. It is not runtime and not an official governance check script.",
+      "risk": "low",
+      "protected_layer": false,
+      "safe_to_stage_later": false,
+      "recommended_action": "Archive later with generated review artifacts; do not stage."
+    },
+    {
+      "path": "shs_project_snapshot.sh",
+      "status": "??",
+      "classification": "ARCHIVE_LATER",
+      "reason": "Ad hoc full project snapshot generator at repo root. It is not runtime and duplicates inspection/reporting behavior outside official scripts.",
+      "risk": "low",
+      "protected_layer": false,
+      "safe_to_stage_later": false,
+      "recommended_action": "Archive later with generated review artifacts; do not stage."
+    },
+    {
+      "path": "src/content/lessons/asl-student/student.asl-01-dup.json",
+      "status": "??",
+      "classification": "ARCHIVE_LATER",
+      "reason": "Filename indicates a duplicate lesson fixture; content is a small ASL sanity-test duplicate and no active references were found in the focused scan.",
+      "risk": "medium",
+      "protected_layer": false,
+      "safe_to_stage_later": false,
+      "recommended_action": "Archive later after confirming no lesson import/index expects it; do not stage as active curriculum content."
+    },
+    {
+      "path": "src/data/shfImpactData.js",
+      "status": "??",
+      "classification": "INVESTIGATE",
+      "reason": "Untracked SHF Impact Data Spine adapter is imported by the modified active SHF map and mirrors a shf-next contract. It controls public-approved/sample labels for impact data.",
+      "risk": "high",
+      "protected_layer": true,
+      "safe_to_stage_later": false,
+      "recommended_action": "Human review required for public approval/data-spine claims; stage only with SHF map changes if approved."
+    },
+    {
+      "path": "src/pages/admin/ops/",
+      "status": "??",
+      "classification": "INVESTIGATE",
+      "reason": "Untracked Production Ops admin surface is imported by the modified AdminRoutes and depends on new /ops/* access-control entries. This is active admin architecture/runtime surface.",
+      "risk": "high",
+      "protected_layer": true,
+      "safe_to_stage_later": false,
+      "recommended_action": "Owner should approve Production Ops layer/route bundle before staging with AdminRoutes, AdminSidebar, and identity access changes."
+    },
+    {
+      "path": "src/pages/admin/web-maker.css",
+      "status": "??",
+      "classification": "INVESTIGATE",
+      "reason": "Untracked stylesheet is imported by both active BuilderHub and public WebMakerPage. It is part of the Website Studio route behavior change.",
+      "risk": "medium",
+      "protected_layer": true,
+      "safe_to_stage_later": false,
+      "recommended_action": "Review visual/public-admin coupling; stage only with the approved Website Studio/WebMaker bundle."
+    },
+    {
+      "path": "src/pages/public/WebMakerPage.jsx",
+      "status": "??",
+      "classification": "INVESTIGATE",
+      "reason": "Untracked public Website Studio page is imported by the active index entrypoint for /studio/templates. It creates a new public route surface outside the governance stabilization scope.",
+      "risk": "high",
+      "protected_layer": true,
+      "safe_to_stage_later": false,
+      "recommended_action": "Owner should confirm public route, copy, and build scope before staging with index.main.jsx and web-maker.css."
+    }
+  ]
+}

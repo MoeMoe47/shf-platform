@@ -1,57 +1,23 @@
 import React, {useEffect, useMemo, useState} from "react";
 import OhioCountyOfficialMapV2 from "@/pages/iep-command-v2/OhioCountyOfficialMapV2.jsx";
 import SHFRegionalCountyCluster from "./SHFRegionalCountyCluster.jsx";
+import {
+  getImpactTotals,
+  getMapDataStatusSummary,
+  getProgramLaneById,
+  getPublicApprovedCounties,
+  getPublicApprovedCountyByName,
+} from "@/data/shfImpactData.js";
 import "./shf-impact-ohio-map.css";
 
-const COUNTY_DATA = {
-  Franklin:   { programs: "5", people: "3,824", funding: "$4.5M", outcome: "82%", condition: "Stable" },
-  Delaware:   { programs: "2", people: "1,120", funding: "$1.2M", outcome: "76%", condition: "Stable" },
-  Licking:    { programs: "2", people: "980",  funding: "$980K", outcome: "72%", condition: "Watch" },
-  Fairfield:  { programs: "1", people: "640",  funding: "$610K", outcome: "68%", condition: "Stable" },
-  Pickaway:   { programs: "1", people: "420",  funding: "$430K", outcome: "66%", condition: "Stable" },
-
-  Cuyahoga:   { programs: "4", people: "2,406", funding: "$3.2M", outcome: "79%", condition: "Watch" },
-  Lake:       { programs: "2", people: "870",   funding: "$860K", outcome: "71%", condition: "Stable" },
-  Geauga:     { programs: "1", people: "350",   funding: "$370K", outcome: "67%", condition: "Stable" },
-  Summit:     { programs: "2", people: "1,240", funding: "$1.4M", outcome: "71%", condition: "Opportunity" },
-  Lorain:     { programs: "2", people: "910",   funding: "$930K", outcome: "69%", condition: "Stable" },
-
-  Hamilton:   { programs: "3", people: "1,955", funding: "$2.1M", outcome: "74%", condition: "Stable" },
-  Butler:     { programs: "2", people: "820",   funding: "$810K", outcome: "70%", condition: "Stable" },
-  Warren:     { programs: "1", people: "510",   funding: "$500K", outcome: "68%", condition: "Stable" },
-  Clermont:   { programs: "1", people: "490",   funding: "$470K", outcome: "67%", condition: "Stable" },
-  Montgomery: { programs: "2", people: "1,112", funding: "$1.1M", outcome: "69%", condition: "Stable" },
-
-  Carroll:    { programs: "1", people: "500",   funding: "$500K", outcome: "70%", condition: "Stable" },
-  Stark:      { programs: "2", people: "980",   funding: "$960K", outcome: "74%", condition: "Stable" },
-  Tuscarawas: { programs: "1", people: "420",   funding: "$410K", outcome: "68%", condition: "Stable" },
-  Harrison:   { programs: "1", people: "260",   funding: "$250K", outcome: "64%", condition: "Watch" },
-  Columbiana: { programs: "1", people: "390",   funding: "$380K", outcome: "66%", condition: "Stable" },
-
-  Coshocton:  { programs: "1", people: "500",   funding: "$500K", outcome: "70%", condition: "Stable" },
-  Holmes:     { programs: "1", people: "340",   funding: "$320K", outcome: "65%", condition: "Stable" },
-  Knox:       { programs: "1", people: "420",   funding: "$430K", outcome: "68%", condition: "Stable" },
-  Muskingum:  { programs: "2", people: "760",   funding: "$740K", outcome: "71%", condition: "Stable" },
-
-  Ashland:    { programs: "1", people: "410",   funding: "$390K", outcome: "67%", condition: "Stable" },
-  Richland:   { programs: "2", people: "710",   funding: "$700K", outcome: "70%", condition: "Stable" },
-  Wayne:      { programs: "2", people: "660",   funding: "$650K", outcome: "69%", condition: "Stable" },
-  Morrow:     { programs: "1", people: "250",   funding: "$240K", outcome: "61%", condition: "Stable" },
-
-  Ashtabula:  { programs: "1", people: "540",   funding: "$520K", outcome: "68%", condition: "Stable" },
-  Trumbull:   { programs: "2", people: "780",   funding: "$760K", outcome: "71%", condition: "Stable" },
-  Portage:    { programs: "1", people: "590",   funding: "$560K", outcome: "69%", condition: "Stable" },
-
-  Athens:     { programs: "1", people: "430",   funding: "$410K", outcome: "66%", condition: "Stable" },
-  Perry:      { programs: "1", people: "300",   funding: "$280K", outcome: "63%", condition: "Watch" },
-  Hocking:    { programs: "1", people: "270",   funding: "$260K", outcome: "62%", condition: "Stable" },
-  Vinton:     { programs: "1", people: "190",   funding: "$180K", outcome: "60%", condition: "Stable" },
-  Morgan:     { programs: "1", people: "210",   funding: "$205K", outcome: "61%", condition: "Stable" },
-
-  Lucas:      { programs: "2", people: "913",   funding: "$940K", outcome: "67%", condition: "Stable" },
-};
-
-const PROCESSING_COUNTIES = new Set(["Franklin", "Cuyahoga", "Hamilton"]);
+const PUBLIC_IMPACT_COUNTIES = getPublicApprovedCounties();
+const PUBLIC_IMPACT_COUNTY_NAMES = PUBLIC_IMPACT_COUNTIES.map((county) => county.countyName);
+const PUBLIC_IMPACT_TOTALS = getImpactTotals();
+const MAP_DATA_STATUS = getMapDataStatusSummary();
+const DEFAULT_PUBLIC_COUNTY = PUBLIC_IMPACT_COUNTY_NAMES.includes("Licking")
+  ? "Licking"
+  : PUBLIC_IMPACT_COUNTY_NAMES[0] || "Ohio";
+const PROCESSING_COUNTIES = new Set(PUBLIC_IMPACT_COUNTY_NAMES.slice(0, 3));
 
 const COUNTY_CLUSTERS = {
   Franklin: ["Franklin", "Delaware", "Licking", "Fairfield", "Pickaway"],
@@ -59,6 +25,12 @@ const COUNTY_CLUSTERS = {
   Hamilton: ["Hamilton", "Butler", "Warren", "Clermont", "Montgomery"],
   Carroll: ["Carroll", "Stark", "Tuscarawas", "Harrison", "Columbiana"],
   Coshocton: ["Coshocton", "Holmes", "Knox", "Licking", "Muskingum"],
+  Holmes: ["Holmes", "Coshocton", "Knox", "Wayne", "Tuscarawas"],
+  Knox: ["Knox", "Licking", "Coshocton", "Holmes", "Wayne"],
+  Muskingum: ["Muskingum", "Licking", "Perry", "Coshocton", "Tuscarawas"],
+  Perry: ["Perry", "Muskingum", "Licking", "Coshocton", "Knox"],
+  Tuscarawas: ["Tuscarawas", "Holmes", "Coshocton", "Wayne", "Muskingum"],
+  Wayne: ["Wayne", "Holmes", "Knox", "Tuscarawas", "Coshocton"],
   Richland:  ["Richland", "Ashland", "Knox", "Morrow", "Wayne"],
   Ashtabula: ["Ashtabula", "Lake", "Geauga", "Trumbull", "Portage"],
   Athens:    ["Athens", "Hocking", "Perry", "Vinton", "Morgan"],
@@ -71,37 +43,74 @@ function normalizeCountyName(name = "") {
   return cleaned;
 }
 
+function formatNumber(value) {
+  return Number(value || 0).toLocaleString("en-US");
+}
+
+function formatProgramNames(programLaneIds = []) {
+  return programLaneIds
+    .map((id) => getProgramLaneById(id)?.title)
+    .filter(Boolean)
+    .join(", ");
+}
+
 function getShownData(activeCounty) {
   if (!activeCounty) return null;
 
-  const base = COUNTY_DATA[activeCounty] || {
-    programs: "1",
-    people: "500",
-    funding: "$500K",
-    outcome: "70%",
-    condition: "Stable",
+  const county = getPublicApprovedCountyByName(activeCounty);
+
+  if (!county) {
+    return {
+      hasPublicData: false,
+      programs: "Not public-approved",
+      people: "Not public-approved",
+      funding: "Not public-approved",
+      outcome: "Public approval pending",
+      condition: "Pending",
+      communitiesReached: "Not public-approved",
+      studentsServed: "Not public-approved",
+      workforceParticipants: "Not public-approved",
+      partners: "Not public-approved",
+      dataStatus: "Pending",
+      mapIntensity: "—",
+      publicMessage: "No public impact data available yet",
+      riskStatus: "Pending Public Approval",
+      interventionStatus: "Hidden",
+      fundingState: "Hidden",
+      priority: "Not Public",
+    };
+  }
+
+  const peopleServed = county.studentsServed + county.adultsAndFamiliesReached;
+  const programNames = formatProgramNames(county.primaryProgramLaneIds);
+  const base = {
+    hasPublicData: true,
+    programs: programNames || "SHF mission programs",
+    people: formatNumber(peopleServed),
+    funding: county.dataStatus,
+    outcome: `${Math.round(county.mapIntensity * 100)}% map intensity`,
+    condition: county.dataStatus,
+    communitiesReached: formatNumber(county.communitiesReached),
+    studentsServed: formatNumber(county.studentsServed),
+    workforceParticipants: formatNumber(county.workforceParticipants),
+    partners: formatNumber(county.partners),
+    dataStatus: county.dataStatus,
+    mapIntensity: `${Math.round(county.mapIntensity * 100)}%`,
   };
 
   const riskStatus =
-    base.condition === "Watch" ? "Monitored" :
-    base.condition === "Opportunity" ? "Needs Review" :
-    "Stable";
+    county.dataStatus === "Verified" ? "Verified" :
+    county.dataStatus === "Pending Verification" ? "Needs Verification" :
+    "Sample Data";
 
-  const interventionStatus =
-    activeCounty === "Franklin" ? "Active" :
-    activeCounty === "Cuyahoga" ? "Queued" :
-    activeCounty === "Hamilton" ? "Tracked" :
-    "Available";
+  const interventionStatus = county.primaryProgramLaneIds.length > 1 ? "Multi-lane" : "Single-lane";
 
-  const fundingState =
-    activeCounty === "Franklin" ? "Tracked" :
-    activeCounty === "Cuyahoga" ? "Active" :
-    "Open";
+  const fundingState = `${county.partners} partners`;
 
   const priority =
-    activeCounty === "Franklin" ? "High" :
-    base.condition === "Watch" ? "Moderate" :
-    "Normal";
+    county.mapIntensity >= 0.8 ? "High Reach" :
+    county.mapIntensity >= 0.6 ? "Active Reach" :
+    "Emerging Reach";
 
   return {
     ...base,
@@ -114,17 +123,14 @@ function getShownData(activeCounty) {
 
 function getCommandState(activeCounty, shown, regionalMode) {
   const countyLabel = activeCounty || "Ohio";
-  const risk = shown?.condition || "Stable";
-  const funding = shown?.funding || "$0";
+  const risk = shown?.condition || "Sample";
+  const funding = shown?.dataStatus || "Sample";
   const next =
     regionalMode
-      ? "Review county packet"
+      ? "Review public data"
       : "Select county";
   const confidence =
-    countyLabel === "Franklin" ? "91%" :
-    countyLabel === "Cuyahoga" ? "88%" :
-    countyLabel === "Hamilton" ? "86%" :
-    "82%";
+    shown?.hasPublicData ? shown.mapIntensity : "Pending";
 
   return {
     countyLabel,
@@ -176,8 +182,10 @@ function dispatchSHFDrawerContext(countyName, source = "drawer_event", open = tr
 
 export default function SHFImpactOhioMap() {
   const [hoveredCounty, setHoveredCounty] = useState(null);
-  const [selectedCounty, setSelectedCounty] = useState("Franklin");
-  const [statusMessage, setStatusMessage] = useState("Initializing statewide command surface…");
+  const [selectedCounty, setSelectedCounty] = useState(DEFAULT_PUBLIC_COUNTY);
+  const [statusMessage, setStatusMessage] = useState(
+    `Initializing public SHF impact map · ${PUBLIC_IMPACT_TOTALS.countiesServed} approved counties…`
+  );
   const [statusVisible, setStatusVisible] = useState(true);
   const [isDrilldownOpen, setIsDrilldownOpen] = useState(false);
   const [countyCentroids, setCountyCentroids] = useState({});
@@ -204,7 +212,7 @@ export default function SHFImpactOhioMap() {
   }, [selectedCounty]);
 
   const statewideSignalNodes = useMemo(() => {
-    return ["Franklin", "Cuyahoga", "Hamilton"]
+    return PUBLIC_IMPACT_COUNTY_NAMES.slice(0, 3)
       .map((county, index) => {
         const point = countyCentroids[county];
         if (!point) return null;
@@ -263,12 +271,12 @@ export default function SHFImpactOhioMap() {
   };
 
   const returnToStatewideView = () => {
-    setSelectedCounty("Franklin");
-    dispatchSHFMapCountyContext("Franklin", "statewide_view");
+    setSelectedCounty(DEFAULT_PUBLIC_COUNTY);
+    dispatchSHFMapCountyContext(DEFAULT_PUBLIC_COUNTY, "statewide_view");
     setHoveredCounty(null);
     setIsDrilldownOpen(false);
     setIsCountyDrawerOpen(false);
-    dispatchSHFDrawerContext("Franklin", "statewide_view_drawer_closed", false);
+    dispatchSHFDrawerContext(DEFAULT_PUBLIC_COUNTY, "statewide_view_drawer_closed", false);
     showStatus("Statewide county view restored.", 1400);
   };
 
@@ -303,6 +311,21 @@ export default function SHFImpactOhioMap() {
         <span className="shf-system-status__text">{statusMessage}</span>
       </div>
 
+      <aside className="shf-map-data-spine-status" aria-label="SHF Impact Data Spine status">
+        <div className="shf-map-data-spine-status__head">
+          <span>SHF Data Spine</span>
+          <strong>{MAP_DATA_STATUS.dataStatus}</strong>
+        </div>
+        <dl>
+          <div><dt>Data Source</dt><dd>{MAP_DATA_STATUS.dataSource}</dd></div>
+          <div><dt>Public Approved Records</dt><dd>{MAP_DATA_STATUS.publicApprovedRecords}</dd></div>
+          <div><dt>Trust Level</dt><dd>{MAP_DATA_STATUS.trustLevel}</dd></div>
+          <div><dt>Last Updated</dt><dd>{MAP_DATA_STATUS.lastUpdated}</dd></div>
+          <div><dt>Visibility Rule</dt><dd>{MAP_DATA_STATUS.visibilityRule}</dd></div>
+        </dl>
+        <p>This map displays SHF-approved public impact data only.</p>
+      </aside>
+
       <div className="shf-impact-map-toolbar">
         <button
           type="button"
@@ -333,7 +356,7 @@ export default function SHFImpactOhioMap() {
               <strong>{commandState.risk}</strong>
             </div>
             <div className="shf-command-chip">
-              <span>Funding</span>
+              <span>Data</span>
               <strong>{commandState.funding}</strong>
             </div>
             <div className="shf-command-chip">
@@ -361,7 +384,7 @@ export default function SHFImpactOhioMap() {
             </div>
             <div className="shf-command-legend-item">
               <span className="shf-command-legend-swatch shf-command-legend-swatch--funding" />
-              <span>Funding</span>
+              <span>Public data</span>
             </div>
           </div>
         </div>
@@ -399,9 +422,17 @@ export default function SHFImpactOhioMap() {
             </div>
 
             <div className="shf-impact-map-processing-layer" aria-hidden="true">
-              {[...PROCESSING_COUNTIES].map((county) => (
-                <div key={county} className="shf-processing-beacon" data-county={county} />
-              ))}
+              {[...PROCESSING_COUNTIES].map((county) => {
+                const point = countyCentroids[county];
+                return (
+                  <div
+                    key={county}
+                    className="shf-processing-beacon"
+                    data-county={county}
+                    style={point ? { left: `${(point.x / 900) * 100}%`, top: `${(point.y / 620) * 100}%` } : undefined}
+                  />
+                );
+              })}
             </div>
 
             <svg className="shf-signal-layer shf-signal-layer--statewide" viewBox="0 0 900 620" aria-hidden="true">
@@ -460,11 +491,13 @@ export default function SHFImpactOhioMap() {
         {activeCounty && shown ? (
           <>
             <strong>{activeCounty} County</strong>
-            <div>Programs Active: {shown.programs}</div>
-            <div>People Served: {shown.people}</div>
-            <div>Funding Deployed: {shown.funding}</div>
-            <div>Top Outcome: {shown.outcome}</div>
-            <div>Program Condition: {shown.condition}</div>
+            <div>Programs: {shown.programs}</div>
+            <div>Students Served: {shown.studentsServed}</div>
+            <div>Workforce Participants: {shown.workforceParticipants}</div>
+            <div>Communities Reached: {shown.communitiesReached}</div>
+            <div>Map Intensity: {shown.mapIntensity}</div>
+            <div>Data Status: {shown.dataStatus}</div>
+            {!shown.hasPublicData ? <div>{shown.publicMessage}</div> : null}
           </>
         ) : null}
       </div>
@@ -484,7 +517,7 @@ export default function SHFImpactOhioMap() {
               <strong>{shown.interventionStatus}</strong>
             </div>
             <div className="shf-regional-detail-item">
-              <span>Funding</span>
+              <span>Partners</span>
               <strong>{shown.fundingState}</strong>
             </div>
             <div className="shf-regional-detail-item">
@@ -494,10 +527,10 @@ export default function SHFImpactOhioMap() {
           </div>
 
           <div className="shf-regional-detail-stats">
-            <div><span>Programs Active</span><strong>{shown.programs}</strong></div>
-            <div><span>People Served</span><strong>{shown.people}</strong></div>
-            <div><span>Funding Deployed</span><strong>{shown.funding}</strong></div>
-            <div><span>Top Outcome</span><strong>{shown.outcome}</strong></div>
+            <div><span>Programs</span><strong>{shown.programs}</strong></div>
+            <div><span>Students</span><strong>{shown.studentsServed}</strong></div>
+            <div><span>Workforce</span><strong>{shown.workforceParticipants}</strong></div>
+            <div><span>Data Status</span><strong>{shown.dataStatus}</strong></div>
           </div>
 
           <button
@@ -546,7 +579,7 @@ export default function SHFImpactOhioMap() {
                 <strong>{shown.interventionStatus}</strong>
               </div>
               <div className="shf-county-drawer__card">
-                <span>Funding State</span>
+                <span>Partners</span>
                 <strong>{shown.fundingState}</strong>
               </div>
               <div className="shf-county-drawer__card">
@@ -558,10 +591,12 @@ export default function SHFImpactOhioMap() {
             <div className="shf-county-drawer__section">
               <div className="shf-county-drawer__section-title">Operational Summary</div>
               <div className="shf-county-drawer__stats">
-                <div><span>Programs Active</span><strong>{shown.programs}</strong></div>
-                <div><span>People Served</span><strong>{shown.people}</strong></div>
-                <div><span>Funding Deployed</span><strong>{shown.funding}</strong></div>
-                <div><span>Top Outcome</span><strong>{shown.outcome}</strong></div>
+                <div><span>Programs</span><strong>{shown.programs}</strong></div>
+                <div><span>Communities</span><strong>{shown.communitiesReached}</strong></div>
+                <div><span>Students</span><strong>{shown.studentsServed}</strong></div>
+                <div><span>Workforce</span><strong>{shown.workforceParticipants}</strong></div>
+                <div><span>Data Status</span><strong>{shown.dataStatus}</strong></div>
+                <div><span>Map Intensity</span><strong>{shown.mapIntensity}</strong></div>
               </div>
             </div>
 
@@ -570,7 +605,7 @@ export default function SHFImpactOhioMap() {
               <ul className="shf-county-drawer__list">
                 <li>Outcome timeline</li>
                 <li>Intervention history</li>
-                <li>Funding movement</li>
+                <li>Partner and program movement</li>
                 <li>Operator notes</li>
                 <li>Recommended action queue</li>
               </ul>

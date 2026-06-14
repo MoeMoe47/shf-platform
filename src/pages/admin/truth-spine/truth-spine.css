@@ -1,0 +1,447 @@
+.truth-spine-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255, 255, 255, 0.14), transparent 28rem),
+    radial-gradient(circle at 88% 0%, rgba(77, 163, 255, 0.16), transparent 26rem),
+    linear-gradient(145deg, #05070d 0%, #0b1020 48%, #111827 100%);
+  color: #eef6ff;
+  padding: 28px;
+  overflow-x: hidden;
+}
+
+.truth-spine-hero,
+.truth-spine-panel,
+.truth-spine-metrics article,
+.truth-spine-alert {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(11, 18, 32, 0.72);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(18px);
+}
+
+.truth-spine-hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  border-radius: 22px;
+  padding: 26px;
+}
+
+.truth-spine-kicker,
+.truth-spine-panel-head span {
+  margin: 0;
+  color: #7dd3fc;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.truth-spine-hero h1 {
+  margin: 8px 0 0;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 0.98;
+  letter-spacing: 0;
+}
+
+.truth-spine-hero p {
+  max-width: 760px;
+  margin: 14px 0 0;
+  color: rgba(238, 246, 255, 0.72);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.truth-spine-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-content: flex-start;
+  gap: 10px;
+}
+
+.truth-spine-actions button,
+.truth-spine-table-wrap button {
+  border: 1px solid rgba(125, 211, 252, 0.25);
+  border-radius: 999px;
+  background: rgba(125, 211, 252, 0.12);
+  color: #eef6ff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 10px 14px;
+}
+
+.truth-spine-alert {
+  margin-top: 16px;
+  border-color: rgba(248, 113, 113, 0.38);
+  border-radius: 14px;
+  color: #fecaca;
+  padding: 14px 16px;
+}
+
+.truth-spine-metrics {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.truth-spine-metrics article {
+  min-width: 0;
+  border-radius: 18px;
+  padding: 16px;
+}
+
+.truth-spine-metrics span {
+  display: block;
+  color: rgba(238, 246, 255, 0.58);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.truth-spine-metrics strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 30px;
+  line-height: 1;
+}
+
+.truth-spine-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(320px, 0.75fr);
+  gap: 16px;
+}
+
+.truth-spine-grid--lower {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 16px;
+}
+
+.truth-spine-grid--hardening {
+  margin: 16px 0;
+}
+
+.truth-spine-panel {
+  min-width: 0;
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+.truth-spine-panel-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 16px 18px;
+}
+
+.truth-spine-panel-head strong {
+  display: block;
+  margin-top: 4px;
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.truth-spine-table-wrap {
+  overflow-x: auto;
+}
+
+.truth-spine-table-wrap table {
+  width: 100%;
+  min-width: 850px;
+  border-collapse: collapse;
+}
+
+.truth-spine-table-wrap th,
+.truth-spine-table-wrap td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 13px 14px;
+  color: rgba(238, 246, 255, 0.82);
+  font-size: 13px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.truth-spine-table-wrap th {
+  color: rgba(238, 246, 255, 0.48);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.truth-spine-table-wrap tr.is-selected {
+  background: rgba(125, 211, 252, 0.08);
+}
+
+.truth-spine-table-wrap td small,
+.truth-spine-source-list small,
+.truth-spine-audit-list small {
+  display: block;
+  margin-top: 5px;
+  color: rgba(238, 246, 255, 0.45);
+  font-size: 11px;
+}
+
+.truth-pill {
+  display: inline-flex;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 5px 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e5e7eb;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.truth-pill--verified {
+  border-color: rgba(52, 211, 153, 0.35);
+  background: rgba(52, 211, 153, 0.12);
+  color: #bbf7d0;
+}
+
+.truth-pill--draft,
+.truth-pill--missing_source {
+  border-color: rgba(251, 191, 36, 0.35);
+  background: rgba(251, 191, 36, 0.12);
+  color: #fde68a;
+}
+
+.truth-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.truth-switch input {
+  accent-color: #38bdf8;
+}
+
+.truth-spine-envelope {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 16px;
+}
+
+.truth-spine-envelope div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 12px;
+}
+
+.truth-spine-envelope dt {
+  color: rgba(238, 246, 255, 0.54);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.truth-spine-envelope dd {
+  margin: 0;
+  color: #ffffff;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.truth-spine-warning-list,
+.truth-spine-source-list,
+.truth-spine-audit-list,
+.truth-spine-drift-list,
+.truth-spine-replay-list,
+.truth-spine-federation-list {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+}
+
+.truth-spine-coverage-grid,
+.truth-spine-severity-grid {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+}
+
+.truth-spine-coverage-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.truth-spine-severity-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding-bottom: 0;
+}
+
+.truth-spine-coverage-grid article,
+.truth-spine-severity-grid article,
+.truth-spine-drift-list article {
+  min-width: 0;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 11px;
+}
+
+.truth-spine-coverage-grid span,
+.truth-spine-severity-grid span {
+  display: block;
+  color: rgba(238, 246, 255, 0.52);
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.truth-spine-coverage-grid strong,
+.truth-spine-severity-grid strong {
+  display: block;
+  margin-top: 5px;
+  color: #ffffff;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.truth-spine-warning-list {
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  padding-top: 0;
+}
+
+.truth-spine-warning-list span,
+.truth-spine-source-list article,
+.truth-spine-audit-list article,
+.truth-spine-replay-list article,
+.truth-spine-federation-list article,
+.truth-spine-package-card {
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 11px;
+}
+
+.truth-spine-package-card {
+  margin: 0 16px 16px;
+}
+
+.truth-spine-package-card p {
+  overflow-wrap: anywhere;
+  margin: 8px 0;
+  color: rgba(238, 246, 255, 0.7);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.truth-spine-warning-list span {
+  color: #fde68a;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.truth-spine-source-list strong,
+.truth-spine-audit-list strong,
+.truth-spine-drift-list strong,
+.truth-spine-replay-list strong,
+.truth-spine-federation-list strong,
+.truth-spine-package-card strong {
+  display: block;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.truth-spine-source-list span,
+.truth-spine-audit-list span,
+.truth-spine-replay-list span,
+.truth-spine-federation-list span,
+.truth-spine-package-card span,
+.truth-spine-source-list p,
+.truth-spine-audit-list p,
+.truth-spine-drift-list p {
+  color: rgba(238, 246, 255, 0.68);
+  font-size: 12px;
+}
+
+.truth-spine-package-card span {
+  display: block;
+  color: #7dd3fc;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.truth-spine-drift-list p {
+  margin: 6px 0 0;
+  line-height: 1.35;
+}
+
+.truth-spine-drift-list small,
+.truth-spine-replay-list small,
+.truth-spine-federation-list small,
+.truth-spine-package-card small {
+  display: block;
+  margin-top: 6px;
+  color: rgba(238, 246, 255, 0.48);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.truth-severity {
+  display: inline-flex;
+  width: max-content;
+  border-radius: 999px;
+  padding: 4px 8px;
+  margin-bottom: 8px;
+  background: rgba(125, 211, 252, 0.12);
+  color: #bae6fd;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.truth-severity--critical {
+  background: rgba(248, 113, 113, 0.16);
+  color: #fecaca;
+}
+
+.truth-severity--warning {
+  background: rgba(251, 191, 36, 0.14);
+  color: #fde68a;
+}
+
+.truth-severity--info {
+  background: rgba(52, 211, 153, 0.12);
+  color: #bbf7d0;
+}
+
+@media (max-width: 980px) {
+  .truth-spine-page {
+    padding: 16px;
+  }
+
+  .truth-spine-hero,
+  .truth-spine-grid,
+  .truth-spine-grid--lower {
+    grid-template-columns: 1fr;
+  }
+
+  .truth-spine-hero {
+    display: grid;
+  }
+
+  .truth-spine-actions {
+    justify-content: flex-start;
+  }
+
+  .truth-spine-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .truth-spine-coverage-grid,
+  .truth-spine-severity-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

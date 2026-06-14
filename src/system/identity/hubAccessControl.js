@@ -33,8 +33,11 @@ export const hubPageAccess = {
   "/app-registry": ["shs_admin"],
   "/registry": ["shs_admin"],
   "/builder": ["shs_admin"],
+  "/web-maker": ["shs_admin"],
+  "/studio/templates": ["shs_admin"],
   "/builder/tools": ["shs_admin"],
   "/tools": ["shs_admin"],
+  "/tool-dashboard": ["shs_admin"],
   "/master-narrative": ["shs_admin"],
   "/grant-binder": ["shs_admin"],
   "/alignment": ["shs_admin"],
@@ -60,11 +63,29 @@ export const hubPageAccess = {
 
   "/oracle": ["shs_admin"],
   "/verification": ["shs_admin"],
+  "/truth-spine": ["shs_admin"],
+  "/ai-guardrails": ["shs_admin"],
+  "/game-theory": ["shs_admin"],
   "/aggregation": ["shs_admin"],
   "/audit": ["shs_admin"],
   "/settings": ["shs_admin"],
   "/identity": ["shs_admin"],
   "/adaptive-experience": ["shs_admin"],
+
+  // Internal Production Ops stays SHS-admin only. Development identity overrides
+  // happen in identityRouting.js and must not widen these route permissions.
+  "/ops/production": ["shs_admin"],
+  "/ops/projects": ["shs_admin"],
+  "/ops/brand-profile": ["shs_admin"],
+  "/ops/page-intent": ["shs_admin"],
+  "/ops/layout-blueprint": ["shs_admin"],
+  "/ops/visual-treatment": ["shs_admin"],
+  "/ops/assets": ["shs_admin"],
+  "/ops/data-binding": ["shs_admin"],
+  "/ops/mock-review": ["shs_admin"],
+  "/ops/build-packet": ["shs_admin"],
+  "/ops/screenshot-qa": ["shs_admin"],
+  "/ops/learning": ["shs_admin"],
 };
 
 export function normalizeHubRole(role) {

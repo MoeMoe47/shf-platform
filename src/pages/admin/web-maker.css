@@ -1,0 +1,586 @@
+.webmaker-page {
+  --webmaker-navy: #06111F;
+  --webmaker-navy-2: #0B1B2E;
+  --webmaker-cream: #f7f4ef;
+  --webmaker-soft: #fbfaf7;
+  --webmaker-line: rgba(6, 17, 31, 0.1);
+  --webmaker-muted: #667085;
+  --webmaker-blue: #2563eb;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 18% 8%, rgba(14, 165, 233, 0.1), transparent 28%),
+    linear-gradient(180deg, #fbfaf7 0%, #f5f1ea 100%);
+  color: var(--webmaker-navy);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  overflow-x: hidden;
+}
+
+.webmaker-page * {
+  box-sizing: border-box;
+}
+
+.webmaker-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 26px 0;
+}
+
+.webmaker-brand,
+.webmaker-nav__links a {
+  color: var(--webmaker-navy);
+  text-decoration: none;
+}
+
+.webmaker-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.96rem;
+  font-weight: 800;
+}
+
+.webmaker-brand__mark {
+  display: inline-grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--webmaker-navy);
+  color: #fff;
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+}
+
+.webmaker-nav__links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  color: rgba(6, 17, 31, 0.72);
+  font-size: 0.94rem;
+  font-weight: 650;
+}
+
+.webmaker-nav__links a {
+  color: rgba(6, 17, 31, 0.72);
+}
+
+.webmaker-sound {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid var(--webmaker-line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--webmaker-navy);
+  cursor: pointer;
+  font-weight: 750;
+  box-shadow: 0 10px 26px rgba(6, 17, 31, 0.06);
+}
+
+.webmaker-hero,
+.webmaker-trust,
+.webmaker-templates,
+.webmaker-steps,
+.webmaker-finalCta {
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+}
+
+.webmaker-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(420px, 1.05fr);
+  gap: 60px;
+  align-items: center;
+  padding: 76px 0 86px;
+}
+
+.webmaker-eyebrow {
+  margin: 0 0 14px;
+  color: #2563eb;
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.webmaker-hero h1 {
+  max-width: 650px;
+  margin: 0 0 22px;
+  color: var(--webmaker-navy);
+  font-size: clamp(3.6rem, 8vw, 6.7rem);
+  line-height: 0.92;
+  letter-spacing: 0;
+}
+
+.webmaker-hero__copy > p:not(.webmaker-eyebrow) {
+  max-width: 560px;
+  margin: 0;
+  color: #475467;
+  font-size: 1.18rem;
+  line-height: 1.65;
+}
+
+.webmaker-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 32px;
+}
+
+.webmaker-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 22px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 800;
+  box-shadow: 0 16px 34px rgba(6, 17, 31, 0.12);
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.webmaker-button span,
+.webmaker-templateCard button i {
+  display: inline-block;
+  font-style: normal;
+  transition: transform 180ms ease;
+}
+
+.webmaker-button--primary {
+  background: var(--webmaker-navy);
+  color: #fff;
+}
+
+.webmaker-button--secondary {
+  border: 1px solid var(--webmaker-line);
+  background: #fff;
+  color: var(--webmaker-navy);
+}
+
+.webmaker-preview {
+  position: relative;
+  min-height: 540px;
+}
+
+.webmaker-preview__desktop {
+  position: absolute;
+  inset: 26px 36px 66px 0;
+  border: 1px solid rgba(6, 17, 31, 0.08);
+  border-radius: 34px;
+  background: #fff;
+  box-shadow:
+    0 34px 80px rgba(6, 17, 31, 0.18),
+    0 1px 0 rgba(255, 255, 255, 0.9) inset;
+  overflow: hidden;
+}
+
+.webmaker-windowbar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  height: 54px;
+  padding-left: 26px;
+  border-bottom: 1px solid rgba(6, 17, 31, 0.08);
+  background: rgba(247, 244, 239, 0.78);
+}
+
+.webmaker-windowbar i {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: rgba(6, 17, 31, 0.18);
+}
+
+.webmaker-preview__screen {
+  min-height: calc(100% - 54px);
+  padding: 56px 54px;
+  background:
+    linear-gradient(135deg, rgba(223, 244, 255, 0.72), rgba(255, 255, 255, 0.88)),
+    var(--webmaker-soft);
+}
+
+.webmaker-preview__pill,
+.webmaker-preview__cta,
+.webmaker-preview__tiles span {
+  display: block;
+  border-radius: 999px;
+}
+
+.webmaker-preview__pill {
+  width: 160px;
+  height: 16px;
+  margin-bottom: 34px;
+  background: rgba(37, 99, 235, 0.18);
+}
+
+.webmaker-preview__screen h2 {
+  max-width: 360px;
+  margin: 0 0 18px;
+  color: var(--webmaker-navy);
+  font-size: 3rem;
+  line-height: 0.96;
+  letter-spacing: 0;
+}
+
+.webmaker-preview__screen p {
+  max-width: 390px;
+  margin: 0;
+  color: #667085;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.webmaker-preview__cta {
+  width: 148px;
+  height: 44px;
+  margin-top: 34px;
+  background: var(--webmaker-navy);
+}
+
+.webmaker-preview__tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 54px;
+}
+
+.webmaker-preview__tiles span {
+  height: 92px;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 14px 30px rgba(6, 17, 31, 0.08);
+}
+
+.webmaker-preview__mobile {
+  position: absolute;
+  right: 0;
+  bottom: 28px;
+  width: 188px;
+  min-height: 336px;
+  padding: 26px 20px;
+  border: 9px solid var(--webmaker-navy-2);
+  border-radius: 36px;
+  background: #fff;
+  box-shadow: 0 30px 70px rgba(6, 17, 31, 0.24);
+}
+
+.webmaker-preview__mobile span {
+  display: block;
+  width: 54px;
+  height: 6px;
+  margin: 0 auto 38px;
+  border-radius: 999px;
+  background: rgba(6, 17, 31, 0.18);
+}
+
+.webmaker-preview__mobile h3 {
+  margin: 0 0 12px;
+  color: var(--webmaker-navy);
+  font-size: 1.55rem;
+  letter-spacing: 0;
+}
+
+.webmaker-preview__mobile p {
+  margin: 0;
+  color: #667085;
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.webmaker-preview__mobile i {
+  display: block;
+  width: 92px;
+  height: 36px;
+  margin-top: 34px;
+  border-radius: 999px;
+  background: #2563eb;
+}
+
+.webmaker-trust {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  padding: 22px 0 96px;
+}
+
+.webmaker-trust article,
+.webmaker-stepGrid article {
+  padding: 30px;
+  border: 1px solid rgba(6, 17, 31, 0.08);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 18px 46px rgba(6, 17, 31, 0.07);
+}
+
+.webmaker-trust h2,
+.webmaker-stepGrid h3 {
+  margin: 0 0 12px;
+  color: var(--webmaker-navy);
+  font-size: 1.25rem;
+  letter-spacing: 0;
+}
+
+.webmaker-trust p,
+.webmaker-stepGrid p,
+.webmaker-sectionHead h2 + p {
+  margin: 0;
+  color: var(--webmaker-muted);
+  line-height: 1.6;
+}
+
+.webmaker-templates,
+.webmaker-steps {
+  padding: 0 0 104px;
+}
+
+.webmaker-sectionHead {
+  max-width: 720px;
+  margin-bottom: 34px;
+}
+
+.webmaker-sectionHead h2,
+.webmaker-finalCta h2 {
+  margin: 0;
+  color: var(--webmaker-navy);
+  font-size: clamp(2.2rem, 5vw, 4.8rem);
+  line-height: 0.98;
+  letter-spacing: 0;
+}
+
+.webmaker-templateGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.webmaker-templateCard {
+  min-height: 560px;
+  border: 1px solid rgba(6, 17, 31, 0.08);
+  border-radius: 34px;
+  background: #fff;
+  box-shadow: 0 24px 60px rgba(6, 17, 31, 0.1);
+  overflow: hidden;
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.webmaker-templateCard__image {
+  height: 70%;
+  min-height: 392px;
+  overflow: hidden;
+  background: var(--webmaker-cream);
+}
+
+.webmaker-templateCard__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 260ms ease;
+}
+
+.webmaker-templateCard__body {
+  min-height: 30%;
+  padding: 22px;
+}
+
+.webmaker-templateCard__body span {
+  display: inline-flex;
+  margin-bottom: 10px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.09);
+  color: #1d4ed8;
+  font-size: 0.75rem;
+  font-weight: 850;
+}
+
+.webmaker-templateCard h3 {
+  margin: 0 0 8px;
+  color: var(--webmaker-navy);
+  font-size: 1.35rem;
+  letter-spacing: 0;
+}
+
+.webmaker-templateCard p {
+  margin: 0 0 18px;
+  color: #667085;
+  line-height: 1.5;
+}
+
+.webmaker-templateCard button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--webmaker-navy);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 800;
+  transition: transform 180ms ease, background 180ms ease;
+}
+
+.webmaker-stepGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.webmaker-stepGrid article > span {
+  display: inline-flex;
+  margin-bottom: 28px;
+  color: #2563eb;
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+.webmaker-finalCta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 70px;
+  padding: 56px;
+  border-radius: 38px;
+  background:
+    radial-gradient(circle at 88% 20%, rgba(56, 189, 248, 0.24), transparent 32%),
+    linear-gradient(135deg, var(--webmaker-navy), var(--webmaker-navy-2));
+  color: #fff;
+  box-shadow: 0 34px 80px rgba(6, 17, 31, 0.22);
+}
+
+.webmaker-finalCta .webmaker-eyebrow,
+.webmaker-finalCta h2 {
+  color: #fff;
+}
+
+.webmaker-finalCta h2 {
+  max-width: 760px;
+}
+
+.webmaker-finalCta .webmaker-button {
+  flex: 0 0 auto;
+  background: #fff;
+  color: var(--webmaker-navy);
+}
+
+.webmaker-button:hover,
+.webmaker-sound:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 22px 42px rgba(6, 17, 31, 0.16);
+}
+
+.webmaker-button:hover span,
+.webmaker-templateCard button:hover i {
+  transform: translateX(4px);
+}
+
+.webmaker-button:active,
+.webmaker-sound:active,
+.webmaker-templateCard button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.webmaker-templateCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 32px 80px rgba(6, 17, 31, 0.15);
+}
+
+.webmaker-templateCard:hover img {
+  transform: scale(1.035);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .webmaker-page *,
+  .webmaker-page *::before,
+  .webmaker-page *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@media (max-width: 1040px) {
+  .webmaker-hero {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .webmaker-preview {
+    min-height: 500px;
+  }
+
+  .webmaker-trust,
+  .webmaker-templateGrid,
+  .webmaker-stepGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .webmaker-templateCard {
+    min-height: auto;
+  }
+
+  .webmaker-finalCta {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 700px) {
+  .webmaker-nav {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .webmaker-nav__links {
+    width: 100%;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .webmaker-hero,
+  .webmaker-trust,
+  .webmaker-templates,
+  .webmaker-steps,
+  .webmaker-finalCta {
+    width: min(100% - 28px, 1180px);
+  }
+
+  .webmaker-hero {
+    padding-top: 42px;
+  }
+
+  .webmaker-preview {
+    min-height: 440px;
+  }
+
+  .webmaker-preview__desktop {
+    inset: 0 0 82px 0;
+  }
+
+  .webmaker-preview__screen {
+    padding: 38px 28px;
+  }
+
+  .webmaker-preview__screen h2 {
+    font-size: 2.25rem;
+  }
+
+  .webmaker-preview__mobile {
+    width: 150px;
+    min-height: 286px;
+  }
+
+  .webmaker-finalCta {
+    padding: 34px 24px;
+    border-radius: 28px;
+  }
+}

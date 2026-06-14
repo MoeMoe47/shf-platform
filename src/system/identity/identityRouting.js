@@ -1,5 +1,36 @@
 import { normalizeHubRole } from "@/system/identity/hubAccessControl";
 
+const SHS_DEV_ADMIN_OVERRIDE_KEY = "shsDevIdentityRoleOverride";
+const SHS_DEV_ADMIN_EMAILS_KEY = "shsDevIdentityAdminEmails";
+const SHS_DEV_ADMIN_EMAILS = ["admin@demo.shs", "shs@demo.shs"];
+
+function isLocalDevelopmentHost() {
+  if (typeof window === "undefined") return false;
+
+  return ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
+}
+
+function canUseLocalDevelopmentIdentityOverride(email) {
+  if (!import.meta.env.DEV || !isLocalDevelopmentHost()) return false;
+
+  const normalizedEmail = String(email || "").trim().toLowerCase();
+  if (!normalizedEmail) return false;
+
+  const configuredEmails = String(localStorage.getItem(SHS_DEV_ADMIN_EMAILS_KEY) || "")
+    .split(",")
+    .map((value) => value.trim().toLowerCase())
+    .filter(Boolean);
+
+  return [...SHS_DEV_ADMIN_EMAILS, ...configuredEmails].includes(normalizedEmail);
+}
+
+function getLocalDevelopmentRoleOverride(email) {
+  if (!canUseLocalDevelopmentIdentityOverride(email)) return "";
+
+  const overrideRole = normalizeHubRole(localStorage.getItem(SHS_DEV_ADMIN_OVERRIDE_KEY));
+  return overrideRole === "shs_admin" ? overrideRole : "";
+}
+
 export const SHS_DEMO_USERS = [
   {
     id: "demo_client",
@@ -65,6 +96,28 @@ export function saveIdentitySession(user) {
   localStorage.setItem("shsRecommendedGoal", user.recommendedGoal || "");
 }
 
+export function seedLocalShsAdminIdentityForDevelopment() {
+  if (typeof window === "undefined") return false;
+
+  /*
+    Local development helper only:
+    - Requires Vite dev mode and a localhost-style host.
+    - Does not change hubAccessControl; /ops remains shs_admin-only.
+    - Production builds cannot use this path because import.meta.env.DEV is false.
+
+    Browser console usage:
+    window.SHS_DEV_IDENTITY.seedShsAdmin()
+  */
+  if (!import.meta.env.DEV || !isLocalDevelopmentHost()) return false;
+
+  const shsAdminUser = getDemoUserByEmail("shs@demo.shs");
+  if (!shsAdminUser) return false;
+
+  saveIdentitySession(shsAdminUser);
+  localStorage.setItem(SHS_DEV_ADMIN_OVERRIDE_KEY, "shs_admin");
+  return true;
+}
+
 export function clearIdentitySession() {
   if (typeof window === "undefined") return;
 
@@ -79,6 +132,7 @@ export function clearIdentitySession() {
     "shsOrganization",
     "shsWorkspace",
     "shsRecommendedGoal",
+    SHS_DEV_ADMIN_OVERRIDE_KEY,
   ].forEach((key) => localStorage.removeItem(key));
 }
 
@@ -94,18 +148,41 @@ export function getCurrentIdentity() {
     };
   }
 
-  const role = normalizeHubRole(localStorage.getItem("shsUserRole") || localStorage.getItem("shsHubDemoRole"));
+  const storedEmail = localStorage.getItem("shsUserEmail") || "";
+  const storedRole = normalizeHubRole(localStorage.getItem("shsUserRole") || localStorage.getItem("shsHubDemoRole"));
+  const developmentRoleOverride = getLocalDevelopmentRoleOverride(storedEmail);
+  const role = developmentRoleOverride || storedRole;
 
   return {
     isAuthenticated: localStorage.getItem("shsAuthStatus") === "authenticated",
     id: localStorage.getItem("shsUserId") || "",
     name: localStorage.getItem("shsUserName") || "Guest",
-    email: localStorage.getItem("shsUserEmail") || "",
+    email: storedEmail,
     role,
-    roleLabel: localStorage.getItem("shsUserRoleLabel") || role,
+    roleLabel: developmentRoleOverride ? "SHS Admin (local dev)" : localStorage.getItem("shsUserRoleLabel") || role,
     organization: localStorage.getItem("shsOrganization") || "",
     workspace: localStorage.getItem("shsWorkspace") || "",
     recommendedGoal: localStorage.getItem("shsRecommendedGoal") || "",
+  };
+}
+
+if (typeof window !== "undefined" && import.meta.env.DEV && isLocalDevelopmentHost()) {
+  /*
+    Intentionally exposed only during local Vite development so the project
+    owner can recover an admin demo session without weakening production auth.
+  */
+  window.SHS_DEV_IDENTITY = {
+    seedShsAdmin: seedLocalShsAdminIdentityForDevelopment,
+    setShsAdminOverride() {
+      const email = localStorage.getItem("shsUserEmail") || "";
+      if (!canUseLocalDevelopmentIdentityOverride(email)) return false;
+      localStorage.setItem(SHS_DEV_ADMIN_OVERRIDE_KEY, "shs_admin");
+      return true;
+    },
+    clearOverride() {
+      localStorage.removeItem(SHS_DEV_ADMIN_OVERRIDE_KEY);
+      return true;
+    },
   };
 }
 

@@ -9,6 +9,7 @@ import "@/styles/unified-shell.css";
 
 // Providers wrapper (exists in your tree: src/entries/RootProviders.jsx)
 import RootProviders from "@/entries/RootProviders.jsx";
+import WebMakerPage from "@/pages/public/WebMakerPage.jsx";
 
 /**
  * Simple, safe Launcher that routes users to the correct multi-entry HTML pages.
@@ -110,9 +111,11 @@ function App() {
   if (typeof document !== "undefined") {
     document.documentElement.setAttribute("data-app", "index");
   }
+  const pathname = typeof window !== "undefined" ? window.location.pathname : "/";
+
   return (
     <RootProviders>
-      <Launcher />
+      {pathname === "/studio/templates" ? <WebMakerPage /> : <Launcher />}
     </RootProviders>
   );
 }

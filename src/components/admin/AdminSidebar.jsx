@@ -7,9 +7,27 @@ const navClass = ({ isActive }) =>
 
 const SECTIONS = [
   {
+    title: "Production Ops",
+    items: [
+      { to: "/ops/production", icon: "▣", label: "Production" },
+      { to: "/ops/projects", icon: "◇", label: "Projects" },
+      { to: "/ops/brand-profile", icon: "◈", label: "Brand Profile" },
+      { to: "/ops/page-intent", icon: "→", label: "Page Intent" },
+      { to: "/ops/layout-blueprint", icon: "□", label: "Layout Blueprint" },
+      { to: "/ops/visual-treatment", icon: "◐", label: "Visual Treatment" },
+      { to: "/ops/assets", icon: "◧", label: "Assets" },
+      { to: "/ops/data-binding", icon: "≡", label: "Data Binding" },
+      { to: "/ops/mock-review", icon: "✓", label: "Mock Review" },
+      { to: "/ops/build-packet", icon: "▤", label: "Build Packet" },
+      { to: "/ops/screenshot-qa", icon: "◫", label: "Screenshot QA" },
+      { to: "/ops/learning", icon: "↻", label: "Learning" }
+    ]
+  },
+  {
     title: "Operations",
     items: [
-      { to: "/tool-dashboard", icon: "🧰", label: "Tool Dashboard" },
+      { to: "/builder", icon: "▥", label: "Website Studio" },
+      { to: "/builder/tools", icon: "🧰", label: "Tool Dashboard" },
       { to: "/admin", icon: "🛡️", label: "Admin Home", end: true },
       { to: "/admin/users", icon: "👥", label: "Users" },
       { to: "/admin/settings", icon: "⚙️", label: "Settings" }
@@ -25,6 +43,10 @@ const SECTIONS = [
   {
     title: "System",
     items: [
+      { to: "/truth-spine", icon: "T", label: "Truth Spine", badge: "V1" },
+      { to: "/oracle", icon: "O", label: "Oracle", badge: "V1" },
+      { to: "/ai-guardrails", icon: "A", label: "AI Guardrails", badge: "V1" },
+      { to: "/game-theory", icon: "G", label: "Game Theory", badge: "V1" },
       { to: "/dev/docs", icon: "📚", label: "Docs" },
       { to: "/health", icon: "💚", label: "Health", badge: "NEW" }
     ]

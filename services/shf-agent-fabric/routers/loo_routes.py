@@ -101,7 +101,17 @@ def _score_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
         "weekly_artifact_completion": weekly_artifact_completion,
     }
 
-    return {"ok": True, "score": int(score), "decision": decision, "metrics": metrics, "derived": derived}
+    truth_input = payload.get("truth") if isinstance(payload.get("truth"), dict) else {}
+    trust_metadata = {
+        "claim_id": truth_input.get("claim_id"),
+        "verification_status": truth_input.get("verification_status") or "not_supplied",
+        "trust_level": truth_input.get("trust_level") or "draft",
+        "trace_coverage": truth_input.get("trace_coverage") or 0,
+        "report_ready": bool(truth_input.get("report_ready")),
+        "note": "LOO ranks outcomes; Truth Spine metadata gates reporting readiness.",
+    }
+
+    return {"ok": True, "score": int(score), "decision": decision, "metrics": metrics, "derived": derived, "trust": trust_metadata}
 
 
 def _inject_run_targets(payload: Dict[str, Any], targets: Dict[str, Any]) -> Dict[str, Any]:

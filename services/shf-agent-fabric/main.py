@@ -82,6 +82,10 @@ from routers.runs_registry_routes import router as runs_registry_router  # noqa:
 from routers.runs_loo_payload_routes import router as runs_loo_payload_router  # noqa: E402
 
 from routers.reports_routes import router as reports_router  # noqa: E402
+from routers.truth_routes import router as truth_router  # noqa: E402
+from routers.oracle_routes import router as oracle_router  # noqa: E402
+from routers.ai_guardrails_routes import router as ai_guardrails_router  # noqa: E402
+from routers.game_theory_routes import router as game_theory_router  # noqa: E402
 from routers.feedback_routes import router as feedback_router  # noqa: E402
 from routers.events_routes import router as events_router
 from routers.live_optimizer_routes import router as live_optimizer_router
@@ -432,6 +436,10 @@ app.include_router(runs_registry_router)
 app.include_router(runs_loo_payload_router)
 
 # Reports / feedback / events
+app.include_router(truth_router)
+app.include_router(oracle_router)
+app.include_router(ai_guardrails_router)
+app.include_router(game_theory_router)
 app.include_router(reports_router)
 app.include_router(feedback_router)
 app.include_router(events_router)

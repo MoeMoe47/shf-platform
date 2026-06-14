@@ -308,6 +308,9 @@ import AIAnalystPanel from "./sections/AIAnalystPanel";
 import TrustVerificationPanel from "./sections/TrustVerificationPanel";
 
 const SHF_COMMAND_LOGO_SRC = "/assets/shf-command/brand/shf-globe-logo.png";
+const SHF_REPORT_GENERATOR_HREF = import.meta.env.DEV
+  ? "http://127.0.0.1:5174/foundation/impact-report"
+  : "/foundation/impact-report";
 
 const SHF_COMMAND_TOUR_STEPS = [
   {
@@ -1431,6 +1434,7 @@ const [selfAudit, setSelfAudit] = useState(null);
   };
 
   return (
+    <>
     <div className="shf-page">
       <div className="shf-shell">
         <header className="shf-topbar">
@@ -1478,6 +1482,13 @@ const [selfAudit, setSelfAudit] = useState(null);
               <option>Cuyahoga County</option>
               <option>Hamilton County</option>
             </select>
+
+            <a
+              className="shf-export-btn"
+              href={SHF_REPORT_GENERATOR_HREF}
+            >
+              Generate SHF Impact Report
+            </a>
 
             <button
               className="shf-export-btn"
@@ -1884,7 +1895,7 @@ const [selfAudit, setSelfAudit] = useState(null);
         drawerState={aiTruthDrawer}
         onClose={() => setAiTruthDrawer({ open: false })}
       />
+    </>
 
   );
 }
-

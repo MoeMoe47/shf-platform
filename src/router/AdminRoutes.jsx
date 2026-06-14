@@ -14,6 +14,22 @@ import BuilderHub from "@/pages/admin/BuilderHub.jsx";
 import AggregationDashboard from "@/pages/admin/aggregation/AggregationDashboard.jsx";
 import ReportingCommandSurface from "@/pages/admin/reporting/ReportingCommandSurface.jsx";
 import VerificationAuditSurface from "@/pages/admin/reporting/VerificationAuditSurface.jsx";
+import TruthSpinePage from "@/pages/admin/truth-spine/TruthSpinePage.jsx";
+import OraclePage from "@/pages/admin/oracle/OraclePage.jsx";
+import AIGuardrailsPage from "@/pages/admin/ai-guardrails/AIGuardrailsPage.jsx";
+import GameTheoryPage from "@/pages/admin/game-theory/GameTheoryPage.jsx";
+import OpsProductionDashboard from "@/pages/admin/ops/OpsProductionDashboard.jsx";
+import OpsProjectSetup from "@/pages/admin/ops/OpsProjectSetup.jsx";
+import OpsBrandProfile from "@/pages/admin/ops/OpsBrandProfile.jsx";
+import OpsPageIntent from "@/pages/admin/ops/OpsPageIntent.jsx";
+import OpsLayoutBlueprint from "@/pages/admin/ops/OpsLayoutBlueprint.jsx";
+import OpsVisualTreatment from "@/pages/admin/ops/OpsVisualTreatment.jsx";
+import OpsAssetGovernance from "@/pages/admin/ops/OpsAssetGovernance.jsx";
+import OpsDataBinding from "@/pages/admin/ops/OpsDataBinding.jsx";
+import OpsMockReview from "@/pages/admin/ops/OpsMockReview.jsx";
+import OpsBuildPacket from "@/pages/admin/ops/OpsBuildPacket.jsx";
+import OpsScreenshotQA from "@/pages/admin/ops/OpsScreenshotQA.jsx";
+import OpsLearningDashboard from "@/pages/admin/ops/OpsLearningDashboard.jsx";
 
 import HubWorkspaceDashboard from "@/pages/hub/HubWorkspaceDashboard.jsx";
 import SHSLoginPage from "@/pages/auth/SHSLoginPage.jsx";
@@ -130,6 +146,10 @@ export default function AdminRoutes() {
         <Route path="/aggregation" element={protect("/aggregation", <AggregationDashboard />, [SHS_SECURITY_PERMISSIONS.AGGREGATION_VIEW])} />
         <Route path="/reporting" element={protect("/reporting", <ReportingCommandSurface />, [SHS_SECURITY_PERMISSIONS.REPORTS_VIEW])} />
         <Route path="/verification-audit" element={protect("/verification-audit", <VerificationAuditSurface />, [SHS_SECURITY_PERMISSIONS.VERIFICATION_VIEW])} />
+        <Route path="/truth-spine" element={protect("/truth-spine", <TruthSpinePage />, [SHS_SECURITY_PERMISSIONS.TRUTH_VIEW])} />
+        <Route path="/oracle" element={protect("/oracle", <OraclePage />, [SHS_SECURITY_PERMISSIONS.TRUTH_VIEW])} />
+        <Route path="/ai-guardrails" element={protect("/ai-guardrails", <AIGuardrailsPage />, [SHS_SECURITY_PERMISSIONS.TRUTH_VIEW])} />
+        <Route path="/game-theory" element={protect("/game-theory", <GameTheoryPage />, [SHS_SECURITY_PERMISSIONS.TRUTH_VIEW])} />
         <Route path="/audit" element={protect("/audit", <AuditLogViewer />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/identity" element={protect("/identity", <IdentityManagement />, [SHS_SECURITY_PERMISSIONS.IDENTITY_VIEW])} />
 
@@ -137,14 +157,31 @@ export default function AdminRoutes() {
         <Route path="/app-registry" element={protect("/app-registry", <AppRegistry />)} />
         <Route path="/registry" element={protect("/registry", <Registry />)} />
         <Route path="/builder" element={protect("/builder", <BuilderHub />)} />
+        <Route path="/web-maker" element={protect("/web-maker", <BuilderHub />)} />
+        <Route path="/studio/templates" element={protect("/studio/templates", <BuilderHub />)} />
         <Route path="/builder/tools" element={protect("/builder/tools", <ToolDashboard />)} />
         <Route path="/tools" element={protect("/tools", <ToolDashboard />)} />
+        <Route path="/tool-dashboard" element={protect("/tool-dashboard", <ToolDashboard />)} />
         <Route path="/master-narrative" element={protect("/master-narrative", <MasterNarrativeViewer />)} />
         <Route path="/grant-binder" element={protect("/grant-binder", <GrantBinder />)} />
         <Route path="/alignment" element={protect("/alignment", <AlignmentSwitchboard />)} />
 
         {/* Partner Growth Engine */}
         <Route path="/growth" element={protect("/growth", <SHSPartnerGrowthEngine />, [SHS_SECURITY_PERMISSIONS.GROWTH_VIEW])} />
+
+        {/* Internal SHS Production Ops */}
+        <Route path="/ops/production" element={protect("/ops/production", <OpsProductionDashboard />)} />
+        <Route path="/ops/projects" element={protect("/ops/projects", <OpsProjectSetup />)} />
+        <Route path="/ops/brand-profile" element={protect("/ops/brand-profile", <OpsBrandProfile />)} />
+        <Route path="/ops/page-intent" element={protect("/ops/page-intent", <OpsPageIntent />)} />
+        <Route path="/ops/layout-blueprint" element={protect("/ops/layout-blueprint", <OpsLayoutBlueprint />)} />
+        <Route path="/ops/visual-treatment" element={protect("/ops/visual-treatment", <OpsVisualTreatment />)} />
+        <Route path="/ops/assets" element={protect("/ops/assets", <OpsAssetGovernance />)} />
+        <Route path="/ops/data-binding" element={protect("/ops/data-binding", <OpsDataBinding />)} />
+        <Route path="/ops/mock-review" element={protect("/ops/mock-review", <OpsMockReview />)} />
+        <Route path="/ops/build-packet" element={protect("/ops/build-packet", <OpsBuildPacket />)} />
+        <Route path="/ops/screenshot-qa" element={protect("/ops/screenshot-qa", <OpsScreenshotQA />)} />
+        <Route path="/ops/learning" element={protect("/ops/learning", <OpsLearningDashboard />)} />
 
         {/* Fallback */}
         <Route path="/solutions" element={protect("/solutions", <SolutionsInfrastructurePage />)} />

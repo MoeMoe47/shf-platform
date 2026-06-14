@@ -5,13 +5,50 @@ from fastapi import APIRouter, Body
 
 from fabric.watchtower.aggregator import build_watchtower_summary, build_watchtower_program_rows
 from fabric.watchtower.store import set_quarantine, clear_quarantine, get_quarantine_map, get_risk_history
+from services.ai_guardrails_service import ai_guardrails_summary
+from services.game_theory_service import game_theory_summary
+from services.oracle_service import oracle_summary
+from services.truth_spine_service import truth_summary
 
 
 router = APIRouter(prefix="/watchtower", tags=["watchtower"])
 
 @router.get("/summary")
 def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10) -> Dict[str, Any]:
-    return build_watchtower_summary(days=int(days), baseline_weeks=int(baseline_weeks), top_n=int(top_n))
+    summary = build_watchtower_summary(days=int(days), baseline_weeks=int(baseline_weeks), top_n=int(top_n))
+    truth = truth_summary()
+    oracle = oracle_summary()
+    ai_guardrails = ai_guardrails_summary()
+    game_theory = game_theory_summary()
+    if isinstance(summary, dict):
+        summary["truth_coverage"] = {
+            "coverage_percent": truth["coverage_percent"],
+            "claim_count": truth["claim_count"],
+            "report_ready_count": truth["report_ready_count"],
+            "missing_source_count": truth["missing_source_count"],
+            "low_trace_coverage_count": truth["low_trace_coverage_count"],
+            "flag": truth["coverage_percent"] < 80,
+            "status": "watch" if truth["coverage_percent"] < 80 else "covered",
+        }
+        summary["oracle"] = {
+            "cases_total": oracle["cases_total"],
+            "rulings_total": oracle["rulings_total"],
+            "open_cases": oracle["open_cases"],
+            "insufficient_evidence_count": oracle["insufficient_evidence_count"],
+        }
+        summary["ai_guardrails"] = {
+            "policy_status": ai_guardrails["policy_status"],
+            "blocked_count": ai_guardrails["blocked_count"],
+            "review_required_count": ai_guardrails["review_required_count"],
+        }
+        summary["game_theory"] = {
+            "policy_status": game_theory["policy_status"],
+            "scenarios_total": game_theory["scenarios_total"],
+            "high_risk_count": game_theory["high_risk_count"],
+            "critical_risk_count": game_theory["critical_risk_count"],
+            "average_confidence": game_theory["average_confidence"],
+        }
+    return summary
 
 @router.get("/programs")
 def watchtower_programs(days: int = 30, baseline_weeks: int = 8) -> Dict[str, Any]:

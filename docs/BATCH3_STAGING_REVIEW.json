@@ -1,0 +1,135 @@
+{
+  "generated_at": "2026-06-14",
+  "source_files": [
+    "docs/GIT_STAGING_PLAN.md",
+    "docs/GIT_STAGING_PLAN.json",
+    "docs/BATCH2_STAGING_REVIEW.md",
+    "docs/BATCH2_STAGING_REVIEW.json"
+  ],
+  "no_action_confirmation": {
+    "git_add": false,
+    "git_commit": false,
+    "git_restore": false,
+    "git_reset": false,
+    "deleted_files": false,
+    "moved_files": false,
+    "source_code_changed": false,
+    "runtime_behavior_changed": false
+  },
+  "batch": {
+    "id": 3,
+    "name": "Admin UI",
+    "plan_entry_count": 6,
+    "concrete_file_count": 10,
+    "risk_level": "medium-high",
+    "purpose": "Stage V1 governance admin pages and admin navigation/route wiring.",
+    "plan_entries": [
+      "src/pages/admin/truth-spine/",
+      "src/pages/admin/oracle/",
+      "src/pages/admin/ai-guardrails/",
+      "src/pages/admin/game-theory/",
+      "src/components/admin/AdminSidebar.jsx",
+      "src/router/AdminRoutes.jsx"
+    ],
+    "files": [
+      {
+        "path": "src/pages/admin/truth-spine/TruthSpinePage.jsx",
+        "status": "??",
+        "category": "Admin UI",
+        "purpose": "Truth Spine admin page."
+      },
+      {
+        "path": "src/pages/admin/truth-spine/truth-spine.css",
+        "status": "??",
+        "category": "Admin UI",
+        "purpose": "Truth Spine admin styling."
+      },
+      {
+        "path": "src/pages/admin/oracle/OraclePage.jsx",
+        "status": "??",
+        "category": "Admin UI",
+        "purpose": "Oracle admin page."
+      },
+      {
+        "path": "src/pages/admin/oracle/oracle.css",
+        "status": "??",
+        "category": "Admin UI",
+        "purpose": "Oracle admin styling."
+      },
+      {
+        "path": "src/pages/admin/ai-guardrails/AIGuardrailsPage.jsx",
+        "status": "??",
+        "category": "Admin UI",
+        "purpose": "AI Guardrails admin page."
+      },
+      {
+        "path": "src/pages/admin/ai-guardrails/ai-guardrails.css",
+        "status": "??",
+        "category": "Admin UI",
+        "purpose": "AI Guardrails admin styling."
+      },
+      {
+        "path": "src/pages/admin/game-theory/GameTheoryPage.jsx",
+        "status": "??",
+        "category": "Admin UI",
+        "purpose": "Game Theory admin page."
+      },
+      {
+        "path": "src/pages/admin/game-theory/game-theory.css",
+        "status": "??",
+        "category": "Admin UI",
+        "purpose": "Game Theory admin styling."
+      },
+      {
+        "path": "src/router/AdminRoutes.jsx",
+        "status": "M",
+        "category": "Admin routes",
+        "purpose": "Admin route wiring."
+      },
+      {
+        "path": "src/components/admin/AdminSidebar.jsx",
+        "status": "M",
+        "category": "Admin navigation",
+        "purpose": "Admin sidebar navigation."
+      }
+    ],
+    "explicitly_excluded": [
+      {
+        "path": "src/system/identity/hubAccessControl.js",
+        "reason": "Not included in Batch 3 plan; assigned to Batch 4 as one of the 11 owner-approved active SHF/WebMaker files."
+      }
+    ]
+  },
+  "boundary_verification": {
+    "admin_ui_or_admin_access_only": true,
+    "batch_4_shf_webmaker_files_included": [],
+    "batch_5_expected_archive_removals_included": [],
+    "batch_6_archive_later_files_included": [],
+    "runtime_or_local_persistence_files_included": []
+  },
+  "staged_dependency_confirmation": {
+    "batch_1_already_staged": true,
+    "batch_1_missing_from_cached_diff": [],
+    "batch_2_already_staged": true,
+    "batch_2_missing_from_cached_diff": []
+  },
+  "dependency_notes": [
+    "Batch 3 depends on Batch 1 governance checks and Batch 2 backend routes being staged first.",
+    "Admin pages depend on the corresponding backend route families being available for Truth Spine, Oracle, AI Guardrails, and Game Theory.",
+    "AdminRoutes.jsx and AdminSidebar.jsx should be staged with the admin pages so navigation and page imports stay in the same batch.",
+    "hubAccessControl.js remains in Batch 4 per the staging plan."
+  ],
+  "proposed_git_add_commands": [
+    "git add -- src/pages/admin/truth-spine/TruthSpinePage.jsx src/pages/admin/truth-spine/truth-spine.css src/pages/admin/oracle/OraclePage.jsx src/pages/admin/oracle/oracle.css src/pages/admin/ai-guardrails/AIGuardrailsPage.jsx src/pages/admin/ai-guardrails/ai-guardrails.css src/pages/admin/game-theory/GameTheoryPage.jsx src/pages/admin/game-theory/game-theory.css src/router/AdminRoutes.jsx src/components/admin/AdminSidebar.jsx"
+  ],
+  "validation_commands": [
+    "npm run check:governance",
+    "npm run build",
+    "git diff --cached --name-status",
+    "git status --short"
+  ],
+  "recommendation": {
+    "status": "Safe to stage after owner approval",
+    "reason": "Batch 3 is internally consistent, includes only Admin UI/admin navigation files, excludes Batch 4, Batch 5, and Batch 6 files, and depends cleanly on already staged Batch 1 and Batch 2 work."
+  }
+}

@@ -1,0 +1,174 @@
+{
+  "generated_at": "2026-06-14",
+  "source_files": [
+    "docs/GIT_STAGING_PLAN.md",
+    "docs/GIT_STAGING_PLAN.json"
+  ],
+  "no_action_confirmation": {
+    "git_add": false,
+    "git_commit": false,
+    "git_restore": false,
+    "git_reset": false,
+    "deleted_files": false,
+    "moved_files": false
+  },
+  "batch": {
+    "id": 2,
+    "name": "Backend infrastructure",
+    "file_count": 16,
+    "risk_level": "high",
+    "purpose": "Stage Agent Fabric V1 routers, services, tests, mounted route integrations, and route-mount wiring for Truth Spine, Oracle, AI Guardrails, Game Theory, Reports, Watchtower, LOO, and main.py.",
+    "files": [
+      {
+        "path": "services/shf-agent-fabric/main.py",
+        "status": "M",
+        "category": "Agent Fabric route mounts",
+        "purpose": "Mount backend V1 layer routes."
+      },
+      {
+        "path": "services/shf-agent-fabric/routers/truth_routes.py",
+        "status": "??",
+        "category": "Truth Spine",
+        "purpose": "Truth Spine router."
+      },
+      {
+        "path": "services/shf-agent-fabric/services/truth_spine_service.py",
+        "status": "??",
+        "category": "Truth Spine",
+        "purpose": "Truth Spine service."
+      },
+      {
+        "path": "services/shf-agent-fabric/tests/test_truth_routes.py",
+        "status": "??",
+        "category": "Backend tests",
+        "purpose": "Truth Spine route tests."
+      },
+      {
+        "path": "services/shf-agent-fabric/routers/oracle_routes.py",
+        "status": "??",
+        "category": "Oracle",
+        "purpose": "Oracle router."
+      },
+      {
+        "path": "services/shf-agent-fabric/services/oracle_service.py",
+        "status": "??",
+        "category": "Oracle",
+        "purpose": "Oracle service."
+      },
+      {
+        "path": "services/shf-agent-fabric/tests/test_oracle_routes.py",
+        "status": "??",
+        "category": "Backend tests",
+        "purpose": "Oracle route tests."
+      },
+      {
+        "path": "services/shf-agent-fabric/routers/ai_guardrails_routes.py",
+        "status": "??",
+        "category": "AI Guardrails",
+        "purpose": "AI Guardrails router."
+      },
+      {
+        "path": "services/shf-agent-fabric/services/ai_guardrails_service.py",
+        "status": "??",
+        "category": "AI Guardrails",
+        "purpose": "AI Guardrails service."
+      },
+      {
+        "path": "services/shf-agent-fabric/tests/test_ai_guardrails_routes.py",
+        "status": "??",
+        "category": "Backend tests",
+        "purpose": "AI Guardrails route tests."
+      },
+      {
+        "path": "services/shf-agent-fabric/routers/game_theory_routes.py",
+        "status": "??",
+        "category": "Game Theory",
+        "purpose": "Game Theory router."
+      },
+      {
+        "path": "services/shf-agent-fabric/services/game_theory_service.py",
+        "status": "??",
+        "category": "Game Theory",
+        "purpose": "Game Theory service."
+      },
+      {
+        "path": "services/shf-agent-fabric/tests/test_game_theory_routes.py",
+        "status": "??",
+        "category": "Backend tests",
+        "purpose": "Game Theory route tests."
+      },
+      {
+        "path": "services/shf-agent-fabric/routers/reports_routes.py",
+        "status": "M",
+        "category": "Reports integrations",
+        "purpose": "Reports truth/trust integration."
+      },
+      {
+        "path": "services/shf-agent-fabric/routers/watchtower_routes.py",
+        "status": "M",
+        "category": "Watchtower integrations",
+        "purpose": "Watchtower truth coverage integration."
+      },
+      {
+        "path": "services/shf-agent-fabric/routers/loo_routes.py",
+        "status": "M",
+        "category": "LOO integration",
+        "purpose": "LOO trust metadata integration."
+      }
+    ]
+  },
+  "boundary_verification": {
+    "allowed_categories": [
+      "Truth Spine",
+      "Oracle",
+      "AI Guardrails",
+      "Game Theory",
+      "Reports integrations",
+      "Watchtower integrations",
+      "Agent Fabric route mounts",
+      "Backend tests"
+    ],
+    "overlap_with_batch_1_governance": [],
+    "overlap_with_batch_4_shf_webmaker": [],
+    "overlap_with_batch_5_archive_removals": [],
+    "runtime_or_local_persistence_files": []
+  },
+  "dependency_notes": [
+    "Batch 2 depends on Batch 1 governance checks and documentation being staged or otherwise reviewed first.",
+    "main.py should be staged with the new routers so route imports and route mounts stay in one backend batch.",
+    "Route tests should be staged with their corresponding routers and services so backend contracts travel with implementation.",
+    "Reports, Watchtower, and LOO files remain in Batch 2 because they are backend route integrations."
+  ],
+  "proposed_git_add_commands": [
+    "git add -- services/shf-agent-fabric/main.py services/shf-agent-fabric/routers/truth_routes.py services/shf-agent-fabric/services/truth_spine_service.py services/shf-agent-fabric/tests/test_truth_routes.py services/shf-agent-fabric/routers/oracle_routes.py services/shf-agent-fabric/services/oracle_service.py services/shf-agent-fabric/tests/test_oracle_routes.py services/shf-agent-fabric/routers/ai_guardrails_routes.py services/shf-agent-fabric/services/ai_guardrails_service.py services/shf-agent-fabric/tests/test_ai_guardrails_routes.py services/shf-agent-fabric/routers/game_theory_routes.py services/shf-agent-fabric/services/game_theory_service.py services/shf-agent-fabric/tests/test_game_theory_routes.py services/shf-agent-fabric/routers/reports_routes.py services/shf-agent-fabric/routers/watchtower_routes.py services/shf-agent-fabric/routers/loo_routes.py"
+  ],
+  "validation_commands_after_staging": [
+    "npm run check:governance",
+    "python3 -m pytest services/shf-agent-fabric/tests/test_truth_routes.py services/shf-agent-fabric/tests/test_oracle_routes.py services/shf-agent-fabric/tests/test_ai_guardrails_routes.py services/shf-agent-fabric/tests/test_game_theory_routes.py",
+    "npm run build",
+    "git diff --cached --name-status"
+  ],
+  "requested_git_snapshots": {
+    "commands_run": [
+      "git diff --name-only",
+      "git diff --cached --name-only",
+      "git status --short"
+    ],
+    "git_diff_name_only_count": 3292,
+    "git_diff_cached_name_only_count": 29,
+    "git_status_short_total": 3348,
+    "git_status_short_counts": {
+      " D": 3279,
+      "A ": 28,
+      "??": 27,
+      " M": 13,
+      "M ": 1
+    },
+    "cached_note": "git diff --cached --name-only was already non-empty before this Batch 2 review; it contains Batch 1 governance paths expanded from the duplicate-layer audit archive directory."
+  },
+  "recommendation": {
+    "status": "Safe to stage",
+    "reason": "Batch 2 is internally consistent, has no overlap with Batch 1, Batch 4, or Batch 5, and contains only backend infrastructure files for the approved V1 governance stack and route integrations.",
+    "review_note": "Batch 1 appears staged from outside this review. This review did not create, alter, or clear staged state."
+  }
+}

@@ -1,0 +1,168 @@
+{
+  "generated_at": "2026-06-14",
+  "source_files": [
+    "docs/GIT_STAGING_PLAN.md",
+    "docs/GIT_STAGING_PLAN.json",
+    "docs/GIT_INVESTIGATE_FILES_HUMAN_REVIEW.md",
+    "docs/GIT_INVESTIGATE_FILES_HUMAN_REVIEW.json",
+    "docs/BATCH2_STAGING_REVIEW.md",
+    "docs/BATCH2_STAGING_REVIEW.json",
+    "docs/BATCH3_STAGING_REVIEW.md",
+    "docs/BATCH3_STAGING_REVIEW.json"
+  ],
+  "no_action_confirmation": {
+    "git_add": false,
+    "git_commit": false,
+    "git_restore": false,
+    "git_reset": false,
+    "deleted_files": false,
+    "moved_files": false,
+    "source_code_changed": false,
+    "runtime_behavior_changed": false
+  },
+  "owner_decision": "These 11 plan entries are approved to keep as active work. None should be archived, reverted, moved, or deleted. BuilderHub is the admin/internal control surface. WebMakerPage is the public/user-facing builder page. web-maker.css remains the shared current stylesheet for now.",
+  "batch": {
+    "id": 4,
+    "name": "Approved active SHF/WebMaker files",
+    "plan_entry_count": 11,
+    "concrete_file_count": 25,
+    "risk_level": "high",
+    "purpose": "Review approved active SHF/WebMaker/Identity/Ops files before staging.",
+    "plan_entries": [
+      "src/entries/index.main.jsx",
+      "src/pages/admin/BuilderHub.jsx",
+      "src/pages/shf-command/SHFImpactCommandCenter.jsx",
+      "src/pages/shf-command/components/SHFImpactOhioMap.jsx",
+      "src/pages/shf-command/components/shf-impact-ohio-map.css",
+      "src/system/identity/hubAccessControl.js",
+      "src/system/identity/identityRouting.js",
+      "src/data/shfImpactData.js",
+      "src/pages/admin/ops/",
+      "src/pages/admin/web-maker.css",
+      "src/pages/public/WebMakerPage.jsx"
+    ],
+    "files": [
+      {"path": "src/entries/index.main.jsx", "status": "M", "tracked": true, "category": "WebMaker public page", "purpose": "Public /studio/templates route entrypoint."},
+      {"path": "src/pages/admin/BuilderHub.jsx", "status": "M", "tracked": true, "category": "BuilderHub admin surface", "purpose": "Admin/internal Website Studio control surface."},
+      {"path": "src/pages/shf-command/SHFImpactCommandCenter.jsx", "status": "M", "tracked": true, "category": "SHF Impact Command Center", "purpose": "SHF command page and impact report generator link."},
+      {"path": "src/pages/shf-command/components/SHFImpactOhioMap.jsx", "status": "M", "tracked": true, "category": "SHF Impact Ohio Map", "purpose": "Map component using SHF Impact Data Spine."},
+      {"path": "src/pages/shf-command/components/shf-impact-ohio-map.css", "status": "M", "tracked": true, "category": "SHF Impact Ohio Map", "purpose": "Map styling and Data Spine status panel styling."},
+      {"path": "src/system/identity/hubAccessControl.js", "status": "M", "tracked": true, "category": "Identity / access routing", "purpose": "Access policy for WebMaker, governance, and ops routes."},
+      {"path": "src/system/identity/identityRouting.js", "status": "M", "tracked": true, "category": "Identity / access routing", "purpose": "Identity session and local development SHS admin override helper."},
+      {"path": "src/data/shfImpactData.js", "status": "??", "tracked": false, "category": "SHF Impact Data Spine", "purpose": "Shared public-approved SHF impact data helpers."},
+      {"path": "src/pages/admin/ops/OpsAssetGovernance.jsx", "status": "??", "tracked": false, "category": "Admin Ops", "purpose": "Admin Ops page."},
+      {"path": "src/pages/admin/ops/OpsBrandProfile.jsx", "status": "??", "tracked": false, "category": "Admin Ops", "purpose": "Admin Ops page."},
+      {"path": "src/pages/admin/ops/OpsBuildPacket.jsx", "status": "??", "tracked": false, "category": "Admin Ops", "purpose": "Admin Ops page."},
+      {"path": "src/pages/admin/ops/OpsDataBinding.jsx", "status": "??", "tracked": false, "category": "Admin Ops", "purpose": "Admin Ops page."},
+      {"path": "src/pages/admin/ops/OpsLayoutBlueprint.jsx", "status": "??", "tracked": false, "category": "Admin Ops", "purpose": "Admin Ops page."},
+      {"path": "src/pages/admin/ops/OpsLearningDashboard.jsx", "status": "??", "tracked": false, "category": "Admin Ops", "purpose": "Admin Ops page."},
+      {"path": "src/pages/admin/ops/OpsMockReview.jsx", "status": "??", "tracked": false, "category": "Admin Ops", "purpose": "Admin Ops page."},
+      {"path": "src/pages/admin/ops/OpsPageIntent.jsx", "status": "??", "tracked": false, "category": "Admin Ops", "purpose": "Admin Ops page."},
+      {"path": "src/pages/admin/ops/OpsProductionDashboard.jsx", "status": "??", "tracked": false, "category": "Admin Ops", "purpose": "Admin Ops production dashboard."},
+      {"path": "src/pages/admin/ops/OpsProjectSetup.jsx", "status": "??", "tracked": false, "category": "Admin Ops", "purpose": "Admin Ops page."},
+      {"path": "src/pages/admin/ops/OpsScreenshotQA.jsx", "status": "??", "tracked": false, "category": "Admin Ops", "purpose": "Admin Ops page."},
+      {"path": "src/pages/admin/ops/OpsVisualTreatment.jsx", "status": "??", "tracked": false, "category": "Admin Ops", "purpose": "Admin Ops page."},
+      {"path": "src/pages/admin/ops/ops-production.css", "status": "??", "tracked": false, "category": "Admin Ops", "purpose": "Admin Ops styling."},
+      {"path": "src/pages/admin/ops/opsData.js", "status": "??", "tracked": false, "category": "Admin Ops", "purpose": "Admin Ops data."},
+      {"path": "src/pages/admin/ops/opsStorage.js", "status": "??", "tracked": false, "category": "Admin Ops", "purpose": "Admin Ops storage helper, not runtime persistence output."},
+      {"path": "src/pages/admin/web-maker.css", "status": "??", "tracked": false, "category": "WebMaker public page", "purpose": "Shared current BuilderHub/WebMaker stylesheet."},
+      {"path": "src/pages/public/WebMakerPage.jsx", "status": "??", "tracked": false, "category": "WebMaker public page", "purpose": "Public/user-facing builder page."}
+    ]
+  },
+  "inspection": {
+    "commands_used": [
+      "git status --short -- <batch-4-paths>",
+      "git diff -- <tracked-batch-4-paths>",
+      "git ls-files -- <batch-4-paths>",
+      "rg references where useful"
+    ],
+    "tracked_diff_numstat": [
+      {"path": "src/entries/index.main.jsx", "insertions": 4, "deletions": 1},
+      {"path": "src/pages/admin/BuilderHub.jsx", "insertions": 253, "deletions": 103},
+      {"path": "src/pages/shf-command/SHFImpactCommandCenter.jsx", "insertions": 12, "deletions": 1},
+      {"path": "src/pages/shf-command/components/SHFImpactOhioMap.jsx", "insertions": 139, "deletions": 104},
+      {"path": "src/pages/shf-command/components/shf-impact-ohio-map.css", "insertions": 116, "deletions": 0},
+      {"path": "src/system/identity/hubAccessControl.js", "insertions": 21, "deletions": 0},
+      {"path": "src/system/identity/identityRouting.js", "insertions": 80, "deletions": 3}
+    ],
+    "active_reference_summary": [
+      "src/entries/index.main.jsx imports WebMakerPage and routes /studio/templates.",
+      "src/pages/public/WebMakerPage.jsx imports src/pages/admin/web-maker.css.",
+      "src/router/AdminRoutes.jsx imports BuilderHub and Admin Ops pages.",
+      "src/router/AdminRoutes.jsx mounts /builder, /web-maker, /studio/templates, and /ops/* routes.",
+      "src/pages/shf-command/components/SHFImpactOhioMap.jsx imports src/data/shfImpactData.js.",
+      "src/pages/shf-command/SHFImpactCommandCenter.jsx links to the SHF impact report generator.",
+      "hubAccessControl.js and identityRouting.js are active identity/access files used by admin and hub routing."
+    ]
+  },
+  "boundary_verification": {
+    "approved_categories": [
+      "SHF Impact Command Center",
+      "SHF Impact Ohio Map",
+      "SHF Impact Data Spine",
+      "Identity / access routing",
+      "WebMaker public page",
+      "BuilderHub admin surface",
+      "Admin Ops"
+    ],
+    "batch_5_expected_archive_removals_included": [],
+    "batch_6_archive_later_files_included": [],
+    "runtime_or_local_persistence_files_included": []
+  },
+  "staged_dependency_confirmation": {
+    "batch_1_already_staged": true,
+    "batch_1_missing_from_cached_diff": [],
+    "batch_2_already_staged": true,
+    "batch_2_missing_from_cached_diff": [],
+    "batch_3_already_staged": true,
+    "batch_3_missing_from_cached_diff": []
+  },
+  "safety_notes": [
+    "This batch is active product/UI work, not frozen governance core.",
+    "These files should likely be committed separately from Batches 1-3 if the owner wants clean history.",
+    "Do not stage archive removals with this batch.",
+    "Do not stage Batch 6 archive-later files with this batch.",
+    "opsStorage.js is an Admin Ops helper file, not local JSON persistence or audit-log runtime output."
+  ],
+  "proposed_git_add_commands": [
+    "git add -- src/entries/index.main.jsx src/pages/admin/BuilderHub.jsx src/pages/shf-command/SHFImpactCommandCenter.jsx src/pages/shf-command/components/SHFImpactOhioMap.jsx src/pages/shf-command/components/shf-impact-ohio-map.css src/system/identity/hubAccessControl.js src/system/identity/identityRouting.js src/data/shfImpactData.js src/pages/admin/ops/OpsAssetGovernance.jsx src/pages/admin/ops/OpsBrandProfile.jsx src/pages/admin/ops/OpsBuildPacket.jsx src/pages/admin/ops/OpsDataBinding.jsx src/pages/admin/ops/OpsLayoutBlueprint.jsx src/pages/admin/ops/OpsLearningDashboard.jsx src/pages/admin/ops/OpsMockReview.jsx src/pages/admin/ops/OpsPageIntent.jsx src/pages/admin/ops/OpsProductionDashboard.jsx src/pages/admin/ops/OpsProjectSetup.jsx src/pages/admin/ops/OpsScreenshotQA.jsx src/pages/admin/ops/OpsVisualTreatment.jsx src/pages/admin/ops/ops-production.css src/pages/admin/ops/opsData.js src/pages/admin/ops/opsStorage.js src/pages/admin/web-maker.css src/pages/public/WebMakerPage.jsx"
+  ],
+  "validation_commands": [
+    "npm run check:governance",
+    "npm run build",
+    "git diff --cached --name-status",
+    "git status --short"
+  ],
+  "validation_results": {
+    "npm_run_check_governance": "PASS",
+    "npm_run_build": "PASS with existing large chunk warning",
+    "git_diff_cached_name_status": "Batches 1, 2, and 3 remain staged; Batch 4 is not staged.",
+    "git_status_short": {
+      "total_entries": 3358,
+      "counts": {
+        " D": 3279,
+        "A ": 48,
+        "??": 17,
+        "M ": 7,
+        " M": 7
+      },
+      "batch4_status": [
+        " M src/entries/index.main.jsx",
+        " M src/pages/admin/BuilderHub.jsx",
+        " M src/pages/shf-command/SHFImpactCommandCenter.jsx",
+        " M src/pages/shf-command/components/SHFImpactOhioMap.jsx",
+        " M src/pages/shf-command/components/shf-impact-ohio-map.css",
+        " M src/system/identity/hubAccessControl.js",
+        " M src/system/identity/identityRouting.js",
+        "?? src/data/shfImpactData.js",
+        "?? src/pages/admin/ops/",
+        "?? src/pages/admin/web-maker.css",
+        "?? src/pages/public/WebMakerPage.jsx"
+      ]
+    }
+  },
+  "recommendation": {
+    "status": "Safe to stage after owner approval",
+    "reason": "Batch 4 matches the owner-approved active work, excludes Batch 5 and Batch 6, contains no runtime/local persistence files, and is wired through active entrypoints/routes."
+  }
+}

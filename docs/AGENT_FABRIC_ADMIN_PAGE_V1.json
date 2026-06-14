@@ -1,0 +1,114 @@
+{
+  "page": "Agent Fabric Admin Page V1",
+  "route": "admin.html#/agent-fabric",
+  "files_created": [
+    "src/pages/admin/agent-fabric/AgentFabricPage.jsx",
+    "src/pages/admin/agent-fabric/agent-fabric.css",
+    "docs/AGENT_FABRIC_ADMIN_PAGE_V1.md",
+    "docs/AGENT_FABRIC_ADMIN_PAGE_V1.json"
+  ],
+  "files_modified": [
+    "src/router/AdminRoutes.jsx",
+    "src/components/admin/AdminSidebar.jsx",
+    "src/system/identity/hubAccessControl.js"
+  ],
+  "api_dependencies": [
+    "GET /admin/agents",
+    "GET /admin/agents/verify",
+    "GET /admin/agents/summary/health",
+    "GET /admin/layers/gate/status"
+  ],
+  "admin_only": true,
+  "governance_boundaries": [
+    "Agents can propose, analyze, execute assigned tasks, and report.",
+    "Agents cannot verify claims.",
+    "Agents cannot public-approve data.",
+    "Agents cannot override Oracle rulings.",
+    "Agents cannot bypass AI Guardrails.",
+    "Agents cannot bypass permissions.",
+    "Agents cannot create new architecture layers without Master Layer Registry / proposal governance."
+  ],
+  "backend_smoke": {
+    "/admin/agents_without_key": {
+      "status": 401,
+      "expected_block": true
+    },
+    "/admin/agents": {
+      "status": 200,
+      "agent_count": 11
+    },
+    "/admin/agents/verify": {
+      "status": 200,
+      "ledger_pass": true
+    },
+    "/admin/agents/summary/health": {
+      "status": 200,
+      "total": 11,
+      "ready": 11,
+      "warning": 0
+    },
+    "/admin/layers/gate/status": {
+      "status": 200,
+      "gate_pass": false,
+      "note": "gate_pass=false may be expected until later readiness blockers are resolved."
+    }
+  },
+  "frontend_smoke": {
+    "tested_url": "http://127.0.0.1:5174/admin.html#/agent-fabric",
+    "heading_visible": true,
+    "sidebar_link_visible": true,
+    "agents_table_visible": true,
+    "governance_boundary_visible": true,
+    "missing_admin_key_warning_visible": true,
+    "blank_screen": false,
+    "console_notes": [
+      "Non-blocking local dev /api/auth/me 404 before identity fallback."
+    ]
+  },
+  "validation": {
+    "json_report_valid": {
+      "command": "python3 -m json.tool docs/AGENT_FABRIC_ADMIN_PAGE_V1.json",
+      "result": "PASS"
+    },
+    "check_master_layer_registry": {
+      "command": "python3 scripts/check_master_layer_registry.py",
+      "result": "PASS"
+    },
+    "check_truth_spine_freeze": {
+      "command": "python3 scripts/check_truth_spine_freeze.py",
+      "result": "PASS"
+    },
+    "check_oracle_layer": {
+      "command": "python3 scripts/check_oracle_layer.py",
+      "result": "PASS"
+    },
+    "check_ai_guardrails_layer": {
+      "command": "python3 scripts/check_ai_guardrails_layer.py",
+      "result": "PASS"
+    },
+    "check_game_theory_layer": {
+      "command": "python3 scripts/check_game_theory_layer.py",
+      "result": "PASS"
+    },
+    "check_governance": {
+      "command": "npm run check:governance",
+      "result": "PASS"
+    },
+    "focused_pytest": {
+      "command": "python3 -m pytest services/shf-agent-fabric/tests/test_truth_routes.py services/shf-agent-fabric/tests/test_oracle_routes.py services/shf-agent-fabric/tests/test_ai_guardrails_routes.py services/shf-agent-fabric/tests/test_game_theory_routes.py services/shf-agent-fabric/tests/test_agent_canon_basics.py",
+      "result": "PASS",
+      "summary": "25 passed"
+    },
+    "build": {
+      "command": "npm run build",
+      "result": "PASS",
+      "note": "Build completed with existing large-chunk warning."
+    }
+  },
+  "remaining_risks": [
+    "Full agent event log streaming is not exposed in V1; the page documents db/agent_events.jsonl instead.",
+    "Layer gate can report gate_pass=false until later readiness blockers are resolved.",
+    "Local smoke requires a valid ADMIN_API_KEY in local storage."
+  ],
+  "v1_complete": true
+}

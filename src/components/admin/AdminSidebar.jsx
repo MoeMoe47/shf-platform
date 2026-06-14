@@ -48,6 +48,7 @@ const SECTIONS = [
       { to: "/oracle", icon: "O", label: "Oracle", badge: "V1" },
       { to: "/ai-guardrails", icon: "A", label: "AI Guardrails", badge: "V1" },
       { to: "/game-theory", icon: "G", label: "Game Theory", badge: "V1" },
+      { to: "/agent-fabric", icon: "F", label: "Agent Fabric", badge: "V1" },
       { to: "/dev/docs", icon: "📚", label: "Docs" },
       { to: "/health", icon: "💚", label: "Health", badge: "NEW" }
     ]

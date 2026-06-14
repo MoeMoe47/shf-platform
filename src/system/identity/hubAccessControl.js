@@ -66,6 +66,7 @@ export const hubPageAccess = {
   "/truth-spine": ["shs_admin"],
   "/ai-guardrails": ["shs_admin"],
   "/game-theory": ["shs_admin"],
+  "/agent-fabric": ["shs_admin"],
   "/aggregation": ["shs_admin"],
   "/audit": ["shs_admin"],
   "/settings": ["shs_admin"],

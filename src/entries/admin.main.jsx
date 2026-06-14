@@ -4,6 +4,7 @@ import { HashRouter } from "react-router-dom";
 
 import RootProviders from "@/entries/RootProviders.jsx";
 import AdminRoutes from "@/router/AdminRoutes.jsx";
+import AdminLayout from "@/layouts/AdminLayout.jsx";
 import { SelectedEntityProvider } from "@/system/context/SelectedEntityContext";
 
 import "@/styles/_bg-guard.css";
@@ -60,7 +61,9 @@ createRoot(mount).render(<AuthProvider>
       <RootProviders>
         <HashRouter>
           <SelectedEntityProvider>
-            <AdminRoutes />
+            <AdminLayout>
+              <AdminRoutes />
+            </AdminLayout>
           </SelectedEntityProvider>
         </HashRouter>
       </RootProviders>

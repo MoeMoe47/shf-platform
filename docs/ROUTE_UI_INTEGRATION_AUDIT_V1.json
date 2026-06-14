@@ -1,0 +1,409 @@
+{
+  "audit_name": "Route/UI Integration Audit V1",
+  "date": "2026-06-14",
+  "required_routes": [
+    "truth-spine",
+    "oracle",
+    "ai-guardrails",
+    "game-theory"
+  ],
+  "route_results": {
+    "/truth-spine": {
+      "component": "TruthSpinePage",
+      "import_exists": true,
+      "route_exists": true,
+      "permission": "SHS_SECURITY_PERMISSIONS.TRUTH_VIEW",
+      "hub_access_roles": [
+        "shs_admin"
+      ],
+      "public_exposure": false,
+      "result": "PASS"
+    },
+    "/oracle": {
+      "component": "OraclePage",
+      "import_exists": true,
+      "route_exists": true,
+      "permission": "SHS_SECURITY_PERMISSIONS.TRUTH_VIEW",
+      "hub_access_roles": [
+        "shs_admin"
+      ],
+      "public_exposure": false,
+      "result": "PASS"
+    },
+    "/ai-guardrails": {
+      "component": "AIGuardrailsPage",
+      "import_exists": true,
+      "route_exists": true,
+      "permission": "SHS_SECURITY_PERMISSIONS.TRUTH_VIEW",
+      "hub_access_roles": [
+        "shs_admin"
+      ],
+      "public_exposure": false,
+      "result": "PASS"
+    },
+    "/game-theory": {
+      "component": "GameTheoryPage",
+      "import_exists": true,
+      "route_exists": true,
+      "permission": "SHS_SECURITY_PERMISSIONS.TRUTH_VIEW",
+      "hub_access_roles": [
+        "shs_admin"
+      ],
+      "public_exposure": false,
+      "result": "PASS"
+    }
+  },
+  "admin_route_inventory": [
+    "/login",
+    "/",
+    "/hub",
+    "/hub/network",
+    "/hub/leadership",
+    "/hub/intake",
+    "/hub/queue",
+    "/hub/action-queue",
+    "/hub/lifecycle",
+    "/hub/referrals",
+    "/hub/unmet-needs",
+    "/hub/imports",
+    "/hub/reports",
+    "/hub/growth-network",
+    "/hub/sales-pipeline",
+    "/hub/opportunities",
+    "/hub/bundles",
+    "/hub/intelligence",
+    "/uploads",
+    "/imports",
+    "/aggregation",
+    "/reporting",
+    "/verification-audit",
+    "/truth-spine",
+    "/oracle",
+    "/ai-guardrails",
+    "/game-theory",
+    "/audit",
+    "/identity",
+    "/app-registry",
+    "/registry",
+    "/builder",
+    "/web-maker",
+    "/studio/templates",
+    "/builder/tools",
+    "/tools",
+    "/tool-dashboard",
+    "/master-narrative",
+    "/grant-binder",
+    "/alignment",
+    "/growth",
+    "/ops/production",
+    "/ops/projects",
+    "/ops/brand-profile",
+    "/ops/page-intent",
+    "/ops/layout-blueprint",
+    "/ops/visual-treatment",
+    "/ops/assets",
+    "/ops/data-binding",
+    "/ops/mock-review",
+    "/ops/build-packet",
+    "/ops/screenshot-qa",
+    "/ops/learning",
+    "/solutions",
+    "/solutions/infrastructure",
+    "*"
+  ],
+  "sidebar_results": {
+    "required_links": {
+      "/truth-spine": {
+        "label": "Truth Spine",
+        "exists": true,
+        "href_matches": true,
+        "visible_after_fix": true
+      },
+      "/oracle": {
+        "label": "Oracle",
+        "exists": true,
+        "href_matches": true,
+        "visible_after_fix": true
+      },
+      "/ai-guardrails": {
+        "label": "AI Guardrails",
+        "exists": true,
+        "href_matches": true,
+        "visible_after_fix": true
+      },
+      "/game-theory": {
+        "label": "Game Theory",
+        "exists": true,
+        "href_matches": true,
+        "visible_after_fix": true
+      }
+    },
+    "issue_found": "AdminSidebar existed but AdminLayout was not mounted by admin.main.jsx.",
+    "fixed": true
+  },
+  "sidebar_inventory": [
+    {
+      "section": "Production Ops",
+      "items": [
+        "/ops/production",
+        "/ops/projects",
+        "/ops/brand-profile",
+        "/ops/page-intent",
+        "/ops/layout-blueprint",
+        "/ops/visual-treatment",
+        "/ops/assets",
+        "/ops/data-binding",
+        "/ops/mock-review",
+        "/ops/build-packet",
+        "/ops/screenshot-qa",
+        "/ops/learning"
+      ]
+    },
+    {
+      "section": "Operations",
+      "items": [
+        "/builder",
+        "/builder/tools",
+        "/admin",
+        "/admin/users",
+        "/admin/settings"
+      ]
+    },
+    {
+      "section": "Analytics",
+      "items": [
+        "/analytics",
+        "/lord-outcomes"
+      ]
+    },
+    {
+      "section": "System",
+      "items": [
+        "/truth-spine",
+        "/oracle",
+        "/ai-guardrails",
+        "/game-theory",
+        "/dev/docs",
+        "/health"
+      ]
+    }
+  ],
+  "permission_results": {
+    "hubAccessControl": {
+      "/truth-spine": [
+        "shs_admin"
+      ],
+      "/oracle": [
+        "shs_admin"
+      ],
+      "/ai-guardrails": [
+        "shs_admin"
+      ],
+      "/game-theory": [
+        "shs_admin"
+      ],
+      "ops_routes": "all routed /ops/* entries are shs_admin only"
+    },
+    "identityRouting": {
+      "local_dev_seed": "seedLocalShsAdminIdentityForDevelopment",
+      "localhost_only": true,
+      "vite_dev_only": true,
+      "result": "PASS"
+    }
+  },
+  "ops_results": {
+    "/ops/production": {
+      "heading": "Internal Production Dashboard",
+      "blank": false,
+      "result": "PASS"
+    },
+    "/ops/projects": {
+      "heading": "Project Setup",
+      "blank": false,
+      "result": "PASS"
+    },
+    "/ops/brand-profile": {
+      "heading": "Brand Profile",
+      "blank": false,
+      "result": "PASS"
+    },
+    "/ops/page-intent": {
+      "heading": "Page Intent",
+      "blank": false,
+      "result": "PASS"
+    },
+    "/ops/layout-blueprint": {
+      "heading": "Layout Blueprint",
+      "blank": false,
+      "result": "PASS"
+    },
+    "/ops/visual-treatment": {
+      "heading": "Visual Treatment",
+      "blank": false,
+      "result": "PASS"
+    },
+    "/ops/assets": {
+      "heading": "Asset Governance",
+      "blank": false,
+      "result": "PASS"
+    },
+    "/ops/data-binding": {
+      "heading": "Data Binding",
+      "blank": false,
+      "result": "PASS"
+    },
+    "/ops/mock-review": {
+      "heading": "Mock Review",
+      "blank": false,
+      "result": "PASS"
+    },
+    "/ops/build-packet": {
+      "heading": "Build Packet",
+      "blank": false,
+      "result": "PASS"
+    },
+    "/ops/screenshot-qa": {
+      "heading": "Screenshot QA",
+      "blank": false,
+      "result": "PASS"
+    },
+    "/ops/learning": {
+      "heading": "Adaptive Learning Dashboard",
+      "blank": false,
+      "result": "PASS"
+    }
+  },
+  "builderhub_webmaker_boundary": {
+    "builderhub_admin_routes": [
+      "admin.html#/builder",
+      "admin.html#/web-maker",
+      "admin.html#/studio/templates"
+    ],
+    "public_webmaker_route": "/studio/templates",
+    "builderhub_admin_only": true,
+    "webmaker_public_user_facing": true,
+    "shared_stylesheet": "src/pages/admin/web-maker.css",
+    "result": "PASS"
+  },
+  "browser_smoke": {
+    "requested_port_5173": {
+      "available": false,
+      "note": "Port 5173 was occupied by another Node process serving a different/stale app."
+    },
+    "tested_base_url": "http://127.0.0.1:5174/admin.html",
+    "routes": {
+      "/truth-spine": {
+        "heading": "SHS Truth Spine V1",
+        "heading_ok": true,
+        "blank": false,
+        "sidebar_visible": true,
+        "console_errors": [
+          "Failed to load resource: /api/auth/me returned 404 during local dev auth fallback."
+        ],
+        "result": "PASS_WITH_NON_BLOCKING_DEV_AUTH_NOTE"
+      },
+      "/oracle": {
+        "heading": "Oracle Layer V1",
+        "heading_ok": true,
+        "blank": false,
+        "sidebar_visible": true,
+        "console_errors": [],
+        "result": "PASS"
+      },
+      "/ai-guardrails": {
+        "heading": "AI Guardrails V1",
+        "heading_ok": true,
+        "blank": false,
+        "sidebar_visible": true,
+        "console_errors": [],
+        "result": "PASS"
+      },
+      "/game-theory": {
+        "heading": "Game Theory Layer V1",
+        "heading_ok": true,
+        "blank": false,
+        "sidebar_visible": true,
+        "console_errors": [],
+        "result": "PASS"
+      }
+    }
+  },
+  "backend_smoke": {
+    "/truth/health": {
+      "status": 200,
+      "ok": true
+    },
+    "/oracle/health": {
+      "status": 200,
+      "ok": true
+    },
+    "/ai-guardrails/health": {
+      "status": 200,
+      "ok": true
+    },
+    "/game-theory/health": {
+      "status": 200,
+      "ok": true
+    },
+    "/reports/snapshot": {
+      "status": 200,
+      "ok": true
+    },
+    "/watchtower/summary": {
+      "status": 200,
+      "ok": true
+    }
+  },
+  "fixes_applied": [
+    {
+      "file": "src/entries/admin.main.jsx",
+      "change": "Wrapped AdminRoutes with existing AdminLayout so AdminSidebar is visible in the active admin shell."
+    }
+  ],
+  "files_changed": [
+    "src/entries/admin.main.jsx",
+    "docs/ROUTE_UI_INTEGRATION_AUDIT_V1.md",
+    "docs/ROUTE_UI_INTEGRATION_AUDIT_V1.json"
+  ],
+  "validation": {
+    "npm_run_check_governance": {
+      "command": "npm run check:governance",
+      "result": "PASS"
+    },
+    "check_master_layer_registry": {
+      "command": "python3 scripts/check_master_layer_registry.py",
+      "result": "PASS"
+    },
+    "check_truth_spine_freeze": {
+      "command": "python3 scripts/check_truth_spine_freeze.py",
+      "result": "PASS"
+    },
+    "check_oracle_layer": {
+      "command": "python3 scripts/check_oracle_layer.py",
+      "result": "PASS"
+    },
+    "check_ai_guardrails_layer": {
+      "command": "python3 scripts/check_ai_guardrails_layer.py",
+      "result": "PASS"
+    },
+    "check_game_theory_layer": {
+      "command": "python3 scripts/check_game_theory_layer.py",
+      "result": "PASS"
+    },
+    "focused_pytest": {
+      "command": "python3 -m pytest services/shf-agent-fabric/tests/test_truth_routes.py services/shf-agent-fabric/tests/test_oracle_routes.py services/shf-agent-fabric/tests/test_ai_guardrails_routes.py services/shf-agent-fabric/tests/test_game_theory_routes.py",
+      "result": "PASS",
+      "summary": "23 passed"
+    },
+    "npm_run_build": {
+      "command": "npm run build",
+      "result": "PASS",
+      "note": "Build completed with existing large chunk warning."
+    }
+  },
+  "remaining_risks": [
+    "Legacy/out-of-scope sidebar links were not remapped in this V1 audit.",
+    "Local dev auth still emits a non-blocking /api/auth/me 404 before seeded identity fallback."
+  ],
+  "v1_complete": true
+}

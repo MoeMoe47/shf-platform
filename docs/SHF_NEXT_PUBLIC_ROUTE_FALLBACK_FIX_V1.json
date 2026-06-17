@@ -1,0 +1,185 @@
+{
+  "name": "SHF-Next Public Route Fallback Fix V1",
+  "root_cause": "SHF-Next uses manual pathname routing in App.tsx. The / and /foundation paths had no explicit public route branches, so they reached the final OpsShell fallback and rendered DevelopmentLibrary/internal ops content despite being classified public by the identity bridge.",
+  "existing_public_pages": [
+    {
+      "route": "/foundation/impact-report",
+      "component": "ShfImpactReportGenerator",
+      "status": "existing"
+    },
+    {
+      "route": "/studio/templates",
+      "component": "WebsiteStudioTemplates",
+      "status": "existing"
+    },
+    {
+      "route": "/studio/templates/browse",
+      "component": "WebsiteStudioTemplateBrowse",
+      "status": "existing"
+    },
+    {
+      "route": "/studio/templates/floral-boutique",
+      "component": "WebsiteStudioTemplatePreview",
+      "status": "existing"
+    },
+    {
+      "route": "/solutions",
+      "component": "PublicSolutionsPage",
+      "status": "existing_from_prior_route_fix"
+    }
+  ],
+  "fixes_applied": [
+    {
+      "file": "/Users/mikeslate/shf-next/src/App.tsx",
+      "change": "Added minimal PublicHomePage and exact path === '/' branch before the OpsShell fallback."
+    },
+    {
+      "file": "/Users/mikeslate/shf-next/src/App.tsx",
+      "change": "Added minimal PublicFoundationPage and exact path === '/foundation' branch after specific foundation report/admin route branches."
+    }
+  ],
+  "public_routes_verified": [
+    {
+      "route": "/",
+      "public_content": true,
+      "no_bridge_notice": true,
+      "no_internal_ops_shell": true,
+      "no_sensitive_metadata": true,
+      "result": "PASS"
+    },
+    {
+      "route": "/foundation",
+      "public_content": true,
+      "no_bridge_notice": true,
+      "no_internal_ops_shell": true,
+      "no_sensitive_metadata": true,
+      "result": "PASS"
+    },
+    {
+      "route": "/foundation/impact-report",
+      "public_content": true,
+      "no_bridge_notice": true,
+      "no_internal_ops_shell": true,
+      "no_sensitive_metadata": true,
+      "result": "PASS"
+    },
+    {
+      "route": "/solutions",
+      "public_content": true,
+      "no_bridge_notice": true,
+      "no_internal_ops_shell": true,
+      "no_sensitive_metadata": true,
+      "result": "PASS"
+    },
+    {
+      "route": "/studio/templates",
+      "public_content": true,
+      "no_bridge_notice": true,
+      "no_internal_ops_shell": true,
+      "no_sensitive_metadata": true,
+      "result": "PASS"
+    },
+    {
+      "route": "/studio/templates/browse",
+      "public_content": true,
+      "no_bridge_notice": true,
+      "no_internal_ops_shell": true,
+      "no_sensitive_metadata": true,
+      "result": "PASS"
+    }
+  ],
+  "internal_routes_verified": [
+    {
+      "route": "/ops",
+      "bridge_notice": true,
+      "internal_content": true,
+      "result": "PASS"
+    },
+    {
+      "route": "/ops/command",
+      "bridge_notice": true,
+      "internal_content": true,
+      "result": "PASS"
+    },
+    {
+      "route": "/ops/sales",
+      "bridge_notice": true,
+      "internal_content": true,
+      "result": "PASS"
+    },
+    {
+      "route": "/ops/projects",
+      "bridge_notice": true,
+      "internal_content": true,
+      "result": "PASS"
+    },
+    {
+      "route": "/ops/library",
+      "bridge_notice": true,
+      "internal_content": true,
+      "result": "PASS"
+    },
+    {
+      "route": "/ops/qa",
+      "bridge_notice": true,
+      "internal_content": true,
+      "result": "PASS"
+    },
+    {
+      "route": "/ops/clientops",
+      "bridge_notice": true,
+      "internal_content": true,
+      "result": "PASS"
+    },
+    {
+      "route": "/foundation/data-approval",
+      "bridge_notice": true,
+      "internal_content": true,
+      "result": "PASS"
+    }
+  ],
+  "browser_smoke": {
+    "server": "http://127.0.0.1:5175",
+    "public": {
+      "/": "PASS",
+      "/foundation": "PASS",
+      "/foundation/impact-report": "PASS",
+      "/solutions": "PASS",
+      "/studio/templates": "PASS",
+      "/studio/templates/browse": "PASS"
+    },
+    "internal": {
+      "/ops": "PASS",
+      "/ops/command": "PASS",
+      "/ops/sales": "PASS",
+      "/ops/projects": "PASS",
+      "/ops/library": "PASS",
+      "/ops/qa": "PASS",
+      "/ops/clientops": "PASS",
+      "/foundation/data-approval": "PASS"
+    },
+    "blank_screens": [],
+    "critical_console_errors": []
+  },
+  "validation": {
+    "shf_next": {
+      "npm run build": "PASS",
+      "npm run lint": "PASS",
+      "git status --short": "NOT_A_GIT_REPOSITORY"
+    },
+    "shrv1": {
+      "npm run check:governance": "PASS",
+      "npm run build": "PASS"
+    }
+  },
+  "files_changed": [
+    "/Users/mikeslate/shf-next/src/App.tsx",
+    "docs/SHF_NEXT_PUBLIC_ROUTE_FALLBACK_FIX_V1.md",
+    "docs/SHF_NEXT_PUBLIC_ROUTE_FALLBACK_FIX_V1.json"
+  ],
+  "remaining_risks": [
+    "/ and /foundation now use minimal public placeholders, not final designed public pages.",
+    "/Users/mikeslate/shf-next did not report as a git repository, so SHF-Next git status could not be produced there."
+  ],
+  "v1_complete": true
+}

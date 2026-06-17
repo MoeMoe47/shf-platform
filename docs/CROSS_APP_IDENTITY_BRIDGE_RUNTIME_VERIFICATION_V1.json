@@ -1,0 +1,218 @@
+{
+  "audit_name": "Cross-App Identity Bridge Runtime Verification V1",
+  "scaffold_files": [
+    {
+      "path": "src/system/identity/crossAppIdentityBridge.js",
+      "repo": "shrv1",
+      "status": "PASS",
+      "notes": "SHRV1 authority scaffold exists and exports route classification helpers."
+    },
+    {
+      "path": "/Users/mikeslate/shf-next/src/data/crossAppIdentityBridge.ts",
+      "repo": "shf-next",
+      "status": "PASS",
+      "notes": "SHF-Next consumer bridge exists with storage keys, route rules, role checks, and notice messages."
+    },
+    {
+      "path": "/Users/mikeslate/shf-next/src/components/CrossAppAccessNotice.tsx",
+      "repo": "shf-next",
+      "status": "PASS",
+      "notes": "Notice component exists and consumes bridge helpers."
+    }
+  ],
+  "integration_status": "active_on_ops_foundation_admin_and_studio_admin_routes_with_public_studio_templates_mismatch",
+  "route_runtime_results": {
+    "/": {
+      "expected": "no_notice",
+      "actual": "no_notice",
+      "result": "PASS"
+    },
+    "/foundation": {
+      "expected": "no_notice",
+      "actual": "no_notice",
+      "result": "PASS"
+    },
+    "/foundation/impact-report": {
+      "expected": "no_notice",
+      "actual": "no_notice",
+      "result": "PASS"
+    },
+    "/solutions": {
+      "expected": "no_notice",
+      "actual": "no_notice",
+      "result": "PASS_WITH_ROUTE_CONTENT_RISK",
+      "notes": "Rendered internal ops fallback content without bridge notice."
+    },
+    "/ops": {
+      "expected": "notice",
+      "actual": "notice",
+      "result": "PASS"
+    },
+    "/ops/command": {
+      "expected": "notice",
+      "actual": "notice",
+      "result": "PASS"
+    },
+    "/ops/sales": {
+      "expected": "notice",
+      "actual": "notice",
+      "result": "PASS"
+    },
+    "/ops/projects": {
+      "expected": "notice",
+      "actual": "notice",
+      "result": "PASS"
+    },
+    "/ops/library": {
+      "expected": "notice",
+      "actual": "notice",
+      "result": "PASS"
+    },
+    "/ops/qa": {
+      "expected": "notice",
+      "actual": "notice",
+      "result": "PASS"
+    },
+    "/ops/clientops": {
+      "expected": "notice",
+      "actual": "notice",
+      "result": "PASS"
+    },
+    "/studio": {
+      "expected": "notice",
+      "actual": "notice",
+      "result": "PASS"
+    },
+    "/studio/templates": {
+      "expected": "notice",
+      "actual": "no_notice",
+      "result": "FAIL_AGAINST_REQUEST_MATCHES_EXISTING_PUBLIC_DESIGN"
+    },
+    "/studio/templates/browse": {
+      "expected": "notice",
+      "actual": "no_notice",
+      "result": "FAIL_AGAINST_REQUEST_MATCHES_EXISTING_PUBLIC_DESIGN"
+    },
+    "/foundation/data-approval": {
+      "expected": "notice",
+      "actual": "notice",
+      "result": "PASS"
+    }
+  },
+  "identity_missing_state": {
+    "storage_keys_cleared": [
+      "shrv1.identity.bridge.v1",
+      "shs.identity.bridge.v1"
+    ],
+    "expected_notice": "Internal route \u2014 SHRV1 identity bridge required before production use.",
+    "protected_route_result": "PASS_EXCEPT_PUBLIC_STUDIO_TEMPLATES",
+    "did_not_block_page": true,
+    "no_blank_screens": true,
+    "console_errors": []
+  },
+  "identity_present_state": {
+    "storage_keys_set": [
+      "shrv1.identity.bridge.v1",
+      "shs.identity.bridge.v1"
+    ],
+    "payload": {
+      "identityAuthority": "shrv1",
+      "subject": "local-dev-user",
+      "roles": [
+        "shs_admin"
+      ],
+      "orgId": "demo-org",
+      "permissions": [],
+      "issuedBy": "shrv1",
+      "environment": "local",
+      "expiresAt": null,
+      "bridgeVersion": "v1"
+    },
+    "expected_notice": "Internal route \u2014 identity recognized from SHRV1 bridge.",
+    "protected_route_result": "PASS_EXCEPT_PUBLIC_STUDIO_TEMPLATES",
+    "console_errors": []
+  },
+  "public_route_safety": {
+    "routes_checked": [
+      "/",
+      "/foundation",
+      "/foundation/impact-report",
+      "/solutions",
+      "/studio/templates",
+      "/studio/templates/browse"
+    ],
+    "admin_warnings_visible": false,
+    "bridge_metadata_visible": false,
+    "roles_visible": false,
+    "permissions_visible": false,
+    "result": "PASS"
+  },
+  "secret_exposure": {
+    "patterns_checked": [
+      "ADMIN_API_KEY",
+      "x-admin-key",
+      "X-Admin-Key",
+      "Authorization",
+      "Bearer ",
+      "token=",
+      "api_key="
+    ],
+    "static_hits": [],
+    "rendered_ui_hits": [],
+    "local_storage_hits": [],
+    "request_url_or_header_hits": [],
+    "result": "PASS"
+  },
+  "authority_model": {
+    "authority": "SHRV1",
+    "consumer": "SHF-Next",
+    "duplicate_auth_system_added": false,
+    "production_auth_added": false,
+    "runtime_behavior_changed": false,
+    "result": "PASS"
+  },
+  "browser_smoke": {
+    "shrv1": {
+      "admin.html": "PASS",
+      "admin.html#/identity": "PASS_WITH_SEEDED_ADMIN_LOCAL_STATE",
+      "admin.html#/agent-fabric": "PASS_WITH_SEEDED_ADMIN_LOCAL_STATE",
+      "admin.html#/registry": "PASS_WITH_SEEDED_ADMIN_LOCAL_STATE"
+    },
+    "shf_next": {
+      "/": "PASS",
+      "/foundation": "PASS",
+      "/foundation/data-approval": "PASS",
+      "/ops": "PASS",
+      "/ops/clientops": "PASS",
+      "/studio/templates/browse": "PARTIAL_PUBLIC_ROUTE_NO_BRIDGE_NOTICE"
+    },
+    "console_errors": []
+  },
+  "validation": {
+    "shrv1": {
+      "python3 scripts/check_master_layer_registry.py": "PASS",
+      "python3 scripts/check_truth_spine_freeze.py": "PASS",
+      "python3 scripts/check_oracle_layer.py": "PASS",
+      "python3 scripts/check_ai_guardrails_layer.py": "PASS",
+      "python3 scripts/check_game_theory_layer.py": "PASS",
+      "npm run check:governance": "PASS",
+      "npm run build": "PASS"
+    },
+    "shf_next": {
+      "npm run build": "PASS",
+      "npm run lint": "PASS",
+      "git status --short": "NOT_A_GIT_REPOSITORY"
+    }
+  },
+  "safe_fixes_applied": [],
+  "files_changed": [
+    "docs/CROSS_APP_IDENTITY_BRIDGE_RUNTIME_VERIFICATION_V1.md",
+    "docs/CROSS_APP_IDENTITY_BRIDGE_RUNTIME_VERIFICATION_V1.json"
+  ],
+  "remaining_risks": [
+    "/studio/templates and /studio/templates/browse do not meet this request's internal-route notice expectation because they are currently public-facing Website Studio pages.",
+    "/solutions rendered internal ops fallback content during smoke, although no bridge metadata or secrets were exposed.",
+    "/Users/mikeslate/shf-next did not report as a git repository, so only build/lint validation was possible there."
+  ],
+  "v1_complete": false
+}

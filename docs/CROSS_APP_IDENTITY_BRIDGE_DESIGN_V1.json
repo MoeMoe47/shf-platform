@@ -1,0 +1,488 @@
+{
+  "design_name": "Cross-App Identity Bridge Design V1",
+  "generated_at": "2026-06-15T10:06:15.668448+00:00",
+  "identity_authority": "shrv1",
+  "consumer_app": "shf-next",
+  "is_new_layer": false,
+  "app_ownership": {
+    "shrv1": [
+      "Identity authority",
+      "Governance routes",
+      "Admin role model",
+      "Truth Spine",
+      "Oracle",
+      "AI Guardrails",
+      "Game Theory",
+      "Agent Fabric",
+      "Registry",
+      "Watchtower",
+      "Reports readiness",
+      "LOO trust/governance"
+    ],
+    "shf-next": [
+      "/ops/*",
+      "/ops/clientops / ClientOps",
+      "/studio/*",
+      "/studio/templates/browse",
+      "/foundation/data-approval",
+      "/foundation/impact-report",
+      "public foundation/presentation pages",
+      "template/studio/customer-facing surfaces"
+    ]
+  },
+  "shf_next_route_classes": [
+    {
+      "route": "/",
+      "owner_app": "shf-next",
+      "route_class": "PUBLIC",
+      "required_roles": [
+        "public"
+      ],
+      "public_internal": "public",
+      "spine_dependency": "none",
+      "recommended_bridge_behavior": "no notice, no bridge identity required",
+      "production_risk": "low; current fallback may expose internal DevelopmentLibrary on unknown routes if not hardened",
+      "implementation_phase": "phase_1_design"
+    },
+    {
+      "route": "/ops",
+      "owner_app": "shf-next",
+      "route_class": "INTERNAL_OPS",
+      "required_roles": [
+        "shs_admin",
+        "shs_ops"
+      ],
+      "public_internal": "internal",
+      "spine_dependency": "Identity & Access, Production Ops, Watchtower later",
+      "recommended_bridge_behavior": "show non-blocking internal notice in V1; block only after signed/session bridge",
+      "production_risk": "internal ops data may be public if hosted without route guard",
+      "implementation_phase": "phase_2_notice"
+    },
+    {
+      "route": "/ops/command",
+      "owner_app": "shf-next",
+      "route_class": "INTERNAL_OPS",
+      "required_roles": [
+        "shs_admin",
+        "shs_ops"
+      ],
+      "public_internal": "internal",
+      "spine_dependency": "Identity & Access, Reports, Watchtower, SHF Impact Data Spine",
+      "recommended_bridge_behavior": "show non-blocking internal notice; later require bridge identity",
+      "production_risk": "command metrics/workflow state could leak",
+      "implementation_phase": "phase_2_notice"
+    },
+    {
+      "route": "/ops/sales",
+      "owner_app": "shf-next",
+      "route_class": "INTERNAL_OPS",
+      "required_roles": [
+        "shs_admin",
+        "shs_sales",
+        "shs_ops"
+      ],
+      "public_internal": "internal",
+      "spine_dependency": "Identity & Access, SHS Sales Layer, Reports",
+      "recommended_bridge_behavior": "show notice; later enforce sales/admin roles",
+      "production_risk": "sales pipeline data could leak",
+      "implementation_phase": "phase_2_notice"
+    },
+    {
+      "route": "/ops/projects",
+      "owner_app": "shf-next",
+      "route_class": "INTERNAL_OPS",
+      "required_roles": [
+        "shs_admin",
+        "shs_ops"
+      ],
+      "public_internal": "internal",
+      "spine_dependency": "Identity & Access, Production Ops, QA + Delivery",
+      "recommended_bridge_behavior": "show notice; later enforce ops/admin roles",
+      "production_risk": "project delivery data could leak",
+      "implementation_phase": "phase_2_notice"
+    },
+    {
+      "route": "/ops/library",
+      "owner_app": "shf-next",
+      "route_class": "INTERNAL_OPS",
+      "required_roles": [
+        "shs_admin",
+        "shs_ops"
+      ],
+      "public_internal": "internal",
+      "spine_dependency": "Identity & Access, Development Library, Production Ops",
+      "recommended_bridge_behavior": "show notice; later enforce ops/admin roles",
+      "production_risk": "build packet and reusable process material could be exposed",
+      "implementation_phase": "phase_2_notice"
+    },
+    {
+      "route": "/ops/qa",
+      "owner_app": "shf-next",
+      "route_class": "INTERNAL_OPS",
+      "required_roles": [
+        "shs_admin",
+        "shs_qa",
+        "shs_ops"
+      ],
+      "public_internal": "internal",
+      "spine_dependency": "Identity & Access, QA + Delivery",
+      "recommended_bridge_behavior": "show notice; later enforce QA/admin roles",
+      "production_risk": "QA status and delivery issues could leak",
+      "implementation_phase": "phase_2_notice"
+    },
+    {
+      "route": "/ops/clientops",
+      "owner_app": "shf-next",
+      "route_class": "INTERNAL_CLIENTOPS",
+      "required_roles": [
+        "shs_admin",
+        "shs_clientops"
+      ],
+      "public_internal": "internal",
+      "spine_dependency": "Identity & Access, ClientOps, Reports readiness, Truth Spine links",
+      "recommended_bridge_behavior": "show notice; later enforce clientops/admin identity",
+      "production_risk": "client/project facts and reports workflow could leak",
+      "implementation_phase": "phase_2_notice"
+    },
+    {
+      "route": "/studio",
+      "owner_app": "shf-next",
+      "route_class": "INTERNAL_STUDIO_ADMIN",
+      "required_roles": [
+        "shs_admin",
+        "shs_studio_admin"
+      ],
+      "public_internal": "internal if routed outside /studio/templates",
+      "spine_dependency": "Identity & Access, Website Studio",
+      "recommended_bridge_behavior": "owner decision; public template pages stay public, admin studio route class requires bridge later",
+      "production_risk": "risk of accidentally admin-gating public template marketplace or exposing studio admin tools",
+      "implementation_phase": "phase_3_local_dev_enforcement"
+    },
+    {
+      "route": "/studio/templates",
+      "owner_app": "shf-next",
+      "route_class": "PUBLIC",
+      "required_roles": [
+        "public"
+      ],
+      "public_internal": "public",
+      "spine_dependency": "Website Studio, public content only",
+      "recommended_bridge_behavior": "no notice; no bridge identity required",
+      "production_risk": "public page should not reveal internal controls",
+      "implementation_phase": "phase_1_design"
+    },
+    {
+      "route": "/studio/templates/browse",
+      "owner_app": "shf-next",
+      "route_class": "PUBLIC",
+      "required_roles": [
+        "public"
+      ],
+      "public_internal": "public",
+      "spine_dependency": "Website Studio marketplace",
+      "recommended_bridge_behavior": "no notice; keep public",
+      "production_risk": "low if page stays public/catalog only",
+      "implementation_phase": "phase_1_design"
+    },
+    {
+      "route": "/studio/templates/floral-boutique",
+      "owner_app": "shf-next",
+      "route_class": "PUBLIC",
+      "required_roles": [
+        "public"
+      ],
+      "public_internal": "public",
+      "spine_dependency": "Website Studio template preview",
+      "recommended_bridge_behavior": "no notice; keep public preview",
+      "production_risk": "low if preview contains no internal admin data",
+      "implementation_phase": "phase_1_design"
+    },
+    {
+      "route": "/foundation/data-approval",
+      "owner_app": "shf-next",
+      "route_class": "FOUNDATION_ADMIN",
+      "required_roles": [
+        "shs_admin",
+        "shf_admin",
+        "shf_reviewer"
+      ],
+      "public_internal": "internal/foundation admin",
+      "spine_dependency": "Identity & Access, SHF Data Approval Gateway, Truth Spine, Reports readiness",
+      "recommended_bridge_behavior": "show notice in V1; later require signed reviewer/admin identity",
+      "production_risk": "approval actions without identity can weaken audit trail",
+      "implementation_phase": "phase_2_notice"
+    },
+    {
+      "route": "/foundation/impact-report",
+      "owner_app": "shf-next",
+      "route_class": "PUBLIC_FOUNDATION",
+      "required_roles": [
+        "public"
+      ],
+      "public_internal": "public presentation",
+      "spine_dependency": "SHF Impact Data Spine, Reports, Truth metadata where published",
+      "recommended_bridge_behavior": "no notice; keep public/report presentation unless editing/approval controls appear",
+      "production_risk": "public claims need Truth Spine/readiness metadata before publication",
+      "implementation_phase": "phase_1_design"
+    },
+    {
+      "route": "/foundation/impact-report/print",
+      "owner_app": "shf-next",
+      "route_class": "PUBLIC_FOUNDATION",
+      "required_roles": [
+        "public"
+      ],
+      "public_internal": "public presentation/print",
+      "spine_dependency": "SHF Impact Data Spine, Reports readiness",
+      "recommended_bridge_behavior": "no notice; do not admin-gate print route in V1",
+      "production_risk": "print claims need verified/report-ready backing",
+      "implementation_phase": "phase_1_design"
+    },
+    {
+      "route": "/foundation/report",
+      "owner_app": "shf-next",
+      "route_class": "PUBLIC_FOUNDATION",
+      "required_roles": [
+        "public"
+      ],
+      "public_internal": "public alias",
+      "spine_dependency": "SHF Impact Data Spine, Reports readiness",
+      "recommended_bridge_behavior": "no notice; canonicalize later if needed",
+      "production_risk": "alias drift risk",
+      "implementation_phase": "phase_1_design"
+    },
+    {
+      "route": "/foundation",
+      "owner_app": "shf-next",
+      "route_class": "PUBLIC_FOUNDATION",
+      "required_roles": [
+        "public"
+      ],
+      "public_internal": "public",
+      "spine_dependency": "Public foundation presentation",
+      "recommended_bridge_behavior": "no notice",
+      "production_risk": "owner decision if additional foundation admin routes are added",
+      "implementation_phase": "phase_1_design"
+    },
+    {
+      "route": "/solutions",
+      "owner_app": "shf-next or shrv1 depending host",
+      "route_class": "PUBLIC",
+      "required_roles": [
+        "public"
+      ],
+      "public_internal": "public",
+      "spine_dependency": "public marketing/presentation",
+      "recommended_bridge_behavior": "no notice",
+      "production_risk": "route ownership and host ambiguity if both apps expose solutions surfaces",
+      "implementation_phase": "phase_1_design"
+    },
+    {
+      "route": "/terms, /privacy, /contact",
+      "owner_app": "shf-next TBD",
+      "route_class": "OWNER_DECISION_REQUIRED",
+      "required_roles": [
+        "public or shs_admin after owner decision"
+      ],
+      "public_internal": "owner decision",
+      "spine_dependency": "legal/public page ownership",
+      "recommended_bridge_behavior": "route explicitly before production; avoid current fallback to internal-looking library",
+      "production_risk": "public footer links can fall into OpsShell fallback",
+      "implementation_phase": "phase_3_local_dev_enforcement"
+    },
+    {
+      "route": "unmatched paths",
+      "owner_app": "shf-next TBD",
+      "route_class": "OWNER_DECISION_REQUIRED",
+      "required_roles": [
+        "shs_admin"
+      ],
+      "public_internal": "owner decision",
+      "spine_dependency": "Route Integrity, Identity & Access",
+      "recommended_bridge_behavior": "do not classify as public by default; show notice if rendered through app shell until route hardening",
+      "production_risk": "unknown public URLs can expose internal fallback",
+      "implementation_phase": "phase_3_local_dev_enforcement"
+    }
+  ],
+  "role_matrix": [
+    {
+      "role_family": "shs_admin",
+      "source_alignment": "maps to existing SHRV1 shs_admin",
+      "routes": [
+        "all internal bridge classes"
+      ],
+      "notes": "broad admin family for local-dev bridge and future production authority"
+    },
+    {
+      "role_family": "shs_ops",
+      "source_alignment": "new bridge family derived from Production Ops boundary; not an SHRV1 login role yet",
+      "routes": [
+        "/ops",
+        "/ops/command",
+        "/ops/projects",
+        "/ops/library"
+      ],
+      "notes": "future granular ops role; shs_admin remains compatible"
+    },
+    {
+      "role_family": "shs_clientops",
+      "source_alignment": "new bridge family derived from ClientOps boundary",
+      "routes": [
+        "/ops/clientops"
+      ],
+      "notes": "future client/project workflow access"
+    },
+    {
+      "role_family": "shs_sales",
+      "source_alignment": "new bridge family derived from SHS Sales Layer",
+      "routes": [
+        "/ops/sales"
+      ],
+      "notes": "future sales workflow access"
+    },
+    {
+      "role_family": "shs_qa",
+      "source_alignment": "new bridge family derived from QA + Delivery",
+      "routes": [
+        "/ops/qa"
+      ],
+      "notes": "future QA workflow access"
+    },
+    {
+      "role_family": "shs_studio_admin",
+      "source_alignment": "new bridge family derived from Website Studio admin boundary",
+      "routes": [
+        "/studio admin class"
+      ],
+      "notes": "must not gate public /studio/templates"
+    },
+    {
+      "role_family": "shf_admin",
+      "source_alignment": "new foundation admin bridge family",
+      "routes": [
+        "/foundation/data-approval"
+      ],
+      "notes": "future SHF foundation admin/reviewer access"
+    },
+    {
+      "role_family": "shf_reviewer",
+      "source_alignment": "new foundation reviewer bridge family",
+      "routes": [
+        "/foundation/data-approval"
+      ],
+      "notes": "future approval/review actions"
+    },
+    {
+      "role_family": "public",
+      "source_alignment": "public route marker, not an authenticated role",
+      "routes": [
+        "/",
+        "/studio/templates",
+        "/foundation/impact-report",
+        "/solutions"
+      ],
+      "notes": "must not access internal routes"
+    }
+  ],
+  "bridge_data_contract": {
+    "identityAuthority": "shrv1",
+    "subject": "local-dev-user-or-session-id",
+    "roles": [
+      "shs_admin"
+    ],
+    "orgId": "demo-org",
+    "permissions": [],
+    "issuedBy": "shrv1",
+    "environment": "local|staging|production",
+    "expiresAt": null,
+    "bridgeVersion": "v1"
+  },
+  "local_dev_behavior": {
+    "storage_keys": [
+      "shs.identity.bridge.v1",
+      "shrv1.identity.bridge.v1"
+    ],
+    "allowed": "SHF-Next may read localStorage bridge identity only for local development and advisory notices.",
+    "not_allowed": [
+      "no ADMIN_API_KEY",
+      "no secrets in URLs",
+      "no hardcoded production credentials",
+      "no duplicate user DB"
+    ],
+    "current_behavior": "existing scaffold shows non-blocking notices on internal routes and does not block rendering"
+  },
+  "production_behavior": {
+    "required_future_model": "signed/session-backed identity handoff owned by SHRV1 and validated server-side or through approved gateway",
+    "forbidden": [
+      "browser-exposed admin keys",
+      "query-string secrets",
+      "parallel auth authority in SHF-Next"
+    ],
+    "enforcement": "not implemented in design V1; future phases only"
+  },
+  "cross_app_link_behavior": {
+    "shrv1_to_shf_next": [
+      "use environment base URL config",
+      "no secrets in query strings",
+      "optional non-sensitive context query only",
+      "include returnTo route only when safe",
+      "same/new tab based on route type"
+    ],
+    "shf_next_to_shrv1": [
+      "link to governance pages through normal admin shell",
+      "never expose ADMIN_API_KEY",
+      "route users through SHRV1 login/admin flow"
+    ]
+  },
+  "scaffold_files_created": [],
+  "scaffold_files_already_present": [
+    "src/system/identity/crossAppIdentityBridge.js",
+    "/Users/mikeslate/shf-next/src/data/crossAppIdentityBridge.ts",
+    "/Users/mikeslate/shf-next/src/components/CrossAppAccessNotice.tsx"
+  ],
+  "files_modified": [
+    "docs/CROSS_APP_IDENTITY_BRIDGE_DESIGN_V1.md",
+    "docs/CROSS_APP_IDENTITY_BRIDGE_DESIGN_V1.json"
+  ],
+  "risk_model": [
+    "SHF-Next internal pages can be reachable publicly if hosted without a guard.",
+    "Hardcoded admin keys or URL secrets would compromise governance authority.",
+    "A duplicate identity system in SHF-Next would drift from SHRV1 authority.",
+    "Route drift can make public/internal boundaries inaccurate.",
+    "Public foundation/report pages could be accidentally admin-gated and break public presentation workflows.",
+    "ClientOps/Ops routes may expose sensitive client, delivery, or project data.",
+    "Unknown shf-next paths currently fall to a DevelopmentLibrary-style fallback until a later route hardening pass."
+  ],
+  "implementation_phases": {
+    "phase_1": "Design docs, route access matrix, and non-invasive bridge config.",
+    "phase_2": "Visible access warnings/notices on SHF-Next internal routes without blocking.",
+    "phase_3": "Local-dev bridge identity enforcement after owner approval.",
+    "phase_4": "Production-safe signed/session-backed bridge with server-side validation.",
+    "phase_5": "Watchtower/Reports monitoring for bridge violations, route drift, and missing identity coverage."
+  },
+  "validation": {
+    "shrv1": {
+      "python3 scripts/check_master_layer_registry.py": "PASS: Master Layer Registry checked 45 required layers.",
+      "python3 scripts/check_truth_spine_freeze.py": "PASS: Truth Spine V1 freeze checks passed.",
+      "python3 scripts/check_oracle_layer.py": "PASS: Oracle Layer V1 checks passed.",
+      "python3 scripts/check_ai_guardrails_layer.py": "PASS: AI/Swarm Guardrails V1 checks passed.",
+      "python3 scripts/check_game_theory_layer.py": "PASS: Game Theory Layer V1 checks passed.",
+      "npm run check:governance": "PASS: registry, proposal, truth, oracle, ai-guardrails, game-theory, duplicate cleanup checks passed.",
+      "npm run build": "PASS: Vite build completed; existing large chunk warning only."
+    },
+    "shf_next": {
+      "npm run build": "PASS: TypeScript/Vite build completed; existing large chunk warning only.",
+      "npm run lint": "PASS: eslint completed with no errors."
+    }
+  },
+  "remaining_risks": [
+    "SHF-Next internal pages can be reachable publicly if hosted without a guard.",
+    "Hardcoded admin keys or URL secrets would compromise governance authority.",
+    "A duplicate identity system in SHF-Next would drift from SHRV1 authority.",
+    "Route drift can make public/internal boundaries inaccurate.",
+    "Public foundation/report pages could be accidentally admin-gated and break public presentation workflows.",
+    "ClientOps/Ops routes may expose sensitive client, delivery, or project data.",
+    "Unknown shf-next paths currently fall to a DevelopmentLibrary-style fallback until a later route hardening pass."
+  ],
+  "v1_complete": true
+}

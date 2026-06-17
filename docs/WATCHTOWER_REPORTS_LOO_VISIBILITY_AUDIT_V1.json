@@ -1,0 +1,246 @@
+{
+  "audit": "Watchtower / Reports / LOO Visibility Audit V1",
+  "date": "2026-06-14",
+  "status": "complete_as_audit",
+  "runtime_behavior_changed": false,
+  "source_code_changed": false,
+  "signals_audited": [
+    "Truth Spine",
+    "Oracle",
+    "AI/Swarm Guardrails",
+    "Game Theory",
+    "Agent Fabric/Governance",
+    "Master Layer Registry",
+    "Duplicate cleanup/anti-drift",
+    "Layer gate",
+    "Trust metadata",
+    "Audit trace metadata"
+  ],
+  "backend": {
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/watchtower/summary",
+        "status": "pass",
+        "http_status": 200,
+        "visible_signals": ["Watchtower coverage/risk", "Truth coverage", "Oracle", "AI Guardrails", "Game Theory"],
+        "gaps": ["Agent Fabric", "Layer gate", "Master Layer Registry", "Duplicate cleanup"]
+      },
+      {
+        "method": "GET",
+        "path": "/reports/snapshot",
+        "status": "pass",
+        "http_status": 200,
+        "visible_signals": ["Reports", "Truth readiness", "Oracle", "AI Guardrails", "Game Theory"],
+        "gaps": ["Agent Fabric", "Layer gate", "Master Layer Registry", "Duplicate cleanup", "Explicit audit trace metadata"]
+      },
+      {
+        "method": "GET",
+        "path": "/loo/score",
+        "status": "expected_gap",
+        "http_status": 405,
+        "visible_signals": [],
+        "gaps": ["LOO score endpoint is POST-only"]
+      },
+      {
+        "method": "POST",
+        "path": "/loo/score",
+        "status": "pass",
+        "http_status": 200,
+        "visible_signals": ["LOO score", "LOO decision", "Derived metrics", "Truth Spine trust metadata"],
+        "trust_sample": {
+          "claim_id": "claim_smoke_truth",
+          "verification_status": "verified",
+          "trust_level": "verified",
+          "trace_coverage": 92,
+          "report_ready": true,
+          "note": "LOO ranks outcomes; Truth Spine metadata gates reporting readiness."
+        },
+        "gaps": ["Oracle", "Layer gate", "Agent Fabric", "Audit trace metadata"]
+      },
+      {
+        "method": "GET",
+        "path": "/truth/health",
+        "status": "pass",
+        "http_status": 200,
+        "visible_signals": ["Truth Spine health", "Claim/source counts", "Report-ready counts"],
+        "gaps": []
+      },
+      {
+        "method": "GET",
+        "path": "/truth/coverage",
+        "status": "pass",
+        "http_status": 200,
+        "visible_signals": ["Truth coverage", "Package counts", "Federation counts"],
+        "gaps": []
+      },
+      {
+        "method": "GET",
+        "path": "/oracle/health",
+        "status": "pass",
+        "http_status": 200,
+        "visible_signals": ["Oracle health"],
+        "gaps": []
+      },
+      {
+        "method": "GET",
+        "path": "/oracle/rulings",
+        "status": "pass",
+        "http_status": 200,
+        "visible_signals": ["Oracle rulings"],
+        "gaps": []
+      },
+      {
+        "method": "GET",
+        "path": "/ai-guardrails/health",
+        "status": "pass",
+        "http_status": 200,
+        "visible_signals": ["AI Guardrails health", "Blocked/review-required counts"],
+        "gaps": []
+      },
+      {
+        "method": "GET",
+        "path": "/ai-guardrails/decisions",
+        "status": "pass",
+        "http_status": 200,
+        "visible_signals": ["AI Guardrails decisions"],
+        "gaps": []
+      },
+      {
+        "method": "GET",
+        "path": "/game-theory/health",
+        "status": "pass",
+        "http_status": 200,
+        "visible_signals": ["Game Theory health"],
+        "gaps": []
+      },
+      {
+        "method": "GET",
+        "path": "/game-theory/strategy-playbook",
+        "status": "pass",
+        "http_status": 200,
+        "visible_signals": ["Game Theory strategy playbook"],
+        "gaps": []
+      },
+      {
+        "method": "GET",
+        "path": "/admin/agents/summary/health",
+        "status": "pass",
+        "http_status": 200,
+        "visible_signals": ["Agent Fabric summary", "Canonical health", "Readiness counts"],
+        "gaps": ["Watchtower payload state", "Reports payload state", "LOO payload state"]
+      },
+      {
+        "method": "GET",
+        "path": "/admin/agents/verify",
+        "status": "pass",
+        "http_status": 200,
+        "visible_signals": ["Agent Fabric verification ledger", "Audit event count"],
+        "gaps": ["Watchtower payload state", "Reports payload state", "LOO payload state"]
+      },
+      {
+        "method": "GET",
+        "path": "/admin/layers/gate/status",
+        "status": "pass",
+        "http_status": 200,
+        "visible_signals": ["Layer gate", "Master Layer Registry gate blockers"],
+        "gate_pass": false,
+        "gaps": []
+      }
+    ]
+  },
+  "frontend": {
+    "routes": [
+      {
+        "route": "admin.html#/agent-fabric",
+        "status": "pass",
+        "rendered_h1": "Agent Fabric",
+        "visible_signals": ["Agent Fabric", "Required layers", "Layer gate posture"]
+      },
+      {
+        "route": "admin.html#/registry",
+        "status": "pass",
+        "rendered_h1": "Registry",
+        "visible_signals": ["Registry", "Master Layer Registry posture"]
+      },
+      {
+        "route": "admin.html#/truth-spine",
+        "status": "pass",
+        "rendered_h1": "SHS Truth Spine V1",
+        "visible_signals": ["Truth Spine", "Report readiness"]
+      },
+      {
+        "route": "admin.html#/oracle",
+        "status": "pass",
+        "rendered_h1": "Oracle Layer V1",
+        "visible_signals": ["Oracle", "Truth Spine boundary"]
+      },
+      {
+        "route": "admin.html#/ai-guardrails",
+        "status": "pass",
+        "rendered_h1": "AI Guardrails V1",
+        "visible_signals": ["AI Guardrails", "Publication gate posture"]
+      },
+      {
+        "route": "admin.html#/game-theory",
+        "status": "pass",
+        "rendered_h1": "Game Theory Layer V1",
+        "visible_signals": ["Game Theory"]
+      },
+      {
+        "route": "admin.html#/reporting",
+        "status": "pass_with_access_or_workflow_blocker",
+        "rendered_h1": "Reporting Command Surface",
+        "visible_signals": ["Reports", "Reporting readiness", "Oracle/trust terminology", "Audit/export surfaces"]
+      },
+      {
+        "route": "admin.html#/hub/reports",
+        "status": "pass_with_access_or_workflow_blocker",
+        "rendered_h1": "Hub Reports",
+        "visible_signals": ["Truth Spine report readiness", "Audit coverage", "Verified reports"]
+      },
+      {
+        "route": "admin.html#/lord-outcomes",
+        "status": "gap",
+        "rendered_h1": "Silicon Heartland Hub",
+        "final_hash": "#/hub",
+        "visible_signals": [],
+        "gap": "Sidebar link exists, but AdminRoutes does not mount /lord-outcomes."
+      },
+      {
+        "route": "admin.html#/watchtower",
+        "status": "gap",
+        "rendered_h1": "Silicon Heartland Hub",
+        "final_hash": "#/hub",
+        "visible_signals": [],
+        "gap": "No dedicated mounted admin Watchtower route found."
+      },
+      {
+        "route": "admin.html#/loo",
+        "status": "gap",
+        "rendered_h1": "Silicon Heartland Hub",
+        "final_hash": "#/hub",
+        "visible_signals": [],
+        "gap": "No dedicated mounted admin LOO route found."
+      },
+      {
+        "route": "admin.html#/reports",
+        "status": "gap",
+        "rendered_h1": "Silicon Heartland Hub",
+        "final_hash": "#/hub",
+        "visible_signals": [],
+        "gap": "Mounted report surfaces are /reporting and /hub/reports, not /reports."
+      }
+    ]
+  },
+  "gaps": [
+    "GET /loo/score is not active; scoring is POST /loo/score.",
+    "Admin sidebar Lord of Outcomes link points to /lord-outcomes, but the admin router does not mount that route.",
+    "Watchtower summary and Reports snapshot do not include Agent Fabric, Layer Gate, Master Layer Registry, or duplicate-cleanup status.",
+    "No dedicated mounted admin Watchtower route was found.",
+    "No dedicated mounted admin /reports route was found; active report routes are /reporting and /hub/reports."
+  ],
+  "fixes_applied": [],
+  "v1_complete": true,
+  "v1_complete_meaning": "Audit documents created and validated. Cross-surface visibility gaps are documented for a later owner-approved implementation pass."
+}

@@ -26,6 +26,9 @@ const SECTIONS = [
   {
     title: "Operations",
     items: [
+      { to: "/command", icon: "⌘", label: "Command Center" },
+      { to: "/dashboard", icon: "▦", label: "Dashboard" },
+      { to: "/reports", icon: "▤", label: "Reports" },
       { to: "/builder", icon: "▥", label: "Website Studio" },
       { to: "/builder/tools", icon: "🧰", label: "Tool Dashboard" },
       { to: "/admin", icon: "🛡️", label: "Admin Home", end: true },

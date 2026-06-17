@@ -69,6 +69,7 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 - Must Not Own: Claim verification, report readiness, public approval, or outcome ranking.
 - Upstream: Governance Layer, Security/Privacy
 - Downstream: API Gateway, Admin, Apps/Programs
+- Cross-App Bridge Note: Cross-App Identity Bridge V1 is not a new layer; SHRV1 remains the Identity & Access authority and SHF-Next consumes route boundary metadata.
 - Truth Spine Requirement: Must not mark claims verified, public-approved, or report-ready.
 - Enforcement Status: Required
 

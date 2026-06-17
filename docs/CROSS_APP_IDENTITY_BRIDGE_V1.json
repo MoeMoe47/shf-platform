@@ -1,0 +1,286 @@
+{
+  "name": "Cross-App Identity Bridge V1",
+  "generated_at": "2026-06-15T09:58:03.572443+00:00",
+  "identity_authority": "shrv1",
+  "consumer_app": "shf-next",
+  "is_new_layer": false,
+  "shrv1_files": [
+    "src/system/identity/crossAppIdentityBridge.js",
+    "docs/MASTER_LAYER_REGISTRY.md",
+    "docs/CROSS_APP_IDENTITY_BRIDGE_V1.md",
+    "docs/CROSS_APP_IDENTITY_BRIDGE_V1.json"
+  ],
+  "shf_next_files": [
+    "/Users/mikeslate/shf-next/src/data/crossAppIdentityBridge.ts",
+    "/Users/mikeslate/shf-next/src/components/CrossAppAccessNotice.tsx",
+    "/Users/mikeslate/shf-next/src/App.tsx"
+  ],
+  "route_classes": [
+    {
+      "route": "/ops",
+      "class": "INTERNAL_OPS",
+      "required_roles": [
+        "shs_admin",
+        "shs_ops"
+      ],
+      "notice": "shown"
+    },
+    {
+      "route": "/ops/command",
+      "class": "INTERNAL_OPS",
+      "required_roles": [
+        "shs_admin",
+        "shs_ops"
+      ],
+      "notice": "shown"
+    },
+    {
+      "route": "/ops/sales",
+      "class": "INTERNAL_OPS",
+      "required_roles": [
+        "shs_admin",
+        "shs_sales",
+        "shs_ops"
+      ],
+      "notice": "shown"
+    },
+    {
+      "route": "/ops/projects",
+      "class": "INTERNAL_OPS",
+      "required_roles": [
+        "shs_admin",
+        "shs_ops"
+      ],
+      "notice": "shown"
+    },
+    {
+      "route": "/ops/library",
+      "class": "INTERNAL_OPS",
+      "required_roles": [
+        "shs_admin",
+        "shs_ops"
+      ],
+      "notice": "shown"
+    },
+    {
+      "route": "/ops/qa",
+      "class": "INTERNAL_OPS",
+      "required_roles": [
+        "shs_admin",
+        "shs_qa",
+        "shs_ops"
+      ],
+      "notice": "shown"
+    },
+    {
+      "route": "/ops/clientops",
+      "class": "INTERNAL_CLIENTOPS",
+      "required_roles": [
+        "shs_admin",
+        "shs_clientops"
+      ],
+      "notice": "shown"
+    },
+    {
+      "route": "/studio",
+      "class": "INTERNAL_STUDIO_ADMIN",
+      "required_roles": [
+        "shs_admin",
+        "shs_studio_admin"
+      ],
+      "notice": "shown if routed"
+    },
+    {
+      "route": "/studio/templates",
+      "class": "PUBLIC",
+      "required_roles": [
+        "public"
+      ],
+      "notice": "hidden"
+    },
+    {
+      "route": "/studio/templates/browse",
+      "class": "PUBLIC",
+      "required_roles": [
+        "public"
+      ],
+      "notice": "hidden"
+    },
+    {
+      "route": "/foundation/data-approval",
+      "class": "FOUNDATION_ADMIN",
+      "required_roles": [
+        "shs_admin",
+        "shf_admin",
+        "shf_reviewer"
+      ],
+      "notice": "shown"
+    },
+    {
+      "route": "/foundation/impact-report",
+      "class": "PUBLIC_FOUNDATION",
+      "required_roles": [
+        "public"
+      ],
+      "notice": "hidden"
+    },
+    {
+      "route": "/foundation",
+      "class": "PUBLIC_FOUNDATION",
+      "required_roles": [
+        "public"
+      ],
+      "notice": "hidden"
+    },
+    {
+      "route": "/solutions",
+      "class": "PUBLIC",
+      "required_roles": [
+        "public"
+      ],
+      "notice": "hidden"
+    },
+    {
+      "route": "/",
+      "class": "PUBLIC",
+      "required_roles": [
+        "public"
+      ],
+      "notice": "hidden"
+    },
+    {
+      "route": "unmatched",
+      "class": "OWNER_DECISION_REQUIRED",
+      "required_roles": [
+        "shs_admin"
+      ],
+      "notice": "shown if routed through app shell"
+    }
+  ],
+  "role_matrix": [
+    {
+      "role": "shs_admin",
+      "scope": "all internal V1 bridge notices; authority/admin family"
+    },
+    {
+      "role": "shs_ops",
+      "scope": "/ops, /ops/command, /ops/projects, /ops/library"
+    },
+    {
+      "role": "shs_clientops",
+      "scope": "/ops/clientops"
+    },
+    {
+      "role": "shs_sales",
+      "scope": "/ops/sales"
+    },
+    {
+      "role": "shs_qa",
+      "scope": "/ops/qa"
+    },
+    {
+      "role": "shs_studio_admin",
+      "scope": "/studio admin route class"
+    },
+    {
+      "role": "shf_admin",
+      "scope": "/foundation/data-approval"
+    },
+    {
+      "role": "shf_reviewer",
+      "scope": "/foundation/data-approval"
+    },
+    {
+      "role": "public",
+      "scope": "public studio, public foundation report, solutions, homepage"
+    }
+  ],
+  "bridge_data_contract": {
+    "version": "v1",
+    "authority": "shrv1",
+    "consumer": "shf-next",
+    "subjectId": "string",
+    "displayName": "string",
+    "email": "string",
+    "roleFamily": "allowed role family",
+    "roles": [
+      "allowed role family"
+    ],
+    "organization": "string",
+    "issuedAt": "ISO-8601 string",
+    "expiresAt": "ISO-8601 string optional for local dev",
+    "environment": "local-dev",
+    "source": "shrv1 local-dev bridge identity or future signed/session bridge"
+  },
+  "local_storage_keys": [
+    "shs.identity.bridge.v1",
+    "shrv1.identity.bridge.v1"
+  ],
+  "notice_component": "/Users/mikeslate/shf-next/src/components/CrossAppAccessNotice.tsx",
+  "blocking_enforced": false,
+  "validation": {
+    "shrv1": {
+      "python3 scripts/check_master_layer_registry.py": "PASS: Master Layer Registry checked 45 required layers.",
+      "python3 scripts/check_truth_spine_freeze.py": "PASS: Truth Spine V1 freeze checks passed.",
+      "python3 scripts/check_oracle_layer.py": "PASS: Oracle Layer V1 checks passed.",
+      "python3 scripts/check_ai_guardrails_layer.py": "PASS: AI/Swarm Guardrails V1 checks passed.",
+      "python3 scripts/check_game_theory_layer.py": "PASS: Game Theory Layer V1 checks passed.",
+      "npm run check:governance": "PASS: registry, proposal, truth, oracle, ai-guardrails, game-theory, duplicate cleanup checks passed.",
+      "npm run build": "PASS: Vite build completed; existing large chunk warning only."
+    },
+    "shf_next": {
+      "npm run build": "PASS: TypeScript/Vite build completed; existing large chunk warning only.",
+      "npm run lint": "PASS: eslint completed with no errors."
+    }
+  },
+  "browser_smoke": {
+    "dev_server": "npm run dev -- --host 127.0.0.1 --port 5175",
+    "results": [
+      {
+        "route": "/studio/templates/browse",
+        "expected": "public route without notice",
+        "result": "PASS",
+        "console_errors": 0
+      },
+      {
+        "route": "/ops/command",
+        "expected": "internal notice shown",
+        "result": "PASS",
+        "console_errors": 0
+      },
+      {
+        "route": "/ops/clientops",
+        "expected": "internal notice shown",
+        "result": "PASS",
+        "console_errors": 0
+      },
+      {
+        "route": "/foundation/data-approval",
+        "expected": "foundation admin notice shown",
+        "result": "PASS",
+        "console_errors": 0
+      },
+      {
+        "route": "/foundation/impact-report",
+        "expected": "public foundation route without notice",
+        "result": "PASS",
+        "console_errors": 0
+      },
+      {
+        "route": "/",
+        "expected": "public homepage route without notice",
+        "result": "PASS",
+        "console_errors": 0
+      }
+    ],
+    "identity_present_path": "Covered by component logic and build/lint; browser runtime blocks localStorage mutation from read-only page evaluation, so live seeded identity was not used in browser smoke."
+  },
+  "remaining_risks": [
+    "V1 is local-dev metadata only and does not authenticate users in production.",
+    "Routes are not blocked in V1; the notice is advisory so public pages are not disrupted.",
+    "A future signed/session-backed bridge is required before production enforcement.",
+    "shf-next remains outside the shrv1 git repo and is not a git repository in this environment.",
+    "Unmatched shf-next paths are OWNER_DECISION_REQUIRED in config but may still render the existing fallback DevelopmentLibrary page until a later route hardening pass."
+  ],
+  "v1_complete": true
+}

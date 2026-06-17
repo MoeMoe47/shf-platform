@@ -1,0 +1,227 @@
+{
+  "audit_name": "Command Center / Dashboard Route Establishment V1",
+  "cards_found": {
+    "watchtower_card_command_center": {
+      "found": false,
+      "notes": "No literal Watchtower card found in active Command Center pages."
+    },
+    "loo_card_command_center": {
+      "found": false,
+      "notes": "No literal LOO/Lord of Outcomes card found in active Command Center pages."
+    },
+    "watchtower_card_dashboard": {
+      "found": false,
+      "notes": "No literal Watchtower card found in active Dashboard pages."
+    },
+    "loo_card_dashboard": {
+      "found": false,
+      "notes": "No literal LOO/Lord of Outcomes card found in active Dashboard pages."
+    },
+    "reports_trust_card": {
+      "found": true,
+      "locations": [
+        "src/pages/shf-command/sections/ReportsBriefingsPanel.jsx",
+        "src/pages/shf-command/sections/TrustVerificationPanel.jsx",
+        "src/pages/exchange/workspace-dashboard/components/ReportsPanel.jsx",
+        "src/pages/hub/HubReports.jsx"
+      ]
+    },
+    "governance_layer_gate_card": {
+      "found": true,
+      "locations": [
+        "src/pages/admin/agent-fabric/AgentFabricPage.jsx"
+      ]
+    }
+  },
+  "cards_visible": {
+    "watchtower_card_command_center": false,
+    "loo_card_command_center": false,
+    "watchtower_card_dashboard": false,
+    "loo_card_dashboard": false,
+    "reports_trust_card": true,
+    "governance_layer_gate_card": true
+  },
+  "cards_missing": {
+    "watchtower_card_command_center": true,
+    "loo_card_command_center": true,
+    "watchtower_card_dashboard": true,
+    "loo_card_dashboard": true
+  },
+  "routes_found": {
+    "command_center_existing": [
+      "foundation.html#/impact",
+      "index.html#/shf-command",
+      "exchange nested route exchange/command"
+    ],
+    "dashboard_existing": [
+      "exchange nested route exchange/dashboard"
+    ],
+    "watchtower_existing": [
+      "backend /watchtower/*",
+      "admin.html#/agent-fabric governance visibility"
+    ],
+    "loo_existing": [
+      "lord-of-outcomes.html#/",
+      "src/router/LordOutcomesRoutes.jsx"
+    ],
+    "reports_existing": [
+      "admin.html#/reporting",
+      "admin.html#/hub/reports"
+    ]
+  },
+  "routes_added": [
+    "admin.html#/command",
+    "admin.html#/command-center",
+    "admin.html#/dashboard",
+    "admin.html#/reports",
+    "admin.html#/loo",
+    "admin.html#/lord-outcomes/*",
+    "admin.html#/watchtower"
+  ],
+  "sidebar_links_added": [
+    "Command Center -> #/command",
+    "Dashboard -> #/dashboard",
+    "Reports -> #/reports"
+  ],
+  "permissions": {
+    "command": "shs_admin plus audit.view",
+    "command_center": "shs_admin plus audit.view",
+    "dashboard": "shs_admin plus audit.view",
+    "reports": "client_admin/shs_admin plus reports.view",
+    "loo": "redirects to lord-outcomes; final surface shs_admin plus audit.view",
+    "lord_outcomes": "shs_admin plus audit.view",
+    "watchtower": "redirects to agent-fabric; final surface shs_admin plus audit.view"
+  },
+  "browser_smoke": {
+    "admin.html#/command": {
+      "status": "pass",
+      "final_hash": "#/command",
+      "h1": "SHF Impact Command Center",
+      "watchtower_visible": false,
+      "loo_visible": true,
+      "reports_visible": true,
+      "trust_visible": false,
+      "risk_visible": true,
+      "governance_visible": true
+    },
+    "admin.html#/command-center": {
+      "status": "pass",
+      "final_hash": "#/command-center",
+      "h1": "SHF Impact Command Center"
+    },
+    "admin.html#/dashboard": {
+      "status": "pass",
+      "final_hash": "#/dashboard",
+      "h1": "Silicon Heartland Solutions",
+      "reports_visible": true
+    },
+    "admin.html#/reports": {
+      "status": "pass_with_existing_api_console_noise",
+      "final_hash": "#/reports",
+      "h1": "Reporting Command Surface",
+      "reports_visible": true,
+      "trust_visible": true
+    },
+    "admin.html#/reporting": {
+      "status": "pass_with_existing_api_console_noise",
+      "final_hash": "#/reporting",
+      "h1": "Reporting Command Surface"
+    },
+    "admin.html#/loo": {
+      "status": "pass",
+      "final_hash": "#/lord-outcomes",
+      "h1": "Lord of Outcomes"
+    },
+    "admin.html#/lord-outcomes": {
+      "status": "pass",
+      "final_hash": "#/lord-outcomes",
+      "h1": "Lord of Outcomes"
+    },
+    "admin.html#/watchtower": {
+      "status": "pass",
+      "final_hash": "#/agent-fabric",
+      "h1": "Agent Fabric",
+      "watchtower_visible": true
+    },
+    "console_errors": [
+      "Existing /auth/me or local API 404 noise remains in dev smoke.",
+      "Existing reporting/Oracle local endpoints return 404 in smoke.",
+      "Existing SHF command Agent Fabric calls target 127.0.0.1:8090 while this smoke backend ran on 8091."
+    ]
+  },
+  "backend_smoke": {
+    "GET /watchtower/summary": {
+      "status": "pass",
+      "http_status": 200
+    },
+    "POST /loo/score": {
+      "status": "pass",
+      "http_status": 200,
+      "trust_metadata": {
+        "claim_id": "claim_route_establishment",
+        "verification_status": "verified",
+        "trust_level": "verified",
+        "trace_coverage": 90,
+        "report_ready": true
+      }
+    },
+    "GET /reports/snapshot": {
+      "status": "pass",
+      "http_status": 200
+    }
+  },
+  "files_changed": [
+    "src/router/AdminRoutes.jsx",
+    "src/components/admin/AdminSidebar.jsx",
+    "src/system/identity/hubAccessControl.js",
+    "docs/COMMAND_DASHBOARD_ROUTE_ESTABLISHMENT_V1.md",
+    "docs/COMMAND_DASHBOARD_ROUTE_ESTABLISHMENT_V1.json"
+  ],
+  "validation": {
+    "json": {
+      "command": "python3 -m json.tool docs/COMMAND_DASHBOARD_ROUTE_ESTABLISHMENT_V1.json",
+      "status": "pass"
+    },
+    "governance": {
+      "command": "npm run check:governance",
+      "status": "pass"
+    },
+    "master_layer_registry": {
+      "command": "python3 scripts/check_master_layer_registry.py",
+      "status": "pass"
+    },
+    "truth_spine_freeze": {
+      "command": "python3 scripts/check_truth_spine_freeze.py",
+      "status": "pass"
+    },
+    "oracle_layer": {
+      "command": "python3 scripts/check_oracle_layer.py",
+      "status": "pass"
+    },
+    "ai_guardrails_layer": {
+      "command": "python3 scripts/check_ai_guardrails_layer.py",
+      "status": "pass"
+    },
+    "game_theory_layer": {
+      "command": "python3 scripts/check_game_theory_layer.py",
+      "status": "pass"
+    },
+    "focused_pytest": {
+      "command": "python3 -m pytest services/shf-agent-fabric/tests/test_truth_routes.py services/shf-agent-fabric/tests/test_oracle_routes.py services/shf-agent-fabric/tests/test_ai_guardrails_routes.py services/shf-agent-fabric/tests/test_game_theory_routes.py services/shf-agent-fabric/tests/test_agent_canon_basics.py",
+      "status": "pass",
+      "passed": 25
+    },
+    "build": {
+      "command": "npm run build",
+      "status": "pass",
+      "notes": "Existing large chunk warning remains."
+    }
+  },
+  "remaining_gaps": [
+    "No literal Watchtower card exists in the audited Command Center or Dashboard.",
+    "No literal LOO card exists in the audited Command Center or Dashboard.",
+    "No dedicated Watchtower admin page exists; /watchtower redirects to Agent Fabric.",
+    "Existing local-dev console errors remain for unrelated API/backend expectations."
+  ],
+  "v1_complete": true
+}

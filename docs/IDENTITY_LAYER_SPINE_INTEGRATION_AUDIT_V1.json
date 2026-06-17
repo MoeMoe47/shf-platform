@@ -1,0 +1,1218 @@
+{
+  "audit_name": "Identity Layer Spine Integration Audit V1",
+  "generated_at": "2026-06-15T00:54:33.684095+00:00",
+  "identity_files": [
+    {
+      "repo": "shrv1",
+      "path": "src/entries/admin.main.jsx",
+      "role": "Mounts AuthProvider, HashRouter, AdminLayout, and AdminRoutes for admin.html."
+    },
+    {
+      "repo": "shrv1",
+      "path": "src/auth/auth-context.jsx",
+      "role": "Front-end auth context; fetches /api/auth/me and creates localhost dev session only in Vite dev."
+    },
+    {
+      "repo": "shrv1",
+      "path": "src/auth/AuthGuard.jsx",
+      "role": "Blocks unauthenticated AdminRoutes children."
+    },
+    {
+      "repo": "shrv1",
+      "path": "src/auth/PermissionGuard.jsx",
+      "role": "Blocks routes missing named SHS_SECURITY_PERMISSIONS."
+    },
+    {
+      "repo": "shrv1",
+      "path": "src/system/identity/hubAccessControl.js",
+      "role": "Canonical shrv1 role-to-route gate for hub/admin surfaces."
+    },
+    {
+      "repo": "shrv1",
+      "path": "src/system/identity/identityRouting.js",
+      "role": "Local identity session helpers, demo users, and dev-only admin seeding."
+    },
+    {
+      "repo": "shrv1",
+      "path": "src/system/security/security-permissions.js",
+      "role": "Named role and permission grants used by PermissionGuard."
+    },
+    {
+      "repo": "shrv1",
+      "path": "src/router/AdminRoutes.jsx",
+      "role": "Admin route protection wrapper using AuthGuard, ProtectedHubRoute, and PermissionGuard."
+    },
+    {
+      "repo": "shrv1",
+      "path": "src/components/admin/AdminSidebar.jsx",
+      "role": "Admin navigation discovery surface; rendered inside AdminLayout."
+    },
+    {
+      "repo": "shrv1",
+      "path": "src/pages/admin/identity/IdentityManagement.jsx",
+      "role": "Identity admin surface mounted at admin.html#/identity."
+    },
+    {
+      "repo": "shrv1",
+      "path": "services/shf-agent-fabric/fabric/admin_auth.py",
+      "role": "Backend ADMIN_API_KEY dependency for protected /admin control plane routers."
+    },
+    {
+      "repo": "shrv1",
+      "path": "services/shf-agent-fabric/routers/admin_agents_routes.py",
+      "role": "Protected Agent Fabric admin API."
+    },
+    {
+      "repo": "shrv1",
+      "path": "services/shf-agent-fabric/routers/admin_layers_routes.py",
+      "role": "Protected layer registry/admin API."
+    },
+    {
+      "repo": "shrv1",
+      "path": "services/shf-agent-fabric/routers/admin_gate_routes.py",
+      "role": "Protected layer gate status/history API."
+    },
+    {
+      "repo": "shrv1",
+      "path": "services/shf-agent-fabric/routers/admin_registry_routes.py",
+      "role": "Protected registry API with X-Admin-Role and X-Org-Id read/write isolation."
+    },
+    {
+      "repo": "shf-next",
+      "path": "src/App.tsx",
+      "role": "Manual path router; currently has no visible shared identity/auth bridge."
+    }
+  ],
+  "registry_status": {
+    "official_layer_present": true,
+    "layer_name": "Identity & Access",
+    "layer_type": "Security",
+    "owns": "Authentication, roles, organizations, route access, and permission gates.",
+    "must_not_own": "Claim verification, Truth Spine state, report readiness, public approval, outcome ranking, or data ownership decisions.",
+    "truth_spine_requirement": "Must not mark claims verified, public-approved, or report-ready.",
+    "enforcement_status": "Required",
+    "patch_applied": false
+  },
+  "shrv1_route_protection": {
+    "protected": [
+      {
+        "route": "admin.html#/hub",
+        "component": "HubWorkspaceDashboard",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/network",
+        "component": "HubLeadershipDashboard",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/leadership",
+        "component": "HubLeadershipDashboard",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/intake",
+        "component": "IntakeNavigatorConsole",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/queue",
+        "component": "PartnerActionQueue",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/action-queue",
+        "component": "PartnerActionQueue",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/lifecycle",
+        "component": "ReferralLifecycleView",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/referrals",
+        "component": "ReferralLifecycleView",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/unmet-needs",
+        "component": "UnmetNeedsQueue",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/imports",
+        "component": "HubFilesImports",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/reports",
+        "component": "HubReports",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/growth-network",
+        "component": "HubGrowthNetwork",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/sales-pipeline",
+        "component": "HubSalesPipelinePage",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/opportunities",
+        "component": "HubOpportunitiesPage",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/bundles",
+        "component": "HubBundleBuilderPage",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/intelligence",
+        "component": "HubIntelligencePage",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/uploads",
+        "component": "UploadManager",
+        "permission": "UPLOADS_INTERNAL",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/imports",
+        "component": "HubFilesImports",
+        "permission": "UPLOADS_INTERNAL",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/aggregation",
+        "component": "AggregationDashboard",
+        "permission": "AGGREGATION_VIEW",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/reporting",
+        "component": "ReportingCommandSurface",
+        "permission": "REPORTS_VIEW",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/reports",
+        "component": "ReportingCommandSurface",
+        "permission": "REPORTS_VIEW",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/command",
+        "component": "SHFImpactCommandCenter",
+        "permission": "AUDIT_VIEW",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/command-center",
+        "component": "SHFImpactCommandCenter",
+        "permission": "AUDIT_VIEW",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/dashboard",
+        "component": "WorkspaceDashboard",
+        "permission": "AUDIT_VIEW",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/lord-outcomes",
+        "component": "LordOutcomesRoutes",
+        "permission": "AUDIT_VIEW",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/lord-outcomes",
+        "component": "LordOutcomesRoutes",
+        "permission": "AUDIT_VIEW",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/verification-audit",
+        "component": "VerificationAuditSurface",
+        "permission": "VERIFICATION_VIEW",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/truth-spine",
+        "component": "TruthSpinePage",
+        "permission": "TRUTH_VIEW",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/oracle",
+        "component": "OraclePage",
+        "permission": "TRUTH_VIEW",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ai-guardrails",
+        "component": "AIGuardrailsPage",
+        "permission": "TRUTH_VIEW",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/game-theory",
+        "component": "GameTheoryPage",
+        "permission": "TRUTH_VIEW",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/agent-fabric",
+        "component": "AgentFabricPage",
+        "permission": "AUDIT_VIEW",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/audit",
+        "component": "AuditLogViewer",
+        "permission": "AUDIT_VIEW",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/identity",
+        "component": "IdentityManagement",
+        "permission": "IDENTITY_VIEW",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/app-registry",
+        "component": "AppRegistry",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/registry",
+        "component": "Registry",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/builder",
+        "component": "BuilderHub",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/web-maker",
+        "component": "BuilderHub",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/studio/templates",
+        "component": "BuilderHub",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/builder/tools",
+        "component": "ToolDashboard",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/tools",
+        "component": "ToolDashboard",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/tool-dashboard",
+        "component": "ToolDashboard",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/master-narrative",
+        "component": "MasterNarrativeViewer",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/grant-binder",
+        "component": "GrantBinder",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/alignment",
+        "component": "AlignmentSwitchboard",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/analytics",
+        "component": "AdminAnalytics",
+        "permission": "AUDIT_VIEW",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/dev/docs",
+        "component": "DevDocsViewer",
+        "permission": "AUDIT_VIEW",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/growth",
+        "component": "SHSPartnerGrowthEngine",
+        "permission": "GROWTH_VIEW",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/production",
+        "component": "OpsProductionDashboard",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/projects",
+        "component": "OpsProjectSetup",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/brand-profile",
+        "component": "OpsBrandProfile",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/page-intent",
+        "component": "OpsPageIntent",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/layout-blueprint",
+        "component": "OpsLayoutBlueprint",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/visual-treatment",
+        "component": "OpsVisualTreatment",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/assets",
+        "component": "OpsAssetGovernance",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/data-binding",
+        "component": "OpsDataBinding",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/mock-review",
+        "component": "OpsMockReview",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/build-packet",
+        "component": "OpsBuildPacket",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/screenshot-qa",
+        "component": "OpsScreenshotQA",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/learning",
+        "component": "OpsLearningDashboard",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/solutions",
+        "component": "SolutionsInfrastructurePage",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/solutions/infrastructure",
+        "component": "SolutionsInfrastructurePage",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      }
+    ],
+    "public_intentional": [
+      {
+        "route": "admin.html#/login",
+        "reason": "login page must be reachable before auth"
+      },
+      {
+        "route": "admin.html#/",
+        "reason": "redirects to protected hub"
+      },
+      {
+        "route": "/studio/templates",
+        "reason": "public WebMaker page via index.main.jsx; separate from admin BuilderHub"
+      }
+    ],
+    "missing_permission": [],
+    "permission_without_route": [
+      "/adaptive-experience",
+      "/hub/calendar",
+      "/hub/conference",
+      "/hub/journal",
+      "/settings",
+      "/verification"
+    ],
+    "route_without_permission": [
+      {
+        "route": "admin.html#/hub",
+        "component": "HubWorkspaceDashboard",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/network",
+        "component": "HubLeadershipDashboard",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/leadership",
+        "component": "HubLeadershipDashboard",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/intake",
+        "component": "IntakeNavigatorConsole",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/queue",
+        "component": "PartnerActionQueue",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/action-queue",
+        "component": "PartnerActionQueue",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/lifecycle",
+        "component": "ReferralLifecycleView",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/referrals",
+        "component": "ReferralLifecycleView",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/unmet-needs",
+        "component": "UnmetNeedsQueue",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/imports",
+        "component": "HubFilesImports",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/reports",
+        "component": "HubReports",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/growth-network",
+        "component": "HubGrowthNetwork",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/sales-pipeline",
+        "component": "HubSalesPipelinePage",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/opportunities",
+        "component": "HubOpportunitiesPage",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/bundles",
+        "component": "HubBundleBuilderPage",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/hub/intelligence",
+        "component": "HubIntelligencePage",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/app-registry",
+        "component": "AppRegistry",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/registry",
+        "component": "Registry",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/builder",
+        "component": "BuilderHub",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/web-maker",
+        "component": "BuilderHub",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/studio/templates",
+        "component": "BuilderHub",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/builder/tools",
+        "component": "ToolDashboard",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/tools",
+        "component": "ToolDashboard",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/tool-dashboard",
+        "component": "ToolDashboard",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/master-narrative",
+        "component": "MasterNarrativeViewer",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/grant-binder",
+        "component": "GrantBinder",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/alignment",
+        "component": "AlignmentSwitchboard",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/production",
+        "component": "OpsProductionDashboard",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/projects",
+        "component": "OpsProjectSetup",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/brand-profile",
+        "component": "OpsBrandProfile",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/page-intent",
+        "component": "OpsPageIntent",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/layout-blueprint",
+        "component": "OpsLayoutBlueprint",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/visual-treatment",
+        "component": "OpsVisualTreatment",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/assets",
+        "component": "OpsAssetGovernance",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/data-binding",
+        "component": "OpsDataBinding",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/mock-review",
+        "component": "OpsMockReview",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/build-packet",
+        "component": "OpsBuildPacket",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/screenshot-qa",
+        "component": "OpsScreenshotQA",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/ops/learning",
+        "component": "OpsLearningDashboard",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/solutions",
+        "component": "SolutionsInfrastructurePage",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      },
+      {
+        "route": "admin.html#/solutions/infrastructure",
+        "component": "SolutionsInfrastructurePage",
+        "permission": "role_gate_only",
+        "role_gate": "canAccessHubRoute"
+      }
+    ],
+    "fallback_to_hub": [
+      {
+        "route": "unauthorized protected route",
+        "behavior": "ProtectedHubRoute writes shsAccessRedirectNotice and redirects to /hub"
+      },
+      {
+        "route": "admin.html#/*",
+        "behavior": "AdminRoutes wildcard redirects to /hub"
+      },
+      {
+        "route": "admin.html#/watchtower",
+        "behavior": "redirects to /agent-fabric"
+      },
+      {
+        "route": "admin.html#/loo",
+        "behavior": "redirects to /lord-outcomes"
+      }
+    ],
+    "owner_decision_required": [
+      {
+        "route": "admin.html#/admin",
+        "finding": "sidebar link has no mounted route and falls through to /hub"
+      },
+      {
+        "route": "admin.html#/admin/users",
+        "finding": "sidebar link has no mounted route and falls through to /hub"
+      },
+      {
+        "route": "admin.html#/admin/settings",
+        "finding": "sidebar link has no mounted route and falls through to /hub; hubAccessControl has /settings but not /admin/settings"
+      },
+      {
+        "route": "admin.html#/health",
+        "finding": "sidebar link has no mounted route and falls through to /hub"
+      },
+      {
+        "route": "/settings",
+        "finding": "hubAccessControl permission exists without mounted AdminRoutes route"
+      },
+      {
+        "route": "/adaptive-experience",
+        "finding": "hubAccessControl permission exists without mounted AdminRoutes route"
+      }
+    ]
+  },
+  "shf_next_route_protection": {
+    "public": [
+      {
+        "route": "/studio/templates/floral-boutique",
+        "component": "WebsiteStudioTemplatePreview",
+        "category": "studio",
+        "current_identity": "public/manual route"
+      },
+      {
+        "route": "/studio/templates/browse",
+        "component": "WebsiteStudioTemplateBrowse",
+        "category": "studio",
+        "current_identity": "public/manual route"
+      },
+      {
+        "route": "/studio/templates",
+        "component": "WebsiteStudioTemplates",
+        "category": "studio",
+        "current_identity": "public/manual route"
+      },
+      {
+        "route": "/foundation/impact-report/print",
+        "component": "ShfImpactReportPrintPage",
+        "category": "foundation/report",
+        "current_identity": "public/manual route"
+      },
+      {
+        "route": "/foundation/impact-report",
+        "component": "ShfImpactReportGenerator",
+        "category": "foundation/report",
+        "current_identity": "public/manual route"
+      },
+      {
+        "route": "/foundation/report",
+        "component": "ShfImpactReportGenerator",
+        "category": "foundation/report alias",
+        "current_identity": "public/manual route"
+      }
+    ],
+    "internal_or_admin": [
+      {
+        "route": "/foundation/data-approval",
+        "component": "ShfDataApprovalGateway",
+        "category": "foundation/data approval",
+        "current_identity": "manual route; no visible auth guard"
+      },
+      {
+        "route": "/ops/command",
+        "component": "OpsCommandOverview",
+        "category": "ops",
+        "current_identity": "manual route inside OpsShell; no visible auth guard"
+      },
+      {
+        "route": "/ops/projects",
+        "component": "ProductionProjects",
+        "category": "ops",
+        "current_identity": "manual route inside OpsShell; no visible auth guard"
+      },
+      {
+        "route": "/ops/qa",
+        "component": "QADeliveryDashboard",
+        "category": "ops",
+        "current_identity": "manual route inside OpsShell; no visible auth guard"
+      },
+      {
+        "route": "/ops/clientops",
+        "component": "ClientOpsCenter",
+        "category": "clientops",
+        "current_identity": "manual route inside OpsShell; no visible auth guard"
+      },
+      {
+        "route": "/ops/sales",
+        "component": "SalesCommandCenter",
+        "category": "ops/sales",
+        "current_identity": "manual route inside OpsShell; no visible auth guard"
+      },
+      {
+        "route": "/ops/library",
+        "component": "DevelopmentLibrary",
+        "category": "ops/dev library",
+        "current_identity": "manual route inside OpsShell; no visible auth guard"
+      }
+    ],
+    "ops": [
+      {
+        "route": "/ops/command",
+        "component": "OpsCommandOverview",
+        "category": "ops",
+        "current_identity": "manual route inside OpsShell; no visible auth guard"
+      },
+      {
+        "route": "/ops/projects",
+        "component": "ProductionProjects",
+        "category": "ops",
+        "current_identity": "manual route inside OpsShell; no visible auth guard"
+      },
+      {
+        "route": "/ops/qa",
+        "component": "QADeliveryDashboard",
+        "category": "ops",
+        "current_identity": "manual route inside OpsShell; no visible auth guard"
+      },
+      {
+        "route": "/ops/sales",
+        "component": "SalesCommandCenter",
+        "category": "ops/sales",
+        "current_identity": "manual route inside OpsShell; no visible auth guard"
+      },
+      {
+        "route": "/ops/library",
+        "component": "DevelopmentLibrary",
+        "category": "ops/dev library",
+        "current_identity": "manual route inside OpsShell; no visible auth guard"
+      }
+    ],
+    "clientops": [
+      {
+        "route": "/ops/clientops",
+        "component": "ClientOpsCenter",
+        "category": "clientops",
+        "current_identity": "manual route inside OpsShell; no visible auth guard"
+      }
+    ],
+    "studio": [
+      {
+        "route": "/studio/templates/floral-boutique",
+        "component": "WebsiteStudioTemplatePreview",
+        "category": "studio",
+        "current_identity": "public/manual route"
+      },
+      {
+        "route": "/studio/templates/browse",
+        "component": "WebsiteStudioTemplateBrowse",
+        "category": "studio",
+        "current_identity": "public/manual route"
+      },
+      {
+        "route": "/studio/templates",
+        "component": "WebsiteStudioTemplates",
+        "category": "studio",
+        "current_identity": "public/manual route"
+      }
+    ],
+    "foundation": [
+      {
+        "route": "/foundation/impact-report/print",
+        "component": "ShfImpactReportPrintPage",
+        "category": "foundation/report",
+        "current_identity": "public/manual route"
+      },
+      {
+        "route": "/foundation/data-approval",
+        "component": "ShfDataApprovalGateway",
+        "category": "foundation/data approval",
+        "current_identity": "manual route; no visible auth guard"
+      },
+      {
+        "route": "/foundation/impact-report",
+        "component": "ShfImpactReportGenerator",
+        "category": "foundation/report",
+        "current_identity": "public/manual route"
+      },
+      {
+        "route": "/foundation/report",
+        "component": "ShfImpactReportGenerator",
+        "category": "foundation/report alias",
+        "current_identity": "public/manual route"
+      }
+    ],
+    "needs_identity_bridge": [
+      {
+        "route": "/ops/*",
+        "reason": "ops routes appear internal but App.tsx has no visible auth guard or shrv1 identity bridge"
+      },
+      {
+        "route": "/ops/clientops",
+        "reason": "ClientOps likely needs client/project identity and Truth/Reports bridge before production use"
+      },
+      {
+        "route": "/foundation/data-approval",
+        "reason": "approval actions should bind to reviewer identity and Truth Spine/report readiness"
+      },
+      {
+        "route": "fallback *",
+        "reason": "unknown paths fall into DevelopmentLibrary, an internal-looking surface"
+      }
+    ],
+    "owner_decision_required": [
+      "Confirm which shf-next routes are intentionally public versus internal-only.",
+      "Approve a cross-app identity bridge model before adding guards to shf-next.",
+      "Decide whether Data Approval Gateway is public review, internal approval, or split-mode."
+    ]
+  },
+  "cross_app_identity_bridge": {
+    "needed": true,
+    "recommended_model": "Keep shrv1 as governance/admin identity authority; expose a minimal signed/session-based identity bridge for shf-next internal ops and approval surfaces. Public shf-next studio/report pages stay public-read, while approvals, ClientOps, Ops, and admin/governance actions require identity context. Do not pass ADMIN_API_KEY or backend secrets through browser URLs.",
+    "required_links": [
+      {
+        "from": "shrv1 admin.html#/truth-spine",
+        "to": "shf-next /foundation/data-approval"
+      },
+      {
+        "from": "shrv1 admin.html#/reports",
+        "to": "shf-next /foundation/impact-report"
+      },
+      {
+        "from": "shrv1 admin.html#/command",
+        "to": "shf-next /foundation/impact-report"
+      },
+      {
+        "from": "shf-next /ops/clientops",
+        "to": "shrv1 admin.html#/reports"
+      },
+      {
+        "from": "shf-next /ops/clientops",
+        "to": "shrv1 admin.html#/agent-fabric"
+      }
+    ],
+    "risks": [
+      "shf-next internal ops pages can be reached directly today if hosted publicly.",
+      "Approval actions without identity could weaken audit attribution.",
+      "A bridge implemented with localStorage-only state would be insufficient for production security.",
+      "Backend admin keys must remain server-side and never be exposed to public pages."
+    ]
+  },
+  "spine_connection_matrix": {
+    "truth_spine": "connected in shrv1 admin via protected /truth-spine route and frozen registry; identity must not verify claims.",
+    "oracle": "connected in shrv1 admin via protected /oracle route; Oracle remains decision-support over Truth Packages.",
+    "ai_guardrails": "connected in shrv1 admin via protected /ai-guardrails route; publication still needs future Truth Envelope gate.",
+    "game_theory": "connected in shrv1 admin via protected /game-theory route; strategy outputs do not become verified facts.",
+    "agent_fabric": "connected through protected /agent-fabric UI and /admin/agents ADMIN_API_KEY backend API.",
+    "watchtower": "partially connected: /watchtower redirects to /agent-fabric; /watchtower/summary includes truth_coverage; quarantine mutations need owner decision for backend auth.",
+    "reports": "connected in shrv1 admin via REPORTS_VIEW routes and /reports/snapshot truth metadata; backend snapshot is internal-open V1.",
+    "loo": "connected in shrv1 admin via /lord-outcomes and LOO score trust metadata; backend /loo/score is internal-open V1.",
+    "master_layer_registry": "connected; Identity & Access is official and required in MASTER_LAYER_REGISTRY.md.",
+    "layer_gate": "connected through /admin/layers and /admin/gate protected APIs plus governance checks.",
+    "shf_impact_data_spine": "partially connected: shrv1 Command Center and shf-next impact pages use SHF data surfaces; identity bridge not implemented across repos.",
+    "data_approval_gateway": "needs identity bridge if approval actions are used beyond public review; current route lives in shf-next manual router.",
+    "registry": "connected: shrv1 Registry UI sends admin key plus X-Admin-Role/X-Org-Id to protected admin registry API.",
+    "admin_sidebar": "connected inside AdminLayout/AuthGuard; unresolved legacy links remain owner-decision items.",
+    "route_bridge": "documented but not implemented; route bridge should preserve shrv1 governance authority and shf-next presentation ownership."
+  },
+  "agent_permission_findings": {
+    "agent_contract_source": "services/shf-agent-fabric/contracts/agents/agents.json",
+    "admin_ui_route": "admin.html#/agent-fabric protected by shs_admin role and AUDIT_VIEW permission",
+    "admin_api": "/admin/agents requires ADMIN_API_KEY",
+    "agent_registry": "admin agents expose lifecycle, enabled state, capabilities, visibility, policy, and approval fields",
+    "finding": "Agent Fabric admin actions are protected; public/user-visible agent behavior still depends on future bridge/policy when exposed outside admin."
+  },
+  "backend_admin_api_protection": {
+    "protected_by_admin_key": [
+      "/admin/agents",
+      "/admin/layers",
+      "/admin/gate",
+      "/admin/registry",
+      "/admin/force/status",
+      "/admin/align/*",
+      "/admin/align/plans/*",
+      "/runs/* mutating/execute paths"
+    ],
+    "protected_by_role_org_headers_after_admin_key": [
+      "/admin/registry with X-Admin-Role and X-Org-Id"
+    ],
+    "internal_v1_open_or_readmostly": [
+      "/truth/*",
+      "/oracle/*",
+      "/ai-guardrails/*",
+      "/game-theory/*",
+      "/reports/snapshot",
+      "/watchtower/summary",
+      "/loo/score"
+    ],
+    "owner_decision_required": [
+      "Decide whether Watchtower quarantine mutation endpoints should require ADMIN_API_KEY before production exposure.",
+      "Decide whether LOO scoring POST endpoints remain internal-open or move behind an API gateway/admin/session policy.",
+      "Decide whether Truth/Oracle/AI/Game mutating V1 endpoints need backend identity protection before non-local deployment."
+    ]
+  },
+  "browser_smoke": {
+    "dev_server": "npm run dev -- --host 127.0.0.1 --port 5174",
+    "login_flow": {
+      "route": "admin.html#/login",
+      "selected_identity": "SHS Admin demo user",
+      "result": "PASS: continued to admin.html#/hub with no access denial"
+    },
+    "routes": {
+      "admin.html#/identity": {
+        "result": "PASS",
+        "notes": "rendered protected identity admin surface; no blank screen; no access denial"
+      },
+      "admin.html#/command": {
+        "result": "PASS",
+        "notes": "rendered protected command surface; no blank screen; no access denial"
+      },
+      "admin.html#/dashboard": {
+        "result": "PASS",
+        "notes": "rendered protected dashboard surface; no blank screen; no access denial"
+      },
+      "admin.html#/truth-spine": {
+        "result": "PASS",
+        "notes": "rendered protected Truth Spine surface; no blank screen; no access denial"
+      },
+      "admin.html#/agent-fabric": {
+        "result": "PASS",
+        "notes": "rendered protected Agent Fabric surface; no blank screen; no access denial"
+      },
+      "/studio/templates": {
+        "result": "PASS",
+        "notes": "rendered public WebMaker/website studio route; no blank screen; no access denial"
+      }
+    },
+    "console_errors": [],
+    "note": "Dev server logged an /auth/me proxy refusal because backend auth service was not running; localhost dev auth fallback handled the admin session."
+  },
+  "backend_smoke": {
+    "result": "PASS",
+    "checks": [
+      {
+        "name": "admin_agents_without_key_blocks",
+        "method": "GET",
+        "path": "/admin/agents",
+        "expected": 401,
+        "status": 401,
+        "ok": true
+      },
+      {
+        "name": "admin_agents_with_key_allows",
+        "method": "GET",
+        "path": "/admin/agents",
+        "expected": 200,
+        "status": 200,
+        "ok": true
+      },
+      {
+        "name": "admin_layers_without_key_blocks",
+        "method": "GET",
+        "path": "/admin/layers/gate/status",
+        "expected": 401,
+        "status": 401,
+        "ok": true
+      },
+      {
+        "name": "admin_layers_with_key_allows",
+        "method": "GET",
+        "path": "/admin/layers/gate/status",
+        "expected": 200,
+        "status": 200,
+        "ok": true
+      },
+      {
+        "name": "admin_registry_without_key_blocks",
+        "method": "GET",
+        "path": "/admin/registry",
+        "expected": 401,
+        "status": 401,
+        "ok": true
+      },
+      {
+        "name": "admin_registry_with_key_role_org_allows",
+        "method": "GET",
+        "path": "/admin/registry",
+        "expected": 200,
+        "status": 200,
+        "ok": true
+      },
+      {
+        "name": "truth_health",
+        "method": "GET",
+        "path": "/truth/health",
+        "expected": 200,
+        "status": 200,
+        "ok": true
+      },
+      {
+        "name": "watchtower_summary",
+        "method": "GET",
+        "path": "/watchtower/summary",
+        "expected": 200,
+        "status": 200,
+        "ok": true
+      },
+      {
+        "name": "reports_snapshot",
+        "method": "GET",
+        "path": "/reports/snapshot",
+        "expected": 200,
+        "status": 200,
+        "ok": true
+      },
+      {
+        "name": "loo_score",
+        "method": "POST",
+        "path": "/loo/score",
+        "expected": 200,
+        "status": 200,
+        "ok": true
+      }
+    ]
+  },
+  "safe_fixes_applied": [],
+  "files_changed": [
+    "docs/IDENTITY_LAYER_SPINE_INTEGRATION_AUDIT_V1.md",
+    "docs/IDENTITY_LAYER_SPINE_INTEGRATION_AUDIT_V1.json"
+  ],
+  "validation": {
+    "shrv1": {
+      "python3 scripts/check_master_layer_registry.py": "PASS: Master Layer Registry checked 45 required layers.",
+      "python3 scripts/check_truth_spine_freeze.py": "PASS: Truth Spine V1 freeze checks passed.",
+      "python3 scripts/check_oracle_layer.py": "PASS: Oracle Layer V1 checks passed.",
+      "python3 scripts/check_ai_guardrails_layer.py": "PASS: AI/Swarm Guardrails V1 checks passed.",
+      "python3 scripts/check_game_theory_layer.py": "PASS: Game Theory Layer V1 checks passed.",
+      "npm run check:governance": "PASS: registry, proposal, truth, oracle, ai-guardrails, game-theory, duplicate cleanup checks passed.",
+      "python3 -m pytest services/shf-agent-fabric/tests/test_truth_routes.py services/shf-agent-fabric/tests/test_oracle_routes.py services/shf-agent-fabric/tests/test_ai_guardrails_routes.py services/shf-agent-fabric/tests/test_game_theory_routes.py services/shf-agent-fabric/tests/test_agent_canon_basics.py": "PASS: 25 passed in 12.54s.",
+      "npm run build": "PASS: Vite build completed; existing large chunk warning only."
+    },
+    "shf_next": {
+      "npm run build": "PASS: TypeScript/Vite build completed; existing large chunk warning only.",
+      "npm run lint": "PASS: eslint completed with no errors."
+    },
+    "git": {
+      "test_side_effect_cleanup": "Restored pytest-generated diffs in contracts/agents/agents.json and var/watchtower_audit.jsonl using git show content replacement; no git restore/reset used."
+    }
+  },
+  "remaining_risks": [
+    "shf-next has no visible auth guard or shared identity bridge for /ops/* and /foundation/data-approval.",
+    "Several shrv1 admin routes are role-gated only and do not yet use named PermissionGuard permissions; this appears to be existing pattern, not a current break.",
+    "AdminSidebar still includes unresolved legacy links /admin, /admin/users, /admin/settings, and /health that fall back to /hub.",
+    "Backend V1 spine endpoints are internal-open except protected /admin control planes; production exposure should sit behind API gateway/session policy.",
+    "Watchtower quarantine mutation endpoints are not protected by ADMIN_API_KEY in the current router."
+  ],
+  "v1_complete": true
+}

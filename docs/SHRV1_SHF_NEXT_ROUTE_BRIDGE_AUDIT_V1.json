@@ -1,0 +1,1805 @@
+{
+  "audit_name": "SHRV1 SHF-Next Route Bridge Audit V1",
+  "folders": {
+    "shrv1": "/Users/mikeslate/Desktop/shrv1",
+    "shf_next": "/Users/mikeslate/shf-next"
+  },
+  "route_model": {
+    "shrv1": "hash/admin multi-entry routing",
+    "shf_next": "pathname SPA routing"
+  },
+  "environment_assumptions": {
+    "shrv1_admin_urls": "admin.html#/route via HashRouter",
+    "shrv1_public_urls": "multi-entry HTML pages and selected pathname /studio/templates in index entry",
+    "shf_next_urls": "normal pathname routes handled by App.tsx startsWith branches",
+    "localhost_ports": "Both are Vite apps and should be expected to run on different local ports when bridged; do not use relative cross-app links.",
+    "shf_next_git_repo": "not a git repository in this environment"
+  },
+  "shrv1_routes": [
+    {
+      "route": "admin.html#/login",
+      "route_pattern": "/login",
+      "entry": "admin.html",
+      "component": "SHSLoginPage",
+      "category": "admin",
+      "protected": false,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/",
+      "route_pattern": "/",
+      "entry": "admin.html",
+      "component": "Navigate",
+      "category": "admin",
+      "protected": false,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/hub",
+      "route_pattern": "/hub",
+      "entry": "admin.html",
+      "component": "HubWorkspaceDashboard",
+      "category": "hub/clientops",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/hub/network",
+      "route_pattern": "/hub/network",
+      "entry": "admin.html",
+      "component": "HubLeadershipDashboard",
+      "category": "hub/clientops",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/hub/leadership",
+      "route_pattern": "/hub/leadership",
+      "entry": "admin.html",
+      "component": "HubLeadershipDashboard",
+      "category": "hub/clientops",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/hub/intake",
+      "route_pattern": "/hub/intake",
+      "entry": "admin.html",
+      "component": "IntakeNavigatorConsole",
+      "category": "hub/clientops",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/hub/queue",
+      "route_pattern": "/hub/queue",
+      "entry": "admin.html",
+      "component": "PartnerActionQueue",
+      "category": "hub/clientops",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/hub/action-queue",
+      "route_pattern": "/hub/action-queue",
+      "entry": "admin.html",
+      "component": "PartnerActionQueue",
+      "category": "hub/clientops",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/hub/lifecycle",
+      "route_pattern": "/hub/lifecycle",
+      "entry": "admin.html",
+      "component": "ReferralLifecycleView",
+      "category": "hub/clientops",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/hub/referrals",
+      "route_pattern": "/hub/referrals",
+      "entry": "admin.html",
+      "component": "ReferralLifecycleView",
+      "category": "hub/clientops",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/hub/unmet-needs",
+      "route_pattern": "/hub/unmet-needs",
+      "entry": "admin.html",
+      "component": "UnmetNeedsQueue",
+      "category": "hub/clientops",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/hub/imports",
+      "route_pattern": "/hub/imports",
+      "entry": "admin.html",
+      "component": "HubFilesImports",
+      "category": "hub/clientops",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/hub/reports",
+      "route_pattern": "/hub/reports",
+      "entry": "admin.html",
+      "component": "HubReports",
+      "category": "reports/verification",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/hub/growth-network",
+      "route_pattern": "/hub/growth-network",
+      "entry": "admin.html",
+      "component": "HubGrowthNetwork",
+      "category": "hub/clientops",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/hub/sales-pipeline",
+      "route_pattern": "/hub/sales-pipeline",
+      "entry": "admin.html",
+      "component": "HubSalesPipelinePage",
+      "category": "hub/clientops",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/hub/opportunities",
+      "route_pattern": "/hub/opportunities",
+      "entry": "admin.html",
+      "component": "HubOpportunitiesPage",
+      "category": "hub/clientops",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/hub/bundles",
+      "route_pattern": "/hub/bundles",
+      "entry": "admin.html",
+      "component": "HubBundleBuilderPage",
+      "category": "hub/clientops",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/hub/intelligence",
+      "route_pattern": "/hub/intelligence",
+      "entry": "admin.html",
+      "component": "HubIntelligencePage",
+      "category": "hub/clientops",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/uploads",
+      "route_pattern": "/uploads",
+      "entry": "admin.html",
+      "component": "UploadManager",
+      "category": "admin",
+      "protected": true,
+      "permissions": [
+        "UPLOADS_INTERNAL"
+      ],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/imports",
+      "route_pattern": "/imports",
+      "entry": "admin.html",
+      "component": "HubFilesImports",
+      "category": "admin",
+      "protected": true,
+      "permissions": [
+        "UPLOADS_INTERNAL"
+      ],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/aggregation",
+      "route_pattern": "/aggregation",
+      "entry": "admin.html",
+      "component": "AggregationDashboard",
+      "category": "governance/admin",
+      "protected": true,
+      "permissions": [
+        "AGGREGATION_VIEW"
+      ],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/reporting",
+      "route_pattern": "/reporting",
+      "entry": "admin.html",
+      "component": "ReportingCommandSurface",
+      "category": "reports/verification",
+      "protected": true,
+      "permissions": [
+        "REPORTS_VIEW"
+      ],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/reports",
+      "route_pattern": "/reports",
+      "entry": "admin.html",
+      "component": "ReportingCommandSurface",
+      "category": "reports/verification",
+      "protected": true,
+      "permissions": [
+        "REPORTS_VIEW"
+      ],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/command",
+      "route_pattern": "/command",
+      "entry": "admin.html",
+      "component": "SHFImpactCommandCenter",
+      "category": "command/dashboard",
+      "protected": true,
+      "permissions": [
+        "AUDIT_VIEW"
+      ],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/command-center",
+      "route_pattern": "/command-center",
+      "entry": "admin.html",
+      "component": "SHFImpactCommandCenter",
+      "category": "command/dashboard",
+      "protected": true,
+      "permissions": [
+        "AUDIT_VIEW"
+      ],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/dashboard",
+      "route_pattern": "/dashboard",
+      "entry": "admin.html",
+      "component": "WorkspaceDashboard",
+      "category": "command/dashboard",
+      "protected": true,
+      "permissions": [
+        "AUDIT_VIEW"
+      ],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/loo",
+      "route_pattern": "/loo",
+      "entry": "admin.html",
+      "component": "Navigate",
+      "category": "admin",
+      "protected": false,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/watchtower",
+      "route_pattern": "/watchtower",
+      "entry": "admin.html",
+      "component": "Navigate",
+      "category": "admin",
+      "protected": false,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/lord-outcomes",
+      "route_pattern": "/lord-outcomes",
+      "entry": "admin.html",
+      "component": "LordOutcomesRoutes",
+      "category": "admin",
+      "protected": true,
+      "permissions": [
+        "AUDIT_VIEW"
+      ],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/lord-outcomes/*",
+      "route_pattern": "/lord-outcomes/*",
+      "entry": "admin.html",
+      "component": "LordOutcomesRoutes",
+      "category": "admin",
+      "protected": true,
+      "permissions": [
+        "AUDIT_VIEW"
+      ],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/verification-audit",
+      "route_pattern": "/verification-audit",
+      "entry": "admin.html",
+      "component": "VerificationAuditSurface",
+      "category": "reports/verification",
+      "protected": true,
+      "permissions": [
+        "VERIFICATION_VIEW"
+      ],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/truth-spine",
+      "route_pattern": "/truth-spine",
+      "entry": "admin.html",
+      "component": "TruthSpinePage",
+      "category": "governance/admin",
+      "protected": true,
+      "permissions": [
+        "TRUTH_VIEW"
+      ],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/oracle",
+      "route_pattern": "/oracle",
+      "entry": "admin.html",
+      "component": "OraclePage",
+      "category": "governance/admin",
+      "protected": true,
+      "permissions": [
+        "TRUTH_VIEW"
+      ],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/ai-guardrails",
+      "route_pattern": "/ai-guardrails",
+      "entry": "admin.html",
+      "component": "AIGuardrailsPage",
+      "category": "governance/admin",
+      "protected": true,
+      "permissions": [
+        "TRUTH_VIEW"
+      ],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/game-theory",
+      "route_pattern": "/game-theory",
+      "entry": "admin.html",
+      "component": "GameTheoryPage",
+      "category": "governance/admin",
+      "protected": true,
+      "permissions": [
+        "TRUTH_VIEW"
+      ],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/agent-fabric",
+      "route_pattern": "/agent-fabric",
+      "entry": "admin.html",
+      "component": "AgentFabricPage",
+      "category": "governance/admin",
+      "protected": true,
+      "permissions": [
+        "AUDIT_VIEW"
+      ],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/audit",
+      "route_pattern": "/audit",
+      "entry": "admin.html",
+      "component": "AuditLogViewer",
+      "category": "admin",
+      "protected": true,
+      "permissions": [
+        "AUDIT_VIEW"
+      ],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/identity",
+      "route_pattern": "/identity",
+      "entry": "admin.html",
+      "component": "IdentityManagement",
+      "category": "admin",
+      "protected": true,
+      "permissions": [
+        "IDENTITY_VIEW"
+      ],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/app-registry",
+      "route_pattern": "/app-registry",
+      "entry": "admin.html",
+      "component": "AppRegistry",
+      "category": "governance/admin",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/registry",
+      "route_pattern": "/registry",
+      "entry": "admin.html",
+      "component": "Registry",
+      "category": "governance/admin",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/builder",
+      "route_pattern": "/builder",
+      "entry": "admin.html",
+      "component": "BuilderHub",
+      "category": "builder/webmaker",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/web-maker",
+      "route_pattern": "/web-maker",
+      "entry": "admin.html",
+      "component": "BuilderHub",
+      "category": "builder/webmaker",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/studio/templates",
+      "route_pattern": "/studio/templates",
+      "entry": "admin.html",
+      "component": "BuilderHub",
+      "category": "builder/webmaker",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/builder/tools",
+      "route_pattern": "/builder/tools",
+      "entry": "admin.html",
+      "component": "ToolDashboard",
+      "category": "builder/webmaker",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/tools",
+      "route_pattern": "/tools",
+      "entry": "admin.html",
+      "component": "ToolDashboard",
+      "category": "builder/webmaker",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/tool-dashboard",
+      "route_pattern": "/tool-dashboard",
+      "entry": "admin.html",
+      "component": "ToolDashboard",
+      "category": "builder/webmaker",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/master-narrative",
+      "route_pattern": "/master-narrative",
+      "entry": "admin.html",
+      "component": "MasterNarrativeViewer",
+      "category": "admin",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/grant-binder",
+      "route_pattern": "/grant-binder",
+      "entry": "admin.html",
+      "component": "GrantBinder",
+      "category": "admin",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/alignment",
+      "route_pattern": "/alignment",
+      "entry": "admin.html",
+      "component": "AlignmentSwitchboard",
+      "category": "governance/admin",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/analytics",
+      "route_pattern": "/analytics",
+      "entry": "admin.html",
+      "component": "AdminAnalytics",
+      "category": "admin",
+      "protected": true,
+      "permissions": [
+        "AUDIT_VIEW"
+      ],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/dev/docs",
+      "route_pattern": "/dev/docs",
+      "entry": "admin.html",
+      "component": "DevDocsViewer",
+      "category": "admin",
+      "protected": true,
+      "permissions": [
+        "AUDIT_VIEW"
+      ],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/growth",
+      "route_pattern": "/growth",
+      "entry": "admin.html",
+      "component": "SHSPartnerGrowthEngine",
+      "category": "admin",
+      "protected": true,
+      "permissions": [
+        "GROWTH_VIEW"
+      ],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/ops/production",
+      "route_pattern": "/ops/production",
+      "entry": "admin.html",
+      "component": "OpsProductionDashboard",
+      "category": "ops/admin",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/ops/projects",
+      "route_pattern": "/ops/projects",
+      "entry": "admin.html",
+      "component": "OpsProjectSetup",
+      "category": "ops/admin",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/ops/brand-profile",
+      "route_pattern": "/ops/brand-profile",
+      "entry": "admin.html",
+      "component": "OpsBrandProfile",
+      "category": "ops/admin",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/ops/page-intent",
+      "route_pattern": "/ops/page-intent",
+      "entry": "admin.html",
+      "component": "OpsPageIntent",
+      "category": "ops/admin",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/ops/layout-blueprint",
+      "route_pattern": "/ops/layout-blueprint",
+      "entry": "admin.html",
+      "component": "OpsLayoutBlueprint",
+      "category": "ops/admin",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/ops/visual-treatment",
+      "route_pattern": "/ops/visual-treatment",
+      "entry": "admin.html",
+      "component": "OpsVisualTreatment",
+      "category": "ops/admin",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/ops/assets",
+      "route_pattern": "/ops/assets",
+      "entry": "admin.html",
+      "component": "OpsAssetGovernance",
+      "category": "ops/admin",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/ops/data-binding",
+      "route_pattern": "/ops/data-binding",
+      "entry": "admin.html",
+      "component": "OpsDataBinding",
+      "category": "ops/admin",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/ops/mock-review",
+      "route_pattern": "/ops/mock-review",
+      "entry": "admin.html",
+      "component": "OpsMockReview",
+      "category": "ops/admin",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/ops/build-packet",
+      "route_pattern": "/ops/build-packet",
+      "entry": "admin.html",
+      "component": "OpsBuildPacket",
+      "category": "ops/admin",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/ops/screenshot-qa",
+      "route_pattern": "/ops/screenshot-qa",
+      "entry": "admin.html",
+      "component": "OpsScreenshotQA",
+      "category": "ops/admin",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/ops/learning",
+      "route_pattern": "/ops/learning",
+      "entry": "admin.html",
+      "component": "OpsLearningDashboard",
+      "category": "ops/admin",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/solutions",
+      "route_pattern": "/solutions",
+      "entry": "admin.html",
+      "component": "SolutionsInfrastructurePage",
+      "category": "admin",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#/solutions/infrastructure",
+      "route_pattern": "/solutions/infrastructure",
+      "entry": "admin.html",
+      "component": "SolutionsInfrastructurePage",
+      "category": "admin",
+      "protected": true,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "admin.html#*",
+      "route_pattern": "*",
+      "entry": "admin.html",
+      "component": "Navigate",
+      "category": "admin",
+      "protected": false,
+      "permissions": [],
+      "source_file": "src/router/AdminRoutes.jsx"
+    },
+    {
+      "route": "/foundation.html#/",
+      "route_pattern": "/foundation.html#/",
+      "entry": "index.html launcher",
+      "component": "Launcher link",
+      "category": "public/multi-entry",
+      "protected": false,
+      "permissions": [],
+      "source_file": "src/entries/index.main.jsx"
+    },
+    {
+      "route": "/solutions.html#/",
+      "route_pattern": "/solutions.html#/",
+      "entry": "index.html launcher",
+      "component": "Launcher link",
+      "category": "public/multi-entry",
+      "protected": false,
+      "permissions": [],
+      "source_file": "src/entries/index.main.jsx"
+    },
+    {
+      "route": "/sales.html#/",
+      "route_pattern": "/sales.html#/",
+      "entry": "index.html launcher",
+      "component": "Launcher link",
+      "category": "public/multi-entry",
+      "protected": false,
+      "permissions": [],
+      "source_file": "src/entries/index.main.jsx"
+    },
+    {
+      "route": "/career.html#/",
+      "route_pattern": "/career.html#/",
+      "entry": "index.html launcher",
+      "component": "Launcher link",
+      "category": "public/multi-entry",
+      "protected": false,
+      "permissions": [],
+      "source_file": "src/entries/index.main.jsx"
+    },
+    {
+      "route": "/curriculum.html#/",
+      "route_pattern": "/curriculum.html#/",
+      "entry": "index.html launcher",
+      "component": "Launcher link",
+      "category": "public/multi-entry",
+      "protected": false,
+      "permissions": [],
+      "source_file": "src/entries/index.main.jsx"
+    },
+    {
+      "route": "/civic.html#/",
+      "route_pattern": "/civic.html#/",
+      "entry": "index.html launcher",
+      "component": "Launcher link",
+      "category": "public/multi-entry",
+      "protected": false,
+      "permissions": [],
+      "source_file": "src/entries/index.main.jsx"
+    },
+    {
+      "route": "/credit.html#/",
+      "route_pattern": "/credit.html#/",
+      "entry": "index.html launcher",
+      "component": "Launcher link",
+      "category": "public/multi-entry",
+      "protected": false,
+      "permissions": [],
+      "source_file": "src/entries/index.main.jsx"
+    },
+    {
+      "route": "/debt.html#/",
+      "route_pattern": "/debt.html#/",
+      "entry": "index.html launcher",
+      "component": "Launcher link",
+      "category": "public/multi-entry",
+      "protected": false,
+      "permissions": [],
+      "source_file": "src/entries/index.main.jsx"
+    },
+    {
+      "route": "/treasury.html#/",
+      "route_pattern": "/treasury.html#/",
+      "entry": "index.html launcher",
+      "component": "Launcher link",
+      "category": "public/multi-entry",
+      "protected": false,
+      "permissions": [],
+      "source_file": "src/entries/index.main.jsx"
+    },
+    {
+      "route": "/arcade.html#/",
+      "route_pattern": "/arcade.html#/",
+      "entry": "index.html launcher",
+      "component": "Launcher link",
+      "category": "public/multi-entry",
+      "protected": false,
+      "permissions": [],
+      "source_file": "src/entries/index.main.jsx"
+    },
+    {
+      "route": "/fuel.html#/",
+      "route_pattern": "/fuel.html#/",
+      "entry": "index.html launcher",
+      "component": "Launcher link",
+      "category": "public/multi-entry",
+      "protected": false,
+      "permissions": [],
+      "source_file": "src/entries/index.main.jsx"
+    },
+    {
+      "route": "/store.html#/",
+      "route_pattern": "/store.html#/",
+      "entry": "index.html launcher",
+      "component": "Launcher link",
+      "category": "public/multi-entry",
+      "protected": false,
+      "permissions": [],
+      "source_file": "src/entries/index.main.jsx"
+    },
+    {
+      "route": "/lord-of-outcomes.html#/",
+      "route_pattern": "/lord-of-outcomes.html#/",
+      "entry": "index.html launcher",
+      "component": "Launcher link",
+      "category": "public/multi-entry",
+      "protected": false,
+      "permissions": [],
+      "source_file": "src/entries/index.main.jsx"
+    },
+    {
+      "route": "/verifier.html#/",
+      "route_pattern": "/verifier.html#/",
+      "entry": "index.html launcher",
+      "component": "Launcher link",
+      "category": "public/multi-entry",
+      "protected": false,
+      "permissions": [],
+      "source_file": "src/entries/index.main.jsx"
+    },
+    {
+      "route": "/studio/templates",
+      "route_pattern": "/studio/templates",
+      "entry": "index.html",
+      "component": "WebMakerPage",
+      "category": "public webmaker",
+      "protected": false,
+      "permissions": [],
+      "source_file": "src/entries/index.main.jsx"
+    }
+  ],
+  "shf_next_routes": [
+    {
+      "route": "/studio/templates/floral-boutique",
+      "route_pattern": "/studio/templates/floral-boutique",
+      "component": "WebsiteStudioTemplatePreview",
+      "category": "studio",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    },
+    {
+      "route": "/studio/templates/browse",
+      "route_pattern": "/studio/templates/browse",
+      "component": "WebsiteStudioTemplateBrowse",
+      "category": "studio",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    },
+    {
+      "route": "/studio/templates",
+      "route_pattern": "/studio/templates",
+      "component": "WebsiteStudioTemplates",
+      "category": "studio",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    },
+    {
+      "route": "/foundation/impact-report/print",
+      "route_pattern": "/foundation/impact-report/print",
+      "component": "ShfImpactReportPrintPage",
+      "category": "foundation",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    },
+    {
+      "route": "/foundation/data-approval",
+      "route_pattern": "/foundation/data-approval",
+      "component": "ShfDataApprovalGateway",
+      "category": "foundation",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    },
+    {
+      "route": "/foundation/impact-report",
+      "route_pattern": "/foundation/impact-report",
+      "component": "ShfImpactReportGenerator",
+      "category": "foundation",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    },
+    {
+      "route": "/foundation/report",
+      "route_pattern": "/foundation/report",
+      "component": "ShfImpactReportGenerator",
+      "category": "foundation",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    },
+    {
+      "route": "/ops/command",
+      "route_pattern": "/ops/command",
+      "component": "OpsCommandOverview",
+      "category": "ops",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    },
+    {
+      "route": "/ops/projects",
+      "route_pattern": "/ops/projects",
+      "component": "ProductionProjects",
+      "category": "ops",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    },
+    {
+      "route": "/ops/qa",
+      "route_pattern": "/ops/qa",
+      "component": "QADeliveryDashboard",
+      "category": "ops",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    },
+    {
+      "route": "/ops/clientops",
+      "route_pattern": "/ops/clientops",
+      "component": "ClientOpsCenter",
+      "category": "ops",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    },
+    {
+      "route": "/ops/sales",
+      "route_pattern": "/ops/sales",
+      "component": "SalesCommandCenter",
+      "category": "ops",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    },
+    {
+      "route": "/ops/library",
+      "route_pattern": "/ops/library",
+      "component": "DevelopmentLibrary",
+      "category": "ops",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    },
+    {
+      "route": "/ops/library/bundles",
+      "route_pattern": "/ops/library/bundles",
+      "component": "DevelopmentLibrary tab",
+      "category": "ops",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    },
+    {
+      "route": "/ops/library/blueprint-selector",
+      "route_pattern": "/ops/library/blueprint-selector",
+      "component": "DevelopmentLibrary tab",
+      "category": "ops",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    },
+    {
+      "route": "/ops/library/build-packets",
+      "route_pattern": "/ops/library/build-packets",
+      "component": "DevelopmentLibrary tab",
+      "category": "ops",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    },
+    {
+      "route": "/ops/library/qa-checklists",
+      "route_pattern": "/ops/library/qa-checklists",
+      "component": "DevelopmentLibrary tab",
+      "category": "ops",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    },
+    {
+      "route": "/ops/library/brand-engine",
+      "route_pattern": "/ops/library/brand-engine",
+      "component": "DevelopmentLibrary tab",
+      "category": "ops",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    },
+    {
+      "route": "/studio/templates/compare",
+      "route_pattern": "/studio/templates/compare",
+      "component": "unhandled studio subpath; currently captured by /studio/templates branch",
+      "category": "studio",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    },
+    {
+      "route": "/studio/templates/:slug",
+      "route_pattern": "/studio/templates/:slug",
+      "component": "partially handled; floral-boutique has dedicated preview, other slugs fall to base templates page",
+      "category": "studio",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    },
+    {
+      "route": "/terms",
+      "route_pattern": "/terms",
+      "component": "unhandled public footer link; falls to OpsShell default",
+      "category": "public/unhandled",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    },
+    {
+      "route": "/privacy",
+      "route_pattern": "/privacy",
+      "component": "unhandled public footer link; falls to OpsShell default",
+      "category": "public/unhandled",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    },
+    {
+      "route": "/contact",
+      "route_pattern": "/contact",
+      "component": "unhandled public footer link; falls to OpsShell default",
+      "category": "public/unhandled",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    },
+    {
+      "route": "*",
+      "route_pattern": "*",
+      "component": "DevelopmentLibrary default inside OpsShell",
+      "category": "public/unhandled",
+      "routing_model": "normal pathname",
+      "protected": false,
+      "source_file": "src/App.tsx or linked page"
+    }
+  ],
+  "route_relationships": [
+    {
+      "shf_next_route": "/ops/command",
+      "relationship": "MIRROR_ROUTE",
+      "shrv1_counterpart": "admin.html#/ops/production plus admin.html#/command",
+      "proposed_owner": "shf-next for live SHS ops; shrv1 for governance/admin command",
+      "notes": "Both show ops/command views. Keep aligned; do not merge."
+    },
+    {
+      "shf_next_route": "/ops/sales",
+      "relationship": "SHF_NEXT_ONLY",
+      "shrv1_counterpart": "admin.html#/growth and admin.html#/hub/sales-pipeline",
+      "proposed_owner": "shf-next",
+      "notes": "Live sales command workflow belongs in shf-next; shrv1 keeps partner growth/hub sales governance views."
+    },
+    {
+      "shf_next_route": "/ops/projects",
+      "relationship": "MIRROR_ROUTE",
+      "shrv1_counterpart": "admin.html#/ops/projects",
+      "proposed_owner": "shared with shf-next live owner",
+      "notes": "Both manage production projects. shf-next appears fuller live lifecycle; shrv1 is admin/governance planning surface."
+    },
+    {
+      "shf_next_route": "/ops/library",
+      "relationship": "MIRROR_ROUTE",
+      "shrv1_counterpart": "admin.html#/ops/learning and admin.html#/ops/build-packet",
+      "proposed_owner": "shf-next",
+      "notes": "Development Library live workflow is shf-next; shrv1 has production admin components."
+    },
+    {
+      "shf_next_route": "/ops/library/bundles",
+      "relationship": "SHF_NEXT_ONLY",
+      "shrv1_counterpart": "admin.html#/builder/tools",
+      "proposed_owner": "shf-next",
+      "notes": "Library tab inside shf-next, with possible cross-link to shrv1 tool governance."
+    },
+    {
+      "shf_next_route": "/ops/library/blueprint-selector",
+      "relationship": "SHF_NEXT_ONLY",
+      "shrv1_counterpart": "admin.html#/ops/layout-blueprint",
+      "proposed_owner": "shf-next",
+      "notes": "Related to shrv1 layout blueprint but shf-next owns interactive library tab."
+    },
+    {
+      "shf_next_route": "/ops/library/build-packets",
+      "relationship": "MIRROR_ROUTE",
+      "shrv1_counterpart": "admin.html#/ops/build-packet",
+      "proposed_owner": "shared with shf-next live owner",
+      "notes": "Same concept exists in both; keep aligned, owner decision if one becomes canonical."
+    },
+    {
+      "shf_next_route": "/ops/library/qa-checklists",
+      "relationship": "MIRROR_ROUTE",
+      "shrv1_counterpart": "admin.html#/ops/screenshot-qa and admin.html#/ops/mock-review",
+      "proposed_owner": "shf-next",
+      "notes": "QA templates live in shf-next library; shrv1 admin QA surfaces remain governance/admin."
+    },
+    {
+      "shf_next_route": "/ops/library/brand-engine",
+      "relationship": "MIRROR_ROUTE",
+      "shrv1_counterpart": "admin.html#/ops/brand-profile",
+      "proposed_owner": "shared",
+      "notes": "Brand profile/engine overlap; likely align data model before links."
+    },
+    {
+      "shf_next_route": "/ops/qa",
+      "relationship": "MIRROR_ROUTE",
+      "shrv1_counterpart": "admin.html#/ops/screenshot-qa and admin.html#/ops/mock-review",
+      "proposed_owner": "shf-next",
+      "notes": "QA + Delivery live workflow belongs in shf-next; shrv1 has screenshot/mock review admin steps."
+    },
+    {
+      "shf_next_route": "/ops/clientops",
+      "relationship": "SHF_NEXT_ONLY",
+      "shrv1_counterpart": "admin.html#/hub/reports, admin.html#/hub/lifecycle, admin.html#/agent-fabric",
+      "proposed_owner": "shf-next",
+      "notes": "ClientOps center is shf-next; should link to shrv1 governance/reporting when reviewing trust or agent status."
+    },
+    {
+      "shf_next_route": "/studio/templates",
+      "relationship": "DUPLICATE_CONFLICT",
+      "shrv1_counterpart": "/studio/templates on shrv1 index and admin.html#/studio/templates",
+      "proposed_owner": "owner decision",
+      "notes": "Both apps expose /studio/templates. shrv1 public WebMaker and admin BuilderHub exist; shf-next has template marketplace."
+    },
+    {
+      "shf_next_route": "/studio/templates/browse",
+      "relationship": "SHF_NEXT_ONLY",
+      "shrv1_counterpart": "admin.html#/builder or /studio/templates",
+      "proposed_owner": "shf-next",
+      "notes": "Browse marketplace appears shf-next-owned; shrv1 should cross-link rather than duplicate."
+    },
+    {
+      "shf_next_route": "/studio/templates/floral-boutique",
+      "relationship": "SHF_NEXT_ONLY",
+      "shrv1_counterpart": "/studio/templates",
+      "proposed_owner": "shf-next",
+      "notes": "Dedicated template preview belongs to shf-next template marketplace."
+    },
+    {
+      "shf_next_route": "/studio/templates/:slug",
+      "relationship": "OWNER_DECISION_REQUIRED",
+      "shrv1_counterpart": "/studio/templates",
+      "proposed_owner": "shf-next likely",
+      "notes": "Most slug paths are linked but not individually branched except floral-boutique; decide preview routing pattern."
+    },
+    {
+      "shf_next_route": "/studio/templates/compare",
+      "relationship": "OWNER_DECISION_REQUIRED",
+      "shrv1_counterpart": "/studio/templates",
+      "proposed_owner": "shf-next likely",
+      "notes": "Link exists but no dedicated branch; currently captured by base templates branch."
+    },
+    {
+      "shf_next_route": "/foundation/data-approval",
+      "relationship": "SHF_NEXT_ONLY",
+      "shrv1_counterpart": "admin.html#/truth-spine and admin.html#/reports",
+      "proposed_owner": "shf-next for SHF Data Approval Gateway",
+      "notes": "Gateway is SHF public/foundation-side approval surface; shrv1 owns Truth Spine/governance backend/admin."
+    },
+    {
+      "shf_next_route": "/foundation/impact-report",
+      "relationship": "CROSS_LINK_REQUIRED",
+      "shrv1_counterpart": "admin.html#/command and admin.html#/reports",
+      "proposed_owner": "shf-next",
+      "notes": "shrv1 command links to 127.0.0.1:5174 in dev for report generator; formal bridge should be configured."
+    },
+    {
+      "shf_next_route": "/foundation/report",
+      "relationship": "CROSS_LINK_REQUIRED",
+      "shrv1_counterpart": "admin.html#/command and admin.html#/reports",
+      "proposed_owner": "shf-next",
+      "notes": "Alias route in shf-next; shrv1 should use canonical impact-report path."
+    },
+    {
+      "shf_next_route": "/foundation/impact-report/print",
+      "relationship": "SHF_NEXT_ONLY",
+      "shrv1_counterpart": "admin.html#/reports",
+      "proposed_owner": "shf-next",
+      "notes": "Print report renderer belongs in shf-next; shrv1 should not duplicate print route."
+    },
+    {
+      "shf_next_route": "/terms",
+      "relationship": "OWNER_DECISION_REQUIRED",
+      "shrv1_counterpart": "none",
+      "proposed_owner": "shf-next/public TBD",
+      "notes": "Footer link exists in studio browse but no route branch."
+    },
+    {
+      "shf_next_route": "/privacy",
+      "relationship": "OWNER_DECISION_REQUIRED",
+      "shrv1_counterpart": "none",
+      "proposed_owner": "shf-next/public TBD",
+      "notes": "Footer link exists in studio browse but no route branch."
+    },
+    {
+      "shf_next_route": "/contact",
+      "relationship": "OWNER_DECISION_REQUIRED",
+      "shrv1_counterpart": "none",
+      "proposed_owner": "shf-next/public TBD",
+      "notes": "Footer link exists in studio browse but no route branch."
+    },
+    {
+      "shf_next_route": "*",
+      "relationship": "SHF_NEXT_ONLY",
+      "shrv1_counterpart": "none",
+      "proposed_owner": "shf-next",
+      "notes": "Unknown shf-next paths fall to DevelopmentLibrary in OpsShell; this is risky for public URLs."
+    },
+    {
+      "shrv1_route": "admin.html#/truth-spine",
+      "relationship": "SHRV1_ONLY",
+      "shf_next_counterpart": null,
+      "proposed_owner": "shrv1",
+      "notes": "Governance/admin or multi-entry route belongs in shrv1; shf-next should cross-link only when needed."
+    },
+    {
+      "shrv1_route": "admin.html#/oracle",
+      "relationship": "SHRV1_ONLY",
+      "shf_next_counterpart": null,
+      "proposed_owner": "shrv1",
+      "notes": "Governance/admin or multi-entry route belongs in shrv1; shf-next should cross-link only when needed."
+    },
+    {
+      "shrv1_route": "admin.html#/ai-guardrails",
+      "relationship": "SHRV1_ONLY",
+      "shf_next_counterpart": null,
+      "proposed_owner": "shrv1",
+      "notes": "Governance/admin or multi-entry route belongs in shrv1; shf-next should cross-link only when needed."
+    },
+    {
+      "shrv1_route": "admin.html#/game-theory",
+      "relationship": "SHRV1_ONLY",
+      "shf_next_counterpart": null,
+      "proposed_owner": "shrv1",
+      "notes": "Governance/admin or multi-entry route belongs in shrv1; shf-next should cross-link only when needed."
+    },
+    {
+      "shrv1_route": "admin.html#/agent-fabric",
+      "relationship": "SHRV1_ONLY",
+      "shf_next_counterpart": null,
+      "proposed_owner": "shrv1",
+      "notes": "Governance/admin or multi-entry route belongs in shrv1; shf-next should cross-link only when needed."
+    },
+    {
+      "shrv1_route": "admin.html#/registry",
+      "relationship": "SHRV1_ONLY",
+      "shf_next_counterpart": null,
+      "proposed_owner": "shrv1",
+      "notes": "Governance/admin or multi-entry route belongs in shrv1; shf-next should cross-link only when needed."
+    },
+    {
+      "shrv1_route": "admin.html#/watchtower",
+      "relationship": "SHRV1_ONLY",
+      "shf_next_counterpart": null,
+      "proposed_owner": "shrv1",
+      "notes": "Governance/admin or multi-entry route belongs in shrv1; shf-next should cross-link only when needed."
+    },
+    {
+      "shrv1_route": "admin.html#/loo",
+      "relationship": "SHRV1_ONLY",
+      "shf_next_counterpart": null,
+      "proposed_owner": "shrv1",
+      "notes": "Governance/admin or multi-entry route belongs in shrv1; shf-next should cross-link only when needed."
+    },
+    {
+      "shrv1_route": "admin.html#/lord-outcomes",
+      "relationship": "SHRV1_ONLY",
+      "shf_next_counterpart": null,
+      "proposed_owner": "shrv1",
+      "notes": "Governance/admin or multi-entry route belongs in shrv1; shf-next should cross-link only when needed."
+    },
+    {
+      "shrv1_route": "admin.html#/aggregation",
+      "relationship": "SHRV1_ONLY",
+      "shf_next_counterpart": null,
+      "proposed_owner": "shrv1",
+      "notes": "Governance/admin or multi-entry route belongs in shrv1; shf-next should cross-link only when needed."
+    },
+    {
+      "shrv1_route": "admin.html#/verification-audit",
+      "relationship": "SHRV1_ONLY",
+      "shf_next_counterpart": null,
+      "proposed_owner": "shrv1",
+      "notes": "Governance/admin or multi-entry route belongs in shrv1; shf-next should cross-link only when needed."
+    },
+    {
+      "shrv1_route": "admin.html#/hub",
+      "relationship": "SHRV1_ONLY",
+      "shf_next_counterpart": null,
+      "proposed_owner": "shrv1",
+      "notes": "Governance/admin or multi-entry route belongs in shrv1; shf-next should cross-link only when needed."
+    },
+    {
+      "shrv1_route": "admin.html#/hub/reports",
+      "relationship": "SHRV1_ONLY",
+      "shf_next_counterpart": null,
+      "proposed_owner": "shrv1",
+      "notes": "Governance/admin or multi-entry route belongs in shrv1; shf-next should cross-link only when needed."
+    },
+    {
+      "shrv1_route": "admin.html#/solutions",
+      "relationship": "SHRV1_ONLY",
+      "shf_next_counterpart": null,
+      "proposed_owner": "shrv1",
+      "notes": "Governance/admin or multi-entry route belongs in shrv1; shf-next should cross-link only when needed."
+    },
+    {
+      "shrv1_route": "admin.html#/solutions/infrastructure",
+      "relationship": "SHRV1_ONLY",
+      "shf_next_counterpart": null,
+      "proposed_owner": "shrv1",
+      "notes": "Governance/admin or multi-entry route belongs in shrv1; shf-next should cross-link only when needed."
+    }
+  ],
+  "route_ownership": {
+    "Truth Spine admin": {
+      "owner": "shrv1",
+      "routes": [
+        "admin.html#/truth-spine"
+      ],
+      "reason": "Frozen governance/anti-drift authority."
+    },
+    "Oracle admin": {
+      "owner": "shrv1",
+      "routes": [
+        "admin.html#/oracle"
+      ],
+      "reason": "Governance decision-support layer admin surface."
+    },
+    "AI Guardrails admin": {
+      "owner": "shrv1",
+      "routes": [
+        "admin.html#/ai-guardrails"
+      ],
+      "reason": "AI publication/guardrail governance."
+    },
+    "Game Theory admin": {
+      "owner": "shrv1",
+      "routes": [
+        "admin.html#/game-theory"
+      ],
+      "reason": "Strategy layer admin/governance."
+    },
+    "Agent Fabric admin": {
+      "owner": "shrv1",
+      "routes": [
+        "admin.html#/agent-fabric"
+      ],
+      "reason": "Agent governance and layer visibility."
+    },
+    "Admin Registry": {
+      "owner": "shrv1",
+      "routes": [
+        "admin.html#/registry",
+        "admin.html#/app-registry"
+      ],
+      "reason": "Master registry/admin control surface."
+    },
+    "Watchtower": {
+      "owner": "shrv1",
+      "routes": [
+        "admin.html#/watchtower -> /agent-fabric",
+        "backend /watchtower/*"
+      ],
+      "reason": "Assurance/risk observation stack in Agent Fabric/governance."
+    },
+    "Reports": {
+      "owner": "shared",
+      "routes": [
+        "shrv1 admin.html#/reports",
+        "shrv1 admin.html#/reporting",
+        "shf-next /foundation/impact-report",
+        "shf-next /foundation/impact-report/print"
+      ],
+      "reason": "shrv1 owns trust/report readiness admin; shf-next owns foundation presentation/print."
+    },
+    "LOO": {
+      "owner": "shrv1",
+      "routes": [
+        "admin.html#/lord-outcomes",
+        "backend /loo/*"
+      ],
+      "reason": "Outcome ranking/trust metadata layer."
+    },
+    "SHF Impact Command": {
+      "owner": "shrv1",
+      "routes": [
+        "admin.html#/command",
+        "admin.html#/command-center"
+      ],
+      "reason": "SHF Impact Command Center is in shrv1 and can link to shf-next reports."
+    },
+    "SHF Data Approval Gateway": {
+      "owner": "shf-next",
+      "routes": [
+        "/foundation/data-approval"
+      ],
+      "reason": "Foundation-side approved data gateway; should reference shrv1 Truth Spine/Reports governance."
+    },
+    "BuilderHub": {
+      "owner": "shrv1",
+      "routes": [
+        "admin.html#/builder",
+        "admin.html#/web-maker",
+        "admin.html#/studio/templates"
+      ],
+      "reason": "Admin/internal control surface."
+    },
+    "WebMaker": {
+      "owner": "split",
+      "routes": [
+        "shrv1 /studio/templates public WebMakerPage",
+        "shf-next /studio/templates marketplace"
+      ],
+      "reason": "Boundary needs final decision; shrv1 has public WebMaker, shf-next has template marketplace."
+    },
+    "Website Studio": {
+      "owner": "shared with shf-next marketplace owner",
+      "routes": [
+        "admin.html#/builder",
+        "/studio/templates",
+        "/studio/templates/browse"
+      ],
+      "reason": "Admin governance in shrv1, customer/template browsing in shf-next."
+    },
+    "Template Browse": {
+      "owner": "shf-next",
+      "routes": [
+        "/studio/templates/browse"
+      ],
+      "reason": "Dedicated browse marketplace is shf-next."
+    },
+    "Brand Kit": {
+      "owner": "shared",
+      "routes": [
+        "admin.html#/ops/brand-profile",
+        "/ops/library/brand-engine"
+      ],
+      "reason": "shrv1 admin brand profile and shf-next live library brand engine overlap."
+    },
+    "Production Ops": {
+      "owner": "shared with shf-next live owner",
+      "routes": [
+        "shrv1 admin.html#/ops/*",
+        "shf-next /ops/projects",
+        "/ops/command"
+      ],
+      "reason": "shf-next appears live lifecycle; shrv1 is admin/gov production ops."
+    },
+    "ClientOps": {
+      "owner": "shf-next",
+      "routes": [
+        "/ops/clientops"
+      ],
+      "reason": "Dedicated ClientOps Center exists only in shf-next; shrv1 has hub/client reports."
+    },
+    "Sales Ops": {
+      "owner": "shf-next",
+      "routes": [
+        "/ops/sales"
+      ],
+      "reason": "Dedicated Sales Command Center exists in shf-next."
+    },
+    "QA + Delivery": {
+      "owner": "shf-next",
+      "routes": [
+        "/ops/qa"
+      ],
+      "reason": "Dedicated QA + Delivery dashboard exists in shf-next."
+    },
+    "Development Library": {
+      "owner": "shf-next",
+      "routes": [
+        "/ops/library",
+        "/ops/library/*"
+      ],
+      "reason": "Dedicated Development Library exists in shf-next."
+    },
+    "Public SHF pages": {
+      "owner": "shf-next for impact reports; shrv1 for legacy multi-entry public apps",
+      "routes": [
+        "/foundation/impact-report",
+        "/foundation/data-approval",
+        "shrv1 foundation.html#/"
+      ],
+      "reason": "Do not merge; bridge by links."
+    },
+    "Public SHS pages": {
+      "owner": "shrv1 for launcher/WebMaker; shf-next for Studio templates if owner approves",
+      "routes": [
+        "shrv1 index launcher",
+        "/studio/templates"
+      ],
+      "reason": "Route conflict needs owner boundary."
+    }
+  },
+  "cross_app_links_required": [
+    {
+      "source_app": "shrv1",
+      "source_route": "admin.html#/command",
+      "target_app": "shf-next",
+      "target_route": "/foundation/impact-report",
+      "reason": "Command Center generates/reviews SHF impact report presentation."
+    },
+    {
+      "source_app": "shrv1",
+      "source_route": "admin.html#/reports",
+      "target_app": "shf-next",
+      "target_route": "/foundation/impact-report/print?style=premium&period=annual",
+      "reason": "Reporting admin should open the current SHF print renderer rather than duplicating it."
+    },
+    {
+      "source_app": "shrv1",
+      "source_route": "admin.html#/truth-spine",
+      "target_app": "shf-next",
+      "target_route": "/foundation/data-approval",
+      "reason": "Truth/readiness review should cross-link to public data approval gate."
+    },
+    {
+      "source_app": "shrv1",
+      "source_route": "admin.html#/builder",
+      "target_app": "shf-next",
+      "target_route": "/studio/templates/browse",
+      "reason": "BuilderHub admin should open live template marketplace if shf-next owns browsing."
+    },
+    {
+      "source_app": "shrv1",
+      "source_route": "/studio/templates",
+      "target_app": "shf-next",
+      "target_route": "/studio/templates/browse",
+      "reason": "Public WebMaker should point to the richer marketplace if owner confirms shf-next as template owner."
+    },
+    {
+      "source_app": "shrv1",
+      "source_route": "admin.html#/ops/production",
+      "target_app": "shf-next",
+      "target_route": "/ops/command",
+      "reason": "Admin production ops should open live ops command overview."
+    },
+    {
+      "source_app": "shrv1",
+      "source_route": "admin.html#/ops/projects",
+      "target_app": "shf-next",
+      "target_route": "/ops/projects",
+      "reason": "Project setup/governance should open live project dashboard."
+    },
+    {
+      "source_app": "shrv1",
+      "source_route": "admin.html#/ops/build-packet",
+      "target_app": "shf-next",
+      "target_route": "/ops/library/build-packets",
+      "reason": "Build packet admin review should open live build packet library tab."
+    },
+    {
+      "source_app": "shrv1",
+      "source_route": "admin.html#/ops/screenshot-qa",
+      "target_app": "shf-next",
+      "target_route": "/ops/qa",
+      "reason": "Screenshot QA/admin review should open live QA + Delivery workflow."
+    },
+    {
+      "source_app": "shf-next",
+      "source_route": "/ops/clientops",
+      "target_app": "shrv1",
+      "target_route": "admin.html#/agent-fabric",
+      "reason": "ClientOps should be able to review governance/Agent Fabric status."
+    },
+    {
+      "source_app": "shf-next",
+      "source_route": "/ops/clientops",
+      "target_app": "shrv1",
+      "target_route": "admin.html#/reports",
+      "reason": "ClientOps monthly/reporting workflow should open trust-aware reports admin."
+    },
+    {
+      "source_app": "shf-next",
+      "source_route": "/foundation/data-approval",
+      "target_app": "shrv1",
+      "target_route": "admin.html#/truth-spine",
+      "reason": "Approval Gateway should link to Truth Spine authority for internal users."
+    },
+    {
+      "source_app": "shf-next",
+      "source_route": "/foundation/impact-report",
+      "target_app": "shrv1",
+      "target_route": "admin.html#/reports",
+      "reason": "Impact report generator should link back to verified/report readiness admin."
+    },
+    {
+      "source_app": "shf-next",
+      "source_route": "/studio/templates",
+      "target_app": "shrv1",
+      "target_route": "admin.html#/builder",
+      "reason": "Template marketplace should link to BuilderHub/admin governance for internal users."
+    }
+  ],
+  "duplicate_conflicts": [
+    {
+      "surface": "/studio/templates",
+      "shrv1": "public WebMakerPage and admin BuilderHub route alias",
+      "shf_next": "WebsiteStudioTemplates and browse/preview marketplace",
+      "risk": "Same pathname used in both apps; port/context decides app, but ownership is unclear."
+    },
+    {
+      "surface": "Production Ops / projects",
+      "shrv1": "admin.html#/ops/projects and production ops steps",
+      "shf_next": "/ops/projects live production dashboard",
+      "risk": "Same operational concept split across apps; data sync/canonical owner not defined."
+    },
+    {
+      "surface": "Build Packets / Development Library",
+      "shrv1": "admin.html#/ops/build-packet",
+      "shf_next": "/ops/library/build-packets",
+      "risk": "Overlapping workflow names; likely cross-link, not merge."
+    },
+    {
+      "surface": "Brand Kit / Brand Profile",
+      "shrv1": "admin.html#/ops/brand-profile",
+      "shf_next": "/ops/library/brand-engine",
+      "risk": "Possible duplicate brand source of truth."
+    },
+    {
+      "surface": "Reports",
+      "shrv1": "admin.html#/reports and /reporting trust surfaces",
+      "shf_next": "/foundation/impact-report and print",
+      "risk": "Shared term but different ownership: trust/admin vs presentation/print."
+    }
+  ],
+  "owner_decisions_required": [
+    {
+      "decision": "Choose canonical public /studio/templates owner",
+      "options": [
+        "shrv1 WebMaker public page",
+        "shf-next WebsiteStudio marketplace",
+        "keep split by host/port with explicit cross-links"
+      ]
+    },
+    {
+      "decision": "Decide whether shf-next live ops or shrv1 admin ops owns canonical Production Ops data",
+      "options": [
+        "shf-next live owner",
+        "shrv1 admin owner",
+        "shared with bridge metadata"
+      ]
+    },
+    {
+      "decision": "Define route bridge base URLs for local/dev/prod",
+      "options": [
+        "environment variables",
+        "static docs only",
+        "small future route bridge config"
+      ]
+    },
+    {
+      "decision": "Determine whether shf-next /terms, /privacy, /contact should be real public pages or external links",
+      "options": [
+        "add shf-next pages later",
+        "link to existing public legal pages",
+        "remove footer links later"
+      ]
+    },
+    {
+      "decision": "Resolve shf-next template slug routing for all templates",
+      "options": [
+        "dedicated preview route for all slugs",
+        "one dynamic preview component",
+        "keep only floral preview"
+      ]
+    },
+    {
+      "decision": "Decide whether shrv1 AdminSidebar legacy /admin, /admin/users, /admin/settings, /health should remain",
+      "options": [
+        "mount pages",
+        "remove links",
+        "redirect to existing identity/audit/health surfaces"
+      ]
+    }
+  ],
+  "routing_risks": [
+    {
+      "risk": "Different routing models",
+      "detail": "shrv1 uses multi-entry HTML plus HashRouter in admin.html; shf-next uses pathname SPA routing. Relative links cannot cross apps reliably without an absolute base URL."
+    },
+    {
+      "risk": "Different localhost ports expected",
+      "detail": "shrv1 Vite commonly runs on 5174 in recent smoke; shf-next can also use Vite defaults/preview. Cross-app links need environment-specific base URLs."
+    },
+    {
+      "risk": "shf-next is not a git repository here",
+      "detail": "git -C /Users/mikeslate/shf-next status fails; validation can run, but repo status cannot be reported from Git."
+    },
+    {
+      "risk": "shf-next public footer links fall into app fallback",
+      "detail": "/terms, /privacy, /contact are linked from studio browse but are not routed branches; likely render OpsShell default DevelopmentLibrary."
+    },
+    {
+      "risk": "shf-next studio slug paths are partially handled",
+      "detail": "/studio/templates/floral-boutique has dedicated preview; other /studio/templates/:slug paths are captured by base templates route."
+    },
+    {
+      "risk": "shrv1 has admin sidebar links without routes",
+      "detail": "/admin, /admin/users, /admin/settings, /health remain unresolved from the route integrity plan."
+    },
+    {
+      "risk": "shrv1 command center hardcodes local shf-next report URL in dev",
+      "detail": "SHFImpactCommandCenter uses 127.0.0.1:5174 for foundation impact report in dev; needs formal bridge config before production."
+    },
+    {
+      "risk": "Same route names mean different things on different apps",
+      "detail": "/ops/projects and /studio/templates can exist in both app contexts; host/port must disambiguate."
+    }
+  ],
+  "implementation_plan": {
+    "phase_1_document_ownership": [
+      "Approve this route ownership map as the source for future route bridge work.",
+      "Keep shrv1 governance/admin surfaces separate from shf-next live ops/presentation surfaces."
+    ],
+    "phase_2_shrv1_links": [
+      "Add environment-safe links from shrv1 Command/Reports/Truth/Builder/Ops pages to shf-next routes after owner approval.",
+      "Do not add links until base URL is configured or explicitly accepted."
+    ],
+    "phase_3_shf_next_links": [
+      "Add internal-only links from shf-next ClientOps/Data Approval/Impact Report/Studio routes back to shrv1 governance pages.",
+      "Keep public template/report pages free of admin-only assumptions."
+    ],
+    "phase_4_owner_decisions": [
+      "Resolve /studio/templates ownership.",
+      "Resolve Production Ops and Brand Kit canonical data ownership.",
+      "Resolve unhandled shf-next footer and template slug routes."
+    ],
+    "phase_5_bridge_config": [
+      "Optional future config: SHRV1_ADMIN_BASE, SHF_NEXT_BASE, routeBridge map, public-safe vs admin-only link flags.",
+      "Only create if repeated cross-app links would otherwise hardcode localhost or production URLs."
+    ]
+  },
+  "validation": {
+    "npm run check:governance": "PASS",
+    "npm run build (shrv1)": "PASS with existing large chunk warnings",
+    "npm run build (shf-next)": "PASS with existing chunk warning; sandbox escalation used for tsbuildinfo writes",
+    "npm run lint (shf-next)": "PASS",
+    "git status (shf-next)": "NOT_A_GIT_REPOSITORY in this environment",
+    "source_changes": "No source, route, backend, package, or shf-next files modified by this audit; only the two SHRV1_SHF_NEXT_ROUTE_BRIDGE_AUDIT_V1 docs were created."
+  },
+  "v1_complete": true
+}

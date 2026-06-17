@@ -29,6 +29,12 @@ export const hubPageAccess = {
   "/imports": ["client", "client_admin", "shs_admin"],
   "/uploads": ["shs_admin"],
   "/verification-audit": ["shs_admin"],
+  "/command": ["shs_admin"],
+  "/command-center": ["shs_admin"],
+  "/dashboard": ["shs_admin"],
+  "/loo": ["shs_admin"],
+  "/watchtower": ["shs_admin"],
+  "/lord-outcomes": ["shs_admin"],
 
   "/app-registry": ["shs_admin"],
   "/registry": ["shs_admin"],
@@ -41,6 +47,8 @@ export const hubPageAccess = {
   "/master-narrative": ["shs_admin"],
   "/grant-binder": ["shs_admin"],
   "/alignment": ["shs_admin"],
+  "/analytics": ["shs_admin"],
+  "/dev/docs": ["shs_admin"],
 
   "/solutions": ["client_admin", "shs_admin"],
   "/solutions/infrastructure": ["client_admin", "shs_admin"],
@@ -54,6 +62,7 @@ export const hubPageAccess = {
   "/hub/journal": ["client", "client_admin", "shs_admin"],
 
   "/reporting": ["client_admin", "shs_admin"],
+  "/reports": ["client_admin", "shs_admin"],
   "/growth": ["client_admin", "shs_admin"],
   "/hub/growth-network": ["client_admin", "shs_admin"],
   "/hub/intelligence": ["client_admin", "shs_admin"],

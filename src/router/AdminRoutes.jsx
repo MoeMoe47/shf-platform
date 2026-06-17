@@ -10,6 +10,8 @@ import MasterNarrativeViewer from "@/pages/admin/MasterNarrativeViewer.jsx";
 import GrantBinder from "@/pages/admin/GrantBinder.jsx";
 import AlignmentSwitchboard from "@/pages/admin/AlignmentSwitchboard.jsx";
 import BuilderHub from "@/pages/admin/BuilderHub.jsx";
+import AdminAnalytics from "@/pages/AdminAnalytics.jsx";
+import DevDocsViewer from "@/pages/dev/Docs.jsx";
 
 import AggregationDashboard from "@/pages/admin/aggregation/AggregationDashboard.jsx";
 import ReportingCommandSurface from "@/pages/admin/reporting/ReportingCommandSurface.jsx";
@@ -19,6 +21,9 @@ import OraclePage from "@/pages/admin/oracle/OraclePage.jsx";
 import AIGuardrailsPage from "@/pages/admin/ai-guardrails/AIGuardrailsPage.jsx";
 import GameTheoryPage from "@/pages/admin/game-theory/GameTheoryPage.jsx";
 import AgentFabricPage from "@/pages/admin/agent-fabric/AgentFabricPage.jsx";
+import SHFImpactCommandCenter from "@/pages/shf-command/SHFImpactCommandCenter.jsx";
+import WorkspaceDashboard from "@/pages/exchange/WorkspaceDashboard.jsx";
+import LordOutcomesRoutes from "@/router/LordOutcomesRoutes.jsx";
 import OpsProductionDashboard from "@/pages/admin/ops/OpsProductionDashboard.jsx";
 import OpsProjectSetup from "@/pages/admin/ops/OpsProjectSetup.jsx";
 import OpsBrandProfile from "@/pages/admin/ops/OpsBrandProfile.jsx";
@@ -146,6 +151,14 @@ export default function AdminRoutes() {
         <Route path="/imports" element={protect("/imports", <HubFilesImports />, [SHS_SECURITY_PERMISSIONS.UPLOADS_INTERNAL])} />
         <Route path="/aggregation" element={protect("/aggregation", <AggregationDashboard />, [SHS_SECURITY_PERMISSIONS.AGGREGATION_VIEW])} />
         <Route path="/reporting" element={protect("/reporting", <ReportingCommandSurface />, [SHS_SECURITY_PERMISSIONS.REPORTS_VIEW])} />
+        <Route path="/reports" element={protect("/reports", <ReportingCommandSurface />, [SHS_SECURITY_PERMISSIONS.REPORTS_VIEW])} />
+        <Route path="/command" element={protect("/command", <SHFImpactCommandCenter />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
+        <Route path="/command-center" element={protect("/command-center", <SHFImpactCommandCenter />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
+        <Route path="/dashboard" element={protect("/dashboard", <WorkspaceDashboard />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
+        <Route path="/loo" element={<Navigate to="/lord-outcomes" replace />} />
+        <Route path="/watchtower" element={<Navigate to="/agent-fabric" replace />} />
+        <Route path="/lord-outcomes" element={protect("/lord-outcomes", <LordOutcomesRoutes />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
+        <Route path="/lord-outcomes/*" element={protect("/lord-outcomes", <LordOutcomesRoutes />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/verification-audit" element={protect("/verification-audit", <VerificationAuditSurface />, [SHS_SECURITY_PERMISSIONS.VERIFICATION_VIEW])} />
         <Route path="/truth-spine" element={protect("/truth-spine", <TruthSpinePage />, [SHS_SECURITY_PERMISSIONS.TRUTH_VIEW])} />
         <Route path="/oracle" element={protect("/oracle", <OraclePage />, [SHS_SECURITY_PERMISSIONS.TRUTH_VIEW])} />
@@ -167,6 +180,8 @@ export default function AdminRoutes() {
         <Route path="/master-narrative" element={protect("/master-narrative", <MasterNarrativeViewer />)} />
         <Route path="/grant-binder" element={protect("/grant-binder", <GrantBinder />)} />
         <Route path="/alignment" element={protect("/alignment", <AlignmentSwitchboard />)} />
+        <Route path="/analytics" element={protect("/analytics", <AdminAnalytics />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
+        <Route path="/dev/docs" element={protect("/dev/docs", <DevDocsViewer />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
 
         {/* Partner Growth Engine */}
         <Route path="/growth" element={protect("/growth", <SHSPartnerGrowthEngine />, [SHS_SECURITY_PERMISSIONS.GROWTH_VIEW])} />

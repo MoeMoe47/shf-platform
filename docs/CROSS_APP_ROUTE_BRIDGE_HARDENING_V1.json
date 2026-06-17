@@ -1,0 +1,152 @@
+{
+  "name": "Cross-App Route Bridge Hardening V1",
+  "is_new_layer": false,
+  "route_ownership": {
+    "shrv1": [
+      "admin.html#/truth-spine",
+      "admin.html#/oracle",
+      "admin.html#/ai-guardrails",
+      "admin.html#/game-theory",
+      "admin.html#/agent-fabric",
+      "admin.html#/registry",
+      "admin.html#/watchtower",
+      "admin.html#/lord-outcomes",
+      "admin.html#/reporting",
+      "admin.html#/command",
+      "admin.html#/dashboard"
+    ],
+    "shf_next": [
+      "/",
+      "/foundation",
+      "/foundation/impact-report",
+      "/foundation/data-approval",
+      "/solutions",
+      "/ops",
+      "/ops/*",
+      "/ops/clientops",
+      "/studio/*",
+      "/studio/templates",
+      "/studio/templates/browse"
+    ]
+  },
+  "base_url_strategy": {
+    "env_vars": [
+      "VITE_SHRV1_BASE_URL",
+      "VITE_SHF_NEXT_BASE_URL"
+    ],
+    "local_defaults": {
+      "shrv1": "http://127.0.0.1:5174",
+      "shf_next": "http://127.0.0.1:5175"
+    },
+    "rules": [
+      "Use environment variables before local defaults.",
+      "Allow only http and https base URLs.",
+      "Reject secret-like values including ADMIN_API_KEY, admin key, token, authorization, role, and permission payloads.",
+      "Do not hardcode production URLs as final."
+    ]
+  },
+  "link_builders": [
+    "getShrv1BaseUrl",
+    "getShfNextBaseUrl",
+    "buildShrv1AdminUrl",
+    "buildShfNextUrl",
+    "getCrossAppRouteTarget",
+    "isExternalCrossAppUrl"
+  ],
+  "cross_app_targets": [
+    "shrv1CommandToShfImpactReport",
+    "shrv1ReportsToShfImpactPrint",
+    "shrv1TruthToShfDataApproval",
+    "shrv1BuilderToShfTemplatesBrowse",
+    "shrv1WebMakerToShfTemplatesBrowse",
+    "shrv1OpsProductionToShfOpsCommand",
+    "shrv1OpsProjectsToShfOpsProjects",
+    "shrv1BuildPacketToShfBuildPackets",
+    "shrv1ScreenshotQaToShfQa",
+    "shfClientOpsToShrv1AgentFabric",
+    "shfClientOpsToShrv1Reports",
+    "shfDataApprovalToShrv1Truth",
+    "shfImpactReportToShrv1Reports",
+    "shfStudioTemplatesToShrv1Builder"
+  ],
+  "ui_links_added": [],
+  "ui_links_deferred": [
+    "SHRV1 BuilderHub/WebMaker to SHF-Next Studio Templates Browse",
+    "SHF-Next internal notice to SHRV1 governance/admin surfaces",
+    "SHF-Next ClientOps to SHRV1 Agent Fabric and Reports",
+    "SHF-Next Data Approval to SHRV1 Truth Spine and Registry"
+  ],
+  "public_route_regression": {
+    "/": "PASS",
+    "/foundation": "PASS",
+    "/foundation/impact-report": "PASS",
+    "/solutions": "PASS",
+    "/studio/templates": "PASS",
+    "/studio/templates/browse": "PASS"
+  },
+  "internal_route_regression": {
+    "/ops": "PASS",
+    "/ops/clientops": "PASS",
+    "/foundation/data-approval": "PASS"
+  },
+  "browser_smoke": {
+    "ports": {
+      "shrv1": "http://127.0.0.1:5174",
+      "shf_next": "http://127.0.0.1:5175"
+    },
+    "generated_url_safety": {
+      "target_count": 14,
+      "all_targets_safe": true,
+      "unsafe_secret_url_blocked": true
+    },
+    "shrv1_routes": {
+      "admin.html#/agent-fabric": "PASS",
+      "admin.html#/registry": "PASS",
+      "admin.html#/truth-spine": "PASS",
+      "admin.html#/oracle": "PASS",
+      "admin.html#/ai-guardrails": "PASS",
+      "admin.html#/game-theory": "PASS",
+      "admin.html#/lord-outcomes": "PASS",
+      "admin.html#/analytics": "PASS",
+      "admin.html#/dev/docs": "PASS"
+    },
+    "shf_next_routes": {
+      "/": "PASS",
+      "/foundation": "PASS",
+      "/foundation/impact-report": "PASS",
+      "/solutions": "PASS",
+      "/studio/templates": "PASS",
+      "/studio/templates/browse": "PASS",
+      "/ops": "PASS",
+      "/ops/clientops": "PASS",
+      "/foundation/data-approval": "PASS"
+    },
+    "critical_console_errors": []
+  },
+  "validation": {
+    "shrv1": {
+      "helper_import_smoke": "PASS",
+      "npm run check:governance": "PASS",
+      "npm run build": "PASS"
+    },
+    "shf_next": {
+      "npm run build": "PASS",
+      "npm run lint": "PASS",
+      "git status --short": "NOT_A_GIT_REPOSITORY"
+    }
+  },
+  "files_changed": [
+    "src/system/routes/crossAppRouteBridge.js",
+    "/Users/mikeslate/shf-next/src/data/crossAppRouteBridge.ts",
+    "docs/CROSS_APP_ROUTE_BRIDGE_HARDENING_V1.md",
+    "docs/CROSS_APP_ROUTE_BRIDGE_HARDENING_V1.json"
+  ],
+  "remaining_risks": [
+    "Visible UI links are deferred pending owner approval for exact placement.",
+    "/Users/mikeslate/shf-next does not report as a git repository in this environment, so SHF-Next git status cannot be produced.",
+    "Local base URL defaults are development-only and must be overridden for staging/production.",
+    "Existing unresolved SHF-Next footer routes such as /terms, /privacy, and /contact remain outside this V1 scope.",
+    "SHRV1 admin smoke produced Vite proxy ECONNREFUSED server logs for backend API calls because the Agent Fabric backend was not running; admin pages still loaded without blank screens."
+  ],
+  "v1_complete": true
+}

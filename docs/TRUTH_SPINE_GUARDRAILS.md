@@ -136,6 +136,12 @@ Data Normalization can prepare canonical shapes, normalize field aliases, preser
 
 Data Normalization cannot verify claims, public-approve records, mark reports ready, create final claims, override Oracle rulings, or mutate SHF Impact Data Spine. Normalized records remain unverified until Truth Spine evaluates them.
 
+## Evidence Package
+
+Evidence Package may bundle normalized records with source metadata, provenance, and evidence references, then prepare review-ready packages for Truth Spine.
+
+Evidence Package may not verify truth, approve data, create verified claims, override Truth Spine decisions, override Oracle rulings, mutate SHF Impact Data Spine, publish reports, or bypass Data Approval Gateway.
+
 ## Backend First
 
 Truth Spine V1 lives in Agent Fabric first:

@@ -8,6 +8,7 @@ from fabric.watchtower.store import set_quarantine, clear_quarantine, get_quaran
 from services.ai_guardrails_service import ai_guardrails_summary
 from services.data_aggregator_service import data_aggregator_summary
 from services.data_normalization_service import data_normalization_summary
+from services.evidence_package_service import evidence_package_summary
 from services.game_theory_service import game_theory_summary
 from services.oracle_service import oracle_summary
 from services.truth_spine_service import truth_summary
@@ -24,6 +25,7 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
     game_theory = game_theory_summary()
     data_aggregator = data_aggregator_summary()
     data_normalization = data_normalization_summary()
+    evidence_package = evidence_package_summary()
     if isinstance(summary, dict):
         summary["truth_coverage"] = {
             "coverage_percent": truth["coverage_percent"],
@@ -52,6 +54,18 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
             "approves_public_data": data_normalization["approves_public_data"],
             "flag": data_normalization["sample_readiness"]["blocked"] > 0,
             "status": "watch" if data_normalization["sample_readiness"]["blocked"] > 0 else "ready",
+        }
+        summary["evidence_package"] = {
+            "policy_status": evidence_package["policy_status"],
+            "complete_packages": evidence_package["complete_packages"],
+            "incomplete_packages": evidence_package["incomplete_packages"],
+            "missing_provenance": evidence_package["missing_provenance"],
+            "missing_sources": evidence_package["missing_sources"],
+            "truth_spine_ready": evidence_package["truth_spine_ready"],
+            "public_approval_ready": evidence_package["public_approval_ready"],
+            "verifies_truth": evidence_package["verifies_truth"],
+            "flag": evidence_package["incomplete_packages"] > 0,
+            "status": "watch" if evidence_package["incomplete_packages"] > 0 else "ready",
         }
         summary["oracle"] = {
             "cases_total": oracle["cases_total"],

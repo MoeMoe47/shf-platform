@@ -1,0 +1,105 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
+REQUIRED_FILES = [
+    "docs/EVIDENCE_PACKAGE_LAYER_V1.md",
+    "docs/EVIDENCE_PACKAGE_LAYER_V1.json",
+    "services/shf-agent-fabric/services/evidence_package_service.py",
+    "services/shf-agent-fabric/routers/evidence_package_routes.py",
+    "services/shf-agent-fabric/tests/test_evidence_package_routes.py",
+]
+
+REQUIRED_ROUTES = [
+    "/health",
+    "/schema",
+    "/summary",
+    "/build",
+    "/batch-build",
+    "/readiness",
+]
+
+
+def _read(path: str) -> str:
+    return (ROOT / path).read_text(encoding="utf-8")
+
+
+def main() -> int:
+    failures: list[str] = []
+
+    for rel_path in REQUIRED_FILES:
+        if not (ROOT / rel_path).exists():
+            failures.append(f"missing required file: {rel_path}")
+
+    registry_path = ROOT / "docs" / "MASTER_LAYER_REGISTRY.md"
+    if registry_path.exists():
+        registry = registry_path.read_text(encoding="utf-8")
+        if "| Evidence Package Layer |" not in registry:
+            failures.append("MASTER_LAYER_REGISTRY.md missing Official Layers row for Evidence Package Layer")
+        if "### Evidence Package Layer" not in registry:
+            failures.append("MASTER_LAYER_REGISTRY.md missing structured Evidence Package Layer entry")
+    else:
+        failures.append("missing docs/MASTER_LAYER_REGISTRY.md")
+
+    guardrails_path = ROOT / "docs" / "TRUTH_SPINE_GUARDRAILS.md"
+    if guardrails_path.exists():
+        guardrails = guardrails_path.read_text(encoding="utf-8")
+        if "Evidence Package" not in guardrails or "may not verify truth" not in guardrails:
+            failures.append("TRUTH_SPINE_GUARDRAILS.md missing Evidence Package boundary")
+    else:
+        failures.append("missing docs/TRUTH_SPINE_GUARDRAILS.md")
+
+    if (ROOT / "services/shf-agent-fabric/routers/evidence_package_routes.py").exists():
+        routes = _read("services/shf-agent-fabric/routers/evidence_package_routes.py")
+        if 'prefix="/evidence-package"' not in routes:
+            failures.append("evidence_package_routes.py missing /evidence-package prefix")
+        for route in REQUIRED_ROUTES:
+            if route not in routes:
+                failures.append(f"evidence_package_routes.py missing route: {route}")
+
+    if (ROOT / "services/shf-agent-fabric/main.py").exists():
+        main_py = _read("services/shf-agent-fabric/main.py")
+        if "evidence_package_router" not in main_py:
+            failures.append("main.py missing evidence_package_router import")
+        if "include_router(evidence_package_router)" not in main_py:
+            failures.append("main.py missing evidence_package_router mount")
+
+    package_path = ROOT / "package.json"
+    if package_path.exists():
+        package = json.loads(package_path.read_text(encoding="utf-8"))
+        scripts = package.get("scripts", {})
+        if "check:evidence-package" not in scripts:
+            failures.append("package.json missing check:evidence-package")
+        if "check:evidence-package" not in scripts.get("check:governance", ""):
+            failures.append("package.json check:governance does not include check:evidence-package")
+
+    if (ROOT / "services/shf-agent-fabric/services/evidence_package_service.py").exists():
+        service = _read("services/shf-agent-fabric/services/evidence_package_service.py").lower()
+        forbidden = [
+            "evidence package verifies truth",
+            "evidence package public approves",
+            "evidence package overrides truth spine",
+            "verification_status = \"verified\"",
+            "public_approved = true",
+        ]
+        for phrase in forbidden:
+            if phrase in service:
+                failures.append(f"evidence_package_service.py contains forbidden authority phrase: {phrase}")
+
+    if failures:
+        print("FAIL: Evidence Package Layer checks failed:")
+        for failure in failures:
+            print(f"- {failure}")
+        return 1
+
+    print("PASS: Evidence Package Layer V1 boundary, routes, docs, and governance checks passed.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

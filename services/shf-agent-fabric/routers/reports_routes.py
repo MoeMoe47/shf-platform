@@ -4,6 +4,7 @@ from datetime import datetime
 from services.ai_guardrails_service import ai_guardrails_summary
 from services.data_aggregator_service import data_aggregator_summary
 from services.data_normalization_service import data_normalization_summary
+from services.evidence_package_service import evidence_package_summary
 from services.game_theory_service import game_theory_summary
 from services.oracle_service import oracle_summary
 from services.truth_spine_service import truth_summary
@@ -18,6 +19,7 @@ def snapshot():
     game_theory = game_theory_summary()
     data_aggregator = data_aggregator_summary()
     data_normalization = data_normalization_summary()
+    evidence_package = evidence_package_summary()
     return {
         "ts": datetime.utcnow().isoformat(),
         "usage": {"requests": 0, "users": 0, "apps": 0},
@@ -52,6 +54,18 @@ def snapshot():
             "verifies_truth": data_normalization["verifies_truth"],
             "approves_public_data": data_normalization["approves_public_data"],
             "note": "Data Normalization is canonical preview context only; Truth Spine controls verification, public approval, and report readiness.",
+        },
+        "evidence_package": {
+            "policy_status": evidence_package["policy_status"],
+            "total_packages": evidence_package["total_packages"],
+            "complete_packages": evidence_package["complete_packages"],
+            "incomplete_packages": evidence_package["incomplete_packages"],
+            "missing_provenance": evidence_package["missing_provenance"],
+            "missing_sources": evidence_package["missing_sources"],
+            "truth_spine_ready": evidence_package["truth_spine_ready"],
+            "public_approval_ready": evidence_package["public_approval_ready"],
+            "verifies_truth": evidence_package["verifies_truth"],
+            "note": "Evidence Package is review preparation only; Truth Spine controls verification, public approval, and report readiness.",
         },
         "oracle": {
             "cases_total": oracle["cases_total"],

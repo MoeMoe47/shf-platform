@@ -1,0 +1,114 @@
+{
+  "layer_name": "Evidence Package Layer V1",
+  "is_new_layer": false,
+  "role": "Bundles normalized records with source metadata, provenance, and evidence references before Truth Spine review.",
+  "position": "Data Normalization -> Evidence Package -> Truth Spine",
+  "owner": "Data Operations / Governance preparation layer",
+  "dependencies": {
+    "upstream": [
+      "Data Normalization",
+      "Data Aggregator",
+      "Source Registry"
+    ],
+    "downstream": [
+      "Truth Spine",
+      "Oracle",
+      "Reports",
+      "Watchtower",
+      "LOO",
+      "Data Approval Gateway",
+      "SHF Impact Data Spine"
+    ]
+  },
+  "boundaries": {
+    "does": [
+      "receive normalized records",
+      "attach source metadata",
+      "attach provenance metadata",
+      "attach evidence references",
+      "generate package completeness score",
+      "identify blockers",
+      "identify missing evidence",
+      "identify missing provenance",
+      "identify missing source references",
+      "determine Truth Spine readiness",
+      "determine review readiness"
+    ],
+    "does_not": [
+      "verify claims",
+      "create verified claims",
+      "create truth scores",
+      "create public approved records",
+      "publish reports",
+      "modify SHF Impact Data Spine",
+      "override Truth Spine",
+      "override Oracle",
+      "create a production database"
+    ]
+  },
+  "canonical_package_model": {
+    "package_id": "",
+    "canonical_type": "",
+    "normalized_record": {},
+    "source_metadata": {},
+    "provenance": {},
+    "evidence_refs": [],
+    "warnings": [],
+    "blockers": [],
+    "completeness_score": 0,
+    "ready_for_truth_spine": false,
+    "ready_for_public_approval": false
+  },
+  "endpoints": [
+    "GET /evidence-package/health",
+    "GET /evidence-package/schema",
+    "GET /evidence-package/summary",
+    "POST /evidence-package/build",
+    "POST /evidence-package/batch-build",
+    "GET /evidence-package/readiness"
+  ],
+  "reports_integration": {
+    "field": "evidence_package",
+    "summary_only": true
+  },
+  "watchtower_integration": {
+    "field": "evidence_package",
+    "observation_only": true
+  },
+  "registry_status": {
+    "registered": true,
+    "enforcement_status": "Formalized V1"
+  },
+  "validation": {
+    "status": "pass",
+    "commands": {
+      "python3 -m py_compile services/shf-agent-fabric/services/evidence_package_service.py services/shf-agent-fabric/routers/evidence_package_routes.py scripts/check_evidence_package_layer.py": "pass",
+      "python3 scripts/check_evidence_package_layer.py": "pass",
+      "python3 scripts/check_data_aggregator_layer.py": "pass",
+      "python3 scripts/check_data_normalization_layer.py": "pass",
+      "python3 scripts/check_master_layer_registry.py": "pass",
+      "python3 scripts/check_truth_spine_freeze.py": "pass",
+      "python3 scripts/check_oracle_layer.py": "pass",
+      "python3 scripts/check_ai_guardrails_layer.py": "pass",
+      "python3 scripts/check_game_theory_layer.py": "pass",
+      "npm run check:governance": "pass",
+      "python3 -m pytest services/shf-agent-fabric/tests/test_evidence_package_routes.py": "pass",
+      "python3 -m pytest services/shf-agent-fabric/tests/test_data_normalization_routes.py services/shf-agent-fabric/tests/test_data_aggregator_routes.py services/shf-agent-fabric/tests/test_truth_routes.py": "pass",
+      "npm run build": "pass"
+    },
+    "api_smoke": {
+      "GET /evidence-package/health": "pass",
+      "GET /evidence-package/schema": "pass",
+      "GET /evidence-package/summary": "pass",
+      "POST /evidence-package/build": "pass",
+      "GET /evidence-package/readiness": "pass",
+      "GET /reports/snapshot": "pass",
+      "GET /watchtower/summary": "pass"
+    }
+  },
+  "remaining_risks": [
+    "V1 has no production persistence.",
+    "Future Source Registry and Data Approval Gateway integrations must preserve the preparation-only boundary."
+  ],
+  "v1_complete": true
+}

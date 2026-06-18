@@ -20,6 +20,7 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 | Batch/Import | Data Operations | Handles file imports, bulk uploads, and scheduled ingest. |
 | Data Aggregator Layer | Data Operations | Gathers approved raw/structured inputs, attaches provenance, and prepares intake for normalization, evidence packaging, and Truth Spine review. |
 | Data Normalization Layer | Data Operations | Converts aggregated intake into canonical preview shapes before Evidence Package, Truth Spine, Reports, Watchtower, LOO, or SHF Impact Data Spine consume it. |
+| Evidence Package Layer | Data Operations | Bundles normalized records with source metadata, provenance, and evidence references before Truth Spine review. |
 | Warehouse Sync | Data Operations | Moves normalized data into durable reporting and analysis stores. |
 | Apps/Programs | Product | Produces operational signals and user workflows. |
 | Adapter Layer | Platform | Converts app/program data into canonical SHS contracts. |
@@ -123,6 +124,16 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 - Upstream: Data Aggregator Layer, Batch/Import, Apps/Programs, Source Registry
 - Downstream: Evidence Package, Truth Spine, Reports, Watchtower, LOO, SHF Impact Data Spine, Data Approval Gateway
 - Truth Spine Requirement: Must preserve source/provenance metadata and may only mark normalized previews ready for Truth Spine review; cannot verify, public-approve, or mark report-ready.
+- Enforcement Status: Formalized V1
+
+### Evidence Package Layer
+
+- Layer Type: Data Operations
+- Owns: Bundling normalized records, source metadata, provenance metadata, evidence references, completeness scoring, blocker detection, missing evidence warnings, missing provenance blockers, missing source blockers, and review readiness for Truth Spine submission.
+- Must Not Own: Truth verification, public approval, Source Registry authority, Data Normalization authority, final claim verification, report publication, Oracle rulings, Watchtower risk decisions, LOO ranking, Data Approval Gateway decisions, or SHF Impact Data Spine structures.
+- Upstream: Data Normalization Layer, Data Aggregator Layer, Source Registry
+- Downstream: Truth Spine, Oracle Layer, Reports, Watchtower, LOO, Data Approval Gateway, SHF Impact Data Spine
+- Truth Spine Requirement: May prepare review-ready packages for Truth Spine but cannot verify truth, create verified claims, public-approve records, or mark report-ready.
 - Enforcement Status: Formalized V1
 
 ### Warehouse Sync

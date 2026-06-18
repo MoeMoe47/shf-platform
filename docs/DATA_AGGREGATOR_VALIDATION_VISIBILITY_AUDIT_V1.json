@@ -1,0 +1,241 @@
+{
+  "audit_name": "Data Aggregator Validation & Visibility Audit V1",
+  "visibility": {
+    "reports": {
+      "visible": true,
+      "field": "data_aggregator",
+      "summary_only": true,
+      "truth_authority": false,
+      "public_approval_authority": false,
+      "keys": [
+        "policy_status",
+        "total_sources",
+        "pending_intake",
+        "missing_provenance",
+        "blocked_from_truth_spine",
+        "ready_for_normalization",
+        "ready_for_evidence_package",
+        "public_approval_eligible_count",
+        "note"
+      ]
+    },
+    "watchtower": {
+      "visible": true,
+      "field": "data_aggregator",
+      "warnings_visible": true,
+      "truth_authority": false,
+      "public_approval_authority": false,
+      "keys": [
+        "policy_status",
+        "pending_intake",
+        "missing_provenance",
+        "blocked_from_truth_spine",
+        "ready_for_normalization",
+        "ready_for_evidence_package",
+        "flag",
+        "status"
+      ]
+    },
+    "registry": {
+      "registered": true,
+      "official_layers_row": true,
+      "structured_entry": true,
+      "owner_dependencies_boundaries_clear": true,
+      "enforcement_status": "Formalized V1",
+      "replacement_for_truth_spine": false,
+      "replacement_for_source_registry": false,
+      "replacement_for_shf_impact_data_spine": false
+    },
+    "layer_checks": {
+      "script_exists": true,
+      "script_passed": true,
+      "package_script": "check:data-aggregator",
+      "included_in_check_governance": true
+    }
+  },
+  "endpoint_validation": {
+    "method": "FastAPI TestClient",
+    "endpoints": {
+      "GET /data-aggregator/health": {
+        "ok": true,
+        "status": "formalized_v1"
+      },
+      "GET /data-aggregator/sources": {
+        "ok": true,
+        "count": 3
+      },
+      "GET /data-aggregator/intake-queue": {
+        "ok": true,
+        "count": 3
+      },
+      "GET /data-aggregator/summary": {
+        "ok": true,
+        "policy_status": "formalized_v1"
+      },
+      "POST /data-aggregator/classify": {
+        "ok": true
+      },
+      "GET /reports/snapshot": {
+        "ok": true,
+        "contains_data_aggregator": true
+      },
+      "GET /watchtower/summary": {
+        "ok": true,
+        "contains_data_aggregator": true
+      }
+    },
+    "classify_missing_provenance": {
+      "status": "blocked",
+      "eligible_for_truth_spine": false,
+      "eligible_for_public_approval": false,
+      "warnings": [
+        "missing_provenance",
+        "missing_required_metadata"
+      ]
+    },
+    "classify_complete_provenance": {
+      "status": "ready_for_normalization",
+      "eligible_for_truth_spine": true,
+      "eligible_for_public_approval": false,
+      "warnings": []
+    },
+    "classify_complete_deterministic": true,
+    "classify_public_approval_attempt": {
+      "status": "ready_for_evidence_package",
+      "eligible_for_truth_spine": true,
+      "eligible_for_public_approval": false,
+      "warnings": [
+        "public_approval_requires_truth_spine"
+      ]
+    },
+    "downstream_targets_advisory_only": true,
+    "truth_verification_granted_by_aggregator": false,
+    "public_approval_granted_by_aggregator": false
+  },
+  "duplicate_system_scan": {
+    "duplicate_truth_spine": false,
+    "duplicate_shf_impact_data_spine": false,
+    "duplicate_source_registry": false,
+    "duplicate_public_approval": false,
+    "duplicate_report_readiness": false,
+    "duplicate_database": false,
+    "findings": [
+      "No Data Aggregator database or persistence directory was found.",
+      "No duplicate Source Registry was found.",
+      "No duplicate Truth Spine was found.",
+      "No duplicate SHF Impact Data Spine was found.",
+      "No duplicate public approval queue was found.",
+      "No duplicate report readiness system was found.",
+      "Existing admin aggregation pages and historical backup files were present before this audit and were not changed."
+    ]
+  },
+  "boundary_audit": {
+    "verifies_claims": false,
+    "marks_claims_verified": false,
+    "approves_public_data": false,
+    "marks_records_public_approved": false,
+    "mutates_shf_impact_data": false,
+    "overrides_truth_spine": false,
+    "overrides_oracle": false,
+    "publishes_reports": false,
+    "bypasses_data_approval_gateway": false,
+    "bypasses_identity": false
+  },
+  "shf_impact_overlap": {
+    "overlap_found": false,
+    "shf_impact_data_spine_file": "src/data/shfImpactData.js",
+    "aggregator_imports_shf_impact_data": false,
+    "aggregator_mutates_public_approved_records": false,
+    "public_approval_still_governed_by_existing_rules": true,
+    "notes": [
+      "SHF Impact Data Spine remains the public impact data contract.",
+      "Data Aggregator only prepares and classifies intake candidates."
+    ]
+  },
+  "truth_spine_overlap": {
+    "overlap_found": false,
+    "aggregator_creates_truth_claims": false,
+    "aggregator_modifies_truth_persistence": false,
+    "aggregator_sets_verification_status": false,
+    "aggregator_sets_trust_level": false,
+    "truth_spine_remains_authority": true,
+    "notes": [
+      "Data Aggregator does not import Truth Spine write functions.",
+      "Data Aggregator only indicates eligibility/readiness for downstream review."
+    ]
+  },
+  "reports_watchtower_payloads": {
+    "reports": {
+      "field": "data_aggregator",
+      "keys": [
+        "policy_status",
+        "total_sources",
+        "pending_intake",
+        "missing_provenance",
+        "blocked_from_truth_spine",
+        "ready_for_normalization",
+        "ready_for_evidence_package",
+        "public_approval_eligible_count",
+        "note"
+      ],
+      "missing_required_fields": [],
+      "warnings": []
+    },
+    "watchtower": {
+      "field": "data_aggregator",
+      "keys": [
+        "policy_status",
+        "pending_intake",
+        "missing_provenance",
+        "blocked_from_truth_spine",
+        "ready_for_normalization",
+        "ready_for_evidence_package",
+        "flag",
+        "status"
+      ],
+      "missing_required_fields": [],
+      "warnings": [
+        "missing_provenance sample intake produces status watch"
+      ]
+    },
+    "stable_and_deterministic": true
+  },
+  "validation": {
+    "python3 -m py_compile services/shf-agent-fabric/services/data_aggregator_service.py services/shf-agent-fabric/routers/data_aggregator_routes.py scripts/check_data_aggregator_layer.py": "pass",
+    "python3 scripts/check_data_aggregator_layer.py": "pass",
+    "python3 scripts/check_master_layer_registry.py": "pass",
+    "python3 scripts/check_truth_spine_freeze.py": "pass",
+    "python3 scripts/check_oracle_layer.py": "pass",
+    "python3 scripts/check_ai_guardrails_layer.py": "pass",
+    "python3 scripts/check_game_theory_layer.py": "pass",
+    "npm run check:governance": "pass"
+  },
+  "tests": {
+    "python3 -m pytest services/shf-agent-fabric/tests/test_data_aggregator_routes.py": {
+      "status": "pass",
+      "passed": 4
+    },
+    "python3 -m pytest services/shf-agent-fabric/tests/test_truth_routes.py services/shf-agent-fabric/tests/test_oracle_routes.py services/shf-agent-fabric/tests/test_ai_guardrails_routes.py services/shf-agent-fabric/tests/test_game_theory_routes.py services/shf-agent-fabric/tests/test_agent_canon_basics.py": {
+      "status": "pass",
+      "passed": 25
+    }
+  },
+  "build": {
+    "npm run build": {
+      "status": "pass",
+      "warnings": [
+        "Vite reported existing large chunk warnings after successful build."
+      ]
+    }
+  },
+  "safe_fixes_applied": [],
+  "files_changed": [
+    "docs/DATA_AGGREGATOR_VALIDATION_VISIBILITY_AUDIT_V1.md",
+    "docs/DATA_AGGREGATOR_VALIDATION_VISIBILITY_AUDIT_V1.json"
+  ],
+  "remaining_risks": [
+    "Watchtower summary validation writes runtime audit rows to services/shf-agent-fabric/var/watchtower_audit.jsonl.",
+    "Historical backup and aggregation files remain present but were not created or modified by this audit."
+  ],
+  "v1_complete": true
+}

@@ -1,0 +1,51 @@
+{
+  "name": "Data Aggregator Layer V1",
+  "status": "formalized_v1",
+  "layer_type": "Data Operations",
+  "role": "Gather approved raw and structured inputs, attach provenance, classify intake readiness, and prepare records for normalization, evidence packaging, Truth Spine review, Watchtower visibility, Reports, and public/data approval workflows.",
+  "not_a_replacement_for": [
+    "Truth Spine",
+    "Source Registry",
+    "SHF Impact Data Spine",
+    "Verified Aggregation",
+    "Reports readiness gates"
+  ],
+  "owns": [
+    "intake collection metadata",
+    "source provenance completeness checks",
+    "intake classification",
+    "readiness signals for normalization",
+    "readiness signals for evidence packaging",
+    "summary visibility for Reports and Watchtower"
+  ],
+  "must_not_own": [
+    "claim verification",
+    "source verification",
+    "public approval",
+    "report readiness",
+    "Oracle rulings",
+    "Watchtower risk decisions",
+    "LOO ranking",
+    "SHF Impact Data Spine structures",
+    "new database authority"
+  ],
+  "source_types": [
+    "report",
+    "csv",
+    "manual",
+    "operator_record",
+    "document",
+    "api_export",
+    "unknown"
+  ],
+  "endpoints": [
+    "GET /data-aggregator/health",
+    "GET /data-aggregator/sources",
+    "GET /data-aggregator/intake-queue",
+    "GET /data-aggregator/summary",
+    "POST /data-aggregator/classify"
+  ],
+  "truth_spine_requirement": "Claim-like data must be sent to Truth Spine with source/provenance metadata; missing-source or missing-provenance inputs remain blocked or draft.",
+  "public_approval_rule": "Data Aggregator cannot public-approve data or mark it report-ready.",
+  "persistence": "none_v1"
+}

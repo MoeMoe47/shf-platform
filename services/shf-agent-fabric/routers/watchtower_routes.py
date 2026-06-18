@@ -6,6 +6,7 @@ from fastapi import APIRouter, Body
 from fabric.watchtower.aggregator import build_watchtower_summary, build_watchtower_program_rows
 from fabric.watchtower.store import set_quarantine, clear_quarantine, get_quarantine_map, get_risk_history
 from services.ai_guardrails_service import ai_guardrails_summary
+from services.data_aggregator_service import data_aggregator_summary
 from services.game_theory_service import game_theory_summary
 from services.oracle_service import oracle_summary
 from services.truth_spine_service import truth_summary
@@ -20,6 +21,7 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
     oracle = oracle_summary()
     ai_guardrails = ai_guardrails_summary()
     game_theory = game_theory_summary()
+    data_aggregator = data_aggregator_summary()
     if isinstance(summary, dict):
         summary["truth_coverage"] = {
             "coverage_percent": truth["coverage_percent"],
@@ -29,6 +31,16 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
             "low_trace_coverage_count": truth["low_trace_coverage_count"],
             "flag": truth["coverage_percent"] < 80,
             "status": "watch" if truth["coverage_percent"] < 80 else "covered",
+        }
+        summary["data_aggregator"] = {
+            "policy_status": data_aggregator["policy_status"],
+            "pending_intake": data_aggregator["pending_intake"],
+            "missing_provenance": data_aggregator["missing_provenance"],
+            "blocked_from_truth_spine": data_aggregator["blocked_from_truth_spine"],
+            "ready_for_normalization": data_aggregator["ready_for_normalization"],
+            "ready_for_evidence_package": data_aggregator["ready_for_evidence_package"],
+            "flag": data_aggregator["missing_provenance"] > 0 or data_aggregator["blocked_from_truth_spine"] > 0,
+            "status": "watch" if data_aggregator["missing_provenance"] > 0 or data_aggregator["blocked_from_truth_spine"] > 0 else "ready",
         }
         summary["oracle"] = {
             "cases_total": oracle["cases_total"],

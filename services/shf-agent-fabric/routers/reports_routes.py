@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from datetime import datetime
 
 from services.ai_guardrails_service import ai_guardrails_summary
+from services.data_aggregator_service import data_aggregator_summary
 from services.game_theory_service import game_theory_summary
 from services.oracle_service import oracle_summary
 from services.truth_spine_service import truth_summary
@@ -14,6 +15,7 @@ def snapshot():
     oracle = oracle_summary()
     ai_guardrails = ai_guardrails_summary()
     game_theory = game_theory_summary()
+    data_aggregator = data_aggregator_summary()
     return {
         "ts": datetime.utcnow().isoformat(),
         "usage": {"requests": 0, "users": 0, "apps": 0},
@@ -28,6 +30,17 @@ def snapshot():
             "public_approved_count": truth["public_approved_count"],
             "coverage_percent": truth["coverage_percent"],
             "status": "ready" if truth["report_ready_count"] else "needs_truth_coverage",
+        },
+        "data_aggregator": {
+            "policy_status": data_aggregator["policy_status"],
+            "total_sources": data_aggregator["total_sources"],
+            "pending_intake": data_aggregator["pending_intake"],
+            "missing_provenance": data_aggregator["missing_provenance"],
+            "blocked_from_truth_spine": data_aggregator["blocked_from_truth_spine"],
+            "ready_for_normalization": data_aggregator["ready_for_normalization"],
+            "ready_for_evidence_package": data_aggregator["ready_for_evidence_package"],
+            "public_approval_eligible_count": data_aggregator["public_approval_eligible_count"],
+            "note": "Data Aggregator is intake context only; Truth Spine controls verification, public approval, and report readiness.",
         },
         "oracle": {
             "cases_total": oracle["cases_total"],

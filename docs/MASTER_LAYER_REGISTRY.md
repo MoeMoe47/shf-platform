@@ -18,6 +18,7 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 | API Gateway | Platform | Routes API traffic and applies shared request policy. |
 | Event/Webhook | Platform | Receives and emits event signals from apps, partners, and systems. |
 | Batch/Import | Data Operations | Handles file imports, bulk uploads, and scheduled ingest. |
+| Data Aggregator Layer | Data Operations | Gathers approved raw/structured inputs, attaches provenance, and prepares intake for normalization, evidence packaging, and Truth Spine review. |
 | Warehouse Sync | Data Operations | Moves normalized data into durable reporting and analysis stores. |
 | Apps/Programs | Product | Produces operational signals and user workflows. |
 | Adapter Layer | Platform | Converts app/program data into canonical SHS contracts. |
@@ -102,6 +103,16 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 - Downstream: Adapter Layer, Warehouse Sync, Truth Spine
 - Truth Spine Requirement: Imported claims must include sources or enter Truth Spine as missing_source or draft.
 - Enforcement Status: Required
+
+### Data Aggregator Layer
+
+- Layer Type: Data Operations
+- Owns: Intake collection, source/provenance metadata capture, intake classification, aggregation readiness, and routing eligible inputs toward Data Normalization, Evidence Package, Truth Spine, Reports, Watchtower, and SHF Impact Data Spine.
+- Must Not Own: Truth verification, Source Registry authority, canonical normalization, public approval, report publication, Oracle rulings, Watchtower risk decisions, LOO ranking, or SHF Impact Data Spine structures.
+- Upstream: Batch/Import, Event/Webhook, Apps/Programs, Partner/Institution, SHF Impact Data Spine
+- Downstream: Adapter Layer, Warehouse Sync, Truth Spine, Reports, Watchtower, SHF Impact Data Spine
+- Truth Spine Requirement: Must send claim-like data to Truth Spine with source/provenance metadata and must mark missing-source/provenance inputs as blocked or draft; cannot verify, public-approve, or mark report-ready.
+- Enforcement Status: Formalized V1
 
 ### Warehouse Sync
 

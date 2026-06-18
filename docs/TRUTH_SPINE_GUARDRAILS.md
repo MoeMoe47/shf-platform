@@ -122,6 +122,14 @@ Client/project facts must be treated as internal or draft until Truth Spine eval
 
 ClientOps may register local systems and submit claims/sources, but client/project facts remain internal unless Truth Spine marks the claim report-ready and public-approved where public communication is intended.
 
+## Data Aggregator
+
+Data Aggregator gathers and classifies raw or structured intake. It may prepare records for normalization, evidence packaging, Truth Spine review, Watchtower visibility, Reports, and SHF Impact Data Spine workflows.
+
+Data Aggregator must not verify claims, verify sources, public-approve data, mark report readiness, create a duplicate Source Registry, or replace SHF Impact Data Spine structures.
+
+Inputs without source/provenance metadata must remain blocked or draft before Truth Spine. Data Aggregator status is intake context only; Truth Spine remains the authority for verified, public-approved, and report-ready facts.
+
 ## Backend First
 
 Truth Spine V1 lives in Agent Fabric first:

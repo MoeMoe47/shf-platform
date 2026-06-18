@@ -1,0 +1,124 @@
+{
+  "layer_name": "Data Approval Layer V1",
+  "is_new_layer": false,
+  "role": "Evaluates approval readiness after Truth Spine, Oracle, and Data Verification without becoming a truth authority or mutating public data.",
+  "position": "Truth Spine / Oracle / Data Verification -> Data Approval -> Data Approval Gateway -> SHF Impact Data Spine",
+  "owner": "Data Operations / Governance approval preparation layer",
+  "dependencies": {
+    "upstream": [
+      "Truth Spine",
+      "Oracle Layer",
+      "Data Verification Layer",
+      "Evidence Package"
+    ],
+    "downstream": [
+      "Data Approval Gateway",
+      "SHF Impact Data Spine",
+      "Reports",
+      "Watchtower",
+      "LOO",
+      "Public Impact Map"
+    ]
+  },
+  "boundaries": {
+    "does": [
+      "accept approval candidate records",
+      "inspect Truth Spine status",
+      "inspect Oracle supportability",
+      "inspect Data Verification readiness",
+      "inspect evidence and provenance presence",
+      "assign approval_state",
+      "produce readiness score",
+      "identify blockers",
+      "identify warnings",
+      "recommend next approval action",
+      "prepare records for Data Approval Gateway review"
+    ],
+    "does_not": [
+      "verify truth",
+      "create Truth Spine claims",
+      "override Truth Spine",
+      "override Oracle",
+      "mutate SHF Impact Data Spine",
+      "publish reports",
+      "create final public-approved records",
+      "bypass human review",
+      "bypass Data Approval Gateway",
+      "bypass Identity",
+      "replace Data Approval Gateway",
+      "replace SHF Impact Data Spine"
+    ]
+  },
+  "canonical_approval_model": {
+    "approval_id": "",
+    "candidate_id": "",
+    "canonical_type": "",
+    "approval_state": "blocked|needs_review|gateway_ready|public_ready_candidate",
+    "readiness_score": 0,
+    "truth_spine_status": "",
+    "oracle_supportability": "",
+    "data_verification_status": "",
+    "warnings": [],
+    "blockers": [],
+    "recommended_action": "",
+    "ready_for_data_approval_gateway": false,
+    "ready_for_public_approval": false,
+    "public_approved": false,
+    "mutated_public_data": false
+  },
+  "endpoints": [
+    "GET /data-approval/health",
+    "GET /data-approval/schema",
+    "GET /data-approval/summary",
+    "POST /data-approval/evaluate",
+    "POST /data-approval/batch-evaluate",
+    "GET /data-approval/readiness"
+  ],
+  "reports_integration": {
+    "field": "data_approval",
+    "summary_only": true
+  },
+  "watchtower_integration": {
+    "field": "data_approval",
+    "observation_only": true
+  },
+  "registry_status": {
+    "registered": true,
+    "enforcement_status": "Formalized V1"
+  },
+  "validation": {
+    "status": "pass",
+    "commands": {
+      "py_compile": "pass",
+      "check_data_approval_layer": "pass",
+      "check_data_verification_layer": "pass",
+      "check_evidence_package_layer": "pass",
+      "check_data_normalization_layer": "pass",
+      "check_data_aggregator_layer": "pass",
+      "check_master_layer_registry": "pass",
+      "check_truth_spine_freeze": "pass",
+      "check_oracle_layer": "pass",
+      "check_ai_guardrails_layer": "pass",
+      "check_game_theory_layer": "pass",
+      "check_governance": "pass",
+      "pytest_data_approval_routes": "7 passed",
+      "pytest_adjacent_routes": "31 passed",
+      "npm_build": "pass"
+    },
+    "api_smoke": {
+      "GET /data-approval/health": "pass",
+      "GET /data-approval/schema": "pass",
+      "GET /data-approval/summary": "pass",
+      "POST /data-approval/evaluate": "pass",
+      "POST /data-approval/batch-evaluate": "pass",
+      "GET /data-approval/readiness": "pass",
+      "GET /reports/snapshot": "pass",
+      "GET /watchtower/summary": "pass"
+    }
+  },
+  "remaining_risks": [
+    "V1 has no production persistence.",
+    "Future Data Approval Gateway workflow must preserve recommendation-only boundary."
+  ],
+  "v1_complete": true
+}

@@ -148,6 +148,12 @@ Data Verification may evaluate Evidence Package readiness, inspect source/proven
 
 Data Verification may not verify truth, write Truth Spine claims, approve public data, mark records public-approved, override Truth Spine decisions, override Oracle rulings, mutate SHF Impact Data Spine, or publish reports.
 
+## Data Approval
+
+Data Approval may evaluate approval readiness from Truth Spine status, Oracle supportability, Data Verification status, evidence presence, and provenance presence.
+
+Data Approval may not verify truth, override Truth Spine, override Oracle, mutate SHF Impact Data Spine, publish public-approved records without Data Approval Gateway and human approval, bypass Identity, or replace the Data Approval Gateway.
+
 ## Backend First
 
 Truth Spine V1 lives in Agent Fabric first:

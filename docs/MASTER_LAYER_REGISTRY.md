@@ -22,6 +22,7 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 | Data Normalization Layer | Data Operations | Converts aggregated intake into canonical preview shapes before Evidence Package, Truth Spine, Reports, Watchtower, LOO, or SHF Impact Data Spine consume it. |
 | Evidence Package Layer | Data Operations | Bundles normalized records with source metadata, provenance, and evidence references before Truth Spine review. |
 | Data Verification Layer | Data Operations | Evaluates Evidence Package readiness, source/provenance quality, blockers, warnings, and next review action before Truth Spine review. |
+| Data Approval Layer | Data Operations | Evaluates approval readiness after Truth Spine, Oracle, and Data Verification before Data Approval Gateway review. |
 | Warehouse Sync | Data Operations | Moves normalized data into durable reporting and analysis stores. |
 | Apps/Programs | Product | Produces operational signals and user workflows. |
 | Adapter Layer | Platform | Converts app/program data into canonical SHS contracts. |
@@ -145,6 +146,16 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 - Upstream: Evidence Package Layer, Data Normalization Layer, Data Aggregator Layer, Source Registry
 - Downstream: Truth Spine, Oracle Layer, Reports, Watchtower, LOO, Data Approval Gateway, SHF Impact Data Spine
 - Truth Spine Requirement: May evaluate readiness for Truth Spine but cannot verify truth, write Truth Spine claims, public-approve records, or override Truth Spine decisions.
+- Enforcement Status: Formalized V1
+
+### Data Approval Layer
+
+- Layer Type: Data Operations
+- Owns: Approval candidate evaluation, Truth Spine status inspection, Oracle supportability inspection, Data Verification status inspection, evidence/provenance presence checks, approval readiness scoring, blockers, warnings, recommended approval action, and preparation for Data Approval Gateway review.
+- Must Not Own: Truth verification, Truth Spine claim creation, Truth Spine persistence, Oracle rulings, SHF Impact Data Spine mutation, public report publishing, final public approval, human review replacement, Data Approval Gateway replacement, or Identity bypasses.
+- Upstream: Truth Spine, Oracle Layer, Data Verification Layer, Evidence Package Layer
+- Downstream: Data Approval Gateway, SHF Impact Data Spine, Reports, Watchtower, LOO, Public Impact Map
+- Truth Spine Requirement: May evaluate approval readiness from Truth Spine metadata but cannot verify truth, override Truth Spine, mark records public-approved, or mutate public impact data.
 - Enforcement Status: Formalized V1
 
 ### Warehouse Sync

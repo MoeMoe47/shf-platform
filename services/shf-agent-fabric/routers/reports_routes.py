@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from datetime import datetime
 
 from services.ai_guardrails_service import ai_guardrails_summary
+from services.data_approval_service import data_approval_summary
 from services.data_aggregator_service import data_aggregator_summary
 from services.data_normalization_service import data_normalization_summary
 from services.data_verification_service import data_verification_summary
@@ -22,6 +23,7 @@ def snapshot():
     data_normalization = data_normalization_summary()
     evidence_package = evidence_package_summary()
     data_verification = data_verification_summary()
+    data_approval = data_approval_summary()
     return {
         "ts": datetime.utcnow().isoformat(),
         "usage": {"requests": 0, "users": 0, "apps": 0},
@@ -79,6 +81,19 @@ def snapshot():
             "public_approval_ready": data_verification["public_approval_ready"],
             "verifies_truth": data_verification["verifies_truth"],
             "note": "Data Verification evaluates readiness only; Truth Spine remains the verification authority.",
+        },
+        "data_approval": {
+            "policy_status": data_approval["policy_status"],
+            "total_candidates": data_approval["total_candidates"],
+            "blocked": data_approval["blocked"],
+            "needs_review": data_approval["needs_review"],
+            "gateway_ready": data_approval["gateway_ready"],
+            "public_ready_candidates": data_approval["public_ready_candidates"],
+            "public_approved_count": data_approval["public_approved_count"],
+            "mutated_public_data_count": data_approval["mutated_public_data_count"],
+            "approves_public_data": data_approval["approves_public_data"],
+            "requires_gateway_review": data_approval["requires_gateway_review"],
+            "note": "Data Approval evaluates approval readiness only; Data Approval Gateway and human review remain required for public approval.",
         },
         "oracle": {
             "cases_total": oracle["cases_total"],

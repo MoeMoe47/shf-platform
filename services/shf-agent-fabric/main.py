@@ -86,6 +86,7 @@ from routers.data_aggregator_routes import router as data_aggregator_router  # n
 from routers.data_normalization_routes import router as data_normalization_router  # noqa: E402
 from routers.evidence_package_routes import router as evidence_package_router  # noqa: E402
 from routers.data_verification_routes import router as data_verification_router  # noqa: E402
+from routers.data_approval_routes import router as data_approval_router  # noqa: E402
 from routers.truth_routes import router as truth_router  # noqa: E402
 from routers.oracle_routes import router as oracle_router  # noqa: E402
 from routers.ai_guardrails_routes import router as ai_guardrails_router  # noqa: E402
@@ -444,6 +445,7 @@ app.include_router(data_aggregator_router)
 app.include_router(data_normalization_router)
 app.include_router(evidence_package_router)
 app.include_router(data_verification_router)
+app.include_router(data_approval_router)
 app.include_router(truth_router)
 app.include_router(oracle_router)
 app.include_router(ai_guardrails_router)

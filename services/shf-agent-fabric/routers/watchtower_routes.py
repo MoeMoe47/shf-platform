@@ -6,6 +6,7 @@ from fastapi import APIRouter, Body
 from fabric.watchtower.aggregator import build_watchtower_summary, build_watchtower_program_rows
 from fabric.watchtower.store import set_quarantine, clear_quarantine, get_quarantine_map, get_risk_history
 from services.ai_guardrails_service import ai_guardrails_summary
+from services.data_approval_service import data_approval_summary
 from services.data_aggregator_service import data_aggregator_summary
 from services.data_normalization_service import data_normalization_summary
 from services.data_verification_service import data_verification_summary
@@ -28,6 +29,7 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
     data_normalization = data_normalization_summary()
     evidence_package = evidence_package_summary()
     data_verification = data_verification_summary()
+    data_approval = data_approval_summary()
     if isinstance(summary, dict):
         summary["truth_coverage"] = {
             "coverage_percent": truth["coverage_percent"],
@@ -79,6 +81,19 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
             "verifies_truth": data_verification["verifies_truth"],
             "flag": data_verification["blocked"] > 0 or data_verification["needs_review"] > 0,
             "status": "watch" if data_verification["blocked"] > 0 or data_verification["needs_review"] > 0 else "ready",
+        }
+        summary["data_approval"] = {
+            "policy_status": data_approval["policy_status"],
+            "blocked": data_approval["blocked"],
+            "needs_review": data_approval["needs_review"],
+            "gateway_ready": data_approval["gateway_ready"],
+            "public_ready_candidates": data_approval["public_ready_candidates"],
+            "public_approved_count": data_approval["public_approved_count"],
+            "mutated_public_data_count": data_approval["mutated_public_data_count"],
+            "approves_public_data": data_approval["approves_public_data"],
+            "requires_gateway_review": data_approval["requires_gateway_review"],
+            "flag": data_approval["blocked"] > 0 or data_approval["needs_review"] > 0,
+            "status": "watch" if data_approval["blocked"] > 0 or data_approval["needs_review"] > 0 else "ready",
         }
         summary["oracle"] = {
             "cases_total": oracle["cases_total"],

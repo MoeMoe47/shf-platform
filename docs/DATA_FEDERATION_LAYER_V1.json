@@ -1,0 +1,131 @@
+{
+  "layer_name": "Data Federation Layer V1",
+  "is_new_layer": false,
+  "role": "Coordinates source groups between Source Registry and Data Aggregator without verifying truth or approving public data.",
+  "position": "Source Registry -> Data Federation -> Data Aggregator",
+  "owner": "Data Operations / Federation preparation layer",
+  "dependencies": {
+    "upstream": [
+      "Source Registry",
+      "Batch/Import",
+      "Partner/Institution",
+      "Apps/Programs"
+    ],
+    "downstream": [
+      "Data Aggregator",
+      "Data Normalization",
+      "Evidence Package",
+      "Data Verification",
+      "Truth Spine",
+      "Oracle",
+      "Data Approval",
+      "Reports",
+      "Watchtower",
+      "LOO",
+      "Data Approval Gateway",
+      "SHF Impact Data Spine"
+    ]
+  },
+  "boundaries": {
+    "does": [
+      "accept source registry-style source records",
+      "group related sources into federation sets",
+      "evaluate source compatibility",
+      "evaluate cross-source provenance completeness",
+      "detect source conflicts",
+      "detect missing lineage",
+      "detect source trust-tier mismatches",
+      "produce federation readiness",
+      "route eligible source groups toward Data Aggregator"
+    ],
+    "does_not": [
+      "verify truth",
+      "approve public data",
+      "mutate SHF Impact Data Spine",
+      "create verified claims",
+      "override Oracle",
+      "publish reports",
+      "replace Source Registry",
+      "replace Data Aggregator",
+      "bypass Evidence Package",
+      "bypass Truth Spine",
+      "act as final source of truth for claims"
+    ]
+  },
+  "canonical_federation_model": {
+    "federation_id": "",
+    "federation_name": "",
+    "canonical_type": "",
+    "sources": [],
+    "source_count": 0,
+    "source_types": [],
+    "trust_tiers": [],
+    "lineage": {},
+    "conflicts": [],
+    "warnings": [],
+    "blockers": [],
+    "federation_status": "blocked|needs_review|aggregator_ready",
+    "ready_for_aggregator": false,
+    "ready_for_truth_spine": false,
+    "ready_for_public_approval": false,
+    "truth_verified": false,
+    "public_approved": false
+  },
+  "endpoints": [
+    "GET /data-federation/health",
+    "GET /data-federation/schema",
+    "GET /data-federation/summary",
+    "POST /data-federation/evaluate",
+    "POST /data-federation/batch-evaluate",
+    "GET /data-federation/readiness"
+  ],
+  "reports_integration": {
+    "field": "data_federation",
+    "summary_only": true
+  },
+  "watchtower_integration": {
+    "field": "data_federation",
+    "observation_only": true
+  },
+  "registry_status": {
+    "registered": true,
+    "enforcement_status": "Formalized V1"
+  },
+  "validation": {
+    "status": "pass",
+    "commands": {
+      "py_compile": "pass",
+      "check_data_federation_layer": "pass",
+      "check_source_registry_layer": "pass",
+      "check_data_aggregator_layer": "pass",
+      "check_data_normalization_layer": "pass",
+      "check_evidence_package_layer": "pass",
+      "check_data_verification_layer": "pass",
+      "check_data_approval_layer": "pass",
+      "check_master_layer_registry": "pass",
+      "check_truth_spine_freeze": "pass",
+      "check_oracle_layer": "pass",
+      "check_ai_guardrails_layer": "pass",
+      "check_game_theory_layer": "pass",
+      "check_governance": "pass",
+      "pytest_data_federation_routes": "7 passed",
+      "pytest_adjacent_routes": "45 passed",
+      "npm_build": "pass"
+    },
+    "api_smoke": {
+      "GET /data-federation/health": "pass",
+      "GET /data-federation/schema": "pass",
+      "GET /data-federation/summary": "pass",
+      "POST /data-federation/evaluate": "pass",
+      "POST /data-federation/batch-evaluate": "pass",
+      "GET /data-federation/readiness": "pass",
+      "GET /reports/snapshot": "pass",
+      "GET /watchtower/summary": "pass"
+    }
+  },
+  "remaining_risks": [
+    "V1 has no production persistence.",
+    "Future federation workflows must preserve route-to-aggregator boundaries."
+  ],
+  "v1_complete": true
+}

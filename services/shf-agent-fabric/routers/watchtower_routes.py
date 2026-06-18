@@ -8,6 +8,7 @@ from fabric.watchtower.store import set_quarantine, clear_quarantine, get_quaran
 from services.ai_guardrails_service import ai_guardrails_summary
 from services.data_approval_service import data_approval_summary
 from services.data_aggregator_service import data_aggregator_summary
+from services.data_federation_service import data_federation_summary
 from services.data_normalization_service import data_normalization_summary
 from services.data_verification_service import data_verification_summary
 from services.evidence_package_service import evidence_package_summary
@@ -25,6 +26,7 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
     truth = truth_summary()
     oracle = oracle_summary()
     source_registry = source_registry_summary()
+    data_federation = data_federation_summary()
     ai_guardrails = ai_guardrails_summary()
     game_theory = game_theory_summary()
     data_aggregator = data_aggregator_summary()
@@ -58,6 +60,19 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
             "status": "watch"
             if source_registry["blocked_sources"] > 0 or source_registry["unknown_sources"] > 0
             else "ready",
+        }
+        summary["data_federation"] = {
+            "policy_status": data_federation["policy_status"],
+            "blocked": data_federation["blocked"],
+            "needs_review": data_federation["needs_review"],
+            "aggregator_ready": data_federation["aggregator_ready"],
+            "truth_spine_ready": data_federation["truth_spine_ready"],
+            "public_approval_ready": data_federation["public_approval_ready"],
+            "truth_verified_count": data_federation["truth_verified_count"],
+            "public_approved_count": data_federation["public_approved_count"],
+            "verifies_truth": data_federation["verifies_truth"],
+            "flag": data_federation["blocked"] > 0 or data_federation["needs_review"] > 0,
+            "status": "watch" if data_federation["blocked"] > 0 or data_federation["needs_review"] > 0 else "ready",
         }
         summary["data_aggregator"] = {
             "policy_status": data_aggregator["policy_status"],

@@ -4,6 +4,7 @@ from datetime import datetime
 from services.ai_guardrails_service import ai_guardrails_summary
 from services.data_approval_service import data_approval_summary
 from services.data_aggregator_service import data_aggregator_summary
+from services.data_federation_service import data_federation_summary
 from services.data_normalization_service import data_normalization_summary
 from services.data_verification_service import data_verification_summary
 from services.evidence_package_service import evidence_package_summary
@@ -19,6 +20,7 @@ def snapshot():
     truth = truth_summary()
     oracle = oracle_summary()
     source_registry = source_registry_summary()
+    data_federation = data_federation_summary()
     ai_guardrails = ai_guardrails_summary()
     game_theory = game_theory_summary()
     data_aggregator = data_aggregator_summary()
@@ -55,6 +57,19 @@ def snapshot():
             "public_approved_count": source_registry["public_approved_count"],
             "verifies_truth": source_registry["verifies_truth"],
             "note": "Source Registry evaluates source identity and downstream eligibility only; Truth Spine controls verification and public approval.",
+        },
+        "data_federation": {
+            "policy_status": data_federation["policy_status"],
+            "total_federation_sets": data_federation["total_federation_sets"],
+            "blocked": data_federation["blocked"],
+            "needs_review": data_federation["needs_review"],
+            "aggregator_ready": data_federation["aggregator_ready"],
+            "truth_spine_ready": data_federation["truth_spine_ready"],
+            "public_approval_ready": data_federation["public_approval_ready"],
+            "truth_verified_count": data_federation["truth_verified_count"],
+            "public_approved_count": data_federation["public_approved_count"],
+            "verifies_truth": data_federation["verifies_truth"],
+            "note": "Data Federation groups sources for Data Aggregator only; it does not verify truth or approve public data.",
         },
         "data_aggregator": {
             "policy_status": data_aggregator["policy_status"],

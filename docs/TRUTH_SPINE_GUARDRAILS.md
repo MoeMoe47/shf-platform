@@ -136,6 +136,12 @@ Source Registry may evaluate source identity, source type, provenance completene
 
 Source Registry may not verify truth, write Truth Spine claims, approve public data, mark records public-approved, override Truth Spine decisions, override Oracle rulings, mutate SHF Impact Data Spine, publish reports, bypass Data Aggregator, bypass Evidence Package, or replace Data Approval Gateway.
 
+## Data Federation
+
+Data Federation may group Source Registry-style records, evaluate source compatibility, identify lineage gaps and source conflicts, and route eligible source groups toward Data Aggregator.
+
+Data Federation may not verify truth, write Truth Spine claims, approve public data, mark records public-approved, override Truth Spine decisions, override Oracle rulings, mutate SHF Impact Data Spine, publish reports, replace Source Registry, replace Data Aggregator, or bypass Evidence Package.
+
 ## Data Normalization
 
 Data Normalization can prepare canonical shapes, normalize field aliases, preserve provenance, and flag readiness for Evidence Package or Truth Spine review.

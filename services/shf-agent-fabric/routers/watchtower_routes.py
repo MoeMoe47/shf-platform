@@ -5,6 +5,7 @@ from fastapi import APIRouter, Body
 
 from fabric.watchtower.aggregator import build_watchtower_summary, build_watchtower_program_rows
 from fabric.watchtower.store import set_quarantine, clear_quarantine, get_quarantine_map, get_risk_history
+from services.audit_verification_service import audit_verification_summary
 from services.ai_guardrails_service import ai_guardrails_summary
 from services.data_approval_service import data_approval_summary
 from services.data_aggregator_service import data_aggregator_summary
@@ -34,6 +35,7 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
     evidence_package = evidence_package_summary()
     data_verification = data_verification_summary()
     data_approval = data_approval_summary()
+    audit_verification = audit_verification_summary()
     if isinstance(summary, dict):
         summary["truth_coverage"] = {
             "coverage_percent": truth["coverage_percent"],
@@ -128,6 +130,21 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
             "requires_gateway_review": data_approval["requires_gateway_review"],
             "flag": data_approval["blocked"] > 0 or data_approval["needs_review"] > 0,
             "status": "watch" if data_approval["blocked"] > 0 or data_approval["needs_review"] > 0 else "ready",
+        }
+        summary["audit_verification"] = {
+            "policy_status": audit_verification["policy_status"],
+            "blocked": audit_verification["blocked"],
+            "needs_review": audit_verification["needs_review"],
+            "audit_ready": audit_verification["audit_ready"],
+            "trace_ready": audit_verification["trace_ready"],
+            "replay_ready": audit_verification["replay_ready"],
+            "truth_verified_count": audit_verification["truth_verified_count"],
+            "public_approved_count": audit_verification["public_approved_count"],
+            "verifies_truth": audit_verification["verifies_truth"],
+            "flag": audit_verification["blocked"] > 0 or audit_verification["needs_review"] > 0,
+            "status": "watch"
+            if audit_verification["blocked"] > 0 or audit_verification["needs_review"] > 0
+            else "ready",
         }
         summary["oracle"] = {
             "cases_total": oracle["cases_total"],

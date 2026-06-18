@@ -166,6 +166,12 @@ Data Approval may evaluate approval readiness from Truth Spine status, Oracle su
 
 Data Approval may not verify truth, override Truth Spine, override Oracle, mutate SHF Impact Data Spine, publish public-approved records without Data Approval Gateway and human approval, bypass Identity, or replace the Data Approval Gateway.
 
+## Audit & Verification
+
+Audit & Verification may evaluate audit completeness, traceability, replay readiness, missing trace fields, provenance and evidence references, before/after decision records, and layer/event coverage.
+
+Audit & Verification may not verify truth, write Truth Spine claims, approve public data, mark records public-approved, override Truth Spine decisions, override Oracle rulings, mutate SHF Impact Data Spine, publish reports, replace Watchtower, replace Reports, or replace Agent Fabric event ledger.
+
 ## Backend First
 
 Truth Spine V1 lives in Agent Fabric first:

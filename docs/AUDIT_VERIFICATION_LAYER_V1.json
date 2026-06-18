@@ -1,0 +1,152 @@
+{
+  "layer_name": "Audit & Verification Layer V1",
+  "is_new_layer": false,
+  "role": "Evaluates audit completeness, traceability, and replay readiness without becoming a truth authority or public approval system.",
+  "position": "Data approval and governance chain events -> Audit & Verification -> Reports / Watchtower / Self-Audit / Governance Binder / Replay Engine / Signed Manifest",
+  "owner": "Governance assurance / audit completeness layer",
+  "dependencies": {
+    "upstream": [
+      "Source Registry",
+      "Data Federation",
+      "Data Aggregator",
+      "Data Normalization",
+      "Evidence Package",
+      "Data Verification",
+      "Truth Spine",
+      "Oracle Layer",
+      "Data Approval Layer",
+      "Reports",
+      "Watchtower",
+      "Agent Fabric"
+    ],
+    "downstream": [
+      "Reports",
+      "Watchtower",
+      "Self-Audit",
+      "Governance Binder",
+      "Replay Engine",
+      "Signed Manifest"
+    ]
+  },
+  "boundaries": {
+    "does": [
+      "evaluate audit completeness",
+      "classify audit event type and owning layer",
+      "inspect source and evidence references",
+      "inspect provenance fields",
+      "inspect before and after decision records",
+      "calculate completeness score",
+      "identify missing trace fields",
+      "produce coverage by layer summaries",
+      "report trace readiness",
+      "report replay readiness"
+    ],
+    "does_not": [
+      "verify truth",
+      "create Truth Spine claims",
+      "approve public data",
+      "mark records public-approved",
+      "override Truth Spine",
+      "override Oracle",
+      "mutate SHF Impact Data Spine",
+      "publish reports",
+      "replace Watchtower",
+      "replace Reports",
+      "replace Agent Fabric event ledger",
+      "create production persistence"
+    ]
+  },
+  "canonical_audit_event_model": {
+    "event_id": "",
+    "event_type": "",
+    "layer": "",
+    "actor": "",
+    "subject_id": "",
+    "input_ref": "",
+    "output_ref": "",
+    "source_refs": [],
+    "evidence_refs": [],
+    "provenance": {},
+    "decision_before": "",
+    "decision_after": "",
+    "timestamp": "",
+    "warnings": [],
+    "blockers": [],
+    "audit_complete": false,
+    "truth_verified": false,
+    "public_approved": false
+  },
+  "canonical_audit_result_model": {
+    "audit_id": "",
+    "event_id": "",
+    "layer": "",
+    "event_type": "",
+    "audit_status": "blocked|needs_review|audit_ready",
+    "completeness_score": 0,
+    "missing_fields": [],
+    "warnings": [],
+    "blockers": [],
+    "trace_ready": false,
+    "replay_ready": false,
+    "truth_verified": false,
+    "public_approved": false
+  },
+  "endpoints": [
+    "GET /audit-verification/health",
+    "GET /audit-verification/schema",
+    "GET /audit-verification/summary",
+    "POST /audit-verification/evaluate",
+    "POST /audit-verification/batch-evaluate",
+    "GET /audit-verification/readiness"
+  ],
+  "reports_integration": {
+    "field": "audit_verification",
+    "summary_only": true
+  },
+  "watchtower_integration": {
+    "field": "audit_verification",
+    "observation_only": true
+  },
+  "registry_status": {
+    "registered": true,
+    "enforcement_status": "Formalized V1"
+  },
+  "validation": {
+    "status": "pass",
+    "commands": {
+      "py_compile": "pass",
+      "check_audit_verification_layer": "pass",
+      "check_source_registry_layer": "pass",
+      "check_data_federation_layer": "pass",
+      "check_data_aggregator_layer": "pass",
+      "check_data_normalization_layer": "pass",
+      "check_evidence_package_layer": "pass",
+      "check_data_verification_layer": "pass",
+      "check_data_approval_layer": "pass",
+      "check_master_layer_registry": "pass",
+      "check_truth_spine_freeze": "pass",
+      "check_oracle_layer": "pass",
+      "check_ai_guardrails_layer": "pass",
+      "check_game_theory_layer": "pass",
+      "check_governance": "pass",
+      "pytest_audit_verification_routes": "pass",
+      "pytest_adjacent_routes": "pass",
+      "npm_build": "pass"
+    },
+    "api_smoke": {
+      "GET /audit-verification/health": "pass",
+      "GET /audit-verification/schema": "pass",
+      "GET /audit-verification/summary": "pass",
+      "POST /audit-verification/evaluate": "pass",
+      "POST /audit-verification/batch-evaluate": "pass",
+      "GET /audit-verification/readiness": "pass",
+      "GET /reports/snapshot": "pass",
+      "GET /watchtower/summary": "pass"
+    }
+  },
+  "remaining_risks": [
+    "V1 has no production persistence.",
+    "Future Replay Engine and Signed Manifest work must preserve the audit-only boundary."
+  ],
+  "v1_complete": true
+}

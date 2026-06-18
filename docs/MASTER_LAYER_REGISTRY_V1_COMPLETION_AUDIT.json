@@ -1,0 +1,1765 @@
+{
+  "audit_name": "Master Layer Registry V1 Completion Audit",
+  "required_layer_count": 52,
+  "registry_checker_required_count": 45,
+  "registry_count_note": "Official Layers table contains 52 rows; check_master_layer_registry.py currently checks 45 older required layers.",
+  "status_counts": {
+    "complete_v1": 15,
+    "mostly_complete": 17,
+    "scaffolded_v1": 0,
+    "partial": 8,
+    "needs_formal_v1": 12,
+    "duplicate_or_merge_required": 0,
+    "not_started": 0,
+    "owner_decision_required": 0
+  },
+  "layers": [
+    {
+      "layer_name": "Identity & Access",
+      "status": "COMPLETE_V1",
+      "owner_domain": "Security",
+      "docs": [
+        "docs/CROSS_APP_IDENTITY_BRIDGE_DESIGN_V1.json",
+        "docs/CROSS_APP_IDENTITY_BRIDGE_DESIGN_V1.md",
+        "docs/CROSS_APP_IDENTITY_BRIDGE_RUNTIME_VERIFICATION_V1.json",
+        "docs/CROSS_APP_IDENTITY_BRIDGE_RUNTIME_VERIFICATION_V1.md",
+        "docs/CROSS_APP_IDENTITY_BRIDGE_V1.json",
+        "docs/CROSS_APP_IDENTITY_BRIDGE_V1.md",
+        "docs/IDENTITY_LAYER_SPINE_INTEGRATION_AUDIT_V1.json",
+        "docs/IDENTITY_LAYER_SPINE_INTEGRATION_AUDIT_V1.md"
+      ],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [
+        "src/pages/admin/identity/IdentityManagement.jsx",
+        "src/pages/admin/identity/IdentityManagement.jsx.bak_20260423_224230",
+        "src/pages/admin/identity/IdentityManagement.jsx.bak_20260423_224516",
+        "src/pages/admin/identity/IdentityManagement.jsx.bak_20260424_092057",
+        "src/pages/admin/identity/IdentityManagement.jsx.bak_20260424_094021",
+        "src/pages/admin/identity/IdentityManagement.jsx.bak_20260424_094334",
+        "src/pages/admin/identity/IdentityManagement.jsx.bak_20260424_113525",
+        "src/pages/admin/identity/IdentityManagement.jsx.bak_20260424_114723"
+      ],
+      "reports_visibility": true,
+      "watchtower_visibility": false,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [
+        "docs/CROSS_APP_IDENTITY_BRIDGE_DESIGN_V1.json",
+        "docs/CROSS_APP_IDENTITY_BRIDGE_DESIGN_V1.md",
+        "docs/CROSS_APP_IDENTITY_BRIDGE_RUNTIME_VERIFICATION_V1.json",
+        "docs/CROSS_APP_IDENTITY_BRIDGE_RUNTIME_VERIFICATION_V1.md",
+        "docs/CROSS_APP_IDENTITY_BRIDGE_V1.json"
+      ],
+      "gaps": [
+        "No layer-specific governance script; covered by broader checks/audits"
+      ],
+      "recommended_next_action": "Keep under governance; no immediate V1 work beyond routine hardening.",
+      "priority": "P4"
+    },
+    {
+      "layer_name": "API Gateway",
+      "status": "NEEDS_FORMAL_V1",
+      "owner_domain": "Platform",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/alignment/routes_gateway.py",
+        "services/shf-agent-fabric/routers/api_v1/__init__.py",
+        "services/shf-agent-fabric/routers/api_v1/aal_routes.py",
+        "services/shf-agent-fabric/routers/api_v1/apps_routes.py",
+        "services/shf-agent-fabric/routers/api_v1/control_routes.py",
+        "services/shf-agent-fabric/routers/api_v1/credits_routes.py",
+        "services/shf-agent-fabric/routers/api_v1/curriculum_routes.py",
+        "services/shf-agent-fabric/routers/api_v1/efficiency_routes.py"
+      ],
+      "tests": [
+        "services/shf-agent-fabric/tests/test_api_v1_capital_routes_smoke.py"
+      ],
+      "governance_script": [],
+      "admin_ui": [],
+      "reports_visibility": true,
+      "watchtower_visibility": true,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Registry entry exists, but dedicated V1 docs/checks/tests are missing or not layer-specific"
+      ],
+      "recommended_next_action": "Create a small docs/check scaffold and wire governance visibility before V1 freeze.",
+      "priority": "P1"
+    },
+    {
+      "layer_name": "Event/Webhook",
+      "status": "NEEDS_FORMAL_V1",
+      "owner_domain": "Platform",
+      "docs": [],
+      "backend_service": [
+        "services/shf-agent-fabric/services/operator_events_service.py"
+      ],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/events_routes.py"
+      ],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [
+        "src/system/adaptive-experience/adaptiveEvent.types.js"
+      ],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Registry entry exists, but dedicated V1 docs/checks/tests are missing or not layer-specific"
+      ],
+      "recommended_next_action": "Create a small docs/check scaffold and wire governance visibility before V1 freeze.",
+      "priority": "P1"
+    },
+    {
+      "layer_name": "Batch/Import",
+      "status": "NEEDS_FORMAL_V1",
+      "owner_domain": "Data Operations",
+      "docs": [
+        "docs/BATCH2_STAGING_REVIEW.json",
+        "docs/BATCH2_STAGING_REVIEW.md",
+        "docs/BATCH3_STAGING_REVIEW.json",
+        "docs/BATCH3_STAGING_REVIEW.md",
+        "docs/BATCH4_STAGING_REVIEW.json",
+        "docs/BATCH4_STAGING_REVIEW.md",
+        "docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json",
+        "docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.md"
+      ],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [
+        "src/pages/admin/uploads/UploadManager.jsx",
+        "src/router/AdminRoutes.jsx.before_fix_hub_imports_missing_role_20260428_042142.bak",
+        "src/router/AdminRoutes.jsx.before_hub_imports_route_fix_20260428_041932.bak"
+      ],
+      "reports_visibility": true,
+      "watchtower_visibility": true,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [
+        "docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json",
+        "docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.md"
+      ],
+      "gaps": [
+        "Registry entry exists, but dedicated V1 docs/checks/tests are missing or not layer-specific"
+      ],
+      "recommended_next_action": "Create a small docs/check scaffold and wire governance visibility before V1 freeze.",
+      "priority": "P1"
+    },
+    {
+      "layer_name": "Source Registry Layer",
+      "status": "COMPLETE_V1",
+      "owner_domain": "Data Operations",
+      "docs": [
+        "docs/SOURCE_REGISTRY_LAYER_V1.json",
+        "docs/SOURCE_REGISTRY_LAYER_V1.md"
+      ],
+      "backend_service": [
+        "services/shf-agent-fabric/services/source_registry_service.py"
+      ],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/source_registry_routes.py"
+      ],
+      "tests": [
+        "services/shf-agent-fabric/tests/test_source_registry_routes.py"
+      ],
+      "governance_script": [
+        "scripts/check_source_registry_layer.py"
+      ],
+      "admin_ui": [],
+      "reports_visibility": true,
+      "watchtower_visibility": true,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [
+        "docs/SOURCE_REGISTRY_LAYER_V1.json",
+        "docs/SOURCE_REGISTRY_LAYER_V1.md"
+      ],
+      "gaps": [],
+      "recommended_next_action": "Keep under governance; no immediate V1 work beyond routine hardening.",
+      "priority": "P4"
+    },
+    {
+      "layer_name": "Data Federation Layer",
+      "status": "COMPLETE_V1",
+      "owner_domain": "Data Operations",
+      "docs": [
+        "docs/DATA_FEDERATION_LAYER_V1.json",
+        "docs/DATA_FEDERATION_LAYER_V1.md"
+      ],
+      "backend_service": [
+        "services/shf-agent-fabric/services/data_federation_service.py"
+      ],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/data_federation_routes.py"
+      ],
+      "tests": [
+        "services/shf-agent-fabric/tests/test_data_federation_routes.py"
+      ],
+      "governance_script": [
+        "scripts/check_data_federation_layer.py"
+      ],
+      "admin_ui": [],
+      "reports_visibility": true,
+      "watchtower_visibility": true,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [
+        "docs/DATA_FEDERATION_LAYER_V1.json",
+        "docs/DATA_FEDERATION_LAYER_V1.md"
+      ],
+      "gaps": [],
+      "recommended_next_action": "Keep under governance; no immediate V1 work beyond routine hardening.",
+      "priority": "P4"
+    },
+    {
+      "layer_name": "Data Aggregator Layer",
+      "status": "COMPLETE_V1",
+      "owner_domain": "Data Operations",
+      "docs": [
+        "docs/DATA_AGGREGATOR_LAYER_V1.json",
+        "docs/DATA_AGGREGATOR_LAYER_V1.md",
+        "docs/DATA_AGGREGATOR_VALIDATION_VISIBILITY_AUDIT_V1.json",
+        "docs/DATA_AGGREGATOR_VALIDATION_VISIBILITY_AUDIT_V1.md"
+      ],
+      "backend_service": [
+        "services/shf-agent-fabric/services/data_aggregator_service.py"
+      ],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/data_aggregator_routes.py"
+      ],
+      "tests": [
+        "services/shf-agent-fabric/tests/test_data_aggregator_routes.py"
+      ],
+      "governance_script": [
+        "scripts/check_data_aggregator_layer.py"
+      ],
+      "admin_ui": [
+        "src/pages/admin/aggregation/AggregationCommandBar.jsx",
+        "src/pages/admin/aggregation/AggregationDashboard.jsx",
+        "src/pages/admin/aggregation/AggregationOverview.jsx",
+        "src/pages/admin/aggregation/BridgeDemoPanel.jsx",
+        "src/pages/admin/aggregation/EntityResolutionQueue.jsx",
+        "src/pages/admin/aggregation/LineageExplorer.jsx",
+        "src/pages/admin/aggregation/LiveBridgePanel.jsx",
+        "src/pages/admin/aggregation/MappingRegistry.jsx"
+      ],
+      "reports_visibility": true,
+      "watchtower_visibility": true,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [
+        "docs/DATA_AGGREGATOR_LAYER_V1.json",
+        "docs/DATA_AGGREGATOR_LAYER_V1.md",
+        "docs/DATA_AGGREGATOR_VALIDATION_VISIBILITY_AUDIT_V1.json",
+        "docs/DATA_AGGREGATOR_VALIDATION_VISIBILITY_AUDIT_V1.md"
+      ],
+      "gaps": [],
+      "recommended_next_action": "Keep under governance; no immediate V1 work beyond routine hardening.",
+      "priority": "P4"
+    },
+    {
+      "layer_name": "Data Normalization Layer",
+      "status": "COMPLETE_V1",
+      "owner_domain": "Data Operations",
+      "docs": [
+        "docs/DATA_NORMALIZATION_LAYER_V1.json",
+        "docs/DATA_NORMALIZATION_LAYER_V1.md"
+      ],
+      "backend_service": [
+        "services/shf-agent-fabric/services/data_normalization_service.py"
+      ],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/data_normalization_routes.py"
+      ],
+      "tests": [
+        "services/shf-agent-fabric/tests/test_data_normalization_routes.py"
+      ],
+      "governance_script": [
+        "scripts/check_data_normalization_layer.py"
+      ],
+      "admin_ui": [],
+      "reports_visibility": true,
+      "watchtower_visibility": true,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [
+        "docs/DATA_NORMALIZATION_LAYER_V1.json",
+        "docs/DATA_NORMALIZATION_LAYER_V1.md"
+      ],
+      "gaps": [],
+      "recommended_next_action": "Keep under governance; no immediate V1 work beyond routine hardening.",
+      "priority": "P4"
+    },
+    {
+      "layer_name": "Evidence Package Layer",
+      "status": "COMPLETE_V1",
+      "owner_domain": "Data Operations",
+      "docs": [
+        "docs/EVIDENCE_PACKAGE_LAYER_V1.json",
+        "docs/EVIDENCE_PACKAGE_LAYER_V1.md"
+      ],
+      "backend_service": [
+        "services/shf-agent-fabric/services/evidence_package_service.py"
+      ],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/evidence_package_routes.py"
+      ],
+      "tests": [
+        "services/shf-agent-fabric/tests/test_evidence_package_routes.py"
+      ],
+      "governance_script": [
+        "scripts/check_evidence_package_layer.py"
+      ],
+      "admin_ui": [],
+      "reports_visibility": true,
+      "watchtower_visibility": true,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [
+        "docs/EVIDENCE_PACKAGE_LAYER_V1.json",
+        "docs/EVIDENCE_PACKAGE_LAYER_V1.md"
+      ],
+      "gaps": [],
+      "recommended_next_action": "Keep under governance; no immediate V1 work beyond routine hardening.",
+      "priority": "P4"
+    },
+    {
+      "layer_name": "Data Verification Layer",
+      "status": "COMPLETE_V1",
+      "owner_domain": "Data Operations",
+      "docs": [
+        "docs/DATA_VERIFICATION_LAYER_V1.json",
+        "docs/DATA_VERIFICATION_LAYER_V1.md"
+      ],
+      "backend_service": [
+        "services/shf-agent-fabric/services/data_verification_service.py"
+      ],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/data_verification_routes.py"
+      ],
+      "tests": [
+        "services/shf-agent-fabric/tests/test_data_verification_routes.py"
+      ],
+      "governance_script": [
+        "scripts/check_data_verification_layer.py"
+      ],
+      "admin_ui": [],
+      "reports_visibility": true,
+      "watchtower_visibility": true,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [
+        "docs/DATA_VERIFICATION_LAYER_V1.json",
+        "docs/DATA_VERIFICATION_LAYER_V1.md"
+      ],
+      "gaps": [],
+      "recommended_next_action": "Keep under governance; no immediate V1 work beyond routine hardening.",
+      "priority": "P4"
+    },
+    {
+      "layer_name": "Data Approval Layer",
+      "status": "COMPLETE_V1",
+      "owner_domain": "Data Operations",
+      "docs": [
+        "docs/DATA_APPROVAL_LAYER_V1.json",
+        "docs/DATA_APPROVAL_LAYER_V1.md"
+      ],
+      "backend_service": [
+        "services/shf-agent-fabric/services/data_approval_service.py"
+      ],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/data_approval_routes.py"
+      ],
+      "tests": [
+        "services/shf-agent-fabric/tests/test_data_approval_routes.py"
+      ],
+      "governance_script": [
+        "scripts/check_data_approval_layer.py"
+      ],
+      "admin_ui": [],
+      "reports_visibility": true,
+      "watchtower_visibility": true,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [
+        "docs/DATA_APPROVAL_LAYER_V1.json",
+        "docs/DATA_APPROVAL_LAYER_V1.md"
+      ],
+      "gaps": [],
+      "recommended_next_action": "Keep under governance; no immediate V1 work beyond routine hardening.",
+      "priority": "P4"
+    },
+    {
+      "layer_name": "Warehouse Sync",
+      "status": "NEEDS_FORMAL_V1",
+      "owner_domain": "Data Operations",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Registry entry exists, but dedicated V1 docs/checks/tests are missing or not layer-specific"
+      ],
+      "recommended_next_action": "Create a small docs/check scaffold and wire governance visibility before V1 freeze.",
+      "priority": "P1"
+    },
+    {
+      "layer_name": "Apps/Programs",
+      "status": "PARTIAL",
+      "owner_domain": "Product",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/api_v1/apps_routes.py"
+      ],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [],
+      "reports_visibility": true,
+      "watchtower_visibility": true,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Operational or UI evidence exists, but ownership/boundaries need formal V1 audit or scaffold"
+      ],
+      "recommended_next_action": "Audit existing work and formalize boundaries before adding features.",
+      "priority": "P2"
+    },
+    {
+      "layer_name": "Adapter Layer",
+      "status": "NEEDS_FORMAL_V1",
+      "owner_domain": "Platform",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/loo_adapters_routes.py"
+      ],
+      "tests": [
+        "services/shf-agent-fabric/tests/test_program_adapters_contract.py",
+        "services/shf-agent-fabric/tests/test_program_adapters_meta_parity.py",
+        "services/shf-agent-fabric/tests/test_program_adapters_status.py"
+      ],
+      "governance_script": [],
+      "admin_ui": [
+        "src/pages/admin/aggregation/adapters.ts",
+        "src/pages/admin/reporting/analyst/oracle-memo-adapter.js",
+        "src/pages/admin/reporting/export-history-adapter.ts",
+        "src/pages/admin/reporting/oracle-action-adapter.ts",
+        "src/pages/admin/reporting/oracle-backend-adapter.ts",
+        "src/pages/admin/reporting/oracle-compare-adapter.ts",
+        "src/pages/admin/reporting/oracle-priority-adapter.ts",
+        "src/pages/admin/reporting/reporting-backend-adapter.ts"
+      ],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Registry entry exists, but dedicated V1 docs/checks/tests are missing or not layer-specific"
+      ],
+      "recommended_next_action": "Create a small docs/check scaffold and wire governance visibility before V1 freeze.",
+      "priority": "P1"
+    },
+    {
+      "layer_name": "Truth Spine",
+      "status": "COMPLETE_V1",
+      "owner_domain": "Verification",
+      "docs": [
+        "docs/TRUTH_SPINE_FREEZE_V1.md",
+        "docs/TRUTH_SPINE_GUARDRAILS.md",
+        "docs/TRUTH_SPINE_V1.md"
+      ],
+      "backend_service": [
+        "services/shf-agent-fabric/services/truth_spine_service.py"
+      ],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/truth_routes.py"
+      ],
+      "tests": [
+        "services/shf-agent-fabric/tests/test_truth_routes.py"
+      ],
+      "governance_script": [
+        "scripts/check_truth_spine_freeze.py"
+      ],
+      "admin_ui": [
+        "src/pages/admin/truth-spine/TruthSpinePage.jsx",
+        "src/pages/admin/truth-spine/truth-spine.css"
+      ],
+      "reports_visibility": true,
+      "watchtower_visibility": true,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [
+        "docs/TRUTH_SPINE_FREEZE_V1.md",
+        "docs/TRUTH_SPINE_V1.md"
+      ],
+      "gaps": [],
+      "recommended_next_action": "Keep under governance; no immediate V1 work beyond routine hardening.",
+      "priority": "P4"
+    },
+    {
+      "layer_name": "Oracle Layer",
+      "status": "COMPLETE_V1",
+      "owner_domain": "Decision Support",
+      "docs": [
+        "docs/ORACLE_LAYER_V1.md"
+      ],
+      "backend_service": [
+        "services/shf-agent-fabric/services/oracle_service.py"
+      ],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/oracle_routes.py"
+      ],
+      "tests": [
+        "services/shf-agent-fabric/tests/test_oracle_routes.py"
+      ],
+      "governance_script": [
+        "scripts/check_oracle_layer.py"
+      ],
+      "admin_ui": [
+        "src/pages/admin/aggregation/oracle-row-readiness.js",
+        "src/pages/admin/oracle/OraclePage.jsx",
+        "src/pages/admin/oracle/oracle.css",
+        "src/pages/admin/reporting/analyst/oracle-memo-adapter.js",
+        "src/pages/admin/reporting/oracle-action-adapter.ts",
+        "src/pages/admin/reporting/oracle-backend-adapter.ts",
+        "src/pages/admin/reporting/oracle-compare-adapter.ts",
+        "src/pages/admin/reporting/oracle-priority-adapter.ts"
+      ],
+      "reports_visibility": true,
+      "watchtower_visibility": true,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [
+        "docs/ORACLE_LAYER_V1.md"
+      ],
+      "gaps": [],
+      "recommended_next_action": "Keep under governance; no immediate V1 work beyond routine hardening.",
+      "priority": "P4"
+    },
+    {
+      "layer_name": "Game Theory Layer",
+      "status": "COMPLETE_V1",
+      "owner_domain": "Strategy",
+      "docs": [
+        "docs/GAME_THEORY_LAYER_V1.md"
+      ],
+      "backend_service": [
+        "services/shf-agent-fabric/services/ai_layer/game_theory.py",
+        "services/shf-agent-fabric/services/game_theory_service.py"
+      ],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/game_theory_routes.py"
+      ],
+      "tests": [
+        "services/shf-agent-fabric/tests/test_game_theory_routes.py"
+      ],
+      "governance_script": [
+        "scripts/check_game_theory_layer.py"
+      ],
+      "admin_ui": [
+        "src/pages/admin/game-theory/GameTheoryPage.jsx",
+        "src/pages/admin/game-theory/game-theory.css"
+      ],
+      "reports_visibility": true,
+      "watchtower_visibility": true,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [
+        "docs/GAME_THEORY_LAYER_V1.md"
+      ],
+      "gaps": [],
+      "recommended_next_action": "Keep under governance; no immediate V1 work beyond routine hardening.",
+      "priority": "P4"
+    },
+    {
+      "layer_name": "AI/Swarm Layer",
+      "status": "COMPLETE_V1",
+      "owner_domain": "Automation",
+      "docs": [
+        "docs/AGENT_FABRIC_ADMIN_PAGE_V1.json",
+        "docs/AGENT_FABRIC_ADMIN_PAGE_V1.md",
+        "docs/AI_SWARM_GUARDRAILS_V1.md"
+      ],
+      "backend_service": [
+        "services/shf-agent-fabric/services/aal_repository.py",
+        "services/shf-agent-fabric/services/aal_service.py",
+        "services/shf-agent-fabric/services/ai_guardrails_service.py",
+        "services/shf-agent-fabric/services/ai_layer/__init__.py",
+        "services/shf-agent-fabric/services/ai_layer/adaptive_rules.py",
+        "services/shf-agent-fabric/services/ai_layer/agents/__init__.py",
+        "services/shf-agent-fabric/services/ai_layer/agents/funding_agent.py",
+        "services/shf-agent-fabric/services/ai_layer/agents/intervention_agent.py"
+      ],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/__init__.py",
+        "services/shf-agent-fabric/routers/admin_agents_routes.py",
+        "services/shf-agent-fabric/routers/admin_force_routes.py",
+        "services/shf-agent-fabric/routers/admin_gate_routes.py",
+        "services/shf-agent-fabric/routers/admin_infra_verify_routes.py",
+        "services/shf-agent-fabric/routers/admin_layers_routes.py",
+        "services/shf-agent-fabric/routers/admin_observability_routes.py",
+        "services/shf-agent-fabric/routers/admin_registry_routes.py"
+      ],
+      "tests": [
+        "services/shf-agent-fabric/tests/conftest.py",
+        "services/shf-agent-fabric/tests/outcomes/test_outcomes_chain_smoke.py",
+        "services/shf-agent-fabric/tests/outcomes/test_outcomes_proof_sign_deterministic_smoke.py",
+        "services/shf-agent-fabric/tests/outcomes/test_outcomes_proof_sign_smoke.py",
+        "services/shf-agent-fabric/tests/outcomes/test_outcomes_proof_smoke.py",
+        "services/shf-agent-fabric/tests/outcomes/test_outcomes_proof_verify_signature_smoke.py",
+        "services/shf-agent-fabric/tests/outcomes/test_outcomes_routes_smoke.py",
+        "services/shf-agent-fabric/tests/outcomes/test_outcomes_verify_replay_smoke.py"
+      ],
+      "governance_script": [
+        "scripts/check_ai_guardrails_layer.py"
+      ],
+      "admin_ui": [
+        "src/pages/admin/agent-fabric/AgentFabricPage.jsx",
+        "src/pages/admin/agent-fabric/agent-fabric.css",
+        "src/pages/admin/ai-guardrails/AIGuardrailsPage.jsx",
+        "src/pages/admin/ai-guardrails/ai-guardrails.css"
+      ],
+      "reports_visibility": true,
+      "watchtower_visibility": true,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [
+        "docs/AGENT_FABRIC_ADMIN_PAGE_V1.json",
+        "docs/AGENT_FABRIC_ADMIN_PAGE_V1.md",
+        "docs/AI_SWARM_GUARDRAILS_V1.md"
+      ],
+      "gaps": [],
+      "recommended_next_action": "Keep under governance; no immediate V1 work beyond routine hardening.",
+      "priority": "P4"
+    },
+    {
+      "layer_name": "Alignment Layer",
+      "status": "MOSTLY_COMPLETE",
+      "owner_domain": "Governance",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/alignment/__init__.py",
+        "services/shf-agent-fabric/routers/alignment/audit.py",
+        "services/shf-agent-fabric/routers/alignment/containment.py",
+        "services/shf-agent-fabric/routers/alignment/models.py",
+        "services/shf-agent-fabric/routers/alignment/policy.py",
+        "services/shf-agent-fabric/routers/alignment/routes_admin.py",
+        "services/shf-agent-fabric/routers/alignment/routes_gateway.py",
+        "services/shf-agent-fabric/routers/alignment/routes_plans_admin.py"
+      ],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [
+        "src/pages/admin/AlignmentSwitchboard.jsx"
+      ],
+      "reports_visibility": true,
+      "watchtower_visibility": false,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Meaningful implementation exists, but formal layer-specific V1 doc/check/test coverage is incomplete"
+      ],
+      "recommended_next_action": "Add or finish formal V1 doc/check/test only where needed; avoid rebuilding mature behavior.",
+      "priority": "P3"
+    },
+    {
+      "layer_name": "LOO",
+      "status": "MOSTLY_COMPLETE",
+      "owner_domain": "Outcomes",
+      "docs": [
+        "docs/WATCHTOWER_REPORTS_LOO_VISIBILITY_AUDIT_V1.json",
+        "docs/WATCHTOWER_REPORTS_LOO_VISIBILITY_AUDIT_V1.md"
+      ],
+      "backend_service": [],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/loo_adapters_routes.py",
+        "services/shf-agent-fabric/routers/loo_rankings_routes.py",
+        "services/shf-agent-fabric/routers/loo_routes.py",
+        "services/shf-agent-fabric/routers/runs_loo_payload_routes.py"
+      ],
+      "tests": [
+        "services/shf-agent-fabric/tests/test_loo_rankings_contract_lock.py"
+      ],
+      "governance_script": [],
+      "admin_ui": [
+        "src/router/LordOutcomesRoutes.jsx.bak_fix_layers_loop_20260429_173310"
+      ],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [
+        "docs/WATCHTOWER_REPORTS_LOO_VISIBILITY_AUDIT_V1.json",
+        "docs/WATCHTOWER_REPORTS_LOO_VISIBILITY_AUDIT_V1.md"
+      ],
+      "gaps": [
+        "Meaningful implementation exists, but formal layer-specific V1 doc/check/test coverage is incomplete"
+      ],
+      "recommended_next_action": "Add or finish formal V1 doc/check/test only where needed; avoid rebuilding mature behavior.",
+      "priority": "P3"
+    },
+    {
+      "layer_name": "Watchtower",
+      "status": "COMPLETE_V1",
+      "owner_domain": "Assurance",
+      "docs": [
+        "docs/WATCHTOWER_REPORTS_LOO_VISIBILITY_AUDIT_V1.json",
+        "docs/WATCHTOWER_REPORTS_LOO_VISIBILITY_AUDIT_V1.md"
+      ],
+      "backend_service": [],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/watchtower_attestation_routes.py",
+        "services/shf-agent-fabric/routers/watchtower_routes.py"
+      ],
+      "tests": [
+        "services/shf-agent-fabric/tests/test_watchtower_alerts.py",
+        "services/shf-agent-fabric/tests/test_watchtower_attestation_routes.py",
+        "services/shf-agent-fabric/tests/test_watchtower_contract.py",
+        "services/shf-agent-fabric/tests/test_watchtower_coverage.py",
+        "services/shf-agent-fabric/tests/test_watchtower_risk_engine.py",
+        "services/shf-agent-fabric/tests/test_watchtower_store_smoke.py"
+      ],
+      "governance_script": [],
+      "admin_ui": [
+        "src/system/contracts/watchtower.ts"
+      ],
+      "reports_visibility": false,
+      "watchtower_visibility": true,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [
+        "docs/WATCHTOWER_REPORTS_LOO_VISIBILITY_AUDIT_V1.json",
+        "docs/WATCHTOWER_REPORTS_LOO_VISIBILITY_AUDIT_V1.md"
+      ],
+      "gaps": [
+        "No layer-specific governance script; covered by broader checks/audits"
+      ],
+      "recommended_next_action": "Keep under governance; no immediate V1 work beyond routine hardening.",
+      "priority": "P4"
+    },
+    {
+      "layer_name": "Governance Layer",
+      "status": "MOSTLY_COMPLETE",
+      "owner_domain": "Governance",
+      "docs": [
+        "docs/AGENT_GOVERNANCE_FABRIC_AUDIT_V1.json",
+        "docs/AGENT_GOVERNANCE_FABRIC_AUDIT_V1.md",
+        "docs/AI_SWARM_GUARDRAILS_V1.md",
+        "docs/ARCHITECTURE_CHANGE_PROPOSAL_TEMPLATE.md",
+        "docs/TRUTH_SPINE_GUARDRAILS.md"
+      ],
+      "backend_service": [
+        "services/shf-agent-fabric/services/ai_guardrails_service.py"
+      ],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/ai_guardrails_routes.py",
+        "services/shf-agent-fabric/routers/api_v1/governance_routes.py"
+      ],
+      "tests": [
+        "services/shf-agent-fabric/tests/test_ai_guardrails_routes.py",
+        "services/shf-agent-fabric/tests/test_governance_store_smoke.py"
+      ],
+      "governance_script": [
+        "scripts/check_ai_guardrails_layer.py",
+        "scripts/check_architecture_proposal.py"
+      ],
+      "admin_ui": [
+        "src/pages/admin/ai-guardrails/AIGuardrailsPage.jsx",
+        "src/pages/admin/ai-guardrails/ai-guardrails.css",
+        "src/pages/admin/ops/OpsAssetGovernance.jsx"
+      ],
+      "reports_visibility": true,
+      "watchtower_visibility": true,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [
+        "docs/AGENT_GOVERNANCE_FABRIC_AUDIT_V1.json",
+        "docs/AGENT_GOVERNANCE_FABRIC_AUDIT_V1.md",
+        "docs/AI_SWARM_GUARDRAILS_V1.md"
+      ],
+      "gaps": [
+        "Meaningful implementation exists, but formal layer-specific V1 doc/check/test coverage is incomplete"
+      ],
+      "recommended_next_action": "Add or finish formal V1 doc/check/test only where needed; avoid rebuilding mature behavior.",
+      "priority": "P3"
+    },
+    {
+      "layer_name": "Audit & Verification",
+      "status": "NEEDS_FORMAL_V1",
+      "owner_domain": "Assurance",
+      "docs": [
+        "docs/AGENT_GOVERNANCE_FABRIC_AUDIT_V1.json",
+        "docs/AGENT_GOVERNANCE_FABRIC_AUDIT_V1.md",
+        "docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json",
+        "docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.md",
+        "docs/DATA_AGGREGATOR_VALIDATION_VISIBILITY_AUDIT_V1.json",
+        "docs/DATA_AGGREGATOR_VALIDATION_VISIBILITY_AUDIT_V1.md",
+        "docs/DUPLICATE_LAYER_AUDIT.md",
+        "docs/FULL_PAGE_SPINE_CONNECTION_AUDIT_V1.json"
+      ],
+      "backend_service": [],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/alignment/audit.py"
+      ],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [
+        "src/pages/admin/audit/AuditLogViewer.jsx",
+        "src/pages/admin/reporting/AuditPackPanel.jsx",
+        "src/pages/admin/reporting/VerificationAuditSurface.jsx",
+        "src/pages/admin/reporting/export-audit-trail.js",
+        "src/pages/admin/reporting/reporting-trace-actions.ts",
+        "src/pages/admin/reporting/reporting-trace-query.ts",
+        "src/pages/admin/reporting/reporting-trace-routes.ts",
+        "src/pages/admin/reporting/reporting-trace.ts"
+      ],
+      "reports_visibility": false,
+      "watchtower_visibility": true,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [
+        "docs/AGENT_GOVERNANCE_FABRIC_AUDIT_V1.json",
+        "docs/AGENT_GOVERNANCE_FABRIC_AUDIT_V1.md",
+        "docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.json",
+        "docs/BATCH5_ARCHIVE_REMOVAL_AUDIT.md",
+        "docs/DATA_AGGREGATOR_VALIDATION_VISIBILITY_AUDIT_V1.json"
+      ],
+      "gaps": [
+        "Registry entry exists, but dedicated V1 docs/checks/tests are missing or not layer-specific"
+      ],
+      "recommended_next_action": "Create a small docs/check scaffold and wire governance visibility before V1 freeze.",
+      "priority": "P1"
+    },
+    {
+      "layer_name": "Readiness Gate",
+      "status": "NEEDS_FORMAL_V1",
+      "owner_domain": "Reporting",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [
+        "src/pages/admin/aggregation/aggregation-readiness-model.js",
+        "src/pages/admin/aggregation/oracle-row-readiness.js",
+        "src/pages/admin/reporting/ExportReadinessCard.jsx",
+        "src/pages/admin/reporting/reporting-readiness.ts"
+      ],
+      "reports_visibility": true,
+      "watchtower_visibility": true,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Registry entry exists, but dedicated V1 docs/checks/tests are missing or not layer-specific"
+      ],
+      "recommended_next_action": "Create a small docs/check scaffold and wire governance visibility before V1 freeze.",
+      "priority": "P1"
+    },
+    {
+      "layer_name": "Verified Aggregation",
+      "status": "NEEDS_FORMAL_V1",
+      "owner_domain": "Data Operations",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Registry entry exists, but dedicated V1 docs/checks/tests are missing or not layer-specific"
+      ],
+      "recommended_next_action": "Create a small docs/check scaffold and wire governance visibility before V1 freeze.",
+      "priority": "P1"
+    },
+    {
+      "layer_name": "Reports",
+      "status": "COMPLETE_V1",
+      "owner_domain": "Reporting",
+      "docs": [
+        "docs/WATCHTOWER_REPORTS_LOO_VISIBILITY_AUDIT_V1.json",
+        "docs/WATCHTOWER_REPORTS_LOO_VISIBILITY_AUDIT_V1.md"
+      ],
+      "backend_service": [],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/reports_routes.py"
+      ],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [
+        "src/pages/admin/ReportsDashboard.jsx",
+        "src/pages/admin/reporting/ActionLogExportPanel.jsx",
+        "src/pages/admin/reporting/AnalystMemoExportPanel.jsx",
+        "src/pages/admin/reporting/AuditPackPanel.jsx",
+        "src/pages/admin/reporting/BriefingExportPanel.jsx",
+        "src/pages/admin/reporting/ExportReadinessCard.jsx",
+        "src/pages/admin/reporting/ReportingCommandSurface.jsx",
+        "src/pages/admin/reporting/VerificationAuditSurface.jsx"
+      ],
+      "reports_visibility": true,
+      "watchtower_visibility": false,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [
+        "docs/WATCHTOWER_REPORTS_LOO_VISIBILITY_AUDIT_V1.json",
+        "docs/WATCHTOWER_REPORTS_LOO_VISIBILITY_AUDIT_V1.md"
+      ],
+      "gaps": [
+        "No layer-specific governance script; covered by broader checks/audits"
+      ],
+      "recommended_next_action": "Keep under governance; no immediate V1 work beyond routine hardening.",
+      "priority": "P4"
+    },
+    {
+      "layer_name": "Funding Intelligence",
+      "status": "PARTIAL",
+      "owner_domain": "Funding",
+      "docs": [],
+      "backend_service": [
+        "services/shf-agent-fabric/services/ai_layer/agents/funding_agent.py"
+      ],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/funding_capabilities.py",
+        "services/shf-agent-fabric/routers/funding_partner.py",
+        "services/shf-agent-fabric/routers/funding_partner_network.py",
+        "services/shf-agent-fabric/routers/funding_partner_registry.py",
+        "services/shf-agent-fabric/routers/funding_replay.py",
+        "services/shf-agent-fabric/routers/funding_replay_crypto.py",
+        "services/shf-agent-fabric/routers/funding_rulesets.py",
+        "services/shf-agent-fabric/routers/funding_simulator.py"
+      ],
+      "tests": [
+        "services/shf-agent-fabric/tests/test_funding_integrity_gate.py",
+        "services/shf-agent-fabric/tests/test_funding_manifest_signature_gate.py",
+        "services/shf-agent-fabric/tests/test_funding_policy_guard.py",
+        "services/shf-agent-fabric/tests/test_funding_replay_engine.py",
+        "services/shf-agent-fabric/tests/test_funding_ruleset_integrity_gate.py"
+      ],
+      "governance_script": [],
+      "admin_ui": [
+        "src/pages/admin/GrantBinder.jsx"
+      ],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Operational or UI evidence exists, but ownership/boundaries need formal V1 audit or scaffold"
+      ],
+      "recommended_next_action": "Audit existing work and formalize boundaries before adding features.",
+      "priority": "P2"
+    },
+    {
+      "layer_name": "Public Approval",
+      "status": "NEEDS_FORMAL_V1",
+      "owner_domain": "Governance",
+      "docs": [
+        "docs/DATA_APPROVAL_LAYER_V1.json",
+        "docs/DATA_APPROVAL_LAYER_V1.md"
+      ],
+      "backend_service": [
+        "services/shf-agent-fabric/services/data_approval_service.py"
+      ],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/data_approval_routes.py"
+      ],
+      "tests": [
+        "services/shf-agent-fabric/tests/test_data_approval_routes.py"
+      ],
+      "governance_script": [
+        "scripts/check_data_approval_layer.py"
+      ],
+      "admin_ui": [],
+      "reports_visibility": true,
+      "watchtower_visibility": true,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [
+        "docs/DATA_APPROVAL_LAYER_V1.json",
+        "docs/DATA_APPROVAL_LAYER_V1.md"
+      ],
+      "gaps": [
+        "Registry entry exists, but dedicated V1 docs/checks/tests are missing or not layer-specific"
+      ],
+      "recommended_next_action": "Create a small docs/check scaffold and wire governance visibility before V1 freeze.",
+      "priority": "P1"
+    },
+    {
+      "layer_name": "Narrative/Story",
+      "status": "PARTIAL",
+      "owner_domain": "Communications",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [
+        "src/pages/admin/MasterNarrativeViewer.jsx",
+        "src/pages/admin/reporting/export-history-adapter.ts"
+      ],
+      "reports_visibility": false,
+      "watchtower_visibility": true,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Operational or UI evidence exists, but ownership/boundaries need formal V1 audit or scaffold"
+      ],
+      "recommended_next_action": "Audit existing work and formalize boundaries before adding features.",
+      "priority": "P2"
+    },
+    {
+      "layer_name": "Partner/Institution",
+      "status": "PARTIAL",
+      "owner_domain": "Operations",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/funding_partner.py",
+        "services/shf-agent-fabric/routers/funding_partner_network.py",
+        "services/shf-agent-fabric/routers/funding_partner_registry.py"
+      ],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [
+        "src/pages/admin/PartnerJobs.jsx",
+        "src/pages/admin/growth/SHSPartnerGrowthEngine.jsx",
+        "src/pages/admin/growth/partnerGrowthTourSteps.js",
+        "src/pages/admin/growth/shs-partner-growth-engine.css"
+      ],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Operational or UI evidence exists, but ownership/boundaries need formal V1 audit or scaffold"
+      ],
+      "recommended_next_action": "Audit existing work and formalize boundaries before adding features.",
+      "priority": "P2"
+    },
+    {
+      "layer_name": "Security/Privacy",
+      "status": "NEEDS_FORMAL_V1",
+      "owner_domain": "Security",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [
+        "src/system/security/security-permissions.js"
+      ],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Registry entry exists, but dedicated V1 docs/checks/tests are missing or not layer-specific"
+      ],
+      "recommended_next_action": "Create a small docs/check scaffold and wire governance visibility before V1 freeze.",
+      "priority": "P1"
+    },
+    {
+      "layer_name": "Data Ownership/IP",
+      "status": "NEEDS_FORMAL_V1",
+      "owner_domain": "Governance",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [
+        "services/shf-agent-fabric/tests/test_registry_contract_script_runs.py"
+      ],
+      "governance_script": [
+        "scripts/check_ai_guardrails_layer.py",
+        "scripts/check_architecture_proposal.py",
+        "scripts/check_data_aggregator_layer.py",
+        "scripts/check_data_approval_layer.py",
+        "scripts/check_data_federation_layer.py",
+        "scripts/check_data_normalization_layer.py",
+        "scripts/check_data_verification_layer.py",
+        "scripts/check_duplicate_layer_cleanup.py"
+      ],
+      "admin_ui": [
+        "src/components/admin/ControlPlaneStrip.jsx"
+      ],
+      "reports_visibility": false,
+      "watchtower_visibility": true,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Registry entry exists, but dedicated V1 docs/checks/tests are missing or not layer-specific"
+      ],
+      "recommended_next_action": "Create a small docs/check scaffold and wire governance visibility before V1 freeze.",
+      "priority": "P1"
+    },
+    {
+      "layer_name": "Decision Journal",
+      "status": "MOSTLY_COMPLETE",
+      "owner_domain": "Governance",
+      "docs": [
+        "docs/GIT_NEEDS_REVIEW_DECISION_REPORT.json",
+        "docs/GIT_NEEDS_REVIEW_DECISION_REPORT.md"
+      ],
+      "backend_service": [
+        "services/shf-agent-fabric/services/ai_layer/decision_journal.py"
+      ],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/decision_routes.py"
+      ],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [],
+      "reports_visibility": true,
+      "watchtower_visibility": false,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Meaningful implementation exists, but formal layer-specific V1 doc/check/test coverage is incomplete"
+      ],
+      "recommended_next_action": "Add or finish formal V1 doc/check/test only where needed; avoid rebuilding mature behavior.",
+      "priority": "P3"
+    },
+    {
+      "layer_name": "Replay Engine",
+      "status": "MOSTLY_COMPLETE",
+      "owner_domain": "Assurance",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [
+        "services/shf-agent-fabric/routers/funding_replay.py",
+        "services/shf-agent-fabric/routers/funding_replay_crypto.py"
+      ],
+      "tests": [
+        "services/shf-agent-fabric/tests/outcomes/test_outcomes_verify_replay_smoke.py",
+        "services/shf-agent-fabric/tests/test_funding_replay_engine.py"
+      ],
+      "governance_script": [],
+      "admin_ui": [],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Meaningful implementation exists, but formal layer-specific V1 doc/check/test coverage is incomplete"
+      ],
+      "recommended_next_action": "Add or finish formal V1 doc/check/test only where needed; avoid rebuilding mature behavior.",
+      "priority": "P3"
+    },
+    {
+      "layer_name": "Signed Manifest",
+      "status": "MOSTLY_COMPLETE",
+      "owner_domain": "Assurance",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [
+        "services/shf-agent-fabric/tests/outcomes/test_outcomes_proof_verify_signature_smoke.py",
+        "services/shf-agent-fabric/tests/test_funding_manifest_signature_gate.py"
+      ],
+      "governance_script": [],
+      "admin_ui": [],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Meaningful implementation exists, but formal layer-specific V1 doc/check/test coverage is incomplete"
+      ],
+      "recommended_next_action": "Add or finish formal V1 doc/check/test only where needed; avoid rebuilding mature behavior.",
+      "priority": "P3"
+    },
+    {
+      "layer_name": "Self-Audit",
+      "status": "MOSTLY_COMPLETE",
+      "owner_domain": "Assurance",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Meaningful implementation exists, but formal layer-specific V1 doc/check/test coverage is incomplete"
+      ],
+      "recommended_next_action": "Add or finish formal V1 doc/check/test only where needed; avoid rebuilding mature behavior.",
+      "priority": "P3"
+    },
+    {
+      "layer_name": "Layer Control System",
+      "status": "COMPLETE_V1",
+      "owner_domain": "Platform",
+      "docs": [
+        "docs/MASTER_LAYER_REGISTRY.md"
+      ],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [],
+      "governance_script": [
+        "scripts/check_architecture_proposal.py",
+        "scripts/check_master_layer_registry.py"
+      ],
+      "admin_ui": [],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [],
+      "recommended_next_action": "Keep under governance; no immediate V1 work beyond routine hardening.",
+      "priority": "P4"
+    },
+    {
+      "layer_name": "Context-Adaptive Analyst",
+      "status": "PARTIAL",
+      "owner_domain": "AI Operations",
+      "docs": [],
+      "backend_service": [
+        "services/shf-agent-fabric/services/ai_layer/adaptive_rules.py"
+      ],
+      "backend_router": [],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [
+        "src/pages/admin/reporting/analyst/analyst-context-builder.js",
+        "src/system/adaptive-experience/README.md",
+        "src/system/adaptive-experience/adaptiveEvent.types.js",
+        "src/system/adaptive-experience/adaptiveRecommendations.js",
+        "src/system/adaptive-experience/adaptiveScoring.js",
+        "src/system/adaptive-experience/adaptiveTracker.js",
+        "src/system/adaptive-experience/useAdaptiveExperience.js",
+        "src/system/adaptive-growth/adaptiveGrowthStorage.js"
+      ],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Operational or UI evidence exists, but ownership/boundaries need formal V1 audit or scaffold"
+      ],
+      "recommended_next_action": "Audit existing work and formalize boundaries before adding features.",
+      "priority": "P2"
+    },
+    {
+      "layer_name": "SHS Sales Layer",
+      "status": "MOSTLY_COMPLETE",
+      "owner_domain": "Revenue Operations",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [
+        "src/router/SalesRoutes.jsx",
+        "src/router/SalesRoutes.jsx.bak",
+        "src/router/SalesRoutes.jsx.bak.20251122-163832"
+      ],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Meaningful implementation exists, but formal layer-specific V1 doc/check/test coverage is incomplete"
+      ],
+      "recommended_next_action": "Add or finish formal V1 doc/check/test only where needed; avoid rebuilding mature behavior.",
+      "priority": "P3"
+    },
+    {
+      "layer_name": "Production Ops",
+      "status": "MOSTLY_COMPLETE",
+      "owner_domain": "Operations",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [
+        "src/pages/admin/ops/OpsProductionDashboard.jsx"
+      ],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Meaningful implementation exists, but formal layer-specific V1 doc/check/test coverage is incomplete"
+      ],
+      "recommended_next_action": "Add or finish formal V1 doc/check/test only where needed; avoid rebuilding mature behavior.",
+      "priority": "P3"
+    },
+    {
+      "layer_name": "Development Library",
+      "status": "MOSTLY_COMPLETE",
+      "owner_domain": "Operations",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Meaningful implementation exists, but formal layer-specific V1 doc/check/test coverage is incomplete"
+      ],
+      "recommended_next_action": "Add or finish formal V1 doc/check/test only where needed; avoid rebuilding mature behavior.",
+      "priority": "P3"
+    },
+    {
+      "layer_name": "QA + Delivery",
+      "status": "MOSTLY_COMPLETE",
+      "owner_domain": "Operations",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [
+        "src/pages/admin/ops/OpsScreenshotQA.jsx"
+      ],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Meaningful implementation exists, but formal layer-specific V1 doc/check/test coverage is incomplete"
+      ],
+      "recommended_next_action": "Add or finish formal V1 doc/check/test only where needed; avoid rebuilding mature behavior.",
+      "priority": "P3"
+    },
+    {
+      "layer_name": "ClientOps",
+      "status": "MOSTLY_COMPLETE",
+      "owner_domain": "Operations",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Meaningful implementation exists, but formal layer-specific V1 doc/check/test coverage is incomplete"
+      ],
+      "recommended_next_action": "Add or finish formal V1 doc/check/test only where needed; avoid rebuilding mature behavior.",
+      "priority": "P3"
+    },
+    {
+      "layer_name": "Website Studio",
+      "status": "MOSTLY_COMPLETE",
+      "owner_domain": "Production",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [
+        "src/pages/admin/BuilderHub.jsx",
+        "src/pages/admin/web-maker.css",
+        "src/pages/public/WebMakerPage.jsx"
+      ],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Meaningful implementation exists, but formal layer-specific V1 doc/check/test coverage is incomplete"
+      ],
+      "recommended_next_action": "Add or finish formal V1 doc/check/test only where needed; avoid rebuilding mature behavior.",
+      "priority": "P3"
+    },
+    {
+      "layer_name": "Production Automation",
+      "status": "NEEDS_FORMAL_V1",
+      "owner_domain": "Automation",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Registry entry exists, but dedicated V1 docs/checks/tests are missing or not layer-specific"
+      ],
+      "recommended_next_action": "Create a small docs/check scaffold and wire governance visibility before V1 freeze.",
+      "priority": "P1"
+    },
+    {
+      "layer_name": "SHF Impact Command Center",
+      "status": "MOSTLY_COMPLETE",
+      "owner_domain": "SHF Impact",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [
+        "src/pages/shf-command/SHFImpactCommandCenter.jsx",
+        "src/pages/shf-command/SHFImpactCommandCenter.jsx.bak_oracle_guard_1776747943",
+        "src/pages/shf-command/SHFImpactCommandCenter.jsx.pre_early_restore_20260421_024147",
+        "src/pages/shf-command/SHFImpactCommandCenter.jsx.pre_restore_20260421_023416",
+        "src/pages/shf-command/SHFImpactCommandCenter.jsx.pre_target_restore_20260421_025734",
+        "src/pages/shf-command/SHFImpactCommandCenter.jsx.pre_target_restore_20260421_093441",
+        "src/pages/shf-command/SHFImpactCommandCenter.jsx.pre_target_restore_20260421_093802",
+        "src/pages/shf-command/SHFImpactCommandCenter.jsx.rescue_20260421_022901"
+      ],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Meaningful implementation exists, but formal layer-specific V1 doc/check/test coverage is incomplete"
+      ],
+      "recommended_next_action": "Add or finish formal V1 doc/check/test only where needed; avoid rebuilding mature behavior.",
+      "priority": "P3"
+    },
+    {
+      "layer_name": "Public Impact Map",
+      "status": "MOSTLY_COMPLETE",
+      "owner_domain": "SHF Impact",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [
+        "src/pages/shf-command/components/SHFImpactOhioMap.jsx",
+        "src/pages/shf-command/components/SHFImpactOhioMap.jsx.bak_county_route_20260413_230609",
+        "src/pages/shf-command/components/map/OhioImpactTacticalMap.jsx"
+      ],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Meaningful implementation exists, but formal layer-specific V1 doc/check/test coverage is incomplete"
+      ],
+      "recommended_next_action": "Add or finish formal V1 doc/check/test only where needed; avoid rebuilding mature behavior.",
+      "priority": "P3"
+    },
+    {
+      "layer_name": "Career Pathways",
+      "status": "PARTIAL",
+      "owner_domain": "Programs",
+      "docs": [
+        "docs/CAREER_PRIMARY_FUNNEL.md"
+      ],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [
+        "src/router/CareerRoutes.jsx"
+      ],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Operational or UI evidence exists, but ownership/boundaries need formal V1 audit or scaffold"
+      ],
+      "recommended_next_action": "Audit existing work and formalize boundaries before adding features.",
+      "priority": "P2"
+    },
+    {
+      "layer_name": "Program Registry",
+      "status": "MOSTLY_COMPLETE",
+      "owner_domain": "Programs",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [
+        "services/shf-agent-fabric/tests/test_program_adapters_contract.py",
+        "services/shf-agent-fabric/tests/test_program_adapters_meta_parity.py",
+        "services/shf-agent-fabric/tests/test_program_adapters_status.py"
+      ],
+      "governance_script": [],
+      "admin_ui": [],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Meaningful implementation exists, but formal layer-specific V1 doc/check/test coverage is incomplete"
+      ],
+      "recommended_next_action": "Add or finish formal V1 doc/check/test only where needed; avoid rebuilding mature behavior.",
+      "priority": "P3"
+    },
+    {
+      "layer_name": "Sponsorship Layer",
+      "status": "PARTIAL",
+      "owner_domain": "Funding",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": false,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Operational or UI evidence exists, but ownership/boundaries need formal V1 audit or scaffold"
+      ],
+      "recommended_next_action": "Audit existing work and formalize boundaries before adding features.",
+      "priority": "P2"
+    },
+    {
+      "layer_name": "Grant/Proposal Layer",
+      "status": "PARTIAL",
+      "owner_domain": "Funding",
+      "docs": [
+        "docs/ARCHITECTURE_CHANGE_PROPOSAL_TEMPLATE.md"
+      ],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [],
+      "governance_script": [
+        "scripts/check_architecture_proposal.py"
+      ],
+      "admin_ui": [
+        "src/pages/admin/GrantBinder.jsx"
+      ],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Operational or UI evidence exists, but ownership/boundaries need formal V1 audit or scaffold"
+      ],
+      "recommended_next_action": "Audit existing work and formalize boundaries before adding features.",
+      "priority": "P2"
+    },
+    {
+      "layer_name": "Governance Binder",
+      "status": "MOSTLY_COMPLETE",
+      "owner_domain": "Governance",
+      "docs": [],
+      "backend_service": [],
+      "backend_router": [],
+      "tests": [],
+      "governance_script": [],
+      "admin_ui": [
+        "src/pages/admin/GrantBinder.jsx"
+      ],
+      "reports_visibility": false,
+      "watchtower_visibility": false,
+      "route_visibility": true,
+      "registry_status": "present_in_table_and_structured_entry",
+      "known_audit_report": [],
+      "gaps": [
+        "Meaningful implementation exists, but formal layer-specific V1 doc/check/test coverage is incomplete"
+      ],
+      "recommended_next_action": "Add or finish formal V1 doc/check/test only where needed; avoid rebuilding mature behavior.",
+      "priority": "P3"
+    }
+  ],
+  "remaining_for_v1": [
+    "API Gateway",
+    "Event/Webhook",
+    "Batch/Import",
+    "Warehouse Sync",
+    "Apps/Programs",
+    "Adapter Layer",
+    "Audit & Verification",
+    "Readiness Gate",
+    "Verified Aggregation",
+    "Funding Intelligence",
+    "Public Approval",
+    "Narrative/Story",
+    "Partner/Institution",
+    "Security/Privacy",
+    "Data Ownership/IP",
+    "Context-Adaptive Analyst",
+    "Production Automation",
+    "Career Pathways",
+    "Sponsorship Layer",
+    "Grant/Proposal Layer"
+  ],
+  "shortest_path_to_v1": {
+    "phase_1_must_formalize": [
+      "API Gateway",
+      "Event/Webhook",
+      "Batch/Import",
+      "Adapter Layer",
+      "Audit & Verification",
+      "Readiness Gate",
+      "Verified Aggregation",
+      "Public Approval",
+      "Security/Privacy",
+      "Data Ownership/IP",
+      "Warehouse Sync",
+      "Production Automation"
+    ],
+    "phase_2_can_remain_scaffolded": [
+      "Apps/Programs",
+      "Funding Intelligence",
+      "Narrative/Story",
+      "Partner/Institution",
+      "Context-Adaptive Analyst",
+      "Career Pathways",
+      "Sponsorship Layer",
+      "Grant/Proposal Layer"
+    ],
+    "phase_3_post_v1_hardening": [
+      "Alignment Layer",
+      "LOO",
+      "Governance Layer",
+      "Decision Journal",
+      "Replay Engine",
+      "Signed Manifest",
+      "Self-Audit",
+      "SHS Sales Layer",
+      "Production Ops",
+      "Development Library",
+      "QA + Delivery",
+      "ClientOps",
+      "Website Studio",
+      "SHF Impact Command Center",
+      "Public Impact Map",
+      "Program Registry",
+      "Governance Binder"
+    ],
+    "phase_4_visibility_polish": [
+      "Admin/route visibility polish for mostly-complete layers",
+      "Dedicated Reports/Watchtower summary panels for remaining governance layers",
+      "Clean up historical backup files separately under archive policy"
+    ]
+  },
+  "duplicate_overlap_review": [
+    {
+      "overlap": "AI Governance and AI Guardrails",
+      "classification": "needs documentation",
+      "note": "AI Guardrails V1 is formalized; AI governance language should remain bounded inside AI/Swarm or Governance unless owner creates a separate layer."
+    },
+    {
+      "overlap": "Policy Engine and AI Guardrails",
+      "classification": "needs documentation",
+      "note": "Policy/rules services exist; formal Policy Engine V1 should clarify it supports Alignment/AI Guardrails rather than duplicating them."
+    },
+    {
+      "overlap": "Role/Permission and Identity",
+      "classification": "clean boundary",
+      "note": "Identity files and route guards own access; permissions are implementation details of Identity/Security."
+    },
+    {
+      "overlap": "Audit/Trace and Event Bus/Activity Log",
+      "classification": "needs merge decision",
+      "note": "Audit viewer, reporting traces, events routes, and watchtower logs overlap; formal V1 should define ownership."
+    },
+    {
+      "overlap": "Reports and Client Reporting",
+      "classification": "needs documentation",
+      "note": "Reports admin is mature; client reporting should be a consumer/workflow boundary, not a separate truth channel."
+    },
+    {
+      "overlap": "Data Approval Layer and Data Approval Gateway",
+      "classification": "clean boundary",
+      "note": "Layer evaluates readiness; Gateway/human review remains final public approval control surface."
+    },
+    {
+      "overlap": "SHF Impact Data Spine and Public Publishing",
+      "classification": "needs documentation",
+      "note": "Impact data exists; public publishing needs formal gates around Data Approval Gateway and public surfaces."
+    },
+    {
+      "overlap": "Watchtower and System Health",
+      "classification": "needs documentation",
+      "note": "Watchtower observes risk/coverage; health/status routes observe system availability."
+    },
+    {
+      "overlap": "LOO and Readiness/Risk Scoring",
+      "classification": "needs documentation",
+      "note": "LOO ranks outcomes; readiness/risk scoring should remain evidence or governance signals feeding LOO/Watchtower."
+    }
+  ],
+  "governance_validation": {
+    "npm_run_check_governance": "pass",
+    "python3_scripts_check_master_layer_registry_py": "pass",
+    "note": "Governance checker reports 45 required layers; audit table contains 52 registry rows."
+  },
+  "build_validation": {
+    "npm_run_build": "pass",
+    "warning": "Vite reported existing large chunk warning only."
+  },
+  "git_safety": {
+    "git_status_short": [
+      "?? docs/MASTER_LAYER_REGISTRY_V1_COMPLETION_AUDIT.json",
+      "?? docs/MASTER_LAYER_REGISTRY_V1_COMPLETION_AUDIT.md"
+    ],
+    "git_diff_name_status": [],
+    "git_diff_stat": "no tracked diffs; only untracked audit reports",
+    "commit_performed": false
+  },
+  "files_changed": [
+    "docs/MASTER_LAYER_REGISTRY_V1_COMPLETION_AUDIT.md",
+    "docs/MASTER_LAYER_REGISTRY_V1_COMPLETION_AUDIT.json"
+  ],
+  "v1_completion_assessment": {
+    "is_v1_complete_now": false,
+    "estimated_layers_remaining": 12,
+    "recommended_next_layer": "Audit & Verification",
+    "reason": "The core truth/oracle/data chain is strong, but audit/trace ownership is the highest-leverage remaining formal V1 boundary because it touches reports, events, Watchtower, replay, and compliance."
+  }
+}

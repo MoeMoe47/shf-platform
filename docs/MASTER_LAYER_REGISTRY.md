@@ -294,12 +294,12 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 ### Audit & Verification
 
 - Layer Type: Assurance
-- Owns: Audit records, verification evidence traces, and proof retention.
-- Must Not Own: Product workflow, narrative communication, or public approval.
-- Upstream: Truth Spine, Watchtower, Signed Manifest
-- Downstream: Self-Audit, Governance Binder, Reports
-- Truth Spine Requirement: Must preserve Truth Spine claim/source/package identifiers.
-- Enforcement Status: Required
+- Owns: Audit event records, audit completeness validation, layer/event classification, provenance/evidence trace checks, before/after decision checks, completeness scoring, missing trace detection, coverage by layer, trace readiness, and replay readiness.
+- Must Not Own: Final truth verification, Truth Spine claim creation or persistence, public approval, Oracle rulings, Watchtower monitoring replacement, Reports replacement, Agent event ledger replacement, SHF Impact Data Spine mutation, product workflow, or narrative communication.
+- Upstream: Source Registry, Data Federation, Data Aggregator, Data Normalization, Evidence Package, Data Verification, Truth Spine, Oracle Layer, Data Approval Layer, Reports, Watchtower, Agent Fabric
+- Downstream: Reports, Watchtower, Self-Audit, Governance Binder, Replay Engine, Signed Manifest
+- Truth Spine Requirement: May verify audit completeness and traceability only; cannot verify truth, write Truth Spine claims, public-approve records, or override Truth Spine.
+- Enforcement Status: Formalized V1
 
 ### Readiness Gate
 

@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from datetime import datetime
 
+from services.audit_verification_service import audit_verification_summary
 from services.ai_guardrails_service import ai_guardrails_summary
 from services.data_approval_service import data_approval_summary
 from services.data_aggregator_service import data_aggregator_summary
@@ -28,6 +29,7 @@ def snapshot():
     evidence_package = evidence_package_summary()
     data_verification = data_verification_summary()
     data_approval = data_approval_summary()
+    audit_verification = audit_verification_summary()
     return {
         "ts": datetime.utcnow().isoformat(),
         "usage": {"requests": 0, "users": 0, "apps": 0},
@@ -126,6 +128,19 @@ def snapshot():
             "approves_public_data": data_approval["approves_public_data"],
             "requires_gateway_review": data_approval["requires_gateway_review"],
             "note": "Data Approval evaluates approval readiness only; Data Approval Gateway and human review remain required for public approval.",
+        },
+        "audit_verification": {
+            "policy_status": audit_verification["policy_status"],
+            "total_events": audit_verification["total_events"],
+            "blocked": audit_verification["blocked"],
+            "needs_review": audit_verification["needs_review"],
+            "audit_ready": audit_verification["audit_ready"],
+            "trace_ready": audit_verification["trace_ready"],
+            "replay_ready": audit_verification["replay_ready"],
+            "truth_verified_count": audit_verification["truth_verified_count"],
+            "public_approved_count": audit_verification["public_approved_count"],
+            "verifies_truth": audit_verification["verifies_truth"],
+            "note": "Audit Verification is traceability and replay-readiness context only; Truth Spine controls truth, public approval, and report readiness.",
         },
         "oracle": {
             "cases_total": oracle["cases_total"],

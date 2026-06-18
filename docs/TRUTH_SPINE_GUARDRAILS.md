@@ -130,6 +130,12 @@ Data Aggregator must not verify claims, verify sources, public-approve data, mar
 
 Inputs without source/provenance metadata must remain blocked or draft before Truth Spine. Data Aggregator status is intake context only; Truth Spine remains the authority for verified, public-approved, and report-ready facts.
 
+## Data Normalization
+
+Data Normalization can prepare canonical shapes, normalize field aliases, preserve provenance, and flag readiness for Evidence Package or Truth Spine review.
+
+Data Normalization cannot verify claims, public-approve records, mark reports ready, create final claims, override Oracle rulings, or mutate SHF Impact Data Spine. Normalized records remain unverified until Truth Spine evaluates them.
+
 ## Backend First
 
 Truth Spine V1 lives in Agent Fabric first:

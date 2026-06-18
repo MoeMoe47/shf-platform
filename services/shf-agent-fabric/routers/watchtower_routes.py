@@ -7,6 +7,7 @@ from fabric.watchtower.aggregator import build_watchtower_summary, build_watchto
 from fabric.watchtower.store import set_quarantine, clear_quarantine, get_quarantine_map, get_risk_history
 from services.ai_guardrails_service import ai_guardrails_summary
 from services.data_aggregator_service import data_aggregator_summary
+from services.data_normalization_service import data_normalization_summary
 from services.game_theory_service import game_theory_summary
 from services.oracle_service import oracle_summary
 from services.truth_spine_service import truth_summary
@@ -22,6 +23,7 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
     ai_guardrails = ai_guardrails_summary()
     game_theory = game_theory_summary()
     data_aggregator = data_aggregator_summary()
+    data_normalization = data_normalization_summary()
     if isinstance(summary, dict):
         summary["truth_coverage"] = {
             "coverage_percent": truth["coverage_percent"],
@@ -41,6 +43,15 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
             "ready_for_evidence_package": data_aggregator["ready_for_evidence_package"],
             "flag": data_aggregator["missing_provenance"] > 0 or data_aggregator["blocked_from_truth_spine"] > 0,
             "status": "watch" if data_aggregator["missing_provenance"] > 0 or data_aggregator["blocked_from_truth_spine"] > 0 else "ready",
+        }
+        summary["data_normalization"] = {
+            "policy_status": data_normalization["policy_status"],
+            "sample_readiness": data_normalization["sample_readiness"],
+            "ready_for_public_approval": data_normalization["ready_for_public_approval"],
+            "verifies_truth": data_normalization["verifies_truth"],
+            "approves_public_data": data_normalization["approves_public_data"],
+            "flag": data_normalization["sample_readiness"]["blocked"] > 0,
+            "status": "watch" if data_normalization["sample_readiness"]["blocked"] > 0 else "ready",
         }
         summary["oracle"] = {
             "cases_total": oracle["cases_total"],

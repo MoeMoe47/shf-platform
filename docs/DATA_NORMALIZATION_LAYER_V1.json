@@ -1,0 +1,110 @@
+{
+  "layer_name": "Data Normalization Layer V1",
+  "is_new_layer": false,
+  "role": "Converts aggregated intake data into consistent canonical preview shapes before downstream evidence, verification, decision, reporting, approval, and public impact systems consume it.",
+  "boundaries": {
+    "does": [
+      "receive aggregated intake-style records",
+      "standardize field names",
+      "normalize basic data types",
+      "classify canonical entity type",
+      "detect missing required fields",
+      "detect ambiguous entity matches",
+      "preserve source/provenance metadata",
+      "produce normalized preview records",
+      "flag readiness for Evidence Package and Truth Spine review"
+    ],
+    "does_not": [
+      "verify truth",
+      "approve public data",
+      "create public approved records",
+      "mutate SHF Impact Data Spine",
+      "override Truth Spine",
+      "override Oracle",
+      "publish reports",
+      "create final claims without evidence/source references",
+      "bypass Data Aggregator or Source Registry",
+      "create a production database"
+    ]
+  },
+  "upstream_dependencies": [
+    "Data Aggregator",
+    "Source Registry"
+  ],
+  "downstream_targets": [
+    "Evidence Package",
+    "Truth Spine",
+    "Reports",
+    "Watchtower"
+  ],
+  "supported_canonical_types": [
+    "county",
+    "program",
+    "metric",
+    "story",
+    "organization",
+    "source",
+    "evidence",
+    "unknown"
+  ],
+  "alias_groups": {
+    "county_name": ["countyName", "county", "county_name"],
+    "program_name": ["programName", "program", "program_name"],
+    "metric_name": ["metricName", "metric", "metric_name"],
+    "source_url": ["sourceUrl", "source_url", "url"],
+    "source_name": ["sourceName", "source_name"],
+    "value": ["value", "metricValue", "metric_value"],
+    "status": ["status", "approvalStatus"],
+    "last_updated": ["updatedAt", "lastUpdated", "last_updated"]
+  },
+  "endpoints": [
+    "GET /data-normalization/health",
+    "GET /data-normalization/schema",
+    "GET /data-normalization/summary",
+    "POST /data-normalization/normalize",
+    "POST /data-normalization/batch-normalize"
+  ],
+  "reports_integration": {
+    "field": "data_normalization",
+    "summary_only": true
+  },
+  "watchtower_integration": {
+    "field": "data_normalization",
+    "observation_only": true
+  },
+  "registry_status": {
+    "registered": true,
+    "enforcement_status": "Formalized V1"
+  },
+  "validation": {
+    "status": "pass",
+    "commands": {
+      "python3 -m py_compile services/shf-agent-fabric/services/data_normalization_service.py services/shf-agent-fabric/routers/data_normalization_routes.py scripts/check_data_normalization_layer.py": "pass",
+      "python3 scripts/check_data_normalization_layer.py": "pass",
+      "python3 scripts/check_data_aggregator_layer.py": "pass",
+      "python3 scripts/check_master_layer_registry.py": "pass",
+      "python3 scripts/check_truth_spine_freeze.py": "pass",
+      "python3 scripts/check_oracle_layer.py": "pass",
+      "python3 scripts/check_ai_guardrails_layer.py": "pass",
+      "python3 scripts/check_game_theory_layer.py": "pass",
+      "npm run check:governance": "pass",
+      "python3 -m pytest services/shf-agent-fabric/tests/test_data_normalization_routes.py": "pass",
+      "python3 -m pytest services/shf-agent-fabric/tests/test_data_aggregator_routes.py services/shf-agent-fabric/tests/test_truth_routes.py services/shf-agent-fabric/tests/test_oracle_routes.py services/shf-agent-fabric/tests/test_ai_guardrails_routes.py services/shf-agent-fabric/tests/test_game_theory_routes.py services/shf-agent-fabric/tests/test_agent_canon_basics.py": "pass",
+      "npm run build": "pass"
+    },
+    "api_smoke": {
+      "GET /data-normalization/health": "pass",
+      "GET /data-normalization/schema": "pass",
+      "GET /data-normalization/summary": "pass",
+      "POST /data-normalization/normalize": "pass",
+      "POST /data-normalization/batch-normalize": "pass",
+      "GET /reports/snapshot": "pass",
+      "GET /watchtower/summary": "pass"
+    }
+  },
+  "remaining_risks": [
+    "V1 has no production persistence.",
+    "Future Evidence Package and Source Registry layers must preserve this boundary."
+  ],
+  "v1_complete": true
+}

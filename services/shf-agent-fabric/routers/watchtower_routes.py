@@ -8,6 +8,7 @@ from fabric.watchtower.store import set_quarantine, clear_quarantine, get_quaran
 from services.ai_guardrails_service import ai_guardrails_summary
 from services.data_aggregator_service import data_aggregator_summary
 from services.data_normalization_service import data_normalization_summary
+from services.data_verification_service import data_verification_summary
 from services.evidence_package_service import evidence_package_summary
 from services.game_theory_service import game_theory_summary
 from services.oracle_service import oracle_summary
@@ -26,6 +27,7 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
     data_aggregator = data_aggregator_summary()
     data_normalization = data_normalization_summary()
     evidence_package = evidence_package_summary()
+    data_verification = data_verification_summary()
     if isinstance(summary, dict):
         summary["truth_coverage"] = {
             "coverage_percent": truth["coverage_percent"],
@@ -66,6 +68,17 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
             "verifies_truth": evidence_package["verifies_truth"],
             "flag": evidence_package["incomplete_packages"] > 0,
             "status": "watch" if evidence_package["incomplete_packages"] > 0 else "ready",
+        }
+        summary["data_verification"] = {
+            "policy_status": data_verification["policy_status"],
+            "blocked": data_verification["blocked"],
+            "needs_review": data_verification["needs_review"],
+            "ready_for_truth_spine": data_verification["ready_for_truth_spine"],
+            "truth_verified_count": data_verification["truth_verified_count"],
+            "public_approval_ready": data_verification["public_approval_ready"],
+            "verifies_truth": data_verification["verifies_truth"],
+            "flag": data_verification["blocked"] > 0 or data_verification["needs_review"] > 0,
+            "status": "watch" if data_verification["blocked"] > 0 or data_verification["needs_review"] > 0 else "ready",
         }
         summary["oracle"] = {
             "cases_total": oracle["cases_total"],

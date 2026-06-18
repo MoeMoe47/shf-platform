@@ -142,6 +142,12 @@ Evidence Package may bundle normalized records with source metadata, provenance,
 
 Evidence Package may not verify truth, approve data, create verified claims, override Truth Spine decisions, override Oracle rulings, mutate SHF Impact Data Spine, publish reports, or bypass Data Approval Gateway.
 
+## Data Verification
+
+Data Verification may evaluate Evidence Package readiness, inspect source/provenance quality, surface blockers and warnings, calculate readiness scores, and recommend whether a package should move to Truth Spine review.
+
+Data Verification may not verify truth, write Truth Spine claims, approve public data, mark records public-approved, override Truth Spine decisions, override Oracle rulings, mutate SHF Impact Data Spine, or publish reports.
+
 ## Backend First
 
 Truth Spine V1 lives in Agent Fabric first:

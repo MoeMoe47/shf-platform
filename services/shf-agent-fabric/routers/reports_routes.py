@@ -4,6 +4,7 @@ from datetime import datetime
 from services.ai_guardrails_service import ai_guardrails_summary
 from services.data_aggregator_service import data_aggregator_summary
 from services.data_normalization_service import data_normalization_summary
+from services.data_verification_service import data_verification_summary
 from services.evidence_package_service import evidence_package_summary
 from services.game_theory_service import game_theory_summary
 from services.oracle_service import oracle_summary
@@ -20,6 +21,7 @@ def snapshot():
     data_aggregator = data_aggregator_summary()
     data_normalization = data_normalization_summary()
     evidence_package = evidence_package_summary()
+    data_verification = data_verification_summary()
     return {
         "ts": datetime.utcnow().isoformat(),
         "usage": {"requests": 0, "users": 0, "apps": 0},
@@ -66,6 +68,17 @@ def snapshot():
             "public_approval_ready": evidence_package["public_approval_ready"],
             "verifies_truth": evidence_package["verifies_truth"],
             "note": "Evidence Package is review preparation only; Truth Spine controls verification, public approval, and report readiness.",
+        },
+        "data_verification": {
+            "policy_status": data_verification["policy_status"],
+            "total_evaluations": data_verification["total_evaluations"],
+            "blocked": data_verification["blocked"],
+            "needs_review": data_verification["needs_review"],
+            "ready_for_truth_spine": data_verification["ready_for_truth_spine"],
+            "truth_verified_count": data_verification["truth_verified_count"],
+            "public_approval_ready": data_verification["public_approval_ready"],
+            "verifies_truth": data_verification["verifies_truth"],
+            "note": "Data Verification evaluates readiness only; Truth Spine remains the verification authority.",
         },
         "oracle": {
             "cases_total": oracle["cases_total"],

@@ -1,0 +1,121 @@
+{
+  "layer_name": "Data Verification Layer V1",
+  "is_new_layer": false,
+  "role": "Evaluates whether an Evidence Package is ready for Truth Spine review without becoming Truth Spine or creating verified claims.",
+  "position": "Evidence Package -> Data Verification -> Truth Spine",
+  "owner": "Data Operations / Governance review preparation layer",
+  "dependencies": {
+    "upstream": [
+      "Evidence Package",
+      "Data Normalization",
+      "Data Aggregator",
+      "Source Registry"
+    ],
+    "downstream": [
+      "Truth Spine",
+      "Oracle",
+      "Reports",
+      "Watchtower",
+      "LOO",
+      "Data Approval Gateway",
+      "SHF Impact Data Spine"
+    ]
+  },
+  "boundaries": {
+    "does": [
+      "accept Evidence Package-style records",
+      "evaluate completeness",
+      "evaluate provenance presence",
+      "evaluate source metadata presence",
+      "evaluate evidence reference count",
+      "evaluate verification readiness",
+      "identify blockers",
+      "identify warnings",
+      "recommend review action",
+      "return readiness score",
+      "prepare package for Truth Spine review"
+    ],
+    "does_not": [
+      "mark truth as verified",
+      "create verified claims",
+      "write into Truth Spine persistence",
+      "approve public data",
+      "mark anything public_approved",
+      "override Oracle",
+      "mutate SHF Impact Data Spine",
+      "publish reports",
+      "replace Evidence Package",
+      "replace Truth Spine"
+    ]
+  },
+  "canonical_verification_model": {
+    "verification_id": "",
+    "package_id": "",
+    "canonical_type": "",
+    "readiness_score": 0,
+    "verification_status": "blocked|needs_review|ready_for_truth_spine",
+    "source_quality": "missing|weak|acceptable|strong",
+    "evidence_quality": "missing|weak|acceptable|strong",
+    "provenance_quality": "missing|weak|acceptable|strong",
+    "warnings": [],
+    "blockers": [],
+    "recommended_action": "",
+    "ready_for_truth_spine": false,
+    "truth_verified": false,
+    "ready_for_public_approval": false
+  },
+  "endpoints": [
+    "GET /data-verification/health",
+    "GET /data-verification/schema",
+    "GET /data-verification/summary",
+    "POST /data-verification/evaluate",
+    "POST /data-verification/batch-evaluate",
+    "GET /data-verification/readiness"
+  ],
+  "reports_integration": {
+    "field": "data_verification",
+    "summary_only": true
+  },
+  "watchtower_integration": {
+    "field": "data_verification",
+    "observation_only": true
+  },
+  "registry_status": {
+    "registered": true,
+    "enforcement_status": "Formalized V1"
+  },
+  "validation": {
+    "status": "pass",
+    "commands": {
+      "py_compile": "pass",
+      "check_data_verification_layer": "pass",
+      "check_evidence_package_layer": "pass",
+      "check_data_normalization_layer": "pass",
+      "check_data_aggregator_layer": "pass",
+      "check_master_layer_registry": "pass",
+      "check_truth_spine_freeze": "pass",
+      "check_oracle_layer": "pass",
+      "check_ai_guardrails_layer": "pass",
+      "check_game_theory_layer": "pass",
+      "check_governance": "pass",
+      "pytest_data_verification_routes": "7 passed",
+      "pytest_adjacent_routes": "20 passed",
+      "npm_build": "pass"
+    },
+    "api_smoke": {
+      "GET /data-verification/health": "pass",
+      "GET /data-verification/schema": "pass",
+      "GET /data-verification/summary": "pass",
+      "POST /data-verification/evaluate": "pass",
+      "POST /data-verification/batch-evaluate": "pass",
+      "GET /data-verification/readiness": "pass",
+      "GET /reports/snapshot": "pass",
+      "GET /watchtower/summary": "pass"
+    }
+  },
+  "remaining_risks": [
+    "V1 has no production persistence.",
+    "Future Truth Spine submission workflow must preserve readiness-only boundary."
+  ],
+  "v1_complete": true
+}

@@ -9,6 +9,7 @@ from services.data_verification_service import data_verification_summary
 from services.evidence_package_service import evidence_package_summary
 from services.game_theory_service import game_theory_summary
 from services.oracle_service import oracle_summary
+from services.source_registry_service import source_registry_summary
 from services.truth_spine_service import truth_summary
 
 router = APIRouter(prefix="/reports", tags=["reports"])
@@ -17,6 +18,7 @@ router = APIRouter(prefix="/reports", tags=["reports"])
 def snapshot():
     truth = truth_summary()
     oracle = oracle_summary()
+    source_registry = source_registry_summary()
     ai_guardrails = ai_guardrails_summary()
     game_theory = game_theory_summary()
     data_aggregator = data_aggregator_summary()
@@ -38,6 +40,21 @@ def snapshot():
             "public_approved_count": truth["public_approved_count"],
             "coverage_percent": truth["coverage_percent"],
             "status": "ready" if truth["report_ready_count"] else "needs_truth_coverage",
+        },
+        "source_registry": {
+            "policy_status": source_registry["policy_status"],
+            "total_sources": source_registry["total_sources"],
+            "known_sources": source_registry["known_sources"],
+            "unknown_sources": source_registry["unknown_sources"],
+            "blocked_sources": source_registry["blocked_sources"],
+            "eligible_for_aggregator": source_registry["eligible_for_aggregator"],
+            "eligible_for_evidence_package": source_registry["eligible_for_evidence_package"],
+            "eligible_for_truth_spine": source_registry["eligible_for_truth_spine"],
+            "eligible_for_public_approval_consideration": source_registry["eligible_for_public_approval_consideration"],
+            "truth_verified_count": source_registry["truth_verified_count"],
+            "public_approved_count": source_registry["public_approved_count"],
+            "verifies_truth": source_registry["verifies_truth"],
+            "note": "Source Registry evaluates source identity and downstream eligibility only; Truth Spine controls verification and public approval.",
         },
         "data_aggregator": {
             "policy_status": data_aggregator["policy_status"],

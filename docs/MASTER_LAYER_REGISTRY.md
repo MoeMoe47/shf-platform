@@ -18,6 +18,7 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 | API Gateway | Platform | Routes API traffic and applies shared request policy. |
 | Event/Webhook | Platform | Receives and emits event signals from apps, partners, and systems. |
 | Batch/Import | Data Operations | Handles file imports, bulk uploads, and scheduled ingest. |
+| Source Registry Layer | Data Operations | Registers source identity, source type, provenance expectations, eligibility, and allowed downstream use before data intake. |
 | Data Aggregator Layer | Data Operations | Gathers approved raw/structured inputs, attaches provenance, and prepares intake for normalization, evidence packaging, and Truth Spine review. |
 | Data Normalization Layer | Data Operations | Converts aggregated intake into canonical preview shapes before Evidence Package, Truth Spine, Reports, Watchtower, LOO, or SHF Impact Data Spine consume it. |
 | Evidence Package Layer | Data Operations | Bundles normalized records with source metadata, provenance, and evidence references before Truth Spine review. |
@@ -107,6 +108,16 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 - Downstream: Adapter Layer, Warehouse Sync, Truth Spine
 - Truth Spine Requirement: Imported claims must include sources or enter Truth Spine as missing_source or draft.
 - Enforcement Status: Required
+
+### Source Registry Layer
+
+- Layer Type: Data Operations
+- Owns: Source identity, source type classification, owner/submitted-by metadata checks, provenance expectations, source warnings, source blockers, intake eligibility, evidence package eligibility, Truth Spine review eligibility, public approval consideration eligibility, and allowed downstream targets.
+- Must Not Own: Truth verification, Truth Spine claim creation, public approval, Oracle rulings, Data Aggregator intake collection, Evidence Package bundling, Data Approval Gateway decisions, SHF Impact Data Spine mutation, report publishing, or final claim truth.
+- Upstream: Batch/Import, Event/Webhook, Partner/Institution, Apps/Programs
+- Downstream: Data Aggregator Layer, Data Normalization Layer, Evidence Package Layer, Data Verification Layer, Truth Spine, Oracle Layer, Data Approval Layer, Reports, Watchtower, LOO, Data Approval Gateway, SHF Impact Data Spine
+- Truth Spine Requirement: May evaluate source eligibility and provenance completeness but cannot verify truth, write Truth Spine claims, public-approve records, or override Truth Spine decisions.
+- Enforcement Status: Formalized V1
 
 ### Data Aggregator Layer
 

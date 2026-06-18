@@ -13,6 +13,7 @@ from services.data_verification_service import data_verification_summary
 from services.evidence_package_service import evidence_package_summary
 from services.game_theory_service import game_theory_summary
 from services.oracle_service import oracle_summary
+from services.source_registry_service import source_registry_summary
 from services.truth_spine_service import truth_summary
 
 
@@ -23,6 +24,7 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
     summary = build_watchtower_summary(days=int(days), baseline_weeks=int(baseline_weeks), top_n=int(top_n))
     truth = truth_summary()
     oracle = oracle_summary()
+    source_registry = source_registry_summary()
     ai_guardrails = ai_guardrails_summary()
     game_theory = game_theory_summary()
     data_aggregator = data_aggregator_summary()
@@ -39,6 +41,23 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
             "low_trace_coverage_count": truth["low_trace_coverage_count"],
             "flag": truth["coverage_percent"] < 80,
             "status": "watch" if truth["coverage_percent"] < 80 else "covered",
+        }
+        summary["source_registry"] = {
+            "policy_status": source_registry["policy_status"],
+            "known_sources": source_registry["known_sources"],
+            "unknown_sources": source_registry["unknown_sources"],
+            "blocked_sources": source_registry["blocked_sources"],
+            "eligible_for_aggregator": source_registry["eligible_for_aggregator"],
+            "eligible_for_evidence_package": source_registry["eligible_for_evidence_package"],
+            "eligible_for_truth_spine": source_registry["eligible_for_truth_spine"],
+            "eligible_for_public_approval_consideration": source_registry["eligible_for_public_approval_consideration"],
+            "truth_verified_count": source_registry["truth_verified_count"],
+            "public_approved_count": source_registry["public_approved_count"],
+            "verifies_truth": source_registry["verifies_truth"],
+            "flag": source_registry["blocked_sources"] > 0 or source_registry["unknown_sources"] > 0,
+            "status": "watch"
+            if source_registry["blocked_sources"] > 0 or source_registry["unknown_sources"] > 0
+            else "ready",
         }
         summary["data_aggregator"] = {
             "policy_status": data_aggregator["policy_status"],

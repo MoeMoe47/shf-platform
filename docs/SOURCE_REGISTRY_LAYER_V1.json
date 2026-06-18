@@ -1,0 +1,132 @@
+{
+  "layer_name": "Source Registry Layer V1",
+  "is_new_layer": false,
+  "role": "Evaluates source identity, source type, provenance expectations, source eligibility, and allowed downstream use without verifying truth or approving public data.",
+  "position": "Source Registry -> Data Aggregator -> Data Normalization -> Evidence Package",
+  "owner": "Data Operations / Source governance preparation layer",
+  "dependencies": {
+    "upstream": [
+      "Batch/Import",
+      "Partner/Institution",
+      "Apps/Programs",
+      "Manual source intake"
+    ],
+    "downstream": [
+      "Data Aggregator",
+      "Data Normalization",
+      "Evidence Package",
+      "Data Verification",
+      "Truth Spine",
+      "Oracle",
+      "Data Approval",
+      "Reports",
+      "Watchtower",
+      "LOO",
+      "Data Approval Gateway",
+      "SHF Impact Data Spine"
+    ]
+  },
+  "boundaries": {
+    "does": [
+      "register source metadata in deterministic V1 scaffold form",
+      "classify source type",
+      "define required provenance fields",
+      "define allowed downstream targets",
+      "define source warnings and blockers",
+      "evaluate source intake eligibility",
+      "evaluate evidence package eligibility",
+      "evaluate Truth Spine review eligibility",
+      "evaluate public approval consideration eligibility",
+      "preserve source ownership and provenance metadata"
+    ],
+    "does_not": [
+      "verify truth",
+      "approve public data",
+      "mutate SHF Impact Data Spine",
+      "create verified claims",
+      "override Oracle",
+      "publish reports",
+      "bypass Data Aggregator",
+      "bypass Evidence Package",
+      "bypass Data Approval Gateway",
+      "act as final source of truth for claims"
+    ]
+  },
+  "canonical_source_model": {
+    "source_id": "",
+    "source_name": "",
+    "source_type": "manual_entry|document|dataset|api|partner_feed|public_record|user_submission|unknown",
+    "owner": "",
+    "submitted_by": "",
+    "source_url": "",
+    "provenance": {},
+    "trust_tier": "unknown|low|standard|high|official",
+    "allowed_downstream_targets": [],
+    "warnings": [],
+    "blockers": [],
+    "eligible_for_aggregator": false,
+    "eligible_for_evidence_package": false,
+    "eligible_for_truth_spine": false,
+    "eligible_for_public_approval_consideration": false,
+    "truth_verified": false,
+    "public_approved": false
+  },
+  "endpoints": [
+    "GET /source-registry/health",
+    "GET /source-registry/schema",
+    "GET /source-registry/summary",
+    "GET /source-registry/sources",
+    "POST /source-registry/evaluate",
+    "POST /source-registry/batch-evaluate",
+    "GET /source-registry/readiness"
+  ],
+  "reports_integration": {
+    "field": "source_registry",
+    "summary_only": true
+  },
+  "watchtower_integration": {
+    "field": "source_registry",
+    "observation_only": true
+  },
+  "registry_status": {
+    "registered": true,
+    "enforcement_status": "Formalized V1"
+  },
+  "validation": {
+    "status": "pass",
+    "commands": {
+      "py_compile": "pass",
+      "check_source_registry_layer": "pass",
+      "check_data_approval_layer": "pass",
+      "check_data_verification_layer": "pass",
+      "check_evidence_package_layer": "pass",
+      "check_data_normalization_layer": "pass",
+      "check_data_aggregator_layer": "pass",
+      "check_master_layer_registry": "pass",
+      "check_truth_spine_freeze": "pass",
+      "check_oracle_layer": "pass",
+      "check_ai_guardrails_layer": "pass",
+      "check_game_theory_layer": "pass",
+      "check_governance": "pass",
+      "pytest_source_registry_routes": "7 passed",
+      "pytest_adjacent_routes": "38 passed",
+      "npm_build": "pass"
+    },
+    "api_smoke": {
+      "GET /source-registry/health": "pass",
+      "GET /source-registry/schema": "pass",
+      "GET /source-registry/summary": "pass",
+      "GET /source-registry/sources": "pass",
+      "POST /source-registry/evaluate": "pass",
+      "POST /source-registry/batch-evaluate": "pass",
+      "GET /source-registry/readiness": "pass",
+      "GET /reports/snapshot": "pass",
+      "GET /watchtower/summary": "pass"
+    }
+  },
+  "remaining_risks": [
+    "V1 has no production persistence.",
+    "Future source intake workflows must preserve Source Registry as source metadata authority without letting it become Truth Spine."
+  ],
+  "v1_complete": true
+}

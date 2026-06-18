@@ -130,6 +130,12 @@ Data Aggregator must not verify claims, verify sources, public-approve data, mar
 
 Inputs without source/provenance metadata must remain blocked or draft before Truth Spine. Data Aggregator status is intake context only; Truth Spine remains the authority for verified, public-approved, and report-ready facts.
 
+## Source Registry
+
+Source Registry may evaluate source identity, source type, provenance completeness, source eligibility, and allowed downstream use before records enter Data Aggregator, Evidence Package, Truth Spine, Data Approval, reports, or SHF Impact Data Spine.
+
+Source Registry may not verify truth, write Truth Spine claims, approve public data, mark records public-approved, override Truth Spine decisions, override Oracle rulings, mutate SHF Impact Data Spine, publish reports, bypass Data Aggregator, bypass Evidence Package, or replace Data Approval Gateway.
+
 ## Data Normalization
 
 Data Normalization can prepare canonical shapes, normalize field aliases, preserve provenance, and flag readiness for Evidence Package or Truth Spine review.

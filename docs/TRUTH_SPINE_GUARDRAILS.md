@@ -244,6 +244,12 @@ Notification / Alert may classify notification readiness, trigger type, alert se
 
 Notification / Alert may not send notifications in V1, send email, send SMS, send external webhooks, send Slack/Teams/messages, create production notification queues, call external systems, write production records, verify truth, write Truth Spine claims, override Truth Spine decisions, override Oracle rulings, directly approve public data, mark records public-approved, directly mutate SHF Impact Data Spine, directly publish reports, replace Event / Webhook, replace Production Automation, replace Policy Engine, replace Watchtower, replace Reports, bypass Security / Privacy, bypass Data Ownership / IP, or bypass human review requirements.
 
+## Verified Aggregation
+
+Verified Aggregation may produce deterministic aggregate previews from records that satisfy traceability, verification/readiness, policy, audit, privacy/security, ownership/IP, and public approval criteria for the requested aggregation purpose.
+
+Verified Aggregation may not verify truth, write Truth Spine claims, override Truth Spine decisions, override Oracle rulings, directly approve public data, mark records public-approved, directly mutate SHF Impact Data Spine, directly publish reports, replace Reports, replace Data Aggregator, replace Data Normalization, replace Data Approval Gateway, bypass Security / Privacy, bypass Data Ownership / IP, or bypass Public Approval.
+
 ## SHS Spine And SHF Spine Boundary
 
 Truth Spine may evaluate eligible claims and evidence that originate from SHS Spine operational records, including ClientOps, Production Ops, Sales Ops, Website Studio, WebMaker, BuilderHub, reports workflow, service delivery, tickets, maintenance, QA, and project activity.

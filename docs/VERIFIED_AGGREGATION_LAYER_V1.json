@@ -1,0 +1,80 @@
+{
+  "layer_name": "Verified Aggregation Layer V1",
+  "is_new_layer": false,
+  "role": "Prepares deterministic aggregate previews from traceable, verified or readiness-approved, policy-compliant, privacy-safe, ownership-clear records without writing records, approving public data, mutating SHF Impact Data Spine, or publishing reports.",
+  "aggregation_purposes": [
+    "internal_summary",
+    "report_summary",
+    "watchtower_summary",
+    "loo_summary",
+    "public_impact_candidate",
+    "unknown"
+  ],
+  "boundaries": {
+    "does": [
+      "accept candidate records for aggregation",
+      "classify aggregation purpose",
+      "check traceability",
+      "check supplied Truth Spine status",
+      "check supplied Oracle supportability",
+      "check supplied Data Approval and Public Approval context",
+      "check supplied policy, audit, privacy, and ownership context",
+      "exclude blocked records",
+      "produce deterministic aggregate preview",
+      "expose summary-only context to Reports and Watchtower"
+    ],
+    "does_not": [
+      "perform raw data intake",
+      "perform final normalization",
+      "verify truth",
+      "create Truth Spine claims",
+      "override Truth Spine",
+      "override Oracle",
+      "approve public data",
+      "mark records public-approved",
+      "mutate SHF Impact Data Spine",
+      "publish reports",
+      "replace Reports",
+      "replace Data Aggregator",
+      "replace Data Normalization",
+      "replace Data Approval Gateway",
+      "write aggregate outputs to production stores",
+      "create production persistence"
+    ]
+  },
+  "endpoints": [
+    "GET /verified-aggregation/health",
+    "GET /verified-aggregation/schema",
+    "GET /verified-aggregation/summary",
+    "POST /verified-aggregation/evaluate",
+    "POST /verified-aggregation/batch-evaluate",
+    "GET /verified-aggregation/readiness"
+  ],
+  "authority_flags": {
+    "records_written": false,
+    "truth_verified": false,
+    "public_approved": false,
+    "mutated_public_data": false,
+    "published_report": false,
+    "writes_records": false,
+    "verifies_truth": false,
+    "approves_public_data": false,
+    "mutates_shf_impact_data": false,
+    "publishes_reports": false,
+    "replaces_reports": false,
+    "replaces_data_aggregator": false,
+    "replaces_data_approval_gateway": false
+  },
+  "reports_integration": {
+    "field": "verified_aggregation",
+    "summary_only": true
+  },
+  "watchtower_integration": {
+    "field": "verified_aggregation",
+    "observation_only": true
+  },
+  "validation": {
+    "status": "pass"
+  },
+  "v1_complete": true
+}

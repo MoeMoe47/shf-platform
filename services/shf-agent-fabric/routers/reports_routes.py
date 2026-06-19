@@ -24,6 +24,7 @@ from services.readiness_gate_service import readiness_gate_summary
 from services.security_privacy_service import security_privacy_summary
 from services.source_registry_service import source_registry_summary
 from services.truth_spine_service import truth_summary
+from services.verified_aggregation_service import verified_aggregation_summary
 from services.warehouse_sync_service import warehouse_sync_summary
 
 router = APIRouter(prefix="/reports", tags=["reports"])
@@ -54,6 +55,7 @@ def snapshot():
     warehouse_sync = warehouse_sync_summary()
     production_automation = production_automation_summary()
     notification_alert = notification_alert_summary()
+    verified_aggregation = verified_aggregation_summary()
     return {
         "ts": datetime.utcnow().isoformat(),
         "usage": {"requests": 0, "users": 0, "apps": 0},
@@ -191,6 +193,34 @@ def snapshot():
             "approves_public_data": public_approval["approves_public_data"],
             "publishes_reports": public_approval["publishes_reports"],
             "note": "Public Approval evaluates public-release readiness only; final public approval, public data writes, and report publishing remain gated outside this V1 scaffold.",
+        },
+        "verified_aggregation": {
+            "policy_status": verified_aggregation["policy_status"],
+            "total_aggregation_reviews": verified_aggregation["total_aggregation_reviews"],
+            "blocked": verified_aggregation["blocked"],
+            "needs_review": verified_aggregation["needs_review"],
+            "aggregation_ready": verified_aggregation["aggregation_ready"],
+            "records_seen_count": verified_aggregation["records_seen_count"],
+            "included_record_count": verified_aggregation["included_record_count"],
+            "excluded_record_count": verified_aggregation["excluded_record_count"],
+            "reports_ready_candidate_count": verified_aggregation["reports_ready_candidate_count"],
+            "watchtower_ready_candidate_count": verified_aggregation["watchtower_ready_candidate_count"],
+            "loo_ready_candidate_count": verified_aggregation["loo_ready_candidate_count"],
+            "public_impact_ready_candidate_count": verified_aggregation["public_impact_ready_candidate_count"],
+            "records_written_count": verified_aggregation["records_written_count"],
+            "truth_verified_count": verified_aggregation["truth_verified_count"],
+            "public_approved_count": verified_aggregation["public_approved_count"],
+            "mutated_public_data_count": verified_aggregation["mutated_public_data_count"],
+            "published_report_count": verified_aggregation["published_report_count"],
+            "writes_records": verified_aggregation["writes_records"],
+            "verifies_truth": verified_aggregation["verifies_truth"],
+            "approves_public_data": verified_aggregation["approves_public_data"],
+            "mutates_shf_impact_data": verified_aggregation["mutates_shf_impact_data"],
+            "publishes_reports": verified_aggregation["publishes_reports"],
+            "replaces_reports": verified_aggregation["replaces_reports"],
+            "replaces_data_aggregator": verified_aggregation["replaces_data_aggregator"],
+            "replaces_data_approval_gateway": verified_aggregation["replaces_data_approval_gateway"],
+            "note": "Verified Aggregation prepares deterministic aggregate previews only; it does not write records, verify truth, approve public data, mutate SHF Impact Data Spine, or publish reports.",
         },
         "security_privacy": {
             "policy_status": security_privacy["policy_status"],

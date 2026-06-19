@@ -182,6 +182,10 @@ Production Automation may evaluate automation readiness for SHS operational work
 
 Notification / Alert Layer may evaluate notification readiness for SHS operational workflows, ClientOps, imports, syncs, reports, readiness blockers, and Watchtower findings, but it does not send notifications in V1 and cannot move SHS private data into SHF public surfaces without downstream governance.
 
+## Relationship To Verified Aggregation Layer
+
+Verified Aggregation may summarize eligible, governed SHS-derived records only after governance checks. It cannot make SHS private operational data public and cannot mutate SHF Impact Data Spine.
+
 ## Relationship To Data Approval Gateway
 
 Data Approval Gateway is the human/review gate before public SHF use. It does not own raw SHS operational data, and SHS records cannot bypass it into public SHF Impact Data Spine.

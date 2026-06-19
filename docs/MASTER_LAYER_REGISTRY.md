@@ -359,12 +359,12 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 ### Verified Aggregation
 
 - Layer Type: Data Operations
-- Owns: Aggregating verified/readiness-approved records for downstream use.
-- Must Not Own: Draft claims, public approval decisions, or source verification.
-- Upstream: Truth Spine, Readiness Gate, Warehouse Sync
-- Downstream: Reports, Funding Intelligence, SHF Impact Command Center
-- Truth Spine Requirement: Must aggregate only verified/readiness-approved Truth Spine records.
-- Enforcement Status: Required
+- Owns: Aggregation review payloads, aggregation purpose classification, candidate record traceability checks, supplied Truth Spine/Oracle/Data Approval/Public Approval/Security-Privacy/Data Ownership-IP/Policy/Audit readiness inspection, excluded-record reporting, deterministic aggregate previews, included/excluded counts, blockers, warnings, and summary visibility to Reports and Watchtower.
+- Must Not Own: Raw data intake, final normalization, Truth Spine verification, Truth Spine claim creation, Oracle rulings, public approval, public-approved record writes, SHF Impact Data Spine mutation, report publishing, Reports replacement, Data Aggregator replacement, Data Normalization replacement, Data Approval Gateway replacement, production persistence, or production aggregate writes.
+- Upstream: Source Registry, Data Federation, Data Aggregator, Data Normalization, Evidence Package, Data Verification, Truth Spine, Oracle Layer, Data Approval Layer, Readiness Gate, Audit & Verification, Policy Engine, Security/Privacy, Data Ownership/IP, Public Approval
+- Downstream: Reports, Watchtower, LOO, Data Approval Gateway, SHF Spine, SHF Impact Data Spine, SHF Impact Command Center, Public Impact Map, Funding Intelligence
+- Truth Spine Requirement: May prepare aggregate previews only from traceable records that satisfy verification/readiness/approval criteria for the requested purpose. It cannot verify truth, write Truth Spine claims, mark records public-approved, override Truth Spine, override Oracle, mutate SHF Impact Data Spine, or publish reports.
+- Enforcement Status: Formalized V1
 
 ### Reports
 

@@ -28,6 +28,7 @@ from services.readiness_gate_service import readiness_gate_summary
 from services.security_privacy_service import security_privacy_summary
 from services.source_registry_service import source_registry_summary
 from services.truth_spine_service import truth_summary
+from services.verified_aggregation_service import verified_aggregation_summary
 from services.warehouse_sync_service import warehouse_sync_summary
 
 
@@ -60,6 +61,7 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
     warehouse_sync = warehouse_sync_summary()
     production_automation = production_automation_summary()
     notification_alert = notification_alert_summary()
+    verified_aggregation = verified_aggregation_summary()
     if isinstance(summary, dict):
         summary["truth_coverage"] = {
             "coverage_percent": truth["coverage_percent"],
@@ -199,6 +201,34 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
             "status": "watch"
             if public_approval["blocked"] > 0 or public_approval["needs_review"] > 0
             else "ready",
+        }
+        summary["verified_aggregation"] = {
+            "policy_status": verified_aggregation["policy_status"],
+            "blocked": verified_aggregation["blocked"],
+            "needs_review": verified_aggregation["needs_review"],
+            "aggregation_ready": verified_aggregation["aggregation_ready"],
+            "records_seen_count": verified_aggregation["records_seen_count"],
+            "included_record_count": verified_aggregation["included_record_count"],
+            "excluded_record_count": verified_aggregation["excluded_record_count"],
+            "reports_ready_candidate_count": verified_aggregation["reports_ready_candidate_count"],
+            "watchtower_ready_candidate_count": verified_aggregation["watchtower_ready_candidate_count"],
+            "loo_ready_candidate_count": verified_aggregation["loo_ready_candidate_count"],
+            "public_impact_ready_candidate_count": verified_aggregation["public_impact_ready_candidate_count"],
+            "records_written_count": verified_aggregation["records_written_count"],
+            "truth_verified_count": verified_aggregation["truth_verified_count"],
+            "public_approved_count": verified_aggregation["public_approved_count"],
+            "mutated_public_data_count": verified_aggregation["mutated_public_data_count"],
+            "published_report_count": verified_aggregation["published_report_count"],
+            "writes_records": verified_aggregation["writes_records"],
+            "verifies_truth": verified_aggregation["verifies_truth"],
+            "approves_public_data": verified_aggregation["approves_public_data"],
+            "mutates_shf_impact_data": verified_aggregation["mutates_shf_impact_data"],
+            "publishes_reports": verified_aggregation["publishes_reports"],
+            "replaces_reports": verified_aggregation["replaces_reports"],
+            "replaces_data_aggregator": verified_aggregation["replaces_data_aggregator"],
+            "replaces_data_approval_gateway": verified_aggregation["replaces_data_approval_gateway"],
+            "flag": verified_aggregation["blocked"] > 0 or verified_aggregation["needs_review"] > 0,
+            "status": "watch" if verified_aggregation["blocked"] > 0 or verified_aggregation["needs_review"] > 0 else "ready",
         }
         summary["security_privacy"] = {
             "policy_status": security_privacy["policy_status"],

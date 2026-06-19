@@ -26,6 +26,7 @@ from services.readiness_gate_service import readiness_gate_summary
 from services.security_privacy_service import security_privacy_summary
 from services.source_registry_service import source_registry_summary
 from services.truth_spine_service import truth_summary
+from services.warehouse_sync_service import warehouse_sync_summary
 
 
 router = APIRouter(prefix="/watchtower", tags=["watchtower"])
@@ -54,6 +55,7 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
     api_gateway = api_gateway_summary()
     adapter_layer = adapter_layer_summary()
     batch_import = batch_import_summary()
+    warehouse_sync = warehouse_sync_summary()
     if isinstance(summary, dict):
         summary["truth_coverage"] = {
             "coverage_percent": truth["coverage_percent"],
@@ -342,6 +344,35 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
             "replaces_data_normalization": batch_import["replaces_data_normalization"],
             "flag": batch_import["blocked"] > 0 or batch_import["needs_review"] > 0 or batch_import["quarantined_record_count"] > 0,
             "status": "watch" if batch_import["blocked"] > 0 or batch_import["needs_review"] > 0 or batch_import["quarantined_record_count"] > 0 else "ready",
+        }
+        summary["warehouse_sync"] = {
+            "policy_status": warehouse_sync["policy_status"],
+            "blocked": warehouse_sync["blocked"],
+            "needs_review": warehouse_sync["needs_review"],
+            "sync_ready": warehouse_sync["sync_ready"],
+            "warehouse_write_performed_count": warehouse_sync["warehouse_write_performed_count"],
+            "external_call_made_count": warehouse_sync["external_call_made_count"],
+            "export_created_count": warehouse_sync["export_created_count"],
+            "truth_verified_count": warehouse_sync["truth_verified_count"],
+            "public_approved_count": warehouse_sync["public_approved_count"],
+            "mutated_public_data_count": warehouse_sync["mutated_public_data_count"],
+            "published_report_count": warehouse_sync["published_report_count"],
+            "target_domain_counts": warehouse_sync["target_domain_counts"],
+            "data_classification_counts": warehouse_sync["data_classification_counts"],
+            "writes_warehouse": warehouse_sync["writes_warehouse"],
+            "calls_external_systems": warehouse_sync["calls_external_systems"],
+            "creates_exports": warehouse_sync["creates_exports"],
+            "verifies_truth": warehouse_sync["verifies_truth"],
+            "approves_public_data": warehouse_sync["approves_public_data"],
+            "mutates_shf_impact_data": warehouse_sync["mutates_shf_impact_data"],
+            "publishes_reports": warehouse_sync["publishes_reports"],
+            "replaces_reports": warehouse_sync["replaces_reports"],
+            "replaces_watchtower": warehouse_sync["replaces_watchtower"],
+            "replaces_batch_import": warehouse_sync["replaces_batch_import"],
+            "replaces_adapter_layer": warehouse_sync["replaces_adapter_layer"],
+            "replaces_data_approval_gateway": warehouse_sync["replaces_data_approval_gateway"],
+            "flag": warehouse_sync["blocked"] > 0 or warehouse_sync["needs_review"] > 0,
+            "status": "watch" if warehouse_sync["blocked"] > 0 or warehouse_sync["needs_review"] > 0 else "ready",
         }
         summary["oracle"] = {
             "cases_total": oracle["cases_total"],

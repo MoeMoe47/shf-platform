@@ -170,6 +170,10 @@ Adapter Layer is the first formal preparation boundary for SHS Spine outputs bef
 
 Batch / Import Layer governs bulk SHS Spine exports, ClientOps exports, Website Studio exports, partner datasets, CSV/JSON uploads, and import batches before they reach Adapter Layer or Source Registry. SHS private operational data remains private unless downstream governance allows transfer.
 
+## Relationship To Warehouse Sync Layer
+
+Warehouse Sync Layer prepares governed SHS/SHF records for future analytics or warehouse sync. It does not write warehouse records in V1 and does not make SHS private data public.
+
 ## Relationship To Data Approval Gateway
 
 Data Approval Gateway is the human/review gate before public SHF use. It does not own raw SHS operational data, and SHS records cannot bypass it into public SHF Impact Data Spine.

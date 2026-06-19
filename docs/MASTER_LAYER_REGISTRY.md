@@ -28,7 +28,7 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 | Evidence Package Layer | Data Operations | Bundles normalized records with source metadata, provenance, and evidence references before Truth Spine review. |
 | Data Verification Layer | Data Operations | Evaluates Evidence Package readiness, source/provenance quality, blockers, warnings, and next review action before Truth Spine review. |
 | Data Approval Layer | Data Operations | Evaluates approval readiness after Truth Spine, Oracle, and Data Verification before Data Approval Gateway review. |
-| Warehouse Sync | Data Operations | Moves normalized data into durable reporting and analysis stores. |
+| Warehouse Sync | Data Operations | Reviews future warehouse/analytics sync eligibility for governed records, summaries, reports, and audit events without writing warehouse records in V1. |
 | Apps/Programs | Product | Produces operational signals and user workflows. |
 | Adapter Layer | Platform | Prepares external/internal source formats, partner feeds, app outputs, SHS Spine outputs, and SHF-Next outputs for safe governance intake. |
 | Truth Spine | Verification | Verifies claims, sources, trace coverage, public approval, and report readiness. |
@@ -217,12 +217,12 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 ### Warehouse Sync
 
 - Layer Type: Data Operations
-- Owns: Moving normalized records into durable reporting and analysis stores.
-- Must Not Own: Verification rules, public release decisions, or layer governance.
-- Upstream: Batch/Import, Adapter Layer, Verified Aggregation
-- Downstream: Reports, Funding Intelligence, Watchtower
-- Truth Spine Requirement: Public/reporting datasets must preserve Truth Spine status metadata.
-- Enforcement Status: Required
+- Owns: Warehouse sync review payloads, source layer classification, target warehouse domain classification, data sensitivity classification, schema readiness inspection, mapping readiness inspection, audit trace reference checks, Security/Privacy status inspection, Data Ownership/IP status inspection, approval/public-status inspection, warehouse sync readiness, blockers, warnings, and summary visibility to Reports and Watchtower.
+- Must Not Own: Real warehouse connections, write warehouse records authority, export creation, external service calls, production persistence, Truth Spine verification, Oracle rulings, public approval, SHF Impact Data Spine mutation, report publishing, Reports replacement, Watchtower replacement, Batch/Import replacement, Adapter Layer replacement, Data Approval Gateway replacement, Security/Privacy bypass, Data Ownership/IP bypass, or Public Approval bypass.
+- Upstream: SHF Impact Data Spine, Data Approval Gateway, Public Approval, Security/Privacy, Data Ownership/IP, Readiness Gate, Data Approval Layer, Audit & Verification, Reports, Watchtower, LOO, Batch/Import, Adapter Layer, Verified Aggregation
+- Downstream: Reports, Watchtower, LOO, Analytics, Funding Intelligence
+- Truth Spine Requirement: Public/reporting datasets must preserve Truth Spine status metadata and may only be considered sync-ready when schema/mapping/audit references and downstream governance clearance are present. Warehouse Sync cannot verify truth, approve public data, mutate SHF Impact Data Spine, publish reports, create exports, or write warehouse records in V1.
+- Enforcement Status: Formalized V1
 
 ### Apps/Programs
 

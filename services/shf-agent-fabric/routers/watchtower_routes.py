@@ -5,6 +5,7 @@ from fastapi import APIRouter, Body
 
 from fabric.watchtower.aggregator import build_watchtower_summary, build_watchtower_program_rows
 from fabric.watchtower.store import set_quarantine, clear_quarantine, get_quarantine_map, get_risk_history
+from services.adapter_layer_service import adapter_layer_summary
 from services.api_gateway_service import api_gateway_summary
 from services.audit_verification_service import audit_verification_summary
 from services.ai_guardrails_service import ai_guardrails_summary
@@ -50,6 +51,7 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
     policy_engine = policy_engine_summary()
     event_webhook = event_webhook_summary()
     api_gateway = api_gateway_summary()
+    adapter_layer = adapter_layer_summary()
     if isinstance(summary, dict):
         summary["truth_coverage"] = {
             "coverage_percent": truth["coverage_percent"],
@@ -288,6 +290,27 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
             "replaces_ai_guardrails": api_gateway["replaces_ai_guardrails"],
             "flag": api_gateway["blocked"] > 0 or api_gateway["needs_review"] > 0,
             "status": "watch" if api_gateway["blocked"] > 0 or api_gateway["needs_review"] > 0 else "ready",
+        }
+        summary["adapter_layer"] = {
+            "policy_status": adapter_layer["policy_status"],
+            "blocked": adapter_layer["blocked"],
+            "needs_review": adapter_layer["needs_review"],
+            "adapter_ready": adapter_layer["adapter_ready"],
+            "external_call_made_count": adapter_layer["external_call_made_count"],
+            "normalized_final_count": adapter_layer["normalized_final_count"],
+            "truth_verified_count": adapter_layer["truth_verified_count"],
+            "public_approved_count": adapter_layer["public_approved_count"],
+            "mutated_public_data_count": adapter_layer["mutated_public_data_count"],
+            "published_report_count": adapter_layer["published_report_count"],
+            "target_layer_counts": adapter_layer["target_layer_counts"],
+            "adapter_profile_counts": adapter_layer["adapter_profile_counts"],
+            "calls_external_systems": adapter_layer["calls_external_systems"],
+            "normalizes_final_data": adapter_layer["normalizes_final_data"],
+            "replaces_source_registry": adapter_layer["replaces_source_registry"],
+            "replaces_data_aggregator": adapter_layer["replaces_data_aggregator"],
+            "replaces_data_normalization": adapter_layer["replaces_data_normalization"],
+            "flag": adapter_layer["blocked"] > 0 or adapter_layer["needs_review"] > 0,
+            "status": "watch" if adapter_layer["blocked"] > 0 or adapter_layer["needs_review"] > 0 else "ready",
         }
         summary["oracle"] = {
             "cases_total": oracle["cases_total"],

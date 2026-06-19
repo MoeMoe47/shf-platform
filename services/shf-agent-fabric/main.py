@@ -83,6 +83,7 @@ from routers.runs_loo_payload_routes import router as runs_loo_payload_router  #
 
 from routers.reports_routes import router as reports_router  # noqa: E402
 from routers.api_gateway_routes import router as api_gateway_router  # noqa: E402
+from routers.adapter_layer_routes import router as adapter_layer_router  # noqa: E402
 from routers.source_registry_routes import router as source_registry_router  # noqa: E402
 from routers.data_federation_routes import router as data_federation_router  # noqa: E402
 from routers.data_aggregator_routes import router as data_aggregator_router  # noqa: E402
@@ -471,6 +472,7 @@ app.include_router(ai_guardrails_router)
 app.include_router(game_theory_router)
 app.include_router(reports_router)
 app.include_router(api_gateway_router)
+app.include_router(adapter_layer_router)
 app.include_router(feedback_router)
 app.include_router(events_router)
 

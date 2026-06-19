@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from datetime import datetime
 
+from services.adapter_layer_service import adapter_layer_summary
 from services.api_gateway_service import api_gateway_summary
 from services.audit_verification_service import audit_verification_summary
 from services.ai_guardrails_service import ai_guardrails_summary
@@ -44,6 +45,7 @@ def snapshot():
     policy_engine = policy_engine_summary()
     event_webhook = event_webhook_summary()
     api_gateway = api_gateway_summary()
+    adapter_layer = adapter_layer_summary()
     return {
         "ts": datetime.utcnow().isoformat(),
         "usage": {"requests": 0, "users": 0, "apps": 0},
@@ -276,6 +278,27 @@ def snapshot():
             "replaces_policy_engine": api_gateway["replaces_policy_engine"],
             "replaces_ai_guardrails": api_gateway["replaces_ai_guardrails"],
             "note": "API Gateway evaluates route exposure and gateway readiness only; it does not forward requests, replace auth, verify truth, approve public data, mutate public data, or publish reports.",
+        },
+        "adapter_layer": {
+            "policy_status": adapter_layer["policy_status"],
+            "total_reviews": adapter_layer["total_reviews"],
+            "blocked": adapter_layer["blocked"],
+            "needs_review": adapter_layer["needs_review"],
+            "adapter_ready": adapter_layer["adapter_ready"],
+            "external_call_made_count": adapter_layer["external_call_made_count"],
+            "normalized_final_count": adapter_layer["normalized_final_count"],
+            "truth_verified_count": adapter_layer["truth_verified_count"],
+            "public_approved_count": adapter_layer["public_approved_count"],
+            "mutated_public_data_count": adapter_layer["mutated_public_data_count"],
+            "published_report_count": adapter_layer["published_report_count"],
+            "target_layer_counts": adapter_layer["target_layer_counts"],
+            "adapter_profile_counts": adapter_layer["adapter_profile_counts"],
+            "calls_external_systems": adapter_layer["calls_external_systems"],
+            "normalizes_final_data": adapter_layer["normalizes_final_data"],
+            "replaces_source_registry": adapter_layer["replaces_source_registry"],
+            "replaces_data_aggregator": adapter_layer["replaces_data_aggregator"],
+            "replaces_data_normalization": adapter_layer["replaces_data_normalization"],
+            "note": "Adapter Layer prepares source formats and mapping readiness only; it does not call external systems, normalize final data, verify truth, approve public data, mutate public data, or publish reports.",
         },
         "oracle": {
             "cases_total": oracle["cases_total"],

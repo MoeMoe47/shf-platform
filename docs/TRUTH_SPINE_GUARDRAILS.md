@@ -214,6 +214,12 @@ API Gateway may classify API routes, route exposure, method safety, required adm
 
 API Gateway may not forward requests in V1, replace auth, verify truth, write Truth Spine claims, override Truth Spine decisions, override Oracle rulings, directly approve public data, directly mutate SHF Impact Data Spine, directly publish reports, replace Identity / Access Control, replace Role / Permission, replace Policy Engine, replace AI Guardrails, replace Watchtower, or expose protected routes publicly.
 
+## Adapter Layer
+
+Adapter Layer may classify source system, input format, payload domain, adapter profile, mapping readiness, missing source/provenance metadata, SHS private operational context, SHF public-impact candidate context, and target intake layer.
+
+Adapter Layer may not perform final normalization, verify truth, write Truth Spine claims, override Truth Spine decisions, override Oracle rulings, directly approve public data, mark records public-approved, directly mutate SHF Impact Data Spine, directly publish reports, replace Source Registry, replace Data Aggregator, replace Data Normalization, replace API Gateway, replace Event / Webhook, bypass Security / Privacy, or bypass Data Ownership / IP.
+
 ## SHS Spine And SHF Spine Boundary
 
 Truth Spine may evaluate eligible claims and evidence that originate from SHS Spine operational records, including ClientOps, Production Ops, Sales Ops, Website Studio, WebMaker, BuilderHub, reports workflow, service delivery, tickets, maintenance, QA, and project activity.

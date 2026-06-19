@@ -30,7 +30,7 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 | Data Approval Layer | Data Operations | Evaluates approval readiness after Truth Spine, Oracle, and Data Verification before Data Approval Gateway review. |
 | Warehouse Sync | Data Operations | Moves normalized data into durable reporting and analysis stores. |
 | Apps/Programs | Product | Produces operational signals and user workflows. |
-| Adapter Layer | Platform | Converts app/program data into canonical SHS contracts. |
+| Adapter Layer | Platform | Prepares external/internal source formats, partner feeds, app outputs, SHS Spine outputs, and SHF-Next outputs for safe governance intake. |
 | Truth Spine | Verification | Verifies claims, sources, trace coverage, public approval, and report readiness. |
 | Oracle Layer | Decision Support | Decides what verified evidence supports and explains evidence-backed recommendations. |
 | Game Theory Layer | Strategy | Models incentives, adversarial pressure, and decision scenarios. |
@@ -237,12 +237,12 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 ### Adapter Layer
 
 - Layer Type: Platform
-- Owns: Converting app/program data into canonical SHS contracts.
-- Must Not Own: Truth evaluation, report communication, or public approval.
-- Upstream: Apps/Programs, Batch/Import, Program Registry
-- Downstream: Truth Spine, LOO, Watchtower
-- Truth Spine Requirement: Claim-like adapter output must carry source references into Truth Spine.
-- Enforcement Status: Required
+- Owns: Adapter review payloads, source system classification, input format classification, payload domain classification, adapter profile selection, mapping field readiness, missing source/provenance detection, target intake layer recommendation, SHS private operational data warnings, SHF public-impact candidate warnings, deterministic V1 seeded examples, and summary visibility to Reports and Watchtower.
+- Must Not Own: External API calls, production connectors, production persistence, final normalization, Truth Spine verification, Oracle rulings, public approval, public-approved writes, SHF Impact Data Spine mutation, report publishing, Source Registry replacement, Data Aggregator replacement, Data Normalization replacement, API Gateway replacement, Event/Webhook replacement, Security / Privacy bypass, or Data Ownership/IP bypass.
+- Upstream: SHS Spine, Apps/Programs, Partner/Institution, ClientOps, Production Ops, Website Studio, WebMaker, BuilderHub, SHF-Next, API Gateway, Event/Webhook, Batch/Import
+- Downstream: Source Registry Layer, Data Federation Layer, Data Aggregator Layer, Event/Webhook, Batch/Import, API Gateway, Reports, Watchtower, Policy Engine, Security/Privacy, Data Ownership/IP
+- Truth Spine Requirement: Must preserve source/provenance references and route eligible records toward Source Registry, Data Aggregator, and downstream evidence/verification controls. Adapter Layer cannot verify truth, perform final normalization, approve public data, mutate SHF Impact Data Spine, or publish reports.
+- Enforcement Status: Formalized V1
 
 ### Truth Spine
 

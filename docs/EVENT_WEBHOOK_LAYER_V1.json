@@ -1,0 +1,182 @@
+{
+  "layer_name": "Event / Webhook Layer V1",
+  "is_new_layer": false,
+  "role": "Evaluates, classifies, queues, and exposes event/webhook readiness across the SHF/SHS layer system without sending external webhooks in V1.",
+  "boundaries": {
+    "does": [
+      "accept event-style payloads",
+      "classify event type",
+      "classify source layer",
+      "identify routing targets",
+      "evaluate internal delivery readiness",
+      "evaluate future external delivery readiness",
+      "block external delivery when policy, security/privacy, or ownership context is missing",
+      "identify downstream consumers",
+      "produce warnings",
+      "produce blockers",
+      "provide summary-only visibility to Reports",
+      "provide observation-only visibility to Watchtower"
+    ],
+    "does_not": [
+      "send external webhooks in V1",
+      "call external network services",
+      "create production event bus persistence",
+      "verify truth",
+      "approve public data",
+      "mutate SHF Impact Data Spine",
+      "publish reports",
+      "create Truth Spine claims",
+      "override Truth Spine",
+      "override Oracle",
+      "replace Audit & Verification",
+      "replace Watchtower",
+      "replace Reports",
+      "replace Policy Engine",
+      "replace Notification / Alert",
+      "replace Production Automation"
+    ]
+  },
+  "event_types": [
+    "layer_status",
+    "data_ready",
+    "approval_ready",
+    "public_ready_candidate",
+    "watchtower_observation",
+    "report_snapshot",
+    "policy_violation",
+    "security_privacy_warning",
+    "ownership_warning",
+    "agent_action",
+    "integration_request",
+    "unknown"
+  ],
+  "routing_statuses": [
+    "blocked",
+    "needs_review",
+    "queue_ready"
+  ],
+  "recognized_internal_targets": [
+    "reports",
+    "watchtower",
+    "audit_verification",
+    "readiness_gate",
+    "policy_engine",
+    "notification_alert",
+    "production_automation",
+    "client_reporting"
+  ],
+  "recognized_external_targets": [
+    "webhook",
+    "partner_system",
+    "client_callback",
+    "public_status_feed"
+  ],
+  "deterministic_v1_rules": [
+    "missing event_id blocks",
+    "missing event_type blocks",
+    "missing source_layer blocks",
+    "unknown event_type needs review",
+    "unknown source_layer needs review",
+    "missing subject_id needs review",
+    "missing timestamp needs review",
+    "external or both delivery requires policy_ref, security_privacy_ref, and ownership_ref",
+    "requested_targets empty needs review",
+    "internal-only event with known source layer and internal target can be queue-ready",
+    "external delivery may be allowed only when required refs are present and no blockers exist",
+    "external targets are never called in V1",
+    "webhook_sent is always false in V1"
+  ],
+  "upstream_dependencies": [
+    "Apps/Programs",
+    "Partner/Institution",
+    "Audit & Verification",
+    "Policy Engine",
+    "Security / Privacy",
+    "Data Ownership / IP",
+    "Public Approval",
+    "Readiness Gate",
+    "Reports",
+    "Watchtower"
+  ],
+  "downstream_targets": [
+    "Adapter Layer",
+    "Batch/Import",
+    "Watchtower",
+    "Reports",
+    "Audit & Verification",
+    "Policy Engine",
+    "Notification / Alert",
+    "Production Automation",
+    "ClientOps"
+  ],
+  "endpoints": [
+    "GET /event-webhook/health",
+    "GET /event-webhook/schema",
+    "GET /event-webhook/summary",
+    "POST /event-webhook/evaluate",
+    "POST /event-webhook/batch-evaluate",
+    "GET /event-webhook/readiness"
+  ],
+  "reports_integration": {
+    "field": "event_webhook",
+    "summary_only": true
+  },
+  "watchtower_integration": {
+    "field": "event_webhook",
+    "observation_only": true
+  },
+  "registry_status": {
+    "registered": true,
+    "enforcement_status": "Formalized V1"
+  },
+  "authority_flags": {
+    "webhook_sent": false,
+    "truth_verified": false,
+    "public_approved": false,
+    "mutated_public_data": false,
+    "published_report": false,
+    "sends_external_webhooks": false,
+    "replaces_audit_verification": false,
+    "replaces_watchtower": false,
+    "replaces_notification_alert": false,
+    "replaces_policy_engine": false
+  },
+  "validation": {
+    "status": "pass",
+    "commands": {
+      "python3 -m py_compile services/shf-agent-fabric/services/event_webhook_service.py services/shf-agent-fabric/routers/event_webhook_routes.py scripts/check_event_webhook_layer.py": "pass",
+      "python3 scripts/check_event_webhook_layer.py": "pass",
+      "python3 scripts/check_policy_engine_layer.py": "pass",
+      "python3 scripts/check_data_ownership_ip_layer.py": "pass",
+      "python3 scripts/check_security_privacy_layer.py": "pass",
+      "python3 scripts/check_public_approval_layer.py": "pass",
+      "python3 scripts/check_readiness_gate_layer.py": "pass",
+      "python3 scripts/check_audit_verification_layer.py": "pass",
+      "python3 scripts/check_master_layer_registry.py": "pass",
+      "python3 scripts/check_truth_spine_freeze.py": "pass",
+      "python3 scripts/check_oracle_layer.py": "pass",
+      "python3 scripts/check_ai_guardrails_layer.py": "pass",
+      "python3 scripts/check_game_theory_layer.py": "pass",
+      "npm run check:governance": "pass",
+      "python3 -m pytest services/shf-agent-fabric/tests/test_event_webhook_routes.py": "pass",
+      "python3 -m pytest services/shf-agent-fabric/tests/test_policy_engine_routes.py services/shf-agent-fabric/tests/test_data_ownership_ip_routes.py services/shf-agent-fabric/tests/test_security_privacy_routes.py services/shf-agent-fabric/tests/test_public_approval_routes.py services/shf-agent-fabric/tests/test_readiness_gate_routes.py services/shf-agent-fabric/tests/test_audit_verification_routes.py services/shf-agent-fabric/tests/test_truth_routes.py services/shf-agent-fabric/tests/test_oracle_routes.py": "pass",
+      "npm run build": "pass"
+    },
+    "api_smoke": {
+      "GET /event-webhook/health": "pass",
+      "GET /event-webhook/schema": "pass",
+      "GET /event-webhook/summary": "pass",
+      "POST /event-webhook/evaluate": "pass",
+      "POST /event-webhook/batch-evaluate": "pass",
+      "GET /event-webhook/readiness": "pass",
+      "GET /reports/snapshot": "pass",
+      "GET /watchtower/summary": "pass"
+    }
+  },
+  "remaining_risks": [
+    "V1 has no production event bus persistence.",
+    "V1 does not send external webhooks.",
+    "Future outbound delivery requires signed manifests, retry policy, delivery logs, and governance approval."
+  ],
+  "v1_complete": true
+}

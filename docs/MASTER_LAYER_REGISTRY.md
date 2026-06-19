@@ -16,7 +16,7 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 | --- | --- | --- |
 | Identity & Access | Security | Authenticates users, roles, organizations, route access, and permission gates. |
 | API Gateway | Platform | Routes API traffic and applies shared request policy. |
-| Event/Webhook | Platform | Receives and emits event signals from apps, partners, and systems. |
+| Event/Webhook | Platform | Evaluates, classifies, queues, and exposes event/webhook readiness without sending external webhooks in V1. |
 | Batch/Import | Data Operations | Handles file imports, bulk uploads, and scheduled ingest. |
 | Source Registry Layer | Data Operations | Registers source identity, source type, provenance expectations, eligibility, and allowed downstream use before data intake. |
 | Data Federation Layer | Data Operations | Coordinates source groups, lineage, compatibility, and conflicts between Source Registry and Data Aggregator. |
@@ -94,12 +94,12 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 ### Event/Webhook
 
 - Layer Type: Platform
-- Owns: Event receipt, webhook emission, and signal transport.
-- Must Not Own: Verification state, public approval, or durable report facts.
-- Upstream: Apps/Programs, Partner/Institution
-- Downstream: Adapter Layer, Batch/Import, Watchtower
-- Truth Spine Requirement: Events that become claims must be routed into Truth Spine or remain unverified.
-- Enforcement Status: Required
+- Owns: Event-style payload acceptance, event type classification, source layer classification, target routing readiness, internal target identification, external delivery readiness, blocked target detection, queue readiness, warnings, blockers, deterministic V1 seeded examples, and summary visibility to Reports and Watchtower.
+- Must Not Own: send external webhooks in V1, external network calls, production event bus persistence, Audit & Verification replacement, Watchtower replacement, Reports replacement, Policy Engine replacement, Notification / Alert replacement, Production Automation replacement, verification state, public approval, SHF Impact Data Spine mutation, report publishing, Truth Spine claim creation, Truth Spine override, Oracle override, or durable report facts.
+- Upstream: Apps/Programs, Partner/Institution, Audit & Verification, Policy Engine, Security / Privacy, Data Ownership / IP, Public Approval, Readiness Gate, Reports, Watchtower
+- Downstream: Adapter Layer, Batch/Import, Watchtower, Reports, Audit & Verification, Policy Engine, Notification / Alert, Production Automation, ClientOps
+- Truth Spine Requirement: Events that become claims must be routed into Truth Spine or remain unverified. Event / Webhook may classify events and webhook readiness but cannot verify truth, approve public data, mutate public impact data, or publish reports.
+- Enforcement Status: Formalized V1
 
 ### Batch/Import
 

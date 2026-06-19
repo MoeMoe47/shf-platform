@@ -202,6 +202,12 @@ Policy Engine may evaluate policy compliance, policy violations, warnings, escal
 
 Policy Engine may not verify truth, write Truth Spine claims, override Truth Spine decisions, override Oracle rulings, directly approve public data, mark records public-approved, directly mutate SHF Impact Data Spine, directly publish reports, replace AI Guardrails, replace Identity / Access Control, replace Security / Privacy, replace Data Ownership / IP, replace Public Approval, or bypass Readiness Gate.
 
+## Event / Webhook
+
+Event / Webhook may classify events, classify source layers, route internal targets, evaluate queue readiness, and prepare webhook readiness for future integrations.
+
+Event / Webhook may not send external webhooks in V1, verify truth, write Truth Spine claims, override Truth Spine decisions, override Oracle rulings, directly approve public data, directly mutate SHF Impact Data Spine, directly publish reports, replace Audit & Verification, replace Watchtower, replace Reports, replace Policy Engine, replace Notification / Alert, or replace Production Automation.
+
 ## Backend First
 
 Truth Spine V1 lives in Agent Fabric first:

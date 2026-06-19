@@ -10,6 +10,7 @@ from services.data_normalization_service import data_normalization_summary
 from services.data_ownership_ip_service import data_ownership_ip_summary
 from services.data_verification_service import data_verification_summary
 from services.evidence_package_service import evidence_package_summary
+from services.event_webhook_service import event_webhook_summary
 from services.game_theory_service import game_theory_summary
 from services.oracle_service import oracle_summary
 from services.policy_engine_service import policy_engine_summary
@@ -40,6 +41,7 @@ def snapshot():
     security_privacy = security_privacy_summary()
     data_ownership_ip = data_ownership_ip_summary()
     policy_engine = policy_engine_summary()
+    event_webhook = event_webhook_summary()
     return {
         "ts": datetime.utcnow().isoformat(),
         "usage": {"requests": 0, "users": 0, "apps": 0},
@@ -227,6 +229,27 @@ def snapshot():
             "replaces_ai_guardrails": policy_engine["replaces_ai_guardrails"],
             "replaces_identity": policy_engine["replaces_identity"],
             "note": "Policy Engine evaluates policy readiness only; it does not replace Truth Spine, Oracle, AI Guardrails, Identity, privacy, ownership, Public Approval, or Reports.",
+        },
+        "event_webhook": {
+            "policy_status": event_webhook["policy_status"],
+            "total_events": event_webhook["total_events"],
+            "blocked": event_webhook["blocked"],
+            "needs_review": event_webhook["needs_review"],
+            "queue_ready": event_webhook["queue_ready"],
+            "external_delivery_allowed_count": event_webhook["external_delivery_allowed_count"],
+            "webhook_sent_count": event_webhook["webhook_sent_count"],
+            "internal_targets_count": event_webhook["internal_targets_count"],
+            "external_targets_count": event_webhook["external_targets_count"],
+            "blocked_targets_count": event_webhook["blocked_targets_count"],
+            "truth_verified_count": event_webhook["truth_verified_count"],
+            "public_approved_count": event_webhook["public_approved_count"],
+            "mutated_public_data_count": event_webhook["mutated_public_data_count"],
+            "published_report_count": event_webhook["published_report_count"],
+            "sends_external_webhooks": event_webhook["sends_external_webhooks"],
+            "verifies_truth": event_webhook["verifies_truth"],
+            "replaces_watchtower": event_webhook["replaces_watchtower"],
+            "replaces_policy_engine": event_webhook["replaces_policy_engine"],
+            "note": "Event Webhook evaluates event routing and webhook readiness only; it does not send external webhooks, verify truth, approve public data, mutate public data, or publish reports.",
         },
         "oracle": {
             "cases_total": oracle["cases_total"],

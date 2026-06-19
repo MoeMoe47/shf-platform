@@ -303,13 +303,13 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 
 ### Readiness Gate
 
-- Layer Type: Reporting
-- Owns: Eligibility checks for reports, briefings, and public outputs.
-- Must Not Own: Claim verification, source verification, or narrative writing.
-- Upstream: Truth Spine, Public Approval, Governance Layer
-- Downstream: Reports, Verified Aggregation
-- Truth Spine Requirement: Must use Truth Spine report_ready and public_approved state.
-- Enforcement Status: Required
+- Layer Type: Governance
+- Owns: Cross-layer transition requests, producer/consumer layer checks, required readiness field checks, transition status, blocker and warning surfacing, blocker owner assignment, next-action recommendations, and forward-movement eligibility.
+- Must Not Own: Truth verification, Truth Spine claim creation or persistence, public approval, Oracle rulings, Data Approval Gateway decisions, Audit & Verification replacement, Watchtower replacement, SHF Impact Data Spine mutation, report publishing, or final claim authority.
+- Upstream: Source Registry, Data Federation, Data Aggregator, Data Normalization, Evidence Package, Data Verification, Truth Spine, Oracle Layer, Data Approval Layer, Data Approval Gateway, Audit & Verification, Reports, Watchtower
+- Downstream: Data Federation, Data Aggregator, Data Normalization, Evidence Package, Data Verification, Truth Spine, Oracle Layer, Data Approval Layer, Data Approval Gateway, SHF Impact Data Spine, Reports, Watchtower, LOO, Verified Aggregation
+- Truth Spine Requirement: May decide if an output can move to the next layer, but cannot verify truth, write Truth Spine claims, mark records public-approved, override Truth Spine, override Oracle, or mutate SHF Impact Data Spine.
+- Enforcement Status: Formalized V1
 
 ### Verified Aggregation
 

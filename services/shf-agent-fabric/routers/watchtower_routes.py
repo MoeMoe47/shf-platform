@@ -15,6 +15,7 @@ from services.data_verification_service import data_verification_summary
 from services.evidence_package_service import evidence_package_summary
 from services.game_theory_service import game_theory_summary
 from services.oracle_service import oracle_summary
+from services.readiness_gate_service import readiness_gate_summary
 from services.source_registry_service import source_registry_summary
 from services.truth_spine_service import truth_summary
 
@@ -36,6 +37,7 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
     data_verification = data_verification_summary()
     data_approval = data_approval_summary()
     audit_verification = audit_verification_summary()
+    readiness_gate = readiness_gate_summary()
     if isinstance(summary, dict):
         summary["truth_coverage"] = {
             "coverage_percent": truth["coverage_percent"],
@@ -144,6 +146,21 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
             "flag": audit_verification["blocked"] > 0 or audit_verification["needs_review"] > 0,
             "status": "watch"
             if audit_verification["blocked"] > 0 or audit_verification["needs_review"] > 0
+            else "ready",
+        }
+        summary["readiness_gate"] = {
+            "policy_status": readiness_gate["policy_status"],
+            "blocked": readiness_gate["blocked"],
+            "needs_review": readiness_gate["needs_review"],
+            "ready": readiness_gate["ready"],
+            "can_move_forward_count": readiness_gate["can_move_forward_count"],
+            "truth_verified_count": readiness_gate["truth_verified_count"],
+            "public_approved_count": readiness_gate["public_approved_count"],
+            "mutated_public_data_count": readiness_gate["mutated_public_data_count"],
+            "verifies_truth": readiness_gate["verifies_truth"],
+            "flag": readiness_gate["blocked"] > 0 or readiness_gate["needs_review"] > 0,
+            "status": "watch"
+            if readiness_gate["blocked"] > 0 or readiness_gate["needs_review"] > 0
             else "ready",
         }
         summary["oracle"] = {

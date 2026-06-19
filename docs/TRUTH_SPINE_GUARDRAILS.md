@@ -172,6 +172,12 @@ Audit & Verification may evaluate audit completeness, traceability, replay readi
 
 Audit & Verification may not verify truth, write Truth Spine claims, approve public data, mark records public-approved, override Truth Spine decisions, override Oracle rulings, mutate SHF Impact Data Spine, publish reports, replace Watchtower, replace Reports, or replace Agent Fabric event ledger.
 
+## Readiness Gate
+
+Readiness Gate may decide whether an output from one layer is ready to move to the next layer, needs review, or must be blocked before forward movement.
+
+Readiness Gate may not verify truth, write Truth Spine claims, approve public data, mark records public-approved, override Truth Spine decisions, override Oracle rulings, mutate SHF Impact Data Spine, replace Data Approval Gateway, replace Audit & Verification, replace Watchtower, or publish reports.
+
 ## Backend First
 
 Truth Spine V1 lives in Agent Fabric first:

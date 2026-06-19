@@ -1,0 +1,174 @@
+{
+  "layer_name": "Readiness Gate Layer V1",
+  "is_new_layer": false,
+  "role": "Evaluates whether an output can move from one layer to the next without becoming a truth authority, public approval authority, or SHF Impact Data Spine mutator.",
+  "position": "Cross-layer transition gate across the governance and data chain.",
+  "owner": "Governance transition-control layer",
+  "dependencies": {
+    "upstream": [
+      "Source Registry",
+      "Data Federation",
+      "Data Aggregator",
+      "Data Normalization",
+      "Evidence Package",
+      "Data Verification",
+      "Truth Spine",
+      "Oracle Layer",
+      "Data Approval Layer",
+      "Data Approval Gateway",
+      "Audit & Verification",
+      "Reports",
+      "Watchtower"
+    ],
+    "downstream": [
+      "Data Federation",
+      "Data Aggregator",
+      "Data Normalization",
+      "Evidence Package",
+      "Data Verification",
+      "Truth Spine",
+      "Oracle Layer",
+      "Data Approval Layer",
+      "Data Approval Gateway",
+      "SHF Impact Data Spine",
+      "Reports",
+      "Watchtower",
+      "LOO",
+      "Verified Aggregation"
+    ]
+  },
+  "boundaries": {
+    "does": [
+      "accept layer output and transition request payloads",
+      "identify producing layer",
+      "identify target layer",
+      "evaluate required readiness fields",
+      "classify transition status",
+      "surface blockers",
+      "surface warnings",
+      "recommend next action",
+      "assign blocker owner layer",
+      "expose gate summary to Reports",
+      "expose gate summary to Watchtower"
+    ],
+    "does_not": [
+      "verify truth",
+      "create Truth Spine claims",
+      "approve public data",
+      "mark records public-approved",
+      "mutate SHF Impact Data Spine",
+      "override Truth Spine",
+      "override Oracle",
+      "replace Data Approval Gateway",
+      "replace Audit & Verification",
+      "replace Watchtower",
+      "publish reports",
+      "create production persistence"
+    ]
+  },
+  "canonical_gate_request": {
+    "gate_id": "",
+    "from_layer": "",
+    "to_layer": "",
+    "subject_id": "",
+    "subject_type": "",
+    "readiness_inputs": {},
+    "audit_ref": "",
+    "evidence_ref": "",
+    "truth_ref": "",
+    "oracle_ref": "",
+    "approval_ref": ""
+  },
+  "canonical_gate_result": {
+    "gate_id": "",
+    "from_layer": "",
+    "to_layer": "",
+    "subject_id": "",
+    "gate_status": "blocked|needs_review|ready",
+    "readiness_score": 0,
+    "required_checks": [],
+    "passed_checks": [],
+    "failed_checks": [],
+    "warnings": [],
+    "blockers": [],
+    "blocker_owner_layer": "",
+    "recommended_action": "",
+    "can_move_forward": false,
+    "truth_verified": false,
+    "public_approved": false,
+    "mutated_public_data": false
+  },
+  "supported_transitions": [
+    "source_registry->data_federation",
+    "data_federation->data_aggregator",
+    "data_aggregator->data_normalization",
+    "data_normalization->evidence_package",
+    "evidence_package->data_verification",
+    "data_verification->truth_spine",
+    "truth_spine->oracle",
+    "oracle->data_approval",
+    "data_approval->data_approval_gateway",
+    "data_approval_gateway->shf_impact_data_spine",
+    "reports->watchtower",
+    "watchtower->reports"
+  ],
+  "endpoints": [
+    "GET /readiness-gate/health",
+    "GET /readiness-gate/schema",
+    "GET /readiness-gate/summary",
+    "POST /readiness-gate/evaluate",
+    "POST /readiness-gate/batch-evaluate",
+    "GET /readiness-gate/readiness"
+  ],
+  "reports_integration": {
+    "field": "readiness_gate",
+    "summary_only": true
+  },
+  "watchtower_integration": {
+    "field": "readiness_gate",
+    "observation_only": true
+  },
+  "registry_status": {
+    "registered": true,
+    "enforcement_status": "Formalized V1"
+  },
+  "validation": {
+    "status": "pass",
+    "commands": {
+      "py_compile": "pass",
+      "check_readiness_gate_layer": "pass",
+      "check_audit_verification_layer": "pass",
+      "check_source_registry_layer": "pass",
+      "check_data_federation_layer": "pass",
+      "check_data_aggregator_layer": "pass",
+      "check_data_normalization_layer": "pass",
+      "check_evidence_package_layer": "pass",
+      "check_data_verification_layer": "pass",
+      "check_data_approval_layer": "pass",
+      "check_master_layer_registry": "pass",
+      "check_truth_spine_freeze": "pass",
+      "check_oracle_layer": "pass",
+      "check_ai_guardrails_layer": "pass",
+      "check_game_theory_layer": "pass",
+      "check_governance": "pass",
+      "pytest_readiness_gate_routes": "pass",
+      "pytest_adjacent_routes": "pass",
+      "npm_build": "pass"
+    },
+    "api_smoke": {
+      "GET /readiness-gate/health": "pass",
+      "GET /readiness-gate/schema": "pass",
+      "GET /readiness-gate/summary": "pass",
+      "POST /readiness-gate/evaluate": "pass",
+      "POST /readiness-gate/batch-evaluate": "pass",
+      "GET /readiness-gate/readiness": "pass",
+      "GET /reports/snapshot": "pass",
+      "GET /watchtower/summary": "pass"
+    }
+  },
+  "remaining_risks": [
+    "V1 has no production persistence.",
+    "Future Data Approval Gateway, Replay Engine, Signed Manifest, and SHF Impact Data Spine work must preserve the transition-only boundary."
+  ],
+  "v1_complete": true
+}

@@ -11,6 +11,7 @@ from services.data_verification_service import data_verification_summary
 from services.evidence_package_service import evidence_package_summary
 from services.game_theory_service import game_theory_summary
 from services.oracle_service import oracle_summary
+from services.readiness_gate_service import readiness_gate_summary
 from services.source_registry_service import source_registry_summary
 from services.truth_spine_service import truth_summary
 
@@ -30,6 +31,7 @@ def snapshot():
     data_verification = data_verification_summary()
     data_approval = data_approval_summary()
     audit_verification = audit_verification_summary()
+    readiness_gate = readiness_gate_summary()
     return {
         "ts": datetime.utcnow().isoformat(),
         "usage": {"requests": 0, "users": 0, "apps": 0},
@@ -141,6 +143,19 @@ def snapshot():
             "public_approved_count": audit_verification["public_approved_count"],
             "verifies_truth": audit_verification["verifies_truth"],
             "note": "Audit Verification is traceability and replay-readiness context only; Truth Spine controls truth, public approval, and report readiness.",
+        },
+        "readiness_gate": {
+            "policy_status": readiness_gate["policy_status"],
+            "total_gate_evaluations": readiness_gate["total_gate_evaluations"],
+            "blocked": readiness_gate["blocked"],
+            "needs_review": readiness_gate["needs_review"],
+            "ready": readiness_gate["ready"],
+            "can_move_forward_count": readiness_gate["can_move_forward_count"],
+            "truth_verified_count": readiness_gate["truth_verified_count"],
+            "public_approved_count": readiness_gate["public_approved_count"],
+            "mutated_public_data_count": readiness_gate["mutated_public_data_count"],
+            "verifies_truth": readiness_gate["verifies_truth"],
+            "note": "Readiness Gate is transition-readiness context only; Truth Spine, Oracle, and Data Approval Gateway remain their own authorities.",
         },
         "oracle": {
             "cases_total": oracle["cases_total"],

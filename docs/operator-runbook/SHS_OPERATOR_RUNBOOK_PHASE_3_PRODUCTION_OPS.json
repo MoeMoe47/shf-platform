@@ -1,0 +1,336 @@
+{
+  "runbook_name": "SHS Operator Runbook V1 - Phase 3: Production Ops",
+  "phase": 3,
+  "phase_name": "Production Ops",
+  "mode": "documentation_and_audit_only",
+  "created_at": "2026-06-19",
+  "goal": "Document how the production team turns a sales handoff into a build-ready SHS project.",
+  "v1_complete": true,
+  "entry_condition": "A Phase 2 Sales Handoff has produced an approved or review-ready handoff packet with selected package, client goals, deliverables, brand details, timeline, required pages/modules, and proposal approval status.",
+  "exit_condition": "Build Packet Ready: a Production Ops project and required page/module records exist, active page specs are complete, mock review is approved or ready for review, screenshot QA expectations are captured, blockers are resolved or documented, and the build packet is ready to copy/download for implementation.",
+  "route_status": {
+    "admin_routes_file": "src/router/AdminRoutes.jsx",
+    "protection": "All /ops/* routes are mounted under AuthGuard and wrapped with protect(...), which uses ProtectedHubRoute and hub access control.",
+    "routes": [
+      {
+        "phase_item": "Production dashboard",
+        "route": "admin.html#/ops/production",
+        "page": "src/pages/admin/ops/OpsProductionDashboard.jsx",
+        "status": "existing"
+      },
+      {
+        "phase_item": "Project setup",
+        "route": "admin.html#/ops/projects",
+        "page": "src/pages/admin/ops/OpsProjectSetup.jsx",
+        "status": "existing"
+      },
+      {
+        "phase_item": "Brand profile",
+        "route": "admin.html#/ops/brand-profile",
+        "page": "src/pages/admin/ops/OpsBrandProfile.jsx",
+        "status": "existing"
+      },
+      {
+        "phase_item": "Page intent",
+        "route": "admin.html#/ops/page-intent",
+        "page": "src/pages/admin/ops/OpsPageIntent.jsx",
+        "status": "existing"
+      },
+      {
+        "phase_item": "Layout blueprint",
+        "route": "admin.html#/ops/layout-blueprint",
+        "page": "src/pages/admin/ops/OpsLayoutBlueprint.jsx",
+        "status": "existing"
+      },
+      {
+        "phase_item": "Visual treatment",
+        "route": "admin.html#/ops/visual-treatment",
+        "page": "src/pages/admin/ops/OpsVisualTreatment.jsx",
+        "status": "existing"
+      },
+      {
+        "phase_item": "Asset governance",
+        "route": "admin.html#/ops/assets",
+        "page": "src/pages/admin/ops/OpsAssetGovernance.jsx",
+        "status": "existing"
+      },
+      {
+        "phase_item": "Data binding",
+        "route": "admin.html#/ops/data-binding",
+        "page": "src/pages/admin/ops/OpsDataBinding.jsx",
+        "status": "existing"
+      },
+      {
+        "phase_item": "Mock review",
+        "route": "admin.html#/ops/mock-review",
+        "page": "src/pages/admin/ops/OpsMockReview.jsx",
+        "status": "existing"
+      },
+      {
+        "phase_item": "Build packet",
+        "route": "admin.html#/ops/build-packet",
+        "page": "src/pages/admin/ops/OpsBuildPacket.jsx",
+        "status": "existing"
+      },
+      {
+        "phase_item": "Screenshot QA",
+        "route": "admin.html#/ops/screenshot-qa",
+        "page": "src/pages/admin/ops/OpsScreenshotQA.jsx",
+        "status": "existing"
+      },
+      {
+        "phase_item": "Learning loop",
+        "route": "admin.html#/ops/learning",
+        "page": "src/pages/admin/ops/OpsLearningDashboard.jsx",
+        "status": "existing"
+      }
+    ]
+  },
+  "workflow_sections": [
+    {
+      "name": "Project setup",
+      "route": "admin.html#/ops/projects",
+      "required_outputs": [
+        "project name",
+        "client/internal type",
+        "brand system",
+        "owner",
+        "priority",
+        "confidentiality",
+        "status",
+        "current stage",
+        "page records"
+      ],
+      "done_when": "Project is created or updated and at least one page/module record exists when page work is required."
+    },
+    {
+      "name": "Brand profile",
+      "route": "admin.html#/ops/brand-profile",
+      "required_outputs": [
+        "audience",
+        "tone",
+        "vocabulary",
+        "trust signals",
+        "logo usage",
+        "visual constraints",
+        "approved references",
+        "prohibited references"
+      ],
+      "done_when": "Brand profile is specific enough to prevent visual drift and accidental public style borrowing."
+    },
+    {
+      "name": "Page intent",
+      "route": "admin.html#/ops/page-intent",
+      "required_outputs": [
+        "primary user action",
+        "first-visit explanation",
+        "repeated-use behavior",
+        "proof points",
+        "conversion points",
+        "decision support zones"
+      ],
+      "done_when": "Every required page/module has a clear operator or client action."
+    },
+    {
+      "name": "Layout blueprint",
+      "route": "admin.html#/ops/layout-blueprint",
+      "required_outputs": [
+        "screen list",
+        "section order",
+        "major components",
+        "responsive priorities",
+        "empty/loading/active/success/review states",
+        "layout constraints"
+      ],
+      "done_when": "The implementation path is buildable without redesigning during coding."
+    },
+    {
+      "name": "Visual treatment",
+      "route": "admin.html#/ops/visual-treatment",
+      "required_outputs": [
+        "color direction",
+        "density",
+        "motion",
+        "imagery",
+        "component feel",
+        "surfaces not to borrow from"
+      ],
+      "done_when": "The visual direction is approved for this project and does not disturb public Foundation, Solutions, Sales, Hub, or Exchange pages."
+    },
+    {
+      "name": "Asset governance",
+      "route": "admin.html#/ops/assets",
+      "required_outputs": [
+        "asset list",
+        "source",
+        "usage rights",
+        "replacement status",
+        "approval owner",
+        "internal-only versus client-approved classification"
+      ],
+      "done_when": "No placeholder or internal-only asset can leak into final delivery by accident."
+    },
+    {
+      "name": "Data binding",
+      "route": "admin.html#/ops/data-binding",
+      "required_outputs": [
+        "field inventory",
+        "static/mock/computed/imported/future API classification",
+        "backend assumptions",
+        "truth/reporting implications",
+        "deferred integrations"
+      ],
+      "done_when": "The project states what data is real, mock, static, future, or requires governance before publication."
+    },
+    {
+      "name": "Mock review",
+      "route": "admin.html#/ops/mock-review",
+      "required_outputs": [
+        "page purpose review",
+        "audience fit",
+        "executive clarity",
+        "visual credibility",
+        "approval notes",
+        "required changes",
+        "mock status"
+      ],
+      "done_when": "Mock is approved or ready for review before the build packet is marked ready."
+    },
+    {
+      "name": "Screenshot QA",
+      "route": "admin.html#/ops/screenshot-qa",
+      "required_outputs": [
+        "mock screenshot notes",
+        "built screenshot notes",
+        "match score",
+        "QA status",
+        "drift category",
+        "viewport/route notes"
+      ],
+      "done_when": "Screenshot QA expectations are recorded before implementation and post-build QA can use the same criteria."
+    },
+    {
+      "name": "Learning loop",
+      "route": "admin.html#/ops/learning",
+      "required_outputs": [
+        "project",
+        "active page",
+        "workflow stage",
+        "learning category",
+        "learning note"
+      ],
+      "done_when": "Important build packet, visual drift, data binding, approval, QA, and time-saver lessons are captured for future production cycles."
+    }
+  ],
+  "workflow_stage_statuses": [
+    "Not Started",
+    "In Progress",
+    "Ready for Review",
+    "Approved",
+    "Blocked"
+  ],
+  "workflow_pipeline": [
+    "Sales discovery",
+    "Quick demo/mock",
+    "Approval",
+    "Scope confirmation",
+    "Build-ready packet",
+    "Codex implementation",
+    "Screenshot QA",
+    "Functional QA",
+    "Delivery",
+    "Adaptive learning loop"
+  ],
+  "local_storage_keys": [
+    "shs.ops.projects",
+    "shs.ops.activeProjectId",
+    "shs.ops.stageStatus",
+    "shs.ops.buildPacketDraft",
+    "shs.ops.screenshotQaNotes",
+    "shs.ops.learningEvents",
+    "shs.ops.pages",
+    "shs.ops.activePageId",
+    "shs.ops.pageWorkflowStatus",
+    "shs.ops.pageBuildPacketDraft",
+    "shs.ops.pageQaNotes",
+    "shs.ops.pageLearningEvents"
+  ],
+  "operator_checklist": [
+    "Open admin.html#/ops/projects.",
+    "Create or update the Production Ops project from the Phase 2 handoff packet.",
+    "Create page/module records for each required deliverable.",
+    "Select the active project and active page/module.",
+    "Complete Brand Profile.",
+    "Complete Page Intent.",
+    "Complete Layout Blueprint.",
+    "Complete Visual Treatment.",
+    "Complete Asset Governance.",
+    "Complete Data Binding.",
+    "Complete Mock Review and set mock status.",
+    "Record Screenshot QA expectations.",
+    "Check the page-level workflow status board for blockers.",
+    "Open admin.html#/ops/build-packet.",
+    "Confirm the generated build packet includes project, page, workflow, specs, screenshot QA, acceptance checklist, and non-goals.",
+    "Set Build Packet status to Ready for Review when complete.",
+    "Record any production lesson in admin.html#/ops/learning."
+  ],
+  "build_packet_ready_criteria": [
+    "Active project exists.",
+    "Active page/module exists.",
+    "Project owner, priority, confidentiality, status, and stage are set.",
+    "Page route, page type, audience, primary goal, and status are set.",
+    "Brand profile is filled.",
+    "Page intent is filled.",
+    "Layout blueprint is filled.",
+    "Visual treatment is filled.",
+    "Asset rules are filled.",
+    "Data binding is filled.",
+    "Mock review is filled and status is Ready for Review or Approved.",
+    "Screenshot QA expectations are filled.",
+    "Acceptance checklist is present.",
+    "Non-goals and protected public surfaces are explicit.",
+    "No workflow stage is blocked without a blocker note.",
+    "Build packet can be copied or downloaded."
+  ],
+  "governance_boundaries": [
+    "Production Ops is an internal/private pre-launch SHS surface.",
+    "Production Ops must not mutate SHF Impact Data Spine directly.",
+    "Production Ops must not publish public reports directly.",
+    "Production Ops must not mark records public-approved.",
+    "Production Ops build packets, prompts, QA machinery, screenshot drift notes, and adaptive learning remain internal.",
+    "Public claims, reports, funder-facing proof, or impact records must pass the appropriate governance path before publication."
+  ],
+  "findings": [
+    "All requested Phase 3 surfaces already exist under src/pages/admin/ops/.",
+    "All /ops/* routes are mounted in AdminRoutes.jsx and protected through admin routing.",
+    "Most individual Ops pages are thin wrappers around OpsWorkflowPage, so the canonical behavior lives in OpsProductionDashboard.jsx, opsData.js, and opsStorage.js.",
+    "The Build Packet surface can copy or download a generated internal page build packet.",
+    "The current Production Ops workflow is localStorage-backed and browser-local.",
+    "The Production Ops governance audit classifies Production Ops as internal/private pre-launch source material, not public SHF impact data."
+  ],
+  "launch_blockers": [
+    "Production Ops V1 uses localStorage rather than durable backend persistence.",
+    "No automated import from Phase 2 Sales Handoff into Production Ops project/page records.",
+    "Build Packet Ready is operator-enforced, not hard-blocked by validation logic.",
+    "Screenshot QA can store notes and status, but browser screenshot capture/attachment is not automated.",
+    "Learning loop is internal and local; it is not yet aggregated into a durable production knowledge base."
+  ],
+  "post_v1_improvements": [
+    "Add durable Production Ops persistence when the workflow stabilizes.",
+    "Create a direct Sales Handoff to Production Ops project conversion.",
+    "Add readiness validation before Build Packet can be marked Ready for Review.",
+    "Attach screenshots and approved mock references to page records.",
+    "Add explicit blocker notes per workflow stage.",
+    "Connect post-launch approved records to ClientOps through a governed handoff.",
+    "Route public claims, reports, and impact records through Truth Spine and approval gates when they leave internal Production Ops."
+  ],
+  "validation": {
+    "python3_m_json_tool": "PASS",
+    "npm_run_build": "PASS_WITH_EXISTING_LARGE_CHUNK_WARNING",
+    "npm_run_check_governance": "PASS"
+  },
+  "files_changed": [
+    "docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_3_PRODUCTION_OPS.md",
+    "docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_3_PRODUCTION_OPS.json"
+  ]
+}

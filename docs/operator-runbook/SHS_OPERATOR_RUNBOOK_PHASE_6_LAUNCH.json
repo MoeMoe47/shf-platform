@@ -1,0 +1,258 @@
+{
+  "runbook_name": "SHS Operator Runbook V1 - Phase 6: Launch",
+  "phase": 6,
+  "phase_name": "Launch",
+  "mode": "documentation_and_audit_only",
+  "created_at": "2026-06-19",
+  "goal": "Document how a delivered project becomes a launched SHS client system.",
+  "v1_complete": true,
+  "runtime_complete": false,
+  "entry_condition": "Phase 5 QA + Delivery is Delivery Ready, final client-facing deliverables are approved or ready for final owner approval, report/public claim readiness has passed required gates, Production Ops has a final launch-ready project record, and open QA exceptions or post-launch watch items are documented.",
+  "exit_condition": "ClientOps Active: final approval, launch date, client signoff, support tier, handoff notes, version launch record, ClientOps record, owner assignment, and open maintenance/watch item transfer are complete.",
+  "current_launch_context": {
+    "shrv1_surfaces": [
+      {
+        "surface": "Production Ops dashboard",
+        "route": "admin.html#/ops/production",
+        "status": "existing",
+        "purpose": "Internal/admin project status and launch handoff preparation."
+      },
+      {
+        "surface": "Project setup",
+        "route": "admin.html#/ops/projects",
+        "status": "existing",
+        "purpose": "Final project record context before launch handoff."
+      },
+      {
+        "surface": "Build packet",
+        "route": "admin.html#/ops/build-packet",
+        "status": "existing",
+        "purpose": "Development-ready packet and final implementation source context."
+      },
+      {
+        "surface": "Screenshot QA",
+        "route": "admin.html#/ops/screenshot-qa",
+        "status": "existing",
+        "purpose": "QA evidence, match notes, drift category, and delivery readiness context."
+      },
+      {
+        "surface": "Reports admin",
+        "route": "admin.html#/reports",
+        "status": "existing",
+        "purpose": "Trust-aware reporting/readiness context when reports are in scope."
+      },
+      {
+        "surface": "Truth Spine admin",
+        "route": "admin.html#/truth-spine",
+        "status": "existing",
+        "purpose": "Approval authority for public claims, report facts, readiness, and public approval."
+      }
+    ],
+    "shf_next_clientops_surface": {
+      "route": "/ops/clientops",
+      "status": "existing_in_consumer_app",
+      "classification": "internal_clientops",
+      "roles": [
+        "shs_admin",
+        "shs_clientops"
+      ],
+      "purpose": "ClientOps center for active records, maintenance, support, system health, version history, upgrades, monthly review, and exports."
+    },
+    "bridge_context": [
+      {
+        "file": "src/system/routes/crossAppRouteBridge.js",
+        "finding": "SHF-Next /ops/clientops has bridge entries to SHRV1 Agent Fabric and Reports governance surfaces."
+      },
+      {
+        "file": "src/system/identity/crossAppIdentityBridge.js",
+        "finding": "/ops/clientops is classified as internal ClientOps for shs_admin and shs_clientops."
+      }
+    ],
+    "missing_route_or_page": "No dedicated SHRV1 operator Launch route was found in the audited context. Phase 6 uses existing Production Ops, QA, Reports, Truth Spine, and ClientOps surfaces."
+  },
+  "required_data_fields": [
+    "project_id",
+    "client_id",
+    "client_name",
+    "business_name",
+    "package_selected",
+    "final_approval_status",
+    "final_approval_owner",
+    "launch_date",
+    "client_signoff_status",
+    "client_signoff_owner",
+    "support_tier",
+    "handoff_notes",
+    "version_record",
+    "clientops_record_id",
+    "active_modules",
+    "routes",
+    "reports_if_in_scope",
+    "open_maintenance_items_if_any",
+    "post_launch_watch_items_if_any"
+  ],
+  "operator_checklist": [
+    "Confirm Phase 5 exit status is Delivery Ready.",
+    "Open Production Ops, project setup, build packet, and screenshot QA records.",
+    "Confirm final approval status and final approval owner.",
+    "Record planned or actual launch date.",
+    "Capture client signoff status and signer.",
+    "Assign support tier before launch handoff.",
+    "Write handoff notes that explain what ClientOps must know to support the client.",
+    "Create a version launch record with version ID, date, summary, active modules, routes, reports, known exceptions, and owner.",
+    "Confirm report claims and public claims use Truth Spine, Reports readiness, and public approval gates when applicable.",
+    "Transfer the final launch-ready project record to ClientOps context.",
+    "Transfer client name, business name, package, support tier, active modules, routes, reports, renewal or review timing, and approved operational context.",
+    "Transfer open maintenance tasks or post-launch watch items.",
+    "Keep internal sales assumptions, draft build packets, prompts, QA machinery, screenshot drift notes, blocked/internal defects, adaptive learning notes, sensitive client context, and unapproved scope decisions private.",
+    "Create or confirm the ClientOps record in the active ClientOps surface.",
+    "Assign ClientOps owner or support owner.",
+    "Mark the project ClientOps Active only after final approval, launch date, client signoff, support tier, handoff notes, version record, and ClientOps record creation are complete."
+  ],
+  "launch_checks": {
+    "final_approval": [
+      "Delivery Ready status is not blocked.",
+      "Approved exceptions are documented.",
+      "Client-facing content and assets are approved.",
+      "Report/public claim readiness is approved where applicable.",
+      "Launch date and support tier are agreed.",
+      "ClientOps owner accepts the handoff."
+    ],
+    "launch_date": [
+      "Planned launch date is recorded.",
+      "Actual launch date is recorded after execution.",
+      "Launch window or timing note is documented if needed.",
+      "Owner responsible for launch confirmation is assigned.",
+      "Known constraints, blackout windows, or post-launch monitoring notes are captured."
+    ],
+    "client_signoff": [
+      "Signoff status is recorded.",
+      "Signer or client-side approver is recorded.",
+      "Date of signoff is recorded.",
+      "Approved exceptions or unresolved items are recorded.",
+      "Client-facing delivery note is available for ClientOps when needed."
+    ],
+    "support_tier": [
+      "Tier name is assigned.",
+      "Support owner is assigned.",
+      "Response expectations are recorded.",
+      "Maintenance cadence is recorded.",
+      "Monthly review cadence is recorded when applicable.",
+      "Upgrade or revision pathway is recorded when applicable."
+    ],
+    "handoff_notes": [
+      "What launched is summarized.",
+      "What was intentionally excluded is summarized.",
+      "What ClientOps must monitor is documented.",
+      "Known exceptions are documented.",
+      "Open maintenance or watch items are documented.",
+      "Contacts, escalation path, and support owner are recorded.",
+      "Internal prompts, sales assumptions, QA machinery, adaptive learning notes, and unapproved claims are excluded."
+    ],
+    "version_record": [
+      "Version ID is recorded.",
+      "Launch date is recorded.",
+      "Project/client identifiers are recorded.",
+      "Package delivered is recorded.",
+      "Active modules and routes are recorded.",
+      "Included reports are recorded when applicable.",
+      "Approved exceptions and known limitations are recorded.",
+      "Support tier and owner are recorded."
+    ],
+    "clientops_record_creation": [
+      "Client identity and business identity are captured.",
+      "Package and active modules are captured.",
+      "Support tier and owner are captured.",
+      "Launch/version record is linked.",
+      "Routes and reports are captured.",
+      "Open maintenance tasks and post-launch watch items are captured.",
+      "Monthly review cadence is captured when applicable.",
+      "Only approved operational context is transferred."
+    ]
+  },
+  "governance_boundary": {
+    "clientops_classification": "SHS internal/private operational surface",
+    "blocked_actions": [
+      "Direct SHF public exposure.",
+      "Direct SHF Impact Data Spine mutation.",
+      "Direct public approval.",
+      "Direct public report publishing.",
+      "Bypassing Truth Spine, Reports readiness, or public approval gates."
+    ],
+    "allowed_governed_path": [
+      "Adapter Layer",
+      "Batch / Import",
+      "Source Registry",
+      "Data Federation",
+      "Data Aggregator",
+      "Data Normalization",
+      "Evidence Package",
+      "Data Verification",
+      "Truth Spine",
+      "Oracle where applicable",
+      "Data Approval",
+      "Readiness Gate",
+      "Security / Privacy",
+      "Data Ownership / IP",
+      "Public Approval",
+      "Verified Aggregation",
+      "Data Approval Gateway",
+      "SHF Impact Data Spine only after approval"
+    ]
+  },
+  "definition_of_done": [
+    "Final approval is recorded.",
+    "Launch date is recorded.",
+    "Client signoff is recorded.",
+    "Support tier is assigned.",
+    "Handoff notes are complete and private-safe.",
+    "Version launch record exists.",
+    "ClientOps record exists.",
+    "ClientOps owner/support owner is assigned.",
+    "Open maintenance or watch items are transferred.",
+    "Reports/public claims remain truth/readiness-safe.",
+    "Project status is ClientOps Active."
+  ],
+  "findings": [
+    "The launch-readiness audit states SHS/SHF V1 is private-beta ready with operator controls, but not paid-client or public-launch ready.",
+    "Existing SHRV1 Production Ops, Build Packet, Screenshot QA, Reports, and Truth Spine surfaces can support a manual launch handoff.",
+    "Existing docs define the lifecycle as Sales / Handoff -> Production Ops -> Development Library / Build Packet -> QA + Delivery -> Launch -> ClientOps.",
+    "SHF-Next /ops/clientops is the documented active ClientOps surface for portfolio records, maintenance, support tickets, system health, version history, upgrade opportunities, monthly review, and exports.",
+    "ClientOps is internal/private and should not be exposed on public SHF routes.",
+    "Launch and ClientOps activation are currently operator-enforced, not hard runtime gates."
+  ],
+  "launch_blockers": [
+    "No dedicated SHRV1 Launch route or hard launch gate was found.",
+    "No automated Production Ops to ClientOps record creation exists in SHRV1.",
+    "No durable launch/version record backend was identified for SHRV1 Operator Runbook V1.",
+    "Client signoff, final approval, and support tier are checklist-driven rather than hard-validated.",
+    "Production auth and durable persistence remain outside this runbook phase."
+  ],
+  "post_v1_improvements": [
+    "Add a structured Launch gate surface or model when owner approves runtime work.",
+    "Add one-click ClientOps record creation from a launch-ready project.",
+    "Add durable version records for launched client systems.",
+    "Add required final approval, client signoff, support tier, and owner fields.",
+    "Add launch/browser smoke evidence capture.",
+    "Add governed ClientOps-to-report candidate intake when real reporting workflows require it."
+  ],
+  "files_changed": [
+    "docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_6_LAUNCH.md",
+    "docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_6_LAUNCH.json"
+  ],
+  "validation": {
+    "python3 -m json.tool docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_6_LAUNCH.json": {
+      "status": "PASS",
+      "notes": "JSON report is valid."
+    },
+    "npm run build": {
+      "status": "PASS_WITH_EXISTING_LARGE_CHUNK_WARNING",
+      "notes": "Build passed with the existing Vite large-chunk warning."
+    },
+    "npm run check:governance": {
+      "status": "PASS",
+      "notes": "Master registry, proposal, Truth Spine, Oracle, AI Guardrails, Game Theory, data/governance layers, and duplicate cleanup checks passed."
+    }
+  },
+  "commit_performed": false
+}

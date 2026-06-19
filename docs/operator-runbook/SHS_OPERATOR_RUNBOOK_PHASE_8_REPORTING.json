@@ -1,0 +1,226 @@
+{
+  "runbook_name": "SHS Operator Runbook V1 - Phase 8: Reporting",
+  "phase": 8,
+  "phase_name": "Reporting",
+  "mode": "documentation_and_audit_only",
+  "created_at": "2026-06-19",
+  "goal": "Document how SHS produces client-facing reports.",
+  "v1_complete": true,
+  "runtime_complete": false,
+  "entry_condition": "Phase 7 ClientOps status is actively managed, ClientOps operational context is current, report purpose/audience/delivery channel are known, and report facts are private client facts or have passed required Truth Spine, Reports readiness, approval, privacy, and ownership gates.",
+  "exit_condition": "Report delivered: report type selected, source data reviewed, boundaries checked, approval recorded, final report saved as PDF, PDF delivered through approved channel, and ClientOps record updated.",
+  "current_reporting_context": {
+    "surfaces": [
+      {
+        "surface": "SHRV1 Reports admin",
+        "route_or_file": "admin.html#/reports",
+        "status": "existing",
+        "purpose": "Trust-aware report readiness and governance reporting surface."
+      },
+      {
+        "surface": "SHRV1 Truth Spine",
+        "route_or_file": "admin.html#/truth-spine",
+        "status": "existing",
+        "purpose": "Verification, report readiness, public approval, package metadata, and display-scope authority."
+      },
+      {
+        "surface": "Reports API snapshot",
+        "route_or_file": "services/shf-agent-fabric/routers/reports_routes.py",
+        "status": "existing",
+        "purpose": "Exposes truth status and governance-layer readiness context for reports."
+      },
+      {
+        "surface": "SHF-Next ClientOps Center",
+        "route_or_file": "/ops/clientops",
+        "status": "existing_in_consumer_app",
+        "purpose": "ClientOps record, monthly review, support, maintenance, health, version history, and report/export workflow context."
+      },
+      {
+        "surface": "ClientOps report helpers",
+        "route_or_file": "/Users/mikeslate/shf-next/src/data/clientOpsReportData.ts",
+        "status": "existing_in_consumer_app",
+        "purpose": "Project snapshot, monthly review, maintenance, support ticket, system health, and upgrade opportunity exports."
+      },
+      {
+        "surface": "ClientOps bridge to Reports",
+        "route_or_file": "src/system/routes/crossAppRouteBridge.js",
+        "status": "existing",
+        "purpose": "Allows ClientOps monthly/reporting workflow to open SHRV1 trust-aware reports admin."
+      }
+    ],
+    "reporting_boundary": "Client-facing reports may use ClientOps operational context, but public/funder-facing claims must not bypass Truth Spine, Reports readiness, public approval, Security / Privacy, or Data Ownership / IP checks."
+  },
+  "required_data_fields": [
+    "report_id",
+    "report_type",
+    "clientops_record_id",
+    "client_id",
+    "client_name",
+    "report_period",
+    "report_audience",
+    "source_sections",
+    "truth_status_if_required",
+    "approval_status",
+    "approved_by",
+    "pdf_saved",
+    "delivery_channel",
+    "delivered_at",
+    "delivery_owner",
+    "report_version"
+  ],
+  "report_types": {
+    "client_health_report": [
+      "Client status.",
+      "System health.",
+      "Open/closed support tickets.",
+      "Maintenance board summary.",
+      "Version changes.",
+      "Known risks.",
+      "Next actions.",
+      "Support tier and owner."
+    ],
+    "monthly_review_report": [
+      "Reporting period.",
+      "Client status.",
+      "Support summary.",
+      "Maintenance progress.",
+      "System health.",
+      "Version history highlights.",
+      "Upgrade opportunities.",
+      "Decisions needed.",
+      "Next-month actions."
+    ],
+    "upgrade_report": [
+      "Opportunity title.",
+      "Problem or value.",
+      "Affected module/route/package.",
+      "Evidence from support, maintenance, monthly review, or system health.",
+      "Estimated complexity if known.",
+      "Client readiness.",
+      "Recommended next step.",
+      "Sales/proposal handoff note if applicable."
+    ],
+    "support_summary": [
+      "Tickets opened.",
+      "Tickets closed.",
+      "Current open tickets.",
+      "Response status against support tier.",
+      "Common issue patterns.",
+      "Maintenance items created from tickets.",
+      "Client action needed.",
+      "Internal action owner."
+    ]
+  },
+  "report_approval_checks": [
+    "Report type and audience are correct.",
+    "Client/private data is not exposed beyond intended audience.",
+    "Public/funder-facing claims are verified, report-ready, and public-approved where required.",
+    "Truth Spine status and report readiness are included in snapshots/exports when applicable.",
+    "Security / Privacy and Data Ownership / IP concerns are resolved or blocked.",
+    "Reports do not use draft, missing-source, or low-coverage claims as final facts.",
+    "Report owner approves the final version."
+  ],
+  "save_as_pdf_rule": [
+    "Save only the approved final report as PDF.",
+    "Use a date-stamped or versioned filename.",
+    "Do not save draft reports as delivery PDFs.",
+    "Do not deliver screenshots, raw exports, JSON, CSV, or internal notes as the final client-facing report unless separately approved.",
+    "If JSON/CSV exports are generated for internal traceability, keep them internal unless the owner approves delivery.",
+    "Record the PDF filename, report version, saved date, and delivery owner in ClientOps."
+  ],
+  "delivery_process": [
+    "Select report type.",
+    "Confirm audience and delivery channel.",
+    "Pull source context from ClientOps, Reports, and Truth Spine where applicable.",
+    "Draft the report.",
+    "Check client/private and public/private boundaries.",
+    "Check report approval requirements.",
+    "Resolve blockers or mark the report blocked.",
+    "Record approval owner and approval status.",
+    "Save final approved report as PDF.",
+    "Deliver PDF through the approved channel.",
+    "Record delivery date, recipient/channel, report version, and owner.",
+    "Update the ClientOps record with the delivered report and next action."
+  ],
+  "operator_checklist": [
+    "Confirm ClientOps record is active.",
+    "Select client health, monthly review, upgrade report, support summary, or approved custom report.",
+    "Confirm report period and audience.",
+    "Gather ClientOps record, maintenance board, support tickets, system health, version history, upgrade opportunities, and handoff file context.",
+    "Open SHRV1 Reports admin when trust/readiness context is required.",
+    "Open Truth Spine when public claims, report-ready facts, package metadata, or public approval are required.",
+    "Draft client-facing content.",
+    "Remove internal prompts, private sales assumptions, QA machinery, adaptive learning notes, sensitive context, and unapproved claims.",
+    "Run report approval checklist.",
+    "Record approval status and approver.",
+    "Save final approved report as PDF.",
+    "Deliver PDF through the approved delivery channel.",
+    "Record delivery in ClientOps.",
+    "Exit only when report status is Report delivered."
+  ],
+  "governance_boundary": {
+    "canonical_rule": "Reports communicate only verified and readiness-approved information.",
+    "clientops_reporting_rule": "ClientOps may feed reports only as governed report-candidate input after applicable source, verification, approval, privacy, ownership, readiness, public approval, and gateway controls.",
+    "blocked_actions": [
+      "Publish ClientOps private data publicly.",
+      "Use draft, missing-source, or low-coverage claims as final facts.",
+      "Recalculate Truth Spine verification status.",
+      "Recalculate public approval status.",
+      "Override Security / Privacy or Data Ownership / IP blockers.",
+      "Deliver public/funder-facing claims without required public approval."
+    ]
+  },
+  "definition_of_done": [
+    "Report type is selected.",
+    "ClientOps source context is reviewed.",
+    "Report audience is documented.",
+    "Truth/readiness/public approval requirements are checked.",
+    "Report approval is recorded.",
+    "Final approved report is saved as PDF.",
+    "PDF is delivered through approved channel.",
+    "Delivery date, recipient/channel, owner, and version are recorded.",
+    "ClientOps record is updated.",
+    "Report status is Report delivered."
+  ],
+  "findings": [
+    "SHRV1 Reports snapshot includes Truth Spine report-ready, verified, public-approved, and coverage status.",
+    "Truth Spine Guardrails state Reports must include Truth Spine status and may communicate only verified, report-ready, and public-approved claims where applicable.",
+    "ClientOps audit states ClientOps may feed reports only as governed report-candidate input after source, verification, approval, privacy, ownership, readiness, public approval, and gateway controls.",
+    "SHF-Next ClientOps has monthly/report/export context, while SHRV1 owns trust-aware Reports and Truth Spine governance surfaces.",
+    "Client-facing report delivery is currently operator-driven and PDF-based, not hard runtime-enforced in SHRV1."
+  ],
+  "launch_blockers": [
+    "No hard SHRV1 client-report approval gate was identified.",
+    "PDF delivery is a runbook rule, not a runtime-enforced workflow.",
+    "ClientOps report generation lives in the consumer app context and is not durably persisted by SHRV1 V1.",
+    "Public/funder-facing report claims still require complete Truth Spine and public approval coverage.",
+    "Production auth and durable report delivery records remain post-V1."
+  ],
+  "post_v1_improvements": [
+    "Add a structured report approval model when owner approves runtime work.",
+    "Add report delivery records to durable ClientOps persistence.",
+    "Add automatic Truth Spine package attachment to report exports.",
+    "Add PDF filename/version enforcement.",
+    "Add public/private leakage checks before report delivery.",
+    "Add report-recipient and delivery-channel audit trail."
+  ],
+  "files_changed": [
+    "docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_8_REPORTING.md",
+    "docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_8_REPORTING.json"
+  ],
+  "validation": {
+    "python3 -m json.tool docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_8_REPORTING.json": {
+      "status": "PASS",
+      "notes": "JSON report is valid."
+    },
+    "npm run build": {
+      "status": "PASS_WITH_EXISTING_LARGE_CHUNK_WARNING",
+      "notes": "Build passed with the existing Vite large-chunk warning."
+    },
+    "npm run check:governance": {
+      "status": "PASS",
+      "notes": "Master registry, proposal, Truth Spine, Oracle, AI Guardrails, Game Theory, data/governance layers, and duplicate cleanup checks passed."
+    }
+  },
+  "commit_performed": false
+}

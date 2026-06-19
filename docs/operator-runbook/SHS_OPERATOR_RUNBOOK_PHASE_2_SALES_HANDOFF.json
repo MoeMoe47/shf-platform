@@ -1,0 +1,250 @@
+{
+  "runbook_name": "SHS Operator Runbook V1 - Phase 2: Sales Handoff",
+  "phase": 2,
+  "phase_name": "Sales Handoff",
+  "mode": "documentation_and_audit_only",
+  "created_at": "2026-06-19",
+  "goal": "Document how a qualified SHS lead becomes a production-ready SHS project handoff.",
+  "v1_complete": true,
+  "entry_condition": "A Phase 1 lead has reached Ready for Sales Handoff with qualification notes, owner, next action, and an initial package recommendation.",
+  "exit_condition": "Production project created: the qualified opportunity has a selected package, client goals, deliverables, brand details, timeline, required pages/modules, proposal approval status, handoff packet, and a Production Ops project/page record ready for build packet work.",
+  "current_route_status": {
+    "sales_review_routes": [
+      {
+        "route": "admin.html#/hub/sales-pipeline",
+        "page": "src/pages/hub/HubSalesPipelinePage.jsx",
+        "status": "usable_sales_handoff_source",
+        "notes": "Tracks sales stages, estimated value, priority, due date, related opportunity, related partners, next action, notes, and local sales review events."
+      },
+      {
+        "route": "admin.html#/hub/opportunities",
+        "page": "src/pages/hub/HubOpportunitiesPage.jsx",
+        "status": "usable_opportunity_context_source",
+        "notes": "Tracks opportunity title, type, stage, estimated value, urgency, deadline, needed lanes, geography, source, buyer, next action, score, and recommended partners."
+      },
+      {
+        "route": "admin.html#/hub/bundles",
+        "page": "src/pages/hub/HubBundleBuilderPage.jsx",
+        "status": "usable_package_context_route",
+        "notes": "Linked from Sales Pipeline as Bundle Builder; useful for package and partner-bundle context."
+      }
+    ],
+    "production_handoff_routes": [
+      {
+        "route": "admin.html#/ops/projects",
+        "page": "src/pages/admin/ops/OpsProjectSetup.jsx",
+        "status": "usable_project_creation_surface",
+        "notes": "Creates or updates Production Ops project records and page records through OpsProductionDashboard state."
+      },
+      {
+        "route": "admin.html#/ops/production",
+        "page": "src/pages/admin/ops/OpsProductionDashboard.jsx",
+        "status": "usable_production_dashboard",
+        "notes": "Shows active project, active page, project pages, workflow status, metrics, and next recommended step."
+      },
+      {
+        "route": "admin.html#/ops/build-packet",
+        "page": "src/pages/admin/ops/OpsBuildPacket.jsx",
+        "status": "usable_build_packet_surface",
+        "notes": "Generates copy/download build packet text from the active project, page, workflow status, draft packet sections, and QA notes."
+      },
+      {
+        "route": "admin.html#/ops/brand-profile",
+        "page": "src/pages/admin/ops/OpsBrandProfile.jsx",
+        "status": "usable_brand_details_surface",
+        "notes": "Captures brand profile notes for the active page build packet."
+      },
+      {
+        "route": "admin.html#/ops/page-intent",
+        "page": "src/pages/admin/ops/OpsPageIntent.jsx",
+        "status": "usable_page_intent_surface",
+        "notes": "Captures page purpose, user action, proof points, conversion points, and decision support notes."
+      },
+      {
+        "route": "admin.html#/ops/layout-blueprint",
+        "page": "src/pages/admin/ops/OpsLayoutBlueprint.jsx",
+        "status": "usable_required_pages_modules_surface",
+        "notes": "Captures screen list, section order, major components, states, and responsive priorities."
+      },
+      {
+        "route": "admin.html#/ops/mock-review",
+        "page": "src/pages/admin/ops/OpsMockReview.jsx",
+        "status": "usable_approval_surface",
+        "notes": "Captures mock review notes and status before build packet creation."
+      }
+    ],
+    "missing_or_incomplete_route_page": [
+      {
+        "route": "/sales.html#/pipeline",
+        "page": "src/pages/sales/Pipeline.jsx",
+        "status": "stub",
+        "notes": "The Sales app Pipeline route renders only a stub and is not the current V1 handoff source."
+      },
+      {
+        "route": "admin.html#/sales-handoff",
+        "page": null,
+        "status": "missing",
+        "notes": "No dedicated Sales Handoff admin page was found."
+      }
+    ],
+    "sidebar_status": {
+      "admin_sidebar": "src/components/admin/AdminSidebar.jsx",
+      "finding": "AdminSidebar exposes Production Ops routes directly, but no direct Sales Pipeline, Opportunities, or Sales Handoff link was found."
+    }
+  },
+  "local_storage_flows": [
+    {
+      "key": "shs_hub_sales_pipeline_events_v1",
+      "source": "src/pages/hub/HubSalesPipelinePage.jsx",
+      "purpose": "Stores sales pipeline review events such as sales review started, proposal created, and proposal packet created."
+    },
+    {
+      "key": "shs_hub_opportunity_events_v1",
+      "source": "src/pages/hub/HubOpportunitiesPage.jsx",
+      "purpose": "Stores opportunity review events."
+    },
+    {
+      "keys": [
+        "shs.ops.projects",
+        "shs.ops.activeProjectId",
+        "shs.ops.stageStatus",
+        "shs.ops.buildPacketDraft",
+        "shs.ops.screenshotQaNotes",
+        "shs.ops.learningEvents",
+        "shs.ops.pages",
+        "shs.ops.activePageId",
+        "shs.ops.pageWorkflowStatus",
+        "shs.ops.pageBuildPacketDraft",
+        "shs.ops.pageQaNotes",
+        "shs.ops.pageLearningEvents"
+      ],
+      "source": "src/pages/admin/ops/opsStorage.js",
+      "purpose": "Stores Production Ops project, page, workflow, build packet, QA, and learning state."
+    }
+  ],
+  "required_handoff_fields": [
+    {
+      "field": "package_selected",
+      "required": true,
+      "description": "Final selected SHS package or package bundle approved for proposal/handoff."
+    },
+    {
+      "field": "client_goals",
+      "required": true,
+      "description": "Plain-language goals the project must achieve for the client or internal buyer."
+    },
+    {
+      "field": "deliverables",
+      "required": true,
+      "description": "Concrete items SHS will deliver: pages, dashboards, forms, reports, portals, automations, or handoff artifacts."
+    },
+    {
+      "field": "brand_details",
+      "required": true,
+      "description": "Brand system, audience, tone, references, logo/assets, prohibited references, and approval owner."
+    },
+    {
+      "field": "timeline",
+      "required": true,
+      "description": "Target start, review dates, approval date, build window, QA window, and delivery date."
+    },
+    {
+      "field": "required_pages_modules",
+      "required": true,
+      "description": "List of required pages, routes, modules, components, workflows, and data assumptions."
+    },
+    {
+      "field": "proposal_approval_status",
+      "required": true,
+      "description": "Draft, internal review, sent to client, client approved, approved with changes, blocked, or declined."
+    },
+    {
+      "field": "handoff_packet_requirements",
+      "required": true,
+      "description": "The packet must include scope, non-goals, assets, route list, data assumptions, allowed files, protected files, QA expectations, owner, and next action."
+    },
+    {
+      "field": "production_project_id",
+      "required": true,
+      "description": "The Production Ops project record created in admin.html#/ops/projects."
+    }
+  ],
+  "operator_checklist": [
+    "Open the qualified opportunity from Phase 1.",
+    "Confirm selected package or package bundle.",
+    "Confirm client goals in measurable, plain-language terms.",
+    "List deliverables and mark each as in scope, out of scope, or deferred.",
+    "Capture brand details: audience, tone, logo/assets, references, constraints, and approval owner.",
+    "Confirm timeline: start, review, approval, build, QA, and delivery dates.",
+    "List required pages/modules with route, audience, goal, and data assumptions.",
+    "Confirm proposal approval status and whether approval includes changes.",
+    "Create or update the Production Ops project in admin.html#/ops/projects.",
+    "Create page records for each required page/module.",
+    "Fill Brand Profile, Page Intent, Layout Blueprint, Visual Treatment, Assets, Data Binding, and Mock Review notes.",
+    "Generate or review the Build Packet in admin.html#/ops/build-packet.",
+    "Exit only when the Production Ops project exists and the handoff packet is ready for build packet work."
+  ],
+  "handoff_packet_requirements": [
+    "Qualified lead or opportunity source.",
+    "Selected package and any included sub-packages.",
+    "Client goals and success criteria.",
+    "Deliverables list with in-scope, out-of-scope, and deferred items.",
+    "Brand details and approved/prohibited references.",
+    "Timeline and approval milestones.",
+    "Required pages/modules with route, audience, primary goal, and status.",
+    "Proposal approval status and approving owner.",
+    "Data assumptions: static, mock, computed, imported, future API, or verified source.",
+    "Truth/reporting requirement if client-facing claims or reports will be published.",
+    "Allowed files or surfaces to change.",
+    "Protected files or surfaces that must not change.",
+    "QA expectations: route load, desktop/mobile screenshots, text fit, screenshot match, localStorage persistence, and no unintended public route changes.",
+    "Production owner, sales owner, build owner, and next action."
+  ],
+  "definition_of_done": [
+    "Package selected is documented.",
+    "Client goals are documented.",
+    "Deliverables are documented.",
+    "Brand details are documented.",
+    "Timeline is documented.",
+    "Required pages/modules are documented.",
+    "Proposal approval status is documented.",
+    "Handoff packet requirements are satisfied or blockers are recorded.",
+    "Production Ops project is created or updated.",
+    "At least one page/module record exists when the project requires page work.",
+    "Build Packet is ready for review or marked blocked with reason."
+  ],
+  "findings": [
+    "Hub Sales Pipeline is the strongest current source for sales handoff context.",
+    "Hub Opportunities provides useful opportunity and package context before handoff.",
+    "Admin Production Ops has usable project setup, page records, workflow stages, build packet generation, screenshot QA, and learning surfaces.",
+    "Production Ops state is persisted in browser localStorage through opsStorage.js.",
+    "The handoff between Sales Pipeline and Production Ops is manual today.",
+    "The Sales app Pipeline page exists but is a stub.",
+    "No dedicated Sales Handoff route or single handoff record schema was found."
+  ],
+  "launch_blockers": [
+    "No automated conversion from qualified sales opportunity to Production Ops project.",
+    "No dedicated Sales Handoff page.",
+    "Sales Pipeline and Opportunities use separate localStorage event logs from Production Ops project/page state.",
+    "Proposal approval status is not represented as a single canonical handoff field across sales and production.",
+    "AdminSidebar exposes Production Ops but not direct Sales Pipeline or Sales Handoff navigation."
+  ],
+  "post_v1_improvements": [
+    "Create a dedicated Sales Handoff route once the current manual process is stable.",
+    "Add a one-click Create Production Project action from Sales Pipeline won/approved items.",
+    "Create a canonical handoff packet schema shared by Hub Sales and Production Ops.",
+    "Add proposal approval status to the production project record.",
+    "Add direct navigation from AdminSidebar to Sales Pipeline or future Sales Handoff.",
+    "Add validation that blocks build packet approval until package, goals, deliverables, brand, timeline, pages/modules, approval status, and QA expectations are filled.",
+    "Connect Truth Spine requirements when the handoff includes public claims, reports, or funder-facing proof."
+  ],
+  "validation": {
+    "python3_m_json_tool": "PASS",
+    "npm_run_build": "PASS_WITH_EXISTING_LARGE_CHUNK_WARNING",
+    "npm_run_check_governance": "PASS"
+  },
+  "files_changed": [
+    "docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_2_SALES_HANDOFF.md",
+    "docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_2_SALES_HANDOFF.json"
+  ]
+}

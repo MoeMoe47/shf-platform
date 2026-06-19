@@ -1,0 +1,226 @@
+{
+  "runbook_name": "SHS Operator Runbook V1 - Phase 9: Upgrade Opportunity",
+  "phase": 9,
+  "phase_name": "Upgrade Opportunity",
+  "mode": "documentation_and_audit_only",
+  "created_at": "2026-06-19",
+  "goal": "Document how SHS identifies, tracks, and converts upgrade opportunities.",
+  "v1_complete": true,
+  "runtime_complete": false,
+  "entry_condition": "Phase 7 ClientOps status is actively managed and a trigger event, ClientOps signal, health/report signal, support trend, client request, or operator observation suggests additional value that is not already covered by an active ticket, maintenance item, or approved proposal.",
+  "exit_condition": "Upgrade tracked or closed: trigger event, ClientOps signal, health/report signal if applicable, recommended upgrade, revenue opportunity, proposal next step, follow-up status, owner, next action, and tracked/closed state are recorded.",
+  "current_upgrade_context": {
+    "surfaces": [
+      {
+        "surface": "SHF-Next ClientOps Center",
+        "route_or_file": "/ops/clientops",
+        "status": "existing_in_consumer_app",
+        "purpose": "Tracks active records, maintenance, support tickets, system health, version history, upgrade opportunities, monthly review, and exports."
+      },
+      {
+        "surface": "ClientOps report helpers",
+        "route_or_file": "/Users/mikeslate/shf-next/src/data/clientOpsReportData.ts",
+        "status": "existing_in_consumer_app",
+        "purpose": "Supports monthly review and upgrade opportunity exports."
+      },
+      {
+        "surface": "SHRV1 Hub Opportunities",
+        "route_or_file": "admin.html#/hub/opportunities",
+        "status": "existing",
+        "purpose": "Tracks opportunity title, type, stage, estimated value, urgency, deadline, buyer, next action, score, and recommended partners."
+      },
+      {
+        "surface": "SHRV1 Hub Sales Pipeline",
+        "route_or_file": "admin.html#/hub/sales-pipeline",
+        "status": "existing",
+        "purpose": "Tracks sales stages, estimated value, priority, due date, related opportunity, next action, notes, and sales review events."
+      },
+      {
+        "surface": "SHRV1 Reports admin",
+        "route_or_file": "admin.html#/reports",
+        "status": "existing",
+        "purpose": "Trust-aware report and readiness context when an upgrade is based on report signal."
+      },
+      {
+        "surface": "SHRV1 Truth Spine",
+        "route_or_file": "admin.html#/truth-spine",
+        "status": "existing",
+        "purpose": "Truth/readiness/public approval authority when upgrade claims become report, proposal, or public-facing claims."
+      }
+    ],
+    "boundary": "Upgrade opportunities begin as private SHS operational signals and become sales/proposal work only after operator review and owner-approved next action."
+  },
+  "required_data_fields": [
+    "upgrade_opportunity_id",
+    "clientops_record_id",
+    "client_id",
+    "client_name",
+    "trigger_event",
+    "clientops_signal",
+    "health_report_signal_if_applicable",
+    "recommended_upgrade",
+    "problem_or_value",
+    "revenue_opportunity",
+    "proposal_next_step",
+    "follow_up_status",
+    "owner",
+    "next_action_date_unless_closed",
+    "close_reason_if_closed"
+  ],
+  "trigger_events": [
+    "Client asks for a new page, module, report, automation, integration, or workflow.",
+    "Support tickets repeat around the same issue.",
+    "Maintenance board reveals recurring manual work.",
+    "System health review identifies fragility, missing monitoring, or performance risk.",
+    "Monthly review shows expansion need or client growth.",
+    "Report delivery identifies a better client-facing package.",
+    "Version history shows repeated patching that should become a formal upgrade.",
+    "Operator identifies a value gap during ClientOps review."
+  ],
+  "signal_types": {
+    "clientops_signal": [
+      "Support ticket pattern.",
+      "Maintenance board item.",
+      "System health warning.",
+      "Monthly review recommendation.",
+      "Version history change.",
+      "Client request.",
+      "Handoff file note.",
+      "ClientOps owner observation."
+    ],
+    "health_report_signal": [
+      "Health score degraded.",
+      "Broken route or recurring defect.",
+      "Monthly review trend.",
+      "Client health report recommendation.",
+      "Support summary pattern.",
+      "Upgrade report recommendation.",
+      "Truth/readiness gap affecting a client-facing report."
+    ]
+  },
+  "recommended_upgrade_fields": [
+    "Upgrade title.",
+    "Upgrade category.",
+    "Package/module affected.",
+    "Current limitation.",
+    "Proposed improvement.",
+    "Client benefit.",
+    "Internal complexity.",
+    "Dependencies.",
+    "Risks.",
+    "Required owner decision."
+  ],
+  "revenue_opportunity_fields": [
+    "Revenue type: one-time, monthly, annual, retainer, support tier, package upgrade, or unknown.",
+    "Estimated value or range.",
+    "Confidence: low, medium, high, or unknown.",
+    "Source of estimate.",
+    "Related package/tier.",
+    "Renewal or expansion timing.",
+    "Reason the client may buy."
+  ],
+  "proposal_next_steps": [
+    "Needs discovery.",
+    "Draft proposal.",
+    "Sales review.",
+    "Client review.",
+    "Convert to Hub Opportunity.",
+    "Convert to Sales Pipeline item.",
+    "Defer.",
+    "Close."
+  ],
+  "follow_up_statuses": [
+    "new",
+    "needs_discovery",
+    "proposal_recommended",
+    "proposal_drafted",
+    "proposal_sent",
+    "accepted",
+    "deferred",
+    "closed_won",
+    "closed_lost",
+    "closed_no_action"
+  ],
+  "operator_checklist": [
+    "Confirm the client is actively managed in ClientOps.",
+    "Record the trigger event.",
+    "Identify the ClientOps signal source.",
+    "Identify health/report signal if applicable.",
+    "Confirm the signal is not already covered by an active support ticket, maintenance item, or approved proposal.",
+    "Describe the recommended upgrade.",
+    "Document the client value and current limitation.",
+    "Estimate revenue opportunity or mark unknown.",
+    "Assign owner and proposal next step.",
+    "Set follow-up status and next action date.",
+    "If client-facing claims are included, check Reports and Truth Spine readiness.",
+    "If moving to sales, create or update Hub Opportunities or Hub Sales Pipeline context.",
+    "If not moving forward, close with reason.",
+    "Exit only when the opportunity is tracked for next action or closed."
+  ],
+  "governance_boundary": {
+    "default_classification": "Private SHS operational record.",
+    "blocked_actions": [
+      "Become public SHF impact claims.",
+      "Mutate SHF Impact Data Spine.",
+      "Be represented as approved proposals before owner approval.",
+      "Use unverified public claims as sales facts.",
+      "Publish ClientOps private data publicly.",
+      "Bypass Truth Spine or Reports readiness when used in client-facing reports."
+    ],
+    "allowed_conversion_path": "Upgrade opportunities may become proposal or report candidate material only through the appropriate sales, reporting, privacy, ownership, and governance gates."
+  },
+  "definition_of_done": [
+    "Trigger event is recorded.",
+    "ClientOps signal is recorded.",
+    "Health/report signal is recorded or marked not applicable.",
+    "Recommended upgrade is documented.",
+    "Revenue opportunity is estimated or marked unknown.",
+    "Proposal next step is assigned.",
+    "Follow-up status is set.",
+    "Owner and next action are assigned unless closed.",
+    "Opportunity is tracked in ClientOps, Hub Opportunities, or Hub Sales Pipeline when moving forward.",
+    "Closed opportunities include close reason.",
+    "Final status is Upgrade tracked or closed."
+  ],
+  "findings": [
+    "ClientOps audit identifies upgrade opportunities as a ClientOps functional area.",
+    "Phase 8 reporting already treats upgrade reports as recommendations, not commitments, until approved through sales, proposal, governance, and delivery flow.",
+    "Hub Opportunities and Hub Sales Pipeline provide existing SHRV1 context for opportunity and proposal follow-up.",
+    "ClientOps upgrade signals are internal/private and should not become public SHF data or public claims without governance.",
+    "Upgrade conversion is currently operator-driven and not hard runtime-enforced in SHRV1."
+  ],
+  "launch_blockers": [
+    "No dedicated SHRV1 upgrade opportunity conversion route was identified.",
+    "No automated ClientOps upgrade-to-Hub Opportunity conversion exists in SHRV1.",
+    "Revenue estimate and proposal next step are checklist-driven rather than hard-validated.",
+    "ClientOps upgrade records currently rely on the consumer app context and manual operator workflow.",
+    "Production auth and durable opportunity persistence remain post-V1."
+  ],
+  "post_v1_improvements": [
+    "Add a structured upgrade opportunity model when owner approves runtime work.",
+    "Add one-click conversion from ClientOps upgrade opportunity to Hub Opportunity or Sales Pipeline item.",
+    "Add proposal readiness fields and owner approval state.",
+    "Add revenue range and confidence validation.",
+    "Add upgrade close reason analytics.",
+    "Add governed report/proposal package generation for accepted upgrade opportunities."
+  ],
+  "files_changed": [
+    "docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_9_UPGRADE_OPPORTUNITY.md",
+    "docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_9_UPGRADE_OPPORTUNITY.json"
+  ],
+  "validation": {
+    "python3 -m json.tool docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_9_UPGRADE_OPPORTUNITY.json": {
+      "status": "PASS",
+      "notes": "JSON report is valid."
+    },
+    "npm run build": {
+      "status": "PASS_WITH_EXISTING_LARGE_CHUNK_WARNING",
+      "notes": "Build passed with the existing Vite large-chunk warning."
+    },
+    "npm run check:governance": {
+      "status": "PASS",
+      "notes": "Master registry, proposal, Truth Spine, Oracle, AI Guardrails, Game Theory, data/governance layers, and duplicate cleanup checks passed."
+    }
+  },
+  "commit_performed": false
+}

@@ -1,0 +1,240 @@
+{
+  "runbook_name": "SHS Operator Runbook V1 - Phase 5: QA + Delivery",
+  "phase": 5,
+  "phase_name": "QA + Delivery",
+  "mode": "documentation_and_audit_only",
+  "created_at": "2026-06-19",
+  "goal": "Document how SHS verifies a completed project before delivery.",
+  "v1_complete": true,
+  "entry_condition": "A project has passed Phase 4 Development Ready, implementation work is complete, and the completed build is available for QA review against the approved build packet, mock, route list, data assumptions, permissions, report readiness, and delivery criteria.",
+  "exit_condition": "Delivery Ready: desktop layout, mobile layout, navigation, forms, reports, permissions, public/private leakage, screenshot QA, functional QA, and delivery readiness checks pass or have explicit approved exceptions.",
+  "current_route_status": {
+    "shrv1_admin_qa_routes": [
+      {
+        "route": "admin.html#/ops/screenshot-qa",
+        "page": "src/pages/admin/ops/OpsScreenshotQA.jsx",
+        "implementation": "Wrapper around OpsWorkflowPage pageKey screenshotQa in src/pages/admin/ops/OpsProductionDashboard.jsx",
+        "status": "existing",
+        "purpose": "Records mock screenshot notes, built screenshot notes, match score, QA status, and drift category."
+      },
+      {
+        "route": "admin.html#/ops/mock-review",
+        "page": "src/pages/admin/ops/OpsMockReview.jsx",
+        "status": "existing",
+        "purpose": "Confirms mock approval and required changes before delivery QA compares the build."
+      },
+      {
+        "route": "admin.html#/ops/build-packet",
+        "page": "src/pages/admin/ops/OpsBuildPacket.jsx",
+        "status": "existing",
+        "purpose": "Provides the source of truth for route, page, specification, QA checklist, and non-goals."
+      },
+      {
+        "route": "admin.html#/ops/production",
+        "page": "src/pages/admin/ops/OpsProductionDashboard.jsx",
+        "status": "existing",
+        "purpose": "Shows project/page workflow status and blocked pages."
+      },
+      {
+        "route": "admin.html#/reports",
+        "page": "src/pages/admin/reporting/ReportingCommandSurface.jsx",
+        "status": "existing",
+        "purpose": "Trust-aware reports admin/readiness surface when delivery includes reports."
+      },
+      {
+        "route": "admin.html#/truth-spine",
+        "page": "src/pages/admin/truth-spine/TruthSpinePage.jsx",
+        "status": "existing",
+        "purpose": "Truth/readiness authority when delivery includes public claims, report facts, or approval gates."
+      }
+    ],
+    "cross_app_live_qa_context": [
+      {
+        "source": "docs/SHRV1_SHF_NEXT_ROUTE_BRIDGE_AUDIT_V1.md",
+        "relationship": "admin.html#/ops/screenshot-qa maps conceptually to shf-next /ops/qa."
+      },
+      {
+        "source": "docs/SHRV1_SHF_NEXT_ROUTE_BRIDGE_AUDIT_V1.md",
+        "relationship": "QA + Delivery live workflow belongs in shf-next; SHRV1 has screenshot/mock review admin steps."
+      }
+    ],
+    "permission_boundary": {
+      "source": "src/system/identity/hubAccessControl.js",
+      "finding": "SHRV1 /ops/* routes, including /ops/screenshot-qa, are SHS-admin only."
+    },
+    "private_surface_notice": {
+      "source": "src/pages/admin/ops/opsData.js",
+      "finding": "Production Ops tells operators clients see approved demos, deliverables, timelines, and finished systems, not internal build packets, prompts, QA machinery, or adaptive learning."
+    }
+  },
+  "qa_check_categories": [
+    {
+      "category": "Desktop layout",
+      "checks": [
+        "Target route loads at approved desktop viewport.",
+        "Layout matches approved mock or build packet direction.",
+        "Text fits without overlap or truncation.",
+        "Cards, tables, forms, headers, sidebars, and primary actions align correctly.",
+        "No horizontal scrolling unless intentionally documented.",
+        "Important states are visible and not hidden behind clipped containers."
+      ]
+    },
+    {
+      "category": "Mobile layout",
+      "checks": [
+        "Target route loads at approved mobile viewport.",
+        "Navigation remains reachable.",
+        "Content stacks in a readable order.",
+        "Tap targets are usable.",
+        "Text fits within controls and panels.",
+        "No desktop-only layout assumptions block the primary task."
+      ]
+    },
+    {
+      "category": "Navigation",
+      "checks": [
+        "Primary route loads directly.",
+        "Sidebar/header links point to expected destinations.",
+        "Back/return links do not send the user to unrelated fallback pages.",
+        "Protected admin routes remain protected.",
+        "Public routes do not enter internal shells.",
+        "Fallback behavior is intentional and documented."
+      ]
+    },
+    {
+      "category": "Forms",
+      "checks": [
+        "Required fields are visible and labeled.",
+        "Inputs accept expected values.",
+        "Validation/error behavior is understandable.",
+        "Submit/save/copy/download actions work or are clearly marked non-functional for V1.",
+        "Form state persists only where expected.",
+        "No private data is stored or displayed on public routes."
+      ]
+    },
+    {
+      "category": "Reports",
+      "checks": [
+        "Reports use trust-aware admin/reporting surfaces when applicable.",
+        "Truth Spine status is checked for report claims when public or funder-facing.",
+        "Report readiness, public approval, and approval-gate status are not bypassed.",
+        "Generated/exported report content does not include internal QA notes or prompts.",
+        "No unverified claim is communicated as verified."
+      ]
+    },
+    {
+      "category": "Permissions",
+      "checks": [
+        "Admin/private routes remain SHS-admin only where required.",
+        "Client/admin/operator roles are not widened by the delivery change.",
+        "ProtectedHubRoute/AuthGuard behavior is not bypassed.",
+        "PermissionGuard checks remain intact for reports, audit, identity, aggregation, and truth surfaces.",
+        "No secret, role override, or permission metadata appears in public UI."
+      ]
+    },
+    {
+      "category": "Public/private leakage",
+      "checks": [
+        "Public routes do not display internal build packets.",
+        "Public routes do not display prompts, QA machinery, adaptive learning, role metadata, or private notes.",
+        "Client-facing deliverables show only approved copy, assets, reports, and demos.",
+        "Production Ops and ClientOps private data do not mutate SHF Impact Data Spine directly.",
+        "Public claims pass Truth Spine/public approval when required."
+      ]
+    },
+    {
+      "category": "Screenshot QA",
+      "checks": [
+        "Mock screenshot notes are recorded.",
+        "Built screenshot notes are recorded.",
+        "Match score is recorded.",
+        "Drift category is recorded.",
+        "QA status is set.",
+        "Any mismatch has a correction note or approved exception."
+      ]
+    },
+    {
+      "category": "Functional QA",
+      "checks": [
+        "Primary user path works end to end.",
+        "Buttons, links, toggles, tabs, filters, copy, download, and save actions behave as expected.",
+        "State updates persist where expected.",
+        "Empty/loading/error/success/review states are acceptable.",
+        "Console has no critical errors in the tested workflow.",
+        "Build passes."
+      ]
+    },
+    {
+      "category": "Delivery readiness",
+      "checks": [
+        "Known blockers are resolved or explicitly approved.",
+        "Open QA items have owner and next action.",
+        "Launch/client handoff notes are complete.",
+        "Client-facing content and assets are approved.",
+        "Reports/public claims have readiness approval where needed.",
+        "Final delivery owner signs off."
+      ]
+    }
+  ],
+  "operator_checklist": [
+    "Open the completed project/page and the Phase 4 build packet.",
+    "Run desktop layout review against the approved mock and packet.",
+    "Run mobile layout review against the approved mock and packet.",
+    "Verify navigation, route loading, fallback behavior, and protected route boundaries.",
+    "Verify forms and save/submit/copy/download behaviors.",
+    "Verify reports through trust-aware reporting surfaces when reports are in scope.",
+    "Verify permissions and role boundaries.",
+    "Check public/private leakage on public, client-facing, and admin/private routes.",
+    "Record screenshot QA notes, match score, drift category, and QA status in admin.html#/ops/screenshot-qa.",
+    "Run functional QA for the primary user path and important edge states.",
+    "Run build and governance validation.",
+    "Record delivery readiness, blockers, owner, next action, and approved exceptions.",
+    "Exit only when Delivery Ready is true or blockers are explicitly documented."
+  ],
+  "delivery_ready_criteria": [
+    "Desktop layout passes or has approved exception.",
+    "Mobile layout passes or has approved exception.",
+    "Navigation passes.",
+    "Forms and interactions pass or are explicitly out of scope.",
+    "Reports are truth/readiness-safe where applicable.",
+    "Permissions and route protection pass.",
+    "No public/private leakage is found.",
+    "Screenshot QA is recorded.",
+    "Functional QA passes.",
+    "Build passes.",
+    "Governance check passes.",
+    "Delivery owner signs off."
+  ],
+  "findings": [
+    "SHRV1 has an existing screenshot QA admin surface at admin.html#/ops/screenshot-qa.",
+    "SHRV1 Production Ops records screenshot notes, match score, drift category, and QA status.",
+    "SHRV1 /ops/* QA/admin surfaces are SHS-admin only through hub access control.",
+    "SHF-Next is documented as the live QA + Delivery owner for /ops/qa, while SHRV1 owns admin/governance screenshot/mock review surfaces.",
+    "Reports and public claims must use trust-aware Reports and Truth Spine readiness paths when delivery includes report output.",
+    "Delivery Ready is currently operator-enforced, not a hard runtime readiness gate."
+  ],
+  "launch_blockers": [
+    "No hard Delivery Ready validation gate exists in SHRV1.",
+    "Screenshot QA stores notes and scores, but screenshot capture/attachment is not automated in SHRV1.",
+    "Functional QA is checklist-driven rather than tool-enforced.",
+    "No durable QA backend persistence exists for SHRV1 Production Ops V1.",
+    "Cross-app sync to shf-next /ops/qa is documented but not automated."
+  ],
+  "post_v1_improvements": [
+    "Add a structured Delivery Ready readiness model.",
+    "Add screenshot attachment support for mock and built screenshots.",
+    "Add automated route smoke checks for desktop and mobile.",
+    "Add structured form/navigation/report/permission QA records.",
+    "Add cross-link or export from SHRV1 screenshot QA to shf-next /ops/qa.",
+    "Add required owner/signoff fields before Delivery Ready can be set."
+  ],
+  "validation": {
+    "python3_m_json_tool": "PASS",
+    "npm_run_build": "PASS_WITH_EXISTING_LARGE_CHUNK_WARNING",
+    "npm_run_check_governance": "PASS"
+  },
+  "files_changed": [
+    "docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_5_QA_DELIVERY.md",
+    "docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_5_QA_DELIVERY.json"
+  ]
+}

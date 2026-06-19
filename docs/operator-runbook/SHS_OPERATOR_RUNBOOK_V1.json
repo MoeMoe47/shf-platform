@@ -1,0 +1,608 @@
+{
+  "runbook_name": "SHS Operator Runbook V1",
+  "lifecycle": [
+    "Lead Intake",
+    "Sales Handoff",
+    "Production Ops",
+    "Build Packet",
+    "QA + Delivery",
+    "Launch",
+    "ClientOps",
+    "Reporting",
+    "Upgrade Opportunity"
+  ],
+  "phase_count": 9,
+  "documentation_readiness": "READY",
+  "runtime_readiness": "PARTIAL",
+  "private_beta_readiness": "NEAR_READY",
+  "paid_launch_readiness": "NOT_READY",
+  "phases": [
+    {
+      "phase_number": 1,
+      "phase_name": "Lead Intake",
+      "purpose": "Take a new SHS lead from first interest to qualified opportunity.",
+      "entry_condition": "A person or organization has expressed interest in SHS, requested a demo, been referred by a partner, appeared as a growth/opportunity signal, or otherwise created enough context for operator review.",
+      "operator_actions": [
+        "Capture lead source, contact, organization/client details, industry, problem, budget range, and timeline.",
+        "Recommend a package.",
+        "Run qualification checklist.",
+        "Assign owner, next action, and stage."
+      ],
+      "required_data_fields": [
+        "lead_source",
+        "contact_name",
+        "email_or_phone",
+        "organization",
+        "industry",
+        "problem",
+        "budget_range",
+        "timeline",
+        "package_recommendation",
+        "qualification_status",
+        "owner",
+        "next_action"
+      ],
+      "required_routes_pages": [
+        "admin.html#/hub/opportunities",
+        "admin.html#/hub/sales-pipeline"
+      ],
+      "exit_condition": "Ready for Sales Handoff.",
+      "definition_of_done": [
+        "Minimum contact, organization, problem, budget/timeline, package recommendation, qualification decision, owner, next action, and stage are recorded."
+      ],
+      "known_runtime_gaps": [
+        "No dedicated first-interest lead intake route.",
+        "Production lead source is not wired.",
+        "Qualification remains operator-driven."
+      ],
+      "private_beta_readiness": "NEAR_READY",
+      "paid_launch_readiness": "NOT_READY"
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Sales Handoff",
+      "purpose": "Convert a qualified lead into a production-ready SHS project handoff.",
+      "entry_condition": "Phase 1 lead is Ready for Sales Handoff with qualification notes, owner, next action, and package recommendation.",
+      "operator_actions": [
+        "Select package.",
+        "Confirm client goals, deliverables, brand details, timeline, required pages/modules, and proposal approval status.",
+        "Assemble handoff packet.",
+        "Create or update Production Ops project context."
+      ],
+      "required_data_fields": [
+        "package_selected",
+        "client_goals",
+        "deliverables",
+        "brand_details",
+        "timeline",
+        "required_pages_modules",
+        "proposal_approval_status",
+        "handoff_packet"
+      ],
+      "required_routes_pages": [
+        "admin.html#/hub/sales-pipeline",
+        "admin.html#/hub/opportunities",
+        "admin.html#/ops/production",
+        "admin.html#/ops/projects"
+      ],
+      "exit_condition": "Production project created.",
+      "definition_of_done": [
+        "Qualified opportunity has selected package, goals, deliverables, brand details, timeline, required pages/modules, proposal approval status, handoff packet, and Production Ops project/page context."
+      ],
+      "known_runtime_gaps": [
+        "No automated conversion from qualified sales opportunity to Production Ops project.",
+        "Proposal approval status is not hard-enforced.",
+        "Sales handoff remains manual/local workflow."
+      ],
+      "private_beta_readiness": "NEAR_READY",
+      "paid_launch_readiness": "NOT_READY"
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Production Ops",
+      "purpose": "Turn a sales handoff into build-ready project planning.",
+      "entry_condition": "Phase 2 has produced an approved or review-ready handoff packet.",
+      "operator_actions": [
+        "Set up project.",
+        "Complete brand profile, page intent, layout blueprint, visual treatment, asset governance, data binding, mock review, screenshot QA expectations, and learning-loop notes.",
+        "Resolve blockers or assign owner/next action."
+      ],
+      "required_data_fields": [
+        "project_setup",
+        "brand_profile",
+        "page_intent",
+        "layout_blueprint",
+        "visual_treatment",
+        "asset_governance",
+        "data_binding",
+        "mock_review",
+        "screenshot_qa",
+        "learning_loop",
+        "blockers"
+      ],
+      "required_routes_pages": [
+        "admin.html#/ops/production",
+        "admin.html#/ops/projects",
+        "admin.html#/ops/brand-profile",
+        "admin.html#/ops/page-intent",
+        "admin.html#/ops/layout-blueprint",
+        "admin.html#/ops/visual-treatment",
+        "admin.html#/ops/assets",
+        "admin.html#/ops/data-binding",
+        "admin.html#/ops/mock-review",
+        "admin.html#/ops/screenshot-qa",
+        "admin.html#/ops/learning"
+      ],
+      "exit_condition": "Build Packet Ready.",
+      "definition_of_done": [
+        "Production project/page/module records are ready enough to create a build packet without redesigning or guessing scope."
+      ],
+      "known_runtime_gaps": [
+        "No durable Production Ops backend persistence.",
+        "Project readiness remains operator-reviewed.",
+        "Live consumer-app sync is documented but not automated."
+      ],
+      "private_beta_readiness": "NEAR_READY",
+      "paid_launch_readiness": "NOT_READY"
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Build Packet",
+      "purpose": "Document what must exist before a project is development-ready.",
+      "entry_condition": "Phase 3 produced a build-packet-ready project/page/module with production planning completed.",
+      "operator_actions": [
+        "Confirm routes, pages, components, data requirements, assets, brand rules, QA checklist, acceptance criteria, non-goals, and Codex-ready implementation notes.",
+        "Package the build request clearly enough for implementation."
+      ],
+      "required_data_fields": [
+        "routes",
+        "pages",
+        "components",
+        "data_requirements",
+        "assets",
+        "brand_rules",
+        "qa_checklist",
+        "acceptance_criteria",
+        "implementation_notes",
+        "non_goals"
+      ],
+      "required_routes_pages": [
+        "admin.html#/ops/build-packet",
+        "admin.html#/ops/production",
+        "admin.html#/ops/projects",
+        "admin.html#/ops/screenshot-qa"
+      ],
+      "exit_condition": "Development Ready.",
+      "definition_of_done": [
+        "Build packet contains enough route, page, component, data, asset, brand, QA, acceptance, and implementation guidance to build without redesigning or expanding scope."
+      ],
+      "known_runtime_gaps": [
+        "Build packet output is not a signed/exportable delivery artifact.",
+        "Approval remains operator-driven.",
+        "Durable build-packet storage is not production-grade."
+      ],
+      "private_beta_readiness": "NEAR_READY",
+      "paid_launch_readiness": "NOT_READY"
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "QA + Delivery",
+      "purpose": "Verify a completed project before delivery.",
+      "entry_condition": "Phase 4 is Development Ready, implementation is complete, and the build is available for QA review.",
+      "operator_actions": [
+        "Review desktop layout, mobile layout, navigation, forms, reports, permissions, public/private leakage, screenshot QA, functional QA, and delivery readiness.",
+        "Record QA status, approved exceptions, blockers, owner, and next action."
+      ],
+      "required_data_fields": [
+        "desktop_status",
+        "mobile_status",
+        "navigation_status",
+        "form_status",
+        "report_readiness",
+        "permission_result",
+        "leakage_result",
+        "screenshot_qa",
+        "functional_qa",
+        "delivery_owner_signoff"
+      ],
+      "required_routes_pages": [
+        "admin.html#/ops/screenshot-qa",
+        "admin.html#/ops/mock-review",
+        "admin.html#/ops/build-packet",
+        "admin.html#/ops/production",
+        "admin.html#/reports",
+        "admin.html#/truth-spine"
+      ],
+      "exit_condition": "Delivery Ready.",
+      "definition_of_done": [
+        "Desktop, mobile, navigation, forms/interactions, reports, permissions, leakage, screenshot QA, functional QA, build, governance, and owner signoff pass or have approved exceptions."
+      ],
+      "known_runtime_gaps": [
+        "No hard Delivery Ready validation gate.",
+        "Screenshot capture/attachment is not automated.",
+        "Functional QA remains checklist-driven."
+      ],
+      "private_beta_readiness": "NEAR_READY",
+      "paid_launch_readiness": "NOT_READY"
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Launch",
+      "purpose": "Turn a delivered project into a launched SHS client system.",
+      "entry_condition": "Phase 5 is Delivery Ready and launch-ready project context exists.",
+      "operator_actions": [
+        "Record final approval, launch date, client signoff, support tier, handoff notes, version record, ClientOps record, owner, and open maintenance/watch items.",
+        "Confirm report/public claims remain truth/readiness-safe."
+      ],
+      "required_data_fields": [
+        "project_id",
+        "client_id",
+        "client_name",
+        "business_name",
+        "package_selected",
+        "final_approval_status",
+        "launch_date",
+        "client_signoff_status",
+        "support_tier",
+        "handoff_notes",
+        "version_record",
+        "clientops_record_id",
+        "active_modules",
+        "routes",
+        "reports"
+      ],
+      "required_routes_pages": [
+        "admin.html#/ops/production",
+        "admin.html#/ops/projects",
+        "admin.html#/ops/build-packet",
+        "admin.html#/ops/screenshot-qa",
+        "admin.html#/reports",
+        "admin.html#/truth-spine",
+        "SHF-Next /ops/clientops"
+      ],
+      "exit_condition": "ClientOps Active.",
+      "definition_of_done": [
+        "Final approval, launch date, client signoff, support tier, handoff notes, version launch record, ClientOps record, owner assignment, and maintenance/watch transfer are complete."
+      ],
+      "known_runtime_gaps": [
+        "No dedicated SHRV1 Launch route or hard launch gate.",
+        "No automated Production Ops to ClientOps record creation.",
+        "No durable launch/version backend."
+      ],
+      "private_beta_readiness": "NEAR_READY",
+      "paid_launch_readiness": "NOT_READY"
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "ClientOps",
+      "purpose": "Manage a launched client after delivery.",
+      "entry_condition": "Phase 6 is ClientOps Active with launch/signoff/support/version/handoff context and assigned owner.",
+      "operator_actions": [
+        "Keep client record, maintenance board, support tickets, system health, version history, upgrade opportunities, monthly review cadence, and handoff file current.",
+        "Keep ClientOps private and route report/public candidates through governance."
+      ],
+      "required_data_fields": [
+        "clientops_record_id",
+        "client_id",
+        "client_name",
+        "business_name",
+        "project_id",
+        "support_tier",
+        "clientops_owner",
+        "handoff_file",
+        "maintenance_board",
+        "support_tickets",
+        "system_health",
+        "version_history",
+        "upgrade_opportunities",
+        "monthly_review"
+      ],
+      "required_routes_pages": [
+        "SHF-Next /ops/clientops",
+        "admin.html#/ops/production",
+        "admin.html#/reports",
+        "admin.html#/truth-spine"
+      ],
+      "exit_condition": "Client actively managed.",
+      "definition_of_done": [
+        "Client record, maintenance, support, health, version, upgrade, monthly review, handoff file, owner, and governance boundaries are active."
+      ],
+      "known_runtime_gaps": [
+        "Production auth remains outside V1.",
+        "Durable ClientOps backend persistence is not implemented in SHRV1.",
+        "Real ClientOps-to-governance intake remains post-V1."
+      ],
+      "private_beta_readiness": "NEAR_READY",
+      "paid_launch_readiness": "NOT_READY"
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Reporting",
+      "purpose": "Produce client-facing reports.",
+      "entry_condition": "Phase 7 client is actively managed and report purpose, audience, delivery channel, and source facts are known.",
+      "operator_actions": [
+        "Select report type.",
+        "Gather ClientOps, Reports, and Truth Spine context.",
+        "Draft client-facing report.",
+        "Run report approval checks.",
+        "Save approved final report as PDF.",
+        "Deliver PDF through approved channel.",
+        "Record delivery in ClientOps."
+      ],
+      "required_data_fields": [
+        "report_id",
+        "report_type",
+        "clientops_record_id",
+        "client_id",
+        "client_name",
+        "report_period",
+        "report_audience",
+        "source_sections",
+        "truth_status_if_required",
+        "approval_status",
+        "approved_by",
+        "pdf_saved",
+        "delivery_channel",
+        "delivered_at",
+        "delivery_owner",
+        "report_version"
+      ],
+      "required_routes_pages": [
+        "admin.html#/reports",
+        "admin.html#/truth-spine",
+        "services/shf-agent-fabric/routers/reports_routes.py",
+        "SHF-Next /ops/clientops"
+      ],
+      "exit_condition": "Report delivered.",
+      "definition_of_done": [
+        "Report type, source context, audience, truth/readiness requirements, approval, PDF, delivery channel, delivery metadata, ClientOps update, and delivered status are complete."
+      ],
+      "known_runtime_gaps": [
+        "No hard SHRV1 client-report approval gate.",
+        "PDF delivery is a runbook rule, not runtime-enforced.",
+        "Durable report delivery records remain post-V1."
+      ],
+      "private_beta_readiness": "NEAR_READY",
+      "paid_launch_readiness": "NOT_READY"
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Upgrade Opportunity",
+      "purpose": "Identify, track, and convert upgrade opportunities.",
+      "entry_condition": "Phase 7 client is actively managed and a trigger event, ClientOps signal, health/report signal, support trend, client request, or operator observation suggests additional value.",
+      "operator_actions": [
+        "Record trigger event, ClientOps signal, health/report signal, recommended upgrade, client value, revenue opportunity, owner, proposal next step, follow-up status, and close reason if closed.",
+        "Convert strong opportunities to Hub Opportunities or Hub Sales Pipeline when appropriate."
+      ],
+      "required_data_fields": [
+        "upgrade_opportunity_id",
+        "clientops_record_id",
+        "client_id",
+        "client_name",
+        "trigger_event",
+        "clientops_signal",
+        "health_report_signal",
+        "recommended_upgrade",
+        "problem_or_value",
+        "revenue_opportunity",
+        "proposal_next_step",
+        "follow_up_status",
+        "owner",
+        "next_action_date",
+        "close_reason_if_closed"
+      ],
+      "required_routes_pages": [
+        "SHF-Next /ops/clientops",
+        "admin.html#/hub/opportunities",
+        "admin.html#/hub/sales-pipeline",
+        "admin.html#/reports",
+        "admin.html#/truth-spine"
+      ],
+      "exit_condition": "Upgrade tracked or closed.",
+      "definition_of_done": [
+        "Trigger, signals, upgrade, revenue, proposal next step, follow-up, owner, next action/close reason, and tracked/closed state are recorded."
+      ],
+      "known_runtime_gaps": [
+        "No dedicated SHRV1 upgrade opportunity conversion route.",
+        "No automated ClientOps upgrade-to-Hub Opportunity conversion.",
+        "Revenue/proposal fields remain checklist-driven."
+      ],
+      "private_beta_readiness": "NEAR_READY",
+      "paid_launch_readiness": "NOT_READY"
+    }
+  ],
+  "client_journey_checklist": [
+    {
+      "step": "Lead",
+      "working_now": true,
+      "manual_operator_required": true,
+      "missing_runtime_support": "Dedicated first-interest intake route.",
+      "route_or_doc_reference": "Phase 1; admin.html#/hub/opportunities"
+    },
+    {
+      "step": "Discovery",
+      "working_now": true,
+      "manual_operator_required": true,
+      "missing_runtime_support": "Production discovery record/persistence.",
+      "route_or_doc_reference": "Phase 1; Phase 2"
+    },
+    {
+      "step": "Proposal",
+      "working_now": "partial",
+      "manual_operator_required": true,
+      "missing_runtime_support": "Contract/payment/proposal approval hard gate.",
+      "route_or_doc_reference": "Phase 2; admin.html#/hub/sales-pipeline"
+    },
+    {
+      "step": "Handoff",
+      "working_now": true,
+      "manual_operator_required": true,
+      "missing_runtime_support": "Automated opportunity-to-production conversion.",
+      "route_or_doc_reference": "Phase 2"
+    },
+    {
+      "step": "Production Project",
+      "working_now": true,
+      "manual_operator_required": true,
+      "missing_runtime_support": "Durable project authority.",
+      "route_or_doc_reference": "Phase 3; admin.html#/ops/projects"
+    },
+    {
+      "step": "Build Packet",
+      "working_now": "partial",
+      "manual_operator_required": true,
+      "missing_runtime_support": "Exportable/approvable artifact.",
+      "route_or_doc_reference": "Phase 4; admin.html#/ops/build-packet"
+    },
+    {
+      "step": "QA",
+      "working_now": true,
+      "manual_operator_required": true,
+      "missing_runtime_support": "Acceptance evidence and automated screenshot capture.",
+      "route_or_doc_reference": "Phase 5; admin.html#/ops/screenshot-qa"
+    },
+    {
+      "step": "Launch",
+      "working_now": "partial",
+      "manual_operator_required": true,
+      "missing_runtime_support": "Hard launch/signoff gate.",
+      "route_or_doc_reference": "Phase 6"
+    },
+    {
+      "step": "ClientOps Record",
+      "working_now": true,
+      "manual_operator_required": true,
+      "missing_runtime_support": "Durable ClientOps persistence.",
+      "route_or_doc_reference": "Phase 7; SHF-Next /ops/clientops"
+    },
+    {
+      "step": "Monthly Review",
+      "working_now": true,
+      "manual_operator_required": true,
+      "missing_runtime_support": "Delivery/approval ledger.",
+      "route_or_doc_reference": "Phase 7; Phase 8"
+    },
+    {
+      "step": "Upgrade Opportunity",
+      "working_now": true,
+      "manual_operator_required": true,
+      "missing_runtime_support": "Automated sales/proposal conversion.",
+      "route_or_doc_reference": "Phase 9"
+    }
+  ],
+  "launch_blockers": {
+    "private_beta": [
+      "Run and document one complete SHS client journey rehearsal from lead to upgrade opportunity.",
+      "Record browser smoke evidence for critical SHS/shf-next public and internal routes.",
+      "Explicitly document beta constraints around local/demo persistence and access boundaries.",
+      "Decide which Website Studio marketplace CTAs remain beta-only or need safe next-step labels."
+    ],
+    "paid_launch": [
+      "Production auth/session enforcement for paid-client launch.",
+      "Durable persistence or approved paid-beta storage policy.",
+      "Website Studio cannot yet complete Select Template -> Configure Brand -> Generate Site Packet -> Deliver Site.",
+      "Build Packet output is not yet signed/exportable/approvable.",
+      "QA Delivery Ready -> Launch -> ClientOps acceptance/signoff is not hard-enforced.",
+      "ClientOps monthly report approval and delivery ledger are not finalized.",
+      "Public/private copy and data leakage scan is still required."
+    ],
+    "post_v1": [
+      "Move local workflows toward durable services where needed.",
+      "Add observability, deploy monitoring, and automated route smoke checks.",
+      "Add structured launch gate, report approval model, and PDF/version enforcement.",
+      "Add one-click ClientOps upgrade-to-sales opportunity conversion.",
+      "Add visible internal-only governance banners in consumer-app ClientOps/Production Ops after owner approval."
+    ]
+  },
+  "private_beta_operating_procedure": [
+    {
+      "stage": "Before client call",
+      "actions": [
+        "Confirm beta constraints, route list, operator owner, and client journey rehearsal account.",
+        "Prepare lead intake, package recommendation, and discovery questions.",
+        "Confirm no public/funder-facing claims will be made without Truth Spine/readiness approval."
+      ]
+    },
+    {
+      "stage": "During discovery",
+      "actions": [
+        "Capture contact, organization, industry, problem, budget, timeline, package fit, and qualification status.",
+        "Record owner and next action.",
+        "If qualified, move to Sales Handoff."
+      ]
+    },
+    {
+      "stage": "After client approval",
+      "actions": [
+        "Confirm package, deliverables, brand details, required pages/modules, proposal approval status, and handoff packet.",
+        "Create Production Ops context."
+      ]
+    },
+    {
+      "stage": "During production",
+      "actions": [
+        "Complete project setup, brand profile, page intent, layout blueprint, visual treatment, asset governance, data binding, mock review, screenshot QA, and build packet.",
+        "Keep internal prompts, QA notes, and private client data out of public routes."
+      ]
+    },
+    {
+      "stage": "Before delivery",
+      "actions": [
+        "Run QA + Delivery checklist.",
+        "Confirm desktop/mobile/nav/forms/reports/permissions/leakage/screenshot/functional QA.",
+        "Record Delivery Ready or blockers."
+      ]
+    },
+    {
+      "stage": "After launch",
+      "actions": [
+        "Record final approval, launch date, client signoff, support tier, version record, handoff notes, and ClientOps record.",
+        "Transfer maintenance/watch items and assign owner."
+      ]
+    },
+    {
+      "stage": "First monthly review",
+      "actions": [
+        "Review client health, support tickets, maintenance, version history, upgrade opportunities, and report needs.",
+        "Produce approved PDF report if needed.",
+        "Track upgrade opportunity or close with reason."
+      ]
+    }
+  ],
+  "master_operator_checklist": [
+    "Confirm private-beta constraints are disclosed.",
+    "Create or identify the lead.",
+    "Qualify the lead and set owner/next action.",
+    "Select package and confirm proposal approval status.",
+    "Create the production handoff.",
+    "Build Production Ops project/page/module context.",
+    "Complete production planning and build packet.",
+    "Build or hand off to implementation.",
+    "Run QA + Delivery checklist.",
+    "Record final approval, launch date, signoff, support tier, handoff notes, and version.",
+    "Create/confirm ClientOps record.",
+    "Manage support, maintenance, health, reporting, monthly review, and upgrades.",
+    "Run npm run build and npm run check:governance before owner go/no-go."
+  ],
+  "final_recommendation": {
+    "operator_runbook_ready": true,
+    "private_beta_operator_ready": true,
+    "paid_client_launch_ready": false,
+    "next_task": "Run and document one complete SHS private-beta client journey rehearsal from Lead Intake through Upgrade Opportunity, including route smoke evidence and a blocker log."
+  },
+  "validation": {
+    "python3 -m json.tool docs/operator-runbook/SHS_OPERATOR_RUNBOOK_V1.json": {
+      "status": "PASS",
+      "notes": "JSON report is valid."
+    },
+    "npm run build": {
+      "status": "PASS_WITH_EXISTING_LARGE_CHUNK_WARNING",
+      "notes": "Build passed with the existing Vite large-chunk warning."
+    },
+    "npm run check:governance": {
+      "status": "PASS",
+      "notes": "Master registry, proposal, Truth Spine, Oracle, AI Guardrails, Game Theory, data/governance layers, and duplicate cleanup checks passed."
+    }
+  },
+  "commit_performed": false
+}

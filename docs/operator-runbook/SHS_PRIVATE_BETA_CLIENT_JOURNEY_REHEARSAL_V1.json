@@ -1,0 +1,389 @@
+{
+  "rehearsal_name": "SHS Private Beta Client Journey Rehearsal V1",
+  "client": {
+    "business_name": "Central Care Services",
+    "industry": "Home Healthcare",
+    "package": "SHS Business Operational Package",
+    "project_goal": "Website + Client Intake + Reporting",
+    "support_tier": "Growth Support",
+    "private_beta_status": "Test Client / Demo Client",
+    "public_shf_impact_status": "Not public-approved"
+  },
+  "overall_result": {
+    "can_onboard_client_today": true,
+    "can_deliver_project_today": true,
+    "can_manage_launched_client_today": true,
+    "private_beta_ready": false,
+    "paid_launch_ready": false,
+    "notes": [
+      "Today means supervised internal/private-beta rehearsal with manual operator controls.",
+      "External private beta still requires route smoke evidence, explicit beta constraints, and public/private leakage smoke.",
+      "Paid launch remains blocked by auth, persistence, launch evidence, report delivery controls, and build packet acceptance."
+    ]
+  },
+  "phases": [
+    {
+      "phase": "Lead Intake",
+      "classification": "NEAR_READY",
+      "route_or_page_exists": true,
+      "page_purpose_clear": true,
+      "required_fields_documented": true,
+      "operator_can_complete_manually": true,
+      "workflow_can_continue": true,
+      "manual_workaround_required": true,
+      "missing_runtime_support": [
+        "Dedicated first-interest intake route was not confirmed",
+        "Structured lead source and qualification enforcement remain manual"
+      ],
+      "private_public_boundary_status": "SHS private operational only",
+      "blockers_found": [
+        "PB-003"
+      ],
+      "evidence_files_routes": [
+        "src/router/AdminRoutes.jsx",
+        "src/components/admin/AdminSidebar.jsx",
+        "docs/operator-runbook/SHS_OPERATOR_RUNBOOK_V1.md"
+      ]
+    },
+    {
+      "phase": "Sales Handoff",
+      "classification": "NEAR_READY",
+      "route_or_page_exists": true,
+      "page_purpose_clear": true,
+      "required_fields_documented": true,
+      "operator_can_complete_manually": true,
+      "workflow_can_continue": true,
+      "manual_workaround_required": true,
+      "missing_runtime_support": [
+        "Opportunity-to-production transition is not a hard runtime gate",
+        "Handoff packet approval evidence remains manual"
+      ],
+      "private_public_boundary_status": "SHS private operational only",
+      "blockers_found": [
+        "PB-004"
+      ],
+      "evidence_files_routes": [
+        "src/router/AdminRoutes.jsx",
+        "src/pages/admin/ops/",
+        "docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_2_SALES_HANDOFF.md"
+      ]
+    },
+    {
+      "phase": "Production Ops",
+      "classification": "READY",
+      "route_or_page_exists": true,
+      "page_purpose_clear": true,
+      "required_fields_documented": true,
+      "operator_can_complete_manually": true,
+      "workflow_can_continue": true,
+      "manual_workaround_required": false,
+      "missing_runtime_support": [
+        "Durable production persistence remains a paid-launch blocker"
+      ],
+      "private_public_boundary_status": "SHS private operational only",
+      "blockers_found": [
+        "PB-008"
+      ],
+      "evidence_files_routes": [
+        "src/pages/admin/ops/",
+        "src/system/spines/shsSpine.js",
+        "docs/SHS_PRODUCTION_OPS_SPINE_GOVERNANCE_AUDIT_V1_1.md"
+      ]
+    },
+    {
+      "phase": "Build Packet",
+      "classification": "PARTIAL",
+      "route_or_page_exists": true,
+      "page_purpose_clear": true,
+      "required_fields_documented": true,
+      "operator_can_complete_manually": true,
+      "workflow_can_continue": true,
+      "manual_workaround_required": true,
+      "missing_runtime_support": [
+        "Signed or exportable build packet artifact",
+        "Hard acceptance criteria gate"
+      ],
+      "private_public_boundary_status": "SHS private operational until approved delivery",
+      "blockers_found": [
+        "PB-005"
+      ],
+      "evidence_files_routes": [
+        "src/pages/admin/ops/OpsBuildPacket.jsx",
+        "src/router/AdminRoutes.jsx",
+        "docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_4_BUILD_PACKET.md"
+      ]
+    },
+    {
+      "phase": "QA + Delivery",
+      "classification": "NEAR_READY",
+      "route_or_page_exists": true,
+      "page_purpose_clear": true,
+      "required_fields_documented": true,
+      "operator_can_complete_manually": true,
+      "workflow_can_continue": true,
+      "manual_workaround_required": true,
+      "missing_runtime_support": [
+        "Route smoke evidence",
+        "Screenshot evidence archive",
+        "Delivery readiness signoff ledger"
+      ],
+      "private_public_boundary_status": "SHS private operational; no public impact publication",
+      "blockers_found": [
+        "PB-001",
+        "PB-011"
+      ],
+      "evidence_files_routes": [
+        "src/pages/admin/ops/OpsScreenshotQA.jsx",
+        "/Users/mikeslate/shf-next/src/pages/ops/QADeliveryDashboard.tsx",
+        "docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_5_QA_DELIVERY.md"
+      ]
+    },
+    {
+      "phase": "Launch",
+      "classification": "PARTIAL",
+      "route_or_page_exists": true,
+      "page_purpose_clear": true,
+      "required_fields_documented": true,
+      "operator_can_complete_manually": true,
+      "workflow_can_continue": true,
+      "manual_workaround_required": true,
+      "missing_runtime_support": [
+        "Hard launch signoff gate",
+        "Version record enforcement",
+        "Support tier activation evidence"
+      ],
+      "private_public_boundary_status": "Client-facing launch is not SHF public impact",
+      "blockers_found": [
+        "PB-006",
+        "PB-007",
+        "PB-008"
+      ],
+      "evidence_files_routes": [
+        "docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_6_LAUNCH.md",
+        "docs/SHS_V1_GAP_CLOSURE_PLAN.md"
+      ]
+    },
+    {
+      "phase": "ClientOps",
+      "classification": "NEAR_READY",
+      "route_or_page_exists": true,
+      "page_purpose_clear": true,
+      "required_fields_documented": true,
+      "operator_can_complete_manually": true,
+      "workflow_can_continue": true,
+      "manual_workaround_required": true,
+      "missing_runtime_support": [
+        "Production durable persistence",
+        "Paid support audit ledger"
+      ],
+      "private_public_boundary_status": "SHS private operational; blocked from direct SHF public surfaces",
+      "blockers_found": [
+        "PB-008"
+      ],
+      "evidence_files_routes": [
+        "/Users/mikeslate/shf-next/src/pages/ops/ClientOpsCenter.tsx",
+        "src/system/spines/shsSpine.js",
+        "docs/SHS_CLIENTOPS_SPINE_GOVERNANCE_AUDIT_V1_1.md"
+      ]
+    },
+    {
+      "phase": "Reporting",
+      "classification": "PARTIAL",
+      "route_or_page_exists": true,
+      "page_purpose_clear": true,
+      "required_fields_documented": true,
+      "operator_can_complete_manually": true,
+      "workflow_can_continue": true,
+      "manual_workaround_required": true,
+      "missing_runtime_support": [
+        "Hard report approval gate",
+        "Save-as-PDF evidence",
+        "Delivery ledger"
+      ],
+      "private_public_boundary_status": "Client-facing report only unless Truth/Public Approval gates approve public impact use",
+      "blockers_found": [
+        "PB-009"
+      ],
+      "evidence_files_routes": [
+        "src/router/AdminRoutes.jsx",
+        "services/shf-agent-fabric/routers/reports_routes.py",
+        "docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_8_REPORTING.md"
+      ]
+    },
+    {
+      "phase": "Upgrade Opportunity",
+      "classification": "NEAR_READY",
+      "route_or_page_exists": true,
+      "page_purpose_clear": true,
+      "required_fields_documented": true,
+      "operator_can_complete_manually": true,
+      "workflow_can_continue": true,
+      "manual_workaround_required": true,
+      "missing_runtime_support": [
+        "Automated upgrade conversion into proposal or project remains future work"
+      ],
+      "private_public_boundary_status": "SHS private operational",
+      "blockers_found": [],
+      "evidence_files_routes": [
+        "docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_9_UPGRADE_OPPORTUNITY.md",
+        "docs/SHS_V1_GAP_CLOSURE_PLAN.md"
+      ]
+    }
+  ],
+  "blocker_log": [
+    {
+      "id": "PB-001",
+      "severity": "high",
+      "phase": "All phases",
+      "blocker": "Route smoke evidence is not captured in this rehearsal artifact.",
+      "impact": "External beta could begin without proof that the full journey loads cleanly.",
+      "recommended_fix": "Run and archive route smoke for lead, sales, ops, reports, ClientOps, and SHF-Next ops routes.",
+      "estimated_hours": 4,
+      "required_before_private_beta": true,
+      "required_before_paid_launch": true
+    },
+    {
+      "id": "PB-002",
+      "severity": "high",
+      "phase": "All phases",
+      "blocker": "Explicit private beta operating constraints need owner signoff.",
+      "impact": "Operators may treat beta data or unfinished flows as production-ready.",
+      "recommended_fix": "Publish beta constraints: demo data only, manual persistence, no public approval, no paid launch claims.",
+      "estimated_hours": 3,
+      "required_before_private_beta": true,
+      "required_before_paid_launch": true
+    },
+    {
+      "id": "PB-003",
+      "severity": "medium",
+      "phase": "Lead Intake",
+      "blocker": "No dedicated first-interest intake route was confirmed.",
+      "impact": "Lead capture relies on manual sales/opportunity entry.",
+      "recommended_fix": "Add or designate one lead intake surface after beta if sales flow proves insufficient.",
+      "estimated_hours": 6,
+      "required_before_private_beta": false,
+      "required_before_paid_launch": true
+    },
+    {
+      "id": "PB-004",
+      "severity": "medium",
+      "phase": "Sales Handoff",
+      "blocker": "Opportunity-to-production handoff is not a hard runtime transition.",
+      "impact": "Handoff packet quality depends on operator discipline.",
+      "recommended_fix": "Add handoff checklist enforcement or packet export after private beta learning.",
+      "estimated_hours": 8,
+      "required_before_private_beta": false,
+      "required_before_paid_launch": true
+    },
+    {
+      "id": "PB-005",
+      "severity": "high",
+      "phase": "Build Packet",
+      "blocker": "Build Packet is not a signed/exportable development artifact.",
+      "impact": "Development may start with incomplete acceptance criteria.",
+      "recommended_fix": "Add exportable build packet with owner/client approval evidence.",
+      "estimated_hours": 12,
+      "required_before_private_beta": false,
+      "required_before_paid_launch": true
+    },
+    {
+      "id": "PB-006",
+      "severity": "high",
+      "phase": "Launch",
+      "blocker": "No hard launch signoff gate was confirmed.",
+      "impact": "Paid projects could launch without final approval/version evidence.",
+      "recommended_fix": "Add final approval, version record, support tier activation, and ClientOps creation gate.",
+      "estimated_hours": 10,
+      "required_before_private_beta": false,
+      "required_before_paid_launch": true
+    },
+    {
+      "id": "PB-007",
+      "severity": "critical",
+      "phase": "Paid launch",
+      "blocker": "Production auth/session enforcement remains incomplete for paid use.",
+      "impact": "Internal/client boundaries cannot be relied on for production paid customers.",
+      "recommended_fix": "Implement production-grade authentication and route/session enforcement.",
+      "estimated_hours": 28,
+      "required_before_private_beta": false,
+      "required_before_paid_launch": true
+    },
+    {
+      "id": "PB-008",
+      "severity": "critical",
+      "phase": "Paid launch",
+      "blocker": "Durable persistence is not production-ready across the full lifecycle.",
+      "impact": "Client records, handoffs, QA, reports, and support history can be lost or drift.",
+      "recommended_fix": "Add durable persistence and backup/restore policy for paid operations.",
+      "estimated_hours": 32,
+      "required_before_private_beta": false,
+      "required_before_paid_launch": true
+    },
+    {
+      "id": "PB-009",
+      "severity": "high",
+      "phase": "Reporting",
+      "blocker": "Paid-client report approval and delivery ledger are not hard gates.",
+      "impact": "Reports may be delivered without traceable approval or delivery status.",
+      "recommended_fix": "Add report approval, save-as-PDF rule evidence, and delivery record.",
+      "estimated_hours": 18,
+      "required_before_private_beta": false,
+      "required_before_paid_launch": true
+    },
+    {
+      "id": "PB-010",
+      "severity": "high",
+      "phase": "Website/Builder",
+      "blocker": "Website Studio/WebMaker generation-to-delivery path remains incomplete for paid delivery.",
+      "impact": "Website project delivery may rely on manual assembly.",
+      "recommended_fix": "Define Website Studio generation, BuilderHub handoff, and delivery acceptance path.",
+      "estimated_hours": 34,
+      "required_before_private_beta": false,
+      "required_before_paid_launch": true
+    },
+    {
+      "id": "PB-011",
+      "severity": "medium",
+      "phase": "Safety",
+      "blocker": "Public/private leakage route scan should be captured before external beta.",
+      "impact": "Demo/private operational data could accidentally appear on public surfaces.",
+      "recommended_fix": "Run route leakage smoke for public SHF pages, admin SHS pages, and SHF-Next ops routes.",
+      "estimated_hours": 6,
+      "required_before_private_beta": true,
+      "required_before_paid_launch": true
+    }
+  ],
+  "private_public_safety": {
+    "central_care_services_private_beta_demo_only": true,
+    "public_approved_assigned": false,
+    "shf_impact_data_spine_mutated": false,
+    "public_shf_impact_data_created": false,
+    "clientops_private_operational": true,
+    "production_ops_private_operational": true,
+    "truth_spine_public_approval_required_for_public_claims": true,
+    "notes": [
+      "Central Care Services must remain demo/private beta data.",
+      "No public SHF impact status is assigned.",
+      "Any future public impact publication must pass Truth Spine and public approval gates."
+    ]
+  },
+  "validation": {
+    "json_tool": "pass",
+    "npm_run_check_governance": "pass",
+    "check_master_layer_registry": "pass",
+    "check_truth_spine_freeze": "pass",
+    "npm_run_build": "pass_with_existing_large_chunk_warning",
+    "shf_next_npm_run_build": "pass_with_existing_large_chunk_warning",
+    "shf_next_npm_run_lint": "pass",
+    "git_status_short": "pass_dirty_worktree_reported",
+    "git_diff_name_status": "pass_existing_source_diff_reported",
+    "git_diff_stat": "pass_existing_source_diff_reported"
+  },
+  "next_recommended_actions": [
+    "Run route smoke evidence and archive results.",
+    "Publish private beta constraints before external beta.",
+    "Capture public/private leakage smoke.",
+    "Design paid launch gates for auth, persistence, launch signoff, report delivery, and build packet approval.",
+    "Keep Central Care Services private and never mark public-approved during rehearsal."
+  ]
+}

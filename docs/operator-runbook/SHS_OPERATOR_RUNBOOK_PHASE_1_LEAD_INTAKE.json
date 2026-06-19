@@ -1,0 +1,261 @@
+{
+  "runbook_name": "SHS Operator Runbook V1 - Phase 1: Lead Intake",
+  "phase": 1,
+  "phase_name": "Lead Intake",
+  "mode": "documentation_and_audit_only",
+  "created_at": "2026-06-19",
+  "goal": "Document and audit the exact process for taking a new SHS lead from first interest to qualified opportunity.",
+  "v1_complete": true,
+  "entry_condition": "A person or organization has expressed interest in SHS, requested a demo, been referred by a partner, appeared as a growth/opportunity signal, or otherwise created enough context for an operator to review fit.",
+  "exit_condition": "Ready for Sales Handoff: the lead has minimum contact, organization, problem, budget/timeline, package recommendation, qualification decision, owner, next action, and stage recorded for sales follow-up.",
+  "current_route_status": {
+    "required_route_page_if_exists": [
+      {
+        "route": "admin.html#/hub/sales-pipeline",
+        "page": "src/pages/hub/HubSalesPipelinePage.jsx",
+        "status": "usable_as_operator_sales_review_surface",
+        "notes": "Tracks sales pipeline items, stages, estimated value, priority, due dates, next action, notes, review events, and links to Opportunities and Bundle Builder."
+      },
+      {
+        "route": "admin.html#/hub/opportunities",
+        "page": "src/pages/hub/HubOpportunitiesPage.jsx",
+        "status": "usable_as_opportunity_context_surface",
+        "notes": "Tracks opportunity signals, buyer, source, value, urgency, stage, partner/package context, and next actions."
+      },
+      {
+        "route": "/solutions.html#/request-demo",
+        "page": "src/pages/solutions/SHSRequestDemoPage.jsx",
+        "status": "public_interest_source_surface",
+        "notes": "Collects public demo/contact fields, but no runtime submit/persistence handler was found in this audit."
+      }
+    ],
+    "missing_or_incomplete_route_page": [
+      {
+        "route": "/sales.html#/leads",
+        "page": "src/pages/sales/Leads.jsx",
+        "status": "stub",
+        "notes": "The Sales app Leads route renders only a stub and is not sufficient as the V1 operator lead intake surface."
+      },
+      {
+        "route": "admin.html#/hub/lead-intake",
+        "page": null,
+        "status": "missing",
+        "notes": "No dedicated SHS Lead Intake admin route/page was found."
+      }
+    ],
+    "sidebar_status": {
+      "admin_sidebar": "src/components/admin/AdminSidebar.jsx",
+      "finding": "AdminSidebar exposes Production Ops, Operations, Analytics, and System sections, but no direct Sales Pipeline or Lead Intake link was found."
+    }
+  },
+  "lead_sources": [
+    "Public Request Demo form",
+    "direct email or phone",
+    "partner referral",
+    "Hub Growth signal",
+    "Hub Opportunities board",
+    "existing ClientOps upgrade opportunity",
+    "manual operator entry"
+  ],
+  "required_data_fields": [
+    {
+      "field": "lead_source",
+      "required": true,
+      "description": "Where the lead came from: demo request, referral, event, partner, existing client, growth signal, manual."
+    },
+    {
+      "field": "first_name",
+      "required": true,
+      "description": "Primary contact first name."
+    },
+    {
+      "field": "last_name",
+      "required": true,
+      "description": "Primary contact last name."
+    },
+    {
+      "field": "work_email",
+      "required": true,
+      "description": "Work email used for follow-up and demo scheduling."
+    },
+    {
+      "field": "phone",
+      "required": false,
+      "description": "Phone number if provided or needed for high-intent follow-up."
+    },
+    {
+      "field": "organization_name",
+      "required": true,
+      "description": "Organization, company, agency, or client name."
+    },
+    {
+      "field": "organization_type",
+      "required": true,
+      "description": "Nonprofit, government, funder, workforce/education, program operator, business, or other."
+    },
+    {
+      "field": "role_title",
+      "required": true,
+      "description": "Decision role or stakeholder role."
+    },
+    {
+      "field": "industry",
+      "required": true,
+      "description": "Operational sector or market: healthcare, home care, legal, nonprofit, workforce, logistics, education, professional services, etc."
+    },
+    {
+      "field": "problem_to_solve",
+      "required": true,
+      "description": "The operational, reporting, website, client delivery, or system problem they need solved."
+    },
+    {
+      "field": "budget_range",
+      "required": true,
+      "description": "Estimated available budget or buying capacity. If unknown, mark unknown and ask during discovery."
+    },
+    {
+      "field": "timeline",
+      "required": true,
+      "description": "Desired start or demo timeframe: urgent, within 2 weeks, 2-4 weeks, 1-2 months, just exploring."
+    },
+    {
+      "field": "package_recommendation",
+      "required": true,
+      "description": "Initial recommended SHS package or service path."
+    },
+    {
+      "field": "qualification_status",
+      "required": true,
+      "description": "New, needs discovery, qualified opportunity, nurture, disqualified."
+    },
+    {
+      "field": "owner",
+      "required": true,
+      "description": "SHS operator or sales owner responsible for next action."
+    },
+    {
+      "field": "next_action",
+      "required": true,
+      "description": "Concrete next step before sales handoff."
+    }
+  ],
+  "operator_checklist": [
+    "Capture the lead source.",
+    "Capture contact information: first name, last name, work email, and phone if available.",
+    "Capture organization/client details: organization name, organization type, role, geography if relevant.",
+    "Capture industry or operating sector.",
+    "Summarize the problem they need solved in one plain-language sentence.",
+    "Capture budget range or mark unknown and schedule discovery to resolve it.",
+    "Capture timeline or preferred demo timeframe.",
+    "Recommend an initial package based on problem, industry, urgency, and budget.",
+    "Run qualification checklist.",
+    "Assign owner and next action.",
+    "Move to Ready for Sales Handoff only when required fields and qualification decision are complete."
+  ],
+  "package_recommendation_rules": [
+    {
+      "condition": "Needs public website, template, brand, or simple service page",
+      "recommendation": "Website Studio / WebMaker Starter"
+    },
+    {
+      "condition": "Needs operational dashboard, workflow, roles, internal process, or team visibility",
+      "recommendation": "Operations OS"
+    },
+    {
+      "condition": "Needs client portal, onboarding, support, knowledge base, or client delivery layer",
+      "recommendation": "Client Delivery OS"
+    },
+    {
+      "condition": "Needs scheduling, routing, dispatch, logistics, or field coordination",
+      "recommendation": "Dispatch OS"
+    },
+    {
+      "condition": "Needs reporting, verified outcomes, proof, audit trail, or funder/leadership visibility",
+      "recommendation": "Reporting + Verification Layer"
+    },
+    {
+      "condition": "Needs multi-system build with workflow, website, reporting, and ClientOps",
+      "recommendation": "Full SHS Operating System Build"
+    }
+  ],
+  "qualification_checklist": [
+    {
+      "item": "Clear problem",
+      "pass_condition": "The lead can name the operational or public-facing problem SHS would solve."
+    },
+    {
+      "item": "Real organization",
+      "pass_condition": "Organization/client identity and contact are known."
+    },
+    {
+      "item": "Decision context",
+      "pass_condition": "The contact is a decision-maker, influencer, or can introduce one."
+    },
+    {
+      "item": "Budget fit",
+      "pass_condition": "Budget range is known or discovery is scheduled to resolve it."
+    },
+    {
+      "item": "Timeline fit",
+      "pass_condition": "Timeline is known and not incompatible with SHS capacity."
+    },
+    {
+      "item": "Package fit",
+      "pass_condition": "At least one SHS package maps to the problem."
+    },
+    {
+      "item": "Risk screen",
+      "pass_condition": "No obvious privacy, security, legal, or public-claim blocker prevents discovery."
+    },
+    {
+      "item": "Next action",
+      "pass_condition": "A concrete next action and owner are assigned."
+    }
+  ],
+  "definition_of_done": [
+    "Lead source is recorded.",
+    "Contact and organization details are recorded.",
+    "Industry and problem statement are recorded.",
+    "Budget range and timeline are recorded or explicitly marked unknown with discovery action.",
+    "Initial package recommendation is recorded.",
+    "Qualification checklist has pass/fail notes.",
+    "Owner and next action are assigned.",
+    "Lead status is Qualified Opportunity or Nurture/Disqualified with reason.",
+    "If qualified, the lead is ready to appear in Sales Pipeline or Production Handoff review."
+  ],
+  "findings": [
+    "SHS has a usable Hub Sales Pipeline route for sales review: admin.html#/hub/sales-pipeline.",
+    "SHS has a usable Hub Opportunities route for opportunity context: admin.html#/hub/opportunities.",
+    "The public Request Demo page collects many lead fields, including contact, organization, role, problem, source, and timeframe.",
+    "No dedicated Lead Intake admin page was found.",
+    "The Sales app /sales.html#/leads page exists but is a stub.",
+    "Budget range is not clearly collected in the public Request Demo form.",
+    "Package recommendation and qualification status are operator-derived today, not a dedicated intake workflow."
+  ],
+  "launch_blockers": [
+    "No dedicated lead intake route/page for first-interest to qualified opportunity.",
+    "Public Request Demo form appears presentational; no submit/persistence handler was found.",
+    "Sales Leads route is a stub.",
+    "Budget range and package recommendation are not captured in the public lead form.",
+    "AdminSidebar does not expose a direct Sales Pipeline or Lead Intake link.",
+    "No single lead qualification record schema was found for the operator to complete before Sales Handoff."
+  ],
+  "post_v1_improvements": [
+    "Create a dedicated Lead Intake page or make /sales.html#/leads fully functional.",
+    "Persist Request Demo submissions into a review queue.",
+    "Add budget range, package interest, and urgency fields to lead intake.",
+    "Add qualification status and owner assignment workflow.",
+    "Add direct AdminSidebar navigation to Sales Pipeline or Lead Intake.",
+    "Connect Qualified Opportunity to Sales Handoff without duplicate manual entry.",
+    "Add basic duplicate lead detection by email/domain/organization."
+  ],
+  "validation": {
+    "python3_m_json_tool": "PASS",
+    "npm_run_build": "PASS_WITH_EXISTING_LARGE_CHUNK_WARNING",
+    "npm_run_check_governance": "PASS"
+  },
+  "files_changed": [
+    "docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_1_LEAD_INTAKE.md",
+    "docs/operator-runbook/SHS_OPERATOR_RUNBOOK_PHASE_1_LEAD_INTAKE.json"
+  ]
+}

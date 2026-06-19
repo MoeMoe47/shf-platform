@@ -1,0 +1,25 @@
+{
+  "layer_name": "Oracle Layer",
+  "status": "COMPLETE_V1",
+  "source_doc": "docs/ORACLE_LAYER_V1.md",
+  "role": "Decision-support layer that reasons over verified evidence and explains whether evidence supports a recommendation or ruling.",
+  "boundaries": [
+    "May reason over Truth Packages and verified evidence.",
+    "Does not verify truth.",
+    "Does not override Truth Spine.",
+    "Does not approve public data, mutate SHF Impact Data Spine, or publish reports."
+  ],
+  "known_surfaces": [
+    "services/shf-agent-fabric/services/oracle_service.py",
+    "services/shf-agent-fabric/routers/oracle_routes.py",
+    "services/shf-agent-fabric/tests/test_oracle_routes.py",
+    "src/pages/admin/oracle/OraclePage.jsx"
+  ],
+  "governance_notes": [
+    "Truth Spine verifies what is true; Oracle decides what verified evidence supports.",
+    "Oracle output remains decision support and does not become public authority without downstream gates."
+  ],
+  "post_v1_hardening": [
+    "Keep JSON companion aligned with Oracle V1 docs if decision-support fields change."
+  ]
+}

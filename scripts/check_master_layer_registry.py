@@ -9,54 +9,6 @@ import re
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY_PATH = ROOT / "docs" / "MASTER_LAYER_REGISTRY.md"
 
-REQUIRED_LAYERS = [
-    "Identity & Access",
-    "API Gateway",
-    "Event/Webhook",
-    "Batch/Import",
-    "Warehouse Sync",
-    "Apps/Programs",
-    "Adapter Layer",
-    "Truth Spine",
-    "Oracle Layer",
-    "Game Theory Layer",
-    "AI/Swarm Layer",
-    "Alignment Layer",
-    "LOO",
-    "Watchtower",
-    "Governance Layer",
-    "Audit & Verification",
-    "Readiness Gate",
-    "Verified Aggregation",
-    "Reports",
-    "Funding Intelligence",
-    "Public Approval",
-    "Narrative/Story",
-    "Partner/Institution",
-    "Security/Privacy",
-    "Data Ownership/IP",
-    "Decision Journal",
-    "Replay Engine",
-    "Signed Manifest",
-    "Self-Audit",
-    "Layer Control System",
-    "Context-Adaptive Analyst",
-    "SHS Sales Layer",
-    "Production Ops",
-    "Development Library",
-    "QA + Delivery",
-    "ClientOps",
-    "Website Studio",
-    "Production Automation",
-    "SHF Impact Command Center",
-    "Public Impact Map",
-    "Career Pathways",
-    "Program Registry",
-    "Sponsorship Layer",
-    "Grant/Proposal Layer",
-    "Governance Binder",
-]
-
 REQUIRED_FIELDS = [
     "Layer Type",
     "Owns",
@@ -79,6 +31,25 @@ def _layer_blocks(text: str) -> dict[str, str]:
     return blocks
 
 
+def _official_layers(text: str) -> list[str]:
+    layers: list[str] = []
+    in_table = False
+    for line in text.splitlines():
+        if line.strip() == "| Layer | Ownership | Boundary |":
+            in_table = True
+            continue
+        if not in_table:
+            continue
+        if line.startswith("| ---"):
+            continue
+        if not line.startswith("|"):
+            break
+        cells = [cell.strip() for cell in line.strip("|").split("|")]
+        if len(cells) >= 3 and cells[0]:
+            layers.append(cells[0])
+    return layers
+
+
 def main() -> int:
     if not REGISTRY_PATH.exists():
         print(f"FAIL: missing {REGISTRY_PATH.relative_to(ROOT)}")
@@ -86,10 +57,10 @@ def main() -> int:
 
     text = REGISTRY_PATH.read_text(encoding="utf-8")
     failures: list[str] = []
+    required_layers = _official_layers(text)
 
-    table_missing = [layer for layer in REQUIRED_LAYERS if f"| {layer} |" not in text]
-    for layer in table_missing:
-        failures.append(f"missing layer in Official Layers table: {layer}")
+    if not required_layers:
+        failures.append("Official Layers table did not yield any layer rows")
 
     heading_names = [match.group(1).strip() for match in re.finditer(r"^###\s+(.+?)\s*$", text, flags=re.MULTILINE)]
     for name, count in sorted(Counter(heading_names).items()):
@@ -97,7 +68,7 @@ def main() -> int:
             failures.append(f"duplicate layer heading: {name}")
 
     blocks = _layer_blocks(text)
-    for layer in REQUIRED_LAYERS:
+    for layer in required_layers:
         block = blocks.get(layer)
         if block is None:
             failures.append(f"missing structured layer entry: {layer}")
@@ -117,7 +88,7 @@ def main() -> int:
             print(f"- {failure}")
         return 1
 
-    print(f"PASS: Master Layer Registry checked {len(REQUIRED_LAYERS)} required layers.")
+    print(f"PASS: Master Layer Registry checked {len(required_layers)} official registry rows/layers.")
     return 0
 
 

@@ -1,0 +1,122 @@
+{
+  "name": "Governance Hardening V1.1",
+  "registry_checker": {
+    "old_scope": 45,
+    "new_scope": 57,
+    "updated": true,
+    "result": "Master Layer Registry checker now parses docs/MASTER_LAYER_REGISTRY.md Official Layers table and checks 57 official registry rows/layers."
+  },
+  "ai_governance_alias": {
+    "added": true,
+    "canonical_script": "check:ai-guardrails",
+    "alias_script": "check:ai-governance"
+  },
+  "json_companion_audit": {
+    "checked": [
+      "Truth Spine",
+      "Oracle Layer",
+      "AI/Swarm Layer",
+      "Game Theory Layer",
+      "Agent Fabric",
+      "Watchtower",
+      "Reports",
+      "LOO",
+      "Identity & Access",
+      "SHF Impact Data Spine",
+      "Data Approval Gateway",
+      "ClientOps",
+      "Production Ops",
+      "Website Studio",
+      "BuilderHub",
+      "WebMaker"
+    ],
+    "created": [
+      "docs/TRUTH_SPINE_V1.json",
+      "docs/ORACLE_LAYER_V1.json",
+      "docs/AI_SWARM_GUARDRAILS_V1.json",
+      "docs/GAME_THEORY_LAYER_V1.json"
+    ],
+    "deferred": [
+      {
+        "layer": "Agent Fabric",
+        "reason": "Existing Agent Fabric docs already have JSON audit/page companions; no additional layer companion was needed without guessing a broader layer contract."
+      },
+      {
+        "layer": "Watchtower",
+        "reason": "Existing Watchtower visibility/audit docs have JSON companions, but no single canonical WATCHTOWER_LAYER_V1.md source doc was identified."
+      },
+      {
+        "layer": "Reports",
+        "reason": "Reports visibility is covered in existing audit docs; no single canonical REPORTS_LAYER_V1.md source doc was identified."
+      },
+      {
+        "layer": "LOO",
+        "reason": "LOO is covered through existing visibility and route/test evidence, but no single canonical LOO_LAYER_V1.md source doc was identified."
+      },
+      {
+        "layer": "Identity & Access",
+        "reason": "Identity layer spine integration already has markdown and JSON audit docs."
+      },
+      {
+        "layer": "SHF Impact Data Spine",
+        "reason": "Protected by SHS Spine formalization and src/data/shfImpactData.js; no standalone complete V1 markdown source doc was identified."
+      },
+      {
+        "layer": "Data Approval Gateway",
+        "reason": "Referenced as a human/review gate in existing governance docs; no standalone complete V1 markdown source doc was identified."
+      },
+      {
+        "layer": "ClientOps",
+        "reason": "Mostly-complete product/ops surface; no standalone complete V1 markdown source doc was identified."
+      },
+      {
+        "layer": "Production Ops",
+        "reason": "Mostly-complete product/ops surface; no standalone complete V1 markdown source doc was identified."
+      },
+      {
+        "layer": "Website Studio",
+        "reason": "Mostly-complete production surface; no standalone complete V1 markdown source doc was identified."
+      },
+      {
+        "layer": "BuilderHub",
+        "reason": "Approved active work boundary, not an official complete registry layer with a standalone V1 markdown source doc."
+      },
+      {
+        "layer": "WebMaker",
+        "reason": "Approved active work boundary, not an official complete registry layer with a standalone V1 markdown source doc."
+      }
+    ]
+  },
+  "validation": {
+    "python3 scripts/check_master_layer_registry.py": "PASS: Master Layer Registry checked 57 official registry rows/layers.",
+    "npm run check:ai-governance": "PASS: alias delegates to npm run check:ai-guardrails.",
+    "npm run check:ai-guardrails": "PASS: AI/Swarm Guardrails V1 checks passed.",
+    "npm run check:governance": "PASS: governance aggregate passed.",
+    "python3 scripts/check_truth_spine_freeze.py": "PASS: Truth Spine V1 freeze checks passed.",
+    "npm run build": "PASS: Vite build completed with existing large-chunk warning.",
+    "focused_governance_pytest": "PASS: 27 passed.",
+    "json_validity": "PASS: Governance Hardening report and four companion JSON docs are valid JSON."
+  },
+  "git_safety": {
+    "git status --short --untracked-files=all": "PASS: reviewed working tree; no commit/stage action performed.",
+    "git diff --name-status": "PASS: reviewed tracked file changes.",
+    "git diff --stat": "PASS: reviewed tracked diff summary.",
+    "runtime_note": "services/shf-agent-fabric/var/watchtower_audit.jsonl remains modified from generated Watchtower audit rows."
+  },
+  "files_changed": [
+    "scripts/check_master_layer_registry.py",
+    "package.json",
+    "docs/TRUTH_SPINE_V1.json",
+    "docs/ORACLE_LAYER_V1.json",
+    "docs/AI_SWARM_GUARDRAILS_V1.json",
+    "docs/GAME_THEORY_LAYER_V1.json",
+    "docs/GOVERNANCE_HARDENING_V1_1.md",
+    "docs/GOVERNANCE_HARDENING_V1_1.json"
+  ],
+  "remaining_post_v1_hardening": [
+    "Owner may decide later whether product/ops/funding rows need standalone V1 JSON companion docs.",
+    "Owner may decide later whether Watchtower, Reports, and LOO should receive dedicated layer docs beyond existing visibility/audit docs.",
+    "Keep check:ai-governance as an alias only; check:ai-guardrails remains canonical."
+  ],
+  "v1_1_complete": true
+}

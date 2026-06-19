@@ -11,6 +11,7 @@
     "check:truth": "python3 scripts/check_truth_spine_freeze.py",
     "check:oracle": "python3 scripts/check_oracle_layer.py",
     "check:ai-guardrails": "python3 scripts/check_ai_guardrails_layer.py",
+    "check:ai-governance": "npm run check:ai-guardrails",
     "check:game-theory": "python3 scripts/check_game_theory_layer.py",
     "check:source-registry": "python3 scripts/check_source_registry_layer.py",
     "check:data-federation": "python3 scripts/check_data_federation_layer.py",

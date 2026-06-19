@@ -1,0 +1,25 @@
+{
+  "layer_name": "Game Theory Layer",
+  "status": "COMPLETE_V1",
+  "source_doc": "docs/GAME_THEORY_LAYER_V1.md",
+  "role": "Strategy layer that models incentives, adversarial pressure, decision scenarios, and risk without deciding truth, issuing Oracle rulings, or publishing reports.",
+  "boundaries": [
+    "May model incentives, risk, strategy, and scenario pressure.",
+    "Does not verify claims.",
+    "Does not public-approve records.",
+    "Does not execute actions, publish reports, mutate SHF Impact Data Spine, or override Truth Spine or Oracle."
+  ],
+  "known_surfaces": [
+    "services/shf-agent-fabric/services/game_theory_service.py",
+    "services/shf-agent-fabric/routers/game_theory_routes.py",
+    "services/shf-agent-fabric/tests/test_game_theory_routes.py",
+    "src/pages/admin/game-theory/GameTheoryPage.jsx"
+  ],
+  "governance_notes": [
+    "Game Theory output is strategic analysis only.",
+    "Verified facts and public outputs still depend on Truth Spine, Oracle where needed, and downstream governance gates."
+  ],
+  "post_v1_hardening": [
+    "Keep JSON companion aligned with Game Theory V1 docs if scenario/risk fields change."
+  ]
+}

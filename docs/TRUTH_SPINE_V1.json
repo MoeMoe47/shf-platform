@@ -1,0 +1,26 @@
+{
+  "layer_name": "Truth Spine",
+  "status": "COMPLETE_V1",
+  "source_doc": "docs/TRUTH_SPINE_V1.md",
+  "role": "Canonical authority for claims, sources, verification status, trust level, trace coverage, public approval gate, and report readiness.",
+  "boundaries": [
+    "Verifies what is true.",
+    "Does not decide what verified evidence supports; Oracle owns supportability reasoning.",
+    "Does not rank outcomes; LOO owns outcome ranking.",
+    "Does not replace Reports, Watchtower, Data Approval Gateway, or SHF Impact Data Spine."
+  ],
+  "known_surfaces": [
+    "services/shf-agent-fabric/services/truth_spine_service.py",
+    "services/shf-agent-fabric/routers/truth_routes.py",
+    "services/shf-agent-fabric/tests/test_truth_routes.py",
+    "src/pages/admin/truth-spine/TruthSpinePage.jsx"
+  ],
+  "governance_notes": [
+    "Frozen as the official SHS anti-drift authority.",
+    "Public approval can only be true for verified claims.",
+    "Report readiness depends on verified status and trace coverage."
+  ],
+  "post_v1_hardening": [
+    "Keep JSON companion aligned with TRUTH_SPINE_FREEZE_V1.md if freeze language changes."
+  ]
+}

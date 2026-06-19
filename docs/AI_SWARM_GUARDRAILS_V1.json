@@ -1,0 +1,25 @@
+{
+  "layer_name": "AI/Swarm Layer",
+  "status": "COMPLETE_V1",
+  "source_doc": "docs/AI_SWARM_GUARDRAILS_V1.md",
+  "role": "AI governance and guardrail layer for AI outputs, swarm coordination, publication readiness, and execution safety without bypassing Truth Spine, Oracle, Alignment, or governance gates.",
+  "boundaries": [
+    "May summarize, assist, and coordinate agents within governance limits.",
+    "May not label data verified, public-approved, or report-ready unless authoritative upstream metadata says so.",
+    "May not publish public claims without Truth Spine and public approval context.",
+    "May not override Truth Spine, Oracle, Alignment, Security/Privacy, or Data Ownership/IP."
+  ],
+  "known_surfaces": [
+    "services/shf-agent-fabric/services/ai_guardrails_service.py",
+    "services/shf-agent-fabric/routers/ai_guardrails_routes.py",
+    "services/shf-agent-fabric/tests/test_ai_guardrails_routes.py",
+    "src/pages/admin/ai-guardrails/AIGuardrailsPage.jsx"
+  ],
+  "governance_notes": [
+    "Canonical npm script remains check:ai-guardrails.",
+    "check:ai-governance is an alias to the canonical AI Guardrails checker."
+  ],
+  "post_v1_hardening": [
+    "Keep alias and canonical checker naming documented if AI governance language changes."
+  ]
+}

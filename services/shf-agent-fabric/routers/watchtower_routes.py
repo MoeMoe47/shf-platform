@@ -9,6 +9,7 @@ from services.adapter_layer_service import adapter_layer_summary
 from services.api_gateway_service import api_gateway_summary
 from services.audit_verification_service import audit_verification_summary
 from services.ai_guardrails_service import ai_guardrails_summary
+from services.batch_import_service import batch_import_summary
 from services.data_approval_service import data_approval_summary
 from services.data_aggregator_service import data_aggregator_summary
 from services.data_federation_service import data_federation_summary
@@ -52,6 +53,7 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
     event_webhook = event_webhook_summary()
     api_gateway = api_gateway_summary()
     adapter_layer = adapter_layer_summary()
+    batch_import = batch_import_summary()
     if isinstance(summary, dict):
         summary["truth_coverage"] = {
             "coverage_percent": truth["coverage_percent"],
@@ -311,6 +313,35 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
             "replaces_data_normalization": adapter_layer["replaces_data_normalization"],
             "flag": adapter_layer["blocked"] > 0 or adapter_layer["needs_review"] > 0,
             "status": "watch" if adapter_layer["blocked"] > 0 or adapter_layer["needs_review"] > 0 else "ready",
+        }
+        summary["batch_import"] = {
+            "policy_status": batch_import["policy_status"],
+            "blocked": batch_import["blocked"],
+            "needs_review": batch_import["needs_review"],
+            "import_ready": batch_import["import_ready"],
+            "total_records_seen": batch_import["total_records_seen"],
+            "accepted_record_count": batch_import["accepted_record_count"],
+            "quarantined_record_count": batch_import["quarantined_record_count"],
+            "row_warning_count": batch_import["row_warning_count"],
+            "row_blocker_count": batch_import["row_blocker_count"],
+            "records_written_count": batch_import["records_written_count"],
+            "external_call_made_count": batch_import["external_call_made_count"],
+            "normalized_final_count": batch_import["normalized_final_count"],
+            "truth_verified_count": batch_import["truth_verified_count"],
+            "public_approved_count": batch_import["public_approved_count"],
+            "mutated_public_data_count": batch_import["mutated_public_data_count"],
+            "published_report_count": batch_import["published_report_count"],
+            "target_layer_counts": batch_import["target_layer_counts"],
+            "import_type_counts": batch_import["import_type_counts"],
+            "writes_records": batch_import["writes_records"],
+            "calls_external_systems": batch_import["calls_external_systems"],
+            "normalizes_final_data": batch_import["normalizes_final_data"],
+            "replaces_adapter_layer": batch_import["replaces_adapter_layer"],
+            "replaces_source_registry": batch_import["replaces_source_registry"],
+            "replaces_data_aggregator": batch_import["replaces_data_aggregator"],
+            "replaces_data_normalization": batch_import["replaces_data_normalization"],
+            "flag": batch_import["blocked"] > 0 or batch_import["needs_review"] > 0 or batch_import["quarantined_record_count"] > 0,
+            "status": "watch" if batch_import["blocked"] > 0 or batch_import["needs_review"] > 0 or batch_import["quarantined_record_count"] > 0 else "ready",
         }
         summary["oracle"] = {
             "cases_total": oracle["cases_total"],

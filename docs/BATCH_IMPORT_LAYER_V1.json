@@ -1,0 +1,213 @@
+{
+  "layer_name": "Batch / Import Layer V1",
+  "is_new_layer": false,
+  "role": "Reviews bulk imports, CSV/JSON uploads, multi-record payloads, import batches, file-style records, SHS exports, SHF-Next exports, partner datasets, and future bulk intake jobs before governed intake.",
+  "boundaries": {
+    "does": [
+      "accept batch/import review payloads",
+      "classify batch source system",
+      "classify import type",
+      "classify input format",
+      "count records from provided metadata or small inline lists",
+      "identify required mapping/profile metadata",
+      "identify missing source metadata",
+      "identify missing provenance metadata",
+      "identify row-level warnings",
+      "identify row-level blockers",
+      "classify quarantine needs",
+      "classify import readiness",
+      "recommend target intake layer",
+      "provide summary-only visibility to Reports",
+      "provide observation-only visibility to Watchtower"
+    ],
+    "does_not": [
+      "parse large real files in V1",
+      "ingest production files",
+      "create production database persistence",
+      "write production records",
+      "perform final normalization",
+      "verify truth",
+      "approve public data",
+      "mark records public-approved",
+      "mutate SHF Impact Data Spine",
+      "publish reports",
+      "call external services",
+      "replace Adapter Layer",
+      "replace Source Registry",
+      "replace Data Aggregator",
+      "replace Data Normalization",
+      "bypass Security / Privacy",
+      "bypass Data Ownership / IP",
+      "override Truth Spine",
+      "override Oracle"
+    ]
+  },
+  "source_system_types": [
+    "shs_spine",
+    "shf_next",
+    "clientops",
+    "production_ops",
+    "website_studio",
+    "webmaker",
+    "partner_feed",
+    "api_export",
+    "manual_upload",
+    "unknown"
+  ],
+  "import_types": [
+    "csv",
+    "json",
+    "api_export",
+    "manual_entry",
+    "partner_dataset",
+    "unknown"
+  ],
+  "input_formats": [
+    "csv",
+    "json",
+    "inline_records",
+    "file_reference",
+    "unknown"
+  ],
+  "batch_statuses": [
+    "blocked",
+    "needs_review",
+    "import_ready"
+  ],
+  "deterministic_v1_rules": [
+    "missing batch_id blocks",
+    "missing source_system blocks",
+    "missing source_system_type blocks",
+    "missing import_type blocks",
+    "unknown import_type needs review",
+    "missing input_format blocks",
+    "unknown input_format needs review",
+    "missing mapping_profile needs review",
+    "missing source_metadata needs review",
+    "missing provenance needs review",
+    "record_count <= 0 with no inline records blocks",
+    "inline records are counted directly",
+    "inline rows missing source_id, source_name, or canonical_type are quarantined",
+    "inline rows with obvious PII or secret fields create review warnings",
+    "SHS operational source systems are private by default and target Adapter Layer",
+    "partner feed, api export, and manual upload batches target Adapter Layer",
+    "complete batches with required metadata may be import-ready",
+    "records_written is always false in V1",
+    "external_call_made is always false in V1",
+    "normalized_final is always false in V1",
+    "truth_verified is always false in V1",
+    "public_approved is always false in V1",
+    "mutated_public_data is always false in V1",
+    "published_report is always false in V1"
+  ],
+  "upstream_dependencies": [
+    "SHS Spine",
+    "Partner/Institution",
+    "Apps/Programs",
+    "ClientOps",
+    "Production Ops",
+    "Website Studio",
+    "WebMaker",
+    "SHF-Next",
+    "API Gateway",
+    "Event/Webhook",
+    "Manual uploads",
+    "CSV/JSON uploads"
+  ],
+  "downstream_targets": [
+    "Adapter Layer",
+    "Source Registry Layer",
+    "Data Federation Layer",
+    "Data Aggregator Layer",
+    "Data Normalization Layer",
+    "Reports",
+    "Watchtower",
+    "Security/Privacy",
+    "Data Ownership/IP"
+  ],
+  "endpoints": [
+    "GET /batch-import/health",
+    "GET /batch-import/schema",
+    "GET /batch-import/summary",
+    "POST /batch-import/evaluate",
+    "POST /batch-import/batch-evaluate",
+    "GET /batch-import/readiness"
+  ],
+  "reports_integration": {
+    "field": "batch_import",
+    "summary_only": true
+  },
+  "watchtower_integration": {
+    "field": "batch_import",
+    "observation_only": true
+  },
+  "registry_status": {
+    "registered": true,
+    "enforcement_status": "Formalized V1"
+  },
+  "authority_flags": {
+    "records_written": false,
+    "external_call_made": false,
+    "normalized_final": false,
+    "truth_verified": false,
+    "public_approved": false,
+    "mutated_public_data": false,
+    "published_report": false,
+    "writes_records": false,
+    "calls_external_systems": false,
+    "normalizes_final_data": false,
+    "verifies_truth": false,
+    "approves_public_data": false,
+    "mutates_shf_impact_data": false,
+    "publishes_reports": false,
+    "replaces_adapter_layer": false,
+    "replaces_source_registry": false,
+    "replaces_data_aggregator": false,
+    "replaces_data_normalization": false,
+    "overrides_truth_spine": false,
+    "overrides_oracle": false
+  },
+  "validation": {
+    "status": "pass",
+    "commands": {
+      "python3 -m py_compile services/shf-agent-fabric/services/batch_import_service.py services/shf-agent-fabric/routers/batch_import_routes.py scripts/check_batch_import_layer.py": "pass",
+      "python3 scripts/check_batch_import_layer.py": "pass",
+      "python3 scripts/check_adapter_layer.py": "pass",
+      "python3 scripts/check_api_gateway_layer.py": "pass",
+      "python3 scripts/check_event_webhook_layer.py": "pass",
+      "python3 scripts/check_policy_engine_layer.py": "pass",
+      "python3 scripts/check_source_registry_layer.py": "pass",
+      "python3 scripts/check_data_aggregator_layer.py": "pass",
+      "python3 scripts/check_data_normalization_layer.py": "pass",
+      "python3 scripts/check_master_layer_registry.py": "pass",
+      "python3 scripts/check_truth_spine_freeze.py": "pass",
+      "python3 scripts/check_oracle_layer.py": "pass",
+      "python3 scripts/check_ai_guardrails_layer.py": "pass",
+      "python3 scripts/check_game_theory_layer.py": "pass",
+      "npm run check:governance": "pass",
+      "python3 -m pytest services/shf-agent-fabric/tests/test_batch_import_routes.py": "pass",
+      "python3 -m pytest services/shf-agent-fabric/tests/test_adapter_layer_routes.py services/shf-agent-fabric/tests/test_api_gateway_routes.py services/shf-agent-fabric/tests/test_event_webhook_routes.py services/shf-agent-fabric/tests/test_policy_engine_routes.py services/shf-agent-fabric/tests/test_source_registry_routes.py services/shf-agent-fabric/tests/test_data_aggregator_routes.py services/shf-agent-fabric/tests/test_data_normalization_routes.py": "pass",
+      "npm run build": "pass"
+    },
+    "api_smoke": {
+      "GET /batch-import/health": "pass",
+      "GET /batch-import/schema": "pass",
+      "GET /batch-import/summary": "pass",
+      "POST /batch-import/evaluate": "pass",
+      "POST /batch-import/batch-evaluate": "pass",
+      "GET /batch-import/readiness": "pass",
+      "GET /reports/snapshot": "pass",
+      "GET /watchtower/summary": "pass"
+    }
+  },
+  "remaining_risks": [
+    "V1 is deterministic and summary-only.",
+    "V1 does not parse large real files.",
+    "V1 does not ingest production files.",
+    "V1 does not persist batch review history.",
+    "V1 does not write records.",
+    "V1 does not perform final normalization.",
+    "V1 does not verify truth, approve public data, or publish reports."
+  ],
+  "v1_complete": true
+}

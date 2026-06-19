@@ -5,6 +5,7 @@ from services.adapter_layer_service import adapter_layer_summary
 from services.api_gateway_service import api_gateway_summary
 from services.audit_verification_service import audit_verification_summary
 from services.ai_guardrails_service import ai_guardrails_summary
+from services.batch_import_service import batch_import_summary
 from services.data_approval_service import data_approval_summary
 from services.data_aggregator_service import data_aggregator_summary
 from services.data_federation_service import data_federation_summary
@@ -46,6 +47,7 @@ def snapshot():
     event_webhook = event_webhook_summary()
     api_gateway = api_gateway_summary()
     adapter_layer = adapter_layer_summary()
+    batch_import = batch_import_summary()
     return {
         "ts": datetime.utcnow().isoformat(),
         "usage": {"requests": 0, "users": 0, "apps": 0},
@@ -299,6 +301,35 @@ def snapshot():
             "replaces_data_aggregator": adapter_layer["replaces_data_aggregator"],
             "replaces_data_normalization": adapter_layer["replaces_data_normalization"],
             "note": "Adapter Layer prepares source formats and mapping readiness only; it does not call external systems, normalize final data, verify truth, approve public data, mutate public data, or publish reports.",
+        },
+        "batch_import": {
+            "policy_status": batch_import["policy_status"],
+            "total_batches": batch_import["total_batches"],
+            "blocked": batch_import["blocked"],
+            "needs_review": batch_import["needs_review"],
+            "import_ready": batch_import["import_ready"],
+            "total_records_seen": batch_import["total_records_seen"],
+            "accepted_record_count": batch_import["accepted_record_count"],
+            "quarantined_record_count": batch_import["quarantined_record_count"],
+            "row_warning_count": batch_import["row_warning_count"],
+            "row_blocker_count": batch_import["row_blocker_count"],
+            "records_written_count": batch_import["records_written_count"],
+            "external_call_made_count": batch_import["external_call_made_count"],
+            "normalized_final_count": batch_import["normalized_final_count"],
+            "truth_verified_count": batch_import["truth_verified_count"],
+            "public_approved_count": batch_import["public_approved_count"],
+            "mutated_public_data_count": batch_import["mutated_public_data_count"],
+            "published_report_count": batch_import["published_report_count"],
+            "target_layer_counts": batch_import["target_layer_counts"],
+            "import_type_counts": batch_import["import_type_counts"],
+            "writes_records": batch_import["writes_records"],
+            "calls_external_systems": batch_import["calls_external_systems"],
+            "normalizes_final_data": batch_import["normalizes_final_data"],
+            "replaces_adapter_layer": batch_import["replaces_adapter_layer"],
+            "replaces_source_registry": batch_import["replaces_source_registry"],
+            "replaces_data_aggregator": batch_import["replaces_data_aggregator"],
+            "replaces_data_normalization": batch_import["replaces_data_normalization"],
+            "note": "Batch / Import reviews bulk intake readiness and quarantine needs only; it does not write records, call external systems, normalize final data, verify truth, approve public data, mutate public data, or publish reports.",
         },
         "oracle": {
             "cases_total": oracle["cases_total"],

@@ -166,6 +166,10 @@ Truth Spine may evaluate claims/evidence coming from SHS Spine, but it does not 
 
 Adapter Layer is the first formal preparation boundary for SHS Spine outputs before Source Registry, Data Federation, or Data Aggregator intake. It may classify source system, input format, mapping readiness, provenance completeness, and target intake layer. SHS operational/private data remains private unless downstream governance allows transfer.
 
+## Relationship To Batch / Import Layer
+
+Batch / Import Layer governs bulk SHS Spine exports, ClientOps exports, Website Studio exports, partner datasets, CSV/JSON uploads, and import batches before they reach Adapter Layer or Source Registry. SHS private operational data remains private unless downstream governance allows transfer.
+
 ## Relationship To Data Approval Gateway
 
 Data Approval Gateway is the human/review gate before public SHF use. It does not own raw SHS operational data, and SHS records cannot bypass it into public SHF Impact Data Spine.

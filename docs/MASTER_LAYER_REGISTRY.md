@@ -20,7 +20,7 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 | SHS→SHF Data Flow Boundary | Governance | Prevents raw SHS private/client data from entering SHF public surfaces without approval. |
 | API Gateway | Platform | Routes API traffic and applies shared request policy. |
 | Event/Webhook | Platform | Evaluates, classifies, queues, and exposes event/webhook readiness without sending external webhooks in V1. |
-| Batch/Import | Data Operations | Handles file imports, bulk uploads, and scheduled ingest. |
+| Batch/Import | Data Operations | Reviews bulk imports, CSV/JSON uploads, multi-record payloads, SHS exports, SHF-Next exports, partner datasets, and file-style intake readiness before Adapter Layer or governed intake. |
 | Source Registry Layer | Data Operations | Registers source identity, source type, provenance expectations, eligibility, and allowed downstream use before data intake. |
 | Data Federation Layer | Data Operations | Coordinates source groups, lineage, compatibility, and conflicts between Source Registry and Data Aggregator. |
 | Data Aggregator Layer | Data Operations | Gathers approved raw/structured inputs, attaches provenance, and prepares intake for normalization, evidence packaging, and Truth Spine review. |
@@ -137,12 +137,12 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 ### Batch/Import
 
 - Layer Type: Data Operations
-- Owns: File imports, bulk uploads, scheduled ingest, and import validation.
-- Must Not Own: Final truth decisions, public approval, or narrative release.
-- Upstream: Event/Webhook, Partner/Institution, Apps/Programs
-- Downstream: Adapter Layer, Warehouse Sync, Truth Spine
-- Truth Spine Requirement: Imported claims must include sources or enter Truth Spine as missing_source or draft.
-- Enforcement Status: Required
+- Owns: Batch/import review payloads, batch source system classification, import type classification, input format classification, record counts from provided metadata or small inline lists, required mapping/profile metadata checks, missing source/provenance metadata checks, row-level warnings and blockers, quarantine needs, import readiness, target intake layer recommendation, and summary visibility to Reports and Watchtower.
+- Must Not Own: Production file ingestion, large-file parsing, write production records authority, final normalization, Truth Spine verification, Oracle rulings, public approval, SHF Impact Data Spine mutation, report publishing, Adapter Layer replacement, Source Registry replacement, Data Aggregator replacement, Data Normalization replacement, Security/Privacy bypass, Data Ownership/IP bypass, or production persistence.
+- Upstream: SHS Spine, Partner/Institution, Apps/Programs, ClientOps, Production Ops, Website Studio, WebMaker, SHF-Next, API Gateway, Event/Webhook, manual uploads, CSV/JSON uploads
+- Downstream: Adapter Layer, Source Registry Layer, Data Federation Layer, Data Aggregator Layer, Data Normalization Layer, Reports, Watchtower, Security/Privacy, Data Ownership/IP
+- Truth Spine Requirement: Imported claims must preserve source/provenance references and cannot enter Truth Spine as verified claims unless downstream evidence and verification controls are satisfied. Batch/Import may classify import readiness and quarantine needs but cannot verify truth, perform final normalization, approve public data, mutate SHF Impact Data Spine, or publish reports.
+- Enforcement Status: Formalized V1
 
 ### Source Registry Layer
 

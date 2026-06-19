@@ -220,6 +220,12 @@ Adapter Layer may classify source system, input format, payload domain, adapter 
 
 Adapter Layer may not perform final normalization, verify truth, write Truth Spine claims, override Truth Spine decisions, override Oracle rulings, directly approve public data, mark records public-approved, directly mutate SHF Impact Data Spine, directly publish reports, replace Source Registry, replace Data Aggregator, replace Data Normalization, replace API Gateway, replace Event / Webhook, bypass Security / Privacy, or bypass Data Ownership / IP.
 
+## Batch / Import
+
+Batch / Import may classify bulk/file import readiness, batch source system, import type, input format, record counts from provided metadata or small inline lists, row quarantine needs, missing source/provenance metadata, and target intake layer.
+
+Batch / Import may not write production records in V1, ingest production files, parse large files, verify truth, perform final normalization, write Truth Spine claims, override Truth Spine decisions, override Oracle rulings, directly approve public data, mark records public-approved, directly mutate SHF Impact Data Spine, directly publish reports, replace Adapter Layer, replace Source Registry, replace Data Aggregator, replace Data Normalization, bypass Security / Privacy, or bypass Data Ownership / IP.
+
 ## SHS Spine And SHF Spine Boundary
 
 Truth Spine may evaluate eligible claims and evidence that originate from SHS Spine operational records, including ClientOps, Production Ops, Sales Ops, Website Studio, WebMaker, BuilderHub, reports workflow, service delivery, tickets, maintenance, QA, and project activity.

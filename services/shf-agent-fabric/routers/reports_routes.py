@@ -13,6 +13,7 @@ from services.game_theory_service import game_theory_summary
 from services.oracle_service import oracle_summary
 from services.public_approval_service import public_approval_summary
 from services.readiness_gate_service import readiness_gate_summary
+from services.security_privacy_service import security_privacy_summary
 from services.source_registry_service import source_registry_summary
 from services.truth_spine_service import truth_summary
 
@@ -34,6 +35,7 @@ def snapshot():
     audit_verification = audit_verification_summary()
     readiness_gate = readiness_gate_summary()
     public_approval = public_approval_summary()
+    security_privacy = security_privacy_summary()
     return {
         "ts": datetime.utcnow().isoformat(),
         "usage": {"requests": 0, "users": 0, "apps": 0},
@@ -171,6 +173,22 @@ def snapshot():
             "approves_public_data": public_approval["approves_public_data"],
             "publishes_reports": public_approval["publishes_reports"],
             "note": "Public Approval evaluates public-release readiness only; final public approval, public data writes, and report publishing remain gated outside this V1 scaffold.",
+        },
+        "security_privacy": {
+            "policy_status": security_privacy["policy_status"],
+            "total_reviews": security_privacy["total_reviews"],
+            "blocked": security_privacy["blocked"],
+            "needs_review": security_privacy["needs_review"],
+            "public_safe_candidates": security_privacy["public_safe_candidates"],
+            "pii_detected_count": security_privacy["pii_detected_count"],
+            "sensitive_data_detected_count": security_privacy["sensitive_data_detected_count"],
+            "secret_detected_count": security_privacy["secret_detected_count"],
+            "public_approved_count": security_privacy["public_approved_count"],
+            "mutated_public_data_count": security_privacy["mutated_public_data_count"],
+            "published_report_count": security_privacy["published_report_count"],
+            "approves_public_data": security_privacy["approves_public_data"],
+            "publishes_reports": security_privacy["publishes_reports"],
+            "note": "Security Privacy evaluates exposure risk only; Identity, Truth Spine, Public Approval, SHF Impact Data Spine, and Reports remain separate authorities.",
         },
         "oracle": {
             "cases_total": oracle["cases_total"],

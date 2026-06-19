@@ -17,6 +17,7 @@ from services.game_theory_service import game_theory_summary
 from services.oracle_service import oracle_summary
 from services.public_approval_service import public_approval_summary
 from services.readiness_gate_service import readiness_gate_summary
+from services.security_privacy_service import security_privacy_summary
 from services.source_registry_service import source_registry_summary
 from services.truth_spine_service import truth_summary
 
@@ -40,6 +41,7 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
     audit_verification = audit_verification_summary()
     readiness_gate = readiness_gate_summary()
     public_approval = public_approval_summary()
+    security_privacy = security_privacy_summary()
     if isinstance(summary, dict):
         summary["truth_coverage"] = {
             "coverage_percent": truth["coverage_percent"],
@@ -178,6 +180,24 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
             "flag": public_approval["blocked"] > 0 or public_approval["needs_review"] > 0,
             "status": "watch"
             if public_approval["blocked"] > 0 or public_approval["needs_review"] > 0
+            else "ready",
+        }
+        summary["security_privacy"] = {
+            "policy_status": security_privacy["policy_status"],
+            "blocked": security_privacy["blocked"],
+            "needs_review": security_privacy["needs_review"],
+            "public_safe_candidates": security_privacy["public_safe_candidates"],
+            "pii_detected_count": security_privacy["pii_detected_count"],
+            "sensitive_data_detected_count": security_privacy["sensitive_data_detected_count"],
+            "secret_detected_count": security_privacy["secret_detected_count"],
+            "public_approved_count": security_privacy["public_approved_count"],
+            "mutated_public_data_count": security_privacy["mutated_public_data_count"],
+            "published_report_count": security_privacy["published_report_count"],
+            "approves_public_data": security_privacy["approves_public_data"],
+            "publishes_reports": security_privacy["publishes_reports"],
+            "flag": security_privacy["blocked"] > 0 or security_privacy["needs_review"] > 0,
+            "status": "watch"
+            if security_privacy["blocked"] > 0 or security_privacy["needs_review"] > 0
             else "ready",
         }
         summary["oracle"] = {

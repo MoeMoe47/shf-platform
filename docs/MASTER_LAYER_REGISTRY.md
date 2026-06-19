@@ -374,12 +374,12 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 ### Security/Privacy
 
 - Layer Type: Security
-- Owns: Privacy, data handling, sensitive-data boundaries, and access constraints.
-- Must Not Own: Claim truth, outcome ranking, or funding strategy.
-- Upstream: Governance Layer, Data Ownership/IP
-- Downstream: Identity & Access, Public Approval, Reports
-- Truth Spine Requirement: Must prevent private data from being released through Truth Spine-approved reports unless allowed.
-- Enforcement Status: Required
+- Owns: Privacy risk evaluation, security risk evaluation, simple PII indicator detection, sensitive category indicator detection, secret/token exposure detection, redaction recommendations, access restriction recommendations, public-safe candidate status, and exposure blockers before public-facing use.
+- Must Not Own: Claim truth, Truth Spine claim creation or persistence, Oracle rulings, public approval, public-approved record writes, SHF Impact Data Spine mutation, report publishing, Identity & Access replacement, role/permission replacement, Data Approval Gateway replacement, outcome ranking, or funding strategy.
+- Upstream: Governance Layer, Data Ownership/IP, Identity & Access, Data Approval Layer, Readiness Gate, Public Approval, Audit & Verification
+- Downstream: Public Approval, Data Approval Gateway, SHF Impact Data Spine, Reports, Watchtower, LOO, Public Impact Map, Identity & Access
+- Truth Spine Requirement: Must block or require review for private/sensitive/security-exposed data before it is released through Truth Spine-approved reports or public surfaces.
+- Enforcement Status: Formalized V1
 
 ### Data Ownership/IP
 

@@ -1,0 +1,182 @@
+{
+  "layer_name": "Security / Privacy Layer V1",
+  "is_new_layer": false,
+  "role": "Evaluates privacy risk, security risk, sensitive-data exposure, PII risk, redaction needs, access restriction needs, and public-safe candidate status before public-facing use.",
+  "position": "Cross-cutting safety layer before public exposure and public approval paths.",
+  "owner": "Security governance / privacy review preparation layer",
+  "dependencies": {
+    "upstream": [
+      "Governance Layer",
+      "Data Ownership/IP",
+      "Identity & Access",
+      "Data Approval Layer",
+      "Readiness Gate",
+      "Public Approval",
+      "Audit & Verification"
+    ],
+    "downstream": [
+      "Public Approval",
+      "Data Approval Gateway",
+      "SHF Impact Data Spine",
+      "Reports",
+      "Watchtower",
+      "LOO",
+      "Public Impact Map",
+      "Identity & Access"
+    ]
+  },
+  "boundaries": {
+    "does": [
+      "accept candidate records and payloads",
+      "detect simple PII indicators",
+      "detect sensitive category indicators",
+      "detect secret/token/admin-key exposure indicators",
+      "detect public-safety blockers",
+      "classify privacy risk",
+      "classify security risk",
+      "recommend redaction",
+      "recommend access restriction",
+      "produce public-safe candidate status",
+      "expose summary visibility to Reports",
+      "expose summary visibility to Watchtower"
+    ],
+    "does_not": [
+      "verify truth",
+      "create Truth Spine claims",
+      "approve public data",
+      "mark records public-approved",
+      "mutate SHF Impact Data Spine",
+      "publish reports",
+      "override Truth Spine",
+      "override Oracle",
+      "replace Identity / Access Control",
+      "replace role/permission controls",
+      "replace Compliance Layer",
+      "bypass Public Approval",
+      "bypass Data Approval Gateway",
+      "create production persistence"
+    ]
+  },
+  "canonical_security_privacy_model": {
+    "review_id": "",
+    "candidate_id": "",
+    "canonical_type": "",
+    "privacy_risk": "none|low|medium|high|blocked",
+    "security_risk": "none|low|medium|high|blocked",
+    "pii_detected": false,
+    "sensitive_data_detected": false,
+    "secret_detected": false,
+    "redaction_required": false,
+    "access_restriction_required": false,
+    "privacy_review_required": false,
+    "security_review_required": false,
+    "public_safe_candidate": false,
+    "warnings": [],
+    "blockers": [],
+    "recommended_action": "",
+    "public_approved": false,
+    "mutated_public_data": false,
+    "published_report": false
+  },
+  "v1_detection": {
+    "pii_indicators": [
+      "email",
+      "phone",
+      "address",
+      "ssn",
+      "date_of_birth",
+      "dob",
+      "student_name",
+      "minor_name",
+      "client_name",
+      "patient_name"
+    ],
+    "sensitive_indicators": [
+      "health",
+      "diagnosis",
+      "disability",
+      "minor",
+      "youth",
+      "student",
+      "criminal",
+      "legal",
+      "financial_account",
+      "bank",
+      "religion",
+      "race",
+      "ethnicity",
+      "immigration"
+    ],
+    "secret_indicators": [
+      "api_key",
+      "admin_api_key",
+      "token",
+      "secret",
+      "password",
+      "private_key",
+      "bearer",
+      "session"
+    ],
+    "external_calls": false,
+    "ml_calls": false,
+    "production_secret_scanner": false
+  },
+  "endpoints": [
+    "GET /security-privacy/health",
+    "GET /security-privacy/schema",
+    "GET /security-privacy/summary",
+    "POST /security-privacy/evaluate",
+    "POST /security-privacy/batch-evaluate",
+    "GET /security-privacy/readiness"
+  ],
+  "reports_integration": {
+    "field": "security_privacy",
+    "summary_only": true
+  },
+  "watchtower_integration": {
+    "field": "security_privacy",
+    "observation_only": true
+  },
+  "registry_status": {
+    "registered": true,
+    "enforcement_status": "Formalized V1"
+  },
+  "validation": {
+    "status": "pass",
+    "commands": {
+      "py_compile": "pass",
+      "check_security_privacy_layer": "pass",
+      "check_public_approval_layer": "pass",
+      "check_readiness_gate_layer": "pass",
+      "check_audit_verification_layer": "pass",
+      "check_data_approval_layer": "pass",
+      "check_data_verification_layer": "pass",
+      "check_evidence_package_layer": "pass",
+      "check_master_layer_registry": "pass",
+      "check_truth_spine_freeze": "pass",
+      "check_oracle_layer": "pass",
+      "check_ai_guardrails_layer": "pass",
+      "check_game_theory_layer": "pass",
+      "check_governance": "pass",
+      "pytest_security_privacy_routes": "pass",
+      "pytest_adjacent_routes": "pass",
+      "npm_build": "pass"
+    },
+    "api_smoke": {
+      "GET /security-privacy/health": "pass",
+      "GET /security-privacy/schema": "pass",
+      "GET /security-privacy/summary": "pass",
+      "POST /security-privacy/evaluate": "pass",
+      "POST /security-privacy/batch-evaluate": "pass",
+      "GET /security-privacy/readiness": "pass",
+      "GET /reports/snapshot": "pass",
+      "GET /watchtower/summary": "pass"
+    }
+  },
+  "remaining_risks": [
+    "V1 has no production persistence.",
+    "V1 is a deterministic heuristic scaffold, not a production secret scanning or compliance engine.",
+    "Future Identity, role/permission, Compliance, and Data Approval Gateway work must preserve the recommendation/blocker-only boundary."
+  ],
+  "v1_complete": true
+}

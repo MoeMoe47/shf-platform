@@ -184,6 +184,12 @@ Public Approval may evaluate public release readiness after Data Approval Gatewa
 
 Public Approval may not verify truth, write Truth Spine claims, override Truth Spine decisions, override Oracle rulings, directly mutate SHF Impact Data Spine, directly publish reports, directly mark records public-approved in V1, bypass Data Approval Gateway, bypass Readiness Gate, or bypass human review.
 
+## Security / Privacy
+
+Security / Privacy may detect privacy risk, security risk, PII indicators, sensitive-data indicators, secret exposure, redaction needs, access restriction needs, and public exposure blockers before records move toward Public Approval, SHF Impact Data Spine, Reports, Watchtower, LOO, or public-facing surfaces.
+
+Security / Privacy may not verify truth, write Truth Spine claims, approve public data, mark records public-approved, override Truth Spine decisions, override Oracle rulings, directly mutate SHF Impact Data Spine, directly publish reports, replace Identity / Access Control, replace role/permission controls, or bypass Data Approval Gateway.
+
 ## Backend First
 
 Truth Spine V1 lives in Agent Fabric first:

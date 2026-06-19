@@ -178,6 +178,12 @@ Readiness Gate may decide whether an output from one layer is ready to move to t
 
 Readiness Gate may not verify truth, write Truth Spine claims, approve public data, mark records public-approved, override Truth Spine decisions, override Oracle rulings, mutate SHF Impact Data Spine, replace Data Approval Gateway, replace Audit & Verification, replace Watchtower, or publish reports.
 
+## Public Approval
+
+Public Approval may evaluate public release readiness after Data Approval Gateway review, using Truth Spine status, Oracle supportability, Data Approval state, Readiness Gate status, evidence/provenance completeness, and privacy/security review status.
+
+Public Approval may not verify truth, write Truth Spine claims, override Truth Spine decisions, override Oracle rulings, directly mutate SHF Impact Data Spine, directly publish reports, directly mark records public-approved in V1, bypass Data Approval Gateway, bypass Readiness Gate, or bypass human review.
+
 ## Backend First
 
 Truth Spine V1 lives in Agent Fabric first:

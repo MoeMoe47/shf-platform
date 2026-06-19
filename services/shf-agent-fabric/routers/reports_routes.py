@@ -11,6 +11,7 @@ from services.data_verification_service import data_verification_summary
 from services.evidence_package_service import evidence_package_summary
 from services.game_theory_service import game_theory_summary
 from services.oracle_service import oracle_summary
+from services.public_approval_service import public_approval_summary
 from services.readiness_gate_service import readiness_gate_summary
 from services.source_registry_service import source_registry_summary
 from services.truth_spine_service import truth_summary
@@ -32,6 +33,7 @@ def snapshot():
     data_approval = data_approval_summary()
     audit_verification = audit_verification_summary()
     readiness_gate = readiness_gate_summary()
+    public_approval = public_approval_summary()
     return {
         "ts": datetime.utcnow().isoformat(),
         "usage": {"requests": 0, "users": 0, "apps": 0},
@@ -156,6 +158,19 @@ def snapshot():
             "mutated_public_data_count": readiness_gate["mutated_public_data_count"],
             "verifies_truth": readiness_gate["verifies_truth"],
             "note": "Readiness Gate is transition-readiness context only; Truth Spine, Oracle, and Data Approval Gateway remain their own authorities.",
+        },
+        "public_approval": {
+            "policy_status": public_approval["policy_status"],
+            "total_candidates": public_approval["total_candidates"],
+            "blocked": public_approval["blocked"],
+            "needs_review": public_approval["needs_review"],
+            "public_ready_candidates": public_approval["public_ready_candidates"],
+            "public_approved_count": public_approval["public_approved_count"],
+            "mutated_public_data_count": public_approval["mutated_public_data_count"],
+            "published_report_count": public_approval["published_report_count"],
+            "approves_public_data": public_approval["approves_public_data"],
+            "publishes_reports": public_approval["publishes_reports"],
+            "note": "Public Approval evaluates public-release readiness only; final public approval, public data writes, and report publishing remain gated outside this V1 scaffold.",
         },
         "oracle": {
             "cases_total": oracle["cases_total"],

@@ -344,12 +344,12 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 ### Public Approval
 
 - Layer Type: Governance
-- Owns: External release eligibility and public-facing approval controls.
-- Must Not Own: Source verification, evidence-support reasoning, or outcome ranking.
-- Upstream: Truth Spine, Governance Layer, Security/Privacy
-- Downstream: Reports, Public Impact Map, Narrative/Story
-- Truth Spine Requirement: Public approval is valid only when Truth Spine verification passes.
-- Enforcement Status: Required
+- Owns: Public release readiness evaluation, Data Approval state inspection, Data Approval Gateway status inspection, Truth Spine status inspection, Oracle supportability inspection, Readiness Gate status inspection, evidence/provenance completeness checks, privacy/security review checks, blockers, warnings, and public-ready candidate recommendation.
+- Must Not Own: Truth verification, Truth Spine claim creation or persistence, Oracle rulings, Data Approval Layer replacement, Data Approval Gateway replacement, SHF Impact Data Spine mutation, direct public-approved record writes, report publishing, human review replacement, source verification, or outcome ranking.
+- Upstream: Data Approval Layer, Data Approval Gateway, Truth Spine, Oracle Layer, Readiness Gate, Audit & Verification, Security/Privacy, Governance Layer
+- Downstream: SHF Impact Data Spine, Reports, Watchtower, LOO, Public Impact Map, Narrative/Story, Governance Binder
+- Truth Spine Requirement: May evaluate public release readiness from Truth Spine metadata but cannot verify truth, override Truth Spine, mark records public-approved in V1, or mutate public impact data.
+- Enforcement Status: Formalized V1
 
 ### Narrative/Story
 

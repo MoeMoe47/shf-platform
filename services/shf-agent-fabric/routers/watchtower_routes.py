@@ -15,6 +15,7 @@ from services.data_verification_service import data_verification_summary
 from services.evidence_package_service import evidence_package_summary
 from services.game_theory_service import game_theory_summary
 from services.oracle_service import oracle_summary
+from services.public_approval_service import public_approval_summary
 from services.readiness_gate_service import readiness_gate_summary
 from services.source_registry_service import source_registry_summary
 from services.truth_spine_service import truth_summary
@@ -38,6 +39,7 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
     data_approval = data_approval_summary()
     audit_verification = audit_verification_summary()
     readiness_gate = readiness_gate_summary()
+    public_approval = public_approval_summary()
     if isinstance(summary, dict):
         summary["truth_coverage"] = {
             "coverage_percent": truth["coverage_percent"],
@@ -161,6 +163,21 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
             "flag": readiness_gate["blocked"] > 0 or readiness_gate["needs_review"] > 0,
             "status": "watch"
             if readiness_gate["blocked"] > 0 or readiness_gate["needs_review"] > 0
+            else "ready",
+        }
+        summary["public_approval"] = {
+            "policy_status": public_approval["policy_status"],
+            "blocked": public_approval["blocked"],
+            "needs_review": public_approval["needs_review"],
+            "public_ready_candidates": public_approval["public_ready_candidates"],
+            "public_approved_count": public_approval["public_approved_count"],
+            "mutated_public_data_count": public_approval["mutated_public_data_count"],
+            "published_report_count": public_approval["published_report_count"],
+            "approves_public_data": public_approval["approves_public_data"],
+            "publishes_reports": public_approval["publishes_reports"],
+            "flag": public_approval["blocked"] > 0 or public_approval["needs_review"] > 0,
+            "status": "watch"
+            if public_approval["blocked"] > 0 or public_approval["needs_review"] > 0
             else "ready",
         }
         summary["oracle"] = {

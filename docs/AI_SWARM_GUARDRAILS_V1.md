@@ -40,6 +40,10 @@ AI cannot issue final rulings. Requested actions such as `rule`, `decide`, or `r
 
 AI execution requests require Alignment L25/L26 approval. Requested actions such as `execute`, `approve`, `escalate`, or `send` are gated by Alignment.
 
+## Policy Engine Boundary
+
+Policy Engine may evaluate policy context for AI actions. Policy Engine does not replace AI Guardrails containment, safety, capability control, Truth Spine requirements, Oracle requirements, or Alignment gates.
+
 ## Reports Requirements
 
 AI may draft report text, but Reports must carry Truth Spine metadata. AI cannot export report output as final without the Reports layer.

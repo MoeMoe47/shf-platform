@@ -1,0 +1,156 @@
+{
+  "layer_name": "Policy Engine Layer V1",
+  "is_new_layer": false,
+  "role": "Evaluates cross-layer governance policy context and returns deterministic proceed, block, or needs-review decisions.",
+  "boundaries": {
+    "does": [
+      "classify policy domains",
+      "evaluate requested action context",
+      "produce policy status",
+      "produce violations",
+      "produce warnings",
+      "assign owner-layer responsibility",
+      "recommend escalation",
+      "return can_proceed status",
+      "provide summary-only visibility to Reports",
+      "provide observation-only visibility to Watchtower"
+    ],
+    "does_not": [
+      "verify truth",
+      "create Truth Spine claims",
+      "override Truth Spine",
+      "override Oracle",
+      "approve public data",
+      "mark records public-approved",
+      "mutate SHF Impact Data Spine",
+      "publish reports",
+      "replace AI Guardrails",
+      "replace Identity / Access Control",
+      "replace Security / Privacy",
+      "replace Data Ownership / IP",
+      "replace Public Approval",
+      "replace Data Approval Gateway",
+      "create production persistence"
+    ]
+  },
+  "policy_domains": [
+    "ai_governance",
+    "identity",
+    "role_permission",
+    "security_privacy",
+    "data_ownership_ip",
+    "public_approval",
+    "reporting",
+    "watchtower",
+    "integration",
+    "unknown"
+  ],
+  "policy_statuses": [
+    "blocked",
+    "needs_review",
+    "allowed"
+  ],
+  "upstream_dependencies": [
+    "AI/Swarm Layer",
+    "AI Guardrails",
+    "Identity & Access",
+    "Security / Privacy",
+    "Data Ownership / IP",
+    "Readiness Gate",
+    "Public Approval",
+    "Reports",
+    "Watchtower",
+    "Governance Layer"
+  ],
+  "downstream_targets": [
+    "AI/Swarm Layer",
+    "Identity & Access",
+    "Security / Privacy",
+    "Data Ownership / IP",
+    "Public Approval",
+    "Reports",
+    "Watchtower",
+    "Readiness Gate",
+    "Audit & Verification"
+  ],
+  "deterministic_v1_rules": [
+    "missing policy_domain blocks",
+    "unknown policy_domain needs review",
+    "missing requested_action blocks",
+    "public publishing or public approval actions require public approval, security/privacy clear, and data ownership/IP clear context",
+    "AI generation or agent execution actions require AI Guardrails context or need review",
+    "admin or protected actions require actor and role context or need review",
+    "report actions require audit/readiness context or need review",
+    "SHF Impact Data Spine write actions are blocked unless gateway and public-ready context are present",
+    "V1 never mutates SHF Impact Data Spine",
+    "secret, security, privacy, or ownership blockers block"
+  ],
+  "endpoints": [
+    "GET /policy-engine/health",
+    "GET /policy-engine/schema",
+    "GET /policy-engine/summary",
+    "POST /policy-engine/evaluate",
+    "POST /policy-engine/batch-evaluate",
+    "GET /policy-engine/readiness"
+  ],
+  "reports_integration": {
+    "field": "policy_engine",
+    "summary_only": true
+  },
+  "watchtower_integration": {
+    "field": "policy_engine",
+    "observation_only": true
+  },
+  "registry_status": {
+    "registered": true,
+    "enforcement_status": "Formalized V1"
+  },
+  "authority_flags": {
+    "truth_verified": false,
+    "public_approved": false,
+    "mutated_public_data": false,
+    "published_report": false,
+    "replaces_ai_guardrails": false,
+    "replaces_identity": false,
+    "replaces_security_privacy": false,
+    "replaces_data_ownership_ip": false
+  },
+  "validation": {
+    "status": "pass",
+    "commands": {
+      "python3 -m py_compile services/shf-agent-fabric/services/policy_engine_service.py services/shf-agent-fabric/routers/policy_engine_routes.py scripts/check_policy_engine_layer.py": "pass",
+      "python3 scripts/check_policy_engine_layer.py": "pass",
+      "python3 scripts/check_data_ownership_ip_layer.py": "pass",
+      "python3 scripts/check_security_privacy_layer.py": "pass",
+      "python3 scripts/check_public_approval_layer.py": "pass",
+      "python3 scripts/check_readiness_gate_layer.py": "pass",
+      "python3 scripts/check_audit_verification_layer.py": "pass",
+      "python3 scripts/check_data_approval_layer.py": "pass",
+      "python3 scripts/check_truth_spine_freeze.py": "pass",
+      "python3 scripts/check_oracle_layer.py": "pass",
+      "python3 scripts/check_ai_guardrails_layer.py": "pass",
+      "python3 scripts/check_game_theory_layer.py": "pass",
+      "python3 scripts/check_master_layer_registry.py": "pass",
+      "npm run check:governance": "pass",
+      "python3 -m pytest services/shf-agent-fabric/tests/test_policy_engine_routes.py": "pass",
+      "python3 -m pytest services/shf-agent-fabric/tests/test_data_ownership_ip_routes.py services/shf-agent-fabric/tests/test_security_privacy_routes.py services/shf-agent-fabric/tests/test_public_approval_routes.py services/shf-agent-fabric/tests/test_readiness_gate_routes.py services/shf-agent-fabric/tests/test_audit_verification_routes.py services/shf-agent-fabric/tests/test_truth_routes.py services/shf-agent-fabric/tests/test_oracle_routes.py services/shf-agent-fabric/tests/test_ai_guardrails_routes.py": "pass",
+      "npm run build": "pass"
+    },
+    "api_smoke": {
+      "GET /policy-engine/health": "pass",
+      "GET /policy-engine/schema": "pass",
+      "GET /policy-engine/summary": "pass",
+      "POST /policy-engine/evaluate": "pass",
+      "POST /policy-engine/batch-evaluate": "pass",
+      "GET /policy-engine/readiness": "pass",
+      "GET /reports/snapshot": "pass",
+      "GET /watchtower/summary": "pass"
+    }
+  },
+  "remaining_risks": [
+    "V1 has no production persistence.",
+    "V1 does not implement signed policy manifests or policy authoring UI.",
+    "Future public release workflows must keep Truth Spine and Public Approval as separate authorities."
+  ],
+  "v1_complete": true
+}

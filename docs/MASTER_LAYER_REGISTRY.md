@@ -32,6 +32,7 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 | Oracle Layer | Decision Support | Decides what verified evidence supports and explains evidence-backed recommendations. |
 | Game Theory Layer | Strategy | Models incentives, adversarial pressure, and decision scenarios. |
 | AI/Swarm Layer | Automation | Summarizes, assists, and coordinates agents without bypassing verification gates. |
+| Policy Engine | Governance | Evaluates cross-layer policy readiness, violations, escalation, and proceed/block status. |
 | Alignment Layer | Governance | Controls allowed actions, containment, and policy alignment. |
 | LOO | Outcomes | Ranks outcomes and exposes trust metadata without deciding truth. |
 | Watchtower | Assurance | Observes coverage, risk, anomalies, and drift. |
@@ -250,6 +251,16 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 - Downstream: Apps/Programs, Reports, ClientOps
 - Truth Spine Requirement: Published AI output must attach a Truth Envelope before publication.
 - Enforcement Status: Registered
+
+### Policy Engine
+
+- Layer Type: Governance
+- Owns: Cross-layer policy evaluation, policy domain classification, requested action checks, deterministic V1 policy rules, violations, warnings, owner-layer assignment, escalation recommendation, next action, and proceed/block/needs-review status.
+- Must Not Own: Truth verification, Truth Spine claim creation or persistence, Oracle rulings, public approval, public-approved record writes, SHF Impact Data Spine mutation, report publishing, AI Guardrails replacement, Identity / Access Control replacement, Security / Privacy replacement, Data Ownership / IP replacement, Public Approval replacement, Data Approval Gateway replacement, or Watchtower replacement.
+- Upstream: AI/Swarm Layer, AI Guardrails, Identity & Access, Security/Privacy, Data Ownership/IP, Readiness Gate, Public Approval, Reports, Watchtower, Governance Layer
+- Downstream: AI/Swarm Layer, Identity & Access, Security/Privacy, Data Ownership/IP, Public Approval, Reports, Watchtower, Readiness Gate, Audit & Verification
+- Truth Spine Requirement: May require Truth Spine-related context for policy decisions but cannot verify truth, override Truth Spine, mark records public-approved, publish reports, or mutate public impact data.
+- Enforcement Status: Formalized V1
 
 ### Alignment Layer
 

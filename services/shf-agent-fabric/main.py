@@ -94,6 +94,7 @@ from routers.readiness_gate_routes import router as readiness_gate_router  # noq
 from routers.public_approval_routes import router as public_approval_router  # noqa: E402
 from routers.security_privacy_routes import router as security_privacy_router  # noqa: E402
 from routers.data_ownership_ip_routes import router as data_ownership_ip_router  # noqa: E402
+from routers.policy_engine_routes import router as policy_engine_router  # noqa: E402
 from routers.truth_routes import router as truth_router  # noqa: E402
 from routers.oracle_routes import router as oracle_router  # noqa: E402
 from routers.ai_guardrails_routes import router as ai_guardrails_router  # noqa: E402
@@ -460,6 +461,7 @@ app.include_router(readiness_gate_router)
 app.include_router(public_approval_router)
 app.include_router(security_privacy_router)
 app.include_router(data_ownership_ip_router)
+app.include_router(policy_engine_router)
 app.include_router(truth_router)
 app.include_router(oracle_router)
 app.include_router(ai_guardrails_router)

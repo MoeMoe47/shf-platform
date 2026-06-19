@@ -196,6 +196,12 @@ Data Ownership / IP may evaluate ownership, source owner, submitter, license typ
 
 Data Ownership / IP may not verify truth, write Truth Spine claims, approve public data, mark records public-approved, override Truth Spine decisions, override Oracle rulings, directly mutate SHF Impact Data Spine, directly publish reports, replace Security / Privacy, replace Source Registry, replace role/permission controls, bypass Public Approval, bypass Data Approval Gateway, or provide legal advice.
 
+## Policy Engine
+
+Policy Engine may evaluate policy compliance, policy violations, warnings, escalation requirements, owner-layer responsibility, and proceed/block/needs-review status across AI governance, identity, role/permission, security/privacy, data ownership, public approval, reporting, Watchtower, and integration contexts.
+
+Policy Engine may not verify truth, write Truth Spine claims, override Truth Spine decisions, override Oracle rulings, directly approve public data, mark records public-approved, directly mutate SHF Impact Data Spine, directly publish reports, replace AI Guardrails, replace Identity / Access Control, replace Security / Privacy, replace Data Ownership / IP, replace Public Approval, or bypass Readiness Gate.
+
 ## Backend First
 
 Truth Spine V1 lives in Agent Fabric first:

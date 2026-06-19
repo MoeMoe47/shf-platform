@@ -12,6 +12,7 @@ from services.data_verification_service import data_verification_summary
 from services.evidence_package_service import evidence_package_summary
 from services.game_theory_service import game_theory_summary
 from services.oracle_service import oracle_summary
+from services.policy_engine_service import policy_engine_summary
 from services.public_approval_service import public_approval_summary
 from services.readiness_gate_service import readiness_gate_summary
 from services.security_privacy_service import security_privacy_summary
@@ -38,6 +39,7 @@ def snapshot():
     public_approval = public_approval_summary()
     security_privacy = security_privacy_summary()
     data_ownership_ip = data_ownership_ip_summary()
+    policy_engine = policy_engine_summary()
     return {
         "ts": datetime.utcnow().isoformat(),
         "usage": {"requests": 0, "users": 0, "apps": 0},
@@ -208,6 +210,23 @@ def snapshot():
             "publishes_reports": data_ownership_ip["publishes_reports"],
             "provides_legal_advice": data_ownership_ip["provides_legal_advice"],
             "note": "Data Ownership IP evaluates ownership and usage-right readiness only; it does not provide legal advice, approve public data, publish reports, or mutate SHF Impact Data Spine.",
+        },
+        "policy_engine": {
+            "policy_status": policy_engine["policy_status"],
+            "total_evaluations": policy_engine["total_evaluations"],
+            "blocked": policy_engine["blocked"],
+            "needs_review": policy_engine["needs_review"],
+            "allowed": policy_engine["allowed"],
+            "escalation_required_count": policy_engine["escalation_required_count"],
+            "violations_count": policy_engine["violations_count"],
+            "can_proceed_count": policy_engine["can_proceed_count"],
+            "public_approved_count": policy_engine["public_approved_count"],
+            "mutated_public_data_count": policy_engine["mutated_public_data_count"],
+            "published_report_count": policy_engine["published_report_count"],
+            "verifies_truth": policy_engine["verifies_truth"],
+            "replaces_ai_guardrails": policy_engine["replaces_ai_guardrails"],
+            "replaces_identity": policy_engine["replaces_identity"],
+            "note": "Policy Engine evaluates policy readiness only; it does not replace Truth Spine, Oracle, AI Guardrails, Identity, privacy, ownership, Public Approval, or Reports.",
         },
         "oracle": {
             "cases_total": oracle["cases_total"],

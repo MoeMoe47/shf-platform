@@ -16,6 +16,7 @@ from services.data_verification_service import data_verification_summary
 from services.evidence_package_service import evidence_package_summary
 from services.game_theory_service import game_theory_summary
 from services.oracle_service import oracle_summary
+from services.policy_engine_service import policy_engine_summary
 from services.public_approval_service import public_approval_summary
 from services.readiness_gate_service import readiness_gate_summary
 from services.security_privacy_service import security_privacy_summary
@@ -44,6 +45,7 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
     public_approval = public_approval_summary()
     security_privacy = security_privacy_summary()
     data_ownership_ip = data_ownership_ip_summary()
+    policy_engine = policy_engine_summary()
     if isinstance(summary, dict):
         summary["truth_coverage"] = {
             "coverage_percent": truth["coverage_percent"],
@@ -220,6 +222,23 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
             "status": "watch"
             if data_ownership_ip["blocked"] > 0 or data_ownership_ip["needs_review"] > 0
             else "ready",
+        }
+        summary["policy_engine"] = {
+            "policy_status": policy_engine["policy_status"],
+            "blocked": policy_engine["blocked"],
+            "needs_review": policy_engine["needs_review"],
+            "allowed": policy_engine["allowed"],
+            "escalation_required_count": policy_engine["escalation_required_count"],
+            "violations_count": policy_engine["violations_count"],
+            "can_proceed_count": policy_engine["can_proceed_count"],
+            "public_approved_count": policy_engine["public_approved_count"],
+            "mutated_public_data_count": policy_engine["mutated_public_data_count"],
+            "published_report_count": policy_engine["published_report_count"],
+            "verifies_truth": policy_engine["verifies_truth"],
+            "replaces_ai_guardrails": policy_engine["replaces_ai_guardrails"],
+            "replaces_identity": policy_engine["replaces_identity"],
+            "flag": policy_engine["blocked"] > 0 or policy_engine["needs_review"] > 0,
+            "status": "watch" if policy_engine["blocked"] > 0 or policy_engine["needs_review"] > 0 else "ready",
         }
         summary["oracle"] = {
             "cases_total": oracle["cases_total"],

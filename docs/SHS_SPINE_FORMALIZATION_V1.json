@@ -1,0 +1,111 @@
+{
+  "name": "SHS Spine Formalization & SHS-to-SHF Data Flow Audit V1",
+  "shs_spine_role": "SHS operational truth spine and source of internal, client, private, production, ClientOps, Sales Ops, Website Studio, WebMaker, BuilderHub, reports workflow, maintenance, tickets, QA, project handoff, and business system records.",
+  "shf_spine_role": "SHF nonprofit/foundation/public-approved impact spine that receives only governed, approved, public-safe impact data after required review and approval controls.",
+  "data_flow_doctrine": [
+    "SHS Spine is upstream operational source context.",
+    "SHF Spine is downstream governed/public impact context.",
+    "SHS Spine may feed SHF Spine only through Source Registry, Data Federation, Data Aggregator, Data Normalization, Evidence Package, Data Verification, Truth Spine, Oracle, Data Approval, Security / Privacy, Data Ownership / IP, Readiness Gate, Public Approval, and Data Approval Gateway as applicable.",
+    "SHS private/client/internal data cannot directly enter SHF public surfaces.",
+    "Records must be explicitly public-approved before public SHF use.",
+    "Data Approval Gateway/human approval is required before public use where applicable.",
+    "SHF Spine does not replace SHS operational recordkeeping."
+  ],
+  "must_stay_in_shs": [
+    "client private data",
+    "internal business data",
+    "support tickets",
+    "maintenance details",
+    "billing/payment support status",
+    "private operational notes",
+    "private QA notes",
+    "internal sales notes",
+    "client-specific business metrics unless approved",
+    "raw form submissions",
+    "unverified operational data",
+    "PII or sensitive data",
+    "ownership/privacy/security-blocked records"
+  ],
+  "allowed_to_cross_to_shf": [
+    "approved aggregate impact counts",
+    "approved county impact metrics",
+    "approved program outcomes",
+    "approved workforce outcome records",
+    "approved youth/education outcome records",
+    "approved public stories",
+    "approved non-sensitive service categories",
+    "approved public report metadata",
+    "approved public map records"
+  ],
+  "existing_evidence": {
+    "shs_os_refs": [
+      "src/data/shfImpactData.js: SHS OS is infrastructure and operations system",
+      "src/pages/admin/ops/opsData.js: Internal SHS production workflow notice",
+      "src/router/AdminRoutes.jsx: Internal SHS Production Ops routes are protected"
+    ],
+    "shf_os_refs": [
+      "src/data/shfImpactData.js: SHF OS is foundation/community impact reporting system",
+      "src/pages/shf-command/components/SHFImpactOhioMap.jsx: SHF Data Spine status panel",
+      "/Users/mikeslate/shf-next/src/App.tsx: /foundation and /foundation/impact-report are public foundation surfaces"
+    ],
+    "shs_to_shf_rule_refs": [
+      "src/data/shfImpactData.js: SHF_DATA_FLOW_RULE",
+      "src/system/routes/crossAppRouteBridge.js: SHRV1 governance routes link to SHF-Next data approval and impact report routes",
+      "/Users/mikeslate/shf-next/src/data/crossAppRouteBridge.ts: cross-app route targets"
+    ],
+    "impact_data_spine_refs": [
+      "src/data/shfImpactData.js: isPublicApprovedImpactRecord",
+      "src/data/shfImpactData.js: getPublicApprovedMapCounties filters public-approved records",
+      "src/data/shfImpactData.js: getMapDataStatusSummary visibilityRule is Public-approved data only",
+      "src/pages/shf-command/components/SHFImpactOhioMap.jsx: status panel says map displays SHF-approved public impact data only"
+    ],
+    "clientops_ops_refs": [
+      "src/pages/admin/ops/opsData.js: Production Ops internal workflow",
+      "src/system/identity/hubAccessControl.js: internal Production Ops routes are SHS-admin only",
+      "/Users/mikeslate/shf-next/src/App.tsx: /ops and /ops/clientops render inside OpsShell with CrossAppAccessNotice",
+      "/Users/mikeslate/shf-next/src/data/crossAppIdentityBridge.ts: /ops/clientops is INTERNAL_CLIENTOPS"
+    ],
+    "cross_app_bridge_refs": [
+      "src/system/routes/crossAppRouteBridge.js",
+      "/Users/mikeslate/shf-next/src/data/crossAppIdentityBridge.ts",
+      "/Users/mikeslate/shf-next/src/data/crossAppRouteBridge.ts",
+      "/Users/mikeslate/shf-next/src/components/CrossAppAccessNotice.tsx"
+    ]
+  },
+  "registry_updates": [
+    "Added official layer table rows for SHS Spine, SHF Spine, and SHS-to-SHF Data Flow Boundary.",
+    "Added structured registry entries for SHS Spine, SHF Spine, and SHS-to-SHF Data Flow Boundary."
+  ],
+  "truth_spine_guardrail_updates": [
+    "Added SHS Spine and SHF Spine boundary section.",
+    "Clarified that Truth Spine may evaluate eligible SHS-origin claims but does not make SHS private data public.",
+    "Clarified public SHF use requires approval layers and Data Approval Gateway."
+  ],
+  "config_scaffold": {
+    "created": true,
+    "files": [
+      "src/system/spines/shsSpine.js"
+    ]
+  },
+  "validation": {
+    "npm run check:governance": "pass",
+    "npm run build": "pass",
+    "python3 scripts/check_master_layer_registry.py": "pass",
+    "python3 scripts/check_truth_spine_freeze.py": "pass",
+    "python3 scripts/check_duplicate_layer_cleanup.py": "pass"
+  },
+  "files_changed": [
+    "docs/MASTER_LAYER_REGISTRY.md",
+    "docs/TRUTH_SPINE_GUARDRAILS.md",
+    "docs/SHS_SPINE_FORMALIZATION_V1.md",
+    "docs/SHS_SPINE_FORMALIZATION_V1.json",
+    "src/system/spines/shsSpine.js"
+  ],
+  "remaining_risks": [
+    "The scaffold is advisory-only and not wired into runtime ingestion.",
+    "Future SHS-to-SHF transfer implementation must occur at source/governance/gateway boundaries.",
+    "SHF-Next was inspected but not modified.",
+    "Existing API Gateway/Event Webhook working-tree changes remain separate."
+  ],
+  "v1_complete": true
+}

@@ -94,6 +94,36 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 - Truth Spine Requirement: Must route Truth Spine requests without bypassing Truth Spine gates. API Gateway may classify route exposure and gateway readiness but cannot verify truth, approve public data, mutate public impact data, publish reports, override Truth Spine, or override Oracle.
 - Enforcement Status: Formalized V1
 
+### SHS Spine
+
+- Layer Type: Operations
+- Owns: SHS operational source records, client activity, project activity, ClientOps activity, Production Ops activity, Sales Ops activity, Website Studio activity, WebMaker/BuilderHub activity, reports workflow records, maintenance, support tickets, service delivery, QA notes, upgrade opportunities, and internal business system outputs.
+- Must Not Own: SHF public impact publication, public approval, Truth Spine verification, Oracle rulings, Data Approval Gateway decisions, SHF Impact Data Spine mutation, or public report publishing.
+- Upstream: Apps/Programs, ClientOps, Production Ops, SHS Sales Layer, Website Studio, QA + Delivery, Development Library, Partner/Institution
+- Downstream: Source Registry Layer, Data Federation Layer, Data Aggregator Layer, Data Normalization Layer, Evidence Package Layer, Data Verification Layer, Truth Spine, Reports, Watchtower, Policy Engine, Event/Webhook, API Gateway
+- Truth Spine Requirement: SHS operational facts may become Truth Spine claims only through source/evidence/governance intake. Truth Spine can verify eligible claims but does not make private SHS records public.
+- Enforcement Status: Formalized V1
+
+### SHF Spine
+
+- Layer Type: SHF Impact
+- Owns: Governed nonprofit/foundation impact records, approved aggregate impact counts, approved county impact metrics, approved program outcomes, approved public stories, approved public report metadata, and approved public map records.
+- Must Not Own: Raw SHS client/private data, SHS operational recordkeeping, internal SHS business notes, support tickets, maintenance details, billing/payment support state, unverified operational data, or data with privacy/ownership/security blockers.
+- Upstream: Truth Spine, Oracle Layer, Data Approval Layer, Readiness Gate, Security/Privacy, Data Ownership/IP, Public Approval, Data Approval Gateway, SHS→SHF Data Flow Boundary
+- Downstream: SHF Impact Command Center, Public Impact Map, Reports, Watchtower, LOO, Public Approval, Governance Binder
+- Truth Spine Requirement: SHF Spine may consume only governed, approved impact data. Public-facing SHF use requires verified/readiness-approved/public-approved status where applicable and Data Approval Gateway review before public surfaces.
+- Enforcement Status: Formalized V1
+
+### SHS→SHF Data Flow Boundary
+
+- Layer Type: Governance
+- Owns: Directional boundary between SHS operational source records and SHF governed/public impact records, eligibility doctrine, private-data exclusion rules, approved public category rules, and warnings for unsafe transfer.
+- Must Not Own: Data mutation, public approval, Truth Spine verification, Oracle rulings, Data Approval Gateway decisions, SHF Impact Data Spine writes, report publishing, Identity replacement, or production persistence.
+- Upstream: SHS Spine, Source Registry Layer, Data Federation Layer, Data Aggregator Layer, Data Normalization Layer, Evidence Package Layer, Data Verification Layer, Truth Spine, Oracle Layer, Security/Privacy, Data Ownership/IP, Readiness Gate, Public Approval
+- Downstream: SHF Spine, Data Approval Gateway, SHF Impact Data Spine, Public Impact Map, Public Reports, SHF public surfaces
+- Truth Spine Requirement: SHS-origin records cannot enter SHF public surfaces unless source/evidence/governance checks are satisfied, Truth Spine/Oracle/Data Approval/Public Approval requirements are satisfied where applicable, and the record is explicitly public-approved before public SHF use.
+- Enforcement Status: Formalized V1
+
 ### Event/Webhook
 
 - Layer Type: Platform

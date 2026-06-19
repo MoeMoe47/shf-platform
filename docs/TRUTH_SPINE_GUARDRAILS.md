@@ -214,6 +214,14 @@ API Gateway may classify API routes, route exposure, method safety, required adm
 
 API Gateway may not forward requests in V1, replace auth, verify truth, write Truth Spine claims, override Truth Spine decisions, override Oracle rulings, directly approve public data, directly mutate SHF Impact Data Spine, directly publish reports, replace Identity / Access Control, replace Role / Permission, replace Policy Engine, replace AI Guardrails, replace Watchtower, or expose protected routes publicly.
 
+## SHS Spine And SHF Spine Boundary
+
+Truth Spine may evaluate eligible claims and evidence that originate from SHS Spine operational records, including ClientOps, Production Ops, Sales Ops, Website Studio, WebMaker, BuilderHub, reports workflow, service delivery, tickets, maintenance, QA, and project activity.
+
+Truth Spine does not make SHS private/client/internal data public. SHF public use requires the applicable source, federation, aggregation, normalization, evidence, data verification, Truth Spine, Oracle, Data Approval, Security / Privacy, Data Ownership / IP, Readiness Gate, Public Approval, and Data Approval Gateway controls before any record may enter SHF Spine, SHF Impact Data Spine, Public Impact Map, public reports, or other SHF public surfaces.
+
+Private SHS records, raw form submissions, client-specific business metrics, internal notes, support details, billing/payment support state, unverified operational data, PII, sensitive data, and ownership/privacy/security-blocked records must remain in SHS unless explicitly governed, de-identified or aggregated where needed, and public-approved.
+
 ## Backend First
 
 Truth Spine V1 lives in Agent Fabric first:

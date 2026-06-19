@@ -15,8 +15,10 @@ from services.data_verification_service import data_verification_summary
 from services.evidence_package_service import evidence_package_summary
 from services.event_webhook_service import event_webhook_summary
 from services.game_theory_service import game_theory_summary
+from services.notification_alert_service import notification_alert_summary
 from services.oracle_service import oracle_summary
 from services.policy_engine_service import policy_engine_summary
+from services.production_automation_service import production_automation_summary
 from services.public_approval_service import public_approval_summary
 from services.readiness_gate_service import readiness_gate_summary
 from services.security_privacy_service import security_privacy_summary
@@ -50,6 +52,8 @@ def snapshot():
     adapter_layer = adapter_layer_summary()
     batch_import = batch_import_summary()
     warehouse_sync = warehouse_sync_summary()
+    production_automation = production_automation_summary()
+    notification_alert = notification_alert_summary()
     return {
         "ts": datetime.utcnow().isoformat(),
         "usage": {"requests": 0, "users": 0, "apps": 0},
@@ -361,6 +365,78 @@ def snapshot():
             "replaces_adapter_layer": warehouse_sync["replaces_adapter_layer"],
             "replaces_data_approval_gateway": warehouse_sync["replaces_data_approval_gateway"],
             "note": "Warehouse Sync reviews future analytics/warehouse readiness only; it does not write warehouse records, create exports, call external systems, verify truth, approve public data, mutate public data, or publish reports.",
+        },
+        "production_automation": {
+            "policy_status": production_automation["policy_status"],
+            "total_reviews": production_automation["total_reviews"],
+            "blocked": production_automation["blocked"],
+            "needs_review": production_automation["needs_review"],
+            "automation_ready": production_automation["automation_ready"],
+            "automation_executed_count": production_automation["automation_executed_count"],
+            "external_call_made_count": production_automation["external_call_made_count"],
+            "webhook_sent_count": production_automation["webhook_sent_count"],
+            "notification_sent_count": production_automation["notification_sent_count"],
+            "production_record_written_count": production_automation["production_record_written_count"],
+            "truth_verified_count": production_automation["truth_verified_count"],
+            "public_approved_count": production_automation["public_approved_count"],
+            "mutated_public_data_count": production_automation["mutated_public_data_count"],
+            "published_report_count": production_automation["published_report_count"],
+            "trigger_type_counts": production_automation["trigger_type_counts"],
+            "requested_action_counts": production_automation["requested_action_counts"],
+            "executes_automation": production_automation["executes_automation"],
+            "calls_external_systems": production_automation["calls_external_systems"],
+            "sends_webhooks": production_automation["sends_webhooks"],
+            "sends_notifications": production_automation["sends_notifications"],
+            "writes_production_records": production_automation["writes_production_records"],
+            "verifies_truth": production_automation["verifies_truth"],
+            "approves_public_data": production_automation["approves_public_data"],
+            "mutates_shf_impact_data": production_automation["mutates_shf_impact_data"],
+            "publishes_reports": production_automation["publishes_reports"],
+            "replaces_event_webhook": production_automation["replaces_event_webhook"],
+            "replaces_notification_alert": production_automation["replaces_notification_alert"],
+            "replaces_policy_engine": production_automation["replaces_policy_engine"],
+            "replaces_readiness_gate": production_automation["replaces_readiness_gate"],
+            "replaces_audit_verification": production_automation["replaces_audit_verification"],
+            "note": "Production Automation reviews automation readiness only; it does not execute automations, call external systems, send webhooks or notifications, write records, verify truth, approve public data, mutate public data, or publish reports.",
+        },
+        "notification_alert": {
+            "policy_status": notification_alert["policy_status"],
+            "total_reviews": notification_alert["total_reviews"],
+            "blocked": notification_alert["blocked"],
+            "needs_review": notification_alert["needs_review"],
+            "notification_ready": notification_alert["notification_ready"],
+            "notification_sent_count": notification_alert["notification_sent_count"],
+            "external_call_made_count": notification_alert["external_call_made_count"],
+            "webhook_sent_count": notification_alert["webhook_sent_count"],
+            "email_sent_count": notification_alert["email_sent_count"],
+            "sms_sent_count": notification_alert["sms_sent_count"],
+            "message_sent_count": notification_alert["message_sent_count"],
+            "production_record_written_count": notification_alert["production_record_written_count"],
+            "truth_verified_count": notification_alert["truth_verified_count"],
+            "public_approved_count": notification_alert["public_approved_count"],
+            "mutated_public_data_count": notification_alert["mutated_public_data_count"],
+            "published_report_count": notification_alert["published_report_count"],
+            "trigger_type_counts": notification_alert["trigger_type_counts"],
+            "severity_counts": notification_alert["severity_counts"],
+            "recipient_scope_counts": notification_alert["recipient_scope_counts"],
+            "delivery_channel_counts": notification_alert["delivery_channel_counts"],
+            "sends_notifications": notification_alert["sends_notifications"],
+            "calls_external_systems": notification_alert["calls_external_systems"],
+            "sends_webhooks": notification_alert["sends_webhooks"],
+            "sends_email": notification_alert["sends_email"],
+            "sends_sms": notification_alert["sends_sms"],
+            "sends_messages": notification_alert["sends_messages"],
+            "writes_production_records": notification_alert["writes_production_records"],
+            "verifies_truth": notification_alert["verifies_truth"],
+            "approves_public_data": notification_alert["approves_public_data"],
+            "mutates_shf_impact_data": notification_alert["mutates_shf_impact_data"],
+            "publishes_reports": notification_alert["publishes_reports"],
+            "replaces_event_webhook": notification_alert["replaces_event_webhook"],
+            "replaces_production_automation": notification_alert["replaces_production_automation"],
+            "replaces_policy_engine": notification_alert["replaces_policy_engine"],
+            "replaces_watchtower": notification_alert["replaces_watchtower"],
+            "replaces_reports": notification_alert["replaces_reports"],
+            "note": "Notification / Alert reviews notification readiness only; it does not send notifications, call external systems, send webhooks, send email/SMS/messages, write records, verify truth, approve public data, mutate public data, or publish reports.",
         },
         "oracle": {
             "cases_total": oracle["cases_total"],

@@ -174,6 +174,14 @@ Batch / Import Layer governs bulk SHS Spine exports, ClientOps exports, Website 
 
 Warehouse Sync Layer prepares governed SHS/SHF records for future analytics or warehouse sync. It does not write warehouse records in V1 and does not make SHS private data public.
 
+## Relationship To Production Automation Layer
+
+Production Automation may evaluate automation readiness for SHS operational workflows, ClientOps, imports, syncs, reports, and maintenance actions, but it does not execute automation in V1 and cannot move SHS private data into SHF public surfaces without downstream governance.
+
+## Relationship To Notification / Alert Layer
+
+Notification / Alert Layer may evaluate notification readiness for SHS operational workflows, ClientOps, imports, syncs, reports, readiness blockers, and Watchtower findings, but it does not send notifications in V1 and cannot move SHS private data into SHF public surfaces without downstream governance.
+
 ## Relationship To Data Approval Gateway
 
 Data Approval Gateway is the human/review gate before public SHF use. It does not own raw SHS operational data, and SHS records cannot bypass it into public SHF Impact Data Spine.

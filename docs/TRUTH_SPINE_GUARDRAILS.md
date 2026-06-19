@@ -232,6 +232,18 @@ Warehouse Sync may classify sync eligibility, source layer, target warehouse dom
 
 Warehouse Sync may not write to warehouse in V1, connect to a warehouse, create exports, call external systems, verify truth, write Truth Spine claims, override Truth Spine decisions, override Oracle rulings, directly approve public data, mark records public-approved, directly mutate SHF Impact Data Spine, directly publish reports, replace Reports, replace Watchtower, replace Batch / Import, replace Adapter Layer, replace Data Approval Gateway, bypass Security / Privacy, bypass Data Ownership / IP, or bypass Public Approval.
 
+## Production Automation
+
+Production Automation may classify whether a task, workflow, event, import, sync, report, approval step, or operational action is automation-ready.
+
+Production Automation may not execute automation in V1, run real automations, send external webhooks, send notifications, write production records, call external systems, verify truth, write Truth Spine claims, override Truth Spine decisions, override Oracle rulings, directly approve public data, mark records public-approved, directly mutate SHF Impact Data Spine, directly publish reports, replace Event / Webhook, replace Notification / Alert, replace Policy Engine, replace Readiness Gate, replace Audit & Verification, bypass Security / Privacy, bypass Data Ownership / IP, or bypass human approval requirements.
+
+## Notification / Alert
+
+Notification / Alert may classify notification readiness, trigger type, alert severity, recipient scope, delivery channel, policy context, audit trace context, Security/Privacy context, Data Ownership/IP context, Event/Webhook context, and human review context.
+
+Notification / Alert may not send notifications in V1, send email, send SMS, send external webhooks, send Slack/Teams/messages, create production notification queues, call external systems, write production records, verify truth, write Truth Spine claims, override Truth Spine decisions, override Oracle rulings, directly approve public data, mark records public-approved, directly mutate SHF Impact Data Spine, directly publish reports, replace Event / Webhook, replace Production Automation, replace Policy Engine, replace Watchtower, replace Reports, bypass Security / Privacy, bypass Data Ownership / IP, or bypass human review requirements.
+
 ## SHS Spine And SHF Spine Boundary
 
 Truth Spine may evaluate eligible claims and evidence that originate from SHS Spine operational records, including ClientOps, Production Ops, Sales Ops, Website Studio, WebMaker, BuilderHub, reports workflow, service delivery, tickets, maintenance, QA, and project activity.

@@ -62,7 +62,8 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 | QA + Delivery | Operations | Runs quality checks, delivery readiness, screenshot QA, and release signoff. |
 | ClientOps | Operations | Manages client/project workflows, intake, referrals, reports, and service coordination. |
 | Website Studio | Production | Builds and manages website/page production workflows. |
-| Production Automation | Automation | Automates internal production workflows without bypassing review gates. |
+| Production Automation | Automation | Reviews whether tasks, workflows, events, imports, syncs, reports, approval steps, or operational actions are eligible for future automation without executing production actions in V1. |
+| Notification / Alert | Communications | Reviews notification and alert readiness without sending notifications, emails, SMS, messages, or webhooks in V1. |
 | SHF Impact Command Center | SHF Impact | Coordinates SHF impact views, regional context, AI analyst context, and impact reporting. |
 | Public Impact Map | SHF Impact | Displays public-safe, approved impact geography and map signals. |
 | Career Pathways | Programs | Manages career pathway programming and workforce journey surfaces. |
@@ -558,12 +559,22 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 ### Production Automation
 
 - Layer Type: Automation
-- Owns: Internal production workflow automation and task execution support.
-- Must Not Own: Human approval bypass, truth verification, or public release.
-- Upstream: Alignment Layer, Production Ops, Development Library
-- Downstream: QA + Delivery, Website Studio, ClientOps
-- Truth Spine Requirement: Automation must not publish claims without Truth Spine approval.
-- Enforcement Status: Required
+- Owns: Automation review payloads, trigger classification, requested action classification, target layer classification, policy context inspection, readiness gate context inspection, audit trace context inspection, Security/Privacy context inspection, Data Ownership/IP context inspection, human approval requirement inspection, automation readiness, blockers, warnings, and summary visibility to Reports and Watchtower.
+- Must Not Own: execute automation in V1, production action execution, scheduler/worker/queue execution, external service calls, webhook sending, notification sending, production record writes, public approval, Truth Spine verification, Oracle rulings, SHF Impact Data Spine mutation, report publishing, Event/Webhook replacement, Notification / Alert replacement, Policy Engine replacement, Readiness Gate replacement, Audit & Verification replacement, Security/Privacy bypass, Data Ownership/IP bypass, or human approval bypass.
+- Upstream: Alignment Layer, Production Ops, Development Library, QA + Delivery, Event/Webhook, Policy Engine, Readiness Gate, Audit & Verification, Security/Privacy, Data Ownership/IP, Warehouse Sync, Batch/Import, Adapter Layer, Watchtower, Reports
+- Downstream: QA + Delivery, Website Studio, ClientOps, Event/Webhook, Notification / Alert, Watchtower, Reports, Production Ops
+- Truth Spine Requirement: Automation readiness cannot verify truth, approve public data, mutate public impact data, publish reports, or publish claims. Any automated workflow touching public claims must preserve Truth Spine status and remain blocked until downstream Truth Spine/public approval requirements are satisfied.
+- Enforcement Status: Formalized V1
+
+### Notification / Alert
+
+- Layer Type: Communications
+- Owns: Notification review payloads, trigger type classification, alert severity classification, recipient scope classification, delivery channel classification, policy context inspection, audit trace context inspection, Security/Privacy context inspection, Data Ownership/IP context inspection, Event/Webhook context inspection, human review status inspection, notification readiness, blockers, warnings, and summary visibility to Reports and Watchtower.
+- Must Not Own: send notifications in V1, email sending, SMS sending, Slack/Teams/message sending, external webhook sending, external service calls, production notification queues, production persistence, production record writes, public approval, Truth Spine verification, Oracle rulings, SHF Impact Data Spine mutation, report publishing, Event/Webhook replacement, Production Automation replacement, Policy Engine replacement, Watchtower replacement, Reports replacement, Security/Privacy bypass, Data Ownership/IP bypass, or human review bypass.
+- Upstream: Watchtower, Reports, ClientOps, Production Automation, Event/Webhook, Policy Engine, Readiness Gate, Audit & Verification, Security/Privacy, Data Ownership/IP, Public Approval, System Health
+- Downstream: Reports, Watchtower, ClientOps, Production Ops, Event/Webhook, Production Automation
+- Truth Spine Requirement: Notification readiness cannot verify truth, approve public data, mutate public impact data, publish reports, or publish claims. Any notification that references public claims must preserve Truth Spine status and remain blocked until public approval context is present.
+- Enforcement Status: Formalized V1
 
 ### SHF Impact Command Center
 

@@ -384,12 +384,12 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 ### Data Ownership/IP
 
 - Layer Type: Governance
-- Owns: Data ownership, usage rights, intellectual property, and release constraints.
-- Must Not Own: Truth verification, route access, or report generation.
-- Upstream: Governance Layer, Security/Privacy
-- Downstream: Public Approval, Reports, Governance Binder
-- Truth Spine Requirement: Truth Spine publication must respect ownership and release constraints.
-- Enforcement Status: Required
+- Owns: Ownership readiness evaluation, source owner inspection, submitter inspection, usage-right checks, license readiness checks, reuse eligibility, reporting eligibility, public-release rights, attribution needs, consent needs, third-party IP indicators, blockers, warnings, and ownership-clear candidate recommendation.
+- Must Not Own: Legal advice, Truth verification, Truth Spine claim creation or persistence, Oracle rulings, public approval, public-approved record writes, SHF Impact Data Spine mutation, report publishing, Security / Privacy replacement, Source Registry replacement, role/permission replacement, Data Approval Gateway replacement, route access, or report generation.
+- Upstream: Source Registry, Security/Privacy, Data Approval Layer, Readiness Gate, Public Approval, Data Ownership/IP policy, Governance Layer
+- Downstream: Public Approval, Data Approval Gateway, SHF Impact Data Spine, Reports, Watchtower, LOO, ClientOps, Governance Binder
+- Truth Spine Requirement: Truth Spine publication must respect ownership, usage rights, attribution, consent, and release constraints before public or reporting use.
+- Enforcement Status: Formalized V1
 
 ### Decision Journal
 

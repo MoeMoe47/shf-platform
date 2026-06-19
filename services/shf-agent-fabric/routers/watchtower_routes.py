@@ -11,6 +11,7 @@ from services.data_approval_service import data_approval_summary
 from services.data_aggregator_service import data_aggregator_summary
 from services.data_federation_service import data_federation_summary
 from services.data_normalization_service import data_normalization_summary
+from services.data_ownership_ip_service import data_ownership_ip_summary
 from services.data_verification_service import data_verification_summary
 from services.evidence_package_service import evidence_package_summary
 from services.game_theory_service import game_theory_summary
@@ -42,6 +43,7 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
     readiness_gate = readiness_gate_summary()
     public_approval = public_approval_summary()
     security_privacy = security_privacy_summary()
+    data_ownership_ip = data_ownership_ip_summary()
     if isinstance(summary, dict):
         summary["truth_coverage"] = {
             "coverage_percent": truth["coverage_percent"],
@@ -198,6 +200,25 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
             "flag": security_privacy["blocked"] > 0 or security_privacy["needs_review"] > 0,
             "status": "watch"
             if security_privacy["blocked"] > 0 or security_privacy["needs_review"] > 0
+            else "ready",
+        }
+        summary["data_ownership_ip"] = {
+            "policy_status": data_ownership_ip["policy_status"],
+            "blocked": data_ownership_ip["blocked"],
+            "needs_review": data_ownership_ip["needs_review"],
+            "ownership_clear_candidates": data_ownership_ip["ownership_clear_candidates"],
+            "third_party_ip_detected_count": data_ownership_ip["third_party_ip_detected_count"],
+            "consent_missing_count": data_ownership_ip["consent_missing_count"],
+            "public_release_rights_count": data_ownership_ip["public_release_rights_count"],
+            "public_approved_count": data_ownership_ip["public_approved_count"],
+            "mutated_public_data_count": data_ownership_ip["mutated_public_data_count"],
+            "published_report_count": data_ownership_ip["published_report_count"],
+            "approves_public_data": data_ownership_ip["approves_public_data"],
+            "publishes_reports": data_ownership_ip["publishes_reports"],
+            "provides_legal_advice": data_ownership_ip["provides_legal_advice"],
+            "flag": data_ownership_ip["blocked"] > 0 or data_ownership_ip["needs_review"] > 0,
+            "status": "watch"
+            if data_ownership_ip["blocked"] > 0 or data_ownership_ip["needs_review"] > 0
             else "ready",
         }
         summary["oracle"] = {

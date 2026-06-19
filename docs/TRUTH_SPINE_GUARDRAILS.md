@@ -190,6 +190,12 @@ Security / Privacy may detect privacy risk, security risk, PII indicators, sensi
 
 Security / Privacy may not verify truth, write Truth Spine claims, approve public data, mark records public-approved, override Truth Spine decisions, override Oracle rulings, directly mutate SHF Impact Data Spine, directly publish reports, replace Identity / Access Control, replace role/permission controls, or bypass Data Approval Gateway.
 
+## Data Ownership / IP
+
+Data Ownership / IP may evaluate ownership, source owner, submitter, license type, usage rights, reuse eligibility, reporting eligibility, public-release rights, attribution needs, consent needs, and third-party IP indicators before records move toward Public Approval, SHF Impact Data Spine, Reports, Watchtower, LOO, client reporting, or public-facing surfaces.
+
+Data Ownership / IP may not verify truth, write Truth Spine claims, approve public data, mark records public-approved, override Truth Spine decisions, override Oracle rulings, directly mutate SHF Impact Data Spine, directly publish reports, replace Security / Privacy, replace Source Registry, replace role/permission controls, bypass Public Approval, bypass Data Approval Gateway, or provide legal advice.
+
 ## Backend First
 
 Truth Spine V1 lives in Agent Fabric first:

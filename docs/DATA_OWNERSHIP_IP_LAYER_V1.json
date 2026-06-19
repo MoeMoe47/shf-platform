@@ -1,0 +1,149 @@
+{
+  "layer_name": "Data Ownership / IP Layer V1",
+  "is_new_layer": false,
+  "role": "Evaluates ownership, usage rights, licensing, reuse limits, attribution, consent, third-party IP indicators, and public-release rights readiness without becoming a truth authority, legal advice engine, report publisher, or public data mutator.",
+  "position": "Cross-cutting governance layer before public exposure, public approval, reuse, reporting, and licensing.",
+  "owner": "Governance ownership and usage-right readiness layer",
+  "dependencies": {
+    "upstream": [
+      "Source Registry",
+      "Security / Privacy",
+      "Data Approval Layer",
+      "Readiness Gate",
+      "Public Approval",
+      "Governance Layer"
+    ],
+    "downstream": [
+      "Public Approval",
+      "Data Approval Gateway",
+      "SHF Impact Data Spine",
+      "Reports",
+      "Watchtower",
+      "LOO",
+      "ClientOps",
+      "Governance Binder"
+    ]
+  },
+  "boundaries": {
+    "does": [
+      "accept candidate records and payloads",
+      "inspect ownership fields",
+      "inspect submitter fields",
+      "inspect license fields",
+      "inspect consent fields",
+      "inspect attribution needs",
+      "inspect reuse and publication restrictions",
+      "inspect third-party IP indicators",
+      "classify ownership risk",
+      "classify license risk",
+      "classify reuse eligibility",
+      "classify reporting eligibility",
+      "classify public-release rights",
+      "produce blockers and warnings",
+      "expose summary visibility to Reports",
+      "expose summary visibility to Watchtower"
+    ],
+    "does_not": [
+      "verify truth",
+      "create Truth Spine claims",
+      "approve public data",
+      "mark records public-approved",
+      "mutate SHF Impact Data Spine",
+      "publish reports",
+      "override Truth Spine",
+      "override Oracle",
+      "replace Security / Privacy",
+      "replace Source Registry",
+      "replace role/permission controls",
+      "replace Data Approval Gateway",
+      "provide legal advice",
+      "bypass Public Approval",
+      "bypass Data Approval Gateway",
+      "create production persistence"
+    ]
+  },
+  "canonical_data_ownership_ip_model": {
+    "ownership_review_id": "",
+    "candidate_id": "",
+    "canonical_type": "",
+    "owner": "",
+    "submitted_by": "",
+    "license_type": "unknown|internal_use|reporting_allowed|public_release_allowed|restricted|third_party",
+    "usage_rights": [],
+    "attribution_required": false,
+    "consent_required": false,
+    "consent_confirmed": false,
+    "third_party_ip_detected": false,
+    "reuse_allowed": false,
+    "reporting_allowed": false,
+    "public_release_rights": false,
+    "ownership_risk": "unknown|low|medium|high|blocked",
+    "license_risk": "unknown|low|medium|high|blocked",
+    "warnings": [],
+    "blockers": [],
+    "recommended_action": "",
+    "ownership_clear_candidate": false,
+    "public_approved": false,
+    "mutated_public_data": false,
+    "published_report": false
+  },
+  "endpoints": [
+    "GET /data-ownership-ip/health",
+    "GET /data-ownership-ip/schema",
+    "GET /data-ownership-ip/summary",
+    "POST /data-ownership-ip/evaluate",
+    "POST /data-ownership-ip/batch-evaluate",
+    "GET /data-ownership-ip/readiness"
+  ],
+  "reports_integration": {
+    "field": "data_ownership_ip",
+    "summary_only": true
+  },
+  "watchtower_integration": {
+    "field": "data_ownership_ip",
+    "observation_only": true
+  },
+  "registry_status": {
+    "registered": true,
+    "enforcement_status": "Formalized V1"
+  },
+  "validation": {
+    "status": "pass",
+    "commands": {
+      "py_compile": "pass",
+      "check_data_ownership_ip_layer": "pass",
+      "check_security_privacy_layer": "pass",
+      "check_public_approval_layer": "pass",
+      "check_readiness_gate_layer": "pass",
+      "check_audit_verification_layer": "pass",
+      "check_data_approval_layer": "pass",
+      "check_data_verification_layer": "pass",
+      "check_evidence_package_layer": "pass",
+      "check_master_layer_registry": "pass",
+      "check_truth_spine_freeze": "pass",
+      "check_oracle_layer": "pass",
+      "check_ai_guardrails_layer": "pass",
+      "check_game_theory_layer": "pass",
+      "check_governance": "pass",
+      "pytest_data_ownership_ip_routes": "pass",
+      "pytest_adjacent_routes": "pass",
+      "npm_build": "pass"
+    },
+    "api_smoke": {
+      "GET /data-ownership-ip/health": "pass",
+      "GET /data-ownership-ip/schema": "pass",
+      "GET /data-ownership-ip/summary": "pass",
+      "POST /data-ownership-ip/evaluate": "pass",
+      "POST /data-ownership-ip/batch-evaluate": "pass",
+      "GET /data-ownership-ip/readiness": "pass",
+      "GET /reports/snapshot": "pass",
+      "GET /watchtower/summary": "pass"
+    }
+  },
+  "remaining_risks": [
+    "V1 has no production persistence.",
+    "V1 is a deterministic rights-readiness scaffold, not legal advice or a contract management system.",
+    "Future Source Registry, role/permission, Public Approval, Data Approval Gateway, and SHF Impact Data Spine workflows must preserve the recommendation/blocker-only boundary."
+  ],
+  "v1_complete": true
+}

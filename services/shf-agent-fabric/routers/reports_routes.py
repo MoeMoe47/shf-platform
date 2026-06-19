@@ -7,6 +7,7 @@ from services.data_approval_service import data_approval_summary
 from services.data_aggregator_service import data_aggregator_summary
 from services.data_federation_service import data_federation_summary
 from services.data_normalization_service import data_normalization_summary
+from services.data_ownership_ip_service import data_ownership_ip_summary
 from services.data_verification_service import data_verification_summary
 from services.evidence_package_service import evidence_package_summary
 from services.game_theory_service import game_theory_summary
@@ -36,6 +37,7 @@ def snapshot():
     readiness_gate = readiness_gate_summary()
     public_approval = public_approval_summary()
     security_privacy = security_privacy_summary()
+    data_ownership_ip = data_ownership_ip_summary()
     return {
         "ts": datetime.utcnow().isoformat(),
         "usage": {"requests": 0, "users": 0, "apps": 0},
@@ -189,6 +191,23 @@ def snapshot():
             "approves_public_data": security_privacy["approves_public_data"],
             "publishes_reports": security_privacy["publishes_reports"],
             "note": "Security Privacy evaluates exposure risk only; Identity, Truth Spine, Public Approval, SHF Impact Data Spine, and Reports remain separate authorities.",
+        },
+        "data_ownership_ip": {
+            "policy_status": data_ownership_ip["policy_status"],
+            "total_reviews": data_ownership_ip["total_reviews"],
+            "blocked": data_ownership_ip["blocked"],
+            "needs_review": data_ownership_ip["needs_review"],
+            "ownership_clear_candidates": data_ownership_ip["ownership_clear_candidates"],
+            "third_party_ip_detected_count": data_ownership_ip["third_party_ip_detected_count"],
+            "consent_missing_count": data_ownership_ip["consent_missing_count"],
+            "public_release_rights_count": data_ownership_ip["public_release_rights_count"],
+            "public_approved_count": data_ownership_ip["public_approved_count"],
+            "mutated_public_data_count": data_ownership_ip["mutated_public_data_count"],
+            "published_report_count": data_ownership_ip["published_report_count"],
+            "approves_public_data": data_ownership_ip["approves_public_data"],
+            "publishes_reports": data_ownership_ip["publishes_reports"],
+            "provides_legal_advice": data_ownership_ip["provides_legal_advice"],
+            "note": "Data Ownership IP evaluates ownership and usage-right readiness only; it does not provide legal advice, approve public data, publish reports, or mutate SHF Impact Data Spine.",
         },
         "oracle": {
             "cases_total": oracle["cases_total"],

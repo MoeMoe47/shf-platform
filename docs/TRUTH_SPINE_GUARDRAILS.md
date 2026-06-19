@@ -208,6 +208,12 @@ Event / Webhook may classify events, classify source layers, route internal targ
 
 Event / Webhook may not send external webhooks in V1, verify truth, write Truth Spine claims, override Truth Spine decisions, override Oracle rulings, directly approve public data, directly mutate SHF Impact Data Spine, directly publish reports, replace Audit & Verification, replace Watchtower, replace Reports, replace Policy Engine, replace Notification / Alert, or replace Production Automation.
 
+## API Gateway
+
+API Gateway may classify API routes, route exposure, method safety, required admin protection, required identity or role context, required policy context, audit requirements, rate-limit recommendations, public exposure readiness, and gateway readiness.
+
+API Gateway may not forward requests in V1, replace auth, verify truth, write Truth Spine claims, override Truth Spine decisions, override Oracle rulings, directly approve public data, directly mutate SHF Impact Data Spine, directly publish reports, replace Identity / Access Control, replace Role / Permission, replace Policy Engine, replace AI Guardrails, replace Watchtower, or expose protected routes publicly.
+
 ## Backend First
 
 Truth Spine V1 lives in Agent Fabric first:

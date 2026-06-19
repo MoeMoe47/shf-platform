@@ -15,6 +15,9 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 | Layer | Ownership | Boundary |
 | --- | --- | --- |
 | Identity & Access | Security | Authenticates users, roles, organizations, route access, and permission gates. |
+| SHS Spine | Operations | Owns SHS operational, private, client, and business source records before governed downstream intake. |
+| SHF Spine | SHF Impact | Owns nonprofit/foundation impact records only after governance and public approval. |
+| SHS→SHF Data Flow Boundary | Governance | Prevents raw SHS private/client data from entering SHF public surfaces without approval. |
 | API Gateway | Platform | Routes API traffic and applies shared request policy. |
 | Event/Webhook | Platform | Evaluates, classifies, queues, and exposes event/webhook readiness without sending external webhooks in V1. |
 | Batch/Import | Data Operations | Handles file imports, bulk uploads, and scheduled ingest. |
@@ -84,12 +87,12 @@ No new layer may be created unless it cannot fit any registered layer, is requir
 ### API Gateway
 
 - Layer Type: Platform
-- Owns: API traffic routing, shared request policy, and route exposure boundaries.
-- Must Not Own: Business truth, evidence support, risk decisions, or report approval.
-- Upstream: Identity & Access, Alignment Layer
-- Downstream: Apps/Programs, Reports, Watchtower, LOO
-- Truth Spine Requirement: Must route Truth Spine requests without bypassing Truth Spine gates.
-- Enforcement Status: Required
+- Owns: API request review payloads, route exposure classification, method safety classification, admin protection requirement detection, identity/role requirement detection, policy requirement detection, audit requirement detection, rate-limit recommendation, public exposure readiness, blockers, warnings, gateway readiness, deterministic V1 seeded examples, and summary visibility to Reports and Watchtower.
+- Must Not Own: forward requests in V1, backend routing replacement, production auth enforcement, admin API key bypass, protected route public exposure, external API publishing, production gateway/proxy service, request proxying, data mutation, Truth Spine verification, public approval, SHF Impact Data Spine mutation, report publishing, Identity / Access Control replacement, Role / Permission replacement, Policy Engine replacement, AI Guardrails replacement, Watchtower replacement, Reports publishing, Truth Spine override, Oracle override, or durable report facts.
+- Upstream: Identity & Access, Role / Permission Layer, Policy Engine, AI Guardrails, Security / Privacy, Data Ownership / IP, Public Approval, Event/Webhook, Alignment Layer
+- Downstream: Apps/Programs, Agent Fabric APIs, Truth Spine, Oracle Layer, AI/Swarm Layer, Reports, Watchtower, LOO, Admin / Registry APIs
+- Truth Spine Requirement: Must route Truth Spine requests without bypassing Truth Spine gates. API Gateway may classify route exposure and gateway readiness but cannot verify truth, approve public data, mutate public impact data, publish reports, override Truth Spine, or override Oracle.
+- Enforcement Status: Formalized V1
 
 ### Event/Webhook
 

@@ -1,0 +1,172 @@
+{
+  "layer_name": "API Gateway Layer V1",
+  "is_new_layer": false,
+  "role": "Evaluates route exposure, method safety, required protection, and gateway readiness without forwarding requests or replacing existing FastAPI routing/auth in V1.",
+  "boundaries": {
+    "does": [
+      "accept API request review payloads",
+      "classify route exposure",
+      "classify method safety",
+      "identify admin protection requirements",
+      "identify identity or role context requirements",
+      "identify policy context requirements",
+      "identify audit requirements",
+      "recommend rate limiting",
+      "identify blockers",
+      "identify warnings",
+      "produce gateway readiness result",
+      "provide summary-only visibility to Reports",
+      "provide observation-only visibility to Watchtower"
+    ],
+    "does_not": [
+      "forward requests in V1",
+      "rewrite backend routing",
+      "change production auth logic",
+      "bypass existing admin key checks",
+      "expose protected routes publicly",
+      "create external API publishing",
+      "create production gateway or proxy service",
+      "send external requests",
+      "mutate data",
+      "verify truth",
+      "approve public data",
+      "mutate SHF Impact Data Spine",
+      "publish reports",
+      "replace Identity / Access Control",
+      "replace Role / Permission Layer",
+      "replace Policy Engine",
+      "replace AI Guardrails",
+      "replace Watchtower",
+      "override Truth Spine",
+      "override Oracle"
+    ]
+  },
+  "methods": [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "UNKNOWN"
+  ],
+  "exposures": [
+    "public",
+    "internal",
+    "admin",
+    "external",
+    "unknown"
+  ],
+  "gateway_statuses": [
+    "blocked",
+    "needs_review",
+    "gateway_ready"
+  ],
+  "deterministic_v1_rules": [
+    "missing request_id blocks",
+    "missing path blocks",
+    "missing method blocks",
+    "unknown method needs review",
+    "destructive methods need review unless internal/admin and protected",
+    "admin routes require admin key",
+    "governance routes require identity or admin context",
+    "reports and watchtower routes require audit context and policy context",
+    "internal governance routes recommend identity, policy, and audit context",
+    "public-safe GET routes may be gateway-ready",
+    "internal/admin routes may be gateway-ready only if required context is present",
+    "external exposure needs review unless policy, identity, and audit context are present",
+    "request_forwarded is always false in V1"
+  ],
+  "upstream_dependencies": [
+    "Identity & Access",
+    "Role / Permission Layer",
+    "Policy Engine",
+    "AI Guardrails",
+    "Security / Privacy",
+    "Data Ownership / IP",
+    "Public Approval",
+    "Event / Webhook",
+    "Alignment Layer"
+  ],
+  "downstream_targets": [
+    "Apps/Programs",
+    "Agent Fabric APIs",
+    "Truth Spine",
+    "Oracle Layer",
+    "AI/Swarm Layer",
+    "Reports",
+    "Watchtower",
+    "LOO",
+    "Admin / Registry APIs"
+  ],
+  "endpoints": [
+    "GET /api-gateway/health",
+    "GET /api-gateway/schema",
+    "GET /api-gateway/summary",
+    "POST /api-gateway/evaluate",
+    "POST /api-gateway/batch-evaluate",
+    "GET /api-gateway/readiness"
+  ],
+  "reports_integration": {
+    "field": "api_gateway",
+    "summary_only": true
+  },
+  "watchtower_integration": {
+    "field": "api_gateway",
+    "observation_only": true
+  },
+  "registry_status": {
+    "registered": true,
+    "enforcement_status": "Formalized V1"
+  },
+  "authority_flags": {
+    "request_forwarded": false,
+    "truth_verified": false,
+    "public_approved": false,
+    "mutated_public_data": false,
+    "published_report": false,
+    "forwards_requests": false,
+    "replaces_identity": false,
+    "replaces_policy_engine": false,
+    "replaces_ai_guardrails": false
+  },
+  "validation": {
+    "status": "pass",
+    "commands": {
+      "python3 -m py_compile services/shf-agent-fabric/services/api_gateway_service.py services/shf-agent-fabric/routers/api_gateway_routes.py scripts/check_api_gateway_layer.py": "pass",
+      "python3 scripts/check_api_gateway_layer.py": "pass",
+      "python3 scripts/check_event_webhook_layer.py": "pass",
+      "python3 scripts/check_policy_engine_layer.py": "pass",
+      "python3 scripts/check_data_ownership_ip_layer.py": "pass",
+      "python3 scripts/check_security_privacy_layer.py": "pass",
+      "python3 scripts/check_public_approval_layer.py": "pass",
+      "python3 scripts/check_readiness_gate_layer.py": "pass",
+      "python3 scripts/check_audit_verification_layer.py": "pass",
+      "python3 scripts/check_master_layer_registry.py": "pass",
+      "python3 scripts/check_truth_spine_freeze.py": "pass",
+      "python3 scripts/check_oracle_layer.py": "pass",
+      "python3 scripts/check_ai_guardrails_layer.py": "pass",
+      "python3 scripts/check_game_theory_layer.py": "pass",
+      "npm run check:governance": "pass",
+      "python3 -m pytest services/shf-agent-fabric/tests/test_api_gateway_routes.py": "pass",
+      "python3 -m pytest services/shf-agent-fabric/tests/test_event_webhook_routes.py services/shf-agent-fabric/tests/test_policy_engine_routes.py services/shf-agent-fabric/tests/test_data_ownership_ip_routes.py services/shf-agent-fabric/tests/test_security_privacy_routes.py services/shf-agent-fabric/tests/test_public_approval_routes.py services/shf-agent-fabric/tests/test_truth_routes.py services/shf-agent-fabric/tests/test_oracle_routes.py": "pass",
+      "npm run build": "pass"
+    },
+    "api_smoke": {
+      "GET /api-gateway/health": "pass",
+      "GET /api-gateway/schema": "pass",
+      "GET /api-gateway/summary": "pass",
+      "POST /api-gateway/evaluate": "pass",
+      "POST /api-gateway/batch-evaluate": "pass",
+      "GET /api-gateway/readiness": "pass",
+      "GET /reports/snapshot": "pass",
+      "GET /watchtower/summary": "pass"
+    }
+  },
+  "remaining_risks": [
+    "V1 is deterministic and summary-only.",
+    "V1 does not enforce production auth.",
+    "V1 does not forward requests.",
+    "V1 does not implement a proxy, rate limiter, or external API publishing."
+  ],
+  "v1_complete": true
+}

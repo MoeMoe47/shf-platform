@@ -5,6 +5,7 @@ from fastapi import APIRouter, Body
 
 from fabric.watchtower.aggregator import build_watchtower_summary, build_watchtower_program_rows
 from fabric.watchtower.store import set_quarantine, clear_quarantine, get_quarantine_map, get_risk_history
+from services.api_gateway_service import api_gateway_summary
 from services.audit_verification_service import audit_verification_summary
 from services.ai_guardrails_service import ai_guardrails_summary
 from services.data_approval_service import data_approval_summary
@@ -48,6 +49,7 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
     data_ownership_ip = data_ownership_ip_summary()
     policy_engine = policy_engine_summary()
     event_webhook = event_webhook_summary()
+    api_gateway = api_gateway_summary()
     if isinstance(summary, dict):
         summary["truth_coverage"] = {
             "coverage_percent": truth["coverage_percent"],
@@ -262,6 +264,30 @@ def watchtower_summary(days: int = 30, baseline_weeks: int = 8, top_n: int = 10)
             "replaces_policy_engine": event_webhook["replaces_policy_engine"],
             "flag": event_webhook["blocked"] > 0 or event_webhook["needs_review"] > 0,
             "status": "watch" if event_webhook["blocked"] > 0 or event_webhook["needs_review"] > 0 else "ready",
+        }
+        summary["api_gateway"] = {
+            "policy_status": api_gateway["policy_status"],
+            "blocked": api_gateway["blocked"],
+            "needs_review": api_gateway["needs_review"],
+            "gateway_ready": api_gateway["gateway_ready"],
+            "admin_protection_required_count": api_gateway["admin_protection_required_count"],
+            "identity_required_count": api_gateway["identity_required_count"],
+            "policy_required_count": api_gateway["policy_required_count"],
+            "audit_required_count": api_gateway["audit_required_count"],
+            "rate_limit_recommended_count": api_gateway["rate_limit_recommended_count"],
+            "public_exposure_allowed_count": api_gateway["public_exposure_allowed_count"],
+            "request_forwarded_count": api_gateway["request_forwarded_count"],
+            "truth_verified_count": api_gateway["truth_verified_count"],
+            "public_approved_count": api_gateway["public_approved_count"],
+            "mutated_public_data_count": api_gateway["mutated_public_data_count"],
+            "published_report_count": api_gateway["published_report_count"],
+            "forwards_requests": api_gateway["forwards_requests"],
+            "verifies_truth": api_gateway["verifies_truth"],
+            "replaces_identity": api_gateway["replaces_identity"],
+            "replaces_policy_engine": api_gateway["replaces_policy_engine"],
+            "replaces_ai_guardrails": api_gateway["replaces_ai_guardrails"],
+            "flag": api_gateway["blocked"] > 0 or api_gateway["needs_review"] > 0,
+            "status": "watch" if api_gateway["blocked"] > 0 or api_gateway["needs_review"] > 0 else "ready",
         }
         summary["oracle"] = {
             "cases_total": oracle["cases_total"],

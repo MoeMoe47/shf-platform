@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from datetime import datetime
 
+from services.api_gateway_service import api_gateway_summary
 from services.audit_verification_service import audit_verification_summary
 from services.ai_guardrails_service import ai_guardrails_summary
 from services.data_approval_service import data_approval_summary
@@ -42,6 +43,7 @@ def snapshot():
     data_ownership_ip = data_ownership_ip_summary()
     policy_engine = policy_engine_summary()
     event_webhook = event_webhook_summary()
+    api_gateway = api_gateway_summary()
     return {
         "ts": datetime.utcnow().isoformat(),
         "usage": {"requests": 0, "users": 0, "apps": 0},
@@ -250,6 +252,30 @@ def snapshot():
             "replaces_watchtower": event_webhook["replaces_watchtower"],
             "replaces_policy_engine": event_webhook["replaces_policy_engine"],
             "note": "Event Webhook evaluates event routing and webhook readiness only; it does not send external webhooks, verify truth, approve public data, mutate public data, or publish reports.",
+        },
+        "api_gateway": {
+            "policy_status": api_gateway["policy_status"],
+            "total_reviews": api_gateway["total_reviews"],
+            "blocked": api_gateway["blocked"],
+            "needs_review": api_gateway["needs_review"],
+            "gateway_ready": api_gateway["gateway_ready"],
+            "admin_protection_required_count": api_gateway["admin_protection_required_count"],
+            "identity_required_count": api_gateway["identity_required_count"],
+            "policy_required_count": api_gateway["policy_required_count"],
+            "audit_required_count": api_gateway["audit_required_count"],
+            "rate_limit_recommended_count": api_gateway["rate_limit_recommended_count"],
+            "public_exposure_allowed_count": api_gateway["public_exposure_allowed_count"],
+            "request_forwarded_count": api_gateway["request_forwarded_count"],
+            "truth_verified_count": api_gateway["truth_verified_count"],
+            "public_approved_count": api_gateway["public_approved_count"],
+            "mutated_public_data_count": api_gateway["mutated_public_data_count"],
+            "published_report_count": api_gateway["published_report_count"],
+            "forwards_requests": api_gateway["forwards_requests"],
+            "verifies_truth": api_gateway["verifies_truth"],
+            "replaces_identity": api_gateway["replaces_identity"],
+            "replaces_policy_engine": api_gateway["replaces_policy_engine"],
+            "replaces_ai_guardrails": api_gateway["replaces_ai_guardrails"],
+            "note": "API Gateway evaluates route exposure and gateway readiness only; it does not forward requests, replace auth, verify truth, approve public data, mutate public data, or publish reports.",
         },
         "oracle": {
             "cases_total": oracle["cases_total"],

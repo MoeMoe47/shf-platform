@@ -36,6 +36,7 @@ import OpsMockReview from "@/pages/admin/ops/OpsMockReview.jsx";
 import OpsBuildPacket from "@/pages/admin/ops/OpsBuildPacket.jsx";
 import OpsScreenshotQA from "@/pages/admin/ops/OpsScreenshotQA.jsx";
 import OpsLearningDashboard from "@/pages/admin/ops/OpsLearningDashboard.jsx";
+import OpsLaunchWorkflowPage from "@/pages/admin/ops/OpsLaunchWorkflowPage.jsx";
 
 import HubWorkspaceDashboard from "@/pages/hub/HubWorkspaceDashboard.jsx";
 import SHSLoginPage from "@/pages/auth/SHSLoginPage.jsx";
@@ -198,6 +199,7 @@ export default function AdminRoutes() {
         <Route path="/ops/mock-review" element={protect("/ops/mock-review", <OpsMockReview />)} />
         <Route path="/ops/build-packet" element={protect("/ops/build-packet", <OpsBuildPacket />)} />
         <Route path="/ops/screenshot-qa" element={protect("/ops/screenshot-qa", <OpsScreenshotQA />)} />
+        <Route path="/ops/launch-workflow" element={protect("/ops/launch-workflow", <OpsLaunchWorkflowPage />)} />
         <Route path="/ops/learning" element={protect("/ops/learning", <OpsLearningDashboard />)} />
 
         {/* Fallback */}

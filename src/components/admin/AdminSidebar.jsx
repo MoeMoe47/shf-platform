@@ -20,6 +20,7 @@ const SECTIONS = [
       { to: "/ops/mock-review", icon: "✓", label: "Mock Review" },
       { to: "/ops/build-packet", icon: "▤", label: "Build Packet" },
       { to: "/ops/screenshot-qa", icon: "◫", label: "Screenshot QA" },
+      { to: "/ops/launch-workflow", icon: "L", label: "Launch Workflow" },
       { to: "/ops/learning", icon: "↻", label: "Learning" }
     ]
   },

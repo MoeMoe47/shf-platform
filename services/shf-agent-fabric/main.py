@@ -89,6 +89,7 @@ from routers.warehouse_sync_routes import router as warehouse_sync_router  # noq
 from routers.production_automation_routes import router as production_automation_router  # noqa: E402
 from routers.notification_alert_routes import router as notification_alert_router  # noqa: E402
 from routers.verified_aggregation_routes import router as verified_aggregation_router  # noqa: E402
+from routers.shs_launch_ledger_routes import router as shs_launch_ledger_router  # noqa: E402
 from routers.source_registry_routes import router as source_registry_router  # noqa: E402
 from routers.data_federation_routes import router as data_federation_router  # noqa: E402
 from routers.data_aggregator_routes import router as data_aggregator_router  # noqa: E402
@@ -483,6 +484,7 @@ app.include_router(warehouse_sync_router)
 app.include_router(production_automation_router)
 app.include_router(notification_alert_router)
 app.include_router(verified_aggregation_router)
+app.include_router(shs_launch_ledger_router)
 app.include_router(feedback_router)
 app.include_router(events_router)
 

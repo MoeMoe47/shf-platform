@@ -95,6 +95,7 @@ export const hubPageAccess = {
   "/ops/mock-review": ["shs_admin"],
   "/ops/build-packet": ["shs_admin"],
   "/ops/screenshot-qa": ["shs_admin"],
+  "/ops/launch-workflow": ["shs_admin"],
   "/ops/learning": ["shs_admin"],
 };
 

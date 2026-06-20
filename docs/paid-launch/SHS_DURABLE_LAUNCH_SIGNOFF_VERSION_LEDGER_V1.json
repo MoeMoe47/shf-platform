@@ -1,0 +1,75 @@
+{
+  "name": "SHS Durable Launch / Signoff / Version Ledger V1",
+  "files_created": [
+    "src/system/launch/shsLaunchLedger.js",
+    "docs/paid-launch/SHS_DURABLE_LAUNCH_SIGNOFF_VERSION_LEDGER_V1.md",
+    "docs/paid-launch/SHS_DURABLE_LAUNCH_SIGNOFF_VERSION_LEDGER_V1.json"
+  ],
+  "files_modified": [],
+  "ledger_scaffold_created": true,
+  "ui_created": false,
+  "route_created": "",
+  "storage_key": "shs.launch.ledger.v1",
+  "launch_gate_statuses_supported": [
+    "blocked",
+    "needs_review",
+    "private_beta_ready",
+    "paid_launch_ready"
+  ],
+  "launch_gate_rules": [
+    "Missing project_id blocks launch gate evaluation.",
+    "Missing client_name blocks launch gate evaluation.",
+    "Missing project_name blocks launch gate evaluation.",
+    "Missing package_name is a private-beta warning and paid-launch blocker.",
+    "Missing QA signoff blocks launch_ready.",
+    "Missing operator signoff blocks launch_ready.",
+    "Missing delivery signoff blocks launch_ready.",
+    "Missing client signoff blocks paid launch but may allow supervised private beta.",
+    "Missing version record blocks launch_ready.",
+    "Missing rollback owner or last known good version blocks paid launch.",
+    "Record marked private_beta_only blocks paid_launch_ready.",
+    "public_approved is forced false and a true input is treated as a blocker.",
+    "mutated_shf_impact_data is forced false and a true input is treated as a blocker.",
+    "published_report is forced false and a true input is treated as a blocker."
+  ],
+  "clientops_activation_rules": [
+    "ClientOps activation is not allowed when core launch blockers exist.",
+    "ClientOps activation requires support_tier.",
+    "ClientOps activation requires clientops_activation.owner.",
+    "ClientOps activation requires a version record.",
+    "ClientOps activation does not mutate SHF Impact Data Spine.",
+    "ClientOps activation does not publish reports or public approval."
+  ],
+  "exports": [
+    "SHS_LAUNCH_LEDGER_STORAGE_KEY",
+    "SHS_LAUNCH_LEDGER_VERSION",
+    "createLaunchLedgerRecord",
+    "validateLaunchLedgerRecord",
+    "computeLaunchGateStatus",
+    "getLaunchBlockers",
+    "getLaunchWarnings",
+    "isClientOpsActivationAllowed",
+    "createVersionRecord",
+    "createSignoffRecord",
+    "loadLaunchLedger",
+    "saveLaunchLedger",
+    "upsertLaunchLedgerRecord"
+  ],
+  "validation": {
+    "node_import_sanity": "pass",
+    "json_tool": "pass",
+    "npm_run_check_governance": "pass",
+    "check_master_layer_registry": "pass",
+    "check_truth_spine_freeze": "pass",
+    "npm_run_build": "pass_with_existing_vite_large_chunk_warning"
+  },
+  "remaining_risks": [
+    "V1 uses browser localStorage only and is not production-durable.",
+    "No admin Launch Ledger UI or route was created in this pass.",
+    "No backend ledger API, database table, signed hash, or immutable audit trail exists yet.",
+    "Paid launch still requires production auth/session and durable persistence decisions.",
+    "ClientOps activation evidence is represented by scaffold fields but is not wired to SHF-Next ClientOps runtime.",
+    "Truth Spine, Reports readiness, and public approval checks are represented as governance boundaries, not automated launch ledger integrations."
+  ],
+  "v1_complete": true
+}

@@ -1,0 +1,216 @@
+{
+  "name": "SHS Launch Signoff and ClientOps Activation Gate V1",
+  "goal": "Formalize the exact checklist required before a project can be considered launched.",
+  "overall_status": "WARNING",
+  "launch_readiness_score": 64,
+  "clientops_activation_readiness": 78,
+  "go_no_go_recommendation": {
+    "supervised_private_beta_launch_rehearsal": "GO",
+    "unsupervised_private_beta": "NO-GO",
+    "paid_launch": "NO-GO"
+  },
+  "required_signoffs": {
+    "qa_signoff": {
+      "status": "PARTIAL",
+      "required": [
+        "QA checklist attached",
+        "Desktop layout passes",
+        "Mobile layout passes",
+        "Navigation passes",
+        "Forms/interactions pass or are explicitly out of scope",
+        "Reports are truth/readiness-safe where applicable",
+        "Permissions pass",
+        "Public/private leakage passes",
+        "Screenshot QA recorded",
+        "Functional QA passes",
+        "Build and governance checks pass",
+        "No critical QA blockers remain"
+      ],
+      "current_evidence": "Phase 5 runbook defines criteria; SHF-Next QA and validateQAToClientOps require QA record, 100% score, and no critical blockers for ClientOps conversion."
+    },
+    "operator_signoff": {
+      "status": "MANUAL",
+      "required": [
+        "Operator confirms all runbook phases completed or exception-approved",
+        "Operator confirms build packet, QA evidence, reports, route smoke, leakage audit, and launch constraints",
+        "Operator confirms no private SHS data moves to public SHF surfaces",
+        "Operator records owner, timestamp, notes, and exceptions"
+      ],
+      "current_evidence": "Runbooks require delivery owner/operator signoff; no hard operator signoff field or approval ledger was found."
+    },
+    "delivery_signoff": {
+      "status": "PARTIAL",
+      "required": [
+        "Project status is Delivery Ready",
+        "Client-facing content/assets approved",
+        "Build packet and QA records attached",
+        "Handoff guide prepared",
+        "Support tier attached",
+        "Open blockers closed or exception-approved"
+      ],
+      "current_evidence": "SHF-Next QA checklist includes build packet attached, handoff guide prepared, support tier attached, and delivery readiness calculation."
+    },
+    "launch_signoff": {
+      "status": "MANUAL",
+      "required": [
+        "Final approval status and owner",
+        "Client signoff status and signer",
+        "Launch date and window",
+        "Package delivered",
+        "Active modules/routes/reports",
+        "Known exceptions",
+        "Support tier and owner",
+        "Handoff notes",
+        "Version launch record",
+        "Rollback owner and rollback plan",
+        "ClientOps activation confirmation"
+      ],
+      "current_evidence": "Phase 6 runbook defines fields; no dedicated SHRV1 launch gate route or hard runtime gate was found."
+    },
+    "clientops_activation": {
+      "status": "NEAR_READY",
+      "required": [
+        "Delivery Ready project exists",
+        "QA record exists",
+        "QA readiness score is 100%",
+        "No critical QA blockers remain",
+        "ClientOps record created",
+        "Support tier attached",
+        "Version history includes launch baseline",
+        "Maintenance, support, health, routes, reports, and monthly review context exist",
+        "ClientOps owner/support owner assigned"
+      ],
+      "current_evidence": "SHF-Next ClientOps conversion filters delivery-ready projects, calls validateQAToClientOps, and creates ClientOps records with launch date, support tier, routes, reports, maintenance, tickets, health, version history, upgrades, and monthly review status."
+    }
+  },
+  "launch_checklist": [
+    "Confirm Phase 4 Build Packet is approved or exception-approved",
+    "Confirm Phase 5 QA record exists",
+    "Confirm QA score is 100% for ClientOps conversion",
+    "Confirm no critical QA blockers remain",
+    "Confirm desktop, mobile, navigation, forms, permissions, reports, leakage, screenshot QA, and functional QA pass",
+    "Confirm build and governance checks pass",
+    "Confirm operator signoff owner, timestamp, and notes",
+    "Confirm final approval status and approval owner",
+    "Confirm client signoff status, signer, and date",
+    "Confirm launch date, launch window, and launch owner",
+    "Confirm active modules, routes, reports, package, and support tier",
+    "Confirm handoff notes and known exceptions",
+    "Confirm rollback plan and rollback owner",
+    "Confirm launch version record",
+    "Confirm ClientOps record creation",
+    "Confirm ClientOps owner/support owner",
+    "Confirm open maintenance/watch items transferred",
+    "Confirm no public claims bypass Truth Spine/report readiness/public approval"
+  ],
+  "clientops_activation_checklist": [
+    "Select delivery-ready project",
+    "Confirm QA record exists",
+    "Confirm QA readiness score is 100%",
+    "Confirm no critical QA blockers remain",
+    "Confirm build packet attached",
+    "Confirm client handoff guide prepared",
+    "Confirm support tier attached",
+    "Create ClientOps record",
+    "Confirm launch date and renewal date",
+    "Confirm active modules, routes, and reports",
+    "Confirm maintenance board seeded",
+    "Confirm support tickets seeded",
+    "Confirm system health checks seeded",
+    "Confirm version history includes V1 launch baseline",
+    "Confirm monthly review cadence/status",
+    "Assign ClientOps owner or support owner",
+    "Keep ClientOps private/internal and governed"
+  ],
+  "version_record_requirements": [
+    "Version ID",
+    "Launch date",
+    "Project ID",
+    "Client ID or ClientOps ID",
+    "Business/client name",
+    "Package delivered",
+    "Active modules",
+    "Active routes",
+    "Included reports",
+    "Known exceptions",
+    "Support tier",
+    "Launch owner",
+    "Rollback note",
+    "Approval/signoff reference"
+  ],
+  "launch_record_requirements": [
+    "Project ID",
+    "Client ID",
+    "ClientOps record ID",
+    "Final approval status",
+    "Final approval owner",
+    "Client signoff status",
+    "Client signer",
+    "Launch date",
+    "Support tier",
+    "Handoff notes",
+    "Version record",
+    "Active modules/routes/reports",
+    "Open maintenance/watch items",
+    "Rollback plan",
+    "Launch owner",
+    "Created timestamp"
+  ],
+  "rollback_requirements": [
+    "Rollback owner",
+    "Rollback trigger conditions",
+    "Last known good version",
+    "Routes/modules affected",
+    "Data backup or preservation note",
+    "Client communication note",
+    "Support escalation path",
+    "Post-rollback review owner"
+  ],
+  "currently_exists": [
+    "QA runbook and launch runbook define signoff steps",
+    "SHF-Next QA has checklist, readiness score, critical blockers, handoff guide, support tier, and Delivery Ready flow",
+    "SHF-Next ClientOps exposes only delivery-ready projects that pass QA readiness",
+    "SHF-Next ClientOps conversion validates QA record, 100% QA, and no critical blockers",
+    "ClientOps record creation seeds launch date, renewal date, support tier, routes, reports, maintenance, tickets, health, version history, upgrade recommendations, and monthly review status"
+  ],
+  "missing": [
+    "Dedicated SHRV1 launch gate route or model",
+    "Hard operator signoff field",
+    "Hard final approval field",
+    "Hard client signoff field",
+    "Durable launch/version/signoff ledger",
+    "Explicit rollback checklist and rollback owner",
+    "ClientOps owner/support owner as required activation field",
+    "Immutable version/export reference",
+    "Direct SHRV1-to-ClientOps activation record",
+    "Production auth/session and durable persistence for paid launch"
+  ],
+  "manual": [
+    "Operator signoff",
+    "Final approval",
+    "Client signoff",
+    "Launch date confirmation",
+    "Rollback planning",
+    "Launch record assembly",
+    "ClientOps owner assignment",
+    "Exception approval",
+    "Truth/report/public approval verification when reports or public claims are in scope"
+  ],
+  "paid_launch_blockers": [
+    "No durable launch/signoff/version ledger",
+    "No hard SHRV1 Launch Gate route/model",
+    "No required operator/final/client signoff enforcement",
+    "No formal rollback requirement",
+    "ClientOps activation is local/internal rather than production durable",
+    "ClientOps owner/support owner is not hard-required in current data model",
+    "Production auth/session hardening remains outside this gate",
+    "Durable persistence remains incomplete for paid launch",
+    "Report/public claim readiness remains manually verified unless tied to Truth Spine/public approval at runtime"
+  ],
+    "validation": {
+        "json_tool": "pass",
+        "npm_run_build": "pass_with_existing_vite_large_chunk_warning",
+        "npm_run_check_governance": "pass"
+    },
+    "v1_complete": true
+}

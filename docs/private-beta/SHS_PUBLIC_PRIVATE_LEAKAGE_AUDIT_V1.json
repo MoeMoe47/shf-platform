@@ -1,0 +1,302 @@
+{
+  "audit_name": "SHS Public Private Leakage Audit V1",
+  "public_routes_checked": [
+    {
+      "route": "/",
+      "app": "SHF-Next",
+      "status": "PASS",
+      "classification": "public",
+      "evidence": "Public home returns before OpsShell and states internal operations, ClientOps records, bridge state, and governance controls are not exposed."
+    },
+    {
+      "route": "/solutions",
+      "app": "SHF-Next",
+      "status": "PASS",
+      "classification": "public",
+      "evidence": "Public solutions route returns before OpsShell and does not expose internal production methods or ops workflows."
+    },
+    {
+      "route": "/foundation",
+      "app": "SHF-Next",
+      "status": "PASS",
+      "classification": "public_foundation",
+      "evidence": "Public foundation route returns before OpsShell and does not expose internal ops tools, approval controls, or identity metadata."
+    },
+    {
+      "route": "/foundation/impact-report",
+      "app": "SHF-Next",
+      "status": "WARNING",
+      "classification": "public_foundation_report",
+      "evidence": "Uses SHF Impact Data Spine helpers and labels Sample/Draft/Not Verified, but sample records are marked publicApproved true."
+    },
+    {
+      "route": "/foundation/impact-report/print",
+      "app": "SHF-Next",
+      "status": "WARNING",
+      "classification": "public_foundation_report",
+      "evidence": "Print report uses the same SHF Impact Data Spine helpers and sample/publicApproved semantics."
+    },
+    {
+      "route": "/foundation/report",
+      "app": "SHF-Next",
+      "status": "WARNING",
+      "classification": "public_foundation_report",
+      "evidence": "Routes to the same impact report generator family."
+    },
+    {
+      "route": "/studio/templates",
+      "app": "SHF-Next",
+      "status": "PASS",
+      "classification": "public_product",
+      "evidence": "Public template page uses local template data and does not import internal ops components."
+    },
+    {
+      "route": "/studio/templates/browse",
+      "app": "SHF-Next",
+      "status": "PASS",
+      "classification": "public_product",
+      "evidence": "Public template browse page uses local template data and stays outside OpsShell."
+    },
+    {
+      "route": "/solutions.html#/request-demo",
+      "app": "SHRV1",
+      "status": "PASS",
+      "classification": "public_lead_intake",
+      "evidence": "Public request-demo route loads SHSRequestDemoPage and is not an internal ops data surface."
+    }
+  ],
+  "private_routes_checked": [
+    {
+      "route": "admin.html#/ops/*",
+      "app": "SHRV1",
+      "status": "PASS",
+      "classification": "private_shs_admin",
+      "evidence": "Mounted under AuthGuard, wrapped in protect(...), and SHS-admin restricted."
+    },
+    {
+      "route": "admin.html#/hub/sales-pipeline",
+      "app": "SHRV1",
+      "status": "PASS",
+      "classification": "private_hub_sales",
+      "evidence": "Protected Hub route; not mounted in public routes."
+    },
+    {
+      "route": "admin.html#/hub/opportunities",
+      "app": "SHRV1",
+      "status": "PASS",
+      "classification": "private_hub_sales",
+      "evidence": "Protected Hub route; not mounted in public routes."
+    },
+    {
+      "route": "admin.html#/hub/bundles",
+      "app": "SHRV1",
+      "status": "PASS",
+      "classification": "private_hub_sales",
+      "evidence": "Protected Hub route; not mounted in public routes."
+    },
+    {
+      "route": "admin.html#/reports",
+      "app": "SHRV1",
+      "status": "PASS",
+      "classification": "private_reports",
+      "evidence": "Protected Reports admin route with permission guard."
+    },
+    {
+      "route": "admin.html#/reporting",
+      "app": "SHRV1",
+      "status": "PASS",
+      "classification": "private_reporting",
+      "evidence": "Protected reporting command surface with permission guard."
+    },
+    {
+      "route": "/reports/snapshot",
+      "app": "Agent Fabric",
+      "status": "PASS",
+      "classification": "backend_governance_summary",
+      "evidence": "Returns governance metadata and notes that layers do not publish or mutate public data."
+    },
+    {
+      "route": "/ops/command",
+      "app": "SHF-Next",
+      "status": "WARNING",
+      "classification": "internal_ops_notice",
+      "evidence": "Internal and bridge-noticed but not production-auth gated."
+    },
+    {
+      "route": "/ops/sales",
+      "app": "SHF-Next",
+      "status": "WARNING",
+      "classification": "internal_ops_notice",
+      "evidence": "Sales remains under OpsShell with CrossAppAccessNotice, but production auth is not implemented."
+    },
+    {
+      "route": "/ops/projects",
+      "app": "SHF-Next",
+      "status": "WARNING",
+      "classification": "internal_ops_notice",
+      "evidence": "Production Projects remains under OpsShell with CrossAppAccessNotice, but production auth is not implemented."
+    },
+    {
+      "route": "/ops/library",
+      "app": "SHF-Next",
+      "status": "WARNING",
+      "classification": "internal_ops_notice",
+      "evidence": "Development Library remains under OpsShell with CrossAppAccessNotice, but production auth is not implemented."
+    },
+    {
+      "route": "/ops/qa",
+      "app": "SHF-Next",
+      "status": "WARNING",
+      "classification": "internal_ops_notice",
+      "evidence": "QA remains under OpsShell with CrossAppAccessNotice, but production auth is not implemented."
+    },
+    {
+      "route": "/ops/clientops",
+      "app": "SHF-Next",
+      "status": "WARNING",
+      "classification": "internal_clientops_notice",
+      "evidence": "ClientOps remains under OpsShell with CrossAppAccessNotice, but production auth is not implemented."
+    },
+    {
+      "route": "/foundation/data-approval",
+      "app": "SHF-Next",
+      "status": "WARNING",
+      "classification": "foundation_admin_notice",
+      "evidence": "Classified non-public/foundation-admin and shows CrossAppAccessNotice; path remains reachable without production auth."
+    }
+  ],
+  "findings": [
+    {
+      "id": "LKG-001",
+      "status": "PASS",
+      "finding": "ClientOps private data is not mounted on public routes.",
+      "evidence": "SHF-Next /ops/clientops renders inside OpsShell; public routes return before OpsShell; SHS_CLIENTOPS_SPINE_METADATA blocks direct SHF public surfaces.",
+      "risk": "low"
+    },
+    {
+      "id": "LKG-002",
+      "status": "PASS",
+      "finding": "Production Ops private data is not mounted on public routes.",
+      "evidence": "SHRV1 /ops/* is protected; SHF-Next /ops/projects is internal/bridge-noticed; SHS_PRODUCTION_OPS_SPINE_METADATA blocks direct public exposure.",
+      "risk": "low"
+    },
+    {
+      "id": "LKG-003",
+      "status": "PASS",
+      "finding": "Sales pipeline data is private/internal.",
+      "evidence": "SHRV1 sales routes are protected Hub routes; SHF-Next /ops/sales lives under OpsShell.",
+      "risk": "low"
+    },
+    {
+      "id": "LKG-004",
+      "status": "PASS",
+      "finding": "Internal reports are private/protected.",
+      "evidence": "SHRV1 Reports routes are protected; /reports/snapshot returns governance summary data and states layers do not publish reports or mutate public data.",
+      "risk": "low"
+    },
+    {
+      "id": "LKG-005",
+      "status": "PASS",
+      "finding": "SHS Spine operational data remains private by doctrine and metadata.",
+      "evidence": "shsSpine.js says SHS does not own public approval, public SHF impact publication, or SHF Impact Data Spine mutation.",
+      "risk": "low"
+    },
+    {
+      "id": "LKG-006",
+      "status": "PASS",
+      "finding": "SHF public routes use SHF impact/template data, not ClientOps/Production/Sales data.",
+      "evidence": "ShfImpactReportGenerator imports shfImpactData; public template pages define template arrays locally.",
+      "risk": "low"
+    },
+    {
+      "id": "LKG-007",
+      "status": "PASS",
+      "finding": "/studio/templates and /studio/templates/browse remain public product pages without private ops imports.",
+      "evidence": "SHF-Next route order returns those pages before OpsShell; page files import public template/style context only.",
+      "risk": "low"
+    },
+    {
+      "id": "LKG-008",
+      "status": "PASS",
+      "finding": "/ops/* routes remain internal/bridge-noticed in SHF-Next.",
+      "evidence": "App.tsx wraps non-public fallback in OpsShell and CrossAppAccessNotice; identity bridge classifies /ops/* as internal.",
+      "risk": "medium"
+    },
+    {
+      "id": "LKG-009",
+      "status": "WARNING",
+      "finding": "/foundation/data-approval is classified internal/foundation-admin and bridge-noticed, but remains path-accessible without production auth.",
+      "evidence": "App.tsx shows CrossAppAccessNotice and ShfDataApprovalGateway; identity bridge marks route as non-public.",
+      "risk": "medium"
+    },
+    {
+      "id": "LKG-010",
+      "status": "WARNING",
+      "finding": "SHF public impact records are Sample/Draft/Not Verified but often publicApproved true.",
+      "evidence": "shfImpactData.js and SHF-Next shfImpactData.ts filter public routes by publicApproved while dataStatus remains Sample.",
+      "risk": "medium"
+    },
+    {
+      "id": "LKG-011",
+      "status": "WARNING",
+      "finding": "SHF-Next internal route protection is classification/notice-based, not production auth.",
+      "evidence": "CrossAppAccessNotice displays role metadata for non-public routes but does not block rendering.",
+      "risk": "medium"
+    },
+    {
+      "id": "LKG-012",
+      "status": "WARNING",
+      "finding": "Browser DOM leakage proof was not captured in this pass.",
+      "evidence": "This audit is static-plus-build and does not include screenshots or automated public-route text scans.",
+      "risk": "medium"
+    },
+    {
+      "id": "LKG-013",
+      "status": "PASS",
+      "finding": "SHF Impact Data Spine helpers filter public map/report outputs through public-approved helpers.",
+      "evidence": "isPublicApprovedImpactRecord, getPublicApprovedMapCounties, getProgramLaneById, and status summaries enforce public-approved filtering.",
+      "risk": "low"
+    },
+    {
+      "id": "LKG-014",
+      "status": "WARNING",
+      "finding": "One cross-app source route for SHRV1 WebMaker uses /studio/templates without admin.html#, which can confuse public/internal ownership.",
+      "evidence": "crossAppRouteBridge.js has shrv1WebMakerToShfTemplatesBrowse.sourceRoute as /studio/templates.",
+      "risk": "low"
+    },
+    {
+      "id": "LKG-015",
+      "status": "PASS",
+      "finding": "No critical leakage from private SHS data into public SHF surfaces was found.",
+      "evidence": "Combined route, import, spine, and data-helper inspection.",
+      "risk": "low"
+    }
+  ],
+  "pass_count": 10,
+  "warning_count": 5,
+  "fail_count": 0,
+  "leakage_risk_score": 18,
+  "critical_leakage_found": false,
+  "private_beta_safe": true,
+  "paid_launch_safe": false,
+  "recommended_fixes": [
+    "Clarify SHF public data semantics so Sample/Draft records are not treated as production public-approved records before public launch.",
+    "Add browser leakage smoke that scans public routes for private strings: ClientOps, Production Ops, support tickets, contract status, payment status, lead details, localStorage keys, and internal route metadata.",
+    "Replace SHF-Next bridge-notice-only internal route separation with production auth/session gating before paid launch.",
+    "Normalize crossAppRouteBridge.js source route for SHRV1 WebMaker to admin.html#/studio/templates or document the intentional public/admin split.",
+    "Add an automated import-boundary check that public SHF/SHS routes do not import SHF-Next ops components or SHRV1 private ops datasets."
+  ],
+  "validation": {
+    "json_tool": "pass",
+    "shrv1_npm_run_build": "pass_with_existing_vite_large_chunk_warning",
+    "shrv1_npm_run_check_governance": "pass",
+    "shf_next_npm_run_build": "pass_with_vite_large_chunk_warning_after_escalated_rerun",
+    "shf_next_npm_run_lint": "pass"
+  },
+  "launch_recommendation": {
+    "supervised_private_beta": "GO",
+    "public_launch": "NO-GO",
+    "paid_production_launch": "NO-GO"
+  },
+  "v1_complete": true
+}

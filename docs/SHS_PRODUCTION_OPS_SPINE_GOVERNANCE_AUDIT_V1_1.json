@@ -1,0 +1,252 @@
+{
+  "audit_name": "SHS Production Ops V1.1 Spine Integration + Governance Visibility Audit",
+  "production_ops_surfaces_found": [
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/production",
+      "file": "src/pages/admin/ops/OpsProductionDashboard.jsx",
+      "purpose": "Internal production workflow dashboard"
+    },
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/projects",
+      "file": "src/pages/admin/ops/OpsProjectSetup.jsx",
+      "purpose": "Project setup"
+    },
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/brand-profile",
+      "file": "src/pages/admin/ops/OpsBrandProfile.jsx",
+      "purpose": "Brand profile"
+    },
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/page-intent",
+      "file": "src/pages/admin/ops/OpsPageIntent.jsx",
+      "purpose": "Page intent"
+    },
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/layout-blueprint",
+      "file": "src/pages/admin/ops/OpsLayoutBlueprint.jsx",
+      "purpose": "Layout blueprint"
+    },
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/visual-treatment",
+      "file": "src/pages/admin/ops/OpsVisualTreatment.jsx",
+      "purpose": "Visual treatment"
+    },
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/assets",
+      "file": "src/pages/admin/ops/OpsAssetGovernance.jsx",
+      "purpose": "Asset governance"
+    },
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/data-binding",
+      "file": "src/pages/admin/ops/OpsDataBinding.jsx",
+      "purpose": "Data binding"
+    },
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/mock-review",
+      "file": "src/pages/admin/ops/OpsMockReview.jsx",
+      "purpose": "Mock review"
+    },
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/build-packet",
+      "file": "src/pages/admin/ops/OpsBuildPacket.jsx",
+      "purpose": "Build packet"
+    },
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/screenshot-qa",
+      "file": "src/pages/admin/ops/OpsScreenshotQA.jsx",
+      "purpose": "Screenshot QA"
+    },
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/learning",
+      "file": "src/pages/admin/ops/OpsLearningDashboard.jsx",
+      "purpose": "Adaptive learning"
+    },
+    {
+      "app": "shf-next",
+      "route": "/ops/sales",
+      "file": "/Users/mikeslate/shf-next/src/pages/ops/SalesCommandCenter.tsx",
+      "purpose": "Sales handoff creation"
+    },
+    {
+      "app": "shf-next",
+      "route": "/ops/projects",
+      "file": "/Users/mikeslate/shf-next/src/pages/ops/ProductionProjects.tsx",
+      "purpose": "Production project conversion and tracking"
+    },
+    {
+      "app": "shf-next",
+      "route": "/ops/library",
+      "file": "/Users/mikeslate/shf-next/src/pages/ops/DevelopmentLibrary.tsx",
+      "purpose": "Development Library and build packet workflow"
+    },
+    {
+      "app": "shf-next",
+      "route": "/ops/qa",
+      "file": "/Users/mikeslate/shf-next/src/pages/ops/QADeliveryDashboard.tsx",
+      "purpose": "QA and delivery readiness"
+    },
+    {
+      "app": "shf-next",
+      "route": "/ops/command",
+      "file": "/Users/mikeslate/shf-next/src/pages/ops/OpsCommandOverview.tsx",
+      "purpose": "Ops command overview"
+    },
+    {
+      "app": "shf-next",
+      "route": "/ops/clientops",
+      "file": "/Users/mikeslate/shf-next/src/pages/ops/ClientOpsCenter.tsx",
+      "purpose": "Post-launch ClientOps handoff target"
+    }
+  ],
+  "route_visibility": {
+    "shrv1_admin_ops": "Internal admin routes under AuthGuard and ProtectedHubRoute; sidebar links present for Production Ops.",
+    "shf_next_ops": "Internal /ops routes under OpsShell with CrossAppAccessNotice.",
+    "public_exposure_found": false,
+    "blank_fallback_found": false
+  },
+  "identity_permission_boundary": {
+    "shrv1": "Production Ops routes use protect(...) and hubAccessControl grants /ops/* to shs_admin.",
+    "shf_next": "/ops, /ops/sales, /ops/projects, /ops/library, /ops/qa, and /ops/command are internal ops routes with bridge notice; /ops/clientops is INTERNAL_CLIENTOPS.",
+    "public_shf_pages_render_production_ops": false,
+    "production_auth_claimed": false
+  },
+  "production_ops_data_categories": [
+    "pre_launch_operational",
+    "client_private",
+    "sales_handoff",
+    "project_scope",
+    "build_packet",
+    "brand_profile",
+    "page_intent",
+    "layout_blueprint",
+    "visual_treatment",
+    "asset_governance",
+    "data_binding",
+    "mock_review",
+    "screenshot_qa",
+    "qa_delivery",
+    "launch_handoff",
+    "clientops_handoff_candidate",
+    "report_candidate",
+    "public_impact_candidate only after governance"
+  ],
+  "shs_spine_integration": {
+    "production_ops_is_shs_spine_source": true,
+    "classification": "SHS_SPINE_SOURCE / PRIVATE_OPERATIONAL / PRE_LAUNCH_OPERATIONAL",
+    "source_file": "src/system/spines/shsSpine.js",
+    "metadata_added": "SHS_PRODUCTION_OPS_SPINE_METADATA",
+    "raw_production_ops_stays_in_shs_by_default": true
+  },
+  "clientops_handoff_relationship": {
+    "confirmed_path": "Sales / Handoff -> Production Ops -> Development Library / Build Packet -> QA + Delivery -> Launch -> ClientOps",
+    "transfers_to_clientops": [
+      "launch-ready project record",
+      "client and business identity",
+      "package and support tier",
+      "active modules",
+      "routes",
+      "reports",
+      "approved post-launch operational context",
+      "open maintenance or watch items"
+    ],
+    "stays_private_internal": [
+      "internal sales assumptions",
+      "draft build packets",
+      "implementation prompts",
+      "QA machinery",
+      "screenshot drift notes",
+      "adaptive learning notes",
+      "sensitive client notes",
+      "unapproved scope decisions"
+    ],
+    "report_candidate": [
+      "launch status",
+      "approved module list",
+      "readiness status",
+      "public-safe report metadata",
+      "de-identified aggregate operational summaries"
+    ],
+    "public_impact_candidate_rule": "Only after full governance chain and Data Approval Gateway."
+  },
+  "shs_to_shf_boundary": {
+    "direct_public_shf_exposure_allowed": false,
+    "direct_shf_impact_data_mutation_allowed": false,
+    "required_path": [
+      "Adapter Layer",
+      "Batch / Import",
+      "Source Registry",
+      "Data Federation",
+      "Data Aggregator",
+      "Data Normalization",
+      "Evidence Package",
+      "Data Verification",
+      "Truth Spine",
+      "Oracle where applicable",
+      "Data Approval",
+      "Readiness Gate",
+      "Security / Privacy",
+      "Data Ownership / IP",
+      "Public Approval",
+      "Verified Aggregation",
+      "Data Approval Gateway",
+      "SHF Impact Data Spine after approval"
+    ]
+  },
+  "governance_visibility": {
+    "fixed": [
+      "Added explicit Production Ops SHS Spine metadata in src/system/spines/shsSpine.js."
+    ],
+    "already_visible": [
+      "SHS Spine formalization docs include Production Ops as source material.",
+      "SHRV1 Production Ops routes are internal/admin routes.",
+      "SHF-Next /ops routes render CrossAppAccessNotice.",
+      "Cross-app route bridge links SHRV1 Production Ops routes to SHF-Next live ops routes.",
+      "SHF-Next readiness logic checks handoffs, production projects, build packets, QA readiness, and ClientOps conversion."
+    ],
+    "missing_or_deferred": [
+      "Visible Production Ops governance banner in SHF-Next remains post-V1.1 owner-approved consumer-app hardening.",
+      "Formal Production Ops V1 doc/check remains optional unless Production Ops becomes a governance-enforced layer."
+    ]
+  },
+  "reports_watchtower_relationship": {
+    "reports_exposes_governance_layers": true,
+    "watchtower_exposes_governance_layers": true,
+    "production_ops_public_source_in_reports": false,
+    "production_ops_public_source_in_watchtower": false,
+    "relationship": "Production Ops may feed reports only as governed report-candidate input after source, verification, approval, privacy, ownership, readiness, public approval, and gateway controls."
+  },
+  "changes_made": [
+    "src/system/spines/shsSpine.js",
+    "docs/SHS_PRODUCTION_OPS_SPINE_GOVERNANCE_AUDIT_V1_1.md",
+    "docs/SHS_PRODUCTION_OPS_SPINE_GOVERNANCE_AUDIT_V1_1.json"
+  ],
+  "post_v1_1_hardening": [
+    "Add internal-only SHF-Next Production Ops governance banner after owner approval.",
+    "Add real Production Ops Source Registry intake mapping only when governed intake is implemented.",
+    "Do not implement production auth in this audit pass.",
+    "Do not mutate SHF Impact Data Spine from Production Ops."
+  ],
+  "validation": {
+    "npm run check:governance": "PASS",
+    "python3 scripts/check_master_layer_registry.py": "PASS: Master Layer Registry checked 57 official registry rows/layers.",
+    "python3 scripts/check_truth_spine_freeze.py": "PASS: Truth Spine V1 freeze checks passed.",
+    "npm run build": "PASS: Vite build completed with existing large-chunk warning.",
+    "python3 -m json.tool docs/SHS_PRODUCTION_OPS_SPINE_GOVERNANCE_AUDIT_V1_1.json": "PASS",
+    "shf-next npm run build": "PASS after approved sandbox escalation for TypeScript build info writes under node_modules/.tmp.",
+    "shf-next npm run lint": "PASS",
+    "git safety": "PASS: SHRV1 git status/diff reviewed; no commit/stage/restore/reset/delete/move performed."
+  },
+  "v1_1_complete": true
+}

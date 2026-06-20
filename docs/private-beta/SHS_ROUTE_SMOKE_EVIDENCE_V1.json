@@ -1,0 +1,420 @@
+{
+  "audit_name": "SHS Route Smoke Evidence V1",
+  "route_count": 30,
+  "pass_count": 25,
+  "warning_count": 5,
+  "fail_count": 0,
+  "private_beta_route_readiness_score": 92,
+  "routes": [
+    {
+      "route": "admin.html#/hub/sales-pipeline",
+      "app": "SHRV1",
+      "area": "Lead/Sales",
+      "classification": "private_hub_client_admin_shs_admin",
+      "status": "WARNING",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "shared_hub_business_nav_and_in_page_links",
+      "public_private_classification": "private",
+      "notes": "Route exists and is protected, but it is not listed in AdminSidebar."
+    },
+    {
+      "route": "admin.html#/hub/opportunities",
+      "app": "SHRV1",
+      "area": "Lead/Sales",
+      "classification": "private_hub_client_admin_shs_admin",
+      "status": "WARNING",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "shared_hub_business_nav_and_in_page_links",
+      "public_private_classification": "private",
+      "notes": "Route exists and is protected, but it is not listed in AdminSidebar."
+    },
+    {
+      "route": "admin.html#/hub/bundles",
+      "app": "SHRV1",
+      "area": "Lead/Sales",
+      "classification": "private_hub_client_admin_shs_admin",
+      "status": "WARNING",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "shared_hub_business_nav_and_in_page_links",
+      "public_private_classification": "private",
+      "notes": "Route exists and is protected, but it is not listed in AdminSidebar."
+    },
+    {
+      "route": "/solutions.html#/request-demo",
+      "app": "SHRV1",
+      "area": "Lead/Sales",
+      "classification": "public_lead_intake",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "public_solutions_route",
+      "public_private_classification": "public",
+      "notes": "SolutionsRoutes maps request-demo to SHSRequestDemoPage."
+    },
+    {
+      "route": "admin.html#/ops/production",
+      "app": "SHRV1",
+      "area": "Production Ops",
+      "classification": "private_shs_admin",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "AdminSidebar Production Ops",
+      "public_private_classification": "private",
+      "notes": "Protected route and sidebar link are present."
+    },
+    {
+      "route": "admin.html#/ops/projects",
+      "app": "SHRV1",
+      "area": "Production Ops",
+      "classification": "private_shs_admin",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "AdminSidebar Production Ops",
+      "public_private_classification": "private",
+      "notes": "Protected route and sidebar link are present."
+    },
+    {
+      "route": "admin.html#/ops/brand-profile",
+      "app": "SHRV1",
+      "area": "Production Ops",
+      "classification": "private_shs_admin",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "AdminSidebar Production Ops",
+      "public_private_classification": "private",
+      "notes": "Protected route and sidebar link are present."
+    },
+    {
+      "route": "admin.html#/ops/page-intent",
+      "app": "SHRV1",
+      "area": "Production Ops",
+      "classification": "private_shs_admin",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "AdminSidebar Production Ops",
+      "public_private_classification": "private",
+      "notes": "Protected route and sidebar link are present."
+    },
+    {
+      "route": "admin.html#/ops/layout-blueprint",
+      "app": "SHRV1",
+      "area": "Production Ops",
+      "classification": "private_shs_admin",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "AdminSidebar Production Ops",
+      "public_private_classification": "private",
+      "notes": "Protected route and sidebar link are present."
+    },
+    {
+      "route": "admin.html#/ops/visual-treatment",
+      "app": "SHRV1",
+      "area": "Production Ops",
+      "classification": "private_shs_admin",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "AdminSidebar Production Ops",
+      "public_private_classification": "private",
+      "notes": "Protected route and sidebar link are present."
+    },
+    {
+      "route": "admin.html#/ops/assets",
+      "app": "SHRV1",
+      "area": "Production Ops",
+      "classification": "private_shs_admin",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "AdminSidebar Production Ops",
+      "public_private_classification": "private",
+      "notes": "Protected route and sidebar link are present."
+    },
+    {
+      "route": "admin.html#/ops/data-binding",
+      "app": "SHRV1",
+      "area": "Production Ops",
+      "classification": "private_shs_admin",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "AdminSidebar Production Ops",
+      "public_private_classification": "private",
+      "notes": "Protected route and sidebar link are present."
+    },
+    {
+      "route": "admin.html#/ops/mock-review",
+      "app": "SHRV1",
+      "area": "Production Ops",
+      "classification": "private_shs_admin",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "AdminSidebar Production Ops",
+      "public_private_classification": "private",
+      "notes": "Protected route and sidebar link are present."
+    },
+    {
+      "route": "admin.html#/ops/build-packet",
+      "app": "SHRV1",
+      "area": "Production Ops",
+      "classification": "private_shs_admin",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "AdminSidebar Production Ops",
+      "public_private_classification": "private",
+      "notes": "Protected route and sidebar link are present."
+    },
+    {
+      "route": "admin.html#/ops/screenshot-qa",
+      "app": "SHRV1",
+      "area": "Production Ops",
+      "classification": "private_shs_admin",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "AdminSidebar Production Ops",
+      "public_private_classification": "private",
+      "notes": "Protected route and sidebar link are present."
+    },
+    {
+      "route": "admin.html#/ops/learning",
+      "app": "SHRV1",
+      "area": "Production Ops",
+      "classification": "private_shs_admin",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "AdminSidebar Production Ops",
+      "public_private_classification": "private",
+      "notes": "Protected route and sidebar link are present."
+    },
+    {
+      "route": "admin.html#/truth-spine",
+      "app": "SHRV1",
+      "area": "Governance/Admin",
+      "classification": "private_shs_admin",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "AdminSidebar System",
+      "public_private_classification": "private",
+      "notes": "Protected route and sidebar link are present."
+    },
+    {
+      "route": "admin.html#/oracle",
+      "app": "SHRV1",
+      "area": "Governance/Admin",
+      "classification": "private_shs_admin",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "AdminSidebar System",
+      "public_private_classification": "private",
+      "notes": "Protected route and sidebar link are present."
+    },
+    {
+      "route": "admin.html#/agent-fabric",
+      "app": "SHRV1",
+      "area": "Governance/Admin",
+      "classification": "private_shs_admin",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "AdminSidebar System",
+      "public_private_classification": "private",
+      "notes": "Protected route and sidebar link are present."
+    },
+    {
+      "route": "admin.html#/reports",
+      "app": "SHRV1",
+      "area": "Governance/Admin",
+      "classification": "private_client_admin_shs_admin_permission_guarded",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "AdminSidebar Operations",
+      "public_private_classification": "private",
+      "notes": "Protected route, permission guard, and sidebar link are present."
+    },
+    {
+      "route": "admin.html#/watchtower",
+      "app": "SHRV1",
+      "area": "Governance/Admin",
+      "classification": "private_shs_admin_alias",
+      "status": "WARNING",
+      "exists": true,
+      "loads": "redirects_to_agent_fabric",
+      "reachable_from_nav": "no_direct_sidebar_link",
+      "public_private_classification": "private",
+      "notes": "Route aliases to Agent Fabric. No dedicated Watchtower admin page was found."
+    },
+    {
+      "route": "/ops/command",
+      "app": "SHF-Next",
+      "area": "Ops",
+      "classification": "internal_ops",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "OpsShell nav",
+      "public_private_classification": "private_internal",
+      "notes": "Manual pathname route renders OpsCommandOverview with CrossAppAccessNotice."
+    },
+    {
+      "route": "/ops/sales",
+      "app": "SHF-Next",
+      "area": "Ops",
+      "classification": "internal_ops",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "OpsShell nav",
+      "public_private_classification": "private_internal",
+      "notes": "Manual pathname route renders SalesCommandCenter with CrossAppAccessNotice."
+    },
+    {
+      "route": "/ops/projects",
+      "app": "SHF-Next",
+      "area": "Ops",
+      "classification": "internal_ops",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "OpsShell nav",
+      "public_private_classification": "private_internal",
+      "notes": "Manual pathname route renders ProductionProjects with CrossAppAccessNotice."
+    },
+    {
+      "route": "/ops/library",
+      "app": "SHF-Next",
+      "area": "Ops",
+      "classification": "internal_ops",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "OpsShell nav",
+      "public_private_classification": "private_internal",
+      "notes": "Manual pathname route renders DevelopmentLibrary via fallback branch with CrossAppAccessNotice."
+    },
+    {
+      "route": "/ops/qa",
+      "app": "SHF-Next",
+      "area": "Ops",
+      "classification": "internal_ops",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "OpsShell nav",
+      "public_private_classification": "private_internal",
+      "notes": "Manual pathname route renders QADeliveryDashboard with CrossAppAccessNotice."
+    },
+    {
+      "route": "/ops/clientops",
+      "app": "SHF-Next",
+      "area": "Ops",
+      "classification": "internal_ops",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "OpsShell nav",
+      "public_private_classification": "private_internal",
+      "notes": "Manual pathname route renders ClientOpsCenter with CrossAppAccessNotice."
+    },
+    {
+      "route": "/studio/templates",
+      "app": "SHF-Next",
+      "area": "Studio",
+      "classification": "public",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "Public home and solutions links",
+      "public_private_classification": "public",
+      "notes": "Route renders WebsiteStudioTemplates outside OpsShell and without CrossAppAccessNotice."
+    },
+    {
+      "route": "/studio/templates/browse",
+      "app": "SHF-Next",
+      "area": "Studio",
+      "classification": "public",
+      "status": "PASS",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "Studio template links",
+      "public_private_classification": "public",
+      "notes": "Route renders WebsiteStudioTemplateBrowse outside OpsShell and without CrossAppAccessNotice."
+    },
+    {
+      "route": "/foundation/data-approval",
+      "app": "SHF-Next",
+      "area": "Foundation Admin",
+      "classification": "internal_foundation_admin",
+      "status": "WARNING",
+      "exists": true,
+      "loads": "build_verified",
+      "reachable_from_nav": "Foundation report link",
+      "public_private_classification": "private_internal_notice",
+      "notes": "Route shows CrossAppAccessNotice and gateway, but production auth is not present in SHF-Next V1."
+    }
+  ],
+  "missing_routes": [],
+  "broken_navigation": [
+    {
+      "route": "admin.html#/hub/sales-pipeline",
+      "severity": "warning",
+      "issue": "Route is not listed in AdminSidebar; reachable through shared Hub business navigation and in-page links."
+    },
+    {
+      "route": "admin.html#/hub/opportunities",
+      "severity": "warning",
+      "issue": "Route is not listed in AdminSidebar; reachable through shared Hub business navigation and in-page links."
+    },
+    {
+      "route": "admin.html#/hub/bundles",
+      "severity": "warning",
+      "issue": "Route is not listed in AdminSidebar; reachable through shared Hub business navigation and in-page links."
+    },
+    {
+      "route": "admin.html#/watchtower",
+      "severity": "warning",
+      "issue": "Route redirects to Agent Fabric and has no direct sidebar link or dedicated Watchtower page."
+    }
+  ],
+  "public_private_risks": [
+    {
+      "route": "/foundation/data-approval",
+      "severity": "warning",
+      "risk": "Internal/foundation-admin gateway is reachable by public-looking path and relies on CrossAppAccessNotice rather than production auth."
+    },
+    {
+      "route": "/ops/*",
+      "severity": "warning",
+      "risk": "SHF-Next ops routes are internal by UI classification but do not implement production auth/session gating."
+    }
+  ],
+  "validation": {
+    "json_tool": "pass",
+    "shrv1_npm_run_build": "pass_with_existing_vite_large_chunk_warning",
+    "shrv1_npm_run_check_governance": "pass",
+    "shf_next_npm_run_build": "pass_with_vite_large_chunk_warning_after_escalated_rerun",
+    "shf_next_npm_run_lint": "pass"
+  },
+  "top_fixes": [
+    "Add explicit operator navigation for SHRV1 Hub sales routes if they are daily private beta routes.",
+    "Add a dedicated Watchtower surface later or document Agent Fabric as the official Watchtower-visible admin surface.",
+    "Replace SHF-Next CrossAppAccessNotice-only separation with production auth/session gating before paid launch.",
+    "Keep public Studio template browsing outside OpsShell.",
+    "Keep ClientOps, Production Ops, Sales Ops, QA, and Data Approval private/internal."
+  ],
+  "private_beta_ready": true
+}

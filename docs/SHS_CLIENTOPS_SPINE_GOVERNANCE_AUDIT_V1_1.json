@@ -1,0 +1,189 @@
+{
+  "audit_name": "SHS ClientOps Center V1.1 Spine Integration + Governance Visibility Audit",
+  "clientops_surfaces_found": [
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/production",
+      "file": "src/pages/admin/ops/OpsProductionDashboard.jsx",
+      "purpose": "SHS production ops dashboard and workflow shell"
+    },
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/projects",
+      "file": "src/pages/admin/ops/OpsProjectSetup.jsx",
+      "purpose": "Project setup"
+    },
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/brand-profile",
+      "file": "src/pages/admin/ops/OpsBrandProfile.jsx",
+      "purpose": "Brand profile"
+    },
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/page-intent",
+      "file": "src/pages/admin/ops/OpsPageIntent.jsx",
+      "purpose": "Page intent"
+    },
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/layout-blueprint",
+      "file": "src/pages/admin/ops/OpsLayoutBlueprint.jsx",
+      "purpose": "Layout blueprint"
+    },
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/visual-treatment",
+      "file": "src/pages/admin/ops/OpsVisualTreatment.jsx",
+      "purpose": "Visual treatment"
+    },
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/assets",
+      "file": "src/pages/admin/ops/OpsAssetGovernance.jsx",
+      "purpose": "Asset governance"
+    },
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/data-binding",
+      "file": "src/pages/admin/ops/OpsDataBinding.jsx",
+      "purpose": "Data binding"
+    },
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/mock-review",
+      "file": "src/pages/admin/ops/OpsMockReview.jsx",
+      "purpose": "Mock review"
+    },
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/build-packet",
+      "file": "src/pages/admin/ops/OpsBuildPacket.jsx",
+      "purpose": "Build packet"
+    },
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/screenshot-qa",
+      "file": "src/pages/admin/ops/OpsScreenshotQA.jsx",
+      "purpose": "Screenshot QA"
+    },
+    {
+      "app": "shrv1",
+      "route": "admin.html#/ops/learning",
+      "file": "src/pages/admin/ops/OpsLearningDashboard.jsx",
+      "purpose": "Learning dashboard"
+    },
+    {
+      "app": "shf-next",
+      "route": "/ops/clientops",
+      "file": "/Users/mikeslate/shf-next/src/pages/ops/ClientOpsCenter.tsx",
+      "purpose": "ClientOps Center: portfolio, maintenance, support, health, version history, upgrades, monthly review, exports"
+    },
+    {
+      "app": "shf-next",
+      "route": "/ops/clientops",
+      "file": "/Users/mikeslate/shf-next/src/data/clientOpsData.ts",
+      "purpose": "ClientOps data model and record creation"
+    }
+  ],
+  "route_visibility": {
+    "shrv1_admin_ops": "Internal admin routes under AuthGuard and ProtectedHubRoute; sidebar links present for Production Ops.",
+    "shf_next_clientops": "Internal route under OpsShell with CrossAppAccessNotice.",
+    "public_exposure_found": false,
+    "blank_fallback_found": false
+  },
+  "identity_permission_boundary": {
+    "shrv1": "Admin ops routes use protect(...) and hubAccessControl grants /ops/* to shs_admin.",
+    "shf_next": "/ops/clientops is INTERNAL_CLIENTOPS with required roles shs_admin and shs_clientops.",
+    "public_shf_pages_render_clientops": false,
+    "production_auth_claimed": false
+  },
+  "clientops_data_categories": [
+    "client_private",
+    "operational",
+    "support_ticket",
+    "maintenance",
+    "project_health",
+    "version_history",
+    "upgrade_opportunity",
+    "monthly_review",
+    "handoff_file",
+    "report_candidate",
+    "public_impact_candidate only after governance"
+  ],
+  "shs_spine_integration": {
+    "clientops_is_shs_spine_source": true,
+    "classification": "SHS_SPINE_SOURCE / PRIVATE_OPERATIONAL",
+    "source_file": "src/system/spines/shsSpine.js",
+    "metadata_added": "SHS_CLIENTOPS_SPINE_METADATA",
+    "raw_clientops_stays_in_shs_by_default": true
+  },
+  "shs_to_shf_boundary": {
+    "direct_public_shf_exposure_allowed": false,
+    "direct_shf_impact_data_mutation_allowed": false,
+    "required_path": [
+      "Adapter Layer",
+      "Batch / Import",
+      "Source Registry",
+      "Data Federation",
+      "Data Aggregator",
+      "Data Normalization",
+      "Evidence Package",
+      "Data Verification",
+      "Truth Spine",
+      "Oracle where applicable",
+      "Data Approval",
+      "Readiness Gate",
+      "Security / Privacy",
+      "Data Ownership / IP",
+      "Public Approval",
+      "Verified Aggregation",
+      "Data Approval Gateway",
+      "SHF Impact Data Spine after approval"
+    ]
+  },
+  "governance_visibility": {
+    "fixed": [
+      "Added explicit ClientOps SHS Spine metadata in src/system/spines/shsSpine.js."
+    ],
+    "already_visible": [
+      "SHS Spine formalization docs include ClientOps as source material.",
+      "Cross-app route bridge lists /ops/clientops as internal_notice.",
+      "SHF-Next identity bridge classifies /ops/clientops as INTERNAL_CLIENTOPS.",
+      "SHF-Next ClientOps report copy states external source wiring is intentionally not included in V1."
+    ],
+    "missing_or_deferred": [
+      "Visible ClientOps governance banner in SHF-Next remains post-V1.1 owner-approved consumer-app hardening.",
+      "Formal ClientOps V1 doc/check remains optional unless ClientOps becomes a governance-enforced layer."
+    ]
+  },
+  "reports_watchtower_relationship": {
+    "reports_exposes_governance_layers": true,
+    "watchtower_exposes_governance_layers": true,
+    "clientops_public_source_in_reports": false,
+    "clientops_public_source_in_watchtower": false,
+    "relationship": "ClientOps may feed reports only as governed report-candidate input after source, verification, approval, privacy, ownership, readiness, public approval, and gateway controls."
+  },
+  "changes_made": [
+    "src/system/spines/shsSpine.js",
+    "docs/SHS_CLIENTOPS_SPINE_GOVERNANCE_AUDIT_V1_1.md",
+    "docs/SHS_CLIENTOPS_SPINE_GOVERNANCE_AUDIT_V1_1.json"
+  ],
+  "post_v1_1_hardening": [
+    "Add internal-only SHF-Next ClientOps governance banner after owner approval.",
+    "Add real ClientOps Source Registry intake mapping only when governed intake is implemented.",
+    "Do not implement production auth in this audit pass.",
+    "Do not mutate SHF Impact Data Spine from ClientOps."
+  ],
+  "validation": {
+    "npm run check:governance": "PASS",
+    "python3 scripts/check_master_layer_registry.py": "PASS: Master Layer Registry checked 57 official registry rows/layers.",
+    "python3 scripts/check_truth_spine_freeze.py": "PASS: Truth Spine V1 freeze checks passed.",
+    "npm run build": "PASS: Vite build completed with existing large-chunk warning.",
+    "python3 -m json.tool docs/SHS_CLIENTOPS_SPINE_GOVERNANCE_AUDIT_V1_1.json": "PASS",
+    "shf-next npm run build": "PASS after approved sandbox escalation for TypeScript build info writes under node_modules/.tmp.",
+    "shf-next npm run lint": "PASS",
+    "git safety": "PASS: SHRV1 git status/diff reviewed; /Users/mikeslate/shf-next is not a git repository."
+  },
+  "v1_1_complete": true
+}

@@ -1,0 +1,173 @@
+{
+  "name": "Environment / ADMIN_API_KEY Guidance V1",
+  "environment_levels": [
+    {
+      "level": "local_dev",
+      "host_base_url_pattern": "Loopback-only SHRV1 and SHF-Next Vite hosts, typically http://127.0.0.1:5174 and http://127.0.0.1:5175.",
+      "admin_api_key_expectation": "Optional for frontend-only work; required only when local smoke checks call admin-protected Agent Fabric endpoints.",
+      "route_bridge_expectation": "May use default local bridge URLs or explicit VITE_SHRV1_BASE_URL and VITE_SHF_NEXT_BASE_URL values.",
+      "identity_bridge_expectation": "Local-dev identity bridge metadata only; no production identity assumptions.",
+      "secret_handling": "Use only placeholder or local-only keys in untracked env files.",
+      "must_not_commit": [".env", ".env.*", ".env.local", "real ADMIN_API_KEY values", "tokens", "authorization headers", "secret-bearing logs"]
+    },
+    {
+      "level": "local_smoke",
+      "host_base_url_pattern": "Loopback-only local servers for SHRV1, SHF-Next, and Agent Fabric.",
+      "admin_api_key_expectation": "Set ADMIN_API_KEY in the shell for smoke commands that require X-Admin-Key; never echo it into reports.",
+      "route_bridge_expectation": "Use explicit local base URLs when both repos are running.",
+      "identity_bridge_expectation": "Use internal/local route notices and local bridge classifications.",
+      "secret_handling": "Keep key values in shell environment or ignored local env files.",
+      "must_not_commit": ["smoke command output containing keys", "runtime logs with secrets", "local persistence files"]
+    },
+    {
+      "level": "staging",
+      "host_base_url_pattern": "HTTPS staging domains or owner-approved internal staging URLs.",
+      "admin_api_key_expectation": "Required for admin-protected backend calls and stored only in the staging secret manager.",
+      "route_bridge_expectation": "Must set VITE_SHRV1_BASE_URL and VITE_SHF_NEXT_BASE_URL to staging-safe HTTPS origins.",
+      "identity_bridge_expectation": "Must identify staging as non-production and keep internal surfaces gated/noticed.",
+      "secret_handling": "Secrets are injected by hosting/runtime configuration, not committed to the repo.",
+      "must_not_commit": ["staging keys", "staging secret exports", "staging service tokens"]
+    },
+    {
+      "level": "production",
+      "host_base_url_pattern": "Canonical HTTPS production domains only.",
+      "admin_api_key_expectation": "Required, high-entropy, owner-controlled, rotated, and stored in production secret management.",
+      "route_bridge_expectation": "Must use explicit production base URLs; no localhost defaults in production deployment config.",
+      "identity_bridge_expectation": "Must use production identity/session rules before paid or public launch.",
+      "secret_handling": "No secret appears in client bundles, logs, docs, commits, screenshots, or reports.",
+      "must_not_commit": ["production keys", "production env files", "production auth headers", "production incident secrets"]
+    },
+    {
+      "level": "demo_funder_demo",
+      "host_base_url_pattern": "Demo-approved local, staging, or controlled public demo URL.",
+      "admin_api_key_expectation": "Use a demo/staging key only when an operator runs protected admin actions; never expose keys to demo viewers.",
+      "route_bridge_expectation": "Public demo routes must stay public-safe; internal routes require controlled operator access.",
+      "identity_bridge_expectation": "Demo identity must be clearly marked as demo/internal and must not imply production auth.",
+      "secret_handling": "No real keys in decks, screen recordings, reports, or screenshots.",
+      "must_not_commit": ["demo secrets", "client secrets", "private client data exported for demos"]
+    }
+  ],
+  "admin_api_key_rules": [
+    "ADMIN_API_KEY is server-side configuration for admin-protected Agent Fabric operations.",
+    "ADMIN_API_KEY must never be embedded in Vite client code, route URLs, query strings, docs, screenshots, or committed files.",
+    "Admin smoke commands may send the key as X-Admin-Key only from local shell or managed runtime secrets.",
+    "If ADMIN_API_KEY is missing on protected backend endpoints, the backend should fail closed rather than silently allow access.",
+    "Local examples may use placeholder text only.",
+    "Staging and production keys must be high-entropy, owner-controlled, environment-specific, and rotated after suspected exposure.",
+    "The same key must not be shared across local, staging, demo, and production environments."
+  ],
+  "cross_app_env_vars": [
+    {
+      "name": "VITE_SHRV1_BASE_URL",
+      "purpose": "Base URL used by SHRV1/SHF-Next route bridge links back to SHRV1 admin surfaces.",
+      "local_default": "http://127.0.0.1:5174",
+      "secret": false
+    },
+    {
+      "name": "VITE_SHF_NEXT_BASE_URL",
+      "purpose": "Base URL used by cross-app links into SHF-Next public and internal surfaces.",
+      "local_default": "http://127.0.0.1:5175",
+      "secret": false
+    },
+    {
+      "name": "SHF_WEB_ORIGIN",
+      "purpose": "Optional backend CORS origin value for local or deployed web origin configuration.",
+      "local_default": "http://127.0.0.1:5174",
+      "secret": false
+    }
+  ],
+  "env_file_policy": {
+    "env_files_ignored": true,
+    "env_example_allowed": true,
+    "env_example_contains_only_placeholders": true,
+    "real_secrets_allowed_in_repo": false,
+    "gitignore_status": ".env and .env.* are ignored; .env.example is allowed for placeholder documentation."
+  },
+  "env_example_created_or_updated": true,
+  "gitignore_updated": false,
+  "secret_scanning_checklist": [
+    "Review git status before staging.",
+    "Review git diff for .env.example and docs that mention environment variables.",
+    "Search for ADMIN_API_KEY assignments outside .env.example and ignored local env files.",
+    "Search staged changes for bearer tokens, API keys, private keys, passwords, and authorization headers.",
+    "Confirm no runtime logs, local JSON persistence, dist output, node_modules, or cache files are staged.",
+    "Confirm screenshots, PDFs, and demo exports do not show secrets."
+  ],
+  "production_readiness_requirements": [
+    "Production ADMIN_API_KEY is configured in a secret manager, not in the repository.",
+    "Production SHRV1 and SHF-Next base URLs are HTTPS and explicit.",
+    "Admin-protected endpoints are smoke-tested with missing, invalid, and valid admin key cases.",
+    "Public routes never require or display admin key metadata.",
+    "Internal routes remain private, gated, or clearly internal-noticed.",
+    "CORS origins are explicit for production domains.",
+    "Key rotation and suspected leak procedures are documented and rehearsed.",
+    "Production persistence, auth/session, and paid-launch gates are complete before paid launch."
+  ],
+  "local_setup_checklist": [
+    "Copy .env.example to an ignored local env file such as .env.local.",
+    "Replace ADMIN_API_KEY placeholder locally only if admin smoke checks are needed.",
+    "Start SHRV1 on the configured VITE_SHRV1_BASE_URL.",
+    "Start SHF-Next on the configured VITE_SHF_NEXT_BASE_URL if cross-app links are being tested.",
+    "Run npm run check:governance and npm run build before release packaging."
+  ],
+  "staging_setup_checklist": [
+    "Configure ADMIN_API_KEY in staging secret management.",
+    "Configure VITE_SHRV1_BASE_URL and VITE_SHF_NEXT_BASE_URL to staging HTTPS origins.",
+    "Configure backend allowed web origin for the staging frontend.",
+    "Run governance, build, route bridge, identity bridge, and admin endpoint smoke checks.",
+    "Confirm no staging secrets appear in logs or build artifacts."
+  ],
+  "production_setup_checklist": [
+    "Create a production-only ADMIN_API_KEY in secret management.",
+    "Configure production HTTPS base URLs explicitly.",
+    "Confirm production CORS origins.",
+    "Confirm public/private route classification before launch.",
+    "Run final secret scan, governance checks, build, and protected endpoint smoke tests.",
+    "Record owner approval for paid/public launch."
+  ],
+  "key_rotation_checklist": [
+    "Generate a new environment-specific key.",
+    "Update the secret manager for the target environment.",
+    "Restart or redeploy services that read ADMIN_API_KEY.",
+    "Run missing, invalid, and valid key smoke checks.",
+    "Revoke the old key.",
+    "Record the rotation date, owner, and reason outside public docs."
+  ],
+  "suspected_leak_checklist": [
+    "Treat the key as compromised immediately.",
+    "Rotate the key before continuing normal operations.",
+    "Search git history, current diffs, logs, screenshots, and exported artifacts for the leaked value.",
+    "Remove or quarantine exposed artifacts.",
+    "Audit admin endpoint access around the exposure window.",
+    "Document the incident and prevention step without recording the secret value."
+  ],
+  "validation": {
+    "json_tool": "PASS",
+    "npm_check_governance": "PASS",
+    "check_master_layer_registry": "PASS",
+    "check_truth_spine_freeze": "PASS",
+    "check_duplicate_layer_cleanup": "PASS",
+    "check_runtime_log_hygiene": "PASS",
+    "npm_build": "PASS with existing Vite large-chunk warning",
+    "env_git_diff": "PASS: git diff -- .gitignore .env.example produced no tracked diff output because .env.example is newly untracked"
+  },
+  "git_safety": {
+    "git_status_short": "Only untracked files: .env.example, ENVIRONMENT_ADMIN_API_KEY_GUIDANCE_V1 docs, and pre-existing PRODUCTION_PERSISTENCE_DECISION_RECORD_V1 docs.",
+    "git_diff_name_status": "No tracked diff output.",
+    "git_diff_stat": "No tracked diff output.",
+    "commit_performed": false,
+    "real_secrets_added": false,
+    "runtime_behavior_changed": false
+  },
+  "files_changed": [
+    ".env.example",
+    "docs/ENVIRONMENT_ADMIN_API_KEY_GUIDANCE_V1.md",
+    "docs/ENVIRONMENT_ADMIN_API_KEY_GUIDANCE_V1.json"
+  ],
+  "remaining_risks": [
+    "This guidance does not implement production auth/session hardening.",
+    "Operator discipline is still required to keep real secrets out of screenshots, logs, and local reports.",
+    "Production readiness still depends on external secret management and deployment configuration."
+  ],
+  "v1_complete": true
+}

@@ -1,0 +1,151 @@
+{
+  "audit_name": "Final Master Layer Registry V1 Completion Re-Audit",
+  "total_registry_rows": 57,
+  "governance_required_layers": 57,
+  "check_script_required_count": 57,
+  "required_count_matches_expected_v1_scope": true,
+  "status_counts": {
+    "complete_v1": 33,
+    "mostly_complete": 21,
+    "scaffolded_v1": 3,
+    "partial": 0,
+    "needs_formal_v1": 0,
+    "duplicate_or_merge_required": 0,
+    "not_started": 0,
+    "owner_decision_required": 0
+  },
+  "layers": [
+    {"layer": "Identity & Access", "status": "COMPLETE_V1", "evidence": ["registry entry", "admin access controls", "route permission controls", "cross-app identity boundary"], "remaining": "routine hardening only"},
+    {"layer": "SHS Spine", "status": "COMPLETE_V1", "evidence": ["registry entry", "SHS_SPINE_FORMALIZATION_V1 docs", "Truth Spine guardrail boundary", "advisory config scaffold"], "remaining": "future runtime ingestion enforcement"},
+    {"layer": "SHF Spine", "status": "COMPLETE_V1", "evidence": ["registry entry", "SHS_SPINE_FORMALIZATION_V1 docs", "public impact spine distinction", "public-approved data rule"], "remaining": "future runtime transfer enforcement"},
+    {"layer": "SHS→SHF Data Flow Boundary", "status": "COMPLETE_V1", "evidence": ["registry entry", "SHS_SPINE_FORMALIZATION_V1 docs", "Truth Spine guardrail boundary", "public/private leakage doctrine"], "remaining": "future runtime transfer enforcement"},
+    {"layer": "API Gateway", "status": "COMPLETE_V1", "evidence": ["registry entry", "V1 docs and JSON", "service", "router", "tests", "governance check", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "Event/Webhook", "status": "COMPLETE_V1", "evidence": ["registry entry", "V1 docs and JSON", "service", "router", "tests", "governance check", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "Batch/Import", "status": "COMPLETE_V1", "evidence": ["registry entry", "V1 docs and JSON", "service", "router", "tests", "governance check", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "Source Registry Layer", "status": "COMPLETE_V1", "evidence": ["registry entry", "V1 docs and JSON", "service", "router", "tests", "governance check", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "Data Federation Layer", "status": "COMPLETE_V1", "evidence": ["registry entry", "V1 docs and JSON", "service", "router", "tests", "governance check", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "Data Aggregator Layer", "status": "COMPLETE_V1", "evidence": ["registry entry", "V1 docs and JSON", "service", "router", "tests", "governance check", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "Data Normalization Layer", "status": "COMPLETE_V1", "evidence": ["registry entry", "V1 docs and JSON", "service", "router", "tests", "governance check", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "Evidence Package Layer", "status": "COMPLETE_V1", "evidence": ["registry entry", "V1 docs and JSON", "service", "router", "tests", "governance check", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "Data Verification Layer", "status": "COMPLETE_V1", "evidence": ["registry entry", "V1 docs and JSON", "service", "router", "tests", "governance check", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "Data Approval Layer", "status": "COMPLETE_V1", "evidence": ["registry entry", "V1 docs and JSON", "service", "router", "tests", "governance check", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "Warehouse Sync", "status": "COMPLETE_V1", "evidence": ["registry entry", "V1 docs and JSON", "service", "router", "tests", "governance check", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "Apps/Programs", "status": "MOSTLY_COMPLETE", "evidence": ["registry entry", "app/program signal boundary", "route/app surfaces"], "remaining": "post-V1 app-by-app hardening"},
+    {"layer": "Adapter Layer", "status": "COMPLETE_V1", "evidence": ["registry entry", "V1 docs and JSON", "service", "router", "tests", "governance check", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "Truth Spine", "status": "COMPLETE_V1", "evidence": ["registry entry", "TRUTH_SPINE_V1 docs", "freeze docs", "service", "router", "tests", "governance check", "Admin UI", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "Oracle Layer", "status": "COMPLETE_V1", "evidence": ["registry entry", "V1 docs and JSON", "service", "router", "tests", "governance check", "Admin UI", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "Game Theory Layer", "status": "COMPLETE_V1", "evidence": ["registry entry", "V1 docs and JSON", "service", "router", "tests", "governance check", "Admin UI", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "AI/Swarm Layer", "status": "COMPLETE_V1", "evidence": ["registry entry", "AI_SWARM_GUARDRAILS_V1 docs", "router/service evidence", "tests", "governance check", "Admin UI"], "remaining": "no V1 blocker"},
+    {"layer": "Policy Engine", "status": "COMPLETE_V1", "evidence": ["registry entry", "V1 docs and JSON", "service", "router", "tests", "governance check", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "Alignment Layer", "status": "MOSTLY_COMPLETE", "evidence": ["registry entry", "alignment routers", "admin surfaces", "Truth Spine guardrails"], "remaining": "post-V1 dedicated formalization polish"},
+    {"layer": "LOO", "status": "COMPLETE_V1", "evidence": ["registry entry", "LOO routers/tests", "trust metadata boundary", "Reports/Watchtower relationship"], "remaining": "post-V1 display hardening"},
+    {"layer": "Watchtower", "status": "COMPLETE_V1", "evidence": ["registry entry", "routers", "tests", "risk/coverage checks", "Reports relationship"], "remaining": "no V1 blocker"},
+    {"layer": "Governance Layer", "status": "MOSTLY_COMPLETE", "evidence": ["registry entry", "governance docs", "registry checks", "guardrails"], "remaining": "post-V1 dedicated governance-layer doc/check consolidation"},
+    {"layer": "Audit & Verification", "status": "COMPLETE_V1", "evidence": ["registry entry", "V1 docs and JSON", "service", "router", "tests", "governance check", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "Readiness Gate", "status": "COMPLETE_V1", "evidence": ["registry entry", "V1 docs and JSON", "service", "router", "tests", "governance check", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "Verified Aggregation", "status": "COMPLETE_V1", "evidence": ["registry entry", "V1 docs and JSON", "service", "router", "tests", "governance check", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "Reports", "status": "COMPLETE_V1", "evidence": ["registry entry", "reports router", "Truth metadata integration", "layer summary visibility"], "remaining": "no V1 blocker"},
+    {"layer": "Funding Intelligence", "status": "MOSTLY_COMPLETE", "evidence": ["registry entry", "funding routes/tests", "funding policy guard"], "remaining": "post-V1 funding-layer documentation polish"},
+    {"layer": "Public Approval", "status": "COMPLETE_V1", "evidence": ["registry entry", "V1 docs and JSON", "service", "router", "tests", "governance check", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "Narrative/Story", "status": "MOSTLY_COMPLETE", "evidence": ["registry entry", "communications boundary", "public approval dependency"], "remaining": "post-V1 formal narrative workflow doc"},
+    {"layer": "Partner/Institution", "status": "MOSTLY_COMPLETE", "evidence": ["registry entry", "partner routes", "source intake relationship"], "remaining": "post-V1 formal partner workflow doc"},
+    {"layer": "Security/Privacy", "status": "COMPLETE_V1", "evidence": ["registry entry", "V1 docs and JSON", "service", "router", "tests", "governance check", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "Data Ownership/IP", "status": "COMPLETE_V1", "evidence": ["registry entry", "V1 docs and JSON", "service", "router", "tests", "governance check", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "Decision Journal", "status": "MOSTLY_COMPLETE", "evidence": ["registry entry", "decision routes/service evidence", "replay relationship"], "remaining": "post-V1 formal layer doc/check"},
+    {"layer": "Replay Engine", "status": "MOSTLY_COMPLETE", "evidence": ["registry entry", "replay route/test evidence", "Truth Spine replay guardrails"], "remaining": "post-V1 formal layer doc/check"},
+    {"layer": "Signed Manifest", "status": "MOSTLY_COMPLETE", "evidence": ["registry entry", "manifest validation scripts", "build precheck"], "remaining": "post-V1 formal layer doc/check"},
+    {"layer": "Self-Audit", "status": "MOSTLY_COMPLETE", "evidence": ["registry entry", "self-audit route/check evidence", "governance check chain"], "remaining": "post-V1 formal layer doc/check"},
+    {"layer": "Layer Control System", "status": "COMPLETE_V1", "evidence": ["registry entry", "Master Layer Registry", "registry enforcement script", "architecture proposal checker"], "remaining": "no V1 blocker"},
+    {"layer": "Context-Adaptive Analyst", "status": "MOSTLY_COMPLETE", "evidence": ["registry entry", "analyst/admin evidence", "Truth Spine/Oracle dependency"], "remaining": "post-V1 formal layer doc/check"},
+    {"layer": "SHS Sales Layer", "status": "MOSTLY_COMPLETE", "evidence": ["registry entry", "sales pipeline/admin surfaces", "operator runbook"], "remaining": "post-V1 formal layer doc/check"},
+    {"layer": "Production Ops", "status": "MOSTLY_COMPLETE", "evidence": ["registry entry", "ops routes/pages", "operator runbook", "launch workflow"], "remaining": "post-V1 production durability hardening"},
+    {"layer": "Development Library", "status": "MOSTLY_COMPLETE", "evidence": ["registry entry", "library route/surface", "build packet runbook"], "remaining": "post-V1 formal layer doc/check"},
+    {"layer": "QA + Delivery", "status": "MOSTLY_COMPLETE", "evidence": ["registry entry", "QA/delivery runbook", "private beta audits"], "remaining": "post-V1 durable signoff enforcement"},
+    {"layer": "ClientOps", "status": "MOSTLY_COMPLETE", "evidence": ["registry entry", "ClientOps runbook", "private beta audits", "launch workflow ClientOps activation gate"], "remaining": "post-V1 production persistence/auth hardening"},
+    {"layer": "Website Studio", "status": "MOSTLY_COMPLETE", "evidence": ["registry entry", "BuilderHub/WebMaker boundary", "admin/public route distinction"], "remaining": "post-V1 shared asset consolidation"},
+    {"layer": "Production Automation", "status": "COMPLETE_V1", "evidence": ["registry entry", "V1 docs and JSON", "service", "router", "tests", "governance check", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "Notification / Alert", "status": "COMPLETE_V1", "evidence": ["registry entry", "V1 docs and JSON", "service", "router", "tests", "governance check", "Reports visibility", "Watchtower visibility"], "remaining": "no V1 blocker"},
+    {"layer": "SHF Impact Command Center", "status": "MOSTLY_COMPLETE", "evidence": ["registry entry", "command center UI", "SHF impact data spine status"], "remaining": "post-V1 formal layer doc/check"},
+    {"layer": "Public Impact Map", "status": "MOSTLY_COMPLETE", "evidence": ["registry entry", "map component", "public-approved data filtering"], "remaining": "post-V1 map evidence hardening"},
+    {"layer": "Career Pathways", "status": "SCAFFOLDED_V1", "evidence": ["registry entry", "program boundary"], "remaining": "post-V1 program workflow formalization"},
+    {"layer": "Program Registry", "status": "MOSTLY_COMPLETE", "evidence": ["registry entry", "program adapter contract tests"], "remaining": "post-V1 formal layer doc/check"},
+    {"layer": "Sponsorship Layer", "status": "SCAFFOLDED_V1", "evidence": ["registry entry", "funding/narrative dependency"], "remaining": "post-V1 sponsorship workflow formalization"},
+    {"layer": "Grant/Proposal Layer", "status": "SCAFFOLDED_V1", "evidence": ["registry entry", "proposal/binder boundary"], "remaining": "post-V1 proposal workflow formalization"},
+    {"layer": "Governance Binder", "status": "MOSTLY_COMPLETE", "evidence": ["registry entry", "governance/report dependencies"], "remaining": "post-V1 binder packaging polish"}
+  ],
+  "source_to_public_pipeline": {
+    "complete": true,
+    "missing_links": [],
+    "pipeline": [
+      "SHS Spine",
+      "Batch / Import",
+      "Adapter Layer",
+      "Source Registry",
+      "Data Federation",
+      "Data Aggregator",
+      "Data Normalization",
+      "Evidence Package",
+      "Data Verification",
+      "Truth Spine",
+      "Oracle",
+      "Data Approval",
+      "Readiness Gate",
+      "Security / Privacy",
+      "Data Ownership / IP",
+      "Public Approval",
+      "Data Approval Gateway",
+      "SHF Spine / SHF Impact Data Spine",
+      "Warehouse Sync",
+      "Reports / Watchtower / LOO"
+    ]
+  },
+  "public_safety_boundaries": {
+    "truth_authority_clean": true,
+    "oracle_boundary_clean": true,
+    "public_approval_boundary_clean": true,
+    "shf_impact_mutation_boundary_clean": true,
+    "automation_delivery_boundaries_clean": true
+  },
+  "shs_shf_spine_distinction": {
+    "complete": true,
+    "findings": [
+      "SHS Spine is documented as upstream operational/private/client/business data.",
+      "SHF Spine is documented as downstream governed/public impact data.",
+      "SHS feeds SHF only through source, evidence, verification, approval, privacy, ownership, readiness, public approval, and Data Approval Gateway controls.",
+      "SHF does not own raw SHS client/private data.",
+      "SHS private data cannot enter public SHF surfaces without approval."
+    ]
+  },
+  "validation": {
+    "npm run check:governance": "PASS",
+    "python3 scripts/check_master_layer_registry.py": "PASS",
+    "python3 scripts/check_truth_spine_freeze.py": "PASS",
+    "python3 scripts/check_duplicate_layer_cleanup.py": "PASS"
+  },
+  "pytest": {
+    "focused_governance_route_tests": "PASS",
+    "focused_governance_route_tests_count": 168
+  },
+  "build": {
+    "npm run build": "PASS",
+    "notes": "Build passed with the existing Vite large-chunk warning."
+  },
+  "git_safety": {
+    "commit_performed": false,
+    "runtime_behavior_changed": false,
+    "notes": "Only audit report files were created by this task; pre-existing runtime audit log dirtiness may remain."
+  },
+  "remaining_for_v1": [],
+  "post_v1_hardening": [
+    "Formalize optional dedicated docs/checks for mostly-complete operational and communications workflow layers.",
+    "Add durable persistence/auth hardening for paid launch workflows.",
+    "Continue archive cleanup and staged commit discipline separately from this audit.",
+    "Consolidate product-facing admin/UI evidence into owner-approved release packets."
+  ],
+  "v1_completion_assessment": {
+    "is_v1_governance_complete": true,
+    "reason": "The Master Layer Registry now has 57 official rows with matching structured entries; the registry checker validates all rows; the source-to-public pipeline is represented end to end; recent formalized layers have docs, JSON, services, routers, tests, governance checks, and Reports/Watchtower summary visibility where applicable; governance, focused pytest, and build validation passed.",
+    "blocking_items": [],
+    "recommended_next_action": "Mark SHS governance foundation V1 complete, then move to post-V1 hardening: durable production persistence/auth, paid-launch gates, and owner-approved staging/commit packaging."
+  }
+}

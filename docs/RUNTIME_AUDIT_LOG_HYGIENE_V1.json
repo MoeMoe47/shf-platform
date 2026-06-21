@@ -1,0 +1,73 @@
+{
+  "name": "Runtime Audit / Log Hygiene V1",
+  "problem": "Validation and API smoke runs can append runtime audit rows to tracked files such as services/shf-agent-fabric/var/watchtower_audit.jsonl, leaving the working tree dirty and creating release/staging risk.",
+  "tracked_runtime_files": [
+    "services/shf-agent-fabric/var/audit_exports/watchtower_attestations_20260218_202229.jsonl",
+    "services/shf-agent-fabric/var/audit_exports/watchtower_snapshots_20260218_193202.jsonl",
+    "services/shf-agent-fabric/var/audit_exports/watchtower_snapshots_20260218_200130.jsonl",
+    "services/shf-agent-fabric/var/audit_exports/watchtower_snapshots_20260218_200654.jsonl",
+    "services/shf-agent-fabric/var/audit_exports/watchtower_snapshots_20260218_202229.jsonl",
+    "services/shf-agent-fabric/var/watchtower_audit.jsonl"
+  ],
+  "dirty_runtime_files_before": [],
+  "implemented_changes": [
+    "Created scripts/check_runtime_log_hygiene.py to report tracked/dirty runtime log state.",
+    "Created scripts/clean_runtime_audit_logs.sh as a narrow cleanup helper for the known tracked Watchtower runtime audit file.",
+    "Added npm run check:runtime-log-hygiene.",
+    "Added npm run check:runtime-log-hygiene:strict.",
+    "Added non-strict runtime hygiene check to npm run check:governance.",
+    "Created Runtime Audit / Log Hygiene V1 documentation and JSON evidence."
+  ],
+  "package_scripts_added": [
+    "check:runtime-log-hygiene",
+    "check:runtime-log-hygiene:strict"
+  ],
+  "cleanup_helper": "scripts/clean_runtime_audit_logs.sh",
+  "strict_check_available": true,
+  "added_to_governance": true,
+  "owner_approval_required_for": [
+    "Removing services/shf-agent-fabric/var/watchtower_audit.jsonl from git tracking.",
+    "Replacing tracked runtime logs with sample/template files.",
+    "Adding narrow .gitignore rules for currently tracked runtime audit artifacts.",
+    "Moving runtime audit output paths or changing Watchtower audit write behavior."
+  ],
+  "recommended_cleanup_commands": [
+    "python3 scripts/check_runtime_log_hygiene.py",
+    "python3 scripts/check_runtime_log_hygiene.py --strict",
+    "bash scripts/clean_runtime_audit_logs.sh",
+    "git status --short services/shf-agent-fabric/var services/shf-agent-fabric/db services/shf-agent-fabric/logs"
+  ],
+  "validation": {
+    "python3 -m py_compile scripts/check_runtime_log_hygiene.py": "PASS",
+    "python3 scripts/check_runtime_log_hygiene.py": "PASS: checked 22 runtime paths; dirty tracked runtime files 0.",
+    "python3 scripts/check_runtime_log_hygiene.py --strict": "PASS: checked 22 runtime paths; dirty tracked runtime files 0.",
+    "bash scripts/clean_runtime_audit_logs.sh": "PASS: watchtower_audit.jsonl was already clean; no restore needed.",
+    "npm run check:governance": "PASS, including non-strict runtime-log hygiene check.",
+    "npm run build": "PASS with existing Vite large-chunk warning.",
+    "python3 scripts/check_master_layer_registry.py": "PASS: Master Layer Registry checked 57 official registry rows/layers.",
+    "python3 scripts/check_truth_spine_freeze.py": "PASS: Truth Spine V1 freeze checks passed."
+  },
+  "git_safety": {
+    "commit_performed": false,
+    "deleted_files": false,
+    "moved_files": false,
+    "audit_logging_disabled": false,
+    "watchtower_business_logic_changed": false,
+    "api_behavior_changed": false
+  },
+  "files_changed": [
+    "docs/RUNTIME_AUDIT_LOG_HYGIENE_V1.md",
+    "docs/RUNTIME_AUDIT_LOG_HYGIENE_V1.json",
+    "scripts/check_runtime_log_hygiene.py",
+    "scripts/clean_runtime_audit_logs.sh",
+    "package.json"
+  ],
+  "remaining_risks": [
+    "services/shf-agent-fabric/var/watchtower_audit.jsonl remains tracked until owner approves de-tracking or sample/template conversion.",
+    "Historical watchtower audit export jsonl files under services/shf-agent-fabric/var/audit_exports remain tracked and should not be cleaned by the helper without owner review.",
+    "Non-strict governance check reports runtime hygiene but does not fail normal smoke workflows.",
+    "Strict runtime hygiene must be run explicitly before release or paid-launch staging.",
+    "Future Watchtower/API smoke runs may still dirty tracked runtime files until the owner-approved de-tracking or path strategy is completed."
+  ],
+  "v1_complete": true
+}

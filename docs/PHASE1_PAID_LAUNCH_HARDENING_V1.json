@@ -1,0 +1,218 @@
+{
+  "name": "Phase 1 Paid-Launch Hardening V1",
+  "v1_governance_complete": true,
+  "phase": "paid_launch_hardening",
+  "runtime_audit_log_hygiene": {
+    "status": "assessed_no_runtime_changes",
+    "tracked_runtime_files": [
+      {
+        "path": "services/shf-agent-fabric/var/watchtower_audit.jsonl",
+        "tracked": true,
+        "current_status": "clean_at_initial_inspection",
+        "risk": "Validation and smoke runs can append rows, creating paid-launch release noise."
+      },
+      {
+        "path": "services/shf-agent-fabric/var/watchtower_store.sqlite",
+        "tracked": false,
+        "current_status": "present_runtime_store",
+        "risk": "Runtime store is present under var and should remain out of release commits unless explicitly approved."
+      },
+      {
+        "path": "services/shf-agent-fabric/logs/*.log",
+        "tracked": "not listed by git ls-files during this audit",
+        "current_status": "ignored_by_existing_gitignore_patterns",
+        "risk": "Local logs can grow and should remain excluded from release commits."
+      },
+      {
+        "path": "services/shf-agent-fabric/db/*",
+        "tracked": "mixed_runtime_and_scaffold_files_exist",
+        "current_status": "db directory is ignored by top-level .gitignore, but existing tracked files may remain from prior history",
+        "risk": "Production persistence must not be inferred from local JSON, sqlite, or jsonl files."
+      }
+    ],
+    "recommendations": [
+      "Do not delete or rewrite runtime audit files in this Phase 1 task.",
+      "Before paid launch, owner should decide whether watchtower_audit.jsonl is a committed sample fixture, a generated runtime file, or an externally archived audit artifact.",
+      "If treated as runtime, move future writes to an ignored runtime directory or add a narrow ignore rule after preserving any required sample/template evidence.",
+      "Document a safe cleanup command for releases: git status --short services/shf-agent-fabric/var services/shf-agent-fabric/logs services/shf-agent-fabric/db.",
+      "Validation should include a runtime dirty-file check before staging and before release signoff.",
+      "If a sample is required, create an explicit sample such as services/shf-agent-fabric/var/watchtower_audit.sample.jsonl rather than relying on live runtime output."
+    ],
+    "implemented_changes": [
+      "Created Phase 1 hardening documentation only.",
+      "No runtime files were modified, deleted, reset, or moved.",
+      "No .gitignore rule was changed in this pass."
+    ]
+  },
+  "paid_launch_release_checklist": [
+    "Confirm npm run check:governance passes.",
+    "Confirm npm run build passes; document any existing Vite large-chunk warning.",
+    "Run focused pytest for Truth Spine, Oracle, AI Guardrails, Game Theory, SHS Launch Ledger, and newly touched route layers.",
+    "Run private beta route smoke evidence for admin, ops, reports, watchtower, and SHF-Next split routes.",
+    "Confirm Reports and Watchtower expose governance visibility for touched layers.",
+    "Confirm SHS to SHF boundary: no SHS private operational data enters public SHF surfaces.",
+    "Confirm public-approved mutation guard: no layer directly mutates shfImpactData or labels records public-approved outside the approved gateway process.",
+    "Confirm Security/Privacy and Data Ownership/IP are required before public release decisions.",
+    "Confirm ADMIN_API_KEY exists only in environment or secret manager, not repo or docs.",
+    "Confirm staging and production base URLs for SHRV1 and SHF-Next are configured outside source.",
+    "Confirm rollback plan exists for the release.",
+    "Confirm release notes include governance checks, changed routes, affected layers, known warnings, and runtime dirty-file status.",
+    "Confirm no Batch 5 archive removals, runtime logs, dist output, local DB files, or cache files are staged accidentally.",
+    "Confirm owner approval for paid-launch release is recorded before any paid client launch."
+  ],
+  "production_persistence_decision_record": [
+    {
+      "layer": "Source Registry",
+      "v1_decision": "remain deterministic/review-only until owner-approved persistence design",
+      "future_need": "durable source ownership, provenance, eligibility, and source audit records"
+    },
+    {
+      "layer": "Data Federation",
+      "v1_decision": "remain deterministic/review-only until owner-approved persistence design",
+      "future_need": "durable federation groups, conflicts, lineage, and partner trust state"
+    },
+    {
+      "layer": "Data Aggregator",
+      "v1_decision": "remain deterministic/review-only until owner-approved persistence design",
+      "future_need": "durable intake batches, aggregation traces, and blocked/draft intake records"
+    },
+    {
+      "layer": "Data Normalization",
+      "v1_decision": "remain deterministic/scaffold-only until owner-approved persistence design",
+      "future_need": "durable normalized payload versions, aliases, schema mappings, and provenance"
+    },
+    {
+      "layer": "Evidence Package",
+      "v1_decision": "remain deterministic/review-only until owner-approved persistence design",
+      "future_need": "durable evidence bundle records, package hashes, and review packets"
+    },
+    {
+      "layer": "Data Verification",
+      "v1_decision": "remain deterministic/review-only until owner-approved persistence design",
+      "future_need": "durable verification-readiness decisions and blocker/warning history"
+    },
+    {
+      "layer": "Data Approval",
+      "v1_decision": "remain deterministic/review-only until owner-approved persistence design",
+      "future_need": "durable approval-readiness packets tied to human gateway decisions"
+    },
+    {
+      "layer": "Public Approval",
+      "v1_decision": "remain deterministic/review-only and must not mark records public-approved in V1",
+      "future_need": "durable public release decisions with owner, privacy, IP, readiness, and rollback evidence"
+    },
+    {
+      "layer": "Warehouse Sync",
+      "v1_decision": "must not write production warehouse records in V1",
+      "future_need": "owner-approved sync design, destination contracts, retries, audit, and rollback"
+    },
+    {
+      "layer": "Event/Webhook",
+      "v1_decision": "must not send external webhooks in V1",
+      "future_need": "delivery design, signing, retry, rate limit, dead-letter, and audit strategy"
+    },
+    {
+      "layer": "Notification/Alert",
+      "v1_decision": "must not send external email/SMS/messages in V1",
+      "future_need": "channel approval, consent, templates, provider secrets, retry, and opt-out handling"
+    },
+    {
+      "layer": "Production Automation",
+      "v1_decision": "must not execute production automation in V1",
+      "future_need": "operator approval, dry-run, rollback, audit, and identity-bound execution model"
+    }
+  ],
+  "environment_admin_api_key_guidance": [
+    "Local dev may use local-only .env files that remain ignored by git.",
+    "Staging must use environment-managed ADMIN_API_KEY or secret manager injection.",
+    "Production must use managed secrets only; no raw secret values in repo, docs, command history, screenshots, or reports.",
+    "ADMIN_API_KEY must not appear in URLs, query strings, route bridge metadata, logs, report output, or public bundle code.",
+    "Rotate ADMIN_API_KEY before paid launch if it has ever appeared in local logs, shared terminals, screenshots, or issue text.",
+    "Cross-app base URLs should use VITE_SHRV1_BASE_URL and VITE_SHF_NEXT_BASE_URL or deployment-specific equivalents.",
+    "Cross-App Route Bridge must keep secrets out of route URLs and preserve public/internal classification.",
+    "Staging and production CORS/proxy/API Gateway policy should be documented before any external exposure."
+  ],
+  "daily_governance_audit_plan": {
+    "enabled_now": false,
+    "recommended_commands": [
+      "npm run check:governance",
+      "npm run build",
+      "python3 scripts/check_master_layer_registry.py",
+      "python3 scripts/check_truth_spine_freeze.py",
+      "python3 scripts/check_duplicate_layer_cleanup.py",
+      "route/admin smoke check",
+      "Reports/Watchtower visibility check",
+      "SHS to SHF boundary check",
+      "runtime dirty-file check",
+      "public-approved mutation guard",
+      "SHS private data exposure guard"
+    ],
+    "report_naming": [
+      "docs/DAILY_GOVERNANCE_AUDIT_YYYY_MM_DD.md",
+      "docs/DAILY_GOVERNANCE_AUDIT_YYYY_MM_DD.json"
+    ],
+    "future_command_shape": "npm run check:governance && npm run build && git status --short"
+  },
+  "public_safe_release_guardrails": [
+    "Truth Spine remains the only authority for verification, report readiness, trust package state, and public approval preconditions.",
+    "Public Approval and Data Approval Gateway remain the only correct path toward public release decisions.",
+    "No layer may directly mutate shfImpactData or bypass SHF Impact Data Spine controls.",
+    "No layer may mark records public_approved outside the approved gateway/human review path.",
+    "SHS private operational data remains blocked from SHF public surfaces unless governed, de-identified or aggregated where needed, verified, privacy-reviewed, ownership-reviewed, readiness-approved, public-approved, and gateway-approved.",
+    "Security/Privacy and Data Ownership/IP checks are required before public release.",
+    "Reports and Watchtower may expose readiness and risk metadata, but they must not convert draft/unverified data into public facts.",
+    "AI, Oracle, Game Theory, LOO, automation, webhook, notification, and warehouse layers must not publish or approve public data."
+  ],
+  "route_identity_hardening_checklist": [
+    "Review SHRV1 admin routes in AdminRoutes.jsx and AdminSidebar.jsx for intended admin-only exposure.",
+    "Confirm /ops/* Production Ops routes remain shs_admin only in hubAccessControl.js.",
+    "Confirm public SHS/WebMaker routes do not inherit admin-only shells or leak internal metadata.",
+    "Confirm SHF-Next /studio/templates and /studio/templates/browse remain public browsing routes only.",
+    "Confirm SHF-Next /ops/* and /foundation/data-approval remain internally noticed or gated where applicable.",
+    "Confirm Cross-App Identity Bridge route classifications match the current public/internal decision record.",
+    "Confirm Cross-App Route Bridge uses safe base URLs and blocks secrets in route URLs.",
+    "Confirm backend admin/API routes that require ADMIN_API_KEY have staging/production protection documented before external exposure.",
+    "Confirm route smoke evidence has no blank fallbacks and no public/private leakage findings before paid launch."
+  ],
+  "test_hardening_checklist": [
+    "Focused pytest bundle for Truth Spine, Oracle, AI Guardrails, Game Theory, and SHS Launch Ledger.",
+    "Focused pytest bundle for all newly touched Agent Fabric route layers.",
+    "Browser smoke for admin command surfaces, Production Ops, ClientOps, Reports, Watchtower, and Launch Workflow.",
+    "Route smoke for SHRV1 admin routes and SHF-Next public/internal split routes.",
+    "Reports/Watchtower visibility regression covering truth metadata, public approval context, and layer readiness summaries.",
+    "shfImpactData public-approved guard regression test.",
+    "SHS private data exposure guard regression test.",
+    "API endpoint contract inventory for all V1 route families.",
+    "Runtime dirty-file regression check after validations.",
+    "Build artifact and bundle warning review before release signoff."
+  ],
+  "validation": {
+    "python3 -m json.tool docs/PHASE1_PAID_LAUNCH_HARDENING_V1.json": "PASS",
+    "npm run check:governance": "PASS",
+    "python3 scripts/check_master_layer_registry.py": "PASS: Master Layer Registry checked 57 official registry rows/layers.",
+    "python3 scripts/check_truth_spine_freeze.py": "PASS: Truth Spine V1 freeze checks passed.",
+    "python3 scripts/check_duplicate_layer_cleanup.py": "PASS: duplicate layer cleanup checks passed (3 high-risk duplicates archived; 3 official replacements present).",
+    "npm run build": "PASS with existing Vite large-chunk warning.",
+    "optional_pytest_routes": "not_run"
+  },
+  "git_safety": {
+    "commit_performed": false,
+    "staging_performed": false,
+    "source_runtime_behavior_changed": false,
+    "runtime_files_modified_by_this_task": false,
+    "notes": "This task created Phase 1 documentation only. It did not change source, package, service, router, auth, database, runtime behavior, external archive, or git state."
+  },
+  "files_changed": [
+    "docs/PHASE1_PAID_LAUNCH_HARDENING_V1.md",
+    "docs/PHASE1_PAID_LAUNCH_HARDENING_V1.json"
+  ],
+  "remaining_risks": [
+    "services/shf-agent-fabric/var/watchtower_audit.jsonl is tracked and can be dirtied by runtime validation.",
+    "Paid launch still needs owner-approved production persistence decisions for operational records and governance evidence.",
+    "ADMIN_API_KEY handling is documented here but not enforced by a new production secret-management implementation.",
+    "Daily governance audit is documented but not scheduled.",
+    "Broad route/browser smoke and full API contract coverage remain hardening work, not implemented in this docs-only pass.",
+    "Vite large-chunk warning remains a known non-blocking build/performance warning."
+  ],
+  "phase1_complete": true
+}

@@ -1,0 +1,343 @@
+.shs-reports-command {
+  display: grid;
+  gap: 18px;
+  padding: 24px;
+  color: rgba(248, 250, 252, 0.96);
+}
+
+.shs-reports-hero,
+.shs-report-panel,
+.shs-report-type-card,
+.shs-report-status-card,
+.shs-report-table-wrap {
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(18, 27, 44, 0.96), rgba(8, 13, 24, 0.98));
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
+}
+
+.shs-reports-hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px;
+}
+
+.shs-reports-hero p,
+.shs-report-panel__header p {
+  margin: 0 0 7px;
+  color: #38bdf8;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.shs-reports-hero h1,
+.shs-report-panel__header h2 {
+  margin: 0;
+  color: #f6f8fb;
+  line-height: 1.08;
+}
+
+.shs-reports-hero h1 {
+  font-size: 38px;
+}
+
+.shs-reports-hero span,
+.shs-report-panel__header span,
+.shs-report-type-card p,
+.shs-report-type-card dd,
+.shs-report-status-card p,
+.shs-report-readiness-row span,
+.shs-report-choice-row button span {
+  color: rgba(203, 213, 225, 0.86);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.shs-reports-hero__actions {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.shs-reports-hero__actions a,
+.shs-report-primary-action,
+.shs-report-type-card a,
+.shs-report-row-actions a,
+.shs-report-row-actions button {
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: #f6f8fb;
+  background: rgba(0, 123, 255, 0.16);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.shs-report-status-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.shs-report-status-card {
+  padding: 14px;
+}
+
+.shs-report-status-card span {
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.shs-report-status-card strong {
+  display: block;
+  margin-top: 8px;
+  color: #f6f8fb;
+  font-size: 30px;
+}
+
+.shs-report-panel {
+  padding: 18px;
+}
+
+.shs-report-panel__header {
+  margin-bottom: 14px;
+}
+
+.shs-report-type-grid,
+.shs-report-choice-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.shs-report-type-card {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+}
+
+.shs-report-type-card span {
+  color: #d4af37;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.shs-report-type-card h3 {
+  margin: 6px 0;
+  color: #f6f8fb;
+  font-size: 19px;
+}
+
+.shs-report-type-card dl {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.shs-report-type-card div div,
+.shs-report-type-card dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.shs-report-type-card dt {
+  color: #94a3b8;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.shs-report-type-card dd {
+  margin: 0;
+  text-align: right;
+}
+
+.shs-report-recent-list,
+.shs-report-launch-grid,
+.shs-report-readiness-grid,
+.shs-create-flow {
+  display: grid;
+  gap: 12px;
+}
+
+.shs-report-recent-list article,
+.shs-report-launch-grid article,
+.shs-report-readiness-row,
+.shs-report-choice-row button,
+.shs-report-field {
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 8px;
+  padding: 12px;
+  background: rgba(2, 11, 24, 0.34);
+}
+
+.shs-report-recent-list strong,
+.shs-report-launch-grid strong,
+.shs-report-readiness-row strong,
+.shs-report-choice-row button strong,
+.shs-report-field {
+  color: #f6f8fb;
+}
+
+.shs-report-recent-list span,
+.shs-report-recent-list em,
+.shs-report-launch-grid span,
+.shs-report-launch-grid em {
+  display: block;
+  margin-top: 5px;
+  color: #cbd5e1;
+  font-size: 12px;
+  font-style: normal;
+}
+
+.shs-report-launch-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.shs-report-launch-grid a {
+  display: inline-flex;
+  width: max-content;
+  margin-top: 10px;
+  color: #38bdf8;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.shs-report-readiness-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.shs-report-readiness-row em,
+.shs-report-warning {
+  color: #fca5a5;
+  font-size: 12px;
+  font-style: normal;
+}
+
+.shs-report-choice-row button {
+  text-align: left;
+  cursor: pointer;
+}
+
+.shs-report-choice-row button.is-active {
+  border-color: rgba(56, 189, 248, 0.6);
+  background: rgba(0, 123, 255, 0.18);
+}
+
+.shs-report-field {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+  font-weight: 800;
+}
+
+.shs-report-field input {
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  padding: 10px;
+  color: #020b18;
+  background: #f6f8fb;
+  font: inherit;
+}
+
+.shs-report-table-wrap {
+  overflow-x: auto;
+}
+
+.shs-report-history-table {
+  width: 100%;
+  min-width: 1300px;
+  border-collapse: collapse;
+}
+
+.shs-report-history-table th,
+.shs-report-history-table td {
+  padding: 12px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+  color: #e5e7eb;
+  font-size: 12px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.shs-report-history-table th {
+  color: #94a3b8;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.shs-report-row-actions {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.shs-export-metadata-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+
+.shs-export-metadata-grid div {
+  padding: 11px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 8px;
+  background: rgba(2, 11, 24, 0.34);
+}
+
+.shs-export-metadata-grid dt {
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.shs-export-metadata-grid dd {
+  margin: 6px 0 0;
+  color: #f6f8fb;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 1100px) {
+  .shs-report-status-grid,
+  .shs-report-type-grid,
+  .shs-report-launch-grid,
+  .shs-report-choice-row,
+  .shs-export-metadata-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .shs-reports-command {
+    padding: 16px;
+  }
+
+  .shs-reports-hero {
+    flex-direction: column;
+  }
+
+  .shs-report-status-grid,
+  .shs-report-type-grid,
+  .shs-report-launch-grid,
+  .shs-report-choice-row,
+  .shs-export-metadata-grid,
+  .shs-report-readiness-row {
+    grid-template-columns: 1fr;
+  }
+}

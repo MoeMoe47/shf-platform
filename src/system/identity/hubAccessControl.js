@@ -63,6 +63,13 @@ export const hubPageAccess = {
 
   "/reporting": ["client_admin", "shs_admin"],
   "/reports": ["client_admin", "shs_admin"],
+  "/ops/reports": ["shs_admin"],
+  "/ops/reports/create": ["shs_admin"],
+  "/ops/reports/premium-preview": ["shs_admin"],
+  "/ops/reports/premium-preview/executive-summary": ["shs_admin"],
+  "/ops/reports/premium-preview/client-profile": ["shs_admin"],
+  "/ops/reports/history": ["shs_admin"],
+  "/ops/reports/export-metadata": ["shs_admin"],
   "/growth": ["client_admin", "shs_admin"],
   "/hub/growth-network": ["client_admin", "shs_admin"],
   "/hub/intelligence": ["client_admin", "shs_admin"],

@@ -21,6 +21,7 @@ const SECTIONS = [
       { to: "/ops/build-packet", icon: "▤", label: "Build Packet" },
       { to: "/ops/screenshot-qa", icon: "◫", label: "Screenshot QA" },
       { to: "/ops/launch-workflow", icon: "L", label: "Launch Workflow" },
+      { to: "/ops/reports", icon: "▥", label: "Reports Command" },
       { to: "/ops/learning", icon: "↻", label: "Learning" }
     ]
   },
@@ -30,6 +31,7 @@ const SECTIONS = [
       { to: "/command", icon: "⌘", label: "Command Center" },
       { to: "/dashboard", icon: "▦", label: "Dashboard" },
       { to: "/reports", icon: "▤", label: "Reports" },
+      { to: "/ops/reports/history", icon: "H", label: "Report History" },
       { to: "/builder", icon: "▥", label: "Website Studio" },
       { to: "/builder/tools", icon: "🧰", label: "Tool Dashboard" },
       { to: "/admin", icon: "🛡️", label: "Admin Home", end: true },

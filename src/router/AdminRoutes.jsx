@@ -15,6 +15,11 @@ import DevDocsViewer from "@/pages/dev/Docs.jsx";
 
 import AggregationDashboard from "@/pages/admin/aggregation/AggregationDashboard.jsx";
 import ReportingCommandSurface from "@/pages/admin/reporting/ReportingCommandSurface.jsx";
+import ShsReportsCommandPage from "@/pages/admin/reports/ShsReportsCommandPage.jsx";
+import ShsCreateReportPage from "@/pages/admin/reports/ShsCreateReportPage.jsx";
+import ShsPremiumReportPreviewPage from "@/pages/admin/reports/ShsPremiumReportPreviewPage.jsx";
+import ShsReportHistoryPage from "@/pages/admin/reports/ShsReportHistoryPage.jsx";
+import ShsExportMetadataPage from "@/pages/admin/reports/ShsExportMetadataPage.jsx";
 import VerificationAuditSurface from "@/pages/admin/reporting/VerificationAuditSurface.jsx";
 import TruthSpinePage from "@/pages/admin/truth-spine/TruthSpinePage.jsx";
 import OraclePage from "@/pages/admin/oracle/OraclePage.jsx";
@@ -153,6 +158,13 @@ export default function AdminRoutes() {
         <Route path="/aggregation" element={protect("/aggregation", <AggregationDashboard />, [SHS_SECURITY_PERMISSIONS.AGGREGATION_VIEW])} />
         <Route path="/reporting" element={protect("/reporting", <ReportingCommandSurface />, [SHS_SECURITY_PERMISSIONS.REPORTS_VIEW])} />
         <Route path="/reports" element={protect("/reports", <ReportingCommandSurface />, [SHS_SECURITY_PERMISSIONS.REPORTS_VIEW])} />
+        <Route path="/ops/reports" element={protect("/ops/reports", <ShsReportsCommandPage />, [SHS_SECURITY_PERMISSIONS.REPORTS_VIEW])} />
+        <Route path="/ops/reports/create" element={protect("/ops/reports/create", <ShsCreateReportPage />, [SHS_SECURITY_PERMISSIONS.REPORTS_PREVIEW])} />
+        <Route path="/ops/reports/premium-preview" element={protect("/ops/reports/premium-preview", <ShsPremiumReportPreviewPage />, [SHS_SECURITY_PERMISSIONS.REPORTS_PREVIEW])} />
+        <Route path="/ops/reports/premium-preview/executive-summary" element={protect("/ops/reports/premium-preview/executive-summary", <ShsPremiumReportPreviewPage />, [SHS_SECURITY_PERMISSIONS.REPORTS_PREVIEW])} />
+        <Route path="/ops/reports/premium-preview/client-profile" element={protect("/ops/reports/premium-preview/client-profile", <ShsPremiumReportPreviewPage />, [SHS_SECURITY_PERMISSIONS.REPORTS_PREVIEW])} />
+        <Route path="/ops/reports/history" element={protect("/ops/reports/history", <ShsReportHistoryPage />, [SHS_SECURITY_PERMISSIONS.REPORTS_VIEW])} />
+        <Route path="/ops/reports/export-metadata" element={protect("/ops/reports/export-metadata", <ShsExportMetadataPage />, [SHS_SECURITY_PERMISSIONS.REPORTS_VIEW])} />
         <Route path="/command" element={protect("/command", <SHFImpactCommandCenter />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/command-center" element={protect("/command-center", <SHFImpactCommandCenter />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/dashboard" element={protect("/dashboard", <WorkspaceDashboard />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />

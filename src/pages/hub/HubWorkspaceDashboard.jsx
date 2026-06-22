@@ -35,6 +35,7 @@ const navItems = [
   ["Unmet Needs", "♡", "/hub/unmet-needs"],
   ["Outcomes", "◎", "/hub/outcomes"],
   ["Reports", "▥", "/hub/reports"],
+  ["Reports Command", "▤", "/ops/reports"],
   ["Files", "▣", "/hub/imports"],
   ["Calendar", "▦", "/hub/calendar"],
   ["Conference", "▰", "/hub/conference"],

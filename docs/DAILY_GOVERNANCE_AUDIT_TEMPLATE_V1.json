@@ -1,0 +1,62 @@
+{
+  "audit_name": "Daily Governance Audit",
+  "audit_date": "YYYY-MM-DD",
+  "status": "NOT_RUN",
+  "governance_validation": {
+    "npm_run_check_governance": "NOT_RUN",
+    "master_layer_registry": "NOT_RUN",
+    "truth_spine_freeze": "NOT_RUN",
+    "duplicate_layer_cleanup": "NOT_RUN",
+    "runtime_log_hygiene_strict": "NOT_RUN"
+  },
+  "build_validation": {
+    "npm_run_build": "NOT_RUN",
+    "vite_large_chunk_warning": "Known non-blocking only if unchanged"
+  },
+  "runtime_hygiene": {
+    "dirty_tracked_runtime_logs": "NOT_RUN",
+    "cleanup_command_if_dirty": "bash scripts/clean_runtime_audit_logs.sh",
+    "cleanup_performed": false
+  },
+  "git_safety": {
+    "git_status_short": "NOT_RUN",
+    "git_diff_name_status": "NOT_RUN",
+    "git_diff_stat": "NOT_RUN",
+    "unexpected_runtime_files_dirty": "NOT_RUN",
+    "secrets_seen_in_diff": "NOT_RUN"
+  },
+  "reports_watchtower_visibility": {
+    "reports_snapshot_checked": "NOT_RUN",
+    "watchtower_summary_checked": "NOT_RUN",
+    "live_server_required_by_template": false,
+    "notes": []
+  },
+  "shs_shf_boundary": {
+    "shs_spine_private_upstream_confirmed": "NOT_RUN",
+    "shf_spine_public_approved_downstream_confirmed": "NOT_RUN",
+    "private_data_absent_from_public_surfaces": "NOT_RUN",
+    "governance_chain_required": "NOT_RUN"
+  },
+  "public_approved_guard": {
+    "unauthorized_public_approved_mutation_found": "NOT_RUN",
+    "shf_impact_data_public_approved_filtered": "NOT_RUN",
+    "data_approval_gateway_required": "NOT_RUN"
+  },
+  "security_privacy_ownership": {
+    "security_privacy_clear_for_public_release": "NOT_RUN",
+    "data_ownership_ip_clear_for_public_release": "NOT_RUN",
+    "secrets_or_real_keys_in_diff": "NOT_RUN"
+  },
+  "route_identity_boundary": {
+    "admin_routes_internal": "NOT_RUN",
+    "public_routes_no_internal_data": "NOT_RUN",
+    "shf_next_route_split_checked_if_in_scope": "NOT_RUN",
+    "admin_api_key_env_only": "NOT_RUN"
+  },
+  "known_warnings": [
+    "Existing Vite large-chunk warning is non-blocking only if unchanged and documented."
+  ],
+  "blockers": [],
+  "owner_review_items": [],
+  "next_actions": []
+}

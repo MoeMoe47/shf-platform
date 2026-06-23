@@ -1,0 +1,410 @@
+{
+  "audit": "AGENT_FABRIC_REALITY_SCAN_V1",
+  "date": "2026-06-23",
+  "mode": "audit_only",
+  "docs_created": [
+    "docs/AGENT_FABRIC_REALITY_SCAN_V1.md",
+    "docs/AGENT_FABRIC_REALITY_SCAN_V1.json"
+  ],
+  "source_docs_read": [
+    "docs/MASTER_LAYER_REGISTRY.md",
+    "docs/FINAL_MASTER_LAYER_REGISTRY_V1_COMPLETION_REAUDIT.md",
+    "docs/AI_SWARM_GUARDRAILS_V1.md",
+    "docs/AGENT_GOVERNANCE_FABRIC_AUDIT_V1.md",
+    "docs/TRUTH_SPINE_GUARDRAILS.md",
+    "docs/AGENT_FABRIC_ADMIN_PAGE_V1.md"
+  ],
+  "optional_docs_missing": [
+    "docs/SHS_PRIVATE_BETA_OPERATOR_RUNBOOK_V1.md"
+  ],
+  "executive_verdict": {
+    "agent_fabric_real_as": [
+      "governed registry",
+      "admin visibility surface",
+      "dry-run and page-context simulation surface",
+      "hash-chained agent event ledger",
+      "execution-readiness framework"
+    ],
+    "agent_fabric_not_yet_real_as": [
+      "end-to-end SHS agent workforce",
+      "canonical task queue",
+      "canonical real tool executor for contracts/agents/agents.json",
+      "human approval workbench",
+      "agent memory retrieval system",
+      "agent performance system"
+    ],
+    "final_decision": "Do not mark Agent V1 real as an operational SHS agent workforce yet; mark it as a governed framework and workbench foundation."
+  },
+  "canonical_registry": {
+    "status": "PARTIAL",
+    "path": "services/shf-agent-fabric/contracts/agents/agents.json",
+    "schema": "services/shf-agent-fabric/contracts/agents/agent_entity.schema.v1.json",
+    "agent_count": 11,
+    "agents": [
+      {
+        "agent_id": "ai_analyst_agent",
+        "name": "AI Analyst Agent",
+        "layer": "analyst_layer",
+        "visibility": "user_visible",
+        "human_approval": false
+      },
+      {
+        "agent_id": "oracle_truth_agent",
+        "name": "Oracle Truth Agent",
+        "layer": "oracle_layer",
+        "visibility": "internal",
+        "human_approval": false
+      },
+      {
+        "agent_id": "verification_agent",
+        "name": "Verification Agent",
+        "layer": "verification_layer",
+        "visibility": "internal",
+        "human_approval": true
+      },
+      {
+        "agent_id": "reconciliation_agent",
+        "name": "Reconciliation Agent",
+        "layer": "reconciliation_layer",
+        "visibility": "internal",
+        "human_approval": true
+      },
+      {
+        "agent_id": "watchtower_agent",
+        "name": "Watchtower Agent",
+        "layer": "watchtower_layer",
+        "visibility": "internal",
+        "human_approval": false
+      },
+      {
+        "agent_id": "impact_measurement_agent",
+        "name": "Impact Measurement Agent",
+        "layer": "impact_intelligence_layer",
+        "visibility": "internal",
+        "human_approval": false
+      },
+      {
+        "agent_id": "impact_comparison_agent",
+        "name": "Impact Comparison Agent",
+        "layer": "impact_intelligence_layer",
+        "visibility": "internal",
+        "human_approval": false
+      },
+      {
+        "agent_id": "hub_guide_agent",
+        "name": "Hub Guide Agent",
+        "layer": "hub_collaboration_layer",
+        "visibility": "user_visible",
+        "human_approval": false
+      },
+      {
+        "agent_id": "hub_matching_agent",
+        "name": "Hub Matching Agent",
+        "layer": "hub_intelligence_engine",
+        "visibility": "internal",
+        "human_approval": true
+      },
+      {
+        "agent_id": "report_narrator_agent",
+        "name": "Report Narrator Agent",
+        "layer": "reporting_layer",
+        "visibility": "user_visible",
+        "human_approval": true
+      },
+      {
+        "agent_id": "adaptive_experience_agent",
+        "name": "Adaptive Experience Agent",
+        "layer": "adaptive_experience_layer",
+        "visibility": "internal",
+        "human_approval": false
+      }
+    ],
+    "legacy_registry": {
+      "status": "present_but_separate",
+      "path": "services/shf-agent-fabric/registry/*.agent.json",
+      "agent_count": 3,
+      "agents": [
+        "Layer09CaseSupportAgent",
+        "Layer14GrantsDrafterAgent",
+        "Layer23OrchestratorAgent"
+      ],
+      "risk": "Older /run and /plan flows use this separate registry instead of the canonical contracts/agents/agents.json registry."
+    }
+  },
+  "audit_areas": {
+    "agent_registry": {
+      "classification": "PARTIAL",
+      "evidence": [
+        "contracts/agents/agents.json contains 11 canonical agents",
+        "admin_agents_routes.py exposes list, detail, verify, events, lifecycle, enabled, dry-run, and execution-readiness endpoints"
+      ],
+      "gaps": [
+        "requested SHS workforce agents missing",
+        "riskLevel not explicit",
+        "legacy registry split remains"
+      ]
+    },
+    "agent_governance_guardrails": {
+      "classification": "PARTIAL",
+      "evidence": [
+        "AI_SWARM_GUARDRAILS_V1.md blocks verification, public approval, Oracle override, and ungated execution",
+        "TRUTH_SPINE_GUARDRAILS.md requires Alignment approval for AI execution requests",
+        "db/alignment/containment_flags.json supports LIMITED/OFF-style containment",
+        "fabric/layers/global_gate.py blocks execution when required layers are disabled or not enforced ready"
+      ],
+      "gaps": [
+        "guardrails are not yet wrapped around a canonical real agent task executor"
+      ]
+    },
+    "agent_execution": {
+      "classification": "PARTIAL",
+      "simulated_execution": [
+        "/admin/agents/{agent_id}/dry-run",
+        "/admin/agents/{agent_id}/page-context-dry-run",
+        "/admin/agents/summary/execution-readiness"
+      ],
+      "deterministic_execution": [
+        "legacy /run Layer09CaseSupportAgent deterministic analysis",
+        "/runs/execute draft artifact writing from approved plans"
+      ],
+      "real_agent_execution": false,
+      "human_approved_execution": "partial via /runs/execute approved=true against stored plans",
+      "gaps": [
+        "canonical 11 agents are not wired to real tool execution",
+        "no canonical dispatcher assigns tasks to canonical agents",
+        "no complete failure/result lifecycle for canonical agents"
+      ]
+    },
+    "agent_task_queue": {
+      "classification": "MISSING",
+      "adjacent_evidence": [
+        "db/plans/*.json",
+        "db/runs/events.jsonl",
+        "services/execution_service.py generic execution_actions"
+      ],
+      "missing": [
+        "agent_tasks model",
+        "pending/assigned/running/completed/failed statuses",
+        "retry handling",
+        "task history",
+        "queue UI"
+      ]
+    },
+    "agent_workbench_ui": {
+      "classification": "PARTIAL",
+      "evidence": [
+        "src/pages/admin/agent-fabric/AgentFabricPage.jsx",
+        "admin.html#/agent-fabric",
+        "src/router/AdminRoutes.jsx mounts /agent-fabric",
+        "src/system/routes/crossAppRouteBridge.js includes agentFabric"
+      ],
+      "missing": [
+        "task queue",
+        "approval inbox",
+        "full log stream",
+        "run history",
+        "performance metrics",
+        "agent control actions"
+      ]
+    },
+    "human_approval": {
+      "classification": "PARTIAL",
+      "evidence": [
+        "policy.humanApproval exists on canonical agents",
+        "/run blocks approval-required legacy agents and returns a plan",
+        "/runs/execute requires approved=true when approvalRequired is true",
+        "Agent Fabric UI displays human approval policy"
+      ],
+      "missing": [
+        "reviewer",
+        "decision status",
+        "approval timestamp",
+        "approval reason",
+        "action gate record",
+        "approval queue UI"
+      ]
+    },
+    "agent_memory_context": {
+      "classification": "PARTIAL",
+      "evidence": [
+        "memoryScope declared per canonical agent",
+        "page-context dry-run normalizes selected entity/county/region and Oracle/Truth context"
+      ],
+      "missing": [
+        "durable per-agent memory store",
+        "context retrieval service",
+        "task/run history retrieval",
+        "memory retention enforcement"
+      ]
+    },
+    "agent_audit_trail": {
+      "classification": "PARTIAL",
+      "evidence": [
+        "db/agent_events.jsonl exists",
+        "fabric/agent_event_ledger.py appends and verifies hash-chained events",
+        "/admin/agents/events exists",
+        "/admin/agents/verify exists"
+      ],
+      "observed_event_count": 156,
+      "missing": [
+        "canonical task-level audit",
+        "approval references",
+        "input/output hashes per task",
+        "rollback references",
+        "operator workbench event stream"
+      ]
+    },
+    "agent_capabilities_matrix": {
+      "classification": "PARTIAL",
+      "evidence": [
+        "capabilities arrays exist per canonical agent",
+        "allowedTools arrays exist per canonical agent",
+        "containment flags support blocked agents and blocked capabilities"
+      ],
+      "missing": [
+        "first-class matrix file",
+        "explicit safe/risky capability classification",
+        "capability-level enforcement before real execution"
+      ]
+    },
+    "agent_performance": {
+      "classification": "MISSING",
+      "adjacent_evidence": [
+        "/admin/agents/summary/health",
+        "/admin/agents/summary/execution-readiness"
+      ],
+      "missing": [
+        "success_count",
+        "failure_count",
+        "duration",
+        "quality_score",
+        "approval_rate",
+        "blocked_task_count",
+        "last_run"
+      ]
+    }
+  },
+  "shs_agent_workforce_mapping": [
+    {
+      "target_agent": "Sales Agent",
+      "exists": false,
+      "registry_entry": false,
+      "capabilities": false,
+      "task_type": false,
+      "execution": false,
+      "approval_gate": false,
+      "audit_trail": false,
+      "ui_visibility": false
+    },
+    {
+      "target_agent": "Project Agent",
+      "exists": false,
+      "registry_entry": false,
+      "capabilities": false,
+      "task_type": false,
+      "execution": false,
+      "approval_gate": false,
+      "audit_trail": false,
+      "ui_visibility": false
+    },
+    {
+      "target_agent": "Development Library Agent",
+      "exists": false,
+      "registry_entry": false,
+      "capabilities": false,
+      "task_type": false,
+      "execution": false,
+      "approval_gate": false,
+      "audit_trail": false,
+      "ui_visibility": false
+    },
+    {
+      "target_agent": "QA Agent",
+      "exists": false,
+      "registry_entry": false,
+      "capabilities": false,
+      "task_type": false,
+      "execution": false,
+      "approval_gate": false,
+      "audit_trail": false,
+      "ui_visibility": false
+    },
+    {
+      "target_agent": "ClientOps Agent",
+      "exists": false,
+      "registry_entry": false,
+      "capabilities": false,
+      "task_type": false,
+      "execution": false,
+      "approval_gate": false,
+      "audit_trail": false,
+      "ui_visibility": false
+    },
+    {
+      "target_agent": "Report Agent",
+      "exists": "partial_via_report_narrator_agent",
+      "registry_entry": "partial",
+      "capabilities": true,
+      "task_type": false,
+      "execution": false,
+      "approval_gate": "policy_only",
+      "audit_trail": "registry_and_dry_run_events_only",
+      "ui_visibility": true
+    },
+    {
+      "target_agent": "Governance Agent",
+      "exists": false,
+      "registry_entry": false,
+      "capabilities": false,
+      "task_type": false,
+      "execution": false,
+      "approval_gate": false,
+      "audit_trail": false,
+      "ui_visibility": false
+    },
+    {
+      "target_agent": "Executive Agent",
+      "exists": false,
+      "registry_entry": false,
+      "capabilities": false,
+      "task_type": false,
+      "execution": false,
+      "approval_gate": false,
+      "audit_trail": false,
+      "ui_visibility": false
+    }
+  ],
+  "real_vs_framework": {
+    "framework_complete": "PARTIAL",
+    "governance_complete": "PARTIAL",
+    "registry_complete": "PARTIAL",
+    "workbench_complete": "PARTIAL",
+    "execution_complete": "MISSING_FOR_CANONICAL_AGENTS",
+    "human_approval_complete": "PARTIAL",
+    "task_queue_complete": "MISSING",
+    "agent_workforce_complete": "MISSING"
+  },
+  "completion_plan": {
+    "phase_1_agent_fabric_reality_lock": [
+      "Declare contracts/agents/agents.json as the sole V1 canonical workforce registry",
+      "Migrate or retire legacy services/shf-agent-fabric/registry/*.agent.json",
+      "Add riskLevel, taskTypes, approvalMode, executionMode, and ownerLayer fields",
+      "Create Agent Capability Matrix",
+      "Define the eight SHS workforce agents"
+    ],
+    "phase_2_agent_workbench_v1": [
+      "Add canonical agent_tasks storage",
+      "Add task create/list/detail/assign/status routes",
+      "Add human approval records",
+      "Extend UI with task queue, approvals, logs, and run history"
+    ],
+    "phase_3_safe_execution_engine_v1": [
+      "Wire canonical agents to safe executor",
+      "Enforce enabled/lifecycle/layer/policy/AI Guardrails/Alignment/capability gates",
+      "Start with no-side-effect draft/read-only tools",
+      "Record task-level audit ledger",
+      "Add performance metrics",
+      "Add rollback references before write-capable actions"
+    ]
+  }
+}

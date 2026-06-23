@@ -66,6 +66,7 @@ export const hubPageAccess = {
   "/ops/reports": ["shs_admin"],
   "/ops/reports/create": ["shs_admin"],
   "/ops/reports/premium-preview": ["shs_admin"],
+  "/ops/reports/premium-preview/toc": ["shs_admin"],
   "/ops/reports/premium-preview/executive-summary": ["shs_admin"],
   "/ops/reports/premium-preview/client-profile": ["shs_admin"],
   "/ops/reports/history": ["shs_admin"],

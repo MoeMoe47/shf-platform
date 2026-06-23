@@ -1,0 +1,200 @@
+{
+  "name": "System Integration Readiness Audit V1",
+  "date": "2026-06-23",
+  "repository": "/Users/mikeslate/Desktop/shrv1",
+  "admin_routes": {
+    "status": "PASS",
+    "verified_routes": {
+      "/ops/reports": "ShsReportsCommandPage",
+      "/ops/reports/create": "ShsCreateReportPage",
+      "/ops/reports/history": "ShsReportHistoryPage",
+      "/ops/reports/export-metadata": "ShsExportMetadataPage",
+      "/ops/reports/premium-preview": "ShsPremiumReportPreviewPage",
+      "/ops/reports/premium-preview/toc": "ShsPremiumReportPreviewPage",
+      "/ops/reports/premium-preview/executive-summary": "ShsPremiumReportPreviewPage",
+      "/ops/reports/premium-preview/client-profile": "ShsPremiumReportPreviewPage"
+    },
+    "safe_fix": "Added explicit /ops/reports/premium-preview/toc route alias to the existing premium preview component.",
+    "notes": "Existing admin routes remain intact; no unrelated route changes were made."
+  },
+  "sidebar_integration": {
+    "status": "PASS",
+    "reports_command_link": "/ops/reports",
+    "report_history_link": "/ops/reports/history",
+    "generic_reports_link": "/reports",
+    "duplicate_sections_found": false,
+    "notes": "Reports Command appears under Production Ops; Report History appears under Operations; generic reporting surface remains separate."
+  },
+  "hub_integration": {
+    "status": "PASS",
+    "hub_reports_link": "/hub/reports",
+    "reports_command_link": "/ops/reports",
+    "public_exposure_found": false,
+    "notes": "Hub exposes a Reports Command link, but /ops/reports remains SHS-admin-only through access control."
+  },
+  "identity_access": {
+    "status": "PASS",
+    "protected_by": [
+      "ProtectedHubRoute",
+      "PermissionGuard"
+    ],
+    "route_roles": {
+      "/ops/reports": [
+        "shs_admin"
+      ],
+      "/ops/reports/create": [
+        "shs_admin"
+      ],
+      "/ops/reports/history": [
+        "shs_admin"
+      ],
+      "/ops/reports/export-metadata": [
+        "shs_admin"
+      ],
+      "/ops/reports/premium-preview": [
+        "shs_admin"
+      ],
+      "/ops/reports/premium-preview/toc": [
+        "shs_admin"
+      ],
+      "/ops/reports/premium-preview/executive-summary": [
+        "shs_admin"
+      ],
+      "/ops/reports/premium-preview/client-profile": [
+        "shs_admin"
+      ]
+    },
+    "permissions": {
+      "view_routes": "reports.view",
+      "preview_routes": "reports.preview"
+    },
+    "auth_behavior_changed": false
+  },
+  "shs_reports": {
+    "status": "PASS",
+    "data_modules": [
+      "src/data/shsReports/shsReportReadiness.js",
+      "src/data/shsReports/shsReportTypes.js",
+      "src/data/shsReports/shsReportTemplates.js",
+      "src/data/shsReports/shsReportLifecycle.js",
+      "src/data/shsReports/shsReportStorage.js",
+      "src/data/shsReports/shsReportRegistry.js",
+      "src/data/shsReports/shsReportLaunchPoints.js",
+      "src/data/shsReports/shsReportSeedData.js",
+      "src/data/shsReports/shsReportVisibility.js"
+    ],
+    "connected_pages": {
+      "dashboard": "ShsReportsCommandPage + ShsReportDashboard",
+      "create_report": "ShsCreateReportPage",
+      "history": "ShsReportHistoryPage",
+      "export_metadata": "ShsExportMetadataPage",
+      "premium_preview": "ShsPremiumReportPreviewPage",
+      "table_of_contents": "ShsPremiumTableOfContentsPage",
+      "executive_summary": "ShsPremiumExecutiveSummaryPage",
+      "client_profile": "ShsClientOrganizationProfilePage"
+    },
+    "local_storage_keys": [
+      "shs.reports.records.v1",
+      "shs.reports.activeDraft.v1",
+      "shs.reports.templates.v1",
+      "shs.reports.branding.v1",
+      "shs.reports.history.v1",
+      "shs.reports.exports.v1"
+    ],
+    "production_persistence_added": false
+  },
+  "shs_spine_boundary": {
+    "status": "PASS",
+    "classification": "SHS Reports are SHS Spine operational/reporting infrastructure.",
+    "source_areas": [
+      "ClientOps",
+      "Production Ops",
+      "QA + Delivery",
+      "Support / Maintenance",
+      "Version History",
+      "Audit Trail",
+      "Brand Profile",
+      "Export Metadata",
+      "Reporting Layer"
+    ],
+    "visibility_filtering": "src/data/shsReports/shsReportVisibility.js",
+    "notes": "Report records remain local V1 workflow artifacts and do not become SHF public impact data."
+  },
+  "shf_boundary": {
+    "status": "PASS",
+    "shf_impact_data_spine_modified": false,
+    "imports_from_shfImpactData_in_shs_reports": false,
+    "publicApproved_mutations_in_shs_reports": false,
+    "public_approved_mutations_in_shs_reports": false,
+    "notes": "No SHS Reports code path was found mutating SHF Impact Data Spine or public approval state."
+  },
+  "governance_validation": {
+    "status": "PASS",
+    "commands": {
+      "npm run check:governance": "PASS",
+      "bash scripts/run_daily_governance_audit.sh": "PASS",
+      "npm run build": "PASS"
+    },
+    "runtime_log_hygiene_strict": "PASS",
+    "build_warning": "Existing Vite large chunk warning remains; build exits successfully."
+  },
+  "route_smoke_checklist": [
+    {
+      "route": "admin.html#/ops/reports",
+      "static_registration": "PASS",
+      "manual_browser_smoke": "RECOMMENDED"
+    },
+    {
+      "route": "admin.html#/ops/reports/create",
+      "static_registration": "PASS",
+      "manual_browser_smoke": "RECOMMENDED"
+    },
+    {
+      "route": "admin.html#/ops/reports/history",
+      "static_registration": "PASS",
+      "manual_browser_smoke": "RECOMMENDED"
+    },
+    {
+      "route": "admin.html#/ops/reports/export-metadata",
+      "static_registration": "PASS",
+      "manual_browser_smoke": "RECOMMENDED"
+    },
+    {
+      "route": "admin.html#/ops/reports/premium-preview",
+      "static_registration": "PASS",
+      "manual_browser_smoke": "RECOMMENDED"
+    },
+    {
+      "route": "admin.html#/ops/reports/premium-preview/toc",
+      "static_registration": "PASS",
+      "manual_browser_smoke": "RECOMMENDED"
+    },
+    {
+      "route": "admin.html#/ops/reports/premium-preview/executive-summary",
+      "static_registration": "PASS",
+      "manual_browser_smoke": "RECOMMENDED"
+    },
+    {
+      "route": "admin.html#/ops/reports/premium-preview/client-profile",
+      "static_registration": "PASS",
+      "manual_browser_smoke": "RECOMMENDED"
+    }
+  ],
+  "safe_fixes_applied": [
+    {
+      "file": "src/router/AdminRoutes.jsx",
+      "change": "Added explicit /ops/reports/premium-preview/toc route alias using ShsPremiumReportPreviewPage and reports.preview permission."
+    },
+    {
+      "file": "src/system/identity/hubAccessControl.js",
+      "change": "Added /ops/reports/premium-preview/toc as shs_admin-only."
+    }
+  ],
+  "remaining_risks": [
+    "src/pages/admin/clientops/ does not exist in this SHRV1 checkout; ClientOps is represented as SHS Spine source context in report registry/readiness data, but no local admin ClientOps page directory was available to inspect.",
+    "Browser route smoke was documented rather than executed; operator browser smoke is recommended before paid launch handoff.",
+    "Build emits existing Vite large-chunk warnings.",
+    "SHS Reports remain local V1 workflow artifacts; production persistence and backend export services remain out of scope."
+  ],
+  "v1_system_ready": true
+}

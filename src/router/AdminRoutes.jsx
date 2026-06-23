@@ -161,6 +161,7 @@ export default function AdminRoutes() {
         <Route path="/ops/reports" element={protect("/ops/reports", <ShsReportsCommandPage />, [SHS_SECURITY_PERMISSIONS.REPORTS_VIEW])} />
         <Route path="/ops/reports/create" element={protect("/ops/reports/create", <ShsCreateReportPage />, [SHS_SECURITY_PERMISSIONS.REPORTS_PREVIEW])} />
         <Route path="/ops/reports/premium-preview" element={protect("/ops/reports/premium-preview", <ShsPremiumReportPreviewPage />, [SHS_SECURITY_PERMISSIONS.REPORTS_PREVIEW])} />
+        <Route path="/ops/reports/premium-preview/toc" element={protect("/ops/reports/premium-preview/toc", <ShsPremiumReportPreviewPage />, [SHS_SECURITY_PERMISSIONS.REPORTS_PREVIEW])} />
         <Route path="/ops/reports/premium-preview/executive-summary" element={protect("/ops/reports/premium-preview/executive-summary", <ShsPremiumReportPreviewPage />, [SHS_SECURITY_PERMISSIONS.REPORTS_PREVIEW])} />
         <Route path="/ops/reports/premium-preview/client-profile" element={protect("/ops/reports/premium-preview/client-profile", <ShsPremiumReportPreviewPage />, [SHS_SECURITY_PERMISSIONS.REPORTS_PREVIEW])} />
         <Route path="/ops/reports/history" element={protect("/ops/reports/history", <ShsReportHistoryPage />, [SHS_SECURITY_PERMISSIONS.REPORTS_VIEW])} />

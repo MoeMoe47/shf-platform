@@ -1,0 +1,210 @@
+{
+  "name": "Manual Browser Smoke / Launch Handoff Check V1",
+  "date": "2026-06-23",
+  "repository": "/Users/mikeslate/Desktop/shrv1",
+  "pre_smoke_validation": {
+    "initial_git_status": "clean",
+    "commands": {
+      "git status --short": "PASS",
+      "npm run check:governance": "PASS",
+      "bash scripts/run_daily_governance_audit.sh": "PASS",
+      "bash scripts/run_paid_launch_checks.sh": "PASS",
+      "npm run build": "PASS"
+    },
+    "runtime_log_hygiene": {
+      "non_strict": "PASS",
+      "strict_daily_audit": "PASS",
+      "strict_paid_launch": "PASS"
+    },
+    "known_build_warning": "Vite large chunk warning over 700 kB remains non-blocking."
+  },
+  "route_inventory": [
+    {
+      "route": "admin.html#/ops/reports",
+      "component": "ShsReportsCommandPage",
+      "access": ["shs_admin"],
+      "registered": true
+    },
+    {
+      "route": "admin.html#/ops/reports/create",
+      "component": "ShsCreateReportPage",
+      "access": ["shs_admin"],
+      "registered": true
+    },
+    {
+      "route": "admin.html#/ops/reports/history",
+      "component": "ShsReportHistoryPage",
+      "access": ["shs_admin"],
+      "registered": true
+    },
+    {
+      "route": "admin.html#/ops/reports/export-metadata",
+      "component": "ShsExportMetadataPage",
+      "access": ["shs_admin"],
+      "registered": true
+    },
+    {
+      "route": "admin.html#/ops/reports/premium-preview",
+      "component": "ShsPremiumReportPreviewPage",
+      "access": ["shs_admin"],
+      "registered": true
+    },
+    {
+      "route": "admin.html#/ops/reports/premium-preview/toc",
+      "component": "ShsPremiumReportPreviewPage",
+      "access": ["shs_admin"],
+      "registered": true
+    },
+    {
+      "route": "admin.html#/ops/reports/premium-preview/executive-summary",
+      "component": "ShsPremiumReportPreviewPage",
+      "access": ["shs_admin"],
+      "registered": true
+    },
+    {
+      "route": "admin.html#/ops/reports/premium-preview/client-profile",
+      "component": "ShsPremiumReportPreviewPage",
+      "access": ["shs_admin"],
+      "registered": true
+    }
+  ],
+  "manual_browser_smoke": [
+    {
+      "route": "admin.html#/ops/reports",
+      "status": "PASS",
+      "visible_header": "Reports Command",
+      "visible_intent": ["Create Report", "Premium Preview", "Report Registry", "Connected SHS Infrastructure"],
+      "blank_page": false,
+      "hub_fallback": false,
+      "major_console_errors": []
+    },
+    {
+      "route": "admin.html#/ops/reports/create",
+      "status": "PASS",
+      "visible_header": "Create Report",
+      "visible_intent": ["Select Report Subject", "Select Report Type", "Select Visibility", "Generate Draft Report"],
+      "blank_page": false,
+      "hub_fallback": false,
+      "major_console_errors": []
+    },
+    {
+      "route": "admin.html#/ops/reports/history",
+      "status": "PASS",
+      "visible_header": "Report History",
+      "visible_intent": ["lifecycle/status metadata", "visibility metadata", "report history table"],
+      "blank_page": false,
+      "hub_fallback": false,
+      "major_console_errors": []
+    },
+    {
+      "route": "admin.html#/ops/reports/export-metadata",
+      "status": "PASS",
+      "visible_header": "Export Metadata",
+      "visible_intent": ["export metadata", "export readiness", "Save as PDF instruction"],
+      "blank_page": false,
+      "hub_fallback": false,
+      "major_console_errors": []
+    },
+    {
+      "route": "admin.html#/ops/reports/premium-preview",
+      "status": "PASS",
+      "visible_header": "Premium Report Preview",
+      "visible_intent": ["Table of Contents", "SHS Reports Command", "Page 1"],
+      "blank_page": false,
+      "hub_fallback": false,
+      "major_console_errors": []
+    },
+    {
+      "route": "admin.html#/ops/reports/premium-preview/toc",
+      "status": "PASS",
+      "visible_header": "Table of Contents",
+      "visible_intent": ["Premium Report Book Pages", "How to Read This Report"],
+      "blank_page": false,
+      "hub_fallback": false,
+      "major_console_errors": []
+    },
+    {
+      "route": "admin.html#/ops/reports/premium-preview/executive-summary",
+      "status": "PASS",
+      "visible_header": "Executive Summary",
+      "visible_intent": ["Executive Decision Summary", "Data Readiness Snapshot", "Report Control Status"],
+      "blank_page": false,
+      "hub_fallback": false,
+      "major_console_errors": []
+    },
+    {
+      "route": "admin.html#/ops/reports/premium-preview/client-profile",
+      "status": "PASS",
+      "visible_header": "Client / Organization Profile",
+      "visible_intent": ["System Profile", "Active Modules", "Source Readiness Snapshot", "Profile Control Status"],
+      "blank_page": false,
+      "hub_fallback": false,
+      "major_console_errors": []
+    }
+  ],
+  "operator_flow": {
+    "status": "PASS",
+    "flow": [
+      "Admin opens Reports Command",
+      "Admin selects or creates a report",
+      "Admin views readiness, branding, visibility, and draft controls",
+      "Admin previews Premium Report",
+      "Admin checks Table of Contents",
+      "Admin checks Executive Summary",
+      "Admin checks Client Profile",
+      "Admin views History",
+      "Admin views Export Metadata",
+      "Admin returns to Hub/Admin through shared navigation"
+    ],
+    "dead_end_found": false,
+    "automatic_publish_or_export_observed": false
+  },
+  "governance_boundary_smoke": {
+    "status": "PASS",
+    "shs_reports_are_shs_operational_infrastructure": true,
+    "shs_reports_claim_shf_impact_data_spine": false,
+    "shs_reports_import_shfImpactData": false,
+    "shs_reports_mutate_shfImpactData": false,
+    "publicApproved_write_observed": false,
+    "public_approved_write_observed": false,
+    "data_approval_gateway_separate": true,
+    "client_admin_blocked_from_ops_reports": true,
+    "public_path_exposes_reports_command": false,
+    "notes": "Client-admin was redirected to #/hub from #/ops/reports; direct /ops/reports showed the generic launcher, not Reports Command."
+  },
+  "safe_fixes_applied": [],
+  "known_warnings": [
+    "Vite large chunk warning over 700 kB remains non-blocking.",
+    "Daily and paid-launch scripts print expected manual-check reminders for governance/boundary categories."
+  ],
+  "remaining_risks": [
+    "Local browser smoke only; deployed production smoke was not performed.",
+    "Smoke did not perform destructive actions such as generating drafts, locking exports, publishing, or mutating report data.",
+    "src/pages/admin/clientops/ does not exist in this SHRV1 checkout; ClientOps remains represented as SHS Spine source context in report registry/readiness data.",
+    "Large chunks remain a future performance/code-splitting concern."
+  ],
+  "launch_handoff_ready": true,
+  "validation": {
+    "npm run check:governance": "PASS",
+    "bash scripts/run_daily_governance_audit.sh": "PASS",
+    "bash scripts/run_paid_launch_checks.sh": "PASS",
+    "npm run build": "PASS",
+    "browser_smoke": "PASS",
+    "client_admin_boundary_smoke": "PASS",
+    "public_path_boundary_smoke": "PASS"
+  },
+  "git_safety": {
+    "initial_status": "clean",
+    "commit_made": false,
+    "files_deleted": [],
+    "files_moved": [],
+    "final_expected_status": [
+      "?? docs/MANUAL_BROWSER_SMOKE_LAUNCH_HANDOFF_V1.md",
+      "?? docs/MANUAL_BROWSER_SMOKE_LAUNCH_HANDOFF_V1.json"
+    ]
+  },
+  "files_changed": [
+    "docs/MANUAL_BROWSER_SMOKE_LAUNCH_HANDOFF_V1.md",
+    "docs/MANUAL_BROWSER_SMOKE_LAUNCH_HANDOFF_V1.json"
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "name": "Agent Workbench V1 + Agent Task Queue V1",
+  "canonical_matrix": "docs/AGENT_CANONICAL_WORKFORCE_CAPABILITY_MATRIX_V1.json",
+  "agent_workforce": [
+    "shs_sales_agent",
+    "shs_project_agent",
+    "shs_library_agent",
+    "shs_qa_agent",
+    "shs_clientops_agent",
+    "shs_report_agent",
+    "shs_governance_agent",
+    "shs_executive_agent"
+  ],
+  "task_queue_model": {
+    "storage": "frontend_localStorage",
+    "storage_key": "shs.agentWorkbench.tasks.v1",
+    "fields": [
+      "task_id",
+      "title",
+      "task_type",
+      "assigned_agent_id",
+      "source_system",
+      "priority",
+      "risk_level",
+      "status",
+      "approval_status",
+      "intended_action",
+      "agent_recommendation",
+      "operator_note",
+      "created_at",
+      "updated_at",
+      "blockers",
+      "warnings",
+      "audit_events"
+    ],
+    "statuses": [
+      "draft",
+      "queued",
+      "in_review",
+      "approved",
+      "rejected",
+      "completed",
+      "blocked"
+    ],
+    "approval_statuses": [
+      "not_required",
+      "required",
+      "approved",
+      "rejected"
+    ]
+  },
+  "ui_routes": [
+    "admin.html#/ops/agents",
+    "admin.html#/agent-fabric"
+  ],
+  "access_control": {
+    "route": "/ops/agents",
+    "allowed_roles": [
+      "shs_admin"
+    ],
+    "blocked_roles": [
+      "client_admin",
+      "client",
+      "public"
+    ],
+    "permission_guard": "SHS_SECURITY_PERMISSIONS.AUDIT_VIEW"
+  },
+  "human_approval_rules": [
+    "approve task changes local task status and approval_status only",
+    "reject task changes local task status and approval_status only",
+    "mark complete changes local task status only",
+    "return to review changes local task status only",
+    "add note updates operator_note and local audit history only",
+    "no approval action executes production work"
+  ],
+  "audit_model": [
+    "task_created",
+    "approval_changed",
+    "task_status_changed",
+    "note_added"
+  ],
+  "safety_boundaries": [
+    "no autonomous production execution",
+    "no production record mutation",
+    "no report publishing",
+    "no SHF Impact Data Spine mutation",
+    "no public_approved mutation",
+    "no external API calls",
+    "no webhooks",
+    "no notifications",
+    "no warehouse writes",
+    "no database migrations"
+  ],
+  "files_created": [
+    "src/data/agents/shsAgentWorkforce.js",
+    "src/data/agents/agentTaskQueue.js",
+    "src/data/agents/agentTaskStorage.js",
+    "src/data/agents/agentTaskMetrics.js",
+    "src/pages/admin/agents/AgentWorkbenchPage.jsx",
+    "src/pages/admin/agents/components/AgentOverviewPanel.jsx",
+    "src/pages/admin/agents/components/AgentTaskQueue.jsx",
+    "src/pages/admin/agents/components/AgentTaskDetail.jsx",
+    "src/pages/admin/agents/components/AgentApprovalPanel.jsx",
+    "src/pages/admin/agents/components/AgentActivityTimeline.jsx",
+    "src/pages/admin/agents/components/AgentPerformanceSnapshot.jsx",
+    "src/pages/admin/agents/agentWorkbench.css",
+    "docs/AGENT_WORKBENCH_TASK_QUEUE_V1.md",
+    "docs/AGENT_WORKBENCH_TASK_QUEUE_V1.json",
+    "docs/AGENT_CANONICAL_WORKFORCE_CAPABILITY_MATRIX_V1.md",
+    "docs/AGENT_CANONICAL_WORKFORCE_CAPABILITY_MATRIX_V1.json"
+  ],
+  "files_modified": [
+    "src/router/AdminRoutes.jsx",
+    "src/components/admin/AdminSidebar.jsx",
+    "src/system/identity/hubAccessControl.js",
+    "src/system/routes/crossAppRouteBridge.js"
+  ],
+  "validation": {
+    "status": "passed",
+    "commands": {
+      "python3 -m json.tool docs/AGENT_WORKBENCH_TASK_QUEUE_V1.json": "PASS",
+      "npm run check:governance": "PASS",
+      "bash scripts/run_daily_governance_audit.sh": "PASS",
+      "bash scripts/run_paid_launch_checks.sh": "PASS",
+      "npm run build": "PASS_WITH_EXISTING_LARGE_CHUNK_WARNING"
+    },
+    "manual_browser_smoke": {
+      "route": "admin.html#/ops/agents",
+      "loads": "PASS",
+      "agent_workbench_title_visible": "PASS",
+      "agent_overview_visible": "PASS",
+      "task_queue_visible": "PASS",
+      "task_detail_visible": "PASS",
+      "approval_panel_visible": "PASS",
+      "activity_timeline_visible": "PASS",
+      "performance_snapshot_visible": "PASS",
+      "approve_status_change": "PASS",
+      "reject_status_change": "PASS",
+      "complete_status_change": "PASS",
+      "localStorage_refresh_persistence": "PASS",
+      "client_admin_blocked": "PASS_REDIRECTED_TO_HUB",
+      "public_no_session_blocked": "PASS_REDIRECTED_TO_LOGIN",
+      "console_breaking_errors": "NO_RENDERING_BREAKING_ERRORS_OBSERVED",
+      "local_proxy_note": "Vite logged non-blocking /auth/me proxy errors because local backend 127.0.0.1:8091 was not running."
+    }
+  },
+  "remaining_risks": [
+    "V1 queue persistence is localStorage only",
+    "approval history is browser-local",
+    "workbench consumes frontend data directly, while backend contracts/agents/agents.json now carries matching SHS V1 agent IDs",
+    "no real executor is enabled by design",
+    "browser-local smoke state may persist until queue reset",
+    "local dev may log non-blocking /auth/me proxy errors when the auth backend is not running"
+  ],
+  "v1_complete": true
+}

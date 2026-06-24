@@ -1,28 +1,65 @@
 {
-  "ai_analyst_agent": {
-    "agent_id": "ai_analyst_agent",
-    "agentId": "ai_analyst_agent",
-    "name": "AI Analyst Agent",
-    "label": "AI Analyst Agent",
-    "version": "v1",
-    "layer": "analyst_layer",
-    "role": "Explains dashboard state, drawer context, verification readiness, and recommended next actions in plain language.",
-    "visibility": "user_visible",
+  "adaptive_experience_agent": {
+    "agentId": "adaptive_experience_agent",
+    "agent_id": "adaptive_experience_agent",
+    "allowedTools": [
+      "log_note",
+      "save_draft_artifact"
+    ],
+    "capabilities": [
+      "friction_detection",
+      "feature_usage_summary",
+      "workflow_bottleneck_detection",
+      "ux_recommendation"
+    ],
+    "eventLogging": true,
+    "healthCheck": {
+      "required": true,
+      "status": "registered"
+    },
+    "inputs": [
+      "experience_events",
+      "surface_name",
+      "role_context",
+      "workflow_completion_signals"
+    ],
+    "label": "Adaptive Experience Agent",
+    "layer": "adaptive_experience_layer",
     "lifecycle": "active",
+    "memoryScope": "privacy_safe_product_context",
+    "name": "Adaptive Experience Agent",
+    "outputs": [
+      "friction_report",
+      "feature_usage_map",
+      "workflow_bottleneck_report",
+      "ux_recommendations"
+    ],
+    "policy": {
+      "humanApproval": false,
+      "maxSteps": 7,
+      "notes": "Can recommend UX improvements. Should not collect sensitive user data or alter production behavior automatically."
+    },
+    "role": "Reads privacy-safe experience signals, detects workflow friction, and recommends page or workflow improvements.",
+    "version": "v1",
+    "visibility": "internal"
+  },
+  "ai_analyst_agent": {
+    "agentId": "ai_analyst_agent",
+    "agent_id": "ai_analyst_agent",
+    "allowedTools": [
+      "log_note",
+      "save_draft_artifact"
+    ],
     "capabilities": [
       "dashboard_explanation",
       "drawer_context_summary",
       "next_action_recommendation",
       "plain_language_reasoning"
     ],
-    "allowedTools": [
-      "log_note",
-      "save_draft_artifact"
-    ],
-    "policy": {
-      "humanApproval": false,
-      "maxSteps": 6,
-      "notes": "Can explain and recommend. Cannot approve, verify, publish, or modify official records without another system action."
+    "eventLogging": true,
+    "healthCheck": {
+      "required": true,
+      "status": "registered"
     },
     "inputs": [
       "selected_entity",
@@ -31,301 +68,42 @@
       "verification_state",
       "ui_context"
     ],
+    "label": "AI Analyst Agent",
+    "layer": "analyst_layer",
+    "lifecycle": "active",
+    "memoryScope": "session_and_case_context",
+    "name": "AI Analyst Agent",
     "outputs": [
       "plain_language_summary",
       "recommended_next_action",
       "risk_notes",
       "confidence_explanation"
     ],
-    "memoryScope": "session_and_case_context",
-    "eventLogging": true,
-    "healthCheck": {
-      "required": true,
-      "status": "registered"
-    }
-  },
-  "oracle_truth_agent": {
-    "agent_id": "oracle_truth_agent",
-    "agentId": "oracle_truth_agent",
-    "name": "Oracle Truth Agent",
-    "label": "Oracle Truth Agent",
-    "version": "v1",
-    "layer": "oracle_layer",
-    "role": "Reads Oracle truth packages and returns truth status, confidence state, contradiction state, readiness state, and trust-envelope notes.",
-    "visibility": "internal",
-    "lifecycle": "active",
-    "capabilities": [
-      "truth_package_reading",
-      "confidence_interpretation",
-      "contradiction_detection",
-      "readiness_summary"
-    ],
-    "allowedTools": [
-      "log_note"
-    ],
     "policy": {
       "humanApproval": false,
-      "maxSteps": 5,
-      "notes": "Reads and explains Oracle outputs. Does not create truth by itself."
-    },
-    "inputs": [
-      "entity_id",
-      "oracle_truth_package",
-      "source_summary",
-      "trust_envelope"
-    ],
-    "outputs": [
-      "truth_status_summary",
-      "confidence_band_summary",
-      "contradiction_summary",
-      "readiness_summary"
-    ],
-    "memoryScope": "case_context",
-    "eventLogging": true,
-    "healthCheck": {
-      "required": true,
-      "status": "registered"
-    }
-  },
-  "verification_agent": {
-    "agent_id": "verification_agent",
-    "agentId": "verification_agent",
-    "name": "Verification Agent",
-    "label": "Verification Agent",
-    "version": "v1",
-    "layer": "verification_layer",
-    "role": "Reviews evidence sufficiency, verification status, audit trace coverage, and weak-proof risk.",
-    "visibility": "internal",
-    "lifecycle": "active",
-    "capabilities": [
-      "evidence_review",
-      "verification_status_summary",
-      "audit_trace_check",
-      "weak_evidence_flagging"
-    ],
-    "allowedTools": [
-      "log_note"
-    ],
-    "policy": {
-      "humanApproval": true,
       "maxSteps": 6,
-      "notes": "Can recommend verification state but final approval should remain human-controlled or policy-controlled."
+      "notes": "Can explain and recommend. Cannot approve, verify, publish, or modify official records without another system action."
     },
-    "inputs": [
-      "evidence_items",
-      "source_records",
-      "audit_trace",
-      "verification_rules"
-    ],
-    "outputs": [
-      "verification_summary",
-      "missing_evidence",
-      "risk_flags",
-      "approval_recommendation"
-    ],
-    "memoryScope": "case_context",
-    "eventLogging": true,
-    "healthCheck": {
-      "required": true,
-      "status": "registered"
-    }
-  },
-  "reconciliation_agent": {
-    "agent_id": "reconciliation_agent",
-    "agentId": "reconciliation_agent",
-    "name": "Reconciliation Agent",
-    "label": "Reconciliation Agent",
+    "role": "Explains dashboard state, drawer context, verification readiness, and recommended next actions in plain language.",
     "version": "v1",
-    "layer": "reconciliation_layer",
-    "role": "Finds conflicting records, compares source priority, and prepares contradiction-resolution notes before Oracle judgment.",
-    "visibility": "internal",
-    "lifecycle": "active",
-    "capabilities": [
-      "conflict_detection",
-      "source_priority_comparison",
-      "contradiction_resolution_notes"
-    ],
-    "allowedTools": [
-      "log_note"
-    ],
-    "policy": {
-      "humanApproval": true,
-      "maxSteps": 6,
-      "notes": "Can identify conflicts and recommend resolution. Should not silently overwrite source records."
-    },
-    "inputs": [
-      "source_records",
-      "conflicting_values",
-      "source_priority_rules"
-    ],
-    "outputs": [
-      "conflict_summary",
-      "recommended_resolution",
-      "remaining_uncertainty",
-      "audit_note"
-    ],
-    "memoryScope": "case_context",
-    "eventLogging": true,
-    "healthCheck": {
-      "required": true,
-      "status": "registered"
-    }
-  },
-  "watchtower_agent": {
-    "agent_id": "watchtower_agent",
-    "agentId": "watchtower_agent",
-    "name": "Watchtower Agent",
-    "label": "Watchtower Agent",
-    "version": "v1",
-    "layer": "watchtower_layer",
-    "role": "Monitors risk signals, system integrity, audit health, weak proof, and infrastructure alerts.",
-    "visibility": "internal",
-    "lifecycle": "active",
-    "capabilities": [
-      "risk_monitoring",
-      "audit_health_monitoring",
-      "integrity_signal_detection",
-      "alert_summary"
-    ],
-    "allowedTools": [
-      "log_note"
-    ],
-    "policy": {
-      "humanApproval": false,
-      "maxSteps": 8,
-      "notes": "Can alert and summarize. Cannot override locked enforcement gates."
-    },
-    "inputs": [
-      "watchtower_snapshot",
-      "risk_events",
-      "audit_events",
-      "system_health"
-    ],
-    "outputs": [
-      "risk_summary",
-      "alert_level",
-      "recommended_operator_action",
-      "audit_health_note"
-    ],
-    "memoryScope": "system_context",
-    "eventLogging": true,
-    "healthCheck": {
-      "required": true,
-      "status": "registered"
-    }
-  },
-  "impact_measurement_agent": {
-    "agent_id": "impact_measurement_agent",
-    "agentId": "impact_measurement_agent",
-    "name": "Impact Measurement Agent",
-    "label": "Impact Measurement Agent",
-    "version": "v1",
-    "layer": "impact_intelligence_layer",
-    "role": "Measures verified impact using outcome definitions, time windows, cost logic, evidence strength, and confidence scoring.",
-    "visibility": "internal",
-    "lifecycle": "active",
-    "capabilities": [
-      "impact_measurement",
-      "cost_per_outcome_analysis",
-      "evidence_strength_summary",
-      "verified_outcome_summary"
-    ],
-    "allowedTools": [
-      "log_note",
-      "save_draft_artifact"
-    ],
-    "policy": {
-      "humanApproval": false,
-      "maxSteps": 8,
-      "notes": "Measures impact from available data. Must clearly separate claimed, verified, pending, and weak-evidence outcomes."
-    },
-    "inputs": [
-      "outcome_records",
-      "cost_records",
-      "evidence_status",
-      "time_window",
-      "program_context"
-    ],
-    "outputs": [
-      "impact_scorecard",
-      "verified_outcome_summary",
-      "cost_per_outcome_summary",
-      "evidence_strength_summary"
-    ],
-    "memoryScope": "program_and_case_context",
-    "eventLogging": true,
-    "healthCheck": {
-      "required": true,
-      "status": "registered"
-    }
-  },
-  "impact_comparison_agent": {
-    "agent_id": "impact_comparison_agent",
-    "agentId": "impact_comparison_agent",
-    "name": "Impact Comparison Agent",
-    "label": "Impact Comparison Agent",
-    "version": "v1",
-    "layer": "impact_intelligence_layer",
-    "role": "Compares measured impact across programs, partners, counties, neighborhoods, funders, service lanes, and time periods.",
-    "visibility": "internal",
-    "lifecycle": "active",
-    "capabilities": [
-      "impact_comparison",
-      "program_efficiency_comparison",
-      "partner_performance_comparison",
-      "funding_risk_comparison"
-    ],
-    "allowedTools": [
-      "log_note",
-      "save_draft_artifact"
-    ],
-    "policy": {
-      "humanApproval": false,
-      "maxSteps": 8,
-      "notes": "Must use measured impact first before comparison. Should not compare weak data as if verified."
-    },
-    "inputs": [
-      "measured_impact_records",
-      "comparison_groups",
-      "benchmarks",
-      "confidence_scores"
-    ],
-    "outputs": [
-      "comparison_summary",
-      "high_performer_flags",
-      "risk_flags",
-      "scale_recommendation"
-    ],
-    "memoryScope": "program_and_network_context",
-    "eventLogging": true,
-    "healthCheck": {
-      "required": true,
-      "status": "registered"
-    }
+    "visibility": "user_visible"
   },
   "hub_guide_agent": {
-    "agent_id": "hub_guide_agent",
     "agentId": "hub_guide_agent",
-    "name": "Hub Guide Agent",
-    "label": "Hub Guide Agent",
-    "version": "v1",
-    "layer": "hub_collaboration_layer",
-    "role": "Guides users to the correct Hub page based on their goal, role, status, and next best workflow step.",
-    "visibility": "user_visible",
-    "lifecycle": "active",
+    "agent_id": "hub_guide_agent",
+    "allowedTools": [
+      "log_note"
+    ],
     "capabilities": [
       "guided_page_selection",
       "workflow_guidance",
       "role_aware_navigation",
       "next_page_recommendation"
     ],
-    "allowedTools": [
-      "log_note"
-    ],
-    "policy": {
-      "humanApproval": false,
-      "maxSteps": 5,
-      "notes": "Can guide navigation and explain workflows. Cannot change permissions or submit official records."
+    "eventLogging": true,
+    "healthCheck": {
+      "required": true,
+      "status": "registered"
     },
     "inputs": [
       "user_role",
@@ -334,43 +112,43 @@
       "workflow_goal",
       "hub_status_signals"
     ],
+    "label": "Hub Guide Agent",
+    "layer": "hub_collaboration_layer",
+    "lifecycle": "active",
+    "memoryScope": "session_context",
+    "name": "Hub Guide Agent",
     "outputs": [
       "recommended_page",
       "reason",
       "next_step",
       "workflow_hint"
     ],
-    "memoryScope": "session_context",
-    "eventLogging": true,
-    "healthCheck": {
-      "required": true,
-      "status": "registered"
-    }
+    "policy": {
+      "humanApproval": false,
+      "maxSteps": 5,
+      "notes": "Can guide navigation and explain workflows. Cannot change permissions or submit official records."
+    },
+    "role": "Guides users to the correct Hub page based on their goal, role, status, and next best workflow step.",
+    "version": "v1",
+    "visibility": "user_visible"
   },
   "hub_matching_agent": {
-    "agent_id": "hub_matching_agent",
     "agentId": "hub_matching_agent",
-    "name": "Hub Matching Agent",
-    "label": "Hub Matching Agent",
-    "version": "v1",
-    "layer": "hub_intelligence_engine",
-    "role": "Recommends partner matches, referral routes, bundled opportunities, and business network combinations.",
-    "visibility": "internal",
-    "lifecycle": "active",
+    "agent_id": "hub_matching_agent",
+    "allowedTools": [
+      "log_note",
+      "save_draft_artifact"
+    ],
     "capabilities": [
       "partner_matching",
       "referral_route_scoring",
       "bundle_recommendation",
       "business_network_matching"
     ],
-    "allowedTools": [
-      "log_note",
-      "save_draft_artifact"
-    ],
-    "policy": {
-      "humanApproval": true,
-      "maxSteps": 8,
-      "notes": "Can recommend matches and bundles. Human review required before final partner commitment or proposal submission."
+    "eventLogging": true,
+    "healthCheck": {
+      "required": true,
+      "status": "registered"
     },
     "inputs": [
       "partner_profiles",
@@ -379,6 +157,11 @@
       "outcome_history",
       "pricing_context"
     ],
+    "label": "Hub Matching Agent",
+    "layer": "hub_intelligence_engine",
+    "lifecycle": "active",
+    "memoryScope": "network_context",
+    "name": "Hub Matching Agent",
     "outputs": [
       "recommended_matches",
       "match_scores",
@@ -386,37 +169,205 @@
       "risk_notes",
       "next_action"
     ],
-    "memoryScope": "network_context",
+    "policy": {
+      "humanApproval": true,
+      "maxSteps": 8,
+      "notes": "Can recommend matches and bundles. Human review required before final partner commitment or proposal submission."
+    },
+    "role": "Recommends partner matches, referral routes, bundled opportunities, and business network combinations.",
+    "version": "v1",
+    "visibility": "internal"
+  },
+  "impact_comparison_agent": {
+    "agentId": "impact_comparison_agent",
+    "agent_id": "impact_comparison_agent",
+    "allowedTools": [
+      "log_note",
+      "save_draft_artifact"
+    ],
+    "capabilities": [
+      "impact_comparison",
+      "program_efficiency_comparison",
+      "partner_performance_comparison",
+      "funding_risk_comparison"
+    ],
     "eventLogging": true,
     "healthCheck": {
       "required": true,
       "status": "registered"
-    }
+    },
+    "inputs": [
+      "measured_impact_records",
+      "comparison_groups",
+      "benchmarks",
+      "confidence_scores"
+    ],
+    "label": "Impact Comparison Agent",
+    "layer": "impact_intelligence_layer",
+    "lifecycle": "active",
+    "memoryScope": "program_and_network_context",
+    "name": "Impact Comparison Agent",
+    "outputs": [
+      "comparison_summary",
+      "high_performer_flags",
+      "risk_flags",
+      "scale_recommendation"
+    ],
+    "policy": {
+      "humanApproval": false,
+      "maxSteps": 8,
+      "notes": "Must use measured impact first before comparison. Should not compare weak data as if verified."
+    },
+    "role": "Compares measured impact across programs, partners, counties, neighborhoods, funders, service lanes, and time periods.",
+    "version": "v1",
+    "visibility": "internal"
+  },
+  "impact_measurement_agent": {
+    "agentId": "impact_measurement_agent",
+    "agent_id": "impact_measurement_agent",
+    "allowedTools": [
+      "log_note",
+      "save_draft_artifact"
+    ],
+    "capabilities": [
+      "impact_measurement",
+      "cost_per_outcome_analysis",
+      "evidence_strength_summary",
+      "verified_outcome_summary"
+    ],
+    "eventLogging": true,
+    "healthCheck": {
+      "required": true,
+      "status": "registered"
+    },
+    "inputs": [
+      "outcome_records",
+      "cost_records",
+      "evidence_status",
+      "time_window",
+      "program_context"
+    ],
+    "label": "Impact Measurement Agent",
+    "layer": "impact_intelligence_layer",
+    "lifecycle": "active",
+    "memoryScope": "program_and_case_context",
+    "name": "Impact Measurement Agent",
+    "outputs": [
+      "impact_scorecard",
+      "verified_outcome_summary",
+      "cost_per_outcome_summary",
+      "evidence_strength_summary"
+    ],
+    "policy": {
+      "humanApproval": false,
+      "maxSteps": 8,
+      "notes": "Measures impact from available data. Must clearly separate claimed, verified, pending, and weak-evidence outcomes."
+    },
+    "role": "Measures verified impact using outcome definitions, time windows, cost logic, evidence strength, and confidence scoring.",
+    "version": "v1",
+    "visibility": "internal"
+  },
+  "oracle_truth_agent": {
+    "agentId": "oracle_truth_agent",
+    "agent_id": "oracle_truth_agent",
+    "allowedTools": [
+      "log_note"
+    ],
+    "capabilities": [
+      "truth_package_reading",
+      "confidence_interpretation",
+      "contradiction_detection",
+      "readiness_summary"
+    ],
+    "eventLogging": true,
+    "healthCheck": {
+      "required": true,
+      "status": "registered"
+    },
+    "inputs": [
+      "entity_id",
+      "oracle_truth_package",
+      "source_summary",
+      "trust_envelope"
+    ],
+    "label": "Oracle Truth Agent",
+    "layer": "oracle_layer",
+    "lifecycle": "active",
+    "memoryScope": "case_context",
+    "name": "Oracle Truth Agent",
+    "outputs": [
+      "truth_status_summary",
+      "confidence_band_summary",
+      "contradiction_summary",
+      "readiness_summary"
+    ],
+    "policy": {
+      "humanApproval": false,
+      "maxSteps": 5,
+      "notes": "Reads and explains Oracle outputs. Does not create truth by itself."
+    },
+    "role": "Reads Oracle truth packages and returns truth status, confidence state, contradiction state, readiness state, and trust-envelope notes.",
+    "version": "v1",
+    "visibility": "internal"
+  },
+  "reconciliation_agent": {
+    "agentId": "reconciliation_agent",
+    "agent_id": "reconciliation_agent",
+    "allowedTools": [
+      "log_note"
+    ],
+    "capabilities": [
+      "conflict_detection",
+      "source_priority_comparison",
+      "contradiction_resolution_notes"
+    ],
+    "eventLogging": true,
+    "healthCheck": {
+      "required": true,
+      "status": "registered"
+    },
+    "inputs": [
+      "source_records",
+      "conflicting_values",
+      "source_priority_rules"
+    ],
+    "label": "Reconciliation Agent",
+    "layer": "reconciliation_layer",
+    "lifecycle": "active",
+    "memoryScope": "case_context",
+    "name": "Reconciliation Agent",
+    "outputs": [
+      "conflict_summary",
+      "recommended_resolution",
+      "remaining_uncertainty",
+      "audit_note"
+    ],
+    "policy": {
+      "humanApproval": true,
+      "maxSteps": 6,
+      "notes": "Can identify conflicts and recommend resolution. Should not silently overwrite source records."
+    },
+    "role": "Finds conflicting records, compares source priority, and prepares contradiction-resolution notes before Oracle judgment.",
+    "version": "v1",
+    "visibility": "internal"
   },
   "report_narrator_agent": {
-    "agent_id": "report_narrator_agent",
     "agentId": "report_narrator_agent",
-    "name": "Report Narrator Agent",
-    "label": "Report Narrator Agent",
-    "version": "v1",
-    "layer": "reporting_layer",
-    "role": "Turns verified outcomes, trust envelopes, audit traces, and report readiness into plain-language report narratives.",
-    "visibility": "user_visible",
-    "lifecycle": "active",
+    "agent_id": "report_narrator_agent",
+    "allowedTools": [
+      "log_note",
+      "save_draft_artifact"
+    ],
     "capabilities": [
       "report_summary",
       "funder_language_draft",
       "plain_language_explanation",
       "readiness_explanation"
     ],
-    "allowedTools": [
-      "log_note",
-      "save_draft_artifact"
-    ],
-    "policy": {
-      "humanApproval": true,
-      "maxSteps": 8,
-      "notes": "Can draft report language. Human approval required before export, publication, or funder submission."
+    "eventLogging": true,
+    "healthCheck": {
+      "required": true,
+      "status": "registered"
     },
     "inputs": [
       "report_data",
@@ -425,61 +376,752 @@
       "audit_trace",
       "readiness_state"
     ],
+    "label": "Report Narrator Agent",
+    "layer": "reporting_layer",
+    "lifecycle": "active",
+    "memoryScope": "report_context",
+    "name": "Report Narrator Agent",
     "outputs": [
       "report_summary",
       "draft_narrative",
       "readiness_explanation",
       "missing_items"
     ],
-    "memoryScope": "report_context",
-    "eventLogging": true,
-    "healthCheck": {
-      "required": true,
-      "status": "registered"
-    }
-  },
-  "adaptive_experience_agent": {
-    "agent_id": "adaptive_experience_agent",
-    "agentId": "adaptive_experience_agent",
-    "name": "Adaptive Experience Agent",
-    "label": "Adaptive Experience Agent",
+    "policy": {
+      "humanApproval": true,
+      "maxSteps": 8,
+      "notes": "Can draft report language. Human approval required before export, publication, or funder submission."
+    },
+    "role": "Turns verified outcomes, trust envelopes, audit traces, and report readiness into plain-language report narratives.",
     "version": "v1",
-    "layer": "adaptive_experience_layer",
-    "role": "Reads privacy-safe experience signals, detects workflow friction, and recommends page or workflow improvements.",
-    "visibility": "internal",
-    "lifecycle": "active",
-    "capabilities": [
-      "friction_detection",
-      "feature_usage_summary",
-      "workflow_bottleneck_detection",
-      "ux_recommendation"
-    ],
+    "visibility": "user_visible"
+  },
+  "shs_clientops_agent": {
+    "agentId": "shs_clientops_agent",
+    "agent_id": "shs_clientops_agent",
     "allowedTools": [
       "log_note",
       "save_draft_artifact"
     ],
-    "policy": {
-      "humanApproval": false,
-      "maxSteps": 7,
-      "notes": "Can recommend UX improvements. Should not collect sensitive user data or alter production behavior automatically."
-    },
-    "inputs": [
-      "experience_events",
-      "surface_name",
-      "role_context",
-      "workflow_completion_signals"
+    "blockedCapabilities": [
+      "execute_production_action",
+      "mutate_production_record",
+      "publish_report",
+      "mark_public_approved",
+      "mutate_shf_impact_data",
+      "send_external_webhook",
+      "send_notification",
+      "write_warehouse_record"
     ],
-    "outputs": [
-      "friction_report",
-      "feature_usage_map",
-      "workflow_bottleneck_report",
-      "ux_recommendations"
+    "capabilities": [
+      "read_context",
+      "summarize_context",
+      "recommend_next_action",
+      "draft_internal_note",
+      "create_simulated_task",
+      "update_task_status",
+      "prepare_review_packet",
+      "prepare_operator_briefing"
     ],
-    "memoryScope": "privacy_safe_product_context",
     "eventLogging": true,
     "healthCheck": {
       "required": true,
       "status": "registered"
-    }
+    },
+    "inputs": [
+      "client_context",
+      "support_context",
+      "maintenance_context",
+      "renewal_context",
+      "client_health_context"
+    ],
+    "label": "SHS ClientOps Agent",
+    "layer": "clientops",
+    "lifecycle": "active",
+    "memoryScope": "shs_agent_v1_task_context",
+    "name": "SHS ClientOps Agent",
+    "outputs": [
+      "client_health_summary",
+      "support_summary",
+      "renewal_opportunity_summary",
+      "operator_briefing"
+    ],
+    "policy": {
+      "auditRequired": true,
+      "canExecuteProductionActions": false,
+      "canMarkPublicApproved": false,
+      "canModifyAuth": false,
+      "canMutatePublicData": false,
+      "canMutateShfImpactData": false,
+      "canPublishReports": false,
+      "canSendExternalMessages": false,
+      "canSendWebhooks": false,
+      "canWriteWarehouseRecords": false,
+      "humanApproval": true,
+      "maxSteps": 6,
+      "notes": "SHS Agent V1 is dry-run/review only. Human approval is required and does not enable production execution, record mutation, report publishing, public approval, external delivery, webhook delivery, notification delivery, warehouse writes, or auth changes.",
+      "requiresHumanApprovalFor": [
+        "production_action_request",
+        "production_record_change",
+        "report_publication_request",
+        "public_approval_request",
+        "shf_impact_data_change",
+        "external_message_request",
+        "webhook_delivery_request",
+        "notification_delivery_request",
+        "warehouse_write_request",
+        "auth_or_permission_change"
+      ]
+    },
+    "role": "Client record review, support/maintenance summary, renewal/upgrade opportunity support, and client health review.",
+    "version": "v1",
+    "visibility": "internal"
+  },
+  "shs_executive_agent": {
+    "agentId": "shs_executive_agent",
+    "agent_id": "shs_executive_agent",
+    "allowedTools": [
+      "log_note",
+      "save_draft_artifact"
+    ],
+    "blockedCapabilities": [
+      "execute_production_action",
+      "mutate_production_record",
+      "publish_report",
+      "mark_public_approved",
+      "mutate_shf_impact_data",
+      "send_external_webhook",
+      "send_notification",
+      "write_warehouse_record"
+    ],
+    "capabilities": [
+      "read_context",
+      "summarize_context",
+      "recommend_next_action",
+      "draft_internal_note",
+      "create_simulated_task",
+      "update_task_status",
+      "prepare_review_packet",
+      "prepare_operator_briefing"
+    ],
+    "eventLogging": true,
+    "healthCheck": {
+      "required": true,
+      "status": "registered"
+    },
+    "inputs": [
+      "executive_context",
+      "portfolio_context",
+      "launch_readiness_context",
+      "owner_briefing_context"
+    ],
+    "label": "SHS Executive Agent",
+    "layer": "executive_operations",
+    "lifecycle": "active",
+    "memoryScope": "shs_agent_v1_task_context",
+    "name": "SHS Executive Agent",
+    "outputs": [
+      "executive_summary",
+      "portfolio_overview",
+      "owner_briefing",
+      "launch_readiness_summary"
+    ],
+    "policy": {
+      "auditRequired": true,
+      "canExecuteProductionActions": false,
+      "canMarkPublicApproved": false,
+      "canModifyAuth": false,
+      "canMutatePublicData": false,
+      "canMutateShfImpactData": false,
+      "canPublishReports": false,
+      "canSendExternalMessages": false,
+      "canSendWebhooks": false,
+      "canWriteWarehouseRecords": false,
+      "humanApproval": true,
+      "maxSteps": 6,
+      "notes": "SHS Agent V1 is dry-run/review only. Human approval is required and does not enable production execution, record mutation, report publishing, public approval, external delivery, webhook delivery, notification delivery, warehouse writes, or auth changes.",
+      "requiresHumanApprovalFor": [
+        "production_action_request",
+        "production_record_change",
+        "report_publication_request",
+        "public_approval_request",
+        "shf_impact_data_change",
+        "external_message_request",
+        "webhook_delivery_request",
+        "notification_delivery_request",
+        "warehouse_write_request",
+        "auth_or_permission_change"
+      ]
+    },
+    "role": "Executive summary support, portfolio overview, owner briefing, and launch readiness summary.",
+    "version": "v1",
+    "visibility": "internal"
+  },
+  "shs_governance_agent": {
+    "agentId": "shs_governance_agent",
+    "agent_id": "shs_governance_agent",
+    "allowedTools": [
+      "log_note",
+      "save_draft_artifact"
+    ],
+    "blockedCapabilities": [
+      "execute_production_action",
+      "mutate_production_record",
+      "publish_report",
+      "mark_public_approved",
+      "mutate_shf_impact_data",
+      "send_external_webhook",
+      "send_notification",
+      "write_warehouse_record"
+    ],
+    "capabilities": [
+      "read_context",
+      "summarize_context",
+      "recommend_next_action",
+      "draft_internal_note",
+      "create_simulated_task",
+      "update_task_status",
+      "prepare_review_packet",
+      "prepare_governance_summary",
+      "prepare_operator_briefing"
+    ],
+    "eventLogging": true,
+    "healthCheck": {
+      "required": true,
+      "status": "registered"
+    },
+    "inputs": [
+      "governance_context",
+      "daily_audit_context",
+      "policy_context",
+      "readiness_gate_context",
+      "audit_verification_context"
+    ],
+    "label": "SHS Governance Agent",
+    "layer": "governance_layer",
+    "lifecycle": "active",
+    "memoryScope": "shs_agent_v1_task_context",
+    "name": "SHS Governance Agent",
+    "outputs": [
+      "governance_summary",
+      "daily_audit_summary",
+      "boundary_warning",
+      "policy_readiness_summary"
+    ],
+    "policy": {
+      "auditRequired": true,
+      "canExecuteProductionActions": false,
+      "canMarkPublicApproved": false,
+      "canModifyAuth": false,
+      "canMutatePublicData": false,
+      "canMutateShfImpactData": false,
+      "canPublishReports": false,
+      "canSendExternalMessages": false,
+      "canSendWebhooks": false,
+      "canWriteWarehouseRecords": false,
+      "humanApproval": true,
+      "maxSteps": 6,
+      "notes": "SHS Agent V1 is dry-run/review only. Human approval is required and does not enable production execution, record mutation, report publishing, public approval, external delivery, webhook delivery, notification delivery, warehouse writes, or auth changes.",
+      "requiresHumanApprovalFor": [
+        "production_action_request",
+        "production_record_change",
+        "report_publication_request",
+        "public_approval_request",
+        "shf_impact_data_change",
+        "external_message_request",
+        "webhook_delivery_request",
+        "notification_delivery_request",
+        "warehouse_write_request",
+        "auth_or_permission_change"
+      ]
+    },
+    "role": "Governance check summary, daily audit review, boundary/risk warning, and policy/readiness review support.",
+    "version": "v1",
+    "visibility": "internal"
+  },
+  "shs_library_agent": {
+    "agentId": "shs_library_agent",
+    "agent_id": "shs_library_agent",
+    "allowedTools": [
+      "log_note",
+      "save_draft_artifact"
+    ],
+    "blockedCapabilities": [
+      "execute_production_action",
+      "mutate_production_record",
+      "publish_report",
+      "mark_public_approved",
+      "mutate_shf_impact_data",
+      "send_external_webhook",
+      "send_notification",
+      "write_warehouse_record"
+    ],
+    "capabilities": [
+      "read_context",
+      "summarize_context",
+      "recommend_next_action",
+      "draft_internal_note",
+      "create_simulated_task",
+      "update_task_status",
+      "prepare_review_packet"
+    ],
+    "eventLogging": true,
+    "healthCheck": {
+      "required": true,
+      "status": "registered"
+    },
+    "inputs": [
+      "library_context",
+      "template_catalog",
+      "build_packet_context",
+      "asset_context"
+    ],
+    "label": "SHS Development Library Agent",
+    "layer": "development_library",
+    "lifecycle": "active",
+    "memoryScope": "shs_agent_v1_task_context",
+    "name": "SHS Development Library Agent",
+    "outputs": [
+      "template_recommendation",
+      "build_packet_notes",
+      "reuse_summary",
+      "review_packet"
+    ],
+    "policy": {
+      "auditRequired": true,
+      "canExecuteProductionActions": false,
+      "canMarkPublicApproved": false,
+      "canModifyAuth": false,
+      "canMutatePublicData": false,
+      "canMutateShfImpactData": false,
+      "canPublishReports": false,
+      "canSendExternalMessages": false,
+      "canSendWebhooks": false,
+      "canWriteWarehouseRecords": false,
+      "humanApproval": true,
+      "maxSteps": 6,
+      "notes": "SHS Agent V1 is dry-run/review only. Human approval is required and does not enable production execution, record mutation, report publishing, public approval, external delivery, webhook delivery, notification delivery, warehouse writes, or auth changes.",
+      "requiresHumanApprovalFor": [
+        "production_action_request",
+        "production_record_change",
+        "report_publication_request",
+        "public_approval_request",
+        "shf_impact_data_change",
+        "external_message_request",
+        "webhook_delivery_request",
+        "notification_delivery_request",
+        "warehouse_write_request",
+        "auth_or_permission_change"
+      ]
+    },
+    "role": "Development Library support, template/package recommendation, build packet preparation support, and reusable asset recommendations.",
+    "version": "v1",
+    "visibility": "internal"
+  },
+  "shs_project_agent": {
+    "agentId": "shs_project_agent",
+    "agent_id": "shs_project_agent",
+    "allowedTools": [
+      "log_note",
+      "save_draft_artifact"
+    ],
+    "blockedCapabilities": [
+      "execute_production_action",
+      "mutate_production_record",
+      "publish_report",
+      "mark_public_approved",
+      "mutate_shf_impact_data",
+      "send_external_webhook",
+      "send_notification",
+      "write_warehouse_record"
+    ],
+    "capabilities": [
+      "read_context",
+      "summarize_context",
+      "recommend_next_action",
+      "draft_internal_note",
+      "create_simulated_task",
+      "update_task_status",
+      "prepare_review_packet",
+      "prepare_operator_briefing"
+    ],
+    "eventLogging": true,
+    "healthCheck": {
+      "required": true,
+      "status": "registered"
+    },
+    "inputs": [
+      "project_context",
+      "handoff_notes",
+      "task_queue_context",
+      "blocker_context"
+    ],
+    "label": "SHS Project Agent",
+    "layer": "production_ops",
+    "lifecycle": "active",
+    "memoryScope": "shs_agent_v1_task_context",
+    "name": "SHS Project Agent",
+    "outputs": [
+      "project_readiness_summary",
+      "handoff_packet",
+      "blocker_summary",
+      "operator_briefing"
+    ],
+    "policy": {
+      "auditRequired": true,
+      "canExecuteProductionActions": false,
+      "canMarkPublicApproved": false,
+      "canModifyAuth": false,
+      "canMutatePublicData": false,
+      "canMutateShfImpactData": false,
+      "canPublishReports": false,
+      "canSendExternalMessages": false,
+      "canSendWebhooks": false,
+      "canWriteWarehouseRecords": false,
+      "humanApproval": true,
+      "maxSteps": 6,
+      "notes": "SHS Agent V1 is dry-run/review only. Human approval is required and does not enable production execution, record mutation, report publishing, public approval, external delivery, webhook delivery, notification delivery, warehouse writes, or auth changes.",
+      "requiresHumanApprovalFor": [
+        "production_action_request",
+        "production_record_change",
+        "report_publication_request",
+        "public_approval_request",
+        "shf_impact_data_change",
+        "external_message_request",
+        "webhook_delivery_request",
+        "notification_delivery_request",
+        "warehouse_write_request",
+        "auth_or_permission_change"
+      ]
+    },
+    "role": "Project setup support, production handoff organization, task/project readiness review, and project blocker identification.",
+    "version": "v1",
+    "visibility": "internal"
+  },
+  "shs_qa_agent": {
+    "agentId": "shs_qa_agent",
+    "agent_id": "shs_qa_agent",
+    "allowedTools": [
+      "log_note",
+      "save_draft_artifact"
+    ],
+    "blockedCapabilities": [
+      "execute_production_action",
+      "mutate_production_record",
+      "publish_report",
+      "mark_public_approved",
+      "mutate_shf_impact_data",
+      "send_external_webhook",
+      "send_notification",
+      "write_warehouse_record"
+    ],
+    "capabilities": [
+      "read_context",
+      "summarize_context",
+      "recommend_next_action",
+      "draft_internal_note",
+      "create_simulated_task",
+      "update_task_status",
+      "prepare_review_packet",
+      "prepare_qa_summary"
+    ],
+    "eventLogging": true,
+    "healthCheck": {
+      "required": true,
+      "status": "registered"
+    },
+    "inputs": [
+      "qa_checklist",
+      "delivery_context",
+      "defect_context",
+      "browser_smoke_context"
+    ],
+    "label": "SHS QA Agent",
+    "layer": "qa_delivery",
+    "lifecycle": "active",
+    "memoryScope": "shs_agent_v1_task_context",
+    "name": "SHS QA Agent",
+    "outputs": [
+      "qa_summary",
+      "delivery_readiness_summary",
+      "blocker_summary",
+      "browser_smoke_packet"
+    ],
+    "policy": {
+      "auditRequired": true,
+      "canExecuteProductionActions": false,
+      "canMarkPublicApproved": false,
+      "canModifyAuth": false,
+      "canMutatePublicData": false,
+      "canMutateShfImpactData": false,
+      "canPublishReports": false,
+      "canSendExternalMessages": false,
+      "canSendWebhooks": false,
+      "canWriteWarehouseRecords": false,
+      "humanApproval": true,
+      "maxSteps": 6,
+      "notes": "SHS Agent V1 is dry-run/review only. Human approval is required and does not enable production execution, record mutation, report publishing, public approval, external delivery, webhook delivery, notification delivery, warehouse writes, or auth changes.",
+      "requiresHumanApprovalFor": [
+        "production_action_request",
+        "production_record_change",
+        "report_publication_request",
+        "public_approval_request",
+        "shf_impact_data_change",
+        "external_message_request",
+        "webhook_delivery_request",
+        "notification_delivery_request",
+        "warehouse_write_request",
+        "auth_or_permission_change"
+      ]
+    },
+    "role": "QA checklist review, delivery readiness review, defect/blocker summary, and browser smoke preparation.",
+    "version": "v1",
+    "visibility": "internal"
+  },
+  "shs_report_agent": {
+    "agentId": "shs_report_agent",
+    "agent_id": "shs_report_agent",
+    "allowedTools": [
+      "log_note",
+      "save_draft_artifact"
+    ],
+    "blockedCapabilities": [
+      "execute_production_action",
+      "mutate_production_record",
+      "publish_report",
+      "mark_public_approved",
+      "mutate_shf_impact_data",
+      "send_external_webhook",
+      "send_notification",
+      "write_warehouse_record"
+    ],
+    "capabilities": [
+      "read_context",
+      "summarize_context",
+      "recommend_next_action",
+      "draft_internal_note",
+      "create_simulated_task",
+      "update_task_status",
+      "prepare_review_packet",
+      "prepare_report_preview"
+    ],
+    "eventLogging": true,
+    "healthCheck": {
+      "required": true,
+      "status": "registered"
+    },
+    "inputs": [
+      "report_context",
+      "trace_context",
+      "export_metadata",
+      "premium_report_context"
+    ],
+    "label": "SHS Report Agent",
+    "layer": "reports",
+    "lifecycle": "active",
+    "memoryScope": "shs_agent_v1_task_context",
+    "name": "SHS Report Agent",
+    "outputs": [
+      "report_readiness_summary",
+      "report_preview_notes",
+      "export_metadata_review",
+      "review_packet"
+    ],
+    "policy": {
+      "auditRequired": true,
+      "canExecuteProductionActions": false,
+      "canMarkPublicApproved": false,
+      "canModifyAuth": false,
+      "canMutatePublicData": false,
+      "canMutateShfImpactData": false,
+      "canPublishReports": false,
+      "canSendExternalMessages": false,
+      "canSendWebhooks": false,
+      "canWriteWarehouseRecords": false,
+      "humanApproval": true,
+      "maxSteps": 6,
+      "notes": "SHS Agent V1 is dry-run/review only. Human approval is required and does not enable production execution, record mutation, report publishing, public approval, external delivery, webhook delivery, notification delivery, warehouse writes, or auth changes.",
+      "requiresHumanApprovalFor": [
+        "production_action_request",
+        "production_record_change",
+        "report_publication_request",
+        "public_approval_request",
+        "shf_impact_data_change",
+        "external_message_request",
+        "webhook_delivery_request",
+        "notification_delivery_request",
+        "warehouse_write_request",
+        "auth_or_permission_change"
+      ]
+    },
+    "role": "Report readiness review, report draft/preview support, export metadata review, and premium report workflow support.",
+    "version": "v1",
+    "visibility": "internal"
+  },
+  "shs_sales_agent": {
+    "agentId": "shs_sales_agent",
+    "agent_id": "shs_sales_agent",
+    "allowedTools": [
+      "log_note",
+      "save_draft_artifact"
+    ],
+    "blockedCapabilities": [
+      "execute_production_action",
+      "mutate_production_record",
+      "publish_report",
+      "mark_public_approved",
+      "mutate_shf_impact_data",
+      "send_external_webhook",
+      "send_notification",
+      "write_warehouse_record"
+    ],
+    "capabilities": [
+      "read_context",
+      "summarize_context",
+      "recommend_next_action",
+      "draft_internal_note",
+      "create_simulated_task",
+      "update_task_status",
+      "prepare_review_packet"
+    ],
+    "eventLogging": true,
+    "healthCheck": {
+      "required": true,
+      "status": "registered"
+    },
+    "inputs": [
+      "lead_intake",
+      "opportunity_context",
+      "sales_handoff_notes",
+      "proposal_context",
+      "demo_context"
+    ],
+    "label": "SHS Sales Agent",
+    "layer": "shs_sales_layer",
+    "lifecycle": "active",
+    "memoryScope": "shs_agent_v1_task_context",
+    "name": "SHS Sales Agent",
+    "outputs": [
+      "sales_readiness_summary",
+      "opportunity_summary",
+      "recommended_next_action",
+      "review_packet"
+    ],
+    "policy": {
+      "auditRequired": true,
+      "canExecuteProductionActions": false,
+      "canMarkPublicApproved": false,
+      "canModifyAuth": false,
+      "canMutatePublicData": false,
+      "canMutateShfImpactData": false,
+      "canPublishReports": false,
+      "canSendExternalMessages": false,
+      "canSendWebhooks": false,
+      "canWriteWarehouseRecords": false,
+      "humanApproval": true,
+      "maxSteps": 6,
+      "notes": "SHS Agent V1 is dry-run/review only. Human approval is required and does not enable production execution, record mutation, report publishing, public approval, external delivery, webhook delivery, notification delivery, warehouse writes, or auth changes.",
+      "requiresHumanApprovalFor": [
+        "production_action_request",
+        "production_record_change",
+        "report_publication_request",
+        "public_approval_request",
+        "shf_impact_data_change",
+        "external_message_request",
+        "webhook_delivery_request",
+        "notification_delivery_request",
+        "warehouse_write_request",
+        "auth_or_permission_change"
+      ]
+    },
+    "role": "Lead intake, opportunity summary, sales handoff preparation, proposal support, and demo readiness suggestions.",
+    "version": "v1",
+    "visibility": "internal"
+  },
+  "verification_agent": {
+    "agentId": "verification_agent",
+    "agent_id": "verification_agent",
+    "allowedTools": [
+      "log_note"
+    ],
+    "capabilities": [
+      "evidence_review",
+      "verification_status_summary",
+      "audit_trace_check",
+      "weak_evidence_flagging"
+    ],
+    "eventLogging": true,
+    "healthCheck": {
+      "required": true,
+      "status": "registered"
+    },
+    "inputs": [
+      "evidence_items",
+      "source_records",
+      "audit_trace",
+      "verification_rules"
+    ],
+    "label": "Verification Agent",
+    "layer": "verification_layer",
+    "lifecycle": "active",
+    "memoryScope": "case_context",
+    "name": "Verification Agent",
+    "outputs": [
+      "verification_summary",
+      "missing_evidence",
+      "risk_flags",
+      "approval_recommendation"
+    ],
+    "policy": {
+      "humanApproval": true,
+      "maxSteps": 6,
+      "notes": "Can recommend verification state but final approval should remain human-controlled or policy-controlled."
+    },
+    "role": "Reviews evidence sufficiency, verification status, audit trace coverage, and weak-proof risk.",
+    "version": "v1",
+    "visibility": "internal"
+  },
+  "watchtower_agent": {
+    "agentId": "watchtower_agent",
+    "agent_id": "watchtower_agent",
+    "allowedTools": [
+      "log_note"
+    ],
+    "capabilities": [
+      "risk_monitoring",
+      "audit_health_monitoring",
+      "integrity_signal_detection",
+      "alert_summary"
+    ],
+    "eventLogging": true,
+    "healthCheck": {
+      "required": true,
+      "status": "registered"
+    },
+    "inputs": [
+      "watchtower_snapshot",
+      "risk_events",
+      "audit_events",
+      "system_health"
+    ],
+    "label": "Watchtower Agent",
+    "layer": "watchtower_layer",
+    "lifecycle": "active",
+    "memoryScope": "system_context",
+    "name": "Watchtower Agent",
+    "outputs": [
+      "risk_summary",
+      "alert_level",
+      "recommended_operator_action",
+      "audit_health_note"
+    ],
+    "policy": {
+      "humanApproval": false,
+      "maxSteps": 8,
+      "notes": "Can alert and summarize. Cannot override locked enforcement gates."
+    },
+    "role": "Monitors risk signals, system integrity, audit health, weak proof, and infrastructure alerts.",
+    "version": "v1",
+    "visibility": "internal"
   }
 }

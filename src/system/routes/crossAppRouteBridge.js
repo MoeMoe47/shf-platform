@@ -68,6 +68,7 @@ export const routeOwnership = Object.freeze({
     { key: "aiGuardrails", route: "admin.html#/ai-guardrails", owner: "shrv1", access: "admin" },
     { key: "gameTheory", route: "admin.html#/game-theory", owner: "shrv1", access: "admin" },
     { key: "agentFabric", route: "admin.html#/agent-fabric", owner: "shrv1", access: "admin" },
+    { key: "agentWorkbench", route: "admin.html#/ops/agents", owner: "shrv1", access: "admin" },
     { key: "registry", route: "admin.html#/registry", owner: "shrv1", access: "admin" },
     { key: "watchtower", route: "admin.html#/watchtower", owner: "shrv1", access: "admin_redirect" },
     { key: "lordOutcomes", route: "admin.html#/lord-outcomes", owner: "shrv1", access: "admin" },
@@ -133,6 +134,13 @@ export const crossAppRouteTargets = Object.freeze({
     targetRoute: "/ops/command",
     reason: "Production ops admin opens the live ops command overview.",
   }),
+  shrv1AgentWorkbenchToShfClientOps: Object.freeze({
+    sourceApp: "shrv1",
+    sourceRoute: "admin.html#/ops/agents",
+    targetApp: "shf-next",
+    targetRoute: "/ops/clientops",
+    reason: "Agent Workbench can reference ClientOps context without exposing public or autonomous execution.",
+  }),
   shrv1OpsProjectsToShfOpsProjects: Object.freeze({
     sourceApp: "shrv1",
     sourceRoute: "admin.html#/ops/projects",
@@ -193,6 +201,7 @@ export const crossAppRouteTargets = Object.freeze({
 
 export const shrv1RoutesToSmoke = Object.freeze([
   "admin.html#/agent-fabric",
+  "admin.html#/ops/agents",
   "admin.html#/registry",
   "admin.html#/truth-spine",
   "admin.html#/oracle",

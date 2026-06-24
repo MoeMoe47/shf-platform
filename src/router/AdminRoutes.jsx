@@ -26,6 +26,7 @@ import OraclePage from "@/pages/admin/oracle/OraclePage.jsx";
 import AIGuardrailsPage from "@/pages/admin/ai-guardrails/AIGuardrailsPage.jsx";
 import GameTheoryPage from "@/pages/admin/game-theory/GameTheoryPage.jsx";
 import AgentFabricPage from "@/pages/admin/agent-fabric/AgentFabricPage.jsx";
+import AgentWorkbenchPage from "@/pages/admin/agents/AgentWorkbenchPage.jsx";
 import SHFImpactCommandCenter from "@/pages/shf-command/SHFImpactCommandCenter.jsx";
 import WorkspaceDashboard from "@/pages/exchange/WorkspaceDashboard.jsx";
 import LordOutcomesRoutes from "@/router/LordOutcomesRoutes.jsx";
@@ -202,6 +203,7 @@ export default function AdminRoutes() {
 
         {/* Internal SHS Production Ops */}
         <Route path="/ops/production" element={protect("/ops/production", <OpsProductionDashboard />)} />
+        <Route path="/ops/agents" element={protect("/ops/agents", <AgentWorkbenchPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/ops/projects" element={protect("/ops/projects", <OpsProjectSetup />)} />
         <Route path="/ops/brand-profile" element={protect("/ops/brand-profile", <OpsBrandProfile />)} />
         <Route path="/ops/page-intent" element={protect("/ops/page-intent", <OpsPageIntent />)} />

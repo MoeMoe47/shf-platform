@@ -93,6 +93,7 @@ export const hubPageAccess = {
   // Internal Production Ops stays SHS-admin only. Development identity overrides
   // happen in identityRouting.js and must not widen these route permissions.
   "/ops/production": ["shs_admin"],
+  "/ops/agents": ["shs_admin"],
   "/ops/projects": ["shs_admin"],
   "/ops/brand-profile": ["shs_admin"],
   "/ops/page-intent": ["shs_admin"],

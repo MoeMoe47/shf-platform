@@ -1,0 +1,131 @@
+{
+  "name": "Agent Backend Contract Bridge V1",
+  "backend_contract_source": "services/shf-agent-fabric/contracts/agents/agents.json",
+  "frontend_canonical_source": "src/data/agents/shsAgentWorkforce.js",
+  "required_agents": [
+    "shs_sales_agent",
+    "shs_project_agent",
+    "shs_library_agent",
+    "shs_qa_agent",
+    "shs_clientops_agent",
+    "shs_report_agent",
+    "shs_governance_agent",
+    "shs_executive_agent"
+  ],
+  "alignment_rules": [
+    "all 8 required SHS agents exist in frontend canonical workforce data",
+    "all 8 required SHS agents exist in backend Agent Fabric contracts",
+    "all dangerous flags are false",
+    "human approval is required in frontend and backend",
+    "audit is required in frontend and backend",
+    "execution_enabled is always false in V1",
+    "publish, public approval, webhook, notification, warehouse, auth, SHF Impact Data Spine mutation, and production execution powers remain blocked"
+  ],
+  "alignment_summary": {
+    "ok": true,
+    "layer": "agent_contract_bridge",
+    "canonical_agent_count": 8,
+    "backend_agent_count": 19,
+    "matched_agents": [
+      "shs_clientops_agent",
+      "shs_executive_agent",
+      "shs_governance_agent",
+      "shs_library_agent",
+      "shs_project_agent",
+      "shs_qa_agent",
+      "shs_report_agent",
+      "shs_sales_agent"
+    ],
+    "missing_backend_agents": [],
+    "extra_backend_agents": [
+      "adaptive_experience_agent",
+      "ai_analyst_agent",
+      "hub_guide_agent",
+      "hub_matching_agent",
+      "impact_comparison_agent",
+      "impact_measurement_agent",
+      "oracle_truth_agent",
+      "reconciliation_agent",
+      "report_narrator_agent",
+      "verification_agent",
+      "watchtower_agent"
+    ],
+    "dangerous_flags_enabled": [],
+    "execution_enabled": false,
+    "contracts_readable": true,
+    "alignment_status": "needs_review",
+    "warnings": [
+      "extra_backend_agents_present"
+    ],
+    "blockers": []
+  },
+  "dangerous_flag_scan": {
+    "enabled_count": 0,
+    "enabled_flags": [],
+    "execution_enabled": false,
+    "all_dangerous_flags_false": true
+  },
+  "backend_endpoints": [
+    "GET /agent-contract-bridge/health",
+    "GET /agent-contract-bridge/summary",
+    "GET /agent-contract-bridge/agents",
+    "GET /agent-contract-bridge/alignment"
+  ],
+  "workbench_integration": {
+    "route": "admin.html#/ops/agents",
+    "component": "src/pages/admin/agents/components/AgentContractBridgePanel.jsx",
+    "data_bridge": "src/data/agents/agentContractBridge.js",
+    "shows_backend_contract_status": true,
+    "shows_dangerous_flag_scan": true,
+    "shows_execution_enabled_false": true,
+    "execution_enabled": false
+  },
+  "files_created": [
+    "docs/AGENT_BACKEND_CONTRACT_BRIDGE_V1.md",
+    "docs/AGENT_BACKEND_CONTRACT_BRIDGE_V1.json",
+    "scripts/check_agent_contract_bridge.py",
+    "services/shf-agent-fabric/services/agent_contract_bridge_service.py",
+    "services/shf-agent-fabric/routers/agent_contract_bridge_routes.py",
+    "services/shf-agent-fabric/tests/test_agent_contract_bridge_routes.py",
+    "src/data/agents/agentContractBridge.js",
+    "src/pages/admin/agents/components/AgentContractBridgePanel.jsx"
+  ],
+  "files_modified": [
+    "package.json",
+    "services/shf-agent-fabric/main.py",
+    "src/pages/admin/agents/AgentWorkbenchPage.jsx",
+    "src/pages/admin/agents/agentWorkbench.css"
+  ],
+  "validation": {
+    "python3 -m py_compile services/shf-agent-fabric/services/agent_contract_bridge_service.py services/shf-agent-fabric/routers/agent_contract_bridge_routes.py": "PASS",
+    "python3 -m json.tool docs/AGENT_BACKEND_CONTRACT_BRIDGE_V1.json": "PASS",
+    "python3 -m py_compile scripts/check_agent_contract_bridge.py": "PASS",
+    "python3 scripts/check_agent_contract_bridge.py": "PASS",
+    "npm run check:agent-contract-bridge": "PASS",
+    "python3 -m pytest services/shf-agent-fabric/tests/test_agent_contract_bridge_routes.py": "PASS_3_TESTS",
+    "npm run check:governance": "PASS",
+    "bash scripts/run_daily_governance_audit.sh": "PASS_SOLO_RERUN",
+    "bash scripts/run_paid_launch_checks.sh": "PASS",
+    "npm run build": "PASS_EXISTING_LARGE_CHUNK_WARNING"
+  },
+  "browser_smoke": {
+    "admin_ops_agents_loads": "PASS",
+    "contract_bridge_panel_visible": "PASS",
+    "shows_8_canonical_agents": "PASS",
+    "shows_backend_contract_status": "PASS",
+    "dangerous_flag_scan_clean": "PASS",
+    "execution_enabled_false": "PASS",
+    "existing_task_queue_still_works": "PASS",
+    "approval_ledger_still_works": "PASS",
+    "safe_execution_stub_still_works": "PASS",
+    "client_admin_blocked": "PASS_REDIRECTED_TO_HUB_BRIDGE_AND_STUB_ABSENT",
+    "public_no_session_blocked": "PASS_REDIRECTED_TO_LOGIN_BRIDGE_AND_STUB_ABSENT",
+    "local_auth_proxy_note": "NON_BLOCKING_AUTH_ME_PROXY_REFUSED_127_0_0_1_8091"
+  },
+  "remaining_risks": [
+    "Workbench bridge uses a bundled local backend contract snapshot in V1 rather than live endpoint polling.",
+    "Backend registry includes 11 pre-existing non-SHS Agent Fabric contracts, so alignment is needs_review rather than aligned.",
+    "Future runtime bridge work must still pass Identity, Policy Engine, Readiness Gate, Audit & Verification, and Data Approval Gateway boundaries."
+  ],
+  "v1_complete": true
+}

@@ -1,4 +1,5 @@
 import React from "react";
+import { AGENT_CONTRACT_BRIDGE_SUMMARY_V1 } from "@/data/agents/agentContractBridge";
 import { SHS_AGENT_WORKFORCE_V1 } from "@/data/agents/shsAgentWorkforce";
 import { getAgentApprovalLedger, recordAgentApprovalDecision, resetAgentApprovalLedger } from "@/data/agents/agentApprovalLedger";
 import { getLatestSafeExecutionStubRunForTask, getSafeExecutionStubRuns, recordSafeExecutionStubRun, resetSafeExecutionStubRuns } from "@/data/agents/agentSafeExecutionStub";
@@ -9,6 +10,7 @@ import AgentTaskQueue from "./components/AgentTaskQueue";
 import AgentTaskDetail from "./components/AgentTaskDetail";
 import AgentApprovalPanel from "./components/AgentApprovalPanel";
 import AgentApprovalLedger from "./components/AgentApprovalLedger";
+import AgentContractBridgePanel from "./components/AgentContractBridgePanel";
 import AgentSafeExecutionPanel from "./components/AgentSafeExecutionPanel";
 import AgentActivityTimeline from "./components/AgentActivityTimeline";
 import AgentPerformanceSnapshot from "./components/AgentPerformanceSnapshot";
@@ -138,6 +140,8 @@ export default function AgentWorkbenchPage() {
       <AgentPerformanceSnapshot metrics={metrics} />
 
       <AgentApprovalLedger records={approvalLedger} agentsById={agentsById} />
+
+      <AgentContractBridgePanel summary={AGENT_CONTRACT_BRIDGE_SUMMARY_V1} />
 
       <AgentOverviewPanel
         agents={SHS_AGENT_WORKFORCE_V1}

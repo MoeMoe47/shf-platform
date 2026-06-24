@@ -13,7 +13,7 @@ function ListBlock({ title, items }) {
   );
 }
 
-export default function AgentTaskDetail({ task, agent }) {
+export default function AgentTaskDetail({ task, agent, approvalRecord, stubRun }) {
   if (!task) {
     return (
       <section className="agent-workbench-panel agent-workbench-empty" aria-label="Task Detail">
@@ -47,6 +47,10 @@ export default function AgentTaskDetail({ task, agent }) {
           <div><span>Type</span><strong>{task.task_type}</strong></div>
           <div><span>Agent</span><strong>{agent?.name || task.assigned_agent_id}</strong></div>
           <div><span>Required Approval</span><strong>{task.approval_status === "not_required" ? "No" : "Yes"}</strong></div>
+          <div><span>Ledger</span><strong>{approvalRecord?.approval_status || "not recorded"}</strong></div>
+          <div><span>Stub</span><strong>{stubRun?.stub_status || approvalRecord?.safe_execution_stub_status || "not_checked"}</strong></div>
+          <div><span>Execution Allowed</span><strong>false</strong></div>
+          <div><span>Production Action</span><strong>false</strong></div>
         </div>
         <div className="agent-workbench-copy">
           <h3>Intended Action</h3>

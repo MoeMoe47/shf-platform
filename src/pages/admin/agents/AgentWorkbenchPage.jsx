@@ -1,11 +1,15 @@
 import React from "react";
 import { SHS_AGENT_WORKFORCE_V1 } from "@/data/agents/shsAgentWorkforce";
-import { applyAgentTaskAction, createAgentTask, getAgentTasks, resetAgentTasks } from "@/data/agents/agentTaskStorage";
+import { getAgentApprovalLedger, recordAgentApprovalDecision, resetAgentApprovalLedger } from "@/data/agents/agentApprovalLedger";
+import { getLatestSafeExecutionStubRunForTask, getSafeExecutionStubRuns, recordSafeExecutionStubRun, resetSafeExecutionStubRuns } from "@/data/agents/agentSafeExecutionStub";
+import { appendAgentTaskAuditEvent, applyAgentTaskAction, createAgentTask, getAgentTasks, resetAgentTasks } from "@/data/agents/agentTaskStorage";
 import { calculateAgentTaskMetrics } from "@/data/agents/agentTaskMetrics";
 import AgentOverviewPanel from "./components/AgentOverviewPanel";
 import AgentTaskQueue from "./components/AgentTaskQueue";
 import AgentTaskDetail from "./components/AgentTaskDetail";
 import AgentApprovalPanel from "./components/AgentApprovalPanel";
+import AgentApprovalLedger from "./components/AgentApprovalLedger";
+import AgentSafeExecutionPanel from "./components/AgentSafeExecutionPanel";
 import AgentActivityTimeline from "./components/AgentActivityTimeline";
 import AgentPerformanceSnapshot from "./components/AgentPerformanceSnapshot";
 import "./agentWorkbench.css";
@@ -17,10 +21,13 @@ const SAFETY_BOUNDARIES = [
   "No public_approved mutation",
   "No external delivery",
   "No webhooks, notifications, or warehouse writes",
+  "Safe stub simulation only",
 ];
 
 export default function AgentWorkbenchPage() {
   const [tasks, setTasks] = React.useState(() => getAgentTasks());
+  const [approvalLedger, setApprovalLedger] = React.useState(() => getAgentApprovalLedger());
+  const [stubRuns, setStubRuns] = React.useState(() => getSafeExecutionStubRuns());
   const [selectedTaskId, setSelectedTaskId] = React.useState(() => getAgentTasks()[0]?.task_id || "");
   const [selectedAgentId, setSelectedAgentId] = React.useState(SHS_AGENT_WORKFORCE_V1[0]?.id || "");
 
@@ -30,6 +37,10 @@ export default function AgentWorkbenchPage() {
   );
   const selectedTask = tasks.find((task) => task.task_id === selectedTaskId) || tasks[0] || null;
   const selectedAgent = agentsById[selectedTask?.assigned_agent_id] || agentsById[selectedAgentId] || null;
+  const selectedApprovalRecord = selectedTask
+    ? [...approvalLedger].find((record) => record.task_id === selectedTask.task_id) || null
+    : null;
+  const latestStubRun = selectedTask ? getLatestSafeExecutionStubRunForTask(selectedTask.task_id, stubRuns) : null;
   const metrics = React.useMemo(() => calculateAgentTaskMetrics(tasks, SHS_AGENT_WORKFORCE_V1), [tasks]);
 
   React.useEffect(() => {
@@ -59,11 +70,54 @@ export default function AgentWorkbenchPage() {
 
   function handleTaskAction(action, note) {
     if (!selectedTask) return;
-    refresh(applyAgentTaskAction(selectedTask.task_id, action, note));
+    const nextTasks = applyAgentTaskAction(selectedTask.task_id, action, note);
+    const updatedTask = nextTasks.find((task) => task.task_id === selectedTask.task_id) || selectedTask;
+
+    if (action === "approve" || action === "reject") {
+      const nextLedger = recordAgentApprovalDecision({
+        task: updatedTask,
+        agent: selectedAgent,
+        approvalStatus: action === "approve" ? "approved" : "rejected",
+        approvedBy: "shs_operator",
+        operatorNote: note,
+      });
+      setApprovalLedger(nextLedger);
+      const auditTasks = appendAgentTaskAuditEvent(
+        selectedTask.task_id,
+        "approval_ledger_recorded",
+        action === "approve"
+          ? "Approval ledger record created. Safe execution remains simulated-only."
+          : "Approval rejection recorded in ledger. Safe execution remains blocked."
+      );
+      refresh(auditTasks);
+      return;
+    }
+
+    refresh(nextTasks);
+  }
+
+  function handleRunSafeExecutionStub() {
+    if (!selectedTask) return;
+    const { result, runs } = recordSafeExecutionStubRun({
+      task: selectedTask,
+      agent: selectedAgent,
+      approvalLedger,
+    });
+    setStubRuns(runs);
+    setApprovalLedger(getAgentApprovalLedger());
+    refresh(appendAgentTaskAuditEvent(
+      selectedTask.task_id,
+      "safe_execution_stub_recorded",
+      result.stub_status === "simulated"
+        ? "Safe execution stub simulated readiness only. No production action executed."
+        : "Safe execution stub blocked readiness. No production action executed."
+    ));
   }
 
   function handleReset() {
     const nextTasks = resetAgentTasks();
+    setApprovalLedger(resetAgentApprovalLedger());
+    setStubRuns(resetSafeExecutionStubRuns());
     refresh(nextTasks);
     setSelectedTaskId(nextTasks[0]?.task_id || "");
   }
@@ -83,6 +137,8 @@ export default function AgentWorkbenchPage() {
 
       <AgentPerformanceSnapshot metrics={metrics} />
 
+      <AgentApprovalLedger records={approvalLedger} agentsById={agentsById} />
+
       <AgentOverviewPanel
         agents={SHS_AGENT_WORKFORCE_V1}
         selectedAgentId={selectedAgent?.id || selectedAgentId}
@@ -98,10 +154,22 @@ export default function AgentWorkbenchPage() {
             onSelectTask={setSelectedTaskId}
             onCreateTask={handleCreateTask}
           />
-          <AgentTaskDetail task={selectedTask} agent={selectedAgent} />
+          <AgentTaskDetail
+            task={selectedTask}
+            agent={selectedAgent}
+            approvalRecord={selectedApprovalRecord}
+            stubRun={latestStubRun}
+          />
         </div>
         <aside className="agent-workbench-side">
           <AgentApprovalPanel task={selectedTask} onAction={handleTaskAction} />
+          <AgentSafeExecutionPanel
+            task={selectedTask}
+            agent={selectedAgent}
+            approvalLedger={approvalLedger}
+            latestStubRun={latestStubRun}
+            onRunStub={handleRunSafeExecutionStub}
+          />
           <AgentActivityTimeline task={selectedTask} />
           <section className="agent-workbench-panel agent-workbench-copy">
             <div className="agent-workbench-panel__head">

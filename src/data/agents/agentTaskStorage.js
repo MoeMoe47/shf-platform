@@ -110,6 +110,10 @@ function appendTaskEvent(task, eventType, message, extra = {}) {
   };
 }
 
+export function appendAgentTaskAuditEvent(taskId, eventType, message, extra = {}) {
+  return updateAgentTask(taskId, (task) => appendTaskEvent(task, eventType, message, extra));
+}
+
 export function applyAgentTaskAction(taskId, action, note = "") {
   const messages = {
     approve: "Task approved for V1 queue status only. No production action executed.",

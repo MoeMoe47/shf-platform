@@ -16,9 +16,33 @@ function nowIso() {
   return new Date().toISOString();
 }
 
-function makeEvent(taskId, eventType, message, actor = "shs_operator") {
+function normalizeTaskAuditEvents(task) {
+  const seenEventIds = new Set();
+  const auditEvents = (Array.isArray(task.audit_events) ? task.audit_events : []).map((event, index) => {
+    const baseId = event?.event_id || `agevt_${task.task_id || "unknown"}_${index}`;
+    const eventId = seenEventIds.has(baseId)
+      ? `${baseId}_${index}_${Math.random().toString(36).slice(2, 8)}`
+      : baseId;
+    seenEventIds.add(eventId);
+    return {
+      ...event,
+      event_id: eventId,
+    };
+  });
   return {
-    event_id: `agevt_${taskId}_${Date.now()}`,
+    ...task,
+    audit_events: auditEvents,
+  };
+}
+
+function normalizeTasks(tasks) {
+  return (Array.isArray(tasks) ? tasks : []).map((task) => normalizeTaskAuditEvents(task));
+}
+
+function makeEvent(taskId, eventType, message, actor = "shs_operator") {
+  const suffix = `${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+  return {
+    event_id: `agevt_${taskId}_${suffix}`,
     event_type: eventType,
     actor,
     message,
@@ -27,25 +51,27 @@ function makeEvent(taskId, eventType, message, actor = "shs_operator") {
 }
 
 export function getAgentTasks() {
-  if (!canUseStorage()) return cloneTasks(AGENT_TASK_QUEUE_SEED_V1);
+  if (!canUseStorage()) return normalizeTasks(cloneTasks(AGENT_TASK_QUEUE_SEED_V1));
 
   try {
     const stored = globalThis.localStorage.getItem(AGENT_TASK_QUEUE_STORAGE_KEY);
     if (!stored) {
-      const seed = cloneTasks(AGENT_TASK_QUEUE_SEED_V1);
+      const seed = normalizeTasks(cloneTasks(AGENT_TASK_QUEUE_SEED_V1));
       globalThis.localStorage.setItem(AGENT_TASK_QUEUE_STORAGE_KEY, JSON.stringify(seed));
       return seed;
     }
 
     const parsed = JSON.parse(stored);
-    return Array.isArray(parsed) ? parsed : cloneTasks(AGENT_TASK_QUEUE_SEED_V1);
+    const tasks = Array.isArray(parsed) ? normalizeTasks(parsed) : normalizeTasks(cloneTasks(AGENT_TASK_QUEUE_SEED_V1));
+    globalThis.localStorage.setItem(AGENT_TASK_QUEUE_STORAGE_KEY, JSON.stringify(tasks));
+    return tasks;
   } catch {
-    return cloneTasks(AGENT_TASK_QUEUE_SEED_V1);
+    return normalizeTasks(cloneTasks(AGENT_TASK_QUEUE_SEED_V1));
   }
 }
 
 export function saveAgentTasks(tasks) {
-  const safeTasks = Array.isArray(tasks) ? tasks : [];
+  const safeTasks = normalizeTasks(tasks);
   if (canUseStorage()) {
     globalThis.localStorage.setItem(AGENT_TASK_QUEUE_STORAGE_KEY, JSON.stringify(safeTasks));
   }

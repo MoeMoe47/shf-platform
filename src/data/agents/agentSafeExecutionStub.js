@@ -118,6 +118,9 @@ export function getLatestSafeExecutionStubRunForTask(taskId, runs = getSafeExecu
 }
 
 export function evaluateSafeExecutionEligibility({ task, agent, approvalLedger }) {
+  const contextPackets = Array.isArray(arguments[0]?.contextPackets) ? arguments[0].contextPackets : [];
+  const coordinationPlans = Array.isArray(arguments[0]?.coordinationPlans) ? arguments[0].coordinationPlans : [];
+  const workflowRuns = Array.isArray(arguments[0]?.workflowRuns) ? arguments[0].workflowRuns : [];
   const approval = task?.task_id ? getApprovedLedgerRecordForTask(task.task_id, approvalLedger) : null;
   const eligibilityChecks = [];
   const blockedReasons = [];
@@ -160,6 +163,27 @@ export function evaluateSafeExecutionEligibility({ task, agent, approvalLedger }
     eligibilityChecks.push("requested_action_not_blocked");
   }
 
+  const blockedContextPackets = contextPackets.filter((packet) => packet?.blocked_items?.length || packet?.safe_for_execution_stub === false);
+  if (blockedContextPackets.length) {
+    blockedReasons.push("context_packet_blocked_items");
+  } else if (contextPackets.length) {
+    eligibilityChecks.push("context_packets_safe_for_stub");
+  }
+
+  const blockedCoordinationPlans = coordinationPlans.filter((plan) => plan.status === "blocked" || plan.blockers?.length || plan.execution_enabled_v1 !== false);
+  if (blockedCoordinationPlans.length) {
+    blockedReasons.push("coordination_plan_blocked_items");
+  } else if (coordinationPlans.length) {
+    eligibilityChecks.push("coordination_plans_safe_for_stub");
+  }
+
+  const blockedWorkflowRuns = workflowRuns.filter((run) => run.status === "blocked" || run.blockers?.length || run.execution_enabled_v1 !== false);
+  if (blockedWorkflowRuns.length) {
+    blockedReasons.push("workflow_run_blocked_items");
+  } else if (workflowRuns.length) {
+    eligibilityChecks.push("workflow_runs_safe_for_stub");
+  }
+
   return {
     approval,
     eligible: blockedReasons.length === 0,
@@ -168,8 +192,8 @@ export function evaluateSafeExecutionEligibility({ task, agent, approvalLedger }
   };
 }
 
-export function buildSafeExecutionStubResult({ task, agent, approvalLedger }) {
-  const evaluation = evaluateSafeExecutionEligibility({ task, agent, approvalLedger });
+export function buildSafeExecutionStubResult({ task, agent, approvalLedger, contextPackets = [], coordinationPlans = [], workflowRuns = [] }) {
+  const evaluation = evaluateSafeExecutionEligibility({ task, agent, approvalLedger, contextPackets, coordinationPlans, workflowRuns });
   const createdAt = nowIso();
   const simulated = evaluation.eligible;
   const approvalId = evaluation.approval?.approval_id || "";
@@ -180,6 +204,9 @@ export function buildSafeExecutionStubResult({ task, agent, approvalLedger }) {
     agent_id: agent?.id || task?.assigned_agent_id || "",
     requested_action: task?.task_type || task?.intended_action || "",
     approval_id: approvalId,
+    context_packet_ids: contextPackets.map((packet) => packet.context_packet_id),
+    coordination_plan_ids: coordinationPlans.map((plan) => plan.coordination_plan_id),
+    workflow_run_ids: workflowRuns.map((run) => run.workflow_run_id),
     stub_status: simulated ? "simulated" : "blocked",
     eligibility_checks: evaluation.eligibility_checks,
     blocked_reasons: evaluation.blocked_reasons,
@@ -202,7 +229,10 @@ export function buildSafeExecutionStubResult({ task, agent, approvalLedger }) {
 }
 
 export function recordSafeExecutionStubRun({ task, agent, approvalLedger }) {
-  const result = buildSafeExecutionStubResult({ task, agent, approvalLedger });
+  const contextPackets = Array.isArray(arguments[0]?.contextPackets) ? arguments[0].contextPackets : [];
+  const coordinationPlans = Array.isArray(arguments[0]?.coordinationPlans) ? arguments[0].coordinationPlans : [];
+  const workflowRuns = Array.isArray(arguments[0]?.workflowRuns) ? arguments[0].workflowRuns : [];
+  const result = buildSafeExecutionStubResult({ task, agent, approvalLedger, contextPackets, coordinationPlans, workflowRuns });
   const runs = getSafeExecutionStubRuns();
   const nextRuns = saveSafeExecutionStubRuns([result, ...runs]);
 

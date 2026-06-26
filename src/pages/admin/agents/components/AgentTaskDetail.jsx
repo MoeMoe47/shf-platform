@@ -13,7 +13,16 @@ function ListBlock({ title, items }) {
   );
 }
 
-export default function AgentTaskDetail({ task, agent, approvalRecord, stubRun }) {
+export default function AgentTaskDetail({
+  task,
+  agent,
+  approvalRecord,
+  stubRun,
+  memoryCount = 0,
+  contextPacketCount = 0,
+  memoryRiskStatus = "clear",
+  onCreateContextPacket,
+}) {
   if (!task) {
     return (
       <section className="agent-workbench-panel agent-workbench-empty" aria-label="Task Detail">
@@ -40,6 +49,7 @@ export default function AgentTaskDetail({ task, agent, approvalRecord, stubRun }
           <span>Task Detail</span>
           <strong>{task.title}</strong>
         </div>
+        <button type="button" onClick={onCreateContextPacket}>Create Context Packet</button>
       </div>
       <div className="agent-workbench-detail__body">
         <div className="agent-workbench-kv-grid">
@@ -49,6 +59,9 @@ export default function AgentTaskDetail({ task, agent, approvalRecord, stubRun }
           <div><span>Required Approval</span><strong>{task.approval_status === "not_required" ? "No" : "Yes"}</strong></div>
           <div><span>Ledger</span><strong>{approvalRecord?.approval_status || "not recorded"}</strong></div>
           <div><span>Stub</span><strong>{stubRun?.stub_status || approvalRecord?.safe_execution_stub_status || "not_checked"}</strong></div>
+          <div><span>Memory</span><strong>{memoryCount}</strong></div>
+          <div><span>Context Packets</span><strong>{contextPacketCount}</strong></div>
+          <div><span>Memory Risk</span><strong>{memoryRiskStatus}</strong></div>
           <div><span>Execution Allowed</span><strong>false</strong></div>
           <div><span>Production Action</span><strong>false</strong></div>
         </div>

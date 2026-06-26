@@ -39,12 +39,12 @@ function FlagGrid({ result }) {
   );
 }
 
-export default function AgentSafeExecutionPanel({ task, agent, approvalLedger, latestStubRun, onRunStub }) {
+export default function AgentSafeExecutionPanel({ task, agent, approvalLedger, latestStubRun, contextPackets = [], coordinationPlans = [], workflowRuns = [], onRunStub }) {
   if (!task) {
     return null;
   }
 
-  const eligibility = evaluateSafeExecutionEligibility({ task, agent, approvalLedger });
+  const eligibility = evaluateSafeExecutionEligibility({ task, agent, approvalLedger, contextPackets, coordinationPlans, workflowRuns });
 
   return (
     <section className="agent-workbench-panel agent-workbench-safe-stub" aria-label="Safe Execution Panel">
@@ -64,6 +64,12 @@ export default function AgentSafeExecutionPanel({ task, agent, approvalLedger, l
           <div><span>Stub Can Run</span><strong>{eligibility.eligible ? "Yes" : "No"}</strong></div>
           <div><span>Task Risk</span><strong>{task.risk_level}</strong></div>
           <div><span>Last Stub</span><strong>{latestStubRun?.stub_status || "not_checked"}</strong></div>
+          <div><span>Context Packets</span><strong>{contextPackets.length}</strong></div>
+          <div><span>Context Blocked</span><strong>{String(contextPackets.some((packet) => packet.blocked_items?.length || packet.safe_for_execution_stub === false))}</strong></div>
+          <div><span>Coordination Plans</span><strong>{coordinationPlans.length}</strong></div>
+          <div><span>Coordination Blocked</span><strong>{String(coordinationPlans.some((plan) => plan.status === "blocked" || plan.blockers?.length))}</strong></div>
+          <div><span>Workflow Runs</span><strong>{workflowRuns.length}</strong></div>
+          <div><span>Workflow Blocked</span><strong>{String(workflowRuns.some((run) => run.status === "blocked" || run.blockers?.length))}</strong></div>
         </div>
         <div className="agent-workbench-split">
           <ListBlock title="Eligibility Checks" items={eligibility.eligibility_checks} />

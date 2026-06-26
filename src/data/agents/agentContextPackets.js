@@ -1,0 +1,53 @@
+export const AGENT_CONTEXT_PACKET_STORAGE_KEY = "shs.agentWorkbench.contextPackets.v1";
+
+export const AGENT_CONTEXT_PACKET_MODEL_V1 = Object.freeze({
+  context_packet_id: "ctx_001",
+  title: "",
+  agent_id: "",
+  task_id: "",
+  purpose: "",
+  included_memory_ids: [],
+  context_summary: "",
+  risk_summary: "",
+  blocked_items: [],
+  operator_review_required: true,
+  created_at: "",
+  safe_for_execution_stub: true,
+  safe_for_public: false,
+  public_approved: false,
+});
+
+export const AGENT_CONTEXT_PACKET_SEED_V1 = Object.freeze([
+  {
+    context_packet_id: "ctx_001",
+    title: "Sales handoff readiness context packet",
+    agent_id: "shs_sales_agent",
+    task_id: "agtask_001",
+    purpose: "Support operator review of proposal readiness.",
+    included_memory_ids: ["mem_001"],
+    context_summary: "Use sales handoff memory to prepare an internal recommendation only.",
+    risk_summary: "Medium sensitivity; client-facing delivery remains blocked.",
+    blocked_items: [],
+    operator_review_required: true,
+    created_at: "2026-06-24T02:05:00Z",
+    safe_for_execution_stub: true,
+    safe_for_public: false,
+    public_approved: false,
+  },
+  {
+    context_packet_id: "ctx_002",
+    title: "Report readiness review context packet",
+    agent_id: "shs_report_agent",
+    task_id: "agtask_003",
+    purpose: "Support internal report readiness review.",
+    included_memory_ids: ["mem_003"],
+    context_summary: "Report context is internal and requires operator review before export decisions.",
+    risk_summary: "High sensitivity; public publishing is blocked in Agent V1.",
+    blocked_items: ["operator_review_required"],
+    operator_review_required: true,
+    created_at: "2026-06-24T02:10:00Z",
+    safe_for_execution_stub: false,
+    safe_for_public: false,
+    public_approved: false,
+  },
+]);

@@ -1,0 +1,68 @@
+{
+  "correction_name": "SHS Direct Connect Direct-Source Proof Correction",
+  "status": "complete",
+  "mistake_corrected": "Direct Connect was corrected from bank/account connection framing into direct-source proof framing.",
+  "corrected_definition": "SHS Direct Connect is the source-trust layer that connects approved records from client systems, SHS systems, files, forms, analytics, reports, manual verified entries, ClientOps records, SHS internal operations, and approval workflows into Silicon Heartland OS for ClientOps, reporting, governance, QA, ROI proof, and SHF-approved impact workflows.",
+  "core_framing": "direct_source_proof",
+  "not_bank_account_connection_v1": true,
+  "v1_priority_sources": [
+    "CSV/file imports",
+    "website form records",
+    "website analytics",
+    "CRM exports",
+    "client system exports",
+    "SHS internal ops records",
+    "ClientOps records",
+    "report usage records",
+    "manual verified entries",
+    "SHF approval status records",
+    "approved source-backed report evidence"
+  ],
+  "deferred_sensitive_sources": [
+    "bank account connection",
+    "live banking feeds",
+    "Plaid",
+    "Finicity",
+    "live QuickBooks",
+    "OAuth",
+    "credential vaults",
+    "bank login handling",
+    "transaction-level financial syncing",
+    "live payment processor syncing"
+  ],
+  "files_reviewed": [
+    "docs/SHS_DIRECT_CONNECT_REPO_SCAN_V1.md",
+    "docs/SHS_DIRECT_CONNECT_REPO_SCAN_V1.json",
+    "docs/SHS_DIRECT_CONNECT_LAYER_V1.md",
+    "docs/SHS_DIRECT_CONNECT_LAYER_V1.json",
+    "scripts/check_shs_direct_connect_layer.py"
+  ],
+  "files_changed": [
+    "docs/SHS_DIRECT_CONNECT_REPO_SCAN_V1.md",
+    "docs/SHS_DIRECT_CONNECT_REPO_SCAN_V1.json",
+    "docs/SHS_DIRECT_CONNECT_LAYER_V1.md",
+    "docs/SHS_DIRECT_CONNECT_LAYER_V1.json",
+    "scripts/check_shs_direct_connect_layer.py",
+    "docs/SHS_DIRECT_CONNECT_DIRECT_SOURCE_PROOF_CORRECTION.md",
+    "docs/SHS_DIRECT_CONNECT_DIRECT_SOURCE_PROOF_CORRECTION.json",
+    "scripts/check_shs_direct_connect_direct_source_proof.py"
+  ],
+  "shf_boundary_rules": [
+    "Direct Connect does not bypass SHF approval.",
+    "SHF public outputs require SHF Data Approval Gateway approval.",
+    "SHF Impact Data Spine remains public-approved only.",
+    "Financial data must never become public impact data by default.",
+    "Source-backed proof does not automatically equal public approval."
+  ],
+  "batch2_readiness": "Batch 2 is safe to proceed with the corrected direct-source proof framing and must not add live banking, credential handling, OAuth, or live external integrations.",
+  "verification_commands": [
+    "python3 -m json.tool docs/SHS_DIRECT_CONNECT_LAYER_V1.json",
+    "python3 -m json.tool docs/SHS_DIRECT_CONNECT_DIRECT_SOURCE_PROOF_CORRECTION.json",
+    "python3 scripts/check_shs_direct_connect_layer.py",
+    "python3 scripts/check_shs_direct_connect_direct_source_proof.py",
+    "python3 scripts/check_master_layer_registry.py",
+    "python3 scripts/check_truth_spine_freeze.py",
+    "python3 scripts/check_duplicate_layer_cleanup.py",
+    "python3 scripts/check_runtime_log_hygiene.py --strict"
+  ]
+}

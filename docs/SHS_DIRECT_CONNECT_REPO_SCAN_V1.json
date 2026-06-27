@@ -1,0 +1,417 @@
+{
+  "summary": {
+    "connection_layer_found": "partial",
+    "shs_integration_fabric_found": "naming_and_ui_copy_only",
+    "shs_direct_connect_found": "not_found",
+    "strongest_existing_pieces": [
+      "Adapter Layer V1",
+      "API Gateway Layer V1",
+      "Event / Webhook Layer V1",
+      "Batch / Import Layer V1",
+      "Warehouse Sync Layer V1",
+      "Data Aggregator / Normalization / Evidence / Verification / Approval chain",
+      "Verified Aggregation Layer V1",
+      "Audit & Verification Layer V1",
+      "Reports and Watchtower summary visibility",
+      "Hub Files & Imports UI"
+    ],
+    "biggest_missing_pieces": [
+      "No formal SHS Direct Connect Layer docs, registry entry, service, router, tests, or admin page at scan time",
+      "No source-trust registry for files, forms, analytics, CRM exports, client system exports, SHS systems, ClientOps, reports, manual verified entries, or approval workflows",
+      "No durable connection status model",
+      "No credentials/OAuth/consent model beyond governance/security guardrails",
+      "No sync run ledger or connector audit event store",
+      "No report-source binding model for connector-fed reports"
+    ],
+    "recommendation": "Build Direct Connect V1 as a local-first source-trust registry and setup workflow that sits inside the existing integration/intake fabric and feeds Adapter, Batch Import, Event/Webhook, API Gateway, Audit & Verification, Data Approval, Reports, Watchtower, and ClientOps. Banking is deferred and placeholder-only."
+  },
+  "existing_layers": [
+    {
+      "name": "SHS Integration Fabric",
+      "status": "naming_only",
+      "evidence": [
+        "src/pages/hub/shared/hubTourSteps.js references the SHS Integration Fabric approach",
+        "src/pages/solutions/SolutionsInfrastructurePage.jsx has an Integration Fabric offer card",
+        "src/shared/hardening/shsV1LayerReadinessRegistry.json contains an Integration Fabric Layer label"
+      ]
+    },
+    {
+      "name": "SHS Direct Connect Layer",
+      "status": "not_found",
+      "evidence": []
+    },
+    {
+      "name": "Adapter Layer",
+      "status": "formalized_v1",
+      "routes": ["/adapter-layer/health", "/adapter-layer/schema", "/adapter-layer/summary", "/adapter-layer/evaluate", "/adapter-layer/batch-evaluate", "/adapter-layer/readiness"]
+    },
+    {
+      "name": "API Gateway",
+      "status": "formalized_v1",
+      "routes": ["/api-gateway/health", "/api-gateway/schema", "/api-gateway/summary", "/api-gateway/evaluate", "/api-gateway/batch-evaluate", "/api-gateway/readiness"]
+    },
+    {
+      "name": "Event / Webhook",
+      "status": "formalized_v1",
+      "routes": ["/event-webhook/health", "/event-webhook/schema", "/event-webhook/summary", "/event-webhook/evaluate", "/event-webhook/batch-evaluate", "/event-webhook/readiness"]
+    },
+    {
+      "name": "Batch / Import",
+      "status": "formalized_v1",
+      "routes": ["/batch-import/health", "/batch-import/schema", "/batch-import/summary", "/batch-import/evaluate", "/batch-import/batch-evaluate", "/batch-import/readiness"]
+    },
+    {
+      "name": "Warehouse Sync",
+      "status": "formalized_v1",
+      "routes": ["/warehouse-sync/health", "/warehouse-sync/schema", "/warehouse-sync/summary", "/warehouse-sync/evaluate", "/warehouse-sync/batch-evaluate", "/warehouse-sync/readiness"]
+    }
+  ],
+  "relevant_files": [
+    {
+      "path": "docs/MASTER_LAYER_REGISTRY.md",
+      "purpose": "Canonical architecture registry and anti-drift gate",
+      "status": "Production",
+      "relevance": "Defines official neighboring layers but no Direct Connect entry",
+      "recommended_action": "Do not add Direct Connect as a new layer unless owner decides it cannot fit existing Adapter/Batch/Event/API/Warehouse layers"
+    },
+    {
+      "path": "docs/ADAPTER_LAYER_V1.md",
+      "purpose": "External/internal source format preparation boundary",
+      "status": "Production",
+      "relevance": "Closest formal home for connector payload classification and mapping readiness",
+      "recommended_action": "Use as primary upstream boundary for Direct Connect payloads"
+    },
+    {
+      "path": "services/shf-agent-fabric/services/adapter_layer_service.py",
+      "purpose": "Deterministic adapter evaluator",
+      "status": "Partial",
+      "relevance": "Can evaluate source system type, input format, payload domain, mapping profile, provenance",
+      "recommended_action": "Call or mirror its schema in Direct Connect V1; do not replace it"
+    },
+    {
+      "path": "docs/BATCH_IMPORT_LAYER_V1.md",
+      "purpose": "Bulk/file intake readiness boundary",
+      "status": "Production",
+      "relevance": "Owns CSV/JSON/batch review and quarantine logic",
+      "recommended_action": "Route file/manual imports through Batch Import semantics"
+    },
+    {
+      "path": "services/shf-agent-fabric/services/batch_import_service.py",
+      "purpose": "Deterministic import readiness evaluator",
+      "status": "Partial",
+      "relevance": "Can support Direct Connect import/mapping previews without writing records",
+      "recommended_action": "Reuse for sync/import run previews"
+    },
+    {
+      "path": "docs/EVENT_WEBHOOK_LAYER_V1.md",
+      "purpose": "Event routing and webhook readiness boundary",
+      "status": "Production",
+      "relevance": "Owns event/webhook queue-readiness and external delivery blockers",
+      "recommended_action": "Direct Connect webhook connector types should feed this, never send webhooks in V1"
+    },
+    {
+      "path": "services/shf-agent-fabric/services/event_webhook_service.py",
+      "purpose": "Deterministic event/webhook evaluator",
+      "status": "Partial",
+      "relevance": "Can evaluate connector event payloads and block unsafe external delivery",
+      "recommended_action": "Use for connector event audit previews"
+    },
+    {
+      "path": "docs/API_GATEWAY_LAYER_V1.md",
+      "purpose": "API exposure and request readiness review",
+      "status": "Production",
+      "relevance": "Owns API route exposure classification, admin protection, policy and audit needs",
+      "recommended_action": "Direct API connector setup should use API Gateway readiness metadata"
+    },
+    {
+      "path": "services/shf-agent-fabric/services/api_gateway_service.py",
+      "purpose": "Deterministic API gateway readiness evaluator",
+      "status": "Partial",
+      "relevance": "Useful for connector endpoint exposure review",
+      "recommended_action": "Reference for API connector status states"
+    },
+    {
+      "path": "docs/WAREHOUSE_SYNC_LAYER_V1.md",
+      "purpose": "Warehouse/analytics sync readiness",
+      "status": "Production",
+      "relevance": "Owns future warehouse eligibility without writing warehouse records",
+      "recommended_action": "Direct Connect warehouse connector status should remain review-only in V1"
+    },
+    {
+      "path": "docs/AUDIT_VERIFICATION_LAYER_V1.md",
+      "purpose": "Audit completeness and replay-readiness",
+      "status": "Production",
+      "relevance": "Connector sync runs need audit event shape and trace readiness",
+      "recommended_action": "Direct Connect audit events should follow this model"
+    },
+    {
+      "path": "docs/DATA_APPROVAL_LAYER_V1.md",
+      "purpose": "Approval readiness after Truth/Oracle/Data Verification",
+      "status": "Production",
+      "relevance": "Connector-fed data cannot reach public/public-ready paths without Data Approval and Gateway review",
+      "recommended_action": "Direct Connect approval status should be a candidate/readiness status only"
+    },
+    {
+      "path": "docs/VERIFIED_AGGREGATION_LAYER_V1.md",
+      "purpose": "Verified/readiness-approved aggregation previews",
+      "status": "Production",
+      "relevance": "Connector-fed records should aggregate only after verification/readiness gates",
+      "recommended_action": "Use for report-source summary readiness after Direct Connect records are reviewed"
+    },
+    {
+      "path": "services/shf-agent-fabric/routers/reports_routes.py",
+      "purpose": "Reports snapshot and CSV exports",
+      "status": "Production",
+      "relevance": "Already includes integration-adjacent summaries for adapter, API gateway, event webhook, batch import, warehouse sync, verified aggregation",
+      "recommended_action": "Add Direct Connect summary here only after V1 model exists"
+    },
+    {
+      "path": "services/shf-agent-fabric/routers/watchtower_routes.py",
+      "purpose": "Watchtower summary/risk visibility",
+      "status": "Production",
+      "relevance": "Already observes neighboring layers and should flag connector coverage/risk later",
+      "recommended_action": "Add connector coverage/risk summary after Direct Connect model exists"
+    },
+    {
+      "path": "src/pages/hub/HubFilesImports.jsx",
+      "purpose": "Hub Files & Imports UI with lanes, mapping table, validation cards, import guidance",
+      "status": "Mock",
+      "relevance": "Best existing UI proof for Direct Connect operator workflow",
+      "recommended_action": "Use its workflow language, but build internal admin Direct Connect under ops/admin"
+    },
+    {
+      "path": "src/pages/hub/shared/hubTourSteps.js",
+      "purpose": "Guided tour text for Hub workflows",
+      "status": "Docs Only",
+      "relevance": "Explicitly describes Integration Fabric and CSV/Excel, API sync, webhook listener, warehouse sync, audit trace",
+      "recommended_action": "Treat as narrative requirements, not implementation"
+    },
+    {
+      "path": "src/pages/admin/ops/OpsProductionDashboard.jsx",
+      "purpose": "LocalStorage-backed Production Ops workflow and build packet surface",
+      "status": "LocalStorage",
+      "relevance": "Shows current ops UI convention and local-first storage pattern",
+      "recommended_action": "Place Direct Connect admin UI in this ops family or a sibling route"
+    },
+    {
+      "path": "src/pages/admin/ops/opsStorage.js",
+      "purpose": "Production Ops localStorage persistence",
+      "status": "LocalStorage",
+      "relevance": "Shows local-first key conventions for V1 product surfaces",
+      "recommended_action": "Use localStorage keys such as shs.directConnect.*.v1 for frontend-only V1"
+    },
+    {
+      "path": "src/data/shsReports/shsReportStorage.js",
+      "purpose": "SHS report localStorage persistence",
+      "status": "LocalStorage",
+      "relevance": "Report-source bindings should integrate with report readiness without replacing report storage",
+      "recommended_action": "Add report source binding only after connector registry exists"
+    },
+    {
+      "path": "src/data/shsReports/shsReportReadiness.js",
+      "purpose": "Report source readiness evaluation",
+      "status": "Partial",
+      "relevance": "Direct Connect should feed source readiness and report-source status panels",
+      "recommended_action": "Extend with connector source areas in a later batch"
+    },
+    {
+      "path": "src/system/identity/hubAccessControl.js",
+      "purpose": "Route role access map",
+      "status": "Production",
+      "relevance": "Direct Connect admin routes must be shs_admin/internal only",
+      "recommended_action": "Add /ops/direct-connect routes only in implementation batch"
+    },
+    {
+      "path": "src/system/security/security-permissions.js",
+      "purpose": "Permission constants and role-permission map",
+      "status": "Production",
+      "relevance": "Connector setup touches uploads, audit, reports, identity, security",
+      "recommended_action": "Use UPLOADS_INTERNAL/AUDIT_VIEW/REPORTS_VIEW first; add connector permission only if owner approves"
+    },
+    {
+      "path": "src/shared/integrations/importPlacementCsv.js",
+      "purpose": "Simple CSV parser for placement imports",
+      "status": "Partial",
+      "relevance": "Tiny existing CSV parsing utility but not governed enough for Direct Connect",
+      "recommended_action": "Do not reuse for sensitive imports without governance wrappers"
+    },
+    {
+      "path": "src/shared/sync/syncQueue.js",
+      "purpose": "Offline cache-backed event queue and fetch attempt helper",
+      "status": "Partial",
+      "relevance": "Shows older client-side sync pattern that performs fetches",
+      "recommended_action": "Do not use in Direct Connect V1 unless explicitly avoiding external sends is preserved"
+    },
+    {
+      "path": "src/utils/webhooks.js",
+      "purpose": "Mock Slack/webhook/email notifications",
+      "status": "Mock",
+      "relevance": "Shows mock outbound integrations; conflicts with V1 no-external-send policy if misused",
+      "recommended_action": "Do not reuse for Direct Connect V1 external delivery"
+    },
+    {
+      "path": "services/shf-audit-service/main.py",
+      "purpose": "Separate audit service with Postgres-backed hash-chained audit events",
+      "status": "Partial",
+      "relevance": "Potential future durable audit target, not local-first Direct Connect V1",
+      "recommended_action": "Defer until production persistence decision"
+    }
+  ],
+  "current_data_flow": [
+    "SHS operational surfaces and partner/app outputs",
+    "Batch / Import or Event / Webhook or API Gateway review",
+    "Adapter Layer source/format/mapping readiness",
+    "Source Registry / Data Federation / Data Aggregator",
+    "Data Normalization / Evidence Package / Data Verification",
+    "Truth Spine / Oracle / Data Approval / Readiness Gate",
+    "Security / Privacy / Data Ownership IP / Public Approval / Data Approval Gateway",
+    "SHF Impact Data Spine / Reports / Watchtower / LOO / ClientOps"
+  ],
+  "recommended_architecture": [
+    "External systems produce files, forms, analytics exports, CRM exports, client system exports, SHS system records, ClientOps records, report usage records, manual verified entries, approval workflow records, API exports, or webhook-style future records",
+    "SHS Direct Connect V1 stores local connector registry, connection status, mapping previews, sync-run previews, and audit events",
+    "Direct Connect evaluates connector payloads through Adapter, Batch Import, Event/Webhook, API Gateway, Warehouse Sync as applicable",
+    "Verified Aggregation, Audit & Verification, Data Approval, Reports, Watchtower, and ClientOps consume only readiness metadata until records pass governance",
+    "No credentials, OAuth exchange, bank account connection, live banking feeds, external calls, production persistence, public approval, or SHF Impact mutation in V1"
+  ],
+  "placement_decision": {
+    "recommended_pattern": "child_capability_inside_existing_integration_intake_fabric",
+    "not_recommended": [
+      "standalone layer before registry approval",
+      "ClientOps-only module",
+      "Reports-only module",
+      "Foundation Data Approval module",
+      "Tracking Intelligence feature only"
+    ],
+    "reason": "The repo already formalizes the required architectural neighbors as layers. Direct Connect should bind connector setup/status to those layers instead of duplicating them."
+  },
+  "ui_recommendations": [
+    {
+      "surface": "admin overview",
+      "route": "admin.html#/ops/direct-connect",
+      "navigation": "Admin sidebar under Production Ops near Data Binding and Reports Command"
+    },
+    {
+      "surface": "connector setup",
+      "route": "admin.html#/ops/direct-connect/connectors",
+      "navigation": "Child section of Direct Connect"
+    },
+    {
+      "surface": "import/mapping",
+      "route": "admin.html#/ops/direct-connect/mapping",
+      "navigation": "Child section of Direct Connect or link from /hub/imports"
+    },
+    {
+      "surface": "sync log",
+      "route": "admin.html#/ops/direct-connect/sync-log",
+      "navigation": "Child section of Direct Connect"
+    },
+    {
+      "surface": "approval/review",
+      "route": "admin.html#/ops/direct-connect/review",
+      "navigation": "Child section linking to Data Approval/Truth Spine"
+    },
+    {
+      "surface": "report-source status",
+      "route": "admin.html#/ops/reports",
+      "navigation": "Panel inside existing Reports Command"
+    }
+  ],
+  "data_models": {
+    "ConnectorSource": ["sourceId", "displayName", "systemType", "vendor", "domain", "supportedMethods", "dataSensitivity", "owner", "status", "governanceNotes"],
+    "ConnectorConnection": ["connectionId", "sourceId", "clientId", "projectId", "authMode", "credentialStatus", "consentStatus", "connectionStatus", "lastCheckedAt", "allowedScopes", "blockedReasons"],
+    "ConnectorFieldMapping": ["mappingId", "sourceId", "sourceField", "shsField", "canonicalType", "confidence", "status", "sampleValue", "requiresReview"],
+    "ConnectorSyncRun": ["syncRunId", "connectionId", "mode", "startedAt", "finishedAt", "recordsSeen", "recordsAccepted", "recordsBlocked", "status", "targetLayer", "auditEventIds"],
+    "ConnectorAuditEvent": ["eventId", "connectionId", "syncRunId", "eventType", "layer", "actor", "subjectId", "decisionBefore", "decisionAfter", "warnings", "blockers", "timestamp"],
+    "ConnectorApprovalStatus": ["approvalId", "connectionId", "truthStatus", "dataApprovalStatus", "securityPrivacyStatus", "ownershipIpStatus", "publicApprovalStatus", "gatewayStatus", "reportReady"],
+    "ReportSourceBinding": ["bindingId", "reportId", "sourceId", "connectionId", "sourceArea", "readinessStatus", "lastSyncRunId", "visibilitySafe", "blockingReason"]
+  },
+  "v1_scope": [
+    "Documentation and architecture lock",
+    "Local-first connector registry",
+    "Mock source-trust records for CSV/file imports, website form records, website analytics, CRM exports, client system exports, SHS internal ops records, ClientOps records, report usage records, manual verified entries, SHF approval status records, and approved source-backed report evidence",
+    "Connection status states",
+    "Mapping preview rows",
+    "Sync run preview log",
+    "Connector audit events",
+    "Approval/readiness status display",
+    "ClientOps and Reports integration points as metadata only",
+    "Admin-only UI surface",
+    "Governance script/check if implementation adds a formal doc"
+  ],
+  "deferred_scope": [
+    "Real OAuth",
+    "Credential storage",
+    "QuickBooks/Plaid/Finicity/Stripe/Square live API calls",
+    "External webhook sends",
+    "Production persistence",
+    "SHF Impact Data Spine mutation",
+    "Public approval mutation",
+    "Warehouse writes",
+    "Automated scheduling",
+    "Self-service client connector setup"
+  ],
+  "risks": [
+    "Financial-data connectors require stronger privacy, consent, credential, and audit controls than current V1 scaffolds provide",
+    "Existing import UI is mock/client-facing and should not be mistaken for backend readiness",
+    "Older sync/webhook utilities can call or simulate sends and must not bypass V1 no-external-send rules",
+    "localStorage is appropriate for V1 mock state but not production connection or credential persistence",
+    "Reports can overstate trust if connector-fed source readiness is not tied back to Truth Spine and Data Approval",
+    "No formal Direct Connect registry entry exists yet; adding one requires Master Layer Registry owner decision"
+  ],
+  "implementation_batches": [
+    {
+      "batch": 1,
+      "name": "Documentation and architecture lock",
+      "files": ["docs/SHS_DIRECT_CONNECT_LAYER_V1.md", "docs/SHS_DIRECT_CONNECT_LAYER_V1.json", "scripts/check_shs_direct_connect_layer.py"],
+      "notes": "Lock Direct Connect as child capability unless registry owner approves standalone layer"
+    },
+    {
+      "batch": 2,
+      "name": "Data model and mock registry",
+      "files": ["src/data/direct-connect/directConnectTypes.js", "src/data/direct-connect/directConnectRegistry.js", "src/data/direct-connect/directConnectStorage.js"],
+      "notes": "Use localStorage only; no credentials"
+    },
+    {
+      "batch": 3,
+      "name": "Admin UI",
+      "files": ["src/pages/admin/ops/OpsDirectConnectPage.jsx", "src/styles/opsDirectConnect.css", "src/router/AdminRoutes.jsx", "src/components/admin/AdminSidebar.jsx", "src/system/identity/hubAccessControl.js"],
+      "notes": "Internal-only route under /ops/direct-connect"
+    },
+    {
+      "batch": 4,
+      "name": "ClientOps and Reports connection",
+      "files": ["src/data/shsReports/shsReportReadiness.js", "src/pages/admin/reports/components/ShsReportDashboard.jsx"],
+      "notes": "Add connector status as source readiness metadata only"
+    },
+    {
+      "batch": 5,
+      "name": "Audit and approval checks",
+      "files": ["src/data/direct-connect/directConnectAudit.js", "src/data/direct-connect/directConnectApproval.js"],
+      "notes": "Mirror Audit & Verification and Data Approval semantics"
+    },
+    {
+      "batch": 6,
+      "name": "Tests and verification",
+      "files": ["scripts/check_shs_direct_connect_layer.py", "package.json"],
+      "notes": "Add governance check only after docs/model exist"
+    }
+  ],
+  "verification_commands": [
+    "python3 -m json.tool docs/SHS_DIRECT_CONNECT_LAYER_V1.json",
+    "python3 scripts/check_shs_direct_connect_layer.py",
+    "npm run check:governance",
+    "npm run build",
+    "python3 scripts/check_master_layer_registry.py",
+    "python3 scripts/check_truth_spine_freeze.py",
+    "python3 scripts/check_duplicate_layer_cleanup.py",
+    "python3 scripts/check_runtime_log_hygiene.py --strict",
+    "git status --short",
+    "git diff --name-status"
+  ],
+  "open_questions": [
+    "Should owner register Direct Connect as its own official layer, or keep it as a named child capability inside Adapter/Batch/Event/API/Warehouse intake fabric?",
+    "Which connector families are approved for V1 mock registry: finance, CRM, payroll, case management, analytics, or all as non-live examples?",
+    "Should /hub/imports remain client-visible while /ops/direct-connect is SHS-admin-only, or should clients see a limited connector status view later?"
+  ]
+}

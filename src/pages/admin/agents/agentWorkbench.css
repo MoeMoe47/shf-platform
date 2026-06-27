@@ -255,6 +255,7 @@
 .agent-workbench-detail__body,
 .agent-workbench-approval__body,
 .agent-workbench-safe-stub__body,
+.agent-controlled-executor__body,
 .agent-workbench-copy {
   display: grid;
   gap: 14px;
@@ -369,6 +370,37 @@
   display: block;
   font-size: 14px;
   margin-top: 4px;
+}
+
+.agent-controlled-executor__form {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.35fr) minmax(0, 1fr);
+  gap: 12px;
+}
+
+.agent-controlled-executor__form label {
+  display: grid;
+  gap: 7px;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.agent-controlled-executor__form select,
+.agent-controlled-executor__form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #cfd8e6;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #162033;
+  padding: 10px;
+}
+
+.agent-executor-list-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
 
 .agent-workbench-approval label {
@@ -713,6 +745,11 @@
 
   .agent-template-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .agent-controlled-executor__form,
+  .agent-executor-list-grid {
+    grid-template-columns: 1fr;
   }
 }
 

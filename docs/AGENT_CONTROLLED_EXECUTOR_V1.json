@@ -1,0 +1,52 @@
+{
+  "id": "agent_controlled_executor_v1",
+  "name": "Agent Controlled Executor V1",
+  "status": "complete_v1",
+  "local_only": true,
+  "human_approval_required": true,
+  "approval_required": true,
+  "allowlisted_actions": [
+    "create_execution_record",
+    "mark_task_simulated_complete",
+    "add_operator_note",
+    "attach_context_packet",
+    "create_recommendation_packet",
+    "mark_workflow_step_reviewed",
+    "mark_coordination_handoff_reviewed"
+  ],
+  "blocked_actions": [
+    "publish_report",
+    "mark_public_approved",
+    "mutate_shf_impact_data",
+    "send_webhook",
+    "send_notification",
+    "write_warehouse_record",
+    "mutate_auth",
+    "mutate_production_record",
+    "execute_shell",
+    "call_external_api",
+    "write_arbitrary_file",
+    "bypass_approval",
+    "bypass_governance"
+  ],
+  "dangerous_flags": {
+    "production_action_executed": false,
+    "report_published": false,
+    "public_data_mutated": false,
+    "public_approved_mutated": false,
+    "shf_impact_data_mutated": false,
+    "external_message_sent": false,
+    "webhook_sent": false,
+    "notification_sent": false,
+    "warehouse_write_performed": false,
+    "auth_modified": false
+  },
+  "backend_endpoints_created": false,
+  "external_api_calls_enabled": false,
+  "warehouse_writes_enabled": false,
+  "auth_mutation_enabled": false,
+  "public_approval_mutation_enabled": false,
+  "shf_impact_data_mutation_enabled": false,
+  "report_publishing_enabled": false,
+  "validator": "scripts/check_agent_controlled_executor.py"
+}

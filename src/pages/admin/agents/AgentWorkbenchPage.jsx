@@ -47,6 +47,17 @@ import {
   resetAgentWorkflowRuns,
 } from "@/data/agents/agentWorkflowStorage";
 import { scanAgentWorkflowSafety } from "@/data/agents/agentWorkflowSafety";
+import {
+  AGENT_EXECUTION_ALLOWED_ACTION_TYPES,
+  calculateAgentExecutionMetrics,
+  getAgentExecutionRecords,
+  getAgentExecutionRecommendationPackets,
+  getAgentExecutionRequests,
+  resetAgentExecutionRecords,
+  resetAgentExecutionRecommendationPackets,
+  resetAgentExecutionRequests,
+  runControlledExecutionRequest,
+} from "@/data/agents/agentControlledExecutor";
 import AgentOverviewPanel from "./components/AgentOverviewPanel";
 import AgentTaskQueue from "./components/AgentTaskQueue";
 import AgentTaskDetail from "./components/AgentTaskDetail";
@@ -70,6 +81,9 @@ import AgentWorkflowRunDetail from "./components/AgentWorkflowRunDetail";
 import AgentWorkflowStepList from "./components/AgentWorkflowStepList";
 import AgentWorkflowProgress from "./components/AgentWorkflowProgress";
 import AgentWorkflowSafetyPanel from "./components/AgentWorkflowSafetyPanel";
+import AgentControlledExecutorPanel from "./components/AgentControlledExecutorPanel";
+import AgentExecutionRecordTable from "./components/AgentExecutionRecordTable";
+import AgentExecutionSafetyPanel from "./components/AgentExecutionSafetyPanel";
 import "./agentWorkbench.css";
 
 const SAFETY_BOUNDARIES = [
@@ -92,11 +106,15 @@ export default function AgentWorkbenchPage() {
   const [handoffs, setHandoffs] = React.useState(() => getAgentHandoffs());
   const [workflowRuns, setWorkflowRuns] = React.useState(() => getAgentWorkflowRuns());
   const [workflowSteps, setWorkflowSteps] = React.useState(() => getAgentWorkflowSteps());
+  const [executionRequests, setExecutionRequests] = React.useState(() => getAgentExecutionRequests());
+  const [executionRecords, setExecutionRecords] = React.useState(() => getAgentExecutionRecords());
+  const [, setRecommendationPackets] = React.useState(() => getAgentExecutionRecommendationPackets());
   const [selectedTaskId, setSelectedTaskId] = React.useState(() => getAgentTasks()[0]?.task_id || "");
   const [selectedAgentId, setSelectedAgentId] = React.useState(SHS_AGENT_WORKFORCE_V1[0]?.id || "");
   const [selectedMemoryId, setSelectedMemoryId] = React.useState(() => getAgentMemoryRecords()[0]?.memory_id || "");
   const [selectedCoordinationPlanId, setSelectedCoordinationPlanId] = React.useState(() => getAgentCoordinationPlans()[0]?.coordination_plan_id || "");
   const [selectedWorkflowRunId, setSelectedWorkflowRunId] = React.useState(() => getAgentWorkflowRuns()[0]?.workflow_run_id || "");
+  const [selectedExecutionActionType, setSelectedExecutionActionType] = React.useState(AGENT_EXECUTION_ALLOWED_ACTION_TYPES[0]);
 
   const agentsById = React.useMemo(
     () => Object.fromEntries(SHS_AGENT_WORKFORCE_V1.map((agent) => [agent.id, agent])),
@@ -108,6 +126,9 @@ export default function AgentWorkbenchPage() {
   const selectedCoordinationPlan = coordinationPlans.find((plan) => plan.coordination_plan_id === selectedCoordinationPlanId) || coordinationPlans[0] || null;
   const selectedWorkflowRun = workflowRuns.find((run) => run.workflow_run_id === selectedWorkflowRunId) || workflowRuns[0] || null;
   const selectedWorkflowSteps = selectedWorkflowRun ? getStepsForWorkflowRun(selectedWorkflowRun.workflow_run_id, workflowSteps) : [];
+  const selectedWorkflowStep = selectedWorkflowSteps.find((step) => ["ready", "in_review"].includes(step.status))
+    || selectedWorkflowSteps[0]
+    || null;
   const selectedWorkflowCoordinationPlan = selectedWorkflowRun?.source_coordination_plan_id
     ? coordinationPlans.find((plan) => plan.coordination_plan_id === selectedWorkflowRun.source_coordination_plan_id) || null
     : null;
@@ -142,8 +163,75 @@ export default function AgentWorkbenchPage() {
   const memoryMetrics = React.useMemo(() => calculateAgentMemoryMetrics(memoryRecords, contextPackets), [memoryRecords, contextPackets]);
   const coordinationMetrics = React.useMemo(() => calculateAgentCoordinationMetrics(coordinationPlans, handoffs), [coordinationPlans, handoffs]);
   const workflowMetrics = React.useMemo(() => calculateAgentWorkflowMetrics(workflowRuns, workflowSteps), [workflowRuns, workflowSteps]);
+  const executionMetrics = React.useMemo(() => calculateAgentExecutionMetrics(executionRecords, executionRequests), [executionRecords, executionRequests]);
   const coordinationTemplates = React.useMemo(() => getCoordinationTemplates(), []);
   const workflowTemplates = React.useMemo(() => getAgentWorkflowTemplates(), []);
+  const selectedExecutionContextPacket = selectedTaskContextPackets[0] || contextPackets[0] || null;
+  const selectedExecutionHandoff = selectedCoordinationPlanHandoffs[0] || handoffs[0] || null;
+  const executionContext = React.useMemo(() => ({
+    task: selectedTask,
+    agent: selectedAgent,
+    approvalLedger,
+    contextPacket: selectedExecutionContextPacket,
+    contextPackets: selectedTaskContextPackets,
+    coordinationPlan: selectedCoordinationPlan,
+    handoff: selectedExecutionHandoff,
+    workflowRun: selectedWorkflowRun,
+    workflowStep: selectedWorkflowStep,
+  }), [
+    selectedTask,
+    selectedAgent,
+    approvalLedger,
+    selectedExecutionContextPacket,
+    selectedTaskContextPackets,
+    selectedCoordinationPlan,
+    selectedExecutionHandoff,
+    selectedWorkflowRun,
+    selectedWorkflowStep,
+  ]);
+  const previewExecutionRequest = React.useMemo(() => ({
+    execution_request_id: "exec_req_preview",
+    task_id: selectedTask?.task_id || "",
+    agent_id: selectedAgent?.id || "",
+    approval_id: selectedApprovalRecord?.approval_id || "",
+    workflow_run_id: selectedWorkflowRun?.workflow_run_id || "",
+    workflow_step_id: selectedWorkflowStep?.workflow_step_id || "",
+    coordination_plan_id: selectedCoordinationPlan?.coordination_plan_id || "",
+    handoff_id: selectedExecutionHandoff?.handoff_id || "",
+    context_packet_id: selectedExecutionContextPacket?.context_packet_id || "",
+    action_type: selectedExecutionActionType,
+    requested_by: "operator",
+    risk_level: selectedTask?.risk_level || "medium",
+    status: "draft",
+    requested_payload: {},
+    created_at: "",
+    updated_at: "",
+    blockers: [],
+    warnings: [],
+    human_approval_required: true,
+    approval_required: true,
+    execution_allowed_v1: AGENT_EXECUTION_ALLOWED_ACTION_TYPES.includes(selectedExecutionActionType),
+    production_action_executed: false,
+    report_published: false,
+    public_data_mutated: false,
+    public_approved_mutated: false,
+    shf_impact_data_mutated: false,
+    external_message_sent: false,
+    webhook_sent: false,
+    notification_sent: false,
+    warehouse_write_performed: false,
+    auth_modified: false,
+  }), [
+    selectedTask,
+    selectedAgent,
+    selectedApprovalRecord,
+    selectedWorkflowRun,
+    selectedWorkflowStep,
+    selectedCoordinationPlan,
+    selectedExecutionHandoff,
+    selectedExecutionContextPacket,
+    selectedExecutionActionType,
+  ]);
 
   React.useEffect(() => {
     if (selectedTask && selectedTask.assigned_agent_id) {
@@ -252,6 +340,9 @@ export default function AgentWorkbenchPage() {
     const nextHandoffs = resetAgentHandoffs();
     const nextWorkflowRuns = resetAgentWorkflowRuns();
     const nextWorkflowSteps = getAgentWorkflowSteps();
+    setExecutionRequests(resetAgentExecutionRequests());
+    setExecutionRecords(resetAgentExecutionRecords());
+    setRecommendationPackets(resetAgentExecutionRecommendationPackets());
     setMemoryRecords(nextMemoryRecords);
     setContextPackets(nextContextPackets);
     setCoordinationPlans(nextCoordinationPlans);
@@ -402,6 +493,31 @@ export default function AgentWorkbenchPage() {
     refreshWorkflow(applyWorkflowStepAction(stepId, action, note));
   }
 
+  function handleRunControlledExecution(actionType, requestedPayload = {}) {
+    const result = runControlledExecutionRequest({
+      task: selectedTask,
+      agent: selectedAgent,
+      approval: selectedApprovalRecord,
+      actionType,
+      requestedPayload,
+      workflowRun: selectedWorkflowRun,
+      workflowStep: selectedWorkflowStep,
+      coordinationPlan: selectedCoordinationPlan,
+      handoff: selectedExecutionHandoff,
+      contextPacket: selectedExecutionContextPacket,
+      operatorNote: requestedPayload.operator_note || "",
+    }, executionContext);
+    setTasks(result.tasks);
+    setWorkflowRuns(result.workflowRuns);
+    setWorkflowSteps(result.workflowSteps);
+    setCoordinationPlans(result.coordinationPlans);
+    setHandoffs(result.handoffs);
+    setContextPackets(result.contextPackets);
+    setExecutionRequests(result.executionRequests);
+    setExecutionRecords(result.executionRecords);
+    setRecommendationPackets(result.recommendationPackets);
+  }
+
   return (
     <main className="agent-workbench-page">
       <section className="agent-workbench-hero">
@@ -454,6 +570,25 @@ export default function AgentWorkbenchPage() {
       <AgentApprovalLedger records={approvalLedger} agentsById={agentsById} />
 
       <AgentContractBridgePanel summary={AGENT_CONTRACT_BRIDGE_SUMMARY_V1} />
+
+      <AgentControlledExecutorPanel
+        selectedActionType={selectedExecutionActionType}
+        onSelectedActionTypeChange={setSelectedExecutionActionType}
+        previewRequest={previewExecutionRequest}
+        context={executionContext}
+        task={selectedTask}
+        agent={selectedAgent}
+        approvalRecord={selectedApprovalRecord}
+        workflowRun={selectedWorkflowRun}
+        workflowStep={selectedWorkflowStep}
+        coordinationPlan={selectedCoordinationPlan}
+        handoff={selectedExecutionHandoff}
+        contextPacket={selectedExecutionContextPacket}
+        records={executionRecords}
+        onRunControlledAction={handleRunControlledExecution}
+      />
+
+      <AgentExecutionRecordTable records={executionRecords} />
 
       <AgentOverviewPanel
         agents={SHS_AGENT_WORKFORCE_V1}
@@ -514,6 +649,11 @@ export default function AgentWorkbenchPage() {
             run={selectedWorkflowRun}
             safety={selectedWorkflowSafety}
             metrics={workflowMetrics}
+          />
+          <AgentExecutionSafetyPanel
+            previewRequest={previewExecutionRequest}
+            context={executionContext}
+            metrics={executionMetrics}
           />
           <AgentCoordinationSafetyPanel
             plan={selectedCoordinationPlan}

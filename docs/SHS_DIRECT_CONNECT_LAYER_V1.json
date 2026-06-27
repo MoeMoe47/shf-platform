@@ -1,0 +1,231 @@
+{
+  "layer_name": "SHS Direct Connect Layer V1",
+  "status": "architecture_locked",
+  "parent_layer": "SHS Integration Fabric",
+  "core_framing": "direct_source_proof",
+  "not_bank_account_connection_v1": true,
+  "direct_source_proof_definition": "SHS Direct Connect is the source-trust layer that connects approved records from client systems, SHS systems, files, forms, analytics, reports, manual verified entries, ClientOps records, SHS internal operations, and approval workflows into Silicon Heartland OS for ClientOps, reporting, governance, QA, ROI proof, and SHF-approved impact workflows.",
+  "purpose": "SHS Direct Connect gives SHS source-backed proof for reports, ClientOps, governance, QA, ROI evidence, and approval workflows without requiring live bank access or credential handling.",
+  "v1_priority_sources": [
+    "CSV/file imports",
+    "website form records",
+    "website analytics",
+    "CRM exports",
+    "client system exports",
+    "SHS internal ops records",
+    "ClientOps records",
+    "report usage records",
+    "manual verified entries",
+    "SHF approval status records",
+    "approved source-backed report evidence"
+  ],
+  "deferred_sensitive_sources": [
+    "bank account connection",
+    "live banking feeds",
+    "Plaid",
+    "Finicity",
+    "live QuickBooks",
+    "OAuth",
+    "credential vaults",
+    "bank login handling",
+    "transaction-level financial syncing",
+    "live payment processor syncing"
+  ],
+  "not_this": [
+    "Not a bank connector in V1.",
+    "Not a credential vault in V1.",
+    "Not live QuickBooks, Plaid, Finicity, Stripe, or Square integration in V1.",
+    "Not OAuth handling in V1.",
+    "Not a replacement for Tracking + Intelligence.",
+    "Not a replacement for the SHF Data Approval Gateway.",
+    "Not public-impact approval by itself.",
+    "Not a production persistence layer."
+  ],
+  "architecture_position": [
+    "External Systems",
+    "SHS Integration Fabric",
+    "SHS Direct Connect Layer",
+    "Verified Aggregation / Audit / Approval",
+    "SHS Tracking + Intelligence Layer",
+    "ClientOps / Reports / Command Center",
+    "SHF Data Approval Gateway / Public Impact Outputs"
+  ],
+  "existing_repo_foundation": [
+    "Adapter Layer V1 reviews source systems, input formats, payload domains, mapping readiness, source metadata, and provenance.",
+    "API Gateway Layer V1 reviews route exposure, method safety, admin protection, identity, policy, audit, and public exposure readiness.",
+    "Event / Webhook Layer V1 reviews event routing, queue readiness, internal targets, external delivery readiness, and webhook boundaries without sending external webhooks.",
+    "Batch / Import Layer V1 reviews CSV, JSON, manual uploads, batch imports, mapping metadata, provenance, row warnings, and quarantine needs without writing records.",
+    "Warehouse Sync Layer V1 reviews future warehouse sync eligibility without writing warehouse records.",
+    "Data Aggregator, Data Normalization, Evidence Package, Data Verification, Data Approval, Audit & Verification, Public Approval, and Verified Aggregation provide downstream governance readiness.",
+    "Reports and Watchtower already expose visibility for adapter, API gateway, event/webhook, batch/import, warehouse sync, approval, audit, and aggregation layers.",
+    "Hub Files & Imports already describes upload, template, connect-source, batch import, mapping, validation, API sync, webhook listener, warehouse sync, and audit trace workflows.",
+    "SHS Spine, SHF Spine, and the SHS to SHF Data Flow Boundary prevent raw SHS private data from entering public SHF surfaces without approval."
+  ],
+  "v1_responsibilities": [
+    "Connector registry.",
+    "Connector source category classification.",
+    "Connection status tracking.",
+    "Import readiness metadata.",
+    "Field mapping model.",
+    "Sync run history model.",
+    "Audit trail model.",
+    "Approval status model.",
+    "Report source binding model.",
+    "ClientOps visibility metadata.",
+    "Reports visibility metadata.",
+    "Watchtower/governance visibility metadata.",
+    "Trust and public/private data boundary documentation."
+  ],
+  "data_models": {
+    "ConnectorSource": {
+      "purpose": "Defines an external or internal source that may provide records to SHS Direct Connect.",
+      "required_fields": ["source_id", "display_name", "category", "vendor", "domain", "supported_methods", "data_sensitivity", "owner", "status", "created_at", "updated_at"]
+    },
+    "ConnectorConnection": {
+      "purpose": "Tracks one client's or project's connection posture for a source without storing credentials in V1.",
+      "required_fields": ["connection_id", "source_id", "client_id", "project_id", "auth_mode", "credential_status", "consent_status", "connection_status", "last_checked_at", "allowed_scopes", "blocked_reasons"]
+    },
+    "ConnectorFieldMapping": {
+      "purpose": "Maps source fields to SHS canonical fields and records review confidence.",
+      "required_fields": ["mapping_id", "source_id", "connection_id", "source_field", "shs_field", "canonical_type", "confidence", "mapping_status", "sample_value", "requires_review"]
+    },
+    "ConnectorSyncRun": {
+      "purpose": "Records a local/mock import or sync preview run and its target governance layer.",
+      "required_fields": ["sync_run_id", "connection_id", "mode", "started_at", "finished_at", "records_seen", "records_accepted", "records_blocked", "sync_status", "target_layer", "audit_event_ids"]
+    },
+    "ConnectorAuditEvent": {
+      "purpose": "Captures connector setup, mapping, sync, approval, and report-binding decisions for audit review.",
+      "required_fields": ["event_id", "connection_id", "sync_run_id", "event_type", "layer", "actor", "subject_id", "decision_before", "decision_after", "warnings", "blockers", "timestamp"]
+    },
+    "ConnectorApprovalStatus": {
+      "purpose": "Tracks readiness signals from Truth Spine, Data Approval, Security/Privacy, Data Ownership/IP, Public Approval, and Gateway review without approving public use itself.",
+      "required_fields": ["approval_id", "connection_id", "truth_status", "data_approval_status", "security_privacy_status", "ownership_ip_status", "public_approval_status", "gateway_status", "report_ready"]
+    },
+    "ReportSourceBinding": {
+      "purpose": "Binds a connector source to a report source area and shows source readiness, approval, and visibility safety.",
+      "required_fields": ["binding_id", "report_id", "source_id", "connection_id", "source_area", "readiness_status", "last_sync_run_id", "visibility_safe", "blocking_reason"]
+    }
+  },
+  "connection_status_states": [
+    "not_configured",
+    "available",
+    "draft",
+    "pending_review",
+    "connected_mock",
+    "import_ready",
+    "needs_mapping",
+    "needs_approval",
+    "approved_internal",
+    "approved_report_source",
+    "rejected",
+    "disabled",
+    "error"
+  ],
+  "connector_source_categories": [
+    "file_import",
+    "website_analytics",
+    "crm",
+    "payments",
+    "accounting",
+    "banking_future",
+    "client_os",
+    "shs_internal",
+    "shf_approval",
+    "manual_entry"
+  ],
+  "data_trust_rules": [
+    "External data is not trusted by default.",
+    "Connected data is private by default.",
+    "Report use requires approval.",
+    "Public SHF use requires SHF Data Approval Gateway approval.",
+    "Financial data must never become public impact data by default.",
+    "Mock connections must be labeled clearly.",
+    "Every sync or import must create an audit event.",
+    "Every report binding must show source and approval status.",
+    "Truth Spine remains the authority for verified claims, public approval status, and report readiness.",
+    "Direct Connect does not bypass SHF approval."
+  ],
+  "ui_placement_recommendations": [
+    {
+      "surface": "Admin Direct Connect overview",
+      "route": "admin.html#/ops/direct-connect"
+    },
+    {
+      "surface": "Connector registry",
+      "route": "admin.html#/ops/direct-connect/connectors"
+    },
+    {
+      "surface": "Connection detail",
+      "route": "admin.html#/ops/direct-connect/connections/:connectionId"
+    },
+    {
+      "surface": "Import and mapping",
+      "route": "admin.html#/ops/direct-connect/mapping"
+    },
+    {
+      "surface": "Sync log",
+      "route": "admin.html#/ops/direct-connect/sync-log"
+    },
+    {
+      "surface": "Approval review",
+      "route": "admin.html#/ops/direct-connect/review"
+    },
+    {
+      "surface": "Report source bindings",
+      "route": "admin.html#/ops/reports"
+    }
+  ],
+  "deferred_scope": [
+    "QuickBooks live API.",
+    "Plaid.",
+    "Finicity.",
+    "Stripe or Square live API.",
+    "OAuth.",
+    "Credential vault.",
+    "Live bank data.",
+    "Automatic scheduled sync.",
+    "External webhook processing.",
+    "Production database migration.",
+    "Client-facing connector setup.",
+    "Paid integration marketplace."
+  ],
+  "security_boundaries": [
+    "No credential storage in V1.",
+    "No bank login handling in V1.",
+    "No live banking connectors in V1.",
+    "No public exposure of private financial data.",
+    "Role and permission requirements are required before live connectors.",
+    "Audit logging is required for every sync/import preview.",
+    "Data retention policy is required before live financial integrations.",
+    "Financial data is private and must not become public impact data by default."
+  ],
+  "report_clientops_integration": [
+    "Connector status may appear in ClientOps as internal source readiness metadata.",
+    "Connector status may support monthly review preparation.",
+    "Connector status may contribute to system health and upgrade opportunity signals.",
+    "Connector status may feed premium reports through report-source trust panels.",
+    "Connector status does not make reports verified, public-approved, or export-ready by itself."
+  ],
+  "shf_boundary_rules": [
+    "SHS operational data can only flow to SHF public outputs through approval.",
+    "Direct Connect does not bypass SHF approval.",
+    "SHF Impact Data Spine remains public-approved only.",
+    "SHF Data Approval Gateway remains the approval surface.",
+    "Direct Connect cannot mutate SHF Impact Data Spine.",
+    "Direct Connect cannot mark public_approved true."
+  ],
+  "future_batches": [
+    "Batch 2: data model and mock registry.",
+    "Batch 3: admin UI.",
+    "Batch 4: ClientOps and Reports connection.",
+    "Batch 5: audit/approval checks.",
+    "Batch 6: tests/build verification."
+  ],
+  "verification_requirements": [
+    "JSON validates.",
+    "check_shs_direct_connect_layer.py passes.",
+    "Existing governance checks remain untouched.",
+    "No app code is required for Batch 1.",
+    "No git staging or commit is performed."
+  ]
+}

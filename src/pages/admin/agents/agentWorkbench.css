@@ -403,6 +403,41 @@
   gap: 12px;
 }
 
+.production-automation-recipe-grid article {
+  min-height: 245px;
+}
+
+.production-automation-recipe-grid small {
+  min-height: 28px;
+}
+
+.production-automation-note {
+  display: grid;
+  gap: 7px;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.production-automation-note textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #cfd8e6;
+  border-radius: 8px;
+  padding: 10px;
+  resize: vertical;
+}
+
+.production-automation-actions {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.production-automation-run-list .agent-workbench-empty {
+  border: 1px solid #dbe3ee;
+  border-radius: 8px;
+  background: #fbfdff;
+}
+
 .agent-workbench-approval label {
   display: grid;
   gap: 7px;
@@ -767,7 +802,8 @@
   .agent-workbench-actions,
   .agent-memory-actions,
   .agent-template-grid,
-  .agent-workflow-step-meta {
+  .agent-workflow-step-meta,
+  .production-automation-actions {
     grid-template-columns: 1fr;
   }
 

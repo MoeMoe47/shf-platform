@@ -1,0 +1,134 @@
+{
+  "name": "Production Automation V2",
+  "automation_recipe_model": {
+    "source": "src/data/agents/productionAutomationV2Runs.js",
+    "dangerous_enablement_flags_false": true,
+    "auth_mutation_enabled": false
+  },
+  "automation_run_model": {
+    "source": "src/data/agents/productionAutomationV2Runs.js",
+    "dangerous_execution_flags_false": true
+  },
+  "recipes": [
+    "sales_to_delivery",
+    "report_readiness",
+    "qa_delivery",
+    "clientops_review",
+    "launch_handoff",
+    "daily_governance",
+    "private_beta_demo"
+  ],
+  "readiness_scoring": {
+    "base": 100,
+    "subtract_critical_risk": 30,
+    "subtract_no_approval": 20,
+    "subtract_no_workflow_or_context": 20,
+    "subtract_blockers": 15,
+    "subtract_warnings": 10,
+    "subtract_dangerous_action": 25,
+    "subtract_public_shf_external_warehouse_auth_mutation": 50,
+    "floor": 0,
+    "ready_threshold": 80
+  },
+  "workbench_integration": {
+    "route": "admin.html#/ops/agents",
+    "components": [
+      "ProductionAutomationV2Panel",
+      "ProductionAutomationRunDetail",
+      "ProductionAutomationRecipePanel",
+      "ProductionAutomationSafetyPanel"
+    ]
+  },
+  "agent_workflow_coordination_memory_integration": {
+    "local_workflow_run_creation": true,
+    "local_coordination_plan_creation": true,
+    "local_task_queue_item_creation": true,
+    "context_packet_linking": true,
+    "backend_persistence": false
+  },
+  "approval_controlled_executor_boundary": {
+    "human_approval_required": true,
+    "controlled_executor_available": true,
+    "executor_bypass_allowed": false
+  },
+  "backend_boundary": {
+    "backend_v2_executor_created": false,
+    "execute_endpoint_added": false,
+    "run_endpoint_added": false,
+    "external_calls_enabled": false,
+    "database_writes_enabled": false
+  },
+  "safety_rules": [
+    "critical risk blocks",
+    "blocked action requests block",
+    "unsafe payload flags block",
+    "related blocked workflow blocks",
+    "blocked context packets block",
+    "execution_enabled_v2 remains false",
+    "dangerous flags remain false"
+  ],
+  "shs_shf_boundary_rules": [
+    "do not write src/data/shfImpactData.js",
+    "do not mark public_approved",
+    "do not publish SHF impact records",
+    "do not expose SHS private data publicly",
+    "do not bypass Data Approval Gateway"
+  ],
+  "files_created": [
+    "src/data/agents/productionAutomationV2Recipes.js",
+    "src/data/agents/productionAutomationV2Runs.js",
+    "src/data/agents/productionAutomationV2Storage.js",
+    "src/data/agents/productionAutomationV2Safety.js",
+    "src/data/agents/productionAutomationV2Metrics.js",
+    "src/pages/admin/agents/components/ProductionAutomationV2Panel.jsx",
+    "src/pages/admin/agents/components/ProductionAutomationRunDetail.jsx",
+    "src/pages/admin/agents/components/ProductionAutomationRecipePanel.jsx",
+    "src/pages/admin/agents/components/ProductionAutomationSafetyPanel.jsx",
+    "scripts/check_production_automation_v2.py",
+    "docs/PRODUCTION_AUTOMATION_V2.md",
+    "docs/PRODUCTION_AUTOMATION_V2.json"
+  ],
+  "files_modified": [
+    "src/pages/admin/agents/AgentWorkbenchPage.jsx",
+    "src/pages/admin/agents/agentWorkbench.css",
+    "package.json"
+  ],
+  "validation": {
+    "json_tool": "PASS",
+    "py_compile_validator": "PASS",
+    "validator_direct": "PASS",
+    "package_validator": "PASS",
+    "agent_workflow": "PASS",
+    "agent_coordination": "PASS",
+    "agent_memory_context": "PASS",
+    "agent_approval_stub": "PASS",
+    "agent_contract_bridge": "PASS",
+    "governance": "PASS",
+    "daily_governance_audit": "PASS",
+    "paid_launch_checks": "PASS",
+    "build": "PASS_WITH_KNOWN_LARGE_CHUNK_WARNING"
+  },
+  "browser_smoke": {
+    "status": "PASS_WITH_BACKEND_PROXY_NOTE",
+    "url": "http://127.0.0.1:5174/admin.html#/ops/agents",
+    "admin_ops_agents_loads": "PASS",
+    "recipe_visibility": "PASS",
+    "recipe_count": 7,
+    "run_creation": "PASS",
+    "run_detail": "PASS",
+    "readiness_score": "PASS",
+    "run_actions": "PASS",
+    "safety_flags": "PASS",
+    "access_boundary": "PASS",
+    "public_launcher_exposes_v2": false,
+    "browser_console_errors": [],
+    "note": "Vite dev server logged a non-blocking /auth/me proxy connection warning because the local backend was not running during UI smoke."
+  },
+  "remaining_risks": [
+    "browser-local state only",
+    "browser smoke used Vite dev server only; backend auth proxy was not running",
+    "backend remains V1 summary/evaluation only by design",
+    "Vite large-chunk warning remains known and non-blocking"
+  ],
+  "v2_complete": true
+}

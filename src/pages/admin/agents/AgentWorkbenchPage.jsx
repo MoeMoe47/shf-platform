@@ -58,6 +58,17 @@ import {
   resetAgentExecutionRequests,
   runControlledExecutionRequest,
 } from "@/data/agents/agentControlledExecutor";
+import {
+  applyProductionAutomationV2RunAction,
+  attachContextPacketToProductionAutomationRun,
+  calculateProductionAutomationV2Metrics,
+  createProductionAutomationV2RunFromRecipe,
+  getProductionAutomationV2Recipes,
+  getProductionAutomationV2Recommendations,
+  getProductionAutomationV2Runs,
+  resetProductionAutomationV2Recommendations,
+  resetProductionAutomationV2Runs,
+} from "@/data/agents/productionAutomationV2Storage";
 import AgentOverviewPanel from "./components/AgentOverviewPanel";
 import AgentTaskQueue from "./components/AgentTaskQueue";
 import AgentTaskDetail from "./components/AgentTaskDetail";
@@ -84,6 +95,10 @@ import AgentWorkflowSafetyPanel from "./components/AgentWorkflowSafetyPanel";
 import AgentControlledExecutorPanel from "./components/AgentControlledExecutorPanel";
 import AgentExecutionRecordTable from "./components/AgentExecutionRecordTable";
 import AgentExecutionSafetyPanel from "./components/AgentExecutionSafetyPanel";
+import ProductionAutomationRecipePanel from "./components/ProductionAutomationRecipePanel";
+import ProductionAutomationV2Panel from "./components/ProductionAutomationV2Panel";
+import ProductionAutomationRunDetail from "./components/ProductionAutomationRunDetail";
+import ProductionAutomationSafetyPanel from "./components/ProductionAutomationSafetyPanel";
 import "./agentWorkbench.css";
 
 const SAFETY_BOUNDARIES = [
@@ -109,12 +124,15 @@ export default function AgentWorkbenchPage() {
   const [executionRequests, setExecutionRequests] = React.useState(() => getAgentExecutionRequests());
   const [executionRecords, setExecutionRecords] = React.useState(() => getAgentExecutionRecords());
   const [, setRecommendationPackets] = React.useState(() => getAgentExecutionRecommendationPackets());
+  const [automationRuns, setAutomationRuns] = React.useState(() => getProductionAutomationV2Runs());
+  const [, setAutomationRecommendations] = React.useState(() => getProductionAutomationV2Recommendations());
   const [selectedTaskId, setSelectedTaskId] = React.useState(() => getAgentTasks()[0]?.task_id || "");
   const [selectedAgentId, setSelectedAgentId] = React.useState(SHS_AGENT_WORKFORCE_V1[0]?.id || "");
   const [selectedMemoryId, setSelectedMemoryId] = React.useState(() => getAgentMemoryRecords()[0]?.memory_id || "");
   const [selectedCoordinationPlanId, setSelectedCoordinationPlanId] = React.useState(() => getAgentCoordinationPlans()[0]?.coordination_plan_id || "");
   const [selectedWorkflowRunId, setSelectedWorkflowRunId] = React.useState(() => getAgentWorkflowRuns()[0]?.workflow_run_id || "");
   const [selectedExecutionActionType, setSelectedExecutionActionType] = React.useState(AGENT_EXECUTION_ALLOWED_ACTION_TYPES[0]);
+  const [selectedAutomationRunId, setSelectedAutomationRunId] = React.useState(() => getProductionAutomationV2Runs()[0]?.automation_run_id || "");
 
   const agentsById = React.useMemo(
     () => Object.fromEntries(SHS_AGENT_WORKFORCE_V1.map((agent) => [agent.id, agent])),
@@ -125,6 +143,11 @@ export default function AgentWorkbenchPage() {
   const selectedMemory = memoryRecords.find((record) => record.memory_id === selectedMemoryId) || memoryRecords[0] || null;
   const selectedCoordinationPlan = coordinationPlans.find((plan) => plan.coordination_plan_id === selectedCoordinationPlanId) || coordinationPlans[0] || null;
   const selectedWorkflowRun = workflowRuns.find((run) => run.workflow_run_id === selectedWorkflowRunId) || workflowRuns[0] || null;
+  const automationRecipes = React.useMemo(() => getProductionAutomationV2Recipes(), []);
+  const selectedAutomationRun = automationRuns.find((run) => run.automation_run_id === selectedAutomationRunId) || automationRuns[0] || null;
+  const selectedAutomationRecipe = selectedAutomationRun
+    ? automationRecipes.find((recipe) => recipe.automation_recipe_id === selectedAutomationRun.automation_recipe_id) || null
+    : null;
   const selectedWorkflowSteps = selectedWorkflowRun ? getStepsForWorkflowRun(selectedWorkflowRun.workflow_run_id, workflowSteps) : [];
   const selectedWorkflowStep = selectedWorkflowSteps.find((step) => ["ready", "in_review"].includes(step.status))
     || selectedWorkflowSteps[0]
@@ -164,6 +187,7 @@ export default function AgentWorkbenchPage() {
   const coordinationMetrics = React.useMemo(() => calculateAgentCoordinationMetrics(coordinationPlans, handoffs), [coordinationPlans, handoffs]);
   const workflowMetrics = React.useMemo(() => calculateAgentWorkflowMetrics(workflowRuns, workflowSteps), [workflowRuns, workflowSteps]);
   const executionMetrics = React.useMemo(() => calculateAgentExecutionMetrics(executionRecords, executionRequests), [executionRecords, executionRequests]);
+  const automationMetrics = React.useMemo(() => calculateProductionAutomationV2Metrics(automationRuns, automationRecipes), [automationRuns, automationRecipes]);
   const coordinationTemplates = React.useMemo(() => getCoordinationTemplates(), []);
   const workflowTemplates = React.useMemo(() => getAgentWorkflowTemplates(), []);
   const selectedExecutionContextPacket = selectedTaskContextPackets[0] || contextPackets[0] || null;
@@ -269,6 +293,13 @@ export default function AgentWorkbenchPage() {
     }
   }
 
+  function refreshAutomation(nextRuns) {
+    setAutomationRuns(nextRuns);
+    if (!nextRuns.find((run) => run.automation_run_id === selectedAutomationRunId)) {
+      setSelectedAutomationRunId(nextRuns[0]?.automation_run_id || "");
+    }
+  }
+
   function handleCreateTask() {
     const nextTasks = createAgentTask({
       title: "Manual Agent Workbench review",
@@ -343,6 +374,8 @@ export default function AgentWorkbenchPage() {
     setExecutionRequests(resetAgentExecutionRequests());
     setExecutionRecords(resetAgentExecutionRecords());
     setRecommendationPackets(resetAgentExecutionRecommendationPackets());
+    setAutomationRuns(resetProductionAutomationV2Runs());
+    setAutomationRecommendations(resetProductionAutomationV2Recommendations());
     setMemoryRecords(nextMemoryRecords);
     setContextPackets(nextContextPackets);
     setCoordinationPlans(nextCoordinationPlans);
@@ -518,6 +551,51 @@ export default function AgentWorkbenchPage() {
     setRecommendationPackets(result.recommendationPackets);
   }
 
+  function handleCreateAutomationRun(recipeId) {
+    const result = createProductionAutomationV2RunFromRecipe(recipeId, {
+      selectedTask,
+      selectedApprovalRecord,
+      memoryRecords,
+      contextPackets,
+      approvalLedger,
+    });
+    setTasks(result.tasks);
+    setWorkflowRuns(result.workflowRuns);
+    setWorkflowSteps(result.workflowSteps);
+    setCoordinationPlans(result.coordinationPlans);
+    setHandoffs(result.handoffs);
+    setAutomationRuns(result.runs);
+    setAutomationRecommendations(result.recommendations);
+    setSelectedAutomationRunId(result.runs[0]?.automation_run_id || "");
+    setSelectedWorkflowRunId(result.workflowRuns[0]?.workflow_run_id || selectedWorkflowRunId);
+    setSelectedCoordinationPlanId(result.coordinationPlans[0]?.coordination_plan_id || selectedCoordinationPlanId);
+    setSelectedTaskId(result.tasks[0]?.task_id || selectedTaskId);
+  }
+
+  function handleAutomationRunAction(action, note) {
+    if (!selectedAutomationRun) return;
+    const result = applyProductionAutomationV2RunAction(selectedAutomationRun.automation_run_id, action, note, {
+      workflowRuns,
+      contextPackets,
+    });
+    refreshAutomation(result.runs);
+    setAutomationRecommendations(result.recommendations);
+    setTasks(result.tasks);
+    setWorkflowRuns(result.workflowRuns);
+    setWorkflowSteps(result.workflowSteps);
+    setCoordinationPlans(result.coordinationPlans);
+    setHandoffs(result.handoffs);
+  }
+
+  function handleAttachAutomationContextPacket() {
+    if (!selectedAutomationRun || !selectedExecutionContextPacket) return;
+    const result = attachContextPacketToProductionAutomationRun(selectedAutomationRun.automation_run_id, selectedExecutionContextPacket.context_packet_id, {
+      workflowRuns,
+      contextPackets,
+    });
+    refreshAutomation(result.runs);
+  }
+
   return (
     <main className="agent-workbench-page">
       <section className="agent-workbench-hero">
@@ -590,6 +668,20 @@ export default function AgentWorkbenchPage() {
 
       <AgentExecutionRecordTable records={executionRecords} />
 
+      <ProductionAutomationRecipePanel
+        recipes={automationRecipes}
+        agentsById={agentsById}
+        onCreateRun={handleCreateAutomationRun}
+      />
+
+      <ProductionAutomationV2Panel
+        runs={automationRuns}
+        metrics={automationMetrics}
+        agentsById={agentsById}
+        selectedRunId={selectedAutomationRun?.automation_run_id}
+        onSelectRun={setSelectedAutomationRunId}
+      />
+
       <AgentOverviewPanel
         agents={SHS_AGENT_WORKFORCE_V1}
         selectedAgentId={selectedAgent?.id || selectedAgentId}
@@ -642,6 +734,12 @@ export default function AgentWorkbenchPage() {
             agentsById={agentsById}
             onStepAction={handleWorkflowStepAction}
           />
+          <ProductionAutomationRunDetail
+            run={selectedAutomationRun}
+            recipe={selectedAutomationRecipe}
+            onAction={handleAutomationRunAction}
+            onAttachContext={handleAttachAutomationContextPacket}
+          />
         </div>
         <aside className="agent-workbench-side">
           <AgentWorkflowProgress run={selectedWorkflowRun} steps={selectedWorkflowSteps} />
@@ -654,6 +752,10 @@ export default function AgentWorkbenchPage() {
             previewRequest={previewExecutionRequest}
             context={executionContext}
             metrics={executionMetrics}
+          />
+          <ProductionAutomationSafetyPanel
+            run={selectedAutomationRun}
+            metrics={automationMetrics}
           />
           <AgentCoordinationSafetyPanel
             plan={selectedCoordinationPlan}

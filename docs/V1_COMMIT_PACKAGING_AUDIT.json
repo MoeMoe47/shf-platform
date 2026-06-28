@@ -1,0 +1,249 @@
+{
+  "repository_summary": {
+    "repo": "/Users/mikeslate/Desktop/shrv1",
+    "audit_type": "owner-reviewable V1 commit packaging",
+    "current_head": "2933e25 docs: correct Direct Connect as direct-source proof",
+    "pre_report_changed_file_count": 27,
+    "post_report_changed_file_count": 29,
+    "staging_performed": false,
+    "commit_performed": false,
+    "cleanup_performed": false
+  },
+  "working_tree": {
+    "tracked_modified": 4,
+    "untracked_before_report": 23,
+    "untracked_reports_created": 2,
+    "generated_runtime_dirty": 0,
+    "summary": "Working tree is not clean. Changes are concentrated in Agent Workbench/Production Automation V2, Agent V1 documentation/check scripts, Direct Connect Batch 2, and this audit report."
+  },
+  "changed_files": [
+    { "path": "package.json", "git_status": "M", "classification": "OWNER_REVIEW_REQUIRED", "package": "Production Automation V2", "reason": "Adds check:production-automation-v2 script. Governance-adjacent package metadata should be reviewed before staging." },
+    { "path": "services/shf-agent-fabric/main.py", "git_status": "M", "classification": "OWNER_REVIEW_REQUIRED", "package": "Agent Backend Bridge", "reason": "Imports and mounts agent_contract_bridge_router. This is routing/backend surface, not formatting. Owner should decide if it belongs in V1 or a separate bridge commit." },
+    { "path": "src/pages/admin/agents/AgentWorkbenchPage.jsx", "git_status": "M", "classification": "V2_WORK", "package": "Production Automation V2", "reason": "Integrates Production Automation V2 recipes, runs, metrics, detail, and safety panels into Agent Workbench." },
+    { "path": "src/pages/admin/agents/agentWorkbench.css", "git_status": "M", "classification": "V2_WORK", "package": "Production Automation V2", "reason": "Adds Production Automation V2 panel/action styling." },
+    { "path": "docs/AGENT_COORDINATION_LAYER_V1.md", "git_status": "??", "classification": "V1_EXTENSION", "package": "Agent Coordination Layer V1 docs", "reason": "Documents a governed non-autonomous Agent Coordination extension." },
+    { "path": "docs/AGENT_COORDINATION_LAYER_V1.json", "git_status": "??", "classification": "V1_EXTENSION", "package": "Agent Coordination Layer V1 docs", "reason": "Machine-readable record for Agent Coordination Layer V1." },
+    { "path": "scripts/check_agent_coordination_layer.py", "git_status": "??", "classification": "V1_EXTENSION", "package": "Agent Coordination Layer V1 docs", "reason": "Validator for Agent Coordination V1 artifacts; source files referenced by script are already present in repo." },
+    { "path": "docs/AGENT_MEMORY_CONTEXT_LAYER_V1.md", "git_status": "??", "classification": "V1_EXTENSION", "package": "Agent Memory & Context Layer V1 docs", "reason": "Documents a governed non-autonomous Agent Memory/Context extension." },
+    { "path": "docs/AGENT_MEMORY_CONTEXT_LAYER_V1.json", "git_status": "??", "classification": "V1_EXTENSION", "package": "Agent Memory & Context Layer V1 docs", "reason": "Machine-readable record for Agent Memory/Context V1." },
+    { "path": "scripts/check_agent_memory_context_layer.py", "git_status": "??", "classification": "V1_EXTENSION", "package": "Agent Memory & Context Layer V1 docs", "reason": "Validator for Agent Memory/Context V1 artifacts; source files referenced by script are already present in repo." },
+    { "path": "docs/AGENT_V1_FINAL_READINESS_AUDIT.md", "git_status": "??", "classification": "V1_COMPLETE", "package": "Agent V1 Final Readiness Audit", "reason": "Final readiness audit says Agent V1 has no blockers and remains non-autonomous." },
+    { "path": "docs/AGENT_V1_FINAL_READINESS_AUDIT.json", "git_status": "??", "classification": "V1_COMPLETE", "package": "Agent V1 Final Readiness Audit", "reason": "Machine-readable readiness audit." },
+    { "path": "docs/PRODUCTION_AUTOMATION_V2.md", "git_status": "??", "classification": "V2_WORK", "package": "Production Automation V2", "reason": "Explicit V2 work; should not be mixed into official V1 milestone unless owner intentionally includes V2 planning." },
+    { "path": "docs/PRODUCTION_AUTOMATION_V2.json", "git_status": "??", "classification": "V2_WORK", "package": "Production Automation V2", "reason": "Machine-readable V2 record." },
+    { "path": "scripts/check_production_automation_v2.py", "git_status": "??", "classification": "V2_WORK", "package": "Production Automation V2", "reason": "V2 validator and package script target." },
+    { "path": "src/data/agents/productionAutomationV2Metrics.js", "git_status": "??", "classification": "V2_WORK", "package": "Production Automation V2", "reason": "V2 local metrics data helper." },
+    { "path": "src/data/agents/productionAutomationV2Recipes.js", "git_status": "??", "classification": "V2_WORK", "package": "Production Automation V2", "reason": "V2 local recipe registry." },
+    { "path": "src/data/agents/productionAutomationV2Runs.js", "git_status": "??", "classification": "V2_WORK", "package": "Production Automation V2", "reason": "V2 local automation run model." },
+    { "path": "src/data/agents/productionAutomationV2Safety.js", "git_status": "??", "classification": "V2_WORK", "package": "Production Automation V2", "reason": "V2 safety rules and blocked action checks." },
+    { "path": "src/data/agents/productionAutomationV2Storage.js", "git_status": "??", "classification": "V2_WORK", "package": "Production Automation V2", "reason": "V2 localStorage-backed storage helper." },
+    { "path": "src/pages/admin/agents/components/ProductionAutomationRecipePanel.jsx", "git_status": "??", "classification": "V2_WORK", "package": "Production Automation V2", "reason": "V2 Workbench UI panel." },
+    { "path": "src/pages/admin/agents/components/ProductionAutomationRunDetail.jsx", "git_status": "??", "classification": "V2_WORK", "package": "Production Automation V2", "reason": "V2 Workbench detail UI." },
+    { "path": "src/pages/admin/agents/components/ProductionAutomationSafetyPanel.jsx", "git_status": "??", "classification": "V2_WORK", "package": "Production Automation V2", "reason": "V2 Workbench safety UI." },
+    { "path": "src/pages/admin/agents/components/ProductionAutomationV2Panel.jsx", "git_status": "??", "classification": "V2_WORK", "package": "Production Automation V2", "reason": "V2 Workbench run list/metrics UI." },
+    { "path": "docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.md", "git_status": "??", "classification": "V1_EXTENSION", "package": "Direct Connect Batch 2", "reason": "Local-first Direct Connect data model documentation; no routes/UI/services." },
+    { "path": "docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.json", "git_status": "??", "classification": "V1_EXTENSION", "package": "Direct Connect Batch 2", "reason": "Machine-readable Direct Connect Batch 2 data model record." },
+    { "path": "scripts/check_shs_direct_connect_batch2.py", "git_status": "??", "classification": "V1_EXTENSION", "package": "Direct Connect Batch 2", "reason": "Validator for Direct Connect Batch 2 data model." },
+    { "path": "src/data/shsDirectConnectData.js", "git_status": "??", "classification": "V1_EXTENSION", "package": "Direct Connect Batch 2", "reason": "Standalone local data module; no route/UI/service integration." },
+    { "path": "docs/V1_COMMIT_PACKAGING_AUDIT.md", "git_status": "??", "classification": "V1_COMPLETE", "package": "V1 Commit Packaging Audit", "reason": "This owner-reviewable governance report." },
+    { "path": "docs/V1_COMMIT_PACKAGING_AUDIT.json", "git_status": "??", "classification": "V1_COMPLETE", "package": "V1 Commit Packaging Audit", "reason": "Machine-readable governance report." }
+  ],
+  "classification": {
+    "V1_COMPLETE": [
+      "docs/AGENT_V1_FINAL_READINESS_AUDIT.md",
+      "docs/AGENT_V1_FINAL_READINESS_AUDIT.json",
+      "docs/V1_COMMIT_PACKAGING_AUDIT.md",
+      "docs/V1_COMMIT_PACKAGING_AUDIT.json"
+    ],
+    "V1_EXTENSION": [
+      "docs/AGENT_COORDINATION_LAYER_V1.md",
+      "docs/AGENT_COORDINATION_LAYER_V1.json",
+      "scripts/check_agent_coordination_layer.py",
+      "docs/AGENT_MEMORY_CONTEXT_LAYER_V1.md",
+      "docs/AGENT_MEMORY_CONTEXT_LAYER_V1.json",
+      "scripts/check_agent_memory_context_layer.py",
+      "docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.md",
+      "docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.json",
+      "scripts/check_shs_direct_connect_batch2.py",
+      "src/data/shsDirectConnectData.js"
+    ],
+    "V2_WORK": [
+      "docs/PRODUCTION_AUTOMATION_V2.md",
+      "docs/PRODUCTION_AUTOMATION_V2.json",
+      "scripts/check_production_automation_v2.py",
+      "src/data/agents/productionAutomationV2Metrics.js",
+      "src/data/agents/productionAutomationV2Recipes.js",
+      "src/data/agents/productionAutomationV2Runs.js",
+      "src/data/agents/productionAutomationV2Safety.js",
+      "src/data/agents/productionAutomationV2Storage.js",
+      "src/pages/admin/agents/AgentWorkbenchPage.jsx",
+      "src/pages/admin/agents/agentWorkbench.css",
+      "src/pages/admin/agents/components/ProductionAutomationRecipePanel.jsx",
+      "src/pages/admin/agents/components/ProductionAutomationRunDetail.jsx",
+      "src/pages/admin/agents/components/ProductionAutomationSafetyPanel.jsx",
+      "src/pages/admin/agents/components/ProductionAutomationV2Panel.jsx"
+    ],
+    "UNRELATED_WORK": [],
+    "GENERATED_RUNTIME": [],
+    "OWNER_REVIEW_REQUIRED": [
+      "package.json",
+      "services/shf-agent-fabric/main.py"
+    ],
+    "UNKNOWN": []
+  },
+  "recommended_commit_packages": [
+    {
+      "name": "Commit A - V1 Commit Packaging Audit",
+      "classification": "V1_COMPLETE",
+      "files": [
+        "docs/V1_COMMIT_PACKAGING_AUDIT.md",
+        "docs/V1_COMMIT_PACKAGING_AUDIT.json"
+      ],
+      "recommendation": "Stage only if owner wants the audit report committed first."
+    },
+    {
+      "name": "Commit B - Agent V1 Final Readiness Audit",
+      "classification": "V1_COMPLETE",
+      "files": [
+        "docs/AGENT_V1_FINAL_READINESS_AUDIT.md",
+        "docs/AGENT_V1_FINAL_READINESS_AUDIT.json"
+      ],
+      "recommendation": "Good V1 milestone candidate; documentation-only."
+    },
+    {
+      "name": "Commit C - Agent Coordination Layer V1 Documentation and Checks",
+      "classification": "V1_EXTENSION",
+      "files": [
+        "docs/AGENT_COORDINATION_LAYER_V1.md",
+        "docs/AGENT_COORDINATION_LAYER_V1.json",
+        "scripts/check_agent_coordination_layer.py"
+      ],
+      "recommendation": "Commit separately from source/UI changes because this package is docs/check script only in the current working tree."
+    },
+    {
+      "name": "Commit D - Agent Memory and Context Layer V1 Documentation and Checks",
+      "classification": "V1_EXTENSION",
+      "files": [
+        "docs/AGENT_MEMORY_CONTEXT_LAYER_V1.md",
+        "docs/AGENT_MEMORY_CONTEXT_LAYER_V1.json",
+        "scripts/check_agent_memory_context_layer.py"
+      ],
+      "recommendation": "Commit separately from source/UI changes because this package is docs/check script only in the current working tree."
+    },
+    {
+      "name": "Commit E - Agent Backend Bridge Route Mount",
+      "classification": "OWNER_REVIEW_REQUIRED",
+      "files": [
+        "services/shf-agent-fabric/main.py"
+      ],
+      "recommendation": "Owner should review why the Agent Contract Bridge route mount was left modified after recent Agent commits."
+    },
+    {
+      "name": "Commit F - Direct Connect Batch 2 Data Model",
+      "classification": "V1_EXTENSION",
+      "files": [
+        "docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.md",
+        "docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.json",
+        "scripts/check_shs_direct_connect_batch2.py",
+        "src/data/shsDirectConnectData.js"
+      ],
+      "recommendation": "Commit separately as local-first Direct Connect data foundation, after owner confirms it belongs in V1 milestone scope."
+    },
+    {
+      "name": "Commit G - Production Automation V2",
+      "classification": "V2_WORK",
+      "files": [
+        "package.json",
+        "docs/PRODUCTION_AUTOMATION_V2.md",
+        "docs/PRODUCTION_AUTOMATION_V2.json",
+        "scripts/check_production_automation_v2.py",
+        "src/data/agents/productionAutomationV2Metrics.js",
+        "src/data/agents/productionAutomationV2Recipes.js",
+        "src/data/agents/productionAutomationV2Runs.js",
+        "src/data/agents/productionAutomationV2Safety.js",
+        "src/data/agents/productionAutomationV2Storage.js",
+        "src/pages/admin/agents/AgentWorkbenchPage.jsx",
+        "src/pages/admin/agents/agentWorkbench.css",
+        "src/pages/admin/agents/components/ProductionAutomationRecipePanel.jsx",
+        "src/pages/admin/agents/components/ProductionAutomationRunDetail.jsx",
+        "src/pages/admin/agents/components/ProductionAutomationSafetyPanel.jsx",
+        "src/pages/admin/agents/components/ProductionAutomationV2Panel.jsx"
+      ],
+      "recommendation": "Hold for V2 or commit after V1 milestone, unless owner explicitly wants V2 planning included."
+    }
+  ],
+  "owner_review": {
+    "files": [
+      "package.json",
+      "services/shf-agent-fabric/main.py",
+      "src/pages/admin/agents/AgentWorkbenchPage.jsx",
+      "src/pages/admin/agents/agentWorkbench.css",
+      "docs/PRODUCTION_AUTOMATION_V2.md",
+      "docs/PRODUCTION_AUTOMATION_V2.json",
+      "scripts/check_production_automation_v2.py",
+      "src/data/agents/productionAutomationV2Metrics.js",
+      "src/data/agents/productionAutomationV2Recipes.js",
+      "src/data/agents/productionAutomationV2Runs.js",
+      "src/data/agents/productionAutomationV2Safety.js",
+      "src/data/agents/productionAutomationV2Storage.js",
+      "src/pages/admin/agents/components/ProductionAutomationRecipePanel.jsx",
+      "src/pages/admin/agents/components/ProductionAutomationRunDetail.jsx",
+      "src/pages/admin/agents/components/ProductionAutomationSafetyPanel.jsx",
+      "src/pages/admin/agents/components/ProductionAutomationV2Panel.jsx"
+    ],
+    "reason": "V2 work and backend route mount/package metadata should not be included in official V1 milestone without explicit owner decision."
+  },
+  "runtime_files": {
+    "dirty_tracked_runtime_files": [],
+    "recommendation": "No runtime files need staging. Strict runtime hygiene passed."
+  },
+  "governance": {
+    "npm_run_check_governance": "PASS",
+    "check_master_layer_registry": "PASS",
+    "check_truth_spine_freeze": "PASS",
+    "check_duplicate_layer_cleanup": "PASS",
+    "check_runtime_log_hygiene_strict": "PASS",
+    "run_paid_launch_checks": "PASS",
+    "run_daily_governance_audit": "PASS on clean rerun",
+    "npm_run_build": "PASS with existing Vite large-chunk warning",
+    "daily_audit_note": "First daily audit attempt failed during concurrent Vite dist cleanup while another build was running; clean rerun passed. Script still notes manual checks required for reports/watchtower visibility, SHS-SHF boundary, public-approved guard, security/privacy, ownership/IP, and route/identity boundary."
+  },
+  "architecture": {
+    "truth_spine_unchanged": true,
+    "oracle_unchanged": true,
+    "master_layer_registry_unchanged": true,
+    "policy_engine_unchanged": true,
+    "shf_impact_data_spine_unchanged": true,
+    "shs_spine_unchanged": true,
+    "public_approved_unchanged": true,
+    "production_executor_introduced": false,
+    "unsafe_routes_introduced": false,
+    "architecture_drift_found": false,
+    "notes": "No diffs found in protected Truth Spine, Oracle, registry, Policy Engine, SHF Impact Data Spine, or SHS Spine paths. Search found no enabled dangerous mutation flags in changed agent/direct-connect surfaces."
+  },
+  "remaining_risks": [
+    "Production Automation V2 is explicitly V2 and should not be mixed into V1 milestone without owner approval.",
+    "services/shf-agent-fabric/main.py mounts Agent Contract Bridge and should be reviewed as backend/routing work.",
+    "package.json adds a V2 check script and should travel with the V2 package if approved.",
+    "Direct Connect Batch 2 exists in the working tree even though the correction request said not to build Batch 2 yet; classify as V1 extension requiring owner scope confirmation.",
+    "No staging recommendations should be executed until owner approves exact packages."
+  ],
+  "recommended_commit_order": [
+    "Commit A - V1 Commit Packaging Audit",
+    "Commit B - Agent V1 Final Readiness Audit",
+    "Commit C - Agent Coordination Layer V1 Documentation and Checks",
+    "Commit D - Agent Memory and Context Layer V1 Documentation and Checks",
+    "Commit E - Agent Backend Bridge Route Mount, only after owner review",
+    "Commit F - Direct Connect Batch 2 Data Model, only if owner confirms V1 extension scope",
+    "Commit G - Production Automation V2, after V1 milestone or with explicit owner approval"
+  ],
+  "recommended_git_commands": [
+    "# No commands executed by this audit.",
+    "# Owner review required before any git add.",
+    "git add docs/V1_COMMIT_PACKAGING_AUDIT.md docs/V1_COMMIT_PACKAGING_AUDIT.json",
+    "git diff --cached --name-status",
+    "npm run check:governance",
+    "npm run build"
+  ],
+  "v1_ready": false
+}

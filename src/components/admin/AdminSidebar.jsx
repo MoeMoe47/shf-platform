@@ -11,6 +11,7 @@ const SECTIONS = [
     items: [
       { to: "/ops/production", icon: "▣", label: "Production" },
       { to: "/ops/agents", icon: "A", label: "Agent Workbench" },
+      { to: "/ops/direct-connect", icon: "D", label: "Direct Connect" },
       { to: "/ops/projects", icon: "◇", label: "Projects" },
       { to: "/ops/brand-profile", icon: "◈", label: "Brand Profile" },
       { to: "/ops/page-intent", icon: "→", label: "Page Intent" },

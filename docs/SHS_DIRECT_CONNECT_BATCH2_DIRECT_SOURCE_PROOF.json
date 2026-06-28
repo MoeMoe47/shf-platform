@@ -1,0 +1,171 @@
+{
+  "name": "SHS Direct Connect Batch 2 - Direct Source Proof",
+  "corrected_framing": "direct_source_proof",
+  "direct_source_proof_model": {
+    "source": "src/data/directConnect/directSourceProofRecords.js",
+    "visibility": "internal_only",
+    "safe_for_shf_public_surface": false,
+    "public_approved": false,
+    "truth_spine_claim_created": false,
+    "shf_impact_data_mutated": false,
+    "live_connection_enabled": false,
+    "credential_required": false,
+    "external_api_called": false
+  },
+  "source_evidence_reference_model": {
+    "source": "src/data/directConnect/directSourceEvidenceRefs.js",
+    "stores_uploads": false,
+    "stores_credentials": false
+  },
+  "approved_source_categories": [
+    "client_supplied_document",
+    "partner_attestation",
+    "internal_shs_operational_record",
+    "internal_shs_report",
+    "public_agency_record",
+    "public_dataset_reference",
+    "manual_review_record",
+    "system_export_reference",
+    "audit_review_record",
+    "governance_review_record"
+  ],
+  "deferred_source_categories": [
+    "bank_account_connection",
+    "financial_account_aggregation",
+    "payment_processor_connection",
+    "payroll_connection",
+    "EHR_connection",
+    "live_case_management_connection",
+    "live_government_api_connection",
+    "private_system_scraping"
+  ],
+  "readiness_scoring": {
+    "base": 100,
+    "subtract_no_source_owner": 25,
+    "subtract_no_evidence_reference": 20,
+    "subtract_missing_source_registry_ref": 20,
+    "subtract_missing_evidence_package_ref": 20,
+    "subtract_privacy_not_clear": 20,
+    "subtract_ownership_not_clear": 20,
+    "subtract_verification_not_ready": 25,
+    "subtract_public_approved_true": 50,
+    "subtract_live_connection_true": 50,
+    "subtract_credential_required_true": 50,
+    "subtract_external_api_called_true": 50,
+    "subtract_shf_impact_mutation_claimed": 50,
+    "floor": 0,
+    "shs_reporting_ready_threshold": 80,
+    "shf_public_surface_ready": false
+  },
+  "admin_ui": {
+    "created": true,
+    "route": "admin.html#/ops/direct-connect",
+    "access": "shs_admin",
+    "components": [
+      "DirectSourceProofList",
+      "DirectSourceProofDetail",
+      "DirectSourceEvidencePanel",
+      "DirectSourceReadinessPanel",
+      "DirectSourceSafetyPanel",
+      "DirectSourceCategoryPanel"
+    ]
+  },
+  "governance_layer_integration": [
+    "Source Registry",
+    "Evidence Package",
+    "Data Verification",
+    "Data Approval",
+    "Audit & Verification",
+    "Readiness Gate",
+    "Security / Privacy",
+    "Data Ownership / IP",
+    "SHS Spine"
+  ],
+  "shs_shf_boundary_rules": [
+    "proof records are internal_only by default",
+    "safe_for_shf_public_surface remains false",
+    "public_approved remains false",
+    "truth_spine_claim_created remains false",
+    "shf_impact_data_mutated remains false",
+    "live_connection_enabled remains false",
+    "credential_required remains false",
+    "external_api_called remains false"
+  ],
+  "backend_boundary": {
+    "backend_routes_added": false,
+    "live_connection_endpoints_added": false,
+    "credential_storage_added": false,
+    "external_api_calls_enabled": false,
+    "database_persistence_added": false
+  },
+  "files_created": [
+    "src/data/directConnect/directSourceProofRecords.js",
+    "src/data/directConnect/directSourceEvidenceRefs.js",
+    "src/data/directConnect/directSourceCategories.js",
+    "src/data/directConnect/directSourceProofStorage.js",
+    "src/data/directConnect/directSourceProofSafety.js",
+    "src/data/directConnect/directSourceProofMetrics.js",
+    "src/pages/admin/direct-connect/DirectConnectProofCenterPage.jsx",
+    "src/pages/admin/direct-connect/components/DirectSourceProofList.jsx",
+    "src/pages/admin/direct-connect/components/DirectSourceProofDetail.jsx",
+    "src/pages/admin/direct-connect/components/DirectSourceEvidencePanel.jsx",
+    "src/pages/admin/direct-connect/components/DirectSourceReadinessPanel.jsx",
+    "src/pages/admin/direct-connect/components/DirectSourceSafetyPanel.jsx",
+    "src/pages/admin/direct-connect/components/DirectSourceCategoryPanel.jsx",
+    "src/pages/admin/direct-connect/directConnectProofCenter.css",
+    "docs/SHS_DIRECT_CONNECT_BATCH2_DIRECT_SOURCE_PROOF.md",
+    "docs/SHS_DIRECT_CONNECT_BATCH2_DIRECT_SOURCE_PROOF.json"
+  ],
+  "files_modified": [
+    "scripts/check_shs_direct_connect_batch2.py",
+    "package.json",
+    "src/router/AdminRoutes.jsx",
+    "src/components/admin/AdminSidebar.jsx",
+    "src/system/identity/hubAccessControl.js"
+  ],
+  "validation": {
+    "python3 -m json.tool docs/SHS_DIRECT_CONNECT_BATCH2_DIRECT_SOURCE_PROOF.json": "PASS",
+    "python3 -m py_compile scripts/check_shs_direct_connect_batch2.py": "PASS",
+    "python3 scripts/check_shs_direct_connect_batch2.py": "PASS",
+    "npm run check:direct-connect-batch2": "PASS",
+    "python3 scripts/check_shs_direct_connect_layer.py": "PASS",
+    "python3 scripts/check_shs_direct_connect_direct_source_proof.py": "PASS",
+    "npm run check:governance": "PASS",
+    "python3 scripts/check_master_layer_registry.py": "PASS",
+    "python3 scripts/check_truth_spine_freeze.py": "PASS",
+    "python3 scripts/check_duplicate_layer_cleanup.py": "PASS",
+    "python3 scripts/check_runtime_log_hygiene.py --strict": "PASS",
+    "bash scripts/run_daily_governance_audit.sh": "PASS",
+    "bash scripts/run_paid_launch_checks.sh": "PASS",
+    "npm run build": "PASS_WITH_EXISTING_LARGE_CHUNK_WARNING"
+  },
+  "browser_smoke": {
+    "status": "PASS",
+    "route": "admin.html#/ops/direct-connect",
+    "checks": {
+      "route_loaded": true,
+      "admin_sidebar_link_visible": true,
+      "direct_source_proof_copy_visible": true,
+      "proof_records_visible": true,
+      "readiness_panel_visible": true,
+      "safety_panel_visible": true,
+      "source_categories_visible": true,
+      "approved_source_category_count_visible": true,
+      "deferred_source_category_count_visible": true,
+      "public_approved_false_visible": true,
+      "live_connection_false_visible": true,
+      "credential_required_false_visible": true,
+      "external_api_called_false_visible": true,
+      "shf_impact_mutated_false_visible": true,
+      "public_home_route_does_not_expose_proof_center": true
+    },
+    "console_errors": []
+  },
+  "remaining_risks": [
+    "local/browser storage only",
+    "no durable proof ledger",
+    "no file upload",
+    "Truth Spine package attachment remains future gated work"
+  ],
+  "batch2_complete": true
+}

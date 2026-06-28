@@ -94,6 +94,7 @@ export const hubPageAccess = {
   // happen in identityRouting.js and must not widen these route permissions.
   "/ops/production": ["shs_admin"],
   "/ops/agents": ["shs_admin"],
+  "/ops/direct-connect": ["shs_admin"],
   "/ops/projects": ["shs_admin"],
   "/ops/brand-profile": ["shs_admin"],
   "/ops/page-intent": ["shs_admin"],

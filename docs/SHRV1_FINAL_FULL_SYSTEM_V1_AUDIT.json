@@ -1,0 +1,264 @@
+{
+  "name": "SHRV1 Final Full-System V1 Audit",
+  "repository_state": {
+    "classification": "mixed but understood",
+    "head": "eebe370 feat(direct-connect): add direct-source proof Batch 2",
+    "staged_files_count": 0,
+    "tracked_modified_files": [
+      "services/shf-agent-fabric/main.py"
+    ],
+    "untracked_files": [
+      "docs/AGENT_COORDINATION_LAYER_V1.json",
+      "docs/AGENT_COORDINATION_LAYER_V1.md",
+      "docs/AGENT_MEMORY_CONTEXT_LAYER_V1.json",
+      "docs/AGENT_MEMORY_CONTEXT_LAYER_V1.md",
+      "docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.json",
+      "docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.md",
+      "scripts/check_agent_coordination_layer.py",
+      "scripts/check_agent_memory_context_layer.py",
+      "src/data/shsDirectConnectData.js"
+    ],
+    "cached_diff": [],
+    "main_py_review": {
+      "modified": true,
+      "summary": "services/shf-agent-fabric/main.py has an unstaged Agent Contract Bridge router import and app.include_router mount.",
+      "owner_review_required": true,
+      "not_modified_by_this_audit": true
+    },
+    "release_state": "owner review required before a clean release commit"
+  },
+  "governance_v1": {
+    "status": "PASS",
+    "master_layer_registry": "PASS",
+    "truth_spine_freeze": "PASS",
+    "duplicate_cleanup": "PASS",
+    "runtime_hygiene_strict": "PASS",
+    "daily_governance_audit": "PASS",
+    "paid_launch_checks": "PASS",
+    "notes": [
+      "Daily governance audit still lists manual checks for reports/watchtower visibility, SHS-SHF boundary, public-approved guard, security/privacy, ownership/IP, and route/identity boundary.",
+      "No formal V1 governance blocker was found in the automated checks."
+    ]
+  },
+  "layer_registry": {
+    "status": "PASS",
+    "official_layers_checked": 57,
+    "required_layers_complete": true,
+    "formal_v1_blockers": [],
+    "duplicate_merge_blockers": []
+  },
+  "shs_spine_shf_boundary": {
+    "status": "PASS_WITH_MANUAL_REVIEW_NOTE",
+    "shs_spine_private_operational": true,
+    "shf_spine_downstream_public_approved_only": true,
+    "shf_impact_data_spine_unexpected_mutation_found": false,
+    "private_data_public_leak_found": false,
+    "evidence": [
+      "docs/SHS_SPINE_FORMALIZATION_V1.md",
+      "src/system/spines/shsSpine.js",
+      "src/data/shfImpactData.js",
+      "docs/MANUAL_BROWSER_SMOKE_LAUNCH_HANDOFF_V1.json"
+    ]
+  },
+  "shs_reports": {
+    "status": "PASS",
+    "command_center_exists": true,
+    "premium_report_system_exists": true,
+    "internal_private_by_default": true,
+    "automatic_public_publish_enabled": false,
+    "routes": [
+      "admin.html#/ops/reports",
+      "admin.html#/ops/reports/create",
+      "admin.html#/ops/reports/premium-preview",
+      "admin.html#/ops/reports/history",
+      "admin.html#/ops/reports/export-metadata"
+    ]
+  },
+  "agent_system": {
+    "status": "PASS_WITH_OWNER_REVIEW_FOR_DIRTY_ROUTE_MOUNT",
+    "agent_workbench_exists": true,
+    "agent_total": 19,
+    "shs_agent_count": 8,
+    "shs_agents": [
+      "shs_clientops_agent",
+      "shs_executive_agent",
+      "shs_governance_agent",
+      "shs_library_agent",
+      "shs_project_agent",
+      "shs_qa_agent",
+      "shs_report_agent",
+      "shs_sales_agent"
+    ],
+    "capability_matrix_exists": true,
+    "task_queue_exists": true,
+    "approval_ledger_exists": true,
+    "backend_contract_bridge_exists": true,
+    "memory_context_exists": true,
+    "coordination_exists": true,
+    "workflow_engine_exists": true,
+    "controlled_executor_exists": true,
+    "autonomous_execution_enabled": false,
+    "backend_executor_endpoints_enabled": false,
+    "dangerous_flags_enabled_count": 0,
+    "owner_review_required": [
+      "services/shf-agent-fabric/main.py unstaged Agent Contract Bridge router mount"
+    ]
+  },
+  "production_automation_v2": {
+    "status": "PASS",
+    "v2_complete": true,
+    "safe_recipe_count": 7,
+    "local_only_records": true,
+    "readiness_scoring_exists": true,
+    "backend_execution_enabled": false,
+    "shell_deploy_external_api_enabled": false,
+    "public_publishing_enabled": false,
+    "production_mutation_enabled": false,
+    "browser_local_storage_warning": true
+  },
+  "direct_connect_batch2": {
+    "status": "PASS",
+    "corrected_framing": "direct_source_proof",
+    "batch2_complete": true,
+    "direct_source_proof_records_exist": true,
+    "source_evidence_references_exist": true,
+    "approved_source_categories_count": 10,
+    "deferred_source_categories_count": 8,
+    "bank_account_centered_architecture_enabled": false,
+    "live_integration_enabled": false,
+    "credential_storage_enabled": false,
+    "public_approval_enabled": false,
+    "shf_impact_mutation_enabled": false,
+    "backend_routes_added": false,
+    "admin_route": "admin.html#/ops/direct-connect"
+  },
+  "access_control_route_safety": {
+    "status": "PASS_WITH_OWNER_REVIEW_NOTE",
+    "admin_routes_use_protect_wrapper": true,
+    "agent_workbench_protected": true,
+    "direct_connect_proof_center_protected": true,
+    "shs_reports_protected": true,
+    "truth_oracle_ai_game_admin_protected": true,
+    "client_admin_public_blocked_from_internal_pages": true,
+    "notes": [
+      "Access control scan verified hubAccessControl entries and protected AdminRoutes mappings for the audited internal surfaces.",
+      "No auth or permission changes were made by this audit."
+    ]
+  },
+  "dangerous_flag_scan": {
+    "status": "PASS",
+    "enabled_true_values_count": 0,
+    "enabled_true_values": [],
+    "guard_condition_true_references": [
+      "src/system/launch/shsLaunchLedger.js: public_approved === true blocker condition",
+      "src/data/agents/agentMemoryMetrics.js: true-count metrics for public_approved and production_action_executed",
+      "src/data/agents/agentCoordinationMetrics.js: true-count metric for execution_enabled_v1",
+      "src/data/agents/agentMemorySafety.js: public_approved and production_action_executed blocker conditions"
+    ],
+    "scanned_terms": [
+      "public_approved",
+      "shfImpactData",
+      "truth_spine_claim_created",
+      "live_connection_enabled",
+      "credential_required",
+      "external_api_called",
+      "bank_account_connection",
+      "oauth",
+      "token",
+      "webhook_sent",
+      "notification_sent",
+      "warehouse_write_performed",
+      "production_action_executed",
+      "execution_enabled",
+      "execution_enabled_v1",
+      "execution_enabled_v2",
+      "can_execute_production_actions",
+      "can_publish_reports",
+      "can_mutate_public_data",
+      "can_mark_public_approved",
+      "can_mutate_shf_impact_data",
+      "can_send_webhooks",
+      "can_write_warehouse_records",
+      "auth_modified"
+    ]
+  },
+  "browser_smoke_summary": {
+    "status": "PREVIOUSLY_PASSED",
+    "agent_workbench": "PASS_WITH_WARNINGS in docs/AGENT_V1_FINAL_READINESS_AUDIT.json",
+    "shs_reports": "PASS in docs/MANUAL_BROWSER_SMOKE_LAUNCH_HANDOFF_V1.json",
+    "direct_connect": "PASS in docs/SHS_DIRECT_CONNECT_BATCH2_DIRECT_SOURCE_PROOF.json",
+    "production_automation_v2": "PASS_WITH_BACKEND_PROXY_NOTE in docs/PRODUCTION_AUTOMATION_V2.json",
+    "current_browser_smoke_run": false,
+    "accepted_non_blocking_warnings": [
+      "Vite large chunk warning",
+      "/auth/me proxy refusal during frontend-only smoke when local backend auth is not running",
+      "browser-local storage for V1/V2 mock/local layers"
+    ]
+  },
+  "validation": {
+    "npm run check:governance": "PASS",
+    "python3 scripts/check_master_layer_registry.py": "PASS",
+    "python3 scripts/check_truth_spine_freeze.py": "PASS",
+    "python3 scripts/check_duplicate_layer_cleanup.py": "PASS",
+    "python3 scripts/check_runtime_log_hygiene.py --strict": "PASS",
+    "bash scripts/run_daily_governance_audit.sh": "PASS_WITH_MANUAL_REVIEW_NOTE",
+    "bash scripts/run_paid_launch_checks.sh": "PASS",
+    "npm run build": "PASS_WITH_EXISTING_LARGE_CHUNK_WARNING",
+    "npm run check:agent-contract-bridge": "PASS",
+    "npm run check:agent-approval-stub": "PASS",
+    "npm run check:agent-memory-context": "PASS",
+    "npm run check:agent-coordination": "PASS",
+    "npm run check:agent-workflow": "PASS",
+    "npm run check:agent-controlled-executor": "PASS",
+    "npm run check:production-automation-v2": "PASS",
+    "npm run check:direct-connect-batch2": "PASS",
+    "python3 scripts/check_shs_direct_connect_layer.py": "PASS",
+    "python3 scripts/check_shs_direct_connect_direct_source_proof.py": "PASS"
+  },
+  "remaining_risks": [
+    {
+      "risk": "Working tree is mixed and not clean.",
+      "classification": "OWNER_REVIEW_REQUIRED",
+      "blocker": false
+    },
+    {
+      "risk": "services/shf-agent-fabric/main.py has an unstaged Agent Contract Bridge route mount.",
+      "classification": "OWNER_REVIEW_REQUIRED",
+      "blocker": false
+    },
+    {
+      "risk": "Untracked Agent Coordination, Agent Memory/Context, and older Direct Connect Batch 2 data model files remain in the worktree.",
+      "classification": "OWNER_REVIEW_REQUIRED",
+      "blocker": false
+    },
+    {
+      "risk": "Vite emits the existing large chunk warning.",
+      "classification": "NON_BLOCKING_WARNING",
+      "blocker": false
+    },
+    {
+      "risk": "Several V1/V2 local tools intentionally use browser-local storage rather than production persistence.",
+      "classification": "POST_V1_HARDENING",
+      "blocker": false
+    },
+    {
+      "risk": "Daily governance runner still requires manual checks for route/identity boundary and report/watchtower visibility.",
+      "classification": "OWNER_REVIEW_REQUIRED",
+      "blocker": false
+    }
+  ],
+  "final_v1_decision": "V1_READY_WITH_OWNER_REVIEW",
+  "owner_review_required": [
+    "Approve or separately package the unstaged services/shf-agent-fabric/main.py Agent Contract Bridge route mount.",
+    "Decide whether to keep, stage, or supersede untracked Agent Coordination and Agent Memory/Context docs/check scripts.",
+    "Decide whether the older untracked SHS Direct Connect Batch 2 data model files should be archived, committed, or superseded by the committed direct-source proof Batch 2.",
+    "Perform manual daily-governance review items before declaring a clean release package."
+  ],
+  "recommended_next_actions": [
+    "Create an owner-approved clean commit package for this final audit only.",
+    "Resolve or stage the remaining owner-review work in separate packages.",
+    "Keep Direct Connect Batch 2 locked as direct-source proof only.",
+    "Keep autonomous execution, backend executor endpoints, public approval, external delivery, warehouse writes, and SHF Impact mutation disabled.",
+    "Plan Post-V1 hardening for durable persistence, production auth/session, route smoke automation, and chunk splitting."
+  ]
+}

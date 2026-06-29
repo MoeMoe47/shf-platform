@@ -1,0 +1,360 @@
+{
+  "name": "SHRV1 Release Engineering V1",
+  "repository_state": {
+    "head": "eebe370 feat(direct-connect): add direct-source proof Batch 2",
+    "staged_files_count": 0,
+    "tracked_modified_files": [
+      "services/shf-agent-fabric/main.py"
+    ],
+    "untracked_files_before_report": [
+      "docs/AGENT_COORDINATION_LAYER_V1.json",
+      "docs/AGENT_COORDINATION_LAYER_V1.md",
+      "docs/AGENT_MEMORY_CONTEXT_LAYER_V1.json",
+      "docs/AGENT_MEMORY_CONTEXT_LAYER_V1.md",
+      "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.json",
+      "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+      "docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.json",
+      "docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.md",
+      "scripts/check_agent_coordination_layer.py",
+      "scripts/check_agent_memory_context_layer.py",
+      "src/data/shsDirectConnectData.js"
+    ],
+    "new_release_engineering_files": [
+      "docs/SHRV1_RELEASE_ENGINEERING_V1.md",
+      "docs/SHRV1_RELEASE_ENGINEERING_V1.json"
+    ],
+    "cached_diff_files": [],
+    "diff_stat": {
+      "services/shf-agent-fabric/main.py": {
+        "insertions": 2,
+        "deletions": 0
+      }
+    },
+    "classification": "not clean; owner review required before tag prep"
+  },
+  "file_classification": [
+    {
+      "file": "docs/SHRV1_RELEASE_ENGINEERING_V1.md",
+      "git_state": "new",
+      "classification": "RELEASE_PACKAGE_READY",
+      "package": "Release Engineering V1"
+    },
+    {
+      "file": "docs/SHRV1_RELEASE_ENGINEERING_V1.json",
+      "git_state": "new",
+      "classification": "RELEASE_PACKAGE_READY",
+      "package": "Release Engineering V1"
+    },
+    {
+      "file": "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+      "git_state": "untracked",
+      "classification": "RELEASE_PACKAGE_READY",
+      "package": "Release/Frozen Audit Package"
+    },
+    {
+      "file": "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.json",
+      "git_state": "untracked",
+      "classification": "RELEASE_PACKAGE_READY",
+      "package": "Release/Frozen Audit Package"
+    },
+    {
+      "file": "docs/AGENT_COORDINATION_LAYER_V1.md",
+      "git_state": "untracked",
+      "classification": "RELEASE_PACKAGE_READY",
+      "package": "Agent V1 Package"
+    },
+    {
+      "file": "docs/AGENT_COORDINATION_LAYER_V1.json",
+      "git_state": "untracked",
+      "classification": "RELEASE_PACKAGE_READY",
+      "package": "Agent V1 Package"
+    },
+    {
+      "file": "scripts/check_agent_coordination_layer.py",
+      "git_state": "untracked",
+      "classification": "RELEASE_PACKAGE_READY",
+      "package": "Agent V1 Package"
+    },
+    {
+      "file": "docs/AGENT_MEMORY_CONTEXT_LAYER_V1.md",
+      "git_state": "untracked",
+      "classification": "RELEASE_PACKAGE_READY",
+      "package": "Agent V1 Package"
+    },
+    {
+      "file": "docs/AGENT_MEMORY_CONTEXT_LAYER_V1.json",
+      "git_state": "untracked",
+      "classification": "RELEASE_PACKAGE_READY",
+      "package": "Agent V1 Package"
+    },
+    {
+      "file": "scripts/check_agent_memory_context_layer.py",
+      "git_state": "untracked",
+      "classification": "RELEASE_PACKAGE_READY",
+      "package": "Agent V1 Package"
+    },
+    {
+      "file": "services/shf-agent-fabric/main.py",
+      "git_state": "modified",
+      "classification": "OWNER_REVIEW_REQUIRED",
+      "package": "Backend Route Mount Package",
+      "review_note": "Adds agent_contract_bridge_router import and app.include_router mount."
+    },
+    {
+      "file": "docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.md",
+      "git_state": "untracked",
+      "classification": "OWNER_REVIEW_REQUIRED",
+      "package": "Direct Connect Data Model Review",
+      "review_note": "Older connector/mock-registry framing; corrected direct-source-proof package is already committed."
+    },
+    {
+      "file": "docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.json",
+      "git_state": "untracked",
+      "classification": "OWNER_REVIEW_REQUIRED",
+      "package": "Direct Connect Data Model Review"
+    },
+    {
+      "file": "src/data/shsDirectConnectData.js",
+      "git_state": "untracked",
+      "classification": "OWNER_REVIEW_REQUIRED",
+      "package": "Direct Connect Data Model Review"
+    }
+  ],
+  "commit_packages": [
+    {
+      "package_name": "Release/Frozen Audit Package",
+      "files": [
+        "docs/SHRV1_RELEASE_ENGINEERING_V1.md",
+        "docs/SHRV1_RELEASE_ENGINEERING_V1.json",
+        "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+        "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.json"
+      ],
+      "why": "Final V1 audit and release-engineering evidence belong together.",
+      "validation_required": [
+        "python3 -m json.tool docs/SHRV1_RELEASE_ENGINEERING_V1.json",
+        "python3 -m json.tool docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.json",
+        "npm run check:governance",
+        "bash scripts/run_daily_governance_audit.sh",
+        "bash scripts/run_paid_launch_checks.sh",
+        "npm run build"
+      ],
+      "commit_message": "audit: add SHRV1 release engineering V1",
+      "risk_level": "low",
+      "owner_approval_needed": true
+    },
+    {
+      "package_name": "Agent V1 Package",
+      "files": [
+        "docs/AGENT_COORDINATION_LAYER_V1.md",
+        "docs/AGENT_COORDINATION_LAYER_V1.json",
+        "scripts/check_agent_coordination_layer.py",
+        "docs/AGENT_MEMORY_CONTEXT_LAYER_V1.md",
+        "docs/AGENT_MEMORY_CONTEXT_LAYER_V1.json",
+        "scripts/check_agent_memory_context_layer.py"
+      ],
+      "why": "Agent coordination and memory/context V1 docs and validators are validated together.",
+      "validation_required": [
+        "npm run check:agent-coordination",
+        "npm run check:agent-memory-context",
+        "npm run check:agent-workflow",
+        "npm run check:agent-approval-stub",
+        "npm run check:agent-controlled-executor",
+        "npm run check:agent-contract-bridge",
+        "npm run check:governance"
+      ],
+      "commit_message": "docs: add Agent coordination and memory context V1 checks",
+      "risk_level": "medium",
+      "owner_approval_needed": true
+    },
+    {
+      "package_name": "Production Automation V2 Package",
+      "files": [
+        "already committed at 70d673b"
+      ],
+      "why": "Production Automation V2 docs, data, UI, validator, package script, and Workbench integration were already committed together.",
+      "validation_required": [
+        "npm run check:production-automation-v2",
+        "npm run build",
+        "npm run check:governance"
+      ],
+      "commit_message": "feat(automation): add Production Automation V2",
+      "risk_level": "medium",
+      "owner_approval_needed": false
+    },
+    {
+      "package_name": "Direct Connect Batch 2 Package",
+      "files": [
+        "already committed at eebe370"
+      ],
+      "why": "Corrected direct-source-proof docs, data model, admin UI, route/sidebar/access wiring, validator, and package script were already committed together.",
+      "validation_required": [
+        "npm run check:direct-connect-batch2",
+        "npm run check:governance",
+        "npm run build"
+      ],
+      "commit_message": "feat(direct-connect): add direct-source proof Batch 2",
+      "risk_level": "medium",
+      "owner_approval_needed": false
+    },
+    {
+      "package_name": "Backend Route Mount Package",
+      "files": [
+        "services/shf-agent-fabric/main.py"
+      ],
+      "why": "The only live source diff mounts the Agent Contract Bridge router and should be reviewed and committed separately.",
+      "validation_required": [
+        "npm run check:agent-contract-bridge",
+        "python3 -m pytest services/shf-agent-fabric/tests/test_agent_contract_bridge_routes.py",
+        "npm run check:governance",
+        "npm run build"
+      ],
+      "commit_message": "feat(agents): mount agent contract bridge router",
+      "risk_level": "high",
+      "owner_approval_needed": true
+    },
+    {
+      "package_name": "Direct Connect Data Model Review",
+      "files": [
+        "docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.md",
+        "docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.json",
+        "src/data/shsDirectConnectData.js"
+      ],
+      "why": "Older connector/mock-registry artifacts need an owner decision because corrected direct-source proof is already committed.",
+      "validation_required": [
+        "owner review",
+        "npm run check:direct-connect-batch2",
+        "npm run check:governance",
+        "npm run build"
+      ],
+      "commit_message": "docs: add Direct Connect data model review artifacts",
+      "risk_level": "medium-high",
+      "owner_approval_needed": true
+    }
+  ],
+  "owner_review_items": [
+    {
+      "file": "services/shf-agent-fabric/main.py",
+      "decision_needed": "Approve separate Agent Backend Contract Bridge route mount commit or defer it.",
+      "endpoint_tests_pass": true,
+      "belongs_in_package": "Backend Route Mount Package"
+    },
+    {
+      "files": [
+        "docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.md",
+        "docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.json",
+        "src/data/shsDirectConnectData.js"
+      ],
+      "decision_needed": "Keep, supersede, or exclude older connector/mock-registry artifacts."
+    },
+    {
+      "item": "manual daily governance checks",
+      "decision_needed": "Owner/operator manual review for reports/watchtower visibility, SHS-SHF boundary, public-approved guard, security/privacy, ownership/IP, and route/identity boundary."
+    }
+  ],
+  "validation": {
+    "git status --short": "PASS_REVIEWED",
+    "git diff --name-status": "PASS_REVIEWED",
+    "git diff --stat": "PASS_REVIEWED",
+    "git diff --cached --name-status": "PASS_EMPTY",
+    "git log --oneline -40": "PASS_REVIEWED",
+    "npm run check:governance": "PASS",
+    "python3 scripts/check_master_layer_registry.py": "PASS",
+    "python3 scripts/check_truth_spine_freeze.py": "PASS",
+    "python3 scripts/check_duplicate_layer_cleanup.py": "PASS",
+    "python3 scripts/check_runtime_log_hygiene.py --strict": "PASS",
+    "bash scripts/run_daily_governance_audit.sh": "PASS_WITH_MANUAL_REVIEW_NOTE",
+    "bash scripts/run_paid_launch_checks.sh": "PASS",
+    "npm run build": "PASS_WITH_KNOWN_LARGE_CHUNK_WARNING",
+    "npm run check:agent-contract-bridge": "PASS",
+    "npm run check:agent-approval-stub": "PASS",
+    "npm run check:agent-memory-context": "PASS",
+    "npm run check:agent-coordination": "PASS",
+    "npm run check:agent-workflow": "PASS",
+    "npm run check:agent-controlled-executor": "PASS",
+    "npm run check:production-automation-v2": "PASS",
+    "npm run check:direct-connect-batch2": "PASS",
+    "python3 -m pytest services/shf-agent-fabric/tests/test_agent_contract_bridge_routes.py": "PASS_3_TESTS",
+    "dangerous_changed_file_scan": "PASS_NO_ENABLED_FLAGS"
+  },
+  "safe_git_commands": [
+    {
+      "package": "Release/Frozen Audit Package",
+      "commands": [
+        "git add docs/SHRV1_RELEASE_ENGINEERING_V1.md docs/SHRV1_RELEASE_ENGINEERING_V1.json docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.json",
+        "git commit -m \"audit: add SHRV1 release engineering V1\""
+      ]
+    },
+    {
+      "package": "Agent V1 Package",
+      "commands": [
+        "git add docs/AGENT_COORDINATION_LAYER_V1.md docs/AGENT_COORDINATION_LAYER_V1.json scripts/check_agent_coordination_layer.py docs/AGENT_MEMORY_CONTEXT_LAYER_V1.md docs/AGENT_MEMORY_CONTEXT_LAYER_V1.json scripts/check_agent_memory_context_layer.py",
+        "git commit -m \"docs: add Agent coordination and memory context V1 checks\""
+      ]
+    },
+    {
+      "package": "Backend Route Mount Package",
+      "commands": [
+        "git add services/shf-agent-fabric/main.py",
+        "git commit -m \"feat(agents): mount agent contract bridge router\""
+      ]
+    },
+    {
+      "package": "Optional Direct Connect older data-model review package",
+      "commands": [
+        "git add docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.md docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.json src/data/shsDirectConnectData.js",
+        "git commit -m \"docs: add Direct Connect data model review artifacts\""
+      ],
+      "requires_explicit_owner_approval": true
+    },
+    {
+      "package": "Final clean-state check",
+      "commands": [
+        "git status --short",
+        "git log --oneline -20"
+      ]
+    }
+  ],
+  "excluded_from_v1": [
+    {
+      "file": "docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.md",
+      "reason": "Exclude from immediate V1 tag unless owner approves older connector/mock-registry artifacts."
+    },
+    {
+      "file": "docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.json",
+      "reason": "Exclude from immediate V1 tag unless owner approves older connector/mock-registry artifacts."
+    },
+    {
+      "file": "src/data/shsDirectConnectData.js",
+      "reason": "Exclude from immediate V1 tag unless owner approves older connector/mock-registry artifacts."
+    }
+  ],
+  "tag_readiness": {
+    "recommended_tag": "shrv1-v1.0",
+    "status": "NOT_READY_YET",
+    "reason": "Working tree is not clean and owner-review packages remain uncommitted.",
+    "required_before_tag": [
+      "all approved V1 packages committed",
+      "git status --short clean or only approved post-V1 files remain",
+      "governance passes",
+      "daily audit passes",
+      "paid launch checks pass",
+      "build passes",
+      "dangerous flags are zero",
+      "V1 blockers are zero"
+    ],
+    "commands_to_prepare_after_clean_tree": [
+      "git tag -a shrv1-v1.0 -m \"SHRV1 Whole-System V1\"",
+      "git show shrv1-v1.0"
+    ],
+    "tag_created": false
+  },
+  "remaining_risks": [
+    "Owner review is required for services/shf-agent-fabric/main.py backend route mount.",
+    "Owner review is required for older Direct Connect data-model artifacts.",
+    "Daily governance still has manual review items that commands cannot prove.",
+    "Browser-local state remains a Post-V1 hardening item for local/operator layers.",
+    "Vite large-chunk warning remains known and non-blocking."
+  ],
+  "release_engineering_complete": true,
+  "v1_complete": false
+}

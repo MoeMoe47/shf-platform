@@ -1,0 +1,124 @@
+{
+  "name": "Manual Governance Reviews V1",
+  "status": "complete_with_validation_environment_note",
+  "created_files": [
+    "docs/MANUAL_GOVERNANCE_REVIEWS_V1.md",
+    "docs/MANUAL_GOVERNANCE_REVIEWS_V1.json"
+  ],
+  "source_behavior_changed": false,
+  "staged": false,
+  "committed": false,
+  "tagged": false,
+  "reports_watchtower_visibility": {
+    "result": "pass",
+    "checked": [
+      "src/router/AdminRoutes.jsx",
+      "src/system/identity/hubAccessControl.js",
+      "src/pages/admin/reports/",
+      "src/data/shsReports/",
+      "services/shf-agent-fabric/routers/reports_routes.py",
+      "services/shf-agent-fabric/routers/watchtower_routes.py",
+      "docs/DAILY_GOVERNANCE_AUDIT_TEMPLATE_V1.md",
+      "docs/TRUTH_SPINE_GUARDRAILS.md"
+    ],
+    "findings": [
+      "SHS Reports admin routes are protected and mapped to shs_admin.",
+      "Premium report routes are protected.",
+      "Reports expose governance/readiness metadata and do not publish public data automatically.",
+      "Watchtower visibility is observation/audit context.",
+      "No public route exposure for private client report data was found."
+    ],
+    "blockers": []
+  },
+  "shs_shf_boundary": {
+    "result": "pass",
+    "checked": [
+      "docs/SHS_SPINE_FORMALIZATION_V1.md",
+      "docs/TRUTH_SPINE_GUARDRAILS.md",
+      "src/system/spines/shsSpine.js",
+      "src/data/shfImpactData.js",
+      "src/data/directConnect/",
+      "src/data/shsDirectConnectData.js",
+      "src/data/agents/",
+      "src/pages/admin/agents/"
+    ],
+    "findings": [
+      "SHS Spine remains upstream private/operational context.",
+      "SHF Spine remains downstream public-approved impact context.",
+      "SHS to SHF transfer requires governance, verification, privacy, ownership, readiness, public approval, and Data Approval Gateway controls.",
+      "SHF Impact Data Spine mutation by SHS agents, reports, automation, or Direct Connect was not found."
+    ],
+    "blockers": []
+  },
+  "public_approved_guard": {
+    "result": "pass",
+    "search_terms": [
+      "public_approved",
+      "publicApproved",
+      "safe_for_public",
+      "safe_for_shf_public_surface",
+      "shf_impact_data_mutated"
+    ],
+    "findings": [
+      "Direct Connect safety defaults keep public and SHF mutation flags false.",
+      "Agent memory, coordination, workflow, controlled executor, approval ledger, and production automation surfaces keep public approval and SHF mutation flags false or block requested public approval actions.",
+      "Direct Connect Batch 2 does not mark public_approved.",
+      "Data Approval Gateway remains required before public impact visibility."
+    ],
+    "blockers": []
+  },
+  "security_privacy": {
+    "result": "pass",
+    "findings": [
+      "No credentials, OAuth flow, API key, live bank/account/payment connection, scraping path, or external API execution path was found in inspected V1 surfaces.",
+      "Direct Connect remains direct-source proof only.",
+      "Banking is disabled/deferred placeholder-only in Batch 2.",
+      "Internal admin pages remain protected."
+    ],
+    "blockers": []
+  },
+  "ownership_ip": {
+    "result": "pass",
+    "findings": [
+      "Data Ownership / IP remains the ownership and usage-right readiness layer.",
+      "Direct-source proof records require source owner and ownership clear status for readiness.",
+      "Evidence references include ownership review requirements.",
+      "Reports do not override data ownership rules."
+    ],
+    "blockers": []
+  },
+  "route_identity_boundary": {
+    "result": "pass",
+    "findings": [
+      "/ops/agents is protected and shs_admin-only.",
+      "/ops/reports and premium report routes are protected and shs_admin-only.",
+      "/ops/direct-connect is protected and shs_admin-only.",
+      "client_admin and public users are not authorized for internal /ops surfaces.",
+      "No public route exposing internal SHS operating surfaces was found."
+    ],
+    "blockers": []
+  },
+  "validation": {
+    "git status --short": "pass_before_report_creation",
+    "npm run check:governance": "blocked_by_environment_npm_not_found",
+    "python3 scripts/check_master_layer_registry.py": "pass",
+    "python3 scripts/check_truth_spine_freeze.py": "pass",
+    "python3 scripts/check_duplicate_layer_cleanup.py": "pass",
+    "python3 scripts/check_runtime_log_hygiene.py --strict": "pass",
+    "bash scripts/run_daily_governance_audit.sh": "blocked_by_environment_npm_not_found",
+    "bash scripts/run_paid_launch_checks.sh": "blocked_by_environment_npm_not_found",
+    "npm run build": "blocked_by_environment_npm_not_found"
+  },
+  "manual_review_complete": true,
+  "v1_blockers": [],
+  "validation_environment_blockers": [
+    "npm unavailable in Codex tool shell; rerun npm validation and npm-backed bash wrappers from local shell before tagging"
+  ],
+  "remaining_risks": [
+    "Browser route smoke was not rerun in this manual report pass.",
+    "Npm-based governance/build validation was blocked in this Codex tool shell.",
+    "Existing SHF impact data remains sample/draft public-approved fixture data until replaced by approved verified records.",
+    "Direct Connect remains local/browser proof modeling only; durable proof ledger and formal public approval attachment remain future governed work."
+  ],
+  "recommended_next_action": "Run npm run check:governance, bash scripts/run_daily_governance_audit.sh, bash scripts/run_paid_launch_checks.sh, and npm run build from an npm-enabled local shell, then package these manual governance review docs before rerunning final clean-state tag prep."
+}

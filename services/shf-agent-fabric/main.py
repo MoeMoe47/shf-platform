@@ -108,6 +108,7 @@ from routers.truth_routes import router as truth_router  # noqa: E402
 from routers.oracle_routes import router as oracle_router  # noqa: E402
 from routers.ai_guardrails_routes import router as ai_guardrails_router  # noqa: E402
 from routers.game_theory_routes import router as game_theory_router  # noqa: E402
+from routers.agent_contract_bridge_routes import router as agent_contract_bridge_router  # noqa: E402
 from routers.feedback_routes import router as feedback_router  # noqa: E402
 from routers.events_routes import router as events_router
 from routers.live_optimizer_routes import router as live_optimizer_router
@@ -476,6 +477,7 @@ app.include_router(truth_router)
 app.include_router(oracle_router)
 app.include_router(ai_guardrails_router)
 app.include_router(game_theory_router)
+app.include_router(agent_contract_bridge_router)
 app.include_router(reports_router)
 app.include_router(api_gateway_router)
 app.include_router(adapter_layer_router)

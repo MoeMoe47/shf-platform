@@ -1,0 +1,127 @@
+{
+  "batch_name": "SHS Direct Connect Batch 2 Data Model",
+  "status": "complete",
+  "created_files": [
+    "src/data/shsDirectConnectData.js",
+    "docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.md",
+    "docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.json",
+    "scripts/check_shs_direct_connect_batch2.py"
+  ],
+  "models": {
+    "ConnectorSource": "Defines a local/mock connector source, source category, support posture, data sensitivity, allowed destinations, and deferred live features.",
+    "ConnectorConnection": "Tracks one client or project connection posture without credentials, live auth, OAuth, or external sync.",
+    "ConnectorFieldMapping": "Maps source fields to SHS target fields and marks mapping readiness.",
+    "ConnectorSyncRun": "Records mock import, mapping, approval, blocked, and deferred sync evidence.",
+    "ConnectorAuditEvent": "Captures connector, mapping, approval, report binding, financial block, SHF boundary, and banking deferral events.",
+    "ConnectorApprovalStatus": "Records allowed and denied uses, public impact eligibility, and financial public-impact blocking.",
+    "ReportSourceBinding": "Binds a connector connection to report trust-panel or internal-only source usage."
+  },
+  "status_states": [
+    "not_configured",
+    "available",
+    "draft",
+    "pending_review",
+    "connected_mock",
+    "import_ready",
+    "needs_mapping",
+    "needs_approval",
+    "approved_internal",
+    "approved_report_source",
+    "rejected",
+    "disabled",
+    "error"
+  ],
+  "source_categories": [
+    "file_import",
+    "website_analytics",
+    "crm",
+    "payments",
+    "accounting",
+    "banking_future",
+    "client_os",
+    "shs_internal",
+    "shf_approval",
+    "manual_entry"
+  ],
+  "trust_rules": [
+    "External data is not trusted by default.",
+    "Connected data is private by default.",
+    "Report use requires approval.",
+    "Public SHF use requires SHF Data Approval Gateway approval.",
+    "Financial data must never become public impact data by default.",
+    "Mock connections must be labeled clearly.",
+    "Every sync/import must create an audit event.",
+    "Every report binding must show source and approval status.",
+    "No credential storage in V1.",
+    "Direct Connect does not bypass SHF approval."
+  ],
+  "mock_connector_sources": [
+    "CSV File Import",
+    "Website Analytics Mock",
+    "CRM Mock",
+    "Payment Processor Mock",
+    "Accounting Mock",
+    "Banking Future Placeholder",
+    "Client OS Mock",
+    "SHS Internal Ops",
+    "SHF Approval Gateway",
+    "Manual Entry"
+  ],
+  "helper_exports": [
+    "getDirectConnectConnectorSources",
+    "getDirectConnectSourceById",
+    "getDirectConnectSourcesByCategory",
+    "getDirectConnectConnections",
+    "getDirectConnectConnectionById",
+    "getDirectConnectConnectionsByClientId",
+    "getDirectConnectConnectionsByStatus",
+    "getDirectConnectMappingsByConnectionId",
+    "getDirectConnectSyncRunsByConnectionId",
+    "getDirectConnectAuditEventsByConnectionId",
+    "getDirectConnectApprovalByConnectionId",
+    "getDirectConnectReportBindings",
+    "getDirectConnectReportBindingsByConnectionId",
+    "getDirectConnectReportEligibleConnections",
+    "getDirectConnectPublicImpactEligibleConnections",
+    "getDirectConnectBlockedFinancialPublicImpactConnections",
+    "isDirectConnectStatusValid",
+    "isDirectConnectSourceCategoryValid",
+    "isDirectConnectConnectionReportEligible",
+    "isDirectConnectConnectionPublicImpactEligible",
+    "summarizeDirectConnectReadiness"
+  ],
+  "report_clientops_readiness": [
+    "ReportSourceBinding records identify trust-panel visibility, approval status, last verification, and intended report use.",
+    "ConnectorConnection records expose report eligibility, public impact eligibility, approval status, and client ownership.",
+    "SHS Internal Ops and Client OS style records prepare future ClientOps readiness and monthly review usage.",
+    "Financial sources can support internal summaries only when approved and remain blocked from public impact by default."
+  ],
+  "shf_boundary_protections": [
+    "Direct Connect does not approve public SHF impact use by itself.",
+    "Public SHF use requires SHF Data Approval Gateway approval.",
+    "Financial data must never become public impact data by default.",
+    "The SHF Approval Gateway mock source represents an approval boundary rather than a bypass.",
+    "Banking, payment, and accounting records are blocked from public impact eligibility by default."
+  ],
+  "deferred_scope": [
+    "live integrations",
+    "OAuth",
+    "credentials",
+    "bank feeds",
+    "scheduled sync",
+    "external webhook processing",
+    "database persistence",
+    "client-facing setup",
+    "paid integration marketplace"
+  ],
+  "verification_commands": [
+    "python3 -m json.tool docs/SHS_DIRECT_CONNECT_BATCH2_DATA_MODEL.json",
+    "python3 scripts/check_shs_direct_connect_batch2.py",
+    "python3 scripts/check_shs_direct_connect_layer.py",
+    "python3 scripts/check_master_layer_registry.py",
+    "python3 scripts/check_truth_spine_freeze.py",
+    "python3 scripts/check_duplicate_layer_cleanup.py",
+    "python3 scripts/check_runtime_log_hygiene.py --strict",
+    "npm run build"
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "name": "SHRV1 Release Sign-off V1",
+  "release": {
+    "release_name": "SHRV1 Whole-System V1",
+    "version": "v1.0",
+    "tag": "shrv1-v1.0",
+    "release_date": "2026-06-30",
+    "branch": "save-working-pins-before-map-color-cleanup",
+    "head_commit": "20e0726bf313f35299583fb6c3e4d33813df6c60",
+    "head_message": "audit: complete manual governance reviews V1",
+    "working_tree_clean": true,
+    "tag_already_exists": false,
+    "head_already_tagged": false
+  },
+  "validation_summary": {
+    "npm run check:governance": {
+      "status": "BLOCKED",
+      "note": "npm not found in Codex tool shell"
+    },
+    "bash scripts/run_daily_governance_audit.sh": {
+      "status": "BLOCKED",
+      "note": "wrapper calls npm; npm not found in Codex tool shell"
+    },
+    "bash scripts/run_paid_launch_checks.sh": {
+      "status": "BLOCKED",
+      "note": "wrapper calls npm; npm not found in Codex tool shell"
+    },
+    "npm run build": {
+      "status": "BLOCKED",
+      "note": "npm not found in Codex tool shell; existing Vite chunk-size warning should remain NON_BLOCKING_WARNING only after build passes"
+    },
+    "python3 scripts/check_master_layer_registry.py": {
+      "status": "PASS",
+      "note": "Master Layer Registry checked 57 official registry rows/layers"
+    },
+    "python3 scripts/check_truth_spine_freeze.py": {
+      "status": "PASS",
+      "note": "Truth Spine V1 freeze checks passed"
+    },
+    "python3 scripts/check_duplicate_layer_cleanup.py": {
+      "status": "PASS",
+      "note": "duplicate layer cleanup checks passed"
+    },
+    "python3 scripts/check_runtime_log_hygiene.py --strict": {
+      "status": "PASS",
+      "note": "22 runtime paths checked; dirty tracked runtime files: 0"
+    }
+  },
+  "governance_summary": {
+    "master_layer_registry": "PASS",
+    "truth_spine_freeze": "PASS",
+    "oracle": "PASS_FROM_FINAL_AUDIT",
+    "ai_swarm_guardrails": "PASS_FROM_FINAL_AUDIT",
+    "policy_engine": "PASS_FROM_FINAL_AUDIT",
+    "readiness_gate": "PASS_FROM_FINAL_AUDIT",
+    "public_approval": "PASS_FROM_MANUAL_REVIEW",
+    "security_privacy": "PASS_FROM_MANUAL_REVIEW",
+    "data_ownership_ip": "PASS_FROM_MANUAL_REVIEW",
+    "runtime_log_hygiene": "PASS",
+    "duplicate_cleanup": "PASS"
+  },
+  "manual_review_summary": {
+    "reports_watchtower_visibility": "PASS",
+    "shs_shf_boundary": "PASS",
+    "public_approved_guard": "PASS",
+    "security_privacy": "PASS",
+    "ownership_ip": "PASS",
+    "route_identity_boundary": "PASS"
+  },
+  "system_scope_summary": [
+    "Governance V1",
+    "Truth Spine",
+    "Oracle",
+    "Master Layer Registry",
+    "SHS Spine",
+    "SHS Reports",
+    "Agent Workbench",
+    "Agent Memory & Context",
+    "Agent Coordination",
+    "Agent Workflow Engine",
+    "Agent Controlled Executor",
+    "Production Automation V2",
+    "Direct Connect Batch 2 as direct-source proof",
+    "Daily Governance Audit",
+    "Paid-Launch Checks"
+  ],
+  "known_limitations": [
+    "Some V1/V2 local layers are browser/localStorage-only by design.",
+    "No production persistence exists for local V1/V2 layers unless separately implemented.",
+    "Direct Connect has no live integrations.",
+    "Direct Connect has no banking, account-linking, OAuth, Plaid-style aggregation, payment, scraping, credential, or external API connection in V1.",
+    "Agent V1 does not enable autonomous agent execution.",
+    "Public approval mutation remains blocked without Data Approval Gateway and owner-approved public release flow.",
+    "Existing Vite chunk-size warning is known and non-blocking only when build otherwise passes.",
+    "Production deployment, monitoring, observability, and CI hardening are deferred."
+  ],
+  "deferred_v1_1_work": [
+    "System Orchestrator V1",
+    "durable persistence",
+    "production auth hardening",
+    "deployment pipeline",
+    "monitoring and observability",
+    "CI/CD",
+    "performance and chunk splitting",
+    "backup and restore strategy",
+    "production database decisions",
+    "private beta refinements",
+    "broader browser and manual smoke automation"
+  ],
+  "final_owner_approval": {
+    "owner": "Mike Slate / SHRV1 Owner",
+    "approval_status": "BLOCKED_PENDING_NPM_VALIDATION",
+    "recommended_tag_command": "git tag -a shrv1-v1.0 -m \"SHRV1 Whole-System V1\""
+  },
+  "v1_release_ready": false
+}

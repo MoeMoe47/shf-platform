@@ -68,6 +68,7 @@ export const routeOwnership = Object.freeze({
     { key: "aiGuardrails", route: "admin.html#/ai-guardrails", owner: "shrv1", access: "admin" },
     { key: "gameTheory", route: "admin.html#/game-theory", owner: "shrv1", access: "admin" },
     { key: "agentFabric", route: "admin.html#/agent-fabric", owner: "shrv1", access: "admin" },
+    { key: "systemOrchestrator", route: "admin.html#/ops/orchestrator", owner: "shrv1", access: "admin" },
     { key: "agentWorkbench", route: "admin.html#/ops/agents", owner: "shrv1", access: "admin" },
     { key: "registry", route: "admin.html#/registry", owner: "shrv1", access: "admin" },
     { key: "watchtower", route: "admin.html#/watchtower", owner: "shrv1", access: "admin_redirect" },
@@ -202,6 +203,7 @@ export const crossAppRouteTargets = Object.freeze({
 export const shrv1RoutesToSmoke = Object.freeze([
   "admin.html#/agent-fabric",
   "admin.html#/ops/agents",
+  "admin.html#/ops/orchestrator",
   "admin.html#/registry",
   "admin.html#/truth-spine",
   "admin.html#/oracle",

@@ -1,0 +1,235 @@
+.shs-orchestrator-page {
+  min-height: 100vh;
+  padding: 30px;
+  color: #f5f7fb;
+  background:
+    linear-gradient(135deg, rgba(2, 44, 34, 0.92), rgba(17, 24, 39, 0.98) 46%, rgba(49, 46, 129, 0.9)),
+    #0b1220;
+}
+
+.orch-hero,
+.orch-card,
+.orch-metrics article {
+  border: 1px solid rgba(186, 230, 253, 0.16);
+  border-radius: 8px;
+  background: rgba(8, 13, 26, 0.74);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.24);
+}
+
+.orch-hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 22px;
+  align-items: flex-end;
+  padding: 26px;
+}
+
+.orch-hero p,
+.orch-section-head span,
+.orch-template-list span,
+.orch-request-list span,
+.orch-flag-grid span,
+.orch-note span {
+  color: #9ee7d6;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  font-size: 0.72rem;
+}
+
+.orch-hero h1 {
+  margin: 6px 0;
+  font-size: 2.2rem;
+}
+
+.orch-hero button,
+.orch-primary-action,
+.orch-action-row button {
+  border: 1px solid rgba(94, 234, 212, 0.25);
+  border-radius: 8px;
+  color: #f8fafc;
+  background: rgba(20, 184, 166, 0.14);
+  cursor: pointer;
+}
+
+.orch-hero button,
+.orch-primary-action,
+.orch-action-row button {
+  padding: 10px 13px;
+}
+
+.orch-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin: 18px 0;
+}
+
+.orch-metrics article,
+.orch-card {
+  padding: 16px;
+}
+
+.orch-metrics span {
+  display: block;
+  color: #b6c6d8;
+  font-size: 0.78rem;
+}
+
+.orch-metrics strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 1.45rem;
+}
+
+.orch-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(330px, 0.78fr);
+  gap: 18px;
+}
+
+.orch-main,
+.orch-side {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+}
+
+.orch-section-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.orch-section-head h2,
+.orch-plan-detail h3,
+.orch-layer-map h3,
+.orch-action-columns h3,
+.orch-status-columns h3 {
+  margin: 0;
+}
+
+.orch-template-list,
+.orch-request-list {
+  display: grid;
+  gap: 10px;
+}
+
+.orch-template-list button,
+.orch-request-list button {
+  display: grid;
+  gap: 5px;
+  padding: 12px;
+  text-align: left;
+  color: #f8fafc;
+  border: 1px solid rgba(186, 230, 253, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.055);
+  cursor: pointer;
+}
+
+.orch-template-list button.is-active,
+.orch-request-list button.is-active {
+  border-color: rgba(94, 234, 212, 0.72);
+  background: rgba(20, 184, 166, 0.16);
+}
+
+.orch-template-list small,
+.orch-request-list small,
+.orch-muted,
+.orch-card p,
+.orch-card li {
+  color: #cfdae7;
+}
+
+.orch-primary-action {
+  margin-top: 12px;
+}
+
+.orch-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.orch-grid-two,
+.orch-status-columns,
+.orch-layer-map,
+.orch-action-columns,
+.orch-flag-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.orch-grid-two > div,
+.orch-status-columns > div,
+.orch-layer-map > div,
+.orch-action-columns > div,
+.orch-flag-grid > div {
+  min-width: 0;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.orch-grid-two ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+}
+
+.orch-readiness-meter {
+  height: 12px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.orch-readiness-meter div {
+  height: 100%;
+  background: linear-gradient(90deg, #14b8a6, #38bdf8);
+}
+
+.orch-boundary-copy {
+  color: #d8fff4;
+}
+
+.orch-flag-grid strong {
+  display: block;
+  margin-top: 4px;
+}
+
+.orch-note {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.orch-note textarea {
+  width: 100%;
+  resize: vertical;
+  color: #f8fafc;
+  border: 1px solid rgba(186, 230, 253, 0.22);
+  border-radius: 8px;
+  background: rgba(2, 6, 23, 0.55);
+}
+
+@media (max-width: 980px) {
+  .shs-orchestrator-page {
+    padding: 18px;
+  }
+
+  .orch-hero,
+  .orch-layout,
+  .orch-metrics,
+  .orch-grid-two,
+  .orch-status-columns,
+  .orch-layer-map,
+  .orch-action-columns,
+  .orch-flag-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}

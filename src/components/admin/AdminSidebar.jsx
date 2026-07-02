@@ -10,6 +10,7 @@ const SECTIONS = [
     title: "Production Ops",
     items: [
       { to: "/ops/production", icon: "▣", label: "Production" },
+      { to: "/ops/orchestrator", icon: "O", label: "Orchestrator" },
       { to: "/ops/agents", icon: "A", label: "Agent Workbench" },
       { to: "/ops/direct-connect", icon: "D", label: "Direct Connect" },
       { to: "/ops/projects", icon: "◇", label: "Projects" },

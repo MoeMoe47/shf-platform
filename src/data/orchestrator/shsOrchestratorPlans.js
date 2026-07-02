@@ -1,0 +1,56 @@
+import { SHS_ORCHESTRATOR_DANGEROUS_FLAGS_FALSE } from "./shsOrchestratorSafety";
+
+export const SHS_ORCHESTRATOR_PLAN_STORAGE_KEY = "shs.systemOrchestrator.plans.v1";
+
+export const SHS_ORCHESTRATION_PLAN_MODEL = {
+  orchestration_plan_id: "orch_plan_001",
+  orchestration_request_id: "",
+  title: "",
+  summary: "",
+  participating_layers: [],
+  participating_agents: [],
+  recommended_workflow_template: "",
+  recommended_coordination_template: "",
+  required_context_packets: [],
+  required_direct_source_proofs: [],
+  required_reports: [],
+  required_approvals: [],
+  required_governance_gates: [],
+  readiness_score: 0,
+  blockers: [],
+  warnings: [],
+  safe_next_actions: [],
+  dangerous_actions_blocked: [],
+  execution_enabled: false,
+  production_mutation_enabled: false,
+  public_publish_enabled: false,
+  public_approved_mutation_enabled: false,
+  shf_impact_data_mutation_enabled: false,
+  external_delivery_enabled: false,
+  warehouse_write_enabled: false,
+  auth_mutation_enabled: false,
+};
+
+export const SHS_ORCHESTRATOR_PLAN_SEED_V1 = [
+  {
+    orchestration_plan_id: "orch_plan_premium_report_001",
+    orchestration_request_id: "orch_req_premium_report_001",
+    title: "Premium report readiness orchestration",
+    summary: "Coordinate report readiness, source proof, approval review, and readiness gates before any report output is considered.",
+    participating_layers: ["SHS Reports", "Direct Connect Batch 2", "Agent Workflow Engine", "Agent Approval Ledger", "Readiness Gate", "Policy Engine", "Data Ownership / IP"],
+    participating_agents: ["shs_report_agent", "shs_governance_agent", "shs_clientops_agent"],
+    recommended_workflow_template: "report_generation",
+    recommended_coordination_template: "report_generation",
+    required_context_packets: ["report_source_context_packet"],
+    required_direct_source_proofs: ["dsp_client_report_001", "dsp_partner_attestation_001"],
+    required_reports: ["report_premium_shs_v1"],
+    required_approvals: ["human_report_owner_review", "data_ownership_ip_review", "readiness_gate_review"],
+    required_governance_gates: ["Truth Spine", "Policy Engine", "Readiness Gate", "Data Approval Gateway"],
+    readiness_score: 85,
+    blockers: [],
+    warnings: ["Report remains unpublished until explicit approval."],
+    safe_next_actions: ["Review direct-source proof readiness", "Create local workflow run", "Prepare report readiness checklist"],
+    dangerous_actions_blocked: ["report_publishing_without_approval", "public_approval_mutation", "shf_impact_data_mutation"],
+    ...SHS_ORCHESTRATOR_DANGEROUS_FLAGS_FALSE,
+  },
+];

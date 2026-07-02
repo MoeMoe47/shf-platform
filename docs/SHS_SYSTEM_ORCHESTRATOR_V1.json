@@ -1,0 +1,191 @@
+{
+  "name": "SHS System Orchestrator V1",
+  "version": "v1.1-layer-v1",
+  "purpose": "Create a local/admin-safe SHS control plane that coordinates completed V1 systems without bypassing governance, approvals, or safety gates.",
+  "orchestration_templates": [
+    "Client Premium Report Orchestration",
+    "Sales to Delivery Orchestration",
+    "Direct Source Proof Orchestration",
+    "Agent Workflow Orchestration",
+    "Launch Readiness Orchestration",
+    "ClientOps Review Orchestration",
+    "Governance Review Orchestration",
+    "Private Beta Demo Orchestration"
+  ],
+  "request_model": {
+    "orchestration_request_id": "orch_req_001",
+    "title": "",
+    "request_type": "client_report|sales_to_delivery|direct_source_proof|agent_workflow|production_automation|launch_readiness|clientops_review|governance_review|custom",
+    "operator_intent": "",
+    "related_client_id": "",
+    "related_project_id": "",
+    "related_report_id": "",
+    "related_agent_ids": [],
+    "related_workflow_run_id": "",
+    "related_coordination_plan_id": "",
+    "related_direct_source_proof_ids": [],
+    "related_task_ids": [],
+    "status": "draft|analyzing|ready_for_review|blocked|approved_local|completed_local|archived",
+    "risk_level": "low|medium|high|critical",
+    "created_at": "",
+    "updated_at": "",
+    "operator_note": ""
+  },
+  "plan_model": {
+    "orchestration_plan_id": "orch_plan_001",
+    "orchestration_request_id": "",
+    "participating_layers": [],
+    "participating_agents": [],
+    "required_governance_gates": [],
+    "readiness_score": 0,
+    "execution_enabled": false,
+    "production_mutation_enabled": false,
+    "public_publish_enabled": false,
+    "public_approved_mutation_enabled": false,
+    "shf_impact_data_mutation_enabled": false,
+    "external_delivery_enabled": false,
+    "warehouse_write_enabled": false,
+    "auth_mutation_enabled": false
+  },
+  "connected_layers": [
+    "Truth Spine",
+    "Oracle",
+    "Master Layer Registry",
+    "SHS Spine",
+    "Agent Workbench",
+    "Agent Task Queue",
+    "Agent Approval Ledger",
+    "Agent Memory & Context",
+    "Agent Coordination Layer",
+    "Agent Workflow Engine",
+    "Agent Controlled Executor",
+    "Production Automation V2",
+    "SHS Reports",
+    "Direct Connect Batch 2 direct-source proof",
+    "Daily Governance Audit",
+    "Paid-Launch Checks",
+    "Readiness Gate",
+    "Policy Engine",
+    "Audit / Verification Layer",
+    "Security / Privacy",
+    "Data Ownership / IP",
+    "SHS / SHF boundary controls"
+  ],
+  "readiness_scoring": {
+    "start": 100,
+    "ready_score": 80,
+    "deductions": {
+      "critical_risk": 30,
+      "no_human_approval_path": 25,
+      "missing_governance_gates": 20,
+      "missing_source_proof": 20,
+      "missing_workflow": 15,
+      "missing_context_packet": 15,
+      "blockers": 15,
+      "warnings": 10,
+      "dangerous_action_requested": 50
+    }
+  },
+  "safety_rules": [
+    "block production mutation",
+    "block public approval mutation",
+    "block SHF Impact Data mutation",
+    "block report publishing without approval",
+    "block external delivery",
+    "block webhook and notification sending",
+    "block warehouse write",
+    "block auth mutation",
+    "block live Direct Connect integration",
+    "block banking/account/OAuth/payment connection",
+    "block autonomous executor action"
+  ],
+  "admin_ui": {
+    "route": "admin.html#/ops/orchestrator",
+    "page": "src/pages/admin/orchestrator/ShsSystemOrchestratorPage.jsx",
+    "components": [
+      "OrchestratorTemplatePanel",
+      "OrchestratorRequestList",
+      "OrchestratorPlanDetail",
+      "OrchestratorReadinessPanel",
+      "OrchestratorSafetyPanel",
+      "OrchestratorLayerMap",
+      "OrchestratorNextActions"
+    ]
+  },
+  "route_access": {
+    "route": "/ops/orchestrator",
+    "allowed_roles": ["shs_admin"],
+    "client_admin_blocked": true,
+    "public_blocked": true
+  },
+  "shs_shf_boundary": {
+    "preserved": true,
+    "public_approved_mutation_enabled": false,
+    "shf_impact_data_mutation_enabled": false,
+    "direct_connect_direct_source_proof_only": true
+  },
+  "files_created": [
+    "src/data/orchestrator/shsOrchestratorRequests.js",
+    "src/data/orchestrator/shsOrchestratorPlans.js",
+    "src/data/orchestrator/shsOrchestratorTemplates.js",
+    "src/data/orchestrator/shsOrchestratorStorage.js",
+    "src/data/orchestrator/shsOrchestratorReadiness.js",
+    "src/data/orchestrator/shsOrchestratorSafety.js",
+    "src/data/orchestrator/shsOrchestratorMetrics.js",
+    "src/data/orchestrator/shsOrchestratorActions.js",
+    "src/pages/admin/orchestrator/ShsSystemOrchestratorPage.jsx",
+    "src/pages/admin/orchestrator/components/OrchestratorTemplatePanel.jsx",
+    "src/pages/admin/orchestrator/components/OrchestratorRequestList.jsx",
+    "src/pages/admin/orchestrator/components/OrchestratorPlanDetail.jsx",
+    "src/pages/admin/orchestrator/components/OrchestratorReadinessPanel.jsx",
+    "src/pages/admin/orchestrator/components/OrchestratorSafetyPanel.jsx",
+    "src/pages/admin/orchestrator/components/OrchestratorLayerMap.jsx",
+    "src/pages/admin/orchestrator/components/OrchestratorNextActions.jsx",
+    "src/pages/admin/orchestrator/shsSystemOrchestrator.css",
+    "scripts/check_shs_system_orchestrator.py",
+    "docs/SHS_SYSTEM_ORCHESTRATOR_V1.md",
+    "docs/SHS_SYSTEM_ORCHESTRATOR_V1.json"
+  ],
+  "files_modified": [
+    "package.json",
+    "src/router/AdminRoutes.jsx",
+    "src/components/admin/AdminSidebar.jsx",
+    "src/system/identity/hubAccessControl.js",
+    "src/system/routes/crossAppRouteBridge.js"
+  ],
+  "validation": {
+    "python3 -m json.tool docs/SHS_SYSTEM_ORCHESTRATOR_V1.json": "PASS",
+    "PYTHONPYCACHEPREFIX=/tmp/codex_pycache python3 -m py_compile scripts/check_shs_system_orchestrator.py": "PASS",
+    "python3 scripts/check_shs_system_orchestrator.py": "PASS",
+    "npm run check:shs-orchestrator": "BLOCKED_BY_ENVIRONMENT_NPM_NOT_FOUND",
+    "npm run check:governance": "BLOCKED_BY_ENVIRONMENT_NPM_NOT_FOUND",
+    "bash scripts/run_daily_governance_audit.sh": "BLOCKED_BY_ENVIRONMENT_NPM_NOT_FOUND",
+    "bash scripts/run_paid_launch_checks.sh": "BLOCKED_BY_ENVIRONMENT_NPM_NOT_FOUND",
+    "npm run build": "BLOCKED_BY_ENVIRONMENT_NPM_NOT_FOUND"
+  },
+  "browser_smoke": {
+    "status": "BLOCKED_BY_ENVIRONMENT_NPM_NOT_FOUND",
+    "reason": "Local dev server/browser smoke could not be run because npm is not available in this command environment.",
+    "required_checks_when_available": [
+      "admin.html#/ops/orchestrator loads",
+      "Orchestrator page is visible",
+      "8 templates are visible",
+      "Create request works",
+      "Analyze request works",
+      "Readiness score is visible",
+      "Safety panel is visible",
+      "Dangerous flags are false",
+      "SHS/SHF boundary copy is visible",
+      "client_admin and public users are blocked",
+      "Existing /ops/agents, /ops/reports, and /ops/direct-connect still work"
+    ]
+  },
+  "remaining_risks": [
+    "Orchestrator state is local/browser storage only.",
+    "No backend persistence exists for orchestration requests or plans.",
+    "Browser smoke still depends on a local dev server and npm availability.",
+    "Broad npm-backed governance and build checks depend on npm availability.",
+    "Future production orchestrator work must add durable auth, audit, persistence, monitoring, and CI gates without bypassing governance."
+  ],
+  "v1_complete": true
+}

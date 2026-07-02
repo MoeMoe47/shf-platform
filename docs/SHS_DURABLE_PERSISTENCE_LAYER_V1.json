@@ -1,0 +1,170 @@
+{
+  "name": "SHS Durable Persistence Layer V1",
+  "version": "v1.1-layer-v1",
+  "purpose": "Create a safe V1.1 persistence abstraction so SHRV1 can gradually move selected local/browser records into governed durable persistence without adding production credentials or replacing existing feature storage in one pass.",
+  "core_files": [
+    "src/system/persistence/persistenceTypes.js",
+    "src/system/persistence/persistenceSafety.js",
+    "src/system/persistence/persistenceAdapters.js",
+    "src/system/persistence/persistenceService.js",
+    "src/system/persistence/repositoryFactory.js",
+    "src/system/persistence/transactionHistory.js",
+    "src/system/persistence/versionHistory.js",
+    "src/system/persistence/migrationRegistry.js",
+    "src/system/persistence/sessionSnapshots.js",
+    "src/system/persistence/persistenceMetrics.js"
+  ],
+  "repositories": [
+    "src/system/persistence/repositories/agentRepository.js",
+    "src/system/persistence/repositories/orchestratorRepository.js",
+    "src/system/persistence/repositories/directConnectRepository.js",
+    "src/system/persistence/repositories/reportsRepository.js",
+    "src/system/persistence/repositories/productionAutomationRepository.js"
+  ],
+  "adapters": [
+    {"name": "localStorage", "enabled": true, "default": true},
+    {"name": "memory", "enabled": true, "default": false},
+    {"name": "database_placeholder", "enabled": false, "message": "Database adapter is not enabled in Persistence V1."}
+  ],
+  "transaction_history": {
+    "append_only": true,
+    "model_fields": ["transaction_id", "entity_type", "entity_id", "operation", "repository", "actor", "timestamp", "schema_version", "before_hash", "after_hash", "safety_result", "status", "notes"]
+  },
+  "version_history": {
+    "enabled": true,
+    "rollback_apply_blocked_by_default": true,
+    "model_fields": ["version_id", "entity_type", "entity_id", "repository", "version_number", "schema_version", "created_at", "change_summary", "record_hash", "previous_hash", "snapshot_ref", "metadata"]
+  },
+  "session_snapshots": {
+    "enabled": true,
+    "restore_default": "dry_run",
+    "confirm_restore_required": true,
+    "scopes": ["agents", "orchestrator", "direct_connect", "reports", "production_automation", "all_safe"]
+  },
+  "migration_support": {
+    "current_schema_version": "shs.persistence.v1",
+    "dry_run_only_by_default": true,
+    "migrations": [
+      "agents_local_v1_to_persistence_v1",
+      "orchestrator_local_v1_to_persistence_v1",
+      "direct_connect_local_v1_to_persistence_v1",
+      "reports_local_v1_to_persistence_v1",
+      "production_automation_v2_to_persistence_v1"
+    ]
+  },
+  "safety_rules": [
+    "block credential persistence",
+    "block API key persistence",
+    "block OAuth token persistence",
+    "block banking/account secret persistence",
+    "block private key persistence",
+    "block auth secret persistence",
+    "block public approval mutation",
+    "block SHF Impact Data mutation",
+    "block external API calls",
+    "block enabled production database credentials"
+  ],
+  "admin_ui": {
+    "route": "admin.html#/ops/persistence",
+    "page": "src/pages/admin/persistence/ShsPersistenceCenterPage.jsx",
+    "components": [
+      "PersistenceOverviewPanel",
+      "PersistenceRepositoryPanel",
+      "PersistenceTransactionHistory",
+      "PersistenceVersionHistory",
+      "PersistenceSessionSnapshots",
+      "PersistenceMigrationPanel",
+      "PersistenceSafetyPanel"
+    ]
+  },
+  "route_access": {
+    "route": "/ops/persistence",
+    "allowed_roles": ["shs_admin"],
+    "client_admin_blocked": true,
+    "public_blocked": true
+  },
+  "files_created": [
+    "src/system/persistence/persistenceTypes.js",
+    "src/system/persistence/persistenceSafety.js",
+    "src/system/persistence/persistenceAdapters.js",
+    "src/system/persistence/persistenceService.js",
+    "src/system/persistence/repositoryFactory.js",
+    "src/system/persistence/transactionHistory.js",
+    "src/system/persistence/versionHistory.js",
+    "src/system/persistence/migrationRegistry.js",
+    "src/system/persistence/sessionSnapshots.js",
+    "src/system/persistence/persistenceMetrics.js",
+    "src/system/persistence/repositories/agentRepository.js",
+    "src/system/persistence/repositories/orchestratorRepository.js",
+    "src/system/persistence/repositories/directConnectRepository.js",
+    "src/system/persistence/repositories/reportsRepository.js",
+    "src/system/persistence/repositories/productionAutomationRepository.js",
+    "src/pages/admin/persistence/ShsPersistenceCenterPage.jsx",
+    "src/pages/admin/persistence/components/PersistenceOverviewPanel.jsx",
+    "src/pages/admin/persistence/components/PersistenceRepositoryPanel.jsx",
+    "src/pages/admin/persistence/components/PersistenceTransactionHistory.jsx",
+    "src/pages/admin/persistence/components/PersistenceVersionHistory.jsx",
+    "src/pages/admin/persistence/components/PersistenceSessionSnapshots.jsx",
+    "src/pages/admin/persistence/components/PersistenceMigrationPanel.jsx",
+    "src/pages/admin/persistence/components/PersistenceSafetyPanel.jsx",
+    "src/pages/admin/persistence/shsPersistenceCenter.css",
+    "scripts/check_shs_persistence_layer.py",
+    "docs/SHS_DURABLE_PERSISTENCE_LAYER_V1.md",
+    "docs/SHS_DURABLE_PERSISTENCE_LAYER_V1.json"
+  ],
+  "files_modified": [
+    "package.json",
+    "src/router/AdminRoutes.jsx",
+    "src/components/admin/AdminSidebar.jsx",
+    "src/system/identity/hubAccessControl.js",
+    "src/system/routes/crossAppRouteBridge.js"
+  ],
+  "validation": {
+    "python3 -m json.tool docs/SHS_DURABLE_PERSISTENCE_LAYER_V1.json": "PASS",
+    "PYTHONPYCACHEPREFIX=/tmp/codex_pycache python3 -m py_compile scripts/check_shs_persistence_layer.py": "PASS",
+    "python3 scripts/check_shs_persistence_layer.py": "PASS",
+    "npm run check:shs-persistence": "PASS",
+    "npm run check:shs-orchestrator": "PASS",
+    "npm run check:governance": "PASS",
+    "bash scripts/run_daily_governance_audit.sh": "PASS",
+    "bash scripts/run_paid_launch_checks.sh": "PASS",
+    "npm run build": "PASS_WITH_EXISTING_VITE_WARNINGS",
+    "git diff --check": "PASS"
+  },
+  "browser_smoke": {
+    "status": "PASS_WITH_SOURCE_BACKED_PUBLIC_GUARD",
+    "verified": [
+      "SHS admin can load admin.html#/ops/persistence",
+      "overview panel visible",
+      "repository panel visible",
+      "transaction history visible",
+      "version history visible",
+      "session snapshots visible",
+      "migration panel visible",
+      "safety panel visible",
+      "create local snapshot works",
+      "dry-run restore works",
+      "dry-run migration works",
+      "safety scan works",
+      "dangerous persistence types are blocked",
+      "database adapter shows disabled/placeholder",
+      "client_admin is blocked and redirected to /hub",
+      "existing Orchestrator route still loads",
+      "existing Agents route still loads",
+      "existing Reports route still loads",
+      "existing Direct Connect route still loads"
+    ],
+    "source_backed": [
+      "public/no-session users are redirected to /login by ProtectedHubRoute",
+      "/ops/persistence is shs_admin only in hubAccessControl"
+    ],
+    "note": "Browser automation sandbox did not expose localStorage for clearing the active demo session, so public/no-session was source-verified rather than browser-cleared."
+  },
+  "remaining_risks": [
+    "Persistence V1 is a bridge layer; existing systems still use their current local stores.",
+    "The database adapter is intentionally disabled until owner-approved backend scope exists.",
+    "Browser smoke depends on an available local dev server.",
+    "Future migrations must remain dry-run first and pass safety review before any real data movement."
+  ],
+  "v1_complete": true
+}

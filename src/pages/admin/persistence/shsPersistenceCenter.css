@@ -1,0 +1,200 @@
+.shs-persistence-page {
+  min-height: 100vh;
+  padding: 24px;
+  background: #f4f7f5;
+  color: #17211c;
+}
+
+.persistence-hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-end;
+  padding: 26px;
+  border: 1px solid #cfd8d2;
+  background: #ffffff;
+  border-radius: 8px;
+}
+
+.persistence-hero p,
+.panel-heading p {
+  margin: 0 0 6px;
+  color: #587064;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.persistence-hero h1,
+.panel-heading h2 {
+  margin: 0;
+  letter-spacing: 0;
+}
+
+.persistence-hero h1 {
+  font-size: 2rem;
+}
+
+.persistence-hero span {
+  display: block;
+  margin-top: 8px;
+  max-width: 760px;
+  color: #46564d;
+}
+
+.persistence-hero button,
+.persistence-panel button {
+  border: 0;
+  border-radius: 6px;
+  background: #214c39;
+  color: #ffffff;
+  padding: 10px 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.persistence-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.persistence-panel {
+  grid-column: span 6;
+  padding: 18px;
+  border: 1px solid #d5ddd8;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.persistence-overview,
+.persistence-safety {
+  grid-column: span 6;
+}
+
+.metric-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.metric-row article {
+  padding: 12px;
+  border: 1px solid #dfe7e2;
+  border-radius: 6px;
+  background: #f8faf8;
+}
+
+.metric-row span,
+.repo-list span,
+.history-list span,
+.result-box span,
+.result-box small {
+  display: block;
+  color: #62736a;
+  font-size: 0.88rem;
+}
+
+.metric-row strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 1.5rem;
+}
+
+.status-list,
+.blocked-list {
+  padding: 0;
+  margin: 16px 0 0;
+  list-style: none;
+}
+
+.status-list li,
+.blocked-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 0;
+  border-top: 1px solid #edf1ee;
+}
+
+.blocked-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.blocked-list li {
+  border: 1px solid #edd8d4;
+  border-radius: 6px;
+  padding: 8px 10px;
+  background: #fff8f6;
+}
+
+.repo-list,
+.history-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.repo-list article,
+.history-list article,
+.result-box {
+  padding: 12px;
+  border: 1px solid #dfe7e2;
+  border-radius: 6px;
+  background: #f8faf8;
+}
+
+.repo-list article {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.control-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.control-row select {
+  min-width: 0;
+  flex: 1;
+  border: 1px solid #cfd8d2;
+  border-radius: 6px;
+  padding: 10px;
+  background: #ffffff;
+}
+
+.safety-copy {
+  margin: 14px 0;
+  color: #46564d;
+  line-height: 1.5;
+}
+
+.empty-state {
+  padding: 12px;
+  border: 1px dashed #cfd8d2;
+  border-radius: 6px;
+}
+
+@media (max-width: 900px) {
+  .persistence-hero {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .persistence-panel,
+  .persistence-overview,
+  .persistence-safety {
+    grid-column: 1 / -1;
+  }
+
+  .metric-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+

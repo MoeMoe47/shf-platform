@@ -1,0 +1,213 @@
+{
+  "name": "SHS Tracking Intelligence Layer V1",
+  "version": "v1.1-layer-v1",
+  "purpose": "Create a local-first internal tracking intelligence spine that connects SHS operations across Sales, Production, QA, ClientOps, Reports, Agents, Orchestrator, Persistence, Direct Connect, Revenue signals, and Impact proof without adding public tracking or external analytics.",
+  "tracking_streams": [
+    "Sales Activity Stream",
+    "Production Movement Stream",
+    "QA Readiness Stream",
+    "ClientOps Lifecycle Stream",
+    "Reports Usage Stream",
+    "Agent Activity Stream",
+    "Orchestrator Coordination Stream",
+    "Direct Connect Proof Stream",
+    "Persistence Snapshot Stream",
+    "Support / Maintenance Stream",
+    "Revenue / Renewal Signal Stream",
+    "Governance / Readiness Stream"
+  ],
+  "event_model": {
+    "tracking_event_id": "",
+    "event_type": "sales|production|qa|clientops|report|agent|orchestrator|direct_connect|persistence|support|billing|revenue|impact|governance|system",
+    "event_name": "",
+    "event_source": "",
+    "event_action": "",
+    "entity_type": "client|project|report|agent|workflow|task|proof|snapshot|route|system|unknown",
+    "entity_id": "",
+    "client_id": "",
+    "project_id": "",
+    "report_id": "",
+    "agent_id": "",
+    "workflow_id": "",
+    "risk_level": "low|medium|high|critical",
+    "visibility": "internal_only|client_report_candidate|governance_candidate|public_candidate_blocked",
+    "safety_status": "allowed|blocked|needs_review",
+    "timestamp": "",
+    "metadata": {},
+    "operator_note": ""
+  },
+  "signal_model": {
+    "types": [
+      "upgrade_opportunity",
+      "renewal_risk",
+      "report_engagement",
+      "support_hotspot",
+      "qa_blocker",
+      "production_delay",
+      "agent_activity_spike",
+      "proof_gap",
+      "governance_attention",
+      "client_value_signal",
+      "revenue_signal",
+      "impact_report_candidate"
+    ],
+    "local_only": true,
+    "external_ai_calls": false,
+    "external_analytics": false
+  },
+  "metrics": {
+    "event_count_by_stream": true,
+    "event_count_by_client": true,
+    "event_count_by_project": true,
+    "open_blockers": true,
+    "report_usage_count": true,
+    "proof_readiness_count": true,
+    "agent_activity_count": true,
+    "qa_readiness_count": true,
+    "upgrade_signal_count": true,
+    "renewal_risk_count": true,
+    "governance_attention_count": true
+  },
+  "readiness": {
+    "start": 100,
+    "ready_score": 80,
+    "dangerous_tracking_required_false": true,
+    "no_public_approval_mutation": true,
+    "no_shf_impact_mutation": true,
+    "no_external_tracking": true,
+    "no_private_secrets_persisted": true
+  },
+  "safety_rules": [
+    "block private secrets",
+    "block external auth payloads",
+    "block financial account payloads",
+    "block live connector payloads",
+    "block public approval mutation",
+    "block SHF Impact mutation",
+    "block external analytics",
+    "block cookie tracking",
+    "block pixel tracking",
+    "block webhook sending",
+    "block notification sending",
+    "block warehouse write",
+    "block report publishing"
+  ],
+  "admin_ui": {
+    "route": "admin.html#/ops/tracking",
+    "page": "src/pages/admin/tracking/ShsTrackingIntelligencePage.jsx",
+    "components": [
+      "TrackingOverviewPanel",
+      "TrackingStreamPanel",
+      "TrackingEventTimeline",
+      "TrackingSignalPanel",
+      "TrackingEntityLinkPanel",
+      "TrackingReadinessPanel",
+      "TrackingSafetyPanel",
+      "TrackingReportUsePanel"
+    ]
+  },
+  "route_access": {
+    "route": "/ops/tracking",
+    "allowed_roles": ["shs_admin"],
+    "client_admin_blocked": true,
+    "public_blocked": true
+  },
+  "connected_layers": [
+    "Sales",
+    "Production",
+    "QA",
+    "ClientOps",
+    "SHS Reports",
+    "Agent Workbench",
+    "SHS System Orchestrator",
+    "SHS Durable Persistence Layer",
+    "Direct Connect Batch 2",
+    "Revenue Signals",
+    "Impact Proof",
+    "Governance / Readiness"
+  ],
+  "files_created": [
+    "src/system/tracking/shsTrackingTypes.js",
+    "src/system/tracking/shsTrackingEvents.js",
+    "src/system/tracking/shsTrackingStreams.js",
+    "src/system/tracking/shsTrackingStorage.js",
+    "src/system/tracking/shsTrackingSafety.js",
+    "src/system/tracking/shsTrackingMetrics.js",
+    "src/system/tracking/shsTrackingSignals.js",
+    "src/system/tracking/shsTrackingTimeline.js",
+    "src/system/tracking/shsTrackingEntityLinks.js",
+    "src/system/tracking/shsTrackingReadiness.js",
+    "src/pages/admin/tracking/ShsTrackingIntelligencePage.jsx",
+    "src/pages/admin/tracking/components/TrackingOverviewPanel.jsx",
+    "src/pages/admin/tracking/components/TrackingStreamPanel.jsx",
+    "src/pages/admin/tracking/components/TrackingEventTimeline.jsx",
+    "src/pages/admin/tracking/components/TrackingSignalPanel.jsx",
+    "src/pages/admin/tracking/components/TrackingEntityLinkPanel.jsx",
+    "src/pages/admin/tracking/components/TrackingReadinessPanel.jsx",
+    "src/pages/admin/tracking/components/TrackingSafetyPanel.jsx",
+    "src/pages/admin/tracking/components/TrackingReportUsePanel.jsx",
+    "src/pages/admin/tracking/shsTrackingIntelligence.css",
+    "scripts/check_shs_tracking_intelligence.py",
+    "docs/SHS_TRACKING_INTELLIGENCE_LAYER_V1.md",
+    "docs/SHS_TRACKING_INTELLIGENCE_LAYER_V1.json"
+  ],
+  "files_modified": [
+    "package.json",
+    "src/router/AdminRoutes.jsx",
+    "src/components/admin/AdminSidebar.jsx",
+    "src/system/identity/hubAccessControl.js",
+    "src/system/routes/crossAppRouteBridge.js"
+  ],
+  "validation": {
+    "python3 -m json.tool docs/SHS_TRACKING_INTELLIGENCE_LAYER_V1.json": "PASS",
+    "PYTHONPYCACHEPREFIX=/tmp/codex_pycache python3 -m py_compile scripts/check_shs_tracking_intelligence.py": "PASS",
+    "python3 scripts/check_shs_tracking_intelligence.py": "PASS",
+    "npm run check:shs-tracking": "PASS",
+    "npm run check:shs-orchestrator": "PASS",
+    "npm run check:shs-persistence": "PASS",
+    "npm run check:governance": "PASS",
+    "bash scripts/run_daily_governance_audit.sh": "PASS",
+    "bash scripts/run_paid_launch_checks.sh": "PASS",
+    "npm run build": "PASS_WITH_EXISTING_VITE_WARNINGS",
+    "git diff --check": "PASS"
+  },
+  "browser_smoke": {
+    "status": "PASS",
+    "route": "admin.html#/ops/tracking",
+    "shs_admin_route_loaded": true,
+    "stream_count_visible": 12,
+    "panels_visible": [
+      "Overview",
+      "Event Timeline",
+      "Intelligence Signals",
+      "Client / Project / Report / Agent Links",
+      "Tracking Readiness Score",
+      "Internal-only Boundary",
+      "Report / Upsell / Retention / Governance Use"
+    ],
+    "actions_passed": [
+      "Create Sample Internal Event",
+      "Run Safety Scan",
+      "Mark Signal Reviewed Locally",
+      "Archive Local Event",
+      "Stream filter",
+      "Entity filter"
+    ],
+    "client_admin_blocked": true,
+    "neighbor_routes_loaded": [
+      "Orchestrator",
+      "Persistence",
+      "Agents",
+      "Reports",
+      "Direct Connect"
+    ],
+    "direct_connect_direct_source_proof_only_preserved": true
+  },
+  "remaining_risks": [
+    "Tracking V1 is local/admin-first and does not provide backend persistence by itself.",
+    "Future consent design is required before any public-surface tracking exists.",
+    "Report candidates still require human review and Data Approval Gateway.",
+    "Future production telemetry must keep external analytics, cookies, pixels, and warehouse writes owner-approved and disabled by default."
+  ],
+  "v1_complete": true
+}

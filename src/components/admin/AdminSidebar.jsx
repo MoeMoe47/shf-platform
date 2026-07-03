@@ -13,6 +13,7 @@ const SECTIONS = [
       { to: "/ops/orchestrator", icon: "O", label: "Orchestrator" },
       { to: "/ops/persistence", icon: "P", label: "Persistence" },
       { to: "/ops/tracking", icon: "T", label: "Tracking" },
+      { to: "/ops/system-registry", icon: "R", label: "System Registry" },
       { to: "/ops/agents", icon: "A", label: "Agent Workbench" },
       { to: "/ops/direct-connect", icon: "D", label: "Direct Connect" },
       { to: "/ops/projects", icon: "◇", label: "Projects" },

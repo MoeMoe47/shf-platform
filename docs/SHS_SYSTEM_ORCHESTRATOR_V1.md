@@ -56,6 +56,7 @@ The Orchestrator represents these completed V1 systems as participating layers:
 - Direct Connect Batch 2 direct-source proof
 - Daily Governance Audit
 - Paid-Launch Checks
+- System Registry & Dependency Intelligence
 - Readiness Gate
 - Policy Engine
 - Audit / Verification Layer

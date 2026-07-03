@@ -31,6 +31,7 @@ import DirectConnectProofCenterPage from "@/pages/admin/direct-connect/DirectCon
 import ShsSystemOrchestratorPage from "@/pages/admin/orchestrator/ShsSystemOrchestratorPage.jsx";
 import ShsPersistenceCenterPage from "@/pages/admin/persistence/ShsPersistenceCenterPage.jsx";
 import ShsTrackingIntelligencePage from "@/pages/admin/tracking/ShsTrackingIntelligencePage.jsx";
+import ShsSystemRegistryPage from "@/pages/admin/system-registry/ShsSystemRegistryPage.jsx";
 import SHFImpactCommandCenter from "@/pages/shf-command/SHFImpactCommandCenter.jsx";
 import WorkspaceDashboard from "@/pages/exchange/WorkspaceDashboard.jsx";
 import LordOutcomesRoutes from "@/router/LordOutcomesRoutes.jsx";
@@ -210,6 +211,7 @@ export default function AdminRoutes() {
         <Route path="/ops/orchestrator" element={protect("/ops/orchestrator", <ShsSystemOrchestratorPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/ops/persistence" element={protect("/ops/persistence", <ShsPersistenceCenterPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/ops/tracking" element={protect("/ops/tracking", <ShsTrackingIntelligencePage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
+        <Route path="/ops/system-registry" element={protect("/ops/system-registry", <ShsSystemRegistryPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/ops/agents" element={protect("/ops/agents", <AgentWorkbenchPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/ops/direct-connect" element={protect("/ops/direct-connect", <DirectConnectProofCenterPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/ops/projects" element={protect("/ops/projects", <OpsProjectSetup />)} />

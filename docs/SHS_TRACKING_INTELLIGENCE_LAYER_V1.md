@@ -187,6 +187,8 @@ Tracking Intelligence preserves the SHS / SHF boundary:
 
 Tracking streams label whether they are useful for reports, upsells, retention, and governance. This helps operators identify candidates for review without publishing data, sending messages, or moving private data to public surfaces.
 
+System Registry & Dependency Intelligence V1 is a governance/readiness awareness source for Tracking Intelligence. It helps operators understand which layer owns an event source, which validators protect that layer, and what blast radius may apply before a tracking signal becomes a report, retention, upsell, or governance review candidate.
+
 ## What It Does Not Do
 
 Tracking Intelligence V1 does not:

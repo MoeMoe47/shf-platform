@@ -1,0 +1,255 @@
+.shs-system-registry-page {
+  min-height: 100vh;
+  padding: 24px;
+  background: #f5f7f8;
+  color: #172126;
+}
+
+.system-registry-hero,
+.system-registry-panel,
+.system-registry-filters,
+.system-registry-export-status {
+  border: 1px solid #d6dee2;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.system-registry-hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: flex-end;
+  padding: 24px;
+}
+
+.system-registry-hero p,
+.panel-heading p {
+  margin: 0 0 6px;
+  color: #5c6e76;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.system-registry-hero h1,
+.panel-heading h2 {
+  margin: 0;
+  letter-spacing: 0;
+}
+
+.system-registry-hero h1 {
+  font-size: 2rem;
+}
+
+.system-registry-hero span {
+  display: block;
+  max-width: 850px;
+  margin-top: 8px;
+  color: #4b5b62;
+}
+
+.system-registry-actions,
+.system-registry-grid,
+.metric-grid,
+.registry-list,
+.matrix-list,
+.timeline-list,
+.graph-columns,
+.detail-columns,
+.detail-grid,
+.flag-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.system-registry-actions {
+  grid-template-columns: 1fr;
+}
+
+.system-registry-filters {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+  padding: 16px;
+  align-items: end;
+}
+
+.system-registry-filters label,
+.system-registry-panel span,
+.system-registry-panel small,
+.system-registry-panel p,
+.muted {
+  color: #5a6a71;
+}
+
+.system-registry-filters label {
+  display: grid;
+  gap: 6px;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.system-registry-filters select,
+.system-registry-filters input {
+  width: 100%;
+  border: 1px solid #cfd9dd;
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.system-registry-grid {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  margin-top: 16px;
+}
+
+.system-registry-panel {
+  grid-column: span 6;
+  padding: 18px;
+}
+
+.overview,
+.readiness {
+  grid-column: span 6;
+}
+
+.layer-list {
+  grid-column: span 4;
+}
+
+.layer-detail {
+  grid-column: span 8;
+}
+
+.validator-matrix,
+.lifecycle,
+.timeline {
+  grid-column: span 4;
+}
+
+.metric-grid,
+.detail-grid,
+.flag-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 14px;
+}
+
+.metric-grid article,
+.registry-list button,
+.matrix-list article,
+.timeline-list article,
+.detail-grid span,
+.flag-grid span {
+  padding: 12px;
+  border: 1px solid #e0e7ea;
+  border-radius: 6px;
+  background: #f9fbfb;
+}
+
+.metric-grid strong,
+.readiness-score {
+  display: block;
+  margin-top: 4px;
+  font-size: 1.7rem;
+}
+
+.registry-list button {
+  text-align: left;
+  color: #172126;
+  cursor: pointer;
+}
+
+.registry-list button.is-selected {
+  border-color: #2f6851;
+  background: #f2faf6;
+}
+
+.system-registry-page button,
+.system-registry-hero button,
+.system-registry-filters button {
+  border: 0;
+  border-radius: 6px;
+  background: #264e63;
+  color: white;
+  padding: 9px 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.detail-grid b,
+.registry-list strong,
+.matrix-list strong,
+.timeline-list strong,
+.graph-columns strong {
+  display: block;
+  color: #172126;
+}
+
+.detail-columns,
+.graph-columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 14px;
+}
+
+.graph-columns div,
+.detail-columns div {
+  padding: 12px;
+  border: 1px solid #e0e7ea;
+  border-radius: 6px;
+  background: #f9fbfb;
+}
+
+.graph-columns span,
+.matrix-list span,
+.matrix-list small,
+.timeline-list small {
+  display: block;
+}
+
+.matrix-list.compact {
+  max-height: 340px;
+  overflow: auto;
+}
+
+.timeline-list article {
+  grid-template-columns: 32px 1fr auto;
+  display: grid;
+  align-items: center;
+}
+
+.safety-copy {
+  line-height: 1.5;
+}
+
+.system-registry-export-status {
+  padding: 10px 14px;
+  margin: 12px 0 0;
+}
+
+@media (max-width: 980px) {
+  .system-registry-hero {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .system-registry-filters,
+  .metric-grid,
+  .detail-grid,
+  .flag-grid,
+  .detail-columns,
+  .graph-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .system-registry-panel,
+  .overview,
+  .readiness,
+  .layer-list,
+  .layer-detail,
+  .validator-matrix,
+  .lifecycle,
+  .timeline {
+    grid-column: 1 / -1;
+  }
+}
+

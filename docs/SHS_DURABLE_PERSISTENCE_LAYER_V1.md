@@ -17,6 +17,7 @@ The first migration candidates are:
 - Direct Connect direct-source proof records
 - SHS Reports draft/history records
 - Production Automation V2 local planning records
+- System Registry & Dependency Intelligence local review notes and export summaries
 
 The systems that must remain unchanged in V1 are the existing feature modules, route guards, governance checks, Direct Connect direct-source proof framing, and SHS / SHF public boundary controls.
 

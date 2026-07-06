@@ -1,0 +1,160 @@
+{
+  "name": "SHS BOS Event Bus / Message Fabric V1",
+  "product_name": "SHS BOS",
+  "version": "v1.1-layer-v1",
+  "purpose": "Create a local-first internal message fabric for structured SHS BOS events, local publish/subscribe, schema validation, routing, subscriber registry, replay preview, and safety guardrails without external brokers or production mutation.",
+  "channel_count": 10,
+  "channels": [
+    "orchestrator.events",
+    "tracking.events",
+    "persistence.events",
+    "registry.events",
+    "agent.events",
+    "workflow.events",
+    "report.events",
+    "direct_connect.events",
+    "governance.events",
+    "system.events"
+  ],
+  "event_model": {
+    "event_id": "",
+    "event_type": "orchestrator|tracking|persistence|registry|agent|workflow|report|direct_connect|governance|system",
+    "event_name": "",
+    "source_layer": "",
+    "target_layers": [],
+    "entity_type": "",
+    "entity_id": "",
+    "risk_level": "low|medium|high|critical",
+    "visibility": "internal_only",
+    "payload": {},
+    "safety_status": "allowed|blocked|needs_review",
+    "timestamp": "",
+    "operator_note": ""
+  },
+  "capabilities": {
+    "publish_subscribe": true,
+    "local_first_event_transport": true,
+    "event_schema_validation": true,
+    "event_routing": true,
+    "event_replay_preview": true,
+    "subscriber_registry": true,
+    "safety_guardrails": true,
+    "admin_ui": true,
+    "validator": true,
+    "docs": true
+  },
+  "dangerous_capabilities": {
+    "external_broker_enabled": false,
+    "network_delivery_enabled": false,
+    "webhook_send_enabled": false,
+    "notification_send_enabled": false,
+    "production_mutation_enabled": false,
+    "public_approval_mutation_enabled": false,
+    "shf_impact_data_mutation_enabled": false,
+    "report_publish_enabled": false,
+    "warehouse_write_enabled": false,
+    "auth_mutation_enabled": false,
+    "credential_storage_enabled": false,
+    "autonomous_execution_enabled": false
+  },
+  "admin_ui": {
+    "route": "admin.html#/ops/event-bus",
+    "page": "src/pages/admin/event-bus/ShsEventBusPage.jsx",
+    "components": [
+      "EventBusOverviewPanel",
+      "EventChannelPanel",
+      "EventTimelinePanel",
+      "EventSubscriberPanel",
+      "EventReplayPanel",
+      "EventSafetyPanel",
+      "EventReadinessPanel"
+    ],
+    "actions": [
+      "publish sample safe event",
+      "subscribe local layer",
+      "unsubscribe local layer",
+      "replay preview",
+      "run safety scan",
+      "archive local event"
+    ]
+  },
+  "route_access": {
+    "route": "/ops/event-bus",
+    "allowed_roles": ["shs_admin"],
+    "client_admin_blocked": true,
+    "public_blocked": true
+  },
+  "files_created": [
+    "src/system/event-bus/shsEventBusTypes.js",
+    "src/system/event-bus/shsEventSchemas.js",
+    "src/system/event-bus/shsEventBus.js",
+    "src/system/event-bus/shsEventRouter.js",
+    "src/system/event-bus/shsEventSubscribers.js",
+    "src/system/event-bus/shsEventStorage.js",
+    "src/system/event-bus/shsEventReplay.js",
+    "src/system/event-bus/shsEventSafety.js",
+    "src/system/event-bus/shsEventMetrics.js",
+    "src/system/event-bus/shsEventReadiness.js",
+    "src/pages/admin/event-bus/ShsEventBusPage.jsx",
+    "src/pages/admin/event-bus/components/EventBusOverviewPanel.jsx",
+    "src/pages/admin/event-bus/components/EventChannelPanel.jsx",
+    "src/pages/admin/event-bus/components/EventTimelinePanel.jsx",
+    "src/pages/admin/event-bus/components/EventSubscriberPanel.jsx",
+    "src/pages/admin/event-bus/components/EventReplayPanel.jsx",
+    "src/pages/admin/event-bus/components/EventSafetyPanel.jsx",
+    "src/pages/admin/event-bus/components/EventReadinessPanel.jsx",
+    "src/pages/admin/event-bus/shsEventBus.css",
+    "scripts/check_shs_event_bus.py",
+    "docs/SHS_EVENT_BUS_MESSAGE_FABRIC_V1.md",
+    "docs/SHS_EVENT_BUS_MESSAGE_FABRIC_V1.json"
+  ],
+  "files_modified": [
+    "package.json",
+    "src/router/AdminRoutes.jsx",
+    "src/components/admin/AdminSidebar.jsx",
+    "src/system/identity/hubAccessControl.js",
+    "src/system/routes/crossAppRouteBridge.js"
+  ],
+  "validation": {
+    "python3 -m json.tool docs/SHS_EVENT_BUS_MESSAGE_FABRIC_V1.json": "PASS",
+    "python3 scripts/check_shs_event_bus.py": "PASS",
+    "npm run check:shs-event-bus": "PASS",
+    "npm run check:shs-orchestrator": "PASS",
+    "npm run check:shs-tracking": "PASS",
+    "npm run check:shs-persistence": "PASS",
+    "npm run check:governance": "PASS",
+    "bash scripts/run_daily_governance_audit.sh": "PASS",
+    "bash scripts/run_paid_launch_checks.sh": "PASS",
+    "npm run build": "PASS_WITH_EXISTING_VITE_WARNINGS",
+    "git diff --check": "PASS"
+  },
+  "browser_smoke": {
+    "status": "PASS",
+    "url": "http://127.0.0.1:5174/admin.html#/ops/event-bus",
+    "shs_admin_visible": true,
+    "ten_channels_visible": true,
+    "sample_publish": true,
+    "subscriber_panel": true,
+    "subscribe_local_layer": true,
+    "unsubscribe_local_layer": true,
+    "replay_preview": true,
+    "safety_blocks_dangerous_payload": true,
+    "archive_local_event": true,
+    "client_admin_blocked": true,
+    "client_admin_redirect": "http://127.0.0.1:5174/admin.html#/hub",
+    "public_blocked_source_verified": true,
+    "neighbor_routes_checked": [
+      "admin.html#/ops/orchestrator",
+      "admin.html#/ops/tracking",
+      "admin.html#/ops/persistence",
+      "admin.html#/ops/system-registry"
+    ]
+  },
+  "remaining_risks": [
+    "Event Bus V1 is local/browser storage only.",
+    "Replay is preview-only.",
+    "Subscriber delivery is local in-memory preview only.",
+    "Future production message fabric must add owner-reviewed persistence, audit controls, monitoring, and broker integration only after a separate approval package."
+  ],
+  "v1_complete": true
+}

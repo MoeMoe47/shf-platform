@@ -14,6 +14,8 @@ const SECTIONS = [
       { to: "/ops/persistence", icon: "P", label: "Persistence" },
       { to: "/ops/tracking", icon: "T", label: "Tracking" },
       { to: "/ops/system-registry", icon: "R", label: "System Registry" },
+      { to: "/ops/event-bus", icon: "E", label: "Event Bus" },
+      { to: "/ops/scheduler", icon: "S", label: "Scheduler" },
       { to: "/ops/agents", icon: "A", label: "Agent Workbench" },
       { to: "/ops/direct-connect", icon: "D", label: "Direct Connect" },
       { to: "/ops/projects", icon: "◇", label: "Projects" },

@@ -97,6 +97,8 @@ export const hubPageAccess = {
   "/ops/persistence": ["shs_admin"],
   "/ops/tracking": ["shs_admin"],
   "/ops/system-registry": ["shs_admin"],
+  "/ops/event-bus": ["shs_admin"],
+  "/ops/scheduler": ["shs_admin"],
   "/ops/agents": ["shs_admin"],
   "/ops/direct-connect": ["shs_admin"],
   "/ops/projects": ["shs_admin"],

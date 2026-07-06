@@ -1,0 +1,72 @@
+{
+  "name": "SHS BOS Job Scheduler V1",
+  "version": "v1.1-layer-v1",
+  "route": "admin.html#/ops/scheduler",
+  "purpose": "Create local-first scheduling infrastructure for background job previews, delayed tasks, recurring maintenance templates, retries, timeout handling, safety blocking, and local history without cron servers, external workers, autonomous dangerous execution, or production mutation.",
+  "capabilities": {
+    "create_local_job": true,
+    "delay_job": true,
+    "recurring_job_template": true,
+    "pause_resume": true,
+    "retry_preview": true,
+    "mark_complete_locally": true,
+    "block_dangerous_job": true,
+    "view_history": true
+  },
+  "dangerous_capabilities": {
+    "cron_server_enabled": false,
+    "external_worker_enabled": false,
+    "autonomous_execution_enabled": false,
+    "production_mutation_enabled": false,
+    "public_approval_mutation_enabled": false,
+    "shf_impact_data_mutation_enabled": false,
+    "report_publish_enabled": false,
+    "webhook_send_enabled": false,
+    "notification_send_enabled": false,
+    "warehouse_write_enabled": false,
+    "auth_mutation_enabled": false,
+    "credential_storage_enabled": false
+  },
+  "files_created": [
+    "src/system/job-scheduler/shsJobTypes.js",
+    "src/system/job-scheduler/shsJobDefinitions.js",
+    "src/system/job-scheduler/shsJobScheduler.js",
+    "src/system/job-scheduler/shsJobQueue.js",
+    "src/system/job-scheduler/shsJobRetryPolicy.js",
+    "src/system/job-scheduler/shsJobHistory.js",
+    "src/system/job-scheduler/shsJobSafety.js",
+    "src/system/job-scheduler/shsJobMetrics.js",
+    "src/system/job-scheduler/shsJobReadiness.js",
+    "src/pages/admin/scheduler/ShsJobSchedulerPage.jsx",
+    "src/pages/admin/scheduler/shsJobScheduler.css",
+    "scripts/check_shs_job_scheduler.py",
+    "docs/SHS_JOB_SCHEDULER_V1.md",
+    "docs/SHS_JOB_SCHEDULER_V1.json"
+  ],
+  "files_modified": [
+    "package.json",
+    "src/router/AdminRoutes.jsx",
+    "src/components/admin/AdminSidebar.jsx",
+    "src/system/identity/hubAccessControl.js",
+    "src/system/routes/crossAppRouteBridge.js"
+  ],
+  "validation": {
+    "python3 -m json.tool docs/SHS_JOB_SCHEDULER_V1.json": "PASS",
+    "python3 scripts/check_shs_job_scheduler.py": "PASS",
+    "npm run check:shs-job-scheduler": "PASS",
+    "npm run check:shs-command-bus": "NOT_FOUND",
+    "npm run check:shs-event-bus": "PASS",
+    "npm run check:governance": "PASS",
+    "bash scripts/run_daily_governance_audit.sh": "PASS",
+    "bash scripts/run_paid_launch_checks.sh": "PASS",
+    "npm run build": "PASS_WITH_EXISTING_VITE_WARNINGS",
+    "git diff --check": "PASS"
+  },
+  "remaining_risks": [
+    "Scheduler V1 is local/browser storage only.",
+    "Retry behavior is preview-only.",
+    "Recurring jobs are templates only and do not run in the background.",
+    "Future production scheduling needs separate owner approval, durable persistence, audit logging, monitoring, and worker isolation."
+  ],
+  "v1_complete": true
+}

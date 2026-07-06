@@ -1,0 +1,170 @@
+.shs-job-scheduler-page {
+  min-height: 100vh;
+  padding: 28px;
+  background: #f6f7f5;
+  color: #17201d;
+}
+
+.scheduler-hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px;
+  border-radius: 8px;
+  background: #26352f;
+  color: #ffffff;
+}
+
+.scheduler-hero p,
+.panel-heading p {
+  margin: 0 0 6px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  opacity: 0.75;
+}
+
+.scheduler-hero h1 {
+  margin: 0 0 8px;
+  font-size: 2.15rem;
+  letter-spacing: 0;
+}
+
+.scheduler-hero span {
+  display: block;
+  max-width: 760px;
+  line-height: 1.5;
+}
+
+.scheduler-actions,
+.scheduler-toolbar,
+.job-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.scheduler-actions button,
+.scheduler-toolbar button,
+.scheduler-panel button {
+  border: 1px solid #b9c7c0;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #17201d;
+  padding: 10px 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.scheduler-toolbar {
+  margin: 18px 0;
+  padding: 14px;
+  border: 1px solid #d8e0dc;
+  border-radius: 8px;
+  background: #ffffff;
+  align-items: end;
+}
+
+.scheduler-toolbar label {
+  display: grid;
+  gap: 6px;
+  min-width: 280px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.scheduler-toolbar select {
+  border: 1px solid #c7d2cd;
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.scheduler-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.scheduler-panel {
+  grid-column: span 6;
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid #d9e2de;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.scheduler-panel.overview,
+.scheduler-panel.readiness {
+  grid-column: span 3;
+}
+
+.scheduler-panel.queue,
+.scheduler-panel.safety {
+  grid-column: span 12;
+}
+
+.panel-heading h2 {
+  margin: 0 0 14px;
+  font-size: 1.15rem;
+  letter-spacing: 0;
+}
+
+.metric-row,
+.safety-flags {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+}
+
+.metric-row article,
+.safety-flags span {
+  padding: 12px;
+  border-radius: 6px;
+  background: #eef3f0;
+}
+
+.metric-row strong,
+.readiness-score {
+  display: block;
+  font-size: 1.6rem;
+}
+
+.job-list,
+.history-list {
+  display: grid;
+  gap: 10px;
+}
+
+.job-list article,
+.history-list article {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  border-radius: 6px;
+  background: #f2f6f4;
+}
+
+.job-list span,
+.job-list small,
+.history-list span {
+  display: block;
+  margin-top: 4px;
+  color: #586662;
+}
+
+@media (max-width: 920px) {
+  .scheduler-hero,
+  .job-list article {
+    display: grid;
+  }
+
+  .scheduler-panel,
+  .scheduler-panel.overview,
+  .scheduler-panel.readiness {
+    grid-column: span 12;
+  }
+}
+

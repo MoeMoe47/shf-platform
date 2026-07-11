@@ -32,6 +32,7 @@ import ShsSystemOrchestratorPage from "@/pages/admin/orchestrator/ShsSystemOrche
 import ShsPersistenceCenterPage from "@/pages/admin/persistence/ShsPersistenceCenterPage.jsx";
 import ShsTrackingIntelligencePage from "@/pages/admin/tracking/ShsTrackingIntelligencePage.jsx";
 import ShsSystemRegistryPage from "@/pages/admin/system-registry/ShsSystemRegistryPage.jsx";
+import ShsCommandBusPage from "@/pages/admin/command-bus/ShsCommandBusPage.jsx";
 import ShsEventBusPage from "@/pages/admin/event-bus/ShsEventBusPage.jsx";
 import ShsJobSchedulerPage from "@/pages/admin/scheduler/ShsJobSchedulerPage.jsx";
 import ShsNotificationFabricPage from "@/pages/admin/notifications/ShsNotificationFabricPage.jsx";
@@ -215,6 +216,7 @@ export default function AdminRoutes() {
         <Route path="/ops/persistence" element={protect("/ops/persistence", <ShsPersistenceCenterPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/ops/tracking" element={protect("/ops/tracking", <ShsTrackingIntelligencePage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/ops/system-registry" element={protect("/ops/system-registry", <ShsSystemRegistryPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
+        <Route path="/ops/command-bus" element={protect("/ops/command-bus", <ShsCommandBusPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/ops/event-bus" element={protect("/ops/event-bus", <ShsEventBusPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/ops/scheduler" element={protect("/ops/scheduler", <ShsJobSchedulerPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/ops/notifications" element={protect("/ops/notifications", <ShsNotificationFabricPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />

@@ -14,6 +14,7 @@ const SECTIONS = [
       { to: "/ops/persistence", icon: "P", label: "Persistence" },
       { to: "/ops/tracking", icon: "T", label: "Tracking" },
       { to: "/ops/system-registry", icon: "R", label: "System Registry" },
+      { to: "/ops/command-bus", icon: "C", label: "Command Bus" },
       { to: "/ops/event-bus", icon: "E", label: "Event Bus" },
       { to: "/ops/scheduler", icon: "S", label: "Scheduler" },
       { to: "/ops/notifications", icon: "N", label: "Notifications" },

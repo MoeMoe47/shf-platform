@@ -1,0 +1,193 @@
+.shs-command-bus-page {
+  min-height: 100vh;
+  padding: 28px;
+  background: #f6f7f8;
+  color: #17201f;
+}
+
+.command-hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px;
+  border-radius: 8px;
+  background: #20343a;
+  color: #ffffff;
+}
+
+.command-hero p,
+.panel-heading p {
+  margin: 0 0 6px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  opacity: 0.76;
+}
+
+.command-hero h1 {
+  margin: 0 0 8px;
+  font-size: 2.15rem;
+  letter-spacing: 0;
+}
+
+.command-hero span {
+  display: block;
+  max-width: 820px;
+  line-height: 1.5;
+}
+
+.command-actions,
+.command-toolbar,
+.command-row-actions,
+.pipeline-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.command-actions button,
+.command-toolbar button,
+.command-panel button {
+  border: 1px solid #bac8cc;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #17201f;
+  padding: 10px 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.command-toolbar,
+.pipeline-strip {
+  margin: 18px 0;
+  padding: 14px;
+  border: 1px solid #d8e1e3;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.command-toolbar label {
+  display: grid;
+  gap: 6px;
+  min-width: 280px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.command-toolbar select {
+  border: 1px solid #c8d4d7;
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.pipeline-strip span,
+.badge-grid span,
+.blocked-grid span,
+.type-list span {
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: #eef4f5;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.command-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.command-panel {
+  grid-column: span 6;
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid #d9e2e4;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.command-panel.queue,
+.command-panel.safety,
+.command-panel.metrics {
+  grid-column: span 12;
+}
+
+.panel-heading h2 {
+  margin: 0 0 14px;
+  font-size: 1.15rem;
+  letter-spacing: 0;
+}
+
+.metric-row,
+.badge-grid,
+.blocked-grid,
+.type-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.metric-row article,
+.command-list article,
+.compact-list article {
+  padding: 12px;
+  border-radius: 6px;
+  background: #eef4f5;
+}
+
+.metric-row strong {
+  display: block;
+  font-size: 1.6rem;
+}
+
+.command-list,
+.compact-list {
+  display: grid;
+  gap: 10px;
+}
+
+.command-list article {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.command-panel span,
+.command-list small {
+  display: block;
+  margin-top: 4px;
+  color: #57676b;
+}
+
+.command-panel ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.readiness-score {
+  width: 68px;
+  height: 68px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #dcebee;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.empty-state {
+  margin: 0;
+  color: #66767a;
+}
+
+@media (max-width: 920px) {
+  .command-hero,
+  .command-list article {
+    display: grid;
+  }
+
+  .command-panel {
+    grid-column: span 12;
+  }
+}

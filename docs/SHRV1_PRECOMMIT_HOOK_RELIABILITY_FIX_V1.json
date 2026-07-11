@@ -1,0 +1,114 @@
+{
+  "name": "SHRV1 Pre-commit Hook Reliability Fix V1",
+  "root_cause": "Normal commits executed the migrated legacy pre-commit wrapper before configured hooks. That wrapper delegated to the SHF agent fabric ledger script, which restarted the local server on port 8090 and verified through an admin HTTP route. The commit path therefore depended on server lifecycle, port ownership, admin environment state, and endpoint responsiveness.",
+  "affected_hook": ".git/hooks/pre-commit plus migrated .git/hooks/pre-commit.legacy and local pre-commit hooks",
+  "affected_files": [
+    ".pre-commit-config.yaml",
+    ".git/hooks/pre-commit.legacy",
+    "tools/precommit/check_ledger_precommit.py",
+    "tools/precommit/check_registry_guard.py",
+    "services/shf-agent-fabric/bin/ledger_precommit.sh",
+    "services/shf-agent-fabric/scripts/ledger_precommit.sh",
+    "tests/test_precommit_reliability.py"
+  ],
+  "symptoms": [
+    "Commit appeared stuck after legacy ledger pre-commit Step 4 server restart output.",
+    "Hook path required ADMIN_API_KEY for local commit verification.",
+    "Hook path depended on a local HTTP admin verification route.",
+    "Restart helper could affect any listener on port 8090."
+  ],
+  "repair_summary": [
+    "Added direct bounded ledger verifier at tools/precommit/check_ledger_precommit.py.",
+    "Added shf-ledger-verify before shf-registry-guard in .pre-commit-config.yaml.",
+    "Added timeout and debug tracing to tools/precommit/check_registry_guard.py.",
+    "Replaced SHF agent fabric ledger pre-commit shell scripts with direct local verification.",
+    "Updated migrated local legacy hook wrapper to remove ADMIN_API_KEY and avoid server restart.",
+    "Added pre-commit reliability tests for timeout cleanup, port safety, HTTP independence, repeated runs, and hook ordering."
+  ],
+  "timeouts": {
+    "ledger_verify_seconds": 30,
+    "registry_guard_seconds": 60,
+    "terminate_grace_seconds": 3,
+    "debug_flag": "SHRV1_PRECOMMIT_DEBUG=1"
+  },
+  "cleanup_guarantees": [
+    "No server process is started by pre-commit.",
+    "No port listener is killed by pre-commit.",
+    "No network or HTTP route is required by pre-commit.",
+    "Timeout cleanup targets only the exact child process created by the ledger verifier.",
+    "No Git lock leftovers were observed after repeated runs.",
+    "Temporary worktree used for commit testing was removed."
+  ],
+  "tests": {
+    "pytest": {
+      "command": "python3 -m pytest tests/test_precommit_reliability.py",
+      "result": "PASS",
+      "passed": 9
+    },
+    "ledger_hook": {
+      "command": "pre-commit run shf-ledger-verify --all-files --verbose",
+      "result": "PASS",
+      "elapsed_seconds": 2.442
+    },
+    "registry_guard_hook": {
+      "command": "pre-commit run shf-registry-guard --all-files --verbose",
+      "result": "PASS",
+      "elapsed_seconds": 18.846
+    },
+    "all_precommit_hooks": {
+      "command": "pre-commit run --all-files --verbose",
+      "result": "PASS",
+      "elapsed_seconds": 18.855
+    }
+  },
+  "five_run_result": {
+    "command": "pre-commit run shf-registry-guard --all-files --verbose",
+    "runs": [
+      {
+        "run": 1,
+        "real_seconds": 11.68,
+        "hook_duration_seconds": 10.97
+      },
+      {
+        "run": 2,
+        "real_seconds": 10.0,
+        "hook_duration_seconds": 9.25
+      },
+      {
+        "run": 3,
+        "real_seconds": 10.29,
+        "hook_duration_seconds": 9.65
+      },
+      {
+        "run": 4,
+        "real_seconds": 10.05,
+        "hook_duration_seconds": 9.19
+      },
+      {
+        "run": 5,
+        "real_seconds": 9.96,
+        "hook_duration_seconds": 9.36
+      }
+    ],
+    "average_real_seconds": 10.4,
+    "max_real_seconds": 11.68,
+    "leaked_new_process_count": 0,
+    "git_lock_leftovers": 0,
+    "pre_existing_port_8090_listener_left_untouched": true
+  },
+  "temporary_commit_test": {
+    "result": "PASS",
+    "worktree": "/tmp/shrv1-hook-test-precommit",
+    "detached_commit_hash": "ce9ee7f",
+    "elapsed_real_seconds": 8.89,
+    "worktree_removed": true,
+    "active_branch_history_modified": false
+  },
+  "normal_commit_supported": true,
+  "remaining_risks": [
+    "Registry guard still performs repository scanning and can take roughly 10 to 19 seconds depending on filesystem cache state.",
+    "A pre-existing uvicorn listener on port 8090 was observed during diagnosis and intentionally left untouched.",
+    "The generated pre-commit hook still invokes the migrated legacy wrapper, but that wrapper now delegates only to the bounded local verifier path."
+  ],
+  "complete": true
+}

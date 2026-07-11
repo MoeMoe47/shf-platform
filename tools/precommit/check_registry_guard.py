@@ -2,10 +2,14 @@
 from __future__ import annotations
 
 import re
+import os
+import signal
 import sys
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_TIMEOUT_SECONDS = 60
 
 # Files we care about scanning (fast + focused).
 SCAN_GLOBS = [
@@ -53,6 +57,16 @@ def read_text(path: Path) -> str:
         return path.read_text(encoding="utf-8", errors="replace")
     except Exception:
         return ""
+
+def debug_enabled() -> bool:
+    return os.environ.get("SHRV1_PRECOMMIT_DEBUG") == "1"
+
+def debug(message: str) -> None:
+    if debug_enabled():
+        print(f"[SHRV1_PRECOMMIT_DEBUG] registry_guard {message}", file=sys.stderr)
+
+def _timeout_handler(signum, frame):
+    raise TimeoutError("registry guard timed out")
 
 def scan_repo() -> list[str]:
     errors: list[str] = []
@@ -106,11 +120,27 @@ def scan_repo() -> list[str]:
     return errors
 
 def main() -> int:
-    errs = scan_repo()
+    start = time.monotonic()
+    timeout_seconds = int(os.environ.get("SHRV1_REGISTRY_GUARD_TIMEOUT", str(DEFAULT_TIMEOUT_SECONDS)))
+    old_handler = signal.signal(signal.SIGALRM, _timeout_handler)
+    signal.alarm(timeout_seconds)
+    debug(f"start pid={os.getpid()} ppid={os.getppid()} timeout={timeout_seconds}s")
+    try:
+        errs = scan_repo()
+    except TimeoutError:
+        elapsed = time.monotonic() - start
+        print(f"[REGISTRY_GUARD] Timed out after {timeout_seconds}s while scanning repository.", file=sys.stderr)
+        debug(f"final exit=124 elapsed={elapsed:.3f}s")
+        return 124
+    finally:
+        signal.alarm(0)
+        signal.signal(signal.SIGALRM, old_handler)
     if errs:
         print("\n".join(errs))
         print("\n[REGISTRY_GUARD] Commit blocked. Remove legacy/bypass registry references.")
+        debug(f"final exit=1 elapsed={time.monotonic() - start:.3f}s errors={len(errs)}")
         return 1
+    debug(f"final exit=0 elapsed={time.monotonic() - start:.3f}s")
     return 0
 
 if __name__ == "__main__":

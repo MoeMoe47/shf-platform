@@ -1,6 +1,11 @@
 repos:
   - repo: local
     hooks:
+      - id: shf-ledger-verify
+        name: SHF Registry Ledger Verify (direct, bounded)
+        entry: tools/precommit/check_ledger_precommit.py
+        language: system
+        pass_filenames: false
       - id: shf-registry-guard
         name: SHF Registry Guard (no legacy registry paths)
         entry: tools/precommit/check_registry_guard.py

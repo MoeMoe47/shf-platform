@@ -36,6 +36,7 @@ import ShsCommandBusPage from "@/pages/admin/command-bus/ShsCommandBusPage.jsx";
 import ShsEventBusPage from "@/pages/admin/event-bus/ShsEventBusPage.jsx";
 import ShsJobSchedulerPage from "@/pages/admin/scheduler/ShsJobSchedulerPage.jsx";
 import ShsNotificationFabricPage from "@/pages/admin/notifications/ShsNotificationFabricPage.jsx";
+import ShsBosExecutiveCommandCenterPage from "@/pages/admin/executive-command/ShsBosExecutiveCommandCenterPage.jsx";
 import SHFImpactCommandCenter from "@/pages/shf-command/SHFImpactCommandCenter.jsx";
 import WorkspaceDashboard from "@/pages/exchange/WorkspaceDashboard.jsx";
 import LordOutcomesRoutes from "@/router/LordOutcomesRoutes.jsx";
@@ -220,6 +221,7 @@ export default function AdminRoutes() {
         <Route path="/ops/event-bus" element={protect("/ops/event-bus", <ShsEventBusPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/ops/scheduler" element={protect("/ops/scheduler", <ShsJobSchedulerPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/ops/notifications" element={protect("/ops/notifications", <ShsNotificationFabricPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
+        <Route path="/ops/executive-command" element={protect("/ops/executive-command", <ShsBosExecutiveCommandCenterPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/ops/agents" element={protect("/ops/agents", <AgentWorkbenchPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/ops/direct-connect" element={protect("/ops/direct-connect", <DirectConnectProofCenterPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/ops/projects" element={protect("/ops/projects", <OpsProjectSetup />)} />

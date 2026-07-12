@@ -18,6 +18,7 @@ const SECTIONS = [
       { to: "/ops/event-bus", icon: "E", label: "Event Bus" },
       { to: "/ops/scheduler", icon: "S", label: "Scheduler" },
       { to: "/ops/notifications", icon: "N", label: "Notifications" },
+      { to: "/ops/executive-command", icon: "X", label: "BOS Command Center" },
       { to: "/ops/agents", icon: "A", label: "Agent Workbench" },
       { to: "/ops/direct-connect", icon: "D", label: "Direct Connect" },
       { to: "/ops/projects", icon: "◇", label: "Projects" },

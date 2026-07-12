@@ -1,0 +1,293 @@
+{
+  "name": "SHS BOS Executive Command Center V1",
+  "version": "v1.1-layer-v1",
+  "product_name": "SHS BOS",
+  "full_product_name": "Silicon Heartland Business Operating System",
+  "purpose": "Unified internal executive and operator mission-control surface for governed visibility, triage, safe previews, local snapshots, and navigation across SHS BOS layers.",
+  "route": "admin.html#/ops/executive-command",
+  "access": {
+    "shs_admin": true,
+    "client_admin": false,
+    "public": false
+  },
+  "connected_source_groups": [
+    "system_registry",
+    "system_orchestrator",
+    "command_bus",
+    "event_bus",
+    "job_scheduler",
+    "notification_alert_fabric",
+    "tracking_intelligence",
+    "durable_persistence",
+    "agent_workbench",
+    "agent_workflow_engine",
+    "controlled_executor",
+    "production_automation",
+    "direct_connect_proof",
+    "shs_reports",
+    "governance_truth_oracle",
+    "client_operations_business_signals"
+  ],
+  "layer_status_model": {
+    "fields": [
+      "layer_id",
+      "layer_name",
+      "category",
+      "route",
+      "status",
+      "readiness_score",
+      "health_score",
+      "data_posture",
+      "open_items",
+      "blockers",
+      "warnings",
+      "last_activity_at",
+      "last_validated_at",
+      "source_reference",
+      "admin_only",
+      "dangerous_flags_enabled"
+    ],
+    "timestamps": "null or not_verified when no trusted source exists"
+  },
+  "executive_snapshot_model": {
+    "local_admin_only": true,
+    "external_export_default": false,
+    "contains": [
+      "overall_status",
+      "readiness",
+      "health",
+      "layer counts",
+      "runtime counts",
+      "top priorities",
+      "top risks",
+      "safe next actions",
+      "data posture summary",
+      "safety summary",
+      "operator note"
+    ]
+  },
+  "health_scoring": {
+    "starts_at": 100,
+    "deductions": [
+      "unavailable layers",
+      "degraded layers",
+      "blocked layers",
+      "stale or unknown source status",
+      "unresolved safety warnings"
+    ],
+    "hidden_scoring": false
+  },
+  "readiness_scoring": {
+    "starts_at": 100,
+    "deductions": [
+      "critical blocker exists",
+      "dangerous capability flag true",
+      "governance checks blocked",
+      "Truth Spine unavailable or failed",
+      "route or identity boundary failed",
+      "blocked high-risk commands",
+      "failed or blocked jobs",
+      "critical alerts unresolved",
+      "blocked orchestration plans",
+      "system registry dependency conflicts",
+      "persistence below threshold",
+      "tracking review items",
+      "invalid events",
+      "agent workflow blockers",
+      "report readiness issues",
+      "primarily sample or unavailable data posture"
+    ],
+    "hidden_scoring": false
+  },
+  "priority_engine": {
+    "levels": [
+      "P0",
+      "P1",
+      "P2",
+      "P3",
+      "P4"
+    ],
+    "deterministic_local_logic": true,
+    "external_model_call": false
+  },
+  "risk_engine": {
+    "deterministic_local_logic": true,
+    "private_payload_exposure": false
+  },
+  "safe_actions": [
+    "refresh local summaries",
+    "filter by status/category",
+    "mark priority reviewed locally",
+    "add operator note",
+    "create executive snapshot",
+    "compare snapshots",
+    "navigate to source layer",
+    "prepare command preview",
+    "prepare orchestration request preview",
+    "run local safety scan",
+    "show blast-radius preview",
+    "show source data posture",
+    "archive local snapshot"
+  ],
+  "dangerous_flags": {
+    "execution_enabled": false,
+    "autonomous_execution_enabled": false,
+    "production_mutation_enabled": false,
+    "public_publish_enabled": false,
+    "public_approved_mutation_enabled": false,
+    "shf_impact_data_mutation_enabled": false,
+    "external_delivery_enabled": false,
+    "webhook_delivery_enabled": false,
+    "email_delivery_enabled": false,
+    "sms_delivery_enabled": false,
+    "push_delivery_enabled": false,
+    "warehouse_write_enabled": false,
+    "auth_mutation_enabled": false,
+    "shell_execution_enabled": false,
+    "python_execution_enabled": false,
+    "external_api_enabled": false,
+    "banking_connection_enabled": false,
+    "oauth_connection_enabled": false,
+    "payment_execution_enabled": false
+  },
+  "data_posture": {
+    "allowed_values": [
+      "live_local",
+      "persisted_local",
+      "derived_local",
+      "sample",
+      "unavailable",
+      "needs_review"
+    ],
+    "no_false_live_claims": true
+  },
+  "shs_shf_boundary": {
+    "shs_private_data_admin_only": true,
+    "shf_public_surfaces_public_approved_only": true,
+    "public_approved_mutation_enabled": false,
+    "shf_impact_data_mutation_enabled": false,
+    "direct_connect_direct_source_proof_only": true
+  },
+  "admin_ui": {
+    "page": "src/pages/admin/executive-command/ShsBosExecutiveCommandCenterPage.jsx",
+    "component_count": 16,
+    "style": "dark internal BOS command-center layout"
+  },
+  "files_created": [
+    "src/system/executive-command-center/shsExecutiveCommandCenterTypes.js",
+    "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+    "src/system/executive-command-center/shsExecutiveCommandCenterAggregator.js",
+    "src/system/executive-command-center/shsExecutiveCommandCenterHealth.js",
+    "src/system/executive-command-center/shsExecutiveCommandCenterReadiness.js",
+    "src/system/executive-command-center/shsExecutiveCommandCenterPriorities.js",
+    "src/system/executive-command-center/shsExecutiveCommandCenterRisks.js",
+    "src/system/executive-command-center/shsExecutiveCommandCenterActions.js",
+    "src/system/executive-command-center/shsExecutiveCommandCenterSnapshots.js",
+    "src/system/executive-command-center/shsExecutiveCommandCenterStorage.js",
+    "src/system/executive-command-center/shsExecutiveCommandCenterMetrics.js",
+    "src/system/executive-command-center/shsExecutiveCommandCenterSafety.js",
+    "src/system/executive-command-center/shsExecutiveCommandCenterNavigation.js",
+    "src/system/executive-command-center/shsExecutiveCommandCenterStatus.js",
+    "src/pages/admin/executive-command/ShsBosExecutiveCommandCenterPage.jsx",
+    "src/pages/admin/executive-command/components/ExecutiveCommandHeader.jsx",
+    "src/pages/admin/executive-command/components/ExecutiveSystemHealthPanel.jsx",
+    "src/pages/admin/executive-command/components/ExecutiveReadinessPanel.jsx",
+    "src/pages/admin/executive-command/components/ExecutivePriorityQueue.jsx",
+    "src/pages/admin/executive-command/components/ExecutiveRiskPanel.jsx",
+    "src/pages/admin/executive-command/components/ExecutiveRuntimePanel.jsx",
+    "src/pages/admin/executive-command/components/ExecutiveGovernancePanel.jsx",
+    "src/pages/admin/executive-command/components/ExecutiveAgentPanel.jsx",
+    "src/pages/admin/executive-command/components/ExecutiveBusinessOperationsPanel.jsx",
+    "src/pages/admin/executive-command/components/ExecutiveLayerHealthGrid.jsx",
+    "src/pages/admin/executive-command/components/ExecutiveActivityTimeline.jsx",
+    "src/pages/admin/executive-command/components/ExecutiveSafeActionsPanel.jsx",
+    "src/pages/admin/executive-command/components/ExecutiveSnapshotPanel.jsx",
+    "src/pages/admin/executive-command/components/ExecutiveDataPosturePanel.jsx",
+    "src/pages/admin/executive-command/components/ExecutiveSafetyPanel.jsx",
+    "src/pages/admin/executive-command/components/ExecutiveNavigationPanel.jsx",
+    "src/pages/admin/executive-command/shsBosExecutiveCommandCenter.css",
+    "scripts/check_shs_bos_executive_command_center.py",
+    "docs/SHS_BOS_EXECUTIVE_COMMAND_CENTER_V1.md",
+    "docs/SHS_BOS_EXECUTIVE_COMMAND_CENTER_V1.json",
+    "docs/SHS_BOS_EXECUTIVE_COMMAND_CENTER_V1_MANUAL_GOVERNANCE_REVIEW.md",
+    "docs/SHS_BOS_EXECUTIVE_COMMAND_CENTER_V1_MANUAL_GOVERNANCE_REVIEW.json"
+  ],
+  "files_modified": [
+    "package.json",
+    "src/router/AdminRoutes.jsx",
+    "src/components/admin/AdminSidebar.jsx",
+    "src/system/identity/hubAccessControl.js",
+    "src/system/routes/crossAppRouteBridge.js"
+  ],
+  "validation": {
+    "status": "PASS",
+    "commands": {
+      "json_tool": "PASS",
+      "py_compile_validator": "PASS",
+      "python_validator": "PASS",
+      "npm_check_shs_executive_command": "PASS",
+      "npm_check_shs_command_bus": "PASS",
+      "npm_check_shs_event_bus": "PASS",
+      "npm_check_shs_job_scheduler": "PASS",
+      "npm_check_shs_notification_fabric": "PASS",
+      "npm_check_shs_system_registry": "PASS",
+      "npm_check_shs_tracking": "PASS",
+      "npm_check_shs_persistence": "PASS",
+      "npm_check_shs_orchestrator": "PASS",
+      "npm_check_governance": "PASS",
+      "daily_governance_audit": "PASS",
+      "paid_launch_checks": "PASS",
+      "npm_build": "PASS",
+      "git_diff_check": "PASS"
+    },
+    "build_notes": [
+      "Vite build completed successfully.",
+      "Existing circular chunk and large chunk warnings were observed and are non-blocking because build exited successfully."
+    ]
+  },
+  "browser_smoke": {
+    "status": "PASS",
+    "route": "admin.html#/ops/executive-command",
+    "shs_admin_load": "PASS",
+    "client_admin_blocked": "PASS",
+    "public_no_session_blocked": "PASS",
+    "source_groups_visible": 16,
+    "safe_navigation_links_visible": 16,
+    "dangerous_flags_false_visible": 19,
+    "panels_visible": "PASS",
+    "refresh_local_summary": "PASS",
+    "filtering": "PASS",
+    "mark_reviewed": "PASS",
+    "operator_note": "PASS",
+    "create_snapshot": "PASS",
+    "compare_snapshots": "PASS",
+    "safety_scan": "PASS",
+    "blast_radius_preview": "PASS",
+    "command_preview_only": "PASS",
+    "orchestration_preview_only": "PASS",
+    "adjacent_routes": {
+      "orchestrator": "PASS",
+      "command_bus": "PASS",
+      "event_bus": "PASS",
+      "scheduler": "PASS",
+      "notifications": "PASS",
+      "tracking": "PASS",
+      "persistence": "PASS",
+      "system_registry": "PASS",
+      "agents": "PASS",
+      "reports": "PASS",
+      "direct_connect": "PASS"
+    }
+  },
+  "remaining_risks": [
+    "Some source groups are derived or needs-review summaries until their owning layers expose stable read-only APIs.",
+    "Browser smoke requires local Vite/admin auth environment."
+  ],
+  "future_v2_scope": [
+    "Richer source-owned summary adapters",
+    "More granular snapshot comparisons",
+    "Governance result ingestion after owner review",
+    "No execution or external delivery without a separate governed package"
+  ],
+  "v1_complete": true
+}

@@ -2,6 +2,10 @@ import { createCommand } from "./shsCommandTypes";
 import { getCommandRegistryEntry } from "./shsCommandRegistry";
 import { validateCommand } from "./shsCommandValidator";
 import { checkCommandApproval } from "./shsCommandApprovals";
+import {
+  readCriticalStateRecords,
+  writeCriticalStateRecords,
+} from "@/system/persistence/migrations/criticalStateMigrationCompatibility";
 
 const COMMAND_STORAGE_KEY = "shs_bos_command_bus_v1_commands";
 const COMMAND_HISTORY_KEY = "shs_bos_command_bus_v1_history";
@@ -18,28 +22,29 @@ export const SHS_SAFE_SAMPLE_COMMANDS = Object.freeze([
   { command_type: "security", command_name: "Validate Route Access", target_layer: "Route Guard", risk_level: "low", payload: { validation_only: true } },
 ]);
 
-function readJson(key) {
-  if (typeof localStorage === "undefined") return [];
-  try {
-    const value = localStorage.getItem(key);
-    return value ? JSON.parse(value) : [];
-  } catch {
-    return [];
-  }
+function readCommandRecords(key, idField) {
+  return readCriticalStateRecords("command_bus", key, [], {
+    repository: "command_bus",
+    idField,
+    schemaVersion: "shs.critical.command-bus.v1",
+  });
 }
 
-function writeJson(key, items) {
-  if (typeof localStorage === "undefined") return items;
-  localStorage.setItem(key, JSON.stringify(items));
-  return items;
+function writeCommandRecords(key, items, idField, changeSummary) {
+  return writeCriticalStateRecords("command_bus", key, items, {
+    repository: "command_bus",
+    idField,
+    schemaVersion: "shs.critical.command-bus.v1",
+    change_summary: changeSummary,
+  });
 }
 
 export function getCommands() {
-  return readJson(COMMAND_STORAGE_KEY);
+  return readCommandRecords(COMMAND_STORAGE_KEY, "command_id").filter((record) => record.critical_record_type !== "command_history");
 }
 
 export function getCommandHistory() {
-  return readJson(COMMAND_HISTORY_KEY);
+  return readCommandRecords(COMMAND_HISTORY_KEY, "history_id").filter((record) => record.critical_record_type === "command_history" || record.history_id);
 }
 
 export function recordCommandHistory(command, action = "audit") {
@@ -53,7 +58,7 @@ export function recordCommandHistory(command, action = "audit") {
     timestamp: new Date().toISOString(),
     local_only: true,
   };
-  return writeJson(COMMAND_HISTORY_KEY, [entry, ...getCommandHistory()].slice(0, 120));
+  return writeCommandRecords(COMMAND_HISTORY_KEY, [{ ...entry, critical_record_type: "command_history" }, ...getCommandHistory()].slice(0, 120), "history_id", "Command Bus critical history write");
 }
 
 export function createLocalCommand(input = {}) {
@@ -77,7 +82,7 @@ export function createLocalCommand(input = {}) {
     execution_status: validation.valid ? "queued_preview" : "blocked",
     completion_status: "preview_only",
   };
-  const commands = writeJson(COMMAND_STORAGE_KEY, [command, ...getCommands()].slice(0, 100));
+  const commands = writeCommandRecords(COMMAND_STORAGE_KEY, [{ ...command, critical_record_type: "command" }, ...getCommands()].slice(0, 100), "command_id", "Command Bus critical command write");
   recordCommandHistory(command, validation.valid ? "received" : "blocked");
   return { command, commands, validation, approval };
 }
@@ -95,7 +100,7 @@ export function updateCommandStatus(commandId, updates = {}, action = "updated")
     changed = { ...item, ...updates };
     return changed;
   });
-  writeJson(COMMAND_STORAGE_KEY, commands);
+  writeCommandRecords(COMMAND_STORAGE_KEY, commands, "command_id", "Command Bus critical status update");
   if (changed) recordCommandHistory(changed, action);
   return commands;
 }

@@ -208,7 +208,8 @@ def main():
             "compareExecutiveSnapshots",
         ],
         "src/system/executive-command-center/shsExecutiveCommandCenterStorage.js": [
-            "localStorage",
+            "readCriticalStateRecords",
+            "writeCriticalStateRecords",
             "addExecutiveOperatorNote",
             "markExecutivePriorityReviewed",
             "saveExecutiveSnapshot",

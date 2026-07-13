@@ -12,6 +12,11 @@ export const PERSISTENCE_ADAPTERS = Object.freeze({
 export const PERSISTENCE_REPOSITORIES = Object.freeze([
   { repository: "agents", entity_type: "agent_record", label: "Agent Workbench", storage_key: "agents" },
   { repository: "orchestrator", entity_type: "orchestration_record", label: "System Orchestrator", storage_key: "orchestrator" },
+  { repository: "command_bus", entity_type: "command_record", label: "Command Bus", storage_key: "command_bus" },
+  { repository: "job_scheduler", entity_type: "job_record", label: "Job Scheduler", storage_key: "job_scheduler" },
+  { repository: "notification_fabric", entity_type: "notification_record", label: "Notification Fabric", storage_key: "notification_fabric" },
+  { repository: "tracking_intelligence", entity_type: "tracking_record", label: "Tracking Intelligence", storage_key: "tracking_intelligence" },
+  { repository: "executive_command_center", entity_type: "executive_command_record", label: "Executive Command Center", storage_key: "executive_command_center" },
   { repository: "direct_connect", entity_type: "direct_connect_record", label: "Direct Connect", storage_key: "direct_connect" },
   { repository: "reports", entity_type: "report_record", label: "SHS Reports", storage_key: "reports" },
   { repository: "production_automation", entity_type: "production_automation_record", label: "Production Automation", storage_key: "production_automation" },
@@ -20,6 +25,11 @@ export const PERSISTENCE_REPOSITORIES = Object.freeze([
 export const PERSISTENCE_SNAPSHOT_SCOPES = Object.freeze([
   "agents",
   "orchestrator",
+  "command_bus",
+  "job_scheduler",
+  "notification_fabric",
+  "tracking_intelligence",
+  "executive_command_center",
   "direct_connect",
   "reports",
   "production_automation",
@@ -58,4 +68,3 @@ export function createRecordHash(value) {
   }
   return `hash_${Math.abs(hash).toString(16)}`;
 }
-

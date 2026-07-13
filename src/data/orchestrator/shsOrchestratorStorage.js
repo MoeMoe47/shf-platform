@@ -3,14 +3,10 @@ import { SHS_ORCHESTRATOR_PLAN_SEED_V1, SHS_ORCHESTRATOR_PLAN_STORAGE_KEY } from
 import { getShsOrchestratorTemplate, SHS_ORCHESTRATOR_TEMPLATES_V1 } from "./shsOrchestratorTemplates";
 import { calculateShsOrchestratorReadiness } from "./shsOrchestratorReadiness";
 import { applyShsOrchestratorSafetyDefaults, buildShsOrchestratorAuditEvent } from "./shsOrchestratorSafety";
-
-function canUseStorage() {
-  try {
-    return Boolean(globalThis?.localStorage);
-  } catch {
-    return false;
-  }
-}
+import {
+  readCriticalStateRecords,
+  writeCriticalStateRecords,
+} from "@/system/persistence/migrations/criticalStateMigrationCompatibility";
 
 function clone(value) {
   return JSON.parse(JSON.stringify(value));
@@ -18,30 +14,6 @@ function clone(value) {
 
 function nowIso() {
   return new Date().toISOString();
-}
-
-function readJson(key, fallback) {
-  if (!canUseStorage()) return clone(fallback);
-  try {
-    const stored = globalThis.localStorage.getItem(key);
-    if (!stored) {
-      const seed = clone(fallback);
-      globalThis.localStorage.setItem(key, JSON.stringify(seed));
-      return seed;
-    }
-    const parsed = JSON.parse(stored);
-    return Array.isArray(parsed) ? parsed : clone(fallback);
-  } catch {
-    return clone(fallback);
-  }
-}
-
-function saveJson(key, value) {
-  const safeValue = Array.isArray(value) ? value : [];
-  if (canUseStorage()) {
-    globalThis.localStorage.setItem(key, JSON.stringify(safeValue));
-  }
-  return safeValue;
 }
 
 function normalizePlan(plan, request = {}) {
@@ -61,16 +33,32 @@ export function getShsOrchestratorTemplates() {
 }
 
 export function getShsOrchestratorRequests() {
-  return readJson(SHS_ORCHESTRATOR_REQUEST_STORAGE_KEY, SHS_ORCHESTRATOR_REQUEST_SEED_V1);
+  return readCriticalStateRecords("orchestrator", SHS_ORCHESTRATOR_REQUEST_STORAGE_KEY, clone(SHS_ORCHESTRATOR_REQUEST_SEED_V1), {
+    repository: "orchestrator",
+    idField: "orchestration_request_id",
+    schemaVersion: "shs.critical.orchestrator.v1",
+  }).filter((record) => record.critical_record_type !== "orchestration_plan");
 }
 
 export function saveShsOrchestratorRequests(requests) {
-  return saveJson(SHS_ORCHESTRATOR_REQUEST_STORAGE_KEY, requests);
+  return writeCriticalStateRecords("orchestrator", SHS_ORCHESTRATOR_REQUEST_STORAGE_KEY, requests.map((request) => ({
+    ...request,
+    critical_record_type: "orchestration_request",
+  })), {
+    repository: "orchestrator",
+    idField: "orchestration_request_id",
+    schemaVersion: "shs.critical.orchestrator.v1",
+    change_summary: "Orchestrator critical request write",
+  });
 }
 
 export function getShsOrchestratorPlans() {
   const requests = getShsOrchestratorRequests();
-  return readJson(SHS_ORCHESTRATOR_PLAN_STORAGE_KEY, SHS_ORCHESTRATOR_PLAN_SEED_V1).map((plan) => {
+  return readCriticalStateRecords("orchestrator", SHS_ORCHESTRATOR_PLAN_STORAGE_KEY, clone(SHS_ORCHESTRATOR_PLAN_SEED_V1), {
+    repository: "orchestrator",
+    idField: "orchestration_plan_id",
+    schemaVersion: "shs.critical.orchestrator.v1",
+  }).filter((record) => record.critical_record_type === "orchestration_plan" || record.orchestration_plan_id).map((plan) => {
     const request = requests.find((item) => item.orchestration_request_id === plan.orchestration_request_id) || {};
     return normalizePlan(plan, request);
   });
@@ -78,10 +66,15 @@ export function getShsOrchestratorPlans() {
 
 export function saveShsOrchestratorPlans(plans) {
   const requests = getShsOrchestratorRequests();
-  return saveJson(SHS_ORCHESTRATOR_PLAN_STORAGE_KEY, plans.map((plan) => {
+  return writeCriticalStateRecords("orchestrator", SHS_ORCHESTRATOR_PLAN_STORAGE_KEY, plans.map((plan) => {
     const request = requests.find((item) => item.orchestration_request_id === plan.orchestration_request_id) || {};
-    return normalizePlan(plan, request);
-  }));
+    return { ...normalizePlan(plan, request), critical_record_type: "orchestration_plan" };
+  }), {
+    repository: "orchestrator",
+    idField: "orchestration_plan_id",
+    schemaVersion: "shs.critical.orchestrator.v1",
+    change_summary: "Orchestrator critical plan write",
+  });
 }
 
 export function resetShsOrchestratorState() {

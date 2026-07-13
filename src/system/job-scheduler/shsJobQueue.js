@@ -1,23 +1,28 @@
 import { createJob } from "./shsJobTypes";
 import { scanJobSafety } from "./shsJobSafety";
 import { recordJobHistory } from "./shsJobHistory";
+import {
+  readCriticalStateRecords,
+  writeCriticalStateRecords,
+} from "@/system/persistence/migrations/criticalStateMigrationCompatibility";
 
 const JOB_STORAGE_KEY = "shs_bos_job_scheduler_v1_jobs";
 
 function readJobs() {
-  if (typeof localStorage === "undefined") return [];
-  try {
-    const value = localStorage.getItem(JOB_STORAGE_KEY);
-    return value ? JSON.parse(value) : [];
-  } catch {
-    return [];
-  }
+  return readCriticalStateRecords("job_scheduler", JOB_STORAGE_KEY, [], {
+    repository: "job_scheduler",
+    idField: "job_id",
+    schemaVersion: "shs.critical.job-scheduler.v1",
+  }).filter((record) => record.critical_record_type !== "job_history");
 }
 
 function writeJobs(jobs) {
-  if (typeof localStorage === "undefined") return jobs;
-  localStorage.setItem(JOB_STORAGE_KEY, JSON.stringify(jobs));
-  return jobs;
+  return writeCriticalStateRecords("job_scheduler", JOB_STORAGE_KEY, jobs.map((job) => ({ ...job, critical_record_type: "job" })), {
+    repository: "job_scheduler",
+    idField: "job_id",
+    schemaVersion: "shs.critical.job-scheduler.v1",
+    change_summary: "Job Scheduler critical job write",
+  });
 }
 
 function upsertJob(job, action, note = "") {
@@ -94,4 +99,3 @@ export function loadSeedJobs() {
     operator_note: "Seed local Scheduler job.",
   }).jobs;
 }
-

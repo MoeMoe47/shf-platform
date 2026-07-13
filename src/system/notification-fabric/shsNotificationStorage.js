@@ -1,23 +1,28 @@
 import { createNotification } from "./shsNotificationTypes";
 import { getNotificationRule } from "./shsNotificationRules";
 import { scanNotificationSafety } from "./shsNotificationSafety";
+import {
+  readCriticalStateRecords,
+  writeCriticalStateRecords,
+} from "@/system/persistence/migrations/criticalStateMigrationCompatibility";
 
 const NOTIFICATION_STORAGE_KEY = "shs_bos_notification_fabric_v1_notifications";
 
 function readNotifications() {
-  if (typeof localStorage === "undefined") return [];
-  try {
-    const value = localStorage.getItem(NOTIFICATION_STORAGE_KEY);
-    return value ? JSON.parse(value) : [];
-  } catch {
-    return [];
-  }
+  return readCriticalStateRecords("notification_fabric", NOTIFICATION_STORAGE_KEY, [], {
+    repository: "notification_fabric",
+    idField: "notification_id",
+    schemaVersion: "shs.critical.notification-fabric.v1",
+  });
 }
 
 function writeNotifications(notifications) {
-  if (typeof localStorage === "undefined") return notifications;
-  localStorage.setItem(NOTIFICATION_STORAGE_KEY, JSON.stringify(notifications));
-  return notifications;
+  return writeCriticalStateRecords("notification_fabric", NOTIFICATION_STORAGE_KEY, notifications, {
+    repository: "notification_fabric",
+    idField: "notification_id",
+    schemaVersion: "shs.critical.notification-fabric.v1",
+    change_summary: "Notification Fabric critical record write",
+  });
 }
 
 export function getNotifications() {
@@ -74,4 +79,3 @@ export function loadSeedNotifications() {
     message: "Scheduler has a local job ready for operator review.",
   }).notifications;
 }
-

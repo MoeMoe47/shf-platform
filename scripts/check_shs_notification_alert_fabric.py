@@ -156,7 +156,8 @@ def main():
             "queueAlert",
             "acknowledgeNotification",
             "archiveNotification",
-            "localStorage",
+            "readCriticalStateRecords",
+            "writeCriticalStateRecords",
         ],
         "src/pages/admin/notifications/ShsNotificationFabricPage.jsx": [
             "Internal Notification Inbox",

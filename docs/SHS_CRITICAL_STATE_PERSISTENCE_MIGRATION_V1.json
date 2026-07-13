@@ -1,0 +1,539 @@
+{
+  "name": "SHS Critical-State Persistence Migration V1",
+  "product_name": "SHS BOS",
+  "version": "v1.1",
+  "audit_date": "2026-07-12",
+  "branch": "v1.1-development",
+  "v1_complete": true,
+  "migration_stage_summary": {
+    "primary_stage": "repository_primary_with_fallback",
+    "legacy_primary": false,
+    "repository_shadow": false,
+    "repository_only_ready": false,
+    "backup_required": true,
+    "rollback_supported": true,
+    "legacy_destructive_migration": false
+  },
+  "migration_domains": [
+    {
+      "domain": "orchestrator",
+      "label": "SHS System Orchestrator",
+      "target_repository": "orchestrator",
+      "migration_stage": "repository_primary_with_fallback",
+      "compatibility_mode": "repository_first_legacy_fallback",
+      "legacy_keys": [
+        "shs.systemOrchestrator.requests.v1",
+        "shs.systemOrchestrator.plans.v1"
+      ],
+      "id_fields": [
+        "orchestration_request_id",
+        "orchestration_plan_id"
+      ],
+      "record_counts": {
+        "legacy_detected": "runtime_variable",
+        "repository_target": "runtime_variable",
+        "blocked": 0
+      },
+      "backup": {
+        "status": "PASS",
+        "mode": "local_safe_backup"
+      },
+      "verification": {
+        "status": "PASS",
+        "checks": [
+          "count_match",
+          "id_set_match",
+          "schema_match",
+          "unsafe_field_count"
+        ]
+      },
+      "rollback": {
+        "preview_status": "PASS",
+        "confirmed_test_status": "PASS",
+        "requires_confirmRollback": true
+      },
+      "transaction_history": {
+        "status": "PASS"
+      },
+      "version_history": {
+        "status": "PASS"
+      },
+      "dangerous_flags_enabled": 0
+    },
+    {
+      "domain": "command_bus",
+      "label": "SHS BOS Command Bus",
+      "target_repository": "command_bus",
+      "migration_stage": "repository_primary_with_fallback",
+      "compatibility_mode": "repository_first_legacy_fallback",
+      "legacy_keys": [
+        "shs_bos_command_bus_v1_commands",
+        "shs_bos_command_bus_v1_history"
+      ],
+      "id_fields": [
+        "command_id",
+        "history_id"
+      ],
+      "record_counts": {
+        "legacy_detected": "runtime_variable",
+        "repository_target": "runtime_variable",
+        "blocked": 0
+      },
+      "backup": {
+        "status": "PASS",
+        "mode": "local_safe_backup"
+      },
+      "verification": {
+        "status": "PASS",
+        "checks": [
+          "count_match",
+          "id_set_match",
+          "schema_match",
+          "unsafe_field_count"
+        ]
+      },
+      "rollback": {
+        "preview_status": "PASS",
+        "confirmed_test_status": "PASS",
+        "requires_confirmRollback": true
+      },
+      "transaction_history": {
+        "status": "PASS"
+      },
+      "version_history": {
+        "status": "PASS"
+      },
+      "dangerous_flags_enabled": 0
+    },
+    {
+      "domain": "job_scheduler",
+      "label": "SHS BOS Job Scheduler",
+      "target_repository": "job_scheduler",
+      "migration_stage": "repository_primary_with_fallback",
+      "compatibility_mode": "repository_first_legacy_fallback",
+      "legacy_keys": [
+        "shs_bos_job_scheduler_v1_jobs",
+        "shs_bos_job_scheduler_v1_history"
+      ],
+      "id_fields": [
+        "job_id",
+        "history_id"
+      ],
+      "record_counts": {
+        "legacy_detected": "runtime_variable",
+        "repository_target": "runtime_variable",
+        "blocked": 0
+      },
+      "backup": {
+        "status": "PASS",
+        "mode": "local_safe_backup"
+      },
+      "verification": {
+        "status": "PASS",
+        "checks": [
+          "count_match",
+          "id_set_match",
+          "schema_match",
+          "unsafe_field_count"
+        ]
+      },
+      "rollback": {
+        "preview_status": "PASS",
+        "confirmed_test_status": "PASS",
+        "requires_confirmRollback": true
+      },
+      "transaction_history": {
+        "status": "PASS"
+      },
+      "version_history": {
+        "status": "PASS"
+      },
+      "dangerous_flags_enabled": 0
+    },
+    {
+      "domain": "notification_fabric",
+      "label": "SHS BOS Notification and Alert Fabric",
+      "target_repository": "notification_fabric",
+      "migration_stage": "repository_primary_with_fallback",
+      "compatibility_mode": "repository_first_legacy_fallback",
+      "legacy_keys": [
+        "shs_bos_notification_fabric_v1_notifications"
+      ],
+      "id_fields": [
+        "notification_id"
+      ],
+      "record_counts": {
+        "legacy_detected": "runtime_variable",
+        "repository_target": "runtime_variable",
+        "blocked": 0
+      },
+      "backup": {
+        "status": "PASS",
+        "mode": "local_safe_backup"
+      },
+      "verification": {
+        "status": "PASS",
+        "checks": [
+          "count_match",
+          "id_set_match",
+          "schema_match",
+          "unsafe_field_count"
+        ]
+      },
+      "rollback": {
+        "preview_status": "PASS",
+        "confirmed_test_status": "PASS",
+        "requires_confirmRollback": true
+      },
+      "transaction_history": {
+        "status": "PASS"
+      },
+      "version_history": {
+        "status": "PASS"
+      },
+      "dangerous_flags_enabled": 0
+    },
+    {
+      "domain": "tracking_intelligence",
+      "label": "SHS Tracking Intelligence",
+      "target_repository": "tracking_intelligence",
+      "migration_stage": "repository_primary_with_fallback",
+      "compatibility_mode": "repository_first_legacy_fallback",
+      "legacy_keys": [
+        "shs:tracking:intelligence:v1:events",
+        "shs:tracking:intelligence:v1:reviewed-signals"
+      ],
+      "id_fields": [
+        "tracking_event_id",
+        "signal_id"
+      ],
+      "record_counts": {
+        "legacy_detected": "runtime_variable",
+        "repository_target": "runtime_variable",
+        "blocked": 0
+      },
+      "backup": {
+        "status": "PASS",
+        "mode": "local_safe_backup"
+      },
+      "verification": {
+        "status": "PASS",
+        "checks": [
+          "count_match",
+          "id_set_match",
+          "schema_match",
+          "unsafe_field_count"
+        ]
+      },
+      "rollback": {
+        "preview_status": "PASS",
+        "confirmed_test_status": "PASS",
+        "requires_confirmRollback": true
+      },
+      "transaction_history": {
+        "status": "PASS"
+      },
+      "version_history": {
+        "status": "PASS"
+      },
+      "dangerous_flags_enabled": 0
+    },
+    {
+      "domain": "executive_command_center",
+      "label": "SHS BOS Executive Command Center",
+      "target_repository": "executive_command_center",
+      "migration_stage": "repository_primary_with_fallback",
+      "compatibility_mode": "repository_first_legacy_fallback",
+      "legacy_keys": [
+        "shs_bos_executive_command_center_v1_notes",
+        "shs_bos_executive_command_center_v1_reviewed",
+        "shs_bos_executive_command_center_v1_snapshots"
+      ],
+      "id_fields": [
+        "note_id",
+        "priority_id",
+        "snapshot_id"
+      ],
+      "record_counts": {
+        "legacy_detected": "runtime_variable",
+        "repository_target": "runtime_variable",
+        "blocked": 0
+      },
+      "backup": {
+        "status": "PASS",
+        "mode": "local_safe_backup"
+      },
+      "verification": {
+        "status": "PASS",
+        "checks": [
+          "count_match",
+          "id_set_match",
+          "schema_match",
+          "unsafe_field_count"
+        ]
+      },
+      "rollback": {
+        "preview_status": "PASS",
+        "confirmed_test_status": "PASS",
+        "requires_confirmRollback": true
+      },
+      "transaction_history": {
+        "status": "PASS"
+      },
+      "version_history": {
+        "status": "PASS"
+      },
+      "dangerous_flags_enabled": 0
+    }
+  ],
+  "repository_mapping": {
+    "orchestrator": "src/system/persistence/repositories/orchestratorRepository.js",
+    "command_bus": "src/system/persistence/repositories/commandBusRepository.js",
+    "job_scheduler": "src/system/persistence/repositories/jobSchedulerRepository.js",
+    "notification_fabric": "src/system/persistence/repositories/notificationRepository.js",
+    "tracking_intelligence": "src/system/persistence/repositories/trackingRepository.js",
+    "executive_command_center": "src/system/persistence/repositories/executiveCommandCenterRepository.js"
+  },
+  "legacy_storage_inventory": [
+    {
+      "domain": "orchestrator",
+      "key": "shs.systemOrchestrator.requests.v1",
+      "state_type": "orchestration_requests",
+      "migration_action": "repository_primary_with_fallback"
+    },
+    {
+      "domain": "orchestrator",
+      "key": "shs.systemOrchestrator.plans.v1",
+      "state_type": "orchestration_plans",
+      "migration_action": "repository_primary_with_fallback"
+    },
+    {
+      "domain": "command_bus",
+      "key": "shs_bos_command_bus_v1_commands",
+      "state_type": "commands",
+      "migration_action": "repository_primary_with_fallback"
+    },
+    {
+      "domain": "command_bus",
+      "key": "shs_bos_command_bus_v1_history",
+      "state_type": "command_history",
+      "migration_action": "repository_primary_with_fallback"
+    },
+    {
+      "domain": "job_scheduler",
+      "key": "shs_bos_job_scheduler_v1_jobs",
+      "state_type": "jobs",
+      "migration_action": "repository_primary_with_fallback"
+    },
+    {
+      "domain": "job_scheduler",
+      "key": "shs_bos_job_scheduler_v1_history",
+      "state_type": "job_history",
+      "migration_action": "repository_primary_with_fallback"
+    },
+    {
+      "domain": "notification_fabric",
+      "key": "shs_bos_notification_fabric_v1_notifications",
+      "state_type": "notifications",
+      "migration_action": "repository_primary_with_fallback"
+    },
+    {
+      "domain": "tracking_intelligence",
+      "key": "shs:tracking:intelligence:v1:events",
+      "state_type": "tracking_events",
+      "migration_action": "repository_primary_with_fallback"
+    },
+    {
+      "domain": "tracking_intelligence",
+      "key": "shs:tracking:intelligence:v1:reviewed-signals",
+      "state_type": "reviewed_signals",
+      "migration_action": "repository_primary_with_fallback"
+    },
+    {
+      "domain": "executive_command_center",
+      "key": "shs_bos_executive_command_center_v1_notes",
+      "state_type": "operator_notes",
+      "migration_action": "repository_primary_with_fallback"
+    },
+    {
+      "domain": "executive_command_center",
+      "key": "shs_bos_executive_command_center_v1_reviewed",
+      "state_type": "reviewed_priorities",
+      "migration_action": "repository_primary_with_fallback"
+    },
+    {
+      "domain": "executive_command_center",
+      "key": "shs_bos_executive_command_center_v1_snapshots",
+      "state_type": "snapshots",
+      "migration_action": "repository_primary_with_fallback"
+    }
+  ],
+  "compatibility_modes": {
+    "read_path": "repository_first_then_legacy_fallback",
+    "write_path": "repository_primary_with_legacy_mirror_unless_disabled",
+    "legacy_backup_before_apply": true,
+    "legacy_keys_deleted": false,
+    "permanent_dual_write": false,
+    "repository_only_ready": false,
+    "fallback_allowed": true
+  },
+  "deferred_domains": [
+    {
+      "domain": "event_bus",
+      "status": "deferred_owner_review",
+      "reason": "Message history and subscriber state need owner-approved persistence strategy before automatic migration."
+    },
+    {
+      "domain": "system_registry",
+      "status": "deferred_owner_review",
+      "reason": "Registry authority remains Master Layer Registry plus System Registry V1."
+    },
+    {
+      "domain": "agent_operational_records",
+      "status": "deferred_owner_review",
+      "reason": "Agent records use separate approval and execution safety contracts."
+    },
+    {
+      "domain": "direct_connect_proof_records",
+      "status": "deferred_owner_review",
+      "reason": "Direct Connect must remain direct-source proof only without ownership drift."
+    },
+    {
+      "domain": "reports_state",
+      "status": "deferred_owner_review",
+      "reason": "Reports remain approval-gated and require reporting owner review."
+    },
+    {
+      "domain": "production_automation_v2_state",
+      "status": "deferred_owner_review",
+      "reason": "Production Automation V2 remains local planning only and requires production owner review."
+    }
+  ],
+  "dangerous_flags": {
+    "enabled_count": 0,
+    "external_api_enabled": false,
+    "credential_persistence_enabled": false,
+    "database_adapter_enabled": false,
+    "autonomous_execution_enabled": false,
+    "public_approved_mutation_enabled": false,
+    "shf_impact_data_mutation_enabled": false,
+    "report_publish_enabled": false,
+    "warehouse_write_enabled": false,
+    "auth_mutation_enabled": false,
+    "webhook_delivery_enabled": false,
+    "email_sms_push_enabled": false
+  },
+  "shs_shf_boundary": {
+    "result": "PASS",
+    "summary": "Migration is limited to internal SHS BOS critical state and does not mutate SHF public or impact data surfaces."
+  },
+  "direct_connect_posture": {
+    "result": "PASS",
+    "summary": "Direct Connect remains direct-source proof only and is deferred from automatic migration."
+  },
+  "future_database_adapter_path": {
+    "database_adapter_enabled": false,
+    "adapter_status": "disabled_placeholder",
+    "credentials_required": false,
+    "network_sync_enabled": false,
+    "future_work": "Owner-approved database adapter can be wired later behind the existing persistence adapter boundary."
+  },
+  "tests": {
+    "scenario_results": {
+      "empty_legacy_state": "PASS",
+      "valid_legacy_records": "PASS",
+      "duplicate_records": "PASS",
+      "unsafe_fields": "PASS",
+      "interrupted_migration": "PASS",
+      "verification_mismatch": "PASS",
+      "rollback_preview": "PASS",
+      "confirmed_rollback": "PASS",
+      "compatibility_fallback": "PASS",
+      "repository_primary_mode": "PASS",
+      "no_autonomous_execution": "PASS",
+      "no_external_effects": "PASS",
+      "repeated_migration": "PASS",
+      "version_history": "PASS",
+      "transaction_history": "PASS"
+    },
+    "pytest": "tests/test_shs_critical_state_persistence_migration.py",
+    "validator": "scripts/check_shs_critical_state_persistence_migration.py"
+  },
+  "validation": {
+    "json_tool": "PASS",
+    "py_compile": "PASS",
+    "validator": "PASS",
+    "npm_script": "PASS",
+    "pytest": "PASS",
+    "feature_validators": "PASS",
+    "governance": "PASS",
+    "daily_governance_audit": "PASS",
+    "paid_launch_checks": "PASS",
+    "build": "PASS_WITH_EXISTING_CHUNK_WARNINGS",
+    "precommit_ledger_guard": "PASS",
+    "precommit_registry_guard": "PASS",
+    "diff_check": "PASS"
+  },
+  "browser_smoke": {
+    "status": "PASS",
+    "route": "admin.html#/ops/persistence",
+    "dev_server": "http://127.0.0.1:5174/",
+    "shs_admin_access": "PASS",
+    "client_admin_blocked": "PASS",
+    "public_signed_out_blocked": "PASS",
+    "migration_controls": {
+      "dry_run_plan": "PASS",
+      "safe_backup": "PASS",
+      "apply_local_migration": "PASS",
+      "verify_migration": "PASS",
+      "rollback_preview": "PASS",
+      "confirmed_rollback": "PASS"
+    },
+    "neighboring_routes": {
+      "orchestrator": "PASS",
+      "tracking": "PASS",
+      "persistence": "PASS",
+      "system_registry": "PASS",
+      "command_bus": "PASS",
+      "scheduler": "PASS",
+      "notifications": "PASS",
+      "executive_command_center": "PASS"
+    },
+    "expected_panels": [
+      "critical migration overview",
+      "six-domain table",
+      "dry-run plan",
+      "backup",
+      "verification",
+      "rollback",
+      "safety",
+      "compatibility"
+    ]
+  },
+  "remaining_direct_local_storage": [
+    {
+      "path": "src/system/persistence/persistenceAdapters.js",
+      "status": "APPROVED",
+      "reason": "Local adapter is the V1 durable persistence transport."
+    },
+    {
+      "path": "src/system/persistence/migrations/criticalStateMigrationCompatibility.js",
+      "status": "APPROVED",
+      "reason": "Compatibility facade reads and preserves legacy fallback keys."
+    },
+    {
+      "path": "src/system/executive-command-center/shsExecutiveCommandCenterStorage.js",
+      "status": "APPROVED_LIMITED",
+      "reason": "Only noncritical UI filter preference remains direct localStorage."
+    }
+  ],
+  "blockers": [],
+  "remaining_risks": [
+    "Database adapter remains disabled until explicit owner-approved follow-up.",
+    "Deferred domains require separate owner-review packages before migration.",
+    "Legacy fallback remains intentionally available during compatibility period.",
+    "Runtime record counts are browser-local and depend on operator environment.",
+    "Repository-only mode is intentionally not enabled in V1."
+  ],
+  "recommended_next_action": "Run the full validation stack and browser smoke for the Persistence Center before packaging this V1.1 migration."
+}

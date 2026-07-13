@@ -1,19 +1,25 @@
+import {
+  readCriticalStateRecords,
+  writeCriticalStateRecords,
+} from "@/system/persistence/migrations/criticalStateMigrationCompatibility";
+
 const HISTORY_STORAGE_KEY = "shs_bos_job_scheduler_v1_history";
 
 function readHistory() {
-  if (typeof localStorage === "undefined") return [];
-  try {
-    const value = localStorage.getItem(HISTORY_STORAGE_KEY);
-    return value ? JSON.parse(value) : [];
-  } catch {
-    return [];
-  }
+  return readCriticalStateRecords("job_scheduler", HISTORY_STORAGE_KEY, [], {
+    repository: "job_scheduler",
+    idField: "history_id",
+    schemaVersion: "shs.critical.job-scheduler.v1",
+  }).filter((record) => record.critical_record_type === "job_history" || record.history_id);
 }
 
 function writeHistory(history) {
-  if (typeof localStorage === "undefined") return history;
-  localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(history));
-  return history;
+  return writeCriticalStateRecords("job_scheduler", HISTORY_STORAGE_KEY, history.map((entry) => ({ ...entry, critical_record_type: "job_history" })), {
+    repository: "job_scheduler",
+    idField: "history_id",
+    schemaVersion: "shs.critical.job-scheduler.v1",
+    change_summary: "Job Scheduler critical history write",
+  });
 }
 
 export function getJobHistory() {
@@ -33,4 +39,3 @@ export function recordJobHistory(job, action, note = "") {
   };
   return writeHistory([entry, ...readHistory()].slice(0, 100));
 }
-

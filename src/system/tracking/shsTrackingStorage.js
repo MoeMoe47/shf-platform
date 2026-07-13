@@ -1,36 +1,33 @@
 import { createSampleInternalTrackingEvent, SHS_TRACKING_SEED_EVENTS } from "./shsTrackingEvents";
 import { scanTrackingEventSafety } from "./shsTrackingSafety";
 import { normalizeTrackingArray } from "./shsTrackingTypes";
+import {
+  readCriticalStateRecords,
+  writeCriticalStateRecords,
+} from "@/system/persistence/migrations/criticalStateMigrationCompatibility";
 
 export const SHS_TRACKING_STORAGE_KEY = "shs:tracking:intelligence:v1:events";
 export const SHS_TRACKING_REVIEWED_SIGNALS_KEY = "shs:tracking:intelligence:v1:reviewed-signals";
 
-function canUseLocalStorage() {
-  return typeof window !== "undefined" && Boolean(window.localStorage);
-}
-
-function readJson(key, fallback) {
-  if (!canUseLocalStorage()) return fallback;
-  try {
-    return JSON.parse(window.localStorage.getItem(key) || JSON.stringify(fallback));
-  } catch {
-    return fallback;
-  }
-}
-
-function writeJson(key, value) {
-  if (!canUseLocalStorage()) return value;
-  window.localStorage.setItem(key, JSON.stringify(value));
-  return value;
-}
-
 export function getTrackingEvents() {
-  const stored = readJson(SHS_TRACKING_STORAGE_KEY, []);
+  const stored = readCriticalStateRecords("tracking_intelligence", SHS_TRACKING_STORAGE_KEY, [], {
+    repository: "tracking_intelligence",
+    idField: "tracking_event_id",
+    schemaVersion: "shs.critical.tracking.v1",
+  }).filter((record) => record.critical_record_type !== "reviewed_signal");
   return stored.length ? stored : SHS_TRACKING_SEED_EVENTS;
 }
 
 export function saveTrackingEvents(events) {
-  return writeJson(SHS_TRACKING_STORAGE_KEY, normalizeTrackingArray(events));
+  return writeCriticalStateRecords("tracking_intelligence", SHS_TRACKING_STORAGE_KEY, normalizeTrackingArray(events).map((event) => ({
+    ...event,
+    critical_record_type: "tracking_event",
+  })), {
+    repository: "tracking_intelligence",
+    idField: "tracking_event_id",
+    schemaVersion: "shs.critical.tracking.v1",
+    change_summary: "Tracking Intelligence critical event write",
+  });
 }
 
 export function appendTrackingEvent(event) {
@@ -62,12 +59,24 @@ export function resetTrackingEvents() {
 }
 
 export function getReviewedTrackingSignals() {
-  return readJson(SHS_TRACKING_REVIEWED_SIGNALS_KEY, []);
+  return readCriticalStateRecords("tracking_intelligence", SHS_TRACKING_REVIEWED_SIGNALS_KEY, [], {
+    repository: "tracking_intelligence",
+    idField: "signal_id",
+    schemaVersion: "shs.critical.tracking.v1",
+  }).filter((record) => record.critical_record_type === "reviewed_signal").map((record) => record.signal_id);
 }
 
 export function markTrackingSignalReviewed(signalId) {
-  const reviewed = Array.from(new Set([...getReviewedTrackingSignals(), signalId]));
-  writeJson(SHS_TRACKING_REVIEWED_SIGNALS_KEY, reviewed);
-  return reviewed;
+  const reviewed = Array.from(new Set([...getReviewedTrackingSignals(), signalId])).map((id) => ({
+    signal_id: id,
+    critical_record_type: "reviewed_signal",
+    reviewed_at: new Date().toISOString(),
+  }));
+  const saved = writeCriticalStateRecords("tracking_intelligence", SHS_TRACKING_REVIEWED_SIGNALS_KEY, reviewed, {
+    repository: "tracking_intelligence",
+    idField: "signal_id",
+    schemaVersion: "shs.critical.tracking.v1",
+    change_summary: "Tracking Intelligence reviewed signal write",
+  });
+  return saved.map((record) => record.signal_id);
 }
-

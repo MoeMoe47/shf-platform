@@ -126,7 +126,7 @@ def main():
         for token in ["list", "getById", "save", "update", "archive", "restore", "getHistory", "createSnapshot", "validateRecord"]:
             if token not in read("src/system/persistence/repositoryFactory.js"):
                 fail(f"repository factory missing operation: {token}")
-        if "createPersistenceRepository" not in source:
+        if "createPersistenceRepository" not in source and "createCriticalStateRepository" not in source:
             fail(f"repository not using factory: {path}")
 
     require_token("src/router/AdminRoutes.jsx", 'path="/ops/persistence"')

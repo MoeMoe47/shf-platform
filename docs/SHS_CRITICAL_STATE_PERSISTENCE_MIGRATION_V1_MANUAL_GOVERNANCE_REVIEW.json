@@ -1,0 +1,66 @@
+{
+  "name": "SHS Critical-State Persistence Migration V1 Manual Governance Review",
+  "product_name": "SHS BOS",
+  "version": "v1.1",
+  "audit_date": "2026-07-12",
+  "branch": "v1.1-development",
+  "manual_review_complete": true,
+  "review_result": "PASS",
+  "gates": {
+    "legacy_key_inventory_complete": "PASS",
+    "six_primary_domains_mapped_to_repositories": "PASS",
+    "deferred_domains_explicitly_documented": "PASS",
+    "repository_first_compatibility_path_confirmed": "PASS",
+    "legacy_fallback_preserved": "PASS",
+    "no_destructive_legacy_deletion": "PASS",
+    "backup_path_requires_local_safe_backup": "PASS",
+    "rollback_path_requires_explicit_confirmation": "PASS",
+    "transaction_history_preserved": "PASS",
+    "version_history_preserved": "PASS",
+    "database_adapter_disabled": "PASS",
+    "no_external_sync_or_api_calls": "PASS",
+    "no_credentials_tokens_oauth_or_secrets": "PASS",
+    "no_autonomous_execution": "PASS",
+    "no_report_publishing": "PASS",
+    "no_public_approval_mutation": "PASS",
+    "no_shf_impact_data_spine_mutation": "PASS",
+    "direct_connect_direct_source_proof_only": "PASS"
+  },
+  "primary_domains_reviewed": [
+    "orchestrator",
+    "command_bus",
+    "job_scheduler",
+    "notification_fabric",
+    "tracking_intelligence",
+    "executive_command_center"
+  ],
+  "deferred_domains_reviewed": [
+    "event_bus",
+    "system_registry",
+    "agent_operational_records",
+    "direct_connect_proof_records",
+    "reports_state",
+    "production_automation_v2_state"
+  ],
+  "approved_direct_local_storage_exceptions": [
+    {
+      "path": "src/system/persistence/persistenceAdapters.js",
+      "reason": "Local adapter is the V1 durable persistence transport."
+    },
+    {
+      "path": "src/system/persistence/migrations/criticalStateMigrationCompatibility.js",
+      "reason": "Compatibility fallback must read and preserve legacy state."
+    },
+    {
+      "path": "src/system/executive-command-center/shsExecutiveCommandCenterStorage.js",
+      "reason": "Only noncritical UI filter preference remains direct localStorage."
+    }
+  ],
+  "blockers": [],
+  "warnings": [
+    "Deferred domains require separate owner-review packages before migration.",
+    "Repository-only mode remains intentionally disabled for V1 compatibility.",
+    "Runtime record counts are local browser state and may vary by operator."
+  ],
+  "recommended_next_action": "Run validation and browser smoke before packaging."
+}

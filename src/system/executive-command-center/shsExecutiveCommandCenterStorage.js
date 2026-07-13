@@ -1,3 +1,8 @@
+import {
+  readCriticalStateRecords,
+  writeCriticalStateRecords,
+} from "@/system/persistence/migrations/criticalStateMigrationCompatibility";
+
 const NOTE_KEY = "shs_bos_executive_command_center_v1_notes";
 const REVIEWED_KEY = "shs_bos_executive_command_center_v1_reviewed";
 const SNAPSHOT_KEY = "shs_bos_executive_command_center_v1_snapshots";
@@ -12,6 +17,17 @@ function canUseStorage() {
 }
 
 function readJson(key, fallback) {
+  if (key !== FILTER_KEY) {
+    const records = readCriticalStateRecords("executive_command_center", key, Array.isArray(fallback) ? fallback : [], {
+      repository: "executive_command_center",
+      idField: key === SNAPSHOT_KEY ? "snapshot_id" : key === NOTE_KEY ? "note_id" : "priority_id",
+      schemaVersion: "shs.critical.executive-command-center.v1",
+    });
+    if (key === NOTE_KEY) return records.filter((record) => record.critical_record_type === "operator_note" || record.note_id);
+    if (key === REVIEWED_KEY) return records.filter((record) => record.critical_record_type === "priority_review").map((record) => record.priority_id);
+    if (key === SNAPSHOT_KEY) return records.filter((record) => record.critical_record_type === "executive_snapshot" || record.snapshot_id);
+    return records;
+  }
   if (!canUseStorage()) return fallback;
   try {
     const value = globalThis.localStorage.getItem(key);
@@ -22,6 +38,20 @@ function readJson(key, fallback) {
 }
 
 function writeJson(key, value) {
+  if (key !== FILTER_KEY) {
+    const typed = (Array.isArray(value) ? value : []).map((record) => {
+      if (key === NOTE_KEY) return { ...record, critical_record_type: "operator_note" };
+      if (key === REVIEWED_KEY) return { ...(typeof record === "string" ? { priority_id: record } : record), critical_record_type: "priority_review" };
+      if (key === SNAPSHOT_KEY) return { ...record, critical_record_type: "executive_snapshot" };
+      return record;
+    });
+    return writeCriticalStateRecords("executive_command_center", key, typed, {
+      repository: "executive_command_center",
+      idField: key === SNAPSHOT_KEY ? "snapshot_id" : key === NOTE_KEY ? "note_id" : "priority_id",
+      schemaVersion: "shs.critical.executive-command-center.v1",
+      change_summary: "Executive Command Center critical state write",
+    });
+  }
   if (canUseStorage()) globalThis.localStorage.setItem(key, JSON.stringify(value));
   return value;
 }
@@ -46,7 +76,11 @@ export function getReviewedPriorities() {
 export function markExecutivePriorityReviewed(priorityId) {
   const reviewed = new Set(getReviewedPriorities());
   reviewed.add(priorityId);
-  return writeJson(REVIEWED_KEY, [...reviewed]);
+  return writeJson(REVIEWED_KEY, [...reviewed].map((id) => ({
+    priority_id: id,
+    reviewed_at: new Date().toISOString(),
+    critical_record_type: "priority_review",
+  }))).map((record) => record.priority_id);
 }
 
 export function getExecutiveSnapshots() {

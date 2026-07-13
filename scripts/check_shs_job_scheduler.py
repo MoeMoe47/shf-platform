@@ -116,7 +116,8 @@ def main():
             "resumeJob",
             "markJobComplete",
             "blockDangerousJob",
-            "localStorage",
+            "readCriticalStateRecords",
+            "writeCriticalStateRecords",
         ],
         "src/system/job-scheduler/shsJobRetryPolicy.js": [
             "createRetryPreview",

@@ -102,6 +102,7 @@ export const hubPageAccess = {
   "/ops/scheduler": ["shs_admin"],
   "/ops/notifications": ["shs_admin"],
   "/ops/executive-command": ["shs_admin"],
+  "/ops/identity-access": ["shs_admin"],
   "/ops/agents": ["shs_admin"],
   "/ops/direct-connect": ["shs_admin"],
   "/ops/projects": ["shs_admin"],

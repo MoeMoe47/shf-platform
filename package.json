@@ -53,6 +53,7 @@
     "check:shs-executive-command": "python3 scripts/check_shs_bos_executive_command_center.py",
     "check:shs-v1-1-integration": "python3 scripts/check_shs_bos_v1_1_full_integration.py",
     "check:shs-critical-state-migration": "python3 scripts/check_shs_critical_state_persistence_migration.py",
+    "check:shs-auth-hardening": "python3 scripts/check_shs_production_auth_identity_hardening.py",
     "check:shs-launch-ledger": "python3 scripts/check_shs_launch_ledger.py",
     "check:runtime-log-hygiene": "python3 scripts/check_runtime_log_hygiene.py",
     "check:runtime-log-hygiene:strict": "python3 scripts/check_runtime_log_hygiene.py --strict",

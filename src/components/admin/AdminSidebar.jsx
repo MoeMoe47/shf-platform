@@ -1,6 +1,8 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import AppLink from "@/components/nav/AppLink.jsx";
+import { useAuthContext } from "@/auth/auth-context";
+import { canAccessHubRoute } from "@/system/identity/hubAccessControl";
 
 const navClass = ({ isActive }) =>
   isActive ? "adm-navLink is-active" : "adm-navLink";
@@ -19,6 +21,7 @@ const SECTIONS = [
       { to: "/ops/scheduler", icon: "S", label: "Scheduler" },
       { to: "/ops/notifications", icon: "N", label: "Notifications" },
       { to: "/ops/executive-command", icon: "X", label: "BOS Command Center" },
+      { to: "/ops/identity-access", icon: "I", label: "Identity & Access" },
       { to: "/ops/agents", icon: "A", label: "Agent Workbench" },
       { to: "/ops/direct-connect", icon: "D", label: "Direct Connect" },
       { to: "/ops/projects", icon: "◇", label: "Projects" },
@@ -83,6 +86,19 @@ const Item = ({ to, icon, label, end, badge }) => (
 );
 
 export default function AdminSidebar() {
+  const auth = useAuthContext();
+
+  if (auth.loading || !auth.isAuthenticated) {
+    return null;
+  }
+
+  const sections = SECTIONS
+    .map((section) => ({
+      ...section,
+      items: section.items.filter((item) => canAccessHubRoute(auth.role, item.to)),
+    }))
+    .filter((section) => section.items.length);
+
   return (
     <aside className="adm-rail">
       <div className="adm-top">
@@ -91,7 +107,7 @@ export default function AdminSidebar() {
       </div>
 
       <nav className="adm-nav">
-        {SECTIONS.map(section => (
+        {sections.map(section => (
           <div className="adm-section" key={section.title}>
             <div className="adm-sectionTitle">{section.title}</div>
             <ul className="adm-list">

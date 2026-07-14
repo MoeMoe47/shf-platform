@@ -1,0 +1,165 @@
+.identityAccess-page {
+  min-height: 100vh;
+  padding: 24px;
+  background: #111827;
+  color: #e5e7eb;
+}
+
+.identityAccess-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.identityAccess-header p,
+.panel-heading p {
+  margin: 0 0 6px;
+  color: #93c5fd;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.identityAccess-header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.identityAccess-header span,
+.identityAccess-boundary,
+.identityAccess-empty {
+  color: #aeb8c9;
+}
+
+.identityAccess-score,
+.identityAccess-panel {
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: rgba(15, 23, 42, 0.92);
+  border-radius: 8px;
+}
+
+.identityAccess-score {
+  padding: 14px 18px;
+  min-width: 120px;
+  text-align: right;
+}
+
+.identityAccess-score strong,
+.identityAccess-scoreInline {
+  display: block;
+  font-size: 2rem;
+  color: #86efac;
+}
+
+.identityAccess-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.identityAccess-panel {
+  padding: 16px;
+}
+
+.span-3 { grid-column: span 3; }
+.span-6 { grid-column: span 6; }
+
+.panel-heading h2 {
+  margin: 0 0 12px;
+  font-size: 1rem;
+}
+
+.identityAccess-metricRow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.identityAccess-metricRow article,
+.identityAccess-list article {
+  padding: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 6px;
+  background: rgba(30, 41, 59, 0.62);
+}
+
+.identityAccess-metricRow span,
+.identityAccess-list span,
+.identityAccess-kv span {
+  color: #aeb8c9;
+  font-size: 0.82rem;
+}
+
+.identityAccess-list {
+  display: grid;
+  gap: 8px;
+}
+
+.identityAccess-list.compact {
+  max-height: 260px;
+  overflow: auto;
+}
+
+.identityAccess-list article strong,
+.identityAccess-list article span,
+.identityAccess-list article em {
+  display: block;
+}
+
+.identityAccess-list article em {
+  color: #93c5fd;
+  font-style: normal;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+}
+
+.identityAccess-kv {
+  display: grid;
+  grid-template-columns: minmax(100px, 0.4fr) 1fr;
+  gap: 8px 12px;
+  margin-bottom: 12px;
+}
+
+.identityAccess-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.identityAccess-actions button,
+.identityAccess-panel button {
+  border: 1px solid rgba(147, 197, 253, 0.4);
+  border-radius: 6px;
+  background: #1d4ed8;
+  color: #fff;
+  padding: 8px 12px;
+}
+
+.identityAccess-flagGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.identityAccess-flagGrid span {
+  padding: 8px;
+  border-radius: 6px;
+  background: rgba(22, 101, 52, 0.22);
+  color: #bbf7d0;
+}
+
+.ok { color: #86efac; }
+.warn { color: #fbbf24; }
+
+@media (max-width: 900px) {
+  .identityAccess-header,
+  .identityAccess-metricRow {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+  .span-3,
+  .span-6 {
+    grid-column: 1 / -1;
+  }
+}

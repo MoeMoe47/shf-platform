@@ -21,6 +21,9 @@ from routes.exports import router as exports_router
 from app.api.routes.growth import router as growth_router
 from app.api.routes.self_audit import router as self_audit_router
 from fastapi.middleware.cors import CORSMiddleware
+from auth.config import get_allowed_origins, validate_auth_configuration
+from auth.routes import router as auth_router
+from auth.security_headers import SecurityHeadersMiddleware
 
 # Load env early
 load_dotenv()
@@ -298,6 +301,12 @@ def _startup_validate_program_catalog_parity() -> None:
     validate_program_catalog_parity(PROGRAM_ADAPTERS)
 
 
+def _startup_validate_auth_configuration() -> None:
+    result = validate_auth_configuration()
+    if not result.get("ok"):
+        raise RuntimeError("[AUTH] configuration invalid: " + ", ".join(result.get("blockers", [])))
+
+
 _STARTUP_TASKS: Iterable[Callable[[], object]] = (
     _startup_init_db,
     _startup_verify_registry_ledger,
@@ -306,6 +315,7 @@ _STARTUP_TASKS: Iterable[Callable[[], object]] = (
     _startup_validate_program_adapters,
     _startup_validate_adapter_meta_parity,
     _startup_validate_program_catalog_parity,
+    _startup_validate_auth_configuration,
 )
 
 
@@ -329,6 +339,7 @@ async def lifespan(app: FastAPI):
 # -------------------------
 
 app = FastAPI(lifespan=lifespan, title="SHF Agent Fabric")
+app.add_middleware(SecurityHeadersMiddleware)
 
 
 # 🔥 AI SYSTEM ROUTES (NEW)
@@ -344,10 +355,10 @@ app.include_router(comparison_router)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1):(5173|5174|5175|5176)$",
+    allow_origins=list(get_allowed_origins()),
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "HEAD", "OPTIONS"],
+    allow_headers=["Content-Type", "X-CSRF-Token", "X-Admin-Key"],
 )
 
 
@@ -413,17 +424,14 @@ app.include_router(funding_rulesets_router)
 app.include_router(growth_router)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        os.getenv("SHF_WEB_ORIGIN", ""),
-    ],
+    allow_origins=list(get_allowed_origins()),
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "HEAD", "OPTIONS"],
+    allow_headers=["Content-Type", "X-CSRF-Token", "X-Admin-Key"],
 )
 
 # Core routers
+app.include_router(auth_router)
 app.include_router(status_router)
 app.include_router(health_router)
 app.include_router(api_v1_router)

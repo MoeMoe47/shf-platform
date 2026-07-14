@@ -1,113 +1,62 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { mergeRolePermissions } from "@/system/security/security-permissions";
+import {
+  fetchCurrentIdentity,
+  loginWithPassword,
+  logoutSession,
+  refreshSession,
+} from "@/system/identity/authClient";
+import { normalizeAuthRole } from "@/system/identity/authRoles";
+import { BOS_AUTH_ROLES } from "@/system/identity/authRoles";
+import { emptyAuthState, normalizeIdentityResponse } from "@/system/identity/authState";
+import { publishAuthClientEvent } from "@/system/identity/authEvents";
+import {
+  assertNoSessionTokenStorage,
+  clearLegacyAuthoritativeIdentityState,
+} from "@/system/identity/authStorageSafety";
 
 const AuthContext = createContext(null);
 
-const API_BASE =
-  window.__SHS_API_BASE__ ||
-  (import.meta.env.VITE_SHS_API_BASE || "/api");
-
-async function safeJson(res) {
-  const text = await res.text();
-  try {
-    return text ? JSON.parse(text) : {};
-  } catch {
-    return { raw: text };
-  }
-}
-
-
-function isLocalDevHost() {
-  try {
-    const host = String(window.location.hostname || "");
-    return host === "localhost" || host === "127.0.0.1" || host === "::1";
-  } catch {
-    return false;
-  }
-}
-
-function createLocalDevAuthSession() {
-  return {
-    user: {
-      id: "demo-user-1",
-      email: "admin@shs.local",
-      first_name: "SHS",
-      last_name: "Admin",
-      name: "SHS Admin",
-      role: "shs_admin",
-      clearanceLevel: "system_admin",
-    },
-    memberships: [
-      {
-        organization_id: "shs-core",
-        organization_type: "infrastructure",
-        role: "shs_admin",
-        role_name: "shs_admin",
-      },
-      {
-        organization_id: "shf-core",
-        organization_type: "foundation",
-        role: "shf_admin",
-        role_name: "shf_admin",
-      },
-    ],
-    permissions: mergeRolePermissions(["super_admin"]),
-  };
-}
-
 export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
-  const [memberships, setMemberships] = useState([]);
-  const [permissions, setPermissions] = useState([]);
+  const [state, setState] = useState(() => emptyAuthState("loading"));
   const [error, setError] = useState("");
+  const [httpStatus, setHttpStatus] = useState(0);
+
+  const applyIdentity = useCallback((data) => {
+    const next = normalizeIdentityResponse(data);
+    clearLegacyAuthoritativeIdentityState();
+    assertNoSessionTokenStorage();
+    setState(next);
+    setHttpStatus(0);
+    return next;
+  }, []);
+
+  const clearAuth = useCallback((status = "invalid", statusCode = 0) => {
+    clearLegacyAuthoritativeIdentityState();
+    setState(emptyAuthState(status));
+    setHttpStatus(statusCode);
+  }, []);
 
   const refreshAuth = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`${API_BASE}/auth/me`, {
-        credentials: "include",
-      });
-
-      if (!res.ok) {
-        if (import.meta.env.DEV && isLocalDevHost()) {
-          const demo = createLocalDevAuthSession();
-          setUser(demo.user);
-          setMemberships(demo.memberships);
-          setPermissions(demo.permissions);
-          setLoading(false);
-          return;
-        }
-
-        setUser(null);
-        setMemberships([]);
-        setPermissions([]);
-        setLoading(false);
-        return;
-      }
-
-      const data = await safeJson(res);
-      setUser(data.user || null);
-      setMemberships(data.memberships || []);
-      setPermissions(data.permissions || []);
+      const data = await fetchCurrentIdentity();
+      applyIdentity(data);
     } catch (err) {
-      if (import.meta.env.DEV && isLocalDevHost()) {
-        const demo = createLocalDevAuthSession();
-        setError("");
-        setUser(demo.user);
-        setMemberships(demo.memberships);
-        setPermissions(demo.permissions);
-      } else {
-        setError(err?.message || "Failed to load session.");
-        setUser(null);
-        setMemberships([]);
-        setPermissions([]);
-      }
+      const status = err?.status || 0;
+      const sessionStatus = status === 401 ? "invalid" : status === 403 ? "forbidden" : "network_error";
+      clearAuth(sessionStatus, status);
+      setError(status === 401 ? "" : err?.message || "Failed to load session.");
+      publishAuthClientEvent({
+        event_type: "auth_session_load_failed",
+        result: "failed",
+        reason: sessionStatus,
+      });
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [applyIdentity, clearAuth]);
 
   useEffect(() => {
     refreshAuth();
@@ -115,68 +64,85 @@ export function AuthProvider({ children }) {
 
   const login = useCallback(async ({ email, password }) => {
     setError("");
-    const res = await fetch(`${API_BASE}/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-
-    const data = await safeJson(res);
-    if (!res.ok) {
-      throw new Error(data?.error || "Login failed.");
-    }
-    await refreshAuth();
-    return data;
-  }, [refreshAuth]);
+    const data = await loginWithPassword({ email, password });
+    const next = applyIdentity(data);
+    publishAuthClientEvent({ event_type: "auth_login_success", result: "allowed" });
+    return next;
+  }, [applyIdentity]);
 
   const logout = useCallback(async () => {
     setError("");
-    await fetch(`${API_BASE}/auth/logout`, {
-      method: "POST",
-    });
-    await refreshAuth();
-  }, [refreshAuth]);
+    try {
+      await logoutSession(state.csrfToken);
+    } finally {
+      clearAuth("revoked", 401);
+      publishAuthClientEvent({ event_type: "auth_logout", result: "allowed" });
+    }
+  }, [clearAuth, state.csrfToken]);
+
+  const rotateSession = useCallback(async () => {
+    const data = await refreshSession(state.csrfToken);
+    return applyIdentity(data);
+  }, [applyIdentity, state.csrfToken]);
 
   const hasRole = useCallback((roleName) => {
-    return memberships.some((m) => m?.role === roleName || m?.role_name === roleName);
-  }, [memberships]);
+    return normalizeAuthRole(state.role) === normalizeAuthRole(roleName) ||
+      state.memberships.some((m) => normalizeAuthRole(m?.role || m?.role_name) === normalizeAuthRole(roleName));
+  }, [state.memberships, state.role]);
 
   const hasPermission = useCallback((permissionKey) => {
-    return permissions.includes(permissionKey);
-  }, [permissions]);
+    if (state.role === BOS_AUTH_ROLES.SHS_ADMIN && !String(permissionKey || "").startsWith("bos.")) {
+      return true;
+    }
+    if (state.role === BOS_AUTH_ROLES.CLIENT_ADMIN && ["reports.view", "reports.preview"].includes(permissionKey)) {
+      return true;
+    }
+    return state.permissions.includes(permissionKey);
+  }, [state.permissions, state.role]);
 
   const belongsToOrg = useCallback((orgIdOrType) => {
-    return memberships.some(
+    return state.memberships.some(
       (m) =>
         m?.organization_id === orgIdOrType ||
         m?.org_id === orgIdOrType ||
         m?.organization_type === orgIdOrType ||
         m?.org_type === orgIdOrType
     );
-  }, [memberships]);
+  }, [state.memberships]);
 
   const value = useMemo(() => ({
     loading,
     error,
-    user,
-    memberships,
-    permissions,
-    isAuthenticated: !!user,
+    httpStatus,
+    user: state.user,
+    role: state.role,
+    memberships: state.memberships,
+    permissions: state.permissions,
+    sessionStatus: state.sessionStatus,
+    csrfToken: state.csrfToken,
+    expiresAt: state.expiresAt,
+    reauthRequired: state.reauthRequired,
+    environment: state.environment,
+    isAuthenticated: state.authenticated,
+    isForbidden: httpStatus === 403 || state.sessionStatus === "forbidden",
+    isExpired: state.sessionStatus === "expired",
+    isRevoked: state.sessionStatus === "revoked",
     refreshAuth,
     login,
     logout,
+    rotateSession,
     hasRole,
     hasPermission,
     belongsToOrg,
   }), [
     loading,
     error,
-    user,
-    memberships,
-    permissions,
+    httpStatus,
+    state,
     refreshAuth,
     login,
     logout,
+    rotateSession,
     hasRole,
     hasPermission,
     belongsToOrg,

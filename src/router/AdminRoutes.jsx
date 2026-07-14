@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { canAccessHubRoute } from "@/system/identity/hubAccessControl";
-import { getCurrentIdentity } from "@/system/identity/identityRouting";
+import { useAuthContext } from "@/auth/auth-context";
 
 import AppRegistry from "@/pages/admin/AppRegistry.jsx";
 import Registry from "@/pages/admin/Registry.jsx";
@@ -37,6 +37,7 @@ import ShsEventBusPage from "@/pages/admin/event-bus/ShsEventBusPage.jsx";
 import ShsJobSchedulerPage from "@/pages/admin/scheduler/ShsJobSchedulerPage.jsx";
 import ShsNotificationFabricPage from "@/pages/admin/notifications/ShsNotificationFabricPage.jsx";
 import ShsBosExecutiveCommandCenterPage from "@/pages/admin/executive-command/ShsBosExecutiveCommandCenterPage.jsx";
+import ShsIdentityAccessCenterPage from "@/pages/admin/identity-access/ShsIdentityAccessCenterPage.jsx";
 import SHFImpactCommandCenter from "@/pages/shf-command/SHFImpactCommandCenter.jsx";
 import WorkspaceDashboard from "@/pages/exchange/WorkspaceDashboard.jsx";
 import LordOutcomesRoutes from "@/router/LordOutcomesRoutes.jsx";
@@ -73,7 +74,6 @@ import IdentityManagement from "../pages/admin/identity/IdentityManagement";
 import UploadManager from "../pages/admin/uploads/UploadManager";
 import AuditLogViewer from "../pages/admin/audit/AuditLogViewer";
 
-import AuthGuard from "../auth/AuthGuard";
 import PermissionGuard from "../auth/PermissionGuard";
 import SolutionsInfrastructurePage from "@/pages/solutions/SolutionsInfrastructurePage.jsx";
 import SHSPartnerGrowthEngine from "@/pages/admin/growth/SHSPartnerGrowthEngine.jsx";
@@ -84,40 +84,27 @@ installGlobalButtonClickSound();
 
 function ProtectedHubRoute({ path, children }) {
   const location = useLocation();
-  const identity = getCurrentIdentity();
+  const auth = useAuthContext();
   const routePath = path || location.pathname || "/hub";
-  const isAllowed = identity.isAuthenticated && canAccessHubRoute(identity.role, routePath);
+  const isAllowed = auth.isAuthenticated && canAccessHubRoute(auth.role, routePath);
 
-  React.useEffect(() => {
-    if (!identity.isAuthenticated) return;
+  if (auth.loading) {
+    return <div style={{ padding: 24, color: "#cbd5e1" }}>Loading session...</div>;
+  }
 
-    if (!canAccessHubRoute(identity.role, routePath)) {
-      console.warn("[identity] blocked route", {
-        route: routePath,
-        role: identity.role,
-        user: identity.email,
-      });
-
-      localStorage.setItem(
-        "shsAccessRedirectNotice",
-        JSON.stringify({
-          blockedRoute: routePath,
-          role: identity.role,
-          user: identity.email,
-          reason: "Your current role does not have access to that page.",
-          redirectedTo: "/hub",
-          time: new Date().toISOString(),
-        })
-      );
-    }
-  }, [identity.isAuthenticated, identity.role, identity.email, routePath]);
-
-  if (!identity.isAuthenticated) {
+  if (!auth.isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
   if (!isAllowed) {
-    return <Navigate to="/hub" replace />;
+    return (
+      <main style={{ padding: 24, color: "#fecaca" }}>
+        <h1 style={{ margin: "0 0 8px" }}>Access restricted</h1>
+        <p style={{ margin: 0 }}>
+          The active backend session does not allow access to {routePath}.
+        </p>
+      </main>
+    );
   }
 
   return children;
@@ -139,7 +126,6 @@ function protect(path, element, permissions = []) {
 
 export default function AdminRoutes() {
   return (
-    <AuthGuard>
       <Routes>
         <Route path="/login" element={<SHSLoginPage />} />
         {/* Default */}
@@ -222,6 +208,7 @@ export default function AdminRoutes() {
         <Route path="/ops/scheduler" element={protect("/ops/scheduler", <ShsJobSchedulerPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/ops/notifications" element={protect("/ops/notifications", <ShsNotificationFabricPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/ops/executive-command" element={protect("/ops/executive-command", <ShsBosExecutiveCommandCenterPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
+        <Route path="/ops/identity-access" element={protect("/ops/identity-access", <ShsIdentityAccessCenterPage />, ["bos.identity.read"])} />
         <Route path="/ops/agents" element={protect("/ops/agents", <AgentWorkbenchPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/ops/direct-connect" element={protect("/ops/direct-connect", <DirectConnectProofCenterPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/ops/projects" element={protect("/ops/projects", <OpsProjectSetup />)} />
@@ -243,6 +230,5 @@ export default function AdminRoutes() {
         <Route path="*" element={<Navigate to="/hub" replace />} />
 
       </Routes>
-    </AuthGuard>
   );
 }

@@ -1,0 +1,3515 @@
+{
+  "metadata": {
+    "audit_name": "SHS BOS V1 Master Layer Inventory",
+    "scan_timestamp": "2026-07-14T00:12:42.095917+00:00",
+    "repository_root": "/Users/mikeslate/Desktop/shrv1",
+    "branch": "v1.1-development",
+    "head": "0c86c3e97c30e91e28b577bd62c6594c2475cfb6",
+    "head_short": "0c86c3e",
+    "status_summary": "A  docs/SHS_PRODUCTION_AUTH_IDENTITY_HARDENING_V1.json\nA  docs/SHS_PRODUCTION_AUTH_IDENTITY_HARDENING_V1.md\nA  docs/SHS_PRODUCTION_AUTH_IDENTITY_HARDENING_V1_MANUAL_GOVERNANCE_REVIEW.json\nA  docs/SHS_PRODUCTION_AUTH_IDENTITY_HARDENING_V1_MANUAL_GOVERNANCE_REVIEW.md\nM  package.json\nA  scripts/check_shs_production_auth_identity_hardening.py\nA  services/shf-agent-fabric/auth/__init__.py\nA  services/shf-agent-fabric/auth/audit.py\nA  services/shf-agent-fabric/auth/config.py\nA  services/shf-agent-fabric/auth/cookies.py\nA  services/shf-agent-fabric/auth/csrf.py\nA  services/shf-agent-fabric/auth/dependencies.py\nA  services/shf-agent-fabric/auth/passwords.py\nA  services/shf-agent-fabric/auth/permissions.py\nA  services/shf-agent-fabric/auth/rate_limit.py\nA  services/shf-agent-fabric/auth/routes.py\nA  services/shf-agent-fabric/auth/security_headers.py\nA  services/shf-agent-fabric/auth/sessions.py\nA  services/shf-agent-fabric/auth/store.py\nM  services/shf-agent-fabric/main.py\nA  services/shf-agent-fabric/tests/test_auth_hardening.py\nM  src/auth/auth-context.jsx\nM  src/components/admin/AdminSidebar.jsx\nA  src/pages/admin/identity-access/ShsIdentityAccessCenterPage.jsx\nA  src/pages/admin/identity-access/components/IdentityActiveSessionsPanel.jsx\nA  src/pages/admin/identity-access/components/IdentityAuditTimeline.jsx\nA  src/pages/admin/identity-access/components/IdentityConfigurationReadiness.jsx\nA  src/pages/admin/identity-access/components/IdentityDemoModePanel.jsx\nA  src/pages/admin/identity-access/components/IdentityRolePermissionMatrix.jsx\nA  src/pages/admin/identity-access/components/IdentityRouteAccessMatrix.jsx\nA  src/pages/admin/identity-access/components/IdentitySafetyPanel.jsx\nA  src/pages/admin/identity-access/components/IdentitySecurityOverview.jsx\nA  src/pages/admin/identity-access/components/IdentitySessionPanel.jsx\nA  src/pages/admin/identity-access/components/IdentityThreatModelPanel.jsx\nA  src/pages/admin/identity-access/shsIdentityAccessCenter.css\nM  src/pages/auth/SHSLoginPage.jsx\nM  src/router/AdminRoutes.jsx\nA  src/system/identity/authClient.js\nA  src/system/identity/authConfig.js\nA  src/system/identity/authEvents.js\nA  src/system/identity/authPermissions.js\nA  src/system/identity/authRoles.js\nA  src/system/identity/authRoutePolicy.js\nA  src/system/identity/authState.js\nA  src/system/identity/authStorageSafety.js\nM  src/system/identity/hubAccessControl.js\nM  src/system/routes/crossAppRouteBridge.js\nA  tests/test_shs_auth_identity_boundary.py",
+    "python_version": "Python 3.12.8",
+    "node_version": "v22.17.1",
+    "npm_version": "11.13.0",
+    "scope": "read-only evidence-based audit artifacts; application source not modified"
+  },
+  "layer_count": 60,
+  "blocker_count": 5,
+  "layers": [
+    {
+      "layer_id": "SHS-LAYER-001",
+      "official_name": "Identity & Access",
+      "overall_status": "validated_not_hardened",
+      "closure_status": "closed_with_v1_limitations",
+      "completion": 88,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/identity/hubAccessControl.js",
+          "line_range": "19-145",
+          "evidence_type": "access_control",
+          "explanation": "hubPageAccess maps internal routes to roles and canAccessHubRoute enforces role checks.",
+          "what_it_proves": "Route access policy exists for SHS admin/internal surfaces.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "layer_id": "SHS-LAYER-002",
+      "official_name": "SHS Spine",
+      "overall_status": "architecture_defined",
+      "closure_status": "partially_connected",
+      "completion": 55,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "85-193",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive source summaries enumerate registry, orchestrator, command bus, event bus, scheduler, notifications, tracking, persistence, agents, automation, Direct Connect, reports, and governance.",
+          "what_it_proves": "Executive Command Center acts as a local summary/visibility integration hub.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "85-193",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive source summaries enumerate registry, orchestrator, command bus, event bus, scheduler, notifications, tracking, persistence, agents, automation, Direct Connect, reports, and governance.",
+          "what_it_proves": "Executive Command Center acts as a local summary/visibility integration hub.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-003",
+      "official_name": "SHF Spine",
+      "overall_status": "architecture_defined",
+      "closure_status": "blocked_by_cross_repository_dependency",
+      "completion": 45,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+          "line_range": "13-21",
+          "evidence_type": "prior_final_audit",
+          "explanation": "Prior final audit decision was V1_READY_WITH_OWNER_REVIEW due to green validations but mixed worktree.",
+          "what_it_proves": "Recent audit precedent separates validation pass from clean release certification.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        },
+        {
+          "repository": "shf-next",
+          "file_path": "src/App.tsx",
+          "line_range": "not_read_current_turn",
+          "evidence_type": "cross_repository_reference",
+          "explanation": "Memory and accessible file inventory indicate shf-next owns connected public/studio surfaces, but this audit did not merge authority.",
+          "what_it_proves": "Cross-repository route/data contracts require explicit owner review.",
+          "evidence_strength": "weak",
+          "currency": "external"
+        }
+      ],
+      "runtime_wiring_evidence": [],
+      "gaps": [
+        "End-to-end operational chain is not closed by current evidence."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-004",
+      "official_name": "SHS to SHF Data Flow Boundary",
+      "overall_status": "validated_not_hardened",
+      "closure_status": "closed_with_v1_limitations",
+      "completion": 82,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+          "line_range": "13-21",
+          "evidence_type": "prior_final_audit",
+          "explanation": "Prior final audit decision was V1_READY_WITH_OWNER_REVIEW due to green validations but mixed worktree.",
+          "what_it_proves": "Recent audit precedent separates validation pass from clean release certification.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [],
+      "gaps": []
+    },
+    {
+      "layer_id": "SHS-LAYER-005",
+      "official_name": "API Gateway",
+      "overall_status": "integrated_not_validated",
+      "closure_status": "partially_connected",
+      "completion": 68,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "vite.config.js",
+          "line_range": "9-18",
+          "evidence_type": "runtime_proxy",
+          "explanation": "Vite proxies /api to 127.0.0.1:8091.",
+          "what_it_proves": "Frontend is configured to reach the local API host.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "vite.config.js",
+          "line_range": "9-18",
+          "evidence_type": "runtime_proxy",
+          "explanation": "Vite proxies /api to 127.0.0.1:8091.",
+          "what_it_proves": "Frontend is configured to reach the local API host.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-006",
+      "official_name": "Event/Webhook Layer",
+      "overall_status": "partially_implemented",
+      "closure_status": "mock_connected",
+      "completion": 62,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/event-bus/shsEventStorage.js",
+          "line_range": "7-74",
+          "evidence_type": "local_event_processing",
+          "explanation": "Event Bus stores local events/subscribers, validates schema, scans safety, routes to subscribers, and writes local records.",
+          "what_it_proves": "A local event/message fabric exists but is browser-local.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "1-24",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive Command Center imports summaries from command bus, event bus, scheduler, notifications, persistence, tracking, registry, and orchestrator modules.",
+          "what_it_proves": "Executive surface consumes local runtime fabric modules.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "1-24",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive Command Center imports summaries from command bus, event bus, scheduler, notifications, persistence, tracking, registry, and orchestrator modules.",
+          "what_it_proves": "Executive surface consumes local runtime fabric modules.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-007",
+      "official_name": "Command Bus",
+      "overall_status": "partially_implemented",
+      "closure_status": "mock_connected",
+      "completion": 66,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/command-bus/shsCommandStorage.js",
+          "line_range": "10-87",
+          "evidence_type": "local_state_processing",
+          "explanation": "Command Bus stores command previews/history, validates, checks approval, and records preview-only execution status.",
+          "what_it_proves": "Command processing is implemented locally and intentionally preview-only.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "1-24",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive Command Center imports summaries from command bus, event bus, scheduler, notifications, persistence, tracking, registry, and orchestrator modules.",
+          "what_it_proves": "Executive surface consumes local runtime fabric modules.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "85-193",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive source summaries enumerate registry, orchestrator, command bus, event bus, scheduler, notifications, tracking, persistence, agents, automation, Direct Connect, reports, and governance.",
+          "what_it_proves": "Executive Command Center acts as a local summary/visibility integration hub.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "1-24",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive Command Center imports summaries from command bus, event bus, scheduler, notifications, persistence, tracking, registry, and orchestrator modules.",
+          "what_it_proves": "Executive surface consumes local runtime fabric modules.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "85-193",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive source summaries enumerate registry, orchestrator, command bus, event bus, scheduler, notifications, tracking, persistence, agents, automation, Direct Connect, reports, and governance.",
+          "what_it_proves": "Executive Command Center acts as a local summary/visibility integration hub.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-008",
+      "official_name": "Job Scheduler",
+      "overall_status": "partially_implemented",
+      "closure_status": "mock_connected",
+      "completion": 60,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "1-24",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive Command Center imports summaries from command bus, event bus, scheduler, notifications, persistence, tracking, registry, and orchestrator modules.",
+          "what_it_proves": "Executive surface consumes local runtime fabric modules.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "85-193",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive source summaries enumerate registry, orchestrator, command bus, event bus, scheduler, notifications, tracking, persistence, agents, automation, Direct Connect, reports, and governance.",
+          "what_it_proves": "Executive Command Center acts as a local summary/visibility integration hub.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "1-24",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive Command Center imports summaries from command bus, event bus, scheduler, notifications, persistence, tracking, registry, and orchestrator modules.",
+          "what_it_proves": "Executive surface consumes local runtime fabric modules.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "85-193",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive source summaries enumerate registry, orchestrator, command bus, event bus, scheduler, notifications, tracking, persistence, agents, automation, Direct Connect, reports, and governance.",
+          "what_it_proves": "Executive Command Center acts as a local summary/visibility integration hub.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-009",
+      "official_name": "Notification / Alert",
+      "overall_status": "partially_implemented",
+      "closure_status": "mock_connected",
+      "completion": 58,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "1-24",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive Command Center imports summaries from command bus, event bus, scheduler, notifications, persistence, tracking, registry, and orchestrator modules.",
+          "what_it_proves": "Executive surface consumes local runtime fabric modules.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "85-193",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive source summaries enumerate registry, orchestrator, command bus, event bus, scheduler, notifications, tracking, persistence, agents, automation, Direct Connect, reports, and governance.",
+          "what_it_proves": "Executive Command Center acts as a local summary/visibility integration hub.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "1-24",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive Command Center imports summaries from command bus, event bus, scheduler, notifications, persistence, tracking, registry, and orchestrator modules.",
+          "what_it_proves": "Executive surface consumes local runtime fabric modules.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "85-193",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive source summaries enumerate registry, orchestrator, command bus, event bus, scheduler, notifications, tracking, persistence, agents, automation, Direct Connect, reports, and governance.",
+          "what_it_proves": "Executive Command Center acts as a local summary/visibility integration hub.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-010",
+      "official_name": "Batch/Import",
+      "overall_status": "integrated_not_validated",
+      "closure_status": "partially_connected",
+      "completion": 68,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-011",
+      "official_name": "Adapter Layer",
+      "overall_status": "integrated_not_validated",
+      "closure_status": "partially_connected",
+      "completion": 68,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-012",
+      "official_name": "Direct Connect Layer",
+      "overall_status": "partially_implemented",
+      "closure_status": "mock_connected",
+      "completion": 63,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/data/shsDirectConnectData.js",
+          "line_range": "1-16",
+          "evidence_type": "data_model",
+          "explanation": "Direct Connect metadata states local-first mock readiness without live integrations, credentials, OAuth, or external sync.",
+          "what_it_proves": "Direct Connect is intentionally not a live connector execution layer in V1.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/data/shsDirectConnectData.js",
+          "line_range": "61-168",
+          "evidence_type": "data_model",
+          "explanation": "Connector records are mock/import/local placeholders with deferred live features and public-impact blocking defaults.",
+          "what_it_proves": "Source categories exist, but many live execution paths are deferred.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/identity/hubAccessControl.js",
+          "line_range": "19-145",
+          "evidence_type": "access_control",
+          "explanation": "hubPageAccess maps internal routes to roles and canAccessHubRoute enforces role checks.",
+          "what_it_proves": "Route access policy exists for SHS admin/internal surfaces.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-013",
+      "official_name": "Source Registry Layer",
+      "overall_status": "integrated_not_validated",
+      "closure_status": "partially_connected",
+      "completion": 72,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-014",
+      "official_name": "Data Federation Layer",
+      "overall_status": "integrated_not_validated",
+      "closure_status": "partially_connected",
+      "completion": 66,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-015",
+      "official_name": "Data Aggregator Layer",
+      "overall_status": "integrated_not_validated",
+      "closure_status": "partially_connected",
+      "completion": 69,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-016",
+      "official_name": "Data Normalization Layer",
+      "overall_status": "integrated_not_validated",
+      "closure_status": "partially_connected",
+      "completion": 67,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-017",
+      "official_name": "Evidence Package Layer",
+      "overall_status": "integrated_not_validated",
+      "closure_status": "partially_connected",
+      "completion": 68,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-018",
+      "official_name": "Data Verification Layer",
+      "overall_status": "integrated_not_validated",
+      "closure_status": "partially_connected",
+      "completion": 70,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-019",
+      "official_name": "Data Approval Layer",
+      "overall_status": "integrated_not_validated",
+      "closure_status": "partially_connected",
+      "completion": 68,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-020",
+      "official_name": "Warehouse Sync",
+      "overall_status": "scaffolded",
+      "closure_status": "documentation_only",
+      "completion": 25,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-021",
+      "official_name": "Truth Spine",
+      "overall_status": "validated_not_hardened",
+      "closure_status": "closed_with_v1_limitations",
+      "completion": 84,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+          "line_range": "13-21",
+          "evidence_type": "prior_final_audit",
+          "explanation": "Prior final audit decision was V1_READY_WITH_OWNER_REVIEW due to green validations but mixed worktree.",
+          "what_it_proves": "Recent audit precedent separates validation pass from clean release certification.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "layer_id": "SHS-LAYER-022",
+      "official_name": "Oracle Layer",
+      "overall_status": "validated_not_hardened",
+      "closure_status": "closed_with_v1_limitations",
+      "completion": 82,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+          "line_range": "13-21",
+          "evidence_type": "prior_final_audit",
+          "explanation": "Prior final audit decision was V1_READY_WITH_OWNER_REVIEW due to green validations but mixed worktree.",
+          "what_it_proves": "Recent audit precedent separates validation pass from clean release certification.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "layer_id": "SHS-LAYER-023",
+      "official_name": "Policy Engine",
+      "overall_status": "integrated_not_validated",
+      "closure_status": "partially_connected",
+      "completion": 73,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-024",
+      "official_name": "Alignment Layer",
+      "overall_status": "integrated_not_validated",
+      "closure_status": "closed_with_v1_limitations",
+      "completion": 75,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/contracts/agents/agents.json",
+          "line_range": "1-220",
+          "evidence_type": "agent_registry",
+          "explanation": "Agent registry is keyed by agent ID and records capabilities, lifecycle, policy, inputs, outputs, and visibility.",
+          "what_it_proves": "Agent Fabric has a concrete contract registry.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "layer_id": "SHS-LAYER-025",
+      "official_name": "AI / Agent Fabric",
+      "overall_status": "validated_not_hardened",
+      "closure_status": "closed_with_v1_limitations",
+      "completion": 80,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/contracts/agents/agents.json",
+          "line_range": "1-220",
+          "evidence_type": "agent_registry",
+          "explanation": "Agent registry is keyed by agent ID and records capabilities, lifecycle, policy, inputs, outputs, and visibility.",
+          "what_it_proves": "Agent Fabric has a concrete contract registry.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/identity/hubAccessControl.js",
+          "line_range": "19-145",
+          "evidence_type": "access_control",
+          "explanation": "hubPageAccess maps internal routes to roles and canAccessHubRoute enforces role checks.",
+          "what_it_proves": "Route access policy exists for SHS admin/internal surfaces.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "layer_id": "SHS-LAYER-026",
+      "official_name": "Agent Workbench",
+      "overall_status": "validated_not_hardened",
+      "closure_status": "closed_with_v1_limitations",
+      "completion": 82,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "85-193",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive source summaries enumerate registry, orchestrator, command bus, event bus, scheduler, notifications, tracking, persistence, agents, automation, Direct Connect, reports, and governance.",
+          "what_it_proves": "Executive Command Center acts as a local summary/visibility integration hub.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/contracts/agents/agents.json",
+          "line_range": "1-220",
+          "evidence_type": "agent_registry",
+          "explanation": "Agent registry is keyed by agent ID and records capabilities, lifecycle, policy, inputs, outputs, and visibility.",
+          "what_it_proves": "Agent Fabric has a concrete contract registry.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "85-193",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive source summaries enumerate registry, orchestrator, command bus, event bus, scheduler, notifications, tracking, persistence, agents, automation, Direct Connect, reports, and governance.",
+          "what_it_proves": "Executive Command Center acts as a local summary/visibility integration hub.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "layer_id": "SHS-LAYER-027",
+      "official_name": "Context-Adaptive Analyst",
+      "overall_status": "partially_implemented",
+      "closure_status": "partially_connected",
+      "completion": 60,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/contracts/agents/agents.json",
+          "line_range": "1-220",
+          "evidence_type": "agent_registry",
+          "explanation": "Agent registry is keyed by agent ID and records capabilities, lifecycle, policy, inputs, outputs, and visibility.",
+          "what_it_proves": "Agent Fabric has a concrete contract registry.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-028",
+      "official_name": "Reports Layer",
+      "overall_status": "validated_not_hardened",
+      "closure_status": "closed_with_v1_limitations",
+      "completion": 82,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/identity/hubAccessControl.js",
+          "line_range": "19-145",
+          "evidence_type": "access_control",
+          "explanation": "hubPageAccess maps internal routes to roles and canAccessHubRoute enforces role checks.",
+          "what_it_proves": "Route access policy exists for SHS admin/internal surfaces.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+          "line_range": "13-21",
+          "evidence_type": "prior_final_audit",
+          "explanation": "Prior final audit decision was V1_READY_WITH_OWNER_REVIEW due to green validations but mixed worktree.",
+          "what_it_proves": "Recent audit precedent separates validation pass from clean release certification.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "layer_id": "SHS-LAYER-029",
+      "official_name": "Readiness Gate",
+      "overall_status": "integrated_not_validated",
+      "closure_status": "partially_connected",
+      "completion": 72,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-030",
+      "official_name": "Verified Aggregation",
+      "overall_status": "integrated_not_validated",
+      "closure_status": "partially_connected",
+      "completion": 70,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-031",
+      "official_name": "Public Approval",
+      "overall_status": "integrated_not_validated",
+      "closure_status": "partially_connected",
+      "completion": 72,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-032",
+      "official_name": "Audit & Verification",
+      "overall_status": "integrated_not_validated",
+      "closure_status": "partially_connected",
+      "completion": 74,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "310-319",
+          "evidence_type": "startup_validation",
+          "explanation": "Startup tasks initialize DB and verify ledger, Watchtower snapshot store, risk-engine lock, adapter parity, catalog parity, and auth configuration.",
+          "what_it_proves": "Some governance and safety checks run at app startup.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "310-319",
+          "evidence_type": "startup_validation",
+          "explanation": "Startup tasks initialize DB and verify ledger, Watchtower snapshot store, risk-engine lock, adapter parity, catalog parity, and auth configuration.",
+          "what_it_proves": "Some governance and safety checks run at app startup.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-033",
+      "official_name": "Watchtower",
+      "overall_status": "validated_not_hardened",
+      "closure_status": "closed_with_v1_limitations",
+      "completion": 78,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "310-319",
+          "evidence_type": "startup_validation",
+          "explanation": "Startup tasks initialize DB and verify ledger, Watchtower snapshot store, risk-engine lock, adapter parity, catalog parity, and auth configuration.",
+          "what_it_proves": "Some governance and safety checks run at app startup.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+          "line_range": "13-21",
+          "evidence_type": "prior_final_audit",
+          "explanation": "Prior final audit decision was V1_READY_WITH_OWNER_REVIEW due to green validations but mixed worktree.",
+          "what_it_proves": "Recent audit precedent separates validation pass from clean release certification.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "310-319",
+          "evidence_type": "startup_validation",
+          "explanation": "Startup tasks initialize DB and verify ledger, Watchtower snapshot store, risk-engine lock, adapter parity, catalog parity, and auth configuration.",
+          "what_it_proves": "Some governance and safety checks run at app startup.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "layer_id": "SHS-LAYER-034",
+      "official_name": "LOO / Lord of Outcomes",
+      "overall_status": "validated_not_hardened",
+      "closure_status": "closed_with_v1_limitations",
+      "completion": 78,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "310-319",
+          "evidence_type": "startup_validation",
+          "explanation": "Startup tasks initialize DB and verify ledger, Watchtower snapshot store, risk-engine lock, adapter parity, catalog parity, and auth configuration.",
+          "what_it_proves": "Some governance and safety checks run at app startup.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "vite.config.js",
+          "line_range": "54-79",
+          "evidence_type": "build_configuration",
+          "explanation": "Vite declares multi-page build inputs including admin, foundation, public, sales, reports-adjacent and ops entrypoints.",
+          "what_it_proves": "The repository is a multi-page Vite surface.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "310-319",
+          "evidence_type": "startup_validation",
+          "explanation": "Startup tasks initialize DB and verify ledger, Watchtower snapshot store, risk-engine lock, adapter parity, catalog parity, and auth configuration.",
+          "what_it_proves": "Some governance and safety checks run at app startup.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "layer_id": "SHS-LAYER-035",
+      "official_name": "Governance Layer",
+      "overall_status": "validated_not_hardened",
+      "closure_status": "closed_with_v1_limitations",
+      "completion": 86,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+          "line_range": "13-21",
+          "evidence_type": "prior_final_audit",
+          "explanation": "Prior final audit decision was V1_READY_WITH_OWNER_REVIEW due to green validations but mixed worktree.",
+          "what_it_proves": "Recent audit precedent separates validation pass from clean release certification.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [],
+      "gaps": []
+    },
+    {
+      "layer_id": "SHS-LAYER-036",
+      "official_name": "Security / Privacy",
+      "overall_status": "validated_not_hardened",
+      "closure_status": "closed_with_v1_limitations",
+      "completion": 78,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/identity/hubAccessControl.js",
+          "line_range": "19-145",
+          "evidence_type": "access_control",
+          "explanation": "hubPageAccess maps internal routes to roles and canAccessHubRoute enforces role checks.",
+          "what_it_proves": "Route access policy exists for SHS admin/internal surfaces.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "310-319",
+          "evidence_type": "startup_validation",
+          "explanation": "Startup tasks initialize DB and verify ledger, Watchtower snapshot store, risk-engine lock, adapter parity, catalog parity, and auth configuration.",
+          "what_it_proves": "Some governance and safety checks run at app startup.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "310-319",
+          "evidence_type": "startup_validation",
+          "explanation": "Startup tasks initialize DB and verify ledger, Watchtower snapshot store, risk-engine lock, adapter parity, catalog parity, and auth configuration.",
+          "what_it_proves": "Some governance and safety checks run at app startup.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "layer_id": "SHS-LAYER-037",
+      "official_name": "Data Ownership / IP",
+      "overall_status": "integrated_not_validated",
+      "closure_status": "partially_connected",
+      "completion": 68,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-038",
+      "official_name": "Durable Persistence",
+      "overall_status": "partially_implemented",
+      "closure_status": "closed_with_v1_limitations",
+      "completion": 65,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/persistence/persistenceService.js",
+          "line_range": "27-112",
+          "evidence_type": "persistence_service",
+          "explanation": "Persistence service reads/writes repositories, appends versions, and transaction history through an adapter.",
+          "what_it_proves": "A shared local persistence service exists with version and transaction support.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/persistence/persistenceAdapters.js",
+          "line_range": "18-75",
+          "evidence_type": "persistence_adapter",
+          "explanation": "Default adapter is browser localStorage; database adapter is explicitly disabled placeholder.",
+          "what_it_proves": "Persistence is mostly browser-local rather than production database-backed.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "1-24",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive Command Center imports summaries from command bus, event bus, scheduler, notifications, persistence, tracking, registry, and orchestrator modules.",
+          "what_it_proves": "Executive surface consumes local runtime fabric modules.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "102-117",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit records localStorage/local-derived storage posture and critical-state migration as later hardening.",
+          "what_it_proves": "Durable server-side persistence is not universal; local-first state remains a V1 limitation.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "1-24",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive Command Center imports summaries from command bus, event bus, scheduler, notifications, persistence, tracking, registry, and orchestrator modules.",
+          "what_it_proves": "Executive surface consumes local runtime fabric modules.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "layer_id": "SHS-LAYER-039",
+      "official_name": "System Registry / Layer Control System",
+      "overall_status": "validated_not_hardened",
+      "closure_status": "closed_with_v1_limitations",
+      "completion": 80,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "1-24",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive Command Center imports summaries from command bus, event bus, scheduler, notifications, persistence, tracking, registry, and orchestrator modules.",
+          "what_it_proves": "Executive surface consumes local runtime fabric modules.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "85-193",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive source summaries enumerate registry, orchestrator, command bus, event bus, scheduler, notifications, tracking, persistence, agents, automation, Direct Connect, reports, and governance.",
+          "what_it_proves": "Executive Command Center acts as a local summary/visibility integration hub.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "1-24",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive Command Center imports summaries from command bus, event bus, scheduler, notifications, persistence, tracking, registry, and orchestrator modules.",
+          "what_it_proves": "Executive surface consumes local runtime fabric modules.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "85-193",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive source summaries enumerate registry, orchestrator, command bus, event bus, scheduler, notifications, tracking, persistence, agents, automation, Direct Connect, reports, and governance.",
+          "what_it_proves": "Executive Command Center acts as a local summary/visibility integration hub.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "layer_id": "SHS-LAYER-040",
+      "official_name": "System Orchestrator",
+      "overall_status": "partially_implemented",
+      "closure_status": "mock_connected",
+      "completion": 64,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "1-24",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive Command Center imports summaries from command bus, event bus, scheduler, notifications, persistence, tracking, registry, and orchestrator modules.",
+          "what_it_proves": "Executive surface consumes local runtime fabric modules.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "85-193",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive source summaries enumerate registry, orchestrator, command bus, event bus, scheduler, notifications, tracking, persistence, agents, automation, Direct Connect, reports, and governance.",
+          "what_it_proves": "Executive Command Center acts as a local summary/visibility integration hub.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/identity/hubAccessControl.js",
+          "line_range": "19-145",
+          "evidence_type": "access_control",
+          "explanation": "hubPageAccess maps internal routes to roles and canAccessHubRoute enforces role checks.",
+          "what_it_proves": "Route access policy exists for SHS admin/internal surfaces.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "1-24",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive Command Center imports summaries from command bus, event bus, scheduler, notifications, persistence, tracking, registry, and orchestrator modules.",
+          "what_it_proves": "Executive surface consumes local runtime fabric modules.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "85-193",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive source summaries enumerate registry, orchestrator, command bus, event bus, scheduler, notifications, tracking, persistence, agents, automation, Direct Connect, reports, and governance.",
+          "what_it_proves": "Executive Command Center acts as a local summary/visibility integration hub.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-041",
+      "official_name": "Executive Command Center",
+      "overall_status": "validated_not_hardened",
+      "closure_status": "closed_with_v1_limitations",
+      "completion": 84,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "1-24",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive Command Center imports summaries from command bus, event bus, scheduler, notifications, persistence, tracking, registry, and orchestrator modules.",
+          "what_it_proves": "Executive surface consumes local runtime fabric modules.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "85-193",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive source summaries enumerate registry, orchestrator, command bus, event bus, scheduler, notifications, tracking, persistence, agents, automation, Direct Connect, reports, and governance.",
+          "what_it_proves": "Executive Command Center acts as a local summary/visibility integration hub.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/identity/hubAccessControl.js",
+          "line_range": "19-145",
+          "evidence_type": "access_control",
+          "explanation": "hubPageAccess maps internal routes to roles and canAccessHubRoute enforces role checks.",
+          "what_it_proves": "Route access policy exists for SHS admin/internal surfaces.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "1-24",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive Command Center imports summaries from command bus, event bus, scheduler, notifications, persistence, tracking, registry, and orchestrator modules.",
+          "what_it_proves": "Executive surface consumes local runtime fabric modules.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "85-193",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive source summaries enumerate registry, orchestrator, command bus, event bus, scheduler, notifications, tracking, persistence, agents, automation, Direct Connect, reports, and governance.",
+          "what_it_proves": "Executive Command Center acts as a local summary/visibility integration hub.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "layer_id": "SHS-LAYER-042",
+      "official_name": "Tracking and Intelligence Layer",
+      "overall_status": "partially_implemented",
+      "closure_status": "partially_connected",
+      "completion": 63,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "1-24",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive Command Center imports summaries from command bus, event bus, scheduler, notifications, persistence, tracking, registry, and orchestrator modules.",
+          "what_it_proves": "Executive surface consumes local runtime fabric modules.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "85-193",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive source summaries enumerate registry, orchestrator, command bus, event bus, scheduler, notifications, tracking, persistence, agents, automation, Direct Connect, reports, and governance.",
+          "what_it_proves": "Executive Command Center acts as a local summary/visibility integration hub.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/identity/hubAccessControl.js",
+          "line_range": "19-145",
+          "evidence_type": "access_control",
+          "explanation": "hubPageAccess maps internal routes to roles and canAccessHubRoute enforces role checks.",
+          "what_it_proves": "Route access policy exists for SHS admin/internal surfaces.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "1-24",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive Command Center imports summaries from command bus, event bus, scheduler, notifications, persistence, tracking, registry, and orchestrator modules.",
+          "what_it_proves": "Executive surface consumes local runtime fabric modules.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "85-193",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive source summaries enumerate registry, orchestrator, command bus, event bus, scheduler, notifications, tracking, persistence, agents, automation, Direct Connect, reports, and governance.",
+          "what_it_proves": "Executive Command Center acts as a local summary/visibility integration hub.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-043",
+      "official_name": "SHS Sales Layer",
+      "overall_status": "partially_implemented",
+      "closure_status": "partially_connected",
+      "completion": 58,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/identity/hubAccessControl.js",
+          "line_range": "19-145",
+          "evidence_type": "access_control",
+          "explanation": "hubPageAccess maps internal routes to roles and canAccessHubRoute enforces role checks.",
+          "what_it_proves": "Route access policy exists for SHS admin/internal surfaces.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-044",
+      "official_name": "Production Ops",
+      "overall_status": "partially_implemented",
+      "closure_status": "partially_connected",
+      "completion": 62,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/identity/hubAccessControl.js",
+          "line_range": "19-145",
+          "evidence_type": "access_control",
+          "explanation": "hubPageAccess maps internal routes to roles and canAccessHubRoute enforces role checks.",
+          "what_it_proves": "Route access policy exists for SHS admin/internal surfaces.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-045",
+      "official_name": "Production Automation",
+      "overall_status": "validated_not_hardened",
+      "closure_status": "mock_connected",
+      "completion": 78,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "85-193",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive source summaries enumerate registry, orchestrator, command bus, event bus, scheduler, notifications, tracking, persistence, agents, automation, Direct Connect, reports, and governance.",
+          "what_it_proves": "Executive Command Center acts as a local summary/visibility integration hub.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+          "line_range": "85-193",
+          "evidence_type": "frontend_integration",
+          "explanation": "Executive source summaries enumerate registry, orchestrator, command bus, event bus, scheduler, notifications, tracking, persistence, agents, automation, Direct Connect, reports, and governance.",
+          "what_it_proves": "Executive Command Center acts as a local summary/visibility integration hub.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-046",
+      "official_name": "Development Library",
+      "overall_status": "partially_implemented",
+      "closure_status": "partially_connected",
+      "completion": 55,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/identity/hubAccessControl.js",
+          "line_range": "19-145",
+          "evidence_type": "access_control",
+          "explanation": "hubPageAccess maps internal routes to roles and canAccessHubRoute enforces role checks.",
+          "what_it_proves": "Route access policy exists for SHS admin/internal surfaces.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-047",
+      "official_name": "QA + Delivery",
+      "overall_status": "partially_implemented",
+      "closure_status": "partially_connected",
+      "completion": 58,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/identity/hubAccessControl.js",
+          "line_range": "19-145",
+          "evidence_type": "access_control",
+          "explanation": "hubPageAccess maps internal routes to roles and canAccessHubRoute enforces role checks.",
+          "what_it_proves": "Route access policy exists for SHS admin/internal surfaces.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "package.json",
+          "line_range": "2-71",
+          "evidence_type": "validation_scripts",
+          "explanation": "Package scripts define build, governance, layer, agent, Direct Connect, automation, and runtime validation commands.",
+          "what_it_proves": "Validation coverage exists for many named layers, but build alone is not end-to-end proof.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-048",
+      "official_name": "ClientOps",
+      "overall_status": "partially_implemented",
+      "closure_status": "partially_connected",
+      "completion": 60,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/identity/hubAccessControl.js",
+          "line_range": "19-145",
+          "evidence_type": "access_control",
+          "explanation": "hubPageAccess maps internal routes to roles and canAccessHubRoute enforces role checks.",
+          "what_it_proves": "Route access policy exists for SHS admin/internal surfaces.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-049",
+      "official_name": "Website Studio",
+      "overall_status": "partially_implemented",
+      "closure_status": "partially_connected",
+      "completion": 55,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/identity/hubAccessControl.js",
+          "line_range": "19-145",
+          "evidence_type": "access_control",
+          "explanation": "hubPageAccess maps internal routes to roles and canAccessHubRoute enforces role checks.",
+          "what_it_proves": "Route access policy exists for SHS admin/internal surfaces.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-050",
+      "official_name": "SHF Impact Command Center",
+      "overall_status": "partially_implemented",
+      "closure_status": "blocked_by_cross_repository_dependency",
+      "completion": 58,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/identity/hubAccessControl.js",
+          "line_range": "19-145",
+          "evidence_type": "access_control",
+          "explanation": "hubPageAccess maps internal routes to roles and canAccessHubRoute enforces role checks.",
+          "what_it_proves": "Route access policy exists for SHS admin/internal surfaces.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shf-next",
+          "file_path": "src/App.tsx",
+          "line_range": "not_read_current_turn",
+          "evidence_type": "cross_repository_reference",
+          "explanation": "Memory and accessible file inventory indicate shf-next owns connected public/studio surfaces, but this audit did not merge authority.",
+          "what_it_proves": "Cross-repository route/data contracts require explicit owner review.",
+          "evidence_strength": "weak",
+          "currency": "external"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "End-to-end operational chain is not closed by current evidence."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-051",
+      "official_name": "Public Impact Map",
+      "overall_status": "partially_implemented",
+      "closure_status": "blocked_by_cross_repository_dependency",
+      "completion": 52,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shf-next",
+          "file_path": "src/App.tsx",
+          "line_range": "not_read_current_turn",
+          "evidence_type": "cross_repository_reference",
+          "explanation": "Memory and accessible file inventory indicate shf-next owns connected public/studio surfaces, but this audit did not merge authority.",
+          "what_it_proves": "Cross-repository route/data contracts require explicit owner review.",
+          "evidence_strength": "weak",
+          "currency": "external"
+        }
+      ],
+      "runtime_wiring_evidence": [],
+      "gaps": [
+        "End-to-end operational chain is not closed by current evidence."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-052",
+      "official_name": "Program Registry",
+      "overall_status": "validated_not_hardened",
+      "closure_status": "closed_with_v1_limitations",
+      "completion": 78,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "310-319",
+          "evidence_type": "startup_validation",
+          "explanation": "Startup tasks initialize DB and verify ledger, Watchtower snapshot store, risk-engine lock, adapter parity, catalog parity, and auth configuration.",
+          "what_it_proves": "Some governance and safety checks run at app startup.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "310-319",
+          "evidence_type": "startup_validation",
+          "explanation": "Startup tasks initialize DB and verify ledger, Watchtower snapshot store, risk-engine lock, adapter parity, catalog parity, and auth configuration.",
+          "what_it_proves": "Some governance and safety checks run at app startup.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "layer_id": "SHS-LAYER-053",
+      "official_name": "Funding Intelligence",
+      "overall_status": "validated_not_hardened",
+      "closure_status": "closed_with_v1_limitations",
+      "completion": 76,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "310-319",
+          "evidence_type": "startup_validation",
+          "explanation": "Startup tasks initialize DB and verify ledger, Watchtower snapshot store, risk-engine lock, adapter parity, catalog parity, and auth configuration.",
+          "what_it_proves": "Some governance and safety checks run at app startup.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "341-544",
+          "evidence_type": "backend_router_registration",
+          "explanation": "FastAPI app registers auth, status, governance, truth, oracle, data, event, report, production, agent, operator, and admin routers.",
+          "what_it_proves": "Backend service has broad router wiring, though per-layer consumer strength varies.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "services/shf-agent-fabric/main.py",
+          "line_range": "310-319",
+          "evidence_type": "startup_validation",
+          "explanation": "Startup tasks initialize DB and verify ledger, Watchtower snapshot store, risk-engine lock, adapter parity, catalog parity, and auth configuration.",
+          "what_it_proves": "Some governance and safety checks run at app startup.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "layer_id": "SHS-LAYER-054",
+      "official_name": "Sponsorship Layer",
+      "overall_status": "architecture_defined",
+      "closure_status": "documentation_only",
+      "completion": 20,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-055",
+      "official_name": "Grant / Proposal Layer",
+      "overall_status": "partially_implemented",
+      "closure_status": "partially_connected",
+      "completion": 45,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/identity/hubAccessControl.js",
+          "line_range": "19-145",
+          "evidence_type": "access_control",
+          "explanation": "hubPageAccess maps internal routes to roles and canAccessHubRoute enforces role checks.",
+          "what_it_proves": "Route access policy exists for SHS admin/internal surfaces.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-056",
+      "official_name": "Governance Binder",
+      "overall_status": "partially_implemented",
+      "closure_status": "partially_connected",
+      "completion": 55,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/identity/hubAccessControl.js",
+          "line_range": "19-145",
+          "evidence_type": "access_control",
+          "explanation": "hubPageAccess maps internal routes to roles and canAccessHubRoute enforces role checks.",
+          "what_it_proves": "Route access policy exists for SHS admin/internal surfaces.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "Evidence supports partial/local/documented behavior, not production-grade end-to-end closure."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-057",
+      "official_name": "Commercialization / Billing / Entitlements",
+      "overall_status": "not_found",
+      "closure_status": "blocked_by_missing_layer",
+      "completion": 5,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [],
+      "gaps": [
+        "End-to-end operational chain is not closed by current evidence."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-058",
+      "official_name": "Support and Improvement Workflow",
+      "overall_status": "architecture_defined",
+      "closure_status": "blocked_by_missing_subsystem",
+      "completion": 30,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "gaps": [
+        "End-to-end operational chain is not closed by current evidence."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-059",
+      "official_name": "Search and Discovery",
+      "overall_status": "not_found",
+      "closure_status": "blocked_by_missing_layer",
+      "completion": 10,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [],
+      "gaps": [
+        "End-to-end operational chain is not closed by current evidence."
+      ]
+    },
+    {
+      "layer_id": "SHS-LAYER-060",
+      "official_name": "Backup / Recovery / Data Retention",
+      "overall_status": "architecture_defined",
+      "closure_status": "blocked_by_missing_subsystem",
+      "completion": 25,
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/system/persistence/persistenceAdapters.js",
+          "line_range": "18-75",
+          "evidence_type": "persistence_adapter",
+          "explanation": "Default adapter is browser localStorage; database adapter is explicitly disabled placeholder.",
+          "what_it_proves": "Persistence is mostly browser-local rather than production database-backed.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "102-117",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit records localStorage/local-derived storage posture and critical-state migration as later hardening.",
+          "what_it_proves": "Durable server-side persistence is not universal; local-first state remains a V1 limitation.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        }
+      ],
+      "runtime_wiring_evidence": [],
+      "gaps": [
+        "End-to-end operational chain is not closed by current evidence."
+      ]
+    }
+  ]
+}

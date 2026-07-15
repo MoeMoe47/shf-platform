@@ -1,0 +1,61 @@
+SHS BOS V1 Repository Snapshot
+Generated: 2026-07-14T00:12:42.095917+00:00
+Repository root: /Users/mikeslate/Desktop/shrv1
+Supporting repo: /Users/mikeslate/shf-next
+Branch: v1.1-development
+HEAD: 0c86c3e97c30e91e28b577bd62c6594c2475cfb6
+Git status --short:
+A  docs/SHS_PRODUCTION_AUTH_IDENTITY_HARDENING_V1.json
+A  docs/SHS_PRODUCTION_AUTH_IDENTITY_HARDENING_V1.md
+A  docs/SHS_PRODUCTION_AUTH_IDENTITY_HARDENING_V1_MANUAL_GOVERNANCE_REVIEW.json
+A  docs/SHS_PRODUCTION_AUTH_IDENTITY_HARDENING_V1_MANUAL_GOVERNANCE_REVIEW.md
+M  package.json
+A  scripts/check_shs_production_auth_identity_hardening.py
+A  services/shf-agent-fabric/auth/__init__.py
+A  services/shf-agent-fabric/auth/audit.py
+A  services/shf-agent-fabric/auth/config.py
+A  services/shf-agent-fabric/auth/cookies.py
+A  services/shf-agent-fabric/auth/csrf.py
+A  services/shf-agent-fabric/auth/dependencies.py
+A  services/shf-agent-fabric/auth/passwords.py
+A  services/shf-agent-fabric/auth/permissions.py
+A  services/shf-agent-fabric/auth/rate_limit.py
+A  services/shf-agent-fabric/auth/routes.py
+A  services/shf-agent-fabric/auth/security_headers.py
+A  services/shf-agent-fabric/auth/sessions.py
+A  services/shf-agent-fabric/auth/store.py
+M  services/shf-agent-fabric/main.py
+A  services/shf-agent-fabric/tests/test_auth_hardening.py
+M  src/auth/auth-context.jsx
+M  src/components/admin/AdminSidebar.jsx
+A  src/pages/admin/identity-access/ShsIdentityAccessCenterPage.jsx
+A  src/pages/admin/identity-access/components/IdentityActiveSessionsPanel.jsx
+A  src/pages/admin/identity-access/components/IdentityAuditTimeline.jsx
+A  src/pages/admin/identity-access/components/IdentityConfigurationReadiness.jsx
+A  src/pages/admin/identity-access/components/IdentityDemoModePanel.jsx
+A  src/pages/admin/identity-access/components/IdentityRolePermissionMatrix.jsx
+A  src/pages/admin/identity-access/components/IdentityRouteAccessMatrix.jsx
+A  src/pages/admin/identity-access/components/IdentitySafetyPanel.jsx
+A  src/pages/admin/identity-access/components/IdentitySecurityOverview.jsx
+A  src/pages/admin/identity-access/components/IdentitySessionPanel.jsx
+A  src/pages/admin/identity-access/components/IdentityThreatModelPanel.jsx
+A  src/pages/admin/identity-access/shsIdentityAccessCenter.css
+M  src/pages/auth/SHSLoginPage.jsx
+M  src/router/AdminRoutes.jsx
+A  src/system/identity/authClient.js
+A  src/system/identity/authConfig.js
+A  src/system/identity/authEvents.js
+A  src/system/identity/authPermissions.js
+A  src/system/identity/authRoles.js
+A  src/system/identity/authRoutePolicy.js
+A  src/system/identity/authState.js
+A  src/system/identity/authStorageSafety.js
+M  src/system/identity/hubAccessControl.js
+M  src/system/routes/crossAppRouteBridge.js
+A  tests/test_shs_auth_identity_boundary.py
+Python: Python 3.12.8
+Node: v22.17.1
+npm: 11.13.0
+Package manager notes: npm scripts are defined in package.json; no installs were run.
+Network/services: no external network calls, migrations, deployments, production service starts, staging, commits, or pushes were performed.
+Audit output directory: /Users/mikeslate/Desktop/shrv1/docs/v1-layer-audit

@@ -1,0 +1,62 @@
+# SHS BOS V1 Dependency Map
+
+- `SHS-LAYER-001` Identity & Access: upstream dependencies none recorded
+- `SHS-LAYER-002` SHS Spine: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-003` SHF Spine: upstream dependencies SHS-LAYER-001, SHS-LAYER-021, SHS-LAYER-022
+- `SHS-LAYER-004` SHS to SHF Data Flow Boundary: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-005` API Gateway: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-006` Event/Webhook Layer: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-007` Command Bus: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-008` Job Scheduler: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-009` Notification / Alert: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-010` Batch/Import: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-011` Adapter Layer: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-012` Direct Connect Layer: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-013` Source Registry Layer: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-014` Data Federation Layer: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-015` Data Aggregator Layer: upstream dependencies SHS-LAYER-001, SHS-LAYER-013
+- `SHS-LAYER-016` Data Normalization Layer: upstream dependencies SHS-LAYER-001, SHS-LAYER-013
+- `SHS-LAYER-017` Evidence Package Layer: upstream dependencies SHS-LAYER-001, SHS-LAYER-013
+- `SHS-LAYER-018` Data Verification Layer: upstream dependencies SHS-LAYER-001, SHS-LAYER-016, SHS-LAYER-017
+- `SHS-LAYER-019` Data Approval Layer: upstream dependencies SHS-LAYER-001, SHS-LAYER-016, SHS-LAYER-017
+- `SHS-LAYER-020` Warehouse Sync: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-021` Truth Spine: upstream dependencies SHS-LAYER-001, SHS-LAYER-017, SHS-LAYER-018
+- `SHS-LAYER-022` Oracle Layer: upstream dependencies SHS-LAYER-001, SHS-LAYER-017, SHS-LAYER-018
+- `SHS-LAYER-023` Policy Engine: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-024` Alignment Layer: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-025` AI / Agent Fabric: upstream dependencies SHS-LAYER-001, SHS-LAYER-021, SHS-LAYER-022
+- `SHS-LAYER-026` Agent Workbench: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-027` Context-Adaptive Analyst: upstream dependencies SHS-LAYER-001, SHS-LAYER-021, SHS-LAYER-022
+- `SHS-LAYER-028` Reports Layer: upstream dependencies SHS-LAYER-001, SHS-LAYER-021, SHS-LAYER-022
+- `SHS-LAYER-029` Readiness Gate: upstream dependencies SHS-LAYER-001, SHS-LAYER-021, SHS-LAYER-022
+- `SHS-LAYER-030` Verified Aggregation: upstream dependencies SHS-LAYER-001, SHS-LAYER-016, SHS-LAYER-017
+- `SHS-LAYER-031` Public Approval: upstream dependencies SHS-LAYER-001, SHS-LAYER-021, SHS-LAYER-022
+- `SHS-LAYER-032` Audit & Verification: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-033` Watchtower: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-034` LOO / Lord of Outcomes: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-035` Governance Layer: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-036` Security / Privacy: upstream dependencies none recorded
+- `SHS-LAYER-037` Data Ownership / IP: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-038` Durable Persistence: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-039` System Registry / Layer Control System: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-040` System Orchestrator: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-041` Executive Command Center: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-042` Tracking and Intelligence Layer: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-043` SHS Sales Layer: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-044` Production Ops: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-045` Production Automation: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-046` Development Library: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-047` QA + Delivery: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-048` ClientOps: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-049` Website Studio: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-050` SHF Impact Command Center: upstream dependencies SHS-LAYER-001, SHS-LAYER-021, SHS-LAYER-022
+- `SHS-LAYER-051` Public Impact Map: upstream dependencies SHS-LAYER-001, SHS-LAYER-021, SHS-LAYER-022
+- `SHS-LAYER-052` Program Registry: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-053` Funding Intelligence: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-054` Sponsorship Layer: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-055` Grant / Proposal Layer: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-056` Governance Binder: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-057` Commercialization / Billing / Entitlements: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-058` Support and Improvement Workflow: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-059` Search and Discovery: upstream dependencies SHS-LAYER-001
+- `SHS-LAYER-060` Backup / Recovery / Data Retention: upstream dependencies SHS-LAYER-001

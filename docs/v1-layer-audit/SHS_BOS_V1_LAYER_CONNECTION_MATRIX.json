@@ -1,0 +1,1285 @@
+{
+  "metadata": {
+    "audit_name": "SHS BOS V1 Master Layer Inventory",
+    "scan_timestamp": "2026-07-14T00:12:42.095917+00:00",
+    "repository_root": "/Users/mikeslate/Desktop/shrv1",
+    "branch": "v1.1-development",
+    "head": "0c86c3e97c30e91e28b577bd62c6594c2475cfb6",
+    "head_short": "0c86c3e",
+    "status_summary": "A  docs/SHS_PRODUCTION_AUTH_IDENTITY_HARDENING_V1.json\nA  docs/SHS_PRODUCTION_AUTH_IDENTITY_HARDENING_V1.md\nA  docs/SHS_PRODUCTION_AUTH_IDENTITY_HARDENING_V1_MANUAL_GOVERNANCE_REVIEW.json\nA  docs/SHS_PRODUCTION_AUTH_IDENTITY_HARDENING_V1_MANUAL_GOVERNANCE_REVIEW.md\nM  package.json\nA  scripts/check_shs_production_auth_identity_hardening.py\nA  services/shf-agent-fabric/auth/__init__.py\nA  services/shf-agent-fabric/auth/audit.py\nA  services/shf-agent-fabric/auth/config.py\nA  services/shf-agent-fabric/auth/cookies.py\nA  services/shf-agent-fabric/auth/csrf.py\nA  services/shf-agent-fabric/auth/dependencies.py\nA  services/shf-agent-fabric/auth/passwords.py\nA  services/shf-agent-fabric/auth/permissions.py\nA  services/shf-agent-fabric/auth/rate_limit.py\nA  services/shf-agent-fabric/auth/routes.py\nA  services/shf-agent-fabric/auth/security_headers.py\nA  services/shf-agent-fabric/auth/sessions.py\nA  services/shf-agent-fabric/auth/store.py\nM  services/shf-agent-fabric/main.py\nA  services/shf-agent-fabric/tests/test_auth_hardening.py\nM  src/auth/auth-context.jsx\nM  src/components/admin/AdminSidebar.jsx\nA  src/pages/admin/identity-access/ShsIdentityAccessCenterPage.jsx\nA  src/pages/admin/identity-access/components/IdentityActiveSessionsPanel.jsx\nA  src/pages/admin/identity-access/components/IdentityAuditTimeline.jsx\nA  src/pages/admin/identity-access/components/IdentityConfigurationReadiness.jsx\nA  src/pages/admin/identity-access/components/IdentityDemoModePanel.jsx\nA  src/pages/admin/identity-access/components/IdentityRolePermissionMatrix.jsx\nA  src/pages/admin/identity-access/components/IdentityRouteAccessMatrix.jsx\nA  src/pages/admin/identity-access/components/IdentitySafetyPanel.jsx\nA  src/pages/admin/identity-access/components/IdentitySecurityOverview.jsx\nA  src/pages/admin/identity-access/components/IdentitySessionPanel.jsx\nA  src/pages/admin/identity-access/components/IdentityThreatModelPanel.jsx\nA  src/pages/admin/identity-access/shsIdentityAccessCenter.css\nM  src/pages/auth/SHSLoginPage.jsx\nM  src/router/AdminRoutes.jsx\nA  src/system/identity/authClient.js\nA  src/system/identity/authConfig.js\nA  src/system/identity/authEvents.js\nA  src/system/identity/authPermissions.js\nA  src/system/identity/authRoles.js\nA  src/system/identity/authRoutePolicy.js\nA  src/system/identity/authState.js\nA  src/system/identity/authStorageSafety.js\nM  src/system/identity/hubAccessControl.js\nM  src/system/routes/crossAppRouteBridge.js\nA  tests/test_shs_auth_identity_boundary.py",
+    "python_version": "Python 3.12.8",
+    "node_version": "v22.17.1",
+    "npm_version": "11.13.0",
+    "scope": "read-only evidence-based audit artifacts; application source not modified"
+  },
+  "connection_count": 34,
+  "connections": [
+    {
+      "connection_id": "SHS-CONNECTION-001",
+      "upstream_layer_id": "SHS-LAYER-013",
+      "downstream_layer_id": "SHS-LAYER-015",
+      "connection_purpose": "source eligibility and provenance into aggregation",
+      "data_or_event_transferred": "source metadata and eligibility status",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": true,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": true,
+      "connection_status": "connected_with_limitations",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-002",
+      "upstream_layer_id": "SHS-LAYER-015",
+      "downstream_layer_id": "SHS-LAYER-016",
+      "connection_purpose": "raw/structured intake into canonical preview",
+      "data_or_event_transferred": "aggregated intake records",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": false,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": false,
+      "connection_status": "partially_connected",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "blocks_v1": true,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-003",
+      "upstream_layer_id": "SHS-LAYER-016",
+      "downstream_layer_id": "SHS-LAYER-017",
+      "connection_purpose": "canonical preview plus provenance into evidence bundle",
+      "data_or_event_transferred": "normalized records and provenance",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": false,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": false,
+      "connection_status": "partially_connected",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "blocks_v1": true,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-004",
+      "upstream_layer_id": "SHS-LAYER-017",
+      "downstream_layer_id": "SHS-LAYER-018",
+      "connection_purpose": "evidence bundle into readiness/provenance evaluation",
+      "data_or_event_transferred": "evidence package",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": false,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": false,
+      "connection_status": "partially_connected",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "blocks_v1": true,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-005",
+      "upstream_layer_id": "SHS-LAYER-018",
+      "downstream_layer_id": "SHS-LAYER-021",
+      "connection_purpose": "verification-ready claim package into truth review",
+      "data_or_event_transferred": "verification readiness result",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": false,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": false,
+      "connection_status": "partially_connected",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "blocks_v1": true,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-006",
+      "upstream_layer_id": "SHS-LAYER-021",
+      "downstream_layer_id": "SHS-LAYER-022",
+      "connection_purpose": "verified claims into supportability decision",
+      "data_or_event_transferred": "truth spine claim state",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": true,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": true,
+      "connection_status": "connected_with_limitations",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-007",
+      "upstream_layer_id": "SHS-LAYER-022",
+      "downstream_layer_id": "SHS-LAYER-028",
+      "connection_purpose": "evidence-backed recommendations into reports",
+      "data_or_event_transferred": "oracle supportability summary",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": true,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": true,
+      "connection_status": "connected_with_limitations",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-008",
+      "upstream_layer_id": "SHS-LAYER-029",
+      "downstream_layer_id": "SHS-LAYER-028",
+      "connection_purpose": "report readiness and audience constraints",
+      "data_or_event_transferred": "readiness status",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": true,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": true,
+      "connection_status": "connected_with_limitations",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-009",
+      "upstream_layer_id": "SHS-LAYER-031",
+      "downstream_layer_id": "SHS-LAYER-003",
+      "connection_purpose": "public approval gate before SHF/public use",
+      "data_or_event_transferred": "public approval status",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": false,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": false,
+      "connection_status": "partially_connected",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-010",
+      "upstream_layer_id": "SHS-LAYER-002",
+      "downstream_layer_id": "SHS-LAYER-004",
+      "connection_purpose": "private operational records into boundary review",
+      "data_or_event_transferred": "source record eligibility",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": false,
+      "runtime_wired": false,
+      "persistence_supported": false,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": false,
+      "connection_status": "documentation_only",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-011",
+      "upstream_layer_id": "SHS-LAYER-004",
+      "downstream_layer_id": "SHS-LAYER-003",
+      "connection_purpose": "governed approved records into SHF spine",
+      "data_or_event_transferred": "approved public-safe record",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": false,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": false,
+      "connection_status": "partially_connected",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-012",
+      "upstream_layer_id": "SHS-LAYER-012",
+      "downstream_layer_id": "SHS-LAYER-013",
+      "connection_purpose": "connector source metadata into source governance",
+      "data_or_event_transferred": "connector/source profile",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": false,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": false,
+      "connection_status": "mock_only",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-013",
+      "upstream_layer_id": "SHS-LAYER-010",
+      "downstream_layer_id": "SHS-LAYER-011",
+      "connection_purpose": "file/import readiness into format adapter",
+      "data_or_event_transferred": "batch import metadata",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": false,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": false,
+      "connection_status": "partially_connected",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-014",
+      "upstream_layer_id": "SHS-LAYER-011",
+      "downstream_layer_id": "SHS-LAYER-013",
+      "connection_purpose": "adapted payload into source registry",
+      "data_or_event_transferred": "adapted source payload",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": false,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": false,
+      "connection_status": "partially_connected",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-015",
+      "upstream_layer_id": "SHS-LAYER-006",
+      "downstream_layer_id": "SHS-LAYER-007",
+      "connection_purpose": "event readiness to command preview",
+      "data_or_event_transferred": "local event route",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": false,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": false,
+      "connection_status": "mock_only",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-016",
+      "upstream_layer_id": "SHS-LAYER-007",
+      "downstream_layer_id": "SHS-LAYER-008",
+      "connection_purpose": "approved preview command to scheduled local job",
+      "data_or_event_transferred": "command preview",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": false,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": false,
+      "connection_status": "mock_only",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-017",
+      "upstream_layer_id": "SHS-LAYER-008",
+      "downstream_layer_id": "SHS-LAYER-009",
+      "connection_purpose": "risk/condition schedule to notification preview",
+      "data_or_event_transferred": "scheduled condition",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": false,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": false,
+      "connection_status": "mock_only",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-018",
+      "upstream_layer_id": "SHS-LAYER-009",
+      "downstream_layer_id": "SHS-LAYER-042",
+      "connection_purpose": "internal alert status to tracking summary",
+      "data_or_event_transferred": "notification readiness",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": false,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": false,
+      "connection_status": "mock_only",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-019",
+      "upstream_layer_id": "SHS-LAYER-042",
+      "downstream_layer_id": "SHS-LAYER-041",
+      "connection_purpose": "tracking signal summary to executive visibility",
+      "data_or_event_transferred": "tracking readiness metrics",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": true,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": true,
+      "connection_status": "connected_with_limitations",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-020",
+      "upstream_layer_id": "SHS-LAYER-039",
+      "downstream_layer_id": "SHS-LAYER-041",
+      "connection_purpose": "registry layer health into executive source summaries",
+      "data_or_event_transferred": "registry readiness metrics",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": true,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": true,
+      "connection_status": "fully_connected",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [],
+      "required_v1_work": [],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-021",
+      "upstream_layer_id": "SHS-LAYER-038",
+      "downstream_layer_id": "SHS-LAYER-007",
+      "connection_purpose": "critical state storage for command queue/history",
+      "data_or_event_transferred": "local critical records",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": true,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": true,
+      "connection_status": "connected_with_limitations",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-022",
+      "upstream_layer_id": "SHS-LAYER-038",
+      "downstream_layer_id": "SHS-LAYER-006",
+      "connection_purpose": "local event records and subscribers",
+      "data_or_event_transferred": "localStorage records",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": true,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": true,
+      "connection_status": "connected_with_limitations",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-023",
+      "upstream_layer_id": "SHS-LAYER-025",
+      "downstream_layer_id": "SHS-LAYER-026",
+      "connection_purpose": "agent registry and task state into admin workbench",
+      "data_or_event_transferred": "agent contract entries",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": true,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": true,
+      "connection_status": "connected_with_limitations",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-024",
+      "upstream_layer_id": "SHS-LAYER-022",
+      "downstream_layer_id": "SHS-LAYER-025",
+      "connection_purpose": "truth context for agent explanations",
+      "data_or_event_transferred": "oracle truth package",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": false,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": false,
+      "connection_status": "partially_connected",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-025",
+      "upstream_layer_id": "SHS-LAYER-028",
+      "downstream_layer_id": "SHS-LAYER-032",
+      "connection_purpose": "report/export metadata into audit trail",
+      "data_or_event_transferred": "report metadata",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": false,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": false,
+      "connection_status": "partially_connected",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-026",
+      "upstream_layer_id": "SHS-LAYER-035",
+      "downstream_layer_id": "SHS-LAYER-039",
+      "connection_purpose": "registry rules and duplicate checks",
+      "data_or_event_transferred": "governance validation result",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": true,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": true,
+      "connection_status": "connected_with_limitations",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-027",
+      "upstream_layer_id": "SHS-LAYER-036",
+      "downstream_layer_id": "SHS-LAYER-001",
+      "connection_purpose": "privacy/security policy into route/session enforcement",
+      "data_or_event_transferred": "security permission policy",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": true,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": true,
+      "connection_status": "connected_with_limitations",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-028",
+      "upstream_layer_id": "SHS-LAYER-001",
+      "downstream_layer_id": "SHS-LAYER-005",
+      "connection_purpose": "session/role policy into API access posture",
+      "data_or_event_transferred": "role/session state",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": true,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": true,
+      "connection_status": "connected_with_limitations",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-029",
+      "upstream_layer_id": "SHS-LAYER-050",
+      "downstream_layer_id": "SHS-LAYER-051",
+      "connection_purpose": "approved impact geography to public map",
+      "data_or_event_transferred": "approved aggregate impact signals",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": false,
+      "persistence_supported": false,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": false,
+      "connection_status": "broken",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review.",
+        "Status normalized from blocked to approved vocabulary value broken; connection remains V1-blocking."
+      ],
+      "required_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "blocks_v1": true,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-030",
+      "upstream_layer_id": "SHS-LAYER-048",
+      "downstream_layer_id": "SHS-LAYER-028",
+      "connection_purpose": "client operational records to internal reporting",
+      "data_or_event_transferred": "client ops summary",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": false,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": false,
+      "connection_status": "partially_connected",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-031",
+      "upstream_layer_id": "SHS-LAYER-043",
+      "downstream_layer_id": "SHS-LAYER-048",
+      "connection_purpose": "sales opportunity to client/project workflow",
+      "data_or_event_transferred": "sales/client signal",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": false,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": false,
+      "connection_status": "partially_connected",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-032",
+      "upstream_layer_id": "SHS-LAYER-044",
+      "downstream_layer_id": "SHS-LAYER-047",
+      "connection_purpose": "production build state to QA/release readiness",
+      "data_or_event_transferred": "production readiness record",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": false,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": false,
+      "connection_status": "partially_connected",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-033",
+      "upstream_layer_id": "SHS-LAYER-047",
+      "downstream_layer_id": "SHS-LAYER-048",
+      "connection_purpose": "delivery signoff into client handoff/maintenance",
+      "data_or_event_transferred": "QA signoff",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": true,
+      "implementation_exists": true,
+      "runtime_wired": false,
+      "persistence_supported": true,
+      "security_enforced": true,
+      "audit_supported": true,
+      "trace_id_propagated": "partial",
+      "tests_present": false,
+      "connection_status": "partially_connected",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "blocks_v1": false,
+      "recommended_owner": "Architecture/Governance owner review"
+    },
+    {
+      "connection_id": "SHS-CONNECTION-034",
+      "upstream_layer_id": "SHS-LAYER-057",
+      "downstream_layer_id": "SHS-LAYER-048",
+      "connection_purpose": "entitlement/revenue status into client operations",
+      "data_or_event_transferred": "billing entitlement state",
+      "input_contract": "documented_or_local_contract",
+      "output_contract": "documented_or_local_contract",
+      "contract_defined": false,
+      "implementation_exists": false,
+      "runtime_wired": false,
+      "persistence_supported": false,
+      "security_enforced": false,
+      "audit_supported": false,
+      "trace_id_propagated": "partial",
+      "tests_present": false,
+      "connection_status": "not_connected",
+      "evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "what_it_proves": "Layer intent and ownership are architecture-defined.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "known_gaps": [
+        "Connection is limited, local-only, partially evidenced, or requires owner review."
+      ],
+      "required_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "blocks_v1": true,
+      "recommended_owner": "Architecture/Governance owner review"
+    }
+  ]
+}

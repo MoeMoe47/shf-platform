@@ -1,0 +1,618 @@
+{
+  "metadata": {
+    "audit_name": "SHS BOS V1 Master Layer Inventory",
+    "scan_timestamp": "2026-07-14T00:12:42.095917+00:00",
+    "repository_root": "/Users/mikeslate/Desktop/shrv1",
+    "branch": "v1.1-development",
+    "head": "0c86c3e97c30e91e28b577bd62c6594c2475cfb6",
+    "head_short": "0c86c3e",
+    "status_summary": "A  docs/SHS_PRODUCTION_AUTH_IDENTITY_HARDENING_V1.json\nA  docs/SHS_PRODUCTION_AUTH_IDENTITY_HARDENING_V1.md\nA  docs/SHS_PRODUCTION_AUTH_IDENTITY_HARDENING_V1_MANUAL_GOVERNANCE_REVIEW.json\nA  docs/SHS_PRODUCTION_AUTH_IDENTITY_HARDENING_V1_MANUAL_GOVERNANCE_REVIEW.md\nM  package.json\nA  scripts/check_shs_production_auth_identity_hardening.py\nA  services/shf-agent-fabric/auth/__init__.py\nA  services/shf-agent-fabric/auth/audit.py\nA  services/shf-agent-fabric/auth/config.py\nA  services/shf-agent-fabric/auth/cookies.py\nA  services/shf-agent-fabric/auth/csrf.py\nA  services/shf-agent-fabric/auth/dependencies.py\nA  services/shf-agent-fabric/auth/passwords.py\nA  services/shf-agent-fabric/auth/permissions.py\nA  services/shf-agent-fabric/auth/rate_limit.py\nA  services/shf-agent-fabric/auth/routes.py\nA  services/shf-agent-fabric/auth/security_headers.py\nA  services/shf-agent-fabric/auth/sessions.py\nA  services/shf-agent-fabric/auth/store.py\nM  services/shf-agent-fabric/main.py\nA  services/shf-agent-fabric/tests/test_auth_hardening.py\nM  src/auth/auth-context.jsx\nM  src/components/admin/AdminSidebar.jsx\nA  src/pages/admin/identity-access/ShsIdentityAccessCenterPage.jsx\nA  src/pages/admin/identity-access/components/IdentityActiveSessionsPanel.jsx\nA  src/pages/admin/identity-access/components/IdentityAuditTimeline.jsx\nA  src/pages/admin/identity-access/components/IdentityConfigurationReadiness.jsx\nA  src/pages/admin/identity-access/components/IdentityDemoModePanel.jsx\nA  src/pages/admin/identity-access/components/IdentityRolePermissionMatrix.jsx\nA  src/pages/admin/identity-access/components/IdentityRouteAccessMatrix.jsx\nA  src/pages/admin/identity-access/components/IdentitySafetyPanel.jsx\nA  src/pages/admin/identity-access/components/IdentitySecurityOverview.jsx\nA  src/pages/admin/identity-access/components/IdentitySessionPanel.jsx\nA  src/pages/admin/identity-access/components/IdentityThreatModelPanel.jsx\nA  src/pages/admin/identity-access/shsIdentityAccessCenter.css\nM  src/pages/auth/SHSLoginPage.jsx\nM  src/router/AdminRoutes.jsx\nA  src/system/identity/authClient.js\nA  src/system/identity/authConfig.js\nA  src/system/identity/authEvents.js\nA  src/system/identity/authPermissions.js\nA  src/system/identity/authRoles.js\nA  src/system/identity/authRoutePolicy.js\nA  src/system/identity/authState.js\nA  src/system/identity/authStorageSafety.js\nM  src/system/identity/hubAccessControl.js\nM  src/system/routes/crossAppRouteBridge.js\nA  tests/test_shs_auth_identity_boundary.py",
+    "python_version": "Python 3.12.8",
+    "node_version": "v22.17.1",
+    "npm_version": "11.13.0",
+    "scope": "read-only evidence-based audit artifacts; application source not modified"
+  },
+  "registry_count": 60,
+  "official_registry": [
+    {
+      "layer_id": "SHS-LAYER-001",
+      "official_name": "Identity & Access",
+      "recommended_status": "validated_not_hardened",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Security",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-002",
+      "official_name": "SHS Spine",
+      "recommended_status": "architecture_defined",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Operations",
+      "v1_requirement": "mandatory_v1_core",
+      "v1_priority": "P0",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-003",
+      "official_name": "SHF Spine",
+      "recommended_status": "architecture_defined",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "SHF Impact",
+      "v1_requirement": "mandatory_v1_core",
+      "v1_priority": "P0",
+      "repository_owner": "cross_repository"
+    },
+    {
+      "layer_id": "SHS-LAYER-004",
+      "official_name": "SHS to SHF Data Flow Boundary",
+      "recommended_status": "validated_not_hardened",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Governance",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-005",
+      "official_name": "API Gateway",
+      "recommended_status": "integrated_not_validated",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Platform",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-006",
+      "official_name": "Event/Webhook Layer",
+      "recommended_status": "partially_implemented",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Platform",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-007",
+      "official_name": "Command Bus",
+      "recommended_status": "partially_implemented",
+      "recommended_disposition": "owner_review_before_promotion",
+      "canonical_owner": "Runtime Fabric",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-008",
+      "official_name": "Job Scheduler",
+      "recommended_status": "partially_implemented",
+      "recommended_disposition": "owner_review_before_promotion",
+      "canonical_owner": "Runtime Fabric",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-009",
+      "official_name": "Notification / Alert",
+      "recommended_status": "partially_implemented",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Communications",
+      "v1_requirement": "recommended_v1",
+      "v1_priority": "P2",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-010",
+      "official_name": "Batch/Import",
+      "recommended_status": "integrated_not_validated",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Data Operations",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-011",
+      "official_name": "Adapter Layer",
+      "recommended_status": "integrated_not_validated",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Platform",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-012",
+      "official_name": "Direct Connect Layer",
+      "recommended_status": "partially_implemented",
+      "recommended_disposition": "owner_review_before_promotion",
+      "canonical_owner": "Data Operations",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-013",
+      "official_name": "Source Registry Layer",
+      "recommended_status": "integrated_not_validated",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Data Operations",
+      "v1_requirement": "mandatory_v1_core",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-014",
+      "official_name": "Data Federation Layer",
+      "recommended_status": "integrated_not_validated",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Data Operations",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-015",
+      "official_name": "Data Aggregator Layer",
+      "recommended_status": "integrated_not_validated",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Data Operations",
+      "v1_requirement": "mandatory_v1_core",
+      "v1_priority": "P0",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-016",
+      "official_name": "Data Normalization Layer",
+      "recommended_status": "integrated_not_validated",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Data Operations",
+      "v1_requirement": "mandatory_v1_core",
+      "v1_priority": "P0",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-017",
+      "official_name": "Evidence Package Layer",
+      "recommended_status": "integrated_not_validated",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Data Operations",
+      "v1_requirement": "mandatory_v1_core",
+      "v1_priority": "P0",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-018",
+      "official_name": "Data Verification Layer",
+      "recommended_status": "integrated_not_validated",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Data Operations",
+      "v1_requirement": "mandatory_v1_core",
+      "v1_priority": "P0",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-019",
+      "official_name": "Data Approval Layer",
+      "recommended_status": "integrated_not_validated",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Data Operations",
+      "v1_requirement": "mandatory_v1_core",
+      "v1_priority": "P0",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-020",
+      "official_name": "Warehouse Sync",
+      "recommended_status": "scaffolded",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Data Operations",
+      "v1_requirement": "post_v1",
+      "v1_priority": "P3",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-021",
+      "official_name": "Truth Spine",
+      "recommended_status": "validated_not_hardened",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Verification",
+      "v1_requirement": "mandatory_v1_core",
+      "v1_priority": "P0",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-022",
+      "official_name": "Oracle Layer",
+      "recommended_status": "validated_not_hardened",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Decision Support",
+      "v1_requirement": "mandatory_v1_core",
+      "v1_priority": "P0",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-023",
+      "official_name": "Policy Engine",
+      "recommended_status": "integrated_not_validated",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Governance",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-024",
+      "official_name": "Alignment Layer",
+      "recommended_status": "integrated_not_validated",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Governance",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-025",
+      "official_name": "AI / Agent Fabric",
+      "recommended_status": "validated_not_hardened",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Automation",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-026",
+      "official_name": "Agent Workbench",
+      "recommended_status": "validated_not_hardened",
+      "recommended_disposition": "owner_review_before_promotion",
+      "canonical_owner": "Automation",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-027",
+      "official_name": "Context-Adaptive Analyst",
+      "recommended_status": "partially_implemented",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "AI Operations",
+      "v1_requirement": "recommended_v1",
+      "v1_priority": "P2",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-028",
+      "official_name": "Reports Layer",
+      "recommended_status": "validated_not_hardened",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Reporting",
+      "v1_requirement": "mandatory_v1_core",
+      "v1_priority": "P0",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-029",
+      "official_name": "Readiness Gate",
+      "recommended_status": "integrated_not_validated",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Reporting",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-030",
+      "official_name": "Verified Aggregation",
+      "recommended_status": "integrated_not_validated",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Data Operations",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-031",
+      "official_name": "Public Approval",
+      "recommended_status": "integrated_not_validated",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Governance",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-032",
+      "official_name": "Audit & Verification",
+      "recommended_status": "integrated_not_validated",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Assurance",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-033",
+      "official_name": "Watchtower",
+      "recommended_status": "validated_not_hardened",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Assurance",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-034",
+      "official_name": "LOO / Lord of Outcomes",
+      "recommended_status": "validated_not_hardened",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Outcomes",
+      "v1_requirement": "recommended_v1",
+      "v1_priority": "P2",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-035",
+      "official_name": "Governance Layer",
+      "recommended_status": "validated_not_hardened",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Governance",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-036",
+      "official_name": "Security / Privacy",
+      "recommended_status": "validated_not_hardened",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Security",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-037",
+      "official_name": "Data Ownership / IP",
+      "recommended_status": "integrated_not_validated",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Governance",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-038",
+      "official_name": "Durable Persistence",
+      "recommended_status": "partially_implemented",
+      "recommended_disposition": "keep_as_supporting_capability",
+      "canonical_owner": "Runtime Fabric",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-039",
+      "official_name": "System Registry / Layer Control System",
+      "recommended_status": "validated_not_hardened",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Platform",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-040",
+      "official_name": "System Orchestrator",
+      "recommended_status": "partially_implemented",
+      "recommended_disposition": "owner_review_before_promotion",
+      "canonical_owner": "Runtime Fabric",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-041",
+      "official_name": "Executive Command Center",
+      "recommended_status": "validated_not_hardened",
+      "recommended_disposition": "keep_as_supporting_capability",
+      "canonical_owner": "Operations",
+      "v1_requirement": "mandatory_v1_core",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-042",
+      "official_name": "Tracking and Intelligence Layer",
+      "recommended_status": "partially_implemented",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Intelligence",
+      "v1_requirement": "mandatory_v1_core",
+      "v1_priority": "P0",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-043",
+      "official_name": "SHS Sales Layer",
+      "recommended_status": "partially_implemented",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Revenue Operations",
+      "v1_requirement": "mandatory_v1_core",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-044",
+      "official_name": "Production Ops",
+      "recommended_status": "partially_implemented",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Operations",
+      "v1_requirement": "mandatory_v1_core",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-045",
+      "official_name": "Production Automation",
+      "recommended_status": "validated_not_hardened",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Automation",
+      "v1_requirement": "recommended_v1",
+      "v1_priority": "P2",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-046",
+      "official_name": "Development Library",
+      "recommended_status": "partially_implemented",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Operations",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-047",
+      "official_name": "QA + Delivery",
+      "recommended_status": "partially_implemented",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Operations",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-048",
+      "official_name": "ClientOps",
+      "recommended_status": "partially_implemented",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Operations",
+      "v1_requirement": "mandatory_v1_core",
+      "v1_priority": "P0",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-049",
+      "official_name": "Website Studio",
+      "recommended_status": "partially_implemented",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Production",
+      "v1_requirement": "recommended_v1",
+      "v1_priority": "P2",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-050",
+      "official_name": "SHF Impact Command Center",
+      "recommended_status": "partially_implemented",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "SHF Impact",
+      "v1_requirement": "mandatory_v1_core",
+      "v1_priority": "P0",
+      "repository_owner": "cross_repository"
+    },
+    {
+      "layer_id": "SHS-LAYER-051",
+      "official_name": "Public Impact Map",
+      "recommended_status": "partially_implemented",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "SHF Impact",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "cross_repository"
+    },
+    {
+      "layer_id": "SHS-LAYER-052",
+      "official_name": "Program Registry",
+      "recommended_status": "validated_not_hardened",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Programs",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-053",
+      "official_name": "Funding Intelligence",
+      "recommended_status": "validated_not_hardened",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Funding",
+      "v1_requirement": "recommended_v1",
+      "v1_priority": "P2",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-054",
+      "official_name": "Sponsorship Layer",
+      "recommended_status": "architecture_defined",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Funding",
+      "v1_requirement": "post_v1",
+      "v1_priority": "P3",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-055",
+      "official_name": "Grant / Proposal Layer",
+      "recommended_status": "partially_implemented",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Funding",
+      "v1_requirement": "recommended_v1",
+      "v1_priority": "P2",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-056",
+      "official_name": "Governance Binder",
+      "recommended_status": "partially_implemented",
+      "recommended_disposition": "keep_as_official_v1_layer",
+      "canonical_owner": "Governance",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-057",
+      "official_name": "Commercialization / Billing / Entitlements",
+      "recommended_status": "not_found",
+      "recommended_disposition": "owner_review_before_promotion",
+      "canonical_owner": "Revenue Operations",
+      "v1_requirement": "decision_required",
+      "v1_priority": "P0",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-058",
+      "official_name": "Support and Improvement Workflow",
+      "recommended_status": "architecture_defined",
+      "recommended_disposition": "owner_review_before_promotion",
+      "canonical_owner": "Operations",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-059",
+      "official_name": "Search and Discovery",
+      "recommended_status": "not_found",
+      "recommended_disposition": "owner_review_before_promotion",
+      "canonical_owner": "Platform",
+      "v1_requirement": "recommended_v1",
+      "v1_priority": "P2",
+      "repository_owner": "shrv1"
+    },
+    {
+      "layer_id": "SHS-LAYER-060",
+      "official_name": "Backup / Recovery / Data Retention",
+      "recommended_status": "architecture_defined",
+      "recommended_disposition": "keep_as_supporting_capability",
+      "canonical_owner": "Security",
+      "v1_requirement": "mandatory_v1_support",
+      "v1_priority": "P1",
+      "repository_owner": "shrv1"
+    }
+  ]
+}

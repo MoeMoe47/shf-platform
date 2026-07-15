@@ -1,0 +1,2175 @@
+{
+  "metadata": {
+    "audit_name": "SHS BOS V1 Master Layer Inventory",
+    "scan_timestamp": "2026-07-14T00:12:42.095917+00:00",
+    "repository_root": "/Users/mikeslate/Desktop/shrv1",
+    "branch": "v1.1-development",
+    "head": "0c86c3e97c30e91e28b577bd62c6594c2475cfb6",
+    "head_short": "0c86c3e",
+    "status_summary": "A  docs/SHS_PRODUCTION_AUTH_IDENTITY_HARDENING_V1.json\nA  docs/SHS_PRODUCTION_AUTH_IDENTITY_HARDENING_V1.md\nA  docs/SHS_PRODUCTION_AUTH_IDENTITY_HARDENING_V1_MANUAL_GOVERNANCE_REVIEW.json\nA  docs/SHS_PRODUCTION_AUTH_IDENTITY_HARDENING_V1_MANUAL_GOVERNANCE_REVIEW.md\nM  package.json\nA  scripts/check_shs_production_auth_identity_hardening.py\nA  services/shf-agent-fabric/auth/__init__.py\nA  services/shf-agent-fabric/auth/audit.py\nA  services/shf-agent-fabric/auth/config.py\nA  services/shf-agent-fabric/auth/cookies.py\nA  services/shf-agent-fabric/auth/csrf.py\nA  services/shf-agent-fabric/auth/dependencies.py\nA  services/shf-agent-fabric/auth/passwords.py\nA  services/shf-agent-fabric/auth/permissions.py\nA  services/shf-agent-fabric/auth/rate_limit.py\nA  services/shf-agent-fabric/auth/routes.py\nA  services/shf-agent-fabric/auth/security_headers.py\nA  services/shf-agent-fabric/auth/sessions.py\nA  services/shf-agent-fabric/auth/store.py\nM  services/shf-agent-fabric/main.py\nA  services/shf-agent-fabric/tests/test_auth_hardening.py\nM  src/auth/auth-context.jsx\nM  src/components/admin/AdminSidebar.jsx\nA  src/pages/admin/identity-access/ShsIdentityAccessCenterPage.jsx\nA  src/pages/admin/identity-access/components/IdentityActiveSessionsPanel.jsx\nA  src/pages/admin/identity-access/components/IdentityAuditTimeline.jsx\nA  src/pages/admin/identity-access/components/IdentityConfigurationReadiness.jsx\nA  src/pages/admin/identity-access/components/IdentityDemoModePanel.jsx\nA  src/pages/admin/identity-access/components/IdentityRolePermissionMatrix.jsx\nA  src/pages/admin/identity-access/components/IdentityRouteAccessMatrix.jsx\nA  src/pages/admin/identity-access/components/IdentitySafetyPanel.jsx\nA  src/pages/admin/identity-access/components/IdentitySecurityOverview.jsx\nA  src/pages/admin/identity-access/components/IdentitySessionPanel.jsx\nA  src/pages/admin/identity-access/components/IdentityThreatModelPanel.jsx\nA  src/pages/admin/identity-access/shsIdentityAccessCenter.css\nM  src/pages/auth/SHSLoginPage.jsx\nM  src/router/AdminRoutes.jsx\nA  src/system/identity/authClient.js\nA  src/system/identity/authConfig.js\nA  src/system/identity/authEvents.js\nA  src/system/identity/authPermissions.js\nA  src/system/identity/authRoles.js\nA  src/system/identity/authRoutePolicy.js\nA  src/system/identity/authState.js\nA  src/system/identity/authStorageSafety.js\nM  src/system/identity/hubAccessControl.js\nM  src/system/routes/crossAppRouteBridge.js\nA  tests/test_shs_auth_identity_boundary.py",
+    "python_version": "Python 3.12.8",
+    "node_version": "v22.17.1",
+    "npm_version": "11.13.0",
+    "scope": "read-only evidence-based audit artifacts; application source not modified"
+  },
+  "chain_count": 12,
+  "blocker_count": 5,
+  "chains": [
+    {
+      "chain_id": "SHS-CHAIN-001",
+      "chain_name": "Unified Truth Pipeline",
+      "owning_layer_ids": [
+        "SHS-LAYER-013",
+        "SHS-LAYER-015",
+        "SHS-LAYER-016",
+        "SHS-LAYER-017",
+        "SHS-LAYER-018",
+        "SHS-LAYER-021",
+        "SHS-LAYER-022",
+        "SHS-LAYER-025",
+        "SHS-LAYER-028",
+        "SHS-LAYER-042"
+      ],
+      "steps": [
+        {
+          "layer_id": "SHS-LAYER-013",
+          "layer_name": "Source Registry Layer",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "services/shf-agent-fabric/main.py"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-015",
+          "layer_name": "Data Aggregator Layer",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "services/shf-agent-fabric/main.py"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-016",
+          "layer_name": "Data Normalization Layer",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "services/shf-agent-fabric/main.py"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-017",
+          "layer_name": "Evidence Package Layer",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "services/shf-agent-fabric/main.py"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-018",
+          "layer_name": "Data Verification Layer",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "services/shf-agent-fabric/main.py"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-021",
+          "layer_name": "Truth Spine",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+            "package.json"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-022",
+          "layer_name": "Oracle Layer",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+            "package.json"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-025",
+          "layer_name": "AI / Agent Fabric",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "services/shf-agent-fabric/contracts/agents/agents.json"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-028",
+          "layer_name": "Reports Layer",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-042",
+          "layer_name": "Tracking and Intelligence Layer",
+          "step_status": "partial",
+          "evidence_paths": [
+            "src/router/AdminRoutes.jsx",
+            "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+            "src/system/identity/hubAccessControl.js"
+          ]
+        }
+      ],
+      "input_sources": [
+        "operator input",
+        "source records",
+        "local state",
+        "registered routes/APIs",
+        "documents"
+      ],
+      "input_contracts": [
+        "mixed: documented, local JS object, FastAPI payload, or NOT_FOUND for missing systems"
+      ],
+      "input_validation": "partial; validators exist for many layers but no single full-chain validation for this chain",
+      "runtime_entry_point": "admin.html and/or FastAPI routers where evidenced",
+      "processing_services": [
+        "see steps"
+      ],
+      "persistence_writes": [
+        "browser_localStorage/file_backed_json/SQLite where evidenced; missing durable state in several chains"
+      ],
+      "persistence_reads": [
+        "local modules and FastAPI services where evidenced"
+      ],
+      "outputs": [
+        "admin summary",
+        "report/readiness output",
+        "audit event",
+        "local state",
+        "documented blocker"
+      ],
+      "events_produced": [
+        "local event records where Event Bus participates"
+      ],
+      "events_consumed": [
+        "local subscribers where Event Bus participates"
+      ],
+      "downstream_consumers": [
+        "Executive Command Center",
+        "Reports",
+        "Tracking",
+        "Governance",
+        "ClientOps or SHF surface when connected"
+      ],
+      "user_surfaces": [
+        "admin protected routes where evidenced"
+      ],
+      "reporting_consumers": [
+        "Reports Layer if included"
+      ],
+      "agent_consumers": [
+        "Agent Fabric if included"
+      ],
+      "tracking_consumers": [
+        "Tracking Intelligence when included"
+      ],
+      "audit_records": [
+        "Audit & Verification or local transaction/history where included"
+      ],
+      "security_enforcement": "ProtectedHubRoute/hubAccessControl for admin surfaces; backend auth is present but full per-route verification remains owner-review",
+      "feedback_path": "partial; action-event/recompute loops are not fully closed across all chains",
+      "recompute_or_refresh_path": "local refresh/summary functions or validator reruns where evidenced",
+      "failure_path": "partial; blockers/warnings recorded but retry/recovery often missing",
+      "retry_path": "missing or local-only unless explicitly documented",
+      "dead_letter_or_exception_path": "not_found for most chains",
+      "monitoring_path": "Watchtower/governance validators where included",
+      "terminal_outcome": "bounded local V1 outcome or documented roadmap blocker",
+      "end_to_end_tests": "not proven as full-chain E2E in this audit package",
+      "closure_status": "partially_connected",
+      "closure_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "missing_connections": [],
+      "required_supporting_capabilities": [
+        "durable server-side state",
+        "versioned contracts",
+        "full-chain tests",
+        "runbook",
+        "observability/retry path"
+      ],
+      "blocks_v1": true
+    },
+    {
+      "chain_id": "SHS-CHAIN-002",
+      "chain_name": "Client Delivery",
+      "owning_layer_ids": [
+        "SHS-LAYER-043",
+        "SHS-LAYER-048",
+        "SHS-LAYER-044",
+        "SHS-LAYER-046",
+        "SHS-LAYER-047",
+        "SHS-LAYER-028",
+        "SHS-LAYER-057",
+        "SHS-LAYER-003"
+      ],
+      "steps": [
+        {
+          "layer_id": "SHS-LAYER-043",
+          "layer_name": "SHS Sales Layer",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-048",
+          "layer_name": "ClientOps",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-044",
+          "layer_name": "Production Ops",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-046",
+          "layer_name": "Development Library",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "src/router/AdminRoutes.jsx",
+            "src/system/identity/hubAccessControl.js"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-047",
+          "layer_name": "QA + Delivery",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-028",
+          "layer_name": "Reports Layer",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-057",
+          "layer_name": "Commercialization / Billing / Entitlements",
+          "step_status": "missing",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-003",
+          "layer_name": "SHF Spine",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md"
+          ]
+        }
+      ],
+      "input_sources": [
+        "operator input",
+        "source records",
+        "local state",
+        "registered routes/APIs",
+        "documents"
+      ],
+      "input_contracts": [
+        "mixed: documented, local JS object, FastAPI payload, or NOT_FOUND for missing systems"
+      ],
+      "input_validation": "partial; validators exist for many layers but no single full-chain validation for this chain",
+      "runtime_entry_point": "admin.html and/or FastAPI routers where evidenced",
+      "processing_services": [
+        "see steps"
+      ],
+      "persistence_writes": [
+        "browser_localStorage/file_backed_json/SQLite where evidenced; missing durable state in several chains"
+      ],
+      "persistence_reads": [
+        "local modules and FastAPI services where evidenced"
+      ],
+      "outputs": [
+        "admin summary",
+        "report/readiness output",
+        "audit event",
+        "local state",
+        "documented blocker"
+      ],
+      "events_produced": [
+        "local event records where Event Bus participates"
+      ],
+      "events_consumed": [
+        "local subscribers where Event Bus participates"
+      ],
+      "downstream_consumers": [
+        "Executive Command Center",
+        "Reports",
+        "Tracking",
+        "Governance",
+        "ClientOps or SHF surface when connected"
+      ],
+      "user_surfaces": [
+        "admin protected routes where evidenced"
+      ],
+      "reporting_consumers": [
+        "Reports Layer if included"
+      ],
+      "agent_consumers": [
+        "Agent Fabric if included"
+      ],
+      "tracking_consumers": [
+        "Tracking Intelligence when included"
+      ],
+      "audit_records": [
+        "Audit & Verification or local transaction/history where included"
+      ],
+      "security_enforcement": "ProtectedHubRoute/hubAccessControl for admin surfaces; backend auth is present but full per-route verification remains owner-review",
+      "feedback_path": "partial; action-event/recompute loops are not fully closed across all chains",
+      "recompute_or_refresh_path": "local refresh/summary functions or validator reruns where evidenced",
+      "failure_path": "partial; blockers/warnings recorded but retry/recovery often missing",
+      "retry_path": "missing or local-only unless explicitly documented",
+      "dead_letter_or_exception_path": "not_found for most chains",
+      "monitoring_path": "Watchtower/governance validators where included",
+      "terminal_outcome": "bounded local V1 outcome or documented roadmap blocker",
+      "end_to_end_tests": "not proven as full-chain E2E in this audit package",
+      "closure_status": "partially_connected",
+      "closure_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "missing_connections": [
+        "Commercialization / Billing / Entitlements",
+        "SHF Spine"
+      ],
+      "required_supporting_capabilities": [
+        "durable server-side state",
+        "versioned contracts",
+        "full-chain tests",
+        "runbook",
+        "observability/retry path"
+      ],
+      "blocks_v1": true
+    },
+    {
+      "chain_id": "SHS-CHAIN-003",
+      "chain_name": "Direct Connect",
+      "owning_layer_ids": [
+        "SHS-LAYER-012",
+        "SHS-LAYER-013",
+        "SHS-LAYER-015",
+        "SHS-LAYER-021",
+        "SHS-LAYER-032",
+        "SHS-LAYER-009"
+      ],
+      "steps": [
+        {
+          "layer_id": "SHS-LAYER-012",
+          "layer_name": "Direct Connect Layer",
+          "step_status": "partial",
+          "evidence_paths": [
+            "src/data/shsDirectConnectData.js",
+            "src/router/AdminRoutes.jsx",
+            "src/system/identity/hubAccessControl.js"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-013",
+          "layer_name": "Source Registry Layer",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "services/shf-agent-fabric/main.py"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-015",
+          "layer_name": "Data Aggregator Layer",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "services/shf-agent-fabric/main.py"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-021",
+          "layer_name": "Truth Spine",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+            "package.json"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-032",
+          "layer_name": "Audit & Verification",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "services/shf-agent-fabric/main.py"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-009",
+          "layer_name": "Notification / Alert",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+            "src/system/executive-command-center/shsExecutiveCommandCenterSources.js"
+          ]
+        }
+      ],
+      "input_sources": [
+        "operator input",
+        "source records",
+        "local state",
+        "registered routes/APIs",
+        "documents"
+      ],
+      "input_contracts": [
+        "mixed: documented, local JS object, FastAPI payload, or NOT_FOUND for missing systems"
+      ],
+      "input_validation": "partial; validators exist for many layers but no single full-chain validation for this chain",
+      "runtime_entry_point": "admin.html and/or FastAPI routers where evidenced",
+      "processing_services": [
+        "see steps"
+      ],
+      "persistence_writes": [
+        "browser_localStorage/file_backed_json/SQLite where evidenced; missing durable state in several chains"
+      ],
+      "persistence_reads": [
+        "local modules and FastAPI services where evidenced"
+      ],
+      "outputs": [
+        "admin summary",
+        "report/readiness output",
+        "audit event",
+        "local state",
+        "documented blocker"
+      ],
+      "events_produced": [
+        "local event records where Event Bus participates"
+      ],
+      "events_consumed": [
+        "local subscribers where Event Bus participates"
+      ],
+      "downstream_consumers": [
+        "Executive Command Center",
+        "Reports",
+        "Tracking",
+        "Governance",
+        "ClientOps or SHF surface when connected"
+      ],
+      "user_surfaces": [
+        "admin protected routes where evidenced"
+      ],
+      "reporting_consumers": [
+        "Reports Layer if included"
+      ],
+      "agent_consumers": [
+        "Agent Fabric if included"
+      ],
+      "tracking_consumers": [
+        "Tracking Intelligence when included"
+      ],
+      "audit_records": [
+        "Audit & Verification or local transaction/history where included"
+      ],
+      "security_enforcement": "ProtectedHubRoute/hubAccessControl for admin surfaces; backend auth is present but full per-route verification remains owner-review",
+      "feedback_path": "partial; action-event/recompute loops are not fully closed across all chains",
+      "recompute_or_refresh_path": "local refresh/summary functions or validator reruns where evidenced",
+      "failure_path": "partial; blockers/warnings recorded but retry/recovery often missing",
+      "retry_path": "missing or local-only unless explicitly documented",
+      "dead_letter_or_exception_path": "not_found for most chains",
+      "monitoring_path": "Watchtower/governance validators where included",
+      "terminal_outcome": "bounded local V1 outcome or documented roadmap blocker",
+      "end_to_end_tests": "not proven as full-chain E2E in this audit package",
+      "closure_status": "partially_connected",
+      "closure_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "missing_connections": [],
+      "required_supporting_capabilities": [
+        "durable server-side state",
+        "versioned contracts",
+        "full-chain tests",
+        "runbook",
+        "observability/retry path"
+      ],
+      "blocks_v1": false
+    },
+    {
+      "chain_id": "SHS-CHAIN-004",
+      "chain_name": "Reporting",
+      "owning_layer_ids": [
+        "SHS-LAYER-021",
+        "SHS-LAYER-029",
+        "SHS-LAYER-031",
+        "SHS-LAYER-028",
+        "SHS-LAYER-032",
+        "SHS-LAYER-042"
+      ],
+      "steps": [
+        {
+          "layer_id": "SHS-LAYER-021",
+          "layer_name": "Truth Spine",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+            "package.json"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-029",
+          "layer_name": "Readiness Gate",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "services/shf-agent-fabric/main.py"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-031",
+          "layer_name": "Public Approval",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+            "package.json"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-028",
+          "layer_name": "Reports Layer",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-032",
+          "layer_name": "Audit & Verification",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "services/shf-agent-fabric/main.py"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-042",
+          "layer_name": "Tracking and Intelligence Layer",
+          "step_status": "partial",
+          "evidence_paths": [
+            "src/router/AdminRoutes.jsx",
+            "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+            "src/system/identity/hubAccessControl.js"
+          ]
+        }
+      ],
+      "input_sources": [
+        "operator input",
+        "source records",
+        "local state",
+        "registered routes/APIs",
+        "documents"
+      ],
+      "input_contracts": [
+        "mixed: documented, local JS object, FastAPI payload, or NOT_FOUND for missing systems"
+      ],
+      "input_validation": "partial; validators exist for many layers but no single full-chain validation for this chain",
+      "runtime_entry_point": "admin.html and/or FastAPI routers where evidenced",
+      "processing_services": [
+        "see steps"
+      ],
+      "persistence_writes": [
+        "browser_localStorage/file_backed_json/SQLite where evidenced; missing durable state in several chains"
+      ],
+      "persistence_reads": [
+        "local modules and FastAPI services where evidenced"
+      ],
+      "outputs": [
+        "admin summary",
+        "report/readiness output",
+        "audit event",
+        "local state",
+        "documented blocker"
+      ],
+      "events_produced": [
+        "local event records where Event Bus participates"
+      ],
+      "events_consumed": [
+        "local subscribers where Event Bus participates"
+      ],
+      "downstream_consumers": [
+        "Executive Command Center",
+        "Reports",
+        "Tracking",
+        "Governance",
+        "ClientOps or SHF surface when connected"
+      ],
+      "user_surfaces": [
+        "admin protected routes where evidenced"
+      ],
+      "reporting_consumers": [
+        "Reports Layer if included"
+      ],
+      "agent_consumers": [
+        "Agent Fabric if included"
+      ],
+      "tracking_consumers": [
+        "Tracking Intelligence when included"
+      ],
+      "audit_records": [
+        "Audit & Verification or local transaction/history where included"
+      ],
+      "security_enforcement": "ProtectedHubRoute/hubAccessControl for admin surfaces; backend auth is present but full per-route verification remains owner-review",
+      "feedback_path": "partial; action-event/recompute loops are not fully closed across all chains",
+      "recompute_or_refresh_path": "local refresh/summary functions or validator reruns where evidenced",
+      "failure_path": "partial; blockers/warnings recorded but retry/recovery often missing",
+      "retry_path": "missing or local-only unless explicitly documented",
+      "dead_letter_or_exception_path": "not_found for most chains",
+      "monitoring_path": "Watchtower/governance validators where included",
+      "terminal_outcome": "bounded local V1 outcome or documented roadmap blocker",
+      "end_to_end_tests": "not proven as full-chain E2E in this audit package",
+      "closure_status": "partially_connected",
+      "closure_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "missing_connections": [],
+      "required_supporting_capabilities": [
+        "durable server-side state",
+        "versioned contracts",
+        "full-chain tests",
+        "runbook",
+        "observability/retry path"
+      ],
+      "blocks_v1": false
+    },
+    {
+      "chain_id": "SHS-CHAIN-005",
+      "chain_name": "Agent Intelligence",
+      "owning_layer_ids": [
+        "SHS-LAYER-001",
+        "SHS-LAYER-024",
+        "SHS-LAYER-022",
+        "SHS-LAYER-025",
+        "SHS-LAYER-026",
+        "SHS-LAYER-032",
+        "SHS-LAYER-042"
+      ],
+      "steps": [
+        {
+          "layer_id": "SHS-LAYER-001",
+          "layer_name": "Identity & Access",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "package.json",
+            "services/shf-agent-fabric/main.py",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-024",
+          "layer_name": "Alignment Layer",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "services/shf-agent-fabric/contracts/agents/agents.json",
+            "services/shf-agent-fabric/main.py"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-022",
+          "layer_name": "Oracle Layer",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+            "package.json"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-025",
+          "layer_name": "AI / Agent Fabric",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "services/shf-agent-fabric/contracts/agents/agents.json"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-026",
+          "layer_name": "Agent Workbench",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "package.json",
+            "services/shf-agent-fabric/contracts/agents/agents.json",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-032",
+          "layer_name": "Audit & Verification",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "services/shf-agent-fabric/main.py"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-042",
+          "layer_name": "Tracking and Intelligence Layer",
+          "step_status": "partial",
+          "evidence_paths": [
+            "src/router/AdminRoutes.jsx",
+            "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+            "src/system/identity/hubAccessControl.js"
+          ]
+        }
+      ],
+      "input_sources": [
+        "operator input",
+        "source records",
+        "local state",
+        "registered routes/APIs",
+        "documents"
+      ],
+      "input_contracts": [
+        "mixed: documented, local JS object, FastAPI payload, or NOT_FOUND for missing systems"
+      ],
+      "input_validation": "partial; validators exist for many layers but no single full-chain validation for this chain",
+      "runtime_entry_point": "admin.html and/or FastAPI routers where evidenced",
+      "processing_services": [
+        "see steps"
+      ],
+      "persistence_writes": [
+        "browser_localStorage/file_backed_json/SQLite where evidenced; missing durable state in several chains"
+      ],
+      "persistence_reads": [
+        "local modules and FastAPI services where evidenced"
+      ],
+      "outputs": [
+        "admin summary",
+        "report/readiness output",
+        "audit event",
+        "local state",
+        "documented blocker"
+      ],
+      "events_produced": [
+        "local event records where Event Bus participates"
+      ],
+      "events_consumed": [
+        "local subscribers where Event Bus participates"
+      ],
+      "downstream_consumers": [
+        "Executive Command Center",
+        "Reports",
+        "Tracking",
+        "Governance",
+        "ClientOps or SHF surface when connected"
+      ],
+      "user_surfaces": [
+        "admin protected routes where evidenced"
+      ],
+      "reporting_consumers": [
+        "Reports Layer if included"
+      ],
+      "agent_consumers": [
+        "Agent Fabric if included"
+      ],
+      "tracking_consumers": [
+        "Tracking Intelligence when included"
+      ],
+      "audit_records": [
+        "Audit & Verification or local transaction/history where included"
+      ],
+      "security_enforcement": "ProtectedHubRoute/hubAccessControl for admin surfaces; backend auth is present but full per-route verification remains owner-review",
+      "feedback_path": "partial; action-event/recompute loops are not fully closed across all chains",
+      "recompute_or_refresh_path": "local refresh/summary functions or validator reruns where evidenced",
+      "failure_path": "partial; blockers/warnings recorded but retry/recovery often missing",
+      "retry_path": "missing or local-only unless explicitly documented",
+      "dead_letter_or_exception_path": "not_found for most chains",
+      "monitoring_path": "Watchtower/governance validators where included",
+      "terminal_outcome": "bounded local V1 outcome or documented roadmap blocker",
+      "end_to_end_tests": "not proven as full-chain E2E in this audit package",
+      "closure_status": "partially_connected",
+      "closure_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "missing_connections": [],
+      "required_supporting_capabilities": [
+        "durable server-side state",
+        "versioned contracts",
+        "full-chain tests",
+        "runbook",
+        "observability/retry path"
+      ],
+      "blocks_v1": false
+    },
+    {
+      "chain_id": "SHS-CHAIN-006",
+      "chain_name": "SHF Program and Impact",
+      "owning_layer_ids": [
+        "SHS-LAYER-052",
+        "SHS-LAYER-018",
+        "SHS-LAYER-031",
+        "SHS-LAYER-022",
+        "SHS-LAYER-003",
+        "SHS-LAYER-050",
+        "SHS-LAYER-028",
+        "SHS-LAYER-051"
+      ],
+      "steps": [
+        {
+          "layer_id": "SHS-LAYER-052",
+          "layer_name": "Program Registry",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "services/shf-agent-fabric/main.py"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-018",
+          "layer_name": "Data Verification Layer",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "services/shf-agent-fabric/main.py"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-031",
+          "layer_name": "Public Approval",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+            "package.json"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-022",
+          "layer_name": "Oracle Layer",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+            "package.json"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-003",
+          "layer_name": "SHF Spine",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-050",
+          "layer_name": "SHF Impact Command Center",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "src/router/AdminRoutes.jsx",
+            "src/system/identity/hubAccessControl.js"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-028",
+          "layer_name": "Reports Layer",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-051",
+          "layer_name": "Public Impact Map",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md"
+          ]
+        }
+      ],
+      "input_sources": [
+        "operator input",
+        "source records",
+        "local state",
+        "registered routes/APIs",
+        "documents"
+      ],
+      "input_contracts": [
+        "mixed: documented, local JS object, FastAPI payload, or NOT_FOUND for missing systems"
+      ],
+      "input_validation": "partial; validators exist for many layers but no single full-chain validation for this chain",
+      "runtime_entry_point": "admin.html and/or FastAPI routers where evidenced",
+      "processing_services": [
+        "see steps"
+      ],
+      "persistence_writes": [
+        "browser_localStorage/file_backed_json/SQLite where evidenced; missing durable state in several chains"
+      ],
+      "persistence_reads": [
+        "local modules and FastAPI services where evidenced"
+      ],
+      "outputs": [
+        "admin summary",
+        "report/readiness output",
+        "audit event",
+        "local state",
+        "documented blocker"
+      ],
+      "events_produced": [
+        "local event records where Event Bus participates"
+      ],
+      "events_consumed": [
+        "local subscribers where Event Bus participates"
+      ],
+      "downstream_consumers": [
+        "Executive Command Center",
+        "Reports",
+        "Tracking",
+        "Governance",
+        "ClientOps or SHF surface when connected"
+      ],
+      "user_surfaces": [
+        "admin protected routes where evidenced"
+      ],
+      "reporting_consumers": [
+        "Reports Layer if included"
+      ],
+      "agent_consumers": [
+        "Agent Fabric if included"
+      ],
+      "tracking_consumers": [
+        "Tracking Intelligence when included"
+      ],
+      "audit_records": [
+        "Audit & Verification or local transaction/history where included"
+      ],
+      "security_enforcement": "ProtectedHubRoute/hubAccessControl for admin surfaces; backend auth is present but full per-route verification remains owner-review",
+      "feedback_path": "partial; action-event/recompute loops are not fully closed across all chains",
+      "recompute_or_refresh_path": "local refresh/summary functions or validator reruns where evidenced",
+      "failure_path": "partial; blockers/warnings recorded but retry/recovery often missing",
+      "retry_path": "missing or local-only unless explicitly documented",
+      "dead_letter_or_exception_path": "not_found for most chains",
+      "monitoring_path": "Watchtower/governance validators where included",
+      "terminal_outcome": "bounded local V1 outcome or documented roadmap blocker",
+      "end_to_end_tests": "not proven as full-chain E2E in this audit package",
+      "closure_status": "partially_connected",
+      "closure_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "missing_connections": [
+        "SHF Spine",
+        "SHF Impact Command Center",
+        "Public Impact Map"
+      ],
+      "required_supporting_capabilities": [
+        "durable server-side state",
+        "versioned contracts",
+        "full-chain tests",
+        "runbook",
+        "observability/retry path"
+      ],
+      "blocks_v1": true
+    },
+    {
+      "chain_id": "SHS-CHAIN-007",
+      "chain_name": "Governance and Release",
+      "owning_layer_ids": [
+        "SHS-LAYER-035",
+        "SHS-LAYER-039",
+        "SHS-LAYER-021",
+        "SHS-LAYER-032",
+        "SHS-LAYER-047",
+        "SHS-LAYER-033"
+      ],
+      "steps": [
+        {
+          "layer_id": "SHS-LAYER-035",
+          "layer_name": "Governance Layer",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+            "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-039",
+          "layer_name": "System Registry / Layer Control System",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "src/system/executive-command-center/shsExecutiveCommandCenterSources.js"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-021",
+          "layer_name": "Truth Spine",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+            "package.json"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-032",
+          "layer_name": "Audit & Verification",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "services/shf-agent-fabric/main.py"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-047",
+          "layer_name": "QA + Delivery",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-033",
+          "layer_name": "Watchtower",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+            "services/shf-agent-fabric/main.py"
+          ]
+        }
+      ],
+      "input_sources": [
+        "operator input",
+        "source records",
+        "local state",
+        "registered routes/APIs",
+        "documents"
+      ],
+      "input_contracts": [
+        "mixed: documented, local JS object, FastAPI payload, or NOT_FOUND for missing systems"
+      ],
+      "input_validation": "partial; validators exist for many layers but no single full-chain validation for this chain",
+      "runtime_entry_point": "admin.html and/or FastAPI routers where evidenced",
+      "processing_services": [
+        "see steps"
+      ],
+      "persistence_writes": [
+        "browser_localStorage/file_backed_json/SQLite where evidenced; missing durable state in several chains"
+      ],
+      "persistence_reads": [
+        "local modules and FastAPI services where evidenced"
+      ],
+      "outputs": [
+        "admin summary",
+        "report/readiness output",
+        "audit event",
+        "local state",
+        "documented blocker"
+      ],
+      "events_produced": [
+        "local event records where Event Bus participates"
+      ],
+      "events_consumed": [
+        "local subscribers where Event Bus participates"
+      ],
+      "downstream_consumers": [
+        "Executive Command Center",
+        "Reports",
+        "Tracking",
+        "Governance",
+        "ClientOps or SHF surface when connected"
+      ],
+      "user_surfaces": [
+        "admin protected routes where evidenced"
+      ],
+      "reporting_consumers": [
+        "Reports Layer if included"
+      ],
+      "agent_consumers": [
+        "Agent Fabric if included"
+      ],
+      "tracking_consumers": [
+        "Tracking Intelligence when included"
+      ],
+      "audit_records": [
+        "Audit & Verification or local transaction/history where included"
+      ],
+      "security_enforcement": "ProtectedHubRoute/hubAccessControl for admin surfaces; backend auth is present but full per-route verification remains owner-review",
+      "feedback_path": "partial; action-event/recompute loops are not fully closed across all chains",
+      "recompute_or_refresh_path": "local refresh/summary functions or validator reruns where evidenced",
+      "failure_path": "partial; blockers/warnings recorded but retry/recovery often missing",
+      "retry_path": "missing or local-only unless explicitly documented",
+      "dead_letter_or_exception_path": "not_found for most chains",
+      "monitoring_path": "Watchtower/governance validators where included",
+      "terminal_outcome": "bounded local V1 outcome or documented roadmap blocker",
+      "end_to_end_tests": "not proven as full-chain E2E in this audit package",
+      "closure_status": "closed_with_v1_limitations",
+      "closure_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "missing_connections": [],
+      "required_supporting_capabilities": [
+        "durable server-side state",
+        "versioned contracts",
+        "full-chain tests",
+        "runbook",
+        "observability/retry path"
+      ],
+      "blocks_v1": false
+    },
+    {
+      "chain_id": "SHS-CHAIN-008",
+      "chain_name": "Support and Improvement",
+      "owning_layer_ids": [
+        "SHS-LAYER-058",
+        "SHS-LAYER-048",
+        "SHS-LAYER-044",
+        "SHS-LAYER-047",
+        "SHS-LAYER-009",
+        "SHS-LAYER-046",
+        "SHS-LAYER-042"
+      ],
+      "steps": [
+        {
+          "layer_id": "SHS-LAYER-058",
+          "layer_name": "Support and Improvement Workflow",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-048",
+          "layer_name": "ClientOps",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-044",
+          "layer_name": "Production Ops",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-047",
+          "layer_name": "QA + Delivery",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-009",
+          "layer_name": "Notification / Alert",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+            "src/system/executive-command-center/shsExecutiveCommandCenterSources.js"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-046",
+          "layer_name": "Development Library",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "src/router/AdminRoutes.jsx",
+            "src/system/identity/hubAccessControl.js"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-042",
+          "layer_name": "Tracking and Intelligence Layer",
+          "step_status": "partial",
+          "evidence_paths": [
+            "src/router/AdminRoutes.jsx",
+            "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+            "src/system/identity/hubAccessControl.js"
+          ]
+        }
+      ],
+      "input_sources": [
+        "operator input",
+        "source records",
+        "local state",
+        "registered routes/APIs",
+        "documents"
+      ],
+      "input_contracts": [
+        "mixed: documented, local JS object, FastAPI payload, or NOT_FOUND for missing systems"
+      ],
+      "input_validation": "partial; validators exist for many layers but no single full-chain validation for this chain",
+      "runtime_entry_point": "admin.html and/or FastAPI routers where evidenced",
+      "processing_services": [
+        "see steps"
+      ],
+      "persistence_writes": [
+        "browser_localStorage/file_backed_json/SQLite where evidenced; missing durable state in several chains"
+      ],
+      "persistence_reads": [
+        "local modules and FastAPI services where evidenced"
+      ],
+      "outputs": [
+        "admin summary",
+        "report/readiness output",
+        "audit event",
+        "local state",
+        "documented blocker"
+      ],
+      "events_produced": [
+        "local event records where Event Bus participates"
+      ],
+      "events_consumed": [
+        "local subscribers where Event Bus participates"
+      ],
+      "downstream_consumers": [
+        "Executive Command Center",
+        "Reports",
+        "Tracking",
+        "Governance",
+        "ClientOps or SHF surface when connected"
+      ],
+      "user_surfaces": [
+        "admin protected routes where evidenced"
+      ],
+      "reporting_consumers": [
+        "Reports Layer if included"
+      ],
+      "agent_consumers": [
+        "Agent Fabric if included"
+      ],
+      "tracking_consumers": [
+        "Tracking Intelligence when included"
+      ],
+      "audit_records": [
+        "Audit & Verification or local transaction/history where included"
+      ],
+      "security_enforcement": "ProtectedHubRoute/hubAccessControl for admin surfaces; backend auth is present but full per-route verification remains owner-review",
+      "feedback_path": "partial; action-event/recompute loops are not fully closed across all chains",
+      "recompute_or_refresh_path": "local refresh/summary functions or validator reruns where evidenced",
+      "failure_path": "partial; blockers/warnings recorded but retry/recovery often missing",
+      "retry_path": "missing or local-only unless explicitly documented",
+      "dead_letter_or_exception_path": "not_found for most chains",
+      "monitoring_path": "Watchtower/governance validators where included",
+      "terminal_outcome": "bounded local V1 outcome or documented roadmap blocker",
+      "end_to_end_tests": "not proven as full-chain E2E in this audit package",
+      "closure_status": "partially_connected",
+      "closure_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "missing_connections": [
+        "Support and Improvement Workflow"
+      ],
+      "required_supporting_capabilities": [
+        "durable server-side state",
+        "versioned contracts",
+        "full-chain tests",
+        "runbook",
+        "observability/retry path"
+      ],
+      "blocks_v1": false
+    },
+    {
+      "chain_id": "SHS-CHAIN-009",
+      "chain_name": "Tracking and Intelligence",
+      "owning_layer_ids": [
+        "SHS-LAYER-043",
+        "SHS-LAYER-044",
+        "SHS-LAYER-047",
+        "SHS-LAYER-048",
+        "SHS-LAYER-028",
+        "SHS-LAYER-042",
+        "SHS-LAYER-057",
+        "SHS-LAYER-041"
+      ],
+      "steps": [
+        {
+          "layer_id": "SHS-LAYER-043",
+          "layer_name": "SHS Sales Layer",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-044",
+          "layer_name": "Production Ops",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-047",
+          "layer_name": "QA + Delivery",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-048",
+          "layer_name": "ClientOps",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-028",
+          "layer_name": "Reports Layer",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-042",
+          "layer_name": "Tracking and Intelligence Layer",
+          "step_status": "partial",
+          "evidence_paths": [
+            "src/router/AdminRoutes.jsx",
+            "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+            "src/system/identity/hubAccessControl.js"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-057",
+          "layer_name": "Commercialization / Billing / Entitlements",
+          "step_status": "missing",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-041",
+          "layer_name": "Executive Command Center",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+            "src/router/AdminRoutes.jsx",
+            "src/system/executive-command-center/shsExecutiveCommandCenterSources.js"
+          ]
+        }
+      ],
+      "input_sources": [
+        "operator input",
+        "source records",
+        "local state",
+        "registered routes/APIs",
+        "documents"
+      ],
+      "input_contracts": [
+        "mixed: documented, local JS object, FastAPI payload, or NOT_FOUND for missing systems"
+      ],
+      "input_validation": "partial; validators exist for many layers but no single full-chain validation for this chain",
+      "runtime_entry_point": "admin.html and/or FastAPI routers where evidenced",
+      "processing_services": [
+        "see steps"
+      ],
+      "persistence_writes": [
+        "browser_localStorage/file_backed_json/SQLite where evidenced; missing durable state in several chains"
+      ],
+      "persistence_reads": [
+        "local modules and FastAPI services where evidenced"
+      ],
+      "outputs": [
+        "admin summary",
+        "report/readiness output",
+        "audit event",
+        "local state",
+        "documented blocker"
+      ],
+      "events_produced": [
+        "local event records where Event Bus participates"
+      ],
+      "events_consumed": [
+        "local subscribers where Event Bus participates"
+      ],
+      "downstream_consumers": [
+        "Executive Command Center",
+        "Reports",
+        "Tracking",
+        "Governance",
+        "ClientOps or SHF surface when connected"
+      ],
+      "user_surfaces": [
+        "admin protected routes where evidenced"
+      ],
+      "reporting_consumers": [
+        "Reports Layer if included"
+      ],
+      "agent_consumers": [
+        "Agent Fabric if included"
+      ],
+      "tracking_consumers": [
+        "Tracking Intelligence when included"
+      ],
+      "audit_records": [
+        "Audit & Verification or local transaction/history where included"
+      ],
+      "security_enforcement": "ProtectedHubRoute/hubAccessControl for admin surfaces; backend auth is present but full per-route verification remains owner-review",
+      "feedback_path": "partial; action-event/recompute loops are not fully closed across all chains",
+      "recompute_or_refresh_path": "local refresh/summary functions or validator reruns where evidenced",
+      "failure_path": "partial; blockers/warnings recorded but retry/recovery often missing",
+      "retry_path": "missing or local-only unless explicitly documented",
+      "dead_letter_or_exception_path": "not_found for most chains",
+      "monitoring_path": "Watchtower/governance validators where included",
+      "terminal_outcome": "bounded local V1 outcome or documented roadmap blocker",
+      "end_to_end_tests": "not proven as full-chain E2E in this audit package",
+      "closure_status": "partially_connected",
+      "closure_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "missing_connections": [
+        "Commercialization / Billing / Entitlements"
+      ],
+      "required_supporting_capabilities": [
+        "durable server-side state",
+        "versioned contracts",
+        "full-chain tests",
+        "runbook",
+        "observability/retry path"
+      ],
+      "blocks_v1": true
+    },
+    {
+      "chain_id": "SHS-CHAIN-010",
+      "chain_name": "Security and Access",
+      "owning_layer_ids": [
+        "SHS-LAYER-001",
+        "SHS-LAYER-036",
+        "SHS-LAYER-005",
+        "SHS-LAYER-031",
+        "SHS-LAYER-032"
+      ],
+      "steps": [
+        {
+          "layer_id": "SHS-LAYER-001",
+          "layer_name": "Identity & Access",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "package.json",
+            "services/shf-agent-fabric/main.py",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-036",
+          "layer_name": "Security / Privacy",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "services/shf-agent-fabric/main.py",
+            "src/system/identity/hubAccessControl.js"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-005",
+          "layer_name": "API Gateway",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "services/shf-agent-fabric/main.py"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-031",
+          "layer_name": "Public Approval",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+            "package.json"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-032",
+          "layer_name": "Audit & Verification",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "services/shf-agent-fabric/main.py"
+          ]
+        }
+      ],
+      "input_sources": [
+        "operator input",
+        "source records",
+        "local state",
+        "registered routes/APIs",
+        "documents"
+      ],
+      "input_contracts": [
+        "mixed: documented, local JS object, FastAPI payload, or NOT_FOUND for missing systems"
+      ],
+      "input_validation": "partial; validators exist for many layers but no single full-chain validation for this chain",
+      "runtime_entry_point": "admin.html and/or FastAPI routers where evidenced",
+      "processing_services": [
+        "see steps"
+      ],
+      "persistence_writes": [
+        "browser_localStorage/file_backed_json/SQLite where evidenced; missing durable state in several chains"
+      ],
+      "persistence_reads": [
+        "local modules and FastAPI services where evidenced"
+      ],
+      "outputs": [
+        "admin summary",
+        "report/readiness output",
+        "audit event",
+        "local state",
+        "documented blocker"
+      ],
+      "events_produced": [
+        "local event records where Event Bus participates"
+      ],
+      "events_consumed": [
+        "local subscribers where Event Bus participates"
+      ],
+      "downstream_consumers": [
+        "Executive Command Center",
+        "Reports",
+        "Tracking",
+        "Governance",
+        "ClientOps or SHF surface when connected"
+      ],
+      "user_surfaces": [
+        "admin protected routes where evidenced"
+      ],
+      "reporting_consumers": [
+        "Reports Layer if included"
+      ],
+      "agent_consumers": [
+        "Agent Fabric if included"
+      ],
+      "tracking_consumers": [
+        "Tracking Intelligence when included"
+      ],
+      "audit_records": [
+        "Audit & Verification or local transaction/history where included"
+      ],
+      "security_enforcement": "ProtectedHubRoute/hubAccessControl for admin surfaces; backend auth is present but full per-route verification remains owner-review",
+      "feedback_path": "partial; action-event/recompute loops are not fully closed across all chains",
+      "recompute_or_refresh_path": "local refresh/summary functions or validator reruns where evidenced",
+      "failure_path": "partial; blockers/warnings recorded but retry/recovery often missing",
+      "retry_path": "missing or local-only unless explicitly documented",
+      "dead_letter_or_exception_path": "not_found for most chains",
+      "monitoring_path": "Watchtower/governance validators where included",
+      "terminal_outcome": "bounded local V1 outcome or documented roadmap blocker",
+      "end_to_end_tests": "not proven as full-chain E2E in this audit package",
+      "closure_status": "closed_with_v1_limitations",
+      "closure_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "missing_connections": [],
+      "required_supporting_capabilities": [
+        "durable server-side state",
+        "versioned contracts",
+        "full-chain tests",
+        "runbook",
+        "observability/retry path"
+      ],
+      "blocks_v1": false
+    },
+    {
+      "chain_id": "SHS-CHAIN-011",
+      "chain_name": "Notification and Escalation",
+      "owning_layer_ids": [
+        "SHS-LAYER-006",
+        "SHS-LAYER-009",
+        "SHS-LAYER-007",
+        "SHS-LAYER-032",
+        "SHS-LAYER-042"
+      ],
+      "steps": [
+        {
+          "layer_id": "SHS-LAYER-006",
+          "layer_name": "Event/Webhook Layer",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "src/system/event-bus/shsEventStorage.js"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-009",
+          "layer_name": "Notification / Alert",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+            "src/system/executive-command-center/shsExecutiveCommandCenterSources.js"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-007",
+          "layer_name": "Command Bus",
+          "step_status": "partial",
+          "evidence_paths": [
+            "package.json",
+            "src/system/command-bus/shsCommandStorage.js",
+            "src/system/executive-command-center/shsExecutiveCommandCenterSources.js"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-032",
+          "layer_name": "Audit & Verification",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "package.json",
+            "services/shf-agent-fabric/main.py"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-042",
+          "layer_name": "Tracking and Intelligence Layer",
+          "step_status": "partial",
+          "evidence_paths": [
+            "src/router/AdminRoutes.jsx",
+            "src/system/executive-command-center/shsExecutiveCommandCenterSources.js",
+            "src/system/identity/hubAccessControl.js"
+          ]
+        }
+      ],
+      "input_sources": [
+        "operator input",
+        "source records",
+        "local state",
+        "registered routes/APIs",
+        "documents"
+      ],
+      "input_contracts": [
+        "mixed: documented, local JS object, FastAPI payload, or NOT_FOUND for missing systems"
+      ],
+      "input_validation": "partial; validators exist for many layers but no single full-chain validation for this chain",
+      "runtime_entry_point": "admin.html and/or FastAPI routers where evidenced",
+      "processing_services": [
+        "see steps"
+      ],
+      "persistence_writes": [
+        "browser_localStorage/file_backed_json/SQLite where evidenced; missing durable state in several chains"
+      ],
+      "persistence_reads": [
+        "local modules and FastAPI services where evidenced"
+      ],
+      "outputs": [
+        "admin summary",
+        "report/readiness output",
+        "audit event",
+        "local state",
+        "documented blocker"
+      ],
+      "events_produced": [
+        "local event records where Event Bus participates"
+      ],
+      "events_consumed": [
+        "local subscribers where Event Bus participates"
+      ],
+      "downstream_consumers": [
+        "Executive Command Center",
+        "Reports",
+        "Tracking",
+        "Governance",
+        "ClientOps or SHF surface when connected"
+      ],
+      "user_surfaces": [
+        "admin protected routes where evidenced"
+      ],
+      "reporting_consumers": [
+        "Reports Layer if included"
+      ],
+      "agent_consumers": [
+        "Agent Fabric if included"
+      ],
+      "tracking_consumers": [
+        "Tracking Intelligence when included"
+      ],
+      "audit_records": [
+        "Audit & Verification or local transaction/history where included"
+      ],
+      "security_enforcement": "ProtectedHubRoute/hubAccessControl for admin surfaces; backend auth is present but full per-route verification remains owner-review",
+      "feedback_path": "partial; action-event/recompute loops are not fully closed across all chains",
+      "recompute_or_refresh_path": "local refresh/summary functions or validator reruns where evidenced",
+      "failure_path": "partial; blockers/warnings recorded but retry/recovery often missing",
+      "retry_path": "missing or local-only unless explicitly documented",
+      "dead_letter_or_exception_path": "not_found for most chains",
+      "monitoring_path": "Watchtower/governance validators where included",
+      "terminal_outcome": "bounded local V1 outcome or documented roadmap blocker",
+      "end_to_end_tests": "not proven as full-chain E2E in this audit package",
+      "closure_status": "partially_connected",
+      "closure_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "missing_connections": [],
+      "required_supporting_capabilities": [
+        "durable server-side state",
+        "versioned contracts",
+        "full-chain tests",
+        "runbook",
+        "observability/retry path"
+      ],
+      "blocks_v1": false
+    },
+    {
+      "chain_id": "SHS-CHAIN-012",
+      "chain_name": "Commercialization",
+      "owning_layer_ids": [
+        "SHS-LAYER-057",
+        "SHS-LAYER-048",
+        "SHS-LAYER-043",
+        "SHS-LAYER-028",
+        "SHS-LAYER-041"
+      ],
+      "steps": [
+        {
+          "layer_id": "SHS-LAYER-057",
+          "layer_name": "Commercialization / Billing / Entitlements",
+          "step_status": "missing",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-048",
+          "layer_name": "ClientOps",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-043",
+          "layer_name": "SHS Sales Layer",
+          "step_status": "partial",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-028",
+          "layer_name": "Reports Layer",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "docs/MASTER_LAYER_REGISTRY.md",
+            "docs/SHRV1_FINAL_FULL_SYSTEM_V1_AUDIT.md",
+            "src/router/AdminRoutes.jsx"
+          ]
+        },
+        {
+          "layer_id": "SHS-LAYER-041",
+          "layer_name": "Executive Command Center",
+          "step_status": "implemented",
+          "evidence_paths": [
+            "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+            "src/router/AdminRoutes.jsx",
+            "src/system/executive-command-center/shsExecutiveCommandCenterSources.js"
+          ]
+        }
+      ],
+      "input_sources": [
+        "operator input",
+        "source records",
+        "local state",
+        "registered routes/APIs",
+        "documents"
+      ],
+      "input_contracts": [
+        "mixed: documented, local JS object, FastAPI payload, or NOT_FOUND for missing systems"
+      ],
+      "input_validation": "partial; validators exist for many layers but no single full-chain validation for this chain",
+      "runtime_entry_point": "admin.html and/or FastAPI routers where evidenced",
+      "processing_services": [
+        "see steps"
+      ],
+      "persistence_writes": [
+        "browser_localStorage/file_backed_json/SQLite where evidenced; missing durable state in several chains"
+      ],
+      "persistence_reads": [
+        "local modules and FastAPI services where evidenced"
+      ],
+      "outputs": [
+        "admin summary",
+        "report/readiness output",
+        "audit event",
+        "local state",
+        "documented blocker"
+      ],
+      "events_produced": [
+        "local event records where Event Bus participates"
+      ],
+      "events_consumed": [
+        "local subscribers where Event Bus participates"
+      ],
+      "downstream_consumers": [
+        "Executive Command Center",
+        "Reports",
+        "Tracking",
+        "Governance",
+        "ClientOps or SHF surface when connected"
+      ],
+      "user_surfaces": [
+        "admin protected routes where evidenced"
+      ],
+      "reporting_consumers": [
+        "Reports Layer if included"
+      ],
+      "agent_consumers": [
+        "Agent Fabric if included"
+      ],
+      "tracking_consumers": [
+        "Tracking Intelligence when included"
+      ],
+      "audit_records": [
+        "Audit & Verification or local transaction/history where included"
+      ],
+      "security_enforcement": "ProtectedHubRoute/hubAccessControl for admin surfaces; backend auth is present but full per-route verification remains owner-review",
+      "feedback_path": "partial; action-event/recompute loops are not fully closed across all chains",
+      "recompute_or_refresh_path": "local refresh/summary functions or validator reruns where evidenced",
+      "failure_path": "partial; blockers/warnings recorded but retry/recovery often missing",
+      "retry_path": "missing or local-only unless explicitly documented",
+      "dead_letter_or_exception_path": "not_found for most chains",
+      "monitoring_path": "Watchtower/governance validators where included",
+      "terminal_outcome": "bounded local V1 outcome or documented roadmap blocker",
+      "end_to_end_tests": "not proven as full-chain E2E in this audit package",
+      "closure_status": "partially_connected",
+      "closure_evidence": [
+        {
+          "repository": "shrv1",
+          "file_path": "docs/SHS_BOS_V1_1_FULL_INTEGRATION_AUDIT.md",
+          "line_range": "42-77",
+          "evidence_type": "prior_integration_audit",
+          "explanation": "V1.1 audit says runtime fabric is local-first and integrated for audited scenario.",
+          "what_it_proves": "Prior report supports local-first integration and explicitly limits production execution.",
+          "evidence_strength": "medium",
+          "currency": "current"
+        },
+        {
+          "repository": "shrv1",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router.",
+          "evidence_strength": "strong",
+          "currency": "current"
+        }
+      ],
+      "missing_connections": [
+        "Commercialization / Billing / Entitlements"
+      ],
+      "required_supporting_capabilities": [
+        "durable server-side state",
+        "versioned contracts",
+        "full-chain tests",
+        "runbook",
+        "observability/retry path"
+      ],
+      "blocks_v1": true
+    }
+  ]
+}

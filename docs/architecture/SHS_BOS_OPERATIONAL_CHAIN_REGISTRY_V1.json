@@ -1,0 +1,1395 @@
+{
+  "metadata": {
+    "generated_at": "2026-07-14T03:37:08.558978+00:00",
+    "source_audit_dir": "/Users/mikeslate/Desktop/shrv1/docs/v1-layer-audit",
+    "official_layer_count": 50,
+    "family_count": 12,
+    "subsystem_count": 3,
+    "shared_service_count": 2,
+    "business_surface_count": 2,
+    "cross_cutting_control_count": 1,
+    "decision_required_count": 0,
+    "contract_count": 35,
+    "chain_count": 10
+  },
+  "chains": [
+    {
+      "chain_id": "CHAIN-A-UNIFIED-TRUTH",
+      "official_name": "Unified Truth",
+      "owner": "Executive Command Center visibility; source layers own execution",
+      "purpose": "Formal operating chain for Unified Truth.",
+      "start_condition": "Governed input, action, or architecture event enters the first owning layer.",
+      "terminal_outcome": "Leadership and operators can see what happened, what changed, what is blocked, what failed, and what requires action.",
+      "mandatory_steps": [
+        "SHS-LAYER-002",
+        "SHS-LAYER-005",
+        "SHS-LAYER-010",
+        "SHS-LAYER-013",
+        "SHS-LAYER-014",
+        "SHS-LAYER-015",
+        "SHS-LAYER-016",
+        "SHS-LAYER-017",
+        "SHS-LAYER-018",
+        "SHS-LAYER-019",
+        "SHS-LAYER-030",
+        "SHS-LAYER-021",
+        "SHS-LAYER-022",
+        "SHS-LAYER-028",
+        "SHS-LAYER-006",
+        "SHS-LAYER-042"
+      ],
+      "optional_steps": [],
+      "layer_ownership_per_step": [
+        {
+          "layer_id": "SHS-LAYER-002",
+          "owner": "Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-005",
+          "owner": "Platform"
+        },
+        {
+          "layer_id": "SHS-LAYER-010",
+          "owner": "Data Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-013",
+          "owner": "Data Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-014",
+          "owner": "Data Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-015",
+          "owner": "Data Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-016",
+          "owner": "Data Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-017",
+          "owner": "Data Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-018",
+          "owner": "Data Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-019",
+          "owner": "Data Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-030",
+          "owner": "Data Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-021",
+          "owner": "Verification"
+        },
+        {
+          "layer_id": "SHS-LAYER-022",
+          "owner": "Decision Support"
+        },
+        {
+          "layer_id": "SHS-LAYER-028",
+          "owner": "Reporting"
+        },
+        {
+          "layer_id": "SHS-LAYER-006",
+          "owner": "Platform"
+        },
+        {
+          "layer_id": "SHS-LAYER-042",
+          "owner": "Intelligence"
+        }
+      ],
+      "contract_ids": [
+        "CONTRACT-V1-004",
+        "CONTRACT-V1-007",
+        "CONTRACT-V1-010"
+      ],
+      "persistence_per_step": [
+        {
+          "layer_id": "SHS-LAYER-002",
+          "persistence": "browser_localStorage"
+        },
+        {
+          "layer_id": "SHS-LAYER-005",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-010",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-013",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-014",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-015",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-016",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-017",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-018",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-019",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-030",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-021",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-022",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-028",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-006",
+          "persistence": "browser_localStorage"
+        },
+        {
+          "layer_id": "SHS-LAYER-042",
+          "persistence": "browser_localStorage"
+        }
+      ],
+      "trace_propagation": "trace_id, request_id, entity_id, actor_id, timestamp, contract_version where applicable",
+      "security_boundary": "Identity, permission, privacy, ownership, and publication controls stay with source-specific authorities.",
+      "failure_path": "Block, quarantine, owner-review, retry, or closure-plan item based on contract failure code.",
+      "retry_or_recovery_path": "Retry only when idempotent and authorized; otherwise route to owner review.",
+      "tracking_event": "operational_chain_status_changed",
+      "test_requirements": [
+        "schema contract test",
+        "trace propagation test",
+        "blocked path test"
+      ],
+      "current_status": "blocked",
+      "family_ids": [
+        "F01_FOUNDATION_IDENTITY_ACCESS",
+        "F02_INTEGRATION_SOURCE_INTAKE",
+        "F03_DATA_IDENTITY_AGGREGATION",
+        "F04_VERIFICATION_RECONCILIATION_TRUTH",
+        "F07_BUSINESS_OPERATIONS_CLIENT_DELIVERY",
+        "F08_REPORTING_PUBLICATION_OUTPUTS",
+        "F09_TRACKING_OBSERVABILITY_INTELLIGENCE"
+      ],
+      "broken_transitions": [
+        "SHS-LAYER-002->SHS-LAYER-005: missing explicit V1 contract",
+        "SHS-LAYER-005->SHS-LAYER-010: missing explicit V1 contract",
+        "SHS-LAYER-010->SHS-LAYER-013: missing explicit V1 contract",
+        "SHS-LAYER-013->SHS-LAYER-014: missing explicit V1 contract",
+        "SHS-LAYER-014->SHS-LAYER-015: missing explicit V1 contract",
+        "SHS-LAYER-016->SHS-LAYER-017: missing explicit V1 contract",
+        "SHS-LAYER-017->SHS-LAYER-018: missing explicit V1 contract",
+        "SHS-LAYER-018->SHS-LAYER-019: missing explicit V1 contract",
+        "SHS-LAYER-019->SHS-LAYER-030: missing explicit V1 contract",
+        "SHS-LAYER-030->SHS-LAYER-021: missing explicit V1 contract",
+        "SHS-LAYER-028->SHS-LAYER-006: missing explicit V1 contract",
+        "SHS-LAYER-006->SHS-LAYER-042: missing explicit V1 contract"
+      ],
+      "contracts_missing": 12,
+      "persistence_breaks": [
+        "SHS-LAYER-002",
+        "SHS-LAYER-006",
+        "SHS-LAYER-042"
+      ],
+      "feedback_breaks": [],
+      "v1_blockers": [
+        "SHS-DEADEND-009",
+        "SHS-LAYER-002->SHS-LAYER-005: missing explicit V1 contract",
+        "SHS-LAYER-005->SHS-LAYER-010: missing explicit V1 contract",
+        "SHS-LAYER-010->SHS-LAYER-013: missing explicit V1 contract",
+        "SHS-LAYER-013->SHS-LAYER-014: missing explicit V1 contract",
+        "SHS-LAYER-014->SHS-LAYER-015: missing explicit V1 contract",
+        "SHS-LAYER-016->SHS-LAYER-017: missing explicit V1 contract",
+        "SHS-LAYER-017->SHS-LAYER-018: missing explicit V1 contract",
+        "SHS-LAYER-018->SHS-LAYER-019: missing explicit V1 contract",
+        "SHS-LAYER-019->SHS-LAYER-030: missing explicit V1 contract",
+        "SHS-LAYER-030->SHS-LAYER-021: missing explicit V1 contract",
+        "SHS-LAYER-028->SHS-LAYER-006: missing explicit V1 contract",
+        "SHS-LAYER-006->SHS-LAYER-042: missing explicit V1 contract"
+      ],
+      "acceptance_criteria": [
+        "all mandatory steps have valid contracts",
+        "no V1 blockers remain",
+        "terminal outcome is produced and tracked"
+      ]
+    },
+    {
+      "chain_id": "CHAIN-B-CLIENT-DELIVERY",
+      "official_name": "Client Delivery",
+      "owner": "Executive Command Center visibility; source layers own execution",
+      "purpose": "Formal operating chain for Client Delivery.",
+      "start_condition": "Governed input, action, or architecture event enters the first owning layer.",
+      "terminal_outcome": "Leadership and operators can see what happened, what changed, what is blocked, what failed, and what requires action.",
+      "mandatory_steps": [
+        "SHS-LAYER-043",
+        "SHS-LAYER-044",
+        "SHS-LAYER-046",
+        "SHS-LAYER-047",
+        "SHS-LAYER-029",
+        "SHS-LAYER-048",
+        "SHS-LAYER-028",
+        "SHS-LAYER-042"
+      ],
+      "optional_steps": [],
+      "layer_ownership_per_step": [
+        {
+          "layer_id": "SHS-LAYER-043",
+          "owner": "Revenue Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-044",
+          "owner": "Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-046",
+          "owner": "Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-047",
+          "owner": "Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-029",
+          "owner": "Reporting"
+        },
+        {
+          "layer_id": "SHS-LAYER-048",
+          "owner": "Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-028",
+          "owner": "Reporting"
+        },
+        {
+          "layer_id": "SHS-LAYER-042",
+          "owner": "Intelligence"
+        }
+      ],
+      "contract_ids": [
+        "CONTRACT-V1-019",
+        "CONTRACT-V1-021",
+        "CONTRACT-V1-022",
+        "CONTRACT-V1-023",
+        "CONTRACT-V1-025"
+      ],
+      "persistence_per_step": [
+        {
+          "layer_id": "SHS-LAYER-043",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-044",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-046",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-047",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-029",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-048",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-028",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-042",
+          "persistence": "browser_localStorage"
+        }
+      ],
+      "trace_propagation": "trace_id, request_id, entity_id, actor_id, timestamp, contract_version where applicable",
+      "security_boundary": "Identity, permission, privacy, ownership, and publication controls stay with source-specific authorities.",
+      "failure_path": "Block, quarantine, owner-review, retry, or closure-plan item based on contract failure code.",
+      "retry_or_recovery_path": "Retry only when idempotent and authorized; otherwise route to owner review.",
+      "tracking_event": "operational_chain_status_changed",
+      "test_requirements": [
+        "schema contract test",
+        "trace propagation test",
+        "blocked path test"
+      ],
+      "current_status": "blocked",
+      "family_ids": [
+        "F07_BUSINESS_OPERATIONS_CLIENT_DELIVERY",
+        "F08_REPORTING_PUBLICATION_OUTPUTS",
+        "F09_TRACKING_OBSERVABILITY_INTELLIGENCE"
+      ],
+      "broken_transitions": [
+        "SHS-LAYER-044->SHS-LAYER-046: missing explicit V1 contract",
+        "SHS-LAYER-046->SHS-LAYER-047: missing explicit V1 contract"
+      ],
+      "contracts_missing": 2,
+      "persistence_breaks": [
+        "SHS-LAYER-042"
+      ],
+      "feedback_breaks": [
+        "feedback loop not fully proven end to end"
+      ],
+      "v1_blockers": [
+        "SHS-DEADEND-009",
+        "SHS-LAYER-044->SHS-LAYER-046: missing explicit V1 contract",
+        "SHS-LAYER-046->SHS-LAYER-047: missing explicit V1 contract"
+      ],
+      "acceptance_criteria": [
+        "all mandatory steps have valid contracts",
+        "no V1 blockers remain",
+        "terminal outcome is produced and tracked"
+      ]
+    },
+    {
+      "chain_id": "CHAIN-C-DIRECT-CONNECT",
+      "official_name": "Direct Connect",
+      "owner": "Executive Command Center visibility; source layers own execution",
+      "purpose": "Formal operating chain for Direct Connect.",
+      "start_condition": "Governed input, action, or architecture event enters the first owning layer.",
+      "terminal_outcome": "Leadership and operators can see what happened, what changed, what is blocked, what failed, and what requires action.",
+      "mandatory_steps": [
+        "SHS-LAYER-013",
+        "SHS-LAYER-011",
+        "SHS-LAYER-015",
+        "SHS-LAYER-021",
+        "SHS-LAYER-033",
+        "SHS-LAYER-009",
+        "SHS-LAYER-032"
+      ],
+      "optional_steps": [],
+      "layer_ownership_per_step": [
+        {
+          "layer_id": "SHS-LAYER-013",
+          "owner": "Data Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-011",
+          "owner": "Platform"
+        },
+        {
+          "layer_id": "SHS-LAYER-015",
+          "owner": "Data Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-021",
+          "owner": "Verification"
+        },
+        {
+          "layer_id": "SHS-LAYER-033",
+          "owner": "Assurance"
+        },
+        {
+          "layer_id": "SHS-LAYER-009",
+          "owner": "Communications"
+        },
+        {
+          "layer_id": "SHS-LAYER-032",
+          "owner": "Assurance"
+        }
+      ],
+      "contract_ids": [],
+      "persistence_per_step": [
+        {
+          "layer_id": "SHS-LAYER-013",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-011",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-015",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-021",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-033",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-009",
+          "persistence": "browser_localStorage"
+        },
+        {
+          "layer_id": "SHS-LAYER-032",
+          "persistence": "unknown"
+        }
+      ],
+      "trace_propagation": "trace_id, request_id, entity_id, actor_id, timestamp, contract_version where applicable",
+      "security_boundary": "Identity, permission, privacy, ownership, and publication controls stay with source-specific authorities.",
+      "failure_path": "Block, quarantine, owner-review, retry, or closure-plan item based on contract failure code.",
+      "retry_or_recovery_path": "Retry only when idempotent and authorized; otherwise route to owner review.",
+      "tracking_event": "operational_chain_status_changed",
+      "test_requirements": [
+        "schema contract test",
+        "trace propagation test",
+        "blocked path test"
+      ],
+      "current_status": "blocked",
+      "family_ids": [
+        "F02_INTEGRATION_SOURCE_INTAKE",
+        "F03_DATA_IDENTITY_AGGREGATION",
+        "F04_VERIFICATION_RECONCILIATION_TRUTH",
+        "F06_WORKFLOW_COLLABORATION_NOTIFICATIONS",
+        "F09_TRACKING_OBSERVABILITY_INTELLIGENCE"
+      ],
+      "broken_transitions": [
+        "SHS-LAYER-013->SHS-LAYER-011: missing explicit V1 contract",
+        "SHS-LAYER-011->SHS-LAYER-015: missing explicit V1 contract",
+        "SHS-LAYER-015->SHS-LAYER-021: missing explicit V1 contract",
+        "SHS-LAYER-021->SHS-LAYER-033: missing explicit V1 contract",
+        "SHS-LAYER-033->SHS-LAYER-009: missing explicit V1 contract",
+        "SHS-LAYER-009->SHS-LAYER-032: missing explicit V1 contract"
+      ],
+      "contracts_missing": 6,
+      "persistence_breaks": [
+        "SHS-LAYER-009"
+      ],
+      "feedback_breaks": [
+        "feedback loop not fully proven end to end"
+      ],
+      "v1_blockers": [
+        "SHS-LAYER-013->SHS-LAYER-011: missing explicit V1 contract",
+        "SHS-LAYER-011->SHS-LAYER-015: missing explicit V1 contract",
+        "SHS-LAYER-015->SHS-LAYER-021: missing explicit V1 contract",
+        "SHS-LAYER-021->SHS-LAYER-033: missing explicit V1 contract",
+        "SHS-LAYER-033->SHS-LAYER-009: missing explicit V1 contract",
+        "SHS-LAYER-009->SHS-LAYER-032: missing explicit V1 contract"
+      ],
+      "acceptance_criteria": [
+        "all mandatory steps have valid contracts",
+        "no V1 blockers remain",
+        "terminal outcome is produced and tracked"
+      ]
+    },
+    {
+      "chain_id": "CHAIN-D-AGENT-INTELLIGENCE",
+      "official_name": "Agent Intelligence",
+      "owner": "Executive Command Center visibility; source layers own execution",
+      "purpose": "Formal operating chain for Agent Intelligence.",
+      "start_condition": "Governed input, action, or architecture event enters the first owning layer.",
+      "terminal_outcome": "Leadership and operators can see what happened, what changed, what is blocked, what failed, and what requires action.",
+      "mandatory_steps": [
+        "SHS-LAYER-001",
+        "SHS-LAYER-024",
+        "SHS-LAYER-022",
+        "SHS-LAYER-027",
+        "SHS-LAYER-025",
+        "SHS-LAYER-032",
+        "SHS-LAYER-042"
+      ],
+      "optional_steps": [],
+      "layer_ownership_per_step": [
+        {
+          "layer_id": "SHS-LAYER-001",
+          "owner": "Security"
+        },
+        {
+          "layer_id": "SHS-LAYER-024",
+          "owner": "Governance"
+        },
+        {
+          "layer_id": "SHS-LAYER-022",
+          "owner": "Decision Support"
+        },
+        {
+          "layer_id": "SHS-LAYER-027",
+          "owner": "AI Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-025",
+          "owner": "Automation"
+        },
+        {
+          "layer_id": "SHS-LAYER-032",
+          "owner": "Assurance"
+        },
+        {
+          "layer_id": "SHS-LAYER-042",
+          "owner": "Intelligence"
+        }
+      ],
+      "contract_ids": [
+        "CONTRACT-V1-013",
+        "CONTRACT-V1-015"
+      ],
+      "persistence_per_step": [
+        {
+          "layer_id": "SHS-LAYER-001",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-024",
+          "persistence": "file_backed_json"
+        },
+        {
+          "layer_id": "SHS-LAYER-022",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-027",
+          "persistence": "file_backed_json"
+        },
+        {
+          "layer_id": "SHS-LAYER-025",
+          "persistence": "file_backed_json"
+        },
+        {
+          "layer_id": "SHS-LAYER-032",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-042",
+          "persistence": "browser_localStorage"
+        }
+      ],
+      "trace_propagation": "trace_id, request_id, entity_id, actor_id, timestamp, contract_version where applicable",
+      "security_boundary": "Identity, permission, privacy, ownership, and publication controls stay with source-specific authorities.",
+      "failure_path": "Block, quarantine, owner-review, retry, or closure-plan item based on contract failure code.",
+      "retry_or_recovery_path": "Retry only when idempotent and authorized; otherwise route to owner review.",
+      "tracking_event": "operational_chain_status_changed",
+      "test_requirements": [
+        "schema contract test",
+        "trace propagation test",
+        "blocked path test"
+      ],
+      "current_status": "blocked",
+      "family_ids": [
+        "F01_FOUNDATION_IDENTITY_ACCESS",
+        "F04_VERIFICATION_RECONCILIATION_TRUTH",
+        "F05_INTELLIGENCE_AGENT_GOVERNANCE",
+        "F09_TRACKING_OBSERVABILITY_INTELLIGENCE"
+      ],
+      "broken_transitions": [
+        "SHS-LAYER-001->SHS-LAYER-024: missing explicit V1 contract",
+        "SHS-LAYER-024->SHS-LAYER-022: missing explicit V1 contract",
+        "SHS-LAYER-022->SHS-LAYER-027: missing explicit V1 contract",
+        "SHS-LAYER-032->SHS-LAYER-042: missing explicit V1 contract"
+      ],
+      "contracts_missing": 4,
+      "persistence_breaks": [
+        "SHS-LAYER-042"
+      ],
+      "feedback_breaks": [
+        "feedback loop not fully proven end to end"
+      ],
+      "v1_blockers": [
+        "SHS-DEADEND-009",
+        "SHS-LAYER-001->SHS-LAYER-024: missing explicit V1 contract",
+        "SHS-LAYER-024->SHS-LAYER-022: missing explicit V1 contract",
+        "SHS-LAYER-022->SHS-LAYER-027: missing explicit V1 contract",
+        "SHS-LAYER-032->SHS-LAYER-042: missing explicit V1 contract"
+      ],
+      "acceptance_criteria": [
+        "all mandatory steps have valid contracts",
+        "no V1 blockers remain",
+        "terminal outcome is produced and tracked"
+      ]
+    },
+    {
+      "chain_id": "CHAIN-E-REPORTING",
+      "official_name": "Reporting",
+      "owner": "Executive Command Center visibility; source layers own execution",
+      "purpose": "Formal operating chain for Reporting.",
+      "start_condition": "Governed input, action, or architecture event enters the first owning layer.",
+      "terminal_outcome": "Leadership and operators can see what happened, what changed, what is blocked, what failed, and what requires action.",
+      "mandatory_steps": [
+        "SHS-LAYER-022",
+        "SHS-LAYER-029",
+        "SHS-LAYER-031",
+        "SHS-LAYER-028",
+        "SHS-LAYER-042",
+        "SHS-LAYER-006"
+      ],
+      "optional_steps": [],
+      "layer_ownership_per_step": [
+        {
+          "layer_id": "SHS-LAYER-022",
+          "owner": "Decision Support"
+        },
+        {
+          "layer_id": "SHS-LAYER-029",
+          "owner": "Reporting"
+        },
+        {
+          "layer_id": "SHS-LAYER-031",
+          "owner": "Governance"
+        },
+        {
+          "layer_id": "SHS-LAYER-028",
+          "owner": "Reporting"
+        },
+        {
+          "layer_id": "SHS-LAYER-042",
+          "owner": "Intelligence"
+        },
+        {
+          "layer_id": "SHS-LAYER-006",
+          "owner": "Platform"
+        }
+      ],
+      "contract_ids": [
+        "CONTRACT-V1-025"
+      ],
+      "persistence_per_step": [
+        {
+          "layer_id": "SHS-LAYER-022",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-029",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-031",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-028",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-042",
+          "persistence": "browser_localStorage"
+        },
+        {
+          "layer_id": "SHS-LAYER-006",
+          "persistence": "browser_localStorage"
+        }
+      ],
+      "trace_propagation": "trace_id, request_id, entity_id, actor_id, timestamp, contract_version where applicable",
+      "security_boundary": "Identity, permission, privacy, ownership, and publication controls stay with source-specific authorities.",
+      "failure_path": "Block, quarantine, owner-review, retry, or closure-plan item based on contract failure code.",
+      "retry_or_recovery_path": "Retry only when idempotent and authorized; otherwise route to owner review.",
+      "tracking_event": "operational_chain_status_changed",
+      "test_requirements": [
+        "schema contract test",
+        "trace propagation test",
+        "blocked path test"
+      ],
+      "current_status": "blocked",
+      "family_ids": [
+        "F02_INTEGRATION_SOURCE_INTAKE",
+        "F04_VERIFICATION_RECONCILIATION_TRUTH",
+        "F08_REPORTING_PUBLICATION_OUTPUTS",
+        "F09_TRACKING_OBSERVABILITY_INTELLIGENCE"
+      ],
+      "broken_transitions": [
+        "SHS-LAYER-022->SHS-LAYER-029: missing explicit V1 contract",
+        "SHS-LAYER-029->SHS-LAYER-031: missing explicit V1 contract",
+        "SHS-LAYER-031->SHS-LAYER-028: missing explicit V1 contract",
+        "SHS-LAYER-042->SHS-LAYER-006: missing explicit V1 contract"
+      ],
+      "contracts_missing": 4,
+      "persistence_breaks": [
+        "SHS-LAYER-042",
+        "SHS-LAYER-006"
+      ],
+      "feedback_breaks": [
+        "feedback loop not fully proven end to end"
+      ],
+      "v1_blockers": [
+        "SHS-DEADEND-009",
+        "SHS-LAYER-022->SHS-LAYER-029: missing explicit V1 contract",
+        "SHS-LAYER-029->SHS-LAYER-031: missing explicit V1 contract",
+        "SHS-LAYER-031->SHS-LAYER-028: missing explicit V1 contract",
+        "SHS-LAYER-042->SHS-LAYER-006: missing explicit V1 contract"
+      ],
+      "acceptance_criteria": [
+        "all mandatory steps have valid contracts",
+        "no V1 blockers remain",
+        "terminal outcome is produced and tracked"
+      ]
+    },
+    {
+      "chain_id": "CHAIN-F-GOVERNANCE-RELEASE",
+      "official_name": "Governance and Release",
+      "owner": "Executive Command Center visibility; source layers own execution",
+      "purpose": "Formal operating chain for Governance and Release.",
+      "start_condition": "Governed input, action, or architecture event enters the first owning layer.",
+      "terminal_outcome": "Architecture and releases move forward only when ownership, security, testing, documentation, and anti-drift requirements are satisfied.",
+      "mandatory_steps": [
+        "SHS-LAYER-004",
+        "SHS-LAYER-023",
+        "SHS-LAYER-035",
+        "SHS-LAYER-037",
+        "SHS-LAYER-039",
+        "SHS-LAYER-021",
+        "SHS-LAYER-036",
+        "SHS-LAYER-047",
+        "SHS-LAYER-029",
+        "SHS-LAYER-033",
+        "SHS-LAYER-056",
+        "SHS-LAYER-060"
+      ],
+      "optional_steps": [],
+      "layer_ownership_per_step": [
+        {
+          "layer_id": "SHS-LAYER-004",
+          "owner": "Governance"
+        },
+        {
+          "layer_id": "SHS-LAYER-023",
+          "owner": "Governance"
+        },
+        {
+          "layer_id": "SHS-LAYER-035",
+          "owner": "Governance"
+        },
+        {
+          "layer_id": "SHS-LAYER-037",
+          "owner": "Governance"
+        },
+        {
+          "layer_id": "SHS-LAYER-039",
+          "owner": "Platform"
+        },
+        {
+          "layer_id": "SHS-LAYER-021",
+          "owner": "Verification"
+        },
+        {
+          "layer_id": "SHS-LAYER-036",
+          "owner": "Security"
+        },
+        {
+          "layer_id": "SHS-LAYER-047",
+          "owner": "Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-029",
+          "owner": "Reporting"
+        },
+        {
+          "layer_id": "SHS-LAYER-033",
+          "owner": "Assurance"
+        },
+        {
+          "layer_id": "SHS-LAYER-056",
+          "owner": "Governance"
+        },
+        {
+          "layer_id": "SHS-LAYER-060",
+          "owner": "Security"
+        }
+      ],
+      "contract_ids": [
+        "CONTRACT-V1-021"
+      ],
+      "persistence_per_step": [
+        {
+          "layer_id": "SHS-LAYER-004",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-023",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-035",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-037",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-039",
+          "persistence": "browser_localStorage"
+        },
+        {
+          "layer_id": "SHS-LAYER-021",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-036",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-047",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-029",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-033",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-056",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-060",
+          "persistence": "browser_localStorage"
+        }
+      ],
+      "trace_propagation": "trace_id, request_id, entity_id, actor_id, timestamp, contract_version where applicable",
+      "security_boundary": "Identity, permission, privacy, ownership, and publication controls stay with source-specific authorities.",
+      "failure_path": "Block, quarantine, owner-review, retry, or closure-plan item based on contract failure code.",
+      "retry_or_recovery_path": "Retry only when idempotent and authorized; otherwise route to owner review.",
+      "tracking_event": "operational_chain_status_changed",
+      "test_requirements": [
+        "schema contract test",
+        "trace propagation test",
+        "blocked path test"
+      ],
+      "current_status": "blocked",
+      "family_ids": [
+        "F04_VERIFICATION_RECONCILIATION_TRUTH",
+        "F07_BUSINESS_OPERATIONS_CLIENT_DELIVERY",
+        "F08_REPORTING_PUBLICATION_OUTPUTS",
+        "F09_TRACKING_OBSERVABILITY_INTELLIGENCE",
+        "F10_GOVERNANCE_SECURITY_RELEASE"
+      ],
+      "broken_transitions": [
+        "SHS-LAYER-004->SHS-LAYER-023: missing explicit V1 contract",
+        "SHS-LAYER-023->SHS-LAYER-035: missing explicit V1 contract",
+        "SHS-LAYER-035->SHS-LAYER-037: missing explicit V1 contract",
+        "SHS-LAYER-037->SHS-LAYER-039: missing explicit V1 contract",
+        "SHS-LAYER-039->SHS-LAYER-021: missing explicit V1 contract",
+        "SHS-LAYER-021->SHS-LAYER-036: missing explicit V1 contract",
+        "SHS-LAYER-036->SHS-LAYER-047: missing explicit V1 contract",
+        "SHS-LAYER-029->SHS-LAYER-033: missing explicit V1 contract",
+        "SHS-LAYER-033->SHS-LAYER-056: missing explicit V1 contract",
+        "SHS-LAYER-056->SHS-LAYER-060: missing explicit V1 contract"
+      ],
+      "contracts_missing": 10,
+      "persistence_breaks": [
+        "SHS-LAYER-039",
+        "SHS-LAYER-060"
+      ],
+      "feedback_breaks": [
+        "feedback loop not fully proven end to end"
+      ],
+      "v1_blockers": [
+        "SHS-LAYER-004->SHS-LAYER-023: missing explicit V1 contract",
+        "SHS-LAYER-023->SHS-LAYER-035: missing explicit V1 contract",
+        "SHS-LAYER-035->SHS-LAYER-037: missing explicit V1 contract",
+        "SHS-LAYER-037->SHS-LAYER-039: missing explicit V1 contract",
+        "SHS-LAYER-039->SHS-LAYER-021: missing explicit V1 contract",
+        "SHS-LAYER-021->SHS-LAYER-036: missing explicit V1 contract",
+        "SHS-LAYER-036->SHS-LAYER-047: missing explicit V1 contract",
+        "SHS-LAYER-029->SHS-LAYER-033: missing explicit V1 contract",
+        "SHS-LAYER-033->SHS-LAYER-056: missing explicit V1 contract",
+        "SHS-LAYER-056->SHS-LAYER-060: missing explicit V1 contract"
+      ],
+      "acceptance_criteria": [
+        "all mandatory steps have valid contracts",
+        "no V1 blockers remain",
+        "terminal outcome is produced and tracked"
+      ]
+    },
+    {
+      "chain_id": "CHAIN-G-SUPPORT-IMPROVEMENT",
+      "official_name": "Support and Improvement",
+      "owner": "Executive Command Center visibility; source layers own execution",
+      "purpose": "Formal operating chain for Support and Improvement.",
+      "start_condition": "Governed input, action, or architecture event enters the first owning layer.",
+      "terminal_outcome": "An authorized audience receives an accurate, traceable, appropriately disclosed report or decision output based on certified or approved truth.",
+      "mandatory_steps": [
+        "SHS-LAYER-048",
+        "SHS-LAYER-007",
+        "SHS-LAYER-044",
+        "SHS-LAYER-047",
+        "SHS-LAYER-029",
+        "SHS-LAYER-046"
+      ],
+      "optional_steps": [],
+      "layer_ownership_per_step": [
+        {
+          "layer_id": "SHS-LAYER-048",
+          "owner": "Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-007",
+          "owner": "Runtime Fabric"
+        },
+        {
+          "layer_id": "SHS-LAYER-044",
+          "owner": "Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-047",
+          "owner": "Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-029",
+          "owner": "Reporting"
+        },
+        {
+          "layer_id": "SHS-LAYER-046",
+          "owner": "Operations"
+        }
+      ],
+      "contract_ids": [
+        "CONTRACT-V1-020",
+        "CONTRACT-V1-021"
+      ],
+      "persistence_per_step": [
+        {
+          "layer_id": "SHS-LAYER-048",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-007",
+          "persistence": "browser_localStorage"
+        },
+        {
+          "layer_id": "SHS-LAYER-044",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-047",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-029",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-046",
+          "persistence": "unknown"
+        }
+      ],
+      "trace_propagation": "trace_id, request_id, entity_id, actor_id, timestamp, contract_version where applicable",
+      "security_boundary": "Identity, permission, privacy, ownership, and publication controls stay with source-specific authorities.",
+      "failure_path": "Block, quarantine, owner-review, retry, or closure-plan item based on contract failure code.",
+      "retry_or_recovery_path": "Retry only when idempotent and authorized; otherwise route to owner review.",
+      "tracking_event": "operational_chain_status_changed",
+      "test_requirements": [
+        "schema contract test",
+        "trace propagation test",
+        "blocked path test"
+      ],
+      "current_status": "blocked",
+      "family_ids": [
+        "F06_WORKFLOW_COLLABORATION_NOTIFICATIONS",
+        "F07_BUSINESS_OPERATIONS_CLIENT_DELIVERY",
+        "F08_REPORTING_PUBLICATION_OUTPUTS"
+      ],
+      "broken_transitions": [
+        "SHS-LAYER-048->SHS-LAYER-007: missing explicit V1 contract",
+        "SHS-LAYER-007->SHS-LAYER-044: missing explicit V1 contract",
+        "SHS-LAYER-029->SHS-LAYER-046: missing explicit V1 contract"
+      ],
+      "contracts_missing": 3,
+      "persistence_breaks": [
+        "SHS-LAYER-007"
+      ],
+      "feedback_breaks": [
+        "feedback loop not fully proven end to end"
+      ],
+      "v1_blockers": [
+        "SHS-LAYER-048->SHS-LAYER-007: missing explicit V1 contract",
+        "SHS-LAYER-007->SHS-LAYER-044: missing explicit V1 contract",
+        "SHS-LAYER-029->SHS-LAYER-046: missing explicit V1 contract"
+      ],
+      "acceptance_criteria": [
+        "all mandatory steps have valid contracts",
+        "no V1 blockers remain",
+        "terminal outcome is produced and tracked"
+      ]
+    },
+    {
+      "chain_id": "CHAIN-H-TRACKING-INTELLIGENCE",
+      "official_name": "Tracking and Intelligence",
+      "owner": "Executive Command Center visibility; source layers own execution",
+      "purpose": "Formal operating chain for Tracking and Intelligence.",
+      "start_condition": "Governed input, action, or architecture event enters the first owning layer.",
+      "terminal_outcome": "Architecture and releases move forward only when ownership, security, testing, documentation, and anti-drift requirements are satisfied.",
+      "mandatory_steps": [
+        "SHS-LAYER-043",
+        "SHS-LAYER-044",
+        "SHS-LAYER-047",
+        "SHS-LAYER-029",
+        "SHS-LAYER-048",
+        "SHS-LAYER-028",
+        "SHS-LAYER-042",
+        "SHS-LAYER-041"
+      ],
+      "optional_steps": [],
+      "layer_ownership_per_step": [
+        {
+          "layer_id": "SHS-LAYER-043",
+          "owner": "Revenue Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-044",
+          "owner": "Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-047",
+          "owner": "Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-029",
+          "owner": "Reporting"
+        },
+        {
+          "layer_id": "SHS-LAYER-048",
+          "owner": "Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-028",
+          "owner": "Reporting"
+        },
+        {
+          "layer_id": "SHS-LAYER-042",
+          "owner": "Intelligence"
+        },
+        {
+          "layer_id": "SHS-LAYER-041",
+          "owner": "Operations"
+        }
+      ],
+      "contract_ids": [
+        "CONTRACT-V1-019",
+        "CONTRACT-V1-020",
+        "CONTRACT-V1-021",
+        "CONTRACT-V1-022",
+        "CONTRACT-V1-023",
+        "CONTRACT-V1-025",
+        "CONTRACT-V1-028"
+      ],
+      "persistence_per_step": [
+        {
+          "layer_id": "SHS-LAYER-043",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-044",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-047",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-029",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-048",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-028",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-042",
+          "persistence": "browser_localStorage"
+        },
+        {
+          "layer_id": "SHS-LAYER-041",
+          "persistence": "browser_localStorage"
+        }
+      ],
+      "trace_propagation": "trace_id, request_id, entity_id, actor_id, timestamp, contract_version where applicable",
+      "security_boundary": "Identity, permission, privacy, ownership, and publication controls stay with source-specific authorities.",
+      "failure_path": "Block, quarantine, owner-review, retry, or closure-plan item based on contract failure code.",
+      "retry_or_recovery_path": "Retry only when idempotent and authorized; otherwise route to owner review.",
+      "tracking_event": "operational_chain_status_changed",
+      "test_requirements": [
+        "schema contract test",
+        "trace propagation test",
+        "blocked path test"
+      ],
+      "current_status": "blocked",
+      "family_ids": [
+        "F07_BUSINESS_OPERATIONS_CLIENT_DELIVERY",
+        "F08_REPORTING_PUBLICATION_OUTPUTS",
+        "F09_TRACKING_OBSERVABILITY_INTELLIGENCE",
+        "F10_GOVERNANCE_SECURITY_RELEASE"
+      ],
+      "broken_transitions": [],
+      "contracts_missing": 0,
+      "persistence_breaks": [
+        "SHS-LAYER-042",
+        "SHS-LAYER-041"
+      ],
+      "feedback_breaks": [],
+      "v1_blockers": [
+        "SHS-DEADEND-009"
+      ],
+      "acceptance_criteria": [
+        "all mandatory steps have valid contracts",
+        "no V1 blockers remain",
+        "terminal outcome is produced and tracked"
+      ]
+    },
+    {
+      "chain_id": "CHAIN-I-COMMERCIALIZATION",
+      "official_name": "Commercialization",
+      "owner": "Executive Command Center visibility; source layers own execution",
+      "purpose": "Formal operating chain for Commercialization.",
+      "start_condition": "Governed input, action, or architecture event enters the first owning layer.",
+      "terminal_outcome": "Architecture and releases move forward only when ownership, security, testing, documentation, and anti-drift requirements are satisfied.",
+      "mandatory_steps": [
+        "SHS-LAYER-043",
+        "SHS-LAYER-001",
+        "SHS-LAYER-048",
+        "SHS-LAYER-042",
+        "SHS-LAYER-041"
+      ],
+      "optional_steps": [],
+      "layer_ownership_per_step": [
+        {
+          "layer_id": "SHS-LAYER-043",
+          "owner": "Revenue Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-001",
+          "owner": "Security"
+        },
+        {
+          "layer_id": "SHS-LAYER-048",
+          "owner": "Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-042",
+          "owner": "Intelligence"
+        },
+        {
+          "layer_id": "SHS-LAYER-041",
+          "owner": "Operations"
+        }
+      ],
+      "contract_ids": [
+        "CONTRACT-V1-024",
+        "CONTRACT-V1-028"
+      ],
+      "persistence_per_step": [
+        {
+          "layer_id": "SHS-LAYER-043",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-001",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-048",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-042",
+          "persistence": "browser_localStorage"
+        },
+        {
+          "layer_id": "SHS-LAYER-041",
+          "persistence": "browser_localStorage"
+        }
+      ],
+      "trace_propagation": "trace_id, request_id, entity_id, actor_id, timestamp, contract_version where applicable",
+      "security_boundary": "Identity, permission, privacy, ownership, and publication controls stay with source-specific authorities.",
+      "failure_path": "Block, quarantine, owner-review, retry, or closure-plan item based on contract failure code.",
+      "retry_or_recovery_path": "Retry only when idempotent and authorized; otherwise route to owner review.",
+      "tracking_event": "operational_chain_status_changed",
+      "test_requirements": [
+        "schema contract test",
+        "trace propagation test",
+        "blocked path test"
+      ],
+      "current_status": "blocked",
+      "family_ids": [
+        "F01_FOUNDATION_IDENTITY_ACCESS",
+        "F07_BUSINESS_OPERATIONS_CLIENT_DELIVERY",
+        "F09_TRACKING_OBSERVABILITY_INTELLIGENCE",
+        "F10_GOVERNANCE_SECURITY_RELEASE"
+      ],
+      "broken_transitions": [
+        "SHS-LAYER-043->SHS-LAYER-001: missing explicit V1 contract",
+        "SHS-LAYER-001->SHS-LAYER-048: missing explicit V1 contract"
+      ],
+      "contracts_missing": 2,
+      "persistence_breaks": [
+        "SHS-LAYER-042",
+        "SHS-LAYER-041"
+      ],
+      "feedback_breaks": [
+        "feedback loop not fully proven end to end"
+      ],
+      "v1_blockers": [
+        "SHS-DEADEND-009",
+        "SHS-LAYER-043->SHS-LAYER-001: missing explicit V1 contract",
+        "SHS-LAYER-001->SHS-LAYER-048: missing explicit V1 contract"
+      ],
+      "acceptance_criteria": [
+        "all mandatory steps have valid contracts",
+        "no V1 blockers remain",
+        "terminal outcome is produced and tracked"
+      ]
+    },
+    {
+      "chain_id": "CHAIN-J-SHF-IMPACT-INTEGRATION",
+      "official_name": "SHF Impact Integration",
+      "owner": "Executive Command Center visibility; source layers own execution",
+      "purpose": "Formal operating chain for SHF Impact Integration.",
+      "start_condition": "Governed input, action, or architecture event enters the first owning layer.",
+      "terminal_outcome": "SHF program activity becomes secure, verified, traceable, reportable impact while SHF retains mission/program ownership and SHS retains infrastructure ownership.",
+      "mandatory_steps": [
+        "SHS-LAYER-052",
+        "SHS-LAYER-003",
+        "SHS-LAYER-013",
+        "SHS-LAYER-018",
+        "SHS-LAYER-022",
+        "SHS-LAYER-050",
+        "SHS-LAYER-028",
+        "SHS-LAYER-051"
+      ],
+      "optional_steps": [],
+      "layer_ownership_per_step": [
+        {
+          "layer_id": "SHS-LAYER-052",
+          "owner": "Programs"
+        },
+        {
+          "layer_id": "SHS-LAYER-003",
+          "owner": "SHF Impact"
+        },
+        {
+          "layer_id": "SHS-LAYER-013",
+          "owner": "Data Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-018",
+          "owner": "Data Operations"
+        },
+        {
+          "layer_id": "SHS-LAYER-022",
+          "owner": "Decision Support"
+        },
+        {
+          "layer_id": "SHS-LAYER-050",
+          "owner": "SHF Impact"
+        },
+        {
+          "layer_id": "SHS-LAYER-028",
+          "owner": "Reporting"
+        },
+        {
+          "layer_id": "SHS-LAYER-051",
+          "owner": "SHF Impact"
+        }
+      ],
+      "contract_ids": [],
+      "persistence_per_step": [
+        {
+          "layer_id": "SHS-LAYER-052",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-003",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-013",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-018",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-022",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-050",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-028",
+          "persistence": "unknown"
+        },
+        {
+          "layer_id": "SHS-LAYER-051",
+          "persistence": "unknown"
+        }
+      ],
+      "trace_propagation": "trace_id, request_id, entity_id, actor_id, timestamp, contract_version where applicable",
+      "security_boundary": "Identity, permission, privacy, ownership, and publication controls stay with source-specific authorities.",
+      "failure_path": "Block, quarantine, owner-review, retry, or closure-plan item based on contract failure code.",
+      "retry_or_recovery_path": "Retry only when idempotent and authorized; otherwise route to owner review.",
+      "tracking_event": "operational_chain_status_changed",
+      "test_requirements": [
+        "schema contract test",
+        "trace propagation test",
+        "blocked path test"
+      ],
+      "current_status": "blocked",
+      "family_ids": [
+        "F02_INTEGRATION_SOURCE_INTAKE",
+        "F04_VERIFICATION_RECONCILIATION_TRUTH",
+        "F08_REPORTING_PUBLICATION_OUTPUTS",
+        "F12_SHF_PROGRAM_IMPACT_INTEGRATION"
+      ],
+      "broken_transitions": [
+        "SHS-LAYER-052->SHS-LAYER-003: missing explicit V1 contract",
+        "SHS-LAYER-003->SHS-LAYER-013: missing explicit V1 contract",
+        "SHS-LAYER-013->SHS-LAYER-018: missing explicit V1 contract",
+        "SHS-LAYER-018->SHS-LAYER-022: missing explicit V1 contract",
+        "SHS-LAYER-022->SHS-LAYER-050: missing explicit V1 contract",
+        "SHS-LAYER-050->SHS-LAYER-028: missing explicit V1 contract",
+        "SHS-LAYER-028->SHS-LAYER-051: missing explicit V1 contract"
+      ],
+      "contracts_missing": 7,
+      "persistence_breaks": [],
+      "feedback_breaks": [
+        "feedback loop not fully proven end to end"
+      ],
+      "v1_blockers": [
+        "SHS-DEADEND-002",
+        "SHS-DEADEND-010",
+        "SHS-LAYER-052->SHS-LAYER-003: missing explicit V1 contract",
+        "SHS-LAYER-003->SHS-LAYER-013: missing explicit V1 contract",
+        "SHS-LAYER-013->SHS-LAYER-018: missing explicit V1 contract",
+        "SHS-LAYER-018->SHS-LAYER-022: missing explicit V1 contract",
+        "SHS-LAYER-022->SHS-LAYER-050: missing explicit V1 contract",
+        "SHS-LAYER-050->SHS-LAYER-028: missing explicit V1 contract",
+        "SHS-LAYER-028->SHS-LAYER-051: missing explicit V1 contract"
+      ],
+      "acceptance_criteria": [
+        "all mandatory steps have valid contracts",
+        "no V1 blockers remain",
+        "terminal outcome is produced and tracked"
+      ]
+    }
+  ]
+}

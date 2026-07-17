@@ -1,0 +1,181 @@
+{
+  "metadata": {
+    "generated_at": "2026-07-14T03:37:08.558978+00:00",
+    "source_audit_dir": "/Users/mikeslate/Desktop/shrv1/docs/v1-layer-audit",
+    "official_layer_count": 50,
+    "family_count": 12,
+    "subsystem_count": 3,
+    "shared_service_count": 2,
+    "business_surface_count": 2,
+    "cross_cutting_control_count": 1,
+    "decision_required_count": 0,
+    "contract_count": 35,
+    "chain_count": 10
+  },
+  "consolidation_decisions": [
+    {
+      "decision_id": "CONSOLIDATION-001",
+      "affected_ids": [
+        "SHS-LAYER-008"
+      ],
+      "current_names": [
+        "Job Scheduler"
+      ],
+      "current_responsibilities": "Scheduler modules provide reusable local job preview, queue, retry, and history capability. They do not own a separate business decision, operational chain, or production execution authority, so the service is consumed under Command Bus and Workflow governance.",
+      "overlap": [],
+      "canonical_owner": "Runtime Fabric",
+      "migration_risk": "low",
+      "route_impact": [],
+      "data_impact": [],
+      "test_impact": [],
+      "documentation_impact": "Document canonical classification and owner.",
+      "v1_disposition": "retain_with_classification",
+      "code_changes_needed_now": false
+    },
+    {
+      "decision_id": "CONSOLIDATION-002",
+      "affected_ids": [
+        "SHS-LAYER-012"
+      ],
+      "current_names": [
+        "Direct Connect Direct-Source Proof Subsystem"
+      ],
+      "current_responsibilities": "Direct Connect is implemented as direct-source proof, connector metadata, local/mock records, and approval-boundary UI. It does not provide live sync, credentials, external connector execution, or independent truth authority in V1; Source Registry owns source identity and intake eligibility.",
+      "overlap": [],
+      "canonical_owner": "Data Operations",
+      "migration_risk": "low",
+      "route_impact": [
+        "admin.html hash route; see AdminRoutes evidence"
+      ],
+      "data_impact": [],
+      "test_impact": [],
+      "documentation_impact": "Document canonical classification and owner.",
+      "v1_disposition": "retain_with_classification",
+      "code_changes_needed_now": false
+    },
+    {
+      "decision_id": "CONSOLIDATION-003",
+      "affected_ids": [
+        "SHS-LAYER-026"
+      ],
+      "current_names": [
+        "Agent Workbench"
+      ],
+      "current_responsibilities": "Admin surface for agent queue, approval, memory, coordination, workflow, and controlled execution.",
+      "overlap": [],
+      "canonical_owner": "Automation",
+      "migration_risk": "low",
+      "route_impact": [
+        "admin.html hash route; see AdminRoutes evidence"
+      ],
+      "data_impact": [],
+      "test_impact": [
+        "package-script-validation-or-prior-audit"
+      ],
+      "documentation_impact": "Document canonical classification and owner.",
+      "v1_disposition": "retain_with_classification",
+      "code_changes_needed_now": false
+    },
+    {
+      "decision_id": "CONSOLIDATION-004",
+      "affected_ids": [
+        "SHS-LAYER-038"
+      ],
+      "current_names": [
+        "Durable Persistence"
+      ],
+      "current_responsibilities": "Provides local persistence service, version history, and transaction history; database adapter disabled.",
+      "overlap": [],
+      "canonical_owner": "Runtime Fabric",
+      "migration_risk": "low",
+      "route_impact": [],
+      "data_impact": [],
+      "test_impact": [],
+      "documentation_impact": "Document canonical classification and owner.",
+      "v1_disposition": "retain_with_classification",
+      "code_changes_needed_now": false
+    },
+    {
+      "decision_id": "CONSOLIDATION-005",
+      "affected_ids": [
+        "SHS-LAYER-040"
+      ],
+      "current_names": [
+        "System Orchestrator Surface"
+      ],
+      "current_responsibilities": "The orchestrator page and repositories coordinate local request and plan previews across existing owners. Safety copy explicitly blocks execution, production mutation, publishing, SHF data mutation, external delivery, warehouse writes, and auth mutation; it is a coordinating surface rather than a separate authority.",
+      "overlap": [],
+      "canonical_owner": "Runtime Fabric",
+      "migration_risk": "low",
+      "route_impact": [
+        "admin.html hash route; see AdminRoutes evidence"
+      ],
+      "data_impact": [],
+      "test_impact": [],
+      "documentation_impact": "Document canonical classification and owner.",
+      "v1_disposition": "retain_with_classification",
+      "code_changes_needed_now": false
+    },
+    {
+      "decision_id": "CONSOLIDATION-006",
+      "affected_ids": [
+        "SHS-LAYER-041"
+      ],
+      "current_names": [
+        "Executive Command Center"
+      ],
+      "current_responsibilities": "Aggregates runtime fabric visibility and safe next actions for owner review.",
+      "overlap": [],
+      "canonical_owner": "Operations",
+      "migration_risk": "low",
+      "route_impact": [
+        "admin.html hash route; see AdminRoutes evidence"
+      ],
+      "data_impact": [],
+      "test_impact": [],
+      "documentation_impact": "Document canonical classification and owner.",
+      "v1_disposition": "retain_with_classification",
+      "code_changes_needed_now": false
+    },
+    {
+      "decision_id": "CONSOLIDATION-007",
+      "affected_ids": [
+        "SHS-LAYER-058"
+      ],
+      "current_names": [
+        "Support and Improvement Workflow Subsystem"
+      ],
+      "current_responsibilities": "Support and improvement has route and registry evidence but no independent durable authority. It is a ClientOps support/change-flow subsystem that uses Command Bus, QA, Release Readiness, and Tracking rather than owning a separate layer decision.",
+      "overlap": [],
+      "canonical_owner": "Operations",
+      "migration_risk": "low",
+      "route_impact": [
+        "admin.html hash route; see AdminRoutes evidence"
+      ],
+      "data_impact": [],
+      "test_impact": [],
+      "documentation_impact": "Document canonical classification and owner.",
+      "v1_disposition": "retain_with_classification",
+      "code_changes_needed_now": false
+    },
+    {
+      "decision_id": "CONSOLIDATION-008",
+      "affected_ids": [
+        "SHS-LAYER-060"
+      ],
+      "current_names": [
+        "Backup / Recovery / Data Retention"
+      ],
+      "current_responsibilities": "Needed for production-capable state, retention, deletion, backup, and recovery.",
+      "overlap": [],
+      "canonical_owner": "Security",
+      "migration_risk": "low",
+      "route_impact": [],
+      "data_impact": [],
+      "test_impact": [],
+      "documentation_impact": "Document canonical classification and owner.",
+      "v1_disposition": "retain_with_classification",
+      "code_changes_needed_now": false
+    }
+  ]
+}

@@ -1,0 +1,3724 @@
+{
+  "contracts": [
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": true,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-001",
+      "downstream_layer_id": "SHS-LAYER-005",
+      "evidence": [
+        {
+          "currency": "current",
+          "evidence_strength": "strong",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "repository": "shrv1",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router."
+        }
+      ],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Identity and Access to API Gateway",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "session/role policy into API access posture",
+      "remaining_v1_work": [],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": true,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "implemented_or_partially_wired",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": true,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": true,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-001",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": false,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-002",
+      "downstream_layer_id": "SHS-LAYER-013",
+      "evidence": [],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "API Gateway and Direct Connect to Source Intake",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "Governed transition from API Gateway to Source Registry Layer.",
+      "remaining_v1_work": [
+        "No exact connection-matrix row; specification created as closure work."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": false,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "specified_missing_runtime",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": false,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-005",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": true,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-003",
+      "downstream_layer_id": "SHS-LAYER-015",
+      "evidence": [
+        {
+          "currency": "current",
+          "evidence_strength": "strong",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "repository": "shrv1",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router."
+        }
+      ],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Source Intake to Aggregation",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "source eligibility and provenance into aggregation",
+      "remaining_v1_work": [],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": true,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "implemented_or_partially_wired",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": true,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": true,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-013",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": true,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-004",
+      "downstream_layer_id": "SHS-LAYER-016",
+      "evidence": [
+        {
+          "currency": "current",
+          "evidence_strength": "strong",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "repository": "shrv1",
+          "what_it_proves": "Layer intent and ownership are architecture-defined."
+        }
+      ],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Aggregation to Canonical Entity Resolution",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "raw/structured intake into canonical preview",
+      "remaining_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": true,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "implemented_or_partially_wired",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": true,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-015",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": false,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-005",
+      "downstream_layer_id": "SHS-LAYER-018",
+      "evidence": [],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Canonical Entity Resolution to Verification",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "Governed transition from Data Normalization Layer to Data Verification Layer.",
+      "remaining_v1_work": [
+        "No exact connection-matrix row; specification created as closure work."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": false,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "specified_missing_runtime",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": false,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-016",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": true,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-006",
+      "downstream_layer_id": "SHS-LAYER-021",
+      "evidence": [
+        {
+          "currency": "current",
+          "evidence_strength": "strong",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "repository": "shrv1",
+          "what_it_proves": "Layer intent and ownership are architecture-defined."
+        }
+      ],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Verification to Reconciliation",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "verification-ready claim package into truth review",
+      "remaining_v1_work": [
+        "Define durable contract, runtime path, persistence, audit, tests, and downstream use."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": true,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "implemented_or_partially_wired",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": true,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-018",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": true,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-007",
+      "downstream_layer_id": "SHS-LAYER-022",
+      "evidence": [
+        {
+          "currency": "current",
+          "evidence_strength": "strong",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "repository": "shrv1",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router."
+        }
+      ],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Reconciliation to Oracle",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "verified claims into supportability decision",
+      "remaining_v1_work": [],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": true,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "implemented_or_partially_wired",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": true,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": true,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-021",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": false,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-008",
+      "downstream_layer_id": "SHS-LAYER-022",
+      "evidence": [],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Aggregation and Verification to Oracle Truth Package",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "Governed transition from Evidence Package Layer to Oracle Layer.",
+      "remaining_v1_work": [
+        "No exact connection-matrix row; specification created as closure work."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": false,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "specified_missing_runtime",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": false,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-017",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": false,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-009",
+      "downstream_layer_id": "SHS-LAYER-021",
+      "evidence": [],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Oracle to Truth Package Repository",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "Governed transition from Oracle Layer to Truth Spine.",
+      "remaining_v1_work": [
+        "No exact connection-matrix row; specification created as closure work."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": false,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "specified_missing_runtime",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": false,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-022",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": true,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-010",
+      "downstream_layer_id": "SHS-LAYER-028",
+      "evidence": [
+        {
+          "currency": "current",
+          "evidence_strength": "strong",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "repository": "shrv1",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router."
+        }
+      ],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Oracle to Reporting",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "evidence-backed recommendations into reports",
+      "remaining_v1_work": [],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": true,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "implemented_or_partially_wired",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": true,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": true,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-022",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": true,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-011",
+      "downstream_layer_id": "SHS-LAYER-025",
+      "evidence": [
+        {
+          "currency": "current",
+          "evidence_strength": "strong",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "repository": "shrv1",
+          "what_it_proves": "Layer intent and ownership are architecture-defined."
+        }
+      ],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Oracle to Agent Fabric",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "truth context for agent explanations",
+      "remaining_v1_work": [],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": true,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "implemented_or_partially_wired",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": true,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-022",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": false,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-012",
+      "downstream_layer_id": "SHS-LAYER-041",
+      "evidence": [],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Oracle to Operational Surfaces",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "Governed transition from Oracle Layer to Executive Command Center.",
+      "remaining_v1_work": [
+        "No exact connection-matrix row; specification created as closure work."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": false,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "specified_missing_runtime",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": false,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-022",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": false,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-013",
+      "downstream_layer_id": "SHS-LAYER-025",
+      "evidence": [],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Knowledge Layer to Agent Fabric",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "Governed transition from Context-Adaptive Analyst to AI / Agent Fabric.",
+      "remaining_v1_work": [
+        "No exact connection-matrix row; specification created as closure work."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": false,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "specified_missing_runtime",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": false,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-027",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": false,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-014",
+      "downstream_layer_id": "SHS-LAYER-025",
+      "evidence": [],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Alignment Layer to Agent Fabric Execution",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "Governed transition from Alignment Layer to AI / Agent Fabric.",
+      "remaining_v1_work": [
+        "No exact connection-matrix row; specification created as closure work."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": false,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "specified_missing_runtime",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": false,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-024",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": false,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-015",
+      "downstream_layer_id": "SHS-LAYER-032",
+      "evidence": [],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Agent Fabric to Audit and Tracking",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "Governed transition from AI / Agent Fabric to Audit & Verification.",
+      "remaining_v1_work": [
+        "No exact connection-matrix row; specification created as closure work."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": false,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "specified_missing_runtime",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": false,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-025",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": false,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-016",
+      "downstream_layer_id": "SHS-LAYER-009",
+      "evidence": [],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Workflow Engine to Notification Layer",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "Governed transition from Command Bus to Notification / Alert.",
+      "remaining_v1_work": [
+        "No exact connection-matrix row; specification created as closure work."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": false,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "specified_missing_runtime",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": false,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-007",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": false,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-017",
+      "downstream_layer_id": "SHS-LAYER-006",
+      "evidence": [],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "User Action to Action Event",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "Governed transition from Executive Command Center to Event/Webhook Layer.",
+      "remaining_v1_work": [
+        "No exact connection-matrix row; specification created as closure work."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": false,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "specified_missing_runtime",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": false,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-041",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": false,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-018",
+      "downstream_layer_id": "SHS-LAYER-022",
+      "evidence": [],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Action Event to Oracle Recompute",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "Governed transition from Event/Webhook Layer to Oracle Layer.",
+      "remaining_v1_work": [
+        "No exact connection-matrix row; specification created as closure work."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": false,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "specified_missing_runtime",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": false,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-006",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": false,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-019",
+      "downstream_layer_id": "SHS-LAYER-044",
+      "evidence": [],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Sales to Production",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "Governed transition from SHS Sales Layer to Production Ops.",
+      "remaining_v1_work": [
+        "No exact connection-matrix row; specification created as closure work."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": false,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "specified_missing_runtime",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": false,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-043",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": true,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-020",
+      "downstream_layer_id": "SHS-LAYER-047",
+      "evidence": [
+        {
+          "currency": "current",
+          "evidence_strength": "strong",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "repository": "shrv1",
+          "what_it_proves": "Layer intent and ownership are architecture-defined."
+        }
+      ],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Production to QA",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "production build state to QA/release readiness",
+      "remaining_v1_work": [],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": true,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "implemented_or_partially_wired",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": true,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-044",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": false,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-021",
+      "downstream_layer_id": "SHS-LAYER-029",
+      "evidence": [],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "QA to Release Readiness",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "Governed transition from QA + Delivery to Readiness Gate.",
+      "remaining_v1_work": [
+        "No exact connection-matrix row; specification created as closure work."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": false,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "specified_missing_runtime",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": false,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-047",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": false,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-022",
+      "downstream_layer_id": "SHS-LAYER-048",
+      "evidence": [],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Release to ClientOps",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "Governed transition from Readiness Gate to ClientOps.",
+      "remaining_v1_work": [
+        "No exact connection-matrix row; specification created as closure work."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": false,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "specified_missing_runtime",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": false,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-029",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": true,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-023",
+      "downstream_layer_id": "SHS-LAYER-028",
+      "evidence": [
+        {
+          "currency": "current",
+          "evidence_strength": "strong",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "repository": "shrv1",
+          "what_it_proves": "Layer intent and ownership are architecture-defined."
+        }
+      ],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "ClientOps to Reporting",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "client operational records to internal reporting",
+      "remaining_v1_work": [],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": true,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "implemented_or_partially_wired",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": true,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-048",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": false,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-024",
+      "downstream_layer_id": "SHS-LAYER-042",
+      "evidence": [],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "ClientOps Renewal and Upgrade State to Tracking",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "Governed transition from ClientOps to Tracking and Intelligence Layer.",
+      "remaining_v1_work": [
+        "No exact connection-matrix row; specification created as closure work."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": false,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "specified_missing_runtime",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": false,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-048",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": false,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-025",
+      "downstream_layer_id": "SHS-LAYER-042",
+      "evidence": [],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Reporting to Tracking and Intelligence",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "Governed transition from Reports Layer to Tracking and Intelligence Layer.",
+      "remaining_v1_work": [
+        "No exact connection-matrix row; specification created as closure work."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": false,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "specified_missing_runtime",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": false,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-028",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": true,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-026",
+      "downstream_layer_id": "SHS-LAYER-015",
+      "evidence": [
+        {
+          "currency": "current",
+          "evidence_strength": "strong",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "repository": "shrv1",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router."
+        }
+      ],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Source Intake Direct-Source Proof to Aggregation Intake",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "source eligibility and provenance into aggregation",
+      "remaining_v1_work": [],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": true,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "implemented_or_partially_wired",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": true,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": true,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-013",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": false,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-027",
+      "downstream_layer_id": "SHS-LAYER-006",
+      "evidence": [],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Source Intake Failure to Error Queue and Retry",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "Governed transition from Source Registry Layer to Event/Webhook Layer.",
+      "remaining_v1_work": [
+        "No exact connection-matrix row; specification created as closure work."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": false,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "specified_missing_runtime",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": false,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-013",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": true,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-028",
+      "downstream_layer_id": "SHS-LAYER-041",
+      "evidence": [
+        {
+          "currency": "current",
+          "evidence_strength": "strong",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "repository": "shrv1",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router."
+        }
+      ],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Tracking and Intelligence to Executive Command Center",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "tracking signal summary to executive visibility",
+      "remaining_v1_work": [],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": true,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "implemented_or_partially_wired",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": true,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": true,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-042",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": false,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-029",
+      "downstream_layer_id": "SHS-LAYER-029",
+      "evidence": [],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Governance Checks to Release Readiness",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "Governed transition from Governance Layer to Readiness Gate.",
+      "remaining_v1_work": [
+        "No exact connection-matrix row; specification created as closure work."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": false,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "specified_missing_runtime",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": false,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-035",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": false,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-030",
+      "downstream_layer_id": "SHS-LAYER-013",
+      "evidence": [],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "SHF Program Data to SHS Intake",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "Governed transition from Program Registry to Source Registry Layer.",
+      "remaining_v1_work": [
+        "No exact connection-matrix row; specification created as closure work."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": false,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "specified_missing_runtime",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": false,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-052",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": false,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-031",
+      "downstream_layer_id": "SHS-LAYER-003",
+      "evidence": [],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "SHS Certified Outcome to SHF Impact Data Spine",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "Governed transition from Oracle Layer to SHF Spine.",
+      "remaining_v1_work": [
+        "No exact connection-matrix row; specification created as closure work."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": false,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "specified_missing_runtime",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": false,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-022",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": false,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-032",
+      "downstream_layer_id": "SHS-LAYER-028",
+      "evidence": [],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "SHF Approved Impact to Funder and Public Reporting",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "Governed transition from SHF Spine to Reports Layer.",
+      "remaining_v1_work": [
+        "No exact connection-matrix row; specification created as closure work."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": false,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "specified_missing_runtime",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": false,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-003",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": true,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-033",
+      "downstream_layer_id": "SHS-LAYER-005",
+      "evidence": [
+        {
+          "currency": "current",
+          "evidence_strength": "strong",
+          "evidence_type": "frontend_route_registration",
+          "explanation": "AdminRoutes registers protected hub, reports, truth, agent, Direct Connect, runtime fabric, and ops routes.",
+          "file_path": "src/router/AdminRoutes.jsx",
+          "line_range": "127-230",
+          "repository": "shrv1",
+          "what_it_proves": "Many BOS surfaces are wired into the admin React router."
+        }
+      ],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Identity Entitlements to API Gateway Access",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "session/role policy into API access posture",
+      "remaining_v1_work": [],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": true,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "implemented_or_partially_wired",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": true,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": true,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-001",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": true,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-034",
+      "downstream_layer_id": "SHS-LAYER-048",
+      "evidence": [
+        {
+          "currency": "current",
+          "evidence_strength": "strong",
+          "evidence_type": "canonical_registry",
+          "explanation": "Official registry table lists canonical SHS layers, owners, and boundaries.",
+          "file_path": "docs/MASTER_LAYER_REGISTRY.md",
+          "line_range": "13-73",
+          "repository": "shrv1",
+          "what_it_proves": "Layer intent and ownership are architecture-defined."
+        }
+      ],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "Commercial Terms to Renewal and ClientOps",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "sales opportunity to client/project workflow",
+      "remaining_v1_work": [],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": true,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "implemented_or_partially_wired",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": true,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-043",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    },
+    {
+      "audit_requirements": [
+        "trace_id",
+        "actor_id",
+        "decision_or_status",
+        "blockers",
+        "evidence"
+      ],
+      "audit_supported": false,
+      "consumer_behavior": "Reject or mark blocked when required provenance, permission, or trace fields are absent.",
+      "contract_id": "CONTRACT-V1-035",
+      "downstream_layer_id": "SHS-LAYER-047",
+      "evidence": [],
+      "failure_codes": [
+        "missing_required_field",
+        "permission_denied",
+        "invalid_contract_version",
+        "blocked_by_policy",
+        "source_not_ready"
+      ],
+      "freshness_or_staleness_rules": "Consumers must surface stale, mock, missing, or sample input rather than upgrading readiness.",
+      "idempotency_rules": "Use trace_id plus source_record_id or request_id for repeat-safe processing.",
+      "identifier_fields": [
+        "entity_id",
+        "entity_type",
+        "source_id",
+        "source_record_id"
+      ],
+      "implementation_paths": [
+        "services/shf-agent-fabric/services/contract_runtime/core.py",
+        "services/shf-agent-fabric/routers/contract_runtime_routes.py"
+      ],
+      "official_name": "ClientOps Support Issue to QA Change Request",
+      "optional_fields": [
+        "organization_id",
+        "client_id",
+        "program_id",
+        "truth_package_id",
+        "publication_mode"
+      ],
+      "permission_requirements": [
+        "layer_specific_permission_or_shs_admin"
+      ],
+      "persistence_expectations": "Producer preserves source trace; consumer persists only if it owns authoritative state.",
+      "producer_behavior": "Emit governed payload with evidence, traceability, and explicit readiness/limitation state.",
+      "provenance_fields": [
+        "source_id",
+        "source_record_id",
+        "evidence_id",
+        "repository",
+        "file_path"
+      ],
+      "purpose": "Governed transition from ClientOps to QA + Delivery.",
+      "remaining_v1_work": [
+        "No exact connection-matrix row; specification created as closure work."
+      ],
+      "request_or_event_schema": "governed_payload_v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ],
+      "response_or_output_schema": "governed_result_v1",
+      "retry_rules": "Retry only idempotent reads/previews; mutation retries require idempotency key and audit record.",
+      "runtime_status": "not_runtime_wired",
+      "runtime_wired": false,
+      "security_enforced": false,
+      "security_requirements": [
+        "authenticated_actor",
+        "authorized_scope",
+        "no_public_bypass"
+      ],
+      "status": "specified_missing_runtime",
+      "tests": [
+        "schema_validation",
+        "permission_boundary",
+        "trace_propagation",
+        "failure_path"
+      ],
+      "tests_present": false,
+      "trace_fields": [
+        "trace_id",
+        "request_id",
+        "event_id",
+        "parent_event_id",
+        "workflow_id"
+      ],
+      "trace_propagated": false,
+      "transport": "internal_api_or_event_contract",
+      "upstream_layer_id": "SHS-LAYER-048",
+      "v1_blocker": true,
+      "validation_rules": [
+        "required_ids_present",
+        "contract_version_supported",
+        "source_provenance_preserved"
+      ],
+      "version": "v1",
+      "architecture_validation_posture": "architecture_defined"
+    }
+  ],
+  "metadata": {
+    "business_surface_count": 2,
+    "chain_count": 10,
+    "contract_count": 35,
+    "cross_cutting_control_count": 1,
+    "decision_required_count": 0,
+    "family_count": 12,
+    "generated_at": "2026-07-14T03:37:08.558978+00:00",
+    "official_layer_count": 50,
+    "shared_service_count": 2,
+    "source_audit_dir": "/Users/mikeslate/Desktop/shrv1/docs/v1-layer-audit",
+    "subsystem_count": 3
+  },
+  "traceability_standard": {
+    "required_for_all_contracts": [
+      "trace_id",
+      "request_id",
+      "actor_id",
+      "timestamp",
+      "contract_version"
+    ],
+    "required_when_applicable": {
+      "SHF program work": [
+        "program_id"
+      ],
+      "client work": [
+        "client_id"
+      ],
+      "published outputs": [
+        "publication_mode"
+      ],
+      "source intake": [
+        "source_id",
+        "source_record_id"
+      ],
+      "truth consumers": [
+        "truth_package_id"
+      ],
+      "workflow": [
+        "workflow_id",
+        "parent_event_id"
+      ]
+    },
+    "standard_fields": [
+      "trace_id",
+      "request_id",
+      "event_id",
+      "entity_id",
+      "entity_type",
+      "organization_id",
+      "client_id",
+      "program_id",
+      "source_id",
+      "source_record_id",
+      "actor_id",
+      "actor_type",
+      "timestamp",
+      "contract_version",
+      "workflow_id",
+      "parent_event_id",
+      "publication_mode",
+      "truth_package_id"
+    ]
+  }
+}

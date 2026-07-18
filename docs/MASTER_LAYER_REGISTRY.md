@@ -10,6 +10,22 @@ Truth Spine verifies what is true. Oracle decides what verified evidence support
 
 No new layer may be created unless it cannot fit any registered layer, is required for safety, scale, reporting, governance, funding, or operations, and is added to this registry with ownership and boundaries.
 
+## Batch 00 Owner-Review Baseline
+
+Batch 00 closes the seven V1 architecture candidates that previously required owner review. The detailed source of truth for family membership, ownership, contracts, chains, evidence, and migration notes is `docs/architecture/SHS_BOS_BATCH_00_OWNER_REVIEW_CLOSEOUT_V1.json`; this registry records the canonical baseline only.
+
+| ID | Canonical Name | Classification | Family | Canonical Owner | V1 Disposition |
+| --- | --- | --- | --- | --- | --- |
+| SHS-LAYER-007 | Command Bus | official_layer | F06_WORKFLOW_COLLABORATION_NOTIFICATIONS | SHS-LAYER-007 | mandatory_v1_support |
+| SHS-LAYER-008 | Job Scheduler | shared_platform_service | F06_WORKFLOW_COLLABORATION_NOTIFICATIONS | SHS-LAYER-007 | mandatory_v1_support |
+| SHS-LAYER-012 | Direct Connect Direct-Source Proof Subsystem | subsystem | F02_INTEGRATION_SOURCE_INTAKE | SHS-LAYER-013 | mandatory_v1_support |
+| SHS-LAYER-040 | System Orchestrator Surface | business_surface | F06_WORKFLOW_COLLABORATION_NOTIFICATIONS | SHS-LAYER-007 | mandatory_v1_support |
+| SHS-LAYER-057 | Commercialization, Billing, and Entitlements Responsibilities | merge_into_existing_layer | F11_COMMERCIALIZATION_ENTITLEMENTS | SHS-LAYER-043; Merged Responsibilities: SHS-LAYER-001, SHS-LAYER-048, SHS-LAYER-042 | mandatory_v1_support |
+| SHS-LAYER-058 | Support and Improvement Workflow Subsystem | subsystem | F06_WORKFLOW_COLLABORATION_NOTIFICATIONS | SHS-LAYER-048 | mandatory_v1_support |
+| SHS-LAYER-059 | Search and Discovery | deferred_post_v1 | F11_COMMERCIALIZATION_ENTITLEMENTS | SHS-LAYER-042 | post_v1 |
+
+Batch 00 final counts: 50 official layers, 12 families, 0 decision-required architecture items, and 0 ownership conflicts. Batch 01 may begin only from this baseline and must not reintroduce a duplicate command center, duplicate Master Layer Registry, or duplicate truth authority.
+
 ## Official Layers
 
 | Layer | Ownership | Boundary |

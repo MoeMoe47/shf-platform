@@ -1,0 +1,120 @@
+{
+  "authoritative_repository_policy": "Browser storage is not authoritative for business-critical V1 runtime state.",
+  "local_storage_migration_plan": [
+    {
+      "classification": "identity_advisory_dev_state",
+      "migration_priority": "P1",
+      "owner_layer_id": "SHS-LAYER-001",
+      "source": "src/system/identity/identityRouting.js",
+      "state_id": "browser.identity.demo_session_keys",
+      "v1_disposition": "allowed_only_for_demo_shell; backend session remains authoritative"
+    },
+    {
+      "classification": "business_critical_runtime_state",
+      "migration_priority": "P0",
+      "owner_layer_id": "SHS-LAYER-007",
+      "source": "src/system/event-bus/shsEventStorage.js",
+      "state_id": "browser.command_bus.event_storage",
+      "v1_disposition": "must migrate to Command Bus event/audit repository before runtime wiring"
+    },
+    {
+      "classification": "business_critical_compatibility_state",
+      "migration_priority": "P0",
+      "owner_layer_id": "SHS-LAYER-007",
+      "source": "src/system/persistence/migrations/criticalStateMigrationCompatibility.js",
+      "state_id": "browser.persistence.compatibility_state",
+      "v1_disposition": "must remain migration-only and feed authoritative repository"
+    },
+    {
+      "classification": "business_critical_source_evidence",
+      "migration_priority": "P0",
+      "owner_layer_id": "SHS-LAYER-013",
+      "source": "src/data/directConnect/directSourceProofStorage.js",
+      "state_id": "browser.direct_source_proof",
+      "v1_disposition": "must migrate to Source Registry persistence before certification"
+    },
+    {
+      "classification": "business_critical_agent_work_queue",
+      "migration_priority": "P0",
+      "owner_layer_id": "SHS-LAYER-025",
+      "source": "src/data/agents/agentTaskStorage.js",
+      "state_id": "browser.agent_task_queue",
+      "v1_disposition": "must migrate to Agent Fabric task repository with Command Bus trace"
+    },
+    {
+      "classification": "business_critical_approval_ledger",
+      "migration_priority": "P0",
+      "owner_layer_id": "SHS-LAYER-025",
+      "source": "src/data/agents/agentApprovalLedger.js",
+      "state_id": "browser.agent_approval_ledger",
+      "v1_disposition": "must migrate to audit-backed Agent Fabric ledger"
+    },
+    {
+      "classification": "business_critical_report_workflow_state",
+      "migration_priority": "P0",
+      "owner_layer_id": "SHS-LAYER-028",
+      "source": "src/pages/admin/reporting/bridge-workflow-store.ts",
+      "state_id": "browser.reporting_bridge_workflow",
+      "v1_disposition": "must migrate to Reporting/Workflow repository before runtime wiring"
+    },
+    {
+      "classification": "business_critical_audit_state",
+      "migration_priority": "P0",
+      "owner_layer_id": "SHS-LAYER-027",
+      "source": "src/pages/admin/reporting/export-audit-trail.js",
+      "state_id": "browser.export_audit_trail",
+      "v1_disposition": "must migrate to Audit and Verification trail"
+    },
+    {
+      "classification": "business_critical_release_state",
+      "migration_priority": "P0",
+      "owner_layer_id": "SHS-LAYER-029",
+      "source": "src/system/launch/shsLaunchLedger.js",
+      "state_id": "browser.launch_ledger",
+      "v1_disposition": "must migrate to Release Management launch ledger"
+    },
+    {
+      "classification": "operator_review_snapshot",
+      "migration_priority": "P2",
+      "owner_layer_id": "SHS-LAYER-041",
+      "source": "src/system/executive-command-center/shsExecutiveCommandCenterStorage.js",
+      "state_id": "browser.executive_command_snapshots",
+      "v1_disposition": "allowed as local operator note; certification source remains API artifacts"
+    },
+    {
+      "classification": "ui_preference",
+      "migration_priority": "none",
+      "owner_layer_id": "SHS-LAYER-003",
+      "source": "src/context/LocaleProvider.jsx; src/context/ReadingLevelProvider.jsx",
+      "state_id": "browser.locale_and_reading_preferences",
+      "v1_disposition": "may remain browser-local"
+    }
+  ],
+  "metadata": {
+    "artifact": "SHS_BOS_BATCH_01_PERSISTENCE_REGISTRY_V1",
+    "generated_at": "2026-07-14T04:05:59+00:00",
+    "version": "SHS_BOS_BATCH_01_CONTRACT_FOUNDATION_V1"
+  },
+  "repository_targets": [
+    {
+      "owner_layer_id": "SHS-LAYER-027",
+      "purpose": "redacted contract audit decisions",
+      "repository_id": "contract_runtime.audit_jsonl"
+    },
+    {
+      "owner_layer_id": "SHS-LAYER-007",
+      "purpose": "event and command correlation",
+      "repository_id": "command_bus.event_store"
+    },
+    {
+      "owner_layer_id": "SHS-LAYER-013",
+      "purpose": "direct source proof and provenance",
+      "repository_id": "source_registry.evidence_store"
+    },
+    {
+      "owner_layer_id": "SHS-LAYER-029",
+      "purpose": "release readiness and launch evidence",
+      "repository_id": "release.launch_ledger"
+    }
+  ]
+}

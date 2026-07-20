@@ -1,0 +1,93 @@
+{
+  "identities": [
+    {
+      "authority": "Identity and Access",
+      "canonical_owner": "SHS-LAYER-001",
+      "format": "usr_|svc_|agt_<stable-id>",
+      "identifier": "actor_id",
+      "required": true
+    },
+    {
+      "authority": "Identity and Access",
+      "canonical_owner": "SHS-LAYER-001",
+      "format": "org_<stable-id>",
+      "identifier": "organization_id",
+      "required": false
+    },
+    {
+      "authority": "ClientOps",
+      "canonical_owner": "SHS-LAYER-048",
+      "format": "client_<stable-id>",
+      "identifier": "client_id",
+      "required": false
+    },
+    {
+      "authority": "SHF Program Authority through Source Registry intake",
+      "canonical_owner": "SHS-LAYER-052",
+      "format": "program_<stable-id>",
+      "identifier": "program_id",
+      "required": false
+    },
+    {
+      "authority": "Source Registry",
+      "canonical_owner": "SHS-LAYER-013",
+      "format": "source_<stable-id>",
+      "identifier": "source_id",
+      "required": false
+    },
+    {
+      "authority": "Source Registry",
+      "canonical_owner": "SHS-LAYER-013",
+      "format": "source-record/native-id",
+      "identifier": "source_record_id",
+      "required": false
+    },
+    {
+      "authority": "Canonical Entity Resolution",
+      "canonical_owner": "SHS-LAYER-016",
+      "format": "entity_<stable-id>",
+      "identifier": "entity_id",
+      "required": false
+    },
+    {
+      "authority": "Truth Spine",
+      "canonical_owner": "SHS-LAYER-023",
+      "format": "truth_<stable-id>",
+      "identifier": "truth_package_id",
+      "required": false
+    },
+    {
+      "authority": "Command Bus / Workflow Engine",
+      "canonical_owner": "SHS-LAYER-007",
+      "format": "wf_<stable-id>",
+      "identifier": "workflow_id",
+      "required": false
+    },
+    {
+      "authority": "API Gateway / contract foundation",
+      "canonical_owner": "SHS-LAYER-005",
+      "format": "trc_<hex>",
+      "identifier": "trace_id",
+      "required": true
+    },
+    {
+      "authority": "API Gateway / contract foundation",
+      "canonical_owner": "SHS-LAYER-005",
+      "format": "req_<hex>",
+      "identifier": "request_id",
+      "required": true
+    },
+    {
+      "authority": "Command Bus event channel",
+      "canonical_owner": "SHS-LAYER-007",
+      "format": "evt_<stable-id>",
+      "identifier": "event_id",
+      "required": false
+    }
+  ],
+  "metadata": {
+    "artifact": "SHS_BOS_BATCH_01_IDENTITY_REGISTRY_V1",
+    "generated_at": "2026-07-14T04:05:59+00:00",
+    "version": "SHS_BOS_BATCH_01_CONTRACT_FOUNDATION_V1"
+  }
+}

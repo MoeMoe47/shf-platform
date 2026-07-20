@@ -1,0 +1,1095 @@
+{
+  "contract_gate_results": [
+    {
+      "blocked_reasons": [],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": true,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-001",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "passed",
+      "official_name": "Identity and Access to API Gateway",
+      "representative": true,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-002",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "API Gateway and Direct Connect to Source Intake",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-003",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "evaluated_blocked",
+      "official_name": "Source Intake to Aggregation",
+      "representative": true,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-004",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "Aggregation to Canonical Entity Resolution",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-005",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "evaluated_blocked",
+      "official_name": "Canonical Entity Resolution to Verification",
+      "representative": true,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-006",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "Verification to Reconciliation",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-007",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "evaluated_blocked",
+      "official_name": "Reconciliation to Oracle",
+      "representative": true,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-008",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "Aggregation and Verification to Oracle Truth Package",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-009",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "Oracle to Truth Package Repository",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": true,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-010",
+      "contract_type": "oracle_downstream",
+      "foundation_gate_status": "passed",
+      "official_name": "Oracle to Reporting",
+      "representative": true,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-011",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "evaluated_blocked",
+      "official_name": "Oracle to Agent Fabric",
+      "representative": true,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-012",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "Oracle to Operational Surfaces",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-013",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "Knowledge Layer to Agent Fabric",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-014",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "Alignment Layer to Agent Fabric Execution",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-015",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "Agent Fabric to Audit and Tracking",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": true,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-016",
+      "contract_type": "event_or_command",
+      "foundation_gate_status": "passed",
+      "official_name": "Workflow Engine to Notification Layer",
+      "representative": true,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-017",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "User Action to Action Event",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-018",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "Action Event to Oracle Recompute",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-019",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "evaluated_blocked",
+      "official_name": "Sales to Production",
+      "representative": true,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": true,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-020",
+      "contract_type": "operational_handoff",
+      "foundation_gate_status": "passed",
+      "official_name": "Production to QA",
+      "representative": true,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-021",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "QA to Release Readiness",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-022",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "Release to ClientOps",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-023",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "ClientOps to Reporting",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-024",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "ClientOps Renewal and Upgrade State to Tracking",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-025",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "Reporting to Tracking and Intelligence",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-026",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "Source Intake Direct-Source Proof to Aggregation Intake",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-027",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "Source Intake Failure to Error Queue and Retry",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-028",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "Tracking and Intelligence to Executive Command Center",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-029",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "Governance Checks to Release Readiness",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-030",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "evaluated_blocked",
+      "official_name": "SHF Program Data to SHS Intake",
+      "representative": true,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-031",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "SHS Certified Outcome to SHF Impact Data Spine",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-032",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "SHF Approved Impact to Funder and Public Reporting",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-033",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "Identity Entitlements to API Gateway Access",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-034",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "Commercial Terms to Renewal and ClientOps",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-035",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "metadata_only_blocked",
+      "official_name": "ClientOps Support Issue to QA Change Request",
+      "representative": false,
+      "runtime_wired": false,
+      "v1_blocker": true
+    }
+  ],
+  "dead_letter_requirements": [
+    {
+      "accepted_categories": [
+        "validation",
+        "idempotency",
+        "permission"
+      ],
+      "owner_layer_id": "SHS-LAYER-027",
+      "queue": "contract_runtime.dead_letter.validation"
+    },
+    {
+      "accepted_categories": [
+        "transport",
+        "staleness",
+        "oracle"
+      ],
+      "owner_layer_id": "SHS-LAYER-007",
+      "queue": "contract_runtime.dead_letter.transport"
+    }
+  ],
+  "metadata": {
+    "artifact": "SHS_BOS_BATCH_01_RUNTIME_GATE_RESULTS_V1",
+    "generated_at": "2026-07-14T04:05:59+00:00",
+    "version": "SHS_BOS_BATCH_01_CONTRACT_FOUNDATION_V1"
+  },
+  "representative_contracts": [
+    {
+      "blocked_reasons": [],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": true,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-001",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "passed",
+      "official_name": "Identity and Access to API Gateway",
+      "representative": true,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-003",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "evaluated_blocked",
+      "official_name": "Source Intake to Aggregation",
+      "representative": true,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-005",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "evaluated_blocked",
+      "official_name": "Canonical Entity Resolution to Verification",
+      "representative": true,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-007",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "evaluated_blocked",
+      "official_name": "Reconciliation to Oracle",
+      "representative": true,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": true,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-010",
+      "contract_type": "oracle_downstream",
+      "foundation_gate_status": "passed",
+      "official_name": "Oracle to Reporting",
+      "representative": true,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-011",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "evaluated_blocked",
+      "official_name": "Oracle to Agent Fabric",
+      "representative": true,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": true,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-016",
+      "contract_type": "event_or_command",
+      "foundation_gate_status": "passed",
+      "official_name": "Workflow Engine to Notification Layer",
+      "representative": true,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-019",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "evaluated_blocked",
+      "official_name": "Sales to Production",
+      "representative": true,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": true,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-020",
+      "contract_type": "operational_handoff",
+      "foundation_gate_status": "passed",
+      "official_name": "Production to QA",
+      "representative": true,
+      "runtime_wired": false,
+      "v1_blocker": true
+    },
+    {
+      "blocked_reasons": [
+        "producer_consumer_runtime_proof_not_complete"
+      ],
+      "checks": {
+        "audit": true,
+        "failure_path": true,
+        "idempotency_or_no_retry": true,
+        "identity": true,
+        "observability": true,
+        "persistence_migration_disposition": true,
+        "producer_consumer_runtime_proven": false,
+        "schema_validation": true,
+        "scope": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-030",
+      "contract_type": "synchronous",
+      "foundation_gate_status": "evaluated_blocked",
+      "official_name": "SHF Program Data to SHS Intake",
+      "representative": true,
+      "runtime_wired": false,
+      "v1_blocker": true
+    }
+  ]
+}

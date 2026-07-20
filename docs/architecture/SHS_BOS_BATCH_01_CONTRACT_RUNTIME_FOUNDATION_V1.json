@@ -1,0 +1,72 @@
+{
+  "audit_contract": {
+    "canonical_owner": "SHS-LAYER-027",
+    "raw_sensitive_payload_allowed": false,
+    "retention": "bounded_runtime_audit_with_redaction"
+  },
+  "duplicate_surface_policy": {
+    "do_not_create": [
+      "/ops/v1-command-center",
+      "/ops/contract-runtime-command-center",
+      "/ops/v1-certification",
+      "/api/contract-runtime"
+    ],
+    "reason": "These would compete with the established Executive Command Center and V1 Command Center API family."
+  },
+  "metadata": {
+    "artifact": "SHS_BOS_BATCH_01_CONTRACT_RUNTIME_FOUNDATION_V1",
+    "generated_at": "2026-07-14T04:05:59+00:00",
+    "status": "complete",
+    "version": "SHS_BOS_BATCH_01_CONTRACT_FOUNDATION_V1"
+  },
+  "observability_contract": {
+    "canonical_owner": "SHS-LAYER-041",
+    "metrics": [
+      "gate_status",
+      "failure_code_count",
+      "dead_letter_count",
+      "staleness_count",
+      "runtime_wired_count"
+    ]
+  },
+  "overview": {
+    "canonical_api_family": "/api/v1-command-center/contract-foundation",
+    "canonical_route": "admin.html#/ops/executive-command",
+    "contract_count": 35,
+    "contracts_runtime_wired_by_batch_01": 0,
+    "contracts_v1_blocked": 35,
+    "contracts_with_foundation_metadata": 35,
+    "permission_contract": {
+      "canonical_owner": "SHS-LAYER-001",
+      "rule": "Downstream scopes may match or narrow upstream scopes; they may not broaden organization, client, program, or publication authority."
+    },
+    "representative_contracts_evaluated": 10,
+    "representative_foundation_passed": 4,
+    "traceability_contract": {
+      "envelope_version": "shs.contract.envelope.v1",
+      "required_fields": [
+        "trace_id",
+        "request_id",
+        "actor_id",
+        "timestamp",
+        "contract_version"
+      ]
+    }
+  },
+  "ownership_decision": {
+    "canonical_api_family": "/api/v1-command-center",
+    "canonical_owner_surface": "Executive Command Center",
+    "canonical_route": "admin.html#/ops/executive-command",
+    "decision": "Extend the existing Executive Command Center V1 Certification panel with a Contract Runtime Foundations section.",
+    "overlapping_surfaces": [
+      "Identity and Access",
+      "Source Registry",
+      "Command Bus",
+      "Readiness Gate",
+      "Oracle",
+      "Truth Spine",
+      "Audit and Verification",
+      "Release Management"
+    ]
+  }
+}

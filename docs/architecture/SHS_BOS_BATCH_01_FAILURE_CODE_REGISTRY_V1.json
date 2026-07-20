@@ -1,0 +1,79 @@
+{
+  "failure_codes": [
+    {
+      "category": "validation",
+      "code": "missing_required_field",
+      "dead_letter": true,
+      "owner": "consumer",
+      "retryable": false
+    },
+    {
+      "category": "validation",
+      "code": "invalid_contract_version",
+      "dead_letter": true,
+      "owner": "consumer",
+      "retryable": false
+    },
+    {
+      "category": "permission",
+      "code": "permission_denied",
+      "dead_letter": false,
+      "owner": "Identity and Access",
+      "retryable": false
+    },
+    {
+      "category": "permission",
+      "code": "scope_broadening_denied",
+      "dead_letter": true,
+      "owner": "Identity and Access",
+      "retryable": false
+    },
+    {
+      "category": "readiness",
+      "code": "source_not_ready",
+      "max_attempts": 3,
+      "owner": "producer",
+      "retryable": true
+    },
+    {
+      "category": "staleness",
+      "code": "stale_input",
+      "max_attempts": 2,
+      "owner": "consumer",
+      "retryable": true
+    },
+    {
+      "category": "idempotency",
+      "code": "idempotency_conflict",
+      "dead_letter": true,
+      "owner": "Command Bus",
+      "retryable": false
+    },
+    {
+      "category": "oracle",
+      "code": "oracle_dependency_blocked",
+      "max_attempts": 2,
+      "owner": "Oracle",
+      "retryable": true
+    },
+    {
+      "category": "audit",
+      "code": "audit_write_failed",
+      "max_attempts": 2,
+      "owner": "Audit and Verification",
+      "retryable": true
+    },
+    {
+      "category": "transport",
+      "code": "downstream_unavailable",
+      "max_attempts": 3,
+      "owner": "consumer",
+      "retryable": true
+    }
+  ],
+  "metadata": {
+    "artifact": "SHS_BOS_BATCH_01_FAILURE_CODE_REGISTRY_V1",
+    "generated_at": "2026-07-14T04:05:59+00:00",
+    "version": "SHS_BOS_BATCH_01_CONTRACT_FOUNDATION_V1"
+  }
+}

@@ -1,0 +1,390 @@
+{
+  "audit_records": [
+    {
+      "action": "source_claims.persisted",
+      "audit_id": "audit_6aafd04d423968cbdccd",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "recorded_at": "2026-07-20T03:50:13+00:00",
+      "sensitive_payload_redacted": true,
+      "summary": "Two governed source claims persisted.",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "action": "aggregation.persisted",
+      "audit_id": "audit_6d3d7322c9f2b6ebadf7",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "recorded_at": "2026-07-20T03:50:13+00:00",
+      "sensitive_payload_redacted": true,
+      "summary": "Aggregation normalized two source claims.",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "action": "entity_resolution.persisted",
+      "audit_id": "audit_6e0e3e5cd4be4ea39c3c",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "recorded_at": "2026-07-20T03:50:13+00:00",
+      "sensitive_payload_redacted": true,
+      "summary": "Canonical entity ID assigned.",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "action": "verification.persisted",
+      "audit_id": "audit_66a91cd200bf14b9b8f2",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "recorded_at": "2026-07-20T03:50:13+00:00",
+      "sensitive_payload_redacted": true,
+      "summary": "Evidence sufficiency verified.",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "action": "reconciliation.persisted",
+      "audit_id": "audit_37ea176624aa6b503d3a",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "recorded_at": "2026-07-20T03:50:13+00:00",
+      "sensitive_payload_redacted": true,
+      "summary": "Minor contradiction resolved.",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "action": "action_event.persisted",
+      "audit_id": "audit_d9b89cb6568a5c1da5af",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "recorded_at": "2026-07-20T03:50:13+00:00",
+      "sensitive_payload_redacted": true,
+      "summary": "Governed action event persisted.",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "action": "oracle.recomputed",
+      "audit_id": "audit_99081ee7babc2274bf87",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "recorded_at": "2026-07-20T03:50:13+00:00",
+      "sensitive_payload_redacted": true,
+      "summary": "Oracle produced Truth Package v2 from action causation.",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "metadata": {
+    "batch_id": "BATCH-02",
+    "canonical_api_family": "/api/v1-command-center/truth-pipeline",
+    "canonical_owner_surface": "Executive Command Center",
+    "chain_id": "CHAIN-A-UNIFIED-TRUTH",
+    "generated_at": "2026-07-20T03:50:13+00:00",
+    "package": "Package F",
+    "production_readiness_claim": false,
+    "representative_entity_id": "entity_batch02_program_workforce_readiness",
+    "runtime_completion_claim": "representative_truth_pipeline_runtime_only"
+  },
+  "trace": {
+    "record_count": 36,
+    "timeline": [
+      {
+        "collection": "source_claims",
+        "record_id": "claim_batch02_source_a",
+        "summary": "source_claims",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "source_claims",
+        "record_id": "claim_batch02_source_b",
+        "summary": "source_claims",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "aggregations",
+        "record_id": "agg_batch02_workforce_readiness",
+        "summary": "aggregations",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "entity_resolutions",
+        "record_id": "entity_batch02_program_workforce_readiness",
+        "summary": "entity_resolutions",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "verifications",
+        "record_id": "entity_batch02_program_workforce_readiness",
+        "summary": "verifications",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "reconciliations",
+        "record_id": "entity_batch02_program_workforce_readiness",
+        "summary": "reconciliations",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "truth_packages",
+        "record_id": "truthpkg_batch02_workforce_readiness_v1",
+        "summary": "certified",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "truth_packages",
+        "record_id": "truthpkg_batch02_workforce_readiness_v1",
+        "summary": "certified",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "truth_packages",
+        "record_id": "truthpkg_batch02_workforce_readiness_v2",
+        "summary": "certified",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "report_readiness",
+        "record_id": "truthpkg_batch02_workforce_readiness_v1",
+        "summary": "report_readiness",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "report_readiness",
+        "record_id": "truthpkg_batch02_workforce_readiness_v2",
+        "summary": "report_readiness",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "action_events",
+        "record_id": "truthpkg_batch02_workforce_readiness_v1",
+        "summary": "action_events",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "recompute_results",
+        "record_id": null,
+        "summary": "recompute_results",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "tracking_events",
+        "record_id": "evt_batch02_source_intake",
+        "summary": "truth_pipeline_stage_status",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "tracking_events",
+        "record_id": "evt_batch02_tracking_aggregation",
+        "summary": "truth_pipeline_stage_status",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "tracking_events",
+        "record_id": "evt_batch02_tracking_entity",
+        "summary": "truth_pipeline_stage_status",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "tracking_events",
+        "record_id": "evt_batch02_tracking_verification",
+        "summary": "truth_pipeline_stage_status",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "tracking_events",
+        "record_id": "evt_batch02_tracking_reconciliation",
+        "summary": "truth_pipeline_stage_status",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "tracking_events",
+        "record_id": "evt_batch02_tracking_action",
+        "summary": "truth_pipeline_stage_status",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "tracking_events",
+        "record_id": "evt_batch02_tracking_recompute",
+        "summary": "truth_pipeline_stage_status",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "tracking_events",
+        "record_id": "evt_batch02_tracking_final",
+        "summary": "truth_pipeline_stage_status",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "audit_records",
+        "record_id": "audit_6aafd04d423968cbdccd",
+        "summary": "Two governed source claims persisted.",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "audit_records",
+        "record_id": "audit_6d3d7322c9f2b6ebadf7",
+        "summary": "Aggregation normalized two source claims.",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "audit_records",
+        "record_id": "audit_6e0e3e5cd4be4ea39c3c",
+        "summary": "Canonical entity ID assigned.",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "audit_records",
+        "record_id": "audit_66a91cd200bf14b9b8f2",
+        "summary": "Evidence sufficiency verified.",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "audit_records",
+        "record_id": "audit_37ea176624aa6b503d3a",
+        "summary": "Minor contradiction resolved.",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "audit_records",
+        "record_id": "audit_d9b89cb6568a5c1da5af",
+        "summary": "Governed action event persisted.",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "audit_records",
+        "record_id": "audit_99081ee7babc2274bf87",
+        "summary": "Oracle produced Truth Package v2 from action causation.",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "failure_records",
+        "record_id": "fail_8727a6ddab9fd17a",
+        "summary": "missing_required_field",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "failure_records",
+        "record_id": "fail_4a2e8016215a3733",
+        "summary": "idempotency_conflict",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "failure_records",
+        "record_id": "fail_6b059b6b170bfa8b",
+        "summary": "audit_write_failed",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "failure_records",
+        "record_id": "fail_03442495564b76ab",
+        "summary": "source_not_ready",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "failure_records",
+        "record_id": "fail_f7486d1136750de0",
+        "summary": "stale_input",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "failure_records",
+        "record_id": "fail_8038f9d007539723",
+        "summary": "oracle_dependency_blocked",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "failure_records",
+        "record_id": "fail_07697110d4afc000",
+        "summary": "permission_denied",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "collection": "failure_records",
+        "record_id": "fail_72c24ba0208b2ddb",
+        "summary": "downstream_unavailable",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "tracking_events": [
+    {
+      "contract_id": "CONTRACT-V1-003",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "event_type": "truth_pipeline_stage_status",
+      "stage": "source_intake",
+      "status": "complete",
+      "timestamp": "2026-07-20T03:50:13+00:00",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "tracking_event_id": "evt_batch02_source_intake"
+    },
+    {
+      "contract_id": "CONTRACT-V1-003",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "event_type": "truth_pipeline_stage_status",
+      "stage": "aggregation",
+      "status": "complete",
+      "timestamp": "2026-07-20T03:50:13+00:00",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "tracking_event_id": "evt_batch02_tracking_aggregation"
+    },
+    {
+      "contract_id": "CONTRACT-V1-004",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "event_type": "truth_pipeline_stage_status",
+      "stage": "canonical_entity",
+      "status": "complete",
+      "timestamp": "2026-07-20T03:50:13+00:00",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "tracking_event_id": "evt_batch02_tracking_entity"
+    },
+    {
+      "contract_id": "CONTRACT-V1-005",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "event_type": "truth_pipeline_stage_status",
+      "stage": "verification",
+      "status": "complete",
+      "timestamp": "2026-07-20T03:50:13+00:00",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "tracking_event_id": "evt_batch02_tracking_verification"
+    },
+    {
+      "contract_id": "CONTRACT-V1-006",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "event_type": "truth_pipeline_stage_status",
+      "stage": "reconciliation",
+      "status": "complete",
+      "timestamp": "2026-07-20T03:50:13+00:00",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "tracking_event_id": "evt_batch02_tracking_reconciliation"
+    },
+    {
+      "contract_id": "CONTRACT-V1-010",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "event_type": "truth_pipeline_stage_status",
+      "stage": "action",
+      "status": "complete",
+      "timestamp": "2026-07-20T03:50:13+00:00",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "tracking_event_id": "evt_batch02_tracking_action"
+    },
+    {
+      "contract_id": "CONTRACT-V1-008",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "event_type": "truth_pipeline_stage_status",
+      "stage": "recompute",
+      "status": "complete",
+      "timestamp": "2026-07-20T03:50:13+00:00",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "tracking_event_id": "evt_batch02_tracking_recompute"
+    },
+    {
+      "contract_id": "CONTRACT-V1-028",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "event_type": "truth_pipeline_stage_status",
+      "stage": "tracking",
+      "status": "complete",
+      "timestamp": "2026-07-20T03:50:13+00:00",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "tracking_event_id": "evt_batch02_tracking_final"
+    }
+  ]
+}

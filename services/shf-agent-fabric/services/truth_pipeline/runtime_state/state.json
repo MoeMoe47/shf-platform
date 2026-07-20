@@ -1,0 +1,1550 @@
+{
+  "action_events": [
+    {
+      "action_event_id": "action_batch02_mark_review_complete",
+      "action_type": "mark_review_complete",
+      "actor": {
+        "actor_id": "usr_batch02_shs_admin",
+        "actor_type": "human_operator",
+        "client_id": "client_demo_truth_pipeline",
+        "organization_id": "org_shs_batch_02",
+        "permissions": [
+          "bos.identity.read",
+          "bos.registry.read",
+          "bos.governance.read",
+          "bos.reports.read",
+          "bos.tracking.read"
+        ],
+        "program_id": "program_demo_workforce_readiness",
+        "role": "shs_admin"
+      },
+      "audit_context": {
+        "audit_id": "audit_batch02_action_review_complete"
+      },
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "previous_state_reference": "truthpkg_batch02_workforce_readiness_v1",
+      "reason": "Representative review completed after minor contradiction was resolved.",
+      "requested_change": {
+        "readiness_status": "ready_for_internal_reporting"
+      },
+      "scope": {
+        "client_id": "client_demo_truth_pipeline",
+        "organization_id": "org_shs_batch_02",
+        "program_id": "program_demo_workforce_readiness"
+      },
+      "timestamp": "2026-07-20T04:07:06+00:00",
+      "trace_context": {
+        "causation_id": "action-review-complete",
+        "contract_version": "v1",
+        "correlation_id": "corr_batch_02_unified_truth",
+        "event_id": "evt_batch02_action",
+        "parent_event_id": "",
+        "pipeline_schema_version": "shs.truth_pipeline.v1",
+        "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "truth_package_id": "truthpkg_batch02_workforce_readiness_v1"
+    }
+  ],
+  "aggregations": [
+    {
+      "aggregation_id": "agg_batch02_workforce_readiness",
+      "canonical_candidate": {
+        "candidate_key": "demo-workforce-readiness:participants_ready_for_placement",
+        "entity_type": "program_metric"
+      },
+      "duplicate_candidates": [
+        {
+          "claim_ids": [
+            "claim_batch02_source_a",
+            "claim_batch02_source_b"
+          ],
+          "reason": "same_metric_different_values"
+        }
+      ],
+      "match_confidence": 0.94,
+      "normalized_claims": [
+        {
+          "claim_id": "claim_batch02_source_a",
+          "metric_name": "participants_ready_for_placement",
+          "metric_value": 42,
+          "source_id": "source_batch02_operator_report",
+          "source_record_id": "operator-report-row-001",
+          "unit": "count"
+        },
+        {
+          "claim_id": "claim_batch02_source_b",
+          "metric_name": "participants_ready_for_placement",
+          "metric_value": 41,
+          "source_id": "source_batch02_partner_csv",
+          "source_record_id": "partner-csv-row-001",
+          "unit": "count"
+        }
+      ],
+      "provenance": {
+        "fixture_id": "BATCH02_SAFE_DEMO_WORKFORCE_READINESS",
+        "source_count": 2
+      },
+      "relationship_candidates": [
+        {
+          "confidence": 0.94,
+          "relationship": "same_program_metric"
+        }
+      ],
+      "source_references": [
+        {
+          "source_id": "source_batch02_operator_report",
+          "source_record_id": "operator-report-row-001"
+        },
+        {
+          "source_id": "source_batch02_partner_csv",
+          "source_record_id": "partner-csv-row-001"
+        }
+      ],
+      "trace_context": {
+        "causation_id": "aggregation",
+        "contract_version": "v1",
+        "correlation_id": "corr_batch_02_unified_truth",
+        "event_id": "evt_batch02_aggregation",
+        "parent_event_id": "",
+        "pipeline_schema_version": "shs.truth_pipeline.v1",
+        "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "unresolved_identity_issues": []
+    }
+  ],
+  "audit_records": [
+    {
+      "action": "source_claims.persisted",
+      "audit_id": "audit_6aafd04d423968cbdccd",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "recorded_at": "2026-07-20T04:07:06+00:00",
+      "sensitive_payload_redacted": true,
+      "summary": "Two governed source claims persisted.",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "action": "aggregation.persisted",
+      "audit_id": "audit_6d3d7322c9f2b6ebadf7",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "recorded_at": "2026-07-20T04:07:06+00:00",
+      "sensitive_payload_redacted": true,
+      "summary": "Aggregation normalized two source claims.",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "action": "entity_resolution.persisted",
+      "audit_id": "audit_6e0e3e5cd4be4ea39c3c",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "recorded_at": "2026-07-20T04:07:06+00:00",
+      "sensitive_payload_redacted": true,
+      "summary": "Canonical entity ID assigned.",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "action": "verification.persisted",
+      "audit_id": "audit_66a91cd200bf14b9b8f2",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "recorded_at": "2026-07-20T04:07:06+00:00",
+      "sensitive_payload_redacted": true,
+      "summary": "Evidence sufficiency verified.",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "action": "reconciliation.persisted",
+      "audit_id": "audit_37ea176624aa6b503d3a",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "recorded_at": "2026-07-20T04:07:06+00:00",
+      "sensitive_payload_redacted": true,
+      "summary": "Minor contradiction resolved.",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "action": "action_event.persisted",
+      "audit_id": "audit_d9b89cb6568a5c1da5af",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "recorded_at": "2026-07-20T04:07:06+00:00",
+      "sensitive_payload_redacted": true,
+      "summary": "Governed action event persisted.",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "action": "oracle.recomputed",
+      "audit_id": "audit_99081ee7babc2274bf87",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "recorded_at": "2026-07-20T04:07:06+00:00",
+      "sensitive_payload_redacted": true,
+      "summary": "Oracle produced Truth Package v2 from action causation.",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "chain_id": "CHAIN-A-UNIFIED-TRUTH",
+  "dead_letters": [
+    {
+      "attempt_history": [
+        {
+          "attempt": 1,
+          "failure_code": "idempotency_conflict",
+          "status": "failed"
+        }
+      ],
+      "contract_id": "CONTRACT-V1-003",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "created_at": "2026-07-20T04:07:06+00:00",
+      "dead_letter": true,
+      "dead_letter_disposition": {
+        "attempt_history": [
+          {
+            "attempt": 1,
+            "failure_code": "idempotency_conflict",
+            "status": "failed"
+          }
+        ],
+        "contract_id": "CONTRACT-V1-003",
+        "correlation_id": "corr_batch_02_unified_truth",
+        "disposition_timestamp": "2026-07-20T04:07:06+00:00",
+        "failure_code": "idempotency_conflict",
+        "last_error_summary": "duplicate intake fixture",
+        "original_request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "replay_eligible": false,
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "failure_code": "idempotency_conflict",
+      "failure_id": "fail_91817937d9117509",
+      "reason": "duplicate intake fixture",
+      "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "retryable": false,
+      "tested": true,
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "transition": "source_intake"
+    },
+    {
+      "attempt_history": [
+        {
+          "attempt": 1,
+          "failure_code": "downstream_unavailable",
+          "status": "failed"
+        },
+        {
+          "attempt": 2,
+          "failure_code": "downstream_unavailable",
+          "status": "failed"
+        },
+        {
+          "attempt": 3,
+          "failure_code": "downstream_unavailable",
+          "status": "failed"
+        }
+      ],
+      "contract_id": "CONTRACT-V1-008",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "created_at": "2026-07-20T04:07:06+00:00",
+      "dead_letter": true,
+      "dead_letter_disposition": {
+        "attempt_history": [
+          {
+            "attempt": 1,
+            "failure_code": "downstream_unavailable",
+            "status": "failed"
+          },
+          {
+            "attempt": 2,
+            "failure_code": "downstream_unavailable",
+            "status": "failed"
+          },
+          {
+            "attempt": 3,
+            "failure_code": "downstream_unavailable",
+            "status": "failed"
+          }
+        ],
+        "contract_id": "CONTRACT-V1-008",
+        "correlation_id": "corr_batch_02_unified_truth",
+        "disposition_timestamp": "2026-07-20T04:07:06+00:00",
+        "failure_code": "downstream_unavailable",
+        "last_error_summary": "recompute retry exhaustion fixture",
+        "original_request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "replay_eligible": true,
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "failure_code": "downstream_unavailable",
+      "failure_id": "fail_959e6e411530e8ae",
+      "max_attempts": 3,
+      "reason": "recompute retry exhaustion fixture",
+      "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "retry_exhausted": true,
+      "retryable": true,
+      "tested": true,
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "transition": "recompute"
+    }
+  ],
+  "entity_resolutions": [
+    {
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "entity_type": "program_metric",
+      "merge_candidates": [
+        {
+          "claim_ids": [
+            "claim_batch02_source_a",
+            "claim_batch02_source_b"
+          ],
+          "reason": "same_metric_different_values"
+        }
+      ],
+      "resolution_confidence": 0.94,
+      "resolution_method": "deterministic_program_metric_key",
+      "resolution_status": "resolved",
+      "source_mappings": [
+        {
+          "claim_id": "claim_batch02_source_a",
+          "entity_id": "entity_batch02_program_workforce_readiness",
+          "source_id": "source_batch02_operator_report"
+        },
+        {
+          "claim_id": "claim_batch02_source_b",
+          "entity_id": "entity_batch02_program_workforce_readiness",
+          "source_id": "source_batch02_partner_csv"
+        }
+      ],
+      "trace_context": {
+        "causation_id": "entity-resolution",
+        "contract_version": "v1",
+        "correlation_id": "corr_batch_02_unified_truth",
+        "event_id": "evt_batch02_entity_resolution",
+        "parent_event_id": "",
+        "pipeline_schema_version": "shs.truth_pipeline.v1",
+        "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "unresolved_issues": []
+    }
+  ],
+  "failure_records": [
+    {
+      "attempt_history": [
+        {
+          "attempt": 1,
+          "failure_code": "missing_required_field",
+          "status": "failed"
+        }
+      ],
+      "contract_id": "CONTRACT-V1-003",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "created_at": "2026-07-20T04:07:06+00:00",
+      "failure_code": "missing_required_field",
+      "failure_id": "fail_cd0b9812650a0d80",
+      "reason": "intake validation failure fixture",
+      "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "retryable": false,
+      "tested": true,
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "transition": "source_intake"
+    },
+    {
+      "attempt_history": [
+        {
+          "attempt": 1,
+          "failure_code": "idempotency_conflict",
+          "status": "failed"
+        }
+      ],
+      "contract_id": "CONTRACT-V1-003",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "created_at": "2026-07-20T04:07:06+00:00",
+      "dead_letter": true,
+      "dead_letter_disposition": {
+        "attempt_history": [
+          {
+            "attempt": 1,
+            "failure_code": "idempotency_conflict",
+            "status": "failed"
+          }
+        ],
+        "contract_id": "CONTRACT-V1-003",
+        "correlation_id": "corr_batch_02_unified_truth",
+        "disposition_timestamp": "2026-07-20T04:07:06+00:00",
+        "failure_code": "idempotency_conflict",
+        "last_error_summary": "duplicate intake fixture",
+        "original_request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "replay_eligible": false,
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "failure_code": "idempotency_conflict",
+      "failure_id": "fail_91817937d9117509",
+      "reason": "duplicate intake fixture",
+      "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "retryable": false,
+      "tested": true,
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "transition": "source_intake"
+    },
+    {
+      "attempt_history": [
+        {
+          "attempt": 1,
+          "failure_code": "audit_write_failed",
+          "status": "failed"
+        },
+        {
+          "attempt": 2,
+          "failure_code": "audit_write_failed",
+          "status": "failed"
+        }
+      ],
+      "contract_id": "CONTRACT-V1-009",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "created_at": "2026-07-20T04:07:06+00:00",
+      "failure_code": "audit_write_failed",
+      "failure_id": "fail_3c3f18574e7579ee",
+      "max_attempts": 2,
+      "reason": "persistence failure fixture",
+      "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "retryable": true,
+      "tested": true,
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "transition": "truth_persistence"
+    },
+    {
+      "attempt_history": [
+        {
+          "attempt": 1,
+          "failure_code": "source_not_ready",
+          "status": "failed"
+        },
+        {
+          "attempt": 2,
+          "failure_code": "source_not_ready",
+          "status": "failed"
+        },
+        {
+          "attempt": 3,
+          "failure_code": "source_not_ready",
+          "status": "failed"
+        }
+      ],
+      "contract_id": "CONTRACT-V1-005",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "created_at": "2026-07-20T04:07:06+00:00",
+      "failure_code": "source_not_ready",
+      "failure_id": "fail_d42bbdf646716be4",
+      "max_attempts": 3,
+      "reason": "verification insufficiency fixture",
+      "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "retryable": true,
+      "tested": true,
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "transition": "verification"
+    },
+    {
+      "attempt_history": [
+        {
+          "attempt": 1,
+          "failure_code": "stale_input",
+          "status": "failed"
+        },
+        {
+          "attempt": 2,
+          "failure_code": "stale_input",
+          "status": "failed"
+        }
+      ],
+      "contract_id": "CONTRACT-V1-006",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "created_at": "2026-07-20T04:07:06+00:00",
+      "failure_code": "stale_input",
+      "failure_id": "fail_b3ea086e4c60b038",
+      "max_attempts": 2,
+      "reason": "unresolved reconciliation conflict fixture",
+      "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "retryable": true,
+      "tested": true,
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "transition": "reconciliation"
+    },
+    {
+      "attempt_history": [
+        {
+          "attempt": 1,
+          "failure_code": "oracle_dependency_blocked",
+          "status": "failed"
+        },
+        {
+          "attempt": 2,
+          "failure_code": "oracle_dependency_blocked",
+          "status": "failed"
+        }
+      ],
+      "contract_id": "CONTRACT-V1-007",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "created_at": "2026-07-20T04:07:06+00:00",
+      "failure_code": "oracle_dependency_blocked",
+      "failure_id": "fail_ccef38243da50fb8",
+      "max_attempts": 2,
+      "reason": "Oracle blocked judgment fixture",
+      "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "retryable": true,
+      "tested": true,
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "transition": "oracle"
+    },
+    {
+      "attempt_history": [
+        {
+          "attempt": 1,
+          "failure_code": "permission_denied",
+          "status": "failed"
+        }
+      ],
+      "contract_id": "CONTRACT-V1-010",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "created_at": "2026-07-20T04:07:06+00:00",
+      "failure_code": "permission_denied",
+      "failure_id": "fail_658d9e5f01b0e2eb",
+      "reason": "Reporting blocked publication fixture",
+      "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "retryable": false,
+      "tested": true,
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "transition": "reporting"
+    },
+    {
+      "attempt_history": [
+        {
+          "attempt": 1,
+          "failure_code": "downstream_unavailable",
+          "status": "failed"
+        },
+        {
+          "attempt": 2,
+          "failure_code": "downstream_unavailable",
+          "status": "failed"
+        },
+        {
+          "attempt": 3,
+          "failure_code": "downstream_unavailable",
+          "status": "failed"
+        }
+      ],
+      "contract_id": "CONTRACT-V1-008",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "created_at": "2026-07-20T04:07:06+00:00",
+      "dead_letter": true,
+      "dead_letter_disposition": {
+        "attempt_history": [
+          {
+            "attempt": 1,
+            "failure_code": "downstream_unavailable",
+            "status": "failed"
+          },
+          {
+            "attempt": 2,
+            "failure_code": "downstream_unavailable",
+            "status": "failed"
+          },
+          {
+            "attempt": 3,
+            "failure_code": "downstream_unavailable",
+            "status": "failed"
+          }
+        ],
+        "contract_id": "CONTRACT-V1-008",
+        "correlation_id": "corr_batch_02_unified_truth",
+        "disposition_timestamp": "2026-07-20T04:07:06+00:00",
+        "failure_code": "downstream_unavailable",
+        "last_error_summary": "recompute retry exhaustion fixture",
+        "original_request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "replay_eligible": true,
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "failure_code": "downstream_unavailable",
+      "failure_id": "fail_959e6e411530e8ae",
+      "max_attempts": 3,
+      "reason": "recompute retry exhaustion fixture",
+      "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "retry_exhausted": true,
+      "retryable": true,
+      "tested": true,
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "transition": "recompute"
+    }
+  ],
+  "recompute_results": [
+    {
+      "action_event_id": "action_batch02_mark_review_complete",
+      "audit_references": [
+        "audit_batch02_action_review_complete"
+      ],
+      "change_summary": "Readiness changed from limited to ready_for_internal_reporting.",
+      "new_truth_package_id": "truthpkg_batch02_workforce_readiness_v2",
+      "previous_truth_package_id": "truthpkg_batch02_workforce_readiness_v1",
+      "readiness_change": {
+        "from": "limited",
+        "to": "ready_for_internal_reporting"
+      },
+      "recompute_status": "completed",
+      "stale_state_cleared": true,
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "reconciliations": [
+    {
+      "conflicts": [
+        {
+          "field": "metric_value",
+          "severity": "minor",
+          "values": [
+            42,
+            41
+          ]
+        }
+      ],
+      "contradiction_status": "minor_resolved",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "escalation_required": false,
+      "merge_state": "merged",
+      "precedence_decisions": [
+        {
+          "field": "metric_value",
+          "reason": "operator report has later reviewed evidence",
+          "selected_value": 42,
+          "source_id": "source_batch02_operator_report"
+        }
+      ],
+      "reconciliation_id": "recon_batch02_workforce_readiness",
+      "reconciliation_notes": "One-count mismatch resolved by source precedence.",
+      "trace_context": {
+        "causation_id": "reconciliation",
+        "contract_version": "v1",
+        "correlation_id": "corr_batch_02_unified_truth",
+        "event_id": "evt_batch02_reconciliation",
+        "parent_event_id": "",
+        "pipeline_schema_version": "shs.truth_pipeline.v1",
+        "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "unresolved_conflicts": []
+    }
+  ],
+  "report_readiness": [
+    {
+      "allowed": false,
+      "audience_mode": "internal_admin",
+      "blocking_reasons": [
+        "readiness_limited"
+      ],
+      "limitations": [
+        "internal_review_only_until_action_recompute"
+      ],
+      "publication_mode": "internal_review",
+      "readiness_status": "limited",
+      "report_type": "unified_truth_pipeline_summary",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "trust_envelope": {
+        "confidence": 86,
+        "contradiction_status": "minor_resolved",
+        "evidence_sufficiency": "sufficient",
+        "generated_timestamp": "2026-07-20T04:07:06+00:00",
+        "last_refresh": "2026-07-20T04:07:06+00:00",
+        "oracle_version": "shs.oracle.truth_pipeline.v1",
+        "publication_eligibility": [
+          "internal_review"
+        ],
+        "readiness": "limited",
+        "source_count": 2,
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "truth_status": "certified",
+        "unresolved_count": 0,
+        "verification_status": "verified",
+        "warnings": []
+      },
+      "truth_package_id": "truthpkg_batch02_workforce_readiness_v1"
+    },
+    {
+      "allowed": true,
+      "audience_mode": "internal_admin",
+      "blocking_reasons": [],
+      "limitations": [],
+      "publication_mode": "internal_report",
+      "readiness_status": "allowed",
+      "report_type": "unified_truth_pipeline_summary",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "trust_envelope": {
+        "confidence": 91,
+        "contradiction_status": "minor_resolved",
+        "evidence_sufficiency": "sufficient",
+        "generated_timestamp": "2026-07-20T04:07:06+00:00",
+        "last_refresh": "2026-07-20T04:07:06+00:00",
+        "oracle_version": "shs.oracle.truth_pipeline.v1",
+        "publication_eligibility": [
+          "internal_report"
+        ],
+        "readiness": "ready_for_internal_reporting",
+        "source_count": 2,
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "truth_status": "certified",
+        "unresolved_count": 0,
+        "verification_status": "verified",
+        "warnings": []
+      },
+      "truth_package_id": "truthpkg_batch02_workforce_readiness_v2"
+    }
+  ],
+  "representative_entity_id": "entity_batch02_program_workforce_readiness",
+  "representative_fixture": {
+    "evidence": [
+      {
+        "evidence_id": "evidence_batch02_operator_report",
+        "source_id": "source_batch02_operator_report",
+        "sufficient": true,
+        "trust_tier": "standard"
+      },
+      {
+        "evidence_id": "evidence_batch02_partner_csv",
+        "source_id": "source_batch02_partner_csv",
+        "sufficient": true,
+        "trust_tier": "high"
+      }
+    ],
+    "fixture_id": "BATCH02_SAFE_DEMO_WORKFORCE_READINESS",
+    "private_production_data": false,
+    "selection_reason": "Synthetic two-source program metric demonstrates source identity, canonical entity resolution, evidence review, minor contradiction resolution, Oracle certification, reporting readiness, action, recompute, and tracking without private participant data.",
+    "source_claims": [
+      {
+        "claim_data": {
+          "metric_name": "participants_ready_for_placement",
+          "metric_value": 42,
+          "unit": "count"
+        },
+        "claim_id": "claim_batch02_source_a",
+        "claim_type": "program_metric",
+        "client_id": "client_demo_truth_pipeline",
+        "contract_version": "v1",
+        "organization_id": "org_shs_batch_02",
+        "permission_context": {
+          "actor_id": "usr_batch02_shs_admin",
+          "actor_type": "human_operator",
+          "client_id": "client_demo_truth_pipeline",
+          "organization_id": "org_shs_batch_02",
+          "permissions": [
+            "bos.identity.read",
+            "bos.registry.read",
+            "bos.governance.read",
+            "bos.reports.read",
+            "bos.tracking.read"
+          ],
+          "program_id": "program_demo_workforce_readiness",
+          "role": "shs_admin"
+        },
+        "program_id": "program_demo_workforce_readiness",
+        "provenance": {
+          "evidence_ref": "evidence_batch02_operator_report",
+          "owner": "Data Operations",
+          "source_type": "operator_record"
+        },
+        "received_timestamp": "2026-07-14T04:00:00+00:00",
+        "source_id": "source_batch02_operator_report",
+        "source_record_id": "operator-report-row-001",
+        "source_timestamp": "2026-07-13T20:00:00+00:00",
+        "subject_reference": {
+          "metric_name": "participants_ready_for_placement",
+          "program_name": "Demo Workforce Readiness",
+          "subject_type": "program_metric"
+        },
+        "trace_context": {
+          "causation_id": "intake-source-a",
+          "contract_version": "v1",
+          "correlation_id": "corr_batch_02_unified_truth",
+          "event_id": "evt_batch02_intake_a",
+          "parent_event_id": "",
+          "pipeline_schema_version": "shs.truth_pipeline.v1",
+          "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      {
+        "claim_data": {
+          "metric_name": "participants_ready_for_placement",
+          "metric_value": 41,
+          "unit": "count"
+        },
+        "claim_id": "claim_batch02_source_b",
+        "claim_type": "program_metric",
+        "client_id": "client_demo_truth_pipeline",
+        "contract_version": "v1",
+        "organization_id": "org_shs_batch_02",
+        "permission_context": {
+          "actor_id": "usr_batch02_shs_admin",
+          "actor_type": "human_operator",
+          "client_id": "client_demo_truth_pipeline",
+          "organization_id": "org_shs_batch_02",
+          "permissions": [
+            "bos.identity.read",
+            "bos.registry.read",
+            "bos.governance.read",
+            "bos.reports.read",
+            "bos.tracking.read"
+          ],
+          "program_id": "program_demo_workforce_readiness",
+          "role": "shs_admin"
+        },
+        "program_id": "program_demo_workforce_readiness",
+        "provenance": {
+          "evidence_ref": "evidence_batch02_partner_csv",
+          "owner": "Data Operations",
+          "source_type": "partner_feed"
+        },
+        "received_timestamp": "2026-07-14T04:00:00+00:00",
+        "source_id": "source_batch02_partner_csv",
+        "source_record_id": "partner-csv-row-001",
+        "source_timestamp": "2026-07-13T21:00:00+00:00",
+        "subject_reference": {
+          "metric_name": "participants_ready_for_placement",
+          "program_name": "Demo Workforce Readiness",
+          "subject_type": "program_metric"
+        },
+        "trace_context": {
+          "causation_id": "intake-source-b",
+          "contract_version": "v1",
+          "correlation_id": "corr_batch_02_unified_truth",
+          "event_id": "evt_batch02_intake_b",
+          "parent_event_id": "",
+          "pipeline_schema_version": "shs.truth_pipeline.v1",
+          "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      }
+    ]
+  },
+  "runtime_gate_results": [
+    {
+      "checks": {
+        "audit": true,
+        "consumer": true,
+        "durable_persistence": true,
+        "failure_behavior": true,
+        "identity_scope": true,
+        "integration_test": true,
+        "observability": true,
+        "permissions": true,
+        "producer": true,
+        "retry_or_no_retry": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-003",
+      "runtime_gate_status": "passed",
+      "runtime_wired": true
+    },
+    {
+      "checks": {
+        "audit": true,
+        "consumer": true,
+        "durable_persistence": true,
+        "failure_behavior": true,
+        "identity_scope": true,
+        "integration_test": true,
+        "observability": true,
+        "permissions": true,
+        "producer": true,
+        "retry_or_no_retry": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-004",
+      "runtime_gate_status": "passed",
+      "runtime_wired": true
+    },
+    {
+      "checks": {
+        "audit": true,
+        "consumer": true,
+        "durable_persistence": true,
+        "failure_behavior": true,
+        "identity_scope": true,
+        "integration_test": true,
+        "observability": true,
+        "permissions": true,
+        "producer": true,
+        "retry_or_no_retry": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-005",
+      "runtime_gate_status": "passed",
+      "runtime_wired": true
+    },
+    {
+      "checks": {
+        "audit": true,
+        "consumer": true,
+        "durable_persistence": true,
+        "failure_behavior": true,
+        "identity_scope": true,
+        "integration_test": true,
+        "observability": true,
+        "permissions": true,
+        "producer": true,
+        "retry_or_no_retry": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-006",
+      "runtime_gate_status": "passed",
+      "runtime_wired": true
+    },
+    {
+      "checks": {
+        "audit": true,
+        "consumer": true,
+        "durable_persistence": true,
+        "failure_behavior": true,
+        "identity_scope": true,
+        "integration_test": true,
+        "observability": true,
+        "permissions": true,
+        "producer": true,
+        "retry_or_no_retry": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-007",
+      "runtime_gate_status": "passed",
+      "runtime_wired": true
+    },
+    {
+      "checks": {
+        "audit": true,
+        "consumer": true,
+        "durable_persistence": true,
+        "failure_behavior": true,
+        "identity_scope": true,
+        "integration_test": true,
+        "observability": true,
+        "permissions": true,
+        "producer": true,
+        "retry_or_no_retry": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-008",
+      "runtime_gate_status": "passed",
+      "runtime_wired": true
+    },
+    {
+      "checks": {
+        "audit": true,
+        "consumer": true,
+        "durable_persistence": true,
+        "failure_behavior": true,
+        "identity_scope": true,
+        "integration_test": true,
+        "observability": true,
+        "permissions": true,
+        "producer": true,
+        "retry_or_no_retry": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-009",
+      "runtime_gate_status": "passed",
+      "runtime_wired": true
+    },
+    {
+      "checks": {
+        "audit": true,
+        "consumer": true,
+        "durable_persistence": true,
+        "failure_behavior": true,
+        "identity_scope": true,
+        "integration_test": true,
+        "observability": true,
+        "permissions": true,
+        "producer": true,
+        "retry_or_no_retry": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-010",
+      "runtime_gate_status": "passed",
+      "runtime_wired": true
+    },
+    {
+      "checks": {
+        "audit": true,
+        "consumer": true,
+        "durable_persistence": true,
+        "failure_behavior": true,
+        "identity_scope": true,
+        "integration_test": true,
+        "observability": true,
+        "permissions": true,
+        "producer": true,
+        "retry_or_no_retry": true,
+        "trace": true
+      },
+      "contract_id": "CONTRACT-V1-028",
+      "runtime_gate_status": "passed",
+      "runtime_wired": true
+    }
+  ],
+  "schema_version": "shs.truth_pipeline.store.v1",
+  "source_claims": [
+    {
+      "claim_data": {
+        "metric_name": "participants_ready_for_placement",
+        "metric_value": 42,
+        "unit": "count"
+      },
+      "claim_id": "claim_batch02_source_a",
+      "claim_type": "program_metric",
+      "client_id": "client_demo_truth_pipeline",
+      "contract_version": "v1",
+      "organization_id": "org_shs_batch_02",
+      "permission_context": {
+        "actor_id": "usr_batch02_shs_admin",
+        "actor_type": "human_operator",
+        "client_id": "client_demo_truth_pipeline",
+        "organization_id": "org_shs_batch_02",
+        "permissions": [
+          "bos.identity.read",
+          "bos.registry.read",
+          "bos.governance.read",
+          "bos.reports.read",
+          "bos.tracking.read"
+        ],
+        "program_id": "program_demo_workforce_readiness",
+        "role": "shs_admin"
+      },
+      "program_id": "program_demo_workforce_readiness",
+      "provenance": {
+        "evidence_ref": "evidence_batch02_operator_report",
+        "owner": "Data Operations",
+        "source_type": "operator_record"
+      },
+      "received_timestamp": "2026-07-14T04:00:00+00:00",
+      "source_id": "source_batch02_operator_report",
+      "source_record_id": "operator-report-row-001",
+      "source_timestamp": "2026-07-13T20:00:00+00:00",
+      "subject_reference": {
+        "metric_name": "participants_ready_for_placement",
+        "program_name": "Demo Workforce Readiness",
+        "subject_type": "program_metric"
+      },
+      "trace_context": {
+        "causation_id": "intake-source-a",
+        "contract_version": "v1",
+        "correlation_id": "corr_batch_02_unified_truth",
+        "event_id": "evt_batch02_intake_a",
+        "parent_event_id": "",
+        "pipeline_schema_version": "shs.truth_pipeline.v1",
+        "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "claim_data": {
+        "metric_name": "participants_ready_for_placement",
+        "metric_value": 41,
+        "unit": "count"
+      },
+      "claim_id": "claim_batch02_source_b",
+      "claim_type": "program_metric",
+      "client_id": "client_demo_truth_pipeline",
+      "contract_version": "v1",
+      "organization_id": "org_shs_batch_02",
+      "permission_context": {
+        "actor_id": "usr_batch02_shs_admin",
+        "actor_type": "human_operator",
+        "client_id": "client_demo_truth_pipeline",
+        "organization_id": "org_shs_batch_02",
+        "permissions": [
+          "bos.identity.read",
+          "bos.registry.read",
+          "bos.governance.read",
+          "bos.reports.read",
+          "bos.tracking.read"
+        ],
+        "program_id": "program_demo_workforce_readiness",
+        "role": "shs_admin"
+      },
+      "program_id": "program_demo_workforce_readiness",
+      "provenance": {
+        "evidence_ref": "evidence_batch02_partner_csv",
+        "owner": "Data Operations",
+        "source_type": "partner_feed"
+      },
+      "received_timestamp": "2026-07-14T04:00:00+00:00",
+      "source_id": "source_batch02_partner_csv",
+      "source_record_id": "partner-csv-row-001",
+      "source_timestamp": "2026-07-13T21:00:00+00:00",
+      "subject_reference": {
+        "metric_name": "participants_ready_for_placement",
+        "program_name": "Demo Workforce Readiness",
+        "subject_type": "program_metric"
+      },
+      "trace_context": {
+        "causation_id": "intake-source-b",
+        "contract_version": "v1",
+        "correlation_id": "corr_batch_02_unified_truth",
+        "event_id": "evt_batch02_intake_b",
+        "parent_event_id": "",
+        "pipeline_schema_version": "shs.truth_pipeline.v1",
+        "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    }
+  ],
+  "tracking_events": [
+    {
+      "contract_id": "CONTRACT-V1-003",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "event_type": "truth_pipeline_stage_status",
+      "stage": "source_intake",
+      "status": "complete",
+      "timestamp": "2026-07-20T04:07:06+00:00",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "tracking_event_id": "evt_batch02_source_intake"
+    },
+    {
+      "contract_id": "CONTRACT-V1-003",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "event_type": "truth_pipeline_stage_status",
+      "stage": "aggregation",
+      "status": "complete",
+      "timestamp": "2026-07-20T04:07:06+00:00",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "tracking_event_id": "evt_batch02_tracking_aggregation"
+    },
+    {
+      "contract_id": "CONTRACT-V1-004",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "event_type": "truth_pipeline_stage_status",
+      "stage": "canonical_entity",
+      "status": "complete",
+      "timestamp": "2026-07-20T04:07:06+00:00",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "tracking_event_id": "evt_batch02_tracking_entity"
+    },
+    {
+      "contract_id": "CONTRACT-V1-005",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "event_type": "truth_pipeline_stage_status",
+      "stage": "verification",
+      "status": "complete",
+      "timestamp": "2026-07-20T04:07:06+00:00",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "tracking_event_id": "evt_batch02_tracking_verification"
+    },
+    {
+      "contract_id": "CONTRACT-V1-006",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "event_type": "truth_pipeline_stage_status",
+      "stage": "reconciliation",
+      "status": "complete",
+      "timestamp": "2026-07-20T04:07:06+00:00",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "tracking_event_id": "evt_batch02_tracking_reconciliation"
+    },
+    {
+      "contract_id": "CONTRACT-V1-010",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "event_type": "truth_pipeline_stage_status",
+      "stage": "action",
+      "status": "complete",
+      "timestamp": "2026-07-20T04:07:06+00:00",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "tracking_event_id": "evt_batch02_tracking_action"
+    },
+    {
+      "contract_id": "CONTRACT-V1-008",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "event_type": "truth_pipeline_stage_status",
+      "stage": "recompute",
+      "status": "complete",
+      "timestamp": "2026-07-20T04:07:06+00:00",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "tracking_event_id": "evt_batch02_tracking_recompute"
+    },
+    {
+      "contract_id": "CONTRACT-V1-028",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "event_type": "truth_pipeline_stage_status",
+      "stage": "tracking",
+      "status": "complete",
+      "timestamp": "2026-07-20T04:07:06+00:00",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "tracking_event_id": "evt_batch02_tracking_final"
+    }
+  ],
+  "transition_results": [
+    {
+      "blocker": "",
+      "contract_id": "CONTRACT-V1-003",
+      "evidence": "Source Intake persisted and traced for representative entity.",
+      "last_failure": "",
+      "last_successful_run": "2026-07-20T04:07:06+00:00",
+      "owner_layer_id": "SHS-LAYER-013",
+      "stage": "source_intake",
+      "status": "runtime_wired",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "blocker": "",
+      "contract_id": "CONTRACT-V1-003",
+      "evidence": "Aggregation persisted and traced for representative entity.",
+      "last_failure": "",
+      "last_successful_run": "2026-07-20T04:07:06+00:00",
+      "owner_layer_id": "SHS-LAYER-015",
+      "stage": "aggregation",
+      "status": "runtime_wired",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "blocker": "",
+      "contract_id": "CONTRACT-V1-004",
+      "evidence": "Canonical Entity persisted and traced for representative entity.",
+      "last_failure": "",
+      "last_successful_run": "2026-07-20T04:07:06+00:00",
+      "owner_layer_id": "SHS-LAYER-016",
+      "stage": "canonical_entity",
+      "status": "runtime_wired",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "blocker": "",
+      "contract_id": "CONTRACT-V1-005",
+      "evidence": "Verification persisted and traced for representative entity.",
+      "last_failure": "",
+      "last_successful_run": "2026-07-20T04:07:06+00:00",
+      "owner_layer_id": "SHS-LAYER-018",
+      "stage": "verification",
+      "status": "runtime_wired",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "blocker": "",
+      "contract_id": "CONTRACT-V1-006",
+      "evidence": "Reconciliation persisted and traced for representative entity.",
+      "last_failure": "",
+      "last_successful_run": "2026-07-20T04:07:06+00:00",
+      "owner_layer_id": "SHS-LAYER-021",
+      "stage": "reconciliation",
+      "status": "runtime_wired",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "blocker": "",
+      "contract_id": "CONTRACT-V1-007",
+      "evidence": "Oracle persisted and traced for representative entity.",
+      "last_failure": "",
+      "last_successful_run": "2026-07-20T04:07:06+00:00",
+      "owner_layer_id": "SHS-LAYER-022",
+      "stage": "oracle",
+      "status": "runtime_wired",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "blocker": "",
+      "contract_id": "CONTRACT-V1-009",
+      "evidence": "Truth Package Persistence persisted and traced for representative entity.",
+      "last_failure": "",
+      "last_successful_run": "2026-07-20T04:07:06+00:00",
+      "owner_layer_id": "SHS-LAYER-021",
+      "stage": "truth_persistence",
+      "status": "runtime_wired",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "blocker": "",
+      "contract_id": "CONTRACT-V1-010",
+      "evidence": "Reporting persisted and traced for representative entity.",
+      "last_failure": "",
+      "last_successful_run": "2026-07-20T04:07:06+00:00",
+      "owner_layer_id": "SHS-LAYER-028",
+      "stage": "reporting",
+      "status": "runtime_wired",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "blocker": "",
+      "contract_id": "CONTRACT-V1-010",
+      "evidence": "Action Event persisted and traced for representative entity.",
+      "last_failure": "",
+      "last_successful_run": "2026-07-20T04:07:06+00:00",
+      "owner_layer_id": "SHS-LAYER-007",
+      "stage": "action",
+      "status": "runtime_wired",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "blocker": "",
+      "contract_id": "CONTRACT-V1-008",
+      "evidence": "Oracle Recompute persisted and traced for representative entity.",
+      "last_failure": "",
+      "last_successful_run": "2026-07-20T04:07:06+00:00",
+      "owner_layer_id": "SHS-LAYER-022",
+      "stage": "recompute",
+      "status": "runtime_wired",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "blocker": "",
+      "contract_id": "CONTRACT-V1-028",
+      "evidence": "Tracking and Audit persisted and traced for representative entity.",
+      "last_failure": "",
+      "last_successful_run": "2026-07-20T04:07:06+00:00",
+      "owner_layer_id": "SHS-LAYER-042",
+      "stage": "tracking",
+      "status": "runtime_wired",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "truth_packages": [
+    {
+      "action_event_history": [],
+      "audit_references": [],
+      "canonical_state": {
+        "metric_name": "participants_ready_for_placement",
+        "metric_value": 42,
+        "program_id": "program_demo_workforce_readiness",
+        "unit": "count"
+      },
+      "change_summary": "Initial certification.",
+      "confidence_band": "high",
+      "confidence_score": 86,
+      "contradiction_status": "minor_resolved",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "entity_type": "program_metric",
+      "last_truth_refresh": "2026-07-20T04:07:06+00:00",
+      "prior_truth_package_id": "",
+      "publication_modes": [
+        "internal_review"
+      ],
+      "readiness_status": "limited",
+      "recommended_next_action": "hold_publication_until_operator_review",
+      "schema_version": "shs.truth_package.v1",
+      "source_summary": {
+        "selected_value_source_id": "source_batch02_operator_report",
+        "source_count": 2
+      },
+      "stale_status": "current",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "triggering_event": "initial_oracle_certification",
+      "trust_envelope": {
+        "confidence": 86,
+        "contradiction_status": "minor_resolved",
+        "evidence_sufficiency": "sufficient",
+        "generated_timestamp": "2026-07-20T04:07:06+00:00",
+        "last_refresh": "2026-07-20T04:07:06+00:00",
+        "oracle_version": "shs.oracle.truth_pipeline.v1",
+        "publication_eligibility": [
+          "internal_review"
+        ],
+        "readiness": "limited",
+        "source_count": 2,
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "truth_status": "certified",
+        "unresolved_count": 0,
+        "verification_status": "verified",
+        "warnings": []
+      },
+      "truth_package_id": "truthpkg_batch02_workforce_readiness_v1",
+      "truth_package_version": 1,
+      "truth_status": "certified",
+      "unresolved_items": [],
+      "verification_status": "verified"
+    },
+    {
+      "action_event_history": [],
+      "audit_references": [],
+      "canonical_state": {
+        "metric_name": "participants_ready_for_placement",
+        "metric_value": 42,
+        "program_id": "program_demo_workforce_readiness",
+        "unit": "count"
+      },
+      "change_summary": "Initial certification.",
+      "confidence_band": "high",
+      "confidence_score": 86,
+      "contradiction_status": "minor_resolved",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "entity_type": "program_metric",
+      "last_truth_refresh": "2026-07-20T04:07:06+00:00",
+      "marked_at": "2026-07-20T04:07:06+00:00",
+      "prior_truth_package_id": "",
+      "publication_modes": [
+        "internal_review"
+      ],
+      "readiness_status": "limited",
+      "recommended_next_action": "hold_publication_until_operator_review",
+      "schema_version": "shs.truth_package.v1",
+      "source_summary": {
+        "selected_value_source_id": "source_batch02_operator_report",
+        "source_count": 2
+      },
+      "stale_reason": "mark_review_complete",
+      "stale_status": "stale_due_to_action",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "triggering_event": "initial_oracle_certification",
+      "trust_envelope": {
+        "confidence": 86,
+        "contradiction_status": "minor_resolved",
+        "evidence_sufficiency": "sufficient",
+        "generated_timestamp": "2026-07-20T04:07:06+00:00",
+        "last_refresh": "2026-07-20T04:07:06+00:00",
+        "oracle_version": "shs.oracle.truth_pipeline.v1",
+        "publication_eligibility": [
+          "internal_review"
+        ],
+        "readiness": "limited",
+        "source_count": 2,
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "truth_status": "certified",
+        "unresolved_count": 0,
+        "verification_status": "verified",
+        "warnings": []
+      },
+      "truth_package_id": "truthpkg_batch02_workforce_readiness_v1",
+      "truth_package_version": 1,
+      "truth_status": "certified",
+      "unresolved_items": [],
+      "verification_status": "verified"
+    },
+    {
+      "action_event_history": [
+        {
+          "action_event_id": "action_batch02_mark_review_complete",
+          "action_type": "mark_review_complete",
+          "actor": {
+            "actor_id": "usr_batch02_shs_admin",
+            "actor_type": "human_operator",
+            "client_id": "client_demo_truth_pipeline",
+            "organization_id": "org_shs_batch_02",
+            "permissions": [
+              "bos.identity.read",
+              "bos.registry.read",
+              "bos.governance.read",
+              "bos.reports.read",
+              "bos.tracking.read"
+            ],
+            "program_id": "program_demo_workforce_readiness",
+            "role": "shs_admin"
+          },
+          "audit_context": {
+            "audit_id": "audit_batch02_action_review_complete"
+          },
+          "entity_id": "entity_batch02_program_workforce_readiness",
+          "previous_state_reference": "truthpkg_batch02_workforce_readiness_v1",
+          "reason": "Representative review completed after minor contradiction was resolved.",
+          "requested_change": {
+            "readiness_status": "ready_for_internal_reporting"
+          },
+          "scope": {
+            "client_id": "client_demo_truth_pipeline",
+            "organization_id": "org_shs_batch_02",
+            "program_id": "program_demo_workforce_readiness"
+          },
+          "timestamp": "2026-07-20T04:07:06+00:00",
+          "trace_context": {
+            "causation_id": "action-review-complete",
+            "contract_version": "v1",
+            "correlation_id": "corr_batch_02_unified_truth",
+            "event_id": "evt_batch02_action",
+            "parent_event_id": "",
+            "pipeline_schema_version": "shs.truth_pipeline.v1",
+            "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          "truth_package_id": "truthpkg_batch02_workforce_readiness_v1"
+        }
+      ],
+      "audit_references": [
+        "audit_batch02_action_review_complete"
+      ],
+      "canonical_state": {
+        "metric_name": "participants_ready_for_placement",
+        "metric_value": 42,
+        "program_id": "program_demo_workforce_readiness",
+        "unit": "count"
+      },
+      "change_summary": "Review-complete action cleared stale limited readiness.",
+      "confidence_band": "high",
+      "confidence_score": 91,
+      "contradiction_status": "minor_resolved",
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "entity_type": "program_metric",
+      "last_truth_refresh": "2026-07-20T04:07:06+00:00",
+      "prior_truth_package_id": "truthpkg_batch02_workforce_readiness_v1",
+      "publication_modes": [
+        "internal_report"
+      ],
+      "readiness_status": "ready_for_internal_reporting",
+      "recommended_next_action": "publish_internal_report",
+      "schema_version": "shs.truth_package.v1",
+      "source_summary": {
+        "selected_value_source_id": "source_batch02_operator_report",
+        "source_count": 2
+      },
+      "stale_status": "current",
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "triggering_event": "action_batch02_mark_review_complete",
+      "trust_envelope": {
+        "confidence": 91,
+        "contradiction_status": "minor_resolved",
+        "evidence_sufficiency": "sufficient",
+        "generated_timestamp": "2026-07-20T04:07:06+00:00",
+        "last_refresh": "2026-07-20T04:07:06+00:00",
+        "oracle_version": "shs.oracle.truth_pipeline.v1",
+        "publication_eligibility": [
+          "internal_report"
+        ],
+        "readiness": "ready_for_internal_reporting",
+        "source_count": 2,
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "truth_status": "certified",
+        "unresolved_count": 0,
+        "verification_status": "verified",
+        "warnings": []
+      },
+      "truth_package_id": "truthpkg_batch02_workforce_readiness_v2",
+      "truth_package_version": 2,
+      "truth_status": "certified",
+      "unresolved_items": [],
+      "verification_status": "verified"
+    }
+  ],
+  "updated_at": "2026-07-20T04:07:06+00:00",
+  "verifications": [
+    {
+      "entity_id": "entity_batch02_program_workforce_readiness",
+      "evidence_sufficiency": "sufficient",
+      "missing_evidence": [],
+      "rejected_fields": [],
+      "review_actor": "svc_truth_pipeline_verifier",
+      "review_notes": "Synthetic fixture evidence is complete for the representative chain.",
+      "review_timestamp": "2026-07-20T04:07:06+00:00",
+      "source_trust_tier": "high",
+      "trace_context": {
+        "causation_id": "verification",
+        "contract_version": "v1",
+        "correlation_id": "corr_batch_02_unified_truth",
+        "event_id": "evt_batch02_verification",
+        "parent_event_id": "",
+        "pipeline_schema_version": "shs.truth_pipeline.v1",
+        "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "verification_id": "verify_batch02_workforce_readiness",
+      "verification_status": "verified",
+      "verified_fields": [
+        "metric_name",
+        "metric_value",
+        "unit",
+        "program_id",
+        "client_id"
+      ]
+    }
+  ]
+}

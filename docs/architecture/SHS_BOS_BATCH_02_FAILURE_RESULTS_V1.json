@@ -1,0 +1,265 @@
+{
+  "dead_letter_count": 2,
+  "failure_count": 8,
+  "failures": [
+    {
+      "attempt_history": [
+        {
+          "attempt": 1,
+          "failure_code": "missing_required_field",
+          "status": "failed"
+        }
+      ],
+      "contract_id": "CONTRACT-V1-003",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "created_at": "2026-07-20T03:50:13+00:00",
+      "failure_code": "missing_required_field",
+      "failure_id": "fail_8727a6ddab9fd17a",
+      "reason": "intake validation failure fixture",
+      "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "retryable": false,
+      "tested": true,
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "transition": "source_intake"
+    },
+    {
+      "attempt_history": [
+        {
+          "attempt": 1,
+          "failure_code": "idempotency_conflict",
+          "status": "failed"
+        }
+      ],
+      "contract_id": "CONTRACT-V1-003",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "created_at": "2026-07-20T03:50:13+00:00",
+      "dead_letter": true,
+      "dead_letter_disposition": {
+        "attempt_history": [
+          {
+            "attempt": 1,
+            "failure_code": "idempotency_conflict",
+            "status": "failed"
+          }
+        ],
+        "contract_id": "CONTRACT-V1-003",
+        "correlation_id": "corr_batch_02_unified_truth",
+        "disposition_timestamp": "2026-07-20T03:50:13+00:00",
+        "failure_code": "idempotency_conflict",
+        "last_error_summary": "duplicate intake fixture",
+        "original_request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "replay_eligible": false,
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "failure_code": "idempotency_conflict",
+      "failure_id": "fail_4a2e8016215a3733",
+      "reason": "duplicate intake fixture",
+      "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "retryable": false,
+      "tested": true,
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "transition": "source_intake"
+    },
+    {
+      "attempt_history": [
+        {
+          "attempt": 1,
+          "failure_code": "audit_write_failed",
+          "status": "failed"
+        },
+        {
+          "attempt": 2,
+          "failure_code": "audit_write_failed",
+          "status": "failed"
+        }
+      ],
+      "contract_id": "CONTRACT-V1-009",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "created_at": "2026-07-20T03:50:13+00:00",
+      "failure_code": "audit_write_failed",
+      "failure_id": "fail_6b059b6b170bfa8b",
+      "max_attempts": 2,
+      "reason": "persistence failure fixture",
+      "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "retryable": true,
+      "tested": true,
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "transition": "truth_persistence"
+    },
+    {
+      "attempt_history": [
+        {
+          "attempt": 1,
+          "failure_code": "source_not_ready",
+          "status": "failed"
+        },
+        {
+          "attempt": 2,
+          "failure_code": "source_not_ready",
+          "status": "failed"
+        },
+        {
+          "attempt": 3,
+          "failure_code": "source_not_ready",
+          "status": "failed"
+        }
+      ],
+      "contract_id": "CONTRACT-V1-005",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "created_at": "2026-07-20T03:50:13+00:00",
+      "failure_code": "source_not_ready",
+      "failure_id": "fail_03442495564b76ab",
+      "max_attempts": 3,
+      "reason": "verification insufficiency fixture",
+      "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "retryable": true,
+      "tested": true,
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "transition": "verification"
+    },
+    {
+      "attempt_history": [
+        {
+          "attempt": 1,
+          "failure_code": "stale_input",
+          "status": "failed"
+        },
+        {
+          "attempt": 2,
+          "failure_code": "stale_input",
+          "status": "failed"
+        }
+      ],
+      "contract_id": "CONTRACT-V1-006",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "created_at": "2026-07-20T03:50:13+00:00",
+      "failure_code": "stale_input",
+      "failure_id": "fail_f7486d1136750de0",
+      "max_attempts": 2,
+      "reason": "unresolved reconciliation conflict fixture",
+      "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "retryable": true,
+      "tested": true,
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "transition": "reconciliation"
+    },
+    {
+      "attempt_history": [
+        {
+          "attempt": 1,
+          "failure_code": "oracle_dependency_blocked",
+          "status": "failed"
+        },
+        {
+          "attempt": 2,
+          "failure_code": "oracle_dependency_blocked",
+          "status": "failed"
+        }
+      ],
+      "contract_id": "CONTRACT-V1-007",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "created_at": "2026-07-20T03:50:13+00:00",
+      "failure_code": "oracle_dependency_blocked",
+      "failure_id": "fail_8038f9d007539723",
+      "max_attempts": 2,
+      "reason": "Oracle blocked judgment fixture",
+      "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "retryable": true,
+      "tested": true,
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "transition": "oracle"
+    },
+    {
+      "attempt_history": [
+        {
+          "attempt": 1,
+          "failure_code": "permission_denied",
+          "status": "failed"
+        }
+      ],
+      "contract_id": "CONTRACT-V1-010",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "created_at": "2026-07-20T03:50:13+00:00",
+      "failure_code": "permission_denied",
+      "failure_id": "fail_07697110d4afc000",
+      "reason": "Reporting blocked publication fixture",
+      "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "retryable": false,
+      "tested": true,
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "transition": "reporting"
+    },
+    {
+      "attempt_history": [
+        {
+          "attempt": 1,
+          "failure_code": "downstream_unavailable",
+          "status": "failed"
+        },
+        {
+          "attempt": 2,
+          "failure_code": "downstream_unavailable",
+          "status": "failed"
+        },
+        {
+          "attempt": 3,
+          "failure_code": "downstream_unavailable",
+          "status": "failed"
+        }
+      ],
+      "contract_id": "CONTRACT-V1-008",
+      "correlation_id": "corr_batch_02_unified_truth",
+      "created_at": "2026-07-20T03:50:13+00:00",
+      "dead_letter": true,
+      "dead_letter_disposition": {
+        "attempt_history": [
+          {
+            "attempt": 1,
+            "failure_code": "downstream_unavailable",
+            "status": "failed"
+          },
+          {
+            "attempt": 2,
+            "failure_code": "downstream_unavailable",
+            "status": "failed"
+          },
+          {
+            "attempt": 3,
+            "failure_code": "downstream_unavailable",
+            "status": "failed"
+          }
+        ],
+        "contract_id": "CONTRACT-V1-008",
+        "correlation_id": "corr_batch_02_unified_truth",
+        "disposition_timestamp": "2026-07-20T03:50:13+00:00",
+        "failure_code": "downstream_unavailable",
+        "last_error_summary": "recompute retry exhaustion fixture",
+        "original_request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "replay_eligible": true,
+        "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "failure_code": "downstream_unavailable",
+      "failure_id": "fail_72c24ba0208b2ddb",
+      "max_attempts": 3,
+      "reason": "recompute retry exhaustion fixture",
+      "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "retry_exhausted": true,
+      "retryable": true,
+      "tested": true,
+      "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "transition": "recompute"
+    }
+  ],
+  "metadata": {
+    "batch_id": "BATCH-02",
+    "canonical_api_family": "/api/v1-command-center/truth-pipeline",
+    "canonical_owner_surface": "Executive Command Center",
+    "chain_id": "CHAIN-A-UNIFIED-TRUTH",
+    "generated_at": "2026-07-20T03:50:13+00:00",
+    "package": "Package F",
+    "production_readiness_claim": false,
+    "representative_entity_id": "entity_batch02_program_workforce_readiness",
+    "runtime_completion_claim": "representative_truth_pipeline_runtime_only"
+  },
+  "retryable_count": 5
+}

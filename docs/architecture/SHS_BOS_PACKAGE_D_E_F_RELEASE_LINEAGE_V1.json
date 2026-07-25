@@ -1,0 +1,123 @@
+{
+  "schema_version": "1.0",
+  "artifact": "SHS_BOS_PACKAGE_D_E_F_RELEASE_LINEAGE_V1",
+  "owner": "release governance",
+  "branch": "v1.1-development",
+  "current_head": "bdaecd00d91d9ae4ffdc39d0abfb25e06e6fa07b",
+  "current_integrated_branch_anchor": "bdaecd00d91d9ae4ffdc39d0abfb25e06e6fa07b",
+  "current_head_semantics": "Package F integrated branch anchor before owner-neutral release-governance commit; later governance commits may descend from this anchor.",
+  "lineage": [
+    {
+      "package": "D",
+      "batch": "Batch 00",
+      "commit": "918e25fb8992460a42ce703d1f07c825a72458bc",
+      "role": "release_anchor",
+      "parent": "90d0a5e10d917e9fdc1ea23e122a6db5250135de",
+      "tree": "b8ac80a53d95d13389f7572edb570d1bb3b6fc69",
+      "commit_date": "2026-07-18T15:27:01-04:00",
+      "subject": "Package D: Complete Batch 00 Owner Review Closure and Validator Isolation",
+      "path_classification": {
+        "package_d": 6,
+        "shared_package_d_registry_hunk": 1,
+        "package_e": 0,
+        "package_f": 0,
+        "unknown": 0
+      }
+    },
+    {
+      "package": "E",
+      "batch": "Batch 01",
+      "commit": "17b0458c4a897e5f1b22517f232ee767b4f43e44",
+      "role": "release_anchor",
+      "parent": "918e25fb8992460a42ce703d1f07c825a72458bc",
+      "tree": "caf69b55c448974f4a8574f35bbdc01de9ef358f",
+      "commit_date": "2026-07-19T23:18:35-04:00",
+      "subject": "Package E: Complete Batch 01 Contract Foundations and Validator Isolation",
+      "path_classification": {
+        "package_d": 0,
+        "package_e": 24,
+        "package_f": 0,
+        "shared": 0,
+        "unknown": 0
+      }
+    },
+    {
+      "package": "F",
+      "batch": "Batch 02",
+      "commit": "bdaecd00d91d9ae4ffdc39d0abfb25e06e6fa07b",
+      "role": "release_anchor_and_current_head",
+      "parent": "17b0458c4a897e5f1b22517f232ee767b4f43e44",
+      "tree": "4eed7dd4993a1ada25ee493174cc2dec0059a6ce",
+      "commit_date": "2026-07-20T00:07:51-04:00",
+      "subject": "Package F: Complete Batch 02 Unified Truth Pipeline Runtime Closure",
+      "path_classification": {
+        "package_d": 0,
+        "package_e": 0,
+        "package_f": 29,
+        "shared": 0,
+        "unknown": 0
+      }
+    }
+  ],
+  "ancestry": {
+    "d_ancestor_of_e": true,
+    "e_ancestor_of_f": true,
+    "d_ancestor_of_f": true,
+    "merge_base_d_e": "918e25fb8992460a42ce703d1f07c825a72458bc",
+    "merge_base_e_f": "17b0458c4a897e5f1b22517f232ee767b4f43e44"
+  },
+  "package_e_truth": {
+    "release_commit": "17b0458c4a897e5f1b22517f232ee767b4f43e44",
+    "predecessor_anchor": "918e25fb8992460a42ce703d1f07c825a72458bc",
+    "successor_commit": "bdaecd00d91d9ae4ffdc39d0abfb25e06e6fa07b",
+    "current_integrated_head": "bdaecd00d91d9ae4ffdc39d0abfb25e06e6fa07b",
+    "batch_01_artifacts_unchanged_between_e_and_f": true
+  },
+  "remote_status": {
+    "origin_v1_1_development": "90d0a5e10d917e9fdc1ea23e122a6db5250135de",
+    "package_d_on_origin": false,
+    "package_e_on_origin": false,
+    "package_f_on_origin": false,
+    "posture": "LOCAL_RELEASE_LINEAGE_NOT_YET_PUBLISHED"
+  },
+  "tag_status": {
+    "package_d_tag_exists": false,
+    "package_e_tag_exists": false,
+    "package_f_tag_exists": false,
+    "recommended_tags": [
+      {
+        "tag": "shs-bos-package-d-batch-00-v1",
+        "target": "918e25fb8992460a42ce703d1f07c825a72458bc"
+      },
+      {
+        "tag": "shs-bos-package-e-batch-01-v1",
+        "target": "17b0458c4a897e5f1b22517f232ee767b4f43e44"
+      },
+      {
+        "tag": "shs-bos-package-f-batch-02-v1",
+        "target": "bdaecd00d91d9ae4ffdc39d0abfb25e06e6fa07b"
+      }
+    ],
+    "tags_created": false,
+    "tags_pushed": false
+  },
+  "branch_strategy": {
+    "decision": "NO_RELEASE_BRANCH_REQUIRED",
+    "reason": "Package E is an immutable ancestor of Package F; annotated tags are sufficient unless independent Package E patch maintenance or compliance policy requires a branch.",
+    "optional_package_e_branch": "release/package-e-batch-01-v1",
+    "optional_package_e_branch_target": "17b0458c4a897e5f1b22517f232ee767b4f43e44",
+    "branch_created": false
+  },
+  "stale_certificate_findings": {
+    "package_e_baseline_918e25_claim": "unsupported_stale",
+    "repository_occurrences_corrected": 0,
+    "repository_occurrences_remaining": 0
+  },
+  "release_anchor_lock": {
+    "PACKAGE_D_RELEASE_ANCHOR": "918e25fb8992460a42ce703d1f07c825a72458bc",
+    "PACKAGE_E_RELEASE_ANCHOR": "17b0458c4a897e5f1b22517f232ee767b4f43e44",
+    "PACKAGE_F_RELEASE_ANCHOR": "bdaecd00d91d9ae4ffdc39d0abfb25e06e6fa07b",
+    "CURRENT_INTEGRATED_BRANCH_ANCHOR": "bdaecd00d91d9ae4ffdc39d0abfb25e06e6fa07b"
+  },
+  "history_rewrite_prohibition": true
+}

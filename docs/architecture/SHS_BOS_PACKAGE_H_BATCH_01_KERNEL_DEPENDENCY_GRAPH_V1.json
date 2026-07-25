@@ -1,0 +1,23 @@
+{
+  "artifact": "SHS_BOS_PACKAGE_H_BATCH_01_KERNEL_DEPENDENCY_GRAPH_V1",
+  "package": "PACKAGE_H",
+  "batch": "BATCH_01",
+  "owner_registrations": 0,
+  "runtime_wiring": 0,
+  "dependency_policy": "standard_library_and_extension_kernel_package_only",
+  "external_dependencies": [],
+  "runtime_dependencies": [],
+  "owner_dependencies": [],
+  "module_edges": [
+    {"from": "models", "to": "constants"},
+    {"from": "interfaces", "to": "models"},
+    {"from": "validation", "to": "constants"},
+    {"from": "validation", "to": "models"},
+    {"from": "validation", "to": "versioning"},
+    {"from": "registry", "to": "validation"},
+    {"from": "registry", "to": "models"},
+    {"from": "diagnostics", "to": "validation"},
+    {"from": "events", "to": "constants"},
+    {"from": "serialization", "to": "models"}
+  ]
+}

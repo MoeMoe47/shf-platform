@@ -1,0 +1,96 @@
+from __future__ import annotations
+
+from services.extension_kernel.constants import (
+    APPROVAL_TYPES,
+    CAPABILITY_TYPES,
+    EVENT_TYPES,
+    KERNEL_SCHEMA_VERSION,
+    LIFECYCLE_STATES,
+    TRUST_LEVELS,
+    ExtensionApprovalType,
+    ExtensionCapabilityType,
+    ExtensionEventType,
+    ExtensionLifecycleState,
+    ExtensionTrustLevel,
+)
+from services.extension_kernel.diagnostics import diagnostics_for_manifest
+from services.extension_kernel.errors import (
+    ExtensionKernelCompatibilityError,
+    ExtensionKernelError,
+    ExtensionKernelRegistrationError,
+    ExtensionKernelValidationError,
+)
+from services.extension_kernel.events import define_event, event_catalog
+from services.extension_kernel.lifecycle import allowed_next_states, can_transition, require_transition
+from services.extension_kernel.models import (
+    ExtensionActivationRequest,
+    ExtensionApprovalRequest,
+    ExtensionCapabilityContract,
+    ExtensionConfiguration,
+    ExtensionDependency,
+    ExtensionDescriptor,
+    ExtensionHealth,
+    ExtensionKernelEvent,
+    ExtensionKernelIssue,
+    ExtensionKernelResult,
+    ExtensionManifest,
+    ExtensionMetadata,
+    ExtensionRegistrationRecord,
+    ExtensionRollbackMetadata,
+    ExtensionSecurityContract,
+)
+from services.extension_kernel.registry import InMemoryExtensionRegistry
+from services.extension_kernel.serialization import require_json_object, to_json, to_plain_dict
+from services.extension_kernel.utilities import is_stable_identifier, normalize_labels
+from services.extension_kernel.validation import validate_manifest
+from services.extension_kernel.versioning import SemanticVersion, is_compatible_version, is_deprecated, parse_semantic_version
+
+__all__ = [
+    "APPROVAL_TYPES",
+    "CAPABILITY_TYPES",
+    "EVENT_TYPES",
+    "KERNEL_SCHEMA_VERSION",
+    "LIFECYCLE_STATES",
+    "TRUST_LEVELS",
+    "ExtensionActivationRequest",
+    "ExtensionApprovalRequest",
+    "ExtensionApprovalType",
+    "ExtensionCapabilityContract",
+    "ExtensionCapabilityType",
+    "ExtensionConfiguration",
+    "ExtensionDependency",
+    "ExtensionDescriptor",
+    "ExtensionEventType",
+    "ExtensionHealth",
+    "ExtensionKernelCompatibilityError",
+    "ExtensionKernelError",
+    "ExtensionKernelEvent",
+    "ExtensionKernelIssue",
+    "ExtensionKernelRegistrationError",
+    "ExtensionKernelResult",
+    "ExtensionKernelValidationError",
+    "ExtensionLifecycleState",
+    "ExtensionManifest",
+    "ExtensionMetadata",
+    "ExtensionRegistrationRecord",
+    "ExtensionRollbackMetadata",
+    "ExtensionSecurityContract",
+    "ExtensionTrustLevel",
+    "InMemoryExtensionRegistry",
+    "SemanticVersion",
+    "allowed_next_states",
+    "can_transition",
+    "define_event",
+    "diagnostics_for_manifest",
+    "event_catalog",
+    "is_compatible_version",
+    "is_deprecated",
+    "is_stable_identifier",
+    "normalize_labels",
+    "parse_semantic_version",
+    "require_json_object",
+    "require_transition",
+    "to_json",
+    "to_plain_dict",
+    "validate_manifest",
+]

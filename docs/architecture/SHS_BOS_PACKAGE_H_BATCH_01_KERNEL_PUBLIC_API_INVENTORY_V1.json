@@ -1,0 +1,22 @@
+{
+  "artifact": "SHS_BOS_PACKAGE_H_BATCH_01_KERNEL_PUBLIC_API_INVENTORY_V1",
+  "package": "PACKAGE_H",
+  "batch": "BATCH_01",
+  "owner_registrations": 0,
+  "runtime_wiring": 0,
+  "public_modules": [
+    "services.extension_kernel.constants",
+    "services.extension_kernel.errors",
+    "services.extension_kernel.models",
+    "services.extension_kernel.interfaces",
+    "services.extension_kernel.registry",
+    "services.extension_kernel.lifecycle",
+    "services.extension_kernel.validation",
+    "services.extension_kernel.versioning",
+    "services.extension_kernel.events",
+    "services.extension_kernel.diagnostics",
+    "services.extension_kernel.serialization",
+    "services.extension_kernel.utilities"
+  ],
+  "public_entrypoint": "services.extension_kernel"
+}

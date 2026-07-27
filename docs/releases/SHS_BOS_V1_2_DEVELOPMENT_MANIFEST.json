@@ -9,8 +9,19 @@
   "baseline_status": "CERTIFIED_AND_IMMUTABLE",
   "current_phase": "PHASE_1_INFRASTRUCTURE_COMPLETION",
   "current_mission": "V1_2_INITIALIZATION_AND_MISSION_PLANNING",
+  "completed_mission_history": [
+    {
+      "mission": "V1_2_INITIALIZATION_AND_MISSION_PLANNING",
+      "status": "COMPLETE",
+      "commit": "6df04dc6b14cc148df3ded405f18e01122474466"
+    }
+  ],
+  "active_package_mission": "PACKAGE_H_BATCH_02_BLUEPRINT_AND_RESTORATION_READINESS",
+  "current_mission_type": "PLANNING_ONLY",
   "next_planned_mission": "PACKAGE_H_BATCH_02_BLUEPRINT_AND_RESTORATION_READINESS",
+  "post_blueprint_next_mission": "PACKAGE_H_BATCH_02_IMPLEMENTATION",
   "implementation_authorized": false,
+  "package_h_batch_02_implementation_authorized": false,
   "runtime_changes_authorized": false,
   "archive_restoration_authorized": false,
   "new_layer_authorized": false,
@@ -72,6 +83,15 @@
     "docs/releases/SHS_BOS_V1_2_MISSION_PLAN.md",
     "scripts/check_shs_bos_v1_2_initialization.py"
   ],
+  "current_planning_artifacts": [
+    "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+    "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_OWNERSHIP_MAP.md",
+    "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_RESTORATION_READINESS.md",
+    "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+    "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+  ],
+  "current_validator": "scripts/check_shs_bos_v1_2_package_h_batch_02_blueprint.py",
+  "blueprint_validation_status": "VALIDATED",
   "prohibited_path_classes": [
     "archived candidate files",
     "backend runtime files",

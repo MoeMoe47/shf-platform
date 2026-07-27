@@ -1,0 +1,205 @@
+{
+  "schema_version": "1.0",
+  "product": "SHS BOS",
+  "development_release": "V1.2",
+  "package": "H",
+  "batch": "02",
+  "mission": "PACKAGE_H_BATCH_02_BLUEPRINT_AND_RESTORATION_READINESS",
+  "mission_type": "PLANNING_ONLY",
+  "baseline_branch": "v1.2-development",
+  "baseline_commit": "6df04dc6b14cc148df3ded405f18e01122474466",
+  "package_h_batch_01_tag": "shs-bos-package-h-batch-01-v1",
+  "package_h_batch_01_commit": "185ee97db7cd8c44bdcf97b74e3194862087ce89",
+  "implementation_authorized": false,
+  "runtime_changes_authorized": false,
+  "archive_restoration_authorized": false,
+  "new_layer_authorized": false,
+  "owner_neutrality_required": true,
+  "authoritative_purpose": "Package H Batch 02 exists to define and implement an owner-neutral onboarding contract that validates owner-supplied declarations, detects ownership and authority conflicts, and produces deterministic registration evidence through the certified Batch 01 extension kernel without creating a new registry, command surface, API surface, UI surface, or owner-specific runtime path.",
+  "in_scope": [
+    "owner declaration contract",
+    "deterministic declaration validation",
+    "ownership collision detection",
+    "authority-boundary validation",
+    "dependency declaration validation",
+    "registration acceptance and rejection evidence",
+    "Batch 01 extension-kernel integration",
+    "owner-neutral focused tests",
+    "deterministic Package H Batch 02 validator"
+  ],
+  "out_of_scope": [
+    "FastAPI route",
+    "frontend UI",
+    "Package G runtime closure",
+    "Batch 03 activation logic",
+    "persistent database",
+    "owner-private adapters",
+    "audit runtime",
+    "release tag creation",
+    "archived file restoration"
+  ],
+  "canonical_owners": [
+    {
+      "responsibility": "shared extension registration foundation",
+      "owner": "Package H Batch 01 extension kernel",
+      "batch_02_role": "SHARED_REGISTRATION_FOUNDATION"
+    },
+    {
+      "responsibility": "owner declaration content",
+      "owner": "registering owner",
+      "batch_02_role": "REGISTERING_OWNER"
+    },
+    {
+      "responsibility": "registration validation",
+      "owner": "Package H Batch 02",
+      "batch_02_role": "VALIDATOR"
+    },
+    {
+      "responsibility": "audit runtime",
+      "owner": "Audit and Verification owner",
+      "batch_02_role": "EVIDENCE_CONSUMER"
+    },
+    {
+      "responsibility": "release certification",
+      "owner": "Release governance",
+      "batch_02_role": "RELEASE_CERTIFIER"
+    }
+  ],
+  "candidate_inventory": [
+    {
+      "path": "docs/architecture/SHS_BOS_PACKAGE_H_BATCH_02_OWNER_ONBOARDING_SUMMARY_V1.json",
+      "location": "archive",
+      "disposition": "REUSE_CONCEPT_ONLY"
+    },
+    {
+      "path": "docs/architecture/SHS_BOS_PACKAGE_H_BATCH_02_REGISTERED_OWNER_INVENTORY_V1.json",
+      "location": "archive",
+      "disposition": "REUSE_CONCEPT_ONLY"
+    },
+    {
+      "path": "docs/architecture/SHS_BOS_PACKAGE_H_BATCH_02_DEPENDENCY_REPORT_V1.json",
+      "location": "archive",
+      "disposition": "REFERENCE_ONLY"
+    },
+    {
+      "path": "scripts/check_shs_bos_package_h_batch_02_owner_onboarding.py",
+      "location": "archive",
+      "disposition": "REWRITE_FROM_REQUIREMENTS"
+    },
+    {
+      "path": "services/shf-agent-fabric/services/owner_onboarding/service.py",
+      "location": "archive",
+      "disposition": "UNSAFE_TO_RESTORE"
+    },
+    {
+      "path": "services/shf-agent-fabric/routers/extension_owner_onboarding_routes.py",
+      "location": "archive",
+      "disposition": "UNSAFE_TO_RESTORE"
+    },
+    {
+      "path": "services/shf-agent-fabric/tests/test_owner_onboarding_runtime_closure.py",
+      "location": "archive",
+      "disposition": "REWRITE_FROM_REQUIREMENTS"
+    }
+  ],
+  "restoration_decision": "SELECTIVE_CONCEPTUAL_REUSE_ONLY",
+  "future_authorized_paths": [
+    {
+      "path": "services/shf-agent-fabric/services/extension_kernel/owner_onboarding.py",
+      "classification": "EXPECTED_NEW_PATH"
+    },
+    {
+      "path": "services/shf-agent-fabric/services/extension_kernel/__init__.py",
+      "classification": "EXPECTED_MODIFIED_PATH"
+    },
+    {
+      "path": "services/shf-agent-fabric/services/extension_kernel/models.py",
+      "classification": "EXPECTED_MODIFIED_PATH"
+    },
+    {
+      "path": "services/shf-agent-fabric/services/extension_kernel/validation.py",
+      "classification": "EXPECTED_MODIFIED_PATH"
+    },
+    {
+      "path": "services/shf-agent-fabric/services/extension_kernel/constants.py",
+      "classification": "EXPECTED_MODIFIED_PATH"
+    },
+    {
+      "path": "services/shf-agent-fabric/tests/test_extension_kernel_owner_onboarding.py",
+      "classification": "EXPECTED_NEW_PATH"
+    },
+    {
+      "path": "scripts/check_shs_bos_v1_2_package_h_batch_02_owner_onboarding.py",
+      "classification": "EXPECTED_NEW_PATH"
+    },
+    {
+      "path": "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_IMPLEMENTATION_SUMMARY.md",
+      "classification": "CONDITIONAL_PATH_REQUIRING_EVIDENCE"
+    }
+  ],
+  "future_prohibited_paths": [
+    "services/shf-agent-fabric/services/owner_onboarding/service.py",
+    "services/shf-agent-fabric/services/owner_onboarding/__init__.py",
+    "services/shf-agent-fabric/routers/extension_owner_onboarding_routes.py",
+    "services/shf-agent-fabric/main.py",
+    "src/**",
+    "services/shf-agent-fabric/services/shared_integration/**",
+    "docs/architecture/SHS_BOS_PACKAGE_H_BATCH_02_REGISTERED_OWNER_INVENTORY_V1.*",
+    "docs/architecture/SHS_BOS_PACKAGE_H_BATCH_02_RUNTIME_*"
+  ],
+  "acceptance_criteria": [
+    "PHB02-ARCH-001",
+    "PHB02-ARCH-002",
+    "PHB02-ARCH-003",
+    "PHB02-ARCH-004",
+    "PHB02-ARCH-005",
+    "PHB02-CONTRACT-001",
+    "PHB02-CONTRACT-002",
+    "PHB02-CONTRACT-003",
+    "PHB02-CONTRACT-004",
+    "PHB02-CONTRACT-005",
+    "PHB02-CONTRACT-006",
+    "PHB02-CONTRACT-007",
+    "PHB02-RUNTIME-001",
+    "PHB02-RUNTIME-002",
+    "PHB02-RUNTIME-003",
+    "PHB02-RUNTIME-004",
+    "PHB02-RUNTIME-005",
+    "PHB02-RUNTIME-006",
+    "PHB02-SEC-001",
+    "PHB02-SEC-002",
+    "PHB02-SEC-003",
+    "PHB02-EVID-001",
+    "PHB02-EVID-002",
+    "PHB02-EVID-003",
+    "PHB02-TEST-001",
+    "PHB02-TEST-002",
+    "PHB02-TEST-003",
+    "PHB02-TEST-004",
+    "PHB02-GOV-001",
+    "PHB02-GOV-002",
+    "PHB02-GOV-003",
+    "PHB02-GOV-004",
+    "PHB02-GOV-005"
+  ],
+  "blocking_questions": [],
+  "non_blocking_questions": [
+    "Which durable persistence owner will store accepted registrations after certification?",
+    "Which audit owner will consume onboarding evidence in production?",
+    "Which UI or command surface should show owner-onboarding status?",
+    "Can archived Package G runtime closure be reused later?"
+  ],
+  "validation_commands": [
+    "python3 -m json.tool docs/releases/SHS_BOS_V1_2_DEVELOPMENT_MANIFEST.json",
+    "python3 -m json.tool docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json",
+    "python3 scripts/check_shs_bos_v1_2_initialization.py",
+    "python3 scripts/check_shs_bos_v1_2_package_h_batch_02_blueprint.py",
+    "python3 scripts/check_master_layer_registry.py",
+    "python3 scripts/check_shs_bos_v1_layer_audit.py",
+    "python3 scripts/check_shs_bos_layer_family_architecture.py",
+    "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS=-p no:cacheprovider python3 scripts/check_shs_bos_package_h_batch_01_extension_kernel.py",
+    "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS=-p no:cacheprovider pytest -q -p no:cacheprovider services/shf-agent-fabric/tests/test_extension_kernel_foundation.py"
+  ],
+  "planning_status": "VALIDATED",
+  "next_mission": "PACKAGE_H_BATCH_02_IMPLEMENTATION"
+}

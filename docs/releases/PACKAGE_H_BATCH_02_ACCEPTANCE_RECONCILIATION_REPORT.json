@@ -1,0 +1,502 @@
+{
+  "schema_version": "1.0",
+  "product": "SHS BOS",
+  "development_release": "V1.2",
+  "package": "H",
+  "batch": "02",
+  "artifact": "PACKAGE_H_BATCH_02_ACCEPTANCE_RECONCILIATION_REPORT",
+  "authoritative_sources": [
+    "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+    "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+    "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json",
+    "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.md",
+    "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+    "docs/MASTER_LAYER_REGISTRY.md",
+    "docs/releases/SHS_BOS_V1_2_DEVELOPMENT_MANIFEST.json"
+  ],
+  "summary": {
+    "acceptance_criteria": 33,
+    "evidence_rows": 33,
+    "missing_criteria": 0,
+    "duplicate_criteria": 0,
+    "blueprint_agreement": "PASS",
+    "evidence_matrix_agreement": "PASS",
+    "manifest_agreement": "PASS",
+    "governance_agreement": "PASS",
+    "architecture_agreement": "PASS",
+    "classification_changes": 0,
+    "human_review_required": false,
+    "authoritative_acceptance_criteria_locked": true,
+    "implementation_authorized": false,
+    "classification_counts": {
+      "BLOCKING": 26,
+      "REQUIRED": 7,
+      "ADVISORY": 0
+    },
+    "discrepancy_resolution": "The asserted 22 blocking / 11 required blueprint classification is not present as a row-level classification or count in the authoritative blueprint file. The blueprint delegates binding acceptance to the acceptance criteria artifact, which explicitly defines 26 blocking / 7 required / 0 advisory. The evidence matrix already matches that source."
+  },
+  "rows": [
+    {
+      "criterion_id": "PHB02-ARCH-001",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-ARCH-002",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-ARCH-003",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-ARCH-004",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-ARCH-005",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-CONTRACT-001",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-CONTRACT-002",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "REQUIRED",
+      "authoritative_classification": "REQUIRED",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-CONTRACT-003",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-CONTRACT-004",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-CONTRACT-005",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-CONTRACT-006",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "REQUIRED",
+      "authoritative_classification": "REQUIRED",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-CONTRACT-007",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-RUNTIME-001",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-RUNTIME-002",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-RUNTIME-003",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-RUNTIME-004",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-RUNTIME-005",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-RUNTIME-006",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-SEC-001",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-SEC-002",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-SEC-003",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-EVID-001",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "REQUIRED",
+      "authoritative_classification": "REQUIRED",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-EVID-002",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-EVID-003",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "REQUIRED",
+      "authoritative_classification": "REQUIRED",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-TEST-001",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-TEST-002",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-TEST-003",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-TEST-004",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "REQUIRED",
+      "authoritative_classification": "REQUIRED",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-GOV-001",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-GOV-002",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-GOV-003",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "REQUIRED",
+      "authoritative_classification": "REQUIRED",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-GOV-004",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "BLOCKING",
+      "authoritative_classification": "BLOCKING",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    },
+    {
+      "criterion_id": "PHB02-GOV-005",
+      "blueprint_classification": "NOT_EXPLICIT_IN_BLUEPRINT",
+      "matrix_classification": "REQUIRED",
+      "authoritative_classification": "REQUIRED",
+      "reason": "The row-level classification is explicitly defined in SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md. The blueprint references the acceptance criteria as the binding companion contract but does not assign per-criterion criticality values.",
+      "evidence": [
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_ACCEPTANCE_CRITERIA.md",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_BLUEPRINT.md",
+        "docs/releases/PACKAGE_H_BATCH_02_EVIDENCE_ACCEPTANCE_MATRIX.json",
+        "docs/releases/SHS_BOS_V1_2_PACKAGE_H_BATCH_02_PLAN_MANIFEST.json"
+      ],
+      "status": "UNCHANGED"
+    }
+  ]
+}

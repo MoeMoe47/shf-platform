@@ -39,6 +39,20 @@ from services.extension_kernel.models import (
     ExtensionRollbackMetadata,
     ExtensionSecurityContract,
 )
+from services.extension_kernel.owner_onboarding import (
+    OWNER_ONBOARDING_CONTRACT_VERSION,
+    OWNER_ONBOARDING_EVIDENCE_CONTRACT,
+    OWNER_ONBOARDING_FAILURE_CODES,
+    OWNER_ONBOARDING_REGISTRATION_VERSION,
+    OwnerCapabilityDeclaration,
+    OwnerDependencyDeclaration,
+    OwnerOnboardingDeclaration,
+    manifest_for_owner_declaration,
+    onboarding_evidence,
+    register_owner_declaration,
+    registration_record_for_owner_declaration,
+    validate_owner_declaration,
+)
 from services.extension_kernel.registry import InMemoryExtensionRegistry
 from services.extension_kernel.serialization import require_json_object, to_json, to_plain_dict
 from services.extension_kernel.utilities import is_stable_identifier, normalize_labels
@@ -77,6 +91,13 @@ __all__ = [
     "ExtensionSecurityContract",
     "ExtensionTrustLevel",
     "InMemoryExtensionRegistry",
+    "OWNER_ONBOARDING_CONTRACT_VERSION",
+    "OWNER_ONBOARDING_EVIDENCE_CONTRACT",
+    "OWNER_ONBOARDING_FAILURE_CODES",
+    "OWNER_ONBOARDING_REGISTRATION_VERSION",
+    "OwnerCapabilityDeclaration",
+    "OwnerDependencyDeclaration",
+    "OwnerOnboardingDeclaration",
     "SemanticVersion",
     "allowed_next_states",
     "can_transition",
@@ -86,11 +107,16 @@ __all__ = [
     "is_compatible_version",
     "is_deprecated",
     "is_stable_identifier",
+    "manifest_for_owner_declaration",
     "normalize_labels",
+    "onboarding_evidence",
     "parse_semantic_version",
+    "register_owner_declaration",
+    "registration_record_for_owner_declaration",
     "require_json_object",
     "require_transition",
     "to_json",
     "to_plain_dict",
+    "validate_owner_declaration",
     "validate_manifest",
 ]

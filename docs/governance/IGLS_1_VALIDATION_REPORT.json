@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "standard_id": "IGLS-1",
+  "version": "1.0",
+  "artifact": "IGLS_1_VALIDATION_REPORT",
+  "validation_status": "PASS",
+  "required_commands": [
+    "python3 -m json.tool docs/governance/IGLS_1_IMPLEMENTATION_GOVERNANCE_LIFECYCLE_STANDARD.json",
+    "python3 -m json.tool docs/governance/IGLS_1_GOVERNANCE_LOCK.json",
+    "python3 -m json.tool docs/governance/IGLS_1_ARTIFACT_MANIFEST.json",
+    "python3 scripts/check_igls_1.py",
+    "PYTHONDONTWRITEBYTECODE=1 pytest -q tests/test_igls_1.py",
+    "python3 scripts/check_master_layer_registry.py",
+    "python3 scripts/check_shs_bos_v1_layer_audit.py",
+    "python3 scripts/check_shs_bos_layer_family_architecture.py"
+  ],
+  "runtime_added": false,
+  "api_added": false,
+  "ui_added": false,
+  "persistence_added": false,
+  "duplicate_authority_introduced": false,
+  "duplicate_registry_introduced": false,
+  "results": {
+    "igls_contract_json": "PASS",
+    "igls_governance_lock_json": "PASS",
+    "igls_artifact_manifest_json": "PASS",
+    "igls_validator": "PASS",
+    "focused_tests": "PASS",
+    "master_layer_registry": "PASS",
+    "architecture_governance": "PASS",
+    "repository_build": "NOT_REQUIRED_WITH_EVIDENCE"
+  }
+}

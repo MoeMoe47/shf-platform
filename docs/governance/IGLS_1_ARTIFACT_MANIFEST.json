@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "standard_id": "IGLS-1",
+  "version": "1.0",
+  "artifact": "IGLS_1_ARTIFACT_MANIFEST",
+  "canonical_artifacts": [
+    "docs/governance/IGLS_1_IMPLEMENTATION_GOVERNANCE_LIFECYCLE_STANDARD.md",
+    "docs/governance/IGLS_1_IMPLEMENTATION_GOVERNANCE_LIFECYCLE_STANDARD.json",
+    "docs/governance/IGLS_1_GOVERNANCE_LOCK.md",
+    "docs/governance/IGLS_1_GOVERNANCE_LOCK.json",
+    "docs/governance/IGLS_1_ARTIFACT_MANIFEST.md",
+    "docs/governance/IGLS_1_ARTIFACT_MANIFEST.json",
+    "scripts/check_igls_1.py",
+    "tests/test_igls_1.py"
+  ],
+  "template_directory": "docs/governance/templates",
+  "templates": [
+    "docs/governance/templates/IGLS_1_MISSION_DEFINITION_TEMPLATE.md",
+    "docs/governance/templates/IGLS_1_ARCHITECTURE_CHARTER_TEMPLATE.md",
+    "docs/governance/templates/IGLS_1_BLUEPRINT_TEMPLATE.md",
+    "docs/governance/templates/IGLS_1_ACCEPTANCE_CRITERIA_TEMPLATE.md",
+    "docs/governance/templates/IGLS_1_EVIDENCE_MATRIX_TEMPLATE.md",
+    "docs/governance/templates/IGLS_1_VALIDATION_PLAN_TEMPLATE.md",
+    "docs/governance/templates/IGLS_1_GOVERNANCE_LOCK_TEMPLATE.md",
+    "docs/governance/templates/IGLS_1_IMPLEMENTATION_REPORT_TEMPLATE.md",
+    "docs/governance/templates/IGLS_1_INDEPENDENT_RELEASE_REVIEW_TEMPLATE.md",
+    "docs/governance/templates/IGLS_1_RELEASE_CERTIFICATE_TEMPLATE.md",
+    "docs/governance/templates/IGLS_1_PUBLICATION_CHECKLIST_TEMPLATE.md",
+    "docs/governance/templates/IGLS_1_PUBLICATION_COMPLETION_CERTIFICATE_TEMPLATE.md",
+    "docs/governance/templates/IGLS_1_POST_PUBLICATION_VERIFICATION_TEMPLATE.md",
+    "docs/governance/templates/IGLS_1_NEXT_PACKAGE_AUTHORIZATION_TEMPLATE.md"
+  ],
+  "required_template_count": 14,
+  "compliance_profile": "The IGLS-1 JSON contract is the machine-readable compliance profile; no parallel schema registry is introduced."
+}

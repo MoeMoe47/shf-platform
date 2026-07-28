@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "artifact": "PACKAGE_H_BATCH_03_IGLS_1_INITIATION_AUTHORIZATION",
+  "standard_id": "IGLS-1",
+  "standard_version": "1.0",
+  "package": "H",
+  "batch": "03",
+  "package_h_batch_02_publication_complete": true,
+  "package_h_batch_03_implementation_authorized": false,
+  "next_permitted_phase": "MISSION_DEFINITION",
+  "next_permitted_artifact": "Package H Batch 03 Mission Definition",
+  "prohibited_by_this_authorization": [
+    "Batch 03 architecture",
+    "Batch 03 code",
+    "Batch 03 API",
+    "Batch 03 UI",
+    "Batch 03 runtime",
+    "Batch 03 persistence",
+    "Batch 03 owner adapter"
+  ],
+  "final_status": "PHASE_1_READY"
+}

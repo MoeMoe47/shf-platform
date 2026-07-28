@@ -1,0 +1,532 @@
+{
+  "standard_id": "IGLS-1",
+  "standard_name": "Implementation Governance Lifecycle Standard v1",
+  "version": "1.0",
+  "status": "ADOPTED_PENDING_PUBLICATION",
+  "authority": {
+    "canonical_owner": "Governance Layer",
+    "release_authority": "Release Management",
+    "audit_authority": "Audit & Verification",
+    "registry_authority": "Master Layer Registry",
+    "readiness_authority": "Readiness Gate"
+  },
+  "scope": {
+    "governs": [
+      "engineering lifecycle",
+      "governance-before-implementation",
+      "evidence-backed acceptance",
+      "independent release certification",
+      "repository publication",
+      "post-publication verification"
+    ],
+    "does_not_govern": [
+      "domain runtime ownership",
+      "canonical layer ownership",
+      "command execution",
+      "truth verification",
+      "oracle decisions",
+      "identity credentials",
+      "audit runtime",
+      "readiness runtime",
+      "release tag mutation without authorization"
+    ]
+  },
+  "effective_repository_adoption_point": "d80fc002dc19c4e1e30530ef39c9b21f96a1a7cd",
+  "compatibility": {
+    "model": "project-version-pinned",
+    "compatible_with": [
+      "SHS BOS V1.2",
+      "Package H Batch 02 publication baseline"
+    ],
+    "backward_compatibility": "Existing certified releases remain governed by their original certification artifacts unless explicitly migrated."
+  },
+  "supersession": {
+    "silent_supersession_allowed": false,
+    "successor_standard_requirement": "IGLS-2 requires a separate mission definition, architecture charter, blueprint, acceptance criteria, governance lock, independent certification, and publication.",
+    "amendment_requirement": "IGLS-1 amendments require recorded governance approval and a new validator-compatible versioned contract."
+  },
+  "applicability": {
+    "full_lifecycle_required_for": [
+      "new packages",
+      "new batches",
+      "new infrastructure layers",
+      "major architectural changes",
+      "new runtime authorities",
+      "canonical registry changes",
+      "cross-layer integrations",
+      "security-sensitive changes",
+      "release-critical changes"
+    ],
+    "classification_paths": [
+      "FULL_LIFECYCLE",
+      "REDUCED_LIFECYCLE",
+      "EMERGENCY_CHANGE",
+      "DOCUMENTATION_ONLY_CHANGE",
+      "NON_GOVERNED_TRIVIAL_MAINTENANCE"
+    ],
+    "classification_authority": "Governance Layer with release-authority concurrence for release-critical work",
+    "weaker_path_rule": "No work may self-classify into a weaker lifecycle path without recorded authority."
+  },
+  "phase_order": [
+    "MISSION_DEFINITION",
+    "ARCHITECTURE_CHARTER",
+    "BLUEPRINT",
+    "ACCEPTANCE_AND_EVIDENCE",
+    "GOVERNANCE_LOCK",
+    "GOVERNED_IMPLEMENTATION",
+    "INDEPENDENT_RELEASE_CERTIFICATION",
+    "REPOSITORY_PUBLICATION",
+    "POST_PUBLICATION_VERIFICATION",
+    "NEXT_PACKAGE_AUTHORIZATION"
+  ],
+  "lifecycle_phases": [
+    {
+      "phase_id": "MISSION_DEFINITION",
+      "phase_number": 1,
+      "objective": "Define the mission, package, owner, branch, baseline, scope, non-goals, and stop conditions.",
+      "entry_conditions": [
+        "repository path identified",
+        "branch identified",
+        "baseline candidate identified"
+      ],
+      "required_inputs": [
+        "user authorization",
+        "repository baseline"
+      ],
+      "required_artifacts": [
+        "Mission Definition"
+      ],
+      "required_evidence": [
+        "clean preflight",
+        "baseline commit",
+        "scope statement"
+      ],
+      "responsible_authority": "Governance Layer",
+      "prohibited_actions": [
+        "implementation",
+        "publication",
+        "tag mutation"
+      ],
+      "exit_conditions": [
+        "mission boundary is explicit",
+        "next phase authorized"
+      ],
+      "certification_status": "MISSION_DEFINED",
+      "failure_status": "BLOCKED",
+      "next_permitted_phase": "ARCHITECTURE_CHARTER"
+    },
+    {
+      "phase_id": "ARCHITECTURE_CHARTER",
+      "phase_number": 2,
+      "objective": "Map canonical owners, authorities, dependencies, registries, and non-duplicative architecture boundaries.",
+      "entry_conditions": [
+        "mission definition complete"
+      ],
+      "required_inputs": [
+        "Master Layer Registry",
+        "architecture governance artifacts"
+      ],
+      "required_artifacts": [
+        "Architecture Charter"
+      ],
+      "required_evidence": [
+        "authority map",
+        "duplication analysis"
+      ],
+      "responsible_authority": "Architecture governance",
+      "prohibited_actions": [
+        "new layer creation",
+        "duplicate registry creation",
+        "runtime implementation"
+      ],
+      "exit_conditions": [
+        "canonical ownership mapped",
+        "architecture risks recorded"
+      ],
+      "certification_status": "ARCHITECTURE_CHARTERED",
+      "failure_status": "REQUIRES_REVIEW",
+      "next_permitted_phase": "BLUEPRINT"
+    },
+    {
+      "phase_id": "BLUEPRINT",
+      "phase_number": 3,
+      "objective": "Define the exact design, future mutation boundary, dependencies, out-of-scope work, risks, and stop conditions.",
+      "entry_conditions": [
+        "architecture charter complete"
+      ],
+      "required_inputs": [
+        "mission definition",
+        "architecture charter"
+      ],
+      "required_artifacts": [
+        "Blueprint"
+      ],
+      "required_evidence": [
+        "path authorization map",
+        "hostile review",
+        "risk register"
+      ],
+      "responsible_authority": "Architecture governance",
+      "prohibited_actions": [
+        "implementation",
+        "runtime wiring",
+        "publication"
+      ],
+      "exit_conditions": [
+        "design complete",
+        "implementation remains unauthorized"
+      ],
+      "certification_status": "BLUEPRINT_COMPLETE",
+      "failure_status": "REQUIRES_REVIEW",
+      "next_permitted_phase": "ACCEPTANCE_AND_EVIDENCE"
+    },
+    {
+      "phase_id": "ACCEPTANCE_AND_EVIDENCE",
+      "phase_number": 4,
+      "objective": "Define criterion-specific acceptance and objective evidence requirements.",
+      "entry_conditions": [
+        "blueprint complete"
+      ],
+      "required_inputs": [
+        "blueprint",
+        "canonical owner map"
+      ],
+      "required_artifacts": [
+        "Acceptance Criteria",
+        "Evidence Matrix",
+        "Validation Plan"
+      ],
+      "required_evidence": [
+        "criterion ids",
+        "test requirements",
+        "validator requirements"
+      ],
+      "responsible_authority": "Governance Layer",
+      "prohibited_actions": [
+        "silent criteria merge",
+        "unsupported PASS",
+        "implementation"
+      ],
+      "exit_conditions": [
+        "all blocking and required criteria are uniquely identified",
+        "evidence matrix covers every criterion"
+      ],
+      "certification_status": "ACCEPTANCE_DEFINED",
+      "failure_status": "REQUIRES_REVIEW",
+      "next_permitted_phase": "GOVERNANCE_LOCK"
+    },
+    {
+      "phase_id": "GOVERNANCE_LOCK",
+      "phase_number": 5,
+      "objective": "Lock scope, criteria, authority, implementation boundary, and evidence rules before implementation.",
+      "entry_conditions": [
+        "acceptance and evidence complete"
+      ],
+      "required_inputs": [
+        "blueprint",
+        "acceptance criteria",
+        "evidence matrix"
+      ],
+      "required_artifacts": [
+        "Governance Lock"
+      ],
+      "required_evidence": [
+        "classification reconciliation",
+        "human review status",
+        "implementation authorization status"
+      ],
+      "responsible_authority": "Governance Layer",
+      "prohibited_actions": [
+        "implementation before lock",
+        "silent reclassification",
+        "scope expansion"
+      ],
+      "exit_conditions": [
+        "governance lock complete",
+        "implementation authorization can be separately issued"
+      ],
+      "certification_status": "GOVERNANCE_LOCKED",
+      "failure_status": "REQUIRES_REVIEW",
+      "next_permitted_phase": "GOVERNED_IMPLEMENTATION"
+    },
+    {
+      "phase_id": "GOVERNED_IMPLEMENTATION",
+      "phase_number": 6,
+      "objective": "Implement only the locked scope with continuous evidence updates.",
+      "entry_conditions": [
+        "governance lock complete",
+        "implementation explicitly authorized"
+      ],
+      "required_inputs": [
+        "governance lock",
+        "evidence matrix",
+        "implementation prompt"
+      ],
+      "required_artifacts": [
+        "Implementation Report",
+        "Implementation Validation"
+      ],
+      "required_evidence": [
+        "source diff",
+        "focused tests",
+        "validators",
+        "repository evidence"
+      ],
+      "responsible_authority": "Implementation owner under governance oversight",
+      "prohibited_actions": [
+        "out-of-scope implementation",
+        "untracked evidence claims",
+        "publication"
+      ],
+      "exit_conditions": [
+        "implementation commit created if authorized",
+        "all criteria evaluated"
+      ],
+      "certification_status": "IMPLEMENTATION_COMPLETE",
+      "failure_status": "BLOCKED",
+      "next_permitted_phase": "INDEPENDENT_RELEASE_CERTIFICATION"
+    },
+    {
+      "phase_id": "INDEPENDENT_RELEASE_CERTIFICATION",
+      "phase_number": 7,
+      "objective": "Independently review the exact implementation commit and attempt to disprove publication readiness.",
+      "entry_conditions": [
+        "implementation complete",
+        "exact commit identified"
+      ],
+      "required_inputs": [
+        "implementation commit",
+        "governance artifacts",
+        "validation evidence"
+      ],
+      "required_artifacts": [
+        "Independent Release Review",
+        "Release Certificate"
+      ],
+      "required_evidence": [
+        "commit integrity",
+        "validator results",
+        "test results",
+        "build result"
+      ],
+      "responsible_authority": "Independent Release Certification Board",
+      "prohibited_actions": [
+        "implementation fixes",
+        "amendment",
+        "push"
+      ],
+      "exit_conditions": [
+        "approved for publication or blocked"
+      ],
+      "certification_status": "APPROVED_FOR_PUBLICATION",
+      "failure_status": "CERTIFICATION_BLOCKED",
+      "next_permitted_phase": "REPOSITORY_PUBLICATION"
+    },
+    {
+      "phase_id": "REPOSITORY_PUBLICATION",
+      "phase_number": 8,
+      "objective": "Publish only the exact certified commit using the authorized refspec.",
+      "entry_conditions": [
+        "approved for publication",
+        "remote target identified"
+      ],
+      "required_inputs": [
+        "release certificate",
+        "publication authorization"
+      ],
+      "required_artifacts": [
+        "Publication Checklist",
+        "Publication Completion Certificate"
+      ],
+      "required_evidence": [
+        "push output",
+        "remote head verification"
+      ],
+      "responsible_authority": "Release Management",
+      "prohibited_actions": [
+        "force push",
+        "tag mutation without authorization",
+        "publishing a changed commit"
+      ],
+      "exit_conditions": [
+        "remote head equals local certified commit"
+      ],
+      "certification_status": "PUBLICATION_COMPLETE",
+      "failure_status": "PUBLICATION_BLOCKED",
+      "next_permitted_phase": "POST_PUBLICATION_VERIFICATION"
+    },
+    {
+      "phase_id": "POST_PUBLICATION_VERIFICATION",
+      "phase_number": 9,
+      "objective": "Verify publication integrity, branch synchronization, clean repository state, and absence of unintended refs.",
+      "entry_conditions": [
+        "publication complete"
+      ],
+      "required_inputs": [
+        "publication completion certificate"
+      ],
+      "required_artifacts": [
+        "Post-Publication Verification"
+      ],
+      "required_evidence": [
+        "fetch output",
+        "local remote comparison",
+        "clean worktree",
+        "tag audit"
+      ],
+      "responsible_authority": "Release Management",
+      "prohibited_actions": [
+        "new implementation",
+        "tag mutation",
+        "history rewrite"
+      ],
+      "exit_conditions": [
+        "published state verified"
+      ],
+      "certification_status": "PUBLICATION_VERIFIED",
+      "failure_status": "VERIFICATION_FAILED",
+      "next_permitted_phase": "NEXT_PACKAGE_AUTHORIZATION"
+    },
+    {
+      "phase_id": "NEXT_PACKAGE_AUTHORIZATION",
+      "phase_number": 10,
+      "objective": "Authorize only the next package initiation artifact and prevent premature downstream implementation.",
+      "entry_conditions": [
+        "post-publication verification complete"
+      ],
+      "required_inputs": [
+        "verified publication evidence",
+        "roadmap or governing mission plan"
+      ],
+      "required_artifacts": [
+        "Next Package Authorization"
+      ],
+      "required_evidence": [
+        "next permitted phase",
+        "non-authorization of implementation"
+      ],
+      "responsible_authority": "Governance Layer",
+      "prohibited_actions": [
+        "blueprint creation before mission definition",
+        "implementation",
+        "scope inference"
+      ],
+      "exit_conditions": [
+        "next mission definition may begin"
+      ],
+      "certification_status": "NEXT_PACKAGE_AUTHORIZED",
+      "failure_status": "STOP",
+      "next_permitted_phase": "MISSION_DEFINITION"
+    }
+  ],
+  "gates": [
+    "Initiation Gate",
+    "Architecture Gate",
+    "Design Completeness Gate",
+    "Governance Lock Gate",
+    "Implementation Authorization Gate",
+    "Implementation Completion Gate",
+    "Independent Certification Gate",
+    "Publication Authorization Gate",
+    "Publication Verification Gate",
+    "Next-Package Authorization Gate"
+  ],
+  "acceptance_classifications": {
+    "BLOCKING": {
+      "meaning": "Failure prevents completion or publication.",
+      "authority": "Governance Layer",
+      "completion_effect": "Must pass or block."
+    },
+    "REQUIRED": {
+      "meaning": "Required for completion unless explicitly deferred by governance.",
+      "authority": "Governance Layer",
+      "completion_effect": "Must pass or carry recorded deferral."
+    },
+    "ADVISORY": {
+      "meaning": "Non-blocking improvement guidance.",
+      "authority": "Governance Layer",
+      "completion_effect": "May remain open with recorded rationale."
+    }
+  },
+  "classification_rules": {
+    "conflict_resolution": "The most specific locked acceptance artifact controls unless governance reconciliation supersedes it.",
+    "reconciliation_required": true,
+    "silent_reclassification_allowed": false
+  },
+  "traceability_chain": [
+    "Mission",
+    "Architecture Charter",
+    "Blueprint",
+    "Acceptance Criterion",
+    "Implementation",
+    "Validator",
+    "Test",
+    "Evidence",
+    "Certification",
+    "Publication",
+    "Post-Publication Verification"
+  ],
+  "separation_of_duties": [
+    "Implementers do not independently certify their own work.",
+    "Certification reviews the exact implementation commit.",
+    "Publication uses the exact certified commit.",
+    "A changed commit invalidates prior release certification.",
+    "Publication authority is distinct from implementation authority.",
+    "Exceptions require explicit recorded governance approval."
+  ],
+  "repository_integrity_rules": [
+    "correct branch required",
+    "clean worktree required",
+    "clean index required",
+    "baseline commit captured",
+    "expected mutation scope recorded",
+    "unexpected files investigated",
+    "commit identity recorded",
+    "remote local comparison recorded",
+    "tag discipline enforced",
+    "no stash reset workaround"
+  ],
+  "evidence_integrity_rules": [
+    "objective",
+    "reproducible",
+    "repository grounded",
+    "criterion specific",
+    "commit bound where appropriate",
+    "unsupported PASS prohibited",
+    "traceable to code validators and tests",
+    "preserved through publication"
+  ],
+  "exception_governance": {
+    "authorizer": "Governance Layer with affected canonical owner and release authority when release-critical",
+    "required_justification": true,
+    "scope_and_duration_required": true,
+    "evidence_required": true,
+    "risk_classification_required": true,
+    "expiration_required": true,
+    "remediation_required": true,
+    "implied_exceptions_allowed": false
+  },
+  "status_vocabulary": [
+    "NOT_STARTED",
+    "IN_PROGRESS",
+    "BLOCKED",
+    "REQUIRES_REVIEW",
+    "GOVERNANCE_LOCKED",
+    "IMPLEMENTATION_AUTHORIZED",
+    "IMPLEMENTATION_COMPLETE",
+    "CERTIFICATION_BLOCKED",
+    "APPROVED_FOR_PUBLICATION",
+    "PUBLICATION_COMPLETE",
+    "VERIFICATION_FAILED",
+    "STOP"
+  ],
+  "authority_registration": {
+    "registration_type": "governance_standard",
+    "registered_with": "Governance Layer",
+    "registry_reference": "docs/governance/IGLS_1_GOVERNANCE_LOCK.json",
+    "master_layer_registry_change_required": false,
+    "runtime_layer": false,
+    "duplicate_authority_introduced": false,
+    "duplicate_registry_introduced": false
+  }
+}

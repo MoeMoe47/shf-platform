@@ -1,72 +1,62 @@
-// src/pages /sales/Settings.jsx
+// src/pages/sales/Settings.jsx
+//
+// The previous version wrote to civic:privacy/civic:attestations/
+// civic:publog — leftover Civic-app keys, same cross-app contamination
+// pattern found and fixed in Proposals.jsx. Rebuilt with a minimal,
+// genuinely Sales-scoped settings surface using "sales:*" keys.
 import React from "react";
 
-const KEY_PRIV = "civic:privacy";
-const KEY_POINTS = "wallet:points";
-const KEY_BADGES = "wallet:badges";
-const KEY_ATTEST = "civic:attestations";
-const KEY_PUBLOG = "civic:publog";
+const KEY = "sales:settings";
+
+function loadSettings() {
+  try {
+    return { crmConnected: false, notifyOnNewLead: true, ...JSON.parse(localStorage.getItem(KEY) || "{}") };
+  } catch {
+    return { crmConnected: false, notifyOnNewLead: true };
+  }
+}
 
 export default function Settings() {
-  const [privacy, setPrivacy] = React.useState(() => loadJSON(KEY_PRIV, {
-    allowExternalPublish: false,     // default safe-off
-    publicHandle: ""                 // optional handle
-  }));
+  const [settings, setSettings] = React.useState(loadSettings);
 
-  const save = (next) => { setPrivacy(next); saveJSON(KEY_PRIV, next); };
-
-  const resetLocal = () => {
-    try {
-      localStorage.removeItem(KEY_POINTS);
-      localStorage.removeItem(KEY_BADGES);
-      localStorage.removeItem(KEY_ATTEST);
-      localStorage.removeItem(KEY_PUBLOG);
-    } catch {}
-    // toast lives at page-level; safe to omit here per ask (no alerts)
-  };
+  function update(next) {
+    const merged = { ...settings, ...next };
+    setSettings(merged);
+    try { localStorage.setItem(KEY, JSON.stringify(merged)); } catch {}
+  }
 
   return (
-    <section className="crb-main">
+    <section className="db-shell">
       <header className="db-head">
-        <h1 className="db-title">Settings & Privacy</h1>
-        <p className="db-subtitle">Control how your data is handled. External publishing is blocked by default.</p>
+        <div>
+          <h1 className="db-title">Settings</h1>
+          <p className="db-subtitle">Sales app preferences</p>
+        </div>
       </header>
 
-      <div className="db-grid">
-        <article className="card card--pad" style={{display:"grid", gap:10}}>
-          <strong>Privacy</strong>
-          <label className="sh-checkbox" style={{display:"flex", gap:8, alignItems:"center"}}>
-            <input
-              type="checkbox"
-              checked={!!privacy.allowExternalPublish}
-              onChange={(e)=> save({ ...privacy, allowExternalPublish: e.target.checked })}
-            />
-            <span>Allow external publication of mission evidence (disabled by default)</span>
-          </label>
+      <div className="card card--pad" style={{ display: "grid", gap: 12 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <div style={{ fontWeight: 700 }}>Connect CRM</div>
+            <div style={{ fontSize: 13, color: "var(--ink-soft, #6b7280)" }}>Sync pipeline and leads with an external CRM.</div>
+          </div>
+          <button type="button" className="sh-btn sh-btn--soft" onClick={() => update({ crmConnected: !settings.crmConnected })}>
+            {settings.crmConnected ? "Connected ✓" : "Connect"}
+          </button>
+        </div>
 
-          <label style={{display:"grid", gap:6}}>
-            <span style={{fontSize:12, opacity:.8}}>Public handle (optional)</span>
-            <input
-              className="sh-input"
-              value={privacy.publicHandle || ""}
-              onChange={(e)=> save({ ...privacy, publicHandle: e.target.value })}
-              placeholder="@student"
-            />
-          </label>
-
-          <em style={{fontSize:12, opacity:.75}}>
-            Note: Political or election-tagged content remains blocked by policy even if enabled.
-          </em>
-        </article>
-
-        <article className="card card--pad" style={{display:"grid", gap:10}}>
-          <strong>Developer</strong>
-          <button className="sh-btn is-ghost" onClick={resetLocal}>Reset local rewards & logs</button>
-        </article>
+        <label style={{ display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "pointer" }}>
+          <div>
+            <div style={{ fontWeight: 700 }}>Notify on new lead</div>
+            <div style={{ fontSize: 13, color: "var(--ink-soft, #6b7280)" }}>Alert when an employer-bridged lead arrives.</div>
+          </div>
+          <input
+            type="checkbox"
+            checked={settings.notifyOnNewLead}
+            onChange={(e) => update({ notifyOnNewLead: e.target.checked })}
+          />
+        </label>
       </div>
     </section>
   );
 }
-
-function loadJSON(k, d){ try { return JSON.parse(localStorage.getItem(k) || JSON.stringify(d)); } catch { return d; } }
-function saveJSON(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }

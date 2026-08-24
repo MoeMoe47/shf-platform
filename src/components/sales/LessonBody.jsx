@@ -1,4 +1,4 @@
-// src/components /sales/LessonBody.jsx
+// src/components/sales/LessonBody.jsx
 import React from "react";
 import { useToasts } from "@/context/Toasts.jsx";
 import earn from "@/shared/credit/earn-shim.js";
@@ -11,7 +11,7 @@ import { getVariant } from "@/shared/reading-level/getVariant.js";
 import { seedReview, getDue, scheduleNext } from "@/shared/review/spacedReview.js";
 
 /* ✅ NEW: shared accreditation components/styles */
-import AccreditationPanel from "@/components /sales/AccreditationPanel.jsx";
+import AccreditationPanel from "@/components/sales/AccreditationPanel.jsx";
 import "@/styles/accreditation.css";
 
 /* ------------------------------------------------------------------

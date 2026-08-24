@@ -207,3 +207,29 @@ html[data-rail="collapsed"] .crb-railToggle .lbl-text{ display:none; }
 .shs-map-state .mapboxgl-canvas {
   filter: none !important;
 }
+
+/* ---------------------------------------------------------------
+   Restored Demo suite (FundingCalculator/GrantBrief/CompliancePack/
+   RewardsMarketplace/CaseloadTable/DemoControls, restored from
+   src/_archive/components.sales.20251107-000126/) references a handful
+   of classes that were never defined anywhere in the project. Modeled on
+   the closest existing equivalents already used elsewhere in this file
+   (.sh-btn / .kpi-label / .table) rather than inventing new visual
+   language.
+   --------------------------------------------------------------- */
+.sh-label { display: block; font-size: 12px; color: var(--ink-soft, #6b7280); margin-bottom: 2px; }
+.sh-input {
+  width: 100%; padding: 8px 10px; border: 1px solid var(--ring, #e5e7eb);
+  border-radius: 8px; font-size: 14px; background: #fff; color: var(--ink, #111);
+}
+.sh-hr { border: none; border-top: 1px solid var(--ring, #e5e7eb); margin: 12px 0; }
+.lux-card { background: var(--card, #fff); border: 1px solid var(--ring, #e5e7eb); border-radius: 12px; padding: 14px; }
+.seg { display: flex; gap: 6px; flex-wrap: wrap; }
+.seg-btn {
+  padding: 6px 12px; border-radius: 999px; border: 1px solid var(--ring, #e5e7eb);
+  background: #fff; color: var(--ink, #111); cursor: pointer; font-size: 13px;
+}
+.seg-btn.is-active { background: var(--brand, #111827); color: #fff; border-color: var(--brand, #111827); }
+.tbl { width: 100%; border-collapse: collapse; }
+.tbl th, .tbl td { padding: 8px 10px; border-bottom: 1px solid var(--ring, #e5e7eb); text-align: left; }
+.sh-btn--secondary { background: #fff; color: var(--ink, #111); border: 1px solid var(--ring, #e5e7eb); }

@@ -1,26 +1,30 @@
+// src/layouts/SalesLayout.jsx
+//
+// Rebuilt to use the same .crb-root/.crb-header/.crb-body/.crb-sidebar/
+// .crb-main shell architecture already proven for Civic this session (see
+// src/layouts/CivicLayout.jsx and src/styles/civic-shell.css) — the Sales
+// counterpart, src/styles/sales-shell.css, already defines the identical
+// class family and is already imported by src/entries/sales.main.jsx, it
+// was simply never wired up: the previous SalesLayout used one-off inline
+// styles instead. SalesHeader/SalesSidebar are the current app's own
+// components (SalesSidebar.jsx confirmed real/uncontaminated; SalesHeader
+// replaced separately — see that file's own history note).
 import React from "react";
-import { Outlet, NavLink } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import SalesHeader from "@/components/sales/SalesHeader.jsx";
+import SalesSidebar from "@/components/sales/SalesSidebar.jsx";
 
 export default function SalesLayout() {
   return (
-    <div data-app="sales" style={{minHeight:"100vh",display:"grid",gridTemplateRows:"56px 1fr"}}>
-      <header style={{display:"flex",gap:12,alignItems:"center",padding:"12px 16px",borderBottom:"1px solid #e5e7eb"}}>
-        <strong>SHF SALES</strong>
-        <nav style={{display:"flex",gap:12}}>
-          <NavLink to="/dashboard">Dashboard</NavLink>
-          <NavLink to="/leads">Leads</NavLink>
-          <NavLink to="/pipeline">Pipeline</NavLink>
-        </nav>
+    <div className="crb-root" data-app="sales">
+      <header className="crb-header" role="banner">
+        <SalesHeader />
       </header>
-      <div style={{display:"grid",gridTemplateColumns:"240px 1fr"}}>
-        <aside style={{borderRight:"1px solid #e5e7eb",padding:12}}>
-          <ul style={{listStyle:"none",padding:0,margin:0}}>
-            <li><NavLink to="/dashboard">🏁 Northstar</NavLink></li>
-            <li><NavLink to="/leads">📬 Leads</NavLink></li>
-            <li><NavLink to="/pipeline">🧭 Pipeline</NavLink></li>
-          </ul>
+      <div className="crb-body">
+        <aside className="crb-sidebar" aria-label="Primary">
+          <SalesSidebar />
         </aside>
-        <main id="sales-main" style={{padding:16}}>
+        <main className="crb-main" id="sales-main" role="main" aria-live="polite">
           <Outlet />
         </main>
       </div>

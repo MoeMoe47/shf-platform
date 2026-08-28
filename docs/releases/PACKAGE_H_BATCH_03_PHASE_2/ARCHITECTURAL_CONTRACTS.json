@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "mission_id": "PACKAGE_H_BATCH_03_IGLS_1_PHASE_2",
+  "artifact": "ARCHITECTURAL_CONTRACTS",
+  "contracts_are_conceptual": true,
+  "api_definitions_included": false,
+  "runtime_schemas_included": false,
+  "contracts": [
+    {
+      "name": "Owner Activation Readiness Contract",
+      "responsibilities": ["evaluate readiness concept", "classify missing evidence", "preserve owner neutrality"],
+      "inputs": ["Batch 02 onboarding evidence", "owner-boundary map", "future Phase 3 criteria"],
+      "outputs": ["readiness classification", "blockers", "evidence references"],
+      "ownership": "Package H shared foundation under Governance Layer",
+      "lifecycle": "defined in architecture; detailed in Blueprint; implemented only in a later authorized phase",
+      "validation": "deterministic validator and focused tests in later phases",
+      "failure_behavior": "block on missing owner, missing evidence, owner reach-in, or authority conflict",
+      "governance_rules": ["no self-certification", "no implementation in Phase 2"],
+      "evidence_produced": "readiness evidence expectation",
+      "contract_stability_expectations": "Blueprint may refine detail but may not redefine ownership or boundaries."
+    },
+    {
+      "name": "Neutral Integration Boundary Contract",
+      "responsibilities": ["classify interactions", "reject bypasses", "preserve registry neutrality"],
+      "inputs": ["Master Layer Registry", "owner declaration", "interaction purpose"],
+      "outputs": ["permitted dependency list", "forbidden dependency list", "boundary finding"],
+      "ownership": "Governance Layer referencing Master Layer Registry",
+      "lifecycle": "architecture law inherited by Blueprint",
+      "validation": "no duplicate registry or duplicate ownership",
+      "failure_behavior": "block unregistered integration or cross-layer ownership",
+      "governance_rules": ["registry remains canonical"],
+      "evidence_produced": "boundary comparison",
+      "contract_stability_expectations": "No future phase may create a parallel registry."
+    },
+    {
+      "name": "Evidence Trust Envelope Contract",
+      "responsibilities": ["bind evidence to criteria", "support independent certification", "record validator linkage"],
+      "inputs": ["criteria", "validator result", "test result", "owner-boundary evidence"],
+      "outputs": ["certification-ready evidence packet"],
+      "ownership": "Audit & Verification with Governance Layer",
+      "lifecycle": "evidence expectation now; artifact shape later",
+      "validation": "evidence must be objective and reproducible",
+      "failure_behavior": "unsupported PASS is blocking",
+      "governance_rules": ["evidence before trust"],
+      "evidence_produced": "certification evidence",
+      "contract_stability_expectations": "Future implementation may not weaken evidence requirements."
+    }
+  ]
+}

@@ -6,6 +6,14 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "start": "node dist/server.js",
+    "worker:trusted-reporting": "tsx src/domain/trusted-reporting/worker.ts",
+    "db:migrate:status": "tsx src/db/migrate.ts status",
+    "db:migrate:plan": "tsx src/db/migrate.ts plan",
+    "db:migrate": "tsx src/db/migrate.ts up",
+    "db:migrate:baseline": "tsx src/db/migrate.ts baseline",
+    "lifecycle:status": "tsx src/db/lifecycle.ts status",
+    "lifecycle:plan": "tsx src/db/lifecycle.ts plan",
+    "lifecycle:cleanup": "tsx src/db/lifecycle.ts cleanup --confirm",
     "typecheck": "tsc --noEmit",
     "build": "tsc -p tsconfig.json"
   },

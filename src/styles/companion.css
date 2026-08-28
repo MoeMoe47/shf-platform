@@ -1,0 +1,289 @@
+/* src/styles/companion.css
+   SHF Learning Companion ("Brainiact") — shared visual layer, loaded once
+   via src/entries/RootProviders.jsx so both Career and Curriculum get
+   identical styling without duplicating it per app. Uses the same base
+   tokens as the rest of the app (--card/--ring/--ink/--radius from
+   src/index.css) rather than a parallel palette, and reuses the existing
+   z-index/mobile-offset conventions established for the character it
+   replaces (.coach-fab) — see src/companion/companionConfig.js for the
+   documented z-index policy. */
+
+.brainiact-root {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: var(--z-ask-coach, 90);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+@media (max-width: 1023.98px) {
+  .brainiact-root {
+    bottom: calc(78px + env(safe-area-inset-bottom, 0px));
+    right: calc(14px + env(safe-area-inset-right, 0px));
+  }
+}
+
+/* ===========================================================
+   Collapsed state — the character itself
+   =========================================================== */
+.brainiact-fab {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  border-radius: 999px;
+  border: none;
+  background: var(--card, #fff);
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.22);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  padding: 0;
+}
+.brainiact-fab:hover { box-shadow: 0 12px 32px rgba(15, 23, 42, 0.28); }
+.brainiact-fab:focus-visible {
+  outline: 2px solid var(--orange, #ff4f00);
+  outline-offset: 3px;
+}
+@media (max-width: 480px) {
+  .brainiact-fab { width: 52px; height: 52px; }
+}
+
+.brainiact-faceChip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  right: 0;
+  max-width: 160px;
+  background: var(--slate, #0f172a);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  padding: 6px 10px;
+  border-radius: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}
+
+/* ===========================================================
+   Idle motion — subtle AND occasional, not constant. Deliberately not an
+   `infinite` CSS loop: besides the spec's own "occasional glance... do not
+   make it bounce constantly" guidance, a perpetually-animating transform
+   on the clickable element also fails real click-actionability checks
+   (confirmed via Playwright: `.brainiact-fab` never reported as "stable"
+   while an infinite keyframe ran, causing every click to time out) —
+   fixing the flakiness and following the spec's own motion guidance
+   turned out to be the same fix. Brainiact.jsx schedules a single short
+   `data-breathe="1"` pulse every ~7-9s (only while idle, visible, and
+   motion isn't reduced) instead; the element is static the rest of the
+   time. Paused entirely under reduced motion (system OR the companion's
+   own in-app toggle, via [data-motion="reduced"] — the OS-level case
+   additionally gets zeroed for free by index.css's global
+   `@media (prefers-reduced-motion: reduce) * { animation-duration: 0.01ms
+   !important }` rule).
+   =========================================================== */
+.brainiact-root[data-motion="full"] .brainiact-fab[data-breathe="1"] {
+  animation: brainiact-breathe 1.3s ease-in-out 1;
+}
+@keyframes brainiact-breathe {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-2px) scale(1.015); }
+}
+.brainiact-root[data-motion="reduced"] .brainiact-fab { animation: none; }
+
+/* ===========================================================
+   Celebration motion tokens — modest, transform-only, capped duration
+   (see celebrationRegistry.js durationMs). Never distorts the character's
+   internal proportions, only the whole button's position/scale/rotation.
+   =========================================================== */
+.brainiact-root[data-motion="full"] .brainiact-fab[data-anim="fistPump"] { animation: brainiact-fistPump 0.5s ease-out 2; }
+.brainiact-root[data-motion="full"] .brainiact-fab[data-anim="miniDance"] { animation: brainiact-miniDance 0.5s ease-in-out 3; }
+.brainiact-root[data-motion="full"] .brainiact-fab[data-anim="victoryDance"],
+.brainiact-root[data-motion="full"] .brainiact-fab[data-anim="celebrate"],
+.brainiact-root[data-motion="full"] .brainiact-fab[data-anim="projectVictory"] { animation: brainiact-celebrate 0.6s ease-in-out 3; }
+.brainiact-root[data-motion="full"] .brainiact-fab[data-anim="majorCelebration"] { animation: brainiact-major 0.7s ease-in-out 4; }
+
+@keyframes brainiact-fistPump { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes brainiact-miniDance { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-6deg); } 75% { transform: rotate(6deg); } }
+@keyframes brainiact-celebrate { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-8px) scale(1.08); } }
+@keyframes brainiact-major { 0%, 100% { transform: translateY(0) scale(1) rotate(0deg); } 30% { transform: translateY(-10px) scale(1.12) rotate(-5deg); } 60% { transform: translateY(-4px) scale(1.08) rotate(5deg); } }
+
+/* Under reduced motion, celebrations still communicate via the face
+   message text (see Brainiact.jsx) — the bouncy keyframes above are simply
+   skipped rather than the celebration being suppressed entirely, per
+   "do not remove functionality under reduced-motion mode". */
+
+/* ===========================================================
+   Expanded state — small institutional panel, not a chatbot window.
+   =========================================================== */
+.brainiact-bubble {
+  width: min(300px, calc(100vw - 32px));
+  max-height: min(420px, calc(100vh - 120px));
+  overflow-y: auto;
+  background: var(--card, #fff);
+  border: 1px solid var(--ring, #e5e7eb);
+  border-radius: var(--radius, 14px);
+  box-shadow: 0 20px 48px rgba(15, 23, 42, 0.22);
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+}
+.brainiact-bubbleHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.brainiact-bubbleTitle { font-size: 14px; font-weight: 800; color: var(--ink, #0f172a); }
+.brainiact-iconBtn {
+  width: 32px; height: 32px; min-width: 32px; min-height: 32px;
+  border-radius: 8px; border: 1px solid transparent; background: transparent;
+  color: var(--ink, #0f172a); cursor: pointer; font-size: 13px;
+}
+.brainiact-iconBtn:hover { background: rgba(0, 0, 0, 0.05); }
+
+.brainiact-faceMessage {
+  margin: 0;
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--ink, #0f172a);
+}
+
+.brainiact-quickActions,
+.brainiact-hintActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.brainiact-btn {
+  min-height: 36px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--ring, #e5e7eb);
+  background: var(--orange, #ff4f00);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+}
+.brainiact-btn--quiet { background: #fff; color: var(--ink, #0f172a); }
+.brainiact-btn:focus-visible { outline: 2px solid var(--orange, #ff4f00); outline-offset: 2px; }
+
+.brainiact-hintPanel { display: grid; gap: 8px; }
+.brainiact-hintLevel { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-soft, #6b7280); }
+.brainiact-hintText { margin: 0; font-size: 13px; color: var(--ink, #0f172a); }
+.brainiact-a11yAlt { font-size: 12px; color: var(--ink-soft, #6b7280); }
+.brainiact-a11yAlt summary { cursor: pointer; }
+.brainiact-a11yAlt ul { margin: 6px 0 0; padding-left: 18px; }
+
+.brainiact-settingsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--ring, #e5e7eb);
+}
+.brainiact-toggle {
+  min-height: 32px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--ring, #e5e7eb);
+  background: #fff;
+  color: var(--ink-soft, #6b7280);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.brainiact-toggle[aria-pressed="true"] {
+  border-color: var(--orange, #ff4f00);
+  color: var(--orange, #ff4f00);
+  background: #fff7f2;
+}
+
+/* ===========================================================
+   Hidden state — a small, low-weight reveal affordance. Hiding the
+   character must never hide the underlying capability entirely.
+   =========================================================== */
+.brainiact-revealBtn {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: var(--z-ask-coach, 90);
+  min-height: 36px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--ring, #e5e7eb);
+  background: var(--card, #fff);
+  color: var(--ink-soft, #6b7280);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
+}
+@media (max-width: 1023.98px) {
+  .brainiact-revealBtn {
+    bottom: calc(78px + env(safe-area-inset-bottom, 0px));
+    right: calc(14px + env(safe-area-inset-right, 0px));
+  }
+}
+
+/* Suppressed on the Resume Builder workspace route — same body-attribute
+   mechanism the old .coach-fab used (see src/pages/ResumeBuilder.jsx),
+   unchanged; the equivalent non-floating reachable entry there is the
+   Career header's Coach button (CareerLayout.jsx), which now calls
+   companion.openCoach() directly.
+
+   Also suppressed across the whole public Silicon Heartland Universe
+   (see useSuppressCompanion() in src/pages/universe-v1/UniverseApp.jsx) —
+   Brainiact is a Career/Curriculum learning companion, not a public
+   Universe destination, and has no equivalent reachable entry point
+   there (none was added — the Universe has no Coach feature to expose). */
+body[data-coach-suppress~="resume-workspace"] .brainiact-root,
+body[data-coach-suppress~="resume-workspace"] .brainiact-revealBtn,
+body[data-coach-suppress~="universe-public"] .brainiact-root,
+body[data-coach-suppress~="universe-public"] .brainiact-revealBtn {
+  display: none;
+}
+
+/* ===========================================================
+   Dark mode — gated identically to the rest of the shared shell (only
+   "painted" where a page has real dark support today: Resume Builder,
+   and — Desktop Shell Correction pass — the whole Curriculum app, which
+   now has real dark styling throughout; see markDarkScope("curriculum",
+   true) in CurriculumLayout.jsx and src/utils/curriculumTheme.js).
+   =========================================================== */
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .brainiact-fab,
+html[data-theme="dark"] body[data-dark-scope~="curriculum"] .brainiact-fab {
+  background: #1E222A;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .brainiact-bubble,
+html[data-theme="dark"] body[data-dark-scope~="curriculum"] .brainiact-bubble {
+  background: #1E222A;
+  border-color: #343944;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.55);
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .brainiact-bubbleTitle,
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .brainiact-faceMessage,
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .brainiact-hintText,
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .brainiact-iconBtn,
+html[data-theme="dark"] body[data-dark-scope~="curriculum"] .brainiact-bubbleTitle,
+html[data-theme="dark"] body[data-dark-scope~="curriculum"] .brainiact-faceMessage,
+html[data-theme="dark"] body[data-dark-scope~="curriculum"] .brainiact-hintText,
+html[data-theme="dark"] body[data-dark-scope~="curriculum"] .brainiact-iconBtn {
+  color: #F5F3EE;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .brainiact-btn--quiet,
+html[data-theme="dark"] body[data-dark-scope~="curriculum"] .brainiact-btn--quiet {
+  background: #262B34; color: #F5F3EE; border-color: #343944;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .brainiact-toggle,
+html[data-theme="dark"] body[data-dark-scope~="curriculum"] .brainiact-toggle {
+  background: #262B34; border-color: #343944; color: #AEB4BF;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .brainiact-revealBtn,
+html[data-theme="dark"] body[data-dark-scope~="curriculum"] .brainiact-revealBtn {
+  background: #1E222A; border-color: #343944; color: #AEB4BF;
+}

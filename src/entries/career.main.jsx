@@ -4,12 +4,10 @@ import { createRoot } from "react-dom/client";
 window.addEventListener("shf:mode", () => {
   window.location.reload();
 });
-window.addEventListener("shf:mode", () => {
-  window.location.reload();
-});
 import { HashRouter } from "react-router-dom";
 
 import RootProviders from "@/entries/RootProviders.jsx";
+import { CareerRoutes } from "@/router/CareerRoutes.jsx";
 
 // Shell + theme styles so the career app looks like the rest of SHF
 import "@/styles/theme-shf.css";
@@ -17,7 +15,16 @@ import "@/styles/_bg-guard.css";
 import "@/styles/unified-shell.css";
 import "@/styles/shell.css";
 import "@/styles/career-shell.css";
+// KpiCard.jsx's real design (used by Credit Report + AttendanceCard) — was
+// never loaded for Career (only debt/ledger/sales/employer/treasury
+// imported it), so cards fell back to shell.css's bare-minimum .kpi rules.
+// Imported before util-wash.css so a washClass's background (added by
+// util-wash.css's .wash rule) wins the cascade over kpi.css's own
+// .kpi{background:...} when both classes are present on the same card.
+import "@/styles/kpi.css";
 import "@/styles/util-wash.css";
+import "@/styles/student-portfolio.css";
+import "@/styles/student-portfolio-dark.css";
 
 const APP = "career";
 
@@ -46,21 +53,13 @@ function getMount(id = "root", appAttrValue = APP) {
 function bootstrap() {
   const mount = getMount("root", APP);
   const root = createRoot(mount);
-window.addEventListener("shf:mode", () => {
-  window.location.reload();
-});
-window.addEventListener("shf:mode", () => {
-  window.location.reload();
-});
 
   root.render(
     <React.StrictMode>
       <RootProviders appScope={APP}>
         <HashRouter>
         <div className="shf-shell">
-          <div className="app-shell">
-            
-          </div>
+          <CareerRoutes />
         </div>
       </HashRouter>
       </RootProviders>

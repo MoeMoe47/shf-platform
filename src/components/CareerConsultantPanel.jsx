@@ -16,7 +16,19 @@ export default function CareerConsultantPanel({
   studentProfile = {}, // { goals, location, timeLimitWeeks, hasTransportation, ... }
   compact = false,
   roleOverride = null, // optional local override if you don't want to use context role
+  title = "AI Career Consultant", // additive, backward-compatible: lets a caller
+                                   // relabel the eyebrow text (e.g. "Coach Mode")
+                                   // without changing default behavior elsewhere
+  showNotes,                      // additive: previously tied 1:1 to `compact`
+                                   // (role picker AND notes shared one flag).
+                                   // Defaults to the exact old behavior below
+                                   // when unspecified, but lets a caller show
+                                   // the role picker without the inline notes
+                                   // (e.g. when notes are mounted separately
+                                   // elsewhere via the SharedCoachingNotes
+                                   // named export, as CareerPathways.jsx does).
 }) {
+  const shouldShowNotes = showNotes === undefined ? !compact : showNotes;
   const { role: ctxRole } = useRole() || { role: "student" };
   const userId =
     typeof window !== "undefined" && window.__user?.id ? window.__user.id : "anon";
@@ -47,7 +59,7 @@ export default function CareerConsultantPanel({
         style={{ justifyContent: "space-between", alignItems: "baseline", gap: 8 }}
       >
         <div>
-          <div className="subtle" style={{ margin: 0 }}>AI Career Consultant</div>
+          <div className="subtle" style={{ margin: 0 }}>{title}</div>
           <h3 className="h3" style={{ margin: 0 }}>{pathway?.title || "Explore pathways"}</h3>
           {pathway?.cluster ? <div className="subtle">{pathway.cluster}</div> : null}
         </div>
@@ -79,7 +91,7 @@ export default function CareerConsultantPanel({
       </div>
 
       {/* Shared notes feed (parents • coaches • instructors) */}
-      {!compact && <SharedCoachingNotes pathwayId={pathway?.id} />}
+      {shouldShowNotes && <SharedCoachingNotes pathwayId={pathway?.id} />}
     </section>
   );
 }
@@ -172,7 +184,10 @@ function makeStarters(role, pathway) {
 
 /* ---------------- shared notes ---------------- */
 
-function SharedCoachingNotes({ pathwayId }) {
+// Named export (additive) so the Team Workspace tab layout can mount just
+// the notes surface on its own — same component, same storage key, same
+// behavior as when it renders inline below the chat (compact=false).
+export function SharedCoachingNotes({ pathwayId }) {
   const key = `career:notes:${pathwayId || "unknown"}`;
   const { role } = useRole() || { role: "member" };
   const userId =

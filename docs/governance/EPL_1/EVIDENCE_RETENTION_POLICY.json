@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "standard_id": "EPL-1",
+  "artifact": "EVIDENCE_RETENTION_POLICY",
+  "constitutional_evidence_deletable": false,
+  "certified_evidence_mutable": false,
+  "supersession_requires_governance": true,
+  "retention_rules": [
+    "Never overwrite evidence",
+    "Never mutate certified evidence",
+    "Never delete constitutional evidence",
+    "Only supersede through constitutional governance"
+  ]
+}

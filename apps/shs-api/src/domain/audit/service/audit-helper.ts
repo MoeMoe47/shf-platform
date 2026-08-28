@@ -14,8 +14,8 @@ export async function writeAuditEvent(input: {
   reason_text?: string | null;
   correlation_id: string;
   source_channel: string;
-}) {
-  const res = await query(
+}, executor: any = { query }) {
+  const res = await executor.query(
     `INSERT INTO audit_events (
       audit_event_id, organization_id, actor_user_id, actor_system_id,
       target_object_type, target_object_id, action_type,

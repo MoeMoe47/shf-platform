@@ -1,5 +1,192 @@
 
 
+/* ===========================================================
+   Shared stacking-order tokens (Career app).
+   Deterministic layer order, low to high. Every overlay in the Career
+   shell and Resume Builder should reference one of these instead of an
+   ad-hoc number, so relative order stays correct as surfaces are added.
+   Fixed a real bug while introducing this: Ask Coach (previously z-index
+   105, hardcoded) rendered ABOVE Resume Builder's Export/More dropdown
+   menus (previously z-index 60) — an open menu could be visually covered
+   by the fab. Coach now sits below menus/scrims/drawers/dialogs.
+   =========================================================== */
+:root {
+  --z-content: 1;
+  --z-sticky-actions: 300;   /* sticky mobile header/tabs/action bar */
+  --z-ask-coach: 400;
+  --z-menu: 500;             /* dropdown menus / popovers */
+  --z-scrim: 600;
+  --z-nav-drawer: 700;       /* shared shell mobile navigation drawer */
+  --z-ci-drawer: 800;        /* Career Intelligence overlay drawer */
+  --z-dialog: 900;           /* modals, mobile bottom sheets */
+  --z-notification: 1000;
+
+  /* Career sidebar layout tokens. Desktop only (>=1024px) — below that,
+     the existing mobile drawer rule at the bottom of this file takes over
+     with its own explicit width, and these tokens don't apply there. */
+  --career-sidebar-expanded-width: 250px;
+  --career-sidebar-collapsed-width: 76px;
+}
+
+/* ===========================================================
+   Desktop sidebar width + collapse (Career only).
+   ROOT CAUSE (confirmed before writing this): shell.css's `.sh-sidebar`
+   has no width/flex-basis of its own — as a plain flex item inside
+   `.sh-shellBody{display:flex}` it sizes to its content's intrinsic width
+   (~330-380px once the milestone card + wallet pill render at full size),
+   and no rule anywhere targeted `.sh-sidebar.is-collapsed`, so toggling
+   the header button changed only the class name, never the layout column.
+   `.sh-main{flex:1}` then just absorbed whatever width was left. Fixed
+   here by giving the sidebar an explicit flex-basis that the collapsed
+   class overrides, and letting `.sh-main` claim the rest via flex:1 with
+   min-width:0 (without that, a flex child's default min-width:auto can
+   itself force the row wider than the viewport — the other half of "no
+   horizontal overflow"). Scoped to [data-app="career"]: shell.css's bare
+   .sh-sidebar/.sh-main are shared with Curriculum, which isn't part of
+   this repair and must render exactly as before. */
+@media (min-width: 1024px) {
+  [data-app="career"] .sh-sidebar {
+    flex: 0 0 var(--career-sidebar-expanded-width);
+    width: var(--career-sidebar-expanded-width);
+    max-width: var(--career-sidebar-expanded-width);
+    overflow-x: hidden;
+    transition: flex-basis 0.18s ease, width 0.18s ease;
+  }
+  [data-app="career"] .sh-sidebar.is-collapsed {
+    flex-basis: var(--career-sidebar-collapsed-width);
+    width: var(--career-sidebar-collapsed-width);
+    max-width: var(--career-sidebar-collapsed-width);
+  }
+  [data-app="career"] .sh-main {
+    flex: 1 1 auto;
+    min-width: 0; /* let main actually shrink/grow instead of forcing overflow */
+  }
+}
+
+/* Safe truncation at the slim 250px width — applies at every size, not
+   just collapsed, per "long text must wrap or truncate safely". */
+[data-app="career"] .car-link {
+  min-width: 0; /* grid items default to min-width:auto, which silently
+                    defeats text-overflow:ellipsis below */
+}
+[data-app="career"] .car-linkLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+[data-app="career"] .car-milestoneSub {
+  overflow-wrap: break-word;
+}
+
+/* ---------------------------------------------------------
+   Collapsed desktop rail (icon-only). Labels are visually hidden with the
+   standard clip technique (NOT display:none) so every link keeps its full
+   accessible name — only display:none would strip it from the a11y tree.
+   Tooltip technique (data-label + ::after, shown on hover AND
+   :focus-visible) mirrors the one other proven collapsed-rail pattern
+   already in this codebase (shell.css's `.app-root.is-collapsed
+   .app-nav__item[data-label]`), reused rather than re-invented.
+--------------------------------------------------------- */
+@media (min-width: 1024px) {
+  [data-app="career"] .sh-sidebar.is-collapsed .car-nav {
+    padding: 12px 8px;
+  }
+  [data-app="career"] .sh-sidebar.is-collapsed .car-linkLabel,
+  [data-app="career"] .sh-sidebar.is-collapsed .car-navTitle,
+  [data-app="career"] .sh-sidebar.is-collapsed .car-milestoneBody,
+  [data-app="career"] .sh-sidebar.is-collapsed .car-moreLabel {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  }
+  [data-app="career"] .sh-sidebar.is-collapsed .car-link {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    padding: 10px 6px;
+    position: relative;
+  }
+  [data-app="career"] .sh-sidebar.is-collapsed .car-linkIcon {
+    width: auto;
+    font-size: 18px;
+  }
+  [data-app="career"] .sh-sidebar.is-collapsed .car-link[data-label]::after {
+    content: attr(data-label);
+    position: absolute; left: 100%; top: 50%; transform: translateY(-50%);
+    margin-left: 8px; white-space: nowrap; background: #111827; color: #fff;
+    border-radius: 8px; padding: 6px 8px; font-size: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: var(--z-menu, 500);
+    pointer-events: none;
+  }
+  [data-app="career"] .sh-sidebar.is-collapsed .car-link[data-label]:hover::after,
+  [data-app="career"] .sh-sidebar.is-collapsed .car-link[data-label]:focus-visible::after {
+    opacity: 1; visibility: visible; transform: translate(4px, -50%);
+  }
+
+  /* Milestone card collapses to just the progress ring — still one
+     reachable link (see CareerSidebar.jsx), not a dead decoration. */
+  [data-app="career"] .sh-sidebar.is-collapsed .car-milestone {
+    display: flex; justify-content: center; padding: 8px 4px;
+  }
+
+  /* Wallet: icon + balance only. CareerSidebar.jsx already drops the
+     token breakdown when collapsed (showTokens={!collapsed}); the "SHF"
+     text label is hidden here too — safe because WalletButton sets a
+     full aria-label ("Open wallet. SHF balance …") on the link itself,
+     so hiding this visual-only span loses no accessible information. */
+  [data-app="career"] .sh-sidebar.is-collapsed .car-walletRow {
+    display: flex; justify-content: center; overflow: hidden; padding: 6px 4px;
+  }
+  [data-app="career"] .sh-sidebar.is-collapsed .car-walletBtn {
+    width: auto; padding: 6px 8px; justify-content: center;
+  }
+  [data-app="career"] .sh-sidebar.is-collapsed .car-walletBtn .subtle {
+    display: none;
+  }
+
+  /* More tools: icon-only trigger, tooltip via the same data-label
+     technique; the disclosure list it opens reuses .car-link, so its
+     items already get the same collapsed treatment above. */
+  [data-app="career"] .sh-sidebar.is-collapsed .car-moreToggle {
+    justify-content: center;
+    position: relative;
+  }
+  [data-app="career"] .sh-sidebar.is-collapsed .car-moreToggle::after {
+    content: "More tools";
+    position: absolute; left: 100%; top: 50%; transform: translateY(-50%);
+    margin-left: 8px; white-space: nowrap; background: #111827; color: #fff;
+    border-radius: 8px; padding: 6px 8px; font-size: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: var(--z-menu, 500);
+    pointer-events: none;
+  }
+  [data-app="career"] .sh-sidebar.is-collapsed .car-moreToggle:hover::after,
+  [data-app="career"] .sh-sidebar.is-collapsed .car-moreToggle:focus-visible::after {
+    opacity: 1; visibility: visible; transform: translate(4px, -50%);
+  }
+}
+
+/* Shared sidebar-toggle header control (AppShellLayout.jsx). Same
+   position as before (header actions row, immediately before
+   ThemeSwitch) — only sizing/label presentation changes. */
+.sh-sidebarToggle {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+@media (max-width: 1023.98px) {
+  /* No desktop rail exists below the mobile breakpoint — the hamburger
+     already owns navigation there, so this control would be redundant
+     and confusing next to it. */
+  [data-app="career"] .sh-sidebarToggle { display: none; }
+}
+
 /* scope: career */
 .car-root { --car-sidebar-w: 260px; background: var(--surface-1,#f6f2ea); min-height: 100dvh; }
 .car-header { position: sticky; top:0; z-index:20; display:flex; align-items:center; gap:12px; padding:12px 16px; background:#fff; border-bottom:1px solid var(--ring,#e5e7eb); }
@@ -30,5 +217,396 @@
 /* skip link */
 .car-skip{ position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden; }
 .car-skip:focus{ position:fixed; left:12px; top:12px; padding:8px 12px; background:#fff; border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,.12); z-index:1000; }
+
+/* AppShellLayout header fix (career-scoped only):
+   AppShellLayout renders 4 header children (brand, cross-app nav, actions, control-plane strip),
+   but the shared .app-header rule in shell.css is a fixed 56px / 2-column grid, so the extra
+   children overflow the header box. Override to a wrapping flex row, scoped to the career app only. */
+[data-app="career"] .sh-header.app-header {
+  display: flex;
+  flex-wrap: wrap;
+  height: auto;
+  min-height: var(--header-h, 56px);
+  row-gap: 8px;
+  /* shell.css gives this z-index:40, its own stacking context — any popover
+     rendered inside it (e.g. the theme switch dropdown) is trapped at that
+     rank regardless of its own higher z-index token. Confirmed bug: at
+     390px the wrapped header is tall enough that the theme menu's open
+     position lands over Resume Builder's sticky sub-header
+     (.rb2-mheader, z-index 300), which then intercepts clicks meant for
+     the menu (verified via elementFromPoint). Raised to the shared "menu"
+     tier so header-originated popovers reliably clear in-page sticky
+     content, while staying below scrims/drawers/dialogs (600+) so modal
+     overlays still cover the header as expected. shell.css already sets
+     position:sticky on this element, so only z-index needs overriding. */
+  z-index: var(--z-menu, 500);
+}
+[data-app="career"] .sh-header.app-header .app-nav {
+  /* shell.css defines .app-nav as a vertical (sidebar-style) list; the header's
+     cross-app nav needs a horizontal row instead. */
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+}
+
+/* Mobile off-canvas navigation drawer (AppShellLayout.jsx).
+   `.sh-sidebar`/`.sh-main`/`.sh-shellBody` (shell.css) have no mobile
+   treatment at all — `.sh-sidebar` has no explicit width, so as a flex
+   item it just sizes to its nav content (~236px measured), leaving
+   `.sh-main{flex:1}` compressed to whatever's left (~154px measured at
+   390px). Below this breakpoint the sidebar is pulled out of that flex
+   row via position:fixed and shown/hidden as a drawer instead, so
+   `.sh-main` — its only remaining flex sibling — naturally reclaims the
+   full width. Mirrors the one other live mobile-drawer pattern in the
+   app (CurriculumLayout.jsx's `.ld-*` classes at its own 860px
+   breakpoint); the legacy `.app-body`/`.app-sidebar`/`drawer-open`
+   pattern elsewhere in shell.css is dead CSS with no component wiring
+   it up, so it isn't reused here. Scoped to the career app only —
+   shell.css is shared by many other apps this task doesn't touch. */
+[data-app="career"] .sh-mobileMenuBtn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  flex-shrink: 0;
+  border: 1px solid var(--ring, #e5e7eb);
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  padding: 0;
+}
+[data-app="career"] .sh-mobileMenuBar {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: #111827;
+  border-radius: 1px;
+}
+[data-app="career"] .sh-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-scrim, 600);
+  background: rgba(0, 0, 0, 0.4);
+}
+@media (max-width: 1023.98px) {
+  [data-app="career"] .sh-mobileMenuBtn { display: inline-flex; }
+  [data-app="career"] .sh-shellBody { position: relative; }
+  [data-app="career"] .sh-sidebar {
+    position: fixed; inset: 0 auto 0 0; z-index: var(--z-nav-drawer, 700);
+    width: min(84vw, 300px); height: 100dvh; overflow-y: auto;
+    border-right: 1px solid var(--ring, #e5e7eb);
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  }
+  [data-app="career"] .sh-sidebar.is-mobileOpen { transform: translateX(0); }
+  [data-app="career"] .sh-main { width: 100%; }
+}
+
+/* ===========================================================
+   Theme switch (ThemeSwitch.jsx) — the one shared Light/Dark/System
+   control, rendered once in the shared header. Base (light) styling only
+   here; its dark-mode appearance is gated below alongside the rest of the
+   shared header/sidebar chrome, for the same "one page with real dark
+   support" reason.
+   =========================================================== */
+.theme-switch { position: relative; }
+.theme-switch__trigger {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-width: 44px; min-height: 44px; padding: 8px 12px;
+  border-radius: 10px; border: 1px solid var(--ring, #e5e7eb);
+  background: #fff;
+  /* Bug fix: was `color: inherit`, which pulled `.app-header`'s own
+     fallback (`color: var(--header-ink, #fff)` in shell.css — that
+     variable is never defined, so it resolved to white) onto a white
+     button background, making the "Theme" label invisible. Every sibling
+     header control (.sh-btn etc.) already sets its own explicit dark
+     color instead of inheriting; this now does too. */
+  color: #111827;
+  font-weight: 700; font-size: 13px;
+  cursor: pointer;
+}
+.theme-switch__icon { font-size: 15px; line-height: 1; }
+.theme-switch__label { white-space: nowrap; }
+.theme-switch__menu {
+  position: absolute; right: 0; top: calc(100% + 6px); z-index: var(--z-menu, 500);
+  min-width: 180px; background: #fff; border: 1px solid var(--ring, #e5e7eb);
+  border-radius: 12px; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
+  padding: 6px; display: grid; gap: 2px;
+}
+.theme-switch__item {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  min-height: 44px; padding: 8px 10px; border: none; border-radius: 8px;
+  background: transparent;
+  /* Same inherited-white bug as the trigger (see above) — the menu is
+     `background:#fff` but never set its own color, so items inherited
+     the header's white fallback too. Confirmed via live testing. */
+  color: #111827;
+  text-align: left; cursor: pointer; font-size: 13px;
+}
+.theme-switch__item:hover { background: #f3f4f6; }
+.theme-switch__item.is-selected { font-weight: 700; }
+.theme-switch__itemIcon { font-size: 15px; }
+.theme-switch__itemLabel { flex: 1; }
+.theme-switch__check { color: var(--orange, #ff4f00); font-weight: 800; width: 14px; text-align: center; }
+.theme-switch__trigger:focus-visible,
+.theme-switch__item:focus-visible {
+  outline: 2px solid var(--orange, #ff4f00); outline-offset: 2px;
+}
+
+/* ===========================================================
+   Shared header + sidebar dark styling — gated the same way as
+   Resume Builder's own dark CSS (see resumeBuilderDark.css): the
+   preference is global and the control lives here permanently, but the
+   visual dark treatment only paints the shared chrome while a page with
+   real dark support (currently only Resume Builder) is mounted, so
+   Dashboard/Portfolio/etc. never render a half-dark shell.
+   =========================================================== */
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .sh-header.app-header {
+  background: #111419;
+  color: #F5F3EE;
+  border-bottom-color: #343944;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .brand-wordmark {
+  color: #F5F3EE;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .sh-header.app-header .sh-btn {
+  background: #1E222A; color: #F5F3EE; border-color: #343944;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .sh-mobileMenuBtn {
+  background: #1E222A; border-color: #343944;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .sh-mobileMenuBar {
+  background: #F5F3EE;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .sh-sidebar {
+  background: #111419;
+  border-right-color: #343944;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .car-nav {
+  background: #111419; border-color: #343944;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .car-navTitle {
+  color: #AEB4BF;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .car-link {
+  color: #F5F3EE;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .car-link:hover {
+  background: #1E222A;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .car-link.is-active,
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .car-link[aria-current="page"] {
+  background: #262B34; color: #F5F3EE;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .theme-switch__trigger {
+  background: #1E222A; color: #F5F3EE; border-color: #343944;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .theme-switch__menu {
+  background: #1E222A; border-color: #343944; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .theme-switch__item {
+  color: #F5F3EE;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .theme-switch__item:hover {
+  background: #262B34;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .theme-switch__check {
+  color: #FF5A1F;
+}
+
+/* ===========================================================
+   Logo repair. `.brand-mark` had no sizing rule anywhere — harmless
+   while the broken /assets/brand/shf-logo-stacked.svg reference meant it
+   never rendered, but the real replacement asset
+   (shf-globe-logo.png, 1254×1254) needs an explicit box or it would
+   render at full native size. object-fit:contain avoids distortion.
+   =========================================================== */
+[data-app="career"] .brand-mark {
+  height: 32px;
+  width: 32px;
+  object-fit: contain;
+  display: block;
+}
+[data-app="career"] .brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+[data-app="career"] .brand-wordmark {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  font-weight: 800;
+  font-size: 15px;
+  color: #111827;
+  white-space: nowrap;
+}
+
+/* ===========================================================
+   Application switcher (AppSwitcher.jsx) — replaces the former
+   permanent row of 5 separate cross-app buttons. Same accessible
+   dropdown pattern as ThemeSwitch (trigger + menu, Escape, outside
+   click, focus restoration, contained in viewport, 44×44 target).
+   =========================================================== */
+.app-switcher { position: relative; }
+.app-switcher__trigger {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-width: 44px; min-height: 44px; padding: 8px 12px;
+  border-radius: 10px; border: 1px solid var(--ring, #e5e7eb);
+  background: #fff; color: #111827; font-weight: 700; font-size: 13px;
+  cursor: pointer;
+}
+.app-switcher__icon { font-size: 16px; line-height: 1; }
+.app-switcher__label { white-space: nowrap; }
+.app-switcher__menu {
+  /* right:0 (not left:0) — the trigger sits mid-header, not flush with
+     the header's left edge, so a menu growing rightward from left:0
+     overflowed the viewport at 390px (menu right edge landed ~14px past
+     390px, measured live). Anchoring off the trigger's right edge instead
+     mirrors ThemeSwitch's already-viewport-safe convention and keeps the
+     menu fully contained at every measured width. */
+  position: absolute; right: 0; top: calc(100% + 6px); z-index: var(--z-menu, 500);
+  min-width: 200px; background: #fff; border: 1px solid var(--ring, #e5e7eb);
+  border-radius: 12px; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
+  padding: 6px; display: grid; gap: 2px;
+}
+.app-switcher__item {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  min-height: 44px; padding: 8px 10px; border-radius: 8px;
+  color: #111827; text-decoration: none; font-size: 13px;
+}
+.app-switcher__item:hover { background: #f3f4f6; }
+.app-switcher__item.is-current { font-weight: 700; background: #f6f2ea; }
+.app-switcher__itemIcon { font-size: 15px; }
+.app-switcher__itemLabel { flex: 1; }
+.app-switcher__check { color: var(--orange, #ff4f00); font-weight: 800; width: 14px; text-align: center; }
+.app-switcher__trigger:focus-visible,
+.app-switcher__item:focus-visible {
+  outline: 2px solid var(--orange, #ff4f00); outline-offset: 2px;
+}
+
+/* ===========================================================
+   Header Coach entry (CareerLayout.jsx headerRight). Equivalent,
+   always-reachable, non-floating access point for Ask Coach — required so
+   Brainiact (src/components/companion/Brainiact.jsx) can be safely
+   suppressed while it would otherwise cover the Resume Builder Preview
+   workspace, without ever making Coach unreachable. The suppression rule
+   itself now lives in src/styles/companion.css
+   (`body[data-coach-suppress~="resume-workspace"] .brainiact-root`),
+   alongside the rest of Brainiact's styling.
+   =========================================================== */
+.car-headerCoachBtn { min-height: 44px; }
+@media (max-width: 900px) {
+  .car-headerCoachLabel { display: none; }
+}
+
+/* ===========================================================
+   Sidebar restructure (CareerSidebar.jsx): 6 always-visible primary
+   destinations, the wallet, and a collapsible "More tools" disclosure
+   holding the remaining 11 secondary routes — default collapsed so the
+   sidebar isn't permanently a 17-item list, while every route stays
+   mounted in the DOM (not unmounted) so it's still reachable by
+   keyboard/AT and satisfied the existing DEV route-presence check.
+   =========================================================== */
+[data-app="career"] .car-primaryList { margin-bottom: 4px; }
+
+/* Career-readiness milestone widget (CareerSidebar.jsx ReadinessMilestone) —
+   matches the approved Resume Builder mock's sidebar card. */
+[data-app="career"] .car-milestone {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 12px; margin: 4px 0 10px; border-radius: 12px;
+  border: 1px solid var(--ring, #e5e7eb); background: #f6f2ea;
+  text-decoration: none; color: inherit; /* now an <a>, reset link defaults */
+}
+[data-app="career"] .car-milestone:hover { background: #f0ebe0; }
+[data-app="career"] .car-milestone:focus-visible { outline: 2px solid var(--orange, #ff4f00); outline-offset: 2px; }
+[data-app="career"] .car-milestoneRing { flex: none; color: #111827; }
+[data-app="career"] .car-milestoneBody { min-width: 0; }
+[data-app="career"] .car-milestoneTitle { display: block; font-weight: 800; font-size: 13px; }
+[data-app="career"] .car-milestoneSub { display: block; font-size: 11px; color: #6b7280; margin-top: 2px; }
+[data-app="career"] .car-milestoneLink {
+  display: inline-block; margin-top: 6px; font-size: 12px; font-weight: 700;
+  color: var(--orange, #ff4f00); text-decoration: none;
+}
+[data-app="career"] .car-milestoneLink:hover { text-decoration: underline; }
+
+[data-app="career"] .car-walletRow { padding: 6px 6px 10px; }
+[data-app="career"] .car-walletBtn { width: 100%; justify-content: flex-start; }
+[data-app="career"] .car-moreToggle {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  width: 100%; min-height: 44px; padding: 10px 12px; margin-top: 4px;
+  border: 1px solid transparent; border-radius: 10px; background: transparent;
+  color: #6b7280; font-weight: 700; font-size: 12px; letter-spacing: .04em;
+  text-transform: uppercase; cursor: pointer;
+}
+[data-app="career"] .car-moreIcon { font-size: 16px; line-height: 1; flex: none; }
+[data-app="career"] .car-moreLabel { flex: 1; text-align: left; }
+[data-app="career"] .car-moreToggle:hover { background: #f3f4f6; }
+[data-app="career"] .car-moreChevron { transition: transform .15s ease; }
+[data-app="career"] .car-moreChevron.is-open { transform: rotate(180deg); }
+[data-app="career"] .car-moreTools {
+  display: none;
+  padding-top: 4px;
+}
+[data-app="career"] .car-moreTools.is-open { display: block; }
+
+/* ===========================================================
+   Dark-mode equivalents for everything above, gated the same way as the
+   rest of the shared shell (see the block above this one).
+   =========================================================== */
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .app-switcher__trigger {
+  background: #1E222A; color: #F5F3EE; border-color: #343944;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .app-switcher__menu {
+  background: #1E222A; border-color: #343944; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .app-switcher__item {
+  color: #F5F3EE;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .app-switcher__item:hover,
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .app-switcher__item.is-current {
+  background: #262B34;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .app-switcher__check {
+  color: #FF5A1F;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .car-milestone {
+  background: #1E222A; border-color: #343944;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .car-milestoneRing {
+  color: #F5F3EE;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .car-milestoneSub {
+  color: #AEB4BF;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .car-moreToggle {
+  color: #AEB4BF;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .car-moreToggle:hover {
+  background: #1E222A;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .car-headerCoachBtn {
+  background: #1E222A; color: #F5F3EE; border-color: #343944;
+}
+/* WalletButton.jsx sets its background/color as an inline style
+   (`style={{background:"var(--surface,#fff)", ...}}`), which no ordinary
+   CSS rule can override — confirmed visually: it stayed a bright white
+   pill sitting inside an otherwise fully dark sidebar. `!important` is
+   the correct, narrow tool here (not a hack): it's the only way to
+   override an inline style without editing the shared WalletButton
+   component itself, which is used by other apps too. */
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] [data-app="career"] .car-walletBtn {
+  background: #1E222A !important;
+  border-color: #343944 !important;
+  color: #F5F3EE !important;
+}
 
 

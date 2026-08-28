@@ -192,14 +192,20 @@ export default function CoachSlideOver({ open, onClose }) {
           from { transform: translateX(12px); opacity: 0; }
           to   { transform: translateX(0);     opacity: 1; }
         }
-        :not([data-app="curriculum"])[data-theme="dark"] .coach-panel {
+        /* Desktop Shell Correction pass (2026-08-27): Curriculum used to be
+           excluded here because it had no real dark styling of its own —
+           painting this panel dark while the rest of a light Curriculum
+           page stayed light would have been a mismatched island. Curriculum
+           now has real dark tokens throughout (curriculum-dashboard.css /
+           curriculum-lesson.css), so this can safely apply there too. */
+        [data-theme="dark"] .coach-panel {
           background:#0b0b0b;
           border-left-color:#23262d;
         }
-        :not([data-app="curriculum"])[data-theme="dark"] .coach-head {
+        [data-theme="dark"] .coach-head {
           border-bottom-color:#23262d;
         }
-        :not([data-app="curriculum"])[data-theme="dark"] .coach-foot {
+        [data-theme="dark"] .coach-foot {
           background:#0b0b0b;
           border-top-color:#23262d;
         }

@@ -1,0 +1,157 @@
+{
+  "blender_version": [
+    4,
+    5,
+    12
+  ],
+  "import_ok": true,
+  "import_error": null,
+  "file_size_bytes": 61090172,
+  "glb_magic": "glTF",
+  "glb_version": 2,
+  "scene_count": 1,
+  "collection_count": 0,
+  "object_count": 3,
+  "mesh_object_count": 1,
+  "armature_object_count": 0,
+  "object_names_by_type": {
+    "MESH": [
+      "geometry_0"
+    ],
+    "EMPTY": [
+      "Node_0",
+      "world"
+    ]
+  },
+  "totals": {
+    "vertices": 1017842,
+    "edges": 3017714,
+    "faces": 2000000,
+    "triangles": 2000000,
+    "material_slots": 1
+  },
+  "per_object": [
+    {
+      "name": "geometry_0",
+      "mesh_data_name": "Mesh_0",
+      "vertices": 1017842,
+      "edges": 3017714,
+      "faces": 2000000,
+      "triangles": 2000000,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "has_custom_normals": true,
+      "vertex_groups": 0,
+      "vertex_group_names": [],
+      "armature_modifiers": [],
+      "other_modifiers": [],
+      "shape_keys": 0,
+      "dimensions": [
+        0.6643028259277344,
+        0.5928590297698975,
+        1.0
+      ],
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "non_manifold_edges": 35428,
+      "loose_vertices": 0,
+      "loose_edges": 0,
+      "degenerate_faces": 50,
+      "duplicate_vertex_pairs_within_0.0001": 18098,
+      "connected_islands": 128
+    }
+  ],
+  "material_count": 1,
+  "material_names": [
+    "pbr_material"
+  ],
+  "image_count": 2,
+  "images": [
+    {
+      "name": "Image_0",
+      "width": 8192,
+      "height": 8192,
+      "file_format": "JPEG",
+      "embedded": true,
+      "filepath": ""
+    },
+    {
+      "name": "Image_1",
+      "width": 8192,
+      "height": 8192,
+      "file_format": "JPEG",
+      "embedded": true,
+      "filepath": ""
+    }
+  ],
+  "world_bounding_box": {
+    "min": [
+      -0.3321514129638672,
+      -0.29642951488494873,
+      -0.5
+    ],
+    "max": [
+      0.3321514129638672,
+      0.29642951488494873,
+      0.5
+    ],
+    "dimensions": [
+      0.6643028259277344,
+      0.5928590297698975,
+      1.0
+    ],
+    "ground_z_min": -0.5
+  },
+  "armatures": [],
+  "has_armature": false,
+  "action_count": 0,
+  "action_names": [],
+  "nla_track_count": 0,
+  "total_shape_keys": 0,
+  "render_engine_used": "BLENDER_EEVEE_NEXT",
+  "renders_ok": true,
+  "rendered_views": [
+    "front",
+    "rear",
+    "left",
+    "right",
+    "front_three_quarter",
+    "rear_three_quarter",
+    "head_closeup",
+    "shoulder_elbow_closeup",
+    "hand_closeup",
+    "knee_closeup",
+    "front_wireframe",
+    "left_wireframe",
+    "head_closeup_wireframe"
+  ],
+  "render_errors": {},
+  "phase": "1",
+  "asset": "Brainiact",
+  "master_path": "assets-source/brainiact/master/BRAINIACT_HI3D_MASTER.glb",
+  "master_sha256": "d669f27b25d3a91812057245fdc316fd053bf6425ffa20321455339ccbd2d387",
+  "audit_note": "Freestyle wireframe overlay pass did not actually produce visible edge lines (LineSet/FreestyleLineStyle was not configured in this script's fresh factory-reset scene, causing a silent AttributeError inside Blender's own parameter_editor.py during that pass) \u2014 the '*_wireframe.png' files are solid-shaded renders identical to their non-wireframe counterparts, not real topology overlays. All topology conclusions in this audit come from the bmesh measurements above (vertex/edge/face/triangle counts, non-manifold/duplicate/degenerate counts, connected-island count), not from a visual wireframe.",
+  "recommended_production_path": "D_with_C_prerequisite",
+  "recommended_targets": {
+    "lod0_triangles": "60000-80000",
+    "lod1_triangles": "25000-35000",
+    "mobile_triangles": "12000-18000",
+    "texture_target": "2048x2048 base color + a baked normal map to preserve brain-fold detail",
+    "mobile_texture_target": "1024x1024 (512x512 for a hard low-end fallback)",
+    "target_glb_size": "3-5 MB",
+    "max_first_pass_glb_size": "10 MB"
+  }
+}

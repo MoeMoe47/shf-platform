@@ -2,6 +2,8 @@
 
 Truth Spine V1 is frozen as the official SHS anti-drift authority for verified claims, public approval, report readiness, Truth Packages, replay, and local federation registry state.
 
+> **Security boundary amendment (Truth Spine security remediation):** a prior audit found every canonical `/truth/*` endpoint unauthenticated. This has been remediated - see `services/shf-agent-fabric/docs/TRUTH_SPINE_SECURITY.md` for the current authentication, permission, tenant-isolation, versioning, and public-visibility rules, which now govern who may create, verify, approve, or read Truth Spine data. This freeze document's data/verification model is unchanged; the security boundary described below it is now enforced in code, not merely assumed.
+
 ## Freeze Rule
 
 No SHS surface may present a claim as verified, public-approved, or report-ready unless Truth Spine says so.

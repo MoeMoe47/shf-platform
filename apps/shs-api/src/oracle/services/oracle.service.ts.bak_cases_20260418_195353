@@ -1,0 +1,25 @@
+import { buildTruthPackage } from "./truth-package-builder";
+import { getTruth, setTruth } from "../repositories/truth.repo";
+import type { TruthPackage } from "../domain/types";
+
+export function resolveTruth(entityId: string): TruthPackage {
+  const existing = getTruth(entityId);
+  if (existing) return existing;
+
+  const truthPackage = buildTruthPackage({
+    entityId,
+    entityType: "case",
+    truthStatus: "certified",
+    verificationStatus: "verified",
+    publicationMode: "internal",
+    sourceSummary: ["aggregation_layer"],
+    unresolvedItems: [],
+    sourceCount: 1,
+    conflictCount: 0,
+    completeness: 18,
+    freshnessBonus: 6,
+    recommendedNextAction: "Proceed with reporting and institutional review.",
+  });
+
+  return setTruth(truthPackage);
+}

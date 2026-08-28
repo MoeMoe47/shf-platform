@@ -2,9 +2,9 @@ import React, { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SHS_REPORT_REGISTRY, getReportTypeDefinition } from "@/data/shsReports/shsReportRegistry";
 import { buildDefaultReadiness, evaluateReportReadiness } from "@/data/shsReports/shsReportReadiness";
-import { createReportRecord } from "@/data/shsReports/shsReportStorage";
 import { SHS_REPORT_VISIBILITY_MODES, displayVisibilityMode } from "@/data/shsReports/shsReportTypes";
 import { getVisibilityWarnings } from "@/data/shsReports/shsReportVisibility";
+import { createShsReportDraft } from "@/shared/reporting/shsReportDraftClient";
 import ShsReportBrandingPanel from "./components/ShsReportBrandingPanel.jsx";
 import ShsReportReadinessPanel from "./components/ShsReportReadinessPanel.jsx";
 import "./shsReports.css";
@@ -27,6 +27,8 @@ export default function ShsCreateReportPage() {
   const [reportType, setReportType] = useState(initialType);
   const [brandMode, setBrandMode] = useState("shs-premium");
   const [visibility, setVisibility] = useState("internal-only");
+  const [saveState, setSaveState] = useState("idle");
+  const [saveError, setSaveError] = useState("");
   const definition = useMemo(() => getReportTypeDefinition(reportType), [reportType]);
   const draftReport = useMemo(
     () => ({
@@ -43,16 +45,26 @@ export default function ShsCreateReportPage() {
   const readiness = evaluateReportReadiness(draftReport);
   const visibilityWarnings = getVisibilityWarnings(draftReport);
 
-  function generateDraft() {
-    const report = createReportRecord({
-      reportType,
-      brandMode,
-      subjectType,
-      subjectName,
-      visibility,
-      readiness: buildDefaultReadiness(reportType),
-    });
-    navigate(report.reportType === "premium-os-report-book" ? "/ops/reports/premium-preview" : "/ops/reports/history");
+  async function generateDraft() {
+    setSaveState("saving");
+    setSaveError("");
+    try {
+      const report = await createShsReportDraft({
+        reportType,
+        title: definition.displayName,
+        brandMode,
+        subjectType,
+        subjectName,
+        visibility,
+        readiness: buildDefaultReadiness(reportType),
+        exportMetadata: { exportFormat: "pdf", exportLocked: false },
+      });
+      setSaveState("saved");
+      navigate(report.reportType === "premium-os-report-book" ? "/ops/reports/premium-preview" : "/ops/reports/history", { state: { reportId: report.reportId } });
+    } catch (error) {
+      setSaveState("error");
+      setSaveError(error instanceof Error ? error.message : "SHS report draft could not be saved");
+    }
   }
 
   return (
@@ -63,9 +75,10 @@ export default function ShsCreateReportPage() {
           <h1>Create Report</h1>
           <span>Select a subject, report type, readiness posture, branding mode, and visibility before generating a draft.</span>
         </div>
-        <button type="button" className="shs-report-primary-action" onClick={generateDraft}>
-          Generate Draft Report
+        <button type="button" className="shs-report-primary-action" onClick={generateDraft} disabled={saveState === "saving"}>
+          {saveState === "saving" ? "Saving Draft…" : "Generate Draft Report"}
         </button>
+        {saveError ? <p className="shs-report-warning" role="alert">{saveError}</p> : null}
       </section>
 
       <section className="shs-create-flow">
@@ -129,8 +142,8 @@ export default function ShsCreateReportPage() {
             <h2>Generate Draft Report</h2>
             <span>{readiness.blocked ? "Missing required data will be marked visibly in the draft." : "Draft can be generated for review."}</span>
           </div>
-          <button type="button" className="shs-report-primary-action" onClick={generateDraft}>
-            Generate Draft Report
+          <button type="button" className="shs-report-primary-action" onClick={generateDraft} disabled={saveState === "saving"}>
+            {saveState === "saving" ? "Saving Draft…" : "Generate Draft Report"}
           </button>
         </article>
       </section>

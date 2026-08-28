@@ -1,0 +1,891 @@
+/* src/styles/student-portfolio.css
+   Student Portfolio — approved mock implementation.
+   Scoped entirely under .sp-* classes rooted at .sp-page, so it is safe
+   to load from any host app (career.html and curriculum.html both mount
+   this page) without leaking into surrounding app chrome. Shares the
+   same design tokens as curriculum-dashboard.css (.ld-*) for visual
+   continuity with the approved Learning Dashboard, but does not depend
+   on it and does not touch it.
+*/
+
+.sp-page {
+  --sp-bg: #f7f3ea;
+  --sp-card: #ffffff;
+  --sp-ink: #14161a;
+  --sp-muted: #6b7280;
+  --sp-ring: #e7e2d8;
+  --sp-ring-soft: #eef0f3;
+  --sp-orange: #ff4f00;
+  --sp-orange-600: #e64600;
+  --sp-orange-tint: #fff1e8;
+  --sp-orange-tint-strong: #ffe3d1;
+  --sp-shadow: 0 1px 2px rgba(20, 22, 26, 0.04), 0 6px 20px rgba(20, 22, 26, 0.05);
+  --sp-radius: 14px;
+  --sp-radius-sm: 10px;
+
+  background: var(--sp-bg);
+  color: var(--sp-ink);
+  padding: 24px 32px 48px;
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", system-ui, sans-serif;
+}
+
+.sp-page *:focus-visible {
+  outline: 2px solid var(--sp-orange);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.sp-srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sp-page * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ===================== Header ===================== */
+.sp-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.sp-h1 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 800;
+  color: var(--sp-ink);
+}
+.sp-subtitle {
+  margin: 6px 0 0;
+  color: var(--sp-muted);
+  font-size: 14px;
+}
+.sp-headerControls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.sp-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 220px;
+}
+.sp-searchIcon {
+  position: absolute;
+  left: 12px;
+  color: var(--sp-muted);
+  pointer-events: none;
+}
+.sp-searchInput {
+  width: 100%;
+  padding: 10px 12px 10px 38px;
+  border-radius: 10px;
+  border: 1px solid var(--sp-ring);
+  background: var(--sp-card);
+  font-size: 14px;
+  color: var(--sp-ink);
+}
+.sp-searchInput::placeholder {
+  color: var(--sp-muted);
+}
+.sp-iconBtn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--sp-ring);
+  background: var(--sp-card);
+  color: var(--sp-ink);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.sp-iconBtn:hover {
+  background: #f6f3ec;
+}
+.sp-unreadDot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--sp-orange);
+  border: 1.5px solid var(--sp-card);
+}
+.sp-notifWrap {
+  position: relative;
+}
+.sp-notifPanel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  width: 260px;
+  background: var(--sp-card);
+  border: 1px solid var(--sp-ring);
+  border-radius: var(--sp-radius-sm);
+  box-shadow: var(--sp-shadow);
+  padding: 14px;
+  z-index: 30;
+}
+.sp-notifEmpty {
+  margin: 0;
+  font-size: 13px;
+  color: var(--sp-muted);
+}
+.sp-pathwaySelect {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.sp-pathwaySelectInput {
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 10px 34px 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--sp-ring);
+  background: var(--sp-card);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--sp-ink);
+}
+.sp-pathwayChevron {
+  position: absolute;
+  right: 10px;
+  color: var(--sp-muted);
+  pointer-events: none;
+}
+
+/* ===================== Card base ===================== */
+.sp-card {
+  background: var(--sp-card);
+  border: 1px solid var(--sp-ring);
+  border-radius: var(--sp-radius);
+  box-shadow: var(--sp-shadow);
+  padding: 22px 24px;
+  min-width: 0;
+}
+.sp-cardHeadRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.sp-cardTitle {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--sp-ink);
+}
+.sp-viewLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--sp-orange);
+  font-weight: 700;
+  font-size: 13px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 0;
+}
+.sp-viewLink:hover {
+  color: var(--sp-orange-600);
+}
+.sp-viewLink[aria-disabled="true"] {
+  color: var(--sp-muted);
+  cursor: default;
+}
+
+.sp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 10px;
+  padding: 11px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1px solid var(--sp-ring);
+  min-height: 44px;
+  cursor: pointer;
+  background: var(--sp-card);
+  color: var(--sp-ink);
+}
+.sp-btnPrimary {
+  background: var(--sp-orange);
+  color: #fff;
+  border-color: transparent;
+}
+.sp-btnPrimary:hover {
+  background: var(--sp-orange-600);
+}
+.sp-btnSecondary:hover {
+  background: #f6f3ec;
+}
+
+/* ===================== Profile hero ===================== */
+.sp-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding: 24px;
+}
+.sp-heroLeft {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-width: 0;
+}
+.sp-avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  object-fit: cover;
+  background: linear-gradient(180deg, #f3f4f6, #e5e7eb);
+  border: 1px solid var(--sp-ring);
+}
+.sp-avatarFallback {
+  display: grid;
+  place-items: center;
+  color: #9ca3af;
+}
+.sp-heroName {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--sp-ink);
+}
+.sp-heroRole {
+  margin: 2px 0 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--sp-orange);
+}
+.sp-heroLocation {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: var(--sp-muted);
+}
+.sp-heroProgressRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+.sp-heroProgressLabel {
+  font-size: 13px;
+  color: var(--sp-muted);
+  white-space: nowrap;
+}
+.sp-progressBar {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--sp-ring-soft);
+  overflow: hidden;
+  min-width: 120px;
+}
+.sp-progressBarFill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--sp-orange);
+}
+.sp-heroRight {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.sp-heroStats {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.sp-heroStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.sp-heroStatValue {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--sp-ink);
+  line-height: 1.1;
+}
+.sp-heroStatLabel {
+  font-size: 12px;
+  color: var(--sp-muted);
+}
+.sp-heroActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sp-editPanel {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--sp-ring);
+}
+
+/* ===================== Body grid ===================== */
+.sp-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+  align-items: start;
+}
+.sp-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+/* ===================== Featured projects ===================== */
+.sp-projectList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+}
+.sp-projectRow {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 16px;
+  padding: 14px;
+  border: 1px solid var(--sp-ring);
+  border-radius: var(--sp-radius-sm);
+  background: var(--sp-orange-tint);
+}
+.sp-projectIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  color: var(--sp-orange);
+  border: 1px solid var(--sp-ring);
+}
+.sp-projectMain {
+  min-width: 0;
+}
+.sp-projectTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.sp-projectTitle {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--sp-ink);
+}
+.sp-tag {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #ede9fe;
+  color: #6d28d9;
+  white-space: nowrap;
+}
+.sp-tag.is-web {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+.sp-projectDesc {
+  margin: 4px 0 8px;
+  font-size: 13px;
+  color: var(--sp-muted);
+}
+.sp-techTags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.sp-techTag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--sp-ring);
+  color: var(--sp-ink);
+}
+.sp-statusPill {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.sp-statusPill.is-complete {
+  background: #dcfce7;
+  color: #15803d;
+}
+.sp-statusPill.is-review {
+  background: var(--sp-orange-tint-strong);
+  color: var(--sp-orange-600);
+}
+.sp-projectNav {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid var(--sp-ring);
+  background: #fff;
+  color: var(--sp-ink);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.sp-projectNav:hover {
+  background: #f6f3ec;
+}
+
+/* ===================== Profile strength ===================== */
+.sp-strengthGrid {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.sp-ring {
+  --sp-ring-size: 96px;
+  width: var(--sp-ring-size);
+  height: var(--sp-ring-size);
+  border-radius: 999px;
+  flex-shrink: 0;
+  background: conic-gradient(var(--sp-orange) calc(var(--sp-ring-pct) * 1%), var(--sp-orange-tint) 0);
+  display: grid;
+  place-items: center;
+}
+.sp-ringInner {
+  width: calc(var(--sp-ring-size) - 18px);
+  height: calc(var(--sp-ring-size) - 18px);
+  border-radius: 999px;
+  background: var(--sp-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--sp-ink);
+}
+.sp-strengthList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 8px;
+}
+.sp-strengthItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--sp-ink);
+}
+.sp-strengthIcon {
+  flex-shrink: 0;
+}
+.sp-strengthItem.is-done .sp-strengthIcon {
+  color: #16a34a;
+}
+.sp-strengthItem.is-todo .sp-strengthIcon {
+  color: var(--sp-muted);
+}
+.sp-strengthItem.is-todo {
+  color: var(--sp-muted);
+}
+
+/* ===================== Credentials & badges ===================== */
+.sp-badgeGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.sp-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+.sp-badgeIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid var(--sp-ring);
+}
+.sp-badgeIcon.tone-a {
+  background: #ecfdf5;
+  color: #059669;
+  border-color: #a7f3d0;
+}
+.sp-badgeIcon.tone-b {
+  background: #eff6ff;
+  color: #2563eb;
+  border-color: #bfdbfe;
+}
+.sp-badgeIcon.tone-c {
+  background: #fdf4ff;
+  color: #a21caf;
+  border-color: #f0abfc;
+}
+.sp-badgeIcon.tone-d {
+  background: var(--sp-orange-tint);
+  color: var(--sp-orange-600);
+  border-color: var(--sp-orange-tint-strong);
+}
+.sp-badgeLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--sp-ink);
+}
+
+/* ===================== Interview practice ===================== */
+.sp-interviewMeta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 13px;
+  color: var(--sp-muted);
+  flex-wrap: wrap;
+}
+.sp-interviewQuestion {
+  margin: 4px 0 14px;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--sp-ink);
+}
+.sp-ratingRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+.sp-ratingLabel {
+  font-size: 13px;
+  color: var(--sp-muted);
+}
+.sp-ratingBtns {
+  display: flex;
+  gap: 6px;
+}
+.sp-ratingBtn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--sp-ring);
+  background: #fff;
+  color: var(--sp-ink);
+  font-weight: 700;
+  font-size: 13px;
+}
+.sp-ratingBtn:hover {
+  background: #f6f3ec;
+}
+.sp-ratingBtn[aria-pressed="true"] {
+  background: var(--sp-orange);
+  color: #fff;
+  border-color: var(--sp-orange);
+}
+.sp-ratingHint {
+  font-size: 12px;
+  color: var(--sp-muted);
+}
+.sp-durationSelect {
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 8px 30px 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--sp-ring);
+  background: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--sp-ink);
+  position: relative;
+}
+.sp-durationWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.sp-durationChevron {
+  position: absolute;
+  right: 8px;
+  color: var(--sp-muted);
+  pointer-events: none;
+}
+.sp-notesLabel {
+  display: block;
+  font-size: 13px;
+  color: var(--sp-muted);
+  margin: 12px 0 6px;
+}
+.sp-notesInput {
+  width: 100%;
+  min-height: 90px;
+  border: 1px solid var(--sp-ring);
+  border-radius: var(--sp-radius-sm);
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  color: var(--sp-ink);
+}
+.sp-notesInput::placeholder {
+  color: var(--sp-muted);
+}
+.sp-interviewActions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+.sp-interviewSecondaryActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+/* ===================== Career readiness ===================== */
+.sp-readinessList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+}
+.sp-readinessItem {
+  display: grid;
+  gap: 6px;
+}
+.sp-readinessTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+}
+.sp-readinessLabel {
+  color: var(--sp-ink);
+  font-weight: 600;
+}
+.sp-readinessValue {
+  color: var(--sp-ink);
+  font-weight: 700;
+}
+
+/* ===================== Recent achievements ===================== */
+.sp-achieveList {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+}
+.sp-achieveItem {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+.sp-achieveIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1.5px solid var(--sp-orange-tint-strong);
+  color: var(--sp-orange);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.sp-achieveText {
+  min-width: 0;
+}
+.sp-achieveTitle {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--sp-ink);
+}
+.sp-achieveDate {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: var(--sp-muted);
+}
+.sp-achieveConnector {
+  height: 1.5px;
+  background: var(--sp-ring);
+  align-self: center;
+  flex: 0 0 32px;
+  margin: 0 6px;
+  margin-top: 20px;
+}
+
+/* ===================== Tablet ===================== */
+@media (max-width: 1180px) {
+  .sp-body {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 1024px) {
+  .sp-page {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .sp-badgeGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ===================== Mobile ===================== */
+@media (max-width: 860px) {
+  .sp-page {
+    padding: 16px 16px 40px;
+  }
+  .sp-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .sp-headerControls {
+    width: 100%;
+  }
+  .sp-search {
+    min-width: 0;
+    flex: 1;
+  }
+  .sp-pathwaySelect {
+    max-width: 100%;
+  }
+  .sp-pathwaySelectInput {
+    max-width: 100%;
+    text-overflow: ellipsis;
+  }
+  .sp-heroProgressLabel {
+    white-space: normal;
+  }
+  .sp-hero {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 18px;
+  }
+  .sp-heroLeft {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .sp-heroText {
+    min-width: 0;
+    flex: 1;
+  }
+  .sp-progressBar {
+    min-width: 0;
+  }
+  .sp-heroRight {
+    justify-content: space-between;
+    width: 100%;
+  }
+  .sp-heroStats {
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .sp-projectRow {
+    grid-template-columns: 48px minmax(0, 1fr);
+    grid-template-areas:
+      "icon main"
+      "status status"
+      "nav nav";
+    row-gap: 8px;
+  }
+  .sp-projectIcon {
+    grid-area: icon;
+    width: 48px;
+    height: 48px;
+  }
+  .sp-projectMain {
+    grid-area: main;
+  }
+  .sp-statusPill {
+    grid-area: status;
+    justify-self: start;
+  }
+  .sp-projectNav {
+    grid-area: nav;
+    justify-self: start;
+  }
+  .sp-badgeGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .sp-achieveList {
+    flex-direction: column;
+    gap: 14px;
+  }
+  .sp-achieveConnector {
+    display: none;
+  }
+  .sp-strengthGrid {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ===================== 320px minimum width ===================== */
+@media (max-width: 400px) {
+  .sp-card {
+    padding: 16px;
+  }
+  .sp-heroStats {
+    gap: 12px;
+  }
+  .sp-ring {
+    --sp-ring-size: 84px;
+  }
+  .sp-badgeGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

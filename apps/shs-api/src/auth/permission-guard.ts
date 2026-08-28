@@ -9,6 +9,22 @@ export function requirePermission(permission: string) {
       });
     }
 
+    if (user.org_context_error) {
+      return res.status(403).json({
+        ok: false,
+        error: { code: user.org_context_error, message: "Valid active organization context is required." },
+        correlation_id: "corr_org_context_forbidden",
+      });
+    }
+
+    if (!user.active_organization_id || !user.tenant_id) {
+      return res.status(403).json({
+        ok: false,
+        error: { code: "ORG_CONTEXT_REQUIRED", message: "Valid active organization context is required." },
+        correlation_id: "corr_org_context_required",
+      });
+    }
+
     const permissions = user.permissions || [];
     if (!permissions.includes(permission)) {
       return res.status(403).json({

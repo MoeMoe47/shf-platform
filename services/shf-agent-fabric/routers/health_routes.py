@@ -38,15 +38,13 @@ def _run_script(candidates: List[Path]) -> Dict[str, Any]:
             )
             return {
                 "ok": proc.returncode == 0,
-                "ran": str(p),
-                "stdout_tail": _tail(proc.stdout),
-                "stderr_tail": _tail(proc.stderr),
+                "ran": p.name,
+                "error": None if proc.returncode == 0 else "health_check_failed",
             }
     return {
         "ok": False,
         "ran": None,
-        "stdout_tail": "",
-        "stderr_tail": "no matching script found",
+        "error": "health_check_script_missing",
     }
 
 
@@ -55,7 +53,7 @@ def _check_gate_g() -> Dict[str, Any]:
         verify_compliance_gate_g_or_die()
         return {"ok": True}
     except Exception as e:
-        return {"ok": False, "error": f"{type(e).__name__}: {e}"}
+        return {"ok": False, "error": f"{type(e).__name__}"}
 
 
 def _check_registry_contract() -> Dict[str, Any]:

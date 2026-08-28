@@ -22,6 +22,7 @@ export default function ImpactForecaster({ onChange }) {
   return (
     <section className="card card--pad" style={{ display:"grid", gap:12 }}>
       <h3 style={{ margin:0 }}>Impact Forecaster</h3>
+      <p role="note" style={{ margin: 0, fontWeight: 700 }}>Simulation / projection - not verified institutional data.</p>
 
       <div style={{ display:"grid", gap:12, gridTemplateColumns:"repeat(auto-fit, minmax(220px,1fr))" }}>
         <Num label="# Learners" value={learners} set={setLearners} min={20} max={2000} step={10} />

@@ -12,6 +12,7 @@ import HubBusinessTourProvider from "./shared/HubBusinessTourProvider.jsx";
 import { buildHubWorkflowReadiness, hubWorkflowStatusClass, hubWorkflowStepClass } from "./shared/hubWorkflowReadiness";
 import { hubPartners } from "./shared/hubBusinessNetworkData";
 import InstitutionalFooter from "@/components/shared/InstitutionalFooter.jsx";
+import { fetchHubReferralCreatedCountReport } from "@/shared/reporting/hubReferralReportingClient";
 
 const LOGO_SRC = "/assets/hub/shs-hub-logo.png";
 const SHS_HOME_URL = "/";
@@ -100,7 +101,6 @@ function getTruthSpineReportSummary(records = [], events = []) {
     );
   });
 
-  const createdReferralEvents = events.filter((event) => event?.eventType === "hub.referral.created");
   const reportExportEvents = events.filter((event) => event?.eventType === "report.export.generated");
 
   const readinessPercent = pct(reportReadyRecords.length, totalRecords);
@@ -114,7 +114,6 @@ function getTruthSpineReportSummary(records = [], events = []) {
     auditReadyCount: auditReadyRecords.length,
     readinessPercent,
     auditCoveragePercent,
-    createdReferralCount: createdReferralEvents.length,
     reportExportCount: reportExportEvents.length,
   };
 }
@@ -287,6 +286,31 @@ export default function HubReports() {
   const [truthSpineVersion, setTruthSpineVersion] = React.useState(0);
   const [truthEngineSnapshot, setTruthEngineSnapshot] = React.useState(null);
   const [truthEngineStatus, setTruthEngineStatus] = React.useState("loading");
+  const [referralReport, setReferralReport] = React.useState(null);
+  const [referralReportStatus, setReferralReportStatus] = React.useState("loading");
+
+  React.useEffect(() => {
+    let active = true;
+
+    async function loadReferralReport() {
+      setReferralReportStatus("loading");
+      try {
+        const report = await fetchHubReferralCreatedCountReport();
+        if (!active) return;
+        setReferralReport(report);
+        setReferralReportStatus("ready");
+      } catch {
+        if (!active) return;
+        setReferralReport(null);
+        setReferralReportStatus("unavailable");
+      }
+    }
+
+    loadReferralReport();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   function refreshTruthEngineSnapshot() {
     setTruthSpineVersion((value) => value + 1);
@@ -334,6 +358,12 @@ export default function HubReports() {
   }, [truthSpineVersion]);
 
   const truthSummary = truthEngineSnapshot?.summary || fallbackTruthSummary;
+  const referralMetric = referralReport?.metric_results?.[0];
+  const referralDisplay = referralReportStatus === "loading"
+    ? "…"
+    : referralReportStatus === "ready"
+      ? String(referralMetric.value)
+      : "Unavailable";
 
   const [exportNotice, setExportNotice] = React.useState("");
   const [localExports, setLocalExports] = React.useState(() => readJson(HUB_REPORT_EXPORT_KEY, []));
@@ -441,6 +471,11 @@ export default function HubReports() {
           </div>
         )}
 
+        <div className="hbr-panel" role="note" style={{ marginBottom: 12 }}>
+          <strong>Canonical reporting field: Hub Referrals Created</strong>
+          <p>Other values on this page are operational or demonstration-only and are not institutional reporting.</p>
+        </div>
+
         <HubReportWorkflowReadinessBridge truthSummary={truthSummary} />
 
         <section className="hbr-kpiStrip" data-tour="hub-reports-kpis">
@@ -479,9 +514,9 @@ export default function HubReports() {
           <KpiCard
             icon="♡"
             label="Hub Referrals Created"
-            value={String(truthSummary.createdReferralCount)}
-            chip="Captured"
-            note="Referral-created events in the Truth Spine"
+            value={referralDisplay}
+            chip={referralReportStatus === "ready" ? "Canonical" : referralReportStatus === "loading" ? "Loading" : "Unavailable"}
+            note={referralReportStatus === "ready" ? "Canonical Reporting Service count" : referralReportStatus === "loading" ? "Loading approved reporting data" : "Reporting unavailable"}
             tone="cyan"
           />
           <KpiCard

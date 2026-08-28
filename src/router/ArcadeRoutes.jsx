@@ -9,6 +9,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import ArcadeLayout from "@/layouts/ArcadeLayout.jsx";
 
 import ArcadeDashboard from "@/pages/arcade/ArcadeDashboard.jsx";
+import ClassicalArcadeRoom from "@/pages/arcade/ClassicalArcadeRoom.jsx";
 import History from "@/pages/arcade/History.jsx";
 import ArcadeLibrary from "@/pages/arcade/ArcadeLibrary.jsx";
 import Leaderboard from "@/pages/arcade/Leaderboard.jsx";
@@ -29,6 +30,15 @@ export default function ArcadeRoutes() {
         element={
           <ArcadeLayout>
             <ArcadeDashboard />
+          </ArcadeLayout>
+        }
+      />
+
+      <Route
+        path="/classical-arcade"
+        element={
+          <ArcadeLayout>
+            <ClassicalArcadeRoom />
           </ArcadeLayout>
         }
       />

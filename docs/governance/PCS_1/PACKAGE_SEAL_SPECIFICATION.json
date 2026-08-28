@@ -1,0 +1,25 @@
+{
+  "standard_id": "PCS-1",
+  "artifact": "PACKAGE_SEAL_SPECIFICATION",
+  "artifact_type": "seal_specification",
+  "status": "GOVERNANCE_DEFINED",
+  "canonical_owner": "Governance Layer",
+  "seal_required_fields": [
+    "Package Identifier",
+    "Package Version",
+    "Lifecycle Version",
+    "Owning Standard",
+    "Owning Package",
+    "Certification Identifier",
+    "Integrity Hash",
+    "Manifest Identifier",
+    "Evidence Identifier",
+    "Traceability Identifier",
+    "Seal Timestamp",
+    "Constitutional Status"
+  ],
+  "seal_effect": "A valid seal converts package artifacts into one governed constitutional object.",
+  "seal_may_authorize_publication": false,
+  "runtime_added": false,
+  "duplicate_authority_created": false
+}

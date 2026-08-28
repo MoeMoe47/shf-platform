@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useToasts } from "@/context/Toasts.jsx";
 import RewardsChip from "@/components/rewards/RewardsChip.jsx";
 import { readJSON, saveJSON, logWallet } from "@/shared/rewards/history.js";
-import { useStorageGuard, StorageSoftReset, bumpKPI } from "@/shared/storage/guard"; // <- no .js
+import { useStorageGuard, StorageSoftReset, bumpKPI } from "@/shared/storage/guard.jsx";
 
 const KEY_SNAPS = "civic:treasury:snapshots";   // JSON[ {id, name, note, state, at} ]
 const KEY_STATE = "civic:treasury:state";       // JSON (live sim state)
@@ -153,7 +153,7 @@ export default function TreasurySnapshots() {
           <h1 id="ts-title" className="db-title">Treasury Snapshots</h1>
           <p className="db-subtitle">Save budget simulations, restore them later, and export/share JSON.</p>
         </div>
-        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+        <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
           <Link className="sh-btn is-ghost" to="/treasury">Open Treasury</Link>
           <StorageSoftReset
             keys={[KEY_SNAPS, KEY_STATE]}

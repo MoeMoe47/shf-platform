@@ -5,6 +5,7 @@ import {
   APP_CONFIG,
   FUNDING_STREAM_LABELS,
 } from "@/utils/logAggregator.js";
+import { createGrantBinder, listGrantBinders } from "@/shared/reporting/grantBinderClient.js";
 
 function useQueryParams() {
   const { search } = useLocation();
@@ -186,11 +187,45 @@ const Chip = ({ children, onClear }) => (
 export default function GrantBinder() {
   const q = useQueryParams();
   const navigate = useNavigate();
+  const [canonicalBinders, setCanonicalBinders] = React.useState(null);
+  const [binderStatus, setBinderStatus] = React.useState("loading");
+  const [binderError, setBinderError] = React.useState("");
 
   const appQ = (q.get("app") || "").trim().toLowerCase();
   const siteQ = (q.get("site") || "").trim();
   const fundingQ = (q.get("funding") || "").trim().toLowerCase();
   const identity = clampIdentity(q.get("identity") || "admin");
+
+  React.useEffect(() => {
+    let active = true;
+    listGrantBinders()
+      .then((items) => {
+        if (!active) return;
+        setCanonicalBinders(items);
+        setBinderStatus("ready");
+      })
+      .catch((err) => {
+        if (!active) return;
+        setBinderError(err?.message || "Grant Binder workspace unavailable");
+        setBinderStatus("unavailable");
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  async function createWorkspace() {
+    setBinderStatus("saving");
+    setBinderError("");
+    try {
+      const binder = await createGrantBinder();
+      setCanonicalBinders((items) => [binder, ...(items || [])]);
+      setBinderStatus("ready");
+    } catch (err) {
+      setBinderError(err?.message || "Grant Binder workspace could not be created");
+      setBinderStatus("unavailable");
+    }
+  }
 
   const summary = React.useMemo(() => {
     const app = appQ || undefined;
@@ -332,6 +367,14 @@ export default function GrantBinder() {
         </div>
 
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+          <span className="sh-badge is-ghost">
+            Workspace: <strong>{canonicalBinders?.[0]?.title || "None"}</strong>
+          </span>
+          {canonicalBinders && canonicalBinders.length === 0 && binderStatus === "ready" ? (
+            <button className="sh-btn is-ghost" type="button" onClick={createWorkspace} disabled={binderStatus === "saving"}>
+              {binderStatus === "saving" ? "Creating…" : "Create workspace"}
+            </button>
+          ) : null}
           <span className="sh-badge">
             Minutes: <strong>{summary.totalMinutes}</strong>
           </span>
@@ -349,6 +392,13 @@ export default function GrantBinder() {
           </button>
         </div>
       </header>
+
+      {binderStatus === "unavailable" ? (
+        <div className="card card--pad" role="alert" style={{ marginBottom: 12 }}>
+          Canonical Grant Binder workspace unavailable. Browser activity logs remain operational history only.
+          {binderError ? ` ${binderError}` : ""}
+        </div>
+      ) : null}
 
       <div className="card card--pad" style={{ marginBottom: 12 }}>
         <div

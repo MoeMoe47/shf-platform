@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "blueprint_id": "CTB-1",
+  "mission_id": "PACKAGE_H_BATCH_03_IGLS_1_PHASE_3",
+  "artifact": "INTERACTION_MODEL",
+  "api_implementation_included": false,
+  "runtime_implementation_included": false,
+  "interactions": [
+    {"producer": "Owner onboarding evidence", "consumer": "B03-COMP-READINESS", "contract": "B03-CONTRACT-READINESS", "ownership": "Package H shared foundation", "direction": "evidence input", "validation": "owner and evidence present", "security": "no credential ownership", "evidence": "readiness input trace", "failure_handling": "block missing evidence"},
+    {"producer": "Master Layer Registry", "consumer": "B03-COMP-BOUNDARY", "contract": "B03-CONTRACT-BOUNDARY", "ownership": "Master Layer Registry", "direction": "read/reference", "validation": "canonical owner exists", "security": "read-only governance reference", "evidence": "owner map trace", "failure_handling": "block unregistered integration"},
+    {"producer": "B03-COMP-READINESS", "consumer": "B03-COMP-EVIDENCE", "contract": "B03-CONTRACT-EVIDENCE", "ownership": "Audit & Verification", "direction": "evidence expectation", "validation": "criterion-specific evidence", "security": "no sensitive data disclosure authority", "evidence": "evidence envelope trace", "failure_handling": "reject unsupported PASS"},
+    {"producer": "Future path/dependency list", "consumer": "B03-COMP-MINIMALISM", "contract": "B03-CONTRACT-MINIMALISM", "ownership": "Runtime Architecture Authority", "direction": "audit input", "validation": "no runtime/API/UI/persistence/deployment", "security": "no runtime access", "evidence": "minimalism finding", "failure_handling": "block implementation readiness"}
+  ]
+}

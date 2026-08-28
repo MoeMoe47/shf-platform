@@ -1,0 +1,67 @@
+import type {
+  ReadinessStatus,
+  TruthStatus,
+  VerificationStatus,
+  ContradictionStatus,
+  PublicationMode,
+} from "../domain/types";
+
+export function deriveReadinessStatus(input: {
+  truthStatus: TruthStatus;
+  verificationStatus: VerificationStatus;
+  contradictionStatus: ContradictionStatus;
+  confidenceScore: number;
+  publicationMode: PublicationMode;
+}): { readinessStatus: ReadinessStatus; reasons: string[] } {
+  const reasons: string[] = [];
+
+  if (input.truthStatus === "blocked") {
+    reasons.push("truth_blocked");
+  }
+
+  if (
+    input.contradictionStatus === "unresolved_conflict" ||
+    input.contradictionStatus === "escalated"
+  ) {
+    reasons.push("contradictions_blocking");
+  }
+
+  if (
+    input.verificationStatus === "insufficient_evidence" ||
+    input.verificationStatus === "rejected"
+  ) {
+    reasons.push("verification_blocking");
+  }
+
+  if (input.confidenceScore < 55) {
+    reasons.push("confidence_too_low");
+  }
+
+  if (reasons.length > 0) {
+    return {
+      readinessStatus: "blocked",
+      reasons,
+    };
+  }
+
+  if (input.confidenceScore < 70 || input.verificationStatus !== "verified") {
+    return {
+      readinessStatus: "not_ready",
+      reasons: input.verificationStatus !== "verified" ? ["verification_not_complete"] : ["confidence_not_sufficient"],
+    };
+  }
+
+  if (input.publicationMode === "public_safe") {
+    return { readinessStatus: "public_ready", reasons: [] };
+  }
+
+  if (input.publicationMode === "deidentified_funder") {
+    return { readinessStatus: "funder_ready", reasons: [] };
+  }
+
+  if (input.publicationMode === "leadership") {
+    return { readinessStatus: "leadership_ready", reasons: [] };
+  }
+
+  return { readinessStatus: "internally_ready", reasons: [] };
+}

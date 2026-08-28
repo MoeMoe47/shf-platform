@@ -1,23 +1,58 @@
 import { query } from "../../../db/client";
 import type { TaxonomyCategory } from "../model/taxonomy-category";
 
+const PROGRAM_COLUMNS = `
+  program_id, organization_id, name, program_type, status, owner_team_id, created_by_user_id,
+  program_classification,
+  COALESCE(owner_organization_id, organization_id) AS owner_organization_id,
+  COALESCE(operator_organization_id, organization_id) AS operator_organization_id,
+  COALESCE(accountable_organization_id, organization_id) AS accountable_organization_id,
+  created_at, updated_at
+`;
+
 export class ProgramRepo {
-  async listPrograms() {
+  async listPrograms(scope: any) {
     const res = await query(
-      `SELECT program_id, organization_id, name, program_type, status, owner_team_id, created_by_user_id, created_at, updated_at
+      `SELECT ${PROGRAM_COLUMNS}
        FROM programs
+       WHERE organization_id = $1
+          OR owner_organization_id = $1
+          OR operator_organization_id = $1
+          OR accountable_organization_id = $1
        ORDER BY updated_at DESC`
+      , [scope.organization_id]
     );
     return res.rows;
   }
 
-  async getProgramById(programId: string) {
+  async getProgramById(programId: string, scope: any) {
     const res = await query(
-      `SELECT program_id, organization_id, name, program_type, status, owner_team_id, created_by_user_id, created_at, updated_at
+      `SELECT ${PROGRAM_COLUMNS}
        FROM programs
        WHERE program_id = $1
+         AND (
+           organization_id = $2
+           OR owner_organization_id = $2
+           OR operator_organization_id = $2
+           OR accountable_organization_id = $2
+         )
        LIMIT 1`,
-      [programId]
+      [programId, scope.organization_id]
+    );
+    return res.rows[0] || null;
+  }
+
+  async getProgramForTransition(programId: string, scope: any) {
+    const res = await query(
+      `SELECT ${PROGRAM_COLUMNS}
+       FROM programs
+       WHERE program_id = $1
+         AND (
+           COALESCE(operator_organization_id, organization_id) = $2
+           OR COALESCE(accountable_organization_id, organization_id) = $2
+         )
+       LIMIT 1`,
+      [programId, scope.organization_id]
     );
     return res.rows[0] || null;
   }
@@ -25,29 +60,39 @@ export class ProgramRepo {
   async createProgram(input: any) {
     const res = await query(
       `INSERT INTO programs (
-        program_id, organization_id, name, program_type, status, owner_team_id, created_by_user_id
-      ) VALUES ($1,$2,$3,$4,$5,$6,$7)
-      RETURNING program_id, organization_id, name, program_type, status, owner_team_id, created_by_user_id, created_at, updated_at`,
+        program_id, organization_id, name, program_type, status, owner_team_id, created_by_user_id,
+        program_classification, owner_organization_id, operator_organization_id, accountable_organization_id
+      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+      RETURNING ${PROGRAM_COLUMNS}`,
       [
         input.program_id,
-        input.organization_id,
+        input.accountable_organization_id,
         input.name,
         input.program_type,
         input.status,
         input.owner_team_id || null,
         input.created_by_user_id || null,
+        input.program_classification,
+        input.owner_organization_id,
+        input.operator_organization_id,
+        input.accountable_organization_id,
       ]
     );
     return res.rows[0];
   }
 
-  async updateProgramStatus(programId: string, status: string) {
+  async updateProgramStatus(programId: string, status: string, scope: any, expectedStatus?: string) {
     const res = await query(
       `UPDATE programs
        SET status = $2, updated_at = NOW()
        WHERE program_id = $1
-       RETURNING program_id, organization_id, name, program_type, status, owner_team_id, created_by_user_id, created_at, updated_at`,
-      [programId, status]
+         AND (
+           COALESCE(operator_organization_id, organization_id) = $3
+           OR COALESCE(accountable_organization_id, organization_id) = $3
+         )
+         AND ($4::text IS NULL OR status = $4)
+       RETURNING ${PROGRAM_COLUMNS}`,
+      [programId, status, scope.organization_id, expectedStatus || null]
     );
     return res.rows[0] || null;
   }

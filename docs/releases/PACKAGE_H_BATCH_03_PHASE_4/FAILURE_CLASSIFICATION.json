@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "mission_id": "PACKAGE_H_BATCH_03_IGLS_1_PHASE_4",
+  "artifact": "FAILURE_CLASSIFICATION",
+  "failure_classes": [
+    {"severity": "Critical", "detection_method": "validator, test, or repository scan", "blocking_behavior": "blocks certification", "escalation": "Independent Constitutional Review Authority", "recovery_requirements": "correct artifact and revalidate", "reverification_requirements": "full Phase 4 reverification"},
+    {"severity": "Major", "detection_method": "validator or traceability review", "blocking_behavior": "blocks unless constitutionally waived", "escalation": "Verification Authority", "recovery_requirements": "document correction or waiver", "reverification_requirements": "targeted reverification plus certification review"},
+    {"severity": "Minor", "detection_method": "review or validator warning", "blocking_behavior": "non-blocking if evidence recorded", "escalation": "Acceptance Authority", "recovery_requirements": "record remediation plan", "reverification_requirements": "targeted reverification"},
+    {"severity": "Advisory", "detection_method": "review", "blocking_behavior": "non-blocking", "escalation": "Evidence Authority", "recovery_requirements": "optional improvement", "reverification_requirements": "not required unless scope changes"},
+    {"severity": "Informational", "detection_method": "review", "blocking_behavior": "none", "escalation": "none", "recovery_requirements": "none", "reverification_requirements": "none"}
+  ],
+  "evidence_sufficiency_states": ["Complete", "Incomplete", "Insufficient", "Conflicting", "Superseded", "Invalid", "Expired", "Untrusted"]
+}

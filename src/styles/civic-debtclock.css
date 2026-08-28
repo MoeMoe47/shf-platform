@@ -1,0 +1,206 @@
+/* src/styles/civic-debtclock.css
+   Civic Lab — Debt Clock page. Reuses every token/shell primitive from
+   src/styles/civic-dashboard.css (--civic-*, .cv-card, .cv-btn, .cv-shell,
+   theme handling, breakpoints) and the card/pill/mission-log patterns
+   established in civic-elections.css / civic-proposals.css /
+   civic-grantstory.css. `.dc-*` classes are this page's own content only
+   — nothing here redefines the shell or theme mechanism. Deliberately
+   small: the approved mock is intentionally simple (header, one hero
+   card + illustration, mission log, compact Coach), not a dashboard.
+   Breakpoints match the shared shell exactly: >=1200px desktop,
+   768-1199px tablet (icon rail inherited), <768px mobile (drawer
+   inherited). */
+
+:root[data-app="civic"] .dc-page {
+  background: var(--civic-page-bg);
+  padding: 28px 32px 64px;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+@media (min-width: 1200px) {
+  :root[data-app="civic"] .dc-page { padding-right: 104px; } /* Brainiact gutter — see civic-dashboard.css */
+}
+
+:root[data-app="civic"] .dc-card {
+  background: var(--civic-card-bg);
+  border: 1px solid var(--civic-card-border);
+  border-radius: var(--civic-radius);
+  box-shadow: var(--civic-shadow);
+}
+
+/* ---- Header ---- */
+:root[data-app="civic"] .dc-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+:root[data-app="civic"] .dc-header__h1 { font-size: 30px; font-weight: 800; margin: 0; }
+:root[data-app="civic"] .dc-header__sub { font-size: 14px; color: var(--civic-ink-muted); margin: 0; text-align: right; }
+
+/* ---- Hero row: debt card + illustration ---- */
+:root[data-app="civic"] .dc-heroRow {
+  display: flex;
+  align-items: stretch;
+  gap: 20px;
+}
+:root[data-app="civic"] .dc-hero {
+  flex: 1 1 62%;
+  min-width: 0;
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+:root[data-app="civic"] .dc-hero__icon {
+  width: 56px; height: 56px; flex: none;
+  border-radius: 999px;
+  background: var(--civic-gold-soft);
+  color: var(--civic-gold);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 24px;
+}
+:root[data-theme="dark"][data-app="civic"] .dc-hero__icon { background: rgba(217, 119, 6, 0.2); }
+:root[data-app="civic"] .dc-hero__label { font-size: 14px; font-weight: 700; color: var(--civic-ink-muted); margin: 0 0 4px; }
+:root[data-app="civic"] .dc-hero__value {
+  font-weight: 800;
+  line-height: 1.05;
+  margin: 0;
+  /* Responsive scaling instead of fixed breakpoints — the full value must
+     always fit without truncation, from a 375px phone to a 1536px
+     desktop. */
+  font-size: clamp(1.6rem, 1rem + 3.2vw, 2.75rem);
+  overflow-wrap: anywhere;
+}
+:root[data-app="civic"] .dc-hero__source { font-size: 12px; color: var(--civic-ink-muted); margin: 6px 0 0; }
+:root[data-app="civic"] .dc-hero__unavailable { font-size: 15px; font-weight: 700; color: var(--civic-ink-muted); }
+
+:root[data-app="civic"] .dc-illustration {
+  flex: 1 1 38%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+:root[data-app="civic"] .dc-illustration svg { width: 100%; height: auto; max-width: 340px; }
+
+/* ---- Mission Log wrapper — same fix pattern as Elections/Proposals:
+   MissionLogButtons is shared (also used unmodified by Proposals/Treasury
+   Sim) and reads global, non-civic-scoped --card/--ring tokens, so it
+   needs a scoped token+selector override here rather than any change to
+   the component itself. ---- */
+:root[data-theme="dark"][data-app="civic"] .dc-missionLog {
+  --card: var(--civic-card-bg);
+  --ring: var(--civic-card-border);
+  --muted: rgba(255, 255, 255, 0.04);
+}
+:root[data-theme="dark"][data-app="civic"] .dc-missionLog .card {
+  background: var(--civic-card-bg);
+  border-color: var(--civic-card-border);
+}
+:root[data-app="civic"] .dc-missionLog input.sh-input,
+:root[data-app="civic"] .dc-missionLog textarea.sh-input {
+  background: var(--civic-card-bg);
+  color: var(--civic-ink);
+  border: 1px solid var(--civic-card-border);
+  border-radius: 8px;
+  padding: 6px 9px;
+  font: inherit;
+  font-size: 13px;
+  width: 100%;
+  box-sizing: border-box;
+}
+:root[data-app="civic"] .dc-missionLog input.sh-input:focus-visible,
+:root[data-app="civic"] .dc-missionLog textarea.sh-input:focus-visible {
+  outline: 2px solid var(--civic-pink);
+  outline-offset: 1px;
+}
+/* Primary/secondary action hierarchy inside the shared component: "Log
+   mission" (primary, pink) vs "Log & keep open" (secondary, outlined) —
+   matches the approved mock exactly without forking the component. */
+:root[data-app="civic"] .dc-missionLog .sh-btn:not(.is-ghost) {
+  background: var(--civic-pink);
+  border-color: var(--civic-pink);
+  color: #fff;
+  min-height: 44px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+:root[data-app="civic"] .dc-missionLog .sh-btn:not(.is-ghost):hover { filter: brightness(1.05); }
+:root[data-app="civic"] .dc-missionLog .sh-btn.is-ghost {
+  background: var(--civic-card-bg);
+  border: 1.5px solid var(--civic-card-border);
+  color: var(--civic-ink);
+  min-height: 44px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+:root[data-app="civic"] .dc-missionLog .sh-btn:focus-visible {
+  outline: 2px solid var(--civic-pink);
+  outline-offset: 2px;
+}
+
+/* ---- Compact Coach card, bottom-right per the approved mock (not a
+   full-width section like the larger Coach cards on other pages — this
+   page is intentionally simple). ---- */
+:root[data-app="civic"] .dc-coachRow { display: flex; justify-content: flex-end; }
+:root[data-app="civic"] .dc-coach {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  max-width: 260px;
+}
+:root[data-app="civic"] .dc-coach__art { flex: none; }
+:root[data-app="civic"] .dc-coach__art svg, :root[data-app="civic"] .dc-coach__art { width: 44px; height: 44px; }
+:root[data-app="civic"] .dc-coach__title { font-size: 13px; font-weight: 700; margin: 0; }
+:root[data-app="civic"] .dc-coach__link {
+  font-size: 13px;
+  font-weight: 800;
+  /* #be185d, not var(--civic-pink)/#ec4899: measured live at 3.53:1
+     against the white card — under WCAG AA's 4.5:1. Same fix pattern used
+     throughout the redesign (nav active state, tags, buttons). */
+  color: #be185d;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+}
+:root[data-theme="dark"][data-app="civic"] .dc-coach__link { color: var(--civic-pink); }
+:root[data-app="civic"] .dc-coach__link:focus-visible { outline: 2px solid var(--civic-pink); outline-offset: 2px; }
+
+/* ===================== Responsive ===================== */
+@media (max-width: 767.98px) {
+  :root[data-app="civic"] .dc-page { padding: 18px 16px 48px; gap: 16px; }
+  :root[data-app="civic"] .dc-header { flex-direction: column; align-items: flex-start; gap: 4px; }
+  :root[data-app="civic"] .dc-header__sub { text-align: left; }
+  :root[data-app="civic"] .dc-heroRow { flex-direction: column; }
+  :root[data-app="civic"] .dc-hero { padding: 20px; }
+  /* Below ~400px the icon-beside-value layout leaves too little width for
+     "$89,420,000,000" to sit on one line at a legible size (confirmed
+     live — it still fit with no clipping, just an awkward mid-number
+     wrap). Stacking the icon above the value instead frees the full card
+     width for the number. */
+  @media (max-width: 399.98px) {
+    :root[data-app="civic"] .dc-hero { flex-direction: column; align-items: flex-start; gap: 10px; }
+  }
+  :root[data-app="civic"] .dc-illustration svg { max-width: 220px; }
+  :root[data-app="civic"] .dc-coachRow { justify-content: flex-start; }
+  :root[data-app="civic"] .dc-coach { max-width: none; width: 100%; }
+}
+
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  :root[data-app="civic"] .dc-page { padding: 24px 22px 56px; }
+  :root[data-app="civic"] .dc-heroRow { flex-direction: column; }
+  :root[data-app="civic"] .dc-illustration svg { max-width: 280px; }
+}
+
+@media (min-width: 1200px) and (max-width: 1339.98px) {
+  :root[data-app="civic"] .dc-hero { flex-basis: 58%; }
+  :root[data-app="civic"] .dc-illustration { flex-basis: 42%; }
+}

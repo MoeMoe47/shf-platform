@@ -1,5 +1,4 @@
 import React from "react";
-import { useParams } from "react-router-dom";
 import AIAnalystPanel from "@/pages/shf-command/sections/AIAnalystPanel";
 import TrustVerificationPanel from "@/pages/shf-command/sections/TrustVerificationPanel";
 import ReportsBriefingsPanel from "@/pages/shf-command/sections/ReportsBriefingsPanel";
@@ -16,6 +15,12 @@ function countyToEntityId(slug) {
   if (normalized === "cuyahoga") return "test_case_002";
   if (normalized === "hamilton") return "test_case_003";
   return "test_case_001";
+}
+
+function getCountySlug() {
+  if (typeof window === "undefined") return "";
+  const match = String(window.location.hash || "").match(/^#\/county\/([^/]+)$/i);
+  return match?.[1] || "";
 }
 
 const TRUST_ITEMS = [
@@ -88,7 +93,7 @@ function ReportsInstitutionalList({ items = [], onExportClick = null }) {
 }
 
 export default function CountyDetail() {
-  const { slug } = useParams();
+  const slug = getCountySlug();
   const county = titleCase(slug || "unknown");
   const entityId = countyToEntityId(slug);
 

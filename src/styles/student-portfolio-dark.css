@@ -1,0 +1,118 @@
+/* src/styles/student-portfolio-dark.css
+   Dark-mode theme layer for Student Portfolio. A pure addition on top of
+   student-portfolio.css — no light-mode rule is edited or removed, so
+   light mode is byte-for-byte unchanged. Activated only when BOTH are
+   true:
+     - the user's resolved theme is dark (`[data-theme="dark"]` on <html>,
+       see src/utils/careerTheme.js)
+     - Student Portfolio is the active page
+       (`body[data-dark-scope~="student-portfolio"]`, set/cleared by
+       Portfolio.jsx's mount/unmount effect)
+   The second condition is what keeps dark mode from bleeding onto other
+   pages that don't have dark styling yet, even though the *preference*
+   is global and shared via one control in the AppShellLayout header.
+
+   Portfolio.jsx also marks the "resume-builder" scope token alongside its
+   own — that literal token is what the shared shell's existing dark CSS
+   (career-shell.css) checks to let the shared header/sidebar go dark; it
+   predates this page and is reused rather than duplicated, exactly as
+   done for Career Pathways (see src/pages/CareerPathways.jsx).
+
+   Approved dark palette (same institutional palette used by Resume
+   Builder and Career Pathways):
+     canvas #0D0F12 · surface #171A20 · elevated #1E222A · borders #343944
+     text #F5F3EE · secondary text #AEB4BF · accent #FF5A1F
+*/
+
+html[data-theme="dark"] body[data-dark-scope~="student-portfolio"] .sp-page {
+  --sp-bg: #0D0F12;
+  --sp-card: #1E222A;
+  --sp-ink: #F5F3EE;
+  --sp-muted: #AEB4BF;
+  --sp-ring: #343944;
+  --sp-ring-soft: #262B34;
+  --sp-orange: #FF5A1F;
+  --sp-orange-600: #E14A16;
+  --sp-orange-tint: #2A1B12;
+  --sp-orange-tint-strong: #3A2417;
+  --sp-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 20px rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
+}
+
+/* ===========================================================
+   Hardcoded-hex spots that don't route through the --sp-* tokens
+   above (hover states, tone pills, native form-control defaults).
+   =========================================================== */
+html[data-theme="dark"] body[data-dark-scope~="student-portfolio"] .sp-iconBtn:hover,
+html[data-theme="dark"] body[data-dark-scope~="student-portfolio"] .sp-btnSecondary:hover,
+html[data-theme="dark"] body[data-dark-scope~="student-portfolio"] .sp-projectNav:hover,
+html[data-theme="dark"] body[data-dark-scope~="student-portfolio"] .sp-ratingBtn:hover {
+  background: #262B34;
+}
+
+html[data-theme="dark"] body[data-dark-scope~="student-portfolio"] .sp-avatar {
+  background: linear-gradient(180deg, #262B34, #1E222A);
+}
+html[data-theme="dark"] body[data-dark-scope~="student-portfolio"] .sp-avatarFallback {
+  color: #757C88;
+}
+
+html[data-theme="dark"] body[data-dark-scope~="student-portfolio"] .sp-projectIcon,
+html[data-theme="dark"] body[data-dark-scope~="student-portfolio"] .sp-projectNav,
+html[data-theme="dark"] body[data-dark-scope~="student-portfolio"] .sp-techTag,
+html[data-theme="dark"] body[data-dark-scope~="student-portfolio"] .sp-ratingBtn,
+html[data-theme="dark"] body[data-dark-scope~="student-portfolio"] .sp-durationSelect {
+  background: #171A20;
+}
+/* .sp-notesInput has no light-mode background rule at all (it relies on
+   the browser's white textarea default, invisible against .sp-card's own
+   white in light mode) — dark mode needs one explicit or it stays a
+   glaring native-white box. */
+html[data-theme="dark"] body[data-dark-scope~="student-portfolio"] .sp-notesInput {
+  background: #171A20;
+}
+
+/* Category tag pills (Featured Projects) */
+html[data-theme="dark"] body[data-dark-scope~="student-portfolio"] .sp-tag {
+  background: #2E2140;
+  color: #C4B5FD;
+}
+html[data-theme="dark"] body[data-dark-scope~="student-portfolio"] .sp-tag.is-web {
+  background: #16283A;
+  color: #7DD3FC;
+}
+
+/* Status pills (Featured Projects) */
+html[data-theme="dark"] body[data-dark-scope~="student-portfolio"] .sp-statusPill.is-complete {
+  background: #14301F;
+  color: #4ADE80;
+}
+
+/* Profile-strength "done" check color */
+html[data-theme="dark"] body[data-dark-scope~="student-portfolio"] .sp-strengthItem.is-done .sp-strengthIcon {
+  color: #4ADE80;
+}
+
+/* Credentials & Badges tone icons */
+html[data-theme="dark"] body[data-dark-scope~="student-portfolio"] .sp-badgeIcon.tone-a {
+  background: #10261B;
+  color: #34D399;
+  border-color: #1F6B4A;
+}
+html[data-theme="dark"] body[data-dark-scope~="student-portfolio"] .sp-badgeIcon.tone-b {
+  background: #12233D;
+  color: #60A5FA;
+  border-color: #1E3A5F;
+}
+html[data-theme="dark"] body[data-dark-scope~="student-portfolio"] .sp-badgeIcon.tone-c {
+  background: #2E1530;
+  color: #E879F9;
+  border-color: #5B2A5E;
+}
+
+/* AvatarUploader's inline-styled error text (var with light fallback —
+   see AvatarUploader.jsx) needs a brighter red for dark-background
+   contrast; the light value stays completely untouched. */
+html[data-theme="dark"] body[data-dark-scope~="student-portfolio"] .sp-page {
+  --sp-danger: #FCA5A5;
+}

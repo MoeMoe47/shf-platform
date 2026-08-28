@@ -207,6 +207,53 @@
 
 /* Keep emoji readable when collapsed */
 :root[data-app="civic"] .crb-linkIcon { width: 1.25em; text-align: center; font-size: 18px; }
+
+/* Journal list+editor split — desktop keeps the exact prior proportions
+   (list capped at 280–360px, editor takes the rest); only the mobile
+   override below changes. Defined BEFORE the mobile media query below so
+   the media query (equal selector specificity) wins at narrow widths by
+   source order — do not move this after that block. */
+:root[data-app="civic"] .crb-journalGrid {
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+/* Mobile: the fixed 260px-sidebar + 1fr grid (see .crb-body above) has no
+   narrow-viewport treatment and overflows below ~860px — stack sidebar
+   above main instead of forcing it beside a viewport too narrow for both.
+   This is a minimal containment fix, not a new mobile nav pattern (no
+   drawer/hamburger is introduced here). */
+@media (max-width: 860px) {
+  :root[data-app="civic"] .crb-body {
+    grid-template-columns: 1fr;
+    padding: 12px;
+  }
+  :root[data-app="civic"] .crb-sidebar {
+    border-right: none;
+    border-bottom: 1px solid var(--ring, #e6e6e6);
+    border-radius: 14px;
+  }
+  :root[data-app="civic"] .crb-main {
+    padding-left: 0;
+    min-height: auto;
+  }
+  /* ConstitutionJournal's list+editor split (see .crb-journalGrid below) —
+     the 280px minimum first column alone exceeds a 390px viewport, so
+     stack list above editor instead of forcing them side by side. */
+  :root[data-app="civic"] .crb-journalGrid {
+    grid-template-columns: 1fr;
+  }
+  /* .db-head (title + action-row header used by every Civic page) has no
+     flex-wrap at any width — on narrow viewports a title plus several
+     action buttons/chips forces the row wider than the viewport. */
+  :root[data-app="civic"] .db-head {
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+}
+
 /* ------------------------------
    Civic Survey Layout Polish
 ---------------------------------*/

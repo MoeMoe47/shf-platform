@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "mission_id": "PACKAGE_H_BATCH_03_IGLS_1_PHASE_1",
+  "artifact": "MISSION_BOUNDARY_ANALYSIS",
+  "boundary_status": "PASS",
+  "will": [
+    "define the Batch 03 mission",
+    "authorize only IGLS-1 Phase 2 Architecture Charter",
+    "require future authority mapping",
+    "require future runtime-owner boundary analysis",
+    "require evidence before certification"
+  ],
+  "will_not": [
+    "create architecture charter content",
+    "create a blueprint",
+    "implement software",
+    "build runtime",
+    "create APIs",
+    "create UI",
+    "modify infrastructure",
+    "create persistence"
+  ],
+  "must_never": [
+    "duplicate the Master Layer Registry",
+    "replace Truth Spine",
+    "override Oracle",
+    "replace Executive Command",
+    "replace Release Management",
+    "replace Readiness Gate",
+    "replace Contract Runtime",
+    "replace Identity",
+    "replace Audit or Verification",
+    "become marketplace owner",
+    "become runtime monopoly"
+  ],
+  "does_not_replace": {
+    "Truth Spine": "Truth Spine remains truth and verification authority.",
+    "Oracle": "Oracle remains evidence-support reasoning authority.",
+    "Master Layer Registry": "The registry remains canonical architecture authority.",
+    "Executive Command": "Executive Command remains a visibility and command surface.",
+    "Release Management": "Release Management remains publication authority.",
+    "Readiness Gate": "Readiness Gate remains report/publication readiness authority.",
+    "Contract Runtime": "Existing contract runtime remains owner of runtime contract execution.",
+    "Identity": "Identity remains role, permission, and access authority.",
+    "Audit": "Audit remains audit-event and audit-proof authority.",
+    "Verification": "Verification remains evidence verification authority."
+  },
+  "prohibited_surfaces": {
+    "duplicate_authority": false,
+    "duplicate_registry": false,
+    "runtime": false,
+    "api": false,
+    "ui": false,
+    "persistence": false,
+    "batch_03_implementation": false
+  }
+}

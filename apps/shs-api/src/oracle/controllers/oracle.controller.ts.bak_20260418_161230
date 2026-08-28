@@ -1,0 +1,9 @@
+import { resolveTruth } from "../services/oracle.service";
+
+export function getOracleTruth(req: any, res: any) {
+  const { entityId } = req.params;
+
+  const truth = resolveTruth(entityId);
+
+  res.json(truth);
+}

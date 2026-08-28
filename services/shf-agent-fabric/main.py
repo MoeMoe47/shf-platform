@@ -107,6 +107,10 @@ from routers.security_privacy_routes import router as security_privacy_router  #
 from routers.data_ownership_ip_routes import router as data_ownership_ip_router  # noqa: E402
 from routers.policy_engine_routes import router as policy_engine_router  # noqa: E402
 from routers.event_webhook_routes import router as event_webhook_router  # noqa: E402
+from routers.shf_ingestion_routes import router as shf_ingestion_router  # noqa: E402
+from routers.shf_internal_ingestion_routes import router as shf_internal_ingestion_router  # noqa: E402
+from routers.shf_metric_routes import router as shf_metric_router  # noqa: E402
+from routers.shf_reporting_routes import router as shf_reporting_router  # noqa: E402
 from routers.truth_routes import router as truth_router  # noqa: E402
 from routers.oracle_routes import router as oracle_router  # noqa: E402
 from routers.ai_guardrails_routes import router as ai_guardrails_router  # noqa: E402
@@ -481,6 +485,10 @@ app.include_router(security_privacy_router)
 app.include_router(data_ownership_ip_router)
 app.include_router(policy_engine_router)
 app.include_router(event_webhook_router)
+app.include_router(shf_ingestion_router)
+app.include_router(shf_internal_ingestion_router)
+app.include_router(shf_metric_router)
+app.include_router(shf_reporting_router)
 app.include_router(truth_router)
 app.include_router(oracle_router)
 app.include_router(ai_guardrails_router)

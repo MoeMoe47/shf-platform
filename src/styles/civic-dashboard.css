@@ -1,0 +1,887 @@
+/* src/styles/civic-dashboard.css
+   Civic Lab — responsive shell (sidebar/top bar) + Dashboard redesign.
+   Establishes the shell, design tokens, spacing, navigation behavior,
+   responsive rules, theme behavior, and component language that future
+   Civic pages inherit. Scoped entirely under [data-app="civic"] so it can
+   never leak into Arcade/Career/Curriculum/Sales/other apps, which are
+   separate Vite HTML entrypoints/bundles.
+
+   Breakpoints (per the approved dashboard redesign spec):
+     >= 1200px   desktop — full sidebar, user-collapsible
+     768–1199px  tablet  — always the collapsed icon rail
+     < 768px     mobile  — sidebar hidden, hamburger + drawer
+*/
+
+/* ===================== Design tokens ===================== */
+:root[data-app="civic"] {
+  /* Accents — shared across both themes */
+  --civic-pink: #ec4899;
+  --civic-pink-soft: #fce7f3;
+  --civic-gold: #d97706;
+  --civic-gold-soft: #fef3c7;
+  --civic-purple: #8b5cf6;
+  --civic-purple-soft: #ede9fe;
+
+  /* Light mode (default) — warm white / ivory institutional palette */
+  --civic-page-bg: #faf8f5;
+  --civic-ivory: #faf8f5;
+  --civic-card-bg: #ffffff;
+  --civic-card-border: #e7e0d6;
+  --civic-ink: #17140f;
+  --civic-ink-muted: #6b6459;
+  --civic-shadow: 0 1px 2px rgba(23, 20, 15, 0.04), 0 8px 24px -12px rgba(23, 20, 15, 0.12);
+
+  /* Sidebar/header chrome — light */
+  --civic-sidebar-bg: #ffffff;
+  --civic-sidebar-border: #e7e0d6;
+  --civic-header-bg: #ffffff;
+
+  /* Hero — stays dark in both themes */
+  --civic-hero-bg: #0f1420;
+  --civic-hero-card-bg: #171d2c;
+  --civic-hero-border: #2a3244;
+  --civic-hero-ink: #f5f3ef;
+  --civic-hero-ink-muted: #a7adbd;
+
+  --civic-radius: 14px;
+  --civic-radius-sm: 10px;
+  --civic-sidebar-w: 268px;
+  --civic-sidebar-w-collapsed: 80px;
+  --civic-header-h: 64px;
+  --civic-transition: 160ms ease;
+}
+
+:root[data-app="civic"]:not([data-theme="light"]) {
+  /* Fallback only applies with an explicit system-dark match; the real
+     dark values are defined below under [data-theme="dark"], which always
+     wins once the user (or system) resolves to dark. */
+}
+
+:root[data-app="civic"][data-theme="dark"] {
+  /* Dark mode — near-black/navy background, dark charcoal cards, restrained
+     glow, institutional (not neon-gaming) */
+  --civic-page-bg: #0b0f16;
+  --civic-card-bg: #141a24;
+  --civic-card-border: #263042;
+  --civic-ink: #f3f4f6;
+  --civic-ink-muted: #97a0b3;
+  --civic-shadow: 0 0 0 1px rgba(236, 72, 153, 0.03), 0 10px 28px -14px rgba(0, 0, 0, 0.6);
+
+  --civic-sidebar-bg: #0d1219;
+  --civic-sidebar-border: #212a38;
+  --civic-header-bg: #0d1219;
+
+  --civic-hero-bg: #0a0e17;
+  --civic-hero-card-bg: #121826;
+  --civic-hero-border: #262f42;
+  --civic-hero-ink: #f5f3ef;
+  --civic-hero-ink-muted: #97a0b3;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-app="civic"]:not([data-theme="light"]):not([data-theme="dark"]) {
+    --civic-page-bg: #0b0f16;
+    --civic-card-bg: #141a24;
+    --civic-card-border: #263042;
+    --civic-ink: #f3f4f6;
+    --civic-ink-muted: #97a0b3;
+    --civic-shadow: 0 0 0 1px rgba(236, 72, 153, 0.03), 0 10px 28px -14px rgba(0, 0, 0, 0.6);
+    --civic-sidebar-bg: #0d1219;
+    --civic-sidebar-border: #212a38;
+    --civic-header-bg: #0d1219;
+  }
+}
+
+/* app-shell.css (loaded after this file, "layout guardrails") sets
+   `html, body { height: 100% }` globally across every app that shares it.
+   That's a hard height, not a floor — on any Civic route whose content
+   exceeds one viewport tall, body's own painted background box stops at
+   exactly 100vh while the (unclipped) content keeps rendering past it, so
+   html's un-themed default background shows through as a visible seam
+   below the fold. Fixed here, scoped strictly to [data-app="civic"] so it
+   can never affect any other app sharing app-shell.css: `height: auto` +
+   `min-height: 100%` keeps the "at least one viewport tall" guarantee
+   in that rule intended for while letting the box grow with real content. */
+html[data-app="civic"],
+html[data-app="civic"] body {
+  height: auto;
+  min-height: 100%;
+}
+
+html[data-app="civic"],
+:root[data-app="civic"] body,
+:root[data-app="civic"] .cv-shell {
+  background: var(--civic-page-bg);
+  color: var(--civic-ink);
+}
+
+:root[data-app="civic"] * {
+  transition: background-color var(--civic-transition), border-color var(--civic-transition), color var(--civic-transition);
+}
+:root[data-app="civic"] .cv-navLink,
+:root[data-app="civic"] .cv-shell__sidebar {
+  transition: width var(--civic-transition), background-color var(--civic-transition), border-color var(--civic-transition);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-app="civic"] * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+.cv-srOnly {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ===================== Shell layout ===================== */
+:root[data-app="civic"] .cv-shell {
+  display: flex;
+  min-height: 100vh;
+  align-items: stretch;
+}
+
+:root[data-app="civic"] .cv-shell__sidebar {
+  width: var(--civic-sidebar-w);
+  flex: 0 0 var(--civic-sidebar-w);
+  background: var(--civic-sidebar-bg);
+  border-right: 1px solid var(--civic-sidebar-border);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+:root[data-app="civic"] .cv-shell__sidebar.is-collapsed {
+  width: var(--civic-sidebar-w-collapsed);
+  flex-basis: var(--civic-sidebar-w-collapsed);
+}
+
+:root[data-app="civic"] .cv-shell__right {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+:root[data-app="civic"] .cv-shell__scrim {
+  display: none;
+}
+
+:root[data-app="civic"] .cv-drawerClose {
+  display: none;
+}
+
+/* ---- Top bar ---- */
+:root[data-app="civic"] .cv-shell__header {
+  height: var(--civic-header-h);
+  min-height: var(--civic-header-h);
+  background: var(--civic-header-bg);
+  border-bottom: 1px solid var(--civic-card-border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 20px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+:root[data-app="civic"] .cv-headerBrand {
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: 0.01em;
+  color: var(--civic-ink);
+  text-decoration: none;
+}
+
+:root[data-app="civic"] .cv-mobileMenuBtn {
+  display: none;
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--civic-card-border);
+  background: var(--civic-card-bg);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+}
+:root[data-app="civic"] .cv-mobileMenuBar {
+  width: 18px; height: 2px;
+  background: var(--civic-ink);
+  border-radius: 2px;
+}
+
+:root[data-app="civic"] .cv-headerExtras {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+:root[data-app="civic"] .cv-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1px solid var(--civic-card-border);
+  background: var(--civic-card-bg);
+  color: var(--civic-ink);
+  cursor: pointer;
+  min-height: 40px;
+}
+:root[data-app="civic"] .cv-btn--ghost:hover { border-color: var(--civic-purple); }
+:root[data-app="civic"] .cv-btn:focus-visible,
+:root[data-app="civic"] .cv-iconBtn:focus-visible,
+:root[data-app="civic"] .cv-navLink:focus-visible,
+:root[data-app="civic"] a.cv-brand:focus-visible,
+:root[data-app="civic"] button:focus-visible {
+  outline: 2px solid var(--civic-purple);
+  outline-offset: 2px;
+}
+
+:root[data-app="civic"] .cv-pointsChip { min-height: 40px; }
+
+:root[data-app="civic"] .cv-iconBtn {
+  position: relative;
+  width: 40px; height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--civic-card-border);
+  background: var(--civic-card-bg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+}
+:root[data-app="civic"] .cv-iconBtn__badge {
+  position: absolute;
+  top: -4px; right: -4px;
+  min-width: 16px; height: 16px;
+  padding: 0 3px;
+  border-radius: 999px;
+  background: var(--civic-pink);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===================== Sidebar nav ===================== */
+:root[data-app="civic"] .cv-nav {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+:root[data-app="civic"] .cv-sideTop {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 18px 16px 14px;
+  border-bottom: 1px solid var(--civic-sidebar-border);
+}
+
+:root[data-app="civic"] .cv-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--civic-ink);
+  min-width: 0;
+}
+:root[data-app="civic"] .cv-brand__mark { font-size: 24px; flex: none; }
+:root[data-app="civic"] .cv-brand__text { display: flex; flex-direction: column; min-width: 0; }
+:root[data-app="civic"] .cv-brand__name {
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+}
+:root[data-app="civic"] .cv-brand__tagline {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--civic-ink-muted);
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+:root[data-app="civic"] .cv-sideToggle {
+  margin-left: auto;
+  flex: none;
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  border: 1px solid var(--civic-sidebar-border);
+  background: transparent;
+  color: var(--civic-ink-muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+:root[data-app="civic"] .cv-sideToggle:hover { border-color: var(--civic-purple); color: var(--civic-purple); }
+
+:root[data-app="civic"] .cv-navScroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 12px 12px 8px;
+}
+
+:root[data-app="civic"] .cv-navSection { margin-bottom: 14px; }
+:root[data-app="civic"] .cv-navSection__title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--civic-ink-muted);
+  padding: 0 10px 6px;
+}
+
+:root[data-app="civic"] .cv-navList {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+:root[data-app="civic"] .cv-navLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--civic-ink);
+  font-size: 14px;
+  font-weight: 600;
+  position: relative;
+}
+:root[data-app="civic"] .cv-navLink:hover { background: var(--civic-pink-soft); }
+:root[data-theme="dark"][data-app="civic"] .cv-navLink:hover { background: rgba(236, 72, 153, 0.14); }
+:root[data-app="civic"] .cv-navLink.is-active {
+  /* Corrected from an earlier purple guess (made before any Elections mock
+     existed) to pink — the approved Elections mock (provided directly, not
+     reconstructed from text) shows the active sidebar item with a pink
+     wash/text/left accent, confirming pink is the app's primary
+     selection/action color throughout, not just an Elections-local choice.
+     Applied here in the shared shell so Dashboard and every other Civic
+     page stay visually consistent with one another — a fidelity
+     correction now backed by real evidence, not a functional change:
+     Dashboard was re-verified after this edit (see final report). */
+  background: var(--civic-pink-soft);
+  /* #db2777, not var(--civic-pink)/#ec4899: measured live at ~3.8:1
+     against white — under WCAG AA's 4.5:1 for normal-size text. This
+     darker shade (same accent family) clears it. --civic-pink itself is
+     unchanged and stays correct for its other uses (buttons, icon fills)
+     where it's paired with white glyphs, not read as body text. */
+  color: #db2777;
+}
+:root[data-theme="dark"][data-app="civic"] .cv-navLink.is-active {
+  background: rgba(236, 72, 153, 0.18);
+  color: #f9a8d4;
+}
+:root[data-app="civic"] .cv-navIcon { font-size: 16px; flex: none; width: 20px; text-align: center; }
+:root[data-app="civic"] .cv-navLabel { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+:root[data-app="civic"] .cv-sideProfile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-top: 1px solid var(--civic-sidebar-border);
+}
+:root[data-app="civic"] .cv-sideProfile__avatar {
+  width: 32px; height: 32px;
+  border-radius: 999px;
+  background: var(--civic-gold-soft);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  font-size: 16px;
+}
+:root[data-theme="dark"][data-app="civic"] .cv-sideProfile__avatar { background: rgba(217, 119, 6, 0.22); }
+:root[data-app="civic"] .cv-sideProfile__text { display: flex; flex-direction: column; min-width: 0; }
+:root[data-app="civic"] .cv-sideProfile__name {
+  font-size: 13px; font-weight: 700;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+:root[data-app="civic"] .cv-sideProfile__role { font-size: 11px; color: var(--civic-ink-muted); }
+
+/* ---- Collapsed (icon-only) state — desktop toggle OR forced tablet rail ---- */
+:root[data-app="civic"] .cv-shell__sidebar.is-collapsed .cv-sideTop { flex-direction: column; align-items: center; gap: 8px; }
+:root[data-app="civic"] .cv-shell__sidebar.is-collapsed .cv-brand { justify-content: center; }
+:root[data-app="civic"] .cv-shell__sidebar.is-collapsed .cv-brand__text { display: none; }
+:root[data-app="civic"] .cv-shell__sidebar.is-collapsed .cv-navSection__title { display: none; }
+:root[data-app="civic"] .cv-shell__sidebar.is-collapsed .cv-navLabel {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+:root[data-app="civic"] .cv-shell__sidebar.is-collapsed .cv-navLink { justify-content: center; padding: 10px 0; }
+:root[data-app="civic"] .cv-shell__sidebar.is-collapsed .cv-navIcon { width: auto; font-size: 18px; }
+:root[data-app="civic"] .cv-shell__sidebar.is-collapsed .cv-sideProfile { justify-content: center; padding: 12px 8px; }
+:root[data-app="civic"] .cv-shell__sidebar.is-collapsed .cv-sideProfile__text { display: none; }
+
+/* Accessible tooltip on hover/focus for collapsed icon-only links */
+:root[data-app="civic"] .cv-shell__sidebar.is-collapsed .cv-navLink[data-label]::after {
+  content: attr(data-label);
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--civic-ink);
+  color: var(--civic-card-bg);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 40;
+  transition: opacity 120ms ease;
+}
+:root[data-app="civic"] .cv-shell__sidebar.is-collapsed .cv-navLink[data-label]:hover::after,
+:root[data-app="civic"] .cv-shell__sidebar.is-collapsed .cv-navLink[data-label]:focus-visible::after {
+  opacity: 1;
+}
+
+/* ===================== Theme switch ===================== */
+:root[data-app="civic"] .cv-themeSwitch { position: relative; }
+:root[data-app="civic"] .cv-themeSwitch__trigger {
+  width: 40px; height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--civic-card-border);
+  background: var(--civic-card-bg);
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+}
+:root[data-app="civic"] .cv-themeSwitch__menu {
+  position: absolute;
+  right: 0; top: calc(100% + 8px);
+  background: var(--civic-card-bg);
+  border: 1px solid var(--civic-card-border);
+  border-radius: 12px;
+  box-shadow: var(--civic-shadow);
+  padding: 6px;
+  min-width: 150px;
+  z-index: 50;
+}
+:root[data-app="civic"] .cv-themeSwitch__item {
+  width: 100%;
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--civic-ink);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+}
+:root[data-app="civic"] .cv-themeSwitch__item:hover,
+:root[data-app="civic"] .cv-themeSwitch__item.is-selected { background: var(--civic-purple-soft); }
+:root[data-theme="dark"][data-app="civic"] .cv-themeSwitch__item:hover,
+:root[data-theme="dark"][data-app="civic"] .cv-themeSwitch__item.is-selected { background: rgba(139, 92, 246, 0.18); }
+:root[data-app="civic"] .cv-themeSwitch__itemLabel { flex: 1; }
+:root[data-app="civic"] .cv-themeSwitch__check { color: var(--civic-purple); font-weight: 800; }
+
+/* ===================== Info dialog ===================== */
+:root[data-app="civic"] .cv-dialog__scrim {
+  position: fixed; inset: 0;
+  background: rgba(15, 20, 32, 0.5);
+  display: grid; place-items: center;
+  z-index: 200;
+  padding: 16px;
+}
+:root[data-app="civic"] .cv-dialog {
+  width: min(420px, 100%);
+  background: var(--civic-card-bg);
+  border: 1px solid var(--civic-card-border);
+  border-radius: var(--civic-radius);
+  box-shadow: var(--civic-shadow);
+  padding: 18px;
+}
+:root[data-app="civic"] .cv-dialog__head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+:root[data-app="civic"] .cv-dialog__title { font-size: 17px; margin: 0; flex: 1; }
+:root[data-app="civic"] .cv-dialog__close {
+  width: 30px; height: 30px; border-radius: 8px;
+  border: 1px solid var(--civic-card-border); background: transparent; cursor: pointer;
+}
+:root[data-app="civic"] .cv-dialog__body { font-size: 14px; color: var(--civic-ink-muted); line-height: 1.5; }
+
+/* ===================== Dashboard content ===================== */
+:root[data-app="civic"] .cv-dash {
+  /* .crb-main (the Outlet wrapper shared by every Civic route, unchanged
+     for other pages — see CivicLayout.jsx) carries the legacy `.wash`
+     utility class, which paints its own explicit light background. That's
+     fine for every other, still-light-only Civic page, but this page now
+     supports dark mode, so it needs its own background painted on top of
+     that wash — scoped to `.cv-dash` alone, not `.crb-main` itself, so no
+     other route's styling changes. */
+  background: var(--civic-page-bg);
+  padding: 28px 32px 64px;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* Reserved right-edge gutter, desktop only: the global Learning Companion
+   ("Brainiact", mounted app-wide via RootProviders — see src/companion/)
+   floats fixed at the viewport's bottom-right corner on every page, above
+   ordinary content (z-index ~90). Found live via DOM-rect measurement (not
+   eyeballed) at 1440x900: the Next Actions card's own links sat directly
+   under that fixed zone and were partly unclickable underneath it. The
+   companion's position isn't something this page controls, so the content
+   column is given a permanent gutter clear of that corner instead — the
+   same pattern any page with a persistent floating widget needs. */
+@media (min-width: 1200px) {
+  :root[data-app="civic"] .cv-dash { padding-right: 104px; }
+}
+
+:root[data-app="civic"] .cv-greeting__title {
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin: 0 0 6px;
+}
+:root[data-app="civic"] .cv-greeting__sub {
+  font-size: 15px;
+  color: var(--civic-ink-muted);
+  margin: 0;
+  max-width: 62ch;
+}
+
+:root[data-app="civic"] .cv-card {
+  background: var(--civic-card-bg);
+  border: 1px solid var(--civic-card-border);
+  border-radius: var(--civic-radius);
+  box-shadow: var(--civic-shadow);
+}
+
+:root[data-app="civic"] .cv-sectionTitle {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0;
+}
+:root[data-app="civic"] .cv-sectionHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+:root[data-app="civic"] .cv-viewAll {
+  font-size: 13px;
+  font-weight: 700;
+  color: #7c3aed; /* see .cv-navLink.is-active comment: darker than
+    --civic-purple specifically for text-on-light-card contrast */
+  text-decoration: none;
+}
+:root[data-theme="dark"][data-app="civic"] .cv-viewAll { color: #c4b5fd; }
+
+/* ---- KPI cards ---- */
+:root[data-app="civic"] .cv-kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+:root[data-app="civic"] .cv-kpi {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+:root[data-app="civic"] .cv-kpi__icon {
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+:root[data-app="civic"] .cv-kpi__icon--pink { background: var(--civic-pink-soft); }
+:root[data-app="civic"] .cv-kpi__icon--gold { background: var(--civic-gold-soft); }
+:root[data-app="civic"] .cv-kpi__icon--purple { background: var(--civic-purple-soft); }
+:root[data-theme="dark"][data-app="civic"] .cv-kpi__icon--pink { background: rgba(236, 72, 153, 0.16); }
+:root[data-theme="dark"][data-app="civic"] .cv-kpi__icon--gold { background: rgba(217, 119, 6, 0.18); }
+:root[data-theme="dark"][data-app="civic"] .cv-kpi__icon--purple { background: rgba(139, 92, 246, 0.18); }
+:root[data-app="civic"] .cv-kpi__value {
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1;
+}
+:root[data-app="civic"] .cv-kpi__label { font-size: 13px; font-weight: 700; color: var(--civic-ink); }
+:root[data-app="civic"] .cv-kpi__sub { font-size: 12px; color: var(--civic-ink-muted); }
+
+/* ---- Two-column: hero mission + activity ---- */
+:root[data-app="civic"] .cv-row2 {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+:root[data-app="civic"] .cv-hero {
+  background: var(--civic-hero-bg);
+  border: 1px solid var(--civic-hero-border);
+  border-radius: var(--civic-radius);
+  color: var(--civic-hero-ink);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow: hidden;
+  position: relative;
+}
+:root[data-app="civic"] .cv-hero__eyebrow {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--civic-pink);
+  text-transform: uppercase;
+}
+:root[data-app="civic"] .cv-hero__title { font-size: 24px; font-weight: 800; margin: 0; }
+:root[data-app="civic"] .cv-hero__desc { font-size: 14px; color: var(--civic-hero-ink-muted); margin: 0; max-width: 60ch; }
+:root[data-app="civic"] .cv-hero__art { align-self: center; opacity: 0.9; }
+:root[data-app="civic"] .cv-hero__progressRow { display: flex; align-items: center; gap: 10px; }
+:root[data-app="civic"] .cv-hero__progressTrack {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+:root[data-app="civic"] .cv-hero__progressFill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--civic-pink), var(--civic-gold));
+}
+:root[data-app="civic"] .cv-hero__progressLabel { font-size: 12px; font-weight: 700; color: var(--civic-hero-ink-muted); white-space: nowrap; }
+:root[data-app="civic"] .cv-hero__cta {
+  align-self: flex-start;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--civic-pink);
+  color: #fff;
+  font-weight: 800;
+  font-size: 14px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+:root[data-app="civic"] .cv-hero__cta:hover { filter: brightness(1.06); }
+
+:root[data-app="civic"] .cv-activity { padding: 18px; }
+:root[data-app="civic"] .cv-activityRows { display: flex; flex-direction: column; }
+:root[data-app="civic"] .cv-activityRow {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--civic-card-border);
+}
+:root[data-app="civic"] .cv-activityRow:last-child { border-bottom: none; padding-bottom: 0; }
+:root[data-app="civic"] .cv-activityRow__label { font-size: 13px; color: var(--civic-ink-muted); font-weight: 600; }
+:root[data-app="civic"] .cv-activityRow__value { font-size: 13px; font-weight: 700; text-align: right; max-width: 60%; }
+
+/* ---- Community simulation + Next actions row ---- */
+:root[data-app="civic"] .cv-row2b {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+:root[data-app="civic"] .cv-community { padding: 18px; }
+:root[data-app="civic"] .cv-communityGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+:root[data-app="civic"] .cv-communityItem { display: flex; flex-direction: column; gap: 6px; }
+:root[data-app="civic"] .cv-communityItem__icon { font-size: 18px; }
+:root[data-app="civic"] .cv-communityItem__value { font-size: 26px; font-weight: 800; }
+:root[data-app="civic"] .cv-communityItem__label { font-size: 12px; font-weight: 700; }
+:root[data-app="civic"] .cv-communityItem__sub { font-size: 11px; color: var(--civic-ink-muted); }
+
+:root[data-app="civic"] .cv-nextActions { padding: 18px; }
+:root[data-app="civic"] .cv-nextActionsList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+:root[data-app="civic"] .cv-nextAction {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%;
+  padding: 10px 10px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--civic-ink);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+:root[data-app="civic"] .cv-nextAction:hover { background: var(--civic-pink-soft); border-color: var(--civic-card-border); }
+:root[data-theme="dark"][data-app="civic"] .cv-nextAction:hover { background: rgba(236, 72, 153, 0.12); }
+:root[data-app="civic"] .cv-nextAction__icon { flex: none; }
+:root[data-app="civic"] .cv-nextAction__arrow { margin-left: auto; color: var(--civic-ink-muted); }
+
+/* ---- Explore Civic Tools ---- */
+:root[data-app="civic"] .cv-toolsGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+:root[data-app="civic"] .cv-tool {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 16px 14px;
+  text-decoration: none;
+  color: var(--civic-ink);
+}
+:root[data-app="civic"] .cv-tool__icon { font-size: 20px; }
+:root[data-app="civic"] .cv-tool__label { font-size: 13px; font-weight: 700; }
+:root[data-app="civic"] .cv-tool:hover { border-color: var(--civic-purple); }
+
+/* ---- Impact flow ---- */
+:root[data-app="civic"] .cv-impact { padding: 26px; text-align: center; }
+:root[data-app="civic"] .cv-impact__title { font-size: 20px; font-weight: 800; margin: 0 0 6px; }
+:root[data-app="civic"] .cv-impact__desc { font-size: 14px; color: var(--civic-ink-muted); margin: 0 auto 20px; max-width: 62ch; }
+:root[data-app="civic"] .cv-impact__flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+:root[data-app="civic"] .cv-impact__step {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--civic-purple-soft);
+  font-size: 13px;
+  font-weight: 700;
+  color: #7c3aed; /* see .cv-navLink.is-active comment */
+  text-decoration: none;
+}
+:root[data-theme="dark"][data-app="civic"] .cv-impact__step { background: rgba(139, 92, 246, 0.16); color: #c4b5fd; }
+:root[data-app="civic"] .cv-impact__arrow { color: var(--civic-ink-muted); font-weight: 800; }
+
+/* ===================== Responsive: mobile (<768px) ===================== */
+@media (max-width: 767.98px) {
+  :root[data-app="civic"] .cv-shell__sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 100;
+    width: min(300px, 84vw);
+    flex-basis: min(300px, 84vw);
+    transform: translateX(-100%);
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.02);
+  }
+  :root[data-app="civic"] .cv-shell__sidebar.is-mobileOpen {
+    transform: translateX(0);
+  }
+  :root[data-app="civic"] .cv-shell__sidebar.is-collapsed:not(.is-mobileOpen) {
+    width: min(300px, 84vw);
+    flex-basis: min(300px, 84vw);
+  }
+  /* Mobile drawer always shows the FULL (expanded) nav content, regardless
+     of the desktop collapse preference — the collapsed *icon rail* is a
+     tablet-only concept; on mobile the sidebar is either fully open (drawer)
+     or fully hidden. */
+  :root[data-app="civic"] .cv-shell__sidebar.is-mobileOpen .cv-brand__text,
+  :root[data-app="civic"] .cv-shell__sidebar.is-mobileOpen .cv-navSection__title,
+  :root[data-app="civic"] .cv-shell__sidebar.is-mobileOpen .cv-sideProfile__text { display: flex; }
+  :root[data-app="civic"] .cv-shell__sidebar.is-mobileOpen .cv-navLabel {
+    position: static; width: auto; height: auto; padding: 0; margin: 0; overflow: visible; clip: auto; white-space: nowrap;
+  }
+  :root[data-app="civic"] .cv-shell__sidebar.is-mobileOpen .cv-navLink { justify-content: flex-start; padding: 9px 10px; }
+
+  :root[data-app="civic"] .cv-shell__scrim {
+    display: block;
+    position: fixed; inset: 0;
+    background: rgba(15, 20, 32, 0.45);
+    z-index: 90;
+  }
+  :root[data-app="civic"] .cv-drawerClose {
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    align-self: flex-end;
+    margin: 10px 10px 0 0;
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    border: 1px solid var(--civic-sidebar-border);
+    background: transparent;
+    cursor: pointer;
+  }
+  :root[data-app="civic"] .cv-mobileMenuBtn { display: inline-flex; }
+  /* The desktop/tablet collapse-to-icon-rail toggle is a distinct concept
+     from the mobile drawer's own open/close — showing it inside the
+     temporary drawer is confusing (it persists a desktop preference that
+     only takes visible effect once resized back past 768px). */
+  :root[data-app="civic"] .cv-shell__sidebar.is-mobileOpen .cv-sideToggle { display: none; }
+  :root[data-app="civic"] .cv-northstarLink__label { display: none; }
+  :root[data-app="civic"] .cv-northstarLink { padding: 8px 10px; }
+
+  :root[data-app="civic"] .cv-dash { padding: 18px 16px 48px; gap: 18px; }
+  :root[data-app="civic"] .cv-greeting__title { font-size: 26px; }
+  :root[data-app="civic"] .cv-kpiGrid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  :root[data-app="civic"] .cv-row2, :root[data-app="civic"] .cv-row2b { grid-template-columns: 1fr; }
+  :root[data-app="civic"] .cv-communityGrid { grid-template-columns: 1fr; gap: 16px; }
+  :root[data-app="civic"] .cv-toolsGrid { grid-template-columns: repeat(2, 1fr); }
+  :root[data-app="civic"] .cv-hero__art { display: none; }
+}
+
+@media (max-width: 424.98px) {
+  :root[data-app="civic"] .cv-kpiGrid { grid-template-columns: 1fr; }
+}
+
+/* ===================== Responsive: tablet (768–1199px) ===================== */
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  :root[data-app="civic"] .cv-dash { padding: 24px 22px 56px; }
+  :root[data-app="civic"] .cv-kpiGrid { grid-template-columns: repeat(2, 1fr); }
+  :root[data-app="civic"] .cv-row2 { grid-template-columns: 1fr; }
+  :root[data-app="civic"] .cv-row2b { grid-template-columns: 1fr; }
+  :root[data-app="civic"] .cv-communityGrid { grid-template-columns: repeat(3, 1fr); }
+  :root[data-app="civic"] .cv-toolsGrid { grid-template-columns: repeat(3, 1fr); }
+  :root[data-app="civic"] .cv-northstarLink__label { display: none; }
+  :root[data-app="civic"] .cv-northstarLink { padding: 8px 10px; }
+}
+
+/* ===================== Responsive: narrower desktop (1200–1279px safety) ===================== */
+@media (min-width: 1200px) and (max-width: 1339.98px) {
+  :root[data-app="civic"] .cv-toolsGrid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Reduce sidebar width slightly at the low end of desktop so KPI cards keep
+   comfortable breathing room down to 1200px, matching the two-column hero
+   row switching to stacked below 1200px only where actually needed. */
+@media (min-width: 1200px) and (max-width: 1365.98px) {
+  :root[data-app="civic"] .cv-row2 { grid-template-columns: 1.4fr 1fr; }
+}

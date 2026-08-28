@@ -1,0 +1,32 @@
+{
+  "standard_id": "PCS-1",
+  "artifact": "PACKAGE_BOUNDARY_SPECIFICATION",
+  "artifact_type": "boundary_specification",
+  "status": "GOVERNANCE_DEFINED",
+  "canonical_owner": "Governance Layer",
+  "belongs_inside_package": [
+    "authorized mission artifacts",
+    "package-scoped architecture artifacts",
+    "package-scoped blueprint artifacts",
+    "package-scoped implementation artifacts",
+    "package-scoped validation artifacts",
+    "package-scoped evidence artifacts",
+    "package-scoped release artifacts",
+    "package-scoped validators",
+    "package-scoped focused tests",
+    "package manifest",
+    "package certification"
+  ],
+  "belongs_outside_package": [
+    "unrelated package work",
+    "shared governance standards not authored by the package",
+    "unapproved runtime changes",
+    "unapproved architecture changes",
+    "temporary output",
+    "generated caches"
+  ],
+  "cross_package_references_allowed": true,
+  "cross_package_ownership_transfer_allowed": false,
+  "duplicate_constitutional_authority_allowed": false,
+  "duplicate_registry_allowed": false
+}

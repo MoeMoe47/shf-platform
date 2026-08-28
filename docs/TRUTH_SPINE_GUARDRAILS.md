@@ -1,5 +1,7 @@
 # Truth Spine Guardrails
 
+> **Security boundary amendment (Truth Spine security remediation):** see `services/shf-agent-fabric/docs/TRUTH_SPINE_SECURITY.md` for the authentication/authorization/tenant-isolation rules now enforced on every `/truth/*` endpoint. CORS and frontend permission gates are explicitly NOT authorization controls - see that document's opening sections.
+
 ## Canonical Rule
 
 Truth Spine verifies what is true. Oracle decides what evidence supports. Watchtower observes coverage and risk. LOO ranks outcomes. Reports communicate only verified and readiness-approved information.

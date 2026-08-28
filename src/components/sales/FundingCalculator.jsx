@@ -71,6 +71,7 @@ export default function FundingCalculator() {
   return (
     <section className="card lux-card" style={{ padding: 16 }}>
       <div style={{ display: "grid", gap: 12 }}>
+        <p role="note" style={{ margin: 0, fontWeight: 700 }}>Simulation / estimate - not verified institutional data.</p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3,minmax(0,1fr))", gap: 8 }}>
           <label className="sh-label" style={{ display: "grid", gap: 6 }}>
             Audience
@@ -123,7 +124,7 @@ export default function FundingCalculator() {
           <Stat label="$/user/mo" value={`$${ppm.toFixed(2)}`} />
           <Stat label="Monthly cost" value={`$${fmt(monthlyCost)}`} />
           <Stat label="Est. monthly funding" value={`$${fmt(monthlyLift)}`} />
-          <Stat label="ROI" value={`${isFinite(roiPct) ? roiPct : 0}%`} />
+          <Stat label="Estimated ROI" value={`${isFinite(roiPct) ? roiPct : 0}%`} />
         </div>
 
         <div className="sh-hr" style={{ height: 1, background: "var(--ring)" }} />

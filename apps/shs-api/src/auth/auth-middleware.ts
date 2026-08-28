@@ -1,11 +1,29 @@
 import { IdentityRepo } from "../domain/identity/repo/identity-repo";
 import { parseDevToken } from "./current-user";
 import { mergeRolePermissions } from "./security-permissions";
+import { isProductionEnvironment } from "./production-identity";
+import { Auth0SessionService } from "../domain/identity/service/auth0-session-service";
+import { applyActiveOrganizationContext, getRequestedOrganizationId, OrganizationContextError } from "./organization-context";
+import { tenantIdForOrganization } from "./tenant-context";
 
 const repo = new IdentityRepo();
+const productionSessions = isProductionEnvironment() ? new Auth0SessionService() : null;
+
+function readSessionCookie(header?: string): string | null {
+  try {
+    const value = String(header || "").split(";").map((item) => item.trim()).find((item) => item.startsWith("shs_session="));
+    return value ? decodeURIComponent(value.slice("shs_session=".length)) : null;
+  } catch {
+    return null;
+  }
+}
 
 function isLocalDevAuthEnabled() {
-  return process.env.NODE_ENV !== "production";
+  const environment = String(process.env.SHS_AUTH_ENV || process.env.NODE_ENV || "development")
+    .trim()
+    .toLowerCase();
+  const configured = String(process.env.AUTH_DEMO_IDENTITY_ENABLED || "1").trim().toLowerCase();
+  return environment === "development" && !["0", "false", "no", "off"].includes(configured);
 }
 
 function buildLocalDevUser() {
@@ -20,8 +38,19 @@ function buildLocalDevUser() {
     role_name: "super_admin",
     roles: ["super_admin"],
     organization_id: "shs-core",
+    active_organization_id: "shs-core",
+    tenant_id: tenantIdForOrganization("shs-core"),
     organization_type: "SHS",
-    permissions: mergeRolePermissions(["super_admin"]),
+    memberships: [{
+      membership_id: "local-dev-super-admin",
+      organization_id: "shs-core",
+      tenant_id: tenantIdForOrganization("shs-core"),
+      role: "super_admin",
+      role_scope_type: "platform",
+      status: "active",
+      organization_status: "active",
+      permissions: mergeRolePermissions(["super_admin"]),
+    }],
   };
 }
 
@@ -35,10 +64,27 @@ function getUserRoles(user: any): string[] {
 
 export async function authMiddleware(req: any, _res: any, next: any) {
   const authHeader = req.headers?.authorization;
-  const userId = parseDevToken(authHeader);
+  if (productionSessions) {
+    const sessionToken = readSessionCookie(req.headers?.cookie);
+    try {
+      req.user = sessionToken ? await productionSessions.getUserForSession(sessionToken, getRequestedOrganizationId(req)) : null;
+    } catch (error: any) {
+      if (error instanceof OrganizationContextError) {
+        req.user = { org_context_error: error.code, permissions: [], roles: [] };
+      } else {
+        throw error;
+      }
+    }
+    return next();
+  }
+  // dev-token is a development-only credential format and is never used by
+  // the production session path.
+  const userId = isProductionEnvironment() ? null : parseDevToken(authHeader);
 
   if (!userId) {
-    req.user = isLocalDevAuthEnabled() ? buildLocalDevUser() : null;
+    req.user = isLocalDevAuthEnabled()
+      ? applyActiveOrganizationContext(buildLocalDevUser(), getRequestedOrganizationId(req))
+      : null;
     return next();
   }
 
@@ -55,11 +101,19 @@ export async function authMiddleware(req: any, _res: any, next: any) {
       ? user.permissions
       : mergeRolePermissions(roles);
 
-  req.user = {
-    ...user,
-    roles,
-    permissions,
-  };
+  try {
+    req.user = applyActiveOrganizationContext({
+      ...user,
+      roles,
+      permissions,
+    }, getRequestedOrganizationId(req));
+  } catch (error: any) {
+    if (error instanceof OrganizationContextError) {
+      req.user = { ...user, org_context_error: error.code, permissions: [], roles: [] };
+    } else {
+      throw error;
+    }
+  }
 
   return next();
 }

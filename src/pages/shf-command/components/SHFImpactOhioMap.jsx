@@ -13,6 +13,7 @@ import "./shf-impact-ohio-map.css";
 const PUBLIC_IMPACT_COUNTIES = getPublicApprovedCounties();
 const PUBLIC_IMPACT_COUNTY_NAMES = PUBLIC_IMPACT_COUNTIES.map((county) => county.countyName);
 const PUBLIC_IMPACT_TOTALS = getImpactTotals();
+const PUBLIC_DATA_AVAILABLE = false;
 const MAP_DATA_STATUS = getMapDataStatusSummary();
 const DEFAULT_PUBLIC_COUNTY = PUBLIC_IMPACT_COUNTY_NAMES.includes("Licking")
   ? "Licking"
@@ -301,6 +302,17 @@ export default function SHFImpactOhioMap() {
       document.removeEventListener("click", handleStaticStatewideButtonClick);
     };
   }, []);
+
+  if (!PUBLIC_DATA_AVAILABLE) {
+    return (
+      <div className="shf-impact-map-root" role="status">
+        <div className="shf-map-data-spine-status">
+          <strong>Data pending verification</strong>
+          <p>Public impact values are suppressed until approved canonical Truth data is available.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="shf-impact-map-root">

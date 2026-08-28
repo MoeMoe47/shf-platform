@@ -1,9 +1,21 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { allInstructorUnits } from "../content/lessons/instructorLoader.js";
 
 export default function Instructor() {
-  const data = allInstructorUnits();
+  const { curriculum = "asl" } = useParams();
+  const [data, setData] = React.useState([]);
+
+  React.useEffect(() => {
+    let alive = true;
+    allInstructorUnits(curriculum).then((units) => {
+      if (alive) setData(Array.isArray(units) ? units : []);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [curriculum]);
+
   return (
     <div className="card card--pad">
       <div className="row">
@@ -18,14 +30,26 @@ export default function Instructor() {
         </p>
       ) : (
         <ul style={{ marginTop: 14, paddingLeft: 18 }}>
-          {data.map(u => (
-            <li key={u.slug} style={{ marginBottom: 10 }}>
-              <Link to={`/instructor/${u.slug}`}><strong>{u.title}</strong></Link>
-              {u?.pacing?.minutes ? (
-                <span className="subtle"> — {u.pacing.minutes} min</span>
+          {data.map((u, i) => {
+            // Real instructor JSON has no `slug` field — the loader looks
+            // units up by filename (see instructorLoader.js's
+            // getInstructorUnit), and `id` matches that filename in every
+            // sampled file (e.g. "instructor.asl-01"). Fall back to `slug`
+            // first in case a future unit adds one explicitly.
+            const unitSlug = u.slug || u.id;
+            return (
+            <li key={unitSlug || i} style={{ marginBottom: 10 }}>
+              {unitSlug ? (
+                <Link to={`/curriculum/instructor/${encodeURIComponent(unitSlug)}`}><strong>{u.title}</strong></Link>
+              ) : (
+                <strong>{u.title}</strong>
+              )}
+              {u?.estMinutes ? (
+                <span className="subtle"> — {u.estMinutes} min</span>
               ) : null}
             </li>
-          ))}
+            );
+          })}
         </ul>
       )}
     </div>

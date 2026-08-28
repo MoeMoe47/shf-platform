@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "mission_id": "PACKAGE_H_BATCH_03_IGLS_1_PHASE_1",
+  "artifact": "MISSION_TRACEABILITY_MATRIX",
+  "traceability_status": "PASS",
+  "links": [
+    {
+      "from": "Mission Definition",
+      "to": "Alignment Matrix",
+      "evidence": "Mission purpose is checked against Semantic Constitution, AEIB-1, and IGLS-1."
+    },
+    {
+      "from": "Alignment Matrix",
+      "to": "Boundary Analysis",
+      "evidence": "Airport principle and authority alignment become explicit non-replacement boundaries."
+    },
+    {
+      "from": "Boundary Analysis",
+      "to": "Risk Register",
+      "evidence": "Boundary drift risks are classified and mitigated."
+    },
+    {
+      "from": "Risk Register",
+      "to": "Evidence Matrix",
+      "evidence": "Risk mitigations require objective evidence in future phases."
+    },
+    {
+      "from": "Evidence Matrix",
+      "to": "Mission Authorization",
+      "evidence": "Authorization is limited to the next phase because evidence for later phases is not yet available."
+    },
+    {
+      "from": "Mission Authorization",
+      "to": "Certification Report",
+      "evidence": "Independent certification checks that only Phase 2 is authorized."
+    }
+  ]
+}

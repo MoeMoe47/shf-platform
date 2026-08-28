@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "artifact_id": "CAR-1",
+  "artifact": "CORRECTIVE_ACTION_REGISTER",
+  "package_id": "PACKAGE_H",
+  "phase_id": "PACKAGE_H_BATCH_03_PHASE_7",
+  "version": "1.0",
+  "status": "NO_BLOCKING_CORRECTIVE_ACTION_REQUIRED",
+  "certification_state": "PACKAGE_H_BATCH_03_PHASE_7_CERTIFIED",
+  "repository_references": [
+    "docs/releases/PACKAGE_H_BATCH_03_PHASE_7/NON_CONFORMANCE_REGISTER.json",
+    "docs/releases/PACKAGE_H_BATCH_03_PHASE_7/CERTIFICATION_FINDINGS_SUMMARY.json",
+    "scripts/check_package_h_batch_03_phase_7.py"
+  ],
+  "evidence_references": ["NCR-1", "CFS-1"],
+  "traceability_references": ["CTV-1"],
+  "cross_references": ["NCR-1", "CFS-1", "ICR-1", "P7M-1"],
+  "validator_references": ["PACKAGE_H_BATCH_03_PHASE_7_CERTIFICATION_VALIDATOR"],
+  "authoritative_source_references": ["Phase 7 Validator", "Non-Conformance Register", "Certification Findings Summary"],
+  "corrective_actions": [],
+  "required_actions_open": [],
+  "closure_basis": "No critical or major non-conformances are recorded; therefore no corrective action is required for certification.",
+  "next_authorized_phase": "IGLS-1 Phase 8 - PUBLICATION_AUTHORIZATION",
+  "deployment_authorized": false,
+  "production_release_authorized": false,
+  "operational_activation_authorized": false
+}

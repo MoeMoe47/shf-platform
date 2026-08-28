@@ -20,7 +20,8 @@
   
   /* Layout */
   .kpi__head { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
-  .kpi__label { font-size: 13px; color: var(--shf-muted, #6b655c); }
+  .kpi__label { font-size: 13px; color: var(--shf-muted, #6b655c); display:inline-flex; align-items:center; gap:6px; }
+  .kpi__icon { font-size: 15px; line-height: 1; }
   .kpi__chip {
     display:inline-block; padding:2px 8px; border-radius: 999px;
     background: var(--shf-brand-weak, #ffe1cc); color: var(--shf-text, #111);

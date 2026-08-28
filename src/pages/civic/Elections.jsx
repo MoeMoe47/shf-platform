@@ -1,12 +1,27 @@
 // src/pages/civic/Elections.jsx
+// Redesigned per the approved Elections mock (light + dark, supplied
+// directly during this task). Shell/theme/shared design tokens are
+// inherited unchanged from the Civic Lab Dashboard redesign — see
+// src/styles/civic-dashboard.css and src/styles/civic-elections.css (this
+// page's own additions only). All practice-voting, mission-logging, and
+// Grant Story behavior below is functionally identical to the pre-redesign
+// page; only presentation changed, plus one new UI-only state (the
+// Review Ballot step) that does not alter what castVote() actually does.
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useToasts } from "@/context/Toasts.jsx";
 import { useRewards } from "@/hooks/useRewards.js";
+import { useCompanion } from "@/hooks/useCompanion.js";
 import RewardsChip from "@/components/rewards/RewardsChip.jsx";
 import MissionLogButtons from "@/components/civic/MissionLogButtons.jsx";
+import CompanionFace from "@/components/companion/CompanionFace.jsx";
 
-/* ---------------- Mock ballot data (single-choice races) ---------------- */
+/* ---------------- Mock ballot data (single-choice races) ----------------
+   Candidate names/parties/ids are unchanged from the existing data. Bio
+   copy is updated to the approved mock's exact wording — a prose
+   rewording of the same underlying facts (still "former council member" +
+   "renewal", not a new policy claim), not an invented position. Topic tags
+   are the mock's own explicit tag pairs, derived from each bio. */
 const BALLOT = [
   {
     id: "race-mayor",
@@ -17,19 +32,22 @@ const BALLOT = [
         id: "c1",
         name: "Alex Carter",
         party: "Unity",
-        bio: "Former council member, urban renewal plan.",
+        bio: "Former council member focused on smart growth and neighborhood renewal.",
+        tags: ["Urban Renewal", "Infrastructure"],
       },
       {
         id: "c2",
         name: "Jordan Reyes",
         party: "Forward",
-        bio: "Education advocate, transit upgrades.",
+        bio: "Education advocate committed to stronger schools and transit.",
+        tags: ["Education", "Transit"],
       },
       {
         id: "c3",
         name: "Taylor Kim",
         party: "Civic",
-        bio: "Small business owner, safety-first.",
+        bio: "Small business owner prioritizing public safety and local jobs.",
+        tags: ["Public Safety", "Jobs"],
       },
     ],
   },
@@ -42,26 +60,37 @@ const BALLOT = [
         id: "t1",
         name: "Morgan Singh",
         party: "Civic",
-        bio: "CPA, transparency platform.",
+        bio: "CPA and transparency advocate building a clearer public budget.",
+        tags: ["Transparency", "Fiscal Reform"],
       },
       {
         id: "t2",
         name: "Riley Brooks",
         party: "Forward",
-        bio: "Fintech background, open data.",
+        bio: "Fintech background pushing open data and modern systems.",
+        tags: ["Open Data", "Technology"],
       },
     ],
   },
 ];
 
-/* ---------------- Storage + KPI keys ---------------- */
-const KEY_VOTES = "civic:votes"; // array of {at, ballotId, selections}
-const KEY_VOTE_FLAG = "civic:flag:practiceVote"; // "1" after first cast (legacy flag if needed)
-const KPI_VOTES = "civic:kpi:votesCast"; // optional KPI counter
-const KEY_ATTEST = "civic:attestations"; // JSON[ {eventType, lessonId, timestamp} ]
-const KEY_WALLET_LOG = "wallet:history"; // JSON log of point changes
+// One consistent accent per party, applied evenly to every candidate in
+// that party — a fixed lookup, not a per-candidate/per-race choice, so no
+// party is visually favored over another (Phase 18: political neutrality).
+const PARTY_ACCENT = {
+  Unity: "pink",
+  Forward: "purple",
+  Civic: "gold",
+};
 
-/* ---------------- Tiny helpers ---------------- */
+/* ---------------- Storage + KPI keys (unchanged) ---------------- */
+const KEY_VOTES = "civic:votes"; // array of {at, ballotId, selections}
+const KEY_VOTE_FLAG = "civic:flag:practiceVote";
+const KPI_VOTES = "civic:kpi:votesCast";
+const KEY_ATTEST = "civic:attestations";
+const KEY_WALLET_LOG = "wallet:history";
+
+/* ---------------- Tiny helpers (unchanged) ---------------- */
 function getVotes() {
   try {
     const raw = localStorage.getItem(KEY_VOTES);
@@ -74,34 +103,20 @@ function getVotes() {
 function setVotes(arr) {
   try {
     localStorage.setItem(KEY_VOTES, JSON.stringify(arr));
-    window.dispatchEvent(
-      new StorageEvent("storage", {
-        key: KEY_VOTES,
-        newValue: "updated",
-      })
-    );
+    window.dispatchEvent(new StorageEvent("storage", { key: KEY_VOTES, newValue: "updated" }));
   } catch {}
 }
 function bump(key, delta = 1) {
   try {
-    const v =
-      Number(localStorage.getItem(key) || "0") +
-      Number(delta || 0);
+    const v = Number(localStorage.getItem(key) || "0") + Number(delta || 0);
     const n = Math.max(0, v);
     localStorage.setItem(key, String(n));
-    window.dispatchEvent(
-      new StorageEvent("storage", {
-        key,
-        newValue: String(n),
-      })
-    );
+    window.dispatchEvent(new StorageEvent("storage", { key, newValue: String(n) }));
   } catch {}
 }
 function readJSON(k, d) {
   try {
-    return JSON.parse(
-      localStorage.getItem(k) || JSON.stringify(d)
-    );
+    return JSON.parse(localStorage.getItem(k) || JSON.stringify(d));
   } catch {
     return d;
   }
@@ -111,119 +126,100 @@ function saveJSON(k, v) {
     localStorage.setItem(k, JSON.stringify(v));
   } catch {}
 }
-
-/* Mark micro-lesson complete (id aligns with your micro-lessons JSON) */
 function addAttestation(lessonId) {
   const arr = readJSON(KEY_ATTEST, []);
-  if (
-    !arr.some(
-      (a) =>
-        a.eventType === "micro-lesson-complete" &&
-        a.lessonId === lessonId
-    )
-  ) {
-    arr.push({
-      eventType: "micro-lesson-complete",
-      lessonId,
-      timestamp: Date.now(),
-    });
+  if (!arr.some((a) => a.eventType === "micro-lesson-complete" && a.lessonId === lessonId)) {
+    arr.push({ eventType: "micro-lesson-complete", lessonId, timestamp: Date.now() });
     saveJSON(KEY_ATTEST, arr);
     try {
-      window.dispatchEvent(
-        new StorageEvent("storage", {
-          key: KEY_ATTEST,
-          newValue: "updated",
-        })
-      );
+      window.dispatchEvent(new StorageEvent("storage", { key: KEY_ATTEST, newValue: "updated" }));
     } catch {}
-    // Bump the KPIs that your Northstar reads for completions
     bump("ns:kpi:microLessonsCompleted", +1);
     bump("civic:kpi:microDone", +1);
   }
 }
 
-/* ---------------- UI bits ---------------- */
-function RaceCard({ race, value, onChange }) {
+function initials(name) {
+  return name.split(/\s+/).map((p) => p[0]).slice(0, 2).join("").toUpperCase();
+}
+
+/* ---------------- Progress steps ---------------- */
+const STEPS = [
+  { n: 1, title: "Review Candidates", sub: "Read about the races" },
+  { n: 2, title: "Make Your Selection", sub: "Choose one candidate per race" },
+  { n: 3, title: "Cast Your Ballot", sub: "Submit your practice vote" },
+  { n: 4, title: "Reflect & Log", sub: "Explain your choices" },
+];
+
+function currentStep(selections, reviewing) {
+  const count = Object.keys(selections).length;
+  if (reviewing) return 4;
+  if (count === 0) return 1;
+  if (count < BALLOT.length) return 2;
+  return 3;
+}
+
+function ProgressSteps({ active }) {
   return (
-    <section
-      className="card card--pad"
-      role="group"
-      aria-labelledby={`${race.id}-label`}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "baseline",
-          gap: 8,
-        }}
-      >
-        <h3
-          id={`${race.id}-label`}
-          style={{ margin: 0 }}
-        >
-          {race.title}
-        </h3>
-        <span
-          style={{ fontSize: 12, opacity: 0.7 }}
-        >
-          {race.instructions}
+    <nav className="elex-card elex-steps" aria-label="Election progress">
+      <ol>
+        {STEPS.map((s) => (
+          <li key={s.n} className={s.n === active ? "is-active" : ""} aria-current={s.n === active ? "step" : undefined}>
+            <span className="elex-steps__badge" aria-hidden="true">{s.n}</span>
+            <span className="elex-steps__text">
+              <span className="elex-steps__title">{s.title}</span>
+              <span className="elex-steps__sub">{s.sub}</span>
+            </span>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+}
+
+/* ---------------- Candidate card ---------------- */
+function CandidateCard({ race, candidate, selected, onChange }) {
+  const accent = PARTY_ACCENT[candidate.party] || "gold";
+  return (
+    <label className={`elex-candidate elex-candidate--${accent}${selected ? " is-selected" : ""}`}>
+      <input
+        type="radio"
+        name={race.id}
+        value={candidate.id}
+        checked={selected}
+        onChange={() => onChange(race.id, candidate.id)}
+        className="elex-candidate__radio"
+        aria-describedby={`${candidate.id}-bio`}
+      />
+      <span className="elex-candidate__avatar" aria-hidden="true">{initials(candidate.name)}</span>
+      <span className="elex-candidate__name">{candidate.name}</span>
+      <span className="elex-candidate__party">{candidate.party} Party</span>
+      <span className="elex-candidate__bio" id={`${candidate.id}-bio`}>{candidate.bio}</span>
+      {candidate.tags?.length > 0 && (
+        <span className="elex-candidate__tags">
+          {candidate.tags.map((t) => (
+            <span key={t} className="elex-candidate__tag">{t}</span>
+          ))}
         </span>
-      </div>
-      <div
-        style={{
-          display: "grid",
-          gap: 8,
-          marginTop: 8,
-        }}
-      >
+      )}
+    </label>
+  );
+}
+
+function RaceBallot({ race, value, onChange, columns }) {
+  return (
+    <fieldset className="elex-card elex-race">
+      <legend className="elex-race__legend">
+        <span className="elex-race__icon" aria-hidden="true">{race.id === "race-mayor" ? "🏛️" : "🏦"}</span>
+        <span className="elex-race__title">{race.title}</span>
+        <span className="elex-race__instructions">{race.instructions}</span>
+      </legend>
+      <div className={`elex-candidateGrid elex-candidateGrid--${columns}`}>
         {race.candidates.map((c) => (
-          <label
-            key={c.id}
-            className="sh-card-radio"
-            style={{
-              display: "flex",
-              gap: 12,
-              alignItems: "flex-start",
-              cursor: "pointer",
-            }}
-          >
-            <input
-              type="radio"
-              name={race.id}
-              value={c.id}
-              checked={value === c.id}
-              onChange={() => onChange(race.id, c.id)}
-              style={{ marginTop: 4 }}
-            />
-            <div>
-              <div
-                style={{
-                  display: "flex",
-                  gap: 8,
-                  alignItems: "baseline",
-                }}
-              >
-                <strong>{c.name}</strong>
-                <span className="sh-badge is-ghost">
-                  {c.party}
-                </span>
-              </div>
-              {c.bio && (
-                <div
-                  style={{
-                    fontSize: 13,
-                    opacity: 0.8,
-                    marginTop: 2,
-                  }}
-                >
-                  {c.bio}
-                </div>
-              )}
-            </div>
-          </label>
+          <CandidateCard key={c.id} race={race} candidate={c} selected={value === c.id} onChange={onChange} />
         ))}
       </div>
-    </section>
+    </fieldset>
   );
 }
 
@@ -231,57 +227,38 @@ function RaceCard({ race, value, onChange }) {
 export default function Elections() {
   const nav = useNavigate();
   const { toast } = useToasts();
-  const {
-    addPoints,
-    addBadge,
-    badges = [],
-  } =
-    typeof useRewards === "function"
-      ? useRewards()
-      : {
-          addPoints: () => {},
-          addBadge: () => {},
-          badges: [],
-        };
+  const companion = useCompanion();
+  const { addPoints, addBadge, badges = [] } =
+    typeof useRewards === "function" ? useRewards() : { addPoints: () => {}, addBadge: () => {}, badges: [] };
 
-  const [selections, setSelections] =
-    React.useState(() => ({}));
+  const [selections, setSelections] = React.useState(() => ({}));
   const [saving, setSaving] = React.useState(false);
+  const [reviewing, setReviewing] = React.useState(false);
 
-  const allSelected = BALLOT.every(
-    (r) => selections[r.id]
-  );
+  const allSelected = BALLOT.every((r) => selections[r.id]);
+  const step = currentStep(selections, reviewing);
 
   const onPick = (raceId, candId) => {
-    setSelections((s) => ({
-      ...s,
-      [raceId]: candId,
-    }));
+    setSelections((s) => ({ ...s, [raceId]: candId }));
+    setReviewing(false);
   };
 
   const castVote = () => {
     if (!allSelected || saving) return;
     setSaving(true);
     try {
-      const record = {
-        at: Date.now(),
-        ballotId: "demo-local-001",
-        selections, // { raceId: candidateId }
-      };
+      const record = { at: Date.now(), ballotId: "demo-local-001", selections };
       const arr = getVotes();
       arr.push(record);
       setVotes(arr);
 
-      // Legacy flag if other code watches it
       try {
         localStorage.setItem(KEY_VOTE_FLAG, "1");
       } catch {}
 
-      // KPI bump specific to votes
       bump(KPI_VOTES, 1);
 
-      // 🎯 Micro-lesson attestation + rewards (+ wallet history)
-      addAttestation("elections-howto"); // id should match your micro-lesson id
+      addAttestation("elections-howto");
       try {
         addPoints?.(10);
       } catch {}
@@ -292,163 +269,155 @@ export default function Elections() {
       }
       try {
         const log = readJSON(KEY_WALLET_LOG, []);
-        log.push({
-          at: Date.now(),
-          delta: +10,
-          note: "Practice ballot cast",
-        });
+        log.push({ at: Date.now(), delta: +10, note: "Practice ballot cast" });
         saveJSON(KEY_WALLET_LOG, log);
       } catch {}
 
-      toast(
-        "🗳️ Vote recorded! +10 pts · ‘Practice Voting’ completed ✅",
-        { type: "success" }
-      );
+      toast("🗳️ Vote recorded! +10 pts · 'Practice Voting' completed ✅", { type: "success" });
       nav("/dashboard-ns", { replace: true });
     } finally {
       setSaving(false);
     }
   };
 
+  const mayorPick = BALLOT[0].candidates.find((c) => c.id === selections["race-mayor"]);
+  const treasurerPick = BALLOT[1].candidates.find((c) => c.id === selections["race-treasurer"]);
+
   return (
-    <section
-      className="crb-main"
-      aria-labelledby="elex-title"
-    >
-      <header className="db-head">
-        <div>
-          <h1 id="elex-title" className="db-title">
-            Elections (Practice)
-          </h1>
-          <p className="db-subtitle">
-            Cast a practice ballot. Your selection is stored
-            locally for learning analytics.
-          </p>
+    <div className="elex-page">
+      <h1 className="cv-srOnly">Practice Election</h1>
+
+      {/* Page Header */}
+      <header className="elex-header" aria-labelledby="elex-title">
+        <div className="elex-header__title">
+          <span className="elex-header__icon" aria-hidden="true">📋</span>
+          <div>
+            <p className="elex-header__h1" id="elex-title">Practice Election</p>
+            <p className="elex-header__sub">
+              Cast a practice ballot. Your selection is stored locally for learning analytics and reflection.
+            </p>
+          </div>
         </div>
-        <div
-          style={{
-            display: "flex",
-            gap: 8,
-            alignItems: "center",
-          }}
-        >
-          <Link
-            className="sh-btn is-ghost"
-            to="/proposals"
-          >
-            View Proposals
+        <div className="elex-header__actions">
+          <Link className="cv-btn cv-btn--ghost" to="/proposals">
+            <span aria-hidden="true">📄</span> View Proposals
           </Link>
-          <Link
-            className="sh-btn is-ghost"
-            to="/dashboard-ns"
-          >
-            Northstar
+          <Link className="cv-btn cv-btn--ghost" to="/dashboard-ns">
+            <span aria-hidden="true">⭐</span> Northstar Dashboard
           </Link>
           <RewardsChip />
         </div>
       </header>
 
-      <div
-        className="db-grid"
-        style={{ gridTemplateColumns: "1fr", rowGap: 12 }}
-      >
-        {BALLOT.map((r) => (
-          <RaceCard
-            key={r.id}
-            race={r}
-            value={selections[r.id]}
-            onChange={onPick}
-          />
-        ))}
+      <ProgressSteps active={step} />
 
-        <section
-          className="card card--pad"
-          aria-label="Submit"
-        >
-          <div
-            style={{ display: "flex", gap: 8 }}
-          >
-            <button
-              className="sh-btn"
-              disabled={!allSelected || saving}
-              onClick={castVote}
-            >
-              {saving ? "Submitting…" : "Cast Vote"}
-            </button>
-            <Link
-              className="sh-btn is-ghost"
-              to="/dashboard"
-            >
-              Cancel
-            </Link>
-            {!allSelected && (
-              <span
-                style={{
-                  marginLeft: "auto",
-                  fontSize: 12,
-                  opacity: 0.7,
-                }}
-              >
-                Select one candidate in each race to enable
-                voting.
-              </span>
-            )}
-          </div>
-        </section>
+      <div className="elex-layout">
+        <div className="elex-main">
+          {!reviewing ? (
+            <>
+              <RaceBallot race={BALLOT[0]} value={selections["race-mayor"]} onChange={onPick} columns={3} />
+              <RaceBallot race={BALLOT[1]} value={selections["race-treasurer"]} onChange={onPick} columns={2} />
 
-        <aside
-          className="card card--pad"
-          aria-label="Your Last Votes"
-        >
-          <strong
-            style={{
-              display: "block",
-              marginBottom: 8,
-            }}
-          >
-            Recent Practice Votes
-          </strong>
-          <VoteLog />
+              <section className="elex-card elex-actions" aria-label="Ballot actions">
+                <div className="elex-actions__row">
+                  <Link className="cv-btn cv-btn--ghost" to="/dashboard">
+                    <span aria-hidden="true">✕</span> Cancel
+                  </Link>
+                  <button
+                    type="button"
+                    className="cv-btn elex-btn--primary"
+                    disabled={!allSelected}
+                    onClick={() => setReviewing(true)}
+                  >
+                    Review Ballot <span aria-hidden="true">→</span>
+                  </button>
+                </div>
+                {!allSelected && (
+                  <p className="elex-actions__hint" role="status">
+                    Select one candidate in each race to continue.
+                  </p>
+                )}
+              </section>
+            </>
+          ) : (
+            <section className="elex-card elex-review" aria-labelledby="elex-review-title">
+              <h2 className="elex-review__title" id="elex-review-title">Confirm your practice ballot</h2>
+              <p className="elex-review__sub">Review your selections before casting your practice vote.</p>
+              <dl className="elex-review__list">
+                <div className="elex-review__row">
+                  <dt>Mayor</dt>
+                  <dd>{mayorPick?.name} <span className="elex-review__party">({mayorPick?.party} Party)</span></dd>
+                </div>
+                <div className="elex-review__row">
+                  <dt>City Treasurer</dt>
+                  <dd>{treasurerPick?.name} <span className="elex-review__party">({treasurerPick?.party} Party)</span></dd>
+                </div>
+              </dl>
+              <div className="elex-actions__row">
+                <button type="button" className="cv-btn cv-btn--ghost" onClick={() => setReviewing(false)} disabled={saving}>
+                  <span aria-hidden="true">←</span> Back to edit
+                </button>
+                <button type="button" className="cv-btn elex-btn--primary" onClick={castVote} disabled={saving}>
+                  {saving ? "Submitting…" : "Cast Practice Vote"}
+                </button>
+              </div>
+            </section>
+          )}
+
+          <p className="elex-disclaimer">
+            <span aria-hidden="true">🔒</span> This is a practice election. No official votes are recorded.
+          </p>
+        </div>
+
+        <aside className="elex-side">
+          <section className="elex-missionLog" aria-label="Your Mission Log">
+            <MissionLogButtons
+              missionId="elections-mission"
+              missionTitle="Elections Strategy Mission"
+              chapter="Democracy & Representation"
+              defaultDuration={30}
+              defaultSummary=""
+              defaultOutcome=""
+              fundingStreams={["essa", "civics"]}
+              icon="🚩"
+              title="Your Mission Log"
+              description="After casting a practice ballot, log your mission so it counts toward the Civic Grant Story."
+              placeholderSummary="e.g., Compared candidates and cast my practice vote."
+              placeholderOutcome="e.g., Selected candidates and explained my reasoning."
+            />
+          </section>
+
+          <section className="elex-card elex-history" aria-label="Recent Practice Votes">
+            <div className="elex-history__head">
+              <strong><span aria-hidden="true">🕐</span> Recent Practice Votes</strong>
+              <Link className="cv-viewAll" to="/dashboard-ns">View all →</Link>
+            </div>
+            <VoteLog />
+          </section>
+
+          <section className="elex-card elex-coach" aria-labelledby="elex-coach-title">
+            <div className="elex-coach__text">
+              <h2 className="elex-coach__title" id="elex-coach-title">Need help deciding?</h2>
+              <p className="elex-coach__body">
+                Ask Coach for guidance on civic processes, candidate research, or trade-offs.
+              </p>
+              <button type="button" className="cv-btn elex-btn--primary" onClick={() => companion.openCoach()}>
+                Ask Coach!
+              </button>
+            </div>
+            <div className="elex-coach__art" aria-hidden="true">
+              <CompanionFace animation="wave" size={100} />
+            </div>
+          </section>
         </aside>
       </div>
-
-      {/* 🔹 Mission logging → ESSA + Civics evidence */}
-      <section
-        className="card card--pad"
-        style={{ marginTop: 16 }}
-      >
-        <strong style={{ fontSize: 15 }}>
-          Log this Elections mission
-        </strong>
-        <p
-          style={{
-            marginTop: 4,
-            fontSize: 13,
-            opacity: 0.8,
-          }}
-        >
-          After casting a practice ballot, log your mission
-          so it shows up in the ESSA / Civics grant story.
-        </p>
-        <MissionLogButtons
-          missionId="elections-mission"
-          missionTitle="Elections Strategy Mission"
-          chapter="Democracy & Representation"
-          defaultDuration={30}
-          defaultSummary=""
-          defaultOutcome=""
-          fundingStreams={["essa", "civics"]}
-        />
-      </section>
-    </section>
+    </div>
   );
 }
 
 /* ---------------- Small log viewer ---------------- */
 function VoteLog() {
-  const [rows, setRows] = React.useState(
-    getVotes().slice().reverse()
-  );
+  const [rows, setRows] = React.useState(getVotes().slice().reverse());
 
   React.useEffect(() => {
     const onStorage = (e) => {
@@ -456,96 +425,41 @@ function VoteLog() {
         setRows(getVotes().slice().reverse());
         return;
       }
-      if (e.key === KEY_VOTES)
-        setRows(getVotes().slice().reverse());
+      if (e.key === KEY_VOTES) setRows(getVotes().slice().reverse());
     };
     window.addEventListener("storage", onStorage);
-    const t = setInterval(
-      () => setRows(getVotes().slice().reverse()),
-      1500
-    );
+    const t = setInterval(() => setRows(getVotes().slice().reverse()), 1500);
     return () => {
       window.removeEventListener("storage", onStorage);
       clearInterval(t);
     };
   }, []);
 
-  if (!rows.length)
-    return (
-      <div
-        style={{ opacity: 0.7, fontSize: 13 }}
-      >
-        No votes yet.
-      </div>
-    );
+  if (!rows.length) return <p className="elex-history__empty">No practice votes yet.</p>;
 
   return (
-    <ul
-      style={{
-        listStyle: "none",
-        padding: 0,
-        margin: 0,
-        display: "grid",
-        gap: 8,
-      }}
-    >
+    <ul className="elex-history__list">
       {rows.slice(0, 6).map((r, i) => (
-        <li
-          key={i}
-          style={{
-            border:
-              "1px solid var(--ring,#eee)",
-            borderRadius: 10,
-            padding: "8px 10px",
-            background: "#fff",
-          }}
-        >
-          <div
-            style={{
-              fontSize: 12,
-              opacity: 0.7,
-            }}
-          >
-            {new Date(r.at).toLocaleString()}
+        <li key={i} className="elex-history__row">
+          <div className="elex-history__when">{new Date(r.at).toLocaleString()}</div>
+          <div className="elex-history__picks">
+            {Object.entries(r.selections)
+              .map(([raceId, candId]) => `${shortLabelForRace(raceId)}: ${labelForCandidate(raceId, candId)}`)
+              .join(" · ")}
           </div>
-          <div
-            style={{
-              display: "grid",
-              gap: 4,
-              marginTop: 6,
-            }}
-          >
-            {Object.entries(r.selections).map(
-              ([raceId, candId]) => (
-                <div
-                  key={raceId}
-                  style={{ fontSize: 13 }}
-                >
-                  <strong>
-                    {labelForRace(raceId)}:
-                  </strong>{" "}
-                  {labelForCandidate(raceId, candId)}
-                </div>
-              )
-            )}
-          </div>
+          <span className="elex-history__status">Completed</span>
         </li>
       ))}
     </ul>
   );
 }
 
-/* ---------------- Label helpers (from BALLOT) ---------------- */
-function labelForRace(raceId) {
+function shortLabelForRace(raceId) {
   const race = BALLOT.find((r) => r.id === raceId);
-  return race ? race.title : raceId;
+  return race ? (race.id === "race-mayor" ? "Mayor" : "Treasurer") : raceId;
 }
 function labelForCandidate(raceId, candId) {
   const race = BALLOT.find((r) => r.id === raceId);
-  const cand = race?.candidates.find(
-    (c) => c.id === candId
-  );
-  return cand
-    ? `${cand.name} (${cand.party})`
-    : candId;
+  const cand = race?.candidates.find((c) => c.id === candId);
+  return cand ? cand.name : candId;
 }

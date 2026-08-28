@@ -16,7 +16,10 @@ export default function ReportsBriefingsPanel({ items = [], onExportClick }) {
             className="shf-export-row"
             onClick={() => onExportClick?.(item)}
           >
-            <span>{item.label}</span>
+            <span>
+              {item.label}
+              {item.subtitle ? <small>{item.subtitle}</small> : null}
+            </span>
             <strong>{item.value}</strong>
           </button>
         ))}

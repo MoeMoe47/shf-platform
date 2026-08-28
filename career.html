@@ -4,6 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SHF Career</title>
+    <script>
+      // Applies the saved/system theme before first paint, matching the
+      // resolution logic in src/utils/careerTheme.js, so switching to Dark
+      // doesn't flash light on load/refresh. Kept in sync manually with
+      // that module since it must run synchronously, before any bundle.
+      (function () {
+        try {
+          var pref = localStorage.getItem("career:ui:theme");
+          if (pref !== "light" && pref !== "dark" && pref !== "system") pref = "system";
+          var resolved =
+            pref === "system"
+              ? (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+              : pref;
+          document.documentElement.setAttribute("data-theme", resolved);
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root" data-app="career"></div>

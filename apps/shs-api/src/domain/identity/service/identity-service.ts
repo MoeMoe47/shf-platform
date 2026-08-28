@@ -1,9 +1,17 @@
 import { IdentityRepo } from "../repo/identity-repo";
+import { isProductionEnvironment } from "../../../auth/production-identity";
 
 export class IdentityService {
   private repo = new IdentityRepo();
 
-  async login(email: string, _password: string) {
+  async login(email: string, password: string) {
+    if (isProductionEnvironment()) {
+      throw new Error("production_identity_provider_required");
+    }
+    if (!email || !password) {
+      throw new Error("Invalid credentials");
+    }
+
     const user = await this.repo.getUserByEmail(email);
     if (!user) {
       throw new Error("Invalid credentials");

@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "artifact_id": "ICA-1",
+  "artifact": "INDEPENDENT_CERTIFICATION_ASSESSMENT",
+  "assessment_state": "PASS",
+  "certification_state": "PACKAGE_H_BATCH_03_PHASE_7_CERTIFIED",
+  "primary_questions": [
+    {"question_id": "ICA-Q01", "question": "Was only authorized implementation completed?", "answer": "YES", "evidence": "P6CIR-1 and P6SIR-1"},
+    {"question_id": "ICA-Q02", "question": "Were every Phase 5 restriction preserved?", "answer": "YES", "evidence": "P6SIR-1 and IIC-1"},
+    {"question_id": "ICA-Q03", "question": "Does every implemented capability satisfy CTB-1?", "answer": "YES", "evidence": "P6ITM-1"},
+    {"question_id": "ICA-Q04", "question": "Does every implementation satisfy ACS-1?", "answer": "YES", "evidence": "IVM-1"},
+    {"question_id": "ICA-Q05", "question": "Does every implementation produce EM-1 evidence?", "answer": "YES", "evidence": "IEMV-1"},
+    {"question_id": "ICA-Q06", "question": "Does every evidence record satisfy EPL-1?", "answer": "YES", "evidence": "P6ERP-1 and IEMV-1"},
+    {"question_id": "ICA-Q07", "question": "Is traceability complete?", "answer": "YES", "evidence": "CTV-1"},
+    {"question_id": "ICA-Q08", "question": "Were canonical owners preserved?", "answer": "YES", "evidence": "OCV-1"},
+    {"question_id": "ICA-Q09", "question": "Was architecture preserved?", "answer": "YES", "evidence": "ARV-1"},
+    {"question_id": "ICA-Q10", "question": "Was no unauthorized capability introduced?", "answer": "YES", "evidence": "P6M-1"},
+    {"question_id": "ICA-Q11", "question": "Was no new layer created?", "answer": "YES", "evidence": "RCV-1"},
+    {"question_id": "ICA-Q12", "question": "Was no new registry created?", "answer": "YES", "evidence": "RCV-1"},
+    {"question_id": "ICA-Q13", "question": "Was no duplicate authority created?", "answer": "YES", "evidence": "OCV-1"},
+    {"question_id": "ICA-Q14", "question": "Was runtime minimalism preserved?", "answer": "YES", "evidence": "ARV-1 and RCV-1"},
+    {"question_id": "ICA-Q15", "question": "Is the implementation certifiable?", "answer": "YES", "evidence": "IIC-1 and ICR-1"}
+  ],
+  "certification_can_proceed": true
+}

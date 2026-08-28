@@ -3,28 +3,49 @@ import { CaseRepo } from "../repo/case-repo";
 import { validateCaseAssignment } from "./case-assignment";
 import { canTransitionCase } from "./case-transitions";
 import { writeAuditEvent } from "../../audit/service/audit-helper";
+import { withTransaction } from "../../../db/transaction";
+import { IntegrationOutboxRepo } from "../../trusted-reporting/outbox-repo";
+import { buildReferralOutboxEvent } from "../../trusted-reporting/outbox";
 
 export class CaseService {
-  private repo = new CaseRepo();
+  constructor(
+    private repo = new CaseRepo(),
+    private outbox = new IntegrationOutboxRepo(),
+    private transaction = withTransaction,
+    private auditWriter = writeAuditEvent,
+  ) {}
 
-  async listCases() {
-    return this.repo.listCases();
+  private scopeFromActor(actor: any) {
+    const organizationId = actor?.active_organization_id || actor?.organization_id;
+    const actorId = actor?.user_id || actor?.id;
+    if (!actorId) throw new Error("Actor is required");
+    if (!organizationId) throw new Error("Active organization is required");
+    return { actor_id: actorId, organization_id: organizationId };
   }
 
-  async listReferrals() {
-    return this.repo.listReferralCases();
+  async listCases(actor: any) {
+    return this.repo.listCases(this.scopeFromActor(actor));
+  }
+
+  async getCase(caseId: string, actor: any) {
+    return this.repo.getCaseById(caseId, this.scopeFromActor(actor));
+  }
+
+  async listReferrals(actor: any) {
+    return this.repo.listReferralCases(this.scopeFromActor(actor));
   }
 
   async createCase(input: any, actor?: any) {
+    const scope = this.scopeFromActor(actor);
     const created = await this.repo.createCase({
-      case_id: `case_${randomUUID()}`,
-      organization_id: actor?.organization_id || "org_shf_001",
-      status: "draft",
-      created_by_user_id: actor?.user_id || null,
       ...input,
+      case_id: `case_${randomUUID()}`,
+      organization_id: scope.organization_id,
+      status: "draft",
+      created_by_user_id: scope.actor_id,
     });
 
-    await writeAuditEvent({
+    await this.auditWriter({
       audit_event_id: `audit_${randomUUID()}`,
       organization_id: created.organization_id,
       actor_user_id: actor?.user_id || null,
@@ -41,54 +62,54 @@ export class CaseService {
   }
 
   async createReferral(input: any, actor?: any) {
-    const created = await this.repo.createCase({
-      case_id: `case_${randomUUID()}`,
-      organization_id: actor?.organization_id || input?.organization_id || "org_shf_001",
-      program_id: input?.program_id || null,
-      case_type: "referral",
-      status: input?.status || "open",
-      priority: input?.priority || "medium",
-      created_by_user_id: actor?.user_id || null,
-    });
+    const scope = this.scopeFromActor(actor);
+    const correlationId = `corr_${randomUUID()}`;
+    return this.transaction(async (db: any) => {
+      const created = await this.repo.createCase({
+        case_id: `case_${randomUUID()}`,
+        organization_id: scope.organization_id,
+        program_id: input?.program_id || null,
+        case_type: "referral",
+        status: input?.status || "open",
+        priority: input?.priority || "medium",
+        created_by_user_id: scope.actor_id,
+      }, db);
 
-    const details = await this.repo.upsertReferralDetails(created.case_id, {
-      receiving_organization_id: input?.receiving_organization_id || null,
-      need_category: input?.need_category || null,
-      urgency_level: input?.urgency_level || created.priority,
-      notes: input?.notes || null,
-    });
+      const details = await this.repo.upsertReferralDetails(created.case_id, {
+        receiving_organization_id: input?.receiving_organization_id || null,
+        need_category: input?.need_category || null,
+        urgency_level: input?.urgency_level || created.priority,
+        notes: input?.notes || null,
+      }, db);
 
-    await writeAuditEvent({
-      audit_event_id: `audit_${randomUUID()}`,
-      organization_id: created.organization_id,
-      actor_user_id: actor?.user_id || null,
-      target_object_type: "referral",
-      target_object_id: created.case_id,
-      action_type: "referral.created",
-      new_state_json: {
-        ...created,
-        ...details,
-      },
-      reason_text: input?.reason_text || "Referral created",
-      correlation_id: `corr_${randomUUID()}`,
-      source_channel: "api",
-    });
+      await this.auditWriter({
+        audit_event_id: `audit_${randomUUID()}`,
+        organization_id: created.organization_id,
+        actor_user_id: scope.actor_id,
+        target_object_type: "referral",
+        target_object_id: created.case_id,
+        action_type: "referral.created",
+        new_state_json: { ...created, ...details },
+        reason_text: input?.reason_text || "Referral created",
+        correlation_id: correlationId,
+        source_channel: "api",
+      }, db);
 
-    return {
-      ...created,
-      ...details,
-    };
+      await this.outbox.enqueue(buildReferralOutboxEvent(created, correlationId), db);
+      return { ...created, ...details, reporting_delivery_status: "PENDING", reporting_correlation_id: correlationId };
+    });
   }
 
   async assignCase(caseId: string, input: any, actor?: any) {
+    const scope = this.scopeFromActor(actor);
     validateCaseAssignment(input);
-    const updated = await this.repo.assignCase(caseId, input);
+    const updated = await this.repo.assignCase(caseId, input, scope);
     if (!updated) throw new Error("Case not found");
 
-    await writeAuditEvent({
+    await this.auditWriter({
       audit_event_id: `audit_${randomUUID()}`,
       organization_id: updated.organization_id,
-      actor_user_id: actor?.user_id || null,
+      actor_user_id: scope.actor_id,
       target_object_type: "case",
       target_object_id: caseId,
       action_type: "case.assigned",
@@ -102,17 +123,18 @@ export class CaseService {
   }
 
   async transitionCase(caseId: string, currentStatus: string, nextStatus: string, actor?: any, reasonText?: string) {
+    const scope = this.scopeFromActor(actor);
     if (!canTransitionCase(currentStatus, nextStatus)) {
       throw new Error(`Invalid case transition: ${currentStatus} -> ${nextStatus}`);
     }
 
-    const updated = await this.repo.updateCaseStatus(caseId, nextStatus);
+    const updated = await this.repo.updateCaseStatus(caseId, nextStatus, scope);
     if (!updated) throw new Error("Case not found");
 
-    await writeAuditEvent({
+    await this.auditWriter({
       audit_event_id: `audit_${randomUUID()}`,
       organization_id: updated.organization_id,
-      actor_user_id: actor?.user_id || null,
+      actor_user_id: scope.actor_id,
       target_object_type: "case",
       target_object_id: caseId,
       action_type: "case.transitioned",

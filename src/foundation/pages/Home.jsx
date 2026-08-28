@@ -1,7 +1,5 @@
-import React from "react";
-import FoundationLayout from "../layout/FoundationLayout";
-import "../styles/foundation.css";
-import "../styles/shf-home-mock.css";
+import React, { useEffect, useState } from "react";
+import { fetchPublicCurriculumLessonCompletions } from "@/shared/reporting/publicImpactReportingClient.js";
 
 const missionCards = [
   {
@@ -37,8 +35,23 @@ const featuredPrograms = [
 ];
 
 export default function Home() {
+  const [lessonCompletions, setLessonCompletions] = useState({ status: "LOADING", value: "Unavailable" });
+
+  useEffect(() => {
+    let active = true;
+    fetchPublicCurriculumLessonCompletions()
+      .then((projection) => {
+        if (!active) return;
+        setLessonCompletions(projection ? { status: projection.representationType === "SUPPRESSED_LT_10" ? "SUPPRESSED" : projection.displayValue === "0" ? "ZERO" : "CANONICAL_VALUE", value: projection.displayValue } : { status: "UNAVAILABLE", value: "Unavailable" });
+      })
+      .catch(() => {
+        if (active) setLessonCompletions({ status: "UNAVAILABLE", value: "Unavailable" });
+      });
+    return () => { active = false; };
+  }, []);
+
   return (
-    <FoundationLayout>
+    <>
       <section className="shf-mock-hero" id="about">
         <div className="shf-mock-hero__bg" />
         <div className="shf-mock-hero__shade" />
@@ -79,8 +92,8 @@ export default function Home() {
           <div className="shf-impact-stat">
             <div className="shf-impact-icon">🎓</div>
             <div>
-              <strong>4,200+</strong>
-              <span>Certifications Earned</span>
+              <strong aria-live="polite">{lessonCompletions.value}</strong>
+              <span>Verified Lesson Completions</span>
             </div>
           </div>
 
@@ -207,6 +220,6 @@ export default function Home() {
       </section>
 
       <section className="shf-report-anchor" id="reports" aria-label="Impact reports" />
-    </FoundationLayout>
+    </>
   );
 }

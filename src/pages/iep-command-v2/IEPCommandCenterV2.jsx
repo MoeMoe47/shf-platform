@@ -280,6 +280,9 @@ export default function IEPCommandCenterV2(
   }, [activeCountyState, profile, viewMode]);
 
   const handleExportAnalystMemo = React.useCallback(() => {
+    // County profiles are demonstration data and are never exportable as official reporting.
+    return;
+    /* istanbul ignore next */
     const timestamp = new Date();
     const safeCounty = String(profile.label || activeCountyState || "county")
       .toLowerCase()
@@ -372,6 +375,8 @@ export default function IEPCommandCenterV2(
           <div className="v2-context-line muted">Live Snapshot · 10:45 AM</div>
         </div>
       </header>
+
+      <div role="note" className="v2-demo-notice">Demonstration data - not real student or institutional reporting.</div>
 
       <main className="v2-main">
         <aside className="v2-left-rail">
@@ -579,6 +584,8 @@ export default function IEPCommandCenterV2(
                 className="v2-secondary-btn v2-export-memo-btn"
                 type="button"
                 onClick={handleExportAnalystMemo}
+                disabled
+                title="Demonstration data is not exportable as an official report"
               >
                 EXPORT MEMO
               </button>

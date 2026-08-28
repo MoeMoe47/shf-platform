@@ -1,0 +1,33 @@
+.curriculum-calendar-page {
+  --cal-bg: #fbf9f4;
+  --cal-surface: #ffffff;
+  --cal-surface-raised: #ffffff;
+  --cal-border: #e7e1d7;
+  --cal-text: #1a1a1a;
+  --cal-text-muted: #625d55;
+  --cal-accent: #ff5a1f;
+}
+
+.curriculum-calendar-page .cal-eyebrow {
+  margin: 0 0 4px;
+  color: var(--cal-accent);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.curriculum-calendar-page .cal-mainRegion,
+.curriculum-calendar-page .cal-upcomingRail,
+.curriculum-calendar-page .cal-toolbar {
+  box-shadow: 0 8px 24px rgba(64, 48, 32, 0.05);
+}
+
+@media (max-width: 720px) {
+  .curriculum-calendar-page .cal-pageTitle { font-size: 25px; }
+  .curriculum-calendar-page .cal-toolbar { align-items: stretch; }
+  .curriculum-calendar-page .cal-toolbarNav { flex-wrap: wrap; }
+  .curriculum-calendar-page .cal-periodLabel { min-width: 0; flex: 1; }
+  .curriculum-calendar-page .cal-viewSwitch { width: 100%; }
+  .curriculum-calendar-page .cal-viewBtn { flex: 1; padding-inline: 8px; }
+}

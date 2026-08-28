@@ -1,0 +1,18 @@
+{
+  "standard_id": "PCS-1",
+  "artifact": "PACKAGE_RESEAL_POLICY",
+  "artifact_type": "reseal_policy",
+  "status": "GOVERNANCE_DEFINED",
+  "canonical_owner": "Governance Layer",
+  "reseal_rules": [
+    {"change_type": "minor_governance_edit", "required_action": "reseal"},
+    {"change_type": "documentation_edit", "required_action": "reseal"},
+    {"change_type": "validator_change", "required_action": "new_certification"},
+    {"change_type": "implementation_change", "required_action": "new_package_version"},
+    {"change_type": "runtime_change", "required_action": "new_package_version"},
+    {"change_type": "architecture_change", "required_action": "new_package_version"},
+    {"change_type": "version_change", "required_action": "new_certification"}
+  ],
+  "unreviewed_reseal_allowed": false,
+  "seal_revocation_allowed_by_governance": true
+}

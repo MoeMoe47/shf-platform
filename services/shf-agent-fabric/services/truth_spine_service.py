@@ -2,24 +2,113 @@ from __future__ import annotations
 
 import json
 import hashlib
+import os
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from services import truth_history_service
+
 
 SERVICE_ROOT = Path(__file__).resolve().parents[1]
-TRUTH_DB_DIR = SERVICE_ROOT / "db" / "truth"
+TRUTH_DB_DIR = Path(os.getenv("SHF_TRUTH_DB_DIR", str(SERVICE_ROOT / "db" / "truth")))
 CLAIMS_PATH = TRUTH_DB_DIR / "claims.json"
 SOURCES_PATH = TRUTH_DB_DIR / "sources.json"
 FEDERATION_PATH = TRUTH_DB_DIR / "federation_registry.json"
-AUDIT_LOG_PATH = SERVICE_ROOT / "logs" / "truth.audit.log"
+AUDIT_LOG_PATH = Path(os.getenv("SHF_TRUTH_AUDIT_LOG_PATH", str(SERVICE_ROOT / "logs" / "truth.audit.log")))
 
 VERIFIED_SOURCE_STATUSES = {"verified", "approved", "public_approved"}
 VALID_TRUST_LEVELS = {"draft", "sample", "verified", "public_approved"}
 KNOWN_CLAIM_STATUSES = {"missing_source", "draft", "verified"}
 KNOWN_SOURCE_STATUSES = {"draft", "verified", "approved", "public_approved", "unverified"}
 TRUST_MODES = {"local", "trusted_partner", "review_required", "blocked"}
+
+# --- Truth Spine security remediation additions -----------------------------
+#
+# Ownership/ scope classification for claims. "scoped" claims belong to a
+# real organization_id derived from the creating actor. "global" claims are
+# intentionally organization-less (only a global-authority actor - i.e.
+# ROLE_SHS_ADMIN - may create one). "legacy_unscoped" is applied only by the
+# migration tool (services/truth_migration.py) to pre-existing records that
+# have no trustworthy actor/organization on file; such records are
+# conservatively excluded from public visibility and from privileged
+# mutation until explicitly reviewed. See docs/TRUTH_SPINE_SECURITY.md.
+OWNERSHIP_SCOPED = "scoped"
+OWNERSHIP_GLOBAL = "global"
+OWNERSHIP_LEGACY_UNSCOPED = "legacy_unscoped"
+KNOWN_OWNERSHIP_STATUSES = {OWNERSHIP_SCOPED, OWNERSHIP_GLOBAL, OWNERSHIP_LEGACY_UNSCOPED}
+REQUIRED_CANONICAL_CLAIM_METADATA = (
+    "subject_id", "claim_type", "predicate", "tenant_id", "organization_id",
+    "occurred_at", "evidence_ids", "source_ids", "lineage_id",
+)
+
+# Fields that change the factual substance of a claim. Editing any of these
+# on an existing claim always creates a new version rather than mutating the
+# stored record in place - this is what prevents silent overwrite of
+# previously-approved Truth (see create_claim_version()).
+SUBSTANTIVE_CLAIM_FIELDS = (
+    "claim_type", "claim_text", "metric_name", "metric_value", "source_ids",
+    "subject_id", "predicate", "occurred_at", "evidence_ids", "lineage_id",
+    "producer_id", "producer_event_type",
+)
+
+# Fields a caller's request body can NEVER set directly - they are always
+# server-derived. Any of these present in an inbound payload is ignored.
+CALLER_CANNOT_SET_CLAIM_FIELDS = (
+    "public_approved",
+    "verification_status",
+    "trust_level",
+    "report_ready",
+    "approved_by",
+    "approved_at",
+    "approval_reason",
+    "internal_approval_status",
+    "internal_approved_by",
+    "internal_approved_at",
+    "internal_approval_reason",
+    "internal_approval_revoked_by",
+    "internal_approval_revoked_at",
+    "internal_approval_revocation_reason",
+    "revoked_by",
+    "revoked_at",
+    "revocation_reason",
+    "created_by",
+    "organization_id",
+    "tenant_id",
+    "ownership_status",
+    "version",
+    "previous_version_id",
+    "superseded_by",
+)
+CALLER_CANNOT_SET_SOURCE_FIELDS = (
+    "verification_status",
+    "verified_by",
+    "verified_at",
+    "verification_reason",
+    "created_by",
+    "organization_id",
+    "ownership_status",
+)
+
+
+class TruthAuthorityError(Exception):
+    """Raised when an actor lacks scope authority over a Truth Spine record.
+
+    Routers translate this to HTTP 403/404 - see routers/truth_routes.py.
+    """
+
+
+class TruthTransitionError(Exception):
+    """Raised when a requested state transition is not currently valid
+    (e.g. approving an unverified claim, or approving a legacy-unscoped
+    record). Routers translate this to HTTP 409."""
+
+    def __init__(self, reason: str, detail: Optional[Dict[str, Any]] = None):
+        super().__init__(reason)
+        self.reason = reason
+        self.detail = detail or {}
+
 
 DEFAULT_FEDERATION_SYSTEMS = [
     {
@@ -129,13 +218,143 @@ def _audit(action: str, entity_type: str, entity_id: str, payload: Optional[Dict
         handle.write(json.dumps(event, sort_keys=True) + "\n")
 
 
+# --- Actor helpers ------------------------------------------------------
+#
+# `actor` throughout this module is expected to duck-type an auth.sessions.
+# AuthSession: it must expose .user_id, .role, and .organization_id
+# (None = global authority). Tests may pass a lightweight stand-in with the
+# same three attributes instead of a real session - see
+# tests/test_truth_routes_security.py.
+
+def _actor_has_global_scope(actor: Any) -> bool:
+    from auth.permissions import has_global_scope
+
+    return has_global_scope(getattr(actor, "role", None))
+
+
+def _actor_organization_id(actor: Any) -> Optional[str]:
+    return getattr(actor, "organization_id", None)
+
+
+def check_organization_access(actor: Any, target_organization_id: Optional[str]) -> None:
+    """Public tenant/organization scope check, used by BOTH read and write
+    paths in addition to the permission dependency already enforced at the
+    router layer. Router permissions answer "can this role ever do X";
+    this answers "can this specific actor do X to this specific
+    organization's record". Raises TruthAuthorityError (translated by
+    routers/truth_routes.py to a 404, so cross-tenant callers cannot infer
+    that a record exists - see docs/TRUTH_SPINE_SECURITY.md)."""
+    if _actor_has_global_scope(actor):
+        return
+    actor_org = _actor_organization_id(actor)
+    if target_organization_id is None:
+        # Only global-authority actors may access global (organization-less)
+        # records.
+        raise TruthAuthorityError("global_records_require_global_authority")
+    if actor_org != target_organization_id:
+        raise TruthAuthorityError("cross_organization_access_denied")
+
+
+# Backward-compatible internal alias used by write paths in this module.
+_require_write_scope = check_organization_access
+
+
 def list_sources() -> List[Dict[str, Any]]:
     return _read_list(SOURCES_PATH)
 
 
 def list_claims() -> List[Dict[str, Any]]:
+    """Unfiltered internal read of the LATEST version of every claim.
+    Not access-controlled - only call this from server-internal aggregate
+    functions (truth_coverage, truth_drift) or from viewer-aware wrappers
+    below (list_claims_for_viewer / list_public_claims) that apply the
+    appropriate filter before returning data across a trust boundary."""
     sources = list_sources()
-    return [_apply_truth_rules(claim, sources) for claim in _read_list(CLAIMS_PATH)]
+    all_claims = [_apply_truth_rules(claim, sources) for claim in _read_list(CLAIMS_PATH)]
+    # Collapse to latest version per claim_id (superseded_by is None on the
+    # current version).
+    latest: Dict[str, Dict[str, Any]] = {}
+    for claim in all_claims:
+        cid = claim.get("claim_id")
+        if claim.get("superseded_by"):
+            continue
+        latest[cid] = claim
+    return list(latest.values())
+
+
+def list_all_claim_versions(claim_id: str) -> List[Dict[str, Any]]:
+    """Privileged: every version of a claim, oldest first."""
+    sources = list_sources()
+    versions = [
+        _apply_truth_rules(claim, sources)
+        for claim in _read_list(CLAIMS_PATH)
+        if claim.get("claim_id") == claim_id
+    ]
+    return sorted(versions, key=lambda c: int(c.get("version") or 1))
+
+
+def list_claims_for_viewer(actor: Any) -> List[Dict[str, Any]]:
+    """Privileged internal read (truth.internal.read). Global-scope actors
+    see every claim; organization-scoped actors see only their own
+    organization's claims plus global claims. Never returns
+    legacy_unscoped claims' full detail to non-global actors."""
+    claims = list_claims()
+    if _actor_has_global_scope(actor):
+        return claims
+    org_id = _actor_organization_id(actor)
+    return [
+        claim
+        for claim in claims
+        if claim.get("organization_id") == org_id or claim.get("ownership_status") == OWNERSHIP_GLOBAL
+    ]
+
+
+def is_publicly_visible(claim: Dict[str, Any]) -> bool:
+    """The single canonical public-visibility predicate. Every public-read
+    path in this module and in routers/truth_routes.py MUST use this
+    function rather than re-implementing filtering logic. Fails closed:
+    any missing/malformed required field results in NOT visible."""
+    if not isinstance(claim, dict):
+        return False
+    if claim.get("public_approved") is not True:
+        return False
+    if claim.get("verification_status") != "verified":
+        return False
+    if claim.get("superseded_by"):
+        return False
+    ownership_status = claim.get("ownership_status")
+    if ownership_status not in (OWNERSHIP_SCOPED, OWNERSHIP_GLOBAL):
+        return False
+    if ownership_status == OWNERSHIP_SCOPED and not claim.get("organization_id"):
+        return False
+    return True
+
+
+def is_internal_institutionally_eligible(claim: Dict[str, Any]) -> bool:
+    """Fail-closed predicate for future internal metric consumers.
+
+    Internal approval is deliberately independent from ``public_approved``;
+    both source verification and an authorized internal approval are required.
+    Missing canonical lineage metadata, legacy scope, or superseded versions
+    are never eligible.
+    """
+    if not isinstance(claim, dict):
+        return False
+    if any(not claim.get(field) for field in REQUIRED_CANONICAL_CLAIM_METADATA):
+        return False
+    if not isinstance(claim.get("evidence_ids"), list) or not isinstance(claim.get("source_ids"), list):
+        return False
+    if claim.get("verification_status") != "verified":
+        return False
+    if claim.get("internal_approval_status") != "approved":
+        return False
+    if claim.get("superseded_by"):
+        return False
+    return claim.get("ownership_status") in (OWNERSHIP_SCOPED, OWNERSHIP_GLOBAL)
+
+
+def list_public_claims() -> List[Dict[str, Any]]:
+    return [claim for claim in list_claims() if is_publicly_visible(claim)]
 
 
 def get_source(source_id: str) -> Optional[Dict[str, Any]]:
@@ -143,7 +362,15 @@ def get_source(source_id: str) -> Optional[Dict[str, Any]]:
 
 
 def get_claim(claim_id: str) -> Optional[Dict[str, Any]]:
+    """Latest (non-superseded) version only. Not access-controlled by
+    itself - callers in routers/truth_routes.py apply the appropriate
+    public/privileged filter before returning the result."""
     return next((claim for claim in list_claims() if claim.get("claim_id") == claim_id), None)
+
+
+def get_public_claim(claim_id: str) -> Optional[Dict[str, Any]]:
+    claim = get_claim(claim_id)
+    return claim if claim and is_publicly_visible(claim) else None
 
 
 def _clean_string(value: Any) -> str:
@@ -180,6 +407,10 @@ def _clean_string_list(value: Any) -> List[str]:
     return out
 
 
+def _clean_optional_string_list(value: Any) -> List[str]:
+    return _clean_string_list(value)
+
+
 def _canonical_json(value: Dict[str, Any]) -> str:
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
 
@@ -188,11 +419,32 @@ def _sha256_payload(value: Dict[str, Any]) -> str:
     return hashlib.sha256(_canonical_json(value).encode("utf-8")).hexdigest()
 
 
+def _resolve_write_organization(actor: Any, payload: Dict[str, Any]) -> tuple[Optional[str], str]:
+    """Server-side derivation of (organization_id, ownership_status) for a
+    NEW record. The request body's own organization_id (if any) is never
+    trusted directly - see CALLER_CANNOT_SET_CLAIM_FIELDS /
+    CALLER_CANNOT_SET_SOURCE_FIELDS. A global-authority actor may
+    optionally target a specific organization by passing
+    requested_organization_id, or create a truly global record by omitting
+    it."""
+    if _actor_has_global_scope(actor):
+        requested = _clean_string(payload.get("requested_organization_id")) or None
+        if requested:
+            return requested, OWNERSHIP_SCOPED
+        return None, OWNERSHIP_GLOBAL
+    org_id = _actor_organization_id(actor)
+    if not org_id:
+        # An authenticated, organization-scoped actor with no organization
+        # on file cannot write anything attributable - fail closed rather
+        # than guessing.
+        raise TruthAuthorityError("actor_missing_organization_scope")
+    return org_id, OWNERSHIP_SCOPED
+
+
 def _normalize_source(payload: Dict[str, Any], existing: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     now = _now()
     source_id = _clean_string(payload.get("source_id") or (existing or {}).get("source_id") or f"src_{uuid.uuid4().hex[:12]}")
     created_at = _clean_string((existing or {}).get("created_at") or payload.get("created_at") or now)
-    verification_status = _clean_string(payload.get("verification_status") or (existing or {}).get("verification_status") or "draft").lower()
     return {
         "source_id": source_id,
         "system_id": _clean_string(payload.get("system_id") or (existing or {}).get("system_id")),
@@ -200,17 +452,101 @@ def _normalize_source(payload: Dict[str, Any], existing: Optional[Dict[str, Any]
         "title": _clean_string(payload.get("title") or (existing or {}).get("title") or "Untitled source"),
         "uri": _clean_string(payload.get("uri") or (existing or {}).get("uri")),
         "evidence_type": _clean_string(payload.get("evidence_type") or (existing or {}).get("evidence_type") or "document"),
-        "verification_status": verification_status,
         "created_at": created_at,
         "updated_at": now,
     }
+
+
+def create_source(payload: Dict[str, Any], actor: Any) -> Dict[str, Any]:
+    """Requires truth.source.create (enforced by the router). A newly
+    created source ALWAYS starts as verification_status="unverified"
+    regardless of anything the caller sends - verification is only ever
+    performed by verify_source(), which requires truth.source.verify and a
+    reason. This is what closes the self-verification attack chain."""
+    clean_payload = {k: v for k, v in payload.items() if k not in CALLER_CANNOT_SET_SOURCE_FIELDS}
+    organization_id, ownership_status = _resolve_write_organization(actor, payload)
+
+    sources = list_sources()
+    existing = next((s for s in sources if s.get("source_id") == clean_payload.get("source_id")), None)
+    if existing and existing.get("organization_id") not in (None, organization_id) and not _actor_has_global_scope(actor):
+        raise TruthAuthorityError("cross_organization_access_denied")
+
+    source = _normalize_source(clean_payload, existing=existing)
+    source["verification_status"] = "unverified"
+    source["organization_id"] = organization_id
+    source["ownership_status"] = ownership_status
+    source["created_by"] = getattr(actor, "user_id", "")
+    source["verified_by"] = None
+    source["verified_at"] = None
+    source["verification_reason"] = ""
+
+    sources = [item for item in sources if item.get("source_id") != source["source_id"]]
+    sources.append(source)
+    _write_list(SOURCES_PATH, sources)
+    _audit("source.upserted", "source", source["source_id"], {"verification_status": source["verification_status"]})
+    truth_history_service.append_history_event(
+        event_type="source.created",
+        entity_type="source",
+        entity_id=source["source_id"],
+        organization_id=organization_id,
+        tenant_id=f"tenant:{organization_id}" if organization_id else None,
+        actor_id=getattr(actor, "user_id", ""),
+        new_state={"verification_status": source["verification_status"]},
+    )
+    return source
+
+
+def verify_source(source_id: str, actor: Any, verification_status: str, reason: str) -> Dict[str, Any]:
+    """Requires truth.source.verify (enforced by the router) and a
+    non-empty reason. This is the ONLY function that may move a source
+    into verified/approved/public_approved."""
+    reason = _clean_string(reason)
+    if not reason:
+        raise TruthTransitionError("reason_required", {"field": "reason"})
+    verification_status = _clean_string(verification_status).lower()
+    if verification_status not in KNOWN_SOURCE_STATUSES:
+        raise TruthTransitionError("invalid_verification_status", {"allowed": sorted(KNOWN_SOURCE_STATUSES)})
+
+    source = get_source(source_id)
+    if not source:
+        raise TruthTransitionError("source_not_found")
+    _require_write_scope(actor, source.get("organization_id"))
+
+    previous_status = source.get("verification_status")
+    source = {**source}
+    source["verification_status"] = verification_status
+    source["verified_by"] = getattr(actor, "user_id", "")
+    source["verified_at"] = _now()
+    source["verification_reason"] = reason
+    source["updated_at"] = _now()
+
+    sources = [item for item in list_sources() if item.get("source_id") != source_id]
+    sources.append(source)
+    _write_list(SOURCES_PATH, sources)
+
+    event_type = (
+        "source.verification_revoked"
+        if verification_status in {"draft", "unverified"} and previous_status in VERIFIED_SOURCE_STATUSES
+        else "source.verified"
+    )
+    _audit("source.verification_updated", "source", source_id, {"verification_status": verification_status})
+    truth_history_service.append_history_event(
+        event_type=event_type,
+        entity_type="source",
+        entity_id=source_id,
+        organization_id=source.get("organization_id"),
+        actor_id=getattr(actor, "user_id", ""),
+        reason=reason,
+        previous_state={"verification_status": previous_status},
+        new_state={"verification_status": verification_status},
+    )
+    return source
 
 
 def _base_claim(payload: Dict[str, Any], existing: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     now = _now()
     claim_id = _clean_string(payload.get("claim_id") or (existing or {}).get("claim_id") or f"claim_{uuid.uuid4().hex[:12]}")
     created_at = _clean_string((existing or {}).get("created_at") or payload.get("created_at") or now)
-    public_approved = bool(payload.get("public_approved", (existing or {}).get("public_approved", False)))
     return {
         "claim_id": claim_id,
         "app_id": _clean_string(payload.get("app_id") or (existing or {}).get("app_id") or "shs"),
@@ -222,11 +558,14 @@ def _base_claim(payload: Dict[str, Any], existing: Optional[Dict[str, Any]] = No
         "metric_name": _clean_string(payload.get("metric_name") or (existing or {}).get("metric_name")),
         "metric_value": payload.get("metric_value", (existing or {}).get("metric_value")),
         "source_ids": _clean_source_ids(payload.get("source_ids", (existing or {}).get("source_ids", []))),
-        "verification_status": _clean_string(payload.get("verification_status") or (existing or {}).get("verification_status") or "missing_source"),
-        "trust_level": _clean_string(payload.get("trust_level") or (existing or {}).get("trust_level") or "draft"),
+        "evidence_ids": _clean_optional_string_list(payload.get("evidence_ids", (existing or {}).get("evidence_ids", []))),
+        "subject_id": _clean_string(payload.get("subject_id") or (existing or {}).get("subject_id")),
+        "predicate": _clean_string(payload.get("predicate") or (existing or {}).get("predicate")),
+        "occurred_at": _clean_string(payload.get("occurred_at") or (existing or {}).get("occurred_at")),
+        "lineage_id": _clean_string(payload.get("lineage_id") or (existing or {}).get("lineage_id")),
+        "producer_id": _clean_string(payload.get("producer_id") or (existing or {}).get("producer_id")),
+        "producer_event_type": _clean_string(payload.get("producer_event_type") or (existing or {}).get("producer_event_type")),
         "trace_coverage": _trace_coverage(payload.get("trace_coverage", (existing or {}).get("trace_coverage", 0))),
-        "public_approved": public_approved,
-        "report_ready": bool(payload.get("report_ready", (existing or {}).get("report_ready", False))),
         "created_at": created_at,
         "updated_at": now,
     }
@@ -251,6 +590,11 @@ def _apply_truth_rules(claim: Dict[str, Any], sources: Optional[List[Dict[str, A
     else:
         verification_status = "draft"
 
+    # public_approved is a STORED decision (see approve_public/revoke_public
+    # below), not re-derived from source state on every read - but it can
+    # never be effectively true unless verification_status is currently
+    # "verified" (defense in depth against a source being unverified after
+    # a claim was approved).
     public_approved = bool(claim.get("public_approved")) and verification_status == "verified"
     report_ready = verification_status == "verified" and trace_coverage >= 80
 
@@ -273,6 +617,13 @@ def _apply_truth_rules(claim: Dict[str, Any], sources: Optional[List[Dict[str, A
         "trust_level": trust_level,
         "trace_coverage": trace_coverage,
         "public_approved": public_approved,
+        "internal_approval_status": _clean_string(claim.get("internal_approval_status") or "not_approved"),
+        "internal_approved_by": _clean_string(claim.get("internal_approved_by")),
+        "internal_approved_at": _clean_string(claim.get("internal_approved_at")),
+        "internal_approval_reason": _clean_string(claim.get("internal_approval_reason")),
+        "internal_approval_revoked_by": _clean_string(claim.get("internal_approval_revoked_by")),
+        "internal_approval_revoked_at": _clean_string(claim.get("internal_approval_revoked_at")),
+        "internal_approval_revocation_reason": _clean_string(claim.get("internal_approval_revocation_reason")),
         "report_ready": report_ready,
         "warnings": build_claim_warnings({
             **claim,
@@ -285,27 +636,167 @@ def _apply_truth_rules(claim: Dict[str, Any], sources: Optional[List[Dict[str, A
     }
 
 
-def create_source(payload: Dict[str, Any]) -> Dict[str, Any]:
-    sources = list_sources()
-    source = _normalize_source(payload)
-    sources = [item for item in sources if item.get("source_id") != source["source_id"]]
-    sources.append(source)
-    _write_list(SOURCES_PATH, sources)
-    _audit("source.upserted", "source", source["source_id"], {"verification_status": source["verification_status"]})
-    return source
+def create_claim(payload: Dict[str, Any], actor: Any) -> Dict[str, Any]:
+    """Creates a brand-new claim (version 1). Requires truth.claim.create
+    (enforced by the router). If claim_id already exists, this raises -
+    use create_claim_version() to edit an existing claim."""
+    clean_payload = {k: v for k, v in payload.items() if k not in CALLER_CANNOT_SET_CLAIM_FIELDS}
+    existing = next(
+        (c for c in _read_list(CLAIMS_PATH) if c.get("claim_id") == clean_payload.get("claim_id")),
+        None,
+    )
+    if existing:
+        raise TruthTransitionError("claim_already_exists", {"claim_id": existing.get("claim_id")})
+
+    organization_id, ownership_status = _resolve_write_organization(actor, payload)
+    claim = _base_claim(clean_payload)
+    claim["version"] = 1
+    claim["previous_version_id"] = None
+    claim["superseded_by"] = None
+    claim["organization_id"] = organization_id
+    claim["tenant_id"] = _clean_string(getattr(actor, "tenant_id", "") or (f"tenant:{organization_id}" if organization_id else ""))
+    claim["ownership_status"] = ownership_status
+    claim["created_by"] = getattr(actor, "user_id", "")
+    claim["public_approved"] = False
+    claim["approved_by"] = None
+    claim["approved_at"] = None
+    claim["approval_reason"] = ""
+    claim["internal_approval_status"] = "not_approved"
+    claim["internal_approved_by"] = None
+    claim["internal_approved_at"] = None
+    claim["internal_approval_reason"] = ""
+    claim["internal_approval_revoked_by"] = None
+    claim["internal_approval_revoked_at"] = None
+    claim["internal_approval_revocation_reason"] = ""
+
+    stored = _apply_truth_rules(claim, list_sources())
+    stored_for_write = {k: v for k, v in stored.items() if k != "warnings"}
+    all_claims = _read_list(CLAIMS_PATH)
+    all_claims.append(stored_for_write)
+    _write_list(CLAIMS_PATH, all_claims)
+
+    _audit("claim.upserted", "claim", stored["claim_id"], {"verification_status": stored["verification_status"]})
+    truth_history_service.append_history_event(
+        event_type="claim.created",
+        entity_type="claim",
+        entity_id=stored["claim_id"],
+        entity_version=1,
+        organization_id=organization_id,
+        tenant_id=stored.get("tenant_id"),
+        actor_id=getattr(actor, "user_id", ""),
+        new_state={"verification_status": stored["verification_status"]},
+    )
+    return stored
 
 
-def create_claim(payload: Dict[str, Any]) -> Dict[str, Any]:
-    claims = _read_list(CLAIMS_PATH)
-    existing = next((claim for claim in claims if claim.get("claim_id") == payload.get("claim_id")), None)
-    claim = _base_claim(payload, existing=existing)
-    claim = _apply_truth_rules(claim, list_sources())
-    stored_claim = {key: value for key, value in claim.items() if key != "warnings"}
-    claims = [item for item in claims if item.get("claim_id") != stored_claim["claim_id"]]
-    claims.append(stored_claim)
-    _write_list(CLAIMS_PATH, claims)
-    _audit("claim.upserted", "claim", stored_claim["claim_id"], {"verification_status": claim["verification_status"]})
-    return claim
+def _is_substantive_change(current: Dict[str, Any], payload: Dict[str, Any]) -> bool:
+    for field in SUBSTANTIVE_CLAIM_FIELDS:
+        if field not in payload:
+            continue
+        new_value = payload.get(field)
+        if field == "source_ids":
+            new_value = _clean_source_ids(new_value)
+            if new_value != current.get("source_ids", []):
+                return True
+        elif str(new_value if new_value is not None else "") != str(current.get(field) if current.get(field) is not None else ""):
+            return True
+    return False
+
+
+def create_claim_version(claim_id: str, payload: Dict[str, Any], actor: Any) -> Dict[str, Any]:
+    """Edits an existing claim. Requires truth.claim.update (enforced by
+    the router). Any substantive change (see SUBSTANTIVE_CLAIM_FIELDS)
+    ALWAYS creates a new version rather than mutating the current record in
+    place - this is what prevents silent overwrite of previously-approved
+    Truth. The prior version is preserved, marked superseded_by the new
+    version's id, and remains available to privileged readers via
+    list_all_claim_versions(). public_approved always resets to False on a
+    new version - a new version requires a fresh approval decision."""
+    current = get_claim(claim_id)
+    if not current:
+        raise TruthTransitionError("claim_not_found")
+    _require_write_scope(actor, current.get("organization_id"))
+
+    clean_payload = {k: v for k, v in payload.items() if k not in CALLER_CANNOT_SET_CLAIM_FIELDS}
+    substantive = _is_substantive_change(current, clean_payload)
+
+    if not substantive:
+        # Metadata-only edit (e.g. project_id/program_id label correction):
+        # applied in place, no new version, no re-approval needed. Still
+        # cannot touch approval fields (already stripped above).
+        merged = {**current, **clean_payload}
+        merged = _base_claim(merged, existing=current)
+        merged["version"] = current.get("version", 1)
+        merged["previous_version_id"] = current.get("previous_version_id")
+        merged["superseded_by"] = None
+        merged["organization_id"] = current.get("organization_id")
+        merged["tenant_id"] = current.get("tenant_id")
+        merged["ownership_status"] = current.get("ownership_status")
+        merged["created_by"] = current.get("created_by")
+        merged["public_approved"] = current.get("public_approved", False)
+        merged["approved_by"] = current.get("approved_by")
+        merged["approved_at"] = current.get("approved_at")
+        merged["approval_reason"] = current.get("approval_reason", "")
+        merged["internal_approval_status"] = current.get("internal_approval_status", "not_approved")
+        merged["internal_approved_by"] = current.get("internal_approved_by")
+        merged["internal_approved_at"] = current.get("internal_approved_at")
+        merged["internal_approval_reason"] = current.get("internal_approval_reason", "")
+        merged["internal_approval_revoked_by"] = current.get("internal_approval_revoked_by")
+        merged["internal_approval_revoked_at"] = current.get("internal_approval_revoked_at")
+        merged["internal_approval_revocation_reason"] = current.get("internal_approval_revocation_reason", "")
+        stored = _apply_truth_rules(merged, list_sources())
+        all_claims = [c for c in _read_list(CLAIMS_PATH) if not (c.get("claim_id") == claim_id and c.get("version") == merged["version"])]
+        all_claims.append({k: v for k, v in stored.items() if k != "warnings"})
+        _write_list(CLAIMS_PATH, all_claims)
+        _audit("claim.upserted", "claim", claim_id, {"verification_status": stored["verification_status"]})
+        return stored
+
+    next_version = int(current.get("version", 1)) + 1
+    new_claim = _base_claim(clean_payload, existing=current)
+    new_claim["version"] = next_version
+    new_claim["previous_version_id"] = f"{claim_id}@v{current.get('version', 1)}"
+    new_claim["superseded_by"] = None
+    new_claim["organization_id"] = current.get("organization_id")
+    new_claim["tenant_id"] = current.get("tenant_id")
+    new_claim["ownership_status"] = current.get("ownership_status")
+    new_claim["created_by"] = getattr(actor, "user_id", "")
+    new_claim["public_approved"] = False
+    new_claim["approved_by"] = None
+    new_claim["approved_at"] = None
+    new_claim["approval_reason"] = ""
+    new_claim["internal_approval_status"] = "not_approved"
+    new_claim["internal_approved_by"] = None
+    new_claim["internal_approved_at"] = None
+    new_claim["internal_approval_reason"] = ""
+    new_claim["internal_approval_revoked_by"] = None
+    new_claim["internal_approval_revoked_at"] = None
+    new_claim["internal_approval_revocation_reason"] = ""
+
+    stored = _apply_truth_rules(new_claim, list_sources())
+    all_claims = _read_list(CLAIMS_PATH)
+    # Mark the prior version superseded (find its exact stored row by
+    # claim_id + version, not just claim_id, since multiple versions share
+    # claim_id).
+    for row in all_claims:
+        if row.get("claim_id") == claim_id and int(row.get("version", 1)) == int(current.get("version", 1)):
+            row["superseded_by"] = f"{claim_id}@v{next_version}"
+            row["updated_at"] = _now()
+    all_claims.append({k: v for k, v in stored.items() if k != "warnings"})
+    _write_list(CLAIMS_PATH, all_claims)
+
+    _audit("claim.version_created", "claim", claim_id, {"version": next_version})
+    truth_history_service.append_history_event(
+        event_type="claim.version_created",
+        entity_type="claim",
+        entity_id=claim_id,
+        entity_version=next_version,
+        organization_id=current.get("organization_id"),
+        tenant_id=current.get("tenant_id"),
+        actor_id=getattr(actor, "user_id", ""),
+        previous_state={"version": current.get("version", 1), "public_approved": current.get("public_approved", False)},
+        new_state={"version": next_version, "public_approved": False},
+    )
+    return stored
 
 
 def _normalize_federation_system(payload: Dict[str, Any], existing: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
@@ -339,6 +830,7 @@ def get_federation_system(system_id: str) -> Optional[Dict[str, Any]]:
 
 
 def upsert_federation_system(payload: Dict[str, Any]) -> Dict[str, Any]:
+    """Requires truth.admin (enforced by the router)."""
     systems = list_federation_systems()
     requested_id = _clean_string(payload.get("system_id"))
     existing = next((system for system in systems if system.get("system_id") == requested_id), None)
@@ -390,10 +882,28 @@ def build_truth_package(claim_id: str) -> Optional[Dict[str, Any]]:
         "issued_at": issued_at,
         "issued_by": "shs-truth-spine-v1",
         "signature_status": "hash_signed_v1",
-        "display_scope": "public" if claim.get("public_approved") is True else "internal",
+        "display_scope": "public" if is_publicly_visible(claim) else "internal",
         "warnings": warnings,
     }
     return {**package, "package_hash": _sha256_payload(package)}
+
+
+def build_public_truth_package(claim_id: str) -> Optional[Dict[str, Any]]:
+    claim = get_public_claim(claim_id)
+    if not claim:
+        return None
+    package = build_truth_package(claim_id)
+    if not package or package.get("display_scope") != "public":
+        return None
+    # Strip internal-only source detail from the public view - public
+    # consumers get sources that are themselves publicly relevant, not
+    # private evidentiary metadata (e.g. internal uri/system_id).
+    package = {**package}
+    package["sources"] = [
+        {"source_id": s.get("source_id"), "title": s.get("title"), "source_type": s.get("source_type")}
+        for s in package.get("sources", [])
+    ]
+    return package
 
 
 def list_truth_packages() -> List[Dict[str, Any]]:
@@ -420,6 +930,10 @@ def list_truth_packages() -> List[Dict[str, Any]]:
     return packages
 
 
+def list_public_truth_packages() -> List[Dict[str, Any]]:
+    return [p for p in list_truth_packages() if p.get("display_scope") == "public"]
+
+
 def replay_claim(claim_id: str) -> Optional[Dict[str, Any]]:
     claim = get_claim(claim_id)
     if not claim:
@@ -430,7 +944,7 @@ def replay_claim(claim_id: str) -> Optional[Dict[str, Any]]:
         {
             "ts": claim.get("created_at"),
             "event_type": "claim_created",
-            "actor": "shs-truth-spine-v1",
+            "actor": claim.get("created_by") or "shs-truth-spine-v1",
             "summary": "Claim entered Truth Spine.",
             "state": {"verification_status": "missing_source", "trust_level": "draft"},
         }
@@ -439,7 +953,7 @@ def replay_claim(claim_id: str) -> Optional[Dict[str, Any]]:
         timeline.append({
             "ts": source.get("created_at"),
             "event_type": "source_created",
-            "actor": "shs-truth-spine-v1",
+            "actor": source.get("created_by") or "shs-truth-spine-v1",
             "source_id": source.get("source_id"),
             "summary": "Source attached to Truth Spine evidence registry.",
             "state": {"verification_status": source.get("verification_status")},
@@ -448,7 +962,7 @@ def replay_claim(claim_id: str) -> Optional[Dict[str, Any]]:
             timeline.append({
                 "ts": source.get("updated_at"),
                 "event_type": "source_updated",
-                "actor": "shs-truth-spine-v1",
+                "actor": source.get("verified_by") or "shs-truth-spine-v1",
                 "source_id": source.get("source_id"),
                 "summary": "Source verification state updated.",
                 "state": {"verification_status": source.get("verification_status")},
@@ -457,7 +971,7 @@ def replay_claim(claim_id: str) -> Optional[Dict[str, Any]]:
         timeline.append({
             "ts": claim.get("updated_at"),
             "event_type": "claim_updated",
-            "actor": "shs-truth-spine-v1",
+            "actor": claim.get("approved_by") or claim.get("created_by") or "shs-truth-spine-v1",
             "summary": "Claim fields updated.",
             "state": {"trace_coverage": claim.get("trace_coverage")},
         })
@@ -476,7 +990,7 @@ def replay_claim(claim_id: str) -> Optional[Dict[str, Any]]:
         {
             "ts": claim.get("updated_at"),
             "event_type": "public_approval_evaluated",
-            "actor": "shs-truth-spine-v1",
+            "actor": claim.get("approved_by") or "shs-truth-spine-v1",
             "summary": "Public approval gate evaluated.",
             "state": {"public_approved": claim.get("public_approved")},
         },
@@ -503,6 +1017,7 @@ def replay_claim(claim_id: str) -> Optional[Dict[str, Any]]:
         "approval_events": [event for event in timeline if "approval" in str(event.get("event_type", ""))],
         "verification_events": [event for event in timeline if "verification" in str(event.get("event_type", ""))],
         "warnings": claim.get("warnings", []),
+        "structured_history": truth_history_service.list_history_for_entity(claim_id),
     }
 
 
@@ -555,17 +1070,185 @@ def build_readiness(claim_id: str) -> Optional[Dict[str, Any]]:
     }
 
 
-def patch_public_approval(claim_id: str, public_approved: bool) -> Optional[Dict[str, Any]]:
+def _assert_human_internal_approver(actor: Any) -> None:
+    if str(getattr(actor, "principal_type", "user")).lower() == "service":
+        raise TruthAuthorityError("service_principal_cannot_approve_internal_claim")
+
+
+def _set_internal_approval(claim_id: str, actor: Any, reason: str, status: str) -> Dict[str, Any]:
+    _assert_human_internal_approver(actor)
+    reason = _clean_string(reason)
+    if not reason:
+        raise TruthTransitionError("reason_required", {"field": "reason"})
     existing = get_claim(claim_id)
     if not existing:
-        return None
-    requested = bool(public_approved)
-    if requested and existing.get("verification_status") != "verified":
-        updated = create_claim({**existing, "public_approved": False})
+        raise TruthTransitionError("claim_not_found")
+    _require_write_scope(actor, existing.get("organization_id"))
+    if existing.get("ownership_status") == OWNERSHIP_LEGACY_UNSCOPED:
+        raise TruthTransitionError("legacy_unscoped_records_cannot_be_approved")
+    if status == "approved" and existing.get("verification_status") != "verified":
+        truth_history_service.append_history_event(
+            event_type="transition.rejected",
+            entity_type="claim",
+            entity_id=claim_id,
+            entity_version=existing.get("version"),
+            organization_id=existing.get("organization_id"),
+            tenant_id=existing.get("tenant_id"),
+            actor_id=getattr(actor, "user_id", ""),
+            actor_type="USER",
+            reason=reason,
+            previous_state={"verification_status": existing.get("verification_status")},
+            new_state={"attempted_internal_approval": status},
+        )
+        raise TruthTransitionError("claim_not_verified", {"verification_status": existing.get("verification_status")})
+
+    now = _now()
+    all_claims = _read_list(CLAIMS_PATH)
+    previous = existing.get("internal_approval_status", "not_approved")
+    for row in all_claims:
+        if row.get("claim_id") == claim_id and int(row.get("version", 1)) == int(existing.get("version", 1)):
+            row["internal_approval_status"] = status
+            if status == "approved":
+                row["internal_approved_by"] = getattr(actor, "user_id", "")
+                row["internal_approved_at"] = now
+                row["internal_approval_reason"] = reason
+                row["internal_approval_revoked_by"] = None
+                row["internal_approval_revoked_at"] = None
+                row["internal_approval_revocation_reason"] = ""
+            else:
+                row["internal_approval_revoked_by"] = getattr(actor, "user_id", "")
+                row["internal_approval_revoked_at"] = now
+                row["internal_approval_revocation_reason"] = reason
+            row["updated_at"] = now
+    _write_list(CLAIMS_PATH, all_claims)
+    updated = get_claim(claim_id)
+    event_type = "claim.internal_approved" if status == "approved" else "claim.internal_approval_revoked"
+    _audit("internal_approval.updated", "claim", claim_id, {"internal_approval_status": status})
+    truth_history_service.append_history_event(
+        event_type=event_type,
+        entity_type="claim",
+        entity_id=claim_id,
+        entity_version=existing.get("version"),
+        organization_id=existing.get("organization_id"),
+        tenant_id=existing.get("tenant_id"),
+        actor_id=getattr(actor, "user_id", ""),
+        actor_type="USER",
+        reason=reason,
+        previous_state={"internal_approval_status": previous},
+        new_state={"internal_approval_status": status},
+    )
+    return updated or existing
+
+
+def approve_internal(claim_id: str, actor: Any, reason: str) -> Dict[str, Any]:
+    """Approve a verified claim for internal institutional use only.
+
+    This transition is intentionally separate from public approval and never
+    changes ``public_approved``. Router permission checks provide the
+    external authorization boundary; the service repeats separation-of-duty
+    and scope checks for defense in depth.
+    """
+    return _set_internal_approval(claim_id, actor, reason, "approved")
+
+
+def revoke_internal(claim_id: str, actor: Any, reason: str) -> Dict[str, Any]:
+    return _set_internal_approval(claim_id, actor, reason, "revoked")
+
+
+def approve_public(claim_id: str, actor: Any, reason: str) -> Dict[str, Any]:
+    """Requires truth.claim.approve_public (enforced by the router) and a
+    non-empty reason. Idempotent: re-approving an already-approved claim
+    re-records history but does not error."""
+    reason = _clean_string(reason)
+    if not reason:
+        raise TruthTransitionError("reason_required", {"field": "reason"})
+
+    existing = get_claim(claim_id)
+    if not existing:
+        raise TruthTransitionError("claim_not_found")
+    _require_write_scope(actor, existing.get("organization_id"))
+    if existing.get("ownership_status") == OWNERSHIP_LEGACY_UNSCOPED:
+        raise TruthTransitionError("legacy_unscoped_records_cannot_be_approved")
+    if existing.get("verification_status") != "verified":
         _audit("public_approval.blocked", "claim", claim_id, {"reason": "claim_not_verified"})
-        return {**updated, "approval_blocked": True, "block_reason": "public_approved requires verification_status verified"}
-    updated = create_claim({**existing, "public_approved": requested})
-    _audit("public_approval.updated", "claim", claim_id, {"public_approved": requested})
+        truth_history_service.append_history_event(
+            event_type="transition.rejected",
+            entity_type="claim",
+            entity_id=claim_id,
+            entity_version=existing.get("version"),
+            organization_id=existing.get("organization_id"),
+            actor_id=getattr(actor, "user_id", ""),
+            reason=reason,
+            previous_state={"verification_status": existing.get("verification_status")},
+            new_state={"attempted": "public_approved"},
+        )
+        raise TruthTransitionError(
+            "claim_not_verified",
+            {"claim_id": claim_id, "verification_status": existing.get("verification_status")},
+        )
+
+    was_already_approved = bool(existing.get("public_approved"))
+    all_claims = _read_list(CLAIMS_PATH)
+    for row in all_claims:
+        if row.get("claim_id") == claim_id and int(row.get("version", 1)) == int(existing.get("version", 1)):
+            row["public_approved"] = True
+            row["approved_by"] = getattr(actor, "user_id", "")
+            row["approved_at"] = _now()
+            row["approval_reason"] = reason
+            row["updated_at"] = _now()
+    _write_list(CLAIMS_PATH, all_claims)
+    updated = get_claim(claim_id)
+
+    _audit("public_approval.updated", "claim", claim_id, {"public_approved": True})
+    truth_history_service.append_history_event(
+        event_type="claim.public_approved",
+        entity_type="claim",
+        entity_id=claim_id,
+        entity_version=existing.get("version"),
+        organization_id=existing.get("organization_id"),
+        actor_id=getattr(actor, "user_id", ""),
+        reason=reason,
+        previous_state={"public_approved": was_already_approved},
+        new_state={"public_approved": True},
+    )
+    return updated
+
+
+def revoke_public(claim_id: str, actor: Any, reason: str) -> Dict[str, Any]:
+    """Requires truth.claim.revoke_public (enforced by the router) and a
+    non-empty reason."""
+    reason = _clean_string(reason)
+    if not reason:
+        raise TruthTransitionError("reason_required", {"field": "reason"})
+
+    existing = get_claim(claim_id)
+    if not existing:
+        raise TruthTransitionError("claim_not_found")
+    _require_write_scope(actor, existing.get("organization_id"))
+
+    all_claims = _read_list(CLAIMS_PATH)
+    for row in all_claims:
+        if row.get("claim_id") == claim_id and int(row.get("version", 1)) == int(existing.get("version", 1)):
+            row["public_approved"] = False
+            row["revoked_by"] = getattr(actor, "user_id", "")
+            row["revoked_at"] = _now()
+            row["revocation_reason"] = reason
+            row["updated_at"] = _now()
+    _write_list(CLAIMS_PATH, all_claims)
+    updated = get_claim(claim_id)
+
+    _audit("public_approval.updated", "claim", claim_id, {"public_approved": False})
+    truth_history_service.append_history_event(
+        event_type="claim.public_approval_revoked",
+        entity_type="claim",
+        entity_id=claim_id,
+        entity_version=existing.get("version"),
+        organization_id=existing.get("organization_id"),
+        actor_id=getattr(actor, "user_id", ""),
+        reason=reason,
+        previous_state={"public_approved": existing.get("public_approved")},
+        new_state={"public_approved": False},
+    )
     return updated
 
 

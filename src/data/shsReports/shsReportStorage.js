@@ -1,7 +1,6 @@
 import { createNewReportVersion, lockExportedReport } from "./shsReportLifecycle";
 import { getReportTypeDefinition } from "./shsReportRegistry";
 import { buildDefaultReadiness } from "./shsReportReadiness";
-import { shsReportSeedRecords } from "./shsReportSeedData";
 import { SHS_PREMIUM_INTERIOR_TEMPLATE } from "./shsReportTemplates";
 
 export const SHS_REPORT_RECORDS_KEY = "shs.reports.records.v1";
@@ -33,7 +32,7 @@ function writeJson(key, value) {
 export function getReportRecords() {
   const records = readJson(SHS_REPORT_RECORDS_KEY, null);
   if (Array.isArray(records) && records.length) return records;
-  return [...shsReportSeedRecords];
+  return [];
 }
 
 export function saveReportRecords(records) {

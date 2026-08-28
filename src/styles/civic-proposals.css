@@ -1,0 +1,284 @@
+/* src/styles/civic-proposals.css
+   Civic Lab — Proposals page. Reuses every token/shell primitive from
+   src/styles/civic-dashboard.css (--civic-*, .cv-card, .cv-btn, .cv-shell,
+   theme handling, breakpoints) and the status-pill/party-accent pattern
+   established in src/styles/civic-elections.css. `.prop-*` classes are
+   this page's own content only — nothing here redefines the shell, the
+   theme mechanism, or a second design system.
+   Breakpoints match the shared shell exactly: >=1200px desktop,
+   768-1199px tablet (icon rail inherited), <768px mobile (drawer
+   inherited). */
+
+:root[data-app="civic"] .prop-page {
+  background: var(--civic-page-bg);
+  padding: 28px 32px 64px;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+@media (min-width: 1200px) {
+  :root[data-app="civic"] .prop-page { padding-right: 104px; } /* Brainiact gutter — see civic-dashboard.css */
+}
+
+:root[data-app="civic"] .prop-card {
+  background: var(--civic-card-bg);
+  border: 1px solid var(--civic-card-border);
+  border-radius: var(--civic-radius);
+  box-shadow: var(--civic-shadow);
+}
+
+/* ---- Header (reuses .elex-header's exact rules by class name, imported
+   after civic-elections.css so nothing here needs to redeclare it) ---- */
+:root[data-app="civic"] .prop-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+:root[data-app="civic"] .prop-header__title { display: flex; gap: 12px; align-items: flex-start; }
+:root[data-app="civic"] .prop-header__icon {
+  width: 40px; height: 40px; flex: none;
+  border-radius: 12px;
+  background: var(--civic-pink-soft);
+  color: var(--civic-pink);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+:root[data-theme="dark"][data-app="civic"] .prop-header__icon { background: rgba(236, 72, 153, 0.16); }
+:root[data-app="civic"] .prop-header__h1 { font-size: 28px; font-weight: 800; margin: 0; }
+:root[data-app="civic"] .prop-header__sub { font-size: 14px; color: var(--civic-ink-muted); margin: 4px 0 0; max-width: 62ch; }
+:root[data-app="civic"] .prop-header__actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+/* ---- Steps (visual clone of .elex-steps, own namespace since copy is
+   Proposals-specific — see Elections' equivalent rules for the pattern
+   this mirrors) ---- */
+:root[data-app="civic"] .prop-steps { padding: 14px 18px; }
+:root[data-app="civic"] .prop-steps ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+:root[data-app="civic"] .prop-steps li { display: flex; align-items: center; gap: 10px; min-width: 0; }
+:root[data-app="civic"] .prop-steps__badge {
+  width: 28px; height: 28px; flex: none;
+  border-radius: 999px;
+  background: var(--civic-card-border);
+  color: var(--civic-ink-muted);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 13px;
+}
+:root[data-app="civic"] .prop-steps li.is-active .prop-steps__badge { background: var(--civic-pink); color: #fff; }
+:root[data-app="civic"] .prop-steps__text { display: flex; flex-direction: column; min-width: 0; }
+:root[data-app="civic"] .prop-steps__title { font-size: 13px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+:root[data-app="civic"] .prop-steps li:not(.is-active) .prop-steps__title { color: var(--civic-ink-muted); }
+:root[data-app="civic"] .prop-steps__sub { font-size: 11px; color: var(--civic-ink-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ---- Layout ---- */
+:root[data-app="civic"] .prop-layout { display: grid; grid-template-columns: 1fr 1.15fr; gap: 16px; align-items: start; }
+:root[data-app="civic"] .prop-colLeft, :root[data-app="civic"] .prop-colRight { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+
+/* ---- Submit form ---- */
+:root[data-app="civic"] .prop-form { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+:root[data-app="civic"] .prop-form__title { display: flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 800; margin: 0; }
+:root[data-app="civic"] .prop-form__sub { font-size: 13px; color: var(--civic-ink-muted); margin: -6px 0 0; }
+:root[data-app="civic"] .prop-field { display: flex; flex-direction: column; gap: 6px; }
+:root[data-app="civic"] .prop-field__label { font-size: 13px; font-weight: 700; }
+:root[data-app="civic"] .prop-field input,
+:root[data-app="civic"] .prop-field textarea {
+  background: var(--civic-card-bg);
+  color: var(--civic-ink);
+  border: 1px solid var(--civic-card-border);
+  border-radius: 8px;
+  padding: 9px 11px;
+  font: inherit;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+}
+:root[data-app="civic"] .prop-field input:focus-visible,
+:root[data-app="civic"] .prop-field textarea:focus-visible {
+  outline: 2px solid var(--civic-pink);
+  outline-offset: 1px;
+}
+:root[data-app="civic"] .prop-form__row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+:root[data-app="civic"] .prop-form__hint { font-size: 12px; color: var(--civic-ink-muted); margin-left: auto; }
+
+/* ---- Threshold explainer ---- */
+:root[data-app="civic"] .prop-thresholds { padding: 16px 18px; }
+:root[data-app="civic"] .prop-thresholds__title { font-size: 14px; font-weight: 800; margin: 0 0 6px; }
+:root[data-app="civic"] .prop-thresholds__row { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
+:root[data-app="civic"] .prop-thresholds__item { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+:root[data-app="civic"] .prop-thresholds__dot { width: 10px; height: 10px; border-radius: 999px; flex: none; }
+:root[data-app="civic"] .prop-thresholds__dot--pass { background: #16a34a; }
+:root[data-app="civic"] .prop-thresholds__dot--reject { background: #dc2626; }
+
+/* ---- Disclaimer (reuses the same visual language as Elections') ---- */
+:root[data-app="civic"] .prop-disclaimer { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--civic-ink-muted); margin: 0; }
+
+/* ---- Active Proposals list ---- */
+:root[data-app="civic"] .prop-list { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+:root[data-app="civic"] .prop-list__title { display: flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 800; margin: 0; }
+:root[data-app="civic"] .prop-empty {
+  border: 1px dashed var(--civic-card-border);
+  border-radius: var(--civic-radius-sm);
+  padding: 16px;
+  font-size: 13px;
+  color: var(--civic-ink-muted);
+  text-align: center;
+}
+
+:root[data-app="civic"] .prop-proposal {
+  border: 1px solid var(--civic-card-border);
+  border-radius: var(--civic-radius-sm);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+:root[data-app="civic"] .prop-proposal__head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+:root[data-app="civic"] .prop-proposal__title { font-size: 16px; font-weight: 800; }
+:root[data-app="civic"] .prop-proposal__date { font-size: 12px; color: var(--civic-ink-muted); }
+:root[data-app="civic"] .prop-proposal__score { margin-left: auto; font-size: 12px; color: var(--civic-ink-muted); text-align: right; }
+:root[data-app="civic"] .prop-proposal__score strong { color: var(--civic-ink); font-size: 13px; }
+:root[data-app="civic"] .prop-proposal__rationale { font-size: 14px; line-height: 1.5; color: var(--civic-ink); white-space: pre-wrap; }
+:root[data-app="civic"] .prop-proposal__impact { display: flex; gap: 8px; align-items: baseline; font-size: 13px; }
+:root[data-app="civic"] .prop-proposal__impactLabel { font-weight: 700; flex: none; }
+:root[data-app="civic"] .prop-proposal__impactValue { color: var(--civic-ink-muted); }
+:root[data-app="civic"] .prop-proposal__decided { font-size: 12px; color: var(--civic-ink-muted); }
+
+:root[data-app="civic"] .prop-status {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+:root[data-app="civic"] .prop-status--open { background: var(--civic-gold-soft); color: #b45309; }
+:root[data-app="civic"] .prop-status--passed { background: #dcfce7; color: #15803d; }
+:root[data-app="civic"] .prop-status--rejected { background: #fee2e2; color: #b91c1c; }
+:root[data-theme="dark"][data-app="civic"] .prop-status--open { background: rgba(217, 119, 6, 0.2); color: #fbbf24; }
+:root[data-theme="dark"][data-app="civic"] .prop-status--passed { background: rgba(34, 197, 94, 0.18); color: #86efac; }
+:root[data-theme="dark"][data-app="civic"] .prop-status--rejected { background: rgba(220, 38, 38, 0.2); color: #fca5a5; }
+
+:root[data-app="civic"] .prop-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+:root[data-app="civic"] .prop-voteBtn {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 13px; font-weight: 700;
+  border: 1.5px solid var(--civic-card-border);
+  background: var(--civic-card-bg);
+  color: var(--civic-ink);
+  cursor: pointer;
+}
+:root[data-app="civic"] .prop-voteBtn:disabled { opacity: 0.45; cursor: not-allowed; }
+:root[data-app="civic"] .prop-voteBtn[aria-pressed="true"].prop-voteBtn--up {
+  background: var(--civic-purple-soft);
+  border-color: var(--civic-purple);
+  color: #7c3aed;
+}
+:root[data-theme="dark"][data-app="civic"] .prop-voteBtn[aria-pressed="true"].prop-voteBtn--up {
+  background: rgba(139, 92, 246, 0.18); color: #c4b5fd;
+}
+:root[data-app="civic"] .prop-voteBtn[aria-pressed="true"].prop-voteBtn--down {
+  background: var(--civic-gold-soft);
+  border-color: var(--civic-gold);
+  color: #b45309;
+}
+:root[data-theme="dark"][data-app="civic"] .prop-voteBtn[aria-pressed="true"].prop-voteBtn--down {
+  background: rgba(217, 119, 6, 0.2); color: #fbbf24;
+}
+:root[data-app="civic"] .prop-deleteBtn {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 44px;
+  padding: 8px 14px;
+  margin-left: auto;
+  border-radius: 999px;
+  font-size: 13px; font-weight: 700;
+  border: 1.5px solid transparent;
+  background: transparent;
+  /* #991b1b, not #b91c1c: measured live at 3.25:1 against the white card
+     — under WCAG AA's 4.5:1. This darker red clears it. */
+  color: #991b1b;
+  cursor: pointer;
+}
+:root[data-app="civic"] .prop-deleteBtn:hover { background: #fee2e2; }
+:root[data-theme="dark"][data-app="civic"] .prop-deleteBtn { color: #fca5a5; }
+:root[data-theme="dark"][data-app="civic"] .prop-deleteBtn:hover { background: rgba(220, 38, 38, 0.16); }
+
+/* ---- Mission Log wrapper (same fix pattern as Elections: MissionLogButtons
+   is shared — also used unmodified by Treasury Sim/Debt Clock — and reads
+   global, non-civic-scoped --card/--ring tokens, so it needs a scoped
+   token+selector override here rather than any change to the component
+   itself.) ---- */
+:root[data-theme="dark"][data-app="civic"] .prop-missionLog {
+  --card: var(--civic-card-bg);
+  --ring: var(--civic-card-border);
+  --muted: rgba(255, 255, 255, 0.04);
+}
+:root[data-theme="dark"][data-app="civic"] .prop-missionLog .card {
+  background: var(--civic-card-bg);
+  border-color: var(--civic-card-border);
+}
+:root[data-app="civic"] .prop-missionLog input.sh-input,
+:root[data-app="civic"] .prop-missionLog textarea.sh-input {
+  background: var(--civic-card-bg);
+  color: var(--civic-ink);
+  border: 1px solid var(--civic-card-border);
+  border-radius: 8px;
+  padding: 6px 9px;
+  font: inherit;
+  font-size: 13px;
+  width: 100%;
+  box-sizing: border-box;
+}
+:root[data-app="civic"] .prop-missionLog input.sh-input:focus-visible,
+:root[data-app="civic"] .prop-missionLog textarea.sh-input:focus-visible {
+  outline: 2px solid var(--civic-pink);
+  outline-offset: 1px;
+}
+
+/* ---- Recent Proposal Activity ---- */
+:root[data-app="civic"] .prop-activity { padding: 16px; }
+:root[data-app="civic"] .prop-activity__head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; }
+:root[data-app="civic"] .prop-activity__title { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 800; margin: 0; }
+:root[data-app="civic"] .prop-activity__empty { font-size: 13px; color: var(--civic-ink-muted); margin: 0; }
+:root[data-app="civic"] .prop-activity__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+:root[data-app="civic"] .prop-activity__row {
+  border: 1px solid var(--civic-card-border);
+  border-radius: var(--civic-radius-sm);
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+:root[data-app="civic"] .prop-activity__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+:root[data-app="civic"] .prop-activity__when { font-size: 11px; color: var(--civic-ink-muted); }
+:root[data-app="civic"] .prop-activity__name { font-size: 13px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+:root[data-app="civic"] .prop-activity__row .prop-status { margin-left: auto; flex: none; }
+
+/* ---- Coach card (visual clone of .elex-coach) ---- */
+:root[data-app="civic"] .prop-coach { padding: 18px; display: flex; align-items: center; gap: 12px; justify-content: space-between; }
+:root[data-app="civic"] .prop-coach__title { font-size: 16px; font-weight: 800; margin: 0; }
+:root[data-app="civic"] .prop-coach__body { font-size: 13px; color: var(--civic-ink-muted); margin: 4px 0 12px; }
+:root[data-app="civic"] .prop-coach__art { flex: none; }
+
+/* ===================== Responsive ===================== */
+@media (max-width: 767.98px) {
+  :root[data-app="civic"] .prop-page { padding: 18px 16px 48px; gap: 14px; }
+  :root[data-app="civic"] .prop-steps ol { grid-template-columns: repeat(2, 1fr); row-gap: 12px; }
+  :root[data-app="civic"] .prop-steps__title,
+  :root[data-app="civic"] .prop-steps__sub { white-space: normal; overflow: visible; text-overflow: clip; }
+  :root[data-app="civic"] .prop-layout { grid-template-columns: 1fr; }
+  :root[data-app="civic"] .prop-deleteBtn { margin-left: 0; width: 100%; justify-content: center; border-top: 1px solid var(--civic-card-border); border-radius: 0; padding-top: 12px; margin-top: 4px; }
+  :root[data-app="civic"] .prop-actions { flex-direction: column; align-items: stretch; }
+  :root[data-app="civic"] .prop-voteBtn { justify-content: center; }
+  :root[data-app="civic"] .prop-coach { flex-direction: column; align-items: flex-start; }
+  :root[data-app="civic"] .prop-coach__art { align-self: center; }
+}
+
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  :root[data-app="civic"] .prop-page { padding: 24px 22px 56px; }
+  :root[data-app="civic"] .prop-steps ol { grid-template-columns: repeat(2, 1fr); row-gap: 12px; }
+  :root[data-app="civic"] .prop-steps__title,
+  :root[data-app="civic"] .prop-steps__sub { white-space: normal; overflow: visible; text-overflow: clip; }
+  :root[data-app="civic"] .prop-layout { grid-template-columns: 1fr; }
+}
+
+@media (min-width: 1200px) and (max-width: 1339.98px) {
+  :root[data-app="civic"] .prop-layout { grid-template-columns: 1fr 1fr; }
+}

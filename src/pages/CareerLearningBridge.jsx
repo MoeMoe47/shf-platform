@@ -104,7 +104,7 @@ export default function CareerLearningBridge() {
           <h2 style={{ margin: 0, fontSize: 18 }}>Explore ASL lessons</h2>
           <a
             className="sh-btn sh-btn--secondary"
-            href={`/curriculum.html#/asl/lessons${hashQS}`}
+            href={`/curriculum.html#/curriculum/library/lessons${hashQS}`}
           >
             View all lessons
           </a>
@@ -146,7 +146,7 @@ export default function CareerLearningBridge() {
       >
         <a
           className="sh-btn"
-          href={`/curriculum.html#/asl/dashboard${hashQS}`}
+          href={`/curriculum.html#/curriculum/asl/dashboard${hashQS}`}
           onClick={() =>
             safeEmit(emit, "bridge:open_dashboard", {
               app: "career",
@@ -323,8 +323,12 @@ function Cards({ children }) {
 }
 
 function mkLessonHref(cur, slug, qs) {
-  // Curriculum routes: /:cur/lesson/:slug
-  return `/curriculum.html#/${encodeURIComponent(cur)}/lesson/${encodeURIComponent(
+  // Curriculum routes are registered under the /curriculum layout as
+  // "lesson/:id" (see src/router/CurriculumRoutes.jsx) — there is no
+  // per-curriculum path segment, "asl" is implicit app-wide. The previous
+  // `/${cur}/lesson/:slug` shape never matched any registered route and
+  // silently fell through to CurriculumRoutes.jsx's catch-all redirect.
+  return `/curriculum.html#/curriculum/lesson/${encodeURIComponent(
     slug
   )}${qs || ""}`;
 }

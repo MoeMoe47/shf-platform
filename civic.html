@@ -2,19 +2,32 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Civic HARD SMOKE TEST</title>
+    <title>Civic — Silicon Heartland</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      // Applies the saved/system theme before first paint, matching the
+      // resolution logic in src/utils/civicTheme.js, so switching to Dark
+      // doesn't flash light on load/refresh (module scripts — including
+      // civic.main.jsx's own early init call — only run once the full
+      // unbundled dev-mode import graph has resolved, which is too late to
+      // beat first paint). Kept in sync manually with that module since it
+      // must run synchronously, before any bundle — mirrors career.html's
+      // identical pattern for careerTheme.js.
+      (function () {
+        try {
+          var pref = localStorage.getItem("civic:theme");
+          if (pref !== "light" && pref !== "dark" && pref !== "system") pref = "system";
+          var resolved =
+            pref === "system"
+              ? (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+              : pref;
+          document.documentElement.setAttribute("data-theme", resolved);
+        } catch (e) {}
+      })();
+    </script>
   </head>
-
-  <body style="font-family: system-ui; padding: 24px; background:#fffbe6;">
-    <h1 style="margin-top:0;">CIVIC HARD SMOKE TEST</h1>
-    <p>
-      If you are seeing this yellow page, the browser is definitely loading
-      <code>/civic.html</code> from your <code>sh8</code> project.
-    </p>
-    <p>
-      There is <strong>no React, no Vite logo, no scripts at all</strong> on
-      this page right now.
-    </p>
+  <body>
+    <div id="root" data-app="civic"></div>
+    <script type="module" src="/src/entries/civic.main.jsx"></script>
   </body>
 </html>

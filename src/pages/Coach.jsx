@@ -67,7 +67,7 @@ export default function Coach() {
           font-weight: 600;
         }
         .btn:hover { opacity: 0.9; }
-        :not([data-app="curriculum"])[data-theme="dark"] .btn { background: #ff6a1a; color: #fff; }
+        [data-theme="dark"] .btn { background: #ff6a1a; color: #fff; }
       `}</style>
     </div>
   );

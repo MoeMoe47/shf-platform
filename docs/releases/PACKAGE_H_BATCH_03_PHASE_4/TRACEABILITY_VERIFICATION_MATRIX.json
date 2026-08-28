@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "mission_id": "PACKAGE_H_BATCH_03_IGLS_1_PHASE_4",
+  "artifact": "TRACEABILITY_VERIFICATION_MATRIX",
+  "traceability_required": ["Mission", "Architecture", "Blueprint", "Decision Ledger", "Implementation Readiness", "Evidence Provenance Ledger"],
+  "links": [
+    {"verification_item": "ACS-1-001", "mission": "Phase 1 Mission", "architecture": "Phase 2 Runtime Minimalism Guard", "blueprint": "CTB-1", "decision_ledger": "BDL-1-001", "implementation_readiness": "IRS-1", "evidence_provenance_ledger": "EM-1-001"},
+    {"verification_item": "ACS-1-002", "mission": "Phase 1 Mission", "architecture": "Neutral Integration Boundary Register", "blueprint": "CTB-1", "decision_ledger": "BDL-1-002", "implementation_readiness": "IRS-1", "evidence_provenance_ledger": "EM-1-002"},
+    {"verification_item": "ACS-1-003", "mission": "Phase 1 Evidence Strategy", "architecture": "Evidence Trust Envelope", "blueprint": "IRS-1", "decision_ledger": "BDL-1-003", "implementation_readiness": "IRS-1", "evidence_provenance_ledger": "EM-1-003"},
+    {"verification_item": "ACS-1-004", "mission": "Phase 4 Mission", "architecture": "Runtime Minimalism Guard", "blueprint": "CTB-1", "decision_ledger": "BDL-1-004", "implementation_readiness": "IRS-1", "evidence_provenance_ledger": "EM-1-004"}
+  ]
+}

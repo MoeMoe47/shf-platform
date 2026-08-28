@@ -1,10 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import useOrganizations from "@/lib/hub/useOrganizations";
-import {
-  createBackendReferral,
-  createTruthSpineReferralFromIntake,
-  getTruthSpineSnapshot,
-} from "@/shared/truth-spine";
+import { createBackendReferral } from "@/shared/truth-spine/truthSpineApi.js";
 import "./intake-navigator-shs.css";
 import HubBusinessTourProvider from "./shared/HubBusinessTourProvider.jsx";
 import { useAdaptiveExperience } from "@/system/adaptive-experience/useAdaptiveExperience";
@@ -145,50 +141,6 @@ export default function IntakeNavigatorConsole() {
 
   const canCreate = Boolean(senderId && receiverId && category);
 
-  async function saveReferralThroughTruthEngine(referralInput, payload, backend = null) {
-    setTruthEngineStatus("syncing");
-
-    try {
-      const result = createTruthSpineReferralFromIntake(referralInput, {
-        sourceSurface: "hub_intake_navigator",
-        backend,
-        intake: payload,
-        actorId: "demo-user-1",
-        actorRole: "hub_operator",
-        organizationId: "shf-core",
-      });
-
-      const snapshot = await getTruthSpineSnapshot({ includeBackend: false });
-
-      setTruthEngineStatus(result.mode === "fallback" ? "fallback" : "connected");
-      setTruthEngineNotice(
-        result.mode === "fallback"
-          ? "Truth Spine Engine fallback used; local proof preserved."
-          : `Truth Spine Engine captured referral. Records: ${snapshot?.summary?.totalRecords ?? "updated"}`
-      );
-
-      window.clearTimeout(window.__intakeTruthEngineNotice);
-      window.__intakeTruthEngineNotice = window.setTimeout(() => {
-        setTruthEngineNotice("");
-      }, 4200);
-
-      return result.record;
-    } catch (error) {
-      console.warn("[Truth Spine Engine] Intake save failed", error);
-
-      setTruthEngineStatus("fallback");
-      setTruthEngineNotice("Truth Spine Engine save needs review.");
-
-      window.clearTimeout(window.__intakeTruthEngineNotice);
-      window.__intakeTruthEngineNotice = window.setTimeout(() => {
-        setTruthEngineNotice("");
-      }, 4200);
-
-      throw error;
-    }
-  }
-
-
   async function handleCreateReferral() {
     submittedRef.current = true;
     adaptive.track({
@@ -221,52 +173,21 @@ export default function IntakeNavigatorConsole() {
         reason_text: "Referral created from SHS Hub Intake Navigator",
       });
 
-      const referralInput = {
-        ...payload,
-        ...created,
-        id: created?.case_id || created?.id || `case_${Date.now()}`,
-        case_id: created?.case_id || created?.id,
-        title: "Referral",
-        status: created?.status || "open",
-        sender: getOrgName(sender),
-        receiver: getOrgName(receiver),
-        needCategory: category,
-        urgency: urgency.toLowerCase(),
-        notes,
-      };
-
-      await saveReferralThroughTruthEngine(referralInput, payload, created);
-
-      setDraftState("Referral Created");
+      const deliveryStatus = String(created?.reporting_delivery_status || "PENDING").toUpperCase();
+      const reportingAcknowledged = deliveryStatus === "DELIVERED";
+      setTruthEngineStatus(reportingAcknowledged ? "delivered" : "pending");
+      setTruthEngineNotice(
+        reportingAcknowledged
+          ? "Referral saved. Trusted reporting delivery acknowledged; verification remains pending."
+          : "Referral saved. Trusted reporting delivery pending."
+      );
+      setDraftState(reportingAcknowledged ? "Referral Created" : "Referral Created · Reporting Pending");
       go("/hub/queue");
     } catch (error) {
-      console.warn("[SHS Hub Intake] Backend referral create failed; using Truth Spine fallback:", error);
-
-      const fallbackReferral = {
-        id: `case_local_${Date.now()}`,
-        title: "Referral",
-        status: "open",
-        sender: getOrgName(sender),
-        receiver: getOrgName(receiver),
-        needCategory: category,
-        urgency: urgency.toLowerCase(),
-        notes,
-        sending_organization_id: senderId,
-        receiving_organization_id: receiverId,
-      };
-
-      await saveReferralThroughTruthEngine(
-        {
-          ...fallbackReferral,
-          fallback: true,
-          backendError: error?.message || "Backend unavailable",
-        },
-        payload,
-        null
-      );
-
-      setDraftState("Referral Created Locally");
-      go("/hub/queue");
+      console.warn("[SHS Hub Intake] Backend referral create failed:", error);
+      setTruthEngineStatus("failed");
+      setTruthEngineNotice("Referral could not be created. Please try again.");
+      setDraftState("Referral Failed");
     }
   }
 
@@ -338,7 +259,7 @@ export default function IntakeNavigatorConsole() {
               need classification, and referral preparation.
             </span>
             <div className="intakeShs-engineStatus">
-              <strong>Truth Spine Engine:</strong> {truthEngineStatus}
+              <strong>Trusted reporting:</strong> {truthEngineStatus}
               {truthEngineNotice ? <em>{truthEngineNotice}</em> : null}
             </div>
           </div>

@@ -1,0 +1,18 @@
+{
+  "standard_id": "PCS-1",
+  "artifact": "PACKAGE_VERSION_SPECIFICATION",
+  "artifact_type": "version_specification",
+  "status": "GOVERNANCE_DEFINED",
+  "canonical_owner": "Governance Layer",
+  "version_fields": [
+    "Package Version",
+    "Seal Version",
+    "Lifecycle Version",
+    "Governance Version",
+    "Standard Version",
+    "Manifest Version"
+  ],
+  "compatibility_rules_required": true,
+  "version_mismatch_blocks_seal": true,
+  "unversioned_seal_allowed": false
+}

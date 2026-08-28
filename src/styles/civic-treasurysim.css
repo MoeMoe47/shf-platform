@@ -1,0 +1,313 @@
+/* src/styles/civic-treasurysim.css
+   Civic Lab — Treasury Simulator page. Reuses every token/shell primitive
+   from src/styles/civic-dashboard.css (--civic-*, .cv-card, .cv-btn,
+   .cv-shell, theme handling, breakpoints) and the card/badge/mission-log
+   patterns established in civic-elections.css / civic-proposals.css /
+   civic-grantstory.css / civic-debtclock.css. `.ts-*` classes are this
+   page's own content only — nothing here redefines the shell or theme
+   mechanism. Pink is the established primary interaction accent
+   throughout Civic Lab; the earlier purple Treasury exploration is not
+   used as visual authority.
+   Breakpoints match the shared shell exactly: >=1200px desktop,
+   768-1199px tablet (icon rail inherited), <768px mobile (drawer
+   inherited). */
+
+:root[data-app="civic"] .ts-page {
+  background: var(--civic-page-bg);
+  padding: 28px 32px 64px;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+@media (min-width: 1200px) {
+  :root[data-app="civic"] .ts-page { padding-right: 104px; } /* Brainiact gutter — see civic-dashboard.css */
+}
+
+:root[data-app="civic"] .ts-card {
+  background: var(--civic-card-bg);
+  border: 1px solid var(--civic-card-border);
+  border-radius: var(--civic-radius);
+  box-shadow: var(--civic-shadow);
+  padding: 20px 22px;
+}
+:root[data-app="civic"] .ts-cardTitle { font-size: 15px; font-weight: 800; display: block; }
+
+/* ---- Header ---- */
+:root[data-app="civic"] .ts-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+:root[data-app="civic"] .ts-header__h1 { font-size: 30px; font-weight: 800; margin: 0; }
+:root[data-app="civic"] .ts-header__sub { font-size: 14px; color: var(--civic-ink-muted); margin: 4px 0 0; }
+:root[data-app="civic"] .ts-headerActions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+/* ---- Shared button treatment (Save Snapshot / Save scenario / Open
+   Snapshots — both header and Programs-card instances are real, distinct
+   entry points that call the same underlying save action; both must stay
+   present, not merged). ---- */
+:root[data-app="civic"] .ts-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  min-height: 40px;
+  border: 1.5px solid transparent;
+}
+:root[data-app="civic"] .ts-btn--primary {
+  background: var(--civic-pink);
+  border-color: var(--civic-pink);
+  color: #fff;
+}
+:root[data-app="civic"] .ts-btn--primary:hover { filter: brightness(1.05); }
+:root[data-app="civic"] .ts-btn--ghost {
+  background: var(--civic-card-bg);
+  border-color: var(--civic-card-border);
+  color: var(--civic-ink);
+}
+:root[data-app="civic"] .ts-btn--ghost:hover { border-color: var(--civic-pink); }
+:root[data-app="civic"] .ts-btn:focus-visible {
+  outline: 2px solid var(--civic-pink);
+  outline-offset: 2px;
+}
+
+/* ---- Totals + Programs grid ---- */
+:root[data-app="civic"] .ts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 16px;
+  align-items: start;
+}
+
+:root[data-app="civic"] .ts-slider {
+  width: 100%;
+  margin-top: 8px;
+  accent-color: var(--civic-pink);
+}
+:root[data-app="civic"] .ts-slider--cap { margin-top: 10px; }
+
+:root[data-app="civic"] .ts-badges {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+:root[data-app="civic"] .ts-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--civic-pink-soft);
+  /* #be185d, not #db2777: measured live at 3.91:1 on --civic-pink-soft —
+     under WCAG AA's 4.5:1 for normal-size text. Same darker-shade fix
+     pattern as .cv-navLink.is-active in civic-dashboard.css, just one step
+     further since this badge's tint background is lighter. */
+  color: #be185d;
+}
+:root[data-theme="dark"][data-app="civic"] .ts-badge { background: rgba(236, 72, 153, 0.16); color: #f9a8d4; }
+:root[data-app="civic"] .ts-badge--ghost {
+  background: transparent;
+  border: 1px solid var(--civic-card-border);
+  color: var(--civic-ink-muted);
+}
+:root[data-app="civic"] .ts-badge--info {
+  background: var(--civic-purple-soft);
+  color: #7c3aed;
+}
+:root[data-theme="dark"][data-app="civic"] .ts-badge--info { background: rgba(139, 92, 246, 0.18); color: #c4b5fd; }
+:root[data-app="civic"] .ts-badge--ok {
+  background: rgba(22, 163, 74, 0.12);
+  /* #166534, not #15803d: measured live (alpha-composited over white) at
+     4.39:1 — just under WCAG AA's 4.5:1. Same darker-shade fix pattern used
+     throughout the redesign. */
+  color: #166534;
+}
+:root[data-theme="dark"][data-app="civic"] .ts-badge--ok { background: rgba(74, 222, 128, 0.16); color: #86efac; }
+
+/* ---- Programs list ---- */
+:root[data-app="civic"] .ts-programList {
+  display: grid;
+  gap: 14px;
+  margin-top: 10px;
+}
+:root[data-app="civic"] .ts-programRow__top {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+:root[data-app="civic"] .ts-programRow__label { width: 132px; flex: none; font-size: 13px; font-weight: 700; }
+:root[data-app="civic"] .ts-programRow input.ts-slider { flex: 1; min-width: 120px; margin-top: 0; width: auto; }
+:root[data-app="civic"] .ts-programRow__value {
+  width: 44px;
+  text-align: right;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--civic-ink-muted);
+}
+:root[data-app="civic"] .ts-programRow__track {
+  height: 6px;
+  background: var(--civic-pink-soft);
+  border-radius: 999px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+:root[data-theme="dark"][data-app="civic"] .ts-programRow__track { background: rgba(236, 72, 153, 0.14); }
+:root[data-app="civic"] .ts-programRow__fill {
+  display: block;
+  height: 100%;
+  background: var(--civic-pink);
+}
+
+:root[data-app="civic"] .ts-programsActions {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+:root[data-app="civic"] .ts-overAlloc {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 700;
+  color: #b91c1c;
+}
+:root[data-theme="dark"][data-app="civic"] .ts-overAlloc { color: #fca5a5; }
+
+/* ---- Results & Next ---- */
+:root[data-app="civic"] .ts-resultsList {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  font-size: 13px;
+  color: var(--civic-ink-muted);
+  display: grid;
+  gap: 4px;
+}
+:root[data-app="civic"] .ts-resultsList a { color: #db2777; font-weight: 700; }
+:root[data-theme="dark"][data-app="civic"] .ts-resultsList a { color: #f9a8d4; }
+/* PortfolioHint is a shared, unmodified component rendering global
+   .mini-hint/.sh-badge/.sh-btn classes (also used unstyled elsewhere) — same
+   fix pattern as the Mission Log wrapper below: scope an override here
+   rather than touch the shared component. */
+:root[data-app="civic"] .ts-results .mini-hint { margin-top: 12px; }
+:root[data-theme="dark"][data-app="civic"] .ts-results .sh-badge {
+  background: var(--civic-card-bg);
+  border: 1px solid var(--civic-card-border);
+  color: var(--civic-ink);
+}
+:root[data-app="civic"] .ts-results .sh-btn.is-ghost {
+  border-color: var(--civic-pink);
+  color: #db2777;
+}
+:root[data-theme="dark"][data-app="civic"] .ts-results .sh-btn.is-ghost { color: #f9a8d4; }
+
+/* ---- Mission Log wrapper — same fix pattern as Elections/Proposals/Debt
+   Clock: MissionLogButtons is shared and reads global, non-civic-scoped
+   --card/--ring tokens, so it needs a scoped token+selector override here
+   rather than any change to the component itself. ---- */
+:root[data-app="civic"] .ts-missionLog__title { font-size: 15px; }
+:root[data-app="civic"] .ts-missionLog__desc { margin: 4px 0 12px; font-size: 13px; color: var(--civic-ink-muted); }
+:root[data-theme="dark"][data-app="civic"] .ts-missionLog {
+  --card: var(--civic-card-bg);
+  --ring: var(--civic-card-border);
+  --muted: rgba(255, 255, 255, 0.04);
+}
+:root[data-theme="dark"][data-app="civic"] .ts-missionLog .card {
+  background: var(--civic-card-bg);
+  border-color: var(--civic-card-border);
+}
+:root[data-app="civic"] .ts-missionLog input.sh-input,
+:root[data-app="civic"] .ts-missionLog textarea.sh-input {
+  background: var(--civic-card-bg);
+  color: var(--civic-ink);
+  border: 1px solid var(--civic-card-border);
+  border-radius: 8px;
+  padding: 6px 9px;
+  font: inherit;
+  font-size: 13px;
+  width: 100%;
+  box-sizing: border-box;
+}
+:root[data-app="civic"] .ts-missionLog input.sh-input:focus-visible,
+:root[data-app="civic"] .ts-missionLog textarea.sh-input:focus-visible {
+  outline: 2px solid var(--civic-pink);
+  outline-offset: 1px;
+}
+:root[data-app="civic"] .ts-missionLog .sh-btn:not(.is-ghost) {
+  background: var(--civic-pink);
+  border-color: var(--civic-pink);
+  color: #fff;
+  min-height: 44px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+:root[data-app="civic"] .ts-missionLog .sh-btn:not(.is-ghost):hover { filter: brightness(1.05); }
+:root[data-app="civic"] .ts-missionLog .sh-btn.is-ghost {
+  background: var(--civic-card-bg);
+  border: 1.5px solid var(--civic-card-border);
+  color: var(--civic-ink);
+  min-height: 44px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+:root[data-app="civic"] .ts-missionLog .sh-btn:focus-visible {
+  outline: 2px solid var(--civic-pink);
+  outline-offset: 2px;
+}
+
+/* ---- Compact Coach card, bottom-right (same pattern as Debt Clock). ---- */
+:root[data-app="civic"] .ts-coachRow { display: flex; justify-content: flex-end; }
+:root[data-app="civic"] .ts-coach {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  max-width: 260px;
+}
+:root[data-app="civic"] .ts-coach__art { flex: none; width: 44px; height: 44px; }
+:root[data-app="civic"] .ts-coach__title { font-size: 13px; font-weight: 700; margin: 0; }
+:root[data-app="civic"] .ts-coach__link {
+  font-size: 13px;
+  font-weight: 800;
+  color: #be185d; /* measured live at 3.53:1 against white — under WCAG AA's
+    4.5:1; same fix pattern used throughout the redesign. */
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+}
+:root[data-theme="dark"][data-app="civic"] .ts-coach__link { color: var(--civic-pink); }
+:root[data-app="civic"] .ts-coach__link:focus-visible { outline: 2px solid var(--civic-pink); outline-offset: 2px; }
+
+/* ===================== Responsive ===================== */
+@media (max-width: 767.98px) {
+  :root[data-app="civic"] .ts-page { padding: 18px 16px 48px; gap: 16px; }
+  :root[data-app="civic"] .ts-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+  :root[data-app="civic"] .ts-grid { grid-template-columns: 1fr; }
+  :root[data-app="civic"] .ts-card { padding: 16px; }
+  :root[data-app="civic"] .ts-programRow__label { width: 108px; }
+  :root[data-app="civic"] .ts-overAlloc { margin-left: 0; width: 100%; }
+  :root[data-app="civic"] .ts-coachRow { justify-content: flex-start; }
+  :root[data-app="civic"] .ts-coach { max-width: none; width: 100%; }
+}
+
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  :root[data-app="civic"] .ts-page { padding: 24px 22px 56px; }
+  :root[data-app="civic"] .ts-grid { grid-template-columns: 1fr; }
+}
+
+@media (min-width: 1200px) and (max-width: 1339.98px) {
+  :root[data-app="civic"] .ts-grid { grid-template-columns: 1fr 1fr; }
+}

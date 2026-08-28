@@ -1,0 +1,857 @@
+/* src/styles/curriculum-lesson.css
+   SHF Student Lesson Guided Experience — Phase 1 (desktop only).
+   Built on the same --ld-* tokens as curriculum-dashboard.css (approved
+   Learning Dashboard mock) so the lesson experience reads as the same
+   application, not a second design system. Scoped under .ld-lesson* so it
+   cannot collide with LessonBody.jsx's inline styles (still used by the
+   separate, unmodified /curriculum/lesson/:id preview route) or any other
+   Curriculum surface.
+*/
+
+.ld-lessonPage {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  /* Clears the fixed bottom-right Brainiact companion (.brainiact-root,
+     18px + ~64px) so the Completion Check button — the last, right-
+     aligned control on the page — is never partially covered when the
+     page is scrolled to its end (see companion.css). padding, not
+     margin: a trailing block margin here was measured NOT to extend
+     .ld-main's scrollHeight (collapses away), so it never actually
+     created scrollable clearance — padding always does. */
+  padding-bottom: 96px;
+}
+
+/* ===================== Breadcrumb ===================== */
+.ld-lessonCrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--ld-muted);
+  flex-wrap: wrap;
+}
+.ld-lessonCrumbLink {
+  display: inline-flex;
+  align-items: center;
+  color: var(--ld-muted);
+  text-decoration: none;
+}
+.ld-lessonCrumbLink:hover {
+  color: var(--ld-ink);
+}
+.ld-lessonCrumbCurrent {
+  color: var(--ld-ink);
+  font-weight: 600;
+}
+.ld-lessonCrumbSep {
+  color: var(--ld-ring);
+}
+
+/* ===================== Lesson header card ===================== */
+.ld-lessonHeaderCard {
+  padding: 16px 22px !important;
+}
+.ld-lessonHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.ld-lessonHeaderMain {
+  min-width: 0;
+  flex: 1 1 420px;
+}
+.ld-lessonTitle {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--ld-ink);
+  line-height: 1.2;
+}
+.ld-lessonContext {
+  margin: 3px 0 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ld-orange);
+}
+.ld-lessonSummary {
+  margin: 6px 0 0;
+  font-size: 13.5px;
+  color: var(--ld-ink);
+  line-height: 1.45;
+  max-width: 60ch;
+}
+.ld-lessonMetaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.ld-lessonPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ld-ink);
+  background: var(--ld-ring-soft);
+  border: 1px solid var(--ld-ring);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.ld-lessonPillIcon {
+  color: var(--ld-muted);
+  flex-shrink: 0;
+}
+
+.ld-lessonHeaderSide {
+  flex: 0 0 180px;
+  min-width: 160px;
+  text-align: right;
+}
+.ld-lessonUnitLabel {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ld-ink);
+}
+.ld-lessonUnitPct {
+  font-weight: 800;
+  color: var(--ld-ink);
+}
+.ld-lessonUnitProgress {
+  margin-top: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--ld-ring-soft);
+  overflow: hidden;
+}
+.ld-lessonUnitProgressFill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--ld-orange);
+}
+
+/* ===================== Stage rail ===================== */
+.ld-stageRailCard {
+  padding: 12px 20px !important;
+}
+.ld-stageRail {
+  display: flex;
+  align-items: flex-start;
+  gap: 2px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+.ld-stageStep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1 1 0;
+  min-width: 52px;
+  background: none;
+  border: none;
+  padding: 2px 2px 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  position: relative;
+}
+.ld-stageStep::before {
+  content: "";
+  position: absolute;
+  top: 14px;
+  left: -50%;
+  width: 100%;
+  height: 1.5px;
+  background: var(--ld-ring);
+  z-index: 0;
+}
+.ld-stageStep:first-child::before {
+  display: none;
+}
+.ld-stageStep.is-complete::before {
+  background: var(--ld-orange);
+}
+.ld-stageDot {
+  position: relative;
+  z-index: 1;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: var(--ld-card);
+  border: 1.5px solid var(--ld-ring);
+  color: var(--ld-muted);
+  flex-shrink: 0;
+}
+.ld-stageDot svg {
+  width: 14px;
+  height: 14px;
+}
+.ld-stageStep.is-complete .ld-stageDot {
+  background: var(--ld-orange);
+  border-color: var(--ld-orange);
+  color: #fff;
+}
+.ld-stageStep.is-active .ld-stageDot {
+  background: var(--ld-orange-tint);
+  border-color: var(--ld-orange);
+  color: var(--ld-orange);
+  box-shadow: 0 0 0 3px var(--ld-orange-tint);
+}
+.ld-stageLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ld-muted);
+  white-space: nowrap;
+}
+.ld-stageStep.is-active .ld-stageLabel {
+  color: var(--ld-orange-600);
+  font-weight: 800;
+}
+.ld-stageStep.is-complete .ld-stageLabel {
+  color: var(--ld-ink);
+}
+.ld-stageStep:hover .ld-stageDot {
+  border-color: var(--ld-orange);
+}
+.ld-stageStep:focus-visible {
+  outline: 2px solid var(--ld-orange);
+  outline-offset: 3px;
+  border-radius: 10px;
+}
+
+/* ===================== Main grid ===================== */
+.ld-lessonGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 2.4fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.ld-lessonSide {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+.ld-panelCard {
+  padding: 16px 18px !important;
+}
+
+/* ===================== Workspace ===================== */
+.ld-workspace {
+  min-width: 0;
+}
+.ld-workspaceEyebrowRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.ld-workspaceIcon {
+  color: var(--ld-orange);
+  flex-shrink: 0;
+}
+.ld-workspaceTitle {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ld-ink);
+}
+.ld-workspaceLede {
+  margin: -4px 0 14px;
+  font-size: 13.5px;
+  color: var(--ld-ink);
+  line-height: 1.5;
+}
+.ld-workspaceEmpty {
+  font-size: 14px;
+  color: var(--ld-muted);
+}
+
+/* Compact labeled sub-sections within a stage's workspace (e.g. "Why
+   this matters", "What's ahead") — the mock's own eyebrow+card pattern,
+   reused instead of one flat bullet list per stage. */
+.ld-workspaceSection + .ld-workspaceSection {
+  margin-top: 18px;
+}
+.ld-workspaceSectionHead {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 8px;
+  color: var(--ld-orange);
+  font-size: 11.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.ld-whyMattersCard {
+  border: 1px solid var(--ld-ring);
+  background: var(--ld-orange-tint);
+  border-radius: var(--ld-radius-sm);
+  padding: 14px 16px;
+  font-size: 14px;
+  color: var(--ld-ink);
+  line-height: 1.5;
+}
+
+.ld-objectiveList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.ld-objectiveList li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 14px;
+  color: var(--ld-ink);
+  line-height: 1.45;
+}
+.ld-objectiveList svg {
+  color: var(--ld-orange);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.ld-vocabPillRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 14px;
+}
+.ld-vocabList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.ld-vocabList li {
+  font-size: 14px;
+  color: var(--ld-ink);
+  line-height: 1.5;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--ld-ring);
+}
+.ld-vocabList li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.ld-vocabTerm {
+  font-weight: 800;
+}
+
+.ld-sectionBlock + .ld-sectionBlock {
+  margin-top: 22px;
+  padding-top: 22px;
+  border-top: 1px solid var(--ld-ring);
+}
+.ld-sectionHeading {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--ld-ink);
+}
+.ld-sectionBody {
+  font-size: 14px;
+  color: var(--ld-ink);
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+.ld-microCheck {
+  margin-top: 14px;
+  border: 1px dashed var(--ld-ring);
+  border-radius: var(--ld-radius-sm);
+  padding: 12px 14px;
+}
+.ld-microCheckQ {
+  margin: 0 0 8px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ld-ink);
+}
+.ld-microCheckAnswer {
+  margin: 8px 0 0;
+  font-size: 13.5px;
+  color: var(--ld-ink);
+  background: var(--ld-orange-tint);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+/* Rubric (Assess) */
+.ld-rubricGrid {
+  display: grid;
+  gap: 14px;
+}
+.ld-rubricRow {
+  border: 1px solid var(--ld-ring);
+  border-radius: var(--ld-radius-sm);
+  padding: 12px 14px;
+}
+.ld-rubricSkill {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ld-ink);
+}
+.ld-rubricLevels {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  color: var(--ld-muted);
+  display: grid;
+  gap: 4px;
+}
+
+/* Apply */
+.ld-applyCard {
+  border: 1px solid var(--ld-ring);
+  border-radius: var(--ld-radius-sm);
+  padding: 16px;
+  background: var(--ld-orange-tint);
+}
+.ld-applyCard p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ld-ink);
+  line-height: 1.55;
+}
+
+/* ===================== Arcade mission card ===================== */
+.ld-arcadeCard {
+  border: 1px solid var(--ld-ring);
+  border-radius: var(--ld-radius-sm);
+  padding: 16px;
+}
+.ld-arcadeCard + .ld-arcadeCard {
+  margin-top: 14px;
+}
+.ld-arcadeCardHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ld-orange);
+  font-weight: 800;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.ld-arcadeCardTitle {
+  margin: 8px 0 4px;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--ld-ink);
+}
+.ld-arcadeCardMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 6px 0 12px;
+  font-size: 12.5px;
+  color: var(--ld-muted);
+}
+.ld-arcadeOutcomes {
+  margin: 0 0 12px;
+  padding-left: 18px;
+  font-size: 13px;
+  color: var(--ld-ink);
+  display: grid;
+  gap: 4px;
+}
+.ld-arcadeSuggestedList {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  font-size: 13.5px;
+  color: var(--ld-ink);
+  display: grid;
+  gap: 4px;
+}
+
+/* ===================== Buttons ===================== */
+.ld-btnGhost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1px solid var(--ld-ring);
+  background: var(--ld-card);
+  color: var(--ld-ink);
+  min-height: 40px;
+  cursor: pointer;
+}
+.ld-btnGhost:hover {
+  background: #f6f3ec;
+}
+.ld-btnGhost:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.ld-btnSm {
+  padding: 7px 12px;
+  font-size: 13px;
+  min-height: 32px;
+}
+
+/* ===================== Tip callout ===================== */
+.ld-tipCallout {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: 16px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--ld-orange-tint);
+  font-size: 13px;
+  color: var(--ld-ink);
+  line-height: 1.5;
+}
+.ld-tipCallout svg {
+  color: var(--ld-orange);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ===================== Side panels ===================== */
+.ld-panelTitleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.ld-panelTitle {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ld-ink);
+}
+.ld-panelCount {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ld-muted);
+}
+.ld-panelNote {
+  margin: 0 0 4px;
+  font-size: 13px;
+  color: var(--ld-muted);
+  line-height: 1.5;
+}
+
+.ld-reqList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+.ld-reqRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--ld-ink);
+  padding: 8px 0;
+  border-top: 1px solid var(--ld-ring-soft);
+}
+.ld-reqRow:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+.ld-reqStatusDot {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.ld-reqRow.is-done .ld-reqStatusDot {
+  background: var(--ld-green-tint);
+  color: var(--ld-green-strong);
+}
+.ld-reqRow.is-pending .ld-reqStatusDot {
+  background: var(--ld-ring-soft);
+  color: var(--ld-muted);
+}
+.ld-reqEmptyState {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.ld-reqEmptyIcon {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: var(--ld-ring-soft);
+  color: var(--ld-muted);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.ld-reqEmptyTitle {
+  margin: 0 0 4px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ld-ink);
+}
+.ld-reqViewLink {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ld-orange);
+  text-decoration: none;
+}
+.ld-reqViewLink:hover {
+  color: var(--ld-orange-600);
+}
+
+.ld-evList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+.ld-evRow {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 9px 0;
+  border-top: 1px solid var(--ld-ring-soft);
+}
+.ld-evRow:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+.ld-evIcon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+}
+.ld-evIcon.is-done {
+  background: var(--ld-green-tint);
+  color: var(--ld-green-strong);
+}
+.ld-evIcon.is-pending {
+  background: var(--ld-orange-tint);
+  color: var(--ld-orange-600);
+}
+.ld-evIcon.is-empty {
+  background: var(--ld-ring-soft);
+  color: var(--ld-muted);
+}
+.ld-evLabel {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ld-ink);
+  margin: 0;
+}
+.ld-evDetail {
+  font-size: 12px;
+  color: var(--ld-muted);
+  margin: 1px 0 0;
+}
+
+.ld-careerCard {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.ld-careerIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: var(--ld-green-tint);
+  color: var(--ld-green-ink);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.ld-careerText {
+  font-size: 13.5px;
+  color: var(--ld-ink);
+  line-height: 1.5;
+  margin: 0 0 8px;
+}
+.ld-careerLink {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ld-orange);
+  text-decoration: none;
+}
+.ld-careerLink:hover {
+  color: var(--ld-orange-600);
+}
+
+/* ===================== Up-next strip ===================== */
+.ld-upNextGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.ld-upNextCard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+  background: var(--ld-card);
+  border: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  padding: 14px 16px !important;
+}
+.ld-upNextCard:hover {
+  box-shadow: 0 2px 10px rgba(20, 22, 26, 0.08);
+}
+.ld-upNextTop {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ld-upNextIcon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--ld-orange-tint);
+  color: var(--ld-orange);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.ld-upNextEyebrow {
+  margin: 0;
+  font-size: 11px;
+  color: var(--ld-muted);
+  font-weight: 600;
+}
+.ld-upNextLabel {
+  margin: 1px 0 0;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ld-ink);
+}
+.ld-upNextDesc {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--ld-muted);
+  line-height: 1.45;
+  flex: 1;
+}
+.ld-upNextTime {
+  align-self: flex-start;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--ld-muted);
+  background: var(--ld-ring-soft);
+  border-radius: 999px;
+  padding: 3px 9px;
+}
+
+/* ===================== Completion Check ===================== */
+.ld-completionCard {
+  padding: 16px 20px !important;
+}
+.ld-completionTop {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.ld-completionIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--ld-orange-tint);
+  color: var(--ld-orange);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.ld-completionTitle {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ld-ink);
+}
+.ld-completionDesc {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--ld-muted);
+}
+.ld-completionNotice {
+  margin: 10px 0 0 50px;
+  font-size: 12.5px;
+  color: var(--ld-muted);
+  line-height: 1.5;
+  max-width: 62ch;
+}
+.ld-completionActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 14px 0 0 50px;
+}
+.ld-completionActionsRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.ld-completionReward {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ld-muted);
+}
+.ld-completionSync {
+  font-size: 12px;
+  font-weight: 700;
+}
+.ld-completionSync[data-status="synchronized"] {
+  color: var(--ld-green-ink);
+}
+.ld-completionSync[data-status="rejected"] {
+  color: var(--ld-red-strong);
+}
+.ld-completionSync[data-status="pending"] {
+  color: var(--ld-muted);
+}
+
+.ld-navRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--ld-ring);
+}
+
+/* ===================== 1024px safety (no tablet redesign) ===================== */
+@media (max-width: 1180px) {
+  .ld-lessonGrid {
+    grid-template-columns: 1fr;
+  }
+  .ld-upNextGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -1,0 +1,224 @@
+/* src/styles/civic-grantstory.css
+   Civic Lab — Grant Story page. Reuses every token/shell primitive from
+   src/styles/civic-dashboard.css (--civic-*, .cv-card, .cv-btn, .cv-shell,
+   theme handling, breakpoints) and the card/pill patterns established in
+   civic-elections.css / civic-proposals.css. `.gs-*` classes are this
+   page's own content only — nothing here redefines the shell or theme
+   mechanism.
+   Breakpoints match the shared shell exactly: >=1200px desktop,
+   768-1199px tablet (icon rail inherited), <768px mobile (drawer
+   inherited). */
+
+:root[data-app="civic"] .gs-page {
+  background: var(--civic-page-bg);
+  padding: 28px 32px 64px;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+@media (min-width: 1200px) {
+  :root[data-app="civic"] .gs-page { padding-right: 104px; } /* Brainiact gutter — see civic-dashboard.css */
+}
+
+:root[data-app="civic"] .gs-card {
+  background: var(--civic-card-bg);
+  border: 1px solid var(--civic-card-border);
+  border-radius: var(--civic-radius);
+  box-shadow: var(--civic-shadow);
+}
+
+/* ---- Header ---- */
+:root[data-app="civic"] .gs-header { display: flex; gap: 12px; align-items: flex-start; }
+:root[data-app="civic"] .gs-header__icon {
+  width: 40px; height: 40px; flex: none;
+  border-radius: 12px;
+  background: var(--civic-pink-soft);
+  color: var(--civic-pink);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+:root[data-theme="dark"][data-app="civic"] .gs-header__icon { background: rgba(236, 72, 153, 0.16); }
+:root[data-app="civic"] .gs-header__h1 { font-size: 28px; font-weight: 800; margin: 0; }
+:root[data-app="civic"] .gs-header__sub { font-size: 14px; color: var(--civic-ink-muted); margin: 4px 0 0; max-width: 90ch; line-height: 1.5; }
+
+/* ---- Primary actions ---- */
+:root[data-app="civic"] .gs-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+:root[data-app="civic"] .gs-actionBtn {
+  display: inline-flex; align-items: center; gap: 8px;
+  min-height: 44px;
+  padding: 9px 16px;
+  border-radius: 10px;
+  font-size: 14px; font-weight: 700;
+  border: 1.5px solid var(--civic-pink);
+  background: var(--civic-pink-soft);
+  color: #be185d;
+  cursor: pointer;
+}
+:root[data-theme="dark"][data-app="civic"] .gs-actionBtn { background: rgba(236, 72, 153, 0.14); color: #f9a8d4; }
+:root[data-app="civic"] .gs-actionBtn:hover { filter: brightness(0.98); }
+:root[data-app="civic"] .gs-actionBtn--secondary {
+  border-color: var(--civic-card-border);
+  background: var(--civic-card-bg);
+  color: var(--civic-ink);
+}
+:root[data-app="civic"] .gs-actionBtn:focus-visible { outline: 2px solid var(--civic-pink); outline-offset: 2px; }
+:root[data-app="civic"] .gs-actionFeedback { font-size: 12px; font-weight: 700; color: #15803d; }
+:root[data-theme="dark"][data-app="civic"] .gs-actionFeedback { color: #86efac; }
+:root[data-app="civic"] .gs-actionFeedback--error { color: #b91c1c; }
+:root[data-theme="dark"][data-app="civic"] .gs-actionFeedback--error { color: #fca5a5; }
+
+/* ---- Summary cards ---- */
+:root[data-app="civic"] .gs-summaryGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+:root[data-app="civic"] .gs-summary {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+:root[data-app="civic"] .gs-summary__icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+:root[data-app="civic"] .gs-summary__icon--pink { background: var(--civic-pink-soft); color: var(--civic-pink); }
+:root[data-app="civic"] .gs-summary__icon--gold { background: var(--civic-gold-soft); color: var(--civic-gold); }
+:root[data-app="civic"] .gs-summary__icon--purple { background: var(--civic-purple-soft); color: #7c3aed; }
+:root[data-theme="dark"][data-app="civic"] .gs-summary__icon--pink { background: rgba(236, 72, 153, 0.16); }
+:root[data-theme="dark"][data-app="civic"] .gs-summary__icon--gold { background: rgba(217, 119, 6, 0.2); }
+:root[data-theme="dark"][data-app="civic"] .gs-summary__icon--purple { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; }
+:root[data-app="civic"] .gs-summary__label { font-size: 13px; font-weight: 700; color: var(--civic-ink-muted); }
+:root[data-app="civic"] .gs-summary__value { font-size: 22px; font-weight: 800; }
+:root[data-app="civic"] .gs-summary__hint { font-size: 12px; color: var(--civic-ink-muted); line-height: 1.4; }
+:root[data-app="civic"] .gs-summary__status {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--civic-purple-soft);
+  color: #7c3aed;
+  width: fit-content;
+}
+:root[data-theme="dark"][data-app="civic"] .gs-summary__status { background: rgba(139, 92, 246, 0.18); color: #c4b5fd; }
+
+/* ---- Impact pathway ---- */
+:root[data-app="civic"] .gs-pathway { padding: 18px 20px; }
+:root[data-app="civic"] .gs-pathway__title { font-size: 16px; font-weight: 800; margin: 0 0 14px; }
+:root[data-app="civic"] .gs-pathway__flow { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+:root[data-app="civic"] .gs-pathway__step {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none;
+  color: var(--civic-ink);
+  padding: 4px 6px;
+  border-radius: 10px;
+}
+a.gs-pathway__step:hover { background: var(--civic-pink-soft); }
+:root[data-theme="dark"][data-app="civic"] a.gs-pathway__step:hover { background: rgba(236, 72, 153, 0.1); }
+:root[data-app="civic"] .gs-pathway__icon {
+  width: 36px; height: 36px; flex: none;
+  border-radius: 999px;
+  background: var(--civic-pink-soft);
+  color: var(--civic-pink);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+:root[data-theme="dark"][data-app="civic"] .gs-pathway__icon { background: rgba(236, 72, 153, 0.16); }
+:root[data-app="civic"] .gs-pathway__text { display: flex; flex-direction: column; }
+:root[data-app="civic"] .gs-pathway__name { font-size: 13px; font-weight: 700; }
+:root[data-app="civic"] .gs-pathway__desc { font-size: 11px; color: var(--civic-ink-muted); }
+:root[data-app="civic"] .gs-pathway__arrow { color: var(--civic-ink-muted); font-weight: 800; flex: none; }
+
+/* ---- Layout: narrative + funders/coach ---- */
+:root[data-app="civic"] .gs-layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 16px; align-items: start; }
+:root[data-app="civic"] .gs-colRight { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+
+/* ---- Master Grant Narrative ---- */
+:root[data-app="civic"] .gs-narrative { padding: 20px; min-width: 0; }
+:root[data-app="civic"] .gs-narrative__head { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+:root[data-app="civic"] .gs-narrative__title { font-size: 17px; font-weight: 800; margin: 0; }
+:root[data-app="civic"] .gs-narrative__badge {
+  font-size: 11px; font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--civic-card-border);
+  color: var(--civic-ink-muted);
+  display: inline-flex; align-items: center; gap: 4px;
+}
+:root[data-app="civic"] .gs-narrative__body {
+  margin: 12px 0 0;
+  max-height: 560px;
+  overflow-y: auto;
+  overflow-x: auto;
+  background: var(--civic-page-bg);
+  border: 1px solid var(--civic-card-border);
+  border-radius: var(--civic-radius-sm);
+  padding: 16px 18px;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--civic-ink);
+}
+:root[data-app="civic"] .gs-narrative__empty {
+  margin: 12px 0 0;
+  padding: 20px;
+  border: 1px dashed var(--civic-card-border);
+  border-radius: var(--civic-radius-sm);
+  font-size: 13px;
+  color: var(--civic-ink-muted);
+  text-align: center;
+}
+
+/* ---- What Funders See ---- */
+:root[data-app="civic"] .gs-funders { padding: 20px; }
+:root[data-app="civic"] .gs-funders__title { font-size: 16px; font-weight: 800; margin: 0 0 8px; }
+:root[data-app="civic"] .gs-funders__intro { font-size: 13px; color: var(--civic-ink-muted); margin: 0 0 14px; line-height: 1.5; }
+:root[data-app="civic"] .gs-funders__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+:root[data-app="civic"] .gs-funders__item { display: flex; gap: 10px; align-items: flex-start; }
+:root[data-app="civic"] .gs-funders__check {
+  width: 20px; height: 20px; flex: none;
+  border-radius: 999px;
+  background: var(--civic-pink-soft);
+  color: var(--civic-pink);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  margin-top: 1px;
+}
+:root[data-theme="dark"][data-app="civic"] .gs-funders__check { background: rgba(236, 72, 153, 0.18); }
+:root[data-app="civic"] .gs-funders__itemTitle { font-size: 13px; font-weight: 700; margin: 0; }
+:root[data-app="civic"] .gs-funders__itemDesc { font-size: 12px; color: var(--civic-ink-muted); margin: 2px 0 0; line-height: 1.4; }
+
+/* ---- Coach card (visual clone of .elex-coach/.prop-coach) ---- */
+:root[data-app="civic"] .gs-coach { padding: 18px; display: flex; align-items: center; gap: 12px; justify-content: space-between; }
+:root[data-app="civic"] .gs-coach__title { font-size: 16px; font-weight: 800; margin: 0; }
+:root[data-app="civic"] .gs-coach__body { font-size: 13px; color: var(--civic-ink-muted); margin: 4px 0 12px; }
+:root[data-app="civic"] .gs-coach__art { flex: none; }
+
+/* ===================== Responsive ===================== */
+@media (max-width: 767.98px) {
+  :root[data-app="civic"] .gs-page { padding: 18px 16px 48px; gap: 14px; }
+  :root[data-app="civic"] .gs-summaryGrid { grid-template-columns: repeat(2, 1fr); }
+  :root[data-app="civic"] .gs-layout { grid-template-columns: 1fr; }
+  :root[data-app="civic"] .gs-pathway__flow { flex-direction: column; align-items: flex-start; }
+  :root[data-app="civic"] .gs-pathway__arrow { transform: rotate(90deg); margin-left: 17px; }
+  :root[data-app="civic"] .gs-narrative__body { max-height: 420px; }
+  :root[data-app="civic"] .gs-coach { flex-direction: column; align-items: flex-start; }
+  :root[data-app="civic"] .gs-coach__art { align-self: center; }
+}
+
+@media (max-width: 424.98px) {
+  :root[data-app="civic"] .gs-summaryGrid { grid-template-columns: 1fr; }
+}
+
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  :root[data-app="civic"] .gs-page { padding: 24px 22px 56px; }
+  :root[data-app="civic"] .gs-summaryGrid { grid-template-columns: repeat(2, 1fr); }
+  :root[data-app="civic"] .gs-layout { grid-template-columns: 1fr; }
+}
+
+@media (min-width: 1200px) and (max-width: 1339.98px) {
+  :root[data-app="civic"] .gs-layout { grid-template-columns: 1.2fr 1fr; }
+}

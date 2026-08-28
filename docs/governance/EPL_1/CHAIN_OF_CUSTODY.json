@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "standard_id": "EPL-1",
+  "artifact": "CHAIN_OF_CUSTODY",
+  "required_chain_events": [
+    "Origin",
+    "Ownership",
+    "Transfers",
+    "Validation",
+    "Certification",
+    "Publication",
+    "Archive",
+    "Replacement",
+    "Retirement"
+  ],
+  "bypass_allowed": false,
+  "transfer_requires": ["prior_owner", "new_owner", "authority", "timestamp", "reason", "integrity_verification"],
+  "certified_evidence_mutable": false
+}

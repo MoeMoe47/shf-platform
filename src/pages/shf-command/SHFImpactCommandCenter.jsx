@@ -2,6 +2,13 @@ import React, {useCallback, useEffect, useMemo, useState} from "react";
 import { useSelectedEntity } from "@/system/context/SelectedEntityContext";
 import "./shf-impact-command-center.css";
 import { resolveCountyFromEntity } from "@/system/resolvers/entityToCounty";
+import { fetchWorkforceEmploymentStartedVerifiedCountReport } from "@/shared/reporting/workforceEmploymentReportingClient";
+import {
+  authorizeDonorSummaryDistribution,
+  createDonorSummaryArtifact,
+  listApprovedDonorDisclosures,
+  listAuthorizedReportRecipients,
+} from "@/shared/reporting/donorSummaryAuthorizationClient";
 
 
 const SELF_AUDIT_BASE = "http://127.0.0.1:8090";
@@ -435,6 +442,7 @@ const KPIS = [
   { key: "risk", label: "Risk Alerts", value: "3", delta: "", sublabel: "Priority Watchlist" },
   { key: "readiness", label: "Grant Readiness", value: "91%", delta: "Readiness", sublabel: "Institutional Score" },
 ];
+const REPORTING_DATA_AVAILABLE = false;
 
 const COUNTIES = [
   { id: "franklin", name: "Franklin County", x: 58, y: 33, shade: "high", programs: 5, people: "3,824", funding: "$4.5M", topOutcome: "82%", risk: "Stable" },
@@ -645,9 +653,9 @@ const TRUST_ITEMS = [
 ];
 
 const EXPORT_ITEMS = [
-  { label: "Board Brief", value: "92%" },
+  { label: "Board Brief", subtitle: "Verified Employment Starts", value: "Unavailable" },
   { label: "Grant Narrative", value: "PASS" },
-  { label: "Donor Summary", value: "ACTIVE" },
+  { label: "Donor Summary", value: "Unavailable" },
   { label: "Public Impact Snapshot", value: "" },
   { label: "Program Health Memo", value: "" },
 ];
@@ -672,6 +680,124 @@ const WHEEL_SEGMENTS = [
   { label: "Governance", value: "10%", tone: "seg-10" },
   { label: "Outcome Verification", value: "14%", tone: "seg-11" },
 ];
+
+function DonorSummaryAuthorityDrawer({ selected, onClose }) {
+  const [artifact, setArtifact] = useState(null);
+  const [recipients, setRecipients] = useState([]);
+  const [disclosures, setDisclosures] = useState([]);
+  const [recipientId, setRecipientId] = useState("");
+  const [disclosureId, setDisclosureId] = useState("");
+  const [phase, setPhase] = useState(selected?.workforceReportLoading ? "LOADING" : selected?.workforceReportError ? "UNAVAILABLE" : "READY_TO_GENERATE");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const requestKey = React.useRef(null);
+
+  const workforceValue = selected?.workforceReport?.metric_results?.[0]?.value;
+  const reportReady = !selected?.workforceReportLoading && !selected?.workforceReportError && Number.isFinite(workforceValue);
+
+  async function generateArtifact() {
+    if (!reportReady || busy) return;
+    setBusy(true);
+    setError("");
+    requestKey.current ||= `donor-summary-${globalThis.crypto?.randomUUID?.() || Date.now()}`;
+    try {
+      const created = await createDonorSummaryArtifact(requestKey.current);
+      setArtifact(created);
+      setPhase("ARTIFACT_GENERATED");
+      const [authorizedRecipients, approvedDisclosures] = await Promise.all([
+        listAuthorizedReportRecipients(),
+        listApprovedDonorDisclosures(created.artifact_id, created.artifact_version),
+      ]);
+      setRecipients(authorizedRecipients);
+      setDisclosures(approvedDisclosures);
+      setPhase(authorizedRecipients.length ? (approvedDisclosures.length ? "READY_TO_AUTHORIZE" : "DISCLOSURE_REQUIRED") : "RECIPIENT_REQUIRED");
+    } catch (err) {
+      setPhase("AUTHORIZATION_FAILED");
+      setError(err?.message || "Donor Summary artifact unavailable");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function authorize() {
+    if (!artifact || !recipientId || !disclosureId || busy) return;
+    setBusy(true);
+    setError("");
+    try {
+      await authorizeDonorSummaryDistribution(artifact.artifact_id, {
+        artifact_version: artifact.artifact_version,
+        recipient_authorization_id: recipientId,
+        disclosure_decision_id: disclosureId,
+        idempotency_key: `${requestKey.current}:authorize`,
+      });
+      setPhase("AUTHORIZED_FOR_DISTRIBUTION");
+    } catch (err) {
+      setPhase("AUTHORIZATION_FAILED");
+      setError(err?.message || "Authorization unavailable");
+      setRecipients([]);
+      setDisclosures([]);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const phaseLabel = phase === "AUTHORIZED_FOR_DISTRIBUTION"
+    ? "Authorized for Distribution"
+    : phase === "UNAVAILABLE" || phase === "AUTHORIZATION_FAILED"
+      ? "Unavailable"
+      : phase === "RECIPIENT_REQUIRED"
+        ? "Recipient Authorization Required"
+        : phase === "DISCLOSURE_REQUIRED"
+          ? "Disclosure Approval Required"
+          : phase === "LOADING"
+            ? "Loading..."
+            : "Generate Restricted Donor Summary";
+
+  return (
+    <div className="shf-detail-drawer__backdrop" onClick={onClose}>
+      <aside className="shf-detail-drawer shf-detail-drawer--command" role="dialog" aria-modal="true" aria-labelledby="donor-summary-title" onClick={(event) => event.stopPropagation()}>
+        <div className="shf-detail-drawer__header">
+          <div>
+            <div className="shf-detail-drawer__eyebrow">RESTRICTED INTERNAL AUTHORITY</div>
+            <h2 id="donor-summary-title">Donor Summary</h2>
+          </div>
+          <button type="button" className="shf-detail-drawer__close" onClick={onClose} aria-label="Close drawer">×</button>
+        </div>
+
+        <div className="shf-detail-drawer__section">
+          <div className="shf-detail-drawer__section-title">Verified Employment Starts</div>
+          <p>Historical verified employment starts recorded during the reporting period.</p>
+          <strong>{reportReady ? String(workforceValue) : phase === "LOADING" ? "Loading..." : "Unavailable"}</strong>
+        </div>
+
+        {artifact ? <div className="shf-detail-drawer__section"><div className="shf-detail-drawer__section-title">Artifact</div><p>Canonical Donor Summary artifact generated. Distribution authorization remains separate.</p></div> : null}
+
+        {phase !== "UNAVAILABLE" && phase !== "AUTHORIZATION_FAILED" && phase !== "LOADING" && phase !== "AUTHORIZED_FOR_DISTRIBUTION" && !artifact ? (
+          <button type="button" onClick={generateArtifact} disabled={!reportReady || busy}>{busy ? "Generating..." : "Generate Restricted Donor Summary"}</button>
+        ) : null}
+
+        {artifact && phase !== "AUTHORIZED_FOR_DISTRIBUTION" ? (
+          <div className="shf-detail-drawer__section">
+            <label htmlFor="donor-recipient">Recipient</label>
+            <select id="donor-recipient" value={recipientId} onChange={(event) => setRecipientId(event.target.value)} disabled={busy || !recipients.length}>
+              <option value="">{recipients.length ? "Select authorized recipient" : "Recipient Authorization Required"}</option>
+              {recipients.map((item) => <option key={item.recipient_authorization_id} value={item.recipient_authorization_id}>{item.recipient_organization_ref} ({item.audience_type})</option>)}
+            </select>
+            <label htmlFor="donor-disclosure">Approved Disclosure</label>
+            <select id="donor-disclosure" value={disclosureId} onChange={(event) => setDisclosureId(event.target.value)} disabled={busy || !disclosures.length}>
+              <option value="">{disclosures.length ? "Select approved disclosure" : "Disclosure Approval Required"}</option>
+              {disclosures.map((item) => <option key={item.disclosure_decision_id} value={item.disclosure_decision_id}>{item.policy_reference}</option>)}
+            </select>
+            <button type="button" onClick={authorize} disabled={busy || !recipientId || !disclosureId}>{busy ? "Authorizing..." : "Authorize for Distribution"}</button>
+          </div>
+        ) : null}
+
+        {phase === "AUTHORIZED_FOR_DISTRIBUTION" ? <div className="shf-detail-drawer__section" role="status"><strong>Authorized for Distribution</strong><p>Authorization recorded. Delivery is handled separately.</p></div> : null}
+        {error ? <p role="alert">{error}</p> : null}
+      </aside>
+    </div>
+  );
+}
 
 function DetailDrawer({ selected, onClose }) {
   const [simulation, setSimulation] = useState(null);
@@ -732,6 +858,7 @@ return () => {
   }, [selected]);
 
   if (!selected) return null;
+  if (selected.donorSummary) return <DonorSummaryAuthorityDrawer selected={selected} onClose={onClose} />;
 
   const metrics = Array.isArray(selected.metrics) ? selected.metrics : [];
   const actions = Array.isArray(selected.actions) ? selected.actions : [];
@@ -952,6 +1079,10 @@ function buildDrawerPayload({
   nextOutcome = "REVIEWED",
   simulationScenario = null,
   reasonSignals = [],
+  donorSummary = false,
+  workforceReport = null,
+  workforceReportLoading = false,
+  workforceReportError = null,
 }) {
   return {
     title,
@@ -964,6 +1095,10 @@ function buildDrawerPayload({
     nextOutcome,
     simulationScenario,
     reasonSignals: Array.isArray(reasonSignals) ? reasonSignals : [],
+    donorSummary,
+    workforceReport,
+    workforceReportLoading,
+    workforceReportError,
   };
 }
 
@@ -1018,6 +1153,28 @@ return (
 
 export default function SHFImpactCommandCenter() {
   const [aiTruthDrawer, setAiTruthDrawer] = useState({ open: false });
+  const [workforceReport, setWorkforceReport] = useState(null);
+  const [workforceReportLoading, setWorkforceReportLoading] = useState(true);
+  const [workforceReportError, setWorkforceReportError] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    fetchWorkforceEmploymentStartedVerifiedCountReport()
+      .then((report) => {
+        if (!active) return;
+        setWorkforceReport(report);
+        setWorkforceReportError(false);
+      })
+      .catch(() => {
+        if (active) setWorkforceReportError(true);
+      })
+      .finally(() => {
+        if (active) setWorkforceReportLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     function handleAIAnalystDrawerRequest(event) {
@@ -1415,6 +1572,16 @@ const [selfAudit, setSelfAudit] = useState(null);
   };
 
   const onExportClick = (item) => {
+    if (item.label === "Donor Summary") {
+      openDrawer({
+        title: "Donor Summary",
+        donorSummary: true,
+        workforceReport,
+        workforceReportLoading,
+        workforceReportError,
+      });
+      return;
+    }
     openDrawer({
       title: item.label,
       summary: `${item.label} can be generated from the command center export system.`,
@@ -1432,6 +1599,54 @@ const [selfAudit, setSelfAudit] = useState(null);
       nextOutcome: "REVIEWED",
     });
   };
+
+  const boardBriefItem = {
+    ...EXPORT_ITEMS[0],
+    value: workforceReportLoading
+      ? "Loading..."
+      : workforceReportError
+        ? "Unavailable"
+        : String(workforceReport?.metric_results?.[0]?.value),
+  };
+  const grantNarrativeItem = {
+    ...EXPORT_ITEMS[1],
+    value: workforceReportLoading
+      ? "Loading..."
+      : workforceReportError
+        ? "Unavailable"
+        : `${String(workforceReport?.metric_results?.[0]?.value)} verified employment starts were recorded during the reporting period.`,
+  };
+  const programHealthMemoItem = {
+    ...EXPORT_ITEMS[4],
+    subtitle: "Historical Workforce Outcome",
+    value: workforceReportLoading
+      ? "Loading..."
+      : workforceReportError
+        ? "Unavailable"
+        : `${String(workforceReport?.metric_results?.[0]?.value)} verified employment starts were recorded during the reporting period.`,
+  };
+  const briefingItems = [boardBriefItem, grantNarrativeItem, ...EXPORT_ITEMS.slice(2, 4), programHealthMemoItem];
+
+  if (!REPORTING_DATA_AVAILABLE) {
+    return (
+      <main className="shf-page" role="status">
+        <section className="shf-shell">
+          <header className="shf-topbar">
+            <div className="shf-brand__text">Silicon Heartland</div>
+            <h1>SHF Impact Command Center</h1>
+          </header>
+          <section className="shf-panel" style={{ margin: 24, padding: 24 }}>
+            <h2>Data pending verification</h2>
+            <p>Impact metrics and exports are suppressed until approved canonical Truth data is available.</p>
+          </section>
+          <ReportsBriefingsPanel
+            items={[boardBriefItem, grantNarrativeItem, programHealthMemoItem]}
+            onExportClick={onExportClick}
+          />
+        </section>
+      </main>
+    );
+  }
 
   return (
     <>
@@ -1620,7 +1835,7 @@ const [selfAudit, setSelfAudit] = useState(null);
             />
 
             <ReportsBriefingsPanel
-              items={EXPORT_ITEMS}
+              items={briefingItems}
               onExportClick={onExportClick}
             />
 

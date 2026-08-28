@@ -1,5 +1,8 @@
 import React from "react";
 
+const universeOrigin = String(import.meta.env.VITE_UNIVERSE_ORIGIN || "").replace(/\/+$/, "");
+const returnToUniverseHref = universeOrigin ? `${universeOrigin}/universe` : "";
+
 export default function FoundationHeader() {
   return (
     <header className="shf-header">
@@ -20,6 +23,23 @@ export default function FoundationHeader() {
         </nav>
 
         <div className="shf-header__actions">
+          {returnToUniverseHref ? (
+            <a
+              className="shf-return-universe-pill"
+              href={returnToUniverseHref}
+              aria-label="Return to Universe"
+            >
+              RETURN TO UNIVERSE
+            </a>
+          ) : (
+            <span
+              className="shf-return-universe-pill shf-return-universe-pill--disabled"
+              aria-disabled="true"
+              title="Universe origin is not configured."
+            >
+              RETURN TO UNIVERSE
+            </span>
+          )}
           <a className="shf-donate-pill" href="#donate">Donate</a>
           <a className="shf-command-pill" href="/shf.html">SHF Command Center</a>
         </div>

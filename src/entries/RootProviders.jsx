@@ -15,6 +15,18 @@ import LedgerProvider from "@/shared/ledger/LedgerProvider.jsx";
 import ProgressProvider from "@/shared/progress/ProgressProvider.jsx";
 import { initMode } from "@/runtime/mode.js";
 
+// SHF Learning Companion ("Brainiact") — the one shared runtime + character,
+// mounted here since RootProviders is the one file both career.main.jsx and
+// curriculum.main.jsx already import (confirmed via repo audit: Career and
+// Curriculum share no other live infrastructure). Also activates the
+// existing-but-previously-unmounted LiveAnnouncer live region
+// (src/components/ally/A11yTools.jsx) so announce() calls — used by the
+// companion for state-change accessibility — actually reach assistive tech.
+import { CompanionProvider } from "@/companion/CompanionProvider.jsx";
+import Brainiact from "@/components/companion/Brainiact.jsx";
+import { LiveAnnouncer } from "@/components/ally/A11yTools.jsx";
+import "@/styles/companion.css";
+
 /* ⬇️ Keep this LAST among CSS so it wins the cascade */
 import "@/styles/app-shell.css";
 
@@ -107,8 +119,12 @@ export default function RootProviders({ children, appScope }) {
         <ProgressProvider>
           <CreditProvider>
             <EmojiCtx.Provider value={emojiValue}>
-              {/* Each HTML entry mounts its own Router + shell */}
-              {children}
+              <CompanionProvider appScope={appScope}>
+                <LiveAnnouncer />
+                {/* Each HTML entry mounts its own Router + shell */}
+                {children}
+                <Brainiact />
+              </CompanionProvider>
             </EmojiCtx.Provider>
           </CreditProvider>
         </ProgressProvider>

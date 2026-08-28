@@ -19,8 +19,8 @@ export function download(filename, data, mime = "application/octet-stream") {
   }
 }
 
-export function downloadText(filename, text) {
-  return download(filename, String(text ?? ""), "text/plain;charset=utf-8");
+export function downloadText(filename, text, mime = "text/plain;charset=utf-8") {
+  return download(filename, String(text ?? ""), mime);
 }
 
 export function downloadJSON(filename, obj) {

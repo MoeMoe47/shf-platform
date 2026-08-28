@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "standard_id": "EPL-1",
+  "artifact": "TRACEABILITY_MODEL",
+  "required_trace_targets": [
+    "Mission",
+    "Architecture",
+    "Blueprint",
+    "Decision",
+    "Requirement",
+    "Validator",
+    "Test",
+    "Certification",
+    "Publication"
+  ],
+  "certification_must_reference_supporting_evidence": true,
+  "traceability_gaps_allowed": false
+}

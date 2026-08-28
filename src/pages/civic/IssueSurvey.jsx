@@ -195,7 +195,7 @@ export default function IssueSurvey(){
         </div>
       </header>
 
-      <div className="db-grid" style={{ gridTemplateColumns:"1fr 1fr", gap:12 }}>
+      <div className="db-grid" style={{ gridTemplateColumns:"repeat(auto-fit, minmax(260px, 1fr))", gap:12 }}>
         {/* Questions */}
         <section className="card card--pad" aria-label="Survey Questions">
           <strong style={{ fontSize:16 }}>Your Stances</strong>

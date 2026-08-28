@@ -1,0 +1,101 @@
+{
+  "phase": "3.2",
+  "asset": "Brainiact_LOD0_Working",
+  "working_file": "assets-source/brainiact/blender/BRAINIACT_RETOPOLOGY_WORKING.blend",
+  "failed_attempt_1": {
+    "method": "global whole-mesh find_doubles + weld_verts at 1e-5 m",
+    "vertices_merged": 17792,
+    "result": "structural_islands_post_cleanup collapsed to 1 (brain/face/torso/arms/hip/legs/feet all fused into a single ~1,999,522-1,999,570-face blob)",
+    "status": "ROLLED_BACK",
+    "certified": false,
+    "root_cause": "safety check compared threshold only against within-island feature thinness (1.6mm), not against actual inter-island gap distance at joint boundaries; near-duplicate vertices exist at essentially every joint seam body-wide, not just the neck/collar debris hotspot",
+    "secondary_bug": "rollback via bpy.ops.object.duplicate() silently no-op'd because the source object had hide_select=True, causing the script to rename/mutate the actual Brainiact_Phase2_Reference object instead of a fresh duplicate; fixed via pure bpy.data-level Object.copy()/Mesh.copy() regenerated from geometry_0 (verified byte-identical after fix)"
+  },
+  "weld": {
+    "candidate_thresholds_m": [0.00001, 0.000025, 0.00005, 0.0001],
+    "global_dry_run_merge_counts": {"0.00001": 17792, "0.000025": 17792, "0.00005": 17799, "0.0001": 18098},
+    "debris_scoped_dry_run_merge_counts": {"0.00001": 495, "0.000025": 495, "0.00005": 495, "0.0001": 548},
+    "selected_threshold_m": 0.00001,
+    "selected_scope": "vertices belonging to islands matched to the 75 certified debris_candidate_ids only (2592 verts); explicitly excludes 1033 verts belonging to preserved islands 50/52/53 and all vertices of the 53 classified structural islands",
+    "vertices_merged": 495
+  },
+  "before_baseline": {
+    "verts": 1017842, "edges": 3017714, "faces": 2000000, "tri_count": 2000000,
+    "islands": 128, "non_manifold_edges": 35428, "zero_area_faces": 0,
+    "duplicate_pairs_at_1e-4m": 18098, "debris_islands": 75, "classified_islands": 53
+  },
+  "after_final": {
+    "verts": 1015656, "edges": 3012575, "faces": 1996973, "tri_count": 1996973,
+    "islands": 54, "non_manifold_edges": 34231, "zero_area_faces": 0,
+    "duplicate_pairs_at_1e-4m": 17337, "debris_islands_remaining": 1,
+    "dims": [0.6643028259277344, 0.5928590297698975, 1.0]
+  },
+  "deltas": {
+    "verts": -2186, "verts_pct": -0.2148,
+    "edges": -5139, "edges_pct": -0.1703,
+    "faces": -3027, "faces_pct": -0.1514,
+    "tri_count": -3027, "tri_count_pct": -0.1514,
+    "islands": -74, "islands_pct": -57.8125,
+    "duplicate_pairs": -761, "duplicate_pairs_pct": -4.2048,
+    "non_manifold_edges": -1197, "non_manifold_edges_pct": -3.3781,
+    "degenerate_faces": 0,
+    "dimensional_deviation_pct": 0.0,
+    "bbox_deviation_pct": 0.0
+  },
+  "debris_review": {
+    "candidates_reviewed": 75,
+    "deleted_islands_main_pass": 35,
+    "deleted_islands_followup_pass": 1,
+    "deleted_faces_total": 2027,
+    "confirmed_internal": 0,
+    "ambiguous_preserved": 1,
+    "ambiguous_preserved_face_count": 773
+  },
+  "special_islands": {
+    "50": {"disposition": "preserved", "face_count_before": 670, "face_count_after": 670, "action": "excluded from weld scope entirely"},
+    "52": {"disposition": "preserved", "face_count_before": 518, "face_count_after": 518, "action": "excluded from weld scope entirely"},
+    "53": {"disposition": "preserved", "face_count_before": 512, "face_count_after": 512, "action": "excluded from weld scope entirely"},
+    "51": {"disposition": "deleted_confirmed_debris", "face_count_before": 560, "merged_with": 54, "action": "welded into a combined 1544-face cluster with 54 and neighbors, confirmed non-silhouette-touching, deleted"},
+    "54": {"disposition": "deleted_confirmed_debris", "face_count_before": 499, "merged_with": 51, "action": "welded into a combined 1544-face cluster with 51 and neighbors, confirmed non-silhouette-touching, deleted"}
+  },
+  "normals": {
+    "flip_candidates_detected": 24,
+    "repaired": 24,
+    "method": "dot(orig_normal, recalc_face_normals_on_disposable_copy) < -0.9"
+  },
+  "non_manifold_classification": {
+    "in_joint_collar_zones_deferred": 20148,
+    "elsewhere_deferred": 14083,
+    "repaired": 0,
+    "note": "all non-manifold edges deferred to retopology; none repaired this step"
+  },
+  "region_stability_check": {
+    "brain_crown": {"old_faces": 483988, "final_faces": 483988, "delta_pct": 0.0},
+    "face_lower_head": {"old_faces": 380627, "final_faces": 380627, "delta_pct": 0.0},
+    "upper_arm_shoulder_transition": {"old_faces": 185314, "final_faces": 185314, "delta_pct": 0.0},
+    "neck_collar_shoulder_joint_complex": {"old_faces": 111675, "final_faces": 111675, "delta_pct": 0.0},
+    "torso_shoulder_mass": {"old_faces": 214134, "final_faces": 214134, "delta_pct": 0.0},
+    "pointing_arm_hand_wrist": {"old_faces": 59053, "final_faces": 59053, "delta_pct": 0.0},
+    "torso_chest_core": {"old_faces": 102508, "final_faces": 102508, "delta_pct": 0.0},
+    "lowered_arm_forearm": {"old_faces": 59302, "final_faces": 59302, "delta_pct": 0.0},
+    "hip_pelvis": {"old_faces": 59400, "final_faces": 59400, "delta_pct": 0.0},
+    "lowered_arm_hand_wrist": {"old_faces": 59303, "final_faces": 59303, "delta_pct": 0.0},
+    "lower_leg_ankle_cuff": {"old_faces": 66040, "final_faces": 66040, "delta_pct": 0.0},
+    "foot_shoe_base": {"old_faces": 213156, "final_faces": 213156, "delta_pct": 0.0},
+    "neck_ring_rib_segment": {"old_faces": 1700, "final_faces": 1700, "delta_pct": 0.0}
+  },
+  "source_integrity": {
+    "master_sha256_unchanged": true,
+    "phase2_working_blend_sha256_unchanged": true,
+    "phase2_reference_collection_unchanged": true,
+    "phase2_reference_note": "regenerated once mid-step after the rollback bug (see failed_attempt_1.secondary_bug); verified byte-for-byte identical (1017842/3017714/2000000, dims match) to geometry_0 and to its original Step 1 state"
+  },
+  "mutation_status": {
+    "retopology_performed": false,
+    "decimation_performed": false,
+    "rigging_performed": false,
+    "animation_performed": false,
+    "texture_modification_performed": false,
+    "export_performed": false
+  }
+}

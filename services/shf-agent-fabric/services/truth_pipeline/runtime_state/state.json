@@ -32,7 +32,7 @@
         "organization_id": "org_shs_batch_02",
         "program_id": "program_demo_workforce_readiness"
       },
-      "timestamp": "2026-07-20T04:07:06+00:00",
+      "timestamp": "2026-08-27T02:19:20+00:00",
       "trace_context": {
         "causation_id": "action-review-complete",
         "contract_version": "v1",
@@ -119,7 +119,7 @@
       "action": "source_claims.persisted",
       "audit_id": "audit_6aafd04d423968cbdccd",
       "entity_id": "entity_batch02_program_workforce_readiness",
-      "recorded_at": "2026-07-20T04:07:06+00:00",
+      "recorded_at": "2026-08-27T02:19:20+00:00",
       "sensitive_payload_redacted": true,
       "summary": "Two governed source claims persisted.",
       "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -128,7 +128,7 @@
       "action": "aggregation.persisted",
       "audit_id": "audit_6d3d7322c9f2b6ebadf7",
       "entity_id": "entity_batch02_program_workforce_readiness",
-      "recorded_at": "2026-07-20T04:07:06+00:00",
+      "recorded_at": "2026-08-27T02:19:20+00:00",
       "sensitive_payload_redacted": true,
       "summary": "Aggregation normalized two source claims.",
       "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -137,7 +137,7 @@
       "action": "entity_resolution.persisted",
       "audit_id": "audit_6e0e3e5cd4be4ea39c3c",
       "entity_id": "entity_batch02_program_workforce_readiness",
-      "recorded_at": "2026-07-20T04:07:06+00:00",
+      "recorded_at": "2026-08-27T02:19:20+00:00",
       "sensitive_payload_redacted": true,
       "summary": "Canonical entity ID assigned.",
       "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -146,7 +146,7 @@
       "action": "verification.persisted",
       "audit_id": "audit_66a91cd200bf14b9b8f2",
       "entity_id": "entity_batch02_program_workforce_readiness",
-      "recorded_at": "2026-07-20T04:07:06+00:00",
+      "recorded_at": "2026-08-27T02:19:20+00:00",
       "sensitive_payload_redacted": true,
       "summary": "Evidence sufficiency verified.",
       "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -155,7 +155,7 @@
       "action": "reconciliation.persisted",
       "audit_id": "audit_37ea176624aa6b503d3a",
       "entity_id": "entity_batch02_program_workforce_readiness",
-      "recorded_at": "2026-07-20T04:07:06+00:00",
+      "recorded_at": "2026-08-27T02:19:20+00:00",
       "sensitive_payload_redacted": true,
       "summary": "Minor contradiction resolved.",
       "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -164,7 +164,7 @@
       "action": "action_event.persisted",
       "audit_id": "audit_d9b89cb6568a5c1da5af",
       "entity_id": "entity_batch02_program_workforce_readiness",
-      "recorded_at": "2026-07-20T04:07:06+00:00",
+      "recorded_at": "2026-08-27T02:19:20+00:00",
       "sensitive_payload_redacted": true,
       "summary": "Governed action event persisted.",
       "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -173,7 +173,7 @@
       "action": "oracle.recomputed",
       "audit_id": "audit_99081ee7babc2274bf87",
       "entity_id": "entity_batch02_program_workforce_readiness",
-      "recorded_at": "2026-07-20T04:07:06+00:00",
+      "recorded_at": "2026-08-27T02:19:20+00:00",
       "sensitive_payload_redacted": true,
       "summary": "Oracle produced Truth Package v2 from action causation.",
       "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -191,7 +191,7 @@
       ],
       "contract_id": "CONTRACT-V1-003",
       "correlation_id": "corr_batch_02_unified_truth",
-      "created_at": "2026-07-20T04:07:06+00:00",
+      "created_at": "2026-08-27T02:19:20+00:00",
       "dead_letter": true,
       "dead_letter_disposition": {
         "attempt_history": [
@@ -203,7 +203,7 @@
         ],
         "contract_id": "CONTRACT-V1-003",
         "correlation_id": "corr_batch_02_unified_truth",
-        "disposition_timestamp": "2026-07-20T04:07:06+00:00",
+        "disposition_timestamp": "2026-08-27T02:19:20+00:00",
         "failure_code": "idempotency_conflict",
         "last_error_summary": "duplicate intake fixture",
         "original_request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
@@ -211,7 +211,7 @@
         "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
       },
       "failure_code": "idempotency_conflict",
-      "failure_id": "fail_91817937d9117509",
+      "failure_id": "fail_87ae0bd2bc87193d",
       "reason": "duplicate intake fixture",
       "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "retryable": false,
@@ -239,7 +239,7 @@
       ],
       "contract_id": "CONTRACT-V1-008",
       "correlation_id": "corr_batch_02_unified_truth",
-      "created_at": "2026-07-20T04:07:06+00:00",
+      "created_at": "2026-08-27T02:19:20+00:00",
       "dead_letter": true,
       "dead_letter_disposition": {
         "attempt_history": [
@@ -261,7 +261,7 @@
         ],
         "contract_id": "CONTRACT-V1-008",
         "correlation_id": "corr_batch_02_unified_truth",
-        "disposition_timestamp": "2026-07-20T04:07:06+00:00",
+        "disposition_timestamp": "2026-08-27T02:19:20+00:00",
         "failure_code": "downstream_unavailable",
         "last_error_summary": "recompute retry exhaustion fixture",
         "original_request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
@@ -269,7 +269,7 @@
         "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
       },
       "failure_code": "downstream_unavailable",
-      "failure_id": "fail_959e6e411530e8ae",
+      "failure_id": "fail_35ce7e469e770052",
       "max_attempts": 3,
       "reason": "recompute retry exhaustion fixture",
       "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
@@ -332,9 +332,9 @@
       ],
       "contract_id": "CONTRACT-V1-003",
       "correlation_id": "corr_batch_02_unified_truth",
-      "created_at": "2026-07-20T04:07:06+00:00",
+      "created_at": "2026-08-27T02:19:20+00:00",
       "failure_code": "missing_required_field",
-      "failure_id": "fail_cd0b9812650a0d80",
+      "failure_id": "fail_eb2f41701d6b1981",
       "reason": "intake validation failure fixture",
       "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "retryable": false,
@@ -352,7 +352,7 @@
       ],
       "contract_id": "CONTRACT-V1-003",
       "correlation_id": "corr_batch_02_unified_truth",
-      "created_at": "2026-07-20T04:07:06+00:00",
+      "created_at": "2026-08-27T02:19:20+00:00",
       "dead_letter": true,
       "dead_letter_disposition": {
         "attempt_history": [
@@ -364,7 +364,7 @@
         ],
         "contract_id": "CONTRACT-V1-003",
         "correlation_id": "corr_batch_02_unified_truth",
-        "disposition_timestamp": "2026-07-20T04:07:06+00:00",
+        "disposition_timestamp": "2026-08-27T02:19:20+00:00",
         "failure_code": "idempotency_conflict",
         "last_error_summary": "duplicate intake fixture",
         "original_request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
@@ -372,7 +372,7 @@
         "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
       },
       "failure_code": "idempotency_conflict",
-      "failure_id": "fail_91817937d9117509",
+      "failure_id": "fail_87ae0bd2bc87193d",
       "reason": "duplicate intake fixture",
       "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "retryable": false,
@@ -395,9 +395,9 @@
       ],
       "contract_id": "CONTRACT-V1-009",
       "correlation_id": "corr_batch_02_unified_truth",
-      "created_at": "2026-07-20T04:07:06+00:00",
+      "created_at": "2026-08-27T02:19:20+00:00",
       "failure_code": "audit_write_failed",
-      "failure_id": "fail_3c3f18574e7579ee",
+      "failure_id": "fail_876df53b106a4459",
       "max_attempts": 2,
       "reason": "persistence failure fixture",
       "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
@@ -426,9 +426,9 @@
       ],
       "contract_id": "CONTRACT-V1-005",
       "correlation_id": "corr_batch_02_unified_truth",
-      "created_at": "2026-07-20T04:07:06+00:00",
+      "created_at": "2026-08-27T02:19:20+00:00",
       "failure_code": "source_not_ready",
-      "failure_id": "fail_d42bbdf646716be4",
+      "failure_id": "fail_050bce0cf6400a8c",
       "max_attempts": 3,
       "reason": "verification insufficiency fixture",
       "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
@@ -452,9 +452,9 @@
       ],
       "contract_id": "CONTRACT-V1-006",
       "correlation_id": "corr_batch_02_unified_truth",
-      "created_at": "2026-07-20T04:07:06+00:00",
+      "created_at": "2026-08-27T02:19:20+00:00",
       "failure_code": "stale_input",
-      "failure_id": "fail_b3ea086e4c60b038",
+      "failure_id": "fail_b45de5e491510a51",
       "max_attempts": 2,
       "reason": "unresolved reconciliation conflict fixture",
       "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
@@ -478,9 +478,9 @@
       ],
       "contract_id": "CONTRACT-V1-007",
       "correlation_id": "corr_batch_02_unified_truth",
-      "created_at": "2026-07-20T04:07:06+00:00",
+      "created_at": "2026-08-27T02:19:20+00:00",
       "failure_code": "oracle_dependency_blocked",
-      "failure_id": "fail_ccef38243da50fb8",
+      "failure_id": "fail_5bc5d50ed3fd4547",
       "max_attempts": 2,
       "reason": "Oracle blocked judgment fixture",
       "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
@@ -499,9 +499,9 @@
       ],
       "contract_id": "CONTRACT-V1-010",
       "correlation_id": "corr_batch_02_unified_truth",
-      "created_at": "2026-07-20T04:07:06+00:00",
+      "created_at": "2026-08-27T02:19:20+00:00",
       "failure_code": "permission_denied",
-      "failure_id": "fail_658d9e5f01b0e2eb",
+      "failure_id": "fail_e9652263de579fff",
       "reason": "Reporting blocked publication fixture",
       "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "retryable": false,
@@ -529,7 +529,7 @@
       ],
       "contract_id": "CONTRACT-V1-008",
       "correlation_id": "corr_batch_02_unified_truth",
-      "created_at": "2026-07-20T04:07:06+00:00",
+      "created_at": "2026-08-27T02:19:20+00:00",
       "dead_letter": true,
       "dead_letter_disposition": {
         "attempt_history": [
@@ -551,7 +551,7 @@
         ],
         "contract_id": "CONTRACT-V1-008",
         "correlation_id": "corr_batch_02_unified_truth",
-        "disposition_timestamp": "2026-07-20T04:07:06+00:00",
+        "disposition_timestamp": "2026-08-27T02:19:20+00:00",
         "failure_code": "downstream_unavailable",
         "last_error_summary": "recompute retry exhaustion fixture",
         "original_request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
@@ -559,7 +559,7 @@
         "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
       },
       "failure_code": "downstream_unavailable",
-      "failure_id": "fail_959e6e411530e8ae",
+      "failure_id": "fail_35ce7e469e770052",
       "max_attempts": 3,
       "reason": "recompute retry exhaustion fixture",
       "request_id": "req_02bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
@@ -645,8 +645,8 @@
         "confidence": 86,
         "contradiction_status": "minor_resolved",
         "evidence_sufficiency": "sufficient",
-        "generated_timestamp": "2026-07-20T04:07:06+00:00",
-        "last_refresh": "2026-07-20T04:07:06+00:00",
+        "generated_timestamp": "2026-08-27T02:19:20+00:00",
+        "last_refresh": "2026-08-27T02:19:20+00:00",
         "oracle_version": "shs.oracle.truth_pipeline.v1",
         "publication_eligibility": [
           "internal_review"
@@ -674,8 +674,8 @@
         "confidence": 91,
         "contradiction_status": "minor_resolved",
         "evidence_sufficiency": "sufficient",
-        "generated_timestamp": "2026-07-20T04:07:06+00:00",
-        "last_refresh": "2026-07-20T04:07:06+00:00",
+        "generated_timestamp": "2026-08-27T02:19:20+00:00",
+        "last_refresh": "2026-08-27T02:19:20+00:00",
         "oracle_version": "shs.oracle.truth_pipeline.v1",
         "publication_eligibility": [
           "internal_report"
@@ -1096,7 +1096,7 @@
       "event_type": "truth_pipeline_stage_status",
       "stage": "source_intake",
       "status": "complete",
-      "timestamp": "2026-07-20T04:07:06+00:00",
+      "timestamp": "2026-08-27T02:19:20+00:00",
       "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "tracking_event_id": "evt_batch02_source_intake"
     },
@@ -1107,7 +1107,7 @@
       "event_type": "truth_pipeline_stage_status",
       "stage": "aggregation",
       "status": "complete",
-      "timestamp": "2026-07-20T04:07:06+00:00",
+      "timestamp": "2026-08-27T02:19:20+00:00",
       "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "tracking_event_id": "evt_batch02_tracking_aggregation"
     },
@@ -1118,7 +1118,7 @@
       "event_type": "truth_pipeline_stage_status",
       "stage": "canonical_entity",
       "status": "complete",
-      "timestamp": "2026-07-20T04:07:06+00:00",
+      "timestamp": "2026-08-27T02:19:20+00:00",
       "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "tracking_event_id": "evt_batch02_tracking_entity"
     },
@@ -1129,7 +1129,7 @@
       "event_type": "truth_pipeline_stage_status",
       "stage": "verification",
       "status": "complete",
-      "timestamp": "2026-07-20T04:07:06+00:00",
+      "timestamp": "2026-08-27T02:19:20+00:00",
       "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "tracking_event_id": "evt_batch02_tracking_verification"
     },
@@ -1140,7 +1140,7 @@
       "event_type": "truth_pipeline_stage_status",
       "stage": "reconciliation",
       "status": "complete",
-      "timestamp": "2026-07-20T04:07:06+00:00",
+      "timestamp": "2026-08-27T02:19:20+00:00",
       "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "tracking_event_id": "evt_batch02_tracking_reconciliation"
     },
@@ -1151,7 +1151,7 @@
       "event_type": "truth_pipeline_stage_status",
       "stage": "action",
       "status": "complete",
-      "timestamp": "2026-07-20T04:07:06+00:00",
+      "timestamp": "2026-08-27T02:19:20+00:00",
       "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "tracking_event_id": "evt_batch02_tracking_action"
     },
@@ -1162,7 +1162,7 @@
       "event_type": "truth_pipeline_stage_status",
       "stage": "recompute",
       "status": "complete",
-      "timestamp": "2026-07-20T04:07:06+00:00",
+      "timestamp": "2026-08-27T02:19:20+00:00",
       "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "tracking_event_id": "evt_batch02_tracking_recompute"
     },
@@ -1173,7 +1173,7 @@
       "event_type": "truth_pipeline_stage_status",
       "stage": "tracking",
       "status": "complete",
-      "timestamp": "2026-07-20T04:07:06+00:00",
+      "timestamp": "2026-08-27T02:19:20+00:00",
       "trace_id": "trc_02aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "tracking_event_id": "evt_batch02_tracking_final"
     }
@@ -1184,7 +1184,7 @@
       "contract_id": "CONTRACT-V1-003",
       "evidence": "Source Intake persisted and traced for representative entity.",
       "last_failure": "",
-      "last_successful_run": "2026-07-20T04:07:06+00:00",
+      "last_successful_run": "2026-08-27T02:19:20+00:00",
       "owner_layer_id": "SHS-LAYER-013",
       "stage": "source_intake",
       "status": "runtime_wired",
@@ -1195,7 +1195,7 @@
       "contract_id": "CONTRACT-V1-003",
       "evidence": "Aggregation persisted and traced for representative entity.",
       "last_failure": "",
-      "last_successful_run": "2026-07-20T04:07:06+00:00",
+      "last_successful_run": "2026-08-27T02:19:20+00:00",
       "owner_layer_id": "SHS-LAYER-015",
       "stage": "aggregation",
       "status": "runtime_wired",
@@ -1206,7 +1206,7 @@
       "contract_id": "CONTRACT-V1-004",
       "evidence": "Canonical Entity persisted and traced for representative entity.",
       "last_failure": "",
-      "last_successful_run": "2026-07-20T04:07:06+00:00",
+      "last_successful_run": "2026-08-27T02:19:20+00:00",
       "owner_layer_id": "SHS-LAYER-016",
       "stage": "canonical_entity",
       "status": "runtime_wired",
@@ -1217,7 +1217,7 @@
       "contract_id": "CONTRACT-V1-005",
       "evidence": "Verification persisted and traced for representative entity.",
       "last_failure": "",
-      "last_successful_run": "2026-07-20T04:07:06+00:00",
+      "last_successful_run": "2026-08-27T02:19:20+00:00",
       "owner_layer_id": "SHS-LAYER-018",
       "stage": "verification",
       "status": "runtime_wired",
@@ -1228,7 +1228,7 @@
       "contract_id": "CONTRACT-V1-006",
       "evidence": "Reconciliation persisted and traced for representative entity.",
       "last_failure": "",
-      "last_successful_run": "2026-07-20T04:07:06+00:00",
+      "last_successful_run": "2026-08-27T02:19:20+00:00",
       "owner_layer_id": "SHS-LAYER-021",
       "stage": "reconciliation",
       "status": "runtime_wired",
@@ -1239,7 +1239,7 @@
       "contract_id": "CONTRACT-V1-007",
       "evidence": "Oracle persisted and traced for representative entity.",
       "last_failure": "",
-      "last_successful_run": "2026-07-20T04:07:06+00:00",
+      "last_successful_run": "2026-08-27T02:19:20+00:00",
       "owner_layer_id": "SHS-LAYER-022",
       "stage": "oracle",
       "status": "runtime_wired",
@@ -1250,7 +1250,7 @@
       "contract_id": "CONTRACT-V1-009",
       "evidence": "Truth Package Persistence persisted and traced for representative entity.",
       "last_failure": "",
-      "last_successful_run": "2026-07-20T04:07:06+00:00",
+      "last_successful_run": "2026-08-27T02:19:20+00:00",
       "owner_layer_id": "SHS-LAYER-021",
       "stage": "truth_persistence",
       "status": "runtime_wired",
@@ -1261,7 +1261,7 @@
       "contract_id": "CONTRACT-V1-010",
       "evidence": "Reporting persisted and traced for representative entity.",
       "last_failure": "",
-      "last_successful_run": "2026-07-20T04:07:06+00:00",
+      "last_successful_run": "2026-08-27T02:19:20+00:00",
       "owner_layer_id": "SHS-LAYER-028",
       "stage": "reporting",
       "status": "runtime_wired",
@@ -1272,7 +1272,7 @@
       "contract_id": "CONTRACT-V1-010",
       "evidence": "Action Event persisted and traced for representative entity.",
       "last_failure": "",
-      "last_successful_run": "2026-07-20T04:07:06+00:00",
+      "last_successful_run": "2026-08-27T02:19:20+00:00",
       "owner_layer_id": "SHS-LAYER-007",
       "stage": "action",
       "status": "runtime_wired",
@@ -1283,7 +1283,7 @@
       "contract_id": "CONTRACT-V1-008",
       "evidence": "Oracle Recompute persisted and traced for representative entity.",
       "last_failure": "",
-      "last_successful_run": "2026-07-20T04:07:06+00:00",
+      "last_successful_run": "2026-08-27T02:19:20+00:00",
       "owner_layer_id": "SHS-LAYER-022",
       "stage": "recompute",
       "status": "runtime_wired",
@@ -1294,7 +1294,7 @@
       "contract_id": "CONTRACT-V1-028",
       "evidence": "Tracking and Audit persisted and traced for representative entity.",
       "last_failure": "",
-      "last_successful_run": "2026-07-20T04:07:06+00:00",
+      "last_successful_run": "2026-08-27T02:19:20+00:00",
       "owner_layer_id": "SHS-LAYER-042",
       "stage": "tracking",
       "status": "runtime_wired",
@@ -1317,7 +1317,7 @@
       "contradiction_status": "minor_resolved",
       "entity_id": "entity_batch02_program_workforce_readiness",
       "entity_type": "program_metric",
-      "last_truth_refresh": "2026-07-20T04:07:06+00:00",
+      "last_truth_refresh": "2026-08-27T02:19:20+00:00",
       "prior_truth_package_id": "",
       "publication_modes": [
         "internal_review"
@@ -1336,8 +1336,8 @@
         "confidence": 86,
         "contradiction_status": "minor_resolved",
         "evidence_sufficiency": "sufficient",
-        "generated_timestamp": "2026-07-20T04:07:06+00:00",
-        "last_refresh": "2026-07-20T04:07:06+00:00",
+        "generated_timestamp": "2026-08-27T02:19:20+00:00",
+        "last_refresh": "2026-08-27T02:19:20+00:00",
         "oracle_version": "shs.oracle.truth_pipeline.v1",
         "publication_eligibility": [
           "internal_review"
@@ -1371,8 +1371,8 @@
       "contradiction_status": "minor_resolved",
       "entity_id": "entity_batch02_program_workforce_readiness",
       "entity_type": "program_metric",
-      "last_truth_refresh": "2026-07-20T04:07:06+00:00",
-      "marked_at": "2026-07-20T04:07:06+00:00",
+      "last_truth_refresh": "2026-08-27T02:19:20+00:00",
+      "marked_at": "2026-08-27T02:19:20+00:00",
       "prior_truth_package_id": "",
       "publication_modes": [
         "internal_review"
@@ -1392,8 +1392,8 @@
         "confidence": 86,
         "contradiction_status": "minor_resolved",
         "evidence_sufficiency": "sufficient",
-        "generated_timestamp": "2026-07-20T04:07:06+00:00",
-        "last_refresh": "2026-07-20T04:07:06+00:00",
+        "generated_timestamp": "2026-08-27T02:19:20+00:00",
+        "last_refresh": "2026-08-27T02:19:20+00:00",
         "oracle_version": "shs.oracle.truth_pipeline.v1",
         "publication_eligibility": [
           "internal_review"
@@ -1446,7 +1446,7 @@
             "organization_id": "org_shs_batch_02",
             "program_id": "program_demo_workforce_readiness"
           },
-          "timestamp": "2026-07-20T04:07:06+00:00",
+          "timestamp": "2026-08-27T02:19:20+00:00",
           "trace_context": {
             "causation_id": "action-review-complete",
             "contract_version": "v1",
@@ -1475,7 +1475,7 @@
       "contradiction_status": "minor_resolved",
       "entity_id": "entity_batch02_program_workforce_readiness",
       "entity_type": "program_metric",
-      "last_truth_refresh": "2026-07-20T04:07:06+00:00",
+      "last_truth_refresh": "2026-08-27T02:19:20+00:00",
       "prior_truth_package_id": "truthpkg_batch02_workforce_readiness_v1",
       "publication_modes": [
         "internal_report"
@@ -1494,8 +1494,8 @@
         "confidence": 91,
         "contradiction_status": "minor_resolved",
         "evidence_sufficiency": "sufficient",
-        "generated_timestamp": "2026-07-20T04:07:06+00:00",
-        "last_refresh": "2026-07-20T04:07:06+00:00",
+        "generated_timestamp": "2026-08-27T02:19:20+00:00",
+        "last_refresh": "2026-08-27T02:19:20+00:00",
         "oracle_version": "shs.oracle.truth_pipeline.v1",
         "publication_eligibility": [
           "internal_report"
@@ -1515,7 +1515,7 @@
       "verification_status": "verified"
     }
   ],
-  "updated_at": "2026-07-20T04:07:06+00:00",
+  "updated_at": "2026-08-27T02:19:20+00:00",
   "verifications": [
     {
       "entity_id": "entity_batch02_program_workforce_readiness",
@@ -1524,7 +1524,7 @@
       "rejected_fields": [],
       "review_actor": "svc_truth_pipeline_verifier",
       "review_notes": "Synthetic fixture evidence is complete for the representative chain.",
-      "review_timestamp": "2026-07-20T04:07:06+00:00",
+      "review_timestamp": "2026-08-27T02:19:20+00:00",
       "source_trust_tier": "high",
       "trace_context": {
         "causation_id": "verification",

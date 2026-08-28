@@ -15,7 +15,7 @@ export const emptyResume = () => ({
     { type: "certs", items: [] },      // item: { name, org, year }
   ],
   settings: {
-    template: "ats-clean", // "ats-clean" | "modern" | "compact"
+    template: "clean", // "clean" | "modern" | "compact"
     accent: "#111827",
     fontSize: 14,
     lineHeight: 1.4,
@@ -28,7 +28,18 @@ export function validateResume(doc) {
   return { ok, errors: ok ? [] : ["Invalid schema or version"] };
 }
 
+// Older saves used a different set of template ids than the current picker
+// ("clean" | "modern" | "compact"). Normalize on load so old saved resumes
+// still resolve to a real, selectable template instead of silently
+// matching nothing in the picker.
+const TEMPLATE_ID_ALIASES = { "ats-clean": "clean" };
+
 export function migrateResume(doc) {
-  // future-proof: bump versions here
+  if (doc?.settings?.template && TEMPLATE_ID_ALIASES[doc.settings.template]) {
+    return {
+      ...doc,
+      settings: { ...doc.settings, template: TEMPLATE_ID_ALIASES[doc.settings.template] },
+    };
+  }
   return doc;
 }

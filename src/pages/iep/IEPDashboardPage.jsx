@@ -187,6 +187,7 @@ const selectedStudent = useMemo(
         <div>
           <div className="iep-brand">SHS IEP Integration Layer</div>
           <h1 className="iep-title">Accessible IEP Dashboard</h1>
+          <p role="note" className="iep-demo-notice">Demonstration data - not real student or institutional reporting.</p>
           <p className="iep-subtitle">
             Track. Verify. Fund. Accessible by default.
           </p>

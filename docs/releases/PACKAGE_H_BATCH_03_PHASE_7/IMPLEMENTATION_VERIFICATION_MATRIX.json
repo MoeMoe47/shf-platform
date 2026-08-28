@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "artifact_id": "IVM-1",
+  "artifact": "IMPLEMENTATION_VERIFICATION_MATRIX",
+  "status": "PASS",
+  "rows": [
+    {"capability_id": "B03-CAP-001", "authorization_source": "ISA-1", "owner": "Package H shared foundation under Governance Layer", "contract": "B03-CONTRACT-READINESS", "acceptance_criterion": "ACS-1-001", "evidence": "P6-EV-001", "test_result": "PASS", "validator_result": "PASS", "failure_handling": "fail closed on missing owner evidence", "runtime_boundary": "no activation runtime", "result": "PASS"},
+    {"capability_id": "B03-CAP-002", "authorization_source": "ISA-1", "owner": "Governance Layer referencing Master Layer Registry", "contract": "B03-CONTRACT-BOUNDARY", "acceptance_criterion": "ACS-1-002", "evidence": "P6-EV-002", "test_result": "PASS", "validator_result": "PASS", "failure_handling": "fail closed on missing registry or private reach-in", "runtime_boundary": "read/reference only", "result": "PASS"},
+    {"capability_id": "B03-CAP-003", "authorization_source": "ISA-1", "owner": "Audit & Verification with Governance Layer", "contract": "B03-CONTRACT-EVIDENCE", "acceptance_criterion": "ACS-1-003", "evidence": "P6-EV-003", "test_result": "PASS", "validator_result": "PASS", "failure_handling": "reject unsupported PASS and missing EPL mapping", "runtime_boundary": "evidence envelope only", "result": "PASS"},
+    {"capability_id": "B03-CAP-004", "authorization_source": "ISA-1", "owner": "Runtime Architecture Authority under Governance Layer", "contract": "B03-CONTRACT-MINIMALISM", "acceptance_criterion": "ACS-1-004", "evidence": "P6-EV-004", "test_result": "PASS", "validator_result": "PASS", "failure_handling": "block runtime/API/UI/persistence/deployment drift", "runtime_boundary": "minimalism audit only", "result": "PASS"}
+  ],
+  "all_capabilities_verified": true
+}

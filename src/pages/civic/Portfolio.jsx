@@ -152,7 +152,7 @@ export default function CivicPortfolio() {
           <h1 id="cvp-title" className="db-title">Civic Portfolio</h1>
           <p className="db-subtitle">Store proposals, research, media, and credentials.</p>
         </div>
-        <div style={{ display:"flex", gap:8, alignItems:"center" }}>
+        <div style={{ display:"flex", gap:8, alignItems:"center", flexWrap:"wrap" }}>
           <button className="sh-btn is-ghost" onClick={exportJSON}>Export JSON</button>
           <button className="sh-btn is-ghost" onClick={clearAll}>Clear All</button>
           <StorageSoftReset keys={[KEY_ARTIFACTS]} label="Fix storage" />
@@ -166,7 +166,7 @@ export default function CivicPortfolio() {
         <div style={{ display:"grid", gap:8, marginTop:8 }}>
           <input className="sh-input" placeholder="Title" value={title} onChange={e=>setTitle(e.target.value)} />
           <textarea className="sh-input" rows={4} placeholder="Short description" value={desc} onChange={e=>setDesc(e.target.value)} style={{ resize:"vertical" }} />
-          <div style={{ display:"grid", gap:8, gridTemplateColumns:"1fr 1fr" }}>
+          <div style={{ display:"grid", gap:8, gridTemplateColumns:"repeat(auto-fit, minmax(140px, 1fr))" }}>
             <select className="sh-input" value={kind} onChange={e=>setKind(e.target.value)}>
               <option value="document">Document</option><option value="link">Link</option>
               <option value="media">Media</option><option value="cert">Certificate</option>
@@ -192,7 +192,7 @@ export default function CivicPortfolio() {
               <li key={a.id} className="card" style={{ padding:"10px 12px", display:"grid", gap:8 }}>
                 <input className="sh-input" value={a.title} onChange={e=>updateArtifact(a.id, { title: e.target.value })} />
                 <textarea className="sh-input" rows={3} value={a.desc} onChange={e=>updateArtifact(a.id, { desc: e.target.value })} style={{ resize:"vertical" }} />
-                <div style={{ display:"grid", gap:8, gridTemplateColumns:"1fr 1fr" }}>
+                <div style={{ display:"grid", gap:8, gridTemplateColumns:"repeat(auto-fit, minmax(140px, 1fr))" }}>
                   <select className="sh-input" value={a.kind || "document"} onChange={e=>updateArtifact(a.id, { kind: e.target.value })}>
                     <option value="document">Document</option><option value="link">Link</option>
                     <option value="media">Media</option><option value="cert">Certificate</option>

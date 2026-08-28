@@ -1,0 +1,45 @@
+{
+  "standard_id": "PAS-1",
+  "artifact": "PACKAGE_BOUNDARY_REPORT",
+  "artifact_type": "boundary_report",
+  "status": "PASS",
+  "canonical_owner": "Governance Layer",
+  "package_identifier": "PACKAGE_H_BATCH_03",
+  "included_path_roots": [
+    "docs/governance/EPL_1/",
+    "docs/releases/PACKAGE_H_BATCH_03_PHASE_1/",
+    "docs/releases/PACKAGE_H_BATCH_03_PHASE_2/",
+    "docs/releases/PACKAGE_H_BATCH_03_PHASE_3/",
+    "docs/releases/PACKAGE_H_BATCH_03_PHASE_4/",
+    "docs/releases/PACKAGE_H_BATCH_03_PHASE_5/",
+    "docs/releases/PACKAGE_H_BATCH_03_PHASE_6/",
+    "docs/releases/PACKAGE_H_BATCH_03_PHASE_7/"
+  ],
+  "included_files": [
+    "scripts/check_epl_1.py",
+    "scripts/check_package_h_batch_03_phase_1.py",
+    "scripts/check_package_h_batch_03_phase_2.py",
+    "scripts/check_package_h_batch_03_phase_3.py",
+    "scripts/check_package_h_batch_03_phase_4.py",
+    "scripts/check_package_h_batch_03_phase_5.py",
+    "scripts/check_package_h_batch_03_phase_6.py",
+    "scripts/check_package_h_batch_03_phase_7.py",
+    "tests/test_epl_1.py",
+    "tests/test_package_h_batch_03_phase_1.py",
+    "tests/test_package_h_batch_03_phase_2.py",
+    "tests/test_package_h_batch_03_phase_3.py",
+    "tests/test_package_h_batch_03_phase_4.py",
+    "tests/test_package_h_batch_03_phase_5.py",
+    "tests/test_package_h_batch_03_phase_6.py",
+    "tests/test_package_h_batch_03_phase_7.py",
+    "services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py",
+    "services/shf-agent-fabric/services/extension_kernel/__init__.py",
+    "services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py"
+  ],
+  "excluded_path_roots": [
+    "docs/governance/PCS_1/"
+  ],
+  "expected_member_count": 193,
+  "boundary_status": "PASS",
+  "unknown_members_allowed": false
+}

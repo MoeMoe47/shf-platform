@@ -24,6 +24,8 @@ export class IdentityRepo {
           "case.assign",
           "case.transition",
           "audit.read",
+          "exchange.fundingCommitments.view",
+          "exchange.fundingCommitments.manage",
         ],
       },
       {
@@ -65,29 +67,32 @@ export class IdentityRepo {
       };
     }
 
-    return {
-      user_id: "user_admin_001",
-      organization_id: "org_shf_001",
-      email: "admin@siliconheartland.org",
-      full_name: "SHF Org Admin",
-      roles: ["org_admin"],
-      permissions: [
-        "user.read",
-        "role.read",
-        "membership.assign",
-        "membership.revoke",
-        "program.create",
-        "program.read",
-        "program.update",
-        "program.transition",
-        "case.create",
-        "case.read",
-        "case.update",
-        "case.assign",
-        "case.transition",
-        "audit.read",
-      ],
-    };
+    // Phase 2A Live Learning demo identities (mirrors existing users table
+    // seed — see apps/shs-api/seeds/010_seed_live_learning_users.sql).
+    // roles here drive real permission checks (see
+    // src/auth/security-permissions.ts's STUDENT/INSTRUCTOR role maps),
+    // unlike src/utils/zoomAccess.js's localStorage state, which the
+    // Live Learning service never consults.
+    if (userId === "user_student_001") {
+      return {
+        user_id: "user_student_001",
+        organization_id: "org_shf_001",
+        email: "student@siliconheartland.org",
+        full_name: "SHF Demo Student",
+        roles: ["student"],
+      };
+    }
+    if (userId === "user_instructor_001") {
+      return {
+        user_id: "user_instructor_001",
+        organization_id: "org_shf_001",
+        email: "instructor@siliconheartland.org",
+        full_name: "SHF Demo Instructor",
+        roles: ["instructor"],
+      };
+    }
+
+    return null;
   }
 
   async listOrganizations(): Promise<Organization[]> {

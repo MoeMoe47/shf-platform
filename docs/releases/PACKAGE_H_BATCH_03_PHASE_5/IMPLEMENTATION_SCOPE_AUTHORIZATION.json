@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "artifact_id": "ISA-1",
+  "artifact": "IMPLEMENTATION_SCOPE_AUTHORIZATION",
+  "package": "H",
+  "batch": "03",
+  "phase": "IGLS-1 Phase 5 - GOVERNANCE_LOCK",
+  "authorization_result": "AUTHORIZED",
+  "authorized_next_phase": "IGLS-1 Phase 6 - GOVERNED_IMPLEMENTATION",
+  "authorized_scope_type": "bounded governed implementation only",
+  "authorized_capabilities": [
+    {"capability_id": "B03-CAP-001", "name": "Owner Activation Readiness Contract", "phase_6_permission": "implement governed readiness evaluation only", "trace": ["CTB-1", "BDL-1", "IRS-1", "ACS-1", "EM-1", "EPL-1", "GLS-1", "IAG-1", "GFM-1"]},
+    {"capability_id": "B03-CAP-002", "name": "Neutral Integration Boundary Register", "phase_6_permission": "implement governed boundary evaluation only", "trace": ["CTB-1", "BDL-1", "IRS-1", "ACS-1", "EM-1", "EPL-1", "GLS-1", "IAG-1", "GFM-1"]},
+    {"capability_id": "B03-CAP-003", "name": "Evidence Trust Envelope", "phase_6_permission": "implement governed evidence-envelope production only", "trace": ["CTB-1", "BDL-1", "IRS-1", "ACS-1", "EM-1", "EPL-1", "GLS-1", "IAG-1", "GFM-1"]},
+    {"capability_id": "B03-CAP-004", "name": "Runtime Minimalism Guard", "phase_6_permission": "implement governed minimalism validation only", "trace": ["CTB-1", "BDL-1", "IRS-1", "ACS-1", "EM-1", "EPL-1", "GLS-1", "IAG-1", "GFM-1"]}
+  ],
+  "required_phase_6_controls": [
+    "all implementation changes must trace to an authorized capability",
+    "all evidence must register through EPL-1",
+    "all acceptance evidence must satisfy ACS-1 and EM-1",
+    "all implementation must preserve Master Layer Registry ownership",
+    "all validators and tests must remain deterministic and local"
+  ],
+  "continuing_prohibitions": [
+    "deployment",
+    "publication",
+    "production release",
+    "unrestricted implementation",
+    "architecture redesign",
+    "new canonical owners",
+    "new layers",
+    "new registries",
+    "evidence-authority duplication",
+    "runtime ownership duplication",
+    "implementation outside B03-CAP-001 through B03-CAP-004"
+  ],
+  "no_phase_beyond_6_authorized": true,
+  "implementation_performed": false,
+  "runtime_added": false,
+  "api_added": false,
+  "ui_added": false,
+  "persistence_added": false,
+  "deployment_performed": false,
+  "publication_performed": false,
+  "production_code_added": false,
+  "registry_mutation_performed": false
+}

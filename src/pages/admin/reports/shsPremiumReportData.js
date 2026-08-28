@@ -1,4 +1,3 @@
-import { shsReportSeedRecords } from "@/data/shsReports/shsReportSeedData";
 import { SHS_PREMIUM_INTERIOR_TEMPLATE } from "@/data/shsReports/shsReportTemplates";
 import {
   displayDataStatus,
@@ -29,9 +28,7 @@ const AUDIT_STATUS_LABELS = Object.freeze({
   missing: "Missing",
 });
 
-export const shsPremiumReportSeeds = shsReportSeedRecords.filter(
-  (report) => report.reportType === "premium-os-report-book"
-);
+export const shsPremiumReportSeeds = [];
 
 export function normalizeShsStatus(value, fallback = "Missing") {
   return displayDataStatus(normalizeReportStatus(value, String(fallback).toLowerCase()));
@@ -131,6 +128,5 @@ export function getExecutiveSummaryFindings(report = {}) {
 }
 
 export function getReportById(reportId) {
-  if (!reportId) return shsPremiumReportSeeds[0] || shsReportSeedRecords[0];
-  return shsReportSeedRecords.find((report) => report.reportId === reportId || report.id === reportId) || shsPremiumReportSeeds[0] || shsReportSeedRecords[0];
+  return null;
 }

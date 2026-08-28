@@ -41,6 +41,7 @@ export default function LordOutcomesLayout() {
 
           <div className="looBrand">
             <div className="looBrandTitle">Lord of Outcomes™</div>
+            <div role="note" className="looDemoNotice">Demonstration data - not verified SHF outcomes.</div>
           </div>
 
           {/* Tabs row */}
@@ -90,7 +91,7 @@ export default function LordOutcomesLayout() {
 
             <div className="looActions">
               <button type="button">⟲ Reset Filters</button>
-              <button type="button">⇩ Export</button>
+              <button type="button" disabled title="Demo data is not exportable as an official report">⇩ Export unavailable</button>
               <button type="button">💾 Save View</button>
             </div>
           </div>
@@ -107,4 +108,3 @@ export default function LordOutcomesLayout() {
 }
 
 /* ============================= */
-

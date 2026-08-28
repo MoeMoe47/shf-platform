@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "blueprint_id": "CTB-1",
+  "mission_id": "PACKAGE_H_BATCH_03_IGLS_1_PHASE_3",
+  "artifact": "CAPABILITY_DECOMPOSITION",
+  "capabilities": [
+    {
+      "capability_id": "B03-CAP-001",
+      "purpose": "Evaluate whether an onboarded owner is ready for future activation consideration.",
+      "owner": "Package H shared foundation under Governance Layer",
+      "inputs": ["Batch 02 onboarding evidence", "owner declaration", "architecture boundary map"],
+      "outputs": ["activation readiness classification", "readiness blockers", "evidence references"],
+      "dependencies": ["CTB-1", "BDL-1", "IRS-1", "Master Layer Registry"],
+      "consumers": ["Phase 4 acceptance criteria", "future implementation validator", "independent certification"],
+      "lifecycle": "declared -> validated -> certified -> inherited",
+      "validation_requirements": ["owner exists", "evidence exists", "no owner-private reach-in"],
+      "evidence_produced": ["readiness decision evidence"],
+      "failure_modes": ["missing owner", "missing evidence", "authority conflict"],
+      "recovery_strategy": "block future implementation until evidence or ownership is corrected",
+      "future_evolution_rules": "may be refined by acceptance criteria but not re-owned"
+    },
+    {
+      "capability_id": "B03-CAP-002",
+      "purpose": "Prevent unregistered or owner-private integrations.",
+      "owner": "Governance Layer referencing Master Layer Registry",
+      "inputs": ["proposed interaction", "canonical owner map"],
+      "outputs": ["permitted dependencies", "forbidden dependencies", "boundary finding"],
+      "dependencies": ["Master Layer Registry", "Phase 2 Layer Interaction Model"],
+      "consumers": ["future blueprint validation", "implementation readiness review"],
+      "lifecycle": "declared -> compared -> blocked_or_approved",
+      "validation_requirements": ["registry owner matched", "no duplicate registry", "no hard-coded reach-in"],
+      "evidence_produced": ["integration boundary evidence"],
+      "failure_modes": ["unregistered integration", "cross-layer ownership", "duplicate authority"],
+      "recovery_strategy": "return to architecture review",
+      "future_evolution_rules": "new integrations require registry-consistent ownership"
+    },
+    {
+      "capability_id": "B03-CAP-003",
+      "purpose": "Produce certification-ready evidence expectations.",
+      "owner": "Audit & Verification with Governance Layer",
+      "inputs": ["validator result", "test result", "readiness finding", "boundary finding"],
+      "outputs": ["evidence trust envelope"],
+      "dependencies": ["Truth Spine", "Oracle", "Audit & Verification"],
+      "consumers": ["independent certification", "publication readiness in later phases"],
+      "lifecycle": "collected -> bound -> reviewed -> certified",
+      "validation_requirements": ["objective evidence", "criterion link", "no unsupported PASS"],
+      "evidence_produced": ["evidence envelope"],
+      "failure_modes": ["unsupported PASS", "missing trace", "self-certification"],
+      "recovery_strategy": "re-run evidence collection and independent review",
+      "future_evolution_rules": "evidence requirements may not be weakened by implementation"
+    },
+    {
+      "capability_id": "B03-CAP-004",
+      "purpose": "Guard against runtime expansion beyond the minimal future implementation scope.",
+      "owner": "Runtime Architecture Authority under Governance Layer",
+      "inputs": ["future path list", "dependency list", "runtime authority map"],
+      "outputs": ["runtime minimalism finding", "blocking drift findings"],
+      "dependencies": ["Executive Command ownership", "Master Layer Registry", "Phase 2 Runtime Minimalism Guard"],
+      "consumers": ["implementation readiness", "independent certification"],
+      "lifecycle": "declared -> audited -> blocked_or_accepted",
+      "validation_requirements": ["no service startup", "no route binding", "no main.py wiring", "no database"],
+      "evidence_produced": ["runtime minimalism evidence"],
+      "failure_modes": ["runtime monolith", "circular dependency", "route or deployment drift"],
+      "recovery_strategy": "remove runtime drift before implementation authorization",
+      "future_evolution_rules": "runtime ownership changes require a separate governed architecture mission"
+    }
+  ]
+}

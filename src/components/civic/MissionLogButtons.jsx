@@ -66,6 +66,16 @@ export default function MissionLogButtons({
   defaultSummary = "",
   defaultOutcome = "",
   fundingStreams, // optional — auto-filled if omitted
+  // Optional presentation overrides — additive and fully backward
+  // compatible: every existing caller (Proposals, Treasury Simulator,
+  // Debt Clock) omits these and gets byte-identical text/behavior to
+  // before. Added so a page-specific redesign (e.g. Elections) can match
+  // its own approved copy without forking this shared component.
+  icon,
+  title = "Log this mission to Grant Story",
+  description,
+  placeholderSummary = "e.g., Compared debt scenarios and drafted a proposal.",
+  placeholderOutcome = "e.g., Selected a policy option and justified it in writing.",
 }) {
   const { toast } = useToasts();
   const rewards =
@@ -173,8 +183,12 @@ export default function MissionLogButtons({
       <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
         <div>
           <strong style={{ fontSize: 14 }}>
-            Log this mission to Grant Story
+            {icon ? <span aria-hidden="true" style={{ marginRight: 6 }}>{icon}</span> : null}
+            {title}
           </strong>
+          {description && (
+            <p style={{ margin: "4px 0 0", fontSize: 12, opacity: 0.8 }}>{description}</p>
+          )}
           {chapter && (
             <div style={{ fontSize: 11, opacity: 0.8 }}>
               Chapter: <strong>{chapter}</strong>
@@ -231,7 +245,7 @@ export default function MissionLogButtons({
               className="sh-input"
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
-              placeholder="e.g., Compared debt scenarios and drafted a proposal."
+              placeholder={placeholderSummary}
             />
           </label>
 
@@ -244,7 +258,7 @@ export default function MissionLogButtons({
               rows={2}
               value={outcome}
               onChange={(e) => setOutcome(e.target.value)}
-              placeholder="e.g., Selected a policy option and justified it in writing."
+              placeholder={placeholderOutcome}
             />
           </label>
         </div>

@@ -1,0 +1,58 @@
+import type { TruthPackage } from "../domain/types";
+
+export type ComparisonResult = {
+  comparedEntityIds: string[];
+  ranked: TruthPackage[];
+  strongest: TruthPackage | null;
+  weakest: TruthPackage | null;
+  summary: string;
+};
+
+function scoreTruth(t: TruthPackage): number {
+  let score = 0;
+
+  if (t.readinessStatus === "funder_ready") score += 50;
+  else if (t.readinessStatus === "leadership_ready") score += 40;
+  else if (t.readinessStatus === "internally_ready") score += 30;
+  else if (t.readinessStatus === "public_ready") score += 60;
+
+  score += t.confidenceScore;
+
+  if (t.contradictionStatus === "none") score += 20;
+  else if (t.contradictionStatus === "resolved") score += 10;
+  else score -= 20;
+
+  if (t.verificationStatus === "verified") score += 20;
+
+  score -= (t.unresolvedItems?.length || 0) * 10;
+
+  return score;
+}
+
+export function compareTruthPackages(packages: TruthPackage[]): ComparisonResult {
+  if (!packages.length) {
+    return {
+      comparedEntityIds: [],
+      ranked: [],
+      strongest: null,
+      weakest: null,
+      summary: "No entities provided for comparison.",
+    };
+  }
+
+  const ranked = [...packages].sort((a, b) => scoreTruth(b) - scoreTruth(a));
+  const strongest = ranked[0] || null;
+  const weakest = ranked[ranked.length - 1] || null;
+
+  const summary = strongest
+    ? `Strongest case is ${strongest.entityId} due to higher readiness (${strongest.readinessStatus}), confidence (${strongest.confidenceScore}), and contradiction state (${strongest.contradictionStatus}).`
+    : "No comparison available.";
+
+  return {
+    comparedEntityIds: packages.map((p) => p.entityId),
+    ranked,
+    strongest,
+    weakest,
+    summary,
+  };
+}

@@ -1,3 +1,31 @@
+// src/pages/civic/ConstitutionJournal.jsx
+// Redesigned per the approved Constitution Journal mocks (light + dark,
+// supplied directly). Shell/theme/shared design tokens are inherited
+// unchanged from the Civic Lab Dashboard/Elections/Proposals/Grant Story/
+// Debt Clock/Treasury Simulator redesigns — see src/styles/civic-dashboard.css
+// and src/styles/civic-journal.css (this page's own additions only).
+//
+// Data model / logic (Phase 1 forensic discovery — zero changes):
+//   - Storage: src/shared/journal/journalStore.js, localStorage["shf.journal.v1"].
+//   - Entry schema (unchanged): {id, createdAt, updatedAt, appId, siteId,
+//     userId, promptId, title, body, tags[], fundingStreams[], evidence[],
+//     outcome, visibility}. Body is PLAIN TEXT — exportMarkdown embeds it
+//     verbatim, so a toolbar that inserts literal Markdown characters into
+//     the plain textarea is safe and changes nothing about the stored
+//     shape (see applyFormatting below — no rich-text/HTML data format
+//     introduced, per the brief's explicit instruction).
+//   - App is fixed to "civic" (never selectable) — Site is the real,
+//     existing selectable field, synced to the URL (?site=). Funding is a
+//     real filter over the fixed FUNDING taxonomy already in this file;
+//     Tag options are derived dynamically from the current entries, not
+//     hardcoded (unchanged, including the pre-existing quirk that tag
+//     options are computed from `items`, which is itself already filtered
+//     by the active tag — preserved as-is, not "fixed").
+//   - Autosave: 350ms debounce in scheduleAutosave, unchanged.
+//   - Delete and the per-entry Funding-stream chips + Outcome field are
+//     real, existing capabilities not shown in the approved mock's editor
+//     panel — preserved here (see Editor panel), not removed, per the
+//     brief's non-negotiable capability list.
 import React from "react";
 import {
   createEntry,
@@ -9,6 +37,8 @@ import {
   exportMarkdown,
   downloadText,
 } from "@/shared/journal/journalStore.js";
+import { useCompanion } from "@/hooks/useCompanion.js";
+import CompanionFace from "@/components/companion/CompanionFace.jsx";
 
 const FUNDING = [
   { id: "all", label: "All" },
@@ -42,16 +72,31 @@ function Chip({ active, onClick, children }) {
   return (
     <button
       type="button"
-      className={"sh-badge" + (active ? "" : " is-ghost")}
+      className={"cj-chip" + (active ? " is-active" : "")}
       onClick={onClick}
-      style={{ cursor: "pointer" }}
+      aria-pressed={active}
     >
       {children}
     </button>
   );
 }
 
+// Lightweight Markdown-syntax toolbar — writes plain characters into the
+// existing plain-text body, wrapping the current selection (or inserting a
+// placeholder when nothing is selected). No rich-text/HTML format
+// introduced; exportMarkdown/exportJSON both already carry body through
+// verbatim, so this cannot break either export. See file header.
+const TOOLBAR_ACTIONS = [
+  { id: "bold", label: "Bold", glyph: "B", wrap: ["**", "**"], placeholder: "bold text" },
+  { id: "italic", label: "Italic", glyph: "I", wrap: ["*", "*"], placeholder: "italic text" },
+  { id: "bullet", label: "Bulleted list", glyph: "•", linePrefix: "- ", placeholder: "list item" },
+  { id: "numbered", label: "Numbered list", glyph: "1.", linePrefix: "1. ", placeholder: "list item" },
+  { id: "quote", label: "Quote", glyph: "“", linePrefix: "> ", placeholder: "quote" },
+  { id: "link", label: "Link", glyph: "🔗", isLink: true, placeholder: "link text" },
+];
+
 export default function ConstitutionJournal() {
+  const companion = useCompanion();
   const query = useQuery();
 
   const [appId] = React.useState("civic");
@@ -74,6 +119,8 @@ export default function ConstitutionJournal() {
   });
 
   const [saving, setSaving] = React.useState(false);
+  const bodyRef = React.useRef(null);
+  const editorRef = React.useRef(null);
 
   const filters = React.useMemo(
     () => ({
@@ -174,6 +221,15 @@ export default function ConstitutionJournal() {
     refresh();
   }
 
+  function selectEntry(id) {
+    setActiveId(id);
+    if (typeof window !== "undefined" && window.matchMedia("(max-width: 767.98px)").matches) {
+      requestAnimationFrame(() => {
+        editorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+  }
+
   function toggleFundingStream(id) {
     setDraft((prev) => {
       const has = (prev.fundingStreams || []).includes(id);
@@ -208,6 +264,49 @@ export default function ConstitutionJournal() {
     downloadText(`shf-journal-${appId}-${siteId}.md`, text, "text/markdown;charset=utf-8;");
   }
 
+  function applyFormatting(action) {
+    const el = bodyRef.current;
+    if (!el) return;
+    const { selectionStart: s, selectionEnd: e, value } = el;
+    const selected = value.slice(s, e);
+    let insertText;
+    let caretStart;
+    let caretEnd;
+
+    if (action.isLink) {
+      const url = window.prompt("Link URL", "https://");
+      if (url == null) return;
+      const label = selected || action.placeholder;
+      insertText = `[${label}](${url})`;
+      caretStart = s + 1;
+      caretEnd = caretStart + label.length;
+    } else if (action.wrap) {
+      const [open, close] = action.wrap;
+      const text = selected || action.placeholder;
+      insertText = `${open}${text}${close}`;
+      caretStart = s + open.length;
+      caretEnd = caretStart + text.length;
+    } else {
+      const text = selected || action.placeholder;
+      insertText = text
+        .split("\n")
+        .map((line, i) => (action.id === "numbered" ? `${i + 1}. ${line}` : `${action.linePrefix}${line}`))
+        .join("\n");
+      caretStart = s;
+      caretEnd = s + insertText.length;
+    }
+
+    const newValue = value.slice(0, s) + insertText + value.slice(e);
+    const next = { ...draft, body: newValue };
+    setDraft(next);
+    scheduleAutosave(next);
+
+    requestAnimationFrame(() => {
+      el.focus();
+      el.setSelectionRange(caretStart, caretEnd);
+    });
+  }
+
   const siteOptions = React.useMemo(() => {
     const fromStats = Object.keys(stats.bySite || {}).sort();
     const base = ["default"];
@@ -224,103 +323,89 @@ export default function ConstitutionJournal() {
   }, [items]);
 
   return (
-    <section className="app-main" aria-label="Constitution Journal">
-      <header className="app-header">
-        <div>
-          <h1>Constitution Journal</h1>
-          <p className="app-subtitle">
+    <div className="cj-page">
+      <h1 className="cj-srOnly">Constitution Journal</h1>
+
+      <header className="cj-header" aria-labelledby="cj-title">
+        <div className="cj-header__titleBlock">
+          <p className="cj-header__h1" id="cj-title">Constitution Journal</p>
+          <p className="cj-header__sub">
             A shared journal record you can tag by funding stream and use later as proof in Admin reporting.
           </p>
         </div>
 
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-          <span className="sh-badge">
+        <div className="cj-header__meta">
+          <span className="cj-badge">
             Entries: <strong>{stats.count || 0}</strong>
           </span>
-          <span className="sh-badge is-ghost">
+          <span className="cj-badge cj-badge--ghost">
             Status: <strong>{saving ? "Saving…" : "Ready"}</strong>
           </span>
-          <button className="sh-btn" type="button" onClick={handleNew}>
+        </div>
+
+        <div className="cj-header__actions">
+          <button className="cj-btn cj-btn--primary" type="button" onClick={handleNew}>
             New entry
           </button>
-          <button className="sh-btn is-ghost" type="button" onClick={exportAllJSON}>
+          <button className="cj-btn cj-btn--ghost" type="button" onClick={exportAllJSON}>
             Export JSON
           </button>
-          <button className="sh-btn is-ghost" type="button" onClick={exportAllMD}>
+          <button className="cj-btn cj-btn--ghost" type="button" onClick={exportAllMD}>
             Export Markdown
           </button>
         </div>
       </header>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(280px, 360px) 1fr",
-          gap: 12,
-          alignItems: "start",
-        }}
-      >
-        <aside className="card card--pad" aria-label="Journal list">
-          <div style={{ display: "grid", gap: 8 }}>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              <span className="sh-badge is-ghost">App: <strong>{appId}</strong></span>
-              <span className="sh-badge is-ghost">Site:</span>
-              <select
-                className="sh-input"
-                value={siteId}
-                onChange={(e) => applySite(e.target.value)}
-                style={{ height: 32 }}
-              >
+      <div className="cj-workspace">
+        <aside className="cj-card cj-panel" aria-label="Journal filters and entry list">
+          <div className="cj-filterRow">
+            <span className="cj-fieldLabel">App: <strong>{appId}</strong></span>
+            <label className="cj-selectWrap">
+              <span className="cj-fieldLabel">Site:</span>
+              <select className="cj-select" value={siteId} onChange={(e) => applySite(e.target.value)}>
                 {siteOptions.map((s) => (
                   <option key={s} value={s}>{s}</option>
                 ))}
               </select>
-            </div>
+            </label>
+          </div>
 
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              <span className="sh-badge is-ghost">Funding:</span>
-              <select
-                className="sh-input"
-                value={funding}
-                onChange={(e) => applyFunding(e.target.value)}
-                style={{ height: 32 }}
-              >
+          <div className="cj-filterRow cj-filterRow--2up">
+            <label className="cj-selectWrap">
+              <span className="cj-fieldLabel">Funding:</span>
+              <select className="cj-select" value={funding} onChange={(e) => applyFunding(e.target.value)}>
                 {FUNDING.map((f) => (
                   <option key={f.id} value={f.id}>{f.label}</option>
                 ))}
               </select>
+            </label>
 
-              <span className="sh-badge is-ghost">Tag:</span>
-              <select
-                className="sh-input"
-                value={tag}
-                onChange={(e) => setTag(e.target.value)}
-                style={{ height: 32 }}
-              >
+            <label className="cj-selectWrap">
+              <span className="cj-fieldLabel">Tag:</span>
+              <select className="cj-select" value={tag} onChange={(e) => setTag(e.target.value)}>
                 {tagOptions.map((t) => (
                   <option key={t} value={t}>{t}</option>
                 ))}
               </select>
-            </div>
-
-            <input
-              className="sh-input"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search title/body/tags…"
-              aria-label="Search journal entries"
-            />
-
-            <div style={{ fontSize: 12, opacity: 0.75 }}>
-              Click an entry to edit. Everything autosaves.
-            </div>
+            </label>
           </div>
 
-          <div style={{ marginTop: 12, display: "grid", gap: 8 }}>
+          <div className="cj-searchWrap">
+            <span className="cj-searchIcon" aria-hidden="true">🔍</span>
+            <input
+              className="cj-search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search title/body/tags..."
+              aria-label="Search journal entries"
+            />
+          </div>
+
+          <p className="cj-hint">Click an entry to edit. Everything autosaves.</p>
+
+          <div className="cj-entryList" role="list">
             {items.length === 0 ? (
-              <div style={{ fontSize: 13, opacity: 0.7 }}>
-                No entries yet for these filters.
-              </div>
+              <div className="cj-emptyList">No entries yet for these filters.</div>
             ) : (
               items.map((e) => {
                 const active = e.id === activeId;
@@ -328,34 +413,25 @@ export default function ConstitutionJournal() {
                   <button
                     key={e.id}
                     type="button"
-                    onClick={() => setActiveId(e.id)}
-                    className={"card card--pad" + (active ? " is-active" : "")}
-                    style={{
-                      textAlign: "left",
-                      padding: 10,
-                      cursor: "pointer",
-                      border: active ? "1px solid var(--brand,#22c55e)" : "1px solid var(--line,#e5e7eb)",
-                      background: active ? "rgba(34,197,94,0.06)" : "var(--card,#fff)",
-                    }}
+                    role="listitem"
+                    onClick={() => selectEntry(e.id)}
+                    aria-current={active ? "true" : undefined}
+                    className={"cj-entry" + (active ? " is-active" : "")}
                   >
-                    <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 2 }}>
-                      {e.title || "Untitled"}
-                    </div>
-                    <div style={{ fontSize: 11, opacity: 0.75 }}>
+                    <div className="cj-entry__title">{e.title || "Untitled"}</div>
+                    <div className="cj-entry__time">
                       {e.updatedAt ? new Date(e.updatedAt).toLocaleString() : ""}
                     </div>
-                    <div style={{ marginTop: 6, display: "flex", gap: 4, flexWrap: "wrap" }}>
-                      {(e.fundingStreams || []).slice(0, 3).map((f) => (
-                        <span key={f} className="sh-badge is-ghost" style={{ fontSize: 10 }}>
-                          {f}
-                        </span>
-                      ))}
-                      {(e.tags || []).slice(0, 2).map((t) => (
-                        <span key={t} className="sh-badge is-ghost" style={{ fontSize: 10 }}>
-                          {t}
-                        </span>
-                      ))}
-                    </div>
+                    {((e.fundingStreams || []).length > 0 || (e.tags || []).length > 0) && (
+                      <div className="cj-entry__tags">
+                        {(e.fundingStreams || []).slice(0, 3).map((f) => (
+                          <span key={f} className="cj-tag cj-tag--funding">{f}</span>
+                        ))}
+                        {(e.tags || []).slice(0, 2).map((t) => (
+                          <span key={t} className="cj-tag">{t}</span>
+                        ))}
+                      </div>
+                    )}
                   </button>
                 );
               })
@@ -363,52 +439,57 @@ export default function ConstitutionJournal() {
           </div>
         </aside>
 
-        <main className="card card--pad" aria-label="Journal editor">
+        <main className="cj-card cj-editor" aria-label="Journal editor" ref={editorRef}>
           {!activeId ? (
-            <div style={{ opacity: 0.75 }}>
-              Select an entry on the left, or click <strong>New entry</strong>.
+            <div className="cj-editorEmpty" role="status">
+              <span className="cj-editorEmpty__icon" aria-hidden="true">ℹ️</span>
+              <span>
+                Select an entry on the left, or click <strong>New entry</strong>.
+              </span>
             </div>
           ) : (
-            <div style={{ display: "grid", gap: 10 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", gap: 10, flexWrap: "wrap" }}>
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                  <span className="sh-badge is-ghost">Entry: <strong>{activeId}</strong></span>
-                  <span className="sh-badge is-ghost">Site: <strong>{siteId}</strong></span>
+            <div className="cj-editorBody">
+              <div className="cj-editorMeta">
+                <div className="cj-editorMeta__badges">
+                  <span className="cj-badge cj-badge--ghost">Entry: <strong>{activeId}</strong></span>
+                  <span className="cj-badge cj-badge--ghost">Site: <strong>{siteId}</strong></span>
                 </div>
-
-                <div style={{ display: "flex", gap: 8 }}>
-                  <button className="sh-btn is-ghost" type="button" onClick={handleDelete}>
-                    Delete
-                  </button>
-                </div>
+                <button className="cj-btn cj-btn--danger" type="button" onClick={handleDelete}>
+                  Delete
+                </button>
               </div>
 
-              <input
-                className="sh-input"
-                value={draft.title}
-                onChange={(e) => {
-                  const next = { ...draft, title: e.target.value };
-                  setDraft(next);
-                  scheduleAutosave(next);
-                }}
-                placeholder="Entry title"
-              />
+              <label className="cj-field">
+                <span className="cj-fieldLabel">Title</span>
+                <input
+                  className="cj-input"
+                  value={draft.title}
+                  onChange={(e) => {
+                    const next = { ...draft, title: e.target.value };
+                    setDraft(next);
+                    scheduleAutosave(next);
+                  }}
+                  placeholder="Enter a title..."
+                />
+              </label>
 
-              <textarea
-                className="sh-inputText"
-                value={draft.body}
-                onChange={(e) => {
-                  const next = { ...draft, body: e.target.value };
-                  setDraft(next);
-                  scheduleAutosave(next);
-                }}
-                placeholder="Write your reflection, reasoning, and proposal notes here…"
-                style={{ minHeight: 260 }}
-              />
+              <label className="cj-field">
+                <span className="cj-fieldLabel">Tags</span>
+                <input
+                  className="cj-input"
+                  value={draft.tagsText}
+                  onChange={(e) => {
+                    const next = { ...draft, tagsText: e.target.value };
+                    setDraft(next);
+                    scheduleAutosave(next);
+                  }}
+                  placeholder="Add tags (comma separated)..."
+                />
+              </label>
 
-              <div style={{ display: "grid", gap: 6 }}>
-                <div style={{ fontSize: 12, opacity: 0.8 }}>Funding streams (click to tag)</div>
-                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+              <div className="cj-field">
+                <span className="cj-fieldLabel">Funding streams (click to tag)</span>
+                <div className="cj-chipRow">
                   {FUNDING.filter((x) => x.id !== "all").map((f) => (
                     <Chip
                       key={f.id}
@@ -421,24 +502,41 @@ export default function ConstitutionJournal() {
                 </div>
               </div>
 
-              <div style={{ display: "grid", gap: 6 }}>
-                <div style={{ fontSize: 12, opacity: 0.8 }}>Tags (comma-separated)</div>
-                <input
-                  className="sh-input"
-                  value={draft.tagsText}
-                  onChange={(e) => {
-                    const next = { ...draft, tagsText: e.target.value };
-                    setDraft(next);
-                    scheduleAutosave(next);
-                  }}
-                  placeholder="journal, constitution, proposal, evidence"
-                />
+              <div className="cj-field cj-field--body">
+                <span className="cj-fieldLabel">Body</span>
+                <div className="cj-editorFrame">
+                  <div className="cj-toolbar" role="toolbar" aria-label="Formatting">
+                    {TOOLBAR_ACTIONS.map((action) => (
+                      <button
+                        key={action.id}
+                        type="button"
+                        className="cj-toolbar__btn"
+                        aria-label={action.label}
+                        title={action.label}
+                        onClick={() => applyFormatting(action)}
+                      >
+                        {action.glyph}
+                      </button>
+                    ))}
+                  </div>
+                  <textarea
+                    ref={bodyRef}
+                    className="cj-body"
+                    value={draft.body}
+                    onChange={(e) => {
+                      const next = { ...draft, body: e.target.value };
+                      setDraft(next);
+                      scheduleAutosave(next);
+                    }}
+                    placeholder="Start writing your journal entry..."
+                  />
+                </div>
               </div>
 
-              <div style={{ display: "grid", gap: 6 }}>
-                <div style={{ fontSize: 12, opacity: 0.8 }}>Outcome (what changed because of this work?)</div>
+              <label className="cj-field">
+                <span className="cj-fieldLabel">Outcome (what changed because of this work?)</span>
                 <input
-                  className="sh-input"
+                  className="cj-input"
                   value={draft.outcome}
                   onChange={(e) => {
                     const next = { ...draft, outcome: e.target.value };
@@ -447,11 +545,32 @@ export default function ConstitutionJournal() {
                   }}
                   placeholder="Example: Drafted a 3-point amendment proposal and identified 2 budget trade-offs."
                 />
-              </div>
+              </label>
             </div>
           )}
         </main>
       </div>
-    </section>
+
+      <div className="cj-coachRow">
+        <div className="cj-card cj-coach">
+          <span className="cj-coach__art" aria-hidden="true">
+            <CompanionFace animation="idle" size={44} />
+          </span>
+          <div>
+            <p className="cj-coach__title">Need help journaling?</p>
+            <p className="cj-coach__desc">
+              Ask Coach for reflection prompts, help organizing your evidence, or connecting your notes to civic learning.
+            </p>
+            <button
+              type="button"
+              className="cj-coach__link"
+              onClick={() => companion.openCoach()}
+            >
+              Ask Coach!
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -26,6 +26,10 @@ import "@/styles/dashboard-shared.css";
 import "@/styles/curriculum-shell.css";
 import "@/styles/curriculum-sidebar.css";
 import "@/styles/curriculum-skin.css";
+import "@/styles/curriculum-dashboard.css";
+import "@/styles/curriculum-lesson.css";
+import "@/styles/student-portfolio.css";
+import "@/styles/student-portfolio-dark.css";
 
 /* ---------- React / Router ---------- */
 import React from "react";
@@ -36,6 +40,20 @@ import { HashRouter } from "react-router-dom";
 import RootProviders from "@/entries/RootProviders.jsx";
 import GlobalErrorBoundary from "@/components/GlobalErrorBoundary.jsx";
 import CurriculumRoutes from "@/router/CurriculumRoutes.jsx";
+
+/* ---------- Phase 2B: cross-cutting accessibility providers ----------
+   ReadingLevelProvider already existed (real, working) but was never
+   mounted anywhere in the Curriculum app. AccessibilityPreferencesProvider
+   is new (see its own file header — no existing generic capability-based
+   preference system was found). LiveAnnouncer is a real, existing
+   primitive from src/components/ally/A11yTools.jsx, also never mounted
+   here before — CurriculumLayout.jsx already has its own real skip link
+   (`.ld-skip` -> #curriculum-main), so A11yTools' SkipToContent is
+   deliberately NOT also added here (would be a duplicate, confusing
+   screen-reader users with two skip links). */
+import ReadingLevelProvider from "@/context/ReadingLevelProvider.jsx";
+import AccessibilityPreferencesProvider from "@/context/AccessibilityPreferences.jsx";
+import { LiveAnnouncer } from "@/components/ally/A11yTools.jsx";
 
 /* ---------- Robust mount (SHVR1 style) ---------- */
 function getOrCreateMount() {
@@ -57,9 +75,14 @@ createRoot(getOrCreateMount()).render(
   <React.StrictMode>
     <GlobalErrorBoundary>
       <RootProviders appScope="curriculum">
-        <HashRouter>
-          <CurriculumRoutes />
-        </HashRouter>
+        <AccessibilityPreferencesProvider>
+          <ReadingLevelProvider>
+            <LiveAnnouncer />
+            <HashRouter>
+              <CurriculumRoutes />
+            </HashRouter>
+          </ReadingLevelProvider>
+        </AccessibilityPreferencesProvider>
       </RootProviders>
     </GlobalErrorBoundary>
   </React.StrictMode>

@@ -1,8 +1,31 @@
 /* src/styles/arcade.css
    Arcade-only styles (dark Apple/Tesla vibe). Namespaced with .ar-root */
 
-/* --- Base canvas --- */
-.ar-root {
+/* --- Base canvas ---
+   Dark is this block's default (matches the app's original, shipped
+   appearance and its own "Arcade-only neon dark mode" identity) — the
+   institutional light mode is a full override block right below, scoped
+   the same way (`.ar-root`, gated by `html[data-theme="light"]`) so it
+   can only ever paint this app's own document root, never Career/
+   Curriculum/Civic/Sales/Portfolio (separate bundles/page loads). Every
+   existing rule below that already reads --bg1/--ink/--ink-soft/--ring/
+   --glass1/--glass2/--shadow/--radius keeps working unmodified in both
+   themes since only the token *values* change, not their names. New
+   tokens (--ar-surface*, --ar-primary, --ar-cyan/green/violet/magenta/
+   lime/gold/amber, --ar-text*) back every new component this
+   implementation adds. */
+/* Token declarations hoisted to `html[data-app="arcade"]` (arcade.html's
+   own document root, set statically in the HTML — confirmed present),
+   NOT just `.ar-root`: found live during visual verification that the
+   sidebar (`.sh-sidebar`, rendered by AppShellLayout) is a SIBLING of
+   `.ar-root`, not a descendant of it — so every sidebar rule reading
+   `var(--ar-text)`/`var(--ar-primary)`/etc previously resolved to nothing,
+   rendering sidebar text nearly invisible in dark mode. CSS custom
+   properties only cascade to descendants of the element that defines
+   them, so the fix is to define them on the true common ancestor (html)
+   instead of a narrower one. `.ar-root` keeps its own visual application
+   (background/color/color-scheme) below, unchanged. */
+html[data-app="arcade"] {
   --bg1: #0b1020;
   --bg2: #0e1326;
 
@@ -19,6 +42,59 @@
   /* iOS/modern browsers safe area */
   --safe-top: env(safe-area-inset-top, 0px);
 
+  /* Dark mode semantic tokens */
+  --ar-surface: #151b26;
+  --ar-surface-2: #1b2330;
+  --ar-border: rgba(255, 255, 255, .12);
+  --ar-text: #f4f6fb;
+  --ar-text-soft: #9aa3b2;
+  --ar-primary: #ff4f00;       /* International Orange, matches Career's --orange */
+  --ar-primary-ink: #150900;
+  --ar-cyan: #35c4e8;
+  --ar-green: #34d399;
+  --ar-violet: #a78bfa;
+  --ar-magenta: #e879c9;
+  --ar-lime: #a3e635;
+  --ar-gold: #f4c542;
+  --ar-amber: #f5a524;
+  --ar-amber-ink: #3a2400;
+  --ar-neon-glow: 0 0 22px hsl(var(--ar-hue,210) 100% 60% / .35);
+}
+
+/* Institutional light mode — warm ivory canvas, white cards, dark navy
+   text, restrained shadows, controlled category accents. */
+html[data-app="arcade"][data-theme="light"] {
+  --bg1: #faf6ef;
+  --bg2: #f3ede0;
+
+  --ink: #17203a;
+  --ink-soft: #5b5240;
+
+  --ring: rgba(23, 32, 58, .14);
+  --glass1: rgba(23, 32, 58, .06);
+  --glass2: rgba(23, 32, 58, .04);
+
+  --shadow: 0 6px 20px rgba(23, 32, 58, .08);
+
+  --ar-surface: #ffffff;
+  --ar-surface-2: #fbf8f2;
+  --ar-border: #e6ddcc;
+  --ar-text: #17203a;
+  --ar-text-soft: #5b5240;
+  --ar-primary: #ff4f00;
+  --ar-primary-ink: #ffffff;
+  --ar-cyan: #0e7fa3;
+  --ar-green: #157a4d;
+  --ar-violet: #6d4fd6;
+  --ar-magenta: #b0348c;
+  --ar-lime: #5f8a12;
+  --ar-gold: #a3760a;
+  --ar-amber: #b06a05;
+  --ar-amber-ink: #ffffff;
+  --ar-neon-glow: none;
+}
+
+.ar-root {
   min-height: 100vh;
   color: var(--ink);
   background:
@@ -26,6 +102,10 @@
     radial-gradient(1400px 900px at 120% 10%, rgba(239, 68, 68, .12), transparent 60%),
     linear-gradient(180deg, var(--bg1), var(--bg2));
   color-scheme: dark;
+}
+html[data-theme="light"] .ar-root {
+  background: linear-gradient(180deg, var(--bg1), var(--bg2));
+  color-scheme: light;
 }
 
 /* --- Frosted header --- */
@@ -101,8 +181,15 @@
 .ar-root .ar-hero__sub { margin: 12px 0 16px; color: var(--ink-soft); font-size: 18px; }
 .ar-root .ar-hero__actions { display: flex; gap: 12px; flex-wrap: wrap; }
 
-/* --- Main grid --- */
-.ar-root .ar-main { padding: 28px 22px 60px; max-width: 1200px; margin: 0 auto; }
+/* --- Main grid ---
+   Widened/tightened for the shell/density repair: the old 1200px cap plus
+   28px top padding wasted horizontal space next to the new dedicated
+   sidebar and pushed the first content-card row far below the approved
+   mock's target (~y 375-390 at 1536px). max-width raised so main content
+   actually uses the width the sidebar-first shell frees up; the reference
+   1536px viewport still leaves a natural right margin from `.ar-main`'s
+   own padding, so nothing runs edge-to-edge on ultra-wide screens. */
+.ar-root .ar-main { padding: 12px 24px 48px; max-width: 1440px; margin: 0 auto; }
 .ar-root .ar-section + .ar-section { margin-top: 26px; }
 .ar-root .ar-section__title { margin: 0 0 12px; font-size: 18px; color: var(--ink-soft); font-weight: 600; }
 
@@ -1009,4 +1096,787 @@
 .shs-map-layer-state .mapboxgl-canvas,
 .shs-map-state .mapboxgl-canvas {
   filter: none !important;
+}
+
+/* ===========================================================
+   Learning Arcade Home + Classical Arcade Room
+   Presentation layer for ArcadeDashboard.jsx / ClassicalArcadeRoom.jsx.
+   Everything below is scoped under .ar-root and reads the token set
+   defined above, so light/dark switching needs no duplicate color rules
+   here beyond the few explicit accent overrides called out inline.
+   =========================================================== */
+
+.ar-srOnly {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/* No extra horizontal/top/bottom padding or max-width here: this renders
+   inside the pre-existing `.ar-root .ar-main` box (28px top / 22px sides /
+   60px bottom padding, max-width:1200px, margin:0 auto — shared with the
+   untouched Games/Leaderboard/Rewards/Tournaments/History/Help pages),
+   which already provides all of that. Adding it again here would just
+   double the inset instead of changing anything visible. */
+.ar-home { }
+
+/* Authoritative desktop composition: wide main column + a narrower,
+   fixed-ish right rail (approved mock: main ≈ 66-68%, rail ≈ 300-330px),
+   not a symmetric alternating 2-column grid.
+
+   All 8 Home sections are direct children of .ar-homeGrid in a single,
+   fixed DOM order (see the comment in ArcadeDashboard.jsx) that already
+   matches the required mobile reading order. Every breakpoint below
+   places them purely with grid-column/grid-row (never the `order`
+   property), so screen-reader and keyboard/tab order always follows that
+   same DOM sequence regardless of visual position — only the desktop
+   tier's main+rail illusion is reconstructed visually, via placement. */
+.ar-homeGrid {
+  display: grid; gap: 16px; margin-top: 12px; align-items: start;
+}
+
+/* Neutralizes the older `.ar-root .ar-section + .ar-section{margin-top:26px}`
+   rule (same selector/specificity, declared later here so it wins) —
+   that rule assumed a single stacked column; inside this grid composition
+   it would otherwise misalign spacing between cards. */
+.ar-homeGrid .ar-section + .ar-section,
+.ar-root .ar-homeGrid .ar-section + .ar-section { margin-top: 0; }
+
+/* ---- Desktop: >=1200px (certified baseline, unchanged pixel geometry) ---- */
+@media (min-width: 1200px) {
+  .ar-homeGrid { grid-template-columns: 1.5fr 1fr minmax(300px, 360px); }
+  .ar-homeItem--build       { grid-column: 1; grid-row: 1; }
+  .ar-homeItem--learn       { grid-column: 2; grid-row: 1; }
+  .ar-homeItem--agentlab    { grid-column: 3; grid-row: 1; }
+  .ar-homeItem--student     { grid-column: 1 / 3; grid-row: 2; }
+  .ar-homeItem--activity    { grid-column: 3; grid-row: 2; }
+  .ar-homeItem--classic     { grid-column: 1 / 3; grid-row: 3; }
+  .ar-homeItem--submit      { grid-column: 3; grid-row: 3; }
+  .ar-homeItem--achievement { grid-column: 3; grid-row: 4; }
+}
+
+/* ---- Compact desktop / tablet landscape: 900-1199.98px ----
+   Two-column flow — Continue Building spans full width; the narrow
+   desktop right rail is retired here (its cards become full grid
+   members) per the responsive package's explicit instruction not to
+   keep a crushed right rail at this width. */
+@media (min-width: 900px) and (max-width: 1199.98px) {
+  .ar-homeGrid { grid-template-columns: 1fr 1fr; }
+  .ar-homeItem--build       { grid-column: 1 / 3; grid-row: 1; }
+  .ar-homeItem--learn       { grid-column: 1; grid-row: 2; }
+  .ar-homeItem--agentlab    { grid-column: 2; grid-row: 2; }
+  .ar-homeItem--activity    { grid-column: 1; grid-row: 3; }
+  .ar-homeItem--achievement { grid-column: 2; grid-row: 3; }
+  .ar-homeItem--student     { grid-column: 1 / 3; grid-row: 4; }
+  .ar-homeItem--classic     { grid-column: 1 / 3; grid-row: 5; }
+  .ar-homeItem--submit      { grid-column: 1 / 3; grid-row: 6; }
+}
+
+/* ---- Tablet portrait: 600-899.98px ----
+   Same two-column intent as the landscape tier above, at narrower
+   columns; Continue Learning/AI Agent Game Lab share a row and Arcade
+   Activity/Achievement Snapshot share a row, matching the responsive
+   package's tablet-portrait guidance. */
+@media (min-width: 600px) and (max-width: 899.98px) {
+  .ar-homeGrid { grid-template-columns: 1fr 1fr; }
+  .ar-homeItem--build       { grid-column: 1 / 3; grid-row: 1; }
+  .ar-homeItem--learn       { grid-column: 1; grid-row: 2; }
+  .ar-homeItem--agentlab    { grid-column: 2; grid-row: 2; }
+  .ar-homeItem--activity    { grid-column: 1; grid-row: 3; }
+  .ar-homeItem--achievement { grid-column: 2; grid-row: 3; }
+  .ar-homeItem--student     { grid-column: 1 / 3; grid-row: 4; }
+  .ar-homeItem--classic     { grid-column: 1 / 3; grid-row: 5; }
+  .ar-homeItem--submit      { grid-column: 1 / 3; grid-row: 6; }
+}
+
+/* ---- Mobile: <=599.98px ---- one column, DOM order == visual order. */
+@media (max-width: 599.98px) {
+  .ar-homeGrid { grid-template-columns: minmax(0, 1fr); }
+  .ar-homeGrid > * { grid-column: 1 !important; grid-row: auto !important; }
+}
+
+/* ===========================================================
+   Classical Arcade Room grid — completely independent of
+   .ar-homeGrid/.ar-homeItem--* above (different section set/
+   composition), so neither page's responsive rules can affect the
+   other's.
+
+   Four grid children only (see ClassicalArcadeRoom.jsx): Hero and
+   Featured Cabinet share row 1 directly; .ar-roomMain and .ar-roomRail
+   (each an internally independent flex column covering the remaining
+   eight sections) share row 2. DOM order is therefore already identical
+   to the required reading order at every breakpoint — no `order`
+   property is used anywhere on this page. Below 900px the grid collapses
+   to one column and the two wrapper divs become `display:contents` (they
+   disappear from the box tree; their children become direct .ar-roomGrid
+   items, in the same DOM sequence), so the single-column mobile stack is
+   simply "read the DOM top to bottom."
+   =========================================================== */
+.ar-roomGrid { display: grid; gap: 16px; margin-top: 0; align-items: start; }
+
+/* ---- Desktop: >=1200px (main ~71%, rail ~29%) ----
+   Row 1 (Hero/Featured) is a safe row-track pairing: both are similar
+   natural heights by design. Row 2 pairs exactly two OPAQUE flex columns
+   (not multiple items sharing that row), so each sizes to its own eight-
+   section content independently — measured live, this avoids the dead-
+   space defect that pairing individual dissimilar-height sections (e.g.
+   the compact "1. Choose Your Arcade Mode" row against the much taller
+   "4. Student Hall of Fame" list) in a shared grid row previously caused:
+   CSS Grid ties row-track height across everything sharing that row
+   regardless of align-items, and there is no supported masonry mode in
+   this browser target — two independent flex columns is the fix. */
+@media (min-width: 1200px) {
+  .ar-roomGrid { grid-template-columns: 2.5fr 1fr; }
+  .ar-roomMain, .ar-roomRail { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+}
+
+/* ---- Compact desktop / tablet landscape: 900-1199.98px ----
+   Same two-column composition, narrower rail column. */
+@media (min-width: 900px) and (max-width: 1199.98px) {
+  .ar-roomGrid { grid-template-columns: 2.1fr 1fr; }
+  .ar-roomMain, .ar-roomRail { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+}
+
+/* ---- Tablet portrait + mobile: <=899.98px ----
+   Single column, pure DOM order, no `order` property. */
+@media (max-width: 899.98px) {
+  .ar-roomGrid { grid-template-columns: minmax(0, 1fr); }
+  .ar-roomMain, .ar-roomRail { display: contents; }
+}
+
+.ar-card {
+  background: var(--ar-surface);
+  border: 1px solid var(--ar-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+.ar-section__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.ar-section__headRight { display: flex; align-items: center; gap: 10px; }
+.ar-section__icon { font-size: 15px; margin-right: -4px; }
+/* `.ar-root` prefix required: an older, unrelated `.ar-root .ar-section__title`
+   rule earlier in this file (higher specificity) would otherwise silently
+   win over a bare `.ar-section__title` and force the wrong weight/color. */
+.ar-root .ar-section__title { margin: 0; font-size: 17px; font-weight: 700; color: var(--ar-text); }
+.ar-note { font-size: 12px; color: var(--ar-text-soft); }
+.ar-muted { color: var(--ar-text-soft); font-size: 14px; }
+.ar-demoTag {
+  font-size: 11px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 999px; background: var(--ar-violet); color: #150922;
+}
+html[data-theme="light"] .ar-demoTag { color: #ffffff; }
+
+/* --- Buttons ---
+   `.ar-root` prefix required on the base rule: an older, unrelated
+   `.ar-root .ar-btn` rule earlier in this file (higher specificity, built
+   for the old `.ar-btn.primary`/`.ar-btn.ghost` compound-class system)
+   would otherwise win the padding declaration over a bare `.ar-btn`. The
+   BEM-style `--primary`/`--secondary`/`--ghost` modifiers below are a
+   different, new class each, so they don't collide with that old system
+   at all — only the shared base class name needed the specificity fix. */
+.ar-root .ar-btn {
+  appearance: none; font: inherit; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 44px; padding: 10px 16px; border-radius: 999px;
+  border: 1px solid transparent; text-decoration: none;
+  transition: filter .15s ease, background-color .15s ease, border-color .15s ease;
+}
+/* `.ar-root` prefix required on every modifier too: the old
+   `.ar-root .ar-btn{ border: 1px solid transparent }` shorthand
+   (specificity 0,0,2,0) otherwise beats a bare `.ar-btn--ghost{
+   border-color: ... }` (0,0,1,0) and silently keeps the border
+   transparent — confirmed live (Open Creator Studio rendered with no
+   visible border/pill at all before this fix). */
+.ar-root .ar-btn--primary { background: var(--ar-primary); color: var(--ar-primary-ink); font-weight: 700; border-color: var(--ar-primary); }
+.ar-root .ar-btn--primary:hover { filter: brightness(1.06); }
+.ar-root .ar-btn--secondary { background: var(--ar-surface-2); color: var(--ar-text); border-color: var(--ar-border); }
+.ar-root .ar-btn--secondary:hover { background: var(--glass2); }
+.ar-root .ar-btn--ghost { background: transparent; color: var(--ar-text); border-color: var(--ar-border); }
+.ar-root .ar-btn--ghost:hover { background: var(--glass2); }
+.ar-btn[disabled] { opacity: .55; cursor: not-allowed; }
+.ar-btn:focus-visible { outline: 2px solid var(--ar-cyan); outline-offset: 2px; }
+
+.ar-linkRow { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+
+/* --- Pills / status badges --- */
+.ar-pill {
+  display: inline-flex; align-items: center; font-size: 12px; font-weight: 600;
+  padding: 4px 10px; border-radius: 999px; background: var(--ar-surface-2);
+  border: 1px solid var(--ar-border); color: var(--ar-text-soft);
+}
+.ar-pill--amber { background: var(--ar-amber); color: var(--ar-amber-ink); border-color: transparent; }
+.ar-pill--green { background: var(--ar-green); color: #052e1c; border-color: transparent; }
+html[data-theme="light"] .ar-pill--green { color: #ffffff; }
+.ar-pill--planned { background: var(--ar-surface); color: var(--ar-cyan); border-color: var(--ar-cyan); }
+.ar-chipList { list-style: none; margin: 0; padding: 0; display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* --- Hero ---
+   Selectors deliberately written as `.ar-root .ar-hero...` (matching the
+   pre-existing dark-header hero rule's specificity at the top of this
+   file, which also targets `.ar-hero`/`.ar-hero__title`/`.ar-hero__sub`/
+   `.ar-hero__actions` for a different, unused hero markup) so these newer
+   declarations reliably win by source order instead of an unpredictable
+   specificity tie — and the old decorative `::before` glow (sized for
+   that other markup) is explicitly turned off below rather than bleeding
+   into this component. */
+.ar-root .ar-hero::before { content: none; }
+/* No horizontal padding / max-width / auto-margin here either, for the
+   same reason as .ar-home above — `.ar-main` already provides it.
+   Text ~38%, image ~62% (approved mock's ratio), with a real CSS
+   clip-path angled cut on the image edge rather than a baked-in diagonal
+   in the asset, so the boundary stays crisp at any viewport/zoom. */
+.ar-root .ar-hero {
+  position: relative; isolation: auto;
+  /* padding:0 explicitly required — root cause of the "hero 3x too tall
+     with content still clipping" bug, found live: an older, unrelated
+     `.ar-root .ar-hero { padding: 72px 22px 34px; ... }` rule earlier in
+     this file has the exact same selector/specificity, and since this
+     rule never re-declared `padding` at all, that legacy 72px+34px value
+     kept winning for that one property regardless of every other change
+     made here (equal-specificity cascade resolves per property, not per
+     rule) — consuming 106px of whatever height was set and pushing all
+     content down by a fixed 72px no centering/height/overflow tweak
+     could ever counteract. */
+  padding: 0;
+  display: grid; grid-template-columns: minmax(0, 48%) minmax(0, 52%); gap: 0; align-items: center;
+  height: 288px;
+  border-bottom: 1px solid var(--ar-border);
+  overflow: hidden;
+}
+/* Tablet landscape / compact desktop (900-1199.98px): stays side-by-side
+   (horizontal composition, image dominant) per the responsive package,
+   just shorter and with a smaller headline than the certified desktop
+   288px/42px baseline above — that baseline rule is intentionally left
+   untouched here so >=1200px never regresses. */
+@media (max-width: 1199.98px) and (min-width: 900px) {
+  .ar-root .ar-hero { height: 250px; }
+  /* Classical Arcade Room's hero has more content than Home's (a
+     breadcrumb above the title, 3 status pills below the buttons) — the
+     shared 250px above clips it at this tier's narrower main column
+     (confirmed live: "Safe Play"/"Instructor Approved"/"Accessibility
+     Ready" were cut off entirely at 1024x768). Home's own hero is
+     unaffected since this only targets .ar-hero--room. */
+  .ar-root .ar-hero--room { height: auto; min-height: 250px; }
+}
+/* Tablet portrait and mobile (<=899.98px): stacked, copy above image —
+   "may remain side-by-side if both stay readable, otherwise a balanced
+   stacked composition" per the tablet-portrait guidance, and mobile's
+   explicit copy-first/image-second requirement. */
+@media (max-width: 899.98px) {
+  .ar-root .ar-hero { grid-template-columns: minmax(0, 1fr); height: auto; }
+}
+.ar-hero__body { display: flex; flex-direction: column; padding: 0 24px 0 0; min-width: 0; }
+@media (max-width: 899.98px) {
+  .ar-hero__body { padding: 24px 0; }
+}
+.ar-hero__art { position: relative; height: 100%; overflow: hidden; }
+.ar-hero__img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  /* Angled boundary: cuts in from the top-left corner, matching the
+     approved mock's diagonal copy/image seam. */
+  clip-path: polygon(8% 0, 100% 0, 100% 100%, 0 100%);
+}
+@media (max-width: 899.98px) {
+  .ar-hero__art { height: 240px; }
+  /* Not a plain `clip-path:none` — the source asset
+     (public/assets/arcade/eco-city-hero.jpg) has a rounded-card border
+     baked into its edges from the original mock extraction. The
+     certified desktop `clip-path: polygon(8% 0, 100% 0, ...)` happens to
+     crop the LEFT edge artifact away as a side effect of its angled cut,
+     but never touched the right edge, and desktop's narrower ~52%-width
+     image column crops enough off the right edge via object-fit:cover to
+     hide it there too. This stacked/full-width tier's aspect ratio is
+     close enough to the source's natural aspect that object-fit:cover
+     crops very little, leaving the right-edge artifact fully visible
+     (confirmed live via screenshot). A `clip-path: inset()` here would
+     only shrink the visible box (revealing blank container background,
+     confirmed live — it does not change what object-fit:cover samples);
+     scaling the image itself, clipped by .ar-hero__art's own
+     `overflow:hidden`, is what actually crops further into the source
+     image while still filling the box edge-to-edge. */
+  .ar-hero__img { clip-path: none; border-radius: var(--radius); transform: scale(1.1); }
+}
+@media (max-width: 599.98px) {
+  .ar-hero__art { height: 200px; }
+}
+/* Density repair: font-size tuned (measured live, not guessed) so both
+   headline lines — "PLAY WHAT'S POSSIBLE." and "BUILD WHAT COMES NEXT."
+   — each render on exactly one line within the ~40% text column at the
+   1536px reference viewport, matching the mock's 2-line headline exactly
+   (the previous clamp's max (44px) was measurably too wide for the
+   column, wrapping the first line a second time — 4 lines total). */
+.ar-root .ar-hero__title {
+  margin: 0 0 10px; font-size: clamp(24px, 2.85vw, 42px); letter-spacing: -.01em; line-height: 1.15;
+  color: var(--ar-text); font-weight: 800;
+}
+/* Below 1200px the vw-relative clamp above no longer tracks the hero's
+   effective text-column width well (the column's share of the viewport
+   changes across tiers as the sidebar/rail width changes), so each tier
+   gets an explicit, measured size instead of relying on further fluid
+   scaling — same reasoning as the certified desktop value, just per-tier
+   rather than fluid. Targets: tablet 38-44px, mobile 32-38px. */
+@media (max-width: 1199.98px) and (min-width: 900px) {
+  /* Measured live: at this tier's 48%/52% column split (kept identical to
+     the certified desktop ratio, "image remains dominant" per spec),
+     38-44px reliably wraps to 3-4 lines and gets clipped by the fixed
+     230-270px hero height — 30px is the largest size that reliably holds
+     2 lines. Documented, honest deviation below the "approximately
+     38-44px" target, same trade-off shape as the certified desktop rule
+     above (which also deviated on ratio, not line-count, to satisfy a
+     hard 2-line constraint). */
+  .ar-root .ar-hero__title { font-size: 30px; }
+}
+@media (max-width: 899.98px) and (min-width: 600px) {
+  .ar-root .ar-hero__title { font-size: 40px; }
+}
+@media (max-width: 599.98px) {
+  /* Measured live: 32-38px (the stated target) wraps to 4 lines at the
+     342px mobile text column, exceeding the spec's explicit "two or three
+     lines are acceptable" cap. 29px is the largest size that holds at 3
+     lines — a small, honest deviation below the stated range in favor of
+     the harder, explicitly-bounded line-count constraint. */
+  .ar-root .ar-hero__title { font-size: 29px; }
+}
+.ar-root .ar-hero__sub { margin: 0 0 16px; color: var(--ar-text-soft); font-size: 14px; max-width: 38ch; line-height: 1.5; }
+@media (max-width: 899.98px) {
+  .ar-root .ar-hero__sub { font-size: 15px; max-width: none; }
+}
+.ar-root .ar-hero__actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.ar-roomControls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 4px; }
+/* At >=1200px the hero's text column is a fixed 48% of the hero's own
+   width, so it actually gets NARROWER as the viewport shrinks toward
+   1200px even though this whole tier nominally shares one fixed 288px
+   hero height. Found live at 1280x900: the 333px-wide text column was
+   too narrow to fit "Instructor Approved" and "Accessibility Ready"
+   alongside their neighbors, so each wrapped onto its own line —  four
+   wrapped lines total pushed those last two pills entirely past the
+   hero's `overflow:hidden` edge (confirmed live: controls bottom landed
+   ~60px past the hero's). Compacting the controls — not growing the
+   hero — is the fix, and was chosen specifically because growing the
+   hero's height at this tier turned out to inflate it far past what the
+   content needed (414px measured for a ~349px need) once the image
+   column's percentage-height stopped resolving against a fixed value;
+   this keeps that working, certified mechanism completely untouched. At
+   the certified 1536px width this rule still applies but changes
+   nothing visible — that width already had slack. */
+@media (min-width: 1200px) {
+  .ar-hero--room .ar-roomControls { gap: 6px; }
+  .ar-hero--room .ar-roomControls .ar-btn { padding: 9px 12px; font-size: 14px; }
+  .ar-hero--room .ar-roomControls .ar-pill { font-size: 11px; padding: 3px 8px; }
+}
+
+/* --- Original retro-cabinet illustration (local, CSS-only) — used only
+   by the Classical Arcade Room hero fallback now that Home's hero uses a
+   real photo; kept for that page. --- */
+
+/* --- Original retro-cabinet illustration (local, CSS-only) --- */
+.ar-cabRow { display: flex; align-items: flex-end; gap: 18px; height: 220px; padding: 0 12px; }
+.ar-cabinet { width: 26%; height: 78%; border-radius: 10px 10px 4px 4px; position: relative; box-shadow: var(--shadow); }
+.ar-cabinet::before {
+  content: ""; position: absolute; inset: 14% 12% auto 12%; height: 34%; border-radius: 6px;
+  background: rgba(255, 255, 255, .18);
+}
+.ar-cabinet--a { background: linear-gradient(180deg, var(--ar-cyan), var(--ar-surface-2)); }
+.ar-cabinet--b { background: linear-gradient(180deg, var(--ar-magenta), var(--ar-surface-2)); height: 92%; }
+.ar-cabinet--c { background: linear-gradient(180deg, var(--ar-lime), var(--ar-surface-2)); height: 68%; }
+
+/* --- Build / progress card (Continue Building) — 3 regions: thumbnail
+   image, main (title/desc/progress/collaborators), side (tool pills +
+   instructor review), matching the approved mock's layout. --- */
+.ar-buildCard { display: grid; grid-template-columns: 96px minmax(0, 1fr) 122px; gap: 12px; align-items: start; }
+@media (max-width: 900px) {
+  .ar-buildCard { grid-template-columns: 90px minmax(0, 1fr); }
+  /* `.ar-buildCard .ar-buildCard__side` (two classes) required, not the
+     bare single-class `.ar-buildCard__side` used elsewhere in this file:
+     the unconditional base rule (`.ar-buildCard__side{flex-direction:
+     column}`, further down this file) has the same specificity as a bare
+     single-class rule here and comes AFTER it in source order, so a bare
+     selector here would silently lose regardless of this media query
+     matching — confirmed live via getComputedStyle (flex-direction
+     reported "column" here despite this rule setting "row"). Found and
+     fixed live rather than assumed, same failure shape as the hero
+     padding/`data-app` bugs found earlier in this project. */
+  .ar-buildCard .ar-buildCard__side { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; align-items: center; }
+  /* .ar-pill--block (display:block; width:100%) is meant for the narrow
+     desktop right-rail column where a full-width pill reads correctly —
+     once .ar-buildCard__side above switches to a wrapping row, a 100%-
+     width pill fills the whole row by itself, defeating the wrap (each
+     tool badge lands on its own line instead of wrapping side by side). */
+  .ar-buildCard__side .ar-pill--block { display: inline-flex; width: auto; }
+  .ar-buildCard__toolsLabel { flex-basis: 100%; }
+}
+@media (max-width: 560px) { .ar-buildCard { grid-template-columns: 1fr; } .ar-buildCard__img { width: 100%; height: 140px; } }
+.ar-buildCard__img { width: 96px; height: 96px; border-radius: 12px; object-fit: cover; display: block; }
+.ar-buildCard__main { min-width: 0; }
+.ar-buildCard__title { margin: 0 0 6px; font-size: 16px; color: var(--ar-text); }
+.ar-buildCard__desc { margin: 0 0 12px; font-size: 13px; color: var(--ar-text-soft); line-height: 1.5; }
+.ar-buildCard__meta { margin: 8px 0 0; font-size: 12px; color: var(--ar-text-soft); }
+.ar-buildCard__collabs { margin-top: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ar-buildCard__toolsLabel { font-size: 12px; color: var(--ar-text-soft); }
+.ar-buildCard__side { display: flex; flex-direction: column; gap: 8px; }
+.ar-pill--block { display: block; width: 100%; text-align: center; box-sizing: border-box; }
+.ar-progressBar { margin-top: 12px; height: 10px; border-radius: 999px; background: var(--ar-surface-2); overflow: hidden; }
+.ar-progressBar--sm { height: 6px; margin-top: 8px; }
+.ar-progressBar__fill { height: 100%; background: var(--ar-primary); border-radius: 999px; }
+.ar-avatarRow { display: flex; gap: 6px; }
+.ar-avatarChip {
+  width: 30px; height: 30px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; background: var(--ar-surface-2); border: 1px solid var(--ar-border); color: var(--ar-text);
+}
+
+/* --- Continue Learning --- */
+.ar-learnCard__img { width: 100%; height: 110px; object-fit: cover; border-radius: 12px; margin-bottom: 12px; display: block; }
+.ar-learnCard__course { margin: 0; font-size: 11px; color: var(--ar-text-soft); text-transform: uppercase; letter-spacing: .04em; }
+.ar-learnCard__lesson { margin: 4px 0 4px; font-size: 15px; font-weight: 700; color: var(--ar-text); }
+.ar-learnCard__progress { margin: 0; font-size: 12px; color: var(--ar-text-soft); }
+.ar-learnCard .ar-btn { margin-top: 14px; width: 100%; }
+
+/* --- AI Agent Game Lab — label:value rows, matching the mock exactly --- */
+.ar-agentLab__stats { display: flex; flex-direction: column; gap: 10px; margin: 0 0 16px; list-style: none; padding: 0; }
+.ar-agentLab__stat { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.ar-agentLab__stat dt { font-size: 12px; color: var(--ar-text-soft); margin: 0; }
+.ar-agentLab__stat dd { margin: 0; font-size: 13px; color: var(--ar-text); font-weight: 600; text-align: right; }
+.ar-agentLab__amber { color: var(--ar-amber); }
+.ar-agentLab__stat--tools { flex-direction: column; align-items: flex-start; }
+.ar-agentLab__stat--tools dd { text-align: left; font-weight: 500; color: var(--ar-text-soft); font-size: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ar-pill--sm { font-size: 10px; padding: 2px 8px; }
+.ar-btn--block { display: flex; width: 100%; }
+
+/* --- KPI / activity grid (Arcade Activity, real data) --- */
+.ar-activityCard .ar-section__head { align-items: baseline; }
+.ar-note--link { text-decoration: none; color: var(--ar-primary); font-weight: 600; }
+.ar-note--link:hover { text-decoration: underline; }
+.ar-activityGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 640px) { .ar-activityGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.ar-kpi {
+  padding: 10px 8px; border-radius: 12px; background: var(--ar-surface-2); border: 1px solid var(--ar-border);
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px;
+}
+.ar-kpi__icon { font-size: 15px; }
+.ar-kpi__label { font-size: 10px; color: var(--ar-text-soft); text-transform: uppercase; letter-spacing: .02em; }
+.ar-kpi__value { font-size: 18px; font-weight: 800; color: var(--ar-text); }
+.ar-kpi--gold .ar-kpi__value { color: var(--ar-gold); }
+.ar-kpi--violet .ar-kpi__value { color: var(--ar-violet); }
+.ar-kpi--green .ar-kpi__value { color: var(--ar-green); }
+.ar-kpi--cyan .ar-kpi__value { color: var(--ar-cyan); }
+.ar-activityRecent { margin: 12px 0 0; font-size: 13px; color: var(--ar-text-soft); }
+.ar-activityLinks { display: flex; flex-direction: column; gap: 2px; margin-top: 12px; border-top: 1px solid var(--ar-border); padding-top: 10px; }
+/* Compact override for Classical Arcade Room's right-rail "6. Your Arcade
+   Activity" (the shared ArcadeActivitySummary component, unchanged for
+   Rewards page usage — this only scopes under the room's own item class). */
+.ar-roomItem--activity .ar-kpi { padding: 7px 6px; }
+.ar-roomItem--activity .ar-activityRecent { margin-top: 8px; font-size: 12px; }
+.ar-roomItem--activity .ar-activityLinks { margin-top: 8px; padding-top: 6px; gap: 0; }
+.ar-roomItem--activity .ar-activityLink { min-height: 30px; padding: 5px 4px; }
+.ar-activityLink {
+  display: flex; align-items: center; justify-content: space-between; padding: 8px 4px; min-height: 36px;
+  color: var(--ar-text); text-decoration: none; font-size: 13px; border-radius: 8px;
+}
+.ar-activityLink:hover { background: var(--glass2); }
+
+/* --- Card grids (Student-Made Experiences, Classic-Inspired Games) --- */
+.ar-cardGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+.ar-miniCard, .ar-gameCard {
+  background: var(--ar-surface-2); border: 1px solid var(--ar-border); border-radius: 14px; padding: 14px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.ar-miniCard__art {
+  aspect-ratio: 16 / 10; border-radius: 10px;
+  background: linear-gradient(135deg, var(--ar-cyan), var(--ar-violet));
+}
+/* .ar-gameCard__art / .ar-featuredCabinet__art are real <img> elements in
+   Classical Arcade Room (not empty gradient-filled divs — that was the
+   defect this rule replaces), so this sizes/fits the image rather than
+   painting a placeholder background. */
+.ar-gameCard__art, .ar-featuredCabinet__art {
+  width: 100%; aspect-ratio: 16 / 10; border-radius: 10px; object-fit: cover; display: block;
+  background: var(--ar-surface-2);
+}
+.ar-miniCard__title, .ar-gameCard__title { margin: 0; font-size: 15px; color: var(--ar-text); }
+.ar-miniCard__meta, .ar-gameCard__skills { margin: 0; font-size: 12px; color: var(--ar-text-soft); }
+.ar-gameCard__meta { display: flex; gap: 10px; flex-wrap: wrap; font-size: 12px; color: var(--ar-text-soft); }
+
+/* Classical Arcade Room's "2. Classic-Inspired Games" — four compact
+   cards on one desktop row (the missing rule here was the root cause of
+   each card rendering full main-column width/height instead — .ar-
+   gameCard--room has no width constraint of its own without this grid). */
+.ar-roomGameGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 10px; }
+.ar-gameCard--room { padding: 8px; gap: 5px; }
+.ar-gameCard--room .ar-gameCard__art { max-height: 58px; aspect-ratio: auto; }
+.ar-gameCard--room .ar-gameCard__title { font-size: 13px; }
+.ar-gameCard--room .ar-chipList--sm { margin: 0; gap: 4px; }
+.ar-gameCard--room .ar-gameCard__meta { font-size: 11px; gap: 6px; align-items: center; }
+.ar-gameCard--room .ar-btn--sm, .ar-gameCard--room .ar-btn { min-height: 34px; padding: 6px 12px; }
+/* No compressed four-card row below desktop — two per row instead. */
+@media (max-width: 1199.98px) {
+  .ar-roomGameGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 479.98px) {
+  .ar-roomGameGrid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* --- Student-Made Experiences cards (real extracted images) --- */
+.ar-studentGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 12px; }
+@media (max-width: 900px) { .ar-studentGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .ar-studentGrid { grid-template-columns: 1fr; } }
+.ar-studentCard { background: var(--ar-surface-2); border: 1px solid var(--ar-border); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
+.ar-studentCard__img { width: 100%; height: 110px; object-fit: cover; display: block; }
+.ar-studentCard__title { margin: 10px 12px 0; font-size: 14px; color: var(--ar-text); }
+.ar-studentCard__desc { margin: 2px 12px 0; font-size: 12px; color: var(--ar-text-soft); }
+.ar-studentCard__by { margin: 6px 12px 0; font-size: 11px; color: var(--ar-text-soft); display: flex; align-items: center; gap: 4px; }
+.ar-verifiedDot { color: var(--ar-cyan); font-size: 10px; }
+.ar-chipList--sm { margin: 8px 12px 0; }
+.ar-pill--tag { font-size: 10px; padding: 2px 8px; }
+.ar-studentCard__foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px 12px; margin-top: auto; }
+.ar-studentCard__rating, .ar-studentCard__plays { font-size: 12px; color: var(--ar-text-soft); }
+.ar-btn--sm { min-height: 34px; padding: 6px 14px; font-size: 13px; }
+
+/* --- Featured Cabinet --- */
+.ar-featuredCabinet { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 640px) { .ar-featuredCabinet { grid-template-columns: 1fr; } }
+.ar-featuredCabinet__title { margin: 0 0 8px; font-size: 18px; color: var(--ar-text); }
+/* Classical Arcade Room's featured card is narrower (right rail, not a
+   full main-column card), so it uses a stacked art-above-body layout
+   instead of the side-by-side 220px column above. */
+.ar-featuredCabinet--room { display: flex; flex-direction: column; gap: 8px; }
+.ar-featuredCabinet--room .ar-featuredCabinet__art { aspect-ratio: 16 / 9; max-height: 84px; }
+.ar-featuredCabinet--room .ar-featuredCabinet__title { margin: 0; font-size: 16px; }
+.ar-featuredCabinet--room .ar-chipList { gap: 6px; }
+.ar-featuredCabinet--room .ar-linkRow { margin-top: 2px; gap: 8px; }
+.ar-featuredCabinet--room .ar-btn { min-height: 38px; padding: 8px 14px; font-size: 13px; }
+.ar-roomEyebrow { margin: 0; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--ar-text-soft); }
+
+/* --- Arcade mode tabs (Home's generic .ar-modeRow / .ar-modeTab used
+   elsewhere; Classical Arcade Room's "1. Choose Your Arcade Mode" uses
+   its own compact horizontal card treatment below) --- */
+.ar-modeRow { display: flex; gap: 8px; flex-wrap: wrap; }
+.ar-modeTab {
+  appearance: none; font: inherit; cursor: pointer; min-height: 44px; padding: 10px 16px;
+  border-radius: 999px; border: 1px solid var(--ar-border); background: var(--ar-surface-2); color: var(--ar-text);
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.ar-modeTab.is-active { background: var(--ar-primary); color: var(--ar-primary-ink); border-color: transparent; font-weight: 700; }
+.ar-modeTab--future { color: var(--ar-text-soft); }
+
+.ar-modeRow--room { flex-wrap: nowrap; gap: 10px; }
+.ar-roomModeCard {
+  appearance: none; font: inherit; cursor: pointer; text-align: left;
+  flex: 1 1 0; min-width: 0; display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px; border-radius: 12px; border: 1px solid var(--ar-border); border-left-width: 3px;
+  background: var(--ar-surface-2); color: var(--ar-text); min-height: 52px;
+}
+.ar-roomModeCard__icon { width: 22px; height: 22px; border-radius: 7px; flex-shrink: 0; }
+.ar-roomModeCard__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.ar-roomModeCard__label { font-size: 13px; font-weight: 700; color: var(--ar-text); }
+.ar-roomModeCard__desc { font-size: 11.5px; color: var(--ar-text-soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ar-roomModeCard--cyan { border-left-color: var(--ar-cyan); }
+.ar-roomModeCard--cyan .ar-roomModeCard__icon { background: var(--ar-cyan); }
+.ar-roomModeCard--violet { border-left-color: var(--ar-violet); }
+.ar-roomModeCard--violet .ar-roomModeCard__icon { background: var(--ar-violet); }
+.ar-roomModeCard--gold { border-left-color: var(--ar-amber); }
+.ar-roomModeCard--gold .ar-roomModeCard__icon { background: var(--ar-amber); }
+.ar-roomModeCard--green { border-left-color: var(--ar-green); }
+.ar-roomModeCard--green .ar-roomModeCard__icon { background: var(--ar-green); }
+.ar-roomModeCard.is-active { box-shadow: inset 0 0 0 1px var(--ar-cyan); }
+.ar-roomModeCard:focus-visible { outline: 2px solid var(--ar-cyan); outline-offset: 2px; }
+
+/* --- Stage row (Turn Play Into Progress) --- */
+.ar-stageRow { list-style: none; margin: 0 0 12px; padding: 0; display: flex; gap: 8px; flex-wrap: wrap; }
+.ar-stageBtn {
+  appearance: none; font: inherit; cursor: pointer; text-decoration: none; min-height: 44px; padding: 10px 16px;
+  border-radius: 999px; border: 1px solid var(--ar-border); background: var(--ar-surface-2); color: var(--ar-text);
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.ar-stageBtn.is-active { background: var(--ar-primary); color: var(--ar-primary-ink); border-color: transparent; font-weight: 700; }
+.ar-stageBtn--future { color: var(--ar-text-soft); }
+.ar-roomItem--progress .ar-stageRow { gap: 6px; margin-bottom: 8px; }
+.ar-roomItem--progress .ar-stageBtn { min-height: 36px; padding: 7px 12px; font-size: 13px; }
+.ar-roomItem--progress .ar-btn { min-height: 38px; }
+
+/* --- Classical Arcade Room entry card (Home §H) --- */
+.ar-roomEntry { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.ar-roomEntry__img { width: 90px; height: 64px; object-fit: cover; border-radius: 10px; flex-shrink: 0; }
+.ar-roomEntry__body { flex: 1; min-width: 200px; }
+.ar-roomEntry__title { margin: 0; font-size: 16px; color: var(--ar-text); display: flex; align-items: center; gap: 8px; }
+.ar-roomEntry__sub { margin: 4px 0 0; font-size: 13px; color: var(--ar-text-soft); }
+
+/* --- Challenge card --- */
+.ar-challengeCard { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.ar-challengeCard__title { margin: 0; font-size: 16px; color: var(--ar-text); }
+.ar-challengeCard--room { flex-wrap: nowrap; align-items: flex-start; }
+.ar-challengeCard__icon { width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0; }
+.ar-challengeCard--room .ar-challengeCard__body { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.ar-challengeCard__meta { margin: 0; font-size: 11.5px; color: var(--ar-text-soft); }
+.ar-challengeCard--room .ar-challengeCard__title { font-size: 14px; }
+.ar-challengeCard--room .ar-btn { min-height: 34px; padding: 6px 12px; font-size: 12.5px; margin-top: 2px; }
+
+/* --- Hall of Fame table (Home's generic .ar-table; Classical Arcade
+   Room's "4. Student Hall of Fame" uses the compact .ar-hofList rows
+   below, sized for the narrow right rail) --- */
+.ar-table { width: 100%; border-collapse: collapse; }
+.ar-table th, .ar-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--ar-border); font-size: 13px; color: var(--ar-text); }
+.ar-table th { color: var(--ar-text-soft); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
+
+.ar-hofList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.ar-hofRow { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--ar-border); }
+.ar-hofRow:last-child { border-bottom: none; }
+.ar-hofRow__rank { width: 20px; flex-shrink: 0; font-size: 12px; font-weight: 700; color: var(--ar-text-soft); text-align: center; }
+.ar-hofRow__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.ar-hofRow__name { font-size: 13px; font-weight: 700; color: var(--ar-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ar-hofRow__title { font-size: 11px; color: var(--ar-text-soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ar-hofRow__xp { font-size: 12px; font-weight: 700; color: var(--ar-primary); flex-shrink: 0; }
+
+/* --- How Was This Built: horizontal 3-topic breakdown + actions --- */
+.ar-howBuiltRow { display: flex; gap: 16px; align-items: stretch; }
+.ar-howBuiltTopics { display: flex; gap: 10px; flex: 1 1 auto; min-width: 0; }
+.ar-howBuiltTopic {
+  appearance: none; font: inherit; cursor: pointer; text-align: left; flex: 1 1 0; min-width: 0;
+  display: flex; flex-direction: column; gap: 4px; padding: 7px; border-radius: 12px;
+  border: 1px solid var(--ar-border); background: var(--ar-surface-2); color: var(--ar-text);
+}
+.ar-howBuiltTopic:focus-visible { outline: 2px solid var(--ar-cyan); outline-offset: 2px; }
+.ar-howBuiltTopic__art { width: 100%; aspect-ratio: 4 / 3; max-height: 46px; object-fit: cover; border-radius: 8px; }
+.ar-howBuiltTopic__label { font-size: 12.5px; font-weight: 700; }
+.ar-howBuiltTopic__bullets { font-size: 10.5px; color: var(--ar-text-soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ar-howBuiltActions { display: flex; flex-direction: column; gap: 6px; flex: 0 0 170px; justify-content: center; }
+.ar-howBuiltActions .ar-btn { min-height: 36px; padding: 8px 14px; font-size: 13px; }
+@media (max-width: 767.98px) {
+  .ar-howBuiltRow { flex-direction: column; }
+  .ar-howBuiltTopics { flex-direction: column; }
+  .ar-howBuiltActions { flex: 0 0 auto; flex-direction: row; flex-wrap: wrap; }
+  .ar-howBuiltActions .ar-btn { flex: 1 1 160px; }
+}
+
+/* --- Bottom policy bar --- */
+.ar-roomPolicyBar {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 16px;
+  padding: 12px 16px; border-radius: 12px; border: 1px solid var(--ar-border); background: var(--ar-surface);
+}
+.ar-roomPolicyBar__text { margin: 0; font-size: 12.5px; color: var(--ar-text-soft); flex: 1 1 260px; }
+.ar-roomPolicyBar__tags { list-style: none; margin: 0; padding: 0; display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* --- Breadcrumb (hero) --- */
+.ar-roomBreadcrumb__list {
+  list-style: none; margin: 0 0 8px; padding: 0; display: flex; gap: 6px; align-items: center;
+  font-size: 12px; color: var(--ar-text-soft);
+}
+.ar-roomBreadcrumb__list a { color: var(--ar-text-soft); text-decoration: none; }
+.ar-roomBreadcrumb__list a:hover { text-decoration: underline; }
+.ar-roomBreadcrumb__list li[aria-current="page"] { color: var(--ar-text); font-weight: 600; }
+
+/* Real button rendered with .ar-pill visuals (Accessibility Ready trigger
+   in the room hero) — resets the browser's default button font/border so
+   it matches the plain-span .ar-pill status badges beside it exactly. */
+.ar-pill--button { font: inherit; border: none; cursor: pointer; appearance: none; }
+.ar-pill--button:focus-visible { outline: 2px solid var(--ar-cyan); outline-offset: 2px; }
+
+/* --- Difficulty dots (Classic-Inspired Games cards) --- */
+.ar-difficultyDots { display: inline-flex; gap: 3px; align-items: center; }
+.ar-difficultyDots__dot { width: 6px; height: 6px; border-radius: 999px; background: var(--ar-border); display: inline-block; }
+.ar-difficultyDots__dot.is-filled { background: var(--ar-primary); }
+
+.ar-contentNotice { margin-top: 24px; font-size: 12px; color: var(--ar-text-soft); }
+
+/* --- Achievement Snapshot --- */
+.ar-achievement { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 10px; }
+@media (max-width: 599.98px) { .ar-achievement { grid-template-columns: 1fr; } }
+.ar-achievement__stat { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px; padding: 10px 6px; border-radius: 12px; background: var(--ar-surface-2); border: 1px solid var(--ar-border); }
+.ar-achievement__icon { font-size: 16px; }
+.ar-achievement__value { font-size: 20px; font-weight: 800; color: var(--ar-text); }
+.ar-achievement__label { font-size: 10px; color: var(--ar-text-soft); text-transform: uppercase; letter-spacing: .02em; }
+.ar-achievement__stat .ar-note--link { font-size: 10px; margin-top: 4px; }
+
+/* --- Theme switch (ArcadeThemeSwitch.jsx) --- */
+.ar-themeSwitch { position: relative; }
+/* Size/padding (36x36px, padding:0) is set by the compact icon-only rule
+   in arcade-shell.css, which this file loads after — deliberately NOT
+   redeclared here. It previously WAS redeclared here (min-width:44px,
+   padding:8px 12px), and since arcade.css loads after arcade-shell.css,
+   that equal-specificity duplicate silently won and rendered the trigger
+   at 44px regardless of the compact rule (confirmed live via
+   getComputedStyle: width/min-width both reported "44px" despite the
+   36px rule existing) — the sole cause of a 390px-width header overflow. */
+.ar-themeSwitch__trigger {
+  display: inline-flex; align-items: center; gap: 6px;
+  border-radius: 10px; border: 1px solid rgba(255, 255, 255, .18); background: rgba(255, 255, 255, .06);
+  color: #e9eef6; cursor: pointer; font: inherit;
+}
+html[data-theme="light"] .ar-themeSwitch__trigger { border-color: #d8cdb4; background: #ffffff; color: #17203a; }
+.ar-themeSwitch__trigger:focus-visible { outline: 2px solid var(--ar-cyan, #35c4e8); outline-offset: 2px; }
+.ar-themeSwitch__menu {
+  position: absolute; top: calc(100% + 6px); right: 0; z-index: var(--z-menu, 500);
+  min-width: 160px; padding: 6px; border-radius: 12px;
+  background: #151b26; border: 1px solid rgba(255, 255, 255, .14); box-shadow: 0 12px 30px rgba(0, 0, 0, .4);
+}
+html[data-theme="light"] .ar-themeSwitch__menu { background: #ffffff; border-color: #e6ddcc; box-shadow: 0 12px 30px rgba(23,32,58,.14); }
+.ar-themeSwitch__item {
+  width: 100%; display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 8px;
+  background: none; border: none; color: #e9eef6; font: inherit; cursor: pointer; text-align: left;
+}
+html[data-theme="light"] .ar-themeSwitch__item { color: #17203a; }
+.ar-themeSwitch__item:hover, .ar-themeSwitch__item:focus-visible { background: rgba(255, 255, 255, .08); }
+html[data-theme="light"] .ar-themeSwitch__item:hover,
+html[data-theme="light"] .ar-themeSwitch__item:focus-visible { background: #f3ede0; }
+.ar-themeSwitch__item.is-selected { font-weight: 700; }
+.ar-themeSwitch__check { margin-left: auto; }
+
+/* --- Informational dialog (ArcadeInfoDialog.jsx) --- */
+.ar-dialog__scrim {
+  position: fixed; inset: 0; z-index: var(--z-dialog, 900);
+  background: rgba(5, 8, 14, .55); display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.ar-dialog {
+  width: min(480px, 100%); max-height: 82vh; overflow-y: auto; border-radius: 16px;
+  background: var(--ar-surface); border: 1px solid var(--ar-border); box-shadow: 0 24px 60px rgba(0,0,0,.45);
+  padding: 20px;
+}
+.ar-dialog__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.ar-dialog__title { margin: 0; font-size: 17px; color: var(--ar-text); }
+.ar-dialog__close {
+  min-width: 36px; min-height: 36px; border-radius: 8px; border: 1px solid var(--ar-border);
+  background: var(--ar-surface-2); color: var(--ar-text); cursor: pointer; font-size: 14px;
+}
+.ar-dialog__close:focus-visible, .ar-dialog__body a:focus-visible { outline: 2px solid var(--ar-cyan); outline-offset: 2px; }
+.ar-dialog__body { color: var(--ar-text-soft); font-size: 14px; line-height: 1.6; }
+.ar-dialog__body p { margin: 0 0 10px; }
+.ar-dialog__body p:last-child { margin-bottom: 0; }
+
+/* --- Focus visibility for the new interactive classes --- */
+.ar-navLink:focus-visible,
+.ar-topNavTab:focus-visible,
+.ar-modeTab:focus-visible,
+.ar-stageBtn:focus-visible,
+.ar-quickSearch__input:focus-visible,
+.ar-iconBtn:focus-visible,
+.ar-profileChip:focus-visible {
+  outline: 2px solid var(--ar-cyan);
+  outline-offset: 2px;
+}
+
+/* --- Responsive: 768 / 1024 / 1440 already implied by the grid rules
+   above (auto-fit / minmax / breakpoint overrides); 390px specifics: --- */
+@media (max-width: 480px) {
+  /* Horizontal padding for .ar-hero/.ar-homeGrid/.ar-contentNotice comes
+     entirely from the pre-existing `.ar-root .ar-main` box at every
+     width (22px) — nothing to override here. */
+  .ar-root .ar-hero { padding-bottom: 24px; }
+  .ar-homeGrid { gap: 14px; }
+  .ar-topNavList { padding: 0 16px; }
+  .ar-topNavTab { padding: 12px 10px; }
+  .ar-root .ar-hero__actions, .ar-roomControls, .ar-linkRow, .ar-modeRow, .ar-stageRow { flex-direction: column; align-items: stretch; }
+  .ar-root .ar-hero__actions .ar-btn, .ar-roomControls .ar-btn, .ar-linkRow .ar-btn,
+  .ar-modeRow .ar-modeTab, .ar-stageRow .ar-stageBtn { width: 100%; }
+  .ar-cardGrid { grid-template-columns: 1fr; }
+}
+
+/* --- Reduced motion: cover the new hover/transform-bearing rules too --- */
+@media (prefers-reduced-motion: reduce) {
+  .ar-btn, .ar-navLink, .ar-modeTab, .ar-stageBtn, .ar-shell__sidebar {
+    transition: none !important;
+  }
+}
+
+/* --- Print: keep dialogs/menus out of a printed page, same posture as
+   the app's existing print rule above --- */
+@media print {
+  .ar-dialog__scrim, .ar-themeSwitch__menu, .ar-quickSearch__list { display: none !important; }
 }

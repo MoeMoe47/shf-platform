@@ -18,7 +18,17 @@ export async function allInstructorUnits(curriculumId) {
   const entries = Object.entries(fileModules).filter(([p]) =>
     p.includes(`/${curriculumId}-instructor/`)
   );
-  const units = await Promise.all(entries.map(([_, loader]) => loader()));
+  // A single malformed/empty unit file must not take down the whole list —
+  // skip it and keep the rest loadable.
+  const results = await Promise.allSettled(entries.map(([_, loader]) => loader()));
+  const units = [];
+  results.forEach((r, i) => {
+    if (r.status === "fulfilled") {
+      units.push(r.value);
+    } else {
+      console.warn("[instructorLoader] Skipping unloadable unit:", entries[i][0], r.reason);
+    }
+  });
   return units.map(validateInstructorUnit);
 }
 

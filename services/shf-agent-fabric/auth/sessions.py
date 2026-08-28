@@ -24,6 +24,8 @@ class AuthSession:
     last_seen_at: datetime
     last_authenticated_at: datetime
     revoked: bool = False
+    # See AuthUser.organization_id. None = global authority.
+    organization_id: str | None = None
 
 
 _SESSIONS: dict[str, AuthSession] = {}
@@ -57,6 +59,7 @@ def create_session(user: AuthUser) -> tuple[str, AuthSession]:
         idle_expires_at=issued + timedelta(minutes=settings.idle_minutes),
         last_seen_at=issued,
         last_authenticated_at=issued,
+        organization_id=user.organization_id,
     )
     _SESSIONS[session.token_hash] = session
     record_auth_event("session_created", user_id=user.user_id, session_id=token, role=user.role)
@@ -93,6 +96,7 @@ def rotate_session(token: str | None) -> tuple[str, AuthSession] | None:
         role=old.role,
         password_hash="",
         disabled=False,
+        organization_id=old.organization_id,
     )
     new_token, session = create_session(user)
     record_auth_event("session_rotated", user_id=session.user_id, session_id=new_token, role=session.role)
@@ -128,6 +132,7 @@ def sanitized_identity(session: AuthSession) -> dict:
         "email": session.email,
         "display_name": session.display_name,
         "role": session.role,
+        "organization_id": session.organization_id,
         "permissions": permissions,
         "session_id": session.token_hash,
         "session_status": "active",

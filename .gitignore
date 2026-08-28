@@ -47,6 +47,10 @@ db/
 **/*.sqlite3
 **/*.db
 
+# Canonical SHS database client/runner source is code, not a local database.
+!apps/shs-api/src/db/
+!apps/shs-api/src/db/**
+
 # --- Runtime logs (services + app) ---
 logs/
 **/logs/
@@ -56,6 +60,13 @@ logs/
 /tmp/
 *.pdf
 *.zip
+
+# --- Terraform local state and configuration ---
+*.tfstate
+*.tfstate.*
+.terraform/
+*.tfvars
+!*.tfvars.example
 
 # Allow curated contract snapshots (keep these tracked)
 !services/shf-agent-fabric/registry/contracts/
@@ -95,3 +106,9 @@ __pycache__/
 .backup_loo_*/
 loo_rankings*.json
 .env.local
+
+# Local heavyweight Blender working archive; back up separately
+/assets-source/brainiact/blender/
+
+# Downloaded Terraform working directories
+**/.terraform/

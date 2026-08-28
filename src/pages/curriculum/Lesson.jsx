@@ -22,7 +22,7 @@ export default function CurriculumLesson() {
       <div className="page pad">
         <h1>Lesson not found</h1>
         <p>We couldn’t find a stored lesson with id <code>{id}</code>.</p>
-        <p><Link to="/lessons">← Back to My Lessons</Link></p>
+        <p><Link to="/curriculum/lessons">← Back to My Lessons</Link></p>
       </div>
     );
   }
@@ -33,12 +33,15 @@ export default function CurriculumLesson() {
     <div className="page pad">
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:12,flexWrap:"wrap"}}>
         <h1 style={{margin:0}}>{title}</h1>
-        <Link className="btn" to="/lessons">My Lessons</Link>
+        <Link className="btn" to="/curriculum/lessons">My Lessons</Link>
       </div>
 
       {/* Preferred renderer */}
       {lesson.raw ? (
-        <LessonBody lesson={lesson.raw} />
+        <LessonBody
+          lesson={lesson.raw}
+          institutionalCompletion={false}
+        />
       ) : (
         <pre className="card" style={{padding:16,overflow:"auto"}}>{JSON.stringify(lesson, null, 2)}</pre>
       )}

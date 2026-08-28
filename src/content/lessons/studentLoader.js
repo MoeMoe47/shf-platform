@@ -36,6 +36,49 @@ export async function getStudentUnit(curriculumId, slug) {
   return validateStudentUnit(mod);
 }
 
+// Guided Lesson Experience Phase 1 correction (2026-08-27): the canonical
+// /curriculum/lessons/:slug route has no :curriculum URL segment, so a
+// caller that only has a slug (StudentUnit.jsx) has no real curriculum id
+// to pass into getStudentUnit() above — it must not guess/default one.
+// This scans every known "-student" folder for the matching slug and
+// returns the curriculum id actually derived from the real file path
+// (via the same parseCurriculumId() every other loader function here
+// uses), so lesson context is never hardcoded to a single curriculum.
+export async function getStudentUnitBySlug(slug) {
+  const path = Object.keys(fileModules).find((p) => p.endsWith(`/${slug}.json`));
+  if (!path) return null;
+  const curriculum = parseCurriculumId(path);
+  const mod = await fileModules[path]();
+  return { curriculum, unit: validateStudentUnit(mod) };
+}
+
+function parseSlugFromPath(path) {
+  const m = path.match(/\/([^/]+)\.json$/);
+  return m ? m[1] : null;
+}
+
+// Lessons-navigation correction (2026-08-27): real content proved
+// inconsistent about carrying a `slug`/`id` field that actually matches
+// its own filename — e.g. student.asl-21.json's internal `id` is "asl-21",
+// not "student.asl-21" (confirmed live: only 2 of 72 real asl-student
+// files even have a `slug` field, and several `id` values diverge from
+// their filename). Since getStudentUnit()/getStudentUnitBySlug() both
+// match a route slug against the real FILENAME, that filename — not any
+// JSON content field — is the only reliable routable slug. This is the
+// canonical source for a real lessons catalog (see MyLessons.jsx); it
+// must never be reconstructed from localStorage or from unit.slug/id.
+export async function allStudentUnitsCatalog() {
+  const entries = Object.entries(fileModules);
+  const loaded = await Promise.all(
+    entries.map(async ([path, loader]) => ({
+      curriculum: parseCurriculumId(path),
+      routeSlug: parseSlugFromPath(path),
+      unit: validateStudentUnit(await loader()),
+    }))
+  );
+  return loaded.filter((e) => e.routeSlug);
+}
+
 /* ---------- tiny schema guard (no deps) ---------- */
 function validateStudentUnit(u) {
   if (!u || typeof u !== "object") return u;

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import useReferrals from "@/lib/hub/useReferrals";
+import { fetchHubReferralCreatedCountReport } from "@/shared/reporting/hubReferralReportingClient";
 import "./referral-tracker-shs.css";
 import { useAdaptiveExperience } from "@/system/adaptive-experience/useAdaptiveExperience";
 import { buildLifecycleReferralSignal, buildLifecycleStageSignal, lifecycleSignalClass } from "./shared/hubLifecycleSignals";
@@ -341,6 +342,31 @@ function AdaptiveLifecycleSignal({ adaptive }) {
 export default function ReferralLifecycleView() {
   const { items = [], loading, error } = useReferrals();
   const [viewMode, setViewMode] = useState("board");
+  const [createdReport, setCreatedReport] = useState(null);
+  const [createdReportStatus, setCreatedReportStatus] = useState("loading");
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadCreatedReport() {
+      setCreatedReportStatus("loading");
+      try {
+        const report = await fetchHubReferralCreatedCountReport();
+        if (!active) return;
+        setCreatedReport(report);
+        setCreatedReportStatus("ready");
+      } catch {
+        if (!active) return;
+        setCreatedReport(null);
+        setCreatedReportStatus("unavailable");
+      }
+    }
+
+    loadCreatedReport();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const adaptive = useAdaptiveExperience({
     surface: ADAPTIVE_SURFACES.HUB_REFERRAL_LIFECYCLE || "hub_referral_lifecycle",
@@ -470,10 +496,15 @@ export default function ReferralLifecycleView() {
     const highPriority = referrals.filter((item) =>
       ["high", "urgent"].includes(normalizePriority(item.priority || item.urgency_level || item.urgency))
     ).length;
-    const completionRate = total ? Math.round((completed / total) * 100) : 0;
-
-    return { total, active, completed, onHold, highPriority, completionRate };
+    return { total, active, completed, onHold, highPriority };
   }, [referrals, grouped]);
+
+  const createdReportMetric = createdReport?.metric_results?.[0];
+  const createdReferralDisplay = createdReportStatus === "loading"
+    ? "…"
+    : createdReportStatus === "ready"
+      ? String(createdReportMetric.value)
+      : "Unavailable";
 
   return (
     <main className="rt-shell" onClickCapture={handleLifecycleClickCapture}>
@@ -549,12 +580,12 @@ export default function ReferralLifecycleView() {
         ) : null}
 
         <section className="rt-kpiStrip">
-          <SummaryCard icon="👥" label="Total Referrals" value={loading ? "…" : counts.total} chip="Live" note="Live API count" tone="green" />
+          <SummaryCard icon="👥" label="Referrals Created" value={createdReferralDisplay} chip={createdReportStatus === "ready" ? "Canonical" : createdReportStatus === "loading" ? "Loading" : "Unavailable"} note={createdReportStatus === "ready" ? "Canonical Reporting Service count" : createdReportStatus === "loading" ? "Loading approved reporting data" : "Reporting unavailable"} tone="green" />
           <SummaryCard icon="↪" label="Active Flow" value={loading ? "…" : counts.active} chip="Open Path" note="Open + Assigned + In Review" tone="blue" />
           <SummaryCard icon="✓" label="Completed Flow" value={loading ? "…" : counts.completed} chip="Resolved" note="Resolved + Closed" tone="green" />
           <SummaryCard icon="▣" label="On Hold Pressure" value={loading ? "…" : counts.onHold} chip="Needs Attention" note="Items paused and needing operator attention" tone="gold" />
           <SummaryCard icon="⚑" label="High Priority" value={loading ? "…" : counts.highPriority} chip="Urgent" note="Urgent referrals needing faster movement" tone="red" />
-          <SummaryCard icon="◷" label="Completion Rate" value={loading ? "…" : `${counts.completionRate}%`} chip="On Track" note="Completed / total referrals in stream" tone="blue" />
+          <SummaryCard icon="◷" label="Completion Rate" value="Unavailable" chip="Not canonical" note="No approved referral completion metric" tone="blue" />
         </section>
 
         <section className="rt-workGrid">

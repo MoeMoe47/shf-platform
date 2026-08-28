@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "standard_id": "EPL-1",
+  "artifact": "EVIDENCE_LIFECYCLE",
+  "states": [
+    "Created",
+    "Registered",
+    "Validated",
+    "Accepted",
+    "Certified",
+    "Published",
+    "Archived",
+    "Superseded",
+    "Retired"
+  ],
+  "transition_requirements": {
+    "entry_criteria": "state-specific prior evidence and ownership must be present",
+    "exit_criteria": "integrity, traceability, and required authority checks must pass",
+    "approval_authority": "Evidence Governance Authority or delegated lifecycle authority",
+    "evidence_required": "chain-of-custody event, validation result, and repository reference"
+  }
+}

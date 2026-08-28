@@ -8,6 +8,17 @@ const __dirname = path.dirname(__filename);
 
 export default defineConfig({
   server: {
+    // Explicit IPv4 host, matching the same convention already used by
+    // the other local dev servers this app links to/from
+    // (autonomous-registry, the Universe reference implementation both
+    // pass --host 127.0.0.1) and by .env.example's documented cross-app
+    // origins (all 127.0.0.1). Without this, Vite's default host binds
+    // IPv6 loopback ([::1]) only on this machine — any cross-app link
+    // built from a 127.0.0.1 origin (e.g. Foundation/Solutions' "Return
+    // to Universe", found live: it 404'd/connection-refused with
+    // chrome-error://chromewebdata) would silently fail to reach this
+    // server even though "localhost:5173" worked.
+    host: "127.0.0.1",
     proxy: {
       "/api": {
         target: "http://127.0.0.1:8091",
@@ -60,6 +71,7 @@ export default defineConfig({
         allocation: path.resolve(__dirname, "allocation.html"),
         ai: path.resolve(__dirname, "ai.html"),
         arcade: path.resolve(__dirname, "arcade.html"),
+        career: path.resolve(__dirname, "career.html"),
         catalog: path.resolve(__dirname, "catalog.html"),
         civic: path.resolve(__dirname, "civic.html"),
         credit: path.resolve(__dirname, "credit.html"),
@@ -75,6 +87,7 @@ export default defineConfig({
         solutions: path.resolve(__dirname, "solutions.html"),
         store: path.resolve(__dirname, "store.html"),
         treasury: path.resolve(__dirname, "treasury.html"),
+        universe: path.resolve(__dirname, "universe.html"),
         verifier: path.resolve(__dirname, "verifier.html"),
       },
 

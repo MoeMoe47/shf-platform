@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "mission_id": "PACKAGE_H_BATCH_03_IGLS_1_PHASE_1",
+  "artifact": "MISSION_RISK_REGISTER",
+  "risk_status": "CONTROLLED",
+  "risks": [
+    {
+      "id": "B03-RISK-001",
+      "risk": "Phase 1 approval is mistaken for implementation authorization.",
+      "severity": "BLOCKING",
+      "mitigation": "MISSION_AUTHORIZATION explicitly authorizes only IGLS-1 Phase 2 Architecture Charter.",
+      "evidence": "Validator checks implementation_authorized is false."
+    },
+    {
+      "id": "B03-RISK-002",
+      "risk": "Runtime owner closure duplicates existing runtime owners.",
+      "severity": "BLOCKING",
+      "mitigation": "Future Architecture Charter must map every owner against the Master Layer Registry.",
+      "evidence": "MISSION_BOUNDARY_ANALYSIS does_not_replace map."
+    },
+    {
+      "id": "B03-RISK-003",
+      "risk": "Package H becomes a marketplace, agent platform, protocol, or runtime monopoly.",
+      "severity": "BLOCKING",
+      "mitigation": "Airport principle review requires neutral infrastructure and replaceable integrations.",
+      "evidence": "MISSION_ALIGNMENT_MATRIX airport_principle_review."
+    },
+    {
+      "id": "B03-RISK-004",
+      "risk": "Evidence requirements are redefined by a later implementation mission.",
+      "severity": "REQUIRED",
+      "mitigation": "MISSION_EVIDENCE_MATRIX fixes required evidence for future phases.",
+      "evidence": "Future validators must compare against this Phase 1 matrix."
+    }
+  ]
+}

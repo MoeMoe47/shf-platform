@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "artifact_id": "CRI-1",
+  "artifact": "CONSTITUTIONAL_READINESS_INDEX",
+  "version": "1.0",
+  "advisory_only": true,
+  "cannot_override_iag_1": true,
+  "score_formula": "passed mandatory checks divided by total mandatory checks, expressed as percentage; any failed mandatory IAG-1 gate forces NOT_READY regardless of score",
+  "score": 100,
+  "readiness_state": "READY",
+  "domains": [
+    {"domain_id": "CRI-DOMAIN-01", "name": "mission readiness", "governing_sources": ["Phase 1 Mission"], "mandatory_checks": 1, "checks_passed": 1, "checks_failed": 0, "checks_requiring_review": 0, "readiness_state": "READY", "blocking_findings": [], "evidence_references": ["P5-EV-01"], "gate_references": ["IAG-GATE-01"], "rationale": "Phase 1 validator and certification reference present."},
+    {"domain_id": "CRI-DOMAIN-02", "name": "architecture readiness", "governing_sources": ["Phase 2 Architecture"], "mandatory_checks": 1, "checks_passed": 1, "checks_failed": 0, "checks_requiring_review": 0, "readiness_state": "READY", "blocking_findings": [], "evidence_references": ["P5-EV-02"], "gate_references": ["IAG-GATE-02"], "rationale": "Phase 2 validator and certification reference present."},
+    {"domain_id": "CRI-DOMAIN-03", "name": "blueprint readiness", "governing_sources": ["CTB-1", "BDL-1", "IRS-1"], "mandatory_checks": 3, "checks_passed": 3, "checks_failed": 0, "checks_requiring_review": 0, "readiness_state": "READY", "blocking_findings": [], "evidence_references": ["P5-EV-03", "P5-EV-04", "P5-EV-05"], "gate_references": ["IAG-GATE-03", "IAG-GATE-04", "IAG-GATE-05"], "rationale": "Blueprint, decision ledger, and IRS are locked."},
+    {"domain_id": "CRI-DOMAIN-04", "name": "evidence governance readiness", "governing_sources": ["EPL-1", "ERP-1"], "mandatory_checks": 2, "checks_passed": 2, "checks_failed": 0, "checks_requiring_review": 0, "readiness_state": "READY", "blocking_findings": [], "evidence_references": ["P5-EV-06", "P5-EV-10"], "gate_references": ["IAG-GATE-06", "IAG-GATE-10"], "rationale": "EPL-1 is present and ERP-1 consumes it."},
+    {"domain_id": "CRI-DOMAIN-05", "name": "verification readiness", "governing_sources": ["CVF-1", "ACS-1", "EM-1"], "mandatory_checks": 3, "checks_passed": 3, "checks_failed": 0, "checks_requiring_review": 0, "readiness_state": "READY", "blocking_findings": [], "evidence_references": ["P5-EV-07", "P5-EV-08", "P5-EV-09"], "gate_references": ["IAG-GATE-07", "IAG-GATE-08", "IAG-GATE-09"], "rationale": "Phase 4 verification artifacts are complete."},
+    {"domain_id": "CRI-DOMAIN-06", "name": "traceability readiness", "governing_sources": ["all locked artifacts"], "mandatory_checks": 1, "checks_passed": 1, "checks_failed": 0, "checks_requiring_review": 0, "readiness_state": "READY", "blocking_findings": [], "evidence_references": ["P5-EV-11"], "gate_references": ["IAG-GATE-11"], "rationale": "Traceability maps are complete."},
+    {"domain_id": "CRI-DOMAIN-07", "name": "repository readiness", "governing_sources": ["IGLS-1"], "mandatory_checks": 3, "checks_passed": 3, "checks_failed": 0, "checks_requiring_review": 0, "readiness_state": "READY", "blocking_findings": [], "evidence_references": ["P5-EV-12", "P5-EV-13", "P5-EV-14"], "gate_references": ["IAG-GATE-12", "IAG-GATE-13", "IAG-GATE-14"], "rationale": "Repository scope, validators, and focused tests pass."},
+    {"domain_id": "CRI-DOMAIN-08", "name": "certification readiness", "governing_sources": ["IAG-1", "Phase 5 certification report"], "mandatory_checks": 3, "checks_passed": 3, "checks_failed": 0, "checks_requiring_review": 0, "readiness_state": "READY", "blocking_findings": [], "evidence_references": ["P5-EV-15", "P5-EV-16", "P5-EV-20"], "gate_references": ["IAG-GATE-15", "IAG-GATE-16", "IAG-GATE-20"], "rationale": "No blockers or unresolved conflicts recorded."},
+    {"domain_id": "CRI-DOMAIN-09", "name": "scope-control readiness", "governing_sources": ["Implementation Scope Authorization", "GLS-1"], "mandatory_checks": 2, "checks_passed": 2, "checks_failed": 0, "checks_requiring_review": 0, "readiness_state": "READY", "blocking_findings": [], "evidence_references": ["P5-EV-18", "P5-EV-19"], "gate_references": ["IAG-GATE-18", "IAG-GATE-19"], "rationale": "Authorized and prohibited scope are explicit."},
+    {"domain_id": "CRI-DOMAIN-10", "name": "governance-lock readiness", "governing_sources": ["GLS-1", "GFM-1"], "mandatory_checks": 1, "checks_passed": 1, "checks_failed": 0, "checks_requiring_review": 0, "readiness_state": "READY", "blocking_findings": [], "evidence_references": ["P5-EV-17"], "gate_references": ["IAG-GATE-17"], "rationale": "Freeze manifest includes locked artifacts."}
+  ],
+  "override_warning": "A high readiness score does not override a failed mandatory gate."
+}

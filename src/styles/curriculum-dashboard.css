@@ -1,0 +1,1471 @@
+/* src/styles/curriculum-dashboard.css
+   Curriculum "Learning Dashboard" — approved mock implementation.
+   Scoped entirely under .ld-* / [data-app="curriculum"] classes so it
+   cannot collide with the pre-existing (unused) .cur-* / .app-* shell
+   layers already shipped in curriculum-shell.css / curriculum-sidebar.css
+   / curriculum-skin.css. Those files are left untouched.
+*/
+
+:root[data-app="curriculum"] {
+  --ld-bg: #f7f3ea;
+  --ld-card: #ffffff;
+  --ld-ink: #14161a;
+  --ld-muted: #6b7280;
+  --ld-ring: #e7e2d8;
+  --ld-ring-soft: #eef0f3;
+  --ld-orange: #ff4f00;
+  --ld-orange-600: #e64600;
+  --ld-orange-tint: #fff1e8;
+  --ld-orange-tint-strong: #ffe3d1;
+  --ld-shadow: 0 1px 2px rgba(20, 22, 26, 0.04), 0 6px 20px rgba(20, 22, 26, 0.05);
+  --ld-radius: 14px;
+  --ld-radius-sm: 10px;
+  --ld-sidebar-w: 264px;
+  --ld-sidebar-w-collapsed: 76px;
+  --ld-header-h: 96px;
+  /* Accent-scoped surfaces that read as "verified"/"career"/etc — kept as
+     tokens (not literals scattered in curriculum-lesson.css) so dark mode
+     only has to redefine them once here. */
+  --ld-green-tint: #dcfce7;
+  --ld-green-ink: #15803d;
+  --ld-green-strong: #16a34a;
+  --ld-red-strong: #991b1b;
+}
+
+/* ===================== Dark mode (Desktop Shell Correction pass) =====
+   Institutional, quiet, premium — not a neon/gaming dark theme. Mirrors
+   civic-dashboard.css's proven token-redefinition pattern exactly: same
+   token *names* stay in effect everywhere, only their dark *values*
+   change here, so every component already built against --ld-* re-themes
+   automatically with no per-component dark rule needed except where a
+   component used a literal color instead of a token (curriculum-lesson.css
+   has a few — themed separately, near those rules).
+   ===================================================================== */
+:root[data-app="curriculum"][data-theme="dark"] {
+  --ld-bg: #0e0f12;
+  --ld-card: #16181d;
+  --ld-ink: #f2f1ee;
+  --ld-muted: #9a9da6;
+  --ld-ring: #2a2d34;
+  --ld-ring-soft: #1e2026;
+  --ld-orange: #ff6a2b;
+  --ld-orange-600: #ff8548;
+  --ld-orange-tint: rgba(255, 106, 43, 0.14);
+  --ld-orange-tint-strong: rgba(255, 106, 43, 0.24);
+  --ld-shadow: 0 0 0 1px rgba(255, 255, 255, 0.02), 0 10px 28px -14px rgba(0, 0, 0, 0.65);
+  --ld-green-tint: rgba(34, 197, 94, 0.16);
+  --ld-green-ink: #4ade80;
+  --ld-green-strong: #4ade80;
+  --ld-red-strong: #f87171;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-app="curriculum"]:not([data-theme="light"]):not([data-theme="dark"]) {
+    --ld-bg: #0e0f12;
+    --ld-card: #16181d;
+    --ld-ink: #f2f1ee;
+    --ld-muted: #9a9da6;
+    --ld-ring: #2a2d34;
+    --ld-ring-soft: #1e2026;
+    --ld-orange: #ff6a2b;
+    --ld-orange-600: #ff8548;
+    --ld-orange-tint: rgba(255, 106, 43, 0.14);
+    --ld-orange-tint-strong: rgba(255, 106, 43, 0.24);
+    --ld-shadow: 0 0 0 1px rgba(255, 255, 255, 0.02), 0 10px 28px -14px rgba(0, 0, 0, 0.65);
+    --ld-green-tint: rgba(34, 197, 94, 0.16);
+    --ld-green-ink: #4ade80;
+    --ld-green-strong: #4ade80;
+    --ld-red-strong: #f87171;
+  }
+}
+
+/* ===================== Dark-mode correction: legacy shared tokens =====
+   Root cause of "white cards, light text" (Desktop Shell Dark-Mode
+   Correction pass): curriculum.main.jsx also loads several pre-existing,
+   cross-app-shared stylesheets this app doesn't own or otherwise touch —
+   global.css, shell.css (imported for their .card/.btn/.sh-btn primitives
+   and reset, used directly by MyLessons.jsx, Assignments.jsx,
+   LiveSessions.jsx, AccessibilityPreferencesPanel.jsx, and inline styles
+   in Assignments.jsx) — each defines its OWN `--card`/`--ink`/`--ring`/
+   etc. on a bare `:root{}` with light-only values and no dark branch.
+   src/index.css has a real dark branch for these same names, but
+   index.css is never imported by curriculum.main.jsx at all, so it never
+   applied here. Rather than editing those shared, cross-app files (risk
+   of affecting Debt/Employer/Sales/etc, which also load them) or
+   hand-patching every consuming page with one-off colors, this aliases
+   the *same generic names* to the already-correct --ld-* dark values, at
+   higher specificity than any of those files' bare `:root{}` blocks, so
+   every existing var(--card)/var(--ink)/var(--ring) consumer re-themes
+   automatically — one shared-token fix, not N page-level patches. */
+:root[data-app="curriculum"][data-theme="dark"] {
+  --card: var(--ld-card);
+  --bg: var(--ld-bg);
+  --page: var(--ld-bg);
+  --ivory: var(--ld-bg);
+  --beige: var(--ld-bg);
+  --ink: var(--ld-ink);
+  --text: var(--ld-ink);
+  --ink-soft: var(--ld-muted);
+  --muted: var(--ld-muted);
+  --ring: var(--ld-ring);
+  --line: var(--ld-ring);
+  --brand: var(--ld-orange);
+  --orange: var(--ld-orange);
+  --surface: var(--ld-card);
+}
+
+/* A few component rules in those shared files hardcode a literal white
+   background instead of reading var(--card) (global.css's .btn,
+   shell.css's .sh-btn/.sh-btn--soft) — a variable alias alone can't fix a
+   literal, so these are patched directly, still scoped strictly to
+   [data-app="curriculum"][data-theme="dark"] so no other app is touched. */
+:root[data-app="curriculum"][data-theme="dark"] .btn,
+:root[data-app="curriculum"][data-theme="dark"] .sh-btn,
+:root[data-app="curriculum"][data-theme="dark"] .card {
+  background: var(--ld-card);
+  border-color: var(--ld-ring);
+  color: var(--ld-ink);
+}
+:root[data-app="curriculum"][data-theme="dark"] .btn--primary {
+  background: var(--ld-orange);
+  border-color: var(--ld-orange);
+  color: #fff;
+}
+:root[data-app="curriculum"][data-theme="dark"] .sh-btn--soft {
+  background: var(--ld-ring-soft);
+}
+:root[data-app="curriculum"][data-theme="dark"] .sh-btn:hover {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+/* Placeholder text (form inputs on these shared pages) — browser default
+   placeholder color doesn't follow `color` and stays too dark to read on
+   a dark card. */
+:root[data-app="curriculum"][data-theme="dark"] input::placeholder,
+:root[data-app="curriculum"][data-theme="dark"] textarea::placeholder {
+  color: var(--ld-muted);
+  opacity: 1;
+}
+:root[data-app="curriculum"][data-theme="dark"] input:disabled,
+:root[data-app="curriculum"][data-theme="dark"] button:disabled,
+:root[data-app="curriculum"][data-theme="dark"] select:disabled {
+  color: var(--ld-muted);
+  opacity: 0.6;
+}
+
+/* app-shell.css (loaded after this file, "layout guardrails") sets
+   `html, body { height: 100% }` globally across every app that shares it.
+   That's a hard height, not a floor — on any Curriculum route whose
+   content exceeds one viewport tall (every lesson page, once the
+   Brainiact bottom-clearance padding is added — see curriculum-lesson.css),
+   body's own painted background box stops at exactly 100vh while the
+   (unclipped) content keeps rendering past it, so html's un-themed
+   default (white) background shows through as a visible seam below the
+   fold — very visible in dark mode. Fixed identically to
+   civic-dashboard.css's own documented fix for the same shared-CSS
+   issue, scoped strictly to [data-app="curriculum"]. */
+html[data-app="curriculum"],
+html[data-app="curriculum"] body {
+  height: auto;
+  min-height: 100%;
+}
+
+html[data-app="curriculum"],
+:root[data-app="curriculum"] body,
+:root[data-app="curriculum"] .ld-shell {
+  background: var(--ld-bg);
+  color: var(--ld-ink);
+}
+
+.ld-srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.ld-skip {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  background: #fff;
+  color: var(--ld-ink);
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--ld-ring);
+  z-index: 200;
+}
+.ld-skip:focus {
+  left: 12px;
+  top: 12px;
+}
+
+:root[data-app="curriculum"] *:focus-visible {
+  outline: 2px solid var(--ld-orange);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ===================== Shell frame ===================== */
+.ld-shell {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  min-height: 100dvh;
+  background: var(--ld-bg);
+  color: var(--ld-ink);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", system-ui, sans-serif;
+}
+
+.ld-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ld-main {
+  flex: 1;
+  min-width: 0;
+  padding: 24px 32px 48px;
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ===================== Sidebar ===================== */
+.ld-sidebarWrap {
+  flex-shrink: 0;
+}
+
+.ld-sidebar {
+  width: var(--ld-sidebar-w);
+  height: 100dvh;
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--ld-card);
+  border-right: 1px solid var(--ld-ring);
+  transition: width 160ms ease;
+}
+
+.ld-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 22px 20px 18px;
+}
+.ld-brandToggle {
+  margin-left: auto;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: 1px solid var(--ld-ring);
+  background: var(--ld-card);
+  color: var(--ld-muted);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.ld-brandToggle:hover {
+  border-color: var(--ld-orange);
+  color: var(--ld-orange);
+}
+.ld-brandMark {
+  color: var(--ld-orange);
+  flex-shrink: 0;
+}
+.ld-brandName {
+  font-weight: 800;
+  font-size: 15px;
+  line-height: 1.25;
+  color: var(--ld-ink);
+}
+
+.ld-navScroll {
+  flex: 1;
+  min-height: 0;
+  /* Deliberately not overflow-y: auto — per spec, a non-visible overflow-y
+     forces overflow-x to clip too, which silently cut off the collapsed
+     sidebar's absolutely-positioned hover tooltip (position: absolute;
+     left: calc(100% + 10px) — see .ld-sidebar[data-collapsed="true"]
+     .ld-navItem[data-label]::after below). The full nav list (10 items)
+     comfortably fits without scrolling on any real desktop viewport; if it
+     ever doesn't, the page scrolls instead of a clipped inner region. */
+  padding: 4px 12px;
+}
+
+.ld-navGroup + .ld-navGroup {
+  margin-top: 4px;
+}
+
+.ld-navDivider {
+  height: 1px;
+  background: var(--ld-ring);
+  margin: 12px 12px;
+}
+
+.ld-navLabel {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ld-muted);
+  padding: 10px 12px 6px;
+}
+
+.ld-navList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.ld-navItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px 9px 14px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--ld-ink);
+  font-size: 14px;
+  font-weight: 500;
+  min-height: 40px;
+}
+.ld-navItem:hover {
+  background: var(--ld-ring-soft);
+}
+.ld-navIcon {
+  color: var(--ld-muted);
+  flex-shrink: 0;
+}
+.ld-navText {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ld-navItem.is-active {
+  background: var(--ld-orange-tint);
+  color: var(--ld-orange-600);
+  font-weight: 700;
+}
+.ld-navItem.is-active .ld-navIcon {
+  color: var(--ld-orange);
+}
+.ld-navItem.is-active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 3px;
+  border-radius: 999px;
+  background: var(--ld-orange);
+}
+
+.ld-userCard {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px;
+  padding: 10px;
+  border: 1px solid var(--ld-ring);
+  border-radius: var(--ld-radius-sm);
+  background: var(--ld-card);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+}
+.ld-userCard:hover {
+  background: var(--ld-ring-soft);
+}
+.ld-userAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: var(--ld-orange-tint-strong);
+  color: var(--ld-orange-600);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.ld-userMeta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+.ld-userName {
+  font-weight: 700;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ld-userRole {
+  font-size: 12px;
+  color: var(--ld-muted);
+}
+.ld-userChevron {
+  color: var(--ld-muted);
+  flex-shrink: 0;
+}
+
+/* ===================== Sidebar: collapsed (desktop icon rail) =====
+   Desktop-only correction pass — a user-toggled compact rail, distinct
+   from (and independent of) the existing <=860px mobile drawer below,
+   which is untouched. Persistence/keyboard shortcut live in
+   CurriculumLayout.jsx (localStorage "curriculum.sidebar.collapsed",
+   Alt+S) — mirrors the proven civic-dashboard.css /
+   CivicAppShell.jsx pattern exactly, including the visually-hidden
+   (not display:none) label technique so collapsed nav items keep a real
+   accessible name instead of losing it. ================================ */
+.ld-sidebar[data-collapsed="true"] {
+  width: var(--ld-sidebar-w-collapsed);
+}
+.ld-sidebar[data-collapsed="true"] .ld-brand {
+  padding: 18px 0 14px;
+  justify-content: center;
+}
+.ld-sidebar[data-collapsed="true"] .ld-brandName,
+.ld-sidebar[data-collapsed="true"] .ld-brandToggle {
+  display: none;
+}
+.ld-sidebar[data-collapsed="true"] .ld-navLabel {
+  display: none;
+}
+.ld-sidebar[data-collapsed="true"] .ld-navItem {
+  justify-content: center;
+  padding: 10px 0;
+}
+.ld-sidebar[data-collapsed="true"] .ld-navText {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.ld-sidebar[data-collapsed="true"] .ld-navItem.is-active::before {
+  left: 50%;
+  top: 0;
+  bottom: auto;
+  width: 20px;
+  height: 3px;
+  transform: translateX(-50%);
+}
+/* Accessible tooltip on hover/focus for collapsed icon-only nav items */
+.ld-sidebar[data-collapsed="true"] .ld-navItem[data-label]::after {
+  content: attr(data-label);
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--ld-ink);
+  color: var(--ld-card);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 40;
+  transition: opacity 120ms ease;
+}
+.ld-sidebar[data-collapsed="true"] .ld-navItem[data-label]:hover::after,
+.ld-sidebar[data-collapsed="true"] .ld-navItem[data-label]:focus-visible::after {
+  opacity: 1;
+}
+.ld-sidebar[data-collapsed="true"] .ld-userCard {
+  justify-content: center;
+  padding: 10px 8px;
+}
+.ld-sidebar[data-collapsed="true"] .ld-userMeta,
+.ld-sidebar[data-collapsed="true"] .ld-userChevron {
+  display: none;
+}
+.ld-collapsedToggle {
+  margin: 8px 12px 4px;
+  width: calc(100% - 24px);
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--ld-ring);
+  background: var(--ld-card);
+  color: var(--ld-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.ld-collapsedToggle:hover {
+  border-color: var(--ld-orange);
+  color: var(--ld-orange);
+}
+
+/* ===================== Mobile menu button / drawer ===================== */
+.ld-mobileMenuBtn {
+  display: none;
+}
+.ld-scrim {
+  display: none;
+}
+
+/* ===================== Header ===================== */
+/* Desktop Shell Correction pass: a real, persistent application header —
+   full-bleed background + bottom border across the .ld-body column, with
+   its content sharing the exact same max-width/gutters as .ld-main so the
+   header and page content align on one canonical edge (see also
+   .ld-lessonPage/.ld-dashGrid, which live inside .ld-main). */
+.ld-headerBar {
+  background: var(--ld-card);
+  border-bottom: 1px solid var(--ld-ring);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+.ld-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding: 16px 32px;
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.ld-headerTitles {
+  min-width: 0;
+}
+.ld-h1 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 800;
+  color: var(--ld-ink);
+}
+.ld-subtitle {
+  margin: 6px 0 0;
+  color: var(--ld-muted);
+  font-size: 14px;
+}
+
+.ld-headerControls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ld-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 280px;
+}
+.ld-searchIcon {
+  position: absolute;
+  left: 12px;
+  color: var(--ld-muted);
+  pointer-events: none;
+}
+.ld-searchInput {
+  width: 100%;
+  padding: 10px 12px 10px 38px;
+  border-radius: 10px;
+  border: 1px solid var(--ld-ring);
+  background: var(--ld-card);
+  font-size: 14px;
+  color: var(--ld-ink);
+}
+.ld-searchInput::placeholder {
+  color: var(--ld-muted);
+}
+.ld-searchInput:focus {
+  outline: 2px solid var(--ld-orange);
+  outline-offset: 1px;
+}
+
+.ld-iconBtn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--ld-ring);
+  background: var(--ld-card);
+  color: var(--ld-ink);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.ld-iconBtn:hover {
+  background: #f6f3ec;
+}
+.ld-unreadDot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--ld-orange);
+  border: 1.5px solid var(--ld-card);
+}
+
+.ld-notifWrap {
+  position: relative;
+}
+.ld-notifPanel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  width: 260px;
+  background: var(--ld-card);
+  border: 1px solid var(--ld-ring);
+  border-radius: var(--ld-radius-sm);
+  box-shadow: var(--ld-shadow);
+  padding: 14px;
+  z-index: 30;
+}
+.ld-notifEmpty {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ld-muted);
+}
+
+.ld-pathwaySelect {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.ld-pathwaySelectInput {
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 10px 34px 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--ld-ring);
+  background: var(--ld-card);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ld-ink);
+}
+.ld-pathwayChevron {
+  position: absolute;
+  right: 10px;
+  color: var(--ld-muted);
+  pointer-events: none;
+}
+
+/* ===================== Theme switch ===================== */
+.ld-themeSwitch {
+  position: relative;
+}
+.ld-themeSwitch__trigger {
+  font-size: 16px;
+}
+.ld-themeSwitch__menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  background: var(--ld-card);
+  border: 1px solid var(--ld-ring);
+  border-radius: 12px;
+  box-shadow: var(--ld-shadow);
+  padding: 6px;
+  min-width: 150px;
+  z-index: 50;
+}
+.ld-themeSwitch__item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 13.5px;
+  color: var(--ld-ink);
+  cursor: pointer;
+  text-align: left;
+}
+.ld-themeSwitch__item:hover,
+.ld-themeSwitch__item.is-selected {
+  background: var(--ld-orange-tint);
+}
+.ld-themeSwitch__itemLabel {
+  flex: 1;
+}
+.ld-themeSwitch__check {
+  color: var(--ld-orange);
+  font-weight: 800;
+}
+
+/* ===================== Dashboard grid ===================== */
+.ld-dashGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: 20px;
+  margin-top: 24px;
+  align-items: start;
+}
+.ld-dashCol {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+/* ===================== Card base ===================== */
+.ld-card {
+  background: var(--ld-card);
+  border: 1px solid var(--ld-ring);
+  border-radius: var(--ld-radius);
+  box-shadow: var(--ld-shadow);
+  padding: 22px 24px;
+  min-width: 0;
+}
+
+.ld-eyebrow {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ld-orange);
+}
+.ld-cardHeadRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.ld-cardHeadRow .ld-eyebrow {
+  margin-bottom: 0;
+}
+
+.ld-cardTitle {
+  margin: 0 0 14px;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--ld-ink);
+}
+.ld-mutedLine {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ld-muted);
+}
+.ld-lessonName {
+  margin: 4px 0 14px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ld-ink);
+}
+
+/* Current Pathway progress bar */
+.ld-progressRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.ld-progressBar {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--ld-ring-soft);
+  overflow: hidden;
+}
+.ld-progressBarFill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--ld-orange);
+}
+.ld-progressPct {
+  font-size: 13px;
+  color: var(--ld-muted);
+  white-space: nowrap;
+}
+
+.ld-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 10px;
+  padding: 11px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1px solid transparent;
+  min-height: 44px;
+  cursor: pointer;
+}
+.ld-btnPrimary {
+  background: var(--ld-orange);
+  color: #fff;
+}
+.ld-btnPrimary:hover {
+  background: var(--ld-orange-600);
+}
+
+/* This Week stats */
+.ld-statRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
+.ld-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+}
+.ld-statIcon {
+  color: var(--ld-orange);
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  border-radius: 999px;
+  border: 1.5px solid var(--ld-orange-tint-strong);
+  box-sizing: border-box;
+}
+.ld-statValue {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--ld-ink);
+  line-height: 1.1;
+}
+.ld-statLabel {
+  font-size: 12px;
+  color: var(--ld-muted);
+  line-height: 1.3;
+}
+.ld-statLabelTop {
+  font-weight: 600;
+  color: var(--ld-ink);
+}
+
+/* Learning progress ring */
+.ld-progressGrid {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.ld-ring {
+  --ld-ring-size: 128px;
+  width: var(--ld-ring-size);
+  height: var(--ld-ring-size);
+  border-radius: 999px;
+  flex-shrink: 0;
+  background: conic-gradient(
+    var(--ld-orange) calc(var(--ld-ring-pct) * 1%),
+    var(--ld-orange-tint) 0
+  );
+  display: grid;
+  place-items: center;
+}
+.ld-ringInner {
+  width: calc(var(--ld-ring-size) - 22px);
+  height: calc(var(--ld-ring-size) - 22px);
+  border-radius: 999px;
+  background: var(--ld-card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.ld-ringPct {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--ld-ink);
+  line-height: 1.1;
+}
+.ld-ringLabel {
+  font-size: 12px;
+  color: var(--ld-muted);
+}
+.ld-progressStats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  min-width: 220px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+.ld-progressStats li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+}
+.ld-progressStatIcon {
+  color: var(--ld-muted);
+  margin-bottom: 4px;
+}
+.ld-progressStatValue {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--ld-ink);
+}
+.ld-progressStatLabel {
+  font-size: 12px;
+  color: var(--ld-muted);
+  line-height: 1.3;
+}
+
+/* Wallet & Rewards */
+.ld-walletShf {
+  margin: 4px 0 0;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--ld-ink);
+  line-height: 1.1;
+}
+.ld-walletShfLabel {
+  margin-bottom: 16px;
+}
+.ld-walletTokens {
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.ld-walletTokens li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ld-tokenIcon {
+  font-size: 16px;
+}
+.ld-tokenLabel {
+  flex: 1;
+  font-size: 14px;
+  color: var(--ld-ink);
+}
+.ld-tokenValue {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ld-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.ld-viewLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ld-orange);
+  font-weight: 700;
+  font-size: 13px;
+  text-decoration: none;
+}
+.ld-viewLink:hover {
+  color: var(--ld-orange-600);
+}
+.ld-viewLinkSmall {
+  font-size: 13px;
+}
+
+/* Upcoming assignments */
+.ld-assignList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+.ld-assignRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-top: 1px solid var(--ld-ring);
+}
+.ld-assignRow:first-child {
+  border-top: none;
+  padding-top: 6px;
+}
+.ld-assignIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.ld-tone-blue {
+  background: #e7f1ff;
+  color: #1d5fd6;
+}
+.ld-tone-slate {
+  background: #eef0f3;
+  color: #334155;
+}
+.ld-assignMain {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ld-assignTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ld-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ld-assignCourse {
+  font-size: 12px;
+  color: var(--ld-muted);
+}
+.ld-assignDate {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  white-space: nowrap;
+}
+.ld-assignDateValue {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ld-ink);
+}
+.ld-assignDay {
+  font-size: 12px;
+  color: var(--ld-muted);
+}
+.ld-statusPill {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.ld-statusPill.is-soon {
+  background: var(--ld-orange-tint-strong);
+  color: var(--ld-orange-600);
+}
+.ld-statusPill.is-later {
+  background: var(--ld-ring-soft);
+  color: var(--ld-muted);
+}
+
+/* Calendar */
+.ld-calHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.ld-calTitle {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ld-ink);
+}
+.ld-calNav {
+  display: flex;
+  gap: 6px;
+}
+.ld-calNavBtn {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--ld-ring);
+  background: var(--ld-card);
+  color: var(--ld-ink);
+  display: grid;
+  place-items: center;
+}
+.ld-calNavBtn:hover {
+  background: #f6f3ec;
+}
+.ld-calWeekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 4px;
+}
+.ld-calWeekday {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ld-muted);
+  text-transform: uppercase;
+  padding: 4px 0;
+}
+.ld-calGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+.ld-calDay {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: var(--ld-ink);
+  font-size: 13px;
+}
+.ld-calDay:not(:disabled):hover {
+  background: #f6f3ec;
+}
+.ld-calDay.is-outside {
+  color: #c9c3b6;
+}
+.ld-calDay.is-selected {
+  background: var(--ld-orange);
+  color: #fff;
+  font-weight: 700;
+}
+.ld-calDot {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--ld-orange);
+}
+.ld-calDay.is-selected .ld-calDot {
+  background: #fff;
+}
+
+/* ===================== Shared Curriculum footer =====================
+   Rendered once by CurriculumLayout.jsx (see CurriculumFooter.jsx),
+   inside .ld-body alongside the header/main — so it automatically shares
+   their exact max-width/gutters, and automatically widens with the main
+   content column when the sidebar is collapsed (no footer-specific width
+   math needed, same mechanism the header already uses).
+   Light: ivory (--ld-bg) with a subtle top border, matching the approved
+   mock's "white/ivory institutional" direction (deliberately not the
+   white --ld-card surface cards use, so the footer doesn't read as
+   another card). Dark: --ld-card (an elevated dark surface, distinct
+   from the near-black page background) per the mock's explicit "dark
+   elevated footer surface" dark-mode direction — the one place this
+   footer intentionally uses a different token per theme, not two theme
+   systems. */
+.ld-footer {
+  background: var(--ld-bg);
+  border-top: 1px solid var(--ld-ring);
+}
+:root[data-app="curriculum"][data-theme="dark"] .ld-footer {
+  background: var(--ld-card);
+}
+.ld-footerInner {
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 28px 32px 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.ld-footerPrimary {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.ld-footerBrand {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  min-width: 220px;
+  max-width: 320px;
+}
+.ld-footerBrandMark {
+  color: var(--ld-orange);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.ld-footerBrandName {
+  margin: 0;
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--ld-ink);
+}
+.ld-footerTagline {
+  margin: 4px 0 0;
+  font-size: 12.5px;
+  color: var(--ld-muted);
+  line-height: 1.4;
+}
+.ld-footerNav {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-width: 130px;
+}
+.ld-footerLink {
+  display: inline-block;
+  width: fit-content;
+  font: inherit;
+  font-size: 13px;
+  color: var(--ld-muted);
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 1px 0;
+  text-align: left;
+  cursor: pointer;
+}
+a.ld-footerLink:hover {
+  color: var(--ld-orange);
+}
+a.ld-footerLink:focus-visible {
+  outline: 2px solid var(--ld-orange);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+span.ld-footerLink.is-unavailable {
+  color: var(--ld-ring);
+  cursor: default;
+}
+:root[data-app="curriculum"][data-theme="dark"] span.ld-footerLink.is-unavailable {
+  color: #4a4e58;
+}
+.ld-footerSecondary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 18px;
+  border-top: 1px solid var(--ld-ring);
+}
+.ld-footerCopyright {
+  margin: 0;
+  font-size: 12px;
+  color: var(--ld-muted);
+}
+.ld-footerBackToTop {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid var(--ld-ring);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ld-ink);
+  cursor: pointer;
+}
+.ld-footerBackToTop:hover {
+  color: var(--ld-orange);
+  border-color: var(--ld-orange);
+}
+.ld-footerBackToTop:focus-visible {
+  outline: 2px solid var(--ld-orange);
+  outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .ld-footerInner {
+    padding: 24px 20px 100px;
+  }
+  .ld-footerPrimary {
+    gap: 24px;
+  }
+}
+
+/* ===================== Reduced motion ===================== */
+@media (prefers-reduced-motion: reduce) {
+  :root[data-app="curriculum"] * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ===================== Tablet (<=1024px) ===================== */
+@media (max-width: 1024px) {
+  .ld-dashGrid {
+    grid-template-columns: 1fr;
+  }
+  :root[data-app="curriculum"] {
+    --ld-sidebar-w: 220px;
+  }
+  .ld-main,
+  .ld-header {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+/* ===================== Mobile (<=860px): sidebar becomes a drawer ===================== */
+@media (max-width: 860px) {
+  /* The desktop collapse toggle is a separate concern from the existing
+     mobile drawer below — a collapsed desktop preference must never
+     shrink the mobile off-canvas drawer, which always shows full labels. */
+  .ld-sidebar[data-collapsed="true"] {
+    width: var(--ld-sidebar-w);
+  }
+  .ld-sidebar[data-collapsed="true"] .ld-navText,
+  .ld-sidebar[data-collapsed="true"] .ld-navLabel,
+  .ld-sidebar[data-collapsed="true"] .ld-brandName,
+  .ld-sidebar[data-collapsed="true"] .ld-userMeta,
+  .ld-sidebar[data-collapsed="true"] .ld-userChevron {
+    display: initial;
+    position: static;
+    width: auto;
+    height: auto;
+    clip: auto;
+    overflow: visible;
+    margin: 0;
+  }
+  .ld-mobileMenuBtn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    width: 40px;
+    height: 40px;
+    margin: 12px 0 0 16px;
+    border-radius: 10px;
+    border: 1px solid var(--ld-ring);
+    background: var(--ld-card);
+    align-self: flex-start;
+  }
+  .ld-mobileMenuBar {
+    display: block;
+    height: 2px;
+    margin: 0 8px;
+    background: var(--ld-ink);
+    border-radius: 2px;
+  }
+  .ld-scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 22, 26, 0.4);
+    z-index: 55;
+  }
+  .ld-sidebarWrap {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(84vw, 300px);
+    z-index: 60;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+  }
+  .ld-sidebarWrap.is-open {
+    transform: translateX(0);
+  }
+  .ld-sidebar {
+    height: 100dvh;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  }
+  .ld-header {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px 16px 0;
+  }
+  .ld-headerControls {
+    width: 100%;
+  }
+  .ld-search {
+    min-width: 0;
+    flex: 1;
+  }
+  .ld-main {
+    padding: 16px 16px 40px;
+  }
+  .ld-statRow {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .ld-progressGrid {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .ld-progressStats {
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+  }
+  .ld-assignRow {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      "icon main"
+      "date date"
+      "status status";
+    row-gap: 6px;
+  }
+  .ld-assignIcon {
+    grid-area: icon;
+  }
+  .ld-assignMain {
+    grid-area: main;
+  }
+  .ld-assignDate {
+    grid-area: date;
+    align-items: flex-start;
+    text-align: left;
+    flex-direction: row;
+    gap: 8px;
+  }
+  .ld-statusPill {
+    grid-area: status;
+    justify-self: start;
+  }
+}
+
+/* ===================== 320px minimum-width safety ===================== */
+@media (max-width: 400px) {
+  .ld-h1 {
+    font-size: 22px;
+  }
+  .ld-card {
+    padding: 16px;
+  }
+  .ld-ring {
+    --ld-ring-size: 108px;
+  }
+  .ld-progressStats {
+    grid-template-columns: 1fr 1fr;
+  }
+}

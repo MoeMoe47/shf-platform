@@ -1,0 +1,79 @@
+BRAINIACT UPPER-BODY FIT DIMENSIONS -- MEASUREMENT AUDIT (READ-ONLY)
+Generated: automated Blender scene query, no geometry modified
+
+SCENE UNIT SCALE: 1.0 (METRIC), 1 Blender unit = 1.0 m
+Axis convention (verified from rig symmetry): +X = character LEFT, -X = character RIGHT,
+Z = vertical (up), -Y = front (face/visor side), +Y = back of head
+True body centerline X = 0.051000 m (matches torso center, NOT world X=0)
+
+1. TORSO / CHEST ENVELOPE  (object: Brainiact_TORSO_PRODUCTION)
+CHEST MAXIMUM WIDTH: 295.5 mm
+CHEST MAXIMUM HEIGHT: 103.0 mm
+CHEST MAXIMUM DEPTH: 149.2 mm
+CHEST CENTER WORLD POSITION (mm): [51.0, 92.0, 428.5]
+CHEST TOP Z: 480.0 mm
+CHEST BOTTOM Z: 377.0 mm
+LEFT CHEST EXTENT (mm): [198.75, 92.0, 428.5]
+RIGHT CHEST EXTENT (mm): [-96.75, 92.0, 428.5]
+FRONTMOST CHEST SURFACE (mm): [51.0, 17.4, 428.5]
+
+2. PROPOSED BREASTPLATE SAFE ENVELOPE  (RECOMMENDATION, not measured -- no shell exists yet)
+BREASTPLATE WIDTH: ~305 mm
+BREASTPLATE HEIGHT: ~115 mm
+BREASTPLATE DEPTH / PROJECTION: ~159 mm
+RECOMMENDED SHELL CLEARANCE: ~5 mm
+
+3. SHOULDER JOINT MEASUREMENTS
+LEFT SHOULDER CENTER POSITION (mm): [218.26, 92.0, 469.6]
+LEFT SHOULDER BALL DIAMETER: 90.5 mm
+LEFT SHOULDER BALL RADIUS: 45.3 mm
+LEFT SHOULDER DISTANCE FROM CENTERLINE: 167.3 mm
+RIGHT SHOULDER CENTER POSITION (mm): [-116.26, 92.0, 469.6]
+RIGHT SHOULDER BALL DIAMETER: 90.5 mm
+RIGHT SHOULDER BALL RADIUS: 45.3 mm
+RIGHT SHOULDER DISTANCE FROM CENTERLINE: 167.3 mm
+DISTANCE BETWEEN LEFT AND RIGHT SHOULDER CENTERS: 334.5 mm
+SHOULDERS GEOMETRICALLY SYMMETRIC: YES (relative to true centerline X=0.0510, NOT world X=0)
+
+4. SHOULDER ARMOR SAFE ZONE  (RECOMMENDATION, not measured)
+SHOULDER CAP WIDTH: ~106 mm
+SHOULDER CAP HEIGHT: ~106 mm
+SHOULDER CAP DEPTH: ~111 mm
+MINIMUM JOINT CLEARANCE: ~8 mm
+
+5. UPPER ARM  (objects: Brainiact_LEFT_UPPER_ARM / Brainiact_RIGHT_UPPER_ARM, Brainiact_LEFT/RIGHT_ELBOW_JOINT)
+UPPER ARM LENGTH (mesh Z-span, shoulder region to elbow region): 117.2 mm
+  (supplementary: shoulder-joint-center to elbow-joint-center distance: 117.5 mm)
+MAXIMUM WIDTH: 87.4 mm
+MAXIMUM DEPTH: 70.0 mm
+ELBOW JOINT DIAMETER: 66.7 mm
+RECOMMENDED ARMOR CLEARANCE: ~4-6 mm
+(Right upper arm / elbow are mirror-matched: width 87.4 mm, depth 70.0 mm, elbow diameter 66.7 mm)
+
+6. V-SHAPED CHEST DISPLAY SAFE AREA  (RECOMMENDATION, not measured -- no display object exists yet)
+AVAILABLE DISPLAY WIDTH AT TOP: ~236 mm
+AVAILABLE DISPLAY WIDTH AT LOWER REGION: ~112 mm
+AVAILABLE DISPLAY HEIGHT: ~88 mm
+FRONT SURFACE CENTER (mm): [51.0, 17.4, 428.5]
+RECOMMENDED DISPLAY PROJECTION ABOVE ARMOR: ~2 mm
+Note: shoulder joints sit above/lateral to chest top (Z 424-515 mm) -- V-display height budget above stays clear of shoulder articulation.
+
+7. NECK / SPINE CONNECTION
+VERTICAL GAP (head/brain-head assembly bottom to torso top): 81.3 mm
+  (head assembly bottom Z = 561.3 mm [Brainiact_HEAD_FRAME], torso top Z = 480.0 mm)
+AVAILABLE WIDTH (current interface footprint): 129.6 mm
+AVAILABLE DEPTH (current interface footprint): 129.6 mm
+HEAD CENTERLINE (mm, Brainiact_HEAD_FRAME center): [7.06, 7.53, 699.63]
+TORSO CENTERLINE (mm, Brainiact_TORSO_PRODUCTION center): [51.0, 92.0, 428.5]
+Note: this vertical span is currently occupied by the existing Brainiact_HEAD_NECK_INTERFACE object
+  (Z 480.0-598.0 mm) -- reported for reference, not modified.
+A separate Brainiact_NECK_COLLAR object exists but is currently hidden (not part of the visible assembly).
+
+PROTECTION VERIFICATION
+GEOMETRY MODIFIED: NO
+OBJECTS MOVED: NO
+TRANSFORMS APPLIED: NO
+RIG MODIFIED: NO
+MATERIALS MODIFIED: NO
+VISOR MODIFIED: NO
+BRAIN MODIFIED: NO

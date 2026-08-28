@@ -1,0 +1,50 @@
+{
+  "registry_id": "shf-report-definition-registry-v1",
+  "schema_version": "1.0.0",
+  "definitions": [
+    {
+      "report_definition_id": "curriculum.lesson_completion_count",
+      "version": 1,
+      "status": "active",
+      "metric_ids": ["curriculum.lesson.completion_count.v1"],
+      "audiences": ["internal", "organization", "public"],
+      "permission": "shf.report.read",
+      "public_policy": "metric_and_claim_public_eligibility_required",
+      "effective_from": "2026-01-01T00:00:00Z",
+      "effective_to": null
+    },
+    {
+      "report_definition_id": "hub.referral.created_count",
+      "version": 1,
+      "status": "active",
+      "metric_ids": ["hub.referral.created_count.v1"],
+      "audiences": ["internal", "organization", "public"],
+      "permission": "shf.report.read",
+      "public_policy": "metric_and_claim_public_eligibility_required",
+      "effective_from": "2026-08-25T00:00:00Z",
+      "effective_to": null
+    },
+    {
+      "report_definition_id": "exchange.funding.commitment_count",
+      "version": 1,
+      "status": "active",
+      "metric_ids": ["exchange.funding.commitment_count.v1"],
+      "audiences": ["internal", "organization"],
+      "permission": "shf.report.read",
+      "public_policy": "not_public_commitment_data",
+      "effective_from": "2026-08-26T00:00:00Z",
+      "effective_to": null
+    },
+    {
+      "report_definition_id": "workforce.employment.started_verified_count",
+      "version": 1,
+      "status": "active",
+      "metric_ids": ["workforce.employment.started_verified_count.v1"],
+      "audiences": ["internal", "organization"],
+      "permission": "shf.report.read",
+      "public_policy": "not_public_workforce_outcomes_without_aggregate_privacy_review",
+      "effective_from": "2026-08-26T00:00:00Z",
+      "effective_to": null
+    }
+  ]
+}

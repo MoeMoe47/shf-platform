@@ -1,0 +1,146 @@
+{
+  "phase": "3.3",
+  "scope": "planning only, no mutation",
+  "input_state": {
+    "verts": 1015656, "edges": 3012575, "faces": 1996973, "islands": 54,
+    "non_manifold_edges": 34231
+  },
+  "production_objects": [
+    {"name": "HEAD", "source_islands": [0,3,4,5,6,7,8,9,10,17,22], "face_count": 864615, "rig_class": "rigid", "notes": "brain (6 islands) + face/lower-head (5 islands) merged per Phase 2's own retopology plan; visor is texture-only, no separate geometry"},
+    {"name": "NECK_COLLAR", "source_islands": [28,31,33,34,36,37,38,39,42,43,44,45,46,47,48,49,50,52,53], "face_count": 113375, "rig_class": "hybrid", "notes": "includes preserved neck-ring rib segments 50/52/53 as trim reference; ambiguous 773-face cluster (old id 59) kept as reference only, not assigned here yet"},
+    {"name": "TORSO", "source_islands": [1,24,29,30,32,35,40,41], "face_count": 216601, "rig_class": "rigid"},
+    {"name": "PELVIS", "source_islands": [12], "face_count": 59400, "rig_class": "deformation_at_hip_socket_otherwise_rigid"},
+    {"name": "RIGHT_SHOULDER_UPPER_ARM", "source_islands": [2], "face_count": 100041, "rig_class": "rigid", "notes": "no source elbow/shoulder seam; new topology cut recommended at retopology time, mirrored from left arm"},
+    {"name": "LEFT_SHOULDER_UPPER_ARM", "source_islands": [11,16,23,27], "face_count": 185314, "rig_class": "rigid"},
+    {"name": "RIGHT_FOREARM", "source_islands": [], "face_count": 0, "rig_class": "rigid", "notes": "no source island exists; new object built at retopology time, mirrored from LEFT_FOREARM"},
+    {"name": "LEFT_FOREARM", "source_islands": [14], "face_count": 59302, "rig_class": "rigid"},
+    {"name": "RIGHT_HAND", "source_islands": [15], "face_count": 59053, "rig_class": "hybrid"},
+    {"name": "LEFT_HAND", "source_islands": [13], "face_count": 59303, "rig_class": "hybrid"},
+    {"name": "RIGHT_UPPER_LEG", "source_islands": [], "face_count": 0, "rig_class": "deformation_at_hip_rigid_otherwise", "notes": "no source island; carved from PELVIS mass at retopology time, no source seam evidence"},
+    {"name": "LEFT_UPPER_LEG", "source_islands": [], "face_count": 0, "rig_class": "deformation_at_hip_rigid_otherwise", "notes": "same as RIGHT_UPPER_LEG"},
+    {"name": "RIGHT_LOWER_LEG", "source_islands": [26], "face_count": 32516, "rig_class": "rigid"},
+    {"name": "LEFT_LOWER_LEG", "source_islands": [25], "face_count": 33524, "rig_class": "rigid"},
+    {"name": "RIGHT_FOOT", "source_islands": [20,21], "face_count": 105115, "rig_class": "rigid"},
+    {"name": "LEFT_FOOT", "source_islands": [18,19], "face_count": 108041, "rig_class": "rigid"}
+  ],
+  "objects_evaluated_and_rejected": {
+    "BRAIN_separate": "merged into HEAD",
+    "VISOR_separate": "no geometry exists; texture-only, UV island reserved inside HEAD instead",
+    "HEAD_FACE_FRAME_separate": "merged into HEAD",
+    "LEFT_SHOULDER_separate": "merged into LEFT_SHOULDER_UPPER_ARM (no source seam, no rig need distinct from upper arm)",
+    "RIGHT_SHOULDER_separate": "merged into RIGHT_SHOULDER_UPPER_ARM",
+    "FINGERS_separate": "confirmed continuous with hand mesh in Phase 2; lives inside LEFT_HAND/RIGHT_HAND as edge-loop detail",
+    "accessories": "none exist on this asset (1 material, 2 meshes total per Phase 1 inventory)"
+  },
+  "seam_strategy": {
+    "neck_head": "hidden_seam",
+    "shoulder": "deformation_bridge",
+    "elbow": "intentional_hard_separation",
+    "wrist": "hybrid_transition",
+    "fingers": "hidden_seam_none_needed_continuous_mesh",
+    "hip": "deformation_bridge",
+    "knee": "intentional_hard_separation",
+    "ankle": "intentional_hard_separation"
+  },
+  "lod0_polygon_budget": {
+    "brain": 13000,
+    "head_visor": 8000,
+    "head_subtotal": 21000,
+    "neck_collar": 7000,
+    "torso": 8400,
+    "shoulders_both": 1600,
+    "upper_arms_both": 4800,
+    "forearms_both": 4800,
+    "arms_subtotal": 11200,
+    "hands_fingers_both": 8400,
+    "pelvis": 2800,
+    "legs_both": 7000,
+    "feet_both": 4200,
+    "accessories": 0,
+    "total": 70000,
+    "target_range": [60000, 80000],
+    "note": "top-level shares identical to Phase 2's certified LOD0 table (30/10/12/16/12/4/10/6%); arm share newly subdivided into shoulder/upper-arm/forearm"
+  },
+  "retopology_method": {
+    "brain": "manual_guided_shrinkwrap_assisted",
+    "head_visor": "manual_quad_shrinkwrap_assisted",
+    "neck_collar": "hard_surface_primitive_driven",
+    "torso": "hard_surface_primitive_driven",
+    "shoulders_arms": "hard_surface_primitive_driven",
+    "hands": "manual_quad_poly_build_shrinkwrap_assisted",
+    "legs": "hard_surface_primitive_driven",
+    "feet": "hard_surface_primitive_driven",
+    "source_reuse_policy": "reference_only_never_direct_reuse_except_neck_ring_islands_50_52_53_as_trim_reference",
+    "decimation_policy": "temporary_LOD1_mobile_preview_reference_only_never_final_LOD0"
+  },
+  "brain_strategy": {
+    "must_survive_as_geometry": "major crease/groove edge loops, both LOD0 and LOD1",
+    "can_move_to_normal_map": "fine-grain groove shading, baked from the 2,000,000-tri master",
+    "base_color_only": "black crease coloring itself",
+    "minimum_mobile_geometry": "primary top-of-head and side creases, even at 4,500-tri mobile LOD",
+    "merge_not_multiply": "6-island brain crown becomes 1 continuous shell"
+  },
+  "visor_strategy": {
+    "default_lod0_build": "reserve a clean visor-shaped UV island on the HEAD shell during retopology; zero extra geometry cost",
+    "deferred_alternative": "separate thin overlay patch shell, explicitly a Phase 6 (Digital Face System) decision, not decided here",
+    "material_note": "plan for a second material slot dedicated to the visor's emissive/dynamic region regardless of which geometry option is eventually chosen",
+    "rig_compatibility": "either option moves with the HEAD bone; no new deformation zone implied"
+  },
+  "hand_finger_strategy": {
+    "fingers_separate_object": false,
+    "fingers_joined_into_hand": true,
+    "reason": "zero finger-level source islands (Phase 2 confirmed); rigid segments would look stiff for required poses",
+    "budget_per_hand_tri": 4200,
+    "deformation_loops": "knuckle base (all 4 fingers) + wrist boundary",
+    "thumb_treatment": "dedicated edge-loop pattern, distinct from the 4-finger loop pattern (different opposition axis)",
+    "rig_class": "hybrid_light_skin_blend",
+    "required_poses": ["pointing", "fist_pump", "wave", "charades", "expressive_posing"]
+  },
+  "joint_readiness": {
+    "shoulder": {"edge_loops": "deformation bridge loop set", "rigid_boundary": "NECK_COLLAR / SHOULDER_UPPER_ARM", "deformation_transition": "yes", "pivot_estimate": "approx (0.05-0.09, 0.03-0.07, 0.58-0.64) world, from neck_collar_shoulder_joint_complex centroids", "future_bone": "shoulder ball joint"},
+    "elbow": {"edge_loops": "simple hinge loop, minimal", "rigid_boundary": "SHOULDER_UPPER_ARM / FOREARM", "deformation_transition": "no", "pivot_estimate": "new seam, no source evidence; mirror left/right", "future_bone": "elbow hinge"},
+    "wrist": {"edge_loops": "light blend loop set", "rigid_boundary": "FOREARM / HAND", "deformation_transition": "yes (light)", "pivot_estimate": "at FOREARM/HAND source boundary (islands 13/14, 15)", "future_bone": "wrist hinge"},
+    "finger": {"edge_loops": "knuckle base loops per finger + distinct thumb pattern", "rigid_boundary": "none (continuous)", "deformation_transition": "yes (light)", "pivot_estimate": "within HAND mesh, per-knuckle", "future_bone": "finger chain per digit"},
+    "hip": {"edge_loops": "deformation bridge loop set", "rigid_boundary": "PELVIS / UPPER_LEG", "deformation_transition": "yes", "pivot_estimate": "no source seam; proxy = lower-leg island upper bbox + reference renders", "future_bone": "hip ball joint"},
+    "knee": {"edge_loops": "simple hinge loop, minimal", "rigid_boundary": "UPPER_LEG / LOWER_LEG", "deformation_transition": "no", "pivot_estimate": "no source seam on upper-leg side; lower-leg island (25/26) upper bbox as proxy", "future_bone": "knee hinge"},
+    "ankle": {"edge_loops": "simple hinge loop, minimal", "rigid_boundary": "LOWER_LEG / FOOT", "deformation_transition": "no", "pivot_estimate": "clean existing source boundary (islands 25/26 vs 18-21)", "future_bone": "ankle hinge"},
+    "neck": {"edge_loops": "deformation bridge loop set", "rigid_boundary": "HEAD / NECK_COLLAR", "deformation_transition": "yes", "pivot_estimate": "neck ring islands 50/52/53 location", "future_bone": "neck base"}
+  },
+  "ambiguous_773_face_cluster": {
+    "matched_old_id": 59,
+    "disposition": "preserve_as_source_reference_only",
+    "action_required_step4": "one manual interactive viewport look during NECK_COLLAR checkpoint before deciding keep-as-trim vs discard",
+    "not_auto_incorporated": true,
+    "not_auto_deleted": true
+  },
+  "non_manifold_strategy": {
+    "total_remaining": 34231,
+    "in_joint_zones_disappear_naturally": 20148,
+    "elsewhere_need_attention": 14083,
+    "repaired_this_step": 0,
+    "note": "joint-zone edges are never inherited because Step 4 builds new topology there; non-joint-zone edges need a lightweight check only in shrinkwrap-referenced regions (brain, hands)"
+  },
+  "step4_risks": [
+    "right arm has no source shoulder/upper-arm/forearm segmentation; mitigate by mirroring finished left-arm topology",
+    "pelvis-to-upper-leg has zero source seam; mitigate with lower-leg bbox proxy + reference renders",
+    "visor geometry decision remains open (Phase 6 scope); build only the safe UV-reservation default",
+    "773-face ambiguous cluster needs one manual look at the NECK_COLLAR checkpoint",
+    "non-manifold source edges must not leak into brain/hand regions via shrinkwrap reference"
+  ],
+  "execution_order": [
+    "1. Head/brain", "2. Neck/collar (incl. 773-face cluster decision)", "3. Torso", "4. Pelvis",
+    "5. Shoulders/upper arms/forearms (mirrored)", "6. Hands", "7. Upper/lower legs (new hip seam)",
+    "8. Feet", "9. Accessories (none, skipped)", "10. Joint transitions", "11. Final weld/seam validation"
+  ],
+  "checkpoints": [
+    {"id": "A", "regions": ["HEAD", "NECK_COLLAR"], "tri_budget": 28000, "rollback_to": "certified Step 2 BRAINIACT_LOD0_WORKING state"},
+    {"id": "B", "regions": ["TORSO", "PELVIS"], "tri_budget": 11200, "rollback_to": "end of Checkpoint A"},
+    {"id": "C", "regions": ["SHOULDER_UPPER_ARM x2", "FOREARM x2", "HAND x2"], "tri_budget": 19600, "rollback_to": "end of Checkpoint B"},
+    {"id": "D", "regions": ["UPPER_LEG x2", "LOWER_LEG x2", "FOOT x2"], "tri_budget": 11200, "rollback_to": "end of Checkpoint C"},
+    {"id": "E", "regions": ["all joint transitions", "final weld/seam validation"], "tri_budget": 0, "rollback_to": "end of Checkpoint D"}
+  ],
+  "mutation_status": {
+    "retopology_performed": false, "remesh_performed": false, "decimation_performed": false,
+    "rigging_performed": false, "export_performed": false, "file_saved": false
+  }
+}

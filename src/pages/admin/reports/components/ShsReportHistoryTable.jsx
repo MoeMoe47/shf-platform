@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { createReportVersion } from "@/data/shsReports/shsReportStorage";
 import { displayDataStatus, displayLifecycleStatus, displayVisibilityMode } from "@/data/shsReports/shsReportTypes";
 import {
   ShsReportDataStatusBadge,
@@ -8,7 +7,7 @@ import {
   ShsReportVisibilityBadge,
 } from "./ShsPremiumReportShared.jsx";
 
-export default function ShsReportHistoryTable({ reports = [], onVersionCreated }) {
+export default function ShsReportHistoryTable({ reports = [], revisionsByReport = {} }) {
   return (
     <div className="shs-report-table-wrap">
       <table className="shs-report-history-table">
@@ -26,6 +25,7 @@ export default function ShsReportHistoryTable({ reports = [], onVersionCreated }
             <th>Generated</th>
             <th>Exported</th>
             <th>Locked</th>
+            <th>Revision history</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -45,22 +45,18 @@ export default function ShsReportHistoryTable({ reports = [], onVersionCreated }
               <td>{report.exportMetadata?.exportedAt || "Missing"}</td>
               <td>{report.isLocked ? "Locked" : "Draft"}</td>
               <td>
+                {(revisionsByReport[report.reportId] || []).map((revision) => (
+                  <span key={revision.revisionId}>
+                    v{revision.version} ({revision.createdAt || "Unknown time"})
+                  </span>
+                ))}
+                {!revisionsByReport[report.reportId]?.length ? "No revisions" : null}
+              </td>
+              <td>
                 <div className="shs-report-row-actions">
                   <Link to="/ops/reports/premium-preview">open preview</Link>
                   <Link to={`/ops/reports/export-metadata?reportId=${encodeURIComponent(report.reportId)}`}>metadata</Link>
-                  {report.isLocked ? (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const version = createReportVersion(report.reportId);
-                        onVersionCreated?.(version);
-                      }}
-                    >
-                      duplicate as new version
-                    </button>
-                  ) : (
-                    <Link to={`/ops/reports/create?reportId=${encodeURIComponent(report.reportId)}`}>continue draft</Link>
-                  )}
+                  <Link to={`/ops/reports/create?reportId=${encodeURIComponent(report.reportId)}`}>continue draft</Link>
                 </div>
               </td>
             </tr>

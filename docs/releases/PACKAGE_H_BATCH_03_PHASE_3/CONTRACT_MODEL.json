@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "blueprint_id": "CTB-1",
+  "mission_id": "PACKAGE_H_BATCH_03_IGLS_1_PHASE_3",
+  "artifact": "CONTRACT_MODEL",
+  "contracts": [
+    {"contract_id": "B03-CONTRACT-READINESS", "purpose": "Owner activation readiness evaluation concept", "inputs": ["owner onboarding evidence", "boundary map"], "outputs": ["readiness classification", "blockers"], "owner": "Package H shared foundation", "lifecycle": "declared -> validated -> inherited", "validation": ["owner exists", "evidence exists"], "evidence": ["readiness trace"], "compatibility": "inherits CTB-1 and Phase 2 boundaries", "version_evolution": "no re-ownership without architecture review", "failure_rules": ["missing owner blocks", "missing evidence blocks"]},
+    {"contract_id": "B03-CONTRACT-BOUNDARY", "purpose": "Neutral integration boundary concept", "inputs": ["proposed interaction", "registry owner map"], "outputs": ["boundary finding"], "owner": "Governance Layer referencing Master Layer Registry", "lifecycle": "declared -> compared -> inherited", "validation": ["no duplicate registry", "no cross-layer ownership"], "evidence": ["boundary trace"], "compatibility": "must preserve Master Layer Registry", "version_evolution": "new interactions require governed extension", "failure_rules": ["unregistered integration blocks"]},
+    {"contract_id": "B03-CONTRACT-EVIDENCE", "purpose": "Certification evidence envelope concept", "inputs": ["validator result", "test result", "readiness finding"], "outputs": ["evidence envelope"], "owner": "Audit & Verification with Governance Layer", "lifecycle": "collected -> bound -> certified", "validation": ["objective evidence", "criterion link"], "evidence": ["certification-ready envelope"], "compatibility": "must preserve Truth Spine and Oracle boundaries", "version_evolution": "evidence cannot be weakened", "failure_rules": ["unsupported PASS blocks"]},
+    {"contract_id": "B03-CONTRACT-MINIMALISM", "purpose": "Runtime minimalism guard concept", "inputs": ["future path list", "dependency list"], "outputs": ["minimalism finding"], "owner": "Runtime Architecture Authority", "lifecycle": "audited -> blocked_or_accepted", "validation": ["no runtime", "no API", "no UI", "no persistence", "no deployment"], "evidence": ["runtime minimalism evidence"], "compatibility": "must preserve Executive Command and existing runtime ownership", "version_evolution": "runtime ownership requires new governed mission", "failure_rules": ["runtime drift blocks"]}
+  ]
+}

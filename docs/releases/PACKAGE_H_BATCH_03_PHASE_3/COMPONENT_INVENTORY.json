@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "blueprint_id": "CTB-1",
+  "mission_id": "PACKAGE_H_BATCH_03_IGLS_1_PHASE_3",
+  "artifact": "COMPONENT_INVENTORY",
+  "components": [
+    {
+      "component_identifier": "B03-COMP-READINESS",
+      "canonical_owner": "Package H shared foundation under Governance Layer",
+      "responsibility": "Conceptual owner activation readiness evaluation.",
+      "explicit_non_responsibilities": ["runtime activation", "provider implementation", "identity decisions"],
+      "interfaces": ["readiness input concept", "readiness result concept"],
+      "contracts": ["B03-CONTRACT-READINESS"],
+      "dependencies": ["B03-CAP-001", "Master Layer Registry"],
+      "data_ownership": "none; evidence references only",
+      "security_ownership": "Identity & Access remains owner",
+      "governance_ownership": "Governance Layer",
+      "runtime_ownership": "none",
+      "validation_owner": "Governance Validation Authority",
+      "certification_owner": "Independent Blueprint Certification Authority",
+      "publication_owner": "Release Management in later phase"
+    },
+    {
+      "component_identifier": "B03-COMP-BOUNDARY",
+      "canonical_owner": "Governance Layer referencing Master Layer Registry",
+      "responsibility": "Neutral integration and ownership boundary evaluation.",
+      "explicit_non_responsibilities": ["registry mutation", "integration execution", "new layer creation"],
+      "interfaces": ["boundary input concept", "boundary finding concept"],
+      "contracts": ["B03-CONTRACT-BOUNDARY"],
+      "dependencies": ["B03-CAP-002", "Phase 2 Layer Interaction Model"],
+      "data_ownership": "none",
+      "security_ownership": "Security/Privacy remains owner",
+      "governance_ownership": "Governance Layer",
+      "runtime_ownership": "none",
+      "validation_owner": "Governance Validation Authority",
+      "certification_owner": "Independent Blueprint Certification Authority",
+      "publication_owner": "Release Management in later phase"
+    },
+    {
+      "component_identifier": "B03-COMP-EVIDENCE",
+      "canonical_owner": "Audit & Verification with Governance Layer",
+      "responsibility": "Certification-ready evidence trust envelope expectation.",
+      "explicit_non_responsibilities": ["Truth Spine verification", "Oracle ruling", "audit runtime"],
+      "interfaces": ["evidence input concept", "evidence envelope concept"],
+      "contracts": ["B03-CONTRACT-EVIDENCE"],
+      "dependencies": ["B03-CAP-003", "Truth Spine", "Oracle"],
+      "data_ownership": "no mutation of Truth Spine or Oracle data",
+      "security_ownership": "Security/Privacy remains owner",
+      "governance_ownership": "Governance Layer",
+      "runtime_ownership": "none",
+      "validation_owner": "Governance Validation Authority",
+      "certification_owner": "Independent Blueprint Certification Authority",
+      "publication_owner": "Release Management in later phase"
+    },
+    {
+      "component_identifier": "B03-COMP-MINIMALISM",
+      "canonical_owner": "Runtime Architecture Authority under Governance Layer",
+      "responsibility": "Runtime minimalism and drift guard.",
+      "explicit_non_responsibilities": ["runtime operation", "service startup", "deployment"],
+      "interfaces": ["runtime drift input concept", "minimalism finding concept"],
+      "contracts": ["B03-CONTRACT-MINIMALISM"],
+      "dependencies": ["B03-CAP-004", "Executive Command", "Master Layer Registry"],
+      "data_ownership": "none",
+      "security_ownership": "Identity & Access and Security/Privacy remain owners",
+      "governance_ownership": "Governance Layer",
+      "runtime_ownership": "none",
+      "validation_owner": "Governance Validation Authority",
+      "certification_owner": "Independent Blueprint Certification Authority",
+      "publication_owner": "Release Management in later phase"
+    }
+  ]
+}

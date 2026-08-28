@@ -5,14 +5,20 @@ import { requirePermission } from "../../../auth/permission-guard";
 const service = new CaseService();
 
 export function registerCaseRoutes(app: any) {
-  app.get("/cases", async (_req: any, res: any) => {
-    const items = await service.listCases();
+  app.get("/cases", requirePermission("case.read"), async (req: any, res: any) => {
+    const items = await service.listCases(req.user);
     res.json(ok({ items }));
   });
 
-  app.get("/cases/referrals", async (_req: any, res: any) => {
-    const items = await service.listReferrals();
+  app.get("/cases/referrals", requirePermission("case.read"), async (req: any, res: any) => {
+    const items = await service.listReferrals(req.user);
     res.json(ok({ items }));
+  });
+
+  app.get("/cases/:id", requirePermission("case.read"), async (req: any, res: any) => {
+    const item = await service.getCase(req.params.id, req.user);
+    if (!item) return res.status(404).json(fail("NOT_FOUND", "Case not found"));
+    res.json(ok(item));
   });
 
   app.post("/cases", requirePermission("case.create"), async (req: any, res: any) => {
@@ -24,7 +30,7 @@ export function registerCaseRoutes(app: any) {
     }
   });
 
-  app.post("/cases/referrals", requirePermission("case.create"), async (req: any, res: any) => {
+  app.post("/cases/referrals", requirePermission("referrals.manage"), async (req: any, res: any) => {
     try {
       const created = await service.createReferral(req.body || {}, req.user);
       res.json(ok(created));

@@ -1,0 +1,104 @@
+import React from "react";
+
+const DEFAULT_STAGES = [
+  "risk_signal",
+  "anomaly_clear",
+  "verification_inquiry",
+  "verification_passed",
+  "queue_operator_review",
+  "action_queued",
+  "outcome_pending",
+  "payment_pending",
+];
+
+function nextStageFrom(currentStage) {
+  const idx = DEFAULT_STAGES.indexOf(currentStage);
+  if (idx === -1) return DEFAULT_STAGES[0];
+  return DEFAULT_STAGES[(idx + 1) % DEFAULT_STAGES.length];
+}
+
+function buildFrameFromStage(stage, ctx) {
+  const recommendation = ctx?.recommendation || null;
+  const systemStatus = ctx?.systemStatus || "";
+  const noteMap = {
+    risk_signal: "Simulation is monitoring a live risk signal.",
+    anomaly_clear: "Anomaly has cleared and the case is stabilizing.",
+    verification_inquiry: "Verification inquiry is active.",
+    verification_passed: "Verification cleared. Preparing next action.",
+    queue_operator_review: "Operator review queue is active.",
+    action_queued: "Action has been queued for execution.",
+    outcome_pending: "Outcome is pending confirmation.",
+    payment_pending: "Payment is pending completion.",
+  };
+
+  return {
+    currentStage: stage,
+    recommendation,
+    note: noteMap[stage] || "Simulation active.",
+    analystSummary: {
+      summary: noteMap[stage] || "Simulation active.",
+    },
+    systemStatus,
+  };
+}
+
+export default function useExchangeSimulation(context = {}) {
+  const {
+    enabled = true,
+    tickMs = 5000,
+    stepNonce = 0,
+    timelineStep,
+  } = context || {};
+
+  const initialStage = timelineStep || DEFAULT_STAGES[0];
+
+  const [frame, setFrame] = React.useState(() =>
+    buildFrameFromStage(initialStage, context)
+  );
+
+  const lastStepNonceRef = React.useRef(stepNonce);
+
+  // Keep stage aligned when upstream timeline changes
+  React.useEffect(() => {
+    setFrame((prev) => {
+      const targetStage = timelineStep || prev?.currentStage || DEFAULT_STAGES[0];
+      if (prev?.currentStage === targetStage && prev?.recommendation === context?.recommendation) {
+        return {
+          ...prev,
+          analystSummary: buildFrameFromStage(targetStage, context).analystSummary,
+          note: buildFrameFromStage(targetStage, context).note,
+          recommendation: context?.recommendation || null,
+          systemStatus: context?.systemStatus || "",
+        };
+      }
+      return buildFrameFromStage(targetStage, context);
+    });
+  }, [timelineStep, context?.recommendation, context?.systemStatus]);
+
+  // Normal live ticking when enabled
+  React.useEffect(() => {
+    if (!enabled) return;
+
+    const id = window.setInterval(() => {
+      setFrame((prev) => {
+        const nextStage = nextStageFrom(prev?.currentStage || initialStage);
+        return buildFrameFromStage(nextStage, context);
+      });
+    }, tickMs);
+
+    return () => window.clearInterval(id);
+  }, [enabled, tickMs, initialStage, context]);
+
+  // Step mode: one advance per nonce change, especially useful while paused
+  React.useEffect(() => {
+    if (stepNonce === lastStepNonceRef.current) return;
+    lastStepNonceRef.current = stepNonce;
+
+    setFrame((prev) => {
+      const nextStage = nextStageFrom(prev?.currentStage || initialStage);
+      return buildFrameFromStage(nextStage, context);
+    });
+  }, [stepNonce, initialStage, context]);
+
+  return frame;
+}

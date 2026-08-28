@@ -1,25 +1,38 @@
 // src/layouts/ArcadeLayout.jsx
 // ------------------------------------------------------------
-// L1X Arcade layout – thin wrapper around arcade pages
+// SHF Learning Arcade layout.
+//
+// Shell/density repair pass: now renders ArcadeAppShell (Arcade's own
+// dedicated shell — src/layouts/arcade/ArcadeAppShell.jsx), NOT
+// AppShellLayout. Measured live before this change: AppShellLayout's
+// header sits ABOVE the sidebar+main body row (header y=0..56, sidebar
+// y=56..), which structurally cannot produce the approved mock's geometry
+// (sidebar full-height from y=0, header starting only at the sidebar's
+// right edge). ArcadeAppShell is a different DOM topology entirely, not a
+// restyle of the old one. Every existing Arcade route keeps working
+// unchanged — only the outer chrome around `{children}` changed.
 // ------------------------------------------------------------
 
 import React from "react";
+import { Outlet } from "react-router-dom";
+import ArcadeAppShell from "@/layouts/arcade/ArcadeAppShell.jsx";
+import ArcadeTopNav from "@/components/arcade/ArcadeTopNav.jsx";
 
 export default function ArcadeLayout({ children }) {
   return (
-    <div className="ar-root">
-      {/* Top glow bar could hold global arcade status later */}
-      <header className="ar-top">
-        <div className="ar-top__left">
-          <span className="ar-dot" />
-          <span className="ar-top__label">Arcade Pulse · 7 days</span>
-        </div>
-        <div className="ar-top__right">
-          {/* future quick stats – leave empty for now */}
-        </div>
-      </header>
-
-      <main className="ar-main">{children}</main>
-    </div>
+    <ArcadeAppShell>
+      {/* No data-app attribute here either — same reason as
+          ArcadeAppShell.jsx's own root div: only arcade.html's #root
+          needs it (for the mount-point query in arcade.main.jsx), and
+          app-shell.css's global `[data-app]{display:flex;flex-direction:
+          column}` rule would otherwise apply to this div a second time
+          for no benefit. */}
+      <div className="ar-root">
+        <ArcadeTopNav />
+        <main className="ar-main" id="arcade-main" role="main" aria-live="polite">
+          {children ?? <Outlet />}
+        </main>
+      </div>
+    </ArcadeAppShell>
   );
 }

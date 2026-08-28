@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "plan_id": "ERP-1",
+  "mission_id": "PACKAGE_H_BATCH_03_IGLS_1_PHASE_4",
+  "artifact": "EPL_EVIDENCE_REGISTRATION_PLAN",
+  "uses_permanent_epl_1": true,
+  "creates_new_evidence_system": false,
+  "evidence_namespaces": ["EPL-1/PKG-H/B03/CVF-1", "EPL-1/PKG-H/B03/ACS-1", "EPL-1/PKG-H/B03/EM-1", "EPL-1/PKG-H/B03/ERP-1"],
+  "registration_workflow": ["produce evidence", "assign EPL-1 category", "record owner and producer", "record validator", "hash and fingerprint", "register chain-of-custody", "bind to criterion", "submit for certification"],
+  "evidence_ownership": "Evidence Authority owns Phase 4 evidence records under EPL-1.",
+  "registration_authority": "Evidence Governance Authority",
+  "chain_of_custody": "EPL-1 Chain Of Custody",
+  "registration_timing": "before certification entry",
+  "validation_timing": "before independent certification",
+  "certification_timing": "after all criteria have evidence",
+  "publication_timing": "future publication phase only",
+  "evidence_bundles": ["CVF-1 bundle", "ACS-1 bundle", "EM-1 bundle", "ERP-1 bundle"],
+  "evidence_set_composition": ["acceptance criteria", "evidence matrix", "validator output", "test output", "repository state", "independent certification"],
+  "repository_references": ["docs/releases/PACKAGE_H_BATCH_03_PHASE_4", "scripts/check_package_h_batch_03_phase_4.py", "tests/test_package_h_batch_03_phase_4.py"],
+  "retention_strategy": "constitutional retention under EPL-1; supersession only through governance"
+}

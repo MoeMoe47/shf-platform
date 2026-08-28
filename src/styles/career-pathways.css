@@ -1,0 +1,362 @@
+/* src/styles/career-pathways.css
+   Career Pathways page-level visual upgrade (matches
+   career-pathways-capability-master.png as closely as practical).
+   Page-scoped only — no shared-shell selectors, no [data-app] overrides.
+   Every element styled here is backed by a real, existing capability;
+   see CareerPathways.jsx for what's genuinely wired to what. */
+
+.cpw-page { display: flex; flex-direction: column; gap: 18px; color: var(--ink, #111); }
+
+/* ---------- Breadcrumb + hero ---------- */
+.cpw-breadcrumb { font-size: 13px; color: var(--ink-soft, #6b7280); }
+.cpw-breadcrumb a { color: inherit; text-decoration: none; }
+.cpw-breadcrumb a:hover { text-decoration: underline; }
+.cpw-breadcrumb .cpw-crumbSep { margin: 0 6px; }
+.cpw-breadcrumb .cpw-crumbCurrent { color: var(--ink, #111); font-weight: 600; }
+
+.cpw-hero { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.cpw-heroTitle { margin: 4px 0 4px; font-size: 32px; font-weight: 800; letter-spacing: -0.01em; }
+.cpw-heroSub { margin: 0; color: var(--ink-soft, #6b7280); font-size: 14px; }
+.cpw-heroActions { display: flex; gap: 10px; flex-wrap: wrap; }
+.cpw-heroActions .sh-btn { min-height: 44px; }
+.cpw-btnGradient {
+  background: linear-gradient(135deg, #ff7a1f, #ff4f00);
+  color: #fff; border: none; font-weight: 700;
+}
+.cpw-btnGradient:hover { filter: brightness(1.05); }
+
+/* ---------- Stepper ---------- */
+.cpw-statusRow { display: flex; gap: 16px; flex-wrap: wrap; align-items: stretch; }
+.cpw-stepper {
+  flex: 2 1 480px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  background: #fff; border: 1px solid var(--ring, #e5e7eb); border-radius: 14px; padding: 16px 20px;
+}
+.cpw-step { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.cpw-stepDot {
+  width: 32px; height: 32px; border-radius: 50%; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 14px; color: #fff; background: #9ca3af;
+}
+.cpw-step[data-status="complete"] .cpw-stepDot { background: #16a34a; }
+.cpw-step[data-status="active"] .cpw-stepDot { background: #1d4ed8; }
+.cpw-stepLabel { display: flex; flex-direction: column; line-height: 1.2; }
+.cpw-stepName { font-weight: 700; font-size: 14px; }
+.cpw-stepState { font-size: 12px; color: var(--ink-soft, #6b7280); }
+.cpw-step[data-status="active"] .cpw-stepState { color: #1d4ed8; font-weight: 600; }
+.cpw-step[data-status="complete"] .cpw-stepState { color: #16a34a; }
+.cpw-stepConnector { flex: 1 1 24px; height: 2px; background: var(--ring, #e5e7eb); min-width: 16px; }
+
+.cpw-planReadyPanel {
+  flex: 1 1 260px; display: flex; align-items: flex-start; gap: 10px;
+  background: #fff; border: 1px solid var(--ring, #e5e7eb); border-radius: 14px; padding: 16px 20px;
+}
+.cpw-planReadyIcon { font-size: 20px; flex: none; }
+.cpw-planReadyTitle { font-weight: 700; font-size: 14px; margin: 0; }
+.cpw-planReadySub { margin: 2px 0 0; font-size: 12px; color: var(--ink-soft, #6b7280); }
+
+/* ---------- Two-column layout ---------- */
+.cpw-layout { display: grid; grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr); gap: 18px; align-items: start; }
+.cpw-main { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.cpw-rail { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+
+/* ---------- Recommended Pathways ---------- */
+.cpw-sectionHead { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.cpw-sectionTitle { margin: 0; font-size: 18px; font-weight: 800; }
+.cpw-sectionLink { font-size: 13px; font-weight: 700; color: #1d4ed8; text-decoration: none; white-space: nowrap; }
+.cpw-sectionLink:hover { text-decoration: underline; }
+
+.cpw-pathwayGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+.cpw-pathwayCard {
+  position: relative; display: flex; flex-direction: column;
+  background: #fff; border: 1px solid var(--ring, #e5e7eb); border-radius: 16px; overflow: hidden;
+}
+.cpw-pathwayCard.is-recommended { border-color: #1d4ed8; box-shadow: 0 0 0 1px #1d4ed8; }
+.cpw-pathwayRank {
+  position: absolute; top: 10px; left: 10px; z-index: 1;
+  width: 26px; height: 26px; border-radius: 50%; background: #1d4ed8; color: #fff;
+  display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800;
+}
+.cpw-pathwayRecommended {
+  position: absolute; top: 10px; right: 10px; z-index: 1;
+  background: #1d4ed8; color: #fff; font-size: 11px; font-weight: 700;
+  padding: 3px 8px; border-radius: 999px;
+}
+.cpw-pathwayTile {
+  height: 96px; display: flex; align-items: center; justify-content: center; font-size: 40px;
+  background: linear-gradient(135deg, #eef2ff, #e0f2fe);
+}
+.cpw-pathwayBody { padding: 14px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.cpw-pathwayTitle { margin: 0; font-size: 16px; font-weight: 800; }
+.cpw-pathwayMeta { display: flex; flex-direction: column; gap: 5px; font-size: 12.5px; }
+.cpw-pathwayMetaRow { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.cpw-pathwayMetaLabel { display: flex; align-items: center; gap: 6px; color: var(--ink-soft, #6b7280); }
+.cpw-pathwayMetaValue { font-weight: 700; }
+.cpw-pathwayActions { display: flex; flex-direction: column; gap: 8px; padding: 0 14px 14px; }
+.cpw-pathwayActions .sh-btn { min-height: 40px; width: 100%; justify-content: center; }
+
+/* ---------- Your Career Plan (rail) — targeted PlanSelector overrides ---------- */
+.cpw-planList .grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+.cpw-planRow { display: flex; align-items: flex-start; gap: 10px; padding: 12px !important; }
+.cpw-planRadio {
+  width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--ring, #d1d5db);
+  flex: none; margin-top: 4px; position: relative;
+}
+.cpw-planRadio[data-checked="true"] { border-color: #1d4ed8; }
+.cpw-planRadio[data-checked="true"]::after {
+  content: ""; position: absolute; inset: 3px; border-radius: 50%; background: #1d4ed8;
+}
+.cpw-planRowBody { flex: 1; min-width: 0; }
+.cpw-bestFit {
+  font-size: 11px; font-weight: 700; color: #16a34a; background: #ecfdf3;
+  border: 1px solid #bbf0cf; border-radius: 999px; padding: 2px 8px;
+}
+.cpw-planList .cpw-planRow.is-active { box-shadow: 0 0 0 1px #1d4ed8 inset; }
+
+.cpw-disclaimer {
+  display: flex; align-items: flex-start; gap: 8px; margin-top: 12px; padding: 10px 12px;
+  background: #f8fafc; border: 1px solid var(--ring, #e5e7eb); border-radius: 10px;
+  font-size: 12px; color: var(--ink-soft, #6b7280);
+}
+
+/* ---------- Coach Mode (rail) ---------- */
+.cpw-coachModeSub { margin: 2px 0 10px; font-size: 12.5px; color: var(--ink-soft, #6b7280); }
+.cpw-roleRow { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+
+/* ---------- Impact Snapshot (rail) ---------- */
+.cpw-impactHead { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.cpw-impactLock {
+  font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;
+  color: var(--ink-soft, #6b7280);
+}
+.cpw-impactSub { margin: 2px 0 12px; font-size: 12px; color: var(--ink-soft, #6b7280); }
+.cpw-impactGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
+.cpw-impactTile { border: 1px solid var(--ring, #e5e7eb); border-radius: 12px; padding: 12px; text-align: center; }
+.cpw-impactIcon { font-size: 18px; }
+.cpw-impactValue { font-weight: 800; font-size: 20px; margin-top: 4px; }
+.cpw-impactLabel { font-size: 11px; color: var(--ink-soft, #6b7280); margin-top: 2px; }
+
+/* ---------- Funding row ---------- */
+.cpw-fundingRow { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; align-items: start; }
+
+/* ---------- Team Workspace tabs ---------- */
+.cpw-teamWorkspace { background: #fff; border: 1px solid var(--ring, #e5e7eb); border-radius: 16px; padding: 16px; }
+.cpw-tabList { display: flex; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--ring, #e5e7eb); margin-bottom: 14px; }
+.cpw-tab {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px;
+  border: none; background: transparent; color: var(--ink-soft, #6b7280); font-weight: 700; font-size: 13px;
+  border-bottom: 2px solid transparent; cursor: pointer; margin-bottom: -1px;
+}
+.cpw-tab:hover { color: var(--ink, #111); }
+.cpw-tab[aria-selected="true"] { color: #ff4f00; border-bottom-color: #ff4f00; }
+.cpw-tabPanel .card { border: none; border-radius: 0; padding: 0; background: transparent; box-shadow: none; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1080px) {
+  .cpw-layout { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .cpw-heroTitle { font-size: 24px; }
+  .cpw-hero { flex-direction: column; align-items: stretch; }
+  .cpw-heroActions .sh-btn { flex: 1; }
+  .cpw-statusRow { flex-direction: column; }
+  .cpw-pathwayGrid { grid-template-columns: 1fr; }
+}
+
+/* ===========================================================
+   Dark mode — opt-in, scoped to this page only (see the
+   markDarkScope("career-pathways", true) effect in
+   CareerPathways.jsx). Never applies to any other page.
+
+   Strategy: redefine the shared CSS custom properties
+   (--card/--surface/--ink/--ink-soft/--ring/--beige/--ivory) that
+   PathwayDetailDrawer.jsx, FundingWizard.jsx's callout, and every other
+   reused child component already reference via var(--x, fallback) — since
+   they're DOM descendants of .cpw-page, the redefinition cascades to them
+   automatically without editing those files. Anything that uses a
+   hardcoded hex instead of a var (.sh-btn, .sh-btn--soft, .sh-chip,
+   .pp-sheet, .pd-head's gradient, etc.) gets an explicit override below.
+
+   Palette matches the same dark tokens already established for Resume
+   Builder / Calendar (career-shell.css, career-calendar.css) — reused,
+   not reinvented, per the "no competing token system" requirement.
+   =========================================================== */
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-page {
+  --card: #1E222A;
+  --surface: #1E222A;
+  --ink: #F5F3EE;
+  --ink-soft: #AEB4BF;
+  --ring: #343944;
+  --beige: #171A20;
+  --ivory: #171A20;
+  --canvas: #0D0F12;
+  background: #0D0F12;
+  color: #F5F3EE;
+}
+
+/* Shared, otherwise-hardcoded classes — scoped to this page's subtree so
+   no other page using .sh-btn/.sh-chip/etc. is ever affected. */
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-page .sh-btn {
+  background: #1E222A; color: #F5F3EE; border-color: #343944;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-page .sh-btn--soft {
+  background: #171A20;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-page .sh-btn--primary {
+  background: #FF5A1F; color: #0D0F12; border-color: #FF5A1F;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-page .sh-btn--tiny {
+  background: #1E222A; color: #F5F3EE; border-color: #343944;
+}
+/* .sh-btn--tiny and .sh-btn--primary share specificity — when a button
+   carries both (e.g. the active role pill in Coach Mode), source order
+   would let --tiny's neutral background win. Re-assert primary explicitly
+   so the active state still stands out. */
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-page .sh-btn--tiny.sh-btn--primary {
+  background: #FF5A1F; color: #0D0F12; border-color: #FF5A1F;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-page .sh-chip {
+  background: #262B34; color: #F5F3EE; border-color: #343944;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-page .sh-chip--soft {
+  background: #1E222A;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-page input,
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-page select,
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-page textarea {
+  background: #171A20; color: #F5F3EE; border-color: #343944;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-page .sh-alert--warn {
+  background: #2A1D14; color: #F5F3EE; border-color: #4A3418;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-page .sh-btn--secondary {
+  background: #1E222A; color: #F5F3EE; border-color: #343944;
+}
+
+/* AIChat widget (Coach Mode / "Your AI Coach") — its classes have no base
+   CSS anywhere in the project (unstyled by design, browser-default button
+   look in every theme), so a plain dark override keeps it from rendering
+   as glaring white boxes on this page without touching its light-mode
+   look or any other page that mounts the same component. */
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-page .ai-panel {
+  background: #1E222A; color: #F5F3EE; border-color: #343944;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-page .chip,
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-page .ai-input,
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-page .btn {
+  background: #171A20; color: #F5F3EE; border-color: #343944;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-page .ai-bubble {
+  background: #262B34; color: #F5F3EE;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-page .btn--primary {
+  background: #FF5A1F; color: #0D0F12; border-color: #FF5A1F;
+}
+
+/* Hero / stepper / plan-ready panel */
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-btnGradient {
+  color: #0D0F12;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-stepper,
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-planReadyPanel,
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-teamWorkspace,
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-disclaimer {
+  background: #1E222A; border-color: #343944;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-stepConnector {
+  background: #343944;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-stepDot {
+  background: #4B5563;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-step[data-status="complete"] .cpw-stepDot {
+  background: #22C55E;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-step[data-status="active"] .cpw-stepDot {
+  background: #3B82F6;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-step[data-status="active"] .cpw-stepState {
+  color: #7CACFF;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-step[data-status="complete"] .cpw-stepState {
+  color: #4ADE80;
+}
+
+/* Recommended Pathways cards */
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-pathwayCard {
+  background: #1E222A; border-color: #343944;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-pathwayCard.is-recommended {
+  border-color: #3B82F6; box-shadow: 0 0 0 1px #3B82F6;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-pathwayRank,
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-pathwayRecommended {
+  background: #3B82F6;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-pathwayTile {
+  background: linear-gradient(135deg, #1b2440, #14313f);
+}
+
+/* Your Career Plan (PlanSelector overrides) */
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-planRadio {
+  border-color: #4B5563;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-planRadio[data-checked="true"] {
+  border-color: #3B82F6;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-planRadio[data-checked="true"]::after {
+  background: #3B82F6;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-bestFit {
+  color: #4ADE80; background: #0F2A1B; border-color: #1F4A30;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-planList .cpw-planRow.is-active {
+  box-shadow: 0 0 0 1px #3B82F6 inset;
+}
+
+/* Impact tiles */
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-impactTile {
+  border-color: #343944;
+}
+
+/* Team Workspace tabs */
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-tabList {
+  border-bottom-color: #343944;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-tab {
+  color: #AEB4BF;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-tab:hover {
+  color: #F5F3EE;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .cpw-tab[aria-selected="true"] {
+  color: #FF5A1F; border-bottom-color: #FF5A1F;
+}
+
+/* Pathway Detail Drawer — .pd-modal/.pd-kpi/.pd-foot already use
+   var(--card)/var(--ivory)/var(--beige) and inherit automatically; only
+   the one hardcoded gradient start-color needs an explicit override. */
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .pd-head {
+  background: linear-gradient(to bottom, #1E222A, #171A20);
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .pd-x {
+  color: #F5F3EE;
+}
+
+/* Personalizer sheet — several hardcoded colors, not var-driven */
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .pp-sheet {
+  background: #1E222A; color: #F5F3EE; border-color: #343944;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .pp-field input,
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .pp-field select {
+  background: #171A20; color: #F5F3EE; border-color: #343944;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .pp-field input[aria-invalid="true"],
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .pp-field select[aria-invalid="true"] {
+  border-color: #F87171;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .pp-error {
+  color: #F87171;
+}
+html[data-theme="dark"] body[data-dark-scope~="career-pathways"] .pp-notice {
+  background: #2A1D14; border-color: #4A3418; color: #F5F3EE;
+}

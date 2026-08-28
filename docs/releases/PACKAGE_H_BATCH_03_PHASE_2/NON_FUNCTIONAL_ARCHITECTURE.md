@@ -1,0 +1,16 @@
+# Package H Batch 03 Non-Functional Architecture
+
+| Requirement | Constitutional Rule |
+| --- | --- |
+| Security | No credentials, roles, secrets, or access grants are owned by Batch 03. |
+| Reliability | Future closure decisions must fail closed when evidence or ownership is missing. |
+| Scalability | Future design must remain provider-neutral and avoid owner-specific branching. |
+| Availability | No Phase 2 runtime availability claims are made. |
+| Maintainability | Contracts and ownership rules must remain readable, versioned, and validator-backed. |
+| Auditability | Every future closure decision must produce objective evidence. |
+| Observability | Future observability is evidence-facing and must not replace Watchtower or Audit. |
+| Performance | No runtime performance claims are made before implementation authorization. |
+| Extensibility | New providers must be replaceable and registered before reach-in. |
+| Interoperability | Layer interactions must use canonical owners and stable contracts. |
+| Replaceability | Providers and integrations must remain removable without registry or runtime monopoly. |
+| Version Evolution | Future evolution must preserve IGLS-1 change control and no silent supersession. |

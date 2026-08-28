@@ -16,22 +16,34 @@ class AuthUser:
     role: str
     password_hash: str
     disabled: bool = False
+    # Organization/tenant scope for this user. None means global authority
+    # (currently only ROLE_SHS_ADMIN) rather than "unscoped" - see
+    # auth/permissions.py and services/truth_spine_service.py for how this
+    # is used to enforce Truth Spine tenant isolation. Added for the Truth
+    # Spine security remediation; existing (non-Truth) callers of AuthUser/
+    # AuthSession are unaffected since this field defaults to None.
+    organization_id: str | None = None
 
 
-def _fixture_user(user_id: str, email: str, display_name: str, role: str) -> AuthUser:
+def _fixture_user(user_id: str, email: str, display_name: str, role: str, organization_id: str | None = None) -> AuthUser:
     return AuthUser(
         user_id=user_id,
         email=email,
         display_name=display_name,
         role=normalize_role(role),
         password_hash=hash_password(FIXTURE_PASSWORD, f"shs-bos-{user_id}"),
+        organization_id=organization_id,
     )
 
 
 _USERS = {
-    "shs@demo.shs": _fixture_user("demo_shs_admin", "shs@demo.shs", "Avery Stone", ROLE_SHS_ADMIN),
-    "admin@demo.shs": _fixture_user("demo_client_admin", "admin@demo.shs", "Morgan Reed", ROLE_CLIENT_ADMIN),
-    "client@demo.shs": _fixture_user("demo_client", "client@demo.shs", "Jordan Ellis", ROLE_CLIENT),
+    "shs@demo.shs": _fixture_user("demo_shs_admin", "shs@demo.shs", "Avery Stone", ROLE_SHS_ADMIN, organization_id=None),
+    "admin@demo.shs": _fixture_user("demo_client_admin", "admin@demo.shs", "Morgan Reed", ROLE_CLIENT_ADMIN, organization_id="client-demo"),
+    "client@demo.shs": _fixture_user("demo_client", "client@demo.shs", "Jordan Ellis", ROLE_CLIENT, organization_id="client-demo"),
+    # A second organization fixture user, needed to write real cross-tenant
+    # isolation tests (Truth Spine remediation) rather than only testing
+    # against a single organization.
+    "client@other-demo.shs": _fixture_user("demo_client_other_org", "client@other-demo.shs", "Riley Chen", ROLE_CLIENT, organization_id="client-other-demo"),
     "disabled@demo.shs": AuthUser(
         user_id="disabled_demo_user",
         email="disabled@demo.shs",
@@ -39,6 +51,7 @@ _USERS = {
         role=ROLE_CLIENT_ADMIN,
         password_hash=hash_password(FIXTURE_PASSWORD, "shs-bos-disabled"),
         disabled=True,
+        organization_id="client-demo",
     ),
 }
 

@@ -171,7 +171,7 @@ export default function InlineMCQ(props) {
       <style>{`
         .mcq .sh-btn { border-radius: 10px; }
         .mcq .sh-btn.sh-btn--secondary { background: #fff; }
-        :not([data-app="curriculum"])[data-theme="dark"] .mcq .sh-btn.sh-btn--secondary { background: #111317; }
+        [data-theme="dark"] .mcq .sh-btn.sh-btn--secondary { background: #111317; }
       `}</style>
     </section>
   );

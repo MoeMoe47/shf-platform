@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "mission_id": "PACKAGE_H_BATCH_03_IGLS_1_PHASE_2",
+  "artifact": "LAYER_INTERACTION_MODEL",
+  "interactions": [
+    {
+      "source_layer": "Package H",
+      "target_layer": "Master Layer Registry",
+      "direction": "read/reference",
+      "contract": "Owner and layer boundary lookup",
+      "ownership": "Master Layer Registry owns canonical layer map",
+      "read_write_permissions": "read only",
+      "runtime_authority": "none",
+      "evidence_produced": "owner-boundary comparison",
+      "validation_required": "no duplicate registry"
+    },
+    {
+      "source_layer": "Package H",
+      "target_layer": "Truth Spine",
+      "direction": "read/reference",
+      "contract": "Truth status boundary",
+      "ownership": "Truth Spine owns verification",
+      "read_write_permissions": "read only",
+      "runtime_authority": "Truth Spine",
+      "evidence_produced": "truth-boundary preservation",
+      "validation_required": "no claim verification by Batch 03"
+    },
+    {
+      "source_layer": "Package H",
+      "target_layer": "Oracle",
+      "direction": "read/reference",
+      "contract": "Evidence support boundary",
+      "ownership": "Oracle owns supportability reasoning",
+      "read_write_permissions": "read only",
+      "runtime_authority": "Oracle",
+      "evidence_produced": "oracle-boundary preservation",
+      "validation_required": "no Oracle override"
+    },
+    {
+      "source_layer": "Package H",
+      "target_layer": "Executive Command",
+      "direction": "visibility only",
+      "contract": "Future status display eligibility",
+      "ownership": "Executive Command owns command visibility",
+      "read_write_permissions": "no write in Phase 2",
+      "runtime_authority": "Executive Command",
+      "evidence_produced": "display boundary statement",
+      "validation_required": "no runtime ownership transfer"
+    },
+    {
+      "source_layer": "Package H",
+      "target_layer": "Audit & Verification",
+      "direction": "evidence handoff concept",
+      "contract": "Evidence trust envelope",
+      "ownership": "Audit & Verification owns audit proof",
+      "read_write_permissions": "conceptual only",
+      "runtime_authority": "Audit & Verification",
+      "evidence_produced": "audit evidence expectation",
+      "validation_required": "no audit runtime"
+    },
+    {
+      "source_layer": "Package H",
+      "target_layer": "Readiness Gate",
+      "direction": "readiness input concept",
+      "contract": "Readiness decision boundary",
+      "ownership": "Readiness Gate owns readiness decisions",
+      "read_write_permissions": "conceptual only",
+      "runtime_authority": "Readiness Gate",
+      "evidence_produced": "readiness-boundary statement",
+      "validation_required": "no readiness gate replacement"
+    },
+    {
+      "source_layer": "Package H",
+      "target_layer": "Identity & Access",
+      "direction": "permission boundary reference",
+      "contract": "Role and access authority",
+      "ownership": "Identity & Access owns identity and permissions",
+      "read_write_permissions": "read/reference only",
+      "runtime_authority": "Identity & Access",
+      "evidence_produced": "identity-boundary statement",
+      "validation_required": "no credential or role ownership"
+    }
+  ]
+}

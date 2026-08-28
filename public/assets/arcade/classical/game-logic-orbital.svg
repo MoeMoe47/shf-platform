@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" role="img" aria-hidden="true">
+  <defs>
+    <radialGradient id="glBg" cx="50%" cy="40%" r="85%">
+      <stop offset="0%" stop-color="#123852"/>
+      <stop offset="100%" stop-color="#040a12"/>
+    </radialGradient>
+  </defs>
+  <rect width="300" height="200" fill="url(#glBg)"/>
+
+  <!-- motion paths: three orbits at different radii, evoking "movement" -->
+  <g fill="none" stroke="#2f6f8f" stroke-width="1.2" opacity="0.6">
+    <ellipse cx="150" cy="100" rx="112" ry="40"/>
+    <ellipse cx="150" cy="100" rx="82" ry="66" transform="rotate(24 150 100)"/>
+    <ellipse cx="150" cy="100" rx="82" ry="66" transform="rotate(-24 150 100)"/>
+  </g>
+
+  <!-- moving bodies along the paths, one mid-collision -->
+  <circle cx="150" cy="100" r="10" fill="#ffb14d"/>
+  <circle cx="150" cy="100" r="16" fill="none" stroke="#ffd9a0" stroke-width="1" opacity="0.6"/>
+  <circle cx="248" cy="76" r="5" fill="#35c4e8"/>
+  <circle cx="60" cy="130" r="4" fill="#9be8f7"/>
+
+  <!-- collision event: two bodies meeting, with an impact burst -->
+  <g transform="translate(96,54)">
+    <circle cx="0" cy="0" r="4.5" fill="#ff5d6c"/>
+    <circle cx="13" cy="-4" r="3" fill="#ff8f7a"/>
+    <g stroke="#ffd0c8" stroke-width="1.2" opacity="0.85">
+      <line x1="-2" y1="-10" x2="-2" y2="-16"/>
+      <line x1="6" y1="-12" x2="10" y2="-17"/>
+      <line x1="16" y1="4" x2="20" y2="8"/>
+    </g>
+  </g>
+
+  <!-- spawn point marker -->
+  <g transform="translate(224,138)">
+    <circle r="7" fill="none" stroke="#7be34f" stroke-width="1.4" stroke-dasharray="3 3"/>
+    <circle r="2.2" fill="#c8ffab"/>
+  </g>
+
+  <!-- scoring HUD ticks, lower-left -->
+  <g stroke="#9be8f7" stroke-width="1.4" opacity="0.75">
+    <line x1="26" y1="176" x2="26" y2="166"/>
+    <line x1="34" y1="176" x2="34" y2="160"/>
+    <line x1="42" y1="176" x2="42" y2="168"/>
+    <line x1="50" y1="176" x2="50" y2="154"/>
+  </g>
+</svg>

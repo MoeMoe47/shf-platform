@@ -3,12 +3,20 @@ import { registerCaseRoutes } from "../domain/cases/api/routes";
 import { registerAuditRoutes } from "../domain/audit/api/routes";
 import { registerIdentityRoutes } from "../domain/identity/api/routes";
 import { registerReportingRoutes } from "../domain/reporting/routes";
+import { registerGrantBinderRoutes } from "../domain/grant-binder/api/routes";
+import { registerExchangeFundingCommitmentRoutes } from "../domain/exchange-funding-commitment/api/routes";
+import { registerLiveLearningRoutes } from "../domain/live-learning/api/routes";
+import { registerWorkforceOutcomeRoutes } from "../domain/workforce-outcome/api/routes";
 import { registerOracleRoutes } from "../oracle/routes/oracle.routes";
 import aggregationRoutes from "../aggregation/routes/aggregation.routes";
 import { IdentityService } from "../domain/identity/service/identity-service";
 import { ok, fail } from "./response-envelope";
 import { mergeRolePermissions } from "../auth/security-permissions";
 import { writeSecurityAuditEvent } from "../auth/security-audit";
+import { isProductionEnvironment } from "../auth/production-identity";
+import { Auth0SessionService } from "../domain/identity/service/auth0-session-service";
+import { registerCurriculumCompletionRoutes } from "../domain/curriculum/api/routes";
+import { registerOrganizationRelationshipRoutes } from "../domain/organization-relationships/api/routes";
 
 
 type MutableApiUser = {
@@ -22,6 +30,7 @@ type MutableApiUser = {
 };
 
 const identityService = new IdentityService();
+const auth0Sessions = isProductionEnvironment() ? new Auth0SessionService() : null;
 
 
 const DEMO_USERS = [
@@ -100,31 +109,30 @@ export function buildRouter(app: any) {
 
   app.get("/auth/me", async (req: any, res: any) => {
     try {
-      // Starter session shape for frontend auth-context.jsx.
-      // Replace this with real session/cookie validation + DB-backed memberships.
-      const demoUser = {
-        id: "demo-user-1",
-        email: "admin@shs.local",
-        first_name: "SHS",
-        last_name: "Admin",
-      };
+      if (!req.user) {
+        return res.status(401).json({ ok: false, error: "Authentication required." });
+      }
 
-      const memberships = [
-        {
-          organization_id: "shs-core",
-          organization_type: "SHS",
-          role: "super_admin",
-          role_name: "super_admin",
-        },
-      ];
-
-      const permissions = mergeRolePermissions(["super_admin"]);
+      const user = req.user;
+      const memberships = user.memberships || (user.active_organization_id || user.organization_id ? [{
+        organization_id: user.organization_id,
+        organization_type: user.organization_type,
+        role: user.role,
+        role_name: user.role_name || user.role,
+      }] : []);
 
       return res.json({
         ok: true,
-        user: demoUser,
+        user,
         memberships,
-        permissions,
+        active_organization_context: user.active_organization_id ? {
+          organization_id: user.active_organization_id,
+          tenant_id: user.tenant_id,
+          membership_id: user.membership_id || null,
+          roles: user.organization_scoped_roles || user.roles || [],
+          permissions: user.organization_scoped_permissions || user.permissions || [],
+        } : null,
+        permissions: user.organization_scoped_permissions || user.permissions || mergeRolePermissions(user.roles || [user.role]),
       });
     } catch (error: any) {
       return res.status(500).json({
@@ -133,7 +141,12 @@ export function buildRouter(app: any) {
     }
   });
 
-  app.post("/auth/logout", async (_req: any, res: any) => {
+  app.post("/auth/logout", async (req: any, res: any) => {
+    const sessionCookie = String(req.headers?.cookie || "").split(";").map((item) => item.trim()).find((item) => item.startsWith("shs_session="));
+    if (auth0Sessions && sessionCookie) {
+      await auth0Sessions.revoke(decodeURIComponent(sessionCookie.slice("shs_session=".length)));
+      res.setHeader("Set-Cookie", "shs_session=; Max-Age=0; Path=/; HttpOnly; Secure; SameSite=Lax");
+    }
     return res.json({ ok: true });
   });
 app.post("/auth/login", async (req: any, res: any) => {
@@ -144,6 +157,21 @@ app.post("/auth/login", async (req: any, res: any) => {
     } catch (err: any) {
       res.status(401).json(fail("AUTH_FAILED", err.message || "Invalid credentials"));
     }
+});
+
+  app.post("/auth/session/exchange", async (req: any, res: any) => {
+    if (!auth0Sessions) return res.status(404).json(fail("AUTH_NOT_CONFIGURED", "Production identity exchange is unavailable."));
+    try {
+      const result = await auth0Sessions.exchange({
+        credential: String(req.body?.credential || ""),
+        issuer: String(process.env.AUTH0_ISSUER || ""),
+        audience: String(process.env.AUTH0_AUDIENCE || ""),
+      });
+      res.setHeader("Set-Cookie", `shs_session=${encodeURIComponent(result.session.token)}; Max-Age=3600; Path=/; HttpOnly; Secure; SameSite=Lax`);
+      return res.json(ok({ user: result.user }));
+    } catch {
+      return res.status(401).json(fail("AUTH_FAILED", "Authentication failed."));
+    }
   });
 
   app.get("/me", async (req: any, res: any) => {
@@ -153,7 +181,9 @@ app.post("/auth/login", async (req: any, res: any) => {
     res.json(ok(req.user));
   });
 
-  
+  // These legacy fixture routes are local development surfaces only. They
+  // must not expose or mutate demo identity data in production.
+  if (!isProductionEnvironment()) {
   app.get("/users", async (_req: any, res: any) => {
     return res.json({ items: DEMO_USERS });
   });
@@ -270,12 +300,19 @@ app.post("/auth/login", async (req: any, res: any) => {
   app.get("/audit-logs", async (_req: any, res: any) => {
     return res.json({ items: DEMO_AUDIT_LOGS });
   });
+  }
 
   registerIdentityRoutes(app);
   registerProgramRoutes(app);
+  registerOrganizationRelationshipRoutes(app);
   registerCaseRoutes(app);
   registerAuditRoutes(app);
   registerReportingRoutes(app);
+  registerGrantBinderRoutes(app);
+  registerExchangeFundingCommitmentRoutes(app);
+  registerLiveLearningRoutes(app);
+  registerCurriculumCompletionRoutes(app);
+  registerWorkforceOutcomeRoutes(app);
   app.use("/aggregation", aggregationRoutes);
   registerOracleRoutes(app);
 

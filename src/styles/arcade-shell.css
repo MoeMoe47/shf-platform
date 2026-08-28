@@ -1,8 +1,406 @@
 
 
-/* scope: arcade */
+/* scope: arcade (legacy scaffold — no live component renders these
+   .arc-* classes; left in place, not reused below to avoid confusion
+   with the real .ar-* classes ArcadeLayout/ArcadeSidebar etc. use). */
 .arc-root { background:#0b0f14; min-height:100dvh; color:#e5e7eb; }
 .arc-header { position:sticky; top:0; padding:12px 16px; background:#0f141b; border-bottom:1px solid #1f2937; display:flex; align-items:center; gap:12px; }
 .arc-main { padding:16px; }
 
+/* ===========================================================
+   Arcade's own dedicated application shell (ArcadeAppShell.jsx).
+   NOT AppShellLayout's chrome — that topology (full-width header ABOVE a
+   sidebar+main body row) was measured live and found structurally
+   incompatible with the approved mock (sidebar must run full-height from
+   y=0; header must start only at the sidebar's right edge). This block
+   defines a different, sidebar-first topology instead:
 
+     .ar-shell (flex row)
+       .ar-shell__sidebar   <- full height, x=0..248px, sticky
+       .ar-shell__right     <- flex column, everything else
+         .ar-shell__header  <- x starts at the sidebar's right edge
+         {page content}
+   =========================================================== */
+:root {
+  --arcade-sidebar-expanded-width: 244px;
+  --arcade-sidebar-collapsed-width: 76px;
+  --arcade-header-height: 66px;
+}
+
+.ar-shell {
+  display: flex;
+  min-height: 100vh;
+  background: #0b0f14;
+}
+html[data-theme="light"] .ar-shell { background: #faf6ef; }
+
+.ar-shell__sidebar {
+  flex: 0 0 var(--arcade-sidebar-expanded-width);
+  width: var(--arcade-sidebar-expanded-width);
+  max-width: var(--arcade-sidebar-expanded-width);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #0b0f14;
+  border-right: 1px solid rgba(255, 255, 255, .08);
+  transition: flex-basis 0.18s ease, width 0.18s ease;
+  z-index: var(--z-nav-drawer, 700);
+}
+html[data-theme="light"] .ar-shell__sidebar { background: #ffffff; border-right-color: #e6ddcc; }
+.ar-shell__sidebar.is-collapsed {
+  flex-basis: var(--arcade-sidebar-collapsed-width);
+  width: var(--arcade-sidebar-collapsed-width);
+  max-width: var(--arcade-sidebar-collapsed-width);
+}
+
+.ar-shell__right {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ar-shell__header {
+  height: var(--arcade-header-height);
+  min-height: var(--arcade-header-height);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: var(--z-menu, 500);
+  background: #0f141b;
+  border-bottom: 1px solid rgba(255, 255, 255, .08);
+  color: #e9eef6;
+}
+html[data-theme="light"] .ar-shell__header {
+  background: #ffffff;
+  border-bottom-color: #e6ddcc;
+  color: #17203a;
+}
+
+/* Mobile off-canvas drawer (own scrim/hamburger — not AppShellLayout's) */
+.ar-mobileMenuBtn {
+  display: none;
+  align-items: center; justify-content: center; flex-direction: column; gap: 4px;
+  width: 44px; height: 44px; min-width: 44px; min-height: 44px; flex-shrink: 0;
+  border-radius: 10px; cursor: pointer; padding: 0;
+  background: #0f141b; border: 1px solid rgba(255, 255, 255, .18);
+}
+html[data-theme="light"] .ar-mobileMenuBtn { background: #ffffff; border-color: #d8cdb4; }
+.ar-mobileMenuBar { display: block; width: 18px; height: 2px; border-radius: 1px; background: #e9eef6; }
+html[data-theme="light"] .ar-mobileMenuBar { background: #17203a; }
+.ar-shell__scrim { position: fixed; inset: 0; z-index: var(--z-scrim, 600); background: rgba(0, 0, 0, 0.5); }
+
+/* Responsive breakpoint contract (Arcade shell + hero + home grid):
+     Desktop                >=1200px   — certified baseline, unchanged
+     Compact/tablet landscape 900-1199.98px — permanent icon rail (ArcadeAppShell's isRailTier)
+     Tablet portrait         600-899.98px  — off-canvas drawer
+     Mobile                  <=599.98px    — off-canvas drawer
+   The drawer takeover (this block) and the rail tier below share the
+   899.98/900 boundary so there is never a gap or overlap between them. */
+@media (max-width: 899.98px) {
+  .ar-mobileMenuBtn { display: inline-flex; }
+  .ar-shell__sidebar {
+    position: fixed; inset: 0 auto 0 0; width: min(84vw, 300px);
+    flex-basis: auto; max-width: none; height: 100dvh;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+  }
+  .ar-shell__sidebar.is-mobileOpen { transform: translateX(0); }
+  .ar-shell__right { width: 100%; }
+  .ar-sideToggle { display: none; } /* desktop-only collapse control */
+  .ar-drawerClose {
+    position: absolute; top: 12px; right: 12px; z-index: 1;
+    width: 44px; height: 44px; min-width: 44px; min-height: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 9px; border: 1px solid rgba(255, 255, 255, .18); background: rgba(255, 255, 255, .06);
+    color: #e9eef6; cursor: pointer; font-size: 14px; padding: 0;
+  }
+  html[data-theme="light"] .ar-drawerClose { border-color: #d8cdb4; background: #ffffff; color: #17203a; }
+}
+@media (min-width: 900px) {
+  .ar-drawerClose { display: none; } /* mobile/tablet-portrait drawer only */
+}
+
+.ar-headerBrand {
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: .01em;
+  text-transform: uppercase;
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* ---- Arcade nav list (ArcadeSidebar.jsx) ---- */
+.ar-nav { padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; min-height: 100%; }
+
+.ar-sideTop { display: flex; align-items: flex-start; justify-content: space-between; gap: 4px; }
+.ar-sideLogo { display: flex; align-items: center; gap: 10px; padding: 4px 4px 16px 8px; text-decoration: none; color: inherit; min-width: 0; }
+.ar-sideLogo__mark { width: 28px; height: 28px; object-fit: contain; flex-shrink: 0; }
+.ar-sideLogo__wordmark { display: flex; flex-direction: column; line-height: 1.15; }
+.ar-sideLogo__shf { font-size: 14px; font-weight: 800; color: var(--ar-primary); letter-spacing: .01em; }
+.ar-sideLogo__full { font-size: 8.5px; font-weight: 700; letter-spacing: .04em; color: var(--ar-text-soft); text-transform: uppercase; }
+
+.ar-sideToggle {
+  min-width: 32px; min-height: 32px; width: 32px; height: 32px; flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 8px; border: 1px solid var(--ar-border); background: var(--ar-surface-2);
+  color: var(--ar-text-soft); cursor: pointer; font-size: 13px; margin-top: 4px;
+}
+.ar-sideToggle:hover { color: var(--ar-text); border-color: var(--ar-primary); }
+
+.ar-navList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.ar-navList--bottom { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--ar-border, rgba(255,255,255,.1)); }
+.ar-navLink {
+  display: grid; grid-template-columns: 24px 1fr; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: 10px; text-decoration: none;
+  color: var(--ar-text, inherit);
+  font: inherit; background: none; border: none; cursor: pointer; text-align: left;
+  min-width: 0; position: relative;
+}
+.ar-navLink--button { width: 100%; }
+.ar-navLink:hover { background: rgba(255, 255, 255, .06); }
+.ar-navLink.is-active {
+  background: color-mix(in srgb, var(--ar-primary) 14%, transparent);
+  color: var(--ar-primary);
+  font-weight: 700;
+}
+.ar-navLink.is-active::before {
+  content: ""; position: absolute; left: -12px; top: 6px; bottom: 6px; width: 3px;
+  border-radius: 0 3px 3px 0; background: var(--ar-primary);
+}
+.ar-navIcon { width: 24px; text-align: center; }
+.ar-navLabel { line-height: 1.2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+
+html[data-theme="light"] .ar-navLink:hover { background: rgba(23, 32, 58, .06); }
+
+/* ---- Sidebar stat/info cards (Rewards Wallet, SHF Pledge) ---- */
+.ar-sideCards { display: flex; flex-direction: column; gap: 10px; padding: 10px 4px; }
+.ar-sideCard { border-radius: 12px; border: 1px solid var(--ar-border); background: var(--ar-surface-2); text-decoration: none; color: inherit; display: block; }
+.ar-sideCard--collapsed { display: flex; align-items: center; justify-content: center; min-height: 40px; font-size: 16px; }
+.ar-rewardsCard { padding: 10px; }
+.ar-rewardsCard:hover { border-color: var(--ar-primary); }
+.ar-rewardsCard__head { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.ar-rewardsCard__icon { font-size: 13px; }
+.ar-rewardsCard__title { font-size: 11px; font-weight: 700; color: var(--ar-text-soft); text-transform: uppercase; letter-spacing: .02em; }
+.ar-rewardsCard__xp { font-size: 19px; font-weight: 800; color: var(--ar-text); }
+.ar-rewardsCard__xp span { font-size: 12px; font-weight: 600; color: var(--ar-text-soft); }
+.ar-rewardsCard__level { font-size: 11px; color: var(--ar-text-soft); margin: 2px 0 6px; }
+.ar-rewardsCard__next { font-size: 10px; color: var(--ar-text-soft); margin-top: 5px; }
+
+.ar-pledgeCard { padding: 10px; }
+.ar-pledgeCard__head { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.ar-pledgeCard__title { font-size: 11px; font-weight: 700; color: var(--ar-text-soft); text-transform: uppercase; letter-spacing: .02em; }
+.ar-pledgeCard__body { font-size: 11px; color: var(--ar-text-soft); margin: 0 0 6px; line-height: 1.45; }
+.ar-pledgeCard__link { font-size: 11px; font-weight: 700; color: var(--ar-primary); text-decoration: none; }
+.ar-pledgeCard__link:hover { text-decoration: underline; }
+
+/* Covers both the real desktop toggle-collapsed state (>=1200px) and the
+   permanent 900-1199.98px rail tier (ArcadeAppShell forces the same
+   .is-collapsed class there via isRailTier — see ArcadeAppShell.jsx). */
+@media (min-width: 900px) {
+  .ar-shell__sidebar.is-collapsed .ar-nav { padding: 16px 8px; }
+  .ar-shell__sidebar.is-collapsed .ar-sideTop { flex-direction: column; align-items: center; gap: 8px; }
+  .ar-shell__sidebar.is-collapsed .ar-sideLogo { justify-content: center; padding: 4px 0; }
+  .ar-shell__sidebar.is-collapsed .ar-sideLogo__wordmark { display: none; }
+  .ar-shell__sidebar.is-collapsed .ar-navLink.is-active::before { left: -8px; }
+  .ar-shell__sidebar.is-collapsed .ar-navLabel {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  }
+  .ar-shell__sidebar.is-collapsed .ar-navLink {
+    grid-template-columns: 1fr; justify-items: center; padding: 10px 6px; position: relative;
+  }
+  .ar-shell__sidebar.is-collapsed .ar-navIcon { width: auto; font-size: 18px; }
+  .ar-shell__sidebar.is-collapsed .ar-navLink[data-label]::after {
+    content: attr(data-label);
+    position: absolute; left: 100%; top: 50%; transform: translateY(-50%);
+    margin-left: 8px; white-space: nowrap; background: #111827; color: #fff;
+    border-radius: 8px; padding: 6px 8px; font-size: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: var(--z-menu, 500);
+    pointer-events: none;
+  }
+  .ar-shell__sidebar.is-collapsed .ar-navLink[data-label]:hover::after,
+  .ar-shell__sidebar.is-collapsed .ar-navLink[data-label]:focus-visible::after {
+    opacity: 1; visibility: visible; transform: translate(4px, -50%);
+  }
+}
+
+/* ---- Header extras (search / notifications / theme / profile) ----
+   Compact by design — the approved mock's header has no large labeled
+   "Theme" or "Expand sidebar" button, so those controls are icon-only
+   here (theme) or moved into the sidebar entirely (collapse toggle). */
+.ar-headerExtras { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; margin-left: auto; }
+.ar-quickSearch { position: relative; }
+.ar-quickSearch__icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); font-size: 12px; opacity: .6; pointer-events: none; }
+.ar-quickSearch__input {
+  height: 36px; width: 220px; padding: 0 10px 0 32px; border-radius: 9px; font-size: 13px;
+  border: 1px solid rgba(255, 255, 255, .18); background: rgba(255, 255, 255, .06);
+  color: #e9eef6; font: inherit;
+}
+.ar-quickSearch__list {
+  position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: var(--z-menu, 500);
+  list-style: none; margin: 0; padding: 4px; border-radius: 10px;
+  background: #151b26; border: 1px solid rgba(255, 255, 255, .14);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .4);
+}
+.ar-quickSearch__option {
+  display: block; width: 100%; text-align: left; padding: 8px 10px; border-radius: 8px;
+  background: none; border: none; color: #e9eef6; font: inherit; cursor: pointer;
+}
+.ar-quickSearch__option:hover, .ar-quickSearch__option:focus-visible { background: rgba(255, 255, 255, .08); }
+
+html[data-theme="light"] .ar-quickSearch__input { border-color: #d8cdb4; background: #ffffff; color: #17203a; }
+html[data-theme="light"] .ar-quickSearch__list { background: #ffffff; border-color: #e6ddcc; }
+html[data-theme="light"] .ar-quickSearch__option { color: #17203a; }
+html[data-theme="light"] .ar-quickSearch__option:hover,
+html[data-theme="light"] .ar-quickSearch__option:focus-visible { background: #f3ede0; }
+
+.ar-iconBtn {
+  position: relative; min-width: 36px; min-height: 36px; width: 36px; height: 36px; display: inline-flex;
+  align-items: center; justify-content: center; border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, .18); background: rgba(255, 255, 255, .06);
+  color: #e9eef6; cursor: pointer; font-size: 14px;
+}
+.ar-iconBtn__badge {
+  position: absolute; top: -4px; right: -4px; min-width: 16px; height: 16px; padding: 0 3px;
+  border-radius: 999px; background: #ff4f00; color: #fff; font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+html[data-theme="light"] .ar-iconBtn { border-color: #d8cdb4; background: #ffffff; color: #17203a; }
+
+/* Compact theme trigger: icon only, no visible "Theme" text. The trigger
+   still exposes "Theme" as its accessible name via aria-label (see
+   ArcadeThemeSwitch.jsx) — only the *visible* text label is clipped here,
+   the same standard visually-hidden technique already used for
+   .ar-navLabel when the sidebar is collapsed, so screen-reader users
+   still get the full label. */
+.ar-themeSwitch__trigger {
+  min-width: 36px; min-height: 36px; width: 36px; height: 36px; padding: 0;
+  justify-content: center;
+}
+.ar-themeSwitch__label {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+.ar-profileChip {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 3px 8px 3px 3px;
+  border-radius: 999px; border: 1px solid rgba(255, 255, 255, .18); background: rgba(255, 255, 255, .06);
+  color: #e9eef6; text-decoration: none;
+}
+
+/* Touch-target minimum (44x44) below the certified >=1200px desktop tier,
+   where mouse precision no longer applies — the notification/search/theme
+   icon buttons and the profile chip are all 36px at desktop by design
+   (compact header, mouse-precise), which is too small a target on a
+   touchscreen. Desktop itself is untouched. */
+@media (max-width: 1199.98px) {
+  .ar-iconBtn { min-width: 44px; min-height: 44px; width: 44px; height: 44px; }
+  .ar-themeSwitch__trigger { min-width: 44px; min-height: 44px; width: 44px; height: 44px; }
+  .ar-profileChip { min-height: 44px; }
+}
+.ar-profileChip__avatar {
+  width: 28px; height: 28px; border-radius: 999px; background: var(--ar-surface-2, rgba(255,255,255,.1));
+  display: inline-flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0;
+}
+.ar-profileChip__text { display: flex; flex-direction: column; line-height: 1.1; }
+.ar-profileChip__name { font-size: 12px; font-weight: 700; }
+.ar-profileChip__role { font-size: 10px; color: var(--ar-text-soft, #9aa3b2); }
+.ar-profileChip__chevron { font-size: 11px; opacity: .7; margin-left: 1px; }
+html[data-theme="light"] .ar-profileChip { border-color: #d8cdb4; background: #ffffff; color: #17203a; }
+
+@media (max-width: 899.98px) {
+  .ar-quickSearch__input { width: 140px; }
+}
+
+/* Mobile tier (<=599.98px): ArcadeQuickSearch (ArcadeHeaderExtras.jsx)
+   renders as a compact icon trigger by default and switches itself into
+   this "open" markup on click via a matchMedia check at the same 599.98px
+   boundary — no permanent 220px input, matching the "no large search
+   field" requirement. The overlay bar sits directly under the header
+   rather than squeezing an input into the icon row. */
+.ar-quickSearch--compactOpen {
+  position: fixed;
+  top: var(--arcade-header-height);
+  left: 0;
+  right: 0;
+  z-index: var(--z-menu, 500);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #0f141b;
+  border-bottom: 1px solid rgba(255, 255, 255, .08);
+}
+html[data-theme="light"] .ar-quickSearch--compactOpen {
+  background: #ffffff;
+  border-bottom-color: #e6ddcc;
+}
+.ar-quickSearch--compactOpen .ar-quickSearch__input { width: 100%; height: 40px; }
+.ar-quickSearch--compactOpen .ar-quickSearch__list { position: absolute; top: 100%; left: 12px; right: 12px; }
+.ar-quickSearch__close {
+  flex-shrink: 0; width: 36px; height: 36px; min-width: 36px; min-height: 36px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 9px; border: 1px solid rgba(255, 255, 255, .18); background: rgba(255, 255, 255, .06);
+  color: #e9eef6; cursor: pointer; font-size: 14px; padding: 0;
+}
+html[data-theme="light"] .ar-quickSearch__close { border-color: #d8cdb4; background: #ffffff; color: #17203a; }
+
+@media (max-width: 599.98px) {
+  .ar-profileChip__text { display: none; }
+  /* At this width the mobile menu button + brand + icon cluster no longer
+     fit at desktop padding/gap/font-size/header-height (measured: 44px of
+     horizontal overflow at 390px with the desktop values) — tighten all
+     four rather than truncating or hiding the brand label. */
+  .ar-shell__header { height: 58px; min-height: 58px; padding: 0 4px; gap: 4px; }
+  .ar-headerBrand { font-size: 15px; }
+  .ar-headerExtras { gap: 4px; }
+  /* Decorative only (the chip's accessible name already states role via
+     aria-label) — trimmed to make room for 44px (up from 36px) touch
+     targets on the search/notification/theme icon buttons at this width,
+     confirmed live: bumping those three to 44px alone reintroduced 20px
+     of horizontal overflow at 390px. */
+  .ar-profileChip__chevron { display: none; }
+  .ar-quickSearch--compactOpen { top: 58px; }
+}
+
+/* ---- Top section nav (Play / Learn / Create / My Studio / Showcase) ---- */
+.ar-topNav { border-bottom: 1px solid rgba(255, 255, 255, .08); }
+html[data-theme="light"] .ar-topNav { border-bottom-color: #e6ddcc; }
+.ar-topNavList { list-style: none; margin: 0; padding: 0 24px; display: flex; gap: 4px; flex-wrap: wrap; }
+/* Tablet portrait + mobile: horizontally scrollable instead of wrapping to
+   multiple rows — wrapping was pushing the hero and all page content down
+   by 1-2 extra tab rows' worth of height with no benefit; a single
+   scrollable row keeps every tab reachable (none clipped) without eating
+   vertical space. The active tab (Play) is always the first item, so it
+   stays visible without needing scroll-into-view logic. */
+@media (max-width: 899.98px) {
+  .ar-topNavList {
+    flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    padding: 0 16px; scrollbar-width: thin;
+  }
+  .ar-topNavTab { flex-shrink: 0; padding: 9px 10px; min-height: 44px; }
+}
+.ar-topNavTab {
+  appearance: none; font: inherit; cursor: pointer; background: none; border: none;
+  padding: 9px 12px; min-height: 40px; color: inherit; text-decoration: none; font-size: 14px;
+  border-bottom: 3px solid transparent; display: inline-flex; align-items: center; gap: 6px;
+  color: var(--ink-soft, #9aa3b2);
+}
+.ar-topNavTab.is-active { color: var(--ink, #e9eef6); border-bottom-color: #ff4f00; font-weight: 700; }
+.ar-topNavTab__icon { font-size: 12px; }
+.ar-comingSoon {
+  font-size: 9px; letter-spacing: .03em; text-transform: uppercase; padding: 2px 6px; border-radius: 999px;
+  background: rgba(255, 255, 255, .10); color: var(--ink-soft, #9aa3b2);
+}
+html[data-theme="light"] .ar-comingSoon { background: #f3ede0; color: #5b5240; }

@@ -1,0 +1,168 @@
+/* src/pages/resume-builder/resumeBuilderDark.css
+   Dark-mode theme layer for the Resume Builder. A pure addition on top of
+   resumeBuilder.css — no light-mode rule is edited or removed, so light
+   mode is byte-for-byte unchanged. Activated only when BOTH are true:
+     - the user's resolved theme is dark (`[data-theme="dark"]` on <html>,
+       see src/utils/careerTheme.js)
+     - Resume Builder is the active page (`body[data-dark-scope~="resume-builder"]`,
+       set/cleared by ResumeBuilder.jsx's mount/unmount effect)
+   The second condition is what keeps dark mode from bleeding onto other
+   Career pages that don't have dark styling yet (Dashboard, Portfolio,
+   etc.) even though the *preference* is global and shared via one control
+   in the AppShellLayout header.
+
+   Approved dark palette (applied via CSS custom properties so every
+   existing `var(--rb2-*)` reference in resumeBuilder.css picks these up
+   automatically; only the handful of rules that used a hardcoded hex
+   instead of a token are overridden explicitly below):
+     canvas #0D0F12 · sidebar/header #111419 · panels #171A20
+     elevated (menus/drawers/sheets) #1E222A · borders #343944
+     text #F5F3EE · secondary text #AEB4BF · disabled text #757C88
+     accent #FF5A1F
+
+   No CSS nesting syntax is used here (kept flat/fully-qualified) to match
+   the rest of the codebase and avoid depending on newer browser support.
+*/
+
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] {
+  color-scheme: dark;
+}
+
+/* ===========================================================
+   Token overrides — re-resolves every var(--rb2-*) consumer in
+   resumeBuilder.css at once (buttons, inputs, borders, panels, text).
+   =========================================================== */
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-shell {
+  --rb2-bg: #0D0F12;
+  --rb2-surface: #171A20;
+  --rb2-ink: #F5F3EE;
+  --rb2-ink-soft: #AEB4BF;
+  --rb2-ring: #343944;
+  --rb2-accent: #FF5A1F;
+}
+
+/* ===========================================================
+   Explicit overrides for rules that used a literal hex instead of a
+   `var(--rb2-*)` token in resumeBuilder.css (buttons, banners, menus,
+   accordion rows, chips, modals, drawers, bottom sheets, mobile chrome).
+   Each targets the exact same selector as its light-mode rule.
+   =========================================================== */
+
+/* Banners */
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-banner { background: #241C14; border-color: #4A3420; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-banner--error { border-color: #7A2E2E; background: #2A1616; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-banner--warn { border-color: #6B4A15; background: #241C14; }
+
+/* Buttons / inputs */
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-btn { color: #171A20; } /* accent bg stays vivid; dark ink for AA on #FF5A1F */
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-btn--secondary { background: #1E222A; color: #F5F3EE; border-color: #343944; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-btn--danger { color: #FF8A6B; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-iconBtn { color: #F5F3EE; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-iconBtn:hover { background: rgba(245, 243, 238, 0.08); }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-iconBtn[aria-pressed="true"] { background: rgba(255, 90, 31, 0.18); color: #FF5A1F; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-input,
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-textarea,
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] select.rb2-input {
+  background: #12151A; color: #F5F3EE; border-color: #343944;
+}
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-input::placeholder,
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-textarea::placeholder { color: #757C88; opacity: 1; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-templateSelect { background: #1E222A; color: #F5F3EE; border-color: #343944; }
+
+/* Top bar */
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-topBtn { background: #1E222A; color: #F5F3EE; border-color: #343944; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-topBtn--accent { color: #171A20; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-savedStatus { color: #34D399; } /* existing success green, lightened for dark contrast */
+
+/* Dropdown menus */
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-menu { background: #1E222A; border-color: #343944; box-shadow: 0 16px 40px rgba(0,0,0,.55); }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-menuItem { color: #F5F3EE; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-menuItem:hover { background: #262B34; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-menuItem--danger { color: #FF8A6B; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-menuItemDesc { color: #AEB4BF; }
+
+/* Strength bar. The bottom info bar (.rb2-bottomBar*) needs no explicit
+   dark rule here — it's built entirely from --rb2-surface/--rb2-ink/
+   --rb2-ring/--rb2-accent, all already redefined for dark above. */
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-strengthBar { background: #262B34; }
+
+/* Accordion rows */
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-row { background: #171A20; border-color: #343944; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-row--hidden { background: linear-gradient(0deg, rgba(255,90,31,.10), rgba(255,90,31,.10)), #171A20; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-drag { color: #4A505C; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-rowSubtitle { color: #AEB4BF; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-titleInput { color: #F5F3EE; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-titleInput::placeholder { color: #757C88; }
+
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-item { background: #12151A; border-color: #343944; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-chip { background: #1E222A; border-color: #343944; color: #F5F3EE; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-emptyHint { color: #AEB4BF; }
+
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-coachBtn { background: #241C14; border-color: #6B4A15; color: #F5F3EE; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-coachStatic,
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-coachHint { color: #AEB4BF; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-addSectionBtn { background: #241C14; border-color: #FF5A1F; color: #FF5A1F; }
+
+/* Modals (Bullet Coach, Version history) */
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-modalScrim { background: rgba(0,0,0,.65); }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-modal { background: #1E222A; box-shadow: 0 24px 60px rgba(0,0,0,.6); }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-modalHead,
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-modalFoot { border-color: #343944; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-previewBox { background: #12151A; border-color: #343944; color: #F5F3EE; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-versionItem { border-color: #343944; }
+
+/* Career Intelligence drawer */
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-drawerScrim { background: rgba(0,0,0,.6); }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-drawer { background: #1E222A; box-shadow: -20px 0 50px rgba(0,0,0,.6); }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-ciMetric { background: #171A20; border-color: #343944; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-kwChip { background: #171A20; border-color: #343944; color: #F5F3EE; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-kwChip--flat { background: #262B34; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-recItem { border-color: #343944; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-recWhy { color: #FFB37A; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-checklist li.is-done { color: #34D399; }
+
+/* Live Preview panel chrome (NOT the A4 paper — see isolation block below) */
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-tmplSwatch { background: #171A20; border-color: #343944; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-tmplSwatch.is-selected { border-color: #FF5A1F; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-previewFrame { background: #0A0C0F; border-color: #343944; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-preview--fullscreen { background: #171A20; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-designControls,
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-designRow { border-color: #343944; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-chevronRight { color: #AEB4BF; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-colorSwatch.is-selected { border-color: #F5F3EE; }
+
+/* Mobile / tablet chrome */
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-mheader,
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-mtabs,
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-mactions { background: #111419; border-color: #343944; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-mtab { color: #AEB4BF; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-mtab.is-active { background: rgba(255,90,31,.14); color: #FF5A1F; }
+
+/* Export bottom sheet */
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-sheetScrim { background: rgba(0,0,0,.65); }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-sheet { background: #1E222A; box-shadow: 0 -20px 50px rgba(0,0,0,.6); }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-sheetGrabber { background: #343944; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-sheetRow { color: #F5F3EE; border-color: #343944; }
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-sheetRow:hover { background: #262B34; }
+
+/* Template thumbnails must stay a faithful, undarkened preview of the
+   actual document design (they represent light-paper output regardless
+   of app theme), so they're intentionally excluded from the color
+   overrides above — only their border adapts so they're visible against
+   the dark card. */
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .rb2-tmplThumb {
+  border-color: #343944;
+}
+
+/* ===========================================================
+   A4 DOCUMENT ISOLATION (hard boundary)
+   The printable resume paper is never dark, in either app theme. These
+   rules pin it to an opaque white surface with dark document text
+   regardless of any ancestor dark styling, so the live preview always
+   matches what PDF/HTML/print export actually produce.
+   =========================================================== */
+html[data-theme="dark"] body[data-dark-scope~="resume-builder"] .resume-a4 {
+  background: #ffffff !important;
+  color: #1a1a1a !important;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.45);
+}

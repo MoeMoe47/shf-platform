@@ -1,0 +1,1922 @@
+:root {
+  color: #f5f1e8;
+  background: #020203;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+button,
+.button-link {
+  appearance: none;
+  border: 1px solid rgba(245, 241, 232, 0.26);
+  background: rgba(2, 2, 3, 0.48);
+  color: #f5f1e8;
+  min-height: 42px;
+  padding: 0 14px;
+  font: inherit;
+  cursor: pointer;
+}
+
+button:hover,
+.button-link:hover {
+  border-color: rgba(245, 241, 232, 0.64);
+  background: rgba(245, 241, 232, 0.08);
+}
+
+.button-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #f5f1e8;
+  outline-offset: 4px;
+}
+
+button:disabled {
+  color: rgba(245, 241, 232, 0.36);
+  cursor: not-allowed;
+}
+
+.universe,
+.v1-lab,
+.destination-route {
+  position: relative;
+  width: 100vw;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+  background: #020203;
+}
+
+.v1-lab {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  background: #000;
+}
+
+.v1-lab-stage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #000;
+}
+
+.v1-lab-image {
+  display: block;
+  width: min(100vw, calc(100svh * 1672 / 941));
+  height: auto;
+  max-width: 100vw;
+  max-height: 100svh;
+  aspect-ratio: 1672 / 941;
+  object-fit: contain;
+  image-rendering: auto;
+  user-select: none;
+  z-index: 0;
+}
+
+.v1-atmosphere-frame {
+  position: absolute;
+  width: min(100vw, calc(100svh * 1672 / 941));
+  height: min(100svh, calc(100vw * 941 / 1672));
+  max-width: 100vw;
+  max-height: 100svh;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+  contain: layout paint style;
+}
+
+.v1-atmosphere-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.v1-atmosphere-item {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--size);
+  height: var(--size);
+  border-radius: 999px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.v1-star-twinkle {
+  background: rgba(245, 241, 232, 0.92);
+  opacity: var(--base-opacity);
+  filter: blur(var(--blur));
+  transform: translate3d(-50%, -50%, 0) scale(0.82);
+  animation: v1-star-twinkle var(--duration) ease-in-out var(--delay) infinite;
+  box-shadow: 0 0 2px rgba(245, 241, 232, 0.28);
+}
+
+.v1-star-twinkle.is-mid {
+  box-shadow: 0 0 4px rgba(245, 241, 232, 0.34);
+}
+
+.v1-star-twinkle.is-hero {
+  box-shadow: 0 0 7px rgba(245, 241, 232, 0.5);
+}
+
+.v1-solar-dust {
+  background: rgba(245, 241, 232, 0.82);
+  opacity: var(--base-opacity);
+  filter: blur(var(--blur));
+  transform: translate3d(0, 0, 0);
+  animation: v1-solar-dust var(--duration) linear var(--delay) infinite;
+  box-shadow: 0 0 4px rgba(245, 241, 232, 0.18);
+}
+
+.v1-solar-dust.is-near {
+  box-shadow: 0 0 9px rgba(245, 241, 232, 0.24);
+}
+
+.motion-paused .v1-atmosphere-item {
+  animation-play-state: paused;
+}
+
+.v1-lab-target {
+  position: absolute;
+  translate: -50% -50%;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  opacity: 1;
+  z-index: 2;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.v1-lab-target:focus-visible {
+  outline: 2px solid #f5f1e8;
+  outline-offset: 3px;
+}
+
+.v1-lab-target:hover {
+  border: 0;
+  background: transparent;
+}
+
+.planet-halo {
+  position: absolute;
+  inset: -10%;
+  border: 1px solid rgba(245, 241, 232, 0.48);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle, rgba(245, 241, 232, 0.12), rgba(245, 241, 232, 0.035) 46%, transparent 72%);
+  box-shadow:
+    0 0 28px rgba(245, 241, 232, 0.13),
+    inset 0 0 20px rgba(245, 241, 232, 0.08);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease, transform 220ms ease;
+  transform: scale(0.94);
+}
+
+.planet-label {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 6px);
+  translate: -50% 0;
+  padding: 3px 6px;
+  border: 1px solid rgba(245, 241, 232, 0.34);
+  background: rgba(0, 0, 0, 0.78);
+  color: #f5f1e8;
+  font-size: 12px;
+  line-height: 1.2;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition: opacity 160ms ease 0ms, transform 160ms ease 0ms;
+}
+
+.v1-lab-target:hover .planet-halo,
+.v1-lab-target:focus-visible .planet-halo,
+.v1-lab-target.is-previewed .planet-halo {
+  opacity: 0.72;
+  transform: scale(1);
+  animation: v1-planet-attention 2.8s ease-in-out infinite;
+}
+
+.v1-lab-target:hover .planet-label,
+.v1-lab-target:focus-visible .planet-label,
+.v1-lab-target.is-previewed .planet-label {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 320ms;
+}
+
+.v1-lab-target.label-left .planet-label {
+  left: auto;
+  right: calc(100% + 8px);
+  top: 50%;
+  translate: 0 -50%;
+}
+
+.v1-lab-target.label-right .planet-label {
+  left: calc(100% + 8px);
+  right: auto;
+  top: 50%;
+  translate: 0 -50%;
+}
+
+.v1-lab-target.label-above.label-center .planet-label {
+  top: auto;
+  bottom: calc(100% + 8px);
+}
+
+.debug-hit-regions .v1-lab-target {
+  border: 1px solid rgba(245, 241, 232, 0.86);
+  background: rgba(245, 241, 232, 0.08);
+  opacity: 1;
+}
+
+.debug-hit-regions .v1-lab-target .planet-halo,
+.debug-hit-regions .v1-lab-target .planet-label {
+  opacity: 1;
+}
+
+@keyframes v1-star-twinkle {
+  0%,
+  100% {
+    opacity: calc(var(--base-opacity) * 0.68);
+    transform: translate3d(-50%, -50%, 0) scale(0.82);
+  }
+  29% {
+    opacity: min(1, calc(var(--base-opacity) * 1.82));
+    transform: translate3d(-50%, -50%, 0) scale(1.22);
+  }
+  53% {
+    opacity: calc(var(--base-opacity) * 0.86);
+    transform: translate3d(-50%, -50%, 0) scale(0.94);
+  }
+  76% {
+    opacity: min(0.96, calc(var(--base-opacity) * 1.38));
+    transform: translate3d(-50%, -50%, 0) scale(1.08);
+  }
+}
+
+@keyframes v1-solar-dust {
+  0% {
+    opacity: calc(var(--base-opacity) * 0.28);
+    transform: translate3d(0, 0, 0) scale(0.92);
+  }
+  16% {
+    opacity: var(--base-opacity);
+  }
+  72% {
+    opacity: calc(var(--base-opacity) * 0.86);
+  }
+  100% {
+    opacity: calc(var(--base-opacity) * 0.18);
+    transform: translate3d(var(--drift-x), var(--drift-y), 0) scale(1.08);
+  }
+}
+
+@keyframes v1-planet-attention {
+  0%,
+  100% {
+    opacity: 0.56;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 0.78;
+    transform: scale(1.03);
+  }
+}
+
+.v1-branding {
+  position: absolute;
+  left: clamp(18px, 4vw, 58px);
+  bottom: clamp(88px, 12vh, 132px);
+  z-index: 4;
+  width: min(620px, calc(100vw - 36px));
+  color: #f5f1e8;
+  pointer-events: none;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.86);
+}
+
+.v1-branding::before {
+  content: "";
+  position: absolute;
+  inset: -24px -32px -20px -28px;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 22% 72%, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.22) 46%, transparent 74%);
+}
+
+.v1-branding h1 {
+  margin: 0;
+  color: #f5f1e8;
+  font-size: clamp(32px, 4.1vw, 58px);
+  line-height: 0.96;
+  font-weight: 520;
+  letter-spacing: 0;
+}
+
+.v1-branding h1 span {
+  display: block;
+}
+
+.v1-branding p {
+  margin: 14px 0 0;
+  width: min(520px, 100%);
+  color: rgba(245, 241, 232, 0.76);
+  font-size: clamp(15px, 1.5vw, 19px);
+  line-height: 1.42;
+  font-weight: 360;
+}
+
+.v1-card-toggle {
+  position: absolute;
+  left: clamp(14px, 3vw, 32px);
+  bottom: clamp(14px, 3vw, 32px);
+  z-index: 5;
+  min-height: 38px;
+  color: rgba(245, 241, 232, 0.84);
+  background: rgba(0, 0, 0, 0.58);
+}
+
+.v1-selection-panel {
+  position: absolute;
+  z-index: 5;
+  width: min(340px, calc(100vw - 28px));
+  padding: 16px;
+  border: 1px solid rgba(245, 241, 232, 0.2);
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(10px);
+}
+
+.v1-selection-panel p {
+  margin: 0 0 7px;
+  color: rgba(245, 241, 232, 0.62);
+  font-size: 12px;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.v1-selection-panel h2 {
+  margin: 0 0 10px;
+  font-size: 22px;
+  line-height: 1.1;
+  font-weight: 430;
+}
+
+.v1-selection-panel span {
+  display: block;
+  color: rgba(245, 241, 232, 0.72);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.v1-selection-panel strong {
+  display: block;
+  margin-top: 12px;
+  color: rgba(245, 241, 232, 0.64);
+  font-size: 11px;
+  font-weight: 520;
+  line-height: 1.25;
+}
+
+.v1-selection-panel div {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.v1-selection-panel .inactive-enter {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 0 14px;
+  border: 1px solid rgba(245, 241, 232, 0.16);
+  color: rgba(245, 241, 232, 0.44);
+  font-size: 12px;
+}
+
+.scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #020203;
+}
+
+.scene-image {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: max(100vw, calc(100svh * 1672 / 941));
+  height: auto;
+  min-height: 100svh;
+  object-fit: cover;
+  transform: translate(-50%, -50%);
+  transform-origin: 50% 50%;
+  filter: grayscale(1) contrast(1.05) brightness(0.82);
+}
+
+.motion-paused .scene-image,
+.motion-paused .star {
+  animation-play-state: paused;
+}
+
+.focus-bos .scene-image {
+  transform: translate(-50%, -50%);
+  filter: grayscale(1) contrast(1.08) brightness(0.86);
+}
+
+.focus-aos .scene-image {
+  transform: translate(-50%, -50%);
+  filter: grayscale(1) contrast(1.08) brightness(0.84);
+}
+
+.focus-standard .scene-image,
+.focus-registry .scene-image {
+  transform: translate(-50%, -50%);
+  filter: grayscale(1) contrast(1.08) brightness(0.84);
+}
+
+.focus-bureau .scene-image {
+  transform: translate(-50%, -50%);
+  filter: grayscale(1) contrast(1.08) brightness(0.84);
+}
+
+.scene-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 48% 48%, rgba(245, 241, 232, 0.04), transparent 34%),
+    linear-gradient(90deg, rgba(2, 2, 3, 0.72), transparent 34%, transparent 62%, rgba(2, 2, 3, 0.76)),
+    linear-gradient(0deg, rgba(2, 2, 3, 0.92), transparent 36%, rgba(2, 2, 3, 0.58));
+}
+
+.star-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: rgba(245, 241, 232, 0.7);
+  animation: flicker 5s ease-in-out infinite;
+}
+
+.s1 { left: 12%; top: 18%; }
+.s2 { left: 72%; top: 14%; animation-delay: 1.2s; }
+.s3 { left: 91%; top: 62%; animation-delay: 2s; }
+.s4 { left: 28%; top: 78%; animation-delay: 3.4s; }
+
+.shooting-star {
+  position: absolute;
+  width: 150px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(245, 241, 232, 0.96), transparent);
+  opacity: 0;
+  animation: shoot 900ms ease-out forwards;
+}
+
+.title-block {
+  position: absolute;
+  left: clamp(18px, 4vw, 62px);
+  bottom: clamp(92px, 12vh, 148px);
+  width: min(680px, calc(100vw - 36px));
+  pointer-events: none;
+}
+
+.title-block p {
+  margin: 0 0 14px;
+  color: #f5f1e8;
+  font-size: clamp(24px, 5vw, 56px);
+  line-height: 0.98;
+  font-weight: 520;
+}
+
+.title-block h1 {
+  margin: 0;
+  width: min(560px, 100%);
+  color: rgba(245, 241, 232, 0.72);
+  font-size: clamp(15px, 1.8vw, 20px);
+  line-height: 1.45;
+  font-weight: 360;
+}
+
+.scene-target {
+  position: absolute;
+  translate: -50% -50%;
+  border-radius: 999px;
+  border-color: rgba(245, 241, 232, 0.42);
+  background: transparent;
+  box-shadow: 0 0 0 1px rgba(2, 2, 3, 0.52), inset 0 0 24px rgba(245, 241, 232, 0.04);
+}
+
+.scene-target span {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 8px);
+  translate: -50% 0;
+  padding: 4px 7px;
+  color: rgba(245, 241, 232, 0.82);
+  background: rgba(2, 2, 3, 0.62);
+  border: 1px solid rgba(245, 241, 232, 0.18);
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.scene-target:hover span,
+.scene-target:focus-visible span,
+.scene-target.is-focused {
+  opacity: 1;
+}
+
+.scene-target:hover span,
+.scene-target:focus-visible span,
+.scene-target.is-focused span {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scene-target.is-focused {
+  border-color: rgba(245, 241, 232, 0.95);
+  box-shadow: 0 0 0 1px rgba(245, 241, 232, 0.24), 0 0 52px rgba(245, 241, 232, 0.08);
+}
+
+.identity-panel {
+  position: absolute;
+  right: clamp(18px, 4vw, 58px);
+  bottom: clamp(92px, 12vh, 146px);
+  width: min(360px, calc(100vw - 36px));
+  padding: 18px;
+  border: 1px solid rgba(245, 241, 232, 0.18);
+  background: rgba(2, 2, 3, 0.72);
+  backdrop-filter: blur(12px);
+}
+
+.identity-panel p,
+.card-mode-head p,
+.destination-card p,
+.destination-route p {
+  margin: 0 0 8px;
+  color: rgba(245, 241, 232, 0.56);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.identity-panel h2,
+.destination-card h2,
+.destination-route h1 {
+  margin: 0 0 12px;
+  font-weight: 420;
+  line-height: 1.1;
+}
+
+.identity-panel span,
+.destination-card span,
+.destination-route span,
+.info-panel span {
+  display: block;
+  color: rgba(245, 241, 232, 0.68);
+  line-height: 1.45;
+}
+
+.destination-card small {
+  display: block;
+  margin-top: 14px;
+  color: rgba(245, 241, 232, 0.46);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.identity-panel div,
+.card-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.utility {
+  position: absolute;
+  left: clamp(18px, 4vw, 62px);
+  right: clamp(18px, 4vw, 62px);
+  bottom: 24px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.utility button {
+  min-height: 38px;
+  padding-inline: 12px;
+  color: rgba(245, 241, 232, 0.76);
+  font-size: 13px;
+}
+
+.card-mode {
+  position: absolute;
+  inset: clamp(16px, 4vw, 56px);
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  border: 1px solid rgba(245, 241, 232, 0.18);
+  background: rgba(2, 2, 3, 0.86);
+  backdrop-filter: blur(16px);
+  padding: clamp(18px, 3vw, 34px);
+  overflow: auto;
+}
+
+.card-mode-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: center;
+}
+
+.destination-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(170px, 1fr));
+  gap: 12px;
+}
+
+.destination-card {
+  min-height: 220px;
+  padding: 18px;
+  border: 1px solid rgba(245, 241, 232, 0.16);
+  background: rgba(245, 241, 232, 0.035);
+}
+
+.info-panel {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 10;
+  width: min(420px, calc(100vw - 48px));
+  border: 1px solid rgba(245, 241, 232, 0.18);
+  background: rgba(2, 2, 3, 0.88);
+  padding: 18px;
+}
+
+.info-panel button {
+  float: right;
+}
+
+.info-panel p {
+  margin: 46px 0 8px;
+}
+
+.intro {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  background: #020203;
+  animation: introOut 520ms ease 4.2s forwards;
+}
+
+.intro-inner {
+  width: min(340px, calc(100vw - 48px));
+  text-align: center;
+}
+
+.intro p {
+  color: rgba(245, 241, 232, 0.76);
+}
+
+.progress {
+  height: 2px;
+  overflow: hidden;
+  background: rgba(245, 241, 232, 0.12);
+}
+
+.progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: left;
+  background: #f5f1e8;
+  animation: progress 4.3s ease forwards;
+}
+
+.intro button {
+  margin-top: 18px;
+}
+
+.calibration {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  border: 1px solid rgba(245, 241, 232, 0.5);
+}
+
+.calibration span {
+  position: absolute;
+  translate: -50% -50%;
+  padding: 3px 6px;
+  border: 1px solid #f5f1e8;
+  background: #020203;
+  font-size: 12px;
+}
+
+.calibration p {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  margin: 0;
+}
+
+.destination-route {
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 70% 34%, rgba(245, 241, 232, 0.09), transparent 24%),
+    #020203;
+}
+
+.destination-route section {
+  width: min(680px, 100%);
+  border-left: 1px solid rgba(245, 241, 232, 0.24);
+  padding-left: clamp(20px, 4vw, 44px);
+}
+
+.destination-route h1 {
+  font-size: clamp(34px, 7vw, 76px);
+}
+
+.destination-route button {
+  margin-top: 28px;
+}
+
+.destination-route .button-link {
+  margin-top: 28px;
+  margin-right: 10px;
+}
+
+.universe-directory {
+  overflow: auto;
+}
+
+.universe-directory section {
+  width: min(1160px, 100%);
+  padding-top: 34px;
+  padding-bottom: 34px;
+}
+
+.directory-grid {
+  margin-top: 24px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.v2-lab-boundary {
+  background:
+    linear-gradient(135deg, rgba(245, 241, 232, 0.065), transparent 34%),
+    linear-gradient(315deg, rgba(110, 142, 168, 0.12), transparent 42%),
+    #020203;
+}
+
+.v2-lab-boundary section {
+  max-width: 780px;
+}
+
+.environment-lab {
+  position: relative;
+  width: 100vw;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+  background: #000;
+  color: #f5f1e8;
+}
+
+.panorama-stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #000;
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+}
+
+.panorama-stage:active {
+  cursor: grabbing;
+}
+
+.deep-space-panorama {
+  position: absolute;
+  top: var(--panorama-y, 50%);
+  left: var(--panorama-x, 50%);
+  width: max(220vw, calc(100svh * 2.8));
+  height: auto;
+  min-height: 112svh;
+  transform: translate(-50%, -50%);
+  transform-origin: 50% 50%;
+  filter:
+    grayscale(var(--panorama-monochrome, 0.94))
+    saturate(var(--panorama-saturation, 0.12))
+    contrast(var(--panorama-contrast, 1.18))
+    brightness(var(--panorama-brightness, 1.95));
+  pointer-events: none;
+}
+
+.panorama-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 48% 52%, transparent 0%, rgba(0, 0, 0, 0.1) 42%, rgba(0, 0, 0, 0.78) 100%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.82), transparent 25%, transparent 68%, rgba(0, 0, 0, 0.86)),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.92), transparent 32%, rgba(0, 0, 0, 0.52));
+}
+
+.environment-lab-header {
+  position: absolute;
+  left: clamp(18px, 4vw, 62px);
+  top: clamp(18px, 4vw, 54px);
+  pointer-events: none;
+}
+
+.environment-lab-header p,
+.environment-lab-status p {
+  margin: 0 0 8px;
+  color: rgba(245, 241, 232, 0.58);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.environment-lab-header h1 {
+  margin: 0;
+  max-width: min(520px, calc(100vw - 36px));
+  color: rgba(245, 241, 232, 0.88);
+  font-size: clamp(28px, 5vw, 64px);
+  line-height: 1;
+  font-weight: 430;
+}
+
+.environment-lab-status {
+  position: absolute;
+  right: clamp(18px, 4vw, 54px);
+  bottom: clamp(18px, 4vw, 54px);
+  width: min(360px, calc(100vw - 36px));
+  padding: 16px;
+  border: 1px solid rgba(245, 241, 232, 0.16);
+  background: rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(10px);
+}
+
+.environment-lab-status span {
+  display: block;
+  color: rgba(245, 241, 232, 0.66);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.environment-lab-status button {
+  margin-top: 14px;
+  min-height: 36px;
+  color: rgba(245, 241, 232, 0.78);
+  font-size: 13px;
+}
+
+@keyframes cameraBreath {
+  from { transform: translate(-50%, -50%) scale(1.01); }
+  to { transform: translate(-50.4%, -50.2%) scale(1.035); }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 0.25; }
+  45% { opacity: 0.78; }
+}
+
+@keyframes shoot {
+  0% { opacity: 0; transform: translate3d(0, 0, 0); }
+  16% { opacity: 0.85; }
+  100% { opacity: 0; transform: translate3d(360px, 110px, 0); }
+}
+
+@keyframes progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes introOut {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media (max-width: 1100px) {
+  .v1-star-twinkle:nth-child(n+29),
+  .v1-solar-dust:nth-child(n+23) {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .destination-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .identity-panel {
+    right: auto;
+    left: 18px;
+    bottom: 92px;
+  }
+}
+
+@media (max-width: 800px) {
+  .v1-star-twinkle:nth-child(n+21),
+  .v1-solar-dust:nth-child(n+17) {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  html,
+  body,
+  #root {
+    overflow: hidden;
+  }
+
+  .universe {
+    min-height: 640px;
+  }
+
+  .scene-image {
+    width: auto;
+    height: 100svh;
+    min-width: 100vw;
+  }
+
+  .title-block {
+    bottom: 150px;
+  }
+
+  .title-block p {
+    font-size: clamp(25px, 10vw, 42px);
+  }
+
+  .identity-panel {
+    bottom: 142px;
+  }
+
+  .utility {
+    bottom: 18px;
+  }
+
+  .utility button {
+    flex: 1 1 calc(50% - 6px);
+    min-width: 0;
+  }
+
+  .card-mode {
+    inset: 12px;
+  }
+
+  .destination-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .environment-lab {
+    min-height: 640px;
+  }
+
+  .v1-lab {
+    min-height: 640px;
+  }
+
+  .v1-star-twinkle:nth-child(n+17),
+  .v1-solar-dust:nth-child(n+13) {
+    display: none;
+  }
+
+  .v1-branding {
+    left: 18px;
+    right: 18px;
+    bottom: 116px;
+    width: auto;
+  }
+
+  .v1-branding h1 {
+    font-size: clamp(27px, 8.4vw, 36px);
+    line-height: 1;
+  }
+
+  .v1-branding p {
+    margin-top: 10px;
+    max-width: 330px;
+    font-size: 14px;
+  }
+
+  .v1-selection-panel {
+    right: auto;
+    left: 14px;
+    bottom: 68px;
+  }
+
+  .deep-space-panorama {
+    width: max(360vw, calc(100svh * 3.2));
+    min-height: 118svh;
+  }
+
+  .environment-lab-status {
+    right: 18px;
+    bottom: 18px;
+  }
+}
+
+@media (max-width: 374px) {
+  .v1-star-twinkle:nth-child(n+13),
+  .v1-solar-dust:nth-child(n+9) {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+
+  .shooting-star {
+    display: none;
+  }
+
+  .v1-atmosphere-item {
+    animation: none !important;
+  }
+
+  .planet-halo {
+    animation: none !important;
+  }
+
+  .v1-star-twinkle {
+    opacity: calc(var(--base-opacity) * 0.62);
+    transform: translate3d(-50%, -50%, 0) scale(0.82);
+  }
+
+  .v1-solar-dust {
+    opacity: calc(var(--base-opacity) * 0.5);
+    transform: translate3d(0, 0, 0);
+  }
+
+  .ugw-star,
+  .ugw-galaxyOuterRing,
+  .ugw-galaxyInnerRing,
+  .ugw-galaxyOrbit,
+  .ugw-planet {
+    animation: none !important;
+  }
+  /* .ugw-dustCanvas needs no rule here — the JS-driven particle system
+     reads prefers-reduced-motion itself (see SolarDustCanvas in
+     gateway/UniverseGateway.jsx) and never starts its rAF loop, drawing
+     one static frame instead; this blanket CSS rule cannot reach a
+     <canvas> element's internal drawing. */
+}
+
+/* ------------------------------------------------------------------ */
+/* Planetary Gateway (gateway/UniverseGateway.jsx) — /universe/directory */
+/* Isolated section: new .ugw-* classnames only, nothing above this     */
+/* point is read or overridden by these rules.                          */
+/* Visual fidelity pass (2026-08-27): premium black-and-white cinematic */
+/* upgrade — organic multi-tier starfield, Canvas-driven aggressive     */
+/* solar dust, layered continuously-swirling galaxy, and a true         */
+/* planetary sphere system (size-by-entityType, ambient drift, hover    */
+/* orbit ring). Presentation only — no destination/registry field is    */
+/* read here that wasn't already read by the previous pass.             */
+/* ------------------------------------------------------------------ */
+
+.ugw-page {
+  position: relative;
+  width: 100vw;
+  min-height: 100svh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: #020203;
+  color: #f5f1e8;
+}
+
+.ugw-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+/* Environmental-foundation pass (2026-08-27): the Earth-horizon master is
+   symmetric left-right (Milky Way bands on both sides, horizon centered),
+   unlike the previous asymmetric galaxy master — a single vertical-only
+   object-position works at every viewport, so the old per-breakpoint
+   horizontal bias hack is gone. Cover-fit crops width before height at
+   narrow/tall viewports, so the sky-to-horizon range stays intact on
+   mobile automatically. */
+.ugw-backgroundImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 62%;
+  filter: grayscale(1) contrast(1.06);
+  user-select: none;
+}
+
+/* Soft glow rising from the horizon, echoing the photographic atmosphere
+   glow already baked into the master — ties the animated layers above to
+   the same light source instead of floating independently over it. */
+.ugw-backgroundHaze {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 68% 42% at 50% 100%, rgba(245, 241, 232, 0.12), transparent 62%);
+}
+
+/* Celestial-map pass (2026-08-27): the approved background art is now the
+   dominant visual world — this scrim only needs to keep the bottom
+   (footer/return control) and the very top edge readable, not darken the
+   whole frame. Per-element text-shadow (see .ugw-planetTitle etc. below)
+   does the real legibility work over the busy parts of the image, so the
+   art itself stays visible everywhere else. */
+.ugw-backgroundScrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(2, 2, 3, 0.22) 0%, rgba(2, 2, 3, 0.05) 16%, transparent 38%, rgba(2, 2, 3, 0.14) 78%, rgba(2, 2, 3, 0.4) 100%);
+}
+
+/* Vignette — soft edge fade so the composition reads as one continuous
+   cinematic frame rather than a hard-edged photo rectangle. Kept light
+   enough that the artwork stays the dominant surface, not a darkened
+   backdrop behind opaque panels. */
+.ugw-backgroundVignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 130% 95% at 50% 46%, transparent 68%, rgba(0, 0, 0, 0.32) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.22) 0%, transparent 12%, transparent 84%, rgba(0, 0, 0, 0.34) 100%);
+}
+
+.ugw-starLayer {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+  contain: layout paint style;
+}
+
+.ugw-star {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--size);
+  height: var(--size);
+  border-radius: 999px;
+  pointer-events: none;
+  background: rgba(245, 241, 232, 0.92);
+  opacity: var(--base-opacity);
+  transform: translate3d(-50%, -50%, 0) scale(0.82);
+  animation: v1-star-twinkle var(--duration) ease-in-out var(--delay) infinite;
+  box-shadow: 0 0 2px rgba(245, 241, 232, 0.28);
+}
+
+.ugw-star.is-fast {
+  animation-timing-function: ease-in-out;
+}
+
+.ugw-star.is-hero {
+  box-shadow: 0 0 8px rgba(245, 241, 232, 0.55);
+}
+
+.motion-paused .ugw-star {
+  animation-play-state: paused;
+}
+
+/* Canvas-driven "aggressive" solar dust (see SolarDustCanvas in
+   gateway/UniverseGateway.jsx) — directional streams, curved drift,
+   turbulence, and occasional streaks are drawn per-frame with
+   requestAnimationFrame; this element is just the composited surface. */
+.ugw-dustCanvas {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.ugw-galaxyFrame {
+  position: fixed;
+  top: clamp(-16vw, -9vw, -5vw);
+  right: clamp(-18vw, -11vw, -3vw);
+  z-index: 1;
+  width: min(58vw, 660px);
+  height: min(58vw, 660px);
+  overflow: hidden;
+  pointer-events: none;
+  contain: layout paint style;
+}
+
+/* Glow cleanup (2026-08-27): opacity roughly halved on both rings (was
+   0.55/0.62) — the previous values, combined with the removed core blob
+   below, were reading as an artificial upper-right spotlight that washed
+   out the composition. What remains is a faint swirl texture, not a
+   light source; the approved background image is the only real
+   illumination. */
+.ugw-galaxyOuterRing {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background:
+    conic-gradient(
+      from 0deg,
+      rgba(245, 241, 232, 0.02) 0deg,
+      rgba(245, 241, 232, 0.18) 40deg,
+      rgba(245, 241, 232, 0.02) 90deg,
+      rgba(245, 241, 232, 0.12) 150deg,
+      rgba(245, 241, 232, 0.02) 210deg,
+      rgba(245, 241, 232, 0.16) 270deg,
+      rgba(245, 241, 232, 0.02) 320deg,
+      rgba(245, 241, 232, 0.02) 360deg
+    );
+  filter: blur(7px);
+  opacity: 0.24;
+  animation: ugw-galaxy-swirl 150s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+.ugw-galaxyInnerRing {
+  position: absolute;
+  inset: 17%;
+  border-radius: 999px;
+  background:
+    conic-gradient(
+      from 90deg,
+      transparent 0deg,
+      rgba(245, 241, 232, 0.24) 55deg,
+      transparent 140deg,
+      rgba(245, 241, 232, 0.17) 215deg,
+      transparent 300deg,
+      rgba(245, 241, 232, 0.1) 340deg,
+      transparent 360deg
+    );
+  filter: blur(3px);
+  opacity: 0.28;
+  animation: ugw-galaxy-swirl-reverse 72s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+.ugw-galaxyOrbit {
+  position: absolute;
+  inset: 9%;
+  border-radius: 999px;
+  animation: ugw-galaxy-swirl 42s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+.ugw-galaxyOrbit--b {
+  inset: 1%;
+  animation-name: ugw-galaxy-swirl-reverse;
+  animation-duration: 58s;
+}
+
+.ugw-galaxyOrbit span {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  border-radius: 999px;
+  background: #f5f1e8;
+  opacity: 0.62;
+  box-shadow: 0 0 6px rgba(245, 241, 232, 0.5);
+}
+
+.ugw-galaxyOrbit--b span {
+  width: 3px;
+  height: 3px;
+  margin-left: -1.5px;
+  opacity: 0.46;
+}
+
+@keyframes ugw-galaxy-swirl {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ugw-galaxy-swirl-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+.motion-paused .ugw-galaxyOuterRing,
+.motion-paused .ugw-galaxyInnerRing,
+.motion-paused .ugw-galaxyOrbit {
+  animation-play-state: paused;
+}
+
+.ugw-layout {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(260px, 340px) 1fr;
+  gap: clamp(24px, 4vw, 64px);
+  width: min(1520px, 100%);
+  margin: 0 auto;
+  padding: clamp(28px, 5vw, 64px) clamp(18px, 4vw, 56px) clamp(48px, 6vw, 88px);
+}
+
+.ugw-intro {
+  position: relative;
+  align-self: start;
+  position: sticky;
+  top: clamp(28px, 5vw, 64px);
+  padding: 12px 16px 12px 0;
+}
+
+/* Local scrim (matches the cinematic entrance's own .v1-branding::before
+   technique) — a soft dark smudge sized to the text block only, not a
+   panel spanning the page, so the intro stays legible without hiding the
+   art around it. */
+.ugw-intro::before {
+  content: "";
+  position: absolute;
+  inset: -20px -40px -20px -24px;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 18% 40%, rgba(0, 0, 0, 0.46), rgba(0, 0, 0, 0.2) 52%, transparent 76%);
+}
+
+.ugw-introEyebrow {
+  margin: 0 0 10px;
+  color: rgba(245, 241, 232, 0.62);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
+}
+
+.ugw-introTitle {
+  margin: 0;
+  font-size: clamp(26px, 2.6vw, 36px);
+  font-weight: 480;
+  line-height: 1.1;
+  color: #f5f1e8;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9), 0 6px 26px rgba(0, 0, 0, 0.7);
+}
+
+.ugw-introBody {
+  margin: 12px 0 0;
+  max-width: 30ch;
+  color: rgba(245, 241, 232, 0.74);
+  font-size: 13.5px;
+  line-height: 1.45;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 4px 16px rgba(0, 0, 0, 0.6);
+}
+
+.ugw-content {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(36px, 5vw, 60px);
+  min-width: 0;
+}
+
+.ugw-sectionTitle {
+  margin: 0 0 20px;
+  font-size: 13px;
+  font-weight: 560;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: rgba(245, 241, 232, 0.74);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
+  border-bottom: 1px solid rgba(245, 241, 232, 0.2);
+  padding-bottom: 12px;
+}
+
+/* Composition pass (2026-08-27): institutions/platforms/standards/public
+   surfaces get real breathing room — 2 per row, not 3 — now that their
+   planets are dramatically larger (they're the "important" tier).
+   Applications stay a dense, many-per-row grid; they're the small,
+   frequent tier by design. */
+.ugw-planetGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(44px, 5vw, 76px) clamp(28px, 3.4vw, 48px);
+}
+
+.ugw-section[data-entity-type="application"] .ugw-planetGrid {
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: clamp(28px, 3vw, 40px) clamp(16px, 1.8vw, 22px);
+}
+
+/* Restrained asymmetry (Phase 8 of the celestial-map direction): every
+   other institution/platform/public-surface planet sits a little lower,
+   so the row reads as bodies floating at slightly different depths
+   rather than a mechanically aligned grid. Applications stay level —
+   at that density, offsetting them would look noisy, not cinematic. */
+.ugw-section:not([data-entity-type="application"]) .ugw-planetGrid > .ugw-planetCard:nth-child(2n) {
+  margin-top: clamp(18px, 2.4vw, 34px);
+}
+
+/* Celestial-map pass (2026-08-27): destinations are no longer boxed
+   dashboard cards — each is a bare planet + label cluster sitting
+   directly in the scene, centered under its sphere like a map pin.
+   Legibility comes from text-shadow (below) rather than an opaque/
+   blurred panel, so the approved artwork stays visible behind every
+   destination, not just in the gaps between cards. */
+.ugw-planetCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 6px;
+  border: 0;
+  background: none;
+  transition: transform 180ms ease;
+}
+
+.ugw-planetCard:hover,
+.ugw-planetCard:focus-within {
+  transform: translateY(-3px);
+}
+
+.ugw-planetCard:active {
+  transform: translateY(-1px);
+}
+
+.ugw-planetCard.is-unavailable {
+  opacity: 0.72;
+}
+
+/* Planet sizes keyed to entityType — never inferred from title strings,
+   set directly from a size lookup on destination.entityType in
+   gateway/UniverseGateway.jsx. The planet is the visual anchor now, not
+   the text beneath it:
+     institution (base, no modifier) — 132px desktop
+     platform    (--medium)          — 100px desktop
+     public-surface (--compact)      —  78px desktop
+     application (--small)           —  68px desktop
+   Tablet/mobile scale these down further in the breakpoints below.
+   Independent image-layer pass (2026-08-27): only WIDTH is set per tier —
+   height is derived from each approved asset's own real aspect ratio via
+   `.ugw-planet--wide` (3:2, most of the 8 assets) / `.ugw-planet--square`
+   (1:1, the two square ones), set alongside the size class in
+   gateway/UniverseGateway.jsx, so nothing is stretched or cropped out of
+   proportion. */
+.ugw-planet {
+  position: relative;
+  width: 132px;
+  margin-bottom: 20px;
+  animation: ugw-planet-drift-a 9s ease-in-out infinite;
+}
+
+.ugw-planet--medium {
+  width: 100px;
+  margin-bottom: 18px;
+}
+
+.ugw-planet--compact {
+  width: 78px;
+  margin-bottom: 14px;
+}
+
+.ugw-planet--small {
+  width: 68px;
+  margin-bottom: 12px;
+}
+
+.ugw-planet--wide {
+  aspect-ratio: 3 / 2;
+}
+
+.ugw-planet--square {
+  aspect-ratio: 1 / 1;
+}
+
+.ugw-planetCard:nth-of-type(3n+2) .ugw-planet {
+  animation-name: ugw-planet-drift-b;
+  animation-duration: 10.4s;
+  animation-delay: -2.4s;
+}
+
+.ugw-planetCard:nth-of-type(3n) .ugw-planet {
+  animation-name: ugw-planet-drift-c;
+  animation-duration: 11.6s;
+  animation-delay: -5.1s;
+}
+
+.ugw-planetCard:nth-of-type(4n+1) .ugw-planet {
+  animation-delay: -1.2s;
+}
+
+@keyframes ugw-planet-drift-a {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(0, -5px, 0) rotate(0.7deg);
+  }
+}
+
+@keyframes ugw-planet-drift-b {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(1.5px, 4px, 0) rotate(-0.8deg);
+  }
+}
+
+@keyframes ugw-planet-drift-c {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(-2.5px, -3.5px, 0) rotate(0.5deg);
+  }
+}
+
+.motion-paused .ugw-planet {
+  animation-play-state: paused;
+}
+
+.ugw-planetHalo {
+  position: absolute;
+  inset: -26%;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(245, 241, 232, 0.14), transparent 68%);
+  opacity: 0.55;
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.ugw-planetCard:hover .ugw-planetHalo,
+.ugw-planetCard:focus-within .ugw-planetHalo {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Independent planet image (2026-08-27): the approved photographic asset
+   itself — a real <img>, not a CSS recreation. `object-fit: contain`
+   preserves the source aspect ratio exactly (the aspect-ratio already set
+   on .ugw-planet/.ugw-planet--wide/--square means contain never actually
+   needs to letterbox, but it's the correct/safe fit mode regardless).
+   `filter: drop-shadow` (not box-shadow) is used for the hover glow so it
+   traces the planet's real alpha silhouette — including its rings, where
+   present — instead of a rectangular box. */
+.ugw-planetImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(245, 241, 232, 0.12));
+  transition: filter 180ms ease;
+  user-select: none;
+}
+
+/* Always-on, restrained ring — institutions and platforms only (the
+   "substantial" tier); applications and public surfaces stay plain
+   spheres so the small/dense tier doesn't get visually busy. */
+.ugw-planetRingStatic {
+  position: absolute;
+  inset: -16%;
+  border-radius: 999px;
+  border: 1px solid rgba(245, 241, 232, 0.16);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ugw-planet:not(.ugw-planet--medium):not(.ugw-planet--compact):not(.ugw-planet--small) .ugw-planetRingStatic,
+.ugw-planet--medium .ugw-planetRingStatic {
+  opacity: 1;
+}
+
+/* Thin orbit ring — appears only on hover/focus, a transition rather
+   than an infinite animation, so it needs no reduced-motion override. */
+.ugw-planetOrbitRing {
+  position: absolute;
+  inset: -14%;
+  border-radius: 999px;
+  border: 1px solid rgba(245, 241, 232, 0.5);
+  opacity: 0;
+  transform: scale(0.86);
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+.ugw-planetCard:hover .ugw-planetOrbitRing,
+.ugw-planetCard:focus-within .ugw-planetOrbitRing {
+  opacity: 0.8;
+  transform: scale(1);
+}
+
+.ugw-planetCard:hover .ugw-planetImage,
+.ugw-planetCard:focus-within .ugw-planetImage {
+  filter: drop-shadow(0 0 20px rgba(245, 241, 232, 0.32));
+}
+
+.ugw-planet.is-dormant .ugw-planetImage {
+  filter: brightness(0.55) saturate(0);
+}
+
+.ugw-planet.is-dormant .ugw-planetHalo {
+  opacity: 0.24;
+}
+
+.ugw-planet.is-dormant .ugw-planetRingStatic {
+  border-style: dashed;
+  opacity: 0.5;
+}
+
+.ugw-planetEyebrow {
+  margin: 0 0 4px;
+  color: rgba(245, 241, 232, 0.58);
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+  transition: color 180ms ease;
+}
+
+.ugw-planetCard:hover .ugw-planetEyebrow,
+.ugw-planetCard:focus-within .ugw-planetEyebrow {
+  color: rgba(245, 241, 232, 0.92);
+}
+
+.ugw-planetTitle {
+  margin: 0 0 5px;
+  max-width: 20ch;
+  font-size: 18px;
+  font-weight: 480;
+  line-height: 1.18;
+  color: #f5f1e8;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 4px 18px rgba(0, 0, 0, 0.75);
+}
+
+.ugw-section[data-entity-type="application"] .ugw-planetTitle {
+  font-size: 13.5px;
+  max-width: 14ch;
+}
+
+.ugw-section[data-entity-type="public-surface"] .ugw-planetTitle {
+  font-size: 15.5px;
+}
+
+/* Copy is drastically reduced (Phase 3 of the celestial-map direction):
+   the full registry description stays in the DOM/accessibility tree —
+   nothing is deleted — but visually every tier shows at most one line.
+   line-clamp is a display-only clip; screen readers still read the
+   whole sentence. */
+.ugw-planetDescription {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  margin: 0;
+  max-width: 24ch;
+  color: rgba(245, 241, 232, 0.68);
+  font-size: 12px;
+  line-height: 1.35;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 3px 14px rgba(0, 0, 0, 0.7);
+}
+
+.ugw-section[data-entity-type="application"] .ugw-planetDescription {
+  max-width: 15ch;
+  font-size: 10.5px;
+}
+
+.ugw-planetStatus {
+  display: block;
+  margin-top: 8px;
+  max-width: 24ch;
+  color: rgba(245, 241, 232, 0.5);
+  font-size: 11px;
+  line-height: 1.3;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95);
+}
+
+.ugw-planetActions {
+  display: flex;
+  margin-top: 12px;
+}
+
+/* Minimal, low-contrast pill — nearly invisible at rest, only picking up
+   contrast on hover/focus of the whole planet cluster (not just the
+   control itself), so the planet stays the dominant visual element. */
+.ugw-planetActions button,
+.ugw-planetActions .button-link {
+  width: auto;
+  justify-content: center;
+  min-height: 28px;
+  padding: 0 12px;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: rgba(245, 241, 232, 0.6);
+  background: transparent;
+  border-color: rgba(245, 241, 232, 0.18);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  transition: color 180ms ease, background 180ms ease, border-color 180ms ease;
+}
+
+.ugw-planetCard:hover .ugw-planetActions button,
+.ugw-planetCard:hover .ugw-planetActions .button-link,
+.ugw-planetCard:focus-within .ugw-planetActions button,
+.ugw-planetCard:focus-within .ugw-planetActions .button-link {
+  color: #f5f1e8;
+  background: rgba(2, 2, 3, 0.4);
+  border-color: rgba(245, 241, 232, 0.5);
+}
+
+.ugw-section[data-entity-type="application"] .ugw-planetActions button,
+.ugw-section[data-entity-type="application"] .ugw-planetActions .button-link {
+  min-height: 24px;
+  padding: 0 9px;
+  font-size: 10px;
+}
+
+.ugw-footerRow {
+  display: flex;
+  justify-content: flex-start;
+  padding-top: 8px;
+  border-top: 1px solid rgba(245, 241, 232, 0.12);
+}
+
+@media (max-width: 1279px) {
+  .ugw-layout {
+    grid-template-columns: minmax(240px, 300px) 1fr;
+  }
+
+  .ugw-planetGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ugw-section[data-entity-type="application"] .ugw-planetGrid {
+    grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  }
+}
+
+@media (max-width: 1023px) {
+  .ugw-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .ugw-intro {
+    position: static;
+    max-width: 60ch;
+  }
+
+  .ugw-introBody {
+    max-width: 56ch;
+  }
+
+  .ugw-galaxyFrame {
+    width: min(72vw, 480px);
+    height: min(72vw, 480px);
+  }
+
+  .ugw-star:nth-child(n+20) {
+    display: none;
+  }
+
+  /* Tablet size step — still substantial "worlds," scaled down from the
+     desktop table (132/100/78/68) rather than jumping straight to the
+     mobile sizes below. */
+  .ugw-planet {
+    width: 108px;
+  }
+
+  .ugw-planet--medium {
+    width: 88px;
+  }
+
+  .ugw-planet--compact {
+    width: 70px;
+  }
+
+  .ugw-planet--small {
+    width: 60px;
+  }
+}
+
+@media (max-width: 767px) {
+  .ugw-planet {
+    width: 86px;
+  }
+
+  .ugw-planet--medium {
+    width: 70px;
+  }
+
+  .ugw-planet--compact {
+    width: 58px;
+  }
+
+  .ugw-planet--small {
+    width: 50px;
+  }
+
+  .ugw-galaxyFrame {
+    top: -20vw;
+    right: -22vw;
+    width: min(78vw, 380px);
+    height: min(78vw, 380px);
+  }
+
+  .ugw-star:nth-child(n+15) {
+    display: none;
+  }
+
+}
+
+@media (max-width: 430px) {
+  .ugw-layout {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .ugw-planetCard {
+    padding: 4px;
+  }
+
+  .ugw-planet {
+    width: 76px;
+  }
+
+  .ugw-planet--medium {
+    width: 62px;
+  }
+
+  .ugw-planet--compact {
+    width: 52px;
+  }
+
+  .ugw-planet--small {
+    width: 46px;
+  }
+
+  .ugw-galaxyFrame {
+    width: min(84vw, 320px);
+    height: min(84vw, 320px);
+  }
+
+  .ugw-star:nth-child(n+11) {
+    display: none;
+  }
+}

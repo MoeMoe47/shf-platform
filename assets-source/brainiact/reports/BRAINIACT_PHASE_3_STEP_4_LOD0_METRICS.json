@@ -1,0 +1,80 @@
+{
+  "phase": "3.4",
+  "status": "NOT_CERTIFIED",
+  "reason": "Production-quality retopology (brain crease loops, rig-ready joint edge flow, expressive hand/finger topology) requires interactive artist judgment that cannot be produced by headless scripting. Automated alternatives were tested and are structurally blocked by the certified open-seam architecture from Step 3.",
+  "checkpoint_file": "assets-source/brainiact/blender/BRAINIACT_LOD0_BUILD.blend",
+  "source_integrity": {
+    "master_sha256_unchanged": true,
+    "phase2_working_blend_sha256_unchanged": true,
+    "retopology_working_blend_sha256_unchanged": true,
+    "phase2_reference_object_intact": true,
+    "source_reference_object_intact": true
+  },
+  "quadriflow_feasibility_test": {
+    "region_tested": "HEAD",
+    "input_faces": 864615,
+    "target_faces": 21000,
+    "result": "CANCELLED",
+    "blender_diagnostic": "QuadriFlow: The mesh needs to be manifold and have face normals that point in a consistent direction",
+    "elapsed_s": 0.0,
+    "root_cause": "HEAD (and every other Step 3 production region) is deliberately open at its joint boundary per the certified seam strategy; making it manifold requires capping those boundaries, which corrupts the exact geometry Step 4 needs to keep rig-ready"
+  },
+  "alternatives_rejected": {
+    "voxel_remesh": "not tested; rejected on the same closed/watertight requirement, plus risk of re-fusing separate mechanical parts (same failure mode as Step 2's rolled-back global weld)",
+    "decimation": "rejected on policy grounds -- Step 3's certified retopology-method table restricts decimation to temporary LOD1/mobile reference only, never final LOD0; Phase 1 already rejected blind decimation for this asset"
+  },
+  "object_separation_completed": {
+    "collection": "BRAINIACT_LOD0_SOURCE_SEPARATED",
+    "objects": {
+      "Brainiact_HEAD": {"source_island_ids": [0,3,4,5,6,7,8,9,10,17,22], "verts": 437931, "faces": 864615},
+      "Brainiact_NECK_COLLAR": {"source_island_ids": [28,31,33,34,36,37,38,39,42,43,44,45,46,47,48,49,50,52,53], "verts": 60000, "faces": 113375},
+      "Brainiact_TORSO": {"source_island_ids": [1,24,29,30,32,35,40,41], "verts": 110878, "faces": 216601},
+      "Brainiact_PELVIS": {"source_island_ids": [12], "verts": 30273, "faces": 59400},
+      "Brainiact_RIGHT_SHOULDER_UPPER_ARM": {"source_island_ids": [2], "verts": 50665, "faces": 100041},
+      "Brainiact_LEFT_SHOULDER_UPPER_ARM": {"source_island_ids": [11,16,23,27], "verts": 94280, "faces": 185314},
+      "Brainiact_LEFT_FOREARM": {"source_island_ids": [14], "verts": 30035, "faces": 59302},
+      "Brainiact_RIGHT_HAND": {"source_island_ids": [15], "verts": 29993, "faces": 59053},
+      "Brainiact_LEFT_HAND": {"source_island_ids": [13], "verts": 29829, "faces": 59303},
+      "Brainiact_RIGHT_LOWER_LEG": {"source_island_ids": [26], "verts": 16448, "faces": 32516},
+      "Brainiact_LEFT_LOWER_LEG": {"source_island_ids": [25], "verts": 16953, "faces": 33524},
+      "Brainiact_RIGHT_FOOT": {"source_island_ids": [20,21], "verts": 53255, "faces": 105115},
+      "Brainiact_LEFT_FOOT": {"source_island_ids": [18,19], "verts": 54710, "faces": 108041},
+      "Brainiact_AMBIGUOUS_REFERENCE_ONLY": {"source_island_ids": [59], "verts": 406, "faces": 773}
+    },
+    "total_faces": 1996973,
+    "unassigned_faces": 0,
+    "not_yet_created": ["RIGHT_FOREARM", "RIGHT_UPPER_LEG", "LEFT_UPPER_LEG"],
+    "not_yet_created_reason": "no source-island seam exists; requires a judgment-based bisection cut deferred to interactive work per Step 3 risks 1-2"
+  },
+  "quantitative_validation": {
+    "source_triangles": 1996973, "source_vertices": 1015656,
+    "final_triangles": 1996973, "final_vertices": 1015656,
+    "triangle_reduction_pct": 0.0, "vertex_reduction_pct": 0.0,
+    "dimensional_deviation_pct": 0.0, "bbox_deviation_pct": 0.0,
+    "target_range": [60000, 80000],
+    "target_met": false
+  },
+  "acceptance_gates": {
+    "1_triangle_count_in_range": "FAIL",
+    "2_silhouette_faithful": "N/A (unmodified source)",
+    "3_brain_identity_preserved": "N/A (no brain retopology performed)",
+    "4_visor_faithful_runtime_ready": "N/A (no visor work performed)",
+    "5_hands_expressive": "CANNOT_VERIFY (no hand topology built)",
+    "6_fingers_useful": "CANNOT_VERIFY (no finger topology built)",
+    "7_mechanical_joint_language_preserved": "N/A (no joints rebuilt)",
+    "8_joint_topology_rig_ready": "FAIL",
+    "9_no_major_region_disappears": "PASS",
+    "10_no_catastrophic_defects": "PASS (trivial -- unmodified geometry)",
+    "11_source_reference_untouched": "PASS",
+    "12_step3_architecture_respected": "PARTIAL (object grouping matches; retopology not performed)"
+  },
+  "recommendation": "Interactive Blender session required (human artist or a tool with real viewport-level judgment), working from BRAINIACT_LOD0_BUILD.blend's separated objects, following Step 3's certified per-region budget/method/seam plan. Re-running automated retopology will hit the same structural QuadriFlow/voxel-remesh wall.",
+  "mutation_status": {
+    "retopology_performed": false,
+    "rigging_performed": false,
+    "animation_performed": false,
+    "texture_modification_performed": false,
+    "export_performed": false,
+    "object_separation_performed": true
+  }
+}

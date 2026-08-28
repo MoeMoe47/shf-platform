@@ -1,0 +1,21 @@
+{
+  "standard_id": "PAS-1",
+  "artifact": "PACKAGE_DISPOSITION_REGISTER",
+  "artifact_type": "disposition_register",
+  "status": "COMPLETE",
+  "canonical_owner": "Governance Layer",
+  "package_identifier": "PACKAGE_H_BATCH_03",
+  "dispositions": {
+    "docs/governance/EPL_1/": "Included",
+    "docs/releases/PACKAGE_H_BATCH_03_PHASE_*/": "Included",
+    "scripts/check_epl_1.py": "Included",
+    "scripts/check_package_h_batch_03_phase_*.py": "Included",
+    "tests/test_epl_1.py": "Included",
+    "tests/test_package_h_batch_03_phase_*.py": "Included",
+    "services/shf-agent-fabric/services/extension_kernel/runtime_owner_closure.py": "Implementation",
+    "services/shf-agent-fabric/services/extension_kernel/__init__.py": "Runtime Support",
+    "services/shf-agent-fabric/tests/test_extension_kernel_runtime_owner_closure.py": "Focused Test",
+    "docs/governance/PCS_1/": "Excluded"
+  },
+  "undefined_disposition_allowed": false
+}

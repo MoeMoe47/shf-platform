@@ -1,0 +1,21 @@
+# Non-secret staging example. Supply real values only through an approved
+# untracked tfvars file or CI secret variables.
+subscription_id       = "AUTHORIZED_STAGING_SUBSCRIPTION_ID"
+environment            = "staging"
+resource_group_name    = "shf-trusted-reporting-staging"
+location               = "eastus"
+shs_api_image          = "AUTHORIZED_STAGING_ACR/shs-api:STAGING_IMAGE_TAG"
+agent_fabric_image     = "AUTHORIZED_STAGING_ACR/agent-fabric:STAGING_IMAGE_TAG"
+frontend_image         = ""
+shs_api_origin         = "https://staging-api.example.invalid"
+frontend_origin        = "https://staging.example.invalid"
+auth0_issuer           = "https://AUTHORIZED_TEST_TENANT.us.auth0.com/"
+auth0_audience         = "https://AUTHORIZED_STAGING_API"
+
+# These are names only. Values must already be provisioned in the staging
+# Key Vault by an approved bootstrap process.
+postgres_admin_password_secret_name = "postgres-admin-password"
+database_url_secret_name            = "shs-database-url"
+session_secret_name                 = "shs-session-secret"
+internal_service_keys_secret_name   = "shs-internal-service-keys"
+auth0_client_secret_name            = "auth0-client-secret"

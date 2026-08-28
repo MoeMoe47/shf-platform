@@ -191,7 +191,7 @@ export default function PlanSelector({
               <article
                 key={p.id}
                 role="listitem"
-                className={`card card--pad sh-selectable ${active ? "is-active" : ""}`}
+                className={`card card--pad sh-selectable cpw-planRow ${active ? "is-active" : ""}`}
                 aria-pressed={active ? "true" : "false"}
                 aria-current={active ? "true" : "false"}
                 onClick={() => onSelectPlan(p, idx)}
@@ -200,44 +200,58 @@ export default function PlanSelector({
                 title={`Select ${title}`}
                 style={{ cursor: "pointer" }}
               >
-                <div className="sh-row" style={{ justifyContent: "space-between", alignItems: "baseline" }}>
-                  <div className="sh-chip sh-chip--accent" aria-hidden>
-                    Plan {letter}
+                <span className="cpw-planRadio" aria-hidden="true" data-checked={active} />
+
+                <div className="cpw-planRowBody">
+                  <div className="sh-row" style={{ justifyContent: "space-between", alignItems: "baseline" }}>
+                    <div className="sh-chip sh-chip--accent" aria-hidden>
+                      Plan {letter}
+                    </div>
+                    <div className="sh-muted" style={{ textTransform: "capitalize" }}>
+                      {humanStrategy(p.strategy)}
+                    </div>
+                    {idx === 0 && <span className="cpw-bestFit">Best fit</span>}
                   </div>
-                  <div className="sh-muted" style={{ textTransform: "capitalize" }}>
-                    {humanStrategy(p.strategy)}
-                  </div>
-                </div>
 
-                <h3 className="h3" style={{ margin: "8px 0 6px" }}>{title}</h3>
+                  <h3 className="h3" style={{ margin: "8px 0 6px" }}>{title}</h3>
 
-                {kpiRow(p)}
+                  {kpiRow(p)}
 
-                {cred && (
-                  <div className="sh-muted" style={{ marginTop: 8 }}>
-                    First credential: <strong>{cred}</strong>
-                  </div>
-                )}
-
-                {!compact && <div style={{ marginTop: 10 }}>{firstSteps(p)}</div>}
-
-                <div className="sh-actionsRow" style={{ marginTop: 10 }}>
-                  <button
-                    className={`sh-btn ${active ? "sh-btn--primary" : ""}`}
-                    onClick={(e) => { e.stopPropagation(); onSelectPlan(p, idx); }}
-                    title="Select plan"
-                  >
-                    {active ? "Selected" : "Select"}
-                  </button>
-                  {typeof viewHandler === "function" && (
-                    <button
-                      className="sh-btn sh-btn--secondary"
-                      onClick={(e) => { e.stopPropagation(); viewHandler(p); }}
-                      title="View pathway details"
-                    >
-                      View Path
-                    </button>
+                  {cred && (
+                    <div className="sh-muted" style={{ marginTop: 8 }}>
+                      First credential: <strong>{cred}</strong>
+                    </div>
                   )}
+
+                  {!compact && <div style={{ marginTop: 10 }}>{firstSteps(p)}</div>}
+
+                  <div className="sh-actionsRow" style={{ marginTop: 10 }}>
+                    <button
+                      className={`sh-btn ${active ? "sh-btn--primary" : ""}`}
+                      onClick={(e) => { e.stopPropagation(); onSelectPlan(p, idx); }}
+                      title="Select plan"
+                    >
+                      {active ? "Selected" : "Select"}
+                    </button>
+                    {typeof viewHandler === "function" && (
+                      <button
+                        className="sh-btn sh-btn--secondary"
+                        onClick={(e) => { e.stopPropagation(); viewHandler(p); }}
+                        title="View pathway details"
+                      >
+                        View Path
+                      </button>
+                    )}
+                    {typeof onStart === "function" && (
+                      <button
+                        className="sh-btn sh-btn--primary"
+                        onClick={(e) => { e.stopPropagation(); onStart(p); }}
+                        title="Start this plan"
+                      >
+                        Start Plan
+                      </button>
+                    )}
+                  </div>
                 </div>
               </article>
             );

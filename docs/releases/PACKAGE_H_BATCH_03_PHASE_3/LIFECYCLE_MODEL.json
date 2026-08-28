@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "blueprint_id": "CTB-1",
+  "mission_id": "PACKAGE_H_BATCH_03_IGLS_1_PHASE_3",
+  "artifact": "LIFECYCLE_MODEL",
+  "states": [
+    {
+      "state": "DECLARED",
+      "entry_criteria": ["Blueprint item exists", "BDL-1 decision exists"],
+      "exit_criteria": ["owner, contract, and evidence expectation assigned"],
+      "transitions": ["READY_FOR_ACCEPTANCE_CRITERIA"],
+      "rollback_conditions": ["missing owner", "missing decision"],
+      "validation_requirements": ["decision trace validation"],
+      "evidence_produced": ["blueprint declaration evidence"],
+      "approval_authority": "Constitutional Blueprint Authority",
+      "failure_behavior": "block Phase 4"
+    },
+    {
+      "state": "READY_FOR_ACCEPTANCE_CRITERIA",
+      "entry_criteria": ["declaration complete", "contract complete"],
+      "exit_criteria": ["Phase 4 criteria created in later mission"],
+      "transitions": ["ACCEPTANCE_DEFINED"],
+      "rollback_conditions": ["architecture conflict found"],
+      "validation_requirements": ["contract and capability completeness"],
+      "evidence_produced": ["Phase 4 readiness evidence"],
+      "approval_authority": "Implementation Readiness Authority",
+      "failure_behavior": "return to blueprint review"
+    },
+    {
+      "state": "ACCEPTANCE_DEFINED",
+      "entry_criteria": ["future Phase 4 acceptance artifact exists"],
+      "exit_criteria": ["future governance lock"],
+      "transitions": ["IMPLEMENTATION_LOCKED"],
+      "rollback_conditions": ["criteria redefine blueprint"],
+      "validation_requirements": ["inheritance integrity"],
+      "evidence_produced": ["acceptance trace evidence"],
+      "approval_authority": "Governance Validation Authority",
+      "failure_behavior": "block implementation"
+    }
+  ]
+}

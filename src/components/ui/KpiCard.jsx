@@ -13,6 +13,15 @@ import React from "react";
  *  - delta        (string|number) change value (e.g., +12%, -3.1)
  *  - trend        ("up"|"down"|"flat") trend indicator
  *  - caption      (string)  sublabel/footer (e.g., "vs last 7d")
+ *  - sub          (string)  alias for caption (some callers, e.g.
+ *                  CreditReport.jsx / AttendanceCard.jsx, pass this name —
+ *                  accepted directly rather than silently dropped)
+ *  - icon         (string)  optional leading glyph shown next to the label
+ *  - washClass    (string)  a "wash--*" class from src/utils/getWashClass.js
+ *                  (e.g. "wash--celebrate-10"); applied together with the
+ *                  base "wash" class from util-wash.css so the card's
+ *                  background actually tints instead of the class being a
+ *                  no-op on this component
  *  - intent       ("good"|"warn"|"bad") color accent for trend
  *  - onClick      (fn)      optional click handler
  *  - compact      (bool)    tighter padding
@@ -24,18 +33,25 @@ export default function KpiCard({
   delta,
   trend = "flat",
   caption,
+  sub,
+  icon,
+  washClass,
   intent,
   onClick,
   compact = false,
 }) {
   const cls = [
     "kpi",
+    washClass ? "wash" : "",
+    washClass || "",
     compact ? "kpi--compact" : "",
     intent ? `kpi--${intent}` : "",
     trend ? `kpi--${trend}` : "",
   ]
     .filter(Boolean)
     .join(" ");
+
+  const subline = caption ?? sub;
 
   const Arrow = () => {
     if (trend === "up")
@@ -60,7 +76,10 @@ export default function KpiCard({
   return (
     <button type="button" className={cls} onClick={onClick} aria-label={label}>
       <div className="kpi__head">
-        <span className="kpi__label">{label}</span>
+        <span className="kpi__label">
+          {icon ? <span className="kpi__icon" aria-hidden="true">{icon}</span> : null}
+          {label}
+        </span>
         <span className="kpi__chip">
           {trend === "up" ? "Good" : trend === "down" ? "Watch" : "Stable"}
         </span>
@@ -80,7 +99,7 @@ export default function KpiCard({
         </div>
       )}
 
-      {caption ? <div className="kpi__cap">{caption}</div> : null}
+      {subline ? <div className="kpi__cap">{subline}</div> : null}
     </button>
   );
 }

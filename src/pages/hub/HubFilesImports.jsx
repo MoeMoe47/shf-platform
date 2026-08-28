@@ -125,15 +125,9 @@ export default function HubFilesImports() {
 
         <section className="hfi-readiness" data-tour="hub-imports-readiness">
           <strong>REPORTING READINESS</strong>
-          <div>87%</div>
-          <span>On track</span>
-          <small>
-            FY24 Q2
-            <br />
-            Report
-            <br />
-            Due in 18 days
-          </small>
+          <div>Pending</div>
+          <span>Verification required</span>
+          <small>Institutional reporting metrics are unavailable until verified import data is connected.</small>
         </section>
       </aside>
 
@@ -156,12 +150,7 @@ export default function HubFilesImports() {
         </header>
 
         <section className="hfi-kpiStrip" data-tour="hub-imports-kpis">
-          <KpiCard icon="☁" label="Total Imports" value="124" change="18%" note="vs last 30 days" tone="blue" />
-          <KpiCard icon="✓" label="Ready to Import" value="36" change="24%" note="vs last 30 days" tone="green" />
-          <KpiCard icon="▦" label="Needs Mapping" value="14" change="7%" note="vs last 30 days" tone="gold" />
-          <KpiCard icon="⚠" label="Validation Issues" value="9" change="13%" note="vs last 30 days" tone="red" />
-          <KpiCard icon="↔" label="API Ready" value="8" change="33%" note="vs last 30 days" tone="cyan" />
-          <KpiCard icon="◷" label="Recent Imports" value="11" change="10%" note="completed" tone="violet" />
+          <div role="status" className="hfi-safe-notice">Reporting metrics unavailable until verified import data is connected.</div>
         </section>
 
         <section className="hfi-workGrid" data-tour="hub-imports-workgrid">
@@ -327,13 +316,7 @@ export default function HubFilesImports() {
               </div>
 
               <div className="hfi-importList" data-tour="hub-imports-recent">
-                {[
-                  ["partner_roster_2026-05-14.csv", "SH Foundation", "Completed", "1,248", "10:42 AM", "green"],
-                  ["referrals_batch_0513.xlsx", "Franklin County WFP", "Needs Review", "642", "Yesterday", "gold"],
-                  ["evidence_packet_may.pdf", "HopeWorks", "Blocked", "124", "May 12", "red"],
-                  ["capacity_update_q2.xlsx", "BridgePoint Services", "Completed", "87", "May 10", "green"],
-                  ["outcomes_april.json", "Youth Services", "Completed", "326", "May 9", "green"],
-                ].map(([file, source, status, records, updated, tone]) => (
+                {[].map(([file, source, status, records, updated, tone]) => (
                   <div className="hfi-importRow" key={file}>
                     <span>▤</span>
                     <strong>{file}</strong>

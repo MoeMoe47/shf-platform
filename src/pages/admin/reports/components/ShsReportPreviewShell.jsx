@@ -1,15 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { getReportRecords } from "@/data/shsReports/shsReportStorage";
-
 export default function ShsReportPreviewShell({
   report,
+  reports = [],
   selectedReportId,
   onReportChange,
   activePage,
   children,
 }) {
-  const reports = getReportRecords();
+  if (!report) {
+    return (
+      <main className="shs-report-preview" role="status">
+        <h1>Verified report data unavailable</h1>
+        <p>No canonical report record is available for preview. Seed and sample records are not shown as institutional reports.</p>
+      </main>
+    );
+  }
   const pages = [
     { id: "toc", label: "Page 1 - Table of Contents", to: "/ops/reports/premium-preview" },
     { id: "executive-summary", label: "Page 2 - Executive Summary", to: "/ops/reports/premium-preview/executive-summary" },
@@ -28,9 +34,9 @@ export default function ShsReportPreviewShell({
           <label>
             Report Record
             <select value={selectedReportId} onChange={(event) => onReportChange(event.target.value)}>
-              {reports.map((seed) => (
-                <option key={seed.reportId} value={seed.reportId}>
-                  {seed.subjectName} - {seed.lifecycleStatus}
+              {reports.map((item) => (
+                <option key={item.reportId} value={item.reportId}>
+                  {item.subjectName} - {item.lifecycleStatus}
                 </option>
               ))}
             </select>

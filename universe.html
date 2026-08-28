@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#020203" />
+    <title>Silicon Heartland Universe</title>
+  </head>
+  <body>
+    <!-- Mount point (the entry will also create this if missing) -->
+    <div id="root"></div>
+
+    <!-- Vite entry for the canonical Silicon Heartland Universe.
+         Deliberately does NOT import the shared global.css/shell.css/
+         unified-shell.css stack every other app entry does — the
+         approved Universe is a fully self-contained visual system
+         (its own universe-v1.css) and must not inherit shared tokens
+         or resets that could alter its cinematic appearance. -->
+    <script type="module" src="/src/entries/universe.main.jsx"></script>
+
+    <noscript>Enable JavaScript to run this app.</noscript>
+  </body>
+</html>

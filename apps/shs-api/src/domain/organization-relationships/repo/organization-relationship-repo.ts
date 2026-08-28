@@ -1,4 +1,17 @@
 import { query } from "../../../db/client";
+import { OrganizationRelationshipConflictError } from "../model/organization-relationship";
+
+function isActiveOverlapConflict(error: any) {
+  return error?.code === "23P01" &&
+    error?.constraint === "organization_relationship_no_active_overlap";
+}
+
+function mapRelationshipPersistenceError(error: any) {
+  if (isActiveOverlapConflict(error)) {
+    throw new OrganizationRelationshipConflictError();
+  }
+  throw error;
+}
 
 export class OrganizationRelationshipRepo {
   async listRelationshipsForOrganization(organizationId: string) {
@@ -29,43 +42,51 @@ export class OrganizationRelationshipRepo {
   }
 
   async createRelationship(input: any) {
-    const res = await query(
-      `INSERT INTO organization_relationships (
-        relationship_id, source_organization_id, target_organization_id, relationship_type,
-        status, effective_from, effective_to, created_by, updated_by, metadata_version
-      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
-      RETURNING relationship_id, source_organization_id, target_organization_id, relationship_type,
-                status, effective_from, effective_to, created_by, created_at, updated_by, updated_at,
-                metadata_version`,
-      [
-        input.relationship_id,
-        input.source_organization_id,
-        input.target_organization_id,
-        input.relationship_type,
-        input.status,
-        input.effective_from,
-        input.effective_to || null,
-        input.created_by,
-        input.updated_by,
-        input.metadata_version,
-      ],
-    );
-    return res.rows[0];
+    try {
+      const res = await query(
+        `INSERT INTO organization_relationships (
+          relationship_id, source_organization_id, target_organization_id, relationship_type,
+          status, effective_from, effective_to, created_by, updated_by, metadata_version
+        ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+        RETURNING relationship_id, source_organization_id, target_organization_id, relationship_type,
+                  status, effective_from, effective_to, created_by, created_at, updated_by, updated_at,
+                  metadata_version`,
+        [
+          input.relationship_id,
+          input.source_organization_id,
+          input.target_organization_id,
+          input.relationship_type,
+          input.status,
+          input.effective_from,
+          input.effective_to || null,
+          input.created_by,
+          input.updated_by,
+          input.metadata_version,
+        ],
+      );
+      return res.rows[0];
+    } catch (error) {
+      mapRelationshipPersistenceError(error);
+    }
   }
 
   async updateRelationshipStatus(relationshipId: string, nextStatus: string, expectedStatus: string, actorId: string, scope: any) {
-    const res = await query(
-      `UPDATE organization_relationships
-       SET status = $2, updated_by = $5, updated_at = NOW(), metadata_version = metadata_version + 1
-       WHERE relationship_id = $1
-         AND status = $3
-         AND ($6::boolean OR source_organization_id = $4 OR target_organization_id = $4)
-       RETURNING relationship_id, source_organization_id, target_organization_id, relationship_type,
-                 status, effective_from, effective_to, created_by, created_at, updated_by, updated_at,
-                 metadata_version`,
-      [relationshipId, nextStatus, expectedStatus, scope.organization_id, actorId, Boolean(scope.platform_global)],
-    );
-    return res.rows[0] || null;
+    try {
+      const res = await query(
+        `UPDATE organization_relationships
+         SET status = $2, updated_by = $5, updated_at = NOW(), metadata_version = metadata_version + 1
+         WHERE relationship_id = $1
+           AND status = $3
+           AND ($6::boolean OR source_organization_id = $4 OR target_organization_id = $4)
+         RETURNING relationship_id, source_organization_id, target_organization_id, relationship_type,
+                   status, effective_from, effective_to, created_by, created_at, updated_by, updated_at,
+                   metadata_version`,
+        [relationshipId, nextStatus, expectedStatus, scope.organization_id, actorId, Boolean(scope.platform_global)],
+      );
+      return res.rows[0] || null;
+    } catch (error) {
+      mapRelationshipPersistenceError(error);
+    }
   }
 
   async findActiveRelationship(sourceOrganizationId: string, targetOrganizationId: string, relationshipType: string, now = new Date()) {

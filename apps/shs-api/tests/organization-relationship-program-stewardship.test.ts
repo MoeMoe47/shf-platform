@@ -8,6 +8,10 @@ import {
   ORGANIZATION_RELATIONSHIP_TYPES,
   OrganizationRelationshipService,
 } from "../src/domain/organization-relationships/service/organization-relationship-service";
+import {
+  OrganizationRelationshipConflictError,
+  toOrganizationRelationshipResponse,
+} from "../src/domain/organization-relationships/model/organization-relationship";
 import { ProgramService } from "../src/domain/programs/service/program-service";
 
 function membership(organizationId: string, role: string, extra: Record<string, unknown> = {}) {
@@ -485,4 +489,43 @@ test("permission guard still fails closed before relationship routes", () => {
     throw new Error("next should not run");
   });
   assert.equal(statusCode, 403);
+});
+
+test("ordinary organization relationship API projection excludes persistence and audit internals", () => {
+  const projected = toOrganizationRelationshipResponse({
+    relationship_id: "rel-safe",
+    source_organization_id: "org-a",
+    target_organization_id: "org-b",
+    relationship_type: ORGANIZATION_RELATIONSHIP_TYPES.OPERATES_FOR,
+    status: ORGANIZATION_RELATIONSHIP_STATUSES.ACTIVE,
+    effective_from: "2026-01-01T00:00:00.000Z",
+    effective_to: null,
+    created_by: "user-a",
+    created_at: "2026-01-01T00:00:00.000Z",
+    updated_by: "user-b",
+    updated_at: "2026-01-02T00:00:00.000Z",
+    metadata_version: 9,
+  });
+
+  assert.deepEqual(Object.keys(projected).sort(), [
+    "effective_from",
+    "effective_to",
+    "relationship_id",
+    "relationship_type",
+    "source_organization_id",
+    "status",
+    "target_organization_id",
+  ]);
+  assert.equal("created_by" in projected, false);
+  assert.equal("created_at" in projected, false);
+  assert.equal("updated_by" in projected, false);
+  assert.equal("updated_at" in projected, false);
+  assert.equal("metadata_version" in projected, false);
+});
+
+test("relationship active-overlap conflict uses safe public message", () => {
+  const error = new OrganizationRelationshipConflictError();
+  assert.equal(error.statusCode, 409);
+  assert.equal(error.message, "An overlapping active organization relationship already exists.");
+  assert.doesNotMatch(error.message, /constraint|SQLSTATE|conflicting key|organization_relationship_no_active_overlap/i);
 });

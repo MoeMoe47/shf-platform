@@ -3,6 +3,7 @@ import test from "node:test";
 import { applyActiveOrganizationContext, resolveActiveOrganizationContext } from "../src/auth/organization-context";
 import { tenantIdForOrganization } from "../src/auth/tenant-context";
 import { requirePermission } from "../src/auth/permission-guard";
+import { authResponsePayload } from "../src/auth/auth-response";
 import { ProgramService } from "../src/domain/programs/service/program-service";
 import { CaseService } from "../src/domain/cases/service/case-service";
 
@@ -174,4 +175,24 @@ test("case isolation scopes list, create, read, assign, and transition", async (
   await assert.rejects(() => service.assignCase("case-a", assignment, orgBActor), /Case not found/);
   await service.transitionCase("case-a", "draft", "open", orgAActor);
   await assert.rejects(() => service.transitionCase("case-a", "draft", "open", orgBActor), /Case not found/);
+});
+
+test("ordinary auth response omits tenant internals while preserving client identity context", () => {
+  const scoped = applyActiveOrganizationContext({
+    user_id: "user-a",
+    email: "user-a@example.test",
+    full_name: "User A",
+    memberships: [membership("org-a", "org_admin")],
+  });
+  const response = authResponsePayload(scoped);
+  const serialized = JSON.stringify(response);
+
+  assert.equal(response.ok, true);
+  assert.equal(response.user.user_id, "user-a");
+  assert.equal(response.user.organization_id, "org-a");
+  assert.ok(response.permissions.includes("program.create"));
+  assert.equal(response.active_organization_context?.organization_id, "org-a");
+  assert.equal(response.memberships[0].organization_id, "org-a");
+  assert.equal(serialized.includes("tenant_id"), false);
+  assert.equal(serialized.includes("tenant:org-a"), false);
 });

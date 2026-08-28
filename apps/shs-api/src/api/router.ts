@@ -11,12 +11,12 @@ import { registerOracleRoutes } from "../oracle/routes/oracle.routes";
 import aggregationRoutes from "../aggregation/routes/aggregation.routes";
 import { IdentityService } from "../domain/identity/service/identity-service";
 import { ok, fail } from "./response-envelope";
-import { mergeRolePermissions } from "../auth/security-permissions";
 import { writeSecurityAuditEvent } from "../auth/security-audit";
 import { isProductionEnvironment } from "../auth/production-identity";
 import { Auth0SessionService } from "../domain/identity/service/auth0-session-service";
 import { registerCurriculumCompletionRoutes } from "../domain/curriculum/api/routes";
 import { registerOrganizationRelationshipRoutes } from "../domain/organization-relationships/api/routes";
+import { authResponsePayload } from "../auth/auth-response";
 
 
 type MutableApiUser = {
@@ -113,27 +113,7 @@ export function buildRouter(app: any) {
         return res.status(401).json({ ok: false, error: "Authentication required." });
       }
 
-      const user = req.user;
-      const memberships = user.memberships || (user.active_organization_id || user.organization_id ? [{
-        organization_id: user.organization_id,
-        organization_type: user.organization_type,
-        role: user.role,
-        role_name: user.role_name || user.role,
-      }] : []);
-
-      return res.json({
-        ok: true,
-        user,
-        memberships,
-        active_organization_context: user.active_organization_id ? {
-          organization_id: user.active_organization_id,
-          tenant_id: user.tenant_id,
-          membership_id: user.membership_id || null,
-          roles: user.organization_scoped_roles || user.roles || [],
-          permissions: user.organization_scoped_permissions || user.permissions || [],
-        } : null,
-        permissions: user.organization_scoped_permissions || user.permissions || mergeRolePermissions(user.roles || [user.role]),
-      });
+      return res.json(authResponsePayload(req.user));
     } catch (error: any) {
       return res.status(500).json({
         error: error?.message || "Failed to load auth session.",
@@ -178,7 +158,7 @@ app.post("/auth/login", async (req: any, res: any) => {
     if (!req.user) {
       return res.status(401).json(fail("AUTH_REQUIRED", "Authentication required."));
     }
-    res.json(ok(req.user));
+    res.json(ok(authResponsePayload(req.user).user));
   });
 
   // These legacy fixture routes are local development surfaces only. They

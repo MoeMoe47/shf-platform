@@ -33,6 +33,41 @@ export type OrganizationRelationship = {
   metadata_version: number;
 };
 
+export type OrganizationRelationshipResponse = Pick<
+  OrganizationRelationship,
+  | "relationship_id"
+  | "source_organization_id"
+  | "target_organization_id"
+  | "relationship_type"
+  | "status"
+  | "effective_from"
+  | "effective_to"
+>;
+
+export class OrganizationRelationshipConflictError extends Error {
+  statusCode = 409;
+  code = "CONFLICT";
+
+  constructor(message = "An overlapping active organization relationship already exists.") {
+    super(message);
+    this.name = "OrganizationRelationshipConflictError";
+  }
+}
+
+export function toOrganizationRelationshipResponse(
+  relationship: OrganizationRelationship,
+): OrganizationRelationshipResponse {
+  return {
+    relationship_id: relationship.relationship_id,
+    source_organization_id: relationship.source_organization_id,
+    target_organization_id: relationship.target_organization_id,
+    relationship_type: relationship.relationship_type,
+    status: relationship.status,
+    effective_from: relationship.effective_from,
+    effective_to: relationship.effective_to || null,
+  };
+}
+
 const RELATIONSHIP_TYPE_VALUES = new Set(Object.values(ORGANIZATION_RELATIONSHIP_TYPES));
 const RELATIONSHIP_STATUS_VALUES = new Set(Object.values(ORGANIZATION_RELATIONSHIP_STATUSES));
 

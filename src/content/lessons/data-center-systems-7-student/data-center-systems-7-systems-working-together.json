@@ -1,0 +1,20 @@
+{
+  "id": "data-center-systems-7-systems-working-together",
+  "slug": "data-center-systems-7-systems-working-together",
+  "nextSlug": "data-center-systems-7-inside-a-server",
+  "title": "Systems Working Together",
+  "curriculum": "data-center-systems-7",
+  "gradeBand": { "minGrade": 7, "maxGrade": 7, "stage": "DISCOVER" },
+  "estMinutes": 25,
+  "summary": "Learn how connected subsystems support a data center and how one problem can affect another system.",
+  "objectives": ["Explain what a subsystem and dependency are.", "Use observations to identify which system may be affected by a simple problem."],
+  "vocab": [{ "term": "SUBSYSTEM", "def": "One smaller system that is part of a larger system." }, { "term": "DEPENDENCY", "def": "A connection where one part relies on another part." }, { "term": "TROUBLESHOOTING", "def": "A careful process for finding what may be causing a problem." }],
+  "sections": [
+    { "heading": "A data center is a connected system", "body": "Servers do computing, but they depend on networks, electricity, cooling, monitoring, security, and people. Each supporting area is a subsystem." },
+    { "heading": "Problems can cross system boundaries", "body": "A server can have power and still be unreachable if its network connection has a problem. A cooling issue can affect several servers. Good troubleshooting starts by noticing the evidence." },
+    { "heading": "Start with safe questions", "body": "Observe what changed, identify the affected system, and ask what information would help. Classroom troubleshooting is reasoning practice, not a direction to open equipment or perform repairs." }
+  ],
+  "practice": [{ "prompt": "A classroom computer turns on but cannot reach a website. Which systems could be involved: power, network, or both? Explain what you would observe first." }],
+  "quiz": { "question": "Why can one data-center subsystem affect another?", "options": ["The subsystems depend on connected resources", "Every subsystem does exactly the same job", "Cooling replaces networking", "A server never needs other systems"], "answer": "The subsystems depend on connected resources" },
+  "reflectionPrompt": "Which connected system would you most like to understand better, and what evidence would help you study it?"
+}

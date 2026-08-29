@@ -6,11 +6,13 @@ import LearningProgressCard from "./sections/LearningProgressCard.jsx";
 import WalletRewardsCard from "./sections/WalletRewardsCard.jsx";
 import UpcomingAssignmentsCard from "./sections/UpcomingAssignmentsCard.jsx";
 import CurriculumCalendar from "./sections/CurriculumCalendar.jsx";
+import SpecializationAssignmentPanel from "../../components/curriculum/SpecializationAssignmentPanel.jsx";
 
 export default function CurriculumDashboard() {
   return (
     <div className="ld-dashGrid">
       <div className="ld-dashCol ld-dashColMain">
+        <SpecializationAssignmentPanel />
         <CurrentPathwayCard />
         <LearningProgressCard />
         <UpcomingAssignmentsCard />

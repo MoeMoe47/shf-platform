@@ -1,6 +1,6 @@
-import { requirePermission } from "../../../auth/permission-guard";
-import { SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions";
-import { GrantBinderService } from "../service/grant-binder-service";
+import { requirePermission } from "../../../auth/permission-guard.js";
+import { SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
+import { GrantBinderService } from "../service/grant-binder-service.js";
 
 const grantBinderService = new GrantBinderService();
 

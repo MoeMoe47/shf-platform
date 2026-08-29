@@ -1,4 +1,4 @@
-import { resolveTruth } from "./oracle.service";
+import { resolveTruth } from "./oracle.service.js";
 
 function computePriorityScore(item: any) {
   let base = item.confidenceScore || 0;

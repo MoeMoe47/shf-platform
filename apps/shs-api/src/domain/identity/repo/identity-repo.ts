@@ -1,4 +1,4 @@
-import type { Organization } from "../model/organization";
+import type { Organization } from "../model/organization.js";
 
 export class IdentityRepo {
   async getUserByEmail(email: string) {
@@ -49,6 +49,15 @@ export class IdentityRepo {
   }
 
   async getUserById(userId: string) {
+    if (userId === "user_admin_001") {
+      return {
+        user_id: "user_admin_001",
+        organization_id: "org_shf_001",
+        email: "admin@siliconheartland.org",
+        full_name: "SHF Program Administrator",
+        roles: ["org_admin"],
+      };
+    }
     if (userId === "user_operator_001") {
       return {
         user_id: "user_operator_001",
@@ -82,6 +91,15 @@ export class IdentityRepo {
         roles: ["student"],
       };
     }
+    if (userId === "user_no_assignment_001") {
+      return {
+        user_id: "user_no_assignment_001",
+        organization_id: "org_shf_001",
+        email: "no-assignment@test.invalid",
+        full_name: "No Assignment Learner",
+        roles: ["student"],
+      };
+    }
     if (userId === "user_instructor_001") {
       return {
         user_id: "user_instructor_001",
@@ -91,6 +109,62 @@ export class IdentityRepo {
         roles: ["instructor"],
       };
     }
+    // Disposable PREPARE/PROVE reviewer used only by the local full-stack
+    // proof harness. The explicit verifier role keeps membership distinct
+    // from competency-review authority.
+    if (userId === "user_reviewer_001") {
+      return {
+        user_id: "user_reviewer_001",
+        organization_id: "org_shf_001",
+        email: "reviewer@siliconheartland.org",
+        full_name: "SHF Proof Reviewer",
+        roles: ["reviewer_verifier"],
+      };
+    }
+    if (userId === "user_other_admin_001") {
+      return {
+        user_id: "user_other_admin_001",
+        organization_id: "org_other",
+        email: "admin@other.test",
+        full_name: "Other Organization Program Staff",
+        roles: ["program_manager"],
+      };
+    }
+    if (userId === "user_employer_001") {
+      return {
+        user_id: "user_employer_001",
+        organization_id: "org_shf_001",
+        email: "employer@partner.test",
+        full_name: "Partner Organization Member",
+        roles: ["partner"],
+        permissions: ["program.read"],
+      };
+    }
+    const phase43bUsers: Record<string, any> = {
+      user_phase43b_staff_001: { permissions: [], organization_id: "org_shf_001", email: "phase43b-staff@test.invalid" },
+      user_phase43b_course_001: { permissions: ["program.course.assign"], organization_id: "org_shf_001", email: "phase43b-course@test.invalid" },
+      user_phase43b_manager_001: { permissions: ["project.team.manage"], organization_id: "org_shf_001", email: "phase43b-manager@test.invalid" },
+      user_phase43b_project_reviewer_001: { permissions: ["project.submission.review"], organization_id: "org_shf_001", email: "phase43b-project-reviewer@test.invalid" },
+      user_phase43b_competency_reviewer_001: { permissions: ["verification.review", "verification.approve"], organization_id: "org_shf_001", email: "phase43b-competency-reviewer@test.invalid" },
+      user_phase43b_academic_001: { permissions: ["curriculum.lesson.complete", "program.read", "program.specialization.assign", "program.course.assign", "project.create", "project.team.manage", "project.submission.view", "project.submission.write", "project.submission.review", "verification.view", "verification.review", "verification.approve"], organization_id: "org_shf_001", email: "phase43b-academic@test.invalid" },
+    };
+    if (phase43bUsers[userId]) return { user_id: userId, ...phase43bUsers[userId], full_name: phase43bUsers[userId].email, roles: ["phase43b_fixture_actor"] };
+
+    const assignmentLearners: Record<string, string> = {
+      user_assignment_technical_001: "technical@test.invalid",
+      user_assignment_networking_001: "networking@test.invalid",
+      user_assignment_electrical_001: "electrical@test.invalid",
+      user_assignment_mechanical_001: "mechanical@test.invalid",
+      user_assignment_security_001: "security@test.invalid",
+      user_assignment_ai_001: "ai@test.invalid",
+    };
+    if (assignmentLearners[userId]) return {
+      user_id: userId,
+      organization_id: "org_shf_001",
+      email: assignmentLearners[userId],
+      full_name: "SHF Assignment Learner",
+      roles: ["student"],
+    };
 
     return null;
   }

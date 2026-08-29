@@ -1,4 +1,4 @@
-import { emitOperationalTelemetry } from "../observability/operational-telemetry";
+import { emitOperationalTelemetry } from "../observability/operational-telemetry.js";
 
 export type LifecycleExecutor = {
   query: (sql: string, params?: unknown[]) => Promise<{ rows: any[]; rowCount?: number }>;

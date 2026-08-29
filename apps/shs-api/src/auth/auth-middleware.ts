@@ -1,10 +1,10 @@
-import { IdentityRepo } from "../domain/identity/repo/identity-repo";
-import { parseDevToken } from "./current-user";
-import { mergeRolePermissions } from "./security-permissions";
-import { isProductionEnvironment } from "./production-identity";
-import { Auth0SessionService } from "../domain/identity/service/auth0-session-service";
-import { applyActiveOrganizationContext, getRequestedOrganizationId, OrganizationContextError } from "./organization-context";
-import { tenantIdForOrganization } from "./tenant-context";
+import { IdentityRepo } from "../domain/identity/repo/identity-repo.js";
+import { parseDevToken } from "./current-user.js";
+import { mergeRolePermissions } from "./security-permissions.js";
+import { isProductionEnvironment } from "./production-identity.js";
+import { Auth0SessionService } from "../domain/identity/service/auth0-session-service.js";
+import { applyActiveOrganizationContext, getRequestedOrganizationId, OrganizationContextError } from "./organization-context.js";
+import { tenantIdForOrganization } from "./tenant-context.js";
 
 const repo = new IdentityRepo();
 const productionSessions = isProductionEnvironment() ? new Auth0SessionService() : null;

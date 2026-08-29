@@ -1,22 +1,30 @@
-import { registerProgramRoutes } from "../domain/programs/api/routes";
-import { registerCaseRoutes } from "../domain/cases/api/routes";
-import { registerAuditRoutes } from "../domain/audit/api/routes";
-import { registerIdentityRoutes } from "../domain/identity/api/routes";
-import { registerReportingRoutes } from "../domain/reporting/routes";
-import { registerGrantBinderRoutes } from "../domain/grant-binder/api/routes";
-import { registerExchangeFundingCommitmentRoutes } from "../domain/exchange-funding-commitment/api/routes";
-import { registerLiveLearningRoutes } from "../domain/live-learning/api/routes";
-import { registerWorkforceOutcomeRoutes } from "../domain/workforce-outcome/api/routes";
-import { registerOracleRoutes } from "../oracle/routes/oracle.routes";
-import aggregationRoutes from "../aggregation/routes/aggregation.routes";
-import { IdentityService } from "../domain/identity/service/identity-service";
-import { ok, fail } from "./response-envelope";
-import { writeSecurityAuditEvent } from "../auth/security-audit";
-import { isProductionEnvironment } from "../auth/production-identity";
-import { Auth0SessionService } from "../domain/identity/service/auth0-session-service";
-import { registerCurriculumCompletionRoutes } from "../domain/curriculum/api/routes";
-import { registerOrganizationRelationshipRoutes } from "../domain/organization-relationships/api/routes";
-import { authResponsePayload } from "../auth/auth-response";
+import { registerProgramRoutes } from "../domain/programs/api/routes.js";
+import { registerCaseRoutes } from "../domain/cases/api/routes.js";
+import { registerAuditRoutes } from "../domain/audit/api/routes.js";
+import { registerIdentityRoutes } from "../domain/identity/api/routes.js";
+import { registerReportingRoutes } from "../domain/reporting/routes.js";
+import { registerGrantBinderRoutes } from "../domain/grant-binder/api/routes.js";
+import { registerExchangeFundingCommitmentRoutes } from "../domain/exchange-funding-commitment/api/routes.js";
+import { registerLiveLearningRoutes } from "../domain/live-learning/api/routes.js";
+import { registerWorkforceOutcomeRoutes } from "../domain/workforce-outcome/api/routes.js";
+import { registerOracleRoutes } from "../oracle/routes/oracle.routes.js";
+import aggregationRoutes from "../aggregation/routes/aggregation.routes.js";
+import { IdentityService } from "../domain/identity/service/identity-service.js";
+import { ok, fail } from "./response-envelope.js";
+import { writeSecurityAuditEvent } from "../auth/security-audit.js";
+import { isProductionEnvironment } from "../auth/production-identity.js";
+import { Auth0SessionService } from "../domain/identity/service/auth0-session-service.js";
+import { registerCurriculumCompletionRoutes } from "../domain/curriculum/api/routes.js";
+import { registerOrganizationRelationshipRoutes } from "../domain/organization-relationships/api/routes.js";
+import { registerCareerRoutes } from "../domain/careers/api/routes.js";
+import { authResponsePayload } from "../auth/auth-response.js";
+import { registerPrepareProveRoutes } from "../domain/prepare-prove/api/routes.js";
+import { registerSpecializationAssignmentRoutes } from "../domain/programs/api/specialization-assignment-routes.js";
+import { registerSpecializationRequestRoutes } from "../domain/programs/api/specialization-request-routes.js";
+import { registerGrade12EligibilityRoutes } from "../domain/programs/api/grade12-eligibility-routes.js";
+import { registerCourseAssignmentRoutes } from "../domain/programs/api/course-assignment-routes.js";
+import { registerProjectRoutes } from "../domain/projects/project-routes.js";
+import { registerCapstoneEntryRoutes } from "../domain/programs/api/capstone-entry-routes.js";
 
 
 type MutableApiUser = {
@@ -285,6 +293,7 @@ app.post("/auth/login", async (req: any, res: any) => {
   registerIdentityRoutes(app);
   registerProgramRoutes(app);
   registerOrganizationRelationshipRoutes(app);
+  registerCareerRoutes(app);
   registerCaseRoutes(app);
   registerAuditRoutes(app);
   registerReportingRoutes(app);
@@ -293,6 +302,13 @@ app.post("/auth/login", async (req: any, res: any) => {
   registerLiveLearningRoutes(app);
   registerCurriculumCompletionRoutes(app);
   registerWorkforceOutcomeRoutes(app);
+  registerPrepareProveRoutes(app);
+  registerSpecializationAssignmentRoutes(app);
+  registerSpecializationRequestRoutes(app);
+  registerGrade12EligibilityRoutes(app);
+  registerCourseAssignmentRoutes(app);
+  registerProjectRoutes(app);
+  registerCapstoneEntryRoutes(app);
   app.use("/aggregation", aggregationRoutes);
   registerOracleRoutes(app);
 

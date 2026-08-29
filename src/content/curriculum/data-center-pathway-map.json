@@ -1,0 +1,707 @@
+{
+  "programId": "data-center-ai-infrastructure-youth-pathway",
+  "title": "SHF Data Center & AI Infrastructure Youth Development Pathway",
+  "owner": "curriculum",
+  "version": 1,
+  "stages": {
+    "DISCOVER": { "grades": [6, 7, 8], "purpose": "Build curiosity, infrastructure literacy, and systems thinking." },
+    "EXPLORE": { "grades": [9, 10], "purpose": "Apply technical foundations through supervised labs and troubleshooting." },
+    "PREPARE_PROVE": { "grades": [11, 12], "purpose": "Specialize, document evidence, and prepare for transition." },
+    "TRANSITION": { "grades": [], "purpose": "Connect demonstrated learning to postsecondary and workforce options." }
+  },
+  "courses": [
+    {
+      "courseId": "data-center-foundations",
+      "title": "Where Does the Internet Live?",
+      "grade": 6,
+      "stage": "DISCOVER",
+      "description": "Introduces the physical systems behind websites, apps, cloud services, streaming, and AI.",
+      "prerequisites": [],
+      "units": ["dc6-digital-world", "dc6-data-center-systems", "dc6-people-and-communities"],
+      "learningOutcomes": [
+        "Explain that digital services depend on physical computing infrastructure.",
+        "Identify servers, networking, electricity, cooling, and security as data-center systems.",
+        "Describe both opportunities and community questions related to data centers."
+      ],
+      "majorProject": "Build a labeled visual model of a data center.",
+      "assessmentApproach": ["knowledge checks", "vocabulary", "reflection", "model explanation"],
+      "careerConnections": ["data-center-technician"],
+      "futureCompetencyCandidates": ["infrastructure literacy", "systems explanation"],
+      "lessonIds": [
+        "data-center-foundations-digital-world",
+        "data-center-foundations-introduction",
+        "data-center-foundations-server",
+        "data-center-foundations-information-travel",
+        "data-center-foundations-electricity",
+        "data-center-foundations-heat",
+        "data-center-foundations-security",
+        "data-center-foundations-careers",
+        "data-center-foundations-communities",
+        "data-center-foundations-design-project"
+      ],
+      "contentStatus": "active"
+    },
+    {
+      "courseId": "data-center-systems-7",
+      "title": "Inside the Infrastructure",
+      "grade": 7,
+      "stage": "DISCOVER",
+      "description": "Explores how computing, networking, power, cooling, sensors, and security work together.",
+      "prerequisites": ["data-center-foundations"],
+      "units": ["dc7-computing-parts", "dc7-networking-and-fiber", "dc7-power-cooling-and-security"],
+      "learningOutcomes": [
+        "Describe how components and supporting systems work together.",
+        "Trace a simple connection from a device through a network to a server.",
+        "Use a safe classroom scenario to identify possible causes of a system failure."
+      ],
+      "majorProject": "Troubleshoot a low-risk classroom infrastructure model.",
+      "assessmentApproach": ["scenario questions", "systems diagram", "team troubleshooting explanation"],
+      "careerConnections": ["data-center-technician"],
+      "futureCompetencyCandidates": ["systems thinking", "technical communication"],
+      "lessonIds": [
+        "data-center-systems-7-systems-working-together",
+        "data-center-systems-7-inside-a-server",
+        "data-center-systems-7-servers-to-racks",
+        "data-center-systems-7-switches-cables-connections",
+        "data-center-systems-7-fiber",
+        "data-center-systems-7-power-path",
+        "data-center-systems-7-airflow-cooling",
+        "data-center-systems-7-sensors-monitoring",
+        "data-center-systems-7-finding-the-problem",
+        "data-center-systems-7-systems-challenge"
+      ],
+      "contentStatus": "active"
+    },
+    {
+      "courseId": "data-center-design-8",
+      "title": "Build a Better Data Center",
+      "grade": 8,
+      "stage": "DISCOVER",
+      "description": "Uses design constraints to balance infrastructure reliability, sustainability, community impact, and opportunity.",
+      "prerequisites": ["data-center-systems-7"],
+      "units": ["dc8-design-constraints", "dc8-community-tradeoffs", "dc8-workforce-and-sustainability"],
+      "learningOutcomes": [
+        "Compare design choices involving energy, cooling, connectivity, land, and reliability.",
+        "Use evidence to explain a community benefit and a community concern.",
+        "Present a design that balances technical and community constraints."
+      ],
+      "majorProject": "Design a community-aware hypothetical data center.",
+      "assessmentApproach": ["design brief", "tradeoff analysis", "presentation", "reflection"],
+      "careerConnections": ["data-center-technician"],
+      "futureCompetencyCandidates": ["engineering design", "community impact analysis"],
+      "lessonIds": [
+        "data-center-design-8-design-challenge",
+        "data-center-design-8-site-selection",
+        "data-center-design-8-reliable-power",
+        "data-center-design-8-cooling-airflow",
+        "data-center-design-8-network-design",
+        "data-center-design-8-security-by-design",
+        "data-center-design-8-reliability-redundancy",
+        "data-center-design-8-sustainability-resources",
+        "data-center-design-8-community-benefits",
+        "data-center-design-8-build-better-data-center"
+      ],
+      "contentStatus": "active"
+    },
+    {
+      "courseId": "data-center-technical-foundations-9",
+      "title": "How Data Center Systems Work",
+      "grade": 9,
+      "stage": "EXPLORE",
+      "description": "Builds supervised technical foundations in hardware, networking, electricity, cooling, and operations.",
+      "prerequisites": ["data-center-design-8"],
+      "units": ["dc9-server-hardware", "dc9-networking", "dc9-power-and-thermal-basics", "dc9-operations"],
+      "learningOutcomes": [
+        "Identify major server components and explain their roles.",
+        "Use basic network, power, heat, and capacity concepts in a supervised lab.",
+        "Document observations using accurate technical vocabulary and safe procedures."
+      ],
+      "majorProject": "Build and document a basic non-hazardous technical system model.",
+      "assessmentApproach": ["knowledge checks", "supervised lab record", "technical explanation", "safety review"],
+      "careerConnections": ["data-center-technician"],
+      "futureCompetencyCandidates": ["server hardware foundations", "networking foundations", "technical safety"],
+      "lessonIds": [
+        "data-center-technical-foundations-9-modern-server-hardware",
+        "data-center-technical-foundations-9-cpu-gpu-memory-storage",
+        "data-center-technical-foundations-9-how-servers-run-software",
+        "data-center-technical-foundations-9-introduction-to-linux",
+        "data-center-technical-foundations-9-network-fundamentals",
+        "data-center-technical-foundations-9-ip-addresses-network-paths",
+        "data-center-technical-foundations-9-cabling-switches-fiber",
+        "data-center-technical-foundations-9-electricity-fundamentals",
+        "data-center-technical-foundations-9-powering-critical-infrastructure",
+        "data-center-technical-foundations-9-heat-airflow-cooling",
+        "data-center-technical-foundations-9-monitoring-infrastructure",
+        "data-center-technical-foundations-9-technical-documentation",
+        "data-center-technical-foundations-9-structured-troubleshooting",
+        "data-center-technical-foundations-9-safe-technical-system-project"
+      ],
+      "contentStatus": "active"
+    },
+    {
+      "courseId": "data-center-reliable-operations-10",
+      "title": "Operating Reliable Infrastructure",
+      "grade": 10,
+      "stage": "EXPLORE",
+      "description": "Applies technical foundations to monitoring, maintenance, troubleshooting, documentation, and incident response.",
+      "prerequisites": ["data-center-technical-foundations-9"],
+      "units": ["dc10-linux-and-deployment", "dc10-power-and-cooling-reliability", "dc10-security-and-incidents"],
+      "learningOutcomes": [
+        "Follow a supervised procedure to investigate a simulated infrastructure issue.",
+        "Explain redundancy, backup power, cooling, monitoring, and preventive maintenance.",
+        "Create a clear incident record that separates observations from assumptions."
+      ],
+      "majorProject": "Respond to a simulated infrastructure scenario and produce an incident report.",
+      "assessmentApproach": ["scenario performance", "incident documentation", "team debrief", "safety check"],
+      "careerConnections": ["data-center-technician"],
+      "futureCompetencyCandidates": ["troubleshooting", "incident documentation", "operations fundamentals"],
+      "lessonIds": [
+        "data-center-reliable-operations-10-operations-foundations",
+        "data-center-reliable-operations-10-monitoring-alerts-logs",
+        "data-center-reliable-operations-10-documentation-change-records",
+        "data-center-reliable-operations-10-server-deployment",
+        "data-center-reliable-operations-10-linux-operations",
+        "data-center-reliable-operations-10-network-troubleshooting",
+        "data-center-reliable-operations-10-connectivity-fiber-faults",
+        "data-center-reliable-operations-10-critical-power-operations",
+        "data-center-reliable-operations-10-cooling-environmental-monitoring",
+        "data-center-reliable-operations-10-preventive-maintenance",
+        "data-center-reliable-operations-10-incident-response",
+        "data-center-reliable-operations-10-troubleshooting-constraints",
+        "data-center-reliable-operations-10-technical-communication",
+        "data-center-reliable-operations-10-operations-challenge"
+      ],
+      "contentStatus": "active"
+    },
+    {
+      "courseId": "data-center-specialization-11",
+      "title": "Choose Your Infrastructure Path",
+      "grade": 11,
+      "stage": "PREPARE_PROVE",
+      "description": "Introduces supervised specialization choices while preserving a shared infrastructure foundation.",
+      "prerequisites": ["data-center-reliable-operations-10"],
+      "units": ["dc11-specialization-choice", "dc11-evidence-and-practice", "dc11-career-research"],
+      "learningOutcomes": [
+        "Compare infrastructure specializations and select a supported area for deeper practice.",
+        "Plan and document a supervised project using appropriate evidence.",
+        "Connect a career interest to technical learning, education, and future credentials."
+      ],
+      "majorProject": "Complete a specialization project proposal and evidence plan.",
+      "assessmentApproach": ["project proposal", "portfolio evidence review", "career research", "presentation"],
+      "careerConnections": ["data-center-technician"],
+      "futureCompetencyCandidates": ["specialization practice", "evidence documentation", "career planning"],
+      "lessonIds": [
+        "data-center-specialization-11-safety-professional-practice",
+        "data-center-specialization-11-technical-communication",
+        "data-center-specialization-11-reliability-systems-thinking",
+        "data-center-specialization-11-evidence-and-feedback",
+        "data-center-specialization-11-career-transition-planning",
+        "data-center-specialization-11-monitoring-proof",
+        "data-center-specialization-11-server-operations",
+        "data-center-specialization-11-asset-inventory",
+        "data-center-specialization-11-linux-inspection",
+        "data-center-specialization-11-telemetry-troubleshooting",
+        "data-center-specialization-11-technical-operations-project",
+        "data-center-specialization-11-network-topology",
+        "data-center-specialization-11-switching-ethernet",
+        "data-center-specialization-11-addressing-gateway-dns",
+        "data-center-specialization-11-structured-cabling",
+        "data-center-specialization-11-fiber-infrastructure",
+        "data-center-specialization-11-network-monitoring",
+        "data-center-specialization-11-connectivity-troubleshooting",
+        "data-center-specialization-11-network-reliability",
+        "data-center-specialization-11-networking-fiber-project"
+        ,"data-center-specialization-11-electrical-safety"
+        ,"data-center-specialization-11-power-quantities"
+        ,"data-center-specialization-11-power-paths"
+        ,"data-center-specialization-11-load-capacity"
+        ,"data-center-specialization-11-ups-generator"
+        ,"data-center-specialization-11-power-reliability"
+        ,"data-center-specialization-11-power-monitoring"
+        ,"data-center-specialization-11-electrical-incident-project"
+        ,"data-center-specialization-11-mechanical-hvac-safety"
+        ,"data-center-specialization-11-heat-thermal-fundamentals"
+        ,"data-center-specialization-11-airflow-management"
+        ,"data-center-specialization-11-environmental-conditions"
+        ,"data-center-specialization-11-cooling-architecture"
+        ,"data-center-specialization-11-cooling-capacity"
+        ,"data-center-specialization-11-environmental-monitoring"
+        ,"data-center-specialization-11-cooling-reliability"
+        ,"data-center-specialization-11-preventive-maintenance"
+        ,"data-center-specialization-11-thermal-incident-project"
+        ,"data-center-specialization-11-cybersecurity-safety"
+        ,"data-center-specialization-11-identity-authentication"
+        ,"data-center-specialization-11-authorization-least-privilege"
+        ,"data-center-specialization-11-physical-security"
+        ,"data-center-specialization-11-security-monitoring-logs"
+        ,"data-center-specialization-11-account-lifecycle"
+        ,"data-center-specialization-11-defensive-system-security"
+        ,"data-center-specialization-11-security-documentation"
+        ,"data-center-specialization-11-security-incident-reasoning"
+        ,"data-center-specialization-11-security-incident-project"
+        ,"data-center-specialization-11-ai-cloud-foundations"
+        ,"data-center-specialization-11-cpu-gpu-workloads"
+        ,"data-center-specialization-11-virtualization-containers"
+        ,"data-center-specialization-11-cloud-infrastructure"
+        ,"data-center-specialization-11-storage-data-movement"
+        ,"data-center-specialization-11-capacity-bottlenecks"
+        ,"data-center-specialization-11-availability-scaling"
+        ,"data-center-specialization-11-ai-power-cooling"
+        ,"data-center-specialization-11-ai-monitoring"
+        ,"data-center-specialization-11-ai-cloud-project"
+      ],
+      "contentStatus": "active",
+      "activationScope": "SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER_AND_ELECTRICAL_AND_MECHANICAL_HVAC_AND_SECURITY_AND_AI_CLOUD"
+    },
+    {
+      "courseId": "data-center-capstone-12",
+      "title": "From Student to Infrastructure Professional",
+      "grade": 12,
+      "stage": "PREPARE_PROVE",
+      "description": "Integrates infrastructure knowledge, community analysis, communication, safety, and transition planning.",
+      "prerequisites": ["data-center-specialization-11"],
+      "units": ["dc12-capstone-design", "dc12-proof-and-presentation", "dc12-transition-planning"],
+      "learningOutcomes": [
+        "Integrate computing, networking, power, cooling, security, sustainability, and community considerations.",
+        "Present a design or technical solution with evidence, constraints, and tradeoffs.",
+        "Create a grounded transition plan for further education, training, or supervised work-based learning."
+      ],
+      "majorProject": "Build Ohio's Next AI Data Center: a hypothetical, community-aware capstone.",
+      "assessmentApproach": ["capstone rubric", "technical and community presentation", "reflection", "transition plan"],
+      "careerConnections": ["data-center-technician"],
+      "futureCompetencyCandidates": ["integrated infrastructure design", "technical communication", "transition readiness evidence"],
+      "lessonIds": [],
+      "contentStatus": "planned"
+    },
+    {
+      "courseId": "data-center-technical-operations-12",
+      "title": "Grade 12 Infrastructure Operations",
+      "grade": 12,
+      "stage": "PREPARE_PROVE",
+      "description": "A small common core and advanced Technical Operations reference slice for eligible Grade 12 learners.",
+      "prerequisites": ["data-center-specialization-11"],
+      "units": ["dc12-shared-core", "dc12-technical-operations"],
+      "learningOutcomes": ["Communicate technical decisions across infrastructure teams.", "Analyze and document safe multi-system operations scenarios."],
+      "majorProject": "Stabilize and document a simulated multi-system service incident.",
+      "assessmentApproach": ["server-backed lesson completion", "safe sandbox activity result", "authorized evidence review"],
+      "careerConnections": ["data-center-technician"],
+      "futureCompetencyCandidates": ["multi-system operations analysis", "operational change and incident coordination"],
+      "lessonIds": [
+        "data-center-specialization-12-advanced-technical-communication",
+        "data-center-specialization-12-change-risk-escalation",
+        "data-center-specialization-12-cross-team-collaboration",
+        "data-center-specialization-12-evidence-quality-defense",
+        "data-center-specialization-12-career-postsecondary-transition",
+        "data-center-specialization-12-advanced-operations-service-dependencies",
+        "data-center-specialization-12-linux-system-state-analysis",
+        "data-center-specialization-12-controlled-change-deployment",
+        "data-center-specialization-12-capacity-reliability-operations",
+        "data-center-specialization-12-multi-system-incident-coordination",
+        "data-center-specialization-12-runbooks-operational-handoffs",
+        "data-center-specialization-12-advanced-technical-operations-project"
+      ],
+      "contentStatus": "active",
+      "activationScope": "GRADE12_SHARED_CORE_AND_TECHNICAL_OPERATIONS"
+    },
+    {
+      "courseId": "data-center-networking-fiber-12",
+      "title": "Grade 12 Networking and Fiber",
+      "grade": 12,
+      "stage": "PREPARE_PROVE",
+      "description": "Advanced Networking and Fiber practice for eligible learners using resilient, simulated network scenarios.",
+      "prerequisites": ["data-center-specialization-11"],
+      "units": ["dc12-shared-core", "dc12-networking-fiber"],
+      "learningOutcomes": ["Interpret resilient network paths and performance evidence.", "Plan safe simulated network changes and document cross-team handoffs."],
+      "majorProject": "Diagnose and stabilize a simulated resilient network incident.",
+      "assessmentApproach": ["server-backed lesson completion", "safe network simulation result", "authorized evidence review"],
+      "careerConnections": ["data-center-technician"],
+      "futureCompetencyCandidates": ["resilient network path analysis", "network change and incident coordination"],
+      "lessonIds": [
+        "data-center-specialization-12-network-architecture-dependencies",
+        "data-center-specialization-12-routing-path-selection",
+        "data-center-specialization-12-network-resilience-failure-domains",
+        "data-center-specialization-12-network-performance-capacity",
+        "data-center-specialization-12-fiber-path-reliability",
+        "data-center-specialization-12-controlled-network-change",
+        "data-center-specialization-12-network-incident-coordination",
+        "data-center-specialization-12-advanced-networking-project"
+      ],
+      "contentStatus": "active",
+      "activationScope": "GRADE12_SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER"
+    },
+    {
+      "courseId": "data-center-electrical-infrastructure-12",
+      "title": "Grade 12 Electrical Infrastructure",
+      "grade": 12,
+      "stage": "PREPARE_PROVE",
+      "description": "Advanced critical-power reasoning for eligible learners using synthetic, simulation-only electrical infrastructure scenarios.",
+      "prerequisites": ["data-center-specialization-11"],
+      "units": ["dc12-shared-core", "dc12-electrical-infrastructure"],
+      "learningOutcomes": ["Interpret simplified critical-power architectures and A/B dependencies.", "Analyze synthetic capacity, redundancy, telemetry, and incident coordination evidence safely."],
+      "majorProject": "Analyze and coordinate a simulated critical power failure.",
+      "assessmentApproach": ["server-backed lesson completion", "safe electrical simulation result", "authorized evidence review"],
+      "careerConnections": ["data-center-technician"],
+      "futureCompetencyCandidates": ["critical power reliability analysis", "electrical change and incident coordination"],
+      "lessonIds": [
+        "data-center-specialization-12-critical-power-architecture",
+        "data-center-specialization-12-ab-power-paths-failure-domains",
+        "data-center-specialization-12-electrical-load-capacity-headroom",
+        "data-center-specialization-12-ups-backup-transfer-states",
+        "data-center-specialization-12-electrical-monitoring-telemetry",
+        "data-center-specialization-12-controlled-electrical-change",
+        "data-center-specialization-12-critical-power-incident-coordination",
+        "data-center-specialization-12-advanced-electrical-infrastructure-project"
+      ],
+      "contentStatus": "active",
+      "activationScope": "GRADE12_SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER_AND_ELECTRICAL"
+    },
+    {
+      "courseId": "data-center-mechanical-hvac-12",
+      "title": "Grade 12 Mechanical / HVAC Infrastructure",
+      "grade": 12,
+      "stage": "PREPARE_PROVE",
+      "description": "Advanced thermal-capacity and cooling-reliability reasoning for eligible learners using synthetic, simulation-only infrastructure scenarios.",
+      "prerequisites": ["data-center-specialization-11"],
+      "units": ["dc12-shared-core", "dc12-mechanical-hvac"],
+      "learningOutcomes": ["Interpret simplified cooling architectures, airflow relationships, and failure domains.", "Analyze synthetic thermal capacity, telemetry, redundancy, maintenance state, and incident coordination safely."],
+      "majorProject": "Diagnose and coordinate a simulated cooling capacity incident.",
+      "assessmentApproach": ["server-backed lesson completion", "safe cooling simulation result", "authorized evidence review"],
+      "careerConnections": ["data-center-technician"],
+      "futureCompetencyCandidates": ["thermal capacity and reliability analysis", "cooling incident and change coordination"],
+      "lessonIds": [
+        "data-center-specialization-12-advanced-thermal-infrastructure",
+        "data-center-specialization-12-thermal-load-capacity-headroom",
+        "data-center-specialization-12-airflow-containment-pressure",
+        "data-center-specialization-12-cooling-redundancy-failure-domains",
+        "data-center-specialization-12-high-density-liquid-cooling",
+        "data-center-specialization-12-environmental-monitoring-trends",
+        "data-center-specialization-12-controlled-cooling-change-incidents",
+        "data-center-specialization-12-advanced-mechanical-hvac-project"
+      ],
+      "contentStatus": "active",
+      "activationScope": "GRADE12_SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER_AND_ELECTRICAL_AND_MECHANICAL_HVAC"
+    },
+    {
+      "courseId": "data-center-cybersecurity-security-12",
+      "title": "Grade 12 Cybersecurity / Physical Security",
+      "grade": 12,
+      "stage": "PREPARE_PROVE",
+      "description": "Advanced defensive identity, access, physical-security, monitoring, and incident-coordination reasoning using synthetic simulations.",
+      "prerequisites": ["data-center-specialization-11"],
+      "units": ["dc12-shared-core", "dc12-cybersecurity-security"],
+      "learningOutcomes": ["Analyze synthetic identity, access, and physical-security relationships.", "Correlate defensive events, preserve uncertainty, and document safe authorized escalation."],
+      "majorProject": "Investigate and coordinate a simulated access-control incident.",
+      "assessmentApproach": ["server-backed lesson completion", "defensive security simulation result", "authorized evidence review"],
+      "careerConnections": ["data-center-technician"],
+      "futureCompetencyCandidates": ["security access governance analysis", "defensive incident correlation and coordination"],
+      "lessonIds": [
+        "data-center-specialization-12-advanced-identity-access-governance",
+        "data-center-specialization-12-privileged-access-separation-duties",
+        "data-center-specialization-12-physical-cyber-access-convergence",
+        "data-center-specialization-12-security-logging-event-correlation",
+        "data-center-specialization-12-alert-triage-defensive-monitoring",
+        "data-center-specialization-12-security-change-recovery-validation",
+        "data-center-specialization-12-incident-evidence-preservation",
+        "data-center-specialization-12-advanced-security-project"
+      ],
+      "contentStatus": "active",
+      "activationScope": "GRADE12_SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER_AND_ELECTRICAL_AND_MECHANICAL_HVAC_AND_SECURITY"
+    },
+    {
+      "courseId": "data-center-ai-cloud-infrastructure-12",
+      "title": "Grade 12 AI / Cloud Infrastructure",
+      "grade": 12,
+      "stage": "PREPARE_PROVE",
+      "description": "Advanced infrastructure reasoning for multi-node compute, storage, capacity, reliability, and cross-domain dependencies using synthetic simulations.",
+      "prerequisites": ["data-center-specialization-11"],
+      "units": ["dc12-shared-core", "dc12-ai-cloud-infrastructure"],
+      "learningOutcomes": ["Interpret multi-node compute, virtualization, storage, and workload-placement relationships.", "Analyze synthetic capacity, bottleneck, reliability, observability, power, and cooling evidence safely."],
+      "majorProject": "Diagnose and stabilize a simulated AI compute cluster capacity incident.",
+      "assessmentApproach": ["server-backed lesson completion", "safe AI infrastructure simulation result", "authorized evidence review"],
+      "careerConnections": ["data-center-technician"],
+      "futureCompetencyCandidates": ["AI infrastructure capacity and bottleneck analysis", "distributed infrastructure reliability and incident coordination"],
+      "lessonIds": [
+        "data-center-specialization-12-advanced-multi-node-compute",
+        "data-center-specialization-12-virtualization-clusters-workload-placement",
+        "data-center-specialization-12-accelerated-compute-infrastructure",
+        "data-center-specialization-12-storage-data-movement-network",
+        "data-center-specialization-12-capacity-bottlenecks-headroom",
+        "data-center-specialization-12-reliability-redundancy-observability",
+        "data-center-specialization-12-controlled-infrastructure-change-incident",
+        "data-center-specialization-12-advanced-ai-cloud-infrastructure-project"
+      ],
+      "contentStatus": "active",
+      "activationScope": "GRADE12_SHARED_CORE_AND_TECHNICAL_OPERATIONS_AND_NETWORKING_FIBER_AND_ELECTRICAL_AND_MECHANICAL_HVAC_AND_SECURITY_AND_AI_CLOUD"
+    }
+  ],
+  "transition": {
+    "stage": "TRANSITION",
+    "entryAfter": ["data-center-capstone-12"],
+    "purpose": "Use approved evidence and future partner pathways to support postsecondary or workforce decisions.",
+    "notYetImplemented": ["credentials", "internships", "apprenticeships", "employment matching", "readiness scoring"]
+  },
+  "prepareProveArchitecture": {
+    "stage": "PREPARE_PROVE",
+    "executableSharedCoreCourseIds": ["data-center-specialization-11"],
+    "activeSpecializationIds": ["technical-operations", "networking-fiber", "electrical-infrastructure", "mechanical-hvac", "cybersecurity-security", "ai-cloud-infrastructure"],
+    "specializationTiming": {
+      "model": "MODEL_B",
+      "decision": "Grade 11 begins with a shared core, then students select a primary specialization; Grade 12 deepens that branch and integrates it into a collaborative capstone.",
+      "assignmentPolicy": "MODEL_2_LEARNER_REQUEST_AUTHORIZED_STAFF_CONFIRMATION",
+      "assignmentOwner": "PROGRAM_ASSIGNMENT_DOMAIN",
+      "assignmentRecord": "program_specialization_assignments",
+      "primaryAssignmentRule": "At most one ACTIVE PRIMARY specialization per learner, organization, and program; changes preserve transferred history.",
+      "grade12EligibilityPolicy": {
+        "policyVersion": "grade12-entry-v1",
+        "owner": "CURRICULUM_PROGRAM_PROGRESSION",
+        "decision": "MODEL_B_SMALL_EXPLICIT_MINIMUM",
+        "requirements": ["active Grade 11 primary specialization assignment", "all five shared-core lesson completions", "three assigned-branch prerequisite lesson completions", "three assigned-branch DEMONSTRATED entry competencies"],
+        "notReadiness": "Grade 12 eligibility is educational progression status, not career readiness, credential status, licensure, or employment eligibility."
+      },
+      "grade12CapstoneRoleMap": {
+        "technical-operations": "Operations",
+        "networking-fiber": "Networking",
+        "electrical-infrastructure": "Power",
+        "mechanical-hvac": "Cooling/Mechanical",
+        "cybersecurity-security": "Security",
+        "ai-cloud-infrastructure": "Compute/AI Infrastructure"
+      },
+      "flexibility": [
+        "A student may change a primary branch after an advising review and prerequisite check.",
+        "A secondary focus may be taken through approved cross-specialization electives.",
+        "Individual and team project formats must preserve equivalent learning outcomes.",
+        "Selection is a curriculum-planning decision, not an automated readiness score."
+      ]
+    },
+    "sharedGrade11Core": [
+      { "id": "pp-safety-and-professional-practice", "title": "Safety and Professional Practice", "whyCommon": "Every infrastructure pathway needs safe boundaries, permissions, escalation, and reliable procedures.", "prerequisiteCourseIds": ["data-center-reliable-operations-10"], "specializationsServed": ["technical-operations", "networking-fiber", "electrical-infrastructure", "mechanical-hvac", "cybersecurity-security", "ai-cloud-infrastructure"] },
+      { "id": "pp-documentation-and-communication", "title": "Documentation and Technical Communication", "whyCommon": "Specialists must communicate observations, decisions, evidence, and handoffs to other teams.", "prerequisiteCourseIds": ["data-center-reliable-operations-10"], "specializationsServed": ["technical-operations", "networking-fiber", "electrical-infrastructure", "mechanical-hvac", "cybersecurity-security", "ai-cloud-infrastructure"] },
+      { "id": "pp-reliability-and-systems-thinking", "title": "Reliability and Systems Thinking", "whyCommon": "Infrastructure failures cross domain boundaries, so every learner needs shared reliability language.", "prerequisiteCourseIds": ["data-center-reliable-operations-10"], "specializationsServed": ["technical-operations", "networking-fiber", "electrical-infrastructure", "mechanical-hvac", "cybersecurity-security", "ai-cloud-infrastructure"] },
+      { "id": "pp-evidence-and-portfolio-boundaries", "title": "Evidence, Feedback, and Portfolio Boundaries", "whyCommon": "Learners need to distinguish practice, artifacts, reviewed evidence, and future competency decisions.", "prerequisiteCourseIds": ["data-center-reliable-operations-10"], "specializationsServed": ["technical-operations", "networking-fiber", "electrical-infrastructure", "mechanical-hvac", "cybersecurity-security", "ai-cloud-infrastructure"] },
+      { "id": "pp-career-and-transition-planning", "title": "Career and Transition Planning", "whyCommon": "Students should compare education, training, apprenticeship, and work-based learning options without being steered to one outcome.", "prerequisiteCourseIds": ["data-center-reliable-operations-10"], "specializationsServed": ["technical-operations", "networking-fiber", "electrical-infrastructure", "mechanical-hvac", "cybersecurity-security", "ai-cloud-infrastructure"] }
+    ],
+    "specializations": [
+      {
+        "specializationId": "technical-operations",
+        "activationStatus": "active",
+        "title": "Data Center Technical Operations",
+        "purpose": "Deepen server, Linux, monitoring, deployment, troubleshooting, and operational procedure practice.",
+        "plannedCourseIds": ["data-center-specialization-11", "data-center-capstone-12"],
+        "grades": { "11": "APPLIED", "12": "ADVANCED_INTEGRATED" },
+        "requiredPriorCourseIds": ["data-center-technical-foundations-9", "data-center-reliable-operations-10"],
+        "requiredPriorConcepts": ["server hardware", "Linux foundations", "monitoring", "incident documentation", "safe escalation"],
+        "appliedFocus": ["supervised Linux and server-operations scenarios", "monitoring interpretation", "deployment and troubleshooting documentation"],
+        "executableLessonIds": ["data-center-specialization-11-monitoring-proof", "data-center-specialization-11-server-operations", "data-center-specialization-11-asset-inventory", "data-center-specialization-11-linux-inspection", "data-center-specialization-11-telemetry-troubleshooting", "data-center-specialization-11-technical-operations-project"],
+        "advancedFocus": ["integrated operations scenario", "cross-team handoffs", "reliability improvement proposal"],
+        "careerRelationships": [{ "role": "Data Center Technician", "status": "EXISTING CANONICAL", "careerId": "data-center-technician" }, { "role": "Critical Environment / Operations Technician", "status": "NEEDS SEPARATE CAREER PHASE" }, { "role": "Cloud Infrastructure Technician", "status": "NEEDS SEPARATE CAREER PHASE" }],
+        "futureEvidenceCandidates": [{ "candidate": "diagnose a simulated server fault", "activityType": "supervised operations scenario", "potentialEvidence": "reviewed troubleshooting record", "reviewerAuthority": "future qualified curriculum reviewer", "status": "PLANNED ONLY" }, { "candidate": "interpret monitoring data and document escalation", "activityType": "synthetic monitoring lab", "potentialEvidence": "annotated incident record", "reviewerAuthority": "future qualified curriculum reviewer", "status": "PLANNED ONLY" }],
+        "credentialAlignments": [{ "credential": "Linux foundations", "ageAppropriateness": "requires provider and program review", "providerDependency": "external training or certification provider", "evidenceDependency": "separate approved assessment", "status": "NOT ISSUED / PLANNED" }, { "credential": "CompTIA A+ potential alignment", "ageAppropriateness": "external provider rules apply", "providerDependency": "CompTIA", "evidenceDependency": "external exam and eligibility", "status": "NOT ISSUED / PLANNED" }],
+        "partnerCategories": ["data center operators", "community colleges", "workforce organizations", "apprenticeship providers"]
+      },
+      {
+        "specializationId": "networking-fiber",
+        "activationStatus": "active",
+        "title": "Networking and Fiber",
+        "purpose": "Develop deeper understanding of switching, addressing, structured cabling, fiber, and connectivity troubleshooting.",
+        "plannedCourseIds": ["data-center-specialization-11", "data-center-capstone-12"],
+        "grades": { "11": "APPLIED", "12": "ADVANCED_INTEGRATED" },
+        "requiredPriorCourseIds": ["data-center-technical-foundations-9", "data-center-reliable-operations-10"],
+        "requiredPriorConcepts": ["network paths", "IP concepts", "switches and ports", "fiber safety", "technical documentation"],
+        "appliedFocus": ["sandbox network topology", "connectivity fault analysis", "structured cabling and fiber documentation"],
+        "executableLessonIds": ["data-center-specialization-11-network-topology", "data-center-specialization-11-switching-ethernet", "data-center-specialization-11-addressing-gateway-dns", "data-center-specialization-11-structured-cabling", "data-center-specialization-11-fiber-infrastructure", "data-center-specialization-11-network-monitoring", "data-center-specialization-11-connectivity-troubleshooting", "data-center-specialization-11-network-reliability", "data-center-specialization-11-networking-fiber-project"],
+        "advancedFocus": ["resilient network architecture", "cross-specialization outage response", "network handoff and evidence package"],
+        "careerRelationships": [{ "role": "Network Technician", "status": "NEEDS SEPARATE CAREER PHASE" }, { "role": "Fiber Optic Technician", "status": "NEEDS SEPARATE CAREER PHASE" }, { "role": "Infrastructure Technician", "status": "NEEDS SEPARATE CAREER PHASE" }],
+        "futureEvidenceCandidates": [{ "candidate": "diagnose a sandbox connectivity fault", "activityType": "authorized network simulation", "potentialEvidence": "network path analysis", "reviewerAuthority": "future qualified curriculum reviewer", "status": "PLANNED ONLY" }, { "candidate": "produce a structured cabling record", "activityType": "supervised cabling model", "potentialEvidence": "labeled topology and handoff", "reviewerAuthority": "future qualified curriculum reviewer", "status": "PLANNED ONLY" }],
+        "credentialAlignments": [{ "credential": "CompTIA Network+ potential alignment", "ageAppropriateness": "external provider rules apply", "providerDependency": "CompTIA", "evidenceDependency": "external exam and eligibility", "status": "NOT ISSUED / PLANNED" }, { "credential": "fiber foundations potential alignment", "ageAppropriateness": "partner and equipment safety review required", "providerDependency": "qualified fiber training provider", "evidenceDependency": "provider-controlled practical assessment", "status": "NOT ISSUED / PLANNED" }],
+        "partnerCategories": ["fiber/networking firms", "data center operators", "community colleges", "apprenticeship providers"]
+      },
+      {
+        "specializationId": "electrical-infrastructure",
+        "activationStatus": "active",
+        "title": "Electrical Infrastructure",
+        "purpose": "Build theory, diagram, monitoring, and safe low-voltage learning while reserving hazardous work for qualified partners.",
+        "plannedCourseIds": ["data-center-specialization-11", "data-center-capstone-12"],
+        "grades": { "11": "APPLIED", "12": "ADVANCED_INTEGRATED" },
+        "requiredPriorCourseIds": ["data-center-technical-foundations-9", "data-center-reliable-operations-10"],
+        "requiredPriorConcepts": ["voltage, current, resistance, and power", "critical load", "UPS and generator purpose", "electrical safety"],
+        "safetyPrerequisites": ["qualified supervision for any physical equipment", "no mains panels or energized power supplies", "licensed/apprenticeship work belongs to external partners"],
+        "appliedFocus": ["electrical diagrams", "synthetic load and power-path scenarios", "approved low-voltage measurement concepts"],
+        "executableLessonIds": ["data-center-specialization-11-electrical-safety", "data-center-specialization-11-power-quantities", "data-center-specialization-11-power-paths", "data-center-specialization-11-load-capacity", "data-center-specialization-11-ups-generator", "data-center-specialization-11-power-reliability", "data-center-specialization-11-power-monitoring", "data-center-specialization-11-electrical-incident-project"],
+        "advancedFocus": ["power reliability plan", "capacity and redundancy analysis", "partner-boundary transition plan"],
+        "careerRelationships": [{ "role": "Electrical Technician", "status": "NEEDS SEPARATE CAREER PHASE" }, { "role": "Electrician", "status": "NEEDS SEPARATE CAREER PHASE" }, { "role": "Critical Power Technician", "status": "NEEDS SEPARATE CAREER PHASE" }],
+        "futureEvidenceCandidates": [{ "candidate": "interpret a power-path diagram", "activityType": "simulation or supervised diagram lab", "potentialEvidence": "annotated diagram with safety notes", "reviewerAuthority": "future qualified curriculum reviewer", "status": "PLANNED ONLY" }, { "candidate": "calculate a basic synthetic load", "activityType": "structured math scenario", "potentialEvidence": "checked calculation and explanation", "reviewerAuthority": "future qualified curriculum reviewer", "status": "PLANNED ONLY" }],
+        "credentialAlignments": [{ "credential": "electrical apprenticeship prerequisite alignment", "ageAppropriateness": "partner and jurisdiction rules apply", "providerDependency": "approved apprenticeship provider", "evidenceDependency": "provider-controlled entry requirements and hours", "status": "NOT ISSUED / PLANNED" }],
+        "partnerCategories": ["electrical contractors", "utilities", "apprenticeship providers", "unions", "community colleges"]
+      },
+      {
+        "specializationId": "mechanical-hvac",
+        "activationStatus": "active",
+        "title": "Mechanical and HVAC Infrastructure",
+        "purpose": "Develop thermal, airflow, environmental monitoring, and preventive-maintenance reasoning without unsupervised industrial service.",
+        "plannedCourseIds": ["data-center-specialization-11", "data-center-capstone-12"],
+        "grades": { "11": "APPLIED", "12": "ADVANCED_INTEGRATED" },
+        "requiredPriorCourseIds": ["data-center-technical-foundations-9", "data-center-reliable-operations-10"],
+        "requiredPriorConcepts": ["heat and airflow", "environmental monitoring", "preventive maintenance", "safe escalation"],
+        "safetyPrerequisites": ["industrial HVAC service requires qualified supervision", "no refrigerant, energized equipment, or mechanical service work"],
+        "appliedFocus": ["synthetic thermal trends", "airflow and environmental fault reasoning", "maintenance planning"],
+        "executableLessonIds": ["data-center-specialization-11-mechanical-hvac-safety", "data-center-specialization-11-heat-thermal-fundamentals", "data-center-specialization-11-airflow-management", "data-center-specialization-11-environmental-conditions", "data-center-specialization-11-cooling-architecture", "data-center-specialization-11-cooling-capacity", "data-center-specialization-11-environmental-monitoring", "data-center-specialization-11-cooling-reliability", "data-center-specialization-11-preventive-maintenance", "data-center-specialization-11-thermal-incident-project"],
+        "advancedFocus": ["thermal-management plan", "resource and reliability tradeoffs", "cross-team cooling incident response"],
+        "careerRelationships": [{ "role": "HVAC Technician", "status": "NEEDS SEPARATE CAREER PHASE" }, { "role": "Mechanical Technician", "status": "NEEDS SEPARATE CAREER PHASE" }, { "role": "Facilities Technician", "status": "NEEDS SEPARATE CAREER PHASE" }],
+        "futureEvidenceCandidates": [{ "candidate": "interpret a synthetic environmental trend", "activityType": "thermal simulation", "potentialEvidence": "trend analysis and escalation record", "reviewerAuthority": "future qualified curriculum reviewer", "status": "PLANNED ONLY" }, { "candidate": "propose preventive checks for a model system", "activityType": "maintenance planning exercise", "potentialEvidence": "reviewed maintenance checklist", "reviewerAuthority": "future qualified curriculum reviewer", "status": "PLANNED ONLY" }],
+        "credentialAlignments": [{ "credential": "HVAC foundations potential alignment", "ageAppropriateness": "partner and provider rules apply", "providerDependency": "qualified HVAC training provider", "evidenceDependency": "provider-controlled practical assessment", "status": "NOT ISSUED / PLANNED" }],
+        "partnerCategories": ["HVAC/mechanical firms", "facilities operators", "community colleges", "apprenticeship providers"]
+      },
+      {
+        "specializationId": "cybersecurity-security",
+        "activationStatus": "active",
+        "title": "Cybersecurity and Physical Security",
+        "purpose": "Apply defensive access, monitoring, permissions, and infrastructure-protection concepts in synthetic environments.",
+        "plannedCourseIds": ["data-center-specialization-11", "data-center-capstone-12"],
+        "grades": { "11": "APPLIED", "12": "ADVANCED_INTEGRATED" },
+        "requiredPriorCourseIds": ["data-center-technical-foundations-9", "data-center-reliable-operations-10"],
+        "requiredPriorConcepts": ["defensive security", "permissions", "least privilege", "synthetic logs", "physical access control"],
+        "safetyPrerequisites": ["sandbox-only systems", "no credential theft, exploitation, persistence, or unauthorized scanning"],
+        "appliedFocus": ["defensive access-control procedure", "synthetic alert and log analysis", "physical-security scenario reasoning"],
+        "executableLessonIds": ["data-center-specialization-11-cybersecurity-safety", "data-center-specialization-11-identity-authentication", "data-center-specialization-11-authorization-least-privilege", "data-center-specialization-11-physical-security", "data-center-specialization-11-security-monitoring-logs", "data-center-specialization-11-account-lifecycle", "data-center-specialization-11-defensive-system-security", "data-center-specialization-11-security-documentation", "data-center-specialization-11-security-incident-reasoning", "data-center-specialization-11-security-incident-project"],
+        "advancedFocus": ["layered infrastructure protection plan", "incident communication", "security and operations handoffs"],
+        "careerRelationships": [{ "role": "Cybersecurity Technician", "status": "NEEDS SEPARATE CAREER PHASE" }, { "role": "Data Center Security Technician", "status": "NEEDS SEPARATE CAREER PHASE" }, { "role": "Infrastructure Security Technician", "status": "NEEDS SEPARATE CAREER PHASE" }],
+        "futureEvidenceCandidates": [{ "candidate": "apply a defensive access-control procedure", "activityType": "sandbox security scenario", "potentialEvidence": "reviewed permission decision record", "reviewerAuthority": "future qualified curriculum reviewer", "status": "PLANNED ONLY" }, { "candidate": "analyze synthetic alert evidence", "activityType": "log-analysis simulation", "potentialEvidence": "defensive incident summary", "reviewerAuthority": "future qualified curriculum reviewer", "status": "PLANNED ONLY" }],
+        "credentialAlignments": [{ "credential": "CompTIA Security+ potential alignment", "ageAppropriateness": "external provider rules apply", "providerDependency": "CompTIA", "evidenceDependency": "external exam and eligibility", "status": "NOT ISSUED / PLANNED" }],
+        "partnerCategories": ["security providers", "data center operators", "community colleges", "cybersecurity training providers"]
+      },
+      {
+        "specializationId": "ai-cloud-infrastructure",
+        "activationStatus": "active",
+        "title": "AI and Cloud Infrastructure",
+        "purpose": "Connect accelerators, virtualization, storage, networking, power, cooling, capacity, and reliability.",
+        "plannedCourseIds": ["data-center-specialization-11", "data-center-capstone-12"],
+        "grades": { "11": "APPLIED", "12": "ADVANCED_INTEGRATED" },
+        "requiredPriorCourseIds": ["data-center-technical-foundations-9", "data-center-reliable-operations-10"],
+        "requiredPriorConcepts": ["CPU/GPU workloads", "Linux and operating systems", "networking", "storage", "power and cooling demands"],
+        "appliedFocus": ["compare workload and accelerator needs", "virtualization and cloud concepts", "capacity and telemetry scenarios"],
+        "executableLessonIds": ["data-center-specialization-11-ai-cloud-foundations", "data-center-specialization-11-cpu-gpu-workloads", "data-center-specialization-11-virtualization-containers", "data-center-specialization-11-cloud-infrastructure", "data-center-specialization-11-storage-data-movement", "data-center-specialization-11-capacity-bottlenecks", "data-center-specialization-11-availability-scaling", "data-center-specialization-11-ai-power-cooling", "data-center-specialization-11-ai-monitoring", "data-center-specialization-11-ai-cloud-project"],
+        "advancedFocus": ["AI infrastructure capacity plan", "power and thermal implications", "integrated cloud/AI reliability scenario"],
+        "careerRelationships": [{ "role": "Cloud Infrastructure Technician", "status": "NEEDS SEPARATE CAREER PHASE" }, { "role": "AI Infrastructure Technician", "status": "NEEDS SEPARATE CAREER PHASE" }, { "role": "Data Center Technician", "status": "EXISTING CANONICAL", "careerId": "data-center-technician" }],
+        "futureEvidenceCandidates": [{ "candidate": "compare CPU/GPU workload requirements", "activityType": "capacity planning scenario", "potentialEvidence": "workload comparison and rationale", "reviewerAuthority": "future qualified curriculum reviewer", "status": "PLANNED ONLY" }, { "candidate": "interpret an AI infrastructure power and cooling scenario", "activityType": "synthetic capacity simulation", "potentialEvidence": "annotated capacity plan", "reviewerAuthority": "future qualified curriculum reviewer", "status": "PLANNED ONLY" }],
+        "credentialAlignments": [{ "credential": "cloud fundamentals potential alignment", "ageAppropriateness": "external provider rules apply", "providerDependency": "external cloud training provider", "evidenceDependency": "provider-controlled assessment", "status": "NOT ISSUED / PLANNED" }],
+        "partnerCategories": ["cloud/AI infrastructure firms", "data center operators", "community colleges", "workforce organizations"]
+      }
+    ],
+    "constructionDecision": {
+      "classification": "ELECTIVE_AND_CAREER_EXPOSURE_TRACK",
+      "reason": "Construction and infrastructure delivery materially support every branch, but current evidence does not justify a separate full specialization.",
+      "futureTopics": ["construction sequencing", "site coordination", "commissioning concepts", "plans and documentation", "logistics", "safety culture"],
+      "partnerCategories": ["construction firms", "electrical contractors", "mechanical firms", "logistics providers"]
+    },
+    "grade11ProjectModel": "SPECIALIZATION PROJECT WITH COMMON SAFETY, DOCUMENTATION, AND REVIEW CRITERIA",
+    "grade12CapstoneModel": {
+      "title": "Build Ohio's Next AI Data Center",
+      "model": "COMMON COLLABORATIVE CAPSTONE WITH SPECIALIZATION ROLES AND INDIVIDUAL ACCESSIBLE EQUIVALENTS",
+      "roles": ["operations", "networking", "electrical", "mechanical", "security", "AI/cloud", "community and workforce coordination"]
+    },
+    "grade12Architecture": {
+      "status": "ARCHITECTURE_DEFINED_WITH_EXECUTABLE_REFERENCE_SLICE",
+      "policyVersion": "grade12-entry-v1",
+      "progression": ["GRADE_12_ENTRY", "SMALL_SHARED_CORE", "ADVANCED_SPECIALIZATION", "SPECIALIZATION_PROVE", "INTEGRATED_CAPSTONE", "REFLECTION", "EVIDENCE_REVIEW", "TRANSITION"],
+      "sharedCore": {
+        "decision": "MODEL_B_SMALL_COMMON_CORE",
+        "status": "EXECUTABLE_REFERENCE_SLICE",
+        "outcomes": ["advanced technical communication", "change, risk, and escalation", "cross-team infrastructure collaboration", "evidence quality and review", "postsecondary and workforce transition planning"],
+        "lessonIds": ["data-center-specialization-12-advanced-technical-communication", "data-center-specialization-12-change-risk-escalation", "data-center-specialization-12-cross-team-collaboration", "data-center-specialization-12-evidence-quality-defense", "data-center-specialization-12-career-postsecondary-transition"]
+      },
+      "executableCourseIds": ["data-center-technical-operations-12", "data-center-networking-fiber-12", "data-center-electrical-infrastructure-12", "data-center-mechanical-hvac-12", "data-center-cybersecurity-security-12", "data-center-ai-cloud-infrastructure-12"],
+      "executableSpecializationIds": ["technical-operations", "networking-fiber", "electrical-infrastructure", "mechanical-hvac", "cybersecurity-security", "ai-cloud-infrastructure"],
+      "specializationContinuity": "ACTIVE_CANONICAL_PRIMARY_ASSIGNMENT",
+      "courseAssignmentRelationship": "Specialization assignment establishes branch identity; future Grade 12 course or lesson assignment remains a distinct curriculum participation fact.",
+      "advancedBranches": [
+        { "specializationId": "technical-operations", "purpose": "Apply multi-system operations, Linux, deployment, reliability, incident coordination, and runbook reasoning.", "complexity": "multi-system supervised scenarios", "advancedDomains": ["service operations", "Linux systems", "deployment and change control", "reliability", "incident coordination"], "safetyBoundary": "simulation and authorized supervised operations; no production authority", "candidateEvidence": ["operations runbook", "incident coordination record"], "transitionConnections": ["technical operations", "postsecondary systems training"] },
+        { "specializationId": "networking-fiber", "purpose": "Analyze resilient network paths, performance, fiber documentation, and authorized network changes.", "complexity": "multi-segment sandbox topology", "advancedDomains": ["redundant topology", "routing concepts", "latency and performance", "fiber-path reasoning", "change planning"], "safetyBoundary": "authorized sandbox only; no unauthorized scanning or production changes", "candidateEvidence": ["network design and troubleshooting analysis", "network handoff package"], "transitionConnections": ["networking", "fiber foundations", "postsecondary technical training"] },
+        { "specializationId": "electrical-infrastructure", "purpose": "Reason about critical power capacity, redundancy, monitoring, and professional escalation.", "complexity": "synthetic critical-power incident and capacity scenarios", "advancedDomains": ["power paths", "load and capacity", "redundancy", "monitoring", "energy and sustainability"], "safetyBoundary": "simulation only; no energized systems, panels, switchgear, or professional service", "candidateEvidence": ["power-path capacity analysis", "safety-aware incident record"], "transitionConnections": ["electrical fundamentals", "qualified apprenticeship pathways"] },
+        { "specializationId": "mechanical-hvac", "purpose": "Analyze high-density thermal capacity, environmental telemetry, redundancy, and safe escalation.", "complexity": "synthetic thermal-zone and cooling-capacity scenarios", "advancedDomains": ["thermal capacity", "environmental monitoring", "airflow and liquid-cooling concepts", "redundancy", "trend analysis"], "safetyBoundary": "simulation only; no refrigerant, pressurized systems, energized equipment, or industrial service", "candidateEvidence": ["thermal management analysis", "cooling incident escalation record"], "transitionConnections": ["HVAC fundamentals", "facilities systems training"] },
+        { "specializationId": "cybersecurity-security", "purpose": "Coordinate defensive identity, access, physical-security, monitoring, and evidence-preservation decisions.", "complexity": "correlated synthetic cyber and physical events", "advancedDomains": ["access governance", "defensive monitoring", "event correlation", "physical and cyber convergence", "evidence preservation"], "safetyBoundary": "authorized synthetic systems only; no offensive testing or physical-security bypass", "candidateEvidence": ["access governance analysis", "defensive incident package"], "transitionConnections": ["cybersecurity foundations", "physical-security training"] },
+        { "specializationId": "ai-cloud-infrastructure", "purpose": "Analyze multi-node compute, capacity, data movement, reliability, power, cooling, and cost tradeoffs.", "complexity": "synthetic multi-domain workload placement and failure scenarios", "advancedDomains": ["virtualization and orchestration concepts", "compute and storage capacity", "network data movement", "availability", "power and cooling integration"], "safetyBoundary": "simulation or disposable sandbox; no production cloud accounts, billing, or secrets", "candidateEvidence": ["workload placement and capacity analysis", "reliability operations recommendation"], "transitionConnections": ["cloud fundamentals", "infrastructure operations training"] }
+      ],
+      "capstone": {
+        "id": "build-ohios-next-ai-data-center",
+        "title": "Build Ohio's Next AI Data Center",
+        "status": "ARCHITECTURE_DEFINED_NON_EXECUTABLE",
+        "mode": "MODEL_C_HYBRID",
+        "scenario": "A fictional Ohio site with compute demand, network, power, cooling, security, reliability, sustainability, workforce, and community constraints.",
+        "phases": ["understand challenge", "define requirements", "analyze Ohio and community context", "design by specialization", "integrate systems", "test scenarios", "respond to simulated failure", "improve design", "document", "present or defend", "reflect", "review evidence"],
+        "roleSource": "ACTIVE_CANONICAL_PRIMARY_ASSIGNMENT",
+        "roleMap": { "technical-operations": "Operations", "networking-fiber": "Networking", "electrical-infrastructure": "Power", "mechanical-hvac": "Cooling/Mechanical", "cybersecurity-security": "Security", "ai-cloud-infrastructure": "Compute/AI Infrastructure" },
+        "teamModes": ["COLLABORATIVE_MODE", "INDIVIDUAL_INTEGRATED_MODE"],
+        "teamRules": "Roles may be duplicated or represented through integrated-mode work; no learner is blocked by cohort size or lack of a six-person team.",
+        "teamDeliverables": ["integrated infrastructure design", "dependency and reliability map", "operational and incident plan", "community and sustainability tradeoff analysis", "final presentation or accessible equivalent"],
+        "individualDeliverables": { "technical-operations": "operations runbook and incident response", "networking-fiber": "network design or troubleshooting analysis", "electrical-infrastructure": "power-path and capacity analysis", "mechanical-hvac": "cooling and thermal analysis", "cybersecurity-security": "access and security incident analysis", "ai-cloud-infrastructure": "compute, workload, and capacity plan" },
+        "evidenceLevels": ["TEAM_EVIDENCE", "INDIVIDUAL_ROLE_EVIDENCE", "CROSS_DOMAIN_EVIDENCE"],
+        "individualAttribution": "Team membership never proves contribution; each individual result identifies learner-owned work and evidence.",
+        "review": "One generic authorized competency decision record; optional feedback contributors do not bypass reviewer authority.",
+        "reassessment": "New individual evidence or versioned team submission may receive a new review while preserving prior history.",
+        "communityContext": ["opportunity and workforce access", "electricity and cooling resources", "land and site constraints", "reliability and safety", "sustainability", "community benefits and burdens"],
+        "safety": "SIMULATION_OR_SAFE_SANDBOX_ONLY",
+        "presentationAlternatives": ["recorded presentation", "written defense", "structured accessible Q&A", "accessible multimodal presentation"]
+      },
+      "capstoneEntryPolicy": {
+        "policyVersion": "grade12-capstone-entry-v1",
+        "decision": "DERIVED_FROM_CANONICAL_FACTS",
+        "status": "GATE_ONLY_CAPSTONE_NON_EXECUTABLE",
+        "requirements": ["active Grade 12 specialization assignment", "active matching Grade 12 course assignment", "five shared-core completions", "three branch-specific Grade 12 lesson completions", "one reviewed DEMONSTRATED branch competency"],
+        "competencyRule": "REQUIRE_NARROW_BRANCH_PROOF_NOT_EVERY_FUTURE_COMPETENCY",
+        "notReadiness": "Capstone entry is educational authorization, not program completion, credential status, career readiness, or employment eligibility."
+      },
+      "ownership": {
+        "decision": "MODEL_C_HYBRID_PROJECT_TEAM_SUBMISSION_PREPARE_PROVE_INDIVIDUAL_PROOF",
+        "projectDomainAudit": "The repository has generic project-adjacent operational records but no canonical youth collaborative project/team submission domain suitable for activation; define the contract now and implement the smallest generic Project integration before executable capstone authoring.",
+        "teamSubmissionOwner": "FUTURE_GENERIC_PROJECT_DOMAIN",
+        "individualProofOwner": "GENERIC_PREPARE_PROVE_RESULT_EVIDENCE_REVIEW",
+        "noDuplicateStore": true
+      },
+      "competencies": {
+        "strategy": "BOTH_NARROW",
+        "advancedSpecializationCandidates": "One or two reviewed candidates per branch, defined and activated in a later content phase.",
+        "integrationCandidates": ["Systems Integration Reasoning", "Technical Decision Documentation", "Cross-Team Communication / Handoff", "Evidence-Based Tradeoff Analysis"],
+        "status": "PLANNED_ONLY"
+      },
+      "completionContract": {
+        "programCompletion": ["required Grade 12 learning complete", "capstone submission complete", "required reflection complete"],
+        "competencyRelation": "Program completion and competency demonstration remain separate institutional facts.",
+        "credentialRelation": "No credential, license, apprenticeship hour, or certificate is issued by curriculum completion.",
+        "readinessRelation": "No career or employment readiness score is created."
+      },
+      "accessibility": {
+        "individualEquivalentRequired": true,
+        "requirements": ["text alternatives for diagrams", "keyboard and screen-reader support", "asynchronous collaboration option", "captions and transcripts", "non-color status", "accessible telemetry and CLI output", "presentation alternatives"]
+      },
+      "transition": { "options": ["apprenticeship", "community college", "technical school", "university", "work-based learning", "entry-level employment", "further training"], "status": "PLANNING_ONLY", "partnerCommitments": "NONE" },
+      "truthLineage": ["Program", "Grade 12 Eligibility", "Active Specialization Assignment", "Future Grade 12 Course Assignment", "Advanced Lesson Completion", "Activity Result or Project Submission", "Evidence", "Competency Review", "Program Completion", "Transition"],
+      "events": { "existing": ["competency.reviewed"], "futureCandidates": ["project.submitted", "project.reviewed", "program.completed"], "decision": "Do not add Grade 12-specific events until executable persistence is implemented." },
+      "boundaries": { "grade12Content": "REFERENCE_SLICE_ONLY_OTHER_CONTENT_NON_EXECUTABLE", "capstone": "NON_EXECUTABLE", "credentials": "DEFERRED", "readiness": "DEFERRED", "employerAccess": "DENIED_BY_DEFAULT", "portfolio": "PROJECTION_ONLY", "partnerParticipation": "PLANNED_ONLY" }
+    },
+    "careerExpansionPlan": {
+      "canonicalFamily": "data-center-ai-infrastructure",
+      "existingCanonicalCareerIds": ["data-center-technician"],
+      "plannedRolesNeedingSeparateCareerPhase": ["network-technician", "fiber-optic-technician", "electrical-technician", "electrician", "hvac-mechanical-technician", "facilities-technician", "data-center-security-technician", "logistics-inventory-technician", "cybersecurity-technician", "cloud-infrastructure-technician", "ai-infrastructure-technician"]
+    },
+    "transitionOptions": ["APPRENTICESHIP", "COMMUNITY COLLEGE", "TECHNICAL SCHOOL", "UNIVERSITY", "WORK-BASED LEARNING", "ENTRY-LEVEL EMPLOYMENT", "FURTHER SPECIALIZED TRAINING"],
+    "boundaries": {
+      "curriculumOwns": ["learning sequence", "lesson content", "course prerequisites", "practice context"],
+      "assessmentOwns": ["assessment results under its existing contract"],
+      "projectOwns": ["future project submission and review when canonical infrastructure exists"],
+      "evidenceOwns": ["institutional evidence and reviewer decisions"],
+      "credentialOwns": ["future credential issuance by an authorized provider"],
+      "careerOwns": ["canonical career identity and career facts"],
+      "workBasedLearningOwns": ["future partner-controlled experience records"],
+      "employerSystemsOwn": ["future explicitly permissioned employer workflows"],
+      "competencyStatus": "IMPLEMENTED: generic evidence and competency review foundation from Phase 16; Grade 11 content remains scoped",
+      "credentialStatus": "DEFERRED: planning and potential alignment only; nothing is issued",
+      "employerStatus": "DEFERRED: partner categories are planning references, not commitments",
+      "privacyRule": "Employer or partner context does not grant access to learner lessons, grades, assessments, portfolio, readiness, or evidence without explicit future authorization."
+    }
+  },
+  "safety": {
+    "rule": "Classroom simulation and low-voltage learning are distinct from professional electrical or mechanical work.",
+    "adultSupervisionRequired": true,
+    "hazardousWorkDeferredToQualifiedPartners": true
+  }
+}

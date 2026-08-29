@@ -1,0 +1,22 @@
+{
+  "id": "data-center-technical-foundations-9-modern-server-hardware",
+  "slug": "data-center-technical-foundations-9-modern-server-hardware",
+  "nextSlug": "data-center-technical-foundations-9-cpu-gpu-memory-storage",
+  "title": "Inside Modern Server Hardware",
+  "curriculum": "data-center-technical-foundations-9",
+  "gradeBand": { "minGrade": 9, "maxGrade": 9, "stage": "EXPLORE" },
+  "estMinutes": 30,
+  "summary": "Move from naming server parts to relating hardware choices to a workload.",
+  "objectives": ["Identify major server hardware components and their roles.", "Explain why a hardware choice depends on the work a system must perform."],
+  "vocab": [{ "term": "NIC", "def": "A network interface that connects a computer to a network." }, { "term": "FORM FACTOR", "def": "The size and shape standard of a device or component." }, { "term": "WORKLOAD", "def": "The computing work a system is asked to perform." }],
+  "sections": [
+    { "heading": "A server is a system of parts", "body": "A motherboard connects components. A CPU processes general instructions. Memory supports active work. Storage keeps information. A NIC provides a network connection, and fans help move heat." },
+    { "heading": "Hardware follows the workload", "body": "A file service, a video service, and an AI workload may need different balances of processing, memory, storage, network capacity, and power. There is no single best server for every task." },
+    { "heading": "Safe hardware exploration", "body": "Use a labeled diagram or an approved unpowered training model. Do not open energized equipment, remove power supplies, or handle production hardware. Hands-on equipment work requires supervised instruction." }
+  ],
+  "practice": [{ "prompt": "Choose the most important hardware consideration for a file service, a large calculation, and a network-heavy service. Explain each choice." }],
+  "quiz": { "question": "What does a NIC provide?", "options": ["A network connection for a computer", "Long-term cooling for a building", "Backup electrical generation", "A replacement for memory"], "answer": "A network connection for a computer" },
+  "lab": { "safetyClassification": "SUPERVISED CLASSROOM LAB", "objective": "Label an approved server diagram and connect parts to a workload." },
+  "futureCompetencyCandidates": ["identify server components", "relate hardware choices to a workload"],
+  "reflectionPrompt": "Which server component would you like to understand through a supervised lab, and what question would you bring?"
+}

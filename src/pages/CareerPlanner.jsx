@@ -185,7 +185,7 @@ export default function CareerPlanner() {
   const credit = useCreditCtx(); // ← NEW
 
   const [admin, toggleAdmin] = useIsAdmin();
-  const { data: pathways = [] } = usePathways();
+  const { data: pathways = [], loading: pathwaysLoading, error: pathwaysError } = usePathways();
   const impactStore = useImpactData(impactDefault);
 
   const [sheetOpen, setSheetOpen]         = useState(false);
@@ -289,6 +289,8 @@ export default function CareerPlanner() {
 
   return (
     <div className="sh-grid railGrid" style={{ gridTemplateColumns:"1fr" }}>
+      {pathwaysLoading && <p role="status">Loading careers…</p>}
+      {pathwaysError && <p role="alert">Career information is temporarily unavailable.</p>}
       {/* Plan A/B/C */}
       <div className="card card--pad">
         <div className="sh-row" style={{ alignItems:"center" }}>

@@ -1,4 +1,4 @@
-import { OracleTruthRecord } from "../domain/types";
+import { OracleTruthRecord } from "../domain/types.js";
 
 const STORE: Record<string, OracleTruthRecord> = {};
 

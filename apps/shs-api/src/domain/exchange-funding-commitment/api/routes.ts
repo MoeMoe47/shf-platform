@@ -1,6 +1,6 @@
-import { requirePermission } from "../../../auth/permission-guard";
-import { SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions";
-import { ExchangeFundingCommitmentService } from "../service/exchange-funding-commitment-service";
+import { requirePermission } from "../../../auth/permission-guard.js";
+import { SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
+import { ExchangeFundingCommitmentService } from "../service/exchange-funding-commitment-service.js";
 
 const service = new ExchangeFundingCommitmentService();
 

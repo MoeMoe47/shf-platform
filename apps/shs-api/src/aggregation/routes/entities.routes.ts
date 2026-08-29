@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAggregatedEntity } from "../controllers/entities.controller";
+import { getAggregatedEntity } from "../controllers/entities.controller.js";
 
 const router = Router();
 

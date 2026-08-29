@@ -1,6 +1,6 @@
-import { createAuth0IdentityProvider, type ProductionCredential } from "../../../auth/production-identity";
-import { applyActiveOrganizationContext } from "../../../auth/organization-context";
-import { ProductionIdentityRepo } from "../repo/production-identity-repo";
+import { createAuth0IdentityProvider, type ProductionCredential } from "../../../auth/production-identity.js";
+import { applyActiveOrganizationContext } from "../../../auth/organization-context.js";
+import { ProductionIdentityRepo } from "../repo/production-identity-repo.js";
 
 export class Auth0SessionService {
   constructor(

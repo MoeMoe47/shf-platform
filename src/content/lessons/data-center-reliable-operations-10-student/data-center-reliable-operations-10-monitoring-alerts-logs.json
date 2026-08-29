@@ -1,0 +1,70 @@
+{
+  "id": "data-center-reliable-operations-10-monitoring-alerts-logs",
+  "slug": "data-center-reliable-operations-10-monitoring-alerts-logs",
+  "nextSlug": "data-center-reliable-operations-10-documentation-change-records",
+  "title": "Monitoring, Alerts, and Logs",
+  "curriculum": "data-center-reliable-operations-10",
+  "gradeBand": {
+    "minGrade": 10,
+    "maxGrade": 10,
+    "stage": "EXPLORE"
+  },
+  "estMinutes": 35,
+  "summary": "Interpret synthetic dashboards, alerts, and logs without confusing evidence with diagnosis.",
+  "objectives": [
+    "Classify synthetic status information as informational, warning, or critical within a defined scenario.",
+    "Use timestamps and changing values to describe what happened without claiming an unconfirmed cause."
+  ],
+  "vocab": [
+    {
+      "term": "ALERT",
+      "def": "A message that a condition deserves attention."
+    },
+    {
+      "term": "LOG",
+      "def": "A time-ordered record of events or state changes."
+    },
+    {
+      "term": "THRESHOLD",
+      "def": "A defined point at which a value changes status or requires attention."
+    }
+  ],
+  "sections": [
+    {
+      "heading": "Monitoring shows system state",
+      "body": "Synthetic monitoring may show temperature, utilization, storage, power state, network status, or service status. It gives evidence about conditions at particular times."
+    },
+    {
+      "heading": "Alerts need context",
+      "body": "Informational, warning, and critical labels are classroom categories for this scenario. A warning says to investigate; it does not prove a root cause."
+    },
+    {
+      "heading": "Read a sequence",
+      "body": "A log with timestamps can show what changed first. Compare the order of events before deciding what to investigate next."
+    }
+  ],
+  "practice": [
+    {
+      "prompt": "A synthetic log shows a temperature warning after a fan-status change. Write two observations and one question without naming a confirmed cause."
+    }
+  ],
+  "quiz": {
+    "question": "What does an alert tell you?",
+    "options": [
+      "That a condition deserves attention and investigation",
+      "That the root cause is already known",
+      "That a system must be shut down",
+      "That documentation is unnecessary"
+    ],
+    "answer": "That a condition deserves attention and investigation"
+  },
+  "lab": {
+    "safetyClassification": "SIMULATION ONLY",
+    "objective": "Read a synthetic dashboard and log sequence, then classify the status and list evidence."
+  },
+  "futureCompetencyCandidates": [
+    "interpret synthetic monitoring data",
+    "separate observation from diagnosis"
+  ],
+  "reflectionPrompt": "Why is it useful to write down what an alert says before deciding what it means?"
+}

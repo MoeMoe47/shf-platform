@@ -1,0 +1,22 @@
+{
+  "id": "data-center-technical-foundations-9-network-fundamentals",
+  "slug": "data-center-technical-foundations-9-network-fundamentals",
+  "nextSlug": "data-center-technical-foundations-9-ip-addresses-network-paths",
+  "title": "Network Fundamentals",
+  "curriculum": "data-center-technical-foundations-9",
+  "gradeBand": { "minGrade": 9, "maxGrade": 9, "stage": "EXPLORE" },
+  "estMinutes": 30,
+  "summary": "Move from network diagrams to interfaces, packets, bandwidth, and latency.",
+  "objectives": ["Explain the roles of a network interface, packet, bandwidth, and latency.", "Interpret a simple network path without accessing a live external network."],
+  "vocab": [{ "term": "NETWORK INTERFACE", "def": "The hardware or software point where a device connects to a network." }, { "term": "PACKET", "def": "A small unit of data sent across a network." }, { "term": "LATENCY", "def": "The time it takes information to travel between points." }, { "term": "BANDWIDTH", "def": "The amount of information a connection can carry over time." }],
+  "sections": [
+    { "heading": "Networks move packets", "body": "Applications send information that is organized into packets. Network interfaces, switches, gateways, and links help packets travel from one system to another." },
+    { "heading": "Speed has more than one meaning", "body": "Bandwidth describes how much information a connection can carry. Latency describes travel time. A connection can have high bandwidth and still have noticeable latency." },
+    { "heading": "Use a closed map", "body": "Study a synthetic network map and trace a packet path. Do not scan, probe, or connect to external networks. Network learning stays inside approved diagrams or sandboxes." }
+  ],
+  "practice": [{ "prompt": "A video path has high bandwidth but high latency. What might a learner observe, and what does that observation not prove?" }],
+  "quiz": { "question": "What does latency describe?", "options": ["Time for information to travel between points", "The amount of storage in a server", "The temperature of a rack", "The number of user permissions"], "answer": "Time for information to travel between points" },
+  "lab": { "safetyClassification": "SIMULATION ONLY", "objective": "Trace packets across a synthetic network map and compare bandwidth with latency." },
+  "futureCompetencyCandidates": ["interpret basic network terminology", "trace a simulated packet path"],
+  "reflectionPrompt": "Which network measure would you want to inspect when a service feels slow, and why?"
+}

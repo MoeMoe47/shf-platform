@@ -1,4 +1,4 @@
-import type { ConfidenceBand } from "../domain/types";
+import type { ConfidenceBand } from "../domain/types.js";
 
 export function deriveConfidenceBand(score: number): ConfidenceBand {
   if (score >= 90) return "very_high";

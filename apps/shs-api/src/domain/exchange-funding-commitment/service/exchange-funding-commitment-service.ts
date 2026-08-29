@@ -1,9 +1,9 @@
 import { randomUUID } from "crypto";
-import { withTransaction } from "../../../db/transaction";
-import { writeAuditEvent } from "../../audit/service/audit-helper";
-import { ExchangeFundingCommitmentRepo } from "../repo/exchange-funding-commitment-repo";
-import { IntegrationOutboxRepo } from "../../trusted-reporting/outbox-repo";
-import { buildFundingCommitmentCommittedOutboxEvent } from "../../trusted-reporting/outbox";
+import { withTransaction } from "../../../db/transaction.js";
+import { writeAuditEvent } from "../../audit/service/audit-helper.js";
+import { ExchangeFundingCommitmentRepo } from "../repo/exchange-funding-commitment-repo.js";
+import { IntegrationOutboxRepo } from "../../trusted-reporting/outbox-repo.js";
+import { buildFundingCommitmentCommittedOutboxEvent } from "../../trusted-reporting/outbox.js";
 
 function scopeFromActor(actor: any) {
   const actorId = actor?.user_id || actor?.id;

@@ -1,0 +1,22 @@
+{
+  "id": "data-center-technical-foundations-9-cpu-gpu-memory-storage",
+  "slug": "data-center-technical-foundations-9-cpu-gpu-memory-storage",
+  "nextSlug": "data-center-technical-foundations-9-how-servers-run-software",
+  "title": "CPU, GPU, Memory, and Storage",
+  "curriculum": "data-center-technical-foundations-9",
+  "gradeBand": { "minGrade": 9, "maxGrade": 9, "stage": "EXPLORE" },
+  "estMinutes": 30,
+  "summary": "Compare processing, working memory, and storage choices for different computing work.",
+  "objectives": ["Distinguish CPU, GPU, RAM, and storage roles.", "Compare HDD, SSD, and NVMe at a conceptual level."],
+  "vocab": [{ "term": "CPU", "def": "A general-purpose processor that carries out many kinds of instructions." }, { "term": "GPU", "def": "A processor designed for many parallel calculations, useful for graphics and some AI workloads." }, { "term": "RAM", "def": "Temporary working memory used while programs are running." }, { "term": "SSD", "def": "Solid-state storage with no spinning disk." }],
+  "sections": [
+    { "heading": "Processing is not storage", "body": "The CPU handles general-purpose instructions. A GPU can handle many similar calculations in parallel, which can help graphics and some AI workloads. Neither one replaces RAM or storage." },
+    { "heading": "Working memory and long-term storage", "body": "RAM is fast working space and is usually temporary when power is removed. HDDs use spinning disks, while SSDs and NVMe devices use solid-state storage. Capacity, speed, cost, and reliability all matter." },
+    { "heading": "Safe comparison lab", "body": "Use a synthetic hardware table to compare components. Do not remove drives, open power supplies, or alter a real server. The lab is about interpreting specifications, not hardware repair." }
+  ],
+  "practice": [{ "prompt": "A workload needs many parallel calculations and fast working data. Which components would you compare first, and what tradeoff might remain?" }],
+  "quiz": { "question": "What is RAM mainly used for?", "options": ["Temporary working information while programs run", "Permanent building power", "A physical access record", "A network cable path"], "answer": "Temporary working information while programs run" },
+  "lab": { "safetyClassification": "SIMULATION ONLY", "objective": "Interpret a synthetic component specification table." },
+  "futureCompetencyCandidates": ["distinguish CPU and GPU roles", "interpret basic component specifications"],
+  "reflectionPrompt": "Which specification would matter most for a workload you use, and why?"
+}

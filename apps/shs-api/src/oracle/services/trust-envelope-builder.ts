@@ -6,7 +6,7 @@ import type {
   ReadinessStatus,
   PublicationMode,
   ConfidenceBand,
-} from "../domain/types";
+} from "../domain/types.js";
 
 export function buildTrustEnvelope(input: {
   traceId: string;

@@ -1,0 +1,20 @@
+{
+  "id": "data-center-foundations-heat",
+  "slug": "data-center-foundations-heat",
+  "nextSlug": "data-center-foundations-security",
+  "title": "Why Computers Get Hot",
+  "curriculum": "data-center-foundations",
+  "gradeBand": { "minGrade": 6, "maxGrade": 8, "stage": "DISCOVER" },
+  "estMinutes": 20,
+  "summary": "Computers produce heat, so data centers manage airflow and temperature.",
+  "objectives": ["Explain why operating computers produce heat.", "Describe how cooling and temperature monitoring support safe operation."],
+  "vocab": [{ "term": "COOLING", "def": "Systems that remove heat so equipment can operate safely." }, { "term": "AIRFLOW", "def": "The movement of air through and around a space." }, { "term": "TEMPERATURE", "def": "A measure of how hot or cold something is." }],
+  "sections": [
+    { "heading": "Work creates heat", "body": "When computers use electricity to work, some energy becomes heat. A single device may feel warm; many servers working together produce much more heat." },
+    { "heading": "Moving heat away", "body": "Cooling systems and airflow help carry heat away from equipment. Sensors can help people notice temperature changes before they become larger problems." },
+    { "heading": "Observe safely", "body": "A classroom can compare airflow around ordinary objects or use a diagram. Do not open energized equipment or touch professional cooling systems." }
+  ],
+  "practice": [{ "prompt": "Look at a simple room diagram and mark where cool air should enter and warm air should leave. Explain your choice." }],
+  "quiz": { "question": "What is one reason data centers need cooling?", "options": ["Computers produce heat while they work", "Cooling stores files", "Cooling replaces electricity", "Computers never become warm"], "answer": "Computers produce heat while they work" },
+  "reflectionPrompt": "Where have you noticed heat changing how a device works?"
+}

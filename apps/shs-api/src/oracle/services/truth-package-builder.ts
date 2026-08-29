@@ -3,11 +3,11 @@ import type {
   TruthStatus,
   VerificationStatus,
   PublicationMode,
-} from "../domain/types";
-import { deriveContradictionStatus } from "./contradiction-engine";
-import { computeConfidenceScore } from "./confidence-engine";
-import { deriveReadinessStatus } from "./readiness-engine";
-import { buildTrustEnvelope } from "./trust-envelope-builder";
+} from "../domain/types.js";
+import { deriveContradictionStatus } from "./contradiction-engine.js";
+import { computeConfidenceScore } from "./confidence-engine.js";
+import { deriveReadinessStatus } from "./readiness-engine.js";
+import { buildTrustEnvelope } from "./trust-envelope-builder.js";
 
 export function buildTruthPackage(input: {
   entityId: string;

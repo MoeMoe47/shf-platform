@@ -1,0 +1,18 @@
+{
+  "id": "data-center-specialization-11-safety-professional-practice",
+  "slug": "data-center-specialization-11-safety-professional-practice",
+  "nextSlug": "data-center-specialization-11-technical-communication",
+  "title": "Safety, Permission, and Professional Judgment",
+  "curriculum": "data-center-specialization-11",
+  "gradeBand": { "minGrade": 11, "maxGrade": 11, "stage": "PREPARE_PROVE" },
+  "estMinutes": 35,
+  "summary": "Practice deciding what is safe and authorized before acting on infrastructure.",
+  "objectives": ["Recognize when a task is outside a learner's authority.", "Choose safe escalation instead of improvising around a control."],
+  "vocab": [{ "term": "AUTHORITY", "def": "Permission to perform a particular task in a particular environment." }, { "term": "ESCALATION", "def": "Passing a question or issue to someone with the right responsibility." }],
+  "sections": [{ "heading": "Stop before you act", "body": "A professional checks permission, safety, and scope before changing a system. A warning is not an invitation to open equipment or bypass a control." }, { "heading": "Infrastructure examples", "body": "Mains power, energized hardware, live fiber, production credentials, and industrial cooling belong to qualified or explicitly supervised environments. In a classroom simulation, record the observation and escalate." }],
+  "practice": [{ "prompt": "A simulated rack has a temperature warning and an unfamiliar access control. What is the safe next step?", "answer": "Record the evidence and ask the authorized instructor or facilities team." }],
+  "quiz": { "question": "What should happen before a learner changes a system?", "options": ["Confirm permission, safety, and procedure", "Try an unapproved workaround", "Disable the warning", "Open energized equipment"], "answer": "Confirm permission, safety, and procedure" },
+  "lab": { "safetyClassification": "SAFE CLASSROOM", "objective": "Classify infrastructure actions by permission and safety boundary." },
+  "reflectionPrompt": "When is not acting the most professional technical decision?",
+  "careerConnection": { "careerId": "data-center-technician", "text": "Technicians protect people and systems by following scope, permissions, and escalation procedures. This lesson is preparation, not qualification." }
+}

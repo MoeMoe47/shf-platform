@@ -5,7 +5,7 @@ import type {
   ConfidenceBand,
   TruthStatus,
   PublicationMode,
-} from "../domain/types";
+} from "../domain/types.js";
 
 interface ComputeReadinessInput {
   verificationStatus: VerificationStatus;

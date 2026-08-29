@@ -248,6 +248,36 @@
 .ld-workspace {
   min-width: 0;
 }
+.ld-proofTableWrap {
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+}
+.ld-proofTable {
+  width: 100%;
+  min-width: 0;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 13px;
+}
+.ld-proofTable th,
+.ld-proofTable td {
+  padding: 8px 6px;
+  border-bottom: 1px solid var(--ld-ring);
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+.ld-proofTable th {
+  font-weight: 700;
+}
+.ld-proofForm {
+  min-width: 0;
+}
+.ld-proofForm input,
+.ld-proofForm textarea {
+  box-sizing: border-box;
+  max-width: 100%;
+}
 .ld-workspaceEyebrowRow {
   display: flex;
   align-items: center;

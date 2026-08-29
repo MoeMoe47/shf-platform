@@ -1,0 +1,70 @@
+{
+  "id": "data-center-reliable-operations-10-linux-operations",
+  "slug": "data-center-reliable-operations-10-linux-operations",
+  "nextSlug": "data-center-reliable-operations-10-network-troubleshooting",
+  "title": "Linux Operations Foundations",
+  "curriculum": "data-center-reliable-operations-10",
+  "gradeBand": {
+    "minGrade": 10,
+    "maxGrade": 10,
+    "stage": "EXPLORE"
+  },
+  "estMinutes": 40,
+  "summary": "Inspect a safe Linux sandbox using read-only and low-risk commands.",
+  "objectives": [
+    "Use approved sandbox commands to inspect files, processes, and resource summaries.",
+    "Explain why students should observe and document before changing a system."
+  ],
+  "vocab": [
+    {
+      "term": "FILESYSTEM",
+      "def": "The organized way an operating system stores and names files."
+    },
+    {
+      "term": "PROCESS",
+      "def": "A running program or task."
+    },
+    {
+      "term": "SANDBOX",
+      "def": "An isolated environment for safe practice."
+    }
+  ],
+  "sections": [
+    {
+      "heading": "Operate in a sandbox",
+      "body": "A sandbox is separate from production systems. It lets students practice commands and record observations without accessing real infrastructure."
+    },
+    {
+      "heading": "Safe inspection commands",
+      "body": "In the approved sandbox, commands such as pwd, ls, cd, cat, less, grep, head, tail, df, free, and ps can help inspect location, files, logs, storage, memory, and processes."
+    },
+    {
+      "heading": "Observe before changing",
+      "body": "Do not use destructive deletion, privilege escalation, raw disk tools, shutdown commands, attack tools, or real network targets. Ask an instructor before changing the environment."
+    }
+  ],
+  "practice": [
+    {
+      "prompt": "In a simulated filesystem, identify the current directory, read a status file, and record one observation about storage or memory."
+    }
+  ],
+  "quiz": {
+    "question": "What is the safest first action when a sandbox system seems unusual?",
+    "options": [
+      "Observe approved status information and document it",
+      "Delete files until it looks normal",
+      "Use an attack tool",
+      "Change permissions without review"
+    ],
+    "answer": "Observe approved status information and document it"
+  },
+  "lab": {
+    "safetyClassification": "SUPERVISED CLASSROOM LAB",
+    "objective": "Navigate an approved Linux sandbox with safe commands and complete an observation record."
+  },
+  "futureCompetencyCandidates": [
+    "navigate a Linux sandbox",
+    "document command-line observations"
+  ],
+  "reflectionPrompt": "How does a sandbox change what is safe to try?"
+}

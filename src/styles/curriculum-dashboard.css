@@ -556,7 +556,9 @@ html[data-app="curriculum"],
 }
 
 .ld-headerTitles {
+  flex: 1 1 0;
   min-width: 0;
+  max-width: 100%;
 }
 .ld-h1 {
   margin: 0;
@@ -564,6 +566,7 @@ html[data-app="curriculum"],
   line-height: 1.2;
   font-weight: 800;
   color: var(--ld-ink);
+  overflow-wrap: anywhere;
 }
 .ld-subtitle {
   margin: 6px 0 0;

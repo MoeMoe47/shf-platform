@@ -1,15 +1,15 @@
-import { requirePermission } from "../../auth/permission-guard";
-import { SHS_SECURITY_PERMISSIONS } from "../../auth/security-permissions";
-import { addExport, getExports } from "./export-history.store";
-import { writeSecurityAuditEvent } from "../../auth/security-audit";
-import { ReportDraftService } from "./report-draft-service";
-import { ReportArtifactService } from "./report-artifact-service";
-import { ReportDistributionService } from "./report-distribution-service";
-import { ReportPublicEligibilityService } from "./report-public-eligibility-service";
-import { ReportPublicDisclosureService } from "./report-public-disclosure-service";
-import { ReportPublicDisclosurePolicyService } from "./report-public-disclosure-policy-service";
-import { ReportPublicSnapshotService } from "./report-public-snapshot-service";
-import { ReportPublicationService } from "./report-publication-service";
+import { requirePermission } from "../../auth/permission-guard.js";
+import { SHS_SECURITY_PERMISSIONS } from "../../auth/security-permissions.js";
+import { addExport, getExports } from "./export-history.store.js";
+import { writeSecurityAuditEvent } from "../../auth/security-audit.js";
+import { ReportDraftService } from "./report-draft-service.js";
+import { ReportArtifactService } from "./report-artifact-service.js";
+import { ReportDistributionService } from "./report-distribution-service.js";
+import { ReportPublicEligibilityService } from "./report-public-eligibility-service.js";
+import { ReportPublicDisclosureService } from "./report-public-disclosure-service.js";
+import { ReportPublicDisclosurePolicyService } from "./report-public-disclosure-policy-service.js";
+import { ReportPublicSnapshotService } from "./report-public-snapshot-service.js";
+import { ReportPublicationService } from "./report-publication-service.js";
 
 const reportDraftService = new ReportDraftService();
 const reportArtifactService = new ReportArtifactService();

@@ -1,6 +1,6 @@
-import { ProgramService } from "../service/program-service";
-import { ok, fail } from "../../../api/response-envelope";
-import { requirePermission } from "../../../auth/permission-guard";
+import { ProgramService } from "../service/program-service.js";
+import { ok, fail } from "../../../api/response-envelope.js";
+import { requirePermission } from "../../../auth/permission-guard.js";
 
 const service = new ProgramService();
 

@@ -1,0 +1,20 @@
+{
+  "id": "data-center-design-8-reliability-redundancy",
+  "slug": "data-center-design-8-reliability-redundancy",
+  "nextSlug": "data-center-design-8-sustainability-resources",
+  "title": "Reliability and Redundancy",
+  "curriculum": "data-center-design-8",
+  "gradeBand": { "minGrade": 8, "maxGrade": 8, "stage": "DISCOVER" },
+  "estMinutes": 30,
+  "summary": "Find single points of failure and compare resilient designs using safe hypothetical scenarios.",
+  "objectives": ["Identify a single point of failure in a simple diagram.", "Compare reliability benefits with added resources and complexity."],
+  "vocab": [{ "term": "RESILIENCE", "def": "The ability to continue or recover when a problem occurs." }, { "term": "RECOVERY", "def": "Returning a system to an expected state after a disruption." }, { "term": "MAINTENANCE", "def": "Planned work that helps a system continue operating." }],
+  "sections": [
+    { "heading": "Ask what happens if", "body": "Designers test questions such as: What happens if this switch fails? What if a power path is interrupted? What if a cooling sensor gives a bad reading? These questions reveal dependencies." },
+    { "heading": "More resilience has a cost", "body": "A second switch, power path, or monitoring source may reduce risk. It may also require more equipment, energy, space, testing, and maintenance. Resilience is a reasoned choice, not a magic label." },
+    { "heading": "Compare diagrams", "body": "Circle the single point of failure in a one-path diagram, then add a conceptual alternate path. Explain what improved and what new design work remains." }
+  ],
+  "practice": [{ "prompt": "A design has two servers but one shared switch. What failure could affect both servers? Suggest a conceptual improvement and name one tradeoff." }],
+  "quiz": { "question": "What is a single point of failure?", "options": ["One part whose failure can stop the larger system", "A backup that always works", "A type of community meeting", "A measure of land area"], "answer": "One part whose failure can stop the larger system" },
+  "reflectionPrompt": "Which failure question would reveal the most about a design you are building?"
+}

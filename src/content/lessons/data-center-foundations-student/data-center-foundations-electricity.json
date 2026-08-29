@@ -1,0 +1,20 @@
+{
+  "id": "data-center-foundations-electricity",
+  "slug": "data-center-foundations-electricity",
+  "nextSlug": "data-center-foundations-heat",
+  "title": "Why Computers Need Electricity",
+  "curriculum": "data-center-foundations",
+  "gradeBand": { "minGrade": 6, "maxGrade": 8, "stage": "DISCOVER" },
+  "estMinutes": 20,
+  "summary": "Computers need steady power, and data centers plan for interruptions.",
+  "objectives": ["Explain why computers need electricity.", "Describe why reliable power and backup systems matter without performing electrical work."],
+  "vocab": [{ "term": "ELECTRICITY", "def": "Energy that can power devices and systems." }, { "term": "BACKUP POWER", "def": "A system that can provide power when the usual source is interrupted." }],
+  "sections": [
+    { "heading": "Power makes computing possible", "body": "Servers, switches, lights, cooling equipment, and safety systems all need power. Without enough power, computers cannot keep processing and communicating." },
+    { "heading": "Reliability is planned", "body": "Data centers plan for interruptions. Backup systems can help important equipment keep operating while a power problem is addressed. Planning does not make every interruption harmless." },
+    { "heading": "Safe classroom learning", "body": "We can study a power path with diagrams and cards. Professional electrical work requires qualified supervision and is not a classroom task." }
+  ],
+  "practice": [{ "prompt": "Put these ideas in order on a diagram: power source, facility systems, server, digital response." }],
+  "quiz": { "question": "Why do data centers plan for backup power?", "options": ["To help systems continue during an interruption", "To make servers use no energy", "To replace networks", "To make cooling unnecessary"], "answer": "To help systems continue during an interruption" },
+  "reflectionPrompt": "What question would you ask about the energy used by a digital service?"
+}

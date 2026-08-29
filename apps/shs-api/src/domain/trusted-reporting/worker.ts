@@ -1,4 +1,4 @@
-import { dispatchPendingIntegrationEvents } from "./dispatcher";
+import { dispatchPendingIntegrationEvents } from "./dispatcher.js";
 
 /**
  * One bounded dispatch pass. Deployment should invoke this entrypoint from the

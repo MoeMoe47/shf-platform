@@ -1,0 +1,70 @@
+{
+  "id": "data-center-reliable-operations-10-connectivity-fiber-faults",
+  "slug": "data-center-reliable-operations-10-connectivity-fiber-faults",
+  "nextSlug": "data-center-reliable-operations-10-critical-power-operations",
+  "title": "Connectivity and Fiber Faults",
+  "curriculum": "data-center-reliable-operations-10",
+  "gradeBand": {
+    "minGrade": 10,
+    "maxGrade": 10,
+    "stage": "EXPLORE"
+  },
+  "estMinutes": 35,
+  "summary": "Reason about physical connectivity and fiber fault clues using safe simulated links.",
+  "objectives": [
+    "Compare synthetic symptoms for cable, switch, transceiver, and path problems.",
+    "Explain the safety boundary between classroom models and professional fiber work."
+  ],
+  "vocab": [
+    {
+      "term": "TRANSCEIVER",
+      "def": "A device that sends and receives signals."
+    },
+    {
+      "term": "LINK",
+      "def": "A connection between network devices."
+    },
+    {
+      "term": "FAULT",
+      "def": "A condition that prevents a system from working as expected."
+    }
+  ],
+  "sections": [
+    {
+      "heading": "Physical links matter",
+      "body": "A server can have power and still be unreachable if a cable, port, transceiver, switch path, or fiber link has a fault. Synthetic diagrams can show where evidence points."
+    },
+    {
+      "heading": "Fiber carries information with light",
+      "body": "Fiber supports high-capacity connections over distance. In class, use paper, yarn, diagrams, or a simulator to model paths."
+    },
+    {
+      "heading": "Professional work requires training",
+      "body": "Do not inspect live fiber, handle glass fragments, use lasers, or operate termination tools without qualified training. Classroom activities stay unpowered and simulated."
+    }
+  ],
+  "practice": [
+    {
+      "prompt": "Compare two synthetic diagrams: one with a disconnected link and one with a failed switch port. List evidence that distinguishes them."
+    }
+  ],
+  "quiz": {
+    "question": "What is a safe Grade 10 fiber activity?",
+    "options": [
+      "Tracing a simulated fiber path with a diagram or model",
+      "Inspecting a live fiber with your eyes",
+      "Operating a fusion splicer alone",
+      "Testing an unknown production link"
+    ],
+    "answer": "Tracing a simulated fiber path with a diagram or model"
+  },
+  "lab": {
+    "safetyClassification": "SUPERVISED CLASSROOM LAB",
+    "objective": "Trace safe classroom cable and simulated fiber paths, then document a synthetic fault."
+  },
+  "futureCompetencyCandidates": [
+    "classify a simulated connectivity fault",
+    "document a physical network path"
+  ],
+  "reflectionPrompt": "Why is knowing when not to inspect a live fiber system part of technical professionalism?"
+}

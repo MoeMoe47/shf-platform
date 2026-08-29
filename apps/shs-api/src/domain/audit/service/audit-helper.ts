@@ -1,4 +1,4 @@
-import { query } from "../../../db/client";
+import { query } from "../../../db/client.js";
 
 export async function writeAuditEvent(input: {
   audit_event_id: string;

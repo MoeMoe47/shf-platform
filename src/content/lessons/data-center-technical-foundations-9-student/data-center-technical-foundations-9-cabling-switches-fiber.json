@@ -1,0 +1,22 @@
+{
+  "id": "data-center-technical-foundations-9-cabling-switches-fiber",
+  "slug": "data-center-technical-foundations-9-cabling-switches-fiber",
+  "nextSlug": "data-center-technical-foundations-9-electricity-fundamentals",
+  "title": "Cabling, Switches, and Fiber",
+  "curriculum": "data-center-technical-foundations-9",
+  "gradeBand": { "minGrade": 9, "maxGrade": 9, "stage": "EXPLORE" },
+  "estMinutes": 30,
+  "summary": "Compare copper Ethernet and fiber paths while practicing safe labeling and cable management.",
+  "objectives": ["Compare copper Ethernet and fiber roles at a high level.", "Use labels and a diagram to document a physical network path."],
+  "vocab": [{ "term": "SINGLE-MODE", "def": "A fiber type designed for light traveling in one main path over long distances." }, { "term": "MULTIMODE", "def": "A fiber type designed for light traveling in multiple paths over shorter distances." }, { "term": "CABLE MANAGEMENT", "def": "Organizing and labeling cables so paths are clear and maintainable." }],
+  "sections": [
+    { "heading": "Different links fit different needs", "body": "Copper Ethernet and fiber both carry network information. Fiber uses light and is useful for high-capacity or longer links. Single-mode and multimode describe fiber designs at a conceptual level." },
+    { "heading": "Physical organization is technical work", "body": "Labels, routes, ports, and documentation help people understand a network. A clear path supports troubleshooting and reduces accidental disconnection." },
+    { "heading": "Safe cabling lab", "body": "Use classroom patch cables, yarn, or paper links. Never inspect live fiber, handle glass fragments, use lasers, or operate professional termination tools without qualified training." }
+  ],
+  "practice": [{ "prompt": "Document a path from a server to a switch and then to a gateway. Choose copper or fiber for one link and explain your conceptual reason." }],
+  "quiz": { "question": "Why is cable management useful?", "options": ["It makes physical paths clearer and easier to maintain", "It replaces all network addressing", "It eliminates the need for switches", "It permits live fiber inspection"], "answer": "It makes physical paths clearer and easier to maintain" },
+  "lab": { "safetyClassification": "SUPERVISED CLASSROOM LAB", "objective": "Build and label a non-live classroom network path model." },
+  "futureCompetencyCandidates": ["document a physical network path", "compare copper and fiber roles"],
+  "reflectionPrompt": "What label would help another learner understand your network model quickly?"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "data-center-specialization-11-technical-communication",
+  "slug": "data-center-specialization-11-technical-communication",
+  "nextSlug": "data-center-specialization-11-reliability-systems-thinking",
+  "title": "Technical Communication and Handoffs",
+  "curriculum": "data-center-specialization-11",
+  "gradeBand": { "minGrade": 11, "maxGrade": 11, "stage": "PREPARE_PROVE" },
+  "estMinutes": 35,
+  "summary": "Turn technical observations into concise, useful handoffs.",
+  "objectives": ["Separate observations, assumptions, and confirmed findings.", "Write a concise status update and escalation note."],
+  "vocab": [{ "term": "HANDOFF", "def": "Information passed to another person or team so work can continue safely." }, { "term": "UNCERTAINTY", "def": "What the available evidence does not yet establish." }],
+  "sections": [{ "heading": "Make the record useful", "body": "A handoff names the system, time, observation, evidence, action, and uncertainty. It avoids blame and avoids claiming a cause that has not been confirmed." }, { "heading": "A reliable pattern", "body": "Use: what happened, what was observed, what was checked, what remains unknown, and what the next authorized person should do." }],
+  "practice": [{ "prompt": "Rewrite 'the server is broken' as a useful handoff.", "answer": "At 10:15, the synthetic service alert is active; network link is normal; cause is unknown; please investigate using the approved procedure." }],
+  "quiz": { "question": "Which statement is an observation?", "options": ["The temperature reading is 31°C and rising", "The fan definitely failed", "Someone caused the outage", "The repair will work"], "answer": "The temperature reading is 31°C and rising" },
+  "lab": { "safetyClassification": "SAFE CLASSROOM", "objective": "Write a factual technical handoff from synthetic status information." },
+  "reflectionPrompt": "What detail makes a technical handoff easier for the next person to trust?"
+}

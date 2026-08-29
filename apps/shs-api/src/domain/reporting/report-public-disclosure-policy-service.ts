@@ -1,9 +1,9 @@
 import { randomUUID } from "crypto";
-import { withTransaction } from "../../db/transaction";
-import { writeAuditEvent } from "../audit/service/audit-helper";
-import { CURRICULUM_COMPLETION_REPORT } from "./report-public-eligibility-service";
-import { ReportPublicDisclosurePolicyRepo } from "./report-public-disclosure-policy-repo";
-import { getPublicReportGovernanceRegistration, requirePublicReportGovernanceRegistration } from "./report-public-governance-registry";
+import { withTransaction } from "../../db/transaction.js";
+import { writeAuditEvent } from "../audit/service/audit-helper.js";
+import { CURRICULUM_COMPLETION_REPORT } from "./report-public-eligibility-service.js";
+import { ReportPublicDisclosurePolicyRepo } from "./report-public-disclosure-policy-repo.js";
+import { getPublicReportGovernanceRegistration, requirePublicReportGovernanceRegistration } from "./report-public-governance-registry.js";
 
 export const PUBLIC_DISCLOSURE_POLICY_READINESS = "APPROVED_POLICY_READY";
 

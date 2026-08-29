@@ -1,10 +1,10 @@
 import { randomUUID } from "crypto";
-import { isPlatformGlobalRole } from "../../../auth/security-permissions";
-import { ORGANIZATION_RELATIONSHIP_TYPES, OrganizationRelationshipService } from "../../organization-relationships/service/organization-relationship-service";
-import { ProgramRepo } from "../repo/program-repo";
-import { canTransitionProgram } from "./program-transitions";
-import { normalizeProgramStewardship, PROGRAM_CLASSIFICATIONS } from "../model/program-stewardship";
-import { writeAuditEvent } from "../../audit/service/audit-helper";
+import { isPlatformGlobalRole } from "../../../auth/security-permissions.js";
+import { ORGANIZATION_RELATIONSHIP_TYPES, OrganizationRelationshipService } from "../../organization-relationships/service/organization-relationship-service.js";
+import { ProgramRepo } from "../repo/program-repo.js";
+import { canTransitionProgram } from "./program-transitions.js";
+import { normalizeProgramStewardship, PROGRAM_CLASSIFICATIONS } from "../model/program-stewardship.js";
+import { writeAuditEvent } from "../../audit/service/audit-helper.js";
 
 export class ProgramService {
   constructor(

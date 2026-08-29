@@ -1,7 +1,7 @@
-import { buildTruthPackage } from "./truth-package-builder";
-import { setTruth } from "../repositories/truth.repo";
-import type { TruthPackage, VerificationStatus, TruthStatus, ReadinessStatus } from "../domain/types";
-import { getLatestOracleAction } from "../controllers/oracle.controller";
+import { buildTruthPackage } from "./truth-package-builder.js";
+import { setTruth } from "../repositories/truth.repo.js";
+import type { TruthPackage, VerificationStatus, TruthStatus, ReadinessStatus } from "../domain/types.js";
+import { getLatestOracleAction } from "../controllers/oracle.controller.js";
 
 type PipelineResponse = {
   entity?: {

@@ -1,0 +1,17 @@
+{
+  "id": "data-center-specialization-11-asset-inventory",
+  "slug": "data-center-specialization-11-asset-inventory",
+  "nextSlug": "data-center-specialization-11-linux-inspection",
+  "title": "Hardware Inventory and Asset Records",
+  "curriculum": "data-center-specialization-11",
+  "gradeBand": { "minGrade": 11, "maxGrade": 11, "stage": "PREPARE_PROVE" },
+  "estMinutes": 35,
+  "summary": "Use synthetic asset records to connect equipment identity with operational purpose.",
+  "objectives": ["Interpret asset ID, serial, hostname, rack position, status, and lifecycle fields.", "Identify incomplete or contradictory inventory information."],
+  "vocab": [{ "term": "ASSET TAG", "def": "A stable identifier assigned to an item for tracking." }, { "term": "HOSTNAME", "def": "A readable name used to identify a system on a network or record." }],
+  "sections": [{ "heading": "Identity supports care", "body": "A record is useful when it connects an asset to its location, purpose, current status, and responsible workflow." }, { "heading": "Synthetic records", "body": "Classroom inventory examples are fictional. Never copy production serial numbers, hostnames, or employee information into practice work." }],
+  "practice": [{ "prompt": "Which field would help locate a simulated server?", "answer": "Rack position." }],
+  "quiz": { "question": "What should you do when a hostname and rack position conflict?", "options": ["Flag the discrepancy and ask an authorized person to verify it", "Guess and overwrite the record", "Ignore the conflict", "Publish the record externally"], "answer": "Flag the discrepancy and ask an authorized person to verify it" },
+  "lab": { "safetyClassification": "SAFE CLASSROOM", "objective": "Review a synthetic inventory table and write one factual discrepancy note." },
+  "reflectionPrompt": "How can accurate asset identity make troubleshooting safer?"
+}

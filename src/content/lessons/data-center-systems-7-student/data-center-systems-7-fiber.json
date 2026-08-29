@@ -1,0 +1,20 @@
+{
+  "id": "data-center-systems-7-fiber",
+  "slug": "data-center-systems-7-fiber",
+  "nextSlug": "data-center-systems-7-power-path",
+  "title": "What Is Fiber?",
+  "curriculum": "data-center-systems-7",
+  "gradeBand": { "minGrade": 7, "maxGrade": 7, "stage": "DISCOVER" },
+  "estMinutes": 25,
+  "summary": "Learn how fiber can carry information using light and connect networks across buildings and regions.",
+  "objectives": ["Explain at a high level how fiber carries information.", "Distinguish a classroom fiber model from professional fiber work."],
+  "vocab": [{ "term": "FIBER OPTIC", "def": "A thin strand that carries information using light." }, { "term": "BANDWIDTH", "def": "The amount of information a connection can carry in a given time." }, { "term": "LINK", "def": "A connection between two points in a network." }],
+  "sections": [
+    { "heading": "Information can travel as light", "body": "Fiber optic cables use light signals to carry information. Fiber links can move large amounts of information between networks, buildings, and regions." },
+    { "heading": "A connection across distance", "body": "Data centers depend on many links. Fiber may connect a facility to other networks, while other cables connect equipment inside it. Each link is part of a larger path." },
+    { "heading": "Classroom model, professional boundary", "body": "Use a drawing, yarn, or a light-and-card demonstration to model a link. Never look into a live fiber, handle glass fragments, use laser equipment, or operate a fusion splicer. Professional fiber work requires qualified supervision." }
+  ],
+  "practice": [{ "prompt": "Compare two paper network maps: one with a short link and one with a link between regions. What stays the same about the path, and what changes about its scale?" }],
+  "quiz": { "question": "How does fiber carry information?", "options": ["By using light signals", "By removing the need for networks", "By storing information in a rack label", "By cooling a processor"], "answer": "By using light signals" },
+  "reflectionPrompt": "What question would you ask about the path information takes between two places?"
+}

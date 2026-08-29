@@ -1,0 +1,19 @@
+{
+  "id": "data-center-specialization-11-network-topology",
+  "slug": "data-center-specialization-11-network-topology",
+  "nextSlug": "data-center-specialization-11-switching-ethernet",
+  "title": "Network Architecture and Topology",
+  "curriculum": "data-center-specialization-11",
+  "gradeBand": { "minGrade": 11, "maxGrade": 11, "stage": "PREPARE_PROVE" },
+  "estMinutes": 45,
+  "summary": "Trace how endpoints, switches, gateways, and uplinks form a network path.",
+  "objectives": ["Interpret a simplified synthetic topology.", "Identify dependencies and possible alternate paths.", "Separate visible connections from assumptions about traffic."],
+  "vocab": [{ "term": "TOPOLOGY", "def": "The arrangement and relationships of devices and links in a network." }, { "term": "UPLINK", "def": "A connection from a local device or switch toward another network device or segment." }, { "term": "ENDPOINT", "def": "A device or system that sends or receives network traffic." }],
+  "sections": [{ "heading": "Read the path", "body": "A topology diagram is a model. Trace endpoint to switch, switch to uplink, and uplink to gateway while noting which devices depend on each link." }, { "heading": "Look for dependencies", "body": "If several endpoints share one switch or uplink, that component is a dependency. A second path can reduce the effect of one failed link, but only if it is connected and configured for that purpose." }],
+  "practice": [{ "prompt": "A server connects to Switch A, Switch A connects to a gateway, and Switch B has no link to the gateway. Which path should you trace first?", "answer": "Trace the server to Switch A and then the gateway; Switch B is not part of that visible path." }],
+  "quiz": { "question": "What does a topology diagram help you determine?", "options": ["Which devices and links form a possible path", "The private password for every device", "The exact cause of every outage", "Whether a cable is safe to touch while energized"], "answer": "Which devices and links form a possible path" },
+  "lab": { "safetyClassification": "SIMULATION ONLY", "objective": "Trace a synthetic network path and identify dependencies." },
+  "proofActivity": { "activityId": "grade11-networking-fiber-topology-interpretation", "activityType": "SIMULATED_INFRASTRUCTURE_PROOF", "safetyClassification": "SIMULATION ONLY", "competencySlug": "interpret-network-topology", "monitoringData": [{ "signal": "Topology", "value": "Server -> Switch A -> Gateway", "status": "INFO", "detail": "Synthetic network path" }, { "signal": "Primary uplink", "value": "DOWN", "status": "WARNING", "detail": "Synthetic link state" }, { "signal": "Backup path", "value": "Available", "status": "NORMAL", "detail": "Synthetic topology record" }], "criteria": ["Identifies major devices and relevant path", "Uses topology and status evidence", "Distinguishes observation from assumption", "Documents safe escalation and uncertainty"], "criterion": "network-topology-interpretation" },
+  "futureCompetencyCandidates": ["interpret a synthetic network topology"],
+  "reflectionPrompt": "Which shared link would affect the most endpoints, and what evidence supports that idea?"
+}

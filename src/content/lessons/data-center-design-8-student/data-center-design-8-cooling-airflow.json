@@ -1,0 +1,20 @@
+{
+  "id": "data-center-design-8-cooling-airflow",
+  "slug": "data-center-design-8-cooling-airflow",
+  "nextSlug": "data-center-design-8-network-design",
+  "title": "Designing Cooling and Airflow",
+  "curriculum": "data-center-design-8",
+  "gradeBand": { "minGrade": 8, "maxGrade": 8, "stage": "DISCOVER" },
+  "estMinutes": 30,
+  "summary": "Balance heat, airflow, monitoring, and resource use in a conceptual cooling design.",
+  "objectives": ["Connect computing heat to airflow and monitoring choices.", "Identify a cooling tradeoff in a simple design comparison."],
+  "vocab": [{ "term": "EFFICIENCY", "def": "Using resources carefully to achieve a needed result." }, { "term": "INTAKE", "def": "The place where air enters a system." }, { "term": "EXHAUST", "def": "The place where warmer or used air leaves a system." }],
+  "sections": [
+    { "heading": "Cooling is part of the design", "body": "Computing equipment produces heat. A design must move heat away using planned intake, airflow, exhaust, and temperature monitoring." },
+    { "heading": "Every choice has a tradeoff", "body": "More cooling capacity may support reliability but use more energy or resources. A compact arrangement may save space but make airflow harder. Designers compare needs instead of choosing by one number." },
+    { "heading": "Improve a diagram", "body": "Add arrows to a paper layout showing cool-air intake and warm-air exhaust. Mark a blocked path and explain one improvement. Do not service HVAC machinery or open energized equipment." }
+  ],
+  "practice": [{ "prompt": "Two layouts use the same equipment. Layout A has clear intake and exhaust paths. Layout B sends warm exhaust back toward an intake. Which risk should the team investigate?" }],
+  "quiz": { "question": "What should a cooling design balance?", "options": ["Heat movement, reliability, and resource use", "Only the color of the equipment", "Network passwords and job titles", "A guarantee that equipment never needs power"], "answer": "Heat movement, reliability, and resource use" },
+  "reflectionPrompt": "What cooling choice could improve reliability while creating a resource question?"
+}

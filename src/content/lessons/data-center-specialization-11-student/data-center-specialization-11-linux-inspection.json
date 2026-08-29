@@ -1,0 +1,19 @@
+{
+  "id": "data-center-specialization-11-linux-inspection",
+  "slug": "data-center-specialization-11-linux-inspection",
+  "nextSlug": "data-center-specialization-11-telemetry-troubleshooting",
+  "title": "Linux Systems Inspection",
+  "curriculum": "data-center-specialization-11",
+  "gradeBand": { "minGrade": 11, "maxGrade": 11, "stage": "PREPARE_PROVE" },
+  "estMinutes": 45,
+  "summary": "Inspect an approved Linux sandbox and document relevant system state.",
+  "objectives": ["Use safe read-only inspection evidence from a sandbox.", "Record system state without making unsupported conclusions."],
+  "vocab": [{ "term": "FILESYSTEM", "def": "The organized way an operating system stores files." }, { "term": "UTILIZATION", "def": "How much of a resource is currently in use." }, { "term": "SANDBOX", "def": "An isolated environment for safe practice." }],
+  "sections": [{ "heading": "Observe before changing", "body": "Approved commands and synthetic status files can show storage, memory, processes, and logs. The first responsibility is to observe and record." }, { "heading": "Permission matters", "body": "Do not use destructive deletion, privilege escalation, raw disk tools, shutdown commands, attack tools, or real network targets." }],
+  "practice": [{ "prompt": "A synthetic status file shows storage at 92%. What is the supported finding?", "answer": "Storage utilization is high; the appropriate next step is to document and escalate or follow the approved procedure." }],
+  "quiz": { "question": "What is the safest first action when a sandbox system seems unusual?", "options": ["Inspect approved status information and document it", "Delete files", "Change permissions", "Scan external systems"], "answer": "Inspect approved status information and document it" },
+  "proofActivity": { "activityId": "grade11-technical-operations-linux-inspection", "activityType": "SIMULATED_INFRASTRUCTURE_PROOF", "safetyClassification": "SIMULATION ONLY", "competencySlug": "inspect-linux-system-state-safely", "monitoringData": [{ "signal": "Filesystem", "value": "92% used", "status": "WARNING", "detail": "Synthetic status file" }, { "signal": "Memory", "value": "58% used", "status": "NORMAL", "detail": "Synthetic status file" }, { "signal": "Process", "value": "service-api running", "status": "NORMAL", "detail": "Synthetic process listing" }], "criteria": ["Uses approved inspection evidence", "Identifies relevant system state", "Avoids unsupported conclusions", "Documents a safe next step"], "criterion": "linux-inspection" },
+  "lab": { "safetyClassification": "SIMULATION ONLY", "objective": "Inspect synthetic Linux status information and document a safe finding." },
+  "futureCompetencyCandidates": ["navigate a Linux sandbox", "document command-line observations"],
+  "reflectionPrompt": "What can a status record tell you, and what can it not prove?"
+}

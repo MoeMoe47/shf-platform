@@ -1,5 +1,5 @@
-import { mergeRolePermissions, isPlatformGlobalRole } from "./security-permissions";
-import { resolveTenantForOrganization } from "./tenant-context";
+import { mergeRolePermissions, isPlatformGlobalRole } from "./security-permissions.js";
+import { resolveTenantForOrganization } from "./tenant-context.js";
 
 export class OrganizationContextError extends Error {
   constructor(public readonly code: string, message: string = code) {

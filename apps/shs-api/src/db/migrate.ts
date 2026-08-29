@@ -1,7 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { pool } from "./client";
-import { baselineMigrations, checkSchemaReadiness, discoverMigrations, inspectMigrations, runMigrations } from "./migration-runner";
+import { pool } from "./client.js";
+import { baselineMigrations, checkSchemaReadiness, discoverMigrations, inspectMigrations, runMigrations } from "./migration-runner.js";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const migrationsDir = path.resolve(root, "../../migrations");

@@ -1,4 +1,4 @@
-import { pool } from "./client";
+import { pool } from "./client.js";
 
 export async function withTransaction<T>(fn: (client: any) => Promise<T>): Promise<T> {
   const client = await pool.connect();

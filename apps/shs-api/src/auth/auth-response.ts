@@ -1,4 +1,4 @@
-import { mergeRolePermissions } from "./security-permissions";
+import { mergeRolePermissions } from "./security-permissions.js";
 
 function compactString(value: unknown) {
   const normalized = String(value || "").trim();
@@ -51,6 +51,8 @@ export function authResponsePayload(user: any) {
 
   return {
     ok: true,
+    authenticated: true,
+    session_status: "active",
     user: safeAuthUser(user),
     memberships,
     active_organization_context: user?.active_organization_id ? {

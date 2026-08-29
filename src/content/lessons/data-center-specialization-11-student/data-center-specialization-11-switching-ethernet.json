@@ -1,0 +1,18 @@
+{
+  "id": "data-center-specialization-11-switching-ethernet",
+  "slug": "data-center-specialization-11-switching-ethernet",
+  "nextSlug": "data-center-specialization-11-addressing-gateway-dns",
+  "title": "Switching and Ethernet",
+  "curriculum": "data-center-specialization-11",
+  "gradeBand": { "minGrade": 11, "maxGrade": 11, "stage": "PREPARE_PROVE" },
+  "estMinutes": 45,
+  "summary": "Connect switch ports, Ethernet links, and interface status to network behavior.",
+  "objectives": ["Explain the role of a switch and its ports.", "Interpret link state and uplink evidence.", "Distinguish a physical connection from a complete logical path."],
+  "vocab": [{ "term": "PORT", "def": "A switch or device connection point for a network link." }, { "term": "ETHERNET", "def": "A family of standards and technologies used for wired local networking." }, { "term": "LINK STATE", "def": "An indication that an interface detects an active or inactive connection." }],
+  "sections": [{ "heading": "Switches forward traffic", "body": "A switch connects devices on a local network and forwards traffic using information about interfaces and addresses. A link light or status value is evidence of connection, not proof that every service works." }, { "heading": "Document the physical layer", "body": "Port labels, cable IDs, and uplink notes help another person reproduce the path. Use synthetic records and never change a production switch." }],
+  "practice": [{ "prompt": "A server port is up but its switch uplink is down. What can you conclude?", "answer": "The server has a local link, but the path beyond that switch may be unavailable; inspect and document the uplink evidence." }],
+  "quiz": { "question": "What is a safe interpretation of an active Ethernet link?", "options": ["The interface detects a physical connection", "Every application is working", "The gateway is reachable", "The cable is connected to the correct destination"], "answer": "The interface detects a physical connection" },
+  "lab": { "safetyClassification": "SIMULATION ONLY", "objective": "Interpret synthetic switch-port and Ethernet link records." },
+  "futureCompetencyCandidates": ["interpret switch and Ethernet link evidence"],
+  "reflectionPrompt": "What evidence would you need beyond link state before declaring a network path healthy?"
+}

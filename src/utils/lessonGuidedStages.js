@@ -82,7 +82,7 @@ export function buildGuidedStages(lesson) {
   const suggestedGames = Array.isArray(lesson?.arcade?.suggestedGames) ? lesson.arcade.suggestedGames : [];
   const practice = Array.isArray(lesson.practice) ? lesson.practice : [];
   const { check, reflect } = splitAssessment(lesson);
-  const hasApply = !!(lesson.portfolioFlag || lesson.portfolioArtifact || lesson.project);
+  const hasApply = !!(lesson.portfolioFlag || lesson.portfolioArtifact || lesson.project || lesson.proofActivity);
   const hasRubric = Array.isArray(lesson?.rubric?.criteria) && lesson.rubric.criteria.length > 0;
 
   const availability = {

@@ -1,0 +1,18 @@
+{
+  "id": "data-center-specialization-11-networking-fiber-project",
+  "slug": "data-center-specialization-11-networking-fiber-project",
+  "title": "Diagnose and Document a Simulated Network Failure",
+  "curriculum": "data-center-specialization-11",
+  "gradeBand": { "minGrade": 11, "maxGrade": 11, "stage": "PREPARE_PROVE" },
+  "estMinutes": 65,
+  "summary": "Integrate topology, addressing, cabling, fiber, monitoring, and safe escalation in one synthetic scenario.",
+  "objectives": ["Trace a likely network path from topology and status evidence.", "Distinguish observations from a likely fault domain.", "Document a safe action, verification plan, and escalation boundary."],
+  "vocab": [{ "term": "EVIDENCE", "def": "Information that supports or tests an explanation." }, { "term": "FAULT DOMAIN", "def": "The system area where evidence suggests a problem may be located." }, { "term": "HANDOFF", "def": "A concise transfer of relevant information and responsibility to another person or team." }],
+  "sections": [{ "heading": "Scenario packet", "body": "Use the synthetic topology, interface status, addressing data, gateway result, DNS result, fiber clue, and recent change note. Not every clue is causal." }, { "heading": "Proof boundary", "body": "This activity creates a canonical result and evidence candidate. It does not directly create a competency decision. An authorized reviewer must apply the versioned criteria." }, { "heading": "Safety boundary", "body": "Do not inspect live fiber, change production configurations, scan external networks, or touch energized equipment. Recommend escalation when the scenario leaves the sandbox." }],
+  "practice": [{ "prompt": "A primary fiber path is down, a documented backup path exists, and the learner has no authorization to change live connections. What is the safe recommendation?", "answer": "Record the evidence, identify the documented backup path, and escalate to the authorized network or fiber team rather than changing live equipment." }],
+  "quiz": { "question": "What should a final network handoff include?", "options": ["Symptoms, relevant evidence, likely fault domain, safe next step, and uncertainty", "Only the learner's preferred explanation", "A request to scan unrelated systems", "A claim that the physical repair is complete"], "answer": "Symptoms, relevant evidence, likely fault domain, safe next step, and uncertainty" },
+  "proofActivity": { "activityId": "grade11-networking-fiber-topology-interpretation", "activityType": "SIMULATED_INFRASTRUCTURE_PROOF", "safetyClassification": "SIMULATION ONLY", "competencySlug": "network-topology-interpretation", "monitoringData": [{ "signal": "Topology", "value": "Server -> Switch A -> Gateway", "status": "INFO", "detail": "Synthetic topology path" }, { "signal": "Primary fiber uplink", "value": "DOWN", "status": "WARNING", "detail": "Synthetic link-state record" }, { "signal": "Backup path", "value": "Documented via Switch B", "status": "NORMAL", "detail": "Synthetic topology record" }, { "signal": "DNS", "value": "Name lookup delayed", "status": "WARNING", "detail": "Synthetic resolution result" }], "criteria": ["Identifies major devices and relevant path", "Uses topology and status evidence", "Distinguishes observation from assumption", "Documents safe escalation and uncertainty"], "criterion": "network-topology-interpretation" },
+  "lab": { "safetyClassification": "SIMULATION ONLY", "objective": "Complete a synthetic network failure analysis and handoff." },
+  "futureCompetencyCandidates": ["integrate topology, link, and safe escalation evidence"],
+  "reflectionPrompt": "Which clue was most useful, and which clue could have distracted you?"
+}

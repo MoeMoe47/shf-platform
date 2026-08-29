@@ -1,0 +1,70 @@
+{
+  "id": "data-center-reliable-operations-10-cooling-environmental-monitoring",
+  "slug": "data-center-reliable-operations-10-cooling-environmental-monitoring",
+  "nextSlug": "data-center-reliable-operations-10-preventive-maintenance",
+  "title": "Cooling and Environmental Monitoring",
+  "curriculum": "data-center-reliable-operations-10",
+  "gradeBand": {
+    "minGrade": 10,
+    "maxGrade": 10,
+    "stage": "EXPLORE"
+  },
+  "estMinutes": 35,
+  "summary": "Use synthetic temperature, airflow, humidity, and fan-status trends to investigate a cooling alert.",
+  "objectives": [
+    "Interpret a synthetic environmental trend and identify relevant evidence.",
+    "Explain why a rising temperature requires investigation and safe escalation."
+  ],
+  "vocab": [
+    {
+      "term": "THERMAL TREND",
+      "def": "The direction of temperature values over time."
+    },
+    {
+      "term": "HUMIDITY",
+      "def": "The amount of water vapor in air."
+    },
+    {
+      "term": "INTAKE",
+      "def": "The point where air enters equipment or a space."
+    }
+  ],
+  "sections": [
+    {
+      "heading": "Environment affects reliability",
+      "body": "Equipment produces heat, and operations teams monitor temperature, airflow, cooling status, and sometimes humidity. Trends can reveal that a condition is changing."
+    },
+    {
+      "heading": "Investigate a rising rack temperature",
+      "body": "A synthetic scenario may include a temperature trend, fan status, blocked-airflow clue, and cooling alarm. Compare all clues before deciding what to report."
+    },
+    {
+      "heading": "Do not service equipment",
+      "body": "Students may analyze diagrams and data. HVAC service, equipment opening, and industrial cooling work require qualified supervision and remain outside this course."
+    }
+  ],
+  "practice": [
+    {
+      "prompt": "A simulated rack temperature rises while fan status changes to warning. Write the evidence, a safe next step, and the escalation point."
+    }
+  ],
+  "quiz": {
+    "question": "What does a temperature trend help an operator understand?",
+    "options": [
+      "Whether a condition is changing over time",
+      "The exact root cause by itself",
+      "How to service HVAC equipment",
+      "Whether documentation can be skipped"
+    ],
+    "answer": "Whether a condition is changing over time"
+  },
+  "lab": {
+    "safetyClassification": "SIMULATION ONLY",
+    "objective": "Investigate a synthetic cooling alert using a trend table and environmental status clues."
+  },
+  "futureCompetencyCandidates": [
+    "interpret a synthetic thermal trend",
+    "identify safe cooling escalation"
+  ],
+  "reflectionPrompt": "Why is a trend more useful than one temperature reading alone?"
+}

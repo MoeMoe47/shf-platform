@@ -1,8 +1,8 @@
 import { randomUUID } from "crypto";
-import { withTransaction } from "../../db/transaction";
-import { writeAuditEvent } from "../audit/service/audit-helper";
-import { ReportPublicEligibilityRepo } from "./report-public-eligibility-repo";
-import { requirePublicReportGovernanceRegistration } from "./report-public-governance-registry";
+import { withTransaction } from "../../db/transaction.js";
+import { writeAuditEvent } from "../audit/service/audit-helper.js";
+import { ReportPublicEligibilityRepo } from "./report-public-eligibility-repo.js";
+import { requirePublicReportGovernanceRegistration } from "./report-public-governance-registry.js";
 
 export const CURRICULUM_COMPLETION_REPORT = Object.freeze({
   report_id: "report.curriculum.lesson_completion_count.v1",

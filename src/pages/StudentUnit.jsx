@@ -44,7 +44,7 @@ export default function StudentUnit() {
       .then((res) => {
         if (!alive) return;
         setLesson(res?.unit || null);
-        setCurriculum(res?.curriculum || null);
+        setCurriculum(res?.unit?.curriculum || res?.curriculum || null);
         setLoading(false);
       })
       .catch(() => { if (alive) { setLesson(null); setCurriculum(null); setLoading(false); } });

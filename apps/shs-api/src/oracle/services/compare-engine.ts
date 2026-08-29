@@ -1,4 +1,4 @@
-import { resolveTruth } from "./oracle.service";
+import { resolveTruth } from "./oracle.service.js";
 
 export async function compareTruthPackages(entityIds: string[]) {
   if (!entityIds || entityIds.length === 0) {

@@ -1,0 +1,20 @@
+{
+  "id": "data-center-specialization-11-technical-operations-project",
+  "slug": "data-center-specialization-11-technical-operations-project",
+  "nextSlug": null,
+  "title": "Restore and Document a Simulated Infrastructure Service",
+  "curriculum": "data-center-specialization-11",
+  "gradeBand": { "minGrade": 11, "maxGrade": 11, "stage": "PREPARE_PROVE" },
+  "estMinutes": 60,
+  "summary": "Integrate monitoring, system inspection, troubleshooting, verification, documentation, and escalation in a safe simulation.",
+  "objectives": ["Inspect synthetic telemetry and system records.", "Choose only approved low-risk actions in a sandbox scenario.", "Document evidence, outcome, uncertainty, and escalation."],
+  "vocab": [{ "term": "ROLLBACK", "def": "Returning a controlled system change to its prior approved state." }, { "term": "ROOT CAUSE", "def": "A confirmed underlying reason for an observed problem." }],
+  "sections": [{ "heading": "The operations challenge", "body": "A synthetic service is degraded. Monitoring, Linux status, a recent change, and network evidence provide clues, but not every clue is causal." }, { "heading": "Deliverable", "body": "Submit a structured incident record: symptom, evidence, affected system, safe action, result, remaining uncertainty, and escalation." }, { "heading": "Safety boundary", "body": "This is simulation only. Do not connect to production systems, change real equipment, access real credentials, or perform physical electrical, cooling, fiber, or rack work." }],
+  "practice": [{ "prompt": "What must be documented before declaring a simulated service restored?", "answer": "The action, observed outcome, verification evidence, and any remaining uncertainty." }],
+  "quiz": { "question": "When should a learner escalate?", "options": ["When safety, permission, impact, complexity, or uncertainty requires it", "Only after trying random changes", "Never in a sandbox", "When they want to skip documentation"], "answer": "When safety, permission, impact, complexity, or uncertainty requires it" },
+  "proofActivity": { "activityId": "grade11-technical-operations-troubleshooting-documentation", "activityType": "SIMULATED_INFRASTRUCTURE_PROOF", "safetyClassification": "SIMULATION ONLY", "competencySlug": "document-structured-infrastructure-troubleshooting", "monitoringData": [{ "signal": "Service status", "value": "Degraded", "status": "WARNING", "detail": "Synthetic incident signal" }, { "signal": "Filesystem", "value": "92% used", "status": "WARNING", "detail": "Synthetic system inspection" }, { "signal": "Network path", "value": "Reachable", "status": "NORMAL", "detail": "Synthetic diagnostic result" }], "criteria": ["Defines the symptom", "Uses relevant evidence", "Selects a low-risk action", "Documents verification or escalation"], "criterion": "structured-troubleshooting" },
+  "lab": { "safetyClassification": "SIMULATION ONLY", "objective": "Restore and document a simulated service using approved evidence and safe escalation." },
+  "futureCompetencyCandidates": ["document a structured troubleshooting record", "verify a simulated service outcome"],
+  "reflectionPrompt": "What would you communicate to the next authorized person after this simulation?",
+  "careerConnection": { "careerId": "data-center-technician", "text": "Operations technicians coordinate evidence, safe actions, verification, and handoffs. Completing this project is not professional qualification." }
+}

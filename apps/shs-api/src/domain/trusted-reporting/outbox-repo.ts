@@ -1,4 +1,4 @@
-import { query } from "../../db/client";
+import { query } from "../../db/client.js";
 import { randomUUID } from "node:crypto";
 
 export type OutboxExecutor = { query: (sql: string, params?: unknown[]) => Promise<any> };

@@ -1,0 +1,20 @@
+{
+  "id": "data-center-design-8-security-by-design",
+  "slug": "data-center-design-8-security-by-design",
+  "nextSlug": "data-center-design-8-reliability-redundancy",
+  "title": "Security by Design",
+  "curriculum": "data-center-design-8",
+  "gradeBand": { "minGrade": 8, "maxGrade": 8, "stage": "DISCOVER" },
+  "estMinutes": 30,
+  "summary": "Plan layers of physical, digital, and procedural protection from the beginning of a design.",
+  "objectives": ["Identify physical, digital, and procedural security layers.", "Explain why security should be considered during design rather than added afterward."],
+  "vocab": [{ "term": "PERMISSION", "def": "An approved ability to access or do something." }, { "term": "RESTRICTED ZONE", "def": "An area limited to people with an approved reason to enter." }, { "term": "PROCEDURE", "def": "An agreed sequence of steps for doing work safely and consistently." }],
+  "sections": [
+    { "heading": "Security has layers", "body": "A design may include controlled building access, restricted zones, cameras, permissions, monitoring, strong passwords, and clear procedures. No single layer solves every risk." },
+    { "heading": "Design for the people using it", "body": "Good security makes approved work possible while limiting unnecessary access. Teams can ask who needs access, what they need to do, and how changes should be recorded." },
+    { "heading": "Defensive classroom design", "body": "Create a safe access plan for a paper facility. Do not bypass a lock, test a real system, or practice offensive cybersecurity. The goal is protection and responsible decision making." }
+  ],
+  "practice": [{ "prompt": "For a server room, choose one physical layer, one digital layer, and one procedure. Explain what risk each layer helps address." }],
+  "quiz": { "question": "Why include security during design?", "options": ["Protection can be planned alongside systems and user needs", "Security makes all other systems unnecessary", "It gives everyone unrestricted access", "It guarantees that no incident can occur"], "answer": "Protection can be planned alongside systems and user needs" },
+  "reflectionPrompt": "Which security layer would you want explained clearly before using a shared facility?"
+}

@@ -1,0 +1,19 @@
+{
+  "id": "data-center-specialization-11-structured-cabling",
+  "slug": "data-center-specialization-11-structured-cabling",
+  "nextSlug": "data-center-specialization-11-fiber-infrastructure",
+  "title": "Structured Cabling and Documentation",
+  "curriculum": "data-center-specialization-11",
+  "gradeBand": { "minGrade": 11, "maxGrade": 11, "stage": "PREPARE_PROVE" },
+  "estMinutes": 45,
+  "summary": "Create a synthetic cable record that another learner can follow and check.",
+  "objectives": ["Record source, destination, port, and status accurately.", "Explain why patch panels and labels support troubleshooting.", "Recognize when physical work requires qualified supervision."],
+  "vocab": [{ "term": "PATCH PANEL", "def": "An organized panel where network cables are presented and connected for management." }, { "term": "CABLE ID", "def": "A label that uniquely identifies a cable or connection record." }, { "term": "SOURCE/DESTINATION", "def": "The two endpoints of a documented connection." }],
+  "sections": [{ "heading": "A record is a handoff", "body": "A useful cabling record names both ends, the ports, rack locations, cable ID, and current status. It should be clear enough for another person to check without guessing." }, { "heading": "Model before touching", "body": "Use paper, diagrams, or approved classroom cables for practice. Physical work on live or installed infrastructure belongs to qualified supervision and an approved environment." }],
+  "practice": [{ "prompt": "Which record is most useful: 'blue cable in rack' or 'C-104, panel P2-18 to switch S1-18, active, checked 10:30'?", "answer": "The second record is useful because it identifies the cable, endpoints, ports, status, and check time." }],
+  "quiz": { "question": "Why do consistent cable labels matter?", "options": ["They make paths easier to verify and hand off", "They increase network speed automatically", "They replace all monitoring", "They allow work on live fiber without training"], "answer": "They make paths easier to verify and hand off" },
+  "lab": { "safetyClassification": "SAFE CLASSROOM", "objective": "Build a synthetic source-to-destination cabling record." },
+  "proofActivity": { "activityId": "grade11-networking-fiber-cabling-documentation", "activityType": "SIMULATED_INFRASTRUCTURE_PROOF", "safetyClassification": "SIMULATION ONLY", "competencySlug": "structured-cabling-fiber-documentation", "monitoringData": [{ "signal": "Source", "value": "Patch panel P2-18", "status": "INFO", "detail": "Synthetic record" }, { "signal": "Destination", "value": "Switch S1-18", "status": "INFO", "detail": "Synthetic record" }, { "signal": "Fiber status", "value": "Live inspection not authorized", "status": "WARNING", "detail": "Safety boundary" }], "criteria": ["Interprets source and destination correctly", "Identifies relevant labels and ports", "Documents the path accurately", "Respects live-fiber safety and escalation"], "criterion": "cabling-fiber-documentation" },
+  "futureCompetencyCandidates": ["produce a structured cabling record"],
+  "reflectionPrompt": "What ambiguity would cause the most trouble in a cable handoff?"
+}

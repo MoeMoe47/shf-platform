@@ -1,0 +1,22 @@
+{
+  "id": "data-center-technical-foundations-9-structured-troubleshooting",
+  "slug": "data-center-technical-foundations-9-structured-troubleshooting",
+  "nextSlug": "data-center-technical-foundations-9-safe-technical-system-project",
+  "title": "Structured Troubleshooting",
+  "curriculum": "data-center-technical-foundations-9",
+  "gradeBand": { "minGrade": 9, "maxGrade": 9, "stage": "EXPLORE" },
+  "estMinutes": 35,
+  "summary": "Advance from likely causes to safe tests, observations, documentation, and escalation.",
+  "objectives": ["Apply a structured troubleshooting sequence to a simulated issue.", "Choose a safe test and document its result before escalating."],
+  "vocab": [{ "term": "HYPOTHESIS", "def": "A possible explanation that can be checked against evidence." }, { "term": "ESCALATE", "def": "Ask a more qualified person or team to take over or advise." }, { "term": "SAFE TEST", "def": "An approved check that gathers information without creating unnecessary risk." }],
+  "sections": [
+    { "heading": "Use a repeatable method", "body": "Define the problem, gather evidence, identify the affected system, form possible causes, test the safest simple explanation, observe the result, document it, and escalate when needed." },
+    { "heading": "Scenarios need different evidence", "body": "A service that cannot connect may need path evidence. Storage nearly full may need capacity data. A temperature warning may need trend and airflow context. Do not assume one cause from one symptom." },
+    { "heading": "Stop when the boundary is reached", "body": "A safe test may be reading an approved status file or comparing a simulated path. Stop before opening hardware, changing production configuration, touching electrical equipment, or accessing unauthorized systems." }
+  ],
+  "practice": [{ "prompt": "For a simulated storage warning, state the problem, one hypothesis, one safe test, the evidence you would record, and when you would escalate." }],
+  "quiz": { "question": "What should happen after a safe test?", "options": ["Observe and document the result", "Assume the hypothesis was correct", "Make an unauthorized change", "Delete the evidence"], "answer": "Observe and document the result" },
+  "lab": { "safetyClassification": "SUPERVISED CLASSROOM LAB", "objective": "Work through a synthetic fault using evidence, safe tests, documentation, and escalation." },
+  "futureCompetencyCandidates": ["reason from technical evidence", "document a simulated troubleshooting sequence"],
+  "reflectionPrompt": "Which step keeps troubleshooting from becoming random experimentation?"
+}

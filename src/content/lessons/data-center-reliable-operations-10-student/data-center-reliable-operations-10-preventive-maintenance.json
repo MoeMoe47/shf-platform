@@ -1,0 +1,70 @@
+{
+  "id": "data-center-reliable-operations-10-preventive-maintenance",
+  "slug": "data-center-reliable-operations-10-preventive-maintenance",
+  "nextSlug": "data-center-reliable-operations-10-incident-response",
+  "title": "Preventive Maintenance",
+  "curriculum": "data-center-reliable-operations-10",
+  "gradeBand": {
+    "minGrade": 10,
+    "maxGrade": 10,
+    "stage": "EXPLORE"
+  },
+  "estMinutes": 30,
+  "summary": "Understand how planned checks can reduce surprise failures.",
+  "objectives": [
+    "Distinguish preventive maintenance from corrective repair.",
+    "Connect inspections, trend review, and documentation to reliability."
+  ],
+  "vocab": [
+    {
+      "term": "PREVENTIVE MAINTENANCE",
+      "def": "Planned work intended to reduce the chance of failure."
+    },
+    {
+      "term": "CORRECTIVE REPAIR",
+      "def": "Work performed to fix a problem that has occurred."
+    },
+    {
+      "term": "INSPECTION",
+      "def": "A planned check for condition or change."
+    }
+  ],
+  "sections": [
+    {
+      "heading": "Prevent problems when possible",
+      "body": "Preventive maintenance can include scheduled inspections, cable checks, monitoring-trend review, documentation review, and replacement planning."
+    },
+    {
+      "heading": "Maintenance is not the same as repair",
+      "body": "Preventive maintenance is planned before a failure. Corrective repair responds after a problem appears. Both require the right authorization and skill."
+    },
+    {
+      "heading": "Use a safe classroom plan",
+      "body": "Students can build a synthetic maintenance schedule or review a checklist. They should not clean energized equipment, service HVAC machinery, or handle industrial systems."
+    }
+  ],
+  "practice": [
+    {
+      "prompt": "Classify four synthetic tasks as preventive maintenance or corrective repair, then explain one classification."
+    }
+  ],
+  "quiz": {
+    "question": "Which is preventive maintenance?",
+    "options": [
+      "Reviewing a monitoring trend on a planned schedule",
+      "Replacing a failed component after an outage",
+      "Bypassing a safety check",
+      "Changing a system without approval"
+    ],
+    "answer": "Reviewing a monitoring trend on a planned schedule"
+  },
+  "lab": {
+    "safetyClassification": "SAFE INDEPENDENT CLASSROOM LAB",
+    "objective": "Build a synthetic maintenance checklist and identify what evidence would show each check was completed."
+  },
+  "futureCompetencyCandidates": [
+    "distinguish preventive maintenance from repair",
+    "create a safe maintenance checklist"
+  ],
+  "reflectionPrompt": "How can a planned check help a team communicate before a failure occurs?"
+}

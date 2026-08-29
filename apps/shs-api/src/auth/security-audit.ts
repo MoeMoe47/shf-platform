@@ -1,4 +1,4 @@
-import { writeAuditEvent } from "../domain/audit/service/audit-helper";
+import { writeAuditEvent } from "../domain/audit/service/audit-helper.js";
 
 function nowId(prefix: string) {
   return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;

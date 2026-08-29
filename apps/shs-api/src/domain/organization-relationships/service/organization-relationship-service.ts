@@ -1,14 +1,14 @@
 import { randomUUID } from "crypto";
-import { isPlatformGlobalRole } from "../../../auth/security-permissions";
+import { isPlatformGlobalRole } from "../../../auth/security-permissions.js";
 import {
   ORGANIZATION_RELATIONSHIP_STATUSES,
   ORGANIZATION_RELATIONSHIP_TYPES,
   canTransitionRelationship,
   isRelationshipCurrentlyActive,
   validateRelationshipLifecycle,
-} from "../model/organization-relationship";
-import { OrganizationRelationshipRepo } from "../repo/organization-relationship-repo";
-import { writeAuditEvent } from "../../audit/service/audit-helper";
+} from "../model/organization-relationship.js";
+import { OrganizationRelationshipRepo } from "../repo/organization-relationship-repo.js";
+import { writeAuditEvent } from "../../audit/service/audit-helper.js";
 
 function actorId(actor: any) {
   return actor?.user_id || actor?.id;

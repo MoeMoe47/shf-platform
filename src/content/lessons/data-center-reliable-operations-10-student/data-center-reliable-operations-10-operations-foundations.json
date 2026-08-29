@@ -1,0 +1,70 @@
+{
+  "id": "data-center-reliable-operations-10-operations-foundations",
+  "slug": "data-center-reliable-operations-10-operations-foundations",
+  "nextSlug": "data-center-reliable-operations-10-monitoring-alerts-logs",
+  "title": "What Does Data Center Operations Do?",
+  "curriculum": "data-center-reliable-operations-10",
+  "gradeBand": {
+    "minGrade": 10,
+    "maxGrade": 10,
+    "stage": "EXPLORE"
+  },
+  "estMinutes": 30,
+  "summary": "Learn how operations teams keep infrastructure observable, safe, and reliable.",
+  "objectives": [
+    "Explain why operations uses procedures, monitoring, maintenance, and documentation.",
+    "Sequence the operational lifecycle from observing a system to escalating uncertainty."
+  ],
+  "vocab": [
+    {
+      "term": "AVAILABILITY",
+      "def": "A service is available when people can use it as expected."
+    },
+    {
+      "term": "PROCEDURE",
+      "def": "A planned set of steps for completing work safely."
+    },
+    {
+      "term": "ESCALATE",
+      "def": "Transfer a problem to someone with the right authority or expertise."
+    }
+  ],
+  "sections": [
+    {
+      "heading": "Operations is a team process",
+      "body": "Operations teams help maintain availability, reliability, safety, and accurate records. They use agreed procedures so that people can work consistently and communicate clearly."
+    },
+    {
+      "heading": "The operational lifecycle",
+      "body": "A useful classroom model is MONITOR, DETECT, INVESTIGATE, RESPOND, VERIFY, DOCUMENT, and ESCALATE. The steps can repeat as new evidence appears."
+    },
+    {
+      "heading": "Observe before changing",
+      "body": "An alert is a reason to investigate, not permission to make an unknown change. In a safe lab, record what you see and ask for help when a step is outside your permission."
+    }
+  ],
+  "practice": [
+    {
+      "prompt": "Put these actions in a sensible order: document the result, observe the system, investigate evidence, verify the result, and escalate when needed."
+    }
+  ],
+  "quiz": {
+    "question": "What is the purpose of an operations procedure?",
+    "options": [
+      "To make work safer, repeatable, and easier to communicate",
+      "To guarantee that every problem has one cause",
+      "To replace monitoring",
+      "To allow anyone to change production systems"
+    ],
+    "answer": "To make work safer, repeatable, and easier to communicate"
+  },
+  "lab": {
+    "safetyClassification": "SIMULATION ONLY",
+    "objective": "Sequence a synthetic operations incident and identify where evidence, verification, and escalation belong."
+  },
+  "futureCompetencyCandidates": [
+    "sequence an operational lifecycle",
+    "identify when escalation is appropriate"
+  ],
+  "reflectionPrompt": "Which operations step would help prevent a small problem from becoming a larger one?"
+}

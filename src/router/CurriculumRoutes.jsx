@@ -33,6 +33,7 @@ const InstructorUnit = lazy(() => import("@/pages/InstructorUnit.jsx"));
 const MasterUnit = lazy(() => import("@/pages/MasterUnit.jsx"));
 const AdminCompare = lazy(() => import("@/pages/AdminCompare.jsx"));
 const StudentUnit = lazy(() => import("@/pages/StudentUnit.jsx"));
+const PrepareProveReview = lazy(() => import("@/pages/curriculum/PrepareProveReview.jsx"));
 
 /** Phase 1 Zoom/live-learning restoration — real components, previously
  * unrouted anywhere (see audit §28-30). AdminZoom.jsx is real, existing
@@ -47,6 +48,7 @@ const LiveSessionManage = lazy(() => import("@/pages/curriculum/LiveSessionManag
 /** Phase 2B Complete Learning Experience — real, previously unmounted
  * accessibility preference infrastructure. See Accessibility.jsx. */
 const CurriculumAccessibility = lazy(() => import("@/pages/curriculum/Accessibility.jsx"));
+const Grade12EntryGate = lazy(() => import("@/pages/curriculum/Grade12EntryGate.jsx"));
 
 /**
  * MasterIndex.jsx / MasterUnit.jsx / InstructorUnit.jsx / AdminCompare.jsx
@@ -87,6 +89,7 @@ export default function CurriculumRoutes() {
           <Route path="asl/portfolio" element={<CareerPortfolio />} />
           <Route path="instructor" element={<Instructor />} />
           <Route path="instructor/:slug" element={<InstructorUnit />} />
+          <Route path="instructor/prove/:evidenceId" element={<PrepareProveReview />} />
           <Route path="master" element={<MasterIndex />} />
           <Route path="master/:slug" element={<MasterUnit />} />
           <Route path="admin" element={<AdminCompare />} />
@@ -97,6 +100,7 @@ export default function CurriculumRoutes() {
           <Route path="live-sessions/admin" element={<AdminZoom />} />
           <Route path="live-sessions/manage" element={<LiveSessionManage />} />
           <Route path="accessibility" element={<CurriculumAccessibility />} />
+          <Route path="grade12-entry" element={<Grade12EntryGate />} />
 
           {/* GED Writing Student Chapter Route */}
           <Route path="ged-writing/ch/:number" element={<GedWritingChapterStudent />} />

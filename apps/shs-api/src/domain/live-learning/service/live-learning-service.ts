@@ -2,17 +2,17 @@
 // that decides whether a join is authorized. No client-side state
 // (localStorage, src/utils/zoomAccess.js) is ever consulted here.
 import { randomUUID } from "crypto";
-import { LiveSessionRepo } from "../repo/live-session-repo";
-import { getProvider, listProviders } from "../providers/provider-registry";
-import { ProviderNotConfiguredError } from "../providers/live-learning-provider";
-import { writeAuditEvent } from "../../audit/service/audit-helper";
+import { LiveSessionRepo } from "../repo/live-session-repo.js";
+import { getProvider, listProviders } from "../providers/provider-registry.js";
+import { ProviderNotConfiguredError } from "../providers/live-learning-provider.js";
+import { writeAuditEvent } from "../../audit/service/audit-helper.js";
 import {
   DEFAULT_ACCESS_POLICY,
   DEFAULT_RECORDING_POLICY,
   LiveSession,
   LiveSessionStatus,
   LiveLearningProviderName,
-} from "../model/live-session";
+} from "../model/live-session.js";
 
 const repo = new LiveSessionRepo();
 

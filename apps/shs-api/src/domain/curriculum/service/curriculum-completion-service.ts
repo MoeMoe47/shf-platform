@@ -1,8 +1,9 @@
 import { createHash } from "node:crypto";
-import { withTransaction } from "../../../db/transaction";
-import { IntegrationOutboxRepo } from "../../trusted-reporting/outbox-repo";
-import { emitOperationalTelemetry } from "../../../observability/operational-telemetry";
-import { CurriculumCompletionRepo } from "../repo/curriculum-completion-repo";
+import { withTransaction } from "../../../db/transaction.js";
+import { IntegrationOutboxRepo } from "../../trusted-reporting/outbox-repo.js";
+import { emitOperationalTelemetry } from "../../../observability/operational-telemetry.js";
+import { CurriculumCompletionRepo } from "../repo/curriculum-completion-repo.js";
+import { query } from "../../../db/client.js";
 
 function stableId(organizationId: string, userId: string, curriculumId: string, lessonId: string) {
   return createHash("sha256")
@@ -27,6 +28,24 @@ export class CurriculumCompletionService {
     if (!lessonId || !/^[A-Za-z0-9._:-]{1,160}$/.test(lessonId)) throw new Error("invalid_lesson_id");
     if (!curriculumId || !/^[A-Za-z0-9._:-]{1,80}$/.test(curriculumId)) throw new Error("invalid_curriculum_id");
     if (!userId || !organizationId || tenantId !== `tenant:${organizationId}`) throw new Error("completion_scope_missing");
+
+    // Grade 12 lesson completion is institutional participation, so it must
+    // be backed by the eligible learner's active course assignment.
+    const grade12SpecializationByCourse: Record<string, string> = {
+      "data-center-technical-operations-12": "technical-operations",
+      "data-center-networking-fiber-12": "networking-fiber",
+      "data-center-electrical-infrastructure-12": "electrical-infrastructure",
+      "data-center-mechanical-hvac-12": "mechanical-hvac",
+      "data-center-cybersecurity-security-12": "cybersecurity-security",
+      "data-center-ai-cloud-infrastructure-12": "ai-cloud-infrastructure",
+    };
+    if (grade12SpecializationByCourse[curriculumId]) {
+      const assigned = await query(
+        "SELECT assignment_id FROM program_course_assignments WHERE learner_id=$1 AND organization_id=$2 AND tenant_id=$3 AND program_id='data-center-specialization-11' AND course_id=$4 AND specialization_id=$5 AND status='ACTIVE'",
+        [userId, organizationId, tenantId, curriculumId, grade12SpecializationByCourse[curriculumId]],
+      );
+      if (!assigned.rows[0]) throw new Error("grade12_course_assignment_required");
+    }
 
     const identity = stableId(organizationId, userId, curriculumId, lessonId);
     const completionId = `curriculum_completion_${identity}`;

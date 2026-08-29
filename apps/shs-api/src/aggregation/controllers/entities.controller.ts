@@ -1,4 +1,4 @@
-import { resolveEntityStage } from "./aggregation.controller";
+import { resolveEntityStage } from "./aggregation.controller.js";
 
 export async function getAggregatedEntity(req: any, res: any) {
   try {

@@ -1,12 +1,12 @@
 import { randomUUID } from "crypto";
-import { withTransaction } from "../../db/transaction";
-import { writeAuditEvent } from "../audit/service/audit-helper";
-import { ReportPublicDisclosureRepo } from "./report-public-disclosure-repo";
-import { ReportPublicEligibilityRepo } from "./report-public-eligibility-repo";
-import { CURRICULUM_COMPLETION_REPORT } from "./report-public-eligibility-service";
-import { ReportPublicDisclosurePolicyRepo } from "./report-public-disclosure-policy-repo";
-import { APPROVED_CURRICULUM_POLICY_V1, APPROVED_HUB_REFERRAL_POLICY_V1, CURRICULUM_DISCLOSURE_POLICY, PUBLIC_DISCLOSURE_POLICY_READINESS } from "./report-public-disclosure-policy-service";
-import { requirePublicReportGovernanceRegistration } from "./report-public-governance-registry";
+import { withTransaction } from "../../db/transaction.js";
+import { writeAuditEvent } from "../audit/service/audit-helper.js";
+import { ReportPublicDisclosureRepo } from "./report-public-disclosure-repo.js";
+import { ReportPublicEligibilityRepo } from "./report-public-eligibility-repo.js";
+import { CURRICULUM_COMPLETION_REPORT } from "./report-public-eligibility-service.js";
+import { ReportPublicDisclosurePolicyRepo } from "./report-public-disclosure-policy-repo.js";
+import { APPROVED_CURRICULUM_POLICY_V1, APPROVED_HUB_REFERRAL_POLICY_V1, CURRICULUM_DISCLOSURE_POLICY, PUBLIC_DISCLOSURE_POLICY_READINESS } from "./report-public-disclosure-policy-service.js";
+import { requirePublicReportGovernanceRegistration } from "./report-public-governance-registry.js";
 
 function scopeFromActor(actor: any) {
   const actorId = actor?.user_id || actor?.id;

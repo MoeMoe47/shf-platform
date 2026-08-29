@@ -3,12 +3,12 @@ import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 
-import { buildRouter } from "./api/router";
-import { authMiddleware } from "./auth/auth-middleware";
-import { errorHandler } from "./api/error-handler";
-import { assertProductionIdentityProviderConfigured } from "./auth/production-identity";
-import { assertProductionRateLimitConfigured, rateLimitMiddleware } from "./security/rate-limit";
-import { operationalMonitoringThresholds } from "./observability/operational-telemetry";
+import { buildRouter } from "./api/router.js";
+import { authMiddleware } from "./auth/auth-middleware.js";
+import { errorHandler } from "./api/error-handler.js";
+import { assertProductionIdentityProviderConfigured } from "./auth/production-identity.js";
+import { assertProductionRateLimitConfigured, rateLimitMiddleware } from "./security/rate-limit.js";
+import { operationalMonitoringThresholds } from "./observability/operational-telemetry.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

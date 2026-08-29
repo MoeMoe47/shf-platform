@@ -1,0 +1,22 @@
+{
+  "id": "data-center-design-8-build-better-data-center",
+  "slug": "data-center-design-8-build-better-data-center",
+  "nextSlug": null,
+  "title": "Build a Better Data Center",
+  "curriculum": "data-center-design-8",
+  "gradeBand": { "minGrade": 8, "maxGrade": 8, "stage": "DISCOVER" },
+  "estMinutes": 50,
+  "summary": "Create a community-aware hypothetical design that explains its technical choices and tradeoffs.",
+  "objectives": ["Integrate technical systems and community constraints in a design.", "Document a decision, accepted tradeoff, remaining risk, and possible improvement."],
+  "vocab": [{ "term": "STAKEHOLDER", "def": "A person or group affected by a decision or interested in its outcome." }, { "term": "CAPACITY", "def": "How much work, information, or resource a system can handle." }, { "term": "TRADEOFF", "def": "A choice that gains something while giving up or risking something else." }],
+  "sections": [
+    { "heading": "Your design brief", "body": "Design a hypothetical data center for a community. Include a site, computing needs, power, cooling, networking, security, reliability, sustainability, workforce roles, and community considerations." },
+    { "heading": "Keep a decision log", "body": "For each major choice, explain what you chose, why, what tradeoff you accepted, what risk remains, and what you would improve with more evidence or resources." },
+    { "heading": "Show more than one perspective", "body": "Include at least one possible benefit and one community concern. Your design may seem helpful, need stronger safeguards, need to change, or need more information. The rubric rewards reasoning, not a predetermined conclusion." }
+  ],
+  "practice": [{ "prompt": "Before presenting, check that your design includes every required system and a decision log for site, reliability, sustainability, and community impact." }],
+  "project": { "title": "Build a Better Data Center", "submissionOptions": ["written design brief with a labeled systems diagram", "accessible digital outline or slide-style design", "physical or digital model with an oral explanation"], "rubric": ["integrates the major technical systems", "explains design reasoning and tradeoffs", "addresses reliability and resources", "includes community and workforce perspectives", "communicates clearly and reflects on remaining risk"] },
+  "quiz": { "question": "What makes a design decision strong?", "options": ["It explains needs, evidence, tradeoffs, risks, and possible improvement", "It chooses the biggest system without constraints", "It promises that no problem can occur", "It ignores community questions"], "answer": "It explains needs, evidence, tradeoffs, risks, and possible improvement" },
+  "rubric": { "criteria": [{ "skill": "Integrated design reasoning", "levels": ["Beginning: names a design choice", "Developing: connects a choice to one constraint or system", "Proficient: explains integrated systems, evidence, tradeoffs, community perspectives, and remaining risk"] }] },
+  "reflectionPrompt": "What was your hardest design decision, and what would you investigate before improving it?"
+}

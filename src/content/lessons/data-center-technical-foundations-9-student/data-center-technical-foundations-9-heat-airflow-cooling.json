@@ -1,0 +1,22 @@
+{
+  "id": "data-center-technical-foundations-9-heat-airflow-cooling",
+  "slug": "data-center-technical-foundations-9-heat-airflow-cooling",
+  "nextSlug": "data-center-technical-foundations-9-monitoring-infrastructure",
+  "title": "Heat, Airflow, and Cooling",
+  "curriculum": "data-center-technical-foundations-9",
+  "gradeBand": { "minGrade": 9, "maxGrade": 9, "stage": "EXPLORE" },
+  "estMinutes": 35,
+  "summary": "Interpret synthetic thermal data and connect temperature patterns to airflow and workload clues.",
+  "objectives": ["Explain how workload and airflow affect temperature.", "Interpret simulated temperature data and identify a safe next investigation."],
+  "vocab": [{ "term": "HEAT TRANSFER", "def": "Movement of thermal energy from one place or material to another." }, { "term": "HOT ZONE", "def": "An area with higher-than-expected temperature in a system." }, { "term": "THERMAL LOAD", "def": "Heat produced by equipment or work that a cooling design must manage." }],
+  "sections": [
+    { "heading": "Work creates thermal load", "body": "Computing uses energy and produces heat. More work can change the thermal load. Cooling design uses airflow, temperature monitoring, and equipment arrangement to manage that heat." },
+    { "heading": "Read the pattern", "body": "A single hot reading, a rising trend, and several hot zones suggest different questions. A blocked intake, a workload change, or a sensor issue may be possible causes." },
+    { "heading": "Use synthetic data", "body": "Analyze a provided temperature table or simulation. Do not service HVAC equipment, open energized hardware, or treat one classroom threshold as universal operational guidance." }
+  ],
+  "practice": [{ "prompt": "A rack temperature rises from 22 to 28 degrees while nearby racks stay stable. Calculate the change and name two safe questions to investigate." }],
+  "quiz": { "question": "What is a useful first response to a simulated rising temperature trend?", "options": ["Record the evidence and investigate airflow, workload, and sensor context", "Open the server immediately", "Ignore the trend", "Change a building HVAC setting without permission"], "answer": "Record the evidence and investigate airflow, workload, and sensor context" },
+  "lab": { "safetyClassification": "SIMULATION ONLY", "objective": "Interpret synthetic temperature readings and identify a likely next investigation." },
+  "futureCompetencyCandidates": ["interpret basic thermal data", "relate temperature patterns to possible system causes"],
+  "reflectionPrompt": "What additional measurement would make a thermal conclusion more trustworthy?"
+}

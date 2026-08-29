@@ -1,0 +1,70 @@
+{
+  "id": "data-center-reliable-operations-10-incident-response",
+  "slug": "data-center-reliable-operations-10-incident-response",
+  "nextSlug": "data-center-reliable-operations-10-troubleshooting-constraints",
+  "title": "Incident Response Foundations",
+  "curriculum": "data-center-reliable-operations-10",
+  "gradeBand": {
+    "minGrade": 10,
+    "maxGrade": 10,
+    "stage": "EXPLORE"
+  },
+  "estMinutes": 40,
+  "summary": "Follow a disciplined response process for an unplanned simulated event.",
+  "objectives": [
+    "Define an incident and sequence a response from detection through review.",
+    "Explain why severity and escalation depend on context, safety, permission, and impact."
+  ],
+  "vocab": [
+    {
+      "term": "INCIDENT",
+      "def": "An unplanned event affecting or threatening normal operations."
+    },
+    {
+      "term": "SEVERITY",
+      "def": "A description of how serious an event is in a defined context."
+    },
+    {
+      "term": "RESTORE",
+      "def": "Return a service or system to its expected operating state."
+    }
+  ],
+  "sections": [
+    {
+      "heading": "An incident has a lifecycle",
+      "body": "A classroom lifecycle is Detect, Record, Assess, Respond, Escalate, Restore, Verify, and Review. The order may loop as new evidence appears."
+    },
+    {
+      "heading": "Priority depends on context",
+      "body": "A classroom scenario may define informational, warning, and critical conditions. Real teams use context, safety, permissions, and business impact rather than one universal label."
+    },
+    {
+      "heading": "Escalation is a professional action",
+      "body": "Students should not act beyond their authorization or safety training. Knowing when to stop, record, and ask for help protects people and systems."
+    }
+  ],
+  "practice": [
+    {
+      "prompt": "Sequence a synthetic incident from alert through review, then mark the point where an uncertain or unsafe action must be escalated."
+    }
+  ],
+  "quiz": {
+    "question": "Why might an operator escalate an incident?",
+    "options": [
+      "Because safety, permission, complexity, or impact requires another authority",
+      "Because documentation is optional",
+      "Because every alert proves a critical failure",
+      "Because testing should be random"
+    ],
+    "answer": "Because safety, permission, complexity, or impact requires another authority"
+  },
+  "lab": {
+    "safetyClassification": "SIMULATION ONLY",
+    "objective": "Classify and sequence a synthetic incident response without changing any real system."
+  },
+  "futureCompetencyCandidates": [
+    "sequence incident response stages",
+    "identify an escalation decision"
+  ],
+  "reflectionPrompt": "What makes escalation a responsible action instead of giving up?"
+}

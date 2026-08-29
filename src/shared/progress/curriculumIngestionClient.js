@@ -202,9 +202,6 @@ export async function postOperationalEvent(event, { fetchImpl = globalThis.fetch
     cache: "no-store",
   }, fetchImpl);
   const csrfToken = identity?.csrf_token || "";
-  if (!csrfToken) {
-    throw new Error("Authenticated session required");
-  }
   const completionPath = event?.event_type === "lesson.completed"
     ? `${apiBase}/curriculum/lessons/${encodeURIComponent(event.subject_id)}/complete`
     : `${apiBase}/shf/ingestion/events`;
@@ -216,7 +213,7 @@ export async function postOperationalEvent(event, { fetchImpl = globalThis.fetch
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
-      "X-CSRF-Token": csrfToken,
+      ...(csrfToken ? { "X-CSRF-Token": csrfToken } : {}),
       "X-Correlation-Id": event.idempotency_key,
     },
     body: JSON.stringify(completionBody),

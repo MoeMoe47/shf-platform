@@ -1,0 +1,104 @@
+{
+  "id": "data-center-reliable-operations-10-operations-challenge",
+  "slug": "data-center-reliable-operations-10-operations-challenge",
+  "nextSlug": null,
+  "title": "Data Center Operations Challenge",
+  "curriculum": "data-center-reliable-operations-10",
+  "gradeBand": {
+    "minGrade": 10,
+    "maxGrade": 10,
+    "stage": "EXPLORE"
+  },
+  "estMinutes": 50,
+  "summary": "Respond to a simulated multi-system incident and produce an evidence-based incident report.",
+  "objectives": [
+    "Apply the operations lifecycle to a synthetic incident involving monitoring, network, cooling, and recent-change clues.",
+    "Produce an incident report that documents safe decisions, escalation, verification, and remaining uncertainty."
+  ],
+  "vocab": [
+    {
+      "term": "CORRELATE",
+      "def": "Compare separate pieces of information to see whether they may be related."
+    },
+    {
+      "term": "RECOVERY",
+      "def": "The process of returning a service or system to an expected state."
+    },
+    {
+      "term": "FOLLOW-UP",
+      "def": "A later action used to confirm, improve, or prevent recurrence."
+    }
+  ],
+  "sections": [
+    {
+      "heading": "The scenario",
+      "body": "A synthetic operations center receives a network alert, a temperature warning, a service-impact report, and a recent change record. Some clues are relevant and some are noise."
+    },
+    {
+      "heading": "The response",
+      "body": "Confirm the symptom, inspect the evidence, identify affected systems, prioritize safe actions, escalate where required, verify the simulated recovery, and document what remains uncertain."
+    },
+    {
+      "heading": "The boundary",
+      "body": "This project assesses classroom reasoning and communication. It does not create a project submission record, lab result, verified competency, credential, or job-readiness fact."
+    }
+  ],
+  "practice": [
+    {
+      "prompt": "Use the scenario packet to identify symptoms, evidence, possible causes, safe actions, escalation points, and verification checks."
+    }
+  ],
+  "quiz": {
+    "question": "What is the strongest incident conclusion?",
+    "options": [
+      "A conclusion tied to recorded evidence and a defined verification",
+      "The first possible cause that comes to mind",
+      "A claim that every alert was causal",
+      "A statement that no follow-up is needed"
+    ],
+    "answer": "A conclusion tied to recorded evidence and a defined verification"
+  },
+  "lab": {
+    "safetyClassification": "SUPERVISED CLASSROOM LAB",
+    "objective": "Complete the simulated multi-system incident response using synthetic data and an incident template."
+  },
+  "futureCompetencyCandidates": [
+    "integrate monitoring and troubleshooting evidence",
+    "document an incident response"
+  ],
+  "reflectionPrompt": "Which clue was hardest to interpret, and what additional evidence would help?",
+  "project": {
+    "title": "Data Center Incident Response Challenge",
+    "instructions": "Use the synthetic incident packet to create a structured incident report. Include the symptom, affected systems, evidence, possible causes, safe action, escalation decision, recovery verification, remaining uncertainty, and follow-up.",
+    "submissionOptions": [
+      "structured incident report from synthetic data",
+      "accessible text-only incident record",
+      "small-group oral handoff with a written summary"
+    ],
+    "evidenceBoundary": "LESSON COMPLETION ONLY: project submission, review, and competency are separate future domains."
+  },
+  "rubric": {
+    "criteria": [
+      {
+        "skill": "Evidence use",
+        "levels": ["Beginning: records a relevant clue", "Developing: connects evidence to a decision", "Proficient: supports the response with multiple recorded clues"]
+      },
+      {
+        "skill": "Systems reasoning",
+        "levels": ["Beginning: names an affected system", "Developing: explains a system relationship", "Proficient: distinguishes causal evidence from noise"]
+      },
+      {
+        "skill": "Safety and escalation",
+        "levels": ["Beginning: identifies a safety boundary", "Developing: chooses a safe response or escalation", "Proficient: explains why authorization and impact guide escalation"]
+      },
+      {
+        "skill": "Documentation clarity",
+        "levels": ["Beginning: records the symptom", "Developing: records evidence and actions", "Proficient: creates a clear handoff with status and uncertainty"]
+      },
+      {
+        "skill": "Verification and reflection",
+        "levels": ["Beginning: names an expected result", "Developing: uses a check to verify recovery", "Proficient: explains follow-up and remaining uncertainty"]
+      }
+    ]
+  }
+}

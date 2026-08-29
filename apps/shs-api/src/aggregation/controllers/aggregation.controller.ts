@@ -1,9 +1,9 @@
-import * as EntityResolutionService from "../services/entity-resolution.service";
-import * as VerificationService from "../services/verification.service";
-import * as ReconciliationService from "../services/reconciliation.service";
-import * as AggregationOverviewService from "../services/aggregation-overview.service";
-import * as AggregateEngineService from "../services/aggregate-engine.service";
-import type { VerificationStatus } from "../../oracle/domain/types";
+import * as EntityResolutionService from "../services/entity-resolution.service.js";
+import * as VerificationService from "../services/verification.service.js";
+import * as ReconciliationService from "../services/reconciliation.service.js";
+import * as AggregationOverviewService from "../services/aggregation-overview.service.js";
+import * as AggregateEngineService from "../services/aggregate-engine.service.js";
+import type { VerificationStatus } from "../../oracle/domain/types.js";
 
 type AnyFn = (...args: any[]) => any;
 

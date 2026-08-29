@@ -19,8 +19,8 @@ import type {
   ProviderSession,
   JoinAuthorization,
   ProviderHealth,
-} from "./live-learning-provider";
-import { ProviderNotConfiguredError } from "./live-learning-provider";
+} from "./live-learning-provider.js";
+import { ProviderNotConfiguredError } from "./live-learning-provider.js";
 
 const ZOOM_OAUTH_URL = "https://zoom.us/oauth/token";
 const ZOOM_API_BASE = "https://api.zoom.us/v2";

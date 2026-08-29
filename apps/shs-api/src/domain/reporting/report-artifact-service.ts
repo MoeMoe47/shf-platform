@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
-import { withTransaction } from "../../db/transaction";
-import { writeAuditEvent } from "../audit/service/audit-helper";
-import { ReportArtifactRepo } from "./report-artifact-repo";
+import { withTransaction } from "../../db/transaction.js";
+import { writeAuditEvent } from "../audit/service/audit-helper.js";
+import { ReportArtifactRepo } from "./report-artifact-repo.js";
 
 const CLASSIFICATIONS = new Set(["INTERNAL", "RESTRICTED_EXTERNAL", "PUBLIC"]);
 

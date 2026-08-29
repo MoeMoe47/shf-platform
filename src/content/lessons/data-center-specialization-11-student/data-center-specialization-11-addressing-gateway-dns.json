@@ -1,0 +1,18 @@
+{
+  "id": "data-center-specialization-11-addressing-gateway-dns",
+  "slug": "data-center-specialization-11-addressing-gateway-dns",
+  "nextSlug": "data-center-specialization-11-structured-cabling",
+  "title": "Addressing, Gateways, and DNS",
+  "curriculum": "data-center-specialization-11",
+  "gradeBand": { "minGrade": 11, "maxGrade": 11, "stage": "PREPARE_PROVE" },
+  "estMinutes": 50,
+  "summary": "Reason about local addressing, gateways, and name resolution without turning the lesson into certification practice.",
+  "objectives": ["Explain the roles of an IP address and gateway.", "Distinguish IP reachability from DNS name resolution.", "Use introductory subnet language without requiring subnet mathematics."],
+  "vocab": [{ "term": "IP ADDRESS", "def": "A logical address used to identify an interface on a network." }, { "term": "GATEWAY", "def": "A device or address used to reach another network." }, { "term": "DNS", "def": "A naming system that resolves a name to an address." }],
+  "sections": [{ "heading": "Addressing without overload", "body": "An address identifies an interface in a network context. A gateway provides a route toward another network. A subnet is a local grouping of addresses; this course uses the concept, not full subnet calculations." }, { "heading": "Names and addresses can differ", "body": "A service can respond when contacted by an IP address while its name fails to resolve. That pattern points toward a DNS investigation, not automatically toward a server failure." }],
+  "practice": [{ "prompt": "A synthetic IP check succeeds, but the service name does not resolve. Which system deserves attention first?", "answer": "Name resolution or DNS evidence deserves attention first because IP connectivity already worked in the scenario." }],
+  "quiz": { "question": "What does a gateway generally help a host do?", "options": ["Reach another network", "Store every local file", "Measure rack temperature", "Label a fiber connector"], "answer": "Reach another network" },
+  "lab": { "safetyClassification": "SIMULATION ONLY", "objective": "Classify synthetic IP, gateway, and DNS observations." },
+  "futureCompetencyCandidates": ["reason about addressing and name-resolution evidence"],
+  "reflectionPrompt": "Why is it useful to test an address and a name separately?"
+}

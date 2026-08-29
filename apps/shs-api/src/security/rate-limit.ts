@@ -1,5 +1,5 @@
-import { query } from "../db/client";
-import { emitOperationalTelemetry } from "../observability/operational-telemetry";
+import { query } from "../db/client.js";
+import { emitOperationalTelemetry } from "../observability/operational-telemetry.js";
 
 export type RateLimitClass = "PUBLIC_READ_LIMIT" | "AUTH_LOGIN_LIMIT" | "AUTHENTICATED_USER_LIMIT" | "GOVERNANCE_MUTATION_LIMIT" | "EXPENSIVE_OPERATION_LIMIT" | "INTERNAL_INGESTION_LIMIT";
 export type RateLimitDecision = { allowed: boolean; retryAfterSeconds: number; backend: "postgres" | "memory" };

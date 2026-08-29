@@ -1,0 +1,18 @@
+{
+  "id": "data-center-specialization-11-network-monitoring",
+  "slug": "data-center-specialization-11-network-monitoring",
+  "nextSlug": "data-center-specialization-11-connectivity-troubleshooting",
+  "title": "Network Monitoring and Telemetry",
+  "curriculum": "data-center-specialization-11",
+  "gradeBand": { "minGrade": 11, "maxGrade": 11, "stage": "PREPARE_PROVE" },
+  "estMinutes": 45,
+  "summary": "Use synthetic interface, path, latency, loss, and DNS signals as evidence rather than automatic diagnoses.",
+  "objectives": ["Interpret link, latency, loss, utilization, and DNS signals.", "Compare multiple signals before naming a fault domain.", "Document what telemetry does and does not prove."],
+  "vocab": [{ "term": "LATENCY", "def": "The time it takes for information to travel between points." }, { "term": "PACKET LOSS", "def": "Information sent across a network that does not arrive as expected." }, { "term": "UTILIZATION", "def": "How much of a resource or link capacity is in use." }, { "term": "TELEMETRY", "def": "Collected measurements or status information about a system." }],
+  "sections": [{ "heading": "Signals work together", "body": "A link-down status, packet loss, high latency, and a failed name lookup are different observations. Compare them with the topology and recent changes before choosing a likely fault domain." }, { "heading": "Thresholds need context", "body": "A warning threshold depends on the system and scenario. Use the classroom definitions provided with the data; do not treat one number as universal." }],
+  "practice": [{ "prompt": "Link status is up, latency is high, and packet loss appears on the gateway path. What should happen next?", "answer": "Record the signals, trace the relevant path, and investigate the lowest-risk explanation before changing anything." }],
+  "quiz": { "question": "What is telemetry?", "options": ["Collected measurements or status information", "A guaranteed root-cause report", "A physical cable type", "A permission to change a network"], "answer": "Collected measurements or status information" },
+  "lab": { "safetyClassification": "SIMULATION ONLY", "objective": "Interpret a synthetic network monitoring snapshot." },
+  "futureCompetencyCandidates": ["interpret network telemetry and distinguish evidence from diagnosis"],
+  "reflectionPrompt": "Which two signals would you compare before escalating a connectivity issue, and why?"
+}

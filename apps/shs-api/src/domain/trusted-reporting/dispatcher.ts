@@ -1,7 +1,7 @@
-import { IntegrationOutboxRepo } from "./outbox-repo";
+import { IntegrationOutboxRepo } from "./outbox-repo.js";
 import { randomUUID } from "node:crypto";
-import { classifyDeliveryFailure, classifyDeliveryResponse, signInternalRequest } from "./outbox";
-import { emitOperationalTelemetry } from "../../observability/operational-telemetry";
+import { classifyDeliveryFailure, classifyDeliveryResponse, signInternalRequest } from "./outbox.js";
+import { emitOperationalTelemetry } from "../../observability/operational-telemetry.js";
 
 type DispatcherResponse = { ok: boolean; status: number; json: () => Promise<any> };
 type DispatcherFetch = (url: string, init: any) => Promise<DispatcherResponse>;

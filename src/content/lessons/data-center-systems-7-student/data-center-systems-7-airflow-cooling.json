@@ -1,0 +1,20 @@
+{
+  "id": "data-center-systems-7-airflow-cooling",
+  "slug": "data-center-systems-7-airflow-cooling",
+  "nextSlug": "data-center-systems-7-sensors-monitoring",
+  "title": "Airflow and Cooling",
+  "curriculum": "data-center-systems-7",
+  "gradeBand": { "minGrade": 7, "maxGrade": 7, "stage": "DISCOVER" },
+  "estMinutes": 25,
+  "summary": "Use airflow and temperature clues to understand why cooling supports reliable computing.",
+  "objectives": ["Explain why servers produce heat.", "Identify a possible airflow problem from a safe diagram or description."],
+  "vocab": [{ "term": "INTAKE", "def": "The place where air enters a system." }, { "term": "EXHAUST", "def": "The place where used or warmer air leaves a system." }, { "term": "THERMAL", "def": "Related to heat and temperature." }],
+  "sections": [
+    { "heading": "Computing produces heat", "body": "Servers use energy while they work, and some of that energy becomes heat. Too much heat can make equipment unreliable, so facilities plan how air moves around equipment." },
+    { "heading": "Read the airflow", "body": "Cooler air enters through an intake, moves around equipment, and warmer air leaves through an exhaust. Blocked paths or mixed airflow can make cooling less effective." },
+    { "heading": "Study diagrams safely", "body": "Use arrows on a paper rack diagram to identify intake, exhaust, and a blocked path. Do not service HVAC equipment or open energized hardware. Those tasks require qualified supervision." }
+  ],
+  "practice": [{ "prompt": "A diagram shows warm exhaust air being pulled back into a server intake. What evidence suggests an airflow problem, and what safe next step would you recommend?" }],
+  "quiz": { "question": "Why does airflow matter around servers?", "options": ["It helps move heat away from equipment", "It replaces all network connections", "It makes labels unnecessary", "It prevents every possible failure"], "answer": "It helps move heat away from equipment" },
+  "reflectionPrompt": "What clue would make you investigate cooling instead of networking?"
+}

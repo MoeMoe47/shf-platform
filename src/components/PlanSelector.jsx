@@ -87,6 +87,14 @@ export default function PlanSelector({
   };
 
   const kpiRow = (p) => {
+    if (p?.pathway?.canonicalCareer) {
+      return (
+        <div className="sh-row" style={{ gap: 8, flexWrap: "wrap" }}>
+          <span className="sh-chip">Timeline varies</span>
+          <span className="sh-chip">Cost not specified</span>
+        </div>
+      );
+    }
     const weeks = Number(p.estWeeks) || 0;
     const cost = Number.isFinite(p.netCostAfterAid) ? p.netCostAfterAid : Number(p.estCost) || 0;
     const cohort = p.nextCohortDate ? dateFmt(p.nextCohortDate) : "TBD";

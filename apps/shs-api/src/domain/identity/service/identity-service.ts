@@ -1,5 +1,5 @@
-import { IdentityRepo } from "../repo/identity-repo";
-import { isProductionEnvironment } from "../../../auth/production-identity";
+import { IdentityRepo } from "../repo/identity-repo.js";
+import { isProductionEnvironment } from "../../../auth/production-identity.js";
 
 export class IdentityService {
   private repo = new IdentityRepo();

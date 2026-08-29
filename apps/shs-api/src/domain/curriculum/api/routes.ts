@@ -1,7 +1,7 @@
-import { requirePermission } from "../../../auth/permission-guard";
-import { SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions";
-import { ok, fail } from "../../../api/response-envelope";
-import { CurriculumCompletionService } from "../service/curriculum-completion-service";
+import { requirePermission } from "../../../auth/permission-guard.js";
+import { SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
+import { ok, fail } from "../../../api/response-envelope.js";
+import { CurriculumCompletionService } from "../service/curriculum-completion-service.js";
 
 const service = new CurriculumCompletionService();
 
@@ -19,7 +19,7 @@ export function registerCurriculumCompletionRoutes(app: any) {
         return res.status(200).json(ok(result));
       } catch (error: any) {
         const code = String(error?.message || "completion_rejected");
-        return res.status(400).json(fail(code.toUpperCase(), "Lesson completion rejected."));
+        return res.status(code === "grade12_course_assignment_required" ? 403 : 400).json(fail(code.toUpperCase(), "Lesson completion rejected."));
       }
     },
   );

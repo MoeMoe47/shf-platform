@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getReconciliationForEntity } from "../controllers/reconciliation.controller";
+import { getReconciliationForEntity } from "../controllers/reconciliation.controller.js";
 
 const router = Router();
 

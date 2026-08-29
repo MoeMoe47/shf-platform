@@ -1,0 +1,20 @@
+{
+  "id": "data-center-design-8-reliable-power",
+  "slug": "data-center-design-8-reliable-power",
+  "nextSlug": "data-center-design-8-cooling-airflow",
+  "title": "Designing Reliable Power",
+  "curriculum": "data-center-design-8",
+  "gradeBand": { "minGrade": 8, "maxGrade": 8, "stage": "DISCOVER" },
+  "estMinutes": 30,
+  "summary": "Use redundancy and backup concepts to reason about a power design without performing electrical work.",
+  "objectives": ["Explain why a critical system should not depend on one path.", "Compare a single power path with a conceptual primary-and-backup design."],
+  "vocab": [{ "term": "REDUNDANCY", "def": "An additional path or component available if another one fails." }, { "term": "SINGLE POINT OF FAILURE", "def": "One part whose failure can stop the larger system." }, { "term": "RELIABILITY", "def": "The ability of a system to keep performing as expected over time." }],
+  "sections": [
+    { "heading": "Plan for interruptions", "body": "Computing equipment depends on power. A design can include a primary supply, backup systems, and monitoring so a team has more than one way to respond to an interruption." },
+    { "heading": "One path or more than one", "body": "If one path is the only path, it is a single point of failure. A primary path plus an independent backup can improve resilience, though it adds resources and complexity." },
+    { "heading": "Design on paper", "body": "Draw two conceptual power paths to a server and label the backup. Do not wire circuits, open panels, service generators, or touch mains electricity. Those tasks require qualified professionals." }
+  ],
+  "practice": [{ "prompt": "Compare a design with one power path to one with a primary and backup path. What reliability benefit and resource tradeoff does the second design have?" }],
+  "quiz": { "question": "What does redundancy provide?", "options": ["Another available path or component if one fails", "A guarantee that nothing can fail", "A replacement for cooling", "Permission to service a generator"], "answer": "Another available path or component if one fails" },
+  "reflectionPrompt": "Where might adding a backup improve a design, and what resource might that require?"
+}

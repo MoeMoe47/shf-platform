@@ -1,0 +1,22 @@
+{
+  "id": "data-center-technical-foundations-9-electricity-fundamentals",
+  "slug": "data-center-technical-foundations-9-electricity-fundamentals",
+  "nextSlug": "data-center-technical-foundations-9-powering-critical-infrastructure",
+  "title": "Electricity Fundamentals",
+  "curriculum": "data-center-technical-foundations-9",
+  "gradeBand": { "minGrade": 9, "maxGrade": 9, "stage": "EXPLORE" },
+  "estMinutes": 35,
+  "summary": "Learn the meanings of voltage, current, resistance, and power through safe low-voltage models.",
+  "objectives": ["Define voltage, current, resistance, and power conceptually.", "Use P = V x I in a safe, symbolic calculation without treating it as trade competency."],
+  "vocab": [{ "term": "VOLTAGE", "def": "A difference in electrical potential that can drive current." }, { "term": "CURRENT", "def": "The flow of electric charge." }, { "term": "RESISTANCE", "def": "Opposition to the flow of electric charge." }, { "term": "WATT", "def": "A unit used to describe power." }],
+  "sections": [
+    { "heading": "Four useful quantities", "body": "Voltage can help drive current. Resistance opposes current. Power describes a rate of energy use. A common relationship is P = V x I, where power in watts equals voltage times current." },
+    { "heading": "Calculate in a model", "body": "If a safe classroom model uses 5 volts and 2 amps, its conceptual power is 10 watts. This arithmetic does not authorize electrical work or prove trade competency." },
+    { "heading": "Electrical safety is non-negotiable", "body": "Use diagrams, simulations, or approved low-voltage kits. Never access mains panels, wire building circuits, open energized supplies, or service data-center power equipment." }
+  ],
+  "practice": [{ "prompt": "Use P = V x I for a 12-volt, 1.5-amp classroom model. State the result and one reason the example is not professional electrical training." }],
+  "quiz": { "question": "What does a watt describe?", "options": ["A unit used to describe power", "A network address", "A filesystem location", "A type of fiber connector"], "answer": "A unit used to describe power" },
+  "lab": { "safetyClassification": "SIMULATION ONLY", "objective": "Calculate symbolic power values and interpret a low-voltage model diagram." },
+  "futureCompetencyCandidates": ["define basic electrical quantities", "calculate symbolic power in a controlled exercise"],
+  "reflectionPrompt": "Which electrical quantity would you want explained again before a supervised low-voltage lab?"
+}

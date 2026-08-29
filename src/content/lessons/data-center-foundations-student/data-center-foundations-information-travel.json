@@ -1,0 +1,20 @@
+{
+  "id": "data-center-foundations-information-travel",
+  "slug": "data-center-foundations-information-travel",
+  "nextSlug": "data-center-foundations-electricity",
+  "title": "How Information Travels",
+  "curriculum": "data-center-foundations",
+  "gradeBand": { "minGrade": 6, "maxGrade": 8, "stage": "DISCOVER" },
+  "estMinutes": 25,
+  "summary": "Networks connect devices to servers so information can travel and return.",
+  "objectives": ["Sequence a simple request and response.", "Identify devices, networks, cables, fiber, switches, and servers at a high level."],
+  "vocab": [{ "term": "NETWORK", "def": "Connected devices and equipment that let information move between them." }, { "term": "FIBER", "def": "A thin strand that carries information using light." }, { "term": "SWITCH", "def": "Network equipment that helps direct information to the right connection." }],
+  "sections": [
+    { "heading": "A connected journey", "body": "A request can travel from a student device through a local network and other internet connections to a data center. A server processes the request, and a response travels back." },
+    { "heading": "Different connections", "body": "Cables and fiber carry information. A switch helps direct information between connected devices. These are pieces of a larger network, not magic steps that happen separately." },
+    { "heading": "Sequence matters", "body": "The exact path can vary, but the idea is consistent: a device makes a request, networks carry it, a server works with it, and a response returns." }
+  ],
+  "practice": [{ "prompt": "Arrange these cards in a likely order: server, student device, network, response." }],
+  "quiz": { "question": "What does a network do?", "options": ["It connects devices so information can move", "It only removes heat", "It replaces every server", "It prevents all communication"], "answer": "It connects devices so information can move" },
+  "reflectionPrompt": "Which part of the information journey would you like to learn more about?"
+}

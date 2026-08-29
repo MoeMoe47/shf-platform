@@ -1,0 +1,24 @@
+{
+  "id": "data-center-technical-foundations-9-safe-technical-system-project",
+  "slug": "data-center-technical-foundations-9-safe-technical-system-project",
+  "nextSlug": null,
+  "title": "Build and Diagnose a Safe Technical System",
+  "curriculum": "data-center-technical-foundations-9",
+  "gradeBand": { "minGrade": 9, "maxGrade": 9, "stage": "EXPLORE" },
+  "estMinutes": 55,
+  "summary": "Integrate a simulated server, operating system, network, monitoring signal, and technical record.",
+  "objectives": ["Use safe evidence to diagnose a controlled technical scenario.", "Document the process and communicate a reasoned next step."],
+  "vocab": [{ "term": "DIAGNOSTIC", "def": "A process of gathering information to understand a problem." }, { "term": "CONFIGURATION", "def": "The settings that determine how a system operates." }, { "term": "REFLECTION", "def": "A considered explanation of what was learned and what could improve." }],
+  "sections": [
+    { "heading": "Project environment", "body": "Use an approved browser simulation, disposable Linux sandbox, synthetic network map, or structured paper scenario. The system should include a server or service, a network path, a monitoring clue, and one controlled fault." },
+    { "heading": "Project process", "body": "Record the objective, environment, safety classification, observations, evidence, hypothesis, safe test, result, documentation, and escalation decision. Do not interact with production systems or real learner data." },
+    { "heading": "Communicate the result", "body": "Explain what you found, what remains uncertain, and what a qualified next step would be. Completing this lesson does not prove lab completion, project review, or professional competency." }
+  ],
+  "practice": [{ "prompt": "Before presenting, check that your project record separates observation from hypothesis and includes a safe boundary for the next action." }],
+  "project": { "title": "Build and Diagnose a Safe Technical System", "submissionOptions": ["structured technical report from a browser simulation", "accessible digital outline with network and monitoring evidence", "oral explanation paired with a text-labeled systems record"], "rubric": ["explains the technical system", "uses evidence and a safe process", "documents observations and outcomes", "communicates uncertainty and escalation", "reflects on what could improve"] },
+  "quiz": { "question": "What is the project expected to demonstrate?", "options": ["Safe, evidence-based technical reasoning in a controlled environment", "Professional qualification to repair infrastructure", "Unauthorized access to a network", "An automatic career-ready status"], "answer": "Safe, evidence-based technical reasoning in a controlled environment" },
+  "rubric": { "criteria": [{ "skill": "Safe technical reasoning", "levels": ["Beginning: identifies a symptom", "Developing: connects evidence to a possible cause", "Proficient: documents a safe diagnostic process, result, uncertainty, and escalation"] }] },
+  "lab": { "safetyClassification": "SUPERVISED CLASSROOM LAB", "objective": "Complete a controlled technical scenario using only approved synthetic or disposable systems." },
+  "futureCompetencyCandidates": ["integrate a supervised technical scenario", "produce a structured diagnostic record"],
+  "reflectionPrompt": "Which technical system did you understand more clearly after the project, and what would you learn next?"
+}

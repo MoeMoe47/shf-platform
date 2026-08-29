@@ -1,0 +1,20 @@
+{
+  "id": "data-center-design-8-site-selection",
+  "slug": "data-center-design-8-site-selection",
+  "nextSlug": "data-center-design-8-reliable-power",
+  "title": "Choosing the Right Site",
+  "curriculum": "data-center-design-8",
+  "gradeBand": { "minGrade": 8, "maxGrade": 8, "stage": "DISCOVER" },
+  "estMinutes": 30,
+  "summary": "Compare hypothetical sites by considering infrastructure, risk, access, and community context.",
+  "objectives": ["Compare site choices using more than one constraint.", "Explain why a site with one strength may still have important tradeoffs."],
+  "vocab": [{ "term": "SITE SELECTION", "def": "Choosing a location after considering needs, limits, and risks." }, { "term": "ACCESS", "def": "The ability to reach a place or connect it to needed services." }, { "term": "RISK", "def": "A possibility that could cause harm, delay, or loss." }],
+  "sections": [
+    { "heading": "A location affects the whole system", "body": "A site may need access to electricity, fiber, roads, workers, and emergency services. Land, weather, flooding, nearby communities, and environmental conditions can also matter." },
+    { "heading": "Compare three hypothetical sites", "body": "Site A has strong power but poor fiber. Site B has strong fiber but limited land. Site C has more land but is farther from supporting infrastructure. No site wins every category." },
+    { "heading": "Explain the tradeoff", "body": "Rank the sites using criteria your team names. A defensible choice explains what it gains, what it gives up, and what additional evidence is needed." }
+  ],
+  "practice": [{ "prompt": "Choose one hypothetical site and list two strengths, one concern, and one question you would investigate before deciding." }],
+  "quiz": { "question": "Why should a design team consider fiber access when choosing a site?", "options": ["Connectivity supports the usefulness and reliability of the facility", "Fiber replaces every power system", "Fiber makes land and weather irrelevant", "Fiber removes the need for people"], "answer": "Connectivity supports the usefulness and reliability of the facility" },
+  "reflectionPrompt": "Which site-selection factor would you want more evidence about before making a decision?"
+}

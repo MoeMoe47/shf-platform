@@ -1,0 +1,20 @@
+{
+  "id": "data-center-design-8-network-design",
+  "slug": "data-center-design-8-network-design",
+  "nextSlug": "data-center-design-8-security-by-design",
+  "title": "Connecting the Data Center",
+  "curriculum": "data-center-design-8",
+  "gradeBand": { "minGrade": 8, "maxGrade": 8, "stage": "DISCOVER" },
+  "estMinutes": 30,
+  "summary": "Design a connected path that considers internal organization, external links, and resilience.",
+  "objectives": ["Distinguish internal connections from external connectivity.", "Explain why organized or multiple network paths can improve a design."],
+  "vocab": [{ "term": "CAPACITY", "def": "How much work, information, or resource a system can handle." }, { "term": "NETWORK PATH", "def": "The route information follows between connected systems." }, { "term": "CONNECTIVITY", "def": "The ability of systems or places to connect and communicate." }],
+  "sections": [
+    { "heading": "A powerful facility needs connections", "body": "Inside, servers connect to switches and other systems. Outside, fiber and network links connect the facility to buildings, regions, and services. Without useful connectivity, computing capacity has limited reach." },
+    { "heading": "Organize and protect the paths", "body": "Clear labels and planned cable routes help people understand a system. Multiple conceptual paths can reduce dependence on one connection, but they also require more planning and resources." },
+    { "heading": "Map the information journey", "body": "Draw a path from an outside network to a switch and then to a server. Add a second path and explain what question it raises. This is design reasoning, not advanced network configuration." }
+  ],
+  "practice": [{ "prompt": "A design has one external link and two internal links. What single point of failure remains, and what tradeoff might a second external link create?" }],
+  "quiz": { "question": "Why might a design include more than one network path?", "options": ["To reduce dependence on one connection", "To eliminate the need for servers", "To make cooling unnecessary", "To bypass permissions"], "answer": "To reduce dependence on one connection" },
+  "reflectionPrompt": "What makes a network path easy for another person to understand and maintain?"
+}

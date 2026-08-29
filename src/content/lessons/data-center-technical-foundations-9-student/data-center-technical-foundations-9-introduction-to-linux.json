@@ -1,0 +1,22 @@
+{
+  "id": "data-center-technical-foundations-9-introduction-to-linux",
+  "slug": "data-center-technical-foundations-9-introduction-to-linux",
+  "nextSlug": "data-center-technical-foundations-9-network-fundamentals",
+  "title": "Introduction to Linux",
+  "curriculum": "data-center-technical-foundations-9",
+  "gradeBand": { "minGrade": 9, "maxGrade": 9, "stage": "EXPLORE" },
+  "estMinutes": 35,
+  "summary": "Use a restricted Linux sandbox to navigate files and record observations safely.",
+  "objectives": ["Use basic non-destructive command-line commands in a sandbox.", "Document what each command reveals about a simulated server filesystem."],
+  "vocab": [{ "term": "LINUX", "def": "A family of operating systems commonly used in many computing environments." }, { "term": "COMMAND LINE", "def": "A text interface where a user enters commands." }, { "term": "DIRECTORY", "def": "A location used to organize files." }],
+  "sections": [
+    { "heading": "A text-based way to work", "body": "The command line lets a user ask an operating system to show information or perform an approved task. Many infrastructure teams use command-line tools alongside graphical tools." },
+    { "heading": "Safe starter commands", "body": "In an isolated sandbox, pwd shows the current directory, ls lists items, cd changes location, mkdir creates an approved folder, cat reads a text file, echo prints text, and whoami shows the sandbox user." },
+    { "heading": "Safety before speed", "body": "Use only the approved sandbox and commands. Do not use destructive deletion, privilege escalation, raw disk tools, shutdown commands, attack tools, or real network targets. Ask an instructor before changing the environment." }
+  ],
+  "practice": [{ "prompt": "Write the safe command sequence to show your location, list files, enter a classroom folder, and read a status note." }],
+  "quiz": { "question": "What does pwd show in a Linux sandbox?", "options": ["The current directory", "The server's electrical voltage", "A network attack result", "The number of GPUs in a building"], "answer": "The current directory" },
+  "lab": { "safetyClassification": "SUPERVISED CLASSROOM LAB", "objective": "Navigate a disposable Linux sandbox with approved commands and record observations." },
+  "futureCompetencyCandidates": ["navigate a Linux filesystem", "document command-line observations"],
+  "reflectionPrompt": "What made the command line clear or confusing, and what safe question would you ask next?"
+}

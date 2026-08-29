@@ -1,0 +1,70 @@
+{
+  "id": "data-center-reliable-operations-10-technical-communication",
+  "slug": "data-center-reliable-operations-10-technical-communication",
+  "nextSlug": "data-center-reliable-operations-10-operations-challenge",
+  "title": "Technical Communication and Verification",
+  "curriculum": "data-center-reliable-operations-10",
+  "gradeBand": {
+    "minGrade": 10,
+    "maxGrade": 10,
+    "stage": "EXPLORE"
+  },
+  "estMinutes": 30,
+  "summary": "Communicate operational findings clearly and verify restoration before declaring success.",
+  "objectives": [
+    "Write a concise technical handoff that includes evidence, status, and next steps.",
+    "Explain why verification must follow a response before a service is called restored."
+  ],
+  "vocab": [
+    {
+      "term": "HANDOFF",
+      "def": "A clear transfer of relevant work and context to another person or team."
+    },
+    {
+      "term": "VERIFICATION",
+      "def": "A check that confirms whether an expected result occurred."
+    },
+    {
+      "term": "STATUS",
+      "def": "The current condition of a system or task."
+    }
+  ],
+  "sections": [
+    {
+      "heading": "A handoff should be usable",
+      "body": "A strong handoff names the affected system, current status, observed evidence, actions attempted, remaining uncertainty, and the next owner or escalation path."
+    },
+    {
+      "heading": "Verify the outcome",
+      "body": "A service is not restored merely because an action was taken. Use the defined checks in the scenario to compare expected and actual results."
+    },
+    {
+      "heading": "Communicate without overclaiming",
+      "body": "Say what is known, what is suspected, and what remains untested. Do not claim competency, certification, or production authority from completing a classroom exercise."
+    }
+  ],
+  "practice": [
+    {
+      "prompt": "Turn a synthetic incident note into a three-sentence handoff that states the symptom, evidence, current status, and next step."
+    }
+  ],
+  "quiz": {
+    "question": "What should follow a response action?",
+    "options": [
+      "A defined verification check and accurate documentation",
+      "An unsupported claim that the root cause is fixed",
+      "A new unreviewed change",
+      "Deletion of the incident record"
+    ],
+    "answer": "A defined verification check and accurate documentation"
+  },
+  "lab": {
+    "safetyClassification": "SAFE INDEPENDENT CLASSROOM LAB",
+    "objective": "Write and peer-review a synthetic technical handoff against a provided checklist."
+  },
+  "futureCompetencyCandidates": [
+    "write a technical handoff",
+    "verify a simulated restoration result"
+  ],
+  "reflectionPrompt": "What makes a technical message useful to the next person who receives it?"
+}

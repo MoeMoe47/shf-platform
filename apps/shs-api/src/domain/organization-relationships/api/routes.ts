@@ -1,7 +1,7 @@
-import { requirePermission } from "../../../auth/permission-guard";
-import { fail, ok } from "../../../api/response-envelope";
-import { OrganizationRelationshipService } from "../service/organization-relationship-service";
-import { toOrganizationRelationshipResponse } from "../model/organization-relationship";
+import { requirePermission } from "../../../auth/permission-guard.js";
+import { fail, ok } from "../../../api/response-envelope.js";
+import { OrganizationRelationshipService } from "../service/organization-relationship-service.js";
+import { toOrganizationRelationshipResponse } from "../model/organization-relationship.js";
 
 const service = new OrganizationRelationshipService();
 

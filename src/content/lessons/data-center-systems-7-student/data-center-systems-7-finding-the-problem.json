@@ -1,0 +1,20 @@
+{
+  "id": "data-center-systems-7-finding-the-problem",
+  "slug": "data-center-systems-7-finding-the-problem",
+  "nextSlug": "data-center-systems-7-systems-challenge",
+  "title": "Finding the Problem",
+  "curriculum": "data-center-systems-7",
+  "gradeBand": { "minGrade": 7, "maxGrade": 7, "stage": "DISCOVER" },
+  "estMinutes": 30,
+  "summary": "Practice a safe, evidence-based troubleshooting method with simple infrastructure scenarios.",
+  "objectives": ["Use a six-step troubleshooting sequence.", "Match symptoms to possible systems without attempting hazardous repairs."],
+  "vocab": [{ "term": "SYMPTOM", "def": "An observable sign that something may be different or wrong." }, { "term": "CAUSE", "def": "A condition that helps explain why something happened." }, { "term": "EVIDENCE", "def": "Information used to support careful reasoning." }],
+  "sections": [
+    { "heading": "A safe reasoning sequence", "body": "Observe. Identify the affected system. Check simple causes. Compare evidence. Choose a safe next step. Ask for help when needed. This sequence supports careful thinking." },
+    { "heading": "Try three scenarios", "body": "If a powered server cannot reach the network, investigate the connection path. If several servers show high temperatures, investigate airflow or cooling. If equipment shuts down during an interruption, investigate power and backup systems." },
+    { "heading": "Reason, do not repair", "body": "A classroom scenario asks you to identify likely systems and explain why. It does not authorize opening hardware, wiring equipment, handling live fiber, or bypassing security." }
+  ],
+  "practice": [{ "prompt": "For the symptom 'server has power but cannot connect,' list one observation, one possible system, and one safe next step." }],
+  "quiz": { "question": "What should come before choosing a troubleshooting step?", "options": ["Observe the symptom and compare evidence", "Open every device", "Guess the cause immediately", "Bypass the security controls"], "answer": "Observe the symptom and compare evidence" },
+  "reflectionPrompt": "Which troubleshooting step helps you avoid jumping to a conclusion?"
+}

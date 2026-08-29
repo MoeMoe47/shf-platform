@@ -1,0 +1,22 @@
+{
+  "id": "data-center-technical-foundations-9-how-servers-run-software",
+  "slug": "data-center-technical-foundations-9-how-servers-run-software",
+  "nextSlug": "data-center-technical-foundations-9-introduction-to-linux",
+  "title": "How Servers Run Software",
+  "curriculum": "data-center-technical-foundations-9",
+  "gradeBand": { "minGrade": 9, "maxGrade": 9, "stage": "EXPLORE" },
+  "estMinutes": 30,
+  "summary": "Connect hardware, operating systems, processes, files, users, and services.",
+  "objectives": ["Explain the role of an operating system.", "Trace how hardware and software cooperate to provide a service."],
+  "vocab": [{ "term": "OPERATING SYSTEM", "def": "Software that manages hardware and provides a platform for applications." }, { "term": "PROCESS", "def": "A running program or task." }, { "term": "FILESYSTEM", "def": "The organized way an operating system stores and finds files." }],
+  "sections": [
+    { "heading": "The operating system is a manager", "body": "An operating system manages hardware, files, users, processes, and networking. Applications use the operating system instead of controlling every hardware detail themselves." },
+    { "heading": "From request to service", "body": "A request reaches a network interface, the operating system passes work to a process, and the process uses memory, storage, and the CPU to produce a response. These layers cooperate." },
+    { "heading": "Windows and Linux", "body": "Windows and Linux are operating systems with different tools and conventions. Neither is automatically best for every context. A safe sandbox lets students explore without touching production systems." }
+  ],
+  "practice": [{ "prompt": "Put these ideas in order: application process, network request, operating system, hardware resources, response. Explain the relationship." }],
+  "quiz": { "question": "What is one job of an operating system?", "options": ["Manage hardware and provide a platform for applications", "Replace every network device", "Generate building electricity", "Guarantee an application never fails"], "answer": "Manage hardware and provide a platform for applications" },
+  "lab": { "safetyClassification": "SIMULATION ONLY", "objective": "Trace a synthetic service request through operating-system layers." },
+  "futureCompetencyCandidates": ["explain operating-system responsibilities", "trace a service request through system layers"],
+  "reflectionPrompt": "Which operating-system responsibility would be most important when a server runs many services?"
+}

@@ -1,0 +1,19 @@
+{
+  "id": "data-center-specialization-11-connectivity-troubleshooting",
+  "slug": "data-center-specialization-11-connectivity-troubleshooting",
+  "nextSlug": "data-center-specialization-11-network-reliability",
+  "title": "Connectivity Troubleshooting",
+  "curriculum": "data-center-specialization-11",
+  "gradeBand": { "minGrade": 11, "maxGrade": 11, "stage": "PREPARE_PROVE" },
+  "estMinutes": 55,
+  "summary": "Follow a layered, low-risk process for a synthetic network fault.",
+  "objectives": ["Confirm a symptom before investigating.", "Check physical, interface, addressing, path, and name-resolution evidence in order.", "Document a safe next step and escalation boundary."],
+  "vocab": [{ "term": "FAULT DOMAIN", "def": "The system area where evidence suggests a problem may be located." }, { "term": "REACHABILITY", "def": "Whether one system can successfully reach another in a defined test." }, { "term": "ESCALATION", "def": "Passing responsibility or a problem to an authorized person or team." }],
+  "sections": [{ "heading": "Use layers", "body": "Confirm the symptom, check link state, inspect the interface, review address and gateway evidence, trace the path, then check DNS when relevant. Each step narrows possibilities without random changes." }, { "heading": "Stop at the boundary", "body": "If the next action involves live fiber, an unauthorized target, or a change outside the sandbox, stop, document, and escalate. Safe troubleshooting includes knowing when not to act." }],
+  "practice": [{ "prompt": "A device has an IP address, can reach its gateway, and cannot resolve a service name. Which fault domain is most relevant first?", "answer": "Name resolution or DNS is the most relevant first fault domain in this synthetic scenario." }],
+  "quiz": { "question": "What should happen before changing a network configuration?", "options": ["Confirm the symptom and gather evidence", "Scan unrelated networks", "Guess a new address", "Disconnect random cables"], "answer": "Confirm the symptom and gather evidence" },
+  "proofActivity": { "activityId": "grade11-networking-fiber-connectivity-troubleshooting", "activityType": "SIMULATED_INFRASTRUCTURE_PROOF", "safetyClassification": "SIMULATION ONLY", "competencySlug": "network-connectivity-troubleshooting", "monitoringData": [{ "signal": "Server interface", "value": "UP", "status": "NORMAL", "detail": "Synthetic interface record" }, { "signal": "Gateway reachability", "value": "FAILED", "status": "WARNING", "detail": "Synthetic path test" }, { "signal": "DNS resolution", "value": "NOT TESTED", "status": "INFO", "detail": "Requires approved sandbox check" }, { "signal": "Recent change", "value": "Patch record updated", "status": "WARNING", "detail": "Synthetic change note" }], "criteria": ["Confirms the reported symptom", "Uses relevant topology and connectivity evidence", "Identifies a reasonable fault domain", "Recommends a safe next action and escalation"], "criterion": "connectivity-troubleshooting" },
+  "lab": { "safetyClassification": "SIMULATION ONLY", "objective": "Diagnose and document a synthetic connectivity fault." },
+  "futureCompetencyCandidates": ["diagnose a sandbox connectivity fault"],
+  "reflectionPrompt": "Which troubleshooting step reduced uncertainty most, and what remained unknown?"
+}

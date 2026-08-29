@@ -1,0 +1,20 @@
+{
+  "id": "data-center-systems-7-power-path",
+  "slug": "data-center-systems-7-power-path",
+  "nextSlug": "data-center-systems-7-airflow-cooling",
+  "title": "How Power Reaches Equipment",
+  "curriculum": "data-center-systems-7",
+  "gradeBand": { "minGrade": 7, "maxGrade": 7, "stage": "DISCOVER" },
+  "estMinutes": 25,
+  "summary": "Trace a conceptual power path from a utility through facility systems to a rack and server.",
+  "objectives": ["Sequence a conceptual data-center power path.", "Explain why backup power is part of reliability planning without performing electrical work."],
+  "vocab": [{ "term": "UPS", "def": "A system that can provide short-term backup power during a disruption." }, { "term": "GENERATOR", "def": "A machine that can produce electrical power when another source is unavailable." }, { "term": "DISTRIBUTION", "def": "The organized delivery of a resource to the places that need it." }],
+  "sections": [
+    { "heading": "Follow the path", "body": "A simplified path is utility, facility power systems, power distribution, rack, and server. Real facilities have many layers and safeguards, but the main idea is that equipment depends on planned power delivery." },
+    { "heading": "Reliability uses layers", "body": "A UPS can bridge a short interruption, and a generator may provide power for a longer period when designed systems activate. Backup plans reduce risk but do not make every interruption harmless." },
+    { "heading": "Conceptual and classroom safe", "body": "Arrange cards to model the path. Do not wire circuits, open panels, touch mains electricity, or operate a UPS or generator. Electrical work belongs to qualified professionals." }
+  ],
+  "practice": [{ "prompt": "Put these cards in order: server, utility, rack, facility power systems, distribution. Then name one question you would ask about reliability." }],
+  "quiz": { "question": "What is one purpose of a UPS?", "options": ["Provide short-term backup power during a disruption", "Connect a fiber cable with light", "Replace every network switch", "Measure a server's memory"], "answer": "Provide short-term backup power during a disruption" },
+  "reflectionPrompt": "Why might a community ask questions about the power needed by a large facility?"
+}

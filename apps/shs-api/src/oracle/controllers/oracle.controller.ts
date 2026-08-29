@@ -1,7 +1,7 @@
-import { resolveTruth } from "../services/oracle.service";
-import { runOracleCompare } from "../services/compare.service";
-import { runOraclePriority } from "../services/priority.service";
-import { writeSecurityAuditEvent } from "../../auth/security-audit";
+import { resolveTruth } from "../services/oracle.service.js";
+import { runOracleCompare } from "../services/compare.service.js";
+import { runOraclePriority } from "../services/priority.service.js";
+import { writeSecurityAuditEvent } from "../../auth/security-audit.js";
 
 export type OracleActionRecord = {
   entityId: string;

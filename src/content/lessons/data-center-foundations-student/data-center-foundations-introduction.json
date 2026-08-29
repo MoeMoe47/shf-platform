@@ -1,0 +1,47 @@
+{
+  "id": "data-center-foundations-introduction",
+  "slug": "data-center-foundations-introduction",
+  "nextSlug": "data-center-foundations-server",
+  "title": "What Is a Data Center?",
+  "curriculum": "data-center-foundations",
+  "gradeBand": { "minGrade": 6, "maxGrade": 8, "stage": "DISCOVER" },
+  "estMinutes": 25,
+  "summary": "A data center is a large, carefully managed place where computers help power the digital services people use every day.",
+  "objectives": [
+    "Explain what a data center is and why digital services need physical infrastructure.",
+    "Identify servers, networking, electricity, cooling, and security as parts of a data center.",
+    "Name several careers that help build and operate data centers.",
+    "Describe both possible community benefits and community questions about data-center development."
+  ],
+  "vocab": [
+    { "term": "DATA CENTER", "def": "A managed facility that houses computers and the systems that keep them working." },
+    { "term": "SERVER", "def": "A computer that provides information or services to other computers." },
+    { "term": "NETWORK", "def": "Connected devices and the equipment that lets them exchange information." },
+    { "term": "COOLING", "def": "Systems that remove heat so equipment can operate safely." }
+  ],
+  "sections": [
+    {
+      "heading": "A large home for computers",
+      "body": "When you stream a video, use an app, visit a website, or ask an AI tool a question, computers somewhere have to receive your request and send back a response. A data center is the physical place where many of those computers, called servers, work together. It is more than a room full of computers: it also needs networking, electricity, cooling, and security."
+    },
+    {
+      "heading": "Many systems work together",
+      "body": "Networks connect servers to each other and to the internet. Electrical systems provide steady power and backup power. Cooling systems move heat away from equipment. Physical and digital security help protect the building, hardware, and information. People monitor these systems and respond when something needs attention."
+    },
+    {
+      "heading": "People and communities",
+      "body": "Data centers can bring construction activity, infrastructure investment, connectivity, and jobs in technology, electrical work, mechanical systems, networking, security, and operations. Communities can also ask careful questions about electricity demand, water use, land, noise, sustainability, tax incentives, infrastructure costs, and community benefits. Understanding the infrastructure means examining both opportunities and tradeoffs."
+    }
+  ],
+  "quiz": {
+    "question": "What is one system a data center needs besides servers?",
+    "options": ["Networking, electricity, cooling, or security", "A school bus route", "A paper filing cabinet", "No supporting system"],
+    "answer": "Networking, electricity, cooling, or security"
+  },
+  "rubric": {
+    "criteria": [
+      { "skill": "Infrastructure explanation", "levels": ["Beginning: names a digital service", "Proficient: connects it to servers", "Mastery: explains supporting systems and tradeoffs"] }
+    ]
+  },
+  "reflectionPrompt": "What is one opportunity and one question a community might consider when learning about data centers?"
+}

@@ -1,5 +1,5 @@
-import { query } from "../../../db/client";
-import type { LiveSession, LiveSessionStatus } from "../model/live-session";
+import { query } from "../../../db/client.js";
+import type { LiveSession, LiveSessionStatus } from "../model/live-session.js";
 
 function rowToSession(row: any): LiveSession {
   return {

@@ -56,6 +56,34 @@ export default function PathwayDetailDrawer({
   const weeks = Number(pathway?.estWeeks || 0);
   const cost = Number(pathway?.estCost || 0);
 
+  if (pathway?.canonicalCareer) {
+    return (
+      <>
+        <div className="pd-scrim" onClick={handleClose} aria-hidden="true" />
+        <section role="dialog" aria-modal="true" aria-label={pathway.title} className="pd-modal">
+          <header className="pd-head">
+            <div><h2 className="pd-title">{pathway.title}</h2><div className="pd-subtle">{pathway.cluster}</div></div>
+            <button type="button" ref={closeBtnRef} className="pd-x" aria-label="Close" onClick={handleClose}>✕</button>
+          </header>
+          <div className="pd-body">
+            <p>{pathway.description}</p>
+            <div className="pd-section">
+              <div className="pd-sectionTitle">Recommended learning</div>
+              {pathway.curriculumRequirements?.length ? pathway.curriculumRequirements.map((requirement) => (
+                <div className="sh-row" key={requirement.career_curriculum_requirement_id || requirement.lesson_id}>
+                  <span>{requirement.requirement_type}</span>
+                  <a href={`/curriculum.html#/curriculum/lessons/${encodeURIComponent(requirement.lesson_id)}`}>{requirement.lesson_id}</a>
+                  <span>{requirement.min_grade}–{requirement.max_grade} · {requirement.developmental_stage}</span>
+                </div>
+              )) : <p>No curriculum requirements are currently published.</p>}
+            </div>
+          </div>
+          <footer className="pd-foot"><button type="button" className="sh-btn" onClick={handleClose}>Close</button></footer>
+        </section>
+      </>
+    );
+  }
+
   return (
     <>
       {/* Scrim – click to close */}

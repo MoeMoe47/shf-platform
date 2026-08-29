@@ -1,0 +1,22 @@
+{
+  "id": "data-center-technical-foundations-9-technical-documentation",
+  "slug": "data-center-technical-foundations-9-technical-documentation",
+  "nextSlug": "data-center-technical-foundations-9-structured-troubleshooting",
+  "title": "Technical Documentation",
+  "curriculum": "data-center-technical-foundations-9",
+  "gradeBand": { "minGrade": 9, "maxGrade": 9, "stage": "EXPLORE" },
+  "estMinutes": 30,
+  "summary": "Practice recording technical observations so another person can understand what happened.",
+  "objectives": ["Create a concise technical observation record.", "Separate symptoms, evidence, actions, and outcomes."],
+  "vocab": [{ "term": "INCIDENT", "def": "An event that affects or may affect a system or service." }, { "term": "OBSERVATION", "def": "A recorded fact noticed during an investigation." }, { "term": "OUTCOME", "def": "What happened after an action or event." }],
+  "sections": [
+    { "heading": "Write for the next person", "body": "A useful record includes date and time, system, observation, symptom, evidence, action attempted, and outcome. Clear records help a team compare events instead of relying on memory." },
+    { "heading": "Facts and assumptions differ", "body": "'Network status changed to warning at 10:15' is an observation. 'The switch failed' is a possible cause that needs evidence. Labeling the difference improves troubleshooting." },
+    { "heading": "Document a synthetic event", "body": "Use a provided scenario and complete a short incident record. Do not record real student data, production telemetry, credentials, or private infrastructure details." }
+  ],
+  "practice": [{ "prompt": "Rewrite 'the server was broken' as a record containing time, system, observable symptom, evidence, action, and outcome." }],
+  "quiz": { "question": "Which statement is an observation?", "options": ["Network status changed to warning at 10:15", "The switch definitely failed", "Someone should replace everything", "The next incident will never happen"], "answer": "Network status changed to warning at 10:15" },
+  "lab": { "safetyClassification": "SAFE INDEPENDENT CLASSROOM LAB", "objective": "Complete a technical record from a synthetic incident scenario." },
+  "futureCompetencyCandidates": ["write a structured technical observation", "separate facts from possible causes"],
+  "reflectionPrompt": "What makes a technical note useful to someone who was not present?"
+}

@@ -12,7 +12,7 @@ import type {
   ProviderSession,
   JoinAuthorization,
   ProviderHealth,
-} from "./live-learning-provider";
+} from "./live-learning-provider.js";
 
 let counter = 0;
 function nextId() {

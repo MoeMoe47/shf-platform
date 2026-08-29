@@ -1,0 +1,70 @@
+{
+  "id": "data-center-reliable-operations-10-server-deployment",
+  "slug": "data-center-reliable-operations-10-server-deployment",
+  "nextSlug": "data-center-reliable-operations-10-linux-operations",
+  "title": "Server Deployment Concepts",
+  "curriculum": "data-center-reliable-operations-10",
+  "gradeBand": {
+    "minGrade": 10,
+    "maxGrade": 10,
+    "stage": "EXPLORE"
+  },
+  "estMinutes": 35,
+  "summary": "Trace the controlled path from receiving a server to monitoring its operation.",
+  "objectives": [
+    "Describe the major stages of a safe server deployment workflow.",
+    "Explain why inventory, testing, and documentation are part of deployment."
+  ],
+  "vocab": [
+    {
+      "term": "ASSET TAG",
+      "def": "An identifier assigned to equipment for tracking."
+    },
+    {
+      "term": "HOSTNAME",
+      "def": "A name used to identify a system on a network."
+    },
+    {
+      "term": "DEPLOYMENT",
+      "def": "The controlled process of preparing a system for use."
+    }
+  ],
+  "sections": [
+    {
+      "heading": "Deployment is a sequence",
+      "body": "A conceptual workflow is receive, inspect, inventory, install, cable, configure, test, and monitor. Each stage provides information for the next stage."
+    },
+    {
+      "heading": "Inventory makes systems traceable",
+      "body": "Synthetic inventory can include an asset tag, serial number, rack position, hostname, status, and purpose. These records should not contain real infrastructure details in class."
+    },
+    {
+      "heading": "Physical work has boundaries",
+      "body": "Students can trace a deployment with cards or a simulator. Moving heavy equipment, making live connections, and configuring production systems require qualified supervision and authorization."
+    }
+  ],
+  "practice": [
+    {
+      "prompt": "Arrange deployment cards in order, then identify one check that belongs before configuration and one check after testing."
+    }
+  ],
+  "quiz": {
+    "question": "Why is inventory part of deployment?",
+    "options": [
+      "It makes equipment and its location traceable",
+      "It replaces safety review",
+      "It proves the system is reliable forever",
+      "It removes the need for testing"
+    ],
+    "answer": "It makes equipment and its location traceable"
+  },
+  "lab": {
+    "safetyClassification": "SIMULATION ONLY",
+    "objective": "Use synthetic asset records to trace a server deployment and identify required checks."
+  },
+  "futureCompetencyCandidates": [
+    "trace a deployment workflow",
+    "record synthetic asset information"
+  ],
+  "reflectionPrompt": "Which deployment stage would you want to understand better, and what evidence would show it was complete?"
+}

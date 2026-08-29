@@ -1,12 +1,12 @@
-import { requirePermission } from "../../auth/permission-guard";
-import { SHS_SECURITY_PERMISSIONS } from "../../auth/security-permissions";
+import { requirePermission } from "../../auth/permission-guard.js";
+import { SHS_SECURITY_PERMISSIONS } from "../../auth/security-permissions.js";
 import {
   getOracleTruth,
   compareOracleEntities,
   getOraclePriorityQueue,
   postOracleAction,
   getOracleActions,
-} from "../controllers/oracle.controller";
+} from "../controllers/oracle.controller.js";
 
 export function registerOracleRoutes(app: any) {
   app.get(

@@ -1,0 +1,70 @@
+{
+  "id": "data-center-reliable-operations-10-critical-power-operations",
+  "slug": "data-center-reliable-operations-10-critical-power-operations",
+  "nextSlug": "data-center-reliable-operations-10-cooling-environmental-monitoring",
+  "title": "Critical Power Operations",
+  "curriculum": "data-center-reliable-operations-10",
+  "gradeBand": {
+    "minGrade": 10,
+    "maxGrade": 10,
+    "stage": "EXPLORE"
+  },
+  "estMinutes": 35,
+  "summary": "Interpret a simulated power transition and identify what operations teams monitor.",
+  "objectives": [
+    "Describe the sequence from utility loss through backup stabilization in a simulation.",
+    "Identify safe operational questions during a power event without performing electrical service."
+  ],
+  "vocab": [
+    {
+      "term": "CRITICAL LOAD",
+      "def": "Equipment or service that must remain supported."
+    },
+    {
+      "term": "POWER TRANSITION",
+      "def": "A change from one power source or state to another."
+    },
+    {
+      "term": "STABILIZE",
+      "def": "Reach a steady, monitored operating condition."
+    }
+  ],
+  "sections": [
+    {
+      "heading": "A power path has stages",
+      "body": "A conceptual path is utility input, facility distribution, UPS, generator, rack, and server. Operations teams monitor state changes and alarms across that path."
+    },
+    {
+      "heading": "Read the scenario",
+      "body": "In a simulation, utility power is lost, the UPS supports the load, the generator starts, and the system stabilizes. Students record timestamps and identify what should be verified."
+    },
+    {
+      "heading": "Electrical service is out of scope",
+      "body": "Do not open panels, service UPS units or generators, measure mains voltage, or work on energized power supplies. Escalate safety and equipment work to qualified professionals."
+    }
+  ],
+  "practice": [
+    {
+      "prompt": "Sequence synthetic power-event cards and list two values or statuses an operator would monitor during the transition."
+    }
+  ],
+  "quiz": {
+    "question": "What is the safe student role during a simulated power event?",
+    "options": [
+      "Interpret the provided evidence and identify when to escalate",
+      "Service a generator",
+      "Open a power panel",
+      "Change an energized supply"
+    ],
+    "answer": "Interpret the provided evidence and identify when to escalate"
+  },
+  "lab": {
+    "safetyClassification": "SIMULATION ONLY",
+    "objective": "Analyze a synthetic power transition and complete an operational observation record."
+  },
+  "futureCompetencyCandidates": [
+    "interpret a simulated power transition",
+    "identify safe escalation during a power event"
+  ],
+  "reflectionPrompt": "What evidence would help you decide whether a backup transition stabilized?"
+}

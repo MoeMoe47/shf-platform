@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { requirePermission } from "../../auth/permission-guard";
-import { SHS_SECURITY_PERMISSIONS } from "../../auth/security-permissions";
-import { getAggregationPipeline } from "../controllers/aggregation.controller";
-import entitiesRoutes from "./entities.routes";
-import verificationRoutes from "./verification.routes";
-import reconciliationRoutes from "./reconciliation.routes";
+import { requirePermission } from "../../auth/permission-guard.js";
+import { SHS_SECURITY_PERMISSIONS } from "../../auth/security-permissions.js";
+import { getAggregationPipeline } from "../controllers/aggregation.controller.js";
+import entitiesRoutes from "./entities.routes.js";
+import verificationRoutes from "./verification.routes.js";
+import reconciliationRoutes from "./reconciliation.routes.js";
 
 const router = Router();
 

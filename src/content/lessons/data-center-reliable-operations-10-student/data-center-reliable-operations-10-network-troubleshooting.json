@@ -1,0 +1,70 @@
+{
+  "id": "data-center-reliable-operations-10-network-troubleshooting",
+  "slug": "data-center-reliable-operations-10-network-troubleshooting",
+  "nextSlug": "data-center-reliable-operations-10-connectivity-fiber-faults",
+  "title": "Network Troubleshooting",
+  "curriculum": "data-center-reliable-operations-10",
+  "gradeBand": {
+    "minGrade": 10,
+    "maxGrade": 10,
+    "stage": "EXPLORE"
+  },
+  "estMinutes": 40,
+  "summary": "Use synthetic link, interface, address, gateway, DNS, and latency evidence to reason about connectivity.",
+  "objectives": [
+    "Use multiple clues to narrow a simulated network problem.",
+    "Explain why a diagnostic command must target an approved sandbox host."
+  ],
+  "vocab": [
+    {
+      "term": "GATEWAY",
+      "def": "A system that connects a local network to another network."
+    },
+    {
+      "term": "DNS",
+      "def": "A service that helps translate names into network addresses."
+    },
+    {
+      "term": "LATENCY",
+      "def": "The time it takes information to travel between points."
+    }
+  ],
+  "sections": [
+    {
+      "heading": "A connection has layers",
+      "body": "A simulated problem may involve the physical link, interface status, IP configuration, gateway, DNS, switch path, or service. Check evidence in a deliberate order."
+    },
+    {
+      "heading": "Compare clues",
+      "body": "If an interface is down, a higher-level name lookup cannot fix it. If a name resolves but the service is slow, latency or the service may need investigation."
+    },
+    {
+      "heading": "Use authorized targets",
+      "body": "Only use diagnostic commands against localhost, explicitly created lab hosts, or a simulator network. Never scan external networks."
+    }
+  ],
+  "practice": [
+    {
+      "prompt": "A synthetic host has an up interface, a valid IP, and failed name resolution. Identify the next safe question and explain why."
+    }
+  ],
+  "quiz": {
+    "question": "Why should a classroom network diagnostic target a sandbox host?",
+    "options": [
+      "It keeps testing authorized and isolated",
+      "It makes unauthorized scanning acceptable",
+      "It guarantees the network is healthy",
+      "It avoids documenting results"
+    ],
+    "answer": "It keeps testing authorized and isolated"
+  },
+  "lab": {
+    "safetyClassification": "SIMULATION ONLY",
+    "objective": "Inspect a synthetic network path and classify the most likely layer needing investigation."
+  },
+  "futureCompetencyCandidates": [
+    "identify a network fault from evidence",
+    "follow an authorized diagnostic path"
+  ],
+  "reflectionPrompt": "Which clue would you check first when a service cannot be reached, and why?"
+}

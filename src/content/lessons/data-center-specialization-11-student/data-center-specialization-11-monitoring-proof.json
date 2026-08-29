@@ -1,0 +1,20 @@
+{
+  "id": "data-center-specialization-11-monitoring-proof",
+  "slug": "data-center-specialization-11-monitoring-proof",
+  "nextSlug": "data-center-specialization-11-server-operations",
+  "title": "Monitoring Data and Safe Technical Findings",
+  "curriculum": "data-center-specialization-11",
+  "gradeBand": { "minGrade": 11, "maxGrade": 11, "stage": "PREPARE_PROVE" },
+  "estMinutes": 45,
+  "summary": "Practice separating observations from assumptions, then document a safe finding for review.",
+  "objectives": ["Distinguish monitoring observations from conclusions that need more evidence.", "Identify a reasonable affected system and recommend safe escalation.", "Create reviewable evidence from a synthetic technical finding."],
+  "vocab": [{ "term": "OBSERVATION", "def": "A fact identified directly from available information." }, { "term": "EVIDENCE", "def": "Information that supports or tests an explanation." }, { "term": "PROVENANCE", "def": "Information showing where a record came from and how it was handled." }],
+  "sections": [{ "heading": "Prepare: observe before deciding", "body": "A dashboard can show a warning without proving its cause. Record what the data says, name what is uncertain, and use the safest next step." }, { "heading": "Synthetic monitoring scenario", "body": "This classroom snapshot does not connect to a real data center or contain real learner or employee information." }, { "heading": "Prove: document a safe finding", "body": "Your response becomes a source result for evidence review. Completing the lesson does not decide whether criteria were demonstrated." }],
+  "practice": [{ "prompt": "Which statement is an observation rather than a conclusion?", "answer": "The rack temperature warning is active." }],
+  "quiz": { "question": "What is safest when a temperature warning appears but its cause is uncertain?", "options": ["Record evidence and escalate according to procedure", "Open energized equipment", "Ignore the warning", "Change production settings"], "answer": "Record evidence and escalate according to procedure" },
+  "proofActivity": { "activityId": "grade11-technical-operations-monitoring-proof", "activityType": "SIMULATED_INFRASTRUCTURE_PROOF", "safetyClassification": "SIMULATION ONLY", "competencySlug": "interpret-monitoring-data-and-document-safe-finding", "monitoringData": [{ "signal": "Rack temperature", "value": "31°C", "status": "WARNING", "detail": "Upward trend over three readings" }, { "signal": "CPU utilization", "value": "42%", "status": "NORMAL", "detail": "Within scenario range" }, { "signal": "Network link", "value": "Active", "status": "NORMAL", "detail": "No link-down event" }, { "signal": "Environmental alert", "value": "Active", "status": "WARNING", "detail": "Airflow review requested" }], "criteria": ["Records observations accurately", "Identifies a plausible affected system", "Separates evidence from uncertainty", "Recommends a safe next step"] },
+  "lab": { "safetyClassification": "SIMULATION ONLY", "objective": "Interpret synthetic monitoring data and document a safe technical finding." },
+  "futureCompetencyCandidates": ["interpret monitoring data and document a safe technical finding"],
+  "reflectionPrompt": "What did you know from the monitoring data, and what remained uncertain?",
+  "careerConnection": { "careerId": "data-center-technician", "text": "Data center technicians use observations, procedures, and escalation to support reliable systems. This activity is exploration, not technician qualification." }
+}

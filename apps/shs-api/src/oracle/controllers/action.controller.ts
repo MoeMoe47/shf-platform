@@ -1,4 +1,4 @@
-import { applyOracleAction } from "../services/action-engine";
+import { applyOracleAction } from "../services/action-engine.js";
 
 export function handleOracleAction(req: any, res: any) {
   try {

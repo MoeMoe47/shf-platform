@@ -1,14 +1,14 @@
 // Phase 2A Secure Live Learning — HTTP routes.
 // Dependency direction: route -> service -> provider adapter. This file
 // never imports a provider directly.
-import { ok, fail } from "../../../api/response-envelope";
-import { requirePermission } from "../../../auth/permission-guard";
-import { SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions";
-import * as service from "../service/live-learning-service";
-import { SessionNotFoundError } from "../service/live-learning-service";
-import { ProviderNotConfiguredError } from "../providers/live-learning-provider";
-import { LIVE_LEARNING_PROVIDERS, toStudentFacing } from "../model/live-session";
-import { LiveSessionRepo } from "../repo/live-session-repo";
+import { ok, fail } from "../../../api/response-envelope.js";
+import { requirePermission } from "../../../auth/permission-guard.js";
+import { SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
+import * as service from "../service/live-learning-service.js";
+import { SessionNotFoundError } from "../service/live-learning-service.js";
+import { ProviderNotConfiguredError } from "../providers/live-learning-provider.js";
+import { LIVE_LEARNING_PROVIDERS, toStudentFacing } from "../model/live-session.js";
+import { LiveSessionRepo } from "../repo/live-session-repo.js";
 
 const repo = new LiveSessionRepo();
 

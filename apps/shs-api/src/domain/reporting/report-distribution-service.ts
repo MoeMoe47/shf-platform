@@ -1,9 +1,9 @@
 import { randomUUID } from "crypto";
-import { withTransaction } from "../../db/transaction";
-import { writeAuditEvent } from "../audit/service/audit-helper";
-import { ReportArtifactRepo } from "./report-artifact-repo";
-import { ReportDistributionRepo } from "./report-distribution-repo";
-import { DONOR_SUMMARY_COMPOSITION } from "./report-artifact-service";
+import { withTransaction } from "../../db/transaction.js";
+import { writeAuditEvent } from "../audit/service/audit-helper.js";
+import { ReportArtifactRepo } from "./report-artifact-repo.js";
+import { ReportDistributionRepo } from "./report-distribution-repo.js";
+import { DONOR_SUMMARY_COMPOSITION } from "./report-artifact-service.js";
 
 const AUDIENCE_TYPES = new Set(["DONOR", "FUNDER", "PARTNER", "BOARD_EXTERNAL", "OTHER_AUTHORIZED_EXTERNAL"]);
 

@@ -1,5 +1,5 @@
-import { query } from "../../../db/client";
-import type { TaxonomyCategory } from "../model/taxonomy-category";
+import { query } from "../../../db/client.js";
+import type { TaxonomyCategory } from "../model/taxonomy-category.js";
 
 const PROGRAM_COLUMNS = `
   program_id, organization_id, name, program_type, status, owner_team_id, created_by_user_id,

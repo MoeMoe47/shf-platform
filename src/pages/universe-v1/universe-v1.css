@@ -1109,9 +1109,13 @@ button:disabled {
   .ugw-galaxyOuterRing,
   .ugw-galaxyInnerRing,
   .ugw-galaxyOrbit,
-  .ugw-planet {
+  .ugw-planet,
+  .ugw-planetHalo {
     animation: none !important;
   }
+  /* The pulse is off; .ugw-planetHalo's plain (non-animated) opacity —
+     var(--halo-base), set per tier above — still renders, so a faint
+     static halo remains rather than disappearing outright. */
   /* .ugw-dustCanvas needs no rule here — the JS-driven particle system
      reads prefers-reduced-motion itself (see SolarDustCanvas in
      gateway/UniverseGateway.jsx) and never starts its rAF loop, drawing
@@ -1597,19 +1601,98 @@ button:disabled {
   animation-play-state: paused;
 }
 
+/* Atmospheric pulse (2026-08-28): a slow, monochrome "breathing" glow
+   behind every real planet image — a separate layer (this span), never
+   baked into the image asset or drawn as a planet surface itself. Tier
+   strength is set via custom properties (institution = base/strongest,
+   platform = medium, application/public-surface = lightest), read by the
+   one shared keyframe below so a single animation definition covers
+   every tier. Positioned with the same negative `inset` technique the
+   halo already used — extends beyond .ugw-planet's own box, and neither
+   .ugw-planet nor .ugw-planetCard clip overflow, so this never crops
+   against a ringed planet's wider silhouette. */
 .ugw-planetHalo {
+  --halo-base: 0.5;
+  --halo-peak: 0.74;
+  --halo-hover: 0.86;
   position: absolute;
   inset: -26%;
   border-radius: 999px;
   background: radial-gradient(circle, rgba(245, 241, 232, 0.14), transparent 68%);
-  opacity: 0.55;
+  opacity: var(--halo-base);
+  animation: ugw-planet-pulse 6.5s ease-in-out infinite;
+  animation-delay: -1.5s;
   transition: opacity 220ms ease, transform 220ms ease;
+  transform-origin: 50% 50%;
+  pointer-events: none;
 }
 
+.ugw-planet--medium .ugw-planetHalo {
+  --halo-base: 0.4;
+  --halo-peak: 0.6;
+  --halo-hover: 0.72;
+  inset: -24%;
+}
+
+.ugw-planet--compact .ugw-planetHalo,
+.ugw-planet--small .ugw-planetHalo {
+  --halo-base: 0.32;
+  --halo-peak: 0.48;
+  --halo-hover: 0.6;
+  inset: -20%;
+}
+
+@keyframes ugw-planet-pulse {
+  0%,
+  100% {
+    opacity: var(--halo-base);
+    transform: scale(1);
+  }
+  50% {
+    opacity: var(--halo-peak);
+    transform: scale(1.07);
+  }
+}
+
+/* Stagger — the same nth-of-type technique already used for planet drift
+   (.ugw-planetCard:nth-of-type(3n+2) .ugw-planet below), a different
+   modulus (5) so the pulse phase desyncs from the drift phase instead of
+   correlating with it. Every duration stays within the requested 5-8s
+   range; negative delays pre-offset each planet's phase so they never
+   all start mid-breath at once. */
+.ugw-planetCard:nth-of-type(5n+2) .ugw-planetHalo {
+  animation-duration: 7.2s;
+  animation-delay: -3.8s;
+}
+
+.ugw-planetCard:nth-of-type(5n+3) .ugw-planetHalo {
+  animation-duration: 5.4s;
+  animation-delay: -0.6s;
+}
+
+.ugw-planetCard:nth-of-type(5n+4) .ugw-planetHalo {
+  animation-duration: 7.8s;
+  animation-delay: -5.1s;
+}
+
+.ugw-planetCard:nth-of-type(5n) .ugw-planetHalo {
+  animation-duration: 6s;
+  animation-delay: -2.9s;
+}
+
+.motion-paused .ugw-planetHalo {
+  animation-play-state: paused;
+}
+
+/* Hover/focus — a restrained, tier-relative bump (not a flat opacity:1
+   for every size), and the running pulse is stopped outright rather than
+   merely paused, so this static boosted state is what actually renders
+   instead of being overridden by whatever animation frame was mid-flight. */
 .ugw-planetCard:hover .ugw-planetHalo,
 .ugw-planetCard:focus-within .ugw-planetHalo {
-  opacity: 1;
-  transform: scale(1.1);
+  animation: none;
+  opacity: var(--halo-hover);
+  transform: scale(1.12);
 }
 
 /* Independent planet image (2026-08-27): the approved photographic asset
@@ -1676,6 +1759,7 @@ button:disabled {
 }
 
 .ugw-planet.is-dormant .ugw-planetHalo {
+  animation: none;
   opacity: 0.24;
 }
 

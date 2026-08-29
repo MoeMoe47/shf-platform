@@ -1,0 +1,70 @@
+{
+  "id": "data-center-reliable-operations-10-troubleshooting-constraints",
+  "slug": "data-center-reliable-operations-10-troubleshooting-constraints",
+  "nextSlug": "data-center-reliable-operations-10-technical-communication",
+  "title": "Troubleshooting Under Constraints",
+  "curriculum": "data-center-reliable-operations-10",
+  "gradeBand": {
+    "minGrade": 10,
+    "maxGrade": 10,
+    "stage": "EXPLORE"
+  },
+  "estMinutes": 40,
+  "summary": "Use evidence, recent changes, and low-risk hypotheses to investigate a multi-system event.",
+  "objectives": [
+    "Distinguish symptom, evidence, possible cause, action, and verified result.",
+    "Choose a lowest-risk next test within a defined classroom scenario."
+  ],
+  "vocab": [
+    {
+      "term": "HYPOTHESIS",
+      "def": "A possible explanation that can be tested."
+    },
+    {
+      "term": "ROOT CAUSE",
+      "def": "A confirmed underlying reason for a problem."
+    },
+    {
+      "term": "CONSTRAINT",
+      "def": "A limit that affects what can be done."
+    }
+  ],
+  "sections": [
+    {
+      "heading": "A symptom is not a cause",
+      "body": "A website can be unavailable because of a server, network, application, power, or configuration issue. The observed symptom does not identify the root cause by itself."
+    },
+    {
+      "heading": "Use a disciplined method",
+      "body": "Confirm the symptom, gather evidence, check recent changes, identify a likely subsystem, test the safest hypothesis, compare results, escalate, verify restoration, and document."
+    },
+    {
+      "heading": "Constraints guide safe choices",
+      "body": "A test may be limited by permission, safety, time, or service impact. Choose a reversible, low-risk action in the simulation and explain what result would change your next step."
+    }
+  ],
+  "practice": [
+    {
+      "prompt": "A synthetic service is unavailable after a documented network change. List one observation, one hypothesis, one low-risk test, and one verification step."
+    }
+  ],
+  "quiz": {
+    "question": "What is a hypothesis in troubleshooting?",
+    "options": [
+      "A possible explanation that can be tested with evidence",
+      "A confirmed root cause",
+      "A permission to change any system",
+      "A replacement for documentation"
+    ],
+    "answer": "A possible explanation that can be tested with evidence"
+  },
+  "lab": {
+    "safetyClassification": "SUPERVISED CLASSROOM LAB",
+    "objective": "Investigate a synthetic multi-system incident using a constrained decision record."
+  },
+  "futureCompetencyCandidates": [
+    "separate symptom from root cause",
+    "select a lowest-risk troubleshooting test"
+  ],
+  "reflectionPrompt": "Which constraint would most change your next troubleshooting step: safety, permission, time, or impact?"
+}

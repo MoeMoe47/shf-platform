@@ -1,0 +1,19 @@
+{
+  "id": "data-center-specialization-11-telemetry-troubleshooting",
+  "slug": "data-center-specialization-11-telemetry-troubleshooting",
+  "nextSlug": "data-center-specialization-11-technical-operations-project",
+  "title": "Service and Resource Troubleshooting",
+  "curriculum": "data-center-specialization-11",
+  "gradeBand": { "minGrade": 11, "maxGrade": 11, "stage": "PREPARE_PROVE" },
+  "estMinutes": 45,
+  "summary": "Use multiple synthetic signals to separate symptoms, evidence, and safe actions.",
+  "objectives": ["Gather relevant evidence before acting.", "Identify a likely subsystem and document a low-risk action or escalation."],
+  "vocab": [{ "term": "SYMPTOM", "def": "An observed sign that something may be wrong." }, { "term": "HYPOTHESIS", "def": "A possible explanation that still needs testing." }, { "term": "VERIFICATION", "def": "Checking whether an intended result actually occurred." }],
+  "sections": [{ "heading": "Correlation is not causation", "body": "A temperature warning and service alert may occur together without sharing one confirmed cause. Compare timestamps, recent changes, and system relationships." }, { "heading": "Choose the lowest-risk next step", "body": "Use approved observations, document the result, and escalate when permission, safety, impact, or uncertainty requires it." }],
+  "practice": [{ "prompt": "A service alert appears while the network link remains active. What should you do first?", "answer": "Confirm the symptom and gather approved system evidence before selecting a cause." }],
+  "quiz": { "question": "What is a hypothesis?", "options": ["A possible explanation that needs testing", "A confirmed cause", "A permission bypass", "A replacement for evidence"], "answer": "A possible explanation that needs testing" },
+  "proofActivity": { "activityId": "grade11-technical-operations-troubleshooting-documentation", "activityType": "SIMULATED_INFRASTRUCTURE_PROOF", "safetyClassification": "SIMULATION ONLY", "competencySlug": "document-structured-infrastructure-troubleshooting", "monitoringData": [{ "signal": "Service status", "value": "Degraded", "status": "WARNING", "detail": "Synthetic service alert" }, { "signal": "Network path", "value": "Reachable", "status": "NORMAL", "detail": "Synthetic path check" }, { "signal": "Recent change", "value": "Configuration update", "status": "INFO", "detail": "Synthetic change record" }], "criteria": ["Defines the symptom", "Uses relevant evidence", "Selects a low-risk action", "Documents verification or escalation"], "criterion": "structured-troubleshooting" },
+  "lab": { "safetyClassification": "SIMULATION ONLY", "objective": "Classify synthetic troubleshooting evidence and document a safe next action." },
+  "futureCompetencyCandidates": ["diagnose a simulated server fault", "document a structured troubleshooting record"],
+  "reflectionPrompt": "Which clue was useful evidence, and which conclusion would have been premature?"
+}

@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const apiProxyTarget = process.env.SHS_VITE_API_PROXY_TARGET || "http://127.0.0.1:8091";
 
 export default defineConfig({
   server: {
@@ -21,7 +22,7 @@ export default defineConfig({
     host: "127.0.0.1",
     proxy: {
       "/api": {
-        target: "http://127.0.0.1:8091",
+        target: apiProxyTarget,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },

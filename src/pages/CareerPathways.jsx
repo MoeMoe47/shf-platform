@@ -309,7 +309,7 @@ export default function CareerPlanner() {
   }, []);
 
   const [admin, toggleAdmin] = useIsAdmin();
-  const { data: pathways = [] } = usePathways();
+  const { data: pathways = [], loading: pathwaysLoading, error: pathwaysError } = usePathways();
   const impactStore = useImpactData(impactDefault);
 
   const [sheetOpen, setSheetOpen]       = useState(false);
@@ -470,6 +470,8 @@ export default function CareerPlanner() {
 
   return (
     <div className="cpw-page">
+      {pathwaysLoading && <p role="status">Loading careers…</p>}
+      {pathwaysError && <p role="alert">Career information is temporarily unavailable.</p>}
       <div aria-live="polite" className="sh-srOnly">{planAnnouncement}</div>
 
       <nav className="cpw-breadcrumb" aria-label="Breadcrumb">
@@ -562,14 +564,23 @@ export default function CareerPlanner() {
                       <div className="cpw-pathwayBody">
                         <h3 className="cpw-pathwayTitle">{p.title}</h3>
                         <div className="cpw-pathwayMeta">
-                          <div className="cpw-pathwayMetaRow">
-                            <span className="cpw-pathwayMetaLabel"><span aria-hidden="true">⏱️</span> Time to first paycheck</span>
-                            <span className="cpw-pathwayMetaValue">{p.estWeeks} wks</span>
-                          </div>
-                          <div className="cpw-pathwayMetaRow">
-                            <span className="cpw-pathwayMetaLabel"><span aria-hidden="true">💵</span> Est. cost after aid</span>
-                            <span className="cpw-pathwayMetaValue">{usd0(p.netCostAfterAid)}</span>
-                          </div>
+                          {p?.pathway?.canonicalCareer ? (
+                            <div className="cpw-pathwayMetaRow">
+                              <span className="cpw-pathwayMetaLabel">Career facts</span>
+                              <span className="cpw-pathwayMetaValue">Timeline and cost not specified</span>
+                            </div>
+                          ) : (
+                            <>
+                              <div className="cpw-pathwayMetaRow">
+                                <span className="cpw-pathwayMetaLabel"><span aria-hidden="true">⏱️</span> Time to first paycheck</span>
+                                <span className="cpw-pathwayMetaValue">{p.estWeeks} wks</span>
+                              </div>
+                              <div className="cpw-pathwayMetaRow">
+                                <span className="cpw-pathwayMetaLabel"><span aria-hidden="true">💵</span> Est. cost after aid</span>
+                                <span className="cpw-pathwayMetaValue">{usd0(p.netCostAfterAid)}</span>
+                              </div>
+                            </>
+                          )}
                           {cred && (
                             <div className="cpw-pathwayMetaRow">
                               <span className="cpw-pathwayMetaLabel"><span aria-hidden="true">🎓</span> Credential</span>

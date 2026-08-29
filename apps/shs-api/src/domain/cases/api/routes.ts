@@ -1,6 +1,6 @@
-import { CaseService } from "../service/case-service";
-import { ok, fail } from "../../../api/response-envelope";
-import { requirePermission } from "../../../auth/permission-guard";
+import { CaseService } from "../service/case-service.js";
+import { ok, fail } from "../../../api/response-envelope.js";
+import { requirePermission } from "../../../auth/permission-guard.js";
 
 const service = new CaseService();
 

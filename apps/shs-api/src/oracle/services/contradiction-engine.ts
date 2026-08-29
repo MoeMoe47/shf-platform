@@ -1,4 +1,4 @@
-import type { ContradictionStatus } from "../domain/types";
+import type { ContradictionStatus } from "../domain/types.js";
 
 export function deriveContradictionStatus(input: {
   conflictCount?: number;

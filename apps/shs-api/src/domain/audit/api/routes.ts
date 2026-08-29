@@ -1,7 +1,7 @@
-import { AuditRepo } from "../repo/audit-repo";
-import { ok } from "../../../api/response-envelope";
-import { requirePermission } from "../../../auth/permission-guard";
-import { SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions";
+import { AuditRepo } from "../repo/audit-repo.js";
+import { ok } from "../../../api/response-envelope.js";
+import { requirePermission } from "../../../auth/permission-guard.js";
+import { SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
 
 const repo = new AuditRepo();
 

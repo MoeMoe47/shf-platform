@@ -1,4 +1,4 @@
-import type { OutboxExecutor } from "../../trusted-reporting/outbox-repo";
+import type { OutboxExecutor } from "../../trusted-reporting/outbox-repo.js";
 
 export type CurriculumCompletion = {
   completion_id: string;

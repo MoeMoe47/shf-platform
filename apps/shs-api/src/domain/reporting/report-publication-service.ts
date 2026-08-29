@@ -1,13 +1,13 @@
 import { randomUUID } from "crypto";
-import { withTransaction } from "../../db/transaction";
-import { writeAuditEvent } from "../audit/service/audit-helper";
-import { ReportPublicSnapshotRepo } from "./report-public-snapshot-repo";
-import { ReportPublicEligibilityRepo } from "./report-public-eligibility-repo";
-import { ReportPublicDisclosureRepo } from "./report-public-disclosure-repo";
-import { ReportPublicDisclosurePolicyRepo } from "./report-public-disclosure-policy-repo";
-import { ReportPublicationRepo } from "./report-publication-repo";
-import { ReportPublicationActionRepo } from "./report-publication-action-repo";
-import { getPublicReportGovernanceRegistration, requirePublicReportGovernanceRegistration } from "./report-public-governance-registry";
+import { withTransaction } from "../../db/transaction.js";
+import { writeAuditEvent } from "../audit/service/audit-helper.js";
+import { ReportPublicSnapshotRepo } from "./report-public-snapshot-repo.js";
+import { ReportPublicEligibilityRepo } from "./report-public-eligibility-repo.js";
+import { ReportPublicDisclosureRepo } from "./report-public-disclosure-repo.js";
+import { ReportPublicDisclosurePolicyRepo } from "./report-public-disclosure-policy-repo.js";
+import { ReportPublicationRepo } from "./report-publication-repo.js";
+import { ReportPublicationActionRepo } from "./report-publication-action-repo.js";
+import { getPublicReportGovernanceRegistration, requirePublicReportGovernanceRegistration } from "./report-public-governance-registry.js";
 
 function scope(actor: any) { const actorId = actor?.user_id || actor?.id; const organizationId = actor?.organization_id; if (!actorId || !organizationId) throw new Error("Publication scope unavailable"); return { actor_id: actorId, organization_id: organizationId, tenant_id: actor?.tenant_id || actor?.tenant || `tenant:${organizationId}` }; }
 function permission(actor: any) { if (!Array.isArray(actor?.permissions) || !actor.permissions.includes("reports.publication.authorize")) throw new Error("Missing permission: reports.publication.authorize"); }

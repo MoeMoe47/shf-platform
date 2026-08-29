@@ -1,5 +1,5 @@
-import { query } from "../../../db/client";
-import { OrganizationRelationshipConflictError } from "../model/organization-relationship";
+import { query } from "../../../db/client.js";
+import { OrganizationRelationshipConflictError } from "../model/organization-relationship.js";
 
 function isActiveOverlapConflict(error: any) {
   return error?.code === "23P01" &&

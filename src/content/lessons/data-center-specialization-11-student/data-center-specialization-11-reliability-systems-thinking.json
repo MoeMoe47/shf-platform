@@ -1,0 +1,17 @@
+{
+  "id": "data-center-specialization-11-reliability-systems-thinking",
+  "slug": "data-center-specialization-11-reliability-systems-thinking",
+  "nextSlug": "data-center-specialization-11-evidence-and-feedback",
+  "title": "Reliability, Risk, and Escalation",
+  "curriculum": "data-center-specialization-11",
+  "estMinutes": 40,
+  "summary": "Trace dependencies and decide when a risk needs escalation.",
+  "gradeBand": { "minGrade": 11, "maxGrade": 11, "stage": "PREPARE_PROVE" },
+  "objectives": ["Identify dependencies and possible failure domains.", "Connect redundancy, maintenance, and escalation to reliability."],
+  "vocab": [{ "term": "FAILURE DOMAIN", "def": "A part of a system that can fail together." }, { "term": "RISK", "def": "The possibility that an event could cause harm or loss." }],
+  "sections": [{ "heading": "Systems depend on systems", "body": "A service may depend on compute, network, power, cooling, and procedures. A local fault can have a wider effect, so evidence and handoffs matter." }, { "heading": "Reliability is managed", "body": "Backups, monitoring, maintenance, controlled changes, and escalation reduce risk. They do not guarantee that every failure can be prevented." }],
+  "practice": [{ "prompt": "A network path has one link and a backup power path has two. Which design has fewer single points of failure?", "answer": "The backup power path, because it has another available path." }],
+  "quiz": { "question": "Why should a possible cascading risk be escalated?", "options": ["Another authorized team may need to coordinate the response", "Escalation hides the evidence", "It guarantees there is no failure", "It permits bypassing procedures"], "answer": "Another authorized team may need to coordinate the response" },
+  "lab": { "safetyClassification": "SIMULATION ONLY", "objective": "Trace a synthetic dependency chain and identify a safe escalation point." },
+  "reflectionPrompt": "Which dependency would you want documented before making a change?"
+}

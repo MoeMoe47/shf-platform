@@ -1,5 +1,5 @@
-import { getTruth, setTruth } from "../repositories/truth.repo";
-import type { TruthPackage } from "../domain/types";
+import { getTruth, setTruth } from "../repositories/truth.repo.js";
+import type { TruthPackage } from "../domain/types.js";
 
 export function applyOracleAction(entityId: string, action: string): TruthPackage {
   const current = getTruth(entityId);

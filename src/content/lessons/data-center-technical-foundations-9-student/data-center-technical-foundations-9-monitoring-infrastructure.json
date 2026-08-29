@@ -1,0 +1,22 @@
+{
+  "id": "data-center-technical-foundations-9-monitoring-infrastructure",
+  "slug": "data-center-technical-foundations-9-monitoring-infrastructure",
+  "nextSlug": "data-center-technical-foundations-9-technical-documentation",
+  "title": "Monitoring Infrastructure",
+  "curriculum": "data-center-technical-foundations-9",
+  "gradeBand": { "minGrade": 9, "maxGrade": 9, "stage": "EXPLORE" },
+  "estMinutes": 35,
+  "summary": "Interpret synthetic telemetry for temperature, utilization, storage, power, and network status.",
+  "objectives": ["Interpret simulated infrastructure telemetry.", "Distinguish normal, warning, and critical labels within a defined scenario."],
+  "vocab": [{ "term": "TELEMETRY", "def": "Data collected about a system and sent for observation." }, { "term": "UTILIZATION", "def": "The portion of a resource currently being used." }, { "term": "THRESHOLD", "def": "A defined level at which attention or a different response may be needed." }],
+  "sections": [
+    { "heading": "Monitoring makes patterns visible", "body": "Synthetic telemetry might show temperature, CPU utilization, memory use, storage use, power status, and network status. One reading is a clue; a trend and context often provide more information." },
+    { "heading": "Labels depend on context", "body": "A classroom scenario can label a reading normal, warning, or critical using its stated thresholds. Those labels are not universal rules for every piece of equipment." },
+    { "heading": "Interpret, do not operate", "body": "Use a provided dashboard or table. Do not connect to production monitoring, change thresholds, or take action on real infrastructure. Escalate uncertain results to an instructor." }
+  ],
+  "practice": [{ "prompt": "A synthetic dashboard shows normal temperature, warning storage, and critical network status. Which issue would you investigate first, and what context would you record?" }],
+  "quiz": { "question": "What is telemetry?", "options": ["Data collected about a system for observation", "A permanent credential", "A type of electrical panel", "A replacement for documentation"], "answer": "Data collected about a system for observation" },
+  "lab": { "safetyClassification": "SIMULATION ONLY", "objective": "Classify synthetic telemetry using scenario-specific thresholds and record reasoning." },
+  "futureCompetencyCandidates": ["interpret simulated telemetry", "distinguish observation from operational conclusion"],
+  "reflectionPrompt": "Why should a monitoring label always be read with its equipment and scenario context?"
+}

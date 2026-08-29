@@ -1,11 +1,11 @@
 import { randomUUID } from "crypto";
-import { CaseRepo } from "../repo/case-repo";
-import { validateCaseAssignment } from "./case-assignment";
-import { canTransitionCase } from "./case-transitions";
-import { writeAuditEvent } from "../../audit/service/audit-helper";
-import { withTransaction } from "../../../db/transaction";
-import { IntegrationOutboxRepo } from "../../trusted-reporting/outbox-repo";
-import { buildReferralOutboxEvent } from "../../trusted-reporting/outbox";
+import { CaseRepo } from "../repo/case-repo.js";
+import { validateCaseAssignment } from "./case-assignment.js";
+import { canTransitionCase } from "./case-transitions.js";
+import { writeAuditEvent } from "../../audit/service/audit-helper.js";
+import { withTransaction } from "../../../db/transaction.js";
+import { IntegrationOutboxRepo } from "../../trusted-reporting/outbox-repo.js";
+import { buildReferralOutboxEvent } from "../../trusted-reporting/outbox.js";
 
 export class CaseService {
   constructor(

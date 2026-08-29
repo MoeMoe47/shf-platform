@@ -1,4 +1,4 @@
-import { resolveEntityStage, resolveVerificationStage } from "./aggregation.controller";
+import { resolveEntityStage, resolveVerificationStage } from "./aggregation.controller.js";
 
 export async function getVerificationForEntity(req: any, res: any) {
   try {

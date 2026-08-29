@@ -1,0 +1,17 @@
+{
+  "id": "data-center-specialization-11-server-operations",
+  "slug": "data-center-specialization-11-server-operations",
+  "nextSlug": "data-center-specialization-11-asset-inventory",
+  "title": "Server Operations Workflow",
+  "curriculum": "data-center-specialization-11",
+  "gradeBand": { "minGrade": 11, "maxGrade": 11, "stage": "PREPARE_PROVE" },
+  "estMinutes": 40,
+  "summary": "Trace a server through a controlled operations workflow.",
+  "objectives": ["Explain receive, inspect, inventory, configure, test, monitor, and document steps.", "Distinguish simulated configuration from physical equipment handling."],
+  "vocab": [{ "term": "DEPLOYMENT", "def": "Moving a prepared system into an approved operating role." }, { "term": "LIFECYCLE", "def": "The stages an asset passes through from receipt to retirement." }],
+  "sections": [{ "heading": "Order reduces risk", "body": "A controlled workflow makes ownership, configuration, testing, and monitoring visible. It also creates a record another person can follow." }, { "heading": "Physical boundaries", "body": "Heavy rack installation and energized equipment handling require qualified supervision. This lesson uses a paper or browser model." }],
+  "practice": [{ "prompt": "Which step should come before declaring a simulated server ready?", "answer": "Test the intended configuration and document the result." }],
+  "quiz": { "question": "Why is inventory part of deployment?", "options": ["It connects the system to an accountable record", "It replaces testing", "It permits unapproved access", "It proves a system is reliable forever"], "answer": "It connects the system to an accountable record" },
+  "lab": { "safetyClassification": "SIMULATION ONLY", "objective": "Sequence a synthetic server deployment workflow and identify safe handoffs." },
+  "reflectionPrompt": "Which deployment record would help someone investigate a later problem?"
+}

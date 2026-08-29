@@ -1,0 +1,20 @@
+{
+  "id": "data-center-systems-7-servers-to-racks",
+  "slug": "data-center-systems-7-servers-to-racks",
+  "nextSlug": "data-center-systems-7-switches-cables-connections",
+  "title": "From Servers to Racks",
+  "curriculum": "data-center-systems-7",
+  "gradeBand": { "minGrade": 7, "maxGrade": 7, "stage": "DISCOVER" },
+  "estMinutes": 25,
+  "summary": "See how racks organize many servers while supporting labeling, airflow, and connections.",
+  "objectives": ["Explain why data centers organize servers in racks.", "Use labels and a simple diagram to show orderly equipment connections."],
+  "vocab": [{ "term": "RACK", "def": "A frame that organizes equipment in a vertical arrangement." }, { "term": "LABEL", "def": "A clear name or code that helps people identify something." }, { "term": "AIRFLOW", "def": "The movement of air through a space." }],
+  "sections": [
+    { "heading": "Organization helps people and systems", "body": "A rack holds equipment in an orderly arrangement. Labels help people find the right server or cable, especially when many similar items are nearby." },
+    { "heading": "Space affects cooling and connections", "body": "Servers need planned airflow, and cables need routes that people can understand. Good organization makes it easier to observe, maintain, and explain a system." },
+    { "heading": "Build a paper rack", "body": "Draw a rack with six pretend server cards. Add labels and arrows for network connections and airflow. This classroom model is not a professional installation plan." }
+  ],
+  "practice": [{ "prompt": "A rack has 12 slots and 9 are occupied. How many slots remain? What information would a label add to your diagram?" }],
+  "quiz": { "question": "Why are labels useful in a rack?", "options": ["They help people identify equipment and connections", "They make electricity unnecessary", "They replace all cooling", "They allow anyone to bypass security"], "answer": "They help people identify equipment and connections" },
+  "reflectionPrompt": "How did organization make your paper rack easier to understand?"
+}

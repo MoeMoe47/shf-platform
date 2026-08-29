@@ -1,0 +1,22 @@
+{
+  "id": "data-center-systems-7-systems-challenge",
+  "slug": "data-center-systems-7-systems-challenge",
+  "nextSlug": null,
+  "title": "Diagnose the Data Center",
+  "curriculum": "data-center-systems-7",
+  "gradeBand": { "minGrade": 7, "maxGrade": 7, "stage": "DISCOVER" },
+  "estMinutes": 40,
+  "summary": "Use systems thinking to explain a low-risk infrastructure problem and recommend a safe next step.",
+  "objectives": ["Identify symptoms and a likely affected subsystem.", "Use evidence to explain possible causes and communicate a safe recommendation."],
+  "vocab": [{ "term": "CONSTRAINT", "def": "A limit or condition that a solution must respect." }, { "term": "RECOMMENDATION", "def": "A reasoned suggestion about what should happen next." }, { "term": "SYSTEMS THINKING", "def": "Looking at parts, connections, and effects as one larger system." }],
+  "sections": [
+    { "heading": "Your systems challenge", "body": "Choose a classroom-safe scenario: a powered server cannot reach the network; several racks show high temperature; or equipment loses power during an interruption. Identify the symptoms and affected system." },
+    { "heading": "Build an evidence explanation", "body": "Show the relevant components and connections in a diagram or outline. Name possible causes, distinguish observations from guesses, and recommend a safe next step such as checking approved information or asking a qualified adult." },
+    { "heading": "Explain your reasoning", "body": "Your work should show how systems depend on each other. It is an educational model, not a repair plan. Do not open equipment, wire circuits, handle live fiber, service cooling, or bypass security." }
+  ],
+  "practice": [{ "prompt": "Before presenting, check that your explanation includes a symptom, affected system, evidence, possible cause, constraint, and safe recommendation." }],
+  "project": { "title": "Systems Troubleshooting Challenge", "submissionOptions": ["written scenario response with a systems diagram", "accessible digital outline with labeled connections", "oral explanation paired with a labeled visual"], "rubric": ["identifies a relevant system", "uses evidence and separates observation from assumption", "connects systems correctly", "recommends a safe next step", "communicates clearly"] },
+  "quiz": { "question": "What is the goal of the systems challenge?", "options": ["Explain a possible cause using evidence and a safe next step", "Perform professional electrical repair", "Bypass a security system", "Guarantee a technical job"], "answer": "Explain a possible cause using evidence and a safe next step" },
+  "rubric": { "criteria": [{ "skill": "Systems reasoning", "levels": ["Beginning: names a symptom", "Developing: connects a symptom to a system with some evidence", "Proficient: explains connected systems, evidence, constraints, and a safe recommendation"] }] },
+  "reflectionPrompt": "Which system connection helped you reason through the challenge, and what would you want to learn next?"
+}

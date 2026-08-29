@@ -1,0 +1,20 @@
+{
+  "id": "data-center-systems-7-switches-cables-connections",
+  "slug": "data-center-systems-7-switches-cables-connections",
+  "nextSlug": "data-center-systems-7-fiber",
+  "title": "Switches, Cables, and Connections",
+  "curriculum": "data-center-systems-7",
+  "gradeBand": { "minGrade": 7, "maxGrade": 7, "stage": "DISCOVER" },
+  "estMinutes": 25,
+  "summary": "Trace a simple network path and see how switches and ports help systems communicate.",
+  "objectives": ["Describe the role of a network switch and port.", "Trace a simple path from a server through a switch to another system."],
+  "vocab": [{ "term": "SWITCH", "def": "A network device that helps send information between connected devices." }, { "term": "PORT", "def": "A connection point on a device." }, { "term": "ETHERNET", "def": "A common way devices connect across a wired network." }],
+  "sections": [
+    { "heading": "Connections form a path", "body": "A server can connect by cable to a switch. The switch helps direct information to another network connection. A port is one place where a connection is made." },
+    { "heading": "Trace before guessing", "body": "If a server cannot communicate, a learner can trace the conceptual path: server, cable, switch, network, and destination. This helps separate a connection question from a power or server question." },
+    { "heading": "Use a safe connection map", "body": "Use cards and string to model ports and paths. Do not change a live network or test systems without permission. The goal is to understand relationships, not to access equipment." }
+  ],
+  "practice": [{ "prompt": "Draw a path from Server A to Server B through a switch. Circle the first connection you would check if Server A is powered but unreachable." }],
+  "quiz": { "question": "What is one job of a network switch?", "options": ["Help move information between connected devices", "Create cooling air", "Store every file by itself", "Replace a server processor"], "answer": "Help move information between connected devices" },
+  "reflectionPrompt": "What clue would help you decide whether a problem is in a network path?"
+}

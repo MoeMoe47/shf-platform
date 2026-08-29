@@ -1,8 +1,8 @@
-import { ok, fail } from "../../../api/response-envelope";
-import { requirePermission } from "../../../auth/permission-guard";
-import { SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions";
-import { writeSecurityAuditEvent } from "../../../auth/security-audit";
-import { IdentityService } from "../service/identity-service";
+import { ok, fail } from "../../../api/response-envelope.js";
+import { requirePermission } from "../../../auth/permission-guard.js";
+import { SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
+import { writeSecurityAuditEvent } from "../../../auth/security-audit.js";
+import { IdentityService } from "../service/identity-service.js";
 
 const service = new IdentityService();
 

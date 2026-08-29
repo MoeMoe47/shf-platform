@@ -1,4 +1,4 @@
-import { query } from "../../../db/client";
+import { query } from "../../../db/client.js";
 
 function mapRow(row: any) {
   if (!row) return null;

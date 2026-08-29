@@ -1,6 +1,6 @@
 import { createHash, randomBytes, randomUUID } from "node:crypto";
-import { query } from "../../../db/client";
-import type { VerifiedExternalIdentity } from "../../../auth/production-identity";
+import { query } from "../../../db/client.js";
+import type { VerifiedExternalIdentity } from "../../../auth/production-identity.js";
 
 export class ProductionIdentityRepo {
   async findLink(external: VerifiedExternalIdentity) {

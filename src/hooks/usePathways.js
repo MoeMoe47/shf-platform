@@ -1,7 +1,8 @@
 // src/hooks/usePathways.js
 import { useEffect, useState } from "react";
 import * as schema from "../utils/pathwaySchema.js"; // named + default supported
-import raw from "../data/pathways.json";
+import { listCareers } from "../lib/career/api.js";
+import { careerToPathway } from "../shared/career/careerAdapter.js";
 
 export default function usePathways() {
   const [data, setData] = useState([]);
@@ -9,61 +10,31 @@ export default function usePathways() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    try {
-      // Accept [] | {pathways:[]} | {data:[]}
-      const arr = Array.isArray(raw)
-        ? raw
-        : Array.isArray(raw?.pathways)
-        ? raw.pathways
-        : Array.isArray(raw?.data)
-        ? raw.data
-        : [];
+    let alive = true;
+    listCareers()
+      .then((careers) => {
+        if (!alive) return;
+        const normalized = careers.map((career) => toStandardShape(careerToPathway(career)));
+        let parsed = normalized;
 
-      // ---- normalize both old & new shapes before any validation ----
-      const normalized = arr.map(toStandardShape);
-
-      let parsed = normalized;
-
-      // Prefer helper if present
-      if (typeof schema.validatePathways === "function") {
-        parsed = schema.validatePathways(normalized);
-      }
-      // Or use the array schema
-      else if (
-        schema.pathwayArraySchema &&
-        (typeof schema.pathwayArraySchema.parse === "function" ||
-          typeof schema.pathwayArraySchema.safeParse === "function")
-      ) {
-        // Use safeParse when available to avoid nuking the whole list on one bad item
-        const s = schema.pathwayArraySchema;
-        if (typeof s.safeParse === "function") {
-          const r = s.safeParse(normalized);
-          parsed = r.success ? r.data : normalized; // fall back to normalized if schema fails
-        } else {
-          parsed = s.parse(normalized);
+        if (typeof schema.validatePathways === "function") {
+          parsed = schema.validatePathways(normalized);
+        } else if (schema.pathwayArraySchema && typeof schema.pathwayArraySchema.safeParse === "function") {
+          const result = schema.pathwayArraySchema.safeParse(normalized);
+          parsed = result.success ? result.data : normalized;
         }
-      }
-      // Or fall back to default export schema (parse one-by-one)
-      else if (schema.default && (typeof schema.default.parse === "function" || typeof schema.default.safeParse === "function")) {
-        parsed = normalized.map((p) => {
-          const s = schema.default;
-          if (typeof s.safeParse === "function") {
-            const r = s.safeParse(p);
-            return r.success ? r.data : p;
-          }
-          return s.parse(p);
-        });
-      }
 
-      setData(parsed);
-      setError(null);
-    } catch (e) {
-      console.error("usePathways parse error:", e);
-      setError(e);
-      setData([]);
-    } finally {
-      setLoading(false);
-    }
+        setData(parsed);
+        setError(null);
+      })
+      .catch((e) => {
+        if (!alive) return;
+        console.error("usePathways career API error:", e);
+        setError(e);
+        setData([]);
+      })
+      .finally(() => { if (alive) setLoading(false); });
+    return () => { alive = false; };
   }, []);
 
   return { data, loading, error, clusters: groupClusters(data) };

@@ -1,5 +1,5 @@
-import { pool } from "./client";
-import { lifecycleCleanup, lifecyclePlan, lifecycleStatus, retentionPolicy } from "./lifecycle-manager";
+import { pool } from "./client.js";
+import { lifecycleCleanup, lifecyclePlan, lifecycleStatus, retentionPolicy } from "./lifecycle-manager.js";
 
 const [command = "status", flag] = process.argv.slice(2);
 if (!(["status", "plan", "cleanup"].includes(command))) throw new Error(`unknown lifecycle command: ${command}`);

@@ -3,10 +3,10 @@
 // concrete adapter. Adding Teams/Meet/Webex later means adding one class
 // implementing LiveLearningProvider and one line here — nothing else in
 // the service, routes, or curriculum code changes.
-import type { LiveLearningProvider } from "./live-learning-provider";
-import type { LiveLearningProviderName } from "../model/live-session";
-import { MockLiveLearningProvider } from "./mock-provider";
-import { ZoomLiveLearningProvider } from "./zoom-provider";
+import type { LiveLearningProvider } from "./live-learning-provider.js";
+import type { LiveLearningProviderName } from "../model/live-session.js";
+import { MockLiveLearningProvider } from "./mock-provider.js";
+import { ZoomLiveLearningProvider } from "./zoom-provider.js";
 
 const mock = new MockLiveLearningProvider();
 const zoom = new ZoomLiveLearningProvider();

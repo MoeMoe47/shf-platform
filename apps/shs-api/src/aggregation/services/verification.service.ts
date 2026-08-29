@@ -1,4 +1,4 @@
-import type { CanonicalEntity } from "./entity-resolution.service";
+import type { CanonicalEntity } from "./entity-resolution.service.js";
 
 export type VerificationRecord = {
   verificationStatus:

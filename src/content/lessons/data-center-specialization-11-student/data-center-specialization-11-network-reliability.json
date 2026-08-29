@@ -1,0 +1,18 @@
+{
+  "id": "data-center-specialization-11-network-reliability",
+  "slug": "data-center-specialization-11-network-reliability",
+  "nextSlug": "data-center-specialization-11-networking-fiber-project",
+  "title": "Network Reliability and Redundancy",
+  "curriculum": "data-center-specialization-11",
+  "gradeBand": { "minGrade": 11, "maxGrade": 11, "stage": "PREPARE_PROVE" },
+  "estMinutes": 45,
+  "summary": "Analyze alternate paths, single points of failure, and maintenance evidence.",
+  "objectives": ["Identify a single point of failure in a synthetic topology.", "Explain failover as an alternate path or system taking over.", "Connect reliability to monitoring, documentation, and maintenance."],
+  "vocab": [{ "term": "SINGLE POINT OF FAILURE", "def": "One component whose failure can interrupt a required service or path." }, { "term": "FAILOVER", "def": "A change to an alternate available system or path after a failure." }, { "term": "REDUNDANCY", "def": "An additional path or component intended to support continuity if another fails." }],
+  "sections": [{ "heading": "More than one path", "body": "Two links are not automatically redundant if they share the same switch, power, or physical route. Trace dependencies before calling a design resilient." }, { "heading": "Reliability is operational", "body": "Monitoring, accurate labels, maintenance planning, and change records help teams know whether an alternate path is available and safe to use." }],
+  "practice": [{ "prompt": "Two servers have separate cables but both cables connect to one switch. What dependency remains?", "answer": "The shared switch remains a single point of failure for both servers." }],
+  "quiz": { "question": "What makes an alternate path useful during a failure?", "options": ["It is available, documented, and does not depend on the same failed point", "It is hidden from the operations team", "It requires random configuration changes", "It is always faster than the primary path"], "answer": "It is available, documented, and does not depend on the same failed point" },
+  "lab": { "safetyClassification": "SIMULATION ONLY", "objective": "Identify dependencies and alternate paths in a synthetic topology." },
+  "futureCompetencyCandidates": ["analyze a network single point of failure"],
+  "reflectionPrompt": "What shared dependency would you document before trusting a backup path?"
+}

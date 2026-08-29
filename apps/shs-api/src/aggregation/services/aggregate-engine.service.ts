@@ -1,7 +1,7 @@
-import { resolveEntity } from "./entity-resolution.service";
-import { runVerification } from "./verification.service";
-import { runReconciliation } from "./reconciliation.service";
-import { getAggregationOverview } from "./aggregation-overview.service";
+import { resolveEntity } from "./entity-resolution.service.js";
+import { runVerification } from "./verification.service.js";
+import { runReconciliation } from "./reconciliation.service.js";
+import { getAggregationOverview } from "./aggregation-overview.service.js";
 
 export async function computeAggregateSnapshot(entityId: string) {
   const entity = await resolveEntity(entityId);

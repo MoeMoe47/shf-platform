@@ -1,52 +1,12 @@
 // src/pages/PathwaysExplore.jsx
 import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { track } from "../utils/analytics.js";
-import usePathways from "../hooks/usePathways.js";
-import impact from "../data/impact.js";
+import useCanonicalCareers from "../hooks/useCanonicalCareers.js";
 
 const PathwayDetailDrawer = React.lazy(() => import("../components/PathwayDetailDrawer.jsx"));
-const ProofOutcomesSection = React.lazy(() => import("../components/ProofOutcomesSection.jsx"));
 const preloadDrawer = () => import("../components/PathwayDetailDrawer.jsx");
 
-function CardSkel({ h = 140 }) {
-  return <div className="skel skel--card" style={{ height: h }} aria-hidden="true" />;
-}
-
-/* ---------- Mini ImpactStrip (read-only) ---------- */
-function ImpactStripMini({ kpis = [], updatedAt, ctaHref = "/career" }) {
-  const safe = Array.isArray(kpis) && kpis.length ? kpis : [
-    { label: "Avg time to first paycheck", value: "—" },
-    { label: "Avg cost after aid", value: "—" },
-    { label: "90-day employment", value: "—" },
-  ];
-  return (
-    <section className="card card--pad" aria-label="Program impact (summary)">
-      <div className="sh-row" style={{ alignItems: "center", marginBottom: 8 }}>
-        <h3 className="h3" style={{ margin: 0 }}>Impact Snapshot</h3>
-        <div style={{ flex: 1 }} />
-        {updatedAt && <div className="sh-muted" style={{ fontSize: 12, marginRight: 8 }}>Updated {updatedAt}</div>}
-        <a className="sh-btn sh-btn--secondary" href={ctaHref}
-           onClick={() => { try { track("impact_cta_clicked", { to: ctaHref, from: "explore" }); } catch {} }}>
-          Build Your Plan →
-        </a>
-      </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 10 }}>
-        {safe.map((k, i) => (
-          <div key={i} style={{ border: "1px solid var(--ring,#e5e7eb)", borderRadius: 12, padding: 10, background: "#fff" }}>
-            <div className="sh-muted" style={{ fontSize: 12 }}>{k.label}</div>
-            <div style={{ fontWeight: 800, fontSize: 18, lineHeight: 1.2 }}>{k.value}</div>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
 /* ---------- helpers ---------- */
-function usd(n){
-  try { return new Intl.NumberFormat(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0}).format(Number(n||0)); }
-  catch { return `$${Number(n||0).toLocaleString()}`; }
-}
 function groupByCluster(pathways=[]){
   const m=new Map();
   for(const p of pathways){
@@ -57,13 +17,11 @@ function groupByCluster(pathways=[]){
   return Array.from(m.entries()).map(([cluster,items])=>({cluster,items}));
 }
 function PathwayRow({ pathway, onOpen }) {
-  const weeks = Number(pathway?.estWeeks || 0);
-  const cost = Number(pathway?.estCost || 0);
   return (
     <div className="pathRow" role="group" aria-label={pathway?.title || "Pathway"}>
       <div>
         <div style={{ fontWeight: 600 }}>{pathway.title}</div>
-        <div className="subtle">{weeks ? `${weeks} weeks` : "Timeline varies"} • {usd(cost)}</div>
+        {pathway?.canonicalCareer ? <div className="subtle">Career family record</div> : null}
       </div>
       <div>
         <button className="sh-btn sh-btn--secondary" onMouseEnter={preloadDrawer} onFocus={preloadDrawer}
@@ -117,7 +75,7 @@ function ClusterDrawer({ open, title, onClose, children }) {
 
 export default function PathwaysExplore() {
   useEffect(() => { try { track("pathways_explore_viewed", {}, { silent: true }); } catch {} }, []);
-  const { data: pathways = [] } = usePathways();
+  const { data: pathways = [], loading, error, loadCareer } = useCanonicalCareers();
 
   const [activeCluster, setActiveCluster] = useState(null);
   const [activePathway, setActivePathway] = useState(null);
@@ -129,15 +87,22 @@ export default function PathwaysExplore() {
     [clusters, activeCluster]
   );
 
-  const handleViewPathwayCard = (p) => {
+  const handleViewPathwayCard = async (p) => {
     preloadDrawer();
-    setActivePathway(p);
+    try {
+      setActivePathway((await loadCareer(p.slug)) || p);
+    } catch {
+      setActivePathway(p);
+    }
     setDrawerOpen(true);
     try { track("pathway_drawer_opened", { pathwayId: p?.id, from: "explore_card" }); } catch {}
   };
 
   return (
     <div className="sh-grid sh-grid--1">
+      {loading && <p role="status">Loading careers…</p>}
+      {error && <p role="alert">Career information is temporarily unavailable.</p>}
+      {!loading && !error && !pathways.length && <p>No active careers are available.</p>}
       <div className="card card--pad">
         <div className="sh-row" style={{ alignItems: "center" }}>
           <h3 className="h3" style={{ margin: 0 }}>Explore by Cluster</h3>
@@ -186,16 +151,6 @@ export default function PathwaysExplore() {
         </div>
       </div>
 
-      {/* Outcomes / proof */}
-      <Suspense fallback={<CardSkel />}>
-        <div className="card card--pad">
-          <ProofOutcomesSection pathways={pathways} />
-        </div>
-      </Suspense>
-
-      {/* Impact summary */}
-      <ImpactStripMini kpis={impact?.kpis || []} updatedAt={impact?.updatedAt} ctaHref="/career" />
-
       {/* Drawer for individual pathway */}
       <Suspense fallback={null}>
         <PathwayDetailDrawer open={drawerOpen} pathway={activePathway}
@@ -212,9 +167,7 @@ export default function PathwaysExplore() {
               <li key={p.id} className="pathRow" style={{ marginBottom: 8 }}>
                 <div>
                   <div style={{ fontWeight: 600 }}>{p.title}</div>
-                  <div className="subtle">
-                    {p.estWeeks ? `${p.estWeeks} weeks` : "Timeline varies"} • {usd(p.estCost)}
-                  </div>
+                  <div className="subtle">Career family record</div>
                 </div>
                 <div className="sh-actionsRow">
                   <button className="sh-btn sh-btn--secondary" onClick={() => handleViewPathwayCard(p)} aria-label={`Open ${p.title}`}>Open</button>

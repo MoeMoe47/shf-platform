@@ -1,0 +1,20 @@
+{
+  "id": "data-center-systems-7-sensors-monitoring",
+  "slug": "data-center-systems-7-sensors-monitoring",
+  "nextSlug": "data-center-systems-7-finding-the-problem",
+  "title": "Sensors and Monitoring",
+  "curriculum": "data-center-systems-7",
+  "gradeBand": { "minGrade": 7, "maxGrade": 7, "stage": "DISCOVER" },
+  "estMinutes": 25,
+  "summary": "Discover how observations, sensors, alarms, and dashboards provide information about infrastructure.",
+  "objectives": ["Describe what a sensor or monitoring panel can tell people.", "Separate an observation from a guess about its cause."],
+  "vocab": [{ "term": "SENSOR", "def": "A device that detects and reports information about a condition." }, { "term": "MONITORING", "def": "Watching information over time to notice changes or problems." }, { "term": "ALARM", "def": "A signal that calls attention to a condition that may need investigation." }],
+  "sections": [
+    { "heading": "Information comes before action", "body": "Temperature sensors, power monitors, and equipment status signals help people observe what is happening. A dashboard can organize those observations." },
+    { "heading": "An observation is not a conclusion", "body": "The observation might be three servers showing a high-temperature alert. The cause could involve airflow, cooling equipment, or a sensor. Good reasoning keeps evidence and guesses separate." },
+    { "heading": "Use a paper dashboard", "body": "Create a small classroom panel with normal, changed, and unknown readings. Decide what safe question you would ask next. This is a model, not a live operational system." }
+  ],
+  "practice": [{ "prompt": "A dashboard shows a high temperature in one rack and normal temperature in nearby racks. What does that observation suggest, and what does it not prove?" }],
+  "quiz": { "question": "What is a useful first step when an alarm appears?", "options": ["Read the available evidence and identify what changed", "Immediately open the equipment", "Ignore every alarm", "Assume the cause without checking"], "answer": "Read the available evidence and identify what changed" },
+  "reflectionPrompt": "Why is it useful to separate what you observe from what you think caused it?"
+}

@@ -292,6 +292,19 @@ export default function GuidedLessonExperience({ lesson, curriculum, nextHref })
 
           {activeKey === "apply" && (
             <div className="ld-applyCard">
+              {lesson.proofActivity ? (
+                <ProofActivity activity={lesson.proofActivity} />
+              ) : (
+                <>
+              {lesson.project?.title && <h3>{lesson.project.title}</h3>}
+              {Array.isArray(lesson.project?.submissionOptions) && lesson.project.submissionOptions.length > 0 && (
+                <>
+                  <p>Choose an accessible way to show your work:</p>
+                  <ul>
+                    {lesson.project.submissionOptions.map((option) => <li key={option}>{option}</li>)}
+                  </ul>
+                </>
+              )}
               <p>
                 {lesson.portfolioArtifact
                   ? lesson.portfolioArtifact
@@ -300,6 +313,8 @@ export default function GuidedLessonExperience({ lesson, curriculum, nextHref })
               <Link className="ld-btnGhost" style={{ marginTop: 12 }} to="/curriculum/asl/portfolio">
                 Go to Portfolio
               </Link>
+                </>
+              )}
             </div>
           )}
 
@@ -441,6 +456,84 @@ function VocabularyStage({ lesson, curriculum, actorId }) {
           />
         </div>
       )}
+    </div>
+  );
+}
+
+function ProofActivity({ activity }) {
+  const monitoringData = Array.isArray(activity?.monitoringData) && activity.monitoringData.length > 0
+    ? activity.monitoringData
+    : [
+      { signal: "Service state", value: "degraded", status: "review", detail: "Synthetic signal for evidence-based analysis." },
+      { signal: "Storage pressure", value: "elevated", status: "review", detail: "Synthetic signal; root cause remains uncertain." },
+    ];
+  const [form, setForm] = React.useState({ observations: "", affectedSystem: "", uncertainty: "", safeNextStep: "" });
+  const [status, setStatus] = React.useState(null);
+  const [busy, setBusy] = React.useState(false);
+  const [error, setError] = React.useState("");
+  const loadStatus = React.useCallback(async () => {
+    try {
+      const response = await fetch(`/api/prepare-prove/proof-status?activity_id=${encodeURIComponent(activity.activityId)}`, { credentials: "include", cache: "no-store" });
+      if (!response.ok) return;
+      const body = await response.json();
+      if (body?.ok) setStatus(body.data);
+    } catch { /* The submit path reports a concrete error. */ }
+  }, []);
+  React.useEffect(() => { loadStatus(); }, [loadStatus]);
+  async function submit(event) {
+    event.preventDefault();
+    setBusy(true);
+    setError("");
+    try {
+      const headers = { "Content-Type": "application/json" };
+      const resultResponse = await fetch("/api/prepare-prove/activity-results", {
+        method: "POST", credentials: "include", headers,
+        body: JSON.stringify({ result: {
+          observations: form.observations.split("\n").map((value) => value.trim()).filter(Boolean),
+          activity_id: activity.activityId,
+          affected_system: form.affectedSystem,
+          uncertainty: form.uncertainty,
+          safe_next_step: form.safeNextStep,
+        } }),
+      });
+      if (!resultResponse.ok) throw new Error("The proof result could not be recorded.");
+      const resultBody = await resultResponse.json();
+      const evidenceResponse = await fetch("/api/prepare-prove/evidence", {
+        method: "POST", credentials: "include", headers,
+        body: JSON.stringify({ source_result_id: resultBody.data.result_id, criterion: activity.criterion || "safe-finding" }),
+      });
+      if (!evidenceResponse.ok) throw new Error("The evidence record could not be created.");
+      await loadStatus();
+    } catch (submitError) {
+      setError(submitError?.message || "The proof could not be submitted.");
+    } finally { setBusy(false); }
+  }
+  const update = (key) => (event) => setForm((current) => ({ ...current, [key]: event.target.value }));
+  const decision = status?.decision;
+  return (
+    <div data-testid="prepare-prove-proof-activity">
+      <h3>Prove: document a safe finding</h3>
+      <p>Use the synthetic monitoring snapshot to record facts, uncertainty, and a safe next step. This activity is simulation only.</p>
+      <div className="ld-proofTableWrap">
+        <table className="ld-proofTable">
+          <caption className="sr-only">Synthetic monitoring data</caption>
+          <thead><tr><th scope="col">Signal</th><th scope="col">Value</th><th scope="col">Status</th><th scope="col">Detail</th></tr></thead>
+          <tbody>{monitoringData.map((row) => <tr key={row.signal}><th scope="row">{row.signal}</th><td>{row.value}</td><td>{row.status}</td><td>{row.detail}</td></tr>)}</tbody>
+        </table>
+      </div>
+      <form onSubmit={submit} className="ld-proofForm">
+        <label>Observations (one fact per line)<textarea required value={form.observations} onChange={update("observations")} /></label>
+        <label>Affected system hypothesis<input required value={form.affectedSystem} onChange={update("affectedSystem")} /></label>
+        <label>What remains uncertain?<textarea required value={form.uncertainty} onChange={update("uncertainty")} /></label>
+        <label>Safe next step or escalation<textarea required value={form.safeNextStep} onChange={update("safeNextStep")} /></label>
+        <button type="submit" className="ld-btn ld-btnPrimary" disabled={busy}>{busy ? "Submitting…" : "Submit evidence for review"}</button>
+      </form>
+      {error && <p role="alert">{error}</p>}
+      <div role="status" aria-live="polite" data-testid="prepare-prove-proof-status">
+        {!status?.evidence && <p>Evidence status: Not submitted</p>}
+        {status?.evidence && !decision && <p>Evidence status: Evidence submitted, pending review.</p>}
+        {decision && <p>Review status: {decision.decision === "DEMONSTRATED" ? "Criteria demonstrated" : decision.decision === "EVIDENCE_INSUFFICIENT" ? "Evidence insufficient" : "Review needs follow-up"}. Criteria version {decision.criteria_version}.</p>}
+      </div>
     </div>
   );
 }

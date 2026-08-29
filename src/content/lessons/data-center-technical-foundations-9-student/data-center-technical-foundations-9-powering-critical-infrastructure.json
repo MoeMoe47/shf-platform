@@ -1,0 +1,22 @@
+{
+  "id": "data-center-technical-foundations-9-powering-critical-infrastructure",
+  "slug": "data-center-technical-foundations-9-powering-critical-infrastructure",
+  "nextSlug": "data-center-technical-foundations-9-heat-airflow-cooling",
+  "title": "Powering Critical Infrastructure",
+  "curriculum": "data-center-technical-foundations-9",
+  "gradeBand": { "minGrade": 9, "maxGrade": 9, "stage": "EXPLORE" },
+  "estMinutes": 30,
+  "summary": "Trace critical power paths and relate load, backup, and capacity without servicing equipment.",
+  "objectives": ["Trace a conceptual utility-to-server power path.", "Explain critical load, backup, and capacity in a simulated design."],
+  "vocab": [{ "term": "CRITICAL LOAD", "def": "Equipment or work that needs planned power continuity." }, { "term": "POWER CAPACITY", "def": "The amount of electrical demand a system can support." }, { "term": "BACKUP", "def": "An alternate resource available when the primary resource is interrupted." }],
+  "sections": [
+    { "heading": "Follow the infrastructure", "body": "A simplified path is utility, facility distribution, UPS, generator, rack power, and server. Real designs include controls, safeguards, and qualified operators." },
+    { "heading": "Load and capacity", "body": "A critical load needs enough planned capacity. A design team compares demand with available support and considers what happens during an interruption." },
+    { "heading": "Simulation boundary", "body": "Use a diagram or synthetic power table. Do not service a UPS or generator, open a power supply, access a panel, or perform mains-voltage measurements." }
+  ],
+  "practice": [{ "prompt": "A simulated rack load rises above its planned capacity. What evidence should a learner record, and what safe escalation should follow?" }],
+  "quiz": { "question": "What is a critical load?", "options": ["Equipment or work needing planned power continuity", "A type of network packet", "A cooling intake", "A storage format"], "answer": "Equipment or work needing planned power continuity" },
+  "lab": { "safetyClassification": "SIMULATION ONLY", "objective": "Interpret a synthetic power path and compare load with capacity." },
+  "futureCompetencyCandidates": ["trace a conceptual power path", "interpret basic load and capacity data"],
+  "reflectionPrompt": "What question should a technical team ask when a power load approaches capacity?"
+}

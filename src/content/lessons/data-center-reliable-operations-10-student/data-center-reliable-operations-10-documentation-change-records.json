@@ -1,0 +1,70 @@
+{
+  "id": "data-center-reliable-operations-10-documentation-change-records",
+  "slug": "data-center-reliable-operations-10-documentation-change-records",
+  "nextSlug": "data-center-reliable-operations-10-server-deployment",
+  "title": "Documentation and Change Records",
+  "curriculum": "data-center-reliable-operations-10",
+  "gradeBand": {
+    "minGrade": 10,
+    "maxGrade": 10,
+    "stage": "EXPLORE"
+  },
+  "estMinutes": 30,
+  "summary": "Create accurate records for observations, approved changes, and verification.",
+  "objectives": [
+    "Identify the information needed in an incident or change record.",
+    "Explain why a change should be reviewed, approved, verified, and documented."
+  ],
+  "vocab": [
+    {
+      "term": "CHANGE RECORD",
+      "def": "A record of a planned modification and its result."
+    },
+    {
+      "term": "OBSERVATION",
+      "def": "A fact directly noticed or measured."
+    },
+    {
+      "term": "ASSUMPTION",
+      "def": "An idea that has not yet been confirmed by evidence."
+    }
+  ],
+  "sections": [
+    {
+      "heading": "A record separates facts from guesses",
+      "body": "A useful record includes time, affected system, symptom, evidence, action, outcome, escalation, and follow-up. Write what was observed separately from what is suspected."
+    },
+    {
+      "heading": "Controlled changes",
+      "body": "A classroom change workflow is Request, Review, Approve, Change, Verify, and Document. Control reduces surprises and makes it possible to understand what changed."
+    },
+    {
+      "heading": "Accuracy is technical work",
+      "body": "Clear records help the next person continue safely. Do not record private learner information or production details in a classroom exercise."
+    }
+  ],
+  "practice": [
+    {
+      "prompt": "Complete a synthetic incident record with a timestamp, symptom, two pieces of evidence, a safe next step, and an outcome."
+    }
+  ],
+  "quiz": {
+    "question": "Which statement is an observation?",
+    "options": [
+      "The dashboard showed 82 percent storage use at 10:15",
+      "The disk must be failing",
+      "The next change will fix everything",
+      "The service is probably misconfigured"
+    ],
+    "answer": "The dashboard showed 82 percent storage use at 10:15"
+  },
+  "lab": {
+    "safetyClassification": "SAFE INDEPENDENT CLASSROOM LAB",
+    "objective": "Complete a structured change or incident record using a provided synthetic scenario."
+  },
+  "futureCompetencyCandidates": [
+    "create an accurate incident record",
+    "distinguish observations from assumptions"
+  ],
+  "reflectionPrompt": "What detail would help another person understand what happened without guessing?"
+}

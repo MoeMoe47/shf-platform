@@ -1,4 +1,4 @@
-import { resolveEntityStage, resolveReconciliationStage } from "./aggregation.controller";
+import { resolveEntityStage, resolveReconciliationStage } from "./aggregation.controller.js";
 
 export async function getReconciliationForEntity(req: any, res: any) {
   try {

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getVerificationForEntity } from "../controllers/verification.controller";
+import { getVerificationForEntity } from "../controllers/verification.controller.js";
 
 const router = Router();
 

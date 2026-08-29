@@ -1,0 +1,22 @@
+{
+  "id": "data-center-technical-foundations-9-ip-addresses-network-paths",
+  "slug": "data-center-technical-foundations-9-ip-addresses-network-paths",
+  "nextSlug": "data-center-technical-foundations-9-cabling-switches-fiber",
+  "title": "IP Addresses and Network Paths",
+  "curriculum": "data-center-technical-foundations-9",
+  "gradeBand": { "minGrade": 9, "maxGrade": 9, "stage": "EXPLORE" },
+  "estMinutes": 35,
+  "summary": "Understand IPv4 addresses, gateways, and possible path failures using a closed simulation.",
+  "objectives": ["Explain that an IP address identifies a device or interface on a network.", "Identify possible failure points in a simulated device-to-server path."],
+  "vocab": [{ "term": "IP ADDRESS", "def": "A network address used to identify a device or interface." }, { "term": "GATEWAY", "def": "A device or service that connects a local network to another network." }, { "term": "IPv4", "def": "A common address format written as four numbers separated by dots." }],
+  "sections": [
+    { "heading": "Addresses identify interfaces", "body": "An IPv4 address is commonly written as four numbers separated by dots. In a network model, the address helps identify where information should go; it does not describe every detail about the device." },
+    { "heading": "Follow the path", "body": "A simplified path is device interface, switch, gateway, network, and server interface. A broken link, wrong address, unavailable gateway, or server issue can affect the result." },
+    { "heading": "Closed and authorized practice", "body": "Use only synthetic addresses and a classroom simulator. Do not scan real networks, change external configurations, or test systems without authorization. Subnet mathematics can be introduced later." }
+  ],
+  "practice": [{ "prompt": "A device has an address but cannot reach a server. Name two path points to inspect in a simulation and explain why." }],
+  "quiz": { "question": "What is an IP address used for?", "options": ["Identify a device or interface on a network", "Measure cooling airflow", "Store a permanent password", "Replace a gateway"], "answer": "Identify a device or interface on a network" },
+  "lab": { "safetyClassification": "SIMULATION ONLY", "objective": "Diagnose a synthetic IP and gateway path using provided observations." },
+  "futureCompetencyCandidates": ["interpret an IPv4 address conceptually", "identify simulated network path failure points"],
+  "reflectionPrompt": "Which observation would help distinguish an address problem from a physical link problem?"
+}

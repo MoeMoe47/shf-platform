@@ -1,0 +1,18 @@
+{
+  "id": "data-center-specialization-11-fiber-infrastructure",
+  "slug": "data-center-specialization-11-fiber-infrastructure",
+  "nextSlug": "data-center-specialization-11-network-monitoring",
+  "title": "Fiber Infrastructure",
+  "curriculum": "data-center-specialization-11",
+  "gradeBand": { "minGrade": 11, "maxGrade": 11, "stage": "PREPARE_PROVE" },
+  "estMinutes": 50,
+  "summary": "Connect optical links, transceivers, distance, and safety boundaries to data-center connectivity.",
+  "objectives": ["Explain how fiber carries information using light.", "Compare single-mode and multimode concepts at a high level.", "Recognize attenuation, connector, and transceiver clues without performing live-fiber work."],
+  "vocab": [{ "term": "TRANSCEIVER", "def": "A device that sends and receives signals, including optical network signals." }, { "term": "ATTENUATION", "def": "A reduction in signal strength as it travels through a medium." }, { "term": "SINGLE-MODE", "def": "A fiber design commonly used for longer-distance optical links." }, { "term": "MULTIMODE", "def": "A fiber design commonly used for shorter-distance optical links in suitable environments." }],
+  "sections": [{ "heading": "Light carries information", "body": "Fiber uses light in a glass strand to carry information over high-capacity links. Different fiber designs and transceivers suit different distances and systems." }, { "heading": "Safety is part of the skill", "body": "Never look into a live fiber, handle glass fragments, operate a fusion splicer, or use optical equipment without qualified supervision. Classroom work uses diagrams, labeled inactive materials, or simulation only." }],
+  "practice": [{ "prompt": "A synthetic long-distance link shows rising loss and a connector warning. What is the safe student response?", "answer": "Record the evidence, avoid live inspection or repair, and escalate to qualified personnel." }],
+  "quiz": { "question": "What is a safe classroom fiber activity?", "options": ["Trace a simulated optical path and document its endpoints", "Look into a connector to check for light", "Practice fusion splicing without supervision", "Use live production optical equipment"], "answer": "Trace a simulated optical path and document its endpoints" },
+  "lab": { "safetyClassification": "SIMULATION ONLY", "objective": "Analyze a synthetic optical-link record and document a safe escalation." },
+  "futureCompetencyCandidates": ["analyze a synthetic fiber link and document safe escalation"],
+  "reflectionPrompt": "Which evidence can a classroom simulation provide, and what must a qualified professional inspect?"
+}

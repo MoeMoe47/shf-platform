@@ -12,13 +12,26 @@
 // restyle of the old one. Every existing Arcade route keeps working
 // unchanged — only the outer chrome around `{children}` changed.
 // ------------------------------------------------------------
+//
+// SHF shared-footer integration (Arcade pass): every Arcade route runs
+// through this one layout (see ArcadeRoutes.jsx — there is no separate
+// "immersive gameplay" shell in this codebase; /games' own Play action is
+// currently just an informational stub, not a real fullscreen game), so
+// this is the correct single insertion point for the same canonical
+// SHFFooter Curriculum/Career already use — no per-page imports, no
+// Arcade-specific footer fork. `hideFooter` is an escape hatch for
+// whichever future route becomes real, canvas-driven fullscreen gameplay
+// (see the task's own "fullscreen gameplay exception") — reserved but
+// unused today since no such route exists yet; nothing currently passes
+// it as true.
 
 import React from "react";
 import { Outlet } from "react-router-dom";
 import ArcadeAppShell from "@/layouts/arcade/ArcadeAppShell.jsx";
 import ArcadeTopNav from "@/components/arcade/ArcadeTopNav.jsx";
+import SHFFooter from "@/components/shared/SHFFooter.jsx";
 
-export default function ArcadeLayout({ children }) {
+export default function ArcadeLayout({ children, hideFooter = false }) {
   return (
     <ArcadeAppShell>
       {/* No data-app attribute here either — same reason as
@@ -32,6 +45,7 @@ export default function ArcadeLayout({ children }) {
         <main className="ar-main" id="arcade-main" role="main" aria-live="polite">
           {children ?? <Outlet />}
         </main>
+        {!hideFooter && <SHFFooter variant="arcade" />}
       </div>
     </ArcadeAppShell>
   );

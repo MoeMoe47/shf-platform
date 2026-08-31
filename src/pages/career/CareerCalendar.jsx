@@ -6,7 +6,8 @@ import React from "react";
 import "@/styles/career-calendar.css";
 import { markDarkScope } from "@/utils/careerTheme.js";
 import { useCalendarEvents } from "./calendar/useCalendarEvents.js";
-import { FILTER_GROUPS, EVENT_TYPE_META } from "./calendar/eventContract.js";
+import { EVENT_TYPE_META } from "./calendar/eventContract.js";
+import { unavailableSourcesMessage } from "./calendar/projectionAdapter.js";
 import {
   addMonths,
   addDays,
@@ -31,6 +32,25 @@ const VIEWS = [
   { id: "agenda", label: "Agenda" },
 ];
 
+// SHF Ecosystem Phase 11.5 — restricted to the canonical categories real
+// backend data can actually produce (matching Curriculum's own
+// LEARNING_CALENDAR_FILTERS), plus the two sources this page still merges
+// in locally (Portfolio demo, Personal reminders). The pre-unification
+// default (FILTER_GROUPS from eventContract.js) included Learning/
+// Mentoring chips that only ever matched now-removed demo data and would
+// have sat permanently empty.
+const CAREER_CALENDAR_FILTERS = [
+  { id: "all", label: "All" },
+  { id: "live", label: "Live" },
+  { id: "career", label: "Career" },
+  { id: "assignments", label: "Assignments" },
+  { id: "projects", label: "Projects" },
+  { id: "opportunities", label: "Opportunities" },
+  { id: "credentials", label: "Credentials" },
+  { id: "portfolio", label: "Portfolio" },
+  { id: "personal", label: "Personal" },
+];
+
 function useNarrowViewport(breakpoint = 720) {
   const [narrow, setNarrow] = React.useState(
     () => typeof window !== "undefined" && window.innerWidth <= breakpoint
@@ -47,7 +67,7 @@ function useNarrowViewport(breakpoint = 720) {
 }
 
 export default function CareerCalendar() {
-  const { loading, error, events, refresh } = useCalendarEvents();
+  const { loading, error, events, partial, unavailableSources, refresh } = useCalendarEvents();
   const narrow = useNarrowViewport();
 
   const today = React.useMemo(() => new Date(), []);
@@ -182,12 +202,20 @@ export default function CareerCalendar() {
         onFilterChange={setFilter}
         search={search}
         onSearchChange={setSearch}
+        groups={CAREER_CALENDAR_FILTERS}
       />
 
       <div aria-live="polite" className="cal-srOnly">{liveMessage}</div>
 
       <div className="cal-layout">
         <div className="cal-mainRegion">
+          {partial && !loading && (
+            <div className="cal-partialNotice" role="status">
+              <span className="cal-partialIcon" aria-hidden="true">⚠️</span>
+              <span className="cal-partialText">{unavailableSourcesMessage(unavailableSources)}</span>
+              <button type="button" className="cal-partialRetry" onClick={refresh}>Retry</button>
+            </div>
+          )}
           {loading ? (
             <div className="cal-loadingState" role="status" aria-live="polite">
               <div className="cal-skeletonMonth" aria-hidden="true" />

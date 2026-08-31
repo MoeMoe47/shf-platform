@@ -171,6 +171,21 @@
 .brainiact-btn--quiet { background: #fff; color: var(--ink, #0f172a); }
 .brainiact-btn:focus-visible { outline: 2px solid var(--orange, #ff4f00); outline-offset: 2px; }
 
+/* SHF Ecosystem Phase 11 — Companion Context guidance (top-priority item
+   only; see companionContext.guidance). Deliberately reuses the same
+   .brainiact-btn/.brainiact-hintActions tokens rather than introducing a
+   new visual language — an institutional accent border, not a redesign. */
+.brainiact-guidancePanel {
+  display: grid;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--ring, #e5e7eb);
+  background: rgba(255, 79, 0, 0.06);
+}
+.brainiact-guidanceMessage { margin: 0; font-size: 13px; font-weight: 600; color: var(--ink, #0f172a); }
+.brainiact-guidanceActions { display: flex; flex-wrap: wrap; gap: 8px; }
+
 .brainiact-hintPanel { display: grid; gap: 8px; }
 .brainiact-hintLevel { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-soft, #6b7280); }
 .brainiact-hintText { margin: 0; font-size: 13px; color: var(--ink, #0f172a); }

@@ -1,8 +1,19 @@
 import { ProgramService } from "../service/program-service.js";
 import { ok, fail } from "../../../api/response-envelope.js";
 import { requirePermission } from "../../../auth/permission-guard.js";
+import * as careerPathwayService from "../../career-pathways/service/career-pathway-service.js";
+import { CareerPathwayError } from "../../career-pathways/service/career-pathway-service.js";
 
 const service = new ProgramService();
+
+function actorFromRequest(req: any) {
+  return { user_id: req.user.user_id, organization_id: req.user.active_organization_id || req.user.organization_id, roles: req.user.roles || [] };
+}
+
+function sendPathwayError(error: any, res: any, next: any) {
+  if (error instanceof CareerPathwayError) return res.status(error.statusCode).json(fail(error.code, error.message));
+  return next(error);
+}
 
 export function registerProgramRoutes(app: any) {
   app.get("/programs", requirePermission("program.read"), async (req: any, res: any) => {
@@ -18,7 +29,41 @@ export function registerProgramRoutes(app: any) {
   app.get("/programs/:id", requirePermission("program.read"), async (req: any, res: any) => {
     const item = await service.getProgram(req.params.id, req.user);
     if (!item) return res.status(404).json(fail("NOT_FOUND", "Program not found"));
-    res.json(ok(item));
+    const actor = actorFromRequest(req);
+    const careers = await careerPathwayService.listCareersForProgram(actor.organization_id, req.params.id);
+    res.json(ok({ ...item, careers }));
+  });
+
+  // Program <-> Career pathway mapping (SHF Ecosystem Phase 5). Admin/
+  // program-manager only (program.update) — students/instructors never
+  // rewrite institutional pathway mappings.
+  app.get("/programs/:id/careers", requirePermission("program.read"), async (req: any, res: any) => {
+    const actor = actorFromRequest(req);
+    const careers = await careerPathwayService.listCareersForProgram(actor.organization_id, req.params.id);
+    res.json(ok({ items: careers }));
+  });
+
+  app.post("/programs/:id/careers", requirePermission("program.update"), async (req: any, res: any, next: any) => {
+    try {
+      const created = await careerPathwayService.linkProgramCareer(
+        actorFromRequest(req),
+        req.params.id,
+        String(req.body?.careerId || ""),
+        !!req.body?.isPrimary,
+      );
+      res.status(201).json(ok(created));
+    } catch (error) {
+      sendPathwayError(error, res, next);
+    }
+  });
+
+  app.delete("/programs/:id/careers/:careerId", requirePermission("program.update"), async (req: any, res: any, next: any) => {
+    try {
+      const result = await careerPathwayService.unlinkProgramCareer(actorFromRequest(req), req.params.id, req.params.careerId);
+      res.json(ok(result));
+    } catch (error) {
+      sendPathwayError(error, res, next);
+    }
   });
 
   app.post("/programs", requirePermission("program.create"), async (req: any, res: any) => {

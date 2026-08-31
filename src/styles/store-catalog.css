@@ -1,0 +1,688 @@
+/* src/styles/store-catalog.css
+   New sidebar+header Catalog shell for the Store app (/store.html#/catalog
+   only — see src/router/StoreRoutes.jsx and StoreCatalogShell.jsx). Every
+   selector is scoped under .cs-shell / .cs-* so nothing here can leak
+   onto Marketplace/Verify/My Items/FAQ/About, which still render inside
+   the pre-existing, untouched StoreLayout.
+   Design tokens match src/components/shared/shf-footer.css exactly
+   (same ivory/charcoal light palette, same near-black dark palette, same
+   International Orange) for full visual consistency with Curriculum/
+   Career/Arcade. */
+
+/* Tokens copied 1:1 from src/styles/curriculum-dashboard.css's own
+   :root[data-app="curriculum"] block (--ld-bg/--ld-card/--ld-ink/
+   --ld-muted/--ld-ring/--ld-orange) — the real, canonical color values
+   of the shell being reused, not an approximation of them. */
+.cs-shell {
+  --cs-orange: #ff4f00;
+  --cs-bg: #f7f3ea;
+  --cs-panel: #ffffff;
+  --cs-ink: #14161a;
+  --cs-ink-soft: #6b7280;
+  --cs-border: #e7e2d8;
+  --cs-sidebar-bg: #ffffff;
+
+  display: flex;
+  min-height: 100vh;
+  background: var(--cs-bg);
+  color: var(--cs-ink);
+}
+
+:root[data-theme="dark"] .cs-shell {
+  --cs-orange: #ff6a2b;
+  --cs-bg: #0e0f12;
+  --cs-panel: #16181d;
+  --cs-ink: #f2f1ee;
+  --cs-ink-soft: #9a9da6;
+  --cs-border: #2a2d34;
+  --cs-sidebar-bg: #16181d;
+}
+
+/* ---------- sidebar ---------- */
+.cs-shell__sidebar {
+  flex: 0 0 264px;
+  width: 264px;
+  max-width: 264px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--cs-sidebar-bg);
+  border-right: 1px solid var(--cs-border);
+  transition: flex-basis 0.18s ease, width 0.18s ease;
+  z-index: 700;
+}
+.cs-shell__sidebar.is-collapsed {
+  flex-basis: 76px;
+  width: 76px;
+  max-width: 76px;
+}
+
+.cs-sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 16px 12px;
+}
+
+.cs-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 6px 20px;
+}
+.cs-brandMark {
+  flex: none;
+  color: var(--cs-orange);
+}
+.cs-brandName {
+  font-weight: 800;
+  font-size: 14.5px;
+  line-height: 1.2;
+}
+.cs-brandToggle {
+  margin-left: auto;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  border: 1px solid var(--cs-border);
+  background: transparent;
+  color: var(--cs-ink-soft);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cs-brandToggle:hover { color: var(--cs-orange); border-color: var(--cs-orange); }
+
+.cs-navGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 18px;
+}
+.cs-navGroupLabel {
+  margin: 8px 10px 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cs-ink-soft);
+}
+.cs-navLink {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 10px;
+  border-radius: 10px;
+  color: var(--cs-ink);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+.cs-navLink:hover { background: var(--cs-bg); }
+.cs-navLink.is-active {
+  background: rgba(255, 79, 0, 0.1);
+  color: var(--cs-orange);
+}
+.cs-navIcon { flex: none; font-size: 16px; width: 20px; text-align: center; }
+.cs-navLabel { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.cs-sidebarUser {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-top: 1px solid var(--cs-border);
+}
+.cs-sidebarUser__avatar {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: rgba(255, 79, 0, 0.14);
+  color: var(--cs-orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 12px;
+}
+.cs-sidebarUser__text { display: flex; flex-direction: column; min-width: 0; }
+.cs-sidebarUser__name { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cs-sidebarUser__role { font-size: 11.5px; color: var(--cs-ink-soft); }
+
+.cs-drawerClose {
+  display: none;
+}
+
+/* ---------- right column ---------- */
+.cs-shell__right {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.cs-mobileMenuBtn { display: none; }
+
+/* ---------- header ---------- */
+.cs-headerBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 20px 32px;
+  border-bottom: 1px solid var(--cs-border);
+  background: var(--cs-panel);
+}
+.cs-headerTitles { min-width: 0; }
+.cs-h1 { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
+.cs-subtitle { margin: 4px 0 0; font-size: 13.5px; color: var(--cs-ink-soft); }
+
+.cs-headerControls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cs-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.cs-searchIcon {
+  position: absolute;
+  left: 12px;
+  color: var(--cs-ink-soft);
+  pointer-events: none;
+}
+.cs-searchInput {
+  width: 280px;
+  padding: 9px 12px 9px 36px;
+  border-radius: 10px;
+  border: 1px solid var(--cs-border);
+  background: var(--cs-bg);
+  color: var(--cs-ink);
+  font-size: 13.5px;
+}
+.cs-searchInput:focus-visible { outline: 2px solid var(--cs-orange); outline-offset: 1px; }
+
+.cs-iconBtn {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--cs-border);
+  background: var(--cs-panel);
+  color: var(--cs-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.cs-iconBtn:hover { border-color: var(--cs-orange); color: var(--cs-orange); }
+
+.cs-notifWrap { position: relative; }
+.cs-notifPanel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  width: 240px;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid var(--cs-border);
+  background: var(--cs-panel);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+  z-index: 20;
+}
+.cs-notifEmpty { margin: 0; font-size: 13px; color: var(--cs-ink-soft); }
+
+/* theme switch (compact icon-only, matches Arcade's) */
+.cs-themeSwitch { position: relative; }
+.cs-themeSwitch__trigger {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--cs-border);
+  background: var(--cs-panel);
+  color: var(--cs-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.cs-themeSwitch__trigger:hover { border-color: var(--cs-orange); }
+.cs-themeSwitch__menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  min-width: 150px;
+  padding: 6px;
+  border-radius: 12px;
+  border: 1px solid var(--cs-border);
+  background: var(--cs-panel);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+  z-index: 20;
+}
+.cs-themeSwitch__item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--cs-ink);
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+}
+.cs-themeSwitch__item:hover, .cs-themeSwitch__item.is-selected { background: var(--cs-bg); }
+.cs-themeSwitch__check { margin-left: auto; color: var(--cs-orange); }
+.cs-srOnly {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* ---------- cross-app switcher ---------- */
+/* AppSwitcher.jsx has no general dark-mode CSS anywhere in this codebase
+   (career-shell.css only styles it, and only light-mode, plus one
+   ultra-narrow dark override scoped to a single Career page) — and
+   Store's own bundle never loaded career-shell.css at all, so the
+   trigger button rendered with nothing but browser button defaults
+   (illegible off-white-on-white in dark mode). Scoped, real styling for
+   both themes, matching the rest of this shell's tokens/icon-button
+   look, rather than relying on accidental UA defaults. */
+.cs-shell .app-switcher__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--cs-border);
+  background: var(--cs-panel);
+  color: var(--cs-ink);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+}
+.cs-shell .app-switcher__trigger:hover { border-color: var(--cs-orange); }
+.cs-shell .app-switcher__icon { font-size: 15px; line-height: 1; }
+.cs-shell .app-switcher__label { white-space: nowrap; }
+.cs-shell .app-switcher__menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 20;
+  min-width: 190px;
+  background: var(--cs-panel);
+  border: 1px solid var(--cs-border);
+  border-radius: 12px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+  padding: 6px;
+  display: grid;
+  gap: 2px;
+}
+.cs-shell .app-switcher__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: var(--cs-ink);
+  text-decoration: none;
+  font-size: 13px;
+}
+.cs-shell .app-switcher__item:hover { background: var(--cs-bg); }
+.cs-shell .app-switcher__item.is-current { font-weight: 700; background: rgba(255, 79, 0, 0.1); }
+.cs-shell .app-switcher__itemIcon { font-size: 15px; }
+.cs-shell .app-switcher__itemLabel { flex: 1; }
+.cs-shell .app-switcher__check { color: var(--cs-orange); font-weight: 800; width: 14px; text-align: center; }
+.cs-shell .app-switcher__trigger:focus-visible,
+.cs-shell .app-switcher__item:focus-visible {
+  outline: 2px solid var(--cs-orange);
+  outline-offset: 2px;
+}
+
+/* ---------- page body ---------- */
+.cs-page {
+  flex: 1 1 auto;
+  padding: 20px 32px 40px;
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ---------- filter bar ---------- */
+.cs-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  padding: 14px 0 18px;
+  border-bottom: 1px solid var(--cs-border);
+  margin-bottom: 22px;
+}
+.cs-filterField { display: flex; flex-direction: column; gap: 5px; min-width: 150px; }
+.cs-filterField label {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cs-ink-soft);
+}
+.cs-filterField select {
+  padding: 7px 30px 7px 11px;
+  border-radius: 9px;
+  border: 1px solid var(--cs-border);
+  background: var(--cs-panel) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%236b7280" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>') no-repeat right 9px center;
+  color: var(--cs-ink);
+  font-size: 13px;
+  appearance: none;
+  cursor: pointer;
+}
+.cs-filterField select:focus-visible { outline: 2px solid var(--cs-orange); outline-offset: 1px; }
+
+/* ---------- featured section ---------- */
+.cs-sectionHead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.cs-sectionTitle { margin: 0 0 4px; font-size: 21px; font-weight: 800; }
+.cs-sectionSub { margin: 0; font-size: 13.5px; color: var(--cs-ink-soft); max-width: 60ch; }
+.cs-viewAll {
+  /* This is a <button> in the markup (its action resets filters, not a
+     navigation), so it needs an explicit reset — without one, browser
+     UA button chrome (border/background/padding) shows through and it
+     reads as a boxed default button instead of the mock's plain text
+     link with an arrow. */
+  flex: none;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: var(--cs-orange);
+  font-weight: 700;
+  font-size: 13.5px;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.cs-viewAll:hover { text-decoration: underline; }
+.cs-viewAll:focus-visible { outline: 2px solid var(--cs-orange); outline-offset: 3px; border-radius: 4px; }
+
+/* Large-card update: 4 wide cards per row on desktop (was 5 compact
+   ones) — see the responsive block below for the 4/3/2/1 column
+   progression. Grid's default align-items:stretch already gives every
+   card in a row equal height; CTA alignment across a row comes from
+   .cs-cardDesc's flex:1 pushing .cs-cardCta to the same bottom edge
+   regardless of description length, not from fixed pixel heights. */
+.cs-cardGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+/* ---------- offering card ---------- */
+.cs-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  border: 1px solid var(--cs-border);
+  background: var(--cs-panel);
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+.cs-card:hover {
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+  border-color: var(--cs-orange);
+  transform: translateY(-2px);
+}
+
+/* 16:9-ish wide photo panel, ~40-45% of the card's own visual weight —
+   sized by aspect-ratio (not a fixed px height) so it scales cleanly
+   with the card's actual rendered width at every breakpoint instead of
+   being tuned for one viewport and looking wrong at another. */
+.cs-cardMedia {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+}
+.cs-cardPhoto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+.cs-cardIconBadge {
+  position: absolute;
+  left: 14px;
+  bottom: -18px;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  border: 3px solid var(--cs-panel);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.2);
+}
+.cs-cardIconBadge--blue { background: #dbeafe; }
+.cs-cardIconBadge--orange { background: #ffe4d1; }
+.cs-cardIconBadge--teal { background: #ccfbf1; }
+.cs-cardIconBadge--green { background: #dcfce7; }
+.cs-cardIconBadge--purple { background: #ede9fe; }
+
+.cs-cardBody { padding: 28px 18px 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.cs-cardTitle { margin: 0; font-size: 17px; font-weight: 700; line-height: 1.3; }
+.cs-cardOwner { font-size: 12px; font-weight: 700; color: var(--cs-orange); }
+.cs-cardBadge {
+  align-self: flex-start;
+  margin-top: 2px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid transparent;
+}
+.cs-cardBadge--free { background: rgba(34, 197, 94, 0.12); color: #16803d; border-color: rgba(34,197,94,0.3); }
+.cs-cardBadge--sponsored { background: rgba(255, 79, 0, 0.1); color: #c2410c; border-color: rgba(255,79,0,0.28); }
+.cs-cardBadge--grant-funded { background: rgba(34, 197, 94, 0.12); color: #16803d; border-color: rgba(34,197,94,0.3); }
+.cs-cardBadge--included { background: rgba(59, 130, 246, 0.12); color: #1d4ed8; border-color: rgba(59,130,246,0.3); }
+.cs-cardBadge--premium-addon { background: rgba(147, 51, 234, 0.12); color: #7e22ce; border-color: rgba(147,51,234,0.3); }
+.cs-cardBadge--paid { background: rgba(15, 23, 42, 0.08); color: var(--cs-ink); border-color: var(--cs-border); }
+.cs-cardBadge--request-access { background: rgba(234, 179, 8, 0.14); color: #a16207; border-color: rgba(234,179,8,0.32); }
+.cs-cardBadge--contact-pricing { background: rgba(15, 23, 42, 0.08); color: var(--cs-ink); border-color: var(--cs-border); }
+:root[data-theme="dark"] .cs-cardBadge--free { color: #4ade80; }
+:root[data-theme="dark"] .cs-cardBadge--sponsored { color: #fb923c; }
+:root[data-theme="dark"] .cs-cardBadge--grant-funded { color: #4ade80; }
+:root[data-theme="dark"] .cs-cardBadge--included { color: #60a5fa; }
+:root[data-theme="dark"] .cs-cardBadge--premium-addon { color: #c084fc; }
+:root[data-theme="dark"] .cs-cardBadge--paid { color: var(--cs-ink); }
+:root[data-theme="dark"] .cs-cardBadge--request-access { color: #facc15; }
+:root[data-theme="dark"] .cs-cardBadge--contact-pricing { color: var(--cs-ink); }
+
+.cs-cardDesc { margin: 0; font-size: 13px; line-height: 1.6; color: var(--cs-ink-soft); flex: 1; }
+.cs-cardCta {
+  margin-top: 10px;
+  padding: 11px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--cs-orange);
+  background: transparent;
+  color: var(--cs-orange);
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+}
+.cs-cardCta:hover { background: rgba(255, 79, 0, 0.08); }
+:root[data-theme="dark"] .cs-cardIconBadge--blue { background: #1c2c4d; }
+:root[data-theme="dark"] .cs-cardIconBadge--orange { background: #4a2814; }
+:root[data-theme="dark"] .cs-cardIconBadge--teal { background: #123a34; }
+:root[data-theme="dark"] .cs-cardIconBadge--green { background: #123a22; }
+:root[data-theme="dark"] .cs-cardIconBadge--purple { background: #2c2148; }
+
+/* ---------- trust strip ---------- */
+.cs-trustStrip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid var(--cs-border);
+  background: var(--cs-panel);
+  margin-bottom: 32px;
+}
+.cs-trustItem { display: flex; gap: 12px; align-items: flex-start; }
+.cs-trustIcon {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(255, 79, 0, 0.1);
+  color: var(--cs-orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+.cs-trustTitle { margin: 0 0 4px; font-size: 14px; font-weight: 800; }
+.cs-trustDesc { margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--cs-ink-soft); }
+
+/* ---------- info dialog ---------- */
+.cs-dialogScrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.cs-dialogCard {
+  width: 100%;
+  max-width: 420px;
+  border-radius: 16px;
+  background: var(--cs-panel);
+  color: var(--cs-ink);
+  padding: 22px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+}
+.cs-dialogCard h2 { margin: 0 0 10px; font-size: 18px; }
+.cs-dialogCard p { margin: 0 0 18px; font-size: 13.5px; line-height: 1.6; color: var(--cs-ink-soft); }
+.cs-dialogClose {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--cs-border);
+  background: transparent;
+  color: var(--cs-ink);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.cs-dialogClose:hover { border-color: var(--cs-orange); color: var(--cs-orange); }
+
+/* ---------- scrim / mobile drawer ---------- */
+.cs-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 650;
+  display: none;
+}
+
+/* ---------- responsive ---------- */
+/* Card columns: 4 (base, >=1280) / 3 (1024-1279) / 2 (768-1023) / 1
+   (<768) — decoupled from the sidebar's own 900px drawer breakpoint
+   below, which is a separate concern (nav chrome, not card layout). */
+@media (max-width: 1279px) {
+  .cs-cardGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 1023px) {
+  .cs-cardGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cs-trustStrip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 767px) {
+  .cs-cardGrid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 900px) {
+  .cs-shell__sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+    width: 260px;
+    max-width: 260px;
+    flex-basis: 260px;
+  }
+  .cs-shell__sidebar.is-mobileOpen { transform: translateX(0); }
+  .cs-shell__sidebar.is-collapsed { width: 260px; max-width: 260px; flex-basis: 260px; }
+  .cs-drawerClose {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    margin-left: auto;
+    border-radius: 8px;
+    border: 1px solid var(--cs-border);
+    background: transparent;
+    color: var(--cs-ink);
+    cursor: pointer;
+  }
+  .cs-mobileMenuBtn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    border: 1px solid var(--cs-border);
+    background: var(--cs-panel);
+    cursor: pointer;
+    flex: none;
+  }
+  .cs-mobileMenuBar { display: block; height: 2px; margin: 0 8px; background: var(--cs-ink); border-radius: 2px; }
+  .cs-scrim { display: block; }
+  .cs-headerBar { padding: 16px 20px; }
+  .cs-page { padding: 20px 20px 40px; }
+}
+
+@media (max-width: 640px) {
+  .cs-headerControls { width: 100%; }
+  .cs-search { flex: 1 1 100%; }
+  .cs-searchInput { width: 100%; }
+  .cs-filters { gap: 14px; }
+  .cs-filterField { min-width: 45%; flex: 1 1 45%; }
+  .cs-trustStrip { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 430px) {
+  .cs-sectionHead { flex-direction: column; align-items: flex-start; }
+  .cs-filterField { min-width: 100%; flex: 1 1 100%; }
+}

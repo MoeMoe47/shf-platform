@@ -1,0 +1,123 @@
+.shf-celebration {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+  display: grid;
+  place-items: end center;
+  padding: 20px;
+}
+
+.shf-celebration__message {
+  pointer-events: auto;
+  width: min(420px, calc(100vw - 32px));
+  border: 1px solid color-mix(in srgb, var(--shf-orange, #ff5a1f) 35%, #ffffff);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--surface, #ffffff) 94%, #fff7ed);
+  box-shadow: 0 18px 48px rgba(17, 24, 39, 0.18);
+  color: var(--ink, #111827);
+  padding: 16px;
+}
+
+.shf-celebration__eyebrow {
+  margin: 0 0 6px;
+  color: var(--shf-orange, #ff5a1f);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.shf-celebration h2 {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.2;
+}
+
+.shf-celebration p {
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.shf-celebration__dismiss {
+  margin-top: 12px;
+  border: 1px solid var(--ring, #d1d5db);
+  border-radius: 8px;
+  background: var(--surface, #ffffff);
+  color: inherit;
+  min-height: 36px;
+  padding: 0 12px;
+  font-weight: 700;
+}
+
+.shf-celebration__dismiss:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--shf-orange, #ff5a1f) 55%, transparent);
+  outline-offset: 2px;
+}
+
+.shf-celebration__effect {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.shf-celebration__effect span {
+  position: absolute;
+  top: -18px;
+  left: var(--x);
+  width: 9px;
+  height: 15px;
+  border-radius: 2px;
+  background: hsl(var(--hue) 78% 52%);
+  animation: shf-confetti-fall 1900ms ease-out var(--delay, 0ms) both;
+}
+
+.shf-celebration__effect[data-effect="major"] span {
+  top: 20vh;
+  left: 50vw;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--shf-orange, #ff5a1f) 70%, #ffffff);
+  animation: shf-major-burst 1400ms ease-out var(--delay, 0ms) both;
+}
+
+@keyframes shf-confetti-fall {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -24px, 0) rotate(0deg);
+  }
+  15% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(var(--dx, 0), 72vh, 0) rotate(240deg);
+  }
+}
+
+@keyframes shf-major-burst {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(0.7);
+  }
+  20% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(var(--dx, 0), var(--dy, 0), 0) scale(1.2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shf-celebration__effect {
+    display: none;
+  }
+
+  .shf-celebration__effect span {
+    animation: none;
+  }
+}

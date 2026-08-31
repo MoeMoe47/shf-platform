@@ -1,0 +1,415 @@
+/* src/styles/curriculum-learning-calendar.css
+   SHF Learning Calendar rebuild — page-specific styles only. Reuses the
+   shared calendar engine's tokens/classes (career-calendar.css /
+   curriculum-calendar.css: .cal-page, .cal-layout, .cal-toolbar, etc.) —
+   nothing here redefines those. Also fixes a real pre-existing gap found
+   while building this page: curriculum-calendar.css never had a dark-mode
+   token block at all (career-calendar.css's own dark override is scoped
+   to `[data-app="career"]`, so it silently never applied here), so this
+   file adds the real one, matching Curriculum's own established dark
+   palette (see curriculum-dashboard.css's --ld-* dark tokens) rather than
+   inventing new values. */
+
+:root[data-app="curriculum"][data-theme="dark"] .curriculum-calendar-page {
+  --cal-bg: #0e0f12;
+  --cal-surface: #16181d;
+  --cal-surface-raised: #1c1f26;
+  --cal-border: #2a2d34;
+  --cal-text: #f2f1ee;
+  --cal-text-muted: #9a9da6;
+  --cal-accent: #ff6a2b;
+  --cal-accent-ink: #0e0f12;
+  --cal-today-bg: rgba(255, 106, 43, 0.16);
+  --cal-selected-ring: #ff6a2b;
+  --cal-danger: #f87171;
+  --cal-danger-ink: #2a0e0e;
+  --cal-scrim: rgba(0, 0, 0, 0.65);
+  --cal-focus-ring: #7cacff;
+
+  --cal-type-learning: #6fa0ff;
+  --cal-type-live: #38bdf8;
+  --cal-type-assignment: #e3a73d;
+  --cal-type-project: #86efac;
+  --cal-type-portfolio: #b794f6;
+  --cal-type-mentor: #4fd1c5;
+  --cal-type-arcade: #f472b6;
+  --cal-type-credential: #f2c94c;
+  --cal-type-career: #8c9bff;
+  --cal-type-opportunity: #e9c46a;
+  --cal-type-personal: #c4cad4;
+}
+
+/* ---------- page body wrapper (Final Polish, Phase 43C/D) ----------
+   .lc-pageBody is this page's ONE direct child of .app-main, so it's the
+   only element that receives the shared curriculum-shell's per-section
+   padding (curriculum-skin.css: `.app-main > * { padding: 28px 24px
+   64px }`, written for single-section pages). Every gap between the
+   sections it wraps below (intro, summary row, calendar layout,
+   milestones) is therefore explicit and exact — not a side effect of
+   that rule compounding across four separate direct children like it
+   did before this pass.
+
+   Aggressive Density Correction (Phase 43D): that shared rule's own
+   28px-top/64px-bottom padding was still the largest single contributor
+   to top and bottom whitespace even with only one child. The block below
+   overrides it directly — :root[data-app="curriculum"] is included so
+   this beats that rule's own specificity, not just source order — and
+   moves .cal-page's redundant top/bottom padding (the outer <main>
+   itself) onto the same element, so page-edge spacing has exactly one
+   source instead of two stacked ones. Left/right padding is left alone
+   (still the shared 24px reading-width gutter).
+
+   Both zeroed out entirely: the shell wrapper one level up (.ld-main,
+   curriculum-dashboard.css, shared by every Curriculum page — sidebar/
+   header/footer layout, out of scope for this page-only pass) already
+   contributes its own 24px top / 48px bottom padding around <main>, and
+   that alone lands the header→eyebrow gap at the top of the requested
+   20–24px band. The 48px .ld-main bottom padding is the one target in
+   this pass this page's CSS cannot close further without touching that
+   shared shell file — see the final report. */
+.curriculum-calendar-page.lc-page { padding-top: 0; padding-bottom: 0; }
+:root[data-app="curriculum"] .curriculum-calendar-page .lc-pageBody {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.curriculum-calendar-page.lc-page .cal-pageHead { margin-bottom: 0; }
+.curriculum-calendar-page.lc-page .cal-eyebrow { margin: 0 0 4px; }
+.curriculum-calendar-page.lc-page .cal-pageTitle { margin: 0 0 6px; }
+.curriculum-calendar-page.lc-page .cal-pageSub { margin: 0; }
+
+/* subtitle → summary cards: target 18–24px */
+.lc-summaryRow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
+/* summary cards → calendar workspace: target 18–24px (never exceed 28) */
+.curriculum-calendar-page .cal-layout {
+  margin-top: 20px;
+}
+
+/* ---------- Composition Lock: merged calendar workspace header ----------
+   The toolbar (Today/‹/›/period + Month/Week/Agenda) and filter chip row
+   now render INSIDE .cal-mainRegion as its header (see
+   CurriculumCalendar.jsx) instead of as two standalone cards above the
+   grid. These overrides flatten the toolbar's own card chrome so it reads
+   as one continuous surface with the grid below it, scoped to this page
+   only — .cal-toolbar / .cal-filters remain untouched shared classes used
+   as-is (unmodified) by the Career calendar. */
+.curriculum-calendar-page .lc-calendarCard {
+  display: flex;
+  flex-direction: column;
+}
+.curriculum-calendar-page .lc-calHeader {
+  margin: -16px -16px 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--cal-border);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.curriculum-calendar-page .lc-calHeader .cal-toolbar {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+.curriculum-calendar-page .lc-calHeader .cal-filters {
+  margin: 0;
+}
+.curriculum-calendar-page .lc-calHeader .cal-filterChips {
+  gap: 8px;
+}
+.curriculum-calendar-page .lc-calHeader .cal-filterChip {
+  min-height: 30px;
+  padding: 0 12px;
+  font-size: 12.5px;
+}
+
+/* month grid: shorten cells (readable, denser) — scoped to this page only,
+   the shared 96px cell height (career-calendar.css) is untouched for the
+   Career calendar. */
+.curriculum-calendar-page .cal-dayCell {
+  min-height: 82px;
+}
+.lc-summaryCard {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid var(--cal-border);
+  background: var(--cal-surface);
+}
+.lc-summaryIcon {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  background: rgba(255, 90, 31, 0.1);
+}
+.lc-summaryIcon--due { background: rgba(37, 99, 235, 0.1); }
+.lc-summaryIcon--opportunity { background: rgba(202, 138, 4, 0.12); }
+.lc-summaryIcon--load { background: rgba(15, 118, 110, 0.12); }
+.lc-summaryBody { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.lc-summaryLabel { font-size: 11px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: var(--cal-text-muted); }
+.lc-summaryValue { font-size: 17px; font-weight: 800; color: var(--cal-text); }
+.lc-summaryDetail { font-size: 12px; color: var(--cal-text-muted); }
+/* SHF Ecosystem Phase 10 — the ⚠️ glyph in the JSX already carries the
+   meaning textually, so this color accent is a bonus, never the only
+   signal (accessibility requirement: never convey conflict/urgency by
+   color alone). */
+.lc-summaryDetail--conflict { color: #b45309; font-weight: 600; }
+.lc-loadBar {
+  margin-top: 4px;
+  display: block;
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--cal-border);
+  overflow: hidden;
+}
+.lc-loadBarFill { display: block; height: 100%; background: var(--cal-accent); border-radius: 999px; }
+
+/* ---------- right rail ---------- */
+.lc-rail { display: flex; flex-direction: column; gap: 13px; }
+.lc-railCard {
+  border: 1px solid var(--cal-border);
+  background: var(--cal-surface);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+.lc-railCardHead { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.lc-railCardTitle { margin: 0; font-size: 14px; font-weight: 800; color: var(--cal-text); }
+.lc-railCardSub { font-weight: 500; color: var(--cal-text-muted); font-size: 12px; }
+.lc-railViewAll {
+  flex: none;
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cal-accent);
+  text-decoration: none;
+  cursor: pointer;
+}
+.lc-railViewAll:hover { text-decoration: underline; }
+.lc-railEmpty { margin: 0; font-size: 12.5px; color: var(--cal-text-muted); line-height: 1.5; }
+
+/* SHF Ecosystem Phase 12 — private ICS/webcal subscription link row. */
+.lc-feedUrlRow { display: flex; gap: 8px; align-items: center; margin: 8px 0; }
+.lc-feedUrlInput {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  font-family: monospace;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--cal-border);
+  background: var(--cal-surface-muted, #f8f5f0);
+  color: var(--cal-text);
+}
+
+.lc-typeDot { display: inline-block; width: 8px; height: 8px; border-radius: 999px; background: var(--chip-color); flex: none; }
+/* SHF Ecosystem Phase 10 — Plan My Week recommendation severity marker.
+   The message text itself always states the severity in words too. */
+.lc-typeDot--high { background: #b45309; }
+
+/* Today panel */
+.lc-todayList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.lc-todayItem { display: flex; align-items: center; gap: 8px; }
+.lc-todayItemMain {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border: none;
+  background: none;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+.lc-todayTime { flex: none; width: 64px; font-size: 12px; font-weight: 700; color: var(--cal-text-muted); padding-top: 1px; }
+.lc-todayBody { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.lc-todayTitle { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--cal-text); }
+.lc-todayMeta { font-size: 11.5px; color: var(--cal-text-muted); }
+.lc-todayAction { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.lc-todayActionBtn {
+  flex: none;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--cal-accent);
+  background: transparent;
+  color: var(--cal-accent);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.lc-todayActionBtn:hover { background: rgba(255, 90, 31, 0.08); }
+.lc-todayActionBtn:disabled { opacity: 0.6; cursor: default; }
+.lc-todayActionNote { font-size: 10.5px; color: var(--cal-danger); max-width: 120px; text-align: right; }
+
+/* Deadlines / Opportunity Radar plain rows */
+.lc-plainList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.lc-plainRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+}
+.lc-plainRowTitle { flex: 1; min-width: 0; font-size: 12.5px; font-weight: 600; color: var(--cal-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lc-plainRowDate { flex: none; font-size: 11.5px; color: var(--cal-text-muted); }
+
+/* Plan My Week */
+.lc-planList { list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.lc-planCheckRow { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.lc-planItemTitle { flex: 1; min-width: 0; font-size: 12.5px; font-weight: 600; color: var(--cal-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lc-planItemTitle.is-checked { text-decoration: line-through; color: var(--cal-text-muted); }
+.lc-planItemDue { flex: none; font-size: 11.5px; color: var(--cal-text-muted); }
+/* SHF Ecosystem Phase 10.1 — recommendation messages are full sentences
+   ("2 deadlines fall within 48 hours of each other."), not short titles
+   like "Quiz 2." Reusing the checklist's single-line ellipsis truncation
+   silently dropped the end of the sentence (reproduced live at both the
+   desktop rail's narrow column and ~606px width). Recommendation rows
+   wrap and stack their action label below instead. */
+.lc-planRecommendation { align-items: flex-start; flex-wrap: wrap; }
+.lc-planRecommendation .lc-typeDot { margin-top: 5px; }
+.lc-planRecommendation .lc-planItemTitle {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+.lc-planRecommendation .lc-planItemDue { flex-basis: 100%; padding-left: 16px; }
+.lc-planBtn {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: none;
+  background: var(--cal-accent);
+  color: var(--cal-accent-ink);
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.lc-planBtn:hover { filter: brightness(1.05); }
+
+/* ---------- journey milestones ----------
+   Compact empty-state panel (target: ~80–100px tall) — no large empty
+   white box. Same honest copy/structure, tighter box. Calendar bottom →
+   milestones gap target: 24–32px. */
+.lc-milestones {
+  margin-top: 28px;
+  padding: 14px 16px;
+  border: 1px solid var(--cal-border);
+  background: var(--cal-surface);
+  border-radius: 14px;
+}
+.lc-milestonesTitle { margin: 0 0 6px; font-size: 14px; font-weight: 800; color: var(--cal-text); }
+.lc-milestonesEmpty { padding: 0; }
+.lc-milestoneList { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.lc-milestoneItem {
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--cal-border);
+  border-radius: 10px;
+  background: var(--cal-surface-raised);
+}
+.lc-milestoneType { display: block; margin-bottom: 4px; font-size: 10px; font-weight: 800; letter-spacing: 0; color: var(--cal-text-muted); text-transform: uppercase; }
+.lc-milestoneName { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12.5px; font-weight: 800; color: var(--cal-text); }
+.lc-milestoneMeta { margin: 4px 0 0; font-size: 11.5px; color: var(--cal-text-muted); }
+
+/* ---------- error / partial notices ---------- */
+.lc-compactError {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--cal-border);
+  background: var(--cal-surface);
+}
+.lc-compactErrorIcon { font-size: 20px; flex: none; }
+.lc-compactErrorTitle { margin: 0; font-size: 13.5px; font-weight: 700; color: var(--cal-text); }
+.lc-compactErrorDetail { margin: 2px 0 0; font-size: 12px; }
+.lc-compactError .sh-btn { margin-left: auto; flex: none; }
+
+/* Compact status bar (target: ~44–50px tall), rendered inside the
+   Calendar workspace card, directly above the grid, instead of as a
+   large standalone failure panel. */
+.lc-partialNotice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--cal-accent) 30%, var(--cal-border));
+  background: rgba(255, 90, 31, 0.08);
+  font-size: 12.5px;
+  color: var(--cal-text-muted);
+}
+.lc-partialIcon { flex: none; font-size: 15px; }
+.lc-partialText { flex: 1; min-width: 0; }
+.lc-partialRetry {
+  margin-left: auto;
+  flex: none;
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--cal-accent);
+  cursor: pointer;
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 1024px) {
+  .lc-summaryRow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lc-milestoneList { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 900px) {
+  .lc-rail { flex-direction: column; }
+}
+
+/* SHF Ecosystem Phase 10.1 — reproduced live at ~606px: the right-column
+   summary card (e.g. "Due This Week") sits under the fixed-position
+   sitewide Brainiact companion widget (bottom-right, z-index 90) once the
+   2-column grid's right edge narrows into that zone. Collapsing to a
+   single column earlier — at the same 700px rhythm already used by this
+   page's own toolbar breakpoint (curriculum-calendar.css) — removes the
+   right column entirely below that width, before the collision zone is
+   reached. The widget itself is a sitewide component outside Calendar's
+   own files and is not modified. */
+@media (max-width: 700px) {
+  .lc-summaryRow { grid-template-columns: 1fr; }
+  .lc-milestoneList { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 430px) {
+  .lc-todayTime { width: 52px; }
+}

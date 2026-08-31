@@ -6,6 +6,7 @@ import { LiveSessionRepo } from "../repo/live-session-repo.js";
 import { getProvider, listProviders } from "../providers/provider-registry.js";
 import { ProviderNotConfiguredError } from "../providers/live-learning-provider.js";
 import { writeAuditEvent } from "../../audit/service/audit-helper.js";
+import { EnrollmentRepo } from "../../enrollments/repo/enrollment-repo.js";
 import {
   DEFAULT_ACCESS_POLICY,
   DEFAULT_RECORDING_POLICY,
@@ -15,9 +16,18 @@ import {
 } from "../model/live-session.js";
 
 const repo = new LiveSessionRepo();
+const enrollmentRepo = new EnrollmentRepo();
+const ADMIN_TIER_ROLES = ["shf_admin", "shs_admin", "org_admin", "super_admin", "program_manager"];
 
 export class SessionNotFoundError extends Error {
   constructor() { super("Live session not found."); this.name = "SessionNotFoundError"; }
+}
+
+export class LiveLearningEligibilityError extends Error {
+  constructor(public code: string, message: string, public statusCode = 403) {
+    super(message);
+    this.name = "LiveLearningEligibilityError";
+  }
 }
 
 export interface CreateSessionInput {
@@ -40,7 +50,62 @@ export interface ActorUser {
   roles: string[];
 }
 
+export interface ListSessionsInput {
+  organizationId: string;
+  lessonId?: string;
+  instructorId?: string;
+  actor: ActorUser;
+}
+
+function isAdminTier(roles: string[]): boolean {
+  return roles.some((role) => ADMIN_TIER_ROLES.includes(role));
+}
+
+function isStudentOnly(roles: string[]): boolean {
+  return roles.includes("student") && !roles.includes("instructor") && !isAdminTier(roles);
+}
+
+async function isActiveCohortLearner(actor: ActorUser, cohortId: string): Promise<boolean> {
+  const active = await enrollmentRepo.listActiveEnrollmentsForLearner(actor.organization_id, actor.user_id);
+  return active.some((enrollment) => enrollment.cohortId === cohortId);
+}
+
+async function canViewSession(actor: ActorUser, session: LiveSession): Promise<boolean> {
+  if (session.organizationId !== actor.organization_id) return false;
+  if (isAdminTier(actor.roles)) return true;
+  if (session.audienceScope === "ORGANIZATION") return true;
+  if (!session.cohortId) return false;
+  if (isStudentOnly(actor.roles)) return isActiveCohortLearner(actor, session.cohortId);
+  return session.instructorId === actor.user_id ||
+    enrollmentRepo.isActiveCohortStaff(actor.organization_id, session.cohortId, actor.user_id);
+}
+
+export async function canManageSession(actor: ActorUser, session: LiveSession): Promise<boolean> {
+  if (session.organizationId !== actor.organization_id) return false;
+  if (isAdminTier(actor.roles)) return true;
+  if (session.instructorId === actor.user_id) return true;
+  if (session.audienceScope === "COHORT" && session.cohortId) {
+    return enrollmentRepo.isActiveCohortStaff(actor.organization_id, session.cohortId, actor.user_id);
+  }
+  return false;
+}
+
+async function validateCohortScope(actor: ActorUser, cohortId: string): Promise<void> {
+  const cohort = await enrollmentRepo.getCohortById(cohortId);
+  if (!cohort || cohort.organizationId !== actor.organization_id) {
+    throw new LiveLearningEligibilityError("COHORT_NOT_FOUND", "Cohort not found in organization.", 400);
+  }
+  if (cohort.status !== "ACTIVE") {
+    throw new LiveLearningEligibilityError("COHORT_INACTIVE", "Live sessions may only be scheduled for ACTIVE cohorts.", 400);
+  }
+  if (!isAdminTier(actor.roles) && !(await enrollmentRepo.isActiveCohortStaff(actor.organization_id, cohortId, actor.user_id))) {
+    throw new LiveLearningEligibilityError("COHORT_STAFF_REQUIRED", "Instructor must be active cohort staff to schedule for this cohort.", 403);
+  }
+}
+
 export async function createSession(actor: ActorUser, input: CreateSessionInput): Promise<LiveSession> {
+  if (input.cohortId) await validateCohortScope(actor, input.cohortId);
+
   const providerName = input.provider || "mock";
   const provider = getProvider(providerName);
   const health = await provider.healthCheck();
@@ -70,6 +135,7 @@ export async function createSession(actor: ActorUser, input: CreateSessionInput)
     lessonId: input.lessonId ?? null,
     instructorId: actor.user_id,
     cohortId: input.cohortId ?? null,
+    audienceScope: input.cohortId ? "COHORT" : "ORGANIZATION",
     startsAt: input.startsAt,
     endsAt,
     timezone: input.timezone || "UTC",
@@ -97,15 +163,35 @@ export async function listSessions(filters: { organizationId?: string; lessonId?
   return repo.list(filters);
 }
 
+export async function listSessionsForActor(input: ListSessionsInput): Promise<LiveSession[]> {
+  if (input.organizationId !== input.actor.organization_id) return [];
+  if (isAdminTier(input.actor.roles)) {
+    return repo.list({ organizationId: input.organizationId, lessonId: input.lessonId, instructorId: input.instructorId });
+  }
+  if (isStudentOnly(input.actor.roles)) {
+    return repo.listVisibleForStudent({ organizationId: input.organizationId, userId: input.actor.user_id, lessonId: input.lessonId, instructorId: input.instructorId });
+  }
+  return repo.listVisibleForInstructor({ organizationId: input.organizationId, userId: input.actor.user_id, lessonId: input.lessonId, instructorId: input.instructorId });
+}
+
 export async function getSession(id: string): Promise<LiveSession> {
   const session = await repo.getById(id);
   if (!session) throw new SessionNotFoundError();
   return session;
 }
 
+export async function getSessionForActor(id: string, actor: ActorUser): Promise<LiveSession | null> {
+  const session = await repo.getById(id);
+  if (!session) return null;
+  return await canViewSession(actor, session) ? session : null;
+}
+
 export async function cancelSession(id: string, actor: ActorUser): Promise<LiveSession> {
   const session = await repo.getById(id);
   if (!session) throw new SessionNotFoundError();
+  if (!(await canManageSession(actor, session))) {
+    throw new LiveLearningEligibilityError("FORBIDDEN", "Only the session's instructor, authorized cohort staff, or an admin may cancel it.");
+  }
 
   if (session.providerSessionId) {
     try {
@@ -183,6 +269,12 @@ async function recordDecision(session: LiveSession, userId: string, decision: Jo
 export async function requestJoin(sessionId: string, requestingUser: ActorUser): Promise<JoinDecision> {
   const session = await repo.getById(sessionId);
   if (!session) throw new SessionNotFoundError();
+
+  if (!(await canViewSession(requestingUser, session))) {
+    const decision: JoinDecision = { allowed: false, reason: "Learner is not eligible for this live session." };
+    await recordDecision(session, requestingUser.user_id, decision, requestingUser.user_id);
+    return decision;
+  }
 
   const nonJoinableStatuses: LiveSessionStatus[] = ["draft", "cancelled", "completed", "expired"];
   if (nonJoinableStatuses.includes(session.status)) {

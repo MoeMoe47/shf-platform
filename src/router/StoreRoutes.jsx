@@ -2,6 +2,7 @@
 import React, { Suspense, lazy } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import StoreLayout from "@/layouts/StoreLayout.jsx";
+import StoreCatalogShell from "@/layouts/store/StoreCatalogShell.jsx";
 import DevDocsViewer from "@/pages/dev/Docs.jsx";
 
 // Public pages (lazy where it makes sense)
@@ -24,13 +25,25 @@ export default function StoreRoutes() {
         {/* Out-of-shell docs (no StoreLayout chrome) */}
         <Route path="/__docs" element={<DevDocsViewer />} />
 
-        {/* Main Store shell */}
-        <Route path="/" element={<StoreLayout />}>
-          {/* Default: go to catalog hero */}
-          <Route index element={<Navigate to="catalog" replace />} />
+        {/* Catalog gets its own new sidebar+header shell (see
+            src/layouts/store/StoreCatalogShell.jsx) — a sibling route
+            OUTSIDE <StoreLayout>, not nested inside it, so every other
+            existing Store page below keeps its current, already-live
+            <StoreLayout> chrome completely unchanged. The public URL is
+            unaffected: still /store.html#/catalog. */}
+        <Route
+          path="/catalog"
+          element={
+            <StoreCatalogShell>
+              <StoreCatalog />
+            </StoreCatalogShell>
+          }
+        />
 
-          {/* New catalog page */}
-          <Route path="catalog" element={<StoreCatalog />} />
+        {/* Existing Store shell, unchanged, for everything else */}
+        <Route path="/" element={<StoreLayout />}>
+          {/* Default: go to catalog */}
+          <Route index element={<Navigate to="catalog" replace />} />
 
           {/* Existing pages */}
           <Route path="marketplace" element={<SolutionsMarketplace />} />

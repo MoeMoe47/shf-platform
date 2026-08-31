@@ -1,28 +1,23 @@
 // src/pages/career/calendar/adapters.js
 //
-// Source-neutral registry: the Calendar page never reaches into Assignments,
-// Learning, Portfolio, Arcade, Credentials, etc. directly. Each source
-// registers a small adapter function that returns an array of
-// createCalendarEvent() objects. A confirmed future source can register
-// here without the Calendar view changing at all.
-//
-// Where a source has no dated data model in this repository today (Arcade
-// challenges, Credential badges — checked src/data/arcade.js and
-// portfolio-sections/CredentialsBadges.jsx, neither has a due/scheduled
-// date field), the adapter is registered as an explicit EMPTY provider
-// with a comment, per the build brief: don't invent an endpoint, don't
-// fabricate fake institutional records to fill the space.
-
+// Source-neutral registry for the two sources that remain genuinely
+// frontend-only after SHF Ecosystem Phase 11.5 (Calendar Surface
+// Unification): Portfolio (no canonical backend Portfolio scheduling
+// producer exists — see docs/SHF_PROJECT_PORTFOLIO_CAPSTONE_JOURNEY_
+// INTEGRATION.md) and Personal reminders (genuinely local, user-owned).
+// Every other source this registry used to hold — assignments, learning,
+// mentor, career, opportunity — was DEMO_* fixture data presented with no
+// "demo" label, indistinguishable from live schedule facts. Phase 11.5's
+// repository-wide Calendar census identified this as the one real
+// duplicate-truth gap left after Phase 9 (which had already migrated
+// Curriculum's own copy of the same demo sources to canonical data).
+// Career now consumes GET /calendar/events/me directly (see
+// useCalendarEvents.js + projectionAdapter.js) — the collectAllEvents()
+// aggregator that used to run all seven adapters together no longer has
+// any caller and was removed rather than left as reachable dead code that
+// could be re-wired back in by accident.
 import { createCalendarEvent } from "./eventContract.js";
-import {
-  DEMO_ASSIGNMENTS,
-  DEMO_LEARNING,
-  DEMO_PORTFOLIO,
-  DEMO_MENTOR,
-  DEMO_CAREER,
-  iso,
-  dateKey,
-} from "./demoFixtures.js";
+import { DEMO_PORTFOLIO, iso } from "./demoFixtures.js";
 import { listReminders } from "./reminders.js";
 
 const registry = new Map();
@@ -31,72 +26,31 @@ export function registerAdapter(sourceKey, fn) {
   registry.set(sourceKey, fn);
 }
 
-export function listAdapterSources() {
-  return Array.from(registry.keys());
-}
-
-/** Runs every registered adapter and flattens the result. Adapters are
- * synchronous today (all current sources are local); an async source can
- * still register here — callers already treat this as loading-then-ready
- * via useCalendarEvents.js, so adding `await` later is a non-breaking
- * change to this one function. */
-export function collectAllEvents() {
+/** Runs only the caller-chosen subset of registered sources — both
+ * Curriculum's and Career's Calendar hooks call this with
+ * ["portfolio", "personal"] after fetching canonical data, so demo
+ * Portfolio and real local reminders merge in without pulling in a
+ * duplicate/fake copy of anything the backend already provides. */
+export function collectEvents(sourceKeys) {
   const out = [];
-  for (const [sourceKey, fn] of registry.entries()) {
-    let items = [];
+  for (const sourceKey of sourceKeys) {
+    const fn = registry.get(sourceKey);
+    if (!fn) continue;
     try {
-      items = fn() || [];
+      out.push(...(fn() || []));
     } catch (err) {
-      // A single misbehaving source must not blank the whole calendar.
       // eslint-disable-next-line no-console
-      console.warn(`[CareerCalendar] adapter "${sourceKey}" threw`, err);
-      items = [];
+      console.warn(`[Calendar] adapter "${sourceKey}" threw`, err);
     }
-    out.push(...items);
   }
   return out;
 }
 
 // ---------------------------------------------------------------------
-// Assignments — demo data mirrors src/pages/Assignments.jsx exactly (see
-// demoFixtures.js). Real wiring point: once Assignments.jsx reads from a
-// shared store/API instead of local component state, point this adapter
-// at that same store.
-// ---------------------------------------------------------------------
-registerAdapter("assignments", () =>
-  DEMO_ASSIGNMENTS.map((a) =>
-    createCalendarEvent({
-      id: `assignment-${a.id}`,
-      title: a.title,
-      type: "assignment",
-      start: dateKey(a.dayOffset),
-      allDay: true,
-      dueDate: dateKey(a.dayOffset),
-      route: "/assignments",
-      priority: "medium",
-      source: "assignments-demo",
-    })
-  )
-);
-
-// ---------------------------------------------------------------------
-// Learning — live classes / workshops.
-// ---------------------------------------------------------------------
-registerAdapter("learning", () =>
-  DEMO_LEARNING.map((l) =>
-    createCalendarEvent({
-      id: `learning-${l.id}`,
-      title: l.title,
-      type: "lesson",
-      start: iso(l.dayOffset, l.hour, l.minute),
-      route: l.route || "/learn",
-      source: "learning-demo",
-    })
-  )
-);
-
-// ---------------------------------------------------------------------
-// Portfolio review.
+// Portfolio review — DEMO DATA, explicitly and permanently local (see
+// module header). Never enters canonical Calendar Intelligence — it is
+// merged into the frontend event list only, after the real projection has
+// already been fetched.
 // ---------------------------------------------------------------------
 registerAdapter("portfolio", () =>
   DEMO_PORTFOLIO.map((p) =>
@@ -110,59 +64,6 @@ registerAdapter("portfolio", () =>
     })
   )
 );
-
-// ---------------------------------------------------------------------
-// Mentor check-ins.
-// ---------------------------------------------------------------------
-registerAdapter("mentor", () =>
-  DEMO_MENTOR.map((m) =>
-    createCalendarEvent({
-      id: `mentor-${m.id}`,
-      title: m.title,
-      type: "mentor",
-      start: iso(m.dayOffset, m.hour, m.minute),
-      organizer: m.organizer,
-      route: "/coach",
-      source: "mentor-demo",
-    })
-  )
-);
-
-// ---------------------------------------------------------------------
-// Career events (office hours, career fair, etc.)
-// ---------------------------------------------------------------------
-registerAdapter("career", () =>
-  DEMO_CAREER.map((c) =>
-    createCalendarEvent({
-      id: `career-${c.id}`,
-      title: c.title,
-      type: "career",
-      start: dateKey(c.dayOffset),
-      allDay: !!c.allDay,
-      route: c.route || null,
-      source: "career-demo",
-    })
-  )
-);
-
-// ---------------------------------------------------------------------
-// Arcade — EMPTY PROVIDER. src/data/arcade.js is a static game catalog
-// (title/tag/art/hue) with no date, schedule, or challenge-window field of
-// any kind. No "Arcade Challenge" event can be honestly generated from it,
-// so this adapter deliberately returns nothing rather than fabricating
-// dates. Registering it (instead of omitting it) keeps "Arcade" wired as a
-// real, empty source so a future scheduled-challenge feature can populate
-// it without any Calendar code changing.
-// ---------------------------------------------------------------------
-registerAdapter("arcade", () => []);
-
-// ---------------------------------------------------------------------
-// Credentials — EMPTY PROVIDER. CredentialsBadges.jsx's BADGES array is a
-// static earned/unearned badge list with no due date or milestone date
-// field (confirmed in its own comment: "No canonical credentials/badge
-// catalog exists for this student in the repo"). Same reasoning as Arcade.
-// ---------------------------------------------------------------------
-registerAdapter("credential", () => []);
 
 // ---------------------------------------------------------------------
 // Personal reminders — the one source this Calendar can genuinely create

@@ -17,6 +17,9 @@ export type LiveSessionStatus = typeof LIVE_SESSION_STATUSES[number];
 export const LIVE_LEARNING_PROVIDERS = ["mock", "zoom"] as const;
 export type LiveLearningProviderName = typeof LIVE_LEARNING_PROVIDERS[number];
 
+export const LIVE_SESSION_AUDIENCE_SCOPES = ["ORGANIZATION", "COHORT"] as const;
+export type LiveSessionAudienceScope = typeof LIVE_SESSION_AUDIENCE_SCOPES[number];
+
 export const ATTENDANCE_STATUSES = [
   "registered",
   "authorized",
@@ -65,6 +68,7 @@ export interface LiveSession {
   lessonId: string | null;
   instructorId: string;
   cohortId: string | null;
+  audienceScope: LiveSessionAudienceScope;
   startsAt: string; // ISO 8601, UTC
   endsAt: string;   // ISO 8601, UTC
   timezone: string;
@@ -87,6 +91,7 @@ export interface StudentFacingLiveSession {
   moduleId: string | null;
   lessonId: string | null;
   instructorId: string;
+  audienceScope: LiveSessionAudienceScope;
   startsAt: string;
   endsAt: string;
   timezone: string;
@@ -103,6 +108,7 @@ export function toStudentFacing(s: LiveSession): StudentFacingLiveSession {
     moduleId: s.moduleId,
     lessonId: s.lessonId,
     instructorId: s.instructorId,
+    audienceScope: s.audienceScope,
     startsAt: s.startsAt,
     endsAt: s.endsAt,
     timezone: s.timezone,

@@ -1,0 +1,285 @@
+/* src/components/shared/shf-footer.css
+   Canonical Silicon Heartland Foundation footer (Curriculum + Career).
+   Consumes each app's existing data-theme mechanism (curriculumTheme.js /
+   careerTheme.js both write the same "light" | "dark" | "system" values to
+   <html data-theme="...">) rather than owning any theme state itself.
+   Selectors are scoped to .shf-footer, so they apply correctly regardless
+   of which app's data-app attribute is present. */
+
+.shf-footer {
+  --shf-orange: #ff4f00; /* International Orange - matches curriculum-skin.css/arcade.css's existing --brand/--ar-primary token */
+  --shf-footer-bg: #faf6ee; /* warm ivory */
+  --shf-footer-panel: #ffffff;
+  --shf-footer-ink: #1c1a17; /* charcoal */
+  --shf-footer-ink-soft: #5b564d;
+  --shf-footer-border: rgba(28, 26, 23, 0.12);
+
+  position: relative;
+  isolation: isolate;
+  margin-top: auto;
+  background: var(--shf-footer-bg);
+  color: var(--shf-footer-ink);
+  border-top: 1px solid var(--shf-footer-border);
+  overflow: hidden;
+}
+
+:root[data-theme="dark"] .shf-footer {
+  --shf-footer-bg: #0b0d0f;
+  --shf-footer-panel: #111417;
+  --shf-footer-ink: #f2ede4;
+  --shf-footer-ink-soft: #a9a295;
+  --shf-footer-border: rgba(242, 237, 228, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) .shf-footer {
+    --shf-footer-bg: #0b0d0f;
+    --shf-footer-panel: #111417;
+    --shf-footer-ink: #f2ede4;
+    --shf-footer-ink-soft: #a9a295;
+    --shf-footer-border: rgba(242, 237, 228, 0.12);
+  }
+}
+
+/* ---------- approved Heartland landscape artwork ---------- */
+/* Real cropped assets (see SHFFooter.jsx's HeartlandLandscape), not drawn
+   here. Anchored to the BOTTOM OF .shf-footerInner (not the whole
+   <footer>), with footerInner reserving matching bottom padding below —
+   this guarantees the art is fully contained within the nav-content
+   section and can never be visually chopped by the opaque legal row /
+   orange band that follow it in normal flow underneath. Matches the
+   approved reference's own layout (fields/barn on the left, bridge +
+   city + windmill on the right, flowing across the lower portion of the
+   nav content, low in the footer). The crop is masked (top band painted
+   with the theme's own background color) to remove the reference
+   screenshot's baked-in nav/mission text. */
+.shf-footerLandscape {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 210px;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.shf-footerLandscape__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: bottom;
+  opacity: 0.62;
+  display: none;
+}
+.shf-footerLandscape__img--light {
+  display: block;
+}
+:root[data-theme="dark"] .shf-footerLandscape__img--light {
+  display: none;
+}
+:root[data-theme="dark"] .shf-footerLandscape__img--dark {
+  display: block;
+  opacity: 0.72; /* dark crop's line strokes read dimmer against near-black than the light crop does against ivory, so it needs a touch more opacity to stay "clearly visible", not near-black */
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) .shf-footerLandscape__img--light {
+    display: none;
+  }
+  :root:not([data-theme="light"]):not([data-theme="dark"]) .shf-footerLandscape__img--dark {
+    display: block;
+    opacity: 0.72;
+  }
+}
+
+/* ---------- layout ---------- */
+.shf-footerInner {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  /* Bottom padding reserves exactly the landscape's own height, so the
+     nav grid's content sits clear above the art instead of overlapping
+     it, and the art ends flush with this box's own bottom edge instead
+     of bleeding into the legal row / orange band that follow. */
+  padding: 72px 32px 234px;
+}
+
+.shf-footerGrid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.7fr 1fr 1fr 1fr 1fr;
+  gap: 36px 28px;
+}
+
+.shf-footerBrand {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  min-width: 0;
+  max-width: 300px;
+}
+.shf-footerBrandMark {
+  flex: none;
+  color: var(--shf-orange);
+  margin-top: 2px;
+}
+.shf-footerBrandName {
+  margin: 0 0 10px;
+  font-weight: 800;
+  font-size: 17px;
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+}
+.shf-footerMission {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--shf-footer-ink-soft);
+}
+
+.shf-footerCol h4 {
+  margin: 0 0 16px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--shf-footer-ink-soft);
+}
+.shf-footerCol {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.shf-footerLink {
+  color: var(--shf-footer-ink);
+  text-decoration: none;
+  font-size: 13.5px;
+  width: fit-content;
+  border-radius: 4px;
+}
+.shf-footerLink:hover {
+  color: var(--shf-orange);
+  text-decoration: underline;
+}
+.shf-footerLink:focus-visible {
+  outline: 2px solid var(--shf-orange);
+  outline-offset: 3px;
+}
+
+.shf-footerContactRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.shf-footerContactRow svg {
+  color: var(--shf-footer-ink-soft);
+  flex: none;
+}
+
+/* ---------- legal row ---------- */
+/* Sits directly under the nav content (same order as the approved
+   reference: content+art, then legal, then the closing band last) with
+   its own top border so it reads as an integrated part of the footer
+   rather than a strip stuck on afterward. Ink-soft (the muted token used
+   for column labels) read too faint here at 12px, so copyright + links
+   use full --shf-footer-ink to stay clearly readable while remaining
+   visually secondary (smaller size, plain weight, no uppercase). */
+.shf-footerLegal {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px 32px;
+  border-top: 1px solid var(--shf-footer-border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  align-items: center;
+  font-size: 12.5px;
+  color: var(--shf-footer-ink);
+}
+.shf-footerLegal .shf-footerLink,
+.shf-footerLegal span:first-child {
+  font-size: 12.5px;
+}
+.shf-footerLegal span:first-child {
+  color: var(--shf-footer-ink-soft);
+}
+
+/* ---------- closing brand band ---------- */
+.shf-footerBand {
+  position: relative;
+  z-index: 1;
+  background: var(--shf-orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 64px;
+}
+.shf-footerBand p {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 14px 32px;
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* ---------- responsive ---------- */
+/* Desktop: 5-column institutional footer (Brand / Quick Links / Programs
+   & Resources / Help & Support / Contact Us) via .shf-footerGrid's base
+   1.7fr 1fr 1fr 1fr 1fr above. Tablet below adapts to a 2-column grid
+   (Brand spans both, the four nav columns wrap 2x2); mobile collapses to
+   a single stacked column. .shf-footerInner's bottom padding is kept in
+   lockstep with .shf-footerLandscape's height at every breakpoint below,
+   so the art stays fully contained (never clipped, never overlapping
+   text) as it shrinks. */
+@media (max-width: 1024px) {
+  .shf-footerGrid {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 32px;
+  }
+  .shf-footerBrand {
+    grid-column: 1 / -1;
+    max-width: 420px;
+  }
+}
+
+@media (max-width: 768px) {
+  .shf-footerInner {
+    padding: 56px 20px 160px;
+  }
+  .shf-footerLandscape {
+    height: 140px;
+  }
+}
+
+@media (max-width: 430px) {
+  .shf-footerGrid {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+  .shf-footerInner {
+    padding: 48px 16px 110px;
+  }
+  .shf-footerLandscape {
+    height: 96px;
+  }
+  .shf-footerBand p {
+    padding: 14px 16px;
+    letter-spacing: 0.04em;
+  }
+  .shf-footerLegal {
+    padding: 18px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}

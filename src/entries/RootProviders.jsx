@@ -25,7 +25,9 @@ import { initMode } from "@/runtime/mode.js";
 import { CompanionProvider } from "@/companion/CompanionProvider.jsx";
 import Brainiact from "@/components/companion/Brainiact.jsx";
 import { LiveAnnouncer } from "@/components/ally/A11yTools.jsx";
+import { CelebrationProvider } from "@/experience/celebrations/CelebrationProvider.jsx";
 import "@/styles/companion.css";
+import "@/styles/celebrations.css";
 
 /* ⬇️ Keep this LAST among CSS so it wins the cascade */
 import "@/styles/app-shell.css";
@@ -120,10 +122,12 @@ export default function RootProviders({ children, appScope }) {
           <CreditProvider>
             <EmojiCtx.Provider value={emojiValue}>
               <CompanionProvider appScope={appScope}>
-                <LiveAnnouncer />
-                {/* Each HTML entry mounts its own Router + shell */}
-                {children}
-                <Brainiact />
+                <CelebrationProvider>
+                  <LiveAnnouncer />
+                  {/* Each HTML entry mounts its own Router + shell */}
+                  {children}
+                  <Brainiact />
+                </CelebrationProvider>
               </CompanionProvider>
             </EmojiCtx.Provider>
           </CreditProvider>

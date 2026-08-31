@@ -11,6 +11,8 @@
 // details directly (see companionConfig.MOTION_TOKENS).
 import React, { useEffect, useMemo, useReducer, useRef } from "react";
 import { announce } from "@/components/ally/A11yTools.jsx";
+import { useUser } from "@/context/UserContext.jsx";
+import { getCompanionContext } from "@/lib/companion/api.js";
 import { COMPANION_WIRE_EVENT } from "./companionEvents.js";
 import { resolveCelebration, resolveReaction } from "./celebrationRegistry.js";
 import { getHint as engineGetHint, nextHintLevel } from "./visualHintEngine.js";
@@ -53,6 +55,22 @@ export function CompanionProvider({ appScope, children }) {
   );
 
   const celebrationTimerRef = useRef(null);
+
+  // SHF Ecosystem Phase 11 — Companion Context. Fetched once per mount,
+  // never polled (no long-term memory, no background chatter — a page
+  // reload is the refresh mechanism, matching Calendar Intelligence's own
+  // per-load-only fetch pattern). A failure here degrades quietly: the
+  // Companion simply has no guidance to show and stays fully functional
+  // for Hint/Coach/Celebration, which do not depend on it.
+  const { role } = useUser();
+  const [companionContext, setCompanionContext] = React.useState(null);
+  useEffect(() => {
+    let active = true;
+    getCompanionContext(role)
+      .then((data) => { if (active) setCompanionContext(data); })
+      .catch(() => { if (active) setCompanionContext(null); });
+    return () => { active = false; };
+  }, [role]);
 
   // System reduced-motion preference — live, not just read-once.
   useEffect(() => {
@@ -138,6 +156,11 @@ export function CompanionProvider({ appScope, children }) {
 
   const api = useMemo(() => ({
     state,
+    // SHF Ecosystem Phase 11 — read-only Companion Context/guidance (see
+    // src/lib/companion/api.js). `null` while loading or on failure; the
+    // UI must treat that as "no guidance available right now," never as
+    // an empty-but-complete answer.
+    companionContext,
     emit(name, payload) {
       try { window.dispatchEvent(new CustomEvent(COMPANION_WIRE_EVENT, { detail: { name, payload } })); } catch {}
     },
@@ -169,7 +192,7 @@ export function CompanionProvider({ appScope, children }) {
     dismissHint() { dispatch({ type: "CLEAR_HINT" }); }, // "I'm good"
 
     setCareerMessage(message) { dispatch({ type: "SET_CAREER_MESSAGE", message }); },
-  }), [state]);
+  }), [state, companionContext]);
 
   return <CompanionContext.Provider value={api}>{children}</CompanionContext.Provider>;
 }

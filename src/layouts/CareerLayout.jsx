@@ -3,6 +3,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import AppShellLayout from "@/layouts/AppShellLayout.jsx";
 import CareerSidebar from "@/components/career/CareerSidebar.jsx";
+import SHFFooter from "@/components/shared/SHFFooter.jsx";
 import { useCompanion } from "@/hooks/useCompanion.js";
 
 // The floating .coach-fab and this file's own coachOpen state/Alt+C
@@ -37,6 +38,7 @@ export default function CareerLayout() {
           <span className="car-headerCoachLabel">Coach</span>
         </button>
       }
+      Footer={<SHFFooter variant="career" />}
     >
       <Outlet />
     </AppShellLayout>

@@ -41,12 +41,35 @@ function HintPanel({ hint, onAnotherClue, onExplain, onDismiss }) {
   );
 }
 
+// SHF Ecosystem Phase 11 — a single, top-priority Companion Context
+// guidance item (see companionContext.guidance in CompanionProvider.jsx).
+// Presentation-only: dismissing this is local UI state, never a canonical
+// "completed"/"acknowledged" fact (phase brief §43) — it resets the next
+// time the bubble is opened, so nothing is silently hidden forever.
+function GuidancePanel({ guidance, onDismiss }) {
+  if (!guidance) return null;
+  return (
+    <div className="brainiact-guidancePanel" role="status">
+      <p className="brainiact-guidanceMessage">{guidance.message}</p>
+      <div className="brainiact-guidanceActions">
+        {guidance.action?.url && (
+          <a className="brainiact-btn" href={guidance.action.url}>{guidance.action.label}</a>
+        )}
+        {guidance.dismissible && (
+          <button type="button" className="brainiact-btn brainiact-btn--quiet" onClick={onDismiss}>Dismiss</button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function CompanionBubble({
   mode,
   faceMessage,
   hint,
   focus,
   reduceAnimation,
+  guidance,
   onRequestHint,
   onAnotherClue,
   onExplain,
@@ -58,6 +81,9 @@ export default function CompanionBubble({
   onOpenCoach,
   titleId,
 }) {
+  const [guidanceDismissed, setGuidanceDismissed] = React.useState(false);
+  const showGuidance = guidance && mode !== "hint" && !guidanceDismissed;
+
   return (
     <div className="brainiact-bubble" role="dialog" aria-modal="false" aria-labelledby={titleId}>
       <div className="brainiact-bubbleHead">
@@ -68,6 +94,8 @@ export default function CompanionBubble({
       {faceMessage && mode !== "hint" && (
         <p className="brainiact-faceMessage">{faceMessage}</p>
       )}
+
+      {showGuidance && <GuidancePanel guidance={guidance} onDismiss={() => setGuidanceDismissed(true)} />}
 
       {mode === "hint" && hint ? (
         <HintPanel hint={hint} onAnotherClue={onAnotherClue} onExplain={onExplain} onDismiss={onDismissHint} />

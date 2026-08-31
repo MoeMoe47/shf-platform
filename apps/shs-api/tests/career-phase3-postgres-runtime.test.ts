@@ -24,12 +24,12 @@ test("Phase 3 career and completion proof runs against disposable PostgreSQL", {
   t.after(async () => { await pool.end(); });
 
   const migrations = await discoverMigrations(new URL("../migrations", import.meta.url).pathname);
-  assert.equal(migrations.length, 34);
+  assert.equal(migrations.length, 53);
   const migrationClient = await pool.connect();
   try {
     const applied = await runMigrations(migrationClient, migrations);
     assert.equal(applied.pending.length, 0);
-    assert.equal(applied.applied.at(-1)?.filename, "034_prepare_prove_evidence_competency.sql");
+    assert.equal(applied.applied.at(-1)?.filename, "053_calendar_feed_tokens.sql");
     const rerun = await runMigrations(migrationClient, migrations);
     assert.equal(rerun.pending.length, 0);
     assert.equal((await inspectMigrations(migrationClient, migrations)).drift.length, 0);

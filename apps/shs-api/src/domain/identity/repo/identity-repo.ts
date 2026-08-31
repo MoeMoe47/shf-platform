@@ -130,6 +130,15 @@ export class IdentityRepo {
         roles: ["program_manager"],
       };
     }
+    if (userId === "user_partner_student_001") {
+      return {
+        user_id: "user_partner_student_001",
+        organization_id: "org_partner_001",
+        email: "student@partner.test",
+        full_name: "Partner Demo Student",
+        roles: ["student"],
+      };
+    }
     if (userId === "user_employer_001") {
       return {
         user_id: "user_employer_001",
@@ -165,6 +174,61 @@ export class IdentityRepo {
       full_name: "SHF Assignment Learner",
       roles: ["student"],
     };
+
+    // Phase 4 Career Events/Opportunities tests: dynamically-generated
+    // per-run learner personas (org-only, program A/B, cohort A/B). The
+    // dev-auth fallback below only recognizes known user ids, so any
+    // freshly-created test user needs a matching entry here to
+    // authenticate — mirrors the assignmentLearners pattern above.
+    const phase4CareerLearnerMatch = userId.match(/^user_phase(?:4ce|4opp|5)_\d+_(org_only|program_a|program_b|cohort_a|cohort_b)$/);
+    if (phase4CareerLearnerMatch) {
+      return {
+        user_id: userId,
+        organization_id: "org_shf_001",
+        email: `${userId}@test.invalid`,
+        full_name: "SHF Phase 4 Learner",
+        roles: ["student"],
+      };
+    }
+
+    // Phase 12.1 External Account Security: dynamically-generated per-run
+    // learner personas (a/b, for cross-user IDOR isolation checks).
+    const phase121ExternalAccountLearnerMatch = userId.match(/^user_phase121_\d+_(a|b)$/);
+    if (phase121ExternalAccountLearnerMatch) {
+      return {
+        user_id: userId,
+        organization_id: "org_shf_001",
+        email: `${userId}@test.invalid`,
+        full_name: "SHF Phase 12.1 Learner",
+        roles: ["student"],
+      };
+    }
+
+    // Phase 12.2 Native External Calendar Integration: same pattern, its
+    // own run prefix (a/b personas, plus admin for the admin-privacy
+    // check).
+    const phase122ExternalCalendarLearnerMatch = userId.match(/^user_phase122_\d+_(a|b|admin)$/);
+    if (phase122ExternalCalendarLearnerMatch) {
+      return {
+        user_id: userId,
+        organization_id: "org_shf_001",
+        email: `${userId}@test.invalid`,
+        full_name: "SHF Phase 12.2 Learner",
+        roles: [phase122ExternalCalendarLearnerMatch[1] === "admin" ? "org_admin" : "student"],
+      };
+    }
+
+    // Phase 13 Production Hardening: same pattern, its own run prefix.
+    const phase13HardeningLearnerMatch = userId.match(/^user_phase13_\d+_(a|b)$/);
+    if (phase13HardeningLearnerMatch) {
+      return {
+        user_id: userId,
+        organization_id: "org_shf_001",
+        email: `${userId}@test.invalid`,
+        full_name: "SHF Phase 13 Learner",
+        roles: ["student"],
+      };
+    }
 
     return null;
   }

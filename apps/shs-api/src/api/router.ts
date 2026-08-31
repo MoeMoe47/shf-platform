@@ -25,6 +25,17 @@ import { registerGrade12EligibilityRoutes } from "../domain/programs/api/grade12
 import { registerCourseAssignmentRoutes } from "../domain/programs/api/course-assignment-routes.js";
 import { registerProjectRoutes } from "../domain/projects/project-routes.js";
 import { registerCapstoneEntryRoutes } from "../domain/programs/api/capstone-entry-routes.js";
+import { registerJourneyRoutes } from "../domain/journey/api/routes.js";
+import { registerCredentialRoutes } from "../domain/credentials/api/routes.js";
+import { registerArcadeRoutes } from "../domain/arcade/api/routes.js";
+import { registerCalendarRoutes } from "../domain/calendar/api/routes.js";
+import { registerCompanionRoutes } from "../domain/companion/api/routes.js";
+import { registerCalendarFeedRoutes } from "../domain/calendar-feed/api/routes.js";
+import { registerExternalAccountRoutes } from "../domain/external-accounts/api/routes.js";
+import { registerAssignmentRoutes } from "../domain/assignments/api/routes.js";
+import { registerEnrollmentRoutes } from "../domain/enrollments/api/routes.js";
+import { registerCareerEventRoutes } from "../domain/career-events/api/routes.js";
+import { registerOpportunityRoutes } from "../domain/opportunities/api/routes.js";
 
 
 type MutableApiUser = {
@@ -309,6 +320,17 @@ app.post("/auth/login", async (req: any, res: any) => {
   registerCourseAssignmentRoutes(app);
   registerProjectRoutes(app);
   registerCapstoneEntryRoutes(app);
+  registerJourneyRoutes(app);
+  registerCredentialRoutes(app);
+  registerArcadeRoutes(app);
+  registerCalendarRoutes(app);
+  registerCompanionRoutes(app);
+  registerCalendarFeedRoutes(app);
+  registerExternalAccountRoutes(app);
+  registerAssignmentRoutes(app);
+  registerEnrollmentRoutes(app);
+  registerCareerEventRoutes(app);
+  registerOpportunityRoutes(app);
   app.use("/aggregation", aggregationRoutes);
   registerOracleRoutes(app);
 

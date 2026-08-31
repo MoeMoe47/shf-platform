@@ -35,6 +35,17 @@ export default function AccessibilityPreferencesPanel() {
             <span>{opt.label}</span>
           </label>
         ))}
+        <label style={{ display: "grid", gap: 4 }}>
+          <span>Celebration intensity</span>
+          <select
+            value={prefs.celebrationIntensity || "FULL"}
+            onChange={(e) => setPref("celebrationIntensity", e.target.value)}
+          >
+            <option value="FULL">Full</option>
+            <option value="SUBTLE">Subtle</option>
+            <option value="OFF">Off</option>
+          </select>
+        </label>
       </div>
       <button type="button" className="sh-btn is-ghost" style={{ marginTop: 10 }} onClick={resetPrefs}>
         Reset to defaults

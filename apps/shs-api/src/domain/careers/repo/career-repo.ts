@@ -27,6 +27,22 @@ export class CareerRepo {
     return result.rows[0] || null;
   }
 
+  /** By canonical id rather than slug — used internally by
+   * career-pathways (Program<->Career linkage), which stores career_id,
+   * not slug. Deliberately does not filter on status: a Program-Career
+   * mapping to a since-deactivated Career should stay visible/removable
+   * by an admin rather than silently vanishing. */
+  async getById(careerId: string) {
+    const result = await query(
+      `SELECT ${CAREER_COLUMNS}
+       FROM careers c JOIN career_families f ON f.career_family_id = c.career_family_id
+       WHERE c.career_id = $1
+       LIMIT 1`,
+      [careerId],
+    );
+    return result.rows[0] || null;
+  }
+
   async listCurriculumRequirements(careerId: string) {
     const result = await query(
       `SELECT career_curriculum_requirement_id, career_id, curriculum_id, lesson_id,

@@ -3,7 +3,7 @@ import React from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import CurriculumSidebar from "@/components/CurriculumSidebar.jsx";
 import CurriculumHeader from "@/components/curriculum/CurriculumHeader.jsx";
-import CurriculumFooter from "@/components/curriculum/CurriculumFooter.jsx";
+import SHFFooter from "@/components/shared/SHFFooter.jsx";
 import { markDarkScope } from "@/utils/curriculumTheme.js";
 
 // Desktop Shell Correction pass (2026-08-27): collapse state follows the
@@ -167,7 +167,7 @@ export default function CurriculumLayout() {
         <main id="curriculum-main" className="ld-main" tabIndex={-1}>
           <Outlet />
         </main>
-        <CurriculumFooter />
+        <SHFFooter variant="curriculum" />
       </div>
     </div>
   );

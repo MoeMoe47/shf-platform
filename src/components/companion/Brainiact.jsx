@@ -126,6 +126,7 @@ export default function Brainiact() {
             hint={state.hint}
             focus={state.focus}
             reduceAnimation={state.reduceAnimation}
+            guidance={companion.companionContext?.guidance?.[0] || null}
             titleId={titleId}
             onRequestHint={() => companion.requestHint({ conceptId: "gravity" })}
             onAnotherClue={() => companion.showAnotherClue()}

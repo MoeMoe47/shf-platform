@@ -1,6 +1,8 @@
 import { createHash } from "node:crypto";
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
+import { parseMigrationExpectations } from "./migration-expectation-parser.js";
+import { findMissingPhysicalObjects } from "./exhaustive-schema-integrity.js";
 
 export const MIGRATION_LOCK_KEY = 779421083;
 export const MIGRATION_RUNNER_VERSION = "1";
@@ -165,10 +167,51 @@ export async function checkSchemaReadiness(executor: MigrationExecutor, migratio
   return { ready: true, status };
 }
 
+export class BaselineSchemaVerificationError extends Error {
+  constructor(public migrationId: string, public missingObjects: Array<{ objectType: string; table: string; name: string }>) {
+    super(
+      `Refusing to baseline migration ${migrationId}: its expected physical schema is not present ` +
+      `(${missingObjects.map((o) => `${o.objectType} ${o.table}.${o.name}`).join(", ")}). ` +
+      `This is the exact ledger/physical mismatch class this project has repeatedly hit (see ` +
+      `docs/SHF_DATABASE_MIGRATION_RECONCILIATION.md). Verify the schema truly exists, or run ` +
+      `baseline with { force: true } only if you have confirmed this migration has no physical ` +
+      `schema effect that matters here.`,
+    );
+    this.name = "BaselineSchemaVerificationError";
+  }
+}
+
+export type BaselineOptions = {
+  /** Skips the physical-schema verification guard below. Exists for a
+   * deliberate, explicit override (e.g. a migration whose only effect is
+   * data-only/non-schema and the operator has confirmed that) — never the
+   * default, and never set casually. */
+  force?: boolean;
+};
+
+/**
+ * Marks migrations as applied without executing their SQL — for
+ * reconciling an externally-bootstrapped database's ledger with reality,
+ * not a substitute for `up`.
+ *
+ * Guarded (SHF Database Phase 4.3): every migration being newly baselined
+ * has its own SQL parsed for schema expectations (tables/columns/indexes/
+ * constraints/extensions), and each is verified physically present before
+ * the ledger row is written. This is the smallest safe guard against the
+ * exact defect class repeatedly discovered in this project — a
+ * `runner_version = baseline-*` ledger row whose migration never actually
+ * ran, so its schema was silently absent until a regression test or a
+ * live crash found it (see docs/SHF_DATABASE_MIGRATION_RECONCILIATION.md
+ * for the full incident history: migrations 031, 035-038, 030/032/033,
+ * 008/012-029/034). Physical verification is the same one
+ * `db:schema:integrity:strict` performs — one source of truth, not a
+ * second detector to keep in sync.
+ */
 export async function baselineMigrations(
   executor: MigrationExecutor,
   migrations: Migration[],
   migrationIds: string[],
+  options: BaselineOptions = {},
 ) {
   if (!migrationIds.length) throw new Error("baseline requires explicit migration IDs");
   const selected = migrationIds.map((id) => migrations.find((migration) => migration.id === id));
@@ -179,10 +222,27 @@ export async function baselineMigrations(
     await executor.query(migrationTableSql());
     const current = await inspectMigrations(executor, migrations);
     assertSafeStatus(current);
+
+    const toBaseline = (selected as Migration[]).filter(
+      (migration) => !current.applied.some((applied) => applied.id === migration.id),
+    );
+
+    if (!options.force) {
+      for (const migration of toBaseline) {
+        const expectations = parseMigrationExpectations(migration.id, migration.sql);
+        const missing = await findMissingPhysicalObjects(executor, expectations);
+        if (missing.length) {
+          throw new BaselineSchemaVerificationError(
+            migration.id,
+            missing.map((m) => ({ objectType: m.objectType, table: m.table, name: m.name })),
+          );
+        }
+      }
+    }
+
     await executor.query("BEGIN");
     try {
-      for (const migration of selected as Migration[]) {
-        if (current.applied.some((applied) => applied.id === migration.id)) continue;
+      for (const migration of toBaseline) {
         await executor.query(
           `INSERT INTO ${MIGRATIONS_TABLE} (migration_id, filename, checksum, runner_version)
            VALUES ($1, $2, $3, $4)`,

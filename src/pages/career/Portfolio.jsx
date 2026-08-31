@@ -15,6 +15,7 @@
 // so they cannot leak into either host app's other pages.
 import React from "react";
 
+import { useUser } from "@/context/UserContext.jsx";
 import { markDarkScope } from "../../utils/careerTheme.js";
 
 import PortfolioHeader from "./portfolio-sections/PortfolioHeader.jsx";
@@ -28,6 +29,7 @@ import CareerReadiness from "./portfolio-sections/CareerReadiness.jsx";
 import RecentAchievements from "./portfolio-sections/RecentAchievements.jsx";
 
 export default function Portfolio() {
+  const { role } = useUser();
   const [editOpen, setEditOpen] = React.useState(false);
   const [shareStatus, setShareStatus] = React.useState("");
 
@@ -91,7 +93,7 @@ export default function Portfolio() {
 
         <div className="sp-col">
           <ProfileStrength onComplete={() => setEditOpen(true)} />
-          <CredentialsBadges />
+          <CredentialsBadges role={role} />
           <CareerReadiness />
         </div>
       </div>

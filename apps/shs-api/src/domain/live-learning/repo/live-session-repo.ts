@@ -14,6 +14,7 @@ function rowToSession(row: any): LiveSession {
     lessonId: row.lesson_id,
     instructorId: row.instructor_id,
     cohortId: row.cohort_id,
+    audienceScope: row.audience_scope || (row.cohort_id ? "COHORT" : "ORGANIZATION"),
     startsAt: row.starts_at instanceof Date ? row.starts_at.toISOString() : row.starts_at,
     endsAt: row.ends_at instanceof Date ? row.ends_at.toISOString() : row.ends_at,
     timezone: row.timezone,
@@ -28,9 +29,16 @@ function rowToSession(row: any): LiveSession {
 
 const SELECT_COLUMNS = `
   live_session_id, organization_id, provider, provider_session_id, title, description,
-  course_id, module_id, lesson_id, instructor_id, cohort_id,
+  course_id, module_id, lesson_id, instructor_id, cohort_id, audience_scope,
   starts_at, ends_at, timezone, status, access_policy_json, recording_policy_json,
   created_at, updated_at, version
+`;
+
+const SELECT_COLUMNS_ALIASED = `
+  s.live_session_id, s.organization_id, s.provider, s.provider_session_id, s.title, s.description,
+  s.course_id, s.module_id, s.lesson_id, s.instructor_id, s.cohort_id, s.audience_scope,
+  s.starts_at, s.ends_at, s.timezone, s.status, s.access_policy_json, s.recording_policy_json,
+  s.created_at, s.updated_at, s.version
 `;
 
 export class LiveSessionRepo {
@@ -38,9 +46,9 @@ export class LiveSessionRepo {
     const res = await query(
       `INSERT INTO live_sessions (
         live_session_id, organization_id, provider, provider_session_id, title, description,
-        course_id, module_id, lesson_id, instructor_id, cohort_id,
+        course_id, module_id, lesson_id, instructor_id, cohort_id, audience_scope,
         starts_at, ends_at, timezone, status, access_policy_json, recording_policy_json
-      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16::jsonb,$17::jsonb)
+      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17::jsonb,$18::jsonb)
       RETURNING ${SELECT_COLUMNS}`,
       [
         input.id,
@@ -54,6 +62,7 @@ export class LiveSessionRepo {
         input.lessonId,
         input.instructorId,
         input.cohortId,
+        input.audienceScope,
         input.startsAt,
         input.endsAt,
         input.timezone,
@@ -83,6 +92,58 @@ export class LiveSessionRepo {
     const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
     const res = await query(
       `SELECT ${SELECT_COLUMNS} FROM live_sessions ${where} ORDER BY starts_at ASC`,
+      params
+    );
+    return res.rows.map(rowToSession);
+  }
+
+  async listVisibleForStudent(filters: { organizationId: string; userId: string; lessonId?: string; instructorId?: string; status?: LiveSessionStatus }): Promise<LiveSession[]> {
+    const clauses: string[] = [
+      `s.organization_id = $1`,
+      `(s.audience_scope = 'ORGANIZATION' OR EXISTS (
+        SELECT 1
+        FROM enrollments e
+        WHERE e.organization_id = s.organization_id
+          AND e.learner_user_id = $2
+          AND e.status = 'ACTIVE'
+          AND e.cohort_id = s.cohort_id
+      ))`,
+    ];
+    const params: unknown[] = [filters.organizationId, filters.userId];
+    if (filters.lessonId) { params.push(filters.lessonId); clauses.push(`s.lesson_id = $${params.length}`); }
+    if (filters.instructorId) { params.push(filters.instructorId); clauses.push(`s.instructor_id = $${params.length}`); }
+    if (filters.status) { params.push(filters.status); clauses.push(`s.status = $${params.length}`); }
+    const res = await query(
+      `SELECT ${SELECT_COLUMNS_ALIASED}
+       FROM live_sessions s
+       WHERE ${clauses.join(" AND ")}
+       ORDER BY s.starts_at ASC`,
+      params
+    );
+    return res.rows.map(rowToSession);
+  }
+
+  async listVisibleForInstructor(filters: { organizationId: string; userId: string; lessonId?: string; instructorId?: string; status?: LiveSessionStatus }): Promise<LiveSession[]> {
+    const clauses: string[] = [
+      `s.organization_id = $1`,
+      `(s.instructor_id = $2 OR s.audience_scope = 'ORGANIZATION' OR EXISTS (
+        SELECT 1
+        FROM cohort_staff cs
+        WHERE cs.organization_id = s.organization_id
+          AND cs.cohort_id = s.cohort_id
+          AND cs.user_id = $2
+          AND cs.status = 'ACTIVE'
+      ))`,
+    ];
+    const params: unknown[] = [filters.organizationId, filters.userId];
+    if (filters.lessonId) { params.push(filters.lessonId); clauses.push(`s.lesson_id = $${params.length}`); }
+    if (filters.instructorId) { params.push(filters.instructorId); clauses.push(`s.instructor_id = $${params.length}`); }
+    if (filters.status) { params.push(filters.status); clauses.push(`s.status = $${params.length}`); }
+    const res = await query(
+      `SELECT ${SELECT_COLUMNS_ALIASED}
+       FROM live_sessions s
+       WHERE ${clauses.join(" AND ")}
+       ORDER BY s.starts_at ASC`,
       params
     );
     return res.rows.map(rowToSession);

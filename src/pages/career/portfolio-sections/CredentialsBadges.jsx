@@ -1,42 +1,44 @@
 // src/pages/career/portfolio-sections/CredentialsBadges.jsx
+//
+// SHF Ecosystem Phase 7 — replaces the prior hardcoded fallback badge
+// array with the learner's real, canonically-issued Credentials
+// (GET /credentials/me). Shows exactly what the backend says was
+// actually issued — never "Earned" for a merely-eligible credential, and
+// never a revoked one. An honest empty state renders when the learner
+// has no real Credentials yet; this is expected for most accounts today
+// (see docs/SHF_CREDENTIAL_ARCHITECTURE.md — issuance is manual/
+// institutional, not automatic).
 import React from "react";
-import { BrainIcon, CodeIcon, PortfolioIcon } from "@/components/curriculum/icons.jsx";
+import { PortfolioIcon } from "@/components/curriculum/icons.jsx";
+import { listMyCredentials } from "@/lib/credentials/api.js";
 
-function TeamworkIcon(props) {
-  return (
-    <svg
-      width={props.size || 24}
-      height={props.size || 24}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <circle cx="8" cy="8" r="3" />
-      <circle cx="16" cy="8" r="3" />
-      <path d="M2.5 20c.7-3.3 3-5 5.5-5s4.8 1.7 5.5 5" />
-      <path d="M10.5 20c.7-3.3 3-5 5.5-5s4.8 1.7 5.5 5" />
-    </svg>
-  );
-}
+const LIFECYCLE_LABEL = {
+  ISSUED: "Earned",
+  RENEWAL_DUE: "Renewal due",
+  EXPIRED: "Expired",
+};
 
-/**
- * No canonical credentials/badge catalog exists for this student in the
- * repo (checked src/data, src/shared/rewards — no matching entries).
- * Isolated as fallback content; a real credentials source can replace
- * this array without touching the rendering markup below.
- */
-const BADGES = [
-  { id: "ai-foundations", label: "AI Foundations", Icon: BrainIcon, tone: "tone-a" },
-  { id: "web-builder", label: "Web Builder", Icon: CodeIcon, tone: "tone-b" },
-  { id: "teamwork", label: "Teamwork", Icon: TeamworkIcon, tone: "tone-c" },
-  { id: "career-ready", label: "Career Ready", Icon: PortfolioIcon, tone: "tone-d" },
-];
+export default function CredentialsBadges({ role }) {
+  const [state, setState] = React.useState({ loading: true, error: null, items: [] });
 
-export default function CredentialsBadges() {
+  React.useEffect(() => {
+    let active = true;
+    setState((current) => ({ ...current, loading: true, error: null }));
+    listMyCredentials(role)
+      .then((data) => {
+        if (!active) return;
+        const items = (data?.items || []).filter((item) => item.lifecycle !== "REVOKED");
+        setState({ loading: false, error: null, items });
+      })
+      .catch((error) => {
+        if (!active) return;
+        setState({ loading: false, error, items: [] });
+      });
+    return () => {
+      active = false;
+    };
+  }, [role]);
+
   return (
     <section className="sp-card" aria-labelledby="sp-credentials-h">
       <div className="sp-cardHeadRow">
@@ -54,16 +56,25 @@ export default function CredentialsBadges() {
         </button>
       </div>
 
-      <div className="sp-badgeGrid">
-        {BADGES.map((b) => (
-          <div key={b.id} className="sp-badge">
-            <span className={`sp-badgeIcon ${b.tone}`} aria-hidden="true">
-              <b.Icon size={26} />
-            </span>
-            <span className="sp-badgeLabel">{b.label}</span>
-          </div>
-        ))}
-      </div>
+      {state.loading ? (
+        <p className="sp-cardEmpty">Loading credentials…</p>
+      ) : state.error ? (
+        <p className="sp-cardEmpty">Credentials are unavailable right now.</p>
+      ) : state.items.length === 0 ? (
+        <p className="sp-cardEmpty">No credentials issued yet. Earned credentials will appear here.</p>
+      ) : (
+        <div className="sp-badgeGrid">
+          {state.items.map((item) => (
+            <div key={item.id} className="sp-badge">
+              <span className="sp-badgeIcon tone-a" aria-hidden="true">
+                <PortfolioIcon size={26} />
+              </span>
+              <span className="sp-badgeLabel">{item.definition.name}</span>
+              <span className="sp-badgeLabel sp-badgeStatus">{LIFECYCLE_LABEL[item.lifecycle] || item.lifecycle}</span>
+            </div>
+          ))}
+        </div>
+      )}
     </section>
   );
 }

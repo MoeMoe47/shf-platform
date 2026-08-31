@@ -25,18 +25,34 @@
 // it does not run any evaluation.
 import React from "react";
 import { markLessonComplete } from "@/shared/progress/progressClient.js";
+import { useCelebration } from "@/experience/celebrations/CelebrationProvider.jsx";
 import { ClipboardIcon } from "@/components/curriculum/icons.jsx";
 
 export default function CompletionCheckPanel({ lesson, curriculum, actorId, addPoints }) {
   const [completed, setCompleted] = React.useState(false);
   const [syncStatus, setSyncStatus] = React.useState("");
+  const { celebrateAchievement } = useCelebration();
+  const celebratedRef = React.useRef(false);
 
   function handleClick() {
     markLessonComplete({
       actorId,
       curriculum,
       slug: lesson.slug || lesson.id || lesson.title,
-      onSyncStatus: ({ status }) => setSyncStatus(status),
+      onSyncStatus: ({ status, item }) => {
+        setSyncStatus(status);
+        if (status === "synchronized" && !celebratedRef.current) {
+          celebratedRef.current = true;
+          celebrateAchievement({
+            sourceDomain: "curriculum",
+            sourceRecordId: item?.backend_event_id || item?.event?.subject_id || lesson.slug || lesson.id || lesson.title,
+            achievementType: "curriculum.lesson.completed",
+            status: "synchronized",
+            verified: true,
+            title: lesson.title || "Lesson completed",
+          });
+        }
+      },
     });
     addPoints(5);
     setCompleted(true);

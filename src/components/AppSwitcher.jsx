@@ -13,6 +13,7 @@ const APPS = [
   { key: "sales", label: "Sales", href: "/sales.html#/sales/dashboard", icon: "📈" },
   { key: "arcade", label: "Arcade", href: "/arcade.html#/dashboard", icon: "🕹️" },
   { key: "debt", label: "Debt", href: "/debt.html#/clock", icon: "⏱️" },
+  { key: "store", label: "Store", href: "/store.html#/catalog", icon: "🛍️" },
 ];
 
 export default function AppSwitcher({ currentApp }) {

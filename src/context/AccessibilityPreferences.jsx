@@ -21,6 +21,7 @@ const DEFAULTS = {
   simplifiedReading: false, // when true, LessonBody requests ReadingLevelProvider's "simple" variant
   audioSupport: false,      // when true, surfaces the existing SpeakBtn TTS control more prominently
   keyboardOptimized: false, // when true, widens focus rings / interactive target spacing
+  celebrationIntensity: "FULL", // FULL | SUBTLE | OFF; presentation only, never progress truth
 };
 
 function readStored() {
@@ -58,6 +59,7 @@ export default function AccessibilityPreferencesProvider({ children }) {
 
   const setPref = React.useCallback((key, value) => {
     if (!(key in DEFAULTS)) return;
+    if (key === "celebrationIntensity" && !["FULL", "SUBTLE", "OFF"].includes(value)) return;
     setPrefs((p) => ({ ...p, [key]: value }));
   }, []);
 

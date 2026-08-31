@@ -28,7 +28,7 @@ function readDevtoolsFlag() {
   }
 }
 
-export default function AppShellLayout({ app="app", Sidebar, title="App", headerRight, ThemeControl, brandLabel, children }) {
+export default function AppShellLayout({ app="app", Sidebar, title="App", headerRight, ThemeControl, brandLabel, children, Footer }) {
   const [collapsed, setCollapsed] = React.useState(() => {
     try {
       const parsed = JSON.parse(localStorage.getItem(`${app}.sidebar.collapsed`) || "false");
@@ -218,6 +218,7 @@ export default function AppShellLayout({ app="app", Sidebar, title="App", header
 
         <main id="main" className="sh-main app-main" role="main" aria-live="polite">
           {children ?? <Outlet />}
+          {Footer ? Footer : null}
         </main>
       </div>
 

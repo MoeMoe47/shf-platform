@@ -1,470 +1,236 @@
 // src/pages/store/StoreCatalog.jsx
+// Route: /store.html#/catalog (via StoreRoutes.jsx → StoreCatalogShell)
+//
+// Full rebuild replacing the previous parallax-hero "continue your
+// course" page (fake inline COURSES array, "Billy Gateson" instructor,
+// progress bars) with the approved institutional Catalog: filter row →
+// Featured Programs & Solutions card grid → trust strip. Card data comes
+// from src/data/catalogOfferings.js (a single real data module, not
+// hardcoded JSX) — see that file's header comment for the honest
+// "this is seed data, not verified production records" note.
+//
+// No "Visit the Library" utility link: no real Library resource-browsing
+// page exists anywhere in this repo (checked before writing this file —
+// the only `library` hits are an unrelated imported-lessons localStorage
+// provider and a two-link dev stub, neither matching "browse free
+// guides/templates/reports"). Per the task's own instruction to document
+// a gap instead of faking a destination, this connection is omitted
+// rather than pointed at something that wouldn't deliver what it
+// promises.
 import React from "react";
+import StoreHeader from "@/components/store/StoreHeader.jsx";
+import StoreCatalogCard from "@/components/store/StoreCatalogCard.jsx";
+import StoreInfoDialog from "@/components/store/StoreInfoDialog.jsx";
+import {
+  catalogOfferings,
+  OFFERING_TYPES,
+  ACCESS_TYPES,
+  AUDIENCES,
+  ECOSYSTEMS,
+  SORTS,
+} from "@/data/catalogOfferings.js";
 
-/**
- * StoreCatalog
- * Route: /store.html#/catalog   (via StoreRoutes)
- *
- * Uses 3-layer parallax hero:
- *  - /assets/catalog/sky-layer.jpg
- *  - /assets/catalog/pad-layer.png
- *  - /assets/catalog/wheat-layer.png
- *
- * And a frosted glass course strip at the bottom of the hero.
- */
+function ownerToEcosystem(owner) {
+  if (owner === "Silicon Heartland Foundation") return "shf";
+  if (owner === "Silicon Heartland Solutions") return "shs";
+  return "other";
+}
 
-const HERO_SCROLL_MAX = 400;
+const TRUST_ITEMS = [
+  {
+    icon: "🛡️",
+    title: "Trusted & Verified",
+    desc: "Offerings are reviewed for quality, impact, and alignment with SHF standards.",
+  },
+  {
+    icon: "🤝",
+    title: "Built for Impact",
+    desc: "Programs and solutions are designed to strengthen communities and create opportunity.",
+  },
+  {
+    icon: "♿",
+    title: "Accessible for All",
+    desc: "Accessibility, inclusion, and equity are considered throughout the experience.",
+  },
+  {
+    icon: "❤️",
+    title: "Powering the Heartland",
+    desc: "Investing in people. Strengthening communities. Building our future.",
+  },
+];
 
-export default function StoreCatalog() {
-  const rootRef = React.useRef(null);
+export default function StoreCatalog({ mobileNavOpen, onToggleMobileMenu, mobileMenuBtnRef }) {
+  const [query, setQuery] = React.useState("");
+  const [ecosystem, setEcosystem] = React.useState("all");
+  const [offeringType, setOfferingType] = React.useState("all");
+  const [audience, setAudience] = React.useState("all");
+  const [access, setAccess] = React.useState("all");
+  const [sort, setSort] = React.useState("featured");
+  const [previewOffering, setPreviewOffering] = React.useState(null);
+  const previewTriggerRef = React.useRef(null);
 
-  // Inject CSS once (like SolutionsMarketplace)
-  React.useEffect(() => {
-    if (!document.getElementById("store-catalog-css")) {
-      const el = document.createElement("style");
-      el.id = "store-catalog-css";
-      el.textContent = CATALOG_CSS;
-      document.head.appendChild(el);
-    }
-  }, []);
+  const filtered = React.useMemo(() => {
+    let list = catalogOfferings.filter((o) => {
+      if (ecosystem !== "all" && ownerToEcosystem(o.owner) !== ecosystem) return false;
+      if (offeringType !== "all" && o.offeringType !== offeringType) return false;
+      if (audience !== "all" && !o.audience.includes(audience)) return false;
+      if (access !== "all" && o.access !== access) return false;
+      if (query.trim()) {
+        const q = query.trim().toLowerCase();
+        const haystack = [o.title, o.description, o.offeringType, o.owner, ...o.audience]
+          .join(" ")
+          .toLowerCase();
+        if (!haystack.includes(q)) return false;
+      }
+      return true;
+    });
 
-  // Simple parallax controller
-  React.useEffect(() => {
-    const node = rootRef.current;
-    if (!node) return;
+    list = [...list].sort((a, b) => {
+      if (sort === "name") return a.title.localeCompare(b.title);
+      if (sort === "access") return a.access.localeCompare(b.access);
+      if (sort === "newest") return new Date(b.addedAt) - new Date(a.addedAt);
+      // "featured": featured items first, then newest within each group
+      if (a.featured !== b.featured) return a.featured ? -1 : 1;
+      return new Date(b.addedAt) - new Date(a.addedAt);
+    });
+    return list;
+  }, [ecosystem, offeringType, audience, access, query, sort]);
 
-    const handleScroll = () => {
-      const y = Math.min(window.scrollY || 0, HERO_SCROLL_MAX);
-      node.style.setProperty("--sky-offset", `${-y * 0.15}px`);
-      node.style.setProperty("--pad-offset", `${-y * 0.30}px`);
-      node.style.setProperty("--wheat-offset", `${-y * 0.45}px`);
-      node.style.setProperty("--hero-fade", String(Math.min(y / HERO_SCROLL_MAX, 1)));
-    };
+  // No filter/search active: the "Featured Programs & Solutions" row
+  // shows only the curated featured set (currently 4 — see
+  // catalogOfferings.js). The moment a real filter or search narrows the
+  // list, every match is shown regardless of the featured flag, so
+  // nothing becomes unreachable — "View all" (resetFilters) returns to
+  // the curated view.
+  const isDefaultView =
+    ecosystem === "all" && offeringType === "all" && audience === "all" && access === "all" && !query.trim();
+  const displayList = isDefaultView ? filtered.filter((o) => o.featured) : filtered;
 
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  function resetFilters() {
+    setEcosystem("all");
+    setOfferingType("all");
+    setAudience("all");
+    setAccess("all");
+    setQuery("");
+  }
 
-  const [track, setTrack] = React.useState("all");
-
-  const filteredCourses = COURSES.filter((c) =>
-    track === "all" ? true : c.track === track
-  );
+  function openPreview(offering) {
+    previewTriggerRef.current = document.activeElement;
+    setPreviewOffering(offering);
+  }
 
   return (
-    <div ref={rootRef} className="catalog-page">
-      {/* Hero */}
-      <section className="catalog-hero">
-        {/* Layers */}
-        <div className="catalog-layer catalog-layer--sky" aria-hidden="true" />
-        <div className="catalog-layer catalog-layer--pad" aria-hidden="true" />
-        <div className="catalog-layer catalog-layer--wheat" aria-hidden="true" />
+    <>
+      <StoreHeader
+        mobileNavOpen={mobileNavOpen}
+        onToggleMobileMenu={onToggleMobileMenu}
+        mobileMenuBtnRef={mobileMenuBtnRef}
+        query={query}
+        onSearchChange={setQuery}
+      />
 
-        {/* Gradient + content */}
-        <div className="catalog-hero-inner">
-          <div className="catalog-hero-copy">
-            <p className="catalog-kicker">Silicon Heartland Foundation</p>
-            <h1>
-              Choose Your Path,
-              <br />
-              Build the Future.
-            </h1>
-            <p className="catalog-tagline">
-              Browse our curriculum by track below. Launch when you’re ready —{" "}
-              every lesson moves you closer to a real job, internship, or license.
-            </p>
+      <div className="cs-page">
+        <form
+          className="cs-filters"
+          role="search"
+          aria-label="Catalog filters"
+          onSubmit={(e) => e.preventDefault()}
+        >
+          <div className="cs-filterField">
+            <label htmlFor="cs-filter-ecosystem">Ecosystem</label>
+            <select id="cs-filter-ecosystem" value={ecosystem} onChange={(e) => setEcosystem(e.target.value)}>
+              {ECOSYSTEMS.map((o) => (
+                <option key={o.id} value={o.id}>{o.label}</option>
+              ))}
+            </select>
+          </div>
+          <div className="cs-filterField">
+            <label htmlFor="cs-filter-type">Offering Type</label>
+            <select id="cs-filter-type" value={offeringType} onChange={(e) => setOfferingType(e.target.value)}>
+              {OFFERING_TYPES.map((o) => (
+                <option key={o.id} value={o.id}>{o.label}</option>
+              ))}
+            </select>
+          </div>
+          <div className="cs-filterField">
+            <label htmlFor="cs-filter-audience">Audience</label>
+            <select id="cs-filter-audience" value={audience} onChange={(e) => setAudience(e.target.value)}>
+              {AUDIENCES.map((o) => (
+                <option key={o.id} value={o.id}>{o.label}</option>
+              ))}
+            </select>
+          </div>
+          <div className="cs-filterField">
+            <label htmlFor="cs-filter-access">Access</label>
+            <select id="cs-filter-access" value={access} onChange={(e) => setAccess(e.target.value)}>
+              {ACCESS_TYPES.map((o) => (
+                <option key={o.id} value={o.id}>{o.label}</option>
+              ))}
+            </select>
+          </div>
+          <div className="cs-filterField">
+            <label htmlFor="cs-filter-sort">Sort By</label>
+            <select id="cs-filter-sort" value={sort} onChange={(e) => setSort(e.target.value)}>
+              {SORTS.map((o) => (
+                <option key={o.id} value={o.id}>{o.label}</option>
+              ))}
+            </select>
+          </div>
+        </form>
+
+        <section aria-labelledby="cs-featured-title">
+          <div className="cs-sectionHead">
+            <div>
+              <h2 id="cs-featured-title" className="cs-sectionTitle">Featured Programs &amp; Solutions</h2>
+              <p className="cs-sectionSub">
+                Explore handpicked offerings designed to empower learners, organizations, and communities.
+              </p>
+            </div>
+            <button type="button" className="cs-viewAll" onClick={resetFilters}>
+              View all →
+            </button>
           </div>
 
-          {/* Frosted track + cards strip */}
-          <div className="catalog-strip">
-            {/* Track tabs */}
-            <div className="catalog-track-row" role="tablist" aria-label="Tracks">
-              {TRACKS.map((t) => (
-                <button
-                  key={t.id}
-                  type="button"
-                  role="tab"
-                  className={
-                    track === t.id ? "track-pill track-pill--active" : "track-pill"
-                  }
-                  onClick={() => setTrack(t.id)}
-                >
-                  {t.label}
-                </button>
+          <p className="cs-srOnly" role="status" aria-live="polite">
+            {displayList.length} offering{displayList.length === 1 ? "" : "s"} shown.
+          </p>
+
+          {displayList.length === 0 ? (
+            <p className="cs-sectionSub">No offerings match the current filters. Try clearing a filter above.</p>
+          ) : (
+            <div className="cs-cardGrid">
+              {displayList.map((offering) => (
+                <StoreCatalogCard key={offering.id} offering={offering} onOpenPreview={openPreview} />
               ))}
             </div>
+          )}
+        </section>
 
-            {/* Courses */}
-            <div className="catalog-cards-row">
-              {filteredCourses.map((course) => (
-                <article key={course.id} className="catalog-card">
-                  <div className="catalog-card-icon">{course.icon}</div>
-                  <div className="catalog-card-main">
-                    <h2>{course.title}</h2>
-                    <p className="catalog-card-meta">
-                      {course.instructor} • {course.duration}
-                    </p>
-
-                    <div className="catalog-progress-row">
-                      <div className="catalog-progress-label">
-                        {course.progress}% complete
-                      </div>
-                      <div className="catalog-progress-bar">
-                        <div
-                          className="catalog-progress-fill"
-                          style={{ width: `${course.progress}%` }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="catalog-card-actions">
-                    <button
-                      type="button"
-                      className={
-                        course.status === "start"
-                          ? "catalog-btn catalog-btn--primary"
-                          : "catalog-btn"
-                      }
-                    >
-                      {course.status === "start" ? "Start" : "Resume"}
-                    </button>
-                  </div>
-                </article>
-              ))}
+        <div className="cs-trustStrip">
+          {TRUST_ITEMS.map((item) => (
+            <div key={item.title} className="cs-trustItem">
+              <span className="cs-trustIcon" aria-hidden="true">{item.icon}</span>
+              <div>
+                <h3 className="cs-trustTitle">{item.title}</h3>
+                <p className="cs-trustDesc">{item.desc}</p>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
-      </section>
+      </div>
 
-      {/* Below-hero content placeholder */}
-      <section className="catalog-body">
-        <h2>All Programs</h2>
+      <StoreInfoDialog
+        open={!!previewOffering}
+        onClose={() => setPreviewOffering(null)}
+        titleId="cs-preview-title"
+        title={previewOffering?.title || ""}
+        returnFocusRef={previewTriggerRef}
+      >
         <p>
-          This area is for your full catalog grid, filters, and pathway details.
-          We can wire this next once you’re happy with the hero.
+          {previewOffering?.description} This is a seed catalog entry — no live detail page exists for it
+          yet. Real offerings will link to a real program page once one is built.
         </p>
-      </section>
-    </div>
+      </StoreInfoDialog>
+    </>
   );
 }
-
-/* ------------------- sample data ------------------- */
-
-const TRACKS = [
-  { id: "all", label: "All" },
-  { id: "ai", label: "AI Innovation Track" },
-  { id: "smart", label: "Smart Contracts" },
-  { id: "stack", label: "Silicon Stack" },
-  { id: "deaf", label: "Deaf Pilot" },
-];
-
-const COURSES = [
-  {
-    id: 1,
-    track: "ai",
-    title: "Intro to AI",
-    instructor: "Billy Gateson",
-    duration: "2 hours",
-    progress: 80,
-    status: "resume",
-    icon: "📘",
-  },
-  {
-    id: 2,
-    track: "stack",
-    title: "Cloud Computing Basics",
-    instructor: "Billy Gateson",
-    duration: "2 hours",
-    progress: 30,
-    status: "start",
-    icon: "☁️",
-  },
-  {
-    id: 3,
-    track: "ai",
-    title: "Neural Networks",
-    instructor: "Billy Gateson",
-    duration: "3 hours",
-    progress: 30,
-    status: "resume",
-    icon: "🧠",
-  },
-  {
-    id: 4,
-    track: "smart",
-    title: "Secure Coding Practices",
-    instructor: "Billy Gateson",
-    duration: "3 hours",
-    progress: 0,
-    status: "start",
-    icon: "🔐",
-  },
-];
-
-/* ------------------- CSS ------------------- */
-
-const CATALOG_CSS = `
-.catalog-page{
-  --sky-offset:0px;
-  --pad-offset:0px;
-  --wheat-offset:0px;
-  --hero-fade:0;
-  color:#0b0c0e;
-}
-
-/* Transparent/glass header for store app */
-[data-app="store"] .smp-appbar{
-  position:fixed;
-  top:12px;
-  left:50%;
-  transform:translateX(-50%);
-  max-width:1280px;
-  width:calc(100% - 24px);
-  margin:0;
-  padding:10px 18px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.24);
-  background:linear-gradient(
-    to bottom,
-    rgba(8,9,13,.92),
-    rgba(8,9,13,.75)
-  );
-  backdrop-filter:blur(16px);
-}
-
-/* Hero wrapper */
-.catalog-hero{
-  position:relative;
-  height:min(90vh,720px);
-  min-height:520px;
-  overflow:hidden;
-  background:#05060a;
-  color:#ffffff;
-}
-
-/* Background layers */
-.catalog-layer{
-  position:absolute;
-  inset:-10%;
-  background-repeat:no-repeat;
-  background-position:center bottom;
-  background-size:cover;
-  will-change:transform;
-  pointer-events:none;
-}
-
-.catalog-layer--sky{
-  background-image:url("/assets/catalog/sky-layer.jpg");
-  transform:translate3d(0,var(--sky-offset),0);
-}
-
-.catalog-layer--pad{
-  background-image:url("/assets/catalog/pad-layer.png");
-  background-position:center 55%;
-  transform:translate3d(0,var(--pad-offset),0);
-}
-
-.catalog-layer--wheat{
-  background-image:url("/assets/catalog/wheat-layer.png");
-  background-position:center 100%;
-  transform:translate3d(0,var(--wheat-offset),0);
-}
-
-/* Gradient + content layout */
-.catalog-hero-inner{
-  position:relative;
-  z-index:2;
-  max-width:1200px;
-  margin:0 auto;
-  padding:120px 18px 48px;
-  display:flex;
-  flex-direction:column;
-  gap:32px;
-}
-
-.catalog-hero::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    linear-gradient(to bottom,rgba(5,6,10,.85),rgba(5,6,10,.4) 45%,transparent 75%),
-    linear-gradient(to top,rgba(4,5,7,.9),transparent 40%);
-  z-index:1;
-}
-
-/* Hero text */
-.catalog-hero-copy{
-  max-width:620px;
-}
-.catalog-kicker{
-  margin:0 0 8px;
-  font-size:13px;
-  letter-spacing:.16em;
-  text-transform:uppercase;
-  color:rgba(255,255,255,.8);
-}
-.catalog-hero-copy h1{
-  margin:0 0 12px;
-  font-size:40px;
-  line-height:1.08;
-}
-.catalog-tagline{
-  margin:0;
-  font-size:16px;
-  max-width:540px;
-  color:rgba(255,255,255,.88);
-}
-
-/* Frosted strip */
-.catalog-strip{
-  margin-top:4px;
-  padding:16px 16px 18px;
-  border-radius:24px;
-  backdrop-filter:blur(22px);
-  background:linear-gradient(
-      to bottom,
-      rgba(245,240,230,.94),
-      rgba(245,240,230,.96)
-    );
-  box-shadow:
-    0 18px 45px rgba(0,0,0,.55),
-    0 0 0 1px rgba(255,255,255,.7);
-  color:#1a1b20;
-}
-
-/* Track tabs */
-.catalog-track-row{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-bottom:16px;
-}
-.track-pill{
-  padding:6px 14px;
-  border-radius:999px;
-  border:1px solid rgba(15,23,42,.08);
-  background:transparent;
-  font-size:13px;
-  cursor:pointer;
-  color:#4b5563;
-}
-.track-pill--active{
-  background:#0f172a;
-  color:#f9fafb;
-  border-color:#0f172a;
-}
-
-/* Cards row */
-.catalog-cards-row{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:14px;
-}
-
-.catalog-card{
-  display:flex;
-  align-items:stretch;
-  gap:12px;
-  padding:14px 14px 12px;
-  border-radius:18px;
-  background:#ffffff;
-  box-shadow:0 10px 24px rgba(15,23,42,.25);
-}
-
-.catalog-card-icon{
-  width:40px;
-  height:40px;
-  border-radius:14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:22px;
-  background:#e5f0ff;
-}
-
-.catalog-card-main h2{
-  margin:0 0 4px;
-  font-size:16px;
-}
-.catalog-card-main{
-  flex:1;
-}
-.catalog-card-meta{
-  margin:0 0 8px;
-  font-size:12px;
-  color:#6b7280;
-}
-
-/* Progress */
-.catalog-progress-row{
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-}
-.catalog-progress-label{
-  font-size:11px;
-  color:#4b5563;
-}
-.catalog-progress-bar{
-  height:4px;
-  border-radius:999px;
-  background:#e5e7eb;
-  overflow:hidden;
-}
-.catalog-progress-fill{
-  height:100%;
-  border-radius:999px;
-  background:#f97316;
-}
-
-/* Card actions */
-.catalog-card-actions{
-  display:flex;
-  align-items:flex-end;
-}
-.catalog-btn{
-  padding:7px 14px;
-  border-radius:999px;
-  border:1px solid #0f172a;
-  background:#ffffff;
-  font-size:13px;
-  cursor:pointer;
-}
-.catalog-btn--primary{
-  background:#2563eb;
-  border-color:#2563eb;
-  color:#f9fafb;
-}
-
-/* Below hero content */
-.catalog-body{
-  max-width:1200px;
-  margin:32px auto 80px;
-  padding:0 18px;
-}
-.catalog-body h2{
-  margin:0 0 8px;
-}
-
-/* Responsive */
-@media (max-width:900px){
-  .catalog-hero-inner{
-    padding-top:120px;
-  }
-  .catalog-hero-copy h1{
-    font-size:32px;
-  }
-  .catalog-cards-row{
-    grid-template-columns:1fr;
-  }
-}
-@media (max-width:640px){
-  [data-app="store"] .smp-appbar{
-    padding:8px 14px;
-  }
-  .catalog-strip{
-    padding:14px 14px 16px;
-  }
-}
-`;

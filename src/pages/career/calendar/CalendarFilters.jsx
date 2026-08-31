@@ -2,7 +2,7 @@
 import React from "react";
 import { FILTER_GROUPS } from "./eventContract.js";
 
-export default function CalendarFilters({ activeFilter, onFilterChange, search, onSearchChange, groups = FILTER_GROUPS }) {
+export default function CalendarFilters({ activeFilter, onFilterChange, search, onSearchChange, groups = FILTER_GROUPS, hideSearch = false }) {
   return (
     <div className="cal-filters">
       <div className="cal-filterChips" role="group" aria-label="Filter events by type">
@@ -22,16 +22,18 @@ export default function CalendarFilters({ activeFilter, onFilterChange, search, 
           );
         })}
       </div>
-      <label className="cal-search">
-        <span className="sr-only">Search events</span>
-        <span aria-hidden="true" className="cal-searchIcon">🔎</span>
-        <input
-          type="search"
-          placeholder="Search events…"
-          value={search}
-          onChange={(e) => onSearchChange(e.target.value)}
-        />
-      </label>
+      {!hideSearch && (
+        <label className="cal-search">
+          <span className="sr-only">Search events</span>
+          <span aria-hidden="true" className="cal-searchIcon">🔎</span>
+          <input
+            type="search"
+            placeholder="Search events…"
+            value={search}
+            onChange={(e) => onSearchChange(e.target.value)}
+          />
+        </label>
+      )}
     </div>
   );
 }

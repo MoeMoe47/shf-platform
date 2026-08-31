@@ -2,10 +2,16 @@
 // against a running dev server: `npm run dev` on :8091). Uses the real
 // Postgres-backed service/repo and the MockLiveLearningProvider (never a
 // real Zoom account) — see the mock provider's own file header.
-import { test } from "node:test";
+import { after, test } from "node:test";
 import assert from "node:assert/strict";
+import { query } from "../src/db/client.ts";
 
-const BASE = "http://localhost:8091";
+const BASE = process.env.SHS_API_TEST_BASE_URL || "http://localhost:8091";
+const CREATED_SESSION_IDS = new Set<string>();
+const BASE_USERS = [
+  ["user_instructor_001", "org_shf_001", "instructor@siliconheartland.org", "SHF Instructor"],
+  ["user_student_001", "org_shf_001", "student@siliconheartland.org", "SHF Student"],
+] as const;
 
 function authHeader(userId?: string) {
   return userId ? { Authorization: `Bearer dev-token:${userId}` } : {};
@@ -18,8 +24,18 @@ async function api(path: string, opts: { method?: string; userId?: string; body?
     body: opts.body ? JSON.stringify(opts.body) : undefined,
   });
   const json = await res.json().catch(() => ({}));
+  if ((opts.method || "GET") === "POST" && path === "/live-learning/sessions" && res.status === 201 && json.data?.id) {
+    CREATED_SESSION_IDS.add(json.data.id);
+  }
   return { status: res.status, json };
 }
+
+after(async () => {
+  const ids = [...CREATED_SESSION_IDS];
+  if (!ids.length) return;
+  await query("DELETE FROM live_session_join_events WHERE live_session_id = ANY($1::text[])", [ids]);
+  await query("DELETE FROM live_sessions WHERE live_session_id = ANY($1::text[])", [ids]);
+});
 
 function futureSessionInput(overrides: Record<string, unknown> = {}) {
   const startsAt = new Date(Date.now() + 60_000).toISOString(); // starts in 1 min — inside the 15-min join window

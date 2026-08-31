@@ -37,9 +37,10 @@ try {
   } else if (command === "baseline") {
     if (args[0] !== "--confirm") throw new Error("baseline requires --confirm and explicit migration IDs");
     const ids = args.slice(1).filter((arg) => /^\d{3,}$/.test(arg));
+    const force = args.includes("--force");
     const client = await pool.connect();
     try {
-      printStatus(await baselineMigrations(client, migrations, ids));
+      printStatus(await baselineMigrations(client, migrations, ids, { force }));
     } finally {
       client.release();
     }

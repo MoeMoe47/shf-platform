@@ -26,12 +26,15 @@
   --cal-focus-ring: #1D4ED8;
 
   --cal-type-learning: #2563EB;
+  --cal-type-live: #0284C7;
   --cal-type-assignment: #B45309;
+  --cal-type-project: #166534;
   --cal-type-portfolio: #7C3AED;
   --cal-type-mentor: #0F766E;
   --cal-type-arcade: #DB2777;
   --cal-type-credential: #CA8A04;
   --cal-type-career: #4338CA;
+  --cal-type-opportunity: #B7791F;
   --cal-type-personal: #475569;
 
   background: var(--cal-bg);
@@ -61,12 +64,15 @@ html[data-theme="dark"] body[data-dark-scope~="calendar"] [data-app="career"] .c
   --cal-focus-ring: #7CACFF;
 
   --cal-type-learning: #6FA0FF;
+  --cal-type-live: #38BDF8;
   --cal-type-assignment: #E3A73D;
+  --cal-type-project: #86EFAC;
   --cal-type-portfolio: #B794F6;
   --cal-type-mentor: #4FD1C5;
   --cal-type-arcade: #F472B6;
   --cal-type-credential: #F2C94C;
   --cal-type-career: #8C9BFF;
+  --cal-type-opportunity: #E9C46A;
   --cal-type-personal: #C4CAD4;
 }
 
@@ -160,7 +166,15 @@ html[data-theme="dark"] body[data-dark-scope~="calendar"] [data-app="career"] .c
   color: var(--cal-text); text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .cal-dayEventDot { width: 6px; height: 6px; border-radius: 50%; background: var(--chip-color); flex: none; }
-.cal-dayEventTitle { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* min-width:0 is required for a flex child's own overflow/ellipsis to
+   actually apply — without it the browser sizes this span to its full
+   unwrapped content width regardless of the parent's overflow:hidden,
+   so the title was rendering effectively invisible (0 visible chars,
+   not even an ellipsis) whenever a day cell held more than one or two
+   chips. Found live while building the SHF Learning Calendar, which is
+   the first page to pack several real chips into a narrow month cell —
+   pre-existing in this shared component, not introduced by that page. */
+.cal-dayEventTitle { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1; }
 .cal-dayEventMore { font-size: 11px; color: var(--cal-text-muted); font-weight: 600; }
 
 /* ---------- Week view (structured weekly agenda — see CalendarWeekView.jsx) ---------- */
@@ -217,6 +231,39 @@ html[data-theme="dark"] body[data-dark-scope~="calendar"] [data-app="career"] .c
 .cal-upcomingItemTitle { font-weight: 700; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .cal-upcomingItemMeta { font-size: 12px; color: var(--cal-text-muted); }
 .cal-upcomingAction { font-size: 12px; font-weight: 700; color: var(--cal-accent); white-space: nowrap; min-height: 44px; display: inline-flex; align-items: center; }
+
+/* ---------- Partial-source notice (SHF Ecosystem Phase 11.5) ----------
+   Shared honest-failure presentation for any Calendar surface consuming
+   GET /calendar/events/me — moved here (rather than duplicated per app)
+   so Curriculum and Career report a source outage identically. Compact
+   status bar, not a full-page failure state. */
+.cal-partialNotice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--cal-accent) 30%, var(--cal-border));
+  background: rgba(255, 90, 31, 0.08);
+  font-size: 12.5px;
+  color: var(--cal-text-muted);
+}
+.cal-partialIcon { flex: none; font-size: 15px; }
+.cal-partialText { flex: 1; min-width: 0; }
+.cal-partialRetry {
+  margin-left: auto;
+  flex: none;
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--cal-accent);
+  cursor: pointer;
+}
 
 /* ---------- Empty / loading / error states ---------- */
 .cal-emptyState, .cal-errorState { padding: 40px 20px; text-align: center; }

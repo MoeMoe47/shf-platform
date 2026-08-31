@@ -5,7 +5,7 @@ import { ok, fail } from "../../../api/response-envelope.js";
 import { requirePermission } from "../../../auth/permission-guard.js";
 import { SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
 import * as service from "../service/live-learning-service.js";
-import { SessionNotFoundError } from "../service/live-learning-service.js";
+import { LiveLearningEligibilityError, SessionNotFoundError } from "../service/live-learning-service.js";
 import { ProviderNotConfiguredError } from "../providers/live-learning-provider.js";
 import { LIVE_LEARNING_PROVIDERS, toStudentFacing } from "../model/live-session.js";
 import { LiveSessionRepo } from "../repo/live-session-repo.js";
@@ -14,7 +14,7 @@ const repo = new LiveSessionRepo();
 
 function isStudentOnly(user: any): boolean {
   const roles: string[] = user?.roles || [];
-  return roles.includes("student") && !roles.some((r) => ["instructor", "shf_admin", "shs_admin", "super_admin"].includes(r));
+  return roles.includes("student") && !roles.some((r) => ["instructor", "shf_admin", "shs_admin", "org_admin", "super_admin", "program_manager"].includes(r));
 }
 
 function validateCreateInput(body: any): string | null {
@@ -41,23 +41,20 @@ export function registerLiveLearningRoutes(app: any) {
   });
 
   app.get("/live-learning/sessions", requirePermission(SHS_SECURITY_PERMISSIONS.LIVE_LEARNING_VIEW), async (req: any, res: any) => {
-    const items = await service.listSessions({
+    const items = await service.listSessionsForActor({
       organizationId: req.user.organization_id,
       lessonId: req.query.lessonId,
       instructorId: req.query.instructorId,
+      actor: req.user,
     });
     const shaped = isStudentOnly(req.user) ? items.map(toStudentFacing) : items;
     res.json(ok({ items: shaped }));
   });
 
   app.get("/live-learning/sessions/:id", requirePermission(SHS_SECURITY_PERMISSIONS.LIVE_LEARNING_VIEW), async (req: any, res: any) => {
-    try {
-      const session = await service.getSession(req.params.id);
-      res.json(ok(isStudentOnly(req.user) ? toStudentFacing(session) : session));
-    } catch (err: any) {
-      if (err instanceof SessionNotFoundError) return res.status(404).json(fail("NOT_FOUND", err.message));
-      throw err;
-    }
+    const session = await service.getSessionForActor(req.params.id, req.user);
+    if (!session) return res.status(404).json(fail("NOT_FOUND", "Live session not found."));
+    res.json(ok(isStudentOnly(req.user) ? toStudentFacing(session) : session));
   });
 
   app.post("/live-learning/sessions", requirePermission(SHS_SECURITY_PERMISSIONS.LIVE_LEARNING_CREATE), async (req: any, res: any) => {
@@ -82,24 +79,20 @@ export function registerLiveLearningRoutes(app: any) {
       if (err instanceof ProviderNotConfiguredError) {
         return res.status(503).json(fail("PROVIDER_NOT_CONFIGURED", err.message));
       }
+      if (err instanceof LiveLearningEligibilityError) {
+        return res.status(err.statusCode).json(fail(err.code, err.message));
+      }
       res.status(400).json(fail("CREATE_FAILED", err?.message || "Failed to create live session."));
     }
   });
 
   app.post("/live-learning/sessions/:id/cancel", requirePermission(SHS_SECURITY_PERMISSIONS.LIVE_LEARNING_CREATE), async (req: any, res: any) => {
     try {
-      const session = await service.getSession(req.params.id);
-      const roles: string[] = req.user.roles || [];
-      const isOwner = session.instructorId === req.user.user_id;
-      const isManager = roles.some((r) => ["shf_admin", "shs_admin", "super_admin"].includes(r)) ||
-        (req.user.permissions || []).includes(SHS_SECURITY_PERMISSIONS.LIVE_LEARNING_MANAGE);
-      if (!isOwner && !isManager) {
-        return res.status(403).json(fail("FORBIDDEN", "Only the session's instructor or an admin may cancel it."));
-      }
       const cancelled = await service.cancelSession(req.params.id, req.user);
       res.json(ok(cancelled));
     } catch (err: any) {
       if (err instanceof SessionNotFoundError) return res.status(404).json(fail("NOT_FOUND", err.message));
+      if (err instanceof LiveLearningEligibilityError) return res.status(err.statusCode).json(fail(err.code, err.message));
       res.status(400).json(fail("CANCEL_FAILED", err?.message || "Failed to cancel session."));
     }
   });
@@ -117,12 +110,17 @@ export function registerLiveLearningRoutes(app: any) {
       res.json(ok(decision));
     } catch (err: any) {
       if (err instanceof SessionNotFoundError) return res.status(404).json(fail("NOT_FOUND", err.message));
+      if (err instanceof LiveLearningEligibilityError) return res.status(err.statusCode).json(fail(err.code, err.message));
       res.status(500).json(fail("JOIN_ERROR", "Unable to process join request."));
     }
   });
 
   // Access/audit review — instructors/admins only.
   app.get("/live-learning/sessions/:id/join-events", requirePermission(SHS_SECURITY_PERMISSIONS.LIVE_LEARNING_JOIN_AUTHORIZE), async (req: any, res: any) => {
+    const session = await service.getSessionForActor(req.params.id, req.user);
+    if (!session || !(await service.canManageSession(req.user, session))) {
+      return res.status(404).json(fail("NOT_FOUND", "Live session not found."));
+    }
     const items = await repo.listJoinEventsForSession(req.params.id);
     res.json(ok({ items }));
   });

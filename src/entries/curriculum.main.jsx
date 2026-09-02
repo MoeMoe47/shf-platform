@@ -37,6 +37,7 @@ import "@/styles/student-portfolio-dark.css";
    last among Curriculum CSS so its data-a11y-* attribute selectors are
    unambiguous next to the base --ld-* token definitions above. */
 import "@/styles/curriculum-a11y.css";
+import "@/styles/studio.css";
 
 /* ---------- React / Router ---------- */
 import React from "react";

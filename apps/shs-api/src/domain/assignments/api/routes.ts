@@ -27,6 +27,8 @@ function actorFromRequest(req: any) {
 function serializeWork(work: import("../service/assignment-entitlement-service.js").ResolvedAssignmentWork) {
   return {
     ...work.assignment,
+    studioEligible: Boolean(work.studioRequirement),
+    projectType: work.studioRequirement?.projectType || null,
     curriculumRelease: work.curriculumRelease,
     assignedContent: work.assignedContent,
     progress: { completed: work.completedCount, total: work.totalCount },

@@ -10,6 +10,7 @@ import {
   AssignmentsIcon,
   InstructorIcon,
   MasterViewIcon,
+  SparkleIcon,
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -30,6 +31,7 @@ const CURRICULUM_ITEMS = [
   // Phase 1 restoration (SHF Curriculum Infrastructure Audit §28-30): real
   // request/approval UI, previously unrouted anywhere in the app.
   { key: "live-sessions", label: "Live Sessions", Icon: CalendarIcon, path: "live-sessions" },
+  { key: "studio", label: "Studio", Icon: SparkleIcon, path: "/studio" },
   // Phase 2B: real, previously-unmounted accessibility preferences.
   { key: "accessibility", label: "Accessibility", Icon: PortfolioIcon, path: "accessibility" },
 ];
@@ -100,11 +102,11 @@ export default function CurriculumSidebar({ collapsed = false, onToggleCollapsed
             {CURRICULUM_ITEMS.map(({ key, label, Icon, path }) => (
               <li key={key}>
                 <NavLink
-                  to={`/curriculum/${path}`}
-                  end={key !== "learning"}
+                  to={path.startsWith("/") ? path : `/curriculum/${path}`}
+                  end={key !== "learning" && key !== "studio"}
                   onClick={onNavigate}
                   data-label={label}
-                  className={({ isActive }) => `ld-navItem${isActive || (key === "learning" && inCourseWorkspace) ? " is-active" : ""}`}
+                  className={({ isActive }) => `ld-navItem${isActive || (key === "learning" && inCourseWorkspace) || (key === "studio" && location.pathname.startsWith("/studio")) ? " is-active" : ""}`}
                 >
                   <Icon size={19} className="ld-navIcon" />
                   <span className="ld-navText">{label}</span>

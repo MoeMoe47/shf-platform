@@ -25,6 +25,7 @@ export const REQUIREMENT_TYPES = [
   "CONTENT",
   "ARCADE",
   "PROJECT",
+  "STUDIO_PROJECT",
   "LIVE_ATTENDANCE",
   "INSTRUCTOR_VERIFICATION",
   "EVIDENCE",
@@ -70,6 +71,13 @@ export const REQUIREMENT_REGISTRY: Record<RequirementType, RequirementRegistryEn
   PROJECT: {
     type: "PROJECT",
     authoritativeDomain: "project_submissions (Project domain)",
+    canVerify: true,
+    unavailableReason: null,
+    requiresTargetReference: true,
+  },
+  STUDIO_PROJECT: {
+    type: "STUDIO_PROJECT",
+    authoritativeDomain: "studio_delivery_records (Studio finalization)",
     canVerify: true,
     unavailableReason: null,
     requiresTargetReference: true,

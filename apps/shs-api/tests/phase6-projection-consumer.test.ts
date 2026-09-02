@@ -14,6 +14,7 @@ test("Phase 6 consumes every supported authoritative event through the shared ou
     "attendance.confirmed": "ATTENDANCE",
     "competency.reviewed": "INSTRUCTOR_VERIFICATION",
     "lesson.completed": "LESSON_COMPLETION",
+    "studio.delivery.finalized": "STUDIO_DELIVERY",
   });
 });
 

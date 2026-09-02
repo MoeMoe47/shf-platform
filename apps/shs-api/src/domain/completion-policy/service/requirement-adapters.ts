@@ -103,6 +103,26 @@ async function evaluateProject(req: CompletionPolicyRequirementRow, ctx: Adapter
   return baseResult(req, "SATISFIED", "Learner's latest project submission is ACCEPTED.", row.submission_id);
 }
 
+async function evaluateStudioProject(req: CompletionPolicyRequirementRow, ctx: AdapterContext): Promise<RequirementResult> {
+  if (!req.targetReference) return baseResult(req, "ERROR", "Requirement is missing its Studio project target reference.");
+  const res = await query(
+    `SELECT d.delivery_record_id, d.project_type FROM studio_delivery_records d
+     JOIN projects p ON p.project_id=d.project_id AND p.organization_id=d.organization_id AND p.tenant_id=d.tenant_id
+     WHERE d.organization_id=$1 AND d.tenant_id=$2 AND d.project_id=$3
+       AND p.studio_learner_id=$4 AND p.studio_assignment_id=$5
+       AND p.studio_destination='STUDENT' AND d.status='FINALIZED'
+     ORDER BY d.finalized_at DESC LIMIT 1`,
+    [ctx.organizationId, `tenant:${ctx.organizationId}`, req.targetReference, ctx.learnerUserId, ctx.assignmentId],
+  );
+  const row = res.rows[0];
+  if (!row) return baseResult(req, "UNSATISFIED", "No finalized Studio project exists for this assignment.");
+  const requiredProjectType = String((req.configuration as any)?.projectType || (req.configuration as any)?.allowedProjectType || "").trim();
+  if (requiredProjectType && row.project_type !== requiredProjectType) {
+    return baseResult(req, "UNSATISFIED", `The finalized Studio project must be a ${requiredProjectType} project.`, row.delivery_record_id);
+  }
+  return baseResult(req, "SATISFIED", "The assignment has a finalized Studio project.", row.delivery_record_id);
+}
+
 async function evaluateLiveAttendance(req: CompletionPolicyRequirementRow, ctx: AdapterContext): Promise<RequirementResult> {
   if (!req.targetReference) return baseResult(req, "ERROR", "Requirement is missing its live session target reference.");
   // Defense in depth: getLatestJoinEventForUser (the existing Live
@@ -206,6 +226,7 @@ export async function evaluateRequirement(req: CompletionPolicyRequirementRow, c
     case "CONTENT": return evaluateContent(req, ctx);
     case "ARCADE": return evaluateArcade(req, ctx);
     case "PROJECT": return evaluateProject(req, ctx);
+    case "STUDIO_PROJECT": return evaluateStudioProject(req, ctx);
     case "LIVE_ATTENDANCE": return evaluateLiveAttendance(req, ctx);
     case "INSTRUCTOR_VERIFICATION": return evaluateCompetencyDecision(req, ctx);
     case "EVIDENCE": return evaluateCompetencyDecision(req, ctx);

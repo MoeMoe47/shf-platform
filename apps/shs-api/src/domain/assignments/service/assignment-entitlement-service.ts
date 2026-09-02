@@ -31,6 +31,7 @@ export interface ResolvedLessonRef {
 
 export interface ResolvedAssignmentWork {
   assignment: Assignment;
+  studioRequirement: { required: boolean; projectType: "WEBSITE" | "AI_AGENT" | null } | null;
   curriculumRelease: { releaseId: string; versionNumber: number; courseTitle: string; courseStableKey: string } | null;
   assignedContent: { type: "COURSE" | "UNIT" | "LESSON"; title: string } | null;
   scopeLessons: ResolvedLessonRef[]; // empty for legacy/non-catalog assignments
@@ -88,9 +89,25 @@ function deriveAccessState(assignment: Assignment, completedCount: number, total
 }
 
 export async function resolveAssignmentWork(assignment: Assignment, actor: ActorUser, now: Date = new Date()): Promise<ResolvedAssignmentWork> {
+  const requirementResult = assignment.completionPolicyId
+    ? await query(
+      `SELECT required, configuration
+       FROM completion_policy_requirements
+       WHERE organization_id=$1 AND policy_id=$2 AND requirement_type='STUDIO_PROJECT'
+       ORDER BY sequence ASC LIMIT 1`,
+      [actor.organization_id, assignment.completionPolicyId],
+    )
+    : null;
+  const studioRequirementValue = requirementResult?.rows[0]
+    ? {
+      required: Boolean(requirementResult.rows[0].required),
+      projectType: (requirementResult.rows[0].configuration?.projectType || requirementResult.rows[0].configuration?.allowedProjectType || null) as "WEBSITE" | "AI_AGENT" | null,
+    }
+    : null;
   if (!assignment.curriculumReleaseId) {
     return {
       assignment,
+      studioRequirement: studioRequirementValue,
       curriculumRelease: null,
       assignedContent: null,
       scopeLessons: [],
@@ -106,7 +123,7 @@ export async function resolveAssignmentWork(assignment: Assignment, actor: Actor
     // The release existed at assignment-creation time (FK-enforced) and
     // is immutable, so this can only mean an organization-context
     // mismatch on this read — fail honest/empty, never guess.
-    return { assignment, curriculumRelease: null, assignedContent: null, scopeLessons: [], completedCount: 0, totalCount: 0, nextLesson: null, accessState: "LOCKED" };
+    return { assignment, studioRequirement: studioRequirementValue, curriculumRelease: null, assignedContent: null, scopeLessons: [], completedCount: 0, totalCount: 0, nextLesson: null, accessState: "LOCKED" };
   }
   const snapshot: any = release.snapshot;
   const scope = withinScope(snapshot, assignment.assignedContentType, assignment.assignedContentId);
@@ -124,6 +141,7 @@ export async function resolveAssignmentWork(assignment: Assignment, actor: Actor
 
   return {
     assignment,
+    studioRequirement: studioRequirementValue,
     curriculumRelease: { releaseId: release.releaseId, versionNumber: release.versionNumber, courseTitle: snapshot.course.title, courseStableKey: snapshot.course.stableKey },
     assignedContent: assignment.assignedContentType ? { type: assignment.assignedContentType, title: contentTitle } : null,
     scopeLessons,

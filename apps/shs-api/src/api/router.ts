@@ -46,6 +46,7 @@ import { registerCompletionPolicyRoutes } from "../domain/completion-policy/api/
 import { registerActivityDomainRoutes } from "../domain/activity-domains/api/routes.js";
 import { registerVerifiedEvidenceRoutes } from "../domain/verified-evidence/api/routes.js";
 import { registerOperationalRoutes } from "../domain/operations/api/routes.js";
+import { registerStudioProjectRoutes } from "../domain/studio/api/studio-project-routes.js";
 
 
 type MutableApiUser = {
@@ -351,6 +352,7 @@ app.post("/auth/login", async (req: any, res: any) => {
   registerActivityDomainRoutes(app);
   registerVerifiedEvidenceRoutes(app);
   registerOperationalRoutes(app);
+  registerStudioProjectRoutes(app);
   app.use("/aggregation", aggregationRoutes);
   registerOracleRoutes(app);
 

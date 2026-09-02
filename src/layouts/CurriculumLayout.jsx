@@ -35,6 +35,12 @@ function readCollapsed() {
 // id that doesn't exist in the URL, so nothing here hardcodes "ASL" as a
 // stand-in for "whatever curriculum this is."
 const ROUTE_TITLES = [
+  { test: /\/studio\/new\/?$/, title: "Start a Studio Project", subtitle: "Choose a direction for your next project." },
+  { test: /\/studio\/projects\/[^/]+\/?$/, title: "Studio Project" },
+  { test: /\/studio\/projects\/?$/, title: "My Studio Projects" },
+  { test: /\/studio\/assignments\/?$/, title: "Studio Assignments" },
+  { test: /\/studio\/templates\/?$/, title: "Studio Templates" },
+  { test: /\/studio\/?$/, title: "Studio", subtitle: "Choose something to create and make it your own." },
   { test: /\/curriculum\/asl\/dashboard\/?$/, title: "Learning Dashboard", subtitle: "Continue your pathway and stay on track." },
   { test: /^\/curriculum\/?$/, title: "Learning Dashboard", subtitle: "Continue your pathway and stay on track." },
   { test: /\/curriculum\/asl\/calendar\/?$/, title: "Calendar" },

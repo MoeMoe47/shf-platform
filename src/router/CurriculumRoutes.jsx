@@ -57,6 +57,17 @@ const AdminCompare = lazy(() => import("@/pages/AdminCompare.jsx"));
 const StudentUnit = lazy(() => import("@/pages/StudentUnit.jsx"));
 const PrepareProveReview = lazy(() => import("@/pages/curriculum/PrepareProveReview.jsx"));
 
+/** Phase 3 Studio shell over the durable Phase 2 project API. */
+const StudioHome = lazy(() => import("@/pages/studio/StudioHome.jsx"));
+const StudioNewProject = lazy(() => import("@/pages/studio/StudioNewProject.jsx"));
+const StudioProjects = lazy(() => import("@/pages/studio/StudioProjects.jsx"));
+const StudioProjectShell = lazy(() => import("@/pages/studio/StudioProjectShell.jsx"));
+const StudioBuilderWorkspace = lazy(() => import("@/pages/studio/StudioBuilderWorkspace.jsx"));
+const StudioAssignments = lazy(() => import("@/pages/studio/StudioAssignments.jsx"));
+const StudioTemplates = lazy(() => import("@/pages/studio/StudioTemplates.jsx"));
+const StudioReviewSubmission = lazy(() => import("@/pages/studio/StudioReviewSubmission.jsx"));
+const StudioAssignmentProgress = lazy(() => import("@/pages/studio/StudioAssignmentProgress.jsx"));
+
 /** Phase 1 Zoom/live-learning restoration — real components, previously
  * unrouted anywhere (see audit §28-30). AdminZoom.jsx is real, existing
  * approval-queue UI; LiveSessions.jsx is new (thin) but only wires
@@ -181,6 +192,23 @@ export default function CurriculumRoutes() {
 
           {/* Fallback inside curriculum */}
           <Route path="*" element={<Navigate to="asl/dashboard" replace />} />
+        </Route>
+
+        {/* Phase 3: student Studio is a sibling student route tree, not an
+            alias for the curriculum admin/BuilderHub surfaces. It reuses
+            the established student shell and keeps Studio's durable API
+            boundary in the page modules. */}
+        <Route path="/studio" element={<CurriculumLayout />}>
+          <Route index element={<StudioHome />} />
+          <Route path="new" element={<StudioNewProject />} />
+          <Route path="projects" element={<StudioProjects />} />
+          <Route path="projects/:projectId" element={<StudioProjectShell />} />
+          <Route path="projects/:projectId/build" element={<StudioBuilderWorkspace />} />
+          <Route path="review/:projectId/:submissionId" element={<StudioReviewSubmission />} />
+          <Route path="assignments/:assignmentId/progress" element={<StudioAssignmentProgress />} />
+          <Route path="assignments" element={<StudioAssignments />} />
+          <Route path="templates" element={<StudioTemplates />} />
+          <Route path="*" element={<Navigate to="/studio" replace />} />
         </Route>
 
         {/* Bridge routes: forward the bare `/${curriculum}/...` shape that

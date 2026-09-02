@@ -17,9 +17,9 @@ test("migration discovery is numeric, deterministic, and checksums source conten
 test("all current SHS migrations are discoverable through the canonical chain", async () => {
   const migrationsDir = path.resolve(new URL("../migrations", import.meta.url).pathname);
   const migrations = await discoverMigrations(migrationsDir);
-  assert.equal(migrations.length, 68);
+  assert.equal(migrations.length, 74);
   assert.equal(migrations[0].filename, "001_identity_base.sql");
-  assert.equal(migrations.at(-1)?.filename, "068_phase6_projection_hardening.sql");
+  assert.equal(migrations.at(-1)?.filename, "074_studio_completion_requirement.sql");
 });
 
 test("migration 032 does not require seeded roles before it can apply", async () => {

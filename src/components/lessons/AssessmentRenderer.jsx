@@ -232,6 +232,9 @@ export default function AssessmentRenderer({ assessment, curriculum, slug, actor
     <section className="card card--pad" aria-label="Knowledge check">
       <strong>{assessment.title || "Knowledge Check"}</strong>
       {assessment.note && <p className="subtle" style={{ marginTop: 4 }}>{assessment.note}</p>}
+      <p className="subtle" role="note" style={{ marginTop: 4 }}>
+        Knowledge-check results are for learning feedback and are not institutionally verified assessment results.
+      </p>
       <div style={{ display: "grid", gap: 12, marginTop: 10 }}>
         {assessment.items.map((item) => {
           if (item.type === "mcq") {

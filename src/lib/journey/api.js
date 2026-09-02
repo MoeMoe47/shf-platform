@@ -5,7 +5,7 @@
 // only fetches the learner's own projected milestones.
 import { resolveDevUserId } from "@/lib/liveLearning/api.js";
 
-const JOURNEY_API_BASE = "http://127.0.0.1:8091";
+const JOURNEY_API_BASE = import.meta.env.VITE_SHS_API_BASE || "http://127.0.0.1:8091";
 
 function authHeaders(role) {
   return {

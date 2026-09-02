@@ -1,4 +1,13 @@
 import type { Organization } from "../model/organization.js";
+import { ProductionIdentityRepo } from "./production-identity-repo.js";
+
+function databaseDevIdentityEnabled() {
+  const environment = String(process.env.SHS_AUTH_ENV || process.env.NODE_ENV || "development").trim().toLowerCase();
+  const enabled = String(process.env.SHS_DEV_DATABASE_IDENTITY_ENABLED || "0").trim().toLowerCase();
+  return ["development", "test"].includes(environment) && ["1", "true", "yes", "on"].includes(enabled);
+}
+
+const productionIdentityRepo = new ProductionIdentityRepo();
 
 export class IdentityRepo {
   async getUserByEmail(email: string) {
@@ -49,6 +58,14 @@ export class IdentityRepo {
   }
 
   async getUserById(userId: string) {
+    // Acceptance/local development may opt into canonical DB-backed identities.
+    // Production always uses the session path in auth-middleware and cannot
+    // accept this development-only resolver.
+    if (databaseDevIdentityEnabled()) {
+      const databaseIdentity = await productionIdentityRepo.getActiveIdentity(userId);
+      if (databaseIdentity) return databaseIdentity;
+    }
+
     if (userId === "user_admin_001") {
       return {
         user_id: "user_admin_001",
@@ -227,6 +244,72 @@ export class IdentityRepo {
         email: `${userId}@test.invalid`,
         full_name: "SHF Phase 13 Learner",
         roles: ["student"],
+      };
+    }
+
+    // AIEL Phase 3 — same pattern, its own run prefix.
+    const aielPhase3LearnerMatch = userId.match(/^user_aielp3_\d+_(a|b)$/);
+    if (aielPhase3LearnerMatch) {
+      return {
+        user_id: userId,
+        organization_id: "org_shf_001",
+        email: `${userId}@test.invalid`,
+        full_name: "AIEL Phase 3 Learner",
+        roles: ["student"],
+      };
+    }
+
+    // SHF Lesson + Assignment + Curriculum Ingestion Phase 2 — Curriculum
+    // Catalog: dynamically-generated per-run personas (admin = org_admin
+    // author/approver/publisher, student = no catalog permissions, for
+    // cross-role and cross-org isolation checks).
+    const curriculumCatalogPhase2Match = userId.match(/^user_ccp2_\d+_(admin_a|admin_b|student)$/);
+    if (curriculumCatalogPhase2Match) {
+      const persona = curriculumCatalogPhase2Match[1];
+      const organizationId = persona === "admin_b" ? "org_partner_001" : "org_shf_001";
+      return {
+        user_id: userId,
+        organization_id: organizationId,
+        email: `${userId}@test.invalid`,
+        full_name: "Curriculum Catalog Phase 2 Test User",
+        roles: [persona === "student" ? "student" : "org_admin"],
+      };
+    }
+
+    // SHF Lesson + Assignment + Curriculum Phase 4.5A — Curriculum Import
+    // Job foundation: same admin_a/admin_b/student cross-org isolation
+    // shape as Phase 2's user_ccp2_* fixtures above, its own run prefix.
+    const curriculumImportPhase45AMatch = userId.match(/^user_ci45a_\d+_(admin_a|admin_b|student)$/);
+    if (curriculumImportPhase45AMatch) {
+      const persona = curriculumImportPhase45AMatch[1];
+      const organizationId = persona === "admin_b" ? "org_partner_001" : "org_shf_001";
+      return {
+        user_id: userId,
+        organization_id: organizationId,
+        email: `${userId}@test.invalid`,
+        full_name: "Curriculum Import Phase 4.5A Test User",
+        roles: [persona === "student" ? "student" : "org_admin"],
+      };
+    }
+
+    // SHF Lesson + Assignment + Curriculum Phase 4.6 — Raw Document
+    // Extraction: same admin_a/admin_b/student cross-org isolation shape
+    // as every prior phase's own fixtures, its own run prefix.
+    const curriculumImportPhase46Match = userId.match(/^user_ci46_\d+_(admin_a|admin_b|student)$/);
+    if (curriculumImportPhase46Match) {
+      const persona = curriculumImportPhase46Match[1];
+      const organizationId = persona === "admin_b" ? "org_partner_001" : "org_shf_001";
+      // shf_admin/partner_org_admin, not org_admin: this phase needs
+      // BOTH curriculum.source.upload/view (Phase 1) AND
+      // curriculum.catalog.manage (Phase 2+) on the same actor — org_admin
+      // only ever held the catalog half.
+      const role = persona === "student" ? "student" : persona === "admin_b" ? "partner_org_admin" : "shf_admin";
+      return {
+        user_id: userId,
+        organization_id: organizationId,
+        email: `${userId}@test.invalid`,
+        full_name: "Curriculum Import Phase 4.6 Test User",
+        roles: [role],
       };
     }
 

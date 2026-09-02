@@ -7,15 +7,7 @@ import { fetchCurriculumLessonCompletionReport } from "@/shared/reporting/curric
  * Browser progress remains personal UX/transport state. Institutional lesson
  * completion is read only from the authenticated Reporting Service.
  */
-const PROGRESS = {
-  percentComplete: 68,
-  assignmentsDue: 3,
-  credentialsEarned: 8,
-  streakDays: 12,
-};
-
 export default function LearningProgressCard() {
-  const pct = Math.max(0, Math.min(100, PROGRESS.percentComplete));
   const [lessonReport, setLessonReport] = React.useState({ status: "loading", report: null });
 
   React.useEffect(() => {
@@ -47,13 +39,13 @@ export default function LearningProgressCard() {
       <div className="ld-progressGrid">
         <div
           className="ld-ring"
-          style={{ "--ld-ring-pct": pct }}
+          style={{ "--ld-ring-pct": 0 }}
           role="img"
-          aria-label={`${pct}% of learning pathway complete`}
+          aria-label="Overall pathway completion is not available yet"
         >
           <div className="ld-ringInner">
-            <span className="ld-ringPct">{pct}%</span>
-            <span className="ld-ringLabel">complete</span>
+            <span className="ld-ringPct">—</span>
+            <span className="ld-ringLabel">not available</span>
           </div>
         </div>
 
@@ -66,17 +58,17 @@ export default function LearningProgressCard() {
           </li>
           <li>
             <ClipboardIcon size={22} className="ld-progressStatIcon" />
-            <span className="ld-progressStatValue">{PROGRESS.assignmentsDue}</span>
+            <span className="ld-progressStatValue">—</span>
             <span className="ld-progressStatLabel">Assignments due</span>
           </li>
           <li>
             <AwardIcon size={22} className="ld-progressStatIcon" />
-            <span className="ld-progressStatValue">{PROGRESS.credentialsEarned}</span>
+            <span className="ld-progressStatValue">—</span>
             <span className="ld-progressStatLabel">Credentials earned</span>
           </li>
           <li>
             <FlameIcon size={22} className="ld-progressStatIcon" />
-            <span className="ld-progressStatValue">{PROGRESS.streakDays}</span>
+            <span className="ld-progressStatValue">—</span>
             <span className="ld-progressStatLabel">Day streak</span>
           </li>
         </ul>

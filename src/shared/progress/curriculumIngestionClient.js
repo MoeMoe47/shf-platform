@@ -1,4 +1,5 @@
 export const CURRICULUM_INGESTION_QUEUE_KEY = "curriculum:ingestion:queue:v1";
+export const CANONICAL_BROWSER_EVENT_TYPES = new Set(["lesson.completed"]);
 
 const DEFAULT_API_BASE = "/api";
 
@@ -118,6 +119,7 @@ export function buildReflectionSubmittedOperationalEvent({
 }
 
 export function enqueueCurriculumOperationalEvent(event, now = new Date().toISOString()) {
+  if (!CANONICAL_BROWSER_EVENT_TYPES.has(event?.event_type)) return null;
   const queue = readCurriculumIngestionQueue();
   const existing = queue.find((item) => item.event?.idempotency_key === event.idempotency_key);
   if (existing) return existing;
@@ -161,6 +163,18 @@ export async function syncCurriculumIngestionQueue({ fetchImpl = globalThis.fetc
   for (const item of pending) {
     const index = next.findIndex((candidate) => candidate.queue_id === item.queue_id);
     if (index < 0) continue;
+    if (!CANONICAL_BROWSER_EVENT_TYPES.has(item.event?.event_type)) {
+      next[index] = {
+        ...next[index],
+        sync_status: "rejected",
+        updated_at: new Date().toISOString(),
+        attempt_count: Number(next[index].attempt_count || 0) + 1,
+        last_error: "Browser event is not an approved canonical transport event.",
+      };
+      writeCurriculumIngestionQueue(next);
+      failed += 1;
+      continue;
+    }
     try {
       const result = await postOperationalEvent(item.event, { fetchImpl, apiBase });
       synchronized += 1;
@@ -185,6 +199,7 @@ export async function syncCurriculumIngestionQueue({ fetchImpl = globalThis.fetc
         updated_at: new Date().toISOString(),
         attempt_count: Number(next[index].attempt_count || 0) + 1,
         last_error: error?.message || "Synchronization failed.",
+        last_error_detail: error?.data?.data || null,
       };
     }
     writeCurriculumIngestionQueue(next);
@@ -194,6 +209,9 @@ export async function syncCurriculumIngestionQueue({ fetchImpl = globalThis.fetc
 }
 
 export async function postOperationalEvent(event, { fetchImpl = globalThis.fetch, apiBase = DEFAULT_API_BASE } = {}) {
+  if (!CANONICAL_BROWSER_EVENT_TYPES.has(event?.event_type)) {
+    throw new Error("Browser event is not an approved canonical transport event.");
+  }
   if (typeof fetchImpl !== "function") {
     throw new Error("Network unavailable");
   }

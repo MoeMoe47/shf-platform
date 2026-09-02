@@ -16,15 +16,37 @@ const LessonPage = lazy(() => import("@/pages/LessonPage.jsx"));
 const Help = lazy(() => import("@/pages/Help.jsx"));
 const Settings = lazy(() => import("@/pages/Settings.jsx"));
 
-/** Curriculum-specific lesson screens */
-const MyLessons = lazy(() => import("@/pages/curriculum/MyLessons.jsx"));
+/** Curriculum-specific lesson screens. MyLessons.jsx (the old flat
+ * cross-curriculum list) is no longer routed — "lessons" now redirects to
+ * the Phase 5.5 Learning landing below — but the file itself is left in
+ * place rather than deleted, since nothing in this task required removing
+ * it. */
 const CurriculumLesson = lazy(() => import("@/pages/curriculum/Lesson.jsx"));
+
+/** Phase 5.5 Unified Learning Workspace — course-first Learning landing +
+ * Course Workspace (Overview/Lessons/Assignments/Live/Resources/Progress
+ * tabs), replacing the old flat "Lessons" nav destination. See
+ * CurriculumSidebar.jsx (Learning nav item) and student-catalog-
+ * service.ts (apps/shs-api) for the real data these render. */
+const Learning = lazy(() => import("@/pages/curriculum/Learning.jsx"));
+const CourseWorkspace = lazy(() => import("@/pages/curriculum/course/CourseWorkspace.jsx"));
+const CourseOverview = lazy(() => import("@/pages/curriculum/course/CourseOverview.jsx"));
+const CourseLessons = lazy(() => import("@/pages/curriculum/course/CourseLessons.jsx"));
+const CourseAssignments = lazy(() => import("@/pages/curriculum/course/CourseAssignments.jsx"));
+const CourseLive = lazy(() => import("@/pages/curriculum/course/CourseLive.jsx"));
+const CourseResources = lazy(() => import("@/pages/curriculum/course/CourseResources.jsx"));
+const CourseProgress = lazy(() => import("@/pages/curriculum/course/CourseProgress.jsx"));
 
 /** Sidebar destinations that had no route before (dashboard rebuild) */
 const Calendar = lazy(() => import("@/pages/curriculum/CurriculumCalendar.jsx"));
 const Assignments = lazy(() => import("@/pages/Assignments.jsx"));
 const CareerPortfolio = lazy(() => import("@/pages/career/Portfolio.jsx"));
 const Instructor = lazy(() => import("@/pages/Instructor.jsx"));
+const InstructorOperations = lazy(() => import("@/pages/curriculum/InstructorOperations.jsx"));
+const OperationalDetail = lazy(() => import("@/pages/curriculum/OperationalDetail.jsx"));
+const StaffCourseWorkspace = lazy(() => import("@/pages/curriculum/StaffCourseWorkspace.jsx"));
+const StaffProjectReview = lazy(() => import("@/pages/curriculum/StaffProjectReview.jsx"));
+const StaffAttendance = lazy(() => import("@/pages/curriculum/StaffAttendance.jsx"));
 const MasterIndex = lazy(() => import("@/pages/MasterIndex.jsx"));
 
 /** Phase 1 restoration: these real components existed but had no route
@@ -49,6 +71,7 @@ const LiveSessionManage = lazy(() => import("@/pages/curriculum/LiveSessionManag
  * accessibility preference infrastructure. See Accessibility.jsx. */
 const CurriculumAccessibility = lazy(() => import("@/pages/curriculum/Accessibility.jsx"));
 const Grade12EntryGate = lazy(() => import("@/pages/curriculum/Grade12EntryGate.jsx"));
+const CurriculumImport = lazy(() => import("@/pages/curriculum/CurriculumImport.jsx"));
 
 /**
  * MasterIndex.jsx / MasterUnit.jsx / InstructorUnit.jsx / AdminCompare.jsx
@@ -88,11 +111,23 @@ export default function CurriculumRoutes() {
           <Route path="asl/assignments" element={<Assignments />} />
           <Route path="asl/portfolio" element={<CareerPortfolio />} />
           <Route path="instructor" element={<Instructor />} />
+          <Route path="instructor/operations" element={<InstructorOperations />} />
+          <Route path="instructor/operations/learners/:learnerId" element={<OperationalDetail kind="learner" />} />
+          <Route path="instructor/operations/assignments/:assignmentId" element={<OperationalDetail kind="assignment" />} />
+          <Route path="instructor/operations/courses/:courseId" element={<StaffCourseWorkspace />} />
+          <Route path="instructor/operations/reviews/project/:submissionId" element={<StaffProjectReview />} />
+          <Route path="instructor/operations/live/:sessionId/attendance" element={<StaffAttendance />} />
           <Route path="instructor/:slug" element={<InstructorUnit />} />
           <Route path="instructor/prove/:evidenceId" element={<PrepareProveReview />} />
           <Route path="master" element={<MasterIndex />} />
           <Route path="master/:slug" element={<MasterUnit />} />
           <Route path="admin" element={<AdminCompare />} />
+          <Route path="admin/operations" element={<InstructorOperations />} />
+          <Route path="admin/operations/learners/:learnerId" element={<OperationalDetail kind="learner" />} />
+          <Route path="admin/operations/assignments/:assignmentId" element={<OperationalDetail kind="assignment" />} />
+          <Route path="admin/operations/courses/:courseId" element={<StaffCourseWorkspace />} />
+          <Route path="admin/operations/reviews/project/:submissionId" element={<StaffProjectReview />} />
+          <Route path="admin/operations/live/:sessionId/attendance" element={<StaffAttendance />} />
           <Route path="admin/:slug" element={<AdminCompare />} />
 
           {/* Live Sessions (Zoom) — see LiveSessions.jsx header comment */}
@@ -101,12 +136,32 @@ export default function CurriculumRoutes() {
           <Route path="live-sessions/manage" element={<LiveSessionManage />} />
           <Route path="accessibility" element={<CurriculumAccessibility />} />
           <Route path="grade12-entry" element={<Grade12EntryGate />} />
+          <Route path="import" element={<CurriculumImport />} />
+          <Route path="import/:jobId" element={<CurriculumImport />} />
 
           {/* GED Writing Student Chapter Route */}
           <Route path="ged-writing/ch/:number" element={<GedWritingChapterStudent />} />
 
+          {/* Phase 5.5: Learning landing replaces the flat "Lessons" list as
+              the sidebar destination. The old MyLessons.jsx list itself is
+              left routable at library/lessons-style access is unaffected;
+              only the primary "lessons" path now redirects for bookmark
+              compatibility rather than rendering the flat list. */}
+          <Route path="learning" element={<Learning />} />
+          <Route path="lessons" element={<Navigate to="/curriculum/learning" replace />} />
+
+          {/* Phase 5.5 Course Workspace — nested tabs share one fetch via
+              CourseWorkspace.jsx's <Outlet context={...}/>. */}
+          <Route path="courses/:courseId" element={<CourseWorkspace />}>
+            <Route index element={<CourseOverview />} />
+            <Route path="lessons" element={<CourseLessons />} />
+            <Route path="assignments" element={<CourseAssignments />} />
+            <Route path="live" element={<CourseLive />} />
+            <Route path="resources" element={<CourseResources />} />
+            <Route path="progress" element={<CourseProgress />} />
+          </Route>
+
           {/* Curriculum lesson routes */}
-          <Route path="lessons" element={<MyLessons />} />
           <Route path="lesson/:id" element={<CurriculumLesson />} />
           {/* Canonical student content (src/content/lessons/asl-student/*)
               — previously unreachable, see StudentUnit.jsx header comment.

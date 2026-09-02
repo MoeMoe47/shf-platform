@@ -24,7 +24,7 @@ export function validateLessonAccessibility(lesson) {
     if (s.media) {
       const m = normalizeLessonMedia(s.media);
       if (m) {
-        if (m.type === "image" && !m.alt) {
+        if (m.type === "image" && !m.alt && !m.decorative) {
           warnings.push({ code: "missing-alt", message: `Section "${s.heading || i + 1}" has an image with no alt text.` });
         }
         if (m.type === "video" && !m.captionsTrack && !m.transcript) {

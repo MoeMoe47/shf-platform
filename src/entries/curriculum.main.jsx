@@ -27,9 +27,16 @@ import "@/styles/curriculum-shell.css";
 import "@/styles/curriculum-sidebar.css";
 import "@/styles/curriculum-skin.css";
 import "@/styles/curriculum-dashboard.css";
+import "@/styles/curriculum-learning.css";
 import "@/styles/curriculum-lesson.css";
+import "@/styles/curriculum-import.css";
 import "@/styles/student-portfolio.css";
 import "@/styles/student-portfolio-dark.css";
+
+/* SHF AIEL Phase 4 — Curriculum & Lesson Accessibility Integration. Loaded
+   last among Curriculum CSS so its data-a11y-* attribute selectors are
+   unambiguous next to the base --ld-* token definitions above. */
+import "@/styles/curriculum-a11y.css";
 
 /* ---------- React / Router ---------- */
 import React from "react";

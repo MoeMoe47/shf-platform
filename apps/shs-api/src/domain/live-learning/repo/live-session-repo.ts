@@ -42,6 +42,18 @@ const SELECT_COLUMNS_ALIASED = `
 `;
 
 export class LiveSessionRepo {
+  async confirmAttendance(joinEventId: string, organizationId: string) {
+    const result = await query(
+      `UPDATE live_session_join_events e SET attendance_status='attended'
+       FROM live_sessions s
+       WHERE e.join_event_id=$1 AND s.live_session_id=e.live_session_id
+         AND s.organization_id=$2 AND e.decision='allow'
+       RETURNING e.join_event_id, e.live_session_id, e.user_id, e.attendance_status, e.created_at, s.organization_id`,
+      [joinEventId, organizationId],
+    );
+    return result.rows[0] || null;
+  }
+
   async create(input: Omit<LiveSession, "createdAt" | "updatedAt" | "version">): Promise<LiveSession> {
     const res = await query(
       `INSERT INTO live_sessions (

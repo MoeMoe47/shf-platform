@@ -1,0 +1,58 @@
+:root[data-app="curriculum"] {
+  --cim-surface: var(--ld-card, #fff);
+  --cim-bg: var(--ld-bg, #f7f3ea);
+  --cim-ink: var(--ld-ink, #14161a);
+  --cim-muted: var(--ld-muted, #6b7280);
+  --cim-line: var(--ld-ring, #e7e2d8);
+  --cim-orange: var(--ld-orange, #ff4f00);
+  --cim-green: var(--ld-green-ink, #15803d);
+}
+.cim-page { color: var(--cim-ink); display: grid; gap: 18px; max-width: 1320px; margin: 0 auto; }
+.cim-pageHeader, .cim-sectionHeader, .cim-detailHeader, .cim-actionRow { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.cim-pageHeader h1, .cim-card h2, .cim-detail h2 { margin: 0; line-height: 1.15; }
+.cim-pageHeader h1 { font-size: clamp(1.6rem, 3vw, 2.35rem); }
+.cim-card { background: var(--cim-surface); border: 1px solid var(--cim-line); border-radius: 10px; padding: 22px; box-shadow: var(--ld-shadow, 0 2px 12px rgba(0,0,0,.05)); }
+.cim-subtitle, .cim-muted { color: var(--cim-muted); line-height: 1.5; }
+.cim-eyebrow { color: var(--cim-orange); font-size: .72rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; margin: 0 0 7px; }
+.cim-newImport { display: grid; grid-template-columns: minmax(0, 1fr) minmax(310px, 460px); align-items: end; gap: 22px; }
+.cim-importForm { display: grid; grid-template-columns: 1fr auto; gap: 8px 10px; align-items: end; }
+.cim-importForm label { grid-column: 1 / -1; font-weight: 700; }
+.cim-importForm select, .cim-filter select { min-height: 42px; border: 1px solid var(--cim-line); border-radius: 7px; background: var(--cim-surface); color: var(--cim-ink); padding: 0 10px; }
+.cim-primaryButton, .cim-secondaryButton, .cim-textButton { min-height: 42px; display: inline-flex; align-items: center; justify-content: center; border-radius: 7px; padding: 0 14px; font-weight: 750; text-decoration: none; cursor: pointer; }
+.cim-primaryButton { border: 1px solid var(--cim-orange); color: #fff; background: var(--cim-orange); }
+.cim-primaryButton:disabled { cursor: not-allowed; opacity: .55; }
+.cim-secondaryButton { border: 1px solid var(--cim-line); color: var(--cim-ink); background: transparent; }
+.cim-textButton { min-height: 32px; padding: 0; color: var(--cim-orange); }
+.cim-workspace { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(300px, .75fr); gap: 18px; align-items: start; }
+.cim-previewCard { min-width: 0; }
+.cim-jobStatus, .cim-status { display: inline-flex; align-items: center; width: fit-content; border: 1px solid var(--cim-line); border-radius: 999px; padding: 4px 8px; font-size: .68rem; font-weight: 800; letter-spacing: .04em; white-space: nowrap; }
+.cim-jobStatus-READY, .cim-jobStatus-COMPLETED { color: var(--cim-green); }
+.cim-jobStatus-FAILED, .cim-jobStatus-NEEDS_REVIEW { color: #a33a19; }
+.cim-countGrid { display: grid; grid-template-columns: repeat(7, minmax(70px, 1fr)); gap: 8px; margin: 18px 0; }
+.cim-count { display: grid; gap: 3px; border-left: 3px solid var(--cim-line); padding: 8px 9px; }
+.cim-count strong { font-size: 1.35rem; }.cim-count span { color: var(--cim-muted); font-size: .76rem; }
+.cim-tree { border-top: 1px solid var(--cim-line); margin-top: 18px; padding-top: 8px; }
+.cim-treeChildren { border-left: 1px solid var(--cim-line); margin-left: 17px; padding-left: 10px; }
+.cim-treeItem { width: 100%; display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; align-items: center; gap: 8px; border: 1px solid transparent; border-radius: 7px; background: transparent; color: var(--cim-ink); padding: 10px 8px; text-align: left; cursor: pointer; }
+.cim-treeItem:hover, .cim-treeItem.is-selected { background: color-mix(in srgb, var(--cim-orange) 8%, transparent); border-color: color-mix(in srgb, var(--cim-orange) 35%, var(--cim-line)); }
+.cim-treeType { color: var(--cim-muted); font-size: .68rem; font-weight: 800; }.cim-treeTitle { overflow-wrap: anywhere; }.cim-status { font-size: .62rem; }
+.cim-status[data-status="NEW"] { color: #9a4f00; }.cim-status[data-status="MODIFIED"] { color: #8b3a8e; }.cim-status[data-status="MISSING_FROM_SOURCE"], .cim-status[data-status="CONFLICT"] { color: #a33a19; }.cim-status[data-status="UNCHANGED"] { color: var(--cim-green); }
+.cim-detail { position: sticky; top: 18px; background: var(--cim-surface); border: 1px solid var(--cim-line); border-radius: 10px; padding: 20px; }.cim-emptyDetail { min-height: 160px; display: grid; place-items: center; text-align: center; }
+.cim-metaGrid { display: grid; gap: 10px; margin: 18px 0; }.cim-metaGrid div { border-bottom: 1px solid var(--cim-line); padding-bottom: 8px; }.cim-metaGrid dt { color: var(--cim-muted); font-size: .76rem; }.cim-metaGrid dd { margin: 3px 0 0; overflow-wrap: anywhere; }.cim-contentFields { display: grid; gap: 14px; }.cim-contentFields h3 { font-size: .95rem; margin: 0 0 5px; }.cim-contentFields p, .cim-contentFields ul { color: var(--cim-muted); line-height: 1.5; margin: 0; padding-left: 18px; }
+.cim-alert { border-left: 4px solid var(--cim-orange); padding: 11px 13px; line-height: 1.45; margin: 12px 0; }.cim-alertError { border-left-color: #b13a19; background: color-mix(in srgb, #b13a19 8%, transparent); }.cim-alertWarning { border-left-color: #a36a00; background: color-mix(in srgb, #a36a00 8%, transparent); }.cim-alert ul { margin: 5px 0 0; }
+.cim-actionRow { align-items: center; border-top: 1px solid var(--cim-line); margin-top: 18px; padding-top: 16px; flex-wrap: wrap; }.cim-actionNote { color: var(--cim-muted); font-size: .82rem; }
+.cim-filter { display: flex; align-items: center; gap: 8px; color: var(--cim-muted); font-size: .85rem; }.cim-history { overflow-x: auto; max-width: 100%; }.cim-historyRow { display: grid; grid-template-columns: minmax(150px, 1.6fr) 140px 80px minmax(150px, 1fr) 80px; gap: 12px; align-items: center; min-width: 700px; border-top: 1px solid var(--cim-line); padding: 12px 0; }.cim-historyHead { color: var(--cim-muted); font-size: .75rem; font-weight: 800; text-transform: uppercase; }.cim-emptyState { border: 1px dashed var(--cim-line); color: var(--cim-muted); padding: 18px; text-align: center; }
+/* Phase 4.6: raw-document panel. A dedicated (narrower, four-column) row
+   layout rather than reusing .cim-historyRow's 700px floor verbatim —
+   min-width: 0 on the card is the standard fix for a CSS Grid item
+   otherwise refusing to shrink below its content's intrinsic width
+   (the exact mechanism that produced real, measured horizontal page
+   overflow at 390px before this rule was added — verified via the
+   repository's own Playwright responsive spec, not assumed). */
+.cim-rawDocument { min-width: 0; }
+.cim-uploadRow, .cim-fileLabel { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.cim-fileLabel { font-weight: 700; max-width: 100%; }
+.cim-fileLabel input[type="file"] { max-width: 100%; }
+.cim-docRow { display: grid; grid-template-columns: minmax(0, 1.4fr) 60px minmax(0, 1fr) minmax(90px, auto); gap: 10px; align-items: center; border-top: 1px solid var(--cim-line); padding: 10px 0; overflow-wrap: anywhere; }
+@media (max-width: 900px) { .cim-newImport, .cim-workspace { grid-template-columns: 1fr; }.cim-detail { position: static; }.cim-countGrid { grid-template-columns: repeat(4, minmax(70px, 1fr)); } }
+@media (max-width: 560px) { .cim-pageHeader, .cim-sectionHeader { align-items: stretch; flex-direction: column; }.cim-importForm { grid-template-columns: 1fr; }.cim-importForm select, .cim-importForm button { width: 100%; }.cim-countGrid { grid-template-columns: repeat(2, minmax(70px, 1fr)); }.cim-card { padding: 16px; }.cim-treeItem { grid-template-columns: 62px minmax(0, 1fr); }.cim-treeItem .cim-status { grid-column: 2; justify-self: start; }.cim-docRow { grid-template-columns: 1fr; gap: 2px; } }

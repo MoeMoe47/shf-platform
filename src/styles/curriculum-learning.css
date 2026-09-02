@@ -1,0 +1,963 @@
+/* src/styles/curriculum-learning.css
+   SHF Curriculum Phase 5.5 — Learning landing / Course Workspace /
+   Assignments / Live Sessions rework. Deliberately additive: every rule
+   here is a NEW .ld-* class built on the same tokens curriculum-
+   dashboard.css already defines (--ld-bg/--ld-card/--ld-orange/etc.) so
+   dark mode, focus rings, and reduced-motion all inherit automatically —
+   no second token set, no second theme system.
+*/
+
+/* ===================== Breadcrumb ===================== */
+.ld-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 6px;
+  font-size: calc(13px * var(--ld-text-scale, 1));
+  color: var(--ld-muted);
+  flex-wrap: wrap;
+}
+.ld-breadcrumb a,
+.ld-breadcrumb .ld-breadcrumbLink {
+  color: var(--ld-muted);
+  text-decoration: none;
+  font: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+.ld-breadcrumb a:hover,
+.ld-breadcrumb .ld-breadcrumbLink:hover {
+  color: var(--ld-orange);
+}
+.ld-breadcrumb .ld-breadcrumbCurrent {
+  color: var(--ld-ink);
+  font-weight: 600;
+}
+.ld-breadcrumbSep {
+  color: var(--ld-ring);
+}
+
+/* ===================== Section titles / rail cards ===================== */
+.ld-sectionCard,
+.ld-railCard {
+  padding: 22px 24px;
+}
+.ld-sectionTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.ld-sectionTitle {
+  margin: 0;
+  color: var(--ld-ink);
+  font-size: calc(19px * var(--ld-text-scale, 1));
+  line-height: 1.15;
+  font-weight: 800;
+}
+.ld-sectionIcon {
+  color: var(--ld-orange);
+  flex-shrink: 0;
+}
+.ld-railCard {
+  border-radius: var(--ld-radius-sm);
+}
+
+/* ===================== Course Workspace tabs ===================== */
+.ld-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--ld-ring);
+  margin: 10px 0 22px;
+  overflow-x: auto;
+}
+.ld-tab {
+  appearance: none;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 10px 14px;
+  font: inherit;
+  font-size: calc(14px * var(--ld-text-scale, 1));
+  font-weight: 600;
+  color: var(--ld-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.ld-tab:hover {
+  color: var(--ld-ink);
+}
+.ld-tab.is-active {
+  color: var(--ld-orange-600);
+  border-bottom-color: var(--ld-orange);
+}
+
+/* ===================== Course workspace header ===================== */
+.ld-courseHero {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 32px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.ld-courseHeroMedia {
+  min-height: 160px;
+  border-radius: var(--ld-radius-sm);
+  background: linear-gradient(135deg, #172231, #253345 55%, #18202b);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.ld-courseHeroDescription {
+  margin: 12px 0 0;
+  max-width: 720px;
+  color: var(--ld-ink);
+  font-size: calc(17px * var(--ld-text-scale, 1));
+  line-height: 1.45;
+}
+.ld-courseHeroAction {
+  margin-top: 18px;
+}
+
+/* ===================== Course cards (Learning landing / Your Courses) ===================== */
+.ld-courseGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 16px;
+}
+.ld-courseCard {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 18px;
+}
+.ld-courseCardMedia {
+  position: relative;
+  height: 118px;
+  border-radius: var(--ld-radius-sm);
+  background: linear-gradient(135deg, #162133, #273347);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  margin: -22px -24px 14px;
+  overflow: hidden;
+}
+.ld-courseCardMedia.is-design,
+.ld-featureMedia.is-design { background: linear-gradient(135deg, #202633, #344153 55%, #151b24); }
+.ld-courseCardMedia.is-ops,
+.ld-featureMedia.is-ops { background: linear-gradient(135deg, #172820, #244232 56%, #101c18); }
+.ld-courseCardMedia.is-foundation,
+.ld-featureMedia.is-foundation { background: linear-gradient(135deg, #17243a, #2b3354 56%, #141b2c); }
+.ld-courseCardBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: calc(11px * var(--ld-text-scale, 1));
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+.ld-courseStageBadge {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: #1689e8;
+  color: #fff;
+  font-size: calc(12px * var(--ld-text-scale, 1));
+  font-weight: 800;
+}
+.ld-courseIconBubble {
+  width: 54px;
+  height: 54px;
+  margin-top: -42px;
+  margin-bottom: 12px;
+  border: 4px solid var(--ld-card);
+  border-radius: 999px;
+  background: var(--ld-ring-soft);
+  color: var(--ld-orange);
+  display: grid;
+  place-items: center;
+  position: relative;
+  z-index: 1;
+}
+.ld-courseTitle {
+  margin: 0 0 4px;
+  font-size: calc(17px * var(--ld-text-scale, 1));
+  font-weight: 800;
+  color: var(--ld-ink);
+}
+.ld-courseMeta {
+  margin: 0 0 12px;
+  font-size: calc(12.5px * var(--ld-text-scale, 1));
+  color: var(--ld-muted);
+}
+.ld-courseMetaRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 10px;
+  font-size: calc(12.5px * var(--ld-text-scale, 1));
+  color: var(--ld-muted);
+  flex-wrap: wrap;
+}
+.ld-courseMetaRow > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.ld-courseFooter {
+  margin-top: auto;
+  padding-top: 16px;
+}
+.ld-contextLabel {
+  margin: 0 0 6px;
+  color: var(--ld-muted);
+  font-size: calc(11px * var(--ld-text-scale, 1));
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.ld-nextLessonLine {
+  display: grid;
+  gap: 3px;
+  margin: 12px 0 14px;
+}
+.ld-nextLessonLine span {
+  color: var(--ld-muted);
+  font-size: calc(12px * var(--ld-text-scale, 1));
+}
+.ld-nextLessonLine a {
+  color: var(--ld-ink);
+  text-decoration: none;
+  font-weight: 800;
+}
+.ld-nextLessonLine a:hover {
+  color: var(--ld-orange);
+}
+.ld-nextLessonLine.is-card {
+  margin: 10px 0 0;
+}
+
+/* ===================== Feature card (Continue Learning / Next Live Session) ===================== */
+.ld-featureCard {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.ld-featureCard--learning {
+  align-items: center;
+}
+.ld-featureMedia {
+  min-height: 138px;
+  border-radius: var(--ld-radius-sm);
+  background: linear-gradient(135deg, #1c1f26, #2b2f38);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.ld-featureBody {
+  min-width: 0;
+  position: relative;
+}
+.ld-featureEyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+.ld-featureTitle {
+  margin: 0;
+  color: var(--ld-ink);
+  font-size: calc(24px * var(--ld-text-scale, 1));
+  line-height: 1.2;
+  font-weight: 800;
+}
+.ld-featureAction {
+  margin-top: 16px;
+}
+.ld-dataCenterGlyph {
+  width: 112px;
+  height: 80px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  align-items: end;
+  filter: drop-shadow(0 18px 18px rgba(0, 0, 0, 0.22));
+}
+.ld-dataCenterGlyph span {
+  display: block;
+  border-radius: 7px 7px 3px 3px;
+  background: linear-gradient(180deg, #536179, #1c2431);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: inset 0 -18px 0 rgba(44, 130, 255, 0.15), 0 0 20px rgba(75, 151, 255, 0.18);
+}
+.ld-dataCenterGlyph span:nth-child(1) { height: 54px; }
+.ld-dataCenterGlyph span:nth-child(2) { height: 76px; }
+.ld-dataCenterGlyph span:nth-child(3) { height: 62px; }
+.ld-dataCenterGlyph--small {
+  width: 88px;
+  height: 58px;
+}
+
+/* ===================== Person row (instructor) ===================== */
+.ld-personRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+.ld-personAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: var(--ld-orange-tint-strong);
+  color: var(--ld-orange-600);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: calc(12px * var(--ld-text-scale, 1));
+  flex-shrink: 0;
+}
+.ld-personLabel {
+  font-size: calc(11px * var(--ld-text-scale, 1));
+  color: var(--ld-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.ld-personName {
+  display: block;
+  font-size: calc(13.5px * var(--ld-text-scale, 1));
+  font-weight: 700;
+  color: var(--ld-ink);
+}
+
+/* ===================== Course overview ===================== */
+.ld-overviewHero .ld-progressGrid {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(190px, 0.7fr);
+  align-items: center;
+  gap: 28px;
+}
+.ld-liveSummary {
+  border-left: 1px solid var(--ld-ring);
+  padding-left: 26px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--ld-orange);
+}
+.ld-liveSummary .ld-mutedLine,
+.ld-liveSummary .ld-lessonName {
+  color: var(--ld-ink);
+}
+
+/* ===================== Unit accordion (Course Workspace Lessons) ===================== */
+.ld-unitAccordion {
+  display: grid;
+  gap: 12px;
+}
+.ld-unit {
+  border: 1px solid var(--ld-ring);
+  border-radius: var(--ld-radius);
+  background: var(--ld-card);
+  overflow: hidden;
+}
+.ld-unitHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: none;
+  border: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  color: var(--ld-ink);
+}
+.ld-unitHeaderIcon {
+  color: var(--ld-orange);
+  flex-shrink: 0;
+}
+.ld-unitHeaderTitle {
+  flex: 1;
+  min-width: 0;
+  font-weight: 800;
+  font-size: calc(15px * var(--ld-text-scale, 1));
+}
+.ld-unitHeaderPct {
+  font-size: calc(13px * var(--ld-text-scale, 1));
+  font-weight: 700;
+  color: var(--ld-muted);
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--ld-ring-soft);
+}
+.ld-unitHeaderPct.is-complete {
+  background: var(--ld-green-tint);
+  color: var(--ld-green-ink);
+}
+.ld-unitChevron {
+  color: var(--ld-muted);
+  flex-shrink: 0;
+  transition: transform 120ms ease;
+}
+.ld-unit[data-open="true"] .ld-unitChevron {
+  transform: rotate(180deg);
+}
+.ld-unit[data-open="true"] .ld-unitHeader {
+  background: color-mix(in srgb, var(--ld-orange-tint) 35%, transparent);
+}
+.ld-unitBody {
+  border-top: 1px solid var(--ld-ring);
+}
+.ld-lessonRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 20px;
+  border-top: 1px solid var(--ld-ring-soft);
+}
+.ld-lessonRow:has(.ld-lessonStatusIcon.is-in_progress) {
+  background: var(--ld-orange-tint);
+  box-shadow: inset 3px 0 0 var(--ld-orange);
+}
+.ld-lessonRow:first-child {
+  border-top: none;
+}
+.ld-lessonStatusIcon {
+  flex-shrink: 0;
+}
+.ld-lessonStatusIcon.is-completed { color: var(--ld-green-strong); }
+.ld-lessonStatusIcon.is-in_progress { color: var(--ld-orange); }
+.ld-lessonStatusIcon.is-upcoming { color: var(--ld-ring); }
+.ld-lessonStatusIcon.is-locked { color: var(--ld-muted); }
+.ld-lessonTitle {
+  min-width: 0;
+  font-size: calc(14px * var(--ld-text-scale, 1));
+  font-weight: 600;
+  color: var(--ld-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ld-lessonSeq {
+  font-size: calc(12.5px * var(--ld-text-scale, 1));
+  color: var(--ld-muted);
+  white-space: nowrap;
+}
+.ld-lessonBadge {
+  font-size: calc(12px * var(--ld-text-scale, 1));
+  font-weight: 700;
+  white-space: nowrap;
+}
+.ld-lessonBadge.is-completed { color: var(--ld-green-ink); }
+.ld-lessonBadge.is-in_progress { color: var(--ld-orange-600); }
+.ld-lessonBadge.is-upcoming { color: var(--ld-muted); }
+.ld-lessonsSummary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(180px, 0.55fr);
+  align-items: center;
+  gap: 24px;
+}
+.ld-ring--small {
+  --ld-ring-size: 82px;
+}
+.ld-ring--small .ld-ringInner {
+  width: calc(var(--ld-ring-size) - 14px);
+  height: calc(var(--ld-ring-size) - 14px);
+}
+.ld-ring--small .ld-ringPct {
+  font-size: calc(18px * var(--ld-text-scale, 1));
+}
+.ld-ring--rail {
+  --ld-ring-size: 112px;
+  margin: 4px auto 14px;
+}
+
+/* ===================== Unit progress list (Course Overview sidebar) ===================== */
+.ld-unitProgressList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+}
+.ld-unitProgressRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+}
+.ld-unitProgressIndex {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--ld-ring-soft);
+  color: var(--ld-muted);
+  display: grid;
+  place-items: center;
+  font-size: calc(11px * var(--ld-text-scale, 1));
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.ld-unitProgressIndex.is-complete {
+  background: var(--ld-green-tint);
+  color: var(--ld-green-ink);
+}
+.ld-unitProgressName {
+  min-width: 0;
+  font-size: calc(13px * var(--ld-text-scale, 1));
+  color: var(--ld-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ld-unitProgressPct {
+  font-size: calc(12.5px * var(--ld-text-scale, 1));
+  color: var(--ld-muted);
+  white-space: nowrap;
+}
+
+/* ===================== Stat tiles (Course Overview) ===================== */
+.ld-tileRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 20px;
+}
+.ld-tile {
+  border: 1px solid var(--ld-ring);
+  border-radius: var(--ld-radius-sm);
+  padding: 14px 16px;
+  background: var(--ld-card);
+}
+.ld-tile:nth-child(1) .ld-tileIcon { color: #6d5dfc; }
+.ld-tile:nth-child(2) .ld-tileIcon { color: var(--ld-orange); }
+.ld-tile:nth-child(3) .ld-tileIcon { color: #1d75d8; }
+.ld-tile:nth-child(4) .ld-tileIcon { color: var(--ld-green-strong); }
+.ld-tileIcon {
+  color: var(--ld-orange);
+  margin-bottom: 8px;
+}
+.ld-tileValue {
+  font-size: calc(20px * var(--ld-text-scale, 1));
+  font-weight: 800;
+  color: var(--ld-ink);
+  line-height: 1.1;
+}
+.ld-tileLabel {
+  font-size: calc(12px * var(--ld-text-scale, 1));
+  color: var(--ld-muted);
+  margin-top: 2px;
+}
+.ld-tileLink {
+  margin-top: 6px;
+  display: inline-block;
+}
+
+/* ===================== Needs Your Attention (Assignments) ===================== */
+.ld-attentionGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 14px;
+}
+.ld-attentionCard {
+  border: 1px solid var(--ld-ring);
+  border-radius: var(--ld-radius-sm);
+  padding: 16px;
+  background: var(--ld-card);
+  position: relative;
+  min-height: 210px;
+  display: flex;
+  flex-direction: column;
+}
+.ld-attentionTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+.ld-typePill {
+  display: inline-block;
+  font-size: calc(10.5px * var(--ld-text-scale, 1));
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+}
+.ld-typePill.is-artifact { background: var(--ld-orange-tint); color: var(--ld-orange-600); }
+.ld-typePill.is-reflection { background: #ede9fe; color: #6d28d9; }
+.ld-typePill.is-quiz { background: #dbeafe; color: #1d4ed8; }
+.ld-typePill.is-assignment { background: var(--ld-green-tint); color: var(--ld-green-ink); }
+.ld-attentionCard .ld-lessonName {
+  margin: 0 0 8px;
+}
+.ld-attentionAction {
+  margin-top: auto;
+  align-self: flex-end;
+}
+.ld-urgencyPill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 26px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--ld-orange-tint);
+  color: var(--ld-orange-600);
+  font-size: calc(12px * var(--ld-text-scale, 1));
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* ===================== Work rows (Assignments table) ===================== */
+.ld-workList {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+}
+.ld-workHeader {
+  display: grid;
+  grid-template-columns: 42px minmax(180px, 1fr) 78px 82px 96px 72px 38px;
+  gap: 10px;
+  align-items: center;
+  padding: 0 0 10px;
+  border-bottom: 1px solid var(--ld-ring);
+  color: var(--ld-muted);
+  font-size: calc(12px * var(--ld-text-scale, 1));
+  font-weight: 800;
+}
+.ld-workHeader span:first-child {
+  grid-column: 2;
+}
+.ld-workRow {
+  display: grid;
+  grid-template-columns: 42px minmax(180px, 1fr) 78px 82px 96px 72px 38px;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 0;
+  border-top: 1px solid var(--ld-ring);
+  text-decoration: none;
+  color: inherit;
+}
+.ld-workRow:first-child {
+  border-top: none;
+}
+.ld-workThumb,
+.ld-sessionThumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: var(--ld-orange-tint);
+  color: var(--ld-orange);
+}
+.ld-workThumb.is-reflection { background: #ede9fe; color: #7c3aed; }
+.ld-workThumb.is-quiz { background: #dbeafe; color: #2563eb; }
+.ld-workThumb.is-assignment,
+.ld-workThumb.is-artifact { background: var(--ld-orange-tint); color: var(--ld-orange); }
+.ld-workMain {
+  min-width: 0;
+}
+.ld-workTitle {
+  font-size: calc(14px * var(--ld-text-scale, 1));
+  font-weight: 700;
+  color: var(--ld-ink);
+  overflow-wrap: anywhere;
+}
+.ld-workBreadcrumb {
+  margin-top: 2px;
+  font-size: calc(12px * var(--ld-text-scale, 1));
+  color: var(--ld-muted);
+  overflow-wrap: anywhere;
+}
+.ld-workCell {
+  font-size: calc(13px * var(--ld-text-scale, 1));
+  color: var(--ld-muted);
+  white-space: nowrap;
+}
+.ld-iconAction {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--ld-ring);
+  border-radius: 10px;
+  color: var(--ld-ink);
+  display: inline-grid;
+  place-items: center;
+  text-decoration: none;
+  justify-self: end;
+}
+.ld-iconAction:hover {
+  color: var(--ld-orange);
+  border-color: var(--ld-orange);
+}
+.ld-deadlineItem {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+.ld-dateTile {
+  width: 48px;
+  min-height: 56px;
+  border: 1px solid var(--ld-orange-tint-strong);
+  border-radius: 10px;
+  background: var(--ld-orange-tint);
+  color: var(--ld-orange-600);
+  display: grid;
+  place-items: center;
+  line-height: 1.05;
+  font-size: calc(17px * var(--ld-text-scale, 1));
+  font-weight: 800;
+}
+.ld-dateTile b {
+  display: block;
+  font-size: calc(10px * var(--ld-text-scale, 1));
+  text-transform: uppercase;
+}
+
+/* ===================== Schedule list (Live Sessions sidebar) ===================== */
+.ld-scheduleList {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+.ld-scheduleItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.ld-scheduleIcon {
+  color: var(--ld-orange);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.ld-scheduleWhen {
+  font-size: calc(12px * var(--ld-text-scale, 1));
+  color: var(--ld-muted);
+}
+.ld-scheduleTitle {
+  font-size: calc(13.5px * var(--ld-text-scale, 1));
+  font-weight: 600;
+  color: var(--ld-ink);
+}
+
+/* ===================== Support cards ===================== */
+.ld-supportCard {
+  border: 1px solid var(--ld-ring);
+  border-radius: var(--ld-radius-sm);
+  padding: 14px;
+  margin-top: 12px;
+}
+.ld-supportCard + .ld-supportCard {
+  margin-top: 10px;
+}
+
+/* ===================== Session rows (Live Sessions lists) ===================== */
+.ld-sessionList {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+}
+.ld-sessionRow {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-top: 1px solid var(--ld-ring);
+}
+.ld-sessionRow.is-compact {
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  grid-template-areas: "sessionThumb sessionMain sessionAction";
+  border: 1px solid var(--ld-ring);
+  border-radius: var(--ld-radius-sm);
+  padding: 12px;
+  margin-top: 12px;
+}
+.ld-sessionRow.is-compact .ld-sessionThumb {
+  grid-area: sessionThumb;
+}
+.ld-sessionRow.is-compact .ld-workMain {
+  grid-area: sessionMain;
+}
+.ld-sessionRow.is-compact .ld-statusPill,
+.ld-sessionRow.is-compact .ld-rowChevron {
+  display: none;
+}
+.ld-sessionRow.is-compact .ld-btn {
+  grid-area: sessionAction;
+}
+.ld-rowChevron {
+  color: var(--ld-muted);
+}
+.ld-sessionTime {
+  margin: 10px 0 0;
+  color: var(--ld-ink);
+  font-size: calc(14px * var(--ld-text-scale, 1));
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ld-relatedGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.ld-relatedGrid span {
+  min-width: 0;
+  border: 1px solid var(--ld-ring);
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: var(--ld-muted);
+  font-size: calc(12px * var(--ld-text-scale, 1));
+  display: grid;
+  gap: 4px;
+}
+.ld-relatedGrid b {
+  color: var(--ld-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ld-livePromo {
+  background: color-mix(in srgb, #e8f3ff 55%, var(--ld-card));
+}
+.ld-legacyAccess {
+  padding: 14px 18px;
+  box-shadow: none;
+}
+.ld-legacyAccess summary {
+  cursor: pointer;
+  color: var(--ld-muted);
+  font-size: calc(12px * var(--ld-text-scale, 1));
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.ld-sessionRow:first-child {
+  border-top: none;
+  padding-top: 6px;
+}
+
+/* ===================== Empty states ===================== */
+.ld-emptyState {
+  padding: 26px 16px;
+  text-align: center;
+  color: var(--ld-muted);
+}
+.ld-emptyStateTitle {
+  font-weight: 700;
+  color: var(--ld-ink);
+  margin-bottom: 4px;
+}
+
+/* ===================== Responsive ===================== */
+@media (max-width: 1024px) {
+  .ld-courseHero {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .ld-courseHeroMedia {
+    min-height: 180px;
+  }
+  .ld-featureCard {
+    grid-template-columns: 1fr;
+  }
+  .ld-featureMedia {
+    height: 150px;
+  }
+  .ld-tileRow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .ld-workRow {
+    grid-template-columns: 46px minmax(0, 1fr) auto;
+    grid-template-areas:
+      "thumb main action"
+      "thumb type action"
+      "thumb due action"
+      "thumb status action"
+      "thumb progress action";
+    row-gap: 6px;
+  }
+  .ld-workHeader { display: none; }
+  .ld-workRow .ld-workThumb { grid-area: thumb; }
+  .ld-workRow .ld-workMain { grid-area: main; }
+  .ld-overviewHero .ld-progressGrid,
+  .ld-lessonsSummary {
+    grid-template-columns: 1fr;
+  }
+  .ld-liveSummary {
+    border-left: 0;
+    border-top: 1px solid var(--ld-ring);
+    padding-left: 0;
+    padding-top: 18px;
+  }
+}
+
+@media (max-width: 860px) {
+  .ld-courseGrid {
+    grid-template-columns: 1fr;
+  }
+  .ld-attentionGrid {
+    grid-template-columns: 1fr;
+  }
+  .ld-tileRow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .ld-relatedGrid {
+    grid-template-columns: 1fr;
+  }
+  .ld-sessionRow,
+  .ld-sessionRow.is-compact {
+    grid-template-columns: 46px minmax(0, 1fr);
+  }
+  .ld-sessionRow .ld-statusPill,
+  .ld-sessionRow .ld-btn,
+  .ld-sessionRow .ld-rowChevron {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+
+@media (max-width: 520px) {
+  .ld-featureTitle {
+    font-size: calc(20px * var(--ld-text-scale, 1));
+  }
+  .ld-tileRow {
+    grid-template-columns: 1fr;
+  }
+  .ld-courseHeroMedia,
+  .ld-featureMedia {
+    min-height: 130px;
+  }
+  .ld-sectionCard,
+  .ld-railCard {
+    padding: 18px;
+  }
+}

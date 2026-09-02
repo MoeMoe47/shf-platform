@@ -16,12 +16,14 @@
 import React from "react";
 import SpeakBtn from "@/components/tts/SpeakBtn.jsx";
 import { recordVocabularyReviewed } from "@/shared/progress/progressClient.js";
+import { useEffectiveAccessibilityContext } from "@/context/EffectiveAccessibilityContext.jsx";
 
 function reviewedKey(curriculum, slug) {
   return `curriculum:vocabReviewed:${curriculum}:${slug}`;
 }
 
 export default function VocabularyReview({ vocab, curriculum, slug, actorId, onClose }) {
+  const { readAloudPreference } = useEffectiveAccessibilityContext();
   const [index, setIndex] = React.useState(0);
   const [reviewed, setReviewed] = React.useState(() => {
     try { return new Set(JSON.parse(localStorage.getItem(reviewedKey(curriculum, slug)) || "[]")); }
@@ -73,10 +75,10 @@ export default function VocabularyReview({ vocab, curriculum, slug, actorId, onC
       </div>
 
       <div style={{ border: "1px solid var(--ring,#e5e7eb)", borderRadius: 10, padding: 16, textAlign: "center" }}>
-        <p style={{ fontSize: 20, fontWeight: 800, margin: 0 }}>{term.term}</p>
+        <p style={{ fontSize: "calc(20px * var(--ld-text-scale, 1))", fontWeight: 800, margin: 0 }}>{term.term}</p>
         <p style={{ marginTop: 8 }}>{term.def}</p>
         <div style={{ marginTop: 8, display: "flex", justifyContent: "center", gap: 8 }}>
-          <SpeakBtn text={`${term.term}. ${term.def}`} label="🔊 Hear this term" />
+          <SpeakBtn text={`${term.term}. ${term.def}`} label="🔊 Hear this term" prominence={readAloudPreference} />
         </div>
       </div>
 

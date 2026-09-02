@@ -32,10 +32,20 @@ import { registerCalendarRoutes } from "../domain/calendar/api/routes.js";
 import { registerCompanionRoutes } from "../domain/companion/api/routes.js";
 import { registerCalendarFeedRoutes } from "../domain/calendar-feed/api/routes.js";
 import { registerExternalAccountRoutes } from "../domain/external-accounts/api/routes.js";
+import { registerAccessibilityProfileRoutes } from "../domain/accessibility-profile/api/routes.js";
 import { registerAssignmentRoutes } from "../domain/assignments/api/routes.js";
 import { registerEnrollmentRoutes } from "../domain/enrollments/api/routes.js";
 import { registerCareerEventRoutes } from "../domain/career-events/api/routes.js";
 import { registerOpportunityRoutes } from "../domain/opportunities/api/routes.js";
+import { registerSourceIngestionRoutes } from "../domain/source-ingestion/api/routes.js";
+import { registerCurriculumCatalogRoutes } from "../domain/curriculum-catalog/api/routes.js";
+import { registerStudentCatalogRoutes } from "../domain/curriculum-catalog/api/student-routes.js";
+import { registerCurriculumImportJobRoutes } from "../domain/curriculum-catalog/api/import-job-routes.js";
+import { registerDocumentProcessingRoutes } from "../domain/curriculum-catalog/api/document-processing-routes.js";
+import { registerCompletionPolicyRoutes } from "../domain/completion-policy/api/routes.js";
+import { registerActivityDomainRoutes } from "../domain/activity-domains/api/routes.js";
+import { registerVerifiedEvidenceRoutes } from "../domain/verified-evidence/api/routes.js";
+import { registerOperationalRoutes } from "../domain/operations/api/routes.js";
 
 
 type MutableApiUser = {
@@ -327,10 +337,20 @@ app.post("/auth/login", async (req: any, res: any) => {
   registerCompanionRoutes(app);
   registerCalendarFeedRoutes(app);
   registerExternalAccountRoutes(app);
+  registerAccessibilityProfileRoutes(app);
   registerAssignmentRoutes(app);
   registerEnrollmentRoutes(app);
   registerCareerEventRoutes(app);
   registerOpportunityRoutes(app);
+  registerSourceIngestionRoutes(app);
+  registerCurriculumCatalogRoutes(app);
+  registerStudentCatalogRoutes(app);
+  registerCurriculumImportJobRoutes(app);
+  registerDocumentProcessingRoutes(app);
+  registerCompletionPolicyRoutes(app);
+  registerActivityDomainRoutes(app);
+  registerVerifiedEvidenceRoutes(app);
+  registerOperationalRoutes(app);
   app.use("/aggregation", aggregationRoutes);
   registerOracleRoutes(app);
 

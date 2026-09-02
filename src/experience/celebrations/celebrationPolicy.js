@@ -59,6 +59,34 @@ const POLICY_BY_ACHIEVEMENT = Object.freeze({
     effect: CELEBRATION_EFFECT.ACKNOWLEDGEMENT,
     companionReaction: { eventName: COMPANION_EVENTS.LESSON_COMPLETED },
   },
+  "curriculum.unit.completed": {
+    tier: CELEBRATION_TIER.ACHIEVEMENT,
+    title: "Unit completed",
+    message: "Unit completed.",
+    effect: CELEBRATION_EFFECT.CONFETTI,
+    companionReaction: { eventName: COMPANION_EVENTS.MAJOR_MILESTONE },
+  },
+  "curriculum.course.completed": {
+    tier: CELEBRATION_TIER.MAJOR_MILESTONE,
+    title: "Course completed",
+    message: "Course completed.",
+    effect: CELEBRATION_EFFECT.MAJOR,
+    companionReaction: { eventName: COMPANION_EVENTS.MAJOR_MILESTONE },
+  },
+  "competency.demonstrated": {
+    tier: CELEBRATION_TIER.ACHIEVEMENT,
+    title: "Competency demonstrated",
+    message: "Competency demonstrated.",
+    effect: CELEBRATION_EFFECT.CONFETTI,
+    companionReaction: { eventName: COMPANION_EVENTS.PORTFOLIO_COMPLETED },
+  },
+  "evidence.verified": {
+    tier: CELEBRATION_TIER.ACHIEVEMENT,
+    title: "Evidence verified",
+    message: "Evidence verified.",
+    effect: CELEBRATION_EFFECT.CONFETTI,
+    companionReaction: { eventName: COMPANION_EVENTS.PORTFOLIO_COMPLETED },
+  },
   "project.accepted": {
     tier: CELEBRATION_TIER.ACHIEVEMENT,
     title: "Project approved",
@@ -173,6 +201,56 @@ export function achievementFromJourneyMilestone(item) {
   if (!item || item.status !== "completed") return null;
   const id = clean(item.id);
   const type = clean(item.type).toUpperCase();
+  if (type === "LESSON_COMPLETED") {
+    return {
+      sourceDomain: "curriculum",
+      sourceRecordId: clean(item.sourceRecordId) || id,
+      achievementType: "curriculum.lesson.completed",
+      status: "synchronized",
+      verified: true,
+      title: clean(item.title) || "Lesson completed",
+    };
+  }
+  if (type === "UNIT_COMPLETED") {
+    return {
+      sourceDomain: "curriculum",
+      sourceRecordId: clean(item.sourceRecordId) || id,
+      achievementType: "curriculum.unit.completed",
+      status: "completed",
+      verified: true,
+      title: clean(item.title) || "Unit completed",
+    };
+  }
+  if (type === "COURSE_COMPLETED") {
+    return {
+      sourceDomain: "curriculum",
+      sourceRecordId: clean(item.sourceRecordId) || id,
+      achievementType: "curriculum.course.completed",
+      status: "completed",
+      verified: true,
+      title: clean(item.title) || "Course completed",
+    };
+  }
+  if (type === "COMPETENCY_DEMONSTRATED") {
+    return {
+      sourceDomain: "verified-evidence",
+      sourceRecordId: clean(item.sourceRecordId) || id,
+      achievementType: "competency.demonstrated",
+      status: "completed",
+      verified: true,
+      title: clean(item.title) || "Competency demonstrated",
+    };
+  }
+  if (type === "EVIDENCE_VERIFIED") {
+    return {
+      sourceDomain: "verified-evidence",
+      sourceRecordId: clean(item.sourceRecordId) || id,
+      achievementType: "evidence.verified",
+      status: "completed",
+      verified: true,
+      title: clean(item.title) || "Evidence verified",
+    };
+  }
   if (type === "PROJECT") {
     return {
       sourceDomain: "project",

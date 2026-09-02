@@ -29,7 +29,7 @@ export default function LessonHeader({ lesson, curriculum, completedCount, avail
           <HomeIcon size={16} />
         </Link>
         <ChevronRightIcon size={14} className="ld-lessonCrumbSep" />
-        <Link className="ld-lessonCrumbLink" to="/curriculum/lessons">Lessons</Link>
+        <Link className="ld-lessonCrumbLink" to="/curriculum/learning">Learning</Link>
         <ChevronRightIcon size={14} className="ld-lessonCrumbSep" />
         <span className="ld-lessonCrumbCurrent">{lesson.title || "Lesson"}</span>
       </nav>

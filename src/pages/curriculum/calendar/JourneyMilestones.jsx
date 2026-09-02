@@ -57,7 +57,7 @@ export default function JourneyMilestones({ role }) {
         <div className="lc-milestonesEmpty">
           <p className="lc-railEmpty">
             Pathway milestones aren't tracked yet for your account. This view will populate automatically
-            once canonical Enrollment, Project, Capstone, or Career Event milestones are available.
+            once canonical completion, Evidence, Enrollment, Project, Capstone, or Career Event milestones are available.
           </p>
         </div>
       ) : (

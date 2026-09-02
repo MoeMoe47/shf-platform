@@ -29,6 +29,15 @@ import { CelebrationProvider } from "@/experience/celebrations/CelebrationProvid
 import "@/styles/companion.css";
 import "@/styles/celebrations.css";
 
+// SHF AIEL Phase 3 — canonical Personal Accessibility Profile. Mounted
+// above Companion/Celebration so both can consume the derived Effective
+// Accessibility Context instead of their own independent localStorage
+// reads (docs/SHF_AIEL_PERSISTENCE_API_CONTRACT_V1.md; see
+// AccessibilityProfileContext.jsx and EffectiveAccessibilityContext.jsx
+// for why this replaces, not duplicates, those reads).
+import { AccessibilityProfileProvider } from "@/context/AccessibilityProfileContext.jsx";
+import { EffectiveAccessibilityContextProvider } from "@/context/EffectiveAccessibilityContext.jsx";
+
 /* ⬇️ Keep this LAST among CSS so it wins the cascade */
 import "@/styles/app-shell.css";
 
@@ -121,14 +130,18 @@ export default function RootProviders({ children, appScope }) {
         <ProgressProvider>
           <CreditProvider>
             <EmojiCtx.Provider value={emojiValue}>
-              <CompanionProvider appScope={appScope}>
-                <CelebrationProvider>
-                  <LiveAnnouncer />
-                  {/* Each HTML entry mounts its own Router + shell */}
-                  {children}
-                  <Brainiact />
-                </CelebrationProvider>
-              </CompanionProvider>
+              <AccessibilityProfileProvider>
+                <EffectiveAccessibilityContextProvider>
+                  <CompanionProvider appScope={appScope}>
+                    <CelebrationProvider>
+                      <LiveAnnouncer />
+                      {/* Each HTML entry mounts its own Router + shell */}
+                      {children}
+                      <Brainiact />
+                    </CelebrationProvider>
+                  </CompanionProvider>
+                </EffectiveAccessibilityContextProvider>
+              </AccessibilityProfileProvider>
             </EmojiCtx.Provider>
           </CreditProvider>
         </ProgressProvider>

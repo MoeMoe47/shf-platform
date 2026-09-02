@@ -14,23 +14,22 @@
 // tests/curriculumLessonCompletionSurface.test.mjs, which pins that
 // route/component pair and is intentionally untouched by this work).
 //
-// Fidelity-correction pass (2026-08-27): the previous "Mark as Complete
-// (+5)" button let reward language dominate an institutional completion
-// action, and gave no honest explanation of what "Completion Check" means
-// when no evaluator exists. The button is now "Mark Lesson Complete" (the
-// +5 reward is disclosed as a small secondary note, not the headline), and
-// the card explains the current state in plain language, per explicit
-// instruction. "View requirements" is a real, non-fabricated affordance —
-// it only scrolls to the real (honest, possibly-empty) Requirements panel,
-// it does not run any evaluation.
+// Fidelity-correction pass (2026-08-27): reward language remains secondary
+// to the institutional completion action, and the card explains the current
+// backend-confirmation state in plain language. "View requirements" is a
+// real, non-fabricated affordance: it only scrolls to the real (honest,
+// possibly-empty) Requirements panel and does not run any evaluation.
 import React from "react";
+import { Link } from "react-router-dom";
 import { markLessonComplete } from "@/shared/progress/progressClient.js";
 import { useCelebration } from "@/experience/celebrations/CelebrationProvider.jsx";
-import { ClipboardIcon } from "@/components/curriculum/icons.jsx";
+import { ChevronRightIcon, ClipboardIcon } from "@/components/curriculum/icons.jsx";
 
-export default function CompletionCheckPanel({ lesson, curriculum, actorId, addPoints }) {
+export default function CompletionCheckPanel({ lesson, curriculum, actorId, addPoints, nextHref }) {
   const [completed, setCompleted] = React.useState(false);
   const [syncStatus, setSyncStatus] = React.useState("");
+  const [syncPending, setSyncPending] = React.useState(false);
+  const [requirements, setRequirements] = React.useState([]);
   const { celebrateAchievement } = useCelebration();
   const celebratedRef = React.useRef(false);
 
@@ -41,6 +40,12 @@ export default function CompletionCheckPanel({ lesson, curriculum, actorId, addP
       slug: lesson.slug || lesson.id || lesson.title,
       onSyncStatus: ({ status, item }) => {
         setSyncStatus(status);
+        setSyncPending(status === "pending");
+        if (status === "rejected") setRequirements(item?.last_error_detail?.requirements || []);
+        if (status === "synchronized") {
+          setCompleted(true);
+          addPoints?.(5);
+        }
         if (status === "synchronized" && !celebratedRef.current) {
           celebratedRef.current = true;
           celebrateAchievement({
@@ -54,8 +59,6 @@ export default function CompletionCheckPanel({ lesson, curriculum, actorId, addP
         }
       },
     });
-    addPoints(5);
-    setCompleted(true);
   }
 
   const syncText =
@@ -76,9 +79,21 @@ export default function CompletionCheckPanel({ lesson, curriculum, actorId, addP
       </div>
 
       <p className="ld-completionNotice" role="note">
-        Requirement verification is not available yet — marking this lesson complete records your own
-        progress, not a verified institutional evaluation.
+        Completion is checked by the backend against the assignment's active policy and canonical activity results.
       </p>
+
+      {requirements.length > 0 && (
+        <div className="ld-completionRequirements" role="alert">
+          <strong>Requirements remaining</strong>
+          <ul>
+            {requirements.filter((requirement) => requirement.required && requirement.status !== "SATISFIED").map((requirement) => (
+              <li key={requirement.requirementId || requirement.code || requirement.requirementType}>
+                {requirement.label || requirement.requirementType}: {requirement.detail || requirement.status || "Not satisfied"}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="ld-completionActions">
         <a className="ld-btnGhost" href="#lesson-requirements">View requirements</a>
@@ -88,10 +103,16 @@ export default function CompletionCheckPanel({ lesson, curriculum, actorId, addP
               {syncText}
             </span>
           )}
-          {!completed && <span className="ld-completionReward">+5 pts on completion</span>}
-          <button type="button" className="ld-btn ld-btnPrimary" disabled={completed} onClick={handleClick}>
-            {completed ? "Lesson Complete ✓" : "Mark Lesson Complete"}
-          </button>
+          {!completed && <span className="ld-completionReward">Personal points are awarded after backend confirmation.</span>}
+          {completed && nextHref ? (
+            <Link className="ld-btn ld-btnPrimary" to={nextHref}>
+              Next Lesson <ChevronRightIcon size={16} />
+            </Link>
+          ) : (
+            <button type="button" className="ld-btn ld-btnPrimary" disabled={completed || syncPending} onClick={handleClick}>
+              {completed ? "Lesson Complete ✓" : syncPending ? "Checking…" : "Check Completion"}
+            </button>
+          )}
         </div>
       </div>
     </div>

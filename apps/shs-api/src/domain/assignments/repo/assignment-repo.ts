@@ -21,6 +21,10 @@ function rowToAssignment(row: any): Assignment {
     createdAt: row.created_at instanceof Date ? row.created_at.toISOString() : row.created_at,
     updatedAt: row.updated_at instanceof Date ? row.updated_at.toISOString() : row.updated_at,
     version: row.version,
+    curriculumReleaseId: row.curriculum_release_id ?? null,
+    assignedContentType: row.assigned_content_type ?? null,
+    assignedContentId: row.assigned_content_id ?? null,
+    completionPolicyId: row.completion_policy_id ?? null,
   };
 }
 
@@ -46,14 +50,16 @@ const SELECT_COLUMNS = `
   assignment_id, organization_id, cohort_id, course_id, lesson_id,
   title, description, assignment_type, visibility_scope, created_by,
   available_at, due_at, closes_at, status,
-  created_at, updated_at, version
+  created_at, updated_at, version,
+  curriculum_release_id, assigned_content_type, assigned_content_id, completion_policy_id
 `;
 
 const SELECT_COLUMNS_ALIASED = `
   a.assignment_id, a.organization_id, a.cohort_id, a.course_id, a.lesson_id,
   a.title, a.description, a.assignment_type, a.visibility_scope, a.created_by,
   a.available_at, a.due_at, a.closes_at, a.status,
-  a.created_at, a.updated_at, a.version
+  a.created_at, a.updated_at, a.version,
+  a.curriculum_release_id, a.assigned_content_type, a.assigned_content_id, a.completion_policy_id
 `;
 
 const TARGET_COLUMNS = `
@@ -90,13 +96,18 @@ export class AssignmentRepo {
     dueAt: string;
     closesAt: string | null;
     status: AssignmentStatus;
+    curriculumReleaseId?: string | null;
+    assignedContentType?: string | null;
+    assignedContentId?: string | null;
+    completionPolicyId?: string | null;
   }): Promise<Assignment> {
     const res = await this.dbQuery(
       `INSERT INTO assignments (
         assignment_id, organization_id, cohort_id, course_id, lesson_id,
         title, description, assignment_type, visibility_scope, created_by,
-        available_at, due_at, closes_at, status
-      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
+        available_at, due_at, closes_at, status,
+        curriculum_release_id, assigned_content_type, assigned_content_id, completion_policy_id
+      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
       RETURNING ${SELECT_COLUMNS}`,
       [
         input.id,
@@ -113,9 +124,47 @@ export class AssignmentRepo {
         input.dueAt,
         input.closesAt,
         input.status,
+        input.curriculumReleaseId ?? null,
+        input.assignedContentType ?? null,
+        input.assignedContentId ?? null,
+        input.completionPolicyId ?? null,
       ]
     );
     return rowToAssignment(res.rows[0]);
+  }
+
+  // Deliberately narrow: title/description/availability/due/closes/status
+  // only. curriculum_release_id/assigned_content_type/assigned_content_id
+  // are never accepted here — there is no code path that updates them
+  // after creation, which is what makes content binding immutable-after-
+  // activation (Phase 3 Step 19) true by construction, not by convention.
+  async updateSafeFields(id: string, organizationId: string, fields: {
+    title?: string; description?: string | null; availableAt?: string | null;
+    dueAt?: string; closesAt?: string | null; status?: AssignmentStatus;
+  }): Promise<Assignment | null> {
+    const res = await this.dbQuery(
+      `UPDATE assignments SET
+         title = COALESCE($3, title),
+         description = CASE WHEN $4::boolean THEN $5 ELSE description END,
+         available_at = CASE WHEN $6::boolean THEN $7 ELSE available_at END,
+         due_at = COALESCE($8, due_at),
+         closes_at = CASE WHEN $9::boolean THEN $10 ELSE closes_at END,
+         status = COALESCE($11, status),
+         version = version + 1,
+         updated_at = NOW()
+       WHERE assignment_id = $1 AND organization_id = $2
+       RETURNING ${SELECT_COLUMNS}`,
+      [
+        id, organizationId,
+        fields.title ?? null,
+        fields.description !== undefined, fields.description ?? null,
+        fields.availableAt !== undefined, fields.availableAt ?? null,
+        fields.dueAt ?? null,
+        fields.closesAt !== undefined, fields.closesAt ?? null,
+        fields.status ?? null,
+      ],
+    );
+    return res.rows[0] ? rowToAssignment(res.rows[0]) : null;
   }
 
   async getById(id: string): Promise<Assignment | null> {

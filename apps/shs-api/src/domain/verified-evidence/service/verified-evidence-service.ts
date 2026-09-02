@@ -1,0 +1,168 @@
+import { createHash } from "node:crypto";
+import { query } from "../../../db/client.js";
+import { withTransaction } from "../../../db/transaction.js";
+import { toTruthSpineFact } from "../truth-spine-adapter.js";
+
+export type ProjectionActor = { user_id: string; organization_id: string; permissions?: string[] };
+export type ProjectionInput = { sourceType: string; sourceRecordId: string; evidenceRuleId: string };
+export type EvidenceRuleInput = { evidenceRuleId: string; sourceType: string; evidenceType?: string | null; truthFactType?: string | null; competencyId?: string | null; ruleVersion?: number; reviewRequired?: boolean };
+export type ProjectionOutboxEvent = { event_type: string; subject_id: string; organization_id: string; payload_json?: unknown; payload?: Record<string, unknown> };
+
+const SOURCE_TABLES: Record<string, { table: string; id: string; learner: string; occurred: string }> = {
+  ASSESSMENT_RESULT: { table: "assessment_results", id: "assessment_result_id", learner: "learner_user_id", occurred: "graded_at" },
+  REFLECTION_SUBMISSION: { table: "reflection_submissions", id: "reflection_submission_id", learner: "learner_user_id", occurred: "submitted_at" },
+  PRACTICE_RESULT: { table: "practice_results", id: "practice_result_id", learner: "learner_user_id", occurred: "created_at" },
+  LESSON_COMPLETION: { table: "curriculum_lesson_completions", id: "completion_id", learner: "user_id", occurred: "completed_at" },
+  ARCADE_RESULT: { table: "arcade_results", id: "arcade_result_id", learner: "learner_user_id", occurred: "created_at" },
+  PROJECT_SUBMISSION: { table: "project_submissions", id: "submission_id", learner: "submitted_by_user_id", occurred: "submitted_at" },
+  ATTENDANCE: { table: "live_session_join_events", id: "join_event_id", learner: "user_id", occurred: "created_at" },
+  INSTRUCTOR_VERIFICATION: { table: "learner_competency_decisions", id: "decision_id", learner: "user_id", occurred: "reviewed_at" },
+};
+
+function stableId(...parts: string[]) {
+  return createHash("sha256").update(parts.join("|"), "utf8").digest("hex").slice(0, 32);
+}
+
+async function loadSourceRow(sourceType: string, source: typeof SOURCE_TABLES[string], sourceRecordId: string, organizationId: string, learnerId?: string) {
+  if (sourceType === "ATTENDANCE") {
+    const learnerClause = learnerId ? " AND e.user_id=$3" : "";
+    const params = learnerId ? [sourceRecordId, organizationId, learnerId] : [sourceRecordId, organizationId];
+    return query(`SELECT e.* FROM live_session_join_events e JOIN live_sessions s ON s.live_session_id=e.live_session_id WHERE e.join_event_id=$1 AND s.organization_id=$2${learnerClause}`, params);
+  }
+  const learnerClause = learnerId ? ` AND ${source.learner}=$3` : "";
+  const params = learnerId ? [sourceRecordId, organizationId, learnerId] : [sourceRecordId, organizationId];
+  return query(`SELECT * FROM ${source.table} WHERE ${source.id}=$1 AND organization_id=$2${learnerClause}`, params);
+}
+
+export async function createEvidenceRule(actor: ProjectionActor, input: EvidenceRuleInput) {
+  const evidenceRuleId = String(input.evidenceRuleId || "").trim();
+  const sourceType = String(input.sourceType || "").trim();
+  if (!evidenceRuleId || !SOURCE_TABLES[sourceType]) throw new Error("invalid_evidence_rule");
+  if (!input.evidenceType && !input.truthFactType) throw new Error("evidence_rule_has_no_projection");
+  const result = await query(`INSERT INTO curriculum_evidence_rules
+    (evidence_rule_id, organization_id, source_type, evidence_type, truth_fact_type, competency_id, rule_version, review_required, created_by_user_id)
+    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+    ON CONFLICT (organization_id, evidence_rule_id, rule_version) DO UPDATE SET status='ACTIVE'
+    RETURNING *`, [evidenceRuleId, actor.organization_id, sourceType, input.evidenceType || null, input.truthFactType || null, input.competencyId || null, input.ruleVersion || 1, Boolean(input.reviewRequired), actor.user_id]);
+  return result.rows[0];
+}
+
+export async function projectAuthoritativeFact(actor: ProjectionActor, input: ProjectionInput) {
+  const sourceType = String(input.sourceType || "").trim();
+  const sourceRecordId = String(input.sourceRecordId || "").trim();
+  const evidenceRuleId = String(input.evidenceRuleId || "").trim();
+  const source = SOURCE_TABLES[sourceType];
+  if (!source || !sourceRecordId || !evidenceRuleId) throw new Error("invalid_projection_input");
+  const rule = await query("SELECT * FROM curriculum_evidence_rules WHERE evidence_rule_id=$1 AND organization_id=$2 AND status='ACTIVE'", [evidenceRuleId, actor.organization_id]);
+  if (!rule.rows[0]) throw new Error("evidence_rule_not_found");
+  const sourceResult = await loadSourceRow(sourceType, source, sourceRecordId, actor.organization_id, actor.user_id);
+  const row = sourceResult.rows[0];
+  if (!row) throw new Error("source_record_not_found");
+  const validSource = sourceType === "ASSESSMENT_RESULT" ? row.passed === true && row.needs_review !== true
+    : sourceType === "REFLECTION_SUBMISSION" ? row.status === "REVIEWED" && row.review_status === "APPROVED"
+      : sourceType === "PRACTICE_RESULT" ? row.completed === true
+        : sourceType === "ARCADE_RESULT" ? row.mastery_achieved === true
+          : sourceType === "PROJECT_SUBMISSION" ? row.status === "ACCEPTED"
+            : sourceType === "ATTENDANCE" ? ["attended", "completed"].includes(row.attendance_status)
+              : sourceType === "INSTRUCTOR_VERIFICATION" ? row.decision === "DEMONSTRATED"
+                : true;
+  if (!validSource) throw new Error("source_record_not_evidence_eligible");
+  const configured = rule.rows[0];
+  return withTransaction(async (db: any) => {
+    let evidence = null;
+    if (configured.evidence_type) {
+      const evidenceId = `evidence_${stableId(actor.organization_id, sourceType, sourceRecordId, evidenceRuleId)}`;
+      const result = await db.query(`INSERT INTO prepare_prove_evidence
+        (evidence_id, source_domain, source_record_id, user_id, organization_id, tenant_id, activity_id, criterion, status, provenance_json,
+         source_type, assignment_id, curriculum_release_id, release_version, course_id, unit_stable_key, lesson_stable_key, definition_id,
+         evidence_rule_id, evidence_rule_version, competency_id, verifier_user_id, source_occurred_at)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$2,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22)
+        ON CONFLICT DO NOTHING
+        RETURNING *`, [evidenceId, sourceType, sourceRecordId, actor.user_id, actor.organization_id, `tenant:${actor.organization_id}`, row.activity_id || sourceRecordId, configured.evidence_type, configured.review_required ? "REVIEWABLE" : "REVIEWED", JSON.stringify({ source_type: sourceType, source_record_id: sourceRecordId, rule_id: evidenceRuleId, rule_version: configured.rule_version }), row.assignment_id || null, row.curriculum_release_id || null, row.release_version || null, row.course_id || null, row.unit_stable_key || null, row.lesson_stable_key || null, row.assessment_definition_id || row.reflection_definition_id || row.practice_definition_id || null, evidenceRuleId, configured.rule_version, configured.competency_id || null, configured.review_required ? null : actor.user_id, row[source.occurred] || new Date()]);
+      evidence = result.rows[0] || (await db.query("SELECT * FROM prepare_prove_evidence WHERE organization_id=$1 AND source_type=$2 AND source_record_id=$3 AND evidence_rule_id=$4 AND status <> 'SUPERSEDED'", [actor.organization_id, sourceType, sourceRecordId, evidenceRuleId])).rows[0];
+    }
+    let truthFact = null;
+    if (configured.truth_fact_type) {
+      const truthFactId = `truth_fact_${stableId(actor.organization_id, sourceType, sourceRecordId, configured.truth_fact_type, evidenceRuleId)}`;
+      const result = await db.query(`INSERT INTO curriculum_truth_facts
+        (truth_fact_id, organization_id, learner_user_id, fact_type, source_type, source_record_id, evidence_id, assignment_id, curriculum_release_id, release_version, course_id, unit_stable_key, lesson_stable_key, definition_id, evidence_rule_id, evidence_rule_version, competency_id, provenance_json, occurred_at)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19)
+        ON CONFLICT (organization_id, source_type, source_record_id, fact_type, evidence_rule_id)
+        DO UPDATE SET truth_fact_id=curriculum_truth_facts.truth_fact_id
+        RETURNING *`, [truthFactId, actor.organization_id, actor.user_id, configured.truth_fact_type, sourceType, sourceRecordId, evidence?.evidence_id || null, row.assignment_id || null, row.curriculum_release_id || null, row.release_version || null, row.course_id || null, row.unit_stable_key || null, row.lesson_stable_key || null, row.assessment_definition_id || row.reflection_definition_id || row.practice_definition_id || null, evidenceRuleId, configured.rule_version, configured.competency_id || null, JSON.stringify({ source_type: sourceType, source_record_id: sourceRecordId, rule_id: evidenceRuleId, rule_version: configured.rule_version }), row[source.occurred] || new Date()]);
+      truthFact = result.rows[0];
+    }
+    return { evidence, truthFact, truthSpineFact: truthFact ? toTruthSpineFact(truthFact) : null, idempotent: Boolean(evidence || truthFact) };
+  });
+}
+
+const OUTBOX_SOURCE_TYPES: Record<string, string> = {
+  "assessment.submitted": "ASSESSMENT_RESULT",
+  "reflection.submitted": "REFLECTION_SUBMISSION",
+  "practice.submitted": "PRACTICE_RESULT",
+  "arcade.resulted": "ARCADE_RESULT",
+  "project.submission.reviewed": "PROJECT_SUBMISSION",
+  "attendance.confirmed": "ATTENDANCE",
+  "competency.reviewed": "INSTRUCTOR_VERIFICATION",
+  "lesson.completed": "LESSON_COMPLETION",
+};
+
+/**
+ * Internal-only outbox boundary. The source row, learner, and organization
+ * are resolved from SHS persistence; none are accepted from a browser.
+ */
+export async function projectAuthoritativeOutboxEvent(event: ProjectionOutboxEvent) {
+  const sourceType = OUTBOX_SOURCE_TYPES[event.event_type];
+  if (!sourceType) return { handled: false, projected: 0 };
+  const source = SOURCE_TABLES[sourceType];
+  const payload = typeof event.payload_json === "string" ? JSON.parse(event.payload_json) : (event.payload || event.payload_json || {});
+  const sourceRecordId = String((payload as any)?.source_record_id || (payload as any)?.result_id || (payload as any)?.completion_id || (payload as any)?.decision_id || event.subject_id || "").trim();
+  if (!sourceRecordId) { const error: any = new Error("projection_source_record_missing"); error.status = 503; throw error; }
+  const sourceResult = await loadSourceRow(sourceType, source, sourceRecordId, event.organization_id);
+  const row = sourceResult.rows[0];
+  if (!row) { const error: any = new Error("projection_source_record_not_found"); error.status = 503; throw error; }
+  const learnerId = String(row[source.learner] || "").trim();
+  if (!learnerId) { const error: any = new Error("projection_source_learner_missing"); error.status = 503; throw error; }
+  const rules = await query("SELECT evidence_rule_id FROM curriculum_evidence_rules WHERE organization_id=$1 AND source_type=$2 AND status='ACTIVE' ORDER BY evidence_rule_id", [event.organization_id, sourceType]);
+  let projected = 0;
+  for (const rule of rules.rows) {
+    await projectAuthoritativeFact({ user_id: learnerId, organization_id: event.organization_id }, { sourceType, sourceRecordId, evidenceRuleId: rule.evidence_rule_id });
+    projected += 1;
+  }
+  return { handled: true, projected };
+}
+
+export async function supersedeEvidence(actor: ProjectionActor, evidenceId: string, replacementStatus: "REVIEWABLE" | "REVIEWED" = "REVIEWED") {
+  if (!actor.permissions?.includes("truth.override")) throw new Error("evidence_correction_forbidden");
+  return withTransaction(async (db: any) => {
+    const original = await db.query("SELECT * FROM prepare_prove_evidence WHERE evidence_id=$1 AND organization_id=$2 FOR UPDATE", [evidenceId, actor.organization_id]);
+    if (!original.rows[0]) throw new Error("evidence_not_found");
+    if (original.rows[0].status === "SUPERSEDED") return { original: original.rows[0], replacement: null, idempotent: true };
+    const replacementId = `evidence_${stableId(actor.organization_id, evidenceId, "correction")}`;
+    // Release the deterministic source/rule key only after the original has
+    // been explicitly superseded; the transaction preserves both operations.
+    await db.query("UPDATE prepare_prove_evidence SET status='SUPERSEDED' WHERE evidence_id=$1 AND organization_id=$2", [evidenceId, actor.organization_id]);
+    const replacement = await db.query(`INSERT INTO prepare_prove_evidence
+      (evidence_id, source_domain, source_record_id, user_id, organization_id, tenant_id, activity_id, criterion, status, provenance_json,
+       source_type, assignment_id, curriculum_release_id, release_version, course_id, unit_stable_key, lesson_stable_key, definition_id,
+       evidence_rule_id, evidence_rule_version, competency_id, verifier_user_id, source_occurred_at, supersedes_evidence_id)
+      SELECT $1, source_domain, source_record_id, user_id, organization_id, tenant_id, activity_id, criterion, $2, provenance_json,
+       source_type, assignment_id, curriculum_release_id, release_version, course_id, unit_stable_key, lesson_stable_key, definition_id,
+       evidence_rule_id, evidence_rule_version, competency_id, verifier_user_id, source_occurred_at, evidence_id
+      FROM prepare_prove_evidence WHERE evidence_id=$3
+      RETURNING *`, [replacementId, replacementStatus, evidenceId]);
+    return { original: { ...original.rows[0], status: "SUPERSEDED" }, replacement: replacement.rows[0], idempotent: false };
+  });
+}
+
+export const verifiedEvidenceEventSourceTypes = OUTBOX_SOURCE_TYPES;
+
+export async function getEvidenceForActor(actor: ProjectionActor, evidenceId: string) {
+  const result = await query("SELECT * FROM prepare_prove_evidence WHERE evidence_id=$1 AND organization_id=$2 AND user_id=$3", [evidenceId, actor.organization_id, actor.user_id]);
+  return result.rows[0] || null;
+}
+
+export async function getTruthFactForActor(actor: ProjectionActor, truthFactId: string) {
+  const result = await query("SELECT * FROM curriculum_truth_facts WHERE truth_fact_id=$1 AND organization_id=$2 AND learner_user_id=$3", [truthFactId, actor.organization_id, actor.user_id]);
+  return result.rows[0] || null;
+}

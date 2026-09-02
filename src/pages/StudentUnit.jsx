@@ -66,7 +66,7 @@ export default function StudentUnit() {
         <p>
           No student lesson found for slug <code>{slug}</code>.
         </p>
-        <Link className="btn" to="/curriculum/lessons">Back to Lessons</Link>
+        <Link className="btn" to="/curriculum/learning">Back to Learning</Link>
       </div>
     );
   }

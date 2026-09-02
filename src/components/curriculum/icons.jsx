@@ -286,6 +286,29 @@ export function HeartMark({ size = 30 }) {
   );
 }
 
+export const LockIcon = (p) => (
+  <Base {...p}>
+    <rect x="5" y="11" width="14" height="9" rx="2" />
+    <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+  </Base>
+);
+
+export const VideoIcon = (p) => (
+  <Base {...p}>
+    <rect x="3" y="6" width="13" height="12" rx="2" />
+    <path d="m16 10.5 5-3v9l-5-3Z" />
+  </Base>
+);
+
+export const HeadsetIcon = (p) => (
+  <Base {...p}>
+    <path d="M4 13v-1a8 8 0 0 1 16 0v1" />
+    <rect x="3.5" y="13" width="4" height="6" rx="1.5" />
+    <rect x="16.5" y="13" width="4" height="6" rx="1.5" />
+    <path d="M20.5 19v1a2 2 0 0 1-2 2h-3" />
+  </Base>
+);
+
 export const TagIcon = (p) => (
   <Base {...p}>
     <path d="M3.5 11.2 12.3 3h6.2a1.5 1.5 0 0 1 1.5 1.5v6.2L11.7 20 3.5 11.8Z" />

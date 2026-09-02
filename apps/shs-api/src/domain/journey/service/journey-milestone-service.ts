@@ -20,7 +20,7 @@ const learnerCredentialRepo = new LearnerCredentialRepo();
 const credentialDefinitionRepo = new CredentialDefinitionRepo();
 const arcadeRepo = new ArcadeRepo();
 
-export type JourneyMilestoneType = "PROGRAM_START" | "PROJECT" | "CAPSTONE" | "CAREER_EVENT" | "CREDENTIAL_EARNED" | "ARCADE_MASTERY";
+export type JourneyMilestoneType = "PROGRAM_START" | "PROJECT" | "CAPSTONE" | "CAREER_EVENT" | "CREDENTIAL_EARNED" | "ARCADE_MASTERY" | "LESSON_COMPLETED" | "UNIT_COMPLETED" | "COURSE_COMPLETED" | "COMPETENCY_DEMONSTRATED" | "EVIDENCE_VERIFIED";
 
 export interface JourneyMilestone {
   id: string;
@@ -30,6 +30,16 @@ export interface JourneyMilestone {
   // "completed" is only ever set from the owning domain's own status —
   // never from date passage alone (see brief §22: displayed != verified).
   status: "completed" | "upcoming";
+  organizationId?: string;
+  learnerId?: string;
+  sourceDomain?: string;
+  sourceRecordId?: string;
+  assignmentId?: string | null;
+  curriculumReleaseId?: string | null;
+  releaseVersion?: number | null;
+  competencyId?: string | null;
+  verificationStatus?: "VERIFIED";
+  tier?: "ACKNOWLEDGEMENT" | "ACHIEVEMENT" | "MAJOR_MILESTONE";
 }
 
 function isPast(iso: string): boolean {
@@ -170,15 +180,152 @@ async function arcadeMasteryMilestones(organizationId: string, userId: string): 
   return milestones;
 }
 
+type CurriculumCompletionRow = {
+  completion_id: string;
+  lesson_id: string;
+  completed_at: string | Date;
+  assignment_id: string | null;
+  curriculum_release_id: string | null;
+  release_version: number | null;
+  course_id: string;
+  course_title: string;
+  unit_stable_key: string;
+  unit_title: string;
+  lesson_stable_key: string;
+  lesson_title: string;
+};
+
+function iso(value: string | Date): string {
+  return value instanceof Date ? value.toISOString() : new Date(value).toISOString();
+}
+
+// Completion milestones are a projection of the existing completion table.
+// The release snapshot and catalog joins establish instructional lineage;
+// no denominator or completion fact is created here.
+async function curriculumCompletionMilestones(organizationId: string, userId: string): Promise<JourneyMilestone[]> {
+  const result = await query(
+    `SELECT c.completion_id, c.lesson_id, c.completed_at, c.assignment_id,
+            c.curriculum_release_id, c.release_version,
+            cr.course_id, cc.title AS course_title,
+            cu.stable_key AS unit_stable_key, cu.title AS unit_title,
+            cl.stable_key AS lesson_stable_key, cl.title AS lesson_title
+       FROM curriculum_lesson_completions c
+       LEFT JOIN curriculum_releases cr
+         ON cr.release_id = c.curriculum_release_id AND cr.organization_id = c.organization_id
+       LEFT JOIN curriculum_courses cc
+         ON cc.course_id = cr.course_id AND cc.organization_id = c.organization_id
+       LEFT JOIN curriculum_lessons cl
+         ON cl.organization_id = c.organization_id
+        AND (cl.lesson_id = c.lesson_id OR cl.stable_key = c.lesson_id)
+       LEFT JOIN curriculum_units cu
+         ON cu.unit_id = cl.unit_id AND cu.organization_id = c.organization_id
+      WHERE c.organization_id=$1 AND c.user_id=$2
+        AND c.curriculum_release_id IS NOT NULL
+      ORDER BY c.completed_at ASC, c.completion_id ASC`,
+    [organizationId, userId],
+  );
+  const rows = result.rows as CurriculumCompletionRow[];
+  const milestones: JourneyMilestone[] = rows.map((row) => ({
+    id: `lesson:${row.completion_id}:completed`,
+    type: "LESSON_COMPLETED",
+    title: row.lesson_title || row.lesson_id,
+    occursAt: iso(row.completed_at),
+    status: "completed",
+    organizationId,
+    learnerId: userId,
+    sourceDomain: "curriculum",
+    sourceRecordId: row.completion_id,
+    assignmentId: row.assignment_id,
+    curriculumReleaseId: row.curriculum_release_id,
+    releaseVersion: row.release_version,
+    verificationStatus: "VERIFIED",
+  }));
+
+  // Aggregate only complete canonical release scopes. A course/unit
+  // milestone is intentionally absent until every lesson in that same
+  // immutable release snapshot has a matching canonical completion.
+  const groups = new Map<string, { rows: CurriculumCompletionRow[] }>();
+  for (const row of rows) {
+    if (!row.curriculum_release_id || !row.course_id || !row.unit_stable_key || !row.lesson_stable_key) continue;
+    const key = `${row.curriculum_release_id}\u0000${row.assignment_id || "unassigned"}`;
+    const group = groups.get(key) || { rows: [] };
+    group.rows.push(row);
+    groups.set(key, group);
+  }
+  for (const [key, group] of groups) {
+    const [releaseId, assignmentKey] = key.split("\u0000", 2);
+    const releaseResult = await query("SELECT snapshot FROM curriculum_releases WHERE organization_id=$1 AND release_id=$2", [organizationId, releaseId]);
+    const snapshot: any = releaseResult.rows[0]?.snapshot;
+    const units: any[] = Array.isArray(snapshot?.units) ? snapshot.units : [];
+    const completedAt = group.rows.reduce((latest, row) => Math.max(latest, new Date(row.completed_at).getTime()), 0);
+    const latest = group.rows[group.rows.length - 1];
+    let allCourseLessons = units.flatMap((unit) => (Array.isArray(unit.lessons) ? unit.lessons : []).map((lesson: any) => `${unit.stableKey}:${lesson.stableKey}`));
+    const completedCourseLessons = new Set(group.rows.map((row) => `${row.unit_stable_key}:${row.lesson_stable_key}`));
+    if (allCourseLessons.length > 0 && allCourseLessons.every((lesson) => completedCourseLessons.has(lesson))) {
+      milestones.push({
+        id: `course:${releaseId}:${assignmentKey}:completed`, type: "COURSE_COMPLETED",
+        title: snapshot.course?.title || latest.course_title || "Course completed", occursAt: new Date(completedAt).toISOString(), status: "completed",
+        organizationId, learnerId: userId, sourceDomain: "curriculum", sourceRecordId: releaseId,
+        assignmentId: latest.assignment_id, curriculumReleaseId: releaseId, releaseVersion: latest.release_version,
+        verificationStatus: "VERIFIED",
+      });
+    }
+    for (const unit of units) {
+      const unitLessons: any[] = Array.isArray(unit.lessons) ? unit.lessons : [];
+      if (!unitLessons.length || !unitLessons.every((lesson) => completedCourseLessons.has(`${unit.stableKey}:${lesson.stableKey}`))) continue;
+      milestones.push({
+        id: `unit:${releaseId}:${unit.stableKey}:${assignmentKey}:completed`, type: "UNIT_COMPLETED",
+        title: unit.title || unit.stableKey, occursAt: new Date(completedAt).toISOString(), status: "completed",
+        organizationId, learnerId: userId, sourceDomain: "curriculum", sourceRecordId: `${releaseId}:${unit.stableKey}`,
+        assignmentId: latest.assignment_id, curriculumReleaseId: releaseId, releaseVersion: latest.release_version,
+        verificationStatus: "VERIFIED",
+      });
+    }
+  }
+  return milestones;
+}
+
+async function verifiedEvidenceMilestones(organizationId: string, userId: string): Promise<JourneyMilestone[]> {
+  const result = await query(
+    `SELECT e.evidence_id, e.source_occurred_at, e.assignment_id, e.curriculum_release_id,
+            e.release_version, e.competency_id, e.source_type, e.source_record_id,
+            d.decision, d.reviewed_at, c.title AS competency_title
+       FROM prepare_prove_evidence e
+       JOIN learner_competency_decisions d ON d.evidence_id=e.evidence_id
+       LEFT JOIN competency_definitions c ON c.competency_id=e.competency_id
+      WHERE e.organization_id=$1 AND e.user_id=$2 AND e.status='REVIEWED'
+        AND d.decision='DEMONSTRATED'
+      ORDER BY COALESCE(d.reviewed_at, e.source_occurred_at, e.created_at) ASC, e.evidence_id ASC`,
+    [organizationId, userId],
+  );
+  const milestones: JourneyMilestone[] = [];
+  for (const row of result.rows as any[]) {
+    const occurredAt = row.reviewed_at || row.source_occurred_at;
+    if (!occurredAt) continue;
+    const common = {
+      occursAt: iso(occurredAt), status: "completed" as const, organizationId, learnerId: userId,
+      sourceDomain: "verified-evidence", sourceRecordId: row.evidence_id,
+      assignmentId: row.assignment_id, curriculumReleaseId: row.curriculum_release_id,
+      releaseVersion: row.release_version, competencyId: row.competency_id,
+      verificationStatus: "VERIFIED" as const,
+    };
+    milestones.push({ id: `evidence:${row.evidence_id}:verified`, type: "EVIDENCE_VERIFIED", title: "Evidence verified", ...common });
+    if (row.competency_id) milestones.push({ id: `competency:${row.competency_id}:${row.evidence_id}:demonstrated`, type: "COMPETENCY_DEMONSTRATED", title: row.competency_title || "Competency demonstrated", ...common });
+  }
+  return milestones;
+}
+
 export async function listJourneyMilestonesForLearner(actor: { organization_id: string; user_id: string }): Promise<JourneyMilestone[]> {
-  const [programStart, projects, careerEvents, credentials, arcadeMastery] = await Promise.all([
+  const [programStart, projects, careerEvents, credentials, arcadeMastery, curriculumCompletions, verifiedEvidence] = await Promise.all([
     programStartMilestones(actor.organization_id, actor.user_id),
     projectMilestones(actor.organization_id, actor.user_id),
     careerEventMilestones(actor.organization_id, actor.user_id),
     credentialMilestones(actor.organization_id, actor.user_id),
     arcadeMasteryMilestones(actor.organization_id, actor.user_id),
+    curriculumCompletionMilestones(actor.organization_id, actor.user_id),
+    verifiedEvidenceMilestones(actor.organization_id, actor.user_id),
   ]);
-  return [...programStart, ...projects, ...careerEvents, ...credentials, ...arcadeMastery].sort(
+  return [...programStart, ...projects, ...careerEvents, ...credentials, ...arcadeMastery, ...curriculumCompletions, ...verifiedEvidence].sort(
     (a, b) => new Date(a.occursAt).getTime() - new Date(b.occursAt).getTime(),
   );
 }

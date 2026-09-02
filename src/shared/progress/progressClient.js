@@ -1,9 +1,6 @@
 import { appendEvent } from "../ledger/ledgerClient.js";
 import {
   buildLessonCompletedOperationalEvent,
-  buildAssessmentSubmittedOperationalEvent,
-  buildAssessmentCompletedOperationalEvent,
-  buildReflectionSubmittedOperationalEvent,
   enqueueCurriculumOperationalEvent,
   syncCurriculumIngestionQueue,
 } from "./curriculumIngestionClient.js";
@@ -81,17 +78,14 @@ export function recordQuizStarted({ actorId, curriculum, slug, assessmentId }) {
 
 export function recordQuizSubmitted({ actorId, curriculum, slug, assessmentId, itemId, isCorrect }) {
   recordEvent("quiz.submitted", { actorId, curriculum, slug, meta: { assessmentId, itemId, isCorrect } });
-  enqueueAndSync(buildAssessmentSubmittedOperationalEvent({ actorId, curriculum, slug, assessmentId, itemId, isCorrect }));
 }
 
 export function recordQuizCompleted({ actorId, curriculum, slug, assessmentId, score, maxScore }) {
   recordEvent("quiz.completed", { actorId, curriculum, slug, meta: { assessmentId, score, maxScore } });
-  enqueueAndSync(buildAssessmentCompletedOperationalEvent({ actorId, curriculum, slug, assessmentId, score, maxScore }));
 }
 
 export function recordReflectionSaved({ actorId, curriculum, slug, itemId }) {
   recordEvent("reflection.saved", { actorId, curriculum, slug, meta: { itemId } });
-  enqueueAndSync(buildReflectionSubmittedOperationalEvent({ actorId, curriculum, slug, itemId }));
 }
 
 export function recordActivityCompleted({ actorId, curriculum, slug, activityId }) {
@@ -146,11 +140,6 @@ function notifySyncStatus(handler, status, item) {
   try {
     handler({ status, item });
   } catch {}
-}
-
-function enqueueAndSync(event) {
-  enqueueCurriculumOperationalEvent(event);
-  syncCurriculumIngestionQueue().catch(() => {});
 }
 
 /* ---------- External Course Helpers (added by SHF Partner Layer) ---------- */

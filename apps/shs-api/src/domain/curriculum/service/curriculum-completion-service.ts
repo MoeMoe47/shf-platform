@@ -4,6 +4,15 @@ import { IntegrationOutboxRepo } from "../../trusted-reporting/outbox-repo.js";
 import { emitOperationalTelemetry } from "../../../observability/operational-telemetry.js";
 import { CurriculumCompletionRepo } from "../repo/curriculum-completion-repo.js";
 import { query } from "../../../db/client.js";
+import { evaluateLessonCompletion } from "../../completion-policy/service/completion-evaluator.js";
+import type { CompletionEvaluationResult } from "../../completion-policy/service/completion-evaluator.js";
+
+export class CompletionPolicyNotSatisfiedError extends Error {
+  constructor(public evaluation: CompletionEvaluationResult) {
+    super("completion_policy_not_satisfied");
+    this.name = "CompletionPolicyNotSatisfiedError";
+  }
+}
 
 function stableId(organizationId: string, userId: string, curriculumId: string, lessonId: string) {
   return createHash("sha256")
@@ -47,6 +56,25 @@ export class CurriculumCompletionService {
       if (!assigned.rows[0]) throw new Error("grade12_course_assignment_required");
     }
 
+    // SHF Lesson + Assignment + Curriculum Phase 4 — Completion Policy
+    // gate. findApplicablePolicyForLessonCompletion (inside
+    // evaluateLessonCompletion) returns null when NO assignment entitled
+    // to this learner both resolves to this exact (curriculumId,
+    // lessonId) via its bound release AND has a completion_policy_id —
+    // i.e. this content is not institutionally gated at all (legacy/
+    // demo/unassigned), so behavior is byte-identical to before this
+    // phase. Only when a real policy applies is eligibility enforced —
+    // server-side, from authoritative domain records, never from
+    // anything this method's caller merely asserts.
+    const evaluation = await evaluateLessonCompletion(
+      { user_id: userId, organization_id: organizationId, roles: input.actor?.roles || [] },
+      curriculumId,
+      lessonId,
+    );
+    if (evaluation && !evaluation.eligible) {
+      throw new CompletionPolicyNotSatisfiedError(evaluation);
+    }
+
     const identity = stableId(organizationId, userId, curriculumId, lessonId);
     const completionId = `curriculum_completion_${identity}`;
     const idempotencyKey = `lesson.completed:${identity}`;
@@ -60,6 +88,11 @@ export class CurriculumCompletionService {
         lesson_id: lessonId,
         completed_at: new Date(),
         idempotency_key: idempotencyKey,
+        assignment_id: evaluation?.assignmentId ?? null,
+        curriculum_release_id: evaluation?.curriculumReleaseId ?? null,
+        release_version: evaluation?.releaseVersion ?? null,
+        completion_policy_id: evaluation?.completionPolicyId ?? null,
+        completion_policy_version: evaluation?.completionPolicyVersion ?? null,
       }, db);
 
       const event = await this.outbox.enqueue({

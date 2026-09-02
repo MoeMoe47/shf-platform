@@ -1,12 +1,12 @@
 // src/components/CurriculumSidebar.jsx
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useEntitlements } from "@/context/EntitlementsContext.jsx";
 import {
   DashboardIcon,
   CalendarIcon,
   PortfolioIcon,
-  LessonsIcon,
+  BookIcon,
   AssignmentsIcon,
   InstructorIcon,
   MasterViewIcon,
@@ -16,11 +16,16 @@ import {
   HeartMark,
 } from "@/components/curriculum/icons.jsx";
 
+// Phase 5.5 Unified Learning Workspace: "Lessons" -> "Learning", now
+// pointing at the course-first Learning landing (src/pages/curriculum/
+// Learning.jsx) instead of the old flat MyLessons.jsx list. The old
+// "lessons" path itself still exists as a redirect to "learning" (see
+// CurriculumRoutes.jsx) for bookmark compatibility.
 const CURRICULUM_ITEMS = [
   { key: "dashboard", label: "Dashboard", Icon: DashboardIcon, path: "asl/dashboard" },
   { key: "calendar", label: "Calendar", Icon: CalendarIcon, path: "asl/calendar" },
   { key: "portfolio", label: "Portfolio", Icon: PortfolioIcon, path: "asl/portfolio" },
-  { key: "lessons", label: "Lessons", Icon: LessonsIcon, path: "lessons" },
+  { key: "learning", label: "Learning", Icon: BookIcon, path: "learning" },
   { key: "assignments", label: "Assignments", Icon: AssignmentsIcon, path: "asl/assignments" },
   // Phase 1 restoration (SHF Curriculum Infrastructure Audit §28-30): real
   // request/approval UI, previously unrouted anywhere in the app.
@@ -30,9 +35,10 @@ const CURRICULUM_ITEMS = [
 ];
 
 const INSTRUCTOR_ITEMS = [
-  { key: "instructor", label: "Instructor", Icon: InstructorIcon, path: "instructor" },
+  { key: "instructor", label: "Instructor", Icon: InstructorIcon, path: "instructor/operations" },
   { key: "master", label: "Master View", Icon: MasterViewIcon, path: "master" },
   { key: "live-sessions-admin", label: "Live Session Access", Icon: InstructorIcon, path: "live-sessions/admin" },
+  { key: "curriculum-import", label: "Curriculum Import", Icon: InstructorIcon, path: "import" },
 ];
 
 function initialsFor(name) {
@@ -44,6 +50,12 @@ function initialsFor(name) {
 
 export default function CurriculumSidebar({ collapsed = false, onToggleCollapsed, onNavigate }) {
   const { user, roles } = useEntitlements();
+  const location = useLocation();
+  // Course Workspace (/curriculum/courses/*) is reached from Learning, so
+  // it should read as part of the same nav destination rather than
+  // leaving the sidebar with nothing highlighted once a student drills
+  // into a course.
+  const inCourseWorkspace = location.pathname.startsWith("/curriculum/courses/");
   const displayName = user?.name || "Michael Slate";
   const roleLabel = (roles && roles[0]) ? roles[0][0].toUpperCase() + roles[0].slice(1) : "Student";
 
@@ -89,10 +101,10 @@ export default function CurriculumSidebar({ collapsed = false, onToggleCollapsed
               <li key={key}>
                 <NavLink
                   to={`/curriculum/${path}`}
-                  end={key !== "lessons"}
+                  end={key !== "learning"}
                   onClick={onNavigate}
                   data-label={label}
-                  className={({ isActive }) => `ld-navItem${isActive ? " is-active" : ""}`}
+                  className={({ isActive }) => `ld-navItem${isActive || (key === "learning" && inCourseWorkspace) ? " is-active" : ""}`}
                 >
                   <Icon size={19} className="ld-navIcon" />
                   <span className="ld-navText">{label}</span>

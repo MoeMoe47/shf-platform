@@ -3,6 +3,26 @@
   "schema_version": "1.0.0",
   "definitions": [
     {
+      "report_definition_id": "curriculum.learning_progress",
+      "version": 1,
+      "status": "active",
+      "metric_ids": [
+        "curriculum.lesson.completion_count.v1",
+        "curriculum.assessment.pass_count.v1",
+        "curriculum.arcade.mastery_count.v1",
+        "curriculum.attendance.confirmation_count.v1",
+        "curriculum.evidence.verified_count.v1"
+      ],
+      "audiences": ["internal", "organization"],
+      "scope": ["organization"],
+      "privacy_class": "restricted_aggregate",
+      "public_eligibility": false,
+      "permission": "shf.report.read",
+      "public_policy": "not_public_private_learner_truth",
+      "effective_from": "2026-09-01T00:00:00Z",
+      "effective_to": null
+    },
+    {
       "report_definition_id": "curriculum.lesson_completion_count",
       "version": 1,
       "status": "active",

@@ -6,6 +6,8 @@ import { LiveSessionRepo } from "../repo/live-session-repo.js";
 import { getProvider, listProviders } from "../providers/provider-registry.js";
 import { ProviderNotConfiguredError } from "../providers/live-learning-provider.js";
 import { writeAuditEvent } from "../../audit/service/audit-helper.js";
+import { hasPermission, SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
+import { IntegrationOutboxRepo } from "../../trusted-reporting/outbox-repo.js";
 import { EnrollmentRepo } from "../../enrollments/repo/enrollment-repo.js";
 import {
   DEFAULT_ACCESS_POLICY,
@@ -16,8 +18,34 @@ import {
 } from "../model/live-session.js";
 
 const repo = new LiveSessionRepo();
+const outbox = new IntegrationOutboxRepo();
 const enrollmentRepo = new EnrollmentRepo();
 const ADMIN_TIER_ROLES = ["shf_admin", "shs_admin", "org_admin", "super_admin", "program_manager"];
+
+export async function confirmAttendance(actor: any, joinEventId: string) {
+  if (!hasPermission(actor?.permissions, SHS_SECURITY_PERMISSIONS.LIVE_LEARNING_JOIN_AUTHORIZE)) throw new LiveLearningEligibilityError("FORBIDDEN", "Attendance confirmation permission is required.", 403);
+  const organizationId = String(actor?.organization_id || "");
+  if (!organizationId) throw new LiveLearningEligibilityError("SCOPE_MISSING", "Organization is required.", 403);
+  const row = await repo.confirmAttendance(joinEventId, organizationId);
+  if (!row) throw new SessionNotFoundError();
+  await outbox.enqueue({
+    producer_id: "live-learning.attendance",
+    event_type: "attendance.confirmed",
+    schema_version: "1.0",
+    subject_type: "attendance",
+    subject_id: row.join_event_id,
+    organization_id: organizationId,
+    originating_actor_id: String(actor.user_id),
+    originating_actor_type: "user",
+    tenant_id: String(actor.tenant_id || `tenant:${organizationId}`),
+    occurred_at: new Date(row.created_at).toISOString(),
+    idempotency_key: `attendance.confirmed:${row.join_event_id}`,
+    correlation_id: `attendance:${row.join_event_id}`,
+    payload: { source_record_id: row.join_event_id, learner_id: row.user_id },
+    destination: "shs-verified-evidence",
+  });
+  return row;
+}
 
 export class SessionNotFoundError extends Error {
   constructor() { super("Live session not found."); this.name = "SessionNotFoundError"; }

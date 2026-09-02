@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from services import truth_history_service
+from services.truth_fact_provider import JsonlTruthFactProvider, ShsCurriculumTruthProvider, provider_name
 
 
 SERVICE_ROOT = Path(__file__).resolve().parents[1]
@@ -269,8 +270,14 @@ def list_claims() -> List[Dict[str, Any]]:
     functions (truth_coverage, truth_drift) or from viewer-aware wrappers
     below (list_claims_for_viewer / list_public_claims) that apply the
     appropriate filter before returning data across a trust boundary."""
-    sources = list_sources()
-    all_claims = [_apply_truth_rules(claim, sources) for claim in _read_list(CLAIMS_PATH)]
+    provider = JsonlTruthFactProvider(CLAIMS_PATH, _read_list)
+    if provider_name() == "shs_postgres":
+        all_claims = ShsCurriculumTruthProvider().list_facts()
+    elif provider_name() == "jsonl":
+        sources = list_sources()
+        all_claims = [_apply_truth_rules(claim, sources) for claim in provider.list_facts()]
+    else:
+        raise RuntimeError("truth_provider_unknown")
     # Collapse to latest version per claim_id (superseded_by is None on the
     # current version).
     latest: Dict[str, Dict[str, Any]] = {}

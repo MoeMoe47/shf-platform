@@ -1,16 +1,21 @@
 // src/context/AccessibilityPreferences.jsx
 //
-// Phase 2B — minimal, capability-based UI preferences. Audited: no
-// existing generic preference system covers this (ReadingLevelProvider is
-// real but only covers reading-level content variants; there was nothing
-// for motion/contrast/text-size/captions/transcript/audio/keyboard). This
-// stores INTERFACE PREFERENCES ONLY — never a diagnosis, disability
-// category, or medical information. A student is never labeled; the UI
-// only ever asks "what would help," matching the audit's explicit
-// instruction not to build a single "disabled mode."
+// This file is a thin translation adapter over the canonical
+// AccessibilityProfileContext, preserving the exact same flat external
+// API (`prefs`/`setPref`/`resetPrefs`) that AccessibilityPreferencesPanel.jsx
+// and MediaRow.jsx already call, so neither needed a UI rewrite.
+//
+// SHF AIEL Phase 4 update: the former boolean reading-level checkbox (no
+// real consumer anywhere — see Phase 3's own header note, now retired)
+// has been replaced by `preferredReadingSupport`, a direct passthrough of
+// the real three-value canonical enum (CORE|SIMPLE|ADVANCED). This is no
+// longer a second competing signal: ReadingLevelProvider.jsx now reads
+// and writes this exact same canonical field when mounted inside
+// Curriculum (see that file's own header for the detection mechanism),
+// so this control and the Reading Level mechanism share one authoritative
+// value. This adapter owns no storage of its own at all any more.
 import React from "react";
-
-const KEY = "curriculum:a11yPrefs:v1";
+import { useAccessibilityProfile } from "./AccessibilityProfileContext.jsx";
 
 const DEFAULTS = {
   reducedMotion: false,
@@ -18,19 +23,25 @@ const DEFAULTS = {
   higherContrast: false,
   captionsPreferred: false,
   transcriptPreferred: false,
-  simplifiedReading: false, // when true, LessonBody requests ReadingLevelProvider's "simple" variant
-  audioSupport: false,      // when true, surfaces the existing SpeakBtn TTS control more prominently
-  keyboardOptimized: false, // when true, widens focus rings / interactive target spacing
-  celebrationIntensity: "FULL", // FULL | SUBTLE | OFF; presentation only, never progress truth
+  preferredReadingSupport: "CORE",
+  audioSupport: false,
+  keyboardOptimized: false,
+  celebrationIntensity: "FULL",
 };
 
-function readStored() {
-  try {
-    const raw = JSON.parse(localStorage.getItem(KEY) || "{}");
-    return { ...DEFAULTS, ...raw };
-  } catch {
-    return { ...DEFAULTS };
-  }
+function toFlatPrefs(preferences) {
+  const p = preferences || {};
+  return {
+    reducedMotion: p.sensory?.motionPreference === "REDUCED",
+    largerText: p.presentation?.textScale === "LARGE" || p.presentation?.textScale === "EXTRA_LARGE",
+    higherContrast: p.presentation?.contrastMode === "HIGH",
+    captionsPreferred: p.media?.captionPreference === "PREFER",
+    transcriptPreferred: p.media?.transcriptPreference === "PREFER",
+    preferredReadingSupport: p.learningSupport?.preferredReadingSupport || "CORE",
+    audioSupport: p.learningSupport?.readAloudPreference === "PROMINENT",
+    keyboardOptimized: p.interaction?.focusEmphasis === "ENHANCED",
+    celebrationIntensity: p.sensory?.celebrationIntensity || "FULL",
+  };
 }
 
 const Ctx = React.createContext({ prefs: DEFAULTS, setPref: () => {}, resetPrefs: () => {} });
@@ -40,30 +51,35 @@ export function useAccessibilityPreferences() {
 }
 
 export default function AccessibilityPreferencesProvider({ children }) {
-  const [prefs, setPrefs] = React.useState(readStored);
-
-  React.useEffect(() => {
-    try { localStorage.setItem(KEY, JSON.stringify(prefs)); } catch {}
-  }, [prefs]);
-
-  // Respect the OS-level reduced-motion signal as an honest starting
-  // point (not overriding an explicit student choice already saved).
-  React.useEffect(() => {
-    try {
-      const stored = localStorage.getItem(KEY);
-      if (stored) return; // student already has explicit saved prefs
-      const mql = window.matchMedia?.("(prefers-reduced-motion: reduce)");
-      if (mql?.matches) setPrefs((p) => ({ ...p, reducedMotion: true }));
-    } catch {}
-  }, []);
+  const profile = useAccessibilityProfile();
+  const prefs = React.useMemo(() => toFlatPrefs(profile.preferences), [profile.preferences]);
 
   const setPref = React.useCallback((key, value) => {
     if (!(key in DEFAULTS)) return;
-    if (key === "celebrationIntensity" && !["FULL", "SUBTLE", "OFF"].includes(value)) return;
-    setPrefs((p) => ({ ...p, [key]: value }));
-  }, []);
 
-  const resetPrefs = React.useCallback(() => setPrefs({ ...DEFAULTS }), []);
+    const patchByKey = {
+      reducedMotion: { sensory: { motionPreference: value ? "REDUCED" : "AUTO" } },
+      largerText: { presentation: { textScale: value ? "LARGE" : "DEFAULT" } },
+      higherContrast: { presentation: { contrastMode: value ? "HIGH" : "DEFAULT" } },
+      captionsPreferred: { media: { captionPreference: value ? "PREFER" : "AUTO" } },
+      transcriptPreferred: { media: { transcriptPreference: value ? "PREFER" : "AUTO" } },
+      preferredReadingSupport: ["CORE", "SIMPLE", "ADVANCED"].includes(value) ? { learningSupport: { preferredReadingSupport: value } } : null,
+      audioSupport: { learningSupport: { readAloudPreference: value ? "PROMINENT" : "AUTO" } },
+      keyboardOptimized: { interaction: { focusEmphasis: value ? "ENHANCED" : "DEFAULT", targetSize: value ? "LARGE" : "DEFAULT" } },
+      celebrationIntensity: ["FULL", "SUBTLE", "OFF"].includes(value) ? { sensory: { celebrationIntensity: value } } : null,
+    };
+    const patch = patchByKey[key];
+    if (!patch) return;
+    profile.patch(patch).catch(() => {
+      // Best-effort — the UI will reflect whatever the canonical profile
+      // actually holds on the next read; there is no local fallback state
+      // to reconcile since this adapter has none of its own.
+    });
+  }, [profile]);
+
+  const resetPrefs = React.useCallback(() => {
+    profile.reset().catch(() => {});
+  }, [profile]);
 
   const value = React.useMemo(() => ({ prefs, setPref, resetPrefs }), [prefs, setPref, resetPrefs]);
 

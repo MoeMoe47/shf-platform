@@ -1,5 +1,8 @@
 import React from "react";
 import { useParams } from "react-router-dom";
+import { resolveDevUserId } from "@/lib/liveLearning/api.js";
+
+function authHeaders() { return { "Content-Type": "application/json", Authorization: `Bearer dev-token:${resolveDevUserId("instructor")}` }; }
 
 export default function PrepareProveReview() {
   const { evidenceId } = useParams();
@@ -9,7 +12,7 @@ export default function PrepareProveReview() {
 
   React.useEffect(() => {
     let active = true;
-    fetch(`/api/prepare-prove/evidence/${encodeURIComponent(evidenceId)}`, { credentials: "include", cache: "no-store" })
+    fetch(`/api/prepare-prove/evidence/${encodeURIComponent(evidenceId)}`, { credentials: "include", cache: "no-store", headers: authHeaders() })
       .then(async (response) => { const body = await response.json(); if (!response.ok) throw new Error(body?.error?.code || "Evidence unavailable"); return body.data; })
       .then((data) => { if (active) setPacket(data); })
       .catch((error) => { if (active) setMessage(error.message); });
@@ -21,7 +24,7 @@ export default function PrepareProveReview() {
     setMessage("");
     try {
       const response = await fetch(`/api/prepare-prove/evidence/${encodeURIComponent(evidenceId)}/review`, {
-        method: "POST", credentials: "include", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ decision }),
+        method: "POST", credentials: "include", headers: authHeaders(), body: JSON.stringify({ decision }),
       });
       const body = await response.json();
       if (!response.ok) throw new Error(body?.error?.code || "Review was not recorded");

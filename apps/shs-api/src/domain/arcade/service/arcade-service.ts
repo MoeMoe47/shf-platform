@@ -15,8 +15,10 @@ import { hasPermission, SHS_SECURITY_PERMISSIONS } from "../../../auth/security-
 import { isAdminTier } from "../../shared/audience-eligibility.js";
 import { ArcadeRepo } from "../repo/arcade-repo.js";
 import { ArcadeActivity, ArcadeAttempt, ArcadeResult, deriveMastery } from "../model/arcade.js";
+import { IntegrationOutboxRepo } from "../../trusted-reporting/outbox-repo.js";
 
 const repo = new ArcadeRepo();
+const outbox = new IntegrationOutboxRepo();
 
 export class ArcadeError extends Error {
   constructor(public code: string, message: string, public statusCode = 400) {
@@ -123,7 +125,7 @@ export async function submitResult(actor: ArcadeActor, attemptId: string, input:
     throw new ArcadeError("FORBIDDEN", "Missing arcade.attempt permission.", 403);
   }
   const { organizationId, userId, tenantId } = scope(actor);
-  return withTransaction(async (client: any) => {
+  const result = await withTransaction(async (client: any) => {
     const dbQuery = client.query.bind(client);
     const attempt = await repo.getAttemptForUpdate(dbQuery, attemptId);
     // 404, not 403 — a learner probing another learner's or another org's
@@ -170,6 +172,23 @@ export async function submitResult(actor: ArcadeActor, attemptId: string, input:
     await repo.completeAttempt(dbQuery, attemptId);
     return result;
   });
+  await outbox.enqueue({
+    producer_id: "curriculum.arcade",
+    event_type: "arcade.resulted",
+    schema_version: "1.0",
+    subject_type: "arcade_result",
+    subject_id: result.id,
+    organization_id: organizationId,
+    originating_actor_id: userId,
+    originating_actor_type: "user",
+    tenant_id: tenantId,
+    occurred_at: result.createdAt,
+    idempotency_key: `arcade.resulted:${result.id}`,
+    correlation_id: `arcade:${result.id}`,
+    payload: { source_record_id: result.id, mastery_achieved: result.masteryAchieved },
+    destination: "shs-verified-evidence",
+  });
+  return result;
 }
 
 export async function listResultsForActor(actor: ArcadeActor): Promise<ArcadeResult[]> {

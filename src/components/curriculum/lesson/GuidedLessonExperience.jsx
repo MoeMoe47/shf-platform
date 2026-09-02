@@ -35,14 +35,14 @@ import { buildGuidedStages, splitAssessment, firstAvailableStage, STAGE_LABELS }
 
 import LessonHeader from "./LessonHeader.jsx";
 import LessonStageRail from "./LessonStageRail.jsx";
-import RequirementsPanel from "./RequirementsPanel.jsx";
-import EvidencePanel from "./EvidencePanel.jsx";
-import CareerConnectionPanel from "./CareerConnectionPanel.jsx";
 import ArcadeMissionCard from "./ArcadeMissionCard.jsx";
 import CompletionCheckPanel from "./CompletionCheckPanel.jsx";
 import {
+  CalendarIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  CircleIcon,
+  ClockIcon,
   SparkleIcon,
   ClipboardIcon,
   BookIcon,
@@ -51,44 +51,10 @@ import {
   PlayIcon,
   LayersIcon,
   ChatBubbleIcon,
-  BriefcaseIcon,
   CheckCircleIcon,
+  HeadsetIcon,
+  VideoIcon,
 } from "@/components/curriculum/icons.jsx";
-
-const STAGE_DESCRIPTIONS = {
-  orient: "Get oriented before you start.",
-  checkin: "A quick check-in before this lesson.",
-  learn: "Read through the instructional content.",
-  vocabulary: "Review this lesson's key terms.",
-  check: "Answer a short knowledge check.",
-  practice: "Apply what you're learning.",
-  arcade: "Apply what you learned in a game.",
-  apply: "Connect this lesson to your Portfolio.",
-  assess: "Review the assessment rubric.",
-  reflect: "Reflect on what you practiced.",
-  evidence: "See your progress for this lesson.",
-  career: "See how this connects to careers.",
-  complete: "Wrap up and continue.",
-};
-
-// Fidelity-correction pass (2026-08-27): "Coming up next" previously
-// repeated the same orange clipboard icon for every card regardless of
-// stage — this gives each stage its own real, stage-appropriate icon.
-const STAGE_ICONS = {
-  orient: SparkleIcon,
-  checkin: ChatBubbleIcon,
-  learn: BookIcon,
-  vocabulary: TagIcon,
-  check: ClipboardIcon,
-  practice: TargetIcon,
-  arcade: PlayIcon,
-  apply: LayersIcon,
-  assess: ClipboardIcon,
-  reflect: ChatBubbleIcon,
-  evidence: ClipboardIcon,
-  career: BriefcaseIcon,
-  complete: CheckCircleIcon,
-};
 
 function SectionBlock({ section }) {
   const [showMicroCheck, setShowMicroCheck] = React.useState(false);
@@ -115,6 +81,225 @@ function SectionBlock({ section }) {
       )}
     </div>
   );
+}
+
+function buildContentNavItems(lesson, availableStages) {
+  const items = [];
+  const done = "done";
+  const current = "current";
+  const upcoming = "upcoming";
+  const add = (id, label, meta, status = upcoming, icon = BookIcon, children = []) => {
+    items.push({ id, label, meta, status, icon, children });
+  };
+
+  if (availableStages.some((s) => s.key === "orient")) {
+    add("orient", "Lesson orientation", "Objectives and overview", done, SparkleIcon);
+  }
+  if (Array.isArray(lesson.sections) && lesson.sections.length > 0) {
+    add(
+      "learn",
+      "Instructional content",
+      `${lesson.sections.length} section${lesson.sections.length === 1 ? "" : "s"}`,
+      current,
+      BookIcon,
+      lesson.sections.map((section, index) => ({
+        id: `section-${index}`,
+        label: section.heading || `Section ${index + 1}`,
+        meta: section.media ? "Media included" : section.microCheck ? "Quick check" : "Reading",
+        status: index === 0 ? current : upcoming,
+        icon: section.media ? VideoIcon : BookIcon,
+      })),
+    );
+  }
+  if (Array.isArray(lesson.vocab) && lesson.vocab.length > 0) {
+    add("vocabulary", "Vocabulary", `${lesson.vocab.length} terms`, upcoming, TagIcon);
+  }
+  if (availableStages.some((s) => s.key === "check")) {
+    add("check", "Check Understanding", "Knowledge check", upcoming, ClipboardIcon);
+  }
+  if (Array.isArray(lesson.practice) && lesson.practice.length > 0) {
+    add("practice", "Practice", `${lesson.practice.length} activity`, upcoming, TargetIcon);
+  }
+  if ((lesson.games || []).length || (lesson?.arcade?.suggestedGames || []).length) {
+    add("arcade", "Arcade", "Linked mission", upcoming, PlayIcon);
+  }
+  if (lesson.portfolioFlag || lesson.portfolioArtifact || lesson.project || lesson.proofActivity) {
+    add("apply", "Apply", "Portfolio activity", upcoming, LayersIcon);
+  }
+  if (availableStages.some((s) => s.key === "reflect")) {
+    add("reflect", "Reflect", "Private reflection", upcoming, ChatBubbleIcon);
+  }
+  add("complete", "Completion Check", "Backend confirmation", upcoming, CheckCircleIcon);
+  return items;
+}
+
+function ContentNavigator({ items, onSelectStage }) {
+  const [openGroups, setOpenGroups] = React.useState(() => new Set(["learn"]));
+
+  function toggle(id) {
+    setOpenGroups((current) => {
+      const next = new Set(current);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  return (
+    <aside className="ld-card ld-contentNav" aria-label="Lesson content">
+      <div className="ld-contentNavHead">
+        <h2>Lesson Content</h2>
+        <span>{items.length} groups</span>
+      </div>
+      <div className="ld-contentNavList">
+        {items.map((item, index) => {
+          const Icon = item.icon || BookIcon;
+          const isOpen = openGroups.has(item.id);
+          const hasChildren = item.children?.length > 0;
+          return (
+            <div className={`ld-contentNavGroup is-${item.status}`} key={item.id}>
+              <button
+                type="button"
+                className="ld-contentNavButton"
+                aria-expanded={hasChildren ? isOpen : undefined}
+                onClick={() => {
+                  if (hasChildren) toggle(item.id);
+                  if (onSelectStage && item.id !== "learn") onSelectStage(item.id);
+                }}
+              >
+                <span className="ld-contentNavState" aria-hidden="true">
+                  {item.status === "done" ? <CheckCircleIcon size={15} /> : item.status === "current" ? <CircleIcon size={15} /> : <CircleIcon size={15} />}
+                </span>
+                <span className="ld-contentNavText">
+                  <strong>{index + 1}. {item.label}</strong>
+                  <small>{item.meta}</small>
+                </span>
+                <Icon size={15} className="ld-contentNavIcon" />
+              </button>
+              {hasChildren && isOpen && (
+                <div className="ld-contentNavChildren">
+                  {item.children.map((child) => {
+                    const ChildIcon = child.icon || BookIcon;
+                    return (
+                      <button type="button" className={`ld-contentNavChild is-${child.status}`} key={child.id} onClick={() => onSelectStage?.("learn")}>
+                        <ChildIcon size={13} />
+                        <span>{child.label}</span>
+                        <small>{child.meta}</small>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      <div className="ld-contentHelp">
+        <HeadsetIcon size={22} />
+        <div>
+          <p>Need Help?</p>
+          <span>Join a live session or get help from your instructor.</span>
+          <Link className="ld-btnGhost ld-btnSm" to="/curriculum/live-sessions">View Live Sessions</Link>
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+function ContextRail({ lesson, curriculum, completedCount, availableCount, nextHref, resources }) {
+  const pct = availableCount > 0 ? Math.round((completedCount / availableCount) * 100) : 0;
+  const curriculumName = String(curriculum || lesson.curriculum || "Curriculum").replace(/-/g, " ");
+  return (
+    <aside className="ld-contextRail" aria-label="Lesson context">
+      <section className="ld-card ld-panelCard ld-progressPanel">
+        <div className="ld-panelTitleRow">
+          <h2 className="ld-panelTitle">Lesson Progress</h2>
+        </div>
+        <div className="ld-progressPanelBody">
+          <div className="ld-progressRing" style={{ "--progress": `${pct}%` }} aria-label={`Lesson progress ${pct}%`}>
+            <span>{pct}%</span>
+          </div>
+          <div>
+            <p className="ld-progressPanelLabel">Overall Progress</p>
+            <p className="ld-progressPanelValue">{completedCount} of {availableCount} steps completed</p>
+            <div className="ld-progressBar" role="progressbar" aria-valuemin="0" aria-valuemax={availableCount} aria-valuenow={completedCount}>
+              <span style={{ width: `${pct}%` }} />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="ld-card ld-panelCard">
+        <div className="ld-panelTitleRow">
+          <h2 className="ld-panelTitle">Current Context</h2>
+        </div>
+        <dl className="ld-contextList">
+          <div><dt><BookIcon size={15} /> Course</dt><dd>{curriculumName}</dd></div>
+          <div><dt><LayersIcon size={15} /> Unit</dt><dd>{lesson.gradeBand?.stage || "Current unit"}</dd></div>
+          <div><dt><TargetIcon size={15} /> Lesson</dt><dd>{lesson.slug || lesson.id}</dd></div>
+          {lesson.estMinutes ? <div><dt><ClockIcon size={15} /> Estimated Time</dt><dd>{lesson.estMinutes} minutes</dd></div> : null}
+          <div><dt><CalendarIcon size={15} /> Due Date</dt><dd>Assigned due date unavailable</dd></div>
+        </dl>
+      </section>
+
+      <section className="ld-card ld-panelCard">
+        <div className="ld-panelTitleRow">
+          <h2 className="ld-panelTitle">My Notes</h2>
+        </div>
+        <p className="ld-panelNote">Notes are read-only here until a canonical notes service is available.</p>
+      </section>
+
+      <section className="ld-card ld-panelCard">
+        <div className="ld-panelTitleRow">
+          <h2 className="ld-panelTitle">Resources</h2>
+        </div>
+        {resources.length ? (
+          <ul className="ld-resourceList">
+            {resources.map((resource) => (
+              <li key={`${resource.href}-${resource.label}`}>
+                <a href={resource.href}>
+                  {React.createElement(resource.icon || BookIcon, { size: 14 })}
+                  <span>{resource.label}</span>
+                  <ChevronRightIcon size={13} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="ld-panelNote">No additional lesson resources are available.</p>
+        )}
+      </section>
+
+      <section className="ld-card ld-panelCard ld-helpPanel">
+        <HeadsetIcon size={34} />
+        <h2 className="ld-panelTitle">Need Help?</h2>
+        <p className="ld-panelNote">Get help from your instructor or join a live support session.</p>
+        <Link className="ld-btnGhost ld-btnSm" to="/curriculum/live-sessions">View Live Sessions</Link>
+      </section>
+    </aside>
+  );
+}
+
+function lessonResources(lesson, nextHref) {
+  const resources = [];
+  for (const [index, section] of (lesson.sections || []).entries()) {
+    const raw = section.media || null;
+    const href = raw?.url || raw?.src;
+    if (href) {
+      resources.push({
+        href,
+        label: raw.caption || raw.alt || section.heading || `Lesson media ${index + 1}`,
+        icon: raw.type === "video" || String(href).match(/\.(mp4|mov|webm)$/i) ? VideoIcon : BookIcon,
+      });
+    }
+  }
+  for (const game of lesson.games || []) {
+    if (game.route) resources.push({ href: game.route, label: game.title || "Arcade activity", icon: PlayIcon });
+  }
+  if (nextHref) {
+    resources.push({ href: nextHref, label: "Next lesson", icon: ChevronRightIcon });
+  }
+  return resources;
 }
 
 export default function GuidedLessonExperience({ lesson, curriculum, nextHref }) {
@@ -161,7 +346,8 @@ export default function GuidedLessonExperience({ lesson, curriculum, nextHref })
 
   const completedKeys = new Set(availableStages.filter((_, i) => i < maxIndexReached).map((s) => s.key));
 
-  const upNext = availableStages.slice(activeIndex + 1, activeIndex + 5);
+  const contentNavItems = React.useMemo(() => buildContentNavItems(lesson, availableStages), [lesson, availableStages]);
+  const resources = React.useMemo(() => lessonResources(lesson, nextHref), [lesson, nextHref]);
 
   // Real, derived "what's ahead" counts for the Orient stage — never a
   // fabricated estimate, just how many real items each later stage has.
@@ -192,8 +378,16 @@ export default function GuidedLessonExperience({ lesson, curriculum, nextHref })
       </div>
 
       <div className="ld-lessonGrid">
+        <ContentNavigator items={contentNavItems} onSelectStage={goToStage} />
+
         <section id="lesson-stage-panel" role="tabpanel" aria-labelledby={`lesson-stage-tab-${activeKey}`} className="ld-card ld-workspace">
-          <h2 className="ld-workspaceTitle">{STAGE_LABELS[activeKey]}</h2>
+          <div className="ld-studySurfaceHead">
+            <div>
+              <p className="ld-studyEyebrow">{activeKey === "learn" ? "Lesson Content" : "Lesson Stage"}</p>
+              <h2 className="ld-workspaceTitle">{STAGE_LABELS[activeKey]}</h2>
+            </div>
+            <span className="ld-lessonPill">{activeIndex + 1} of {availableStages.length}</span>
+          </div>
 
           {activeKey === "orient" && (
             <>
@@ -355,17 +549,7 @@ export default function GuidedLessonExperience({ lesson, curriculum, nextHref })
           {activeKey === "career" && <CareerConnectionPanel />}
 
           {activeKey === "complete" && (
-            <div>
-              <p className="ld-workspaceLede">
-                You've reached the end of the guided stages for this lesson. Use Completion Check below when
-                you're ready to mark it complete.
-              </p>
-              {nextHref && (
-                <Link className="ld-btn ld-btnPrimary" to={nextHref}>
-                  Go to next lesson <ChevronRightIcon size={16} />
-                </Link>
-              )}
-            </div>
+            <CompletionCheckPanel lesson={lesson} curriculum={curriculum} actorId={actorId} addPoints={addPoints} nextHref={nextHref} />
           )}
 
           {activeKey === "checkin" && (
@@ -381,47 +565,23 @@ export default function GuidedLessonExperience({ lesson, curriculum, nextHref })
                 Continue <ChevronRightIcon size={16} />
               </button>
             )}
+            {isLast && activeKey !== "complete" && (
+              <button type="button" className="ld-btn ld-btnPrimary" onClick={() => goToStage("complete")}>
+                Check Completion <ChevronRightIcon size={16} />
+              </button>
+            )}
           </div>
         </section>
 
-        <div className="ld-lessonSide">
-          <RequirementsPanel />
-          <EvidencePanel
-            lesson={lesson}
-            curriculum={curriculum}
-            slug={lesson.slug || lesson.id}
-            actorId={actorId}
-            checkItemCount={checkAssessment?.items?.length || 0}
-            reflectItems={reflectAssessment?.items || []}
-            vocabCount={(lesson.vocab || []).length}
-          />
-          <CareerConnectionPanel />
-        </div>
+        <ContextRail
+          lesson={lesson}
+          curriculum={curriculum}
+          completedCount={completedKeys.size}
+          availableCount={availableStages.length}
+          nextHref={nextHref}
+          resources={resources}
+        />
       </div>
-
-      {upNext.length > 0 && (
-        <div className="ld-upNextGrid">
-          {upNext.map((s) => {
-            const StageIcon = STAGE_ICONS[s.key] || ClipboardIcon;
-            return (
-              <button type="button" className="ld-card ld-upNextCard" key={s.key} onClick={() => goToStage(s.key)}>
-                <div className="ld-upNextTop">
-                  <span className="ld-upNextIcon" aria-hidden="true">
-                    <StageIcon size={16} />
-                  </span>
-                  <div>
-                    <p className="ld-upNextEyebrow">Coming up next</p>
-                    <p className="ld-upNextLabel">{s.label}</p>
-                  </div>
-                </div>
-                <p className="ld-upNextDesc">{STAGE_DESCRIPTIONS[s.key]}</p>
-              </button>
-            );
-          })}
-        </div>
-      )}
-
-      <CompletionCheckPanel lesson={lesson} curriculum={curriculum} actorId={actorId} addPoints={addPoints} />
     </div>
   );
 }

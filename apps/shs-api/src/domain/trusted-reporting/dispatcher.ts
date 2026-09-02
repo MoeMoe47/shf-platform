@@ -2,6 +2,7 @@ import { IntegrationOutboxRepo } from "./outbox-repo.js";
 import { randomUUID } from "node:crypto";
 import { classifyDeliveryFailure, classifyDeliveryResponse, signInternalRequest } from "./outbox.js";
 import { emitOperationalTelemetry } from "../../observability/operational-telemetry.js";
+import { projectAuthoritativeOutboxEvent, verifiedEvidenceEventSourceTypes } from "../verified-evidence/service/verified-evidence-service.js";
 
 type DispatcherResponse = { ok: boolean; status: number; json: () => Promise<any> };
 type DispatcherFetch = (url: string, init: any) => Promise<DispatcherResponse>;
@@ -49,6 +50,13 @@ export async function dispatchPendingIntegrationEvents(
   for (const event of events) {
     try {
       const body = typeof event.payload_json === "string" ? JSON.parse(event.payload_json) : event.payload_json;
+      // Curriculum evidence/truth projection is an SHS production consumer of
+      // this same outbox. It must commit before the row is acknowledged and
+      // must never be delegated to a browser or the development JSONL path.
+      let verifiedProjection: { handled: boolean; projected: number } | null = null;
+      if (Object.prototype.hasOwnProperty.call(verifiedEvidenceEventSourceTypes, event.event_type)) {
+        verifiedProjection = await projectAuthoritativeOutboxEvent({ ...event, payload_json: body });
+      }
       const headers = signInternalRequest("POST", "/shf/internal/ingestion/events", body, options.now);
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), config.requestTimeoutMs);
@@ -72,7 +80,7 @@ export async function dispatchPendingIntegrationEvents(
         await repo.markDelivered(event.outbox_event_id, workerId);
         operationalLog("delivery_succeeded", { worker_id: workerId, outbox_event_id: event.outbox_event_id, classification });
         emitOperationalTelemetry({ event_name: "outbox_delivery_succeeded", severity: "INFO", component: "trusted_reporting_worker", category: "OUTBOX", outcome: "SUCCESS", metadata: { reason: classification } });
-        results.push({ outbox_event_id: event.outbox_event_id, status: "DELIVERED" });
+        results.push({ outbox_event_id: event.outbox_event_id, status: "DELIVERED", ...(verifiedProjection ? { verified_projection_count: verifiedProjection.projected } : {}) });
       } else if (classification === "RETRYABLE_FAILURE") {
         const error: any = new Error("agent_fabric_delivery_retryable"); error.status = response.status; throw error;
       } else {

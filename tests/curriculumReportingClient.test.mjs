@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "node:test";
 
-import { fetchCurriculumLessonCompletionReport } from "../src/shared/reporting/curriculumReportingClient.js";
+import { fetchCurriculumLessonCompletionReport, fetchCurriculumLearningProgressReport } from "../src/shared/reporting/curriculumReportingClient.js";
 
 function response(status, body) {
   return {
@@ -56,6 +56,16 @@ test("unavailable Reporting Service data rejects without a browser fallback", as
     }),
     /unavailable/,
   );
+});
+
+test("staff learning progress uses the canonical report endpoint", async () => {
+  const calls = [];
+  const report = { report_definition_id: "curriculum.learning_progress", metric_results: [{ metric_id: "curriculum.lesson.completion_count.v1", value: 2, status: "OK" }] };
+  const result = await fetchCurriculumLearningProgressReport({ fetchImpl: async (url, options) => { calls.push({ url, options }); return new Response(JSON.stringify({ report }), { status: 200 }); } });
+  assert.deepEqual(result, report);
+  assert.equal(calls[0].url, "/api/shf/reports/curriculum.learning-progress");
+  assert.equal(calls[0].options.credentials, "include");
+  assert.equal(calls[0].options.cache, "no-store");
 });
 
 test("the migrated card does not contain a client lesson-count formula or hardcoded lesson count", () => {

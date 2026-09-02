@@ -215,6 +215,33 @@ test("Journey Milestones adapt only completed canonical projection records", () 
   }), null);
 });
 
+test("curriculum and verified Evidence milestones map to shared presentation policy", () => {
+  const lesson = achievementFromJourneyMilestone({
+    id: "lesson:completion_1:completed", type: "LESSON_COMPLETED", title: "Lesson A", status: "completed",
+    sourceRecordId: "completion_1",
+  });
+  assert.equal(lesson.achievementType, "curriculum.lesson.completed");
+  assert.equal(evaluateCelebration(lesson).tier, CELEBRATION_TIER.ACKNOWLEDGEMENT);
+
+  const unit = achievementFromJourneyMilestone({
+    id: "unit:release_1:unit_a:assignment_a:completed", type: "UNIT_COMPLETED", title: "Unit A", status: "completed",
+    sourceRecordId: "release_1:unit_a",
+  });
+  assert.equal(evaluateCelebration(unit).tier, CELEBRATION_TIER.ACHIEVEMENT);
+
+  const course = achievementFromJourneyMilestone({
+    id: "course:release_1:assignment_a:completed", type: "COURSE_COMPLETED", title: "Course A", status: "completed",
+    sourceRecordId: "release_1",
+  });
+  assert.equal(evaluateCelebration(course).tier, CELEBRATION_TIER.MAJOR_MILESTONE);
+
+  const evidence = achievementFromJourneyMilestone({
+    id: "evidence:evidence_1:verified", type: "EVIDENCE_VERIFIED", title: "Evidence verified", status: "completed",
+    sourceRecordId: "evidence_1",
+  });
+  assert.equal(evaluateCelebration(evidence).tier, CELEBRATION_TIER.ACHIEVEMENT);
+});
+
 test("a CREDENTIAL_EARNED milestone adapts to a Tier 3 achievement only when its own status is completed", () => {
   assert.deepEqual(achievementFromJourneyMilestone({
     id: "credential:learner_credential_1:earned",

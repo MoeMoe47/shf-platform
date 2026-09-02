@@ -16,10 +16,10 @@
 // (apps/shs-api/seeds/010_seed_live_learning_users.sql): "student" and
 // "instructor". This is a temporary bridge, not a second identity system
 // — it defers entirely to the backend's real role/permission checks.
-const LIVE_LEARNING_API_BASE = "http://127.0.0.1:8091";
+const LIVE_LEARNING_API_BASE = import.meta.env?.VITE_LIVE_LEARNING_API_BASE || "http://127.0.0.1:8091";
 
 export function resolveDevUserId(role) {
-  return role === "admin" || role === "instructor" ? "user_instructor_001" : "user_student_001";
+  return import.meta.env?.VITE_DEV_USER_ID || (role === "admin" || role === "instructor" ? "user_instructor_001" : "user_student_001");
 }
 
 function authHeaders(role) {
@@ -48,6 +48,11 @@ export async function fetchProviderHealth(role) {
 export async function listLiveSessions(role, { lessonId } = {}) {
   const qs = lessonId ? `?lessonId=${encodeURIComponent(lessonId)}` : "";
   const res = await fetch(`${LIVE_LEARNING_API_BASE}/live-learning/sessions${qs}`, { headers: authHeaders(role) });
+  return parseJson(res);
+}
+
+export async function getLiveSession(role, sessionId) {
+  const res = await fetch(`${LIVE_LEARNING_API_BASE}/live-learning/sessions/${encodeURIComponent(sessionId)}`, { headers: authHeaders(role) });
   return parseJson(res);
 }
 
@@ -87,11 +92,29 @@ export async function requestJoin(role, sessionId) {
   return parseJson(res);
 }
 
+export async function listJoinEvents(role, sessionId) {
+  const res = await fetch(`${LIVE_LEARNING_API_BASE}/live-learning/sessions/${encodeURIComponent(sessionId)}/join-events`, {
+    headers: authHeaders(role),
+  });
+  return parseJson(res);
+}
+
+export async function confirmAttendance(role, joinEventId) {
+  const res = await fetch(`${LIVE_LEARNING_API_BASE}/live-learning/join-events/${encodeURIComponent(joinEventId)}/confirm-attendance`, {
+    method: "POST",
+    headers: authHeaders(role),
+  });
+  return parseJson(res);
+}
+
 export default {
   fetchProviderHealth,
   listLiveSessions,
+  getLiveSession,
   createLiveSession,
   cancelLiveSession,
   requestJoin,
+  listJoinEvents,
+  confirmAttendance,
   resolveDevUserId,
 };

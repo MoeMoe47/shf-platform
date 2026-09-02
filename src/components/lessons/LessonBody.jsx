@@ -41,6 +41,7 @@ export default function LessonBody({
   const curriculum = curriculumProp || lesson?.curriculum || userCurriculum || "asl";
   const [completed, setCompleted] = React.useState(false);
   const [syncStatus, setSyncStatus] = React.useState("");
+  const [syncPending, setSyncPending] = React.useState(false);
   const [showVocabReview, setShowVocabReview] = React.useState(false);
   const actorId = email || "local-student";
 
@@ -173,29 +174,24 @@ export default function LessonBody({
           {institutionalCompletion ? (
             <button
               className="sh-btn"
-              disabled={completed}
+              disabled={completed || syncPending}
               onClick={() => {
-              // Phase 1 progress wiring (SHF Curriculum Infrastructure
-              // Audit §12): this previously only called window.alert()
-              // with a fake "+5 points" claim — no persistence, no real
-              // reward. Now notifies the real, existing shared progress
-              // client (src/shared/progress/progressClient.js) with the
-              // actor identity, curriculum, and lesson slug it expects,
-              // and grants a real +5 via the same reward hook already
-              // used elsewhere in the app (src/hooks/useRewards.js) —
-              // restoring the button's own promised behavior honestly
-              // instead of removing it.
-              markLessonComplete({
-                actorId: email || "local-student",
-                curriculum,
-                slug: lesson.slug || lesson.id || title,
-                onSyncStatus: ({ status }) => setSyncStatus(status),
-              });
-              addPoints(5);
-              setCompleted(true);
+                markLessonComplete({
+                  actorId: email || "local-student",
+                  curriculum,
+                  slug: lesson.slug || lesson.id || title,
+                  onSyncStatus: ({ status }) => {
+                    setSyncStatus(status);
+                    setSyncPending(status === "pending");
+                    if (status === "synchronized") {
+                      setCompleted(true);
+                      addPoints(5);
+                    }
+                  },
+                });
               }}
             >
-              {completed ? "Completed ✓ (+5)" : "Mark as Complete (+5)"}
+              {completed ? "Completed ✓" : syncPending ? "Synchronizing…" : "Mark as Complete"}
             </button>
           ) : (
             <span className="sh-muted" role="status">Preview only — completion is unavailable for imported lessons.</span>

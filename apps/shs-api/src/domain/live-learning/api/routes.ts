@@ -115,6 +115,15 @@ export function registerLiveLearningRoutes(app: any) {
     }
   });
 
+  app.post("/live-learning/join-events/:joinEventId/confirm-attendance", requirePermission(SHS_SECURITY_PERMISSIONS.LIVE_LEARNING_JOIN_AUTHORIZE), async (req: any, res: any) => {
+    try { return res.json(ok(await service.confirmAttendance(req.user, req.params.joinEventId))); }
+    catch (err: any) {
+      if (err instanceof SessionNotFoundError) return res.status(404).json(fail("NOT_FOUND", err.message));
+      if (err instanceof LiveLearningEligibilityError) return res.status(err.statusCode).json(fail(err.code, err.message));
+      return res.status(400).json(fail("ATTENDANCE_CONFIRMATION_FAILED", "Unable to confirm attendance."));
+    }
+  });
+
   // Access/audit review — instructors/admins only.
   app.get("/live-learning/sessions/:id/join-events", requirePermission(SHS_SECURITY_PERMISSIONS.LIVE_LEARNING_JOIN_AUTHORIZE), async (req: any, res: any) => {
     const session = await service.getSessionForActor(req.params.id, req.user);

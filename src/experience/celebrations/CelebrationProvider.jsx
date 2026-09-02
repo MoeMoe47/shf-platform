@@ -1,9 +1,9 @@
 import React from "react";
 import { announce } from "@/components/ally/A11yTools.jsx";
 import { emitCompanionEvent } from "@/companion/companionEvents.js";
+import { useEffectiveAccessibilityContext } from "@/context/EffectiveAccessibilityContext.jsx";
 import {
   CELEBRATION_EFFECT,
-  CELEBRATION_INTENSITY,
   createCelebrationDeduper,
   evaluateCelebration,
 } from "./celebrationPolicy.js";
@@ -13,51 +13,19 @@ const CelebrationContext = React.createContext({
   replayCelebration: () => null,
 });
 
-function readSystemReducedMotion() {
-  try { return window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch { return false; }
-}
-
-function readStoredReducedMotion() {
-  try {
-    const prefs = JSON.parse(localStorage.getItem("curriculum:a11yPrefs:v1") || "{}");
-    return prefs?.reducedMotion === true || localStorage.getItem("companion:reduceAnimation") === "1";
-  } catch {
-    return false;
-  }
-}
-
-function readCelebrationIntensity() {
-  try {
-    const prefs = JSON.parse(localStorage.getItem("curriculum:a11yPrefs:v1") || "{}");
-    const value = prefs?.celebrationIntensity || localStorage.getItem("shf:celebration:intensity:v1");
-    return Object.values(CELEBRATION_INTENSITY).includes(value) ? value : CELEBRATION_INTENSITY.FULL;
-  } catch {
-    return CELEBRATION_INTENSITY.FULL;
-  }
-}
-
 export function CelebrationProvider({ children }) {
+  // SHF AIEL Phase 3 — reducedMotion/celebrationIntensity now come from
+  // the canonical Effective Accessibility Context, not this provider's
+  // own direct localStorage reads (docs/SHF_AIEL_PERSISTENCE_API_
+  // CONTRACT_V1.md — reduced-motion consolidation).
+  const { reducedMotion, celebrationIntensity } = useEffectiveAccessibilityContext();
   const [active, setActive] = React.useState(null);
-  const [reducedMotion, setReducedMotion] = React.useState(() => readSystemReducedMotion() || readStoredReducedMotion());
   const deduper = React.useRef(null);
   const timer = React.useRef(null);
 
   if (!deduper.current) {
     deduper.current = createCelebrationDeduper(typeof window === "undefined" ? null : window.localStorage);
   }
-
-  React.useEffect(() => {
-    let mq;
-    try { mq = window.matchMedia("(prefers-reduced-motion: reduce)"); } catch { return; }
-    const update = () => setReducedMotion(mq.matches || readStoredReducedMotion());
-    update();
-    mq.addEventListener ? mq.addEventListener("change", update) : mq.addListener(update);
-    window.addEventListener("storage", update);
-    return () => {
-      mq.removeEventListener ? mq.removeEventListener("change", update) : mq.removeListener(update);
-      window.removeEventListener("storage", update);
-    };
-  }, []);
 
   React.useEffect(() => () => {
     if (timer.current) clearTimeout(timer.current);
@@ -85,13 +53,13 @@ export function CelebrationProvider({ children }) {
   const celebrateAchievement = React.useCallback((achievement, options = {}) => {
     const descriptor = evaluateCelebration(achievement, {
       reducedMotion,
-      intensity: readCelebrationIntensity(),
+      intensity: celebrationIntensity,
     });
     if (!descriptor) return null;
     if (!options.replay && deduper.current.has(descriptor.celebrationKey)) return null;
     if (!options.replay) deduper.current.mark(descriptor.celebrationKey);
     return showDescriptor(descriptor);
-  }, [reducedMotion, showDescriptor]);
+  }, [reducedMotion, celebrationIntensity, showDescriptor]);
 
   const replayCelebration = React.useCallback((descriptor) => {
     if (!descriptor) return null;

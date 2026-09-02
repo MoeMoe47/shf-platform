@@ -83,6 +83,11 @@ export function normalizeLessonMedia(media) {
   const captionsTrack = media.captionsTrack || media.captions || media.vtt || null;
   const transcript = media.transcript || null;
   const audioDescription = media.audioDescription || null;
+  // Phase 4: an author can explicitly mark an image decorative (e.g. a
+  // purely ornamental background/divider image) — this is the only
+  // legitimate reason an image has no alt text without that being a real
+  // gap. Never inferred/guessed; only set when the source data says so.
+  const decorative = type === "image" && media.decorative === true;
 
   return {
     type,
@@ -90,10 +95,11 @@ export function normalizeLessonMedia(media) {
     poster: media.poster || null,
     caption: media.caption || null,
     alt: media.alt || (type === "image" ? "" : null),
+    decorative,
     transcript,
     captionsTrack,
     audioDescription,
-    hasAccessibleAlternative: !!(captionsTrack || transcript || audioDescription || (type === "image" && media.alt)),
+    hasAccessibleAlternative: !!(captionsTrack || transcript || audioDescription || (type === "image" && (media.alt || decorative))),
   };
 }
 

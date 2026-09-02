@@ -25,12 +25,12 @@ test("only Lessons completed consumes the existing canonical report", () => {
 });
 
 test("remaining progress-card values are not silently canonicalized", () => {
-  assert.match(progressCard, /percentComplete: 68/);
-  assert.match(progressCard, /assignmentsDue: 3/);
-  assert.match(progressCard, /credentialsEarned: 8/);
-  assert.match(progressCard, /streakDays: 12/);
-  assert.match(weeklyCard, /__mockAttendancePct/);
-  assert.match(assignmentsCard, /const ASSIGNMENTS/);
+  assert.match(progressCard, /Overall pathway completion is not available yet/);
+  assert.match(progressCard, /Credentials earned/);
+  assert.match(weeklyCard, /No canonical weekly attendance/);
+  assert.equal(weeklyCard.includes("__mockAttendancePct"), false);
+  assert.match(assignmentsCard, /listCalendarEvents/);
+  assert.equal(assignmentsCard.includes("const ASSIGNMENTS"), false);
   const surface = registry.surfaces.find((item) => item.surface_id === "surface.curriculum.progress");
   assert.equal(surface.migration_status, "MIGRATE");
   assert.match(surface.required_action, /remaining noncanonical cards separately/);

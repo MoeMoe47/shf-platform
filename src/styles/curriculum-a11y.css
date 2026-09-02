@@ -1,0 +1,126 @@
+/* src/styles/curriculum-a11y.css
+   SHF AIEL Phase 4 — Curriculum & Lesson Accessibility Integration.
+
+   Scoped entirely under :root[data-app="curriculum"] (this app's own HTML
+   page — a separate document from every other SHF app in this multi-page
+   build, so nothing here can leak into Career/Civic/Sales/Arcade/etc.)
+   combined with data-a11y-* attributes that
+   src/context/EffectiveAccessibilityContext.jsx sets on <html> from the
+   canonical Personal Accessibility Profile. This file is the one place
+   that turns those attributes into real presentation — no component
+   reimplements this logic itself.
+
+   Reuses the existing --ld-* token system from curriculum-dashboard.css
+   (same file that already re-themes for dark mode) rather than inventing
+   a second token layer.
+*/
+
+/* ===================== Text scale ===================== */
+:root[data-app="curriculum"] {
+  --ld-text-scale: 1;
+}
+:root[data-app="curriculum"][data-a11y-text-scale="LARGE"] {
+  --ld-text-scale: 1.15;
+}
+:root[data-app="curriculum"][data-a11y-text-scale="EXTRA_LARGE"] {
+  --ld-text-scale: 1.3;
+}
+
+/* Root-level cascade: any Curriculum text that does NOT already carry an
+   explicit font-size (most prose, labels, buttons, quiz/assessment text —
+   see AssessmentRenderer.jsx, which has none) inherits this scaled value
+   automatically. Every explicit font-size declared in curriculum-lesson.css
+   and curriculum-dashboard.css is itself wrapped in
+   calc(<original>px * var(--ld-text-scale, 1)), so both paths move
+   together under one lever instead of two competing mechanisms. */
+:root[data-app="curriculum"] .ld-main {
+  font-size: calc(100% * var(--ld-text-scale, 1));
+}
+
+/* ===================== Contrast ===================== */
+/* HIGH strengthens the *existing* --ld-* palette (stronger text, muted,
+   and border contrast) — it does not swap to a different color scheme, so
+   it composes correctly with light/dark mode instead of competing with it.
+   Values chosen for materially better legibility (WCAG-AA-oriented text
+   contrast) without becoming a brand-breaking, high-saturation treatment. */
+:root[data-app="curriculum"][data-a11y-contrast="HIGH"] {
+  --ld-ink: #000000;
+  --ld-muted: #3f3f46;
+  --ld-ring: #4b4b52;
+  --ld-ring-soft: #6b6b73;
+}
+:root[data-app="curriculum"][data-theme="dark"][data-a11y-contrast="HIGH"] {
+  --ld-ink: #ffffff;
+  --ld-muted: #d4d4d8;
+  --ld-ring: #a1a1aa;
+  --ld-ring-soft: #8b8b94;
+}
+/* System `forced-colors` mode (Windows High Contrast) already overrides
+   author colors at the OS/browser level — this app's own HIGH contrast
+   treatment must not fight that, so it only applies when forced-colors is
+   not active. */
+@media (forced-colors: active) {
+  :root[data-app="curriculum"][data-a11y-contrast="HIGH"] {
+    --ld-ink: initial;
+    --ld-muted: initial;
+    --ld-ring: initial;
+    --ld-ring-soft: initial;
+  }
+}
+/* Widen legibility-critical borders (inputs, cards, fieldsets) — many of
+   these come from inline styles in AssessmentRenderer.jsx that already
+   reference var(--ring), a separate, more broadly-shared token; boosting
+   its computed value here (not renaming it) keeps that component
+   untouched. */
+:root[data-app="curriculum"][data-a11y-contrast="HIGH"] .ld-shell {
+  --ring: var(--ld-ring);
+  --line: var(--ld-ring);
+}
+
+/* ===================== Focus emphasis ===================== */
+/* DEFAULT keeps whatever native/existing focus-visible styling each
+   control already has — this rule only adds emphasis, it never removes or
+   replaces a working default. */
+:root[data-app="curriculum"][data-a11y-focus="ENHANCED"] .ld-shell a:focus-visible,
+:root[data-app="curriculum"][data-a11y-focus="ENHANCED"] .ld-shell button:focus-visible,
+:root[data-app="curriculum"][data-a11y-focus="ENHANCED"] .ld-shell input:focus-visible,
+:root[data-app="curriculum"][data-a11y-focus="ENHANCED"] .ld-shell select:focus-visible,
+:root[data-app="curriculum"][data-a11y-focus="ENHANCED"] .ld-shell textarea:focus-visible,
+:root[data-app="curriculum"][data-a11y-focus="ENHANCED"] .ld-shell [tabindex]:focus-visible {
+  outline: 3px solid var(--ld-orange, #ff4f00) !important;
+  outline-offset: 3px !important;
+  border-radius: 4px;
+}
+
+/* ===================== Target size ===================== */
+/* LARGE widens tap/click affordance for real interactive controls only —
+   never blanket-applied to every element, and never replaces a semantic
+   control with a div. */
+:root[data-app="curriculum"][data-a11y-target-size="LARGE"] .ld-shell button,
+:root[data-app="curriculum"][data-a11y-target-size="LARGE"] .ld-shell .sh-btn,
+:root[data-app="curriculum"][data-a11y-target-size="LARGE"] .ld-shell a.ld-navItem,
+:root[data-app="curriculum"][data-a11y-target-size="LARGE"] .ld-shell input[type="checkbox"],
+:root[data-app="curriculum"][data-a11y-target-size="LARGE"] .ld-shell input[type="radio"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+:root[data-app="curriculum"][data-a11y-target-size="LARGE"] .ld-shell button,
+:root[data-app="curriculum"][data-a11y-target-size="LARGE"] .ld-shell .sh-btn {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+:root[data-app="curriculum"][data-a11y-target-size="LARGE"] .ld-shell label {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+/* ===================== Read-aloud prominence ===================== */
+/* SpeakBtn.jsx's HIDDEN-prominence icon-only compact form
+   (learningSupport.readAloudPreference — see SpeakBtn.jsx's own prop
+   doc). Still a real, full-size-tappable, screen-reader-labeled button —
+   only its visual footprint shrinks. */
+:root[data-app="curriculum"] .sh-btn--icon {
+  padding-left: 10px;
+  padding-right: 10px;
+  min-width: 40px;
+}

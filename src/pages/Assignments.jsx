@@ -1,139 +1,193 @@
 // src/pages/Assignments.jsx
+//
+// SHF Curriculum Phase 5.5 rework of the Phase 3 Assignments page —
+// same real backend data (listAssignments -> assignment-entitlement-
+// service.ts), now presented per the approved mock: Needs Your
+// Attention, status tabs, and Upcoming Deadlines / Upcoming Live Session
+// side cards. This page only renders what the server already computed;
+// it never derives or mutates completion/access state itself.
+//
+// One deliberate, disclosed deviation from the mock: the backend's real
+// accessState is LOCKED/AVAILABLE/IN_PROGRESS/OVERDUE/COMPLETED — there
+// is no post-submission review-lifecycle domain (see assignment.ts's own
+// comment on computeDueState). Status tabs below map to real states (To
+// Do/In Progress/Completed) rather than inventing that lifecycle.
 import React from "react";
-import { Link, useParams } from "react-router-dom";
-import { useCreditCtx } from "@/context/CreditContext.jsx";
-import { track } from "@/utils/analytics.js";
+import { Link } from "react-router-dom";
+import { useUser } from "@/context/UserContext.jsx";
+import { listAssignments } from "@/lib/assignments/api.js";
+import { listLiveSessions } from "@/lib/liveLearning/api.js";
+import AssignmentRow, { ACCESS_STATE_LABEL, breadcrumbFor, nextLessonHref } from "@/components/curriculum/AssignmentRow.jsx";
+import { pickNextLiveSession } from "@/shared/learning/upNext.js";
+import { ClipboardIcon, HeadsetIcon, CalendarIcon, ChevronRightIcon } from "@/components/curriculum/icons.jsx";
 
-// This page is mounted at two different routes with two different
-// registered lesson/assignments paths (career.html's `assignments`/`learn/:id`
-// vs curriculum.html's `curriculum/asl/assignments`/`curriculum/lesson/:id` —
-// see src/router/CareerRoutes.jsx and src/router/CurriculumRoutes.jsx). It
-// has no route param or prop telling it which app it's in, so the correct
-// in-app path shape is resolved from the page URL, matching the pattern
-// already used for cross-app links in CareerLearningBridge.jsx.
-function useIsCurriculumApp() {
-  return typeof window !== "undefined" && window.location.pathname.includes("curriculum.html");
+const TABS = [
+  { key: "AVAILABLE", label: "To Do" },
+  { key: "IN_PROGRESS", label: "In Progress" },
+  { key: "COMPLETED", label: "Completed" },
+];
+
+const TYPE_LABEL = { assignment: "Assignment", quiz: "Quiz", reflection: "Reflection", artifact: "Artifact" };
+function daysUntil(iso) {
+  if (!iso) return null;
+  const day = 86_400_000;
+  const due = new Date(iso);
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  const dueStart = new Date(due);
+  dueStart.setHours(0, 0, 0, 0);
+  return Math.round((dueStart.getTime() - todayStart.getTime()) / day);
+}
+function urgencyText(iso) {
+  const days = daysUntil(iso);
+  if (days === null) return "";
+  if (days < 0) return `${Math.abs(days)} day${Math.abs(days) === 1 ? "" : "s"} overdue`;
+  if (days === 0) return "Due today";
+  return `${days} day${days === 1 ? "" : "s"} left`;
 }
 
 export default function Assignments() {
-  const { curriculum = "asl" } = useParams();
-  const credit = useCreditCtx();
-  const isCurriculumApp = useIsCurriculumApp();
-  const lessonHref = (id) => (isCurriculumApp ? `/curriculum/lesson/${id}` : `/learn/${id}`);
-  const assignmentsHref = isCurriculumApp ? "/curriculum/asl/assignments" : "/assignments";
+  const { role } = useUser();
+  const [state, setState] = React.useState({ loading: true, error: null, items: [], liveSessions: [] });
+  const [activeTab, setActiveTab] = React.useState("AVAILABLE");
 
-  // Placeholder data (swap when API is ready)
-  const [open, setOpen] = React.useState([
-    { id: "ref-1",  title: "Lesson 3 Reflection", due: "Sep 20", type: "reflection" },
-    { id: "quiz-2", title: "Quiz 2",              due: "Sep 22", type: "quiz" },
-    { id: "art-1",  title: "Portfolio Artifact",  due: "Sep 28", type: "artifact" },
-  ]);
-  const [completed, setCompleted] = React.useState([]);
-
-  function awardAssignmentComplete(assignment) {
-    try {
-      track?.("assignment_completed", {
-        id: assignment?.id,
-        title: assignment?.title,
-        curriculum,
+  React.useEffect(() => {
+    let active = true;
+    setState((s) => ({ ...s, loading: true, error: null }));
+    Promise.all([listAssignments(role), listLiveSessions(role).catch(() => ({ items: [] }))])
+      .then(([assignmentRes, liveRes]) => {
+        if (active) setState({ loading: false, error: null, items: assignmentRes?.items || [], liveSessions: liveRes?.items || [] });
+      })
+      .catch((error) => {
+        if (active) setState((s) => ({ ...s, loading: false, error }));
       });
-    } catch {}
+    return () => {
+      active = false;
+    };
+  }, [role]);
 
-    credit?.earn?.({
-      action: "assignment.complete",
-      rewards: { wheat: 1 }, // 🌾
-      scoreDelta: 6,
-      meta: { id: assignment?.id, title: assignment?.title, curriculum },
-    });
-  }
-
-  function markComplete(a) {
-    // optimistic move from open → completed
-    setOpen((list) => list.filter((x) => x.id !== a.id));
-    setCompleted((list) => [
-      { ...a, completedAt: Date.now() },
-      ...list,
-    ]);
-    awardAssignmentComplete(a);
-  }
-
-  // Inline styling below (not shared .sh-*/.sb-*/.btn classes) is deliberate:
-  // this page mounts on both career.html and curriculum.html, and auditing
-  // both apps' loaded stylesheets showed the .sb-* classes this file used
-  // to reference are defined nowhere in the repo, while candidate
-  // replacements like .sh-chip/.sh-row/.sh-actionsRow/.sh-listPlain/
-  // .sh-muted/.sh-btn--primary/.sh-btn--secondary are only styled on one
-  // app (or neither) depending on which stylesheet happens to define them.
-  // Only .card/.card--pad/.app-main (all in shell.css, loaded by both
-  // entries) are confirmed safe on both hosts, so the row/chip/button
-  // presentation is done with plain inline styles that don't depend on
-  // guessing which stylesheet is loaded.
-  const mutedStyle = { color: "#6b7280" };
-  const chipStyle = { fontSize: 12, fontWeight: 600, padding: "3px 10px", borderRadius: 999, border: "1px solid var(--ring)", background: "var(--card)", whiteSpace: "nowrap" };
-  const btnStyle = { display: "inline-flex", alignItems: "center", padding: "8px 14px", fontSize: 14, fontWeight: 600, borderRadius: 8, border: "1px solid var(--ring)", textDecoration: "none", cursor: "pointer", background: "var(--card)", color: "inherit" };
-  const btnPrimaryStyle = { ...btnStyle, background: "#FF5A1F", color: "#fff", borderColor: "#FF5A1F" };
+  const { loading, error, items, liveSessions } = state;
+  const counts = {
+    AVAILABLE: items.filter((a) => a.accessState === "AVAILABLE").length,
+    IN_PROGRESS: items.filter((a) => a.accessState === "IN_PROGRESS").length,
+    COMPLETED: items.filter((a) => a.accessState === "COMPLETED").length,
+  };
+  const visibleItems = items.filter((a) => a.accessState === activeTab);
+  const needsAttention = items
+    .filter((a) => a.accessState === "AVAILABLE" || a.accessState === "OVERDUE")
+    .sort((a, b) => new Date(a.dueAt) - new Date(b.dueAt))
+    .slice(0, 3);
+  const upcomingDeadlines = items
+    .filter((a) => a.accessState !== "COMPLETED" && a.accessState !== "LOCKED")
+    .sort((a, b) => new Date(a.dueAt) - new Date(b.dueAt))
+    .slice(0, 5);
+  const nextLive = pickNextLiveSession(liveSessions, {});
 
   return (
-    <main className="app-main">
-      <h1 style={{ marginTop: 0 }}>Assignments</h1>
-      <p style={mutedStyle}>All open and completed work for {curriculum.toUpperCase()}.</p>
+    <div className="ld-dashGrid">
+      <div className="ld-dashCol">
+        <section className="ld-card ld-sectionCard" aria-labelledby="ld-attention-h">
+          <div className="ld-sectionTitleRow">
+            <ClipboardIcon size={22} className="ld-sectionIcon" />
+            <h2 id="ld-attention-h" className="ld-sectionTitle">Needs Your Attention</h2>
+          </div>
+          {loading ? (
+            <p className="ld-mutedLine" role="status">Loading assignments…</p>
+          ) : needsAttention.length === 0 ? (
+            <p className="ld-mutedLine">You're caught up.</p>
+          ) : (
+            <div className="ld-attentionGrid">
+              {needsAttention.map((a) => {
+                const crumb = breadcrumbFor(a);
+                const href = nextLessonHref(a);
+                return (
+                  <article className="ld-attentionCard" key={a.id}>
+                    <div className="ld-attentionTop">
+                      <span className={`ld-typePill is-${a.assignmentType}`}>{TYPE_LABEL[a.assignmentType] || a.assignmentType}</span>
+                      <span className={`ld-workThumb is-${a.assignmentType}`} aria-hidden="true"><ClipboardIcon size={22} /></span>
+                    </div>
+                    <p className="ld-lessonName">{a.title}</p>
+                    {crumb.length > 0 && <p className="ld-mutedLine" style={{ margin: "0 0 4px" }}>{crumb.join(" › ")}</p>}
+                    <div className="ld-courseMetaRow" style={{ marginTop: 0 }}>
+                      <span><CalendarIcon size={15} /> Due {new Date(a.dueAt).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })}</span>
+                      <span className="ld-urgencyPill">{urgencyText(a.dueAt)}</span>
+                    </div>
+                    {a.progress?.total > 0 && (
+                      <div className="ld-progressRow" style={{ marginTop: 10, marginBottom: 0 }}>
+                        <div className="ld-progressBar"><div className="ld-progressBarFill" style={{ width: `${Math.round((a.progress.completed / a.progress.total) * 100)}%` }} /></div>
+                        <span className="ld-progressPct">{a.progress.completed}/{a.progress.total}</span>
+                      </div>
+                    )}
+                    {href && <Link className="ld-iconAction ld-attentionAction" to={href} aria-label={`Open ${a.title}`}><ChevronRightIcon size={16} /></Link>}
+                  </article>
+                );
+              })}
+            </div>
+          )}
+        </section>
 
-      {/* Open */}
-      <section className="card card--pad" aria-labelledby="open-assignments">
-        <h2 id="open-assignments" style={{ marginTop: 0 }}>Open</h2>
-        {open.length === 0 ? (
-          <p style={mutedStyle}>No open assignments.</p>
-        ) : (
-          <ul style={{ display: "grid", gap: 12, listStyle: "none", margin: 0, padding: 0 }}>
-            {open.map((a) => (
-              <li key={a.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10, borderBottom: "1px solid var(--ring)", paddingBottom: 12 }}>
-                <Link to={lessonHref(a.id)} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", color: "inherit" }}>
-                  <span style={{ fontWeight: 700 }}>{a.title}</span>
-                  <span style={chipStyle}>Due {a.due}</span>
-                </Link>
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                  <Link style={btnPrimaryStyle} to={lessonHref(a.id)}>
-                    Start
-                  </Link>
-                  <Link style={btnStyle} to={assignmentsHref}>
-                    Details
-                  </Link>
-                  <button
-                    type="button"
-                    style={btnStyle}
-                    onClick={() => markComplete(a)}
-                    title="Mark this assignment complete"
-                  >
-                    Mark complete ✓
-                  </button>
-                </div>
-              </li>
+        <section className="ld-card ld-sectionCard" style={{ marginTop: 20 }}>
+          <div className="ld-tabs" role="tablist">
+            {TABS.map((t) => (
+              <button key={t.key} type="button" role="tab" aria-selected={activeTab === t.key} className={`ld-tab${activeTab === t.key ? " is-active" : ""}`} onClick={() => setActiveTab(t.key)}>
+                {t.label} ({counts[t.key]})
+              </button>
             ))}
-          </ul>
-        )}
-      </section>
+          </div>
+          {loading ? (
+            <p className="ld-mutedLine" role="status">Loading assignments…</p>
+          ) : error ? (
+            <p className="ld-mutedLine" role="alert">Assignments are unavailable right now.</p>
+          ) : visibleItems.length === 0 ? (
+            <p className="ld-mutedLine">No assignments here.</p>
+          ) : (
+            <>
+              <div className="ld-workHeader" aria-hidden="true">
+                <span>Assignment</span><span>Type</span><span>Due Date</span><span>Status</span><span>Progress</span><span></span>
+              </div>
+              <ul className="ld-workList">
+              {visibleItems.map((a) => <AssignmentRow key={a.id} assignment={a} />)}
+              </ul>
+            </>
+          )}
+        </section>
+      </div>
 
-      {/* Completed */}
-      <section className="card card--pad" aria-labelledby="completed" style={{ marginTop: 16 }}>
-        <h2 id="completed" style={{ marginTop: 0 }}>Completed</h2>
-        {completed.length === 0 ? (
-          <p style={mutedStyle}>Nothing completed yet.</p>
-        ) : (
-          <ul style={{ display: "grid", gap: 12, listStyle: "none", margin: 0, padding: 0 }}>
-            {completed.map((a) => (
-              <li key={a.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10, borderBottom: "1px solid var(--ring)", paddingBottom: 12 }}>
-                <Link to={lessonHref(a.id)} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", color: "inherit" }}>
-                  <span style={{ fontWeight: 700 }}>{a.title}</span>
-                  <span style={chipStyle}>
-                    Submitted {a.completedAt ? new Date(a.completedAt).toLocaleDateString() : ""}
-                  </span>
-                </Link>
-                <span aria-label="Completed" style={{ fontSize: 18 }}>✓</span>
-              </li>
-            ))}
-          </ul>
+      <div className="ld-dashCol">
+        <section className="ld-card ld-railCard">
+          <div className="ld-sectionTitleRow">
+            <CalendarIcon size={20} className="ld-sectionIcon" />
+            <h2 className="ld-sectionTitle">Upcoming Deadlines</h2>
+          </div>
+          {upcomingDeadlines.length === 0 ? (
+            <p className="ld-mutedLine">Nothing due.</p>
+          ) : (
+            <ul className="ld-scheduleList">
+              {upcomingDeadlines.map((a) => (
+                <li className="ld-deadlineItem" key={a.id}>
+                  <span className="ld-dateTile"><b>{new Date(a.dueAt).toLocaleDateString(undefined, { month: "short" })}</b>{new Date(a.dueAt).toLocaleDateString(undefined, { day: "numeric" })}</span>
+                  <div>
+                    <div className="ld-scheduleTitle">{a.title}</div>
+                    <div className="ld-scheduleWhen">{urgencyText(a.dueAt)} · {ACCESS_STATE_LABEL[a.accessState]}</div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+
+        {nextLive && (
+          <section className="ld-card ld-railCard ld-livePromo" style={{ marginTop: 20 }}>
+            <div className="ld-sectionTitleRow">
+              <HeadsetIcon size={20} className="ld-sectionIcon" />
+              <h2 className="ld-sectionTitle">Upcoming Live Session</h2>
+            </div>
+            <p className="ld-lessonName" style={{ margin: "0 0 4px" }}>{nextLive.title}</p>
+            <p className="ld-mutedLine" style={{ marginBottom: 12 }}>{new Date(nextLive.startsAt).toLocaleString(undefined, { weekday: "short", hour: "numeric", minute: "2-digit" })}</p>
+            <Link className="ld-btn ld-btnPrimary" to="/curriculum/live-sessions"><HeadsetIcon size={16} /> View</Link>
+          </section>
         )}
-      </section>
-    </main>
+      </div>
+    </div>
   );
 }

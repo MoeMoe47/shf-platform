@@ -57,6 +57,11 @@ def _in_window(value: Any, start: datetime, end: datetime) -> bool:
     except (TypeError, ValueError): return False
     return start <= parsed.astimezone(timezone.utc) <= end
 
+
+def _is_durable_truth_fact(claim: Dict[str, Any], definition: Dict[str, Any]) -> bool:
+    """Identify SHS facts already normalized by the governed Truth provider."""
+    return bool(definition.get("truth_fact_source")) and claim.get("claim_type") == "fact" and claim.get("curriculum_fact_type")
+
 def calculate_metric(metric_id: str, organization_id: str, period_start: str, period_end: str, actor: Any, public: bool = False, correlation_id: str | None = None) -> Dict[str, Any]:
     if not organization_id or not getattr(actor, "organization_id", None) or actor.organization_id != organization_id: raise MetricCalculationError("scope_required")
     definition = get_metric_definition(metric_id)
@@ -80,11 +85,12 @@ def calculate_metric(metric_id: str, organization_id: str, period_start: str, pe
         elif any(not claim.get(field) for field in definition.get("required_claim_fields", ())):
             if definition.get("fail_closed_on_invalid_input"): raise MetricCalculationError("missing_required_metadata")
             reason = "missing_metadata"
-        elif not claim.get("source_ids") or not claim.get("evidence_ids"): reason = "missing_evidence"
-        elif any(sid not in sources for sid in claim["source_ids"]):
+        elif _is_durable_truth_fact(claim, definition) and not claim.get("source_record_id"): reason = "missing_source"
+        elif not _is_durable_truth_fact(claim, definition) and (not claim.get("source_ids") or not claim.get("evidence_ids")): reason = "missing_evidence"
+        elif not _is_durable_truth_fact(claim, definition) and any(sid not in sources for sid in claim["source_ids"]):
             if definition.get("unavailable_behavior") == "fail_closed_on_missing_source_resolution_or_malformed_population": raise MetricCalculationError("source_unavailable")
             reason = "missing_source"
-        elif any(sources.get(sid, {}).get("verification_status") != "verified" for sid in claim["source_ids"]): reason = "unverified_source"
+        elif not _is_durable_truth_fact(claim, definition) and any(sources.get(sid, {}).get("verification_status") != "verified" for sid in claim["source_ids"]): reason = "unverified_source"
         elif claim.get("verification_status") != "verified": reason = "unapproved_claim"
         elif definition.get("claim_approval_requirement", "").startswith("internal_approved") and "internal_approval_status" not in claim:
             if definition.get("fail_closed_on_invalid_input"): raise MetricCalculationError("missing_approval_state")
@@ -103,5 +109,12 @@ def calculate_metric(metric_id: str, organization_id: str, period_start: str, pe
     unavailable_reasons = set(definition.get("unavailable_on_exclusion_reasons", []))
     if unavailable_reasons.intersection(reasons):
         raise MetricCalculationError("ineligible_population")
-    evidence_ids = sorted(e for c in included for e in c["evidence_ids"])
-    return {"metric_result_id": hashlib.sha256(f"{metric_id}:{definition['version']}:{organization_id}:{period_start}:{period_end}:{','.join(claim_ids)}".encode()).hexdigest(), "metric_id": metric_id, "metric_version": definition["version"], "organization_id": organization_id, "period_start": period_start, "period_end": period_end, "calculated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(), "value": len(included), "unit": definition["unit"], "numerator": len(included), "denominator": None, "population_count": len({c.get("subject_id") for c in included}), "input_claim_count": len(included), "excluded_claim_count": len(excluded), "exclusion_reasons": reasons, "source_claim_ids": claim_ids, "source_claim_versions": [c.get("version") for c in sorted(included, key=lambda c: c["claim_id"])], "source_evidence_ids": evidence_ids, "definition_digest": hashlib.sha256(json.dumps(definition, sort_keys=True).encode()).hexdigest(), "verification_status": "verified", "public_eligibility": public, "suppression_status": "not_suppressed", "warnings": [], "correlation_id": correlation_id}
+    evidence_ids = sorted(e for c in included for e in c.get("evidence_ids", []))
+    assignment_ids = sorted({c.get("assignment_id") for c in included if c.get("assignment_id")})
+    release_ids = sorted({c.get("curriculum_release_id") for c in included if c.get("curriculum_release_id")})
+    source_watermark = hashlib.sha256(json.dumps([
+        {"claim_id": c.get("claim_id"), "version": c.get("version"), "occurred_at": c.get("occurred_at")}
+        for c in sorted(included, key=lambda item: str(item.get("claim_id")))
+    ], sort_keys=True).encode()).hexdigest()
+    calculated_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+    return {"metric_result_id": hashlib.sha256(f"{metric_id}:{definition['version']}:{organization_id}:{period_start}:{period_end}:{','.join(claim_ids)}".encode()).hexdigest(), "metric_id": metric_id, "metric_version": definition["version"], "organization_id": organization_id, "period_start": period_start, "period_end": period_end, "calculated_at": calculated_at, "data_through": period_end, "source_watermark": source_watermark, "value": len(included), "status": "OK" if included else "NO_DATA", "unit": definition["unit"], "numerator": len(included), "denominator": None, "population_count": len({c.get("subject_id") for c in included}), "input_claim_count": len(included), "excluded_claim_count": len(excluded), "exclusion_reasons": reasons, "source_claim_ids": claim_ids, "source_claim_versions": [c.get("version") for c in sorted(included, key=lambda c: c["claim_id"])], "source_evidence_ids": evidence_ids, "assignment_ids": assignment_ids, "curriculum_release_ids": release_ids, "definition_digest": hashlib.sha256(json.dumps(definition, sort_keys=True).encode()).hexdigest(), "verification_status": "verified", "public_eligibility": public, "suppression_status": "not_suppressed", "lineage_scope": {"organization_id": organization_id}, "warnings": [], "correlation_id": correlation_id}

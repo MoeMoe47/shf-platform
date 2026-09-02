@@ -9,8 +9,14 @@ import { downloadTextFile } from "./TranscriptUtils.js";
  * Props:
  *  text: string
  *  label: string (button label)
+ *  prominence: "AUTO" | "PROMINENT" | "HIDDEN" — SHF AIEL Phase 4
+ *    (learningSupport.readAloudPreference). Controls only how visually
+ *    prominent this control is, never whether the read-aloud capability
+ *    itself exists — HIDDEN still renders a real, fully keyboard- and
+ *    screen-reader-accessible control, just visually quieter, so it is
+ *    never a "disable TTS" mode.
  */
-export default function SpeakBtn({ text = "", label = "🔊 Speak" }) {
+export default function SpeakBtn({ text = "", label = "🔊 Speak", prominence = "AUTO" }) {
   const [speaking, setSpeaking] = React.useState(false);
   const can = typeof window !== "undefined" && "speechSynthesis" in window;
 
@@ -33,13 +39,30 @@ export default function SpeakBtn({ text = "", label = "🔊 Speak" }) {
     window.dispatchEvent(new CustomEvent("analytics:ping", { detail: { name: "tts:download" } }));
   }
 
+  const isHidden = prominence === "HIDDEN";
+  const isProminent = prominence === "PROMINENT";
+  const speakButtonClass = isProminent ? "sh-btn" : "sh-btn sh-btn--secondary";
+  const speakLabel = speaking ? "⏹ Stop" : label;
+
   return (
     <div className="sh-actionsRow" aria-label="Text to speech controls">
-      <button className="sh-btn sh-btn--secondary" onClick={speaking ? stop : speak} disabled={!can || !text.trim()}>
-        {speaking ? "⏹ Stop" : label}
+      <button
+        className={isHidden ? "sh-btn is-ghost sh-btn--icon" : speakButtonClass}
+        onClick={speaking ? stop : speak}
+        disabled={!can || !text.trim()}
+        aria-label={isHidden ? speakLabel : undefined}
+        title={isHidden ? speakLabel : undefined}
+      >
+        {isHidden ? (speaking ? "⏹" : "🔊") : speakLabel}
       </button>
-      <button className="sh-btn is-ghost" onClick={download} disabled={!text.trim()}>
-        ⬇︎ Transcript
+      <button
+        className={isHidden ? "sh-btn is-ghost sh-btn--icon" : "sh-btn is-ghost"}
+        onClick={download}
+        disabled={!text.trim()}
+        aria-label={isHidden ? "Download transcript" : undefined}
+        title={isHidden ? "Download transcript" : undefined}
+      >
+        {isHidden ? "⬇︎" : "⬇︎ Transcript"}
       </button>
     </div>
   );

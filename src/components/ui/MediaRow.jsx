@@ -1,6 +1,6 @@
 import React from "react";
 import normalizeLessonMedia from "@/utils/normalizeLessonMedia.js";
-import { useAccessibilityPreferences } from "@/context/AccessibilityPreferences.jsx";
+import { useEffectiveAccessibilityContext } from "@/context/EffectiveAccessibilityContext.jsx";
 
 /**
  * Displays lesson media (video, image, audio, or an iframe embed) through
@@ -29,13 +29,35 @@ export default function MediaRow({ media, src, alt = "", caption, transcript, ra
   // Accept either a pre-normalized `media` object or the legacy flat props.
   const m = media || (src ? { type: /\.mp4$/i.test(src) ? "video" : "image", src, alt, caption, transcript } : null);
 
-  const { prefs } = useAccessibilityPreferences();
+  // SHF AIEL Phase 4 — reads the real three-value canonical enums
+  // directly (docs/SHF_AIEL_PERSISTENCE_API_CONTRACT_V1.md §6), not the
+  // legacy boolean adapter, which could not distinguish AUTO from
+  // DO_NOT_AUTO_SHOW. Preference controls the *default* state only —
+  // capability (whether captions/transcript exist at all) stays entirely
+  // owned by normalizeLessonMedia.js's own output, never asserted here.
+  const { captionPreference, transcriptPreference } = useEffectiveAccessibilityContext();
   const [failed, setFailed] = React.useState(false);
-  const [showTranscript, setShowTranscript] = React.useState(!!prefs.transcriptPreferred);
+  const [showTranscript, setShowTranscript] = React.useState(transcriptPreference === "PREFER");
+  const transcriptManuallyToggled = React.useRef(false);
 
   React.useEffect(() => {
     setFailed(false);
   }, [m?.src]);
+
+  // Only auto-apply a preference-driven default while the student hasn't
+  // manually opened/closed the transcript panel themselves this session —
+  // a manual choice always wins over a later preference change.
+  React.useEffect(() => {
+    if (transcriptManuallyToggled.current) return;
+    setShowTranscript(transcriptPreference === "PREFER");
+  }, [transcriptPreference]);
+
+  // AUTO preserves this component's own original default (captions on
+  // whenever a real captionsTrack exists); PREFER reinforces that;
+  // DO_NOT_AUTO_SHOW starts captions off without removing them — the
+  // browser's native caption control on <video> remains fully available
+  // either way, so this never hides the capability itself.
+  const captionsDefaultOn = captionPreference !== "DO_NOT_AUTO_SHOW";
 
   const ratioClass = `sh-ratio-${ratio.replace(":", "x")}`;
   const resolvedCaption = m?.caption ?? caption;
@@ -76,9 +98,14 @@ export default function MediaRow({ media, src, alt = "", caption, transcript, ra
           >
             {/* Phase 2B: real WebVTT captions when the source data
                 actually provides a captionsTrack — never a fabricated
-                or auto-generated track. See normalizeLessonMedia.js. */}
+                or auto-generated track. See normalizeLessonMedia.js.
+                Phase 4: `default` (captions on at playback start) now
+                follows captionPreference; the track itself — and the
+                browser's own native CC toggle — is always present
+                regardless, so DO_NOT_AUTO_SHOW never removes the
+                capability, only its auto-on default. */}
             {m.captionsTrack && (
-              <track kind="captions" src={m.captionsTrack} srcLang="en" label="English captions" default />
+              <track kind="captions" src={m.captionsTrack} srcLang="en" label="English captions" default={captionsDefaultOn} />
             )}
             Your browser does not support embedded video.
           </video>
@@ -128,7 +155,10 @@ export default function MediaRow({ media, src, alt = "", caption, transcript, ra
             type="button"
             className="sh-mediaTranscript__toggle"
             aria-expanded={showTranscript}
-            onClick={() => setShowTranscript((v) => !v)}
+            onClick={() => {
+              transcriptManuallyToggled.current = true;
+              setShowTranscript((v) => !v);
+            }}
           >
             {showTranscript ? "Hide transcript" : "Show transcript"}
           </button>

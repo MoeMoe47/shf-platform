@@ -39,6 +39,9 @@ export interface AssignmentTarget {
   createdAt: string;
 }
 
+export const ASSIGNED_CONTENT_TYPES = ["COURSE", "UNIT", "LESSON"] as const;
+export type AssignedContentType = typeof ASSIGNED_CONTENT_TYPES[number];
+
 export interface Assignment {
   id: string;
   organizationId: string;
@@ -57,6 +60,20 @@ export interface Assignment {
   createdAt: string;
   updatedAt: string;
   version: number;
+  // SHF Lesson + Assignment + Curriculum Phase 3 — immutable curriculum
+  // binding (migration 060). Null on every pre-existing assignment and on
+  // any new assignment that doesn't reference the canonical catalog.
+  // Never updatable after creation (see assignment-service.ts's
+  // updateAssignment — no field here is ever accepted on update).
+  curriculumReleaseId: string | null;
+  assignedContentType: AssignedContentType | null;
+  assignedContentId: string | null;
+  // SHF Lesson + Assignment + Curriculum Phase 4 — Completion Policy
+  // binding (migration 061). Null means this assignment has no
+  // institutional completion gating (legacy/demo compatibility). Never
+  // updatable after creation — see assignment-service.ts's
+  // updateAssignment, which never accepts this field.
+  completionPolicyId: string | null;
 }
 
 /**

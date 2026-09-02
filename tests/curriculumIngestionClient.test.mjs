@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 
 import {
   CURRICULUM_INGESTION_QUEUE_KEY,
+  CANONICAL_BROWSER_EVENT_TYPES,
   buildAssessmentCompletedOperationalEvent,
   buildAssessmentSubmittedOperationalEvent,
   buildLessonCompletedOperationalEvent,
@@ -154,7 +155,7 @@ async function testLessonCompletionLocalProgressSurvivesFailedBackendSync() {
   assert.deepEqual(statusEvents, ["pending", "rejected"]);
 }
 
-async function testQuizAndReflectionRecordersQueueBackendIngestion() {
+async function testQuizAndReflectionRecordersRemainLocalOnly() {
   localStorage.removeItem("ledger:events:v1");
   localStorage.removeItem(CURRICULUM_INGESTION_QUEUE_KEY);
   globalThis.fetch = async () => response(503, { detail: "backend unavailable" });
@@ -165,15 +166,10 @@ async function testQuizAndReflectionRecordersQueueBackendIngestion() {
   await new Promise((resolve) => setTimeout(resolve, 10));
 
   const ledger = JSON.parse(localStorage.getItem("ledger:events:v1") || "[]");
-  const queue = readCurriculumIngestionQueue();
   assert.equal(ledger.length, 3);
-  assert.equal(queue.length, 3);
-  assert.deepEqual(queue.map((item) => item.event.event_type).sort(), [
-    "assessment.completed",
-    "assessment.submitted",
-    "reflection.submitted",
-  ]);
-  assert.equal(queue.every((item) => item.sync_status === "rejected"), true);
+  assert.equal(readCurriculumIngestionQueue().length, 0);
+  assert.equal(CANONICAL_BROWSER_EVENT_TYPES.has("assessment.completed"), false);
+  assert.equal(CANONICAL_BROWSER_EVENT_TYPES.has("reflection.submitted"), false);
 }
 
 function response(status, body) {
@@ -191,4 +187,4 @@ await testBuildsSupportedAssessmentAndReflectionEvents();
 await testSuccessfulSyncMarksRecordSynchronizedWithoutDeletingIt();
 await testFailurePreservesRecordForRetry();
 await testLessonCompletionLocalProgressSurvivesFailedBackendSync();
-await testQuizAndReflectionRecordersQueueBackendIngestion();
+await testQuizAndReflectionRecordersRemainLocalOnly();

@@ -13,6 +13,8 @@ import React, { useEffect, useMemo, useReducer, useRef } from "react";
 import { announce } from "@/components/ally/A11yTools.jsx";
 import { useUser } from "@/context/UserContext.jsx";
 import { getCompanionContext } from "@/lib/companion/api.js";
+import { useAccessibilityProfile } from "@/context/AccessibilityProfileContext.jsx";
+import { useEffectiveAccessibilityContext } from "@/context/EffectiveAccessibilityContext.jsx";
 import { COMPANION_WIRE_EVENT } from "./companionEvents.js";
 import { resolveCelebration, resolveReaction } from "./celebrationRegistry.js";
 import { getHint as engineGetHint, nextHintLevel } from "./visualHintEngine.js";
@@ -38,6 +40,14 @@ function readSystemReducedMotion() {
 
 export function CompanionProvider({ appScope, children }) {
   const persona = getPersona(appScope);
+  // SHF AIEL Phase 3 — reduceAnimation is seeded from and kept in sync
+  // with the canonical Effective Accessibility Context, not this
+  // provider's own independent companion:reduceAnimation localStorage key
+  // (docs/SHF_AIEL_PERSISTENCE_API_CONTRACT_V1.md — two writable sources
+  // for the same preference must never coexist; see accessibilityProfile
+  // below for the write path this toggle now uses).
+  const accessibilityProfile = useAccessibilityProfile();
+  const { reducedMotion: canonicalReducedMotion } = useEffectiveAccessibilityContext();
   const [state, dispatch] = useReducer(
     companionReducer,
     { appScope, persona },
@@ -45,7 +55,7 @@ export function CompanionProvider({ appScope, children }) {
       initialCompanionState({
         ...base,
         hidden: readBool(STORAGE_KEYS.HIDDEN, false),
-        reduceAnimation: readBool(STORAGE_KEYS.REDUCE_ANIMATION, false),
+        reduceAnimation: canonicalReducedMotion,
         focus: readBool(STORAGE_KEYS.FOCUS, false),
         systemReducedMotion: readSystemReducedMotion(),
         progressionLevel: (() => {
@@ -81,10 +91,19 @@ export function CompanionProvider({ appScope, children }) {
     return () => (mq.removeEventListener ? mq.removeEventListener("change", onChange) : mq.removeListener(onChange));
   }, []);
 
-  // Persist user-controllable preferences.
+  // Persist user-controllable preferences. reduceAnimation is no longer
+  // persisted here at all — it is a read-through of the canonical profile
+  // (synced below), not an independent local write.
   useEffect(() => { writeBool(STORAGE_KEYS.HIDDEN, state.hidden); }, [state.hidden]);
-  useEffect(() => { writeBool(STORAGE_KEYS.REDUCE_ANIMATION, state.reduceAnimation); }, [state.reduceAnimation]);
   useEffect(() => { writeBool(STORAGE_KEYS.FOCUS, state.focus); }, [state.focus]);
+
+  // One-directional sync: the canonical Effective Accessibility Context
+  // is the source of truth; this only ever flows into local reducer
+  // state, never the other way (setReduceAnimation below writes through
+  // to the canonical profile instead of dispatching directly).
+  useEffect(() => {
+    dispatch({ type: "SET_REDUCE_ANIMATION", value: canonicalReducedMotion });
+  }, [canonicalReducedMotion]);
 
   // The one wire listener the whole app talks to Brainiact through.
   useEffect(() => {
@@ -167,7 +186,18 @@ export function CompanionProvider({ appScope, children }) {
     setMode(mode) { dispatch({ type: "SET_MODE", mode }); },
     setExpanded(expanded) { dispatch({ type: "SET_EXPANDED", expanded }); },
     setHidden(hidden) { dispatch({ type: "SET_HIDDEN", hidden }); },
-    setReduceAnimation(value) { dispatch({ type: "SET_REDUCE_ANIMATION", value }); },
+    setReduceAnimation(value) {
+      // Optimistic local update for immediate UI feedback; the canonical
+      // write below is the actual source of truth and will reconcile this
+      // value back in via the sync effect once it resolves.
+      dispatch({ type: "SET_REDUCE_ANIMATION", value });
+      accessibilityProfile
+        .patch({ sensory: { motionPreference: value ? "REDUCED" : "AUTO" } })
+        .catch(() => {
+          // Best-effort — a failed write leaves the optimistic local
+          // value in place until the next canonical sync corrects it.
+        });
+    },
     setFocus(value) { dispatch({ type: "SET_FOCUS", value }); },
     openCoach() { dispatch({ type: "SET_COACH_OPEN", open: true }); },
     closeCoach() { dispatch({ type: "SET_COACH_OPEN", open: false }); },
@@ -192,7 +222,7 @@ export function CompanionProvider({ appScope, children }) {
     dismissHint() { dispatch({ type: "CLEAR_HINT" }); }, // "I'm good"
 
     setCareerMessage(message) { dispatch({ type: "SET_CAREER_MESSAGE", message }); },
-  }), [state, companionContext]);
+  }), [state, companionContext, accessibilityProfile]);
 
   return <CompanionContext.Provider value={api}>{children}</CompanionContext.Provider>;
 }

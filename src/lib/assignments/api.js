@@ -8,7 +8,7 @@
 // through here, never fetch() the backend directly.
 import { resolveDevUserId } from "@/lib/liveLearning/api.js";
 
-const ASSIGNMENTS_API_BASE = "http://127.0.0.1:8091";
+const ASSIGNMENTS_API_BASE = import.meta.env?.VITE_SHS_API_BASE || import.meta.env?.VITE_LIVE_LEARNING_API_BASE || "http://127.0.0.1:8091";
 
 function authHeaders(role) {
   return {

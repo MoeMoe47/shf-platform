@@ -6,16 +6,27 @@
 // always requires explicit issuer authority; eligibility is never
 // sufficient by itself (an eligible-but-not-yet-issued learner has
 // nothing — no partial/pending row is ever written).
-import { randomUUID } from "crypto";
+import { createHash, randomUUID } from "crypto";
 import { query } from "../../../db/client.js";
+import { withTransaction } from "../../../db/transaction.js";
 import { hasPermission, SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
 import { isAdminTier } from "../../shared/audience-eligibility.js";
 import { CredentialDefinitionRepo } from "../repo/credential-definition-repo.js";
 import { LearnerCredentialRepo } from "../repo/learner-credential-repo.js";
 import { CredentialDefinition, LearnerCredential, deriveLearnerCredentialLifecycle } from "../model/credential.js";
+import { IntegrationOutboxRepo } from "../../trusted-reporting/outbox-repo.js";
 
 const definitionRepo = new CredentialDefinitionRepo();
 const learnerCredentialRepo = new LearnerCredentialRepo();
+const outbox = new IntegrationOutboxRepo();
+
+function canonicalJson(value: unknown): string {
+  return JSON.stringify(value, Object.keys(value as any).sort());
+}
+
+function verificationHash(provenance: Record<string, unknown>): string {
+  return createHash("sha256").update(canonicalJson(provenance), "utf8").digest("hex");
+}
 
 export class CredentialError extends Error {
   constructor(public code: string, message: string, public statusCode = 400) {
@@ -121,30 +132,34 @@ export async function issueCredential(actor: CredentialActor, input: { credentia
   if (!definition || definition.status !== "active") {
     throw new CredentialError("CREDENTIAL_DEFINITION_NOT_FOUND", "Credential Definition not found or inactive.", 404);
   }
-  const learner = await query("SELECT 1 FROM users WHERE user_id=$1 AND organization_id=$2 LIMIT 1", [input.learnerUserId, organizationId]);
-  if (!learner.rows[0]) throw new CredentialError("LEARNER_NOT_FOUND", "Learner not found in this organization.", 400);
-  // Issuance is always explicit/manual — an authorized issuer may issue
-  // regardless of the automatic eligibility signal (matches the phase
-  // brief's "prefer explicit/manual issuance" default; eligibility is
-  // advisory information for the issuer's own UI, never a hard gate here
-  // — the alternative, blocking issuance on an unproven automatic rule,
-  // would be a worse failure mode than trusting the human authority the
-  // permission system already vouches for).
-  if (await learnerCredentialRepo.hasActiveIssuance(input.credentialDefinitionId, input.learnerUserId)) {
-    throw new CredentialError("DUPLICATE_ISSUANCE", "This learner already holds an active issuance of this Credential.", 409);
+  const capstone = definition.requiresAcceptedCapstone
+    ? await learnerCredentialRepo.getAcceptedCapstone(organizationId, input.learnerUserId)
+    : null;
+  const provenance = definition.requiresAcceptedCapstone
+    ? { policy: "ACCEPTED_CAPSTONE", sourceType: "PROJECT_SUBMISSION", sourceRecordId: capstone?.submissionId || null, projectId: capstone?.projectId || null }
+    : { policy: "MANUAL_INSTITUTIONAL_ISSUANCE" };
+  if (definition.requiresAcceptedCapstone && !capstone) {
+    throw new CredentialError("CREDENTIAL_NOT_ELIGIBLE", "The learner has not met this Credential's accepted-capstone requirement.", 403);
   }
+  const issuanceKey = `${definition.id}:v1:${organizationId}:${input.learnerUserId}`;
   const expiresAt = definition.validityPeriodMonths
     ? new Date(Date.now() + definition.validityPeriodMonths * 30 * 86_400_000).toISOString()
     : null;
-  return learnerCredentialRepo.create({
-    id: `learner_credential_${randomUUID()}`,
-    credentialDefinitionId: definition.id,
-    learnerUserId: input.learnerUserId,
-    organizationId,
-    tenantId,
-    expiresAt,
-    issuedByUserId: userId,
-    verificationId: randomUUID(),
+  return withTransaction(async (db: any) => {
+    await db.query("SELECT pg_advisory_xact_lock(hashtext($1))", [`credential-issuance:${issuanceKey}`]);
+    const learner = await db.query("SELECT 1 FROM users WHERE user_id=$1 AND organization_id=$2 LIMIT 1", [input.learnerUserId, organizationId]);
+    if (!learner.rows[0]) throw new CredentialError("LEARNER_NOT_FOUND", "Learner not found in this organization.", 400);
+    if (await learnerCredentialRepo.hasActiveIssuance(input.credentialDefinitionId, input.learnerUserId, db)) {
+      throw new CredentialError("DUPLICATE_ISSUANCE", "This learner already holds an active issuance of this Credential.", 409);
+    }
+    const credential = await learnerCredentialRepo.create({
+      id: `learner_credential_${randomUUID()}`, credentialDefinitionId: definition.id,
+      learnerUserId: input.learnerUserId, organizationId, tenantId, expiresAt,
+      issuedByUserId: userId, verificationId: randomUUID(), issuanceKey, provenance,
+      verificationHash: verificationHash(provenance),
+    }, db);
+    await outbox.enqueue({ producer_id: "shs-api.credentials", event_type: "credential.issued", subject_type: "learner_credential", subject_id: credential.id, organization_id: organizationId, originating_actor_id: userId, originating_actor_type: "user", tenant_id: tenantId, occurred_at: credential.issuedAt, idempotency_key: `credential.issued:${credential.id}`, correlation_id: `credential:${credential.id}`, destination: "shs-credentials", payload: { credential_definition_id: credential.credentialDefinitionId, learner_user_id: credential.learnerUserId, credential_version: credential.credentialVersion, verification_hash: credential.verificationHash, provenance_policy: provenance.policy } }, db);
+    return credential;
   });
 }
 
@@ -152,15 +167,18 @@ export async function revokeCredential(actor: CredentialActor, learnerCredential
   if (!hasPermission(actor.permissions, SHS_SECURITY_PERMISSIONS.CREDENTIAL_REVOKE)) {
     throw new CredentialError("FORBIDDEN", "Only an authorized admin or program manager may revoke Credentials.", 403);
   }
-  const { organizationId, userId } = scope(actor);
-  const revoked = await learnerCredentialRepo.revoke(learnerCredentialId, organizationId, userId);
-  if (!revoked) throw new CredentialError("LEARNER_CREDENTIAL_NOT_FOUND", "No active issuance found to revoke.", 404);
-  return revoked;
+  const { organizationId, tenantId, userId } = scope(actor);
+  return withTransaction(async (db: any) => {
+    const revoked = await learnerCredentialRepo.revoke(learnerCredentialId, organizationId, userId, db);
+    if (!revoked) throw new CredentialError("LEARNER_CREDENTIAL_NOT_FOUND", "No active issuance found to revoke.", 404);
+    await outbox.enqueue({ producer_id: "shs-api.credentials", event_type: "credential.revoked", subject_type: "learner_credential", subject_id: revoked.id, organization_id: organizationId, originating_actor_id: userId, originating_actor_type: "user", tenant_id: tenantId, occurred_at: revoked.revokedAt || new Date().toISOString(), idempotency_key: `credential.revoked:${revoked.id}:${revoked.revokedAt}`, correlation_id: `credential:${revoked.id}`, destination: "shs-credentials", payload: { credential_definition_id: revoked.credentialDefinitionId, learner_user_id: revoked.learnerUserId, credential_version: revoked.credentialVersion } }, db);
+    return revoked;
+  });
 }
 
 // --- Reads (entitlement-scoped) ---
 
-export interface LearnerCredentialView extends LearnerCredential {
+export interface LearnerCredentialView extends Omit<LearnerCredential, "issuanceKey"> {
   lifecycle: ReturnType<typeof deriveLearnerCredentialLifecycle>;
   // Computed once, server-side, from expiresAt - renewalWindowDays — the
   // same arithmetic deriveLearnerCredentialLifecycle already uses
@@ -174,11 +192,12 @@ export interface LearnerCredentialView extends LearnerCredential {
 async function withLifecycle(credential: LearnerCredential): Promise<LearnerCredentialView | null> {
   const definition = await definitionRepo.getById(credential.credentialDefinitionId);
   if (!definition) return null;
+  const { issuanceKey: _issuanceKey, ...publicCredential } = credential;
   const renewalDueAt = credential.expiresAt && definition.renewalWindowDays
     ? new Date(new Date(credential.expiresAt).getTime() - definition.renewalWindowDays * 86_400_000).toISOString()
     : null;
   return {
-    ...credential,
+    ...publicCredential,
     lifecycle: deriveLearnerCredentialLifecycle(credential, definition),
     renewalDueAt,
     definition: { id: definition.id, slug: definition.slug, name: definition.name, credentialType: definition.credentialType, issuingAuthority: definition.issuingAuthority, careerId: definition.careerId },

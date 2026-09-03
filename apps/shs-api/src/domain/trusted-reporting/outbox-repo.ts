@@ -1,5 +1,6 @@
 import { query } from "../../db/client.js";
 import { randomUUID } from "node:crypto";
+import { createNotificationFromEvent } from "../notifications/service/notification-service.js";
 
 export type OutboxExecutor = { query: (sql: string, params?: unknown[]) => Promise<any> };
 
@@ -33,7 +34,12 @@ export class IntegrationOutboxRepo {
         event.destination,
       ],
     );
-    return result.rows[0];
+    const stored = result.rows[0];
+    // Notification is a durable, idempotent projection of the canonical
+    // event. It shares the source transaction so a committed event cannot
+    // be silently separated from its in-app awareness record.
+    await createNotificationFromEvent({ ...event, outbox_event_id: stored.outbox_event_id }, executor);
+    return stored;
   }
 
   async claimPending(limit = 20, workerId = "trusted-reporting-worker", leaseSeconds = 60, executor: OutboxExecutor = { query }) {

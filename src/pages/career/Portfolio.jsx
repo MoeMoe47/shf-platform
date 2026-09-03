@@ -1,106 +1,36 @@
-// src/pages/career/Portfolio.jsx
-//
-// Rebuilt to match the approved Student Portfolio mock. Reused/adapted
-// (not deleted) from the prior implementation: the real localStorage
-// photo-upload flow (AvatarUploader.jsx) and the real interview-practice
-// timer/rating/notes/export system (InterviewPractice.jsx). The prior
-// static "Badges" and "High Scores" mock lists had no real backing data
-// and are superseded here by the mock's own Credentials & Badges
-// section; the shared AttendanceCard is not duplicated here since the
-// Curriculum Learning Dashboard already surfaces attendance.
-//
-// Mounted by both src/router/CareerRoutes.jsx ("/portfolio") and
-// src/router/CurriculumRoutes.jsx ("asl/portfolio") — see discovery
-// notes in the accompanying report. Styles are scoped under .sp-page
-// so they cannot leak into either host app's other pages.
 import React from "react";
-
+import { Link } from "react-router-dom";
 import { useUser } from "@/context/UserContext.jsx";
-import { markDarkScope } from "../../utils/careerTheme.js";
-
-import PortfolioHeader from "./portfolio-sections/PortfolioHeader.jsx";
-import StudentProfileHero from "./portfolio-sections/StudentProfileHero.jsx";
-import AvatarUploader from "./portfolio-sections/AvatarUploader.jsx";
-import FeaturedProjects from "./portfolio-sections/FeaturedProjects.jsx";
-import ProfileStrength from "./portfolio-sections/ProfileStrength.jsx";
+import { getPortfolio, updatePortfolioArtifact } from "@/lib/portfolio/api.js";
 import CredentialsBadges from "./portfolio-sections/CredentialsBadges.jsx";
-import InterviewPractice from "./portfolio-sections/InterviewPractice.jsx";
-import CareerReadiness from "./portfolio-sections/CareerReadiness.jsx";
-import RecentAchievements from "./portfolio-sections/RecentAchievements.jsx";
+import "@/styles/portfolio-durable.css";
+
+const VISIBILITY_LABELS = { PRIVATE: "Private", ORGANIZATION: "Visible to My Organization" };
+const typeLabel = (type) => type === "AI_AGENT" ? "AI Agent" : "Website";
+
+function ArtifactCard({ artifact, role, onSaved }) {
+  const [editing, setEditing] = React.useState(false);
+  const [saving, setSaving] = React.useState(false);
+  const [error, setError] = React.useState("");
+  const [draft, setDraft] = React.useState(() => artifact.presentation || {});
+  async function save(event) { event.preventDefault(); setSaving(true); setError(""); try { const updated = await updatePortfolioArtifact(role, artifact.artifactId, draft); setEditing(false); onSaved(updated); } catch { setError("We could not save this presentation. Your verified source is unchanged."); } finally { setSaving(false); } }
+  async function changeStatus(status) { setSaving(true); setError(""); try { onSaved(await updatePortfolioArtifact(role, artifact.artifactId, { status })); } catch { setError("We could not update this Portfolio item. Please try again."); } finally { setSaving(false); } }
+  const title = artifact.presentation?.title || `${typeLabel(artifact.provenance?.projectType)} project`;
+  return <article className="portfolio-v1-card" aria-labelledby={`artifact-${artifact.artifactId}`}>
+    <div className="portfolio-v1-cardHeader"><div><p className="portfolio-v1-kicker">{typeLabel(artifact.provenance?.projectType)}</p><h2 id={`artifact-${artifact.artifactId}`}>{title}</h2></div><span className="portfolio-v1-status">{artifact.status === "ACTIVE" ? "Verified Work" : artifact.status}</span></div>
+    <p className="portfolio-v1-meta">Finalized version · {VISIBILITY_LABELS[artifact.presentation?.visibility] || "Private"}</p>
+    <p className="portfolio-v1-provenance">Connected to your finalized Studio work. Portfolio presentation does not change Evidence, completion, deployment, or credentials.</p>
+    {artifact.presentation?.summary && <p>{artifact.presentation.summary}</p>}{artifact.presentation?.reflection && <p className="portfolio-v1-reflection">{artifact.presentation.reflection}</p>}
+    {editing ? <form className="portfolio-v1-edit" onSubmit={save}><label>Project title<input value={draft.title || ""} maxLength={200} onChange={(event) => setDraft({ ...draft, title: event.target.value })} /></label><label>Summary<textarea value={draft.summary || ""} maxLength={1000} rows="3" onChange={(event) => setDraft({ ...draft, summary: event.target.value })} /></label><label>Reflection<textarea value={draft.reflection || ""} maxLength={4000} rows="4" onChange={(event) => setDraft({ ...draft, reflection: event.target.value })} /></label><label>Visibility<select value={draft.visibility || "PRIVATE"} onChange={(event) => setDraft({ ...draft, visibility: event.target.value })}><option value="PRIVATE">Private</option><option value="ORGANIZATION">Visible to My Organization</option></select></label>{error && <p className="portfolio-v1-error" role="alert">{error}</p>}<div className="portfolio-v1-actions"><button type="submit" disabled={saving}>{saving ? "Saving…" : "Save Presentation"}</button><button type="button" className="portfolio-v1-secondary" onClick={() => setEditing(false)}>Cancel</button></div></form> : <div className="portfolio-v1-actions"><button type="button" onClick={() => setEditing(true)}>Edit Presentation</button><button type="button" className="portfolio-v1-secondary" disabled={saving} onClick={() => changeStatus(artifact.status === "HIDDEN" ? "ACTIVE" : "HIDDEN")}>{artifact.status === "HIDDEN" ? "Show" : "Hide"}</button><button type="button" className="portfolio-v1-secondary" disabled={saving} onClick={() => changeStatus("ARCHIVED")}>Archive</button><button type="button" className="portfolio-v1-linkButton" disabled={saving} onClick={() => changeStatus("REMOVED")}>Remove from Portfolio</button></div>}{!editing && error && <p className="portfolio-v1-error" role="alert">{error}</p>}
+  </article>;
+}
 
 export default function Portfolio() {
   const { role } = useUser();
-  const [editOpen, setEditOpen] = React.useState(false);
-  const [shareStatus, setShareStatus] = React.useState("");
-
-  // Dark mode is opt-in per page (see careerTheme.js) — activates only
-  // while this page is mounted, so no other page is ever affected.
-  // "student-portfolio" gates this file's own .sp-* dark rules
-  // (student-portfolio-dark.css). "resume-builder" is ALSO set here — that
-  // literal scope name is what the shared shell's existing dark CSS
-  // (career-shell.css) checks to let the shared header/sidebar go dark on
-  // career.html; it predates this page and was never renamed to
-  // something more generic. Reusing it (same approach already taken by
-  // Career Pathways) is the smallest-risk way to get shell chrome dark
-  // support here too, fully within the existing shared theme system.
-  React.useEffect(() => {
-    markDarkScope("student-portfolio", true);
-    markDarkScope("resume-builder", true);
-    return () => {
-      markDarkScope("student-portfolio", false);
-      markDarkScope("resume-builder", false);
-    };
-  }, []);
-
-  // Deliberately not using the native Web Share API here: direct testing
-  // showed navigator.share() can block the tab's JS execution entirely
-  // with no way for a client-side timeout to recover (it can freeze even
-  // setTimeout), which is a worse outcome than not offering it. Clipboard
-  // copy is a safe, non-destructive, always-resolving alternative that
-  // satisfies the same "share this portfolio" need.
-  async function handleShare() {
-    const url = window.location.href;
-    try {
-      await navigator.clipboard.writeText(url);
-      setShareStatus("Portfolio link copied to clipboard.");
-    } catch {
-      setShareStatus("Unable to copy automatically. Copy the page URL to share your portfolio.");
-    }
-  }
-
-  return (
-    <div className="sp-page">
-      <PortfolioHeader />
-
-      <StudentProfileHero
-        editOpen={editOpen}
-        onToggleEdit={() => setEditOpen((v) => !v)}
-        onShare={handleShare}
-        shareStatus={shareStatus}
-      />
-
-      {editOpen && (
-        <div id="sp-edit-panel" className="sp-card" style={{ marginTop: 16 }}>
-          <AvatarUploader />
-        </div>
-      )}
-
-      <div className="sp-body">
-        <div className="sp-col">
-          <FeaturedProjects />
-          <InterviewPractice />
-        </div>
-
-        <div className="sp-col">
-          <ProfileStrength onComplete={() => setEditOpen(true)} />
-          <CredentialsBadges role={role} />
-          <CareerReadiness />
-        </div>
-      </div>
-
-      <div style={{ marginTop: 20 }}>
-        <RecentAchievements />
-      </div>
-    </div>
-  );
+  const [state, setState] = React.useState({ loading: true, error: null, portfolio: null, artifacts: [] });
+  const load = React.useCallback(() => { let active = true; setState((current) => ({ ...current, loading: true, error: null })); getPortfolio(role).then((data) => active && setState({ loading: false, error: null, portfolio: data.portfolio, artifacts: data.artifacts || [] })).catch((error) => active && setState({ loading: false, error, portfolio: null, artifacts: [] })); return () => { active = false; }; }, [role]);
+  React.useEffect(load, [load]);
+  React.useEffect(() => { const refresh = () => load(); window.addEventListener("portfolio:updated", refresh); return () => window.removeEventListener("portfolio:updated", refresh); }, [load]);
+  function replaceArtifact(updated) { setState((current) => ({ ...current, artifacts: current.artifacts.map((item) => item.artifactId === updated.artifactId ? updated : item) })); }
+  return <main className="portfolio-v1-page" aria-labelledby="portfolio-v1-heading"><header className="portfolio-v1-header"><div><p className="portfolio-v1-kicker">Your proven work</p><h1 id="portfolio-v1-heading">Portfolio</h1><p>Save completed work you can explain and share with your organization.</p></div><Link className="portfolio-v1-secondary portfolio-v1-button" to="/studio">Open Studio</Link></header>{state.loading ? <p className="portfolio-v1-statusText" role="status">Loading your Portfolio…</p> : state.error ? <section className="portfolio-v1-empty" role="alert"><h2>Portfolio is unavailable</h2><p>Your saved work is safe. Try again when the connection is restored.</p><button type="button" onClick={load}>Try again</button></section> : state.artifacts.length === 0 ? <section className="portfolio-v1-empty"><h2>What You Proved</h2><p>Your Portfolio is where you collect work completed and supported by canonical Evidence.</p><p>When eligible Studio work is ready, you can add it here.</p><Link className="portfolio-v1-button" to="/studio/projects">Go to My Studio Projects</Link></section> : <><section className="portfolio-v1-summary" aria-labelledby="portfolio-v1-work-heading"><h2 id="portfolio-v1-work-heading">My Work</h2><p>{state.artifacts.length} saved {state.artifacts.length === 1 ? "artifact" : "artifacts"}. Your source proof remains separate and protected.</p></section><div className="portfolio-v1-grid">{state.artifacts.filter((artifact) => artifact.status !== "REMOVED").map((artifact) => <ArtifactCard key={artifact.artifactId} artifact={artifact} role={role} onSaved={replaceArtifact} />)}</div></>}{!state.loading && <CredentialsBadges role={role} />}</main>;
 }

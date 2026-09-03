@@ -1,121 +1,47 @@
 import { test, expect } from "@playwright/test";
 
-const CAREER_URL = "http://localhost:5173/career.html#/portfolio";
-const CURRICULUM_URL = "http://localhost:5173/curriculum.html#/curriculum/asl/portfolio";
+const routes = [["curriculum", "http://localhost:5173/curriculum.html#/curriculum/asl/portfolio"], ["career", "http://localhost:5173/career.html#/portfolio"]];
+const artifact = { artifactId: "artifact_website_1", portfolioId: "portfolio_1", status: "ACTIVE", provenance: { projectType: "WEBSITE", workspaceRevision: 4 }, presentation: { title: "Community Garden", summary: "A site for neighbors.", reflection: "I learned to structure content.", visibility: "PRIVATE" } };
 
-for (const [host, url] of [
-  ["career", CAREER_URL],
-  ["curriculum", CURRICULUM_URL],
-]) {
-  test(`${host}: Portfolio renders shell, header, and all sections (no blank screen)`, async ({ page }) => {
-    const errors = [];
-    page.on("pageerror", (e) => errors.push(String(e)));
-
-    await page.goto(url, { waitUntil: "networkidle" });
-
-    await expect(page.getByRole("heading", { name: "Student Portfolio", level: 1 })).toBeVisible();
-    await expect(page.locator(".sp-card")).toHaveCount(await page.locator(".sp-card").count());
-    await expect(page.getByRole("heading", { name: "Featured Projects" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Profile strength" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Credentials & Badges" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Interview Practice" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Career Readiness" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Recent Achievements" })).toBeVisible();
-
-    expect(errors).toEqual([]);
-  });
-
-  test(`${host}: no duplicate page header`, async ({ page }) => {
-    await page.goto(url, { waitUntil: "networkidle" });
-    await expect(page.locator(".sp-h1")).toHaveCount(1);
-    await expect(page.locator("h1")).toHaveCount(1);
-  });
-
-  test(`${host}: only one shell/router mounted`, async ({ page }) => {
-    await page.goto(url, { waitUntil: "networkidle" });
-    await expect(page.locator(".sp-page")).toHaveCount(1);
-  });
-
-  test(`${host}: interview rating is selectable and exposed via aria-pressed`, async ({ page }) => {
-    await page.goto(url, { waitUntil: "networkidle" });
-    const rate4 = page.getByRole("button", { name: "Rate 4 out of 5" });
-    await rate4.click();
-    await expect(rate4).toHaveAttribute("aria-pressed", "true");
-    await expect(page.locator(".sp-interviewMeta")).toContainText("4.0/5");
-  });
-
-  test(`${host}: interview notes field accepts text`, async ({ page }) => {
-    await page.goto(url, { waitUntil: "networkidle" });
-    const notes = page.locator(".sp-notesInput");
-    await notes.fill("STAR practice notes.");
-    await expect(notes).toHaveValue("STAR practice notes.");
-  });
-
-  test(`${host}: Edit profile is keyboard-operable and reveals the upload panel`, async ({ page }) => {
-    await page.goto(url, { waitUntil: "networkidle" });
-    const editBtn = page.getByRole("button", { name: "Edit profile" });
-    await editBtn.focus();
-    await page.keyboard.press("Enter");
-    await expect(page.locator("#sp-edit-panel")).toBeVisible();
-  });
-
-  test(`${host}: Share portfolio always resolves to a status message (no hang)`, async ({ page }) => {
-    await page.goto(url, { waitUntil: "networkidle" });
-    await page.getByRole("button", { name: "Share portfolio" }).click();
-    await expect(page.locator('[role="status"]')).not.toHaveText("", { timeout: 3000 });
-  });
-
-  test(`${host}: no horizontal overflow at 1440x900`, async ({ page }) => {
-    await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto(url, { waitUntil: "networkidle" });
-    const overflow = await page.evaluate(
-      () => document.documentElement.scrollWidth - document.documentElement.clientWidth
-    );
-    expect(overflow).toBeLessThanOrEqual(1);
-  });
-
-  test(`${host}: direct route refresh works`, async ({ page }) => {
-    await page.goto(url, { waitUntil: "networkidle" });
-    await page.reload({ waitUntil: "networkidle" });
-    await expect(page.locator(".sp-h1")).toBeVisible();
+async function mockPortfolio(page, artifacts = [artifact]) {
+  await page.route("**/portfolio", async (route) => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true, data: { portfolio: { portfolioId: "portfolio_1" }, artifacts } }) }));
+  await page.route("**/portfolio/artifacts/**", async (route) => {
+    if (route.request().method() !== "PATCH") return route.continue();
+    const body = JSON.parse(route.request().postData() || "{}");
+    return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true, data: { ...artifact, status: body.status || artifact.status, presentation: { ...artifact.presentation, ...body } } }) });
   });
 }
 
-test("curriculum: no horizontal overflow at 320px", async ({ page }) => {
-  await page.setViewportSize({ width: 320, height: 800 });
-  await page.goto(CURRICULUM_URL, { waitUntil: "networkidle" });
-  const overflow = await page.evaluate(
-    () => document.documentElement.scrollWidth - document.documentElement.clientWidth
-  );
-  expect(overflow).toBeLessThanOrEqual(1);
+for (const [host, url] of routes) test(`${host}: durable Portfolio renders canonical artifact`, async ({ page }) => {
+  await mockPortfolio(page); await page.goto(url, { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("heading", { name: "Portfolio", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Community Garden", level: 2 })).toBeVisible();
+  await expect(page.getByText("Verified Work")).toBeVisible(); await expect(page.getByText("Private")).toBeVisible();
 });
 
-test("curriculum: Portfolio sidebar item shows active state with correct semantics", async ({ page }) => {
-  await page.goto(CURRICULUM_URL, { waitUntil: "networkidle" });
-  const active = page.locator(".ld-navItem.is-active");
-  await expect(active).toHaveCount(1);
-  await expect(active).toContainText("Portfolio");
+test("durable Portfolio empty state is honest and does not import legacy storage", async ({ page }) => {
+  await page.addInitScript(() => { localStorage.setItem("portfolio:items", JSON.stringify([{ title: "Fake legacy item" }])); localStorage.setItem("civic:portfolio:artifacts", JSON.stringify([{ title: "Fake civic item" }])); });
+  await mockPortfolio(page, []); await page.goto(routes[0][1], { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("heading", { name: "What You Proved", level: 2 })).toBeVisible();
+  await expect(page.getByText("Fake legacy item")).toHaveCount(0); await expect(page.getByText("Fake civic item")).toHaveCount(0);
 });
 
-test("career: Portfolio sidebar item shows active state", async ({ page }) => {
-  await page.goto(CAREER_URL, { waitUntil: "networkidle" });
-  await expect(page.locator(".car-link.is-active")).toContainText("Portfolio");
+test("artifact presentation editing exposes only supported visibility", async ({ page }) => {
+  await mockPortfolio(page); await page.goto(routes[0][1], { waitUntil: "domcontentloaded" }); await page.getByRole("button", { name: "Edit Presentation" }).click();
+  await expect(page.getByLabel("Summary")).toHaveValue("A site for neighbors."); await expect(page.getByLabel("Visibility")).toHaveValue("PRIVATE");
+  await expect(page.getByRole("option", { name: "Private" })).toHaveCount(1); await expect(page.getByRole("option", { name: "Visible to My Organization" })).toHaveCount(1);
+  await expect(page.getByRole("option", { name: "Public" })).toHaveCount(0); await expect(page.getByRole("option", { name: "Unlisted" })).toHaveCount(0);
 });
 
-test("back and forward navigation between Dashboard and Portfolio work", async ({ page }) => {
-  await page.goto("http://localhost:5173/career.html#/dashboard", { waitUntil: "networkidle" });
-  await page.goto(CAREER_URL, { waitUntil: "networkidle" });
-  await page.goBack();
-  await expect(page).toHaveURL(/#\/dashboard$/);
-  await page.goForward();
-  await expect(page).toHaveURL(/#\/portfolio$/);
+test("removal is presented as Portfolio-only containment", async ({ page }) => {
+  await mockPortfolio(page); await page.goto(routes[0][1], { waitUntil: "domcontentloaded" });
+  await expect(page.getByText(/does not change Evidence, completion, deployment, or credentials/)).toBeVisible(); await expect(page.getByRole("button", { name: "Remove from Portfolio" })).toBeVisible();
 });
 
-test("Curriculum Learning Dashboard is not regressed by the Portfolio changes", async ({ page }) => {
-  const errors = [];
-  page.on("pageerror", (e) => errors.push(String(e)));
-  await page.goto("http://localhost:5173/curriculum.html#/curriculum/asl/dashboard", { waitUntil: "networkidle" });
-  await expect(page.getByRole("heading", { name: "Learning Dashboard", level: 1 })).toBeVisible();
-  await expect(page.locator(".ld-card")).toHaveCount(6);
-  expect(errors).toEqual([]);
+test("AI Agent artifact keeps the governed project type", async ({ page }) => {
+  await mockPortfolio(page, [{ ...artifact, artifactId: "artifact_agent_1", provenance: { projectType: "AI_AGENT", workspaceRevision: 2 }, presentation: { ...artifact.presentation, title: "Neighborhood Guide Agent" } }]);
+  await page.goto(routes[0][1], { waitUntil: "domcontentloaded" });
+  await expect(page.getByText("AI Agent")).toBeVisible();
+  await expect(page.getByText(/does not change Evidence, completion, deployment, or credentials/)).toBeVisible();
+  await expect(page.getByText(/Registry|certified|production/i)).toHaveCount(0);
 });

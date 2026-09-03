@@ -4,7 +4,8 @@ import { LearnerCredential } from "../model/credential.js";
 const COLUMNS = `
   learner_credential_id, credential_definition_id, learner_user_id, organization_id,
   status, issued_at, expires_at, revoked_at, issued_by_user_id, revoked_by_user_id,
-  verification_id, created_at, updated_at
+  verification_id, credential_version, issuance_key, provenance_json, verification_hash,
+  created_at, updated_at
 `;
 
 function rowToLearnerCredential(row: any): LearnerCredential {
@@ -20,6 +21,10 @@ function rowToLearnerCredential(row: any): LearnerCredential {
     issuedByUserId: row.issued_by_user_id,
     revokedByUserId: row.revoked_by_user_id,
     verificationId: row.verification_id,
+    credentialVersion: Number(row.credential_version || 1),
+    issuanceKey: row.issuance_key || null,
+    provenance: row.provenance_json || {},
+    verificationHash: row.verification_hash || null,
     createdAt: row.created_at instanceof Date ? row.created_at.toISOString() : row.created_at,
     updatedAt: row.updated_at instanceof Date ? row.updated_at.toISOString() : row.updated_at,
   };
@@ -29,14 +34,16 @@ export class LearnerCredentialRepo {
   async create(input: {
     id: string; credentialDefinitionId: string; learnerUserId: string; organizationId: string;
     tenantId: string; expiresAt: string | null; issuedByUserId: string; verificationId: string;
-  }): Promise<LearnerCredential> {
-    const res = await query(
+    issuanceKey: string; provenance: Record<string, unknown>; verificationHash: string;
+  }, executor: { query: (sql: string, params?: unknown[]) => Promise<any> } = { query }): Promise<LearnerCredential> {
+    const res = await executor.query(
       `INSERT INTO learner_credentials (
         learner_credential_id, credential_definition_id, learner_user_id, organization_id, tenant_id,
-        status, expires_at, issued_by_user_id, verification_id
-      ) VALUES ($1,$2,$3,$4,$5,'ISSUED',$6,$7,$8)
+        status, expires_at, issued_by_user_id, verification_id, credential_version,
+        issuance_key, provenance_json, verification_hash
+      ) VALUES ($1,$2,$3,$4,$5,'ISSUED',$6,$7,$8,1,$9,$10,$11)
       RETURNING ${COLUMNS}`,
-      [input.id, input.credentialDefinitionId, input.learnerUserId, input.organizationId, input.tenantId, input.expiresAt, input.issuedByUserId, input.verificationId],
+      [input.id, input.credentialDefinitionId, input.learnerUserId, input.organizationId, input.tenantId, input.expiresAt, input.issuedByUserId, input.verificationId, input.issuanceKey, JSON.stringify(input.provenance), input.verificationHash],
     );
     return rowToLearnerCredential(res.rows[0]);
   }
@@ -46,8 +53,8 @@ export class LearnerCredentialRepo {
     return res.rows[0] ? rowToLearnerCredential(res.rows[0]) : null;
   }
 
-  async hasActiveIssuance(credentialDefinitionId: string, learnerUserId: string): Promise<boolean> {
-    const res = await query(
+  async hasActiveIssuance(credentialDefinitionId: string, learnerUserId: string, executor: { query: (sql: string, params?: unknown[]) => Promise<any> } = { query }): Promise<boolean> {
+    const res = await executor.query(
       "SELECT 1 FROM learner_credentials WHERE credential_definition_id=$1 AND learner_user_id=$2 AND status='ISSUED' LIMIT 1",
       [credentialDefinitionId, learnerUserId],
     );
@@ -67,8 +74,8 @@ export class LearnerCredentialRepo {
     return res.rows.map(rowToLearnerCredential);
   }
 
-  async revoke(id: string, organizationId: string, revokedByUserId: string): Promise<LearnerCredential | null> {
-    const res = await query(
+  async revoke(id: string, organizationId: string, revokedByUserId: string, executor: { query: (sql: string, params?: unknown[]) => Promise<any> } = { query }): Promise<LearnerCredential | null> {
+    const res = await executor.query(
       `UPDATE learner_credentials SET status='REVOKED', revoked_at=NOW(), revoked_by_user_id=$3, updated_at=NOW()
        WHERE learner_credential_id=$1 AND organization_id=$2 AND status='ISSUED'
        RETURNING ${COLUMNS}`,
@@ -88,8 +95,12 @@ export class LearnerCredentialRepo {
   // completion-truth check already proven in
   // journey-milestone-service.ts's projectMilestones().
   async hasAcceptedCapstone(organizationId: string, learnerUserId: string): Promise<boolean> {
+    return Boolean(await this.getAcceptedCapstone(organizationId, learnerUserId));
+  }
+
+  async getAcceptedCapstone(organizationId: string, learnerUserId: string): Promise<{ submissionId: string; projectId: string } | null> {
     const res = await query(
-      `SELECT 1 FROM project_submissions s
+      `SELECT s.submission_id, s.project_id FROM project_submissions s
        JOIN projects p ON p.project_id = s.project_id
        JOIN project_team_members m ON m.team_id = s.team_id
        WHERE p.organization_id=$1 AND p.project_type='CAPSTONE' AND s.status='ACCEPTED'
@@ -97,6 +108,7 @@ export class LearnerCredentialRepo {
        LIMIT 1`,
       [organizationId, learnerUserId],
     );
-    return res.rows.length > 0;
+    if (!res.rows[0]) return null;
+    return { submissionId: res.rows[0].submission_id, projectId: res.rows[0].project_id };
   }
 }

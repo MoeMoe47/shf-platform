@@ -20,11 +20,16 @@ import {
 import { validateStudioWorkspaceWork, workspaceFromRow } from "../model/studio-workspace.js";
 import { evaluateStudioQa, rowToStudioQaRun, STUDIO_QA_RULESET_VERSION } from "../model/studio-qa.js";
 import { rowToStudioReviewSubmission, STUDIO_REVIEW_DECISIONS, type StudioReviewDecision } from "../model/studio-review.js";
+import { ReviewerRoutingService } from "../../studio-routing/service/reviewer-routing-service.js";
+import { evaluateAssignmentCompletion } from "../../completion-policy/service/completion-evaluator.js";
+import { CompletionPolicyRepo } from "../../completion-policy/repo/completion-policy-repo.js";
 
 type DbExecutor = { query: (sql: string, params?: unknown[]) => Promise<any> };
 const assignmentRepo = new AssignmentRepo();
 const enrollmentRepo = new EnrollmentRepo();
 const ADMIN_ROLES = ["shf_admin", "shs_admin", "org_admin", "super_admin", "program_manager"];
+const reviewerRouting = new ReviewerRoutingService();
+const completionPolicyRepo = new CompletionPolicyRepo();
 
 function scope(actor: any) {
   const userId = String(actor?.user_id || actor?.id || "");
@@ -36,6 +41,10 @@ function scope(actor: any) {
 
 function stable(...parts: string[]) {
   return createHash("sha256").update(parts.join("|"), "utf8").digest("hex").slice(0, 32);
+}
+
+function revisionHash(work: unknown) {
+  return createHash("sha256").update(JSON.stringify(work), "utf8").digest("hex");
 }
 
 function requiredString(value: unknown, field: string) {
@@ -55,6 +64,9 @@ function rowToProject(row: any) {
     organizationId: row.organization_id,
     tenantId: row.tenant_id,
     learnerId: row.studio_learner_id,
+    ownerType: row.studio_owner_type || "INDIVIDUAL",
+    teamId: row.studio_team_id || null,
+    teamName: row.studio_team_name || null,
     projectType: row.studio_project_type,
     origin: row.studio_origin,
     originReferenceId: row.studio_origin_reference_id,
@@ -105,14 +117,42 @@ export class StudioProjectService {
     if (!eligible) throw new Error("LEARNER_NOT_ELIGIBLE_FOR_ASSIGNMENT");
   }
 
+  private async assertActiveStudioTeamMember(actor: any, teamId: string) {
+    const s = scope(actor);
+    const result = await this.dbQuery(`SELECT t.studio_team_id FROM studio_teams t JOIN studio_team_members m ON m.studio_team_id=t.studio_team_id AND m.organization_id=t.organization_id AND m.tenant_id=t.tenant_id WHERE t.studio_team_id=$1 AND t.organization_id=$2 AND t.tenant_id=$3 AND t.status='ACTIVE' AND m.user_id=$4 AND m.status='ACTIVE' AND m.left_at IS NULL`, [teamId, s.organizationId, s.tenantId, s.userId]);
+    if (!result.rows[0]) throw new Error("TEAM_MEMBERSHIP_REQUIRED");
+  }
+
   private async authorizeProject(actor: any, row: any) {
     const s = scope(actor);
     if (row.organization_id !== s.organizationId || row.tenant_id !== s.tenantId) throw new Error("PROJECT_NOT_FOUND");
     if (isAdminTier(s.roles) || row.studio_learner_id === s.userId) return s;
+    if (row.studio_owner_type === "TEAM" && row.studio_team_id) {
+      await this.assertActiveStudioTeamMember(actor, row.studio_team_id);
+      return s;
+    }
     if (!row.studio_assignment_id) throw new Error("PROJECT_NOT_FOUND");
     const assignment = await this.assignmentLookup(row.studio_assignment_id, actor as ActorUser);
     if (!assignment) throw new Error("PROJECT_NOT_FOUND");
     return s;
+  }
+
+  async getCollaborationAccess(actor: any, projectId: string) {
+    const s = scope(actor);
+    const id = requiredString(projectId, "project_id");
+    const row = (await this.dbQuery(
+      `SELECT p.*, t.name AS studio_team_name
+       FROM projects p
+       LEFT JOIN studio_teams t ON t.studio_team_id=p.studio_team_id AND t.organization_id=p.organization_id AND t.tenant_id=p.tenant_id
+       WHERE p.project_id=$1 AND p.studio_origin IS NOT NULL`, [id],
+    )).rows[0];
+    if (!row) throw new Error("PROJECT_NOT_FOUND");
+    await this.authorizeProject(actor, row);
+    const workspace = (await this.dbQuery(
+      "SELECT revision, current_revision_id FROM studio_builder_workspaces WHERE project_id=$1 AND organization_id=$2 AND tenant_id=$3",
+      [id, s.organizationId, s.tenantId],
+    )).rows[0] || null;
+    return { project: row, workspace };
   }
 
   async createStudentIdea(actor: any, input: any) {
@@ -124,12 +164,15 @@ export class StudioProjectService {
     if (requestedDestination !== "STUDENT") throw new Error("STUDENT_DESTINATION_REQUIRED");
     const destination: StudioDestination = "STUDENT";
     const title = requiredString(input?.title, "title").slice(0, 200);
+    const teamId = input?.teamId || input?.team_id || null;
+    if (teamId) await this.assertActiveStudioTeamMember(actor, String(teamId));
     const projectId = `studio_project_${randomUUID()}`;
     const handoffId = `studio_handoff_${randomUUID()}`;
     return this.createFromValidatedHandoff(actor, {
       handoffId, projectId, title, projectType, destination, origin: "STUDENT_IDEA",
       learnerId: s.userId, organizationId: s.organizationId, tenantId: s.tenantId,
       originReferenceId: null, assignment: null, requirements: input?.requirements || {}, dueAt: input?.dueAt || null,
+      teamId: teamId ? String(teamId) : null,
     });
   }
 
@@ -181,9 +224,9 @@ export class StudioProjectService {
 
   private async createProjectAndEvents(db: DbExecutor, data: any) {
     const result = await db.query(
-      `INSERT INTO projects (project_id, organization_id, tenant_id, course_id, title, project_type, status, created_by_user_id, studio_origin, studio_origin_reference_id, studio_learner_id, studio_project_type, studio_destination, studio_assignment_id, studio_curriculum_release_id, studio_completion_policy_id, studio_status, studio_qa_status, studio_review_status, studio_delivery_status)
-       VALUES ($1,$2,$3,$4,$5,$6,'ACTIVE',$7,$8,$9,$10,$11,$12,$13,$14,$15,'DRAFT','NOT_RUN','NOT_REQUESTED','NOT_READY') RETURNING *`,
-      [data.projectId, data.organizationId, data.tenantId, data.assignment?.courseId || null, data.title, data.projectType, data.actor.userId, data.origin, data.originReferenceId || null, data.learnerId, data.projectType, data.destination, data.assignment?.id || null, data.assignment?.curriculumReleaseId || null, data.assignment?.completionPolicyId || null],
+      `INSERT INTO projects (project_id, organization_id, tenant_id, course_id, title, project_type, status, created_by_user_id, studio_origin, studio_origin_reference_id, studio_learner_id, studio_project_type, studio_destination, studio_assignment_id, studio_curriculum_release_id, studio_completion_policy_id, studio_status, studio_qa_status, studio_review_status, studio_delivery_status, studio_owner_type, studio_team_id)
+       VALUES ($1,$2,$3,$4,$5,$6,'ACTIVE',$7,$8,$9,$10,$11,$12,$13,$14,$15,'DRAFT','NOT_RUN','NOT_REQUESTED','NOT_READY',$16,$17) RETURNING *`,
+      [data.projectId, data.organizationId, data.tenantId, data.assignment?.courseId || null, data.title, data.projectType, data.actor.userId, data.origin, data.originReferenceId || null, data.learnerId, data.projectType, data.destination, data.assignment?.id || null, data.assignment?.curriculumReleaseId || null, data.assignment?.completionPolicyId || null, data.teamId ? "TEAM" : "INDIVIDUAL", data.teamId || null],
     );
     const project = rowToProject(result.rows[0]);
     const eventBase = { organization_id: data.organizationId, originating_actor_id: data.actor.userId, occurred_at: new Date().toISOString(), correlation_id: `studio_${data.projectId}` };
@@ -195,7 +238,7 @@ export class StudioProjectService {
 
   async get(actor: any, projectId: string) {
     this.requirePermission(actor, SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_VIEW);
-    const row = (await this.dbQuery("SELECT * FROM projects WHERE project_id=$1 AND studio_origin IS NOT NULL", [requiredString(projectId, "project_id")])).rows[0];
+    const row = (await this.dbQuery("SELECT p.*, t.name AS studio_team_name FROM projects p LEFT JOIN studio_teams t ON t.studio_team_id=p.studio_team_id AND t.organization_id=p.organization_id AND t.tenant_id=p.tenant_id WHERE p.project_id=$1 AND p.studio_origin IS NOT NULL", [requiredString(projectId, "project_id")])).rows[0];
     if (!row) throw new Error("PROJECT_NOT_FOUND");
     await this.authorizeProject(actor, row);
     return rowToProject(row);
@@ -306,6 +349,102 @@ export class StudioProjectService {
     };
   }
 
+  // Read-only orchestration projection for the learner-facing Studio shell.
+  // Each facet remains owned by its source domain; this method never writes
+  // workflow, requirement, completion, or revision presentation state.
+  async getLearningContext(actor: any, projectId: string) {
+    this.requirePermission(actor, SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_VIEW);
+    const s = scope(actor);
+    const id = requiredString(projectId, "project_id");
+    const projectRow = (await this.dbQuery(
+      `SELECT p.*, t.name AS studio_team_name
+       FROM projects p
+       LEFT JOIN studio_teams t ON t.studio_team_id=p.studio_team_id AND t.organization_id=p.organization_id AND t.tenant_id=p.tenant_id
+       WHERE p.project_id=$1 AND p.studio_origin IS NOT NULL`, [id],
+    )).rows[0];
+    if (!projectRow) throw new Error("PROJECT_NOT_FOUND");
+    const project = rowToProject(projectRow);
+    await this.authorizeProject(actor, projectRow);
+    const workspace = (await this.dbQuery(
+      "SELECT * FROM studio_builder_workspaces WHERE project_id=$1 AND organization_id=$2 AND tenant_id=$3",
+      [id, s.organizationId, s.tenantId],
+    )).rows[0] || null;
+    const revision = workspace?.current_revision_id ? (await this.dbQuery(
+      "SELECT revision_id, revision_number, status, created_at FROM studio_project_revisions WHERE revision_id=$1 AND project_id=$2 AND organization_id=$3 AND tenant_id=$4",
+      [workspace.current_revision_id, id, s.organizationId, s.tenantId],
+    )).rows[0] : null;
+    const qa = (await this.dbQuery(
+      "SELECT * FROM studio_qa_runs WHERE project_id=$1 AND organization_id=$2 AND tenant_id=$3 ORDER BY created_at DESC LIMIT 1",
+      [id, s.organizationId, s.tenantId],
+    )).rows[0] || null;
+    const review = (await this.dbQuery(
+      `SELECT s.status, s.workspace_revision, s.studio_revision_id, d.decision
+       FROM studio_review_submissions s
+       LEFT JOIN studio_review_decisions d ON d.review_submission_id=s.review_submission_id
+       WHERE s.project_id=$1 AND s.organization_id=$2 AND s.tenant_id=$3
+       ORDER BY s.created_at DESC LIMIT 1`, [id, s.organizationId, s.tenantId],
+    )).rows[0] || null;
+
+    let assignment: any = null;
+    let requirements: any[] = [];
+    if (project.assignmentId) {
+      const assignmentRow = await this.assignmentLookup(project.assignmentId, {
+        user_id: s.userId, organization_id: s.organizationId, roles: s.roles,
+      });
+      if (assignmentRow) {
+        const release = project.curriculumReleaseId ? (await this.dbQuery(
+          "SELECT snapshot FROM curriculum_releases WHERE release_id=$1 AND organization_id=$2",
+          [project.curriculumReleaseId, s.organizationId],
+        )).rows[0] : null;
+        const snapshot = release?.snapshot || {};
+        const unitKey = (await this.dbQuery("SELECT unit_key, lesson_key FROM studio_handoffs WHERE project_id=$1 AND organization_id=$2 AND tenant_id=$3", [id, s.organizationId, s.tenantId])).rows[0] || {};
+        const unit = (snapshot.units || []).find((item: any) => item?.stableKey === unitKey.unit_key);
+        const lesson = (unit?.lessons || []).find((item: any) => item?.stableKey === unitKey.lesson_key);
+        assignment = {
+          id: assignmentRow.id,
+          title: assignmentRow.title,
+          course: snapshot.course ? { id: assignmentRow.courseId || snapshot.course.stableKey || null, title: snapshot.course.title || null } : null,
+          unit: unit ? { id: unit.stableKey, title: unit.title || null } : (unitKey.unit_key ? { id: unitKey.unit_key, title: null } : null),
+          lesson: lesson ? { id: lesson.stableKey, title: lesson.title || null } : (unitKey.lesson_key ? { id: unitKey.lesson_key, title: null } : null),
+        };
+        if (assignmentRow.completionPolicyId) {
+          const policyRequirements = await completionPolicyRepo.listRequirements(s.organizationId, assignmentRow.completionPolicyId);
+          requirements = policyRequirements.map((item: any) => ({
+            id: item.requirementId,
+            source: "COMPLETION_POLICY",
+            label: item.configuration?.label || item.configuration?.title || item.targetReference || item.requirementType,
+            detail: item.configuration?.description || null,
+            status: "REMAINING",
+            required: Boolean(item.required),
+          }));
+        }
+      }
+    }
+    let completion: any = null;
+    if (assignment && project.completionPolicyId && project.learnerId && assignment.unit?.id && assignment.lesson?.id) {
+      completion = await evaluateAssignmentCompletion({ user_id: project.learnerId, organization_id: s.organizationId, roles: s.roles }, assignment.id, assignment.unit.id, assignment.lesson.id);
+      const byId = new Map((completion.requirements || []).map((item: any) => [item.requirementId, item]));
+      requirements = requirements.map((item) => {
+        const result: any = byId.get(item.id);
+        return { ...item, status: result?.status === "SATISFIED" ? "COMPLETE" : result?.status === "NOT_VERIFIABLE" ? "BLOCKED" : "REMAINING" };
+      });
+    }
+    const qaStatus = qa ? (workspace && Number(qa.workspace_revision) === Number(workspace.revision) ? qa.status : "STALE") : "NOT_CHECKED";
+    const reviewStatus = review ? (review.decision || review.status) : "NOT_SUBMITTED";
+    const currentRevision = Number(workspace?.revision || 0);
+    const completionStatus = completion?.eligible ? "COMPLETE" : "INCOMPLETE";
+    return {
+      project: { id, title: project.title, type: project.projectType, origin: project.origin, ownerType: project.ownerType, teamName: project.teamName || null },
+      assignment,
+      originLabel: assignment ? "Assignment" : "Personal Project",
+      currentRevision: revision ? { id: revision.revision_id, number: Number(revision.revision_number), status: revision.status } : (currentRevision ? { number: currentRevision, status: "WORKING" } : null),
+      statuses: { qa: qaStatus, review: reviewStatus, completion: completionStatus },
+      requirements,
+      completion: completion ? { eligible: completion.eligible, reason: completion.reason } : null,
+      changesRequested: reviewStatus === "CHANGES_REQUESTED" ? { revision: Number(review.workspace_revision), nextRevision: Number(review.workspace_revision) + 1 } : null,
+    };
+  }
+
   // Builder work is durable project state, but it is intentionally not a
   // lifecycle, QA, review, delivery, Evidence, or completion decision.
   async getWorkspace(actor: any, projectId: string) {
@@ -366,6 +505,7 @@ export class StudioProjectService {
       tenant_id: s.tenantId,
       project_type: projectRow.studio_project_type,
       workspace_revision: workspace.revision,
+      studio_revision_id: workspace.revisionId || null,
       status: evaluation.status,
       ruleset_version: STUDIO_QA_RULESET_VERSION,
       summary_json: evaluation.summary,
@@ -376,9 +516,9 @@ export class StudioProjectService {
       created_at: now,
     };
     await this.dbQuery(
-      `INSERT INTO studio_qa_runs (qa_run_id, project_id, organization_id, tenant_id, project_type, workspace_revision, status, ruleset_version, summary_json, findings_json, created_by_user_id, started_at, completed_at, created_at)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)`,
-      [row.qa_run_id, row.project_id, row.organization_id, row.tenant_id, row.project_type, row.workspace_revision, row.status, row.ruleset_version, JSON.stringify(row.summary_json), JSON.stringify(row.findings_json), row.created_by_user_id, row.started_at, row.completed_at, row.created_at],
+      `INSERT INTO studio_qa_runs (qa_run_id, project_id, organization_id, tenant_id, project_type, workspace_revision, studio_revision_id, status, ruleset_version, summary_json, findings_json, created_by_user_id, started_at, completed_at, created_at)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)`,
+      [row.qa_run_id, row.project_id, row.organization_id, row.tenant_id, row.project_type, row.workspace_revision, row.studio_revision_id, row.status, row.ruleset_version, JSON.stringify(row.summary_json), JSON.stringify(row.findings_json), row.created_by_user_id, row.started_at, row.completed_at, row.created_at],
     );
     await this.outbox.enqueue({
       producer_id: "shs-api.studio", event_type: "studio.qa.completed", subject_type: "studio_qa_run", subject_id: runId,
@@ -449,7 +589,7 @@ export class StudioProjectService {
     const project = (await this.dbQuery("SELECT * FROM projects WHERE project_id=$1 AND studio_origin IS NOT NULL", [id])).rows[0];
     if (!project) throw new Error("PROJECT_NOT_FOUND");
     await this.authorizeProject(actor, project);
-    if (project.studio_learner_id !== s.userId && !isAdminTier(s.roles)) throw new Error("REVIEW_SUBMISSION_FORBIDDEN");
+    if (project.studio_owner_type !== "TEAM" && project.studio_learner_id !== s.userId && !isAdminTier(s.roles)) throw new Error("REVIEW_SUBMISSION_FORBIDDEN");
     const workspace = (await this.dbQuery("SELECT * FROM studio_builder_workspaces WHERE project_id=$1 AND organization_id=$2 AND tenant_id=$3", [id, s.organizationId, s.tenantId])).rows[0];
     if (!workspace) throw new Error("WORKSPACE_REQUIRED_FOR_REVIEW");
     const qa = (await this.dbQuery("SELECT * FROM studio_qa_runs WHERE qa_run_id IN (SELECT qa_run_id FROM studio_qa_runs WHERE project_id=$1 AND organization_id=$2 AND tenant_id=$3 AND workspace_revision=$4 AND status='PASSED' ORDER BY created_at DESC LIMIT 1)", [id, s.organizationId, s.tenantId, workspace.revision])).rows[0];
@@ -463,15 +603,15 @@ export class StudioProjectService {
     const now = new Date().toISOString();
     const row = {
       review_submission_id: submissionId, project_id: id, organization_id: s.organizationId, tenant_id: s.tenantId,
-      project_type: project.studio_project_type, workspace_revision: Number(workspace.revision), qa_run_id: qa.qa_run_id,
+      project_type: project.studio_project_type, workspace_revision: Number(workspace.revision), studio_revision_id: workspace.current_revision_id || null, qa_run_id: qa.qa_run_id,
       submitted_work_json: workspace.work_json, status: "SUBMITTED", submitted_by_user_id: s.userId, submitted_at: now, created_at: now,
     };
     const inserted = await this.dbQuery(
-      `INSERT INTO studio_review_submissions (review_submission_id, project_id, organization_id, tenant_id, project_type, workspace_revision, qa_run_id, submitted_work_json, status, submitted_by_user_id, submitted_at, created_at)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+      `INSERT INTO studio_review_submissions (review_submission_id, project_id, organization_id, tenant_id, project_type, workspace_revision, studio_revision_id, qa_run_id, submitted_work_json, status, submitted_by_user_id, submitted_at, created_at)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
        ON CONFLICT (project_id, workspace_revision) DO NOTHING
        RETURNING *`,
-      [row.review_submission_id, row.project_id, row.organization_id, row.tenant_id, row.project_type, row.workspace_revision, row.qa_run_id, JSON.stringify(row.submitted_work_json), row.status, row.submitted_by_user_id, row.submitted_at, row.created_at],
+      [row.review_submission_id, row.project_id, row.organization_id, row.tenant_id, row.project_type, row.workspace_revision, row.studio_revision_id, row.qa_run_id, JSON.stringify(row.submitted_work_json), row.status, row.submitted_by_user_id, row.submitted_at, row.created_at],
     );
     if (!inserted.rows[0]) {
       const existingAfterRace = (await this.dbQuery("SELECT * FROM studio_review_submissions WHERE project_id=$1 AND organization_id=$2 AND tenant_id=$3 AND workspace_revision=$4 ORDER BY created_at DESC LIMIT 1", [id, s.organizationId, s.tenantId, workspace.revision])).rows[0];
@@ -479,7 +619,14 @@ export class StudioProjectService {
       const decision = (await this.dbQuery("SELECT * FROM studio_review_decisions WHERE review_submission_id=$1", [existingAfterRace.review_submission_id])).rows[0] || null;
       return rowToStudioReviewSubmission(existingAfterRace, decision, Number(workspace.revision));
     }
+    if (row.studio_revision_id) {
+      await this.dbQuery(
+        "UPDATE studio_project_revisions SET status='SUBMITTED' WHERE revision_id=$1 AND project_id=$2 AND organization_id=$3 AND tenant_id=$4",
+        [row.studio_revision_id, row.project_id, row.organization_id, row.tenant_id],
+      );
+    }
     await this.outbox.enqueue({ producer_id: "shs-api.studio", event_type: "studio.review.submitted", subject_type: "studio_review_submission", subject_id: submissionId, organization_id: s.organizationId, originating_actor_id: s.userId, occurred_at: now, idempotency_key: submissionId, correlation_id: `studio:${id}:review:${submissionId}`, destination: "shs-studio", payload: { project_id: id, workspace_revision: row.workspace_revision, qa_run_id: row.qa_run_id } });
+    await reviewerRouting.routeForSubmission(submissionId, { ...actor, active_organization_id: s.organizationId, tenant_id: s.tenantId });
     return rowToStudioReviewSubmission(row, null, Number(workspace.revision));
   }
 
@@ -491,6 +638,7 @@ export class StudioProjectService {
 
   async decideReview(actor: any, projectId: string, submissionId: string, input: any) {
     const { scope: s } = await this.authorizeReviewProject(actor, projectId);
+    await reviewerRouting.authorizeDecision(actor, submissionId);
     const found = await this.reviewSubmissionRow(actor, projectId, submissionId, true);
     if (found.row.submitted_by_user_id === s.userId) throw new Error("REVIEW_SELF_APPROVAL_FORBIDDEN");
     if (found.decision) throw new Error("REVIEW_ALREADY_DECIDED");
@@ -504,8 +652,15 @@ export class StudioProjectService {
        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
       [decisionId, found.row.review_submission_id, found.row.project_id, s.organizationId, s.tenantId, decision, feedback, s.userId, now, now],
     );
+    if (found.row.studio_revision_id) {
+      await this.dbQuery(
+        "UPDATE studio_project_revisions SET status=$1 WHERE revision_id=$2 AND project_id=$3 AND organization_id=$4 AND tenant_id=$5",
+        [decision === "APPROVED" ? "FINALIZED" : "SUBMITTED", found.row.studio_revision_id, found.row.project_id, s.organizationId, s.tenantId],
+      );
+    }
     await this.dbQuery("UPDATE studio_review_submissions SET status=$1 WHERE review_submission_id=$2 AND organization_id=$3 AND tenant_id=$4", [decision, found.row.review_submission_id, s.organizationId, s.tenantId]);
     await this.outbox.enqueue({ producer_id: "shs-api.studio", event_type: "studio.review.decision_recorded", subject_type: "studio_review_decision", subject_id: decisionId, organization_id: s.organizationId, originating_actor_id: s.userId, occurred_at: now, idempotency_key: decisionId, correlation_id: `studio:${found.row.project_id}:review:${found.row.review_submission_id}`, destination: "shs-studio", payload: { project_id: found.row.project_id, submission_id: found.row.review_submission_id, decision, workspace_revision: found.row.workspace_revision } });
+    await reviewerRouting.completeForDecision({ query: this.dbQuery }, found.row.review_submission_id, s.organizationId, s.tenantId);
     return { submissionId: found.row.review_submission_id, decisionId, decision, feedback, reviewedByUserId: s.userId, reviewedAt: now };
   }
 
@@ -538,28 +693,28 @@ export class StudioProjectService {
     )).rows[0] || null;
     if (!delivery) return { projectId: found.project.project_id, currentWorkspaceRevision: currentRevision, eligible: Boolean(found.eligible), status: "NOT_READY", record: null };
     return { projectId: found.project.project_id, currentWorkspaceRevision: currentRevision, eligible: Boolean(found.eligible), status: delivery.workspace_revision === currentRevision ? delivery.status : "STALE", record: {
-      deliveryRecordId: delivery.delivery_record_id, projectId: delivery.project_id, submissionId: delivery.submission_id, reviewDecisionId: delivery.review_decision_id, qaRunId: delivery.qa_run_id, workspaceRevision: Number(delivery.workspace_revision), projectType: delivery.project_type, destination: delivery.destination, status: delivery.status, requestedByUserId: delivery.requested_by_user_id, requestedAt: delivery.requested_at, finalizedByUserId: delivery.finalized_by_user_id, finalizedAt: delivery.finalized_at, isCurrent: Number(delivery.workspace_revision) === currentRevision,
+      deliveryRecordId: delivery.delivery_record_id, projectId: delivery.project_id, submissionId: delivery.submission_id, reviewDecisionId: delivery.review_decision_id, qaRunId: delivery.qa_run_id, workspaceRevision: Number(delivery.workspace_revision), studioRevisionId: delivery.studio_revision_id ?? null, projectType: delivery.project_type, destination: delivery.destination, status: delivery.status, requestedByUserId: delivery.requested_by_user_id, requestedAt: delivery.requested_at, finalizedByUserId: delivery.finalized_by_user_id, finalizedAt: delivery.finalized_at, isCurrent: Number(delivery.workspace_revision) === currentRevision,
     } };
   }
 
   async finalizeProject(actor: any, projectId: string) {
     this.requirePermission(actor, SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_FINALIZE);
     const found = await this.eligibleDelivery(actor, projectId);
-    if (found.project.studio_learner_id !== found.scope.userId && !isAdminTier(found.scope.roles)) throw new Error("DELIVERY_FINALIZE_FORBIDDEN");
+    if (found.project.studio_owner_type !== "TEAM" && found.project.studio_learner_id !== found.scope.userId && !isAdminTier(found.scope.roles)) throw new Error("DELIVERY_FINALIZE_FORBIDDEN");
     if (!found.workspace) throw new Error("WORKSPACE_REQUIRED_FOR_DELIVERY");
     if (!found.eligible) throw new Error("DELIVERY_NOT_ELIGIBLE");
     const existing = (await this.dbQuery("SELECT * FROM studio_delivery_records WHERE submission_id=$1 AND organization_id=$2 AND tenant_id=$3", [found.eligible.review_submission_id, found.scope.organizationId, found.scope.tenantId])).rows[0];
-    if (existing) return { deliveryRecordId: existing.delivery_record_id, projectId: existing.project_id, submissionId: existing.submission_id, reviewDecisionId: existing.review_decision_id, qaRunId: existing.qa_run_id, workspaceRevision: Number(existing.workspace_revision), projectType: existing.project_type, destination: existing.destination, status: existing.status, requestedByUserId: existing.requested_by_user_id, requestedAt: existing.requested_at, finalizedByUserId: existing.finalized_by_user_id, finalizedAt: existing.finalized_at, isCurrent: true };
+    if (existing) return { deliveryRecordId: existing.delivery_record_id, projectId: existing.project_id, submissionId: existing.submission_id, reviewDecisionId: existing.review_decision_id, qaRunId: existing.qa_run_id, workspaceRevision: Number(existing.workspace_revision), studioRevisionId: existing.studio_revision_id ?? null, projectType: existing.project_type, destination: existing.destination, status: existing.status, requestedByUserId: existing.requested_by_user_id, requestedAt: existing.requested_at, finalizedByUserId: existing.finalized_by_user_id, finalizedAt: existing.finalized_at, isCurrent: true };
     const now = new Date().toISOString();
-    const row = { delivery_record_id: `studio_delivery_${randomUUID()}`, project_id: found.project.project_id, organization_id: found.scope.organizationId, tenant_id: found.scope.tenantId, submission_id: found.eligible.review_submission_id, review_decision_id: found.eligible.review_decision_id, qa_run_id: found.eligible.qa_run_id, workspace_revision: Number(found.workspace.revision), project_type: found.project.studio_project_type, destination: found.project.studio_destination, status: "FINALIZED", requested_by_user_id: found.scope.userId, requested_at: now, finalized_by_user_id: found.scope.userId, finalized_at: now, created_at: now };
+    const row = { delivery_record_id: `studio_delivery_${randomUUID()}`, project_id: found.project.project_id, organization_id: found.scope.organizationId, tenant_id: found.scope.tenantId, submission_id: found.eligible.review_submission_id, review_decision_id: found.eligible.review_decision_id, qa_run_id: found.eligible.qa_run_id, workspace_revision: Number(found.workspace.revision), studio_revision_id: found.workspace.current_revision_id || null, project_type: found.project.studio_project_type, destination: found.project.studio_destination, status: "FINALIZED", requested_by_user_id: found.scope.userId, requested_at: now, finalized_by_user_id: found.scope.userId, finalized_at: now, created_at: now };
     const inserted = await this.dbQuery(
-      `INSERT INTO studio_delivery_records (delivery_record_id, project_id, organization_id, tenant_id, submission_id, review_decision_id, qa_run_id, workspace_revision, project_type, destination, status, requested_by_user_id, requested_at, finalized_by_user_id, finalized_at, created_at)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16) ON CONFLICT (submission_id) DO NOTHING RETURNING *`,
-      [row.delivery_record_id, row.project_id, row.organization_id, row.tenant_id, row.submission_id, row.review_decision_id, row.qa_run_id, row.workspace_revision, row.project_type, row.destination, row.status, row.requested_by_user_id, row.requested_at, row.finalized_by_user_id, row.finalized_at, row.created_at],
+      `INSERT INTO studio_delivery_records (delivery_record_id, project_id, organization_id, tenant_id, submission_id, review_decision_id, qa_run_id, workspace_revision, studio_revision_id, project_type, destination, status, requested_by_user_id, requested_at, finalized_by_user_id, finalized_at, created_at)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17) ON CONFLICT (submission_id) DO NOTHING RETURNING *`,
+      [row.delivery_record_id, row.project_id, row.organization_id, row.tenant_id, row.submission_id, row.review_decision_id, row.qa_run_id, row.workspace_revision, row.studio_revision_id, row.project_type, row.destination, row.status, row.requested_by_user_id, row.requested_at, row.finalized_by_user_id, row.finalized_at, row.created_at],
     );
     if (!inserted.rows[0]) return this.finalizeProject(actor, projectId);
     await this.outbox.enqueue({ producer_id: "shs-api.studio", event_type: "studio.delivery.finalized", subject_type: "studio_delivery_record", subject_id: row.delivery_record_id, organization_id: found.scope.organizationId, originating_actor_id: found.scope.userId, occurred_at: now, idempotency_key: row.delivery_record_id, correlation_id: `studio:${row.project_id}:delivery:${row.delivery_record_id}`, destination: "shs-studio", payload: { project_id: row.project_id, submission_id: row.submission_id, workspace_revision: row.workspace_revision, destination: row.destination } });
-    return { deliveryRecordId: row.delivery_record_id, projectId: row.project_id, submissionId: row.submission_id, reviewDecisionId: row.review_decision_id, qaRunId: row.qa_run_id, workspaceRevision: row.workspace_revision, projectType: row.project_type, destination: row.destination, status: row.status, requestedByUserId: row.requested_by_user_id, requestedAt: row.requested_at, finalizedByUserId: row.finalized_by_user_id, finalizedAt: row.finalized_at, isCurrent: true };
+    return { deliveryRecordId: row.delivery_record_id, projectId: row.project_id, submissionId: row.submission_id, reviewDecisionId: row.review_decision_id, qaRunId: row.qa_run_id, workspaceRevision: row.workspace_revision, studioRevisionId: row.studio_revision_id, projectType: row.project_type, destination: row.destination, status: row.status, requestedByUserId: row.requested_by_user_id, requestedAt: row.requested_at, finalizedByUserId: row.finalized_by_user_id, finalizedAt: row.finalized_at, isCurrent: true };
   }
 
   async updateWorkspace(actor: any, projectId: string, input: any) {
@@ -569,7 +724,7 @@ export class StudioProjectService {
     const projectRow = (await this.dbQuery("SELECT * FROM projects WHERE project_id=$1 AND studio_origin IS NOT NULL", [id])).rows[0];
     if (!projectRow) throw new Error("PROJECT_NOT_FOUND");
     await this.authorizeProject(actor, projectRow);
-    if (!isAdminTier(s.roles) && projectRow.studio_learner_id !== s.userId) throw new Error("PROJECT_UPDATE_FORBIDDEN");
+    if (!isAdminTier(s.roles) && projectRow.studio_owner_type !== "TEAM" && projectRow.studio_learner_id !== s.userId) throw new Error("PROJECT_UPDATE_FORBIDDEN");
     const projectType = projectRow.studio_project_type as StudioProjectType;
     const work = validateStudioWorkspaceWork(projectType, input?.work);
     if (!Number.isInteger(input?.revision) || input.revision < 0) throw new Error("WORKSPACE_REVISION_REQUIRED");
@@ -580,31 +735,78 @@ export class StudioProjectService {
         [id, s.organizationId, s.tenantId],
       );
       const current = currentResult.rows[0];
+      const idempotencyKey = String(input?.idempotencyKey || input?.idempotency_key || "").trim() || null;
+      if (idempotencyKey) {
+        const prior = await db.query(
+          "SELECT * FROM studio_project_revisions WHERE project_id=$1 AND organization_id=$2 AND tenant_id=$3 AND idempotency_key=$4",
+          [id, s.organizationId, s.tenantId, idempotencyKey],
+        );
+        if (prior.rows[0]) {
+          const priorWorkspace = await db.query("SELECT * FROM studio_builder_workspaces WHERE project_id=$1 AND organization_id=$2 AND tenant_id=$3", [id, s.organizationId, s.tenantId]);
+          return workspaceFromRow(priorWorkspace.rows[0]);
+        }
+      }
       if (current && Number(input.revision) !== Number(current.revision)) throw new Error("WORKSPACE_REVISION_CONFLICT");
       if (!current && input.revision !== 0) throw new Error("WORKSPACE_REVISION_CONFLICT");
       const nextRevision = current ? Number(current.revision) + 1 : 1;
       const workspaceId = current?.workspace_id || `studio_workspace_${randomUUID()}`;
+      const revisionId = `studio_revision_${randomUUID()}`;
+      try {
+        await db.query(
+          `INSERT INTO studio_project_revisions (revision_id, project_id, organization_id, tenant_id, revision_number, parent_revision_id, status, project_type, work_json, content_hash, created_by_user_id, idempotency_key)
+           VALUES ($1,$2,$3,$4,$5,$6,'WORKING',$7,$8,$9,$10,$11)`,
+          [revisionId, id, s.organizationId, s.tenantId, nextRevision, current?.current_revision_id || null, projectType, JSON.stringify(work), revisionHash(work), s.userId, idempotencyKey],
+        );
+      } catch (error: any) {
+        if (error?.code === "23505") throw new Error("WORKSPACE_REVISION_CONFLICT");
+        throw error;
+      }
       const result = current
         ? await db.query(
-          "UPDATE studio_builder_workspaces SET work_json=$1, revision=$2, updated_at=NOW() WHERE workspace_id=$3 AND organization_id=$4 AND tenant_id=$5 RETURNING *",
-          [JSON.stringify(work), nextRevision, workspaceId, s.organizationId, s.tenantId],
+          "UPDATE studio_builder_workspaces SET work_json=$1, revision=$2, current_revision_id=$3, updated_at=NOW() WHERE workspace_id=$4 AND organization_id=$5 AND tenant_id=$6 RETURNING *",
+          [JSON.stringify(work), nextRevision, revisionId, workspaceId, s.organizationId, s.tenantId],
         )
         : await db.query(
-          "INSERT INTO studio_builder_workspaces (workspace_id, project_id, organization_id, tenant_id, project_type, work_json, revision, created_by_user_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *",
-          [workspaceId, id, s.organizationId, s.tenantId, projectType, JSON.stringify(work), nextRevision, s.userId],
+          "INSERT INTO studio_builder_workspaces (workspace_id, project_id, organization_id, tenant_id, project_type, work_json, revision, current_revision_id, created_by_user_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *",
+          [workspaceId, id, s.organizationId, s.tenantId, projectType, JSON.stringify(work), nextRevision, revisionId, s.userId],
         );
       if (!result.rows[0]) throw new Error("PROJECT_NOT_FOUND");
       const eventBase = { organization_id: s.organizationId, originating_actor_id: s.userId, occurred_at: new Date().toISOString(), correlation_id: `studio_workspace_${id}` };
+      await this.outbox.enqueue({ ...eventBase, producer_id: "shs-api.studio", event_type: "studio.revision.created", subject_type: "studio_project_revision", subject_id: revisionId, idempotency_key: revisionId, destination: "shs-studio", payload: { project_id: id, revision_id: revisionId, revision_number: nextRevision, parent_revision_id: current?.current_revision_id || null } }, db);
       await this.outbox.enqueue({ ...eventBase, producer_id: "shs-api.studio", event_type: "studio.workspace.updated", subject_type: "studio_builder_workspace", subject_id: workspaceId, idempotency_key: `${workspaceId}:${nextRevision}`, destination: "shs-studio" }, db);
       return workspaceFromRow(result.rows[0]);
     });
+  }
+
+  async listRevisions(actor: any, projectId: string) {
+    this.requirePermission(actor, SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_VIEW);
+    const s = scope(actor);
+    const id = requiredString(projectId, "project_id");
+    const project = (await this.dbQuery("SELECT * FROM projects WHERE project_id=$1 AND studio_origin IS NOT NULL", [id])).rows[0];
+    if (!project) throw new Error("PROJECT_NOT_FOUND");
+    await this.authorizeProject(actor, project);
+    const result = await this.dbQuery("SELECT revision_id, project_id, revision_number, parent_revision_id, status, project_type, content_hash, created_by_user_id, created_at FROM studio_project_revisions WHERE project_id=$1 AND organization_id=$2 AND tenant_id=$3 ORDER BY revision_number DESC", [id, s.organizationId, s.tenantId]);
+    return result.rows.map((row: any) => ({ revisionId: row.revision_id, projectId: row.project_id, revisionNumber: Number(row.revision_number), parentRevisionId: row.parent_revision_id, status: row.status, projectType: row.project_type, contentHash: row.content_hash, createdByUserId: row.created_by_user_id, createdAt: row.created_at }));
+  }
+
+  async getRevision(actor: any, projectId: string, revisionId: string) {
+    this.requirePermission(actor, SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_VIEW);
+    const s = scope(actor);
+    const id = requiredString(projectId, "project_id");
+    const project = (await this.dbQuery("SELECT * FROM projects WHERE project_id=$1 AND studio_origin IS NOT NULL", [id])).rows[0];
+    if (!project) throw new Error("PROJECT_NOT_FOUND");
+    await this.authorizeProject(actor, project);
+    const result = await this.dbQuery("SELECT * FROM studio_project_revisions WHERE revision_id=$1 AND project_id=$2 AND organization_id=$3 AND tenant_id=$4", [requiredString(revisionId, "revision_id"), id, s.organizationId, s.tenantId]);
+    const row = result.rows[0];
+    if (!row) throw new Error("REVISION_NOT_FOUND");
+    return { revisionId: row.revision_id, projectId: row.project_id, revisionNumber: Number(row.revision_number), parentRevisionId: row.parent_revision_id, status: row.status, projectType: row.project_type, work: validateStudioWorkspaceWork(row.project_type, row.work_json), contentHash: row.content_hash, createdByUserId: row.created_by_user_id, createdAt: row.created_at };
   }
 
   async list(actor: any) {
     this.requirePermission(actor, SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_VIEW);
     const s = scope(actor);
     const result = isStudentOnly(s.roles)
-      ? await this.dbQuery("SELECT * FROM projects WHERE organization_id=$1 AND tenant_id=$2 AND created_by_user_id=$3 AND studio_origin IS NOT NULL ORDER BY created_at DESC", [s.organizationId, s.tenantId, s.userId])
+      ? await this.dbQuery("SELECT DISTINCT p.* FROM projects p LEFT JOIN studio_team_members tm ON tm.studio_team_id=p.studio_team_id AND tm.user_id=$3 AND tm.organization_id=$1 AND tm.tenant_id=$2 AND tm.status='ACTIVE' AND tm.left_at IS NULL WHERE p.organization_id=$1 AND p.tenant_id=$2 AND p.studio_origin IS NOT NULL AND (p.created_by_user_id=$3 OR tm.studio_team_membership_id IS NOT NULL) ORDER BY p.created_at DESC", [s.organizationId, s.tenantId, s.userId])
       : isAdminTier(s.roles)
         ? await this.dbQuery("SELECT * FROM projects WHERE organization_id=$1 AND tenant_id=$2 AND studio_origin IS NOT NULL ORDER BY created_at DESC", [s.organizationId, s.tenantId])
         : await this.dbQuery("SELECT p.* FROM projects p WHERE p.organization_id=$1 AND p.tenant_id=$2 AND p.studio_origin IS NOT NULL AND (p.created_by_user_id=$3 OR EXISTS (SELECT 1 FROM assignments a WHERE a.assignment_id=p.studio_assignment_id AND (a.created_by=$3 OR EXISTS (SELECT 1 FROM assignment_targets at JOIN cohort_staff cs ON cs.cohort_id=at.cohort_id AND cs.organization_id=at.organization_id AND cs.user_id=$3 AND cs.status='ACTIVE' WHERE at.assignment_id=a.assignment_id AND at.target_type='COHORT' AND at.organization_id=a.organization_id)))) ORDER BY p.created_at DESC", [s.organizationId, s.tenantId, s.userId]);

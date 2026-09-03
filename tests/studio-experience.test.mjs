@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { STUDIO_EXPERIENCE_MODES, STUDIO_TERMINOLOGY, deriveStudioProgress, resolveStudioNextAction, toStudioCompanionContext } from "../src/pages/studio/experience.js";
+import { STUDIO_EXPERIENCE_MODES, STUDIO_TERMINOLOGY, deriveLearningProgress, deriveStudioProgress, resolveLearningNextAction, resolveStudioNextAction, toStudioCompanionContext } from "../src/pages/studio/experience.js";
 
 test("next action is derived without mutating canonical project data", () => {
   const project = { projectId: "p1", projectType: "WEBSITE", status: "DRAFT" };
@@ -42,4 +42,19 @@ test("Companion context is explicitly read-only", () => {
   assert.equal(context.authority, "read-only");
   assert.equal("completed" in context, false);
   assert.equal("verified" in context, false);
+});
+
+test("learning progress uses canonical QA, review, and completion facets", () => {
+  assert.equal(deriveLearningProgress({ currentRevision: { number: 1 }, statuses: { qa: "NOT_CHECKED", review: "NOT_SUBMITTED", completion: "INCOMPLETE" } }).currentStage, "QA");
+  assert.equal(deriveLearningProgress({ currentRevision: { number: 1 }, statuses: { qa: "PASSED", review: "NOT_SUBMITTED", completion: "INCOMPLETE" } }).currentStage, "Submit");
+  assert.equal(deriveLearningProgress({ currentRevision: { number: 1 }, statuses: { qa: "PASSED", review: "CHANGES_REQUESTED", completion: "INCOMPLETE" } }).currentStage, "Review");
+  assert.equal(deriveLearningProgress({ currentRevision: { number: 2 }, statuses: { qa: "PASSED", review: "APPROVED", completion: "COMPLETE" } }).currentStage, "Complete");
+});
+
+test("learning next action stays truthful for independent and assignment projects", () => {
+  const independent = { originLabel: "Personal Project", statuses: { qa: "NOT_CHECKED", review: "NOT_SUBMITTED", completion: "INCOMPLETE" } };
+  assert.equal(resolveLearningNextAction(independent).key, "qa");
+  assert.equal(resolveLearningNextAction({ statuses: { qa: "FAILED", review: "NOT_SUBMITTED", completion: "INCOMPLETE" } }).key, "qa-failed");
+  assert.equal(resolveLearningNextAction({ changesRequested: { revision: 1, nextRevision: 2 }, statuses: { qa: "PASSED", review: "CHANGES_REQUESTED", completion: "INCOMPLETE" } }).key, "changes");
+  assert.equal(resolveLearningNextAction({ statuses: { qa: "PASSED", review: "NOT_SUBMITTED", completion: "COMPLETE" } }).key, "complete");
 });

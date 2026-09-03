@@ -8,8 +8,8 @@ const service = new StudioProjectService();
 
 function statusFor(error: any) {
   const code = String(error?.message || "");
-  if (["PROJECT_NOT_FOUND", "ASSIGNMENT_NOT_FOUND", "LEARNER_NOT_FOUND", "REVIEW_SUBMISSION_NOT_FOUND"].includes(code)) return 404;
-  if (["FORBIDDEN", "COMMERCIAL_DESTINATION_FORBIDDEN", "STUDENT_DESTINATION_REQUIRED", "STUDENT_IDEA_STUDENT_REQUIRED", "LEARNER_SCOPE_FORBIDDEN", "PROJECT_UPDATE_FORBIDDEN", "STUDENT_STATUS_UPDATE_FORBIDDEN", "STUDIO_PROJECT_CREATE_FORBIDDEN", "REVIEW_SUBMISSION_FORBIDDEN", "CURRENT_QA_REQUIRED", "WORKSPACE_REQUIRED_FOR_REVIEW", "REVIEW_SELF_APPROVAL_FORBIDDEN", "REVIEW_FEEDBACK_TOO_LONG", "DELIVERY_FINALIZE_FORBIDDEN", "WORKSPACE_REQUIRED_FOR_DELIVERY", "DELIVERY_NOT_ELIGIBLE", "project_submission_review_required", "studio_project_finalize_required"].includes(code)) return 403;
+  if (["PROJECT_NOT_FOUND", "ASSIGNMENT_NOT_FOUND", "LEARNER_NOT_FOUND", "REVIEW_SUBMISSION_NOT_FOUND", "REVISION_NOT_FOUND", "TEAM_NOT_FOUND", "TEAM_MEMBER_NOT_FOUND"].includes(code)) return 404;
+  if (["FORBIDDEN", "COMMERCIAL_DESTINATION_FORBIDDEN", "STUDENT_DESTINATION_REQUIRED", "STUDENT_IDEA_STUDENT_REQUIRED", "LEARNER_SCOPE_FORBIDDEN", "PROJECT_UPDATE_FORBIDDEN", "STUDENT_STATUS_UPDATE_FORBIDDEN", "STUDIO_PROJECT_CREATE_FORBIDDEN", "REVIEW_SUBMISSION_FORBIDDEN", "CURRENT_QA_REQUIRED", "WORKSPACE_REQUIRED_FOR_REVIEW", "REVIEW_SELF_APPROVAL_FORBIDDEN", "REVIEW_ASSIGNMENT_REQUIRED", "REVIEW_FEEDBACK_TOO_LONG", "DELIVERY_FINALIZE_FORBIDDEN", "WORKSPACE_REQUIRED_FOR_DELIVERY", "DELIVERY_NOT_ELIGIBLE", "TEAM_MEMBERSHIP_REQUIRED", "TEAM_MEMBER_NOT_ELIGIBLE", "project_submission_review_required", "studio_project_finalize_required"].includes(code)) return 403;
   if (["HANDOFF_IN_PROGRESS", "WORKSPACE_REVISION_CONFLICT", "REVIEW_ALREADY_DECIDED", "REVIEW_SUBMISSION_CONFLICT"].includes(code)) return 409;
   if (["WORKSPACE_REVISION_REQUIRED"].includes(code)) return 400;
   return 400;
@@ -53,8 +53,20 @@ export function registerStudioProjectRoutes(app: any) {
     try { return res.json(ok(await service.getBuildPacket(actor(req), req.params.projectId))); }
     catch (error) { return reject(res, error); }
   });
+  app.get("/studio/projects/:projectId/learning-context", requirePermission(SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_VIEW), async (req: any, res: any) => {
+    try { return res.json(ok(await service.getLearningContext(actor(req), req.params.projectId))); }
+    catch (error) { return reject(res, error); }
+  });
   app.get("/studio/projects/:projectId/workspace", requirePermission(SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_VIEW), async (req: any, res: any) => {
     try { return res.json(ok(await service.getWorkspace(actor(req), req.params.projectId))); }
+    catch (error) { return reject(res, error); }
+  });
+  app.get("/studio/projects/:projectId/revisions", requirePermission(SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_VIEW), async (req: any, res: any) => {
+    try { return res.json(ok({ items: await service.listRevisions(actor(req), req.params.projectId) })); }
+    catch (error) { return reject(res, error); }
+  });
+  app.get("/studio/projects/:projectId/revisions/:revisionId", requirePermission(SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_VIEW), async (req: any, res: any) => {
+    try { return res.json(ok(await service.getRevision(actor(req), req.params.projectId, req.params.revisionId))); }
     catch (error) { return reject(res, error); }
   });
   app.patch("/studio/projects/:projectId/workspace", requirePermission(SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_UPDATE), async (req: any, res: any) => {

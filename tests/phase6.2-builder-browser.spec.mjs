@@ -52,6 +52,21 @@ test("authenticated Website builder saves and reloads without downstream truth",
   const beforeProject = await apiJson(page, "learner_A1", `/studio/projects/${project.projectId}`);
   await page.goto(`${frontend}/curriculum.html#/studio/projects/${project.projectId}`, { waitUntil: "domcontentloaded" });
   await expect(page.locator("body")).toContainText("What you’re building");
+  await expect(page.getByRole("heading", { name: "Project context" })).toBeVisible();
+  await expect(page.getByText("Personal Project", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Progress", exact: true })).toBeVisible();
+  await expect(page.getByText("Next step", { exact: true })).toBeVisible();
+  const learningSnapshot = await page.locator("section[aria-labelledby='studio-learning-context-heading']").ariaSnapshot();
+  expect(learningSnapshot).toContain("Project context");
+  expect(learningSnapshot).toContain("Personal Project");
+  expect(learningSnapshot).toContain("Build");
+  expect(learningSnapshot).toContain("QA");
+  const assignmentHandoff = await apiJson(page, "learner_A1", "/studio/handoffs/assignment", { method: "POST", data: { assignmentId: "phase8_assignment_a", projectType: "WEBSITE", title: "Browser Assignment Context" } });
+  expect(assignmentHandoff.response.status()).toBe(201);
+  await page.goto(`${frontend}/curriculum.html#/studio/projects/${assignmentHandoff.data.projectId}`, { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("heading", { name: "Assignment", exact: true })).toBeVisible();
+  await expect(page.getByText("Assignment A", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Progress", exact: true })).toBeVisible();
   await expect(page.locator("body")).toContainText("Project Resources");
   await page.goto(`${frontend}/curriculum.html#/studio/projects/${project.projectId}/build`, { waitUntil: "domcontentloaded" });
   await expect(page.getByRole("heading", { name: "Build Your Website" })).toBeVisible();
@@ -65,6 +80,11 @@ test("authenticated Website builder saves and reloads without downstream truth",
   await page.reload({ waitUntil: "domcontentloaded" });
   await expect(page.getByLabel("Page title")).toHaveValue("Saved Home");
   await expect(page.getByLabel("Page content")).toHaveValue("Authenticated durable Website work.");
+  await expect(page.getByRole("heading", { name: "Revision history" })).toBeVisible();
+  const revisionSnapshot = await page.locator("section[aria-labelledby='studio-revision-history-heading']").ariaSnapshot();
+  expect(revisionSnapshot).toContain("Revision history");
+  expect(revisionSnapshot).toContain("Revision 1");
+  expect(revisionSnapshot).toContain("Contributor attribution recorded");
   await expect(page.locator("body")).not.toContainText(/QA passed|Verified|Delivered|Evidence created|Portfolio added/i);
   expect(downstreamCounts()).toBe(before);
   const afterProject = await apiJson(page, "learner_A1", `/studio/projects/${project.projectId}`);
@@ -126,7 +146,7 @@ test("stale browser save is reported as a conflict rather than Saved", async ({ 
   const staleResponse = secondPage.waitForResponse((response) => response.request().method() === "PATCH" && response.url().endsWith(`/studio/projects/${project.projectId}/workspace`));
   await secondPage.getByRole("button", { name: "Save draft" }).click();
   expect((await staleResponse).status()).toBe(409);
-  await expect(secondPage.getByRole("alert")).toContainText("changed in another tab");
+  await expect(secondPage.getByText("This project changed in another tab.", { exact: false })).toBeVisible();
   await expect(secondPage.getByText("Saved", { exact: true })).not.toBeVisible();
   await firstPage.close();
   await secondPage.close();
@@ -155,5 +175,20 @@ test("builder labels, keyboard controls, status text, and tablet layout are usab
   await page.getByRole("button", { name: "Save draft" }).press("Enter");
   await expect(page.getByText("Saved", { exact: true })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(768);
+  await page.close();
+});
+
+test("learning-context failure leaves the builder usable with a bounded error", async ({ browser }) => {
+  const page = await actorPage(browser, "learner_A1", { width: 1440, height: 900 });
+  const project = await createProject(page, "learner_A1", "WEBSITE", "Context Failure Website");
+  await page.route("**/studio/projects/*/learning-context", (route) => route.fulfill({
+    status: 503,
+    contentType: "application/json",
+    body: JSON.stringify({ ok: false, error: { code: "CONTEXT_UNAVAILABLE", message: "unavailable" } }),
+  }));
+  await page.goto(`${frontend}/curriculum.html#/studio/projects/${project.projectId}/build`, { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("heading", { name: "Build Your Website" })).toBeVisible();
+  await expect(page.getByRole("alert")).toContainText("Learning context is unavailable");
+  await expect(page.getByLabel("Page content")).toBeVisible();
   await page.close();
 });

@@ -14,6 +14,7 @@ export type StudioWorkspaceWork = StudioWebsiteWork | StudioAgentWork;
 
 export interface StudioWorkspace {
   workspaceId: string | null;
+  revisionId: string | null;
   projectId: string;
   projectType: StudioProjectType;
   revision: number;
@@ -67,6 +68,7 @@ export function workspaceFromRow(row: any, fallbackType?: StudioProjectType): St
   if (!isStudioProjectType(projectType)) throw new Error("WORKSPACE_TYPE_INVALID");
   return {
     workspaceId: row?.workspace_id ?? null,
+    revisionId: row?.current_revision_id ?? null,
     projectId: row.project_id,
     projectType,
     revision: Number(row?.revision || 0),

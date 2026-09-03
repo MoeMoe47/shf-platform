@@ -656,6 +656,16 @@ html[data-app="curriculum"],
   font-size: calc(13px * var(--ld-text-scale, 1));
   color: var(--ld-muted);
 }
+.ld-notifPanelHead { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.ld-notifPanelHead span, .ld-notifList time, .notification-status { color: var(--ld-muted); font-size: 12px; }
+.ld-notifList, .notification-list { list-style: none; margin: 0; padding: 0; }
+.ld-notifList li, .notification-list li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid var(--ld-ring); }
+.ld-notifList li.is-unread, .notification-list li.is-unread { border-left: 3px solid var(--ld-orange); padding-left: 8px; }
+.ld-notifList p, .notification-list p { margin: 3px 0; }
+.ld-notifList a, .ld-notifAll { color: var(--ld-ink); font-weight: 700; }
+.notification-list li { align-items: flex-start; }
+.notification-list li > div { display: grid; gap: 4px; }
+.notification-list .ops-secondary { flex: 0 0 auto; }
 
 .ld-pathwaySelect {
   position: relative;

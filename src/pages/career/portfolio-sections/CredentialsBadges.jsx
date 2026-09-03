@@ -1,6 +1,6 @@
 // src/pages/career/portfolio-sections/CredentialsBadges.jsx
 //
-// SHF Ecosystem Phase 7 — replaces the prior hardcoded fallback badge
+// SHF Ecosystem Phase 8 — renders the learner's durable Credential authority.
 // array with the learner's real, canonically-issued Credentials
 // (GET /credentials/me). Shows exactly what the backend says was
 // actually issued — never "Earned" for a merely-eligible credential, and
@@ -45,15 +45,7 @@ export default function CredentialsBadges({ role }) {
         <h2 id="sp-credentials-h" className="sp-cardTitle">
           Credentials &amp; Badges
         </h2>
-        <button
-          type="button"
-          className="sp-viewLink"
-          aria-disabled="true"
-          title="Credential detail view coming soon"
-          onClick={(e) => e.preventDefault()}
-        >
-          View credentials
-        </button>
+        <span className="sp-cardMeta">Issued by the institution</span>
       </div>
 
       {state.loading ? (
@@ -71,6 +63,8 @@ export default function CredentialsBadges({ role }) {
               </span>
               <span className="sp-badgeLabel">{item.definition.name}</span>
               <span className="sp-badgeLabel sp-badgeStatus">{LIFECYCLE_LABEL[item.lifecycle] || item.lifecycle}</span>
+              <span className="sp-badgeLabel sp-badgeDate">Issued {new Date(item.issuedAt).toLocaleDateString()}</span>
+              <span className="sp-badgeLabel sp-badgeIssuer">{item.definition.issuingAuthority}</span>
             </div>
           ))}
         </div>

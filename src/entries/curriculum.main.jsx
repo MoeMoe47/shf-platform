@@ -47,6 +47,7 @@ import { HashRouter } from "react-router-dom";
 /* ---------- App bits ---------- */
 import RootProviders from "@/entries/RootProviders.jsx";
 import { AuthProvider } from "@/auth/auth-context.jsx";
+import { UserProvider } from "@/context/UserContext.jsx";
 import GlobalErrorBoundary from "@/components/GlobalErrorBoundary.jsx";
 import CurriculumRoutes from "@/router/CurriculumRoutes.jsx";
 
@@ -84,16 +85,18 @@ createRoot(getOrCreateMount()).render(
   <React.StrictMode>
     <GlobalErrorBoundary>
       <AuthProvider>
-        <RootProviders appScope="curriculum">
-          <AccessibilityPreferencesProvider>
-            <ReadingLevelProvider>
-              <LiveAnnouncer />
-              <HashRouter>
-                <CurriculumRoutes />
-              </HashRouter>
-            </ReadingLevelProvider>
-          </AccessibilityPreferencesProvider>
-        </RootProviders>
+        <UserProvider>
+          <RootProviders appScope="curriculum">
+            <AccessibilityPreferencesProvider>
+              <ReadingLevelProvider>
+                <LiveAnnouncer />
+                <HashRouter>
+                  <CurriculumRoutes />
+                </HashRouter>
+              </ReadingLevelProvider>
+            </AccessibilityPreferencesProvider>
+          </RootProviders>
+        </UserProvider>
       </AuthProvider>
     </GlobalErrorBoundary>
   </React.StrictMode>

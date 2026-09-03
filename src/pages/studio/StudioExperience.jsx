@@ -2,17 +2,32 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useCompanionContext } from "@/companion/CompanionProvider.jsx";
 import { useEffectiveAccessibilityContext } from "@/context/EffectiveAccessibilityContext.jsx";
-import { STUDIO_EXPERIENCE_MODES, deriveStudioProgress, resolveStudioNextAction, toStudioCompanionContext } from "./experience.js";
+import { STUDIO_EXPERIENCE_MODES, deriveLearningProgress, deriveStudioProgress, resolveLearningNextAction, resolveStudioNextAction, toStudioCompanionContext } from "./experience.js";
 
 const StudioExperienceContext = React.createContext(null);
 
-export function StudioExperienceProvider({ project, route, resources = [], children }) {
+export function StudioExperienceProvider({ project, context = null, packet = null, route, resources = [], children }) {
   const [mode, setMode] = React.useState(STUDIO_EXPERIENCE_MODES.BEGINNER);
-  const nextAction = React.useMemo(() => resolveStudioNextAction(project), [project]);
-  const progress = React.useMemo(() => deriveStudioProgress(project), [project]);
-  const companionContext = React.useMemo(() => toStudioCompanionContext({ project, route, nextAction, progress, resources }), [project, route, nextAction, progress, resources]);
-  const value = React.useMemo(() => ({ mode, setMode, nextAction, progress, companionContext }), [mode, nextAction, progress, companionContext]);
+  const nextAction = React.useMemo(() => context ? resolveLearningNextAction(context) : resolveStudioNextAction(project), [context, project]);
+  const progress = React.useMemo(() => context ? deriveLearningProgress(context) : deriveStudioProgress(project), [context, project]);
+  const companionContext = React.useMemo(() => toStudioCompanionContext({ project, context, route, nextAction, progress, resources }), [project, context, route, nextAction, progress, resources]);
+  const value = React.useMemo(() => ({ mode, setMode, nextAction, progress, companionContext, context, packet }), [mode, nextAction, progress, companionContext, context, packet]);
   return <StudioExperienceContext.Provider value={value}>{children}</StudioExperienceContext.Provider>;
+}
+
+export function StudioLearningContext({ className = "" }) {
+  const { context, progress, nextAction } = useStudioExperience();
+  if (!context) return null;
+  const project = context.project || {};
+  return <section className={`studio-learningContext ${className}`} aria-labelledby="studio-learning-context-heading">
+    <div className="studio-learningIntro"><div><p className="studio-eyebrow">What you’re building</p><h2 id="studio-learning-context-heading">{project.title}</h2><p className="studio-muted">{project.type === "AI_AGENT" ? "AI Agent" : "Website"}{project.ownerType === "TEAM" && project.teamName ? ` · Team Project · ${project.teamName}` : ""}</p></div>{context.currentRevision && <p className="studio-revisionBadge">Revision {context.currentRevision.number} · {context.currentRevision.status}</p>}</div>
+    <div className="studio-learningGrid">
+      <section aria-labelledby="studio-assignment-context-heading"><h3 id="studio-assignment-context-heading">{context.assignment ? "Assignment" : "Project context"}</h3>{context.assignment ? <><p><strong>{context.assignment.title}</strong></p>{context.assignment.course?.title && <p className="studio-muted">Course: {context.assignment.course.title}</p>}{context.assignment.unit?.title && <p className="studio-muted">Unit: {context.assignment.unit.title}</p>}{context.assignment.lesson?.title && <p className="studio-muted">Lesson: {context.assignment.lesson.title}</p>}</> : <p>Personal Project</p>}{project.ownerType === "TEAM" && <p className="studio-muted">Team Project{project.teamName ? ` · ${project.teamName}` : ""}</p>}</section>
+      <section aria-labelledby="studio-learning-progress-heading"><h3 id="studio-learning-progress-heading">Progress</h3><ol className="studio-learningSteps" aria-label={`Current progress step: ${progress.currentStage}`}>{progress.stages.map((stage) => { const complete = progress.completedStages.includes(stage); const current = stage === progress.currentStage; return <li key={stage} className={complete ? "is-complete" : current ? "is-current" : ""} aria-current={current ? "step" : undefined}><span>{complete ? "Complete" : current ? "Current" : "Next"}</span> {stage}</li>; })}</ol></section>
+      <section aria-labelledby="studio-learning-requirements-heading"><h3 id="studio-learning-requirements-heading">Requirements</h3>{context.requirements?.length ? <ul className="studio-learningRequirements">{context.requirements.map((item) => <li key={item.id}><span aria-hidden="true">{item.status === "COMPLETE" ? "✓" : "○"}</span><strong>{item.label}</strong><span>{item.status === "COMPLETE" ? "Complete" : item.status === "BLOCKED" ? "Blocked" : item.status === "NEEDS_REVIEW" ? "Needs review" : "Remaining"}</span>{item.detail && <small>{item.detail}</small>}</li>)}</ul> : <p className="studio-muted">No formal requirements are available yet.</p>}</section>
+    </div>
+    <section className="studio-learningNext" aria-labelledby="studio-learning-next-heading"><p className="studio-eyebrow">Next step</p><h3 id="studio-learning-next-heading">{nextAction.label}</h3><p>{nextAction.description}</p></section>
+  </section>;
 }
 
 export function useStudioExperience() {

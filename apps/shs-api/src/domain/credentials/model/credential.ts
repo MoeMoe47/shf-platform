@@ -45,6 +45,10 @@ export interface LearnerCredential {
   issuedByUserId: string;
   revokedByUserId: string | null;
   verificationId: string;
+  credentialVersion: number;
+  issuanceKey: string | null;
+  provenance: Record<string, unknown>;
+  verificationHash: string | null;
   createdAt: string;
   updatedAt: string;
 }

@@ -19,7 +19,9 @@
 const LIVE_LEARNING_API_BASE = import.meta.env?.VITE_LIVE_LEARNING_API_BASE || "http://127.0.0.1:8091";
 
 export function resolveDevUserId(role) {
-  return import.meta.env?.VITE_DEV_USER_ID || (role === "admin" || role === "instructor" ? "user_instructor_001" : "user_student_001");
+  // The authenticated boot identity is authoritative when present. The Vite
+  // value remains a development fallback for screens without a boot identity.
+  return (typeof window !== "undefined" && window.__user?.id) || import.meta.env?.VITE_DEV_USER_ID || (role === "admin" || role === "instructor" ? "user_instructor_001" : "user_student_001");
 }
 
 function authHeaders(role) {

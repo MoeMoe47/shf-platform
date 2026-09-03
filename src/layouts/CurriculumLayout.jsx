@@ -61,6 +61,7 @@ const ROUTE_TITLES = [
   { test: /\/curriculum\/library\/lesson(\/[^/]+)?\/?$/, title: "Lesson" },
   { test: /\/curriculum\/lesson\/[^/]+\/?$/, title: "Lesson" },
   { test: /\/curriculum\/settings\/?$/, title: "Settings" },
+  { test: /\/curriculum\/notifications\/?$/, title: "Notifications" },
   { test: /\/curriculum\/help\/?$/, title: "Help" },
 ];
 

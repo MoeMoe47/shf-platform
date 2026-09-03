@@ -39,7 +39,7 @@ export default function StudioHome() {
       </section>
 
       <section className="studio-section" aria-labelledby="studio-projects-heading">
-        <div className="studio-sectionHeading"><h2 id="studio-projects-heading">Continue Working</h2><Link to="/studio/projects">My Projects <ChevronRightIcon size={15} /></Link></div>
+        <div className="studio-sectionHeading"><h2 id="studio-projects-heading">Continue Working</h2><span><Link to="/studio/projects">My Projects <ChevronRightIcon size={15} /></Link> · <Link to="/studio/teams">Teams <ChevronRightIcon size={15} /></Link></span></div>
         {state.loading ? <p className="studio-muted" role="status">Loading your projects…</p> : state.error ? <p className="studio-error" role="alert">Your Studio projects are unavailable right now. Please try again.</p> : state.projects.length === 0 ? <div className="studio-empty"><BriefcaseIcon size={24} /><p><strong>No projects yet</strong><span>Start with a Website or AI Agent above.</span></p></div> : <div className="studio-projectGrid">{state.projects.slice(0, 3).map((project) => <Link className="studio-projectCard" key={project.projectId} to={`/studio/projects/${encodeURIComponent(project.projectId)}`}><span className="studio-cardType">{typeLabel(project.projectType)}</span><strong>{project.title}</strong><span>{project.status === "DRAFT" ? "Ready to plan" : project.status}</span></Link>)}</div>}
       </section>
 

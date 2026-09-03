@@ -46,7 +46,7 @@ export default function InstructorOperations() {
     <main className="ops-page">
       <header className="ops-header">
         <div><p className="ops-eyebrow">Instructor + Admin</p><h1>Operational Workspace</h1><p>Review assigned learning and act on canonical learner state.</p></div>
-        <button type="button" className="ops-secondary" onClick={load}>Refresh</button>
+        <div><button type="button" className="ops-secondary" onClick={load}>Refresh</button> <Link className="ops-secondary" to="/studio/reviewer-queue">Review queue</Link></div>
       </header>
 
       <section className="ops-metrics" aria-label="Operational summary">

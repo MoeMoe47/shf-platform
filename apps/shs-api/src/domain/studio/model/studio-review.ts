@@ -12,6 +12,7 @@ export function rowToStudioReviewSubmission(row: any, decision: any = null, curr
     tenantId: row.tenant_id,
     projectType: row.project_type,
     workspaceRevision,
+    studioRevisionId: row.studio_revision_id ?? null,
     qaRunId: row.qa_run_id,
     status: row.status,
     submittedByUserId: row.submitted_by_user_id,

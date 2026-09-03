@@ -2,8 +2,10 @@ import { query } from "../../../db/client.js";
 import { StudioProjectService } from "./studio-project-service.js";
 import { projectAuthoritativeFact } from "../../verified-evidence/service/verified-evidence-service.js";
 import { evaluateAssignmentCompletion } from "../../completion-policy/service/completion-evaluator.js";
+import { PortfolioService } from "../../portfolio/service/portfolio-service.js";
 
 const projects = new StudioProjectService();
+const portfolio = new PortfolioService();
 
 function scope(actor: any) {
   const userId = String(actor?.user_id || actor?.id || "");
@@ -53,6 +55,7 @@ export async function getStudioInstitutionalStatus(actor: any, projectId: string
      ORDER BY d.reviewed_at ASC`,
     [found.project.organizationId, found.project.tenantId, found.project.learnerId, found.evidence.map((row: any) => row.evidence_id)],
   )).rows : [];
+  const portfolioArtifacts = await portfolio.findArtifactsForEvidence(actor, found.evidence.map((row: any) => row.evidence_id));
   return {
     projectId: found.project.projectId,
     destination: found.project.destination,
@@ -61,10 +64,11 @@ export async function getStudioInstitutionalStatus(actor: any, projectId: string
     evidence: found.evidence.map((row: any) => {
       const provenance = typeof row.provenance_json === "string" ? JSON.parse(row.provenance_json) : (row.provenance_json || {});
       const workspaceRevision = Number(provenance.workspace_revision || 0);
-      return { evidenceId: row.evidence_id, status: row.status, evidenceRuleId: row.evidence_rule_id, competencyId: row.competency_id, workspaceRevision, isCurrent: workspaceRevision > 0 && workspaceRevision === found.currentWorkspaceRevision, createdAt: row.created_at };
+      const artifact = portfolioArtifacts.get(row.evidence_id);
+      return { evidenceId: row.evidence_id, status: row.status, evidenceRuleId: row.evidence_rule_id, competencyId: row.competency_id, workspaceRevision, isCurrent: workspaceRevision > 0 && workspaceRevision === found.currentWorkspaceRevision, createdAt: row.created_at, portfolio: artifact ? { status: artifact.status, artifactId: artifact.artifactId, visibility: artifact.presentation.visibility } : { status: "AVAILABLE" } };
     }),
     whatYouProved: verifiedOutcomes.map((row: any) => ({ competencyId: row.competency_id, title: row.title, verifiedAt: row.reviewed_at })),
-    portfolio: { available: false, status: "NOT_CONNECTED" },
+    portfolio: { available: Boolean(found.evidence.length), status: found.evidence.length ? (portfolioArtifacts.size ? "ADDED_OR_AVAILABLE" : "AVAILABLE") : "WAITING_FOR_EVIDENCE" },
     completion: completion ? { eligible: completion.eligible, reason: completion.reason, requirements: completion.requirements } : null,
   };
 }

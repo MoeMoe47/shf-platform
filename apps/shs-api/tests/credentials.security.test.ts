@@ -201,12 +201,13 @@ test("16. an instructor cannot issue Credentials (no reviewer/issuer relationshi
   assert.equal(res.json.error.code, "FORBIDDEN");
 });
 
-test("17. an ineligible learner can still receive a manual/institutional issuance — eligibility never blocks explicit issuer authority", async () => {
+test("17. an ineligible learner cannot receive an issuance when the definition requires an accepted capstone", async () => {
   const def = await createDefinition("manual-override", { requiresAcceptedCapstone: true });
   const eligibility = await api(`/credentials/definitions/${def.json.data.id}/eligibility/me`, { userId: "user_no_assignment_001" });
   assert.equal(eligibility.json.data.eligible, false);
   const issued = await issue(def.json.data.id, "user_no_assignment_001");
-  assert.equal(issued.status, 201, "explicit issuer authority is the only real gate — eligibility is advisory");
+  assert.equal(issued.status, 403);
+  assert.equal(issued.json.error.code, "CREDENTIAL_NOT_ELIGIBLE");
 });
 
 test("18. duplicate active issuance is prevented", async () => {

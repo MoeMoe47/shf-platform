@@ -47,6 +47,14 @@ import { registerActivityDomainRoutes } from "../domain/activity-domains/api/rou
 import { registerVerifiedEvidenceRoutes } from "../domain/verified-evidence/api/routes.js";
 import { registerOperationalRoutes } from "../domain/operations/api/routes.js";
 import { registerStudioProjectRoutes } from "../domain/studio/api/studio-project-routes.js";
+import { registerPortfolioRoutes } from "../domain/portfolio/api/routes.js";
+import { registerWebsiteDeploymentRoutes } from "../domain/deployment/api/routes.js";
+import { registerAgentPackageRoutes } from "../domain/agent-package/api/routes.js";
+import { registerRegistrySubmissionRoutes } from "../domain/registry-submission/api/routes.js";
+import { registerReviewerRoutingRoutes } from "../domain/studio-routing/api/routes.js";
+import { registerNotificationRoutes } from "../domain/notifications/api/routes.js";
+import { registerStudioTeamRoutes } from "../domain/studio-team/api/routes.js";
+import { registerStudioCollaborationRoutes } from "../domain/studio/api/studio-collaboration-routes.js";
 
 
 type MutableApiUser = {
@@ -353,6 +361,14 @@ app.post("/auth/login", async (req: any, res: any) => {
   registerVerifiedEvidenceRoutes(app);
   registerOperationalRoutes(app);
   registerStudioProjectRoutes(app);
+  registerPortfolioRoutes(app);
+  registerWebsiteDeploymentRoutes(app);
+  registerAgentPackageRoutes(app);
+  registerRegistrySubmissionRoutes(app);
+  registerReviewerRoutingRoutes(app);
+  registerNotificationRoutes(app);
+  registerStudioTeamRoutes(app);
+  registerStudioCollaborationRoutes(app);
   app.use("/aggregation", aggregationRoutes);
   registerOracleRoutes(app);
 

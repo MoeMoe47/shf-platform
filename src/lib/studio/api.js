@@ -31,6 +31,26 @@ export async function listStudioProjects(role = "student") {
   }));
 }
 
+export async function listStudioTeams(role = "student") {
+  return parseResponse(await fetch(`${STUDIO_API_BASE}/studio/teams`, { credentials: "include", cache: "no-store", headers: authHeaders(role) }));
+}
+
+export async function getStudioTeam(role = "student", teamId) {
+  return parseResponse(await fetch(`${STUDIO_API_BASE}/studio/teams/${encodeURIComponent(teamId)}`, { credentials: "include", cache: "no-store", headers: authHeaders(role) }));
+}
+
+export async function createStudioTeam(role = "instructor", name) {
+  return parseResponse(await fetch(`${STUDIO_API_BASE}/studio/teams`, { method: "POST", credentials: "include", headers: authHeaders(role), body: JSON.stringify({ name }) }));
+}
+
+export async function addStudioTeamMember(role = "instructor", teamId, userId, memberRole = "MEMBER") {
+  return parseResponse(await fetch(`${STUDIO_API_BASE}/studio/teams/${encodeURIComponent(teamId)}/members`, { method: "POST", credentials: "include", headers: authHeaders(role), body: JSON.stringify({ userId, role: memberRole }) }));
+}
+
+export async function removeStudioTeamMember(role = "instructor", teamId, userId) {
+  return parseResponse(await fetch(`${STUDIO_API_BASE}/studio/teams/${encodeURIComponent(teamId)}/members/${encodeURIComponent(userId)}`, { method: "DELETE", credentials: "include", headers: authHeaders(role) }));
+}
+
 export async function getStudioProject(role = "student", projectId) {
   return parseResponse(await fetch(`${STUDIO_API_BASE}/studio/projects/${encodeURIComponent(projectId)}`, {
     credentials: "include",
@@ -55,11 +75,37 @@ export async function getStudioBuildPacket(role = "student", projectId) {
   }));
 }
 
+export async function getStudioLearningContext(role = "student", projectId) {
+  return parseResponse(await fetch(`${STUDIO_API_BASE}/studio/projects/${encodeURIComponent(projectId)}/learning-context`, {
+    credentials: "include", cache: "no-store", headers: authHeaders(role),
+  }));
+}
+
 export async function getStudioWorkspace(role = "student", projectId) {
   return parseResponse(await fetch(`${STUDIO_API_BASE}/studio/projects/${encodeURIComponent(projectId)}/workspace`, {
     credentials: "include",
     cache: "no-store",
     headers: authHeaders(role),
+  }));
+}
+
+export async function getStudioRevisions(role = "student", projectId) {
+  return parseResponse(await fetch(`${STUDIO_API_BASE}/studio/projects/${encodeURIComponent(projectId)}/revisions`, {
+    credentials: "include",
+    cache: "no-store",
+    headers: authHeaders(role),
+  }));
+}
+
+export function openStudioCollaborationStream(role = "student", projectId, signal) {
+  return fetch(`${STUDIO_API_BASE}/studio/projects/${encodeURIComponent(projectId)}/collaboration/stream`, {
+    credentials: "include", cache: "no-store", signal, headers: authHeaders(role),
+  });
+}
+
+export async function sendStudioCollaborationUpdate(role = "student", projectId, work) {
+  return parseResponse(await fetch(`${STUDIO_API_BASE}/studio/projects/${encodeURIComponent(projectId)}/collaboration/updates`, {
+    method: "POST", credentials: "include", headers: authHeaders(role), body: JSON.stringify({ work }),
   }));
 }
 
@@ -108,6 +154,12 @@ export async function decideStudioReview(role = "instructor", projectId, submiss
   }));
 }
 
+export async function getStudioReviewerQueue(role = "instructor") {
+  return parseResponse(await fetch(`${STUDIO_API_BASE}/studio/reviews/queue`, {
+    credentials: "include", cache: "no-store", headers: authHeaders(role),
+  }));
+}
+
 export async function getCurrentStudioDelivery(role = "student", projectId) {
   return parseResponse(await fetch(`${STUDIO_API_BASE}/studio/projects/${encodeURIComponent(projectId)}/delivery/current`, { credentials: "include", cache: "no-store", headers: authHeaders(role) }));
 }
@@ -122,6 +174,53 @@ export async function getStudioInstitutionalStatus(role = "student", projectId) 
 
 export async function getStudioAssignmentProgress(role = "instructor", assignmentId) {
   return parseResponse(await fetch(`${STUDIO_API_BASE}/studio/assignments/${encodeURIComponent(assignmentId)}/progress`, { credentials: "include", cache: "no-store", headers: authHeaders(role) }));
+}
+
+export async function createWebsiteDeployment(role = "student", deliveryId) {
+  return parseResponse(await fetch(`${STUDIO_API_BASE}/deployments/from-studio-delivery`, {
+    method: "POST", credentials: "include", headers: authHeaders(role),
+    body: JSON.stringify({ deliveryId }),
+  }));
+}
+
+export async function getWebsiteDeployment(role = "student", deploymentId) {
+  return parseResponse(await fetch(`${STUDIO_API_BASE}/deployments/${encodeURIComponent(deploymentId)}`, {
+    credentials: "include", cache: "no-store", headers: authHeaders(role),
+  }));
+}
+
+export async function listWebsiteDeployments(role = "student", projectId) {
+  return parseResponse(await fetch(`${STUDIO_API_BASE}/studio/projects/${encodeURIComponent(projectId)}/deployments`, {
+    credentials: "include", cache: "no-store", headers: authHeaders(role),
+  }));
+}
+
+export async function retryWebsiteDeployment(role = "student", deploymentId) {
+  return parseResponse(await fetch(`${STUDIO_API_BASE}/deployments/${encodeURIComponent(deploymentId)}/retry`, {
+    method: "POST", credentials: "include", headers: authHeaders(role), body: JSON.stringify({}),
+  }));
+}
+
+export async function createAgentPackage(role = "student", projectId) {
+  return parseResponse(await fetch(`${STUDIO_API_BASE}/studio/projects/${encodeURIComponent(projectId)}/agent-packages`, { method: "POST", credentials: "include", headers: authHeaders(role), body: JSON.stringify({}) }));
+}
+
+export async function listAgentPackages(role = "student", projectId) {
+  return parseResponse(await fetch(`${STUDIO_API_BASE}/studio/projects/${encodeURIComponent(projectId)}/agent-packages`, { credentials: "include", cache: "no-store", headers: authHeaders(role) }));
+}
+
+export async function createRegistrySubmission(role = "student", packageId) {
+  return parseResponse(await fetch(`${STUDIO_API_BASE}/agent-packages/${encodeURIComponent(packageId)}/registry-submissions`, { method: "POST", credentials: "include", headers: authHeaders(role), body: JSON.stringify({}) }));
+}
+
+export async function listRegistrySubmissions(role = "student", packageId) {
+  return parseResponse(await fetch(`${STUDIO_API_BASE}/agent-packages/${encodeURIComponent(packageId)}/registry-submissions`, { credentials: "include", cache: "no-store", headers: authHeaders(role) }));
+}
+
+export async function retryRegistrySubmission(role = "student", submissionId) {
+  return parseResponse(await fetch(`${STUDIO_API_BASE}/registry-submissions/${encodeURIComponent(submissionId)}/retry`, {
+    method: "POST", credentials: "include", headers: authHeaders(role), body: JSON.stringify({}),
+  }));
 }
 
 export async function projectStudioEvidence(role = "student", projectId) {
@@ -165,6 +264,15 @@ export default {
   finalizeStudioProject,
   getStudioInstitutionalStatus,
   getStudioAssignmentProgress,
+  createWebsiteDeployment,
+  getWebsiteDeployment,
+  listWebsiteDeployments,
+  retryWebsiteDeployment,
+  createAgentPackage,
+  listAgentPackages,
+  createRegistrySubmission,
+  listRegistrySubmissions,
+  retryRegistrySubmission,
   projectStudioEvidence,
   createStudentIdeaProject,
   startAssignmentStudioProject,

@@ -39,7 +39,7 @@ function seedPhase10_1() {
       VALUES ('phase10_1_studio_rule','phase8_org_a','STUDIO_DELIVERY','STUDIO_PROJECT_FINALIZED',NULL,'competency_prepare_prove_monitoring_finding',1,true,'admin_A')
     ON CONFLICT DO NOTHING;
     INSERT INTO completion_policies (policy_id, organization_id, curriculum_release_id, assigned_content_type, assigned_content_id, status, version, created_by_user_id, activated_by_user_id, activated_at)
-      VALUES ('phase10_1_studio_only_policy','phase9_org_placeholder','phase9_release_2','LESSON','unit-a:lesson-b','ACTIVE',1,'admin_A','admin_A',NOW())
+      VALUES ('phase10_1_studio_only_policy','phase9_org_placeholder','phase8_release_1','LESSON','unit-a:lesson-a','ACTIVE',2,'admin_A','admin_A',NOW())
     ON CONFLICT DO NOTHING;
   `;
   execFileSync("psql", [database, "-X", "-v", "ON_ERROR_STOP=1", "-c", sql.replace("phase9_org_placeholder", "phase8_org_a")], { encoding: "utf8" });
@@ -48,7 +48,7 @@ function seedPhase10_1() {
       VALUES ('phase10_1_studio_requirement','phase10_1_studio_only_policy','phase8_org_a','STUDIO_PROJECT','pending-project','{}',true,1)
     ON CONFLICT DO NOTHING;
     INSERT INTO assignments (assignment_id, organization_id, cohort_id, course_id, lesson_id, title, assignment_type, created_by, due_at, status, curriculum_release_id, assigned_content_type, assigned_content_id, visibility_scope, completion_policy_id)
-      VALUES ('phase10_1_studio_assignment','phase8_org_a','phase8_cohort_a','phase9_course_a','phase9_lesson_b','Studio-only Assignment','assignment','admin_A',NOW()+INTERVAL '7 days','published','phase9_release_2','LESSON','unit-a:lesson-b','targeted','phase10_1_studio_only_policy')
+      VALUES ('phase10_1_studio_assignment','phase8_org_a','phase8_cohort_a','phase8_course_a','phase8_lesson_a','Studio-only Assignment','assignment','admin_A',NOW()+INTERVAL '7 days','published','phase8_release_1','LESSON','unit-a:lesson-a','targeted','phase10_1_studio_only_policy')
     ON CONFLICT DO NOTHING;
     INSERT INTO assignment_targets (assignment_target_id, assignment_id, organization_id, target_type, user_id, created_by)
       VALUES ('phase10_1_studio_target','phase10_1_studio_assignment','phase8_org_a','LEARNER','learner_A2','admin_A')
@@ -86,6 +86,7 @@ async function completeStudioFlow(browser, { learner, projectType, title, viewpo
   await student.reload({ waitUntil: "domcontentloaded" });
   await student.getByRole("button", { name: "Finalize Project" }).click();
   await expect(student.getByText("Finalized", { exact: true })).toBeVisible();
+  await expect(student.getByText("Finalized", { exact: true })).toBeVisible();
   await student.getByRole("button", { name: "Prepare Evidence" }).click();
   await expect(student.getByText(/Evidence is being processed/)).toBeVisible();
   return { student, reviewer, projectId };
@@ -104,7 +105,7 @@ test("AI Agent finalized work enters Evidence without Registry, credential, Clie
   expect(status.data.destination).toBe("STUDENT");
   expect(status.data.evidence).toHaveLength(1);
   expect(status.data.evidence[0].status).toBe("REVIEWABLE");
-  expect(status.data.portfolio.status).toBe("NOT_CONNECTED");
+  expect(status.data.portfolio.status).toBe("AVAILABLE");
   await expect(student.locator("body")).not.toContainText(/Registry approved|certif(?:ied|ication)|production ready|deployed|Credential(?: awarded)?|Assignment complete/i);
   const downstream = queryRows(`SELECT (SELECT COUNT(*) FROM learner_credentials),(SELECT COUNT(*) FROM curriculum_lesson_completions),(SELECT COUNT(*) FROM prepare_prove_evidence WHERE source_type='STUDIO_DELIVERY')`);
   expect(downstream).toHaveLength(1);
@@ -152,23 +153,65 @@ test("assignment-origin Studio completion is policy-evaluated and preserves the 
   execFileSync("psql", [database, "-X", "-v", "ON_ERROR_STOP=1", "-c", `UPDATE completion_policy_requirements SET target_reference='${projectId}' WHERE requirement_id='phase10_1_studio_requirement';`], { encoding: "utf8" });
   const project = await apiJson(student, "learner_A2", `/studio/projects/${projectId}`);
   expect(project.data.assignmentId).toBe("phase10_1_studio_assignment");
-  expect(project.data.curriculumReleaseId).toBe("phase9_release_2");
+  expect(project.data.curriculumReleaseId).toBe("phase8_release_1");
   const reviewer = await actorPage(browser, "instructor_A_authorized", "instructor");
   const initialProgress = await apiJson(reviewer, "instructor_A_authorized", "/studio/assignments/phase10_1_studio_assignment/progress");
   expect(initialProgress.response.status()).toBe(200);
   expect(initialProgress.data.learners.find((row) => row.learner.id === "learner_A2").state).toBe("STARTED");
   await student.goto(`${frontend}/curriculum.html#/studio/projects/${projectId}/build`, { waitUntil: "domcontentloaded" });
+  await expect(student.getByRole("heading", { name: "Assignment", exact: true })).toBeVisible();
+  await expect(student.getByText("Studio-only Assignment", { exact: true })).toBeVisible();
+  const initialContext = await apiJson(student, "learner_A2", `/studio/projects/${projectId}/learning-context`);
+  expect(initialContext.data.originLabel).toBe("Assignment");
+  expect(initialContext.data.statuses.qa).toBe("NOT_CHECKED");
+  expect(initialContext.data.statuses.review).toBe("NOT_SUBMITTED");
   await student.getByLabel("Page title").fill("Assignment Website");
   await student.getByLabel("Page content").fill("Assignment-owned Studio work.");
   await student.getByRole("button", { name: "Save draft" }).click();
+  await expect(student.getByText("Saved", { exact: true })).toBeVisible();
+  const builtContext = await apiJson(student, "learner_A2", `/studio/projects/${projectId}/learning-context`);
+  expect(builtContext.data.currentRevision.number).toBe(1);
+  expect(builtContext.data.statuses.qa).toBe("NOT_CHECKED");
+  expect(builtContext.data.statuses.review).toBe("NOT_SUBMITTED");
   await student.getByRole("button", { name: "Check My Project" }).click();
+  await expect(student.getByText("Looks good", { exact: true })).toBeVisible();
+  const qaContext = await apiJson(student, "learner_A2", `/studio/projects/${projectId}/learning-context`);
+  expect(qaContext.data.statuses.qa).toBe("PASSED");
+  expect(qaContext.data.statuses.review).toBe("NOT_SUBMITTED");
   const assignmentSubmit = student.waitForResponse((response) => response.request().method() === "POST" && response.url().endsWith(`/studio/projects/${projectId}/review-submissions`));
   await student.getByRole("button", { name: "Submit for Review" }).click();
+  const submittedContext = await apiJson(student, "learner_A2", `/studio/projects/${projectId}/learning-context`);
+  expect(submittedContext.data.statuses.review).toBe("SUBMITTED");
+  expect(submittedContext.data.currentRevision.number).toBe(1);
   expect((await assignmentSubmit).status()).toBe(201);
   const readyProgress = await apiJson(reviewer, "instructor_A_authorized", "/studio/assignments/phase10_1_studio_assignment/progress");
   expect(readyProgress.data.learners.find((row) => row.learner.id === "learner_A2").state).toBe("READY_FOR_REVIEW");
   const review = await apiJson(student, "learner_A2", `/studio/projects/${projectId}/review/current`);
   await reviewer.goto(`${frontend}/curriculum.html#/studio/review/${projectId}/${review.data.submission.submissionId}`, { waitUntil: "domcontentloaded" });
+  await reviewer.getByRole("button", { name: "Request Changes" }).click();
+  await student.reload({ waitUntil: "domcontentloaded" });
+  const changesContext = await apiJson(student, "learner_A2", `/studio/projects/${projectId}/learning-context`);
+  expect(changesContext.data.statuses.review).toBe("CHANGES_REQUESTED");
+  expect(changesContext.data.changesRequested.revision).toBe(1);
+  expect(changesContext.data.changesRequested.nextRevision).toBe(2);
+  await student.goto(`${frontend}/curriculum.html#/studio/projects/${projectId}/build`, { waitUntil: "domcontentloaded" });
+  await student.getByLabel("Page content").fill("Assignment-owned Studio work, revised after feedback.");
+  await student.getByRole("button", { name: "Save draft" }).click();
+  await expect(student.getByText("Saved", { exact: true })).toBeVisible();
+  const nextContext = await apiJson(student, "learner_A2", `/studio/projects/${projectId}/learning-context`);
+  expect(nextContext.data.currentRevision.number).toBe(2);
+  expect(nextContext.data.currentRevision.status).toBe("WORKING");
+  expect(nextContext.data.statuses.qa).toBe("STALE");
+  await student.getByRole("button", { name: "Check My Project" }).click();
+  await expect(student.getByText("Looks good", { exact: true })).toBeVisible();
+  const nextQaContext = await apiJson(student, "learner_A2", `/studio/projects/${projectId}/learning-context`);
+  expect(nextQaContext.data.currentRevision.number).toBe(2);
+  expect(nextQaContext.data.statuses.qa).toBe("PASSED");
+  const secondSubmit = student.waitForResponse((response) => response.request().method() === "POST" && response.url().endsWith(`/studio/projects/${projectId}/review-submissions`));
+  await student.getByRole("button", { name: "Submit for Review" }).click();
+  expect((await secondSubmit).status()).toBe(201);
+  const secondReview = await apiJson(student, "learner_A2", `/studio/projects/${projectId}/review/current`);
+  await reviewer.goto(`${frontend}/curriculum.html#/studio/review/${projectId}/${secondReview.data.submission.submissionId}`, { waitUntil: "domcontentloaded" });
   await reviewer.getByRole("button", { name: "Approve" }).click();
   await student.reload({ waitUntil: "domcontentloaded" });
   await student.getByRole("button", { name: "Finalize Project" }).click();
@@ -185,6 +228,11 @@ test("assignment-origin Studio completion is policy-evaluated and preserves the 
   expect(completion.data.requirements).toHaveLength(1);
   expect(completion.data.requirements[0].type).toBe("STUDIO_PROJECT");
   expect(completion.data.requirements[0].satisfied).toBe(true);
+  const completedContext = await apiJson(student, "learner_A2", `/studio/projects/${projectId}/learning-context`);
+  expect(completedContext.data.statuses.completion).toBe("COMPLETE");
+  await student.reload({ waitUntil: "domcontentloaded" });
+  await expect(student.getByText("Assignment complete", { exact: true })).toBeVisible();
+  await expect(student.getByText("Complete", { exact: true }).last()).toBeVisible();
   execFileSync("psql", [database, "-X", "-v", "ON_ERROR_STOP=1", "-c", `INSERT INTO completion_policy_requirements (requirement_id, policy_id, organization_id, requirement_type, target_reference, configuration, required, sequence)
     VALUES ('phase10_1_unrelated_requirement','phase10_1_studio_only_policy','phase8_org_a','ARCADE','phase10_1_unfinished_activity','{}',true,2);`], { encoding: "utf8" });
   const incomplete = await apiJson(student, "learner_A2", "/assignments/phase10_1_studio_assignment/check-completion", { method: "POST", data: {} });

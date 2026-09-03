@@ -51,13 +51,37 @@ export function deriveStudioProgress(project) {
   return { currentStage: stageLabel(status), stages, completedStages: stages.slice(0, index), remainingStages: stages.slice(index + 1), blocked: status === "CHANGES_REQUIRED", explanation: status === "CHANGES_REQUIRED" ? "A project check needs attention before you continue." : `Your project is in the ${stageLabel(status).toLowerCase()} stage.` };
 }
 
-export function toStudioCompanionContext({ project, route = "/studio", nextAction = resolveStudioNextAction(project), progress = deriveStudioProgress(project), resources = [] } = {}) {
+export function deriveLearningProgress(context) {
+  const statuses = context?.statuses || {};
+  const stages = ["Build", "QA", "Submit", "Review", "Complete"];
+  let index = 0;
+  if (statuses.completion === "COMPLETE") index = 4;
+  else if (["SUBMITTED", "CHANGES_REQUESTED", "APPROVED"].includes(statuses.review)) index = 3;
+  else if (statuses.qa === "PASSED") index = 2;
+  else if (context?.currentRevision) index = 1;
+  const currentStage = stages[index];
+  return { stages, currentStage, completedStages: stages.slice(0, index), remainingStages: stages.slice(index + 1), blocked: statuses.review === "CHANGES_REQUESTED" || statuses.qa === "FAILED", explanation: statuses.review === "CHANGES_REQUESTED" ? `Changes were requested on Revision ${context.changesRequested?.revision || "the submitted revision"}.` : `Your project is in the ${currentStage.toLowerCase()} stage.` };
+}
+
+export function resolveLearningNextAction(context) {
+  if (!context) return { key: "context-error", label: "Reload project context", description: "Your project context could not be loaded. Try again." };
+  const statuses = context.statuses || {};
+  if (statuses.completion === "COMPLETE") return { key: "complete", label: "Assignment complete", description: "Your verified completion is recorded." };
+  if (statuses.review === "CHANGES_REQUESTED") return { key: "changes", label: "Review feedback", description: `Create Revision ${context.changesRequested?.nextRevision || "the next revision"}, run QA again, and resubmit.` };
+  if (statuses.qa === "FAILED") return { key: "qa-failed", label: "Fix QA issues", description: "Address the reported checks before submitting for Review." };
+  if (statuses.qa !== "PASSED") return { key: "qa", label: "Run QA", description: "Check the current revision before submitting it for Review." };
+  if (statuses.review === "NOT_SUBMITTED") return { key: "submit", label: "Submit for Review", description: "Your current revision has passed QA and is ready for Review." };
+  if (["SUBMITTED", "APPROVED"].includes(statuses.review)) return { key: "review", label: "Review in progress", description: "Your submitted revision remains with the Review process." };
+  return { key: "build", label: "Continue building", description: "Keep shaping the current revision." };
+}
+
+export function toStudioCompanionContext({ project, context = null, route = "/studio", nextAction = resolveStudioNextAction(project), progress = deriveStudioProgress(project), resources = [] } = {}) {
   if (!project) return { route, project: null, nextAction: nextAction.label, currentStage: "Start", availableRequirements: [], authority: "read-only" };
   return {
     route,
     authority: "read-only",
     project: { id: project.projectId, title: project.title, type: projectTypeLabel(project.projectType), origin: project.origin },
-    assignment: project.assignmentId ? { id: project.assignmentId, releaseId: project.curriculumReleaseId } : null,
+    assignment: context?.assignment || (project.assignmentId ? { id: project.assignmentId, releaseId: project.curriculumReleaseId } : null),
     currentStage: progress.currentStage,
     nextAction: nextAction.label,
     availableRequirements: [],

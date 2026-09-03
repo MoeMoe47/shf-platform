@@ -19,6 +19,20 @@ export type SchemaIntegrityFailure = {
 
 export const CRITICAL_MIGRATION_OBJECTS: CriticalMigrationObject[] = [
   {
+    migrationId: "083",
+    table: "studio_project_revisions",
+    requiredColumns: ["revision_id", "project_id", "organization_id", "tenant_id", "revision_number", "parent_revision_id", "status", "project_type", "work_json", "content_hash", "created_by_user_id", "created_at", "idempotency_key"],
+    requiredIndexes: ["studio_project_revision_scope_idx"],
+    requiredConstraints: ["studio_project_revisions_pkey", "studio_project_revision_tenant_matches_org", "studio_project_revisions_project_id_revision_number_key", "studio_project_revisions_project_id_idempotency_key_key"],
+  },
+  {
+    migrationId: "080",
+    table: "studio_review_assignments",
+    requiredColumns: ["review_assignment_id", "review_submission_id", "organization_id", "tenant_id", "reviewer_user_id", "status", "routing_policy_key", "assignment_reason", "assigned_at", "completed_at", "reassigned_from_id", "created_at", "updated_at"],
+    requiredIndexes: ["studio_review_assignment_one_active_idx", "studio_review_assignment_reviewer_queue_idx", "studio_review_assignment_submission_history_idx"],
+    requiredConstraints: ["studio_review_assignments_pkey", "studio_review_assignment_tenant_matches_org", "studio_review_assignments_review_submission_id_fkey", "studio_review_assignments_organization_id_fkey", "studio_review_assignments_reviewer_user_id_fkey"],
+  },
+  {
     migrationId: "030",
     table: "rate_limit_windows",
     requiredColumns: ["limiter_key", "window_started_at", "window_seconds", "request_count", "expires_at", "updated_at"],

@@ -43,6 +43,7 @@ const Assignments = lazy(() => import("@/pages/Assignments.jsx"));
 const CareerPortfolio = lazy(() => import("@/pages/career/Portfolio.jsx"));
 const Instructor = lazy(() => import("@/pages/Instructor.jsx"));
 const InstructorOperations = lazy(() => import("@/pages/curriculum/InstructorOperations.jsx"));
+const Notifications = lazy(() => import("@/pages/Notifications.jsx"));
 const OperationalDetail = lazy(() => import("@/pages/curriculum/OperationalDetail.jsx"));
 const StaffCourseWorkspace = lazy(() => import("@/pages/curriculum/StaffCourseWorkspace.jsx"));
 const StaffProjectReview = lazy(() => import("@/pages/curriculum/StaffProjectReview.jsx"));
@@ -66,6 +67,8 @@ const StudioBuilderWorkspace = lazy(() => import("@/pages/studio/StudioBuilderWo
 const StudioAssignments = lazy(() => import("@/pages/studio/StudioAssignments.jsx"));
 const StudioTemplates = lazy(() => import("@/pages/studio/StudioTemplates.jsx"));
 const StudioReviewSubmission = lazy(() => import("@/pages/studio/StudioReviewSubmission.jsx"));
+const StudioReviewerQueue = lazy(() => import("@/pages/studio/StudioReviewerQueue.jsx"));
+const StudioTeams = lazy(() => import("@/pages/studio/StudioTeams.jsx"));
 const StudioAssignmentProgress = lazy(() => import("@/pages/studio/StudioAssignmentProgress.jsx"));
 
 /** Phase 1 Zoom/live-learning restoration — real components, previously
@@ -188,6 +191,7 @@ export default function CurriculumRoutes() {
           <Route path="library/lesson" element={<LessonPage />} />
 
           <Route path="settings" element={<Settings />} />
+          <Route path="notifications" element={<Notifications />} />
           <Route path="help" element={<Help />} />
 
           {/* Fallback inside curriculum */}
@@ -205,6 +209,8 @@ export default function CurriculumRoutes() {
           <Route path="projects/:projectId" element={<StudioProjectShell />} />
           <Route path="projects/:projectId/build" element={<StudioBuilderWorkspace />} />
           <Route path="review/:projectId/:submissionId" element={<StudioReviewSubmission />} />
+          <Route path="reviewer-queue" element={<StudioReviewerQueue />} />
+          <Route path="teams" element={<StudioTeams />} />
           <Route path="assignments/:assignmentId/progress" element={<StudioAssignmentProgress />} />
           <Route path="assignments" element={<StudioAssignments />} />
           <Route path="templates" element={<StudioTemplates />} />

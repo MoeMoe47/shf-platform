@@ -33,6 +33,7 @@ export interface StudioQaRun {
   tenantId: string;
   projectType: StudioProjectType;
   workspaceRevision: number;
+  studioRevisionId: string | null;
   status: StudioQaRunStatus;
   rulesetVersion: string;
   summary: StudioQaSummary;
@@ -112,6 +113,7 @@ export function rowToStudioQaRun(row: any): StudioQaRun {
     tenantId: row.tenant_id,
     projectType: row.project_type,
     workspaceRevision: Number(row.workspace_revision),
+    studioRevisionId: row.studio_revision_id ?? null,
     status: row.status,
     rulesetVersion: row.ruleset_version,
     summary: row.summary_json || { total: 0, pass: 0, fail: 0, warn: 0, notApplicable: 0, error: 0 },

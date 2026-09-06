@@ -56,6 +56,10 @@ export class OrganizationRelationshipService {
   }
 
   async createRelationship(input: any, actor: any) {
+    return this.createRelationshipForOnboarding(input, actor);
+  }
+
+  async createRelationshipForOnboarding(input: any, actor: any, executor?: any) {
     const scope = this.scopeFor(actor);
     const organizationId = scope.organization_id;
     const userId = actorId(actor);
@@ -73,7 +77,8 @@ export class OrganizationRelationshipService {
     const sourceOrganizationId = String(input?.source_organization_id || "").trim();
     const targetOrganizationId = String(input?.target_organization_id || "").trim();
     if (!sourceOrganizationId || !targetOrganizationId) throw new Error("relationship_organizations_required");
-    if (!actorHasPlatformAuthority(actor) && sourceOrganizationId !== organizationId) {
+    const onboardingProviderAuthority = input?.authority_context === "organization_onboarding" && targetOrganizationId === organizationId;
+    if (!actorHasPlatformAuthority(actor) && sourceOrganizationId !== organizationId && !onboardingProviderAuthority) {
       throw new Error("relationship_source_forbidden");
     }
 
@@ -88,7 +93,7 @@ export class OrganizationRelationshipService {
       created_by: userId,
       updated_by: userId,
       metadata_version: 1,
-    });
+    }, executor);
   }
 
   async transitionRelationship(relationshipId: string, nextStatus: string, actor: any, reasonText?: string) {

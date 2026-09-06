@@ -18,6 +18,20 @@ function publicAsset(asset: any) {
   return safe;
 }
 
+export function toInputSecuritySourceReference(asset: any, version: any) {
+  return {
+    resourceType: "source_document_version",
+    resourceId: String(version.source_document_version_id),
+    sourceKind: "SOURCE_DOCUMENT_VERSION",
+    sourceRef: String(asset.source_asset_id),
+    organizationId: String(asset.organization_id),
+    tenantId: String(asset.tenant_id),
+    contentType: String(asset.media_type || "application/octet-stream"),
+    malwareScanStatus: String(asset.scan_status || "UNAVAILABLE"),
+    boundary: "Upload validation, malware scan status, prompt-injection scan, and resource classification remain separate controls.",
+  };
+}
+
 export async function createSourceAsset(actor: SourceActor, file: any, req: any, storage: SourceStorage = new LocalPrivateSourceStorage()) {
   const validated = validateSourceFile(file);
   const contentHash = createHash("sha256").update(file.buffer).digest("hex");

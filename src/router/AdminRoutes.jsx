@@ -15,6 +15,8 @@ import DevDocsViewer from "@/pages/dev/Docs.jsx";
 
 import AggregationDashboard from "@/pages/admin/aggregation/AggregationDashboard.jsx";
 import ReportingCommandSurface from "@/pages/admin/reporting/ReportingCommandSurface.jsx";
+import OperatingBriefPage from "@/pages/admin/operating-brief/OperatingBriefPage.jsx";
+import ReleaseAssurancePage from "@/pages/admin/release-assurance/ReleaseAssurancePage.jsx";
 import ShsReportsCommandPage from "@/pages/admin/reports/ShsReportsCommandPage.jsx";
 import ShsCreateReportPage from "@/pages/admin/reports/ShsCreateReportPage.jsx";
 import ShsPremiumReportPreviewPage from "@/pages/admin/reports/ShsPremiumReportPreviewPage.jsx";
@@ -154,6 +156,8 @@ export default function AdminRoutes() {
         <Route path="/imports" element={protect("/imports", <HubFilesImports />, [SHS_SECURITY_PERMISSIONS.UPLOADS_INTERNAL])} />
         <Route path="/aggregation" element={protect("/aggregation", <AggregationDashboard />, [SHS_SECURITY_PERMISSIONS.AGGREGATION_VIEW])} />
         <Route path="/reporting" element={protect("/reporting", <ReportingCommandSurface />, [SHS_SECURITY_PERMISSIONS.REPORTS_VIEW])} />
+        <Route path="/operating-brief" element={protect("/operating-brief", <OperatingBriefPage />, [SHS_SECURITY_PERMISSIONS.REPORTS_VIEW])} />
+        <Route path="/release-assurance" element={protect("/release-assurance", <ReleaseAssurancePage />, [SHS_SECURITY_PERMISSIONS.REPORTS_VIEW])} />
         <Route path="/reports" element={protect("/reports", <ReportingCommandSurface />, [SHS_SECURITY_PERMISSIONS.REPORTS_VIEW])} />
         <Route path="/ops/reports" element={protect("/ops/reports", <ShsReportsCommandPage />, [SHS_SECURITY_PERMISSIONS.REPORTS_VIEW])} />
         <Route path="/ops/reports/create" element={protect("/ops/reports/create", <ShsCreateReportPage />, [SHS_SECURITY_PERMISSIONS.REPORTS_PREVIEW])} />

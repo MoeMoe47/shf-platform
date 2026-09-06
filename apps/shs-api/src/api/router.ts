@@ -55,6 +55,18 @@ import { registerReviewerRoutingRoutes } from "../domain/studio-routing/api/rout
 import { registerNotificationRoutes } from "../domain/notifications/api/routes.js";
 import { registerStudioTeamRoutes } from "../domain/studio-team/api/routes.js";
 import { registerStudioCollaborationRoutes } from "../domain/studio/api/studio-collaboration-routes.js";
+import { registerServiceCatalogRoutes } from "../domain/service-catalog/api/routes.js";
+import { registerServiceAgreementRoutes } from "../domain/service-agreements/api/routes.js";
+import { registerOrganizationOnboardingRoutes } from "../domain/organization-onboarding/api/routes.js";
+import { registerFundingGrantRoutes } from "../domain/funding-grants/api/routes.js";
+import { registerImpactAttributionRoutes } from "../domain/impact-attribution/api/routes.js";
+import { registerAiGovernanceRoutes } from "../domain/ai-governance/api/routes.js";
+import { registerInputSecurityRoutes } from "../domain/input-security/api/routes.js";
+import { registerAgentSimulationRoutes } from "../domain/agent-simulation/api/routes.js";
+import { registerConductorRoutes } from "../domain/conductor/api/routes.js";
+import { registerMcpRoutes } from "../domain/mcp/api/routes.js";
+import { registerOperationalAwarenessRoutes } from "../domain/operational-awareness/api/routes.js";
+import { registerAragRoutes } from "../domain/arag/api/routes.js";
 
 
 type MutableApiUser = {
@@ -323,6 +335,18 @@ app.post("/auth/login", async (req: any, res: any) => {
   registerIdentityRoutes(app);
   registerProgramRoutes(app);
   registerOrganizationRelationshipRoutes(app);
+  registerServiceCatalogRoutes(app);
+  registerAiGovernanceRoutes(app);
+  registerInputSecurityRoutes(app);
+  registerAgentSimulationRoutes(app);
+  registerConductorRoutes(app);
+  registerMcpRoutes(app);
+  registerOperationalAwarenessRoutes(app);
+  registerAragRoutes(app);
+  registerServiceAgreementRoutes(app);
+  registerOrganizationOnboardingRoutes(app);
+  registerFundingGrantRoutes(app);
+  registerImpactAttributionRoutes(app);
   registerCareerRoutes(app);
   registerCaseRoutes(app);
   registerAuditRoutes(app);

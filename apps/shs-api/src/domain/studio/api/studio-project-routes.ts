@@ -1,5 +1,6 @@
 import { fail, ok } from "../../../api/response-envelope.js";
 import { requirePermission } from "../../../auth/permission-guard.js";
+import { requireOrganizationServiceEntitlement } from "../../../auth/service-entitlement-guard.js";
 import { SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
 import { StudioProjectService } from "../service/studio-project-service.js";
 import { getStudioInstitutionalStatus, projectStudioEvidence } from "../service/studio-institutional-service.js";
@@ -25,6 +26,7 @@ function actor(req: any) {
 }
 
 export function registerStudioProjectRoutes(app: any) {
+  app.use("/studio", requireOrganizationServiceEntitlement("project_studio"));
   app.post("/studio/handoffs/assignment", requirePermission(SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_CREATE), async (req: any, res: any) => {
     try { return res.status(201).json(ok(await service.createFromAssignment(actor(req), req.body || {}))); }
     catch (error) { return reject(res, error); }

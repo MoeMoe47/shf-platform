@@ -41,9 +41,9 @@ export class OrganizationRelationshipRepo {
     return res.rows[0] || null;
   }
 
-  async createRelationship(input: any) {
+  async createRelationship(input: any, executor: any = { query }) {
     try {
-      const res = await query(
+      const res = await executor.query(
         `INSERT INTO organization_relationships (
           relationship_id, source_organization_id, target_organization_id, relationship_type,
           status, effective_from, effective_to, created_by, updated_by, metadata_version

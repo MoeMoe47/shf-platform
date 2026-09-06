@@ -313,6 +313,24 @@ export class IdentityRepo {
       };
     }
 
+    const serviceEntitlementPhase3Match = userId.match(/^user_shfp3_\d+_(shf_admin|org_admin|student|partner_admin|partner_student)$/);
+    if (serviceEntitlementPhase3Match) {
+      const persona = serviceEntitlementPhase3Match[1];
+      const organizationId = persona.startsWith("partner") ? "org_partner_001" : "org_shf_001";
+      const role = persona === "student" || persona === "partner_student"
+        ? "student"
+        : persona === "shf_admin"
+          ? "shf_admin"
+          : "org_admin";
+      return {
+        user_id: userId,
+        organization_id: organizationId,
+        email: `${userId}@test.invalid`,
+        full_name: "SHF Phase 3 Service Entitlement Test User",
+        roles: [role],
+      };
+    }
+
     return null;
   }
 

@@ -7,6 +7,7 @@
 // in this codebase (source-ingestion, assignments, enrollments).
 import { fail, ok } from "../../../api/response-envelope.js";
 import { requirePermission } from "../../../auth/permission-guard.js";
+import { requireOrganizationServiceEntitlement } from "../../../auth/service-entitlement-guard.js";
 import { SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
 import * as service from "../service/curriculum-catalog-service.js";
 import {
@@ -36,6 +37,7 @@ function handleError(error: unknown, res: any, next: any) {
 }
 
 export function registerCurriculumCatalogRoutes(app: any) {
+  app.use("/curriculum/catalog", requireOrganizationServiceEntitlement("curriculum"));
   const manage = requirePermission(SHS_SECURITY_PERMISSIONS.CURRICULUM_CATALOG_MANAGE);
   const approvePermission = requirePermission(SHS_SECURITY_PERMISSIONS.CURRICULUM_CATALOG_APPROVE);
   const publishPermission = requirePermission(SHS_SECURITY_PERMISSIONS.CURRICULUM_CATALOG_PUBLISH);

@@ -1,4 +1,5 @@
 import { requirePermission } from "../../auth/permission-guard.js";
+import { requireOrganizationServiceEntitlement } from "../../auth/service-entitlement-guard.js";
 import { SHS_SECURITY_PERMISSIONS } from "../../auth/security-permissions.js";
 import { addExport, getExports } from "./export-history.store.js";
 import { writeSecurityAuditEvent } from "../../auth/security-audit.js";
@@ -21,6 +22,7 @@ const reportPublicSnapshotService = new ReportPublicSnapshotService();
   const reportPublicationService = new ReportPublicationService();
 
 export function registerReportingRoutes(app: any) {
+  app.use("/reporting", requireOrganizationServiceEntitlement("reporting"));
   app.post(
     "/reporting/publications",
     requirePermission(SHS_SECURITY_PERMISSIONS.REPORTS_PUBLICATION_EXECUTE),

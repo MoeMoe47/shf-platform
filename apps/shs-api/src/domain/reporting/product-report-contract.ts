@@ -6,6 +6,7 @@ export const PRODUCT_KEYS = Object.freeze([
   "bos",
   "foundation",
   "solutions",
+  "legal",
 ] as const);
 
 export type ProductKey = typeof PRODUCT_KEYS[number];

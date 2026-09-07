@@ -6,6 +6,7 @@ import { foundationCurriculumCareerAdapter } from "./foundation-curriculum-caree
 import { bosAiGovernanceAdapter } from "./bos-ai-governance-report-adapter.js";
 import { registrySolutionsAdapters } from "./registry-solutions-report-adapter.js";
 import { applyProgramReportProfile, programReportProfileRegistry, type ProgramReportProfile } from "./program-report-profile-registry.js";
+import { legalReportAdapter } from "./legal-report-adapter.js";
 
 const FORMAT_SET = new Set(["JSON", "HTML", "PDF"]);
 
@@ -21,11 +22,11 @@ export class ProductReportService {
     private artifactService = new ReportArtifactService(),
     private renderService = new ReportR1Service(),
     private registry = new ReportTemplateRegistry(),
-    private adapters = [...studioOasAdapters, foundationCurriculumCareerAdapter, bosAiGovernanceAdapter, ...registrySolutionsAdapters],
+    private adapters = [...studioOasAdapters, foundationCurriculumCareerAdapter, bosAiGovernanceAdapter, ...registrySolutionsAdapters, legalReportAdapter],
     private profileRegistry = programReportProfileRegistry,
   ) {}
 
-  async generate(productKey: "studio" | "oas" | "foundation" | "bos" | "registry" | "solutions", input: any, actor: any) {
+  async generate(productKey: "studio" | "oas" | "foundation" | "bos" | "registry" | "solutions" | "legal", input: any, actor: any) {
     const reportFamily = String(input?.reportFamily || input?.report_family || "").trim();
     if (!reportFamily) throw new Error("REPORT_FAMILY_REQUIRED");
     const definition = this.registry.resolve(productKey, reportFamily, 1);

@@ -13,6 +13,7 @@ import { CertificatePresentation, renderCertificate } from "./certificate-render
 import { CredentialActor, CredentialError } from "./credential-service.js";
 import { programCompletionService } from "../../programs/service/program-completion-service.js";
 import { IntegrationOutboxRepo } from "../../trusted-reporting/outbox-repo.js";
+import { getOutboundMailProvider } from "../../notifications/service/email-provider.js";
 
 const certificateOutbox = new IntegrationOutboxRepo();
 
@@ -156,12 +157,13 @@ export async function emailIssuedCertificate(actor: CredentialActor, id: string)
   if (item.status !== "ISSUED") throw new CredentialError("CERTIFICATE_NOT_DELIVERABLE", "Only an issued certificate may be emailed.", 409);
   const email = await learnerEmail(actor, id);
   if (!email) { const event = await recordDelivery(actor, id, "EMAIL", "FAILED", undefined, "LEARNER_EMAIL_UNAVAILABLE"); return { delivered: false, event, reason: "LEARNER_EMAIL_UNAVAILABLE" }; }
-  const transport = String(process.env.SHS_CERTIFICATE_EMAIL_TRANSPORT || (process.env.NODE_ENV === "production" ? "unavailable" : "test")).toLowerCase();
-  if (transport !== "test") { const event = await recordDelivery(actor, id, "EMAIL", "FAILED", email, "EMAIL_PROVIDER_NOT_CONFIGURED"); return { delivered: false, event, reason: "EMAIL_PROVIDER_NOT_CONFIGURED" }; }
   const rendered = await renderIssuedCertificate(actor, id, "PDF");
+  const provider = getOutboundMailProvider();
+  const delivery = await provider.send({ to: email, subject: String(item.presentationSnapshot.certificateTitle || "Certificate issued"), templateKey: item.profileKey, certificateReference: item.verificationReference, attachment: { filename: rendered.filename, contentBase64: rendered.bytes.toString("base64"), sha256: rendered.hash } });
+  if (!delivery.delivered) { const event = await recordDelivery(actor, id, "EMAIL", "FAILED", email, delivery.reason); return { delivered: false, event, reason: delivery.reason }; }
   await certificateOutbox.enqueue({ producer_id: "shs-api.credentials", event_type: "certificate.email.requested", schema_version: "1.0", subject_type: "issued_certificate", subject_id: item.certificateId, organization_id: item.organizationId, originating_actor_id: actor.user_id, originating_actor_type: "user", tenant_id: item.tenantId, occurred_at: new Date().toISOString(), idempotency_key: `certificate.email.requested:${item.certificateId}:${rendered.hash}:${email}`, correlation_id: `certificate-delivery:${item.certificateId}`, payload: { certificate_id: item.certificateId, certificate_reference: item.certificateSerial, recipient_reference: email, attachment_hash: rendered.hash, template_key: item.profileKey }, destination: "email-provider" });
-  const event = await recordDelivery(actor, id, "EMAIL", "DELIVERED", email, undefined, `certificate-test-mail:${item.certificateId}:${rendered.hash}`);
-  return { delivered: true, event, recipientReference: email, attachmentHash: rendered.hash, transport: "test" };
+  const event = await recordDelivery(actor, id, "EMAIL", "DELIVERED", email, undefined, delivery.providerMessageReference);
+  return { delivered: true, event, recipientReference: email, attachmentHash: rendered.hash, transport: delivery.provider };
 }
 
 export async function verifyCertificate(reference: string) {

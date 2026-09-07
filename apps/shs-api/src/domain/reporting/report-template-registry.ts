@@ -56,6 +56,7 @@ export const PRODUCT_BRANDS = Object.freeze({
   bos: { displayName: "Business Operating System", shortName: "BOS", brandingKey: "bos", filenamePrefix: "BOS", headerLabel: "BOS" },
   foundation: { displayName: "Silicon Heartland Foundation", shortName: "Foundation", brandingKey: "foundation", filenamePrefix: "Foundation", headerLabel: "Foundation" },
   solutions: { displayName: "Silicon Heartland Solutions", shortName: "Solutions", brandingKey: "solutions", filenamePrefix: "Solutions", headerLabel: "Solutions" },
+  legal: { displayName: "Legal Authority", shortName: "Legal", brandingKey: "legal", filenamePrefix: "Legal", headerLabel: "Legal Authority" },
 } satisfies Record<ProductKey, Record<string, string>>);
 
 const PRODUCT_DEFINITIONS: ProductReportDefinition[] = [
@@ -177,7 +178,22 @@ const U5_DEFINITIONS: ProductReportDefinition[] = [
   metadata: { product: PRODUCT_BRANDS[productKey].displayName, foundation: "U5_REGISTRY_SOLUTIONS" },
 }));
 
-const DEFINITIONS: ProductReportDefinition[] = [...CIVICSURE_DEFINITIONS, ...PRODUCT_DEFINITIONS, ...FOUNDATION_DEFINITIONS, ...BOS_DEFINITIONS, ...U5_DEFINITIONS];
+const LEGAL_DEFINITIONS: ProductReportDefinition[] = [
+  ["legal-artifact-summary", "LEGAL_ARTIFACT_SUMMARY", "Legal Artifact Summary"],
+  ["legal-authority-obligation", "LEGAL_AUTHORITY_OBLIGATION", "Legal Authority / Obligation Report"],
+  ["legal-readiness", "LEGAL_READINESS", "Legal Readiness Report"],
+  ["legal-evidence-decision-trace", "LEGAL_EVIDENCE_DECISION_TRACE", "Legal Evidence / Decision Trace Report"],
+].map(([reportFamily, reportType, displayName]: [string, string, string]) => ({
+  productKey: "legal", reportFamily, displayName, reportType,
+  templateId: `legal-${reportFamily}.v1`, templateKey: `legal-${reportFamily}`, templateVersion: 1,
+  supportedFormats: [REPORT_FORMATS.JSON, REPORT_FORMATS.HTML, REPORT_FORMATS.PDF], rendererIdentifier: "shu-universal-r1",
+  projectionAdapterKey: "legal-reporting", brandingKey: "legal", filenamePrefix: "Legal",
+  classificationBehavior: { source: "report_artifact", markRenderedOutput: true, conservativeDefault: "INTERNAL" },
+  publicEligibilityMode: "PUBLIC_DISCLOSURE_SEPARATE", status: "ACTIVE",
+  metadata: { product: "Legal Authority", foundation: "POST_LOCK_LEGAL_RUNTIME" },
+}));
+
+const DEFINITIONS: ProductReportDefinition[] = [...CIVICSURE_DEFINITIONS, ...PRODUCT_DEFINITIONS, ...FOUNDATION_DEFINITIONS, ...BOS_DEFINITIONS, ...U5_DEFINITIONS, ...LEGAL_DEFINITIONS];
 
 export class ReportTemplateRegistry {
   constructor(private repo: any = null) {}

@@ -14,7 +14,7 @@ test("U1 product registry resolves exact CivicSure product/family pairs and fail
   assert.equal(definition.reportFamily, "program-assurance");
   assert.throws(() => registry.resolve("oas", "program-assurance", 1), /REPORT_TEMPLATE_NOT_FOUND/);
   assert.throws(() => registry.resolve("unknown", "program-assurance", 1), /REPORT_PRODUCT_KEY_INVALID/);
-  assert.deepEqual(PRODUCT_KEYS, ["civicsure", "oas", "registry", "studio", "bos", "foundation", "solutions"]);
+  assert.deepEqual(PRODUCT_KEYS, ["civicsure", "oas", "registry", "studio", "bos", "foundation", "solutions", "legal"]);
 });
 
 test("U1 projection envelope requires trusted product, family, scope, classification, and references", () => {

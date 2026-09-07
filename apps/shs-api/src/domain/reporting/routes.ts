@@ -28,7 +28,7 @@ const productReportService = new ProductReportService();
 export function registerReportingRoutes(app: any) {
   app.use("/reporting", requireOrganizationServiceEntitlement("reporting"));
 
-  for (const productKey of ["studio", "oas", "foundation", "bos", "registry", "solutions"] as const) {
+  for (const productKey of ["studio", "oas", "foundation", "bos", "registry", "solutions", "legal"] as const) {
     app.post(
       `/reporting/${productKey}/reports`,
       requirePermission(SHS_SECURITY_PERMISSIONS.REPORTS_EXPORT),

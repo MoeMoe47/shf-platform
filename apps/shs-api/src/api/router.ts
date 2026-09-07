@@ -68,6 +68,8 @@ import { registerMcpRoutes } from "../domain/mcp/api/routes.js";
 import { registerOperationalAwarenessRoutes } from "../domain/operational-awareness/api/routes.js";
 import { registerAragRoutes } from "../domain/arag/api/routes.js";
 import { registerGovernmentAssuranceRoutes } from "../domain/government-assurance/api/routes.js";
+import { registerLegalRoutes } from "../domain/legal/api/routes.js";
+import { registerCrossProductRoutes } from "../domain/cross-product/api/routes.js";
 
 
 type MutableApiUser = {
@@ -345,6 +347,8 @@ app.post("/auth/login", async (req: any, res: any) => {
   registerOperationalAwarenessRoutes(app);
   registerAragRoutes(app);
   registerGovernmentAssuranceRoutes(app);
+  registerLegalRoutes(app);
+  registerCrossProductRoutes(app);
   registerServiceAgreementRoutes(app);
   registerOrganizationOnboardingRoutes(app);
   registerFundingGrantRoutes(app);

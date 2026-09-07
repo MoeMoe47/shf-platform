@@ -129,11 +129,16 @@ CREATE INDEX IF NOT EXISTS ai_agent_session_scope_idx
 CREATE INDEX IF NOT EXISTS ai_agent_session_delegation_idx
   ON ai_agent_sessions (organization_id, tenant_id, delegation_id, status);
 
+-- The canonical SHF organization is seeded separately by
+-- seeds/001_seed_organization.sql. Keep clean migration replay independent
+-- of optional/demo seed data, matching migration 084's service-catalog
+-- bootstrap pattern. The FK remains authoritative when the seed exists.
 INSERT INTO service_catalog (
   service_id, service_key, name, description, category, status,
   provider_organization_id, audience, requires_relationship_type, agreement_requirement
 )
-VALUES (
+SELECT seed.*
+FROM (VALUES (
   'svc_ai_governance',
   'ai_governance',
   'AI Governance Authority',
@@ -144,6 +149,9 @@ VALUES (
   'NETWORK_ORGANIZATION',
   'NETWORK_MEMBER_OF',
   'NO_AGREEMENT_REQUIRED'
+)) AS seed(service_id, service_key, name, description, category, status, provider_organization_id, audience, requires_relationship_type, agreement_requirement)
+WHERE EXISTS (
+  SELECT 1 FROM organizations WHERE organization_id = seed.provider_organization_id
 )
 ON CONFLICT (service_key) DO UPDATE
 SET name = EXCLUDED.name,

@@ -1,0 +1,91 @@
+{
+  "freeze_version": "GPA-v1",
+  "freeze_date": "2026-09-06",
+  "repository": "/Users/mikeslate/Projects/shrv1",
+  "branch": "studio-v1-plus-development",
+  "head": "f02eff81c193f63fcb2878fc949689f8a5b75627",
+  "accepted_baseline_status_hash": "933776d4e46d5afcc2c82c5c323ada36530454feb12c2009686f0c1e39a1302f",
+  "accepted_baseline_dirty_file_count": 85,
+  "migration_baseline": "105",
+  "accepted_phase_verdicts": {
+    "phase_1": "COMPLETE",
+    "phase_2": "COMPLETE",
+    "phase_3": "COMPLETE",
+    "phase_4": "COMPLETE",
+    "phase_5": "COMPLETE",
+    "phase_6": "COMPLETE",
+    "phase_7": "COMPLETE",
+    "phase_8a": "COMPLETE",
+    "phase_8b": "COMPLETE",
+    "phase_8c": "COMPLETE_READY_FOR_COUNTY_PILOT_ACCEPTANCE_GATE"
+  },
+  "readiness_score": 94,
+  "software_readiness_state": "READY_FOR_COUNTY_ACCEPTANCE",
+  "p0_internal_count": 0,
+  "browser_baseline": {
+    "tests": 14,
+    "passed": 14,
+    "failed": 0,
+    "skipped": 0
+  },
+  "phase_8b_browser_baseline": {
+    "tests": 3,
+    "passed": 3,
+    "failed": 0
+  },
+  "focused_regression_baseline": {
+    "tests": 92,
+    "passed": 92,
+    "failed": 0
+  },
+  "canonical_authorities": [
+    "Organization",
+    "Tenant",
+    "Program",
+    "Provider",
+    "Funding",
+    "Source System",
+    "Source Authority",
+    "Data Use Policy",
+    "Evidence",
+    "Claim",
+    "Verification",
+    "Verification Method",
+    "Metric",
+    "Truth",
+    "Reconciliation",
+    "Entity Resolution",
+    "Data Quality",
+    "Monitoring",
+    "Finding",
+    "Corrective Action",
+    "Audit",
+    "Decision",
+    "Reporting",
+    "Public Disclosure",
+    "AI Governance"
+  ],
+  "governed_ai_boundary_reference": "docs/government-program-assurance/GPA_V1_FREEZE_2026-09-06.md#governed-ai-freeze",
+  "report_boundary_reference": "docs/government-program-assurance/GPA_V1_FREEZE_2026-09-06.md#report-artifact-freeze",
+  "acceptance_harness_paths": [
+    "scripts/run-phase8-acceptance-env.mjs",
+    "tests/phase8/",
+    "apps/shs-api/tests/government-program-assurance-*.test.ts",
+    "apps/shs-api/tests/ai-governance-authority.test.ts",
+    "apps/shs-api/tests/report-*.test.ts"
+  ],
+  "fixture_paths": [
+    "scripts/run-phase8-acceptance-env.mjs",
+    "tests/phase8/gpa-acceptance.spec.mjs",
+    "tests/phase8/gpa-ai-reporting.spec.mjs",
+    "tests/phase8/gpa-claim-verification-vertical.spec.mjs",
+    "tests/phase8/gpa-monitoring-vertical.spec.mjs",
+    "tests/phase8/gpa-reconciliation-quality-vertical.spec.mjs",
+    "tests/phase8/gpa-program-provider-funding-audit-lineage.spec.mjs"
+  ],
+  "pre_acceptance_packet": "docs/government-program-assurance/COUNTY_PILOT_PRE_ACCEPTANCE_PACKET.md",
+  "freeze_document": "docs/government-program-assurance/GPA_V1_FREEZE_2026-09-06.md",
+  "change_delta_template": "docs/government-program-assurance/COUNTY_PILOT_CHANGE_DELTA_TEMPLATE.md",
+  "external_acceptance_required": true,
+  "secrets_included": false
+}

@@ -1,0 +1,15 @@
+import { randomUUID } from "node:crypto";
+import { hasPermission, SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
+import { assuranceScope, requireScope, type AssuranceActor } from "../model/government-assurance.js";
+import { PilotConfigurationRepo } from "../repo/pilot-configuration-repo.js";
+
+function actor(input: any): AssuranceActor { return { userId: String(input?.userId || input?.user_id || input?.id || ""), organizationId: String(input?.organizationId || input?.organization_id || input?.active_organization_id || ""), tenantId: String(input?.tenantId || input?.tenant_id || ""), permissions: input?.permissions || [], actor_type: input?.actor_type || input?.actorType || "user" }; }
+function permission(a: AssuranceActor, name: string) { if (!hasPermission(a.permissions || [], name)) throw new Error("GPA_PERMISSION_REQUIRED"); }
+
+export class PilotConfigurationService {
+  constructor(private repo = new PilotConfigurationRepo()) {}
+  async list(input: any) { const a = actor(input); permission(a, SHS_SECURITY_PERMISSIONS.GOVERNMENT_ASSURANCE_PILOT_VIEW); return this.repo.list(assuranceScope(a)); }
+  async get(input: any, id: string) { const a = actor(input); permission(a, SHS_SECURITY_PERMISSIONS.GOVERNMENT_ASSURANCE_PILOT_VIEW); return this.repo.get(id, assuranceScope(a)); }
+  async create(input: any, body: any) { const a = actor(input); permission(a, SHS_SECURITY_PERMISSIONS.GOVERNMENT_ASSURANCE_PILOT_MANAGE); const scope = assuranceScope(a); requireScope(body, scope); if (!body.agencyOrganizationReference || !body.pilotName) throw new Error("GPA_PILOT_CONFIGURATION_INCOMPLETE"); return this.repo.create({ id: body.pilotConfigurationId || `gpa_pilot_${randomUUID()}`, organizationId: scope.organizationId, tenantId: scope.tenantId, agencyOrganizationReference: body.agencyOrganizationReference, pilotName: body.pilotName, status: body.status || "DRAFT", pilotStart: body.pilotStart, pilotEnd: body.pilotEnd, programReferences: body.programReferences, providerReferences: body.providerReferences, fundingReferences: body.fundingReferences, sourceSystemReferences: body.sourceSystemReferences, allowedPurposes: body.allowedPurposes, requiredRoles: body.requiredRoles, publicDisclosureProfileReference: body.publicDisclosureProfileReference, readinessRequirementsVersion: body.readinessRequirementsVersion || "1", createdBy: scope.userId, approvedBy: body.approvedBy, provenance: body.provenance }); }
+  async transition(input: any, id: string, body: any) { const a = actor(input); permission(a, SHS_SECURITY_PERMISSIONS.GOVERNMENT_ASSURANCE_PILOT_MANAGE); const next = String(body.status || ""); if (!["DRAFT","CONFIGURING","READY_FOR_VALIDATION","READY_FOR_ACCEPTANCE","ACTIVE","PAUSED","CLOSED"].includes(next)) throw new Error("GPA_PILOT_STATUS_INVALID"); if (next === "ACTIVE" && !body.approved) throw new Error("GPA_PILOT_ACTIVATION_REQUIRES_APPROVAL"); return this.repo.updateStatus(id, assuranceScope(a), next, next === "ACTIVE" ? a.userId : undefined); }
+}

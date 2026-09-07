@@ -72,9 +72,9 @@
     "test:phase9:security-ux": "node scripts/run-phase8-acceptance-env.mjs --phase9-master-fixture tests/phase9/security-ux.spec.mjs",
     "test:phase9:master-fixture": "node scripts/run-phase8-acceptance-env.mjs --phase9-master-fixture --validate-fixture",
     "test:phase9.5:acceptance": "node scripts/run-phase8-acceptance-env.mjs tests/phase9.5/acceptance.spec.mjs",
-    "ui:snap": "playwright test tests/ui/appRegistry.spec.mjs",
-    "ui:snap:update": "playwright test tests/ui/appRegistry.spec.mjs --update-snapshots",
-    "ui:style": "playwright test tests/ui/appRegistry.styles.spec.mjs",
+    "ui:snap": "node scripts/run-phase8-acceptance-env.mjs tests/ui/appRegistry.spec.mjs",
+    "ui:snap:update": "node scripts/run-phase8-acceptance-env.mjs tests/ui/appRegistry.spec.mjs --update-snapshots",
+    "ui:style": "node scripts/run-phase8-acceptance-env.mjs tests/ui/appRegistry.styles.spec.mjs",
     "ci:ui": "npm run manifests:validate && npm run ui:validate && npm run ui:style && npm run ui:snap"
   },
   "devDependencies": {

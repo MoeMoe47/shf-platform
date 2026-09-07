@@ -67,6 +67,7 @@ import { registerConductorRoutes } from "../domain/conductor/api/routes.js";
 import { registerMcpRoutes } from "../domain/mcp/api/routes.js";
 import { registerOperationalAwarenessRoutes } from "../domain/operational-awareness/api/routes.js";
 import { registerAragRoutes } from "../domain/arag/api/routes.js";
+import { registerGovernmentAssuranceRoutes } from "../domain/government-assurance/api/routes.js";
 
 
 type MutableApiUser = {
@@ -343,6 +344,7 @@ app.post("/auth/login", async (req: any, res: any) => {
   registerMcpRoutes(app);
   registerOperationalAwarenessRoutes(app);
   registerAragRoutes(app);
+  registerGovernmentAssuranceRoutes(app);
   registerServiceAgreementRoutes(app);
   registerOrganizationOnboardingRoutes(app);
   registerFundingGrantRoutes(app);

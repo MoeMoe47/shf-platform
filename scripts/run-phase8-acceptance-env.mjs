@@ -132,6 +132,7 @@ INSERT INTO role_permissions (role_permission_id, role_id, permission_name) VALU
  ('phase8_admin_cohort','phase8_role_admin','cohort.view'),('phase8_admin_assignment','phase8_role_admin','assignment.view'),('phase8_admin_reports','phase8_role_admin','reports.view'),('phase8_admin_project','phase8_role_admin','project.submission.review'),('phase8_admin_verify_view','phase8_role_admin','verification.view'),('phase8_admin_verify_review','phase8_role_admin','verification.review'),('phase8_admin_verify_approve','phase8_role_admin','verification.approve'),('phase8_admin_live','phase8_role_admin','liveLearning.view'),('phase8_admin_attendance','phase8_role_admin','liveLearning.join.authorize'),
  ('phase8_inst_cohort','phase8_role_instructor','cohort.view'),('phase8_inst_assignment','phase8_role_instructor','assignment.view'),('phase8_inst_project','phase8_role_instructor','project.submission.review'),('phase9_inst_queue','phase8_role_instructor','studio.review.queue.view'),('phase8_inst_verify_view','phase8_role_instructor','verification.view'),('phase8_inst_verify_review','phase8_role_instructor','verification.review'),('phase8_inst_verify_approve','phase8_role_instructor','verification.approve'),('phase8_inst_live','phase8_role_instructor','liveLearning.view'),('phase8_inst_attendance','phase8_role_instructor','liveLearning.join.authorize'),('phase8_inst_reports','phase8_role_instructor','reports.view'),
  ('phase8_student_assignment','phase8_role_student','assignment.view'),('phase8_student_enrollment','phase8_role_student','enrollment.view'),('phase8_student_live','phase8_role_student','liveLearning.view'),('phase8_student_join','phase8_role_student','liveLearning.join.request'),('phase8_student_project','phase8_role_student','project.submission.write'),('phase8_student_arcade','phase8_role_student','arcade.attempt'),('phase8_student_complete','phase8_role_student','curriculum.lesson.complete'),('phase8_student_credential_view','phase8_role_student','credential.view') ON CONFLICT DO NOTHING;
+INSERT INTO role_permissions (role_permission_id, role_id, permission_name) VALUES ('phase8_admin_completion_definition','phase8_role_admin','program.course.assign') ON CONFLICT DO NOTHING;
 INSERT INTO role_permissions (role_permission_id, role_id, permission_name) VALUES
  ('phase9_admin_route','phase8_role_admin','studio.review.route'),('phase9_admin_reassign','phase8_role_admin','studio.review.reassign'),('phase9_admin_queue','phase8_role_admin','studio.review.queue.view') ON CONFLICT DO NOTHING;
 INSERT INTO memberships (membership_id,user_id,organization_id,role_id,status,effective_from) VALUES
@@ -205,6 +206,12 @@ ON CONFLICT (service_key) DO NOTHING;
 INSERT INTO organization_service_entitlements (entitlement_id,organization_id,service_id,status,granted_by_user_id,reason)
 SELECT 'phase8_ai_governance_entitlement','phase8_org_a',service_id,'ACTIVE','admin_A','Phase 8 controlled pilot AI governance entitlement'
 FROM service_catalog WHERE service_key='ai_governance' ON CONFLICT DO NOTHING;
+INSERT INTO service_catalog (service_id,service_key,name,description,category,status,provider_organization_id,audience,requires_relationship_type,agreement_requirement)
+VALUES ('phase8_svc_reporting','reporting','Reporting Authority','Controlled GPA pilot reporting service.','SHARED_TECHNOLOGY','ACTIVE','phase8_org_a','NETWORK_ORGANIZATION','NETWORK_MEMBER_OF','NO_AGREEMENT_REQUIRED')
+ON CONFLICT (service_key) DO NOTHING;
+INSERT INTO organization_service_entitlements (entitlement_id,organization_id,service_id,status,granted_by_user_id,reason)
+SELECT 'phase8_reporting_entitlement','phase8_org_a',service_id,'ACTIVE','admin_A','Phase 8 controlled pilot reporting entitlement'
+FROM service_catalog WHERE service_key='reporting' ON CONFLICT DO NOTHING;
 INSERT INTO gpa_jurisdictions (jurisdiction_id,organization_id,tenant_id,jurisdiction_type,canonical_name,state_country_code,effective_from,status,created_by)
 VALUES ('phase8_jurisdiction_a','phase8_org_a','tenant:phase8_org_a','COUNTY','Phase 8 County','US-OH',NOW(),'ACTIVE','admin_A') ON CONFLICT DO NOTHING;
 INSERT INTO gpa_source_systems (source_system_id,organization_id,tenant_id,canonical_name,provider_vendor,source_owner_reference,jurisdiction_id,environment,system_type,data_domains,record_types,effective_from,effective_to,status,data_classification,integration_mode,last_verified_metadata_at,provenance_json,created_by)
@@ -278,6 +285,66 @@ VALUES ('phase8_pilot_gpa','phase8_org_a','tenant:phase8_org_a','phase8_org_a','
 INSERT INTO ai_delegated_authorities (delegation_id,principal_user_id,agent_identifier,organization_id,tenant_id,purpose,resource_scope,allowed_actions,forbidden_actions,autonomy_profile,restricted_resource_access,valid_from,expires_at,created_by)
 VALUES ('phase8_gpa_ai_delegation','admin_A','gpa-governed-assistant','phase8_org_a','tenant:phase8_org_a','GOVERNMENT_PROGRAM_ASSURANCE','{"all":true,"allowRestricted":false}',ARRAY['agent.session.open','gpa.assistant.answer'],ARRAY['gpa.truth.determine','gpa.finding.issue','gpa.reconciliation.resolve','gpa.decision.finalize','gpa.sanction.execute'], 'LEVEL_1_RECOMMEND',false,NOW()-INTERVAL '1 minute',NOW()+INTERVAL '1 day','admin_A') ON CONFLICT DO NOTHING;
 `;
+
+const u6bCertificateFixtureSql = String.raw`
+-- U6B opt-in fixture. These are canonical learner facts; completion is
+-- intentionally evaluated by ProgramCompletionService during acceptance.
+INSERT INTO programs (program_id, organization_id, name, program_type, status, created_by_user_id)
+VALUES ('data-center-specialization-11','phase8_org_a','Data Center & AI Infrastructure Pathway','education','active','admin_A')
+ON CONFLICT (program_id) DO NOTHING;
+INSERT INTO program_specialization_assignments
+  (assignment_id, learner_id, organization_id, tenant_id, program_id, specialization_id, grade, stage, assignment_type, status, assigned_by_user_id, assignment_source)
+VALUES ('u6b_dc_assignment_a','learner_A1','phase8_org_a','tenant:phase8_org_a','data-center-specialization-11','technical-operations',11,'PREPARE_PROVE','PRIMARY','ACTIVE','admin_A','PROGRAM_ASSIGNMENT')
+ON CONFLICT (assignment_id) DO NOTHING;
+INSERT INTO program_specialization_assignments
+  (assignment_id, learner_id, organization_id, tenant_id, program_id, specialization_id, grade, stage, assignment_type, status, assigned_by_user_id, assignment_source)
+VALUES ('u6b_dc_assignment_incomplete','learner_A2','phase8_org_a','tenant:phase8_org_a','data-center-specialization-11','technical-operations',11,'PREPARE_PROVE','PRIMARY','ACTIVE','admin_A','PROGRAM_ASSIGNMENT')
+ON CONFLICT (assignment_id) DO NOTHING;
+
+INSERT INTO curriculum_lesson_completions
+  (completion_id, user_id, organization_id, curriculum_id, lesson_id, completed_at, idempotency_key)
+SELECT 'u6b_dc_completion_' || md5(lesson_id), 'learner_A1', 'phase8_org_a', 'data-center-specialization-11', lesson_id, NOW(), 'u6b:dc:lesson:' || lesson_id
+FROM unnest(ARRAY[
+  'data-center-specialization-11-safety-professional-practice',
+  'data-center-specialization-11-technical-communication',
+  'data-center-specialization-11-reliability-systems-thinking',
+  'data-center-specialization-11-evidence-and-feedback',
+  'data-center-specialization-11-career-transition-planning',
+  'data-center-specialization-11-monitoring-proof',
+  'data-center-specialization-11-linux-inspection',
+  'data-center-specialization-11-telemetry-troubleshooting'
+]) AS required(lesson_id)
+ON CONFLICT DO NOTHING;
+
+INSERT INTO competency_definitions
+  (competency_id, slug, title, description, domain, version, criteria_json, evidence_requirements_json, status)
+VALUES
+ ('u6b_comp_monitoring','interpret-monitoring-data-and-document-safe-finding','Interpret monitoring data and document a safe finding','U6B canonical acceptance competency.','data-center-technical-operations',1,'{"criteria":["records observations accurately"]}','{"source":"u6b-canonical-fixture"}','ACTIVE'),
+ ('u6b_comp_linux','inspect-linux-system-state-safely','Inspect Linux system state safely','U6B canonical acceptance competency.','data-center-technical-operations',1,'{"criteria":["uses safe inspection"]}','{"source":"u6b-canonical-fixture"}','ACTIVE'),
+ ('u6b_comp_troubleshooting','document-structured-infrastructure-troubleshooting','Document structured infrastructure troubleshooting','U6B canonical acceptance competency.','data-center-technical-operations',1,'{"criteria":["documents a bounded finding"]}','{"source":"u6b-canonical-fixture"}','ACTIVE')
+ON CONFLICT (slug) DO NOTHING;
+INSERT INTO prepare_prove_activity_results
+  (result_id, activity_type, activity_id, user_id, organization_id, tenant_id, result_status, result_json)
+VALUES ('u6b_dc_result','U6B_DATA_CENTER','u6b-data-center-proof','learner_A1','phase8_org_a','tenant:phase8_org_a','SUCCEEDED','{"fixture":"u6b","canonical":true}')
+ON CONFLICT (result_id) DO NOTHING;
+INSERT INTO prepare_prove_evidence
+  (evidence_id, source_domain, source_record_id, user_id, organization_id, tenant_id, activity_id, criterion, status, provenance_json)
+VALUES ('u6b_dc_evidence','u6b-data-center','u6b_dc_result','learner_A1','phase8_org_a','tenant:phase8_org_a','u6b-data-center-proof','pathway-competencies','REVIEWED','{"fixture":"u6b","authority":"prepare-prove"}')
+ON CONFLICT (evidence_id) DO NOTHING;
+INSERT INTO learner_competency_decisions
+  (decision_id, competency_id, evidence_id, user_id, organization_id, tenant_id, decision, criteria_version, reviewer_user_id, reviewer_authority, provenance_json)
+SELECT 'u6b_dc_decision_' || c.competency_id, c.competency_id, 'u6b_dc_evidence', 'learner_A1', 'phase8_org_a', 'tenant:phase8_org_a', 'DEMONSTRATED', 1, 'admin_A', 'U6B_CANONICAL_ACCEPTANCE', '{"fixture":"u6b","source":"reviewed-evidence"}'
+FROM competency_definitions c
+WHERE c.slug IN ('interpret-monitoring-data-and-document-safe-finding','inspect-linux-system-state-safely','document-structured-infrastructure-troubleshooting')
+ON CONFLICT DO NOTHING;
+`;
+
+const u6bCertificateManifest = {
+  orgA: "phase8_org_a", orgB: "phase8_org_b", adminA: "admin_A", adminB: "admin_B",
+  learnerA1: "learner_A1", incompleteLearner: "learner_A2", learnerB1: "learner_B1",
+  dataCenterProgram: "data-center-specialization-11", dataCenterAssignment: "u6b_dc_assignment_a",
+  dataCenterBranch: "technical-operations"
+};
 
 const phase9MasterFixtureSql = String.raw`
 -- Phase 9 master-journey fixture. This is deliberately additive to the
@@ -438,11 +505,12 @@ END $$;
 `;
 
 const masterFixture = process.argv.includes("--phase9-master-fixture");
+const u6bFixture = process.argv.includes("--u6b-certificate-fixture");
 const validationOnly = process.argv.includes("--validate-fixture");
-const activeManifest = masterFixture ? phase9MasterManifest : fixtureManifest;
-const activeSeedSql = masterFixture ? `${seedSql}\n${phase9MasterFixtureSql}` : seedSql;
+const activeManifest = masterFixture ? phase9MasterManifest : u6bFixture ? u6bCertificateManifest : fixtureManifest;
+const activeSeedSql = masterFixture ? `${seedSql}\n${phase9MasterFixtureSql}` : u6bFixture ? `${seedSql}\n${u6bCertificateFixtureSql}` : seedSql;
 const activeValidationSql = masterFixture ? phase9MasterValidationSql : fixtureValidationSql;
-const manifestPath = join(tempRoot, masterFixture ? "phase9-master-fixture-manifest.json" : "phase8-fixture-manifest.json");
+const manifestPath = join(tempRoot, masterFixture ? "phase9-master-fixture-manifest.json" : u6bFixture ? "u6b-certificate-fixture-manifest.json" : "phase8-fixture-manifest.json");
 
 try {
   stage = "creating disposable PostgreSQL";
@@ -515,7 +583,7 @@ try {
   console.log(`Frontend: http://127.0.0.1:${frontendPort}`);
   console.log("Verified identities: admin_A, instructor_A_authorized, instructor_A_unauthorized, learner_A1, instructor_B, learner_B1");
   console.log("Verified canonical fixture: Course A (phase8_course_a), Release 1 (phase8_release_1), Assignment A (phase8_assignment_a)");
-  const handoff = process.argv.slice(2).filter((argument) => argument !== "--validate-fixture" && argument !== "--phase9-master-fixture");
+  const handoff = process.argv.slice(2).filter((argument) => argument !== "--validate-fixture" && argument !== "--phase9-master-fixture" && argument !== "--u6b-certificate-fixture");
   if (handoff.length) {
     const handoffKind = process.env.SHS_ACCEPTANCE_HANDOFF_KIND || "playwright";
     if (handoffKind === "api-test") {

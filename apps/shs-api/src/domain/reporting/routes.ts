@@ -5,24 +5,45 @@ import { addExport, getExports } from "./export-history.store.js";
 import { writeSecurityAuditEvent } from "../../auth/security-audit.js";
 import { ReportDraftService } from "./report-draft-service.js";
 import { ReportArtifactService } from "./report-artifact-service.js";
+import { ReportR1Service } from "./report-r1-service.js";
 import { ReportDistributionService } from "./report-distribution-service.js";
 import { ReportPublicEligibilityService } from "./report-public-eligibility-service.js";
 import { ReportPublicDisclosureService } from "./report-public-disclosure-service.js";
 import { ReportPublicDisclosurePolicyService } from "./report-public-disclosure-policy-service.js";
 import { ReportPublicSnapshotService } from "./report-public-snapshot-service.js";
 import { ReportPublicationService } from "./report-publication-service.js";
+import { ProductReportService } from "./product-report-service.js";
 
 const reportDraftService = new ReportDraftService();
 const reportArtifactService = new ReportArtifactService();
+const reportR1Service = new ReportR1Service();
 const reportDistributionService = new ReportDistributionService();
 const reportPublicEligibilityService = new ReportPublicEligibilityService();
 const reportPublicDisclosureService = new ReportPublicDisclosureService();
 const reportPublicDisclosurePolicyService = new ReportPublicDisclosurePolicyService();
 const reportPublicSnapshotService = new ReportPublicSnapshotService();
-  const reportPublicationService = new ReportPublicationService();
+const reportPublicationService = new ReportPublicationService();
+const productReportService = new ProductReportService();
 
 export function registerReportingRoutes(app: any) {
   app.use("/reporting", requireOrganizationServiceEntitlement("reporting"));
+
+  for (const productKey of ["studio", "oas", "foundation", "bos", "registry", "solutions"] as const) {
+    app.post(
+      `/reporting/${productKey}/reports`,
+      requirePermission(SHS_SECURITY_PERMISSIONS.REPORTS_EXPORT),
+      async (req: any, res: any) => {
+        try {
+          const result = await productReportService.generate(productKey, req.body || {}, req.user);
+          return res.status(201).json({ ok: true, data: result });
+        } catch (err: any) {
+          const message = err.message || "Product report rejected";
+          const status = /FORBIDDEN|required|NOT_FOUND|SCOPE|PERMISSION|UNSUPPORTED|MISMATCH|VERSION/.test(message) ? 400 : 500;
+          return res.status(status).json({ ok: false, error: { code: "PRODUCT_REPORT_REJECTED", message } });
+        }
+      },
+    );
+  }
   app.post(
     "/reporting/publications",
     requirePermission(SHS_SECURITY_PERMISSIONS.REPORTS_PUBLICATION_EXECUTE),
@@ -435,7 +456,7 @@ export function registerReportingRoutes(app: any) {
     requirePermission(SHS_SECURITY_PERMISSIONS.REPORTS_VIEW),
     async (req: any, res: any) => {
       try {
-        const items = await reportArtifactService.listArtifacts(req.user);
+        const items = await reportArtifactService.listArtifacts(req.user, { productKey: req.query?.product_key, reportFamily: req.query?.report_family });
         return res.json({ ok: true, data: { items } });
       } catch (err: any) {
         return res.status(400).json({ ok: false, error: { code: "REPORT_ARTIFACT_READ_REJECTED", message: err.message || "Report artifacts unavailable" } });
@@ -453,6 +474,54 @@ export function registerReportingRoutes(app: any) {
         return res.json({ ok: true, data: artifact });
       } catch (err: any) {
         return res.status(400).json({ ok: false, error: { code: "REPORT_ARTIFACT_READ_REJECTED", message: err.message || "Report artifact unavailable" } });
+      }
+    },
+  );
+
+  app.get(
+    "/reporting/artifacts/:artifactId/snapshot",
+    requirePermission(SHS_SECURITY_PERMISSIONS.REPORTS_VIEW),
+    async (req: any, res: any) => {
+      try {
+        const snapshot = await reportR1Service.getSnapshot(req.params.artifactId, req.user);
+        if (!snapshot) return res.status(404).json({ ok: false, error: { code: "REPORT_PAYLOAD_SNAPSHOT_NOT_FOUND", message: "Report payload snapshot not found" } });
+        return res.json({ ok: true, data: snapshot });
+      } catch (err: any) {
+        return res.status(400).json({ ok: false, error: { code: "REPORT_PAYLOAD_SNAPSHOT_READ_REJECTED", message: err.message || "Report payload snapshot unavailable" } });
+      }
+    },
+  );
+
+  app.get(
+    "/reporting/artifacts/:artifactId/rendered-files",
+    requirePermission(SHS_SECURITY_PERMISSIONS.REPORTS_VIEW),
+    async (req: any, res: any) => {
+      try {
+        const files = await reportR1Service.listRenderedFiles(req.params.artifactId, req.user);
+        return res.json({ ok: true, data: { items: files } });
+      } catch (err: any) {
+        return res.status(400).json({ ok: false, error: { code: "REPORT_RENDERED_FILE_READ_REJECTED", message: err.message || "Rendered files unavailable" } });
+      }
+    },
+  );
+
+  app.get(
+    "/reporting/rendered-files/:fileId",
+    requirePermission(SHS_SECURITY_PERMISSIONS.REPORTS_VIEW),
+    async (req: any, res: any) => {
+      try {
+        const result = await reportR1Service.getRenderedFile(req.params.fileId, req.user);
+        if (!result) return res.status(404).json({ ok: false, error: { code: "REPORT_RENDERED_FILE_NOT_FOUND", message: "Rendered file not found" } });
+        const file = result.file;
+        const disposition = req.query?.download === "1" ? "attachment" : "inline";
+        const filename = String(file.filename || `${file.report_type || "report"}.${String(file.format).toLowerCase()}`).replace(/[^a-zA-Z0-9._-]+/g, "-");
+        res.setHeader("Cache-Control", "private, no-store");
+        res.setHeader("X-Content-Type-Options", "nosniff");
+        res.setHeader("Content-Disposition", `${disposition}; filename="${filename}"`);
+        res.setHeader("Content-Type", file.mime_type);
+        return res.send(result.bytes);
+      } catch (err: any) {
+        return res.status(400).json({ ok: false, error: { code: "REPORT_RENDERED_FILE_READ_REJECTED", message: err.message || "Rendered file unavailable" } });
       }
     },
   );

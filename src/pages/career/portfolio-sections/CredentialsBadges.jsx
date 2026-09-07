@@ -10,7 +10,7 @@
 // institutional, not automatic).
 import React from "react";
 import { PortfolioIcon } from "@/components/curriculum/icons.jsx";
-import { listMyCredentials } from "@/lib/credentials/api.js";
+import { emailMyCertificate, listMyCertificates, listMyCredentials, renderMyCertificate } from "@/lib/credentials/api.js";
 
 const LIFECYCLE_LABEL = {
   ISSUED: "Earned",
@@ -19,20 +19,21 @@ const LIFECYCLE_LABEL = {
 };
 
 export default function CredentialsBadges({ role }) {
-  const [state, setState] = React.useState({ loading: true, error: null, items: [] });
+  const [state, setState] = React.useState({ loading: true, error: null, items: [], certificates: [] });
+  const [delivery, setDelivery] = React.useState({});
 
   React.useEffect(() => {
     let active = true;
     setState((current) => ({ ...current, loading: true, error: null }));
-    listMyCredentials(role)
-      .then((data) => {
+    Promise.all([listMyCredentials(role), listMyCertificates(role)])
+      .then(([credentials, certificates]) => {
         if (!active) return;
-        const items = (data?.items || []).filter((item) => item.lifecycle !== "REVOKED");
-        setState({ loading: false, error: null, items });
+        const items = (credentials?.items || []).filter((item) => item.lifecycle !== "REVOKED");
+        setState({ loading: false, error: null, items, certificates: certificates?.items || [] });
       })
       .catch((error) => {
         if (!active) return;
-        setState({ loading: false, error, items: [] });
+        setState({ loading: false, error, items: [], certificates: [] });
       });
     return () => {
       active = false;
@@ -65,6 +66,22 @@ export default function CredentialsBadges({ role }) {
               <span className="sp-badgeLabel sp-badgeStatus">{LIFECYCLE_LABEL[item.lifecycle] || item.lifecycle}</span>
               <span className="sp-badgeLabel sp-badgeDate">Issued {new Date(item.issuedAt).toLocaleDateString()}</span>
               <span className="sp-badgeLabel sp-badgeIssuer">{item.definition.issuingAuthority}</span>
+            </div>
+          ))}
+        </div>
+      )}
+      {!state.loading && !state.error && state.certificates.length > 0 && (
+        <div className="sp-certificateList" aria-label="Issued certificates">
+          <h3 className="sp-cardTitle">Issued certificates</h3>
+          {state.certificates.filter((item) => item.status !== "REVOKED").map((certificate) => (
+            <div key={certificate.certificateId} className="sp-badge">
+              <span className="sp-badgeLabel">{certificate.presentationSnapshot?.certificateTitle || certificate.certificateType}</span>
+              <span className="sp-badgeLabel sp-badgeDate">Issued {new Date(certificate.issuedAt).toLocaleDateString()}</span>
+              <span className="sp-badgeLabel">Reference {certificate.certificateSerial}</span>
+              <button type="button" onClick={async () => { const file = await renderMyCertificate(role, certificate.certificateId); const url = URL.createObjectURL(file.blob); const link = document.createElement("a"); link.href = url; link.download = file.filename; link.click(); URL.revokeObjectURL(url); }}>Download PDF</button>
+              <button type="button" onClick={async () => { const file = await renderMyCertificate(role, certificate.certificateId, "HTML"); const url = URL.createObjectURL(file.blob); window.open(url, "_blank", "noopener,noreferrer"); }}>Print / view</button>
+              <button type="button" onClick={() => { window.open(`http://127.0.0.1:8091/certificates/verify/${encodeURIComponent(certificate.verificationReference)}`, "_blank", "noopener,noreferrer"); }}>Verify</button>
+              <button type="button" onClick={async () => { setDelivery((current) => ({ ...current, [certificate.certificateId]: "Sending…" })); try { await emailMyCertificate(role, certificate.certificateId); setDelivery((current) => ({ ...current, [certificate.certificateId]: "Delivered" })); } catch { setDelivery((current) => ({ ...current, [certificate.certificateId]: "Delivery failed" })); } }}>{delivery[certificate.certificateId] || "Email certificate"}</button>
             </div>
           ))}
         </div>

@@ -3,6 +3,7 @@ import { ok, fail } from "../../../api/response-envelope.js";
 import { requirePermission } from "../../../auth/permission-guard.js";
 import * as careerPathwayService from "../../career-pathways/service/career-pathway-service.js";
 import { CareerPathwayError } from "../../career-pathways/service/career-pathway-service.js";
+import { programCompletionDefinitionService } from "../service/program-completion-definition-service.js";
 
 const service = new ProgramService();
 
@@ -16,6 +17,34 @@ function sendPathwayError(error: any, res: any, next: any) {
 }
 
 export function registerProgramRoutes(app: any) {
+  app.get("/programs/:id/completion-definitions", requirePermission("program.read"), async (req: any, res: any, next: any) => {
+    try {
+      const items = await programCompletionDefinitionService.list(req.user, req.params.id);
+      res.json(ok({ items }));
+    } catch (error) { next(error); }
+  });
+
+  app.post("/programs/:id/completion-definitions", requirePermission("program.course.assign"), async (req: any, res: any, next: any) => {
+    try {
+      const created = await programCompletionDefinitionService.createDraft(req.user, req.params.id, req.body || {});
+      res.status(201).json(ok(created));
+    } catch (error: any) { res.status(400).json(fail("COMPLETION_DEFINITION_INVALID", error.message)); }
+  });
+
+  app.post("/programs/:id/completion-definitions/:definitionId/activate", requirePermission("program.course.assign"), async (req: any, res: any, next: any) => {
+    try {
+      const activated = await programCompletionDefinitionService.activate(req.user, req.params.id, req.params.definitionId);
+      res.json(ok(activated));
+    } catch (error: any) { res.status(400).json(fail("COMPLETION_DEFINITION_ACTIVATION_FAILED", error.message)); }
+  });
+
+  app.post("/programs/:id/completion-definitions/:definitionId/retire", requirePermission("program.course.assign"), async (req: any, res: any, next: any) => {
+    try {
+      const retired = await programCompletionDefinitionService.retire(req.user, req.params.id, req.params.definitionId);
+      res.json(ok(retired));
+    } catch (error: any) { res.status(400).json(fail("COMPLETION_DEFINITION_RETIREMENT_FAILED", error.message)); }
+  });
+
   app.get("/programs", requirePermission("program.read"), async (req: any, res: any) => {
     const items = await service.listPrograms(req.user);
     res.json(ok({ items }));

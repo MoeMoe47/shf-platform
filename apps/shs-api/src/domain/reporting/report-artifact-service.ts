@@ -2,6 +2,7 @@ import { randomUUID } from "crypto";
 import { withTransaction } from "../../db/transaction.js";
 import { writeAuditEvent } from "../audit/service/audit-helper.js";
 import { ReportArtifactRepo } from "./report-artifact-repo.js";
+import { isProductKey, reportFamilyForType } from "./product-report-contract.js";
 
 const CLASSIFICATIONS = new Set(["INTERNAL", "RESTRICTED_EXTERNAL", "PUBLIC"]);
 
@@ -47,6 +48,10 @@ function normalizedInput(input: any, scope: any) {
   if (!compositionType) throw new Error("Composition type is required");
   if (!Number.isInteger(compositionVersion) || compositionVersion < 1) throw new Error("Composition version is required");
   if (!CLASSIFICATIONS.has(classification)) throw new Error("Unsupported report artifact classification");
+  const rawProductKey = String(input?.product_key || input?.productKey || "").trim().toLowerCase();
+  const productKey = rawProductKey ? rawProductKey : null;
+  if (productKey && !isProductKey(productKey)) throw new Error("REPORT_PRODUCT_KEY_INVALID");
+  const reportFamily = String(input?.report_family || input?.reportFamily || reportFamilyForType(input?.report_type || input?.reportType) || "").trim() || null;
   return {
     artifact_id: `artifact_${randomUUID()}`,
     tenant_id: scope.tenant_id,
@@ -56,6 +61,8 @@ function normalizedInput(input: any, scope: any) {
     composition_type: compositionType,
     composition_version: compositionVersion,
     classification,
+    product_key: productKey,
+    report_family: reportFamily,
     canonical_input_manifest: canonicalManifest(input?.canonical_input_manifest || input?.canonicalInputManifest),
   };
 }
@@ -85,6 +92,8 @@ export class ReportArtifactService {
           composition_version: created.composition_version,
           classification: created.classification,
           artifact_version: created.artifact_version,
+          product_key: created.product_key,
+          report_family: created.report_family,
         },
         reason_text: "Canonical report artifact metadata generated",
         correlation_id: `corr_${randomUUID()}`,
@@ -124,7 +133,11 @@ export class ReportArtifactService {
     return this.repo.getArtifact(artifactId, scopeFromActor(actor));
   }
 
-  async listArtifacts(actor: any) {
-    return this.repo.listArtifacts(scopeFromActor(actor));
+  async listArtifacts(actor: any, filters: any = {}) {
+    const productKey = filters.productKey || filters.product_key;
+    if (productKey && !isProductKey(productKey)) throw new Error("REPORT_PRODUCT_KEY_INVALID");
+    const reportFamily = filters.reportFamily || filters.report_family;
+    if (reportFamily !== undefined && (!reportFamily || typeof reportFamily !== "string")) throw new Error("REPORT_FAMILY_INVALID");
+    return this.repo.listArtifacts(scopeFromActor(actor), { productKey, reportFamily });
   }
 }

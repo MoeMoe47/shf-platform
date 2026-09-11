@@ -1,0 +1,123 @@
+.shf-info-page {
+  min-height: 70vh;
+  padding: 112px 0 88px;
+  background: linear-gradient(180deg, #f5eee6 0%, #eee3d8 100%);
+}
+
+.shf-info-shell {
+  width: min(calc(100% - 48px), 1040px);
+  margin: 0 auto;
+}
+
+.shf-info-hero {
+  max-width: 760px;
+  padding-bottom: 42px;
+}
+
+.shf-info-eyebrow {
+  margin: 0 0 14px;
+  color: #a85e2f;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.shf-info-hero h1 {
+  margin: 0;
+  max-width: 16ch;
+  color: #4a2d20;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.6rem, 5vw, 4.8rem);
+  font-weight: 500;
+  line-height: 0.98;
+}
+
+.shf-info-intro {
+  max-width: 62ch;
+  margin: 24px 0 0;
+  color: #735847;
+  font-size: 1.08rem;
+  line-height: 1.7;
+}
+
+.shf-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  border: 1px solid rgba(160, 131, 108, 0.26);
+  background: rgba(160, 131, 108, 0.26);
+}
+
+.shf-info-section {
+  min-height: 180px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.shf-info-section h2 {
+  margin: 0 0 10px;
+  color: #4f3729;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.45rem;
+  font-weight: 500;
+}
+
+.shf-info-section p {
+  margin: 0;
+  color: #735847;
+  line-height: 1.65;
+}
+
+.shf-info-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.shf-info-action {
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 18px;
+  border: 1px solid rgba(168, 94, 47, 0.28);
+  border-radius: 3px;
+  color: #6f432d;
+  font-weight: 800;
+}
+
+.shf-info-action--primary {
+  background: #a85e2f;
+  color: #fffaf5;
+}
+
+.shf-info-action:focus-visible,
+.shf-info-action:hover {
+  outline: 3px solid rgba(168, 94, 47, 0.28);
+  outline-offset: 3px;
+}
+
+@media (max-width: 720px) {
+  .shf-info-page {
+    padding: 96px 0 56px;
+  }
+
+  .shf-info-shell {
+    width: min(calc(100% - 24px), 1040px);
+  }
+
+  .shf-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .shf-info-section {
+    min-height: 0;
+    padding: 20px;
+  }
+
+  .shf-info-action {
+    width: 100%;
+  }
+}

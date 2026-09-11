@@ -8,14 +8,14 @@ const missionCards = [
     text: "Expanding access to career education, digital skills, and practical learning pathways."
   },
   {
-    icon: "🤝",
-    title: "Workforce Development",
-    text: "Preparing people for meaningful careers through training, coaching, and placement support."
+    icon: "→",
+    title: "Workforce Pathways",
+    text: "Connecting learning, preparation, and career exploration to the next useful step."
   },
   {
-    icon: "🧡",
-    title: "Recovery Support",
-    text: "Helping individuals rebuild stability through recovery support, guidance, and community care."
+    icon: "+",
+    title: "Community Programs",
+    text: "Supporting community initiatives, accessibility, inclusion, and local opportunity."
   }
 ];
 
@@ -29,7 +29,7 @@ const featuredPrograms = [
     image: "/assets/foundation/hero-main.jpg"
   },
   {
-    title: "Recovery Support",
+    title: "Community Programs",
     image: "/assets/foundation/hero-main.jpg"
   }
 ];
@@ -60,7 +60,7 @@ export default function Home() {
           <div className="shf-mock-hero__copy">
             <h1>Empowering Pathways to Success</h1>
             <p>
-              Connecting Education, Workforce, and Recovery for a Brighter Future.
+              Connecting education, workforce pathways, technology access, and community opportunity.
             </p>
             <a className="shf-blue-btn" href="#programs">Learn More</a>
           </div>
@@ -84,8 +84,8 @@ export default function Home() {
           <div className="shf-impact-stat">
             <div className="shf-impact-icon">🏠</div>
             <div>
-              <strong>12,500+</strong>
-              <span>Lives Impacted</span>
+              <strong>Education</strong>
+              <span>Learning pathways</span>
             </div>
           </div>
 
@@ -100,8 +100,8 @@ export default function Home() {
           <div className="shf-impact-stat">
             <div className="shf-impact-icon">✓</div>
             <div>
-              <strong>85%</strong>
-              <span>Job Placement Rate</span>
+              <strong>Careers</strong>
+              <span>Workforce direction</span>
             </div>
           </div>
         </div>
@@ -112,8 +112,8 @@ export default function Home() {
           <div className="shf-section-heading">
             <h2>Our Mission</h2>
             <p>
-              Building a Brighter Future Through Education, Workforce Training,
-              and Recovery Programs.
+              Building practical pathways through education, workforce preparation,
+              technology access, and community programs.
             </p>
           </div>
 
@@ -166,17 +166,7 @@ export default function Home() {
           <h2>Trusted by Our Partners</h2>
 
           <div className="shf-partner-row">
-            <div className="shf-partner-logo shf-partner-logo--ohio">
-              <span>Ohio</span>
-              <strong>Means Jobs</strong>
-            </div>
-            <div className="shf-partner-logo">
-              <strong>Job & Family Services</strong>
-            </div>
-            <div className="shf-partner-logo shf-partner-logo--hope">
-              <span>❤</span>
-              <strong>Partners in Hope</strong>
-            </div>
+            <p className="shf-partners-copy">SHF works with schools, nonprofits, counties, employers, and community organizations. Public partner details are shared when a relationship is ready for public use.</p>
           </div>
         </div>
       </section>
@@ -187,24 +177,19 @@ export default function Home() {
 
           <div className="shf-glance-grid">
             <div className="shf-glance-stat">
-              <span>📈</span>
-              <strong>12,500+</strong>
-              <small>Lives Impacted</small>
-            </div>
-            <div className="shf-glance-stat">
               <span>🎓</span>
-              <strong>4,200+</strong>
-              <small>Certifications Earned</small>
+              <strong>Learning</strong>
+              <small>Public pathway information</small>
             </div>
             <div className="shf-glance-stat">
               <span>✓</span>
-              <strong>1,800+</strong>
-              <small>Job Placements</small>
+              <strong>Reporting</strong>
+              <small>Public-approved information</small>
             </div>
             <div className="shf-glance-stat">
               <span>👥</span>
-              <strong>320+</strong>
-              <small>Recovery Graduates</small>
+              <strong>Community</strong>
+              <small>Partners and local pathways</small>
             </div>
           </div>
         </div>
@@ -212,9 +197,9 @@ export default function Home() {
 
       <section className="shf-donate-section" id="donate">
         <div className="shf-shell">
-          <h2>Support Our Mission. Create Lasting Change.</h2>
-          <a className="shf-orange-btn" href="mailto:info@shfoundation.org">
-            Donate Now <span>›</span>
+          <h2>Help build a useful pathway.</h2>
+          <a className="shf-orange-btn" href="#/get-involved">
+            Get Involved <span>›</span>
           </a>
         </div>
       </section>

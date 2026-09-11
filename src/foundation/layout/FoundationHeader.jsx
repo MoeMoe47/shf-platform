@@ -15,11 +15,11 @@ export default function FoundationHeader() {
         </a>
 
         <nav className="shf-nav" aria-label="Foundation navigation">
-          <a href="#about">About</a>
-          <a href="#programs">Programs</a>
+          <a href="#/about">About</a>
+          <a href="#/programs">Programs</a>
           <a href="#impact">Impact</a>
-          <a href="#get-involved">Get Involved</a>
-          <a href="#reports">Reports</a>
+          <a href="#/get-involved">Get Involved</a>
+          <a href="#/reports">Reports</a>
         </nav>
 
         <div className="shf-header__actions">
@@ -40,7 +40,7 @@ export default function FoundationHeader() {
               RETURN TO UNIVERSE
             </span>
           )}
-          <a className="shf-donate-pill" href="#donate">Donate</a>
+          <a className="shf-donate-pill" href="#/get-involved">Support SHF</a>
           <a className="shf-command-pill" href="/shf.html">SHF Command Center</a>
         </div>
       </div>

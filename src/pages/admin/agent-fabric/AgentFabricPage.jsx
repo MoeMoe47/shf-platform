@@ -87,6 +87,10 @@ function statusForAgent(agent, healthRows) {
   return row?.status || agent.lifecycle || "registered";
 }
 
+function summaryValue(value, fallback = "Unavailable") {
+  return Number.isFinite(Number(value)) ? Number(value) : fallback;
+}
+
 export default function AgentFabricPage() {
   const [agents, setAgents] = React.useState([]);
   const [health, setHealth] = React.useState(null);
@@ -135,9 +139,15 @@ export default function AgentFabricPage() {
     ? healthRows.find((item) => item.agent_id === selectedAgent.agent_id || item.agentId === selectedAgent.agent_id)
     : null;
   const gateBlockers = Array.isArray(gate?.gate_blockers) ? gate.gate_blockers : [];
-  const ready = Number(health?.summary?.ready || 0);
-  const warning = Number(health?.summary?.warning || 0);
-  const blocked = Math.max(0, Number(health?.summary?.total || agents.length || 0) - ready - warning);
+  const hasHealthSummary = Boolean(health?.summary && typeof health.summary === "object");
+  const total = hasHealthSummary
+    ? summaryValue(health.summary.total)
+    : agents.length ? agents.length : "Unavailable";
+  const ready = hasHealthSummary ? summaryValue(health.summary.ready) : "Unavailable";
+  const warning = hasHealthSummary ? summaryValue(health.summary.warning) : "Unavailable";
+  const blocked = hasHealthSummary && Number.isFinite(Number(total)) && Number.isFinite(Number(ready)) && Number.isFinite(Number(warning))
+    ? Math.max(0, Number(total) - Number(ready) - Number(warning))
+    : "Unavailable";
 
   return (
     <main className="agent-fabric-page">
@@ -162,7 +172,7 @@ export default function AgentFabricPage() {
       ) : null}
 
       <section className="agent-fabric-metrics" aria-label="Agent Fabric summary">
-        <article><span>Total Agents</span><strong>{Number(health?.summary?.total || agents.length || 0)}</strong></article>
+        <article><span>Total Agents</span><strong>{total}</strong></article>
         <article><span>Ready</span><strong>{ready}</strong></article>
         <article><span>Warnings</span><strong>{warning}</strong></article>
         <article><span>Blocked</span><strong>{blocked}</strong></article>

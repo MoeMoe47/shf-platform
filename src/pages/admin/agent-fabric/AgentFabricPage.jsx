@@ -183,12 +183,12 @@ export default function AgentFabricPage() {
             <table>
               <thead>
                 <tr>
-                  <th>Agent</th>
-                  <th>ID</th>
-                  <th>Role</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                  <th>Boundary</th>
+                  <th scope="col">Agent</th>
+                  <th scope="col">ID</th>
+                  <th scope="col">Role</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Actions</th>
+                  <th scope="col">Boundary</th>
                 </tr>
               </thead>
               <tbody>
@@ -196,7 +196,17 @@ export default function AgentFabricPage() {
                   <tr
                     key={agent.agent_id}
                     className={selectedAgent?.agent_id === agent.agent_id ? "is-selected" : ""}
+                    tabIndex="0"
+                    role="button"
+                    aria-label={`Select ${agent.name}`}
+                    aria-pressed={selectedAgent?.agent_id === agent.agent_id}
                     onClick={() => setSelectedId(agent.agent_id)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        setSelectedId(agent.agent_id);
+                      }
+                    }}
                   >
                     <td><strong>{agent.name}</strong><small>{label(agent.layer)}</small></td>
                     <td><code>{agent.agent_id}</code></td>

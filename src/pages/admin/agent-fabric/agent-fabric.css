@@ -189,6 +189,11 @@
   cursor: pointer;
 }
 
+.agent-fabric-table-wrap tr:focus-visible {
+  outline: 3px solid #7dd3fc;
+  outline-offset: -3px;
+}
+
 .agent-fabric-table-wrap tr.is-selected td {
   background: rgba(125, 211, 252, 0.08);
 }
@@ -290,5 +295,33 @@
 
   .agent-fabric-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .agent-fabric-page {
+    padding: 16px;
+  }
+
+  .agent-fabric-hero,
+  .agent-fabric-panel {
+    border-radius: 16px;
+  }
+
+  .agent-fabric-hero {
+    padding: 20px;
+  }
+
+  .agent-fabric-hero h1 {
+    font-size: 42px;
+  }
+
+  .agent-fabric-panel-head {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .agent-fabric-panel-head button {
+    min-height: 44px;
   }
 }

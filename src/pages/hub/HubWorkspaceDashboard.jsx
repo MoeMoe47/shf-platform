@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./hub-workspace-dashboard.css";
 import HubBusinessTourProvider from "./shared/HubBusinessTourProvider.jsx";
-import { buildHubWorkflowReadiness, hubWorkflowStatusClass, hubWorkflowStepClass } from "./shared/hubWorkflowReadiness";
 import { canAccessHubRoute, filterHubGoalsByRole, getHubRoleLabel, normalizeHubRole } from "@/system/identity/hubAccessControl";
 import { clearIdentitySession, getCurrentIdentity } from "@/system/identity/identityRouting";
 import { useAdaptiveExperience } from "@/system/adaptive-experience/useAdaptiveExperience";
@@ -17,21 +16,12 @@ const HUB_LOGO_FILE_NAME = "shs-hub-logo.png";
 const HUB_LOGO_PATH = `/assets/branding/${HUB_LOGO_FILE_NAME}`;
 const HUB_LOGO_ALT = "Silicon Heartland Solutions logo";
 const DEFAULT_HUB_FLYWHEEL = "/assets/hub/hub-flywheel.png";
-const kpis = [
-  { icon: "👥", label: "Active Partners", value: "24", delta: "▲ 20%", note: "vs last 30 days", tone: "green" },
-  { icon: "↔", label: "Open Referrals", value: "58", delta: "▲ 14%", note: "vs last 30 days", tone: "violet" },
-  { icon: "🗂️", label: "Coordinated Cases", value: "142", delta: "▲ 18%", note: "vs last 30 days", tone: "gold" },
-  { icon: "♡", label: "Unmet Needs", value: "11", delta: "▲ 2", note: "vs last 30 days", tone: "teal" },
-  { icon: "🛡️", label: "Consent Coverage", value: "97%", delta: "▲ 5%", note: "vs last 30 days", tone: "violet" },
-  { icon: "◇", label: "Network Health", value: "94%", delta: "Healthy", note: "All systems operational", tone: "green" },
-];
-
 const navItems = [
   ["Overview", "⌂", "/hub"],
   ["Partners", "▦", "/hub/network"],
   ["Referrals", "↔", "/hub/lifecycle"],
   ["Intake", "▤", "/hub/intake"],
-  ["Action Queue", "☑", "/hub/queue", "12"],
+  ["Action Queue", "☑", "/hub/queue"],
   ["Unmet Needs", "♡", "/hub/unmet-needs"],
   ["Outcomes", "◎", "/hub/outcomes"],
   ["Reports", "▥", "/hub/reports"],
@@ -45,7 +35,7 @@ const workspaceTiles = [
   ["Partner Registry", "👥", "/hub/network"],
   ["Referral Exchange", "↔", "/hub/lifecycle"],
   ["Intake Flow", "📋", "/hub/intake"],
-  ["Action Queue", "✅", "/hub/queue", "12"],
+  ["Action Queue", "✅", "/hub/queue"],
   ["Service Capacity", "🎯", "/hub/capacity"],
   ["Unmet Needs", "💙", "/hub/unmet-needs"],
   ["Shared Outcomes", "📈", "/hub/outcomes"],
@@ -58,26 +48,6 @@ const workspaceTiles = [
   ["Calendar", "📅", "/hub/calendar"],
   ["Journal", "📖", "/hub/journal"],
 ];
-
-const activityRows = [
-  ["✓", "closed: Community support", "org_shf_001", "2026-04-16T12:50:35...", "closed"],
-  ["●", "on hold: workforce_training", "org_partner_001", "2026-04-16T12:50:25...", "on_hold"],
-  ["△", "closed: Community support", "org_shf_001", "2026-04-16T01:38:08...", "closed"],
-];
-
-const notifications = [
-  ["⚠", "Referral review needed", "Referral #R-26471 requires your review.", "10:24 AM", "warn"],
-  ["▤", "Consent form missing", "Client consent form is missing for intake #I-1983.", "9:15 AM", "red"],
-  ["👥", "Partner update received", "Franklin County Workforce Partner updated service capacity.", "8:01 AM", "blue"],
-  ["★", "Monthly hub summary ready", "Your monthly summary report is ready.", "7:30 AM", "violet"],
-];
-
-const agenda = [
-  ["10:00 AM", "Partner Coordination Huddle", "30 min · Virtual"],
-  ["1:00 PM", "Intake Review & Triage", "45 min · Hub Office"],
-  ["3:30 PM", "Community Services Roundtable", "60 min · Community Center"],
-];
-
 
 const guidedWorkflowGoals = [
   {
@@ -211,85 +181,17 @@ const guidedWorkflowGoals = [
 
 
 
-const adaptiveWorkflowSignals = {
-  readinessPercent: 43,
-  reportReadyPercent: 87,
-  openReferrals: 1,
-  assignedReferrals: 2,
-  agingReferrals: 1,
-  capacityRisk: 2,
-  verifiedOutcomes: 2,
-  completionRate: 67,
-  blockers: [
-    "unassigned_referrals",
-    "referrals_on_hold",
-    "aging_referrals",
-    "partner_capacity_risk",
-    "partner_response_risk",
-    "reporting_pending_records",
-  ],
-};
-
 function getAdaptiveWorkflowRecommendation(activeRole = "client") {
-  const signals = adaptiveWorkflowSignals;
-
-  if (signals.agingReferrals > 0 || signals.capacityRisk > 0) {
-    return {
-      tone: "risk",
-      label: "Workflow risk detected",
-      title: "Open Action Queue",
-      goalId: "work-referrals",
-      route: "/hub/queue",
-      confidence: 91,
-      reason:
-        "SHS detected aging pressure and partner capacity risk. The fastest next move is to work the Action Queue before reporting this workflow externally.",
-      evidence: [
-        `${signals.agingReferrals} aging referral${signals.agingReferrals === 1 ? "" : "s"}`,
-        `${signals.capacityRisk} partner capacity risk signal${signals.capacityRisk === 1 ? "" : "s"}`,
-        `${signals.blockers.length} active blockers`,
-      ],
-      next:
-        "After queue actions are logged, open Referral Lifecycle to confirm movement.",
-    };
-  }
-
-  if (signals.reportReadyPercent >= 85 && signals.readinessPercent < 70) {
-    const adminMode = activeRole === "client_admin" || activeRole === "shs_admin";
-    return {
-      tone: "review",
-      label: "Proof review recommended",
-      title: adminMode ? "Review proof or audit readiness" : "Generate Hub Report",
-      goalId: adminMode ? "review-proof" : "generate-report",
-      route: adminMode ? "/reporting" : "/hub/reports",
-      confidence: 88,
-      reason:
-        "Report readiness is strong, but workflow readiness is still blocked. SHS recommends checking proof, audit readiness, and unresolved blockers before publishing externally.",
-      evidence: [
-        `${signals.reportReadyPercent}% report readiness`,
-        `${signals.readinessPercent}% workflow readiness`,
-        "Audit review recommended",
-      ],
-      next:
-        "Resolve missing evidence or blockers, then return to Hub Reports.",
-    };
-  }
-
   return {
-    tone: "ready",
-    label: "Workflow path ready",
-    title: "Generate Hub Report",
-    goalId: "generate-report",
-    route: "/hub/reports",
-    confidence: 84,
-    reason:
-      "The Hub has enough activity to start preparing a leadership-ready report.",
-    evidence: [
-      `${signals.reportReadyPercent}% report readiness`,
-      `${signals.verifiedOutcomes} verified records`,
-      `${signals.completionRate}% completion signal`,
-    ],
-    next:
-      "After report review, open proof or audit readiness if deeper verification is needed.",
+    tone: "pending",
+    label: "Workflow status unavailable",
+    title: "Open Intake",
+    goalId: "setup-data",
+    route: "/hub/intake",
+    confidence: null,
+    reason: "Canonical workflow readiness data is not available on this home yet.",
+    evidence: [],
+    next: "Start with a real intake or open an existing workflow to continue.",
   };
 }
 
@@ -310,114 +212,23 @@ function buildGuidedWorkflowRoute(goal, recommendation) {
 }
 
 function HubWorkflowReadinessStrip() {
-  const demoReferrals = [
-    {
-      id: "case_fdea72ed-ec6e-4eb5-96f9-1cdf84ca44cf",
-      status: "on_hold",
-      priority: "medium",
-      assigned_user_id: "user_admin_001",
-      created_at: "2026-04-15T22:35:08",
-    },
-    {
-      id: "case_1dfc9e8d-1daf-43a8-b892-360cfe068620",
-      status: "closed",
-      priority: "high",
-      assigned_user_id: "user_admin_001",
-      created_at: "2026-04-15T16:20:38",
-    },
-    {
-      id: "case_1302bd05-7c7e-4915-bf96-b1e8426a5a8e",
-      status: "closed",
-      priority: "medium",
-      assigned_user_id: "Unassigned",
-      created_at: "2026-04-15T18:30:29",
-    },
-  ];
-
-  const demoPartners = [
-    { id: "partner_workforce_001", capacity: 82, responseSpeed: 91, verifiedOutcomeRate: 84 },
-    { id: "partner_transport_001", capacity: 68, responseSpeed: 86, verifiedOutcomeRate: 74 },
-    { id: "partner_recovery_001", capacity: 71, responseSpeed: 78, verifiedOutcomeRate: 77 },
-  ];
-
-  const model = buildHubWorkflowReadiness({
-    referrals: demoReferrals,
-    partners: demoPartners,
-    truthSummary: {
-      reportReadyCount: 2,
-      pendingCount: 1,
-      verifiedCount: 2,
-      readinessPercent: 87,
-    },
-    source: "hub_workspace_dashboard",
-  });
-
-  const statRows = [
-    ["Open", model.metrics.openReferrals],
-    ["Assigned", model.metrics.assignedReferrals],
-    ["Aging", model.metrics.agingReferrals],
-    ["Capacity Risk", model.metrics.capacityRiskPartners],
-    ["Report Ready", `${model.metrics.readinessPercent}%`],
-  ];
-
   return (
-    <section className={["hub-workflow-readiness", hubWorkflowStatusClass(model.headlineStatus)].join(" ")}>
+    <section className="hub-workflow-readiness hub-workflow-readiness--pending" data-tour="hub-workflow-readiness">
       <div className="hub-workflow-readiness__header">
         <div>
           <p className="hub-workflow-readiness__eyebrow">Hub Workflow Readiness</p>
-          <h2>{model.headline}</h2>
-          <p>{model.recommendedNextAction}</p>
-        </div>
-
-        <div className="hub-workflow-readiness__score">
-          <span>Workflow Ready</span>
-          <strong>{model.workflowReadinessPercent}%</strong>
+          <h2>Not configured on this home</h2>
+          <p>Canonical readiness data will appear after a real workflow is opened and its current state is available.</p>
         </div>
       </div>
-
-      <div className="hub-workflow-readiness__stats">
-        {statRows.map(([label, value]) => (
-          <article key={label}>
-            <span>{label}</span>
-            <strong>{value}</strong>
-          </article>
-        ))}
-      </div>
-
-      <div className="hub-workflow-readiness__steps">
-        {model.steps.map((step, index) => (
-          <article key={step.key} className={hubWorkflowStepClass(step.status)}>
-            <span>{String(index + 1).padStart(2, "0")}</span>
-            <strong>{step.label}</strong>
-            <p>{step.detail}</p>
-          </article>
-        ))}
-      </div>
-
-      {model.blockers.length ? (
-        <div className="hub-workflow-readiness__blockers">
-          <strong>Active workflow blockers</strong>
-          <p>{model.blockers.join(", ")}</p>
-        </div>
-      ) : null}
     </section>
   );
 }
 
 
 function GuidedWorkflowLauncher({ adaptive }) {
-  const demoRole =
-    localStorage.getItem("shsHubDemoRole") ||
-    localStorage.getItem("shsUserRole") ||
-    localStorage.getItem("shsRole") ||
-    "client";
-
-  const activeRole = normalizeHubRole(demoRole);
+  const activeRole = normalizeHubRole(getCurrentIdentity().role);
   const roleLabel = getHubRoleLabel(activeRole);
-  const isDevMode =
-    typeof import.meta !== "undefined" &&
-    import.meta.env &&
-    import.meta.env.DEV;
 
   const visibleGoals = filterHubGoalsByRole(guidedWorkflowGoals, activeRole);
   const safeGoals = visibleGoals.length ? visibleGoals : filterHubGoalsByRole(guidedWorkflowGoals, "client");
@@ -572,41 +383,6 @@ function GuidedWorkflowLauncher({ adaptive }) {
           <span>Identity Layer View</span>
           <strong>{roleLabel}</strong>
           <small>Showing {safeGoals.length} guided options allowed for this role.</small>
-
-          {isDevMode ? (
-            <div className="hubV1-roleSwitch" aria-label="Development role switcher">
-              <button
-                type="button"
-                className={activeRole === "client" ? "is-active" : ""}
-                onClick={() => {
-                  localStorage.setItem("shsHubDemoRole", "client");
-                  window.location.reload();
-                }}
-              >
-                Client
-              </button>
-              <button
-                type="button"
-                className={activeRole === "client_admin" ? "is-active" : ""}
-                onClick={() => {
-                  localStorage.setItem("shsHubDemoRole", "client_admin");
-                  window.location.reload();
-                }}
-              >
-                Client Admin
-              </button>
-              <button
-                type="button"
-                className={activeRole === "shs_admin" ? "is-active" : ""}
-                onClick={() => {
-                  localStorage.setItem("shsHubDemoRole", "shs_admin");
-                  window.location.reload();
-                }}
-              >
-                SHS Admin
-              </button>
-            </div>
-          ) : null}
         </div>
       </div>
 
@@ -716,23 +492,8 @@ function GuidedWorkflowLauncher({ adaptive }) {
 }
 
 
-const community = [
-  ["👥", "New Partner Onboarding", "Completed onboarding for Bright Futures", "100%", "green"],
-  ["📈", "Referrals Closed This Month", "Target: 50 · Current: 46", "92%", "blue"],
-  ["💙", "Unmet Needs Resolved", "Resolved 18 of 24 unmet needs", "75%", "violet"],
-  ["⚠", "Capacity Alerts", "2 partners reporting capacity strain", "2", "gold"],
-];
-
-
 function getActiveHubRole() {
-  if (typeof window === "undefined") return "client";
-
-  return normalizeHubRole(
-    localStorage.getItem("shsHubDemoRole") ||
-      localStorage.getItem("shsUserRole") ||
-      localStorage.getItem("shsRole") ||
-      "client"
-  );
+  return normalizeHubRole(getCurrentIdentity().role);
 }
 
 function isHubItemVisibleForRole(path, role) {
@@ -763,31 +524,6 @@ function go(path) {
     : String(path);
 
   window.location.hash = normalizedPath;
-}
-
-function Spark({ tone = "blue" }) {
-  return (
-    <svg className={`hubV1-spark hubV1-spark--${tone}`} viewBox="0 0 100 38" aria-hidden="true">
-      <polyline points="3,31 15,29 25,30 36,24 47,26 58,19 69,21 80,14 91,17 98,9" />
-    </svg>
-  );
-}
-
-function KpiCard({ item }) {
-  return (
-    <section className="hubV1-kpi">
-      <div className="hubV1-kpiTop">
-        <span className="hubV1-icon">{item.icon}</span>
-        <h3>{item.label}</h3>
-      </div>
-      <div className="hubV1-kpiMain">
-        <strong>{item.value}</strong>
-        <b className={`hubV1-chip hubV1-chip--${item.tone}`}>{item.delta}</b>
-      </div>
-      <p>{item.note}</p>
-      <Spark tone={item.tone} />
-    </section>
-  );
 }
 
 function Rail() {
@@ -827,9 +563,8 @@ function Rail() {
 
       <div className="hubV1-readiness" data-tour="hub-workspace-readiness">
         <strong>REPORTING READINESS</strong>
-        <div className="hubV1-ring"><span>87%</span></div>
-        <b>On track</b>
-        <p>FY24 Q2 Report<br />Due in 18 days</p>
+        <b>Not configured</b>
+        <p>Canonical reporting data is not available on this home yet.</p>
       </div>
     </aside>
   );
@@ -838,11 +573,12 @@ function Rail() {
 function Header() {
   const fileInputRef = useRef(null);
   const flywheelInputRef = useRef(null);
+  const identity = getCurrentIdentity();
 
   const [profileOpen, setProfileOpen] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState("");
-  const [profileName, setProfileName] = useState("Jordan Ellis");
-  const [profileRole, setProfileRole] = useState("Hub Coordinator");
+  const [profileName, setProfileName] = useState(identity.name || "Signed-in account");
+  const [profileRole, setProfileRole] = useState(identity.roleLabel || "Current role");
 
   useEffect(() => {
     const savedPhoto = localStorage.getItem("shsHubProfilePhoto");
@@ -855,12 +591,12 @@ function Header() {
   }, []);
 
   function initialsFromName(name) {
-    return String(name || "Jordan Ellis")
+    return String(name || "Account")
       .split(" ")
       .filter(Boolean)
       .slice(0, 2)
       .map((part) => part[0]?.toUpperCase())
-      .join("") || "JE";
+      .join("") || "A";
   }
 
   function readImageToStorage(file, key, callback) {
@@ -892,8 +628,8 @@ function Header() {
   }
 
   function saveIdentity() {
-    localStorage.setItem("shsHubProfileName", profileName.trim() || "Jordan Ellis");
-    localStorage.setItem("shsHubProfileRole", profileRole.trim() || "Hub Coordinator");
+    localStorage.setItem("shsHubProfileName", profileName.trim() || "Signed-in account");
+    localStorage.setItem("shsHubProfileRole", profileRole.trim() || "Current role");
     setProfileOpen(false);
   }
 
@@ -913,7 +649,7 @@ function Header() {
       <div className="hubV1-headerActions" data-tour="hub-workspace-header-actions">
         <button>🛡️ Identity</button>
         <button>👥 Workspace</button>
-        <button>🔔 Notifications <b>7</b></button>
+        <button>🔔 Notifications</button>
         <button>📄 Reports</button>
         <button>🔒 Secure Network</button>
         <button>Export</button>
@@ -1066,16 +802,11 @@ function NetworkSnapshot() {
         Connecting partners. Coordinating care. Strengthening communities across the Heartland.
       </p>
 
-      <div className="hubV1-profileRows">
-        <div><span>Region</span><strong>Silicon Heartland (5 Counties)</strong></div>
-        <div><span>Active Organizations</span><strong>2</strong></div>
-        <div><span>Lead Coordinator</span><strong>Jordan Ellis</strong></div>
-        <div><span>Clearance Level</span><strong className="hubV1-gold">Tier 2 – Coordinator</strong></div>
-        <div><span>Hub Status</span><strong className="hubV1-green">● Active</strong></div>
-        <div><span>Next Review</span><strong>May 14, 2025</strong></div>
+      <div className="hubV1-profileRows" role="status">
+        <p>Network profile data is not configured on this home. Open a canonical organization record to view current details.</p>
       </div>
 
-      <button className="hubV1-wideBtn">View Hub Profile</button>
+      <button className="hubV1-wideBtn" type="button" onClick={() => go("/hub/network")}>Open Partner Network</button>
     </section>
   );
 }
@@ -1112,144 +843,6 @@ function OperationsWorkspace() {
     </section>
   );
 }
-
-function RecentActivity() {
-  return (
-    <section className="hubV1-card hubV1-activity" data-tour="hub-workspace-activity">
-      <div className="hubV1-sectionHead">
-        <div>
-          <h2>▤ Recent Hub Activity</h2>
-        </div>
-        <button>View All Activity →</button>
-      </div>
-
-      <table className="hubV1-table">
-        <thead>
-          <tr>
-            <th></th>
-            <th>Activity</th>
-            <th>Partner / Source</th>
-            <th>Date & Time</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {activityRows.map((row) => (
-            <tr key={`${row[1]}-${row[3]}`}>
-              <td><span className={`hubV1-rowIcon ${row[4]}`}>{row[0]}</span></td>
-              <td><strong>{row[1]}</strong></td>
-              <td>{row[2]}</td>
-              <td>{row[3]}</td>
-              <td><b className={`hubV1-status ${row[4]}`}>{row[4]}</b></td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <div className="hubV1-foot">Showing 1 to 3 of 28 activities <span>View All Activity →</span></div>
-    </section>
-  );
-}
-
-function DonutCards() {
-  return (
-    <div className="hubV1-miniGrid" data-tour="hub-workspace-mini-metrics">
-      <section className="hubV1-card hubV1-mini">
-        <div className="hubV1-sectionHead mini">
-          <h2>◔ Referral Aging</h2>
-          <button>View Details →</button>
-        </div>
-        <div className="hubV1-miniBody">
-          <div className="hubV1-donut"><span><strong>3</strong><small>Total Open</small></span></div>
-          <div className="hubV1-legend">
-            <div><i className="green"></i><span>0–7 days</span><b>28</b><em>48%</em></div>
-            <div><i className="gold"></i><span>8–14 days</span><b>17</b><em>29%</em></div>
-            <div><i className="orange"></i><span>15–30 days</span><b>9</b><em>16%</em></div>
-            <div><i className="red"></i><span>30+ days</span><b>4</b><em>7%</em></div>
-          </div>
-        </div>
-      </section>
-
-      <section className="hubV1-card hubV1-mini">
-        <div className="hubV1-sectionHead mini">
-          <h2>⊖ Capacity Strain</h2>
-          <button>View Details →</button>
-        </div>
-        <div className="hubV1-miniBody">
-          <div className="hubV1-gauge"><span><strong>2</strong><small>Partners High Strain</small></span></div>
-          <div className="hubV1-legend compact">
-            <div><i className="red"></i><span>High Strain</span><b>2</b></div>
-            <div><i className="orange"></i><span>Moderate Strain</span><b>4</b></div>
-            <div><i className="green"></i><span>Stable</span><b>18</b></div>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
-}
-
-function Notifications() {
-  return (
-    <section className="hubV1-card hubV1-rightCard" data-tour="hub-workspace-notifications">
-      <div className="hubV1-sectionHead">
-        <h2>🔔 Notifications</h2>
-        <button>View All →</button>
-      </div>
-      {notifications.map(([icon, title, body, time, tone]) => (
-        <div className="hubV1-note" key={title}>
-          <span className={`hubV1-noteIcon ${tone}`}>{icon}</span>
-          <div>
-            <strong>{title}</strong>
-            <p>{body}</p>
-          </div>
-          <time>{time}</time>
-        </div>
-      ))}
-    </section>
-  );
-}
-
-function Agenda() {
-  return (
-    <section className="hubV1-card hubV1-rightCard">
-      <div className="hubV1-sectionHead">
-        <h2 data-tour="hub-workspace-agenda">📅 Today's Agenda</h2>
-        <button>Open Calendar →</button>
-      </div>
-      {agenda.map(([time, title, meta]) => (
-        <div className="hubV1-agenda" key={title}>
-          <strong>{time}</strong>
-          <div>
-            <b>{title}</b>
-            <p>{meta}</p>
-          </div>
-        </div>
-      ))}
-    </section>
-  );
-}
-
-function Community() {
-  return (
-    <section className="hubV1-card hubV1-rightCard">
-      <div className="hubV1-sectionHead">
-        <h2 data-tour="hub-workspace-community">👥 Recent Community Activity</h2>
-        <button>View All →</button>
-      </div>
-      {community.map(([icon, title, body, value, tone]) => (
-        <div className="hubV1-community" key={title}>
-          <span>{icon}</span>
-          <div>
-            <strong>{title}</strong>
-            <p>{body}</p>
-          </div>
-          <b className={`hubV1-chip hubV1-chip--${tone}`}>{value}</b>
-        </div>
-      ))}
-    </section>
-  );
-}
-
 
 function AdaptiveExperienceCard({ adaptive }) {
   const score = adaptive.experienceScore || {};
@@ -1291,6 +884,20 @@ function AdaptiveExperienceCard({ adaptive }) {
         <span>Next-Version Recommendation</span>
         <p>{nextRecommendation?.recommendation || "Continue collecting usage data before changing the dashboard."}</p>
       </div>
+    </section>
+  );
+}
+
+function HubDataAvailability() {
+  return (
+    <section className="hubV1-card hubV1-dataAvailability" aria-labelledby="hub-data-availability-heading">
+      <div className="hubV1-sectionHead">
+        <div>
+          <h2 id="hub-data-availability-heading">Operational data</h2>
+          <p>These summaries appear when canonical organization activity is available.</p>
+        </div>
+      </div>
+      <p role="status">No canonical operational summaries are available on this surface yet.</p>
     </section>
   );
 }
@@ -1359,10 +966,6 @@ export default function HubWorkspaceDashboard() {
 
         <AccessRedirectNotice />
 
-        <section className="hubV1-kpiRow" data-tour="hub-workspace-kpis">
-          {kpis.map((item) => <KpiCard key={item.label} item={item} />)}
-        </section>
-
         <HubWorkflowReadinessStrip />
 
         <GuidedWorkflowLauncher adaptive={adaptive} />
@@ -1372,14 +975,7 @@ export default function HubWorkspaceDashboard() {
 
           <div className="hubV1-centerStack">
             <OperationsWorkspace />
-            <RecentActivity />
-            <DonutCards />
-          </div>
-
-          <div className="hubV1-rightStack">
-            <Notifications />
-            <Agenda />
-            <Community />
+            <HubDataAvailability />
           </div>
         </section>
       </section>

@@ -9,6 +9,15 @@ const navClass = ({ isActive }) =>
 
 const SECTIONS = [
   {
+    title: "SHS Product",
+    items: [
+      { to: "/hub", icon: "⌂", label: "BOS Home", end: true },
+      { href: "/curriculum.html#/studio", route: "/studio", icon: "▥", label: "Studio" },
+      { to: "/release-assurance", icon: "◇", label: "ARAG-1 Assurance" },
+      { to: "/agent-fabric", icon: "F", label: "Agent Fabric" },
+    ],
+  },
+  {
     title: "Production Ops",
     items: [
       { to: "/ops/production", icon: "▣", label: "Production" },
@@ -46,9 +55,8 @@ const SECTIONS = [
       { to: "/dashboard", icon: "▦", label: "Dashboard" },
       { to: "/reports", icon: "▤", label: "Reports" },
       { to: "/ops/reports/history", icon: "H", label: "Report History" },
-      { to: "/builder", icon: "▥", label: "Website Studio" },
+      { to: "/builder", icon: "▥", label: "Website Builder" },
       { to: "/builder/tools", icon: "🧰", label: "Tool Dashboard" },
-      { to: "/hub", icon: "🛡️", label: "Organization Home", end: true },
       { to: "/admin/users", icon: "👥", label: "Users" },
       { to: "/admin/settings", icon: "⚙️", label: "Settings" }
     ]
@@ -68,20 +76,23 @@ const SECTIONS = [
       { to: "/oracle", icon: "O", label: "Oracle", badge: "V1" },
       { to: "/ai-guardrails", icon: "A", label: "AI Guardrails", badge: "V1" },
       { to: "/game-theory", icon: "G", label: "Game Theory", badge: "V1" },
-      { to: "/agent-fabric", icon: "F", label: "Agent Fabric", badge: "V1" },
       { to: "/dev/docs", icon: "📚", label: "Docs" },
       { to: "/health", icon: "💚", label: "Health", badge: "NEW" }
     ]
   }
 ];
 
-const Item = ({ to, icon, label, end, badge }) => (
+const Item = ({ to, href, icon, label, end, badge }) => (
   <li className="adm-navItem">
-    <NavLink to={to} end={end} className={navClass}>
+    {href ? <a href={href} className="adm-navLink">
       <span className="adm-ico">{icon}</span>
       <span className="adm-label">{label}</span>
       {badge && <span className="adm-badge">{badge}</span>}
-    </NavLink>
+    </a> : <NavLink to={to} end={end} className={navClass}>
+      <span className="adm-ico">{icon}</span>
+      <span className="adm-label">{label}</span>
+      {badge && <span className="adm-badge">{badge}</span>}
+    </NavLink>}
   </li>
 );
 
@@ -95,7 +106,7 @@ export default function AdminSidebar() {
   const sections = SECTIONS
     .map((section) => ({
       ...section,
-      items: section.items.filter((item) => canAccessHubRoute(auth.role, item.to)),
+      items: section.items.filter((item) => canAccessHubRoute(auth.role, item.route || item.to)),
     }))
     .filter((section) => section.items.length);
 

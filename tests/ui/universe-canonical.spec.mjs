@@ -89,6 +89,17 @@ test.describe("A. Static source guardrails (no live server required)", () => {
       expect(content).not.toMatch(/https?:\/\/127\.0\.0\.1:517[0-9]/);
     }
   });
+
+  test("FE-0 wired destinations resolve to existing mounted entries", () => {
+    const registry = fs.readFileSync(
+      path.join(REPO_ROOT, "src/pages/universe-v1/universeDestinationRegistry.js"),
+      "utf8"
+    );
+    expect(registry).toContain("id: 'open-autonomous-standard'");
+    expect(registry).toContain("productionPath: '/oas.html'");
+    expect(registry).toContain("id: 'agent-fabric'");
+    expect(registry).toContain("productionPath: '/admin.html#/agent-fabric'");
+  });
 });
 
 test.describe("B. Canonical route renders the approved experience", () => {
@@ -120,9 +131,9 @@ test.describe("B. Canonical route renders the approved experience", () => {
 test.describe("C. Destination registry validity and unavailable-destination handling", () => {
   test.use({ viewport: { width: 1536, height: 900 } });
 
-  test("AOS, Open Autonomous Standard, and Autonomous Trust Bureau remain gracefully unavailable", async ({ page }) => {
+  test("AOS and Autonomous Trust Bureau remain gracefully unavailable", async ({ page }) => {
     await page.goto(`${UNIVERSE_BASE}/universe?skipIntro=1`, { waitUntil: "networkidle" });
-    for (const id of ["aos", "open-autonomous-standard", "autonomous-trust-bureau"]) {
+    for (const id of ["aos", "autonomous-trust-bureau"]) {
       await page.locator(`[data-target-id="${id}"]`).click();
       const panel = page.locator(".v1-selection-panel");
       await expect(panel).toBeVisible();
@@ -147,21 +158,20 @@ test.describe("C. Destination registry validity and unavailable-destination hand
     // Ecosystem-audit pass (2026-08-27, same day): the registry grew from
     // 6 to 22 real, evidenced destinations (see
     // universeDestinationRegistry.js's top comment and the audit report).
-    // The 3 originally-unavailable destinations (aos, open-autonomous-
-    // standard, autonomous-trust-bureau) are still the only 3 unavailable
-    // ones — every new record added by the audit is real and live — so
-    // that count is unchanged and still asserted with the exact original
-    // copy. RETURN TO UNIVERSE still navigates back to /universe.
+    // OAS was promoted to its existing public mounted app during FE-0;
+    // AOS and Autonomous Trust Bureau remain the two unavailable records.
+    // RETURN TO UNIVERSE still navigates back to /universe.
     //
     // Public-visibility correction (2026-08-27, later same day): Lord of
     // Outcomes was found not to be a public-facing destination and was
     // switched to `universeVisible: false` in the registry — its route,
     // app, and every other field are untouched; it is simply no longer
-    // rendered on this public gateway. 22 -> 21.
+    // rendered on this public gateway. The FE-0 destination additions make
+    // the current visible count 22.
     await expect(page.getByRole("heading", { name: "Your universe of opportunity." })).toBeVisible();
     const cards = page.locator("[data-destination-id]");
-    await expect(cards).toHaveCount(21);
-    await expect(page.getByText("Planned destination unavailable in this preview.")).toHaveCount(3);
+    await expect(cards).toHaveCount(22);
+    await expect(page.getByText("Planned destination unavailable in this preview.")).toHaveCount(2);
     await page.getByRole("button", { name: "RETURN TO UNIVERSE" }).click();
     await expect.poll(() => page.evaluate(() => window.location.pathname)).toBe("/universe");
   });

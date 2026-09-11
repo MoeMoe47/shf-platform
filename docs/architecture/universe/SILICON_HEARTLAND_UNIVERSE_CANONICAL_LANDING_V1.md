@@ -103,7 +103,7 @@ full rationale):
 | SHF (Foundation) | Available | `/foundation.html#reports` (same origin) |
 | Autonomous Registry | Available | `VITE_AUTONOMOUS_REGISTRY_ORIGIN` or `http://127.0.0.1:5174` + `/` |
 | AOS | Planned/unavailable | No entry control rendered; informational only |
-| Open Autonomous Standard | Planned/unavailable | No entry control rendered; informational only |
+| Open Autonomous Standard | Available | `/oas.html` (same origin) |
 | Autonomous Trust Bureau | Planned/unavailable | No entry control rendered; informational only |
 
 ## Navigation rule

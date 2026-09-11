@@ -197,25 +197,29 @@ export const universeDestinations = [
     label: 'Standard',
     title: 'Open Autonomous Standard',
     route: '/universe/open-autonomous-standard',
-    destinationType: 'planned-unavailable',
-    availability: 'planned',
-    publicNavigationStatus: 'unavailable',
-    sourceEvidence: 'No exact active local Open Autonomous Standard page found during route-resolution audit.',
+    destinationType: 'same-origin-app',
+    availability: 'available-local',
+    publicNavigationStatus: 'available',
+    productionPath: '/oas.html',
+    sourceEvidence: 'oas.html title "Open Autonomous Standard" + src/entries/oas.main.jsx + src/pages/oas/OASLandingPage.jsx (public mounted OAS landing page).',
     description: 'Neutral constitutional standards foundation for autonomous systems.',
+    entryActionLabel: 'ENTER OAS',
+    returnActionLabel: RETURN_TO_UNIVERSE_LABEL,
+    returnPath: CANONICAL_UNIVERSE_ROUTE,
+    accessibilityLabel: 'Enter Open Autonomous Standard',
     sceneAvailable: true,
     x: 0.634,
     y: 0.226,
     radius: 0.026,
-    // Audit note (2026-08-27): repo-wide search found zero implementation
-    // evidence for "Open Autonomous Standard" anywhere outside this
-    // registry and the Universe docs — no page, component, or doc uses
-    // this name. It is a real, deliberately narrative destination with no
-    // route yet, not a bug — kept honestly as planned/no-link.
+    // FE-0 correction (2026-09-11): the previously planned record now
+    // resolves to the existing public OAS landing entry. OAS remains an
+    // independent standards authority; this navigation assignment does not
+    // grant it SHS or Agent Fabric authority.
     entityType: ENTITY_TYPES.STANDARD,
-    owner: null,
+    owner: 'Open Autonomous Standard',
     parentPlatform: null,
-    status: 'planned',
-    access: 'unknown',
+    status: 'live',
+    access: 'public',
     universeVisible: true,
   },
   {
@@ -309,6 +313,30 @@ export const universeDestinations = [
     returnActionLabel: RETURN_TO_UNIVERSE_LABEL,
     returnPath: CANONICAL_UNIVERSE_ROUTE,
     accessibilityLabel: 'Enter SHS BOS Executive Command Center (admin sign-in required)',
+    sceneAvailable: false,
+    entityType: ENTITY_TYPES.PLATFORM,
+    owner: 'Silicon Heartland Solutions',
+    parentPlatform: null,
+    status: 'restricted',
+    access: 'admin-only',
+    universeVisible: true,
+  },
+
+  {
+    id: 'agent-fabric',
+    label: 'AGENT FABRIC',
+    title: 'Agent Fabric Control Center',
+    route: '/universe/agent-fabric',
+    destinationType: 'same-origin-app',
+    availability: 'available-local',
+    publicNavigationStatus: 'available',
+    productionPath: '/admin.html#/agent-fabric',
+    sourceEvidence: 'src/pages/admin/agent-fabric/AgentFabricPage.jsx + src/router/AdminRoutes.jsx (/agent-fabric, admin-only via SHS_SECURITY_PERMISSIONS.AUDIT_VIEW).',
+    description: 'Admin control surface for bounded, governed Agent Fabric coordination and policy state.',
+    entryActionLabel: 'ENTER (ADMIN SIGN-IN REQUIRED)',
+    returnActionLabel: RETURN_TO_UNIVERSE_LABEL,
+    returnPath: CANONICAL_UNIVERSE_ROUTE,
+    accessibilityLabel: 'Enter Agent Fabric Control Center (admin sign-in required)',
     sceneAvailable: false,
     entityType: ENTITY_TYPES.PLATFORM,
     owner: 'Silicon Heartland Solutions',

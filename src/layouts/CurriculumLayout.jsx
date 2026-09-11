@@ -45,6 +45,7 @@ const ROUTE_TITLES = [
   { test: /^\/curriculum\/?$/, title: "Learning Dashboard", subtitle: "Continue your pathway and stay on track." },
   { test: /\/curriculum\/asl\/calendar\/?$/, title: "Calendar" },
   { test: /\/curriculum\/asl\/assignments\/?$/, title: "Assignments" },
+  { test: /\/curriculum\/parent\/?$/, title: "Parent / Guardian Home" },
   { test: /\/curriculum\/learning\/?$/, title: "Learning" },
   { test: /\/curriculum\/lessons\/?$/, title: "Lessons" },
   { test: /\/curriculum\/live-sessions\/admin\/?$/, title: "Live Session Access" },

@@ -56,6 +56,7 @@ const InstructorUnit = lazy(() => import("@/pages/InstructorUnit.jsx"));
 const MasterUnit = lazy(() => import("@/pages/MasterUnit.jsx"));
 const AdminCompare = lazy(() => import("@/pages/AdminCompare.jsx"));
 const StudentUnit = lazy(() => import("@/pages/StudentUnit.jsx"));
+const ParentDashboard = lazy(() => import("@/pages/ParentDashboard.jsx"));
 const PrepareProveReview = lazy(() => import("@/pages/curriculum/PrepareProveReview.jsx"));
 
 /** Phase 3 Studio shell over the durable Phase 2 project API. */
@@ -124,6 +125,7 @@ export default function CurriculumRoutes() {
           <Route path="asl/calendar" element={<Calendar />} />
           <Route path="asl/assignments" element={<Assignments />} />
           <Route path="asl/portfolio" element={<CareerPortfolio />} />
+          <Route path="parent" element={<ParentDashboard />} />
           <Route path="instructor" element={<Instructor />} />
           <Route path="instructor/operations" element={<InstructorOperations />} />
           <Route path="instructor/operations/learners/:learnerId" element={<OperationalDetail kind="learner" />} />
@@ -229,6 +231,7 @@ export default function CurriculumRoutes() {
         <Route path="/:curriculum/master/:slug" element={<CurriculumParamRedirect to="master/:slug" />} />
         <Route path="/:curriculum/admin" element={<CurriculumParamRedirect to="admin" />} />
         <Route path="/:curriculum/admin/:slug" element={<CurriculumParamRedirect to="admin/:slug" />} />
+        <Route path="/:curriculum/parent" element={<CurriculumParamRedirect to="parent" />} />
         <Route path="/:curriculum/lessons" element={<CurriculumParamRedirect to="lessons" />} />
         <Route path="/:curriculum/lessons/:slug" element={<CurriculumParamRedirect to="lessons/:slug" />} />
 

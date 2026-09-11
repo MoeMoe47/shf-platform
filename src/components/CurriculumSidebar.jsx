@@ -61,6 +61,7 @@ export default function CurriculumSidebar({ collapsed = false, onToggleCollapsed
   const inCourseWorkspace = location.pathname.startsWith("/curriculum/courses/");
   const displayName = user?.name || "Michael Slate";
   const roleLabel = (roles && roles[0]) ? roles[0][0].toUpperCase() + roles[0].slice(1) : "Student";
+  const canSeeInstructor = (roles || []).some((role) => /^(admin|instructor|teacher|coach)$/i.test(String(role)));
 
   return (
     <nav className="ld-sidebar" data-collapsed={collapsed ? "true" : "false"} aria-label="Curriculum">
@@ -124,26 +125,28 @@ export default function CurriculumSidebar({ collapsed = false, onToggleCollapsed
           </ul>
         </div>
 
-        <div className="ld-navDivider" role="separator" />
+        {canSeeInstructor && <>
+          <div className="ld-navDivider" role="separator" />
 
-        <div className="ld-navGroup">
-          <div className="ld-navLabel">Instructor</div>
-          <ul className="ld-navList">
-            {INSTRUCTOR_ITEMS.map(({ key, label, Icon, path }) => (
-              <li key={key}>
-                <NavLink
-                  to={`/curriculum/${path}`}
-                  onClick={onNavigate}
-                  data-label={label}
-                  className={({ isActive }) => `ld-navItem${isActive ? " is-active" : ""}`}
-                >
-                  <Icon size={19} className="ld-navIcon" />
-                  <span className="ld-navText">{label}</span>
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </div>
+          <div className="ld-navGroup">
+            <div className="ld-navLabel">Instructor</div>
+            <ul className="ld-navList">
+              {INSTRUCTOR_ITEMS.map(({ key, label, Icon, path }) => (
+                <li key={key}>
+                  <NavLink
+                    to={`/curriculum/${path}`}
+                    onClick={onNavigate}
+                    data-label={label}
+                    className={({ isActive }) => `ld-navItem${isActive ? " is-active" : ""}`}
+                  >
+                    <Icon size={19} className="ld-navIcon" />
+                    <span className="ld-navText">{label}</span>
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </>}
       </div>
 
       <button

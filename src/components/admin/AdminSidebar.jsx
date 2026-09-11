@@ -48,7 +48,7 @@ const SECTIONS = [
       { to: "/ops/reports/history", icon: "H", label: "Report History" },
       { to: "/builder", icon: "▥", label: "Website Studio" },
       { to: "/builder/tools", icon: "🧰", label: "Tool Dashboard" },
-      { to: "/admin", icon: "🛡️", label: "Admin Home", end: true },
+      { to: "/hub", icon: "🛡️", label: "Organization Home", end: true },
       { to: "/admin/users", icon: "👥", label: "Users" },
       { to: "/admin/settings", icon: "⚙️", label: "Settings" }
     ]

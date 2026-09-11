@@ -56,6 +56,20 @@ export default function CareerDashboard() {
         <div className="card card--pad">Portfolio: <a href="/career.html#/portfolio">View artifacts and credentials</a></div>
         <div className="card card--pad">Events this week: <strong>{displayCount(summary.eventsThisWeek)}</strong></div>
       </div>
+
+      <section className="career-student-next" aria-labelledby="career-student-next-title">
+        <div>
+          <p className="career-student-kicker">Your next step</p>
+          <h2 id="career-student-next-title">Explore, connect, and keep building</h2>
+          <p>Use your learning, portfolio, and pathway references together. Exploration is guidance, not a commitment.</p>
+        </div>
+        <nav className="career-student-nextLinks" aria-label="Career Center next steps">
+          <a href="/career.html#/explore">Explore careers</a>
+          <a href="/career.html#/pathways">View pathways</a>
+          <a href="/career.html#/learn">Continue learning</a>
+          <a href="/career.html#/portfolio">Review portfolio</a>
+        </nav>
+      </section>
     </section>
   );
 }

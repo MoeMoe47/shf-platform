@@ -28,6 +28,7 @@ const CURRICULUM_ITEMS = [
   { key: "portfolio", label: "Portfolio", Icon: PortfolioIcon, path: "asl/portfolio" },
   { key: "learning", label: "Learning", Icon: BookIcon, path: "learning" },
   { key: "assignments", label: "Assignments", Icon: AssignmentsIcon, path: "asl/assignments" },
+  { key: "career", label: "Career", Icon: SparkleIcon, external: "/career.html#/dashboard" },
   // Phase 1 restoration (SHF Curriculum Infrastructure Audit §28-30): real
   // request/approval UI, previously unrouted anywhere in the app.
   { key: "live-sessions", label: "Live Sessions", Icon: CalendarIcon, path: "live-sessions" },
@@ -99,18 +100,25 @@ export default function CurriculumSidebar({ collapsed = false, onToggleCollapsed
         <div className="ld-navGroup">
           <div className="ld-navLabel">Curriculum</div>
           <ul className="ld-navList">
-            {CURRICULUM_ITEMS.map(({ key, label, Icon, path }) => (
+            {CURRICULUM_ITEMS.map(({ key, label, Icon, path, external }) => (
               <li key={key}>
-                <NavLink
-                  to={path.startsWith("/") ? path : `/curriculum/${path}`}
-                  end={key !== "learning" && key !== "studio"}
-                  onClick={onNavigate}
-                  data-label={label}
-                  className={({ isActive }) => `ld-navItem${isActive || (key === "learning" && inCourseWorkspace) || (key === "studio" && location.pathname.startsWith("/studio")) ? " is-active" : ""}`}
-                >
-                  <Icon size={19} className="ld-navIcon" />
-                  <span className="ld-navText">{label}</span>
-                </NavLink>
+                {path ? (
+                  <NavLink
+                    to={path.startsWith("/") ? path : `/curriculum/${path}`}
+                    end={key !== "learning" && key !== "studio"}
+                    onClick={onNavigate}
+                    data-label={label}
+                    className={({ isActive }) => `ld-navItem${isActive || (key === "learning" && inCourseWorkspace) || (key === "studio" && location.pathname.startsWith("/studio")) ? " is-active" : ""}`}
+                  >
+                    <Icon size={19} className="ld-navIcon" />
+                    <span className="ld-navText">{label}</span>
+                  </NavLink>
+                ) : (
+                  <a className="ld-navItem" href={external} onClick={onNavigate} data-label={label}>
+                    <Icon size={19} className="ld-navIcon" />
+                    <span className="ld-navText">{label}</span>
+                  </a>
+                )}
               </li>
             ))}
           </ul>

@@ -1482,3 +1482,7 @@ span.ld-footerLink.is-unavailable {
     grid-template-columns: 1fr 1fr;
   }
 }
+.ld-careerBridge { display: grid; gap: 10px; }
+.ld-careerBridge .ld-cardTitle { margin-bottom: 0; }
+.ld-careerBridgeActions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: 4px; }
+.ld-careerBridgeActions .ld-btn { min-height: 40px; }

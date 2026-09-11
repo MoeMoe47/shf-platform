@@ -15,7 +15,7 @@ test("FE-5 keeps canonical role homes and registers the parent fallback", () => 
   assert.match(routes, /path="\/:curriculum\/parent"/);
   assert.match(curriculum, /canSeeInstructor/);
   assert.match(curriculum, /roles.*admin\|instructor\|teacher\|coach/);
-  assert.match(admin, /to: "\/hub".*Organization Home/);
+  assert.match(admin, /to: "\/hub".*label: "BOS Home"/);
   assert.match(parent, /authorized family relationship/);
 });
 

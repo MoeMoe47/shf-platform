@@ -41,10 +41,10 @@ export const foundationApps = [
 
   {
     id: "civic",
-    name: "Civic Lab",
-    tagline: "Build civic DNA, missions, and impact portfolios.",
-    href: "/civic.html#/dashboard",
-    category: "Civic",
+    name: "CivicSure",
+    tagline: "Government program assurance and public-safe reporting.",
+    href: "/index.html#/civicsure",
+    category: "CivicSure",
 
     // JPEG / still only
     mediaType: "image",

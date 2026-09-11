@@ -5,12 +5,14 @@ import { createRoot } from "react-dom/client";
 import "@/styles/global.css";
 import "@/styles/shell.css";
 import "@/styles/unified-shell.css";
+import "@/styles/civicSureCanonical.css";
 
 import RootProviders from "@/entries/RootProviders.jsx";
 import WebMakerPage from "@/pages/public/WebMakerPage.jsx";
 import OperatorLayout from "../../apps/shf-web/src/layouts/OperatorLayout.jsx";
 import CivicSureShell from "../../apps/shf-web/src/components/civicsure/CivicSureShell.jsx";
 import GovernmentAssurance from "../../apps/shf-web/src/pages/operator/GovernmentAssurance.jsx";
+import CivicSureApp from "@/pages/civicsure/CivicSureApp.jsx";
 
 // Canonical Silicon Heartland Universe (ported from the approved
 // reference implementation — see
@@ -70,6 +72,7 @@ function App() {
   const lineageMatch = routePath.match(/^\/operator\/government-assurance\/lineage\/(truth|metric)\/([^/]+)$/);
   const assistantMatch = routePath.match(/^\/operator\/government-assurance\/assistant$/);
   const reportsMatch = routePath.match(/^\/operator\/government-assurance\/reports$/);
+  const civicSureRoute = routePath === "/civicsure" || routePath.startsWith("/civicsure/");
   const monitoringMatches = [
     ["plan", routePath.match(/^\/operator\/government-assurance\/monitoring\/plans\/([^/]+)$/)],
     ["activity", routePath.match(/^\/operator\/government-assurance\/monitoring\/activities\/([^/]+)$/)],
@@ -82,7 +85,7 @@ function App() {
 
   return (
     <RootProviders appScope="index">
-      {routePath === "/operator/government-assurance" || claimMatch || verificationMatch || reconciliationMatch || sourceMatch || portfolioMatch || lineageMatch || monitoringMatch || assistantMatch || reportsMatch ? (
+      {civicSureRoute ? <CivicSureApp /> : routePath === "/operator/government-assurance" || claimMatch || verificationMatch || reconciliationMatch || sourceMatch || portfolioMatch || lineageMatch || monitoringMatch || assistantMatch || reportsMatch ? (
         <CivicSureShell><GovernmentAssurance initialView={routeView} initialClaimId={claimMatch?.[1] || null} initialVerificationId={verificationMatch?.[1] || null} initialReconciliationId={reconciliationMatch?.[1] || null} initialSourceId={sourceMatch?.[1] || null} initialPortfolio={portfolioMatch ? { kind: ({ programs: "program", providers: "provider", funding: "funding", audits: "audit" }[portfolioMatch[1]]), id: portfolioMatch[2] } : null} initialLineage={lineageMatch ? { kind: lineageMatch[1], id: lineageMatch[2] } : null} initialMonitoring={monitoringMatch ? { kind: monitoringMatch[0], id: monitoringMatch[1][1] } : null} initialPhase8B={assistantMatch ? "Assistant" : reportsMatch ? "Reports" : null} /></CivicSureShell>
       ) : pathname === "/studio/templates" ? (
         <WebMakerPage />

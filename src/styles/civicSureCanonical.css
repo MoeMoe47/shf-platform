@@ -1,0 +1,30 @@
+[data-app="index"] .civicsure-canonical-main {
+  min-height: 100vh;
+  padding: clamp(2rem, 6vw, 5rem) clamp(1.25rem, 5vw, 4rem);
+  background: #f6f8f9;
+  color: #172b2d;
+}
+
+[data-app="index"] .civicsure-canonical-header,
+[data-app="index"] .civicsure-canonical-grid,
+[data-app="index"] .civicsure-canonical-panel {
+  width: min(100%, 72rem);
+  margin-inline: auto;
+}
+
+[data-app="index"] .civicsure-canonical-header { margin-bottom: 2rem; }
+[data-app="index"] .civicsure-canonical-eyebrow { margin: 0 0 .75rem; color: #176b70; font-size: .75rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+[data-app="index"] .civicsure-canonical-header h1 { max-width: 44rem; margin: 0; font-size: clamp(2rem, 5vw, 3.75rem); line-height: 1.08; }
+[data-app="index"] .civicsure-canonical-header > p:last-child { max-width: 46rem; margin: 1rem 0 0; color: #526568; font-size: 1.08rem; line-height: 1.6; }
+[data-app="index"] .civicsure-canonical-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+[data-app="index"] .civicsure-canonical-panel { padding: 1.25rem; border: 1px solid #d7e0e1; border-radius: .5rem; background: #fff; box-shadow: 0 1px 2px rgb(16 24 40 / .05); }
+[data-app="index"] .civicsure-canonical-panel h2 { margin: 0; font-size: 1.15rem; }
+[data-app="index"] .civicsure-canonical-panel p { color: #526568; line-height: 1.55; }
+[data-app="index"] .civicsure-canonical-note { margin-top: 1rem; }
+[data-app="index"] .civicsure-canonical-link { color: #0f5054; font-weight: 700; text-decoration: underline; text-underline-offset: .18em; }
+[data-app="index"] .civicsure-canonical-list { display: grid; gap: .75rem; padding: 0; list-style: none; }
+[data-app="index"] .civicsure-canonical-list li { display: flex; justify-content: space-between; gap: 1rem; padding: .8rem 0; border-bottom: 1px solid #e4ebeb; }
+[data-app="index"] .civicsure-canonical-list span { color: #526568; }
+[data-app="index"] .civicsure-canonical-main a:focus-visible { outline: 3px solid rgb(23 92 211 / .35); outline-offset: 3px; }
+@media (max-width: 48rem) { [data-app="index"] .civicsure-canonical-grid { grid-template-columns: 1fr; } [data-app="index"] .civicsure-canonical-list li { align-items: flex-start; flex-direction: column; } }
+@media (prefers-reduced-motion: reduce) { [data-app="index"] .civicsure-canonical-main *, [data-app="index"] .civicsure-canonical-main *::before, [data-app="index"] .civicsure-canonical-main *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; } }

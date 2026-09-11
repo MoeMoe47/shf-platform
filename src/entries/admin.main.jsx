@@ -11,6 +11,7 @@ import "@/styles/_bg-guard.css";
 import "@/styles/unified-shell.css";
 import "@/styles/unified-shell.optin.css";
 import "@/styles/app-shell.css";
+import "@/design-system/index.css";
 
 import { applyManifest } from "@/apps/manifest/applyManifest.js";
 import { getMode } from "@/runtime/mode.js";

@@ -1,0 +1,112 @@
+/* Structural primitives are opt-in through the ds-* class namespace. */
+.ds-shell {
+  font-family: var(--ds-font-sans);
+  color: var(--ds-color-ink);
+}
+
+.ds-pageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ds-space-6);
+  margin-block-end: var(--ds-space-6);
+}
+
+.ds-pageHeader__copy { min-width: 0; }
+.ds-pageHeader__eyebrow {
+  margin: 0 0 var(--ds-space-2);
+  color: var(--ds-color-ink-muted);
+  font-size: var(--ds-text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.ds-pageHeader__title {
+  margin: 0;
+  font-size: var(--ds-text-xl);
+  line-height: var(--ds-leading-tight);
+}
+.ds-pageHeader__description {
+  max-width: 60ch;
+  margin: var(--ds-space-2) 0 0;
+  color: var(--ds-color-ink-muted);
+  line-height: var(--ds-leading-normal);
+}
+.ds-pageHeader__actions { display: flex; flex-wrap: wrap; gap: var(--ds-space-2); }
+
+.ds-surface {
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-surface);
+  box-shadow: var(--ds-shadow-sm);
+}
+.ds-surface--subtle { background: var(--ds-color-surface-subtle); box-shadow: none; }
+
+.ds-button,
+.ds-iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5rem;
+  border: 1px solid transparent;
+  border-radius: var(--ds-radius-md);
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background-color var(--ds-motion-fast) ease, border-color var(--ds-motion-fast) ease, color var(--ds-motion-fast) ease;
+}
+.ds-button { gap: var(--ds-space-2); padding: 0.55rem 0.9rem; }
+.ds-iconButton { width: 2.5rem; padding: 0; }
+.ds-button:focus-visible,
+.ds-iconButton:focus-visible,
+.ds-shell :where(a, input, select, textarea, button):focus-visible { outline: none; box-shadow: var(--ds-focus-ring); }
+.ds-button:disabled,
+.ds-iconButton:disabled { cursor: not-allowed; opacity: 0.55; }
+.ds-button--primary { background: var(--ds-color-brand); color: var(--ds-color-on-brand); }
+.ds-button--primary:hover:not(:disabled) { background: var(--ds-color-brand-strong); }
+.ds-button--secondary { border-color: var(--ds-color-border-strong); background: var(--ds-color-surface); color: var(--ds-color-ink); }
+.ds-button--secondary:hover:not(:disabled) { background: var(--ds-color-surface-subtle); }
+.ds-button--subtle { background: transparent; color: var(--ds-color-ink-muted); }
+.ds-button--subtle:hover:not(:disabled) { background: var(--ds-color-surface-subtle); color: var(--ds-color-ink); }
+.ds-button--danger { background: var(--ds-color-danger); color: #fff; }
+
+.ds-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
+  padding: 0.15rem 0.55rem;
+  border: 1px solid currentColor;
+  border-radius: var(--ds-radius-pill);
+  font-size: var(--ds-text-xs);
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: capitalize;
+}
+.ds-status--success { color: var(--ds-color-success); background: var(--ds-color-success-bg); }
+.ds-status--warning { color: var(--ds-color-warning); background: var(--ds-color-warning-bg); }
+.ds-status--danger { color: var(--ds-color-danger); background: var(--ds-color-danger-bg); }
+.ds-status--info { color: var(--ds-color-info); background: var(--ds-color-info-bg); }
+
+.ds-field { display: grid; gap: var(--ds-space-2); }
+.ds-field__label { font-size: var(--ds-text-sm); font-weight: 650; }
+.ds-field__hint { color: var(--ds-color-ink-muted); font-size: var(--ds-text-sm); }
+.ds-field__error { color: var(--ds-color-danger); font-size: var(--ds-text-sm); }
+.ds-field :where(input, select, textarea) { min-height: 2.5rem; border: 1px solid var(--ds-color-border-strong); border-radius: var(--ds-radius-md); padding: 0.55rem 0.7rem; background: var(--ds-color-surface); }
+
+.ds-empty,
+.ds-state { padding: var(--ds-space-8); text-align: center; }
+.ds-empty__title,
+.ds-state__title { margin: 0; font-size: var(--ds-text-lg); }
+.ds-empty__description,
+.ds-state__description { max-width: 48ch; margin: var(--ds-space-2) auto 0; color: var(--ds-color-ink-muted); line-height: var(--ds-leading-normal); }
+
+@media (max-width: 48rem) {
+  .ds-pageHeader { flex-direction: column; }
+  .ds-pageHeader__actions { width: 100%; }
+  .ds-pageHeader__actions .ds-button { flex: 1 1 auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-button,
+  .ds-iconButton { transition: none; }
+}

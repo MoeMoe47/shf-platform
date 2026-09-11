@@ -116,7 +116,7 @@ export default function AppShellLayout({ app="app", Sidebar, title="App", header
   };
 
   return (
-    <div className="sh-shell" data-app={app}>
+    <div className="sh-shell ds-shell" data-app={app} data-ds-theme="shf" data-shell-family="product">
       <header className="sh-header app-header">
         <button
           type="button"

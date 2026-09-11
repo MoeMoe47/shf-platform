@@ -1,0 +1,75 @@
+/* FE-1 shared structural tokens. Product themes override --ds-brand-* only. */
+:root {
+  --ds-color-ink: #17212b;
+  --ds-color-ink-muted: #5d6874;
+  --ds-color-surface: #ffffff;
+  --ds-color-surface-subtle: #f5f7f9;
+  --ds-color-canvas: #f1f3f5;
+  --ds-color-border: #d8dee5;
+  --ds-color-border-strong: #b8c2cc;
+  --ds-color-brand: #d94717;
+  --ds-color-brand-strong: #b93810;
+  --ds-color-on-brand: #ffffff;
+  --ds-color-success: #087443;
+  --ds-color-success-bg: #e8f6ef;
+  --ds-color-warning: #8a4b00;
+  --ds-color-warning-bg: #fff4df;
+  --ds-color-danger: #b42318;
+  --ds-color-danger-bg: #fff0ee;
+  --ds-color-info: #175cd3;
+  --ds-color-info-bg: #eff8ff;
+
+  --ds-space-1: 0.25rem;
+  --ds-space-2: 0.5rem;
+  --ds-space-3: 0.75rem;
+  --ds-space-4: 1rem;
+  --ds-space-5: 1.25rem;
+  --ds-space-6: 1.5rem;
+  --ds-space-8: 2rem;
+  --ds-space-10: 2.5rem;
+
+  --ds-radius-sm: 0.25rem;
+  --ds-radius-md: 0.5rem;
+  --ds-radius-lg: 0.75rem;
+  --ds-radius-pill: 999px;
+
+  --ds-shadow-sm: 0 1px 2px rgb(16 24 40 / 0.06);
+  --ds-shadow-md: 0 8px 24px rgb(16 24 40 / 0.08);
+
+  --ds-font-sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ds-font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --ds-text-xs: 0.75rem;
+  --ds-text-sm: 0.875rem;
+  --ds-text-md: 1rem;
+  --ds-text-lg: 1.25rem;
+  --ds-text-xl: 1.75rem;
+  --ds-leading-tight: 1.2;
+  --ds-leading-normal: 1.5;
+
+  --ds-focus-ring: 0 0 0 3px rgb(23 92 211 / 0.28);
+  --ds-content-editorial: 48rem;
+  --ds-content-standard: 75rem;
+  --ds-content-dense: 90rem;
+  --ds-content-workspace: 100%;
+  --ds-breakpoint-tablet: 48rem;
+  --ds-breakpoint-mobile: 40rem;
+  --ds-motion-fast: 120ms;
+  --ds-motion-standard: 180ms;
+  --ds-brand-shf: #d94717;
+  --ds-brand-shs: #175cd3;
+  --ds-brand-oas: #c6954b;
+  --ds-brand-civicsure: #176b70;
+}
+
+[data-ds-theme="shf"] { --ds-color-brand: var(--ds-brand-shf); --ds-color-brand-strong: #b93810; }
+[data-ds-theme="shs"] { --ds-color-brand: var(--ds-brand-shs); --ds-color-brand-strong: #1246a4; }
+[data-ds-theme="oas"] { --ds-color-brand: var(--ds-brand-oas); --ds-color-brand-strong: #8b672f; }
+[data-ds-theme="civicsure"] { --ds-color-brand: var(--ds-brand-civicsure); --ds-color-brand-strong: #0f5054; }
+
+@media (max-width: 48rem) {
+  :root { --ds-space-page: var(--ds-space-5); }
+}
+
+@media (min-width: 48.01rem) {
+  :root { --ds-space-page: var(--ds-space-8); }
+}

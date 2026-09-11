@@ -6,7 +6,7 @@ import AdminSidebar from "@/components/admin/AdminSidebar.jsx";
 export default function AdminLayout({ children }) {
   return (
     // IMPORTANT: no "no-sidebar" here
-    <div className="app-root" data-app="admin">
+    <div className="app-root ds-shell" data-app="admin" data-ds-theme="shs" data-shell-family="operator">
       {/* Top header bar */}
       <AdminHeader />
 

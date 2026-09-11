@@ -166,7 +166,7 @@ export default function CurriculumLayout() {
     : { title: humanizeLastSegment(pathname), subtitle: "" };
 
   return (
-    <div className="ld-shell">
+    <div className="ld-shell ds-shell" data-ds-theme="shf" data-shell-family="learning">
       <a href="#curriculum-main" className="ld-skip">Skip to main content</a>
 
       <button

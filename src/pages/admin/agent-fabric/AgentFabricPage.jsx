@@ -1,5 +1,6 @@
 import React from "react";
 import "./agent-fabric.css";
+import { Button, StatusBadge } from "@/components/shared/DesignSystemPrimitives.jsx";
 
 const API_ROOT = "/api";
 
@@ -176,7 +177,7 @@ export default function AgentFabricPage() {
               <span>Canonical Agents</span>
               <strong>{agents.length ? `${agents.length} registered` : loading ? "Loading" : "Unavailable"}</strong>
             </div>
-            <button type="button" onClick={loadAgentFabric}>Refresh</button>
+            <Button type="button" variant="subtle" onClick={loadAgentFabric}>Refresh</Button>
           </div>
           <div className="agent-fabric-table-wrap">
             <table>
@@ -200,7 +201,7 @@ export default function AgentFabricPage() {
                     <td><strong>{agent.name}</strong><small>{label(agent.layer)}</small></td>
                     <td><code>{agent.agent_id}</code></td>
                     <td>{agent.role || "Registered SHS agent"}</td>
-                    <td>{label(statusForAgent(agent, healthRows))}</td>
+                    <td><StatusBadge status={statusForAgent(agent, healthRows)}>{label(statusForAgent(agent, healthRows))}</StatusBadge></td>
                     <td>{agent.allowedTools.slice(0, 3).join(", ") || "No tools"}</td>
                     <td>{agent.policy?.notes || "Governed by Agent Fabric policy."}</td>
                   </tr>

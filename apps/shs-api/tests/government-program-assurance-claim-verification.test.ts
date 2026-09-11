@@ -80,6 +80,17 @@ test("contradictions are durable and do not silently create Truth", async () => 
   assert.equal(contradiction.materiality, "BLOCKING"); assert.equal(repo.contradictions.length, 1); assert.equal((repo as any).truth, undefined);
 });
 
+test("explicit failed verification is durable and requires a reason", async () => {
+  const repo = new MemoryRepo(); const sut = service(repo);
+  await sut.linkEvidence(user, "claim-1", { evidenceId: "evidence-f", provenanceComplete: true });
+  const verification = await sut.requestVerification(user, { claimId: "claim-1", methodId: "method-1", methodVersion: 1, verifierReference: "reviewer-f" });
+  await assert.rejects(() => sut.determineVerification(user, verification.verification_id, { reviewerReference: "reviewer-f-2", outcome: "FAILED" }), /GPA_VERIFICATION_FAILURE_REASON_REQUIRED/);
+  const failed = await sut.determineVerification(user, verification.verification_id, { reviewerReference: "reviewer-f-2", outcome: "FAILED", rationale: "Evidence contradicts the required service period." });
+  assert.equal(failed.status, "FAILED");
+  assert.match(failed.determination_rationale, /contradicts/);
+  assert.equal(repo.claims.get("claim-1").status, "DRAFT");
+});
+
 test("cross-tenant actor context is rejected before claim access", async () => {
   const sut = service();
   await assert.rejects(() => sut.readiness({ ...user, tenantId: "tenant:other" }, "claim-1"), /GOVERNMENT_ASSURANCE_ORG_CONTEXT_REQUIRED/);

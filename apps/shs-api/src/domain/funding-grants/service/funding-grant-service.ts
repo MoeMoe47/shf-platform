@@ -45,7 +45,9 @@ function scopeFor(actor: any) {
   return {
     organization_id: organizationId,
     actor_id: userId,
-    platform_global: actorHasPlatformAuthority(actor) || actorHasPermission(actor, "funding.grant.manage"),
+    // Grant management permission is organization-scoped. Only the existing
+    // platform-global role may intentionally bypass organization filtering.
+    platform_global: actorHasPlatformAuthority(actor),
   };
 }
 
@@ -95,10 +97,23 @@ function decimalGt(a: string, b: string) {
   return Number(a) > Number(b);
 }
 
+function dateKey(value: any) {
+  if (value instanceof Date) return value.toISOString().slice(0, 10);
+  return String(value || "").slice(0, 10);
+}
+
 function transitionEvent(status: string) {
   if (status === "ACTIVE") return "funding.grant.activated";
   return `funding.grant.${String(status).toLowerCase()}`;
 }
+
+const ALLOWED_GRANT_TRANSITIONS: Record<string, string[]> = {
+  AWARDED: ["ACTIVE", "CLOSED", "CANCELLED"],
+  ACTIVE: ["SUSPENDED", "CLOSED", "CANCELLED"],
+  SUSPENDED: ["ACTIVE", "CLOSED", "CANCELLED"],
+  CLOSED: [],
+  CANCELLED: [],
+};
 
 export class FundingGrantService {
   constructor(
@@ -163,15 +178,52 @@ export class FundingGrantService {
     if (!GRANT_STATUSES.includes(nextStatus as any)) throw new FundingGrantError("INVALID_STATUS", "Unsupported grant status.", 400);
     const scope = scopeFor(actor);
     return withTransaction(async (executor) => {
-      const current = await this.repo.getGrantForUpdate(grantId, executor);
+      const current = await this.repo.getGrantForUpdate(grantId, scope, executor);
       if (!current) throw new FundingGrantError("NOT_FOUND", "Grant not found.", 404);
+      if (nextStatus === "ACTIVE" && current.status === "SUSPENDED" && current.end_date && dateKey(current.end_date) < dateKey(new Date())) {
+        throw new FundingGrantError("FUNDING_EXPIRED", "Expired grants cannot be resumed.", 403);
+      }
       if (["CLOSED", "CANCELLED"].includes(current.status) && current.status !== nextStatus) {
         throw new FundingGrantError("TERMINAL_STATUS", "Closed or cancelled grants cannot re-enter lifecycle.", 400);
+      }
+      if (!ALLOWED_GRANT_TRANSITIONS[current.status]?.includes(nextStatus)) {
+        throw new FundingGrantError("INVALID_TRANSITION", `${current.status} cannot transition to ${nextStatus}.`, 409);
       }
       const updated = await this.repo.transitionGrant(grantId, nextStatus, executor);
       const hydrated = await this.repo.getGrantForAuthority(grantId, executor);
       await this.writeAudit(transitionEvent(nextStatus), grantId, scope, { status: current.status }, { status: updated.status }, executor);
       return hydrated;
+    });
+  }
+
+  async authorizeFundedUse(input: any, actor: any) {
+    if (!hasView(actor)) throw new FundingGrantError("FORBIDDEN", "Funding grant view permission is required.", 403);
+    const scope = scopeFor(actor);
+    const grantId = String(input?.grantId || input?.grant_id || "").trim();
+    const programId = String(input?.programId || input?.program_id || "").trim();
+    const occurredOn = String(input?.occurredOn || input?.occurred_on || "").trim();
+    if (!grantId || !programId || !/^\d{4}-\d{2}-\d{2}$/.test(occurredOn)) {
+      throw new FundingGrantError("INVALID_USE", "Grant, program, and occurredOn (YYYY-MM-DD) are required.", 400);
+    }
+    return withTransaction(async (executor) => {
+      const grant = await this.repo.getGrantForUpdate(grantId, scope, executor);
+      if (!grant) throw new FundingGrantError("NOT_FOUND", "Grant not found.", 404);
+      if (grant.status !== "ACTIVE") throw new FundingGrantError("FUNDING_NOT_ACTIVE", "Funded use requires an active grant.", 403);
+      if (occurredOn < dateKey(grant.start_date) || (grant.end_date && occurredOn > dateKey(grant.end_date))) {
+        throw new FundingGrantError("FUNDING_PERIOD_INVALID", "Funded use is outside the grant effective period.", 403);
+      }
+      const allocations = await this.repo.listAllocations(grantId, executor, scope);
+      const allocation = allocations.find((item: any) => item.program_id === programId);
+      if (!allocation) throw new FundingGrantError("PROGRAM_NOT_AUTHORIZED", "Grant has no allocation for this program.", 403);
+      return {
+        authorized: true,
+        grant_id: grantId,
+        allocation_id: allocation.allocation_id,
+        program_id: programId,
+        organization_id: scope.organization_id,
+        occurred_on: occurredOn,
+        authorization_basis: "ACTIVE_GRANT_PROGRAM_ALLOCATION",
+      };
     });
   }
 
@@ -188,9 +240,10 @@ export class FundingGrantService {
       created_by_user_id: scope.actor_id,
     };
     return withTransaction(async (executor) => {
-      const grant = await this.repo.getGrantForUpdate(allocation.grant_id, executor);
+      const grant = await this.repo.getGrantForUpdate(allocation.grant_id, scope, executor);
       if (!grant) throw new FundingGrantError("NOT_FOUND", "Grant not found.", 404);
       if (["CLOSED", "CANCELLED"].includes(grant.status)) throw new FundingGrantError("GRANT_CLOSED", "Closed or cancelled grants cannot receive new allocations.", 400);
+      if (grant.status === "SUSPENDED") throw new FundingGrantError("GRANT_SUSPENDED", "Suspended grants cannot receive new allocations.", 409);
       const program = await this.repo.getProgram(allocation.program_id, executor);
       if (!program) throw new FundingGrantError("PROGRAM_NOT_FOUND", "Program not found.", 404);
       if (grant.restriction_type === "PROGRAM_RESTRICTED" && grant.restricted_program_id !== allocation.program_id) {

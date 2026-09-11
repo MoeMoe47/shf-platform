@@ -2,6 +2,7 @@ import { fail, ok } from "../../../api/response-envelope.js";
 import { CareerService } from "../service/career-service.js";
 import { requirePermission } from "../../../auth/permission-guard.js";
 import * as careerPathwayService from "../../career-pathways/service/career-pathway-service.js";
+import * as learnerResultService from "../../curriculum/service/learner-result-service.js";
 
 const service = new CareerService();
 
@@ -22,7 +23,8 @@ export function registerCareerRoutes(app: any) {
     try {
       const actor = { organization_id: req.user.active_organization_id || req.user.organization_id, user_id: req.user.user_id };
       const pathway = await careerPathwayService.deriveLearnerPathway(actor);
-      return res.json(ok(pathway));
+      const learnerResults = await learnerResultService.getLearnerResults({ ...actor, tenant_id: req.user.tenant_id || `tenant:${actor.organization_id}` });
+      return res.json(ok({ ...pathway, learnerResultSummary: { mastery: learnerResults.mastery, progress: learnerResults.progress } }));
     } catch (error) {
       return next(error);
     }

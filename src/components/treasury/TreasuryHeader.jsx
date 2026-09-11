@@ -13,7 +13,7 @@ export default function TreasuryHeader() {
 
       {/* Cross-app cluster */}
       <nav className="crb-crossapp" aria-label="Apps">
-        <CrossAppLink className="sh-btn sh-btn--soft" app="career"     to="/dashboard">Career</CrossAppLink>
+        <CrossAppLink className="sh-btn sh-btn--soft" app="career"     to="/">Career</CrossAppLink>
         <CrossAppLink className="sh-btn sh-btn--soft" app="curriculum" to="/asl/dashboard">Curriculum</CrossAppLink>
         <CrossAppLink className="sh-btn sh-btn--soft" app="credit"     to="/report">Credit</CrossAppLink>
         <CrossAppLink className="sh-btn sh-btn--soft" app="debt"       to="/dashboard">Debt</CrossAppLink>

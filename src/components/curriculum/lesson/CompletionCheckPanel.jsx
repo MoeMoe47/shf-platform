@@ -22,16 +22,49 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { markLessonComplete } from "@/shared/progress/progressClient.js";
+import { checkAssignmentCompletion } from "@/lib/curriculum/activityApi.js";
 import { useCelebration } from "@/experience/celebrations/CelebrationProvider.jsx";
 import { ChevronRightIcon, ClipboardIcon } from "@/components/curriculum/icons.jsx";
 
-export default function CompletionCheckPanel({ lesson, curriculum, actorId, addPoints, nextHref }) {
+export default function CompletionCheckPanel({ lesson, curriculum, actorId, addPoints, nextHref, assignmentId, unitStableKey, role }) {
   const [completed, setCompleted] = React.useState(false);
   const [syncStatus, setSyncStatus] = React.useState("");
   const [syncPending, setSyncPending] = React.useState(false);
   const [requirements, setRequirements] = React.useState([]);
   const { celebrateAchievement } = useCelebration();
   const celebratedRef = React.useRef(false);
+
+  async function handleCanonicalCheck() {
+    setSyncPending(true);
+    setSyncStatus("checking");
+    setRequirements([]);
+    try {
+      const result = await checkAssignmentCompletion(role, assignmentId, unitStableKey, lesson.stableKey || lesson.slug || lesson.id);
+      if (!result.complete) {
+        setRequirements(result.requirements || []);
+        setSyncStatus("requirements");
+        return;
+      }
+      setCompleted(true);
+      setSyncStatus("synchronized");
+      addPoints?.(5);
+      if (!celebratedRef.current) {
+        celebratedRef.current = true;
+        celebrateAchievement({ sourceDomain: "curriculum", sourceRecordId: assignmentId, achievementType: "curriculum.lesson.completed", status: "synchronized", verified: true, title: lesson.title || "Lesson completed" });
+      }
+    } catch (error) {
+      setSyncStatus("rejected");
+      setRequirements([{ requirementId: "request", required: true, status: "ERROR", label: "Completion check", detail: error.message || "The completion check failed. Try again." }]);
+    } finally { setSyncPending(false); }
+  }
+
+  React.useEffect(() => {
+    if (!assignmentId || !unitStableKey) return;
+    handleCanonicalCheck();
+    // The assignment-scoped completion endpoint is the canonical read/check
+    // boundary; rechecking on mount rehydrates refreshes and new sessions.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [assignmentId, unitStableKey, lesson.stableKey, lesson.slug, lesson.id]);
 
   function handleClick() {
     markLessonComplete({
@@ -109,7 +142,7 @@ export default function CompletionCheckPanel({ lesson, curriculum, actorId, addP
               Next Lesson <ChevronRightIcon size={16} />
             </Link>
           ) : (
-            <button type="button" className="ld-btn ld-btnPrimary" disabled={completed || syncPending} onClick={handleClick}>
+            <button type="button" className="ld-btn ld-btnPrimary" disabled={completed || syncPending} onClick={assignmentId ? handleCanonicalCheck : handleClick}>
               {completed ? "Lesson Complete ✓" : syncPending ? "Checking…" : "Check Completion"}
             </button>
           )}

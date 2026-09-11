@@ -17,6 +17,30 @@ function sendDomainError(error: any, res: any, next: any) {
 }
 
 export function registerOpportunityRoutes(app: any) {
+  app.get("/public/career/opportunities", async (_req: any, res: any, next: any) => {
+    try { return res.json(ok({ items: await service.listPublicOpportunities() })); } catch (error) { return next(error); }
+  });
+
+  app.get("/public/career/opportunities/:id", async (req: any, res: any, next: any) => {
+    try {
+      const item = await service.getPublicOpportunity(req.params.id);
+      if (!item) return res.status(404).json(fail("NOT_FOUND", "Opportunity not found."));
+      return res.json(ok(item));
+    } catch (error) { return next(error); }
+  });
+
+  app.get("/public/career/employers", async (_req: any, res: any, next: any) => {
+    try { return res.json(ok({ items: await service.listPublicEmployers() })); } catch (error) { return next(error); }
+  });
+
+  app.get("/public/career/employers/:id", async (req: any, res: any, next: any) => {
+    try {
+      const item = await service.getPublicEmployer(req.params.id);
+      if (!item) return res.status(404).json(fail("NOT_FOUND", "Organization not found."));
+      return res.json(ok(item));
+    } catch (error) { return next(error); }
+  });
+
   app.get("/opportunities", requirePermission(SHS_SECURITY_PERMISSIONS.OPPORTUNITY_VIEW), async (req: any, res: any, next: any) => {
     try {
       const actor = actorFromRequest(req);
@@ -55,5 +79,12 @@ export function registerOpportunityRoutes(app: any) {
     } catch (error) {
       return sendDomainError(error, res, next);
     }
+  });
+
+  app.patch("/opportunities/:id/public-visibility", requirePermission(SHS_SECURITY_PERMISSIONS.OPPORTUNITY_MANAGE), async (req: any, res: any, next: any) => {
+    try {
+      const updated = await service.setOpportunityPublicVisibility(req.params.id, actorFromRequest(req), String(req.body?.visibility || ""));
+      return res.json(ok(updated));
+    } catch (error) { return sendDomainError(error, res, next); }
   });
 }

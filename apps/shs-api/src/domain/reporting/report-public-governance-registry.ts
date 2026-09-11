@@ -15,7 +15,7 @@ export type PublicReportGovernanceRegistration = Readonly<{
   registration_version: number;
   status: "ACTIVE";
   result_reference_prefix: string;
-  disclosure_evaluator: "CURRICULUM_EDUCATION_ACTIVITY_V1" | "HUB_REFERRAL_ACTIVITY_V1" | null;
+  disclosure_evaluator: "CURRICULUM_EDUCATION_ACTIVITY_V1" | "HUB_REFERRAL_ACTIVITY_V1" | "GPA_PROGRAM_ASSURANCE_V1" | null;
 }>;
 
 export const PUBLIC_REPORT_GOVERNANCE_REGISTRATIONS: ReadonlyArray<PublicReportGovernanceRegistration> = Object.freeze([
@@ -56,6 +56,25 @@ export const PUBLIC_REPORT_GOVERNANCE_REGISTRATIONS: ReadonlyArray<PublicReportG
     status: "ACTIVE",
     result_reference_prefix: "hub.referral.created_count:v1",
     disclosure_evaluator: "HUB_REFERRAL_ACTIVITY_V1",
+  }),
+  Object.freeze({
+    report_id: "report.gpa.program_assurance_public_summary.v1",
+    report_version: 1,
+    metric_id: "workforce.employment.started_verified_count.v1",
+    metric_version: 1,
+    domain: "GOVERNMENT_PROGRAM_ASSURANCE",
+    public_governance_status: "POLICY_REQUIRED",
+    required_policy_key: "PUBLIC_AGGREGATE_GPA_PROGRAM_ASSURANCE",
+    snapshot_representation_type: "PUBLIC_SAFE_AGGREGATE",
+    semantic_label: "Verified employment starts",
+    semantic_class: "VERIFIED_PROGRAM_OUTCOME",
+    truth_public_population_required: true,
+    publication_projection_type: "SHF_PUBLIC_IMPACT_PROJECTION",
+    public_read_model_id: "gpa-program-assurance-summary",
+    registration_version: 1,
+    status: "ACTIVE",
+    result_reference_prefix: "workforce.employment.started_verified_count:v1",
+    disclosure_evaluator: "GPA_PROGRAM_ASSURANCE_V1",
   }),
 ]);
 

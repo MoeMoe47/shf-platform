@@ -1,9 +1,11 @@
 // src/layouts/CareerLayout.jsx
 import React from "react";
 import { Outlet } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import AppShellLayout from "@/layouts/AppShellLayout.jsx";
 import CareerSidebar from "@/components/career/CareerSidebar.jsx";
 import SHFFooter from "@/components/shared/SHFFooter.jsx";
+import CareerPublicLayout from "@/components/career/CareerPublicLayout.jsx";
 import { useCompanion } from "@/hooks/useCompanion.js";
 
 // The floating .coach-fab and this file's own coachOpen state/Alt+C
@@ -15,6 +17,10 @@ import { useCompanion } from "@/hooks/useCompanion.js";
 // trigger identity (see src/companion/CompanionProvider.jsx).
 export default function CareerLayout() {
   const companion = useCompanion();
+  const location = useLocation();
+  const isPublic = location.pathname === "/" || location.pathname === "/explore" || location.pathname === "/pathways" || location.pathname === "/discovery" || location.pathname === "/opportunities" || location.pathname === "/employers" || location.pathname.startsWith("/careers/") || location.pathname.startsWith("/pathways/") || location.pathname.startsWith("/opportunities/") || location.pathname.startsWith("/employers/");
+
+  if (isPublic) return <CareerPublicLayout />;
 
   return (
     <AppShellLayout

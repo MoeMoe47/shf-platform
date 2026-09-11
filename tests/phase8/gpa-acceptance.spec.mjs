@@ -18,16 +18,16 @@ test("GPA operating environment loads the controlled pilot scope", async ({ page
   await page.goto(`${frontend}/index.html#/operator/government-assurance`, { waitUntil: "domcontentloaded" });
   await expect(page.getByRole("heading", { name: "Government Program Assurance" })).toBeVisible();
   for (const label of ["Overview", "Programs", "Providers", "Funding", "Claims", "Verification", "Monitoring", "Reconciliation", "Audit", "Data Sources", "Reports", "Pilot Administration"]) {
-    await expect(page.getByRole("button", { name: label, exact: true })).toBeVisible();
+    await expect(page.getByRole("link", { name: label, exact: true })).toBeVisible();
   }
-  await page.getByRole("button", { name: "Pilot Administration", exact: true }).click();
+  await page.getByRole("link", { name: "Pilot Administration", exact: true }).click();
   await expect(page.getByText("Controlled County Assurance Pilot")).toBeVisible();
-  await page.getByRole("button", { name: "Public", exact: true }).click();
+  await page.getByRole("link", { name: "Transparency", exact: true }).click();
   await expect(page.getByText("Public-Safe Transparency")).toBeVisible();
   await expect(page.getByText("120")).toBeVisible();
 
   for (const label of ["Programs", "Providers", "Funding", "Claims", "Verification", "Monitoring", "Reconciliation", "Audit", "Data Sources", "Reports"]) {
-    await page.getByRole("button", { name: label, exact: true }).click();
+    await page.getByRole("link", { name: label, exact: true }).click();
     const heading = label === "Data Sources" ? "Data Sources / Data Quality" : label === "Monitoring" ? "Monitoring Work Queue" : label === "Reports" ? "Controlled Reports" : `${label} Assurance`;
     await expect(page.getByRole("heading", { name: heading, exact: true })).toBeVisible();
     if (label === "Claims") {

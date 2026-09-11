@@ -65,6 +65,26 @@ export const APPROVED_HUB_REFERRAL_POLICY_V1 = Object.freeze({
   combination_risk_rules: { review_required: true, narrow_population_scope: true },
 });
 
+export const APPROVED_GPA_PROGRAM_ASSURANCE_POLICY_V1 = Object.freeze({
+  minimum_group_size: 10,
+  cohort_size: { minimum: 10 },
+  allowed_geography_levels: ["COUNTY", "STATE", "ORGANIZATION_WIDE"],
+  allowed_program_granularity: ["NAMED_PROGRAM", "FOUNDATION_WIDE"],
+  reporting_period: ["QUARTERLY", "ANNUAL"],
+  reidentification_risk: { review_required: true },
+  rare_event_risk: { review_required: true },
+  sensitive_outcome_type: "WORKFORCE_OUTCOME_AGGREGATE_ONLY",
+  longitudinal_linkage: { review_required: true },
+  cross_metric_combination_risk: { review_required: true },
+  suppression_required: true,
+  exact_count_allowed: true,
+  display_mode: ["EXACT_COUNT", "SUPPRESSED_LT_10"],
+  complementary_suppression_required: true,
+  reconstruction_risk: { review_required: true },
+  freshness_rules: { data_as_of_required: true, max_age_months: 12, renewed_review_required: true },
+  combination_risk_rules: { review_required: true, narrow_population_scope: true },
+});
+
 function scopeFromActor(actor: any) {
   const actorId = actor?.user_id || actor?.id;
   const organizationId = actor?.organization_id;
@@ -162,6 +182,7 @@ export class ReportPublicDisclosurePolicyService {
       const registration = getPublicReportGovernanceRegistration(policy.report_id, Number(policy.report_version));
       if (registration?.required_policy_key === CURRICULUM_DISCLOSURE_POLICY.policy_key && !sameJson(policy.policy_definition, APPROVED_CURRICULUM_POLICY_V1)) throw new Error("Policy values do not match institutionally approved curriculum policy v1");
       if (registration?.required_policy_key === "PUBLIC_AGGREGATE_HUB_REFERRAL_ACTIVITY" && !sameJson(policy.policy_definition, APPROVED_HUB_REFERRAL_POLICY_V1)) throw new Error("Policy values do not match institutionally approved Hub referral policy v1");
+      if (registration?.required_policy_key === "PUBLIC_AGGREGATE_GPA_PROGRAM_ASSURANCE" && !sameJson(policy.policy_definition, APPROVED_GPA_PROGRAM_ASSURANCE_POLICY_V1)) throw new Error("Policy values do not match institutionally approved GPA program assurance policy v1");
       if (policy.institutional_signoff_required) {
         const signoffs = await this.repo.listSignoffs(policyId, scope, db);
         for (const type of REQUIRED_SIGNOFF_TYPES) {

@@ -6,6 +6,7 @@ import {
   normalizeClassification, policyAllows, type GpaActionClass,
 } from "../model/source-scope.js";
 import { SourceScopeRepo } from "../repo/source-scope-repo.js";
+import { writeAuditEvent } from "../../audit/service/audit-helper.js";
 
 function normalizeActor(actor: any): AssuranceActor {
   return {
@@ -48,7 +49,7 @@ export type SourceAccessInput = {
 };
 
 export class SourceScopeService {
-  constructor(private repo = new SourceScopeRepo()) {}
+  constructor(private repo = new SourceScopeRepo(), private auditWriter: typeof writeAuditEvent = writeAuditEvent) {}
 
   private context(actorInput: any) {
     const actor = normalizeActor(actorInput);
@@ -100,6 +101,58 @@ export class SourceScopeService {
   async listSourceHealth(actorInput: any) {
     const { actor, scope } = this.context(actorInput); permission(actor, SHS_SECURITY_PERMISSIONS.GOVERNMENT_ASSURANCE_SOURCE_SCOPE_VIEW);
     return (await this.repo.listSourceHealth(scope)).map(toPublicRow);
+  }
+
+  async recordSourceHealthObservation(actorInput: any, input: any) {
+    const { actor, scope } = this.context(actorInput);
+    permission(actor, SHS_SECURITY_PERMISSIONS.GOVERNMENT_ASSURANCE_SOURCE_SCOPE_MANAGE);
+    requireScope(input, scope);
+    if (!input.sourceSystemId || !input.currentFreshnessState || !input.observedAt || !input.provenance) {
+      throw new Error("GPA_SOURCE_HEALTH_OBSERVATION_FIELDS_REQUIRED");
+    }
+    const freshnessStates = ["UNKNOWN", "FRESH", "STALE", "DEGRADED"];
+    const degradedStates = ["HEALTHY", "DEGRADED", "UNAVAILABLE"];
+    if (!freshnessStates.includes(String(input.currentFreshnessState))) throw new Error("GPA_SOURCE_HEALTH_STATE_INVALID");
+    if (input.degradedState && !degradedStates.includes(String(input.degradedState))) throw new Error("GPA_SOURCE_HEALTH_DEGRADED_STATE_INVALID");
+    const source = await this.repo.getSourceSystem(String(input.sourceSystemId), scope);
+    if (!source || source.status !== "ACTIVE") throw new Error("GPA_SOURCE_SYSTEM_NOT_ACTIVE");
+    const previous = await this.repo.getSourceHealth(String(input.sourceSystemId), scope);
+    const observed = await this.repo.recordSourceHealthObservation({
+      source_system_id: String(input.sourceSystemId), organization_id: scope.organizationId, tenant_id: scope.tenantId,
+      last_successful_sync: input.lastSuccessfulSync, last_attempted_sync: input.lastAttemptedSync || input.observedAt,
+      freshness_threshold_seconds: input.freshnessThresholdSeconds, stale_after: input.staleAfter,
+      current_freshness_state: String(input.currentFreshnessState), last_schema_verification: input.lastSchemaVerification,
+      authentication_state: input.authenticationState || "UNKNOWN", degraded_state: input.degradedState || "HEALTHY",
+    });
+    if (!observed) throw new Error("GPA_SOURCE_HEALTH_SCOPE_MISMATCH");
+    await this.auditWriter({
+      audit_event_id: `gpa_source_health_${randomUUID()}`, organization_id: scope.organizationId, actor_user_id: scope.userId,
+      target_object_type: "GPA_SOURCE_HEALTH", target_object_id: String(input.sourceSystemId), action_type: "OBSERVED",
+      previous_state_json: previous, new_state_json: { ...observed, observation: input },
+      reason_text: input.reason || "Source health observation recorded", correlation_id: input.correlationId || `gpa_source_health_${randomUUID()}`,
+      source_channel: "government_assurance",
+    });
+    return toPublicRow({ ...observed, observationType: input.observationType || "SOURCE_HEALTH", observedAt: input.observedAt, provenance: input.provenance });
+  }
+
+  async createSourceAssuranceDependency(actorInput: any, input: any) {
+    const { actor, scope } = this.context(actorInput);
+    permission(actor, SHS_SECURITY_PERMISSIONS.GOVERNMENT_ASSURANCE_SOURCE_SCOPE_MANAGE);
+    requireScope(input, scope);
+    if (!input.sourceSystemId || (!input.providerReference && !input.programReference) || !input.provenance) throw new Error("GPA_SOURCE_DEPENDENCY_FIELDS_REQUIRED");
+    const source = await this.repo.getSourceSystem(String(input.sourceSystemId), scope);
+    if (!source || source.status !== "ACTIVE") throw new Error("GPA_SOURCE_SYSTEM_NOT_ACTIVE");
+    return toPublicRow(await this.repo.createSourceAssuranceDependency({
+      dependency_id: String(input.dependencyId || `gpa_source_dependency_${randomUUID()}`), source_system_id: String(input.sourceSystemId),
+      organization_id: scope.organizationId, tenant_id: scope.tenantId, provider_reference: input.providerReference,
+      program_reference: input.programReference, service_reference: input.serviceReference, effective_from: input.effectiveFrom,
+      effective_to: input.effectiveTo, provenance_json: input.provenance, created_by: scope.userId,
+    }));
+  }
+
+  async listSourceAssuranceDependencies(actorInput: any) {
+    const { actor, scope } = this.context(actorInput); permission(actor, SHS_SECURITY_PERMISSIONS.GOVERNMENT_ASSURANCE_SOURCE_SCOPE_VIEW);
+    return (await this.repo.listSourceAssuranceDependencies(scope)).map(toPublicRow);
   }
 
   async listMappings(actorInput: any) {

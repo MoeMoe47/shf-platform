@@ -1,0 +1,832 @@
+/* ------------------------------------------------------------------
+   OAS Domain 02 — Purpose & Boundaries. Loaded alongside
+   oas-landing.css (tokens, header, footer, buttons, .oas__eyebrow /
+   .oas__container reused from there). Everything in this file is
+   page-specific: the compact header refinements (mirroring OAS-1 /
+   Control Domains), the hero, the section-nav bar, the 3-column
+   content, and the Dive Deeper band — none of which exist on the
+   other OAS pages.
+
+   The hero's visual foundation is one asset: the final approved
+   background (.oaspb-hero__bg, purpose-boundaries-final-background.png
+   — planet, dust, orbital atmosphere) plus a left-side white fade
+   (.oaspb-hero__bg-fade). Earlier passes added a live SVG target/halo/
+   orbit graphic on top of it; a cleanup pass removed that entirely as
+   duplicate visual weight — see OASPurposeBoundariesPage.jsx. A
+   silver/gold dust particle canvas (.oaspb-hero__atmosphere, driven by
+   OASPurposeBoundariesMotion.jsx) now sits above the background/fade
+   and below the live content — autonomous drift only, no pointer
+   coupling, not mounted under prefers-reduced-motion.
+
+   The lower half (section nav through Dive Deeper) shares a second
+   background asset (.oaspb-lower__bg, purpose-boundaries-lower-
+   background.png) — see .oaspb-lower for why it's sized by its own
+   aspect ratio rather than object-fit:cover — plus its own calmer dust
+   canvas (.oaspb-lower__dust, driven by
+   OASPurposeBoundariesLowerMotion.jsx), scoped to .oaspb-lower so it
+   never renders over the footer.
+   ------------------------------------------------------------------ */
+
+.oaspb {
+  /* Same "premium institutional" token system established on OAS-1 and
+     Control Domains — duplicated here rather than shared across page
+     files, so this page has no runtime dependency on those
+     stylesheets and can't regress if they change. */
+  --oaspb-rust: #c85b2d;
+  --oaspb-rust-deep: #ab4220;
+  --oaspb-rust-rgb: 200, 91, 45;
+  --oaspb-ink: #201510;
+  --oaspb-body: #4f433b;
+  --oaspb-muted: #7d6e62;
+  --oaspb-soft-fill: #f6dfcf;
+  --oaspb-soft-fill-rgb: 246, 223, 207;
+  --oaspb-ivory: #f6efe4;
+  --oaspb-ivory-rgb: 246, 239, 228;
+  --oaspb-divider: rgba(32, 21, 16, 0.13);
+}
+
+.oaspb-icon {
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------------------------- Header (compact, matching OAS-1 / Control Domains) ---------------------------- */
+
+.oaspb .oas-header__bar {
+  padding: 10px 32px;
+}
+
+.oaspb .oas-header__brand {
+  gap: 16px;
+}
+
+.oaspb .oas-header__mark {
+  font-size: 30px;
+  color: var(--oaspb-ink);
+}
+
+.oaspb .oas-header__tagline {
+  margin-top: 4px;
+}
+
+.oaspb .oas-header__tagline span:first-child {
+  color: var(--oaspb-rust);
+  font-size: 11.5px;
+}
+
+.oaspb .oas-header__nav {
+  gap: 26px;
+}
+
+.oaspb .oas-header__cta .oas-btn {
+  padding: 11px 20px;
+}
+
+/* Only the current-section indicator ("Control Domains") reads dark
+   with a rust underline; every other nav entry recedes to one warm
+   gray-brown, matching the active-state convention already used on
+   OAS-1 and Control Domains. Unlike those pages, "Control Domains"
+   here is still a real link (this page lives one level below it, not
+   on it), so it keeps AnchorLink's href — only its styling changes. */
+.oaspb .oas-header__nav a,
+.oaspb .oas-header__nav button.oas__planned {
+  color: var(--oaspb-muted);
+}
+.oaspb .oas-header__nav a:hover {
+  color: var(--oaspb-rust);
+}
+.oaspb .oas-header__nav a.oaspb-nav-active {
+  font-weight: 700;
+  color: var(--oaspb-ink);
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--oaspb-rust);
+}
+.oaspb .oas-header__nav a.oaspb-nav-active:hover {
+  color: var(--oaspb-ink);
+}
+
+.oas-btn.oaspb-btn--rust {
+  background: var(--oaspb-rust);
+  color: var(--oas-white);
+  font-weight: 700;
+}
+.oas-btn.oaspb-btn--rust:hover {
+  background: var(--oaspb-rust-deep);
+}
+
+@media (max-width: 1150px) {
+  .oaspb .oas-header__nav {
+    display: none;
+  }
+  .oaspb .oas-header__nav.oas-header__nav--open {
+    display: flex;
+  }
+  .oaspb .oas-header__toggle {
+    display: inline-flex;
+  }
+}
+
+/* ---------------------------- Shared eyebrow / text link ---------------------------- */
+
+.oaspb-eyebrow {
+  font: 700 13px/1.4 var(--oas-sans);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--oaspb-rust);
+  margin: 0 0 8px;
+}
+
+/* ---------------------------- Hero ---------------------------- */
+
+.oaspb-hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--oas-white);
+  /* Trimmed from 36px 0 40px: with the emblem placeholder at its own
+     mid-range height (400px), that padding pushed total hero height to
+     476px, over the 380-460px target — measured, not assumed. */
+  padding: 24px 0 28px;
+}
+
+/* The single hero art layer — planet, dust, and orbital atmosphere
+   are all baked into this asset; nothing else is layered on top of
+   it. object-fit:cover on a hero this wide-and-short crops most of
+   the asset's height, so object-position is tuned (not left at
+   default center/center): 68%/22% keeps the small distant planet and
+   the brightest horizon flare inside the right-side focal area while
+   keeping the strongest dust concentration away from the left text
+   column. Tuned against the live layout, not assumed from the source
+   image's raw coordinates alone. */
+.oaspb-hero__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 68% 22%;
+  z-index: 0;
+  pointer-events: none;
+  /* Without this, the image's own (non-white) tone at the hero's
+     bottom-right meets the plain white subnav bar below in one hard
+     line — a real seam, confirmed via pixel sampling on an earlier
+     background asset. Fading the last ~12% of the hero's height to
+     transparent lets the white .oaspb-hero base show through instead. */
+  mask-image: linear-gradient(to bottom, black 0%, black 88%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 88%, transparent 100%);
+}
+
+/* Soft white dissolve protecting the left editorial column. Fully
+   opaque at the far left edge, gone by ~58% width — no hard rectangle
+   edge, just a smooth gradient — so the right-side horizon and orbital
+   arcs stay untouched. */
+.oaspb-hero__bg-fade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.97) 0%,
+    rgba(255, 255, 255, 0.9) 14%,
+    rgba(255, 255, 255, 0.55) 32%,
+    rgba(255, 255, 255, 0.15) 48%,
+    rgba(255, 255, 255, 0) 58%
+  );
+}
+
+/* Particle canvas — sits above the background/fade, below the live
+   content grid (z-index 3). Sized to the hero by JS
+   (OASPurposeBoundariesMotion.jsx); this rule only handles stacking,
+   never layout, so it can't affect hero height/proportions. */
+.oaspb-hero__atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: block;
+  pointer-events: none;
+}
+
+.oaspb-hero__grid {
+  position: relative;
+  z-index: 3;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: grid;
+  grid-template-columns: 40fr 60fr;
+  align-items: center;
+  gap: 40px;
+}
+
+.oaspb-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 600 13px/1 var(--oas-sans);
+  color: var(--oaspb-rust);
+  margin-bottom: 20px;
+}
+.oaspb-back:hover {
+  color: var(--oaspb-rust-deep);
+}
+
+.oaspb-hero__heading {
+  /* 44px -> 58px: the canonical H1 target is 56-64px desktop. */
+  font: 400 58px/1.14 var(--oas-serif);
+  color: var(--oaspb-ink);
+  margin: 0 0 16px;
+  letter-spacing: -0.01em;
+}
+
+.oaspb-hero__body {
+  /* 15px -> 19px, within the 18-19px target; line-height already sat
+     inside the 1.55-1.65 target so it's unchanged. */
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--oaspb-body);
+  max-width: 42ch;
+  margin: 0 0 18px;
+}
+
+.oaspb-hero__rule {
+  width: 44px;
+  height: 2px;
+  background: var(--oaspb-rust);
+  border: 0;
+  margin: 0 0 12px;
+}
+
+.oaspb-hero__tagline {
+  /* 11px -> 12.5px, within the 12-13px micro-copy target — kept
+     deliberately smaller than the eyebrow since this is secondary. */
+  font: 700 12.5px/1.6 var(--oas-sans);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--oaspb-muted);
+  margin: 0;
+}
+
+/* ---------------------------- Hero domain label ----------------------------
+   Live text only — the hero's visual weight comes entirely from the
+   background asset now. Keeps the same 660x400 footprint every
+   earlier phase reserved (target, placeholder, or otherwise), so hero
+   proportions/height are unaffected by this cleanup. */
+.oaspb-emblem {
+  position: relative;
+  width: 100%;
+  max-width: 660px;
+  aspect-ratio: 660 / 400;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.oaspb-emblem__label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.oaspb-emblem__num {
+  font: 700 30px/1 var(--oas-serif);
+  color: var(--oaspb-rust);
+}
+
+.oaspb-emblem__title {
+  /* 11px -> 12px, the canonical decorative-micro-copy target. */
+  font: 700 12px/1.5 var(--oas-sans);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--oaspb-ink);
+  text-align: center;
+}
+
+/* ---------------------------- Lower half atmosphere (section nav through Dive Deeper) ----------------------------
+   One shared background for the section nav, main content, and Dive
+   Deeper band — approved asset is a short, very wide band (2172x724);
+   width:100%/height:auto preserves its own aspect ratio exactly (no
+   object-fit cropping), so the edge planets/orbit rings it was
+   designed to show are never cut off. It's positioned to start right
+   under the hero and mask-fades to transparent well before reaching
+   the middle of the main content, so "Why It Matters" / "In Practice"
+   / Dive Deeper sit on plain white — matching the asset's own "large
+   quiet center, detail near the edges" design rather than forcing it
+   to cover the section's full (and unpredictable) height. */
+.oaspb-lower {
+  position: relative;
+  overflow: hidden;
+  background: var(--oas-white);
+}
+
+.oaspb-lower__bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  z-index: 0;
+  pointer-events: none;
+  /* Fade in fast at the very top (blends with the hero's own
+     already-white base) and dissolve gradually over the image's own
+     lower half, so its natural bottom edge — where the two edge
+     planets are cropped by the asset's own frame — never reads as a
+     hard line. */
+  mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 46%, transparent 88%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 46%, transparent 88%);
+}
+
+/* Very light overall wash — insurance for the outer thirds (where the
+   asset's own art is densest) without ever reading as a white box;
+   the center is already near-white in the source art. */
+.oaspb-lower__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* Calmer companion to the hero's dust canvas (see
+   OASPurposeBoundariesLowerMotion.jsx) — sized to .oaspb-lower by JS,
+   this rule only handles stacking. Sits above the background/veil,
+   below the live content. */
+.oaspb-lower__dust {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  pointer-events: none;
+}
+
+/* ---------------------------- Section navigation ---------------------------- */
+
+.oaspb-subnav {
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.82);
+  border-top: 1px solid var(--oaspb-divider);
+  border-bottom: 1px solid var(--oaspb-divider);
+}
+
+.oaspb-subnav__row {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.oaspb-subnav__row::-webkit-scrollbar {
+  display: none;
+}
+
+.oaspb-subnav__link {
+  flex-shrink: 0;
+  /* 14px -> 16px, the canonical section-tab target. */
+  font: 600 16px/1 var(--oas-sans);
+  color: var(--oaspb-body);
+  padding: 16px 0;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+}
+.oaspb-subnav__link:hover {
+  color: var(--oaspb-rust);
+}
+.oaspb-subnav__link--active {
+  color: var(--oaspb-rust);
+  border-bottom-color: var(--oaspb-rust);
+}
+
+/* ---------------------------- Main 3-column content ---------------------------- */
+
+.oaspb-main {
+  position: relative;
+  z-index: 2;
+  /* Transparent — .oaspb-lower supplies the shared background now. */
+  background: transparent;
+  padding: 40px 0;
+}
+
+/* Explicit 33/34/33 split, within the 31-34 / 33-35 / 31-34 target. */
+.oaspb-main__grid {
+  display: grid;
+  grid-template-columns: 33fr 34fr 33fr;
+  gap: 0 40px;
+  align-items: start;
+}
+
+.oaspb-main__col--divider {
+  border-left: 1px solid var(--oaspb-divider);
+  padding-left: 40px;
+}
+
+.oaspb-main__heading {
+  /* 24px -> 40px, the canonical H2/major-section-heading target;
+     line-height tightened to the large-heading band (1.05-1.15) now
+     that it's genuinely large, and margin opened up a touch so it
+     doesn't read cramped against the body copy below it. */
+  font: 400 40px/1.15 var(--oas-serif);
+  color: var(--oaspb-ink);
+  margin: 0 0 16px;
+}
+
+.oaspb-main__body {
+  /* 13.5px -> 17px, the canonical body-copy target; line-height
+     nudged to the top of the 1.6-1.7 body band. */
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--oaspb-body);
+  margin: 0;
+}
+
+/* ---------------------------- Why it matters (center column) ---------------------------- */
+
+.oaspb-reasons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.oaspb-reason {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.oaspb-reason__icon {
+  flex-shrink: 0;
+  /* 34px -> 38px: a small bump to keep the circle in proportion with
+     the larger title/body text next to it now (not a redesign — same
+     shape, same fill, same position). */
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--oaspb-soft-fill);
+  color: var(--oaspb-rust);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px;
+  box-sizing: border-box;
+}
+
+.oaspb-reason__text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 2px;
+}
+
+.oaspb-reason__title {
+  /* 14px -> 18px, the canonical item-title target (kept at weight 700
+     — already "strong"). */
+  font: 700 18px/1.3 var(--oas-sans);
+  color: var(--oaspb-ink);
+}
+
+.oaspb-reason__body {
+  /* 12.5px -> 16.5px, within the 16-17px item-description target;
+     line-height nudged to the top of the 1.5-1.6 description band. */
+  font-size: 16.5px;
+  line-height: 1.55;
+  color: var(--oaspb-muted);
+}
+
+/* ---------------------------- In practice (right column) ---------------------------- */
+
+.oaspb-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.oaspb-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.oaspb-step__num {
+  flex-shrink: 0;
+  /* 34px -> 38px, matching .oaspb-reason__icon so the two columns'
+     circles stay visually balanced at the larger type scale. */
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--oaspb-soft-fill);
+  color: var(--oaspb-rust-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 14px -> 17px, within the 16-18px step-number target for a 38px
+     circle. */
+  font: 700 17px/1 var(--oas-sans);
+}
+
+.oaspb-step__text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 2px;
+}
+
+.oaspb-step__title {
+  /* 14px -> 18px, matching .oaspb-reason__title (same "item title"
+     target). */
+  font: 700 18px/1.3 var(--oas-sans);
+  color: var(--oaspb-ink);
+}
+
+.oaspb-step__body {
+  /* 12.5px -> 16.5px, matching .oaspb-reason__body (same
+     "item description" target). */
+  font-size: 16.5px;
+  line-height: 1.55;
+  color: var(--oaspb-muted);
+}
+
+/* ---------------------------- Dive deeper band ---------------------------- */
+
+.oaspb-dive {
+  position: relative;
+  z-index: 2;
+  /* Transparent — by this point .oaspb-lower__bg has already faded
+     out (only a light, tapering trace of the dust canvas reaches this
+     far), so this is effectively plain white either way; kept
+     transparent rather than reasserting white so nothing could ever
+     clip the tail end of the fade above it. */
+  background: transparent;
+  padding: 0 0 48px;
+}
+
+.oaspb-dive__row {
+  /* Slightly translucent instead of flat opaque ivory, so the band
+     reads as connected to the atmosphere above it rather than a
+     disconnected solid block — restrained enough that legibility is
+     unaffected (ink text still sits on a near-opaque, ~92%, surface). */
+  background: rgba(var(--oaspb-ivory-rgb), 0.92);
+  border-radius: 10px;
+  padding: 24px 32px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.oaspb-dive__left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.oaspb-dive__icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--oas-white);
+  color: var(--oaspb-rust);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.oaspb-dive__text {
+  min-width: 0;
+}
+
+.oaspb-dive__heading {
+  /* 20px -> 30px, within the 28-32px Dive Deeper heading target;
+     margin opened slightly so it doesn't crowd the larger body copy
+     below it. */
+  font: 400 30px/1.15 var(--oas-serif);
+  color: var(--oaspb-ink);
+  margin: 0 0 8px;
+}
+
+.oaspb-dive__body {
+  /* 12.5px -> 16.5px, within the 16-17px target. */
+  font-size: 16.5px;
+  line-height: 1.55;
+  color: var(--oaspb-body);
+  margin: 0;
+  max-width: 56ch;
+}
+
+.oaspb-dive__cta {
+  flex-shrink: 0;
+  white-space: nowrap;
+  /* .oas-btn's shared base is 14px; the canonical primary-CTA target
+     here is 16px — scoped to this instance only, so the header's
+     "Read OAS-1" button (same shared classes, no .oaspb-dive__cta)
+     is unaffected. */
+  font-size: 16px;
+}
+
+/* .oas-btn is an inline-flex container (shared component, not edited
+   here) — a trailing space in "...Specification <span>→</span>" gets
+   collapsed by flex text-layout rules, so the arrow rendered flush
+   against the word with no visible gap. Fixed with explicit spacing on
+   the arrow itself rather than relying on a text-node space. */
+.oaspb-dive__cta span[aria-hidden] {
+  margin-left: 6px;
+}
+
+.oaspb-dive__next {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-left: 28px;
+  border-left: 1px solid var(--oaspb-divider);
+}
+
+.oaspb-dive__next-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: right;
+}
+
+.oaspb-dive__next-label {
+  /* 11px -> 12.5px, within the 12-13px target. */
+  font: 700 12.5px/1 var(--oas-sans);
+  color: var(--oaspb-ink);
+}
+
+.oaspb-dive__next-title {
+  /* 10.5px -> 16.5px, within the 16-17px target — this is the actual
+     readable domain name, so it carries more weight than the small
+     "Next Domain" kicker above it now. */
+  font: 700 16.5px/1.3 var(--oas-sans);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--oaspb-muted);
+}
+
+.oaspb-dive__next-arrow {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--oas-white);
+  color: var(--oaspb-rust);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+/* ---------------------------- Footer compression (this page only) ---------------------------- */
+
+.oaspb .oas-footer {
+  padding: 40px 0 20px;
+}
+
+/* ---------------------------- Responsive ---------------------------- */
+
+@media (max-width: 1100px) {
+  .oaspb-hero__grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    text-align: left;
+  }
+  .oaspb-emblem {
+    max-width: 480px;
+  }
+  /* Once the hero stacks to one column, the copy spans the full width
+     rather than just the left 40% — a fade that stops at 58% would
+     leave the right half of the text exposed to unfaded background.
+     Switch to a top-heavy vertical fade instead, strongest behind the
+     copy and easing away by the time the placeholder begins. */
+  .oaspb-hero__bg-fade {
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(255, 255, 255, 0.82) 30%,
+      rgba(255, 255, 255, 0.45) 55%,
+      rgba(255, 255, 255, 0.2) 100%
+    );
+  }
+  .oaspb-main__grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .oaspb-main__col--divider {
+    border-left: 0;
+    border-top: 1px solid var(--oaspb-divider);
+    padding-left: 0;
+    padding-top: 28px;
+  }
+  .oaspb-dive__row {
+    flex-wrap: wrap;
+  }
+  .oaspb-dive__next {
+    border-left: 0;
+    padding-left: 0;
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 900px) {
+  .oaspb-hero {
+    padding: 28px 0 32px;
+  }
+  .oaspb-hero__heading {
+    /* 36px -> 44px, within the 42-48px mobile H1 target. */
+    font-size: 44px;
+  }
+  .oaspb-emblem {
+    max-width: 380px;
+  }
+  .oaspb-subnav__row {
+    gap: 26px;
+  }
+  .oaspb-main__heading {
+    /* 40px desktop -> 34px, within the 32-36px mobile H2 target. */
+    font-size: 34px;
+  }
+  .oaspb-reason__title,
+  .oaspb-step__title {
+    /* 18px desktop -> 17px, the canonical mobile item-title target. */
+    font-size: 17px;
+  }
+  /* Simplify further at tablet/mobile widths: a tighter, more-centered
+     crop keeps the horizon legible without the full-width composition
+     the desktop crop uses, and the stronger wash keeps text highly
+     readable over it. */
+  .oaspb-hero__bg {
+    object-position: 68% 30%;
+  }
+  .oaspb-hero__bg-fade {
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.97) 0%,
+      rgba(255, 255, 255, 0.88) 35%,
+      rgba(255, 255, 255, 0.6) 65%,
+      rgba(255, 255, 255, 0.35) 100%
+    );
+  }
+  /* Tablet: crop the decorative reach shorter (fade finishes by ~65%
+     of the image instead of ~88%) so the art stays near the subnav/
+     top-of-Overview and doesn't reach as far down the stacked
+     content. */
+  .oaspb-lower__bg {
+    mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 34%, transparent 65%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 34%, transparent 65%);
+  }
+}
+
+@media (max-width: 640px) {
+  .oaspb-hero__grid {
+    padding: 0 20px;
+  }
+  .oaspb-subnav .oas__container {
+    padding: 0 20px;
+  }
+  .oaspb-dive__row {
+    padding: 20px;
+    gap: 18px;
+  }
+  .oaspb-dive__left {
+    flex-basis: 100%;
+  }
+  .oaspb-dive__cta {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+  }
+  .oaspb-dive__next {
+    order: 2;
+    margin-left: 0;
+  }
+  /* Mobile: simplify heavily — mostly white, only a whisper of art
+     right under the hero, prioritizing text readability over
+     decoration. */
+  .oaspb-lower__bg {
+    mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 20%, transparent 42%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 20%, transparent 42%);
+  }
+  .oaspb-lower__veil {
+    background: rgba(255, 255, 255, 0.45);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oaspb * {
+    transition-duration: 0.01ms !important;
+  }
+  /* Defensive: neither canvas is mounted at all under reduced motion
+     (see OASPurposeBoundariesPage.jsx), but this hides them too in
+     case of markup changes that stop gating the render. */
+  .oaspb-hero__atmosphere,
+  .oaspb-lower__dust {
+    display: none;
+  }
+}

@@ -42,6 +42,47 @@ export class SourceScopeRepo {
     return (await this.executor(executor).query("SELECT * FROM gpa_source_health WHERE source_system_id=$1 AND organization_id=$2 AND tenant_id=$3", [id, scope.organizationId, scope.tenantId])).rows[0] || null;
   }
 
+  async recordSourceHealthObservation(input: any, executor?: Executor) {
+    const result = await this.executor(executor).query(`
+      INSERT INTO gpa_source_health
+        (source_system_id, organization_id, tenant_id, last_successful_sync,
+         last_attempted_sync, freshness_threshold_seconds, stale_after,
+         current_freshness_state, last_schema_verification, authentication_state,
+         degraded_state, updated_at)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,NOW())
+      ON CONFLICT (source_system_id) DO UPDATE SET
+        last_successful_sync=EXCLUDED.last_successful_sync,
+        last_attempted_sync=EXCLUDED.last_attempted_sync,
+        freshness_threshold_seconds=EXCLUDED.freshness_threshold_seconds,
+        stale_after=EXCLUDED.stale_after,
+        current_freshness_state=EXCLUDED.current_freshness_state,
+        last_schema_verification=EXCLUDED.last_schema_verification,
+        authentication_state=EXCLUDED.authentication_state,
+        degraded_state=EXCLUDED.degraded_state,
+        updated_at=NOW()
+      WHERE gpa_source_health.organization_id=$2
+        AND gpa_source_health.tenant_id=$3
+      RETURNING *`,
+      [input.source_system_id, input.organization_id, input.tenant_id,
+        input.last_successful_sync || null, input.last_attempted_sync || null,
+        input.freshness_threshold_seconds || null, input.stale_after || null,
+        input.current_freshness_state, input.last_schema_verification || null,
+        input.authentication_state || "UNKNOWN", input.degraded_state || "HEALTHY"]);
+    return result.rows[0] || null;
+  }
+
+  async createSourceAssuranceDependency(input: any, executor?: Executor) {
+    const result = await this.executor(executor).query(`INSERT INTO gpa_source_assurance_dependencies
+      (dependency_id, source_system_id, organization_id, tenant_id, provider_reference, program_reference, service_reference, effective_from, effective_to, provenance_json, created_by)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *`,
+      [input.dependency_id, input.source_system_id, input.organization_id, input.tenant_id, input.provider_reference || null, input.program_reference || null, input.service_reference || null, input.effective_from || null, input.effective_to || null, json(input.provenance_json), input.created_by]);
+    return result.rows[0];
+  }
+
+  async listSourceAssuranceDependencies(scope: any, executor?: Executor) {
+    return (await this.executor(executor).query("SELECT * FROM gpa_source_assurance_dependencies WHERE organization_id=$1 AND tenant_id=$2 ORDER BY dependency_id", [scope.organizationId, scope.tenantId])).rows;
+  }
+
   async listMappings(scope: any, executor?: Executor) {
     return (await this.executor(executor).query("SELECT * FROM gpa_semantic_mappings WHERE organization_id=$1 AND tenant_id=$2 ORDER BY source_system_id, mapping_id, version DESC", [scope.organizationId, scope.tenantId])).rows;
   }

@@ -121,8 +121,13 @@ export class FundingGrantRepo {
     return { ...row, allocations: await this.listAllocations(grantId, executor) };
   }
 
-  async getGrantForUpdate(grantId: string, executor: any = { query }) {
-    const res = await executor.query("SELECT * FROM funding_grants WHERE grant_id = $1 FOR UPDATE", [grantId]);
+  async getGrantForUpdate(grantId: string, scope: any = {}, executor: any = { query }) {
+    const filter = scope.platform_global ? "" : `
+      AND ($2 IN (g.funder_organization_id, g.recipient_organization_id, g.reporting_organization_id)
+        OR EXISTS (SELECT 1 FROM grant_program_allocations ga JOIN programs p ON p.program_id=ga.program_id
+                  WHERE ga.grant_id=g.grant_id AND $2 IN (p.organization_id, COALESCE(p.owner_organization_id,p.organization_id), COALESCE(p.operator_organization_id,p.organization_id), COALESCE(p.accountable_organization_id,p.organization_id))))`;
+    const params = scope.platform_global ? [grantId] : [grantId, scope.organization_id];
+    const res = await executor.query(`SELECT g.* FROM funding_grants g WHERE g.grant_id = $1${filter} FOR UPDATE`, params);
     return res.rows[0] || null;
   }
 

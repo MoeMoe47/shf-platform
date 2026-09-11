@@ -1,0 +1,939 @@
+/* ------------------------------------------------------------------
+   Open Autonomous Standard — public landing page
+   Fully self-contained visual system. Deliberately does NOT import or
+   inherit SHF/SHS tokens (--orange, theme-shf.css, etc.) — OAS is its
+   own neutral standards identity. See oas.main.jsx for the same
+   opt-out precedent already established by universe.main.jsx.
+   ------------------------------------------------------------------ */
+
+.oas {
+  --oas-black: #02050d;
+  --oas-ink: #1c140d;
+  --oas-venus-deep: #3a2917;
+  --oas-venus-bronze: #a8703f;
+  --oas-venus-amber: #d98e3f;
+  --oas-venus-gold: #d9a14e;
+  --oas-cream: #f6efe2;
+  --oas-warm-white: #fbf7f0;
+  --oas-white: #ffffff;
+  --oas-muted: #8a7d6d;
+  --oas-line: #e9e4dc;
+
+  --oas-serif: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, "Times New Roman", serif;
+  --oas-sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  font-family: var(--oas-sans);
+  color: var(--oas-ink);
+  background: var(--oas-white);
+  -webkit-font-smoothing: antialiased;
+}
+
+.oas, .oas *, .oas *::before, .oas *::after {
+  box-sizing: border-box;
+}
+
+.oas a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.oas img {
+  max-width: 100%;
+  display: block;
+}
+
+.oas :focus-visible {
+  outline: 2px solid var(--oas-venus-gold);
+  outline-offset: 3px;
+}
+
+.oas__skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--oas-black);
+  color: var(--oas-cream);
+  padding: 10px 16px;
+  z-index: 1000;
+  border-radius: 0 0 6px 0;
+}
+.oas__skip-link:focus {
+  left: 0;
+}
+
+.oas__eyebrow {
+  font: 700 12px/1.4 var(--oas-sans);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--oas-venus-bronze);
+  margin: 0 0 14px;
+}
+
+.oas__rule {
+  width: 64px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--oas-venus-gold), var(--oas-venus-amber));
+  border: 0;
+  margin: 18px 0 22px;
+}
+
+.oas__planned {
+  color: var(--oas-muted);
+  cursor: default;
+}
+
+.oas__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* ---------------------------- Header ---------------------------- */
+
+.oas-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--oas-white);
+  border-bottom: 1px solid var(--oas-line);
+}
+
+.oas-header__bar {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 18px 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.oas-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.oas-header__brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.oas-header__mark {
+  font: 800 24px/1 var(--oas-serif);
+  letter-spacing: 0.01em;
+  color: var(--oas-ink);
+}
+
+.oas-header__tagline {
+  margin-top: 3px;
+}
+
+.oas-header__tagline span {
+  display: block;
+  font-size: 11px;
+  color: var(--oas-muted);
+  letter-spacing: 0.01em;
+}
+
+.oas-header__tagline span:first-child {
+  font-weight: 600;
+  color: var(--oas-venus-bronze);
+}
+
+.oas-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  flex: 1;
+}
+
+.oas-header__nav a,
+.oas-header__nav button.oas__planned {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--oas-ink);
+  background: none;
+  border: 0;
+  padding: 6px 0;
+  font-family: inherit;
+}
+
+.oas-header__nav a:hover {
+  color: var(--oas-venus-bronze);
+}
+
+.oas-header__cta {
+  flex-shrink: 0;
+}
+
+.oas-header__toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--oas-line);
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-left: auto;
+}
+
+/* ---------------------------- Buttons ---------------------------- */
+
+.oas-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font: 600 14px/1 var(--oas-sans);
+  letter-spacing: 0.01em;
+  padding: 13px 24px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.oas-btn.oas-btn--primary {
+  background: var(--oas-ink);
+  color: var(--oas-warm-white);
+}
+.oas-btn.oas-btn--primary:hover {
+  background: #000;
+}
+
+.oas-btn.oas-btn--secondary {
+  background: transparent;
+  color: var(--oas-ink);
+  border-color: var(--oas-ink);
+}
+.oas-btn.oas-btn--secondary:hover {
+  background: var(--oas-ink);
+  color: var(--oas-warm-white);
+}
+
+.oas-btn.oas-btn--on-dark {
+  background: var(--oas-venus-gold);
+  color: var(--oas-black);
+}
+.oas-btn.oas-btn--on-dark:hover {
+  background: var(--oas-cream);
+}
+
+.oas-btn.oas-btn--outline-on-dark {
+  background: transparent;
+  color: var(--oas-warm-white);
+  border-color: rgba(251, 247, 240, 0.5);
+}
+.oas-btn.oas-btn--outline-on-dark:hover {
+  background: rgba(251, 247, 240, 0.12);
+  border-color: var(--oas-warm-white);
+}
+
+/* ---------------------------- Hero ---------------------------- */
+/* Full-bleed dark cinematic hero per the approved Home mock — a
+   deliberate departure from every other OAS page's light-background
+   hero (this is Home's own brand moment, not a documentation page).
+   Phase 1 (structure only): the right column is a plain, unstyled
+   dark area reserved for the future planet/atmosphere art — no CSS-
+   drawn planet, no gradients standing in for it. */
+
+.oas-hero {
+  position: relative;
+  background: var(--oas-black);
+  overflow: hidden;
+}
+
+/* Single primary background layer — deep-space photo behind
+   everything else in the hero. object-fit:cover on a hero this wide
+   is width-bound at most breakpoints (the asset's own 1672x941 ratio
+   is narrower than the hero), so the crop mostly trims top/bottom,
+   not left/right; object-position is retuned per breakpoint below
+   only where a given layout's aspect ratio flips that. */
+.oas-hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 62% 42%;
+  pointer-events: none;
+}
+
+/* Left-side readability protection — a gradient, not a hard rectangle,
+   so the dark hero base and the photo behind it read as one surface.
+   Strong through the text column (0-35%), fades out through 35-55%,
+   fully transparent by 55% so it never reaches into the planet-ready
+   right side. */
+.oas-hero__bg-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    rgba(2, 5, 13, 0.88) 0%,
+    rgba(2, 5, 13, 0.82) 35%,
+    rgba(2, 5, 13, 0.32) 55%,
+    rgba(2, 5, 13, 0) 68%
+  );
+}
+
+.oas-hero__grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  /* 40/60 fr split lands inside the requested 38-42% / 58-62% desktop
+     range at every width, unlike a fixed-px text column. */
+  grid-template-columns: 40fr 60fr;
+  align-items: stretch;
+  /* Target 620-760px "substantial but not full-screen" per the task —
+     clamped so it can't blow out on very tall/short viewports. */
+  min-height: clamp(620px, 70vh, 760px);
+  /* Left column aligns with the same inset every other section's
+     .oas__container uses, but the grid itself is NOT wrapped in
+     .oas__container — the right (art) column bleeds to the viewport's
+     right edge, matching the mock's full-bleed composition. */
+  padding-left: max(32px, calc((100vw - 1200px) / 2 + 32px));
+}
+
+.oas-hero__copy {
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 48px 24px 48px 0;
+}
+
+.oas-hero__copy .oas__eyebrow {
+  /* Overrides the shared eyebrow color only (not size) — the shared
+     bronze reads too dark against this hero's near-black background. */
+  color: var(--oas-venus-gold);
+}
+
+.oas-hero__heading {
+  font: 400 68px/1.08 var(--oas-serif);
+  margin: 0;
+  letter-spacing: -0.01em;
+  color: var(--oas-warm-white);
+}
+
+.oas-hero__accent {
+  color: var(--oas-venus-amber);
+}
+
+.oas-hero__body {
+  font-size: 19px;
+  line-height: 1.6;
+  color: rgba(246, 239, 226, 0.78);
+  max-width: 46ch;
+  margin: 20px 0 32px;
+}
+
+.oas-hero__actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* Neutral placeholder for the future planet/atmosphere art — no
+   background of its own (it simply reveals the section's own black),
+   so there's no visible "placeholder box" seam against the copy
+   column. Only a positioning context for the live micro-copy. */
+.oas-hero__visual {
+  position: relative;
+  min-height: 100%;
+}
+
+.oas-hero__micro {
+  position: absolute;
+  top: 56px;
+  right: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  text-align: right;
+  font: 700 12.5px/1.4 var(--oas-sans);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(246, 239, 226, 0.75);
+}
+
+/* ---------------------------- Hero bottom strip ---------------------------- */
+/* Compact institutional strip directly under the hero — kept narrow
+   and unstyled beyond a hairline divider and a small accent mark, per
+   the mock. */
+
+.oas-hero-strip {
+  background: var(--oas-black);
+  border-top: 1px solid rgba(246, 239, 226, 0.1);
+}
+
+.oas-hero-strip__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 18px 32px;
+  border-left: 3px solid var(--oas-venus-amber);
+}
+
+.oas-hero-strip__statement {
+  margin: 0;
+  font-size: 14px;
+  color: rgba(246, 239, 226, 0.82);
+}
+
+.oas-hero-strip__tags {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font: 700 12px/1 var(--oas-sans);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(246, 239, 226, 0.55);
+}
+
+.oas-hero-strip__tags li {
+  padding-left: 16px;
+  margin-left: 16px;
+  border-left: 1px solid rgba(246, 239, 226, 0.25);
+}
+
+.oas-hero-strip__tags li:first-child {
+  padding-left: 0;
+  margin-left: 0;
+  border-left: 0;
+}
+
+/* ---------------------------- Why OAS Exists ---------------------------- */
+/* Simple two-column editorial section — no photo yet. The right column
+   is a plain neutral placeholder (Phase 1: no final institutional
+   architecture image), sized to visually balance the copy rather than
+   dominate it. */
+
+.oas-why {
+  background: var(--oas-white);
+  padding: 96px 0;
+}
+
+.oas-why__grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 480px) 1fr;
+  align-items: center;
+  gap: 56px;
+}
+
+.oas-why__intro {
+  max-width: 480px;
+}
+
+.oas-why__heading {
+  font: 400 42px/1.2 var(--oas-serif);
+  margin: 0 0 20px;
+}
+
+.oas-why__body {
+  font-size: 17px;
+  line-height: 1.7;
+  color: #4a4038;
+  margin: 0;
+}
+
+.oas-why__visual {
+  aspect-ratio: 16 / 11;
+  border-radius: 8px;
+  background: linear-gradient(160deg, #f6ecd9 0%, #efe3cd 100%);
+  border: 1px solid rgba(58, 41, 23, 0.1);
+}
+
+/* ---------------------------- Eight Foundations ---------------------------- */
+
+.oas-foundations {
+  padding: 88px 0;
+  background: linear-gradient(180deg, #fbf3e6 0%, #f6ecd9 100%);
+}
+
+.oas-foundations__head {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: end;
+  margin-bottom: 48px;
+}
+
+.oas-foundations__head h2 {
+  font: 400 42px/1.2 var(--oas-serif);
+  margin: 0;
+}
+
+.oas-foundations__head p {
+  font-size: 17px;
+  line-height: 1.7;
+  color: #4a4038;
+  margin: 0;
+}
+
+.oas-foundations__row {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 0;
+}
+
+.oas-foundation {
+  padding: 0 16px;
+  border-left: 1px solid rgba(58, 41, 23, 0.14);
+}
+
+.oas-foundation:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+
+.oas-foundation__num {
+  font: 700 12px/1 var(--oas-sans);
+  color: var(--oas-venus-bronze);
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.oas-foundation__icon {
+  width: 26px;
+  height: 26px;
+  color: var(--oas-venus-deep);
+  margin-bottom: 10px;
+}
+
+.oas-foundation__label {
+  font: 600 17.5px/1.35 var(--oas-sans);
+  color: var(--oas-ink);
+  margin: 0 0 6px;
+  /* Reserves 2 lines' worth of height regardless of whether this
+     item's title actually wraps — otherwise a 1-line title lets its
+     description start higher than a neighboring 2-line title's does,
+     and the row of descriptions reads as ragged/misaligned. */
+  min-height: 48px;
+}
+
+.oas-foundation__desc {
+  font-size: 16.5px;
+  line-height: 1.5;
+  color: #6b5f52;
+  margin: 0;
+}
+
+/* ---------------------------- Separation of Authority ---------------------------- */
+
+.oas-authority {
+  padding: 96px 0;
+  background: var(--oas-white);
+  text-align: center;
+}
+
+.oas-authority__head {
+  max-width: 680px;
+  margin: 0 auto 68px;
+}
+
+.oas-authority__head h2 {
+  font: 400 42px/1.3 var(--oas-serif);
+  margin: 0 0 18px;
+}
+
+.oas-authority__head p {
+  font-size: 17px;
+  line-height: 1.7;
+  color: #4a4038;
+  margin: 0;
+}
+
+.oas-authority__flow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  text-align: left;
+}
+
+.oas-authority__node {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  max-width: 300px;
+}
+
+.oas-authority__circle {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  font: 700 16px/1.2 var(--oas-sans);
+  letter-spacing: 0.01em;
+  text-align: center;
+}
+
+.oas-authority__circle--oas {
+  background: radial-gradient(circle at 34% 30%, #f3d19b 0%, var(--oas-venus-gold) 32%, var(--oas-venus-bronze) 68%, #6b4322 100%);
+  color: var(--oas-white);
+  font-size: 19px;
+}
+
+.oas-authority__circle--registry {
+  background: var(--oas-venus-bronze);
+  color: var(--oas-white);
+}
+
+.oas-authority__circle--bureau {
+  background: #e4dcd0;
+  color: var(--oas-ink);
+}
+
+.oas-authority__node-text h3 {
+  font: 400 28px/1.25 var(--oas-serif);
+  margin: 0 0 8px;
+}
+
+.oas-authority__node-text p {
+  font-size: 16.5px;
+  line-height: 1.55;
+  color: #4a4038;
+  margin: 0;
+}
+
+.oas-authority__arrow {
+  color: var(--oas-venus-gold);
+  font-size: 22px;
+}
+
+/* ---------------------------- Opportunity Banner ---------------------------- */
+/* Phase 1: flat dark placeholder, no final landscape art yet. */
+
+.oas-opportunity {
+  padding: 120px 0;
+  background: var(--oas-venus-deep);
+  color: var(--oas-cream);
+  text-align: center;
+}
+
+.oas-opportunity__content {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.oas-opportunity h2 {
+  font: 400 44px/1.25 var(--oas-serif);
+  margin: 0 0 20px;
+  color: var(--oas-warm-white);
+}
+
+.oas-opportunity p {
+  font-size: 17px;
+  line-height: 1.7;
+  color: rgba(246, 239, 226, 0.86);
+  margin: 0 0 34px;
+}
+
+/* ---------------------------- Footer ---------------------------- */
+
+.oas-footer {
+  background: var(--oas-black);
+  color: rgba(246, 239, 226, 0.82);
+  padding: 76px 0 28px;
+}
+
+.oas-footer__top {
+  display: grid;
+  grid-template-columns: 1.3fr repeat(4, 1fr) 1.2fr;
+  gap: 32px;
+}
+
+.oas-footer__brand-mark {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.oas-footer__brand-mark strong {
+  font: 800 22px/1 var(--oas-serif);
+  color: var(--oas-warm-white);
+}
+
+.oas-footer__tagline {
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(246, 239, 226, 0.6);
+  max-width: 30ch;
+}
+
+.oas-footer__col h4 {
+  font: 700 12px/1 var(--oas-sans);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--oas-venus-gold);
+  margin: 0 0 18px;
+}
+
+.oas-footer__col ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 13.5px;
+}
+
+.oas-footer__col a:hover {
+  color: var(--oas-warm-white);
+}
+
+.oas-footer__col .oas__planned {
+  color: rgba(246, 239, 226, 0.38);
+}
+
+.oas-footer__right {
+  text-align: right;
+}
+
+.oas-footer__right p:first-child {
+  font: 700 15px/1.4 var(--oas-sans);
+  letter-spacing: 0.02em;
+  color: var(--oas-warm-white);
+  margin: 0 0 10px;
+}
+
+.oas-footer__domain {
+  font: 700 13px/1 var(--oas-sans);
+  letter-spacing: 0.1em;
+  color: rgba(246, 239, 226, 0.5);
+}
+
+.oas-footer__bottom {
+  margin-top: 60px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(246, 239, 226, 0.12);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 12.5px;
+  color: rgba(246, 239, 226, 0.5);
+}
+
+.oas-footer__bottom-links {
+  display: flex;
+  gap: 22px;
+}
+
+/* ---------------------------- Venus mark (shared header/footer logo) ---------------------------- */
+
+.oas-venus-mark {
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+/* ---------------------------- Responsive ---------------------------- */
+
+@media (max-width: 1150px) {
+  /* Every other OAS subpage (OAS-1, Control Domains, Purpose &
+     Boundaries, Risk Classification) already overrides the shared
+     header's hamburger breakpoint from 900px to 1150px, scoped to its
+     own page-root class — the 8-item nav simply doesn't fit down to
+     900px. Home now carries the same 8-item nav (see header markup)
+     and needs the identical fix; scoped to .oas-home rather than
+     changing the shared 900px default so other pages are unaffected. */
+  .oas-home .oas-header__nav {
+    display: none;
+  }
+  .oas-home .oas-header__nav.oas-header__nav--open {
+    display: flex;
+  }
+  .oas-home .oas-header__toggle {
+    display: inline-flex;
+  }
+}
+
+@media (max-width: 1100px) {
+  /* Tablet hero: rebalance toward 45/55 rather than stacking yet
+     (task guidance: "hero may become 45/55 or stacked"). */
+  .oas-hero__grid {
+    grid-template-columns: 45fr 55fr;
+    min-height: clamp(560px, 66vh, 700px);
+  }
+  .oas-hero__heading {
+    font-size: 54px;
+  }
+  .oas-why__grid {
+    gap: 36px;
+  }
+  .oas-foundations__row {
+    grid-template-columns: repeat(4, 1fr);
+    row-gap: 32px;
+  }
+  .oas-foundation:nth-child(4n + 1) {
+    border-left: 0;
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .oas-header__nav {
+    display: none;
+  }
+  .oas-header__toggle {
+    display: inline-flex;
+  }
+  .oas-header__nav.oas-header__nav--open {
+    display: flex;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--oas-white);
+    border-bottom: 1px solid var(--oas-line);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 16px 32px 24px;
+  }
+  /* Mobile hero: single column, art placeholder moves below copy
+     (achieved by plain DOM order — copy is already first in markup). */
+  .oas-hero__grid {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    padding-left: 0;
+  }
+  .oas-hero__copy {
+    max-width: none;
+    padding: 40px 32px 32px;
+  }
+  .oas-hero__visual {
+    min-height: 320px;
+  }
+  .oas-hero__micro {
+    top: 24px;
+  }
+  .oas-hero__heading {
+    font-size: 46px;
+  }
+  .oas-why__grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .oas-why__intro {
+    max-width: none;
+  }
+  .oas-why__visual {
+    aspect-ratio: 16 / 9;
+  }
+  .oas-authority__flow {
+    flex-direction: column;
+  }
+  .oas-authority__node {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    max-width: 320px;
+  }
+  .oas-authority__arrow {
+    transform: rotate(90deg);
+    text-align: center;
+    width: 100%;
+  }
+  .oas-footer__top {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 40px;
+  }
+  .oas-footer__right {
+    grid-column: 1 / -1;
+    text-align: left;
+  }
+}
+
+@media (max-width: 640px) {
+  .oas__container {
+    padding: 0 20px;
+  }
+  .oas-header__bar {
+    padding: 14px 20px;
+  }
+  .oas-header__cta {
+    display: none;
+  }
+  .oas-hero__copy {
+    padding: 32px 20px 28px;
+  }
+  .oas-hero__heading {
+    font-size: 36px;
+  }
+  .oas-hero__body {
+    font-size: 17px;
+  }
+  .oas-hero__visual {
+    min-height: 220px;
+  }
+  .oas-hero__micro {
+    right: 20px;
+    font-size: 11.5px;
+  }
+  .oas-hero-strip__row {
+    padding: 16px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .oas-why,
+  .oas-foundations,
+  .oas-authority,
+  .oas-opportunity {
+    padding: 64px 0;
+  }
+  .oas-why__heading {
+    font-size: 32px;
+  }
+  .oas-foundations__head {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .oas-foundations__head h2 {
+    font-size: 32px;
+  }
+  .oas-foundations__row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .oas-foundation:nth-child(2n + 1) {
+    border-left: 0;
+    padding-left: 0;
+  }
+  .oas-foundation:nth-child(4n + 1),
+  .oas-foundation:nth-child(4n + 2) {
+    border-left: 0;
+  }
+  .oas-authority__head h2 {
+    font-size: 32px;
+  }
+  .oas-footer__top {
+    grid-template-columns: 1fr;
+  }
+  .oas-opportunity {
+    padding: 80px 0;
+  }
+  .oas-opportunity h2 {
+    font-size: 30px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oas * {
+    transition-duration: 0.01ms !important;
+  }
+}

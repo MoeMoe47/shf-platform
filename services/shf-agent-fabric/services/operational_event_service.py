@@ -38,9 +38,10 @@ SUPPORTED_EVENT_TYPES = {
     "grant_binder.created",
     "funding_commitment.committed",
     "employment_started.verified",
+    "government_assurance.truth_determination.accepted",
 }
 
-SUPPORTED_SUBJECT_TYPES = {"student", "lesson", "assessment", "course", "credential", "portfolio_artifact", "referral", "report", "grant_binder", "funding_commitment", "workforce_employment_outcome"}
+SUPPORTED_SUBJECT_TYPES = {"student", "lesson", "assessment", "course", "credential", "portfolio_artifact", "referral", "report", "grant_binder", "funding_commitment", "workforce_employment_outcome", "gpa_truth_determination"}
 
 
 class OperationalEventError(ValueError):
@@ -172,6 +173,7 @@ def validate_operational_event(payload: Dict[str, Any], actor: Any) -> None:
         "shs.grant_binder": _validate_grant_binder_created_payload,
         "shs.exchange": _validate_funding_commitment_committed_payload,
         "shf.workforce": _validate_employment_started_verified_payload,
+        "shs.government_assurance": _validate_government_assurance_truth_determination_payload,
     }
     validator = validators.get(str(payload.get("producer_id") or "").strip())
     if validator:
@@ -234,6 +236,10 @@ def _validate_payload(payload: Dict[str, Any]) -> None:
     if event_type == "employment_started.verified" and producer_id != "shf.workforce":
         raise OperationalEventError("invalid_producer_event_binding", {"producer_id": producer_id, "event_type": event_type})
     if producer_id == "shf.workforce" and event_type != "employment_started.verified":
+        raise OperationalEventError("invalid_producer_event_binding", {"producer_id": producer_id, "event_type": event_type})
+    if event_type == "government_assurance.truth_determination.accepted" and producer_id != "shs.government_assurance":
+        raise OperationalEventError("invalid_producer_event_binding", {"producer_id": producer_id, "event_type": event_type})
+    if producer_id == "shs.government_assurance" and event_type != "government_assurance.truth_determination.accepted":
         raise OperationalEventError("invalid_producer_event_binding", {"producer_id": producer_id, "event_type": event_type})
     if payload["subject_type"] not in SUPPORTED_SUBJECT_TYPES:
         raise OperationalEventError("unsupported_subject_type", {"subject_type": payload["subject_type"]})
@@ -339,6 +345,24 @@ def _validate_employment_started_verified_payload(payload: Dict[str, Any], actor
         raise OperationalEventError("invalid_employment_started_verified_payload", {"field": "idempotency_key"})
 
 
+def _validate_government_assurance_truth_determination_payload(payload: Dict[str, Any], actor: Any) -> None:
+    if str(getattr(actor, "principal_type", "")) != "service" or str(getattr(actor, "service_id", "")) != "service:shs-api":
+        raise OperationalEventError("service_identity_required")
+    if str(payload.get("schema_version") or "") != "v1" or str(payload.get("subject_type") or "") != "gpa_truth_determination":
+        raise OperationalEventError("invalid_event_schema")
+    event_payload = payload.get("payload")
+    required = {"determination_id", "truth_fact_id", "claim_reference", "verification_reference", "provenance_reference", "truth_spine_authority", "truth_spine_status", "lifecycle_status"}
+    if not isinstance(event_payload, dict) or set(event_payload) != required:
+        raise OperationalEventError("invalid_government_assurance_truth_determination_payload")
+    if str(event_payload.get("determination_id") or "") != str(payload.get("subject_id") or ""):
+        raise OperationalEventError("invalid_government_assurance_truth_determination_payload", {"field": "determination_id"})
+    if event_payload.get("truth_spine_authority") != "shs-truth-spine-v1" or event_payload.get("truth_spine_status") != "PENDING_TRUTH_SPINE_INGESTION" or event_payload.get("lifecycle_status") != "accepted":
+        raise OperationalEventError("invalid_government_assurance_truth_determination_payload")
+    expected_key = f"gpa-truth-determination:{payload['subject_id']}:accepted"
+    if str(payload.get("idempotency_key") or "") != expected_key:
+        raise OperationalEventError("invalid_government_assurance_truth_determination_payload", {"field": "idempotency_key"})
+
+
 def _retention_policy_for(producer_id: str, event_type: str) -> str:
     for entry in (
         find_lineage_entry("lineage.curriculum.lesson.completed.v1"),
@@ -349,6 +373,7 @@ def _retention_policy_for(producer_id: str, event_type: str) -> str:
         find_lineage_entry("lineage.shs.grant_binder.created.v1"),
         find_lineage_entry("lineage.shs.exchange.funding_commitment.committed.v1"),
         find_lineage_entry("lineage.shf.workforce.employment_started.verified.v1"),
+        find_lineage_entry("lineage.shs.government_assurance.truth_determination.accepted.v1"),
     ):
         if not entry:
             continue

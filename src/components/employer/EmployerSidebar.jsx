@@ -117,7 +117,7 @@ export default function EmployerSidebar() {
       <div className="crb-navSection">
         <div className="crb-navTitle">CROSS APPS</div>
         <ul className="crb-list">
-          <ItemExt href="/career.html#/dashboard" icon="🧭">
+          <ItemExt href="/career.html#/" icon="🧭">
             Career
           </ItemExt>
           <ItemExt href="/treasury.html#/dashboard" icon="🏦">

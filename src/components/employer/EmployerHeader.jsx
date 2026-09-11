@@ -12,7 +12,7 @@ export default function EmployerHeader() {
 
       {/* Cross-app cluster */}
       <nav className="crb-crossapp" aria-label="Apps">
-        <CrossAppLink className="sh-btn sh-btn--soft" app="career"   to="/dashboard">Career</CrossAppLink>
+        <CrossAppLink className="sh-btn sh-btn--soft" app="career"   to="/">Career</CrossAppLink>
         <CrossAppLink className="sh-btn sh-btn--soft" app="treasury" to="/dashboard">Treasury</CrossAppLink>
         <CrossAppLink className="sh-btn sh-btn--soft" app="credit"   to="/report">Credit</CrossAppLink>
         <CrossAppLink className="sh-btn sh-btn--soft" app="debt"     to="/dashboard">Debt</CrossAppLink>

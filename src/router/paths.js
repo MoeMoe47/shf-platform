@@ -19,7 +19,7 @@ const normPath = (p = "/") => {
 ------------------------------------------ */
 export const HOME      = "/";
 export const HELP      = "/help";
-export const CAREER    = "/career";     // canonical (non-prefixed)
+export const CAREER    = "/";           // Career app public home, under /career.html#
 export const CURRICULA = "/curriculum"; // index/landing for curricula
 
 /* -----------------------------------------
@@ -41,7 +41,42 @@ export const MASTER_UNIT     = (cur, s) => `/${normCur(cur)}/master/${encSlug(s)
 
 // Legacy/aliases
 export const COURSES         = LESSONS;
-export const CAREER_PATHWAYS = CAREER;
+export const CAREER_HOME     = "/";
+export const CAREER_DASHBOARD = "/dashboard";
+export const CAREER_PATHWAYS = "/pathways";
+export const CAREER_EXPLORE  = "/explore";
+export const CAREER_PLANNER  = "/planner";
+export const CAREER_DISCOVERY = "/discovery";
+
+export const CAREER_ROUTE_CONTRACT = {
+  host: "/career.html#",
+  public: {
+    home: CAREER_HOME,
+    explore: CAREER_EXPLORE,
+    pathways: CAREER_PATHWAYS,
+    discovery: CAREER_DISCOVERY,
+    opportunities: "/opportunities",
+    employers: "/employers",
+  },
+  personal: {
+    dashboard: CAREER_DASHBOARD,
+    northstarDashboard: "/dashboard-ns",
+    planner: CAREER_PLANNER,
+    assignments: "/assignments",
+    calendar: "/calendar",
+    portfolio: "/portfolio",
+    learn: "/learn",
+    lesson: "/learn/:id",
+    vocab: "/vocab",
+    resume: "/resume",
+    rewards: "/rewards",
+    creditReport: "/credit/report",
+    marketplace: "/marketplace",
+    coach: "/coach",
+    help: "/help",
+    settings: "/settings",
+  },
+};
 
 /* -----------------------------------------
    HTML entries by app (cross-app anchors build from these)
@@ -56,6 +91,8 @@ export const APP = {
   credit:     "/credit.html#",
   store:      "/store.html#",
   fuel:       "/fuel.html#",        // ✅ Fuel Tank
+  launch:     "/launch.html#",
+  treasury:   "/treasury.html#",
   foundation: "/foundation.html#",  // ✅ NEW
   solutions:  "/solutions.html#",   // ✅ NEW
 };
@@ -66,6 +103,7 @@ export const APP = {
 export const inApp = {
   // Career app
   career: {
+    home:        () => CAREER_HOME,
     dashboard:   () => "/dashboard",
     assignments: () => "/assignments",
     calendar:    () => "/calendar",
@@ -73,6 +111,7 @@ export const inApp = {
     planner:     (section) =>
       section ? `/planner?section=${encodeURIComponent(section)}` : "/planner",
     explore:     () => "/explore",
+    pathways:    () => "/pathways",
     help:        () => "/help",
     resume:      () => "/resume",
   },
@@ -126,6 +165,8 @@ export const href = {
   credit:     (p = "/") => `${APP.credit}${normPath(p)}`,
   store:      (p = "/") => `${APP.store}${normPath(p)}`,
   fuel:       (p = "/") => `${APP.fuel}${normPath(p)}`,         // ✅
+  launch:     (p = "/") => `${APP.launch}${normPath(p)}`,
+  treasury:   (p = "/") => `${APP.treasury}${normPath(p)}`,
   foundation: (p = "/") => `${APP.foundation}${normPath(p)}`,   // ✅
   solutions:  (p = "/") => `${APP.solutions}${normPath(p)}`,    // ✅
 };

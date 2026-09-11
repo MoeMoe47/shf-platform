@@ -1,0 +1,1158 @@
+/* ------------------------------------------------------------------
+   OAS Risk Classification. Loaded alongside oas-landing.css (tokens,
+   header, footer, buttons, .oas__eyebrow / .oas__container reused from
+   there). Everything in this file is page-specific: the compact
+   header refinements (mirroring OAS-1 / Control Domains / Purpose &
+   Boundaries), the hero, the risk-levels intro, the R0-R4 scale, the
+   supporting explanation row, the comparison matrix, and the closing
+   CTA band — none of which exist on the other OAS pages.
+
+   The R0-R4 scale (.oasrc-scale__field) is one continuous escalating
+   field, not five separate cards — see that section below for the
+   full layering (base gradient, decorative landscape accent, static
+   SVG curve, then the live content row).
+   ------------------------------------------------------------------ */
+
+.oasrc {
+  /* Same "premium institutional" token system established on OAS-1,
+     Control Domains, and Purpose & Boundaries — duplicated here rather
+     than shared across page files, so this page has no runtime
+     dependency on those stylesheets and can't regress if they change. */
+  --oasrc-rust: #c85b2d;
+  --oasrc-rust-deep: #ab4220;
+  --oasrc-rust-rgb: 200, 91, 45;
+  --oasrc-ink: #201510;
+  --oasrc-body: #4f433b;
+  --oasrc-muted: #7d6e62;
+  --oasrc-soft-fill: #f6dfcf;
+  --oasrc-soft-fill-rgb: 246, 223, 207;
+  --oasrc-ivory: #f6efe4;
+  --oasrc-ivory-rgb: 246, 239, 228;
+  --oasrc-divider: rgba(32, 21, 16, 0.13);
+
+  /* The five-color risk-escalation palette — the single source of
+     truth every part of the scale (base gradient, landscape accent,
+     badges, mobile stacked rows) reads from, so the same five colors
+     never get redefined in more than one place. */
+  --oasrc-r0: #f8f5f0;
+  --oasrc-r1: #f3e4cd;
+  --oasrc-r2: #e8b978;
+  --oasrc-r3: #c2652f;
+  --oasrc-r3-rgb: 194, 101, 47;
+  --oasrc-r4: #6b2318;
+  --oasrc-r4-rgb: 107, 35, 24;
+}
+
+.oasrc-icon {
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------------------------- Header (compact, matching every other OAS page) ---------------------------- */
+
+.oasrc .oas-header__bar {
+  padding: 10px 32px;
+}
+
+.oasrc .oas-header__brand {
+  gap: 16px;
+}
+
+.oasrc .oas-header__mark {
+  font-size: 30px;
+  color: var(--oasrc-ink);
+}
+
+.oasrc .oas-header__tagline {
+  margin-top: 4px;
+}
+
+.oasrc .oas-header__tagline span:first-child {
+  color: var(--oasrc-rust);
+  font-size: 11.5px;
+}
+
+.oasrc .oas-header__nav {
+  gap: 26px;
+}
+
+.oasrc .oas-header__cta .oas-btn {
+  padding: 11px 20px;
+}
+
+.oasrc-nav-active {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--oasrc-ink);
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--oasrc-rust);
+}
+
+.oasrc .oas-header__nav a,
+.oasrc .oas-header__nav button.oas__planned {
+  color: var(--oasrc-muted);
+}
+.oasrc .oas-header__nav a:hover {
+  color: var(--oasrc-rust);
+}
+
+.oas-btn.oasrc-btn--rust {
+  background: var(--oasrc-rust);
+  color: var(--oas-white);
+  font-weight: 700;
+}
+.oas-btn.oasrc-btn--rust:hover {
+  background: var(--oasrc-rust-deep);
+}
+
+/* A disabled-looking button (wrapped in PlannedItem) never receives a
+   hover treatment — it isn't interactive. */
+.oas__planned .oasrc-btn--rust {
+  cursor: default;
+  opacity: 0.85;
+}
+
+@media (max-width: 1150px) {
+  .oasrc .oas-header__nav {
+    display: none;
+  }
+  .oasrc .oas-header__nav.oas-header__nav--open {
+    display: flex;
+  }
+  .oasrc .oas-header__toggle {
+    display: inline-flex;
+  }
+}
+
+/* ---------------------------- Shared eyebrow / text link ---------------------------- */
+
+.oasrc-eyebrow {
+  font: 700 13px/1.4 var(--oas-sans);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--oasrc-rust);
+  margin: 0 0 8px;
+}
+
+.oasrc-textlink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 700 16px/1.3 var(--oas-sans);
+  color: var(--oasrc-rust);
+}
+a.oasrc-textlink:hover {
+  color: var(--oasrc-rust-deep);
+}
+
+/* ---------------------------- Hero ---------------------------- */
+
+.oasrc-hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--oas-white);
+  /* 28px/32px -> 40px/44px: the previous padding produced a ~400px
+     hero (measured), reading as a thin banner rather than a real page
+     opening. Combined with the taller .oasrc-hero__visual reservation
+     below, this lands in the 430-500px target at desktop. */
+  padding: 40px 0 44px;
+}
+
+/* The single hero art layer — three moons, orbital arcs, and the
+   golden-to-ember mountain ridge are all baked into this asset;
+   nothing else is layered on top of it. object-fit:cover on a hero
+   this wide-and-short is width-bound here (the asset's own 1672x941
+   ratio is already wider than the hero itself at every breakpoint
+   this page supports), so there's no horizontal cropping at all —
+   object-position only needs to choose a vertical band. Tuned by
+   pixel-sampling the source asset: the three moons sit in the top
+   ~6-34% of the image and the ridge's own warm tones only build up
+   gradually below that, so 50%/8% keeps every moon fully in frame
+   (the topmost moon's own edge starts at ~6%) while still carrying
+   well into the ridge's rising golden light — reaching for the
+   deepest, most saturated corner of the ridge would have pushed the
+   smallest moon out of frame entirely. */
+.oasrc-hero__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 8%;
+  z-index: 0;
+  pointer-events: none;
+  /* Fades the asset's own bottom edge to transparent so it dissolves
+     into the white section below instead of meeting it in one hard
+     line (the same seam issue found and fixed on earlier OAS hero
+     integrations). */
+  mask-image: linear-gradient(to bottom, black 0%, black 88%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 88%, transparent 100%);
+}
+
+/* Soft white dissolve protecting the left editorial column. This
+   column measures ~37.6% of the hero width (a 36fr track, narrower
+   than the equivalent column on other OAS pages) — the fade is tuned
+   to that measurement, not copied from another page's wider column,
+   so it fully dissolves by ~44% instead of reaching past 50%. That
+   matters here specifically because the smallest of the three moons
+   sits at ~21% width: a fade that lingered into the 50s (as it does on
+   other OAS heroes with a wider text column) washed it out to
+   near-invisible, confirmed by pixel-sampling that exact spot. */
+.oasrc-hero__bg-fade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.94) 0%,
+    rgba(255, 255, 255, 0.82) 16%,
+    rgba(255, 255, 255, 0.5) 28%,
+    rgba(255, 255, 255, 0.16) 38%,
+    rgba(255, 255, 255, 0) 44%
+  );
+}
+
+/* ---- Hero motion layers (see OASRiskClassificationHeroMotion.jsx) ----
+   Stack, bottom to top: static background (z0) -> readability fade
+   (z1) -> particle dust canvas (z2) -> ridge light sweep (z3) -> peak
+   illumination glows (z4) -> live text grid (z5, bumped up from its
+   original z2 to clear the new motion layers). None of these three
+   are mounted at all under prefers-reduced-motion (see the page
+   component); the display:none rules further down are a defensive
+   backstop only. */
+.oasrc-hero__atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: block;
+  pointer-events: none;
+}
+
+.oasrc-hero__sweep {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.oasrc-hero__sweep::before {
+  content: "";
+  position: absolute;
+  top: -10%;
+  left: -30%;
+  width: 26%;
+  height: 120%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255, 244, 220, 0.16) 45%,
+    rgba(255, 244, 220, 0.22) 50%,
+    rgba(255, 244, 220, 0.16) 55%,
+    transparent 100%
+  );
+  transform: skewX(-18deg);
+  animation: oasrc-sweep 10s ease-in-out infinite;
+}
+
+@keyframes oasrc-sweep {
+  0% {
+    left: -30%;
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 1;
+  }
+  55% {
+    left: 115%;
+    opacity: 0;
+  }
+  100% {
+    left: 115%;
+    opacity: 0;
+  }
+}
+
+.oasrc-hero__peaks {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* Four sequential flares tracing the rising ridge left-to-right, each
+   with its own full-cycle keyframe rule so its active window lines up
+   exactly with the requested 0.9s/0.9s/0.9s/1.2s stage timing plus an
+   0.8s pause (4.7s total loop).
+   A large softly-blurred radial-gradient blob (the first version of
+   this effect) reads as almost no change against this background —
+   the art is already bright, warm, and full of large soft gradients
+   of its own, so a low-opacity translucent wash on top of it is lost.
+   What actually pops is the opposite technique: a small, genuinely
+   bright core (real alpha, not blended into transparency) with a
+   layered box-shadow bloom around it — closer to a small light
+   source switching brighter than a color wash. Box-shadow blur is
+   also cheaper than a filter:blur() on a canvas-sized layer. */
+.oasrc-hero__peak {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff9ef;
+  opacity: 0.62;
+  animation-duration: 4.7s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+/* x/y positions tuned against the actual asset via pixel-sampled
+   column-contrast detection (find the existing bright vertical beams
+   baked into the ridge art, rather than floating in open sky) — see
+   the task's pixel-analysis notes. */
+.oasrc-hero__peak--1 {
+  left: 64%;
+  top: 34%;
+  box-shadow:
+    0 0 16px 6px rgba(255, 235, 190, 0.85),
+    0 0 40px 14px rgba(255, 225, 175, 0.4);
+  animation-name: oasrc-peak-1;
+}
+
+.oasrc-hero__peak--2 {
+  left: 76%;
+  top: 28%;
+  box-shadow:
+    0 0 18px 7px rgba(232, 184, 90, 0.85),
+    0 0 44px 16px rgba(232, 184, 90, 0.4);
+  animation-name: oasrc-peak-2;
+}
+
+.oasrc-hero__peak--3 {
+  left: 88%;
+  top: 22%;
+  box-shadow:
+    0 0 20px 7px rgba(214, 120, 58, 0.85),
+    0 0 46px 16px rgba(214, 120, 58, 0.4);
+  animation-name: oasrc-peak-3;
+}
+
+.oasrc-hero__peak--4 {
+  left: 96%;
+  top: 16%;
+  box-shadow:
+    0 0 20px 7px rgba(200, 70, 46, 0.85),
+    0 0 46px 16px rgba(200, 70, 46, 0.4);
+  animation-name: oasrc-peak-4;
+}
+
+/* Resting opacity 0.62 -> active 0.98 (+58%): deliberately stronger
+   than the originally suggested +25-40% swing, because that range —
+   tested against the actual (very bright, very busy) hero art — did
+   not clear the "clearly perceptible within 3 seconds" bar. Visible
+   sequential travel takes priority over hitting the suggested number
+   exactly. */
+@keyframes oasrc-peak-1 {
+  0%, 19%, 100% { opacity: 0.62; }
+  3%, 16% { opacity: 0.98; }
+}
+@keyframes oasrc-peak-2 {
+  0%, 19%, 38%, 100% { opacity: 0.62; }
+  22%, 35% { opacity: 0.98; }
+}
+@keyframes oasrc-peak-3 {
+  0%, 38%, 57%, 100% { opacity: 0.62; }
+  41%, 54% { opacity: 0.98; }
+}
+@keyframes oasrc-peak-4 {
+  0%, 57%, 83%, 100% { opacity: 0.62; }
+  61%, 79% { opacity: 0.98; }
+}
+
+.oasrc-hero__grid {
+  position: relative;
+  z-index: 5;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: grid;
+  grid-template-columns: 36fr 64fr;
+  align-items: center;
+  gap: 40px;
+}
+
+.oasrc-hero__heading {
+  font: 400 58px/1.12 var(--oas-serif);
+  color: var(--oasrc-ink);
+  margin: 0 0 16px;
+  letter-spacing: -0.01em;
+}
+
+.oasrc-hero__body {
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--oasrc-body);
+  max-width: 42ch;
+  margin: 0 0 18px;
+}
+
+.oasrc-hero__rule {
+  width: 44px;
+  height: 2px;
+  background: var(--oasrc-rust);
+  border: 0;
+  margin: 0 0 12px;
+}
+
+.oasrc-hero__tagline {
+  font: 700 12.5px/1.6 var(--oas-sans);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--oasrc-muted);
+  margin: 0;
+}
+
+/* Transparent spacer — reserves the exact same right-column footprint
+   the Phase 1 placeholder used (identical aspect-ratio/max-height), so
+   the grid's 36/64 proportions and the hero's overall height are
+   completely unaffected by the background swap. Now that the hero-wide
+   background art fills this area, there's nothing left to render here
+   directly; keeping the element (rather than removing the right grid
+   cell) is what keeps the layout byte-for-byte stable. */
+.oasrc-hero__visual {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  aspect-ratio: 660 / 340;
+  /* 340px -> 380px: this spacer's height sets the grid row height at
+     desktop (it's taller than the left copy column), so raising its
+     cap is what actually grows the hero — letting the taller hero
+     reveal more of the background art vertically, rather than
+     stretching the art itself. */
+  max-height: 380px;
+}
+
+/* ---------------------------- Risk levels intro ---------------------------- */
+
+.oasrc-levels-intro {
+  background: var(--oas-white);
+  padding: 32px 0 24px;
+}
+
+.oasrc-levels-intro__heading {
+  font: 400 40px/1.12 var(--oas-serif);
+  color: var(--oasrc-ink);
+  margin: 0 0 10px;
+  max-width: 20ch;
+}
+
+.oasrc-levels-intro__body {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--oasrc-body);
+  max-width: 68ch;
+  margin: 0;
+}
+
+/* ---------------------------- R0-R4 classification scale ---------------------------- */
+
+.oasrc-scale {
+  background: var(--oas-white);
+  padding: 8px 0 32px;
+}
+
+/* ---------------------------- The continuous escalation field ----------------------------
+   One rounded container, four stacked layers (back to front): the
+   base horizontal gradient (every level's real color lives here —
+   everything else just echoes it), a clipped decorative "landscape"
+   accent for depth, a static SVG curve, then the live content row.
+   Fixed height (not aspect-ratio) because the field's proportions are
+   an explicit target (300-360px at desktop) independent of its width,
+   unlike e.g. the hero visual placeholder elsewhere on this page. */
+.oasrc-scale__field {
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+  /* min-height, not height: R4's description is the longest of the
+     five and — at the canonical 16px description floor, not reduced
+     to fit — needed slightly more than 340px in its column. A fixed
+     height clipped it; min-height keeps 340px as the floor everywhere
+     else while letting the field grow to whatever the tallest column
+     actually needs (confirmed via screenshot, not assumed). */
+  min-height: 340px;
+}
+
+.oasrc-scale__base {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(
+    to right,
+    var(--oasrc-r0) 10%,
+    var(--oasrc-r1) 30%,
+    var(--oasrc-r2) 50%,
+    var(--oasrc-r3) 70%,
+    var(--oasrc-r4) 90%
+  );
+}
+
+/* A single straight diagonal is enough to read as "rising ground" —
+   testing showed a multi-point polyline here added complexity without
+   a visible difference, since the base gradient above already carries
+   the actual color signal. Reuses the same five-color gradient at
+   higher saturation/opacity so the "land" reads as a richer, deeper
+   version of the sky above it rather than an unrelated second
+   graphic. */
+.oasrc-scale__landscape {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  clip-path: polygon(0 82%, 100% 15%, 100% 100%, 0 100%);
+  background: linear-gradient(to right, var(--oasrc-r0) 10%, var(--oasrc-r1) 30%, var(--oasrc-r2) 50%, var(--oasrc-r3) 70%, var(--oasrc-r4) 90%);
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+}
+
+/* Sits in the top ~34% of the field, above the content row — a
+   conceptual escalation indicator, not a literal chart tied to any
+   one level's pixel position. Points steepen toward R3/R4 per spec. */
+.oasrc-scale__curve {
+  position: absolute;
+  top: 14px;
+  left: 0;
+  width: 100%;
+  height: 84px;
+  z-index: 2;
+  overflow: visible;
+}
+.oasrc-scale__curve path {
+  fill: none;
+  stroke: var(--oasrc-rust);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  opacity: 0.75;
+}
+.oasrc-scale__curve circle {
+  fill: var(--oasrc-rust);
+}
+
+.oasrc-scale__grid {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  min-height: 100%;
+  padding-top: 92px;
+  padding-bottom: 12px;
+}
+
+.oasrc-level {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  padding: 0 12px;
+}
+
+/* Thin, low-opacity separators between levels — readable structure
+   without breaking the continuous field. mix-blend-mode makes the
+   same single divider color work against both the pale (R0-R1) and
+   dark (R3-R4) ends of the gradient, so it doesn't need five different
+   divider colors of its own. */
+.oasrc-level:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 8%;
+  bottom: 8%;
+  right: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.8);
+  mix-blend-mode: overlay;
+}
+
+.oasrc-level__badge {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 700 15px/1 var(--oas-sans);
+  margin-bottom: 2px;
+  box-shadow: 0 2px 8px rgba(32, 21, 16, 0.12);
+}
+
+.oasrc-level__title {
+  font: 700 18px/1.25 var(--oas-sans);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.oasrc-level__sub {
+  font: 600 12px/1.3 var(--oas-sans);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.72;
+}
+
+.oasrc-level__body {
+  /* 16px is the canonical description floor for this page — kept
+     exactly there rather than reduced; line-height is tightened
+     instead (still comfortably readable) since R4's description is
+     long enough to need every bit of vertical economy available
+     without shrinking the type itself. */
+  font-size: 16px;
+  line-height: 1.42;
+  margin: 0;
+  flex: 1;
+}
+
+.oasrc-level__control {
+  font: 700 12px/1.3 var(--oas-sans);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  /* margin-top:auto (a flex-column technique) pins every level's
+     control band to the same bottom line regardless of how much
+     shorter its own description is than R4's — the grid's default
+     row-stretch already gives every .oasrc-level the height of the
+     tallest column, so this fills that leftover space rather than
+     leaving the band floating right under a short description. */
+  margin: auto 0 0;
+  padding: 8px 10px;
+  border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ---------------------------- Per-level color/contrast (R0-R2 light group) ----------------------------
+   R0-R2 sit on the pale-to-amber end of the field, so they keep dark
+   ink text throughout — badge fill escalates in saturation
+   (neutral -> warm light -> orange) even though the text color
+   doesn't need to switch yet. */
+.oasrc-level--r0 .oasrc-level__title,
+.oasrc-level--r1 .oasrc-level__title,
+.oasrc-level--r2 .oasrc-level__title {
+  color: var(--oasrc-ink);
+}
+.oasrc-level--r0 .oasrc-level__sub,
+.oasrc-level--r1 .oasrc-level__sub,
+.oasrc-level--r2 .oasrc-level__sub {
+  color: var(--oasrc-ink);
+}
+.oasrc-level--r0 .oasrc-level__body,
+.oasrc-level--r1 .oasrc-level__body,
+.oasrc-level--r2 .oasrc-level__body {
+  color: var(--oasrc-body);
+}
+
+.oasrc-level--r0 .oasrc-level__badge {
+  background: var(--oas-white);
+  border: 1.5px solid rgba(var(--oasrc-rust-rgb), 0.3);
+  color: var(--oasrc-muted);
+}
+.oasrc-level--r1 .oasrc-level__badge {
+  background: var(--oasrc-soft-fill);
+  border: 1.5px solid rgba(var(--oasrc-rust-rgb), 0.35);
+  color: var(--oasrc-rust-deep);
+}
+.oasrc-level--r2 .oasrc-level__badge {
+  background: var(--oasrc-r2);
+  border: 1.5px solid rgba(var(--oasrc-rust-rgb), 0.4);
+  color: var(--oasrc-ink);
+}
+
+.oasrc-level--r0 .oasrc-level__control {
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--oasrc-muted);
+}
+.oasrc-level--r1 .oasrc-level__control {
+  background: rgba(255, 255, 255, 0.4);
+  color: var(--oasrc-rust-deep);
+}
+.oasrc-level--r2 .oasrc-level__control {
+  background: rgba(255, 255, 255, 0.32);
+  color: var(--oasrc-ink);
+}
+
+/* ---------------------------- Per-level color/contrast (R3-R4 dark group) ----------------------------
+   R3-R4 sit on the copper/deep-rust end of the field — dark ink text
+   would fail contrast there, so title/description/control switch to
+   light ivory/white, and the badge itself carries the darkest fills. */
+.oasrc-level--r3 .oasrc-level__title,
+.oasrc-level--r4 .oasrc-level__title {
+  color: var(--oas-white);
+}
+.oasrc-level--r3 .oasrc-level__sub,
+.oasrc-level--r4 .oasrc-level__sub {
+  color: rgba(255, 255, 255, 0.85);
+}
+.oasrc-level--r3 .oasrc-level__body {
+  color: rgba(255, 255, 255, 0.92);
+}
+.oasrc-level--r4 .oasrc-level__body {
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.oasrc-level--r3 .oasrc-level__badge {
+  background: var(--oasrc-r3);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  color: var(--oas-white);
+}
+.oasrc-level--r4 .oasrc-level__badge {
+  background: var(--oasrc-r4);
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  color: var(--oas-white);
+}
+
+.oasrc-level--r3 .oasrc-level__control {
+  background: rgba(var(--oasrc-r4-rgb), 0.25);
+  color: rgba(255, 255, 255, 0.92);
+}
+.oasrc-level--r4 .oasrc-level__control {
+  background: rgba(0, 0, 0, 0.22);
+  color: var(--oas-white);
+  font-weight: 800;
+}
+
+/* ---------------------------- Supporting explanation row ---------------------------- */
+
+.oasrc-explain {
+  background: var(--oas-white);
+  padding: 24px 0 32px;
+}
+
+.oasrc-explain__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.oasrc-explain__col {
+  display: flex;
+  flex-direction: column;
+}
+
+.oasrc-explain__icon {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--oasrc-soft-fill);
+  color: var(--oasrc-rust);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  box-sizing: border-box;
+  margin-bottom: 12px;
+}
+
+.oasrc-explain__title {
+  font: 700 18px/1.3 var(--oas-sans);
+  color: var(--oasrc-ink);
+  margin: 0 0 6px;
+}
+
+.oasrc-explain__body {
+  font-size: 16.5px;
+  line-height: 1.55;
+  color: var(--oasrc-muted);
+  margin: 0;
+}
+
+/* ---------------------------- What changes by level? (matrix) ---------------------------- */
+
+.oasrc-matrix-section {
+  background: var(--oasrc-ivory);
+  padding: 32px 0 36px;
+}
+
+.oasrc-matrix-section__heading {
+  font: 400 40px/1.12 var(--oas-serif);
+  color: var(--oasrc-ink);
+  margin: 0 0 10px;
+  max-width: 20ch;
+}
+
+.oasrc-matrix-section__body {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--oasrc-body);
+  max-width: 68ch;
+  margin: 0 0 24px;
+}
+
+.oasrc-matrix__scroll {
+  overflow-x: auto;
+  border-radius: 10px;
+  border: 1px solid var(--oasrc-divider);
+  background: var(--oas-white);
+}
+
+.oasrc-matrix {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.oasrc-matrix th,
+.oasrc-matrix td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--oasrc-divider);
+  white-space: nowrap;
+}
+
+.oasrc-matrix thead th {
+  font: 700 13px/1.3 var(--oas-sans);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--oasrc-rust-deep);
+  background: var(--oasrc-soft-fill);
+}
+
+.oasrc-matrix thead th:first-child {
+  border-top-left-radius: 9px;
+}
+.oasrc-matrix thead th:last-child {
+  border-top-right-radius: 9px;
+}
+
+.oasrc-matrix tbody th {
+  font: 700 15px/1.4 var(--oas-sans);
+  color: var(--oasrc-ink);
+  white-space: normal;
+}
+
+.oasrc-matrix tbody td {
+  font-size: 15px;
+  color: var(--oasrc-body);
+}
+
+.oasrc-matrix tbody tr:last-child th,
+.oasrc-matrix tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* ---------------------------- Bottom CTA band ---------------------------- */
+
+.oasrc-cta {
+  background: var(--oas-white);
+  padding: 0 0 48px;
+}
+
+.oasrc-cta__row {
+  background: var(--oasrc-ivory);
+  border-radius: 10px;
+  padding: 28px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.oasrc-cta__left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1 1 380px;
+  min-width: 0;
+}
+
+.oasrc-cta__icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--oas-white);
+  color: var(--oasrc-rust);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+.oasrc-cta__text {
+  min-width: 0;
+}
+
+.oasrc-cta__heading {
+  font: 400 28px/1.2 var(--oas-serif);
+  color: var(--oasrc-ink);
+  margin: 0 0 6px;
+}
+
+.oasrc-cta__body {
+  font-size: 16.5px;
+  line-height: 1.5;
+  color: var(--oasrc-body);
+  margin: 0;
+  max-width: 56ch;
+}
+
+.oasrc-cta__actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.oasrc-cta__primary {
+  white-space: nowrap;
+  font-size: 16px;
+  gap: 8px;
+}
+
+.oasrc-cta__primary span[aria-hidden] {
+  margin-left: 6px;
+}
+
+/* Small, neutral, secondary — a footnote on the button, not an alert —
+   so the otherwise fully-solid rust CTA never reads as a live link
+   when it has nowhere to go yet. */
+.oasrc-cta__badge {
+  font: 600 10.5px/1 var(--oas-sans);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--oas-white);
+  background: rgba(255, 255, 255, 0.22);
+  padding: 3px 7px;
+  border-radius: 2px;
+}
+
+.oasrc-textlink span[aria-hidden] {
+  margin-left: 2px;
+}
+
+/* ---------------------------- Footer compression (this page only) ---------------------------- */
+
+.oasrc .oas-footer {
+  padding: 40px 0 20px;
+}
+
+/* ---------------------------- Responsive ---------------------------- */
+
+@media (max-width: 1150px) {
+  /* min-height (not height) throughout every one of these
+     breakpoints, for the same reason as the base rule: R4's
+     description at the enforced 16px floor needs more room than a
+     hard cap allows at some widths — confirmed via a real clipping
+     bug caught by screenshot at 1024px, not assumed fixed just because
+     the base rule was. */
+  .oasrc-scale__field {
+    min-height: 320px;
+  }
+  .oasrc-scale__curve {
+    height: 78px;
+  }
+  .oasrc-scale__grid {
+    padding-top: 84px;
+  }
+  .oasrc-level {
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 1100px) {
+  /* The desktop-only padding bump (40/44) compounds with the stacked
+     layout's own extra vertical flow (text, then gap, then visual, in
+     one column instead of a shared row) — left at the desktop value,
+     that pushed this range taller than desktop itself. Trimmed back
+     down for the stacked range specifically. */
+  .oasrc-hero {
+    padding: 32px 0 36px;
+  }
+  .oasrc-hero__grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    text-align: left;
+  }
+  /* 480px (247px tall) was sized before the desktop hero grew — once
+     stacked, that plus the now-taller copy column pushed tablet's
+     total hero past 690px, taller than desktop's own 464px. "Reduce
+     proportionally" means tablet should read as calmer than desktop,
+     not larger than it, so this shrinks specifically at this
+     breakpoint rather than at the shared base rule. */
+  .oasrc-hero__visual {
+    max-width: 360px;
+    max-height: none;
+  }
+  .oasrc-explain__grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+
+@media (max-width: 980px) {
+  /* Tablet keeps the continuous five-column field (per the brief's
+     "preserve connected visual if possible") rather than reflowing to
+     3+2 — a partial-row wrap would break the one-continuous-system
+     read this whole rebuild is about. Sizes shrink further instead. */
+  .oasrc-scale__field {
+    min-height: 300px;
+  }
+  .oasrc-scale__curve {
+    height: 70px;
+  }
+  .oasrc-scale__grid {
+    padding-top: 76px;
+  }
+  .oasrc-level__badge {
+    width: 44px;
+    height: 44px;
+    font-size: 15px;
+  }
+  .oasrc-level__title {
+    font-size: 16px;
+  }
+  /* Description stays at 16px — the canonical minimum for substantive
+     text — even as everything else around it shrinks a little. */
+}
+
+@media (max-width: 900px) {
+  .oasrc-hero {
+    padding: 24px 0 28px;
+  }
+  .oasrc-hero__heading {
+    font-size: 44px;
+  }
+  .oasrc-levels-intro__heading,
+  .oasrc-matrix-section__heading {
+    font-size: 34px;
+  }
+  .oasrc-cta__row {
+    justify-content: center;
+    text-align: center;
+  }
+  .oasrc-cta__left {
+    flex-direction: column;
+    text-align: center;
+  }
+  .oasrc-cta__actions {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .oasrc-hero__grid {
+    padding: 0 20px;
+    gap: 18px;
+  }
+  /* The visual spacer exists purely to reserve room for the
+     background art to show through below the stacked text — at true
+     mobile widths its inherited 480px cap (247px tall) was the main
+     reason the whole hero ran to ~580px, well past "compact." Shrunk
+     specifically here rather than lowering the shared >=641px value,
+     so the desktop/tablet reveal this task was about stays intact. */
+  .oasrc-hero__visual {
+    max-width: 260px;
+  }
+  /* Mobile fallback: stack R0 -> R4 vertically (per the brief) rather
+     than compress five columns until unreadable. The field switches
+     from a fixed-height horizontal system to an auto-height vertical
+     one — same base gradient and landscape accent, just rotated to a
+     top-to-bottom escalation, so each row still gets its correct
+     place on the same five-color scale rather than a flat swap to
+     solid per-row colors. The curve is a horizontal-only diagram, so
+     it's hidden here rather than contorted into a vertical shape. */
+  .oasrc-scale__field {
+    height: auto;
+    border-radius: 12px;
+  }
+  .oasrc-scale__base,
+  .oasrc-scale__landscape {
+    background: linear-gradient(
+      to bottom,
+      var(--oasrc-r0) 6%,
+      var(--oasrc-r1) 26%,
+      var(--oasrc-r2) 50%,
+      var(--oasrc-r3) 74%,
+      var(--oasrc-r4) 94%
+    );
+  }
+  .oasrc-scale__landscape {
+    clip-path: none;
+  }
+  .oasrc-scale__curve {
+    display: none;
+  }
+  .oasrc-scale__grid {
+    grid-template-columns: 1fr;
+    padding-top: 0;
+  }
+  .oasrc-level {
+    flex-direction: row;
+    flex-wrap: wrap;
+    text-align: left;
+    align-items: flex-start;
+    gap: 12px 16px;
+    padding: 20px 16px;
+  }
+  .oasrc-level:not(:last-child)::after {
+    top: auto;
+    bottom: 0;
+    left: 6%;
+    right: 6%;
+    width: auto;
+    height: 1px;
+  }
+  .oasrc-level__badge {
+    margin-bottom: 0;
+  }
+  .oasrc-level__title,
+  .oasrc-level__body {
+    flex: 1 1 calc(100% - 72px);
+  }
+  .oasrc-level__control {
+    margin: 4px 0 0;
+    width: auto;
+    display: inline-block;
+  }
+  .oasrc-cta__actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .oasrc-cta__primary,
+  .oasrc-textlink {
+    justify-content: center;
+    text-align: center;
+  }
+  /* The button's own text/arrow/badge no longer refuse to wrap onto a
+     second line at this width — without this, the "Coming Soon" badge
+     forced a content-driven minimum width wider than the stretched
+     column, overflowing the page horizontally (confirmed via
+     bounding-box measurement, not assumed). */
+  .oasrc-cta__primary {
+    white-space: normal;
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oasrc * {
+    transition-duration: 0.01ms !important;
+  }
+  /* Defensive: none of these three are mounted at all under reduced
+     motion (see OASRiskClassificationPage.jsx), but this hides them
+     too in case of markup changes that stop gating the render. */
+  .oasrc-hero__atmosphere,
+  .oasrc-hero__sweep,
+  .oasrc-hero__peaks {
+    display: none;
+  }
+}

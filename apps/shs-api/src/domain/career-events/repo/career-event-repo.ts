@@ -80,6 +80,7 @@ export class CareerEventRepo {
       `SELECT ${COLUMNS} FROM career_events e
        WHERE e.organization_id = $1
          AND e.status IN ('PUBLISHED', 'COMPLETED')
+         AND (e.status = 'COMPLETED' OR e.ends_at >= NOW())
          AND (
            e.audience_scope = 'ORGANIZATION'
            OR EXISTS (

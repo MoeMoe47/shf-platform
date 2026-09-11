@@ -57,6 +57,7 @@ export interface CurriculumLessonRow {
   title: string;
   summary: string | null;
   objectives: string[];
+  content: Record<string, unknown>;
   estimatedDurationMinutes: number | null;
   sequence: number;
   status: EntityStatus;
@@ -193,6 +194,7 @@ export interface CurriculumReleaseSnapshot {
       title: string;
       summary: string | null;
       objectives: string[];
+      content: Record<string, unknown>;
       estimatedDurationMinutes: number | null;
       sequence: number;
       resources: Array<{

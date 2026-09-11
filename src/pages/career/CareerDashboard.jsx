@@ -4,9 +4,9 @@
 // week" are Calendar facts, so they now derive from the same canonical
 // GET /calendar/events/me every other SHF Calendar surface uses (Phase
 // 9), instead of the hardcoded "3"/"2" this page previously always
-// showed regardless of what was actually true. "Portfolio items" is not
-// a Calendar concept (no scheduled date involved) and is out of this
-// phase's scope — left unchanged.
+// showed regardless of what was actually true. Portfolio counts are owned by
+// Portfolio, so this dashboard links there instead of repeating a hardcoded
+// count as a production fact.
 import React from "react";
 import { useUser } from "@/context/UserContext.jsx";
 import { listCalendarEvents } from "@/lib/calendar/api.js";
@@ -46,14 +46,14 @@ export default function CareerDashboard() {
     <section className="crb-main">
       <header className="db-head">
         <div>
-          <h1 className="db-title">Career Center</h1>
-          <p className="db-subtitle">Assignments, calendar, portfolio</p>
+          <h1 className="db-title">My Career Center</h1>
+          <p className="db-subtitle">Personal assignments, calendar, portfolio, and planning.</p>
         </div>
       </header>
 
       <div className="db-grid db-grid--kpis">
         <div className="card card--pad">Upcoming assignments: <strong>{displayCount(summary.assignmentsDue)}</strong></div>
-        <div className="card card--pad">Portfolio items: <strong>5</strong></div>
+        <div className="card card--pad">Portfolio: <a href="/career.html#/portfolio">View artifacts and credentials</a></div>
         <div className="card card--pad">Events this week: <strong>{displayCount(summary.eventsThisWeek)}</strong></div>
       </div>
     </section>

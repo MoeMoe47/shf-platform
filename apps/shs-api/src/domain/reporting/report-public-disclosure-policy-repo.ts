@@ -97,7 +97,7 @@ export class ReportPublicDisclosurePolicyRepo {
       `INSERT INTO report_public_disclosure_policy_signoffs (
         signoff_record_id, policy_id, tenant_id, organization_id,
         signoff_type, authority_reference, status, recorded_by_user_id, version
-      ) VALUES ($1,$2,$3,$4,$5,'PENDING',$6,1)
+      ) VALUES ($1,$2,$3,$4,$5,$6,'PENDING',$7,1)
       RETURNING *`,
       [input.signoff_record_id, input.policy_id, input.tenant_id, input.organization_id, input.signoff_type, input.authority_reference, input.recorded_by_user_id],
     );

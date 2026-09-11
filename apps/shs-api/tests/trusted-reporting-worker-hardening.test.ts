@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
-import { classifyDeliveryResponse } from "../src/domain/trusted-reporting/outbox.ts";
+import { classifyDeliveryFailure, classifyDeliveryResponse } from "../src/domain/trusted-reporting/outbox.ts";
 import { workerConfig } from "../src/domain/trusted-reporting/dispatcher.ts";
 import { runTrustedReportingWorkerLoop } from "../src/domain/trusted-reporting/worker.ts";
 
@@ -10,6 +10,11 @@ test("delivery classifier distinguishes success, idempotent replay, transient, a
   assert.equal(classifyDeliveryResponse(409, { idempotent_replay: true }), "ALREADY_ACCEPTED_IDEMPOTENT_SUCCESS");
   assert.equal(classifyDeliveryResponse(429), "RETRYABLE_FAILURE");
   assert.equal(classifyDeliveryResponse(422), "PERMANENT_FAILURE");
+});
+
+test("delivery classifier treats refused consumer connections as retryable", () => {
+  assert.deepEqual(classifyDeliveryFailure({ code: "ECONNREFUSED" }), { retryable: true, final: false });
+  assert.deepEqual(classifyDeliveryFailure({ cause: { code: "ECONNREFUSED" } } as any), { retryable: true, final: false });
 });
 
 test("worker configuration has bounded, restart-safe delivery defaults", () => {

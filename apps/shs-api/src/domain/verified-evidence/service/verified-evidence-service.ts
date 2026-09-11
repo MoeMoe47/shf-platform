@@ -18,6 +18,7 @@ const SOURCE_TABLES: Record<string, { table: string; id: string; learner: string
   ATTENDANCE: { table: "live_session_join_events", id: "join_event_id", learner: "user_id", occurred: "created_at" },
   INSTRUCTOR_VERIFICATION: { table: "learner_competency_decisions", id: "decision_id", learner: "user_id", occurred: "reviewed_at" },
   STUDIO_DELIVERY: { table: "studio_delivery_records", id: "delivery_record_id", learner: "studio_learner_id", occurred: "finalized_at" },
+  AGENT_TASK_ATTEMPT: { table: "ai_agent_task_attempts", id: "attempt_id", learner: "agent_principal_user_id", occurred: "finished_at" },
 };
 
 function stableId(...parts: string[]) {
@@ -25,6 +26,20 @@ function stableId(...parts: string[]) {
 }
 
 async function loadSourceRow(sourceType: string, source: typeof SOURCE_TABLES[string], sourceRecordId: string, organizationId: string, learnerId?: string) {
+  if (sourceType === "AGENT_TASK_ATTEMPT") {
+    return query(`SELECT a.*, t.principal_user_id AS agent_principal_user_id, t.session_id, t.agent_identity_id,
+      t.delegation_id, t.task_type, t.requested_action, t.action_hash, t.consequence_class,
+      t.resource_scope, t.tool_scope, t.input_hash, t.policy_snapshot,
+      pa.action_fingerprint, pa.proposed_action_id,
+      ar.approval_request_id, ar.status AS approval_status
+      FROM ai_agent_task_attempts a JOIN ai_agent_tasks t
+        ON t.task_id=a.task_id AND t.organization_id=a.organization_id AND t.tenant_id=a.tenant_id
+      LEFT JOIN ai_agent_task_proposed_actions pa ON pa.task_id=t.task_id
+        AND pa.organization_id=t.organization_id AND pa.tenant_id=t.tenant_id
+      LEFT JOIN ai_agent_task_approval_requests ar ON ar.proposed_action_id=pa.proposed_action_id
+        AND ar.organization_id=t.organization_id AND ar.tenant_id=t.tenant_id
+      WHERE a.attempt_id=$1 AND a.organization_id=$2 AND a.tenant_id=$3`, [sourceRecordId, organizationId, `tenant:${organizationId}`]);
+  }
   if (sourceType === "STUDIO_DELIVERY") {
     const learnerClause = learnerId ? " AND p.studio_learner_id=$3" : "";
     const params = learnerId ? [sourceRecordId, organizationId, learnerId] : [sourceRecordId, organizationId];
@@ -68,7 +83,8 @@ async function projectAuthoritativeFactInternal(actor: ProjectionActor, input: P
   const sourceResult = await loadSourceRow(sourceType, source, sourceRecordId, actor.organization_id, actor.user_id);
   const row = sourceResult.rows[0];
   if (!row) throw new Error("source_record_not_found");
-  const validSource = sourceType === "STUDIO_DELIVERY" ? row.status === "FINALIZED" && row.studio_destination === "STUDENT"
+  const validSource = sourceType === "AGENT_TASK_ATTEMPT" ? row.status === "SUCCEEDED"
+    : sourceType === "STUDIO_DELIVERY" ? row.status === "FINALIZED" && row.studio_destination === "STUDENT"
     : sourceType === "ASSESSMENT_RESULT" ? row.passed === true && row.needs_review !== true
     : sourceType === "REFLECTION_SUBMISSION" ? row.status === "REVIEWED" && row.review_status === "APPROVED"
       : sourceType === "PRACTICE_RESULT" ? row.completed === true
@@ -89,7 +105,7 @@ async function projectAuthoritativeFactInternal(actor: ProjectionActor, input: P
          evidence_rule_id, evidence_rule_version, competency_id, verifier_user_id, source_occurred_at)
         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$2,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22)
         ON CONFLICT DO NOTHING
-      RETURNING *`, [evidenceId, sourceType, sourceRecordId, actor.user_id, actor.organization_id, `tenant:${actor.organization_id}`, row.activity_id || sourceRecordId, configured.evidence_type, sourceType === "STUDIO_DELIVERY" || configured.review_required ? "REVIEWABLE" : "REVIEWED", JSON.stringify({ source_type: sourceType, source_record_id: sourceRecordId, rule_id: evidenceRuleId, rule_version: configured.rule_version, project_id: row.project_id || null, workspace_revision: row.workspace_revision || null }), row.assignment_id || null, row.curriculum_release_id || null, row.release_version || null, row.course_id || null, row.unit_stable_key || null, row.lesson_stable_key || null, row.assessment_definition_id || row.reflection_definition_id || row.practice_definition_id || null, evidenceRuleId, configured.rule_version, configured.competency_id || null, sourceType === "STUDIO_DELIVERY" || configured.review_required ? null : actor.user_id, row[source.occurred] || new Date()]);
+      RETURNING *`, [evidenceId, sourceType, sourceRecordId, sourceType === "AGENT_TASK_ATTEMPT" ? row.agent_principal_user_id : actor.user_id, actor.organization_id, `tenant:${actor.organization_id}`, row.activity_id || sourceRecordId, configured.evidence_type, sourceType === "STUDIO_DELIVERY" || configured.review_required || sourceType === "AGENT_TASK_ATTEMPT" ? "REVIEWABLE" : "REVIEWED", JSON.stringify({ source_type: sourceType, source_record_id: sourceRecordId, rule_id: evidenceRuleId, rule_version: configured.rule_version, project_id: row.project_id || null, workspace_revision: row.workspace_revision || null, agent: sourceType === "AGENT_TASK_ATTEMPT" ? { task_id: row.task_id, attempt_id: row.attempt_id, session_id: row.session_id, agent_identity_id: row.agent_identity_id, delegation_id: row.delegation_id, action_fingerprint: row.action_fingerprint || row.action_hash, approval_request_id: row.approval_request_id || null, approval_status: row.approval_status || null, consequence_class: row.consequence_class } : null }), row.assignment_id || null, row.curriculum_release_id || null, row.release_version || null, row.course_id || null, row.unit_stable_key || null, row.lesson_stable_key || null, row.assessment_definition_id || row.reflection_definition_id || row.practice_definition_id || null, evidenceRuleId, configured.rule_version, configured.competency_id || null, sourceType === "STUDIO_DELIVERY" || configured.review_required || sourceType === "AGENT_TASK_ATTEMPT" ? null : actor.user_id, row[source.occurred] || new Date()]);
       evidence = result.rows[0] || (await db.query("SELECT * FROM prepare_prove_evidence WHERE organization_id=$1 AND source_type=$2 AND source_record_id=$3 AND evidence_rule_id=$4 AND status <> 'SUPERSEDED'", [actor.organization_id, sourceType, sourceRecordId, evidenceRuleId])).rows[0];
     }
     let truthFact = null;
@@ -109,6 +125,29 @@ async function projectAuthoritativeFactInternal(actor: ProjectionActor, input: P
 
 export async function projectAuthoritativeFact(actor: ProjectionActor, input: ProjectionInput) {
   return projectAuthoritativeFactInternal(actor, input, true);
+}
+
+/**
+ * Bounded Agent Fabric intake. A successful safe attempt becomes an
+ * Evidence-domain source record only; Truth promotion still requires the
+ * existing GPA claim, admissibility, and human verification path.
+ */
+export async function projectAgentTaskAttempt(actor: ProjectionActor, input: ProjectionInput) {
+  const attemptId = String(input.sourceRecordId || "").trim();
+  if (!attemptId) throw new Error("invalid_projection_input");
+  const source = await query(`SELECT a.attempt_id, a.task_id, a.organization_id, a.tenant_id,
+      a.status, a.result_metadata, a.finished_at, t.principal_user_id
+    FROM ai_agent_task_attempts a JOIN ai_agent_tasks t
+      ON t.task_id=a.task_id AND t.organization_id=a.organization_id AND t.tenant_id=a.tenant_id
+    WHERE a.attempt_id=$1 AND a.organization_id=$2 AND a.tenant_id=$3`, [attemptId, actor.organization_id, `tenant:${actor.organization_id}`]);
+  const row = source.rows[0];
+  if (!row) throw new Error("source_record_not_found");
+  if (row.status !== "SUCCEEDED") throw new Error("source_record_not_evidence_eligible");
+  await query(`INSERT INTO prepare_prove_activity_results
+    (result_id, activity_type, activity_id, user_id, organization_id, tenant_id, result_status, result_json)
+    VALUES ($1,'AGENT_TASK_ATTEMPT',$1,$2,$3,$4,'SUCCEEDED',$5)
+    ON CONFLICT (result_id) DO UPDATE SET result_json=EXCLUDED.result_json`, [attemptId, row.principal_user_id, row.organization_id, row.tenant_id, JSON.stringify({ attempt_id: attemptId, task_id: row.task_id, result: row.result_metadata || {}, finished_at: row.finished_at })]);
+  return projectAuthoritativeFactInternal(actor, { ...input, sourceType: "AGENT_TASK_ATTEMPT" }, false);
 }
 
 const OUTBOX_SOURCE_TYPES: Record<string, string> = {

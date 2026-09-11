@@ -1,7 +1,10 @@
 import { test, expect } from "@playwright/test";
 
+const BASE = String(process.env.SHS_TEST_FRONTEND_URL || "http://localhost:5173").replace(/\/$/, "");
+const APP_REGISTRY_URL = `${BASE}/admin.html#/app-registry`;
+
 test("App Registry renders contract layout", async ({ page }) => {
-  await page.goto("http://localhost:5173/admin.html#/alignment/app-registry", {
+  await page.goto(APP_REGISTRY_URL, {
     waitUntil: "networkidle",
   });
 

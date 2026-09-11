@@ -1,0 +1,1258 @@
+/* ------------------------------------------------------------------
+   OAS Control Domains — the framework/system-map page answering "what
+   are the eight areas OAS governs?" Loaded alongside oas-landing.css
+   (tokens, header, footer, buttons, .oas__eyebrow / .oas__container are
+   reused from there). Everything in this file is page-specific: the
+   compact header refinements (mirroring OAS-1's), the framework intro,
+   the radial system map, the domain detail grid, and the closing band —
+   none of which exist on the landing page or OAS-1.
+   ------------------------------------------------------------------ */
+
+.oascd {
+  /* Same "premium institutional" token system established on OAS-1
+     (src/pages/oas/oas1-page.css) — duplicated here rather than shared
+     across page files, so this page has no runtime dependency on
+     OAS-1's stylesheet and can't regress if that file changes. */
+  --oascd-rust: #c85b2d;
+  --oascd-rust-deep: #ab4220;
+  --oascd-rust-rgb: 200, 91, 45;
+  --oascd-ink: #201510;
+  --oascd-body: #4f433b;
+  --oascd-muted: #7d6e62;
+  --oascd-soft-fill: #f6dfcf;
+  --oascd-ivory: #f6efe4;
+  --oascd-divider: rgba(32, 21, 16, 0.13);
+}
+
+.oascd-icon {
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------------------------- Header (compact, matching OAS-1) ---------------------------- */
+
+.oascd .oas-header__bar {
+  padding: 10px 32px;
+}
+
+.oascd .oas-header__brand {
+  gap: 16px;
+}
+
+.oascd .oas-header__mark {
+  font-size: 30px;
+  color: var(--oascd-ink);
+}
+
+.oascd .oas-header__tagline {
+  margin-top: 4px;
+}
+
+.oascd .oas-header__tagline span:first-child {
+  color: var(--oascd-rust);
+  font-size: 11.5px;
+}
+
+.oascd .oas-header__nav {
+  gap: 26px;
+}
+
+.oascd .oas-header__cta .oas-btn {
+  padding: 11px 20px;
+}
+
+.oascd-nav-active {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--oascd-ink);
+  padding: 6px 0;
+  border-bottom: 2px solid var(--oascd-rust);
+}
+
+.oascd .oas-header__nav a,
+.oascd .oas-header__nav button.oas__planned {
+  color: var(--oascd-muted);
+}
+.oascd .oas-header__nav a:hover {
+  color: var(--oascd-rust);
+}
+
+.oas-btn.oascd-btn--rust {
+  background: var(--oascd-rust);
+  color: var(--oas-white);
+  font-weight: 700;
+}
+.oas-btn.oascd-btn--rust:hover {
+  background: var(--oascd-rust-deep);
+}
+
+@media (max-width: 1150px) {
+  .oascd .oas-header__nav {
+    display: none;
+  }
+  .oascd .oas-header__nav.oas-header__nav--open {
+    display: flex;
+  }
+  .oascd .oas-header__toggle {
+    display: inline-flex;
+  }
+}
+
+/* ---------------------------- Shared eyebrow / text link ---------------------------- */
+
+.oascd-eyebrow {
+  /* 12px -> 13px, the canonical eyebrow target — same scale now used
+     on Purpose & Boundaries (.oaspb-eyebrow). */
+  font: 700 13px/1.4 var(--oas-sans);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--oascd-rust);
+  margin: 0 0 10px;
+}
+
+.oascd-textlink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  /* 14px -> 16px: this class covers both the hero CTA (target
+     16-17px) and the Stronger Together secondary CTA (target
+     15-16px) — 16px sits inside both ranges. */
+  font: 700 16px/1.3 var(--oas-sans);
+  color: var(--oascd-rust);
+}
+a.oascd-textlink:hover {
+  color: var(--oascd-rust-deep);
+}
+
+/* ---------------------------- Framework intro + radial map ---------------------------- */
+
+/* Phase 2 atmosphere: a barely-off-white base (not flat #fff) with one
+   large, very soft warm glow sitting center-right — roughly where the
+   flywheel lives — so the canvas reads as "luminous/warm" rather than
+   a hard CSS radial circle. Layered as a background-image (not a
+   filled shape any element occupies), positioned relative so the
+   lower-left sweep <img> and the intro grid can stack above it. */
+/* Corrected: the section base is plain white — the earlier version put
+   a section-WIDE radial wash here (1100px wide, centered at 70%),
+   which reached well into the left editorial column and tinted the
+   whole hero peach/cream instead of just the flywheel area. Any
+   atmospheric glow now lives ONLY on .oascd-flywheel (see below),
+   confined to that element's own box, not this section's background. */
+.oascd-intro {
+  position: relative;
+  overflow: hidden;
+  background: var(--oas-white);
+  padding: 40px 0 36px;
+}
+
+/* Final approved background art (empty alt + aria-hidden in the JSX)
+   — supersedes the earlier "design-texture" asset (1672x941, opaque).
+   Measured directly (pixel sampling): even at its brightest/most
+   saturated point (the ring core) this asset only reaches ~(251,246,
+   239) — barely off white — versus the previous asset's visibly more
+   saturated peach. That's why opacity is much higher here (0.5 -> 0.85)
+   than it was for the old asset: at this asset's own pale intensity,
+   high opacity still reads as "white with a luminous hint," not peach.
+
+   object-position is tuned from a direct pixel measurement of the
+   source file: its own ring-system glow center sits at roughly
+   (70%, 41%) of the image — close to the prior asset's own ring
+   position, so the same split-the-difference value against the live
+   center planet (~67%, 50% of this section) still applies. Plain
+   percentage object-position ties "which point in the image" to "the
+   same fraction of the container", so it can't perfectly reconcile two
+   different fractions — 69/46 lands close enough that the ring system
+   reads as centered behind the planet without fighting the image's own
+   strongest glow point. */
+.oascd-intro__texture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 69% 46%;
+  opacity: 0.85;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Protects the left editorial column ("THE FRAMEWORK" / heading / body
+   / CTA) from the texture image showing through — a plain white
+   overlay gradient, not a mask on the image itself, so it degrades
+   safely in any browser. White from the left edge, fully faded away
+   by roughly the column boundary. */
+/* Covers the full section height again (not a 68%-tall rectangle) —
+   that fixed-height version had a completely FLAT bottom edge with no
+   vertical softening: the white overlay was 100% opaque right up to
+   68%, then vanished outright, and the raw texture image (already at
+   0.85 opacity) suddenly appeared in full below that exact line. At
+   normal viewing size that read as a hard horizontal seam directly
+   under the body copy/CTA — confirmed by a zoomed screenshot crop
+   showing a sharp straight edge, not a rendering illusion.
+
+   Fixed by keeping the horizontal protection (the background gradient,
+   unchanged) but controlling the element's own VERTICAL visibility
+   with a mask-image instead of a hard height cutoff: fully present
+   through 66% (past the CTA link, which ends around 64% of the
+   section), then a broad 19%-tall soft ramp down to fully transparent
+   by 85%. The transition is now a gradual dissolve wide enough that no
+   single-pixel-row edge is ever visible, instead of a one-line cliff. */
+.oascd-intro__texture-fade {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(to right, var(--oas-white) 0%, var(--oas-white) 30%, rgba(255, 255, 255, 0) 48%);
+  mask-image: linear-gradient(to bottom, black 0%, black 66%, transparent 85%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 66%, transparent 85%);
+  pointer-events: none;
+}
+
+/* Explicit 36/64 split (not a minmax+1fr track, which left slack space
+   around the flywheel instead of letting it dominate) so the right
+   side reliably reads as the visually dominant ~62-66% the spec calls
+   for, with no dead space between the two columns' actual content. */
+/* align-items was "center": since the flywheel is far taller than the
+   text column, it alone defines the grid row's height (~778px at
+   1440px), and centering a ~255px-tall text block inside a 778px row
+   put ~260px of dead white space above it (measured) — the row's
+   height doesn't change with this switch (the flywheel already
+   matches it exactly, so top vs. center alignment is a no-op for the
+   flywheel itself), only the text's position within that row does. */
+.oascd-intro__grid {
+  position: relative;
+  z-index: 1;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: grid;
+  grid-template-columns: 36fr 64fr;
+  align-items: start;
+  gap: 40px;
+}
+
+/* Explicit top-biased offset (not a transform): landing "THE
+   FRAMEWORK" in the hero's upper third per the approved mock, roughly
+   a 90px upward shift from the old fully-centered position — enough
+   to close the dead-space gap without butting straight up against the
+   header. */
+.oascd-intro__copy {
+  min-width: 0;
+  margin-top: 170px;
+}
+
+.oascd-intro__heading {
+  /* 46px -> 58px, matching the H1 scale now standardized on Purpose &
+     Boundaries (56-64px target); line-height already sat inside the
+     1.05-1.15 large-heading band. */
+  font: 400 58px/1.12 var(--oas-serif);
+  color: var(--oascd-ink);
+  margin: 0 0 16px;
+  letter-spacing: -0.01em;
+}
+
+.oascd-intro__body {
+  /* 15px -> 19px, the canonical lead-body target; line-height already
+     sat inside the 1.55-1.65 band. */
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--oascd-body);
+  max-width: 42ch;
+  margin: 0 0 18px;
+}
+
+/* ---------------------------- Flywheel: orbit system + center planet + 8 domain nodes ----------------------------
+   Geometry matches the JS constants in OASControlDomainsPage.jsx
+   (FW=840, PLANET_R=165, ORBIT_R=310, NODE_R=56) — all measured
+   against the approved hero mock (there, the node-center orbit sits at
+   ~1.88x the planet's own radius). Everything below is sized in
+   PERCENTAGES of .oascd-flywheel's own width, so the whole system
+   (planet, halo, rings, nodes, connectors) scales together at every
+   responsive breakpoint from a single max-width change — no per-
+   element breakpoint overrides needed for size, only for label text
+   (which doesn't scale with percentages).
+
+   Explicit z-index stack (back to front): texture background + fade
+   sit at 0 (on .oascd-intro), connectors/rings/guides at 1, planet
+   group at 4-7, then the 8 nodes at 8 (so a node's label can never be
+   covered by the planet halo). */
+
+.oascd-flywheel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 840px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+}
+
+.oascd-flywheel__connectors {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Thinner, quieter, more "architectural/celestial" than the previous
+   pass — reads as a precise diagram guide, not a HUD/dashboard line. */
+.oascd-flywheel__connector {
+  stroke: var(--oascd-rust);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+  opacity: 0.28;
+  transition: opacity 350ms ease;
+}
+
+/* The connector toward the active domain brightens slightly — a soft
+   opacity change only, no moving/laser effect. */
+.oascd-flywheel__connector--active {
+  opacity: 0.68;
+}
+
+.oascd-flywheel__connector-dot {
+  fill: var(--oascd-rust);
+  opacity: 0.4;
+  transition: opacity 350ms ease;
+}
+
+.oascd-flywheel__connector-dot--active {
+  opacity: 0.85;
+}
+
+.oascd-flywheel__connector-arrow {
+  fill: var(--oascd-rust);
+  opacity: 0.4;
+}
+
+/* Three layered, faint orbit rings — thin, low-contrast, no
+   technical-diagram feel: an outer dashed guide, a middle dashed
+   guide, and a solid hairline running exactly through the node
+   centers (the "flywheel" ring proper). The previous pass's "orbit"
+   ring didn't actually match the node radius (a leftover arithmetic
+   error, inset 26.19% instead of the correct value) — fixed here to
+   genuinely pass through each node's center at ORBIT_R=290/840. */
+.oascd-flywheel__ring {
+  position: absolute;
+  z-index: 1;
+  border-radius: 50%;
+}
+.oascd-flywheel__ring--outer {
+  inset: 4%;
+  border: 1px dashed rgba(var(--oascd-rust-rgb), 0.16);
+}
+.oascd-flywheel__ring--mid {
+  inset: 9.5%;
+  border: 1px dashed rgba(var(--oascd-rust-rgb), 0.1);
+}
+.oascd-flywheel__ring--orbit {
+  /* (840 - 2*290)/2 / 840 = 15.48% — the ring's own radius then equals
+     ORBIT_R exactly, so it passes through every node's center. */
+  inset: 15.48%;
+  border: 1px solid rgba(var(--oascd-rust-rgb), 0.12);
+}
+
+/* Small hollow cross-axis guide points on the outer ring, echoing the
+   approved mock's own corner dots — restrained (two only). */
+.oascd-flywheel__guide {
+  position: absolute;
+  z-index: 1;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid rgba(var(--oascd-rust-rgb), 0.35);
+  background: var(--oas-white);
+  transform: translate(-50%, -50%);
+}
+.oascd-flywheel__guide--1 {
+  top: 50%;
+  left: 2%;
+}
+.oascd-flywheel__guide--2 {
+  top: 50%;
+  left: 98%;
+}
+
+/* ---------------------------- Center planet ---------------------------- */
+
+.oascd-planet {
+  position: absolute;
+  z-index: 4;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 39.3%; /* 330 / 840 */
+  aspect-ratio: 1290 / 1219; /* the source asset's own ratio — never stretched */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Feathered, restrained halo — glow is strongest immediately around
+   the planet and fades out well before the node ring, instead of
+   filling the whole center with a peach disc (the previous -46%/84%
+   version read as one broad wash covering most of the flywheel).
+   Tightened inset and falloff so there's real white space between the
+   planet's own glow and the soft illumination behind the nodes. */
+.oascd-planet__halo {
+  position: absolute;
+  z-index: 4;
+  inset: -28%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 246, 235, 0.88) 0%,
+    rgba(255, 214, 173, 0.34) 24%,
+    rgba(var(--oascd-rust-rgb), 0.16) 42%,
+    transparent 62%
+  );
+}
+
+/* Decorative (alt="" + aria-hidden in the JSX) — the approved
+   production asset, used exactly as generated: no CSS-recreated
+   sphere, no substituted Venus image, no recoloring. object-
+   fit:contain preserves its native aspect ratio, so it's never
+   stretched. filter adds a restrained shine/contrast boost (not a
+   flat recolor) and a soft bloom that hugs the planet's own circular
+   alpha edge (drop-shadow, unlike box-shadow, follows real transparent
+   pixels rather than the image's rectangular box). */
+.oascd-planet__img {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: contrast(1.12) saturate(1.1) brightness(1.05) drop-shadow(0 0 22px rgba(255, 205, 150, 0.5));
+}
+
+/* Extra upper-left highlight + rim brightening, layered on top of the
+   real photographic planet via mix-blend-mode:screen — this ADDS light
+   rather than painting a flat tint, so the real surface texture stays
+   visible underneath (screen can only brighten, never desaturate or
+   flatten). Circular clip-path keeps it confined to the planet's own
+   silhouette rather than its square bounding box. */
+.oascd-planet__sheen {
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  border-radius: 50%;
+  clip-path: circle(50% at 50% 50%);
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(circle at 28% 24%, rgba(255, 248, 232, 0.62) 0%, rgba(255, 248, 232, 0) 44%),
+    radial-gradient(circle at 50% 50%, transparent 72%, rgba(255, 214, 173, 0.4) 89%, transparent 100%);
+}
+
+/* Live HTML overlay — not baked into the image. A very light text
+   shadow (not a background pill/rectangle) keeps it readable over the
+   planet's real surface texture. */
+/* width: max-content is required here, not cosmetic — with only `left`
+   set (no `right`), an absolutely-positioned box's shrink-to-fit width
+   is constrained to (containing block width - left offset), i.e. HALF
+   of .oascd-planet's own width. At small breakpoints that's narrower
+   than "EIGHT DOMAINS" needs, which wrapped it to two lines. */
+.oascd-planet__label {
+  position: absolute;
+  z-index: 7;
+  top: 50%;
+  left: 50%;
+  width: max-content;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: #fdf6ee;
+  text-shadow: 0 2px 10px rgba(20, 8, 2, 0.45);
+}
+
+.oascd-planet__mark,
+.oascd-planet__sub {
+  white-space: nowrap;
+}
+
+.oascd-planet__mark {
+  font: 400 34px/1 var(--oas-serif);
+  letter-spacing: 0.01em;
+}
+
+.oascd-planet__sub {
+  font: 600 12px/1.3 var(--oas-sans);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-top: 7px;
+}
+
+/* ---------------------------- The 8 domain nodes ----------------------------
+   The anchor box (.oascd-node) is sized to EXACTLY the icon circle and
+   positioned so the CIRCLE — not the circle+label group — lands on the
+   true ORBIT_R point. The label is a separate absolutely-positioned
+   child offset outward from that same anchor. (Centering the whole
+   icon+label group on the anchor point instead, tried in an earlier
+   pass, pulled every icon inward/sideways from its intended position
+   since the label is wider than the icon, and caused adjacent nodes to
+   overlap — this anchor-then-offset structure keeps icon placement and
+   label placement fully independent, regardless of label length.) */
+
+/* Now a real <button> (was a plain <div>) so every node is keyboard-
+   reachable and clickable without extra ARIA — reset all default
+   button chrome so it behaves exactly like the old div visually. */
+.oascd-node {
+  position: absolute;
+  z-index: 8;
+  width: 13.3%; /* 112 / 840 */
+  aspect-ratio: 1 / 1;
+  transform: translate(-50%, -50%);
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Visible focus for keyboard users (Tab), matching the shared OAS
+   focus style rather than the browser default outline. */
+.oascd-node:focus-visible {
+  outline: 2px solid var(--oascd-rust);
+  outline-offset: 4px;
+  border-radius: 50%;
+}
+
+/* Warm ivory surface with a genuinely SOFT (blurred) outer halo rather
+   than the previous pass's flat 10px solid-edged ring — that read as a
+   hard second circle, not a glow. Border softened further and the
+   depth shadow kept faint, so these stay "soft illuminated control
+   nodes," not glossy buttons or dashboard cards. */
+.oascd-node__circle {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(160deg, #fffdfa 0%, #fbf2e8 100%);
+  border: 1px solid rgba(var(--oascd-rust-rgb), 0.1);
+  box-shadow: 0 0 20px 3px rgba(var(--oascd-rust-rgb), 0.14), 0 4px 12px rgba(40, 20, 10, 0.06);
+  color: var(--oascd-rust);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24%;
+  box-sizing: border-box;
+  /* transform/box-shadow/background/border only — no layout-affecting
+     properties — so the active state below never shifts surrounding
+     content. transform is applied here (the visual circle), not on
+     the .oascd-node anchor, so the label (a sibling positioned off the
+     anchor's own untransformed box) never moves or scales with it. */
+  transition: transform 350ms ease, box-shadow 350ms ease, background 350ms ease, border-color 350ms ease,
+    color 350ms ease;
+}
+
+/* Calm, premium emphasis — brighter warm surface, stronger soft glow,
+   a hint more scale (well under the 1.02-1.04 ceiling), deeper rust
+   icon color. No jump/bounce: same transition, just a different
+   resting state. */
+.oascd-node--active .oascd-node__circle {
+  transform: scale(1.035);
+  background: linear-gradient(160deg, #fffefb 0%, #fdecd9 100%);
+  border-color: rgba(var(--oascd-rust-rgb), 0.3);
+  box-shadow: 0 0 34px 7px rgba(var(--oascd-rust-rgb), 0.28), 0 8px 18px rgba(40, 20, 10, 0.1);
+  color: var(--oascd-rust-deep);
+}
+
+.oascd-node__label {
+  position: absolute;
+  /* 128px -> 138px: a small widening (not a redesign) so the longer
+     titles ("Safety & Prohibited Actions") don't wrap to noticeably
+     more lines than before now that the text itself is bigger —
+     checked against neighboring node labels for collisions. */
+  width: 138px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.oascd-node__num {
+  /* 13px -> 15px, within the 14-15px domain-number target. */
+  font: 700 15px/1 var(--oas-sans);
+  color: var(--oascd-rust);
+  transition: color 350ms ease;
+}
+
+.oascd-node__title {
+  /* 14px -> 17px, within the 16-17px domain-title target;
+     line-height tightened slightly into the 1.15-1.25 "domain label"
+     band called for at this scale. */
+  font: 700 17px/1.2 var(--oas-sans);
+  color: var(--oascd-ink);
+  transition: text-shadow 350ms ease;
+}
+
+/* Emphasis via color/glow only — no font-weight or size change, which
+   could reflow text inside the label's fixed-width box. */
+.oascd-node--active .oascd-node__num {
+  color: var(--oascd-rust-deep);
+}
+.oascd-node--active .oascd-node__title {
+  text-shadow: 0 0 10px rgba(var(--oascd-rust-rgb), 0.22);
+}
+
+/* Per-position anchor placement (percentages of the flywheel, at
+   radius ORBIT_R=290/840 — tightened this pass from 310 for a denser,
+   more unified wheel) and per-position label offset, so each label
+   reads outward from the wheel rather than always left-to-right.
+   Label gaps tightened (10-12px -> 7-8px) so each label feels
+   attached to its node instead of floating near it. */
+.oascd-node--top {
+  left: 50%;
+  top: 15.48%;
+}
+.oascd-node--top .oascd-node__label {
+  top: 100%;
+  left: 50%;
+  margin-top: 7px;
+  transform: translateX(-50%);
+  align-items: center;
+  text-align: center;
+}
+
+.oascd-node--bottom {
+  left: 50%;
+  top: 84.52%;
+}
+.oascd-node--bottom .oascd-node__label {
+  bottom: 100%;
+  left: 50%;
+  margin-bottom: 7px;
+  transform: translateX(-50%);
+  align-items: center;
+  text-align: center;
+}
+
+.oascd-node--upper-right {
+  left: 74.41%;
+  top: 25.59%;
+}
+.oascd-node--right {
+  left: 84.52%;
+  top: 50%;
+}
+.oascd-node--lower-right {
+  left: 74.41%;
+  top: 74.41%;
+}
+.oascd-node--upper-right .oascd-node__label,
+.oascd-node--right .oascd-node__label,
+.oascd-node--lower-right .oascd-node__label {
+  left: 100%;
+  top: 50%;
+  margin-left: 8px;
+  transform: translateY(-50%);
+  align-items: flex-start;
+  text-align: left;
+}
+
+.oascd-node--upper-left {
+  left: 25.59%;
+  top: 25.59%;
+}
+.oascd-node--left {
+  left: 15.48%;
+  top: 50%;
+}
+.oascd-node--lower-left {
+  left: 25.59%;
+  top: 74.41%;
+}
+.oascd-node--upper-left .oascd-node__label,
+.oascd-node--left .oascd-node__label,
+.oascd-node--lower-left .oascd-node__label {
+  right: 100%;
+  top: 50%;
+  margin-right: 8px;
+  transform: translateY(-50%);
+  align-items: flex-end;
+  text-align: right;
+}
+
+/* ---------------------------- Right/lower-left micro-copy ----------------------------
+   Quiet decorative typographic flourish from the approved mock — same
+   spirit as the OAS-1 hero's word list. aria-hidden in the JSX. */
+
+.oascd-intro__micro {
+  position: absolute;
+  z-index: 1;
+  margin: 0;
+  font: 700 10px/1.5 var(--oas-sans);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(125, 110, 98, 0.45);
+}
+
+/* Pulled closer to the right edge so this sits in the quiet margin
+   rather than reading as part of the flywheel composition. */
+.oascd-intro__micro--top-right {
+  top: 9%;
+  right: 1.5%;
+  text-align: right;
+}
+
+.oascd-intro__micro--bottom-right {
+  top: 62%;
+  right: 1.5%;
+  text-align: right;
+}
+
+.oascd-intro__micro--top-right::after,
+.oascd-intro__micro--bottom-right::after {
+  content: "";
+  display: block;
+  margin-top: 8px;
+  width: 22px;
+  height: 1.5px;
+  background: var(--oascd-rust);
+  margin-left: auto;
+}
+
+.oascd-intro__micro--bottom-left {
+  left: 8%;
+  bottom: 3%;
+  max-width: 40ch;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.oascd-intro__micro--bottom-left::before {
+  content: "";
+  flex-shrink: 0;
+  width: 22px;
+  height: 1.5px;
+  background: var(--oascd-rust);
+}
+
+/* ---------------------------- Lower atmosphere (shared by domain details + Stronger Together) ----------------------------
+   One background image behind BOTH .oascd-details and .oascd-together
+   (they no longer paint their own white backgrounds — see below) so
+   the domain grid and the closing band read as one continuous
+   environment instead of two separate white blocks, and so there's
+   only one background layer to manage rather than two independently-
+   cropped instances of the same asset that would be hard to align
+   seamlessly with each other. */
+.oascd-lower {
+  position: relative;
+  overflow: hidden;
+  background: var(--oas-white);
+}
+
+/* Mirrored horizontally (transform: scaleX(-1)) so the asset's own
+   planetary horizon — which sits bottom-RIGHT in the source file —
+   lands bottom-LEFT instead, continuing the hero's own bottom-left
+   planet rather than placing a second one on the opposite side.
+   object-position is chosen post-mirror by visual check against the
+   live grid, not computed from the pre-mirror source coordinates
+   (mirroring inverts which raw-file region ends up screen-left vs.
+   screen-right). mask-image fades the image in from transparent at
+   the very top (continuing smoothly from where the hero's own
+   texture already fades out, per the seam fix) and fades it out again
+   before the footer, so both transitions are gradual, not hard edges. */
+.oascd-lower__texture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 35% 30%;
+  transform: scaleX(-1);
+  opacity: 0.8;
+  z-index: 0;
+  mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+  pointer-events: none;
+  user-select: none;
+}
+
+.oascd-details {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  padding: 40px 0;
+}
+
+/* Replaces the previous flat `border-top: 1px solid` — a full-width
+   line read as a hard seam right under the flywheel. This keeps the
+   same warm-ink divider tone (matching --oascd-divider) but only on
+   the left, where it still helps separate the hero's editorial copy
+   from "THE DOMAINS" below; it dissolves to nothing by 80% width so
+   the right side (under the flywheel/atmosphere) has no line at all. */
+.oascd-details::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    rgba(32, 21, 16, 0.18) 0%,
+    rgba(32, 21, 16, 0.12) 30%,
+    rgba(32, 21, 16, 0.04) 60%,
+    rgba(32, 21, 16, 0) 80%
+  );
+  pointer-events: none;
+}
+
+/* Explicit 24/76 split, matching the spec's 22-26% / 74-78% target
+   precisely (a minmax+1fr track left this closer to the mock by
+   accident rather than by design). */
+.oascd-details__grid {
+  display: grid;
+  grid-template-columns: 24fr 76fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.oascd-details__heading {
+  /* 28px -> 40px, within the 38-42px H2 target; line-height tightened
+     to the 1.05-1.15 large-heading band and margin opened a touch so
+     it doesn't crowd the larger body copy below it. */
+  font: 400 40px/1.12 var(--oas-serif);
+  color: var(--oascd-ink);
+  margin: 0 0 16px;
+}
+
+.oascd-details__body {
+  /* 13.5px -> 17px, the canonical body target; line-height nudged to
+     the 1.6-1.7 band. */
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--oascd-body);
+  margin: 0;
+}
+
+.oascd-details__list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.oascd-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 22px 22px 22px 0;
+  border-bottom: 1px solid var(--oascd-divider);
+  /* A light translucent wash — now that .oascd-details itself is
+     transparent (the shared .oascd-lower__texture shows through),
+     this keeps each cell's text sitting on a clean near-white surface
+     rather than directly on the atmospheric texture, per "keep center
+     content clean." Still see-through enough that the section reads
+     as one connected environment, not a grid of opaque cards. */
+  background: rgba(255, 255, 255, 0.6);
+  /* box-shadow (inset accent line) and background only — never
+     padding/border-width, which would shift this cell's content
+     against its divider-grid neighbors. */
+  transition: background 350ms ease, box-shadow 350ms ease;
+}
+
+/* Synced to the same flywheel node via one shared activeDomain value
+   (see useDomainCycle) — a faint warm wash + a thin inset rust accent
+   line, not a bordered card. */
+.oascd-detail--active {
+  background: rgba(var(--oascd-rust-rgb), 0.035);
+  box-shadow: inset 2px 0 0 0 var(--oascd-rust);
+}
+.oascd-detail--active .oascd-detail__title {
+  color: var(--oascd-rust-deep);
+}
+.oascd-detail--active .oascd-detail__icon {
+  filter: drop-shadow(0 0 6px rgba(var(--oascd-rust-rgb), 0.4));
+}
+
+.oascd-detail:not(:nth-child(4n)) {
+  border-right: 1px solid var(--oascd-divider);
+  padding-right: 22px;
+}
+.oascd-detail:not(:first-child) {
+  padding-left: 22px;
+}
+.oascd-detail:nth-child(-n + 4) {
+  padding-top: 0;
+}
+.oascd-detail:nth-child(n + 5) {
+  border-bottom: 0;
+}
+
+.oascd-detail__icon {
+  /* 28px -> 30px (~7%), enough to stay in proportion with the larger
+     title/description text next to it without redesigning the cell. */
+  width: 30px;
+  height: 30px;
+  color: var(--oascd-rust);
+  transition: filter 350ms ease;
+}
+
+.oascd-detail__head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.oascd-detail__num {
+  /* 12px -> 15px, within the 14-15px domain-number target. */
+  font: 700 15px/1 var(--oas-sans);
+  color: var(--oascd-rust);
+}
+
+.oascd-detail__title {
+  /* 14.5px -> 18px, within the 17-18px item-title target. */
+  font: 700 18px/1.3 var(--oas-sans);
+  color: var(--oascd-ink);
+  transition: color 350ms ease;
+}
+
+.oascd-detail__body {
+  /* 12.5px -> 16.5px, within the 16-17px description target;
+     line-height nudged to the top of the 1.5-1.6 band. */
+  font-size: 16.5px;
+  line-height: 1.55;
+  color: var(--oascd-body);
+  margin: 0;
+}
+
+/* ---------------------------- Stronger together band ---------------------------- */
+
+.oascd-together {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  padding: 0 0 48px;
+}
+
+/* Translucent, not flat opaque ivory — lets a hint of the shared
+   .oascd-lower__texture bleed through at the edges, per "atmospheric
+   bleed" rather than reading as a generic beige card. Soft shadow
+   gives it a gentle lift off the background instead of a hard edge. */
+.oascd-together__panel {
+  background: rgba(246, 239, 228, 0.82);
+  box-shadow: 0 24px 48px -28px rgba(80, 50, 20, 0.18);
+  border-radius: 10px;
+  padding: 28px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.oascd-together__left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 1 1 380px;
+}
+
+.oascd-together__mark {
+  flex-shrink: 0;
+  width: 44px;
+  height: 30px;
+  color: var(--oascd-rust);
+}
+
+.oascd-together__heading {
+  /* 21px -> 30px, within the 28-32px target; line-height tightened to
+     the large-heading band and margin opened slightly. */
+  font: 400 30px/1.15 var(--oas-serif);
+  color: var(--oascd-ink);
+  margin: 0 0 8px;
+}
+
+.oascd-together__body {
+  /* 13px -> 16.5px, within the 16-17px target. */
+  font-size: 16.5px;
+  line-height: 1.55;
+  color: var(--oascd-body);
+  margin: 0;
+  max-width: 60ch;
+}
+
+.oascd-together__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* Primary CTA target is 16px — .oas-btn's shared base is 14px.
+   Scoped to this instance only, so the header CTA (same shared
+   classes elsewhere on the page) is unaffected. */
+.oascd-together__right .oas-btn {
+  font-size: 16px;
+}
+
+/* ---------------------------- Footer compression (this page only) ---------------------------- */
+
+.oascd .oas-footer {
+  padding: 40px 0 20px;
+}
+
+/* ---------------------------- Responsive ---------------------------- */
+
+/* Narrow-desktop safety margin: above 1100px the hero stays 2-column
+   (text + flywheel side by side), but between ~1100-1450px the 64%
+   flywheel column is narrow enough that an 840px-capped flywheel fills
+   nearly all of it — leaving too little room for the "right" node's
+   label (which extends ~140px outward from the flywheel's own right
+   edge) before hitting the viewport edge. Confirmed via measurement:
+   at 1366px and 1280px, that label's right edge landed 35-52px past
+   the viewport without this. */
+@media (max-width: 1430px) {
+  .oascd-flywheel {
+    max-width: 680px;
+  }
+}
+
+@media (max-width: 1320px) {
+  .oascd-flywheel {
+    max-width: 600px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .oascd-intro__grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    text-align: left;
+  }
+  /* The 170px desktop offset was sized for the two-column layout,
+     where the text needed to counteract the flywheel's much taller
+     row. Below 1100px the section stacks to one column (text is its
+     own row, no longer sharing height with the flywheel), so that
+     offset would just push the headline down for no reason. */
+  .oascd-intro__copy {
+    margin-top: 0;
+  }
+  .oascd-flywheel {
+    max-width: 600px;
+  }
+  .oascd-node__label {
+    width: 118px;
+  }
+  .oascd-node__num {
+    font-size: 13px;
+  }
+  .oascd-node__title {
+    font-size: 14px;
+  }
+  /* Below 1100px the section stacks to one column (text above,
+     flywheel below) and grows much taller — stretching the texture
+     with object-fit:cover across that whole new height would zoom in
+     heavily and crop most of the composition away. Anchored to the
+     bottom instead, sized by its own aspect ratio, so it reads as a
+     band sitting behind the flywheel (which is now the bottom-most
+     element) rather than a distorted full-section cover. */
+  .oascd-intro__texture {
+    top: auto;
+    bottom: 0;
+    height: auto;
+    aspect-ratio: 1672 / 941;
+    object-fit: cover;
+    object-position: 69% 50%;
+    opacity: 0.85;
+  }
+  .oascd-intro__texture-fade {
+    display: none;
+  }
+  .oascd-details__grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 900px) {
+  /* Reduced decorative detail at tablet — the shared lower atmosphere
+     stays present but less prominent so the (now narrower, likely
+     2-column) domain grid keeps full attention. */
+  .oascd-lower__texture {
+    opacity: 0.5;
+  }
+  .oascd-intro {
+    padding: 32px 0;
+  }
+  .oascd-intro__heading {
+    /* 46px (old desktop) -> 44px: within the 42-48px mobile H1 target
+       now that desktop itself is 58px. */
+    font-size: 44px;
+  }
+  .oascd-details__heading {
+    /* 40px desktop -> 36px, within the 32-36px mobile H2 target. */
+    font-size: 36px;
+  }
+  .oascd-flywheel {
+    max-width: 460px;
+  }
+  .oascd-planet__mark {
+    font-size: 24px;
+  }
+  .oascd-planet__sub {
+    font-size: 10px;
+  }
+  .oascd-node__label {
+    width: 96px;
+  }
+  .oascd-node__num {
+    font-size: 12px;
+  }
+  .oascd-node__title {
+    font-size: 12.5px;
+  }
+  .oascd-intro__texture {
+    opacity: 0.65;
+  }
+  .oascd-intro__micro {
+    display: none;
+  }
+  .oascd-details__list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .oascd-detail:not(:nth-child(4n)) {
+    border-right: none;
+    padding-right: 0;
+  }
+  .oascd-detail:not(:nth-child(2n)) {
+    border-right: 1px solid var(--oascd-divider);
+    padding-right: 22px;
+  }
+  .oascd-detail:nth-child(-n + 2) {
+    padding-top: 0;
+  }
+  .oascd-detail:nth-child(n + 3) {
+    border-bottom: 1px solid var(--oascd-divider);
+  }
+  .oascd-detail:nth-child(7),
+  .oascd-detail:nth-child(8) {
+    border-bottom: 0;
+  }
+  .oascd-together__panel {
+    justify-content: center;
+    text-align: center;
+  }
+  .oascd-together__left {
+    flex-direction: column;
+    text-align: center;
+  }
+  .oascd-together__right {
+    align-items: center;
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Mostly white at mobile — minimal decorative detail so the grid
+     (now single-column) reads cleanly with no crowding. */
+  .oascd-lower__texture {
+    opacity: 0.28;
+  }
+  .oascd-intro__grid {
+    padding: 0 20px;
+  }
+  /* Kept as a full radial system (not collapsed to a list) per the
+     "do not shrink until unreadable, simplify only if necessary"
+     instruction — 360px keeps all 8 nodes at a legible ~48px with
+     readable labels underneath. */
+  .oascd-flywheel {
+    max-width: min(360px, calc(100% - 20px));
+  }
+  .oascd-planet__mark {
+    font-size: 18px;
+  }
+  .oascd-planet__sub {
+    font-size: 8px;
+    margin-top: 4px;
+  }
+  /* Simplified label treatment at this size: every node's label moves
+     to directly below its icon (centered) instead of the desktop
+     left/right side placement. A side-label at this scale would need
+     to reach sideways far enough to risk running off the viewport
+     edge — this sidesteps that entirely, since a centered label can
+     only grow taller, never reach off-screen. Written as the same
+     compound selectors as the desktop per-position rules (not a bare
+     .oascd-node__label) so this actually wins on specificity. */
+  .oascd-node--top .oascd-node__label,
+  .oascd-node--bottom .oascd-node__label,
+  .oascd-node--upper-right .oascd-node__label,
+  .oascd-node--right .oascd-node__label,
+  .oascd-node--lower-right .oascd-node__label,
+  .oascd-node--upper-left .oascd-node__label,
+  .oascd-node--left .oascd-node__label,
+  .oascd-node--lower-left .oascd-node__label {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    margin: 6px 0 0;
+    transform: translateX(-50%);
+    /* Kept at the original 74px rather than widened: at this flywheel
+       diameter (~300-360px) the 8 labels sit close enough together
+       that even a modest width increase measurably overlapped
+       neighboring labels — confirmed via bounding-box collision
+       checks, not assumed. The font-size increase below still holds. */
+    width: 74px;
+    align-items: center;
+    text-align: center;
+  }
+  .oascd-node__num {
+    /* 9px -> 9.5px. The "15-16px if radial layout remains" mobile
+       target isn't reachable here without colliding: at this flywheel
+       diameter (~300-360px), 8 labels sit only ~77-90px apart
+       center-to-center, and two-line titles at any materially larger
+       size measurably reached into the diagonally-next node's own
+       circle (confirmed via circle-vs-label bounding-box checks
+       against every neighbor, not assumed) — a real "node overlap,"
+       which this task treats as a harder constraint than hitting the
+       suggested size. This is the largest bump that stays clear. */
+    font-size: 9.5px;
+  }
+  .oascd-node__title {
+    font-size: 10px;
+    line-height: 1.15;
+  }
+  .oascd-flywheel__connectors,
+  .oascd-flywheel__guide {
+    display: none;
+  }
+  .oascd-intro__micro {
+    display: none;
+  }
+  /* Reduced further rather than hidden outright — the asset is already
+     mostly white/ivory, so even a moderate opacity reads as a faint
+     texture rather than visual noise behind the stacked text. */
+  .oascd-intro__texture {
+    opacity: 0.5;
+  }
+  .oascd-details__list {
+    grid-template-columns: 1fr;
+  }
+  .oascd-detail {
+    border-right: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-bottom: 1px solid var(--oascd-divider) !important;
+  }
+  .oascd-detail:last-child {
+    border-bottom: 0 !important;
+  }
+  .oascd-detail__title {
+    /* 18px desktop -> 17px, the canonical mobile domain-title target. */
+    font-size: 17px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oascd * {
+    transition-duration: 0.01ms !important;
+  }
+}

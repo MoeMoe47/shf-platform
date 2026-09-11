@@ -73,8 +73,31 @@ export class IntegrationOutboxRepo {
     return executor.query(`UPDATE integration_outbox SET delivery_status=$2, quarantined_at=CASE WHEN $2='QUARANTINED' THEN NOW() ELSE quarantined_at END, last_error=$3, failure_classification=CASE WHEN $2='QUARANTINED' THEN 'QUARANTINED' ELSE 'PERMANENT' END, updated_at=NOW(), lease_owner=NULL, lease_expires_at=NULL WHERE outbox_event_id=$1 AND delivery_status='DELIVERING' AND lease_owner=$4`, [id, quarantined ? "QUARANTINED" : "FAILED_FINAL", error.slice(0, 500), workerId]);
   }
 
+  async requeueQuarantined(id: string, organizationId: string, executor: OutboxExecutor = { query }) {
+    const result = await executor.query(
+      `UPDATE integration_outbox
+       SET delivery_status='PENDING', next_attempt_at=NOW(), last_error=NULL,
+           failure_classification=NULL, quarantined_at=NULL, updated_at=NOW()
+       WHERE outbox_event_id=$1 AND organization_id=$2 AND delivery_status='QUARANTINED'
+       RETURNING *`,
+      [id, organizationId],
+    );
+    return result.rows[0] || null;
+  }
+
   async getBacklogStatus(executor: OutboxExecutor = { query }) {
     const result = await executor.query(`SELECT COUNT(*) FILTER (WHERE delivery_status IN ('PENDING','RETRYABLE'))::int AS pending_count, COUNT(*) FILTER (WHERE delivery_status='DELIVERING')::int AS leased_count, COUNT(*) FILTER (WHERE delivery_status='QUARANTINED')::int AS quarantined_count, MIN(created_at) FILTER (WHERE delivery_status IN ('PENDING','RETRYABLE')) AS oldest_pending_at, MAX(delivered_at) AS last_success_at FROM integration_outbox`);
     return result.rows[0];
+  }
+
+  async linkTruthSpineRecord(determinationId: string, truthSpineRecordId: string, scope: { organizationId: string; tenantId: string }, executor: OutboxExecutor = { query }) {
+    const result = await executor.query(
+      `UPDATE gpa_truth_determinations
+       SET provenance = COALESCE(provenance, '{}'::jsonb) || jsonb_build_object('truthSpineRecordId', $4::text)
+       WHERE determination_id=$1 AND organization_id=$2 AND tenant_id=$3
+       RETURNING determination_id, truth_fact_id, provenance`,
+      [determinationId, scope.organizationId, scope.tenantId, truthSpineRecordId],
+    );
+    return result.rows[0] || null;
   }
 }

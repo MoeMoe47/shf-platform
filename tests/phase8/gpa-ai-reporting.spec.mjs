@@ -29,7 +29,7 @@ test.describe("GPA Phase 8B governed AI and reporting", () => {
 
     await page.goto(`${frontend}/index.html#/operator/government-assurance/assistant`);
     await expect(page.getByRole("heading", { name: "Government Program Assurance" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Governed GPA Assistant" }).last()).toBeVisible();
+    await expect(page.getByRole("heading", { name: "CivicSure AI" }).last()).toBeVisible();
     await expect(page.getByText(/Delegation: gpa-governed-assistant/)).toBeVisible();
     await page.getByRole("button", { name: "Ask governed assistant" }).click();
     await expect(page.getByRole("heading", { name: "Canonical facts" })).toBeVisible();
@@ -40,14 +40,28 @@ test.describe("GPA Phase 8B governed AI and reporting", () => {
     expect(response.status()).toBe(201);
     const body = await response.json();
     expect(body.data.artifact.composition_type).toBe("GPA_EXECUTIVE_ASSURANCE");
+    expect(body.data.report.reportVersion).toBe(2);
     expect(body.data.report.canonicalReferences.length).toBeGreaterThan(0);
     expect(body.data.report.canonicalFacts.dashboard.summary.acceptedTruthFacts).toBeGreaterThanOrEqual(1);
+    expect(body.data.snapshot.payload_hash).toMatch(/^[0-9a-f]{64}$/);
+    expect(body.data.renderedFiles.map((file) => file.format)).toEqual(expect.arrayContaining(["JSON", "HTML", "PDF"]));
+    const pdfFile = body.data.renderedFiles.find((file) => file.format === "PDF");
+    const pdfResponse = await request.get(`${api}/reporting/rendered-files/${pdfFile.rendered_file_id}`, { headers });
+    expect(pdfResponse.status()).toBe(200);
+    expect(pdfResponse.headers()["content-type"]).toContain("application/pdf");
+    const otherHeaders = { Authorization: "Bearer dev-token:admin_B", "x-shs-organization-id": manifest.orgB };
+    const crossTenantResponse = await request.get(`${api}/reporting/rendered-files/${pdfFile.rendered_file_id}`, { headers: otherHeaders });
+    expect([403, 404]).toContain(crossTenantResponse.status());
 
     await page.goto(`${frontend}/index.html#/operator/government-assurance/reports`);
     await expect(page.getByRole("heading", { name: "Controlled Reports" }).last()).toBeVisible();
     await page.getByRole("button", { name: "Generate report" }).click();
     await expect(page.getByText("Generated artifact")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Download Executive PDF" })).toBeVisible();
     await expect(page.getByRole("button", { name: "Download bounded JSON report" })).toBeVisible();
+    await page.getByRole("button", { name: "Preview HTML" }).click();
+    await expect(page.getByTitle("CivicSure report HTML preview")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Report history" })).toBeVisible();
   });
 
   test("AI and report scope do not cross tenants", async ({ request }) => {

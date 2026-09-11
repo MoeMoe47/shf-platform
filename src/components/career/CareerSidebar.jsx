@@ -1,5 +1,6 @@
 // src/components/career/CareerSidebar.jsx
 import React from "react";
+import { useLocation } from "react-router-dom";
 import AppLink from "@/components/nav/AppLink.jsx";
 import WalletButton from "@/components/WalletButton.jsx";
 import { loadResume, computeStrength, readinessLabel } from "@/pages/resume-builder/store.js";
@@ -38,12 +39,20 @@ const Section = ({ title, children }) => (
 // (src/pages/career/portfolio-sections/CredentialsBadges.jsx), so it
 // honestly points at the same real /portfolio route rather than a
 // fabricated destination.
+const PUBLIC_ITEMS = [
+  { to: "/", icon: "🏠", label: "Career Home" },
+  { to: "/explore", icon: "🗺️", label: "Explore Careers" },
+  { to: "/pathways", icon: "🧩", label: "Career Pathways" },
+  { to: "/discovery", icon: "✦", label: "Career Discovery" },
+  { to: "/opportunities", icon: "↗", label: "Opportunities" },
+  { to: "/employers", icon: "◫", label: "Organizations" },
+];
+
 const PRIMARY_ITEMS = [
-  { to: "/dashboard", icon: "📊", label: "Dashboard" },
-  { to: "/learn", icon: "📚", label: "Learning" },
-  { to: "/career/pathways", icon: "🧩", label: "Career Pathways" },
+  { to: "/dashboard", icon: "📊", label: "My Career Center" },
+  { to: "/learn", icon: "📚", label: "My Learning" },
   { to: "/resume", icon: "📄", label: "Resume Builder" },
-  { to: "/portfolio", icon: "📁", label: "Portfolio" },
+  { to: "/portfolio", icon: "📁", label: "My Portfolio" },
   { to: "/portfolio", icon: "🎓", label: "Credentials" },
 ];
 
@@ -85,7 +94,7 @@ function ReadinessMilestone() {
     <a
       className="car-milestone"
       href="/career.html#/dashboard-ns"
-      aria-label={`Career readiness ${strength}% — Build a strong resume. Complete key sections and connect evidence to reach 100%, ${readinessLabel(strength)}. View milestones.`}
+      aria-label={`Resume Builder progress ${strength}% — Complete key sections and connect evidence to reach 100%, ${readinessLabel(strength)}. View demo milestones.`}
     >
       <svg className="car-milestoneRing" width="52" height="52" viewBox="0 0 44 44" aria-hidden="true">
         <circle cx="22" cy="22" r="18" fill="none" stroke="var(--ring, #e5e7eb)" strokeWidth="4" />
@@ -97,15 +106,26 @@ function ReadinessMilestone() {
         <text x="22" y="26" textAnchor="middle" fontSize="12" fontWeight="800" fill="currentColor">{strength}%</text>
       </svg>
       <div className="car-milestoneBody" aria-hidden="true">
-        <div className="car-milestoneTitle">Build a strong resume</div>
+        <div className="car-milestoneTitle">Resume Builder progress</div>
         <div className="car-milestoneSub">Complete key sections and connect evidence to reach 100% — {readinessLabel(strength)}</div>
-        <span className="car-milestoneLink">View milestones →</span>
+        <span className="car-milestoneLink">View demo milestones →</span>
       </div>
     </a>
   );
 }
 
 export default function CareerSidebar({ collapsed = false }) {
+  const location = useLocation();
+  const isPublicRoute = location.pathname === "/"
+    || location.pathname === "/explore"
+    || location.pathname === "/pathways"
+    || location.pathname === "/discovery"
+    || location.pathname === "/opportunities"
+    || location.pathname === "/employers"
+    || location.pathname.startsWith("/careers/")
+    || location.pathname.startsWith("/pathways/")
+    || location.pathname.startsWith("/opportunities/")
+    || location.pathname.startsWith("/employers/");
   const [moreOpen, setMoreOpen] = React.useState(() => {
     try { return localStorage.getItem(MORE_TOOLS_KEY) === "1"; } catch { return false; }
   });
@@ -121,6 +141,7 @@ export default function CareerSidebar({ collapsed = false }) {
   React.useEffect(() => {
     if (!import.meta.env.DEV) return;
     const required = [
+      "/",
       "/dashboard",
       "/dashboard-ns",
       "/assignments",
@@ -130,7 +151,8 @@ export default function CareerSidebar({ collapsed = false }) {
       "/vocab",
       "/planner",
       "/explore",
-      "/career/pathways",
+      "/pathways",
+      "/discovery",
       "/resume",
       "/rewards",
       "/credit/report",
@@ -155,22 +177,35 @@ export default function CareerSidebar({ collapsed = false }) {
 
   return (
     <nav className="car-nav" aria-label="Main">
-      <ul className="car-list car-primaryList">
-        {PRIMARY_ITEMS.map((it, i) => (
+      <Section title="PUBLIC CAREER">
+        {PUBLIC_ITEMS.map((it, i) => (
           <Item key={`${it.to}-${i}`} to={it.to} icon={it.icon}>{it.label}</Item>
         ))}
-      </ul>
+      </Section>
 
-      <ReadinessMilestone />
+      {isPublicRoute ? (
+        <Section title="MY CAREER">
+          <Item to="/dashboard" icon="📊">My Career Center</Item>
+        </Section>
+      ) : (
+        <>
+          <Section title="MY CAREER">
+            {PRIMARY_ITEMS.map((it, i) => (
+              <Item key={`${it.to}-${i}`} to={it.to} icon={it.icon}>{it.label}</Item>
+            ))}
+          </Section>
+          <ReadinessMilestone />
+        </>
+      )}
 
-      <div className="car-walletRow">
+      {!isPublicRoute ? <div className="car-walletRow">
         {/* Token breakdown dropped when collapsed — icon + SHF balance
             still fits and stays reachable in the 76px rail; full detail
             returns the moment the sidebar is expanded again. */}
         <WalletButton className="car-walletBtn" size="sm" showTokens={!collapsed} />
-      </div>
+      </div> : null}
 
-      <button
+      {!isPublicRoute ? <button
         type="button"
         className="car-moreToggle"
         aria-expanded={moreOpen}
@@ -180,19 +215,18 @@ export default function CareerSidebar({ collapsed = false }) {
         <span className="car-moreIcon" aria-hidden="true">⋯</span>
         <span className="car-moreLabel">More tools</span>
         <span className={`car-moreChevron ${moreOpen ? "is-open" : ""}`} aria-hidden="true">⌄</span>
-      </button>
+      </button> : null}
 
-      <div id="car-more-tools" className={`car-moreTools ${moreOpen ? "is-open" : ""}`}>
+      {!isPublicRoute ? <div id="car-more-tools" className={`car-moreTools ${moreOpen ? "is-open" : ""}`}>
         <Section title="LEARN">
-          <Item to="/dashboard-ns" icon="⭐">Northstar Dashboard</Item>
+          <Item to="/dashboard-ns" icon="⭐">Northstar Demo</Item>
           <Item to="/assignments" icon="📝">Assignments</Item>
           <Item to="/calendar"    icon="📅">Calendar</Item>
           <Item to="/vocab"       icon="🔤">Vocabulary</Item>
         </Section>
 
-        <Section title="CAREER">
-          <Item to="/planner" icon="🧭">Planner</Item>
-          <Item to="/explore" icon="🗺️">Explore</Item>
+        <Section title="PERSONAL PLANNING">
+          <Item to="/planner" icon="🧭">My Career Planner</Item>
         </Section>
 
         <Section title="TOOLS">
@@ -206,7 +240,7 @@ export default function CareerSidebar({ collapsed = false }) {
           <Item to="/help"     icon="❓">Help</Item>
           <Item to="/settings" icon="⚙️">Settings</Item>
         </Section>
-      </div>
+      </div> : null}
     </nav>
   );
 }

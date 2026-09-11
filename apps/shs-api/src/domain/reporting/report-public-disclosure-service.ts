@@ -5,7 +5,7 @@ import { ReportPublicDisclosureRepo } from "./report-public-disclosure-repo.js";
 import { ReportPublicEligibilityRepo } from "./report-public-eligibility-repo.js";
 import { CURRICULUM_COMPLETION_REPORT } from "./report-public-eligibility-service.js";
 import { ReportPublicDisclosurePolicyRepo } from "./report-public-disclosure-policy-repo.js";
-import { APPROVED_CURRICULUM_POLICY_V1, APPROVED_HUB_REFERRAL_POLICY_V1, CURRICULUM_DISCLOSURE_POLICY, PUBLIC_DISCLOSURE_POLICY_READINESS } from "./report-public-disclosure-policy-service.js";
+import { APPROVED_CURRICULUM_POLICY_V1, APPROVED_HUB_REFERRAL_POLICY_V1, APPROVED_GPA_PROGRAM_ASSURANCE_POLICY_V1, CURRICULUM_DISCLOSURE_POLICY, PUBLIC_DISCLOSURE_POLICY_READINESS } from "./report-public-disclosure-policy-service.js";
 import { requirePublicReportGovernanceRegistration } from "./report-public-governance-registry.js";
 
 function scopeFromActor(actor: any) {
@@ -90,6 +90,10 @@ export function evaluateHubReferralPublicDisclosure(policy: any, context: any) {
   return evaluateAggregateDisclosure(policy, APPROVED_HUB_REFERRAL_POLICY_V1, context, "SUPPRESSED_LT_10");
 }
 
+export function evaluateGpaProgramAssurancePublicDisclosure(policy: any, context: any) {
+  return evaluateAggregateDisclosure(policy, APPROVED_GPA_PROGRAM_ASSURANCE_POLICY_V1, context, "SUPPRESSED_LT_10");
+}
+
 export class ReportPublicDisclosureService {
   constructor(
     private repo = new ReportPublicDisclosureRepo(),
@@ -116,8 +120,10 @@ export class ReportPublicDisclosureService {
         const evaluator = registration.disclosure_evaluator === "CURRICULUM_EDUCATION_ACTIVITY_V1"
           ? evaluateCurriculumPublicDisclosure
           : registration.disclosure_evaluator === "HUB_REFERRAL_ACTIVITY_V1"
-            ? evaluateHubReferralPublicDisclosure
-            : null;
+          ? evaluateHubReferralPublicDisclosure
+            : registration.disclosure_evaluator === "GPA_PROGRAM_ASSURANCE_V1"
+              ? evaluateGpaProgramAssurancePublicDisclosure
+              : null;
         if (!evaluator) throw new Error("No disclosure evaluator is registered for this report");
         const evaluation = evaluator(policy, normalized.review_context);
         normalized.review_context = { ...normalized.review_context, public_representation: evaluation.display_mode };

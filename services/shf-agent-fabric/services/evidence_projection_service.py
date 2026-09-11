@@ -10,6 +10,7 @@ from typing import Any, Dict, List
 from auth.audit import record_auth_event
 from auth.permissions import TRUTH_CLAIM_CREATE, TRUTH_SOURCE_CREATE, has_permission
 from services import operational_event_service, truth_spine_service
+from services import truth_spine_postgres_repository as durable_repo
 from services.reporting_lineage_service import ALLOWED_TRUTH_ELIGIBILITY, LineageRegistryError, find_lineage_for_event
 
 
@@ -17,10 +18,13 @@ SERVICE_ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE_DB_DIR = Path(os.getenv("SHF_EVIDENCE_DB_DIR", str(SERVICE_ROOT / "db" / "reporting")))
 EVIDENCE_PATH = EVIDENCE_DB_DIR / "evidence.jsonl"
 PROJECTION_RESULTS_PATH = EVIDENCE_DB_DIR / "truth_projection_results.jsonl"
-EVIDENCE_STORAGE_BACKEND = "jsonl_repository_abstraction"
-EVIDENCE_STORAGE_DURABILITY_CLASS = "development_only"
-EVIDENCE_PRODUCTION_DURABILITY_APPROVED = False
+EVIDENCE_STORAGE_BACKEND = "postgres_truth_spine_records" if durable_repo.is_postgres_mode() else "jsonl_repository_abstraction"
+EVIDENCE_STORAGE_DURABILITY_CLASS = "durable_append_only" if durable_repo.is_postgres_mode() else "development_only"
+EVIDENCE_PRODUCTION_DURABILITY_APPROVED = durable_repo.is_postgres_mode()
 EVIDENCE_DEPLOYMENT_REQUIREMENT = (
+    "PostgreSQL Truth Spine persistence is selected; production deployment still requires retention controls, backup/restore, and monitoring."
+    if durable_repo.is_postgres_mode()
+    else
     "Evidence JSONL is a repository abstraction/development implementation and is not approved production persistence; "
     "production deployment requires an owner-approved durable evidence store, retention controls, backup/restore, and monitoring."
 )
@@ -63,6 +67,8 @@ def now_utc() -> str:
 
 
 def _ensure_store() -> None:
+    if durable_repo.is_postgres_mode():
+        return
     EVIDENCE_DB_DIR.mkdir(parents=True, exist_ok=True)
     for path in (EVIDENCE_PATH, PROJECTION_RESULTS_PATH):
         if not path.exists():
@@ -70,6 +76,8 @@ def _ensure_store() -> None:
 
 
 def _read_jsonl(path: Path) -> List[Dict[str, Any]]:
+    if durable_repo.is_postgres_mode():
+        return durable_repo.read_records(path.name)
     _ensure_store()
     rows: List[Dict[str, Any]] = []
     for line in path.read_text(encoding="utf-8").splitlines():
@@ -85,12 +93,18 @@ def _read_jsonl(path: Path) -> List[Dict[str, Any]]:
 
 
 def _append_evidence(record: Dict[str, Any]) -> None:
+    if durable_repo.is_postgres_mode():
+        durable_repo.append_record(EVIDENCE_PATH.name, record)
+        return
     _ensure_store()
     with EVIDENCE_PATH.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(record, sort_keys=True) + "\n")
 
 
 def _append_projection_result(record: Dict[str, Any]) -> None:
+    if durable_repo.is_postgres_mode():
+        durable_repo.append_record(PROJECTION_RESULTS_PATH.name, record)
+        return
     _ensure_store()
     with PROJECTION_RESULTS_PATH.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(record, sort_keys=True) + "\n")
@@ -123,6 +137,12 @@ def project_operational_event_to_truth(event_id: str, actor: Any) -> Dict[str, A
 
     existing = _terminal_projection_for_event(event["event_id"], actor)
     if existing:
+        if durable_repo.is_postgres_mode() and existing.get("truth_claim_id") and not existing.get("truth_spine_record_id"):
+            identity = durable_repo.find_record_identity(
+                "claims", existing["truth_claim_id"], event["tenant_id"], event["organization_id"]
+            )
+            if identity:
+                existing = {**existing, "truth_spine_record_id": identity["record_id"]}
         return {"projection": existing, "idempotent_replay": True}
 
     lineage = _lineage_for_event(event)
@@ -176,6 +196,11 @@ def project_operational_event_to_truth(event_id: str, actor: Any) -> Dict[str, A
         truth_source_id=source["source_id"],
         truth_claim_id=claim["claim_id"],
         truth_claim_version=int(claim.get("version") or 1),
+        truth_spine_record_id=(
+            (durable_repo.find_record_identity("claims", claim["claim_id"], event["tenant_id"], event["organization_id"]) or {}).get("record_id")
+            if durable_repo.is_postgres_mode()
+            else None
+        ),
         retryable=False,
     )
     _append_projection_result(result)
@@ -201,7 +226,7 @@ def evidence_storage_status() -> Dict[str, Any]:
     return {
         "backend": EVIDENCE_STORAGE_BACKEND,
         "durability_class": EVIDENCE_STORAGE_DURABILITY_CLASS,
-        "production_ready": False,
+        "production_ready": EVIDENCE_PRODUCTION_DURABILITY_APPROVED,
         "approved_production_persistence_boundary": EVIDENCE_PRODUCTION_DURABILITY_APPROVED,
         "path": str(EVIDENCE_PATH),
         "projection_results_path": str(PROJECTION_RESULTS_PATH),
@@ -289,7 +314,7 @@ def _ensure_evidence_record(event: Dict[str, Any], lineage: Dict[str, Any]) -> D
         "correlation_id": event["correlation_id"],
         "lineage_id": lineage["lineage_id"],
         "verification_status": "unverified",
-        "storage_classification": "repository_abstraction_development_only",
+        "storage_classification": "truth_spine_owned_durable" if EVIDENCE_PRODUCTION_DURABILITY_APPROVED else "repository_abstraction_development_only",
         "storage_backend": EVIDENCE_STORAGE_BACKEND,
         "storage_durability_class": EVIDENCE_STORAGE_DURABILITY_CLASS,
         "production_durability_approved": EVIDENCE_PRODUCTION_DURABILITY_APPROVED,
@@ -375,6 +400,7 @@ def _projection_result(
     truth_claim_id: str | None,
     truth_claim_version: int | None,
     retryable: bool,
+    truth_spine_record_id: str | None = None,
 ) -> Dict[str, Any]:
     trace = {
         "operational_event_id": event["event_id"],
@@ -382,6 +408,7 @@ def _projection_result(
         "truth_source_id": truth_source_id,
         "truth_claim_id": truth_claim_id,
         "truth_claim_version": truth_claim_version,
+        "truth_spine_record_id": truth_spine_record_id,
     }
     return {
         "projection_id": _stable_id("proj", event["event_id"]),
@@ -390,6 +417,7 @@ def _projection_result(
         "truth_source_id": truth_source_id,
         "truth_claim_id": truth_claim_id,
         "truth_claim_version": truth_claim_version,
+        "truth_spine_record_id": truth_spine_record_id,
         "status": status,
         "retryable": retryable,
         "lineage_id": lineage["lineage_id"],

@@ -20,6 +20,7 @@ ALLOWED_SERVICE_EVENTS = {
     ("shs.grant_binder", "grant_binder.created"),
     ("shs.exchange", "funding_commitment.committed"),
     ("shf.workforce", "employment_started.verified"),
+    ("shs.government_assurance", "government_assurance.truth_determination.accepted"),
 }
 
 

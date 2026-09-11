@@ -3,8 +3,21 @@ import React, { Suspense, lazy } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import CareerLayout from "@/layouts/CareerLayout.jsx";
+import {
+  CAREER_HOME,
+  CAREER_PATHWAYS,
+  CAREER_ROUTE_CONTRACT,
+} from "@/router/paths.js";
 
 /* Pages inside the layout */
+const CareerHomePlaceholder = lazy(() => import("@/pages/career/CareerHomePlaceholder.jsx"));
+const CareerDetail = lazy(() => import("@/pages/career/CareerDetail.jsx"));
+const PathwayDetail = lazy(() => import("@/pages/career/PathwayDetail.jsx"));
+const CareerDiscovery = lazy(() => import("@/pages/career/CareerDiscovery.jsx"));
+const PublicOpportunities = lazy(() => import("@/pages/career/PublicOpportunities.jsx"));
+const PublicOpportunityDetail = lazy(() => import("@/pages/career/PublicOpportunities.jsx").then((module) => ({ default: module.PublicOpportunityDetail })));
+const PublicEmployerDirectory = lazy(() => import("@/pages/career/PublicOpportunities.jsx").then((module) => ({ default: module.PublicEmployerDirectory })));
+const PublicEmployerProfile = lazy(() => import("@/pages/career/PublicOpportunities.jsx").then((module) => ({ default: module.PublicEmployerProfile })));
 const CareerDashboard = lazy(() => import("@/pages/career/CareerDashboard.jsx"));
 const CareerDashboardNorthstar = lazy(() =>
   import("@/pages/career/CareerDashboardNorthstar.jsx")
@@ -20,9 +33,8 @@ const CareerLearningBridge = lazy(() => import("@/pages/CareerLearningBridge.jsx
 const Lesson = lazy(() => import("@/pages/career/Lesson.jsx"));
 const CareerVocabulary = lazy(() => import("@/pages/CareerVocabulary.jsx"));
 
-const CareerPlanner = lazy(() => import("@/pages/CareerPlanner.jsx"));
+const CareerPlanner = lazy(() => import("@/pages/CareerPathways.jsx"));
 const PathwaysExplore = lazy(() => import("@/pages/PathwaysExplore.jsx"));
-const CareerPathways = lazy(() => import("@/pages/CareerPathways.jsx"));
 const ResumeBuilder = lazy(() => import("@/pages/ResumeBuilder.jsx"));
 
 const RewardsWallet = lazy(() => import("@/pages/RewardsWallet.jsx"));
@@ -33,12 +45,15 @@ const Coach = lazy(() => import("@/pages/Coach.jsx"));
 const Help = lazy(() => import("@/pages/Help.jsx"));
 const Settings = lazy(() => import("@/pages/Settings.jsx"));
 
+export const PUBLIC_CAREER_ROUTES = Object.values(CAREER_ROUTE_CONTRACT.public);
+export const PERSONAL_CAREER_ROUTES = Object.values(CAREER_ROUTE_CONTRACT.personal);
+
 export function CareerRoutes() {
   return (
     <Suspense fallback={<div className="skeleton pad">Loading…</div>}>
       <Routes>
         <Route path="/" element={<CareerLayout />}>
-          <Route index element={<Navigate to="dashboard" replace />} />
+          <Route index element={<CareerHomePlaceholder />} />
 
           <Route path="dashboard" element={<CareerDashboard />} />
           <Route path="dashboard-ns" element={<CareerDashboardNorthstar />} />
@@ -53,7 +68,15 @@ export function CareerRoutes() {
 
           <Route path="planner" element={<CareerPlanner />} />
           <Route path="explore" element={<PathwaysExplore />} />
-          <Route path="career/pathways" element={<CareerPathways />} />
+          <Route path="pathways" element={<PathwaysExplore />} />
+          <Route path="pathways/:pathwaySlug" element={<PathwayDetail />} />
+          <Route path="careers/:careerSlug" element={<CareerDetail />} />
+          <Route path="discovery" element={<CareerDiscovery />} />
+          <Route path="opportunities" element={<PublicOpportunities />} />
+          <Route path="opportunities/:opportunityId" element={<PublicOpportunityDetail />} />
+          <Route path="employers" element={<PublicEmployerDirectory />} />
+          <Route path="employers/:employerSlugOrId" element={<PublicEmployerProfile />} />
+          <Route path="career/pathways" element={<Navigate to={CAREER_PATHWAYS} replace />} />
           <Route path="resume" element={<ResumeBuilder />} />
 
           <Route path="rewards" element={<RewardsWallet />} />
@@ -64,10 +87,10 @@ export function CareerRoutes() {
           <Route path="help" element={<Help />} />
           <Route path="settings" element={<Settings />} />
 
-          {/* safe fallback inside Career (absolute path: "*" matches the full
-              unmatched remainder, so a relative target here would keep
-              appending to it and loop forever) */}
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          {/* Unknown public Career URLs land on the public entry, not the
+              personal dashboard. Backend permissions remain authoritative for
+              protected data; this router only establishes the UI boundary. */}
+          <Route path="*" element={<Navigate to={CAREER_HOME} replace />} />
         </Route>
       </Routes>
     </Suspense>

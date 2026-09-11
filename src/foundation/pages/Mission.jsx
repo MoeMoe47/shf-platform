@@ -34,7 +34,7 @@ export default function Mission() {
             <a href="#/about">About</a>
             <a href="#/programs">Programs</a>
             <a href="#/impact">Impact</a>
-            <a href="#/careers">Careers</a>
+            <a href="/career.html#/">Careers</a>
             <a href="#/get-involved">Get Involved</a>
             <a href="#/mission" className="mission-btn mission-btn--navy">Donate</a>
           </nav>

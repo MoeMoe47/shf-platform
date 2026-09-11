@@ -27,6 +27,8 @@ const REPORT_TYPES: Record<string, string> = {
   "career-employer-partner-outcome": "CAREER_EMPLOYER_PARTNER_OUTCOME",
 };
 
+const CURRICULUM_LESSON_METRIC = { type: "METRIC_DEFINITION", id: "curriculum.lesson.completion_count.v1", version: 1, label: "Curriculum lesson completion count" };
+
 function scope(actor: any) {
   const organizationId = String(actor?.active_organization_id || actor?.organization_id || "").trim();
   const tenantId = String(actor?.tenant_id || actor?.tenant || `tenant:${organizationId}`).trim();
@@ -139,6 +141,7 @@ export class FoundationCurriculumCareerReportAdapter implements ProductReportPro
         references.push(ref("CURRICULUM_COURSE", course.course_id, course.title));
         rows.push(["Course", course.title, "Curriculum catalog authority"]);
         rows.push(["Course status", course.status, "Curriculum catalog authority"]);
+        references.push(CURRICULUM_LESSON_METRIC);
       }
       if (family === "career-credential-evidence" && (input?.credentialId || input?.credential_id)) {
         const credentialId = String(input.credentialId || input.credential_id).trim();
@@ -147,10 +150,33 @@ export class FoundationCurriculumCareerReportAdapter implements ProductReportPro
         references.push(ref("LEARNER_CREDENTIAL", credential.learner_credential_id, credential.verification_id));
         rows.push(["Credential", credential.status, "Credential authority"]);
       }
-      const completion = await one(this.dbQuery, "SELECT COUNT(*)::int AS count FROM curriculum_lesson_completions WHERE organization_id=$1 AND user_id=$2", [s.organizationId, learnerId]);
+      const metricResultId = String(input?.metricResultId || input?.metric_result_id || "").trim();
+      let completion: any = null;
+      if (metricResultId) {
+        const metric = await one(this.dbQuery, `SELECT mr.metric_result_id, mr.metric_id, mr.metric_version,
+            mr.calculated_value, mr.numerator, mr.denominator, mr.program_reference,
+            mr.input_references, mr.provenance, mr.status, m.canonical_name
+          FROM gpa_metric_results mr
+          JOIN gpa_metrics m ON m.metric_id=mr.metric_id AND m.version=mr.metric_version
+            AND m.organization_id=mr.organization_id AND m.tenant_id=mr.tenant_id
+          WHERE mr.metric_result_id=$1 AND mr.organization_id=$2 AND mr.tenant_id=$3
+            AND mr.status IN ('CALCULATED','ACCEPTED')`, [metricResultId, s.organizationId, s.tenantId]);
+        if (!metric) throw new Error("FOUNDATION_METRIC_RESULT_NOT_FOUND");
+        if (metric.program_reference && input?.programId && metric.program_reference !== input.programId) throw new Error("FOUNDATION_METRIC_PROGRAM_MISMATCH");
+        references.push(ref("METRIC_RESULT", metric.metric_result_id, `${metric.metric_id}:${metric.metric_version}`));
+        references.push(ref("METRIC_DEFINITION", `${metric.metric_id}:${metric.metric_version}`, metric.canonical_name));
+        rows.push(["Verified learner metric", metric.calculated_value, "MetricTruth canonical result"]);
+        rows.push(["Metric numerator", metric.numerator, "MetricTruth canonical result"]);
+        if (metric.denominator !== null) rows.push(["Metric denominator", metric.denominator, "MetricTruth canonical result"]);
+        rows.push(["Metric lineage", JSON.stringify(metric.input_references || []), "MetricTruth provenance"]);
+        completion = { count: metric.calculated_value };
+      } else {
+        completion = await one(this.dbQuery, "SELECT COUNT(*)::int AS count FROM curriculum_truth_facts WHERE organization_id=$1 AND learner_user_id=$2 AND fact_type IN ('LESSON_COMPLETED','completed_lesson')", [s.organizationId, learnerId]);
+      }
       const evidence = await one(this.dbQuery, "SELECT COUNT(*)::int AS count FROM prepare_prove_evidence WHERE organization_id=$1 AND tenant_id=$2 AND user_id=$3", [s.organizationId, s.tenantId, learnerId]);
       const credentials = await one(this.dbQuery, "SELECT COUNT(*)::int AS count FROM learner_credentials WHERE organization_id=$1 AND tenant_id=$2 AND learner_user_id=$3 AND status='ISSUED'", [s.organizationId, s.tenantId, learnerId]);
       rows.push(["Lesson completions", completion?.count || 0, "Curriculum completion authority"]);
+      if (family.startsWith("curriculum-")) rows.push(["Registered metric", "curriculum.lesson.completion_count.v1:1", "Metric Registry authority"]);
       rows.push(["Evidence records", evidence?.count || 0, "Prepare/Prove evidence authority"]);
       rows.push(["Issued credentials", credentials?.count || 0, "Credential authority"]);
       if (family === "career-skill-profile") {

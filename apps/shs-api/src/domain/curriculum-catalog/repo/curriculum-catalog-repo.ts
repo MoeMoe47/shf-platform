@@ -58,6 +58,7 @@ function lessonFromRow(row: any): CurriculumLessonRow {
     title: row.title,
     summary: row.summary,
     objectives: Array.isArray(row.objectives) ? row.objectives : [],
+    content: row.content && typeof row.content === "object" && !Array.isArray(row.content) ? row.content : {},
     estimatedDurationMinutes: row.estimated_duration_minutes,
     sequence: row.sequence,
     status: row.status,
@@ -294,12 +295,12 @@ export class CurriculumCatalogRepo {
   async createLesson(input: {
     lessonId: string; organizationId: string; unitId: string; stableKey: string;
     title: string; summary: string | null; objectives: string[];
-    estimatedDurationMinutes: number | null; sequence: number;
+    content?: Record<string, unknown>; estimatedDurationMinutes: number | null; sequence: number;
   }): Promise<CurriculumLessonRow> {
     const res = await this.dbQuery(
-      `INSERT INTO curriculum_lessons (lesson_id, organization_id, unit_id, stable_key, title, summary, objectives, estimated_duration_minutes, sequence)
-       VALUES ($1,$2,$3,$4,$5,$6,$7::jsonb,$8,$9) RETURNING *`,
-      [input.lessonId, input.organizationId, input.unitId, input.stableKey, input.title, input.summary, JSON.stringify(input.objectives), input.estimatedDurationMinutes, input.sequence],
+      `INSERT INTO curriculum_lessons (lesson_id, organization_id, unit_id, stable_key, title, summary, objectives, content, estimated_duration_minutes, sequence)
+       VALUES ($1,$2,$3,$4,$5,$6,$7::jsonb,$8::jsonb,$9,$10) RETURNING *`,
+      [input.lessonId, input.organizationId, input.unitId, input.stableKey, input.title, input.summary, JSON.stringify(input.objectives), JSON.stringify(input.content || {}), input.estimatedDurationMinutes, input.sequence],
     );
     return lessonFromRow(res.rows[0]);
   }
@@ -324,15 +325,16 @@ export class CurriculumCatalogRepo {
 
   async updateLesson(
     organizationId: string, lessonId: string, expectedRevision: number,
-    fields: { title?: string; summary?: string | null; objectives?: string[]; estimatedDurationMinutes?: number | null; status?: string },
+    fields: { title?: string; summary?: string | null; objectives?: string[]; content?: Record<string, unknown>; estimatedDurationMinutes?: number | null; status?: string },
   ): Promise<CurriculumLessonRow | null> {
     const res = await this.dbQuery(
       `UPDATE curriculum_lessons SET
          title = COALESCE($4, title),
          summary = CASE WHEN $5::boolean THEN $6 ELSE summary END,
          objectives = CASE WHEN $7::boolean THEN $8::jsonb ELSE objectives END,
-         estimated_duration_minutes = CASE WHEN $9::boolean THEN $10 ELSE estimated_duration_minutes END,
-         status = COALESCE($11, status),
+         content = CASE WHEN $9::boolean THEN $10::jsonb ELSE content END,
+         estimated_duration_minutes = CASE WHEN $11::boolean THEN $12 ELSE estimated_duration_minutes END,
+         status = COALESCE($13, status),
          revision = revision + 1,
          updated_at = NOW()
        WHERE organization_id = $1 AND lesson_id = $2 AND revision = $3
@@ -342,6 +344,7 @@ export class CurriculumCatalogRepo {
         fields.title ?? null,
         fields.summary !== undefined, fields.summary ?? null,
         fields.objectives !== undefined, JSON.stringify(fields.objectives ?? []),
+        fields.content !== undefined, JSON.stringify(fields.content ?? {}),
         fields.estimatedDurationMinutes !== undefined, fields.estimatedDurationMinutes ?? null,
         fields.status ?? null,
       ],

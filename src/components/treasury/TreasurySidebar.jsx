@@ -175,7 +175,7 @@ export default function TreasurySidebar() {
           <ItemExt href="/credit.html#/report" icon="🧾">
             Credit Reports
           </ItemExt>
-          <ItemExt href="/career.html#/dashboard" icon="🧭">
+          <ItemExt href="/career.html#/" icon="🧭">
             Career
           </ItemExt>
           <ItemExt href="/sales.html#/dashboard" icon="🛍️">

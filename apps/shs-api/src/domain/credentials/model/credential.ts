@@ -14,6 +14,8 @@ export interface CredentialDefinition {
   description: string | null;
   careerId: string | null;
   requiresAcceptedCapstone: boolean;
+  eligibilityPolicyVersion: string;
+  eligibilityRequirements: Record<string, unknown>;
   validityPeriodMonths: number | null;
   renewalWindowDays: number | null;
   status: CredentialDefinitionStatus;

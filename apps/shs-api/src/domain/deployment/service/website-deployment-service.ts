@@ -25,8 +25,8 @@ function mapRow(row: any) {
   return { deploymentId: row.deployment_id, organizationId: row.organization_id, tenantId: row.tenant_id, learnerId: row.learner_id, projectId: row.project_id, deliveryRecordId: row.delivery_record_id, workspaceRevision: Number(row.workspace_revision), projectType: row.project_type, providerKey: row.provider_key, target: row.target, status: row.status, providerDeploymentId: row.provider_deployment_id, liveUrl: row.live_url, isPublic: false, packageHash: row.package_hash, failureCode: row.failure_code, failureMessage: row.failure_message, requestedAt: row.requested_at, startedAt: row.started_at, deployedAt: row.deployed_at, failedAt: row.failed_at, supersededAt: row.superseded_at, unpublishedAt: row.unpublished_at };
 }
 
-function packageFromWorkspace(row: any, projectId: string, revision: number): WebsiteDeploymentPackage {
-  const work = row?.work_json || {};
+function packageFromArtifact(row: any, projectId: string, revision: number): WebsiteDeploymentPackage {
+  const work = row?.manifest_json?.workspace?.work || {};
   const pages = Array.isArray(work.pages) ? work.pages : [];
   const files = pages.map((page: any, index: number) => ({ path: index === 0 ? "index.html" : `page-${index + 1}.html`, content: `<h1>${String(page?.title || "")}</h1>\n${String(page?.content || "")}` }));
   const normalized = JSON.stringify({ projectId, revision, work });
@@ -40,10 +40,11 @@ export class WebsiteDeploymentService {
   private async source(executor: Executor, actor: Actor, deliveryId: string) {
     const s = scope(actor);
     const result = await executor.query(
-      `SELECT d.*, p.studio_learner_id AS learner_id, p.studio_owner_type, p.studio_team_id, p.studio_destination, w.work_json, w.revision AS current_revision
+      `SELECT d.*, a.manifest_json, a.content_hash AS artifact_content_hash, p.studio_learner_id AS learner_id, p.studio_owner_type, p.studio_team_id, p.studio_destination, w.revision AS current_revision
          FROM studio_delivery_records d
          JOIN projects p ON p.project_id=d.project_id AND p.organization_id=d.organization_id AND p.tenant_id=d.tenant_id
          JOIN studio_builder_workspaces w ON w.project_id=d.project_id AND w.organization_id=d.organization_id AND w.tenant_id=d.tenant_id
+         JOIN studio_build_artifacts a ON a.artifact_id=d.artifact_id AND a.project_id=d.project_id AND a.organization_id=d.organization_id AND a.tenant_id=d.tenant_id AND a.workspace_revision=d.workspace_revision
         WHERE d.delivery_record_id=$1 AND d.organization_id=$2 AND d.tenant_id=$3
           AND d.status='FINALIZED' AND d.project_type='WEBSITE' AND d.destination='STUDENT'
           AND p.studio_project_type='WEBSITE' AND p.studio_destination='STUDENT'
@@ -53,7 +54,7 @@ export class WebsiteDeploymentService {
     if (!row) throw new Error("DEPLOYMENT_NOT_ELIGIBLE");
     const teamMember = row.studio_owner_type === "TEAM" && row.studio_team_id && (await executor.query("SELECT 1 FROM studio_team_members WHERE studio_team_id=$1 AND organization_id=$2 AND tenant_id=$3 AND user_id=$4 AND status='ACTIVE' AND left_at IS NULL", [row.studio_team_id, s.organizationId, s.tenantId, s.userId])).rows[0];
     if (row.learner_id !== s.userId && !teamMember && !s.permissions.includes(SHS_SECURITY_PERMISSIONS.WEBSITE_DEPLOYMENT_MANAGE)) throw new Error("DEPLOYMENT_FORBIDDEN");
-    return { scope: s, row, package: packageFromWorkspace(row, row.project_id, Number(row.workspace_revision)) };
+    return { scope: s, row, package: packageFromArtifact(row, row.project_id, Number(row.workspace_revision)) };
   }
 
   private async emit(executor: Executor, type: string, row: any, s: any) {

@@ -568,6 +568,37 @@
       ]
     },
     {
+      "lineage_id": "lineage.shs.government_assurance.truth_determination.accepted.v1",
+      "producer_id": "shs.government_assurance",
+      "producer_domain": "government-assurance",
+      "producer_event_type": "government_assurance.truth_determination.accepted",
+      "producer_application": "apps/shs-api",
+      "producer_file": "apps/shs-api/src/domain/government-assurance/service/metric-truth-service.ts",
+      "operational_store": "postgresql_gpa_truth_determinations_and_integration_outbox",
+      "evidence_type": "government_assurance_truth_determination",
+      "truth_eligibility": "TRUTH_ELIGIBLE",
+      "truth_claim_type": "government_assurance_determination",
+      "truth_subject_mapping": "tenant_id + organization_id + truth_fact_id",
+      "truth_predicate": "accepted_government_assurance_determination",
+      "verification_policy": "gpa_passed_verification_and_reconciliation_gate",
+      "approval_policy": "authorized_gpa_human_determination_required",
+      "metric_ids": [],
+      "report_ids": [],
+      "tenant_scope": "server_derived_from_authenticated_shs_actor",
+      "organization_scope": "server_derived_from_authenticated_shs_actor",
+      "sensitivity": "restricted_government_assurance_metadata",
+      "public_eligibility": "not_public_without_reporting_disclosure_approval",
+      "retention_policy": "government_assurance_and_audit_retention_required",
+      "current_runtime_status": "trusted_reporting_outbox_to_signed_agent_fabric_ingestion_to_truth_spine_projection",
+      "evidence": [
+        "apps/shs-api/src/domain/government-assurance/service/metric-truth-service.ts",
+        "apps/shs-api/src/domain/trusted-reporting/outbox.ts",
+        "services/shf-agent-fabric/services/operational_event_service.py",
+        "services/shf-agent-fabric/services/evidence_projection_service.py",
+        "services/shf-agent-fabric/services/truth_spine_service.py"
+      ]
+    },
+    {
       "lineage_id": "lineage.hub.identity.dev.token.v1",
       "producer_id": "hub.identity.dev_token",
       "producer_domain": "identity",

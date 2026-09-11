@@ -155,4 +155,9 @@ export class GovernmentAssuranceRepo {
     const result = await this.executor(executor).query("SELECT * FROM gpa_reconciliation_cases WHERE organization_id=$1 AND tenant_id=$2 ORDER BY created_at DESC", [scope.organizationId, scope.tenantId]);
     return result.rows;
   }
+
+  async getReconciliationCase(id: string, scope: any, executor?: Executor) {
+    const result = await this.executor(executor).query("SELECT * FROM gpa_reconciliation_cases WHERE reconciliation_case_id=$1 AND organization_id=$2 AND tenant_id=$3", [id, scope.organizationId, scope.tenantId]);
+    return result.rows[0] || null;
+  }
 }

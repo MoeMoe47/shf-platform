@@ -4,6 +4,7 @@ import { CredentialDefinition } from "../model/credential.js";
 const COLUMNS = `
   credential_definition_id, slug, name, credential_type, issuing_authority, description,
   career_id, requires_accepted_capstone, validity_period_months, renewal_window_days,
+  eligibility_policy_version, eligibility_requirements_json,
   status, created_by_user_id, created_at, updated_at
 `;
 
@@ -17,6 +18,8 @@ function rowToDefinition(row: any): CredentialDefinition {
     description: row.description,
     careerId: row.career_id,
     requiresAcceptedCapstone: row.requires_accepted_capstone,
+    eligibilityPolicyVersion: row.eligibility_policy_version || "accepted-capstone.v1",
+    eligibilityRequirements: row.eligibility_requirements_json || {},
     validityPeriodMonths: row.validity_period_months === null ? null : Number(row.validity_period_months),
     renewalWindowDays: row.renewal_window_days === null ? null : Number(row.renewal_window_days),
     status: row.status,
@@ -31,17 +34,20 @@ export class CredentialDefinitionRepo {
     id: string; slug: string; name: string; credentialType: string; issuingAuthority: string;
     description: string | null; careerId: string | null; requiresAcceptedCapstone: boolean;
     validityPeriodMonths: number | null; renewalWindowDays: number | null; createdByUserId: string;
+    eligibilityPolicyVersion?: string; eligibilityRequirements?: Record<string, unknown>;
   }): Promise<CredentialDefinition> {
     const res = await query(
       `INSERT INTO credential_definitions (
         credential_definition_id, slug, name, credential_type, issuing_authority, description,
-        career_id, requires_accepted_capstone, validity_period_months, renewal_window_days, created_by_user_id
-      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+        career_id, requires_accepted_capstone, validity_period_months, renewal_window_days,
+        eligibility_policy_version, eligibility_requirements_json, created_by_user_id
+      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
       RETURNING ${COLUMNS}`,
       [
         input.id, input.slug, input.name, input.credentialType, input.issuingAuthority, input.description,
         input.careerId, input.requiresAcceptedCapstone, input.validityPeriodMonths, input.renewalWindowDays,
-        input.createdByUserId,
+        input.eligibilityPolicyVersion || (input.requiresAcceptedCapstone ? "accepted-capstone.v1" : "manual.v1"),
+        JSON.stringify(input.eligibilityRequirements || {}), input.createdByUserId,
       ],
     );
     return rowToDefinition(res.rows[0]);

@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { withTransaction } from "../../../db/transaction.js";
 import { hasPermission, SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
 import { IntegrationOutboxRepo } from "../../trusted-reporting/outbox-repo.js";
@@ -15,6 +15,14 @@ import {
   toDelegationResponse,
   toModelResponse,
   toSessionResponse,
+  toAgentIdentityResponse,
+  toTaskResponse,
+  toTaskAttemptResponse,
+  toWorkerResponse,
+  toProposedActionResponse,
+  toApprovalRequestResponse,
+  toApprovalDecisionResponse,
+  toSecurityEventResponse,
   type ResourceClassification,
 } from "../model/ai-governance.js";
 
@@ -51,8 +59,24 @@ function denial(code: string, detail?: Record<string, unknown>) {
   return { allowed: false, denialCode: code, ...detail };
 }
 
+function stableJson(value: unknown): string {
+  if (Array.isArray(value)) return `[${value.map(stableJson).join(",")}]`;
+  if (value && typeof value === "object") return `{${Object.keys(value as Record<string, unknown>).sort().map((key) => `${JSON.stringify(key)}:${stableJson((value as Record<string, unknown>)[key])}`).join(",")}}`;
+  return JSON.stringify(value) || "null";
+}
+
+function fingerprint(value: unknown) {
+  return createHash("sha256").update(stableJson(value)).digest("hex");
+}
+
 function allowed(detail: Record<string, unknown>) {
   return { allowed: true, denialCode: null, ...detail };
+}
+
+const SAFE_TASK_TYPES = new Set(["bounded_review_preparation", "safe_read", "simulation"]);
+
+function safeExecutionEnabled() {
+  return ["1", "true", "yes", "on"].includes(String(process.env.SHS_AGENT_SAFE_EXECUTION_ENABLED || "0").trim().toLowerCase());
 }
 
 export class AiGovernanceError extends Error {
@@ -201,6 +225,10 @@ export class AiGovernanceService {
       await this.emit(db, "delegation.revoked", "ai_delegated_authority", row.delegation_id, scope, {
         reason: row.revocation_reason || null,
       });
+      const revokeActiveExecutionByDelegation = (this.repo as any).revokeActiveExecutionByDelegation;
+      if (typeof revokeActiveExecutionByDelegation === "function") {
+        await revokeActiveExecutionByDelegation.call(this.repo, row.delegation_id, scope.organizationId, scope.tenantId, db);
+      }
       return toDelegationResponse(row);
     });
   }
@@ -391,10 +419,16 @@ export class AiGovernanceService {
     const delegationId = String(body.delegationId || body.delegation_id || "").trim();
     const delegation = await this.repo.getDelegation(delegationId, scope.organizationId, scope.tenantId);
     if (!delegation) throw new AiGovernanceError("NO_DELEGATION", "Delegation not found.", 404);
+    const agentIdentifier = String(body.agentIdentifier || body.agent_identifier || "").trim();
+    const getAgentIdentityByIdentifier = (this.repo as any).getAgentIdentityByIdentifier;
+    if (typeof getAgentIdentityByIdentifier === "function") {
+      const identity = await getAgentIdentityByIdentifier.call(this.repo, agentIdentifier, scope.organizationId, scope.tenantId);
+      if (!identity || identity.status !== "ACTIVE") throw new AiGovernanceError("AGENT_IDENTITY_DISABLED", "Agent identity is not active.", 403);
+    }
     const model = body.model || {};
     const evaluation = await this.evaluateAgentAuthority({
       principalUserId: scope.userId,
-      agentIdentifier: body.agentIdentifier || body.agent_identifier,
+      agentIdentifier,
       organizationId: scope.organizationId,
       tenantId: scope.tenantId,
       delegation,
@@ -423,7 +457,14 @@ export class AiGovernanceService {
         model_identifier: model.modelIdentifier || model.model_identifier || model.model || null,
         started_at: now,
         expires_at: expiresAt,
-        security_metadata: body.securityMetadata || body.security_metadata || {},
+        security_metadata: {
+          ...(body.securityMetadata || body.security_metadata || {}),
+          resource: body.resource || null,
+          resourceScope: body.resourceScope || body.resource_scope || null,
+          toolScope: body.toolScope || body.tool_scope || [],
+          policySnapshot: body.policySnapshot || body.policy_snapshot || null,
+          executionMode: body.executionMode || body.execution_mode || "GOVERNED_PRE_EXECUTION",
+        },
       }, db);
       await this.emit(db, "agent_session.created", "ai_agent_session", row.session_id, scope, {
         delegation_id: row.delegation_id,
@@ -459,5 +500,339 @@ export class AiGovernanceService {
       });
       return toSessionResponse(row);
     });
+  }
+
+  async createAgentIdentity(actor: Actor, body: any) {
+    requireActorPermission(actor, SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_MANAGE);
+    const scope = actorScope(actor);
+    const agentIdentifier = String(body.agentIdentifier || body.agent_identifier || "").trim();
+    const agentType = String(body.agentType || body.agent_type || "governed_agent").trim();
+    const allowedMode = String(body.allowedMode || body.allowed_mode || "LIMITED").trim().toUpperCase();
+    if (!agentIdentifier) throw new AiGovernanceError("AGENT_REQUIRED", "Agent identifier is required.");
+    if (!["OFF", "LIMITED", "ON"].includes(allowedMode)) throw new AiGovernanceError("AGENT_MODE_INVALID", "Agent mode is invalid.");
+    const row = await this.repo.createAgentIdentity({ agent_identity_id: `ai_agent_identity_${randomUUID()}`, organization_id: scope.organizationId, tenant_id: scope.tenantId, agent_identifier: agentIdentifier, agent_type: agentType, allowed_mode: allowedMode, created_by: scope.userId });
+    return toAgentIdentityResponse(row);
+  }
+
+  async listAgentIdentities(actor: Actor) {
+    requireActorPermission(actor, SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_VIEW);
+    const scope = actorScope(actor);
+    return (await this.repo.listAgentIdentities(scope.organizationId, scope.tenantId)).map(toAgentIdentityResponse);
+  }
+
+  async getAgentIdentity(actor: Actor, agentIdentityId: string) {
+    requireActorPermission(actor, SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_VIEW);
+    const scope = actorScope(actor);
+    const row = await this.repo.getAgentIdentity(agentIdentityId, scope.organizationId, scope.tenantId);
+    if (!row) throw new AiGovernanceError("AGENT_IDENTITY_NOT_FOUND", "Agent identity not found.", 404);
+    return toAgentIdentityResponse(row);
+  }
+
+  async setAgentIdentityStatus(actor: Actor, agentIdentityId: string, status: "DISABLED" | "REVOKED") {
+    requireActorPermission(actor, SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_MANAGE);
+    const scope = actorScope(actor);
+    const row = await this.repo.setAgentIdentityStatus({ agent_identity_id: agentIdentityId, organization_id: scope.organizationId, tenant_id: scope.tenantId, status });
+    if (!row) throw new AiGovernanceError("AGENT_IDENTITY_NOT_FOUND", "Agent identity not found.", 404);
+    const revokeActiveExecutionByAgent = (this.repo as any).revokeActiveExecutionByAgent;
+    if (typeof revokeActiveExecutionByAgent === "function") {
+      await revokeActiveExecutionByAgent.call(this.repo, row.agent_identity_id, scope.organizationId, scope.tenantId);
+    }
+    await this.emit(null, `agent_identity.${status.toLowerCase()}`, "ai_agent_identity", row.agent_identity_id, scope, { agent_identifier: row.agent_identifier });
+    return toAgentIdentityResponse(row);
+  }
+
+  async createTask(actor: Actor, body: any) {
+    requireActorPermission(actor, SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_EVALUATE);
+    const scope = actorScope(actor);
+    const agentIdentityId = String(body.agentIdentityId || body.agent_identity_id || "").trim();
+    const sessionId = String(body.sessionId || body.session_id || "").trim();
+    const delegationId = String(body.delegationId || body.delegation_id || "").trim();
+    const taskType = String(body.taskType || body.task_type || "").trim();
+    const purpose = String(body.purpose || "").trim();
+    const requestedAction = String(body.requestedAction || body.requested_action || "").trim();
+    const idempotencyKey = String(body.idempotencyKey || body.idempotency_key || "").trim();
+    const consequenceClass = String(body.consequenceClass || body.consequence_class || "READ_ONLY").trim().toUpperCase();
+    const inputSnapshot = body.inputSnapshot || body.input_snapshot || {};
+    const resourceScope = normalizeResourceScope(body.resourceScope || body.resource_scope);
+    const toolScope = Array.isArray(body.toolScope || body.tool_scope) ? Array.from(new Set((body.toolScope || body.tool_scope).map((value: any) => String(value).trim()).filter(Boolean))) : [];
+    if (!agentIdentityId || !sessionId || !delegationId || !taskType || !purpose || !requestedAction || !idempotencyKey) throw new AiGovernanceError("TASK_REQUIRED", "Task identity, session, delegation, purpose, action, and idempotency key are required.");
+    if (!["READ_ONLY", "REVERSIBLE_CHANGE", "EXTERNAL_SIDE_EFFECT", "CONSEQUENTIAL_HIGH_RISK"].includes(consequenceClass)) throw new AiGovernanceError("TASK_CONSEQUENCE_INVALID", "Task consequence class is invalid.");
+    const serializedInput = stableJson(inputSnapshot);
+    if (Buffer.byteLength(serializedInput, "utf8") > 32768) throw new AiGovernanceError("TASK_INPUT_TOO_LARGE", "Task input snapshot exceeds the bounded limit.");
+    const scopeResources = resourceScope.resources;
+    if (!scopeResources.length || resourceScope.all) throw new AiGovernanceError("TASK_SCOPE_REQUIRED", "Task requires explicit bounded resources.");
+    const agent = await this.repo.getAgentIdentity(agentIdentityId, scope.organizationId, scope.tenantId);
+    if (!agent || agent.status !== "ACTIVE") throw new AiGovernanceError("AGENT_IDENTITY_DISABLED", "Agent identity is not active.", 403);
+    const delegation = await this.repo.getDelegation(delegationId, scope.organizationId, scope.tenantId);
+    const session = await this.repo.getSession(sessionId, scope.organizationId, scope.tenantId);
+    if (!delegation || !session) throw new AiGovernanceError("TASK_AUTHORITY_NOT_FOUND", "Task authority records were not found.", 404);
+    if (session.status !== "ACTIVE") throw new AiGovernanceError("SESSION_NOT_ACTIVE", "Session is not active.", 403);
+    if (session.agent_identifier !== agent.agent_identifier || session.delegation_id !== delegation.delegation_id || session.acting_for_user_id !== scope.userId) throw new AiGovernanceError("TASK_AUTHORITY_MISMATCH", "Task authority does not match the session.", 403);
+    const resource = scopeResources[0];
+    const evaluation = await this.evaluateAgentAuthority({ principalUserId: scope.userId, agentIdentifier: agent.agent_identifier, organizationId: scope.organizationId, tenantId: scope.tenantId, delegation, sessionId, purpose, resource, action: requestedAction, model: body.model || {} });
+    if (!evaluation.allowed) throw new AiGovernanceError(String(evaluation.denialCode), String(evaluation.denialCode), 403);
+    const policySnapshot = { delegationId, delegationExpiresAt: delegation.expires_at, sessionId, sessionExpiresAt: session.expires_at, evaluation, capturedAt: new Date().toISOString() };
+    const actionHash = fingerprint({ requestedAction, resourceScope: { resources: scopeResources }, toolScope, purpose });
+    const inputHash = fingerprint(inputSnapshot);
+    return this.transaction(async (db: Executor) => {
+      const row = await this.repo.createTask({ task_id: `ai_task_${randomUUID()}`, organization_id: scope.organizationId, tenant_id: scope.tenantId, session_id: sessionId, agent_identity_id: agentIdentityId, delegation_id: delegationId, principal_user_id: scope.userId, task_type: taskType, purpose, requested_action: requestedAction, resource_scope: { resources: scopeResources, all: false }, tool_scope: toolScope, input_snapshot: inputSnapshot, input_hash: inputHash, action_hash: actionHash, consequence_class: consequenceClass, policy_snapshot: policySnapshot, provider_model: body.model || {}, idempotency_key: idempotencyKey, created_by: scope.userId }, db);
+      if (!row) {
+        const existing = (await this.repo.listTasks(scope.organizationId, scope.tenantId, db)).find((item: any) => item.idempotency_key === idempotencyKey);
+        if (!existing) throw new AiGovernanceError("TASK_REPLAY_UNRESOLVED", "Task replay could not be resolved.", 409);
+        return toTaskResponse(existing);
+      }
+      await this.emit(db, "agent.task.created", "ai_agent_task", row.task_id, scope, { session_id: sessionId, delegation_id: delegationId, action_hash: actionHash });
+      return toTaskResponse(row);
+    });
+  }
+
+  async listTasks(actor: Actor) {
+    requireActorPermission(actor, SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_VIEW);
+    const scope = actorScope(actor);
+    return (await this.repo.listTasks(scope.organizationId, scope.tenantId)).map(toTaskResponse);
+  }
+
+  async getTask(actor: Actor, taskId: string) {
+    requireActorPermission(actor, SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_VIEW);
+    const scope = actorScope(actor);
+    const row = await this.repo.getTask(taskId, scope.organizationId, scope.tenantId);
+    if (!row) throw new AiGovernanceError("TASK_NOT_FOUND", "Task not found.", 404);
+    return toTaskResponse(row);
+  }
+
+  async listTaskAttempts(actor: Actor, taskId: string) {
+    requireActorPermission(actor, SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_VIEW);
+    const scope = actorScope(actor);
+    if (!(await this.repo.getTask(taskId, scope.organizationId, scope.tenantId))) throw new AiGovernanceError("TASK_NOT_FOUND", "Task not found.", 404);
+    return (await this.repo.listAttempts(taskId, scope.organizationId, scope.tenantId)).map(toTaskAttemptResponse);
+  }
+
+  private async recordSecurityEvent(scope: { userId: string; organizationId: string; tenantId: string }, input: any, executor?: Executor) {
+    const row = await this.repo.createSecurityEvent({ ...input, security_event_id: `ai_security_${randomUUID()}`, organization_id: scope.organizationId, tenant_id: scope.tenantId, actor_user_id: input.actor_user_id || scope.userId }, executor);
+    await this.emit(executor || null, "agent.governance.security_event", "ai_governance_security_event", row.security_event_id, scope, { event_type: row.event_type, task_id: row.task_id, approval_request_id: row.approval_request_id });
+    return row;
+  }
+
+  async requestTaskApproval(actor: Actor, taskId: string, body: any = {}) {
+    requireActorPermission(actor, SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_EVALUATE);
+    const scope = actorScope(actor);
+    return this.transaction(async (db: Executor) => {
+      const task = await this.repo.getTask(taskId, scope.organizationId, scope.tenantId, db);
+      if (!task) throw new AiGovernanceError("TASK_NOT_FOUND", "Task not found.", 404);
+      if (task.consequence_class === "READ_ONLY") throw new AiGovernanceError("APPROVAL_NOT_REQUIRED", "Read-only tasks do not require human approval.", 409);
+      const target = body.target || {};
+      const targetType = String(target.type || target.resourceType || target.resource_type || "resource").trim();
+      const targetId = String(target.id || target.resourceId || target.resource_id || (task.resource_scope?.resources || [])[0]?.resourceId || "").trim();
+      const actionType = String(body.actionType || body.action_type || task.requested_action).trim();
+      const owningDomain = String(body.owningDomain || body.owning_domain || "agent_fabric").trim();
+      if (!targetId || !actionType || !owningDomain) throw new AiGovernanceError("PROPOSED_ACTION_REQUIRED", "Action type, owning domain, and target are required.");
+      const parameterHash = fingerprint(body.parameters || {});
+      const actionFingerprint = fingerprint({ taskId, taskActionHash: task.action_hash, actionType, owningDomain, targetType, targetId, parameterHash, consequenceClass: task.consequence_class, organizationId: scope.organizationId, tenantId: scope.tenantId });
+      const proposal = await this.repo.createProposedAction({ proposed_action_id: `ai_proposed_action_${randomUUID()}`, task_id: taskId, organization_id: scope.organizationId, tenant_id: scope.tenantId, action_type: actionType, owning_domain: owningDomain, target_type: targetType, target_id: targetId, parameter_hash: parameterHash, consequence_class: task.consequence_class, side_effect_class: body.sideEffectClass || body.side_effect_class || task.consequence_class, action_fingerprint: actionFingerprint, task_action_hash: task.action_hash, policy_version: body.policyVersion || body.policy_version || null, requested_by: scope.userId }, db);
+      const existing = proposal ? null : await this.repo.getApprovalForTask(taskId, scope.organizationId, scope.tenantId, db);
+      const request = proposal ? await this.repo.createApprovalRequest({ approval_request_id: `ai_approval_${randomUUID()}`, task_id: taskId, proposed_action_id: proposal.proposed_action_id, organization_id: scope.organizationId, tenant_id: scope.tenantId, action_fingerprint: actionFingerprint, required_permission: SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_MANAGE, requested_by: scope.userId, expires_at: body.expiresAt || body.expires_at || null }, db) : existing;
+      if (!request) throw new AiGovernanceError("APPROVAL_REPLAY_UNRESOLVED", "Approval request replay could not be resolved.", 409);
+      if (task.status !== "WAITING_APPROVAL" && task.status !== "AUTHORIZED" && task.status !== "COMPLETED") await this.repo.transitionTask({ task_id: taskId, organization_id: scope.organizationId, tenant_id: scope.tenantId, status: "WAITING_APPROVAL", from_status: task.status, reason: "HUMAN_APPROVAL_REQUIRED" }, db);
+      await this.emit(db, "agent.task.approval_requested", "ai_agent_task_approval_request", request.approval_request_id, scope, { task_id: taskId, action_fingerprint: request.action_fingerprint });
+      return { proposedAction: toProposedActionResponse(proposal || await this.repo.getApprovalForTask(taskId, scope.organizationId, scope.tenantId, db)), approvalRequest: toApprovalRequestResponse(request) };
+    });
+  }
+
+  async listTaskApprovals(actor: Actor) {
+    requireActorPermission(actor, SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_VIEW);
+    const scope = actorScope(actor);
+    return (await this.repo.listApprovalRequests(scope.organizationId, scope.tenantId)).map(toApprovalRequestResponse);
+  }
+
+  async getTaskApproval(actor: Actor, approvalRequestId: string) {
+    requireActorPermission(actor, SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_VIEW);
+    const scope = actorScope(actor);
+    const request = await this.repo.getApprovalRequest(approvalRequestId, scope.organizationId, scope.tenantId);
+    if (!request) throw new AiGovernanceError("APPROVAL_NOT_FOUND", "Approval request not found.", 404);
+    return { approvalRequest: toApprovalRequestResponse(request), decisions: (await this.repo.listApprovalDecisions(approvalRequestId, scope.organizationId, scope.tenantId)).map(toApprovalDecisionResponse) };
+  }
+
+  async decideTaskApproval(actor: Actor, approvalRequestId: string, body: any = {}) {
+    requireActorPermission(actor, SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_MANAGE);
+    const scope = actorScope(actor);
+    const decision = String(body.decision || "").trim().toUpperCase();
+    if (!["APPROVED", "DENIED"].includes(decision)) throw new AiGovernanceError("APPROVAL_DECISION_INVALID", "Decision must be APPROVED or DENIED.");
+    return this.transaction(async (db: Executor) => {
+      const request = await this.repo.getApprovalRequest(approvalRequestId, scope.organizationId, scope.tenantId, db);
+      if (!request) throw new AiGovernanceError("APPROVAL_NOT_FOUND", "Approval request not found.", 404);
+      const task = await this.repo.getTask(request.task_id, scope.organizationId, scope.tenantId, db);
+      if (!task) throw new AiGovernanceError("TASK_NOT_FOUND", "Task not found.", 404);
+      if (task.principal_user_id === scope.userId && task.consequence_class !== "READ_ONLY") throw new AiGovernanceError("SELF_APPROVAL_DENIED", "The task principal cannot approve this consequential action.", 403);
+      const current = await this.repo.getApprovalForTask(task.task_id, scope.organizationId, scope.tenantId, db);
+      if (!current || current.task_action_hash !== task.action_hash || current.action_fingerprint !== request.action_fingerprint || ["CANCELLED", "REVOKED", "FAILED", "COMPLETED"].includes(task.status)) {
+        // Commit the invalidation and security event outside the decision transaction;
+        // the caller still receives the rejection without rolling those records back.
+        await this.repo.setApprovalStatus({ approval_request_id: approvalRequestId, organization_id: scope.organizationId, tenant_id: scope.tenantId, status: "INVALIDATED" });
+        await this.recordSecurityEvent(scope, { event_type: "STALE_APPROVAL_OR_INVALID_TASK", severity: "HIGH", task_id: task.task_id, session_id: task.session_id, agent_identity_id: task.agent_identity_id, approval_request_id: approvalRequestId, action_fingerprint: request.action_fingerprint, metadata: { currentActionHash: task.action_hash, approvedActionFingerprint: request.action_fingerprint } });
+        throw new AiGovernanceError("STALE_APPROVAL", "Approval no longer matches the current task action.", 409);
+      }
+      if (request.status !== "PENDING") {
+        const prior = await this.repo.listApprovalDecisions(approvalRequestId, scope.organizationId, scope.tenantId, db);
+        return { approvalRequest: toApprovalRequestResponse(request), decision: prior[prior.length - 1] ? toApprovalDecisionResponse(prior[prior.length - 1]) : null, replay: true };
+      }
+      const updated = await this.repo.setApprovalStatus({ approval_request_id: approvalRequestId, organization_id: scope.organizationId, tenant_id: scope.tenantId, status: decision }, db);
+      const row = await this.repo.createApprovalDecision({ approval_decision_id: `ai_approval_decision_${randomUUID()}`, approval_request_id: approvalRequestId, organization_id: scope.organizationId, tenant_id: scope.tenantId, decision, action_fingerprint: request.action_fingerprint, approver_user_id: scope.userId, reason: body.reason || null }, db);
+      if (decision === "APPROVED") {
+        if (task.status !== "WAITING_APPROVAL") throw new AiGovernanceError("TASK_APPROVAL_STATE_INVALID", "Task is not waiting for approval.", 409);
+        await this.repo.transitionTask({ task_id: task.task_id, organization_id: scope.organizationId, tenant_id: scope.tenantId, status: "AUTHORIZED", from_status: task.status, reason: "HUMAN_APPROVED_EXACT_ACTION" }, db);
+      }
+      await this.emit(db, `agent.task.approval_${decision.toLowerCase()}`, "ai_agent_task_approval_request", approvalRequestId, scope, { task_id: task.task_id, action_fingerprint: request.action_fingerprint, approver_user_id: scope.userId });
+      return { approvalRequest: toApprovalRequestResponse(updated || request), decision: toApprovalDecisionResponse(row) };
+    });
+  }
+
+  async listSecurityEvents(actor: Actor) {
+    requireActorPermission(actor, SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_VIEW);
+    const scope = actorScope(actor);
+    return (await this.repo.listSecurityEvents(scope.organizationId, scope.tenantId)).map(toSecurityEventResponse);
+  }
+
+  async recordTaskAttempt(actor: Actor, taskId: string, body: any = {}) {
+    requireActorPermission(actor, SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_EVALUATE);
+    const scope = actorScope(actor);
+    const task = await this.repo.getTask(taskId, scope.organizationId, scope.tenantId);
+    if (!task) throw new AiGovernanceError("TASK_NOT_FOUND", "Task not found.", 404);
+    const status = String(body.status || "FAILED").toUpperCase();
+    if (!["FAILED", "CANCELLED", "REVOKED", "RECORDED"].includes(status)) throw new AiGovernanceError("ATTEMPT_STATUS_INVALID", "Attempt status is invalid.");
+    if (["CANCELLED", "REVOKED", "COMPLETED"].includes(task.status)) throw new AiGovernanceError("TASK_TERMINAL", "Terminal task cannot receive another attempt.", 409);
+    const attempts = await this.repo.listAttempts(taskId, scope.organizationId, scope.tenantId);
+    const row = await this.repo.createAttempt({ attempt_id: `ai_task_attempt_${randomUUID()}`, task_id: taskId, organization_id: scope.organizationId, tenant_id: scope.tenantId, sequence: attempts.length + 1, provider_model: body.model || task.provider_model || {}, status, error_class: body.errorClass || body.error_class || null, result_metadata: body.resultMetadata || body.result_metadata || {}, started_at: body.startedAt || body.started_at || new Date(), finished_at: body.finishedAt || body.finished_at || new Date(), created_by: scope.userId });
+    await this.emit(null, `agent.task.attempt_${status.toLowerCase()}`, "ai_agent_task_attempt", row.attempt_id, scope, { task_id: taskId, sequence: row.sequence });
+    return toTaskAttemptResponse(row);
+  }
+
+  async transitionTask(actor: Actor, taskId: string, nextStatus: string, body: any = {}) {
+    requireActorPermission(actor, SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_EVALUATE);
+    const scope = actorScope(actor);
+    const task = await this.repo.getTask(taskId, scope.organizationId, scope.tenantId);
+    if (!task) throw new AiGovernanceError("TASK_NOT_FOUND", "Task not found.", 404);
+    if (nextStatus === "AUTHORIZED" && task.consequence_class !== "READ_ONLY") {
+      const approval = await this.repo.getApprovalForTask(taskId, scope.organizationId, scope.tenantId);
+      if (!approval || approval.status !== "APPROVED" || approval.task_action_hash !== task.action_hash || (approval.expires_at && new Date(approval.expires_at) <= new Date())) throw new AiGovernanceError("APPROVAL_REQUIRED", "A current approval bound to the exact task action is required.", 403);
+    }
+    const transitions: Record<string, string[]> = { REQUESTED: ["VALIDATED", "CANCELLED", "REVOKED"], VALIDATED: ["AUTHORIZED", "WAITING_APPROVAL", "READY", "CANCELLED", "REVOKED"], AUTHORIZED: ["READY", "WAITING_APPROVAL", "PAUSED", "CANCELLED", "REVOKED"], WAITING_APPROVAL: ["AUTHORIZED", "CANCELLED", "REVOKED"], READY: ["PAUSED", "CANCELLED", "REVOKED", "FAILED"], PAUSED: ["READY", "CANCELLED", "REVOKED"], RUNNING: ["CANCELLED", "REVOKED"] };
+    if (!transitions[task.status]?.includes(nextStatus)) throw new AiGovernanceError("TASK_TRANSITION_DENIED", `Transition ${task.status} -> ${nextStatus} is not allowed.`, 409);
+    if (["AUTHORIZED", "READY"].includes(nextStatus)) {
+      const delegation = await this.repo.getDelegation(task.delegation_id, scope.organizationId, scope.tenantId);
+      if (!delegation || delegation.revoked_at || new Date(delegation.expires_at) <= new Date()) throw new AiGovernanceError("TASK_AUTHORITY_REVOKED", "Task delegation is no longer valid.", 403);
+      const agent = await this.repo.getAgentIdentity(task.agent_identity_id, scope.organizationId, scope.tenantId);
+      if (!agent || agent.status !== "ACTIVE") throw new AiGovernanceError("AGENT_IDENTITY_DISABLED", "Agent identity is not active.", 403);
+    }
+    return this.transaction(async (db: Executor) => {
+      const row = await this.repo.transitionTask({ task_id: taskId, organization_id: scope.organizationId, tenant_id: scope.tenantId, status: nextStatus, from_status: task.status, reason: body.reason || null }, db);
+      if (!row) throw new AiGovernanceError("TASK_TRANSITION_CONFLICT", "Task changed before transition.", 409);
+      await this.emit(db, `agent.task.${nextStatus.toLowerCase()}`, "ai_agent_task", taskId, scope, { from_status: task.status, to_status: nextStatus });
+      return toTaskResponse(row);
+    });
+  }
+
+  async cancelTask(actor: Actor, taskId: string, body: any = {}) {
+    const result = await this.transitionTask(actor, taskId, "CANCELLED", body);
+    const scope = actorScope(actor);
+    await this.repo.cancelActiveAttempts(taskId, scope.organizationId, scope.tenantId, body.reason || "CANCELLED");
+    await this.repo.invalidateApprovalsForTask(taskId, scope.organizationId, scope.tenantId, "CANCELLED");
+    return result;
+  }
+
+  async createWorker(actor: Actor, body: any = {}) {
+    requireActorPermission(actor, SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_MANAGE);
+    const scope = actorScope(actor);
+    const workerIdentifier = String(body.workerIdentifier || body.worker_identifier || "").trim();
+    const executionMode = String(body.executionMode || body.execution_mode || "TEST_SAFE").trim().toUpperCase();
+    if (!workerIdentifier) throw new AiGovernanceError("WORKER_REQUIRED", "Worker identifier is required.");
+    if (!["TEST_SAFE", "SIMULATION"].includes(executionMode)) throw new AiGovernanceError("WORKER_MODE_INVALID", "Worker execution mode is invalid.");
+    return toWorkerResponse(await this.repo.createWorker({ worker_id: `ai_worker_${randomUUID()}`, organization_id: scope.organizationId, tenant_id: scope.tenantId, worker_identifier: workerIdentifier, execution_mode: executionMode, registered_by: scope.userId }));
+  }
+
+  async listWorkers(actor: Actor) {
+    requireActorPermission(actor, SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_VIEW);
+    const scope = actorScope(actor);
+    return (await this.repo.listWorkers(scope.organizationId, scope.tenantId)).map(toWorkerResponse);
+  }
+
+  private async assertRunnableTask(actor: Actor, taskId: string, workerId: string) {
+    if (!safeExecutionEnabled()) throw new AiGovernanceError("EXECUTION_DISABLED", "Safe execution is disabled by the Agent Fabric execution gate.", 403);
+    const scope = actorScope(actor);
+    const task = await this.repo.getTask(taskId, scope.organizationId, scope.tenantId);
+    const worker = await this.repo.getWorker(workerId, scope.organizationId, scope.tenantId);
+    if (!task) throw new AiGovernanceError("TASK_NOT_FOUND", "Task not found.", 404);
+    if (!worker || worker.status !== "ACTIVE" || !["TEST_SAFE", "SIMULATION"].includes(worker.execution_mode)) throw new AiGovernanceError("WORKER_NOT_ALLOWED", "Worker is not active for safe execution.", 403);
+    if (!SAFE_TASK_TYPES.has(task.task_type)) throw new AiGovernanceError("TASK_TYPE_NOT_ALLOWED", "Task type is not registered for safe execution.", 403);
+    if (task.consequence_class !== "READ_ONLY") throw new AiGovernanceError("CONSEQUENCE_BLOCKED", "Only read-only tasks are eligible for the safe runner.", 403);
+    const resources = Array.isArray(task.resource_scope?.resources) ? task.resource_scope.resources : [];
+    const resource = resources[0];
+    const delegation = await this.repo.getDelegation(task.delegation_id, scope.organizationId, scope.tenantId);
+    if (!delegation || delegation.revoked_at || new Date(delegation.expires_at) <= new Date()) throw new AiGovernanceError("TASK_AUTHORITY_REVOKED", "Task authority is no longer valid.", 403);
+    const evaluation = await this.evaluateAgentAuthority({ principalUserId: scope.userId, agentIdentifier: (await this.repo.getAgentIdentity(task.agent_identity_id, scope.organizationId, scope.tenantId))?.agent_identifier, organizationId: scope.organizationId, tenantId: scope.tenantId, delegation, sessionId: task.session_id, purpose: task.purpose, resource, action: task.requested_action, model: task.provider_model || {} });
+    if (!evaluation.allowed) throw new AiGovernanceError(String(evaluation.denialCode), String(evaluation.denialCode), 403);
+    return { scope, task, worker };
+  }
+
+  async claimTask(actor: Actor, taskId: string, body: any = {}) {
+    requireActorPermission(actor, SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_EVALUATE);
+    const workerId = String(body.workerId || body.worker_id || "").trim();
+    if (!workerId) throw new AiGovernanceError("WORKER_REQUIRED", "Worker is required.");
+    const { scope, task } = await this.assertRunnableTask(actor, taskId, workerId);
+    return this.transaction(async (db: Executor) => {
+      const claimed = await this.repo.claimTask({ task_id: taskId, organization_id: scope.organizationId, tenant_id: scope.tenantId, worker_id: workerId, lease_seconds: Math.min(Math.max(Number(body.leaseSeconds || 30), 5), 300), policy_binding_hash: task.policy_snapshot?.evaluation ? fingerprint(task.policy_snapshot.evaluation) : null, action_binding_hash: task.action_hash, created_by: scope.userId }, db);
+      if (!claimed) throw new AiGovernanceError("TASK_CLAIM_CONFLICT", "Task is not ready or is already claimed.", 409);
+      await this.emit(db, "agent.task.attempt_claimed", "ai_agent_task_attempt", claimed.attempt.attempt_id, scope, { task_id: taskId, worker_id: workerId, sequence: claimed.attempt.sequence });
+      return { task: toTaskResponse(claimed.task), attempt: toTaskAttemptResponse(claimed.attempt) };
+    });
+  }
+
+  async heartbeatAttempt(actor: Actor, taskId: string, attemptId: string, body: any = {}) {
+    requireActorPermission(actor, SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_EVALUATE);
+    const scope = actorScope(actor);
+    const workerId = String(body.workerId || body.worker_id || "").trim();
+    const row = await this.repo.heartbeatAttempt({ task_id: taskId, attempt_id: attemptId, worker_id: workerId, organization_id: scope.organizationId, tenant_id: scope.tenantId, lease_seconds: Math.min(Math.max(Number(body.leaseSeconds || 30), 5), 300) });
+    if (!row) throw new AiGovernanceError("ATTEMPT_NOT_ACTIVE", "Attempt is not active for this worker.", 409);
+    return toTaskAttemptResponse(row);
+  }
+
+  async completeAttempt(actor: Actor, taskId: string, attemptId: string, body: any = {}) {
+    requireActorPermission(actor, SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_EVALUATE);
+    const workerId = String(body.workerId || body.worker_id || "").trim();
+    const { scope } = await this.assertRunnableTask(actor, taskId, workerId);
+    return this.transaction(async (db: Executor) => {
+      const completed = await this.repo.completeAttempt({ task_id: taskId, attempt_id: attemptId, worker_id: workerId, organization_id: scope.organizationId, tenant_id: scope.tenantId, checkpoint: body.checkpoint || { completed: true }, result_metadata: { runner: "bounded_safe_runner", result: "SAFE_RESULT" } }, db);
+      if (!completed) throw new AiGovernanceError("ATTEMPT_NOT_ACTIVE", "Attempt is not active for this worker.", 409);
+      await this.emit(db, "agent.task.succeeded", "ai_agent_task", taskId, scope, { attempt_id: attemptId, execution_mode: "TEST_SAFE" });
+      return { task: toTaskResponse(completed.task), attempt: toTaskAttemptResponse(completed.attempt) };
+    });
+  }
+
+  async failAttempt(actor: Actor, taskId: string, attemptId: string, body: any = {}) {
+    requireActorPermission(actor, SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_EVALUATE);
+    const scope = actorScope(actor);
+    const workerId = String(body.workerId || body.worker_id || "").trim();
+    return this.transaction(async (db: Executor) => {
+      const failed = await this.repo.failAttempt({ task_id: taskId, attempt_id: attemptId, worker_id: workerId, organization_id: scope.organizationId, tenant_id: scope.tenantId, status: "FAILED", error_class: body.errorClass || "TRANSIENT_PROVIDER_FAILURE", retryable: body.retryable === true, result_metadata: body.resultMetadata || {} }, db);
+      if (!failed) throw new AiGovernanceError("ATTEMPT_NOT_ACTIVE", "Attempt is not active for this worker.", 409);
+      await this.emit(db, "agent.task.failed", "ai_agent_task", taskId, scope, { attempt_id: attemptId, error_class: failed.attempt.error_class, retryable: failed.attempt.retryable });
+      return { task: toTaskResponse(failed.task), attempt: toTaskAttemptResponse(failed.attempt) };
+    });
+  }
+
+  async retryTask(actor: Actor, taskId: string, body: any = {}) {
+    requireActorPermission(actor, SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_EVALUATE);
+    const scope = actorScope(actor);
+    const row = await this.transaction((db: Executor) => this.repo.retryTask({ task_id: taskId, organization_id: scope.organizationId, tenant_id: scope.tenantId, max_attempts: Math.min(Math.max(Number(body.maxAttempts || 3), 1), 5) }, db));
+    if (!row || row.exhausted) throw new AiGovernanceError("RETRY_EXHAUSTED", "Task retry limit reached or task is not retryable.", 409);
+    await this.emit(null, "agent.task.retry_ready", "ai_agent_task", taskId, scope, { max_attempts: body.maxAttempts || 3 });
+    return toTaskResponse(row);
+  }
+
+  async expireLeases(actor: Actor) {
+    requireActorPermission(actor, SHS_SECURITY_PERMISSIONS.AI_GOVERNANCE_EVALUATE);
+    const scope = actorScope(actor);
+    const rows = await this.transaction((db: Executor) => this.repo.expireLeases(new Date(), db));
+    await Promise.all(rows.map((row) => this.emit(null, "agent.task.lease_expired", "ai_agent_task_attempt", row.attempt_id, scope, { task_id: row.task_id })));
+    return rows.map(toTaskAttemptResponse);
   }
 }

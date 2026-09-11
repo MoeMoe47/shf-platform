@@ -15,4 +15,17 @@ export class ReportPublicationRepo {
   }
   async getAuthorization(id: string, scope: any, executor: any = { query }) { const result = await executor.query(`SELECT * FROM report_publication_authorizations WHERE publication_authorization_id = $1 AND tenant_id = $2 AND organization_id = $3 LIMIT 1`, [id, scope.tenant_id, scope.organization_id]); return map(result.rows[0]); }
   async listAuthorizations(scope: any, executor: any = { query }) { const result = await executor.query(`SELECT * FROM report_publication_authorizations WHERE tenant_id = $1 AND organization_id = $2 ORDER BY authorized_at DESC, publication_authorization_id DESC`, [scope.tenant_id, scope.organization_id]); return result.rows.map(map); }
+  async revokeAuthorization(id: string, scope: any, executor: any = { query }) {
+    const result = await executor.query(
+      `UPDATE report_publication_authorizations
+       SET status = 'PUBLICATION_REVOKED', version = version + 1
+       WHERE publication_authorization_id = $1
+         AND tenant_id = $2
+         AND organization_id = $3
+         AND status = 'PUBLICATION_AUTHORIZED'
+       RETURNING *`,
+      [id, scope.tenant_id, scope.organization_id],
+    );
+    return map(result.rows[0]);
+  }
 }

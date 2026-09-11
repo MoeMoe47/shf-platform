@@ -3,14 +3,16 @@ import { requirePermission } from "../../../auth/permission-guard.js";
 import { requireOrganizationServiceEntitlement } from "../../../auth/service-entitlement-guard.js";
 import { SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
 import { StudioProjectService } from "../service/studio-project-service.js";
+import { BuildArtifactService } from "../service/studio-build-artifact-service.js";
 import { getStudioInstitutionalStatus, projectStudioEvidence } from "../service/studio-institutional-service.js";
 
 const service = new StudioProjectService();
+const artifacts = new BuildArtifactService();
 
 function statusFor(error: any) {
   const code = String(error?.message || "");
-  if (["PROJECT_NOT_FOUND", "ASSIGNMENT_NOT_FOUND", "LEARNER_NOT_FOUND", "REVIEW_SUBMISSION_NOT_FOUND", "REVISION_NOT_FOUND", "TEAM_NOT_FOUND", "TEAM_MEMBER_NOT_FOUND"].includes(code)) return 404;
-  if (["FORBIDDEN", "COMMERCIAL_DESTINATION_FORBIDDEN", "STUDENT_DESTINATION_REQUIRED", "STUDENT_IDEA_STUDENT_REQUIRED", "LEARNER_SCOPE_FORBIDDEN", "PROJECT_UPDATE_FORBIDDEN", "STUDENT_STATUS_UPDATE_FORBIDDEN", "STUDIO_PROJECT_CREATE_FORBIDDEN", "REVIEW_SUBMISSION_FORBIDDEN", "CURRENT_QA_REQUIRED", "WORKSPACE_REQUIRED_FOR_REVIEW", "REVIEW_SELF_APPROVAL_FORBIDDEN", "REVIEW_ASSIGNMENT_REQUIRED", "REVIEW_FEEDBACK_TOO_LONG", "DELIVERY_FINALIZE_FORBIDDEN", "WORKSPACE_REQUIRED_FOR_DELIVERY", "DELIVERY_NOT_ELIGIBLE", "TEAM_MEMBERSHIP_REQUIRED", "TEAM_MEMBER_NOT_ELIGIBLE", "project_submission_review_required", "studio_project_finalize_required"].includes(code)) return 403;
+  if (["PROJECT_NOT_FOUND", "ASSIGNMENT_NOT_FOUND", "LEARNER_NOT_FOUND", "REVIEW_SUBMISSION_NOT_FOUND", "REVISION_NOT_FOUND", "TEAM_NOT_FOUND", "TEAM_MEMBER_NOT_FOUND", "ARTIFACT_NOT_FOUND"].includes(code)) return 404;
+  if (["FORBIDDEN", "COMMERCIAL_DESTINATION_FORBIDDEN", "STUDENT_DESTINATION_REQUIRED", "STUDENT_IDEA_STUDENT_REQUIRED", "LEARNER_SCOPE_FORBIDDEN", "PROJECT_UPDATE_FORBIDDEN", "STUDENT_STATUS_UPDATE_FORBIDDEN", "STUDIO_PROJECT_CREATE_FORBIDDEN", "REVIEW_SUBMISSION_FORBIDDEN", "CURRENT_QA_REQUIRED", "WORKSPACE_REQUIRED_FOR_REVIEW", "REVIEW_SELF_APPROVAL_FORBIDDEN", "REVIEW_ASSIGNMENT_REQUIRED", "REVIEW_FEEDBACK_TOO_LONG", "DELIVERY_FINALIZE_FORBIDDEN", "WORKSPACE_REQUIRED_FOR_DELIVERY", "DELIVERY_NOT_ELIGIBLE", "TEAM_MEMBERSHIP_REQUIRED", "TEAM_MEMBER_NOT_ELIGIBLE", "ARTIFACT_MATERIALIZATION_FORBIDDEN", "studio_project_update_required", "studio_project_view_required", "project_submission_review_required", "studio_project_finalize_required"].includes(code)) return 403;
   if (["HANDOFF_IN_PROGRESS", "WORKSPACE_REVISION_CONFLICT", "REVIEW_ALREADY_DECIDED", "REVIEW_SUBMISSION_CONFLICT"].includes(code)) return 409;
   if (["WORKSPACE_REVISION_REQUIRED"].includes(code)) return 400;
   return 400;
@@ -61,6 +63,18 @@ export function registerStudioProjectRoutes(app: any) {
   });
   app.get("/studio/projects/:projectId/workspace", requirePermission(SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_VIEW), async (req: any, res: any) => {
     try { return res.json(ok(await service.getWorkspace(actor(req), req.params.projectId))); }
+    catch (error) { return reject(res, error); }
+  });
+  app.post("/studio/projects/:projectId/artifacts", requirePermission(SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_UPDATE), async (req: any, res: any) => {
+    try { return res.status(201).json(ok(await artifacts.materialize(actor(req), req.params.projectId, req.body?.workspaceRevision || req.body?.workspace_revision))); }
+    catch (error) { return reject(res, error); }
+  });
+  app.get("/studio/projects/:projectId/artifacts", requirePermission(SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_VIEW), async (req: any, res: any) => {
+    try { return res.json(ok({ items: await artifacts.list(actor(req), req.params.projectId) })); }
+    catch (error) { return reject(res, error); }
+  });
+  app.get("/studio/artifacts/:artifactId", requirePermission(SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_VIEW), async (req: any, res: any) => {
+    try { return res.json(ok(await artifacts.get(actor(req), req.params.artifactId))); }
     catch (error) { return reject(res, error); }
   });
   app.get("/studio/projects/:projectId/revisions", requirePermission(SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_VIEW), async (req: any, res: any) => {

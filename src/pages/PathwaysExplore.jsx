@@ -1,7 +1,9 @@
 // src/pages/PathwaysExplore.jsx
 import React, { Suspense, useEffect, useMemo, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { track } from "../utils/analytics.js";
 import useCanonicalCareers from "../hooks/useCanonicalCareers.js";
+import { CareerPublicHero, CareerSectionHeader } from "../components/career/CareerPublicPrimitives.jsx";
 
 const PathwayDetailDrawer = React.lazy(() => import("../components/PathwayDetailDrawer.jsx"));
 const preloadDrawer = () => import("../components/PathwayDetailDrawer.jsx");
@@ -24,8 +26,12 @@ function PathwayRow({ pathway, onOpen }) {
         {pathway?.canonicalCareer ? <div className="subtle">Career family record</div> : null}
       </div>
       <div>
-        <button className="sh-btn sh-btn--secondary" onMouseEnter={preloadDrawer} onFocus={preloadDrawer}
-                onClick={onOpen} aria-label={`Open ${pathway.title}`}>Open</button>
+        <div className="sh-actionsRow">
+          <Link className="sh-btn sh-btn--primary" to={`/pathways/${encodeURIComponent(pathway.slug)}`}>View pathway</Link>
+          <Link className="sh-btn sh-btn--secondary" to={`/careers/${encodeURIComponent(pathway.slug)}`}>View career</Link>
+          <button className="sh-btn sh-btn--secondary" onMouseEnter={preloadDrawer} onFocus={preloadDrawer}
+                  onClick={onOpen} aria-label={`Preview ${pathway.title}`}>Preview</button>
+        </div>
       </div>
     </div>
   );
@@ -75,6 +81,8 @@ function ClusterDrawer({ open, title, onClose, children }) {
 
 export default function PathwaysExplore() {
   useEffect(() => { try { track("pathways_explore_viewed", {}, { silent: true }); } catch {} }, []);
+  const location = useLocation();
+  const isPathways = location.pathname === "/pathways";
   const { data: pathways = [], loading, error, loadCareer } = useCanonicalCareers();
 
   const [activeCluster, setActiveCluster] = useState(null);
@@ -99,11 +107,18 @@ export default function PathwaysExplore() {
   };
 
   return (
-    <div className="sh-grid sh-grid--1">
+    <main className="career-explore" aria-labelledby="career-explore-title">
+      <CareerPublicHero
+        eyebrow={isPathways ? "Career pathways" : "Explore careers"}
+        title={isPathways ? "See how careers connect." : "Explore careers with a clear next step."}
+        titleId="career-explore-title"
+        description="Browse canonical Career records by family, then open a public detail page when a direction interests you."
+      />
+      <CareerSectionHeader eyebrow={isPathways ? "Reference catalog" : "Career catalog"} title="Explore by career family" description="These groupings are drawn from the active Career API catalog." />
       {loading && <p role="status">Loading careers…</p>}
       {error && <p role="alert">Career information is temporarily unavailable.</p>}
       {!loading && !error && !pathways.length && <p>No active careers are available.</p>}
-      <div className="card card--pad">
+      <section className="career-public__card career-exploreCatalog" aria-label="Career family catalog">
         <div className="sh-row" style={{ alignItems: "center" }}>
           <h3 className="h3" style={{ margin: 0 }}>Explore by Cluster</h3>
           <div style={{ flex: 1 }} />
@@ -149,7 +164,7 @@ export default function PathwaysExplore() {
             </div>
           ))}
         </div>
-      </div>
+      </section>
 
       {/* Drawer for individual pathway */}
       <Suspense fallback={null}>
@@ -170,7 +185,9 @@ export default function PathwaysExplore() {
                   <div className="subtle">Career family record</div>
                 </div>
                 <div className="sh-actionsRow">
-                  <button className="sh-btn sh-btn--secondary" onClick={() => handleViewPathwayCard(p)} aria-label={`Open ${p.title}`}>Open</button>
+                  <Link className="sh-btn sh-btn--primary" to={`/pathways/${encodeURIComponent(p.slug)}`}>View pathway</Link>
+                  <Link className="sh-btn sh-btn--secondary" to={`/careers/${encodeURIComponent(p.slug)}`}>View career</Link>
+                  <button className="sh-btn sh-btn--secondary" onClick={() => handleViewPathwayCard(p)} aria-label={`Preview ${p.title}`}>Preview</button>
                 </div>
               </li>
             ))}
@@ -184,7 +201,7 @@ export default function PathwaysExplore() {
         .clusterList{display:grid;gap:6px;margin-top:8px;}
         .pathRow{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;border:1px solid var(--ring,#e5e7eb);border-radius:10px;padding:8px;background:var(--card,#fff);}
       `}</style>
-    </div>
+    </main>
   );
 }
 

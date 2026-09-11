@@ -1,0 +1,538 @@
+/* ------------------------------------------------------------------
+   CivicSure Public Footer — reusable across public-facing CivicSure
+   pages (Explorer today, more later). Redeclares the same --cse-*
+   token VALUES used by civicsure-explorer.css on its own root class
+   (.civicsure-public-footer) rather than depending on that file being
+   present — this footer must render correctly on any future public
+   page, not only inside the Explorer page tree. Same precedent as
+   civicsure-explorer.css itself (which redeclares rather than
+   depending on civicsure.css's .civicsure-shell tokens).
+   ------------------------------------------------------------------ */
+
+.civicsure-public-footer {
+  --cse-bg: #eef3f9;
+  --cse-surface: #ffffff;
+  --cse-text: #16223a;
+  --cse-muted: #566380;
+  --cse-border: #d7e3f0;
+  --cse-navy: #102a52;
+  --cse-navy-hover: #0b1f3d;
+  --cse-blue: #1857b0;
+  --cse-blue-soft: #dce9fb;
+  --cse-blue-pale: #eef5fd;
+  --cse-success: #15804a;
+  --cse-success-soft: #ddf5e8;
+
+  display: block;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--cse-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+.civicsure-public-footer,
+.civicsure-public-footer *,
+.civicsure-public-footer *::before,
+.civicsure-public-footer *::after {
+  box-sizing: border-box;
+}
+
+.civicsure-public-footer a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.civicsure-public-footer img {
+  max-width: 100%;
+  display: block;
+}
+
+.civicsure-public-footer :focus-visible {
+  outline: 3px solid var(--cse-blue);
+  outline-offset: 2px;
+}
+
+.csf-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.csf-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.csf-serif,
+.csf-skyline__heading {
+  font-family: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, "Times New Roman", serif;
+}
+
+/* ---------------------------- Skyline banner ---------------------------- */
+
+.csf-skyline {
+  position: relative;
+  overflow: hidden;
+  /* 320px, then 440px, were both still severe crops: object-fit:cover
+     on a container this much wider-than-tall relative to the source
+     image (655x548, aspect 1.2) forces a ~2.2x scale-to-width at
+     desktop, so anything short of ~560-600px only ever shows a thin
+     horizontal slice of mid-rise buildings — no sky, no bridge, no
+     river. The approved mock's own banner is itself ~2.39:1 (1312
+     wide x 548 tall) — matching that proportion (1440/2.39≈600px) is
+     what actually shows the full composition instead of a crop. */
+  min-height: 600px;
+  background: var(--cse-navy);
+}
+
+.csf-skyline__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 66%;
+}
+
+/* Light left-side scrim only (protects the headline) plus a small
+   corner scrim behind the right-side micro-copy — not a tint across
+   the whole photo, so the skyline stays bright per the approved
+   direction (matches the hero's own treatment). */
+.csf-skyline__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(460px 340px at 100% 0%, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.55) 55%, rgba(255, 255, 255, 0) 82%),
+    linear-gradient(to right, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.3) 20%, rgba(255, 255, 255, 0) 42%);
+}
+
+.csf-skyline__content {
+  position: relative;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 44px 32px;
+  min-height: 600px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.csf-skyline__left {
+  max-width: 420px;
+}
+
+.csf-skyline__heading {
+  margin: 0;
+  font-size: 34px;
+  line-height: 1.16;
+  font-weight: 700;
+  color: var(--cse-navy);
+  letter-spacing: -0.01em;
+}
+
+.csf-skyline__rule {
+  width: 40px;
+  height: 2px;
+  background: var(--cse-blue);
+  border: 0;
+  margin: 14px 0;
+}
+
+.csf-skyline__body {
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 1.5;
+  font-weight: 600;
+  color: var(--cse-navy);
+}
+
+.csf-skyline__right {
+  flex-shrink: 0;
+  text-align: right;
+  padding-top: 4px;
+}
+
+.csf-skyline__micro-heading {
+  position: relative;
+  margin: 0 0 8px;
+  padding-top: 12px;
+  font: 800 12.5px/1.3 inherit;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cse-navy);
+  text-shadow: 0 1px 8px rgba(255, 255, 255, 0.9), 0 1px 2px rgba(255, 255, 255, 0.9);
+}
+.csf-skyline__micro-heading::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 32px;
+  height: 2px;
+  background: var(--cse-navy);
+}
+
+.csf-skyline__micro-body {
+  margin: 0;
+  font: 700 12px/1.6 inherit;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cse-muted);
+  text-shadow: 0 1px 8px rgba(255, 255, 255, 0.9), 0 1px 2px rgba(255, 255, 255, 0.9);
+}
+
+/* ---------------------------- Footer body ---------------------------- */
+
+.csf-body {
+  background: var(--cse-surface);
+  padding: 48px 0 0;
+}
+
+.csf-grid {
+  display: grid;
+  grid-template-columns: 35fr 15fr 15fr 18fr 17fr;
+  gap: 24px;
+  padding-bottom: 40px;
+}
+
+/* ---------------------------- Brand + newsletter ---------------------------- */
+
+.csf-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.csf-brand__icon {
+  width: 34px;
+  height: 34px;
+  color: var(--cse-navy);
+  flex-shrink: 0;
+}
+
+.csf-brand__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.csf-brand__wordmark {
+  font: 800 22px/1 Georgia, serif;
+  color: var(--cse-navy);
+  letter-spacing: -0.01em;
+}
+
+.csf-brand__tagline {
+  margin-top: 3px;
+  font-size: 12px;
+  color: var(--cse-muted);
+}
+
+.csf-mission {
+  margin: 0;
+  max-width: 38ch;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--cse-muted);
+}
+
+.csf-divider {
+  border: 0;
+  border-top: 1px solid var(--cse-border);
+  margin: 22px 0;
+  max-width: 420px;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.csf-newsletter h3 {
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.csf-newsletter > p {
+  margin: 0 0 14px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--cse-muted);
+  max-width: 36ch;
+}
+
+.csf-newsletter__form {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  max-width: 420px;
+}
+
+.csf-newsletter__form input {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  color: var(--cse-text);
+  background: var(--cse-surface);
+  border: 1px solid var(--cse-border);
+  border-radius: 8px;
+  padding: 11px 14px 11px 38px;
+}
+.csf-newsletter__form input::placeholder {
+  color: var(--cse-muted);
+}
+.csf-newsletter__form input:focus-visible {
+  border-color: var(--cse-blue);
+  box-shadow: 0 0 0 3px rgba(24, 87, 176, 0.16);
+  outline: none;
+}
+
+.csf-newsletter__form .csf-newsletter__icon {
+  display: flex;
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--cse-muted);
+  pointer-events: none;
+}
+.csf-newsletter__form .csf-newsletter__icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.csf-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font: 700 14px/1 inherit;
+  padding: 11px 20px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.csf-btn--primary {
+  background: var(--cse-navy);
+  color: #fff;
+}
+.csf-btn--primary:hover {
+  background: var(--cse-navy-hover);
+}
+
+.csf-newsletter__privacy {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--cse-muted);
+}
+
+/* ---------------------------- Nav columns ---------------------------- */
+
+.csf-col h3 {
+  margin: 0 0 16px;
+  font: 800 12px/1 inherit;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cse-blue);
+}
+
+.csf-col ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.csf-col a,
+.csf-link--placeholder {
+  font-size: 14.5px;
+  color: var(--cse-muted);
+  display: inline-block;
+}
+
+.csf-col a:hover {
+  color: var(--cse-navy);
+}
+
+.csf-link--placeholder {
+  cursor: default;
+  color: #97a3ba;
+}
+
+/* ---------------------------- Bottom bar ---------------------------- */
+
+.csf-bottom-divider {
+  border: 0;
+  border-top: 1px solid var(--cse-border);
+  margin: 0;
+}
+
+.csf-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 22px 32px 28px;
+}
+
+.csf-bottom__left p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--cse-muted);
+}
+
+.csf-bottom__right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.csf-social {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.csf-social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--cse-navy);
+  color: #fff;
+}
+.csf-social a:hover {
+  background: var(--cse-navy-hover);
+}
+.csf-social a svg {
+  width: 16px;
+  height: 16px;
+}
+
+.csf-bottom__rule {
+  width: 1px;
+  align-self: stretch;
+  background: var(--cse-border);
+}
+
+.csf-ohio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.csf-ohio__icon {
+  width: 26px;
+  height: 26px;
+  color: var(--cse-navy);
+  flex-shrink: 0;
+}
+
+.csf-ohio p {
+  margin: 0;
+  font: 800 11.5px/1.4 inherit;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--cse-navy);
+}
+
+/* ---------------------------- Responsive ---------------------------- */
+
+@media (max-width: 1100px) {
+  .csf-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+    row-gap: 32px;
+  }
+  .csf-brand-col {
+    grid-column: 1 / -1;
+    max-width: 520px;
+  }
+}
+
+@media (max-width: 900px) {
+  .csf-skyline__content {
+    flex-direction: column;
+    gap: 28px;
+    padding: 36px 24px;
+  }
+  .csf-skyline__right {
+    text-align: left;
+    padding-top: 0;
+  }
+  .csf-skyline__micro-heading {
+    padding-top: 0;
+  }
+  .csf-skyline__micro-heading::before {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .csf-container {
+    padding: 0 20px;
+  }
+  .csf-skyline {
+    min-height: 260px;
+  }
+  .csf-skyline__content {
+    min-height: 260px;
+    padding: 28px 20px;
+  }
+  .csf-skyline__heading {
+    font-size: 27px;
+  }
+  .csf-skyline__left {
+    max-width: none;
+  }
+  .csf-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .csf-brand-col {
+    grid-column: 1 / -1;
+    max-width: none;
+  }
+  .csf-newsletter__form {
+    flex-wrap: wrap;
+  }
+  .csf-newsletter__form input {
+    flex-basis: 100%;
+  }
+  .csf-newsletter__form .csf-btn {
+    flex: 1;
+  }
+  .csf-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 22px 20px 26px;
+  }
+  .csf-bottom__right {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 480px) {
+  .csf-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .civicsure-public-footer * {
+    transition-duration: 0.01ms !important;
+  }
+}

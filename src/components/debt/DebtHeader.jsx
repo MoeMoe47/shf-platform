@@ -13,7 +13,7 @@ export default function DebtHeader() {
       <nav className="crb-crossapp" aria-label="Apps">
         <CrossAppLink className="sh-btn sh-btn--soft" app="credit"   to="/report">Credit</CrossAppLink>
         <CrossAppLink className="sh-btn sh-btn--soft" app="treasury" to="/dashboard">Treasury</CrossAppLink>
-        <CrossAppLink className="sh-btn sh-btn--soft" app="career"   to="/dashboard">Career</CrossAppLink>
+        <CrossAppLink className="sh-btn sh-btn--soft" app="career"   to="/">Career</CrossAppLink>
       </nav>
 
       <div className="crb-headerSpacer" />

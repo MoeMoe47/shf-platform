@@ -134,6 +134,7 @@ export async function createOpportunity(actor: EligibilityActor, input: CreateOp
     description: input.description ?? null,
     opportunityType: input.opportunityType,
     status: "DRAFT",
+    publicVisibility: "PRIVATE",
     opensAt,
     applicationDeadline,
     startsAt,
@@ -199,3 +200,23 @@ export async function transitionOpportunityStatus(id: string, actor: Eligibility
   const updated = await repo.updateStatus(id, status);
   return updated as Opportunity;
 }
+
+export async function setOpportunityPublicVisibility(id: string, actor: EligibilityActor, visibility: string): Promise<Opportunity> {
+  const opportunity = await repo.getById(id);
+  if (!opportunity) throw new OpportunityNotFoundError();
+  if (!(await canManageAudienceScopedRecord(actor, asRecord(opportunity)))) {
+    throw new OpportunityDomainError("FORBIDDEN", "Only an authorized opportunity manager may change publication.", 403);
+  }
+  if (!["PRIVATE", "PUBLIC"].includes(visibility)) {
+    throw new OpportunityDomainError("INVALID_PUBLIC_VISIBILITY", "Visibility must be PRIVATE or PUBLIC.", 400);
+  }
+  if (visibility === "PUBLIC" && (opportunity.status !== "OPEN" || opportunity.audienceScope !== "ORGANIZATION" || opportunity.programId || opportunity.cohortId || (!opportunity.actionUrl && !opportunity.actionRoute))) {
+    throw new OpportunityDomainError("PUBLICATION_NOT_ALLOWED", "Only open organization opportunities with a destination may be published.", 400);
+  }
+  return (await repo.updatePublicVisibility(id, visibility as "PRIVATE" | "PUBLIC")) as Opportunity;
+}
+
+export async function listPublicOpportunities() { return repo.listPublic(); }
+export async function getPublicOpportunity(id: string) { return repo.getPublicById(id); }
+export async function listPublicEmployers() { return repo.listPublicEmployers(); }
+export async function getPublicEmployer(id: string) { return repo.getPublicEmployer(id); }

@@ -23,6 +23,7 @@ import { rowToStudioReviewSubmission, STUDIO_REVIEW_DECISIONS, type StudioReview
 import { ReviewerRoutingService } from "../../studio-routing/service/reviewer-routing-service.js";
 import { evaluateAssignmentCompletion } from "../../completion-policy/service/completion-evaluator.js";
 import { CompletionPolicyRepo } from "../../completion-policy/repo/completion-policy-repo.js";
+import { BuildArtifactService } from "./studio-build-artifact-service.js";
 
 type DbExecutor = { query: (sql: string, params?: unknown[]) => Promise<any> };
 const assignmentRepo = new AssignmentRepo();
@@ -495,6 +496,9 @@ export class StudioProjectService {
     )).rows[0];
     const workspace = workspaceFromRow(workspaceRow || { project_id: id, project_type: projectRow.studio_project_type, work_json: null }, projectRow.studio_project_type);
     await this.getBuildPacket(actor, id);
+    const artifact = workspaceRow?.current_revision_id
+      ? await new BuildArtifactService(this.dbQuery).materializeForWorkflow(actor, id, workspace.revision)
+      : null;
     const evaluation = evaluateStudioQa(projectRow.studio_project_type, workspace.work, Boolean(workspaceRow));
     const now = new Date().toISOString();
     const runId = `studio_qa_${randomUUID()}`;
@@ -506,6 +510,7 @@ export class StudioProjectService {
       project_type: projectRow.studio_project_type,
       workspace_revision: workspace.revision,
       studio_revision_id: workspace.revisionId || null,
+      artifact_id: artifact?.artifact.artifactId || null,
       status: evaluation.status,
       ruleset_version: STUDIO_QA_RULESET_VERSION,
       summary_json: evaluation.summary,
@@ -516,9 +521,9 @@ export class StudioProjectService {
       created_at: now,
     };
     await this.dbQuery(
-      `INSERT INTO studio_qa_runs (qa_run_id, project_id, organization_id, tenant_id, project_type, workspace_revision, studio_revision_id, status, ruleset_version, summary_json, findings_json, created_by_user_id, started_at, completed_at, created_at)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)`,
-      [row.qa_run_id, row.project_id, row.organization_id, row.tenant_id, row.project_type, row.workspace_revision, row.studio_revision_id, row.status, row.ruleset_version, JSON.stringify(row.summary_json), JSON.stringify(row.findings_json), row.created_by_user_id, row.started_at, row.completed_at, row.created_at],
+      `INSERT INTO studio_qa_runs (qa_run_id, project_id, organization_id, tenant_id, project_type, workspace_revision, studio_revision_id, artifact_id, status, ruleset_version, summary_json, findings_json, created_by_user_id, started_at, completed_at, created_at)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)`,
+      [row.qa_run_id, row.project_id, row.organization_id, row.tenant_id, row.project_type, row.workspace_revision, row.studio_revision_id, row.artifact_id, row.status, row.ruleset_version, JSON.stringify(row.summary_json), JSON.stringify(row.findings_json), row.created_by_user_id, row.started_at, row.completed_at, row.created_at],
     );
     await this.outbox.enqueue({
       producer_id: "shs-api.studio", event_type: "studio.qa.completed", subject_type: "studio_qa_run", subject_id: runId,
@@ -603,15 +608,15 @@ export class StudioProjectService {
     const now = new Date().toISOString();
     const row = {
       review_submission_id: submissionId, project_id: id, organization_id: s.organizationId, tenant_id: s.tenantId,
-      project_type: project.studio_project_type, workspace_revision: Number(workspace.revision), studio_revision_id: workspace.current_revision_id || null, qa_run_id: qa.qa_run_id,
+      project_type: project.studio_project_type, workspace_revision: Number(workspace.revision), studio_revision_id: workspace.current_revision_id || null, artifact_id: qa.artifact_id || null, qa_run_id: qa.qa_run_id,
       submitted_work_json: workspace.work_json, status: "SUBMITTED", submitted_by_user_id: s.userId, submitted_at: now, created_at: now,
     };
     const inserted = await this.dbQuery(
-      `INSERT INTO studio_review_submissions (review_submission_id, project_id, organization_id, tenant_id, project_type, workspace_revision, studio_revision_id, qa_run_id, submitted_work_json, status, submitted_by_user_id, submitted_at, created_at)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
+      `INSERT INTO studio_review_submissions (review_submission_id, project_id, organization_id, tenant_id, project_type, workspace_revision, studio_revision_id, artifact_id, qa_run_id, submitted_work_json, status, submitted_by_user_id, submitted_at, created_at)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
        ON CONFLICT (project_id, workspace_revision) DO NOTHING
        RETURNING *`,
-      [row.review_submission_id, row.project_id, row.organization_id, row.tenant_id, row.project_type, row.workspace_revision, row.studio_revision_id, row.qa_run_id, JSON.stringify(row.submitted_work_json), row.status, row.submitted_by_user_id, row.submitted_at, row.created_at],
+      [row.review_submission_id, row.project_id, row.organization_id, row.tenant_id, row.project_type, row.workspace_revision, row.studio_revision_id, row.artifact_id, row.qa_run_id, JSON.stringify(row.submitted_work_json), row.status, row.submitted_by_user_id, row.submitted_at, row.created_at],
     );
     if (!inserted.rows[0]) {
       const existingAfterRace = (await this.dbQuery("SELECT * FROM studio_review_submissions WHERE project_id=$1 AND organization_id=$2 AND tenant_id=$3 AND workspace_revision=$4 ORDER BY created_at DESC LIMIT 1", [id, s.organizationId, s.tenantId, workspace.revision])).rows[0];
@@ -706,11 +711,21 @@ export class StudioProjectService {
     const existing = (await this.dbQuery("SELECT * FROM studio_delivery_records WHERE submission_id=$1 AND organization_id=$2 AND tenant_id=$3", [found.eligible.review_submission_id, found.scope.organizationId, found.scope.tenantId])).rows[0];
     if (existing) return { deliveryRecordId: existing.delivery_record_id, projectId: existing.project_id, submissionId: existing.submission_id, reviewDecisionId: existing.review_decision_id, qaRunId: existing.qa_run_id, workspaceRevision: Number(existing.workspace_revision), studioRevisionId: existing.studio_revision_id ?? null, projectType: existing.project_type, destination: existing.destination, status: existing.status, requestedByUserId: existing.requested_by_user_id, requestedAt: existing.requested_at, finalizedByUserId: existing.finalized_by_user_id, finalizedAt: existing.finalized_at, isCurrent: true };
     const now = new Date().toISOString();
-    const row = { delivery_record_id: `studio_delivery_${randomUUID()}`, project_id: found.project.project_id, organization_id: found.scope.organizationId, tenant_id: found.scope.tenantId, submission_id: found.eligible.review_submission_id, review_decision_id: found.eligible.review_decision_id, qa_run_id: found.eligible.qa_run_id, workspace_revision: Number(found.workspace.revision), studio_revision_id: found.workspace.current_revision_id || null, project_type: found.project.studio_project_type, destination: found.project.studio_destination, status: "FINALIZED", requested_by_user_id: found.scope.userId, requested_at: now, finalized_by_user_id: found.scope.userId, finalized_at: now, created_at: now };
+    let artifactId: string | null = null;
+    try {
+      const artifact = await new BuildArtifactService(this.dbQuery).materializeForWorkflow(actor, found.project.project_id, Number(found.workspace.revision));
+      artifactId = artifact.artifact.artifactId;
+    } catch (error: any) {
+      // Legacy test/transition fixtures may not have revision snapshots. Keep
+      // their finalized delivery readable, but it cannot pass the new release
+      // gate until an immutable artifact is available.
+      if (error?.message !== "REVISION_NOT_FOUND") throw error;
+    }
+    const row = { delivery_record_id: `studio_delivery_${randomUUID()}`, project_id: found.project.project_id, organization_id: found.scope.organizationId, tenant_id: found.scope.tenantId, submission_id: found.eligible.review_submission_id, review_decision_id: found.eligible.review_decision_id, qa_run_id: found.eligible.qa_run_id, artifact_id: artifactId, workspace_revision: Number(found.workspace.revision), studio_revision_id: found.workspace.current_revision_id || null, project_type: found.project.studio_project_type, destination: found.project.studio_destination, status: "FINALIZED", requested_by_user_id: found.scope.userId, requested_at: now, finalized_by_user_id: found.scope.userId, finalized_at: now, created_at: now };
     const inserted = await this.dbQuery(
-      `INSERT INTO studio_delivery_records (delivery_record_id, project_id, organization_id, tenant_id, submission_id, review_decision_id, qa_run_id, workspace_revision, studio_revision_id, project_type, destination, status, requested_by_user_id, requested_at, finalized_by_user_id, finalized_at, created_at)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17) ON CONFLICT (submission_id) DO NOTHING RETURNING *`,
-      [row.delivery_record_id, row.project_id, row.organization_id, row.tenant_id, row.submission_id, row.review_decision_id, row.qa_run_id, row.workspace_revision, row.studio_revision_id, row.project_type, row.destination, row.status, row.requested_by_user_id, row.requested_at, row.finalized_by_user_id, row.finalized_at, row.created_at],
+      `INSERT INTO studio_delivery_records (delivery_record_id, project_id, organization_id, tenant_id, submission_id, review_decision_id, qa_run_id, artifact_id, workspace_revision, studio_revision_id, project_type, destination, status, requested_by_user_id, requested_at, finalized_by_user_id, finalized_at, created_at)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18) ON CONFLICT (submission_id) DO NOTHING RETURNING *`,
+      [row.delivery_record_id, row.project_id, row.organization_id, row.tenant_id, row.submission_id, row.review_decision_id, row.qa_run_id, row.artifact_id, row.workspace_revision, row.studio_revision_id, row.project_type, row.destination, row.status, row.requested_by_user_id, row.requested_at, row.finalized_by_user_id, row.finalized_at, row.created_at],
     );
     if (!inserted.rows[0]) return this.finalizeProject(actor, projectId);
     await this.outbox.enqueue({ producer_id: "shs-api.studio", event_type: "studio.delivery.finalized", subject_type: "studio_delivery_record", subject_id: row.delivery_record_id, organization_id: found.scope.organizationId, originating_actor_id: found.scope.userId, occurred_at: now, idempotency_key: row.delivery_record_id, correlation_id: `studio:${row.project_id}:delivery:${row.delivery_record_id}`, destination: "shs-studio", payload: { project_id: row.project_id, submission_id: row.submission_id, workspace_revision: row.workspace_revision, destination: row.destination } });

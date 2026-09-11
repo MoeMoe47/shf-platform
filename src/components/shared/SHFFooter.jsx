@@ -24,27 +24,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { href } from "@/router/paths.js";
+import CareerHeartMark from "@/components/career/CareerHeartMark.jsx";
 import footerLandscapeLight from "@/assets/brand/shf-footer-landscape-light.webp";
 import footerLandscapeDark from "@/assets/brand/shf-footer-landscape-dark.webp";
 import "./shf-footer.css";
-
-function HeartMark({ size = 26 }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M12 20.5s-7.5-4.6-10-9.6C.4 7 2.6 3.5 6.3 3.5c2.1 0 3.7 1.1 5.7 3.4C14 4.6 15.6 3.5 17.7 3.5 21.4 3.5 23.6 7 22 10.9c-2.5 5-10 9.6-10 9.6Z" />
-    </svg>
-  );
-}
 
 // Approved Heartland landscape artwork (fields, barn, silo, trees, bridge,
 // city skyline, windmill), extracted directly from the approved reference
@@ -107,7 +90,7 @@ const VARIANTS = {
       { label: "Dashboard", to: "/curriculum/asl/dashboard" },
       { label: "My Learning", to: "/curriculum/lessons" },
       { label: "Portfolio", to: "/curriculum/asl/portfolio" },
-      { label: "Career Center", to: href.career("/dashboard"), external: true },
+      { label: "Career Center", to: href.career("/"), external: true },
     ],
     programs: [
       { label: "Live Learning", to: "/curriculum/live-sessions" },
@@ -119,17 +102,21 @@ const VARIANTS = {
   },
   career: {
     homeLabel: "Career Center",
-    homeTo: "/dashboard",
+    homeTo: "/",
     tagline: "Career pathways • Resume • Employer connections",
     quickLinks: [
-      { label: "Dashboard", to: "/dashboard" },
-      { label: "Portfolio", to: "/portfolio" },
+      { label: "My Career Center", to: "/dashboard" },
+      { label: "My Portfolio", to: "/portfolio" },
       { label: "Resume Builder", to: "/resume" },
       { label: "Curriculum", to: href.curriculum("/asl/dashboard"), external: true },
     ],
     programs: [
-      { label: "Pathways Explore", to: "/explore" },
-      { label: "Career Planner", to: "/planner" },
+      { label: "Explore Careers", to: "/explore" },
+      { label: "Career Pathways", to: "/pathways" },
+      { label: "Career Discovery", to: "/discovery" },
+      { label: "My Career Planner", to: "/planner" },
+      { label: "Opportunities", to: "/opportunities" },
+      { label: "Organizations", to: "/employers" },
       { label: "Marketplace", to: "/marketplace" },
     ],
     help: [{ label: "Help Center", to: "/help" }],
@@ -183,7 +170,7 @@ export default function SHFFooter({ variant = "curriculum" }) {
         <div className="shf-footerGrid">
           <div className="shf-footerBrand">
             <span className="shf-footerBrandMark" aria-hidden="true">
-              <HeartMark size={28} />
+              <CareerHeartMark size={28} />
             </span>
             <div>
               <p className="shf-footerBrandName">Silicon Heartland Foundation</p>

@@ -156,7 +156,9 @@ export class ClaimVerificationService {
     const links = verification.claim_id ? await this.repo.listClaimEvidence(verification.claim_id, s) : [];
     const admissible = links.filter((l: any) => input.admissibleEvidenceIds?.includes(l.evidence_id) || input.admissibleEvidenceIds === undefined);
     const achieved = maxAchievableLevel({ evidenceCount: links.length, admissibleCount: admissible.length, corroboratingCount: links.filter((l: any) => l.relationship_type === "CORROBORATING").length, authoritativeCount: input.authoritativeEvidence ? 1 : 0, auditGrade: Boolean(input.auditGrade) });
-    const requested = verification.requested_level || "V0"; const partial = levelRank(achieved) < levelRank(requested); const status = partial ? "PARTIAL" : "PASSED";
+    const requested = verification.requested_level || "V0"; const partial = levelRank(achieved) < levelRank(requested); const failed = input.outcome === "FAILED";
+    if (failed && !String(input.rationale || "").trim()) throw new Error("GPA_VERIFICATION_FAILURE_REASON_REQUIRED");
+    const status = failed ? "FAILED" : partial ? "PARTIAL" : "PASSED";
     const result = await this.repo.updateVerification(verificationId, s, { status, completed_at: new Date(), achieved_level: achieved, reviewer_reference: input.reviewerReference || input.reviewer_reference, reviewer_decision: input.reviewerDecision || input.reviewer_decision || status, determination_rationale: input.rationale || `Achieved ${achieved}; requested ${requested}.`, confidence: input.confidence, result: { truthPromotion: false, requestedLevel: requested, achievedLevel: achieved, evidenceCount: admissible.length } });
     if (claim && result.status === "PASSED") await this.repo.updateClaimLifecycle(claim.claim_id, s, "VERIFIED", null, null);
     if (claim && result.status === "PARTIAL") await this.repo.updateClaimLifecycle(claim.claim_id, s, "PARTIALLY_VERIFIED", null, null);

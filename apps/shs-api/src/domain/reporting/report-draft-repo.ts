@@ -113,7 +113,7 @@ export class ReportDraftRepo {
            draft_config_json = $8::jsonb, updated_by_user_id = $9,
            version = version + 1, updated_at = NOW()
        WHERE report_id = $1 AND tenant_id = $2 AND organization_id = $3
-         AND version = $10 AND lifecycle_status = 'draft'
+         AND version = $10 AND lifecycle_status IN ('draft', 'rejected')
        RETURNING *`,
       [
         reportId,
@@ -127,6 +127,35 @@ export class ReportDraftRepo {
         scope.actor_id,
         expectedVersion,
       ]
+    );
+    return result.rows[0] ? { ...result.rows[0], ...mapRow(result.rows[0]) } : null;
+  }
+
+  async beginCorrection(reportId: string, scope: any, rationale: string, executor: any = { query }) {
+    const result = await executor.query(
+      `UPDATE report_drafts
+       SET lifecycle_status = 'draft', review_decision = NULL, review_rationale = $4,
+           reviewed_by_user_id = $5, reviewed_at = NOW(), updated_by_user_id = $5,
+           version = version + 1, updated_at = NOW()
+       WHERE report_id = $1 AND tenant_id = $2 AND organization_id = $3
+         AND lifecycle_status = 'approved'
+       RETURNING *`,
+      [reportId, scope.tenant_id, scope.organization_id, rationale, scope.actor_id],
+    );
+    return result.rows[0] ? { ...result.rows[0], ...mapRow(result.rows[0]) } : null;
+  }
+
+  async transitionReview(reportId: string, scope: any, nextStatus: string, decision: string, rationale: string, executor: any = { query }) {
+    const result = await executor.query(
+      `UPDATE report_drafts
+       SET lifecycle_status = $4, review_decision = $5, review_rationale = $6,
+           reviewed_by_user_id = $7, reviewed_at = NOW(), updated_by_user_id = $7,
+           version = version + 1, updated_at = NOW()
+       WHERE report_id = $1 AND tenant_id = $2 AND organization_id = $3
+         AND lifecycle_status IN ('draft', 'ready_for_review', 'rejected')
+         AND ($4 <> 'approved' OR lifecycle_status = 'ready_for_review')
+       RETURNING *`,
+      [reportId, scope.tenant_id, scope.organization_id, nextStatus, decision, rationale, scope.actor_id],
     );
     return result.rows[0] ? { ...result.rows[0], ...mapRow(result.rows[0]) } : null;
   }

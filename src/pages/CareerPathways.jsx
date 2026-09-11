@@ -475,7 +475,7 @@ export default function CareerPlanner() {
       <div aria-live="polite" className="sh-srOnly">{planAnnouncement}</div>
 
       <nav className="cpw-breadcrumb" aria-label="Breadcrumb">
-        <a href="/career.html#/dashboard">Career Center</a>
+        <a href="/career.html#/dashboard">My Career Center</a>
         <span className="cpw-crumbSep" aria-hidden="true">/</span>
         <span className="cpw-crumbCurrent">Career Pathways</span>
       </nav>
@@ -549,7 +549,7 @@ export default function CareerPlanner() {
           <section aria-labelledby="cpw-pathways-h">
             <div className="cpw-sectionHead">
               <h2 id="cpw-pathways-h" className="cpw-sectionTitle">Recommended Pathways</h2>
-              <a className="cpw-sectionLink" href="/career.html#/explore">View all pathways →</a>
+              <a className="cpw-sectionLink" href="/career.html#/pathways">View all pathways →</a>
             </div>
 
             {topThreePlans.length ? (
@@ -591,7 +591,7 @@ export default function CareerPlanner() {
                       </div>
                       <div className="cpw-pathwayActions">
                         <button className="sh-btn sh-btn--primary" onClick={() => handleViewPlan(p)}>View Details</button>
-                        <a className="sh-btn sh-btn--secondary" href="/career.html#/explore">Explore →</a>
+                        <a className="sh-btn sh-btn--secondary" href="/career.html#/pathways">Explore →</a>
                       </div>
                     </div>
                   );

@@ -1,12 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-/** Local, safe defaults so the page always renders */
+/** Demo-only local defaults so the retained pilot page always renders. */
 const DEFAULT_SEED = {
   kpis: [
-    { id: "readiness", label: "Program Readiness", value: 87, unit: "%", goal: 100, higherIsBetter: true },
+    { id: "readiness", label: "Demo Readiness Signal", value: 87, unit: "%", goal: 100, higherIsBetter: true },
     { id: "fundingSteps", label: "Funding Steps", value: 3, unit: "of 4", goal: 4, higherIsBetter: true },
-    { id: "placement", label: "Placement Score", value: 78, unit: "", goal: 100, higherIsBetter: true },
+    { id: "placement", label: "Demo Placement Signal", value: 78, unit: "", goal: 100, higherIsBetter: true },
   ],
   nextActions: [
     "Book career coach call",
@@ -33,8 +33,12 @@ export default function CareerDashboardNorthstar() {
     <section className="crb-main" aria-labelledby="ns-title">
       <header className="db-head">
         <h1 id="ns-title" className="db-title">Northstar Dashboard</h1>
-        <p className="db-subtitle">Your single source of truth for progress & outcomes.</p>
+        <p className="db-subtitle">Demo-only seed snapshot. This is not a production readiness, placement, or outcome record.</p>
       </header>
+
+      <p className="card card--pad" role="note">
+        Sample data for pilot navigation only. Canonical portfolio, credential, calendar, evidence, and workforce records remain in their own domains.
+      </p>
 
       <div className="db-grid db-grid--kpis">
         {model.kpis.map(k => (

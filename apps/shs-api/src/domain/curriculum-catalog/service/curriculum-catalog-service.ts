@@ -218,7 +218,7 @@ export async function reorderUnits(actor: CatalogActor, courseId: string, ordere
 }
 
 // ---------------- Lesson ----------------
-export async function createLesson(actor: CatalogActor, unitId: string, input: { title: string; stableKey?: string; summary?: string | null; objectives?: string[]; estimatedDurationMinutes?: number | null }, tx: CatalogTxContext = defaultTx()) {
+export async function createLesson(actor: CatalogActor, unitId: string, input: { title: string; stableKey?: string; summary?: string | null; objectives?: string[]; content?: Record<string, unknown>; estimatedDurationMinutes?: number | null }, tx: CatalogTxContext = defaultTx()) {
   const unit = await tx.repo.findUnit(actor.organizationId, unitId);
   if (!unit) throw new NotFoundError("unit");
   const course = await tx.repo.findCourse(actor.organizationId, unit.courseId);
@@ -233,6 +233,7 @@ export async function createLesson(actor: CatalogActor, unitId: string, input: {
     lessonId: newId("lesson"), organizationId: actor.organizationId, unitId,
     stableKey: input.stableKey ? sanitizeStableKey(input.stableKey) : slugify(title), title,
     summary: input.summary ?? null, objectives: input.objectives ?? [],
+    content: input.content ?? {},
     estimatedDurationMinutes: input.estimatedDurationMinutes ?? null, sequence,
   });
   await audit(actor, "curriculum_lesson.created", "curriculum_lesson", lesson.lessonId, null, { unitId, title }, tx.executor);
@@ -245,7 +246,7 @@ export async function listLessons(actor: CatalogActor, unitId: string) {
   return repo.listLessonsForUnit(actor.organizationId, unitId, true);
 }
 
-export async function updateLesson(actor: CatalogActor, lessonId: string, expectedRevision: number, fields: { title?: string; summary?: string | null; objectives?: string[]; estimatedDurationMinutes?: number | null; status?: string }, tx: CatalogTxContext = defaultTx()) {
+export async function updateLesson(actor: CatalogActor, lessonId: string, expectedRevision: number, fields: { title?: string; summary?: string | null; objectives?: string[]; content?: Record<string, unknown>; estimatedDurationMinutes?: number | null; status?: string }, tx: CatalogTxContext = defaultTx()) {
   const existing = await tx.repo.findLesson(actor.organizationId, lessonId);
   if (!existing) throw new NotFoundError("lesson");
   const unit = await tx.repo.findUnit(actor.organizationId, existing.unitId);
@@ -405,6 +406,7 @@ async function buildReleaseSnapshot(organizationId: string, courseId: string): P
       lessonSnapshots.push({
         stableKey: lesson.stableKey, title: lesson.title, summary: lesson.summary,
         objectives: lesson.objectives, estimatedDurationMinutes: lesson.estimatedDurationMinutes, sequence: lesson.sequence,
+        content: lesson.content,
         // Phase 4.5D: externalUrl/description were missing from this
         // snapshot before this phase (confirmed by fresh audit) — a
         // resource's URL or description could be edited post-publish

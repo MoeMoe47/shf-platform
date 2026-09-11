@@ -53,6 +53,11 @@ export async function createDecision(actor: any, input: any) {
   const text = String(input?.decisionText || input?.decision_text || "").trim();
   const authority = String(input?.authorityReference || input?.authority_reference || "").trim();
   if (!text || !authority) throw new Error("LEGAL_DECISION_REQUIRED");
+  const artifactId = input?.artifactId || input?.artifact_id || null;
+  if (artifactId) {
+    const artifact = await query("SELECT artifact_id FROM legal_artifacts WHERE artifact_id=$1 AND organization_id=$2 AND tenant_id=$3", [artifactId, s.organizationId, s.tenantId]);
+    if (!artifact.rows[0]) throw new Error("LEGAL_ARTIFACT_NOT_FOUND");
+  }
   const result = await query("INSERT INTO legal_decisions (decision_id, artifact_id, organization_id, tenant_id, decision_text, authority_reference, disposition, decision_at, actor_user_id, provenance_json) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *", [`legal_decision_${randomUUID()}`, input?.artifactId || input?.artifact_id || null, s.organizationId, s.tenantId, text, authority, String(input?.disposition || "RECORDED"), input?.decisionAt || input?.decision_at || new Date().toISOString(), s.userId, JSON.stringify(input?.provenance || {})]);
   return result.rows[0];
 }

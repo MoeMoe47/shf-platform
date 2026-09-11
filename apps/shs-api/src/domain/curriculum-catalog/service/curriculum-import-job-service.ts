@@ -574,12 +574,13 @@ export async function executeImportJob(actor: CatalogActor, importJobId: string)
           if (mappedLesson) {
             if (mappedLesson.unitId !== createdUnit.unitId) throw new ImportExecutionError(`lesson candidate "${lessonCandidate.stableKey}" is linked to a different unit`);
             createdLesson = mappedLesson;
-            if (lessonCandidate.diffStatus === "MODIFIED") createdLesson = await updateLesson(actor, mappedLesson.lessonId, mappedLesson.revision, { title: lessonCandidate.title, objectives, estimatedDurationMinutes: estMinutes }, tx);
+            if (lessonCandidate.diffStatus === "MODIFIED") createdLesson = await updateLesson(actor, mappedLesson.lessonId, mappedLesson.revision, { title: lessonCandidate.title, objectives, content: raw, estimatedDurationMinutes: estMinutes }, tx);
             if (!createdLesson) throw new ImportStaleRevisionError();
           } else {
             createdLesson = await createLesson(actor, createdUnit.unitId, {
               title: lessonCandidate.title, stableKey: lessonCandidate.stableKey,
               objectives, estimatedDurationMinutes: estMinutes,
+              content: raw,
             }, tx);
           }
           await txJobRepo.markCandidateCreated(actor.organizationId, lessonCandidate.importCandidateId, "LESSON", createdLesson.lessonId);

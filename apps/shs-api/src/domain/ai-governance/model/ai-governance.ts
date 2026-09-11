@@ -150,3 +150,162 @@ export function toSessionResponse(row: any) {
     updatedAt: row.updated_at,
   };
 }
+
+export function toAgentIdentityResponse(row: any) {
+  return {
+    agentIdentityId: row.agent_identity_id,
+    organizationId: row.organization_id,
+    tenantId: row.tenant_id,
+    agentIdentifier: row.agent_identifier,
+    agentType: row.agent_type,
+    status: row.status,
+    allowedMode: row.allowed_mode,
+    createdBy: row.created_by,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+    disabledAt: row.disabled_at || null,
+    revokedAt: row.revoked_at || null,
+  };
+}
+
+export function toTaskResponse(row: any) {
+  return {
+    taskId: row.task_id,
+    organizationId: row.organization_id,
+    tenantId: row.tenant_id,
+    sessionId: row.session_id,
+    agentIdentityId: row.agent_identity_id,
+    delegationId: row.delegation_id,
+    principalUserId: row.principal_user_id,
+    taskType: row.task_type,
+    purpose: row.purpose,
+    requestedAction: row.requested_action,
+    resourceScope: row.resource_scope || {},
+    toolScope: row.tool_scope || [],
+    inputHash: row.input_hash,
+    actionHash: row.action_hash,
+    consequenceClass: row.consequence_class,
+    policySnapshot: row.policy_snapshot || {},
+    providerModel: row.provider_model || {},
+    status: row.status,
+    idempotencyKey: row.idempotency_key,
+    createdBy: row.created_by,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+    cancelledAt: row.cancelled_at || null,
+    cancellationReason: row.cancellation_reason || null,
+    terminalAt: row.terminal_at || null,
+  };
+}
+
+export function toTaskAttemptResponse(row: any) {
+  return {
+    attemptId: row.attempt_id,
+    taskId: row.task_id,
+    organizationId: row.organization_id,
+    tenantId: row.tenant_id,
+    sequence: row.sequence,
+    providerModel: row.provider_model || {},
+    status: row.status,
+    errorClass: row.error_class || null,
+    resultMetadata: row.result_metadata || {},
+    startedAt: row.started_at || null,
+    finishedAt: row.finished_at,
+    createdBy: row.created_by,
+    workerId: row.worker_id || null,
+    executionMode: row.execution_mode || "TEST_SAFE",
+    leaseAcquiredAt: row.lease_acquired_at || null,
+    leaseExpiresAt: row.lease_expires_at || null,
+    heartbeatAt: row.heartbeat_at || null,
+    checkpoint: row.checkpoint || {},
+    retryable: Boolean(row.retryable),
+    policyBindingHash: row.policy_binding_hash || null,
+    actionBindingHash: row.action_binding_hash || null,
+  };
+}
+
+export function toProposedActionResponse(row: any) {
+  return {
+    proposedActionId: row.proposed_action_id,
+    taskId: row.task_id,
+    organizationId: row.organization_id,
+    tenantId: row.tenant_id,
+    actionType: row.action_type,
+    owningDomain: row.owning_domain,
+    targetType: row.target_type,
+    targetId: row.target_id,
+    parameterHash: row.parameter_hash,
+    consequenceClass: row.consequence_class,
+    sideEffectClass: row.side_effect_class,
+    actionFingerprint: row.action_fingerprint,
+    taskActionHash: row.task_action_hash,
+    policyVersion: row.policy_version || null,
+    requestedBy: row.requested_by,
+    createdAt: row.created_at,
+  };
+}
+
+export function toApprovalRequestResponse(row: any) {
+  return {
+    approvalRequestId: row.approval_request_id,
+    taskId: row.task_id,
+    proposedActionId: row.proposed_action_id,
+    organizationId: row.organization_id,
+    tenantId: row.tenant_id,
+    actionFingerprint: row.action_fingerprint,
+    requiredPermission: row.required_permission,
+    status: row.status,
+    requestedBy: row.requested_by,
+    expiresAt: row.expires_at || null,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
+
+export function toApprovalDecisionResponse(row: any) {
+  return {
+    approvalDecisionId: row.approval_decision_id,
+    approvalRequestId: row.approval_request_id,
+    organizationId: row.organization_id,
+    tenantId: row.tenant_id,
+    decision: row.decision,
+    actionFingerprint: row.action_fingerprint,
+    approverUserId: row.approver_user_id,
+    reason: row.reason || null,
+    createdAt: row.created_at,
+  };
+}
+
+export function toSecurityEventResponse(row: any) {
+  return {
+    securityEventId: row.security_event_id,
+    organizationId: row.organization_id,
+    tenantId: row.tenant_id,
+    eventType: row.event_type,
+    severity: row.severity,
+    taskId: row.task_id || null,
+    sessionId: row.session_id || null,
+    agentIdentityId: row.agent_identity_id || null,
+    actorUserId: row.actor_user_id || null,
+    approvalRequestId: row.approval_request_id || null,
+    policyReference: row.policy_reference || null,
+    actionFingerprint: row.action_fingerprint || null,
+    metadata: row.metadata_json || {},
+    status: row.status,
+    createdAt: row.created_at,
+  };
+}
+
+export function toWorkerResponse(row: any) {
+  return {
+    workerId: row.worker_id,
+    organizationId: row.organization_id,
+    tenantId: row.tenant_id,
+    workerIdentifier: row.worker_identifier,
+    executionMode: row.execution_mode,
+    status: row.status,
+    registeredBy: row.registered_by,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}

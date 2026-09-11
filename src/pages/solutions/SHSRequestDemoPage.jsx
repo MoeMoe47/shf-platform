@@ -284,7 +284,7 @@ export default function SHSRequestDemoPage() {
             <h4>Company</h4>
             <a href="#/about">About Us</a>
             <a href="#/resources">Resources</a>
-            <a href="#/careers">Careers</a>
+            <a href="/career.html#/">Careers</a>
             <a href="#/news">News & Updates</a>
           </div>
 

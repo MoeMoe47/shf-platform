@@ -1,0 +1,944 @@
+/* ------------------------------------------------------------------
+   CivicSure Agency / Department Detail — public-facing page frame.
+   Same precedent as the other detail-page stylesheets in this suite:
+   mounts alongside civicsure-explorer.css's `.civicsure-explorer`
+   root, so it redeclares the same bounded --cse-* token set on its
+   own `.civicsure-agency-detail` root. Shared primitives (cse-btn,
+   cse-pill, cse-card, cse-metric-card, cse-metrics, cse-status-badge,
+   cse-table, cse-table-wrap, cse-container, cse-nav, cse-eyebrow,
+   cse-ftm__*, the skip link) are intentionally reused from
+   civicsure-explorer.css rather than redefined here — this file only
+   adds page-specific layout. FRAME ONLY — see
+   docs/ui/CIVICSURE_AGENCY_DETAIL_FRAME.md.
+   ------------------------------------------------------------------ */
+
+.civicsure-agency-detail {
+  --cse-bg: #eef3f9;
+  --cse-surface: #ffffff;
+  --cse-text: #16223a;
+  --cse-muted: #566380;
+  --cse-border: #d7e3f0;
+  --cse-navy: #102a52;
+  --cse-navy-hover: #0b1f3d;
+  --cse-blue: #1857b0;
+  --cse-blue-soft: #dce9fb;
+  --cse-blue-pale: #eef5fd;
+  --cse-success: #15804a;
+  --cse-success-soft: #ddf5e8;
+  --cse-warning: #9a5b12;
+  --cse-warning-soft: #fbedd4;
+
+  background: var(--cse-surface);
+  color: var(--cse-text);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.civicsure-agency-detail,
+.civicsure-agency-detail *,
+.civicsure-agency-detail *::before,
+.civicsure-agency-detail *::after {
+  box-sizing: border-box;
+}
+
+.civicsure-agency-detail a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.civicsure-agency-detail :focus-visible {
+  outline: 3px solid var(--cse-blue);
+  outline-offset: 2px;
+}
+
+.civicsure-agency-detail button {
+  font-family: inherit;
+}
+
+.cse-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------------------------- Header ---------------------------- */
+
+.cse-agy-header {
+  background: var(--cse-surface);
+  border-bottom: 1px solid var(--cse-border);
+  padding: 20px 0 24px;
+}
+
+.cse-agy-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 700 13.5px/1 inherit;
+  color: var(--cse-blue);
+  margin-bottom: 16px;
+}
+.cse-agy-back__icon {
+  width: 16px;
+  height: 16px;
+}
+.cse-agy-back:hover {
+  text-decoration: underline;
+}
+
+.cse-agy-header__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.cse-agy-header__title-block {
+  max-width: 66ch;
+}
+
+.cse-agy-header__title {
+  margin: 6px 0 0;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--cse-navy);
+  letter-spacing: -0.01em;
+}
+
+.cse-agy-header__meta {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: var(--cse-muted);
+}
+
+.cse-agy-header__description {
+  margin: 10px 0 0;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--cse-text);
+}
+
+.cse-agy-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.cse-agy-header__actions .cse-btn svg {
+  width: 16px;
+  height: 16px;
+}
+.cse-agy-header__actions button[aria-disabled="true"] {
+  color: var(--cse-muted);
+  cursor: not-allowed;
+}
+
+/* ---------------------------- Tabs row + about-data trigger ---------------------------- */
+
+.cse-agy-tabs-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid var(--cse-border);
+  margin: 20px 0 0;
+}
+
+.cse-agy-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  flex: 1;
+  min-width: 0;
+}
+
+.cse-agy-tab {
+  flex-shrink: 0;
+  padding: 12px 16px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: var(--cse-muted);
+  font: 600 14.5px/1 inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.cse-agy-tab:hover {
+  color: var(--cse-navy);
+}
+.cse-agy-tab.is-active {
+  color: var(--cse-navy);
+  font-weight: 700;
+  border-bottom-color: var(--cse-blue);
+}
+
+.cse-agy-about-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  font: 700 13.5px/1 inherit;
+  color: var(--cse-blue);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 12px 4px;
+}
+.cse-agy-about-trigger svg {
+  width: 16px;
+  height: 16px;
+}
+.cse-agy-about-trigger:hover {
+  text-decoration: underline;
+}
+
+/* ---------------------------- Generic panel spacing ---------------------------- */
+
+.cse-agy-panel {
+  padding: 28px 0 72px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cse-agy-panel__note {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--cse-muted);
+}
+
+/* ---------------------------- Overview tab ---------------------------- */
+
+.cse-agy-overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 28px;
+  padding: 28px 0 72px;
+  align-items: start;
+}
+
+.cse-agy-overview__main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.cse-agy-overview__side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.cse-agy-facts__heading,
+.cse-agy-responsibilities__heading {
+  margin: 0 0 18px;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.cse-agy-facts__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px 24px;
+  margin: 0;
+}
+.cse-agy-facts__grid dt {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--cse-muted);
+  margin: 0 0 4px;
+}
+.cse-agy-facts__grid dd {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.cse-agy-facts__mission {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--cse-border);
+}
+.cse-agy-facts__mission h3 {
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+.cse-agy-facts__mission p {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--cse-text);
+}
+
+/* ---------------------------- Responsibilities ---------------------------- */
+
+.cse-agy-responsibilities__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.cse-agy-responsibility {
+  padding: 14px;
+  border: 1px solid var(--cse-border);
+  border-radius: 10px;
+  background: var(--cse-bg);
+}
+.cse-agy-responsibility h3 {
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+.cse-agy-responsibility p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--cse-muted);
+}
+
+/* ---------------------------- Data quality notice ---------------------------- */
+
+.cse-agy-dqn {
+  border-color: var(--cse-warning);
+  background: var(--cse-warning-soft);
+}
+.cse-agy-dqn__heading {
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cse-warning);
+}
+.cse-agy-dqn__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cse-agy-dqn__list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--cse-text);
+}
+.cse-agy-dqn__list svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--cse-warning);
+}
+
+/* ---------------------------- Assurance / Geography / Funding Sources cards ---------------------------- */
+
+.cse-agy-assurance__heading,
+.cse-agy-geography__heading,
+.cse-agy-funding-sources__heading {
+  margin: 0 0 14px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.cse-agy-assurance__list {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cse-agy-assurance__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--cse-bg);
+}
+.cse-agy-assurance__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--cse-blue-soft);
+  color: var(--cse-blue);
+}
+.cse-agy-assurance__icon svg {
+  width: 13px;
+  height: 13px;
+}
+.cse-agy-assurance__label {
+  flex: 1;
+  font-size: 13px;
+  color: var(--cse-text);
+}
+
+.cse-agy-assurance__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 700 13.5px/1 inherit;
+  color: var(--cse-blue);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+}
+.cse-agy-assurance__action svg {
+  width: 15px;
+  height: 15px;
+}
+.cse-agy-assurance__action:hover {
+  text-decoration: underline;
+}
+
+.cse-agy-assurance__explanation {
+  margin: 12px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--cse-border);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--cse-muted);
+}
+
+.cse-agy-geography__list,
+.cse-agy-funding-sources__list {
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cse-agy-geography__list li,
+.cse-agy-funding-sources__list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--cse-border);
+  font-size: 13.5px;
+}
+.cse-agy-geography__list li:last-child,
+.cse-agy-funding-sources__list li:last-child {
+  border-bottom: 0;
+}
+.cse-agy-geography__list strong,
+.cse-agy-funding-sources__list strong {
+  color: var(--cse-navy);
+}
+.cse-agy-funding-sources__list {
+  margin-bottom: 0;
+}
+
+a.cse-agy-geography__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 700 13.5px/1 inherit;
+  color: var(--cse-blue);
+}
+.cse-agy-geography__action svg {
+  width: 15px;
+  height: 15px;
+}
+a.cse-agy-geography__action:hover {
+  text-decoration: underline;
+}
+
+/* ---------------------------- Programs / Providers row list ---------------------------- */
+
+.cse-agy-row-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cse-agy-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.cse-agy-row__main {
+  flex: 1;
+  min-width: 240px;
+}
+
+.cse-agy-row__title {
+  margin: 0;
+  font-size: 16.5px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+.cse-agy-row__meta {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--cse-muted);
+}
+.cse-agy-row__delivery {
+  margin: 8px 0 10px;
+  font-size: 13.5px;
+  color: var(--cse-text);
+}
+.cse-agy-row__badges {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0 0;
+}
+.cse-agy-row__outcome {
+  font-size: 13px;
+  color: var(--cse-muted);
+}
+
+.cse-agy-row__aside {
+  flex-shrink: 0;
+  text-align: right;
+  min-width: 160px;
+}
+.cse-agy-row__amount {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--cse-navy);
+}
+.cse-agy-row__amount-label {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: var(--cse-muted);
+}
+a.cse-agy-row__link,
+span.cse-agy-row__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font: 700 13.5px/1 inherit;
+  color: var(--cse-blue);
+}
+.cse-agy-row__link svg {
+  width: 15px;
+  height: 15px;
+}
+a.cse-agy-row__link:hover {
+  text-decoration: underline;
+}
+span.cse-agy-row__link--placeholder {
+  color: var(--cse-muted);
+  cursor: not-allowed;
+}
+
+/* ---------------------------- Funding tab ---------------------------- */
+
+.cse-agy-financial-position__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.cse-agy-financial-position__head h2 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+a.cse-agy-financial-position__explore {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 700 13.5px/1 inherit;
+  color: var(--cse-blue);
+}
+.cse-agy-financial-position__explore svg {
+  width: 15px;
+  height: 15px;
+}
+a.cse-agy-financial-position__explore:hover {
+  text-decoration: underline;
+}
+
+.cse-agy-financial-term {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--cse-border);
+}
+.cse-agy-financial-term:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.cse-agy-financial-term__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.cse-agy-financial-term__label {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+.cse-agy-financial-term__value {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--cse-navy);
+}
+.cse-agy-financial-term__definition {
+  margin: 4px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--cse-muted);
+}
+
+.cse-agy-funding-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.cse-agy-funding-section__heading {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+.cse-agy-funding-section__period {
+  margin: 0 0 14px;
+  font-size: 12.5px;
+  color: var(--cse-muted);
+}
+
+.cse-agy-funding-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cse-agy-funding-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--cse-border);
+  font-size: 13.5px;
+}
+.cse-agy-funding-list li:last-child {
+  border-bottom: 0;
+}
+.cse-agy-funding-list li strong {
+  color: var(--cse-navy);
+}
+
+/* ---------------------------- Evidence tab ---------------------------- */
+
+.cse-agy-evidence__note {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--cse-muted);
+  max-width: 70ch;
+}
+
+.cse-agy-evidence-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+.cse-agy-evidence-tile {
+  text-align: center;
+  padding: 20px 14px;
+}
+.cse-agy-evidence-tile__value {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--cse-navy);
+}
+.cse-agy-evidence-tile__label {
+  margin: 4px 0 0;
+  font-size: 12.5px;
+  color: var(--cse-muted);
+}
+.cse-agy-evidence-tile--green .cse-agy-evidence-tile__value {
+  color: var(--cse-success);
+}
+.cse-agy-evidence-tile--amber .cse-agy-evidence-tile__value {
+  color: var(--cse-warning);
+}
+.cse-agy-evidence-tile--blue .cse-agy-evidence-tile__value {
+  color: var(--cse-blue);
+}
+
+.cse-agy-evidence-quality__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.cse-agy-evidence-quality__head h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+.cse-agy-evidence-quality__head p {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--cse-muted);
+}
+
+.cse-agy-evidence-quality__list {
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cse-agy-evidence-quality__list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--cse-bg);
+  font-size: 13.5px;
+  color: var(--cse-text);
+}
+.cse-agy-evidence-quality__list svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--cse-warning);
+}
+
+.cse-agy-evidence-quality__limitations {
+  margin: 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--cse-border);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--cse-muted);
+}
+
+/* ---------------------------- Reports tab ---------------------------- */
+
+.cse-agy-report-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.cse-agy-report-card h3 {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+.cse-agy-report-card dl {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 0 18px;
+}
+.cse-agy-report-card dt {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--cse-muted);
+  margin: 0 0 3px;
+}
+.cse-agy-report-card dd {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+.cse-agy-report-card .cse-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+/* ---------------------------- About this data drawer ---------------------------- */
+
+.cse-agy-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(16, 42, 82, 0.4);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cse-agy-drawer {
+  width: min(420px, 100%);
+  height: 100%;
+  background: var(--cse-surface);
+  border-left: 1px solid var(--cse-border);
+  padding: 24px;
+  overflow-y: auto;
+  box-shadow: -8px 0 24px rgba(16, 42, 82, 0.15);
+}
+
+.cse-agy-drawer__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.cse-agy-drawer__head h2 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.cse-agy-drawer__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid var(--cse-border);
+  background: var(--cse-surface);
+  color: var(--cse-navy);
+  cursor: pointer;
+}
+.cse-agy-drawer__close svg {
+  width: 16px;
+  height: 16px;
+}
+.cse-agy-drawer__close:hover {
+  background: var(--cse-blue-pale);
+}
+
+.cse-agy-drawer__list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.cse-agy-drawer__list dt {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--cse-muted);
+  margin: 0 0 4px;
+}
+.cse-agy-drawer__list dd {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--cse-text);
+}
+
+/* ---------------------------- Not found ---------------------------- */
+
+.cse-agy-not-found {
+  padding: 72px 0;
+  max-width: 60ch;
+}
+.cse-agy-not-found h1 {
+  margin: 0 0 10px;
+  font-size: 26px;
+  color: var(--cse-navy);
+}
+.cse-agy-not-found p {
+  margin: 0 0 20px;
+  color: var(--cse-muted);
+}
+
+/* ---------------------------- Responsive ---------------------------- */
+
+@media (max-width: 1180px) {
+  .cse-agy-overview {
+    grid-template-columns: 1fr;
+  }
+  .cse-agy-funding-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .cse-agy-report-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .cse-agy-header__row {
+    flex-direction: column;
+  }
+  .cse-agy-header__actions {
+    flex-wrap: wrap;
+  }
+  .cse-agy-facts__grid {
+    grid-template-columns: 1fr;
+  }
+  .cse-agy-responsibilities__grid {
+    grid-template-columns: 1fr;
+  }
+  .cse-agy-funding-grid {
+    grid-template-columns: 1fr;
+  }
+  .cse-agy-report-list {
+    grid-template-columns: 1fr;
+  }
+  .cse-agy-evidence-tiles {
+    grid-template-columns: 1fr 1fr;
+  }
+  .cse-agy-row {
+    flex-direction: column;
+  }
+  .cse-agy-row__aside {
+    text-align: left;
+    width: 100%;
+  }
+  .cse-agy-financial-position__head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .cse-agy-drawer {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .civicsure-agency-detail * {
+    transition-duration: 0.01ms !important;
+  }
+}

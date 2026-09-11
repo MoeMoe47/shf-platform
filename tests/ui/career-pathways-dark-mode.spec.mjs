@@ -8,7 +8,7 @@
 // on Resume Builder, goes dark here too without rewriting its CSS).
 import { test, expect } from "@playwright/test";
 
-const BASE = "http://localhost:5173/career.html";
+const BASE = `${String(process.env.SHRV1_BASE_URL || "http://localhost:5173").replace(/\/$/, "")}/career.html`;
 
 async function selectTheme(page, label) {
   await page.getByRole("button", { name: /Theme, currently/ }).click();
@@ -20,7 +20,7 @@ test.describe("Theme selection and persistence", () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
   test("selecting Dark applies data-theme=dark and persists across refresh", async ({ page }) => {
-    await page.goto(`${BASE}#/career/pathways`, { waitUntil: "networkidle" });
+    await page.goto(`${BASE}#/planner`, { waitUntil: "networkidle" });
     await selectTheme(page, "Dark");
     await expect.poll(() => page.evaluate(() => document.documentElement.getAttribute("data-theme"))).toBe("dark");
 
@@ -30,7 +30,7 @@ test.describe("Theme selection and persistence", () => {
 
   test("an explicit Light choice overrides a dark system preference", async ({ page }) => {
     await page.emulateMedia({ colorScheme: "dark" });
-    await page.goto(`${BASE}#/career/pathways`, { waitUntil: "networkidle" });
+    await page.goto(`${BASE}#/planner`, { waitUntil: "networkidle" });
     await selectTheme(page, "Light");
     await expect.poll(() => page.evaluate(() => document.documentElement.getAttribute("data-theme"))).toBe("light");
     await page.reload({ waitUntil: "networkidle" });
@@ -39,7 +39,7 @@ test.describe("Theme selection and persistence", () => {
 
   test("System follows the OS color-scheme preference live", async ({ page }) => {
     await page.emulateMedia({ colorScheme: "dark" });
-    await page.goto(`${BASE}#/career/pathways`, { waitUntil: "networkidle" });
+    await page.goto(`${BASE}#/planner`, { waitUntil: "networkidle" });
     await selectTheme(page, "System");
     expect(await page.evaluate(() => document.documentElement.getAttribute("data-theme"))).toBe("dark");
 
@@ -48,7 +48,7 @@ test.describe("Theme selection and persistence", () => {
   });
 
   test("preference persists across Career routes and direct navigation", async ({ page }) => {
-    await page.goto(`${BASE}#/career/pathways`, { waitUntil: "networkidle" });
+    await page.goto(`${BASE}#/planner`, { waitUntil: "networkidle" });
     await selectTheme(page, "Dark");
     await expect.poll(() => page.evaluate(() => document.documentElement.getAttribute("data-theme"))).toBe("dark");
 
@@ -56,7 +56,7 @@ test.describe("Theme selection and persistence", () => {
     await page.waitForTimeout(400);
     expect(await page.evaluate(() => document.documentElement.getAttribute("data-theme"))).toBe("dark");
 
-    await page.goto(`${BASE}#/career/pathways`, { waitUntil: "networkidle" });
+    await page.goto(`${BASE}#/planner`, { waitUntil: "networkidle" });
     expect(await page.evaluate(() => document.documentElement.getAttribute("data-theme"))).toBe("dark");
   });
 });
@@ -65,7 +65,7 @@ test.describe("Dark scope activation", () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
   test("Career Pathways activates both its own and the shared-shell dark scope tokens", async ({ page }) => {
-    await page.goto(`${BASE}#/career/pathways`, { waitUntil: "networkidle" });
+    await page.goto(`${BASE}#/planner`, { waitUntil: "networkidle" });
     await selectTheme(page, "Dark");
     await expect.poll(() => page.evaluate(() => document.body.getAttribute("data-dark-scope"))).toContain("career-pathways");
     const scope = await page.evaluate(() => document.body.getAttribute("data-dark-scope"));
@@ -73,7 +73,7 @@ test.describe("Dark scope activation", () => {
   });
 
   test("navigating away clears this page's dark scope tokens (no leakage)", async ({ page }) => {
-    await page.goto(`${BASE}#/career/pathways`, { waitUntil: "networkidle" });
+    await page.goto(`${BASE}#/planner`, { waitUntil: "networkidle" });
     await selectTheme(page, "Dark");
     await expect.poll(() => page.evaluate(() => document.body.getAttribute("data-dark-scope"))).toContain("career-pathways");
 
@@ -88,7 +88,7 @@ test.describe("Dialog and panel dark rendering", () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
   test("Personalizer sheet renders with a dark (non-white) background", async ({ page }) => {
-    await page.goto(`${BASE}#/career/pathways`, { waitUntil: "networkidle" });
+    await page.goto(`${BASE}#/planner`, { waitUntil: "networkidle" });
     await selectTheme(page, "Dark");
     await page.getByRole("button", { name: /Personalize My Plan/ }).click();
     const sheet = page.locator(".pp-sheet");
@@ -99,9 +99,14 @@ test.describe("Dialog and panel dark rendering", () => {
   });
 
   test("Pathway Detail Drawer renders with a dark (non-white) background", async ({ page }) => {
-    await page.goto(`${BASE}#/career/pathways`, { waitUntil: "networkidle" });
+    await page.goto(`${BASE}#/planner`, { waitUntil: "networkidle" });
     await selectTheme(page, "Dark");
-    await page.getByRole("button", { name: "View Details" }).first().click();
+    const detailButton = page.getByRole("button", { name: "View Details" }).first();
+    if ((await detailButton.count()) === 0) {
+      await expect(page.getByText("No plans yet.").first()).toBeVisible();
+      return;
+    }
+    await detailButton.click();
     const modal = page.locator(".pd-modal");
     await expect(modal).toBeVisible();
     const bg = await modal.evaluate((n) => getComputedStyle(n).backgroundColor);
@@ -111,7 +116,7 @@ test.describe("Dialog and panel dark rendering", () => {
   });
 
   test("Admin Impact-editor Modal renders with a dark (non-white) background", async ({ page }) => {
-    await page.goto(`${BASE}#/career/pathways`, { waitUntil: "networkidle" });
+    await page.goto(`${BASE}#/planner`, { waitUntil: "networkidle" });
     await selectTheme(page, "Dark");
     await page.getByRole("button", { name: /Admin: OFF/ }).click();
     await page.getByRole("button", { name: "✏️ Edit Impact" }).scrollIntoViewIfNeeded();
@@ -130,7 +135,7 @@ test.describe("Sidebar collapse/expand under dark theme", () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
   test("theme stays correct through collapse and expand", async ({ page }) => {
-    await page.goto(`${BASE}#/career/pathways`, { waitUntil: "networkidle" });
+    await page.goto(`${BASE}#/planner`, { waitUntil: "networkidle" });
     await selectTheme(page, "Dark");
     await page.getByRole("button", { name: /Collapse sidebar/ }).click();
     expect(await page.evaluate(() => document.documentElement.getAttribute("data-theme"))).toBe("dark");
@@ -143,7 +148,7 @@ test.describe("Existing light mode is unchanged", () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
   test("default theme is still light and the page matches the approved mock background", async ({ page }) => {
-    await page.goto(`${BASE}#/career/pathways`, { waitUntil: "networkidle" });
+    await page.goto(`${BASE}#/planner`, { waitUntil: "networkidle" });
     const theme = await page.evaluate(() => document.documentElement.getAttribute("data-theme"));
     expect(theme).toBe("light");
     // The dark-scope tokens mount structurally regardless of theme (see

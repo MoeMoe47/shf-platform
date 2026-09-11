@@ -27,7 +27,6 @@ import { Link } from "react-router-dom";
 import MediaRow from "@/components/ui/MediaRow.jsx";
 import normalizeLessonMedia from "@/utils/normalizeLessonMedia.js";
 import validateLessonAccessibility from "@/utils/validateLessonAccessibility.js";
-import AssessmentRenderer from "@/components/lessons/AssessmentRenderer.jsx";
 import VocabularyReview from "@/components/lessons/VocabularyReview.jsx";
 import { useUser } from "@/context/UserContext.jsx";
 import { useRewards } from "@/hooks/useRewards.js";
@@ -37,6 +36,7 @@ import LessonHeader from "./LessonHeader.jsx";
 import LessonStageRail from "./LessonStageRail.jsx";
 import ArcadeMissionCard from "./ArcadeMissionCard.jsx";
 import CompletionCheckPanel from "./CompletionCheckPanel.jsx";
+import { AssessmentActivity, PracticeActivity, ReflectionActivity } from "./CanonicalActivityPanel.jsx";
 import {
   CalendarIcon,
   ChevronLeftIcon,
@@ -302,14 +302,23 @@ function lessonResources(lesson, nextHref) {
   return resources;
 }
 
-export default function GuidedLessonExperience({ lesson, curriculum, nextHref }) {
+export default function GuidedLessonExperience({ lesson, curriculum, nextHref, role, assignmentId, unitStableKey, activityState }) {
   const { email } = useUser();
   const { addPoints } = useRewards();
   const actorId = email || "local-student";
 
-  const stages = React.useMemo(() => buildGuidedStages(lesson), [lesson]);
+  const canonicalLesson = React.useMemo(() => {
+    if (!activityState) return lesson;
+    return {
+      ...lesson,
+      ...(activityState.lesson || {}),
+      practice: activityState.practice?.items?.length ? activityState.practice.items : lesson.practice,
+      quiz: activityState.assessment?.items?.length ? { title: activityState.assessment.title, items: activityState.assessment.items } : lesson.quiz,
+    };
+  }, [activityState, lesson]);
+  const stages = React.useMemo(() => buildGuidedStages(canonicalLesson), [canonicalLesson]);
   const availableStages = React.useMemo(() => stages.filter((s) => s.available), [stages]);
-  const { check: checkAssessment, reflect: reflectAssessment } = React.useMemo(() => splitAssessment(lesson), [lesson]);
+  const { check: checkAssessment, reflect: reflectAssessment } = React.useMemo(() => splitAssessment(canonicalLesson), [canonicalLesson]);
 
   const initialStage = React.useMemo(() => firstAvailableStage(availableStages), [availableStages]);
   const [activeKey, setActiveKey] = React.useState(initialStage);
@@ -346,22 +355,23 @@ export default function GuidedLessonExperience({ lesson, curriculum, nextHref })
 
   const completedKeys = new Set(availableStages.filter((_, i) => i < maxIndexReached).map((s) => s.key));
 
-  const contentNavItems = React.useMemo(() => buildContentNavItems(lesson, availableStages), [lesson, availableStages]);
-  const resources = React.useMemo(() => lessonResources(lesson, nextHref), [lesson, nextHref]);
+  const contentNavItems = React.useMemo(() => buildContentNavItems(canonicalLesson, availableStages), [canonicalLesson, availableStages]);
+  const resources = React.useMemo(() => lessonResources(canonicalLesson, nextHref), [canonicalLesson, nextHref]);
 
   // Real, derived "what's ahead" counts for the Orient stage — never a
   // fabricated estimate, just how many real items each later stage has.
-  const vocabCount = (lesson?.vocab || []).length;
-  const arcadeCount = (lesson?.games || []).length || (lesson?.arcade?.suggestedGames || []).length;
+  const vocabCount = (canonicalLesson?.vocab || []).length;
+  const arcadeCount = (canonicalLesson?.games || []).length || (canonicalLesson?.arcade?.suggestedGames || []).length;
   const checkCount = checkAssessment?.items?.length || 0;
   const hasReflect = !!reflectAssessment;
+  const activityContext = { assignmentId, unitStableKey, lessonStableKey: canonicalLesson.stableKey || lesson.slug || lesson.id, role };
 
-  if (!lesson) return null;
+  if (!canonicalLesson) return null;
 
   return (
     <div className="ld-lessonPage">
       <LessonHeader
-        lesson={lesson}
+        lesson={canonicalLesson}
         curriculum={curriculum}
         completedCount={completedKeys.size}
         availableCount={availableStages.length}
@@ -391,12 +401,12 @@ export default function GuidedLessonExperience({ lesson, curriculum, nextHref })
 
           {activeKey === "orient" && (
             <>
-              {lesson.summary && (
+              {canonicalLesson.summary && (
                 <div className="ld-workspaceSection">
                   <div className="ld-workspaceSectionHead">
                     <SparkleIcon size={14} /> Why this matters
                   </div>
-                  <div className="ld-whyMattersCard">{lesson.summary}</div>
+                  <div className="ld-whyMattersCard">{canonicalLesson.summary}</div>
                 </div>
               )}
 
@@ -404,9 +414,9 @@ export default function GuidedLessonExperience({ lesson, curriculum, nextHref })
                 <div className="ld-workspaceSectionHead">
                   <BookIcon size={14} /> Key ideas you'll learn
                 </div>
-                {Array.isArray(lesson.objectives) && lesson.objectives.length > 0 ? (
+                {Array.isArray(canonicalLesson.objectives) && canonicalLesson.objectives.length > 0 ? (
                   <ul className="ld-objectiveList">
-                    {lesson.objectives.map((o, i) => (
+                    {canonicalLesson.objectives.map((o, i) => (
                       <li key={i}>
                         <SparkleIcon size={15} /> {o}
                       </li>
@@ -457,51 +467,46 @@ export default function GuidedLessonExperience({ lesson, curriculum, nextHref })
 
           {activeKey === "learn" && (
             <div>
-              {(lesson.sections || []).map((s, i) => (
+              {(canonicalLesson.sections || []).map((s, i) => (
                 <SectionBlock key={i} section={s} />
               ))}
             </div>
           )}
 
           {activeKey === "vocabulary" && (
-            <VocabularyStage lesson={lesson} curriculum={curriculum} actorId={actorId} />
+            <VocabularyStage lesson={canonicalLesson} curriculum={curriculum} actorId={actorId} />
           )}
 
           {activeKey === "check" && checkAssessment && (
-            <AssessmentRenderer
-              assessment={checkAssessment}
-              curriculum={curriculum}
-              slug={lesson.slug || lesson.id}
-              actorId={actorId}
-            />
+            activityState?.assessment ? <AssessmentActivity definition={activityState.assessment} context={activityContext} /> : <p className="ld-workspaceEmpty">No canonical assessment is available for this assignment.</p>
           )}
 
           {activeKey === "practice" && (
-            <p className="ld-workspaceEmpty">Practice activities for this lesson will appear here once available.</p>
+            activityState?.practice ? <PracticeActivity definition={activityState.practice} context={activityContext} /> : <p className="ld-workspaceEmpty">No canonical practice activity is available for this assignment.</p>
           )}
 
           {activeKey === "arcade" && (
-            <ArcadeMissionCard games={lesson.games} suggestedGames={lesson?.arcade?.suggestedGames} />
+            <ArcadeMissionCard games={canonicalLesson.games} suggestedGames={canonicalLesson?.arcade?.suggestedGames} />
           )}
 
           {activeKey === "apply" && (
             <div className="ld-applyCard">
-              {lesson.proofActivity ? (
-                <ProofActivity activity={lesson.proofActivity} />
+              {canonicalLesson.proofActivity ? (
+                <ProofActivity activity={canonicalLesson.proofActivity} />
               ) : (
                 <>
-              {lesson.project?.title && <h3>{lesson.project.title}</h3>}
-              {Array.isArray(lesson.project?.submissionOptions) && lesson.project.submissionOptions.length > 0 && (
+              {canonicalLesson.project?.title && <h3>{canonicalLesson.project.title}</h3>}
+              {Array.isArray(canonicalLesson.project?.submissionOptions) && canonicalLesson.project.submissionOptions.length > 0 && (
                 <>
                   <p>Choose an accessible way to show your work:</p>
                   <ul>
-                    {lesson.project.submissionOptions.map((option) => <li key={option}>{option}</li>)}
+                {canonicalLesson.project.submissionOptions.map((option) => <li key={option}>{option}</li>)}
                   </ul>
                 </>
               )}
               <p>
-                {lesson.portfolioArtifact
-                  ? lesson.portfolioArtifact
+                {canonicalLesson.portfolioArtifact
+                  ? canonicalLesson.portfolioArtifact
                   : "This lesson counts toward your Portfolio."}
               </p>
               <Link className="ld-btnGhost" style={{ marginTop: 12 }} to="/curriculum/asl/portfolio">
@@ -512,9 +517,9 @@ export default function GuidedLessonExperience({ lesson, curriculum, nextHref })
             </div>
           )}
 
-          {activeKey === "assess" && Array.isArray(lesson?.rubric?.criteria) && (
+          {activeKey === "assess" && Array.isArray(canonicalLesson?.rubric?.criteria) && (
             <div className="ld-rubricGrid">
-              {lesson.rubric.criteria.map((c, i) => (
+              {canonicalLesson.rubric.criteria.map((c, i) => (
                 <div className="ld-rubricRow" key={i}>
                   <p className="ld-rubricSkill">{c.skill}</p>
                   <ul className="ld-rubricLevels">
@@ -526,30 +531,25 @@ export default function GuidedLessonExperience({ lesson, curriculum, nextHref })
           )}
 
           {activeKey === "reflect" && reflectAssessment && (
-            <AssessmentRenderer
-              assessment={reflectAssessment}
-              curriculum={curriculum}
-              slug={lesson.slug || lesson.id}
-              actorId={actorId}
-            />
+            activityState?.reflection ? <ReflectionActivity definition={activityState.reflection} context={activityContext} /> : <p className="ld-workspaceEmpty">No canonical reflection is available for this assignment.</p>
           )}
 
           {activeKey === "evidence" && (
             <EvidencePanel
-              lesson={lesson}
+              lesson={canonicalLesson}
               curriculum={curriculum}
-              slug={lesson.slug || lesson.id}
+              slug={canonicalLesson.slug || canonicalLesson.id}
               actorId={actorId}
               checkItemCount={checkAssessment?.items?.length || 0}
               reflectItems={reflectAssessment?.items || []}
-              vocabCount={(lesson.vocab || []).length}
+              vocabCount={(canonicalLesson.vocab || []).length}
             />
           )}
 
           {activeKey === "career" && <CareerConnectionPanel />}
 
           {activeKey === "complete" && (
-            <CompletionCheckPanel lesson={lesson} curriculum={curriculum} actorId={actorId} addPoints={addPoints} nextHref={nextHref} />
+            <CompletionCheckPanel lesson={lesson} curriculum={curriculum} actorId={actorId} addPoints={addPoints} nextHref={nextHref} assignmentId={assignmentId} unitStableKey={unitStableKey} role={role} />
           )}
 
           {activeKey === "checkin" && (
@@ -574,7 +574,7 @@ export default function GuidedLessonExperience({ lesson, curriculum, nextHref })
         </section>
 
         <ContextRail
-          lesson={lesson}
+              lesson={canonicalLesson}
           curriculum={curriculum}
           completedCount={completedKeys.size}
           availableCount={availableStages.length}

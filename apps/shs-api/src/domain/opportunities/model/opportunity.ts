@@ -20,6 +20,8 @@ export type OpportunityType = typeof OPPORTUNITY_TYPES[number];
 
 export const OPPORTUNITY_STATUSES = ["DRAFT", "OPEN", "CLOSED", "CANCELLED", "ARCHIVED"] as const;
 export type OpportunityStatus = typeof OPPORTUNITY_STATUSES[number];
+export const OPPORTUNITY_PUBLIC_VISIBILITIES = ["PRIVATE", "PUBLIC"] as const;
+export type OpportunityPublicVisibility = typeof OPPORTUNITY_PUBLIC_VISIBILITIES[number];
 
 export const OPPORTUNITY_DELIVERY_MODES = ["IN_PERSON", "VIRTUAL", "HYBRID"] as const;
 export type OpportunityDeliveryMode = typeof OPPORTUNITY_DELIVERY_MODES[number];
@@ -32,6 +34,7 @@ export interface Opportunity {
   description: string | null;
   opportunityType: OpportunityType;
   status: OpportunityStatus;
+  publicVisibility: OpportunityPublicVisibility;
   opensAt: string | null;
   applicationDeadline: string;
   startsAt: string | null;
@@ -76,6 +79,22 @@ export interface StudentFacingOpportunity {
   careerId: string | null;
   careerFamilyId: string | null;
   pathwayRelevant?: boolean;
+}
+
+export interface PublicOpportunity {
+  id: string;
+  title: string;
+  description: string | null;
+  opportunityType: OpportunityType;
+  applicationDeadline: string;
+  startsAt: string | null;
+  endsAt: string | null;
+  deliveryMode: OpportunityDeliveryMode | null;
+  location: string | null;
+  actionUrl: string | null;
+  actionRoute: string | null;
+  organization: { id: string; name: string; type: string };
+  career: { slug: string; title: string; familyName: string } | null;
 }
 
 export function toStudentFacingOpportunity(o: Opportunity): StudentFacingOpportunity {

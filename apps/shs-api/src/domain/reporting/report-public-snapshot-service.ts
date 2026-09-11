@@ -5,7 +5,7 @@ import { ReportPublicSnapshotRepo } from "./report-public-snapshot-repo.js";
 import { ReportPublicEligibilityRepo } from "./report-public-eligibility-repo.js";
 import { ReportPublicDisclosureRepo } from "./report-public-disclosure-repo.js";
 import { ReportPublicDisclosurePolicyRepo } from "./report-public-disclosure-policy-repo.js";
-import { evaluateCurriculumPublicDisclosure } from "./report-public-disclosure-service.js";
+import { evaluateCurriculumPublicDisclosure, evaluateGpaProgramAssurancePublicDisclosure } from "./report-public-disclosure-service.js";
 import { getPublicReportGovernanceRegistration, requirePublicReportGovernanceRegistration } from "./report-public-governance-registry.js";
 
 export const CURRICULUM_PUBLIC_SNAPSHOT = Object.freeze({ report_id: "report.curriculum.lesson_completion_count.v1", report_version: 1, metric_id: "curriculum.lesson.completion_count.v1", metric_version: 1 });
@@ -84,8 +84,13 @@ export class ReportPublicSnapshotService {
       if (disclosure.privacy_policy_reference !== policy.policy_key || String(disclosure.privacy_policy_version) !== "1") throw new Error("Disclosure policy identity does not match approved policy");
       const reviewContext = disclosure.review_context;
       if (!reviewContext || reviewContext.canonical_count !== report.canonical_count) throw new Error("Snapshot result does not match approved disclosure result");
-      if (registration.disclosure_evaluator !== "CURRICULUM_EDUCATION_ACTIVITY_V1") throw new Error("No public snapshot evaluator is registered for this report");
-      const evaluated = evaluateCurriculumPublicDisclosure(policy, { ...reviewContext, ...report, evaluated_at: new Date().toISOString() });
+      const evaluator = registration.disclosure_evaluator === "CURRICULUM_EDUCATION_ACTIVITY_V1"
+        ? evaluateCurriculumPublicDisclosure
+        : registration.disclosure_evaluator === "GPA_PROGRAM_ASSURANCE_V1"
+          ? evaluateGpaProgramAssurancePublicDisclosure
+          : null;
+      if (!evaluator) throw new Error("No public snapshot evaluator is registered for this report");
+      const evaluated = evaluator(policy, { ...reviewContext, ...report, evaluated_at: new Date().toISOString() });
       const safe = { report_id: report.report_id, report_version: report.report_version, source_result_reference: report.result_reference, tenant_id: scope.tenant_id, organization_id: scope.organization_id, public_eligibility_decision_id: eligibilityId, public_disclosure_decision_id: disclosureId, disclosure_policy_reference: policy.policy_key, disclosure_policy_version: String(policy.policy_version), reporting_period_start: report.reporting_period_start, reporting_period_end: report.reporting_period_end, reporting_period: report.reporting_period, reporting_period_label: report.reporting_period_label, data_as_of: report.data_as_of, geography_level: report.geography, program_granularity: report.program_granularity, public_representation_type: evaluated.display_mode, public_display_value: String(evaluated.public_value), suppression_state: evaluated.display_mode === "SUPPRESSED_LT_10" ? "SUPPRESSED_LT_10" : "NONE", public_population_eligible: true };
       const snapshotHash = publicSnapshotHash(safe);
       if (existing) { if (existing.snapshot_hash !== snapshotHash) throw new Error("Snapshot idempotency key conflicts with a different governed result"); return { snapshot: existing, replayed: true }; }

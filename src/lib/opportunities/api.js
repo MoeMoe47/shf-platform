@@ -5,6 +5,7 @@
 // src/lib/assignments/api.js: same base URL, same Bearer dev-token auth
 // header, same {ok,data}/{ok:false,error} envelope). This is the ONLY
 // place in the frontend that talks to the Opportunity backend.
+import { apiGet } from "@/lib/apiClient.js";
 import { resolveDevUserId } from "@/lib/liveLearning/api.js";
 
 const OPPORTUNITIES_API_BASE = "http://127.0.0.1:8091";
@@ -32,4 +33,24 @@ export async function listOpportunities(role) {
   return parseJson(res);
 }
 
-export default { listOpportunities };
+export async function listPublicOpportunities() {
+  const response = await apiGet("/public/career/opportunities");
+  return Array.isArray(response?.data?.items) ? response.data.items : [];
+}
+
+export async function getPublicOpportunity(id) {
+  const response = await apiGet(`/public/career/opportunities/${encodeURIComponent(String(id || ""))}`);
+  return response?.data || null;
+}
+
+export async function listPublicEmployers() {
+  const response = await apiGet("/public/career/employers");
+  return Array.isArray(response?.data?.items) ? response.data.items : [];
+}
+
+export async function getPublicEmployer(id) {
+  const response = await apiGet(`/public/career/employers/${encodeURIComponent(String(id || ""))}`);
+  return response?.data || null;
+}
+
+export default { listOpportunities, listPublicOpportunities, getPublicOpportunity, listPublicEmployers, getPublicEmployer };

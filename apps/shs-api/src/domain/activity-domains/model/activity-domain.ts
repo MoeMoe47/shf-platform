@@ -34,6 +34,7 @@ export interface AssessmentResult {
   unitStableKey: string;
   lessonStableKey: string;
   assessmentDefinitionId: string;
+  attemptNumber: number | null;
   answers: any[];
   score: number | null;
   maxScore: number | null;

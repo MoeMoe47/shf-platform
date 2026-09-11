@@ -8,6 +8,7 @@ import { ReportPublicDisclosurePolicyRepo } from "./report-public-disclosure-pol
 import { ReportPublicationRepo } from "./report-publication-repo.js";
 import { ReportPublicationActionRepo } from "./report-publication-action-repo.js";
 import { getPublicReportGovernanceRegistration, requirePublicReportGovernanceRegistration } from "./report-public-governance-registry.js";
+import { toPublicProjection } from "../government-assurance/adapters/public-projection-boundary.js";
 
 function scope(actor: any) { const actorId = actor?.user_id || actor?.id; const organizationId = actor?.organization_id; if (!actorId || !organizationId) throw new Error("Publication scope unavailable"); return { actor_id: actorId, organization_id: organizationId, tenant_id: actor?.tenant_id || actor?.tenant || `tenant:${organizationId}` }; }
 function permission(actor: any) { if (!Array.isArray(actor?.permissions) || !actor.permissions.includes("reports.publication.authorize")) throw new Error("Missing permission: reports.publication.authorize"); }
@@ -39,6 +40,37 @@ export class ReportPublicationService {
   }
   async getAuthorization(id: string, actor: any) { permission(actor); return this.repo.getAuthorization(id, scope(actor)); }
   async listAuthorizations(actor: any) { permission(actor); return this.repo.listAuthorizations(scope(actor)); }
+
+  async revokeAuthorization(id: string, actor: any, rationale: string) {
+    permission(actor);
+    const current = scope(actor);
+    const reason = required(rationale, "Publication revocation rationale is required");
+    return this.transaction(async (db: any) => {
+      const existing = await this.repo.getAuthorization(id, current, db);
+      if (!existing) throw new Error("Publication authorization not found");
+      if (existing.status === "PUBLICATION_REVOKED") return { authorization: existing, replayed: true };
+      if (existing.status !== "PUBLICATION_AUTHORIZED") throw new Error("Only an active publication authorization can be revoked");
+      const revoked = await this.repo.revokeAuthorization(id, current, db);
+      if (!revoked) throw new Error("Publication authorization is stale or already revoked");
+      if (typeof this.actions.markNotCurrentByAuthorization === "function") {
+        await this.actions.markNotCurrentByAuthorization(id, db);
+      }
+      await this.auditWriter({
+        audit_event_id: `audit_${randomUUID()}`,
+        organization_id: current.organization_id,
+        actor_user_id: current.actor_id,
+        target_object_type: "report_publication_authorization",
+        target_object_id: id,
+        action_type: "report.publication.revoked",
+        previous_state_json: { status: existing.status, version: existing.version },
+        new_state_json: { status: revoked.status, version: revoked.version, public_snapshot_id: revoked.public_snapshot_id },
+        reason_text: reason,
+        correlation_id: `corr_${randomUUID()}`,
+        source_channel: "shs-api",
+      }, db);
+      return { authorization: revoked, replayed: false };
+    });
+  }
 
   async publish(input: any, actor: any) {
     executePermission(actor);
@@ -74,6 +106,18 @@ export class ReportPublicationService {
         return { publication: existing, projection, replayed: true };
       }
 
+      const currentPublication = typeof this.actions.getCurrentPublication === "function"
+        ? await this.actions.getCurrentPublication(snapshot.report_id, current, db)
+        : null;
+      const supersedesPublicationId = input?.supersedes_publication_id || input?.supersedesPublicationId || null;
+      if (currentPublication && supersedesPublicationId !== currentPublication.publication_id) {
+        throw new Error("Current publication must be explicitly superseded");
+      }
+      if (!currentPublication && supersedesPublicationId) throw new Error("Superseded publication is not current or not in scope");
+      if (currentPublication && typeof this.actions.markNotCurrent === "function") {
+        await this.actions.markNotCurrent(currentPublication.publication_id, db);
+      }
+
       const publication = await this.actions.createPublication({
         publication_id: `publication_${randomUUID()}`,
         publication_authorization_id: authorizationId,
@@ -87,6 +131,7 @@ export class ReportPublicationService {
         published_by_user_id: current.actor_id,
         projection_reference: `shf_public_impact_projection:${snapshotId}`,
         idempotency_key: key,
+        supersedes_publication_id: supersedesPublicationId,
       }, db);
       const projection = await this.actions.createProjection({
         projection_id: `impact_projection_${randomUUID()}`,
@@ -127,6 +172,8 @@ export class ReportPublicationService {
           report_version: snapshot.report_version,
           projection_reference: publication.projection_reference,
           publication_status: publication.publication_status,
+          supersedes_publication_id: publication.supersedes_publication_id || null,
+          is_current: publication.is_current,
           version: publication.version,
         },
         reason_text: "Exact publication-authorized public snapshot written to the canonical SHF public Impact projection",
@@ -141,7 +188,26 @@ export class ReportPublicationService {
   async listPublications(actor: any) { executePermission(actor); return this.actions.listPublications(scope(actor)); }
   async listPublicImpactProjections(reportId = "report.curriculum.lesson_completion_count.v1", reportVersion = 1) {
     const registration = requirePublicReportGovernanceRegistration(reportId, reportVersion);
-    if (registration.public_read_model_id !== "curriculum-lesson-completions") throw new Error("Public read model is not exposed");
+    if (!["curriculum-lesson-completions", "gpa-program-assurance-summary"].includes(registration.public_read_model_id)) throw new Error("Public read model is not exposed");
     return this.actions.listPublicProjections(registration.report_id, registration.report_version);
+  }
+
+  async listPublicAssuranceProjections(input: any = {}) {
+    const requestedReportId = String(input?.report_id || input?.reportId || "").trim();
+    const requestedVersion = Number(input?.report_version || input?.reportVersion || 1);
+    const registrations = requestedReportId
+      ? [getPublicReportGovernanceRegistration(requestedReportId, requestedVersion)].filter(Boolean)
+      : ["report.curriculum.lesson_completion_count.v1", "report.hub.referral.created_count.v1", "report.gpa.program_assurance_public_summary.v1"]
+        .map((reportId) => getPublicReportGovernanceRegistration(reportId, 1))
+        .filter(Boolean);
+    const scope = { jurisdiction: String(input?.jurisdiction || input?.jurisdiction_reference || "").trim() || null };
+    const rows = (await Promise.all(registrations.map((registration: any) => this.actions.listPublicProjections(registration.report_id, registration.report_version, scope)))).flat();
+    return rows.map(toPublicProjection).filter(Boolean);
+  }
+
+  async getPublicAssuranceProjection(projectionId: string) {
+    const row = await this.actions.getPublicProjectionById(String(projectionId || "").trim());
+    if (!row || !getPublicReportGovernanceRegistration(row.report_id, Number(row.report_version))) return null;
+    return toPublicProjection(row);
   }
 }

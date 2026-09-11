@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { CaseService } from "../src/domain/cases/service/case-service.ts";
-import { buildReferralOutboxEvent, classifyDeliveryFailure } from "../src/domain/trusted-reporting/outbox.ts";
+import { buildGovernmentAssuranceTruthDeterminationOutboxEvent, buildReferralOutboxEvent, classifyDeliveryFailure } from "../src/domain/trusted-reporting/outbox.ts";
 import { dispatchPendingIntegrationEvents } from "../src/domain/trusted-reporting/dispatcher.ts";
 import { runTrustedReportingWorker } from "../src/domain/trusted-reporting/worker.ts";
 import { readFileSync } from "node:fs";
@@ -33,6 +33,43 @@ test("referral outbox event is minimized and idempotent", () => {
     payload: { referral_id: "case_123" },
     destination: "agent-fabric",
   });
+});
+
+test("accepted GPA determinations publish a sanitized idempotent Truth Spine handoff", () => {
+  const event = buildGovernmentAssuranceTruthDeterminationOutboxEvent(
+    {
+      determination_id: "determination_123",
+      truth_fact_id: "truth_123",
+      organization_id: "org_123",
+      tenant_id: "tenant:org_123",
+      determining_actor: "user_123",
+      decision: "ACCEPTED",
+      claim_reference: "claim_123",
+      verification_reference: "verification_123",
+    },
+    {
+      authority: "shs-truth-spine-v1",
+      status: "PENDING_TRUTH_SPINE_INGESTION",
+      provenanceReference: "source-record-123",
+    },
+    "gpa-correlation-123",
+  );
+
+  assert.equal(event.producer_id, "shs.government_assurance");
+  assert.equal(event.event_type, "government_assurance.truth_determination.accepted");
+  assert.equal(event.subject_type, "gpa_truth_determination");
+  assert.equal(event.idempotency_key, "gpa-truth-determination:determination_123:accepted");
+  assert.deepEqual(Object.keys(event.payload).sort(), [
+    "claim_reference",
+    "determination_id",
+    "lifecycle_status",
+    "provenance_reference",
+    "truth_fact_id",
+    "truth_spine_authority",
+    "truth_spine_status",
+    "verification_reference",
+  ]);
+  assert.equal((event.payload as any).lifecycle_status, "accepted");
 });
 
 test("referral outbox normalizes PostgreSQL Date timestamps to ISO 8601", () => {
@@ -122,6 +159,43 @@ test("dispatcher marks an authenticated acknowledgment delivered and never logs 
   assert.deepEqual(states, ["DELIVERED"]);
   assert.match(received.headers["X-SHF-Service-Signature"], /^[a-f0-9]{64}$/);
   assert.equal(JSON.stringify(received).includes("test-secret"), false);
+});
+
+test("dispatcher persists the canonical Truth Spine row identity before acknowledging GPA delivery", async () => {
+  process.env.SHF_INTERNAL_SERVICE_KEYS_JSON = JSON.stringify({ "test-k1": "test-secret" });
+  process.env.SHF_INTERNAL_SERVICE_ACTIVE_KID = "test-k1";
+  process.env.SHF_AGENT_FABRIC_INTERNAL_URL = "http://agent-fabric.test";
+  let linked: any;
+  const repo: any = {
+    async claimPending() {
+      return [{
+        outbox_event_id: "outbox-gpa-1",
+        payload_json: {
+          producer_id: "shs.government_assurance",
+          event_type: "government_assurance.truth_determination.accepted",
+          subject_type: "gpa_truth_determination",
+          subject_id: "determination-1",
+          organization_id: "org-1",
+          originating_actor_id: "human-1",
+          originating_actor_type: "user",
+          tenant_id: "tenant:org-1",
+          occurred_at: "2026-09-09T00:00:00.000Z",
+          idempotency_key: "gpa-truth-determination:determination-1:accepted",
+          correlation_id: "corr-gpa-1",
+          payload: { determination_id: "determination-1" },
+        },
+      }];
+    },
+    async linkTruthSpineRecord(...args: any[]) { linked = args; },
+    async markDelivered() {},
+    async markRetryable() {},
+    async markFailedFinal() {},
+  };
+  await dispatchPendingIntegrationEvents({
+    repo,
+    fetchImpl: async () => ({ ok: true, status: 200, json: async () => ({ ok: true, projection: { truth_spine_record_id: "truth_record-1" } }) }),
+  });
+  assert.deepEqual(linked, ["determination-1", "truth_record-1", { organizationId: "org-1", tenantId: "tenant:org-1" }, undefined]);
 });
 
 test("dispatcher retains transient failures for retry and finalizes validation failures", async () => {

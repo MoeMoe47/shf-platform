@@ -67,6 +67,30 @@ test("mutating MCP invocation is simulation-only and requires approval", async (
   assert.equal(ready.events.some((event) => event.event_type === "mcp.approval_required"), true);
 });
 
+test("MCP evaluates the canonical resource classification and ceiling ordering", async () => {
+  const ready = await readyTool();
+  const resource = ready.repo.resources[0];
+  resource.bos_classification = "RESTRICTED";
+  const request = { serverId: ready.server.serverId, toolId: ready.tool.toolId, resourceId: resource.mcp_resource_id, agentIdentifier: "agent-a", purpose: "update record", delegationId: "delegation-a", sessionId: "session-a", action: "crm.update" };
+
+  const denied = await ready.service.evaluateMcpAccess(actor, request);
+  assert.equal(denied.allowed, false);
+  assert.equal(denied.denialCode, MCP_DENIAL_CODES.CLASSIFICATION_DENIED);
+
+  ready.repo.policies[0].classification_ceiling = "RESTRICTED";
+  const allowed = await ready.service.evaluateMcpAccess(actor, request);
+  assert.equal(allowed.allowed, true, JSON.stringify(allowed));
+  assert.equal(allowed.classification, "RESTRICTED");
+  assert.equal(allowed.resource.resourceId, resource.mcp_resource_id);
+});
+
+test("MCP direct resource substitution fails closed before authority evaluation", async () => {
+  const ready = await readyTool();
+  const result = await ready.service.evaluateMcpAccess(actor, { serverId: ready.server.serverId, toolId: ready.tool.toolId, resourceId: "resource-from-another-server", agentIdentifier: "agent-a", purpose: "update record", action: "crm.update" });
+  assert.equal(result.allowed, false);
+  assert.equal(result.denialCode, MCP_DENIAL_CODES.RESOURCE_NOT_FOUND);
+});
+
 test("disabled servers fail closed and live reads remain disabled", async () => {
   const ready = await readyTool();
   await ready.service.setServerLifecycle(actor, ready.server.serverId, "DISABLED");

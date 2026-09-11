@@ -37,7 +37,7 @@ export default function About() {
             <a href="#/about">About</a>
             <a href="#/programs">Programs</a>
             <a href="#/impact">Impact</a>
-            <a href="#/careers">Careers</a>
+            <a href="/career.html#/">Careers</a>
             <a href="#/get-involved">Get Involved</a>
             <a href="#/donate" className="shfa-btn shfa-btn--navy">Donate</a>
           </nav>

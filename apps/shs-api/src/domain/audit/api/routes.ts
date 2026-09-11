@@ -9,8 +9,11 @@ export function registerAuditRoutes(app: any) {
   app.get(
     "/audit",
     requirePermission(SHS_SECURITY_PERMISSIONS.AUDIT_VIEW),
-    async (_req: any, res: any) => {
-      const items = await repo.listAuditEvents();
+    async (req: any, res: any) => {
+      const items = await repo.listAuditEvents({
+        organization_id: req.user.active_organization_id,
+        tenant_id: req.user.tenant_id,
+      });
       res.json(ok({ items }));
     }
   );

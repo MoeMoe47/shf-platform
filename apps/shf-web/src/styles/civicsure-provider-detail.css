@@ -1,0 +1,731 @@
+/* ------------------------------------------------------------------
+   CivicSure Provider Detail — public-facing page frame.
+   Same precedent as civicsure-program-detail.css and
+   civicsure-public-footer.css: this page mounts alongside (not
+   necessarily nested inside) civicsure-explorer.css's
+   `.civicsure-explorer` root, so it redeclares the same bounded
+   --cse-* token set on its own `.civicsure-provider-detail` root
+   rather than depending on that other class being present. Shared
+   primitives (cse-btn, cse-pill, cse-card, cse-metric-card,
+   cse-container, cse-nav, the skip link) are intentionally reused
+   from civicsure-explorer.css rather than redefined here — this file
+   only adds page-specific layout. FRAME ONLY — see
+   docs/ui/CIVICSURE_PROVIDER_DETAIL_FRAME.md.
+   ------------------------------------------------------------------ */
+
+.civicsure-provider-detail {
+  --cse-bg: #eef3f9;
+  --cse-surface: #ffffff;
+  --cse-text: #16223a;
+  --cse-muted: #566380;
+  --cse-border: #d7e3f0;
+  --cse-navy: #102a52;
+  --cse-navy-hover: #0b1f3d;
+  --cse-blue: #1857b0;
+  --cse-blue-soft: #dce9fb;
+  --cse-blue-pale: #eef5fd;
+  --cse-success: #15804a;
+  --cse-success-soft: #ddf5e8;
+  --cse-warning: #9a5b12;
+  --cse-warning-soft: #fbedd4;
+
+  background: var(--cse-surface);
+  color: var(--cse-text);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.civicsure-provider-detail,
+.civicsure-provider-detail *,
+.civicsure-provider-detail *::before,
+.civicsure-provider-detail *::after {
+  box-sizing: border-box;
+}
+
+.civicsure-provider-detail a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.civicsure-provider-detail :focus-visible {
+  outline: 3px solid var(--cse-blue);
+  outline-offset: 2px;
+}
+
+.civicsure-provider-detail button {
+  font-family: inherit;
+}
+
+.cse-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------------------------- Header ---------------------------- */
+
+.cse-pvd-header {
+  background: var(--cse-surface);
+  border-bottom: 1px solid var(--cse-border);
+  padding: 20px 0 24px;
+}
+
+.cse-pvd-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 700 13.5px/1 inherit;
+  color: var(--cse-blue);
+  margin-bottom: 16px;
+}
+.cse-pvd-back__icon {
+  width: 16px;
+  height: 16px;
+}
+.cse-pvd-back:hover {
+  text-decoration: underline;
+}
+
+.cse-pvd-header__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.cse-pvd-header__title-block {
+  max-width: 62ch;
+}
+
+.cse-pvd-header__title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cse-pvd-header__title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--cse-navy);
+  letter-spacing: -0.01em;
+}
+
+.cse-pvd-header__meta {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: var(--cse-muted);
+}
+
+.cse-pvd-header__description {
+  margin: 10px 0 0;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--cse-text);
+}
+
+.cse-pvd-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.cse-pvd-header__actions .cse-btn svg {
+  width: 16px;
+  height: 16px;
+}
+.cse-pvd-header__actions button[aria-disabled="true"] {
+  color: var(--cse-muted);
+  cursor: not-allowed;
+}
+
+/* ---------------------------- Identity hero ---------------------------- */
+
+.cse-pvd-hero {
+  display: flex;
+  gap: 24px;
+  margin: 28px 0 0;
+}
+
+.cse-pvd-hero__image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 140px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: var(--cse-blue-soft);
+  color: var(--cse-blue);
+  border: 1px solid var(--cse-border);
+}
+.cse-pvd-hero__image svg {
+  width: 48px;
+  height: 48px;
+}
+
+.cse-pvd-hero__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.cse-pvd-hero__facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px 24px;
+  margin: 0;
+}
+.cse-pvd-hero__facts dt {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--cse-muted);
+  margin: 0 0 3px;
+}
+.cse-pvd-hero__facts dd {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--cse-navy);
+  word-break: break-word;
+}
+
+.cse-pvd-hero__mission {
+  margin: 18px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--cse-border);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--cse-text);
+}
+.cse-pvd-hero__mission strong {
+  color: var(--cse-navy);
+}
+
+/* ---------------------------- Summary metrics ---------------------------- */
+
+.cse-pvd-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  padding: 20px 0 8px;
+}
+
+/* ---------------------------- Tabs row + about-data trigger ---------------------------- */
+
+.cse-pvd-tabs-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid var(--cse-border);
+  margin: 20px 0 0;
+}
+
+.cse-pvd-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  flex: 1;
+  min-width: 0;
+}
+
+.cse-pvd-tab {
+  flex-shrink: 0;
+  padding: 12px 16px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: var(--cse-muted);
+  font: 600 14.5px/1 inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.cse-pvd-tab:hover {
+  color: var(--cse-navy);
+}
+.cse-pvd-tab.is-active {
+  color: var(--cse-navy);
+  font-weight: 700;
+  border-bottom-color: var(--cse-blue);
+}
+
+.cse-pvd-about-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  font: 700 13.5px/1 inherit;
+  color: var(--cse-blue);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 12px 4px;
+}
+.cse-pvd-about-trigger svg {
+  width: 16px;
+  height: 16px;
+}
+.cse-pvd-about-trigger:hover {
+  text-decoration: underline;
+}
+
+/* ---------------------------- Generic tab panel spacing ---------------------------- */
+
+.cse-pvd-panel {
+  padding: 28px 0 72px;
+}
+
+.cse-pvd-panel__note {
+  margin: 0 0 16px;
+  font-size: 13.5px;
+  color: var(--cse-muted);
+}
+
+/* ---------------------------- Overview tab ---------------------------- */
+
+.cse-pvd-overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 28px;
+  padding: 28px 0 72px;
+  align-items: start;
+}
+
+.cse-pvd-overview__side {
+  min-width: 0;
+}
+
+.cse-pvd-facts__heading {
+  margin: 0 0 18px;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.cse-pvd-facts__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px 24px;
+  margin: 0;
+}
+.cse-pvd-facts__grid dt {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--cse-muted);
+  margin: 0 0 4px;
+}
+.cse-pvd-facts__grid dd {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--cse-navy);
+  word-break: break-word;
+}
+
+.cse-pvd-facts__mission {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--cse-border);
+}
+.cse-pvd-facts__mission h3 {
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+.cse-pvd-facts__mission p {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--cse-text);
+}
+
+/* ---------------------------- Assurance status ---------------------------- */
+
+.cse-pvd-assurance__heading {
+  margin: 0 0 14px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.cse-pvd-assurance__status-row {
+  margin-bottom: 12px;
+}
+
+.cse-pvd-assurance__summary {
+  margin: 0 0 16px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--cse-muted);
+}
+
+.cse-pvd-assurance__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 700 13.5px/1 inherit;
+  color: var(--cse-blue);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+}
+.cse-pvd-assurance__action svg {
+  width: 15px;
+  height: 15px;
+}
+.cse-pvd-assurance__action:hover {
+  text-decoration: underline;
+}
+
+/* Status badge (.cse-status-badge) moved to civicsure-explorer.css —
+   it's a shared primitive now (used here and by County Detail), same
+   as cse-btn/cse-pill/cse-card/cse-metric-card. See StatusBadge.jsx. */
+
+/* ---------------------------- Programs tab ---------------------------- */
+
+.cse-pvd-program-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cse-pvd-program-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.cse-pvd-program-row__main {
+  flex: 1;
+  min-width: 220px;
+}
+
+.cse-pvd-program-row__title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cse-pvd-program-row__title {
+  margin: 0;
+  font-size: 16.5px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.cse-pvd-program-row__meta {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--cse-muted);
+}
+
+.cse-pvd-program-row__outcomes {
+  margin: 8px 0 0;
+  font-size: 13.5px;
+  color: var(--cse-text);
+}
+
+.cse-pvd-program-row__aside {
+  flex-shrink: 0;
+  text-align: right;
+  min-width: 140px;
+}
+
+.cse-pvd-program-row__funding {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--cse-navy);
+}
+
+.cse-pvd-program-row__funding-label {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: var(--cse-muted);
+}
+
+a.cse-pvd-program-row__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font: 700 13.5px/1 inherit;
+  color: var(--cse-blue);
+}
+.cse-pvd-program-row__link svg {
+  width: 15px;
+  height: 15px;
+}
+a.cse-pvd-program-row__link:hover {
+  text-decoration: underline;
+}
+
+/* ---------------------------- Funding tab ---------------------------- */
+
+.cse-pvd-funding-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.cse-pvd-funding-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.cse-pvd-funding-section__heading {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.cse-pvd-funding-section__period {
+  margin: 0 0 14px;
+  font-size: 12.5px;
+  color: var(--cse-muted);
+}
+
+.cse-pvd-funding-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cse-pvd-funding-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--cse-border);
+  font-size: 14px;
+}
+.cse-pvd-funding-list li:last-child {
+  border-bottom: 0;
+}
+.cse-pvd-funding-list li span {
+  color: var(--cse-text);
+}
+.cse-pvd-funding-list li strong {
+  color: var(--cse-navy);
+  flex-shrink: 0;
+}
+
+/* Data table (.cse-table / .cse-table-wrap) moved to
+   civicsure-explorer.css — shared primitive, same as .cse-status-badge.
+   See civicsure-explorer.css's "Data table" block. */
+
+/* ---------------------------- Compliance tab ---------------------------- */
+
+.cse-pvd-compliance-section {
+  margin-bottom: 16px;
+}
+.cse-pvd-compliance-section h3 {
+  margin: 0 0 14px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.cse-pvd-compliance-empty {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--cse-muted);
+}
+
+.cse-pvd-compliance-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--cse-border);
+}
+.cse-pvd-compliance-row:last-child {
+  border-bottom: 0;
+}
+
+.cse-pvd-compliance-row__label {
+  flex: 1;
+  min-width: 200px;
+  font-size: 14px;
+  color: var(--cse-text);
+}
+
+.cse-pvd-compliance-row__note {
+  flex-basis: 100%;
+  font-size: 12.5px;
+  color: var(--cse-muted);
+}
+
+/* ---------------------------- About this data drawer ---------------------------- */
+
+.cse-pvd-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(16, 42, 82, 0.4);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cse-pvd-drawer {
+  width: min(420px, 100%);
+  height: 100%;
+  background: var(--cse-surface);
+  border-left: 1px solid var(--cse-border);
+  padding: 24px;
+  overflow-y: auto;
+  box-shadow: -8px 0 24px rgba(16, 42, 82, 0.15);
+}
+
+.cse-pvd-drawer__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.cse-pvd-drawer__head h2 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.cse-pvd-drawer__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid var(--cse-border);
+  background: var(--cse-surface);
+  color: var(--cse-navy);
+  cursor: pointer;
+}
+.cse-pvd-drawer__close svg {
+  width: 16px;
+  height: 16px;
+}
+.cse-pvd-drawer__close:hover {
+  background: var(--cse-blue-pale);
+}
+
+.cse-pvd-drawer__list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.cse-pvd-drawer__list dt {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--cse-muted);
+  margin: 0 0 4px;
+}
+.cse-pvd-drawer__list dd {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--cse-text);
+}
+
+/* ---------------------------- Not found ---------------------------- */
+
+.cse-pvd-not-found {
+  padding: 72px 0;
+  max-width: 60ch;
+}
+.cse-pvd-not-found h1 {
+  margin: 0 0 10px;
+  font-size: 26px;
+  color: var(--cse-navy);
+}
+.cse-pvd-not-found p {
+  margin: 0 0 20px;
+  color: var(--cse-muted);
+}
+
+/* ---------------------------- Responsive ---------------------------- */
+
+@media (max-width: 1180px) {
+  .cse-pvd-metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .cse-pvd-funding-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .cse-pvd-overview {
+    grid-template-columns: 1fr;
+  }
+  .cse-pvd-hero {
+    flex-direction: column;
+  }
+  .cse-pvd-hero__image {
+    width: 100%;
+    height: 120px;
+  }
+  .cse-pvd-funding-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .cse-pvd-header__row {
+    flex-direction: column;
+  }
+  .cse-pvd-header__actions {
+    flex-wrap: wrap;
+  }
+  .cse-pvd-metrics,
+  .cse-pvd-funding-stats {
+    grid-template-columns: 1fr;
+  }
+  .cse-pvd-hero__facts {
+    grid-template-columns: 1fr 1fr;
+  }
+  .cse-pvd-facts__grid {
+    grid-template-columns: 1fr;
+  }
+  .cse-pvd-program-row {
+    flex-direction: column;
+  }
+  .cse-pvd-program-row__aside {
+    text-align: left;
+    width: 100%;
+  }
+  .cse-pvd-drawer {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .civicsure-provider-detail * {
+    transition-duration: 0.01ms !important;
+  }
+}

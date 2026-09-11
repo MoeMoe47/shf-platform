@@ -8,6 +8,8 @@ import {
   type AssuranceActor,
 } from "../model/government-assurance.js";
 import { GovernmentAssuranceRepo } from "../repo/government-assurance-repo.js";
+import { createTruthSpineHandoff } from "../adapters/truth-spine-boundary.js";
+import { metricRegistryMetadata, PlatformMetricRegistryAdapter } from "../adapters/metric-registry-boundary.js";
 
 function normalizeActor(actor: any): AssuranceActor {
   return {
@@ -31,7 +33,7 @@ function dateOrNow(value: any) {
 }
 
 export class GovernmentAssuranceService {
-  constructor(private repo = new GovernmentAssuranceRepo()) {}
+  constructor(private repo = new GovernmentAssuranceRepo(), private metricRegistry: PlatformMetricRegistryAdapter | null = null) {}
 
   private context(actorInput: any) {
     const actor = normalizeActor(actorInput);
@@ -80,8 +82,9 @@ export class GovernmentAssuranceService {
   async createMetric(actorInput: any, input: any) {
     const { actor, scope } = this.context(actorInput); permission(actor, SHS_SECURITY_PERMISSIONS.GOVERNMENT_ASSURANCE_METRIC_MANAGE); requireScope(input, scope);
     if (!input.metricId && !input.metric_id || !input.canonicalName && !input.canonical_name || !input.definition || !input.unitValueType && !input.unit_value_type || !input.authorityOwnerReference && !input.authority_owner_reference) throw new Error("GOVERNMENT_ASSURANCE_METRIC_FIELDS_REQUIRED");
+    const metadata = this.metricRegistry ? this.metricRegistry.registrationMetadata({ metric_id: input.metricId || input.metric_id, version: input.version, metadata: input.metadata }) : metricRegistryMetadata({ metric_id: input.metricId || input.metric_id, version: input.version, metadata: input.metadata });
     return toPublicRow(await this.repo.createMetric({
-      metric_id: String(input.metricId || input.metric_id), version: Number(input.version || 1), organization_id: scope.organizationId, tenant_id: scope.tenantId, program_reference: input.programReference || input.program_reference || null, canonical_name: String(input.canonicalName || input.canonical_name), definition: String(input.definition), unit_value_type: String(input.unitValueType || input.unit_value_type), effective_from: dateOrNow(input.effectiveFrom || input.effective_from), effective_to: input.effectiveTo || input.effective_to || null, authority_owner_reference: String(input.authorityOwnerReference || input.authority_owner_reference), status: input.status || "DRAFT", created_by: scope.userId, metadata: input.metadata || {},
+      metric_id: String(input.metricId || input.metric_id), version: Number(input.version || 1), organization_id: scope.organizationId, tenant_id: scope.tenantId, program_reference: input.programReference || input.program_reference || null, canonical_name: String(input.canonicalName || input.canonical_name), definition: String(input.definition), unit_value_type: String(input.unitValueType || input.unit_value_type), effective_from: dateOrNow(input.effectiveFrom || input.effective_from), effective_to: input.effectiveTo || input.effective_to || null, authority_owner_reference: String(input.authorityOwnerReference || input.authority_owner_reference), status: input.status || "DRAFT", created_by: scope.userId, metadata,
     }));
   }
 
@@ -124,8 +127,12 @@ export class GovernmentAssuranceService {
     if (!input.verificationId || !input.provenance || !input.factType || !input.subjectType || !input.subjectReference) throw new Error("GOVERNMENT_ASSURANCE_TRUTH_PROVENANCE_REQUIRED");
     const verification = await this.repo.getVerification(String(input.verificationId), scope);
     if (!verification || verification.status !== "PASSED") throw new Error(GOVERNMENT_ASSURANCE_CODES.TRUTH_VERIFICATION_REQUIRED);
+    const reconciliationCaseId = input.reconciliationCaseId || input.reconciliation_case_id;
+    if (reconciliationCaseId && this.repo.getReconciliationCase) { const reconciliation = await this.repo.getReconciliationCase(String(reconciliationCaseId), scope); if (!reconciliation || reconciliation.status !== "RESOLVED") throw new Error("GPA_RECONCILIATION_UNRESOLVED"); }
+    const truthFactId = String(input.truthFactId || input.truth_fact_id || `gpa_truth_${randomUUID()}`);
+    const handoff = createTruthSpineHandoff({ truthFactId, determinationId: `gpa_compat_determination_${truthFactId}`, organizationId: scope.organizationId, tenantId: scope.tenantId, decision: "ACCEPTED", verificationStatus: "PASSED", claimReference: input.claimId || input.claim_id, verificationReference: input.verificationId, provenanceReference: input.provenance });
     return toPublicRow(await this.repo.createTruthFact({
-      truth_fact_id: String(input.truthFactId || input.truth_fact_id || `gpa_truth_${randomUUID()}`), organization_id: scope.organizationId, tenant_id: scope.tenantId, fact_type: String(input.factType), subject_type: String(input.subjectType), subject_reference: String(input.subjectReference), claim_id: input.claimId || input.claim_id || null, verification_id: String(input.verificationId), source_references: input.sourceReferences || input.source_references || [], fact_value: input.factValue, status: input.status || "ACCEPTED", provenance: input.provenance, supersedes_truth_fact_id: input.supersedesTruthFactId || input.supersedes_truth_fact_id || null, determined_by: scope.userId, created_by: scope.userId,
+      truth_fact_id: truthFactId, organization_id: scope.organizationId, tenant_id: scope.tenantId, fact_type: String(input.factType), subject_type: String(input.subjectType), subject_reference: String(input.subjectReference), claim_id: input.claimId || input.claim_id || null, verification_id: String(input.verificationId), source_references: input.sourceReferences || input.source_references || [], fact_value: input.factValue, status: input.status || "ACCEPTED", provenance: { ...(input.provenance || {}), truthSpineHandoff: handoff }, supersedes_truth_fact_id: input.supersedesTruthFactId || input.supersedes_truth_fact_id || null, determined_by: scope.userId, created_by: scope.userId, reconciliation_case_id: reconciliationCaseId,
     }));
   }
 

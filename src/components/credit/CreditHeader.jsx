@@ -12,7 +12,7 @@ export default function CreditHeader() {
       </Link>
 
       <nav className="crb-crossapp" aria-label="Apps">
-        <a className="sh-btn sh-btn--soft" href="/career.html#/dashboard">Career</a>
+        <a className="sh-btn sh-btn--soft" href="/career.html#/">Career</a>
         <a className="sh-btn sh-btn--soft" href="/curriculum.html#/asl/dashboard">Curriculum</a>
         <a className="sh-btn sh-btn--soft" href="/sales.html#/sales/dashboard">Sales</a>
         <a className="sh-btn sh-btn--soft" href="/arcade.html#/dashboard">Arcade</a>

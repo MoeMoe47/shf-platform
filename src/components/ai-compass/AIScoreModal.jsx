@@ -1,4 +1,5 @@
 import React from "react";
+import { href } from "@/router/paths.js";
 export default function AIScoreModal({ open, onClose }) {
   const [score, setScore] = React.useState(null);
   async function onSubmit(e){
@@ -19,7 +20,7 @@ export default function AIScoreModal({ open, onClose }) {
   return (
     <div className="ai-modal">
       <div className="ai-modalCard" role="dialog" aria-modal="true" aria-label="AI Score">
-        <header><strong>Your AI Score</strong><button className="ai-btn ghost" onClick={onClose}>Close</button></header>
+        <header><strong>Demo AI Score</strong><button className="ai-btn ghost" onClick={onClose}>Close</button></header>
         {!score ? (
           <form onSubmit={onSubmit} className="ai-form">
             <input name="zip" placeholder="ZIP code" required />
@@ -40,8 +41,9 @@ export default function AIScoreModal({ open, onClose }) {
         ) : (
           <div className="ai-scoreResult">
             <div className="score">{score.score}</div>
+            <p className="ai-muted">Sample heuristic output from a mock endpoint. Not a validated career assessment.</p>
             <ul>{score.explanations.map((t,i)=><li key={i}>{t}</li>)}</ul>
-            <div className="ai-cta"><a className="ai-btn primary" href="#/career">See my training pathway</a></div>
+            <div className="ai-cta"><a className="ai-btn primary" href={href.career("/planner")}>Open my Career Planner</a></div>
           </div>
         )}
       </div>

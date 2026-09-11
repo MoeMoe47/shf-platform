@@ -63,7 +63,9 @@ export class IdentityRepo {
     // accept this development-only resolver.
     if (databaseDevIdentityEnabled()) {
       const databaseIdentity = await productionIdentityRepo.getActiveIdentity(userId);
-      if (databaseIdentity) return databaseIdentity;
+      // Database-backed development identities are authoritative. Do not
+      // fall through to legacy demo identities when membership is inactive.
+      return databaseIdentity;
     }
 
     if (userId === "user_admin_001") {

@@ -35,6 +35,8 @@ function draftInput(input: any, scope: any) {
     draft_config: {
       readiness: input?.readiness || null,
       exportMetadata: input?.exportMetadata || { exportFormat: "pdf", exportLocked: false },
+      metricResultId: input?.metricResultId || input?.metric_result_id || input?.readiness?.metricResultId || null,
+      metricTruthLineage: input?.metricTruthLineage || input?.readiness?.metricTruthLineage || null,
     },
   };
 }
@@ -116,6 +118,63 @@ export class ReportDraftService {
         action_type: "report_draft.updated",
         new_state_json: { report_id: reportId, version: updated.version, lifecycle_status: updated.lifecycle_status },
         reason_text: "Report draft updated",
+        correlation_id: `corr_${randomUUID()}`,
+        source_channel: "shs-api",
+      }, db);
+      return updated;
+    });
+  }
+
+  async beginCorrection(reportId: string, rationale: string, actor: any) {
+    const scope = scopeFromActor(actor);
+    if (actor?.actor_type === "AI" || actor?.actor_type === "SYSTEM") throw new Error("Human report correction authority is required");
+    if (!String(rationale || "").trim()) throw new Error("Correction rationale is required");
+    return this.transaction(async (db: any) => {
+      const current = await this.repo.getDraft(reportId, scope, db);
+      if (!current) throw new Error("Report draft not found");
+      const updated = await this.repo.beginCorrection(reportId, scope, rationale.trim(), db);
+      if (!updated) throw new Error("Only an approved report can begin a correction");
+      await this.repo.createRevision(updated, scope.actor_id, `revision_${randomUUID()}`, db);
+      await this.auditWriter({
+        audit_event_id: `audit_${randomUUID()}`,
+        organization_id: scope.organization_id,
+        actor_user_id: scope.actor_id,
+        target_object_type: "report_draft",
+        target_object_id: reportId,
+        action_type: "report_draft.correction_started",
+        previous_state_json: { lifecycle_status: current.lifecycle_status, version: current.version },
+        new_state_json: { lifecycle_status: updated.lifecycle_status, version: updated.version },
+        reason_text: rationale.trim(),
+        correlation_id: `corr_${randomUUID()}`,
+        source_channel: "shs-api",
+      }, db);
+      return updated;
+    });
+  }
+
+  async transitionReview(reportId: string, nextStatus: string, rationale: string, actor: any) {
+    const scope = scopeFromActor(actor);
+    const normalized = String(nextStatus || "").trim().toLowerCase();
+    if (!['ready_for_review', 'approved', 'rejected'].includes(normalized)) throw new Error("Unsupported report review transition");
+    if (actor?.actor_type === "AI" || actor?.actor_type === "SYSTEM") throw new Error("Human report review authority is required");
+    if (!String(rationale || "").trim()) throw new Error("Review rationale is required");
+    const decision = normalized === "approved" ? "APPROVED" : normalized === "rejected" ? "REJECTED" : "SUBMITTED";
+    return this.transaction(async (db: any) => {
+      const current = await this.repo.getDraft(reportId, scope, db);
+      if (!current) throw new Error("Report draft not found");
+      const updated = await this.repo.transitionReview(reportId, scope, normalized, decision, rationale.trim(), db);
+      if (!updated) throw new Error("Invalid report review transition");
+      await this.repo.createRevision(updated, scope.actor_id, `revision_${randomUUID()}`, db);
+      await this.auditWriter({
+        audit_event_id: `audit_${randomUUID()}`,
+        organization_id: scope.organization_id,
+        actor_user_id: scope.actor_id,
+        target_object_type: "report_draft",
+        target_object_id: reportId,
+        action_type: `report_draft.${normalized}`,
+        previous_state_json: { lifecycle_status: current.lifecycle_status, version: current.version },
+        new_state_json: { lifecycle_status: updated.lifecycle_status, version: updated.version, decision },
+        reason_text: rationale.trim(),
         correlation_id: `corr_${randomUUID()}`,
         source_channel: "shs-api",
       }, db);

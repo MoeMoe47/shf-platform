@@ -1,12 +1,14 @@
 import { query } from "../../../db/client.js";
 
 export class AuditRepo {
-  async listAuditEvents() {
+  async listAuditEvents(scope: { organization_id: string; tenant_id?: string }) {
     const res = await query(
       `SELECT audit_event_id, organization_id, actor_user_id, target_object_type, target_object_id,
               action_type, reason_text, correlation_id, source_channel, event_timestamp, created_at
        FROM audit_events
-       ORDER BY event_timestamp DESC`
+       WHERE organization_id = $1
+       ORDER BY event_timestamp DESC`,
+      [scope.organization_id]
     );
     return res.rows;
   }

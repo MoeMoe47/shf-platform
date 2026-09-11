@@ -10,6 +10,7 @@ from typing import Any, Dict, List, Optional
 
 from services import truth_history_service
 from services.truth_fact_provider import JsonlTruthFactProvider, ShsCurriculumTruthProvider, provider_name
+from services import truth_spine_postgres_repository as durable_repo
 
 
 SERVICE_ROOT = Path(__file__).resolve().parents[1]
@@ -180,6 +181,8 @@ def _now() -> str:
 
 
 def _ensure_storage() -> None:
+    if durable_repo.is_postgres_mode():
+        return
     TRUTH_DB_DIR.mkdir(parents=True, exist_ok=True)
     AUDIT_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
     if not CLAIMS_PATH.exists():
@@ -193,6 +196,8 @@ def _ensure_storage() -> None:
 
 
 def _read_list(path: Path) -> List[Dict[str, Any]]:
+    if durable_repo.is_postgres_mode():
+        return durable_repo.read_records(path.name)
     _ensure_storage()
     try:
         data = json.loads(path.read_text(encoding="utf-8") or "[]")
@@ -202,6 +207,9 @@ def _read_list(path: Path) -> List[Dict[str, Any]]:
 
 
 def _write_list(path: Path, items: List[Dict[str, Any]]) -> None:
+    if durable_repo.is_postgres_mode():
+        durable_repo.replace_records(path.name, items)
+        return
     _ensure_storage()
     path.write_text(json.dumps(items, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
@@ -261,7 +269,15 @@ _require_write_scope = check_organization_access
 
 
 def list_sources() -> List[Dict[str, Any]]:
-    return _read_list(SOURCES_PATH)
+    records = _read_list(SOURCES_PATH)
+    if not durable_repo.is_postgres_mode():
+        return records
+    latest: Dict[str, Dict[str, Any]] = {}
+    for record in records:
+        source_id = record.get("source_id")
+        if source_id:
+            latest[str(source_id)] = record
+    return list(latest.values())
 
 
 def list_claims() -> List[Dict[str, Any]]:
@@ -271,7 +287,9 @@ def list_claims() -> List[Dict[str, Any]]:
     below (list_claims_for_viewer / list_public_claims) that apply the
     appropriate filter before returning data across a trust boundary."""
     provider = JsonlTruthFactProvider(CLAIMS_PATH, _read_list)
-    if provider_name() == "shs_postgres":
+    if durable_repo.is_postgres_mode():
+        all_claims = [_apply_truth_rules(claim, list_sources()) for claim in _read_list(CLAIMS_PATH)]
+    elif provider_name() == "shs_postgres":
         all_claims = ShsCurriculumTruthProvider().list_facts()
     elif provider_name() == "jsonl":
         sources = list_sources()
@@ -481,6 +499,7 @@ def create_source(payload: Dict[str, Any], actor: Any) -> Dict[str, Any]:
     source = _normalize_source(clean_payload, existing=existing)
     source["verification_status"] = "unverified"
     source["organization_id"] = organization_id
+    source["tenant_id"] = f"tenant:{organization_id}" if organization_id else None
     source["ownership_status"] = ownership_status
     source["created_by"] = getattr(actor, "user_id", "")
     source["verified_by"] = None
@@ -828,7 +847,15 @@ def _normalize_federation_system(payload: Dict[str, Any], existing: Optional[Dic
 
 
 def list_federation_systems() -> List[Dict[str, Any]]:
-    return _read_list(FEDERATION_PATH)
+    records = _read_list(FEDERATION_PATH)
+    if not durable_repo.is_postgres_mode():
+        return records
+    latest: Dict[str, Dict[str, Any]] = {}
+    for record in records:
+        system_id = record.get("system_id")
+        if system_id:
+            latest[str(system_id)] = record
+    return list(latest.values())
 
 
 def get_federation_system(system_id: str) -> Optional[Dict[str, Any]]:

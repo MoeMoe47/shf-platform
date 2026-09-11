@@ -1,5 +1,7 @@
 # Master Layer Registry
 
+> CivicSure Wave 0 ownership contract: `docs/government-program-assurance/CIVICSURE_WAVE_0_CANONICAL_AUTHORITY_CONTRACT.md` is the bounded implementation record for Truth Spine, Agent Fabric, Metric Registry, Reporting/Public Disclosure, and GPA source/reconciliation ownership. It does not create replacement persistence.
+
 This registry is the canonical map of SHS layers. It exists to prevent architecture drift and duplicate layer creation.
 
 ## Canonical Rule

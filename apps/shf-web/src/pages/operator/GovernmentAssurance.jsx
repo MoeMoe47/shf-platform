@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import PageHeader from "../../components/PageHeader";
+import CivicSurePageHeader from "../../components/civicsure/CivicSurePageHeader.jsx";
 import StatusChip from "../../components/StatusChip";
 import GovernmentAssuranceMonitoringDetail from "./GovernmentAssuranceMonitoringDetail.jsx";
 import { getAssuranceDashboard, getMonitoringQueue, getPilotReadiness, getPilotConfigurations, getPublicAssuranceSummary, getFundingReferences, getClaims, getClaim, getClaimEvidence, getClaimReadiness, getClaimHistory, submitClaim, withdrawClaim, requestVerification, getVerificationQueue, getVerification, getVerificationHistory, startVerification, addVerificationContradiction, determineVerification, getReconciliationCases, getAudits, getSources, getSourceAuthorities, getDataUsePolicies, getMetricResults, getTruthFacts } from "../../services/government-assurance-client";
@@ -8,8 +8,6 @@ import GovernmentAssuranceSourceDetail from "./GovernmentAssuranceSourceDetail.j
 import GovernmentAssurancePortfolioDetail from "./GovernmentAssurancePortfolioDetail.jsx";
 import GovernmentAssuranceLineageDetail from "./GovernmentAssuranceLineageDetail.jsx";
 import GovernmentAssurancePhase8B from "./GovernmentAssurancePhase8B.jsx";
-
-const tabs = ["Overview", "Programs", "Providers", "Funding", "Claims", "Verification", "Monitoring", "Reconciliation", "Audit", "Data Sources", "Assistant", "Reports", "Pilot Administration", "Public"];
 
 function Metric({ label, value, tone = "#16324f" }) {
   return <div style={{ borderLeft: `4px solid ${tone}`, padding: "12px 14px", background: "#f7f9fb" }}><div style={{ color: "#52606d", fontSize: 13 }}>{label}</div><strong style={{ display: "block", fontSize: 25, color: tone, marginTop: 4 }}>{value ?? "—"}</strong></div>;
@@ -68,8 +66,8 @@ function LifecycleHistory({ items = [] }) {
   return <ol aria-label="Lifecycle history" className="gpa-list">{items.map((item) => <li key={item.audit_event_id || item.correlation_id}><strong>{item.action_type}</strong> <span>{item.actor_user_id || item.actor_system_id || "system"}</span><time dateTime={item.event_timestamp}>{new Date(item.event_timestamp).toLocaleString()}</time>{item.reason_code ? <small>Reason: {item.reason_code}</small> : null}</li>)}</ol>;
 }
 
-export default function GovernmentAssurance({ initialClaimId = null, initialVerificationId = null, initialReconciliationId = null, initialSourceId = null, initialPortfolio = null, initialLineage = null, initialMonitoring = null, initialPhase8B = null }) {
-  const initialTab = initialClaimId ? "Claims" : initialVerificationId ? "Verification" : initialReconciliationId ? "Reconciliation" : initialSourceId ? "Data Sources" : initialPortfolio ? ({ program: "Programs", provider: "Providers", funding: "Funding", audit: "Audit" }[initialPortfolio.kind]) : initialMonitoring ? "Monitoring" : initialPhase8B || "Overview";
+export default function GovernmentAssurance({ initialView = null, initialClaimId = null, initialVerificationId = null, initialReconciliationId = null, initialSourceId = null, initialPortfolio = null, initialLineage = null, initialMonitoring = null, initialPhase8B = null }) {
+  const initialTab = initialView || (initialClaimId ? "Claims" : initialVerificationId ? "Verification" : initialReconciliationId ? "Reconciliation" : initialSourceId ? "Data Sources" : initialPortfolio ? ({ program: "Programs", provider: "Providers", funding: "Funding", audit: "Audit" }[initialPortfolio.kind]) : initialMonitoring ? "Monitoring" : initialPhase8B || "Overview");
   const [tab, setTab] = useState(initialTab);
   const [dashboard, setDashboard] = useState(null);
   const [readiness, setReadiness] = useState(null);
@@ -107,7 +105,8 @@ export default function GovernmentAssurance({ initialClaimId = null, initialVeri
   }, [tab]);
 
   useEffect(() => {
-    if (initialClaimId) setTab("Claims");
+    if (initialView) setTab(initialView);
+    else if (initialClaimId) setTab("Claims");
     else if (initialVerificationId) setTab("Verification");
     else if (initialReconciliationId) setTab("Reconciliation");
     else if (initialSourceId) setTab("Data Sources");
@@ -115,7 +114,7 @@ export default function GovernmentAssurance({ initialClaimId = null, initialVeri
     else if (initialMonitoring) setTab("Monitoring");
     if (initialClaimId && tab === "Claims") loadClaim(initialClaimId);
     if (initialVerificationId && tab === "Verification") loadVerification(initialVerificationId);
-  }, [initialClaimId, initialVerificationId, initialReconciliationId, initialSourceId, initialPortfolio, initialLineage, initialMonitoring, tab]);
+  }, [initialView, initialClaimId, initialVerificationId, initialReconciliationId, initialSourceId, initialPortfolio, initialLineage, initialMonitoring, tab]);
 
   async function loadClaim(claimId) {
     setSelected(null); setSelectedEvidence(null); setSelectedReadiness(null); setSelectedHistory([]); setActionMessage("Loading canonical Claim…");
@@ -173,11 +172,9 @@ export default function GovernmentAssurance({ initialClaimId = null, initialVeri
   ], [queue]);
 
   return <div className="gpa-shell"><style>{`.gpa-shell{max-width:1180px}.gpa-tabs{display:flex;gap:6px;overflow:auto;border-bottom:1px solid #d9e2ec;padding-bottom:8px}.gpa-tabs button{border:1px solid #cbd5e1;background:#fff;color:#243b53;padding:9px 13px;cursor:pointer}.gpa-tabs button[aria-pressed="true"]{background:#16324f;color:#fff}.gpa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.gpa-list{display:grid;gap:8px}.gpa-list div{display:flex;justify-content:space-between;border-bottom:1px solid #e5e7eb;padding:10px 0}.gpa-readiness{display:flex;gap:10px;align-items:center}.gpa-note{color:#52606d;line-height:1.5}.gpa-table-wrap{overflow:auto}.gpa-table-wrap table{border-collapse:collapse;width:100%;min-width:620px}.gpa-table-wrap th,.gpa-table-wrap td{text-align:left;border-bottom:1px solid #d9e2ec;padding:10px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}@media(max-width:760px){.gpa-grid{grid-template-columns:1fr 1fr}}@media(max-width:480px){.gpa-grid{grid-template-columns:1fr}}`}</style>
-    <PageHeader title="Government Program Assurance" subtitle="County pilot operating view. Official figures are sourced from canonical assurance authorities." />
+    <CivicSurePageHeader title="Government Program Assurance" description="County pilot operating view. Official figures are sourced from canonical assurance authorities." />
     {error ? <div role="alert" style={{ padding: 12, background: "#fff4f2", color: "#8a1c13", border: "1px solid #e6b8b2" }}>{error}</div> : null}
     {actionMessage && !selected ? <div role="alert" style={{ padding: 12, background: "#fff4f2", color: "#8a1c13", border: "1px solid #e6b8b2" }}>{actionMessage}</div> : null}
-    <nav aria-label="Government assurance views" className="gpa-tabs">{tabs.map((item) => <button key={item} type="button" aria-pressed={tab === item} onClick={() => setTab(item)}>{item}</button>)}</nav>
-
     {tab === "Overview" ? <>
       <Section title="Executive Assurance Summary"><div className="gpa-grid">
         <Metric label="Programs in scope" value={summary.programs} /><Metric label="Providers in scope" value={summary.providers} /><Metric label="Funding awarded" value={summary.fundingAwarded != null ? `$${summary.fundingAwarded.toLocaleString()}` : "—"} /><Metric label="Accepted Truth facts" value={summary.acceptedTruthFacts} tone="#166534" /><Metric label="Open findings" value={summary.openFindings} tone="#9a3412" /><Metric label="Overdue corrective actions" value={summary.overdueCorrectiveActions} tone="#b91c1c" />

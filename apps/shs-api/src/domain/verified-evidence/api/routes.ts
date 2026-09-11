@@ -1,7 +1,7 @@
 import { requirePermission } from "../../../auth/permission-guard.js";
 import { SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
 import { ok, fail } from "../../../api/response-envelope.js";
-import { createEvidenceRule, projectAuthoritativeFact, supersedeEvidence } from "../service/verified-evidence-service.js";
+import { createEvidenceRule, projectAgentTaskAttempt, projectAuthoritativeFact, supersedeEvidence } from "../service/verified-evidence-service.js";
 
 export function registerVerifiedEvidenceRoutes(app: any) {
   app.post("/verified-evidence/rules", requirePermission(SHS_SECURITY_PERMISSIONS.CURRICULUM_CATALOG_MANAGE), async (req: any, res: any) => {
@@ -16,6 +16,13 @@ export function registerVerifiedEvidenceRoutes(app: any) {
       return res.json(ok(await projectAuthoritativeFact(req.user, req.body || {})));
     } catch (error: any) {
       return res.status(400).json(fail(String(error?.message || "projection_failed").toUpperCase(), "Evidence projection rejected."));
+    }
+  });
+  app.post("/verified-evidence/agent-task-attempts/:attemptId/project", requirePermission(SHS_SECURITY_PERMISSIONS.TRUTH_OVERRIDE), async (req: any, res: any) => {
+    try {
+      return res.json(ok(await projectAgentTaskAttempt(req.user, { sourceType: "AGENT_TASK_ATTEMPT", sourceRecordId: req.params.attemptId, evidenceRuleId: req.body?.evidenceRuleId || req.body?.evidence_rule_id })));
+    } catch (error: any) {
+      return res.status(400).json(fail(String(error?.message || "agent_evidence_projection_failed").toUpperCase(), "Agent evidence projection rejected."));
     }
   });
   app.post("/verified-evidence/:evidenceId/supersede", requirePermission(SHS_SECURITY_PERMISSIONS.TRUTH_OVERRIDE), async (req: any, res: any) => {

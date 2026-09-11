@@ -73,6 +73,47 @@ function artifactFromRow(row: any) {
   };
 }
 
+function learnerResultFromRow(row: any) {
+  const evidenceIds = Array.isArray(row.evidence_ids) ? row.evidence_ids.map(String) : [];
+  return {
+    entryId: row.entry_id,
+    portfolioId: row.portfolio_id,
+    learnerId: row.learner_id,
+    organizationId: row.organization_id,
+    tenantId: row.tenant_id,
+    outcomeId: row.outcome_id,
+    masteryId: row.mastery_id,
+    competencyId: row.competency_id,
+    outcomeType: row.outcome_type,
+    masteryStatus: row.mastery_status,
+    verificationStatus: row.verification_status,
+    status: row.status,
+    score: row.score == null ? null : Number(row.score),
+    courseId: row.course_id,
+    unitStableKey: row.unit_stable_key,
+    lessonStableKey: row.lesson_stable_key,
+    activityId: row.activity_id,
+    assignmentId: row.assignment_id,
+    evidenceIds,
+    provenance: row.provenance_json || {},
+    supersedesEntryId: row.supersedes_entry_id,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
+
+function skillFromRow(row: any) {
+  return {
+    competencyId: row.competency_id,
+    competencyTitle: row.competency_title || null,
+    masteryStatus: row.mastery_status,
+    verificationStatus: row.verification_status,
+    sourceOutcomeId: row.source_outcome_id,
+    evidenceIds: Array.isArray(row.evidence_ids) ? row.evidence_ids.map(String) : [],
+    determinedAt: row.determined_at,
+  };
+}
+
 function presentationInput(input: any) {
   const result: any = {};
   if (input.title !== undefined) result.title = input.title;
@@ -240,13 +281,97 @@ export class PortfolioService {
     });
   }
 
+  /** Internal consumer seam. Curriculum owns the source result and mastery;
+   * Portfolio only projects an eligible, scoped learner-facing entry. */
+  async projectLearnerResult(actor: Actor, outcome: any, mastery: any = null) {
+    const expected = scope(actor);
+    if (outcome.organizationId !== expected.organizationId || outcome.tenantId !== expected.tenantId || outcome.learnerUserId !== expected.learnerId) {
+      throw new Error("PORTFOLIO_LEARNER_RESULT_SCOPE_MISMATCH");
+    }
+    if (mastery && (mastery.organizationId !== expected.organizationId || mastery.tenantId !== expected.tenantId || mastery.learnerUserId !== expected.learnerId || mastery.competencyId !== outcome.competencyId)) {
+      throw new Error("PORTFOLIO_LEARNER_RESULT_MASTERY_MISMATCH");
+    }
+    return this.transaction(async (executor) => {
+      const existing = await executor.query(
+        `SELECT * FROM portfolio_learner_result_entries WHERE organization_id=$1 AND tenant_id=$2 AND learner_id=$3 AND outcome_id=$4`,
+        [expected.organizationId, expected.tenantId, expected.learnerId, outcome.outcomeId],
+      );
+      if (existing.rows[0]) return { entry: learnerResultFromRow(existing.rows[0]), eligible: existing.rows[0].status === "ACTIVE", idempotent: true };
+      const profile = await this.getOrCreateProfile(executor, expected);
+      const eligible = outcome.status === "CURRENT" && ["PASSED", "DEMONSTRATED"].includes(outcome.outcomeType)
+        && mastery && ["DEMONSTRATED", "MASTERED"].includes(mastery.masteryStatus);
+      if (!eligible) {
+        await executor.query(
+          `UPDATE portfolio_learner_result_entries SET status='SUPERSEDED', updated_at=NOW()
+           WHERE organization_id=$1 AND tenant_id=$2 AND learner_id=$3 AND status='ACTIVE'
+             AND competency_id IS NOT DISTINCT FROM $4`,
+          [expected.organizationId, expected.tenantId, expected.learnerId, outcome.competencyId || null],
+        );
+        return { entry: null, eligible: false, idempotent: false };
+      }
+      const predecessor = await executor.query(
+        `SELECT entry_id FROM portfolio_learner_result_entries
+         WHERE organization_id=$1 AND tenant_id=$2 AND learner_id=$3 AND competency_id=$4 AND status='ACTIVE'
+         ORDER BY created_at DESC LIMIT 1 FOR UPDATE`,
+        [expected.organizationId, expected.tenantId, expected.learnerId, outcome.competencyId || null],
+      );
+      const predecessorId = predecessor.rows[0]?.entry_id || null;
+      if (predecessorId) await executor.query(`UPDATE portfolio_learner_result_entries SET status='SUPERSEDED', updated_at=NOW() WHERE entry_id=$1`, [predecessorId]);
+      const provenance = {
+        source: "curriculum-learner-result-v1",
+        outcomeId: outcome.outcomeId,
+        masteryId: mastery.masteryId,
+        sourceType: outcome.sourceType,
+        sourceId: outcome.sourceId,
+        evidenceIds: outcome.evidenceIds || [],
+        courseId: outcome.courseId,
+        lessonStableKey: outcome.lessonStableKey,
+        supersedesOutcomeId: outcome.supersedesOutcomeId,
+      };
+      const inserted = await executor.query(
+        `INSERT INTO portfolio_learner_result_entries
+          (entry_id,portfolio_id,organization_id,tenant_id,learner_id,outcome_id,mastery_id,competency_id,
+           outcome_type,mastery_status,verification_status,score,course_id,unit_stable_key,lesson_stable_key,
+           activity_id,assignment_id,evidence_ids,provenance_json,supersedes_entry_id)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18::jsonb,$19::jsonb,$20)
+         ON CONFLICT (organization_id,tenant_id,learner_id,outcome_id) DO NOTHING RETURNING *`,
+        [`portfolio_result_${randomUUID()}`, profile.portfolio_id, expected.organizationId, expected.tenantId, expected.learnerId,
+          outcome.outcomeId, mastery.masteryId, outcome.competencyId || null, outcome.outcomeType, mastery.masteryStatus,
+          mastery.verificationStatus, outcome.score, outcome.courseId, outcome.unitStableKey, outcome.lessonStableKey,
+          outcome.activityId, outcome.assignmentId, JSON.stringify(outcome.evidenceIds || []), JSON.stringify(provenance), predecessorId],
+      );
+      const entry = inserted.rows[0] ? learnerResultFromRow(inserted.rows[0]) : null;
+      if (!entry) {
+        const retry = await executor.query(`SELECT * FROM portfolio_learner_result_entries WHERE organization_id=$1 AND tenant_id=$2 AND learner_id=$3 AND outcome_id=$4`, [expected.organizationId, expected.tenantId, expected.learnerId, outcome.outcomeId]);
+        return { entry: retry.rows[0] ? learnerResultFromRow(retry.rows[0]) : null, eligible: true, idempotent: true };
+      }
+      await this.emit(executor, "portfolio.learner_result.projected", "portfolio_learner_result", entry.entryId, expected, { outcome_id: outcome.outcomeId, mastery_id: mastery.masteryId, verification_status: mastery.verificationStatus });
+      return { entry, eligible: true, idempotent: false };
+    });
+  }
+
+  async getLearnerResultProjection(actor: Actor) {
+    const expected = scope(actor);
+    const entries = await this.dbQuery(
+      `SELECT * FROM portfolio_learner_result_entries WHERE organization_id=$1 AND tenant_id=$2 AND learner_id=$3 AND status='ACTIVE' ORDER BY created_at DESC`,
+      [expected.organizationId, expected.tenantId, expected.learnerId],
+    );
+    const skills = await this.dbQuery(
+      `SELECT m.*, c.title AS competency_title FROM curriculum_learner_mastery m
+       LEFT JOIN competency_definitions c ON c.competency_id=m.competency_id
+       WHERE m.organization_id=$1 AND m.tenant_id=$2 AND m.learner_user_id=$3 ORDER BY m.competency_id`,
+      [expected.organizationId, expected.tenantId, expected.learnerId],
+    );
+    return { learnerResultItems: entries.rows.map(learnerResultFromRow), skillProfile: skills.rows.map(skillFromRow) };
+  }
+
   async getPortfolio(actor: Actor) {
     requirePermission(actor, SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_VIEW);
     const expected = scope(actor);
     const result = await this.dbQuery(`SELECT * FROM portfolio_profiles WHERE organization_id=$1 AND tenant_id=$2 AND learner_id=$3 AND status='ACTIVE'`, [expected.organizationId, expected.tenantId, expected.learnerId]);
-    if (!result.rows[0]) return { portfolio: null, artifacts: [] };
+    if (!result.rows[0]) return { portfolio: null, artifacts: [], ...(await this.getLearnerResultProjection(actor)) };
     const artifacts = await this.dbQuery(`SELECT * FROM portfolio_artifacts WHERE portfolio_id=$1 AND status <> 'REMOVED' ORDER BY position ASC, created_at ASC`, [result.rows[0].portfolio_id]);
-    return { portfolio: portfolioFromRow(result.rows[0]), artifacts: artifacts.rows.map(artifactFromRow) };
+    return { portfolio: portfolioFromRow(result.rows[0]), artifacts: artifacts.rows.map(artifactFromRow), ...(await this.getLearnerResultProjection(actor)) };
   }
 
   async listArtifacts(actor: Actor) {

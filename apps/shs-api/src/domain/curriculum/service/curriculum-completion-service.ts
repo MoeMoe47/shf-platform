@@ -6,6 +6,7 @@ import { CurriculumCompletionRepo } from "../repo/curriculum-completion-repo.js"
 import { query } from "../../../db/client.js";
 import { evaluateLessonCompletion } from "../../completion-policy/service/completion-evaluator.js";
 import type { CompletionEvaluationResult } from "../../completion-policy/service/completion-evaluator.js";
+import { recordOutcome } from "./learner-result-service.js";
 
 export class CompletionPolicyNotSatisfiedError extends Error {
   constructor(public evaluation: CompletionEvaluationResult) {
@@ -79,7 +80,7 @@ export class CurriculumCompletionService {
     const completionId = `curriculum_completion_${identity}`;
     const idempotencyKey = `lesson.completed:${identity}`;
 
-    return this.transaction(async (db: any) => {
+    const result = await this.transaction(async (db: any) => {
       const completion = await this.repo.createOrGet({
         completion_id: completionId,
         user_id: userId,
@@ -127,5 +128,15 @@ export class CurriculumCompletionService {
       });
       return { completion, outbox_event_id: event.outbox_event_id };
     });
+    await recordOutcome(input.actor, {
+      sourceType: "LESSON_COMPLETION",
+      sourceId: result.completion.completion_id,
+      outcomeType: "COMPLETED",
+      assignmentId: result.completion.assignment_id,
+      courseId: result.completion.curriculum_id,
+      lessonStableKey: result.completion.lesson_id,
+      provenance: { completionId: result.completion.completion_id, completionPolicyId: result.completion.completion_policy_id },
+    });
+    return result;
   }
 }

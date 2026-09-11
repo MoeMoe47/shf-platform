@@ -204,7 +204,7 @@ export default function Top() {
 
           <div className="shf-footer__links">
             <a href="#/privacy">Privacy Policy</a>
-            <a href="#/careers">Careers</a>
+            <a href="/career.html#/">Careers</a>
           </div>
 
           <div className="shf-footer__brand">

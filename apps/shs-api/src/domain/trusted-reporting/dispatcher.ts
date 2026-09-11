@@ -77,6 +77,14 @@ export async function dispatchPendingIntegrationEvents(
         ? (responseBody?.event_idempotent_replay ? "ALREADY_ACCEPTED_IDEMPOTENT_SUCCESS" : "SUCCESS")
         : classifyDeliveryResponse(response.status, responseBody);
       if (classification === "SUCCESS" || classification === "ALREADY_ACCEPTED_IDEMPOTENT_SUCCESS") {
+        const truthSpineRecordId = String(responseBody?.projection?.truth_spine_record_id || "").trim();
+        const determinationId = String(body?.payload?.determination_id || "").trim();
+        if (truthSpineRecordId && determinationId && typeof repo.linkTruthSpineRecord === "function") {
+          await repo.linkTruthSpineRecord(determinationId, truthSpineRecordId, {
+            organizationId: String(body.organization_id),
+            tenantId: String(body.tenant_id),
+          }, undefined);
+        }
         await repo.markDelivered(event.outbox_event_id, workerId);
         operationalLog("delivery_succeeded", { worker_id: workerId, outbox_event_id: event.outbox_event_id, classification });
         emitOperationalTelemetry({ event_name: "outbox_delivery_succeeded", severity: "INFO", component: "trusted_reporting_worker", category: "OUTBOX", outcome: "SUCCESS", metadata: { reason: classification } });

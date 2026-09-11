@@ -61,4 +61,13 @@ export function registerFundingGrantRoutes(app: any) {
       return handleError(error, res, next);
     }
   });
+
+  app.post("/funding/grants/:grantId/authorize-use", requirePermission("funding.grant.view"), async (req: any, res: any, next: any) => {
+    try {
+      const result = await service.authorizeFundedUse({ ...(req.body || {}), grantId: req.params.grantId }, req.user);
+      return res.json(ok(result));
+    } catch (error) {
+      return handleError(error, res, next);
+    }
+  });
 }

@@ -1,0 +1,1419 @@
+/* ------------------------------------------------------------------
+   CivicSure Explorer — public-facing page frame.
+   Deliberately separate from civicsure.css (the internal operator
+   console shell): this page uses its own root class (.civicsure-explorer)
+   with its own bounded --cse-* token set, rather than depending on
+   .civicsure-shell's --civic-* tokens. Those tokens read too muted/
+   gray-green against the approved mock (confirmed by direct visual
+   comparison), so this palette is Explorer-local rather than a change
+   to the shared civicsure.css file used by the internal operator
+   console. FRAME ONLY — see docs/ui/CIVICSURE_EXPLORER_FRAME.md.
+   ------------------------------------------------------------------ */
+
+.civicsure-explorer {
+  --cse-bg: #eef3f9;
+  --cse-surface: #ffffff;
+  --cse-text: #16223a;
+  --cse-muted: #566380;
+  --cse-border: #d7e3f0;
+  --cse-navy: #102a52;
+  --cse-navy-hover: #0b1f3d;
+  --cse-blue: #1857b0;
+  --cse-blue-soft: #dce9fb;
+  --cse-blue-pale: #eef5fd;
+  --cse-success: #15804a;
+  --cse-success-soft: #ddf5e8;
+  --cse-warning: #9a5b12;
+  --cse-warning-soft: #fbedd4;
+
+  background: var(--cse-surface);
+  color: var(--cse-text);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.civicsure-explorer,
+.civicsure-explorer *,
+.civicsure-explorer *::before,
+.civicsure-explorer *::after {
+  box-sizing: border-box;
+}
+
+.civicsure-explorer a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.civicsure-explorer img {
+  max-width: 100%;
+  display: block;
+}
+
+.civicsure-explorer :focus-visible {
+  outline: 3px solid var(--cse-blue);
+  outline-offset: 2px;
+}
+
+.cse-skip-link {
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  z-index: 200;
+  background: var(--cse-navy);
+  color: #fff;
+  padding: 10px 16px;
+  font-weight: 700;
+}
+.cse-skip-link:focus {
+  left: 12px;
+  top: 8px;
+}
+
+.cse-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* Serif used only for the hero display headline — everything else
+   (nav, cards, body copy, UI chrome) stays on the sans stack, per the
+   mock's "editorial hero, modern sans UI" split. */
+.cse-serif {
+  font-family: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, "Times New Roman", serif;
+}
+
+/* ---------------------------- Public nav ---------------------------- */
+
+.cse-nav {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--cse-surface);
+  border-bottom: 1px solid var(--cse-border);
+}
+
+.cse-nav__bar {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.cse-nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.cse-nav__brand-icon {
+  width: 30px;
+  height: 30px;
+  color: var(--cse-navy);
+  flex-shrink: 0;
+}
+
+.cse-nav__brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.cse-nav__wordmark {
+  font: 800 19px/1 Georgia, serif;
+  color: var(--cse-navy);
+  letter-spacing: -0.01em;
+}
+
+.cse-nav__tagline {
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--cse-muted);
+  letter-spacing: 0.01em;
+}
+
+.cse-nav__toggle {
+  display: none;
+  margin-left: auto;
+  border: 1px solid var(--cse-border);
+  background: var(--cse-surface);
+  color: var(--cse-navy);
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+
+.cse-nav__links {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  flex: 1;
+}
+
+a.cse-nav__link {
+  position: relative;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--cse-text);
+  padding: 8px 0;
+  white-space: nowrap;
+}
+
+a.cse-nav__link:hover {
+  color: var(--cse-navy);
+}
+
+.cse-nav__link.is-active {
+  color: var(--cse-navy);
+  font-weight: 700;
+}
+
+.cse-nav__link.is-active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--cse-navy);
+}
+
+.cse-nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.cse-nav__search-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--cse-border);
+  background: var(--cse-surface);
+  color: var(--cse-navy);
+  cursor: pointer;
+}
+.cse-nav__search-btn:hover {
+  background: var(--cse-blue-soft);
+}
+.cse-nav__search-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.cse-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font: 700 14px/1 inherit;
+  padding: 11px 20px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+}
+/* Default icon size for any .cse-btn's ExplorerIcon child. Every
+   ExplorerIcon renders with no width/height of its own (only a
+   viewBox), so without this an icon inside a button that has no
+   page-specific "svg { width; height }" override falls back to the
+   browser's intrinsic SVG replaced-element size (very large) —
+   confirmed live in two report-card buttons that lacked such a
+   scoped override. Page-specific rules (e.g. inside a header's
+   action row) still take precedence via specificity/source order
+   where they exist; this is just the shared fallback so no button
+   icon is ever unstyled by omission. */
+.cse-btn svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.cse-btn--primary {
+  background: var(--cse-navy);
+  color: #fff;
+}
+.cse-btn--primary:hover {
+  background: var(--cse-navy-hover);
+}
+
+.cse-btn--outline {
+  background: var(--cse-surface);
+  color: var(--cse-navy);
+  border-color: var(--cse-border);
+}
+.cse-btn--outline:hover {
+  background: var(--cse-blue-soft);
+}
+
+/* ---------------------------- Hero ---------------------------- */
+
+.cse-hero {
+  position: relative;
+  overflow: hidden;
+  /* Brighter, cleaner pale-blue wash (was a grayer #eef4f9->#e4edf5
+     duo) — matches the mock's crisp blue-white hero background rather
+     than reading as a muted gray-blue. */
+  background: linear-gradient(180deg, var(--cse-blue-pale) 0%, #e2eefb 100%);
+}
+
+.cse-hero__grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 46fr 54fr;
+  align-items: stretch;
+  /* 460px -> ~340px: the mock's hero is a flat, panoramic band, not a
+     tall banner — the previous height came from an over-tight/zoomed
+     image crop needing more vertical room, not from the copy itself. */
+  min-height: 340px;
+}
+
+.cse-hero__copy {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  padding: 22px 28px 20px max(32px, calc((100vw - 1280px) / 2 + 32px));
+}
+
+.cse-eyebrow {
+  margin: 0;
+  font: 800 12.5px/1.4 inherit;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cse-blue);
+}
+
+.cse-hero__heading {
+  margin: 0;
+  font-weight: 700;
+  font-size: 33px;
+  line-height: 1.16;
+  color: var(--cse-navy);
+  letter-spacing: -0.01em;
+  max-width: 19ch;
+}
+
+.cse-hero__body {
+  margin: 0;
+  max-width: 46ch;
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--cse-muted);
+}
+
+/* ---------------------------- Hero search ---------------------------- */
+
+.cse-hero__search-block {
+  margin-top: 2px;
+  max-width: 640px;
+}
+
+.cse-search-form {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  background: var(--cse-surface);
+  border: 1px solid var(--cse-border);
+  border-radius: 12px;
+  padding: 6px 6px 6px 16px;
+}
+
+.cse-search-form__icon {
+  display: flex;
+  align-items: center;
+  color: var(--cse-muted);
+  flex-shrink: 0;
+}
+.cse-search-form__icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.cse-search-form input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  font-size: 15px;
+  color: var(--cse-text);
+  background: transparent;
+  padding: 10px 0;
+}
+.cse-search-form input::placeholder {
+  color: var(--cse-muted);
+}
+
+.cse-search-form__submit {
+  flex-shrink: 0;
+}
+
+.cse-popular {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  font-size: 13.5px;
+  color: var(--cse-muted);
+}
+
+.cse-popular__label {
+  font-weight: 600;
+}
+
+a.cse-popular__link {
+  color: var(--cse-blue);
+  font-weight: 600;
+}
+a.cse-popular__link:hover {
+  text-decoration: underline;
+}
+
+/* ---------------------------- Hero image + overlay text ---------------------------- */
+
+.cse-hero__visual {
+  position: relative;
+  min-height: 100%;
+  overflow: hidden;
+}
+
+.cse-hero__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 42%;
+  z-index: 0;
+}
+
+/* Was a top-to-bottom dark navy tint across the ENTIRE photo — that
+   read as dark/foggy against the mock's bright, vivid skyline. Now
+   just two things: a short left-edge blend into the pale hero
+   background (so the photo doesn't meet it as a hard seam), and a
+   small, corner-anchored scrim behind the bottom-right overlay text
+   only, so the rest of the skyline stays fully bright and untinted. */
+.cse-hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(380px 240px at 100% 100%, rgba(6, 16, 30, 0.4) 0%, rgba(6, 16, 30, 0.16) 45%, rgba(6, 16, 30, 0) 75%),
+    linear-gradient(to right, var(--cse-blue-pale) 0%, rgba(238, 245, 253, 0.65) 6%, rgba(238, 245, 253, 0) 16%);
+}
+
+.cse-hero__overlay-copy {
+  position: absolute;
+  z-index: 2;
+  right: 32px;
+  bottom: 22px;
+  text-align: right;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(4, 12, 22, 0.55);
+}
+
+.cse-hero__overlay-heading {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.28;
+}
+
+.cse-hero__overlay-rule {
+  width: 40px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 0;
+  margin: 8px 0 8px auto;
+}
+
+.cse-hero__overlay-micro {
+  margin: 0;
+  font: 700 11.5px/1.6 inherit;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* ---------------------------- Category nav ---------------------------- */
+
+.cse-section-nav {
+  background: var(--cse-surface);
+  border-bottom: 1px solid var(--cse-border);
+  padding: 18px 0;
+}
+
+.cse-section-nav__row {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  padding-bottom: 2px;
+}
+
+.cse-tab {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 0;
+  min-width: 148px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--cse-border);
+  background: var(--cse-bg);
+  color: var(--cse-muted);
+  font: 600 14.5px/1.2 inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Icons stay institutional blue even on inactive tabs — per the mock,
+   only the label/fill go muted when a tab isn't active, not the icon. */
+.cse-tab svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--cse-blue);
+}
+
+.cse-tab:hover {
+  background: var(--cse-blue-pale);
+  color: var(--cse-navy);
+  border-color: var(--cse-blue-pale);
+}
+
+.cse-tab.is-active {
+  background: var(--cse-blue-pale);
+  color: var(--cse-navy);
+  border-color: var(--cse-blue-pale);
+  font-weight: 700;
+  box-shadow: inset 0 -3px 0 var(--cse-blue);
+}
+
+/* ---------------------------- Section header ---------------------------- */
+
+.cse-section-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 32px 0 4px;
+}
+
+.cse-section-head__title {
+  margin: 0 0 6px;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.cse-section-head__subtitle {
+  margin: 0;
+  font-size: 15px;
+  color: var(--cse-muted);
+  max-width: 60ch;
+}
+
+a.cse-info-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--cse-blue);
+  padding-top: 4px;
+}
+.cse-info-link svg {
+  width: 16px;
+  height: 16px;
+}
+a.cse-info-link:hover {
+  text-decoration: underline;
+}
+
+/* ---------------------------- Metrics ---------------------------- */
+
+.cse-metrics {
+  display: grid;
+  /* minmax(0, 1fr), not bare 1fr: a bare 1fr track is
+     minmax(auto, 1fr), which lets the track grow past its fair share
+     to fit a card's min-content width (e.g. a long, unbreakable label
+     like "Remaining Obligated") — overflowing the grid's own
+     container on narrow screens. minmax(0, 1fr) allows the track to
+     shrink below that minimum instead, so the card's text wraps and
+     the grid never exceeds its container. No visual change on any
+     existing page where content already fit. */
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+  padding: 20px 0 8px;
+}
+
+.cse-metric-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  background: var(--cse-surface);
+  border: 1px solid var(--cse-border);
+  border-radius: 12px;
+}
+
+.cse-metric-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--cse-blue-soft);
+  color: var(--cse-blue);
+}
+.cse-metric-card__icon svg {
+  width: 20px;
+  height: 20px;
+}
+.cse-metric-card--amber .cse-metric-card__icon {
+  background: var(--cse-warning-soft);
+  color: var(--cse-warning);
+}
+.cse-metric-card--green .cse-metric-card__icon {
+  background: var(--cse-success-soft);
+  color: var(--cse-success);
+}
+
+.cse-metric-card__value {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--cse-navy);
+  line-height: 1.15;
+}
+
+.cse-metric-card__label {
+  margin: 1px 0 4px;
+  font-size: 13.5px;
+  color: var(--cse-muted);
+}
+
+.cse-metric-card__delta {
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--cse-success);
+}
+
+/* ---------------------------- Filter toolbar ---------------------------- */
+
+.cse-filters {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 18px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--cse-border);
+}
+
+.cse-filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 168px;
+}
+
+.cse-filter-field label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--cse-muted);
+}
+
+.cse-filter-field select {
+  appearance: none;
+  font: 600 14px/1 inherit;
+  color: var(--cse-navy);
+  background: var(--cse-surface) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23566380' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M5.5 9 12 15.5 18.5 9'/></svg>") no-repeat right 12px center / 14px 14px;
+  border: 1px solid var(--cse-border);
+  border-radius: 8px;
+  padding: 10px 34px 10px 12px;
+  cursor: pointer;
+}
+.cse-filter-field select:focus-visible {
+  border-color: var(--cse-blue);
+  box-shadow: 0 0 0 3px rgba(24, 87, 176, 0.16);
+  outline: none;
+}
+
+.cse-more-filters {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font: 700 13.5px/1 inherit;
+  color: var(--cse-blue);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 10px 0;
+}
+.cse-more-filters svg {
+  width: 16px;
+  height: 16px;
+}
+
+.cse-view-toggle-group {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cse-view-toggle-group > span {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--cse-muted);
+}
+
+.cse-view-toggle {
+  display: flex;
+  border: 1px solid var(--cse-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.cse-view-toggle button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font: 700 13.5px/1 inherit;
+  padding: 9px 14px;
+  border: 0;
+  background: var(--cse-surface);
+  color: var(--cse-muted);
+  cursor: pointer;
+}
+.cse-view-toggle button svg {
+  width: 15px;
+  height: 15px;
+}
+.cse-view-toggle button.is-active {
+  background: var(--cse-navy);
+  color: #fff;
+}
+.cse-view-toggle button + button {
+  border-left: 1px solid var(--cse-border);
+}
+.cse-view-toggle button.is-active + button,
+.cse-view-toggle button:has(+ button.is-active) {
+  border-left-color: transparent;
+}
+
+/* ---------------------------- Main content grid ---------------------------- */
+
+.cse-content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 28px;
+  padding: 28px 0 72px;
+  align-items: start;
+}
+
+.cse-results {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  /* Grid items default to min-width:auto, which refuses to shrink
+     below their content's natural width — without this, a wide child
+     (e.g. the Follow the Money flow) forces the whole grid track (and
+     the page) wider than the viewport instead of wrapping/scrolling
+     internally. */
+  min-width: 0;
+}
+
+.cse-side-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: sticky;
+  top: 88px;
+  min-width: 0;
+}
+
+/* ---------------------------- Program result card ---------------------------- */
+
+.cse-program-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px;
+  background: var(--cse-surface);
+  border: 1px solid var(--cse-border);
+  border-radius: 12px;
+}
+
+.cse-program-card__thumb {
+  width: 96px;
+  height: 84px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  background: var(--cse-blue-soft);
+  color: var(--cse-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.cse-program-card__thumb svg {
+  width: 34px;
+  height: 34px;
+}
+
+.cse-program-card__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.cse-program-card__title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cse-program-card__title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.cse-pill {
+  display: inline-flex;
+  align-items: center;
+  font: 700 12px/1 inherit;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--cse-success-soft);
+  color: var(--cse-success);
+}
+
+/* Shared status vocabulary badge (Verified / Current / Pending Review /
+   Open Exception / Corrective Action) — see StatusBadge.jsx. Used by
+   Provider Detail and County Detail Outcomes/Evidence/Compliance/
+   Assurance rows. Text label always renders; color is a restrained
+   accent only, per the locked visual system's "amber/red for
+   exceptions only" rule. */
+.cse-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 700 12px/1 inherit;
+  padding: 5px 11px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.cse-status-badge svg {
+  width: 13px;
+  height: 13px;
+}
+.cse-status-badge--green {
+  background: var(--cse-success-soft);
+  color: var(--cse-success);
+}
+.cse-status-badge--blue {
+  background: var(--cse-blue-soft);
+  color: var(--cse-blue);
+}
+.cse-status-badge--amber {
+  background: var(--cse-warning-soft);
+  color: var(--cse-warning);
+}
+
+/* Data table — shared primitive used by Provider Detail and County
+   Detail's Outcomes/Evidence tabs. A wide table scrolls inside its
+   own .cse-table-wrap box rather than forcing page-level horizontal
+   scroll on narrow screens. */
+.cse-table-wrap {
+  padding: 0;
+  overflow-x: auto;
+  /* max-width + contain: paint force real containment even for a
+     very wide table (8+ columns): without this, a wide <table>'s
+     intrinsic layout width can still leak into the page's own
+     scrollable area in some browsers even though this wrapper's own
+     box and internal scrollbar are already correctly sized — visible
+     as an empty, content-free horizontal "dead scroll" past the real
+     page content on narrow screens (confirmed via a 6/7-column table
+     not triggering it, an 8-column one did). contain: paint
+     guarantees nothing inside can affect layout/paint outside this
+     box's bounds. */
+  max-width: 100%;
+  contain: paint;
+}
+
+.cse-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.cse-table th,
+.cse-table td {
+  text-align: left;
+  padding: 14px 18px;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--cse-border);
+}
+
+.cse-table thead th {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--cse-muted);
+  background: var(--cse-bg);
+}
+
+.cse-table tbody th {
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.cse-table tbody tr:last-child td,
+.cse-table tbody tr:last-child th {
+  border-bottom: 0;
+}
+
+.cse-program-card__meta {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--cse-muted);
+}
+
+.cse-program-card__desc {
+  margin: 8px 0 0;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--cse-text);
+}
+
+.cse-tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cse-tag {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cse-navy);
+  background: var(--cse-blue-pale);
+  border: 1px solid var(--cse-border);
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+
+.cse-program-card__action {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  align-self: center;
+  color: var(--cse-muted);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 6px;
+}
+.cse-program-card__action svg {
+  width: 20px;
+  height: 20px;
+}
+.cse-program-card__action:hover {
+  color: var(--cse-navy);
+}
+
+/* ---------------------------- Map panel ---------------------------- */
+
+/* Static "real map" illustration, built entirely from layered CSS
+   gradients (no image asset, no map SDK) — replaces the previous
+   flat sage/olive wash with a cooler blue-gray base, a soft blue
+   river band, two restrained green park patches, and a light street
+   grid, so it reads as an actual map rather than an abstract tint. */
+.cse-map-panel {
+  position: relative;
+  border: 1px solid var(--cse-border);
+  border-radius: 12px;
+  overflow: hidden;
+  min-height: 420px;
+  background:
+    linear-gradient(115deg, transparent 36%, rgba(140, 185, 226, 0.55) 40%, rgba(140, 185, 226, 0.55) 47%, transparent 51%),
+    radial-gradient(150px 100px at 20% 74%, rgba(196, 224, 202, 0.6), transparent 70%),
+    radial-gradient(120px 95px at 74% 20%, rgba(196, 224, 202, 0.55), transparent 70%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.9) 0px 2px, transparent 2px 48px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.9) 0px 2px, transparent 2px 48px),
+    repeating-linear-gradient(38deg, rgba(255, 255, 255, 0.55) 0px 2px, transparent 2px 96px),
+    #dde7f2;
+}
+
+.cse-map-panel__illustration {
+  position: absolute;
+  inset: 0;
+}
+
+.cse-map-panel__labels span {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  font-weight: 600;
+  /* Was a grayish sage-green (#5a6b60) — cooler slate-blue now, so
+     even the plain place labels read as part of the blue civic
+     palette rather than an olive/gray-green cast. */
+  color: #3a4a63;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.7);
+  white-space: nowrap;
+}
+.cse-map-panel__labels span.is-emphasis {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--cse-navy);
+}
+
+.cse-map-marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: var(--cse-blue);
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 1px rgba(16, 42, 82, 0.3), 0 1px 4px rgba(16, 42, 82, 0.25);
+}
+
+.cse-map-highway {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 20px;
+  padding: 0 4px;
+  border-radius: 4px;
+  background: var(--cse-blue);
+  border-top: 3px solid #c0392b;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.cse-map-panel__overlay {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 2;
+  width: 220px;
+  background: var(--cse-surface);
+  border: 1px solid var(--cse-border);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 18px rgba(16, 42, 82, 0.1);
+}
+
+.cse-map-panel__overlay h3 {
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.cse-map-panel__overlay ul {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--cse-text);
+}
+
+.cse-map-panel__overlay a {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cse-blue);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.cse-map-panel__overlay a svg {
+  width: 14px;
+  height: 14px;
+}
+.cse-map-panel__overlay a:hover {
+  text-decoration: underline;
+}
+
+.cse-map-zoom {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--cse-border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--cse-surface);
+  box-shadow: 0 2px 10px rgba(16, 42, 82, 0.1);
+}
+
+.cse-map-zoom button {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: var(--cse-surface);
+  color: var(--cse-navy);
+  cursor: pointer;
+}
+.cse-map-zoom button svg {
+  width: 16px;
+  height: 16px;
+}
+.cse-map-zoom button + button {
+  border-top: 1px solid var(--cse-border);
+}
+
+/* ---------------------------- Follow the Money ---------------------------- */
+
+.cse-card {
+  background: var(--cse-surface);
+  border: 1px solid var(--cse-border);
+  border-radius: 12px;
+  padding: 22px;
+}
+
+.cse-ftm__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.cse-ftm__head-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--cse-blue-soft);
+  color: var(--cse-blue);
+  flex-shrink: 0;
+}
+.cse-ftm__head-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.cse-ftm__head-text {
+  flex: 1;
+}
+.cse-ftm__head-text h3 {
+  margin: 0 0 3px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+.cse-ftm__head-text p {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--cse-muted);
+}
+
+.cse-ftm__head-arrow {
+  flex-shrink: 0;
+  color: var(--cse-muted);
+  align-self: center;
+}
+.cse-ftm__head-arrow svg {
+  width: 18px;
+  height: 18px;
+}
+
+.cse-ftm__flow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 20px 0 6px;
+  padding: 0 0 4px;
+  list-style: none;
+  overflow-x: auto;
+}
+
+.cse-ftm__step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 1;
+  min-width: 0;
+  width: 64px;
+  text-align: center;
+}
+
+.cse-ftm__step-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--cse-blue);
+  color: #fff;
+  flex-shrink: 0;
+}
+.cse-ftm__step-icon svg {
+  width: 16px;
+  height: 16px;
+}
+.cse-ftm__step-icon svg {
+  width: 18px;
+  height: 18px;
+}
+.cse-ftm__step--green .cse-ftm__step-icon {
+  background: var(--cse-success);
+}
+
+.cse-ftm__step-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--cse-muted);
+  line-height: 1.25;
+}
+
+.cse-ftm__arrow {
+  flex-shrink: 0;
+  /* Was --cse-border (near-invisible gray) — a visibly blue connector
+     per the mock, not just a faint divider. */
+  color: #9fbde3;
+  margin-bottom: 28px;
+}
+.cse-ftm__arrow svg {
+  width: 16px;
+  height: 16px;
+}
+
+a.cse-ftm__footer {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  font: 700 13.5px/1 inherit;
+  color: var(--cse-blue);
+}
+.cse-ftm__footer svg {
+  width: 15px;
+  height: 15px;
+}
+a.cse-ftm__footer:hover {
+  text-decoration: underline;
+}
+
+/* ---------------------------- Trust callout ---------------------------- */
+
+.cse-trust-callout {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 22px;
+  background: var(--cse-blue-pale);
+  border: 1px solid var(--cse-border);
+  border-radius: 12px;
+}
+
+.cse-trust-callout__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--cse-surface);
+  color: var(--cse-navy);
+  flex-shrink: 0;
+}
+.cse-trust-callout__icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.cse-trust-callout__text {
+  flex: 1;
+}
+.cse-trust-callout__text h3 {
+  margin: 0 0 3px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+.cse-trust-callout__text p {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--cse-muted);
+}
+
+.cse-trust-callout__arrow {
+  flex-shrink: 0;
+  color: var(--cse-navy);
+}
+.cse-trust-callout__arrow svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ---------------------------- Responsive ---------------------------- */
+
+@media (max-width: 1180px) {
+  .cse-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .cse-content-grid {
+    grid-template-columns: 1fr;
+  }
+  .cse-side-stack {
+    position: static;
+  }
+}
+
+/* Nav collapses at its own, wider breakpoint: the logo + 7 links +
+   search + Sign In genuinely doesn't fit down to 980px (confirmed by
+   measurement — it overflowed at 1024px), independent of when the
+   hero itself needs to stack. */
+@media (max-width: 1120px) {
+  .cse-nav__links {
+    display: none;
+  }
+  .cse-nav__toggle {
+    display: inline-flex;
+  }
+  .cse-nav__links.is-open {
+    display: flex;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--cse-surface);
+    border-bottom: 1px solid var(--cse-border);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 12px 20px 18px;
+  }
+}
+
+@media (max-width: 980px) {
+  .cse-hero__grid {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+  .cse-hero__copy {
+    padding: 40px 20px 28px;
+  }
+  .cse-hero__visual {
+    min-height: 220px;
+  }
+  .cse-hero__overlay-copy {
+    right: 20px;
+    bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Logo + hamburger + search icon + Sign In is tight below ~430px —
+     confirmed by measurement (42-57px real overflow before this fix).
+     Trim gaps/padding and drop the tagline (the widest part of the
+     brand block, wider than the wordmark above it) rather than
+     shrinking anything down to an unreadable/untappable size. */
+  .cse-nav__bar {
+    gap: 12px;
+    padding: 12px 16px;
+  }
+  .cse-nav__tagline {
+    display: none;
+  }
+  .cse-nav__actions {
+    gap: 8px;
+  }
+  .cse-hero__visual {
+    min-height: 190px;
+  }
+  .cse-btn--primary {
+    padding: 10px 14px;
+  }
+}
+
+@media (max-width: 760px) {
+  .cse-container {
+    padding: 0 18px;
+  }
+  .cse-hero__heading {
+    font-size: 32px;
+    max-width: none;
+  }
+  .cse-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .cse-section-nav__row {
+    padding-bottom: 6px;
+  }
+  .cse-section-head {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .cse-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .cse-filter-field {
+    min-width: 0;
+  }
+  .cse-view-toggle-group {
+    margin-left: 0;
+    justify-content: space-between;
+  }
+  .cse-program-card {
+    flex-wrap: wrap;
+  }
+  .cse-program-card__thumb {
+    width: 100%;
+    height: 120px;
+  }
+  .cse-program-card__action {
+    display: none;
+  }
+  .cse-ftm__flow {
+    justify-content: flex-start;
+  }
+  .cse-trust-callout {
+    flex-wrap: wrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .civicsure-explorer * {
+    transition-duration: 0.01ms !important;
+  }
+}

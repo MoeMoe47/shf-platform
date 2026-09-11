@@ -13,6 +13,8 @@ function mapPublication(row: any) {
     tenant_id: row.tenant_id,
     organization_id: row.organization_id,
     publication_status: row.publication_status,
+    supersedes_publication_id: row.supersedes_publication_id,
+    is_current: row.is_current,
     published_by_user_id: row.published_by_user_id,
     published_at: row.published_at,
     projection_reference: row.projection_reference,
@@ -54,6 +56,7 @@ function mapProjection(row: any) {
 function mapPublicProjection(row: any) {
   if (!row) return null;
   return {
+    public_reference: row.projection_id,
     report_id: row.report_id,
     report_version: row.report_version,
     metric_label: row.metric_label,
@@ -67,6 +70,10 @@ function mapPublicProjection(row: any) {
     public_representation_type: row.public_representation_type,
     public_display_value: row.public_display_value,
     suppression_state: row.suppression_state,
+    // Retained for the public-boundary predicate; toPublicProjection strips
+    // these internal publication fields before returning the DTO.
+    source_type: row.source_type,
+    projection_status: row.projection_status,
     published_at: row.published_at,
   };
 }
@@ -88,20 +95,39 @@ export class ReportPublicationActionRepo {
     return mapPublication(result.rows[0]);
   }
 
+  async getCurrentPublication(reportId: string, scope: any, executor: any = { query }) {
+    const result = await executor.query(
+      `SELECT * FROM report_publications
+       WHERE report_id = $1 AND tenant_id = $2 AND organization_id = $3 AND is_current = TRUE
+       ORDER BY published_at DESC, publication_id DESC
+       LIMIT 1 FOR UPDATE`,
+      [reportId, scope.tenant_id, scope.organization_id],
+    );
+    return mapPublication(result.rows[0]);
+  }
+
+  async markNotCurrent(publicationId: string, executor: any = { query }) {
+    await executor.query("UPDATE report_publications SET is_current = FALSE, version = version + 1 WHERE publication_id = $1 AND is_current = TRUE", [publicationId]);
+  }
+
+  async markNotCurrentByAuthorization(authorizationId: string, executor: any = { query }) {
+    await executor.query("UPDATE report_publications SET is_current = FALSE, version = version + 1 WHERE publication_authorization_id = $1 AND is_current = TRUE", [authorizationId]);
+  }
+
   async createPublication(input: any, executor: any = { query }) {
     const result = await executor.query(
       `INSERT INTO report_publications (
         publication_id, publication_authorization_id, public_snapshot_id,
         snapshot_version, snapshot_hash, report_id, report_version, tenant_id,
         organization_id, publication_status, published_by_user_id, published_at,
-        projection_reference, idempotency_key
-      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'PUBLISHED',$10,NOW(),$11,$12)
+        projection_reference, idempotency_key, supersedes_publication_id, is_current
+      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'PUBLISHED',$10,NOW(),$11,$12,$13,TRUE)
       RETURNING *`,
       [
         input.publication_id, input.publication_authorization_id, input.public_snapshot_id,
         input.snapshot_version, input.snapshot_hash, input.report_id, input.report_version,
         input.tenant_id, input.organization_id, input.published_by_user_id,
-        input.projection_reference, input.idempotency_key,
+        input.projection_reference, input.idempotency_key, input.supersedes_publication_id || null,
       ],
     );
     return mapPublication(result.rows[0]);
@@ -149,7 +175,11 @@ export class ReportPublicationActionRepo {
     return result.rows.map(mapPublication);
   }
 
-  async listPublicProjections(reportId: string, reportVersion: number, executor: any = { query }) {
+  async listPublicProjections(reportId: string, reportVersion: number, scope: any = {}, executor: any = { query }) {
+    const params: any[] = [reportId, reportVersion];
+    const filters: string[] = [];
+    if (scope.organizationId) { params.push(scope.organizationId); filters.push(`AND organization_id = $${params.length}`); }
+    if (scope.jurisdiction) { params.push(scope.jurisdiction); filters.push(`AND geography_level = $${params.length}`); }
     const result = await executor.query(
       `SELECT projection_id, publication_id, public_snapshot_id, snapshot_version,
         snapshot_hash, report_id, report_version, metric_label,
@@ -162,9 +192,58 @@ export class ReportPublicationActionRepo {
          AND report_version = $2
          AND source_type = 'CANONICAL_PUBLICATION'
          AND projection_status = 'PUBLISHED'
-       ORDER BY published_at DESC, projection_id DESC`,
-      [reportId, reportVersion],
+         AND EXISTS (
+           SELECT 1
+           FROM report_publication_authorizations authz
+           WHERE authz.publication_authorization_id = (
+             SELECT publication_authorization_id
+             FROM report_publications publication
+             WHERE publication.publication_id = shf_public_impact_projections.publication_id
+           )
+             AND authz.status = 'PUBLICATION_AUTHORIZED'
+         )
+         ${filters.join("\n         ")}
+         AND EXISTS (
+           SELECT 1 FROM report_publications publication
+           WHERE publication.publication_id = shf_public_impact_projections.publication_id
+             AND publication.is_current = TRUE
+         )
+         ORDER BY published_at DESC, projection_id DESC`,
+      params,
     );
     return result.rows.map(mapPublicProjection);
+  }
+
+  async getPublicProjectionById(projectionId: string, executor: any = { query }) {
+    const result = await executor.query(
+      `SELECT projection_id, publication_id, public_snapshot_id,
+        snapshot_version, snapshot_hash, report_id, report_version,
+        metric_label, reporting_period_start, reporting_period_end,
+        reporting_period, reporting_period_label, data_as_of,
+        geography_level, program_granularity, public_representation_type,
+        public_display_value, suppression_state, source_type,
+        projection_status, published_at, created_at, version
+       FROM shf_public_impact_projections
+       WHERE projection_id = $1
+         AND source_type = 'CANONICAL_PUBLICATION'
+         AND projection_status = 'PUBLISHED'
+         AND EXISTS (
+           SELECT 1 FROM report_publication_authorizations authz
+           WHERE authz.publication_authorization_id = (
+             SELECT publication_authorization_id
+             FROM report_publications publication
+             WHERE publication.publication_id = shf_public_impact_projections.publication_id
+           )
+           AND authz.status = 'PUBLICATION_AUTHORIZED'
+         )
+         AND EXISTS (
+           SELECT 1 FROM report_publications publication
+           WHERE publication.publication_id = shf_public_impact_projections.publication_id
+             AND publication.is_current = TRUE
+         )
+       LIMIT 1`,
+      [projectionId],
+    );
+    return result.rows.map(mapPublicProjection)[0] || null;
   }
 }

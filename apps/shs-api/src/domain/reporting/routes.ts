@@ -13,6 +13,7 @@ import { ReportPublicDisclosurePolicyService } from "./report-public-disclosure-
 import { ReportPublicSnapshotService } from "./report-public-snapshot-service.js";
 import { ReportPublicationService } from "./report-publication-service.js";
 import { ProductReportService } from "./product-report-service.js";
+import { TrustedReportingRecoveryService } from "../trusted-reporting/recovery-service.js";
 
 const reportDraftService = new ReportDraftService();
 const reportArtifactService = new ReportArtifactService();
@@ -24,6 +25,7 @@ const reportPublicDisclosurePolicyService = new ReportPublicDisclosurePolicyServ
 const reportPublicSnapshotService = new ReportPublicSnapshotService();
 const reportPublicationService = new ReportPublicationService();
 const productReportService = new ProductReportService();
+const trustedReportingRecoveryService = new TrustedReportingRecoveryService();
 
 export function registerReportingRoutes(app: any) {
   app.use("/reporting", requireOrganizationServiceEntitlement("reporting"));
@@ -86,6 +88,25 @@ export function registerReportingRoutes(app: any) {
     }
   });
 
+  app.get("/public/assurance/projections", async (req: any, res: any) => {
+    try {
+      const items = await reportPublicationService.listPublicAssuranceProjections(req.query || {});
+      return res.json({ ok: true, data: { items } });
+    } catch (_err: any) {
+      return res.status(503).json({ ok: false, error: { code: "PUBLIC_ASSURANCE_UNAVAILABLE", message: "Public assurance data unavailable" } });
+    }
+  });
+
+  app.get("/public/assurance/projections/:projectionId", async (req: any, res: any) => {
+    try {
+      const item = await reportPublicationService.getPublicAssuranceProjection(req.params.projectionId);
+      if (!item) return res.status(404).json({ ok: false, error: { code: "PUBLIC_ASSURANCE_NOT_FOUND", message: "Public assurance projection not found" } });
+      return res.json({ ok: true, data: item });
+    } catch (_err: any) {
+      return res.status(503).json({ ok: false, error: { code: "PUBLIC_ASSURANCE_UNAVAILABLE", message: "Public assurance data unavailable" } });
+    }
+  });
+
   app.post(
     "/reporting/publication-authorizations",
     requirePermission(SHS_SECURITY_PERMISSIONS.REPORTS_PUBLICATION_AUTHORIZE),
@@ -115,6 +136,18 @@ export function registerReportingRoutes(app: any) {
       const authorization = await reportPublicationService.getAuthorization(req.params.authorizationId, req.user);
       if (!authorization) return res.status(404).json({ ok: false, error: { code: "REPORT_PUBLICATION_AUTHORIZATION_NOT_FOUND", message: "Publication authorization not found" } });
       return res.json({ ok: true, data: authorization });
+    },
+  );
+  app.post(
+    "/reporting/publication-authorizations/:authorizationId/revoke",
+    requirePermission(SHS_SECURITY_PERMISSIONS.REPORTS_PUBLICATION_AUTHORIZE),
+    async (req: any, res: any) => {
+      try {
+        const result = await reportPublicationService.revokeAuthorization(req.params.authorizationId, req.user, req.body?.rationale);
+        return res.status(result.replayed ? 200 : 200).json({ ok: true, data: result.authorization, idempotent_replay: result.replayed });
+      } catch (err: any) {
+        return res.status(400).json({ ok: false, error: { code: "REPORT_PUBLICATION_REVOCATION_REJECTED", message: err.message || "Publication revocation rejected" } });
+      }
     },
   );
   app.post(
@@ -595,6 +628,45 @@ export function registerReportingRoutes(app: any) {
         return res.status(409).json({ ok: false, error: { code: "REPORT_DRAFT_UPDATE_REJECTED", message: err.message || "Report draft update rejected" } });
       }
     }
+  );
+
+  app.post(
+    "/reporting/drafts/:reportId/review",
+    requirePermission(SHS_SECURITY_PERMISSIONS.REPORTS_PUBLICATION_AUTHORIZE),
+    async (req: any, res: any) => {
+      try {
+        const report = await reportDraftService.transitionReview(req.params.reportId, req.body?.status, req.body?.rationale, req.user);
+        return res.json({ ok: true, data: report });
+      } catch (err: any) {
+        return res.status(409).json({ ok: false, error: { code: "REPORT_REVIEW_REJECTED", message: err.message || "Report review rejected" } });
+      }
+    },
+  );
+
+  app.post(
+    "/reporting/drafts/:reportId/correction",
+    requirePermission(SHS_SECURITY_PERMISSIONS.REPORTS_PREVIEW),
+    async (req: any, res: any) => {
+      try {
+        const report = await reportDraftService.beginCorrection(req.params.reportId, req.body?.rationale, req.user);
+        return res.json({ ok: true, data: report });
+      } catch (err: any) {
+        return res.status(409).json({ ok: false, error: { code: "REPORT_CORRECTION_REJECTED", message: err.message || "Report correction rejected" } });
+      }
+    },
+  );
+
+  app.post(
+    "/reporting/outbox/:outboxEventId/recover",
+    requirePermission(SHS_SECURITY_PERMISSIONS.REPORTS_PUBLICATION_AUTHORIZE),
+    async (req: any, res: any) => {
+      try {
+        const event = await trustedReportingRecoveryService.recoverQuarantined(req.params.outboxEventId, req.user, req.body?.reason);
+        return res.json({ ok: true, data: event });
+      } catch (err: any) {
+        return res.status(409).json({ ok: false, error: { code: "REPORT_OUTBOX_RECOVERY_REJECTED", message: err.message || "Outbox recovery rejected" } });
+      }
+    },
   );
 
   app.get(

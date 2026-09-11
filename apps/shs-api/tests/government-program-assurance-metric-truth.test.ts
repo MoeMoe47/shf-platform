@@ -57,6 +57,18 @@ test("Truth promotion requires passed verification and is denied to AI, Reportin
   await assert.rejects(() => sut.determineTruth({ ...user, actor_type: "ai" }, { metricResultId: repo.result.metric_result_id }), /GPA_TRUTH_ACTOR_DENIED/);
 });
 
+test("accepted Truth promotion publishes the existing Agent Fabric outbox handoff", async () => {
+  const repo = new MemoryRepo();
+  const events: any[] = [];
+  const sut = new MetricTruthService(repo as any, new MemoryVerificationRepo() as any, null, { enqueue: async (event: any) => { events.push(event); } } as any);
+  await sut.calculate(user, { metricId: "retention", metricVersion: 1, denominatorValue: 1, inputs: [{ claimId: "claim-1", verificationId: "verification-1", value: 1, verificationLevel: "V2", provenanceReference: "prov-1", sourceAuthorityReference: "authority-1" }] });
+  await sut.determineTruth(user, { metricResultId: repo.result.metric_result_id });
+  assert.equal(events.length, 1);
+  assert.equal(events[0].event_type, "government_assurance.truth_determination.accepted");
+  assert.equal(events[0].destination, "agent-fabric");
+  assert.equal(events[0].payload.truth_fact_id, repo.truth.truth_fact_id);
+});
+
 test("unresolved blocking contradiction prevents Truth promotion", async () => {
   const repo = new MemoryRepo(); const verificationRepo = new MemoryVerificationRepo(); verificationRepo.listContradictions = async () => [{ status: "OPEN", materiality: "BLOCKING" }];
   const sut = new MetricTruthService(repo as any, verificationRepo as any, null);

@@ -1,4 +1,5 @@
 import React from "react";
+import { href } from "@/router/paths.js";
 export default function Drawer({ metro, onClose }) {
   return (
     <aside className={`ai-drawer ${metro ? "open" : ""}`} aria-live="polite" aria-label="Region details">
@@ -12,10 +13,10 @@ export default function Drawer({ metro, onClose }) {
           <div className="ai-grid">
             <Stat label="Growth index" value={metro.idx} color={metro.color} />
             <Stat label="Median pay" value="$—" />
-            <Stat label="Top roles" value="(mock) Data-Center Tech, Cyber Analyst, STNA" />
+            <Stat label="Top roles" value="Sample: Data-Center Tech, Cyber Analyst, STNA" />
           </div>
           <div className="ai-cta">
-            <a className="ai-btn primary" href="#/career">Train with SHF</a>
+            <a className="ai-btn primary" href={href.career("/")}>Explore SHF Career Center</a>
             <button className="ai-btn" onClick={() => alert("Subscribe flow")}>Get weekly local pulse</button>
           </div>
         </>

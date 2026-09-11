@@ -70,7 +70,7 @@ export default function CurriculumFooter() {
             <FooterLink to="/curriculum/asl/dashboard">Curriculum</FooterLink>
             <FooterLink to="/curriculum/accessibility">Accessibility</FooterLink>
             <FooterLink to="/curriculum/live-sessions">Live Sessions</FooterLink>
-            <FooterLink to={href.career("/dashboard")} external>Career Center</FooterLink>
+            <FooterLink to={href.career("/")} external>Career Center</FooterLink>
           </nav>
 
           <nav className="ld-footerNav" aria-label="Support links">

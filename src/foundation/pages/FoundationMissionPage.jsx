@@ -64,7 +64,7 @@ function Footer() {
       <div className="shf-mission-footer-bottom">
         <a href="#/privacy">Privacy Policy</a>
         <span />
-        <a href="#/careers">Careers</a>
+        <a href="/career.html#/">Careers</a>
         <span />
         <strong>Silicon Heartland</strong>
       </div>

@@ -54,6 +54,7 @@ function scope(actor: CredentialActor) {
 export async function createCredentialDefinition(actor: CredentialActor, input: {
   slug: string; name: string; credentialType: string; issuingAuthority: string; description?: string;
   careerId?: string; requiresAcceptedCapstone?: boolean; validityPeriodMonths?: number; renewalWindowDays?: number;
+  eligibilityPolicyVersion?: string; eligibilityRequirements?: Record<string, unknown>;
 }): Promise<CredentialDefinition> {
   if (!hasPermission(actor.permissions, SHS_SECURITY_PERMISSIONS.CREDENTIAL_DEFINITION_MANAGE)) {
     throw new CredentialError("FORBIDDEN", "Only an authorized admin or program manager may define Credentials.", 403);
@@ -85,6 +86,8 @@ export async function createCredentialDefinition(actor: CredentialActor, input: 
     requiresAcceptedCapstone: !!input.requiresAcceptedCapstone,
     validityPeriodMonths: input.validityPeriodMonths ?? null,
     renewalWindowDays: input.renewalWindowDays ?? null,
+    eligibilityPolicyVersion: input.eligibilityPolicyVersion,
+    eligibilityRequirements: input.eligibilityRequirements,
     createdByUserId: userId,
   });
 }
@@ -98,11 +101,13 @@ export async function listCredentialDefinitions(): Promise<CredentialDefinition[
 export interface EligibilityResult {
   credentialDefinitionId: string;
   eligible: boolean;
-  reason: "NO_REQUIREMENT_DEFINED" | "ACCEPTED_CAPSTONE_FOUND" | "ACCEPTED_CAPSTONE_MISSING";
+  reason: "NO_REQUIREMENT_DEFINED" | "ACCEPTED_CAPSTONE_FOUND" | "ACCEPTED_CAPSTONE_MISSING" | "LEARNER_RESULT_REQUIREMENTS_MET" | "LEARNER_RESULT_REQUIREMENTS_MISSING" | "LEARNER_RESULT_VERIFICATION_REQUIRED";
+  policyVersion?: string;
+  sourceReferences?: unknown[];
 }
 
-export async function isEligibleForCredential(actor: CredentialActor, credentialDefinitionId: string): Promise<EligibilityResult> {
-  const { organizationId, userId } = scope(actor);
+export async function isEligibleForCredential(actor: CredentialActor, credentialDefinitionId: string, learnerUserId = actor.user_id): Promise<EligibilityResult> {
+  const { organizationId } = scope(actor);
   const definition = await definitionRepo.getById(credentialDefinitionId);
   if (!definition) throw new CredentialError("CREDENTIAL_DEFINITION_NOT_FOUND", "Credential Definition not found.", 404);
   if (!definition.requiresAcceptedCapstone) {
@@ -111,13 +116,33 @@ export async function isEligibleForCredential(actor: CredentialActor, credential
     // an error; it truthfully reports that eligibility isn't
     // automatically determinable, matching the phase's deliberate
     // decision not to build a generic, unproven requirements engine.
-    return { credentialDefinitionId, eligible: false, reason: "NO_REQUIREMENT_DEFINED" };
+    if (definition.eligibilityPolicyVersion !== "curriculum-learner-result.v1") return { credentialDefinitionId, eligible: false, reason: "NO_REQUIREMENT_DEFINED", policyVersion: definition.eligibilityPolicyVersion };
   }
-  const hasCapstone = await learnerCredentialRepo.hasAcceptedCapstone(organizationId, userId);
+  if (definition.eligibilityPolicyVersion === "curriculum-learner-result.v1") {
+    const requirements = definition.eligibilityRequirements || {};
+    const competencyId = String(requirements.competencyId || "").trim();
+    const courseId = String(requirements.courseId || "").trim();
+    const masteryStatus = String(requirements.masteryStatus || "MASTERED").trim();
+    const verificationStatus = String(requirements.verificationStatus || "VERIFIED").trim();
+    if (!competencyId) throw new CredentialError("CREDENTIAL_POLICY_INVALID", "Curriculum learner-result policy requires competencyId.", 400);
+    const result = await query(`SELECT m.mastery_id, m.mastery_status, m.verification_status, m.source_outcome_id, o.course_id, o.evidence_ids
+      FROM curriculum_learner_mastery m JOIN curriculum_learner_outcomes o ON o.outcome_id=m.source_outcome_id
+      WHERE m.organization_id=$1 AND m.tenant_id=$2 AND m.learner_user_id=$3 AND m.competency_id=$4
+        AND m.mastery_status=$5 AND m.verification_status=$6 AND o.status='CURRENT' AND ($7='' OR o.course_id=$7)
+      ORDER BY m.determined_at DESC LIMIT 1`, [organizationId, `tenant:${organizationId}`, learnerUserId, competencyId, masteryStatus, verificationStatus, courseId]);
+    if (!result.rows[0]) {
+      const mastery = await query(`SELECT 1 FROM curriculum_learner_mastery WHERE organization_id=$1 AND tenant_id=$2 AND learner_user_id=$3 AND competency_id=$4 AND mastery_status=$5 LIMIT 1`, [organizationId, `tenant:${organizationId}`, learnerUserId, competencyId, masteryStatus]);
+      return { credentialDefinitionId, eligible: false, reason: mastery.rows[0] ? "LEARNER_RESULT_VERIFICATION_REQUIRED" : "LEARNER_RESULT_REQUIREMENTS_MISSING", policyVersion: definition.eligibilityPolicyVersion, sourceReferences: [] };
+    }
+    const row = result.rows[0];
+    return { credentialDefinitionId, eligible: true, reason: "LEARNER_RESULT_REQUIREMENTS_MET", policyVersion: definition.eligibilityPolicyVersion, sourceReferences: [{ masteryId: row.mastery_id, outcomeId: row.source_outcome_id, evidenceIds: row.evidence_ids || [], courseId: row.course_id }] };
+  }
+  const hasCapstone = await learnerCredentialRepo.hasAcceptedCapstone(organizationId, learnerUserId);
   return {
     credentialDefinitionId,
     eligible: hasCapstone,
     reason: hasCapstone ? "ACCEPTED_CAPSTONE_FOUND" : "ACCEPTED_CAPSTONE_MISSING",
+    policyVersion: definition.eligibilityPolicyVersion,
   };
 }
 
@@ -135,9 +160,15 @@ export async function issueCredential(actor: CredentialActor, input: { credentia
   const capstone = definition.requiresAcceptedCapstone
     ? await learnerCredentialRepo.getAcceptedCapstone(organizationId, input.learnerUserId)
     : null;
+  const eligibility = (definition.requiresAcceptedCapstone || definition.eligibilityPolicyVersion === "curriculum-learner-result.v1")
+    ? await isEligibleForCredential(actor, input.credentialDefinitionId, input.learnerUserId)
+    : null;
+  if (eligibility && !eligibility.eligible) throw new CredentialError("CREDENTIAL_NOT_ELIGIBLE", eligibility.reason, 403);
   const provenance = definition.requiresAcceptedCapstone
     ? { policy: "ACCEPTED_CAPSTONE", sourceType: "PROJECT_SUBMISSION", sourceRecordId: capstone?.submissionId || null, projectId: capstone?.projectId || null }
-    : { policy: "MANUAL_INSTITUTIONAL_ISSUANCE" };
+    : definition.eligibilityPolicyVersion === "curriculum-learner-result.v1"
+      ? { policy: definition.eligibilityPolicyVersion, policyVersion: definition.eligibilityPolicyVersion, sourceReferences: eligibility?.sourceReferences || [] }
+      : { policy: "MANUAL_INSTITUTIONAL_ISSUANCE", policyVersion: definition.eligibilityPolicyVersion };
   if (definition.requiresAcceptedCapstone && !capstone) {
     throw new CredentialError("CREDENTIAL_NOT_ELIGIBLE", "The learner has not met this Credential's accepted-capstone requirement.", 403);
   }

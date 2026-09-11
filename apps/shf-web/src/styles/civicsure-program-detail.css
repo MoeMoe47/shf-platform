@@ -1,0 +1,449 @@
+/* ------------------------------------------------------------------
+   CivicSure Program Detail — public-facing page frame.
+   Same precedent as civicsure-public-footer.css: this page mounts
+   alongside (not necessarily nested inside) civicsure-explorer.css's
+   `.civicsure-explorer` root, so it redeclares the same bounded
+   --cse-* token set on its own `.civicsure-program-detail` root
+   rather than depending on that other class being present. Shared
+   primitives (cse-btn, cse-pill, cse-tag, cse-card, cse-metric-card,
+   cse-container, cse-nav, the skip link, icon sizing inside cse-tab-
+   style controls) are intentionally reused from civicsure-explorer.css
+   rather than redefined here — this file only adds page-specific
+   layout. FRAME ONLY — see docs/ui/CIVICSURE_PROGRAM_DETAIL_FRAME.md.
+   ------------------------------------------------------------------ */
+
+.civicsure-program-detail {
+  --cse-bg: #eef3f9;
+  --cse-surface: #ffffff;
+  --cse-text: #16223a;
+  --cse-muted: #566380;
+  --cse-border: #d7e3f0;
+  --cse-navy: #102a52;
+  --cse-navy-hover: #0b1f3d;
+  --cse-blue: #1857b0;
+  --cse-blue-soft: #dce9fb;
+  --cse-blue-pale: #eef5fd;
+  --cse-success: #15804a;
+  --cse-success-soft: #ddf5e8;
+  --cse-warning: #9a5b12;
+  --cse-warning-soft: #fbedd4;
+
+  background: var(--cse-surface);
+  color: var(--cse-text);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.civicsure-program-detail,
+.civicsure-program-detail *,
+.civicsure-program-detail *::before,
+.civicsure-program-detail *::after {
+  box-sizing: border-box;
+}
+
+.civicsure-program-detail a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.civicsure-program-detail :focus-visible {
+  outline: 3px solid var(--cse-blue);
+  outline-offset: 2px;
+}
+
+.civicsure-program-detail button {
+  font-family: inherit;
+}
+
+/* .cse-metric-card--amber moved to civicsure-explorer.css — shared
+   primitive now (used here and by County Detail). */
+
+/* ---------------------------- Header ---------------------------- */
+
+.cse-pd-header {
+  background: var(--cse-surface);
+  border-bottom: 1px solid var(--cse-border);
+  padding: 20px 0 24px;
+}
+
+.cse-pd-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 700 13.5px/1 inherit;
+  color: var(--cse-blue);
+  margin-bottom: 16px;
+}
+.cse-pd-back__icon {
+  width: 16px;
+  height: 16px;
+}
+.cse-pd-back:hover {
+  text-decoration: underline;
+}
+
+.cse-pd-header__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.cse-pd-header__title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cse-pd-header__title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--cse-navy);
+  letter-spacing: -0.01em;
+}
+
+.cse-pd-header__meta {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: var(--cse-muted);
+}
+
+.cse-pd-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.cse-pd-header__actions .cse-btn svg {
+  width: 16px;
+  height: 16px;
+}
+.cse-pd-header__actions button[aria-disabled="true"] {
+  color: var(--cse-muted);
+  cursor: not-allowed;
+}
+
+/* ---------------------------- Summary metrics ---------------------------- */
+
+.cse-pd-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  padding: 28px 0 8px;
+}
+
+/* ---------------------------- Tabs ---------------------------- */
+
+.cse-pd-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  border-bottom: 1px solid var(--cse-border);
+  margin: 20px 0 0;
+}
+
+.cse-pd-tab {
+  flex-shrink: 0;
+  padding: 12px 16px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: var(--cse-muted);
+  font: 600 14.5px/1 inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.cse-pd-tab:hover {
+  color: var(--cse-navy);
+}
+.cse-pd-tab.is-active {
+  color: var(--cse-navy);
+  font-weight: 700;
+  border-bottom-color: var(--cse-blue);
+}
+
+/* ---------------------------- Overview layout ---------------------------- */
+
+.cse-pd-overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 28px;
+  padding: 28px 0 72px;
+  align-items: start;
+}
+
+.cse-pd-overview__main {
+  min-width: 0;
+}
+
+.cse-pd-overview__side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.cse-pd-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cse-pd-fact__heading {
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.cse-pd-fact__body {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--cse-text);
+}
+
+.cse-pd-summary-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 4px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--cse-border);
+}
+.cse-pd-summary-row dt {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--cse-muted);
+  margin: 0 0 4px;
+}
+.cse-pd-summary-row dd {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+/* ---------------------------- Program image ---------------------------- */
+
+.cse-pd-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 160px;
+  border-radius: 12px;
+  background: var(--cse-blue-soft);
+  color: var(--cse-blue);
+  border: 1px solid var(--cse-border);
+}
+.cse-pd-image svg {
+  width: 44px;
+  height: 44px;
+}
+
+/* ---------------------------- Why this status? ---------------------------- */
+
+.cse-pd-why__heading {
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.cse-pd-why__intro {
+  margin: 0 0 14px;
+  font-size: 13.5px;
+  color: var(--cse-muted);
+}
+
+.cse-pd-why__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cse-pd-why__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--cse-bg);
+}
+
+.cse-pd-why__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--cse-success-soft);
+  color: var(--cse-success);
+}
+.cse-pd-why__icon svg {
+  width: 14px;
+  height: 14px;
+}
+.cse-pd-why__item--warning .cse-pd-why__icon {
+  background: var(--cse-warning-soft);
+  color: var(--cse-warning);
+}
+
+.cse-pd-why__label {
+  flex: 1;
+  font-size: 13.5px;
+  color: var(--cse-text);
+}
+
+.cse-pd-why__status {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cse-success);
+}
+.cse-pd-why__item--warning .cse-pd-why__status {
+  color: var(--cse-warning);
+}
+
+/* ---------------------------- Quick links ---------------------------- */
+
+.cse-pd-quicklinks__heading {
+  margin: 0 0 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.cse-pd-quicklinks__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+button.cse-pd-quicklinks__link,
+span.cse-pd-quicklinks__link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 8px;
+  border: 0;
+  background: transparent;
+  color: var(--cse-blue);
+  font: 700 14px/1 inherit;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 8px;
+}
+button.cse-pd-quicklinks__link svg,
+span.cse-pd-quicklinks__link svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+button.cse-pd-quicklinks__link:hover {
+  background: var(--cse-blue-pale);
+}
+span.cse-pd-quicklinks__link--placeholder {
+  color: var(--cse-muted);
+  cursor: not-allowed;
+}
+
+/* ---------------------------- Placeholder tab ---------------------------- */
+
+.cse-pd-placeholder {
+  margin: 28px 0 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  max-width: 60ch;
+}
+.cse-pd-placeholder__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--cse-blue-soft);
+  color: var(--cse-blue);
+}
+.cse-pd-placeholder__icon svg {
+  width: 20px;
+  height: 20px;
+}
+.cse-pd-placeholder__heading {
+  margin: 4px 0 0;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+.cse-pd-placeholder__body {
+  margin: 0 0 8px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--cse-muted);
+}
+
+/* ---------------------------- Not found ---------------------------- */
+
+.cse-pd-not-found {
+  padding: 72px 0;
+  max-width: 60ch;
+}
+.cse-pd-not-found h1 {
+  margin: 0 0 10px;
+  font-size: 26px;
+  color: var(--cse-navy);
+}
+.cse-pd-not-found p {
+  margin: 0 0 20px;
+  color: var(--cse-muted);
+}
+
+/* ---------------------------- Responsive ---------------------------- */
+
+@media (max-width: 1180px) {
+  .cse-pd-metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .cse-pd-overview {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .cse-pd-header__row {
+    flex-direction: column;
+  }
+  .cse-pd-header__actions {
+    flex-wrap: wrap;
+  }
+  .cse-pd-metrics {
+    grid-template-columns: 1fr;
+  }
+  .cse-pd-summary-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .civicsure-program-detail * {
+    transition-duration: 0.01ms !important;
+  }
+}

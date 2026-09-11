@@ -1,6 +1,9 @@
 import { query } from "../../../db/client.js";
 import { hasPermission, SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
 import { assuranceScope, type AssuranceActor } from "../model/government-assurance.js";
+import { ReportPublicationActionRepo } from "../../reporting/report-publication-action-repo.js";
+import { requirePublicScope, toPublicProjection, PUBLIC_PROJECTION_AUTHORITY } from "../adapters/public-projection-boundary.js";
+import { getPublicReportGovernanceRegistration } from "../../reporting/report-public-governance-registry.js";
 
 function actor(input: any): AssuranceActor {
   return {
@@ -32,6 +35,7 @@ async function sumFunding(scope: any, type: string, status?: string) {
 }
 
 export class PilotReportingService {
+  constructor(private publicProjections = new ReportPublicationActionRepo()) {}
   async dashboard(input: any) {
     const { scope } = requirePermission(input, SHS_SECURITY_PERMISSIONS.GOVERNMENT_ASSURANCE_PROVIDER_VIEW);
     const [claims, verifiedClaims, providers, programs, truth, findings, reconciliations, overdueActions, audits, sourceSystems, staleSources, plans, fundingAwarded, fundingObligated, fundingVerified] = await Promise.all([
@@ -64,8 +68,30 @@ export class PilotReportingService {
     return { status, configuration, blockers, checks: checks.map(([code, label, value]) => ({ code, label, count: value })), generatedAt: new Date().toISOString() };
   }
 
-  async publicSummary() {
-    const result = await query("SELECT truth_fact_id, fact_type, subject_type, subject_reference, fact_value, unit_value_type, verification_level, accepted_at FROM gpa_truth_facts WHERE status='ACCEPTED' AND public_approval_status='PUBLIC_APPROVED' ORDER BY accepted_at DESC");
-    return { items: result.rows, generatedAt: new Date().toISOString(), disclosure: "PUBLIC_APPROVED_TRUTH_ONLY" };
+  async publicSummary(input: any = {}) {
+    // Public callers without a declared public scope receive a safe empty
+    // projection rather than an internal error. A public record is never
+    // inferred from an omitted scope.
+    let scope: any;
+    try {
+      scope = requirePublicScope(input);
+    } catch (error: any) {
+      if (String(error?.message || "") !== "PUBLIC_PROJECTION_SCOPE_REQUIRED") throw error;
+      return { items: [], generatedAt: new Date().toISOString(), availability: "NOT_PUBLISHED", disclosure: PUBLIC_PROJECTION_AUTHORITY, scope: { jurisdiction: null } };
+    }
+    const reportId = String(input?.reportId || input?.report_id || "").trim();
+    const reportVersion = Number(input?.reportVersion || input?.report_version || 0);
+    if (!reportId || !Number.isInteger(reportVersion) || reportVersion < 1) {
+      return { items: [], generatedAt: new Date().toISOString(), availability: "NOT_PUBLISHED", disclosure: PUBLIC_PROJECTION_AUTHORITY, scope: { jurisdiction: scope.jurisdiction || null } };
+    }
+    // A projection row is not sufficient by itself. The report family must be
+    // registered by Reporting/Public Disclosure before the public GPA route
+    // will address it.
+    if (!getPublicReportGovernanceRegistration(reportId, reportVersion)) {
+      return { items: [], generatedAt: new Date().toISOString(), availability: "NOT_PUBLISHED", disclosure: PUBLIC_PROJECTION_AUTHORITY, scope: { jurisdiction: scope.jurisdiction || null } };
+    }
+    const rows = await this.publicProjections.listPublicProjections(reportId, reportVersion, scope);
+    const items = rows.map(toPublicProjection).filter(Boolean);
+    return { items, generatedAt: new Date().toISOString(), availability: items.length ? "PUBLISHED" : "NOT_PUBLISHED", disclosure: PUBLIC_PROJECTION_AUTHORITY, scope: { jurisdiction: scope.jurisdiction || null } };
   }
 }

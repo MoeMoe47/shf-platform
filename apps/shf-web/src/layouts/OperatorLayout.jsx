@@ -16,6 +16,11 @@ export default function OperatorLayout({ children }) {
           <a href="#/operator">Dashboard</a>
           <a href="#/operator/programs">Programs</a>
           <a href="#/operator/cases">Cases</a>
+          <a href="#/operator/services">Services</a>
+          <a href="#/operator/agreements">Agreements</a>
+          <a href="#/operator/impact-attribution">Impact Attribution</a>
+          <a href="#/operator/onboarding">Onboarding</a>
+          <a href="#/operator/funding">Funding</a>
           <a href="#/operator/government-assurance">Government Assurance</a>
         </nav>
       </aside>

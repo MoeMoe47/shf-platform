@@ -6,7 +6,7 @@ export const foundationApps = [
     id: "career",
     name: "Career Center",
     tagline: "Plan careers, track skills, and prove readiness.",
-    href: "/career.html#/dashboard",
+    href: "/career.html#/",
     category: "Students",
     featured: true,
 

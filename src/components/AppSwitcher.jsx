@@ -8,7 +8,7 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 
 const APPS = [
-  { key: "career", label: "Career", href: "/career.html#/dashboard", icon: "🎯" },
+  { key: "career", label: "Career", href: "/career.html#/", icon: "🎯" },
   { key: "curriculum", label: "Curriculum", href: "/curriculum.html#/", icon: "📚" },
   { key: "sales", label: "Sales", href: "/sales.html#/sales/dashboard", icon: "📈" },
   { key: "arcade", label: "Arcade", href: "/arcade.html#/dashboard", icon: "🕹️" },

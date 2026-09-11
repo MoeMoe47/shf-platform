@@ -17,6 +17,7 @@ function assessmentResultFromRow(row: any): AssessmentResult {
     unitStableKey: row.unit_stable_key,
     lessonStableKey: row.lesson_stable_key,
     assessmentDefinitionId: row.assessment_definition_id,
+    attemptNumber: row.attempt_number == null ? null : Number(row.attempt_number),
     answers: Array.isArray(row.answers) ? row.answers : [],
     score: row.score == null ? null : Number(row.score),
     maxScore: row.max_score == null ? null : Number(row.max_score),
@@ -133,6 +134,18 @@ export class ActivityDomainRepo {
          AND curriculum_release_id = $4 AND lesson_stable_key = $5 AND assessment_definition_id = $6
          AND passed = true AND needs_review = false
        ORDER BY created_at ASC LIMIT 1`,
+      [organizationId, learnerUserId, assignmentId, curriculumReleaseId, lessonStableKey, assessmentDefinitionId],
+    );
+    return res.rows[0] ? assessmentResultFromRow(res.rows[0]) : null;
+  }
+
+  async latestAssessmentResult(organizationId: string, learnerUserId: string, assignmentId: string, curriculumReleaseId: string, lessonStableKey: string, assessmentDefinitionId: string): Promise<AssessmentResult | null> {
+    const res = await this.dbQuery(
+      `SELECT r.*, a.attempt_number FROM assessment_results r
+       JOIN assessment_attempts a ON a.assessment_attempt_id = r.assessment_attempt_id
+       WHERE r.organization_id = $1 AND r.learner_user_id = $2 AND r.assignment_id = $3
+         AND r.curriculum_release_id = $4 AND r.lesson_stable_key = $5 AND r.assessment_definition_id = $6
+       ORDER BY a.attempt_number DESC LIMIT 1`,
       [organizationId, learnerUserId, assignmentId, curriculumReleaseId, lessonStableKey, assessmentDefinitionId],
     );
     return res.rows[0] ? assessmentResultFromRow(res.rows[0]) : null;

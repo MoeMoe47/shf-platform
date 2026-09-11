@@ -1,0 +1,750 @@
+/* ------------------------------------------------------------------
+   OAS-1 — official standards-entry page.
+   Loaded alongside oas-landing.css (tokens, header, footer, buttons,
+   .oas__eyebrow / .oas__rule / .oas__container / .oas__planned are all
+   reused as-is from there). Everything in this file is page-specific:
+   the formal hero, publication-cover artwork, quick facts strip,
+   coverage list, specification table of contents, and access/download
+   states — none of which exist on the OAS landing page.
+   ------------------------------------------------------------------ */
+
+.oas1 {
+  /* Rust is this page's own accent/hero color — distinct from the
+     landing page's gold/amber-led palette, per the approved OAS-1 mock.
+     Kept local to .oas1 rather than added to the shared root tokens in
+     oas-landing.css, since the landing page doesn't use it.
+
+     Centralized OAS-1 typography/color tokens (2026-09-05 fidelity
+     pass): the shared oas-landing.css tokens (--oas-ink, --oas-muted,
+     etc.) are tuned for the landing page's lighter editorial palette
+     and are used by BOTH OAS pages, so this page defines its own richer
+     set rather than editing the shared ones — every rule below that
+     wants the "premium institutional publication" look reaches for an
+     --oas1-* token instead of a shared --oas-* one or a one-off hex. */
+  --oas1-rust: #c85b2d;
+  --oas1-rust-deep: #ab4220;
+  --oas1-rust-rgb: 200, 91, 45;
+  --oas1-ink: #201510;
+  --oas1-body: #4f433b;
+  --oas1-muted: #7d6e62;
+  --oas1-soft-fill: #f6dfcf;
+  --oas1-ivory: #f6efe4;
+  --oas1-hero-light: #f8f3ec;
+  --oas1-divider: rgba(32, 21, 16, 0.13);
+  /* Hero gradient midpoints — a deep bronze and a warm copper, added so
+     the espresso-to-rust sweep has two real intermediate stops instead
+     of jumping from a muddy --oas-venus-deep straight to rust-deep. */
+  --oas1-bronze: #6b4020;
+  --oas1-copper: #c97a3f;
+}
+
+.oas1-icon {
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------------------------- Header active state ---------------------------- */
+
+/* Header height compression (this page only) — .oas-header__bar is the
+   SHARED header bar also used by the OAS landing page; its own rule in
+   oas-landing.css is left untouched. Scoped under .oas1 (present only
+   on this page's root) so the landing page's header is unaffected. */
+/* Measured against the approved mock: header total height there is
+   ~65px against a ~48px Venus mark (a ~1.35x ratio). Applied to this
+   page's own 54px mark, that's a ~73px header — down from the previous
+   80px, which came from unscoped 13px top/bottom padding that read as
+   excess "air" above/below the row rather than the mock's tighter
+   frame. */
+.oas1 .oas-header__bar {
+  padding: 10px 32px;
+}
+
+/* Header brand lockup (this page only) — larger, more institutional
+   than the landing page's default: bigger Venus mark (via the size prop
+   in OAS1Page.jsx), more breathing room before the wordmark, a
+   stronger/darker OAS wordmark, and the tagline recolored to this
+   page's rust accent instead of the landing page's bronze. Gap trimmed
+   slightly (18px -> 16px) for this compression pass. */
+.oas1 .oas-header__brand {
+  gap: 16px;
+}
+
+/* Nav item spacing, scoped to this page only — the shared 30px gap
+   (oas-landing.css) reads slightly looser than the mock's own ~26-28px
+   rhythm at this page's 8-item nav length. */
+.oas1 .oas-header__nav {
+  gap: 26px;
+}
+
+/* The header CTA specifically (not the hero buttons, which share the
+   same .oas1-btn--rust class but live outside .oas-header__cta) —
+   trimmed padding so the button integrates into the tighter header
+   rhythm instead of feeling oversized against the now-shorter row. */
+.oas1 .oas-header__cta .oas-btn {
+  padding: 11px 20px;
+}
+
+.oas1 .oas-header__mark {
+  font-size: 30px;
+  color: var(--oas1-ink);
+}
+
+.oas1 .oas-header__tagline {
+  margin-top: 4px;
+}
+
+.oas1 .oas-header__tagline span:first-child {
+  color: var(--oas1-rust);
+  font-size: 11.5px;
+}
+
+.oas1-nav-active {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--oas1-ink);
+  padding: 6px 0;
+  border-bottom: 2px solid var(--oas1-rust);
+}
+
+/* Only the current-page indicator ("OAS-1") reads in full dark ink; every
+   other nav entry — real links (About, Governance) and not-yet-built
+   PlannedItems alike — recedes to one warm gray-brown so the active
+   state is unambiguous and the row feels calmer/more premium overall. */
+.oas1 .oas-header__nav a,
+.oas1 .oas-header__nav button.oas__planned {
+  color: var(--oas1-muted);
+}
+.oas1 .oas-header__nav a:hover {
+  color: var(--oas1-rust);
+}
+
+/* Page-specific "rust" button — used for both the header CTA and the
+   hero's primary CTA, matching the mock's filled rust/orange button
+   (the landing page's own primary button is dark ink, not rust). */
+.oas-btn.oas1-btn--rust {
+  background: var(--oas1-rust);
+  color: var(--oas-white);
+  font-weight: 700;
+}
+.oas-btn.oas1-btn--rust:hover {
+  background: var(--oas1-rust-deep);
+}
+
+.oas-btn.oas1-btn--ghost-on-dark {
+  background: transparent;
+  color: var(--oas1-hero-light);
+  border-color: rgba(248, 243, 236, 0.62);
+  font-weight: 700;
+}
+.oas-btn.oas1-btn--ghost-on-dark:hover {
+  background: rgba(248, 243, 236, 0.14);
+  border-color: var(--oas1-hero-light);
+}
+
+/* ---------------------------- Hero ---------------------------- */
+/* Deliberately NOT the cinematic Venus-photo treatment used on the OAS
+   landing page — this is a formal document-entry hero. Background is
+   an abstract charcoal-to-rust gradient (no full-bleed photograph), and
+   the right side carries a small, CSS-rendered publication-cover card
+   rather than a full-bleed image panel. */
+.oas1-hero {
+  position: relative;
+  overflow: hidden;
+  /* Continuous dark-espresso -> bronze -> rust -> warm-copper sweep (no
+     flat muddy-brown band in the middle), with a soft, restrained
+     top-right highlight standing in for gentle illumination — not a
+     glossy sheen or a dramatic glow. */
+  background:
+    radial-gradient(120% 90% at 88% 8%, rgba(232, 178, 130, 0.3) 0%, rgba(232, 178, 130, 0) 55%),
+    linear-gradient(120deg, var(--oas-black) 0%, var(--oas1-ink) 32%, var(--oas1-bronze) 58%, var(--oas1-rust-deep) 82%, var(--oas1-copper) 100%);
+  /* Compressed from 88px 0 (576px total hero height) to a formal,
+     compact publication hero — target ~320-350px total. Slightly
+     asymmetric (a touch less bottom padding) so the larger book sits
+     closer to the hero's own bottom edge. */
+  padding: 16px 0 8px;
+}
+
+.oas1-hero__grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 420px) minmax(0, 120px);
+  gap: 40px;
+  align-items: center;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.oas1-hero__eyebrow {
+  /* 11px -> 13px, the canonical eyebrow target used across every other
+     OAS page. */
+  font: 700 13px/1.4 var(--oas-sans);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--oas1-rust);
+  margin: 0 0 10px;
+}
+
+.oas1-hero__title {
+  /* Already inside the 56-64px H1 target — left as-is per "do not make
+     it significantly larger." */
+  font: 500 56px/1 var(--oas-serif);
+  color: var(--oas-white);
+  margin: 0 0 12px;
+  letter-spacing: -0.01em;
+}
+
+.oas1-hero__subtitle {
+  /* 18px -> 24px, within the 22-26px target; line-height tightened
+     into the 1.2-1.3 band. */
+  font: 600 24px/1.25 var(--oas-serif);
+  color: var(--oas1-hero-light);
+  margin: 0 0 14px;
+}
+
+.oas1-hero__body {
+  /* 14.5px -> 19px, within the 18-19px lead-body target; line-height
+     already sat inside the 1.55-1.65 band. */
+  font-size: 19px;
+  line-height: 1.6;
+  color: rgba(238, 232, 223, 0.87);
+  max-width: 50ch;
+  margin: 0 0 20px;
+}
+
+.oas1-hero__actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* 14px shared .oas-btn base -> 16px, scoped to the two hero buttons
+   only — the header's "Read OAS-1" CTA (same shared classes) is
+   unaffected. */
+.oas1-hero__actions .oas-btn {
+  font-size: 16px;
+}
+
+/* ---------------------------- Publication cover ---------------------------- */
+
+.oas1-hero__visual {
+  display: flex;
+  justify-content: center;
+  /* Anchor to the bottom of the hero row instead of the grid's default
+     vertical centering, so the book's base sits close to the hero's
+     bottom edge (matching the mock) instead of floating mid-air with
+     empty space above and below it. */
+  align-self: end;
+  /* Nudges the book right, out of dead gap space toward the slogan
+     block, without touching the grid's column math (which would also
+     shift the left text column). Reset to none once the hero collapses
+     to a single stacked column below 1100px. */
+  transform: translateX(38px);
+  /* No background, border, or box-shadow here — this is a plain flex
+     wrapper, not an image container. The only visible shadow comes
+     from the transparent asset's own baked-in contact shadow. */
+}
+
+/* Transparent-background book cutout
+   (public/assets/oas/oas1-book-stack-transparent.png, 750×691) — matted
+   from the real photographic book-stack asset so the book floats
+   directly in the hero's own dark-to-rust gradient with no visible
+   image rectangle around it. Sized so the rendered height lands in the
+   ~330-365px range the approved mock shows; no border-radius, no
+   filter/drop-shadow, no background — the object's own baked-in
+   contact shadow (in the PNG's alpha channel) is the only shadow. */
+/* Scoped as .oas1 .oas1-cover (two classes) rather than bare .oas1-cover
+   (one class) — the shared `.oas img { max-width: 100%; }` reset in
+   oas-landing.css (specificity 0,1,1) otherwise beats a single-class
+   override (0,1,0) and silently widens the book past its intended cap.
+   Same specificity-bug shape as the .oas-btn.oas1-btn--rust fix above. */
+.oas1 .oas1-cover {
+  display: block;
+  width: 100%;
+  /* 390px -> 420px (+7.7%): a modest scale-up, aspect ratio untouched
+     (width/height attributes on the <img> already encode 750:691). */
+  max-width: 420px;
+  height: auto;
+}
+
+/* ---------------------------- Hero tag list ---------------------------- */
+/* A small decorative word-stack echoing the approved mock's far-right
+   hero copy — supporting flourish only, hidden once space is tight.
+   Pulled left and slightly up so it reads as attached to the book/hero
+   composition rather than a separated sidebar, with a short, thin rust
+   rule (not a full-width border) and centered text. */
+.oas1-hero__tags {
+  list-style: none;
+  margin: 0;
+  padding: 12px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  width: 84px;
+  border-top: 1.5px solid var(--oas1-rust);
+  /* 11px -> 12.5px, within the 12-13px micro-copy target — kept
+     smaller than the eyebrow since this is decorative/supporting. */
+  font: 700 12.5px/1.3 var(--oas-sans);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(248, 243, 236, 0.85);
+  text-align: center;
+  transform: translate(-16px, -18px);
+}
+
+/* ---------------------------- Quick Facts ----------------------------
+   A metadata strip, not a row of cards — restrained flat warm ivory (no
+   card-like gradient sheen), tight icon/label/value alignment on one
+   center-aligned baseline, and thin hairline separators only. */
+
+.oas1-facts {
+  background: var(--oas1-ivory);
+  padding: 5px 0;
+}
+
+.oas1-facts__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.oas1-facts__item {
+  flex: 1 1 150px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 16px;
+  border-left: 1px solid var(--oas1-divider);
+}
+
+.oas1-facts__item:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+
+/* One consistent icon-sizing system across the whole page: quick facts,
+   action rows, and the notice icon all share this same size. Measured
+   directly against the approved mock (icon glyphs there render ~23-25px
+   within its 1536px-wide canvas) rather than an arbitrary CSS guess. */
+.oas1-facts__icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  color: var(--oas1-rust);
+}
+
+.oas1-facts__text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.oas1-facts__label {
+  /* 9px -> 13px, within the 12-13px target. */
+  font: 700 13px/1.2 var(--oas-sans);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--oas1-ink);
+}
+
+.oas1-facts__value {
+  /* 11.5px -> 15.5px, within the 15-16px target; line-height set to
+     the metadata band (1.35-1.45) now that longer values (the
+     Audience/Format rows) can wrap to two lines. */
+  font-size: 15.5px;
+  line-height: 1.4;
+  color: var(--oas1-body);
+}
+
+/* ---------------------------- Main 3-column band ----------------------------
+   Covers / Structure / Access used to be three separate full-width
+   sections (each with its own ~80px top+bottom padding and a 2-column
+   "head" grid) stacked vertically — the single largest source of the
+   page's excess length. They are now one compact section with three
+   columns side by side, matching the approved mock's horizontal
+   density. Proportions are 32% / 31% / 37% per the mock. */
+
+.oas1-main {
+  background: var(--oas-white);
+  padding: 20px 0;
+}
+
+.oas1-main__grid {
+  display: grid;
+  grid-template-columns: 32fr 31fr 37fr;
+  gap: 0 36px;
+  align-items: start;
+}
+
+.oas1-main__col--divider {
+  border-left: 1px solid var(--oas1-divider);
+  padding-left: 36px;
+}
+
+/* The shared .oas__eyebrow (oas-landing.css) is sized for the landing
+   page's looser editorial rhythm and its bronze/gold palette — this
+   page uses the rust accent everywhere else, so the three column
+   eyebrows were rendering in the wrong color family. Rescoped
+   (.oas1 .oas__eyebrow, 0,2,0) to win over the shared 0,1,0 rule,
+   recolored to rust, and pulled tighter to its heading. */
+.oas1 .oas__eyebrow {
+  /* 12px shared base -> 13px, the canonical eyebrow target. */
+  font-size: 13px;
+  color: var(--oas1-rust);
+  margin: 0 0 8px;
+}
+
+.oas1-main__heading {
+  /* 19px -> 30px, within the 28-32px target; line-height tightened
+     into the large-heading band (1.05-1.15) and margin opened a touch
+     so it doesn't crowd the larger intro copy below it. */
+  font: 500 30px/1.12 var(--oas-serif);
+  color: var(--oas1-ink);
+  margin: 0 0 10px;
+}
+
+.oas1-main__intro {
+  /* 12px -> 16.5px, within the 16-17px target; line-height nudged
+     into the 1.55-1.65 lower-body band. */
+  font-size: 16.5px;
+  line-height: 1.6;
+  color: var(--oas1-body);
+  margin: 0 0 12px;
+}
+
+/* ---------------------------- What OAS-1 Covers (left column) ---------------------------- */
+
+.oas1-covers__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 14px;
+  margin-bottom: 10px;
+}
+
+.oas1-domain {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 0;
+}
+
+/* Editorial numeral mark, not a filled UI badge: a soft warm-tinted
+   fill with a thin rust ring reads as typographic numbering (like a
+   standards-document list) rather than a clickable button/chip. */
+.oas1-domain__num {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 18px -> 20px: the smallest bump that comfortably fits 14-15px
+     numeral text — not an oversized badge. */
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid rgba(var(--oas1-rust-rgb), 0.5);
+  background: var(--oas1-soft-fill);
+  color: var(--oas1-rust-deep);
+  /* 8px -> 14px, within the 14-15px domain-number target. */
+  font: 700 14px/1 var(--oas-sans);
+}
+
+.oas1-domain__label {
+  /* 11.5px -> 16.5px, within the 16-17px domain-title target. */
+  font: 600 16.5px/1.25 var(--oas-sans);
+  color: var(--oas1-ink);
+}
+
+.oas1-textlink {
+  display: inline-block;
+  /* 13px -> 16px: this class covers both the Control Domains CTA
+     (target 16-17px) and the Table of Contents CTA (target 16px). */
+  font: 700 16px/1.3 var(--oas-sans);
+  color: var(--oas1-rust);
+}
+
+a.oas1-textlink:hover {
+  color: var(--oas1-rust-deep);
+}
+
+.oas1-textlink--planned {
+  display: block;
+}
+
+/* ---------------------------- Specification Structure (center column) ---------------------------- */
+
+.oas1-toc {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+}
+
+.oas1-toc__item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 4px 0;
+  border-top: 1px solid var(--oas1-divider);
+  /* 12px -> 16.5px, within the 16-17px section-title target;
+     line-height set to the 1.35-1.45 metadata/list band called for
+     here so the "serious publication index" feel doesn't come with
+     excess vertical air. */
+  font-size: 16.5px;
+  line-height: 1.4;
+}
+
+.oas1-toc__num {
+  /* 11px -> 14.5px, within the 14-15px target. */
+  font: 700 14.5px/1.4 var(--oas-sans);
+  color: var(--oas1-rust);
+  flex-shrink: 0;
+}
+
+.oas1-toc__title {
+  color: var(--oas1-ink);
+}
+
+/* ---------------------------- Read the Standard (right column) ---------------------------- */
+
+.oas1-access__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+/* Publication-access rows, not dashboard cards: light warm border and
+   background, small radius, no shadow, no filled icon container. */
+.oas1-action {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 11px;
+  border-radius: 3px;
+  border: 1px solid rgba(var(--oas1-rust-rgb), 0.16);
+  background: rgba(var(--oas1-rust-rgb), 0.045);
+  cursor: default;
+}
+
+/* A rust line icon, not a boxed/tiled icon container — sized to match
+   the quick-facts strip for one consistent icon system. */
+.oas1-action__icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  color: var(--oas1-rust);
+}
+
+.oas1-action__text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.oas1-action__title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  /* 12.5px -> 17.5px, within the 17-18px action-title target. */
+  font: 700 17.5px/1.3 var(--oas-sans);
+  color: var(--oas1-ink);
+}
+
+/* Small, neutral, secondary — a footnote, not an alert. Status
+   metadata, so it stays smallest of the row per the brief. */
+.oas1-action__badge {
+  /* 7.5px -> 11.5px, within the 11-12px target. */
+  font: 600 11.5px/1 var(--oas-sans);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--oas1-muted);
+  background: var(--oas-line);
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+.oas1-action__desc {
+  /* 11.5px -> 16px, at the top of the 15-16px target and matching the
+     16px mobile recommendation exactly; line-height set to the
+     1.45-1.55 action-description band. */
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--oas1-body);
+}
+
+.oas1-action__arrow {
+  flex-shrink: 0;
+  align-self: center;
+  color: var(--oas1-muted);
+  font-size: 13px;
+}
+
+/* ---------------------------- Normative Notice ---------------------------- */
+
+.oas1-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  /* 11px -> 15.5px, within the 15-16px target — substantively
+     important text, not tiny legal copy. */
+  font-size: 15.5px;
+  line-height: 1.45;
+  color: var(--oas1-ink);
+  margin: 0;
+  padding: 10px 14px;
+  border-left: 3px solid var(--oas1-rust-deep);
+  background: rgba(var(--oas1-rust-rgb), 0.08);
+  border-radius: 0 3px 3px 0;
+}
+
+.oas1-notice__icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  margin-top: 1px;
+  color: var(--oas1-rust);
+}
+
+/* ---------------------------- Footer compression (this page only) ----------------------------
+   .oas-footer is the SHARED component also used by the OAS landing
+   page — its own rules in oas-landing.css are left untouched so the
+   landing page's footer is unaffected. These overrides are scoped
+   under .oas1 (present only on this page's root element) to shrink the
+   footer's vertical rhythm here without touching the shared file. */
+
+.oas1 .oas-footer {
+  padding: 40px 0 20px;
+  /* Slightly warmer/brighter base text than the landing page's footer —
+     "crisp and intentional, not hazy" per the OAS-1 fidelity pass. */
+  color: rgba(248, 243, 236, 0.88);
+}
+
+.oas1 .oas-footer__brand-mark {
+  margin-bottom: 8px;
+}
+
+/* This page's footer column headings use the rust accent (matching
+   every other section label on OAS-1) instead of the landing page's
+   gold, for one consistent accent color across the whole page. */
+.oas1 .oas-footer__col h4 {
+  margin: 0 0 12px;
+  color: var(--oas1-rust);
+}
+
+.oas1 .oas-footer__col ul {
+  gap: 8px;
+}
+
+.oas1 .oas-footer__tagline {
+  color: rgba(248, 243, 236, 0.68);
+}
+
+.oas1 .oas-footer__right p:first-child {
+  color: var(--oas1-hero-light);
+}
+
+.oas1 .oas-footer__domain {
+  color: rgba(248, 243, 236, 0.58);
+}
+
+.oas1 .oas-footer__bottom {
+  margin-top: 28px;
+  padding-top: 16px;
+  color: rgba(248, 243, 236, 0.58);
+}
+
+/* ---------------------------- Responsive ---------------------------- */
+
+/* OAS-1's header nav has more/longer items (About, OAS-1, Control
+   Domains, Risk, Conformance, Schemas, Implementation, Governance)
+   than the OAS landing page's nav, so the shared 900px hamburger
+   breakpoint (oas-landing.css) leaves it too little room — it was
+   found to overflow horizontally at 1024px. This scoped, wider
+   breakpoint (higher specificity: two classes vs. one) takes over for
+   this page only; the landing page's own 900px breakpoint is
+   untouched. */
+@media (max-width: 1150px) {
+  .oas1 .oas-header__nav {
+    display: none;
+  }
+  .oas1 .oas-header__nav.oas-header__nav--open {
+    display: flex;
+  }
+  .oas1 .oas-header__toggle {
+    display: inline-flex;
+  }
+}
+
+@media (max-width: 1100px) {
+  .oas1-hero__grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    text-align: left;
+  }
+  .oas1-hero__visual {
+    justify-content: flex-start;
+    align-self: auto;
+    transform: none;
+  }
+  .oas1 .oas1-cover {
+    max-width: 320px;
+  }
+  .oas1-hero__tags {
+    display: none;
+  }
+  /* Below 1100px the 3-column band returns to a normal stack — the
+     mock's horizontal density is a desktop-only composition. */
+  .oas1-main__grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .oas1-main__col--divider {
+    border-left: 0;
+    border-top: 1px solid var(--oas1-divider);
+    padding-left: 0;
+    padding-top: 32px;
+  }
+}
+
+@media (max-width: 900px) {
+  .oas1-hero {
+    padding: 40px 0;
+  }
+  .oas1-hero__title {
+    font-size: 48px;
+  }
+  .oas1-facts__item {
+    flex: 1 1 45%;
+    border-left: 0;
+    padding-left: 0;
+    padding-bottom: 10px;
+  }
+  .oas1-covers__row {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}
+
+@media (max-width: 640px) {
+  .oas1-hero__grid {
+    padding: 0 20px;
+  }
+  .oas1-hero__title {
+    /* 40px -> 44px, within the 42-48px mobile H1 target. */
+    font-size: 44px;
+  }
+  .oas1-main {
+    padding: 40px 0;
+  }
+  .oas1-action {
+    flex-wrap: wrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oas1 * {
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -22,7 +22,7 @@ export default function AllPages() {
   const career = [
     { to: "/career",          label: "Career Planner" },
     { to: "/explore",         label: "Pathways Explore" },
-    { to: "/career/pathways", label: "Career Pathways (alt/legacy)" },
+    { to: "/pathways", label: "Career Pathways" },
   ];
 
   const learner = [

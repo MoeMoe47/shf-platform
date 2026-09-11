@@ -14,10 +14,54 @@ export type TrustedReportingOutboxEvent = {
   idempotency_key: string;
   correlation_id: string;
   payload: Record<string, unknown>;
+  evidence_references?: string[];
   destination: string;
 };
 
 export type ReferralOutboxEvent = TrustedReportingOutboxEvent;
+
+export function buildGovernmentAssuranceTruthDeterminationOutboxEvent(determination: any, handoff: any, correlationId: string): TrustedReportingOutboxEvent {
+  const determinationId = String(determination?.determination_id || determination?.determinationId || "").trim();
+  const truthFactId = String(determination?.truth_fact_id || determination?.truthFactId || "").trim();
+  const organizationId = String(determination?.organization_id || "").trim();
+  const actorId = String(determination?.determining_actor || determination?.determined_by || "").trim();
+  const tenantId = String(determination?.tenant_id || `tenant:${organizationId}`).trim();
+  const claimReference = String(determination?.claim_reference || determination?.claimReference || "").trim();
+  const verificationReference = String(determination?.verification_reference || determination?.verificationReference || "").trim();
+  const provenanceReference = String(handoff?.provenanceReference || "").trim();
+  const occurredAt = determination?.created_at instanceof Date ? determination.created_at.toISOString() : String(determination?.created_at || new Date().toISOString());
+  if (!determinationId || !truthFactId || !organizationId || !actorId || !tenantId || !claimReference || !verificationReference || !provenanceReference) throw new Error("government_assurance_truth_determination_outbox_scope_missing");
+  if (tenantId !== `tenant:${organizationId}`) throw new Error("government_assurance_truth_determination_outbox_scope_invalid");
+  if (determination?.decision !== "ACCEPTED" || handoff?.status !== "PENDING_TRUTH_SPINE_INGESTION") throw new Error("government_assurance_truth_determination_outbox_not_accepted");
+  return {
+    producer_id: "shs.government_assurance",
+    event_type: "government_assurance.truth_determination.accepted",
+    schema_version: "v1",
+    subject_type: "gpa_truth_determination",
+    subject_id: determinationId,
+    organization_id: organizationId,
+    originating_actor_id: actorId,
+    originating_actor_type: "user",
+    tenant_id: tenantId,
+    occurred_at: occurredAt,
+    idempotency_key: `gpa-truth-determination:${determinationId}:accepted`,
+    correlation_id: String(correlationId || determination?.correlation_id || determinationId).trim(),
+    evidence_references: Array.isArray(determination?.evidence_references)
+      ? determination.evidence_references.map((reference: unknown) => String(reference).trim()).filter(Boolean)
+      : [],
+    payload: {
+      determination_id: determinationId,
+      truth_fact_id: truthFactId,
+      claim_reference: claimReference,
+      verification_reference: verificationReference,
+      provenance_reference: provenanceReference,
+      truth_spine_authority: String(handoff?.authority || "shs-truth-spine-v1"),
+      truth_spine_status: String(handoff.status),
+      lifecycle_status: "accepted",
+    },
+    destination: "agent-fabric",
+  };
+}
 
 export function buildEmploymentStartedVerifiedOutboxEvent(outcome: any, correlationId: string): TrustedReportingOutboxEvent {
   const outcomeId = String(outcome?.outcome_id || outcome?.outcomeId || "").trim();
@@ -181,7 +225,8 @@ export function buildReportCreatedOutboxEvent(created: any, revisionId: string, 
 }
 
 export function classifyDeliveryFailure(error: { status?: number; code?: string }): { retryable: boolean; final: boolean } {
-  if (error.status === 408 || error.status === 429 || (error.status || 0) >= 500 || ["ETIMEDOUT", "ECONNRESET", "ENETUNREACH"].includes(String(error.code || ""))) {
+  const networkCode = String(error.code || (error as any)?.cause?.code || "");
+  if (error.status === 408 || error.status === 429 || (error.status || 0) >= 500 || ["ETIMEDOUT", "ECONNRESET", "ECONNREFUSED", "ENETUNREACH"].includes(networkCode)) {
     return { retryable: true, final: false };
   }
   return { retryable: false, final: true };

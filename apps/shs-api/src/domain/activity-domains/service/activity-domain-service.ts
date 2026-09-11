@@ -6,6 +6,7 @@ import { CompletionPolicyRepo } from "../../completion-policy/repo/completion-po
 import * as assignmentService from "../../assignments/service/assignment-service.js";
 import type { ActivityActor, ActivityDefinitionRef } from "../model/activity-domain.js";
 import { ActivityDomainRepo } from "../repo/activity-domain-repo.js";
+import { recordOutcome } from "../../curriculum/service/learner-result-service.js";
 
 const repo = new ActivityDomainRepo();
 const catalogRepo = new CurriculumCatalogRepo();
@@ -36,6 +37,14 @@ function stripKeys(items: any[] = []) {
     const { correctIndex, modelAnswer, ...rest } = item || {};
     return rest;
   });
+}
+
+function sanitizeLesson(value: any): any {
+  if (Array.isArray(value)) return value.map(sanitizeLesson);
+  if (!value || typeof value !== "object") return value;
+  return Object.fromEntries(Object.entries(value)
+    .filter(([key]) => key !== "correctIndex" && key !== "modelAnswer")
+    .map(([key, entry]) => [key, sanitizeLesson(entry)]));
 }
 
 export async function resolveActivityDefinition(actor: ActivityActor, assignmentId: string, unitStableKey: string, lessonStableKey: string): Promise<ActivityDefinitionRef> {
@@ -124,13 +133,20 @@ async function enqueueCommittedActivityEvent(kind: "assessment" | "reflection" |
 
 export async function getLearnerActivityState(actor: ActivityActor, assignmentId: string, unitStableKey: string, lessonStableKey: string) {
   const ref = await resolveActivityDefinition(actor, assignmentId, unitStableKey, lessonStableKey);
+  const latestAssessmentResult = ref.assessmentDefinitionId
+    ? await repo.latestAssessmentResult(actor.organization_id, actor.user_id, ref.assignmentId, ref.curriculumReleaseId, lessonStableKey, ref.assessmentDefinitionId)
+    : null;
   return {
     assignmentId: ref.assignmentId,
     curriculumReleaseId: ref.curriculumReleaseId,
     releaseVersion: ref.releaseVersion,
     unitStableKey,
     lessonStableKey,
-    assessment: ref.assessmentDefinitionId ? { assessmentDefinitionId: ref.assessmentDefinitionId, items: stripKeys(ref.assessmentItems || []) } : null,
+    // The release snapshot is the canonical published curriculum source for
+    // this assignment. Returning the bound lesson here keeps the learner
+    // experience from silently falling back to browser-bundled lesson data.
+    lesson: sanitizeLesson(findLesson((await catalogRepo.findRelease(actor.organization_id, ref.curriculumReleaseId))?.snapshot, unitStableKey, lessonStableKey)),
+    assessment: ref.assessmentDefinitionId ? { assessmentDefinitionId: ref.assessmentDefinitionId, items: stripKeys(ref.assessmentItems || []), latestResult: latestAssessmentResult ? { passed: latestAssessmentResult.passed, needsReview: latestAssessmentResult.needsReview, attemptNumber: latestAssessmentResult.attemptNumber, score: latestAssessmentResult.score, maxScore: latestAssessmentResult.maxScore, percent: latestAssessmentResult.percent } : null } : null,
     reflection: ref.reflectionDefinitionId ? { reflectionDefinitionId: ref.reflectionDefinitionId, items: ref.reflectionItems || [] } : null,
     practice: ref.practiceDefinitionId ? { practiceDefinitionId: ref.practiceDefinitionId, completionMode: ref.completionMode, items: stripKeys(ref.practiceItems || []) } : null,
   };
@@ -140,7 +156,10 @@ export async function submitAssessment(actor: ActivityActor, input: { assignment
   const { organizationId, userId } = actorScope(actor);
   const idempotencyKey = validateIdempotency(input.idempotencyKey);
   const existing = await repo.getAssessmentResultByIdempotency(organizationId, userId, idempotencyKey);
-  if (existing) return existing;
+  if (existing) {
+    await recordOutcome(actor, { sourceType: "ASSESSMENT_RESULT", sourceId: existing.assessmentResultId, outcomeType: existing.passed ? "PASSED" : "FAILED", score: existing.percent, assignmentId: existing.assignmentId, courseId: null, unitStableKey: existing.unitStableKey, lessonStableKey: existing.lessonStableKey, provenance: { assessmentAttemptId: existing.assessmentAttemptId, replay: true } });
+    return existing;
+  }
   const ref = await resolveActivityDefinition(actor, input.assignmentId, input.unitStableKey, input.lessonStableKey);
   if (!ref.assessmentDefinitionId) throw new ActivityDomainError("ASSESSMENT_NOT_DEFINED", "No assessment definition exists for this assigned lesson.", 404);
   const answers = normalizeItems(input.answers);
@@ -162,6 +181,7 @@ export async function submitAssessment(actor: ActivityActor, input: { assignment
       passed, needsReview: scored.needsReview,
     });
   });
+  await recordOutcome(actor, { sourceType: "ASSESSMENT_RESULT", sourceId: created.assessmentResultId, outcomeType: created.passed ? "PASSED" : "FAILED", score: created.percent, assignmentId: created.assignmentId, unitStableKey: created.unitStableKey, lessonStableKey: created.lessonStableKey, provenance: { assessmentAttemptId: created.assessmentAttemptId, attemptNumber: created.attemptNumber } });
   await enqueueCommittedActivityEvent("assessment", actor, created.assessmentResultId, idempotencyKey, { result_status: created.needsReview ? "PENDING_REVIEW" : created.passed ? "PASSED" : "NOT_PASSED" });
   return created;
 }
@@ -212,6 +232,7 @@ export async function submitPractice(actor: ActivityActor, input: { assignmentId
       score: scored.score, maxScore: scored.maxScore, completed,
     });
   });
+  await recordOutcome(actor, { sourceType: "PRACTICE_RESULT", sourceId: created.practiceResultId, outcomeType: created.completed ? "COMPLETED" : "NOT_DEMONSTRATED", score: created.score, assignmentId: created.assignmentId, unitStableKey: created.unitStableKey, lessonStableKey: created.lessonStableKey, provenance: { practiceAttemptId: created.practiceAttemptId } });
   await enqueueCommittedActivityEvent("practice", actor, created.practiceResultId, idempotencyKey, { result_status: created.completed ? "COMPLETED" : "INCOMPLETE" });
   return created;
 }

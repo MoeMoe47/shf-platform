@@ -49,6 +49,7 @@ import { registerOperationalRoutes } from "../domain/operations/api/routes.js";
 import { registerStudioProjectRoutes } from "../domain/studio/api/studio-project-routes.js";
 import { registerPortfolioRoutes } from "../domain/portfolio/api/routes.js";
 import { registerWebsiteDeploymentRoutes } from "../domain/deployment/api/routes.js";
+import { registerStudioReleaseRoutes } from "../domain/deployment/api/release-routes.js";
 import { registerAgentPackageRoutes } from "../domain/agent-package/api/routes.js";
 import { registerRegistrySubmissionRoutes } from "../domain/registry-submission/api/routes.js";
 import { registerReviewerRoutingRoutes } from "../domain/studio-routing/api/routes.js";
@@ -70,6 +71,7 @@ import { registerAragRoutes } from "../domain/arag/api/routes.js";
 import { registerGovernmentAssuranceRoutes } from "../domain/government-assurance/api/routes.js";
 import { registerLegalRoutes } from "../domain/legal/api/routes.js";
 import { registerCrossProductRoutes } from "../domain/cross-product/api/routes.js";
+import { registerLearnerResultRoutes } from "../domain/curriculum/api/learner-result-routes.js";
 
 
 type MutableApiUser = {
@@ -361,6 +363,7 @@ app.post("/auth/login", async (req: any, res: any) => {
   registerExchangeFundingCommitmentRoutes(app);
   registerLiveLearningRoutes(app);
   registerCurriculumCompletionRoutes(app);
+  registerLearnerResultRoutes(app);
   registerWorkforceOutcomeRoutes(app);
   registerPrepareProveRoutes(app);
   registerSpecializationAssignmentRoutes(app);
@@ -393,6 +396,7 @@ app.post("/auth/login", async (req: any, res: any) => {
   registerStudioProjectRoutes(app);
   registerPortfolioRoutes(app);
   registerWebsiteDeploymentRoutes(app);
+  registerStudioReleaseRoutes(app);
   registerAgentPackageRoutes(app);
   registerRegistrySubmissionRoutes(app);
   registerReviewerRoutingRoutes(app);

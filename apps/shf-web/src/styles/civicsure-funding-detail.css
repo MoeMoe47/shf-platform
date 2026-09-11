@@ -1,0 +1,1056 @@
+/* ------------------------------------------------------------------
+   CivicSure Funding Detail / Follow the Money — public-facing page
+   frame. Same precedent as the other detail-page stylesheets in this
+   suite: mounts alongside civicsure-explorer.css's `.civicsure-explorer`
+   root, so it redeclares the same bounded --cse-* token set on its own
+   `.civicsure-funding-detail` root. Shared primitives (cse-btn,
+   cse-pill, cse-card, cse-metric-card, cse-metrics, cse-status-badge,
+   cse-table, cse-container, cse-nav, cse-eyebrow, the skip link) are
+   intentionally reused from civicsure-explorer.css rather than
+   redefined here — this file only adds page-specific layout. FRAME
+   ONLY — see docs/ui/CIVICSURE_FUNDING_DETAIL_FRAME.md.
+   ------------------------------------------------------------------ */
+
+.civicsure-funding-detail {
+  --cse-bg: #eef3f9;
+  --cse-surface: #ffffff;
+  --cse-text: #16223a;
+  --cse-muted: #566380;
+  --cse-border: #d7e3f0;
+  --cse-navy: #102a52;
+  --cse-navy-hover: #0b1f3d;
+  --cse-blue: #1857b0;
+  --cse-blue-soft: #dce9fb;
+  --cse-blue-pale: #eef5fd;
+  --cse-success: #15804a;
+  --cse-success-soft: #ddf5e8;
+  --cse-warning: #9a5b12;
+  --cse-warning-soft: #fbedd4;
+
+  background: var(--cse-surface);
+  color: var(--cse-text);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.civicsure-funding-detail,
+.civicsure-funding-detail *,
+.civicsure-funding-detail *::before,
+.civicsure-funding-detail *::after {
+  box-sizing: border-box;
+}
+
+.civicsure-funding-detail a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.civicsure-funding-detail :focus-visible {
+  outline: 3px solid var(--cse-blue);
+  outline-offset: 2px;
+}
+
+.civicsure-funding-detail button {
+  font-family: inherit;
+}
+
+.cse-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------------------------- Header ---------------------------- */
+
+.cse-fnd-header {
+  background: var(--cse-surface);
+  border-bottom: 1px solid var(--cse-border);
+  padding: 20px 0 24px;
+}
+
+.cse-fnd-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 700 13.5px/1 inherit;
+  color: var(--cse-blue);
+  margin-bottom: 16px;
+}
+.cse-fnd-back__icon {
+  width: 16px;
+  height: 16px;
+}
+.cse-fnd-back:hover {
+  text-decoration: underline;
+}
+
+.cse-fnd-header__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.cse-fnd-header__title-block {
+  max-width: 66ch;
+}
+
+.cse-fnd-header__title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.cse-fnd-header__title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--cse-navy);
+  letter-spacing: -0.01em;
+}
+
+.cse-fnd-header__meta {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: var(--cse-muted);
+}
+
+.cse-fnd-header__description {
+  margin: 10px 0 0;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--cse-text);
+}
+
+.cse-fnd-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.cse-fnd-header__actions .cse-btn svg {
+  width: 16px;
+  height: 16px;
+}
+.cse-fnd-header__actions button[aria-disabled="true"] {
+  color: var(--cse-muted);
+  cursor: not-allowed;
+}
+
+/* ---------------------------- Tabs row + about-data trigger ---------------------------- */
+
+.cse-fnd-tabs-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid var(--cse-border);
+  margin: 20px 0 0;
+}
+
+.cse-fnd-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  flex: 1;
+  min-width: 0;
+}
+
+.cse-fnd-tab {
+  flex-shrink: 0;
+  padding: 12px 16px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: var(--cse-muted);
+  font: 600 14.5px/1 inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.cse-fnd-tab:hover {
+  color: var(--cse-navy);
+}
+.cse-fnd-tab.is-active {
+  color: var(--cse-navy);
+  font-weight: 700;
+  border-bottom-color: var(--cse-blue);
+}
+
+.cse-fnd-about-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  font: 700 13.5px/1 inherit;
+  color: var(--cse-blue);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 12px 4px;
+}
+.cse-fnd-about-trigger svg {
+  width: 16px;
+  height: 16px;
+}
+.cse-fnd-about-trigger:hover {
+  text-decoration: underline;
+}
+
+/* ---------------------------- Generic panel spacing ---------------------------- */
+
+.cse-fnd-panel {
+  padding: 28px 0 72px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cse-fnd-panel__note {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--cse-muted);
+}
+
+/* ---------------------------- Overview tab ---------------------------- */
+
+.cse-fnd-overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 28px;
+  padding: 28px 0 72px;
+  align-items: start;
+}
+
+.cse-fnd-overview__main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.cse-fnd-overview__side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.cse-fnd-facts__heading,
+.cse-fnd-financial-position__heading {
+  margin: 0 0 18px;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.cse-fnd-facts__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px 24px;
+  margin: 0;
+}
+.cse-fnd-facts__grid dt {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--cse-muted);
+  margin: 0 0 4px;
+}
+.cse-fnd-facts__grid dd {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.cse-fnd-facts__purpose {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--cse-border);
+}
+.cse-fnd-facts__purpose h3 {
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+.cse-fnd-facts__purpose p {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--cse-text);
+}
+
+/* Key Financial Position — every term ships with an always-visible
+   plain-English definition (locked CivicSure UX principle: never an
+   unexplained accounting term). */
+.cse-fnd-financial-term {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--cse-border);
+}
+.cse-fnd-financial-term:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.cse-fnd-financial-term__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.cse-fnd-financial-term__label {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+.cse-fnd-financial-term__value {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--cse-navy);
+}
+.cse-fnd-financial-term__definition {
+  margin: 4px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--cse-muted);
+}
+
+/* ---------------------------- Data quality notice ---------------------------- */
+
+.cse-fnd-dqn {
+  border-color: var(--cse-warning);
+  background: var(--cse-warning-soft);
+}
+.cse-fnd-dqn__heading {
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cse-warning);
+}
+.cse-fnd-dqn__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cse-fnd-dqn__list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--cse-text);
+}
+.cse-fnd-dqn__list svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--cse-warning);
+}
+
+/* ---------------------------- Assurance snapshot ---------------------------- */
+
+.cse-fnd-assurance__heading,
+.cse-fnd-report__heading,
+.cse-fnd-geography__heading {
+  margin: 0 0 14px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.cse-fnd-assurance__list {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cse-fnd-assurance__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--cse-bg);
+}
+.cse-fnd-assurance__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--cse-blue-soft);
+  color: var(--cse-blue);
+}
+.cse-fnd-assurance__icon svg {
+  width: 13px;
+  height: 13px;
+}
+.cse-fnd-assurance__label {
+  flex: 1;
+  font-size: 13px;
+  color: var(--cse-text);
+}
+
+.cse-fnd-assurance__action,
+.cse-fnd-reconciliation__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 700 13.5px/1 inherit;
+  color: var(--cse-blue);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+}
+.cse-fnd-assurance__action svg,
+.cse-fnd-reconciliation__action svg {
+  width: 15px;
+  height: 15px;
+}
+.cse-fnd-assurance__action:hover,
+.cse-fnd-reconciliation__action:hover {
+  text-decoration: underline;
+}
+
+.cse-fnd-assurance__explanation,
+.cse-fnd-reconciliation__explanation {
+  margin: 12px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--cse-border);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--cse-muted);
+}
+
+/* ---------------------------- Report card ---------------------------- */
+
+.cse-fnd-report__facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 16px;
+  margin: 0 0 16px;
+}
+.cse-fnd-report__facts dt {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--cse-muted);
+  margin: 0 0 3px;
+}
+.cse-fnd-report__facts dd {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+.cse-fnd-report .cse-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+/* ---------------------------- Geography panel ---------------------------- */
+
+.cse-fnd-geography__list {
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cse-fnd-geography__list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--cse-border);
+  font-size: 13.5px;
+}
+.cse-fnd-geography__list li:last-child {
+  border-bottom: 0;
+}
+.cse-fnd-geography__list strong {
+  color: var(--cse-navy);
+}
+
+a.cse-fnd-geography__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 700 13.5px/1 inherit;
+  color: var(--cse-blue);
+}
+.cse-fnd-geography__action svg {
+  width: 15px;
+  height: 15px;
+}
+a.cse-fnd-geography__action:hover {
+  text-decoration: underline;
+}
+
+/* ---------------------------- Money Flow lineage ---------------------------- */
+
+.cse-fnd-flow {
+  overflow-x: auto;
+}
+
+.cse-fnd-flow__lineage {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 0;
+}
+
+.cse-fnd-node {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 148px;
+  flex-shrink: 0;
+  padding: 14px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--cse-border);
+  background: var(--cse-bg);
+  cursor: pointer;
+  text-align: left;
+}
+.cse-fnd-node:hover {
+  background: var(--cse-blue-pale);
+}
+.cse-fnd-node.is-selected {
+  background: var(--cse-blue-pale);
+  border-color: var(--cse-blue);
+  box-shadow: inset 0 0 0 1px var(--cse-blue);
+}
+.cse-fnd-node--green.is-selected {
+  border-color: var(--cse-success);
+  box-shadow: inset 0 0 0 1px var(--cse-success);
+}
+
+.cse-fnd-node__kicker {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--cse-blue);
+}
+.cse-fnd-node--green .cse-fnd-node__kicker {
+  color: var(--cse-success);
+}
+.cse-fnd-node__title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--cse-navy);
+  line-height: 1.3;
+}
+.cse-fnd-node__amount {
+  font-size: 12px;
+  color: var(--cse-muted);
+}
+
+.cse-fnd-flow__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  color: #9fbde3;
+}
+.cse-fnd-flow__arrow svg {
+  width: 16px;
+  height: 16px;
+}
+
+.cse-fnd-flow__branches {
+  padding-top: 18px;
+  border-top: 1px solid var(--cse-border);
+}
+.cse-fnd-flow__branches > p {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: var(--cse-muted);
+}
+.cse-fnd-flow__branch-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cse-fnd-branch-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--cse-border);
+  background: var(--cse-surface);
+  color: var(--cse-navy);
+  font: 700 13px/1 inherit;
+  cursor: pointer;
+}
+.cse-fnd-branch-chip svg {
+  width: 13px;
+  height: 13px;
+  color: var(--cse-muted);
+}
+.cse-fnd-branch-chip:hover {
+  background: var(--cse-blue-pale);
+}
+.cse-fnd-branch-chip.is-active {
+  background: var(--cse-navy);
+  border-color: var(--cse-navy);
+  color: #fff;
+}
+.cse-fnd-branch-chip.is-active svg {
+  color: #fff;
+}
+
+/* ---------------------------- Flow detail panel ---------------------------- */
+
+.cse-fnd-flow-detail__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+.cse-fnd-flow-detail__head h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.cse-fnd-flow-detail__amount {
+  margin: 0 0 14px;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--cse-navy);
+}
+
+.cse-fnd-flow-detail__facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 16px;
+  margin: 0 0 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--cse-border);
+}
+.cse-fnd-flow-detail__facts dt {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--cse-muted);
+  margin: 0 0 3px;
+}
+.cse-fnd-flow-detail__facts dd {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.cse-fnd-flow-detail__explanation {
+  margin: 0 0 14px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--cse-text);
+}
+
+.cse-fnd-flow-detail__relationship {
+  margin: 0 0 16px;
+  display: flex;
+  gap: 16px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--cse-muted);
+}
+
+.cse-fnd-flow-detail__placeholder {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cse-muted);
+  cursor: not-allowed;
+}
+
+/* ---------------------------- Reconciliation panel ---------------------------- */
+
+.cse-fnd-reconciliation__heading {
+  margin: 0 0 14px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+.cse-fnd-reconciliation__list {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cse-fnd-reconciliation__list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--cse-border);
+  font-size: 14px;
+}
+.cse-fnd-reconciliation__list li:last-child {
+  border-bottom: 0;
+}
+.cse-fnd-reconciliation__list strong {
+  color: var(--cse-navy);
+}
+.cse-fnd-reconciliation__row--amber strong {
+  color: var(--cse-warning);
+}
+
+/* ---------------------------- Programs / Providers row list ---------------------------- */
+
+.cse-fnd-row-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cse-fnd-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.cse-fnd-row__main {
+  flex: 1;
+  min-width: 240px;
+}
+
+.cse-fnd-row__title {
+  margin: 0;
+  font-size: 16.5px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+.cse-fnd-row__meta {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--cse-muted);
+}
+.cse-fnd-row__delivery {
+  margin: 8px 0 10px;
+  font-size: 13.5px;
+  color: var(--cse-text);
+}
+.cse-fnd-row__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 0;
+}
+
+.cse-fnd-row__aside {
+  flex-shrink: 0;
+  text-align: right;
+  min-width: 160px;
+}
+.cse-fnd-row__amount {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--cse-navy);
+}
+.cse-fnd-row__amount-label {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: var(--cse-muted);
+}
+a.cse-fnd-row__link,
+span.cse-fnd-row__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font: 700 13.5px/1 inherit;
+  color: var(--cse-blue);
+}
+.cse-fnd-row__link svg {
+  width: 15px;
+  height: 15px;
+}
+a.cse-fnd-row__link:hover {
+  text-decoration: underline;
+}
+span.cse-fnd-row__link--placeholder {
+  color: var(--cse-muted);
+  cursor: not-allowed;
+}
+
+/* ---------------------------- Outcomes methodology button ---------------------------- */
+
+button.cse-fnd-outcomes__methodology {
+  font: 700 12.5px/1 inherit;
+  color: var(--cse-blue);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 4px 0;
+  white-space: nowrap;
+}
+button.cse-fnd-outcomes__methodology:hover {
+  text-decoration: underline;
+}
+
+/* ---------------------------- Timeline ---------------------------- */
+
+.cse-fnd-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+.cse-fnd-timeline::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: var(--cse-border);
+}
+
+.cse-fnd-timeline__item {
+  position: relative;
+  padding-left: 28px;
+  margin-bottom: 16px;
+}
+.cse-fnd-timeline__item:last-child {
+  margin-bottom: 0;
+}
+
+.cse-fnd-timeline__dot {
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--cse-blue);
+  border: 2px solid var(--cse-surface);
+  box-shadow: 0 0 0 1px var(--cse-blue);
+}
+
+.cse-fnd-timeline__card {
+  padding: 16px;
+}
+.cse-fnd-timeline__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+.cse-fnd-timeline__date {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cse-muted);
+}
+.cse-fnd-timeline__event {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+.cse-fnd-timeline__meta {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--cse-muted);
+}
+
+/* ---------------------------- About this data drawer ---------------------------- */
+
+.cse-fnd-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(16, 42, 82, 0.4);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cse-fnd-drawer {
+  width: min(420px, 100%);
+  height: 100%;
+  background: var(--cse-surface);
+  border-left: 1px solid var(--cse-border);
+  padding: 24px;
+  overflow-y: auto;
+  box-shadow: -8px 0 24px rgba(16, 42, 82, 0.15);
+}
+
+.cse-fnd-drawer__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.cse-fnd-drawer__head h2 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--cse-navy);
+}
+
+.cse-fnd-drawer__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid var(--cse-border);
+  background: var(--cse-surface);
+  color: var(--cse-navy);
+  cursor: pointer;
+}
+.cse-fnd-drawer__close svg {
+  width: 16px;
+  height: 16px;
+}
+.cse-fnd-drawer__close:hover {
+  background: var(--cse-blue-pale);
+}
+
+.cse-fnd-drawer__list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.cse-fnd-drawer__list dt {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--cse-muted);
+  margin: 0 0 4px;
+}
+.cse-fnd-drawer__list dd {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--cse-text);
+}
+
+/* ---------------------------- Not found ---------------------------- */
+
+.cse-fnd-not-found {
+  padding: 72px 0;
+  max-width: 60ch;
+}
+.cse-fnd-not-found h1 {
+  margin: 0 0 10px;
+  font-size: 26px;
+  color: var(--cse-navy);
+}
+.cse-fnd-not-found p {
+  margin: 0 0 20px;
+  color: var(--cse-muted);
+}
+
+/* ---------------------------- Responsive ---------------------------- */
+
+@media (max-width: 1180px) {
+  .cse-fnd-overview {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  /* Tablet: keep the lineage horizontal but let it scroll, with a
+     visible affordance rather than silently clipping. */
+  .cse-fnd-flow {
+    padding-bottom: 6px;
+  }
+  .cse-fnd-flow__lineage {
+    padding-bottom: 4px;
+  }
+}
+
+@media (max-width: 760px) {
+  .cse-fnd-header__row {
+    flex-direction: column;
+  }
+  .cse-fnd-header__actions {
+    flex-wrap: wrap;
+  }
+  .cse-fnd-facts__grid,
+  .cse-fnd-flow-detail__facts,
+  .cse-fnd-report__facts {
+    grid-template-columns: 1fr;
+  }
+  .cse-fnd-row {
+    flex-direction: column;
+  }
+  .cse-fnd-row__aside {
+    text-align: left;
+    width: 100%;
+  }
+  .cse-fnd-drawer {
+    width: 100%;
+  }
+
+  /* Mobile: the horizontal lineage becomes a vertical stepper — each
+     node full-width, arrows rotated to point down. No horizontal
+     page overflow; the row-list of nodes no longer needs its own
+     scroll container since it's vertical now. */
+  .cse-fnd-flow {
+    overflow-x: visible;
+  }
+  .cse-fnd-flow__lineage {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .cse-fnd-node {
+    width: 100%;
+  }
+  .cse-fnd-flow__arrow {
+    width: auto;
+    height: 24px;
+    transform: rotate(90deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .civicsure-funding-detail * {
+    transition-duration: 0.01ms !important;
+  }
+}

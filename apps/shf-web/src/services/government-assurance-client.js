@@ -95,3 +95,12 @@ export function getLineage(metricResultId) { return getWorkspace(`/government-as
 export function getAiDelegations() { return getWorkspace("/ai-governance/delegations"); }
 export function askGovernmentAssuranceAssistant(payload = {}) { return post("/government-assurance/assistant/respond", payload); }
 export function generateGovernmentAssuranceReport(payload = {}) { return post("/government-assurance/reports/generate", payload); }
+export function getReportArtifactSnapshot(artifactId) { return get(`/reporting/artifacts/${encodeURIComponent(artifactId)}/snapshot`); }
+export function getReportRenderedFiles(artifactId) { return get(`/reporting/artifacts/${encodeURIComponent(artifactId)}/rendered-files`); }
+export function getReportArtifacts() { return get("/reporting/artifacts"); }
+export function getReportRenderedFileUrl(fileId, download = false) { return `${API_BASE}/reporting/rendered-files/${encodeURIComponent(fileId)}${download ? "?download=1" : ""}`; }
+export async function fetchReportRenderedFile(fileId) {
+  const response = await fetch(`${API_BASE}/reporting/rendered-files/${encodeURIComponent(fileId)}`, { headers: headers() });
+  if (!response.ok) throw new Error("Rendered report file retrieval failed");
+  return { blob: await response.blob(), contentType: response.headers.get("content-type") || "application/octet-stream" };
+}

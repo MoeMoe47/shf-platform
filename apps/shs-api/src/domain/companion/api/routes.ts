@@ -1,6 +1,9 @@
 import { fail, ok } from "../../../api/response-envelope.js";
 import { requirePermission } from "../../../auth/permission-guard.js";
 import { getCompanionContextForActor, CompanionContextHardFailureError } from "../service/companion-context-service.js";
+import { ContextualGuidanceService } from "../../documentation/service/contextual-guidance-service.js";
+
+const guidanceService = new ContextualGuidanceService();
 
 function actorFromRequest(req: any) {
   const organizationId = req.user.active_organization_id || req.user.organization_id;
@@ -23,8 +26,19 @@ export function registerCompanionRoutes(app: any) {
   // through those very endpoints, never a new entitlement surface.
   app.get("/companion/context/me", requirePermission("enrollment.view"), async (req: any, res: any, next: any) => {
     try {
-      const context = await getCompanionContextForActor(actorFromRequest(req));
-      return res.json(ok(context));
+      const actor = actorFromRequest(req);
+      const context = await getCompanionContextForActor(actor);
+      const serviceKey = String(req.query?.serviceKey || "").trim() || undefined;
+      const dgal = serviceKey
+        ? await guidanceService.compose(actor, {
+          serviceKey,
+          workflowType: String(req.query?.workflowType || "").trim() || undefined,
+          workflowStage: String(req.query?.workflowStage || "").trim() || undefined,
+          resourceType: String(req.query?.resourceType || "").trim() || undefined,
+          resourceId: String(req.query?.resourceId || "").trim() || undefined,
+        })
+        : null;
+      return res.json(ok({ ...context, dgal }));
     } catch (error) {
       if (error instanceof CompanionContextHardFailureError) {
         return res.status(503).json(fail("COMPANION_CONTEXT_UNAVAILABLE", "Companion context is temporarily unavailable."));

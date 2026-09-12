@@ -1,13 +1,18 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
-export default function useTour(totalSteps = 0) {
+export default function useTour(totalSteps = 0, context = null) {
   const [state, setState] = useState({
     isActive: false,
     currentStep: 0,
     mode: "guided",
     completed: false,
     dismissed: false,
+    context,
   });
+
+  useEffect(() => {
+    setState((current) => ({ ...current, context }));
+  }, [context]);
 
   const startTour = useCallback(() => {
     setState((s) => ({

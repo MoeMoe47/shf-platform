@@ -26,5 +26,16 @@
 [data-app="index"] .civicsure-canonical-list li { display: flex; justify-content: space-between; gap: 1rem; padding: .8rem 0; border-bottom: 1px solid #e4ebeb; }
 [data-app="index"] .civicsure-canonical-list span { color: #526568; }
 [data-app="index"] .civicsure-canonical-main a:focus-visible { outline: 3px solid rgb(23 92 211 / .35); outline-offset: 3px; }
+[data-app="index"] .dgal-next-steps { width: min(100%, 72rem); margin: 0 auto 1rem; padding: 1.25rem; border: 1px solid #b8d9d5; border-radius: .5rem; background: #eff9f7; }
+[data-app="index"] .dgal-next-steps-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+[data-app="index"] .dgal-next-steps-heading h2 { margin: 0; font-size: 1.35rem; }
+[data-app="index"] .dgal-eyebrow { margin: 0 0 .4rem; color: #176b70; font-size: .72rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+[data-app="index"] .dgal-next-steps-list { display: grid; gap: .65rem; margin: 1rem 0 0; padding: 0; list-style: none; }
+[data-app="index"] .dgal-next-step { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: .85rem; border: 1px solid #d7e0e1; border-radius: .4rem; background: #fff; }
+[data-app="index"] .dgal-next-step h3 { margin: .15rem 0 .35rem; font-size: 1rem; }
+[data-app="index"] .dgal-next-step p { margin: .25rem 0; color: #526568; line-height: 1.45; }
+[data-app="index"] .dgal-next-step-status, [data-app="index"] .dgal-next-step-source, [data-app="index"] .dgal-next-step-waiting { font-size: .82rem; }
+[data-app="index"] .dgal-next-step-status { color: #0f5054 !important; font-weight: 800; }
+[data-app="index"] .dgal-next-step .civicsure-canonical-link { flex: 0 0 auto; }
 @media (max-width: 48rem) { [data-app="index"] .civicsure-canonical-grid { grid-template-columns: 1fr; } [data-app="index"] .civicsure-canonical-list li { align-items: flex-start; flex-direction: column; } }
 @media (prefers-reduced-motion: reduce) { [data-app="index"] .civicsure-canonical-main *, [data-app="index"] .civicsure-canonical-main *::before, [data-app="index"] .civicsure-canonical-main *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; } }

@@ -17,7 +17,8 @@ test("CivicSure has one root canonical route with audience sections", () => {
 
 test("CivicSure provider and public surfaces do not use fixture fallback", () => {
   assert.match(app, /public\/assurance\/projections/);
-  assert.match(app, /Provider self-service is not configured/);
+  assert.match(app, /government-assurance\/provider-workspace/);
+  assert.match(app, /Provider workspace unavailable/);
   assert.doesNotMatch(app, /mock|fixture|demo data/i);
 });
 

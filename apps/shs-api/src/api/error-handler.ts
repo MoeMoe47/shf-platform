@@ -5,6 +5,6 @@ export function errorHandler(err: any, req: any, res: any, _next: any) {
   res.status(500).json({
     ok: false,
     error: { code: "INTERNAL_ERROR", message: "Internal error" },
-    correlation_id: "corr_dev",
+    correlation_id: String(req?.id || req?.headers?.["x-request-id"] || "corr_unknown"),
   });
 }

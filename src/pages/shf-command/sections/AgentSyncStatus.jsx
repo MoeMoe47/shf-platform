@@ -6,7 +6,7 @@ const AGENT_BASE =
   import.meta.env.VITE_SHF_AGENT_FABRIC_BASE || "http://127.0.0.1:8090";
 
 const AGENT_KEY =
-  import.meta.env.VITE_SHF_AGENT_ADMIN_KEY || "";
+  import.meta.env.PROD ? "" : import.meta.env.VITE_SHF_AGENT_ADMIN_KEY || "";
 
 function titleCaseCounty(value) {
   if (!value) return "Ohio";

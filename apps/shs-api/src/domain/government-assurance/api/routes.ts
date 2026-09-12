@@ -21,6 +21,9 @@ import { ServiceClaimAssuranceService } from "../service/service-claim-assurance
 import { AssuranceOutcomeRiskIntegrationService } from "../service/assurance-outcome-risk-integration-service.js";
 import { AssuranceRiskWorkflowService } from "../service/assurance-risk-workflow-service.js";
 import { CurriculumMetricTruthAdapter } from "../adapters/curriculum-metric-truth-adapter.js";
+import { ProviderSelfServiceService } from "../service/provider-self-service-service.js";
+import multer from "multer";
+import { createSourceAsset } from "../../source-ingestion/service/source-service.js";
 
 const service = new GovernmentAssuranceService(undefined, new PlatformMetricRegistryAdapter());
 const sourceScope = new SourceScopeService();
@@ -40,6 +43,8 @@ const risk = new RiskService();
 const serviceClaimAssurance = new ServiceClaimAssuranceService();
 const outcomeRisk = new AssuranceOutcomeRiskIntegrationService(risk);
 const riskWorkflow = new AssuranceRiskWorkflowService(risk, monitoringAudit);
+const providerSelfService = new ProviderSelfServiceService();
+const providerUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024, files: 1 } });
 
 function reject(res: any, error: any, next: any) {
   const code = String(error?.message || "");
@@ -52,6 +57,31 @@ function reject(res: any, error: any, next: any) {
 }
 
 export function registerGovernmentAssuranceRoutes(app: any) {
+  const providerAuth = (req: any, res: any, next: any) => {
+    const authorization = String(req.headers?.authorization || "").trim();
+    const hasSession = String(req.headers?.cookie || "").split(";").some((item) => item.trim().startsWith("shs_session="));
+    if (!authorization && !hasSession) return res.status(401).json(fail("AUTH_REQUIRED", "Authentication required."));
+    return next();
+  };
+  const providerActor = (req: any) => ({
+    user_id: String(req.user.user_id),
+    organization_id: String(req.user.active_organization_id || req.user.organization_id),
+    tenant_id: String(req.user.tenant_id),
+    permissions: req.user.permissions || [],
+  });
+  app.get("/government-assurance/provider-workspace", providerAuth, requirePermission(SHS_SECURITY_PERMISSIONS.GOVERNMENT_ASSURANCE_PROVIDER_SELF_SERVICE_VIEW), async (req: any, res: any, next: any) => { try { return res.json(ok(await providerSelfService.workspace(providerActor(req)))); } catch (error) { return reject(res, error, next); } });
+  app.get("/government-assurance/provider-workspace/evidence-requests/:id", providerAuth, requirePermission(SHS_SECURITY_PERMISSIONS.GOVERNMENT_ASSURANCE_PROVIDER_SELF_SERVICE_VIEW), async (req: any, res: any, next: any) => { try { const result = await providerSelfService.evidenceRequest(providerActor(req), req.params.id); return result ? res.json(ok(result)) : res.status(404).json(fail("NOT_FOUND", "Evidence request not found.")); } catch (error) { return reject(res, error, next); } });
+  app.get("/government-assurance/provider-workspace/findings/:id", providerAuth, requirePermission(SHS_SECURITY_PERMISSIONS.GOVERNMENT_ASSURANCE_PROVIDER_SELF_SERVICE_VIEW), async (req: any, res: any, next: any) => { try { const result = await providerSelfService.finding(providerActor(req), req.params.id); return result ? res.json(ok(result)) : res.status(404).json(fail("NOT_FOUND", "Finding not found.")); } catch (error) { return reject(res, error, next); } });
+  app.get("/government-assurance/provider-workspace/corrective-actions/:id", providerAuth, requirePermission(SHS_SECURITY_PERMISSIONS.GOVERNMENT_ASSURANCE_PROVIDER_SELF_SERVICE_VIEW), async (req: any, res: any, next: any) => { try { const result = await providerSelfService.correctiveAction(providerActor(req), req.params.id); return result ? res.json(ok(result)) : res.status(404).json(fail("NOT_FOUND", "Corrective action not found.")); } catch (error) { return reject(res, error, next); } });
+  app.post("/government-assurance/provider-workspace/evidence", providerAuth, requirePermission(SHS_SECURITY_PERMISSIONS.GOVERNMENT_ASSURANCE_PROVIDER_SELF_SERVICE_SUBMIT), (req: any, res: any, next: any) => providerUpload.single("file")(req, res, (error: any) => { if (error) return res.status(400).json(fail("UPLOAD_INVALID", "Evidence upload could not be read.")); next(); }), async (req: any, res: any, next: any) => {
+    try {
+      if (!req.file) return res.status(400).json(fail("FILE_REQUIRED", "An evidence file is required."));
+      const actor = providerActor(req);
+      return res.status(201).json(ok(await createSourceAsset(actor, req.file, req)));
+    } catch (error) { return reject(res, error, next); }
+  });
+  app.post("/government-assurance/provider-workspace/findings/:id/responses", providerAuth, requirePermission(SHS_SECURITY_PERMISSIONS.GOVERNMENT_ASSURANCE_PROVIDER_SELF_SERVICE_SUBMIT), async (req: any, res: any, next: any) => { try { return res.status(201).json(ok(await providerSelfService.submitFindingResponse(providerActor(req), req.params.id, req.body || {}))); } catch (error) { return reject(res, error, next); } });
+  app.post("/government-assurance/provider-workspace/corrective-actions/:id/responses", providerAuth, requirePermission(SHS_SECURITY_PERMISSIONS.GOVERNMENT_ASSURANCE_PROVIDER_SELF_SERVICE_SUBMIT), async (req: any, res: any, next: any) => { try { return res.status(201).json(ok(await providerSelfService.submitCorrectiveActionResponse(providerActor(req), req.params.id, req.body || {}))); } catch (error) { return reject(res, error, next); } });
   app.post("/government-assurance/assistant/respond", requirePermission(SHS_SECURITY_PERMISSIONS.AI_CONDUCTOR_USE), async (req: any, res: any, next: any) => { try { return res.json(ok(await phase8b.assist(req.user, req.body || {}))); } catch (error) { return reject(res, error, next); } });
   app.post("/government-assurance/reports/generate", requirePermission(SHS_SECURITY_PERMISSIONS.REPORTS_EXPORT), async (req: any, res: any, next: any) => { try { return res.status(201).json(ok(await phase8b.generateReport(req.user, req.body || {}))); } catch (error) { return reject(res, error, next); } });
   app.get("/government-assurance/claims", requirePermission(SHS_SECURITY_PERMISSIONS.GOVERNMENT_ASSURANCE_CLAIM_VIEW), async (req: any, res: any, next: any) => { try { return res.json(ok({ items: await service.listClaims(req.user) })); } catch (error) { return reject(res, error, next); } });

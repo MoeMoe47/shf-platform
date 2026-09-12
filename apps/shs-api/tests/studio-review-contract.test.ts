@@ -9,7 +9,15 @@ const project = { project_id: "studio-project-a", organization_id: "org-a", tena
 const work = { pages: [{ path: "/", title: "Home", content: "Saved content" }] };
 
 function serviceWith(rows: (sql: string, params?: unknown[]) => any, events: any[] = []) {
-  return new StudioProjectService(async (sql, params) => rows(sql, params), undefined as any, { enqueue: async (event: any) => { events.push(event); } } as any);
+  return new StudioProjectService(
+    async (sql, params) => rows(sql, params),
+    undefined as any,
+    { enqueue: async (event: any) => { events.push(event); } } as any,
+    undefined,
+    undefined,
+    undefined,
+    { routeForSubmission: async () => ({ status: "UNROUTED" }), authorizeDecision: async () => undefined, completeForDecision: async () => undefined } as any,
+  );
 }
 
 test("submission binds to current QA revision and stores an immutable work snapshot", async () => {
@@ -20,6 +28,7 @@ test("submission binds to current QA revision and stores an immutable work snaps
     if (sql.includes("studio_qa_runs") && sql.includes("status='PASSED'")) return { rows: [{ qa_run_id: "qa-3" }] };
     if (sql.includes("studio_review_submissions") && sql.includes("workspace_revision=$4")) return { rows: [] };
     if (sql.startsWith("INSERT INTO studio_review_submissions")) return { rows: [{ review_submission_id: "new" }] };
+    if (sql.includes("FROM studio_review_submissions s JOIN projects p")) return { rows: [{ ...project, review_submission_id: "new", workspace_revision: 3, status: "SUBMITTED" }] };
     return { rows: [] };
   }, events);
   const submission = await db.submitForReview(student, project.project_id);

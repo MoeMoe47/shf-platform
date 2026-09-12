@@ -30,6 +30,13 @@ import { registerCredentialRoutes } from "../domain/credentials/api/routes.js";
 import { registerArcadeRoutes } from "../domain/arcade/api/routes.js";
 import { registerCalendarRoutes } from "../domain/calendar/api/routes.js";
 import { registerCompanionRoutes } from "../domain/companion/api/routes.js";
+import { registerDocumentationRoutes } from "../domain/documentation/api/routes.js";
+import { registerDocumentationInstanceRoutes } from "../domain/documentation/api/instance-routes.js";
+import { registerDocumentationAgreementRoutes } from "../domain/documentation/api/agreement-routes.js";
+import { registerDocumentationSignatureRoutes } from "../domain/documentation/api/signature-routes.js";
+import { registerDocumentationCenterRoutes } from "../domain/documentation/api/center-routes.js";
+import { registerDocumentationRegistryRoutes } from "../domain/documentation/api/registry-routes.js";
+import { registerDocumentationVariantRoutes } from "../domain/documentation/api/variant-routes.js";
 import { registerCalendarFeedRoutes } from "../domain/calendar-feed/api/routes.js";
 import { registerExternalAccountRoutes } from "../domain/external-accounts/api/routes.js";
 import { registerAccessibilityProfileRoutes } from "../domain/accessibility-profile/api/routes.js";
@@ -72,6 +79,11 @@ import { registerGovernmentAssuranceRoutes } from "../domain/government-assuranc
 import { registerLegalRoutes } from "../domain/legal/api/routes.js";
 import { registerCrossProductRoutes } from "../domain/cross-product/api/routes.js";
 import { registerLearnerResultRoutes } from "../domain/curriculum/api/learner-result-routes.js";
+import { requirePermission } from "../auth/permission-guard.js";
+import { SHS_SECURITY_PERMISSIONS } from "../auth/security-permissions.js";
+import { evaluateBreakGlassAttestation } from "../security/break-glass.js";
+import { query } from "../db/client.js";
+import { emitOperationalTelemetry } from "../observability/operational-telemetry.js";
 
 
 type MutableApiUser = {
@@ -214,6 +226,26 @@ app.post("/auth/login", async (req: any, res: any) => {
       return res.status(401).json(fail("AUTH_REQUIRED", "Authentication required."));
     }
     res.json(ok(authResponsePayload(req.user).user));
+  });
+
+  app.post("/security/break-glass/attest", requirePermission(SHS_SECURITY_PERMISSIONS.SECURITY_MANAGE), async (req: any, res: any) => {
+    const decision = evaluateBreakGlassAttestation(req.user, req.body || {});
+    await writeSecurityAuditEvent(req, {
+      action_type: decision.auditEvent,
+      target_object_type: "break_glass",
+      target_object_id: req.user?.user_id || req.user?.id || "unknown",
+      new_state_json: {
+        status: decision.status,
+        reason_code: decision.reasonCode,
+        ttl_minutes: decision.ttlMinutes,
+      },
+      reason_code: decision.reasonCode,
+      reason_text: decision.status === "READY_FOR_EXTERNAL_MFA_ACTIVATION"
+        ? "Break-glass attestation accepted for external MFA-controlled activation."
+        : "Break-glass attestation denied.",
+    });
+    const status = decision.status === "DENIED" ? 403 : 202;
+    return res.status(status).json(ok(decision));
   });
 
   // These legacy fixture routes are local development surfaces only. They
@@ -377,6 +409,13 @@ app.post("/auth/login", async (req: any, res: any) => {
   registerArcadeRoutes(app);
   registerCalendarRoutes(app);
   registerCompanionRoutes(app);
+  registerDocumentationRoutes(app);
+  registerDocumentationInstanceRoutes(app);
+  registerDocumentationAgreementRoutes(app);
+  registerDocumentationSignatureRoutes(app);
+  registerDocumentationCenterRoutes(app);
+  registerDocumentationRegistryRoutes(app);
+  registerDocumentationVariantRoutes(app);
   registerCalendarFeedRoutes(app);
   registerExternalAccountRoutes(app);
   registerAccessibilityProfileRoutes(app);
@@ -408,6 +447,18 @@ app.post("/auth/login", async (req: any, res: any) => {
 
   app.get("/health", (_req: any, res: any) => {
     res.json({ ok: true, service: "shs-api" });
+  });
+  app.get("/health/live", (_req: any, res: any) => {
+    res.json({ ok: true, service: "shs-api", status: "LIVE" });
+  });
+  app.get("/health/ready", async (_req: any, res: any) => {
+    try {
+      await query("SELECT 1 AS ready");
+      res.json({ ok: true, service: "shs-api", status: "READY" });
+    } catch {
+      emitOperationalTelemetry({ event_name: "readiness_dependency_failure", severity: "ERROR", component: "shs_api", category: "DATABASE", outcome: "SYSTEM_FAILURE", metadata: { reason: "database_unavailable" } });
+      res.status(503).json({ ok: false, service: "shs-api", status: "NOT_READY", reason: "database_unavailable" });
+    }
   });
 
   return app;

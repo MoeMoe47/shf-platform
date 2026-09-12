@@ -2,8 +2,21 @@ import { query } from "../../../db/client.js";
 
 type Executor = { query: (sql: string, params?: unknown[]) => Promise<any> };
 type Event = Record<string, any>;
+function documentationPath(event: Event) {
+  if (!event.subject_id) return "/documentation";
+  const kind = event.subject_type === "signature_request" ? "signature" : event.subject_type === "manual_signature" ? "manual" : event.subject_type === "document_instance" ? "document" : event.subject_type === "packet_instance" ? "packet" : "requirement";
+  return `/documentation/items/${encodeURIComponent(`${kind}:${event.subject_id}`)}`;
+}
 
 const EVENT_POLICIES: Record<string, { type: string; title: string; message: string; recipient: (event: Event, db: Executor) => Promise<string | null>; path?: (event: Event) => string | null }> = {
+  "documentation.requirement.created": { type: "DOCUMENTATION_REQUIRED", title: "Document action required", message: "A document action is required in your organization workspace.", recipient: async (event) => String(event.originating_actor_id || event.payload?.recipient_user_id || "") || null, path: documentationPath },
+  "documentation.requirement.correction_required": { type: "DOCUMENTATION_CORRECTION_REQUIRED", title: "Document correction required", message: "A document item needs correction before it can be completed.", recipient: async (event) => String(event.payload?.recipient_user_id || event.originating_actor_id || "") || null, path: documentationPath },
+  "documentation.signature.requested": { type: "DOCUMENTATION_SIGNATURE_REQUIRED", title: "Signature required", message: "A document is waiting for an authorized signature.", recipient: async (event) => String(event.payload?.signer_user_id || event.originating_actor_id || "") || null, path: documentationPath },
+  "documentation.signature.signed": { type: "DOCUMENTATION_SIGNATURE_COMPLETE", title: "Signature complete", message: "A document signature was completed.", recipient: async (event) => String(event.payload?.requester_user_id || event.originating_actor_id || "") || null, path: documentationPath },
+  "documentation.signature.expired": { type: "DOCUMENTATION_SIGNATURE_EXPIRED", title: "Signature request expired", message: "A document signature request expired and may need to be sent again.", recipient: async (event) => String(event.payload?.requester_user_id || event.originating_actor_id || "") || null, path: documentationPath },
+  "documentation.manual_signature.verification_required": { type: "DOCUMENTATION_MANUAL_VERIFICATION", title: "Manual signature needs review", message: "A returned paper document is waiting for authorized verification.", recipient: async (event) => String(event.payload?.verifier_user_id || event.originating_actor_id || "") || null, path: documentationPath },
+  "documentation.manual_signature.rejected": { type: "DOCUMENTATION_MANUAL_CORRECTION", title: "Manual signature needs correction", message: "A returned paper document needs correction before verification.", recipient: async (event) => String(event.payload?.uploader_user_id || event.originating_actor_id || "") || null, path: documentationPath },
+  "documentation.document.superseded": { type: "DOCUMENTATION_SUPERSEDED", title: "Document version updated", message: "A document version was superseded. Review the current version in your workspace.", recipient: async (event) => String(event.originating_actor_id || event.payload?.recipient_user_id || "") || null, path: documentationPath },
   "studio.review.routed": {
     type: "REVIEW_ASSIGNED", title: "New review work", message: "New work is ready for your review.",
     recipient: async (event) => String(event.payload?.reviewer_user_id || "") || null,

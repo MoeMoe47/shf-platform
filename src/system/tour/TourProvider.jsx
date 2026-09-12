@@ -2,6 +2,7 @@ import { useEffect, useMemo } from "react";
 import useTour from "./useTour";
 import TourOverlay from "./TourOverlay";
 import { tourSteps as defaultTourSteps } from "./tourConfig";
+import { createTourContext } from "./tourContext";
 import "./tourStyles.css";
 
 function clearTourBodyClasses() {
@@ -18,12 +19,24 @@ export default function TourProvider({
   children,
   steps = defaultTourSteps,
   buttonLabel = "Guided Tour",
+  context = null,
 }) {
   const activeSteps = useMemo(() => {
     return Array.isArray(steps) && steps.length ? steps : defaultTourSteps;
   }, [steps]);
 
-  const tour = useTour(activeSteps.length);
+  const tour = useTour(activeSteps.length, createTourContext(context || {}));
+
+  useEffect(() => {
+    const handleGuidanceTourRequest = (event) => {
+      const requestedTourId = event.detail?.tourId;
+      if (tour.state.context?.tourId && requestedTourId && requestedTourId !== tour.state.context.tourId) return;
+      if (Number.isInteger(event.detail?.stepIndex)) tour.goToStep(event.detail.stepIndex);
+      else tour.startTour();
+    };
+    window.addEventListener("dgal:tour-request", handleGuidanceTourRequest);
+    return () => window.removeEventListener("dgal:tour-request", handleGuidanceTourRequest);
+  }, [tour.state.context?.tourId, tour.goToStep, tour.startTour]);
 
   useEffect(() => {
     clearTourBodyClasses();
@@ -52,6 +65,7 @@ export default function TourProvider({
         nextStep={tour.nextStep}
         prevStep={tour.prevStep}
         endTour={tour.endTour}
+        context={tour.state.context}
       />
 
       {!tour.state.isActive ? (

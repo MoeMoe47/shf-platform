@@ -81,6 +81,9 @@ import SolutionsInfrastructurePage from "@/pages/solutions/SolutionsInfrastructu
 import SHSPartnerGrowthEngine from "@/pages/admin/growth/SHSPartnerGrowthEngine.jsx";
 import { installGlobalButtonClickSound } from "../shared/ui/globalButtonClickSound.js";
 import { SHS_SECURITY_PERMISSIONS } from "@/system/security/security-permissions";
+import DocumentationCenter from "@/pages/documentation/DocumentationCenter.jsx";
+import DocumentationItemDetail from "@/pages/documentation/DocumentationItemDetail.jsx";
+import DocumentationRegistryAdmin from "@/pages/documentation/DocumentationRegistryAdmin.jsx";
 
 installGlobalButtonClickSound();
 
@@ -182,6 +185,9 @@ export default function AdminRoutes() {
         <Route path="/agent-fabric" element={protect("/agent-fabric", <AgentFabricPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/audit" element={protect("/audit", <AuditLogViewer />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/identity" element={protect("/identity", <IdentityManagement />, [SHS_SECURITY_PERMISSIONS.IDENTITY_VIEW])} />
+        <Route path="/documentation" element={protect("/documentation", <DocumentationCenter />, ["documentation.center.view"])} />
+        <Route path="/documentation/items/:id" element={protect("/documentation/items", <DocumentationItemDetail />, ["documentation.center.view"])} />
+        <Route path="/documentation/admin" element={protect("/documentation/admin", <DocumentationRegistryAdmin />, ["documentation.registry.manage"])} />
 
         {/* Admin builder / registry */}
         <Route path="/app-registry" element={protect("/app-registry", <AppRegistry />)} />

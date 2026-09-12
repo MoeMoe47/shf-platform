@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import "@/styles/admin.reports.css";
 
 const FABRIC_URL = (import.meta.env.VITE_FABRIC_URL || "http://127.0.0.1:8090").replace(/\/+$/,"");
-const ADMIN_KEY = import.meta.env.VITE_ADMIN_KEY || "";
+const ADMIN_KEY = import.meta.env.PROD ? "" : import.meta.env.VITE_ADMIN_KEY || "";
 
 async function jget(path) {
   const r = await fetch(`${FABRIC_URL}${path}`, { headers: { "X-Admin-Key": ADMIN_KEY } });

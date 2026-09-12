@@ -8,7 +8,9 @@ import { authMiddleware } from "./auth/auth-middleware.js";
 import { errorHandler } from "./api/error-handler.js";
 import { assertProductionIdentityProviderConfigured } from "./auth/production-identity.js";
 import { assertProductionRateLimitConfigured, rateLimitMiddleware } from "./security/rate-limit.js";
+import { assertPr1ProductionSecurityConfigured } from "./security/pr1-production-security-readiness.js";
 import { operationalMonitoringThresholds } from "./observability/operational-telemetry.js";
+import { randomUUID } from "node:crypto";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,6 +22,7 @@ const PORT = Number(process.env.PORT || 8091);
 // is the development fixture repository.
 assertProductionIdentityProviderConfigured();
 assertProductionRateLimitConfigured();
+assertPr1ProductionSecurityConfigured();
 operationalMonitoringThresholds();
 
 const runtimeEnvironment = String(process.env.SHS_AUTH_ENV || process.env.NODE_ENV || "development")
@@ -46,6 +49,12 @@ app.use(cors({
 }));
 app.use("/uploads", express.static(path.resolve(__dirname, "../uploads")));
 app.use(express.json());
+app.use((req: any, res: any, next: any) => {
+  const requestId = String(req.headers["x-request-id"] || randomUUID()).trim();
+  req.id = requestId;
+  res.setHeader("X-Request-ID", requestId);
+  next();
+});
 app.use(authMiddleware);
 app.use(rateLimitMiddleware());
 

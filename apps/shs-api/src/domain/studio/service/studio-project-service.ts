@@ -26,6 +26,7 @@ import { CompletionPolicyRepo } from "../../completion-policy/repo/completion-po
 import { BuildArtifactService } from "./studio-build-artifact-service.js";
 
 type DbExecutor = { query: (sql: string, params?: unknown[]) => Promise<any> };
+type ReviewerRoutingAuthority = Pick<ReviewerRoutingService, "routeForSubmission" | "authorizeDecision" | "completeForDecision">;
 const assignmentRepo = new AssignmentRepo();
 const enrollmentRepo = new EnrollmentRepo();
 const ADMIN_ROLES = ["shf_admin", "shs_admin", "org_admin", "super_admin", "program_manager"];
@@ -94,6 +95,7 @@ export class StudioProjectService {
     private assignmentLookup: typeof getAssignmentForActor = getAssignmentForActor,
     private assignments: Pick<AssignmentRepo, "hasEntitlementTarget"> = assignmentRepo,
     private enrollments: Pick<EnrollmentRepo, "listActiveEnrollmentsForLearner"> = enrollmentRepo,
+    private reviewerRoutingAuthority: ReviewerRoutingAuthority = reviewerRouting,
   ) {}
 
   private requirePermission(actor: any, permission: string) {
@@ -631,7 +633,7 @@ export class StudioProjectService {
       );
     }
     await this.outbox.enqueue({ producer_id: "shs-api.studio", event_type: "studio.review.submitted", subject_type: "studio_review_submission", subject_id: submissionId, organization_id: s.organizationId, originating_actor_id: s.userId, occurred_at: now, idempotency_key: submissionId, correlation_id: `studio:${id}:review:${submissionId}`, destination: "shs-studio", payload: { project_id: id, workspace_revision: row.workspace_revision, qa_run_id: row.qa_run_id } });
-    await reviewerRouting.routeForSubmission(submissionId, { ...actor, active_organization_id: s.organizationId, tenant_id: s.tenantId });
+    await this.reviewerRoutingAuthority.routeForSubmission(submissionId, { ...actor, active_organization_id: s.organizationId, tenant_id: s.tenantId });
     return rowToStudioReviewSubmission(row, null, Number(workspace.revision));
   }
 
@@ -643,7 +645,7 @@ export class StudioProjectService {
 
   async decideReview(actor: any, projectId: string, submissionId: string, input: any) {
     const { scope: s } = await this.authorizeReviewProject(actor, projectId);
-    await reviewerRouting.authorizeDecision(actor, submissionId);
+    await this.reviewerRoutingAuthority.authorizeDecision(actor, submissionId);
     const found = await this.reviewSubmissionRow(actor, projectId, submissionId, true);
     if (found.row.submitted_by_user_id === s.userId) throw new Error("REVIEW_SELF_APPROVAL_FORBIDDEN");
     if (found.decision) throw new Error("REVIEW_ALREADY_DECIDED");
@@ -665,7 +667,7 @@ export class StudioProjectService {
     }
     await this.dbQuery("UPDATE studio_review_submissions SET status=$1 WHERE review_submission_id=$2 AND organization_id=$3 AND tenant_id=$4", [decision, found.row.review_submission_id, s.organizationId, s.tenantId]);
     await this.outbox.enqueue({ producer_id: "shs-api.studio", event_type: "studio.review.decision_recorded", subject_type: "studio_review_decision", subject_id: decisionId, organization_id: s.organizationId, originating_actor_id: s.userId, occurred_at: now, idempotency_key: decisionId, correlation_id: `studio:${found.row.project_id}:review:${found.row.review_submission_id}`, destination: "shs-studio", payload: { project_id: found.row.project_id, submission_id: found.row.review_submission_id, decision, workspace_revision: found.row.workspace_revision } });
-    await reviewerRouting.completeForDecision({ query: this.dbQuery }, found.row.review_submission_id, s.organizationId, s.tenantId);
+    await this.reviewerRoutingAuthority.completeForDecision({ query: this.dbQuery }, found.row.review_submission_id, s.organizationId, s.tenantId);
     return { submissionId: found.row.review_submission_id, decisionId, decision, feedback, reviewedByUserId: s.userId, reviewedAt: now };
   }
 

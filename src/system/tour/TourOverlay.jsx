@@ -31,6 +31,7 @@ export default function TourOverlay({
   nextStep,
   prevStep,
   endTour,
+  context = null,
 }) {
   const step = steps[state.currentStep];
   const [rect, setRect] = useState(null);
@@ -72,7 +73,7 @@ export default function TourOverlay({
   const stepNumber = state.currentStep + 1;
 
   return (
-    <div className="tour-overlayRoot" data-tour-overlay="active">
+    <div className="tour-overlayRoot" data-tour-overlay="active" data-dgal-guidance-id={context?.guidanceId || undefined}>
       <div className="tour-dim" onClick={endTour} />
 
       {rect ? (

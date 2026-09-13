@@ -2,7 +2,11 @@ import { test, expect } from "@playwright/test";
 import { execFileSync } from "node:child_process";
 
 const api = process.env.SHS_TEST_API_URL || "http://127.0.0.1:8091";
-const frontend = process.env.SHS_TEST_FRONTEND_URL || "http://127.0.0.1:5173";
+const frontendBase = process.env.SHS_TEST_FRONTEND_URL || "http://127.0.0.1:5173";
+// Organization Onboarding is a Civic entry route. Keep the harness explicit
+// so the hash is evaluated by CivicRoutes rather than the root app shell.
+const frontend = /\/[^/]+\.html$/.test(frontendBase) ? frontendBase : `${frontendBase}/civic.html`;
+const onboardingUrl = `${frontend}#/operator/onboarding`;
 const database = process.env.SHS_TEST_DATABASE_URL;
 const run = `shfp4e2e_${Date.now()}`;
 const provider = "org_shf_001";
@@ -111,7 +115,7 @@ test("authenticated applicant and reviewer onboarding browser flow controls netw
     localStorage.setItem("shfOperatorToken", `dev-token:${token}`);
     localStorage.setItem("shfOperatorOrganizationId", org);
   }, { token: applicant, org: applicantOrg });
-  await page.goto(`${frontend}/#/operator/onboarding`);
+  await page.goto(onboardingUrl);
   await page.getByLabel("Organization Name").fill(`Phase 4 Applicant ${run}`);
   await page.getByLabel("Website").fill(`${run}.example.org`);
   await page.getByLabel("Primary Contact").fill("Applicant Lead");
@@ -126,23 +130,25 @@ test("authenticated applicant and reviewer onboarding browser flow controls netw
   expect(caseId).toContain("onb_");
   await expectService(request, "/reporting/public-snapshots", 403);
 
-  await page.evaluate(({ token, org }) => {
+  const reviewerPage = await page.context().newPage();
+  await reviewerPage.addInitScript(({ token, org }) => {
     localStorage.setItem("shfOperatorToken", `dev-token:${token}`);
     localStorage.setItem("shfOperatorOrganizationId", org);
   }, { token: reviewer, org: provider });
-  await page.getByRole("button", { name: new RegExp(`Phase 4 Applicant ${run}`) }).click();
-  await expect(page.getByText(/Activation Preview:/)).toBeVisible();
+  await reviewerPage.goto(onboardingUrl);
+  await reviewerPage.getByRole("button", { name: new RegExp(`Phase 4 Applicant ${run}`) }).click();
+  await expect(reviewerPage.getByText(/Activation Preview:/)).toBeVisible();
   await Promise.all([
-    page.waitForResponse((res) => res.url().includes(`/organization-onboarding/cases/${caseId}/approve`) && res.status() < 300),
-    page.getByRole("button", { name: "Approve Onboarding" }).click(),
+    reviewerPage.waitForResponse((res) => res.url().includes(`/organization-onboarding/cases/${caseId}/approve`) && res.status() < 300),
+    reviewerPage.getByRole("button", { name: "Approve Onboarding" }).click(),
   ]);
-  await expect(page.getByText("Application approved.")).toBeVisible();
+  await expect(reviewerPage.getByText("Application approved.")).toBeVisible();
   await Promise.all([
-    page.waitForResponse((res) => res.url().includes(`/organization-onboarding/cases/${caseId}/activate`) && res.status() < 300),
-    page.getByRole("button", { name: "Activate Onboarding" }).click(),
+    reviewerPage.waitForResponse((res) => res.url().includes(`/organization-onboarding/cases/${caseId}/activate`) && res.status() < 300),
+    reviewerPage.getByRole("button", { name: "Activate Onboarding" }).click(),
   ]);
-  await expect(page.getByText("Organization activated.")).toBeVisible();
-  await expect(page.getByText("ACTIVATED").first()).toBeVisible();
+  await expect(reviewerPage.getByText("Organization activated.")).toBeVisible();
+  await expect(reviewerPage.getByText("ACTIVATED").first()).toBeVisible();
 
   const persisted = db(`
     SELECT c.status, c.activated_organization_id, r.relationship_type, r.status,
@@ -189,10 +195,10 @@ test("authenticated applicant and reviewer onboarding browser flow controls netw
   expect(forged.status()).toBe(400);
 
   await Promise.all([
-    page.waitForResponse((res) => res.url().includes(`/organization-onboarding/cases/${caseId}/suspend`) && res.status() < 300),
-    page.getByRole("button", { name: "Suspend Onboarding" }).click(),
+    reviewerPage.waitForResponse((res) => res.url().includes(`/organization-onboarding/cases/${caseId}/suspend`) && res.status() < 300),
+    reviewerPage.getByRole("button", { name: "Suspend Onboarding" }).click(),
   ]);
-  await expect(page.getByText("Organization suspended.")).toBeVisible();
+  await expect(reviewerPage.getByText("Organization suspended.")).toBeVisible();
   await expectService(request, "/reporting/public-snapshots", 403);
 
   const audit = db(`
@@ -220,7 +226,7 @@ test("mobile onboarding intake and reviewer controls remain usable and perceivab
     localStorage.setItem("shfOperatorToken", `dev-token:${token}`);
     localStorage.setItem("shfOperatorOrganizationId", org);
   }, { token: applicant, org: applicantOrg });
-  await page.goto(`${frontend}/#/operator/onboarding`);
+  await page.goto(onboardingUrl);
   await expect(page.getByRole("heading", { name: "Applicant Intake" })).toBeVisible();
   await page.getByLabel("Organization Name").fill(`Mobile ${run}`);
   await page.getByLabel("Primary Contact").fill("Mobile Contact");

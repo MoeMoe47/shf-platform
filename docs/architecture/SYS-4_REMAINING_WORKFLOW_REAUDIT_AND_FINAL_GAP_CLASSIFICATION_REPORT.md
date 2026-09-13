@@ -13,13 +13,13 @@ SYS-4 product gap was found in this audit.
 
 ## 2. Repository Baseline
 
-Path: `/Users/mikeslate/Projects/shrv1`  
-Branch: `studio-v1-plus-development`  
-HEAD: `0441aa4fe5f74d330a9f100f678d6353a6cac43b`  
+Path: `/Users/mikeslate/Projects/shrv1`
+Branch: `studio-v1-plus-development`
+HEAD: `0441aa4fe5f74d330a9f100f678d6353a6cac43b`
 Worktree: 106 tracked dirty paths, 158 untracked paths, 264 total. Existing
-owner work was preserved.  
-Migration filename head: `124_credential_learner_result_policy.sql`.  
-Applied migration head: current evidence through 124.  
+owner work was preserved.
+Migration filename head: `124_credential_learner_result_policy.sql`.
+Applied migration head: current evidence through 124.
 PostgreSQL/API/frontend/Agent Fabric: not running at audit time; no live
 runtime was started for this documentation-only re-audit.
 
@@ -247,11 +247,11 @@ changed.
 
 ## 32. Remaining Risks
 
-CRITICAL: none.  
+CRITICAL: none.
 HIGH: none confirmed. WF-018 and WF-026 are repository-local acceptance gaps
-and should be closed before declaring the entire SYS-4 wave complete.  
+and should be closed before declaring the entire SYS-4 wave complete.
 MEDIUM: broad combined regression evidence is distributed across focused suites
-rather than one SYS-4 run.  
+rather than one SYS-4 run.
 LOW: external provider credentials and Azure remain deployment/future
 configuration, not current SYS-4 blockers.
 

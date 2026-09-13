@@ -10,10 +10,10 @@ only in import candidates and lost during canonical execution/publication.
 
 ## 2. Scope and Baseline
 
-Path: `/Users/mikeslate/Projects/shrv1`  
-Branch: `studio-v1-plus-development`  
-HEAD: `0441aa4`  
-Fresh database: `shs_sys4c5_20260910`, PostgreSQL port `55443`  
+Path: `/Users/mikeslate/Projects/shrv1`
+Branch: `studio-v1-plus-development`
+HEAD: `0441aa4`
+Fresh database: `shs_sys4c5_20260910`, PostgreSQL port `55443`
 Migration head: `125_curriculum_lesson_content.sql`; applied `001–125` with
 pending/drift/unknown all empty. Owner worktree changes were preserved.
 

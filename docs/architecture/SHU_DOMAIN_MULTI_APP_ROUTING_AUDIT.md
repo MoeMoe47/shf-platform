@@ -1,8 +1,8 @@
 # SHU Domain and Multi-App Routing Audit
 
-**Audit date:** 2026-09-07  
-**Repository:** `/Users/mikeslate/Projects/shrv1`  
-**Branch:** `studio-v1-plus-development`  
+**Audit date:** 2026-09-07
+**Repository:** `/Users/mikeslate/Projects/shrv1`
+**Branch:** `studio-v1-plus-development`
 **Audit mode:** read-only; no runtime, deployment, DNS, authentication, API, or schema changes made.
 
 ## 1. Executive Result

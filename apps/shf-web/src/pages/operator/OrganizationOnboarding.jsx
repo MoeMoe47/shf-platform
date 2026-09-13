@@ -7,10 +7,13 @@ import {
   approveOnboardingCase,
   declineOnboardingCase,
   exitOnboardingCase,
+  getCurrentAuth,
   listOnboardingCases,
   submitOnboardingCase,
   suspendOnboardingCase,
 } from "../../services/organization-onboarding-client";
+import { resolveOnboardingExperience } from "../../system/sea/onboardingRoleProjection";
+import { SeaAttention, SeaDashboardSection, SeaHelpRegion, SeaNextAction } from "@/components/sea/SeaDashboardPrimitives.jsx";
 
 const SERVICES = [
   ["curriculum", "Curriculum"],
@@ -29,6 +32,7 @@ const RELATIONSHIPS = [
 const fieldStyle = { display: "block", width: "100%", minHeight: 36, marginTop: 4 };
 
 export default function OrganizationOnboarding() {
+  const [actorMode, setActorMode] = useState(null);
   const [cases, setCases] = useState([]);
   const [selectedId, setSelectedId] = useState("");
   const [approvedServices, setApprovedServices] = useState(["curriculum", "reporting"]);
@@ -59,7 +63,19 @@ export default function OrganizationOnboarding() {
   }
 
   useEffect(() => {
-    load();
+    let mounted = true;
+    Promise.all([getCurrentAuth(), listOnboardingCases()])
+      .then(([auth, result]) => {
+        if (!mounted) return;
+        setActorMode(resolveOnboardingExperience(auth));
+        setCases(result.data.items);
+      })
+      .catch((err) => {
+        if (!mounted) return;
+        setActorMode("UNAUTHORIZED");
+        setError(err.message);
+      });
+    return () => { mounted = false; };
   }, []);
 
   const selected = useMemo(() => cases.find((item) => item.onboardingCaseId === selectedId) || cases[0], [cases, selectedId]);
@@ -103,9 +119,30 @@ export default function OrganizationOnboarding() {
       <ErrorBanner message={error} />
       {notice ? <p role="status" aria-live="polite">{notice}</p> : null}
 
-      <div className="onboarding-grid" style={{ display: "grid", gap: 20, gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)" }}>
+      {actorMode === "UNAUTHORIZED" ? (
+        <p role="alert">This account is not authorized for an onboarding experience.</p>
+      ) : actorMode ? (
+        <>
+          <SeaDashboardSection title={actorMode === "REVIEWER" ? "Reviewer context" : "Applicant context"} eyebrow="Organization service">
+            <p>Applications move through the canonical lifecycle; the current actor only receives actions authorized by the onboarding service.</p>
+          </SeaDashboardSection>
+          <SeaAttention items={actorMode === "REVIEWER"
+            ? (selected?.status === "UNDER_REVIEW" ? [{ type: "REVIEW_REQUIRED", label: `${selected.organizationName} is ready for authorized review.`, owner: "Onboarding reviewer" }] : [])
+            : (selected?.status === "UNDER_REVIEW" ? [{ type: "WAITING", label: "Your application is waiting for reviewer action.", owner: "Onboarding reviewer" }] : [])} />
+          <SeaNextAction
+            label={actorMode === "REVIEWER" ? (selected ? "Review the selected application" : "Open the onboarding queue") : "Complete the applicant intake"}
+            description={actorMode === "REVIEWER"
+              ? "The onboarding state machine remains the source of truth for the next reviewer action."
+              : "The onboarding state machine remains the source of truth for the next applicant action."}
+            source="WORKFLOW_STATE_MACHINE"
+          />
+        </>
+      ) : null}
+
+      {actorMode === "APPLICANT" ? (
         <section aria-label="Applicant Intake">
           <h3>Applicant Intake</h3>
+          {selected ? <p>Application status: <StatusChip value={selected.status} />. Reviewer and activation work remain outside this applicant view.</p> : null}
           <form onSubmit={submit} style={{ display: "grid", gap: 12 }}>
             <label>
               Organization Name
@@ -156,7 +193,9 @@ export default function OrganizationOnboarding() {
             <button type="submit">Submit Application</button>
           </form>
         </section>
+      ) : null}
 
+      {actorMode === "REVIEWER" ? (
         <section aria-label="Reviewer Queue">
           <h3>Reviewer Queue</h3>
           <button type="button" onClick={load}>Refresh Queue</button>
@@ -209,7 +248,10 @@ export default function OrganizationOnboarding() {
             </article>
           ) : null}
         </section>
-      </div>
+      ) : null}
+      <SeaHelpRegion>
+        <p>Documents, agreements, and guidance remain DGAL-owned; this surface does not grant entitlement or activation authority.</p>
+      </SeaHelpRegion>
 
       <style>{`
         @media (max-width: 820px) {

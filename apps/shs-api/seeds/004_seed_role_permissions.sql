@@ -29,4 +29,9 @@ INSERT INTO role_permissions (role_permission_id, role_id, permission_name) VALU
 
 ('rp_026','role_reviewer','case.read'),
 ('rp_027','role_reviewer','audit.read')
+,
+('rp_ax4_org_review','role_org_admin','accessibility.accommodation.review'),
+('rp_ax4_org_approve','role_org_admin','accessibility.accommodation.approve'),
+('rp_ax4_org_fulfill','role_org_admin','accessibility.accommodation.fulfill'),
+('rp_ax4_reviewer_review','role_reviewer','accessibility.accommodation.review')
 ON CONFLICT (role_permission_id) DO NOTHING;

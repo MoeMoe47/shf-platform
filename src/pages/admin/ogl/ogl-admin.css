@@ -1,0 +1,23 @@
+.ogl-admin { max-width: 1240px; margin: 0 auto; padding: 32px; color: #172033; background: #f7f8fb; min-height: 100vh; }
+.ogl-admin header { border-bottom: 1px solid #d8deea; margin-bottom: 24px; }
+.ogl-admin h1 { margin: 0 0 8px; font-size: 30px; }
+.ogl-admin h2 { margin-top: 0; font-size: 18px; }
+.ogl-admin h3 { font-size: 15px; }
+.ogl-admin__eyebrow { margin: 0 0 6px; color: #49627d; text-transform: uppercase; letter-spacing: .08em; font-size: 12px; }
+.ogl-admin__grid { display: grid; grid-template-columns: 250px minmax(340px, 1fr) 230px; gap: 18px; align-items: start; }
+.ogl-admin__grid > section, .ogl-admin__grid > aside { border: 1px solid #d8deea; background: #fff; padding: 18px; border-radius: 8px; }
+.ogl-admin__list, .ogl-admin__history { list-style: none; padding: 0; margin: 0; }
+.ogl-admin__list button { width: 100%; display: grid; gap: 4px; text-align: left; border: 0; border-bottom: 1px solid #e7ebf2; background: transparent; padding: 12px 8px; cursor: pointer; color: inherit; }
+.ogl-admin__list button.is-selected { background: #e8f0f7; }
+.ogl-admin__list span, .ogl-admin__history span { font-size: 12px; color: #5c6878; overflow-wrap: anywhere; }
+.ogl-admin form { display: grid; gap: 12px; }
+.ogl-admin label { display: grid; gap: 5px; font-weight: 600; font-size: 13px; }
+.ogl-admin input, .ogl-admin textarea { width: 100%; box-sizing: border-box; border: 1px solid #b7c1d0; border-radius: 4px; padding: 9px; font: inherit; }
+.ogl-admin textarea { min-height: 70px; resize: vertical; }
+.ogl-admin button[type="submit"], .ogl-admin__history button { border: 1px solid #2c5c7c; background: #2c5c7c; color: #fff; border-radius: 4px; padding: 9px 12px; cursor: pointer; }
+.ogl-admin__history li { display: flex; justify-content: space-between; gap: 8px; padding: 8px 0; border-top: 1px solid #e7ebf2; }
+.ogl-admin__history button { padding: 5px 8px; }
+.ogl-health { font-weight: 700; color: #176b48; }
+.ogl-admin__error { color: #9a1b1b; }
+.ogl-admin__notice { color: #176b48; }
+@media (max-width: 850px) { .ogl-admin { padding: 20px; } .ogl-admin__grid { grid-template-columns: 1fr; } }

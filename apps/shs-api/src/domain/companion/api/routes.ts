@@ -18,6 +18,7 @@ function actorFromRequest(req: any) {
 }
 
 export function registerCompanionRoutes(app: any) {
+  app.get("/companion/accessibility/help", requirePermission("enrollment.view"), async (_req: any, res: any) => res.json(ok({ capabilities: ["KEYBOARD_HELP", "ACCESSIBILITY_SETTINGS", "ALTERNATIVE_CONTENT", "ACCOMMODATION_GUIDANCE", "HUMAN_ESCALATION"], authority: "GUIDANCE_ONLY", availableRepresentations: ["ACCESSIBLE_HTML", "PLAIN_TEXT"], note: "Companion explains and guides; it cannot approve accommodations, waive assurance findings, verify issues, or release software." })));
   // Self-service only — no client-suppliable learnerId, mirroring
   // /calendar/events/me, /journey/milestones/me, and /careers/pathway/me.
   // Gated by the same broadly-held "enrollment.view" permission those

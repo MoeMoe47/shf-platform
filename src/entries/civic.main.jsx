@@ -44,11 +44,13 @@ import { HashRouter } from "react-router-dom";
 
 /* ---- App scaffolding ---- */
 import RootProviders from "@/entries/RootProviders.jsx";
+import { AuthProvider } from "@/auth/auth-context.jsx";
 import GlobalErrorBoundary from "@/components/GlobalErrorBoundary.jsx";
 import { RoleProvider } from "@/context/RoleCtx.jsx";
 import { ToastsProvider } from "@/context/Toasts.jsx";
 import { setAppScope } from "@/utils/setAppScope.js";
 import CivicRoutes from "@/router/CivicRoutes.jsx";
+import OglGuidanceEntryPoint from "@/system/guidance/OglGuidanceEntryPoint.jsx";
 
 /* ---- Focus mode (UI + behavior) ---- */
 import "@/styles/FocusMode.css";
@@ -100,7 +102,8 @@ createRoot(getMount()).render(
     <GlobalErrorBoundary>
       <LocaleProvider>
         <ReadingLevelProvider>
-          <RootProviders appScope={APP}>
+          <AuthProvider>
+            <RootProviders appScope={APP}>
             {/* RoleProvider takes `initialRoles` (an array) — previewing
                 the app as an admin by default, matching the original
                 intent, but with the prop name RoleCtx.jsx actually
@@ -118,13 +121,15 @@ createRoot(getMount()).render(
                   what any page's own logic does. */}
               <ToastsProvider>
                 <HashRouter>
+                  <OglGuidanceEntryPoint appScope="civic" />
                   {/* Global coach panel lives at the shell level */}
                   <CoachDrawer />
                   <CivicRoutes />
                 </HashRouter>
               </ToastsProvider>
             </RoleProvider>
-          </RootProviders>
+            </RootProviders>
+          </AuthProvider>
         </ReadingLevelProvider>
       </LocaleProvider>
     </GlobalErrorBoundary>

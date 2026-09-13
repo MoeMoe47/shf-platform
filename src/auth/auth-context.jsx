@@ -158,3 +158,10 @@ export function useAuthContext() {
   }
   return ctx;
 }
+
+// Shared presentation providers also run in anonymous standalone entries
+// (for example Arcade). Those entries need the safe accessibility fallback,
+// not a required authenticated session.
+export function useOptionalAuthContext() {
+  return useContext(AuthContext);
+}

@@ -1,8 +1,8 @@
 # Silicon Heartland Systemwide Workflow Registry
 
-Audit baseline: 2026-09-10  
-Repository: `/Users/mikeslate/Projects/shrv1`  
-Branch: `studio-v1-plus-development`  
+Audit baseline: 2026-09-10
+Repository: `/Users/mikeslate/Projects/shrv1`
+Branch: `studio-v1-plus-development`
 HEAD: `0441aa4fe5f74d330a9f100f678d6353a6cac43b`
 
 ## Registry Rules
@@ -368,7 +368,7 @@ activity loading, assessment submission, policy-gated completion, and visible
 completion state. Course-scoped unit resolution and stable-key completion
 submission were corrected during acceptance. WF-019 remains `PARTIAL` pending
 the complete negative/retry/isolation/refresh/next-action acceptance matrix.
- 
+
 ## SYS-4B3 Final Negative / Retry / Isolation Evidence — 2026-09-10
 
 Fresh disposable database `shs_sys4b3_20260909` and the mounted

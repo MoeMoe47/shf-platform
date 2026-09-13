@@ -39,6 +39,16 @@ before(async () => {
       [userId, `${userId}@test.invalid`],
     ));
   }
+  // The live development identity resolver requires a real active
+  // membership. Reuse the fixture's least-privilege student role instead
+  // of relying on the local super-admin fallback or widening permissions.
+  await query(
+    `INSERT INTO memberships (membership_id, user_id, organization_id, role_id, status, effective_from)
+     VALUES ($1, $2, 'org_shf_001', 'phase8_role_student', 'active', NOW()),
+            ($3, $4, 'org_shf_001', 'phase8_role_student', 'active', NOW())
+     ON CONFLICT (membership_id) DO NOTHING`,
+    [`aiel_profile_mem_${RUN}_a`, userA, `aiel_profile_mem_${RUN}_b`, userB],
+  );
 });
 
 after(async () => {

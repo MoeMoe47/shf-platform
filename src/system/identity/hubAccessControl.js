@@ -62,6 +62,7 @@ export const hubPageAccess = {
   "/hub/journal": ["client", "client_admin", "shs_admin"],
 
   "/reporting": ["client_admin", "shs_admin"],
+  "/release-assurance": ["client_admin", "shs_admin"],
   "/reports": ["client_admin", "shs_admin"],
   "/ops/reports": ["shs_admin"],
   "/ops/reports/create": ["shs_admin"],
@@ -143,6 +144,10 @@ export function normalizeHubRole(role) {
 }
 
 export function canAccessHubRoute(role, route) {
+  const rawRole = String(role || "").trim().toLowerCase();
+  // PermissionGuard still performs the server-derived permission check.
+  if (rawRole === "operator" && ["/verification-audit", "/agent-fabric"].includes(route)) return true;
+  if (rawRole === "org_admin" && ["/ops/executive-command", "/orientation", "/release-assurance"].includes(route)) return true;
   const normalizedRole = normalizeHubRole(role);
   const allowedRoles = hubPageAccess[route] || [];
   return allowedRoles.includes(normalizedRole);

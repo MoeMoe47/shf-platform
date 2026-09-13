@@ -1,6 +1,8 @@
 import React from "react";
 import "./agent-fabric.css";
 import { Button, StatusBadge } from "@/components/shared/DesignSystemPrimitives.jsx";
+import OglGuidanceEntryPoint from "@/system/guidance/OglGuidanceEntryPoint.jsx";
+import { SeaAttention, SeaDashboardSection, SeaHelpRegion, SeaNextAction } from "@/components/sea/SeaDashboardPrimitives.jsx";
 
 const API_ROOT = "/api";
 
@@ -150,7 +152,9 @@ export default function AgentFabricPage() {
     : "Unavailable";
 
   return (
-    <main className="agent-fabric-page">
+    <>
+      <OglGuidanceEntryPoint appScope="agent-fabric" />
+      <main className="agent-fabric-page">
       <section className="agent-fabric-hero">
         <div>
           <p className="agent-fabric-kicker">SHS Agent Governance</p>
@@ -164,6 +168,15 @@ export default function AgentFabricPage() {
         </div>
       </section>
 
+      <SeaDashboardSection title="Governed work-order context" eyebrow="Agent Fabric">
+        <p>Review agent, provider, session, policy, and resource state before taking an authorized action.</p>
+      </SeaDashboardSection>
+      <SeaAttention sourceStatus={error ? "UNAVAILABLE" : loading ? "PARTIAL" : "AVAILABLE"} items={[
+        ...(blocked !== "Unavailable" && Number(blocked) > 0 ? [{ type: "AT_RISK", label: `${blocked} governed agents require attention.`, owner: "Agent Fabric" }] : []),
+        ...(verify?.ok === false ? [{ type: "REVIEW_REQUIRED", label: "Verification status requires review.", owner: "Agent Fabric" }] : []),
+      ]} />
+      <SeaNextAction label="Review governed work orders" description="Policy, tool, approval, and execution boundaries remain controlled by Agent Fabric and WF-040." source="DOMAIN_PROJECTION" />
+
       {error ? (
         <div className="agent-fabric-alert">
           <strong>{error}</strong>
@@ -171,7 +184,7 @@ export default function AgentFabricPage() {
         </div>
       ) : null}
 
-      <section className="agent-fabric-metrics" aria-label="Agent Fabric summary">
+      <section className="agent-fabric-metrics" aria-label="Agent Fabric summary" data-ogl-anchor="agent-fabric-work-orders">
         <article><span>Total Agents</span><strong>{total}</strong></article>
         <article><span>Ready</span><strong>{ready}</strong></article>
         <article><span>Warnings</span><strong>{warning}</strong></article>
@@ -179,6 +192,9 @@ export default function AgentFabricPage() {
         <article><span>Verify</span><strong>{verify?.ok ? "Pass" : loading ? "Load" : "Check"}</strong></article>
         <article><span>Ledger</span><strong>{verify?.ledger?.pass ? "Pass" : loading ? "Load" : "Check"}</strong></article>
       </section>
+      <SeaHelpRegion>
+        <p>Guidance is read-only and cannot authorize unrestricted production execution.</p>
+      </SeaHelpRegion>
 
       <section className="agent-fabric-grid agent-fabric-grid--main">
         <div className="agent-fabric-panel">
@@ -344,6 +360,7 @@ export default function AgentFabricPage() {
           </div>
         </div>
       </section>
-    </main>
+      </main>
+    </>
   );
 }

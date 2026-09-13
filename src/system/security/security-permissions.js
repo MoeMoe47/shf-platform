@@ -46,6 +46,7 @@ export const SHS_SECURITY_PERMISSIONS = Object.freeze({
   REPORTS_PREVIEW: "reports.preview",
   REPORTS_EXPORT: "reports.export",
   REPORTS_PUBLISH: "reports.publish",
+  DOCUMENTATION_REGISTRY_MANAGE: "documentation.registry.manage",
 
   AUDIT_VIEW: "audit.view",
   AUDIT_EXPORT: "audit.export",

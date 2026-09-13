@@ -18,6 +18,7 @@ import "@/styles/career-shell.css";
 import "@/styles/career-public.css";
 import "@/styles/career-public-components.css";
 import "@/styles/career-public-overrides.css";
+import "@/styles/career-pathways-public.css";
 // KpiCard.jsx's real design (used by Credit Report + AttendanceCard) — was
 // never loaded for Career (only debt/ledger/sales/employer/treasury
 // imported it), so cards fell back to shell.css's bare-minimum .kpi rules.

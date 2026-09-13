@@ -18,6 +18,11 @@ export function createTourReturnTarget(input = {}) {
 export function createTourContext(input = {}) {
   return {
     tourId: input.tourId || null,
+    tourVersion: input.tourVersion || 1,
+    orientationId: input.orientationId || null,
+    orientationVersion: input.orientationVersion || 1,
+    userId: input.userId || null,
+    tenantId: input.tenantId || null,
     role: input.role || null,
     organizationId: input.organizationId || null,
     service: input.service || null,

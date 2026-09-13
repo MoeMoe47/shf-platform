@@ -1,0 +1,15 @@
+import { fail, ok } from "../../../api/response-envelope.js";
+import { requirePermission } from "../../../auth/permission-guard.js";
+import * as service from "../service/operations-service.js";
+function handle(res: any, error: any) { return res.status(error?.statusCode || 400).json(fail(error?.code || "ACCESSIBILITY_OPERATIONS_FAILED", error?.message || "Accessibility operations request failed.")); }
+export function registerAccessibilityOperationsRoutes(app: any) {
+  app.get("/accessibility/operations/issues", requirePermission("accessibility.operations.view"), async (req: any, res: any) => { try { return res.json(ok({ items: await service.listIssues(req.user) })); } catch (e) { return handle(res, e); } });
+  app.get("/accessibility/operations/issues/:id", requirePermission("accessibility.operations.view"), async (req: any, res: any) => { try { const item = await service.getIssue(req.user, req.params.id); return item ? res.json(ok(item)) : res.status(404).json(fail("NOT_FOUND", "Accessibility issue not found.")); } catch (e) { return handle(res, e); } });
+  app.post("/accessibility/operations/issues/ingest", requirePermission("accessibility.operations.manage"), async (req: any, res: any) => { try { return res.status(201).json(ok(await service.ingestFinding(req.user, req.body || {}))); } catch (e) { return handle(res, e); } });
+  app.patch("/accessibility/operations/issues/:id", requirePermission("accessibility.operations.manage"), async (req: any, res: any) => { try { return res.json(ok(await service.updateIssue(req.user, req.params.id, req.body || {}))); } catch (e) { return handle(res, e); } });
+  app.get("/accessibility/operations/health", requirePermission("accessibility.operations.view"), async (req: any, res: any) => { try { return res.json(ok(await service.health(req.user))); } catch (e) { return handle(res, e); } });
+  app.post("/accessibility/support/requests", async (req: any, res: any) => { try { if (!req.user) return handle(res, Object.assign(new Error("Authentication required."), { statusCode: 401, code: "AUTH_REQUIRED" })); return res.status(201).json(ok(await service.createSupport(req.user, req.body || {}))); } catch (e) { return handle(res, e); } });
+  app.get("/accessibility/support/requests/me/:id", async (req: any, res: any) => { try { if (!req.user) return handle(res, Object.assign(new Error("Authentication required."), { statusCode: 401, code: "AUTH_REQUIRED" })); const item = await service.getOwnSupport(req.user, req.params.id); return item ? res.json(ok(item)) : res.status(404).json(fail("NOT_FOUND", "Support request not found.")); } catch (e) { return handle(res, e); } });
+  app.get("/accessibility/support/requests", requirePermission("accessibility.support.manage"), async (req: any, res: any) => { try { return res.json(ok({ items: await service.listSupport(req.user) })); } catch (e) { return handle(res, e); } });
+  app.patch("/accessibility/support/requests/:id", requirePermission("accessibility.support.manage"), async (req: any, res: any) => { try { return res.json(ok(await service.updateSupport(req.user, req.params.id, req.body || {}))); } catch (e) { return handle(res, e); } });
+}

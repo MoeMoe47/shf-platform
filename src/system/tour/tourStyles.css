@@ -166,6 +166,62 @@
   transition: top 160ms ease, left 160ms ease, width 160ms ease, height 160ms ease;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .tour-spotlight { transition: none; }
+}
+
+.tour-card:focus-visible, .tour-card button:focus-visible { outline: 3px solid #facc15; outline-offset: 3px; }
+.ogl-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.ogl-muted { color: rgba(226, 246, 255, 0.72); }
+
+.ogl-alternative {
+  position: fixed;
+  inset: 16px;
+  z-index: 100000;
+  overflow: auto;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 24px;
+  border: 1px solid rgba(103, 232, 249, 0.32);
+  border-radius: 16px;
+  background: #041220;
+  color: #e8fbff;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.58);
+}
+
+.ogl-alternative::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: rgba(1, 7, 16, 0.72);
+}
+
+.ogl-alternative__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.ogl-alternative__header button,
+.ogl-alternative li button {
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.9);
+  color: #e2e8f0;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.ogl-alternative li { margin: 0 0 16px; }
+.ogl-alternative__content p { margin: 6px 0; }
+
+@media (max-width: 600px) {
+  .ogl-alternative { inset: 8px; padding: 16px; }
+  .ogl-alternative__header { align-items: flex-start; }
+}
+
 .tour-card {
   position: fixed;
   width: min(380px, calc(100vw - 40px));

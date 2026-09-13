@@ -4,6 +4,7 @@ import { fetchOperationalOverview } from "@/shared/operations/operationsClient.j
 import { fetchCurriculumLearningProgressReport } from "@/shared/reporting/curriculumReportingClient.js";
 import { useUser } from "@/context/UserContext.jsx";
 import "@/styles/curriculum-operations.css";
+import { SeaAttention, SeaDashboardSection, SeaHelpRegion, SeaNextAction } from "@/components/sea/SeaDashboardPrimitives.jsx";
 
 function Metric({ label, value }) {
   return <div className="ops-metric"><span>{label}</span><strong>{value == null ? "NO_DATA" : value}</strong></div>;
@@ -43,16 +44,36 @@ export default function InstructorOperations() {
   const reportMetrics = data.report?.metric_results || [];
 
   return (
-    <main className="ops-page">
+    <main className="ops-page" data-ogl-anchor="curriculum-instructor-workspace">
       <header className="ops-header">
         <div><p className="ops-eyebrow">Instructor + Admin</p><h1>Operational Workspace</h1><p>Review assigned learning and act on canonical learner state.</p></div>
         <div><button type="button" className="ops-secondary" onClick={load}>Refresh</button> <Link className="ops-secondary" to="/studio/reviewer-queue">Review queue</Link></div>
       </header>
 
+      <SeaDashboardSection title="Course and cohort context" eyebrow="Instructor">
+        <p>Review instructional responsibilities for the cohorts and assignments in your authorized scope.</p>
+      </SeaDashboardSection>
+      <SeaAttention items={reviews.slice(0, 5).map((item) => ({
+        type: "REVIEW_REQUIRED",
+        label: item.title || item.name || "Learner work is ready for review.",
+        owner: "Instructor",
+        href: "/curriculum/instructor/operations",
+        actionLabel: "Open review",
+      }))} />
+      <SeaNextAction
+        label="Review instructional work"
+        description="Use the operational projection to choose the next authorized review or intervention."
+        href="/curriculum/instructor/operations"
+        source="DOMAIN_PROJECTION"
+      />
+
       <section className="ops-metrics" aria-label="Operational summary">
         <Metric label="Cohorts" value={summary.cohort_count} /><Metric label="Active learners" value={summary.learner_count} />
         <Metric label="Active assignments" value={summary.active_assignment_count} /><Metric label="Needs review" value={summary.review_count} /><Metric label="Upcoming live" value={summary.upcoming_live_count} />
       </section>
+      <SeaHelpRegion>
+        <p>Guidance is scoped to instructional context; it does not grant learner, approval, or service authority.</p>
+      </SeaHelpRegion>
       <section className="ops-panel ops-report-panel"><div className="ops-panel-head"><h2>Learning report</h2><span>{data.report?.freshness?.calculated_at ? `Calculated ${new Date(data.report.freshness.calculated_at).toLocaleString()}` : "NO_DATA"}</span></div>{reportMetrics.length ? <div className="ops-list">{reportMetrics.map((metric) => <div className="ops-row" key={metric.metric_id}><div><strong>{metric.name || metric.metric_id}</strong><span>{metric.status} · {metric.unit || "value"}</span></div><b>{metric.value == null ? "NO_DATA" : metric.value}</b></div>)}</div> : <Empty>No reporting data available yet.</Empty>}</section>
 
       <div className="ops-grid">

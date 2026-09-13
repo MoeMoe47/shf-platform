@@ -40,6 +40,9 @@ import { registerDocumentationVariantRoutes } from "../domain/documentation/api/
 import { registerCalendarFeedRoutes } from "../domain/calendar-feed/api/routes.js";
 import { registerExternalAccountRoutes } from "../domain/external-accounts/api/routes.js";
 import { registerAccessibilityProfileRoutes } from "../domain/accessibility-profile/api/routes.js";
+import { registerAccessibilityContentRoutes } from "../domain/accessibility-content/api/routes.js";
+import { registerAccessibilityAccommodationRoutes } from "../domain/accessibility-accommodations/api/routes.js";
+import { registerAccessibilityOperationsRoutes } from "../domain/accessibility-operations/api/routes.js";
 import { registerAssignmentRoutes } from "../domain/assignments/api/routes.js";
 import { registerEnrollmentRoutes } from "../domain/enrollments/api/routes.js";
 import { registerCareerEventRoutes } from "../domain/career-events/api/routes.js";
@@ -77,6 +80,8 @@ import { registerOperationalAwarenessRoutes } from "../domain/operational-awaren
 import { registerAragRoutes } from "../domain/arag/api/routes.js";
 import { registerGovernmentAssuranceRoutes } from "../domain/government-assurance/api/routes.js";
 import { registerLegalRoutes } from "../domain/legal/api/routes.js";
+import { registerOrientationRoutes } from "../domain/orientation/api/routes.js";
+import { registerOgl6Routes } from "../domain/orientation/api/ogl6-routes.js";
 import { registerCrossProductRoutes } from "../domain/cross-product/api/routes.js";
 import { registerLearnerResultRoutes } from "../domain/curriculum/api/learner-result-routes.js";
 import { requirePermission } from "../auth/permission-guard.js";
@@ -382,6 +387,8 @@ app.post("/auth/login", async (req: any, res: any) => {
   registerAragRoutes(app);
   registerGovernmentAssuranceRoutes(app);
   registerLegalRoutes(app);
+  registerOrientationRoutes(app);
+  registerOgl6Routes(app);
   registerCrossProductRoutes(app);
   registerServiceAgreementRoutes(app);
   registerOrganizationOnboardingRoutes(app);
@@ -419,6 +426,9 @@ app.post("/auth/login", async (req: any, res: any) => {
   registerCalendarFeedRoutes(app);
   registerExternalAccountRoutes(app);
   registerAccessibilityProfileRoutes(app);
+  registerAccessibilityContentRoutes(app);
+  registerAccessibilityAccommodationRoutes(app);
+  registerAccessibilityOperationsRoutes(app);
   registerAssignmentRoutes(app);
   registerEnrollmentRoutes(app);
   registerCareerEventRoutes(app);

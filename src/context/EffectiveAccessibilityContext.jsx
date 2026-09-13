@@ -75,6 +75,8 @@ export function EffectiveAccessibilityContextProvider({ children }) {
       root.dataset.a11yContrast = value.contrastMode;
       root.dataset.a11yFocus = value.focusEmphasis;
       root.dataset.a11yTargetSize = value.targetSize;
+      root.dataset.axMotion = value.reducedMotion ? "reduced" : "full";
+      root.style.setProperty("--ax-text-scale", value.textScale === "EXTRA_LARGE" ? "1.3" : value.textScale === "LARGE" ? "1.15" : "1");
     } catch {
       // non-DOM environment (SSR/tests) — nothing to do
     }

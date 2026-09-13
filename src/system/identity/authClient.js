@@ -1,5 +1,18 @@
 import { SHS_AUTH_API_BASE } from "@/system/identity/authConfig";
 
+function developmentIdentityHeaders() {
+  try {
+    const userId = window.__user?.id || import.meta.env.VITE_DEV_USER_ID;
+    const localHost = ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
+    if (import.meta.env.DEV && localHost && userId) {
+      return { Authorization: `Bearer dev-token:${userId}` };
+    }
+  } catch {
+    // Non-browser and production builds use the normal session path.
+  }
+  return {};
+}
+
 async function parseResponse(response) {
   const text = await response.text();
   let data = {};
@@ -27,6 +40,7 @@ export async function fetchCurrentIdentity() {
   const response = await fetch(`${SHS_AUTH_API_BASE}/auth/me`, {
     credentials: "include",
     cache: "no-store",
+    headers: developmentIdentityHeaders(),
   });
   return parseResponse(response);
 }
@@ -82,4 +96,3 @@ export async function fetchIdentityAccessCenterData() {
   );
   return Object.fromEntries(entries);
 }
-

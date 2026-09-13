@@ -11,9 +11,9 @@ production side effect was used. WF-040 remains `BLOCKED — SAFETY/POLICY`.
 
 ## 2. Repository Baseline
 
-Path: `/Users/mikeslate/Projects/shrv1`  
-Branch: `studio-v1-plus-development`  
-HEAD: `0441aa4`  
+Path: `/Users/mikeslate/Projects/shrv1`
+Branch: `studio-v1-plus-development`
+HEAD: `0441aa4`
 Dirty baseline: 305 files (122 tracked, 183 untracked) before this phase;
 current count is 307 after the two phase artifacts and report changes. Owner
 work was preserved. Migration filename head: `130_agent_task_approval_incident_control.sql`.

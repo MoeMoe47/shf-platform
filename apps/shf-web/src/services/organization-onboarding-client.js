@@ -26,6 +26,10 @@ async function json(res) {
   return body;
 }
 
+export async function getCurrentAuth() {
+  return json(await fetch(`${API_BASE}/auth/me`, { headers: headers() }));
+}
+
 export async function listOnboardingCases() {
   return json(await fetch(`${API_BASE}/organization-onboarding/cases`, { headers: headers() }));
 }

@@ -9,6 +9,7 @@ import {
   ADAPTIVE_ROLES,
   ADAPTIVE_SURFACES,
 } from "@/system/adaptive-experience/adaptiveEvent.types";
+import { SeaDashboardSection, SeaHelpRegion, SeaNextAction } from "@/components/sea/SeaDashboardPrimitives.jsx";
 
 
 const SHS_HOME_URL = "/capital.html#/";
@@ -908,6 +909,8 @@ export default function HubWorkspaceDashboard() {
     role: ADAPTIVE_ROLES.HUB_OPERATOR,
     dashboardVersion: "hub_workspace_v1",
   });
+  const outerRecommendation = getAdaptiveWorkflowRecommendation(getActiveHubRole());
+  const outerGoal = guidedWorkflowGoals.find((goal) => goal.id === outerRecommendation.goalId) || guidedWorkflowGoals[0];
 
   useEffect(() => {
     adaptive.track({
@@ -957,12 +960,22 @@ export default function HubWorkspaceDashboard() {
   }
 
   return (
-    <HubBusinessTourProvider pageKey="workspace">
+    <HubBusinessTourProvider pageKey="workspace" canonicalRuntime>
       <main className="hubV1-shell" onClickCapture={handleAdaptiveClickCapture}>
       <Rail />
 
       <section className="hubV1-page">
         <Header />
+
+        <SeaDashboardSection title="Organization and service context" eyebrow="Hub / BOS">
+          <p>Use Hub as the operational entry point for active services, organization work, and canonical next steps.</p>
+        </SeaDashboardSection>
+        <SeaNextAction
+          label={outerGoal?.title || "Open the recommended service task"}
+          description={outerRecommendation?.reason || "The Hub workflow projection identifies the next service-owned action."}
+          href={buildGuidedWorkflowRoute(outerGoal, outerRecommendation)}
+          source="DOMAIN_PROJECTION"
+        />
 
         <AccessRedirectNotice />
 
@@ -978,6 +991,9 @@ export default function HubWorkspaceDashboard() {
             <HubDataAvailability />
           </div>
         </section>
+        <SeaHelpRegion>
+          <p>Guidance helps you navigate Hub services; it does not replace service-domain authority.</p>
+        </SeaHelpRegion>
       </section>
       </main>
     </HubBusinessTourProvider>

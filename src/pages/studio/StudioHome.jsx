@@ -4,6 +4,8 @@ import { useUser } from "@/context/UserContext.jsx";
 import { listStudioProjects } from "@/lib/studio/api.js";
 import { BriefcaseIcon, ChevronRightIcon, SparkleIcon } from "@/components/curriculum/icons.jsx";
 import { StudioExperienceProvider, StudioNextAction } from "./StudioExperience.jsx";
+import OglGuidanceEntryPoint from "@/system/guidance/OglGuidanceEntryPoint.jsx";
+import { SeaDashboardSection, SeaHelpRegion, SeaNextAction } from "@/components/sea/SeaDashboardPrimitives.jsx";
 
 function typeLabel(type) { return type === "AI_AGENT" ? "AI Agent" : "Website"; }
 
@@ -20,7 +22,9 @@ export default function StudioHome() {
   }, [role]);
 
   return (
-    <div className="studio-page">
+    <>
+    <OglGuidanceEntryPoint appScope="curriculum" />
+    <div className="studio-page" data-ogl-anchor="curriculum-workspace">
       <header className="studio-hero">
         <div>
           <p className="studio-eyebrow">Student creation space</p>
@@ -29,6 +33,16 @@ export default function StudioHome() {
         </div>
         <SparkleIcon size={54} className="studio-heroIcon" aria-hidden="true" />
       </header>
+
+      <SeaDashboardSection title="Project workspace context" eyebrow="Studio">
+        <p>Build in the selected workspace, then move through the domain-controlled QA and review handoffs.</p>
+      </SeaDashboardSection>
+      <SeaNextAction
+        label={state.projects[0] ? "Continue working" : "Start a project"}
+        description="Studio determines the next build step from the current project state."
+        href={state.projects[0] ? `/studio/projects/${encodeURIComponent(state.projects[0].projectId)}` : "/studio/new?type=WEBSITE"}
+        source="DOMAIN_PROJECTION"
+      />
 
       <section className="studio-section" aria-labelledby="studio-create-heading">
         <div className="studio-sectionHeading"><h2 id="studio-create-heading">Create Something</h2><span>Choose a starting point</span></div>
@@ -51,6 +65,10 @@ export default function StudioHome() {
         <div><h2 id="studio-start-heading">Assigned to You</h2><p className="studio-muted">Studio-ready assignments will appear here when your course connects one to a project.</p><Link className="studio-textLink" to="/studio/assignments">View assignments <ChevronRightIcon size={15} /></Link></div>
         <div><h2>Templates</h2><p className="studio-muted">Browse available starting points without changing your project until you choose one.</p><Link className="studio-textLink" to="/studio/templates">Explore templates <ChevronRightIcon size={15} /></Link></div>
       </section>
+      <SeaHelpRegion>
+        <p>Guidance can explain Studio context, but it does not grant QA, review, approval, or release authority.</p>
+      </SeaHelpRegion>
     </div>
+    </>
   );
 }

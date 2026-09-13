@@ -1,0 +1,163 @@
+/* Public Career Pathways page (/career.html#/pathways). Scoped under .pwPage
+   so it cannot leak into the personal Planner (career-pathways.css, .cpw-*)
+   or the Explore Careers page, which keeps its existing lighter markup. */
+.pwPage{background:#fff;color:var(--cp-ink)}
+.pwPage__inner{max-width:var(--cp-max);margin:0 auto;padding-inline:var(--cp-gutter)}
+
+/* ---- Hero ----
+   Uses its own asymmetric inner container (full left gutter, a much
+   narrower right gutter) so the hero photo can run close to the true
+   right edge instead of sitting centered like every other section. */
+.pwHero{padding:clamp(8px,1.2vw,14px) 0 clamp(2px,0.5vw,6px);background:linear-gradient(180deg,var(--cp-cream) 0%,var(--cp-ivory) 88%)}
+.pwHero__inner{max-width:var(--cp-max);margin:0 auto;padding-left:var(--cp-gutter);padding-right:clamp(0px,0.8vw,10px)}
+.pwHero__grid{display:grid;grid-template-columns:minmax(0,.95fr) minmax(350px,1.15fr);gap:clamp(14px,2.6vw,28px);align-items:center}
+.pwHero__copy{max-width:500px}
+.pwHero h1{margin:0 0 7px;font-size:clamp(1.75rem,2.9vw,2.85rem);line-height:.95}
+.pwHero__lede{margin:0;max-width:470px;color:var(--cp-muted);font-size:15px;line-height:1.44}
+.pwHero__search{display:flex;align-items:center;gap:6px;max-width:100%;margin-top:10px;padding:4px 4px 4px 13px;border:1px solid var(--cp-border);border-radius:999px;background:var(--cp-white);box-shadow:0 4px 14px rgba(30,40,45,.06)}
+.pwHero__search input{flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;color:var(--cp-ink);padding:5px 0}
+.pwHero__searchIcon{color:var(--cp-muted);font-size:15px}
+.pwHero__searchSubmit{display:grid;place-items:center;width:33px;height:33px;flex:none;border:0;border-radius:999px;background:var(--cp-orange);color:#fff;font-size:14px;cursor:pointer}
+.pwHero__searchSubmit:hover{background:#d94100}
+.pwHero__searchSubmit:focus-visible{outline:3px solid rgba(255,79,0,.35);outline-offset:3px}
+.pwHero__chips{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-top:7px}
+.pwHero__chipsLabel{color:var(--cp-muted);font-size:11px;font-weight:750}
+.pwHero__chip{min-height:24px;padding:4px 10px;border:1px solid var(--cp-border);border-radius:999px;background:var(--cp-white);color:var(--cp-ink);font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
+.pwHero__chip:hover{border-color:var(--cp-orange);color:var(--cp-orange)}
+.pwHero__media{position:relative;width:100%;min-width:0;aspect-ratio:471/230;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px rgba(30,40,45,.06);background:var(--cp-cream)}
+.pwHero__media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+/* ---- Section shells ---- */
+.pwSection{padding:clamp(14px,2.2vw,26px) 0}
+.pwPage__inner > .pwSection:first-child{padding-top:clamp(0px,0.4vw,4px)}
+.pwSection--tint{background:var(--cp-cream)}
+.pwPage .career-public__sectionHeader{margin-bottom:10px}
+
+/* ---- Featured family cards ---- */
+.pwFamGrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.pwFamCard{display:flex;flex-direction:column;border:1px solid var(--cp-border);border-radius:var(--cp-radius);background:var(--cp-white);box-shadow:var(--cp-shadow);overflow:hidden}
+.pwFamCard__media{position:relative;height:122px;background:var(--cp-cream)}
+.pwFamCard__media img{width:100%;height:100%;object-fit:cover;display:block}
+.pwFamCard__body{padding:9px 11px 11px;display:flex;flex-direction:column;gap:3px;flex:1}
+.pwFamCard__body h3{margin:0;font-size:.92rem}
+.pwFamCard__body p{margin:0;color:var(--cp-muted);font-size:12px;line-height:1.35;flex:1}
+.pwFamCard__link{align-self:flex-start;margin-top:6px;border:0;background:none;padding:0;color:var(--cp-orange);font-weight:800;font-size:12.5px;cursor:pointer}
+.pwFamCard__link:hover{text-decoration:underline}
+.pwFamCard__link:focus-visible{outline:3px solid rgba(255,79,0,.35);outline-offset:3px;border-radius:4px}
+
+/* ---- Filter bar ---- */
+.pwFilterBar{display:flex;flex-wrap:wrap;align-items:end;gap:12px;padding:12px 14px;border:1px solid var(--cp-border);border-radius:var(--cp-radius);background:var(--cp-white);box-shadow:var(--cp-shadow)}
+.pwFilterField{display:grid;gap:4px;min-width:168px;flex:1 1 168px}
+.pwFilterField label{color:var(--cp-muted);font-size:11px;font-weight:800;letter-spacing:.02em;text-transform:uppercase}
+.pwFilterField select{min-height:36px;padding:6px 9px;border:1px solid var(--cp-border);border-radius:8px;background:var(--cp-white);color:var(--cp-ink);font:inherit}
+.pwFilterField select:disabled{background:var(--cp-cream);color:var(--cp-muted);cursor:not-allowed}
+.pwFilterBar__submit{flex:none;align-self:end}
+.pwFilterBar__submit .career-public__button{min-height:36px;padding:7px 13px}
+.pwFilterNote{width:100%;margin:2px 0 0;color:var(--cp-muted);font-size:11px}
+.pwFilterResults{margin-top:6px;color:var(--cp-muted);font-size:12.5px;font-weight:700}
+
+/* ---- Pathway grid ---- */
+.pwGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:12px}
+.pwCard{display:flex;flex-direction:column;border:1px solid var(--cp-border);border-radius:var(--cp-radius);background:var(--cp-white);box-shadow:var(--cp-shadow);overflow:hidden}
+.pwCard__media{position:relative;height:120px;background:var(--cp-cream)}
+.pwCard__media img{width:100%;height:100%;object-fit:cover;display:block}
+.pwCard__body{display:flex;flex-direction:column;gap:4px;padding:11px 13px 13px;flex:1}
+.pwCard__meta{margin:0;color:var(--cp-orange);font-size:10.5px;font-weight:850;letter-spacing:.07em;text-transform:uppercase}
+.pwCard__body h3{margin:0;font-size:1.02rem}
+.pwCard__body p{margin:0;color:var(--cp-muted);font-size:13px;line-height:1.4;flex:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pwCard__footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.pwCard__link{display:inline-flex;align-items:center;gap:6px;color:var(--cp-orange);font-weight:800;font-size:13px;text-decoration:none}
+.pwCard__link:hover{text-decoration:underline}
+.pwCard__arrow{display:grid;place-items:center;width:30px;height:30px;border-radius:999px;background:var(--cp-cream);color:var(--cp-orange);flex:none}
+
+/* ---- Unavailable / empty / skeleton states (kept inside their section) ---- */
+.pwUnavailable{grid-column:1/-1;display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:22px 24px;border:1px dashed var(--cp-border);border-radius:var(--cp-radius-lg);background:var(--cp-white);color:var(--cp-muted)}
+.pwUnavailable strong{color:var(--cp-ink);font-size:15px}
+.pwSkeleton{grid-column:span 1;height:210px;border-radius:var(--cp-radius-lg);background:linear-gradient(100deg,var(--cp-white) 30%,var(--cp-cream) 50%,var(--cp-white) 70%);background-size:220% 100%;border:1px solid var(--cp-border);animation:pwShimmer 1.6s ease-in-out infinite}
+@keyframes pwShimmer{0%{background-position:200% 0}100%{background-position:-20% 0}}
+
+/* ---- API-unavailable pathway grid fallback ----
+   Preserves the mock's grid density/height on API failure instead of
+   collapsing to a single message: muted, non-data placeholder tiles behind
+   one centered, honest unavailable notice. No fabricated titles/data. */
+.pwGridUnavailable{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:12px}
+.pwGridUnavailable__tile{height:210px;border-radius:var(--cp-radius);background:var(--cp-cream);border:1px solid var(--cp-border);opacity:.55}
+.pwGridUnavailable__message{grid-column:1/-1;position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:20px;background:rgba(255,255,255,.85);border-radius:var(--cp-radius-lg)}
+.pwGridUnavailable__message strong{color:var(--cp-ink);font-size:15px}
+.pwGridUnavailable__message span{color:var(--cp-muted);font-size:13px;max-width:420px}
+
+/* ---- About categories ---- */
+.pwAboutGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.pwAboutCard{display:flex;flex-direction:column;gap:5px;padding:13px;border:1px solid var(--cp-border);border-radius:var(--cp-radius);background:var(--cp-white);box-shadow:var(--cp-shadow)}
+.pwAboutCard__icon{display:grid;place-items:center;width:32px;height:32px;border-radius:9px;background:var(--cp-cream);color:var(--cp-orange)}
+.pwAboutCard__icon svg{width:17px;height:17px}
+.pwAboutCard h3{margin:0;font-size:.92rem}
+.pwAboutCard p{margin:0;color:var(--cp-muted);font-size:12.5px;line-height:1.4}
+
+/* ---- Journey (Explore / Learn / Launch) ---- */
+.pwJourney{background:var(--cp-white);border-top:1px solid var(--cp-border);border-bottom:1px solid var(--cp-border)}
+.pwJourney__grid{display:grid;grid-template-columns:minmax(200px,.75fr) minmax(0,1.25fr);gap:clamp(16px,2.8vw,34px);align-items:center}
+.pwJourney__media{position:relative;width:100%;min-width:0;max-width:340px;aspect-ratio:406/184;border-radius:var(--cp-radius);overflow:hidden;box-shadow:var(--cp-shadow);background:var(--cp-cream)}
+.pwJourney__media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pwSteps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:12px}
+.pwStep{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding-right:14px}
+.pwStep__badge{display:grid;place-items:center;width:36px;height:36px;border-radius:999px;color:#fff}
+.pwStep__badge--explore{background:var(--cp-orange)}
+.pwStep__badge--learn{background:#20406e}
+.pwStep__badge--launch{background:var(--cp-teal)}
+.pwStep__badge svg{width:16px;height:16px}
+.pwStep h3{margin:0;font-size:.86rem;letter-spacing:.04em;text-transform:uppercase;color:var(--cp-ink)}
+.pwStep p{margin:0;color:var(--cp-muted);font-size:12.5px;line-height:1.4}
+.pwStep__arrow{display:none;position:absolute;top:16px;right:-6px;color:var(--cp-border);font-size:18px}
+.pwStep:not(:last-child) .pwStep__arrow{display:block}
+
+/* ---- Bottom CTA banner ----
+   Left/right photos are cropped from the approved mock's single banner
+   image; the center text zone uses a gradient sampled from the photo's own
+   edge tones so real, accessible heading/paragraph/button markup sits on a
+   seamless-looking continuation of the same photograph. */
+.pwCtaBanner{overflow:hidden}
+.pwCtaBanner__row{display:flex;align-items:stretch;min-height:132px}
+.pwCtaBanner__photo{flex:0 0 clamp(140px,26vw,310px);width:clamp(140px,26vw,310px);height:auto;object-fit:cover}
+.pwCtaBanner__photo--left{object-position:right center}
+.pwCtaBanner__photo--right{object-position:left center}
+.pwCtaBanner__textZone{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:12px clamp(12px,2.2vw,28px);text-align:center;background:linear-gradient(90deg,#fbead3,#fdf2e5)}
+.pwCtaBanner h2{margin:0;color:var(--cp-ink);max-width:460px;font-size:clamp(1.25rem,2.2vw,1.75rem)}
+.pwCtaBanner p{margin:0;max-width:420px;color:var(--cp-muted);font-size:13px;line-height:1.4}
+.pwCtaBanner__actions{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin-top:9px}
+.pwCtaBanner__outlineBtn{background:transparent!important;border-color:var(--cp-orange)!important;color:var(--cp-orange)!important}
+.pwCtaBanner__outlineBtn:hover{background:var(--cp-orange)!important;color:#fff!important}
+.pwCtaBanner__actions .career-public__button{min-height:34px;padding:7px 13px;font-size:12.5px}
+
+@media(max-width:1080px){
+  .pwFamGrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .pwGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pwAboutGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+@media(max-width:900px){
+  .pwHero__inner{padding-right:var(--cp-gutter)}
+  .pwHero__grid{grid-template-columns:1fr}
+  .pwHero__media{order:-1}
+  .pwJourney__grid{grid-template-columns:1fr}
+  .pwSteps{grid-template-columns:1fr;gap:16px}
+  .pwStep__arrow{display:none!important}
+  .pwCtaBanner__row{flex-direction:column;min-height:0}
+  .pwCtaBanner__photo{width:100%;flex:0 0 120px;height:120px}
+  .pwCtaBanner__photo--left{order:1}
+  .pwCtaBanner__textZone{order:2}
+  .pwCtaBanner__photo--right{order:3}
+}
+
+@media(max-width:680px){
+  .pwFamGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pwGrid{grid-template-columns:1fr}
+  .pwAboutGrid{grid-template-columns:1fr}
+  .pwHero__search{border-radius:var(--cp-radius-lg);flex-wrap:wrap;padding:10px 12px}
+  .pwHero__search input{flex:1 1 100%;order:1}
+  .pwHero__searchIcon{order:0}
+  .pwHero__searchSubmit{order:2;margin-left:auto}
+  .pwFilterField{min-width:100%}
+  .pwFilterBar__submit{width:100%}
+  .pwFilterBar__submit .career-public__button{width:100%}
+}

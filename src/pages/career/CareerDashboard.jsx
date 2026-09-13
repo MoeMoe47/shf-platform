@@ -10,6 +10,7 @@
 import React from "react";
 import { useUser } from "@/context/UserContext.jsx";
 import { listCalendarEvents } from "@/lib/calendar/api.js";
+import { SeaDashboardSection, SeaHelpRegion, SeaNextAction } from "@/components/sea/SeaDashboardPrimitives.jsx";
 
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 
@@ -51,11 +52,24 @@ export default function CareerDashboard() {
         </div>
       </header>
 
+      <SeaDashboardSection title="Current pathway context" eyebrow="Career">
+        <p>Connect your learning, skills, and portfolio to the next supported career step.</p>
+      </SeaDashboardSection>
+      <SeaNextAction
+        label="Explore pathways"
+        description="Career guidance stays grounded in the pathway and profile information available to your account."
+        href="/career.html#/pathways"
+        source="DOMAIN_PROJECTION"
+      />
+
       <div className="db-grid db-grid--kpis">
         <div className="card card--pad">Upcoming assignments: <strong>{displayCount(summary.assignmentsDue)}</strong></div>
         <div className="card card--pad">Portfolio: <a href="/career.html#/portfolio">View artifacts and credentials</a></div>
         <div className="card card--pad">Events this week: <strong>{displayCount(summary.eventsThisWeek)}</strong></div>
       </div>
+      <SeaHelpRegion>
+        <p>Use Career guidance and the Companion for planning context; no unsupported labor-market outcome is inferred.</p>
+      </SeaHelpRegion>
 
       <section className="career-student-next" aria-labelledby="career-student-next-title">
         <div>

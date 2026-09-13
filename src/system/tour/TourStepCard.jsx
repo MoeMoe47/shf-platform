@@ -69,12 +69,17 @@ export default function TourStepCard({
   nextStep,
   prevStep,
   endTour,
+  skipTour,
+  missingAnchorPolicy,
+  cardRef,
+  onAlternative,
 }) {
   const position = getCardPosition(rect);
   const isLast = stepNumber >= totalSteps;
 
   return (
     <aside
+      ref={cardRef}
       className="tour-card"
       style={{
         top: position.top,
@@ -82,6 +87,11 @@ export default function TourStepCard({
       }}
       role="dialog"
       aria-label={step?.title || "Guided tour step"}
+      aria-describedby="ogl-tour-step-description"
+      tabIndex={-1}
+      onKeyDown={(event) => {
+        if (event.key === "Escape") endTour();
+      }}
     >
       <div className="tour-cardTop">
         <span>Guided Tour</span>
@@ -96,11 +106,11 @@ export default function TourStepCard({
 
       <h3>{step?.title || "Tour Step"}</h3>
 
-      {renderContent(step?.content)}
+      <div id="ogl-tour-step-description">{renderContent(step?.content || step?.body)}</div>
 
       {!rect ? (
         <div className="tour-missingTarget">
-          Target section not visible. Use Next to continue.
+          {missingAnchorPolicy === "REQUIRE_TARGET" ? "This step is unavailable until its target is visible." : "This step is not anchored on the current layout. You can continue with the instructions."}
         </div>
       ) : null}
 
@@ -109,8 +119,12 @@ export default function TourStepCard({
           Back
         </button>
 
-        <button type="button" onClick={endTour}>
-          End
+        <button type="button" onClick={skipTour}>
+          Skip
+        </button>
+
+        <button type="button" onClick={onAlternative}>
+          Step list
         </button>
 
         <button className="is-primary" type="button" onClick={isLast ? endTour : nextStep}>

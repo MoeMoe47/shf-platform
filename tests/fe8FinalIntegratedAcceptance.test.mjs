@@ -23,6 +23,8 @@ test("Agent Fabric remains a protected, canonical governed control center", () =
   assert.match(agentPage, /No agents returned/);
   assert.match(agentPage, /summaryValue/);
   assert.doesNotMatch(agentPage, /demo|fixture|sample data/i);
+  assert.match(agentPage, /OglGuidanceEntryPoint/);
+  assert.match(agentPage, /data-ogl-anchor="agent-fabric-work-orders"/);
 });
 
 test("Agent Fabric preserves human, policy, audit, and WF-040 safety boundaries", () => {
@@ -60,6 +62,8 @@ test("Canonical identity and destination boundaries remain explicit", () => {
   assert.match(registry, /productionPath: '\/oas\.html'/);
   assert.match(agentRoutes, /path="\/release-assurance" element=\{protect\("\/release-assurance"/);
   assert.match(read("src/router/CurriculumRoutes.jsx"), /path="\/studio"/);
+  assert.match(read("src/pages/curriculum/InstructorOperations.jsx"), /data-ogl-anchor="curriculum-instructor-workspace"/);
+  assert.match(read("src/pages/admin/reporting/VerificationAuditSurface.jsx"), /data-ogl-anchor="civicsure-operator-review-queue"/);
   assert.match(agentRoutes, /path="\/hub" element=\{protect\("\/hub"/);
   assert.equal(hasProductionPath("/index.html#/civicsure"), true);
   assert.equal(hasProductionPath("/civic.html#/dashboard"), false);

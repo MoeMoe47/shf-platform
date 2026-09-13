@@ -21,6 +21,8 @@ import CivicSureOutcomeDetailPage from "../pages/civicsure/explorer/CivicSureOut
 import CivicSureEvidenceSummaryPage from "../pages/civicsure/explorer/CivicSureEvidenceSummaryPage";
 import CivicSureComparePage from "../pages/civicsure/explorer/CivicSureComparePage";
 import CivicSureSearchResultsPage from "../pages/civicsure/explorer/CivicSureSearchResultsPage";
+import AccessibilityAccommodations from "../pages/operator/AccessibilityAccommodations";
+import AccessibilityOperations from "../pages/operator/AccessibilityOperations";
 
 export default function AppRoutes() {
   // Pre-existing gap: this hand-rolled router read window.location.hash
@@ -112,6 +114,10 @@ export default function AppRoutes() {
     page = <ServiceAgreements />;
   } else if (path === "#/operator/onboarding") {
     page = <OrganizationOnboarding />;
+  } else if (path === "#/operator/accommodations") {
+    page = <AccessibilityAccommodations />;
+  } else if (path === "#/operator/accessibility-operations") {
+    page = <AccessibilityOperations />;
   } else if (path === "#/operator/funding") {
     page = <FundingGrants />;
   } else if (path === "#/operator/impact-attribution") {

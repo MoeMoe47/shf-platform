@@ -27,6 +27,8 @@ import ExecutiveSafeActionsPanel from "./components/ExecutiveSafeActionsPanel";
 import ExecutiveSafetyPanel from "./components/ExecutiveSafetyPanel";
 import ExecutiveSnapshotPanel from "./components/ExecutiveSnapshotPanel";
 import ExecutiveSystemHealthPanel from "./components/ExecutiveSystemHealthPanel";
+import OglGuidanceEntryPoint from "@/system/guidance/OglGuidanceEntryPoint.jsx";
+import { SeaAttention, SeaDashboardSection, SeaNextAction } from "@/components/sea/SeaDashboardPrimitives.jsx";
 import "./shsBosExecutiveCommandCenter.css";
 
 const EXECUTIVE_COMMAND_CENTER_ACTION_LABELS = [
@@ -101,14 +103,27 @@ export default function ShsBosExecutiveCommandCenterPage() {
   }
 
   return (
-    <main className="shs-bos-ecc-page">
+    <>
+      <OglGuidanceEntryPoint appScope="executive-command" />
+      <main className="shs-bos-ecc-page">
       <span className="ecc-validator-trace" aria-hidden="true">
         {EXECUTIVE_COMMAND_CENTER_ACTION_LABELS.join(" | ")}
       </span>
       <span className="ecc-validator-trace" aria-hidden="true">
         Critical Attention Strip | Executive Metrics | Runtime Fabric | Governance and Trust | Agent Operations | Business Operations | Layer Health Grid | Activity Timeline | Data Posture | Executive Snapshot | Safety and Boundaries
       </span>
-      <ExecutiveCommandHeader state={state} onRefresh={refresh} />
+      <section data-ogl-anchor="executive-command-overview">
+        <ExecutiveCommandHeader state={state} onRefresh={refresh} />
+      </section>
+      <SeaDashboardSection title="Executive attention" eyebrow="Bounded cross-service view">
+        <p>Only source-backed critical attention and routed decisions belong in this view.</p>
+      </SeaDashboardSection>
+      <SeaAttention items={(state.priorities || []).slice(0, 5).map((item) => ({
+        type: item.status === "BLOCKED" ? "BLOCKED" : "ACTION_REQUIRED",
+        label: item.title || item.label || "Executive priority requires review.",
+        owner: item.owner || "Owning service",
+      }))} />
+      <SeaNextAction label="Review the highest-priority service item" description="Executive actions remain previews or routes into the owning service authority." source="DOMAIN_PROJECTION" />
 
       <section className="ecc-metrics-row">
         <article><span>Total layers</span><strong>{state.metrics.total_layers}</strong></article>
@@ -161,6 +176,7 @@ export default function ShsBosExecutiveCommandCenterPage() {
           {blastRadius && <pre>{JSON.stringify(blastRadius, null, 2)}</pre>}
         </section>
       )}
-    </main>
+      </main>
+    </>
   );
 }

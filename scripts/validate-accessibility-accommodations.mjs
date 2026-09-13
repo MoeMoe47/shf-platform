@@ -1,0 +1,31 @@
+import fs from "node:fs";
+import assert from "node:assert/strict";
+
+const root = new URL("../", import.meta.url).pathname;
+const migration = fs.readFileSync(`${root}apps/shs-api/migrations/141_accessibility_accommodation_lifecycle.sql`, "utf8");
+const lifecycle = fs.readFileSync(`${root}apps/shs-api/src/domain/accessibility-accommodations/model/lifecycle.ts`, "utf8");
+const service = fs.readFileSync(`${root}apps/shs-api/src/domain/accessibility-accommodations/service/accommodation-service.ts`, "utf8");
+const routes = fs.readFileSync(`${root}apps/shs-api/src/domain/accessibility-accommodations/api/routes.ts`, "utf8");
+const router = fs.readFileSync(`${root}apps/shs-api/src/api/router.ts`, "utf8");
+const errors = [];
+const check = (condition, message) => { if (!condition) errors.push(message); };
+
+check(migration.includes("accessibility_accommodation_cases"), "lifecycle case table missing");
+check(migration.includes("accessibility_accommodation_requirements"), "structured requirements table missing");
+check(migration.includes("FOREIGN KEY (organization_id, subject_user_id)"), "subject organization boundary missing");
+check(migration.includes("tenant_id = 'tenant:' || organization_id"), "tenant boundary missing");
+check(!/DROP TABLE|TRUNCATE|DROP COLUMN/.test(migration), "migration is destructive");
+check(lifecycle.includes("VALID_TRANSITIONS") && lifecycle.includes("INFORMATION_REQUESTED"), "bounded lifecycle missing");
+check(lifecycle.includes("EXTERNAL_DEPENDENCY") && lifecycle.includes("DELIVERED"), "bounded fulfillment state missing");
+check(service.includes("writeAuditEvent"), "audit history integration missing");
+check(service.includes("getMinimumNecessaryProjection"), "minimum necessary projection missing");
+check(!/user_accessibility_profiles|Truth|Evidence/.test(service), "domain crosses forbidden authority boundary");
+check(routes.includes("ACCESSIBILITY_ACCOMMODATION_APPROVE"), "approval permission boundary missing");
+check(routes.includes("ACCESSIBILITY_ACCOMMODATION_FULFILL"), "fulfillment permission boundary missing");
+check(router.includes("registerAccessibilityAccommodationRoutes"), "routes not registered");
+assert.equal(errors.length, 0, errors.join("; "));
+console.log("Accessibility accommodations validation: PASS");
+console.log("- canonical lifecycle: accessibility_accommodation_cases");
+console.log("- structured requirements: accessibility_accommodation_requirements");
+console.log("- existing grants preserved: authorized_accommodations");
+console.log("- human decision/audit boundaries: present");

@@ -193,7 +193,7 @@ export default function HubSalesPipelinePage() {
   };
 
   return (
-    <HubBusinessTourProvider pageKey="sales">
+    <HubBusinessTourProvider pageKey="sales" canonicalRuntime>
       <main className="hsp-shell">
       <aside className="hsp-rail">
         <button className="hsp-logo" onClick={() => go("#/hub")} aria-label="Go to SHS Hub">
@@ -221,7 +221,7 @@ export default function HubSalesPipelinePage() {
         </div>
       </aside>
 
-      <section className="hsp-page">
+      <section className="hsp-page" data-ogl-anchor="sales-pipeline">
         <header className="hsp-header" data-tour="hub-sales-hero">
           <div>
             <p>SHS SALES TEAM PIPELINE</p>

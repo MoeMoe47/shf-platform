@@ -657,7 +657,7 @@ html[data-app="curriculum"],
   color: var(--ld-muted);
 }
 .ld-notifPanelHead { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
-.ld-notifPanelHead span, .ld-notifList time, .notification-status { color: var(--ld-muted); font-size: 12px; }
+.ld-notifPanelHead span, .ld-notifList time, .notification-status { color: var(--ld-muted); font-size: calc(12px * var(--ld-text-scale, 1)); }
 .ld-notifList, .notification-list { list-style: none; margin: 0; padding: 0; }
 .ld-notifList li, .notification-list li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid var(--ld-ring); }
 .ld-notifList li.is-unread, .notification-list li.is-unread { border-left: 3px solid var(--ld-orange); padding-left: 8px; }

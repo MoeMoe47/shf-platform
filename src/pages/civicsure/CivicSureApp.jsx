@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import CivicSureShell from "../../../apps/shf-web/src/components/civicsure/CivicSureShell.jsx";
 import GovernmentAssurance from "../../../apps/shf-web/src/pages/operator/GovernmentAssurance.jsx";
 import DgalNextStepsPanel from "../../components/DgalNextStepsPanel.jsx";
+import { SeaDashboardSection, SeaNextAction } from "@/components/sea/SeaDashboardPrimitives.jsx";
 
 const API_BASE = import.meta.env.VITE_SHS_API_BASE || import.meta.env.VITE_API_BASE || "http://127.0.0.1:8091";
 
@@ -113,6 +114,10 @@ function ProviderHome() {
       <h1>Provider assurance workspace</h1>
       <p>Review your organization&apos;s assigned requirements, submit evidence, and respond to findings. Verification and publication remain operator-controlled.</p>
     </header>
+    <SeaDashboardSection title="Provider and program context" eyebrow="CivicSure Provider">
+      <p>Review provider-owned requirements and respond to findings within the organization&apos;s authorized scope.</p>
+    </SeaDashboardSection>
+    <SeaNextAction label="Review provider requirements" description="The CivicSure provider projection determines whether evidence or corrective response is next." source="DOMAIN_PROJECTION" />
     {state.loading ? <p role="status">Loading your provider workspace...</p> : state.error ? <section className="civicsure-canonical-panel" role="alert"><h2>Provider workspace unavailable</h2><p>{state.error}</p><button type="button" onClick={load}>Retry</button></section> : <>
       <DgalNextStepsPanel state={guidance} onRetry={load} />
       <section className="civicsure-canonical-panel" aria-labelledby="provider-status-title"><h2 id="provider-status-title">Current status</h2><p>Provider: <strong>{state.data.providerReference}</strong></p><p>Assigned evidence requests: {state.data.items.evidenceRequests.length}. Findings: {state.data.items.findings.length}. Corrective actions: {state.data.items.correctiveActions.length}.</p><p role="status">You can submit provider-owned responses. You cannot verify outcomes, publish results, or trigger payment.</p></section>

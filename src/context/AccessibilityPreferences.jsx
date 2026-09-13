@@ -81,7 +81,14 @@ export default function AccessibilityPreferencesProvider({ children }) {
     profile.reset().catch(() => {});
   }, [profile]);
 
-  const value = React.useMemo(() => ({ prefs, setPref, resetPrefs }), [prefs, setPref, resetPrefs]);
+  const value = React.useMemo(() => ({
+    prefs,
+    setPref,
+    resetPrefs,
+    profileStatus: profile.status,
+    profileError: profile.error,
+    isAuthenticated: profile.status !== "ANONYMOUS",
+  }), [prefs, setPref, resetPrefs, profile.status, profile.error]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

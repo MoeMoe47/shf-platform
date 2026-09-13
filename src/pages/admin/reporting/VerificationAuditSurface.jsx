@@ -12,6 +12,8 @@ import {
   findBridgeLinkByVerificationRecordId,
 } from "./bridge-record-links";
 import { getFocusedVerificationId } from "@/system/routing/hash-query";
+import OglGuidanceEntryPoint from "@/system/guidance/OglGuidanceEntryPoint.jsx";
+import { SeaAttention, SeaDashboardSection, SeaHelpRegion, SeaNextAction } from "@/components/sea/SeaDashboardPrimitives.jsx";
 
 const INITIAL_QUEUE_ROWS = [
   {
@@ -213,8 +215,10 @@ export default function VerificationAuditSurface() {
   }
 
   return (
-    <main className="reporting-command">
-      <section className="reporting-command__hero">
+    <>
+      <OglGuidanceEntryPoint appScope="civic-operator" />
+      <main className="reporting-command">
+      <section className="reporting-command__hero" data-ogl-anchor="civicsure-operator-review-queue">
         <div>
           <p className="reporting-command__eyebrow">Verification + Audit Layer</p>
           <h1 className="reporting-command__title">Verification Audit Surface</h1>
@@ -233,6 +237,11 @@ export default function VerificationAuditSurface() {
           </button>
         </div>
       </section>
+      <SeaDashboardSection title="Verification queue context" eyebrow="CivicSure Operator">
+        <p>Review evidence and verification state within the authorized organization and tenant scope.</p>
+      </SeaDashboardSection>
+      <SeaAttention items={[{ type: "REVIEW_REQUIRED", label: "Verification cases and readiness blockers are source-backed by the assurance service.", owner: "CivicSure operator" }]} />
+      <SeaNextAction label="Review verification queue" description="The assurance projection determines which case is eligible for the next human review action." source="DOMAIN_PROJECTION" />
 
       {focusedVerificationId ? (
         <div
@@ -255,6 +264,9 @@ export default function VerificationAuditSurface() {
           ) : null}
         </div>
       ) : null}
+      <SeaHelpRegion>
+        <p>Operator guidance supports review context; it does not replace verification or Evidence authority.</p>
+      </SeaHelpRegion>
 
       {flash ? (
         <div
@@ -493,6 +505,7 @@ export default function VerificationAuditSurface() {
           </div>
         )}
       </section>
-    </main>
+      </main>
+    </>
   );
 }

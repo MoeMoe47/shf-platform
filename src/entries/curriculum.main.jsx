@@ -50,6 +50,7 @@ import { AuthProvider } from "@/auth/auth-context.jsx";
 import { UserProvider } from "@/context/UserContext.jsx";
 import GlobalErrorBoundary from "@/components/GlobalErrorBoundary.jsx";
 import CurriculumRoutes from "@/router/CurriculumRoutes.jsx";
+import OglGuidanceEntryPoint from "@/system/guidance/OglGuidanceEntryPoint.jsx";
 
 /* ---------- Phase 2B: cross-cutting accessibility providers ----------
    ReadingLevelProvider already existed (real, working) but was never
@@ -91,6 +92,7 @@ createRoot(getOrCreateMount()).render(
               <ReadingLevelProvider>
                 <LiveAnnouncer />
                 <HashRouter>
+                  <OglGuidanceEntryPoint appScope="curriculum" />
                   <CurriculumRoutes />
                 </HashRouter>
               </ReadingLevelProvider>

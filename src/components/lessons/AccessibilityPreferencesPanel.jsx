@@ -21,13 +21,21 @@ const OPTIONS = [
 ];
 
 export default function AccessibilityPreferencesPanel() {
-  const { prefs, setPref, resetPrefs } = useAccessibilityPreferences();
+  const { prefs, setPref, resetPrefs, profileStatus, profileError, isAuthenticated } = useAccessibilityPreferences();
 
   return (
     <section className="card card--pad" aria-label="Accessibility preferences">
       <strong>Accessibility preferences</strong>
       <p className="subtle" style={{ marginTop: 4 }}>
         These change how lessons are displayed for you. Nothing here is shared as a diagnosis or medical information.
+      </p>
+      <p className="subtle" role="status" aria-live="polite" data-testid="accessibility-profile-status">
+        {profileStatus === "LOADING" && "Loading your accessibility preferences…"}
+        {profileStatus === "SAVING" && "Saving accessibility preferences…"}
+        {profileStatus === "SAVED" && (isAuthenticated ? "Accessibility preferences saved." : "Using this preference for this browser session.")}
+        {profileStatus === "ANONYMOUS" && "Anonymous preferences stay in this browser session."}
+        {profileStatus === "UNAVAILABLE" && "Preferences could not be loaded. The app is using safe defaults; try again later."}
+        {profileStatus === "ERROR" && (profileError?.message || "Preferences could not be saved. Your current setting remains available locally.")}
       </p>
       <div style={{ display: "grid", gap: 8, marginTop: 10 }}>
         {OPTIONS.map((opt) => (

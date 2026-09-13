@@ -10,9 +10,9 @@ authority, or mandatory Azure workflow was found.
 
 ## 2. Repository Baseline
 
-Path: `/Users/mikeslate/Projects/shrv1`  
-Branch: `studio-v1-plus-development`  
-HEAD: `0441aa4`  
+Path: `/Users/mikeslate/Projects/shrv1`
+Branch: `studio-v1-plus-development`
+HEAD: `0441aa4`
 Baseline dirty state at audit: 124 tracked and 184 untracked files, 308 total.
 Migration filename head: `130_agent_task_approval_incident_control.sql`.
 The disposable PostgreSQL instance remained available on the existing local

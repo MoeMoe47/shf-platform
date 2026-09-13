@@ -1,6 +1,10 @@
 import React from "react";
 import { getHubTourSteps } from "./hubTourSteps";
 import "./hubBusinessTour.css";
+import TourProvider from "@/system/tour/TourProvider.jsx";
+import { useAuthContext } from "@/auth/auth-context.jsx";
+import GuidanceCenter from "@/system/guidance/GuidanceCenter.jsx";
+import { CANONICAL_AUTHENTICATED_DESTINATIONS } from "@/system/orientation/canonicalDestinationIdentity.js";
 
 
 
@@ -264,8 +268,14 @@ function HubTourOverlay({
   );
 }
 
-export default function HubBusinessTourProvider({ pageKey, children }) {
+export default function HubBusinessTourProvider({ pageKey, children, canonicalRuntime = false }) {
   const steps = React.useMemo(() => getHubTourSteps(pageKey) || [], [pageKey]);
+  return canonicalRuntime
+    ? <CanonicalHubTour pageKey={pageKey} steps={steps}>{children}</CanonicalHubTour>
+    : <LegacyHubTour pageKey={pageKey} steps={steps}>{children}</LegacyHubTour>;
+}
+
+function LegacyHubTour({ pageKey, children, steps }) {
   const [isActive, setIsActive] = React.useState(false);
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [guidedIntent, setGuidedIntent] = React.useState(null);
@@ -368,4 +378,32 @@ export default function HubBusinessTourProvider({ pageKey, children }) {
       ) : null}
     </>
   );
+}
+
+function CanonicalHubTour({ pageKey, steps, children }) {
+  const auth = useAuthContext();
+  const membership = auth.memberships.find((item) => item?.organization_id || item?.org_id) || null;
+  const organizationId = membership?.organization_id || membership?.org_id || auth.user?.organization_id || null;
+  React.useEffect(() => {
+    if (!shouldAutoStartHubTour()) return undefined;
+    const timer = window.setTimeout(() => window.dispatchEvent(new CustomEvent("dgal:tour-request", { detail: { tourId: `hub:${pageKey}` } })), 250);
+    return () => window.clearTimeout(timer);
+  }, [pageKey]);
+  if (auth.loading) return <>{children}</>;
+  const canonical = pageKey === "sales"
+    ? { destinationId: "sales", routeId: "sales.pipeline", orientationId: "orientation:sales:pipeline", tourId: "tour:sales:pipeline", title: "Sales guidance" }
+    : { destinationId: CANONICAL_AUTHENTICATED_DESTINATIONS.BOS_HUB, routeId: "hub.workspace", orientationId: `orientation:hub:${pageKey}`, tourId: `hub:${pageKey}`, title: "Hub guidance" };
+  const guidanceProps = pageKey === "sales" ? canonical : {};
+  return <TourProvider steps={steps} buttonLabel="Start Hub tour" context={{
+    tourId: canonical.tourId,
+    tourVersion: 1,
+    orientationId: canonical.orientationId,
+    orientationVersion: 1,
+    userId: auth.user?.id || null,
+    organizationId,
+    tenantId: organizationId ? `tenant:${organizationId}` : null,
+    role: auth.role || membership?.role || null,
+    service: "hub",
+    destinationId: canonical.destinationId,
+  }}><GuidanceCenter {...guidanceProps} />{children}</TourProvider>;
 }

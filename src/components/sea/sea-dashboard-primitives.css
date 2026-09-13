@@ -1,0 +1,23 @@
+.sea-dashboardSection { margin: 1rem 0; padding: 1rem 1.15rem; border: 1px solid color-mix(in srgb, currentColor 16%, transparent); border-radius: 8px; background: color-mix(in srgb, Canvas 94%, currentColor 6%); }
+.sea-dashboardEyebrow, .sea-sourceLabel { margin: 0 0 .35rem; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; opacity: .72; }
+.sea-dashboardSectionTitle { margin: 0 0 .7rem; font-size: 1.05rem; }
+.sea-attentionList { display: grid; gap: .65rem; margin: 0; padding: 0; list-style: none; }
+.sea-attentionItem { display: flex; align-items: center; gap: .7rem; min-width: 0; padding: .7rem; border-inline-start: 3px solid currentColor; }
+.sea-attentionItem > div { flex: 1; min-width: 0; }
+.sea-attentionItem p, .sea-attentionItem small { display: block; margin: .15rem 0 0; }
+.sea-attentionMarker { display: grid; place-items: center; width: 1.5rem; height: 1.5rem; border: 1px solid currentColor; border-radius: 50%; font-weight: 700; }
+.sea-attentionItem--waiting { opacity: .78; }
+.sea-attentionItem--blocked, .sea-attentionItem--at_risk { color: #9d2d20; }
+.sea-emptyState, .sea-muted { margin: 0; opacity: .72; }
+.sea-nextAction { display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-color: color-mix(in srgb, currentColor 30%, transparent); }
+.sea-nextActionBody { min-width: 0; }
+.sea-nextActionBody > strong { display: block; font-size: 1.1rem; }
+.sea-nextActionBody > p:not(.sea-sourceLabel) { margin: .3rem 0 0; }
+.sea-primaryAction, .sea-inlineAction { display: inline-flex; align-items: center; justify-content: center; min-height: 2.5rem; padding: .55rem .85rem; border-radius: 6px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+.sea-primaryAction { color: #fff; background: #1f5d45; }
+.sea-inlineAction { color: inherit; border: 1px solid currentColor; }
+.sea-sourceStatus { display: inline-flex; padding: .2rem .45rem; border: 1px solid currentColor; border-radius: 999px; font-size: .75rem; font-weight: 700; }
+.sea-sourceStatus--unavailable, .sea-sourceStatus--stale { color: #9d2d20; }
+.sea-sourceStatus--partial { color: #855d00; }
+.sea-helpRegion { background: color-mix(in srgb, Canvas 90%, currentColor 10%); }
+@media (max-width: 640px) { .sea-nextAction { align-items: stretch; flex-direction: column; } .sea-primaryAction { width: 100%; } .sea-attentionItem { align-items: flex-start; flex-wrap: wrap; } .sea-inlineAction { margin-inline-start: 2.2rem; } }

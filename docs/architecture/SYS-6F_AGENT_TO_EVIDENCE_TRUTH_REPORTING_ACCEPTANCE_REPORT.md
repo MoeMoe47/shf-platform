@@ -206,4 +206,3 @@ Not ready for final closure because WF-041 remains an open repository-local acce
 
 ## 68. Recommended Next Phase
 **SYS-6G — MCP Cross-Organization / Resource Classification / Secret Boundary / Replay Acceptance** for WF-041. Do not begin it in this phase.
-

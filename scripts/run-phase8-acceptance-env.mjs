@@ -11,7 +11,7 @@
  * Vite process. SHS_DEV_DATABASE_IDENTITY_ENABLED is deliberately scoped to
  * the development child process; production auth code is unchanged.
  */
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawn } from "node:child_process";
@@ -121,20 +121,42 @@ INSERT INTO users (user_id, organization_id, email, full_name, status, identity_
  ('admin_B','phase8_org_b','admin.b@phase8.test','Admin B','active','test'),
  ('learner_B1','phase8_org_b','learner.b1@phase8.test','Learner B1','active','test'),
  ('multi_org_staff','phase8_org_a','multi.org@phase8.test','Multi Org Staff','active','test'),
+ ('operator_A','phase8_org_a','operator.a@phase8.test','Operator A','active','test'),
  ('admin_empty','phase8_org_empty','admin.empty@phase8.test','Admin Empty','active','test'),
  ('learner_empty','phase8_org_empty','learner.empty@phase8.test','Learner Empty','active','test') ON CONFLICT DO NOTHING;
 INSERT INTO roles (role_id, organization_id, role_name, role_scope_type, is_system_role) VALUES
  ('phase8_role_admin',NULL,'org_admin','ORGANIZATION',true),
  ('phase8_role_instructor',NULL,'instructor','COHORT',true),
+ ('phase8_role_operator',NULL,'operator','ORGANIZATION',true),
  ('phase8_role_student',NULL,'student','SELF',true) ON CONFLICT DO NOTHING;
 INSERT INTO role_permissions (role_permission_id, role_id, permission_name) VALUES
- ('phase8_admin_project_create','phase8_role_admin','project.create'),('phase8_admin_project_team','phase8_role_admin','project.team.manage'),('phase8_admin_specialization','phase8_role_admin','program.specialization.assign'),('phase8_admin_credential_definition','phase8_role_admin','credential.definition.manage'),('phase8_admin_credential_issue','phase8_role_admin','credential.issue'),('phase8_admin_credential_revoke','phase8_role_admin','credential.revoke'),('phase8_admin_credential_view','phase8_role_admin','credential.view'),
+ ('phase8_admin_audit_view','phase8_role_admin','audit.view'),('phase8_admin_project_create','phase8_role_admin','project.create'),('phase8_admin_project_team','phase8_role_admin','project.team.manage'),('phase8_admin_specialization','phase8_role_admin','program.specialization.assign'),('phase8_admin_credential_definition','phase8_role_admin','credential.definition.manage'),('phase8_admin_credential_issue','phase8_role_admin','credential.issue'),('phase8_admin_credential_revoke','phase8_role_admin','credential.revoke'),('phase8_admin_credential_view','phase8_role_admin','credential.view'),
  ('phase8_admin_cohort','phase8_role_admin','cohort.view'),('phase8_admin_assignment','phase8_role_admin','assignment.view'),('phase8_admin_reports','phase8_role_admin','reports.view'),('phase8_admin_project','phase8_role_admin','project.submission.review'),('phase8_admin_verify_view','phase8_role_admin','verification.view'),('phase8_admin_verify_review','phase8_role_admin','verification.review'),('phase8_admin_verify_approve','phase8_role_admin','verification.approve'),('phase8_admin_live','phase8_role_admin','liveLearning.view'),('phase8_admin_attendance','phase8_role_admin','liveLearning.join.authorize'),
  ('phase8_inst_cohort','phase8_role_instructor','cohort.view'),('phase8_inst_assignment','phase8_role_instructor','assignment.view'),('phase8_inst_project','phase8_role_instructor','project.submission.review'),('phase9_inst_queue','phase8_role_instructor','studio.review.queue.view'),('phase8_inst_verify_view','phase8_role_instructor','verification.view'),('phase8_inst_verify_review','phase8_role_instructor','verification.review'),('phase8_inst_verify_approve','phase8_role_instructor','verification.approve'),('phase8_inst_live','phase8_role_instructor','liveLearning.view'),('phase8_inst_attendance','phase8_role_instructor','liveLearning.join.authorize'),('phase8_inst_reports','phase8_role_instructor','reports.view'),
  ('phase8_student_assignment','phase8_role_student','assignment.view'),('phase8_student_enrollment','phase8_role_student','enrollment.view'),('phase8_student_live','phase8_role_student','liveLearning.view'),('phase8_student_join','phase8_role_student','liveLearning.join.request'),('phase8_student_project','phase8_role_student','project.submission.write'),('phase8_student_arcade','phase8_role_student','arcade.attempt'),('phase8_student_complete','phase8_role_student','curriculum.lesson.complete'),('phase8_student_credential_view','phase8_role_student','credential.view') ON CONFLICT DO NOTHING;
+INSERT INTO role_permissions (role_permission_id, role_id, permission_name) VALUES ('phase8_operator_verify_view','phase8_role_operator','verification.view'),('phase8_operator_audit_view','phase8_role_operator','audit.view'),('phase8_operator_ai_governance','phase8_role_operator','ai.governance.view') ON CONFLICT DO NOTHING;
 INSERT INTO role_permissions (role_permission_id, role_id, permission_name) VALUES ('phase8_admin_completion_definition','phase8_role_admin','program.course.assign') ON CONFLICT DO NOTHING;
+INSERT INTO role_permissions (role_permission_id, role_id, permission_name) VALUES ('ogl6_admin_authoring','phase8_role_admin','documentation.registry.manage') ON CONFLICT DO NOTHING;
+INSERT INTO role_permissions (role_permission_id, role_id, permission_name) VALUES ('ax3_admin_documentation_view','phase8_role_admin','documentation.view') ON CONFLICT DO NOTHING;
+INSERT INTO dgal_document_types (document_type_id, document_type_key, title, owning_domain, status) VALUES ('phase8_ax3_doc_type','phase8-ax3-document','AX-3 acceptance document','testing','ACTIVE') ON CONFLICT DO NOTHING;
+INSERT INTO dgal_document_templates (template_id, document_type_id, template_key, title, owning_domain, canonical_source_owner, content_reference, organization_id, tenant_id, status) VALUES ('phase8_ax3_template','phase8_ax3_doc_type','phase8-ax3-template','AX-3 acceptance template','testing','testing','ax3-acceptance','phase8_org_a','tenant:phase8_org_a','ACTIVE') ON CONFLICT DO NOTHING;
+INSERT INTO dgal_template_versions (template_version_id, template_id, version_number, revision, source_reference, classification, status, created_by_user_id) VALUES ('phase8_ax3_version','phase8_ax3_template',1,'phase8-ax3-v1','ax3-acceptance','INTERNAL','ACTIVE','admin_A') ON CONFLICT DO NOTHING;
+INSERT INTO dgal_document_instances (document_instance_id, document_type_id, template_id, template_version_id, owning_domain, organization_id, tenant_id, title, classification, state, artifact_reference, artifact_mime_type, artifact_byte_length, content_hash, generated_at, generated_by_user_id) VALUES ('phase8_ax3_document','phase8_ax3_doc_type','phase8_ax3_template','phase8_ax3_version','testing','phase8_org_a','tenant:phase8_org_a','AX-3 acceptance document','INTERNAL','GENERATED','dgal/phase8_ax3_document.html','text/html',67,'phase8-ax3-content-v1',NOW(),'admin_A') ON CONFLICT DO NOTHING;
 INSERT INTO role_permissions (role_permission_id, role_id, permission_name) VALUES
  ('phase9_admin_route','phase8_role_admin','studio.review.route'),('phase9_admin_reassign','phase8_role_admin','studio.review.reassign'),('phase9_admin_queue','phase8_role_admin','studio.review.queue.view') ON CONFLICT DO NOTHING;
+INSERT INTO role_permissions (role_permission_id, role_id, permission_name) VALUES
+ ('ax4_phase8_admin_review','phase8_role_admin','accessibility.accommodation.review'),
+ ('ax4_phase8_admin_approve','phase8_role_admin','accessibility.accommodation.approve'),
+ ('ax4_phase8_admin_fulfill','phase8_role_admin','accessibility.accommodation.fulfill'),
+ ('ax4_phase8_reviewer_review','phase8_role_instructor','accessibility.accommodation.review'),
+ ('ax4_phase8_student_request','phase8_role_student','accessibility.accommodation.request')
+ ON CONFLICT DO NOTHING;
+INSERT INTO role_permissions (role_permission_id, role_id, permission_name) VALUES
+ ('ax6_phase8_admin_operations_view','phase8_role_admin','accessibility.operations.view'),
+ ('ax6_phase8_admin_operations_manage','phase8_role_admin','accessibility.operations.manage'),
+ ('ax6_phase8_admin_operations_verify','phase8_role_admin','accessibility.operations.verify'),
+ ('ax6_phase8_admin_support_manage','phase8_role_admin','accessibility.support.manage')
+ ON CONFLICT DO NOTHING;
 INSERT INTO memberships (membership_id,user_id,organization_id,role_id,status,effective_from) VALUES
  ('phase8_mem_admin','admin_A','phase8_org_a','phase8_role_admin','active',NOW()),
  ('phase8_mem_inst_auth','instructor_A_authorized','phase8_org_a','phase8_role_instructor','active',NOW()),
@@ -146,6 +168,7 @@ INSERT INTO memberships (membership_id,user_id,organization_id,role_id,status,ef
  ('phase8_mem_admin_b','admin_B','phase8_org_b','phase8_role_admin','active',NOW()),
  ('phase8_mem_multi_a','multi_org_staff','phase8_org_a','phase8_role_instructor','active',NOW()),
  ('phase8_mem_multi_b','multi_org_staff','phase8_org_b','phase8_role_admin','active',NOW()),
+ ('phase8_mem_operator','operator_A','phase8_org_a','phase8_role_operator','active',NOW()),
  ('phase8_mem_admin_empty','admin_empty','phase8_org_empty','phase8_role_admin','active',NOW()),
  ('phase8_mem_learner_empty','learner_empty','phase8_org_empty','phase8_role_student','active',NOW()) ON CONFLICT DO NOTHING;
 INSERT INTO programs (program_id,organization_id,name,program_type,status,created_by_user_id) VALUES ('phase8_program_a','phase8_org_a','Program A','education','active','admin_A'),('phase8_program_b','phase8_org_b','Program B','education','active','admin_B') ON CONFLICT DO NOTHING;
@@ -557,11 +580,14 @@ try {
   if (!(masterFixture && validationOnly)) {
   stage = "starting API";
   const apiPort = await unusedPort();
-  const api = command("npm", ["run", "dev", "--", "--host", "127.0.0.1", "--port", String(apiPort)], { cwd: apiRoot, label: "api", env: { DATABASE_URL: databaseUrl, PORT: String(apiPort), SHS_AUTH_ENV: "development", SHS_DEV_DATABASE_IDENTITY_ENABLED: "1", SHS_RATE_LIMIT_AUTHENTICATED_USER_MAX: "5000", SHS_RATE_LIMIT_AUTHENTICATED_USER_WINDOW_SECONDS: "60" } });
+  const apiStorageRoot = join(tempRoot, "accessibility-content");
+  await mkdir(join(apiStorageRoot, "dgal"), { recursive: true });
+  await writeFile(join(apiStorageRoot, "dgal/phase8_ax3_document.html"), "<h1>AX-3 acceptance document</h1><p>Derived read-only content.</p>");
+  const api = command("npm", ["run", "dev", "--", "--host", "127.0.0.1", "--port", String(apiPort)], { cwd: apiRoot, label: "api", env: { DATABASE_URL: databaseUrl, PORT: String(apiPort), SHS_ACCESSIBILITY_CONTENT_STORAGE_ROOT: apiStorageRoot, SHS_AUTH_ENV: "development", SHS_DEV_DATABASE_IDENTITY_ENABLED: "1", ...(process.env.SHS_ACCEPTANCE_DISABLE_DEMO_AUTH === "1" ? { AUTH_DEMO_IDENTITY_ENABLED: "0" } : {}), SHS_RATE_LIMIT_AUTHENTICATED_USER_MAX: "5000", SHS_RATE_LIMIT_AUTHENTICATED_USER_WINDOW_SECONDS: "60" } });
   await waitFor(`http://127.0.0.1:${apiPort}/health`, api);
   stage = "starting frontend";
   const frontendPort = await unusedPort();
-  const frontend = command("npm", ["run", "dev", "--", "--host", "127.0.0.1", "--port", String(frontendPort), "--strictPort"], { cwd: frontendRoot, label: "frontend", env: { SHS_VITE_API_PROXY_TARGET: `http://127.0.0.1:${apiPort}`, VITE_SHS_API_BASE: `http://127.0.0.1:${apiPort}`, VITE_API_BASE: `http://127.0.0.1:${apiPort}`, VITE_DEV_USER_ID: "instructor_A_authorized", VITE_LIVE_LEARNING_API_BASE: `http://127.0.0.1:${apiPort}` } });
+  const frontend = command("npm", ["run", "dev", "--", "--host", "127.0.0.1", "--port", String(frontendPort), "--strictPort"], { cwd: frontendRoot, label: "frontend", env: { SHS_VITE_API_PROXY_TARGET: `http://127.0.0.1:${apiPort}`, VITE_SHS_API_BASE: `http://127.0.0.1:${apiPort}`, VITE_API_BASE: `http://127.0.0.1:${apiPort}`, VITE_DEV_USER_ID: process.env.SHS_ACCEPTANCE_DEV_USER_ID ?? "instructor_A_authorized", VITE_LIVE_LEARNING_API_BASE: `http://127.0.0.1:${apiPort}` } });
   await waitFor(`http://127.0.0.1:${frontendPort}${frontendReadyPath}`, frontend);
   stage = "readiness assertions";
   const auth = { Authorization: "Bearer dev-token:instructor_A_authorized" };
@@ -588,7 +614,7 @@ try {
     const handoffKind = process.env.SHS_ACCEPTANCE_HANDOFF_KIND || "playwright";
     if (handoffKind === "api-test") {
       stage = "API test handoff";
-      await run("npx", ["tsx", "--test", ...handoff], { cwd: apiRoot, env: { DATABASE_URL: databaseUrl, SHS_TEST_DATABASE_URL: databaseUrl, SHS_API_TEST_BASE_URL: `http://127.0.0.1:${apiPort}` }, label: "api-test" });
+      await run("npx", ["tsx", "--test", ...handoff], { cwd: apiRoot, env: { DATABASE_URL: databaseUrl, SHS_TEST_DATABASE_URL: databaseUrl, SHS_ACCESSIBILITY_CONTENT_STORAGE_ROOT: apiStorageRoot, SHS_API_TEST_BASE_URL: `http://127.0.0.1:${apiPort}` }, label: "api-test" });
     } else if (handoffKind === "api-command") {
       stage = "API command handoff";
       await run("npx", ["tsx", ...handoff], { cwd: apiRoot, env: { DATABASE_URL: databaseUrl, SHS_TEST_DATABASE_URL: databaseUrl, SHS_API_TEST_BASE_URL: `http://127.0.0.1:${apiPort}` }, label: "api-command" });

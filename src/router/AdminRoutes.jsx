@@ -84,6 +84,8 @@ import { SHS_SECURITY_PERMISSIONS } from "@/system/security/security-permissions
 import DocumentationCenter from "@/pages/documentation/DocumentationCenter.jsx";
 import DocumentationItemDetail from "@/pages/documentation/DocumentationItemDetail.jsx";
 import DocumentationRegistryAdmin from "@/pages/documentation/DocumentationRegistryAdmin.jsx";
+import OglAcceptanceRoutes from "@/system/orientation/acceptance/OglAcceptanceRoutes.jsx";
+import OglAdminPage from "@/pages/admin/ogl/OglAdminPage.jsx";
 
 installGlobalButtonClickSound();
 
@@ -138,6 +140,7 @@ export default function AdminRoutes() {
 
         {/* SHS Hub */}
         <Route path="/hub" element={protect("/hub", <HubWorkspaceDashboard />)} />
+        {import.meta.env.DEV ? <Route path="/ogl-acceptance/*" element={<OglAcceptanceRoutes />} /> : null}
         <Route path="/hub/network" element={protect("/hub/network", <HubLeadershipDashboard />)} />
         <Route path="/hub/leadership" element={protect("/hub/leadership", <HubLeadershipDashboard />)} />
         <Route path="/hub/intake" element={protect("/hub/intake", <IntakeNavigatorConsole />)} />
@@ -188,6 +191,7 @@ export default function AdminRoutes() {
         <Route path="/documentation" element={protect("/documentation", <DocumentationCenter />, ["documentation.center.view"])} />
         <Route path="/documentation/items/:id" element={protect("/documentation/items", <DocumentationItemDetail />, ["documentation.center.view"])} />
         <Route path="/documentation/admin" element={protect("/documentation/admin", <DocumentationRegistryAdmin />, ["documentation.registry.manage"])} />
+        <Route path="/orientation" element={protect("/orientation", <OglAdminPage />, [SHS_SECURITY_PERMISSIONS.DOCUMENTATION_REGISTRY_MANAGE])} />
 
         {/* Admin builder / registry */}
         <Route path="/app-registry" element={protect("/app-registry", <AppRegistry />)} />

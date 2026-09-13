@@ -8,10 +8,21 @@ import UpcomingAssignmentsCard from "./sections/UpcomingAssignmentsCard.jsx";
 import CurriculumCalendar from "./sections/CurriculumCalendar.jsx";
 import SpecializationAssignmentPanel from "../../components/curriculum/SpecializationAssignmentPanel.jsx";
 import { Link } from "react-router-dom";
+import { SeaDashboardSection, SeaHelpRegion, SeaNextAction } from "@/components/sea/SeaDashboardPrimitives.jsx";
 
 export default function CurriculumDashboard() {
   return (
-    <div className="ld-dashGrid">
+    <div className="sea-dashboardPage" data-ogl-anchor="curriculum-workspace">
+      <SeaDashboardSection title="Current learning context" eyebrow="Curriculum" className="sea-dashboardContext">
+        <p>Continue your active program, course, and assigned learning work.</p>
+      </SeaDashboardSection>
+      <SeaNextAction
+        label="Open current assignments"
+        description="The curriculum projection determines which assignment or lesson is next for you."
+        href="/curriculum/asl/assignments"
+        source="DOMAIN_PROJECTION"
+      />
+      <div className="ld-dashGrid">
       <div className="ld-dashCol ld-dashColMain">
         <SpecializationAssignmentPanel />
         <CurrentPathwayCard />
@@ -33,6 +44,10 @@ export default function CurriculumDashboard() {
           </div>
         </section>
       </div>
+      </div>
+      <SeaHelpRegion>
+        <p>Use the Guidance Center and Companion for contextual help without changing learning state.</p>
+      </SeaHelpRegion>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 // src/entries/RootProviders.jsx
 import React from "react";
+import "@/styles/accessibility-adaptive.css";
 
 // Keep your dev mock API in development
 if (import.meta.env.DEV) {

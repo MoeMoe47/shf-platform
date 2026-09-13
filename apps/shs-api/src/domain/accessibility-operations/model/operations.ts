@@ -1,0 +1,5 @@
+export const ISSUE_ORIGINS = ["AX5_AUTOMATED", "AX5_HUMAN_REVIEW", "USER_REPORT", "COMPANION_ESCALATION", "STAFF_REPORT", "REGRESSION", "EXTERNAL_AUDIT"] as const;
+export const ISSUE_STATUSES = ["NEW", "TRIAGED", "ASSIGNED", "IN_REMEDIATION", "READY_FOR_RETEST", "RETESTING", "VERIFIED", "RESOLVED", "CLOSED", "BLOCKED", "REGRESSION"] as const;
+export const SUPPORT_TYPES = ["ACCESS_BARRIER", "ASSISTIVE_TECH_HELP", "ALTERNATIVE_FORMAT_HELP", "CONTENT_ACCESS_HELP", "LIVE_SESSION_ACCESS", "ACCOMMODATION_PROCESS_HELP", "OTHER_ACCESSIBILITY_SUPPORT"] as const;
+export const SUPPORT_STATUSES = ["OPEN", "ASSIGNED", "IN_PROGRESS", "WAITING_ON_USER", "ROUTED", "RESOLVED", "CLOSED", "CANCELLED"] as const;
+export function deriveHealth(issues: any[], sourceAvailable = true) { if (!sourceAvailable) return "UNKNOWN"; if (issues.some((i) => i.status === "BLOCKED" || i.severity === "CRITICAL")) return "CRITICAL"; if (issues.some((i) => i.status === "REGRESSION")) return "ATTENTION"; if (issues.some((i) => ["SERIOUS", "MODERATE"].includes(i.severity) && !["VERIFIED", "CLOSED"].includes(i.status))) return "DEGRADED"; return "HEALTHY"; }

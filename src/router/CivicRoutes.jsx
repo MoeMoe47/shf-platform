@@ -29,6 +29,7 @@ const ConstitutionJournal = lazy(() =>
 const CivicBadges      = lazy(() => import("@/pages/civic/Badges.jsx"));
 const CivicLeaderboard = lazy(() => import("@/pages/civic/Leaderboard.jsx"));
 const OrganizationOnboarding = lazy(() => import("../../apps/shf-web/src/pages/operator/OrganizationOnboarding.jsx"));
+const AccessibilityAccommodations = lazy(() => import("../../apps/shf-web/src/pages/operator/AccessibilityAccommodations.jsx"));
 
 /* ---- Small, CSP-safe skeleton so a slow chunk doesn’t look blank ---- */
 function Loader() {
@@ -88,6 +89,7 @@ export default function CivicRoutes() {
               organization-onboarding console used by authenticated
               operator fixtures. */}
           <Route path="operator/onboarding" element={<OrganizationOnboarding />} />
+          <Route path="operator/accommodations" element={<AccessibilityAccommodations />} />
 
           {/* Aliases */}
           <Route

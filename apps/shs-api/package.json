@@ -20,7 +20,10 @@
     "lifecycle:plan": "tsx src/db/lifecycle.ts plan",
     "lifecycle:cleanup": "tsx src/db/lifecycle.ts cleanup --confirm",
     "typecheck": "tsc --noEmit",
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json",
+    "nca:persistence:validate": "tsx scripts/validate-nca-persistence-recipient-policy.mjs",
+    "nca:delivery:validate": "tsx scripts/validate-nca-delivery-domain-integration.mjs",
+    "nca:final:validate": "tsx scripts/validate-nca-final.mjs"
   },
   "dependencies": {
     "@types/pg": "^8.20.0",

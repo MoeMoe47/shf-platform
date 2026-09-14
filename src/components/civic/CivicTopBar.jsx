@@ -5,47 +5,13 @@
 //
 // Left: "Civic Lab" wordmark + mobile hamburger.
 // Right: Points (RewardsChip, real data), Northstar Dashboard link (real
-// route), theme toggle (real, persists), Notifications (honest — no live
-// feed exists yet, matches the same pattern already established for
-// Arcade's ArcadeHeaderExtras.jsx rather than faking activity).
-import React, { useRef, useState } from "react";
+// route), theme toggle (real, persists), Notifications (NCA-3: the
+// shared, canonical NotificationBell — real recipient-scoped backend
+// data, replacing the previous static "0 new" placeholder dialog).
+import React from "react";
 import CivicThemeSwitch from "./CivicThemeSwitch.jsx";
-import CivicInfoDialog from "./CivicInfoDialog.jsx";
 import RewardsChip from "@/components/rewards/RewardsChip.jsx";
-
-function CivicNotifications() {
-  const [open, setOpen] = useState(false);
-  const triggerRef = useRef(null);
-
-  return (
-    <>
-      <button
-        type="button"
-        ref={triggerRef}
-        className="cv-iconBtn"
-        aria-label="Notifications, 0 new"
-        onClick={() => setOpen(true)}
-      >
-        <span aria-hidden="true">🔔</span>
-        <span className="cv-iconBtn__badge" aria-hidden="true">0</span>
-      </button>
-      <CivicInfoDialog
-        open={open}
-        onClose={() => setOpen(false)}
-        returnFocusRef={triggerRef}
-        titleId="cv-notifications-title"
-        title="Notifications"
-      >
-        <p>
-          There are no notifications yet — Civic Lab doesn&rsquo;t have a live
-          notification feed wired up in this phase. This will show real
-          activity (mission reminders, proposal updates, instructor
-          feedback) once that system is built.
-        </p>
-      </CivicInfoDialog>
-    </>
-  );
-}
+import NotificationBell from "@/components/shared/notifications/NotificationBell.jsx";
 
 export default function CivicTopBar({ mobileMenuOpen, onToggleMobileMenu, mobileMenuBtnRef }) {
   return (
@@ -74,7 +40,7 @@ export default function CivicTopBar({ mobileMenuOpen, onToggleMobileMenu, mobile
           <span className="cv-northstarLink__label">Northstar Dashboard</span>
         </a>
         <CivicThemeSwitch />
-        <CivicNotifications />
+        <NotificationBell className="cv-notifWrap" inboxHref="/notifications" />
       </div>
     </header>
   );

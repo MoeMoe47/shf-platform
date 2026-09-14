@@ -29,6 +29,7 @@ const ConstitutionJournal = lazy(() =>
 const CivicBadges      = lazy(() => import("@/pages/civic/Badges.jsx"));
 const CivicLeaderboard = lazy(() => import("@/pages/civic/Leaderboard.jsx"));
 const OrganizationOnboarding = lazy(() => import("../../apps/shf-web/src/pages/operator/OrganizationOnboarding.jsx"));
+const CivicNotifications = lazy(() => import("@/pages/civic/CivicNotifications.jsx"));
 
 /* ---- Small, CSP-safe skeleton so a slow chunk doesn’t look blank ---- */
 function Loader() {
@@ -78,6 +79,9 @@ export default function CivicRoutes() {
           {/* Core nav */}
           <Route path="notes"         element={<CivicNotes />} />
           <Route path="portfolio"     element={<CivicPortfolio />} />
+
+          {/* NCA-3: canonical notification inbox destination. */}
+          <Route path="notifications" element={<CivicNotifications />} />
 
           {/* App meta */}
           <Route path="rewards"       element={<CivicRewards />} />

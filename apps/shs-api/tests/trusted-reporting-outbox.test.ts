@@ -5,6 +5,7 @@ import { CaseService } from "../src/domain/cases/service/case-service.ts";
 import { buildGovernmentAssuranceTruthDeterminationOutboxEvent, buildReferralOutboxEvent, classifyDeliveryFailure } from "../src/domain/trusted-reporting/outbox.ts";
 import { dispatchPendingIntegrationEvents } from "../src/domain/trusted-reporting/dispatcher.ts";
 import { runTrustedReportingWorker } from "../src/domain/trusted-reporting/worker.ts";
+import { IntegrationOutboxRepo } from "../src/domain/trusted-reporting/outbox-repo.ts";
 import { readFileSync } from "node:fs";
 
 test("referral outbox event is minimized and idempotent", () => {
@@ -244,4 +245,50 @@ test("outbox migration defines idempotency, retry, and concurrent claiming contr
 test("referral route uses the existing referrals.manage permission boundary", () => {
   const routes = readFileSync(new URL("../src/domain/cases/api/routes.ts", import.meta.url), "utf8");
   assert.match(routes, /app\.post\("\/cases\/referrals", requirePermission\("referrals\.manage"\)/);
+});
+
+test("NCA-1 / NCA-D001: a notification-projection failure never fails or rolls back the source outbox event", async () => {
+  const calls: string[] = [];
+  const executor = {
+    async query(sql: string) {
+      if (sql.startsWith("INSERT INTO integration_outbox")) {
+        calls.push("outbox_insert");
+        return { rows: [{ outbox_event_id: "outbox_test_1" }] };
+      }
+      if (sql.startsWith("INSERT INTO notifications")) {
+        calls.push("notification_insert_attempted");
+        throw new Error("simulated notification projection failure");
+      }
+      return { rows: [] };
+    },
+  };
+  const repo = new IntegrationOutboxRepo();
+  const originalConsoleError = console.error;
+  const loggedErrors: unknown[][] = [];
+  console.error = (...args: unknown[]) => { loggedErrors.push(args); };
+  let stored: any;
+  try {
+    stored = await repo.enqueue(
+      {
+        producer_id: "shs-api.credentials",
+        event_type: "credential.issued",
+        subject_type: "learner_credential",
+        subject_id: "credential-1",
+        organization_id: "org-1",
+        tenant_id: "tenant:org-1",
+        originating_actor_id: "user-1",
+        occurred_at: "2026-09-14T00:00:00.000Z",
+        idempotency_key: "credential.issued:credential-1",
+        correlation_id: "credential:credential-1",
+        payload: { learner_user_id: "user-1" },
+      },
+      executor as any,
+    );
+  } finally {
+    console.error = originalConsoleError;
+  }
+  assert.equal(stored.outbox_event_id, "outbox_test_1");
+  assert.deepEqual(calls, ["outbox_insert", "notification_insert_attempted"]);
+  assert.equal(loggedErrors.length, 1);
+  assert.equal((loggedErrors[0][0] as string).includes("notification projection failed"), true);
 });

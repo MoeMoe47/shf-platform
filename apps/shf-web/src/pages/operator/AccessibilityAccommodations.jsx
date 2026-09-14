@@ -6,6 +6,7 @@ import {
   activateAccommodation, approveAccommodation, createAccommodationDraft, fulfillAccommodation,
   getAccommodationProjection, getCurrentAuth, getOwnAccommodation, listAccommodations, reviewAccommodation, submitAccommodation,
 } from "../../services/accessibility-accommodations-client";
+import ExrJourneyContext from "@/components/exr/ExrJourneyContext.jsx";
 
 const savedCaseKey = "shfAccommodationCaseId";
 const fieldStyle = { display: "block", width: "100%", minHeight: 38, marginTop: 5 };
@@ -70,6 +71,7 @@ export default function AccessibilityAccommodations() {
     <PageHeader title="Accessibility Support" subtitle="Request, review, and fulfill institutional accessibility support through the canonical workflow." />
     <ErrorBanner message={error} />
     {notice ? <p role="status" aria-live="polite">{notice}</p> : null}
+    <ExrJourneyContext journeyId="accessibility-support-user" actor="learner" organizationId={window.localStorage.getItem("shfOperatorOrganizationId") || null} roleLabel="Accessibility support user" state={ownCase?.status || "NO_REQUEST"} currentWork={ownCase ? `Accommodation request ${ownCase.accommodationCaseId}` : "No active accommodation request"} nextAction={ownCase ? "Review support status" : "Request accessibility support"} nextActionSource="WORKFLOW_STATE_MACHINE" />
     <section aria-labelledby="support-request-heading" style={{ marginBottom: 24 }}>
       <h2 id="support-request-heading">Request support</h2>
       <p>Personal accessibility preferences remain separate from institutional accommodation decisions.</p>

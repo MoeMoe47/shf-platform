@@ -14,6 +14,7 @@ import {
 } from "../../services/organization-onboarding-client";
 import { resolveOnboardingExperience } from "../../system/sea/onboardingRoleProjection";
 import { SeaAttention, SeaDashboardSection, SeaHelpRegion, SeaNextAction } from "@/components/sea/SeaDashboardPrimitives.jsx";
+import ExrJourneyContext from "@/components/exr/ExrJourneyContext.jsx";
 
 const SERVICES = [
   ["curriculum", "Curriculum"],
@@ -118,6 +119,7 @@ export default function OrganizationOnboarding() {
       <PageHeader title="Organization Onboarding" subtitle="Network application review and activation" />
       <ErrorBanner message={error} />
       {notice ? <p role="status" aria-live="polite">{notice}</p> : null}
+      <ExrJourneyContext journeyId="organization-applicant" actor={actorMode === "REVIEWER" ? "org_admin" : "applicant"} organizationId={selected?.organizationId || null} roleLabel={actorMode === "REVIEWER" ? "Onboarding reviewer" : "Organization applicant"} state={selected?.status || "NO_APPLICATION"} currentWork={selected ? `Application ${selected.onboardingCaseId}` : "No active application"} nextAction={actorMode === "REVIEWER" ? (selected ? "Review the selected application" : "Open the reviewer queue") : (selected ? "Review application status" : "Complete the application")} nextActionSource="WORKFLOW_STATE_MACHINE" />
 
       {actorMode === "UNAUTHORIZED" ? (
         <p role="alert">This account is not authorized for an onboarding experience.</p>

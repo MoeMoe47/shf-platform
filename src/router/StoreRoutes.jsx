@@ -12,6 +12,9 @@ const SolutionsMarketplace = lazy(() =>
 const StoreCatalog = lazy(() =>
   import("@/pages/store/StoreCatalog.jsx")
 );
+const StoreNotifications = lazy(() =>
+  import("@/pages/store/StoreNotifications.jsx")
+);
 
 const Verify = () => <div className="pad">Verify a purchase (coming soon)</div>;
 const MyItems = () => <div className="pad">Your purchases (coming soon)</div>;
@@ -36,6 +39,18 @@ export default function StoreRoutes() {
           element={
             <StoreCatalogShell>
               <StoreCatalog />
+            </StoreCatalogShell>
+          }
+        />
+
+        {/* NCA-3: canonical notification inbox destination — same shared
+            component every shell mounts (NCA-D002), same shell chrome as
+            Catalog. */}
+        <Route
+          path="/notifications"
+          element={
+            <StoreCatalogShell>
+              <StoreNotifications />
             </StoreCatalogShell>
           }
         />

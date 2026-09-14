@@ -9,24 +9,23 @@
 // convention of not cross-coupling one app's presentational atoms into
 // another's bundle (see SHFFooter.jsx's own HeartMark comment for the
 // same reasoning).
+//
+// NCA-3: the notification control is now the shared, canonical
+// NotificationBell — previously a static "You're all caught up" panel
+// with no backend call at all (see
+// docs/architecture/NCA-0_SYSTEM_WIDE_NOTIFICATION_COMMUNICATION_ARCHITECTURE_AUDIT.md
+// §6). It now shows the real recipient-scoped unread count and opens the
+// real canonical inbox.
 import React from "react";
 import StoreThemeSwitch from "./StoreThemeSwitch.jsx";
 import AppSwitcher from "@/components/AppSwitcher.jsx";
+import NotificationBell from "@/components/shared/notifications/NotificationBell.jsx";
 
 function SearchIcon(props) {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...props}>
       <circle cx="11" cy="11" r="7" />
       <path d="m21 21-4.3-4.3" />
-    </svg>
-  );
-}
-
-function BellIcon(props) {
-  return (
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <path d="M6 9a6 6 0 1 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 13 6 9Z" />
-      <path d="M10 19a2 2 0 0 0 4 0" />
     </svg>
   );
 }
@@ -40,25 +39,6 @@ export default function StoreHeader({
   onToggleMobileMenu,
   mobileMenuBtnRef,
 }) {
-  const [notifOpen, setNotifOpen] = React.useState(false);
-  const notifRef = React.useRef(null);
-
-  React.useEffect(() => {
-    if (!notifOpen) return;
-    const onDocClick = (e) => {
-      if (notifRef.current && !notifRef.current.contains(e.target)) setNotifOpen(false);
-    };
-    const onKey = (e) => {
-      if (e.key === "Escape") setNotifOpen(false);
-    };
-    document.addEventListener("mousedown", onDocClick);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onDocClick);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [notifOpen]);
-
   return (
     <header className="cs-headerBar">
       <button
@@ -98,23 +78,7 @@ export default function StoreHeader({
 
         <StoreThemeSwitch />
 
-        <div className="cs-notifWrap" ref={notifRef}>
-          <button
-            type="button"
-            className="cs-iconBtn"
-            aria-haspopup="true"
-            aria-expanded={notifOpen}
-            aria-label="Notifications"
-            onClick={() => setNotifOpen((v) => !v)}
-          >
-            <BellIcon />
-          </button>
-          {notifOpen && (
-            <div className="cs-notifPanel" role="dialog" aria-label="Notifications">
-              <p className="cs-notifEmpty">You're all caught up — no new notifications.</p>
-            </div>
-          )}
-        </div>
+        <NotificationBell className="cs-notifWrap" inboxHref="/notifications" />
 
         <AppSwitcher currentApp="store" />
       </div>

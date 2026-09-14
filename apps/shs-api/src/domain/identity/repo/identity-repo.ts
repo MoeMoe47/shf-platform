@@ -140,6 +140,25 @@ export class IdentityRepo {
         roles: ["reviewer_verifier"],
       };
     }
+    // NCA-3 dev/browser-acceptance fixture only (never reachable in
+    // production — this whole method is gated behind the dev-token path,
+    // which parseDevToken only accepts when !isProductionEnvironment()).
+    // A genuine multi-organization identity for manually verifying
+    // cross-org notification filtering/aggregate unread signals; see
+    // docs/architecture/NCA-3_IN_APP_INBOX_ATTENTION_PROJECTION.md §32.
+    if (userId === "user_nca3_multiorg_demo") {
+      return {
+        user_id: "user_nca3_multiorg_demo",
+        organization_id: "org_shf_001",
+        email: "multiorg-demo@siliconheartland.org",
+        full_name: "NCA-3 Multi-Org Demo User",
+        roles: ["student"],
+        memberships: [
+          { membership_id: "nca3-demo-membership-shf", organization_id: "org_shf_001", role: "student", status: "active", organization_status: "active" },
+          { membership_id: "nca3-demo-membership-partner", organization_id: "org_partner_001", role: "student", status: "active", organization_status: "active" },
+        ],
+      };
+    }
     if (userId === "user_other_admin_001") {
       return {
         user_id: "user_other_admin_001",

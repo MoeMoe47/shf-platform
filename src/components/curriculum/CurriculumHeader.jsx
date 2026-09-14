@@ -1,10 +1,18 @@
 // src/components/curriculum/CurriculumHeader.jsx
+//
+// NCA-3: the notification bell is now the shared, canonical
+// NotificationBell (src/components/shared/notifications/) instead of a
+// bespoke local implementation. This also fixes a pre-existing bug: the
+// old local `async function markNotificationRead(item)` shadowed the
+// imported API function of the same name within its own scope, so calling
+// it recursed into itself instead of ever calling the real API — "mark
+// read" from this bell never actually worked. See
+// docs/architecture/NCA-3_IN_APP_INBOX_ATTENTION_PROJECTION.md §19.
 import React from "react";
 import { href as HREFS } from "@/router/paths.js";
-import { SearchIcon, BellIcon, ChevronDownIcon } from "./icons.jsx";
+import { SearchIcon, ChevronDownIcon } from "./icons.jsx";
 import CurriculumThemeSwitch from "./CurriculumThemeSwitch.jsx";
-import { useUser } from "@/context/UserContext.jsx";
-import { listNotifications, markNotificationRead } from "@/lib/notifications/api.js";
+import NotificationBell from "@/components/shared/notifications/NotificationBell.jsx";
 
 const PATHWAY_OPTIONS = [
   { value: "career", label: "Career", href: HREFS.career("/planner") },
@@ -17,43 +25,7 @@ export default function CurriculumHeader({
   onSearch,
 }) {
   const [query, setQuery] = React.useState("");
-  const [notifOpen, setNotifOpen] = React.useState(false);
   const [pathway, setPathway] = React.useState("career");
-  const { role } = useUser();
-  const notifRef = React.useRef(null);
-  const [notifications, setNotifications] = React.useState([]);
-  const [notificationError, setNotificationError] = React.useState("");
-
-  React.useEffect(() => {
-    if (!notifOpen) return;
-    const onDocClick = (e) => {
-      if (notifRef.current && !notifRef.current.contains(e.target)) setNotifOpen(false);
-    };
-    const onKey = (e) => {
-      if (e.key === "Escape") setNotifOpen(false);
-    };
-    document.addEventListener("mousedown", onDocClick);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onDocClick);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [notifOpen]);
-
-  React.useEffect(() => {
-    let cancelled = false;
-    listNotifications(role).then((data) => data.items || [])
-      .then((items) => { if (!cancelled) setNotifications(items); })
-      .catch(() => { if (!cancelled) setNotificationError("Notifications are temporarily unavailable."); });
-    return () => { cancelled = true; };
-  }, [role]);
-
-  const hasUnread = notifications.some((item) => item.status === "UNREAD");
-  async function markNotificationRead(item) {
-    if (item.status !== "UNREAD") return;
-    await markNotificationRead(role, item.notificationId);
-    setNotifications((current) => current.map((candidate) => candidate.notificationId === item.notificationId ? { ...candidate, status: "READ" } : candidate));
-  }
 
   function handleSearchChange(e) {
     const v = e.target.value;
@@ -104,28 +76,7 @@ export default function CurriculumHeader({
 
           <CurriculumThemeSwitch />
 
-          <div className="ld-notifWrap" ref={notifRef}>
-            <button
-              type="button"
-              className="ld-iconBtn"
-              aria-haspopup="true"
-              aria-expanded={notifOpen}
-              aria-label={hasUnread ? "Notifications, unread notifications available" : "Notifications"}
-              onClick={() => {
-                setNotifOpen((v) => !v);
-              }}
-            >
-              <BellIcon size={19} />
-              {hasUnread && <span className="ld-unreadDot" aria-hidden="true" />}
-            </button>
-            {notifOpen && (
-              <div className="ld-notifPanel" role="dialog" aria-label="Notifications">
-                <div className="ld-notifPanelHead"><strong>Notifications</strong>{hasUnread && <span>{notifications.filter((item) => item.status === "UNREAD").length} unread</span>}</div>
-                {notificationError ? <p className="ld-notifEmpty" role="alert">{notificationError}</p> : notifications.length ? <ul className="ld-notifList">{notifications.slice(0, 8).map((item) => <li key={item.notificationId} className={item.status === "UNREAD" ? "is-unread" : ""}><div><strong>{item.title}</strong><p>{item.message}</p><time dateTime={item.createdAt}>{new Date(item.createdAt).toLocaleString()}</time></div>{item.destinationPath && <a href={item.destinationPath} onClick={() => markNotificationRead(item)}>Open</a>}</li>)}</ul> : <p className="ld-notifEmpty">No notifications yet.</p>}
-                {notifications.length > 8 && <a className="ld-notifAll" href="/curriculum/notifications">View all notifications</a>}
-              </div>
-            )}
-          </div>
+          <NotificationBell className="ld-notifWrap" inboxHref="/curriculum/notifications" />
 
           <div className="ld-pathwaySelect">
             <label htmlFor="curriculum-pathway" className="ld-srOnly">

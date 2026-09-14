@@ -88,6 +88,8 @@
     "ax:profile:browser": "SHS_ACCEPTANCE_DISABLE_DEMO_AUTH=1 SHS_ACCEPTANCE_DEV_USER_ID= node scripts/run-phase8-acceptance-env.mjs tests/ax2-profile-browser.spec.mjs",
     "ax:content:browser": "SHS_ACCEPTANCE_DISABLE_DEMO_AUTH=1 node scripts/run-phase8-acceptance-env.mjs tests/ax3-content-browser.spec.mjs",
     "sea:implementation:test": "node --test tests/sea4DashboardImplementation.test.mjs",
+    "nca3:ui:test": "node --test tests/nca3NotificationUi.test.mjs",
+    "nca:ui:validate": "node scripts/validate-nca-ui.mjs",
     "manifests:normalize": "node scripts/normalize-manifests.mjs",
     "predev": "npm run manifests:validate && npm run ui:validate",
     "prebuild": "npm run manifests:validate",

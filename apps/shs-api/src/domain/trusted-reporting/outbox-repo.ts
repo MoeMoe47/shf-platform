@@ -36,9 +36,25 @@ export class IntegrationOutboxRepo {
     );
     const stored = result.rows[0];
     // Notification is a durable, idempotent projection of the canonical
-    // event. It shares the source transaction so a committed event cannot
-    // be silently separated from its in-app awareness record.
-    await createNotificationFromEvent({ ...event, outbox_event_id: stored.outbox_event_id }, executor);
+    // event, attempted in the same executor so it benefits from the source
+    // transaction when one is present. NCA-1 / NCA-D001 (approved): a
+    // failure projecting the notification must never fail or roll back the
+    // source event itself — notification communicates source-domain state,
+    // it must not gate it. So the projection attempt is isolated here: any
+    // error is logged and swallowed, never rethrown. The event remains the
+    // single source of truth; a lost notification projection is a durable,
+    // recoverable gap (the source event is still on the outbox row and can
+    // be reprojected), not an acceptable reason to lose the source event.
+    try {
+      await createNotificationFromEvent({ ...event, outbox_event_id: stored.outbox_event_id }, executor);
+    } catch (notificationError) {
+      console.error("[integration_outbox] notification projection failed; source event still committed", {
+        outbox_event_id: stored.outbox_event_id,
+        event_type: event.event_type,
+        organization_id: event.organization_id,
+        error: notificationError instanceof Error ? notificationError.message : String(notificationError),
+      });
+    }
     return stored;
   }
 

@@ -11,13 +11,14 @@
 //
 // Honesty constraints (unchanged from the certified package):
 //  - Search is a REAL, working quick-jump control (unchanged logic).
-//  - Notifications has no live feed anywhere in this codebase, so it
-//    honestly shows 0 and opens an informational dialog.
+//  - Notifications is now the shared, canonical NotificationBell (NCA-3) —
+//    real recipient-scoped backend data, replacing the previous static
+//    "0 new" placeholder dialog.
 //  - Profile links to the real, working Student Portfolio route.
 import React, { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ArcadeInfoDialog from "./ArcadeInfoDialog.jsx";
 import ArcadeThemeSwitch from "./ArcadeThemeSwitch.jsx";
+import NotificationBell from "@/components/shared/notifications/NotificationBell.jsx";
 
 const DESTINATIONS = [
   { to: "/dashboard", label: "Learning Arcade Home" },
@@ -166,40 +167,6 @@ function ArcadeQuickSearch() {
   );
 }
 
-function ArcadeNotifications() {
-  const [open, setOpen] = useState(false);
-  const triggerRef = useRef(null);
-
-  return (
-    <>
-      <button
-        type="button"
-        ref={triggerRef}
-        className="ar-iconBtn"
-        aria-label="Notifications, 0 new"
-        onClick={() => setOpen(true)}
-      >
-        <span aria-hidden="true">🔔</span>
-        <span className="ar-iconBtn__badge" aria-hidden="true">0</span>
-      </button>
-      <ArcadeInfoDialog
-        open={open}
-        onClose={() => setOpen(false)}
-        returnFocusRef={triggerRef}
-        titleId="ar-notifications-title"
-        title="Notifications"
-      >
-        <p>
-          There are no notifications yet — the Arcade doesn&rsquo;t have a
-          live notification feed wired up in this phase. This will show
-          real activity (instructor review updates, tournament reminders)
-          once that system is built.
-        </p>
-      </ArcadeInfoDialog>
-    </>
-  );
-}
-
 function ArcadeProfileChip() {
   return (
     <a className="ar-profileChip" href="/career.html#/portfolio" aria-label="Jamie Rivera, Student — view your Portfolio">
@@ -217,7 +184,7 @@ export default function ArcadeHeaderExtras() {
   return (
     <div className="ar-headerExtras">
       <ArcadeQuickSearch />
-      <ArcadeNotifications />
+      <NotificationBell className="ar-iconBtn-wrap" inboxHref="/notifications" />
       <ArcadeThemeSwitch />
       <ArcadeProfileChip />
     </div>

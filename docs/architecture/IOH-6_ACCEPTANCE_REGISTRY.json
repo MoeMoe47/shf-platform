@@ -1,0 +1,33 @@
+{
+  "program": "IOH",
+  "registry_version": "ioh-6.final.v1",
+  "worktree": "/Users/mikeslate/Projects/shrv1-codex-next",
+  "branch": "codex/identity-org-hardening",
+  "migration_head": 142,
+  "p0_findings": 0,
+  "repository_local_p1_findings": 0,
+  "phases": [
+    { "phase": "IOH-0", "capability": "identity and organization audit", "evidence": "docs/architecture/IOH-0_IDENTITY_ORGANIZATION_EXPERIENCE_HARDENING_AUDIT.md", "verification": "audit artifact", "status": "COMPLETE" },
+    { "phase": "OWNER_DECISION_LOCK", "capability": "active organization and context decisions", "evidence": "docs/architecture/IOH_OWNER_DECISION_LOCK.md", "verification": "locked decision artifact", "status": "COMPLETE" },
+    { "phase": "IOH-1", "capability": "canonical identity/organization context", "evidence": "apps/shs-api/src/auth/auth-response.ts", "verification": "IOH-1 focused tests; IOH-2/3/4/5 validators", "status": "COMPLETE" },
+    { "phase": "IOH-2", "capability": "server-authoritative multi-org context", "evidence": "apps/shs-api/src/auth/organization-context.ts", "verification": "IOH-2 focused tests; ioh:multi-org:validate", "status": "COMPLETE" },
+    { "phase": "IOH-3", "capability": "bounded membership and role administration", "evidence": "apps/shs-api/src/domain/identity/service/membership-service.ts", "verification": "IOH-3 focused tests; ioh:membership:validate", "status": "COMPLETE" },
+    { "phase": "IOH-4", "capability": "bounded organization administration and entitlement experience", "evidence": "apps/shs-api/src/domain/identity/service/organization-admin-experience-service.ts; src/pages/admin/identity/IdentityManagement.jsx", "verification": "IOH-4 focused/browser tests; ioh:org-admin:validate", "status": "COMPLETE" },
+    { "phase": "IOH-5", "capability": "session, revocation, and Identity Gateway hardening", "evidence": "apps/shs-api/src/auth/auth-middleware.ts; apps/shs-api/src/domain/identity/service/auth0-session-service.ts", "verification": "IOH-5 focused tests; ioh:identity-gateway:validate; Auth0 tests", "status": "COMPLETE" },
+    { "phase": "IOH-6", "capability": "system-wide final acceptance", "evidence": "docs/architecture/IOH-6_SYSTEM_WIDE_FINAL_ACCEPTANCE_COMPLETION.md", "verification": "57 API tests; 10 browser lanes; accessibility/UI/build gates", "status": "COMPLETE" }
+  ],
+  "final_gates": {
+    "focused_api_tests": "57/57 PASS",
+    "browser_lanes": "10/10 PASS",
+    "accessibility_validators": "8/8 PASS",
+    "ioh_validators": "4/4 PASS",
+    "api_typecheck": "PASS",
+    "frontend_build": "PASS",
+    "git_diff_check": "PASS",
+    "migrations_added_by_ioh": 0,
+    "external_provider_features_faked": false,
+    "other_worktrees_touched": false,
+    "commit_created": false,
+    "push_performed": false
+  }
+}

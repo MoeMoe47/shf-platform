@@ -1,377 +1,380 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "@/styles/admin.appRegistry.css";
 import useAuth from "../../../auth/useAuth";
+import { SHS_AUTH_API_BASE } from "@/system/identity/authConfig";
+import { getPreferredOrganizationId } from "@/system/identity/organizationContextPreference";
 
-const API_BASE =
-  window.__SHS_API_BASE__ ||
-  (import.meta.env.VITE_SHS_API_BASE || "/api");
+const API_BASE = window.__SHS_API_BASE__ || SHS_AUTH_API_BASE || "/api";
+
+function developmentIdentityHeaders() {
+  try {
+    const userId = window.__user?.id || import.meta.env.VITE_DEV_USER_ID;
+    const localHost = ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
+    if (import.meta.env.DEV && localHost && userId) return { Authorization: `Bearer dev-token:${userId}` };
+  } catch {
+    // Production relies on the authenticated session cookie.
+  }
+  return {};
+}
 
 async function readJson(res) {
   const text = await res.text();
+  let parsed = {};
   try {
-    return text ? JSON.parse(text) : {};
+    parsed = text ? JSON.parse(text) : {};
   } catch {
-    return { raw: text };
+    parsed = { raw: text };
   }
+  if (!res.ok) {
+    const error = new Error(parsed?.error?.message || parsed?.detail || parsed?.error || "Request failed.");
+    error.status = res.status;
+    error.data = parsed;
+    throw error;
+  }
+  return parsed?.data || parsed;
+}
+
+function requestHeaders(extra = {}) {
+  const preferredOrganizationId = getPreferredOrganizationId();
+  return {
+    "Content-Type": "application/json",
+    ...developmentIdentityHeaders(),
+    ...(preferredOrganizationId ? { "x-shs-preferred-organization-id": preferredOrganizationId } : {}),
+    ...extra,
+  };
+}
+
+async function apiFetch(path, options = {}) {
+  const response = await fetch(`${API_BASE}${path}`, {
+    credentials: "include",
+    cache: "no-store",
+    ...options,
+    headers: requestHeaders(options.headers || {}),
+  });
+  return readJson(response);
+}
+
+function titleize(value) {
+  return String(value || "unknown").replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function StatusBadge({ value }) {
+  const normalized = String(value || "unknown").toUpperCase();
+  return (
+    <span className="ar-pill ar-pillOn" aria-label={`Status ${titleize(normalized)}`}>
+      {titleize(normalized)}
+    </span>
+  );
+}
+
+function EmptyState({ title, children }) {
+  return (
+    <div className="ar-card ar-cardDisabled" style={{ marginTop: 12 }}>
+      <h3 style={{ marginTop: 0, marginBottom: 8 }}>{title}</h3>
+      <div className="ar-sub">{children}</div>
+    </div>
+  );
 }
 
 export default function IdentityManagement() {
   const auth = useAuth();
-
-  const [users, setUsers] = useState([]);
-  const [orgs, setOrgs] = useState([]);
+  const [overview, setOverview] = useState(null);
   const [roles, setRoles] = useState([]);
-  const [invites, setInvites] = useState([]);
-  const [loadedInvites, setLoadedInvites] = useState([]);
-  const [membershipDrafts, setMembershipDrafts] = useState({});
+  const [roleDrafts, setRoleDrafts] = useState({});
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState("");
-  const [inviteForm, setInviteForm] = useState({
-    email: "",
-    organization_id: "",
-    role_id: "",
-  });
+  const [error, setError] = useState("");
 
-  const canManage = useMemo(() => {
-    return auth.hasRole("super_admin") || auth.hasRole("shs_admin");
-  }, [auth]);
+  const context = overview?.context || {};
+  const organization = overview?.organization || {};
+  const members = overview?.members || [];
+  const services = overview?.services || [];
+  const relationships = overview?.relationships || [];
+  const settings = overview?.settings || [];
+  const emptyStates = overview?.empty_states || {};
 
-  const authDebug = {
-    loading: auth.loading,
-    error: auth.error,
-    isAuthenticated: auth.isAuthenticated,
-    user: auth.user,
-    memberships: auth.memberships,
-    permissions: auth.permissions,
-    hasSuperAdmin: auth.hasRole("super_admin"),
-    hasShsAdmin: auth.hasRole("shs_admin"),
-  };
+  const canAssignMembership = auth.hasPermission("identity.membership.assign");
+  const canRevokeMembership = auth.hasPermission("identity.membership.revoke");
+  const isSuspendedOrg = String(context.organization_status || organization.status || "").toLowerCase() !== "active";
 
-  async function loadData() {
+  const servicesByState = useMemo(() => ({
+    active: services.filter((service) => service.status === "ACTIVE"),
+    pending: services.filter((service) => service.status === "PENDING"),
+    inactive: services.filter((service) => ["SUSPENDED", "REVOKED", "EXPIRED"].includes(service.status)),
+    discovery: services.filter((service) => service.status === "AVAILABLE_FOR_DISCOVERY"),
+  }), [services]);
+
+  async function loadOverview() {
     setLoading(true);
+    setError("");
     setStatus("");
     try {
-      const [usersRes, orgsRes, rolesRes, invitesRes] = await Promise.all([
-        fetch(`${API_BASE}/users`),
-        fetch(`${API_BASE}/organizations`),
-        fetch(`${API_BASE}/roles`),
-        fetch(`${API_BASE}/invites`),
+      const [overviewData, roleData] = await Promise.all([
+        apiFetch("/identity/organization-admin/overview"),
+        apiFetch("/identity/roles").catch(() => ({ items: [] })),
       ]);
-
-      const [usersData, orgsData, rolesData, invitesData] = await Promise.all([
-        readJson(usersRes),
-        readJson(orgsRes),
-        readJson(rolesRes),
-        readJson(invitesRes),
-      ]);
-
-      const nextUsers = usersData.items || [];
-      setUsers(nextUsers);
-      setOrgs(orgsData.items || []);
-      setRoles(rolesData.items || []);
-      setLoadedInvites(invitesData.items || []);
-      setMembershipDrafts(
-        Object.fromEntries(
-          nextUsers.map((u) => [
-            u.id,
-            {
-              organization_id: u.organization_id || "",
-              role_id: u.role_id || "",
-            },
-          ])
-        )
-      );
+      setOverview(overviewData);
+      setRoles(roleData.items || []);
+      setRoleDrafts({});
     } catch (err) {
-      setStatus(err?.message || "Failed to load identity data.");
+      setError(err?.message || "Organization administration is unavailable.");
     } finally {
       setLoading(false);
     }
   }
 
   useEffect(() => {
-    loadData();
+    loadOverview();
   }, []);
 
-  async function sendInvite(e) {
-    e.preventDefault();
-    setStatus("");
-
-    if (!inviteForm.email || !inviteForm.organization_id || !inviteForm.role_id) {
-      setStatus("Please complete all invite fields.");
+  async function changeRole(member) {
+    const roleId = roleDrafts[member.membership_id];
+    if (!roleId) {
+      setStatus("Choose a permitted organization role first.");
       return;
     }
-
-    try {
-      const res = await fetch(`${API_BASE}/invites`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(inviteForm),
-      });
-
-      const data = await readJson(res);
-      if (!res.ok) throw new Error(data?.error || "Invite failed.");
-
-      setStatus(`Invite created for ${data?.invite?.email || inviteForm.email}.`);
-      setInvites((prev) => [data.invite, ...prev]);
-      setInviteForm({ email: "", organization_id: "", role_id: "" });
-    } catch (err) {
-      setStatus(err?.message || "Invite failed.");
-    }
-  }
-
-  async function updateUserStatus(userId, nextStatus) {
     setStatus("");
     try {
-      const res = await fetch(`${API_BASE}/users/${userId}/status`, {
+      await apiFetch(`/identity/memberships/${member.membership_id}/role`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: nextStatus }),
+        body: JSON.stringify({ role_id: roleId, reason: "IOH-4 bounded organization admin role update" }),
       });
-      const data = await readJson(res);
-      if (!res.ok) throw new Error(data?.error || "Status update failed.");
-
-      setUsers((prev) =>
-        prev.map((u) => (u.id === userId ? { ...u, status: data.user.status } : u))
-      );
-      setStatus(`User status updated to ${data.user.status}.`);
+      await Promise.all([loadOverview(), auth.refreshAuth()]);
+      setStatus("Role updated. Context refreshed from backend authority.");
     } catch (err) {
-      setStatus(err?.message || "Status update failed.");
+      setStatus(err?.message || "Role update was denied.");
     }
   }
 
-  async function updateUserMembership(userId) {
-    const draft = membershipDrafts[userId] || {};
+  async function revokeMember(member) {
     setStatus("");
     try {
-      const res = await fetch(`${API_BASE}/users/${userId}/membership`, {
+      await apiFetch(`/identity/memberships/${member.membership_id}/revoke`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          organization_id: draft.organization_id,
-          role_id: draft.role_id,
-        }),
+        body: JSON.stringify({ reason: "IOH-4 bounded organization admin revocation" }),
       });
-      const data = await readJson(res);
-      if (!res.ok) throw new Error(data?.error || "Membership update failed.");
-
-      setUsers((prev) =>
-        prev.map((u) =>
-          u.id === userId
-            ? {
-                ...u,
-                organization_id: data.user.organization_id,
-                role_id: data.user.role_id,
-              }
-            : u
-        )
-      );
-      setStatus(`Membership updated for ${data.user.email}.`);
+      await Promise.all([loadOverview(), auth.refreshAuth()]);
+      setStatus("Membership revoked. Active organization context will fail closed for that user on next resolution.");
     } catch (err) {
-      setStatus(err?.message || "Membership update failed.");
+      setStatus(err?.message || "Membership revocation was denied.");
     }
   }
 
-  if (loading) {
-    return <div className="ar-wrap"><div className="ar-sub">Loading identity management…</div></div>;
+  if (loading || auth.loading) {
+    return <div className="ar-wrap"><div className="ar-sub" role="status">Loading organization administration...</div></div>;
   }
 
-  if (!canManage) {
+  if (error) {
     return (
-      <div className="ar-wrap">
+      <main className="ar-wrap">
         <header className="ar-head">
           <div>
-            <div className="ar-kicker">System</div>
-            <h1 className="ar-title">Identity Management</h1>
-            <div className="ar-sub">Access denied for current user.</div>
+            <div className="ar-kicker">Organization</div>
+            <h1 className="ar-title">Administration</h1>
+            <div className="ar-sub" role="alert">{error}</div>
           </div>
         </header>
-        <div className="ar-card">
-          <pre className="ar-code">{JSON.stringify(authDebug, null, 2)}</pre>
-        </div>
-      </div>
+        <section className="ar-card" style={{ maxWidth: 980, margin: "18px auto 0" }}>
+          <h2 style={{ marginTop: 0 }}>Access unavailable</h2>
+          <p className="ar-sub">
+            The active backend session did not return an authorized organization-admin context. Refresh your session or choose another authorized organization.
+          </p>
+          <button className="ar-btn" type="button" onClick={loadOverview}>Retry</button>
+        </section>
+      </main>
     );
   }
 
-  const allInvites = [...invites, ...loadedInvites];
-
   return (
-    <div className="ar-wrap">
+    <main className="ar-wrap" data-ioh4-org-admin>
       <header className="ar-head">
         <div>
-          <div className="ar-kicker">System</div>
-          <h1 className="ar-title">Identity Management</h1>
+          <div className="ar-kicker">Organization</div>
+          <h1 className="ar-title">Administration</h1>
           <div className="ar-sub">
-            Manage users, organizations, roles, and invitations for SHS / SHF V1.
+            {organization.display_name || organization.organization_id} - {titleize(context.actor_roles?.[0] || auth.role || "member")}
           </div>
+        </div>
+        <div className="ar-actions" aria-label="Organization context">
+          <StatusBadge value={organization.status || context.organization_status} />
+          <StatusBadge value={context.membership_status} />
+          <button className="ar-btn ar-btnGhost" type="button" onClick={loadOverview}>Refresh</button>
         </div>
       </header>
 
-      <section className="ar-card" style={{ marginBottom: 18 }}>
-        <h3 style={{ marginTop: 0, marginBottom: 14 }}>Invite User</h3>
-        <form
-          onSubmit={sendInvite}
-          style={{ display: "grid", gap: 12, maxWidth: 840 }}
-        >
-          <input
-            value={inviteForm.email}
-            onChange={(e) => setInviteForm((v) => ({ ...v, email: e.target.value }))}
-            placeholder="Email"
-            style={{ padding: 12, borderRadius: 10, border: "1px solid rgba(255,255,255,0.12)", background: "rgba(10,14,24,0.45)", color: "#e8eefc" }}
-          />
+      {status ? (
+        <section className="ar-card" style={{ maxWidth: 1200, margin: "0 auto 18px" }} role="status">
+          <div className="ar-sub">{status}</div>
+        </section>
+      ) : null}
 
-          <select
-            value={inviteForm.organization_id}
-            onChange={(e) => setInviteForm((v) => ({ ...v, organization_id: e.target.value }))}
-            style={{ padding: 12, borderRadius: 10, border: "1px solid rgba(255,255,255,0.12)", background: "rgba(10,14,24,0.45)", color: "#e8eefc" }}
-          >
-            <option value="">Select organization</option>
-            {orgs.map((org) => (
-              <option key={org.id} value={org.id}>
-                {org.name || org.id}
-              </option>
-            ))}
-          </select>
+      {isSuspendedOrg ? (
+        <section className="ar-card ar-cardGated" style={{ maxWidth: 1200, margin: "0 auto 18px" }} role="status">
+          <h2 style={{ marginTop: 0 }}>Organization suspended</h2>
+          <p className="ar-sub">
+            Operational actions are unavailable while the organization is not active. Backend policy remains authoritative for every protected request.
+          </p>
+        </section>
+      ) : null}
 
-          <select
-            value={inviteForm.role_id}
-            onChange={(e) => setInviteForm((v) => ({ ...v, role_id: e.target.value }))}
-            style={{ padding: 12, borderRadius: 10, border: "1px solid rgba(255,255,255,0.12)", background: "rgba(10,14,24,0.45)", color: "#e8eefc" }}
-          >
-            <option value="">Select role</option>
-            {roles.map((role) => (
-              <option key={role.id} value={role.id}>
-                {role.name || role.id}
-              </option>
-            ))}
-          </select>
+      <section className="ar-grid" aria-label="Organization administration overview">
+        <article className="ar-card">
+          <h2 style={{ marginTop: 0 }}>Organization</h2>
+          <dl style={{ display: "grid", gap: 10, margin: 0 }}>
+            <div><dt className="ar-sub">Name</dt><dd style={{ margin: 0, fontWeight: 700 }}>{organization.display_name || "Unknown"}</dd></div>
+            <div><dt className="ar-sub">Legal name</dt><dd style={{ margin: 0 }}>{organization.legal_name || "Read-only"}</dd></div>
+            <div><dt className="ar-sub">Type</dt><dd style={{ margin: 0 }}>{titleize(organization.organization_type)}</dd></div>
+            <div><dt className="ar-sub">Mission</dt><dd style={{ margin: 0 }}>{organization.mission || "No mission summary available."}</dd></div>
+          </dl>
+        </article>
 
-          <div>
-            <button
-              className="ar-btn"
-              type="submit"
-              disabled={!inviteForm.email || !inviteForm.organization_id || !inviteForm.role_id}
-            >
-              Send Invite
-            </button>
-          </div>
+        <article className="ar-card">
+          <h2 style={{ marginTop: 0 }}>Security / Access</h2>
+          <ul style={{ margin: 0, paddingLeft: 18 }}>
+            <li>Active organization context is required.</li>
+            <li>Organization admin is distinct from platform admin.</li>
+            <li>MFA, SSO, and SCIM are external or later identity work.</li>
+            <li>Entitlements and relationships are displayed, not granted here.</li>
+          </ul>
+        </article>
 
-          {status ? (
-            <div className="ar-sub" style={{ color: status.toLowerCase().includes("failed") ? "#fca5a5" : "#86efac" }}>
-              {status}
-            </div>
-          ) : null}
-        </form>
+        <article className="ar-card">
+          <h2 style={{ marginTop: 0 }}>Relationships</h2>
+          {relationships.length ? (
+            <ul style={{ margin: 0, paddingLeft: 18 }}>
+              {relationships.map((relationship) => (
+                <li key={relationship.relationship_id} style={{ marginBottom: 8 }}>
+                  {titleize(relationship.relationship_type)} - {titleize(relationship.status)} - read-only
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="ar-sub">No relationship summary is available for this organization.</div>
+          )}
+        </article>
       </section>
 
-      <section className="ar-card" style={{ marginBottom: 18 }}>
-        <h3 style={{ marginTop: 0, marginBottom: 14 }}>Recent Invites</h3>
-        {allInvites.length === 0 ? (
-          <div className="ar-sub">No invites created yet.</div>
+      <section className="ar-card" style={{ maxWidth: 1200, margin: "18px auto 0" }}>
+        <h2 style={{ marginTop: 0 }}>Members</h2>
+        {members.length <= 1 ? (
+          <EmptyState title="No members beyond the initial admin">
+            This organization has no additional active members in the bounded member projection.
+          </EmptyState>
+        ) : null}
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 760 }}>
+            <thead>
+              <tr>
+                <th scope="col" style={{ textAlign: "left", padding: 10 }}>Member</th>
+                <th scope="col" style={{ textAlign: "left", padding: 10 }}>Status</th>
+                <th scope="col" style={{ textAlign: "left", padding: 10 }}>Role</th>
+                <th scope="col" style={{ textAlign: "left", padding: 10 }}>Role action</th>
+                <th scope="col" style={{ textAlign: "left", padding: 10 }}>Membership action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {members.map((member) => (
+                <tr key={member.membership_id} style={{ borderTop: "1px solid var(--ar-border)" }}>
+                  <td style={{ padding: 10 }}>{member.user_id}</td>
+                  <td style={{ padding: 10 }}><StatusBadge value={member.status} /></td>
+                  <td style={{ padding: 10 }}>{titleize(member.role_name || member.role_id)}</td>
+                  <td style={{ padding: 10 }}>
+                    <label>
+                      <span className="ar-sub" style={{ display: "block" }}>Permitted role</span>
+                      <select
+                        value={roleDrafts[member.membership_id] || ""}
+                        onChange={(event) => setRoleDrafts((prev) => ({ ...prev, [member.membership_id]: event.target.value }))}
+                        disabled={!canAssignMembership || isSuspendedOrg || member.status !== "active"}
+                        style={{ maxWidth: 220, width: "100%", padding: 8 }}
+                      >
+                        <option value="">No role change</option>
+                        {roles.map((role) => (
+                          <option key={role.role_id} value={role.role_id}>{titleize(role.role_name)}</option>
+                        ))}
+                      </select>
+                    </label>
+                    <button
+                      className="ar-btn ar-btnGhost"
+                      type="button"
+                      style={{ marginTop: 8 }}
+                      disabled={!canAssignMembership || isSuspendedOrg || member.status !== "active"}
+                      onClick={() => changeRole(member)}
+                    >
+                      Update Role
+                    </button>
+                  </td>
+                  <td style={{ padding: 10 }}>
+                    <button
+                      className="ar-btn ar-btnGhost"
+                      type="button"
+                      disabled={!canRevokeMembership || isSuspendedOrg || member.status !== "active"}
+                      onClick={() => revokeMember(member)}
+                    >
+                      Revoke
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="ar-sub">
+          Last-admin protection and target-role policy are enforced by the backend. Blocked actions return a specific backend reason such as LAST_ADMIN_REQUIRED or TARGET_ROLE_FORBIDDEN.
+        </p>
+      </section>
+
+      <section className="ar-card" style={{ maxWidth: 1200, margin: "18px auto 0" }}>
+        <h2 style={{ marginTop: 0 }}>Services</h2>
+        {emptyStates.no_active_services ? (
+          <EmptyState title="No active services">
+            The organization is valid, but no active service entitlement is currently available. Service discovery is visible where policy permits.
+          </EmptyState>
+        ) : null}
+        <div className="ar-grid" style={{ marginTop: 12 }}>
+          {services.map((service) => (
+            <article className={`ar-card ${service.actionable ? "" : "ar-cardDisabled"}`} key={service.service_key}>
+              <h3 style={{ marginTop: 0 }}>{service.service_name || titleize(service.service_key)}</h3>
+              <StatusBadge value={service.status} />
+              <p className="ar-sub">{titleize(service.next_action)}</p>
+              <button className="ar-btn ar-btnGhost" type="button" disabled={!service.actionable}>
+                {service.actionable ? "Open Where Permitted" : "Not Actionable"}
+              </button>
+            </article>
+          ))}
+        </div>
+        {servicesByState.pending.length === 0 ? <p className="ar-sub">No pending service requests are present in the canonical projection.</p> : null}
+        {servicesByState.inactive.length === 0 ? <p className="ar-sub">No suspended, revoked, or expired services are present.</p> : null}
+      </section>
+
+      <section className="ar-card" style={{ maxWidth: 1200, margin: "18px auto 0" }}>
+        <h2 style={{ marginTop: 0 }}>Settings</h2>
+        {settings.length ? (
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 680 }}>
+              <thead>
+                <tr>
+                  <th scope="col" style={{ textAlign: "left", padding: 10 }}>Setting</th>
+                  <th scope="col" style={{ textAlign: "left", padding: 10 }}>Read / Write</th>
+                  <th scope="col" style={{ textAlign: "left", padding: 10 }}>Authority</th>
+                  <th scope="col" style={{ textAlign: "left", padding: 10 }}>Reason</th>
+                </tr>
+              </thead>
+              <tbody>
+                {settings.map((setting) => (
+                  <tr key={setting.key} style={{ borderTop: "1px solid var(--ar-border)" }}>
+                    <td style={{ padding: 10 }}>{setting.label}</td>
+                    <td style={{ padding: 10 }}>{titleize(setting.read_write)}</td>
+                    <td style={{ padding: 10 }}>{titleize(setting.authority)}</td>
+                    <td style={{ padding: 10 }}>{setting.reason}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : (
-          <ul style={{ margin: 0, paddingLeft: 18 }}>
-            {allInvites.map((invite, idx) => (
-              <li key={invite?.id || idx} style={{ marginBottom: 8 }}>
-                {invite?.email || "unknown"} — {invite?.organization_id || "no org"} — {invite?.role_id || "no role"} — {invite?.status || "created"}
-              </li>
-            ))}
-          </ul>
+          <EmptyState title="No editable settings">No organization settings are editable through IOH-4.</EmptyState>
         )}
       </section>
-
-      <div className="ar-grid">
-        <section className="ar-card">
-          <h3 style={{ marginTop: 0, marginBottom: 14 }}>Users</h3>
-          <div style={{ display: "grid", gap: 12 }}>
-            {users.map((user) => {
-            const draft = membershipDrafts[user.id] || {
-              organization_id: user.organization_id || "",
-              role_id: user.role_id || "",
-            };
-
-            return (
-              <div key={user.id} className="ar-card" style={{ marginBottom: 0, padding: 12 }}>
-                <div style={{ fontWeight: 700, marginBottom: 6 }}>{user.email || user.id}</div>
-                <div className="ar-sub" style={{ marginBottom: 8 }}>
-                  Status: {user.status || "unknown"}
-                </div>
-                <div className="ar-sub" style={{ marginBottom: 12 }}>
-                  Org: {user.organization_id || "—"} • Role: {user.role_id || "—"}
-                </div>
-
-                <div style={{ display: "grid", gap: 10, marginBottom: 12 }}>
-                  <select
-                    value={draft.organization_id}
-                    onChange={(e) =>
-                      setMembershipDrafts((prev) => ({
-                        ...prev,
-                        [user.id]: {
-                          ...(prev[user.id] || {}),
-                          organization_id: e.target.value,
-                          role_id: (prev[user.id] || {}).role_id || user.role_id || "",
-                        },
-                      }))
-                    }
-                    style={{ padding: 10, borderRadius: 10, border: "1px solid rgba(255,255,255,0.12)", background: "rgba(10,14,24,0.45)", color: "#e8eefc" }}
-                  >
-                    <option value="">Select organization</option>
-                    {orgs.map((org) => (
-                      <option key={org.id} value={org.id}>
-                        {org.name || org.id}
-                      </option>
-                    ))}
-                  </select>
-
-                  <select
-                    value={draft.role_id}
-                    onChange={(e) =>
-                      setMembershipDrafts((prev) => ({
-                        ...prev,
-                        [user.id]: {
-                          ...(prev[user.id] || {}),
-                          role_id: e.target.value,
-                          organization_id: (prev[user.id] || {}).organization_id || user.organization_id || "",
-                        },
-                      }))
-                    }
-                    style={{ padding: 10, borderRadius: 10, border: "1px solid rgba(255,255,255,0.12)", background: "rgba(10,14,24,0.45)", color: "#e8eefc" }}
-                  >
-                    <option value="">Select role</option>
-                    {roles.map((role) => (
-                      <option key={role.id} value={role.id}>
-                        {role.name || role.id}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                  <button type="button" className="ar-btn ar-btnGhost" onClick={() => updateUserStatus(user.id, "active")}>
-                    Set Active
-                  </button>
-                  <button type="button" className="ar-btn ar-btnGhost" onClick={() => updateUserStatus(user.id, "disabled")}>
-                    Set Disabled
-                  </button>
-                  <button type="button" className="ar-btn" onClick={() => updateUserMembership(user.id)}>
-                    Save Membership
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-          </div>
-        </section>
-
-        <section className="ar-card">
-          <h3 style={{ marginTop: 0, marginBottom: 14 }}>Organizations</h3>
-          <ul style={{ margin: 0, paddingLeft: 18 }}>
-            {orgs.map((org) => (
-              <li key={org.id} style={{ marginBottom: 8 }}>
-                {org.name || org.id} {org.org_type ? `(${org.org_type})` : ""}
-              </li>
-            ))}
-          </ul>
-        </section>
-      </div>
-    </div>
+    </main>
   );
 }

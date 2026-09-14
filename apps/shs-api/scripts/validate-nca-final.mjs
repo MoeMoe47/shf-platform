@@ -127,13 +127,13 @@ try {
 
 // --- 10. Re-run the NCA-2 and NCA-4 domain validators as part of final acceptance ---
 try {
-  execSync("npx tsx scripts/validate-nca-persistence-recipient-policy.mjs", { cwd: apiRoot, stdio: "pipe" });
+  execSync("node --import tsx/esm scripts/validate-nca-persistence-recipient-policy.mjs", { cwd: apiRoot, stdio: "pipe" });
   check("NCA-2 persistence/recipient/preference validator passes", true);
 } catch {
   check("NCA-2 persistence/recipient/preference validator passes", false);
 }
 try {
-  execSync("npx tsx scripts/validate-nca-delivery-domain-integration.mjs", { cwd: apiRoot, stdio: "pipe" });
+  execSync("node --import tsx/esm scripts/validate-nca-delivery-domain-integration.mjs", { cwd: apiRoot, stdio: "pipe" });
   check("NCA-4 delivery/domain-integration validator passes", true);
 } catch {
   check("NCA-4 delivery/domain-integration validator passes", false);

@@ -23,9 +23,12 @@ const source = [
 ].map((path) => readFileSync(path, "utf8")).join("\n");
 const report = readFileSync("docs/architecture/IOH-6_SYSTEM_WIDE_FINAL_ACCEPTANCE_COMPLETION.md", "utf8");
 const registry = JSON.parse(readFileSync("docs/architecture/IOH-6_ACCEPTANCE_REGISTRY.json", "utf8"));
-const migrationNumbers = readdirSync("apps/shs-api/migrations")
+const migrationFiles = readdirSync("apps/shs-api/migrations");
+const migrationNumbers = migrationFiles
   .map((name) => Number(name.match(/^(\d+)_/)?.[1]))
   .filter(Number.isFinite);
+const migrationHead = Math.max(...migrationNumbers);
+const ncaPreferenceMigration = "143_notification_preferences.sql";
 
 const checks = [
   ["all IOH artifacts exist", requiredArtifacts.every(existsSync)],
@@ -40,8 +43,9 @@ const checks = [
   ["EXR and NCA boundaries preserved", /EXR Boundary/.test(report) && /NCA Boundary/.test(report)],
   ["no duplicate authority subsystem", !/(organization-context-v2|new-org-context|identity-context-next)/i.test(source)],
   ["final P0/P1 counts zero", registry.p0_findings === 0 && registry.repository_local_p1_findings === 0 && /P0.*0|P0: 0/.test(report) && /P1.*0|P1: 0/.test(report)],
-  ["migration head is unchanged at 142", Math.max(...migrationNumbers) === 142 && registry.migration_head === 142],
-  ["no IOH-6 migration exists", !readdirSync("apps/shs-api/migrations").some((name) => /^14[3-9]_.*ioh/i.test(name))],
+  ["integrated migration head is NCA 143", migrationHead === 143 && migrationFiles.includes(ncaPreferenceMigration) && registry.migration_head === 142],
+  ["no IOH-6 migration exists", !migrationFiles.some((name) => /^14[3-9]_.*ioh/i.test(name))],
+  ["no later unexpected migration exists", !migrationNumbers.some((number) => number > 143)],
   ["program registry is complete", registry.phases.length === 8 && registry.phases.every((phase) => phase.status === "COMPLETE")],
 ];
 

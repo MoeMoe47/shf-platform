@@ -1,0 +1,98 @@
+{
+  "schema_id": "CPAS-1-RECORD",
+  "schema_name": "SHF Career Pathway Acceptance Record Schema v1",
+  "version": "1.0",
+  "status": "ADOPTED_FOR_PILOT",
+  "standard_ref": "docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_STANDARD_V1.md",
+  "description": "Defines the fields every SHF Career Pathway Acceptance Record must carry. This is a cross-domain INDEX/PROJECTION document, not a new canonical authority. Every *_ref/*_id field below references an existing canonical domain's own identifier; it never restates or duplicates that domain's content.",
+  "canonical_owner_notice": "No backend table exists for this schema in Phase 1 of CPAS-1. Records are authored as JSON documents under docs/career/records/. If a future phase promotes this to a live, queryable system, the recommended smallest-safe owner is a new table inside the existing `careers` domain (see the Standard's Canonical Domain Boundaries section) — not a new top-level domain.",
+  "fields": {
+    "identity": {
+      "pathway_id": { "type": "string", "required": true, "description": "Stable slug id for this pathway, e.g. 'data-center-ai-infrastructure'." },
+      "title": { "type": "string", "required": true },
+      "version": { "type": "string", "required": true, "description": "Version of this record, independent of the Standard's own version." },
+      "current_status": { "type": "enum", "values": ["EXPLORE", "PREPARE", "STATE-PATHWAY", "EMPLOYER-VALIDATED", "CAREER LAUNCH"], "required": true },
+      "validation_status": { "type": "enum", "values": ["NOT REVIEWED", "INDUSTRY REVIEW IN PROGRESS", "EMPLOYER REVIEWED", "EMPLOYER VALIDATED", "MULTIPLE-EMPLOYER VALIDATED"], "required": true },
+      "career_family_ref": { "type": "string", "description": "References careers domain career_family_id.", "canonical_owner": "careers" },
+      "target_occupations": { "type": "array", "items": { "type": "object", "properties": { "career_ref": "careers domain career_id, or null if not yet a canonical Career record", "title": "string", "status": "enum: EXISTING CANONICAL | NEEDS SEPARATE CAREER PHASE" } } },
+      "target_learners": { "type": "string", "description": "Grade band(s) / audience this pathway serves." },
+      "prerequisites": { "type": "array", "items": "string" },
+      "age_requirements": { "type": "string", "description": "Only populated where a real requirement exists; null otherwise." }
+    },
+    "curriculum": {
+      "curriculum_refs": { "type": "array", "items": "string", "canonical_owner": "curriculum / curriculum-catalog", "description": "curriculum_id values as used in career_curriculum_requirements." },
+      "course_refs": { "type": "array", "items": "string" },
+      "lesson_refs": { "type": "array", "items": "string", "description": "May be summarized as a count + directory reference rather than enumerated when large." },
+      "assignment_refs": { "type": "array", "items": "string" },
+      "assessment_refs": { "type": "array", "items": "string" }
+    },
+    "competency": {
+      "competency_refs": { "type": "array", "items": "string", "canonical_owner": "prepare-prove", "description": "competency_id values from competency_definitions." },
+      "skills": { "type": "array", "items": "string" },
+      "professional_practice_expectations": { "type": "array", "items": "string" }
+    },
+    "practice": {
+      "practical_activities": { "type": "array", "items": "string" },
+      "project_requirements": { "type": "array", "items": "string" },
+      "learning_arcade_links": { "type": "array", "items": "string", "description": "Empty array means confirmed none, not unexamined." },
+      "simulation_refs": { "type": "array", "items": "string" }
+    },
+    "assessment": {
+      "knowledge_assessment": { "type": "string", "description": "How knowledge is assessed and whether it is canonically evidenced." },
+      "practical_assessment": { "type": "string" },
+      "demonstration_requirements": { "type": "string" }
+    },
+    "evidence": {
+      "evidence_requirements": { "type": "array", "items": "string", "canonical_owner": "verified-evidence / prepare-prove" },
+      "artifact_requirements": { "type": "array", "items": "string" },
+      "verification_requirements": { "type": "array", "items": "string" },
+      "portfolio_relationships": { "type": "string", "canonical_owner": "portfolio", "description": "Must describe the ACTUAL current code path, not an aspirational one." }
+    },
+    "credential": {
+      "shf_completion_credential": { "type": "string|null" },
+      "shf_competency_credential": { "type": "string|null" },
+      "external_credential_alignment": { "type": "array", "items": { "type": "object", "properties": { "name": "string", "status": "enum: NOT ISSUED / PLANNED | ALIGNED | ISSUED" } } },
+      "issuing_authority": { "type": "string|null", "canonical_owner": "credentials" }
+    },
+    "external_recognition": {
+      "state_authority": { "type": "string|null" },
+      "industry_standards": { "type": "array", "items": "string" },
+      "employer_validators": { "type": "array", "items": "string", "description": "Must be real, named, evidenced reviewers only — never invented." },
+      "education_training_partners": { "type": "array", "items": "string", "description": "Category references are not commitments and must be labeled as such." }
+    },
+    "work_based_learning": {
+      "route_type": { "type": "string|null" },
+      "opportunity_refs": { "type": "array", "items": "string", "canonical_owner": "opportunities" },
+      "eligibility": { "type": "string|null" },
+      "partner_org_ref": { "type": "string|null", "canonical_owner": "organizations" },
+      "capacity": { "type": "string|null" },
+      "placement_status": { "type": "string|null" }
+    },
+    "accessibility": {
+      "accessibility_review_status": { "type": "enum", "values": ["COMPLETE", "PARTIAL", "MISSING", "NOT APPLICABLE"] },
+      "accommodation_requirements": { "type": "array", "items": "string" },
+      "alternate_formats": { "type": "array", "items": "string" }
+    },
+    "sel_readiness": {
+      "reflection": { "type": "string" },
+      "communication": { "type": "string" },
+      "teamwork": { "type": "string" },
+      "goal_setting": { "type": "string" },
+      "professional_identity": { "type": "string" },
+      "persistence": { "type": "string" },
+      "decision_making": { "type": "string" }
+    },
+    "outcome": {
+      "next_step_definition": { "type": "string" },
+      "allowed_claims": { "type": "array", "items": "string" },
+      "prohibited_claims": { "type": "array", "items": "string" }
+    },
+    "governance": {
+      "approval_state": { "type": "enum", "values": ["DRAFT", "UNDER_REVIEW", "APPROVED", "SUPERSEDED"] },
+      "reviewer": { "type": "string|null" },
+      "review_date": { "type": "string|null" },
+      "next_review_date": { "type": "string|null" },
+      "source_evidence_refs": { "type": "array", "items": "string", "description": "File/migration/test paths that back this record's status classification." }
+    }
+  }
+}

@@ -1,0 +1,189 @@
+{
+  "schema_ref": "docs/career/SHF_CAREER_PATHWAY_ACCEPTANCE_RECORD_SCHEMA_V1.json",
+  "identity": {
+    "pathway_id": "data-center-ai-infrastructure",
+    "title": "Data Center & AI Infrastructure",
+    "version": "1.0-pilot",
+    "current_status": "PREPARE",
+    "validation_status": "NOT REVIEWED",
+    "career_family_ref": "career_family_data_center_ai_infrastructure",
+    "target_occupations": [
+      { "career_ref": "career_data_center_technician", "title": "Data Center Technician", "status": "EXISTING CANONICAL" },
+      { "career_ref": null, "title": "Network Technician", "status": "NEEDS SEPARATE CAREER PHASE" },
+      { "career_ref": null, "title": "Electrical Technician", "status": "NEEDS SEPARATE CAREER PHASE" },
+      { "career_ref": null, "title": "HVAC/Mechanical Technician", "status": "NEEDS SEPARATE CAREER PHASE" },
+      { "career_ref": null, "title": "Cybersecurity Technician", "status": "NEEDS SEPARATE CAREER PHASE" },
+      { "career_ref": null, "title": "Cloud/AI Infrastructure Technician", "status": "NEEDS SEPARATE CAREER PHASE" }
+    ],
+    "target_learners": "Grades 6-12 (DISCOVER: 6-8, EXPLORE: 9-10, PREPARE_PROVE: 11-12; a TRANSITION stage is defined with no grade band and is not yet implemented)",
+    "prerequisites": [],
+    "age_requirements": null
+  },
+  "curriculum": {
+    "curriculum_refs": [
+      "data-center-foundations", "data-center-foundations-student (grade 6)", "data-center-systems-7-student (grade 7)",
+      "data-center-design-8-student (grade 8)", "data-center-technical-foundations-9-student (grade 9)",
+      "data-center-reliable-operations-10-student (grade 10)", "data-center-specialization-11-student (grade 11)",
+      "data-center-specialization-12-student (grade 12)"
+    ],
+    "course_refs": [
+      "13 course records defined in src/content/curriculum/data-center-pathway-map.json (grades 6-12, including 6 distinct Grade-12 specialization courses plus one non-executable capstone)"
+    ],
+    "lesson_refs": [
+      "168 lesson JSON files total under src/content/lessons/data-center-*-student/: grade 6 (10), grade 7 (10), grade 8 (10), grade 9 (14), grade 10 (14), grade 11 (58), grade 12 (52)"
+    ],
+    "assignment_refs": [],
+    "assessment_refs": [
+      "Per-lesson quiz/rubric fields inside all 168 lesson JSON files (client-side content only, not DB-backed)",
+      "CORRECTION (Phase 2 discovery, 2026-09-14): 41 DB-backed proof/competency activities are defined in apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts (PROOF_CONFIGS), spanning all 6 specializations at grades 11-12 (6-7 activities per specialization). 31 of the 168 lesson files carry a populated `proofActivity` field wired to this system via the generic ProofActivity component in src/components/curriculum/lesson/GuidedLessonExperience.jsx, which calls the real /api/prepare-prove/proof-status, /activity-results, and /evidence endpoints. This materially updates (and supersedes, for these fields) the original Phase 1 pilot audit's 'exactly 1 competency' finding, which was based only on migration-seeded rows and missed this in-code/on-demand-upserted registry."
+    ]
+  },
+  "competency": {
+    "competency_refs": [
+      "41 named proof/competency configs in apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts (PROOF_CONFIGS), each upserted into the real competency_definitions table on first read by getProofDefinition() — not limited to the single migration-seeded row (competency_prepare_prove_monitoring_finding) found in the original Phase 1 pass.",
+      "Coverage: technical-operations (6), networking-fiber (7), electrical-infrastructure (7), mechanical-hvac (7), cybersecurity-security (7), ai-cloud-infrastructure (7) — all 6 specializations, grades 11 and 12."
+    ],
+    "skills": [
+      "Representative example (grade11-technical-operations-monitoring-proof): records observations accurately, identifies a plausible affected system, separates evidence from uncertainty, recommends a safe next step.",
+      "Each of the 41 configs defines its own 3-7 criteria specific to its domain (e.g. electrical load/capacity reasoning, network topology interpretation, HVAC thermal/airflow interpretation, security access-control analysis, AI/cloud workload and capacity analysis) — not enumerated individually here; see the source file for the full list."
+    ],
+    "professional_practice_expectations": [
+      "Safety block in data-center-pathway-map.json: 'Classroom simulation and low-voltage learning are distinct from professional electrical or mechanical work'; adultSupervisionRequired: true; hazardousWorkDeferredToQualifiedPartners: true.",
+      "Individual proof-activity descriptions repeatedly encode the same boundary in domain-specific language, e.g. 'without performing electrical work', 'without performing industrial HVAC work', 'avoids unauthorized action'."
+    ]
+  },
+  "practice": {
+    "practical_activities": [
+      "`practice`/`lab` fields present across many of the 168 lesson files (hands-on activities embedded in content).",
+      "31 of the 168 lesson files additionally carry a `proofActivity` field driving a real, interactive, backend-graded practice activity (see competency_refs above) — concentrated in the grade-11/12 specialization tracks."
+    ],
+    "project_requirements": [
+      "Grade 12 capstone ('Build Ohio's Next AI Data Center') is architecturally defined in data-center-pathway-map.json but explicitly status ARCHITECTURE_DEFINED_NON_EXECUTABLE / transition.status PLANNING_ONLY / partnerCommitments NONE — cannot be completed end-to-end today.",
+      "Separately, several grade-11/12 lessons named '*-project.json' (e.g. technical-operations-project, ai-cloud-project, networking-fiber-project, and grade-12 'advanced-*-project' variants) DO carry real proofActivity wiring and are not the same thing as the non-executable capstone."
+    ],
+    "learning_arcade_links": [],
+    "simulation_refs": [
+      "SIMULATED_INFRASTRUCTURE_PROOF activity type (apps/shs-api/src/domain/prepare-prove) — CORRECTED activity-type string (Phase 1 recorded 'SIMULATED_INFRASTRUCTURE_MONITORING' in error; the real constant is SIMULATED_INFRASTRUCTURE_PROOF). This is a real, working, permission-gated practical-evidence pipeline covering 41 activities, not a single one."
+    ]
+  },
+  "assessment": {
+    "knowledge_assessment": "Per-lesson `quiz` fields across all 168 files, client-side content only, not DB-backed.",
+    "practical_assessment": "prepare-prove competency review workflow (DEMONSTRATED / EVIDENCE_INSUFFICIENT / NEEDS_REVIEW), DB-backed and permission-gated (requires an active program_specialization_assignments / program_course_assignments record), covering 41 named proof activities across all 6 specializations at grades 11-12 — corrected from Phase 1's 'one seeded competency' finding, which only checked migration-seeded rows, not the in-code registry that upserts rows on demand.",
+    "demonstration_requirements": "Defined per-specialization across all 6 tracks (6-7 activities each); whether any real learner has actually completed one in a live database was not verified in this pass — that would require live database inspection, which is out of scope for a repository audit."
+  },
+  "evidence": {
+    "evidence_requirements": ["SIMULATED_INFRASTRUCTURE_PROOF activity results feed prepare_prove_evidence records (createEvidence()), one per criterion, across all 41 proof-activity configs — not limited to the single migration-seeded competency Phase 1 originally found."],
+    "artifact_requirements": ["Defined per proof-activity config (3-7 criteria each); not enumerated individually here — see apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts."],
+    "verification_requirements": ["learner_competency_decisions review workflow, reviewer required, for each submitted evidence record."],
+    "portfolio_relationships": "apps/shs-api/src/domain/portfolio POST /portfolio/artifacts/from-evidence exists and is real, but its eligibleSource() query requires source_type='STUDIO_DELIVERY' joined to studio_delivery_records/projects — it does NOT currently accept prepare-prove's SIMULATED_INFRASTRUCTURE_PROOF evidence type (corrected activity-type name; Phase 1 recorded this as 'SIMULATED_INFRASTRUCTURE_MONITORING' in error). None of the 41 real Data Center evidence pipelines can currently reach Portfolio without adaptation — this gap is broader than Phase 1 stated, but the underlying limitation (Portfolio's STUDIO_DELIVERY-only intake) is the same."
+  },
+  "credential": {
+    "shf_completion_credential": "foundation.data-center-ai-infrastructure-pathway (apps/shs-api/src/domain/credentials/model/certificate-profile.ts) — certificateType PROGRAM_COMPLETION, status ACTIVE in config, canonicalProgramReference 'data-center-specialization-11'. NOT operational: no credential_definitions DB row is seeded for it, and canonicalProgramReference points at a programs-table row that does not exist (0 rows ever inserted into programs across all 142 migrations).",
+    "shf_competency_credential": null,
+    "external_credential_alignment": [
+      { "name": "CompTIA A+ (technical-operations specialization)", "status": "NOT ISSUED / PLANNED" },
+      { "name": "CompTIA Network+ (networking-fiber specialization)", "status": "NOT ISSUED / PLANNED" },
+      { "name": "CompTIA Security+ (cybersecurity-security specialization)", "status": "NOT ISSUED / PLANNED" },
+      { "name": "Electrical apprenticeship prerequisite alignment (electrical-infrastructure specialization)", "status": "NOT ISSUED / PLANNED" },
+      { "name": "HVAC foundations alignment (mechanical-hvac specialization)", "status": "NOT ISSUED / PLANNED" },
+      { "name": "Cloud fundamentals alignment (ai-cloud-infrastructure specialization)", "status": "NOT ISSUED / PLANNED" }
+    ],
+    "issuing_authority": null
+  },
+  "external_recognition": {
+    "state_authority": null,
+    "industry_standards": [],
+    "employer_validators": [],
+    "education_training_partners": [
+      "data-center-pathway-map.json lists partnerCategories per specialization (e.g. 'data center operators', 'community colleges', 'apprenticeship providers', 'unions') and its own boundaries.employerStatus field says: 'DEFERRED: partner categories are planning references, not commitments'. Treated here as NOT a partner list."
+    ]
+  },
+  "work_based_learning": {
+    "route_type": null,
+    "opportunity_refs": [],
+    "eligibility": null,
+    "partner_org_ref": null,
+    "capacity": null,
+    "placement_status": "data-center-pathway-map.json's own transition.notYetImplemented field lists: credentials, internships, apprenticeships, employment matching, readiness scoring."
+  },
+  "accessibility": {
+    "accessibility_review_status": "PARTIAL",
+    "accommodation_requirements": [
+      "Platform-wide accessibility profile/CSS layer (src/styles/curriculum-a11y.css, src/context/EffectiveAccessibilityContext.jsx) applies to all Curriculum content including Data Center, covering text scale, contrast, focus emphasis, target size, and reduced motion — real and tested (tests/aielPhase4CurriculumAccessibility.test.mjs), but not Data-Center-specific in its test coverage.",
+      "Zero per-lesson accessibility metadata fields exist in any of the 168 Data Center lesson JSON files.",
+      "New AX-3 accessibility-content service (apps/shs-api/src/domain/accessibility-content) can generate accessible representations of lessons, but only for lessons imported into the DB curriculum_lessons/units/courses tables; Data Center content has a real import adapter (curriculum-import-source-adapter.ts) but no evidence it has ever been executed against a live database."
+    ],
+    "alternate_formats": []
+  },
+  "sel_readiness": {
+    "reflection": "PRESENT — reflectionPrompt field in all 168/168 lesson files.",
+    "communication": "Not an explicit per-lesson field; mentioned only at the non-executable Grade-12 capstone architecture level (team roles).",
+    "teamwork": "Same as communication — capstone-architecture-level only, non-executable.",
+    "goal_setting": "Not an explicit field anywhere in sampled/searched content.",
+    "professional_identity": "Touched indirectly in transition-lesson objectives, e.g. 'distinguish learning completion from reviewed competency' (data-center-specialization-12-career-postsecondary-transition.json).",
+    "persistence": "Not an explicit field.",
+    "decision_making": "Not an explicit field; the competency review process itself models evidence-based decision-making for reviewers, not as learner-facing SEL content."
+  },
+  "outcome": {
+    "next_step_definition": "Within-curriculum: real and honest — every lesson has a `nextSlug` field; transition lessons explicitly frame next steps as options to compare, 'without promises'. External to curriculum: MISSING — the TRANSITION stage in data-center-pathway-map.json has no grade band and is explicitly not yet implemented; no real external next step (state pathway, employer validation, work-based learning) exists today.",
+    "allowed_claims": [
+      "Foundational Data Center & AI Infrastructure career exploration and preparation for grades 6-12",
+      "168 lessons across 7 grade bands covering data center systems, design, technical operations, reliability, and six technical specializations",
+      "Hands-on/practical activities including a simulated infrastructure-monitoring practice pipeline with real competency review",
+      "Reflection built into every lesson",
+      "Career-connection content tied to the real occupation of Data Center Technician",
+      "Curriculum benefits from SHF's platform-wide accessibility features (text scale, contrast, focus emphasis, target size, reduced motion, text-to-speech)",
+      "Explicit safety design distinguishing simulated/classroom practice from professional electrical/mechanical work requiring adult supervision",
+      "A documented (not yet issued) completion-certificate concept for the pathway"
+    ],
+    "prohibited_claims": [
+      "job-ready / workforce-ready",
+      "industry certified / CompTIA certified / any specific external certification",
+      "employer validated / industry validated",
+      "state recognized / state licensure pathway",
+      "guaranteed internship / apprenticeship / employment / placement",
+      "Career Launch (as a designation for this pathway today)",
+      "'in-demand' or other labor-market-growth claims (no sourced workforce data backs this)",
+      "any specific program duration claim (e.g. '12-week workforce pathway') that does not match the real multi-year, grade-banded structure",
+      "employer or industry partnership/commitment claims (partner categories are explicitly planning references, not commitments, per the curriculum's own data)",
+      "implying the Grade 12 capstone can be completed end-to-end today (it is explicitly non-executable)"
+    ]
+  },
+  "governance": {
+    "approval_state": "DRAFT",
+    "reviewer": null,
+    "review_date": "2026-09-14",
+    "next_review_date": null,
+    "source_evidence_refs": [
+      "apps/shs-api/src/domain/prepare-prove/service/prepare-prove-service.ts",
+      "src/components/curriculum/lesson/GuidedLessonExperience.jsx (ProofActivity component)",
+      "apps/shs-api/migrations/033_career_workforce_foundation.sql",
+      "apps/shs-api/migrations/034_prepare_prove_evidence_competency.sql",
+      "apps/shs-api/migrations/047_reconcile_missing_030_032_033_schema.sql",
+      "apps/shs-api/migrations/048_reconcile_missing_008_012to029_034_schema.sql",
+      "apps/shs-api/migrations/037_program_course_assignments.sql",
+      "apps/shs-api/migrations/049_career_pathway_integration.sql",
+      "apps/shs-api/migrations/062_curriculum_import_jobs.sql",
+      "apps/shs-api/src/domain/credentials/model/certificate-profile.ts",
+      "apps/shs-api/src/domain/portfolio/api/routes.ts",
+      "apps/shs-api/src/domain/portfolio/service/portfolio-service.ts",
+      "apps/shs-api/src/domain/programs/model/grade12-eligibility-policy.ts",
+      "apps/shs-api/src/domain/curriculum-catalog/service/curriculum-import-source-adapter.ts",
+      "apps/shs-api/tests/curriculum-import-source-adapter.test.ts",
+      "src/content/curriculum/data-center-pathway-map.json",
+      "src/content/lessons/data-center-foundations-student/",
+      "src/content/lessons/data-center-systems-7-student/",
+      "src/content/lessons/data-center-design-8-student/",
+      "src/content/lessons/data-center-technical-foundations-9-student/",
+      "src/content/lessons/data-center-reliable-operations-10-student/",
+      "src/content/lessons/data-center-specialization-11-student/",
+      "src/content/lessons/data-center-specialization-12-student/",
+      "tests/ui/data-center-grade6.spec.mjs",
+      "src/styles/curriculum-a11y.css",
+      "src/context/EffectiveAccessibilityContext.jsx",
+      "tests/aielPhase4CurriculumAccessibility.test.mjs",
+      "src/components/curriculum/lesson/GuidedLessonExperience.jsx",
+      "src/data/catalogOfferings.js"
+    ]
+  }
+}

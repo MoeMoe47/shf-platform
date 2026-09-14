@@ -153,7 +153,7 @@ export const catalogOfferings = [
     offeringType: "career-pathway",
     access: "sponsored",
     audience: ["students", "employers"],
-    description: "A 12-week workforce pathway leading to in-demand data center careers.",
+    description: "Hands-on Data Center & AI Infrastructure preparation for grades 6-12, from foundations through specialization.",
     detailHref: null,
     photo: dataCenterPhoto,
     photoSmall: dataCenterPhotoSmall,

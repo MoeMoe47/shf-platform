@@ -2,7 +2,6 @@
 import React, { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { track } from "../utils/analytics.js";
 import usePathways from "../hooks/usePathways.js";
-import impactDefault from "../data/impact.js";
 import recommendPlans from "../utils/recommendPlans.js";
 import { SharedCoachingNotes } from "../components/CareerConsultantPanel.jsx";
 import { markDarkScope } from "../utils/careerTheme.js";
@@ -106,156 +105,35 @@ const preloadPersonalizer = () => import("../components/PathwayPersonalizerSheet
 const preloadDrawer       = () => import("../components/PathwayDetailDrawer.jsx");
 const preloadTasks        = () => import("../components/TasksCard.jsx");
 
-const IMPACT_LS_KEY   = "sh_impact_override_v1";
-const ADMIN_LS_KEY    = "sh_admin";
 const FUNDING_LS_KEY  = "sh_funding_plan_v1";
 
 function CardSkel({ h = 140 }) {
   return <div className="skel skel--card" style={{ height: h }} aria-hidden="true" />;
 }
 
-/* ---------- Admin helpers ---------- */
-function useIsAdmin() {
-  const [admin, setAdmin] = useState(() => {
-    try {
-      const sp = new URLSearchParams(window.location.search);
-      if (sp.get("admin") === "1") { localStorage.setItem(ADMIN_LS_KEY, "1"); return true; }
-      if (sp.get("admin") === "0") { localStorage.removeItem(ADMIN_LS_KEY); return false; }
-      return localStorage.getItem(ADMIN_LS_KEY) === "1";
-    } catch { return false; }
-  });
-
-  useEffect(() => {
-    const onKey = (e) => {
-      if ((e.altKey || e.metaKey) && (e.key === "i" || e.key === "I")) {
-        e.preventDefault();
-        setAdmin(true);
-        try { localStorage.setItem(ADMIN_LS_KEY, "1"); } catch {}
-        try { track("admin_shortcut_used", { combo: "Alt+I" }); } catch {}
-        window.dispatchEvent(new CustomEvent("open-impact-editor"));
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
-  const toggle = () => {
-    setAdmin((v) => {
-      const nv = !v;
-      try { nv ? localStorage.setItem(ADMIN_LS_KEY,"1") : localStorage.removeItem(ADMIN_LS_KEY); } catch {}
-      return nv;
-    });
-  };
-
-  return [admin, toggle];
-}
-
-function loadImpactOverride() {
-  try { return JSON.parse(localStorage.getItem(IMPACT_LS_KEY) || "null"); }
-  catch { return null; }
-}
-
-function useImpactData(base) {
-  const [override, setOverride] = useState(() => loadImpactOverride());
-  const data = override && typeof override === "object" ? override : base;
-
-  const save = (obj) => {
-    try {
-      localStorage.setItem(IMPACT_LS_KEY, JSON.stringify(obj));
-      setOverride(obj);
-      try { track("impact_override_saved"); } catch {}
-    } catch (e) { console.error(e); }
-  };
-  const reset = () => {
-    try {
-      localStorage.removeItem(IMPACT_LS_KEY);
-      setOverride(null);
-      try { track("impact_override_reset"); } catch {}
-    } catch {}
-  };
-  return { data, save, reset, isOverridden: !!override };
-}
-
-/* ---------- Simple Modal ---------- */
-function Modal({ open, title, onClose, children }) {
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e) => e.key === "Escape" && onClose();
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = prevOverflow;
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [open, onClose]);
-
-  if (!open) return null;
-  return (
-    <>
-      <div className="app-scrim is-visible" onClick={onClose} aria-hidden="true"
-           style={{ position:"fixed", inset:0, background:"rgba(0,0,0,.4)", zIndex:80 }} />
-      <div role="dialog" aria-modal="true" aria-label={title || "Dialog"}
-           onClick={(e)=>e.stopPropagation()}
-           style={{ position:"fixed", inset:"10% auto auto 50%", transform:"translateX(-50%)",
-                    width:"min(880px, 92vw)", background:"var(--card, #fff)", color:"var(--ink, #111)",
-                    border:"1px solid var(--ring)",
-                    borderRadius:12, boxShadow:"0 20px 60px rgba(0,0,0,.25)", zIndex:90,
-                    display:"flex", flexDirection:"column" }}>
-        <header style={{ display:"flex", alignItems:"center", justifyContent:"space-between",
-                         padding:12, borderBottom:"1px solid var(--ring)" }}>
-          <strong style={{ color:"var(--ink)" }}>{title}</strong>
-          <button className="sh-btn sh-btn--secondary" onClick={onClose} aria-label="Close">✕</button>
-        </header>
-        <div style={{ padding:12 }}>{children}</div>
-      </div>
-    </>
-  );
-}
-
-/* ---------- ImpactStrip (JSON-driven) ---------- */
-const IMPACT_ICON = ["⏱️", "💵", "💼", "📈", "🎯"];
-function ImpactStrip({ kpis = [], ctaHref = "/explore", updatedAt, footnote, onEdit, admin, overridden }) {
-  const safeKpis = Array.isArray(kpis) && kpis.length
-    ? kpis
-    : [
-        { label: "Avg time to first paycheck", value: "—" },
-        { label: "Avg cost after aid", value: "—" },
-        { label: "90-day employment", value: "—" },
-      ];
-
+/* ---------- ImpactStrip ----------
+   CCV2 Phase 0 governance correction: this section previously displayed
+   hardcoded, non-canonical cohort figures (formerly src/data/impact.js) as
+   if they were verified institutional outcomes, with a browser query-param
+   plus localStorage mechanism that let anyone locally edit those figures
+   and have them render as if authoritative. Per the "govern facts, not
+   ambition" principle, unverified institutional outcome numbers must not
+   be presented as fact and must never be editable from the browser. No
+   governed backend projection for these particular cohort-outcome metrics
+   exists yet (see src/shared/reporting/ for the metrics that are governed
+   today), so this now shows a bounded, honest unavailable state instead of
+   fabricating or reintroducing numbers. */
+function ImpactStrip({ ctaHref = "/explore" }) {
   return (
     <section className="card card--pad" aria-label="Program impact">
       <div className="cpw-impactHead">
         <h3 className="h3" style={{ margin: 0 }}>Impact Snapshot</h3>
-        <span className="cpw-impactLock" title={admin ? "You can edit these figures" : "Admin sign-in required to edit"}>
-          <span aria-hidden="true">{admin ? "🔓" : "🔒"}</span> {admin ? "Admin edit available" : "Admin edit locked"}
-        </span>
       </div>
-      <p className="cpw-impactSub">
-        Sample cohort data · Client-side estimate
-        {overridden && <> · <span className="sh-chip" title="Using local override">Local</span></>}
-        {updatedAt && <> · Updated {updatedAt}</>}
+      <p className="cpw-impactSub" role="status">
+        Verified outcome data is not currently available.
       </p>
-
-      {admin && (
-        <div className="sh-row" style={{ marginBottom: 10 }}>
-          <button className="sh-btn sh-btn--tiny" onClick={onEdit}>✏️ Edit Impact</button>
-        </div>
-      )}
-
-      <div className="cpw-impactGrid">
-        {safeKpis.map((k, i) => (
-          <div key={i} className="cpw-impactTile" role="group" aria-label={`${k.label} ${k.value}`}>
-            <div className="cpw-impactIcon" aria-hidden="true">{IMPACT_ICON[i % IMPACT_ICON.length]}</div>
-            <div className="cpw-impactValue">{k.value}</div>
-            <div className="cpw-impactLabel">{k.label}</div>
-          </div>
-        ))}
-      </div>
-
       <p className="subtle" style={{ marginTop: 12, fontSize: 12 }}>
-        {footnote || "Figures are cohort medians; results may vary."} Not a guarantee.
+        This section will show verified cohort outcomes once a governed reporting source is connected. Not a guarantee.
       </p>
       <a className="cpw-sectionLink" href={ctaHref}
          style={{ display: "inline-block", marginTop: 4 }}
@@ -308,9 +186,7 @@ export default function CareerPlanner() {
     };
   }, []);
 
-  const [admin, toggleAdmin] = useIsAdmin();
   const { data: pathways = [], loading: pathwaysLoading, error: pathwaysError } = usePathways();
-  const impactStore = useImpactData(impactDefault);
 
   const [sheetOpen, setSheetOpen]       = useState(false);
   const [inputs, setInputs]             = useState(null);
@@ -330,20 +206,6 @@ export default function CareerPlanner() {
   // result (WCAG: move focus or announce after an async region update).
   const planHeadingRef = useRef(null);
   const [planAnnouncement, setPlanAnnouncement] = useState("");
-
-  const [editorOpen, setEditorOpen]   = useState(false);
-  const [editorText, setEditorText]   = useState(() => JSON.stringify(impactStore.data, null, 2));
-  const [editorError, setEditorError] = useState("");
-
-  // Alt+I → open editor
-  useEffect(() => {
-    const onOpen = () => setEditorOpen(true);
-    window.addEventListener("open-impact-editor", onOpen);
-    return () => window.removeEventListener("open-impact-editor", onOpen);
-  }, []);
-
-  // Keep editor text in sync when opening
-  useEffect(() => { if (editorOpen) setEditorText(JSON.stringify(impactStore.data, null, 2)); }, [editorOpen, impactStore.data]);
 
   // Seed A/B/C from pathways on first load.
   // Fixed: recommendPlans(inputs, pathways, options) was being called as
@@ -442,17 +304,6 @@ export default function CareerPlanner() {
     try { track("pathway_enroll_clicked", { pathwayId:p.id, planStrategy:plan?.strategy }); } catch {}
   };
 
-  function saveEditor() {
-    setEditorError("");
-    try {
-      const obj = JSON.parse(editorText);
-      if (!obj || typeof obj !== "object") throw new Error("JSON must be an object");
-      impactStore.save(obj);
-      setEditorOpen(false);
-    } catch (e) { setEditorError(String(e?.message || e)); }
-  }
-  function resetEditor() { impactStore.reset(); setEditorOpen(false); }
-
   // Presentational stepper — every status is derived from real, already-
   // tracked state (no new persistence, no invented signal). "Launch" only
   // ever reflects a real Start Plan click this session.
@@ -503,11 +354,6 @@ export default function CareerPlanner() {
             aria-controls="personalizer-sheet"
           >
             ✨ Personalize My Plan
-          </button>
-          <button className="sh-btn sh-btn--soft" onClick={toggleAdmin}
-                  title="Toggle Admin (persists in this browser)"
-                  aria-pressed={admin ? "true" : "false"}>
-            {admin ? "Admin: ON" : "Admin: OFF"}
           </button>
         </div>
       </div>
@@ -697,15 +543,7 @@ export default function CareerPlanner() {
           </Suspense>
 
           {/* Impact */}
-          <ImpactStrip
-            kpis={impactStore.data?.kpis || []}
-            ctaHref="/explore"
-            updatedAt={impactStore.data?.updatedAt}
-            footnote={impactStore.data?.footnote}
-            admin={admin}
-            overridden={impactStore.isOverridden}
-            onEdit={() => setEditorOpen(true)}
-          />
+          <ImpactStrip ctaHref="/explore" />
         </div>
       </div>
 
@@ -734,32 +572,6 @@ export default function CareerPlanner() {
         />
       </Suspense>
 
-      {/* Impact editor modal */}
-      <Modal open={editorOpen && admin} title="Edit Impact JSON" onClose={() => setEditorOpen(false)}>
-        <div style={{ display:"grid", gap:10 }}>
-          <div className="sh-muted" style={{ fontSize:12 }}>
-            Paste JSON with keys like <code>updatedAt</code>, <code>kpis</code>, and <code>footnote</code>.
-          </div>
-          <textarea
-            value={editorText}
-            onChange={(e)=>setEditorText(e.target.value)}
-            rows={16}
-            spellCheck={false}
-            style={{ width:"100%", border:"1px solid var(--ring)", borderRadius:10, padding:10,
-                     background:"var(--card, #fff)", color:"var(--ink, #111)",
-                     fontFamily:"ui-monospace, SFMono-Regular, Menlo, monospace", fontSize:13 }}
-          />
-          {editorError && <div style={{ color:"#b91c1c", fontSize:13 }}>{editorError}</div>}
-          <div style={{ display:"flex", gap:8, justifyContent:"flex-end" }}>
-            <button className="sh-btn sh-btn--soft" onClick={resetEditor}>Reset to Defaults</button>
-            <button className="sh-btn sh-btn--secondary" onClick={()=>setEditorOpen(false)}>Cancel</button>
-            <button className="sh-btn sh-btn--primary" onClick={saveEditor}>Save</button>
-          </div>
-          <div className="sh-muted" style={{ fontSize:12 }}>
-            Tip: Press <strong>Alt/Option + I</strong> to open this editor quickly.
-          </div>
-        </div>
-      </Modal>
     </div>
   );
 }

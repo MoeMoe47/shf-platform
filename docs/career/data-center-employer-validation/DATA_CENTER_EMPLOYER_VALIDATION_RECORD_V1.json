@@ -1,0 +1,78 @@
+{
+  "record_type": "SHF_VALIDATION_SIGN_OFF_RECORD",
+  "version": "2.0",
+  "pathway_ref": "docs/career/records/DATA_CENTER_AI_INFRASTRUCTURE.pathway-record.json",
+  "note": "This is a BLANK TEMPLATE. No sign-off has occurred. This record is intentionally separate from the Employer Feedback Record — completing feedback alone does not produce a validation outcome; an outcome requires an explicit decision recorded here by an authorized SHF reviewer, grounded in a linked Feedback Record.",
+  "pathway_id": "data-center-ai-infrastructure",
+  "current_pathway_status": "PREPARE",
+  "current_validation_status": "NOT REVIEWED",
+  "target_validation_status": null,
+  "allowed_target_validation_statuses": [
+    "EMPLOYER REVIEWED",
+    "EMPLOYER VALIDATED",
+    "MULTIPLE-EMPLOYER VALIDATED"
+  ],
+  "sufficiency_requirements": {
+    "EMPLOYER REVIEWED": [
+      "identifiable organization named",
+      "identifiable reviewer named",
+      "reviewer role/relevance to entry-level hiring stated",
+      "curriculum version reviewed recorded",
+      "Core questionnaire (Part 1) completed",
+      "feedback documented in a linked Employer Feedback Record",
+      "dated review record"
+    ],
+    "EMPLOYER VALIDATED": [
+      "everything required for EMPLOYER REVIEWED, plus:",
+      "an explicit validation conclusion recorded below (not inferred from ratings)",
+      "a defined validation scope (which specializations/roles/competencies)",
+      "substantive engagement with Part 2 (Optional Deep Technical Review) for the specializations being validated — Part 1 alone is not sufficient for this status",
+      "no unresolved critical safety or role-alignment concern (Questionnaire K4 / Feedback Record safety_findings)",
+      "required_corrections recorded below, even if empty",
+      "the underlying Employer Feedback Record retained and linked",
+      "a revalidation/material-change trigger set"
+    ],
+    "MULTIPLE-EMPLOYER VALIDATED": [
+      "at least two independent EMPLOYER VALIDATED records exist, each meeting the EMPLOYER VALIDATED requirements above, from different organizations",
+      "linked_validation_records below lists each contributing record"
+    ]
+  },
+  "guard_note": "A generic positive comment, a single 'looks good' response, or completion of Part 1 alone must NEVER be treated as sufficient for EMPLOYER VALIDATED. Only an explicit, scoped validation_conclusion below, meeting the sufficiency_requirements for the target status, is sufficient.",
+  "validation_conclusion": null,
+  "review_outcome": null,
+  "allowed_review_outcomes": [
+    "REVIEWED — CHANGES REQUIRED",
+    "REVIEWED — GENERALLY ALIGNED",
+    "VALIDATED FOR FOUNDATIONAL PREPARATION",
+    "VALIDATED FOR SPECIFIED ENTRY-LEVEL COMPETENCIES"
+  ],
+  "scope_of_review": {
+    "specializations_reviewed": [],
+    "grade_bands_reviewed": [],
+    "note": "An outcome applies only to what was actually reviewed. Reviewing one specialization does not validate the others."
+  },
+  "reviewer": {
+    "name": null,
+    "organization": null,
+    "role_title": null,
+    "relevance_to_entry_level_hiring": null
+  },
+  "review_date": null,
+  "curriculum_version_reviewed": null,
+  "scope_statement": null,
+  "required_corrections": [],
+  "linked_feedback_record_ref": null,
+  "linked_validation_records": {
+    "note": "Only relevant when target_validation_status is MULTIPLE-EMPLOYER VALIDATED. List paths/ids of the other independent, already-completed Validation Records this one builds on.",
+    "records": []
+  },
+  "explicit_disclaimer": "This validation, if and when recorded, does not constitute a hiring commitment, placement guarantee, licensure, accreditation, or endorsement beyond the scope explicitly stated above. It does not obligate the reviewing organization to any partnership, internship, apprenticeship, or employment action. Acceptable sign-off language is limited to precise, scoped statements (e.g., 'Employer reviewed the identified foundational competencies and found them generally aligned with the specified entry-level preparation scope.') — never broader claims of accreditation, certification, or guaranteed hiring.",
+  "next_review_date": null,
+  "material_change_trigger": "If SHF materially changes the curriculum, competencies, or safety content for a reviewed specialization, that specialization's validation should be treated as lapsed until re-reviewed.",
+  "governance": {
+    "approval_state": "DRAFT",
+    "created_date": "2026-09-14",
+    "last_updated_date": "2026-09-14",
+    "created_by_process": "CPAS-1 Phase 2 employer validation package build; sufficiency rule and target-status fields added in Phase 2A"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "record_type": "SHF_EMPLOYER_FEEDBACK_RECORD",
+  "version": "2.0",
+  "pathway_ref": "docs/career/records/DATA_CENTER_AI_INFRASTRUCTURE.pathway-record.json",
+  "package_ref": "docs/career/data-center-employer-validation/DATA_CENTER_EMPLOYER_VALIDATION_PACKAGE_V1.md",
+  "questionnaire_ref": "docs/career/data-center-employer-validation/DATA_CENTER_EMPLOYER_VALIDATION_QUESTIONNAIRE_V1.md",
+  "note": "This is a BLANK TEMPLATE. No feedback has been recorded yet. Completing this record alone does not constitute formal validation, and does not by itself move the pathway from EMPLOYER REVIEWED to EMPLOYER VALIDATED — see DATA_CENTER_EMPLOYER_VALIDATION_RECORD_V1.json and the Validation Decision Rule in the main package for that separate, explicit decision. Do not populate this file with invented, hypothetical, or placeholder feedback attributed to a real or fictional employer.",
+  "employer_organization": null,
+  "reviewer": {
+    "name": null,
+    "role_title": null,
+    "contact": null,
+    "relevance_to_entry_level_hiring": null,
+    "note": "relevance_to_entry_level_hiring should capture how this reviewer's role relates to entry-level data center hiring/operations (Questionnaire A4) — a reviewer with no real connection to entry-level hiring is a weak basis for EMPLOYER REVIEWED, let alone VALIDATED."
+  },
+  "review_date": null,
+  "curriculum_version_reviewed": null,
+  "review_scope": {
+    "specializations_reviewed": [],
+    "grade_bands_reviewed": [],
+    "note": "Feedback applies only to what was actually reviewed. A review of one specialization does not extend to the others."
+  },
+  "core_review_completed": false,
+  "optional_deep_technical_sections_completed": [],
+  "questionnaire_ratings": {
+    "note": "Populate with the completed questionnaire's per-item ratings once a real review occurs, keyed by question id (Core: A1-K4; Optional: L1-U2). Empty until then.",
+    "core": {},
+    "optional_deep_technical": {}
+  },
+  "safety_findings": {
+    "minor_student_safety_responses_captured": false,
+    "critical_safety_or_role_alignment_concerns_raised": null,
+    "note": "critical_safety_or_role_alignment_concerns_raised should mirror Questionnaire K4. Any unresolved critical concern here blocks an EMPLOYER VALIDATED outcome regardless of other ratings — see the Validation Record."
+  },
+  "required_changes": [],
+  "optional_improvements": [],
+  "overall_assessment": null,
+  "comments": null,
+  "governance": {
+    "approval_state": "DRAFT",
+    "created_date": "2026-09-14",
+    "last_updated_date": "2026-09-14",
+    "created_by_process": "CPAS-1 Phase 2 employer validation package build; questionnaire/record structure revised in Phase 2A"
+  }
+}

@@ -115,19 +115,25 @@ test.describe("Dialog and panel dark rendering", () => {
     expect(headBg).not.toContain("255, 255, 255");
   });
 
-  test("Admin Impact-editor Modal renders with a dark (non-white) background", async ({ page }) => {
+  // CCV2 Phase 0 governance correction: the browser-only "Admin: OFF/ON"
+  // toggle and "Edit Impact" JSON editor were removed — they let anyone
+  // locally fabricate/override the Impact Snapshot figures via
+  // "?admin=1" + localStorage, which is no longer permitted (see
+  // src/pages/CareerPathways.jsx's ImpactStrip and
+  // tests/careerImpactGovernance.test.mjs). This test now verifies the
+  // replacement bounded state still renders correctly (non-white) in dark
+  // mode, and that the removed admin controls stay removed.
+  test("Impact Snapshot's bounded unavailable state renders with a dark (non-white) background, with no admin override controls", async ({ page }) => {
     await page.goto(`${BASE}#/planner`, { waitUntil: "networkidle" });
     await selectTheme(page, "Dark");
-    await page.getByRole("button", { name: /Admin: OFF/ }).click();
-    await page.getByRole("button", { name: "✏️ Edit Impact" }).scrollIntoViewIfNeeded();
-    await page.getByRole("button", { name: "✏️ Edit Impact" }).click();
-    const dialog = page.getByRole("dialog", { name: "Edit Impact JSON" });
-    await expect(dialog).toBeVisible();
-    const bg = await dialog.evaluate((n) => getComputedStyle(n).backgroundColor);
+    await expect(page.getByRole("button", { name: /Admin: (ON|OFF)/ })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "✏️ Edit Impact" })).toHaveCount(0);
+    const impactSection = page.getByRole("region", { name: "Program impact" });
+    await impactSection.scrollIntoViewIfNeeded();
+    await expect(impactSection).toBeVisible();
+    await expect(impactSection.getByText("Verified outcome data is not currently available.")).toBeVisible();
+    const bg = await impactSection.evaluate((n) => getComputedStyle(n).backgroundColor);
     expect(bg).not.toBe("rgb(255, 255, 255)");
-    const textarea = dialog.locator("textarea");
-    const taBg = await textarea.evaluate((n) => getComputedStyle(n).backgroundColor);
-    expect(taBg).not.toBe("rgb(255, 255, 255)");
   });
 });
 

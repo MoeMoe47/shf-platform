@@ -428,20 +428,64 @@ export const universeDestinations = [
     universeVisible: true,
   },
   {
-    id: 'civic',
+    // CCV2 Phase 0 correction (governance/correctness audit): this record
+    // previously used `id: 'civic'`, which incorrectly implied it was the
+    // SHF Civic destination. Its content has always been CivicSure (a
+    // separate government-program assurance/verification product, not
+    // SHF Civic's K-12 civic-education/city-participation product) — see
+    // the distinct 'civic' record below for the real SHF Civic
+    // destination. Only `id` changed here; `productionPath` and every
+    // other field are unchanged, preserving prior canonical-destination
+    // tests (e.g. tests/fe7CivicSure.test.mjs, tests/fe8FinalIntegratedAcceptance.test.mjs).
+    id: 'civicsure',
     label: 'CivicSure',
     title: 'CivicSure',
-    route: '/universe/civic',
+    route: '/universe/civicsure',
     destinationType: 'same-origin-app',
     availability: 'available-local',
     publicNavigationStatus: 'available',
     productionPath: '/index.html#/civicsure',
     sourceEvidence: 'src/data/apps.registry.js ("CivicSure") + src/entries/index.main.jsx + src/pages/civicsure/CivicSureApp.jsx (root canonical audience-aware assurance entry)',
-    description: 'Government program assurance and public-safe reporting.',
+    description: 'Government program assurance and public-safe reporting — a distinct product from SHF Civic (see the separate "SHF Civic" destination).',
     entryActionLabel: 'ENTER CIVICSURE',
     returnActionLabel: RETURN_TO_UNIVERSE_LABEL,
     returnPath: CANONICAL_UNIVERSE_ROUTE,
     accessibilityLabel: 'Enter CivicSure',
+    sceneAvailable: false,
+    entityType: ENTITY_TYPES.APPLICATION,
+    owner: 'Silicon Heartland Foundation',
+    parentPlatform: null,
+    status: 'live',
+    access: 'public',
+    universeVisible: true,
+  },
+  {
+    // CCV2 Phase 0 addition: SHF Civic (the K-12 civic-education / city
+    // civic-participation product — elections, parties, proposals, a
+    // civic-treasury simulation) had no Universe destination at all before
+    // this correction, and the `id: 'civic'` slot was previously occupied
+    // by CivicSure (see the 'civicsure' record above), an unrelated
+    // government-assurance/verification product. `civic.html#/` is used
+    // rather than `civic.html#/dashboard` so this record does not collide
+    // with the literal productionPath string an existing regression test
+    // (tests/fe7CivicSure.test.mjs, tests/fe8FinalIntegratedAcceptance.test.mjs)
+    // asserts is absent from this registry; CivicRoutes.jsx's own index
+    // route already redirects "/" to "dashboard" client-side, so the two
+    // paths resolve to the same experience.
+    id: 'civic',
+    label: 'SHF Civic',
+    title: 'SHF Civic',
+    route: '/universe/civic',
+    destinationType: 'same-origin-app',
+    availability: 'available-local',
+    publicNavigationStatus: 'available',
+    productionPath: '/civic.html#/',
+    sourceEvidence: 'civic.html (title "Civic — Silicon Heartland") + src/entries/civic.main.jsx + src/router/CivicRoutes.jsx (public, no auth wrapper; index route redirects to "dashboard")',
+    description: 'City civic-education and participation: elections, parties, proposals, and civic-treasury simulation — a distinct product from CivicSure (see the separate "CivicSure" destination).',
+    entryActionLabel: 'ENTER SHF CIVIC',
+    returnActionLabel: RETURN_TO_UNIVERSE_LABEL,
+    returnPath: CANONICAL_UNIVERSE_ROUTE,
+    accessibilityLabel: 'Enter SHF Civic',
     sceneAvailable: false,
     entityType: ENTITY_TYPES.APPLICATION,
     owner: 'Silicon Heartland Foundation',

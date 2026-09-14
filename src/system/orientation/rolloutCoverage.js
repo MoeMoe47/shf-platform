@@ -15,7 +15,17 @@ const coverage = [
   ["career", "TIER_B", ["student", "staff"], "orientation:career:learner", "NOT_APPLICABLE", "The only contract is DRAFT, so no live OGL experience is eligible for this destination."],
   ["curriculum", "TIER_A", ["student", "instructor", "shf_admin"], "orientation:curriculum:student-dashboard", "COMPLETE", "Student and instructor contracts, role-aware Guidance Center selection, semantic anchors, disposable fixtures, and Chromium acceptance are complete."],
   ["arcade", "TIER_C", ["learner", "public"], null, "NOT_APPLICABLE", "Game-specific progression guidance is domain-local and no critical OGL workflow is evidenced."],
-  ["civic", "TIER_A", ["provider", "operator", "reviewer"], "orientation:civicsure:provider", "COMPLETE", "Provider and operator/reviewer contracts, role-safe Guidance Center surfaces, semantic anchors, and server/browser separation evidence are complete."],
+  // CCV2 Phase 0 correction: this entry's destinationId was "civic" before
+  // the Universe registry's id/label collision was fixed (the "civic" id
+  // previously resolved to CivicSure, not SHF Civic) — the entry itself
+  // was always about CivicSure (see its orientationId and provider/
+  // operator/reviewer roles below), so only the key changed here.
+  ["civicsure", "TIER_A", ["provider", "operator", "reviewer"], "orientation:civicsure:provider", "COMPLETE", "Provider and operator/reviewer contracts, role-safe Guidance Center surfaces, semantic anchors, and server/browser separation evidence are complete."],
+  // CCV2 Phase 0 addition: SHF Civic now has its own distinct Universe
+  // destination (id "civic") separate from CivicSure. No OGL-owned guided
+  // workflow has been evidenced for it — adding one is out of this
+  // governance/correctness phase's scope.
+  ["civic", "TIER_C", ["student", "public"], null, "NOT_APPLICABLE", "SHF Civic is a newly-registered Universe destination (Phase 0 registry correction); no OGL-owned critical guided workflow has been evidenced for it yet."],
   ["credit", "TIER_C", ["public", "user"], null, "NOT_APPLICABLE", "Public educational surface; no critical OGL tour requirement identified."],
   ["debt", "TIER_C", ["public", "user"], null, "NOT_APPLICABLE", "Public educational surface; no critical OGL tour requirement identified."],
   ["employer", "TIER_B", ["employer", "user"], null, "NOT_APPLICABLE", "The registered route is public and no canonical employer workflow/context source is currently evidenced for an OGL-owned experience."],

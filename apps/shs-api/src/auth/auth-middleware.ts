@@ -3,7 +3,7 @@ import { parseDevToken } from "./current-user.js";
 import { mergeRolePermissions } from "./security-permissions.js";
 import { isProductionEnvironment } from "./production-identity.js";
 import { Auth0SessionService } from "../domain/identity/service/auth0-session-service.js";
-import { applyActiveOrganizationContext, getRequestedOrganizationId, OrganizationContextError } from "./organization-context.js";
+import { applyActiveOrganizationContext, getPreferredOrganizationId, getRequestedOrganizationId, OrganizationContextError, resolveOrganizationContextTransition } from "./organization-context.js";
 import { tenantIdForOrganization } from "./tenant-context.js";
 
 const repo = new IdentityRepo();
@@ -64,15 +64,21 @@ function getUserRoles(user: any): string[] {
 
 export async function authMiddleware(req: any, _res: any, next: any) {
   const authHeader = req.headers?.authorization;
+  const requestedOrganizationId = getRequestedOrganizationId(req);
+  const preferredOrganizationId = getPreferredOrganizationId(req);
   if (productionSessions) {
     const sessionToken = readSessionCookie(req.headers?.cookie);
     try {
-      req.user = sessionToken ? await productionSessions.getUserForSession(sessionToken, getRequestedOrganizationId(req)) : null;
+      req.user = sessionToken ? await productionSessions.getUserForSession(sessionToken, requestedOrganizationId, preferredOrganizationId) : null;
     } catch (error: any) {
       if (error instanceof OrganizationContextError) {
         req.user = { org_context_error: error.code, permissions: [], roles: [] };
       } else {
-        throw error;
+        // Authentication infrastructure failures fail closed. Do not turn an
+        // invalid/expired provider session into a server error or preserve
+        // any stale request identity.
+        req.user = null;
+        req.auth_error_code = "AUTH_SESSION_INVALID";
       }
     }
     return next();
@@ -83,7 +89,7 @@ export async function authMiddleware(req: any, _res: any, next: any) {
 
   if (!userId) {
     req.user = isLocalDevAuthEnabled()
-      ? applyActiveOrganizationContext(buildLocalDevUser(), getRequestedOrganizationId(req))
+      ? applyActiveOrganizationContext(buildLocalDevUser(), requestedOrganizationId || preferredOrganizationId)
       : null;
     return next();
   }
@@ -102,11 +108,22 @@ export async function authMiddleware(req: any, _res: any, next: any) {
       : mergeRolePermissions(roles);
 
   try {
-    req.user = applyActiveOrganizationContext({
+    const baseUser = {
       ...user,
       roles,
       permissions,
-    }, getRequestedOrganizationId(req));
+    };
+    if (requestedOrganizationId) {
+      req.user = applyActiveOrganizationContext(baseUser, requestedOrganizationId);
+    } else {
+      const transition = resolveOrganizationContextTransition(baseUser, { preferredOrganizationId });
+      req.user = transition.ok && transition.selected_organization_id
+        ? {
+          ...applyActiveOrganizationContext(baseUser, transition.selected_organization_id),
+          organization_context_resolution: transition,
+        }
+        : { ...baseUser, org_context_error: transition.error_code, organization_context_resolution: transition, permissions: [], roles: [] };
+    }
   } catch (error: any) {
     if (error instanceof OrganizationContextError) {
       req.user = { ...user, org_context_error: error.code, permissions: [], roles: [] };

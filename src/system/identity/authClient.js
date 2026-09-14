@@ -1,4 +1,5 @@
 import { SHS_AUTH_API_BASE } from "@/system/identity/authConfig";
+import { getPreferredOrganizationId } from "@/system/identity/organizationContextPreference";
 
 function developmentIdentityHeaders() {
   try {
@@ -37,10 +38,14 @@ function authHeaders(csrfToken = "") {
 }
 
 export async function fetchCurrentIdentity() {
+  const preferredOrganizationId = getPreferredOrganizationId();
   const response = await fetch(`${SHS_AUTH_API_BASE}/auth/me`, {
     credentials: "include",
     cache: "no-store",
-    headers: developmentIdentityHeaders(),
+    headers: {
+      ...developmentIdentityHeaders(),
+      ...(preferredOrganizationId ? { "x-shs-preferred-organization-id": preferredOrganizationId } : {}),
+    },
   });
   return parseResponse(response);
 }

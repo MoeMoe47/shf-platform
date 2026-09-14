@@ -13,6 +13,10 @@ import {
   assertNoSessionTokenStorage,
   clearLegacyAuthoritativeIdentityState,
 } from "@/system/identity/authStorageSafety";
+import {
+  applyOrganizationContextInvalidation,
+  clearOrganizationScopedClientState,
+} from "@/system/identity/organizationContextPreference";
 
 const AuthContext = createContext(null);
 
@@ -25,6 +29,7 @@ export function AuthProvider({ children }) {
   const applyIdentity = useCallback((data) => {
     const next = normalizeIdentityResponse(data);
     clearLegacyAuthoritativeIdentityState();
+    applyOrganizationContextInvalidation(next.organizationContextResolution?.invalidation);
     assertNoSessionTokenStorage();
     setState(next);
     setHttpStatus(0);
@@ -33,6 +38,7 @@ export function AuthProvider({ children }) {
 
   const clearAuth = useCallback((status = "invalid", statusCode = 0) => {
     clearLegacyAuthoritativeIdentityState();
+    clearOrganizationScopedClientState();
     setState(emptyAuthState(status));
     setHttpStatus(statusCode);
   }, []);
@@ -117,6 +123,15 @@ export function AuthProvider({ children }) {
     user: state.user,
     role: state.role,
     memberships: state.memberships,
+    authorizedOrganizations: state.authorizedOrganizations,
+    preferredOrganizationId: state.preferredOrganizationId,
+    activeOrganizationContext: state.activeOrganizationContext,
+    roleContext: state.roleContext,
+    permissionContext: state.permissionContext,
+    entitlementSummary: state.entitlementSummary,
+    organizationContextResolution: state.organizationContextResolution,
+    routeValidityContract: state.routeValidityContract,
+    safeLanding: state.safeLanding,
     permissions: state.permissions,
     sessionStatus: state.sessionStatus,
     csrfToken: state.csrfToken,

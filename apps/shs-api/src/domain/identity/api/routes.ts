@@ -3,9 +3,11 @@ import { requirePermission } from "../../../auth/permission-guard.js";
 import { SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
 import { IdentityService } from "../service/identity-service.js";
 import { MembershipService, MembershipServiceError } from "../service/membership-service.js";
+import { OrganizationAdminExperienceError, OrganizationAdminExperienceService } from "../service/organization-admin-experience-service.js";
 
 const service = new IdentityService();
 const memberships = new MembershipService();
+const organizationAdmin = new OrganizationAdminExperienceService();
 
 export function registerIdentityRoutes(app: any) {
   app.get(
@@ -27,9 +29,14 @@ export function registerIdentityRoutes(app: any) {
 
   app.get(
     "/identity/roles",
-    requirePermission(SHS_SECURITY_PERMISSIONS.IDENTITY_VIEW),
-    (_req: any, res: any) => {
-      res.json(ok({ items: [] }));
+    requirePermission(SHS_SECURITY_PERMISSIONS.IDENTITY_MEMBERSHIP_ASSIGN),
+    async (req: any, res: any) => {
+      try {
+        res.json(ok({ items: await memberships.listAssignableRoles(req.user) }));
+      } catch (err: any) {
+        if (err instanceof MembershipServiceError) return res.status(err.statusCode).json(fail(err.code, err.message));
+        return res.status(400).json(fail("VALIDATION_ERROR", err.message));
+      }
     }
   );
 
@@ -46,6 +53,12 @@ export function registerIdentityRoutes(app: any) {
     "/identity/organizations/:id",
     requirePermission(SHS_SECURITY_PERMISSIONS.ORGANIZATION_VIEW),
     async (req: any, res: any) => {
+      try {
+        organizationAdmin.assertCanReadOrganization(req.user, req.params.id);
+      } catch (err: any) {
+        if (err instanceof OrganizationAdminExperienceError) return res.status(err.statusCode).json(fail(err.code, err.message));
+        throw err;
+      }
       const item = await service.getOrganizationById(req.params.id);
       if (!item) {
         return res.status(404).json(fail("NOT_FOUND", "Organization not found"));
@@ -78,6 +91,33 @@ export function registerIdentityRoutes(app: any) {
       } catch (err: any) {
         if (err instanceof MembershipServiceError) return res.status(err.statusCode).json(fail(err.code, err.message));
         return res.status(400).json(fail("VALIDATION_ERROR", err.message));
+      }
+    }
+  );
+
+  app.patch(
+    "/identity/memberships/:id/role",
+    requirePermission(SHS_SECURITY_PERMISSIONS.IDENTITY_MEMBERSHIP_ASSIGN),
+    async (req: any, res: any) => {
+      try {
+        const result = await memberships.changeRole(req.params.id, req.body || {}, req.user);
+        return res.json(ok(result.membership));
+      } catch (err: any) {
+        if (err instanceof MembershipServiceError) return res.status(err.statusCode).json(fail(err.code, err.message));
+        return res.status(400).json(fail("VALIDATION_ERROR", err.message));
+      }
+    }
+  );
+
+  app.get(
+    "/identity/organization-admin/overview",
+    requirePermission(SHS_SECURITY_PERMISSIONS.ORGANIZATION_VIEW),
+    async (req: any, res: any, next: any) => {
+      try {
+        return res.json(ok(await organizationAdmin.getOverview(req.user)));
+      } catch (err: any) {
+        if (err instanceof OrganizationAdminExperienceError) return res.status(err.statusCode).json(fail(err.code, err.message));
+        return next(err);
       }
     }
   );

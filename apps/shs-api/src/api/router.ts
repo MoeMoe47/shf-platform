@@ -196,9 +196,16 @@ export function buildRouter(app: any) {
   app.post("/auth/logout", async (req: any, res: any) => {
     const sessionCookie = String(req.headers?.cookie || "").split(";").map((item) => item.trim()).find((item) => item.startsWith("shs_session="));
     if (auth0Sessions && sessionCookie) {
-      await auth0Sessions.revoke(decodeURIComponent(sessionCookie.slice("shs_session=".length)));
-      res.setHeader("Set-Cookie", "shs_session=; Max-Age=0; Path=/; HttpOnly; Secure; SameSite=Lax");
+      try {
+        await auth0Sessions.revoke(decodeURIComponent(sessionCookie.slice("shs_session=".length)));
+      } catch {
+        // The browser must still lose its local session handle if the
+        // provider/session store is unavailable. Future requests fail closed.
+      }
     }
+    // Clear the cookie on every environment, including development, so local
+    // logout cannot leave a stale browser credential behind.
+    res.setHeader("Set-Cookie", "shs_session=; Max-Age=0; Path=/; HttpOnly; Secure; SameSite=Lax");
     return res.json({ ok: true });
   });
 app.post("/auth/login", async (req: any, res: any) => {

@@ -21,6 +21,12 @@ export const PASSPORT_CLAIM_TYPES = [
   // MET-12 — projection only; membership/roles alone are never
   // VERIFIED_SKILL (see projectPassportFromSources enterprise loop).
   "ENTERPRISE_EXPERIENCE",
+  // MET-13 — projection only; a completed simulation session is never
+  // VERIFIED_SKILL by itself (see projectPassportFromSources simulation
+  // loop). Real skill verification, if any, still flows through the
+  // VERIFIED_EVIDENCE loop above from evidence an instructor/reviewer
+  // separately confirmed.
+  "SIMULATION_EXPERIENCE",
 ] as const;
 export type PassportClaimType = typeof PASSPORT_CLAIM_TYPES[number];
 
@@ -48,6 +54,7 @@ export const PASSPORT_SOURCE_AUTHORITIES = [
   "STUDIO_TEAM",
   "MARKET",
   "STUDENT_ENTERPRISE",
+  "METAVERSE_SIMULATION",
 ] as const;
 export type PassportSourceAuthority = typeof PASSPORT_SOURCE_AUTHORITIES[number];
 
@@ -200,4 +207,5 @@ export interface PassportProjectionSources {
   marketHistory?: any[];
   programCompletions?: any[];
   enterpriseExperience?: any[];
+  simulationActivity?: any[];
 }

@@ -153,7 +153,15 @@ test("live-route destinations correspond to verified repository route evidence",
 test("city registry is declarative and exposes a frontend-safe projection without duplicating authority", () => {
   assert.equal(SILICON_HEARTLAND_CITY_REGISTRY.declarative_only, true);
   assert.equal(SILICON_HEARTLAND_CITY_REGISTRY.authorization_authority, false);
-  assert.deepEqual(SILICON_HEARTLAND_CITY_REGISTRY.activities, []);
+  // MET-2 shipped with an empty activities array; MET-7 and MET-13 added
+  // real declarative activity entries (curriculum mounts + simulations).
+  // Every one must still declare its own evidence/completion boundary
+  // rather than duplicating curriculum/assessment/evidence authority.
+  assert.ok(SILICON_HEARTLAND_CITY_REGISTRY.activities.length > 0);
+  for (const activity of SILICON_HEARTLAND_CITY_REGISTRY.activities) {
+    assert.ok(activity.evidence_capability, `${activity.id}: evidence_capability is required`);
+    assert.ok(activity.completion_authority, `${activity.id}: completion_authority is required`);
+  }
 
   const projection = getMetaverseCityProjection();
   assert.equal(projection.city_id, SILICON_HEARTLAND_CITY_ID);

@@ -458,6 +458,179 @@ const activities: MetaverseActivity[] = [
   ),
 ];
 
+// MET-13 — Activities, Simulations + District Depth. Additive only: every
+// entry below has a matching simulations/registry/simulation-registry.ts
+// SimulationDefinition with the identical id, and reuses this same
+// MET-3/MET-5 unlock+entry pipeline unmodified. canonical_owner/
+// completion_authority are set per-entry (rather than through the MET-2
+// `activity()` helper's curriculum-domain default) because several of
+// these are original metaverse scenarios, not curriculum mounts.
+function met13Activity(input: {
+  id: string;
+  district_id: string;
+  facility_id: string;
+  label: string;
+  description: string;
+  canonical_owner: string;
+  canonical_ref: string;
+  route_reference: MetaverseRouteReference;
+  unlock_requirement_reference: string | null;
+  completion_authority: string;
+  tags: string[];
+}): MetaverseActivity {
+  return {
+    id: input.id,
+    version: "1.0.0",
+    city_id: SILICON_HEARTLAND_CITY_ID,
+    district_id: input.district_id,
+    facility_id: input.facility_id,
+    label: input.label,
+    description: input.description,
+    status: "ACTIVE",
+    activity_type: "simulation",
+    canonical_owner: input.canonical_owner,
+    canonical_ref: input.canonical_ref,
+    route_reference: input.route_reference,
+    unlock_requirement_reference: input.unlock_requirement_reference,
+    completion_authority: input.completion_authority,
+    evidence_capability: "operational completion fact / evidence candidate only; simulation completion never creates verified skill, credential, course completion, career eligibility, or civic authority (see MET-13 simulation-contract.ts)",
+    tags: input.tags,
+  };
+}
+
+const met13Activities: MetaverseActivity[] = [
+  met13Activity({
+    id: "data-center-operations-simulation",
+    district_id: METAVERSE_DISTRICT_IDS.dataCenter,
+    facility_id: "main-data-center",
+    label: "Data Center Operations: Rack to Recovery",
+    description: "MET-13 flagship multi-step operations simulation: rack configuration, cooling balance, power redundancy, outage response.",
+    canonical_owner: "curriculum-domain",
+    canonical_ref: "apps/shs-api/src/domain/metaverse/simulations/registry/simulation-registry.ts#data-center-operations-simulation",
+    route_reference: route("PLANNED", null, "MET-13 simulation registry", "Mounted within the metaverse city shell's activity view; no standalone app route exists."),
+    unlock_requirement_reference: null,
+    completion_authority: "metaverse-experience-orchestration",
+    tags: ["data-center", "flagship", "simulation"],
+  }),
+  met13Activity({
+    id: "ai-agent-build-test-simulation",
+    district_id: METAVERSE_DISTRICT_IDS.technologyInnovation,
+    facility_id: "ai-agent-lab",
+    label: "Build & Test an AI Agent",
+    description: "MET-13 flagship simulation: define an agent task, configure guardrails, run adversarial test scenarios, review results.",
+    canonical_owner: "metaverse-experience-orchestration",
+    canonical_ref: "apps/shs-api/src/domain/metaverse/simulations/registry/simulation-registry.ts#ai-agent-build-test-simulation",
+    route_reference: route("PLANNED", null, "MET-13 simulation registry", "Mounted within the metaverse city shell's activity view; no standalone app route exists."),
+    unlock_requirement_reference: null,
+    completion_authority: "metaverse-experience-orchestration",
+    tags: ["ai", "flagship", "simulation"],
+  }),
+  met13Activity({
+    id: "enterprise-service-delivery-simulation",
+    district_id: METAVERSE_DISTRICT_IDS.technologyInnovation,
+    facility_id: "builder-studio",
+    label: "Student Enterprise: Client Intake to Delivery",
+    description: "MET-13 flagship team simulation reusing MET-12 Student Enterprise/Studio team authority: intake, estimation, delivery, QA, presentation.",
+    canonical_owner: "metaverse-experience-orchestration",
+    canonical_ref: "apps/shs-api/src/domain/metaverse/simulations/registry/simulation-registry.ts#enterprise-service-delivery-simulation",
+    route_reference: route("PLANNED", null, "MET-13 simulation registry", "Mounted within the metaverse city shell's activity view; no standalone app route exists."),
+    unlock_requirement_reference: null,
+    completion_authority: "metaverse-experience-orchestration",
+    tags: ["enterprise", "flagship", "simulation", "team"],
+  }),
+  met13Activity({
+    id: "civic-budget-tradeoff-simulation",
+    district_id: METAVERSE_DISTRICT_IDS.civic,
+    facility_id: "planning-department",
+    label: "City Infrastructure & Budget Tradeoff",
+    description: "MET-13 flagship bounded civic simulation: allocate a fixed simulated budget across infrastructure priorities. Not gated by SHF Civic eligibility; creates no civic authority.",
+    canonical_owner: "metaverse-experience-orchestration",
+    canonical_ref: "apps/shs-api/src/domain/metaverse/simulations/registry/simulation-registry.ts#civic-budget-tradeoff-simulation",
+    route_reference: route("PLANNED", null, "MET-13 simulation registry", "Mounted within the metaverse city shell's activity view; no standalone app route exists."),
+    unlock_requirement_reference: null,
+    completion_authority: "metaverse-experience-orchestration",
+    tags: ["civic", "flagship", "simulation", "budget"],
+  }),
+  met13Activity({
+    id: "career-pathway-exploration-scenario",
+    district_id: METAVERSE_DISTRICT_IDS.careerEducation,
+    facility_id: "career-pathway-center",
+    label: "Career Pathway Exploration Scenario",
+    description: "MET-13 scenario grounded in the existing Data Center & AI Infrastructure pathway record; no career pathway required to attempt.",
+    canonical_owner: "career-pathways-credentials-career-events-domains",
+    canonical_ref: "docs/career/records/DATA_CENTER_AI_INFRASTRUCTURE.pathway-record.json",
+    route_reference: route("PLANNED", null, "MET-13 simulation registry", "Mounted within the metaverse city shell's activity view; no standalone app route exists."),
+    unlock_requirement_reference: null,
+    completion_authority: "metaverse-experience-orchestration",
+    tags: ["career", "simulation", "scenario"],
+  }),
+  met13Activity({
+    id: "arcade-mission-prep-drill",
+    district_id: METAVERSE_DISTRICT_IDS.learningArcade,
+    facility_id: "simulation-hall",
+    label: "Mission Prep Drill",
+    description: "MET-13 practice-only concept drill; Arcade's own canonical result/mastery authority is untouched.",
+    canonical_owner: "metaverse-experience-orchestration",
+    canonical_ref: "apps/shs-api/src/domain/metaverse/simulations/registry/simulation-registry.ts#arcade-mission-prep-drill",
+    route_reference: route("PLANNED", null, "MET-13 simulation registry", "Mounted within the metaverse city shell's activity view; no standalone app route exists."),
+    unlock_requirement_reference: null,
+    completion_authority: "metaverse-experience-orchestration",
+    tags: ["arcade", "simulation", "practice"],
+  }),
+  met13Activity({
+    id: "enterprise-budgeting-simulation",
+    district_id: METAVERSE_DISTRICT_IDS.treasuryCommerce,
+    facility_id: "student-economy-center",
+    label: "Pricing & Resource Allocation Exercise",
+    description: "MET-13 bounded pricing/allocation simulation; never touches a real Market listing, order, or Treasury balance (MET-1 economy boundary remains unresolved/blocked).",
+    canonical_owner: "metaverse-experience-orchestration",
+    canonical_ref: "apps/shs-api/src/domain/metaverse/simulations/registry/simulation-registry.ts#enterprise-budgeting-simulation",
+    route_reference: route("PLANNED", null, "MET-13 simulation registry", "Mounted within the metaverse city shell's activity view; no standalone app route exists."),
+    unlock_requirement_reference: null,
+    completion_authority: "metaverse-experience-orchestration",
+    tags: ["treasury", "commerce", "simulation"],
+  }),
+  met13Activity({
+    id: "community-accessibility-audit-challenge",
+    district_id: METAVERSE_DISTRICT_IDS.community,
+    facility_id: "community-center",
+    label: "Community Accessibility Audit",
+    description: "MET-13 design-challenge simulation for community/service-learning and Side Mission use.",
+    canonical_owner: "metaverse-experience-orchestration",
+    canonical_ref: "apps/shs-api/src/domain/metaverse/simulations/registry/simulation-registry.ts#community-accessibility-audit-challenge",
+    route_reference: route("PLANNED", null, "MET-13 simulation registry", "Mounted within the metaverse city shell's activity view; no standalone app route exists."),
+    unlock_requirement_reference: null,
+    completion_authority: "metaverse-experience-orchestration",
+    tags: ["community", "accessibility", "simulation"],
+  }),
+  met13Activity({
+    id: "team-time-management-challenge",
+    district_id: METAVERSE_DISTRICT_IDS.studentLife,
+    facility_id: "student-hub",
+    label: "Team Time Management Challenge",
+    description: "MET-13 SEL/scheduling simulation; never infers personality, mental health, or team-fit scores.",
+    canonical_owner: "metaverse-experience-orchestration",
+    canonical_ref: "apps/shs-api/src/domain/metaverse/simulations/registry/simulation-registry.ts#team-time-management-challenge",
+    route_reference: route("PLANNED", null, "MET-13 simulation registry", "Mounted within the metaverse city shell's activity view; no standalone app route exists."),
+    unlock_requirement_reference: null,
+    completion_authority: "metaverse-experience-orchestration",
+    tags: ["student-life", "sel", "simulation"],
+  }),
+  met13Activity({
+    id: "city-scavenger-hunt-side-mission",
+    district_id: METAVERSE_DISTRICT_IDS.publicRealm,
+    facility_id: "central-plaza",
+    label: "Silicon Heartland Scavenger Hunt",
+    description: "MET-13 orientation Side Mission across city districts/facilities; no career pathway or program enrollment required.",
+    canonical_owner: "metaverse-experience-orchestration",
+    canonical_ref: "apps/shs-api/src/domain/metaverse/simulations/registry/simulation-registry.ts#city-scavenger-hunt-side-mission",
+    route_reference: route("PLANNED", null, "MET-13 simulation registry", "Mounted within the metaverse city shell's activity view; no standalone app route exists."),
+    unlock_requirement_reference: null,
+    completion_authority: "metaverse-experience-orchestration",
+    tags: ["public-realm", "side-mission", "simulation"],
+  }),
+];
+
 const districts: MetaverseDistrict[] = [
   district(METAVERSE_DISTRICT_IDS.civic, "Civic District", "SHF Civic-backed simulated city government, proposals, elections, council, planning, public works, and community development.", "district-civic", ["city-hall", "council-chamber", "clerk-office", "planning-department", "public-works", "community-development-office"], ["civic", "shf-civic"]),
   district(METAVERSE_DISTRICT_IDS.careerEducation, "Career & Education District", "Career Center, curriculum, training, certifications/milestones projection, skill profile, portfolio, and workforce pathway navigation.", "district-career-education", ["career-center", "learning-center", "credential-portfolio-center", "career-pathway-center"], ["career", "curriculum", "portfolio"]),
@@ -488,7 +661,7 @@ export const SILICON_HEARTLAND_CITY_REGISTRY: MetaverseCityRegistry = {
   districts,
   facilities,
   destinations,
-  activities,
+  activities: [...activities, ...met13Activities],
   access_requirements: ["MET-3 learner unlock projection required before gated access is enforced."],
   career_alignment: career(["career-center", "data-center-ai-infrastructure"], "Registry reads career pathways; career remains canonical."),
   curriculum_alignment: curriculum(["curriculum-learning", "data-center lesson content"], "Registry reads curriculum alignment; curriculum remains canonical."),

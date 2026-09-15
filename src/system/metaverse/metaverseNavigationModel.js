@@ -107,6 +107,81 @@ export const METAVERSE_ACTIVITY_PLACEHOLDERS = [
     label: "Capstone Project Room",
     mountPoint: "future-project-experience",
   },
+  // MET-13 — every id below has a matching backend MetaverseActivity
+  // (apps/shs-api/src/domain/metaverse/registry/city-registry.ts) and a
+  // matching SimulationDefinition (metaverse/simulations/registry/
+  // simulation-registry.ts). mountPoint "simulation" always renders
+  // through MetaverseSimulationShell (see MetaverseActivityMount.jsx).
+  {
+    id: "data-center-operations-simulation",
+    facilityId: "main-data-center",
+    districtId: "data-center-district",
+    label: "Data Center Operations: Rack to Recovery",
+    mountPoint: "simulation",
+  },
+  {
+    id: "ai-agent-build-test-simulation",
+    facilityId: "ai-agent-lab",
+    districtId: "technology-innovation-district",
+    label: "Build & Test an AI Agent",
+    mountPoint: "simulation",
+  },
+  {
+    id: "enterprise-service-delivery-simulation",
+    facilityId: "builder-studio",
+    districtId: "technology-innovation-district",
+    label: "Student Enterprise: Client Intake to Delivery",
+    mountPoint: "simulation",
+  },
+  {
+    id: "civic-budget-tradeoff-simulation",
+    facilityId: "planning-department",
+    districtId: "civic-district",
+    label: "City Infrastructure & Budget Tradeoff",
+    mountPoint: "simulation",
+  },
+  {
+    id: "career-pathway-exploration-scenario",
+    facilityId: "career-pathway-center",
+    districtId: "career-education-district",
+    label: "Career Pathway Exploration Scenario",
+    mountPoint: "simulation",
+  },
+  {
+    id: "arcade-mission-prep-drill",
+    facilityId: "simulation-hall",
+    districtId: "learning-arcade-district",
+    label: "Mission Prep Drill",
+    mountPoint: "simulation",
+  },
+  {
+    id: "enterprise-budgeting-simulation",
+    facilityId: "student-economy-center",
+    districtId: "treasury-commerce-district",
+    label: "Pricing & Resource Allocation Exercise",
+    mountPoint: "simulation",
+  },
+  {
+    id: "community-accessibility-audit-challenge",
+    facilityId: "community-center",
+    districtId: "community-district",
+    label: "Community Accessibility Audit",
+    mountPoint: "simulation",
+  },
+  {
+    id: "team-time-management-challenge",
+    facilityId: "student-hub",
+    districtId: "student-life-district",
+    label: "Team Time Management Challenge",
+    mountPoint: "simulation",
+  },
+  {
+    id: "city-scavenger-hunt-side-mission",
+    facilityId: "central-plaza",
+    districtId: "public-realm",
+    label: "Silicon Heartland Scavenger Hunt",
+    mountPoint: "simulation",
+  },
 ];
 
 export const METAVERSE_DISTRICTS = METAVERSE_DISTRICT_MARKERS.map((district) => ({

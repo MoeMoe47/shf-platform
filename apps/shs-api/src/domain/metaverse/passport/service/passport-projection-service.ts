@@ -377,6 +377,38 @@ export function projectPassportFromSources(input: {
     }));
   }
 
+  for (const row of input.sources.simulationActivity || []) {
+    // MET-13 — a completed simulation session is a source-confirmed
+    // operational fact / evidence candidate only (see
+    // simulation-evidence-adapter.ts). It is never VERIFIED_SKILL,
+    // credential, course completion, career eligibility, job readiness,
+    // or civic authority on its own.
+    const sessionId = String(row.session_id || "");
+    if (!sessionId) continue;
+    const completionResult = row.completion_result || {};
+    const evidenceBoundary = completionResult.evidence_boundary || {};
+    claims.push(buildClaim({
+      learnerUserId: input.learnerUserId,
+      organizationId: input.organizationId,
+      claimType: "SIMULATION_EXPERIENCE",
+      title: String(row.simulation_id || "Metaverse simulation"),
+      summary: "Source-backed simulation completion; operational fact and, where declared, an evidence candidate only — never verified skill by itself.",
+      sourceType: "SIMULATION_SESSION",
+      sourceRef: sessionId,
+      sourceAuthority: "METAVERSE_SIMULATION",
+      verificationLevel: evidenceBoundary.canBecomeEvidenceCandidate ? "EVIDENCE_CANDIDATE" : "ACTIVITY_COMPLETED",
+      issuedAt: row.completed_at,
+      metadata: {
+        districtId: row.district_id || null,
+        facilityId: row.facility_id || null,
+        simulationType: row.simulation_type || null,
+        teamSessionRef: row.team_session_ref || null,
+        notVerifiedSkill: true,
+      },
+      visibility: "SELF",
+    }));
+  }
+
   for (const row of input.sources.marketHistory || []) {
     const orderId = String(row.order_id || row.orderId || "");
     if (!orderId || String(row.status || "").toUpperCase() !== "FULFILLED") continue;
@@ -581,7 +613,7 @@ function buildCapabilityGraph(learnerUserId: string, claims: PassportClaim[]) {
 export async function loadPassportSources(actor: Actor, learnerUserId: string): Promise<PassportProjectionSources> {
   const organizationId = actorOrgId(actor);
   const tenantId = `tenant:${organizationId}`;
-  const [verifiedEvidence, evidenceCandidates, credentials, portfolioArtifacts, projects, opportunities, arcadeSignals, teamExperience, marketHistory, enterpriseExperience] = await Promise.all([
+  const [verifiedEvidence, evidenceCandidates, credentials, portfolioArtifacts, projects, opportunities, arcadeSignals, teamExperience, marketHistory, enterpriseExperience, simulationActivity] = await Promise.all([
     query("SELECT * FROM prepare_prove_evidence WHERE organization_id=$1 AND user_id=$2 AND status='REVIEWED' ORDER BY source_occurred_at DESC NULLS LAST, created_at DESC LIMIT 100", [organizationId, learnerUserId]).then((r) => r.rows).catch(() => []),
     query("SELECT * FROM prepare_prove_evidence WHERE organization_id=$1 AND user_id=$2 AND status='REVIEWABLE' ORDER BY created_at DESC LIMIT 50", [organizationId, learnerUserId]).then((r) => r.rows).catch(() => []),
     query(`SELECT lc.*, cd.name, cd.slug, cd.issuing_authority, cd.career_id
@@ -602,6 +634,9 @@ export async function loadPassportSources(actor: Actor, learnerUserId: string): 
     query(`SELECT r.*, e.name AS enterprise_name, e.lifecycle_status
       FROM student_enterprise_roles r JOIN student_enterprises e ON e.enterprise_id=r.enterprise_id AND e.organization_id=r.organization_id AND e.tenant_id=r.tenant_id
       WHERE r.organization_id=$1 AND r.tenant_id=$2 AND r.user_id=$3 AND r.status='ACTIVE' ORDER BY r.granted_at DESC LIMIT 50`, [organizationId, tenantId, learnerUserId]).then((r) => r.rows).catch(() => []),
+    query(`SELECT session_id, simulation_id, district_id, facility_id, simulation_type, team_session_ref, completion_result, completed_at
+      FROM metaverse_simulation_sessions
+      WHERE organization_id=$1 AND tenant_id=$2 AND learner_user_id=$3 AND status='COMPLETED' ORDER BY completed_at DESC LIMIT 50`, [organizationId, tenantId, learnerUserId]).then((r) => r.rows).catch(() => []),
   ]);
   return {
     verifiedEvidence,
@@ -614,6 +649,7 @@ export async function loadPassportSources(actor: Actor, learnerUserId: string): 
     teamExperience,
     marketHistory,
     enterpriseExperience,
+    simulationActivity,
     missions: [],
     careerProgress: [],
     programCompletions: [],

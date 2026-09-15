@@ -429,6 +429,71 @@
   font-size: 0.86rem;
 }
 
+/* MET-13 — simulation shell */
+.met-simulation__steps {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.met-simulation__step {
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.55);
+  border-left: 3px solid rgba(180, 215, 255, 0.35);
+}
+
+.met-simulation__step--done {
+  border-left-color: rgba(74, 222, 128, 0.85);
+}
+
+.met-simulation__step-optional {
+  color: rgba(226, 232, 240, 0.6);
+  font-size: 0.82rem;
+}
+
+.met-simulation__task textarea {
+  width: 100%;
+  margin: 6px 0;
+  background: rgba(6, 18, 34, 0.6);
+  color: inherit;
+  border: 1px solid rgba(180, 215, 255, 0.24);
+  border-radius: 6px;
+  padding: 8px;
+}
+
+.met-simulation__hint {
+  color: rgba(226, 232, 240, 0.62);
+  font-size: 0.82rem;
+}
+
+.met-simulation__error {
+  color: rgb(252, 165, 165);
+}
+
+.met-simulation__evidence-list {
+  padding-left: 18px;
+}
+
+.met-simulation__team input {
+  background: rgba(6, 18, 34, 0.6);
+  color: inherit;
+  border: 1px solid rgba(180, 215, 255, 0.24);
+  border-radius: 6px;
+  padding: 6px 8px;
+}
+
+.met-simulation__accessible-alt {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(180, 215, 255, 0.18);
+  font-size: 0.86rem;
+  color: rgba(226, 232, 240, 0.78);
+}
+
 .met-missions {
   position: absolute;
   z-index: 16;

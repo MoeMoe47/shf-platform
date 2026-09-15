@@ -354,6 +354,29 @@ export function projectPassportFromSources(input: {
     }));
   }
 
+  for (const row of input.sources.enterpriseExperience || []) {
+    // MET-12 — Membership/role alone is never VERIFIED_SKILL (build brief
+    // §Phase F: "Membership alone must NOT become verified skill"). This
+    // is a source-confirmed participation record only; actual skill
+    // verification, if any, flows through the VERIFIED_EVIDENCE loop above
+    // from evidence the Opportunity Exchange or Studio project produced.
+    const enterpriseRoleId = String(row.enterprise_role_id || "");
+    if (!enterpriseRoleId) continue;
+    claims.push(buildClaim({
+      learnerUserId: input.learnerUserId,
+      organizationId: input.organizationId,
+      claimType: "ENTERPRISE_EXPERIENCE",
+      title: String(row.enterprise_name || row.name || "Student Enterprise participation"),
+      summary: "Source-backed Student Enterprise role; educational/simulated, not employment, and not verified skill by itself.",
+      sourceType: "STUDENT_ENTERPRISE_ROLE",
+      sourceRef: enterpriseRoleId,
+      sourceAuthority: "STUDENT_ENTERPRISE",
+      verificationLevel: row.lifecycle_status === "ACTIVE" ? "SOURCE_CONFIRMED" : "ACTIVITY_COMPLETED",
+      issuedAt: row.granted_at,
+      metadata: { enterpriseId: row.enterprise_id || null, enterpriseRole: row.enterprise_role || null, lifecycleStatus: row.lifecycle_status || null, notEmploymentNotVerifiedSkill: true },
+    }));
+  }
+
   for (const row of input.sources.marketHistory || []) {
     const orderId = String(row.order_id || row.orderId || "");
     if (!orderId || String(row.status || "").toUpperCase() !== "FULFILLED") continue;
@@ -558,7 +581,7 @@ function buildCapabilityGraph(learnerUserId: string, claims: PassportClaim[]) {
 export async function loadPassportSources(actor: Actor, learnerUserId: string): Promise<PassportProjectionSources> {
   const organizationId = actorOrgId(actor);
   const tenantId = `tenant:${organizationId}`;
-  const [verifiedEvidence, evidenceCandidates, credentials, portfolioArtifacts, projects, opportunities, arcadeSignals, teamExperience, marketHistory] = await Promise.all([
+  const [verifiedEvidence, evidenceCandidates, credentials, portfolioArtifacts, projects, opportunities, arcadeSignals, teamExperience, marketHistory, enterpriseExperience] = await Promise.all([
     query("SELECT * FROM prepare_prove_evidence WHERE organization_id=$1 AND user_id=$2 AND status='REVIEWED' ORDER BY source_occurred_at DESC NULLS LAST, created_at DESC LIMIT 100", [organizationId, learnerUserId]).then((r) => r.rows).catch(() => []),
     query("SELECT * FROM prepare_prove_evidence WHERE organization_id=$1 AND user_id=$2 AND status='REVIEWABLE' ORDER BY created_at DESC LIMIT 50", [organizationId, learnerUserId]).then((r) => r.rows).catch(() => []),
     query(`SELECT lc.*, cd.name, cd.slug, cd.issuing_authority, cd.career_id
@@ -576,6 +599,9 @@ export async function loadPassportSources(actor: Actor, learnerUserId: string): 
       FROM studio_team_members m JOIN studio_teams t ON t.studio_team_id=m.studio_team_id AND t.organization_id=m.organization_id
       WHERE m.organization_id=$1 AND m.tenant_id=$2 AND m.user_id=$3 ORDER BY m.created_at DESC LIMIT 50`, [organizationId, tenantId, learnerUserId]).then((r) => r.rows).catch(() => []),
     query("SELECT * FROM market_orders WHERE organization_id=$1 AND (buyer_user_id=$2 OR seller_ref=$2) ORDER BY updated_at DESC LIMIT 50", [organizationId, learnerUserId]).then((r) => r.rows).catch(() => []),
+    query(`SELECT r.*, e.name AS enterprise_name, e.lifecycle_status
+      FROM student_enterprise_roles r JOIN student_enterprises e ON e.enterprise_id=r.enterprise_id AND e.organization_id=r.organization_id AND e.tenant_id=r.tenant_id
+      WHERE r.organization_id=$1 AND r.tenant_id=$2 AND r.user_id=$3 AND r.status='ACTIVE' ORDER BY r.granted_at DESC LIMIT 50`, [organizationId, tenantId, learnerUserId]).then((r) => r.rows).catch(() => []),
   ]);
   return {
     verifiedEvidence,
@@ -587,6 +613,7 @@ export async function loadPassportSources(actor: Actor, learnerUserId: string): 
     arcadeSignals,
     teamExperience,
     marketHistory,
+    enterpriseExperience,
     missions: [],
     careerProgress: [],
     programCompletions: [],

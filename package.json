@@ -87,6 +87,7 @@
     "ioh:org-admin:validate": "node scripts/validate-ioh-org-admin-experience.mjs",
     "ioh:identity-gateway:validate": "node scripts/validate-ioh-session-identity-gateway.mjs",
     "ioh:final:validate": "node scripts/validate-ioh-final.mjs",
+    "metaverse:final:validate": "node scripts/validate-metaverse-final.mjs",
     "ax:runtime:test": "node --test tests/ax1AccessibilityRuntime.test.mjs",
     "ax:profile:test": "node --test tests/ax2AccessibilityProfile.test.mjs",
     "ax:content:test": "node --test tests/ax3AccessibilityContentEngine.test.mjs",

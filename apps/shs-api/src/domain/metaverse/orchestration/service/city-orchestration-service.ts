@@ -5,6 +5,7 @@ import { listOpportunitiesForActor } from "../../opportunities/service/opportuni
 import { listListings } from "../../market/service/listing-service.js";
 import { getBalance, listMyOrders } from "../../market/service/order-service.js";
 import { getMyPassport } from "../../passport/service/passport-projection-service.js";
+import { listMyEnterprises } from "../../enterprise/service/enterprise-service.js";
 import type {
   BuildingPreview,
   CityBriefingItem,
@@ -33,6 +34,7 @@ export type CityOrchestrationSources = {
   marketBalance: any | null;
   passport: any | null;
   cityPresenceCounts?: Array<{ district_id?: string; districtId?: string; facility_id?: string; facilityId?: string; participant_count?: number; count?: number }>;
+  enterprises?: any[];
 };
 
 export const CITY_ORCHESTRATION_AUTHORITY_REUSE = {
@@ -52,6 +54,7 @@ export const CITY_ORCHESTRATION_AUTHORITY_REUSE = {
   registry: "apps/shs-api/src/domain/metaverse/registry/city-registry.ts",
   presence: "apps/shs-api/src/domain/metaverse/communication/runtime/presence-service.ts",
   notifications: "apps/shs-api/src/domain/notifications (NCA), not duplicated here",
+  student_enterprise: "apps/shs-api/src/domain/metaverse/enterprise/service/enterprise-service.js (MET-12)",
 } as const;
 
 export class CityOrchestrationError extends Error {
@@ -281,6 +284,27 @@ export function deriveGuidedNextAction(sources: CityOrchestrationSources): Guide
   });
 }
 
+// MET-12 — pure mapping, independently unit-testable without a database.
+function enterpriseNextActionType(lifecycleStatus: string): string {
+  switch (lifecycleStatus) {
+    case "DRAFT": return "COMPLETE_ENTERPRISE_SETUP";
+    case "PENDING_APPROVAL": return "SUBMIT_ENTERPRISE_FOR_APPROVAL";
+    case "ACTIVE": return "CONTINUE_ENTERPRISE_PROJECT";
+    case "PAUSED": return "REVIEW_ENTERPRISE_OPPORTUNITY";
+    default: return lifecycleStatus;
+  }
+}
+function enterpriseBriefingSummary(lifecycleStatus: string): string {
+  switch (lifecycleStatus) {
+    case "DRAFT": return "Finish setting up this Student Enterprise before submitting it for approval.";
+    case "PENDING_APPROVAL": return "Awaiting instructor/program/admin review.";
+    case "ACTIVE": return "Active Student Enterprise — educational/simulated, not a legal business.";
+    case "PAUSED": return "Paused; resume when ready to continue.";
+    case "SUSPENDED": return "Suspended by review authority.";
+    default: return "Student Enterprise activity.";
+  }
+}
+
 export function buildDailyBriefing(sources: CityOrchestrationSources, generatedAt: string): DailyCityBriefing {
   const requiredMissions = (sources.missions || []).filter(missionRequired).slice(0, 5).map((mission) => item({
     id: `today:${mission.missionProjectionId}`,
@@ -330,6 +354,17 @@ export function buildDailyBriefing(sources: CityOrchestrationSources, generatedA
       source_type: "MET-9_STUDENT_MARKET",
       source_ref: order.orderId,
       status: order.status,
+    })),
+    // MET-12 — enterprise items are informational briefing entries only;
+    // they never become learner_next_action and cannot outrank a required
+    // mission in the `today` section above (build brief §Phase H).
+    ...(sources.enterprises || []).slice(0, 4).map((enterprise: any) => item({
+      id: `economy:enterprise:${enterprise.enterpriseId}`,
+      title: enterprise.name,
+      summary: enterpriseBriefingSummary(enterprise.lifecycleStatus),
+      source_type: "MET-12_STUDENT_ENTERPRISE",
+      source_ref: enterprise.enterpriseId,
+      status: enterpriseNextActionType(enterprise.lifecycleStatus),
     })),
   ];
   const progress = (sources.passport?.claims || []).slice(0, 5).map((claim: any) => item({
@@ -547,15 +582,18 @@ export function buildCityOrchestrationProjection(actor: Actor, sources: CityOrch
 
 export async function loadCityOrchestrationSources(actor: Actor): Promise<CityOrchestrationSources> {
   assertScope(actor);
-  const [missions, opportunities, marketListings, marketOrders, marketBalance, passport] = await Promise.all([
+  const [missions, opportunities, marketListings, marketOrders, marketBalance, passport, enterprises] = await Promise.all([
     listMissionsForActor(actor).catch(() => []),
     listOpportunitiesForActor(actor).catch(() => []),
     listListings(actor).catch(() => []),
     listMyOrders(actor).catch(() => []),
     getBalance(actor).catch(() => null),
     getMyPassport(actor).catch(() => null),
+    // MET-12 — best-effort; city orchestration must not fail if the
+    // enterprise domain is unavailable (mirrors every other source here).
+    listMyEnterprises(actor).catch(() => []),
   ]);
-  return { missions, opportunities, marketListings, marketOrders, marketBalance, passport };
+  return { missions, opportunities, marketListings, marketOrders, marketBalance, passport, enterprises };
 }
 
 export async function getCityOrchestration(actor: Actor, now: Date = new Date()) {

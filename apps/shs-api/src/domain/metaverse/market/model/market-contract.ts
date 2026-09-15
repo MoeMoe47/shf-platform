@@ -4,7 +4,7 @@
 // workflow. Treasury owns SHF Credit balances, transfer execution, refund
 // settlement and canonical financial history.
 
-export const MARKET_SELLER_TYPES = ["STUDENT", "TEAM", "PROGRAM", "ORGANIZATION", "SYSTEM"] as const;
+export const MARKET_SELLER_TYPES = ["STUDENT", "TEAM", "PROGRAM", "ORGANIZATION", "SYSTEM", "STUDENT_ENTERPRISE"] as const;
 export type MarketSellerType = typeof MARKET_SELLER_TYPES[number];
 
 export const MARKET_LISTING_TYPES = [

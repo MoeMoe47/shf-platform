@@ -19,6 +19,7 @@ import MetaverseCityEvents from "@/components/metaverse/MetaverseCityEvents.jsx"
 import MetaverseFastTravel from "@/components/metaverse/MetaverseFastTravel.jsx";
 import MetaverseMiniMap from "@/components/metaverse/MetaverseMiniMap.jsx";
 import MetaverseBuildingPreview from "@/components/metaverse/MetaverseBuildingPreview.jsx";
+import MetaverseEnterpriseHub from "@/components/metaverse/enterprise/MetaverseEnterpriseHub.jsx";
 import {
   METAVERSE_ACTIVITY_PLACEHOLDERS,
   METAVERSE_DISTRICTS,
@@ -49,6 +50,7 @@ import {
 import { listMissions, enterMission as enterMissionApi } from "@/system/metaverse/metaverseMissionClient.js";
 import { listOpportunities } from "@/system/metaverse/metaverseOpportunityClient.js";
 import { getMarketBalance, listMarketListings, listMarketOrders } from "@/system/metaverse/metaverseMarketClient.js";
+import { listMyEnterprises, listMyStudioTeams } from "@/system/metaverse/metaverseEnterpriseClient.js";
 import { getMyWorkPassport } from "@/system/metaverse/metaversePassportClient.js";
 import { fastTravel as fastTravelApi, getCityOrchestration } from "@/system/metaverse/metaverseOrchestrationClient.js";
 import { resolveDevUserId } from "@/lib/liveLearning/api.js";
@@ -60,6 +62,7 @@ const ROOM_PARTICIPANTS_POLL_MS = 10000;
 const MISSIONS_POLL_MS = 30000;
 const OPPORTUNITIES_POLL_MS = 30000;
 const MARKET_POLL_MS = 30000;
+const ENTERPRISE_POLL_MS = 30000;
 const PASSPORT_POLL_MS = 45000;
 const ORCHESTRATION_POLL_MS = 30000;
 
@@ -110,6 +113,11 @@ export default function MetaverseCityPage() {
   const [marketLoading, setMarketLoading] = useState(true);
   const [marketError, setMarketError] = useState("");
   const [marketOpen, setMarketOpen] = useState(false);
+  const [myEnterprises, setMyEnterprises] = useState([]);
+  const [myStudioTeams, setMyStudioTeams] = useState([]);
+  const [enterprisesLoading, setEnterprisesLoading] = useState(true);
+  const [enterprisesError, setEnterprisesError] = useState("");
+  const [enterpriseOpen, setEnterpriseOpen] = useState(false);
   const [passport, setPassport] = useState(null);
   const [passportLoading, setPassportLoading] = useState(true);
   const [passportError, setPassportError] = useState("");
@@ -202,6 +210,32 @@ export default function MetaverseCityPage() {
       });
     poll();
     const interval = setInterval(poll, MARKET_POLL_MS);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, []);
+
+  const refreshEnterprises = async () => {
+    const [enterprises, teams] = await Promise.all([listMyEnterprises(), listMyStudioTeams()]);
+    setMyEnterprises(enterprises || []);
+    setMyStudioTeams(teams || []);
+  };
+
+  useEffect(() => {
+    let cancelled = false;
+    const poll = () => refreshEnterprises()
+      .then(() => {
+        if (!cancelled) setEnterprisesError("");
+      })
+      .catch((error) => {
+        if (!cancelled) setEnterprisesError(error?.message || "Student Enterprise is temporarily unavailable.");
+      })
+      .finally(() => {
+        if (!cancelled) setEnterprisesLoading(false);
+      });
+    poll();
+    const interval = setInterval(poll, ENTERPRISE_POLL_MS);
     return () => {
       cancelled = true;
       clearInterval(interval);
@@ -849,6 +883,22 @@ export default function MetaverseCityPage() {
         loading={passportLoading}
         error={passportError}
         onClose={() => setPassportOpen(false)}
+      />
+
+      <button type="button" className="met-panel-toggle met-panel-toggle--enterprise" onClick={() => setEnterpriseOpen((value) => !value)} aria-expanded={enterpriseOpen}>
+        Student Enterprise {myEnterprises.length ? `(${myEnterprises.length})` : ""}
+      </button>
+
+      <MetaverseEnterpriseHub
+        open={enterpriseOpen}
+        enterprises={myEnterprises}
+        myTeams={myStudioTeams}
+        opportunities={opportunities}
+        loading={enterprisesLoading}
+        error={enterprisesError}
+        canReview={false}
+        onRefresh={refreshEnterprises}
+        onClose={() => setEnterpriseOpen(false)}
       />
 
       <footer className="met-footer">

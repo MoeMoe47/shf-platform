@@ -3,6 +3,7 @@ import { ReportR1Service } from "./report-r1-service.js";
 import { ReportTemplateRegistry } from "./report-template-registry.js";
 import { studioOasAdapters } from "./studio-oas-report-adapters.js";
 import { foundationCurriculumCareerAdapter } from "./foundation-curriculum-career-report-adapter.js";
+import { metaverseCityReportAdapter } from "./metaverse-city-report-adapter.js";
 import { bosAiGovernanceAdapter } from "./bos-ai-governance-report-adapter.js";
 import { registrySolutionsAdapters } from "./registry-solutions-report-adapter.js";
 import { applyProgramReportProfile, programReportProfileRegistry, type ProgramReportProfile } from "./program-report-profile-registry.js";
@@ -22,7 +23,7 @@ export class ProductReportService {
     private artifactService = new ReportArtifactService(),
     private renderService = new ReportR1Service(),
     private registry = new ReportTemplateRegistry(),
-    private adapters = [...studioOasAdapters, foundationCurriculumCareerAdapter, bosAiGovernanceAdapter, ...registrySolutionsAdapters, legalReportAdapter],
+    private adapters = [...studioOasAdapters, foundationCurriculumCareerAdapter, metaverseCityReportAdapter, bosAiGovernanceAdapter, ...registrySolutionsAdapters, legalReportAdapter],
     private profileRegistry = programReportProfileRegistry,
   ) {}
 

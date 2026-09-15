@@ -91,6 +91,7 @@ import { registerOpportunityExchangeRoutes } from "../domain/metaverse/opportuni
 import { registerMetaverseMarketRoutes } from "../domain/metaverse/market/api/routes.js";
 import { registerMetaversePassportRoutes } from "../domain/metaverse/passport/api/routes.js";
 import { registerMetaverseOrchestrationRoutes } from "../domain/metaverse/orchestration/api/routes.js";
+import { registerStudentEnterpriseRoutes } from "../domain/metaverse/enterprise/api/routes.js";
 import { requirePermission } from "../auth/permission-guard.js";
 import { SHS_SECURITY_PERMISSIONS } from "../auth/security-permissions.js";
 import { evaluateBreakGlassAttestation } from "../security/break-glass.js";
@@ -411,6 +412,7 @@ app.post("/auth/login", async (req: any, res: any) => {
   registerMetaverseMarketRoutes(app);
   registerMetaversePassportRoutes(app);
   registerMetaverseOrchestrationRoutes(app);
+  registerStudentEnterpriseRoutes(app);
   registerServiceAgreementRoutes(app);
   registerOrganizationOnboardingRoutes(app);
   registerFundingGrantRoutes(app);

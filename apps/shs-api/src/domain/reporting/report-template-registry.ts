@@ -121,6 +121,27 @@ const FOUNDATION_DEFINITIONS: ProductReportDefinition[] = [
   metadata: { product: "Silicon Heartland Foundation", reportDomain: prefix, foundation: "U3_FOUNDATION_CURRICULUM_CAREER" },
 }));
 
+const METAVERSE_DEFINITIONS: ProductReportDefinition[] = [
+  ["metaverse-city-participation", "METAVERSE_CITY_PARTICIPATION", "City / Job / Civic / Economy Participation Report", "Metaverse"],
+].map(([reportFamily, reportType, displayName, prefix]: [string, string, string, string]) => ({
+  productKey: "foundation",
+  reportFamily,
+  displayName,
+  reportType,
+  templateId: `foundation-${reportFamily}.v1`,
+  templateKey: `foundation-${reportFamily}`,
+  templateVersion: 1,
+  supportedFormats: [REPORT_FORMATS.JSON, REPORT_FORMATS.HTML, REPORT_FORMATS.PDF],
+  rendererIdentifier: "shu-universal-r1",
+  projectionAdapterKey: "metaverse-city-participation-reporting",
+  brandingKey: "foundation",
+  filenamePrefix: prefix,
+  classificationBehavior: { source: "report_artifact", markRenderedOutput: true },
+  publicEligibilityMode: "PUBLIC_DISCLOSURE_SEPARATE",
+  status: "ACTIVE",
+  metadata: { product: "Silicon Heartland Foundation", reportDomain: prefix, foundation: "MET-12_SYSTEM_WIDE_METAVERSE_ACCEPTANCE" },
+}));
+
 const BOS_DEFINITIONS: ProductReportDefinition[] = [
   ["operating-review", "BOS_OPERATING_REVIEW", "Operating Review"],
   ["workflow-performance", "BOS_WORKFLOW_PERFORMANCE", "Workflow / Operational Performance Report"],
@@ -193,7 +214,7 @@ const LEGAL_DEFINITIONS: ProductReportDefinition[] = [
   metadata: { product: "Legal Authority", foundation: "POST_LOCK_LEGAL_RUNTIME" },
 }));
 
-const DEFINITIONS: ProductReportDefinition[] = [...CIVICSURE_DEFINITIONS, ...PRODUCT_DEFINITIONS, ...FOUNDATION_DEFINITIONS, ...BOS_DEFINITIONS, ...U5_DEFINITIONS, ...LEGAL_DEFINITIONS];
+const DEFINITIONS: ProductReportDefinition[] = [...CIVICSURE_DEFINITIONS, ...PRODUCT_DEFINITIONS, ...FOUNDATION_DEFINITIONS, ...METAVERSE_DEFINITIONS, ...BOS_DEFINITIONS, ...U5_DEFINITIONS, ...LEGAL_DEFINITIONS];
 
 export class ReportTemplateRegistry {
   constructor(private repo: any = null) {}

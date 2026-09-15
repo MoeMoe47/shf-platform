@@ -9,6 +9,7 @@ import { StudentOpportunityBid, OpportunityCompensationType } from "../model/opp
 import { OpportunityExchangeError, OpportunityNotFoundError, getOpportunityByIdOrThrow, getEligibilityForActor, assertCanManageOpportunity } from "./opportunity-service.js";
 import { getEvidenceForActor } from "../../../verified-evidence/service/verified-evidence-service.js";
 import { isAdminTier } from "../../../shared/audience-eligibility.js";
+import { assertActiveEnterpriseForBidding, enterpriseRepo } from "../../enterprise/service/enterprise-policy.js";
 
 const repo = new OpportunityExchangeRepo();
 
@@ -100,6 +101,22 @@ export async function submitBid(actor: any, opportunityId: string, input: Submit
       throw new OpportunityExchangeError("TEAM_TOO_LARGE", `This opportunity allows at most ${opportunity.teamSizeMax} team members.`, 400);
     }
     teamId = requestedTeamId;
+
+    if (opportunity.sourceType === "STUDENT_ENTERPRISE" && opportunity.sourceRef) {
+      // MET-12 — an enterprise may bid only through its own canonical team,
+      // only while ACTIVE, and the bidder must be a real member of that
+      // team (build brief §Phase C). This never creates a separate
+      // enterprise bid record — it is still a plain TEAM bid.
+      let enterprise;
+      try {
+        enterprise = await assertActiveEnterpriseForBidding(opportunity.sourceRef, s.organizationId, s.tenantId, s.userId);
+      } catch (error: any) {
+        throw new OpportunityExchangeError(error?.code || "ENTERPRISE_NOT_ELIGIBLE", error?.message || "Enterprise is not eligible to bid.", error?.statusCode || 403);
+      }
+      if (enterprise.studioTeamId !== teamId) {
+        throw new OpportunityExchangeError("ENTERPRISE_TEAM_MISMATCH", "The bidding team must be this enterprise's own canonical team.", 400);
+      }
+    }
   }
 
   const existing = studentId
@@ -115,8 +132,9 @@ export async function submitBid(actor: any, opportunityId: string, input: Submit
   if (proposalSummary.length > 4000) throw new OpportunityExchangeError("PROPOSAL_SUMMARY_TOO_LONG", "proposalSummary exceeds maximum length.", 400);
 
   const now = new Date().toISOString();
+  let created;
   try {
-    return await repo.createBid({
+    created = await repo.createBid({
       bidId: `student_opportunity_bid_${randomUUID()}`,
       opportunityId,
       organizationId: s.organizationId,
@@ -144,6 +162,17 @@ export async function submitBid(actor: any, opportunityId: string, input: Submit
     }
     throw error;
   }
+  if (opportunity.sourceType === "STUDENT_ENTERPRISE" && opportunity.sourceRef) {
+    await enterpriseRepo.recordHistory({
+      enterpriseId: opportunity.sourceRef,
+      organizationId: s.organizationId,
+      tenantId: s.tenantId,
+      eventType: "OPPORTUNITY_BID_SUBMITTED",
+      actorUserId: s.userId,
+      detail: { opportunityId, bidId: created.bidId },
+    }).catch(() => {});
+  }
+  return created;
 }
 
 async function assertBidderOrManager(actor: any, bid: StudentOpportunityBid) {

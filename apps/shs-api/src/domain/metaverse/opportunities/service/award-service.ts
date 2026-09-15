@@ -9,6 +9,7 @@ import { StudentOpportunityAward } from "../model/opportunity-contract.js";
 import { OpportunityExchangeError, getOpportunityByIdOrThrow, assertCanManageOpportunity } from "./opportunity-service.js";
 import { tryProjectScheduleProjection } from "./opportunity-project-adapter.js";
 import { IntegrationOutboxRepo } from "../../../trusted-reporting/outbox-repo.js";
+import { enterpriseRepo } from "../../enterprise/service/enterprise-policy.js";
 
 const repo = new OpportunityExchangeRepo();
 const outbox = new IntegrationOutboxRepo();
@@ -95,6 +96,19 @@ export async function acceptBid(actor: any, bidId: string): Promise<StudentOppor
     destination: "shs-metaverse-opportunity-exchange",
     payload: { opportunity_id: opportunity.opportunityId, bid_id: bidId, award_id: awardId, student_user_id: bid.studentId, team_id: bid.teamId },
   });
+
+  if (opportunity.sourceType === "STUDENT_ENTERPRISE" && opportunity.sourceRef) {
+    // MET-12 — best-effort enterprise history only; the Award record
+    // itself remains MET-8's durable execution authority.
+    await enterpriseRepo.recordHistory({
+      enterpriseId: opportunity.sourceRef,
+      organizationId: s.organizationId,
+      tenantId: s.tenantId,
+      eventType: "OPPORTUNITY_AWARDED",
+      actorUserId: s.userId,
+      detail: { opportunityId: opportunity.opportunityId, awardId },
+    }).catch(() => {});
+  }
 
   return award;
 }

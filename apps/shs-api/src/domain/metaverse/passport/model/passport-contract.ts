@@ -18,6 +18,9 @@ export const PASSPORT_CLAIM_TYPES = [
   "TEAM_EXPERIENCE",
   "RELIABILITY_FACT",
   "PROGRAM_COMPLETION",
+  // MET-12 — projection only; membership/roles alone are never
+  // VERIFIED_SKILL (see projectPassportFromSources enterprise loop).
+  "ENTERPRISE_EXPERIENCE",
 ] as const;
 export type PassportClaimType = typeof PASSPORT_CLAIM_TYPES[number];
 
@@ -44,6 +47,7 @@ export const PASSPORT_SOURCE_AUTHORITIES = [
   "PROGRAM",
   "STUDIO_TEAM",
   "MARKET",
+  "STUDENT_ENTERPRISE",
 ] as const;
 export type PassportSourceAuthority = typeof PASSPORT_SOURCE_AUTHORITIES[number];
 
@@ -195,4 +199,5 @@ export interface PassportProjectionSources {
   teamExperience?: any[];
   marketHistory?: any[];
   programCompletions?: any[];
+  enterpriseExperience?: any[];
 }

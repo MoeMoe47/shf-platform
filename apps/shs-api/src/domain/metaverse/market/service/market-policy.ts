@@ -1,5 +1,6 @@
 import { query } from "../../../../db/client.js";
 import { MarketError } from "./market-errors.js";
+import { assertAuthorizedEnterpriseActor, EnterpriseError } from "../../enterprise/service/enterprise-policy.js";
 
 export function scope(actor: any) {
   const userId = String(actor?.user_id || actor?.id || "");
@@ -52,7 +53,22 @@ export async function deriveSeller(actor: any, input: any) {
     if (!canAdminMarket(actor)) throw new MarketError("UNAUTHORIZED_SELLER", "Organization/System seller authority is required.", 403);
     return { sellerType: sellerType as "ORGANIZATION" | "SYSTEM", sellerRef: s.organizationId };
   }
-  if (sellerType === "STUDENT_ENTERPRISE") throw new MarketError("SELLER_TYPE_P1", "Student enterprise seller authority is P1 for MET-12.", 400);
+  if (sellerType === "STUDENT_ENTERPRISE") {
+    // MET-12 — replaces the prior fail-closed guard now that enterprise
+    // authority exists. deriveSeller never trusts a client-supplied
+    // enterprise state: assertAuthorizedEnterpriseActor re-reads the
+    // durable record and requires ACTIVE lifecycle plus an authorized
+    // enterprise role held by the acting user (build brief §Phase B).
+    const enterpriseId = String(input?.enterpriseId || "");
+    if (!enterpriseId) throw new MarketError("ENTERPRISE_REQUIRED", "Student enterprise seller requires an enterpriseId.", 400);
+    try {
+      await assertAuthorizedEnterpriseActor(enterpriseId, s.organizationId, s.tenantId, s.userId);
+    } catch (error) {
+      if (error instanceof EnterpriseError) throw new MarketError(error.code, error.message, error.statusCode);
+      throw error;
+    }
+    return { sellerType: "STUDENT_ENTERPRISE" as const, sellerRef: enterpriseId };
+  }
   throw new MarketError("INVALID_SELLER_TYPE", "Seller type is not supported.", 400);
 }
 

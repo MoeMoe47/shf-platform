@@ -33,9 +33,13 @@ test("MET-9 listing contract enforces allowed types, bounded sellers, approval, 
   for (const type of ["DIGITAL_PRODUCT", "SERVICE", "PROJECT_RESOURCE", "PROGRAM_RESOURCE", "ARCADE_RESOURCE", "EVENT_ITEM", "COSMETIC_ITEM", "CITY_COLLECTIBLE", "EDUCATIONAL_RESOURCE", "SIMULATED_GOOD"]) {
     assert.match(migration, new RegExp(type));
   }
-  assert.doesNotMatch(migration, /STUDENT_ENTERPRISE'/);
+  // MET-12 replaced the prior STUDENT_ENTERPRISE fail-closed guard (see
+  // migrations/146_student_enterprises.sql and
+  // tests/met-12-student-enterprise.test.ts) now that enterprise authority
+  // exists; deriveSeller still requires an ACTIVE enterprise and an
+  // authorized enterprise role before returning this seller type.
   assert.match(marketPolicy, /STUDENT_ENTERPRISE/);
-  assert.match(marketPolicy, /SELLER_TYPE_P1/);
+  assert.match(marketPolicy, /assertAuthorizedEnterpriseActor/);
   assert.match(listingService, /PENDING_REVIEW/);
   assert.match(listingService, /PROHIBITED_MARKET_GOOD/);
   assert.match(listingService, /quantityMode/);

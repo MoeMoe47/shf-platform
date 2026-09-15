@@ -4,6 +4,7 @@ import { MarketRepo } from "../repo/market-repo.js";
 import { MARKET_CURRENCY_TYPES, MARKET_FULFILLMENT_TYPES, MARKET_LISTING_TYPES, MARKET_PRICE_TYPES, MARKET_QUANTITY_MODES, MARKET_VISIBILITIES, isProhibitedInstitutionalGood } from "../model/market-contract.js";
 import { MarketError } from "./market-errors.js";
 import { canAdminMarket, deriveSeller, scope } from "./market-policy.js";
+import { enterpriseRepo } from "../../enterprise/service/enterprise-policy.js";
 
 const repo = new MarketRepo();
 const outbox = new IntegrationOutboxRepo();
@@ -75,6 +76,19 @@ export async function createListing(actor: any, input: any) {
     destination: "shs-metaverse-market",
     payload: { listing_id: listing.listingId, seller_user_id: seller.sellerType === "STUDENT" ? seller.sellerRef : null, created_by_user_id: s.userId },
   });
+  if (seller.sellerType === "STUDENT_ENTERPRISE") {
+    // MET-12 — best-effort enterprise history projection only; never
+    // blocks or reverses a valid Market listing (mirrors
+    // opportunity-project-adapter.ts's "never throws" convenience pattern).
+    await enterpriseRepo.recordHistory({
+      enterpriseId: seller.sellerRef,
+      organizationId: s.organizationId,
+      tenantId: s.tenantId,
+      eventType: "MARKET_LISTING_PUBLISHED",
+      actorUserId: s.userId,
+      detail: { listingId: listing.listingId, title },
+    }).catch(() => {});
+  }
   return listing;
 }
 

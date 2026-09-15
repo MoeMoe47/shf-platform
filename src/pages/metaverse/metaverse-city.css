@@ -775,6 +775,107 @@
   margin-top: 12px;
 }
 
+/* MET-12 — Student Enterprise panel; mirrors .met-market layout on the
+   opposite side of the viewport so both can be open without overlap. */
+.met-panel-toggle--enterprise {
+  position: absolute;
+  z-index: 17;
+  right: 18px;
+  bottom: 18px;
+  min-height: 34px;
+  border-radius: 6px;
+  border: 1px solid rgba(155, 183, 255, 0.28);
+  background: rgba(6, 16, 31, 0.92);
+  color: #f8fafc;
+  font: inherit;
+  padding: 6px 12px;
+}
+
+.met-enterprise {
+  position: absolute;
+  z-index: 17;
+  right: 18px;
+  bottom: 18px;
+  width: min(460px, calc(100vw - 36px));
+  max-height: min(78vh, 760px);
+  overflow: auto;
+  padding: 14px;
+  border-radius: 8px;
+  background: rgba(6, 16, 31, 0.92);
+  border: 1px solid rgba(155, 183, 255, 0.26);
+  backdrop-filter: blur(18px);
+  transform: translateY(calc(100% + 28px));
+  transition: transform 220ms ease;
+}
+
+.met-enterprise.is-open {
+  transform: translateY(0);
+}
+
+.met-enterprise__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.met-enterprise__boundary {
+  font-size: 0.85em;
+  opacity: 0.85;
+}
+
+.met-enterprise__status {
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 0.8em;
+  border: 1px solid rgba(155, 183, 255, 0.28);
+}
+
+.met-enterprise__meta,
+.met-enterprise__pill {
+  font-size: 0.85em;
+  opacity: 0.8;
+}
+
+.met-enterprise form label,
+.met-enterprise__form label {
+  display: block;
+  margin-top: 8px;
+}
+
+.met-enterprise button {
+  min-height: 34px;
+  border-radius: 6px;
+  border: 1px solid rgba(155, 183, 255, 0.28);
+  background: rgba(155, 183, 255, 0.16);
+  color: #f8fafc;
+  font: inherit;
+  padding: 6px 10px;
+  margin: 4px 6px 4px 0;
+}
+
+.met-enterprise button:disabled {
+  opacity: 0.55;
+}
+
+.met-enterprise__review-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0;
+}
+
+.met-enterprise__review-list button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin: 4px 0;
+}
+
+.met-enterprise__review-list button.is-selected {
+  border-color: rgba(155, 183, 255, 0.7);
+  background: rgba(155, 183, 255, 0.28);
+}
+
 .met-passport {
   position: absolute;
   z-index: 18;
@@ -1585,6 +1686,17 @@
   .met-opportunities,
   .met-market,
   .met-passport {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-height: 62vh;
+    border-radius: 8px 8px 0 0;
+  }
+
+  /* MET-12 — same mobile full-width convention as the panels above, kept
+     as its own rule so the existing shared selector list stays pinned. */
+  .met-enterprise {
     left: 0;
     right: 0;
     bottom: 0;

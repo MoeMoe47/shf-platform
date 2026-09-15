@@ -26,6 +26,7 @@ import { resolveMissionLinkForSponsor } from "./opportunity-mission-adapter.js";
 import { isAdminTier, isStudentOnly, EligibilityActor } from "../../../shared/audience-eligibility.js";
 import { EnrollmentRepo } from "../../../enrollments/repo/enrollment-repo.js";
 import { getSiliconHeartlandCityRegistry } from "../../registry/city-registry.js";
+import { getEnterpriseOrThrow } from "../../enterprise/service/enterprise-policy.js";
 
 const repo = new OpportunityExchangeRepo();
 const enrollmentRepo = new EnrollmentRepo();
@@ -133,10 +134,21 @@ async function validateSourceProvenance(input: CreateOpportunityInput, s: { orga
       if (!res.rows[0]) throw new OpportunityExchangeError("SOURCE_NOT_FOUND", "Referenced project not found in organization.", 400);
       return sourceRef;
     }
+    case "STUDENT_ENTERPRISE": {
+      // MET-12 — source_ref must be a real, ACTIVE enterprise in this
+      // organization, not an orphan string (build brief §Phase C: "must
+      // stop being orphan strings and become source-backed").
+      if (!sourceRef) throw new OpportunityExchangeError("SOURCE_REF_REQUIRED", "STUDENT_ENTERPRISE source requires a source_ref (an enterpriseId).", 400);
+      try {
+        await getEnterpriseOrThrow(sourceRef, s.organizationId, `tenant:${s.organizationId}`);
+      } catch {
+        throw new OpportunityExchangeError("SOURCE_NOT_FOUND", "Referenced Student Enterprise not found in organization.", 400);
+      }
+      return sourceRef;
+    }
     case "EVENT":
     case "CIVIC":
     case "COMMUNITY":
-    case "STUDENT_ENTERPRISE":
     case "ARCADE":
       if (!sourceRef) throw new OpportunityExchangeError("SOURCE_REF_REQUIRED", `${input.sourceType} source requires a source_ref.`, 400);
       return sourceRef;

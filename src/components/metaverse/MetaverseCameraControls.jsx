@@ -17,6 +17,9 @@ export default function MetaverseCameraControls({
   marketOpen,
   onToggleMarket,
   marketCount,
+  passportOpen,
+  onTogglePassport,
+  passportClaimCount,
 }) {
   return (
     <div className="met-controls" aria-label="Camera and navigation controls">
@@ -40,6 +43,11 @@ export default function MetaverseCameraControls({
       {onToggleMarket ? (
         <button type="button" onClick={onToggleMarket} aria-expanded={marketOpen}>
           Student Market{typeof marketCount === "number" ? ` (${marketCount})` : ""}
+        </button>
+      ) : null}
+      {onTogglePassport ? (
+        <button type="button" onClick={onTogglePassport} aria-expanded={passportOpen}>
+          Work Passport{typeof passportClaimCount === "number" ? ` (${passportClaimCount})` : ""}
         </button>
       ) : null}
     </div>

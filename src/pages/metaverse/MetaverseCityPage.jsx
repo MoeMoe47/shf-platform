@@ -11,6 +11,7 @@ import MetaverseChatTray from "@/components/metaverse/MetaverseChatTray.jsx";
 import MetaverseMissionList from "@/components/metaverse/MetaverseMissionList.jsx";
 import MetaverseOpportunityExchange from "@/components/metaverse/MetaverseOpportunityExchange.jsx";
 import MetaverseMarket from "@/components/metaverse/MetaverseMarket.jsx";
+import MetaverseWorkPassport from "@/components/metaverse/MetaverseWorkPassport.jsx";
 import {
   METAVERSE_ACTIVITY_PLACEHOLDERS,
   METAVERSE_DISTRICTS,
@@ -41,6 +42,7 @@ import {
 import { listMissions, enterMission as enterMissionApi } from "@/system/metaverse/metaverseMissionClient.js";
 import { listOpportunities } from "@/system/metaverse/metaverseOpportunityClient.js";
 import { getMarketBalance, listMarketListings, listMarketOrders } from "@/system/metaverse/metaverseMarketClient.js";
+import { getMyWorkPassport } from "@/system/metaverse/metaversePassportClient.js";
 import { resolveDevUserId } from "@/lib/liveLearning/api.js";
 import "./metaverse-city.css";
 
@@ -50,6 +52,7 @@ const ROOM_PARTICIPANTS_POLL_MS = 10000;
 const MISSIONS_POLL_MS = 30000;
 const OPPORTUNITIES_POLL_MS = 30000;
 const MARKET_POLL_MS = 30000;
+const PASSPORT_POLL_MS = 45000;
 
 const CAMERA_HOME = { x: 0, y: 0, zoom: 1 };
 
@@ -98,6 +101,10 @@ export default function MetaverseCityPage() {
   const [marketLoading, setMarketLoading] = useState(true);
   const [marketError, setMarketError] = useState("");
   const [marketOpen, setMarketOpen] = useState(false);
+  const [passport, setPassport] = useState(null);
+  const [passportLoading, setPassportLoading] = useState(true);
+  const [passportError, setPassportError] = useState("");
+  const [passportOpen, setPassportOpen] = useState(false);
   const presenceStatusRef = useRef(presenceStatus);
   const currentUserId = resolveDevUserId("learner");
 
@@ -114,6 +121,29 @@ export default function MetaverseCityPage() {
       .catch(() => {});
     return () => {
       cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    const poll = () => getMyWorkPassport()
+      .then((result) => {
+        if (cancelled) return;
+        setPassport(result);
+        setPassportError("");
+      })
+      .catch((error) => {
+        if (cancelled) return;
+        setPassportError(error?.message || "Work Passport is temporarily unavailable.");
+      })
+      .finally(() => {
+        if (!cancelled) setPassportLoading(false);
+      });
+    poll();
+    const interval = setInterval(poll, PASSPORT_POLL_MS);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
     };
   }, []);
 
@@ -613,6 +643,9 @@ export default function MetaverseCityPage() {
         marketOpen={marketOpen}
         onToggleMarket={() => setMarketOpen((value) => !value)}
         marketCount={marketListings.length}
+        passportOpen={passportOpen}
+        onTogglePassport={() => setPassportOpen((value) => !value)}
+        passportClaimCount={passport?.claims?.length || 0}
       />
 
       {level === "ACTIVITY_SIMULATION_VIEW" && selectedActivity && contextUnlock && canEnterMetaverseResource(contextUnlock) ? (
@@ -700,6 +733,14 @@ export default function MetaverseCityPage() {
         error={marketError}
         onRefresh={refreshMarket}
         onClose={() => setMarketOpen(false)}
+      />
+
+      <MetaverseWorkPassport
+        open={passportOpen}
+        passport={passport}
+        loading={passportLoading}
+        error={passportError}
+        onClose={() => setPassportOpen(false)}
       />
 
       <footer className="met-footer">

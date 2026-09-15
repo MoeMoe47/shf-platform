@@ -775,6 +775,163 @@
   margin-top: 12px;
 }
 
+.met-passport {
+  position: absolute;
+  z-index: 18;
+  left: 18px;
+  bottom: 18px;
+  width: min(520px, calc(100vw - 36px));
+  max-height: min(82vh, 780px);
+  overflow: auto;
+  padding: 14px;
+  border-radius: 8px;
+  background: rgba(7, 18, 30, 0.94);
+  border: 1px solid rgba(125, 211, 252, 0.28);
+  backdrop-filter: blur(18px);
+  transform: translateY(calc(100% + 28px));
+  transition: transform 220ms ease;
+}
+
+.met-passport.is-open {
+  transform: translateY(0);
+}
+
+.met-passport__header,
+.met-passport__claim-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.met-passport__header h2,
+.met-passport__section h3,
+.met-passport__graph h3,
+.met-passport__claim h4 {
+  margin: 0;
+  letter-spacing: 0;
+}
+
+.met-passport__header h2 {
+  font-size: 1.08rem;
+}
+
+.met-passport__eyebrow,
+.met-passport__claim-kind {
+  margin: 0 0 3px;
+  color: #7dd3fc;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.met-passport__status,
+.met-passport__boundary,
+.met-passport__claim p,
+.met-passport__tree span,
+.met-passport__facts span,
+.met-passport__facts small {
+  color: rgba(226, 232, 240, 0.82);
+  font-size: 0.84rem;
+}
+
+.met-passport__summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.met-passport__summary span,
+.met-passport__claim,
+.met-passport__facts li,
+.met-passport__tree li {
+  border: 1px solid rgba(125, 211, 252, 0.18);
+  border-radius: 6px;
+  padding: 9px;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.met-passport__summary strong {
+  display: block;
+  font-size: 1.1rem;
+}
+
+.met-passport__section,
+.met-passport__graph {
+  margin-top: 14px;
+}
+
+.met-passport__claims,
+.met-passport__facts,
+.met-passport__tree {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.met-passport__trust {
+  flex: 0 0 auto;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  border: 1px solid rgba(147, 197, 253, 0.4);
+  background: rgba(37, 99, 235, 0.22);
+}
+
+.met-passport__trust--evidence_candidate,
+.met-passport__trust--activity_completed,
+.met-passport__trust--unverified {
+  background: rgba(120, 53, 15, 0.35);
+  border-color: rgba(251, 191, 36, 0.42);
+}
+
+.met-passport button,
+.met-passport__source-button {
+  min-height: 34px;
+  border-radius: 6px;
+  border: 1px solid rgba(125, 211, 252, 0.28);
+  background: rgba(125, 211, 252, 0.14);
+  color: #f8fafc;
+  font: inherit;
+  padding: 6px 10px;
+}
+
+.met-passport__source {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 5px 10px;
+  margin: 8px 0 0;
+  font-size: 0.78rem;
+}
+
+.met-passport__source div {
+  display: contents;
+}
+
+.met-passport__source dt {
+  font-weight: 800;
+  color: rgba(226, 232, 240, 0.72);
+}
+
+.met-passport__graph-canvas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.met-passport__node {
+  border: 1px solid rgba(125, 211, 252, 0.22);
+  border-radius: 999px;
+  padding: 4px 8px;
+  background: rgba(8, 47, 73, 0.7);
+  font-size: 0.76rem;
+}
+
 .met-bid-form {
   display: grid;
   gap: 10px;
@@ -1250,7 +1407,8 @@
   .met-navigator,
   .met-missions,
   .met-opportunities,
-  .met-market {
+  .met-market,
+  .met-passport {
     left: 0;
     right: 0;
     bottom: 0;

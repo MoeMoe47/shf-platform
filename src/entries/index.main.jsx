@@ -23,6 +23,7 @@ import CivicSureApp from "@/pages/civicsure/CivicSureApp.jsx";
 // implementation this replaced is archived at
 // src/_archive/universe-legacy-pre-canonical-v1/.
 const UniverseApp = lazy(() => import("@/pages/universe-v1/UniverseApp.jsx"));
+const MetaverseCityPage = lazy(() => import("@/pages/metaverse/MetaverseCityPage.jsx"));
 
 function UniverseLoading() {
   return (
@@ -87,7 +88,11 @@ function App() {
     <RootProviders appScope="index">
       {civicSureRoute ? <CivicSureApp /> : routePath === "/operator/government-assurance" || claimMatch || verificationMatch || reconciliationMatch || sourceMatch || portfolioMatch || lineageMatch || monitoringMatch || assistantMatch || reportsMatch ? (
         <CivicSureShell><GovernmentAssurance initialView={routeView} initialClaimId={claimMatch?.[1] || null} initialVerificationId={verificationMatch?.[1] || null} initialReconciliationId={reconciliationMatch?.[1] || null} initialSourceId={sourceMatch?.[1] || null} initialPortfolio={portfolioMatch ? { kind: ({ programs: "program", providers: "provider", funding: "funding", audits: "audit" }[portfolioMatch[1]]), id: portfolioMatch[2] } : null} initialLineage={lineageMatch ? { kind: lineageMatch[1], id: lineageMatch[2] } : null} initialMonitoring={monitoringMatch ? { kind: monitoringMatch[0], id: monitoringMatch[1][1] } : null} initialPhase8B={assistantMatch ? "Assistant" : reportsMatch ? "Reports" : null} /></CivicSureShell>
-      ) : pathname === "/studio/templates" ? (
+      ) : routePath === "/metaverse" ? (
+        <Suspense fallback={<UniverseLoading />}>
+          <MetaverseCityPage />
+        </Suspense>
+      ) : routePath === "/studio/templates" ? (
         <WebMakerPage />
       ) : (
         <Suspense fallback={<UniverseLoading />}>

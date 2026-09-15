@@ -12,6 +12,13 @@ import MetaverseMissionList from "@/components/metaverse/MetaverseMissionList.js
 import MetaverseOpportunityExchange from "@/components/metaverse/MetaverseOpportunityExchange.jsx";
 import MetaverseMarket from "@/components/metaverse/MetaverseMarket.jsx";
 import MetaverseWorkPassport from "@/components/metaverse/MetaverseWorkPassport.jsx";
+import MetaverseNextAction from "@/components/metaverse/MetaverseNextAction.jsx";
+import MetaverseDailyBriefing from "@/components/metaverse/MetaverseDailyBriefing.jsx";
+import MetaverseDistrictPulse from "@/components/metaverse/MetaverseDistrictPulse.jsx";
+import MetaverseCityEvents from "@/components/metaverse/MetaverseCityEvents.jsx";
+import MetaverseFastTravel from "@/components/metaverse/MetaverseFastTravel.jsx";
+import MetaverseMiniMap from "@/components/metaverse/MetaverseMiniMap.jsx";
+import MetaverseBuildingPreview from "@/components/metaverse/MetaverseBuildingPreview.jsx";
 import {
   METAVERSE_ACTIVITY_PLACEHOLDERS,
   METAVERSE_DISTRICTS,
@@ -43,6 +50,7 @@ import { listMissions, enterMission as enterMissionApi } from "@/system/metavers
 import { listOpportunities } from "@/system/metaverse/metaverseOpportunityClient.js";
 import { getMarketBalance, listMarketListings, listMarketOrders } from "@/system/metaverse/metaverseMarketClient.js";
 import { getMyWorkPassport } from "@/system/metaverse/metaversePassportClient.js";
+import { fastTravel as fastTravelApi, getCityOrchestration } from "@/system/metaverse/metaverseOrchestrationClient.js";
 import { resolveDevUserId } from "@/lib/liveLearning/api.js";
 import "./metaverse-city.css";
 
@@ -53,6 +61,7 @@ const MISSIONS_POLL_MS = 30000;
 const OPPORTUNITIES_POLL_MS = 30000;
 const MARKET_POLL_MS = 30000;
 const PASSPORT_POLL_MS = 45000;
+const ORCHESTRATION_POLL_MS = 30000;
 
 const CAMERA_HOME = { x: 0, y: 0, zoom: 1 };
 
@@ -105,12 +114,33 @@ export default function MetaverseCityPage() {
   const [passportLoading, setPassportLoading] = useState(true);
   const [passportError, setPassportError] = useState("");
   const [passportOpen, setPassportOpen] = useState(false);
+  const [orchestration, setOrchestration] = useState(null);
+  const [orchestrationError, setOrchestrationError] = useState("");
   const presenceStatusRef = useRef(presenceStatus);
   const currentUserId = resolveDevUserId("learner");
 
   useEffect(() => {
     presenceStatusRef.current = presenceStatus;
   }, [presenceStatus]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const poll = () => getCityOrchestration()
+      .then((result) => {
+        if (cancelled) return;
+        setOrchestration(result);
+        setOrchestrationError("");
+      })
+      .catch((error) => {
+        if (!cancelled) setOrchestrationError(error?.message || "City orchestration is temporarily unavailable.");
+      });
+    poll();
+    const interval = setInterval(poll, ORCHESTRATION_POLL_MS);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -519,6 +549,58 @@ export default function MetaverseCityPage() {
     }
   };
 
+  const navigateFastTravelDestination = async (destination) => {
+    if (!destination) return;
+    setEntryNotice("");
+    let result;
+    try {
+      result = await fastTravelApi(destination.destination_id);
+    } catch (error) {
+      setEntryNotice(error?.message || "Fast travel is temporarily unavailable.");
+      return;
+    }
+    if (!result?.can_enter) {
+      setEntryNotice(result?.entry?.decision?.reason_text || "Fast travel destination is locked.");
+      return;
+    }
+    if (destination.district_id) {
+      const district = getDistrictById(destination.district_id);
+      if (district) await selectDistrict(district);
+    } else {
+      setLevel("CITY_OVERVIEW");
+      setDistrictId(null);
+      setFacilityId(null);
+      setActivityId(null);
+      setCamera(CAMERA_HOME);
+    }
+    if (destination.facility_id) {
+      const facility = getFacilityById(destination.facility_id);
+      if (facility) await selectFacility(facility);
+    }
+    if (destination.activity_id) {
+      const activity = METAVERSE_ACTIVITY_PLACEHOLDERS.find((item) => item.id === destination.activity_id);
+      if (activity) await selectActivity(activity);
+    }
+  };
+
+  const handleOrchestrationAction = async (action) => {
+    if (!action) return;
+    const mission = missions.find((item) => item.missionProjectionId === action.source_ref);
+    if (mission) {
+      await handleSelectMission(mission);
+      return;
+    }
+    const destination = orchestration?.fast_travel_destinations?.find((item) => (
+      item.destination_id === "NEXT_ACTION" ||
+      (action.facility_id && item.facility_id === action.facility_id) ||
+      (action.district_id && item.district_id === action.district_id)
+    ));
+    if (destination) await navigateFastTravelDestination(destination);
+    if (action.action_type === "VISIT_MARKET") setMarketOpen(true);
+    if (action.action_type === "VIEW_WORK_PASSPORT" || action.source_type === "MET-10_WORK_PASSPORT") setPassportOpen(true);
+    if (action.action_type === "REVIEW_AVAILABLE_OPPORTUNITY") setOpportunitiesOpen(true);
+  };
+
   const goToCrumb = (crumb) => {
     if (crumb.level === "CITY_OVERVIEW") {
       setLevel("CITY_OVERVIEW");
@@ -592,6 +674,9 @@ export default function MetaverseCityPage() {
   const currentTitle = selectedActivity?.label || selectedFacility?.label || selectedDistrict?.label || "Silicon Heartland";
   const contextSelection = selection || (level === "ACTIVITY_SIMULATION_VIEW" && selectedActivity ? { ...selectedActivity, type: "ACTIVITY", unlock: getUnlock({ id: selectedActivity.id, type: "ACTIVITY" }) } : null);
   const contextUnlock = contextSelection?.unlock || (contextSelection ? getUnlock({ id: contextSelection.id, type: contextSelection.type }) : null);
+  const selectedBuildingPreview = selectedFacility
+    ? orchestration?.building_previews?.find((preview) => preview.facility_id === selectedFacility.id)
+    : null;
 
   return (
     <main
@@ -659,6 +744,29 @@ export default function MetaverseCityPage() {
       ) : null}
 
       {entryNotice ? <div className="met-notice" role="status" aria-live="polite">{entryNotice}</div> : null}
+      {orchestrationError ? <div className="met-notice met-notice--orch" role="status" aria-live="polite">{orchestrationError}</div> : null}
+
+      <section className="met-orchestration" aria-label="City economy orchestration">
+        <MetaverseNextAction action={orchestration?.next_action} onSelect={handleOrchestrationAction} />
+        <MetaverseDailyBriefing briefing={orchestration?.briefing} />
+        <MetaverseFastTravel destinations={orchestration?.fast_travel_destinations || []} onTravel={navigateFastTravelDestination} />
+        <MetaverseMiniMap
+          currentDistrictId={districtId}
+          pulses={orchestration?.district_pulses || []}
+          destinations={orchestration?.fast_travel_destinations || []}
+          onTravel={navigateFastTravelDestination}
+        />
+        <MetaverseDistrictPulse pulses={orchestration?.district_pulses || []} />
+        <MetaverseCityEvents events={orchestration?.city_events || []} />
+      </section>
+
+      <MetaverseBuildingPreview
+        preview={selectedBuildingPreview}
+        onEnter={(preview) => {
+          const facility = getFacilityById(preview.facility_id);
+          if (facility) selectFacility(facility);
+        }}
+      />
 
       {activeRoom ? (
         <MetaverseParticipantList

@@ -1343,6 +1343,182 @@
   font-size: 0.72rem;
 }
 
+.met-orchestration {
+  position: fixed;
+  left: 16px;
+  bottom: 60px;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: minmax(220px, 300px) minmax(220px, 320px);
+  gap: 8px;
+  max-width: min(640px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.met-orchestration > *,
+.met-building-preview {
+  pointer-events: auto;
+}
+
+.met-orch-next,
+.met-briefing,
+.met-pulse,
+.met-events,
+.met-minimap,
+.met-building-preview {
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.78);
+  color: #f8fafc;
+  box-shadow: 0 18px 42px rgba(2, 6, 23, 0.28);
+  backdrop-filter: blur(16px);
+}
+
+.met-orch-next {
+  padding: 14px;
+}
+
+.met-orch-next[data-required="true"] {
+  border-color: rgba(251, 191, 36, 0.68);
+}
+
+.met-orch-label {
+  margin: 0 0 4px;
+  color: #bfdbfe;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.met-orch-next h2,
+.met-briefing h2,
+.met-pulse h2,
+.met-events h2,
+.met-minimap h2,
+.met-building-preview h2 {
+  margin: 0 0 6px;
+  font-size: 0.98rem;
+  letter-spacing: 0;
+}
+
+.met-orch-next p,
+.met-building-preview p,
+.met-minimap p {
+  margin: 4px 0;
+  color: rgba(226, 232, 240, 0.86);
+  font-size: 0.82rem;
+}
+
+.met-orch-reason {
+  color: #fde68a;
+}
+
+.met-orch-next button,
+.met-fast-travel button,
+.met-minimap button,
+.met-building-preview button {
+  min-height: 34px;
+  border: 1px solid rgba(191, 219, 254, 0.36);
+  border-radius: 8px;
+  background: rgba(30, 64, 175, 0.72);
+  color: #f8fafc;
+  font-weight: 800;
+}
+
+.met-orch-next button:disabled,
+.met-fast-travel button:disabled,
+.met-minimap button:disabled {
+  opacity: 0.48;
+}
+
+.met-briefing,
+.met-pulse,
+.met-events,
+.met-minimap {
+  padding: 12px;
+  max-height: 240px;
+  overflow: auto;
+}
+
+.met-briefing__section h3 {
+  margin: 8px 0 4px;
+  font-size: 0.78rem;
+  color: #bae6fd;
+  letter-spacing: 0;
+}
+
+.met-briefing ul,
+.met-pulse ul,
+.met-events ul,
+.met-minimap ul {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.met-briefing li,
+.met-pulse li,
+.met-events li,
+.met-minimap li {
+  display: grid;
+  gap: 2px;
+  padding: 7px;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.58);
+}
+
+.met-pulse li[data-required="true"] {
+  outline: 2px solid rgba(251, 191, 36, 0.7);
+}
+
+.met-briefing small,
+.met-pulse small,
+.met-events small {
+  color: rgba(226, 232, 240, 0.72);
+}
+
+.met-briefing em {
+  color: #93c5fd;
+  font-size: 0.68rem;
+  font-style: normal;
+}
+
+.met-fast-travel {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.met-fast-travel button {
+  padding: 6px 9px;
+  font-size: 0.75rem;
+}
+
+.met-minimap__destinations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.met-building-preview {
+  position: fixed;
+  right: 16px;
+  bottom: 138px;
+  z-index: 23;
+  width: min(280px, calc(100vw - 32px));
+  padding: 12px;
+}
+
+.met-notice--orch {
+  top: auto;
+  bottom: 340px;
+}
+
 @media (max-width: 900px) {
   .met-context {
     top: auto;
@@ -1419,6 +1595,23 @@
 
   .met-footer {
     display: none;
+  }
+
+  .met-orchestration {
+    left: 10px;
+    right: 10px;
+    bottom: 74px;
+    grid-template-columns: 1fr;
+    max-width: none;
+    max-height: 44vh;
+    overflow: auto;
+  }
+
+  .met-building-preview {
+    left: 10px;
+    right: 10px;
+    bottom: 74px;
+    width: auto;
   }
 
   .met-activity {

@@ -59,6 +59,25 @@ export type MetaverseFacility = {
   destination_ids: string[];
 };
 
+export type MetaverseActivity = {
+  id: string;
+  version: string;
+  city_id: string;
+  district_id: string;
+  facility_id: string;
+  label: string;
+  description: string;
+  status: "ACTIVE" | "PLANNED" | "CLOSED";
+  activity_type: "lesson_mount" | "simulation" | "civic_session" | "project_room";
+  canonical_owner: string;
+  canonical_ref: string;
+  route_reference: MetaverseRouteReference;
+  unlock_requirement_reference: string | null;
+  completion_authority: string;
+  evidence_capability: string;
+  tags: string[];
+};
+
 export type MetaverseDistrict = {
   id: string;
   version: string;
@@ -89,7 +108,7 @@ export type MetaverseCityRegistry = {
   districts: MetaverseDistrict[];
   facilities: MetaverseFacility[];
   destinations: MetaverseDestination[];
-  activities: [];
+  activities: MetaverseActivity[];
   access_requirements: string[];
   career_alignment: MetaverseAlignment;
   curriculum_alignment: MetaverseAlignment;
@@ -239,6 +258,38 @@ const facility = (
   destination_ids,
 });
 
+const activity = (
+  id: string,
+  district_id: string,
+  facility_id: string,
+  label: string,
+  description: string,
+  options: {
+    canonical_ref: string;
+    route_reference: MetaverseRouteReference;
+    activity_type?: MetaverseActivity["activity_type"];
+    unlock_requirement_reference?: string | null;
+    tags?: string[];
+  },
+): MetaverseActivity => ({
+  id,
+  version: "1.0.0",
+  city_id: SILICON_HEARTLAND_CITY_ID,
+  district_id,
+  facility_id,
+  label,
+  description,
+  status: "ACTIVE",
+  activity_type: options.activity_type ?? "lesson_mount",
+  canonical_owner: "curriculum-domain",
+  canonical_ref: options.canonical_ref,
+  route_reference: options.route_reference,
+  unlock_requirement_reference: options.unlock_requirement_reference ?? "data-center-foundations-enrollment",
+  completion_authority: "curriculum-domain",
+  evidence_capability: "none; read-only metaverse mount does not create completion, assessment pass, verified outcome, or credential",
+  tags: options.tags ?? [],
+});
+
 export const METAVERSE_DISTRICT_IDS = {
   civic: "civic-district",
   careerEducation: "career-education-district",
@@ -337,6 +388,76 @@ const facilities: MetaverseFacility[] = [
   facility("transit-wayfinding-hub", METAVERSE_DISTRICT_IDS.publicRealm, "Transit / Wayfinding Hub", "Accessible navigation hub.", "district-transit-wayfinding-hub", ["transit-wayfinding-hub"]),
 ];
 
+const activities: MetaverseActivity[] = [
+  activity(
+    "data-center-foundations-introduction",
+    METAVERSE_DISTRICT_IDS.dataCenter,
+    "data-center-training-lab",
+    "What Is a Data Center?",
+    "Read-only mount of the real Data Center Foundations introductory lesson.",
+    {
+      canonical_ref: "src/content/lessons/data-center-foundations-student/data-center-foundations-introduction.json",
+      route_reference: route("LIVE", "/curriculum.html#/curriculum/learning", "src/content/lessons/data-center-foundations-student/data-center-foundations-introduction.json", "Canonical lesson content exists; completion remains in curriculum flows."),
+      tags: ["data-center", "curriculum", "lesson", "read-only"],
+    },
+  ),
+  activity(
+    "data-center-safety-simulation",
+    METAVERSE_DISTRICT_IDS.dataCenter,
+    "main-data-center",
+    "Data Center Safety Simulation",
+    "Future simulation hook requiring lesson and assessment authority before entry.",
+    {
+      canonical_ref: "future-curriculum-simulation:data-center-safety-simulation",
+      route_reference: route("PLANNED", null, "MET-3 unlock policy", "No production simulation route exists yet."),
+      activity_type: "simulation",
+      unlock_requirement_reference: "data-center-safety-simulation",
+      tags: ["data-center", "simulation", "safety"],
+    },
+  ),
+  activity(
+    "civic-council-session",
+    METAVERSE_DISTRICT_IDS.civic,
+    "council-chamber",
+    "Civic Council Session",
+    "Future SHF Civic-governed session hook; CivicSure is not authority.",
+    {
+      canonical_ref: "future-shf-civic:civic-council-session",
+      route_reference: route("PLANNED", null, "SHF Civic unresolved adapter", "Dedicated SHF Civic eligibility source unresolved."),
+      activity_type: "civic_session",
+      unlock_requirement_reference: "shf-civic-eligibility",
+      tags: ["civic", "session", "restricted"],
+    },
+  ),
+  activity(
+    "entitled-ai-agent-lab",
+    METAVERSE_DISTRICT_IDS.technologyInnovation,
+    "ai-agent-lab",
+    "Entitled AI Agent Lab",
+    "Future student-safe AI lab hook requiring canonical service entitlement.",
+    {
+      canonical_ref: "future-curriculum-lab:entitled-ai-agent-lab",
+      route_reference: route("PLANNED", null, "service-catalog-entitlements", "No production student AI lab route exists yet."),
+      unlock_requirement_reference: "metaverse-ai-lab-entitled",
+      tags: ["ai", "entitlement", "planned"],
+    },
+  ),
+  activity(
+    "capstone-project-room",
+    METAVERSE_DISTRICT_IDS.technologyInnovation,
+    "builder-studio",
+    "Capstone Project Room",
+    "Future Studio/team project room hook.",
+    {
+      canonical_ref: "studio-team-domain:capstone-project-room",
+      route_reference: route("PLANNED", null, "Studio team domain", "No metaverse room route exists yet."),
+      activity_type: "project_room",
+      unlock_requirement_reference: "capstone-team-member",
+      tags: ["studio", "team", "project"],
+    },
+  ),
+];
+
 const districts: MetaverseDistrict[] = [
   district(METAVERSE_DISTRICT_IDS.civic, "Civic District", "SHF Civic-backed simulated city government, proposals, elections, council, planning, public works, and community development.", "district-civic", ["city-hall", "council-chamber", "clerk-office", "planning-department", "public-works", "community-development-office"], ["civic", "shf-civic"]),
   district(METAVERSE_DISTRICT_IDS.careerEducation, "Career & Education District", "Career Center, curriculum, training, certifications/milestones projection, skill profile, portfolio, and workforce pathway navigation.", "district-career-education", ["career-center", "learning-center", "credential-portfolio-center", "career-pathway-center"], ["career", "curriculum", "portfolio"]),
@@ -367,7 +488,7 @@ export const SILICON_HEARTLAND_CITY_REGISTRY: MetaverseCityRegistry = {
   districts,
   facilities,
   destinations,
-  activities: [],
+  activities,
   access_requirements: ["MET-3 learner unlock projection required before gated access is enforced."],
   career_alignment: career(["career-center", "data-center-ai-infrastructure"], "Registry reads career pathways; career remains canonical."),
   curriculum_alignment: curriculum(["curriculum-learning", "data-center lesson content"], "Registry reads curriculum alignment; curriculum remains canonical."),
@@ -397,5 +518,6 @@ export function getMetaverseCityProjection() {
     districts: SILICON_HEARTLAND_CITY_REGISTRY.districts.map(({ id, label, purpose, status, visual_asset_slot }) => ({ id, label, purpose, status, visual_asset_slot })),
     facilities: SILICON_HEARTLAND_CITY_REGISTRY.facilities.map(({ id, district_id, label, purpose, status, visual_asset_slot }) => ({ id, district_id, label, purpose, status, visual_asset_slot })),
     destinations: SILICON_HEARTLAND_CITY_REGISTRY.destinations.map(({ id, district_id, facility_id, label, status, destination_type, experience_type, route_reference, accessibility_alternative, tags }) => ({ id, district_id, facility_id, label, status, destination_type, experience_type, route_reference, accessibility_alternative, tags })),
+    activities: SILICON_HEARTLAND_CITY_REGISTRY.activities.map(({ id, district_id, facility_id, label, status, activity_type, route_reference, tags }) => ({ id, district_id, facility_id, label, status, activity_type, route_reference, tags })),
   } as const;
 }

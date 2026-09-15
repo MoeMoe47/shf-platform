@@ -39,6 +39,7 @@ export const METAVERSE_UNLOCK_OPERATIONAL_EVENTS = [
   "metaverse.resource.viewed",
   "metaverse.resource.entered",
   "metaverse.activity.started",
+  "metaverse.activity.exited",
   "metaverse.activity.completed",
   "metaverse.unlock.denied",
   "metaverse.next_action.selected",

@@ -68,6 +68,10 @@ export function facilityRequirementGroup(facilityId: string): MetaverseRequireme
 
 export function activityRequirementGroup(resourceId: string, accessLevel: MetaverseAccessLevel): MetaverseRequirementGroup {
   const byResource: Record<string, MetaverseUnlockRequirement[]> = {
+    "data-center-foundations-introduction": [
+      membershipRequirement,
+      dataCenterEnrollmentRequirement,
+    ],
     "data-center-safety-simulation": [
       membershipRequirement,
       dataCenterEnrollmentRequirement,

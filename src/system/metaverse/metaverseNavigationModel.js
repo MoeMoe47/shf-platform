@@ -72,6 +72,14 @@ export const METAVERSE_FACILITIES = [
 
 export const METAVERSE_ACTIVITY_PLACEHOLDERS = [
   {
+    id: "data-center-foundations-introduction",
+    facilityId: "data-center-training-lab",
+    districtId: "data-center-district",
+    label: "What Is a Data Center?",
+    mountPoint: "curriculum-read-only-lesson",
+    canonicalOwner: "curriculum-domain",
+  },
+  {
     id: "data-center-cooling-simulation",
     facilityId: "cooling-mechanical-plant",
     districtId: "data-center-district",

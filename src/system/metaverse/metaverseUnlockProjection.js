@@ -10,8 +10,8 @@ export const METAVERSE_UNLOCK_STATES = [
 
 export const METAVERSE_UNLOCK_PROJECTION_META = {
   canonicalSource: "MET-3 Learner Unlock Projection",
-  productionApiWired: false,
-  fixtureMode: "development-only deterministic fixture",
+  productionApiWired: true,
+  fixtureMode: "development-only deterministic fixture; disabled in production",
   clientMayGrantUnlock: false,
   cameraMayGrantUnlock: false,
   queryParamsMayGrantUnlock: false,
@@ -40,15 +40,17 @@ function baseDecision(resource, decision, reasonText, nextAction = null) {
 
 export function resolveMetaverseUiUnlock(resource, options = {}) {
   const env = import.meta.env || {};
-  const fixtureEnabled = options.fixtureEnabled ?? Boolean(env.DEV || env.VITE_METAVERSE_ENABLE_DEV_UNLOCK_FIXTURE === "1");
+  const fixtureEnabled = options.fixtureEnabled ?? Boolean(env.DEV && env.MODE !== "production" && env.VITE_METAVERSE_ENABLE_DEV_UNLOCK_FIXTURE !== "0");
   if (options.clientGranted || options.cameraGranted || options.queryGranted) {
     return baseDecision(resource, "RESTRICTED", "Access cannot be granted by client, camera, or URL state.");
   }
+  if (options.runtimeDecision) return options.runtimeDecision;
   if (!fixtureEnabled) {
     return baseDecision(resource, "RESTRICTED", "Server unlock projection is required before entry.");
   }
   if (resource.type === "DISTRICT") return baseDecision(resource, "AVAILABLE", "Available to authenticated organization learners.");
   if (resource.id === "main-data-center") return baseDecision(resource, "LOCKED", "Complete the prerequisite lesson to unlock this facility.", LOCKED_NEXT_ACTION);
+  if (resource.id === "data-center-foundations-introduction") return baseDecision(resource, "LOCKED", "Active Data Center Foundations enrollment is required before this lesson mount opens.", LOCKED_NEXT_ACTION);
   if (resource.id === "data-center-safety-simulation") return baseDecision(resource, "LOCKED", "Complete Lesson 4 and pass the safety assessment to unlock this simulation.", LOCKED_NEXT_ACTION);
   if (resource.id === "civic-council-session") return baseDecision(resource, "RESTRICTED", "This experience is limited to authorized Civic Council participants.");
   if (resource.type === "ACTIVITY") return baseDecision(resource, "AVAILABLE", "Available because the current development fixture allows this placeholder.");

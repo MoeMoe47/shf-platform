@@ -84,6 +84,7 @@ import { registerOrientationRoutes } from "../domain/orientation/api/routes.js";
 import { registerOgl6Routes } from "../domain/orientation/api/ogl6-routes.js";
 import { registerCrossProductRoutes } from "../domain/cross-product/api/routes.js";
 import { registerLearnerResultRoutes } from "../domain/curriculum/api/learner-result-routes.js";
+import { registerMetaverseRuntimeRoutes } from "../domain/metaverse/runtime/routes.js";
 import { requirePermission } from "../auth/permission-guard.js";
 import { SHS_SECURITY_PERMISSIONS } from "../auth/security-permissions.js";
 import { evaluateBreakGlassAttestation } from "../security/break-glass.js";
@@ -397,6 +398,7 @@ app.post("/auth/login", async (req: any, res: any) => {
   registerOrientationRoutes(app);
   registerOgl6Routes(app);
   registerCrossProductRoutes(app);
+  registerMetaverseRuntimeRoutes(app);
   registerServiceAgreementRoutes(app);
   registerOrganizationOnboardingRoutes(app);
   registerFundingGrantRoutes(app);

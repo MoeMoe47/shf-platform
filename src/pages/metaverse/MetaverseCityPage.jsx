@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import MetaverseBreadcrumbs from "@/components/metaverse/MetaverseBreadcrumbs.jsx";
+import MetaverseActivityMount from "@/components/metaverse/MetaverseActivityMount.jsx";
 import MetaverseCamera from "@/components/metaverse/MetaverseCamera.jsx";
 import MetaverseCameraControls from "@/components/metaverse/MetaverseCameraControls.jsx";
 import MetaverseContextPanel from "@/components/metaverse/MetaverseContextPanel.jsx";
@@ -18,6 +19,10 @@ import {
   canEnterMetaverseResource,
   resolveMetaverseUiUnlock,
 } from "@/system/metaverse/metaverseUnlockProjection.js";
+import {
+  canUseMetaverseDevFixture,
+  requestMetaverseEntry,
+} from "@/system/metaverse/metaverseRuntimeClient.js";
 import "./metaverse-city.css";
 
 const CAMERA_HOME = { x: 0, y: 0, zoom: 1 };
@@ -44,6 +49,8 @@ export default function MetaverseCityPage() {
   const [selection, setSelection] = useState(null);
   const [navigatorOpen, setNavigatorOpen] = useState(false);
   const [entryNotice, setEntryNotice] = useState("");
+  const [runtimeDecisions, setRuntimeDecisions] = useState({});
+  const [authorizationState, setAuthorizationState] = useState("idle");
 
   const selectedDistrict = districtId ? getDistrictById(districtId) : null;
   const selectedFacility = facilityId ? getFacilityById(facilityId) : null;
@@ -73,10 +80,40 @@ export default function MetaverseCityPage() {
   }, [level, selectedDistrict, selectedFacility]);
 
   const getUnlock = (resource) => resolveMetaverseUiUnlock(resource, {
+    runtimeDecision: runtimeDecisions[resource?.id],
+    fixtureEnabled: canUseMetaverseDevFixture(),
     clientGranted: false,
     cameraGranted: false,
     queryGranted: new URLSearchParams(window.location.search).has("unlock"),
   });
+
+  const requestProtectedDecision = async (resource, event = "view") => {
+    const queryGranted = new URLSearchParams(window.location.search).has("unlock");
+    if (queryGranted) {
+      return resolveMetaverseUiUnlock(resource, { queryGranted: true, fixtureEnabled: false });
+    }
+    setAuthorizationState("checking");
+    try {
+      const result = await requestMetaverseEntry(resource, { event });
+      setRuntimeDecisions((current) => ({ ...current, [resource.id]: result.decision }));
+      setAuthorizationState("ready");
+      return result.decision;
+    } catch (error) {
+      const decision = {
+        resource_id: resource.id,
+        resource_type: resource.type,
+        decision: error.status === 401 ? "RESTRICTED" : "TEMPORARILY_UNAVAILABLE",
+        reason_code: error.code || "AUTHORIZATION_UNAVAILABLE",
+        reason_text: error.status === 401 ? "Your session expired. Sign in again before entering the metaverse." : "Metaverse authorization is temporarily unavailable.",
+        next_action: null,
+        projection_version: "MET-5_RUNTIME_ADAPTER",
+        authority: "server-required",
+      };
+      setRuntimeDecisions((current) => ({ ...current, [resource.id]: decision }));
+      setAuthorizationState("error");
+      return decision;
+    }
+  };
 
   const focusCamera = (item) => {
     const next = {
@@ -87,8 +124,9 @@ export default function MetaverseCityPage() {
     setCamera(reducedMotion ? next : next);
   };
 
-  const selectDistrict = (district) => {
-    const unlock = getUnlock({ id: district.id, type: "DISTRICT" });
+  const selectDistrict = async (district) => {
+    const resource = { ...district, id: district.id, type: "DISTRICT" };
+    const unlock = await requestProtectedDecision(resource, "enter");
     setSelection({ ...district, type: "DISTRICT", unlock });
     focusCamera(district);
     if (!canEnterMetaverseResource(unlock)) {
@@ -102,8 +140,9 @@ export default function MetaverseCityPage() {
     setCamera(CAMERA_HOME);
   };
 
-  const selectFacility = (facility) => {
-    const unlock = getUnlock({ id: facility.id, type: "FACILITY" });
+  const selectFacility = async (facility) => {
+    const resource = { ...facility, id: facility.id, type: "FACILITY", districtId: facility.districtId };
+    const unlock = await requestProtectedDecision(resource, "enter");
     setSelection({ ...facility, type: "FACILITY", unlock });
     focusCamera(facility);
     if (!canEnterMetaverseResource(unlock)) {
@@ -116,8 +155,9 @@ export default function MetaverseCityPage() {
     setCamera(CAMERA_HOME);
   };
 
-  const selectActivity = (activity) => {
-    const unlock = getUnlock({ id: activity.id, type: "ACTIVITY" });
+  const selectActivity = async (activity) => {
+    const resource = { ...activity, id: activity.id, type: "ACTIVITY", districtId: activity.districtId, facilityId: activity.facilityId };
+    const unlock = await requestProtectedDecision(resource, "activity_start");
     setSelection({ ...activity, type: "ACTIVITY", unlock });
     if (!canEnterMetaverseResource(unlock)) {
       setEntryNotice(unlock.reason_text);
@@ -192,6 +232,17 @@ export default function MetaverseCityPage() {
     return () => window.removeEventListener("keydown", onKey);
   }, [navigatorOpen, selection, level]);
 
+  useEffect(() => {
+    if (window.location.pathname === "/metaverse") return;
+    if (window.location.pathname.startsWith("/metaverse/")) {
+      setEntryNotice("Direct metaverse links require protected server authorization before any district, facility, or activity can render.");
+      setLevel("CITY_OVERVIEW");
+      setDistrictId(null);
+      setFacilityId(null);
+      setActivityId(null);
+    }
+  }, []);
+
   const breadcrumbs = getBreadcrumbs({ level, districtId, facilityId, activityId });
   const currentTitle = selectedActivity?.label || selectedFacility?.label || selectedDistrict?.label || "Silicon Heartland";
   const contextSelection = selection || (level === "ACTIVITY_SIMULATION_VIEW" && selectedActivity ? { ...selectedActivity, type: "ACTIVITY", unlock: getUnlock({ id: selectedActivity.id, type: "ACTIVITY" }) } : null);
@@ -203,6 +254,7 @@ export default function MetaverseCityPage() {
       data-camera-level={level}
       data-reduced-motion={reducedMotion ? "true" : "false"}
       data-route="/metaverse"
+      data-authorization-state={authorizationState}
     >
       <MetaverseCamera
         background={background}
@@ -235,17 +287,17 @@ export default function MetaverseCityPage() {
 
       <div className="met-presence-slots" aria-hidden="true" data-empty="true" />
 
-      {level === "ACTIVITY_SIMULATION_VIEW" && selectedActivity ? (
-        <section className="met-activity" aria-label="Activity placeholder">
-          <p className="met-kicker">Future activity mount</p>
-          <h2>{selectedActivity.label}</h2>
-          <p>{selectedFacility?.label} · {selectedDistrict?.label}</p>
-          <p>{contextUnlock?.reason_text}</p>
-          <button type="button" onClick={goBack}>Exit activity placeholder</button>
-        </section>
+      {level === "ACTIVITY_SIMULATION_VIEW" && selectedActivity && contextUnlock && canEnterMetaverseResource(contextUnlock) ? (
+        <MetaverseActivityMount
+          activity={{ ...selectedActivity, type: "ACTIVITY" }}
+          facility={selectedFacility}
+          district={selectedDistrict}
+          decision={contextUnlock}
+          onExit={goBack}
+        />
       ) : null}
 
-      {entryNotice ? <div className="met-notice" role="status">{entryNotice}</div> : null}
+      {entryNotice ? <div className="met-notice" role="status" aria-live="polite">{entryNotice}</div> : null}
 
       <MetaverseContextPanel
         selection={contextSelection}

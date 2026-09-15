@@ -241,6 +241,24 @@
   line-height: 1;
 }
 
+.met-hotspot__market-count {
+  position: absolute;
+  bottom: -8px;
+  right: -8px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #9bb7ff;
+  color: #07142f;
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
 @keyframes metPulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.22); }
@@ -636,6 +654,125 @@
   font-size: 0.78rem;
   font-weight: 700;
   color: #7adfc0;
+}
+
+.met-market {
+  position: absolute;
+  z-index: 17;
+  left: 18px;
+  bottom: 18px;
+  width: min(460px, calc(100vw - 36px));
+  max-height: min(78vh, 760px);
+  overflow: auto;
+  padding: 14px;
+  border-radius: 8px;
+  background: rgba(6, 16, 31, 0.92);
+  border: 1px solid rgba(155, 183, 255, 0.26);
+  backdrop-filter: blur(18px);
+  transform: translateY(calc(100% + 28px));
+  transition: transform 220ms ease;
+}
+
+.met-market.is-open {
+  transform: translateY(0);
+}
+
+.met-market__header,
+.met-market__card {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.met-market__header h2,
+.met-market__orders h3,
+.met-market__seller h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.met-market__header p,
+.met-market__card p,
+.met-market__orders p,
+.met-market__seller p,
+.met-market__boundary,
+.met-market__status {
+  margin: 4px 0 0;
+  color: rgba(226, 232, 240, 0.82);
+  font-size: 0.84rem;
+}
+
+.met-market__counts,
+.met-market__list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.met-market__counts {
+  grid-template-columns: repeat(3, 1fr);
+  font-size: 0.76rem;
+}
+
+.met-market__counts li,
+.met-market__orders,
+.met-market__seller {
+  border: 1px solid rgba(155, 183, 255, 0.18);
+  border-radius: 6px;
+  padding: 8px;
+  background: rgba(15, 23, 42, 0.48);
+}
+
+.met-market__filter {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 10px;
+  font-size: 0.82rem;
+}
+
+.met-market__card {
+  border: 1px solid rgba(155, 183, 255, 0.18);
+  border-radius: 6px;
+  padding: 10px 12px;
+  background: rgba(15, 23, 42, 0.58);
+}
+
+.met-market__card h3 {
+  margin: 4px 0 0;
+  font-size: 0.96rem;
+}
+
+.met-market__type,
+.met-market__price {
+  font-weight: 800;
+  color: #9bb7ff;
+}
+
+.met-market__meta {
+  text-transform: capitalize;
+}
+
+.met-market button {
+  min-height: 34px;
+  border-radius: 6px;
+  border: 1px solid rgba(155, 183, 255, 0.28);
+  background: rgba(155, 183, 255, 0.16);
+  color: #f8fafc;
+  font: inherit;
+  padding: 6px 10px;
+}
+
+.met-market button:disabled {
+  opacity: 0.55;
+}
+
+.met-market__orders,
+.met-market__seller {
+  margin-top: 12px;
 }
 
 .met-bid-form {
@@ -1112,7 +1249,8 @@
 
   .met-navigator,
   .met-missions,
-  .met-opportunities {
+  .met-opportunities,
+  .met-market {
     left: 0;
     right: 0;
     bottom: 0;

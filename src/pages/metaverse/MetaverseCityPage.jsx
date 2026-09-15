@@ -10,6 +10,7 @@ import MetaverseParticipantList from "@/components/metaverse/MetaverseParticipan
 import MetaverseChatTray from "@/components/metaverse/MetaverseChatTray.jsx";
 import MetaverseMissionList from "@/components/metaverse/MetaverseMissionList.jsx";
 import MetaverseOpportunityExchange from "@/components/metaverse/MetaverseOpportunityExchange.jsx";
+import MetaverseMarket from "@/components/metaverse/MetaverseMarket.jsx";
 import {
   METAVERSE_ACTIVITY_PLACEHOLDERS,
   METAVERSE_DISTRICTS,
@@ -39,6 +40,7 @@ import {
 } from "@/system/metaverse/metaverseCommunicationClient.js";
 import { listMissions, enterMission as enterMissionApi } from "@/system/metaverse/metaverseMissionClient.js";
 import { listOpportunities } from "@/system/metaverse/metaverseOpportunityClient.js";
+import { getMarketBalance, listMarketListings, listMarketOrders } from "@/system/metaverse/metaverseMarketClient.js";
 import { resolveDevUserId } from "@/lib/liveLearning/api.js";
 import "./metaverse-city.css";
 
@@ -47,6 +49,7 @@ const CITY_PRESENCE_POLL_MS = 15000;
 const ROOM_PARTICIPANTS_POLL_MS = 10000;
 const MISSIONS_POLL_MS = 30000;
 const OPPORTUNITIES_POLL_MS = 30000;
+const MARKET_POLL_MS = 30000;
 
 const CAMERA_HOME = { x: 0, y: 0, zoom: 1 };
 
@@ -89,6 +92,12 @@ export default function MetaverseCityPage() {
   const [opportunitiesLoading, setOpportunitiesLoading] = useState(true);
   const [opportunitiesError, setOpportunitiesError] = useState("");
   const [opportunitiesOpen, setOpportunitiesOpen] = useState(false);
+  const [marketListings, setMarketListings] = useState([]);
+  const [marketOrders, setMarketOrders] = useState([]);
+  const [marketBalance, setMarketBalance] = useState(null);
+  const [marketLoading, setMarketLoading] = useState(true);
+  const [marketError, setMarketError] = useState("");
+  const [marketOpen, setMarketOpen] = useState(false);
   const presenceStatusRef = useRef(presenceStatus);
   const currentUserId = resolveDevUserId("learner");
 
@@ -105,6 +114,37 @@ export default function MetaverseCityPage() {
       .catch(() => {});
     return () => {
       cancelled = true;
+    };
+  }, []);
+
+  const refreshMarket = async () => {
+    const [balance, listings, orders] = await Promise.all([
+      getMarketBalance(),
+      listMarketListings(),
+      listMarketOrders(),
+    ]);
+    setMarketBalance(balance);
+    setMarketListings(listings || []);
+    setMarketOrders(orders || []);
+  };
+
+  useEffect(() => {
+    let cancelled = false;
+    const poll = () => refreshMarket()
+      .then(() => {
+        if (!cancelled) setMarketError("");
+      })
+      .catch((error) => {
+        if (!cancelled) setMarketError(error?.message || "Student Market is temporarily unavailable.");
+      })
+      .finally(() => {
+        if (!cancelled) setMarketLoading(false);
+      });
+    poll();
+    const interval = setInterval(poll, MARKET_POLL_MS);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
     };
   }, []);
 
@@ -291,9 +331,27 @@ export default function MetaverseCityPage() {
     return counts;
   }, [opportunities]);
 
+  const marketCountsByDistrict = useMemo(() => {
+    const counts = {};
+    for (const listing of marketListings) {
+      const key = listing.districtId || "treasury-commerce-district";
+      counts[key] = (counts[key] || 0) + 1;
+    }
+    return counts;
+  }, [marketListings]);
+
+  const marketCountsByFacility = useMemo(() => {
+    const counts = {};
+    for (const listing of marketListings) {
+      const key = listing.facilityId;
+      if (key) counts[key] = (counts[key] || 0) + 1;
+    }
+    return counts;
+  }, [marketListings]);
+
   const markers = useMemo(() => {
-    if (level === "CITY_OVERVIEW") return METAVERSE_DISTRICTS.map((district) => ({ ...district, markerType: "DISTRICT", missionCount: missionCountsByDistrict[district.id] || 0, opportunityCount: opportunityCountsByDistrict[district.id] || 0 }));
-    if (level === "DISTRICT_VIEW" && selectedDistrict) return selectedDistrict.facilities.map((facility) => ({ ...facility, markerType: "FACILITY", missionCount: missionCountsByFacility[facility.id] || 0, opportunityCount: opportunityCountsByFacility[facility.id] || 0 }));
+    if (level === "CITY_OVERVIEW") return METAVERSE_DISTRICTS.map((district) => ({ ...district, markerType: "DISTRICT", missionCount: missionCountsByDistrict[district.id] || 0, opportunityCount: opportunityCountsByDistrict[district.id] || 0, marketCount: marketCountsByDistrict[district.id] || 0 }));
+    if (level === "DISTRICT_VIEW" && selectedDistrict) return selectedDistrict.facilities.map((facility) => ({ ...facility, markerType: "FACILITY", missionCount: missionCountsByFacility[facility.id] || 0, opportunityCount: opportunityCountsByFacility[facility.id] || 0, marketCount: marketCountsByFacility[facility.id] || 0 }));
     if (level === "FACILITY_VIEW" && selectedFacility) return getActivitiesForFacility(selectedFacility.id).map((activity, index) => ({
       ...activity,
       markerType: "ACTIVITY",
@@ -302,7 +360,7 @@ export default function MetaverseCityPage() {
       description: "Future activity mount point. Server unlock is required before entry.",
     }));
     return [];
-  }, [level, selectedDistrict, selectedFacility, missionCountsByDistrict, missionCountsByFacility, opportunityCountsByDistrict, opportunityCountsByFacility]);
+  }, [level, selectedDistrict, selectedFacility, missionCountsByDistrict, missionCountsByFacility, opportunityCountsByDistrict, opportunityCountsByFacility, marketCountsByDistrict, marketCountsByFacility]);
 
   const getUnlock = (resource) => resolveMetaverseUiUnlock(resource, {
     runtimeDecision: runtimeDecisions[resource?.id],
@@ -552,6 +610,9 @@ export default function MetaverseCityPage() {
         opportunitiesOpen={opportunitiesOpen}
         onToggleOpportunities={() => setOpportunitiesOpen((value) => !value)}
         opportunityCount={opportunities.length}
+        marketOpen={marketOpen}
+        onToggleMarket={() => setMarketOpen((value) => !value)}
+        marketCount={marketListings.length}
       />
 
       {level === "ACTIVITY_SIMULATION_VIEW" && selectedActivity && contextUnlock && canEnterMetaverseResource(contextUnlock) ? (
@@ -628,6 +689,17 @@ export default function MetaverseCityPage() {
         loading={opportunitiesLoading}
         error={opportunitiesError}
         onClose={() => setOpportunitiesOpen(false)}
+      />
+
+      <MetaverseMarket
+        open={marketOpen}
+        listings={marketListings}
+        orders={marketOrders}
+        balance={marketBalance}
+        loading={marketLoading}
+        error={marketError}
+        onRefresh={refreshMarket}
+        onClose={() => setMarketOpen(false)}
       />
 
       <footer className="met-footer">

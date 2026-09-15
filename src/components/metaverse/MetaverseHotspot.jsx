@@ -17,7 +17,7 @@ export default function MetaverseHotspot({
       style={{ left: `${item.x}%`, top: `${item.y}%` }}
       onClick={() => onSelect(item)}
       aria-pressed={selected}
-      aria-label={`${label}. ${unlockStateLabel(state)}. ${item.missionCount ? `${item.missionCount} mission${item.missionCount === 1 ? "" : "s"}. ` : ""}${item.opportunityCount ? `${item.opportunityCount} opportunit${item.opportunityCount === 1 ? "y" : "ies"} open. ` : ""}${item.description || ""} ${unlock?.reason_text || ""}`.trim()}
+      aria-label={`${label}. ${unlockStateLabel(state)}. ${item.missionCount ? `${item.missionCount} mission${item.missionCount === 1 ? "" : "s"}. ` : ""}${item.opportunityCount ? `${item.opportunityCount} opportunit${item.opportunityCount === 1 ? "y" : "ies"} open. ` : ""}${item.marketCount ? `${item.marketCount} market listing${item.marketCount === 1 ? "" : "s"}. ` : ""}${item.description || ""} ${unlock?.reason_text || ""}`.trim()}
       data-resource-id={item.id}
       data-unlock-state={state}
     >
@@ -29,6 +29,9 @@ export default function MetaverseHotspot({
       ) : null}
       {item.opportunityCount ? (
         <span className="met-hotspot__opportunity-count" aria-hidden="true">{item.opportunityCount}</span>
+      ) : null}
+      {item.marketCount ? (
+        <span className="met-hotspot__market-count" aria-hidden="true">{item.marketCount}</span>
       ) : null}
       {futurePresenceSlot}
     </button>

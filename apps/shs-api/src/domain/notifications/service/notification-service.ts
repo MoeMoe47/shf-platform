@@ -275,6 +275,31 @@ const EVENT_POLICIES: Record<string, NotificationPolicy> = {
     recipient: async (event) => String(event.payload?.student_user_id || "") || null,
     path: (event) => event.payload?.award_id ? `/metaverse/opportunity-exchange/awards/${encodeURIComponent(String(event.payload.award_id))}` : null,
   },
+  "market.listing.review_requested": {
+    type: "MARKET_LISTING_REVIEW_REQUESTED", title: "Market listing needs review", message: "A Student Market listing is waiting for governed review.",
+    recipient: async (event) => String(event.payload?.created_by_user_id || event.originating_actor_id || "") || null,
+    path: () => "/metaverse",
+  },
+  "market.listing.published": {
+    type: "MARKET_LISTING_PUBLISHED", title: "Market listing published", message: "Your Student Market listing was published.",
+    recipient: async (event) => String(event.payload?.seller_user_id || event.payload?.created_by_user_id || "") || null,
+    path: () => "/metaverse",
+  },
+  "market.order.paid": {
+    type: "MARKET_ORDER_PAID", title: "Market order paid", message: "Treasury settled your Student Market order.",
+    recipient: async (event) => String(event.payload?.buyer_user_id || "") || null,
+    path: () => "/metaverse",
+  },
+  "market.order.fulfilled": {
+    type: "MARKET_ORDER_FULFILLED", title: "Market fulfillment ready", message: "Your Student Market order was fulfilled.",
+    recipient: async (event) => String(event.payload?.buyer_user_id || "") || null,
+    path: () => "/metaverse",
+  },
+  "market.refund.settled": {
+    type: "MARKET_REFUND_SETTLED", title: "Market refund settled", message: "Treasury settled your Student Market refund.",
+    recipient: async (event) => String(event.payload?.buyer_user_id || "") || null,
+    path: () => "/metaverse",
+  },
 };
 
 // NCA-4 §5: several real, already-emitting Studio events (studio.qa.completed,

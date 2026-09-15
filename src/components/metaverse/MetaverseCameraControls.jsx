@@ -14,6 +14,9 @@ export default function MetaverseCameraControls({
   opportunitiesOpen,
   onToggleOpportunities,
   opportunityCount,
+  marketOpen,
+  onToggleMarket,
+  marketCount,
 }) {
   return (
     <div className="met-controls" aria-label="Camera and navigation controls">
@@ -32,6 +35,11 @@ export default function MetaverseCameraControls({
       {onToggleOpportunities ? (
         <button type="button" onClick={onToggleOpportunities} aria-expanded={opportunitiesOpen}>
           Opportunity Exchange{typeof opportunityCount === "number" ? ` (${opportunityCount})` : ""}
+        </button>
+      ) : null}
+      {onToggleMarket ? (
+        <button type="button" onClick={onToggleMarket} aria-expanded={marketOpen}>
+          Student Market{typeof marketCount === "number" ? ` (${marketCount})` : ""}
         </button>
       ) : null}
     </div>

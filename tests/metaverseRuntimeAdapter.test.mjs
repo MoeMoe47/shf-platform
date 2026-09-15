@@ -58,8 +58,13 @@ test("MET-5 accessible navigator uses same runtime adapter", () => {
 });
 
 test("MET-5 no fake presence appears", () => {
+  // MET-6 wires real presence/chat from MET-2B (see
+  // metaversePresenceCommunicationRuntime.test.mjs). This assertion still
+  // guards against hardcoded/fabricated counts appearing directly in the
+  // page source; live counts now render through MetaversePresenceHud,
+  // sourced from the server-authoritative /metaverse/presence/city API.
   assert.doesNotMatch(pageSource, /\d+\s+online|student-\d|fake online/i);
-  assert.match(pageSource, /No live presence rendered/);
+  assert.match(pageSource, /getCityPresence/);
 });
 
 test("MET-5 real Data Center lesson is mounted read-only", () => {

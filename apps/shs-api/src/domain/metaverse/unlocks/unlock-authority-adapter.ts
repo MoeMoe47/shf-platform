@@ -43,6 +43,15 @@ export const METAVERSE_UNLOCK_OPERATIONAL_EVENTS = [
   "metaverse.activity.completed",
   "metaverse.unlock.denied",
   "metaverse.next_action.selected",
+  // MET-7 — City Mission operational facts (build brief §11). Same
+  // boundary as every event above: these are operational facts only and
+  // never create verified mastery, an outcome, a credential, or
+  // employment eligibility (METAVERSE_OPERATIONAL_EVENT_BOUNDARY below).
+  "metaverse.mission.viewed",
+  "metaverse.mission.started",
+  "metaverse.mission.exited",
+  "metaverse.mission.submitted",
+  "metaverse.mission.activity_completed",
 ] as const;
 
 export const METAVERSE_OPERATIONAL_EVENT_BOUNDARY = {

@@ -19,6 +19,14 @@ const SOURCE_TABLES: Record<string, { table: string; id: string; learner: string
   INSTRUCTOR_VERIFICATION: { table: "learner_competency_decisions", id: "decision_id", learner: "user_id", occurred: "reviewed_at" },
   STUDIO_DELIVERY: { table: "studio_delivery_records", id: "delivery_record_id", learner: "studio_learner_id", occurred: "finalized_at" },
   AGENT_TASK_ATTEMPT: { table: "ai_agent_task_attempts", id: "attempt_id", learner: "agent_principal_user_id", occurred: "finished_at" },
+  // MET-8 — an accepted Student Opportunity Exchange submission is an
+  // evidence *candidate* only (apps/shs-api/src/domain/metaverse/
+  // opportunities/service/opportunity-evidence-adapter.ts). This entry
+  // makes the source type addressable by createEvidenceRule; the Exchange
+  // domain itself never calls projectAuthoritativeFact — an org must
+  // explicitly register a rule for this source type before anything here
+  // becomes real Evidence, same as every other source type in this map.
+  OPPORTUNITY_SUBMISSION: { table: "student_opportunity_submissions", id: "submission_id", learner: "submitted_by_user_id", occurred: "submitted_at" },
 };
 
 function stableId(...parts: string[]) {

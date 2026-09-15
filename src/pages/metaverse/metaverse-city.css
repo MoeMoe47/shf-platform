@@ -205,6 +205,42 @@
   font-size: 0.75rem;
 }
 
+.met-hotspot__mission-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #ffd27a;
+  color: #1c1206;
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.met-hotspot__opportunity-count {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #7adfc0;
+  color: #04241b;
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
 @keyframes metPulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.22); }
@@ -375,6 +411,260 @@
   font-size: 0.86rem;
 }
 
+.met-missions {
+  position: absolute;
+  z-index: 16;
+  right: 18px;
+  bottom: 18px;
+  width: min(380px, calc(100vw - 36px));
+  max-height: min(70vh, 680px);
+  overflow: auto;
+  padding: 14px;
+  border-radius: 8px;
+  background: rgba(5, 14, 29, 0.9);
+  border: 1px solid rgba(180, 215, 255, 0.22);
+  backdrop-filter: blur(18px);
+  transform: translateY(calc(100% + 28px));
+  transition: transform 220ms ease;
+}
+
+.met-missions.is-open {
+  transform: translateY(0);
+}
+
+.met-missions__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.met-missions__header h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.met-missions__status {
+  margin: 10px 0 0;
+  color: rgba(226, 232, 240, 0.82);
+  font-size: 0.88rem;
+}
+
+.met-missions__list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.met-missions__card {
+  width: 100%;
+  display: grid;
+  gap: 4px;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(180, 215, 255, 0.18);
+  color: inherit;
+}
+
+.met-missions__card--locked,
+.met-missions__card--closed {
+  opacity: 0.72;
+}
+
+.met-missions__title {
+  font-weight: 700;
+}
+
+.met-missions__status-pill {
+  justify-self: start;
+  font-size: 0.76rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.22);
+  border: 1px solid rgba(147, 197, 253, 0.4);
+}
+
+.met-missions__status-pill[data-locked="true"] {
+  background: rgba(120, 53, 15, 0.35);
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.met-missions__place {
+  text-transform: capitalize;
+  font-size: 0.8rem;
+  color: rgba(226, 232, 240, 0.7);
+}
+
+.met-missions__next,
+.met-missions__arcade {
+  font-size: 0.82rem;
+  color: rgba(226, 232, 240, 0.82);
+}
+
+.met-opportunities {
+  position: absolute;
+  z-index: 16;
+  left: 18px;
+  bottom: 18px;
+  width: min(420px, calc(100vw - 36px));
+  max-height: min(74vh, 720px);
+  overflow: auto;
+  padding: 14px;
+  border-radius: 8px;
+  background: rgba(5, 14, 29, 0.9);
+  border: 1px solid rgba(180, 255, 210, 0.22);
+  backdrop-filter: blur(18px);
+  transform: translateY(calc(100% + 28px));
+  transition: transform 220ms ease;
+}
+
+.met-opportunities.is-open {
+  transform: translateY(0);
+}
+
+.met-opportunities__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.met-opportunities__header h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.met-opportunities__status {
+  margin: 10px 0 0;
+  color: rgba(226, 232, 240, 0.82);
+  font-size: 0.88rem;
+}
+
+.met-opportunities__district-counts {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  font-size: 0.78rem;
+  color: rgba(226, 232, 240, 0.72);
+  display: grid;
+  gap: 2px;
+}
+
+.met-opportunities__filter {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 10px;
+  font-size: 0.82rem;
+}
+
+.met-opportunities__list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.met-opportunities__card {
+  width: 100%;
+  display: grid;
+  gap: 4px;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(180, 255, 210, 0.18);
+  color: inherit;
+}
+
+.met-opportunities__card--not_eligible,
+.met-opportunities__card--closed,
+.met-opportunities__card--full,
+.met-opportunities__card--restricted {
+  opacity: 0.72;
+}
+
+.met-opportunities__title {
+  font-weight: 700;
+}
+
+.met-opportunities__tier {
+  font-size: 0.76rem;
+  color: rgba(226, 232, 240, 0.7);
+}
+
+.met-opportunities__eligibility {
+  justify-self: start;
+  font-size: 0.76rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.22);
+  border: 1px solid rgba(147, 197, 253, 0.4);
+}
+
+.met-opportunities__eligibility[data-result="NOT_ELIGIBLE"],
+.met-opportunities__eligibility[data-result="CLOSED"],
+.met-opportunities__eligibility[data-result="FULL"],
+.met-opportunities__eligibility[data-result="RESTRICTED"] {
+  background: rgba(120, 53, 15, 0.35);
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.met-opportunities__meta {
+  font-size: 0.82rem;
+  color: rgba(226, 232, 240, 0.82);
+}
+
+.met-opportunity-detail__facts {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 12px;
+  font-size: 0.85rem;
+}
+
+.met-opportunity-detail__facts dt {
+  font-weight: 700;
+  color: rgba(226, 232, 240, 0.7);
+}
+
+.met-opportunity-detail__badge {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #7adfc0;
+}
+
+.met-bid-form {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.met-bid-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.85rem;
+}
+
+.met-bid-form__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.met-bid-form__error {
+  color: #ffb4b4;
+}
+
+.met-bid-status__notice {
+  font-size: 0.78rem;
+  color: #ffd27a;
+}
+
 .met-notice {
   position: absolute;
   z-index: 15;
@@ -389,8 +679,363 @@
   color: #fff7ed;
 }
 
-.met-presence-slots[data-empty="true"] {
-  display: none;
+.met-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.met-presence-hud {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(180, 215, 255, 0.18);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  align-items: center;
+  font-size: 0.8rem;
+  color: rgba(226, 232, 240, 0.88);
+}
+
+.met-presence-hud strong {
+  color: #f8fafc;
+}
+
+.met-presence-hud__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.met-presence-hud__status-label {
+  color: rgba(226, 232, 240, 0.7);
+}
+
+.met-presence-hud__status-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.met-presence-hud__status-icon {
+  font-size: 0.7rem;
+}
+
+.met-presence-hud__status-icon--available { color: #58e08a; }
+.met-presence-hud__status-icon--away { color: #f2b35b; }
+.met-presence-hud__status-icon--do_not_disturb { color: #f26565; }
+.met-presence-hud__status-icon--offline { color: rgba(226, 232, 240, 0.5); }
+
+.met-presence-hud__status select {
+  background: rgba(5, 16, 33, 0.72);
+  color: #f8fafc;
+  border: 1px solid rgba(180, 215, 255, 0.22);
+  border-radius: 6px;
+  padding: 4px 6px;
+  font: inherit;
+  min-height: 32px;
+}
+
+.met-status-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: rgba(226, 232, 240, 0.5);
+}
+
+.met-status-dot--online,
+.met-status-dot--active,
+.met-status-dot--available { background: #58e08a; }
+.met-status-dot--away { background: #f2b35b; }
+.met-status-dot--do_not_disturb { background: #f26565; }
+.met-status-dot--in_activity,
+.met-status-dot--in_class,
+.met-status-dot--in_simulation { background: #66d9ff; }
+.met-status-dot--offline { background: rgba(226, 232, 240, 0.4); }
+
+.met-participants {
+  position: absolute;
+  z-index: 11;
+  left: 18px;
+  bottom: 86px;
+  width: min(280px, calc(100vw - 36px));
+  max-height: min(46vh, 360px);
+  overflow: auto;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: rgba(5, 14, 29, 0.82);
+  border: 1px solid rgba(180, 215, 255, 0.22);
+  backdrop-filter: blur(16px);
+}
+
+.met-participants__heading {
+  margin: 0 0 8px;
+  font-size: 0.92rem;
+}
+
+.met-participants__empty {
+  color: rgba(226, 232, 240, 0.7);
+  font-size: 0.85rem;
+}
+
+.met-participants__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.met-participants__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+
+.met-participants__role {
+  color: #f6c979;
+  font-style: normal;
+}
+
+.met-participants__note {
+  margin: 10px 0 0;
+  color: rgba(226, 232, 240, 0.6);
+  font-size: 0.72rem;
+}
+
+.met-chat-tray {
+  position: absolute;
+  z-index: 17;
+  right: 18px;
+  bottom: 84px;
+}
+
+.met-chat-tray__toggle {
+  position: relative;
+  min-height: 40px;
+  border: 1px solid rgba(180, 215, 255, 0.22);
+  background: rgba(5, 16, 33, 0.85);
+  color: #f8fafc;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font: inherit;
+}
+
+.met-chat-tray__toggle:focus-visible {
+  outline: 3px solid #ffd27a;
+  outline-offset: 3px;
+}
+
+.met-chat-tray__unread {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: #f26565;
+  color: #1a0505;
+  font-size: 0.7rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+.met-chat-tray__panel {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 10px);
+  width: min(340px, calc(100vw - 36px));
+  max-height: min(60vh, 520px);
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  background: rgba(5, 14, 29, 0.92);
+  border: 1px solid rgba(180, 215, 255, 0.24);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.38);
+  padding: 12px;
+}
+
+.met-chat-tray__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.met-chat-tray__head h2 {
+  margin: 0;
+  font-size: 0.98rem;
+}
+
+.met-chat-tray__head button {
+  min-height: 32px;
+  min-width: 32px;
+  border: 1px solid rgba(180, 215, 255, 0.22);
+  background: rgba(5, 16, 33, 0.72);
+  color: #f8fafc;
+  border-radius: 6px;
+  font-size: 1.1rem;
+}
+
+.met-chat-tray__policy-note {
+  margin: 8px 0;
+  font-size: 0.72rem;
+  color: rgba(226, 232, 240, 0.65);
+}
+
+.met-chat-tray__log {
+  flex: 1;
+  overflow-y: auto;
+  margin: 8px 0;
+  padding-right: 4px;
+}
+
+.met-chat-tray__empty {
+  color: rgba(226, 232, 240, 0.65);
+  font-size: 0.85rem;
+}
+
+.met-chat-tray__messages {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.met-chat-tray__message {
+  border-radius: 6px;
+  padding: 6px 8px;
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.met-chat-tray__message[data-own="true"] {
+  background: rgba(24, 66, 96, 0.55);
+}
+
+.met-chat-tray__message-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  color: rgba(226, 232, 240, 0.65);
+}
+
+.met-chat-tray__message-body {
+  margin: 4px 0 0;
+  font-size: 0.86rem;
+  word-break: break-word;
+}
+
+.met-chat-tray__error {
+  color: #f6a2a2;
+  font-size: 0.78rem;
+}
+
+.met-chat-tray__composer {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.met-chat-tray__composer textarea {
+  flex: 1;
+  min-height: 40px;
+  max-height: 100px;
+  resize: vertical;
+  background: rgba(5, 16, 33, 0.72);
+  color: #f8fafc;
+  border: 1px solid rgba(180, 215, 255, 0.22);
+  border-radius: 6px;
+  padding: 8px;
+  font: inherit;
+}
+
+.met-chat-tray__composer button {
+  min-height: 40px;
+  border: 1px solid rgba(180, 215, 255, 0.22);
+  background: rgba(102, 217, 255, 0.16);
+  color: #f8fafc;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font: inherit;
+}
+
+.met-chat-tray__composer button:disabled {
+  opacity: 0.5;
+}
+
+.met-safety-menu {
+  position: relative;
+  margin-top: 6px;
+}
+
+.met-safety-menu__trigger {
+  min-height: 28px;
+  font-size: 0.7rem;
+  border: 1px solid rgba(180, 215, 255, 0.22);
+  background: rgba(5, 16, 33, 0.72);
+  color: #f8fafc;
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+
+.met-safety-menu__panel {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 4px);
+  left: 0;
+  display: grid;
+  gap: 6px;
+  min-width: 180px;
+  padding: 8px;
+  border-radius: 8px;
+  background: rgba(5, 14, 29, 0.95);
+  border: 1px solid rgba(180, 215, 255, 0.28);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.4);
+}
+
+.met-safety-menu__panel button,
+.met-safety-menu__panel select,
+.met-safety-menu__panel textarea {
+  min-height: 32px;
+  font: inherit;
+  color: #f8fafc;
+  background: rgba(5, 16, 33, 0.72);
+  border: 1px solid rgba(180, 215, 255, 0.22);
+  border-radius: 6px;
+  padding: 4px 8px;
+  text-align: left;
+}
+
+.met-safety-menu__report {
+  display: grid;
+  gap: 4px;
+}
+
+.met-safety-menu__report label {
+  font-size: 0.68rem;
+  color: rgba(226, 232, 240, 0.7);
+}
+
+.met-safety-menu__report-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.met-safety-menu__status {
+  font-size: 0.78rem;
+  display: grid;
+  gap: 6px;
 }
 
 .met-footer {
@@ -422,6 +1067,24 @@
     min-width: 132px;
     max-width: 190px;
   }
+
+  .met-presence-hud {
+    font-size: 0.76rem;
+  }
+
+  .met-presence-hud__status {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .met-participants {
+    bottom: 132px;
+    width: min(240px, calc(100vw - 36px));
+  }
+
+  .met-chat-tray {
+    bottom: 130px;
+  }
 }
 
 @media (max-width: 620px) {
@@ -447,7 +1110,9 @@
     clip: rect(0 0 0 0);
   }
 
-  .met-navigator {
+  .met-navigator,
+  .met-missions,
+  .met-opportunities {
     left: 0;
     right: 0;
     bottom: 0;
@@ -468,5 +1133,31 @@
 
   .met-activity__grid {
     grid-template-columns: 1fr;
+  }
+
+  .met-participants {
+    left: 10px;
+    right: 10px;
+    bottom: auto;
+    top: 110px;
+    width: auto;
+    max-height: 30vh;
+  }
+
+  .met-chat-tray {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+  }
+
+  .met-chat-tray__toggle {
+    width: 100%;
+  }
+
+  .met-chat-tray__panel {
+    left: 0;
+    right: 0;
+    width: auto;
+    max-height: 70vh;
   }
 }

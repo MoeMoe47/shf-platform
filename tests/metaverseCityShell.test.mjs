@@ -125,8 +125,11 @@ test("no fake online users are rendered", () => {
 });
 
 test("no fake presence counts are rendered", () => {
+  // MET-6 wires real presence/chat from MET-2B. Live counts render through
+  // MetaversePresenceHud sourced from getCityPresence(); this assertion
+  // still guards against hardcoded/fabricated counts in the page source.
   assert.doesNotMatch(pageSource, /\d+\s+online/i);
-  assert.match(pageSource, /No live presence rendered/);
+  assert.match(pageSource, /getCityPresence/);
 });
 
 test("mobile navigator path exists", () => {

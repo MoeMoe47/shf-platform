@@ -17,13 +17,19 @@ export default function MetaverseHotspot({
       style={{ left: `${item.x}%`, top: `${item.y}%` }}
       onClick={() => onSelect(item)}
       aria-pressed={selected}
-      aria-label={`${label}. ${unlockStateLabel(state)}. ${item.description || ""} ${unlock?.reason_text || ""}`.trim()}
+      aria-label={`${label}. ${unlockStateLabel(state)}. ${item.missionCount ? `${item.missionCount} mission${item.missionCount === 1 ? "" : "s"}. ` : ""}${item.opportunityCount ? `${item.opportunityCount} opportunit${item.opportunityCount === 1 ? "y" : "ies"} open. ` : ""}${item.description || ""} ${unlock?.reason_text || ""}`.trim()}
       data-resource-id={item.id}
       data-unlock-state={state}
     >
       <span className="met-hotspot__pin" aria-hidden="true" />
       <span className="met-hotspot__label">{label}</span>
       <span className="met-hotspot__state">{unlockStateLabel(state)}</span>
+      {item.missionCount ? (
+        <span className="met-hotspot__mission-count" aria-hidden="true">{item.missionCount}</span>
+      ) : null}
+      {item.opportunityCount ? (
+        <span className="met-hotspot__opportunity-count" aria-hidden="true">{item.opportunityCount}</span>
+      ) : null}
       {futurePresenceSlot}
     </button>
   );

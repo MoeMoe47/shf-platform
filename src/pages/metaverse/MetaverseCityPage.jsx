@@ -1,10 +1,15 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import MetaverseBreadcrumbs from "@/components/metaverse/MetaverseBreadcrumbs.jsx";
 import MetaverseActivityMount from "@/components/metaverse/MetaverseActivityMount.jsx";
 import MetaverseCamera from "@/components/metaverse/MetaverseCamera.jsx";
 import MetaverseCameraControls from "@/components/metaverse/MetaverseCameraControls.jsx";
 import MetaverseContextPanel from "@/components/metaverse/MetaverseContextPanel.jsx";
 import MetaverseLocationNavigator from "@/components/metaverse/MetaverseLocationNavigator.jsx";
+import MetaversePresenceHud from "@/components/metaverse/MetaversePresenceHud.jsx";
+import MetaverseParticipantList from "@/components/metaverse/MetaverseParticipantList.jsx";
+import MetaverseChatTray from "@/components/metaverse/MetaverseChatTray.jsx";
+import MetaverseMissionList from "@/components/metaverse/MetaverseMissionList.jsx";
+import MetaverseOpportunityExchange from "@/components/metaverse/MetaverseOpportunityExchange.jsx";
 import {
   METAVERSE_ACTIVITY_PLACEHOLDERS,
   METAVERSE_DISTRICTS,
@@ -23,7 +28,25 @@ import {
   canUseMetaverseDevFixture,
   requestMetaverseEntry,
 } from "@/system/metaverse/metaverseRuntimeClient.js";
+import {
+  getCityPresence,
+  getOrCreateRoom,
+  getRoomParticipants,
+  getRoomsPolicy,
+  heartbeatPresence,
+  revokePresence,
+  startPresence,
+} from "@/system/metaverse/metaverseCommunicationClient.js";
+import { listMissions, enterMission as enterMissionApi } from "@/system/metaverse/metaverseMissionClient.js";
+import { listOpportunities } from "@/system/metaverse/metaverseOpportunityClient.js";
+import { resolveDevUserId } from "@/lib/liveLearning/api.js";
 import "./metaverse-city.css";
+
+const PRESENCE_HEARTBEAT_INTERVAL_MS = 25000;
+const CITY_PRESENCE_POLL_MS = 15000;
+const ROOM_PARTICIPANTS_POLL_MS = 10000;
+const MISSIONS_POLL_MS = 30000;
+const OPPORTUNITIES_POLL_MS = 30000;
 
 const CAMERA_HOME = { x: 0, y: 0, zoom: 1 };
 
@@ -51,10 +74,171 @@ export default function MetaverseCityPage() {
   const [entryNotice, setEntryNotice] = useState("");
   const [runtimeDecisions, setRuntimeDecisions] = useState({});
   const [authorizationState, setAuthorizationState] = useState("idle");
+  const [presenceStatus, setPresenceStatus] = useState("AVAILABLE");
+  const [presenceSessionId, setPresenceSessionId] = useState(null);
+  const [cityCounts, setCityCounts] = useState([]);
+  const [activeRoom, setActiveRoom] = useState(null);
+  const [roomParticipants, setRoomParticipants] = useState({ participant_count: 0, participants: [] });
+  const [chatOpen, setChatOpen] = useState(false);
+  const [directMessagingNote, setDirectMessagingNote] = useState("");
+  const [missions, setMissions] = useState([]);
+  const [missionsLoading, setMissionsLoading] = useState(true);
+  const [missionsError, setMissionsError] = useState("");
+  const [missionsOpen, setMissionsOpen] = useState(false);
+  const [opportunities, setOpportunities] = useState([]);
+  const [opportunitiesLoading, setOpportunitiesLoading] = useState(true);
+  const [opportunitiesError, setOpportunitiesError] = useState("");
+  const [opportunitiesOpen, setOpportunitiesOpen] = useState(false);
+  const presenceStatusRef = useRef(presenceStatus);
+  const currentUserId = resolveDevUserId("learner");
+
+  useEffect(() => {
+    presenceStatusRef.current = presenceStatus;
+  }, [presenceStatus]);
+
+  useEffect(() => {
+    let cancelled = false;
+    getRoomsPolicy()
+      .then((result) => {
+        if (!cancelled) setDirectMessagingNote(result?.direct_messaging?.rationale || "");
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    const poll = () => getCityPresence().then((result) => {
+      if (!cancelled) setCityCounts(result?.counts || []);
+    }).catch(() => {});
+    poll();
+    const interval = setInterval(poll, CITY_PRESENCE_POLL_MS);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    const poll = () => listMissions()
+      .then((result) => {
+        if (cancelled) return;
+        setMissions(result?.items || []);
+        setMissionsError("");
+      })
+      .catch((error) => {
+        if (cancelled) return;
+        setMissionsError(error?.message || "Missions are temporarily unavailable.");
+      })
+      .finally(() => {
+        if (!cancelled) setMissionsLoading(false);
+      });
+    poll();
+    const interval = setInterval(poll, MISSIONS_POLL_MS);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    const poll = () => listOpportunities()
+      .then((items) => {
+        if (cancelled) return;
+        setOpportunities(items || []);
+        setOpportunitiesError("");
+      })
+      .catch((error) => {
+        if (cancelled) return;
+        setOpportunitiesError(error?.message || "Opportunities are temporarily unavailable.");
+      })
+      .finally(() => {
+        if (!cancelled) setOpportunitiesLoading(false);
+      });
+    poll();
+    const interval = setInterval(poll, OPPORTUNITIES_POLL_MS);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    let sessionId = null;
+    startPresence({ district_id: districtId, facility_id: facilityId, activity_id: activityId, status: presenceStatusRef.current })
+      .then((result) => {
+        if (cancelled) return;
+        sessionId = result?.presence?.presence_session_id || null;
+        setPresenceSessionId(sessionId);
+      })
+      .catch(() => {
+        if (!cancelled) setPresenceSessionId(null);
+      });
+    return () => {
+      cancelled = true;
+      if (sessionId) revokePresence(sessionId).catch(() => {});
+    };
+  }, [districtId, facilityId, activityId]);
+
+  useEffect(() => {
+    if (!presenceSessionId) return undefined;
+    const interval = setInterval(() => {
+      heartbeatPresence(presenceSessionId, { status: presenceStatusRef.current }).catch(() => {});
+    }, PRESENCE_HEARTBEAT_INTERVAL_MS);
+    return () => clearInterval(interval);
+  }, [presenceSessionId]);
+
+  const handleStatusChange = (value) => {
+    setPresenceStatus(value);
+    if (presenceSessionId) heartbeatPresence(presenceSessionId, { status: value }).catch(() => {});
+  };
 
   const selectedDistrict = districtId ? getDistrictById(districtId) : null;
   const selectedFacility = facilityId ? getFacilityById(facilityId) : null;
   const selectedActivity = activityId ? METAVERSE_ACTIVITY_PLACEHOLDERS.find((item) => item.id === activityId) : null;
+
+  const inRoomEligibleView = (level === "FACILITY_VIEW" || level === "ACTIVITY_SIMULATION_VIEW") && Boolean(selectedFacility);
+
+  useEffect(() => {
+    if (!inRoomEligibleView) {
+      setActiveRoom(null);
+      setChatOpen(false);
+      return undefined;
+    }
+    let cancelled = false;
+    getOrCreateRoom({ room_type: "FACILITY_ROOM", district_id: selectedFacility.districtId, facility_id: selectedFacility.id })
+      .then((result) => {
+        if (!cancelled) setActiveRoom(result?.room || null);
+      })
+      .catch(() => {
+        if (!cancelled) setActiveRoom(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [inRoomEligibleView, selectedFacility?.id]);
+
+  useEffect(() => {
+    if (!activeRoom?.room_id) {
+      setRoomParticipants({ participant_count: 0, participants: [] });
+      return undefined;
+    }
+    let cancelled = false;
+    const poll = () => getRoomParticipants(activeRoom.room_id).then((result) => {
+      if (!cancelled) setRoomParticipants(result || { participant_count: 0, participants: [] });
+    }).catch(() => {});
+    poll();
+    const interval = setInterval(poll, ROOM_PARTICIPANTS_POLL_MS);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, [activeRoom?.room_id]);
 
   const background = useMemo(() => {
     if (level === "FACILITY_VIEW" || level === "ACTIVITY_SIMULATION_VIEW") {
@@ -66,9 +250,50 @@ export default function MetaverseCityPage() {
     return findProductionEnvironmentAsset({ cameraLevel: "CITY_OVERVIEW", districtId: null, facilityId: null });
   }, [level, districtId, facilityId]);
 
+  // Real mission counts only — derived from the server's own
+  // GET /metaverse/missions response, never fabricated (build brief §8).
+  const missionCountsByDistrict = useMemo(() => {
+    const counts = {};
+    for (const mission of missions) {
+      const key = mission.location?.districtId;
+      if (key) counts[key] = (counts[key] || 0) + 1;
+    }
+    return counts;
+  }, [missions]);
+
+  const missionCountsByFacility = useMemo(() => {
+    const counts = {};
+    for (const mission of missions) {
+      const key = mission.location?.facilityId;
+      if (key) counts[key] = (counts[key] || 0) + 1;
+    }
+    return counts;
+  }, [missions]);
+
+  // Real Opportunity Exchange counts only — derived from the server's own
+  // GET /metaverse/opportunity-exchange/opportunities response, never
+  // fabricated (build brief §21, mirrors missionCountsByDistrict above).
+  const opportunityCountsByDistrict = useMemo(() => {
+    const counts = {};
+    for (const opportunity of opportunities) {
+      const key = opportunity.districtId;
+      if (key) counts[key] = (counts[key] || 0) + 1;
+    }
+    return counts;
+  }, [opportunities]);
+
+  const opportunityCountsByFacility = useMemo(() => {
+    const counts = {};
+    for (const opportunity of opportunities) {
+      const key = opportunity.facilityId;
+      if (key) counts[key] = (counts[key] || 0) + 1;
+    }
+    return counts;
+  }, [opportunities]);
+
   const markers = useMemo(() => {
-    if (level === "CITY_OVERVIEW") return METAVERSE_DISTRICTS.map((district) => ({ ...district, markerType: "DISTRICT" }));
-    if (level === "DISTRICT_VIEW" && selectedDistrict) return selectedDistrict.facilities.map((facility) => ({ ...facility, markerType: "FACILITY" }));
+    if (level === "CITY_OVERVIEW") return METAVERSE_DISTRICTS.map((district) => ({ ...district, markerType: "DISTRICT", missionCount: missionCountsByDistrict[district.id] || 0, opportunityCount: opportunityCountsByDistrict[district.id] || 0 }));
+    if (level === "DISTRICT_VIEW" && selectedDistrict) return selectedDistrict.facilities.map((facility) => ({ ...facility, markerType: "FACILITY", missionCount: missionCountsByFacility[facility.id] || 0, opportunityCount: opportunityCountsByFacility[facility.id] || 0 }));
     if (level === "FACILITY_VIEW" && selectedFacility) return getActivitiesForFacility(selectedFacility.id).map((activity, index) => ({
       ...activity,
       markerType: "ACTIVITY",
@@ -77,7 +302,7 @@ export default function MetaverseCityPage() {
       description: "Future activity mount point. Server unlock is required before entry.",
     }));
     return [];
-  }, [level, selectedDistrict, selectedFacility]);
+  }, [level, selectedDistrict, selectedFacility, missionCountsByDistrict, missionCountsByFacility, opportunityCountsByDistrict, opportunityCountsByFacility]);
 
   const getUnlock = (resource) => resolveMetaverseUiUnlock(resource, {
     runtimeDecision: runtimeDecisions[resource?.id],
@@ -172,6 +397,38 @@ export default function MetaverseCityPage() {
     if (item.markerType === "DISTRICT") selectDistrict(item);
     else if (item.markerType === "FACILITY") selectFacility(item);
     else selectActivity(item);
+  };
+
+  // MET-7 — launching a mission always goes through the mission-aware
+  // protected entry endpoint first (which itself re-derives both real
+  // assignment eligibility and the MET-3 unlock decision server-side);
+  // only on can_enter does this then reuse the exact same district/
+  // facility/activity navigation + MET-5 entry path a direct city click
+  // would use. A denial is always surfaced, never silently dropped.
+  const handleSelectMission = async (mission) => {
+    setMissionsOpen(false);
+    setEntryNotice("");
+    let result;
+    try {
+      result = await enterMissionApi(mission.missionProjectionId);
+    } catch (error) {
+      setEntryNotice(error?.message || "Mission entry is temporarily unavailable.");
+      return;
+    }
+    if (!result?.can_enter) {
+      setEntryNotice(result?.entry?.decision?.reason_text || result?.mission?.nextAction?.reason || "This mission cannot be entered right now.");
+      return;
+    }
+    const district = getDistrictById(mission.location.districtId);
+    if (!district) return;
+    await selectDistrict(district);
+    const facility = getFacilityById(mission.location.facilityId);
+    if (!facility) return;
+    await selectFacility(facility);
+    if (mission.location.metaverseActivityId) {
+      const activity = METAVERSE_ACTIVITY_PLACEHOLDERS.find((item) => item.id === mission.location.metaverseActivityId);
+      if (activity) await selectActivity(activity);
+    }
   };
 
   const goToCrumb = (crumb) => {
@@ -273,6 +530,12 @@ export default function MetaverseCityPage() {
           <h1>{currentTitle}</h1>
         </div>
         <MetaverseBreadcrumbs breadcrumbs={breadcrumbs} onNavigate={goToCrumb} />
+        <MetaversePresenceHud
+          counts={cityCounts}
+          districtId={level === "CITY_OVERVIEW" ? null : districtId}
+          status={presenceStatus}
+          onStatusChange={handleStatusChange}
+        />
       </header>
 
       <MetaverseCameraControls
@@ -283,9 +546,13 @@ export default function MetaverseCityPage() {
         canGoBack={level !== "CITY_OVERVIEW" || Boolean(selection)}
         navigatorOpen={navigatorOpen}
         onToggleNavigator={() => setNavigatorOpen((value) => !value)}
+        missionsOpen={missionsOpen}
+        onToggleMissions={() => setMissionsOpen((value) => !value)}
+        missionCount={missions.length}
+        opportunitiesOpen={opportunitiesOpen}
+        onToggleOpportunities={() => setOpportunitiesOpen((value) => !value)}
+        opportunityCount={opportunities.length}
       />
-
-      <div className="met-presence-slots" aria-hidden="true" data-empty="true" />
 
       {level === "ACTIVITY_SIMULATION_VIEW" && selectedActivity && contextUnlock && canEnterMetaverseResource(contextUnlock) ? (
         <MetaverseActivityMount
@@ -298,6 +565,24 @@ export default function MetaverseCityPage() {
       ) : null}
 
       {entryNotice ? <div className="met-notice" role="status" aria-live="polite">{entryNotice}</div> : null}
+
+      {activeRoom ? (
+        <MetaverseParticipantList
+          participantCount={roomParticipants.participant_count}
+          participants={roomParticipants.participants}
+        />
+      ) : null}
+
+      {activeRoom ? (
+        <MetaverseChatTray
+          room={activeRoom}
+          open={chatOpen}
+          onToggle={setChatOpen}
+          currentUserId={currentUserId}
+          roomLabel={selectedFacility?.label}
+          directMessagingNote={directMessagingNote}
+        />
+      ) : null}
 
       <MetaverseContextPanel
         selection={contextSelection}
@@ -328,9 +613,26 @@ export default function MetaverseCityPage() {
         onClose={() => setNavigatorOpen(false)}
       />
 
+      <MetaverseMissionList
+        open={missionsOpen}
+        missions={missions}
+        loading={missionsLoading}
+        error={missionsError}
+        onSelectMission={handleSelectMission}
+        onClose={() => setMissionsOpen(false)}
+      />
+
+      <MetaverseOpportunityExchange
+        open={opportunitiesOpen}
+        opportunities={opportunities}
+        loading={opportunitiesLoading}
+        error={opportunitiesError}
+        onClose={() => setOpportunitiesOpen(false)}
+      />
+
       <footer className="met-footer">
         <span>{METAVERSE_NAVIGATION_MODEL_META.projectionPhase}</span>
-        <span>No live presence rendered</span>
+        <span>Presence and chat are server-authoritative; no client-declared counts are rendered</span>
       </footer>
     </main>
   );

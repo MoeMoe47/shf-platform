@@ -310,6 +310,22 @@ export class CurriculumCatalogRepo {
     return res.rows[0] ? lessonFromRow(res.rows[0]) : null;
   }
 
+  // MET-7 — an Assignment/Completion Policy binds to a lesson by its
+  // release-snapshot stable_key (unit_id-independent, immutable-after-
+  // publish), but curriculum_lesson_arcade_activities (migration 064)
+  // keys off the live curriculum_lessons row id. This is the one small
+  // join needed to bridge the two — a read, not a new authority.
+  async findLessonIdByStableKeys(organizationId: string, unitStableKey: string, lessonStableKey: string): Promise<string | null> {
+    const res = await this.dbQuery(
+      `SELECT l.lesson_id FROM curriculum_lessons l
+       JOIN curriculum_units u ON u.unit_id = l.unit_id AND u.organization_id = l.organization_id
+       WHERE l.organization_id = $1 AND u.stable_key = $2 AND l.stable_key = $3
+       ORDER BY l.created_at DESC LIMIT 1`,
+      [organizationId, unitStableKey, lessonStableKey],
+    );
+    return res.rows[0]?.lesson_id ?? null;
+  }
+
   async listLessonsForUnit(organizationId: string, unitId: string, includeArchived = false): Promise<CurriculumLessonRow[]> {
     const res = await this.dbQuery(
       `SELECT * FROM curriculum_lessons WHERE organization_id = $1 AND unit_id = $2 ${includeArchived ? "" : "AND status = 'ACTIVE'"} ORDER BY sequence ASC`,

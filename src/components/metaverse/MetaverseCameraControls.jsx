@@ -8,6 +8,12 @@ export default function MetaverseCameraControls({
   canGoBack,
   navigatorOpen,
   onToggleNavigator,
+  missionsOpen,
+  onToggleMissions,
+  missionCount,
+  opportunitiesOpen,
+  onToggleOpportunities,
+  opportunityCount,
 }) {
   return (
     <div className="met-controls" aria-label="Camera and navigation controls">
@@ -18,6 +24,16 @@ export default function MetaverseCameraControls({
       <button type="button" onClick={onToggleNavigator} aria-expanded={navigatorOpen}>
         Locations
       </button>
+      {onToggleMissions ? (
+        <button type="button" onClick={onToggleMissions} aria-expanded={missionsOpen}>
+          Missions{typeof missionCount === "number" ? ` (${missionCount})` : ""}
+        </button>
+      ) : null}
+      {onToggleOpportunities ? (
+        <button type="button" onClick={onToggleOpportunities} aria-expanded={opportunitiesOpen}>
+          Opportunity Exchange{typeof opportunityCount === "number" ? ` (${opportunityCount})` : ""}
+        </button>
+      ) : null}
     </div>
   );
 }

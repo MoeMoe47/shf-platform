@@ -84,6 +84,13 @@ const NOTIFICATION_CLASSIFICATION: Record<string, NotificationClassification> = 
   ARAG_RELEASE_FAILED: { category: "REQUIRED_ACTION", actionRequired: true, urgency: "warning", channelEligibility: IN_APP_ONLY },
   STUDIO_QA_COMPLETE: { category: "TRANSACTIONAL", actionRequired: false, urgency: "notice", channelEligibility: IN_APP_ONLY },
   STUDIO_HANDOFF_ASSIGNED: { category: "REQUIRED_ACTION", actionRequired: true, urgency: "notice", channelEligibility: IN_APP_ONLY },
+
+  // MET-8 — Student Opportunity Exchange.
+  OPPORTUNITY_EXCHANGE_BID_ACCEPTED: { category: "TRANSACTIONAL", actionRequired: false, urgency: "notice", channelEligibility: IN_APP_ONLY },
+  OPPORTUNITY_EXCHANGE_WORK_SUBMITTED: { category: "REQUIRED_ACTION", actionRequired: true, urgency: "notice", channelEligibility: IN_APP_ONLY },
+  OPPORTUNITY_EXCHANGE_WORK_ACCEPTED: { category: "TRANSACTIONAL", actionRequired: false, urgency: "info", channelEligibility: IN_APP_ONLY },
+  OPPORTUNITY_EXCHANGE_REVISION_REQUESTED: { category: "REQUIRED_ACTION", actionRequired: true, urgency: "warning", channelEligibility: IN_APP_ONLY },
+  OPPORTUNITY_EXCHANGE_WORK_DECLINED: { category: "TRANSACTIONAL", actionRequired: false, urgency: "warning", channelEligibility: IN_APP_ONLY },
 };
 
 /**

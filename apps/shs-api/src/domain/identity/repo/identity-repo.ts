@@ -352,6 +352,27 @@ export class IdentityRepo {
       };
     }
 
+    // MET-8 Student Opportunity Exchange: dynamically-generated per-run
+    // personas. instructor_b is a second, non-owning instructor (proves a
+    // sponsor cannot manage another sponsor's Opportunity); student_a/
+    // student_b are two distinct org_shf_001 students (duplicate-bid,
+    // team-bid, and competing-bid checks); partner_student is cross-org
+    // (org_partner_001) for cross-org denial checks — mirrors the
+    // student/admin_b cross-org shape every prior phase's fixtures use.
+    const met8Match = userId.match(/^user_met8_\d+_(instructor_b|student_a|student_b|partner_student)$/);
+    if (met8Match) {
+      const persona = met8Match[1];
+      const organizationId = persona === "partner_student" ? "org_partner_001" : "org_shf_001";
+      const role = persona === "instructor_b" ? "instructor" : "student";
+      return {
+        user_id: userId,
+        organization_id: organizationId,
+        email: `${userId}@test.invalid`,
+        full_name: "MET-8 Opportunity Exchange Test User",
+        roles: [role],
+      };
+    }
+
     return null;
   }
 

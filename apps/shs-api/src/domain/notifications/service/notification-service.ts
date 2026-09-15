@@ -242,6 +242,39 @@ const EVENT_POLICIES: Record<string, NotificationPolicy> = {
     },
     path: (event) => event.subject_id ? `/studio/handoffs/${encodeURIComponent(String(event.subject_id))}` : null,
   },
+
+  // MET-8 — Student Opportunity Exchange. Verified against
+  // apps/shs-api/src/domain/metaverse/opportunities/service/{award,submission}-service.ts.
+  // Every recipient below is a single named actor already present on the
+  // event payload (the awarded student, or the award's own sponsor_user_id
+  // looked up from the award row) — never a permission-scoped audience,
+  // because an Opportunity always has exactly one sponsor and (for now)
+  // one org-scoped awardee/team.
+  "opportunity_exchange.bid.accepted": {
+    type: "OPPORTUNITY_EXCHANGE_BID_ACCEPTED", title: "Your bid was accepted", message: "Your bid was accepted and an Opportunity award was created.",
+    recipient: async (event) => String(event.payload?.student_user_id || "") || null,
+    path: (event) => event.payload?.award_id ? `/metaverse/opportunity-exchange/awards/${encodeURIComponent(String(event.payload.award_id))}` : null,
+  },
+  "opportunity_exchange.submission.submitted": {
+    type: "OPPORTUNITY_EXCHANGE_WORK_SUBMITTED", title: "Work submitted for review", message: "A student submitted work for your Opportunity award.",
+    recipient: async (event) => String(event.payload?.sponsor_user_id || "") || null,
+    path: (event) => event.payload?.award_id ? `/metaverse/opportunity-exchange/awards/${encodeURIComponent(String(event.payload.award_id))}` : null,
+  },
+  "opportunity_exchange.submission.accepted": {
+    type: "OPPORTUNITY_EXCHANGE_WORK_ACCEPTED", title: "Your work was accepted", message: "Your submitted work was accepted.",
+    recipient: async (event) => String(event.payload?.student_user_id || "") || null,
+    path: (event) => event.payload?.award_id ? `/metaverse/opportunity-exchange/awards/${encodeURIComponent(String(event.payload.award_id))}` : null,
+  },
+  "opportunity_exchange.submission.revision_requested": {
+    type: "OPPORTUNITY_EXCHANGE_REVISION_REQUESTED", title: "Revision requested", message: "The sponsor requested a revision to your submitted work.",
+    recipient: async (event) => String(event.payload?.student_user_id || "") || null,
+    path: (event) => event.payload?.award_id ? `/metaverse/opportunity-exchange/awards/${encodeURIComponent(String(event.payload.award_id))}` : null,
+  },
+  "opportunity_exchange.submission.declined": {
+    type: "OPPORTUNITY_EXCHANGE_WORK_DECLINED", title: "Submitted work declined", message: "The sponsor declined your submitted work.",
+    recipient: async (event) => String(event.payload?.student_user_id || "") || null,
+    path: (event) => event.payload?.award_id ? `/metaverse/opportunity-exchange/awards/${encodeURIComponent(String(event.payload.award_id))}` : null,
+  },
 };
 
 // NCA-4 §5: several real, already-emitting Studio events (studio.qa.completed,

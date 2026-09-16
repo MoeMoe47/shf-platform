@@ -20,6 +20,17 @@ export const CITY_NEXT_ACTION_TYPES = [
   "CONTINUE_CAREER_PATH",
   "JOIN_PROGRAM_MISSION",
   "EXPLORE_SIDE_MISSION",
+  "COMPLETE_CIVIC_COURSE",
+  "FILE_CANDIDACY",
+  "REVIEW_CANDIDATE_PROFILE",
+  "ATTEND_CANDIDATE_FORUM",
+  "CAST_STUDENT_BALLOT",
+  "ATTEND_COUNCIL_SESSION",
+  "REVIEW_COUNCIL_AGENDA",
+  "SUBMIT_CITY_PROPOSAL",
+  "VOTE_ON_COUNCIL_PROPOSAL",
+  "CONTINUE_CITY_PROJECT",
+  "COMPLETE_CIVIC_MISSION",
   "ATTEND_CITY_EVENT",
   "NO_ACTION_AVAILABLE",
 ] as const;
@@ -34,6 +45,7 @@ export const CITY_NEXT_ACTION_PRIORITY = [
   "EVIDENCE_REVIEW_FOLLOW_UP",
   "PROGRAM_REQUIRED_ACTIVITY",
   "AVAILABLE_CAREER_OPPORTUNITY",
+  "CIVIC_GOVERNMENT_ACTION",
   "ARCADE_PRACTICE_RECOMMENDATION",
   "SIDE_MISSION_ENRICHMENT",
   "CITY_EVENT",
@@ -169,6 +181,7 @@ export interface CityOrchestrationProjection {
   market_state: Record<string, unknown>;
   passport_state: Record<string, unknown>;
   career_state: Record<string, unknown>;
+  civic_state?: Record<string, unknown> | null;
   next_action: GuidedNextAction;
   briefing: DailyCityBriefing;
   city_events: CityEventProjection[];

@@ -6,6 +6,7 @@ import { listListings } from "../../market/service/listing-service.js";
 import { getBalance, listMyOrders } from "../../market/service/order-service.js";
 import { getMyPassport } from "../../passport/service/passport-projection-service.js";
 import { listMyEnterprises } from "../../enterprise/service/enterprise-service.js";
+import { buildMetaverseCivicProjection } from "../../civic/civic-authority-adapter.js";
 import type {
   BuildingPreview,
   CityBriefingItem,
@@ -35,6 +36,7 @@ export type CityOrchestrationSources = {
   passport: any | null;
   cityPresenceCounts?: Array<{ district_id?: string; districtId?: string; facility_id?: string; facilityId?: string; participant_count?: number; count?: number }>;
   enterprises?: any[];
+  civic?: any | null;
 };
 
 export const CITY_ORCHESTRATION_AUTHORITY_REUSE = {
@@ -55,6 +57,7 @@ export const CITY_ORCHESTRATION_AUTHORITY_REUSE = {
   presence: "apps/shs-api/src/domain/metaverse/communication/runtime/presence-service.ts",
   notifications: "apps/shs-api/src/domain/notifications (NCA), not duplicated here",
   student_enterprise: "apps/shs-api/src/domain/metaverse/enterprise/service/enterprise-service.js (MET-12)",
+  shf_civic: "apps/shs-api/src/domain/shf-civic/service/shf-civic-service.ts (MET-14 canonical civic authority)",
 } as const;
 
 export class CityOrchestrationError extends Error {
@@ -212,6 +215,25 @@ export function deriveGuidedNextAction(sources: CityOrchestrationSources): Guide
     });
   }
 
+  const civicAction = sources.civic?.civicMissions?.find((action: any) => ["COMPLETE_CIVIC_COURSE", "FILE_CANDIDACY", "CAST_STUDENT_BALLOT", "ATTEND_COUNCIL_SESSION", "SUBMIT_CITY_PROPOSAL", "COMPLETE_CIVIC_MISSION"].includes(String(action.actionType || "")));
+  if (civicAction) {
+    return nextAction({
+      action_type: civicAction.actionType,
+      title: "Continue Civic Hall",
+      summary: "SHF Civic has an available city-government simulation action.",
+      reason: "Civic actions are projected after required academic/project/evidence work and remain governed by SHF Civic.",
+      source_type: civicAction.source || "SHF_CIVIC",
+      source_ref: civicAction.sourceRef || "shf_civic_hall",
+      district_id: "civic-district",
+      facility_id: "city-hall",
+      route_or_destination: civicAction.route || "/metaverse?panel=civic",
+      priority: 7,
+      priority_band: "CIVIC_GOVERNMENT_ACTION",
+      is_required: false,
+      is_available: true,
+    });
+  }
+
   const opportunity = opportunities.find(opportunityOpen);
   if (opportunity) {
     return nextAction({
@@ -338,6 +360,18 @@ export function buildDailyBriefing(sources: CityOrchestrationSources, generatedA
     facility_id: mission.location?.facilityId,
     status: mission.missionStatus,
   }));
+  const civic = sources.civic ? [
+    item({
+      id: "civic:hall",
+      title: "Civic Hall",
+      summary: "SHF Civic student government, elections, council, proposals, and city operations are available as bounded educational simulations.",
+      source_type: "SHF_CIVIC",
+      source_ref: "shf_civic_hall",
+      district_id: "civic-district",
+      facility_id: "city-hall",
+      status: "AVAILABLE",
+    }),
+  ] : [];
   const economy = [
     ...(sources.marketBalance ? [item({
       id: "economy:balance",
@@ -375,7 +409,7 @@ export function buildDailyBriefing(sources: CityOrchestrationSources, generatedA
     source_ref: claim.sourceRef,
     status: claim.verificationLevel,
   }));
-  return { generated_at: generatedAt, sections: { today: requiredMissions, opportunities, city, economy, progress }, source_backed_only: true };
+  return { generated_at: generatedAt, sections: { today: requiredMissions, opportunities, city: [...city, ...civic], economy, progress }, source_backed_only: true };
 }
 
 export function buildCityEvents(sources: CityOrchestrationSources): CityEventProjection[] {
@@ -411,7 +445,21 @@ export function buildCityEvents(sources: CityOrchestrationSources): CityEventPro
       visibility: "PROGRAM",
       status: missionAvailable(mission) ? "ACTIVE" : "BLOCKED",
     } as CityEventProjection));
-  return [...missionEvents, ...opportunityEvents];
+  const civicEvents = sources.civic ? [{
+    event_id: "civic:student-government",
+    source: "CIVIC",
+    source_ref: "shf_civic_hall",
+    title: "Civic Hall session",
+    summary: "SHF Civic council, election, proposal, and public-comment simulation activity.",
+    starts_at: null,
+    ends_at: null,
+    district_id: "civic-district",
+    facility_id: "city-hall",
+    eligibility: "SERVER_DERIVED",
+    visibility: "ORGANIZATION",
+    status: "ACTIVE",
+  } as CityEventProjection] : [];
+  return [...missionEvents, ...opportunityEvents, ...civicEvents];
 }
 
 export function buildDistrictPulses(sources: CityOrchestrationSources, next: GuidedNextAction): CityDistrictPulse[] {
@@ -566,6 +614,7 @@ export function buildCityOrchestrationProjection(actor: Actor, sources: CityOrch
     market_state: { source: "MET-9_STUDENT_MARKET", listing_count: (sources.marketListings || []).length, order_count: (sources.marketOrders || []).length },
     passport_state: { source: "MET-10_WORK_PASSPORT", claim_count: (sources.passport?.claims || []).length, read_only: true },
     career_state: { source: "career_authority_via_passport", career_claim_count: (sources.passport?.claims || []).filter((claim: any) => claim.claimType === "CAREER_PROGRESS").length, job_ready_invented: false },
+    civic_state: sources.civic ? { source: "SHF_CIVIC", authority: "SHF_CIVIC", civic_sure_authority: false, public_safe: sources.civic.publicSafeView, city_operations_count: sources.civic.cityOperations?.length || 0 } : null,
     next_action: next,
     city_events: events,
     district_pulses: districtPulses,
@@ -582,7 +631,7 @@ export function buildCityOrchestrationProjection(actor: Actor, sources: CityOrch
 
 export async function loadCityOrchestrationSources(actor: Actor): Promise<CityOrchestrationSources> {
   assertScope(actor);
-  const [missions, opportunities, marketListings, marketOrders, marketBalance, passport, enterprises] = await Promise.all([
+  const [missions, opportunities, marketListings, marketOrders, marketBalance, passport, enterprises, civic] = await Promise.all([
     listMissionsForActor(actor).catch(() => []),
     listOpportunitiesForActor(actor).catch(() => []),
     listListings(actor).catch(() => []),
@@ -592,8 +641,9 @@ export async function loadCityOrchestrationSources(actor: Actor): Promise<CityOr
     // MET-12 — best-effort; city orchestration must not fail if the
     // enterprise domain is unavailable (mirrors every other source here).
     listMyEnterprises(actor).catch(() => []),
+    Promise.resolve(buildMetaverseCivicProjection(actor)).catch(() => null),
   ]);
-  return { missions, opportunities, marketListings, marketOrders, marketBalance, passport, enterprises };
+  return { missions, opportunities, marketListings, marketOrders, marketBalance, passport, enterprises, civic };
 }
 
 export async function getCityOrchestration(actor: Actor, now: Date = new Date()) {

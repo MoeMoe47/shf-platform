@@ -1827,3 +1827,182 @@
     max-height: 70vh;
   }
 }
+
+.met-panel-toggle--civic {
+  right: 188px;
+}
+
+.met-civic {
+  position: fixed;
+  right: 24px;
+  bottom: 84px;
+  z-index: 18;
+  width: min(720px, calc(100vw - 48px));
+  max-height: min(760px, calc(100vh - 122px));
+  overflow: auto;
+  padding: 18px;
+  border: 1px solid rgba(226, 232, 240, 0.32);
+  border-radius: 8px;
+  background: rgba(11, 18, 32, 0.94);
+  color: #f8fafc;
+  box-shadow: 0 22px 80px rgba(0, 0, 0, 0.42);
+  transform: translateY(18px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+
+.met-civic.is-open {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.met-civic__header,
+.met-civic__section-head,
+.met-civic__candidate .met-civic__candidate-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.met-civic__header h2,
+.met-civic h3,
+.met-civic h4 {
+  margin: 0;
+}
+
+.met-civic__eyebrow,
+.met-civic__boundary,
+.met-civic__office p,
+.met-civic__candidate small,
+.met-civic__status {
+  color: #cbd5e1;
+}
+
+.met-civic__summary,
+.met-civic__office,
+.met-civic__candidate,
+.met-civic__ballot,
+.met-civic section[aria-labelledby] {
+  margin-top: 14px;
+}
+
+.met-civic__summary,
+.met-civic__office,
+.met-civic__candidate,
+.met-civic__ballot,
+.met-civic__form,
+.met-civic__ops li {
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.72);
+  padding: 12px;
+}
+
+.met-civic__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.met-civic dl {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0 0;
+}
+
+.met-civic dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.met-civic dt {
+  color: #94a3b8;
+}
+
+.met-civic dd {
+  margin: 0;
+  text-align: right;
+}
+
+.met-civic__choice {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 10px;
+  align-items: center;
+  min-height: 42px;
+}
+
+.met-civic__form {
+  display: grid;
+  gap: 10px;
+}
+
+.met-civic__form label,
+.met-civic__ballot fieldset {
+  display: grid;
+  gap: 8px;
+}
+
+.met-civic input,
+.met-civic textarea {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid rgba(203, 213, 225, 0.32);
+  border-radius: 6px;
+  background: rgba(2, 6, 23, 0.68);
+  color: #f8fafc;
+  padding: 10px;
+}
+
+.met-civic textarea {
+  min-height: 92px;
+  resize: vertical;
+}
+
+.met-civic button {
+  min-height: 40px;
+  border: 1px solid rgba(203, 213, 225, 0.28);
+  border-radius: 6px;
+  background: rgba(56, 189, 248, 0.14);
+  color: #f8fafc;
+  padding: 8px 12px;
+}
+
+.met-civic button:disabled {
+  opacity: 0.54;
+}
+
+.met-civic__status--error {
+  color: #fecaca;
+}
+
+.met-civic__ops {
+  display: grid;
+  gap: 10px;
+  padding: 0;
+  list-style: none;
+}
+
+.met-civic__ops li {
+  display: grid;
+  gap: 4px;
+}
+
+@media (max-width: 620px) {
+  .met-civic {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-height: 68vh;
+    border-radius: 8px 8px 0 0;
+  }
+
+  .met-panel-toggle--civic {
+    right: 144px;
+  }
+}

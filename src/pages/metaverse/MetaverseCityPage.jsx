@@ -19,6 +19,7 @@ import MetaverseCityEvents from "@/components/metaverse/MetaverseCityEvents.jsx"
 import MetaverseFastTravel from "@/components/metaverse/MetaverseFastTravel.jsx";
 import MetaverseMiniMap from "@/components/metaverse/MetaverseMiniMap.jsx";
 import MetaverseBuildingPreview from "@/components/metaverse/MetaverseBuildingPreview.jsx";
+import MetaverseCivicHall from "@/components/metaverse/MetaverseCivicHall.jsx";
 import MetaverseEnterpriseHub from "@/components/metaverse/enterprise/MetaverseEnterpriseHub.jsx";
 import {
   METAVERSE_ACTIVITY_PLACEHOLDERS,
@@ -122,6 +123,7 @@ export default function MetaverseCityPage() {
   const [passportLoading, setPassportLoading] = useState(true);
   const [passportError, setPassportError] = useState("");
   const [passportOpen, setPassportOpen] = useState(false);
+  const [civicOpen, setCivicOpen] = useState(false);
   const [orchestration, setOrchestration] = useState(null);
   const [orchestrationError, setOrchestrationError] = useState("");
   const presenceStatusRef = useRef(presenceStatus);
@@ -883,6 +885,16 @@ export default function MetaverseCityPage() {
         loading={passportLoading}
         error={passportError}
         onClose={() => setPassportOpen(false)}
+      />
+
+      <button type="button" className="met-panel-toggle met-panel-toggle--civic" onClick={() => setCivicOpen((value) => !value)} aria-expanded={civicOpen}>
+        Civic Hall
+      </button>
+
+      <MetaverseCivicHall
+        open={civicOpen}
+        civicState={orchestration?.civic_state}
+        onClose={() => setCivicOpen(false)}
       />
 
       <button type="button" className="met-panel-toggle met-panel-toggle--enterprise" onClick={() => setEnterpriseOpen((value) => !value)} aria-expanded={enterpriseOpen}>

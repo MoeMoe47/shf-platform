@@ -79,6 +79,7 @@ import { registerMcpRoutes } from "../domain/mcp/api/routes.js";
 import { registerOperationalAwarenessRoutes } from "../domain/operational-awareness/api/routes.js";
 import { registerAragRoutes } from "../domain/arag/api/routes.js";
 import { registerGovernmentAssuranceRoutes } from "../domain/government-assurance/api/routes.js";
+import { registerShfCivicRoutes } from "../domain/shf-civic/api/routes.js";
 import { registerLegalRoutes } from "../domain/legal/api/routes.js";
 import { registerOrientationRoutes } from "../domain/orientation/api/routes.js";
 import { registerOgl6Routes } from "../domain/orientation/api/ogl6-routes.js";
@@ -402,6 +403,7 @@ app.post("/auth/login", async (req: any, res: any) => {
   registerOperationalAwarenessRoutes(app);
   registerAragRoutes(app);
   registerGovernmentAssuranceRoutes(app);
+  registerShfCivicRoutes(app);
   registerLegalRoutes(app);
   registerOrientationRoutes(app);
   registerOgl6Routes(app);

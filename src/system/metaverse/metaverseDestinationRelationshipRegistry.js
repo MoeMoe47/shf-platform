@@ -4,7 +4,12 @@ import {
   isCanonicalDestinationId,
 } from "./metaverseCanonicalDestinationRegistry.js";
 import { METAVERSE_FACILITIES, METAVERSE_DISTRICT_MARKERS } from "./metaverseNavigationModel.js";
-import { MINIMAP_LOCATION_REGISTRY } from "./metaverseMiniMapRegistry.js";
+import {
+  MINIMAP_COORDINATE_STATUSES,
+  MINIMAP_LOCATION_REGISTRY,
+  QUICK_MAP_COORDINATE_SPACE,
+  isNormalizedQuickMapCoordinate,
+} from "./metaverseMiniMapRegistry.js";
 import { METAVERSE_PRODUCTION_BACKGROUND_SET, METAVERSE_REFERENCE_ASSETS, METAVERSE_VISUAL_ASSET_REGISTRY } from "./metaverseVisualAssets.js";
 import { METAVERSE_LIVING_CITY_SCENES } from "./livingCityRegistry.js";
 import { METAVERSE_ROAD_TRACES, METAVERSE_BUS_ROUTES } from "./metaverseRoadTraceRegistry.js";
@@ -12,6 +17,17 @@ import { METAVERSE_RIVER_FLOW_PATHS, METAVERSE_WATER_ZONES } from "./metaverseRi
 import { REGIONAL_SCENE_DESTINATION_REFS } from "./regionalSceneRegistry.js";
 
 export const METAVERSE_RELATIONSHIP_ASSET_STATUSES = ["PRODUCTION", "REFERENCE_ONLY", "MISSING"];
+
+export const MASTER_CITY_COORDINATE_SPACE = Object.freeze({
+  id: "master-city",
+  units: "normalized-percent",
+  minX: 0,
+  maxX: 100,
+  minY: 0,
+  maxY: 100,
+});
+
+export const DESTINATION_COORDINATE_STATUSES = Object.freeze(MINIMAP_COORDINATE_STATUSES);
 
 const emptyRelationshipRefs = () => ({
   roadAccessRefs: [],
@@ -38,12 +54,17 @@ function relationshipForFacility(facility) {
     destinationId,
     masterCity: {
       facilityId: facility.id,
+      coordinateSpaceId: MASTER_CITY_COORDINATE_SPACE.id,
       position: { x: facility.x, y: facility.y },
+      status: "VERIFIED",
     },
     quickMap: quickMap ? {
       markerId: quickMap.id,
+      coordinateSpaceId: QUICK_MAP_COORDINATE_SPACE.id,
       position: { x: quickMap.x, y: quickMap.y },
+      status: quickMap.status,
     } : null,
+    quickMapStatus: quickMap?.status || "UNMAPPED",
     districtId: facility.districtId,
     facilityId: facility.id,
     districtSceneId: districtScene?.sceneId || null,
@@ -68,10 +89,22 @@ export function getDestinationSpatialRelationship(id) {
 }
 
 export function getMasterCityLocation(id) {
+  const masterCity = getDestinationSpatialRelationship(id)?.masterCity;
+  if (!masterCity) return null;
+  // Preserve the Phase 1.3 caller shape; coordinate-space metadata is
+  // available through getMasterCityProjection and the full relationship.
+  return { facilityId: masterCity.facilityId, position: masterCity.position };
+}
+
+export function getMasterCityProjection(id) {
   return getDestinationSpatialRelationship(id)?.masterCity || null;
 }
 
 export function getQuickMapLocation(id) {
+  return getDestinationSpatialRelationship(id)?.quickMap || null;
+}
+
+export function getQuickMapProjection(id) {
   return getDestinationSpatialRelationship(id)?.quickMap || null;
 }
 
@@ -121,6 +154,9 @@ export function validateMetaverseDestinationRelationships(relationships = METAVE
     if (!districtIds.has(relationship.districtId)) errors.push(`${relationship.destinationId}: unknown districtId ${relationship.districtId}`);
     if (!facilityIds.has(relationship.facilityId)) errors.push(`${relationship.destinationId}: unknown facilityId ${relationship.facilityId}`);
     if (relationship.masterCity?.facilityId !== relationship.facilityId) errors.push(`${relationship.destinationId}: master-city facility mismatch`);
+    if (relationship.masterCity?.coordinateSpaceId !== MASTER_CITY_COORDINATE_SPACE.id) errors.push(`${relationship.destinationId}: invalid master-city coordinate space`);
+    if (relationship.masterCity?.status !== "VERIFIED") errors.push(`${relationship.destinationId}: invalid master-city coordinate status`);
+    if (!isNormalizedQuickMapCoordinate(relationship.masterCity?.position?.x, relationship.masterCity?.position?.y)) errors.push(`${relationship.destinationId}: invalid master-city coordinates`);
 
     const coordinateKey = `${relationship.masterCity?.position?.x}:${relationship.masterCity?.position?.y}`;
     if (seenMasterCoordinates.has(coordinateKey)) errors.push(`${relationship.destinationId}: duplicate master-city coordinate ownership`);
@@ -138,6 +174,8 @@ export function validateMetaverseDestinationRelationships(relationships = METAVE
     if (relationship.quickMap && relationship.quickMap.markerId && !MINIMAP_LOCATION_REGISTRY.some((location) => location.id === relationship.quickMap.markerId)) {
       errors.push(`${relationship.destinationId}: unknown Quick Map marker ${relationship.quickMap.markerId}`);
     }
+    if (!MINIMAP_COORDINATE_STATUSES.includes(relationship.quickMapStatus)) errors.push(`${relationship.destinationId}: invalid Quick Map coordinate status`);
+    if (relationship.quickMap && !isNormalizedQuickMapCoordinate(relationship.quickMap.position?.x, relationship.quickMap.position?.y)) errors.push(`${relationship.destinationId}: invalid Quick Map coordinates`);
     for (const roadId of relationship.roadAccessRefs || []) if (!roadIds.has(roadId)) errors.push(`${relationship.destinationId}: unknown road access reference ${roadId}`);
     for (const waterId of relationship.waterAccessRefs || []) if (!waterIds.has(waterId)) errors.push(`${relationship.destinationId}: unknown water access reference ${waterId}`);
     if ((relationship.skyBridgeStopRefs || []).length) errors.push(`${relationship.destinationId}: Sky Bridge registry is not available`);

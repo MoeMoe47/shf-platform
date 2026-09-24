@@ -3,8 +3,11 @@ import { createPortal } from "react-dom";
 import { publicAssetUrl } from "@/system/metaverse/metaverseNavigationModel.js";
 import {
   MINIMAP_ASSET,
+  MINIMAP_CALIBRATION_TARGET_IDS,
   getCalibratedMiniMapLocations,
+  getMiniMapLocationById,
   getMiniMapLocationIcon,
+  formatMiniMapCalibrationMapping,
   resolveMiniMapCalibrationModeEnabled,
   resolveMiniMapFaceFixtureEnabled,
 } from "@/system/metaverse/metaverseMiniMapRegistry.js";
@@ -106,6 +109,12 @@ function isCalibrationModeEnabled() {
   return resolveMiniMapCalibrationModeEnabled({ isDev: import.meta.env.DEV, search: window.location.search });
 }
 
+function readCalibrationTargetId() {
+  if (typeof window === "undefined") return "";
+  const targetId = new URLSearchParams(window.location.search).get("minimapTarget") || "";
+  return MINIMAP_CALIBRATION_TARGET_IDS.includes(targetId) ? targetId : "";
+}
+
 function isFaceFixtureModeEnabled() {
   if (typeof window === "undefined") return false;
   return resolveMiniMapFaceFixtureEnabled({ isDev: import.meta.env.DEV, search: window.location.search });
@@ -156,6 +165,8 @@ export default function MetaverseMiniMap({
   const [mapZoom, setMapZoom] = useState(1);
   const [mapOrigin, setMapOrigin] = useState("50% 50%");
   const [calibrationPoint, setCalibrationPoint] = useState(null);
+  const [calibrationTargetId, setCalibrationTargetId] = useState(readCalibrationTargetId);
+  const [calibrationCopied, setCalibrationCopied] = useState(false);
   const [layerToggles, setLayerToggles] = useState({
     districts: true,
     students: true,
@@ -196,7 +207,8 @@ export default function MetaverseMiniMap({
   // minimap-local view controls only.
   const handleRecenter = () => {
     const mine = districts.find((district) => district.id === currentDistrictId);
-    if (mine) setMapOrigin(`${mine.x}% ${mine.y}%`);
+    const quickMapMine = getMiniMapLocationById(mine?.id);
+    if (quickMapMine && quickMapMine.status !== "UNMAPPED") setMapOrigin(`${quickMapMine.x}% ${quickMapMine.y}%`);
     setMapZoom(1.7);
   };
   const handleFitWorld = () => {
@@ -211,8 +223,19 @@ export default function MetaverseMiniMap({
     const y = ((event.clientY - rect.top) / rect.height) * 100;
     const point = { x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10 };
     setCalibrationPoint(point);
+    setCalibrationCopied(false);
     // eslint-disable-next-line no-console
-    console.log(`[minimapCalibrate] x: ${point.x}, y: ${point.y}`);
+    console.log(`[minimapCalibrate] ${formatMiniMapCalibrationMapping({ targetId: calibrationTargetId || "unassigned", ...point })}`);
+  };
+
+  const calibrationTarget = getMiniMapLocationById(calibrationTargetId);
+  const calibrationMapping = calibrationPoint && calibrationTargetId
+    ? formatMiniMapCalibrationMapping({ targetId: calibrationTargetId, ...calibrationPoint })
+    : null;
+  const copyCalibrationMapping = async () => {
+    if (!calibrationMapping || !navigator.clipboard?.writeText) return;
+    await navigator.clipboard.writeText(calibrationMapping);
+    setCalibrationCopied(true);
   };
 
   // PIXEL-FAITHFUL MOCK MATCH — PHASE 9: Recenter/Fit World/View Full
@@ -263,6 +286,8 @@ export default function MetaverseMiniMap({
             overlay per district. */}
         {layerToggles.districts
           ? districts.map((district) => {
+              const quickMapLocation = getMiniMapLocationById(district.id);
+              if (!quickMapLocation || quickMapLocation.status === "UNMAPPED") return null;
               const isYou = district.id === youAreHereAnchorId;
               const count = layerToggles.students ? countForDistrict(district.id) : 0;
               const live = layerToggles.events && hasActiveEvent(district.id);
@@ -274,7 +299,7 @@ export default function MetaverseMiniMap({
                   key={district.id}
                   type="button"
                   className={`met-citymap__marker ${isYou ? "is-you" : ""} ${live || civicHere ? "has-event" : ""}`}
-                  style={{ left: `${district.x}%`, top: `${district.y}%` }}
+                  style={{ left: `${quickMapLocation.x}%`, top: `${quickMapLocation.y}%` }}
                   onClick={(event) => {
                     event.stopPropagation();
                     onSelectDistrict?.(district);
@@ -555,7 +580,20 @@ export default function MetaverseMiniMap({
               District context is still fully available via the map's own
               markers/callouts and the sidebar breadcrumb. */}
           {calibrationMode ? (
-            <p className="met-citymap__calibration-note">Calibration mode: click the map to read normalized x/y (also logged to console).</p>
+            <div className="met-citymap__calibration-panel" data-calibration-mode="true">
+              <label className="met-citymap__calibration-label">
+                Calibration target
+                <select value={calibrationTargetId} onChange={(event) => { setCalibrationTargetId(event.target.value); setCalibrationPoint(null); setCalibrationCopied(false); }}>
+                  <option value="">Select a district or destination</option>
+                  {MINIMAP_CALIBRATION_TARGET_IDS.map((targetId) => <option key={targetId} value={targetId}>{targetId}</option>)}
+                </select>
+              </label>
+              <p className="met-citymap__calibration-note">
+                Click the map to preview normalized x/y. Existing: {calibrationTarget?.x ?? "null"}, {calibrationTarget?.y ?? "null"} · status: {calibrationTarget?.status || "UNMAPPED"}
+              </p>
+              {calibrationMapping ? <div className="met-citymap__calibration-output"><code>{calibrationMapping}</code><button type="button" onClick={copyCalibrationMapping}>{calibrationCopied ? "Copied" : "Copy mapping"}</button></div> : null}
+              <button type="button" onClick={() => { setCalibrationPoint(null); setCalibrationCopied(false); }}>Clear preview</button>
+            </div>
           ) : null}
 
           {mapState === "compact" ? (districts.length ? renderMapLayers("compact") : null) : null}

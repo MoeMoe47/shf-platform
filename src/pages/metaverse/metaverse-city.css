@@ -6754,6 +6754,41 @@ body:has(.met-home) .brainiact-root {
   color: #ffd27a;
 }
 
+.met-citymap__calibration-panel {
+  display: grid;
+  gap: 5px;
+  margin: 6px 0;
+  padding: 6px 8px;
+  border: 1px dashed rgba(255, 210, 122, 0.55);
+  border-radius: 5px;
+  color: #ffe5ae;
+  font-size: 0.66rem;
+}
+
+.met-citymap__calibration-label {
+  display: grid;
+  gap: 3px;
+}
+
+.met-citymap__calibration-panel select,
+.met-citymap__calibration-panel button {
+  min-height: 26px;
+  border: 1px solid rgba(255, 210, 122, 0.45);
+  border-radius: 4px;
+  background: rgba(11, 25, 43, 0.86);
+  color: #fff4d3;
+  font-size: 0.66rem;
+}
+
+.met-citymap__calibration-output {
+  display: grid;
+  gap: 4px;
+}
+
+.met-citymap__calibration-output code {
+  overflow-wrap: anywhere;
+}
+
 .met-citymap__calibration-point {
   position: absolute;
   transform: translate(-50%, -50%);

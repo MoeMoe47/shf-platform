@@ -1,3 +1,5 @@
+import { CANONICAL_DESTINATION_IDS } from "./metaverseCanonicalDestinationRegistry.js";
+
 // MINIMAP V2 — canonical top-view map asset + location/pin registry.
 //
 // MINIMAP_ASSET is the approved base map image ONLY (owner-supplied,
@@ -12,6 +14,24 @@ export const MINIMAP_ASSET = "public/assets/metaverse/minimap/silicon-heartland-
 // 0-100 normalized x/y this registry uses (e.g. a future calibration
 // tool). Every x/y below is already normalized against these.
 export const MINIMAP_ASSET_DIMENSIONS = { width: 1448, height: 1086 };
+
+export const QUICK_MAP_COORDINATE_SPACE = Object.freeze({
+  id: "quick-map",
+  units: "normalized-percent",
+  minX: 0,
+  maxX: 100,
+  minY: 0,
+  maxY: 100,
+  sourceWidth: MINIMAP_ASSET_DIMENSIONS.width,
+  sourceHeight: MINIMAP_ASSET_DIMENSIONS.height,
+});
+
+export const MINIMAP_COORDINATE_STATUSES = Object.freeze([
+  "VERIFIED",
+  "CALIBRATED",
+  "PROVISIONAL",
+  "UNMAPPED",
+]);
 
 // Location/pin registry for the approved top-view map. x/y are
 // normalized 0-100 percentages of MINIMAP_ASSET_DIMENSIONS — a
@@ -38,28 +58,62 @@ export const MINIMAP_ASSET_DIMENSIONS = { width: 1448, height: 1086 };
 // boat marina + lighthouse) — `provisional: true` marks these as
 // still pending explicit owner confirmation, not final calibration.
 export const MINIMAP_LOCATION_REGISTRY = [
-  { id: "civic-district", label: "Civic District", category: "DISTRICT", icon: "\u{1F3DB}\u{FE0F}", x: null, y: null, calibrated: false, destinationRoute: "civic-district" },
-  { id: "career-education-district", label: "Career & Education", category: "DISTRICT", icon: "\u{1F393}", x: null, y: null, calibrated: false, destinationRoute: "career-education-district" },
-  { id: "public-realm", label: "Public Realm", category: "DISTRICT", icon: "\u{1F333}", x: null, y: null, calibrated: false, destinationRoute: "public-realm" },
-  { id: "data-center-district", label: "Data Center", category: "DISTRICT", icon: "\u{1F5A5}\u{FE0F}", x: null, y: null, calibrated: false, destinationRoute: "data-center-district" },
-  { id: "technology-innovation-district", label: "Technology & Innovation", category: "DISTRICT", icon: "\u{1F4A1}", x: null, y: null, calibrated: false, destinationRoute: "technology-innovation-district" },
-  { id: "learning-arcade-district", label: "Learning Arcade", category: "DISTRICT", icon: "\u{1F4DA}", x: null, y: null, calibrated: false, destinationRoute: "learning-arcade-district" },
-  { id: "treasury-commerce-district", label: "Treasury & Commerce", category: "DISTRICT", icon: "\u{1F4CA}", x: null, y: null, calibrated: false, destinationRoute: "treasury-commerce-district" },
-  { id: "community-district", label: "Community", category: "DISTRICT", icon: "\u{1F465}", x: null, y: null, calibrated: false, destinationRoute: "community-district" },
-  { id: "student-life-district", label: "Residential / Student Life", category: "DISTRICT", icon: "\u{1F3E0}", x: null, y: null, calibrated: false, destinationRoute: "student-life-district" },
-  { id: "airport", label: "Airport", category: "INFRASTRUCTURE", markerClassification: "PROVISIONAL_INFRASTRUCTURE", icon: "✈️", x: 51.8, y: 72.7, calibrated: true, provisional: true, destinationId: null, destinationRoute: null },
-  { id: "hospital", label: "Hospital", category: "INFRASTRUCTURE", markerClassification: "PROVISIONAL_INFRASTRUCTURE", icon: "\u{1F3E5}", x: 10.4, y: 59.4, calibrated: true, provisional: true, destinationId: null, destinationRoute: null },
-  { id: "police", label: "Police", category: "INFRASTRUCTURE", markerClassification: "PROVISIONAL_INFRASTRUCTURE", icon: "\u{1F694}", x: 10.4, y: 74.1, calibrated: true, provisional: true, destinationId: null, destinationRoute: null },
-  { id: "fire", label: "Fire", category: "INFRASTRUCTURE", markerClassification: "PROVISIONAL_INFRASTRUCTURE", icon: "\u{1F692}", x: 22.8, y: 59.4, calibrated: true, provisional: true, destinationId: null, destinationRoute: null },
-  { id: "mall-retail", label: "Mall / Retail", category: "INFRASTRUCTURE", markerClassification: "PROVISIONAL_INFRASTRUCTURE", icon: "\u{1F6CD}️", x: 23.5, y: 74.6, calibrated: true, provisional: true, destinationId: null, destinationRoute: null },
-  { id: "marina-harbor", label: "Marina / Harbor", category: "INFRASTRUCTURE", markerClassification: "PROVISIONAL_INFRASTRUCTURE", icon: "⚓", x: 84.3, y: 32.2, calibrated: true, provisional: true, destinationId: null, destinationRoute: null },
+  { id: "civic-district", label: "Civic District", category: "DISTRICT", icon: "\u{1F3DB}\u{FE0F}", x: null, y: null, calibrated: false, coordinateSpaceId: "quick-map", status: "UNMAPPED", destinationRoute: "civic-district" },
+  { id: "career-education-district", label: "Career & Education", category: "DISTRICT", icon: "\u{1F393}", x: null, y: null, calibrated: false, coordinateSpaceId: "quick-map", status: "UNMAPPED", destinationRoute: "career-education-district" },
+  { id: "public-realm", label: "Public Realm", category: "DISTRICT", icon: "\u{1F333}", x: null, y: null, calibrated: false, coordinateSpaceId: "quick-map", status: "UNMAPPED", destinationRoute: "public-realm" },
+  { id: "data-center-district", label: "Data Center", category: "DISTRICT", icon: "\u{1F5A5}\u{FE0F}", x: null, y: null, calibrated: false, coordinateSpaceId: "quick-map", status: "UNMAPPED", destinationRoute: "data-center-district" },
+  { id: "technology-innovation-district", label: "Technology & Innovation", category: "DISTRICT", icon: "\u{1F4A1}", x: null, y: null, calibrated: false, coordinateSpaceId: "quick-map", status: "UNMAPPED", destinationRoute: "technology-innovation-district" },
+  { id: "learning-arcade-district", label: "Learning Arcade", category: "DISTRICT", icon: "\u{1F4DA}", x: null, y: null, calibrated: false, coordinateSpaceId: "quick-map", status: "UNMAPPED", destinationRoute: "learning-arcade-district" },
+  { id: "treasury-commerce-district", label: "Treasury & Commerce", category: "DISTRICT", icon: "\u{1F4CA}", x: null, y: null, calibrated: false, coordinateSpaceId: "quick-map", status: "UNMAPPED", destinationRoute: "treasury-commerce-district" },
+  { id: "community-district", label: "Community", category: "DISTRICT", icon: "\u{1F465}", x: null, y: null, calibrated: false, coordinateSpaceId: "quick-map", status: "UNMAPPED", destinationRoute: "community-district" },
+  { id: "student-life-district", label: "Residential / Student Life", category: "DISTRICT", icon: "\u{1F3E0}", x: null, y: null, calibrated: false, coordinateSpaceId: "quick-map", status: "UNMAPPED", destinationRoute: "student-life-district" },
+  { id: "airport", label: "Airport", category: "INFRASTRUCTURE", markerClassification: "PROVISIONAL_INFRASTRUCTURE", icon: "✈️", x: 51.8, y: 72.7, calibrated: true, coordinateSpaceId: "quick-map", status: "PROVISIONAL", provisional: true, destinationId: null, destinationRoute: null },
+  { id: "hospital", label: "Hospital", category: "INFRASTRUCTURE", markerClassification: "PROVISIONAL_INFRASTRUCTURE", icon: "\u{1F3E5}", x: 10.4, y: 59.4, calibrated: true, coordinateSpaceId: "quick-map", status: "PROVISIONAL", provisional: true, destinationId: null, destinationRoute: null },
+  { id: "police", label: "Police", category: "INFRASTRUCTURE", markerClassification: "PROVISIONAL_INFRASTRUCTURE", icon: "\u{1F694}", x: 10.4, y: 74.1, calibrated: true, coordinateSpaceId: "quick-map", status: "PROVISIONAL", provisional: true, destinationId: null, destinationRoute: null },
+  { id: "fire", label: "Fire", category: "INFRASTRUCTURE", markerClassification: "PROVISIONAL_INFRASTRUCTURE", icon: "\u{1F692}", x: 22.8, y: 59.4, calibrated: true, coordinateSpaceId: "quick-map", status: "PROVISIONAL", provisional: true, destinationId: null, destinationRoute: null },
+  { id: "mall-retail", label: "Mall / Retail", category: "INFRASTRUCTURE", markerClassification: "PROVISIONAL_INFRASTRUCTURE", icon: "\u{1F6CD}️", x: 23.5, y: 74.6, calibrated: true, coordinateSpaceId: "quick-map", status: "PROVISIONAL", provisional: true, destinationId: null, destinationRoute: null },
+  { id: "marina-harbor", label: "Marina / Harbor", category: "INFRASTRUCTURE", markerClassification: "PROVISIONAL_INFRASTRUCTURE", icon: "⚓", x: 84.3, y: 32.2, calibrated: true, coordinateSpaceId: "quick-map", status: "PROVISIONAL", provisional: true, destinationId: null, destinationRoute: null },
 ];
+
+export const MINIMAP_CALIBRATION_TARGET_IDS = Object.freeze([
+  ...MINIMAP_LOCATION_REGISTRY.map((location) => location.id),
+  ...CANONICAL_DESTINATION_IDS,
+]);
+
+export function getMiniMapLocationById(id) {
+  return MINIMAP_LOCATION_REGISTRY.find((location) => location.id === id) || null;
+}
+
+export function isNormalizedQuickMapCoordinate(x, y) {
+  return Number.isFinite(x) && Number.isFinite(y)
+    && x >= QUICK_MAP_COORDINATE_SPACE.minX && x <= QUICK_MAP_COORDINATE_SPACE.maxX
+    && y >= QUICK_MAP_COORDINATE_SPACE.minY && y <= QUICK_MAP_COORDINATE_SPACE.maxY;
+}
+
+export function formatMiniMapCalibrationMapping({ targetId, x, y }) {
+  if (typeof targetId !== "string" || !isNormalizedQuickMapCoordinate(x, y)) return null;
+  return `${targetId}: { coordinateSpaceId: "quick-map", x: ${x}, y: ${y}, status: "CALIBRATED" }`;
+}
 
 export function validateMiniMapCanonicalReferences() {
   const errors = [];
+  const coordinateOwners = new Map();
   for (const location of MINIMAP_LOCATION_REGISTRY) {
+    if (location.coordinateSpaceId !== QUICK_MAP_COORDINATE_SPACE.id) errors.push(`${location.id}: invalid coordinate space`);
+    if (!MINIMAP_COORDINATE_STATUSES.includes(location.status)) errors.push(`${location.id}: invalid coordinate status`);
+    if (location.status === "UNMAPPED" && (location.x !== null || location.y !== null)) errors.push(`${location.id}: unmapped marker must not have coordinates`);
+    if (location.status !== "UNMAPPED" && !isNormalizedQuickMapCoordinate(location.x, location.y)) errors.push(`${location.id}: mapped marker has invalid coordinates`);
     if (location.category === "INFRASTRUCTURE" && location.markerClassification !== "PROVISIONAL_INFRASTRUCTURE") errors.push(`${location.id}: infrastructure marker must remain provisional or canonical`);
+    if (location.category === "INFRASTRUCTURE" && (location.status !== "PROVISIONAL" || location.destinationId !== null)) errors.push(`${location.id}: infrastructure marker must remain provisional and unclaimed`);
+    if (location.destinationId !== null && location.destinationId !== undefined && !CANONICAL_DESTINATION_IDS.includes(location.destinationId)) errors.push(`${location.id}: unknown canonical destination ${location.destinationId}`);
+    if (location.destinationId !== null && location.destinationId !== undefined && !["VERIFIED", "CALIBRATED"].includes(location.status)) errors.push(`${location.id}: canonical marker must be verified or calibrated`);
     if (location.destinationId !== null && location.destinationId !== undefined && location.destinationRoute === null) errors.push(`${location.id}: canonical marker needs a route reference or explicit null route`);
+    if (location.status !== "UNMAPPED") {
+      const coordinateKey = `${location.x}:${location.y}`;
+      const owner = coordinateOwners.get(coordinateKey);
+      if (owner && owner.sharedPhysicalLocationId !== location.sharedPhysicalLocationId) errors.push(`${location.id}: duplicate Quick Map coordinate with ${owner.id}`);
+      coordinateOwners.set(coordinateKey, location);
+    }
   }
   return errors;
 }

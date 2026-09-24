@@ -2,6 +2,7 @@ import {
   METAVERSE_PRODUCTION_BACKGROUND_SET,
   METAVERSE_REFERENCE_ASSETS,
 } from "./metaverseVisualAssets.js";
+import { getCanonicalDestinationId, resolveDestinationId } from "./metaverseCanonicalDestinationRegistry.js";
 
 export const METAVERSE_ROUTE = "/metaverse";
 
@@ -31,7 +32,7 @@ export const METAVERSE_DISTRICT_MARKERS = [
   { id: "public-realm", label: "Public Realm", fullLabel: "Public Realm", x: 48, y: 44 },
 ];
 
-export const METAVERSE_FACILITIES = [
+const LEGACY_METAVERSE_FACILITIES = [
   { id: "city-hall", districtId: "civic-district", label: "City Hall", x: 32, y: 44 },
   { id: "council-chamber", districtId: "civic-district", label: "Council Chamber", x: 50, y: 38 },
   { id: "clerk-office", districtId: "civic-district", label: "Clerk Office", x: 62, y: 53 },
@@ -69,6 +70,13 @@ export const METAVERSE_FACILITIES = [
   { id: "park", districtId: "public-realm", label: "Park", x: 62, y: 54 },
   { id: "transit-wayfinding-hub", districtId: "public-realm", label: "Transit / Wayfinding Hub", x: 38, y: 68 },
 ];
+
+// Keep legacy facility keys stable for current callers while making the
+// server-owned destination identity explicit at the projection boundary.
+export const METAVERSE_FACILITIES = LEGACY_METAVERSE_FACILITIES.map((facility) => ({
+  ...facility,
+  destinationId: getCanonicalDestinationId(facility.id),
+}));
 
 export const METAVERSE_ACTIVITY_PLACEHOLDERS = [
   {
@@ -233,7 +241,13 @@ export function getDistrictById(id) {
 }
 
 export function getFacilityById(id) {
-  return METAVERSE_FACILITIES.find((facility) => facility.id === id) || null;
+  const canonicalId = resolveDestinationId(id);
+  return METAVERSE_FACILITIES.find((facility) => facility.id === id || facility.destinationId === canonicalId) || null;
+}
+
+export function getDestinationById(id) {
+  const facility = getFacilityById(id);
+  return facility ? { ...facility, destinationId: facility.destinationId } : null;
 }
 
 export function getActivitiesForFacility(facilityId) {

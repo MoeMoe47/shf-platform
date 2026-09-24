@@ -47,13 +47,22 @@ export const MINIMAP_LOCATION_REGISTRY = [
   { id: "treasury-commerce-district", label: "Treasury & Commerce", category: "DISTRICT", icon: "\u{1F4CA}", x: null, y: null, calibrated: false, destinationRoute: "treasury-commerce-district" },
   { id: "community-district", label: "Community", category: "DISTRICT", icon: "\u{1F465}", x: null, y: null, calibrated: false, destinationRoute: "community-district" },
   { id: "student-life-district", label: "Residential / Student Life", category: "DISTRICT", icon: "\u{1F3E0}", x: null, y: null, calibrated: false, destinationRoute: "student-life-district" },
-  { id: "airport", label: "Airport", category: "INFRASTRUCTURE", icon: "✈️", x: 51.8, y: 72.7, calibrated: true, provisional: true, destinationRoute: null },
-  { id: "hospital", label: "Hospital", category: "INFRASTRUCTURE", icon: "\u{1F3E5}", x: 10.4, y: 59.4, calibrated: true, provisional: true, destinationRoute: null },
-  { id: "police", label: "Police", category: "INFRASTRUCTURE", icon: "\u{1F694}", x: 10.4, y: 74.1, calibrated: true, provisional: true, destinationRoute: null },
-  { id: "fire", label: "Fire", category: "INFRASTRUCTURE", icon: "\u{1F692}", x: 22.8, y: 59.4, calibrated: true, provisional: true, destinationRoute: null },
-  { id: "mall-retail", label: "Mall / Retail", category: "INFRASTRUCTURE", icon: "\u{1F6CD}️", x: 23.5, y: 74.6, calibrated: true, provisional: true, destinationRoute: null },
-  { id: "marina-harbor", label: "Marina / Harbor", category: "INFRASTRUCTURE", icon: "⚓", x: 84.3, y: 32.2, calibrated: true, provisional: true, destinationRoute: null },
+  { id: "airport", label: "Airport", category: "INFRASTRUCTURE", markerClassification: "PROVISIONAL_INFRASTRUCTURE", icon: "✈️", x: 51.8, y: 72.7, calibrated: true, provisional: true, destinationId: null, destinationRoute: null },
+  { id: "hospital", label: "Hospital", category: "INFRASTRUCTURE", markerClassification: "PROVISIONAL_INFRASTRUCTURE", icon: "\u{1F3E5}", x: 10.4, y: 59.4, calibrated: true, provisional: true, destinationId: null, destinationRoute: null },
+  { id: "police", label: "Police", category: "INFRASTRUCTURE", markerClassification: "PROVISIONAL_INFRASTRUCTURE", icon: "\u{1F694}", x: 10.4, y: 74.1, calibrated: true, provisional: true, destinationId: null, destinationRoute: null },
+  { id: "fire", label: "Fire", category: "INFRASTRUCTURE", markerClassification: "PROVISIONAL_INFRASTRUCTURE", icon: "\u{1F692}", x: 22.8, y: 59.4, calibrated: true, provisional: true, destinationId: null, destinationRoute: null },
+  { id: "mall-retail", label: "Mall / Retail", category: "INFRASTRUCTURE", markerClassification: "PROVISIONAL_INFRASTRUCTURE", icon: "\u{1F6CD}️", x: 23.5, y: 74.6, calibrated: true, provisional: true, destinationId: null, destinationRoute: null },
+  { id: "marina-harbor", label: "Marina / Harbor", category: "INFRASTRUCTURE", markerClassification: "PROVISIONAL_INFRASTRUCTURE", icon: "⚓", x: 84.3, y: 32.2, calibrated: true, provisional: true, destinationId: null, destinationRoute: null },
 ];
+
+export function validateMiniMapCanonicalReferences() {
+  const errors = [];
+  for (const location of MINIMAP_LOCATION_REGISTRY) {
+    if (location.category === "INFRASTRUCTURE" && location.markerClassification !== "PROVISIONAL_INFRASTRUCTURE") errors.push(`${location.id}: infrastructure marker must remain provisional or canonical`);
+    if (location.destinationId !== null && location.destinationId !== undefined && location.destinationRoute === null) errors.push(`${location.id}: canonical marker needs a route reference or explicit null route`);
+  }
+  return errors;
+}
 
 export function getCalibratedMiniMapLocations() {
   return MINIMAP_LOCATION_REGISTRY.filter((location) => location.calibrated && location.x !== null && location.y !== null);

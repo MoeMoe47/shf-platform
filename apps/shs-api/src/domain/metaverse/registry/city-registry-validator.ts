@@ -10,6 +10,7 @@ import {
   SILICON_HEARTLAND_CITY_ID,
   type MetaverseCityRegistry,
 } from "./city-registry.js";
+import { validateMetaverseDestinationIdCrosswalk } from "./destination-id-crosswalk.js";
 
 export type MetaverseCityRegistryValidationResult = {
   ok: boolean;
@@ -34,6 +35,7 @@ export function validateMetaverseCityRegistry(registry: MetaverseCityRegistry): 
   const errors: string[] = [];
 
   errors.push(...validateMetaverseArchitectureContract().map((error) => `MET-1 contract invalid: ${error}`));
+  errors.push(...validateMetaverseDestinationIdCrosswalk(registry));
 
   if (METAVERSE_CITY_REGISTRIES.length !== 1) errors.push("exactly one canonical city registry is required");
   if (registry.city_id !== SILICON_HEARTLAND_CITY_ID) errors.push("canonical city id must be silicon-heartland-city");

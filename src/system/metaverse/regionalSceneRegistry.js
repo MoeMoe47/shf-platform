@@ -26,6 +26,16 @@ export const REGIONAL_ROUTE_SEQUENCE = [
   { id: "silicon-heartland-city", order: 15, slug: "city", title: "Existing Silicon Heartland City" },
 ];
 
+// Regional scene identity is intentionally independent from city destination
+// identity. No current regional scene has a verified destination relationship.
+export const REGIONAL_SCENE_DESTINATION_REFS = Object.freeze(
+  REGIONAL_ROUTE_SEQUENCE.map((scene) => ({ sceneId: scene.id, destinationId: null })),
+);
+
+export function getRegionalSceneDestinationReference(sceneId) {
+  return REGIONAL_SCENE_DESTINATION_REFS.find((reference) => reference.sceneId === sceneId) || null;
+}
+
 export const REGIONAL_SCENE_CONTRACT_FIELDS = [
   "id",
   "order",

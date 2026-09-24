@@ -10,6 +10,12 @@ import {
   getMetaverseCityProjection,
 } from "../src/domain/metaverse/registry/city-registry.ts";
 import { validateMetaverseCityRegistry } from "../src/domain/metaverse/registry/city-registry-validator.ts";
+import {
+  METAVERSE_DESTINATION_ALIASES,
+  getCanonicalDestinationId,
+  getDestinationById,
+  validateMetaverseDestinationIdCrosswalk,
+} from "../src/domain/metaverse/registry/destination-id-crosswalk.ts";
 import { METAVERSE_AUTHORITY_MAP } from "../src/domain/metaverse/model/metaverse-contract.ts";
 
 function ids(values: { id: string }[]) {
@@ -30,6 +36,31 @@ test("city registry validates through the deterministic registry validator", () 
   const result = validateMetaverseCityRegistry(SILICON_HEARTLAND_CITY_REGISTRY);
   assert.deepEqual(result.errors, []);
   assert.equal(result.ok, true);
+});
+
+test("canonical destination aliases resolve explicitly and unknown ids fail safely", () => {
+  assert.equal(getCanonicalDestinationId(SILICON_HEARTLAND_CITY_REGISTRY, "public-works"), "public-works-office");
+  assert.equal(getCanonicalDestinationId(SILICON_HEARTLAND_CITY_REGISTRY, "park"), "city-park");
+  assert.equal(getDestinationById(SILICON_HEARTLAND_CITY_REGISTRY, "student-profile-access")?.id, "student-profile-portfolio-access");
+  assert.equal(getDestinationById(SILICON_HEARTLAND_CITY_REGISTRY, "unknown-place"), null);
+});
+
+test("destination crosswalk rejects duplicate aliases, canonical collisions, and unknown targets", () => {
+  const duplicateAlias = validateMetaverseDestinationIdCrosswalk(SILICON_HEARTLAND_CITY_REGISTRY, [
+    ...METAVERSE_DESTINATION_ALIASES,
+    { canonical_destination_id: "city-park", aliases: ["public-works"] },
+  ]);
+  assert.ok(duplicateAlias.some((error) => error.includes("alias maps to multiple destinations")));
+
+  const collision = validateMetaverseDestinationIdCrosswalk(SILICON_HEARTLAND_CITY_REGISTRY, [
+    { canonical_destination_id: "city-park", aliases: ["career-center"] },
+  ]);
+  assert.ok(collision.some((error) => error.includes("alias collides with canonical destination id")));
+
+  const unknownTarget = validateMetaverseDestinationIdCrosswalk(SILICON_HEARTLAND_CITY_REGISTRY, [
+    { canonical_destination_id: "missing-destination", aliases: ["missing-alias"] },
+  ]);
+  assert.ok(unknownTarget.some((error) => error.includes("alias target is unknown")));
 });
 
 test("registry contains exactly one canonical Silicon Heartland city", () => {

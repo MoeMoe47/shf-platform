@@ -6785,6 +6785,17 @@ body:has(.met-home) .brainiact-root {
   gap: 4px;
 }
 
+.met-citymap__calibration-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.met-citymap__calibration-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
 .met-citymap__calibration-output code {
   overflow-wrap: anywhere;
 }

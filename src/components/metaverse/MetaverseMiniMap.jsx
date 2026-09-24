@@ -4,6 +4,10 @@ import { publicAssetUrl } from "@/system/metaverse/metaverseNavigationModel.js";
 import {
   MINIMAP_ASSET,
   MINIMAP_CALIBRATION_TARGET_IDS,
+  DISTRICT_CALIBRATION_REVIEW_STATUSES,
+  createDistrictCalibrationCandidate,
+  getCanonicalDistrictCalibrationRecords,
+  getDistrictQuickMapLocation,
   getCalibratedMiniMapLocations,
   getMiniMapLocationById,
   getMiniMapLocationIcon,
@@ -167,6 +171,7 @@ export default function MetaverseMiniMap({
   const [calibrationPoint, setCalibrationPoint] = useState(null);
   const [calibrationTargetId, setCalibrationTargetId] = useState(readCalibrationTargetId);
   const [calibrationCopied, setCalibrationCopied] = useState(false);
+  const [calibrationReviewStatus, setCalibrationReviewStatus] = useState("UNMAPPED");
   const [layerToggles, setLayerToggles] = useState({
     districts: true,
     students: true,
@@ -207,7 +212,7 @@ export default function MetaverseMiniMap({
   // minimap-local view controls only.
   const handleRecenter = () => {
     const mine = districts.find((district) => district.id === currentDistrictId);
-    const quickMapMine = getMiniMapLocationById(mine?.id);
+    const quickMapMine = getDistrictQuickMapLocation(mine?.id);
     if (quickMapMine && quickMapMine.status !== "UNMAPPED") setMapOrigin(`${quickMapMine.x}% ${quickMapMine.y}%`);
     setMapZoom(1.7);
   };
@@ -222,13 +227,19 @@ export default function MetaverseMiniMap({
     const x = ((event.clientX - rect.left) / rect.width) * 100;
     const y = ((event.clientY - rect.top) / rect.height) * 100;
     const point = { x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10 };
+    const candidate = createDistrictCalibrationCandidate({ districtId: calibrationTargetId, x: point.x, y: point.y });
     setCalibrationPoint(point);
     setCalibrationCopied(false);
+    if (candidate) setCalibrationReviewStatus(candidate.reviewStatus);
     // eslint-disable-next-line no-console
     console.log(`[minimapCalibrate] ${formatMiniMapCalibrationMapping({ targetId: calibrationTargetId || "unassigned", ...point })}`);
   };
 
   const calibrationTarget = getMiniMapLocationById(calibrationTargetId);
+  const calibrationRecord = getCanonicalDistrictCalibrationRecords().find((record) => record.districtId === calibrationTargetId);
+  const confirmedDistrictProjection = getDistrictQuickMapLocation(calibrationTargetId);
+  const existingCalibrationX = confirmedDistrictProjection?.position?.x ?? calibrationTarget?.x ?? null;
+  const existingCalibrationY = confirmedDistrictProjection?.position?.y ?? calibrationTarget?.y ?? null;
   const calibrationMapping = calibrationPoint && calibrationTargetId
     ? formatMiniMapCalibrationMapping({ targetId: calibrationTargetId, ...calibrationPoint })
     : null;
@@ -236,6 +247,9 @@ export default function MetaverseMiniMap({
     if (!calibrationMapping || !navigator.clipboard?.writeText) return;
     await navigator.clipboard.writeText(calibrationMapping);
     setCalibrationCopied(true);
+  };
+  const setCalibrationReview = (status) => {
+    if (DISTRICT_CALIBRATION_REVIEW_STATUSES.includes(status)) setCalibrationReviewStatus(status);
   };
 
   // PIXEL-FAITHFUL MOCK MATCH — PHASE 9: Recenter/Fit World/View Full
@@ -286,7 +300,7 @@ export default function MetaverseMiniMap({
             overlay per district. */}
         {layerToggles.districts
           ? districts.map((district) => {
-              const quickMapLocation = getMiniMapLocationById(district.id);
+              const quickMapLocation = getDistrictQuickMapLocation(district.id);
               if (!quickMapLocation || quickMapLocation.status === "UNMAPPED") return null;
               const isYou = district.id === youAreHereAnchorId;
               const count = layerToggles.students ? countForDistrict(district.id) : 0;
@@ -583,16 +597,22 @@ export default function MetaverseMiniMap({
             <div className="met-citymap__calibration-panel" data-calibration-mode="true">
               <label className="met-citymap__calibration-label">
                 Calibration target
-                <select value={calibrationTargetId} onChange={(event) => { setCalibrationTargetId(event.target.value); setCalibrationPoint(null); setCalibrationCopied(false); }}>
+                <select value={calibrationTargetId} onChange={(event) => { setCalibrationTargetId(event.target.value); setCalibrationPoint(null); setCalibrationCopied(false); setCalibrationReviewStatus("UNMAPPED"); }}>
                   <option value="">Select a district or destination</option>
                   {MINIMAP_CALIBRATION_TARGET_IDS.map((targetId) => <option key={targetId} value={targetId}>{targetId}</option>)}
                 </select>
               </label>
               <p className="met-citymap__calibration-note">
-                Click the map to preview normalized x/y. Existing: {calibrationTarget?.x ?? "null"}, {calibrationTarget?.y ?? "null"} · status: {calibrationTarget?.status || "UNMAPPED"}
+                District: {calibrationRecord?.displayName || calibrationTargetId || "none"} · Current: {existingCalibrationX ?? "null"}, {existingCalibrationY ?? "null"} · status: {calibrationRecord?.status || calibrationTarget?.status || "UNMAPPED"}
               </p>
+              <p className="met-citymap__calibration-note">Candidate: {calibrationPoint ? `${calibrationPoint.x}, ${calibrationPoint.y}` : "null"} · review: {calibrationReviewStatus}</p>
               {calibrationMapping ? <div className="met-citymap__calibration-output"><code>{calibrationMapping}</code><button type="button" onClick={copyCalibrationMapping}>{calibrationCopied ? "Copied" : "Copy mapping"}</button></div> : null}
-              <button type="button" onClick={() => { setCalibrationPoint(null); setCalibrationCopied(false); }}>Clear preview</button>
+              <div className="met-citymap__calibration-actions">
+                <button type="button" onClick={() => setCalibrationReview("CONFIRMED")} disabled={!calibrationPoint || !calibrationRecord}>Confirm candidate</button>
+                <button type="button" onClick={() => setCalibrationReview("REJECTED")} disabled={!calibrationPoint}>Reject candidate</button>
+                <button type="button" onClick={() => { setCalibrationPoint(null); setCalibrationCopied(false); setCalibrationReviewStatus("UNMAPPED"); }}>Clear preview</button>
+              </div>
+              <p className="met-citymap__calibration-note">Review controls are temporary and never mutate the source registry.</p>
             </div>
           ) : null}
 

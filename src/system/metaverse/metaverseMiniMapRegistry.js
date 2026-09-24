@@ -1,4 +1,5 @@
 import { CANONICAL_DESTINATION_IDS } from "./metaverseCanonicalDestinationRegistry.js";
+import { METAVERSE_DISTRICT_MARKERS } from "./metaverseNavigationModel.js";
 
 // MINIMAP V2 — canonical top-view map asset + location/pin registry.
 //
@@ -31,6 +32,13 @@ export const MINIMAP_COORDINATE_STATUSES = Object.freeze([
   "CALIBRATED",
   "PROVISIONAL",
   "UNMAPPED",
+]);
+
+export const DISTRICT_CALIBRATION_REVIEW_STATUSES = Object.freeze([
+  "UNMAPPED",
+  "CANDIDATE",
+  "CONFIRMED",
+  "REJECTED",
 ]);
 
 // Location/pin registry for the approved top-view map. x/y are
@@ -75,6 +83,11 @@ export const MINIMAP_LOCATION_REGISTRY = [
   { id: "marina-harbor", label: "Marina / Harbor", category: "INFRASTRUCTURE", markerClassification: "PROVISIONAL_INFRASTRUCTURE", icon: "⚓", x: 84.3, y: 32.2, calibrated: true, coordinateSpaceId: "quick-map", status: "PROVISIONAL", provisional: true, destinationId: null, destinationRoute: null },
 ];
 
+// Owner-reviewed source authority. This remains empty until a human confirms
+// that a Quick Map point represents a canonical Silicon Heartland district.
+// Candidate clicks never mutate this list or the production marker registry.
+export const CONFIRMED_DISTRICT_QUICK_MAP_MAPPINGS = Object.freeze([]);
+
 export const MINIMAP_CALIBRATION_TARGET_IDS = Object.freeze([
   ...MINIMAP_LOCATION_REGISTRY.map((location) => location.id),
   ...CANONICAL_DESTINATION_IDS,
@@ -82,6 +95,57 @@ export const MINIMAP_CALIBRATION_TARGET_IDS = Object.freeze([
 
 export function getMiniMapLocationById(id) {
   return MINIMAP_LOCATION_REGISTRY.find((location) => location.id === id) || null;
+}
+
+export function getCanonicalDistrictCalibrationRecords() {
+  return METAVERSE_DISTRICT_MARKERS.map((district) => {
+    const mapping = CONFIRMED_DISTRICT_QUICK_MAP_MAPPINGS.find((entry) => entry.districtId === district.id);
+    return {
+      districtId: district.id,
+      displayName: district.fullLabel,
+      quickMap: mapping?.quickMap || null,
+      status: mapping ? "CONFIRMED" : "UNMAPPED",
+    };
+  });
+}
+
+export function getDistrictQuickMapLocation(districtId) {
+  return CONFIRMED_DISTRICT_QUICK_MAP_MAPPINGS.find((entry) => entry.districtId === districtId)?.quickMap || null;
+}
+
+export function createDistrictCalibrationCandidate({ districtId, x, y }) {
+  if (!METAVERSE_DISTRICT_MARKERS.some((district) => district.id === districtId)) return null;
+  if (!isNormalizedQuickMapCoordinate(x, y)) return null;
+  return {
+    districtId,
+    quickMap: {
+      coordinateSpaceId: QUICK_MAP_COORDINATE_SPACE.id,
+      position: { x, y },
+      status: "CALIBRATED",
+    },
+    reviewStatus: "CANDIDATE",
+  };
+}
+
+export function validateConfirmedDistrictQuickMapMappings(mappings = CONFIRMED_DISTRICT_QUICK_MAP_MAPPINGS) {
+  const errors = [];
+  const districtIds = new Set(METAVERSE_DISTRICT_MARKERS.map((district) => district.id));
+  const seenDistricts = new Set();
+  const seenCoordinates = new Map();
+  for (const mapping of mappings) {
+    if (!districtIds.has(mapping?.districtId)) errors.push(`unknown district ID: ${mapping?.districtId}`);
+    if (seenDistricts.has(mapping?.districtId)) errors.push(`duplicate district mapping: ${mapping?.districtId}`);
+    seenDistricts.add(mapping?.districtId);
+    if (mapping?.destinationId) errors.push(`${mapping.districtId}: destination ID cannot replace district ID`);
+    if (mapping?.quickMap?.coordinateSpaceId !== QUICK_MAP_COORDINATE_SPACE.id) errors.push(`${mapping?.districtId}: invalid Quick Map coordinate space`);
+    if (mapping?.quickMap?.status !== "VERIFIED") errors.push(`${mapping?.districtId}: confirmed mapping must be VERIFIED`);
+    if (!isNormalizedQuickMapCoordinate(mapping?.quickMap?.position?.x, mapping?.quickMap?.position?.y)) errors.push(`${mapping?.districtId}: invalid confirmed coordinates`);
+    const coordinateKey = `${mapping?.quickMap?.position?.x}:${mapping?.quickMap?.position?.y}`;
+    const owner = seenCoordinates.get(coordinateKey);
+    if (owner && owner.sharedPhysicalLocationId !== mapping.sharedPhysicalLocationId) errors.push(`${mapping.districtId}: duplicate coordinate with ${owner.districtId}`);
+    seenCoordinates.set(coordinateKey, mapping);
+  }
+  return errors;
 }
 
 export function isNormalizedQuickMapCoordinate(x, y) {
@@ -96,7 +160,7 @@ export function formatMiniMapCalibrationMapping({ targetId, x, y }) {
 }
 
 export function validateMiniMapCanonicalReferences() {
-  const errors = [];
+  const errors = [...validateConfirmedDistrictQuickMapMappings()];
   const coordinateOwners = new Map();
   for (const location of MINIMAP_LOCATION_REGISTRY) {
     if (location.coordinateSpaceId !== QUICK_MAP_COORDINATE_SPACE.id) errors.push(`${location.id}: invalid coordinate space`);

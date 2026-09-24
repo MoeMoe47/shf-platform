@@ -10,7 +10,7 @@ import "./styles/shf-home-mock.css";
 function getRoute() {
   const hash = window.location.hash || "#/top";
   if (/^#\/county\/[^/]+$/i.test(hash)) return "county";
-  if (hash === "#reports") return "top";
+  if (hash === "#reports" || hash.startsWith("#reports?")) return "top";
   const route = hash.replace(/^#\/?/, "").split("?")[0].replace(/\/$/, "");
   if (["mission", "about", "programs", "partners", "get-involved", "reports"].includes(route)) return route;
   return "top";

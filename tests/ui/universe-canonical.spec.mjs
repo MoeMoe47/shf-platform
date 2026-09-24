@@ -143,36 +143,22 @@ test.describe("C. Destination registry validity and unavailable-destination hand
     }
   });
 
-  test("Directory / Card Mode lists every destination, available and planned", async ({ page }) => {
+  test("Directory / Card Mode renders the upgraded SHU portal and registry-backed destination cluster", async ({ page }) => {
     await page.goto(`${UNIVERSE_BASE}/universe?skipIntro=1`, { waitUntil: "networkidle" });
     await page.getByRole("button", { name: "Card Mode" }).click();
     await expect.poll(() => page.evaluate(() => window.location.pathname)).toBe("/universe/directory");
-    // Planetary Gateway pass (2026-08-27): this route's presentation was
-    // intentionally redesigned (gateway/UniverseGateway.jsx) from a flat
-    // "Universe Directory" card grid into a sectioned, planet-styled
-    // gateway with its own editorial headline — see that file's header
-    // comment. The heading text and the destination-wrapper selector (now
-    // a stable data attribute instead of the old flat-card class) were
-    // updated to match.
-    //
-    // Ecosystem-audit pass (2026-08-27, same day): the registry grew from
-    // 6 to 22 real, evidenced destinations (see
-    // universeDestinationRegistry.js's top comment and the audit report).
-    // OAS was promoted to its existing public mounted app during FE-0;
-    // AOS and Autonomous Trust Bureau remain the two unavailable records.
-    // RETURN TO UNIVERSE still navigates back to /universe.
-    //
-    // Public-visibility correction (2026-08-27, later same day): Lord of
-    // Outcomes was found not to be a public-facing destination and was
-    // switched to `universeVisible: false` in the registry — its route,
-    // app, and every other field are untouched; it is simply no longer
-    // rendered on this public gateway. The FE-0 destination additions make
-    // the current visible count 22.
     await expect(page.getByRole("heading", { name: "Your universe of opportunity." })).toBeVisible();
-    const cards = page.locator("[data-destination-id]");
-    await expect(cards).toHaveCount(22);
-    await expect(page.getByText("Planned destination unavailable in this preview.")).toHaveCount(2);
-    await page.getByRole("button", { name: "RETURN TO UNIVERSE" }).click();
+    await expect(page.locator(".ugw-backgroundImage")).toHaveAttribute(
+      "src",
+      "/assets/shu/SHU_DIRECTORY_BACKGROUND_MASTER_V2.png"
+    );
+    await expect(page.locator("[data-destination-id]")).toHaveCount(10);
+    await expect(page.locator(".ugw-sectionEyebrow", { hasText: "Start Here" })).toBeVisible();
+    await expect(page.locator(".ugw-sectionEyebrow", { hasText: "Featured Across the Ecosystem" })).toBeVisible();
+    await expect(page.locator(".ugw-sectionEyebrow", { hasText: "Explore the Ecosystem" })).toBeVisible();
+    await expect(page.locator(".ugw-sectionEyebrow", { hasText: "Latest Activity" })).toBeVisible();
+    await expect(page.locator(".ugw-sectionEyebrow", { hasText: "Featured Stories" })).toBeVisible();
+    await page.getByRole("button", { name: "Return to Silicon Heartland Universe cover" }).click();
     await expect.poll(() => page.evaluate(() => window.location.pathname)).toBe("/universe");
   });
 });

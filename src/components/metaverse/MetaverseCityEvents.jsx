@@ -1,7 +1,7 @@
 import React from "react";
 
-export default function MetaverseCityEvents({ events = [] }) {
-  if (!events.length) return null;
+export default function MetaverseCityEvents({ events = [], open = false }) {
+  if (!open || !events.length) return null;
   return (
     <section className="met-events" aria-labelledby="met-events-title">
       <h2 id="met-events-title">City Events</h2>

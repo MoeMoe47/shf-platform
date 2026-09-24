@@ -14,6 +14,11 @@ export function resolveAuthenticatedDestination(route) {
     : null;
 }
 
+const PUBLIC_BOS_DISCOVERY_ROUTES = Object.freeze([
+  "/solutions.html#/bos",
+  "solutions.html#/bos",
+]);
+
 export function isPublicBosDiscoveryRoute(route) {
-  return String(route || "").trim() === "/solutions.html#/home";
+  return PUBLIC_BOS_DISCOVERY_ROUTES.includes(String(route || "").trim());
 }

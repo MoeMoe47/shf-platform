@@ -1,0 +1,233 @@
+@import "../../pages/solutions/shs-tokens.css";
+
+.shs-home-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(3, 11, 22, 0.96);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--shs-line);
+}
+
+.shs-header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.shs-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  color: white;
+  flex-shrink: 0;
+}
+
+.shs-home-header-logo {
+  border-radius: 7px;
+  display: block;
+}
+
+.shs-header-wordmark {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.shs-header-wordmark strong {
+  font-size: 12.5px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+
+.shs-header-wordmark span {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--shs-cyan);
+  letter-spacing: 0.13em;
+}
+
+.shs-header-wordmark em {
+  font-style: normal;
+  font-size: 7.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--shs-text-muted);
+  margin-top: 2px;
+  white-space: nowrap;
+}
+
+.shs-header-nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 1;
+  min-width: 0;
+  justify-content: center;
+}
+
+.shs-header-nav a {
+  color: var(--shs-text-soft);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.shs-header-nav a:hover,
+.shs-header-nav a:focus-visible {
+  color: white;
+}
+
+.shs-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.shs-header-search {
+  display: flex;
+  align-items: center;
+}
+
+.shs-header-icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid var(--shs-line);
+  background: rgba(255, 255, 255, 0.04);
+  color: white;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shs-header-search.is-open {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  padding-left: 4px;
+}
+
+.shs-header-search input {
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: 12px;
+  width: 120px;
+  padding: 4px 8px;
+  outline: none;
+}
+
+.shs-header-search input::placeholder {
+  color: var(--shs-text-muted);
+}
+
+.shs-header-contact {
+  color: white;
+  text-decoration: none;
+  font-size: 12.5px;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  padding: 7px 16px;
+  white-space: nowrap;
+}
+
+.shs-header-cta {
+  min-height: 32px;
+  padding: 0 16px;
+  font-size: 12.5px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.shs-header-menu-btn {
+  display: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--shs-line);
+  background: rgba(255, 255, 255, 0.04);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.shs-header-menu-btn span {
+  display: block;
+  width: 16px;
+  height: 2px;
+  background: white;
+  border-radius: 2px;
+}
+
+.shs-header-mobile-panel {
+  border-top: 1px solid var(--shs-line);
+  padding: 14px 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.shs-header-mobile-panel nav {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.shs-header-mobile-panel a {
+  color: var(--shs-text-soft);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.shs-header-mobile-panel .shs-header-contact {
+  align-self: flex-start;
+}
+
+html[data-app="solutions"] body {
+  background: var(--shs-bg-deep);
+}
+
+@media (max-width: 1180px) {
+  .shs-header-wordmark em {
+    display: none;
+  }
+  .shs-header-nav {
+    gap: 14px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .shs-header-nav,
+  .shs-header-contact,
+  .shs-header-search {
+    display: none;
+  }
+  .shs-header-menu-btn {
+    display: inline-flex;
+  }
+  .shs-header-inner {
+    padding: 10px 16px;
+  }
+}
+
+@media (max-width: 430px) {
+  .shs-header-wordmark strong {
+    font-size: 11px;
+  }
+  .shs-header-cta {
+    padding: 0 12px;
+    font-size: 11.5px;
+  }
+}

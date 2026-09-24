@@ -11,6 +11,7 @@ const bidFormSource = readFileSync(new URL("../src/components/metaverse/Metavers
 const bidStatusSource = readFileSync(new URL("../src/components/metaverse/MetaverseBidStatus.jsx", import.meta.url), "utf8");
 const hotspotSource = readFileSync(new URL("../src/components/metaverse/MetaverseHotspot.jsx", import.meta.url), "utf8");
 const controlsSource = readFileSync(new URL("../src/components/metaverse/MetaverseCameraControls.jsx", import.meta.url), "utf8");
+const sidebarSource = readFileSync(new URL("../src/components/metaverse/MetaverseSidebar.jsx", import.meta.url), "utf8");
 const cssSource = readFileSync(new URL("../src/pages/metaverse/metaverse-city.css", import.meta.url), "utf8");
 
 test("MET-8 opportunity client talks to the real Exchange API only and sends no client-authority fields", () => {
@@ -96,16 +97,25 @@ test("MET-8 opportunity hotspot badge is decorative-only and count is also expos
   assert.match(hotspotSource, /aria-hidden="true">\{item\.opportunityCount\}/);
 });
 
-test("MET-8 camera controls expose an Opportunity Exchange toggle wired to real open state and count", () => {
-  assert.match(controlsSource, /onToggleOpportunities/);
-  assert.match(controlsSource, /opportunitiesOpen/);
-  assert.match(controlsSource, /opportunityCount/);
+// UI AUTHORITY RECONCILIATION — owner decision: the sidebar supersedes
+// the floating lower-right Locations/Missions/Opportunity Exchange
+// cluster MET-8 originally required on the city canvas
+// (MetaverseCameraControls.jsx). The underlying capability (opening
+// the Exchange panel, wired to the real opportunitiesOpen/
+// opportunities.length state) is unchanged — only the floating
+// PRESENTATION is gone, proven accessible instead through
+// MetaverseSidebar's "Opportunities" nav item, which drives the exact
+// same state.
+test("MET-8 (superseded) — camera controls no longer render an Opportunity Exchange toggle; the capability moved to the sidebar", () => {
+  assert.doesNotMatch(controlsSource, /onToggleOpportunities/, "the floating Opportunity Exchange toggle must be gone from the camera controls cluster");
+  assert.doesNotMatch(controlsSource, />Opportunity Exchange</, "no floating Opportunity Exchange button text on the city canvas");
 });
 
-test("MET-8 city page passes Exchange toggle props into camera controls and renders the Exchange panel", () => {
-  assert.match(pageSource, /opportunitiesOpen=\{opportunitiesOpen\}/);
-  assert.match(pageSource, /onToggleOpportunities=\{\(\) => setOpportunitiesOpen/);
-  assert.match(pageSource, /opportunityCount=\{opportunities\.length\}/);
+test("MET-8 (superseded) — the sidebar's Opportunities nav item is wired to the exact same real state (opportunitiesOpen/opportunityCount) the old floating toggle used", () => {
+  assert.match(sidebarSource, /<NavItem icon="💼" label="Opportunities" sublabel="[^"]*" active=\{opportunitiesOpen\} badge=\{opportunityCount\} onClick=\{onOpportunities\} expanded=\{expanded\} \/>/);
+  assert.match(pageSource, /<MetaverseSidebar[\s\S]{0,400}opportunitiesOpen=\{opportunitiesOpen\}/, "MetaverseCityPage.jsx must still pass the real opportunitiesOpen state into the sidebar");
+  assert.match(pageSource, /<MetaverseSidebar[\s\S]{0,400}opportunityCount=\{opportunities\.length\}/, "the sidebar's opportunity badge must come from the real fetched opportunities array, never a hardcoded count");
+  assert.match(pageSource, /onOpportunities=\{\(\) => openPanel\(setOpportunitiesOpen\)\}/, "the sidebar's Opportunities click must open the SAME opportunitiesOpen state the Exchange panel reads");
   assert.match(pageSource, /<MetaverseOpportunityExchange/);
 });
 

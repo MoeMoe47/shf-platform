@@ -11,7 +11,7 @@ test("public Foundation reports route shows governed Return to Universe link wit
 
   await expect(page).toHaveURL(/\/foundation\.html\?returnOrigin=http:\/\/evil\.invalid#reports/);
   await expect(page.locator("#reports")).toBeAttached();
-  await expect(page.getByRole("heading", { name: "Empowering Pathways to Success" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /People First\.\s*A Stronger Heartland\./ })).toBeVisible();
 
   const returnLink = page.getByRole("link", { name: "Return to Universe" });
   await expect(returnLink).toBeVisible();

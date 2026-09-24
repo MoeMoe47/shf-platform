@@ -3,7 +3,7 @@ import "./solutions-infrastructure.css";
 
 import "./solutions-infrastructure-footer.css";
 import SolutionsInfrastructureLogicPanel from "./SolutionsInfrastructureLogicPanel.jsx";
-const LOGO_SRC = "/assets/branding/shs-hub-logo.png";
+const LOGO_SRC = "/assets/shs/shs-orbiter-logo.png";
 const GLOBE_SRC = "/assets/solutions/solutions-infrastructure-globe.png";
 
 const pipeline = [
@@ -39,7 +39,7 @@ export default function SolutionsInfrastructurePage() {
     <main className="solutionsInfra">
 
       <div className="shs-infra-official-brand">
-        <img src="/assets/shs/shs-logo-mark.svg" alt="Silicon Heartland Solutions" />
+        <img src="/assets/shs/shs-orbiter-logo.png" alt="Silicon Heartland Solutions" />
         <div>
           <strong>Silicon Heartland Solutions</strong>
           <span>Verified Outcome Infrastructure</span>
@@ -158,7 +158,7 @@ export default function SolutionsInfrastructurePage() {
 
       <section className="shs-infra-cta-band shs-infra-cta-band--official">
         <div className="shs-infra-cta-brand">
-          <img src="/assets/shs/shs-logo-mark.svg" alt="Silicon Heartland Solutions" />
+          <img src="/assets/shs/shs-orbiter-logo.png" alt="Silicon Heartland Solutions" />
           <div>
             <h2>A platform you can trust. Results you can prove.</h2>
             <p>
@@ -185,7 +185,7 @@ export default function SolutionsInfrastructurePage() {
         <div className="shs-infra-footer-inner">
           <div className="shs-infra-footer-brand">
             <div className="shs-infra-footer-brand-row">
-              <img src="/assets/shs/shs-logo-mark.svg" alt="Silicon Heartland Solutions logo" />
+              <img src="/assets/shs/shs-orbiter-logo.png" alt="Silicon Heartland Solutions logo" />
               <div>
                 <h3>Silicon Heartland Solutions</h3>
                 <p>

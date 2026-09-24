@@ -11,7 +11,7 @@ import {
 const OPEN_POLL_MS = 4000;
 const CLOSED_POLL_MS = 15000;
 
-export default function MetaverseChatTray({ room, open, onToggle, currentUserId, roomLabel, directMessagingNote }) {
+export default function MetaverseChatTray({ room, open, onToggle, currentUserId, roomLabel, directMessagingNote, onUnreadCountChange }) {
   const [messages, setMessages] = useState([]);
   const [draft, setDraft] = useState("");
   const [unreadCount, setUnreadCount] = useState(0);
@@ -65,6 +65,10 @@ export default function MetaverseChatTray({ room, open, onToggle, currentUserId,
       closeButtonRef.current?.focus();
     }
   }, [open]);
+
+  useEffect(() => {
+    onUnreadCountChange?.(unreadCount);
+  }, [unreadCount, onUnreadCountChange]);
 
   const handleSend = async (event) => {
     event.preventDefault();

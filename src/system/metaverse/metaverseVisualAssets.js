@@ -103,7 +103,16 @@ export const METAVERSE_PRODUCTION_BACKGROUND_SET = [
     productionBackground: true,
     referenceOnly: false,
     containsMockDashboardUi: false,
-    notes: "Approved people-free master city overview copied into canonical asset root.",
+    // MET-15G: real per-variant time-of-day plates, geometry-verified
+    // (pixel-identical framing/crop) against every canonical road, river,
+    // rapids, vehicle, and marker registry traced against the master plate.
+    dayAsset: "public/assets/metaverse/city/silicon-heartland-city-day.png",
+    duskAsset: "public/assets/metaverse/city/silicon-heartland-city-dusk.png",
+    nightAsset: "public/assets/metaverse/city/silicon-heartland-city-night.png",
+    // Old single plate: kept only as the resolver's last-resort fallback,
+    // no longer the active production background.
+    baseAsset: "public/assets/metaverse/city/silicon-heartland-city-master-overview.png",
+    notes: "Approved people-free master city overview copied into canonical asset root. Superseded as the active background by dayAsset/duskAsset/nightAsset (MET-15G); retained only as baseAsset fallback.",
   },
   {
     assetId: "met-district-civic",

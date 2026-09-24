@@ -1,0 +1,68 @@
+@import "./shs-tokens.css";
+
+.shs-product-page {
+  min-height: 100vh;
+}
+
+.shs-product-hero {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 88px 24px 56px;
+  text-align: left;
+  border-bottom: 1px solid var(--shs-line);
+}
+
+.shs-product-hero h1 {
+  font-size: clamp(30px, 4vw, 46px);
+  font-weight: 900;
+  margin: 10px 0 18px;
+  letter-spacing: -0.01em;
+}
+
+.shs-product-sub {
+  color: var(--shs-text-soft);
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 640px;
+  margin: 0 0 28px;
+}
+
+.shs-product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.shs-product-card {
+  background: var(--shs-bg-panel);
+  border: 1px solid var(--shs-line);
+  border-radius: 14px;
+  padding: 22px;
+}
+
+.shs-product-card h3 {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+
+.shs-product-card p {
+  margin: 0;
+  color: var(--shs-text-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .shs-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 430px) {
+  .shs-product-hero {
+    padding: 64px 16px 40px;
+  }
+  .shs-product-grid {
+    grid-template-columns: 1fr;
+  }
+}

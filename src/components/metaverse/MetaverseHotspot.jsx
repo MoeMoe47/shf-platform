@@ -1,6 +1,19 @@
 import React from "react";
 import { unlockStateLabel } from "@/system/metaverse/metaverseUnlockProjection.js";
 
+// UI UPGRADE V1 — PART 1/2: at idle a hotspot shows only its small pin
+// (plus the always-on mission/opportunity/market count badges, which are
+// themselves already subtle discoverability signals). The full label/
+// state/chevron card is revealed only on hover, keyboard focus, or an
+// active selection (`selected` — the existing `selectedId === marker.id`
+// wiring from MetaverseCamera.jsx, unchanged), and hides again with a
+// short graceful fade (no instant snap) once none of those are true.
+// This is a CSS-driven reveal (.met-hotspot__card, see metaverse-city.css)
+// rather than JS-timer-driven, so no extra hover/leave state or effect
+// cleanup is needed here — :hover/:focus/:focus-within/.is-selected
+// combined with a transition-delay on the hide path give the "reveal
+// instantly, hide gracefully" behavior directly from the cascade, and
+// `.is-selected` already keeps the card open regardless of mouse leave.
 export default function MetaverseHotspot({
   item,
   unlock,
@@ -22,8 +35,14 @@ export default function MetaverseHotspot({
       data-unlock-state={state}
     >
       <span className="met-hotspot__pin" aria-hidden="true" />
-      <span className="met-hotspot__label">{label}</span>
-      <span className="met-hotspot__state">{unlockStateLabel(state)}</span>
+      {/* aria-hidden: the button's own aria-label above already carries
+          the full accessible name (label + state + counts + reason), so
+          this visual-only card would otherwise double-announce it. */}
+      <span className="met-hotspot__card" aria-hidden="true">
+        <span className="met-hotspot__label">{label}</span>
+        <span className="met-hotspot__state">{unlockStateLabel(state)}</span>
+        <span className="met-hotspot__chevron">{"›"}</span>
+      </span>
       {item.missionCount ? (
         <span className="met-hotspot__mission-count" aria-hidden="true">{item.missionCount}</span>
       ) : null}

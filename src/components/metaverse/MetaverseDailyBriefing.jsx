@@ -8,14 +8,14 @@ const LABELS = {
   progress: "Progress",
 };
 
-export default function MetaverseDailyBriefing({ briefing }) {
+export default function MetaverseDailyBriefing({ briefing, open = false }) {
   const sections = briefing?.sections || {};
   const entries = Object.entries(LABELS).map(([key, label]) => [key, label, sections[key] || []]).filter(([, , items]) => items.length);
-  if (!entries.length) return null;
+  if (!open || !entries.length) return null;
   return (
     <section className="met-briefing" aria-labelledby="met-briefing-title">
       <p className="met-orch-label">Daily City Briefing</p>
-      <h2 id="met-briefing-title">Good afternoon</h2>
+      <h2 id="met-briefing-title">Silicon Heartland Today</h2>
       {entries.map(([key, label, items]) => (
         <section key={key} className="met-briefing__section" aria-label={label}>
           <h3>{label}</h3>

@@ -7,6 +7,7 @@ const clientSource = readFileSync(new URL("../src/system/metaverse/metaverseMiss
 const listSource = readFileSync(new URL("../src/components/metaverse/MetaverseMissionList.jsx", import.meta.url), "utf8");
 const hotspotSource = readFileSync(new URL("../src/components/metaverse/MetaverseHotspot.jsx", import.meta.url), "utf8");
 const controlsSource = readFileSync(new URL("../src/components/metaverse/MetaverseCameraControls.jsx", import.meta.url), "utf8");
+const sidebarSource = readFileSync(new URL("../src/components/metaverse/MetaverseSidebar.jsx", import.meta.url), "utf8");
 const cssSource = readFileSync(new URL("../src/pages/metaverse/metaverse-city.css", import.meta.url), "utf8");
 
 test("MET-7 mission client talks to the real mission API only and sends no client-authority fields", () => {
@@ -84,16 +85,24 @@ test("MET-7 mission hotspot badge is decorative-only and count is also exposed v
   assert.match(hotspotSource, /mission\$\{item\.missionCount === 1 \? "" : "s"\}/);
 });
 
-test("MET-7 camera controls expose a Missions toggle wired to real open state and count", () => {
-  assert.match(controlsSource, /onToggleMissions/);
-  assert.match(controlsSource, /missionsOpen/);
-  assert.match(controlsSource, /missionCount/);
+// UI AUTHORITY RECONCILIATION — owner decision: the sidebar supersedes
+// the floating lower-right Locations/Missions/Opportunity Exchange
+// cluster that MET-7/MET-8 originally required on the city canvas
+// (MetaverseCameraControls.jsx). The underlying capability (opening the
+// mission list, wired to the real missionsOpen/missions.length state)
+// is unchanged and still required — only the floating PRESENTATION of
+// it is gone, proven accessible instead through MetaverseSidebar's
+// "Missions" nav item, which drives the exact same state.
+test("MET-7 (superseded) — camera controls no longer render a Missions toggle; the capability moved to the sidebar", () => {
+  assert.doesNotMatch(controlsSource, /onToggleMissions/, "the floating Missions toggle must be gone from the camera controls cluster");
+  assert.doesNotMatch(controlsSource, />Missions</, "no floating Missions button text on the city canvas");
 });
 
-test("MET-7 city page passes mission toggle props into camera controls and renders the mission list panel", () => {
-  assert.match(pageSource, /missionsOpen=\{missionsOpen\}/);
-  assert.match(pageSource, /onToggleMissions=\{\(\) => setMissionsOpen/);
-  assert.match(pageSource, /missionCount=\{missions\.length\}/);
+test("MET-7 (superseded) — the sidebar's Missions nav item is wired to the exact same real state (missionsOpen/missionCount) the old floating toggle used", () => {
+  assert.match(sidebarSource, /<NavItem icon="🧭" label="Missions" sublabel="[^"]*" active=\{missionsOpen\} badge=\{missionCount\} onClick=\{onMissions\} expanded=\{expanded\} \/>/);
+  assert.match(pageSource, /<MetaverseSidebar[\s\S]{0,400}missionsOpen=\{missionsOpen\}/, "MetaverseCityPage.jsx must still pass the real missionsOpen state into the sidebar");
+  assert.match(pageSource, /<MetaverseSidebar[\s\S]{0,400}missionCount=\{missions\.length\}/, "the sidebar's mission badge must come from the real fetched missions array, never a hardcoded count");
+  assert.match(pageSource, /onMissions=\{\(\) => openPanel\(setMissionsOpen\)\}/, "the sidebar's Missions click must open the SAME missionsOpen state the mission list panel reads");
   assert.match(pageSource, /<MetaverseMissionList/);
   assert.match(pageSource, /onSelectMission=\{handleSelectMission\}/);
 });

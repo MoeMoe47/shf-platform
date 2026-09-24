@@ -120,7 +120,7 @@ test("UI UPGRADE V1 — no manual DAY/DUSK/NIGHT/AUTO control exists anywhere in
 // tests/metaverseDevModeTimeControls.test.mjs for that suite; a real
 // student (devModeEnabled always false) still falls through to AUTO.
 test("UI UPGRADE V1 — the scene resolves time-of-day via the existing canonical AUTO resolver by default", () => {
-  assert.match(cityPageSource, /const timePreviewMode = reviewForcesDay \? "DAY" : \(devModeEnabled \? devTimeMode : "AUTO"\);/);
+  assert.match(cityPageSource, /const timePreviewMode = riverTraceEnabled \? "DAY" : \(reviewForcesDay \? "DAY" : \(devModeEnabled \? devTimeMode : "AUTO"\)\);/);
   assert.match(cityPageSource, /resolveMetaverseTimeOfDay\(\{ mode: timePreviewMode, date: now \}\)/);
 });
 

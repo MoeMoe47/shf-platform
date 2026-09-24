@@ -114,7 +114,7 @@ test("regional Oil Rig DAY scene renders clouds as non-destructive overlays", ()
   assert.match(regionalPageSource, /RegionalForegroundDepthLayer/);
   assert.match(regionalPageSource, /sceneId=\{scene\.id\}/);
   assert.match(regionalPageSource, /timeOfDay=\{resolvedTimeOfDay\}/);
-  assert.match(regionalPageSource, /config=\{cloudConfig\}/);
+  assert.match(regionalPageSource, /config=\{effectiveCloudConfig\}/);
   assert.match(regionalPageSource, /playback=\{cloudPlayback\}/);
   assert.match(cloudLayerSource, /sceneId === normalized\.sceneId/);
   assert.match(cloudLayerSource, /timeOfDay === normalized\.timeOfDay/);

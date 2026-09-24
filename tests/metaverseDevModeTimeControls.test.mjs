@@ -19,6 +19,7 @@ import {
 const cityPageSource = readFileSync(new URL("../src/pages/metaverse/MetaverseCityPage.jsx", import.meta.url), "utf8");
 const cssSource = readFileSync(new URL("../src/pages/metaverse/metaverse-city.css", import.meta.url), "utf8");
 const sidebarSource = readFileSync(new URL("../src/components/metaverse/MetaverseSidebar.jsx", import.meta.url), "utf8");
+const devConsoleSource = readFileSync(new URL("../src/components/metaverse/MetaverseDevConsole.jsx", import.meta.url), "utf8");
 
 // 1/2. /metaverse -> no DEV toolbar; /metaverse?metaverseDev=1 -> DEV toolbar.
 test("DEV MODE — resolveMetaverseDevModeEnabled follows the standard review-flag convention: dev build + explicit param, off by default", () => {
@@ -35,7 +36,7 @@ test("DEV MODE — resolveMetaverseDevModeEnabled follows the standard review-fl
 // open/scroll state — "visible without searching" the instant the
 // sidebar is expanded, not buried inside More.
 test("DEV MODE — the DEV section is pinned directly under the sidebar's primary nav (not inside the collapsible More panel), and is visually distinct from every other sidebar section", () => {
-  assert.match(cityPageSource, /devContent=\{\s*\n\s*devModeEnabled \? \(\s*\n\s*<div className="met-sidebar__dev-pinned">/, "the section must be conditionally rendered via the always-visible devContent prop");
+  assert.match(cityPageSource, /devContent=\{devModeEnabled \? <MetaverseDevConsole/, "the section must be conditionally rendered via the always-visible devContent prop");
   assert.match(sidebarSource, /\{expanded && devContent \? devContent : null\}/, "MetaverseSidebar must render devContent unconditional on moreOpen");
   const navCloseIndex = sidebarSource.indexOf("</ul>");
   const devContentIndex = sidebarSource.indexOf("devContent ? devContent");
@@ -43,12 +44,12 @@ test("DEV MODE — the DEV section is pinned directly under the sidebar's primar
   assert.ok(navCloseIndex > -1 && devContentIndex > navCloseIndex && devContentIndex < morePanelIndex, "devContent must render between the primary nav and the More panel");
   assert.match(cssSource, /\.met-sidebar__dev-pinned\s*\{/);
   assert.match(cssSource, /\.met-sidebar__dev-pinned\s*\{[^}]*border:\s*1px dashed/s);
-  assert.match(cityPageSource, /met-sidebar__dev-badge">DEV MODE</);
-  assert.match(cityPageSource, /<h3>Developer /);
+  assert.match(devConsoleSource, /met-sidebar__dev-badge">DEV MODE</);
+  assert.match(devConsoleSource, /<h3>Metaverse Developer /);
 });
 
 test("DEV MODE — the sidebar Developer section exposes AUTO/DAY/DUSK/NIGHT buttons and a \"Resolved\" readout", () => {
-  assert.match(cityPageSource, /\{METAVERSE_TIME_OF_DAY_MODES\.map\(\(mode\) => \(/);
+  assert.match(cityPageSource, /METAVERSE_TIME_OF_DAY_MODES\.map\(\(mode\)/);
   assert.match(cityPageSource, /onClick=\{\(\) => handleDevTimeModeSelect\(mode\)\}/);
   assert.match(cityPageSource, /Resolved: \{resolvedTimeOfDay\}/);
 });
@@ -82,7 +83,7 @@ test("DEV MODE — selecting AUTO in dev mode returns to real clock resolution, 
 
 // 7. Feature-review DAY flags still win over a DEV manual selection.
 test("DEV MODE — a feature-specific DAY review flag (e.g. dayRapidsMotionReview) takes priority over a DEV manual selection", () => {
-  assert.match(cityPageSource, /const timePreviewMode = reviewForcesDay \? "DAY" : \(devModeEnabled \? devTimeMode : "AUTO"\);/, "reviewForcesDay must be checked FIRST, before devModeEnabled/devTimeMode");
+  assert.match(cityPageSource, /const timePreviewMode = riverTraceEnabled \? "DAY" : \(reviewForcesDay \? "DAY" : \(devModeEnabled \? devTimeMode : "AUTO"\)\);/, "review flags and river preview must precede the DEV override and AUTO fallback");
 });
 
 // 8. Removing ?metaverseDev=1 restores production AUTO behavior; the

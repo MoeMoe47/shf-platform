@@ -68,7 +68,7 @@ test("MET-9 market UI is keyboard/screen-reader operable and mobile responsive",
   assert.match(marketSource, /aria-label="Order status"/);
   assert.doesNotMatch(marketSource, /<div[^>]*onClick=/);
   assert.match(cssSource, /\.met-market\s*\{/);
-  assert.match(cssSource, /\.met-navigator,\s*\n\s*\.met-missions,\s*\n\s*\.met-opportunities,\s*\n\s*\.met-market\s*\{/);
+  assert.match(cssSource, /\.met-navigator,\s*\.met-missions,\s*\.met-opportunities,\s*\.met-market,\s*\.met-passport\s*\{/);
 });
 
 test("MET-9 market UI exposes mission and Opportunity payment context without duplicating MET-6 chat", () => {

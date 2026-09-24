@@ -129,7 +129,7 @@ test("MET-8 Exchange UI is keyboard/screen-reader operable — no click-only div
 });
 
 test("MET-8 Exchange panel has a mobile full-width path, same convention as the mission panel", () => {
-  assert.match(cssSource, /\.met-navigator,\s*\n\s*\.met-missions,\s*\n\s*\.met-opportunities\s*\{/);
+  assert.match(cssSource, /\.met-navigator,\s*\.met-missions,\s*\.met-opportunities,\s*\.met-market,\s*\.met-passport\s*\{/);
 });
 
 test("MET-8 reuses MET-6 communication and MET-7 mission types — no duplicate room type or mission model was introduced", () => {

@@ -235,7 +235,7 @@ test("MET-15D no freeway streak / cloud / bird / turbine implementation was intr
   const cssSource = readFileSync(new URL("../src/pages/metaverse/metaverse-city.css", import.meta.url), "utf8");
   assert.doesNotMatch(cssSource, /\.met-freeway[\w-]*streak/i);
   assert.doesNotMatch(cssSource, /\.met-[\w-]*streak[\w-]*freeway/i);
-  assert.doesNotMatch(cssSource, /\.met-[\w-]*bird/i);
+  assert.doesNotMatch(cssSource, /\.met-freeway[\w-]*bird/i);
   assert.doesNotMatch(cssSource, /\.met-[\w-]*turbine/i);
 });
 

@@ -100,5 +100,5 @@ test("V3.1 — scope discipline: no traffic/trains/boats/clouds/rapids/backgroun
   ]) {
     assert.doesNotMatch(source, /minimapFaceFixture|youAreHereAnchorId|met-citymap__canvas-scrim/);
   }
-  assert.match(cityPageSource, /const timePreviewMode = reviewForcesDay \? "DAY" : \(devModeEnabled \? devTimeMode : "AUTO"\);/, "time authority priority chain must be unchanged");
+  assert.match(cityPageSource, /const timePreviewMode = riverTraceEnabled \? "DAY" : \(reviewForcesDay \? "DAY" : \(devModeEnabled \? devTimeMode : "AUTO"\)\);/, "time authority priority chain must be unchanged");
 });

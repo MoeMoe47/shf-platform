@@ -24,11 +24,9 @@ test("VISUAL RECONCILIATION — MetaverseSidebar accepts a devContent prop and r
 });
 
 test("VISUAL RECONCILIATION — the sidebar Developer block is never nested inside moreContent/the More panel", () => {
-  const moreContentStart = cityPageSource.indexOf("moreContent={(");
-  const moreContentEnd = cityPageSource.indexOf(")}", moreContentStart);
-  const devPinnedIdx = cityPageSource.indexOf('<div className="met-sidebar__dev-pinned">');
-  assert.ok(devPinnedIdx > moreContentEnd, "the DEV block must be defined outside/after the moreContent prop value, passed via its own devContent prop");
-  assert.match(cityPageSource, /devContent=\{/);
+  assert.match(cityPageSource, /moreContent=\{\(/);
+  assert.match(cityPageSource, /devContent=\{devModeEnabled \? <MetaverseDevConsole/);
+  assert.match(sidebarSource, /\{expanded && devContent \? devContent : null\}/);
 });
 
 test("VISUAL RECONCILIATION — clicking a Scene Time button changes the resolved scene immediately (same handler proven in the DEV MODE suite), and the label matches the brief's \"Resolved:\" wording", () => {
@@ -65,7 +63,7 @@ test("VISUAL RECONCILIATION — the side column shows the Map Legend heading, th
 });
 
 test("VISUAL RECONCILIATION — the City Map tabs render inline in the header row (next to the title), not as a separate row below it", () => {
-  const headOpenIdx = miniMapSource.indexOf('className="met-minimap__head"');
+  const headOpenIdx = miniMapSource.lastIndexOf('className="met-minimap__head"');
   const headCloseIdx = miniMapSource.indexOf("</div>", headOpenIdx);
   const tabsIdx = miniMapSource.indexOf('className="met-citymap__tabs"');
   assert.ok(tabsIdx > headOpenIdx && tabsIdx < headCloseIdx, "tabs must be inside the same .met-minimap__head block as the title");

@@ -44,7 +44,7 @@ test("TIME-OF-DAY AUTHORITY — students have NO manual DAY/DUSK/NIGHT/AUTO cont
 // suite covering the DEV toolbar itself.
 test("TIME-OF-DAY AUTHORITY — the resolved mode is AUTO by default, a feature-review flag forces DAY with top priority, and no student control can ever set it", () => {
   assert.match(cityPageSource, /resolveDayBirdsReviewEnabled\(\{ isDev, search \}\) \|\|\s*\n\s*resolveDayWaterReviewEnabled\(\{ isDev, search \}\) \|\|\s*\n\s*resolveDayRapidsMotionReviewEnabled\(\{ isDev, search \}\)/, "every DAY-only review flag must still be able to force DAY");
-  assert.match(cityPageSource, /const timePreviewMode = reviewForcesDay \? "DAY" : \(devModeEnabled \? devTimeMode : "AUTO"\);/);
+  assert.match(cityPageSource, /const timePreviewMode = riverTraceEnabled \? "DAY" : \(reviewForcesDay \? "DAY" : \(devModeEnabled \? devTimeMode : "AUTO"\)\);/);
   assert.doesNotMatch(cityPageSource, /useState\("AUTO"\)/, "AUTO must never be written as timePreviewMode's OWN state — it's the fallback branch of the derived value");
 });
 

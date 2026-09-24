@@ -67,8 +67,7 @@ test("regional Oil Rig page mounts seagulls around the rig foreground depth mask
   assert.match(regionalPageSource, /depthMode="behindRig"/);
   assert.match(regionalPageSource, /<RegionalForegroundDepthLayer/);
   assert.match(regionalPageSource, /depthMode="frontRig"/);
-  assert.match(regionalPageSource, /windDirection: cloudConfig\.windDirection/);
-  assert.match(regionalPageSource, /windSpeed: cloudConfig\.windSpeed/);
+  assert.match(regionalPageSource, /const seagullRuntimeConfig = useMemo\(\(\) => \(\{[\s\S]*windDirection: environmentController\.config\.windDirection,[\s\S]*windSpeed: environmentController\.config\.windSpeed,[\s\S]*\}\),/);
   for (const token of ["Birds", "Flying Count", "Perched Count", "Wind Influence", "Glide Amount", "Flap Frequency", "Show Flight Paths", "Show Perch Anchors", "Randomize Perches", "Reset Birds"]) {
     assert.match(regionalPageSource, new RegExp(token));
   }

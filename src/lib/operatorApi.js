@@ -1,4 +1,5 @@
-const API_BASE = "http://127.0.0.1:8000";
+// Agent Fabric operator routes — canonical base from system/fabric/fabricConfig.js.
+import { FABRIC_API_BASE as API_BASE } from "@/system/fabric/fabricConfig";
 
 async function safeJson(res) {
   const text = await res.text();

@@ -1,4 +1,12 @@
-const RAW_API_BASE = (import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000").trim();
+import { SHS_AUTH_API_BASE } from "@/system/identity/authConfig";
+
+// Shared client for the canonical SHS API (apps/shs-api, local port 8091).
+// Base resolution: an explicit VITE_API_BASE override wins; otherwise the
+// repo's canonical SHS API base (authConfig: window.__SHS_API_BASE__ ->
+// VITE_SHS_API_BASE -> "/api"). In local development "/api" is the
+// same-origin Vite proxy to http://127.0.0.1:8091 (vite.config.js).
+// Agent Fabric requests do not use this client — see lib/capital/operatorApi.js.
+const RAW_API_BASE = String(import.meta.env.VITE_API_BASE || SHS_AUTH_API_BASE || "/api").trim();
 
 function stripTrailingSlash(value) {
   return String(value || "").replace(/\/+$/, "");

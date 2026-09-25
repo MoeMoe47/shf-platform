@@ -5,10 +5,15 @@
 //   - If Vite proxy is set, requests go to "/admin/..." on same origin (5173) and proxy to Fabric (8090).
 // Optional override:
 //   - localStorage.FABRIC_BASE_URL = "http://127.0.0.1:8090"
-//   - OR set VITE_FABRIC_BASE_URL in env (if you wire it into your build)
+//   - OR set VITE_FABRIC_API_BASE (legacy: VITE_FABRIC_URL / VITE_FABRIC_BASE_URL)
+//
+// Keeps its deliberate same-origin default (relative paths when nothing is
+// configured), so it reads only the explicit override from the canonical
+// Fabric config (system/fabric/fabricConfig.js), not the 8090 fallback.
+// Note: vite.config.js currently proxies only /api (to the SHS API), not
+// /admin — see docs for the pending Fabric proxy follow-up.
 
-const ENV_BASE =
-  (typeof import.meta !== "undefined" && import.meta?.env?.VITE_FABRIC_BASE_URL) || "";
+import { FABRIC_API_BASE_OVERRIDE as ENV_BASE } from "@/system/fabric/fabricConfig";
 
 function normalizeBase(u) {
   return String(u || "").replace(/\/$/, "");

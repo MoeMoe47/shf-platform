@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "@/styles/admin.reports.css";
+import { FABRIC_API_BASE as FABRIC_URL } from "@/system/fabric/fabricConfig";
 
-const FABRIC_URL = (import.meta.env.VITE_FABRIC_URL || "http://127.0.0.1:8090").replace(/\/+$/,"");
 const ADMIN_KEY = import.meta.env.PROD ? "" : import.meta.env.VITE_ADMIN_KEY || "";
 
 async function jget(path) {

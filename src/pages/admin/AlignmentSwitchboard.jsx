@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { FABRIC_API_BASE as FABRIC_URL } from "@/system/fabric/fabricConfig";
 
 const env = import.meta.env;
 
 const ENABLED = String(env.VITE_ENABLE_ADMIN || "").toLowerCase() === "true";
-const FABRIC_URL = (env.VITE_FABRIC_URL || "http://127.0.0.1:8090").replace(/\/+$/, "");
 const APP_GATEWAY_KEY = env.PROD ? "" : env.VITE_APP_GATEWAY_KEY || "";
 const ADMIN_KEY = env.PROD ? "" : env.VITE_ADMIN_KEY || "";
 

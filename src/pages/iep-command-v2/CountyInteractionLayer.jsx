@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { fabricUrl } from "@/system/fabric/fabricConfig";
 
 export default function CountyInteractionLayer({
   county = "Franklin",
@@ -38,7 +39,7 @@ export default function CountyInteractionLayer({
     setSimResult(null);
 
     try {
-      const res = await fetch("http://127.0.0.1:8090/run", {
+      const res = await fetch(fabricUrl("/run"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

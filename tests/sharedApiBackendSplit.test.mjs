@@ -5,7 +5,15 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
-import { FABRIC_API_BASE, FABRIC_API_BASE_OVERRIDE, FABRIC_LOCAL_TARGET, FABRIC_PROXY_PREFIX, fabricUrl } from '../src/system/fabric/fabricConfig.js';
+import {
+  FABRIC_API_BASE,
+  FABRIC_API_BASE_OVERRIDE,
+  FABRIC_LOCAL_TARGET,
+  FABRIC_PRODUCTION_UNCONFIGURED_BASE,
+  FABRIC_PROXY_PREFIX,
+  fabricUrl,
+  resolveFabricApiBase,
+} from '../src/system/fabric/fabricConfig.js';
 
 const read = (path) => fs.readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 
@@ -42,6 +50,19 @@ test('Fabric config honors the canonical variable, then legacy aliases, never VI
   const order = ['VITE_FABRIC_API_BASE', 'VITE_FABRIC_URL', 'VITE_FABRIC_BASE_URL'].map((name) => source.indexOf(`env.${name}`));
   assert.ok(order.every((index) => index > 0) && order[0] < order[1] && order[1] < order[2]);
   assert.doesNotMatch(source, /env\.VITE_API_BASE\b/);
+});
+
+test('production Fabric config never falls back to localhost or an unconfirmed proxy', () => {
+  assert.equal(resolveFabricApiBase({ MODE: 'production', PROD: true }), FABRIC_PRODUCTION_UNCONFIGURED_BASE);
+  assert.equal(
+    resolveFabricApiBase({ MODE: 'production', PROD: true, VITE_FABRIC_ENABLE_SAME_ORIGIN_PROXY: 'true' }),
+    '/fabric-api',
+  );
+  assert.equal(
+    resolveFabricApiBase({ MODE: 'production', PROD: true, VITE_FABRIC_API_BASE: 'https://fabric.example.test/' }),
+    'https://fabric.example.test',
+  );
+  assert.doesNotMatch(resolveFabricApiBase({ MODE: 'production', PROD: true }), /localhost|127\.0\.0\.1|:8090/);
 });
 
 test('every Fabric client resolves through fabricConfig and has no :8000 fallback', () => {

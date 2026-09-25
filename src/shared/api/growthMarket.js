@@ -5,9 +5,12 @@
  * Fallback: deterministic simulator when API fails (500/offline/CORS)
  *
  * Controls:
- *   - VITE_FABRIC_API_BASE=http://127.0.0.1:8000  (optional)
+ *   - VITE_FABRIC_API_BASE=http://127.0.0.1:8090  (optional; Agent Fabric local port)
  *   - VITE_GROWTH_SIM=1  (force simulation)
  */
+// Intentionally not on system/fabric/fabricConfig.js yet: this client's
+// relative default (same-origin /api/growth) is part of the pending Growth
+// Market routing follow-up; switching it to the 8090 fallback would change routing.
 const BASE = (import.meta?.env?.VITE_FABRIC_API_BASE || "").replace(/\/+$/, "");
 const FORCE_SIM = String(import.meta?.env?.VITE_GROWTH_SIM || "") === "1";
 

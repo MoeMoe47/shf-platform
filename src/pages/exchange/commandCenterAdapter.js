@@ -1,7 +1,9 @@
-const DEFAULT_API_BASE =
-  import.meta?.env?.VITE_API_BASE ||
-  import.meta?.env?.VITE_SHF_API_BASE ||
-  "http://127.0.0.1:8000";
+import { FABRIC_API_BASE } from "@/system/fabric/fabricConfig";
+
+// Operator / AAL / efficiency routes are served by the Agent Fabric; the
+// canonical Fabric base replaces the former VITE_API_BASE / VITE_SHF_API_BASE
+// lookups (VITE_API_BASE is ambiguous across backends; neither was set).
+const DEFAULT_API_BASE = FABRIC_API_BASE;
 
 async function fetchJson(url) {
   const res = await fetch(url, {

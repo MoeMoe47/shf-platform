@@ -39,6 +39,9 @@ import {
   universeV1BlackIvoryMaster,
 } from './universeDestinationRegistry.js';
 import UniverseGateway from './gateway/UniverseGateway.jsx';
+import UniverseDiscoverPage from './discovery/UniverseDiscoverPage.jsx';
+import UniverseObjectDetailPage from './discovery/UniverseObjectDetailPage.jsx';
+import { DISCOVERY_ROUTE, parseDetailRoute } from './discovery/discoveryModel.js';
 import './universe-v1.css';
 
 const INTRO_KEY = 'shu-preview-v1-intro-complete';
@@ -122,7 +125,9 @@ function useRoute() {
   const navigate = (next, options = {}) => {
     if (options.replace) window.history.replaceState({}, '', next);
     else window.history.pushState({}, '', next);
-    setPath(next);
+    // Routes may carry a query (e.g. /universe/discover?q=...); the route
+    // switch below matches on pathname only.
+    setPath(new URL(next, window.location.origin).pathname);
   };
   return [path, navigate];
 }
@@ -855,6 +860,12 @@ export default function UniverseApp() {
   // Route, dispatcher, and the canonical registry it renders from are all
   // unchanged.
   if (path === UNIVERSE_DIRECTORY_ROUTE) return <UniverseGateway navigate={navigate} />;
+  // SHU Ecosystem Experience V1: canonical discovery + object detail
+  // projections (see discovery/). Checked before the registry's own
+  // single-segment destination routes; detail routes are two segments.
+  if (path === DISCOVERY_ROUTE) return <UniverseDiscoverPage navigate={navigate} />;
+  const detailRoute = parseDetailRoute(path);
+  if (detailRoute) return <UniverseObjectDetailPage key={path} navigate={navigate} typeKey={detailRoute.typeKey} id={detailRoute.id} />;
   if (path === V2_LAB_ROUTE) return <V2LabBoundary navigate={navigate} />;
   if (path === deepStarMap2020Config.route) return <EnvironmentLab navigate={navigate} />;
   if (destination) return <DestinationRoute destination={destination} navigate={navigate} />;

@@ -11,6 +11,7 @@
 import React from "react";
 import { PortfolioIcon } from "@/components/curriculum/icons.jsx";
 import { emailMyCertificate, listMyCertificates, listMyCredentials, renderMyCertificate } from "@/lib/credentials/api.js";
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
 
 const LIFECYCLE_LABEL = {
   ISSUED: "Earned",
@@ -80,7 +81,7 @@ export default function CredentialsBadges({ role }) {
               <span className="sp-badgeLabel">Reference {certificate.certificateSerial}</span>
               <button type="button" onClick={async () => { const file = await renderMyCertificate(role, certificate.certificateId); const url = URL.createObjectURL(file.blob); const link = document.createElement("a"); link.href = url; link.download = file.filename; link.click(); URL.revokeObjectURL(url); }}>Download PDF</button>
               <button type="button" onClick={async () => { const file = await renderMyCertificate(role, certificate.certificateId, "HTML"); const url = URL.createObjectURL(file.blob); window.open(url, "_blank", "noopener,noreferrer"); }}>Print / view</button>
-              <button type="button" onClick={() => { window.open(`http://127.0.0.1:8091/certificates/verify/${encodeURIComponent(certificate.verificationReference)}`, "_blank", "noopener,noreferrer"); }}>Verify</button>
+              <button type="button" onClick={() => { window.open(`${SHS_API_BASE}/certificates/verify/${encodeURIComponent(certificate.verificationReference)}`, "_blank", "noopener,noreferrer"); }}>Verify</button>
               <button type="button" onClick={async () => { setDelivery((current) => ({ ...current, [certificate.certificateId]: "Sending…" })); try { await emailMyCertificate(role, certificate.certificateId); setDelivery((current) => ({ ...current, [certificate.certificateId]: "Delivered" })); } catch { setDelivery((current) => ({ ...current, [certificate.certificateId]: "Delivery failed" })); } }}>{delivery[certificate.certificateId] || "Email certificate"}</button>
             </div>
           ))}

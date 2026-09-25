@@ -89,11 +89,16 @@ reviving any of them.
 `src/pages/iep-command-v2/IEPCommandCenterV2.jsx.fix*` (4) and
 `src/pages/shf-command/SHFImpactCommandCenter.jsx.{bak_*,pre_*,rescue_*}` (6).
 
-## Remaining production-origin gaps (out of scope for V3)
+## Remaining production-origin gaps (updated after SHS normalization)
 
-- `SHFImpactCommandCenter.jsx` still hard-codes the **SHS API** origin
-  (`ORACLE_BASE = "http://127.0.0.1:8091"`, `POST http://127.0.0.1:8091/oracle/action`);
-  about 20 other SHS clients hard-code `127.0.0.1:8091`. SHS-side normalization
-  is a separate task.
-- No deployment configuration in the repo defines either backend's production
-  origin.
+- The SHS API hard-codes noted here at V3 time (`ORACLE_BASE =
+  "http://127.0.0.1:8091"` in `SHFImpactCommandCenter.jsx` and other SHS
+  clients) were migrated to the canonical SHS base by the SHS production-origin
+  normalization; see `docs/API_BACKEND_CONFIGURATION.md`.
+- Deployment config does exist (`infra/azure`): the SHS API has an external
+  origin, but the Agent Fabric is **internal-only** and no frontend route for
+  `/fabric-api` is defined, so Fabric-backed pages have no production path yet
+  (see "Production origins" in `docs/API_BACKEND_CONFIGURATION.md`).
+- The Fabric's `routers/run_report_routes.py` returns absolute
+  `http://127.0.0.1:8090/...` links in its responses (backend; no frontend
+  consumer today).

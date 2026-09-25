@@ -3,8 +3,9 @@ import CivicSureShell from "../../../apps/shf-web/src/components/civicsure/Civic
 import GovernmentAssurance from "../../../apps/shf-web/src/pages/operator/GovernmentAssurance.jsx";
 import DgalNextStepsPanel from "../../components/DgalNextStepsPanel.jsx";
 import { SeaDashboardSection, SeaNextAction } from "@/components/sea/SeaDashboardPrimitives.jsx";
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
 
-const API_BASE = import.meta.env.VITE_SHS_API_BASE || import.meta.env.VITE_API_BASE || "http://127.0.0.1:8091";
+const API_BASE = SHS_API_BASE;
 
 function routeState() {
   const raw = typeof window !== "undefined" && window.location.hash.startsWith("#/")

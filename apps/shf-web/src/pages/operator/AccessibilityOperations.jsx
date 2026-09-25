@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader";
 import StatusChip from "../../components/StatusChip";
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
 
-const API = import.meta.env.VITE_SHS_API_BASE || "http://127.0.0.1:8091";
+const API = SHS_API_BASE;
 const token = () => window.localStorage.getItem("shfOperatorToken") || "";
 async function request(path, options = {}) {
   const response = await fetch(`${API}${path}`, { ...options, headers: { "Content-Type": "application/json", Authorization: `Bearer ${token()}`, ...(options.headers || {}) }, body: options.body === undefined ? undefined : JSON.stringify(options.body) });

@@ -9,8 +9,9 @@
 // module fetches the one aggregated, already-entitled result — it does
 // not re-derive entitlement or truth of any kind.
 import { resolveDevUserId } from "@/lib/liveLearning/api.js";
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
 
-const CALENDAR_API_BASE = import.meta.env?.VITE_SHS_API_BASE || import.meta.env?.VITE_LIVE_LEARNING_API_BASE || "http://127.0.0.1:8091";
+const CALENDAR_API_BASE = SHS_API_BASE;
 
 function authHeaders(role) {
   return {

@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 
-const ORACLE_BASE = "http://127.0.0.1:8091";
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
+
+// SHS API Oracle truth/priority/compare (apps/shs-api oracle.routes).
+const ORACLE_BASE = SHS_API_BASE;
 
 export function useSHFOracle(entityId) {
   const [truth, setTruth] = useState(null);

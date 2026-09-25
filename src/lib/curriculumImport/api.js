@@ -1,6 +1,7 @@
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
 // Phase 4.5C: the admin import UI talks only to the canonical import-job API.
 // Candidate identity, diff status, validation, and execution remain server-owned.
-const API_BASE = String(import.meta.env.VITE_API_BASE || "http://127.0.0.1:8091").replace(/\/+$/, "");
+const API_BASE = SHS_API_BASE;
 
 function devUserId() {
   const user = typeof window !== "undefined" ? (window.__USER__ || window.__AUTH__?.user) : null;

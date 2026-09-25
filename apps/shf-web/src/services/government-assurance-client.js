@@ -1,4 +1,6 @@
-const API_BASE = import.meta.env.VITE_SHS_API_BASE || import.meta.env.VITE_API_BASE || "http://localhost:8091";
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
+
+const API_BASE = SHS_API_BASE;
 const DEFAULT_TOKEN = "dev-token:user_admin_001";
 const DEFAULT_ORG = "org_shf_001";
 

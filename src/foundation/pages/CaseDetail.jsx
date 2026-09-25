@@ -1,7 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
-const ORACLE_BASE = "http://127.0.0.1:8091";
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
+
+// SHS API Oracle truth/priority/action(s) (apps/shs-api oracle.routes).
+const ORACLE_BASE = SHS_API_BASE;
 
 const pageStyle = {
   minHeight: "100vh",

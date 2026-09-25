@@ -18,8 +18,9 @@
 // docs/SHF_EXTERNAL_CALENDAR_INTEGRATION.md), so there is no live
 // success path to reach either way — this is documented, not hidden.
 import { resolveDevUserId } from "@/lib/liveLearning/api.js";
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
 
-const API_BASE = "http://127.0.0.1:8091";
+const API_BASE = SHS_API_BASE;
 
 function authHeaders(role) {
   return {

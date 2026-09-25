@@ -2,8 +2,9 @@
 // Components use this boundary so authentication and response-envelope
 // handling remain consistent with the other curriculum clients.
 import { resolveDevUserId } from "@/lib/liveLearning/api.js";
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
 
-const STUDIO_API_BASE = import.meta.env?.VITE_SHS_API_BASE || import.meta.env?.VITE_LIVE_LEARNING_API_BASE || "http://127.0.0.1:8091";
+const STUDIO_API_BASE = SHS_API_BASE;
 
 function authHeaders(role) {
   return {

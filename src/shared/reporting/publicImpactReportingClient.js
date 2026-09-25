@@ -1,11 +1,8 @@
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
 const PUBLIC_CURRICULUM_PATH = "/public/impact/curriculum-lesson-completions";
 
 function apiBase() {
-  return String(
-    window.__SHS_API_BASE__ ||
-    import.meta.env.VITE_SHS_API_BASE ||
-    "http://127.0.0.1:8091",
-  ).replace(/\/+$/, "");
+  return SHS_API_BASE;
 }
 
 function safeProjection(item) {

@@ -1,4 +1,6 @@
-const HUB_API_BASE = "http://127.0.0.1:8091";
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
+
+const HUB_API_BASE = SHS_API_BASE;
 
 function getAuthHeaders() {
   return {

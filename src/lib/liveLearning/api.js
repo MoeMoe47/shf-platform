@@ -16,7 +16,9 @@
 // (apps/shs-api/seeds/010_seed_live_learning_users.sql): "student" and
 // "instructor". This is a temporary bridge, not a second identity system
 // — it defers entirely to the backend's real role/permission checks.
-const LIVE_LEARNING_API_BASE = import.meta.env?.VITE_LIVE_LEARNING_API_BASE || "http://127.0.0.1:8091";
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
+
+const LIVE_LEARNING_API_BASE = SHS_API_BASE;
 
 export function resolveDevUserId(role) {
   // The authenticated boot identity is authoritative when present. The Vite

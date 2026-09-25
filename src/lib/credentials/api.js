@@ -6,8 +6,9 @@
 // see (their own Credentials, or every organization Credential for
 // admin-tier actors — enforced server-side).
 import { resolveDevUserId } from "@/lib/liveLearning/api.js";
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
 
-const CREDENTIALS_API_BASE = "http://127.0.0.1:8091";
+const CREDENTIALS_API_BASE = SHS_API_BASE;
 
 function authHeaders(role) {
   return {

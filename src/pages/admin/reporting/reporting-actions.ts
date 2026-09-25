@@ -1,3 +1,4 @@
+import { FABRIC_API_BASE } from "@/system/fabric/fabricConfig";
 export type ReportingActionKind =
   | "briefing_export"
   | "action_log_export"
@@ -26,7 +27,8 @@ export interface ReportingActionResult {
   message?: string;
 }
 
-const REPORT_BACKEND_BASE = "http://127.0.0.1:8090";
+// Agent Fabric run-report routes (routers/run_report_routes.py) via the canonical Fabric base.
+const REPORT_BACKEND_BASE = FABRIC_API_BASE;
 
 const ARTIFACT_TO_RUN_ID: Record<string, string> = {
   rep_hub_case_demo_001: "pilot_test_001",

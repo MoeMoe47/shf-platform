@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useState} from "react";
 import { useSelectedEntity } from "@/system/context/SelectedEntityContext";
 import "./shf-impact-command-center.css";
+import { FABRIC_API_BASE, fabricUrl } from "@/system/fabric/fabricConfig";
 import { resolveCountyFromEntity } from "@/system/resolvers/entityToCounty";
 import { fetchWorkforceEmploymentStartedVerifiedCountReport } from "@/shared/reporting/workforceEmploymentReportingClient";
 import {
@@ -11,7 +12,8 @@ import {
 } from "@/shared/reporting/donorSummaryAuthorizationClient";
 
 
-const SELF_AUDIT_BASE = "http://127.0.0.1:8090";
+// Agent Fabric self-audit routes (app/api/routes/self_audit.py) via the canonical Fabric base.
+const SELF_AUDIT_BASE = FABRIC_API_BASE;
 
 const ORACLE_BASE = "http://127.0.0.1:8091";
 
@@ -818,7 +820,7 @@ function DetailDrawer({ selected, onClose }) {
       setSimError("");
 
       try {
-        const res = await fetch("http://127.0.0.1:8090/simulate-outcome", {
+        const res = await fetch(fabricUrl("/simulate-outcome"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -1510,17 +1512,14 @@ const [selfAudit, setSelfAudit] = useState(null);
       }),
     });
 
-    await fetch("http://127.0.0.1:8090/events", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        event: {
-          entity_id: selectedEntityId,
-          action,
-          source: "command_center",
-        },
-      }),
-    });
+    // OWNERLESS EVENT WRITE — BACKEND CONTRACT REQUIRED.
+    // This used to POST { event: { entity_id, action, source: "command_center" } }
+    // to the Agent Fabric's bare /events, which has never existed (the Fabric
+    // serves only /events/ingest — a persistent run-ledger write — and
+    // /events/normalize — side-effect free). Neither is a confirmed contract for
+    // command-center Oracle actions, so the request is disabled rather than
+    // re-pointed; the action itself is recorded by the SHS API call above.
+    // See docs/API_BACKEND_CONFIGURATION.md.
 
     try {
       const bundle = await fetchOracleBundle({

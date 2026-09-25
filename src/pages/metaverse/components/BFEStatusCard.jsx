@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { fabricUrl } from "@/system/fabric/fabricConfig";
 
 export default function BFEStatusCard() {
   const [bfeData, setBfeData] = useState(null);
@@ -9,7 +10,7 @@ export default function BFEStatusCard() {
     let mounted = true;
 
     const loadBfe = () => {
-      fetch("http://127.0.0.1:8090/bfe/summary")
+      fetch(fabricUrl("/bfe/summary"))
         .then((res) => res.json())
         .then((data) => {
           if (!mounted) return;

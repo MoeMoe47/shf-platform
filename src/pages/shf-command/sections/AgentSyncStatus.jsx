@@ -1,9 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { buildAIAnalystTruthContext } from "@/shared/ai-analyst/aiAnalystTruthContext";
 import { resolveCountyFromEntity } from "@/system/resolvers/entityToCounty";
+import { FABRIC_API_BASE } from "@/system/fabric/fabricConfig";
 
-const AGENT_BASE =
-  import.meta.env.VITE_SHF_AGENT_FABRIC_BASE || "http://127.0.0.1:8090";
+// Agent Fabric admin agent routes (routers/admin_agents_routes.py) via the
+// canonical Fabric base; VITE_SHF_AGENT_FABRIC_BASE is retired.
+const AGENT_BASE = FABRIC_API_BASE;
 
 const AGENT_KEY =
   import.meta.env.PROD ? "" : import.meta.env.VITE_SHF_AGENT_ADMIN_KEY || "";

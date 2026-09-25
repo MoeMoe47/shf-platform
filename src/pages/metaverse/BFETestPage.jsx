@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { fabricUrl } from "@/system/fabric/fabricConfig";
 
 function clamp(v, min = 0, max = 1) {
   return Math.max(min, Math.min(max, v));
@@ -215,7 +216,7 @@ export default function BFETestPage() {
     let mounted = true;
 
     const loadBfe = () => {
-      fetch("http://127.0.0.1:8090/bfe/summary")
+      fetch(fabricUrl("/bfe/summary"))
         .then((res) => res.json())
         .then((data) => {
           if (!mounted) return;

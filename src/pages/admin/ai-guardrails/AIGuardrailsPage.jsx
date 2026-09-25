@@ -1,7 +1,9 @@
 import React from "react";
 import "./ai-guardrails.css";
+import { fabricUrl } from "@/system/fabric/fabricConfig";
 
-const API_ROOT = "/api/ai-guardrails";
+// Agent Fabric-owned AI Guardrails routes (routers/ai_guardrails_routes.py).
+const API_ROOT = fabricUrl("/ai-guardrails");
 
 async function guardrailRequest(path, options = {}) {
   const response = await fetch(`${API_ROOT}${path}`, {

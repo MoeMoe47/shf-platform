@@ -5,7 +5,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
-import { FABRIC_API_BASE, FABRIC_API_BASE_OVERRIDE, FABRIC_LOCAL_DEFAULT } from '../src/system/fabric/fabricConfig.js';
+import { FABRIC_API_BASE, FABRIC_API_BASE_OVERRIDE, FABRIC_LOCAL_TARGET, FABRIC_PROXY_PREFIX, fabricUrl } from '../src/system/fabric/fabricConfig.js';
 
 const read = (path) => fs.readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 
@@ -20,10 +20,21 @@ const FABRIC_CLIENTS = [
   'src/apps/manifest/registry_admin_api.js',
 ];
 
-test('canonical Fabric base defaults to the Fabric local port 8090', () => {
-  assert.equal(FABRIC_LOCAL_DEFAULT, 'http://127.0.0.1:8090');
+test('canonical Fabric base defaults to the same-origin proxy for the Fabric local port 8090', () => {
+  assert.equal(FABRIC_LOCAL_TARGET, 'http://127.0.0.1:8090');
+  assert.equal(FABRIC_PROXY_PREFIX, '/fabric-api');
   assert.equal(FABRIC_API_BASE_OVERRIDE, '', 'no Fabric env configured under node');
-  assert.equal(FABRIC_API_BASE, 'http://127.0.0.1:8090');
+  assert.equal(FABRIC_API_BASE, '/fabric-api');
+  assert.equal(fabricUrl('/truth'), '/fabric-api/truth');
+  assert.equal(fabricUrl('admin/agents'), '/fabric-api/admin/agents');
+});
+
+test('vite proxies /api to the SHS API (8091) and /fabric-api to the Fabric (8090)', () => {
+  const vite = read('vite.config.js');
+  assert.match(vite, /SHS_VITE_API_PROXY_TARGET \|\| "http:\/\/127\.0\.0\.1:8091"/);
+  assert.match(vite, /SHS_VITE_FABRIC_PROXY_TARGET \|\| "http:\/\/127\.0\.0\.1:8090"/);
+  assert.match(vite, /"\/api": \{\s*target: apiProxyTarget/);
+  assert.match(vite, /"\/fabric-api": \{\s*target: fabricProxyTarget/);
 });
 
 test('Fabric config honors the canonical variable, then legacy aliases, never VITE_API_BASE', () => {
@@ -36,7 +47,7 @@ test('Fabric config honors the canonical variable, then legacy aliases, never VI
 test('every Fabric client resolves through fabricConfig and has no :8000 fallback', () => {
   for (const file of FABRIC_CLIENTS) {
     const source = read(file);
-    assert.match(source, /@\/system\/fabric\/fabricConfig/, `${file} imports the canonical Fabric config`);
+    assert.match(source, /(@|\.\.\/\.\.)\/system\/fabric\/fabricConfig/, `${file} imports the canonical Fabric config`);
     assert.doesNotMatch(source, /:8000\b/, `${file} has no port-8000 reference`);
     assert.doesNotMatch(source, /import\.meta[^;\n]*VITE_FABRIC_(URL|BASE_URL|API_BASE)/, `${file} does not resolve Fabric env itself`);
   }
@@ -53,6 +64,7 @@ test('shared SHS client resolves through the canonical SHS config, not a Fabric 
 test('env example documents both canonical local ports', () => {
   const example = read('.env.example');
   assert.match(example, /VITE_FABRIC_API_BASE=http:\/\/127\.0\.0\.1:8090/);
+  assert.match(example, /"\/fabric-api"/);
   assert.match(example, /VITE_SHS_API_BASE=http:\/\/127\.0\.0\.1:8091/);
   assert.doesNotMatch(example, /:8000\b/);
 });

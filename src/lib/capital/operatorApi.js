@@ -1,12 +1,14 @@
 import { apiGet } from "@/lib/apiClient";
-import { FABRIC_API_BASE } from "@/system/fabric/fabricConfig";
+import { fabricUrl } from "@/system/fabric/fabricConfig";
 
 // Capital operator routes (/api/v1/operator/*) are served by the Agent
 // Fabric (services/shf-agent-fabric), not the SHS API, so they are sent to the
-// canonical Fabric base. apiGet passes absolute URLs through.
-
+// canonical Fabric base. apiGet only passes ABSOLUTE URLs through untouched
+// (relative paths get the SHS "/api" base), so the Fabric URL — which is the
+// same-origin "/fabric-api" proxy by default — is made absolute first.
 function fabricGet(path) {
-  return apiGet(`${FABRIC_API_BASE}${path}`);
+  const origin = globalThis.location?.origin || "http://127.0.0.1";
+  return apiGet(new URL(fabricUrl(path), origin).href);
 }
 
 export function getOperatorSummary() {

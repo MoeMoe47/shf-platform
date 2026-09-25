@@ -1,7 +1,9 @@
 import React from "react";
 import "./oracle.css";
+import { fabricUrl } from "@/system/fabric/fabricConfig";
 
-const API_ROOT = "/api/oracle";
+// Agent Fabric-owned Oracle case/ruling routes (routers/oracle_routes.py; the SHS API owns only /oracle/truth|compare|priority|action(s)).
+const API_ROOT = fabricUrl("/oracle");
 
 async function oracleRequest(path, options = {}) {
   const response = await fetch(`${API_ROOT}${path}`, {

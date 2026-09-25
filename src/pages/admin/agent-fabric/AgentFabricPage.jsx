@@ -3,8 +3,10 @@ import "./agent-fabric.css";
 import { Button, StatusBadge } from "@/components/shared/DesignSystemPrimitives.jsx";
 import OglGuidanceEntryPoint from "@/system/guidance/OglGuidanceEntryPoint.jsx";
 import { SeaAttention, SeaDashboardSection, SeaHelpRegion, SeaNextAction } from "@/components/sea/SeaDashboardPrimitives.jsx";
+import { FABRIC_API_BASE } from "@/system/fabric/fabricConfig";
 
-const API_ROOT = "/api";
+// Agent Fabric-owned admin routes (/admin/agents, /admin/layers — routers/admin_*_routes.py).
+const API_ROOT = FABRIC_API_BASE;
 
 const GOVERNANCE_BOUNDARIES = [
   "Agents can propose, analyze, execute assigned tasks, and report.",

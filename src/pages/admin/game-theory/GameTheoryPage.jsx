@@ -1,7 +1,9 @@
 import React from "react";
 import "./game-theory.css";
+import { fabricUrl } from "@/system/fabric/fabricConfig";
 
-const API_ROOT = "/api/game-theory";
+// Agent Fabric-owned Game Theory routes (routers/game_theory_routes.py).
+const API_ROOT = fabricUrl("/game-theory");
 
 async function gameTheoryRequest(path, options = {}) {
   const response = await fetch(`${API_ROOT}${path}`, {

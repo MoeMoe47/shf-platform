@@ -1,7 +1,9 @@
 import React from "react";
 import "./truth-spine.css";
+import { fabricUrl } from "@/system/fabric/fabricConfig";
 
-const API_ROOT = "/api/truth";
+// Agent Fabric-owned Truth Spine routes (routers/truth_routes.py).
+const API_ROOT = fabricUrl("/truth");
 
 async function truthRequest(path, options = {}) {
   const response = await fetch(`${API_ROOT}${path}`, {

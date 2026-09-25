@@ -2,28 +2,26 @@
 // TOP-1%: deterministic, proxy-friendly, no CORS pain.
 //
 // Default behavior:
-//   - If Vite proxy is set, requests go to "/admin/..." on same origin (5173) and proxy to Fabric (8090).
+//   - Requests go to the canonical Fabric base (system/fabric/fabricConfig.js):
+//     same-origin "/fabric-api/admin/registry/..." proxied to the Fabric (8090).
 // Optional override:
 //   - localStorage.FABRIC_BASE_URL = "http://127.0.0.1:8090"
 //   - OR set VITE_FABRIC_API_BASE (legacy: VITE_FABRIC_URL / VITE_FABRIC_BASE_URL)
 //
-// Keeps its deliberate same-origin default (relative paths when nothing is
-// configured), so it reads only the explicit override from the canonical
-// Fabric config (system/fabric/fabricConfig.js), not the 8090 fallback.
-// Note: vite.config.js currently proxies only /api (to the SHS API), not
-// /admin — see docs for the pending Fabric proxy follow-up.
+// Registry admin routes are Agent Fabric-owned (routers/admin_registry_routes.py,
+// prefix /admin/registry — no /api prefix; the SHS API has no /admin routes).
 
-import { FABRIC_API_BASE_OVERRIDE as ENV_BASE } from "@/system/fabric/fabricConfig";
+import { FABRIC_API_BASE } from "../../system/fabric/fabricConfig.js";
 
 function normalizeBase(u) {
   return String(u || "").replace(/\/$/, "");
 }
 
-// Prefer explicit override, else rely on same-origin proxy (empty base => relative paths)
+// Prefer an explicit localStorage override, else the canonical Fabric base.
 function getBase() {
   const ls = globalThis?.localStorage;
   const override = ls?.getItem("FABRIC_BASE_URL") || ls?.getItem("shf_fabric_base") || "";
-  return normalizeBase(override || ENV_BASE || "");
+  return normalizeBase(override || FABRIC_API_BASE);
 }
 
 function getAdminKey() {
@@ -32,8 +30,7 @@ function getAdminKey() {
 }
 
 async function req(method, path, body) {
-  const base = getBase(); // "" when proxy is used
-  const url = (base ? base : "") + path;
+  const url = getBase() + path;
 
   const headers = { "Content-Type": "application/json" };
   const k = getAdminKey();
@@ -60,25 +57,25 @@ async function req(method, path, body) {
 }
 
 export async function listRegistry() {
-  return req("GET", "/api/admin/registry");
+  return req("GET", "/admin/registry");
 }
 
 export async function listRegistryEvents() {
-  return req("GET", "/api/admin/registry/events");
+  return req("GET", "/admin/registry/events");
 }
 
 export async function getRegistryEntity(entityId) {
-  return req("GET", `/api/admin/registry/${encodeURIComponent(entityId)}`);
+  return req("GET", `/admin/registry/${encodeURIComponent(entityId)}`);
 }
 
 export async function upsertRegistryEntity(payload) {
-  return req("POST", "/api/admin/registry/upsert", payload);
+  return req("POST", "/admin/registry/upsert", payload);
 }
 
 export async function setRegistryLifecycle(entityId, payload) {
-  return req("POST", `/api/admin/registry/${encodeURIComponent(entityId)}/lifecycle`, payload);
+  return req("POST", `/admin/registry/${encodeURIComponent(entityId)}/lifecycle`, payload);
 }
 
 export async function attestRegistryEntity(entityId, payload) {
-  return req("POST", `/api/admin/registry/${encodeURIComponent(entityId)}/attest`, payload);
+  return req("POST", `/admin/registry/${encodeURIComponent(entityId)}/attest`, payload);
 }

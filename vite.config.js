@@ -6,6 +6,9 @@ import { fileURLToPath } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const apiProxyTarget = process.env.SHS_VITE_API_PROXY_TARGET || "http://127.0.0.1:8091";
+// Agent Fabric (services/shf-agent-fabric) — canonical local port 8090. Kept on
+// its own prefix so "/api" stays SHS-API-only (see docs/API_BACKEND_CONFIGURATION.md).
+const fabricProxyTarget = process.env.SHS_VITE_FABRIC_PROXY_TARGET || "http://127.0.0.1:8090";
 
 export default defineConfig({
   server: {
@@ -25,6 +28,14 @@ export default defineConfig({
         target: apiProxyTarget,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+      // Same-origin path to the Agent Fabric: /fabric-api/<fabric-native path>.
+      // The prefix is stripped, so /fabric-api/truth/claims -> :8090/truth/claims
+      // and /fabric-api/api/growth/claims -> :8090/api/growth/claims.
+      "/fabric-api": {
+        target: fabricProxyTarget,
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/fabric-api/, ""),
       },
     },
   },

@@ -35,13 +35,17 @@
 // retuned to that composition (kept out of the bright horizon band), but
 // destination rendering, routing, planet layout/sizes, and the separate
 // CSS galaxy-swirl decorative layer are untouched in this pass.
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { destinations } from '../destinations.js';
+import Icon from './GatewayIcon.jsx';
+import DiscoverySearch from '../discovery/DiscoverySearch.jsx';
+import { OBJECT_TYPES, discoverRouteFor, typeByKey } from '../discovery/discoveryModel.js';
+import { objectsOfType, typeRelationships } from '../discovery/discoveryAdapter.js';
+import useDiscovery from '../discovery/useDiscovery.js';
+import { useDestinationEntry } from '../discovery/destinationEntry.js';
 import {
   CANONICAL_UNIVERSE_ROUTE,
   isDestinationAvailable,
-  needsHardNavigation,
-  resolveDestinationHref,
 } from '../universeDestinationRegistry.js';
 
 const GATEWAY_BACKGROUND_SOURCE = '/assets/shu/SHU_DIRECTORY_BACKGROUND_MASTER_V2.png';
@@ -53,33 +57,40 @@ function seededUnit(seed) {
   return value - Math.floor(value);
 }
 
-// A denser, more varied starfield than the previous pass — several
-// depth/speed tiers so twinkling reads as organic rather than uniform.
-// `y` is constrained to 0-58% (the new Earth-horizon master's horizon
-// line sits around 58-60% down the frame) so animated stars stay in the
-// dark sky and never appear to float over the photographic Earth surface
-// or get lost in the bright horizon glow.
-function makeStars(count) {
+// Decorative directory stars: deterministic positions/timing, kept mostly
+// above the Earth horizon and biased away from the hero title/search area.
+function makeDirectoryStars(count) {
+  const zones = [
+    { x: [6, 20], y: [8, 38] },
+    { x: [30, 48], y: [5, 26] },
+    { x: [58, 94], y: [7, 34] },
+    { x: [42, 86], y: [36, 55] },
+    { x: [8, 36], y: [46, 58] },
+  ];
   return Array.from({ length: count }, (_, index) => {
-    const base = GATEWAY_SEED + index * 47;
-    const tier = index % 9;
-    const hero = tier === 4 || tier === 8;
-    const fast = tier % 3 === 0;
+    const zone = zones[index % zones.length];
+    const base = GATEWAY_SEED + index * 53;
+    const tier = index % 10;
+    const accent = tier === 4 || tier === 9;
+    const warm = tier === 6;
+    const peakOpacity = accent ? 0.58 + seededUnit(base + 7) * 0.25 : 0.46 + seededUnit(base + 7) * 0.24;
     return {
-      id: `ugw-star-${index}`,
-      x: seededUnit(base + 1) * 100,
-      y: seededUnit(base + 2) * 58,
-      size: hero ? 2.3 + seededUnit(base + 3) * 1.3 : 1 + seededUnit(base + 3) * 1.3,
-      opacity: hero ? 0.5 + seededUnit(base + 4) * 0.26 : 0.2 + seededUnit(base + 4) * 0.3,
-      duration: fast ? 2.4 + seededUnit(base + 5) * 2.6 : 4.5 + seededUnit(base + 5) * 6.5,
-      delay: -(seededUnit(base + 6) * 9),
-      hero,
-      fast,
+      id: `shu-directory-star-${index}`,
+      x: zone.x[0] + seededUnit(base + 1) * (zone.x[1] - zone.x[0]),
+      y: zone.y[0] + seededUnit(base + 2) * (zone.y[1] - zone.y[0]),
+      size: accent ? 1.8 + seededUnit(base + 3) * 1.1 : 1 + seededUnit(base + 3) * 1.45,
+      opacity: accent ? 0.38 + seededUnit(base + 4) * 0.26 : 0.25 + seededUnit(base + 4) * 0.34,
+      peakOpacity,
+      sparkOpacity: Math.min(0.84, peakOpacity + 0.08),
+      duration: 2.6 + seededUnit(base + 5) * 4.35,
+      delay: -(seededUnit(base + 6) * 7.4),
+      accent,
+      warm,
     };
   });
 }
 
-const GATEWAY_STARS = makeStars(34);
+const DIRECTORY_STARS = makeDirectoryStars(56);
 
 // Same document.hidden/visibilitychange pattern as useV1MotionPause in
 // ../UniverseApp.jsx, duplicated locally (8 lines) rather than exported,
@@ -118,6 +129,7 @@ function UniverseBackground() {
         src={GATEWAY_BACKGROUND_SOURCE}
         alt=""
         draggable="false"
+        fetchPriority="high"
       />
       {/* Subtle haze/depth: a soft glow rising from the horizon, echoing
           the photographic atmosphere glow already in the master image, so
@@ -133,16 +145,18 @@ function UniverseBackground() {
 
 function StarField() {
   return (
-    <div className="ugw-starLayer" aria-hidden="true" role="presentation">
-      {GATEWAY_STARS.map((item) => (
+    <div className="shu-directory-stars" aria-hidden="true" role="presentation">
+      {DIRECTORY_STARS.map((item) => (
         <i
           key={item.id}
-          className={`ugw-star${item.hero ? ' is-hero' : ''}${item.fast ? ' is-fast' : ''}`}
+          className={`shu-directory-star${item.accent ? ' is-accent' : ''}${item.warm ? ' is-warm' : ''}`}
           style={{
             '--x': `${item.x}%`,
             '--y': `${item.y}%`,
             '--size': `${item.size}px`,
             '--base-opacity': item.opacity,
+            '--peak-opacity': item.peakOpacity,
+            '--spark-opacity': item.sparkOpacity,
             '--duration': `${item.duration}s`,
             '--delay': `${item.delay}s`,
           }}
@@ -311,7 +325,7 @@ function GalaxySwirl() {
   );
 }
 
-function UniverseIntro() {
+function UniverseIntro({ navigate, onEnterDestination }) {
   return (
     <section className="ugw-intro" aria-labelledby="ugw-intro-title">
       <p className="ugw-introEyebrow">Silicon Heartland Universe</p>
@@ -320,17 +334,7 @@ function UniverseIntro() {
         Explore programs, careers, organizations, projects, places and opportunities across the
         Silicon Heartland ecosystem.
       </p>
-      <form className="ugw-search" role="search" aria-label="Search the Silicon Heartland Universe">
-        <Icon name="search" />
-        <label className="ugw-srOnly" htmlFor="ugw-search-input">Search the universe</label>
-        <input id="ugw-search-input" type="search" placeholder="Search the universe..." />
-        <button type="submit" aria-label="Search">&rarr;</button>
-      </form>
-      <div className="ugw-searchChips" aria-label="Universe search categories">
-        {SEARCH_CHIPS.map((chip) => (
-          <a key={chip} href={`#${slugify(chip)}`}>{chip}</a>
-        ))}
-      </div>
+      <DiscoverySearch navigate={navigate} onEnterDestination={onEnterDestination} />
     </section>
   );
 }
@@ -390,8 +394,6 @@ function planetImageForDestination(destination, indexInSection) {
   );
 }
 
-const SEARCH_CHIPS = ['Programs', 'Careers', 'Organizations', 'Projects', 'Places', 'Opportunities'];
-
 const HERO_DESTINATION_IDS = [
   'silicon-heartland-foundation',
   'bos',
@@ -433,7 +435,7 @@ const FEATURED_ITEMS = [
     type: 'Program',
     title: 'Data Center Community & Workforce Initiative',
     text: 'Education, workforce and community growth.',
-    image: '/assets/metaverse/facilities/data-center-training-facility.png',
+    image: '/assets/shu/content/shu-program-robotics-learning-1200.webp',
     tags: ['Education', 'Workforce', 'Community'],
     cta: 'View Program',
   },
@@ -441,7 +443,7 @@ const FEATURED_ITEMS = [
     type: 'Career',
     title: 'Data Center Technician',
     text: 'High-demand career supporting digital infrastructure.',
-    image: '/assets/career/pathways/grid-data-analytics.jpg',
+    image: '/assets/shu/content/shu-career-data-center-technician-1200.webp',
     tags: ['Training', 'In Demand', 'Good Job'],
     cta: 'View Career',
   },
@@ -449,7 +451,7 @@ const FEATURED_ITEMS = [
     type: 'Organization',
     title: 'Silicon Heartland Foundation',
     text: 'Building equitable growth through education, workforce and community.',
-    image: '/assets/foundation/hero-main.jpg',
+    image: '/assets/shu/content/shu-organization-collaboration-1200.webp',
     tags: ['Nonprofit', 'Education', 'Community'],
     cta: 'View Organization',
   },
@@ -457,7 +459,7 @@ const FEATURED_ITEMS = [
     type: 'Project',
     title: 'Central Ohio Data Center Corridor',
     text: 'Expanding digital infrastructure and opportunity in the region.',
-    image: '/assets/metaverse/districts/data-center-district-overview.png',
+    image: '/assets/shu/content/shu-project-infrastructure-planning-1200.webp',
     tags: ['Infrastructure', 'Economic Growth'],
     cta: 'View Project',
   },
@@ -465,7 +467,7 @@ const FEATURED_ITEMS = [
     type: 'Opportunity',
     title: 'Data Center Training Program',
     text: 'Now enrolling for upcoming cohorts.',
-    image: '/assets/metaverse/facilities/northstar-data-center-facility.png',
+    image: '/assets/shu/content/shu-opportunity-enrollment-advising-1200.webp',
     tags: ['Training', 'Apply Now', 'Columbus'],
     cta: 'View Opportunity',
   },
@@ -480,21 +482,26 @@ const BROWSE_TILES = [
   { icon: 'ticket', title: 'Opportunities', text: 'Grants, jobs and more.' },
 ];
 
+// Center hub art: the warm, text-free "center planet" from the OAS control
+// domains set — deliberately not one of the eight PLANET_IMAGES above, so
+// the ecosystem hub never reads as any single destination (SHF/SHS/BOS...).
+const NETWORK_CENTER_PLANET = '/assets/oas/control-domains-center-planet.png';
+
 const NETWORK_ITEMS = [
-  { title: 'Programs', text: 'Create learning opportunities', image: '/assets/metaverse/facilities/data-center-training-facility.png' },
-  { title: 'Careers', text: 'Lead to pathways and good jobs', image: '/assets/career/pathways/cta-people.jpg' },
-  { title: 'Places', text: 'Connect real world and Metaverse', image: '/assets/metaverse/city/silicon-heartland-city-day.png' },
-  { title: 'Organizations', text: 'Operate and partner on initiatives', image: '/assets/foundation/hero-main.jpg' },
-  { title: 'Projects', text: 'Deliver solutions and infrastructure', image: '/assets/metaverse/facilities/infrastructure-project-work-zone.png' },
-  { title: 'Opportunities', text: 'Create access and growth', image: '/assets/metaverse/districts/community-district-public-realm.png' },
+  { title: 'Programs', text: 'Create learning opportunities', image: '/assets/shu/content/shu-program-robotics-learning-node-400.webp' },
+  { title: 'Careers', text: 'Lead to pathways and good jobs', image: '/assets/shu/content/shu-career-data-center-technician-node-400.webp' },
+  { title: 'Places', text: 'Connect real world and Metaverse', image: '/assets/shu/content/shu-place-connected-region-node-400.webp' },
+  { title: 'Organizations', text: 'Operate and partner on initiatives', image: '/assets/shu/content/shu-organization-collaboration-node-400.webp' },
+  { title: 'Projects', text: 'Deliver solutions and infrastructure', image: '/assets/shu/content/shu-project-engineering-design-node-400.webp' },
+  { title: 'Opportunities', text: 'Create access and growth', image: '/assets/shu/content/shu-opportunity-career-networking-node-400.webp' },
 ];
 
 const ACTIVITY_ITEMS = [
-  { type: 'Program', meta: 'New cohort announced', title: 'Data Center Training Program - Fall 2025', time: '2 hours ago', image: '/assets/metaverse/facilities/data-center-training-facility.png' },
-  { type: 'Organization', meta: 'Partnership', title: 'SHF and regional employers expand workforce initiative', time: '5 hours ago', image: '/assets/foundation/hero-main.jpg' },
-  { type: 'Opportunity', meta: 'Now open', title: 'Applications open for Data Center Scholarships', time: '1 day ago', image: '/assets/metaverse/districts/community-district-public-realm.png' },
-  { type: 'Project', meta: 'Milestone', title: 'Central Ohio Data Center Corridor reaches new milestone', time: '2 days ago', image: '/assets/metaverse/districts/data-center-district-overview.png' },
-  { type: 'Career', meta: 'In demand', title: 'Data Center Technician ranked among top growth careers', time: '3 days ago', image: '/assets/career/pathways/grid-skilled-trades.jpg' },
+  { type: 'Program', meta: 'New cohort announced', title: 'Data Center Training Program - Fall 2025', time: '2 hours ago', image: '/assets/shu/content/shu-workforce-skilled-trades-400.webp' },
+  { type: 'Organization', meta: 'Partnership', title: 'SHF and regional employers expand workforce initiative', time: '5 hours ago', image: '/assets/shu/content/shu-organization-collaboration-400.webp' },
+  { type: 'Opportunity', meta: 'Now open', title: 'Applications open for Data Center Scholarships', time: '1 day ago', image: '/assets/shu/content/shu-opportunity-enrollment-advising-400.webp' },
+  { type: 'Project', meta: 'Milestone', title: 'Central Ohio Data Center Corridor reaches new milestone', time: '2 days ago', image: '/assets/shu/content/shu-project-infrastructure-planning-400.webp' },
+  { type: 'Career', meta: 'In demand', title: 'Data Center Technician ranked among top growth careers', time: '3 days ago', image: '/assets/shu/content/shu-career-data-center-technician-400.webp' },
 ];
 
 const STORY_ITEMS = [
@@ -502,19 +509,25 @@ const STORY_ITEMS = [
     type: 'Workforce',
     title: 'From Training to a Career',
     text: "A local student's journey into the data center industry.",
-    image: '/assets/career/pathways/cta-people.jpg',
+    image: '/assets/shu/content/shu-workforce-skilled-trades-1600.webp',
+    position: '50% 30%',
+    photo: true,
   },
   {
     type: 'Community',
     title: 'Building Opportunity',
     text: 'How Silicon Heartland is powering regional growth.',
-    image: '/assets/metaverse/districts/community-district-public-realm.png',
+    image: '/assets/shu/content/shu-community-development-1600.webp',
+    position: '50% 32%',
+    photo: true,
   },
   {
     type: 'Innovation',
     title: 'A More Connected Region',
     text: 'Education, infrastructure and community working together.',
-    image: '/assets/metaverse/districts/technology-innovation-district-overview.png',
+    image: '/assets/shu/content/shu-project-engineering-design-1600.webp',
+    position: '50% 30%',
+    photo: true,
   },
 ];
 
@@ -522,67 +535,50 @@ function slugify(value) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
 
-function Icon({ name }) {
-  const common = { viewBox: '0 0 24 24', 'aria-hidden': 'true', focusable: 'false' };
-  if (name === 'search') return (
-    <svg {...common}><circle cx="10.5" cy="10.5" r="6.5" /><path d="M16 16l5 5" /></svg>
-  );
-  if (name === 'cap') return (
-    <svg {...common}><path d="M3 8l9-4 9 4-9 4-9-4z" /><path d="M7 10v5c2 2 8 2 10 0v-5" /></svg>
-  );
-  if (name === 'book') return (
-    <svg {...common}><path d="M5 5h7v14H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" /><path d="M12 5h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-7V5z" /></svg>
-  );
-  if (name === 'briefcase') return (
-    <svg {...common}><path d="M9 7V5h6v2" /><rect x="3" y="7" width="18" height="12" rx="2" /><path d="M3 12h18M10 12v2h4v-2" /></svg>
-  );
-  if (name === 'people') return (
-    <svg {...common}><circle cx="9" cy="8" r="3" /><circle cx="17" cy="9" r="2.5" /><path d="M3 19c.7-3.4 2.7-5 6-5s5.3 1.6 6 5" /><path d="M14 15c2.8.1 4.6 1.5 5.4 4" /></svg>
-  );
-  if (name === 'building') return (
-    <svg {...common}><path d="M5 21V4h9v17" /><path d="M14 9h5v12" /><path d="M8 8h3M8 12h3M8 16h3M16 13h1M16 17h1" /></svg>
-  );
-  if (name === 'rocket') return (
-    <svg {...common}><path d="M14 4c3 1 5 3 6 6l-7 7-6-6 7-7z" /><path d="M7 11l-3 1 2 2-1 3 3-2M14 4l-1 5 5-1" /></svg>
-  );
-  if (name === 'pin') return (
-    <svg {...common}><path d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12z" /><circle cx="12" cy="9" r="2.5" /></svg>
-  );
-  if (name === 'hand') return (
-    <svg {...common}><path d="M7 12V6a1.5 1.5 0 0 1 3 0v5" /><path d="M10 11V5a1.5 1.5 0 0 1 3 0v6" /><path d="M13 11V7a1.5 1.5 0 0 1 3 0v7" /><path d="M7 12l-2-2a1.6 1.6 0 0 0-2.2 2.3l5.5 6.2A5 5 0 0 0 12 20h2a5 5 0 0 0 5-5v-3" /></svg>
-  );
-  if (name === 'ticket') return (
-    <svg {...common}><path d="M4 8a2 2 0 0 0 0 4v4h16v-4a2 2 0 0 1 0-4V4H4v4z" /><path d="M9 7h6M9 13h6" /></svg>
-  );
-  return (
-    <svg {...common}><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-  );
+// In-app link: a real href (open-in-new-tab and copy link keep working),
+// client-side navigation on a plain click.
+export function RouteLink({ to, navigate, children, ...rest }) {
+  const onClick = (event) => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    navigate(to);
+  };
+  return <a href={to} onClick={onClick} {...rest}>{children}</a>;
 }
 
-function SectionHeader({ eyebrow, title, action }) {
+// Editorial sections (Featured, Latest Activity, Featured Stories) carry
+// illustrative presentation copy that is NOT canonical ecosystem data; the
+// note makes that explicit to readers (see SHU_ECOSYSTEM_EXPERIENCE_V1.md).
+export function SectionHeader({ eyebrow, title, action, headingId, navigate, editorialNote, children }) {
   return (
     <div className="ugw-sectionHeader">
       <div>
-        <p className="ugw-sectionEyebrow">{eyebrow}</p>
+        <h2 className="ugw-sectionEyebrow" id={headingId}>{eyebrow}</h2>
         {title && <p className="ugw-sectionCopy">{title}</p>}
+        {editorialNote && <p className="ugw-editorialNote">{editorialNote}</p>}
       </div>
-      {action && <a className="ugw-sectionAction" href={action.href}>{action.label} <span aria-hidden="true">&rarr;</span></a>}
+      {children}
+      {action && (
+        <RouteLink className="ugw-sectionAction" to={action.to} navigate={navigate}>
+          {action.label} <span aria-hidden="true">&rarr;</span>
+        </RouteLink>
+      )}
     </div>
   );
 }
 
-function DestinationPlanet({ destination, onEnterDestination, index }) {
+function DestinationPlanet({ destination, onEnterDestination, index, entering }) {
   const available = isDestinationAvailable(destination);
   const text = HERO_DESTINATION_LABELS[destination.id] || { title: destination.label, subtitle: destination.title };
   const image = planetImageForDestination(destination, index);
   return (
     <button
       type="button"
-      className={`ugw-destinationPlanet${available ? '' : ' is-unavailable'}`}
+      className={`ugw-destinationPlanet${available ? '' : ' is-unavailable'}${entering ? ' is-entering' : ''}`}
       data-destination-id={destination.id}
-      onClick={() => onEnterDestination(destination)}
+      onClick={() => onEnterDestination(destination, text.title)}
       disabled={!available}
-      aria-label={`${text.title}: ${text.subtitle}`}
+      aria-label={`${text.title}: ${text.subtitle}${available ? '' : ' (not yet available)'}`}
     >
       <span className={`ugw-planet ugw-planet--${image.ratio}${available ? '' : ' is-dormant'}`} aria-hidden="true">
         <span className="ugw-planetHalo" />
@@ -607,10 +603,25 @@ function AudienceCard({ item }) {
   );
 }
 
-function FeaturedCard({ item }) {
+// Responsive sources for SHU production images: every -1200/-1600 webp in
+// /assets/shu/content/ has an -800 sibling, so small screens never fetch
+// the large derivative.
+function contentSrcSet(src) {
+  const match = /^(\/assets\/shu\/content\/.+)-(1200|1600)\.webp$/.exec(src || '');
+  return match ? `${match[1]}-800.webp 800w, ${src} ${match[2]}w` : undefined;
+}
+
+function FeaturedCard({ item, navigate }) {
   return (
     <article className="ugw-featureCard">
-      <img src={item.image} alt="" loading="lazy" decoding="async" />
+      <img
+        src={item.image}
+        srcSet={contentSrcSet(item.image)}
+        sizes="(max-width: 560px) 92vw, (max-width: 1024px) 31vw, 270px"
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
       <div>
         <p>{item.type}</p>
         <h3>{item.title}</h3>
@@ -618,31 +629,296 @@ function FeaturedCard({ item }) {
         <ul aria-label={`${item.title} metadata`}>
           {item.tags.map((tag) => <li key={tag}>{tag}</li>)}
         </ul>
-        <a href={`#${slugify(item.type)}`}>{item.cta} <span aria-hidden="true">&rarr;</span></a>
+        <RouteLink to={discoverRouteFor({ type: typeKeyForLabel(item.type) })} navigate={navigate}>
+          {item.cta} <span aria-hidden="true">&rarr;</span>
+        </RouteLink>
       </div>
     </article>
   );
 }
 
-function BrowseTile({ item }) {
+function BrowseTile({ item, navigate }) {
   return (
-    <a className="ugw-browseTile" href={`#${slugify(item.title)}`} id={slugify(item.title)}>
+    <RouteLink className="ugw-browseTile" to={discoverRouteFor({ type: typeKeyForPlural(item.title) })} navigate={navigate} id={slugify(item.title)}>
       <span className="ugw-cardIcon"><Icon name={item.icon} /></span>
       <strong>{item.title}</strong>
       <span>{item.text}</span>
       <i aria-hidden="true">&rarr;</i>
-    </a>
+    </RouteLink>
   );
 }
 
-function NetworkModule() {
+function typeKeyForLabel(label) {
+  return OBJECT_TYPES.find((type) => type.label === label)?.key || '';
+}
+
+function typeKeyForPlural(plural) {
+  return OBJECT_TYPES.find((type) => type.plural === plural)?.key || '';
+}
+
+// Featured Across the Ecosystem: editorial presentation cards (NOT the
+// canonical discovery index — see discovery/discoveryAdapter.js). The
+// filter narrows the editorial set by its own `type` label; categories with
+// no editorial card show an honest empty state that points to Discover.
+function FeaturedSection({ navigate }) {
+  const [filter, setFilter] = useState('');
+  const visible = filter ? FEATURED_ITEMS.filter((item) => typeKeyForLabel(item.type) === filter) : FEATURED_ITEMS;
+  const filterType = OBJECT_TYPES.find((type) => type.key === filter);
   return (
-    <section className="ugw-network" aria-labelledby="ugw-network-title">
-      <SectionHeader eyebrow="See How It's Connected" title="Explore relationships across the ecosystem." />
-      <div className="ugw-networkMap">
-        <div className="ugw-networkCenter" id="ugw-network-title">Silicon Heartland<br />Ecosystem</div>
+    <section className="ugw-section" id="featured-across-the-ecosystem" aria-labelledby="ugw-featured-heading" data-content-class="editorial">
+      <SectionHeader
+        eyebrow="Featured Across the Ecosystem"
+        headingId="ugw-featured-heading"
+        editorialNote="Illustrative highlights — not published ecosystem records."
+        navigate={navigate}
+        action={{ to: discoverRouteFor({ type: filter }), label: 'View All' }}
+      >
+        <div className="ugw-filterRow" role="group" aria-label="Filter featured items">
+          <button type="button" className={filter ? '' : 'is-active'} aria-pressed={!filter} onClick={() => setFilter('')}>All</button>
+          {OBJECT_TYPES.map((type) => (
+            <button
+              key={type.key}
+              type="button"
+              className={filter === type.key ? 'is-active' : ''}
+              aria-pressed={filter === type.key}
+              onClick={() => setFilter((current) => (current === type.key ? '' : type.key))}
+            >
+              {type.plural}
+            </button>
+          ))}
+        </div>
+      </SectionHeader>
+      <div className="ugw-featureGrid" aria-live="polite">
+        {visible.map((item) => <FeaturedCard key={item.title} item={item} navigate={navigate} />)}
+        {!visible.length && filterType && (
+          <div className="ugw-emptyState is-compact ugw-featureEmpty" role="status">
+            <strong>No featured {filterType.plural.toLowerCase()} right now.</strong>
+            <p>Browse every published {filterType.label.toLowerCase()} in Discover.</p>
+            <div className="ugw-emptyStateActions">
+              <RouteLink className="ugw-pillButton" to={discoverRouteFor({ type: filterType.key })} navigate={navigate}>
+                Browse {filterType.plural} <span aria-hidden="true">&rarr;</span>
+              </RouteLink>
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+// Network animation timing. A travelling signal takes SIGNAL_TRAVEL_MS to
+// go from the hub edge to a node; the node "receives" it for
+// NODE_RECEIVE_MS. Launches are spaced SIGNAL_GAP_MS apart (randomized), so
+// at most two signals are ever in flight.
+const SIGNAL_TRAVEL_MS = 2800;
+const NODE_RECEIVE_MS = 1500;
+const SIGNAL_GAP_MS = [1700, 4300];
+const MAX_SIGNALS = 2;
+// Loose preferred route (Programs -> Careers -> Organizations ->
+// Opportunities -> Places -> Projects); the scheduler follows it only some
+// of the time so the sequence never reads as a rigid loop.
+const SIGNAL_ROUTE = [0, 1, 3, 5, 2, 4];
+const HUB_GAP = 6;
+const NODE_GAP = 9;
+
+// Center -> node spokes in px, measured from layout offsets (not
+// getBoundingClientRect) for the nodes, so their CSS drift never shifts a
+// line endpoint. Returns null on the stacked mobile layout, where the
+// spokes/travelling signals are dropped and only node glows remain.
+function measureNetworkSpokes(map) {
+  if (!map || window.matchMedia('(max-width: 768px)').matches) return null;
+  const center = map.querySelector('.ugw-networkCenter');
+  if (!center) return null;
+  const mapRect = map.getBoundingClientRect();
+  const centerRect = center.getBoundingClientRect();
+  const cx = centerRect.left - mapRect.left + centerRect.width / 2;
+  const cy = centerRect.top - mapRect.top + centerRect.height / 2;
+  const hubRadius = centerRect.width / 2 + HUB_GAP;
+  return [...map.querySelectorAll('.ugw-networkNode')].map((node) => {
+    const img = node.querySelector('img');
+    const imgX = node.offsetLeft + img.offsetLeft + img.offsetWidth / 2;
+    const ny = node.offsetTop + img.offsetTop + img.offsetHeight / 2;
+    // Left-column nodes have their text between the image and the hub, so
+    // their spoke stops at the node's inner edge instead of crossing text.
+    const textFacesHub = imgX < cx;
+    const nx = textFacesHub ? node.offsetLeft + node.offsetWidth + NODE_GAP : imgX;
+    const length = Math.hypot(nx - cx, ny - cy) || 1;
+    const ux = (nx - cx) / length;
+    const uy = (ny - cy) / length;
+    const nodeRadius = textFacesHub ? 0 : img.offsetWidth / 2 + NODE_GAP;
+    return {
+      x1: cx + ux * hubRadius,
+      y1: cy + uy * hubRadius,
+      x2: nx - ux * nodeRadius,
+      y2: ny - uy * nodeRadius,
+    };
+  });
+}
+
+function randomBetween([min, max]) {
+  return min + Math.random() * (max - min);
+}
+
+// Category key for each network node, from the node's own title (the six
+// nodes are exactly the six discovery object types).
+const NETWORK_TYPE_KEYS = NETWORK_ITEMS.map((item) => typeKeyForPlural(item.title));
+
+function NetworkModule({ animate, navigate }) {
+  const mapRef = useRef(null);
+  const [spokes, setSpokes] = useState(null);
+  const [signals, setSignals] = useState([]);
+  const [receiving, setReceiving] = useState([]);
+  const [inView, setInView] = useState(false);
+  const [selected, setSelected] = useState('');
+  const discovery = useDiscovery();
+
+  // Relationship explorer (Phase 3): category-level edges derived from the
+  // canonical index only. With no selection the network behaves exactly as
+  // before; selecting a node emphasizes the categories it really connects to.
+  const relations = useMemo(() => (discovery.phase === 'ready' ? typeRelationships(discovery.index) : null), [discovery.phase, discovery.index]);
+  const related = useMemo(() => (selected && relations ? relations.get(selected) || new Map() : new Map()), [selected, relations]);
+  const nodeState = (typeKey) => {
+    if (!selected) return '';
+    if (typeKey === selected) return ' is-selected';
+    return related.has(typeKey) ? ' is-related' : ' is-dimmed';
+  };
+  // Signals keep flowing, but only toward the selection and its relations.
+  const signalTargets = useRef(null);
+  signalTargets.current = selected
+    ? NETWORK_TYPE_KEYS.map((key, index) => (key === selected || related.has(key) ? index : -1)).filter((index) => index >= 0)
+    : null;
+  const toggle = (typeKey) => setSelected((current) => (current === typeKey ? '' : typeKey));
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return undefined;
+    const update = () => setSpokes(measureNetworkSpokes(map));
+    update();
+    const resize = new ResizeObserver(update);
+    resize.observe(map);
+    const visibility = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting));
+    visibility.observe(map);
+    return () => {
+      resize.disconnect();
+      visibility.disconnect();
+    };
+  }, []);
+
+  // Signal scheduler: plain timeouts (no rAF loop), only while the section
+  // is on screen, the tab is visible, and reduced motion is off.
+  useEffect(() => {
+    if (!animate || !inView) {
+      setSignals([]);
+      setReceiving([]);
+      return undefined;
+    }
+    const timers = new Set();
+    const later = (fn, ms) => {
+      const id = window.setTimeout(() => {
+        timers.delete(id);
+        fn();
+      }, ms);
+      timers.add(id);
+    };
+    let active = 0;
+    let serial = 0;
+    let routeStep = Math.floor(Math.random() * SIGNAL_ROUTE.length);
+    let lastIndex = -1;
+
+    const pickNode = () => {
+      const targets = signalTargets.current;
+      if (targets?.length) {
+        const pool = targets.length > 1 ? targets.filter((index) => index !== lastIndex) : targets;
+        return pool[Math.floor(Math.random() * pool.length)];
+      }
+      if (Math.random() < 0.55) {
+        routeStep = (routeStep + 1) % SIGNAL_ROUTE.length;
+        if (SIGNAL_ROUTE[routeStep] !== lastIndex) return SIGNAL_ROUTE[routeStep];
+      }
+      let index = lastIndex;
+      while (index === lastIndex) index = Math.floor(Math.random() * NETWORK_ITEMS.length);
+      return index;
+    };
+
+    const launch = () => {
+      if (active < MAX_SIGNALS) {
+        const index = pickNode();
+        const id = serial += 1;
+        lastIndex = index;
+        active += 1;
+        setSignals((current) => [...current, { id, index }]);
+        later(() => {
+          setReceiving((current) => [...current, id + ':' + index]);
+          later(() => setReceiving((current) => current.filter((key) => key !== id + ':' + index)), NODE_RECEIVE_MS);
+        }, SIGNAL_TRAVEL_MS * 0.86);
+        later(() => {
+          active -= 1;
+          setSignals((current) => current.filter((signal) => signal.id !== id));
+        }, SIGNAL_TRAVEL_MS);
+      }
+      later(launch, randomBetween(SIGNAL_GAP_MS));
+    };
+    later(launch, randomBetween([600, 1800]));
+    return () => timers.forEach((id) => window.clearTimeout(id));
+  }, [animate, inView]);
+
+  const isReceiving = (index) => receiving.some((key) => key.endsWith(':' + index));
+
+  return (
+    <section className="ugw-network" aria-labelledby="ugw-network-heading">
+      <SectionHeader eyebrow="See How It's Connected" title="Explore relationships across the ecosystem." headingId="ugw-network-heading" />
+      <div
+        className={`ugw-networkMap${selected ? ' has-selection' : ''}`}
+        ref={mapRef}
+        onKeyDown={(event) => { if (event.key === 'Escape' && selected) { event.stopPropagation(); setSelected(''); } }}
+      >
+        {spokes && (
+          <svg className="ugw-networkSpokes" aria-hidden="true" focusable="false">
+            {spokes.map((spoke, index) => (
+              <line key={NETWORK_ITEMS[index].title} className={`ugw-networkSpoke ugw-networkSpoke--${index + 1}${nodeState(NETWORK_TYPE_KEYS[index])}`} {...spoke} />
+            ))}
+            {signals.map(({ id, index }) => {
+              const spoke = spokes[index];
+              return spoke ? (
+                <g
+                  key={id}
+                  className="ugw-networkSignal"
+                  style={{
+                    '--x1': `${spoke.x1}px`,
+                    '--y1': `${spoke.y1}px`,
+                    '--x2': `${spoke.x2}px`,
+                    '--y2': `${spoke.y2}px`,
+                    '--travel': `${SIGNAL_TRAVEL_MS}ms`,
+                  }}
+                >
+                  <circle className="ugw-networkSignalGlow" r="6" />
+                  <circle className="ugw-networkSignalCore" r="2.2" />
+                </g>
+              ) : null;
+            })}
+          </svg>
+        )}
+        <span className="ugw-networkCenterHalo" aria-hidden="true" />
+        <div className="ugw-networkCenter">
+          <img className="ugw-networkCenterPlanet" src={NETWORK_CENTER_PLANET} alt="" aria-hidden="true" draggable="false" loading="lazy" decoding="async" />
+          <span className="ugw-networkCenterLabel" id="ugw-network-title">Silicon Heartland<br />Ecosystem</span>
+        </div>
         {NETWORK_ITEMS.map((item, index) => (
-          <article key={item.title} className={`ugw-networkNode ugw-networkNode--${index + 1}`}>
+          <article
+            key={item.title}
+            className={`ugw-networkNode ugw-networkNode--${index + 1}${isReceiving(index) ? ' is-receiving' : ''}${nodeState(NETWORK_TYPE_KEYS[index])}`}
+            tabIndex={0}
+            role="button"
+            aria-pressed={selected === NETWORK_TYPE_KEYS[index]}
+            aria-controls="ugw-network-panel"
+            onClick={() => toggle(NETWORK_TYPE_KEYS[index])}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                toggle(NETWORK_TYPE_KEYS[index]);
+              }
+            }}
+          >
             <img src={item.image} alt="" loading="lazy" decoding="async" />
             <div>
               <strong>{item.title}</strong>
@@ -651,20 +927,83 @@ function NetworkModule() {
           </article>
         ))}
       </div>
-      <a className="ugw-outlineButton" href="#explore-the-ecosystem">Explore the Full Network <span aria-hidden="true">&rarr;</span></a>
+      <NetworkPanel
+        selected={selected}
+        related={related}
+        discovery={discovery}
+        navigate={navigate}
+        onClose={() => setSelected('')}
+      />
+      <RouteLink className="ugw-outlineButton" to={discoverRouteFor()} navigate={navigate}>Explore the Full Network <span aria-hidden="true">&rarr;</span></RouteLink>
     </section>
   );
 }
 
-function ActivityList() {
+const NETWORK_PANEL_LIMIT = 4;
+
+// Compact details for the selected category: live canonical count, the
+// categories it is really connected to (with edge counts), a few records,
+// and an explicit CTA. Nothing navigates until the user chooses to.
+function NetworkPanel({ selected, related, discovery, navigate, onClose }) {
+  const type = typeByKey(selected);
+  const ready = discovery.phase === 'ready';
+  const objects = ready && type ? objectsOfType(discovery.index, selected) : [];
+  const status = discovery.status?.[selected];
   return (
-    <section className="ugw-activity" aria-labelledby="ugw-activity-title">
+    <div id="ugw-network-panel" className={`ugw-networkPanel${type ? ' is-open' : ''}`} aria-live="polite">
+      {!type && <p className="ugw-networkHint">Select a category to see how it connects across the ecosystem.</p>}
+      {type && (
+        <>
+          <div className="ugw-networkPanelHeader">
+            <div>
+              <p className="ugw-networkPanelEyebrow">{type.plural}</p>
+              <strong>
+                {!ready ? 'Loading…' : objects.length
+                  ? `${objects.length} published ${objects.length === 1 ? type.label.toLowerCase() : type.plural.toLowerCase()}`
+                  : status === 'error' ? `${type.plural} are unavailable right now` : `No ${type.plural.toLowerCase()} published yet`}
+              </strong>
+            </div>
+            <button type="button" className="ugw-textButton" onClick={onClose}>Clear</button>
+          </div>
+          {ready && (
+            <p className="ugw-networkPanelRelations">
+              {related.size
+                ? <>Connected to {[...related].map(([key, count], index) => (
+                  <React.Fragment key={key}>{index ? ', ' : ''}<b>{typeByKey(key).plural}</b> ({count} relationship{count === 1 ? '' : 's'})</React.Fragment>
+                ))}.</>
+                : 'No cross-category relationships are published for this category yet.'}
+            </p>
+          )}
+          {objects.length > 0 && (
+            <ul className="ugw-networkPanelList">
+              {[...objects].sort((a, b) => (a.kind === 'Pathway' ? -1 : b.kind === 'Pathway' ? 1 : 0)).slice(0, NETWORK_PANEL_LIMIT).map((object) => (
+                <li key={object.key}>
+                  <RouteLink to={object.detailRoute} navigate={navigate}>{object.title}</RouteLink>
+                  <span>{object.kind}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+          <RouteLink className="ugw-pillButton" to={discoverRouteFor({ type: selected })} navigate={navigate}>
+            View Details <span aria-hidden="true">&rarr;</span>
+          </RouteLink>
+        </>
+      )}
+    </div>
+  );
+}
+
+function ActivityList({ navigate }) {
+  return (
+    <section className="ugw-activity" aria-labelledby="ugw-activity-heading" data-content-class="editorial">
       <SectionHeader
         eyebrow="Latest Activity"
         title="What's happening across the Silicon Heartland Universe."
-        action={{ href: '#featured-across-the-ecosystem', label: 'View All' }}
+        editorialNote="Illustrative sample activity — not a live feed; items and times are examples."
+        headingId="ugw-activity-heading"
+        navigate={navigate}
+        action={{ to: discoverRouteFor(), label: 'View All' }}
       />
-      <div id="ugw-activity-title" className="ugw-srOnly">Latest Activity</div>
       <ul>
         {ACTIVITY_ITEMS.map((item) => (
           <li key={`${item.type}-${item.title}`}>
@@ -683,8 +1022,16 @@ function ActivityList() {
 
 function StoryCard({ item }) {
   return (
-    <article className="ugw-storyCard">
-      <img src={item.image} alt="" loading="lazy" decoding="async" />
+    <article className={`ugw-storyCard${item.photo ? ' ugw-storyCard--photo' : ''}`}>
+      <img
+        src={item.image}
+        srcSet={contentSrcSet(item.image)}
+        sizes="(max-width: 768px) 92vw, 33vw"
+        alt=""
+        loading="lazy"
+        decoding="async"
+        style={item.position ? { objectPosition: item.position } : undefined}
+      />
       <div>
         <p>{item.type}</p>
         <h3>{item.title}</h3>
@@ -694,30 +1041,18 @@ function StoryCard({ item }) {
   );
 }
 
-export default function UniverseGateway({ navigate }) {
+// Shared SHU page chrome: background art, stars, dust, galaxy swirl, top
+// bar, layout column and footer. The directory, Discover and object detail
+// pages all render inside it, so the locked visual system is identical
+// everywhere. `searchHref` points the top-bar search icon at the page's own
+// search input (gateway) or at Discover (other pages).
+export function GatewayShell({ navigate, className = '', ariaLabel, searchHref = '#ugw-search-input', children }) {
   const paused = useMotionPause();
   const reducedMotion = useReducedMotion();
-
-  // Identical decision to every other entry point (UniverseV1Lab's own
-  // enterDestination, the retired UniverseDirectory) — same registry
-  // functions, same same-origin-app/independent-local-app hard-navigation
-  // rule, no re-derivation of navigation logic here.
-  const enterDestination = (item) => {
-    if (!isDestinationAvailable(item)) return;
-    const href = resolveDestinationHref(item);
-    if (needsHardNavigation(item)) window.location.assign(href);
-    else navigate(href);
-  };
-
-  const visibleDestinations = destinations.filter((item) => item.universeVisible !== false);
-  const heroDestinations = HERO_DESTINATION_IDS
-    .map((id) => visibleDestinations.find((item) => item.id === id))
-    .filter(Boolean);
-
   return (
     <main
-      className={`ugw-page${paused ? ' motion-paused' : ''}`}
-      aria-label="Silicon Heartland Universe destination gateway"
+      className={`ugw-page${paused ? ' motion-paused' : ''}${className ? ` ${className}` : ''}`}
+      aria-label={ariaLabel}
     >
       <UniverseBackground />
       <StarField />
@@ -735,72 +1070,16 @@ export default function UniverseGateway({ navigate }) {
           ))}
         </nav>
         <div className="ugw-topActions">
-          <a className="ugw-iconLink" href="#ugw-search-input" aria-label="Search"><Icon name="search" /></a>
+          {searchHref.startsWith('/')
+            ? <RouteLink className="ugw-iconLink" to={searchHref} navigate={navigate} aria-label="Search"><Icon name="search" /></RouteLink>
+            : <a className="ugw-iconLink" href={searchHref} aria-label="Search"><Icon name="search" /></a>}
           <a href="#sign-in">Sign In</a>
           <a className="ugw-joinButton" href="#join">Join the Universe <span aria-hidden="true">&rarr;</span></a>
         </div>
       </header>
 
       <div className="ugw-layout">
-        <section className="ugw-hero" aria-labelledby="ugw-intro-title">
-          <UniverseIntro />
-          <div className="ugw-destinationCluster" aria-label="Featured Universe destinations">
-            {heroDestinations.map((destination, index) => (
-              <DestinationPlanet
-                key={destination.id}
-                destination={destination}
-                onEnterDestination={enterDestination}
-                index={index}
-              />
-            ))}
-            <a className="ugw-viewDestinations" href="#explore-the-ecosystem">View All Destinations <span aria-hidden="true">&rarr;</span></a>
-          </div>
-        </section>
-
-        <section className="ugw-section" aria-labelledby="ugw-start-title">
-          <SectionHeader eyebrow="Start Here" title="Find your path in the Silicon Heartland ecosystem." />
-          <div id="ugw-start-title" className="ugw-srOnly">Start Here</div>
-          <div className="ugw-audienceGrid">
-            {AUDIENCE_CARDS.map((item) => <AudienceCard key={item.title} item={item} />)}
-          </div>
-        </section>
-
-        <section className="ugw-section" id="featured-across-the-ecosystem" aria-labelledby="ugw-featured-title">
-          <SectionHeader
-            eyebrow="Featured Across the Ecosystem"
-            action={{ href: '#explore-the-ecosystem', label: 'View All' }}
-          />
-          <div id="ugw-featured-title" className="ugw-filterRow" aria-label="Featured filters">
-            <button type="button" className="is-active">All</button>
-            {SEARCH_CHIPS.map((chip) => <a key={chip} href={`#${slugify(chip)}`}>{chip}</a>)}
-          </div>
-          <div className="ugw-featureGrid">
-            {FEATURED_ITEMS.map((item) => <FeaturedCard key={item.title} item={item} />)}
-          </div>
-        </section>
-
-        <section className="ugw-section" id="explore-the-ecosystem" aria-labelledby="ugw-explore-title">
-          <SectionHeader eyebrow="Explore the Ecosystem" title="Discover and browse what exists across the Silicon Heartland Universe." />
-          <div id="ugw-explore-title" className="ugw-browseGrid">
-            {BROWSE_TILES.map((item) => <BrowseTile key={item.title} item={item} />)}
-          </div>
-        </section>
-
-        <div className="ugw-connectionGrid">
-          <NetworkModule />
-          <ActivityList />
-        </div>
-
-        <section className="ugw-section" aria-labelledby="ugw-stories-title">
-          <SectionHeader
-            eyebrow="Featured Stories"
-            title="Real people. Real progress. A stronger region."
-            action={{ href: '#stories', label: 'View All' }}
-          />
-          <div id="ugw-stories-title" className="ugw-storyGrid">
-            {STORY_ITEMS.map((item) => <StoryCard key={item.title} item={item} />)}
-          </div>
-        </section>
+        {children}
 
         <footer className="ugw-footer">
           <div className="ugw-brand">
@@ -816,5 +1095,79 @@ export default function UniverseGateway({ navigate }) {
         </footer>
       </div>
     </main>
+  );
+}
+
+export default function UniverseGateway({ navigate }) {
+  const paused = useMotionPause();
+  const reducedMotion = useReducedMotion();
+
+  // Identical decision to every other entry point (UniverseV1Lab's own
+  // enterDestination, the retired UniverseDirectory) — same registry
+  // functions, same same-origin-app/independent-local-app hard-navigation
+  // rule, no re-derivation of navigation logic here.
+  // The entry hook only adds the short Phase 4 transition (skipped for
+  // reduced motion) and never runs for unavailable destinations.
+  const { entering, enter: enterDestination } = useDestinationEntry(navigate);
+
+  const visibleDestinations = destinations.filter((item) => item.universeVisible !== false);
+  const heroDestinations = HERO_DESTINATION_IDS
+    .map((id) => visibleDestinations.find((item) => item.id === id))
+    .filter(Boolean);
+
+  return (
+    <GatewayShell navigate={navigate} ariaLabel="Silicon Heartland Universe destination gateway" className={entering ? 'is-entering' : ''}>
+      <section className="ugw-hero" aria-labelledby="ugw-intro-title">
+        <UniverseIntro navigate={navigate} onEnterDestination={enterDestination} />
+        <div className="ugw-destinationCluster" aria-label="Featured Universe destinations">
+          {heroDestinations.map((destination, index) => (
+            <DestinationPlanet
+              key={destination.id}
+              destination={destination}
+              onEnterDestination={enterDestination}
+              index={index}
+              entering={entering?.id === destination.id}
+            />
+          ))}
+          <RouteLink className="ugw-viewDestinations" to={discoverRouteFor({ type: 'destinations' })} navigate={navigate}>View All Destinations <span aria-hidden="true">&rarr;</span></RouteLink>
+        </div>
+      </section>
+
+      <section className="ugw-section" aria-labelledby="ugw-start-heading">
+        <SectionHeader eyebrow="Start Here" title="Find your path in the Silicon Heartland ecosystem." headingId="ugw-start-heading" />
+        <div className="ugw-audienceGrid">
+          {AUDIENCE_CARDS.map((item) => <AudienceCard key={item.title} item={item} />)}
+        </div>
+      </section>
+
+      <FeaturedSection navigate={navigate} />
+
+      <section className="ugw-section" id="explore-the-ecosystem" aria-labelledby="ugw-explore-heading">
+        <SectionHeader eyebrow="Explore the Ecosystem" title="Discover and browse what exists across the Silicon Heartland Universe." headingId="ugw-explore-heading" />
+        <div className="ugw-browseGrid">
+          {BROWSE_TILES.map((item) => <BrowseTile key={item.title} item={item} navigate={navigate} />)}
+        </div>
+      </section>
+
+      <div className="ugw-connectionGrid">
+        <NetworkModule animate={!paused && !reducedMotion} navigate={navigate} />
+        <ActivityList navigate={navigate} />
+      </div>
+
+      <section className="ugw-section" aria-labelledby="ugw-stories-heading" data-content-class="editorial">
+        <SectionHeader
+          eyebrow="Featured Stories"
+          title="Real people. Real progress. A stronger region."
+          editorialNote="Illustrative stories — images and people are representative, not published records."
+          headingId="ugw-stories-heading"
+          navigate={navigate}
+          action={{ to: discoverRouteFor(), label: 'View All' }}
+        />
+        <div className="ugw-storyGrid">
+          {STORY_ITEMS.map((item) => <StoryCard key={item.title} item={item} />)}
+        </div>
+      </section>
+      {entering && <p className="ugw-entryLabel" role="status">Entering {entering.label}</p>}
+    </GatewayShell>
   );
 }

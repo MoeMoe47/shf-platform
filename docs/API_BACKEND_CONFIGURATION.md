@@ -12,7 +12,7 @@ traffic through the other's.
 | Backend | Local port | Dev proxy prefix | Canonical resolver | Resolution order |
 |---|---|---|---|---|
 | SHS API (`apps/shs-api`) | **8091** | `/api` → `:8091` (prefix stripped) | `src/lib/apiClient.js` (`API_BASE`), built on `src/system/identity/authConfig.js` (`SHS_AUTH_API_BASE`) | `VITE_API_BASE` (explicit override) → `window.__SHS_API_BASE__` → `VITE_SHS_API_BASE` → `"/api"` |
-| Agent Fabric (`services/shf-agent-fabric`) | **8090** | `/fabric-api` → `:8090` (prefix stripped) | `src/system/fabric/fabricConfig.js` (`FABRIC_API_BASE`, `fabricUrl()`) | `VITE_FABRIC_API_BASE` → `VITE_FABRIC_URL` (legacy) → `VITE_FABRIC_BASE_URL` (legacy) → `"/fabric-api"` |
+| Agent Fabric (`services/shf-agent-fabric`) | **8090** | `/fabric-api` → `:8090` (prefix stripped) | `src/system/fabric/fabricConfig.js` (`FABRIC_API_BASE`, `fabricUrl()`) | `VITE_FABRIC_API_BASE` → `VITE_FABRIC_URL` (legacy) → `VITE_FABRIC_BASE_URL` (legacy) → `"/fabric-api"` in development or when production explicitly sets `VITE_FABRIC_ENABLE_SAME_ORIGIN_PROXY=true`; otherwise `"/__fabric-production-route-unconfigured__"` |
 
 - `vite.config.js` defines both proxies; targets can be overridden with
   `SHS_VITE_API_PROXY_TARGET` / `SHS_VITE_FABRIC_PROXY_TARGET`.
@@ -20,6 +20,12 @@ traffic through the other's.
   `/fabric-api/truth/claims`, `/fabric-api/admin/agents`,
   `/fabric-api/api/growth/claims`, `/fabric-api/api/v1/operator/summary`
   (growth and operator routes carry `/api` in the Fabric itself).
+- Production Fabric pages must not silently assume `/fabric-api`: set
+  `VITE_FABRIC_ENABLE_SAME_ORIGIN_PROXY=true` only after a real production
+  frontend/gateway route sends `/fabric-api/*` to Agent Fabric, or set
+  `VITE_FABRIC_API_BASE` to an approved Fabric origin. If neither is present,
+  `fabricConfig.js` returns the explicit fail-visible path
+  `/__fabric-production-route-unconfigured__`.
 - Why a Fabric proxy instead of absolute `http://127.0.0.1:8090` URLs: the
   Fabric's CORS allows only `Content-Type`, `X-CSRF-Token` and `X-Admin-Key`
   headers and GET/POST, and its session cookie is `SameSite=Lax`. Admin pages
@@ -111,9 +117,11 @@ Therefore, for a production frontend build:
   the deployed `shs_api_origin`, unless the frontend host reverse-proxies
   same-origin `/api` to the SHS API. No production SHS hostname is committed.
 - Agent Fabric: it is not reachable from browsers as deployed. Fabric-backed
-  pages need either a same-origin `/fabric-api` route on the frontend host or
-  an explicit `VITE_FABRIC_API_BASE` plus an ingress/CORS decision. This is an
-  open deployment decision, not a frontend default.
+  pages need either a same-origin `/fabric-api` route on the frontend host plus
+  `VITE_FABRIC_ENABLE_SAME_ORIGIN_PROXY=true`, or an explicit
+  `VITE_FABRIC_API_BASE` plus an ingress/CORS decision. This is an open
+  deployment decision, not a frontend default. Details:
+  `docs/FABRIC_PRODUCTION_DEPLOYMENT.md`.
 
 ## Remaining SHS localhost references (not live clients)
 

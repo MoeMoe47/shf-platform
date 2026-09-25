@@ -9,11 +9,14 @@ import {
   listApprovedDonorDisclosures,
   listAuthorizedReportRecipients,
 } from "@/shared/reporting/donorSummaryAuthorizationClient";
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
 
 
 const SELF_AUDIT_BASE = "http://127.0.0.1:8090";
 
-const ORACLE_BASE = "http://127.0.0.1:8091";
+// SHS API Oracle truth/compare/priority/action (apps/shs-api oracle.routes);
+// Fabric-owned calls on this page use the Fabric base, not this one.
+const ORACLE_BASE = SHS_API_BASE;
 
 const ORACLE_ENDPOINTS = {
   truth: "/oracle/truth",
@@ -1501,7 +1504,7 @@ const [selfAudit, setSelfAudit] = useState(null);
   const onAiActionClick = async (action) => {
     if (!selectedEntityId || !action) return;
 
-    await fetch("http://127.0.0.1:8091/oracle/action", {
+    await fetch(`${ORACLE_BASE}/oracle/action`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

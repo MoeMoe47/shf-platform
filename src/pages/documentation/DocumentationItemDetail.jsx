@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import "./documentation-center.css";
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
 
-const API = import.meta.env.VITE_SHS_API_BASE || "http://127.0.0.1:8080";
+const API = SHS_API_BASE;
 
 export default function DocumentationItemDetail() {
   const { id } = useParams();

@@ -8,8 +8,9 @@
 // exactly once per rotate call; this module hands that value straight to
 // the caller and keeps nothing).
 import { resolveDevUserId } from "@/lib/liveLearning/api.js";
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
 
-const CALENDAR_FEED_API_BASE = "http://127.0.0.1:8091";
+const CALENDAR_FEED_API_BASE = SHS_API_BASE;
 
 function authHeaders(role) {
   return {

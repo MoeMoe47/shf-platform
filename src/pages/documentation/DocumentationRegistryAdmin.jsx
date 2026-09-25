@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./documentation-center.css";
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
 
-const API = import.meta.env.VITE_SHS_API_BASE || "http://127.0.0.1:8080";
+const API = SHS_API_BASE;
 async function call(path, options = {}) { const response = await fetch(`${API}${path}`, { credentials: "include", headers: { "Content-Type": "application/json" }, ...options }); const payload = await response.json(); if (!response.ok || payload.ok === false) throw new Error(payload.error?.message || "Registry action failed."); return payload.data || payload; }
 
 export default function DocumentationRegistryAdmin() {

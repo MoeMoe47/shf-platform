@@ -13,9 +13,9 @@
 // a pure client-side computation (this profile + the live OS
 // prefers-reduced-motion signal), owned by EffectiveAccessibilityContextProvider.
 import { resolveDevUserId } from "@/lib/liveLearning/api.js";
-import { SHS_AUTH_API_BASE } from "@/system/identity/authConfig";
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
 
-const ACCESSIBILITY_PROFILE_API_BASE = import.meta.env?.VITE_SHS_API_BASE || SHS_AUTH_API_BASE || "http://127.0.0.1:8091";
+const ACCESSIBILITY_PROFILE_API_BASE = SHS_API_BASE;
 
 function authHeaders(role) {
   return {

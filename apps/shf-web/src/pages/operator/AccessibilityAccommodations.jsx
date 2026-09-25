@@ -7,6 +7,7 @@ import {
   getAccommodationProjection, getCurrentAuth, getOwnAccommodation, listAccommodations, reviewAccommodation, submitAccommodation,
 } from "../../services/accessibility-accommodations-client";
 import ExrJourneyContext from "@/components/exr/ExrJourneyContext.jsx";
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
 
 const savedCaseKey = "shfAccommodationCaseId";
 const fieldStyle = { display: "block", width: "100%", minHeight: 38, marginTop: 5 };
@@ -52,12 +53,12 @@ export default function AccessibilityAccommodations() {
 
   async function openRepresentation(requirement) {
     await run(async () => {
-      const representation = await fetch(`${import.meta.env.VITE_SHS_API_BASE || "http://127.0.0.1:8091"}/accessibility/content/representations`, { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${window.localStorage.getItem("shfOperatorToken") || ""}` }, body: JSON.stringify({ sourceType: "CURRICULUM_LESSON", sourceId: "phase8_lesson_a", representationType: "ACCESSIBLE_HTML" }) });
+      const representation = await fetch(`${SHS_API_BASE}/accessibility/content/representations`, { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${window.localStorage.getItem("shfOperatorToken") || ""}` }, body: JSON.stringify({ sourceType: "CURRICULUM_LESSON", sourceId: "phase8_lesson_a", representationType: "ACCESSIBLE_HTML" }) });
       if (!representation.ok) throw new Error("Accessible representation is unavailable.");
       const body = await representation.json();
       const representationId = body?.data?.representationId || body?.data?.representation?.representationId;
       if (!representationId) throw new Error("Accessible representation reference is unavailable.");
-      const delivered = await fetch(`${import.meta.env.VITE_SHS_API_BASE || "http://127.0.0.1:8091"}/accessibility/content/representations/${representationId}/content`, { headers: { Authorization: `Bearer ${window.localStorage.getItem("shfOperatorToken") || ""}` } });
+      const delivered = await fetch(`${SHS_API_BASE}/accessibility/content/representations/${representationId}/content`, { headers: { Authorization: `Bearer ${window.localStorage.getItem("shfOperatorToken") || ""}` } });
       if (!delivered.ok) throw new Error("Accessible representation could not be delivered.");
       const content = await delivered.text();
       const popup = window.open("", "_blank");

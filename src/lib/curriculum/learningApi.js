@@ -10,8 +10,9 @@
 // membership themselves — the backend already resolved it from real
 // entitlement + completion data (see student-catalog-service.ts).
 import { resolveDevUserId } from "@/lib/liveLearning/api.js";
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
 
-const LEARNING_API_BASE = import.meta.env?.VITE_SHS_API_BASE || import.meta.env?.VITE_LIVE_LEARNING_API_BASE || "http://127.0.0.1:8091";
+const LEARNING_API_BASE = SHS_API_BASE;
 
 function authHeaders(role) {
   return {

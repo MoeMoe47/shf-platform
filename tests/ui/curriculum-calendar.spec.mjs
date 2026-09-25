@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 const BASE = "http://localhost:5173/curriculum.html";
 
 async function gotoCalendar(page) {
-  await page.route("http://127.0.0.1:8091/live-learning/sessions**", async (route) => {
+  await page.route("**/api/live-learning/sessions**", async (route) => {
     await route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -34,7 +34,7 @@ test.describe("Curriculum calendar integration", () => {
   });
 
   test("shows an honest empty state when the backend has no sessions", async ({ page }) => {
-    await page.route("http://127.0.0.1:8091/live-learning/sessions**", async (route) => {
+    await page.route("**/api/live-learning/sessions**", async (route) => {
       await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true, data: { items: [] } }) });
     });
     await page.goto(`${BASE}#/curriculum/asl/calendar`, { waitUntil: "networkidle" });

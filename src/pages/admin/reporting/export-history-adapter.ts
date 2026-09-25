@@ -1,4 +1,6 @@
-const BASE = "http://localhost:8091";
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
+
+const BASE = SHS_API_BASE;
 
 export async function saveExport(record: any) {
   await fetch(`${BASE}/reporting/exports`, {

@@ -1,6 +1,7 @@
 import { resolveDevUserId } from "@/lib/liveLearning/api.js";
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
 
-const BASE = import.meta.env?.VITE_SHS_API_BASE || import.meta.env?.VITE_LIVE_LEARNING_API_BASE || "http://127.0.0.1:8091";
+const BASE = SHS_API_BASE;
 
 function headers(role) {
   const userId = window.__user?.id || resolveDevUserId(role);

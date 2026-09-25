@@ -5,10 +5,10 @@
 // src/lib/assignments/api.js: same base URL, same Bearer dev-token auth
 // header, same {ok,data}/{ok:false,error} envelope). This is the ONLY
 // place in the frontend that talks to the Opportunity backend.
-import { apiGet } from "@/lib/apiClient.js";
+import { API_BASE as SHS_API_BASE, apiGet } from "@/lib/apiClient.js";
 import { resolveDevUserId } from "@/lib/liveLearning/api.js";
 
-const OPPORTUNITIES_API_BASE = "http://127.0.0.1:8091";
+const OPPORTUNITIES_API_BASE = SHS_API_BASE;
 
 function authHeaders(role) {
   return {

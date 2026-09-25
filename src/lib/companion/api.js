@@ -7,8 +7,9 @@
 // bounded, explainable context plus a deterministic guidance list. This
 // module fetches that one result; it computes nothing itself.
 import { resolveDevUserId } from "@/lib/liveLearning/api.js";
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
 
-const COMPANION_API_BASE = "http://127.0.0.1:8091";
+const COMPANION_API_BASE = SHS_API_BASE;
 
 function authHeaders(role) {
   return {

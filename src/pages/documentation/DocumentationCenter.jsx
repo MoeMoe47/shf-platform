@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./documentation-center.css";
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
 
-const API = import.meta.env.VITE_SHS_API_BASE || "http://127.0.0.1:8080";
+const API = SHS_API_BASE;
 const statusClass = (value) => String(value || "").toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
 async function readCenter(service, status) {

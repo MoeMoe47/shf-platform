@@ -1,5 +1,6 @@
+import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
 export async function sendOracleAction(entityId, action) {
-  const res = await fetch("http://localhost:8091/oracle/action", {
+  const res = await fetch(`${SHS_API_BASE}/oracle/action`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

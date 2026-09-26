@@ -1,6 +1,7 @@
 import React from "react";
 import normalizeLessonMedia from "@/utils/normalizeLessonMedia.js";
 import { useEffectiveAccessibilityContext } from "@/context/EffectiveAccessibilityContext.jsx";
+import { PUBLIC_ENV } from "../../system/env/publicEnv.js";
 
 /**
  * Displays lesson media (video, image, audio, or an iframe embed) through
@@ -72,7 +73,7 @@ export default function MediaRow({ media, src, alt = "", caption, transcript, ra
     // Dev diagnostic only — never thrown, never surfaced as a console
     // "error" (which several regression suites assert is zero); this is an
     // expected, handled condition for a referenced-but-missing asset.
-    if (import.meta.env?.DEV) {
+    if (PUBLIC_ENV.DEV) {
       console.warn(`[MediaRow] media failed to load (asset likely missing): ${m.src}`);
     }
     setFailed(true);

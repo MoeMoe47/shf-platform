@@ -40,10 +40,8 @@ function readStorage(...keys) {
 
 function adminHeaders() {
   const headers = { "Content-Type": "application/json" };
-  const adminKey = readStorage("ADMIN_API_KEY", "shf_admin_key");
   const adminRole = readStorage("ADMIN_ROLE", "X-Admin-Role", "shf_admin_role");
   const orgId = readStorage("ORG_ID", "X-Org-Id", "shf_org_id");
-  if (adminKey) headers["X-Admin-Key"] = adminKey;
   if (adminRole) headers["X-Admin-Role"] = adminRole;
   if (orgId) headers["X-Org-Id"] = orgId;
   return headers;
@@ -54,7 +52,7 @@ async function agentRequest(path) {
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
     const message = response.status === 401
-      ? "Admin API access required."
+      ? "Agent Fabric admin data requires a server-side auth bridge (AFCC-2A.2). Browser admin keys are no longer used."
       : data?.detail || data?.error || `Agent Fabric request failed: ${response.status}`;
     const error = new Error(message);
     error.status = response.status;
@@ -182,7 +180,7 @@ export default function AgentFabricPage() {
       {error ? (
         <div className="agent-fabric-alert">
           <strong>{error}</strong>
-          <span>Set local storage `ADMIN_API_KEY` for protected local API smoke. V1 does not hardcode secrets.</span>
+          <span>These Fabric admin routes require a server-held Fabric admin credential. The browser no longer holds it, so this page fails closed. The Agent Fabric Command Center reads fleet, gate and run state through the server-side auth bridge (AFCC-2A.2).</span>
         </div>
       ) : null}
 

@@ -1,7 +1,8 @@
+import { PUBLIC_ENV } from "../../system/env/publicEnv.js";
 const DEFAULT_API_BASE = "/api";
 
 function requestOptions(role) {
-  const configuredUserId = import.meta.env?.VITE_DEV_USER_ID;
+  const configuredUserId = PUBLIC_ENV.VITE_DEV_USER_ID;
   const userId = configuredUserId || (role === "admin" || role === "instructor" ? "user_instructor_001" : "user_student_001");
   return { credentials: "include", cache: "no-store", ...(role ? { headers: { Authorization: `Bearer dev-token:${userId}` } } : {}) };
 }

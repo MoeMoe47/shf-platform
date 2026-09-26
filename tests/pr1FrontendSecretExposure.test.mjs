@@ -9,15 +9,14 @@ const files = [
   "src/pages/shf-command/sections/AgentSyncStatus.jsx",
 ];
 
-test("private admin VITE variables are ignored by production browser bundles", () => {
+// AFCC-2A.1 supersedes the PR-1 "PROD ? '' :" guard: it did not stop Vite from
+// inlining these values (whole-object import.meta.env references elsewhere pulled in
+// every VITE_* value), so the private variables are no longer read by browser code at
+// all. The bundle itself is checked by tests/afccBrowserSecretScan.test.mjs.
+test("private admin VITE variables are never read by browser code", () => {
   for (const file of files) {
     const source = readFileSync(file, "utf8");
-    const privateEnvReads = source
-      .split("\n")
-      .filter((line) => /(import\.meta\.env|env)\.VITE_(ADMIN_KEY|APP_GATEWAY_KEY|SHF_AGENT_ADMIN_KEY)/.test(line));
-    assert.ok(privateEnvReads.length > 0, `${file} should contain the reviewed private key reference`);
-    for (const line of privateEnvReads) {
-      assert.match(line, /PROD\s*\?\s*""\s*:/, `${file} must fail closed for private browser env keys in production`);
-    }
+    assert.doesNotMatch(source, /(import\.meta\.env|env)\??\.VITE_(ADMIN_KEY|APP_GATEWAY_KEY|SHF_AGENT_ADMIN_KEY)/, `${file} must not read a private browser env key`);
+    assert.doesNotMatch(source, /["']x-admin-key["']\s*[:\]]/i, `${file} must not send X-Admin-Key`);
   }
 });

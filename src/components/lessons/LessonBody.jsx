@@ -9,6 +9,7 @@ import VocabularyReview from "./VocabularyReview.jsx";
 import { markLessonComplete } from "@/shared/progress/progressClient.js";
 import { useUser } from "@/context/UserContext.jsx";
 import { useRewards } from "@/hooks/useRewards.js";
+import { PUBLIC_ENV } from "../../system/env/publicEnv.js";
 
 function Pill({ children }) {
   return (
@@ -49,7 +50,7 @@ export default function LessonBody({
   // prevents the lesson from rendering, matches the same console.warn
   // dev-diagnostic pattern already used in MediaRow.jsx.
   React.useEffect(() => {
-    if (!lesson || !import.meta.env?.DEV) return;
+    if (!lesson || !PUBLIC_ENV.DEV) return;
     const warnings = validateLessonAccessibility(lesson);
     if (warnings.length) {
       console.warn(`[LessonBody] accessibility check found ${warnings.length} issue(s) in "${lesson.title || lesson.slug}":`, warnings);

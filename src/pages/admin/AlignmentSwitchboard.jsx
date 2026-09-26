@@ -1,11 +1,14 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { FABRIC_API_BASE as FABRIC_URL } from "@/system/fabric/fabricConfig";
 
-const env = import.meta.env;
+// Member access only (a whole-object import.meta.env reference inlines every VITE_* value).
+const ENABLED = String(import.meta.env.VITE_ENABLE_ADMIN || "").toLowerCase() === "true";
 
-const ENABLED = String(env.VITE_ENABLE_ADMIN || "").toLowerCase() === "true";
-const APP_GATEWAY_KEY = env.PROD ? "" : env.VITE_APP_GATEWAY_KEY || "";
-const ADMIN_KEY = env.PROD ? "" : env.VITE_ADMIN_KEY || "";
+// AFCC-2A.1: no Fabric admin key is held or sent by the browser. These Fabric
+// admin routes require X-Admin-Key server-side, so they fail closed (401) until a
+// server-side SHS->Fabric auth bridge exists (AFCC-2A.2).
+const FABRIC_ADMIN_AUTH_NOTICE =
+  "Fabric admin actions are unavailable in the browser: they require a server-side auth bridge (AFCC-2A.2). Browser admin keys are no longer used.";
 
 function useNow() {
   const [t, setT] = useState(Date.now());
@@ -57,6 +60,7 @@ export default function AlignmentSwitchboard() {
   async function jget(path, headers = {}) {
     const r = await fetch(`${FABRIC_URL}${path}`, { headers });
     const txt = await r.text();
+    if (r.status === 401) throw new Error(FABRIC_ADMIN_AUTH_NOTICE);
     if (!r.ok) throw new Error(txt || `HTTP ${r.status}`);
     try { return JSON.parse(txt); } catch { return txt; }
   }
@@ -68,6 +72,7 @@ export default function AlignmentSwitchboard() {
       body: JSON.stringify(body || {}),
     });
     const txt = await r.text();
+    if (r.status === 401) throw new Error(FABRIC_ADMIN_AUTH_NOTICE);
     if (!r.ok) throw new Error(txt || `HTTP ${r.status}`);
     try { return JSON.parse(txt); } catch { return txt; }
   }
@@ -76,19 +81,19 @@ export default function AlignmentSwitchboard() {
     setLoading(true);
     setErr("");
     try {
-      const m = await jget("/admin/mode", { "X-Admin-Key": ADMIN_KEY });
+      const m = await jget("/admin/mode", {});
       setMode(m);
     } catch (e) {
       setMode(null);
     }
     try {
-      const a = await jget("/admin/apps", { "X-Admin-Key": ADMIN_KEY });
+      const a = await jget("/admin/apps", {});
       setApps(Array.isArray(a?.apps) ? a.apps : Array.isArray(a) ? a : []);
     } catch (e) {
       setApps([]);
     }
     try {
-      const p = await jget("/admin/align/plans", { "X-Admin-Key": ADMIN_KEY });
+      const p = await jget("/admin/align/plans", {});
       const list = Array.isArray(p?.plans) ? p.plans : Array.isArray(p) ? p : [];
       setPlans(list.map((x) => ({
         planId: x.planId || x.id || x.plan_id || x,
@@ -109,7 +114,7 @@ export default function AlignmentSwitchboard() {
     setLoading(true);
     setErr("");
     try {
-      const out = await jpost(`/admin/apps/${encodeURIComponent(appId)}/state`, { state }, { "X-Admin-Key": ADMIN_KEY });
+      const out = await jpost(`/admin/apps/${encodeURIComponent(appId)}/state`, { state }, {});
       await refreshAll();
       setPlanActionOut(JSON.stringify(out, null, 2));
     } catch (e) {
@@ -122,7 +127,7 @@ export default function AlignmentSwitchboard() {
     setLoading(true);
     setErr("");
     try {
-      const out = await jpost(`/admin/apps/${encodeURIComponent(appId)}/force`, { forced_state }, { "X-Admin-Key": ADMIN_KEY });
+      const out = await jpost(`/admin/apps/${encodeURIComponent(appId)}/force`, { forced_state }, {});
       await refreshAll();
       setPlanActionOut(JSON.stringify(out, null, 2));
     } catch (e) {
@@ -135,7 +140,7 @@ export default function AlignmentSwitchboard() {
     setLoading(true);
     setErr("");
     try {
-      const out = await jpost(`/admin/apps/${encodeURIComponent(appId)}/force/clear`, {}, { "X-Admin-Key": ADMIN_KEY });
+      const out = await jpost(`/admin/apps/${encodeURIComponent(appId)}/force/clear`, {}, {});
       await refreshAll();
       setPlanActionOut(JSON.stringify(out, null, 2));
     } catch (e) {
@@ -150,17 +155,17 @@ export default function AlignmentSwitchboard() {
     setPlanActionOut("");
     try {
       if (action === "validate") {
-        const out = await jpost("/runs/validate", { planId }, { "X-Admin-Key": ADMIN_KEY });
+        const out = await jpost("/runs/validate", { planId }, {});
         setPlanActionOut(JSON.stringify(out, null, 2));
       } else if (action === "dry-run") {
-        const out = await jpost("/runs/dry-run", { planId }, { "X-Admin-Key": ADMIN_KEY });
+        const out = await jpost("/runs/dry-run", { planId }, {});
         setPlanActionOut(JSON.stringify(out, null, 2));
       } else if (action === "approve-execute") {
         setConfirmPlanId(planId);
         setConfirmText("");
         setConfirmOpen(true);
       } else {
-        const out = await jpost("/runs/execute", { planId, ...(extra || {}) }, { "X-Admin-Key": ADMIN_KEY });
+        const out = await jpost("/runs/execute", { planId, ...(extra || {}) }, {});
         setPlanActionOut(JSON.stringify(out, null, 2));
       }
       await refreshAll();
@@ -175,7 +180,7 @@ export default function AlignmentSwitchboard() {
     setConfirmBusy(true);
     setErr("");
     try {
-      const out = await jpost("/runs/execute", { planId: confirmPlanId, approved: true }, { "X-Admin-Key": ADMIN_KEY });
+      const out = await jpost("/runs/execute", { planId: confirmPlanId, approved: true }, {});
       setPlanActionOut(JSON.stringify(out, null, 2));
       setConfirmOpen(false);
       setConfirmPlanId("");

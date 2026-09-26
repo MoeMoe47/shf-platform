@@ -1,13 +1,20 @@
 from __future__ import annotations
 
+import os
 import subprocess
+import sys
 import time
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
-router = APIRouter(prefix="/admin/infra", tags=["admin", "infra"])
+from fabric.admin_auth import require_admin_key
+from fabric.command.verification_results import record_verification_result
+
+# Privileged verification ACTION. The Command Center reads the recorded result
+# through /api/v1-command-center/agent-fabric/infrastructure instead.
+router = APIRouter(prefix="/admin/infra", tags=["admin", "infra"], dependencies=[Depends(require_admin_key)])
 
 
 def _repo_root_from_here() -> Path:
@@ -23,12 +30,14 @@ def _tail(s: str, n: int = 1400) -> str:
 
 
 def _run(cmd: List[str], *, cwd: Path) -> Tuple[bool, str, str]:
+    # Scripts import `fabric.*`, so the service root must be importable.
+    env = {**os.environ, "PYTHONPATH": os.pathsep.join(filter(None, [str(cwd), os.environ.get("PYTHONPATH", "")]))}
     p = subprocess.run(
         cmd,
         cwd=str(cwd),
         text=True,
         capture_output=True,
-        env=None,
+        env=env,
     )
     ok = (p.returncode == 0)
     return ok, (p.stdout or ""), (p.stderr or "")
@@ -52,7 +61,7 @@ def admin_infra_verify() -> Dict[str, Any]:
 
     # 1) Registry contract
     ok, out, err = _run(
-        ["python3", "services/shf-agent-fabric/scripts/verify_registry_contract.py"],
+        [sys.executable, "scripts/verify_registry_contract.py"],
         cwd=repo_root,
     )
     checks.append(
@@ -66,7 +75,7 @@ def admin_infra_verify() -> Dict[str, Any]:
 
     # 2) Runtime enforcement lock
     ok, out, err = _run(
-        ["python3", "services/shf-agent-fabric/scripts/verify_runtime_enforcement_lock.py"],
+        [sys.executable, "scripts/verify_runtime_enforcement_lock.py"],
         cwd=repo_root,
     )
     checks.append(
@@ -100,7 +109,7 @@ def admin_infra_verify() -> Dict[str, Any]:
 
     # 4) Watchtower snapshot store usability (write + read + hash validation)
     ok, out, err = _run(
-        ["python3", "services/shf-agent-fabric/scripts/verify_watchtower_snapshot_store.py"],
+        [sys.executable, "scripts/verify_watchtower_snapshot_store.py"],
         cwd=repo_root,
     )
     checks.append(
@@ -115,7 +124,7 @@ def admin_infra_verify() -> Dict[str, Any]:
     
     # 4) Watchtower attestation (HMAC) verification (contract-safe: check item only)
     att_ok, att_out, att_err = _run(
-        ["python3", "services/shf-agent-fabric/scripts/verify_watchtower_attestation.py"],
+        [sys.executable, "scripts/verify_watchtower_attestation.py"],
         cwd=repo_root,
     )
     checks.append(
@@ -129,6 +138,12 @@ def admin_infra_verify() -> Dict[str, Any]:
 
 
     overall_ok = all(c.get("ok") is True for c in checks)
+
+    record_verification_result(
+        "infrastructure",
+        [{"name": c["name"], "ok": c.get("ok"), "reason_code": "CHECK_FAILED"} for c in checks],
+        trigger="admin_infra_verify",
+    )
 
     return {
         "ok": overall_ok,

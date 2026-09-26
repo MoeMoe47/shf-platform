@@ -17,13 +17,14 @@
 // "instructor". This is a temporary bridge, not a second identity system
 // — it defers entirely to the backend's real role/permission checks.
 import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
+import { PUBLIC_ENV } from "../../system/env/publicEnv.js";
 
 const LIVE_LEARNING_API_BASE = SHS_API_BASE;
 
 export function resolveDevUserId(role) {
   // The authenticated boot identity is authoritative when present. The Vite
   // value remains a development fallback for screens without a boot identity.
-  return (typeof window !== "undefined" && window.__user?.id) || import.meta.env?.VITE_DEV_USER_ID || (role === "admin" || role === "instructor" ? "user_instructor_001" : "user_student_001");
+  return (typeof window !== "undefined" && window.__user?.id) || PUBLIC_ENV.VITE_DEV_USER_ID || (role === "admin" || role === "instructor" ? "user_instructor_001" : "user_student_001");
 }
 
 function authHeaders(role) {

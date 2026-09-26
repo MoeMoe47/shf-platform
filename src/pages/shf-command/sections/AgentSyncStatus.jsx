@@ -7,8 +7,10 @@ import { FABRIC_API_BASE } from "@/system/fabric/fabricConfig";
 // canonical Fabric base; VITE_SHF_AGENT_FABRIC_BASE is retired.
 const AGENT_BASE = FABRIC_API_BASE;
 
-const AGENT_KEY =
-  import.meta.env.PROD ? "" : import.meta.env.VITE_SHF_AGENT_ADMIN_KEY || "";
+// AFCC-2A.1: the browser holds no Fabric admin key. The page-context dry run is an
+// X-Admin-Key route, so it stays off until a server-side SHS->Fabric auth bridge
+// exists (AFCC-2A.2).
+const FABRIC_ADMIN_BRIDGE_AVAILABLE = false;
 
 function titleCaseCounty(value) {
   if (!value) return "Ohio";
@@ -163,12 +165,12 @@ export default function AgentSyncStatus({
     let cancelled = false;
 
     async function runCheck() {
-      if (!AGENT_KEY) {
+      if (!FABRIC_ADMIN_BRIDGE_AVAILABLE) {
         setSync({
-          status: "missing_key",
+          status: "auth_bridge_required",
           ok: false,
-          message: "Agent Fabric key missing.",
-          detail: "Add VITE_SHF_AGENT_ADMIN_KEY to .env.local for local dev.",
+          message: "Agent Fabric sync unavailable.",
+          detail: "Requires a server-side SHS to Fabric auth bridge (AFCC-2A.2). Browser admin keys are no longer used.",
         });
         return;
       }
@@ -236,7 +238,6 @@ export default function AgentSyncStatus({
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "x-admin-key": AGENT_KEY,
             },
             body: JSON.stringify(payload),
           }

@@ -2,10 +2,9 @@ import React, { useEffect, useMemo, useState } from "react";
 import "@/styles/admin.reports.css";
 import { FABRIC_API_BASE as FABRIC_URL } from "@/system/fabric/fabricConfig";
 
-const ADMIN_KEY = import.meta.env.PROD ? "" : import.meta.env.VITE_ADMIN_KEY || "";
-
+// AFCC-2A.1: no admin key in the browser. /reports/snapshot does not check one.
 async function jget(path) {
-  const r = await fetch(`${FABRIC_URL}${path}`, { headers: { "X-Admin-Key": ADMIN_KEY } });
+  const r = await fetch(`${FABRIC_URL}${path}`);
   const t = await r.text();
   let data = null;
   try { data = JSON.parse(t); } catch { data = { raw: t }; }

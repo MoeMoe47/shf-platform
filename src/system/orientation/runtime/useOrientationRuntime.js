@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { createExperienceState, readExperienceState, transitionExperienceState, writeExperienceState } from "./experienceState";
 import { emitOrientationExperienceEvent } from "./telemetry";
+import { PUBLIC_ENV } from "../../env/publicEnv.js";
 
-const EXPERIENCE_API_BASE = import.meta.env?.VITE_SHS_API_BASE || "/api";
+const EXPERIENCE_API_BASE = PUBLIC_ENV.VITE_SHS_API_BASE || "/api";
 
 function stepId(step, index) { return step?.stepId || step?.id || `step-${index + 1}`; }
 

@@ -198,11 +198,10 @@ def execute_run(payload: dict, x_admin_key: str | None = Header(default=None, al
 
     return {"ok": True, "runId": run_id, "planId": plan_id, "snapshotSha256": snapshot_hash, "northStar": v.get("northStar"), "results": results}
 
-@router.get("/recent")
-def recent_runs(limit: int = 50, x_admin_key: str | None = Header(default=None, alias="X-Admin-Key")):
-    require_admin_key(x_admin_key)
+def read_recent_run_events(limit: int = 50) -> list:
+    """Newest-first run events from the run log. Reads only; never writes."""
     if not RUNS_LOG.exists():
-        return {"events": []}
+        return []
     lines = RUNS_LOG.read_text(encoding="utf-8").splitlines()
     events = []
     for line in reversed(lines):
@@ -214,7 +213,13 @@ def recent_runs(limit: int = 50, x_admin_key: str | None = Header(default=None, 
             continue
         if len(events) >= limit:
             break
-    return {"events": events}
+    return events
+
+
+@router.get("/recent")
+def recent_runs(limit: int = 50, x_admin_key: str | None = Header(default=None, alias="X-Admin-Key")):
+    require_admin_key(x_admin_key)
+    return {"events": read_recent_run_events(limit)}
 
 @router.post("/loo/validate")
 def loo_validate(body: dict):

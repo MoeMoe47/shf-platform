@@ -25,6 +25,6 @@ const __SHF_PANIC_ENABLED__ = (() => {
     if (__SHF_PANIC_ENABLED__) window.addEventListener("unhandledrejection", (e) => push(`❌ UnhandledRejection: ${e.reason?.message || e.reason}`));
   
     // Quick environment breadcrumb
-    console.log("[PANIC] APP =", APP, "ENV =", import.meta.env);
+    console.log("[PANIC] APP =", APP, "MODE =", import.meta.env.MODE);
   })();
   

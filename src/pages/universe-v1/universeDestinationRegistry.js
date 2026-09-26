@@ -1,3 +1,4 @@
+import { PUBLIC_ENV } from "../../system/env/publicEnv.js";
 // src/pages/universe-v1/universeDestinationRegistry.js
 // ------------------------------------------------------------
 // Ported, byte-for-byte behavior preserved, from the approved reference
@@ -816,7 +817,7 @@ export function resolveDestinationHref(destination) {
     return destination.productionPath;
   }
   if (destination.destinationType === 'independent-local-app') {
-    const configuredOrigin = import.meta.env[destination.originEnv];
+    const configuredOrigin = PUBLIC_ENV[destination.originEnv];
     if (configuredOrigin) return `${configuredOrigin.replace(/\/$/, '')}${destination.productionPath}`;
     if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
       return `${destination.localDevelopmentOrigin}${destination.productionPath}`;

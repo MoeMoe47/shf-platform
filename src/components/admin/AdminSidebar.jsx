@@ -14,7 +14,8 @@ const SECTIONS = [
       { to: "/hub", icon: "⌂", label: "BOS Home", end: true },
       { href: "/curriculum.html#/studio", route: "/studio", icon: "▥", label: "Studio" },
       { to: "/release-assurance", icon: "◇", label: "ARAG-1 Assurance" },
-      { to: "/agent-fabric", icon: "F", label: "Agent Fabric" },
+      { to: "/agent-fabric", icon: "F", label: "Agent Fabric", end: true },
+      { to: "/agent-fabric/command", route: "/agent-fabric", icon: "⌘", label: "Fabric Command" },
     ],
   },
   {

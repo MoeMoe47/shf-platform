@@ -22,7 +22,25 @@
 // those, Fabric requests use a clear non-service path instead of silently
 // assuming a gateway that may not exist.
 
-const env = (typeof import.meta !== "undefined" && import.meta.env) || {};
+// Read only the named keys. Referencing `import.meta.env` as a whole object makes
+// Vite inline EVERY VITE_* value into the bundle (AFCC-2A.1), so each key is read
+// by member access. Outside Vite (node tests) import.meta.env is undefined.
+function readViteEnv() {
+  try {
+    return {
+      PROD: import.meta.env.PROD,
+      MODE: import.meta.env.MODE,
+      VITE_FABRIC_API_BASE: import.meta.env.VITE_FABRIC_API_BASE,
+      VITE_FABRIC_URL: import.meta.env.VITE_FABRIC_URL,
+      VITE_FABRIC_BASE_URL: import.meta.env.VITE_FABRIC_BASE_URL,
+      VITE_FABRIC_ENABLE_SAME_ORIGIN_PROXY: import.meta.env.VITE_FABRIC_ENABLE_SAME_ORIGIN_PROXY,
+    };
+  } catch {
+    return {};
+  }
+}
+
+const env = readViteEnv();
 
 // Where the Fabric listens locally (the dev proxy target in vite.config.js).
 export const FABRIC_LOCAL_TARGET = "http://127.0.0.1:8090";

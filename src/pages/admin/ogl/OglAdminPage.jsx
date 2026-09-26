@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { OGL_ORIENTATION_CONTRACTS } from "@/system/orientation/orientationRegistry";
 import "./ogl-admin.css";
+import { PUBLIC_ENV } from "../../../system/env/publicEnv.js";
 
-const API = import.meta.env?.VITE_SHS_API_BASE || "/api";
+const API = PUBLIC_ENV.VITE_SHS_API_BASE || "/api";
 const EMPTY = { title: "", purpose: "", changeSummary: "", helpTopics: [], companionQuestions: [], tourLabels: { start: "Take the tour", resume: "Resume tour", replay: "Replay tour" }, accessibleAlternativeCopy: "" };
 
 async function call(path, options = {}) {

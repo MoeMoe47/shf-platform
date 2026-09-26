@@ -2,8 +2,11 @@ from __future__ import annotations
 
 from typing import Any, Dict, List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
+
+from fabric.admin_auth import require_admin_key
+from fabric.command.verification_results import record_verification_result
 
 # Core invariants (already enforced at import/startup elsewhere, but we probe again here)
 from fabric.startup_verify import verify_compliance_gate_g_or_die
@@ -20,7 +23,9 @@ from fabric.loo.adapter_registry import PROGRAM_ADAPTERS, PROGRAM_ADAPTER_META  
 from fabric.loo.adapter_meta_parity import assert_adapter_meta_parity  # type: ignore
 
 
-router = APIRouter(prefix="/admin/observability", tags=["admin", "observability"])
+# Privileged verification ACTION. The Command Center reads the recorded result
+# through /api/v1-command-center/agent-fabric/observability instead.
+router = APIRouter(prefix="/admin/observability", tags=["admin", "observability"], dependencies=[Depends(require_admin_key)])
 
 CONTRACT_VERSION = "v1"
 
@@ -33,8 +38,10 @@ def _probe_watchtower() -> Dict[str, Any]:
     We don't care about content here, only that compute succeeds and returns the expected types.
     """
     try:
-        alerts = build_watchtower_alerts()
-        rows = compute_watchtower_rows()
+        # compute_watchtower_rows returns (rows, integrity summary); alerts are
+        # built from that summary, as build_watchtower_alerts requires.
+        rows, integrity = compute_watchtower_rows()
+        alerts = build_watchtower_alerts(integrity)
         return {
             "ok": True,
             "alerts_type": type(alerts).__name__,
@@ -84,5 +91,16 @@ def verify_observability() -> JSONResponse:
     status = "healthy" if ok else "degraded"
 
     payload = {"ok": ok, "status": status, "checks": checks, "version": CONTRACT_VERSION}
+
+    recorded = []
+    for name, check in checks.items():
+        if not isinstance(check, dict):
+            continue
+        recorded.append({"name": name, "ok": bool(check.get("ok")), "reason_code": "PROBE_FAILED"})
+        if name == "core" and isinstance(check.get("checks"), dict):
+            for sub, sub_check in check["checks"].items():
+                if isinstance(sub_check, dict):
+                    recorded.append({"name": f"core_{sub}", "ok": bool(sub_check.get("ok")), "reason_code": "CHECK_FAILED"})
+    record_verification_result("observability", recorded, trigger="admin_observability_verify")
     code = 200 if ok else 503
     return JSONResponse(status_code=code, content=payload)

@@ -77,6 +77,7 @@ import { registerAgentSimulationRoutes } from "../domain/agent-simulation/api/ro
 import { registerConductorRoutes } from "../domain/conductor/api/routes.js";
 import { registerMcpRoutes } from "../domain/mcp/api/routes.js";
 import { registerOperationalAwarenessRoutes } from "../domain/operational-awareness/api/routes.js";
+import { registerAgentFabricCommandRoutes } from "../domain/agent-fabric-command/api/routes.js";
 import { registerAragRoutes } from "../domain/arag/api/routes.js";
 import { registerGovernmentAssuranceRoutes } from "../domain/government-assurance/api/routes.js";
 import { registerShfCivicRoutes } from "../domain/shf-civic/api/routes.js";
@@ -401,6 +402,7 @@ app.post("/auth/login", async (req: any, res: any) => {
   registerConductorRoutes(app);
   registerMcpRoutes(app);
   registerOperationalAwarenessRoutes(app);
+  registerAgentFabricCommandRoutes(app);
   registerAragRoutes(app);
   registerGovernmentAssuranceRoutes(app);
   registerShfCivicRoutes(app);

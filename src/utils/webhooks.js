@@ -1,9 +1,10 @@
 // src/utils/webhooks.js
 // Mocked outbound notifiers for Alerts. Swap to real Slack/email/webhook later.
 import { track } from "@/utils/analytics.js";
+import { PUBLIC_ENV } from "../system/env/publicEnv.js";
 
 const DEV = typeof import.meta !== "undefined"
-  ? (import.meta.env?.MODE !== "production")
+  ? (PUBLIC_ENV.MODE !== "production")
   : true;
 
 export async function notifySlack({ channel = "#ops", text, meta = {} }) {

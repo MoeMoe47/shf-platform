@@ -110,6 +110,11 @@ export const SHS_SECURITY_PERMISSIONS = {
   WORKFORCE_OUTCOMES_REJECT: "workforce.outcomes.reject",
 
   AUDIT_VIEW: "audit.view",
+  // AFCC-2A.2: read the Agent Fabric Command Center bridge (platform-wide fleet,
+  // gate and run data). Same name and meaning as Agent Fabric's permission, which
+  // Fabric grants only to its global shs_admin role. Read only: it authorizes no
+  // run, agent, layer, policy, quarantine, publication or verification action.
+  AGENT_FABRIC_COMMAND_READ: "bos.governance.read",
   AUDIT_EXPORT: "audit.export",
 
   UPLOADS_INTERNAL: "uploads.internal",
@@ -350,6 +355,7 @@ export const SHS_ROLE_PERMISSION_MAP: Record<string, ShsSecurityPermission[]> = 
   [SHS_SECURITY_ROLES.SUPER_ADMIN]: SHS_SUPER_ADMIN_PERMISSIONS,
 
   [SHS_SECURITY_ROLES.SHS_ADMIN]: [
+    SHS_SECURITY_PERMISSIONS.AGENT_FABRIC_COMMAND_READ,
     SHS_SECURITY_PERMISSIONS.DOCUMENTATION_CENTER_VIEW,
     SHS_SECURITY_PERMISSIONS.DOCUMENTATION_REGISTRY_MANAGE,
     SHS_SECURITY_PERMISSIONS.DOCUMENTATION_VARIANT_MANAGE,

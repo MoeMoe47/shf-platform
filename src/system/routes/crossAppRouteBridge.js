@@ -1,3 +1,4 @@
+import { PUBLIC_ENV } from "../env/publicEnv.js";
 const DEFAULT_SHRV1_BASE_URL = "http://127.0.0.1:5174";
 const DEFAULT_SHF_NEXT_BASE_URL = "http://127.0.0.1:5175";
 
@@ -13,8 +14,8 @@ const FORBIDDEN_URL_PATTERNS = [
 ];
 
 function envValue(name) {
-  if (typeof import.meta !== "undefined" && import.meta.env?.[name]) {
-    return import.meta.env[name];
+  if (PUBLIC_ENV[name]) {
+    return PUBLIC_ENV[name];
   }
 
   if (typeof process !== "undefined" && process.env?.[name]) {

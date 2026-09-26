@@ -46,6 +46,8 @@ db/
 **/*.sqlite
 **/*.sqlite3
 **/*.db
+# AFCC-2A last-known verification results (runtime state, written by privileged verify actions)
+services/shf-agent-fabric/var/command_verification/
 
 # Canonical SHS database client/runner source is code, not a local database.
 !apps/shs-api/src/db/

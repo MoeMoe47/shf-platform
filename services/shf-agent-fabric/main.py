@@ -137,6 +137,7 @@ from routers.admin_layers_routes import router as admin_layers_router  # noqa: E
 from routers.admin_gate_routes import router as admin_gate_router  # noqa: E402
 from routers.admin_infra_verify_routes import router as admin_infra_verify_router  # noqa: E402
 from routers.admin_observability_routes import router as admin_observability_router  # noqa: E402
+from routers.command_read_routes import router as command_read_router  # noqa: E402
 from routers.funding_rulesets import router as funding_rulesets_router
 
 
@@ -518,6 +519,7 @@ app.include_router(admin_layers_router)
 app.include_router(admin_gate_router)
 app.include_router(admin_infra_verify_router)
 app.include_router(admin_observability_router)
+app.include_router(command_read_router)  # AFCC-2A read-only Command Center projections
 
 
 app.include_router(funding_capabilities_router)

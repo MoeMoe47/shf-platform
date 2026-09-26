@@ -1,10 +1,11 @@
 import { resolveDevUserId } from "@/lib/liveLearning/api.js";
 import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
+import { PUBLIC_ENV } from "../env/publicEnv.js";
 
 const API_BASE = SHS_API_BASE;
 
 function productionMode() {
-  return import.meta.env?.MODE === "production" || import.meta.env?.PROD === true;
+  return PUBLIC_ENV.MODE === "production" || PUBLIC_ENV.PROD === true;
 }
 
 function headers() {

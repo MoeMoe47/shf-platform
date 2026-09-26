@@ -1,15 +1,16 @@
 import { resolveDevUserId } from "@/lib/liveLearning/api.js";
 import { API_BASE as SHS_API_BASE } from "@/lib/apiClient.js";
+import { PUBLIC_ENV } from "../env/publicEnv.js";
 
 const API_BASE = SHS_API_BASE;
 
 function productionMode() {
-  return import.meta.env?.MODE === "production" || import.meta.env?.PROD === true;
+  return PUBLIC_ENV.MODE === "production" || PUBLIC_ENV.PROD === true;
 }
 
 function devFixtureAllowed() {
   if (productionMode()) return false;
-  return import.meta.env?.DEV === true && import.meta.env?.VITE_METAVERSE_ENABLE_DEV_UNLOCK_FIXTURE !== "0";
+  return PUBLIC_ENV.DEV === true && PUBLIC_ENV.VITE_METAVERSE_ENABLE_DEV_UNLOCK_FIXTURE !== "0";
 }
 
 function headers() {

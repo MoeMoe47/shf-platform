@@ -55,6 +55,7 @@ import {
   HeadsetIcon,
   VideoIcon,
 } from "@/components/curriculum/icons.jsx";
+import { PUBLIC_ENV } from "../../../system/env/publicEnv.js";
 
 function SectionBlock({ section }) {
   const [showMicroCheck, setShowMicroCheck] = React.useState(false);
@@ -325,7 +326,7 @@ export default function GuidedLessonExperience({ lesson, curriculum, nextHref, r
   const [maxIndexReached, setMaxIndexReached] = React.useState(0);
 
   React.useEffect(() => {
-    if (!lesson || !import.meta.env?.DEV) return;
+    if (!lesson || !PUBLIC_ENV.DEV) return;
     const warnings = validateLessonAccessibility(lesson);
     if (warnings.length) {
       console.warn(`[GuidedLessonExperience] accessibility check found ${warnings.length} issue(s) in "${lesson.title || lesson.slug}":`, warnings);

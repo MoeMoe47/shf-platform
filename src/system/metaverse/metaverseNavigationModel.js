@@ -3,6 +3,7 @@ import {
   METAVERSE_REFERENCE_ASSETS,
 } from "./metaverseVisualAssets.js";
 import { getCanonicalDestinationId, resolveDestinationId } from "./metaverseCanonicalDestinationRegistry.js";
+import { PUBLIC_ENV } from "../env/publicEnv.js";
 
 export const METAVERSE_ROUTE = "/metaverse";
 
@@ -214,7 +215,7 @@ function districtDescription(districtId) {
 }
 
 export function publicAssetUrl(targetPath) {
-  const baseUrl = import.meta.env?.BASE_URL || "/";
+  const baseUrl = PUBLIC_ENV.BASE_URL || "/";
   return `${baseUrl}${String(targetPath).replace(/^public\//, "")}`;
 }
 

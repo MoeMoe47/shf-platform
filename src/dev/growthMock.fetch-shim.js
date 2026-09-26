@@ -1,3 +1,4 @@
+import { PUBLIC_ENV } from "../system/env/publicEnv.js";
 /**
  * DEV-only network shim for /growth/*
  * - Intercepts BOTH window.fetch and XMLHttpRequest (covers axios too).
@@ -7,7 +8,7 @@
   try {
     // Only in dev
     // import.meta.env exists in Vite ESM modules; for safety also allow window.__VITE_DEV__
-    const isDev = (typeof import.meta !== "undefined" && import.meta.env && import.meta.env.DEV) || false;
+    const isDev = PUBLIC_ENV.DEV || false;
     if (!isDev) return;
 
     if (window.__shf_growth_mock_installed__) return;

@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "@/auth/auth-context.jsx";
 import { useCompanion } from "@/hooks/useCompanion.js";
 import "./guidanceCenter.css";
+import { PUBLIC_ENV } from "../env/publicEnv.js";
 
-const API_BASE = import.meta.env?.VITE_SHS_API_BASE || "/api";
+const API_BASE = PUBLIC_ENV.VITE_SHS_API_BASE || "/api";
 
 function safeRoute(target) {
   if (!target) return null;

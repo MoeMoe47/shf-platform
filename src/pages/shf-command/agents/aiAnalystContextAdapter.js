@@ -1,8 +1,6 @@
-const DEFAULT_AGENT_FABRIC_BASE =
-  import.meta.env.VITE_SHF_AGENT_FABRIC_BASE || "http://127.0.0.1:8090";
-
-const DEFAULT_AGENT_ADMIN_KEY =
-  import.meta.env.PROD ? "" : import.meta.env.VITE_SHF_AGENT_ADMIN_KEY || "";
+// AFCC-2A.1: this adapter never held a browser-safe credential. The page-context
+// dry run requires the Fabric admin key, which must not live in browser code, so
+// the call fails closed until a server-side SHS->Fabric auth bridge exists (AFCC-2A.2).
 
 export function buildAIAnalystPageContextPayload({
   surface = "impact_command_center",
@@ -66,37 +64,12 @@ export function buildAIAnalystPageContextPayload({
   };
 }
 
-export async function syncAIAnalystPageContext(payload, options = {}) {
-  const baseUrl = options.baseUrl || DEFAULT_AGENT_FABRIC_BASE;
-  const adminKey = options.adminKey || DEFAULT_AGENT_ADMIN_KEY;
-
-  if (!adminKey) {
-    return {
-      ok: false,
-      status: "missing_admin_key",
-      safe_to_wire: false,
-      message:
-        "Missing VITE_SHF_AGENT_ADMIN_KEY. Add it to .env.local for local dev only.",
-      payload,
-    };
-  }
-
-  const res = await fetch(
-    `${baseUrl}/admin/agents/ai_analyst_agent/page-context-dry-run`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-admin-key": adminKey,
-      },
-      body: JSON.stringify(payload),
-    }
-  );
-
-  if (!res.ok) {
-    const text = await res.text().catch(() => "");
-    throw new Error(`Agent context sync failed: ${res.status} ${text}`);
-  }
-
-  return res.json();
+export async function syncAIAnalystPageContext(payload) {
+  return {
+    ok: false,
+    status: "auth_bridge_required",
+    safe_to_wire: false,
+    message: "Agent context sync requires a server-side SHS to Fabric auth bridge (AFCC-2A.2).",
+    payload,
+  };
 }

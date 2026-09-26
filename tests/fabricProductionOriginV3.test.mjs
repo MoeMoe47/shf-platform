@@ -47,7 +47,8 @@ test('VITE_SHF_AGENT_FABRIC_BASE is retired: no live code reads it', () => {
   const live = execSync('git ls-files src', { cwd: root, encoding: 'utf8' }).split('\n')
     .filter((file) => /\.(jsx?|tsx?)$/.test(file) && !/_archive|_patchbak|hardening\//.test(file));
   const readers = live.filter((file) => /env\??\.VITE_SHF_AGENT_FABRIC_BASE/.test(code(file)));
-  assert.deepEqual(readers, ['src/pages/shf-command/agents/aiAnalystContextAdapter.js'], 'only the dead adapter still references it');
+  // AFCC-2A.1 removed the last reader (the dead AI Analyst adapter, with its localhost:8090 default).
+  assert.deepEqual(readers, [], 'no code reads the retired variable');
 });
 
 test('SHF Command Center makes no request to the ownerless /events write', () => {

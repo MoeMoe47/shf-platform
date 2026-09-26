@@ -39,7 +39,13 @@ function baseDecision(resource, decision, reasonText, nextAction = null) {
 }
 
 export function resolveMetaverseUiUnlock(resource, options = {}) {
-  const env = import.meta.env || {};
+  // Member access only: a whole-object import.meta.env reference inlines every VITE_* value.
+  let env = {};
+  try {
+    env = { DEV: import.meta.env.DEV, MODE: import.meta.env.MODE, VITE_METAVERSE_ENABLE_DEV_UNLOCK_FIXTURE: import.meta.env.VITE_METAVERSE_ENABLE_DEV_UNLOCK_FIXTURE };
+  } catch {
+    env = {};
+  }
   const fixtureEnabled = options.fixtureEnabled ?? Boolean(env.DEV && env.MODE !== "production" && env.VITE_METAVERSE_ENABLE_DEV_UNLOCK_FIXTURE !== "0");
   if (options.clientGranted || options.cameraGranted || options.queryGranted) {
     return baseDecision(resource, "RESTRICTED", "Access cannot be granted by client, camera, or URL state.");

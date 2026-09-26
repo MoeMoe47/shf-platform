@@ -91,6 +91,8 @@ ARAG route registration and permissions remain behind `ARAG_RELEASE_*` and activ
 
 Privileged backend actions remain gated by server permissions. PR-1 removed production browser access to private legacy `VITE_ADMIN_KEY`, `VITE_APP_GATEWAY_KEY`, and `VITE_SHF_AGENT_ADMIN_KEY` values.
 
+> **Correction (2026-09-25, AFCC-2A.1):** the `import.meta.env.PROD ? "" : …` guards did not keep these values out of production bundles. Whole-object `import.meta.env` references elsewhere made Vite inline every `VITE_*` value, and `VITE_SHF_AGENT_ADMIN_KEY` (the Fabric admin key) appeared in built chunks. AFCC-2A.1 removed all browser consumers, fixed the whole-object references, and added `tests/afccBrowserSecretScan.test.mjs`. The key must be rotated. See `docs/AGENT_FABRIC_COMMAND_CENTER_V1_ACCEPTANCE.md`.
+
 ## 16. Break-Glass Access
 
 Added `/security/break-glass/attest`. It requires authentication, active org context, `security.manage`, configured policy reference, configured MFA requirement, bounded TTL, reason text, MFA evidence, and writes an audit event. It does not grant or bypass permissions.

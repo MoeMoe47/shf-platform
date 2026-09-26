@@ -5,9 +5,15 @@ from fastapi.testclient import TestClient
 from main import app  # type: ignore
 
 
-def test_admin_observability_verify_contract_v1():
+def test_admin_observability_verify_contract_v1(monkeypatch, tmp_path):
+    # Privileged action (AFCC-2A): admin key required; side effects kept out of the real stores.
+    monkeypatch.setenv("ADMIN_API_KEY", "test-admin-key")
+    monkeypatch.setenv("SHF_COMMAND_VERIFICATION_DIR", str(tmp_path / "verification"))
+    monkeypatch.setenv("SHF_WATCHTOWER_STORE_PATH", str(tmp_path / "watchtower_store.sqlite"))
+    monkeypatch.setenv("SHF_WATCHTOWER_AUDIT_PATH", str(tmp_path / "watchtower_audit.jsonl"))
     c = TestClient(app)
-    r = c.get("/admin/observability/verify")
+    assert c.get("/admin/observability/verify").status_code == 401
+    r = c.get("/admin/observability/verify", headers={"X-Admin-Key": "test-admin-key"})
     # healthy => 200, degraded => 503, but body must always follow the contract
     assert r.status_code in (200, 503), r.text
 

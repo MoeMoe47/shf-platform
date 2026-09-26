@@ -1,3 +1,4 @@
+import { PUBLIC_ENV } from "../system/env/publicEnv.js";
 // src/utils/analytics.js
 // Lightweight analytics bus with pluggable sinks.
 // - Students: silent capture; they don't see analytics UI.
@@ -7,7 +8,7 @@
 const RING_MAX = 1000;            // hard cap in-memory
 const PERSIST_KEY = "analytics:ring";
 const DEV = typeof import.meta !== "undefined"
-  ? (import.meta.env?.MODE !== "production")
+  ? (PUBLIC_ENV.MODE !== "production")
   : true;
 
 // -------- Internal state --------

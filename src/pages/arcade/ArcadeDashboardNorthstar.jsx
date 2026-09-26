@@ -12,9 +12,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useArcadeLedger } from "@/shared/arcade/useArcadeLedger.js";
+import { PUBLIC_ENV } from "../../system/env/publicEnv.js";
 
 const isDev =
-  (typeof import.meta !== "undefined" && import.meta.env && import.meta.env.DEV) ||
+  PUBLIC_ENV.DEV ||
   process.env.NODE_ENV !== "production";
 
 export default function ArcadeDashboardNorthstar() {

@@ -24,17 +24,12 @@ function getBase() {
   return normalizeBase(override || FABRIC_API_BASE);
 }
 
-function getAdminKey() {
-  const ls = globalThis?.localStorage;
-  return ls?.getItem("ADMIN_API_KEY") || ls?.getItem("shf_admin_key") || "";
-}
-
 async function req(method, path, body) {
   const url = getBase() + path;
 
+  // AFCC-2A.1: no browser-held Fabric admin key. /admin/registry fails closed (401)
+  // until a server-side SHS->Fabric auth bridge exists (AFCC-2A.2).
   const headers = { "Content-Type": "application/json" };
-  const k = getAdminKey();
-  if (k) headers["X-Admin-Key"] = k;
 
   const res = await fetch(url, {
     method,

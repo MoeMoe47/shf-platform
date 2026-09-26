@@ -28,6 +28,7 @@ import OraclePage from "@/pages/admin/oracle/OraclePage.jsx";
 import AIGuardrailsPage from "@/pages/admin/ai-guardrails/AIGuardrailsPage.jsx";
 import GameTheoryPage from "@/pages/admin/game-theory/GameTheoryPage.jsx";
 import AgentFabricPage from "@/pages/admin/agent-fabric/AgentFabricPage.jsx";
+import AgentFabricCommandCenter from "@/pages/admin/agent-fabric-command/AgentFabricCommandCenter.jsx";
 import AgentWorkbenchPage from "@/pages/admin/agents/AgentWorkbenchPage.jsx";
 import DirectConnectProofCenterPage from "@/pages/admin/direct-connect/DirectConnectProofCenterPage.jsx";
 import ShsSystemOrchestratorPage from "@/pages/admin/orchestrator/ShsSystemOrchestratorPage.jsx";
@@ -186,6 +187,8 @@ export default function AdminRoutes() {
         <Route path="/ai-guardrails" element={protect("/ai-guardrails", <AIGuardrailsPage />, [SHS_SECURITY_PERMISSIONS.TRUTH_VIEW])} />
         <Route path="/game-theory" element={protect("/game-theory", <GameTheoryPage />, [SHS_SECURITY_PERMISSIONS.TRUTH_VIEW])} />
         <Route path="/agent-fabric" element={protect("/agent-fabric", <AgentFabricPage />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
+        {/* AFCC-1: read-only Command Center; same access rule and permission as /agent-fabric. */}
+        <Route path="/agent-fabric/command" element={protect("/agent-fabric", <AgentFabricCommandCenter />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/audit" element={protect("/audit", <AuditLogViewer />, [SHS_SECURITY_PERMISSIONS.AUDIT_VIEW])} />
         <Route path="/identity" element={protect("/identity", <IdentityManagement />, [SHS_SECURITY_PERMISSIONS.IDENTITY_VIEW])} />
         <Route path="/documentation" element={protect("/documentation", <DocumentationCenter />, ["documentation.center.view"])} />

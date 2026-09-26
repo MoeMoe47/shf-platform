@@ -6,17 +6,10 @@ function safeJson(v) {
   try { return JSON.stringify(v, null, 2); } catch { return String(v); }
 }
 
-function getAdminKey() {
-  try {
-    return (
-      globalThis?.localStorage?.getItem("ADMIN_API_KEY") ||
-      globalThis?.localStorage?.getItem("shf_admin_key") ||
-      ""
-    );
-  } catch {
-    return "";
-  }
-}
+// AFCC-2A.1: the browser holds no Fabric admin key. /admin/registry requires one
+// server-side, so these calls fail closed until the SHS->Fabric auth bridge exists.
+const FABRIC_ADMIN_AUTH_NOTICE =
+  "Registry admin routes require a server-side SHS to Fabric auth bridge (AFCC-2A.2). Browser admin keys are no longer used.";
 
 function getAdminRole() {
   try {
@@ -46,8 +39,6 @@ function getOrgId() {
 
 async function api(path, { method = "GET", body } = {}) {
   const headers = { "Content-Type": "application/json" };
-  const k = getAdminKey();
-  if (k) headers["X-Admin-Key"] = k;
   const role = getAdminRole();
   if (role) headers["X-Admin-Role"] = role;
   const orgId = getOrgId();
@@ -681,7 +672,7 @@ export default function Registry() {
           {loading ? "Loading..." : `Showing ${activeCount} ${kindLabel(tab).toLowerCase()} • HTTP ${lastStatus ?? "?"}`}
         </div>
         <div className="ar-muted">
-          Admin key present: {getAdminKey() ? "✅ yes" : "❌ no (set localStorage.ADMIN_API_KEY)"}
+          {FABRIC_ADMIN_AUTH_NOTICE}
         </div>
       </div>
 

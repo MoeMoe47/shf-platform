@@ -36,7 +36,8 @@ def canonical_request_bytes(method: str, path: str, body_digest: str, issued_at:
     return "|".join((method.upper(), path, body_digest, issued_at, expires_at, key_id)).encode("utf-8")
 
 
-def authenticate_internal_request(*, method: str, path: str, body: Mapping[str, Any], headers: Mapping[str, str]) -> InternalServicePrincipal:
+def _verify_signed_request(*, method: str, path: str, body: Mapping[str, Any], headers: Mapping[str, str]) -> tuple[str, str]:
+    """Verify the service:shs-api HMAC signature. Audience is checked by callers."""
     normalized = {str(key).lower(): str(value).strip() for key, value in headers.items()}
     service_id = normalized.get("x-shf-service-id", "")
     key_id = normalized.get("x-shf-service-kid", "")
@@ -66,6 +67,11 @@ def authenticate_internal_request(*, method: str, path: str, body: Mapping[str, 
     expected = hmac.new(secret.encode("utf-8"), message, hashlib.sha256).hexdigest()
     if not hmac.compare_digest(expected, signature):
         raise ValueError("invalid_internal_service_signature")
+    return service_id, key_id
+
+
+def authenticate_internal_request(*, method: str, path: str, body: Mapping[str, Any], headers: Mapping[str, str]) -> InternalServicePrincipal:
+    service_id, key_id = _verify_signed_request(method=method, path=path, body=body, headers=headers)
     if path != INTERNAL_INGESTION_PATH or method.upper() != "POST":
         raise ValueError("invalid_internal_service_audience")
 
@@ -74,6 +80,36 @@ def authenticate_internal_request(*, method: str, path: str, body: Mapping[str, 
     if (producer_id, event_type) not in ALLOWED_SERVICE_EVENTS:
         raise ValueError("internal_service_event_not_allowed")
     return InternalServicePrincipal(service_id=service_id, permission=PERMISSION, key_id=key_id)
+
+
+# AFCC-2A.2/2A.3: the same service identity may READ exactly these Command Center
+# projections, with GET and an empty signed body. It grants nothing else: no
+# other path, no other method, and the ingestion audience above is unchanged.
+COMMAND_READ_PERMISSION = "bos.governance.read"
+COMMAND_READ_PATHS = frozenset(
+    {
+        "/api/v1-command-center/agent-fabric/agents/health",
+        "/api/v1-command-center/agent-fabric/agents/readiness",
+        "/api/v1-command-center/agent-fabric/gate",
+        "/api/v1-command-center/agent-fabric/runs/recent",
+        # AFCC-2A.3: the existing AFCC-2A safe read projections (persisted state
+        # and last-recorded verification results only; they never evaluate or verify).
+        "/api/v1-command-center/agent-fabric/watchtower",
+        "/api/v1-command-center/agent-fabric/infrastructure",
+        "/api/v1-command-center/agent-fabric/observability",
+    }
+)
+
+
+def authenticate_internal_read_request(*, method: str, path: str, headers: Mapping[str, str]) -> InternalServicePrincipal:
+    service_id, key_id = _verify_signed_request(method=method, path=path, body={}, headers=headers)
+    if method.upper() != "GET" or path not in COMMAND_READ_PATHS:
+        raise ValueError("invalid_internal_service_audience")
+    return InternalServicePrincipal(service_id=service_id, permission=COMMAND_READ_PERMISSION, key_id=key_id)
+
+
+def has_internal_service_headers(headers: Mapping[str, str]) -> bool:
+    return any(str(key).lower().startswith("x-shf-service-") for key in headers.keys())
 
 
 def _load_keyring() -> dict[str, str]:

@@ -65,3 +65,36 @@ Repository evidence: GEO-0 and GEO-1A found no confirmed Quick Map to master-cit
 Reason: Shared normalized ranges are not evidence of shared geometry.
 Affected phases: GEO-1 Wave 1, GEO-3, GEO-8.
 Revisit condition: Revisit only when an explicit transform registry with evidence and tests exists.
+
+## GEO1-WAVE2A-DEC-001
+
+Decision ID: GEO1-WAVE2A-DEC-001
+Question: Should the Wave 1 feature ID format be accepted for Wave 2 planning?
+Decision: ACCEPT `spatial:<domain>:<featureType>:<sourceAuthority>:<sourceRecordId>`.
+Alternatives considered: Add version to the ID; preserve source colons literally; use domain record IDs only; switch to random UUIDs.
+Repository evidence: Wave 1 tests prove deterministic normalization, namespace safety, source-authority preservation, and collision separation by authority.
+Reason: The format is stable, URL-safe after normalization, case-normalized, and preserves source authority without inventing domain identity. Source record IDs containing colons are normalized for ID safety while the original source record remains in `sourceRecordId` and provenance.
+Affected phases: GEO-1 Wave 2A, GEO-1 Wave 2B, GEO-3, GEO-6.
+Revisit condition: Revisit only if a canonical source-id service or source authority requires versioned projected identity.
+
+## GEO1-WAVE2A-DEC-002
+
+Decision ID: GEO1-WAVE2A-DEC-002
+Question: What runtime shape should Wave 2B use for shared selection?
+Decision: Design for a pure JavaScript in-memory single-selection store first.
+Alternatives considered: React context first; existing SHS Event Bus; browser storage; network/distributed event infrastructure.
+Repository evidence: The repo contains small no-dependency local event helpers and larger SHS event/command bus systems; GEO-1B recommends lightweight shared modules under `src/shared/spatial/`.
+Reason: Single in-memory selection is deterministic, testable, framework-light, and avoids persistence, authorization, or domain mutation.
+Affected phases: GEO-1 Wave 2B, GEO-7.
+Revisit condition: Revisit when a real client needs React provider ergonomics, multi-selection, URL sync, or cross-tab sync.
+
+## GEO1-WAVE2A-DEC-003
+
+Decision ID: GEO1-WAVE2A-DEC-003
+Question: Should spatial interactions replay by default?
+Decision: No. Transient interactions are not replayed; canonical selection state is stored separately; domain actions are never replayed automatically.
+Alternatives considered: Replay all events to late subscribers; replay only last event per type; persist event history.
+Repository evidence: GEO-1A and GEO-1B separate selection state from interaction envelopes and prohibit domain authority transfer.
+Reason: No replay is safer for UI interactions and avoids accidental domain action re-execution.
+Affected phases: GEO-1 Wave 2B.
+Revisit condition: Revisit only for development-only debugging hooks or an explicitly approved replay design.

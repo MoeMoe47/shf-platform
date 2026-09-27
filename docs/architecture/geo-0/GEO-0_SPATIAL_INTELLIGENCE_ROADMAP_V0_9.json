@@ -1,0 +1,87 @@
+{
+  "roadmap_id": "GEO-0_SPATIAL_INTELLIGENCE_ROADMAP_V0_9",
+  "status": "PROVISIONAL",
+  "created_at": "2026-09-27",
+  "baseline": {
+    "working_directory": "/Users/mikeslate/Projects/silicon-heartland-spatial-intelligence",
+    "repository_root": "/Users/mikeslate/Projects/silicon-heartland-spatial-intelligence",
+    "branch": "feature/spatial-intelligence-geo0",
+    "starting_tree": "clean",
+    "starting_head": "2651e17 feat(fabric): harden run execution safety"
+  },
+  "rules": [
+    "GEO-0 is audit-only.",
+    "GEO-1 is not implemented by this packet.",
+    "No existing spatial implementation is restored, redesigned, deleted, consolidated, or migrated by GEO-0.",
+    "Demo/static geography must not become institutional reporting authority without Evidence, Truth, Metric Registry, Reporting, and publication approval."
+  ],
+  "phases": [
+    {
+      "id": "GEO-0",
+      "name": "Recovery and Forensics",
+      "status": "COMPLETE_IN_THIS_PACKET",
+      "purpose": "Inventory spatial assets, implementations, historical recovery folders, authority boundaries, and gaps."
+    },
+    {
+      "id": "GEO-1",
+      "name": "Canonical Spatial Authority Charter",
+      "status": "READY_WITH_BLOCKERS",
+      "purpose": "Define ownership, allowed data classes, spatial source authority, and non-authoritative demo boundaries.",
+      "blockers": ["owner decisions", "spatial authority boundary approval"]
+    },
+    {
+      "id": "GEO-2",
+      "name": "Spatial Asset and Source Registry",
+      "status": "NOT_STARTED",
+      "purpose": "Canonicalize asset/source metadata without moving assets."
+    },
+    {
+      "id": "GEO-3",
+      "name": "Spatial Data Contracts",
+      "status": "NOT_STARTED",
+      "purpose": "Define county, jurisdiction, geometry, feature, coordinate, and provenance contracts."
+    },
+    {
+      "id": "GEO-4",
+      "name": "Map Runtime Boundary",
+      "status": "NOT_STARTED",
+      "purpose": "Decide runtime engines and route-level loading rules across d3/SVG, Globe, Mapbox, MapLibre, and Three."
+    },
+    {
+      "id": "GEO-5",
+      "name": "Spatial Truth and Reporting Boundary",
+      "status": "NOT_STARTED",
+      "purpose": "Bind spatial claims to Evidence, Truth, Metric Registry, Reporting, and public disclosure only where approved."
+    },
+    {
+      "id": "GEO-6",
+      "name": "CivicSure / GPA Jurisdiction Integration",
+      "status": "NOT_STARTED",
+      "purpose": "Connect jurisdiction/source-scope models to spatial read surfaces without turning maps into authority."
+    },
+    {
+      "id": "GEO-7",
+      "name": "User Experience and Accessibility Acceptance",
+      "status": "NOT_STARTED",
+      "purpose": "Validate spatial views for accessible alternatives, keyboard behavior, text equivalents, and responsive framing."
+    },
+    {
+      "id": "GEO-8",
+      "name": "Migration and Preservation Plan",
+      "status": "NOT_STARTED",
+      "purpose": "Decide what to preserve, archive, leave untouched, or replace later."
+    },
+    {
+      "id": "GEO-9",
+      "name": "Implementation Readiness Gate",
+      "status": "NOT_STARTED",
+      "purpose": "Confirm all dependencies, risks, owners, tests, and rollback are ready before implementation."
+    },
+    {
+      "id": "GEO-10",
+      "name": "Final Spatial Intelligence Acceptance",
+      "status": "NOT_STARTED",
+      "purpose": "Certify spatial intelligence implementation against contracts and repository evidence."
+    }
+  ]
+}

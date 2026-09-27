@@ -1,0 +1,128 @@
+{
+  "registry_id": "GEO-0_SPATIAL_IMPLEMENTATION_REGISTRY",
+  "created_at": "2026-09-27",
+  "scope": "current repository spatial/geography surfaces, assets, contracts, dependencies, and recovery candidates",
+  "baseline": {
+    "branch": "feature/spatial-intelligence-geo0",
+    "head": "2651e17 feat(fabric): harden run execution safety"
+  },
+  "entries": [
+    {
+      "id": "geo.surface.ohio_county_neutral_base",
+      "classification": "ACTIVE_GEOMETRY_VIEW",
+      "path": "src/pages/iep-command-v2/OhioCountyNeutralBase.jsx",
+      "evidence": "Uses d3-geo geoMercator/geoPath/geoCentroid and fetches /assets/maps/ohio-counties.geojson.",
+      "authority_status": "GEOMETRY_RENDERING_ONLY",
+      "geo0_disposition": "PRESERVE_UNCHANGED"
+    },
+    {
+      "id": "geo.surface.shf_ohio_map_engine",
+      "classification": "ACTIVE_STATIC_METRIC_MAP",
+      "path": "src/pages/shf-command/SHFOhioMapEngine.jsx",
+      "evidence": "Wraps OhioCountyNeutralBase and overlays page-local COUNTY_METRICS.",
+      "authority_status": "STATIC_DEMO_VALUES",
+      "geo0_disposition": "PRESERVE_UNCHANGED_DO_NOT_USE_AS_REPORTING_AUTHORITY"
+    },
+    {
+      "id": "geo.surface.iep_command_profiles",
+      "classification": "ACTIVE_STATIC_COUNTY_PROFILES",
+      "path": "src/pages/iep-command-v2/countyProfiles.js",
+      "evidence": "Large county profile fixture with student/risk/funding-style values.",
+      "authority_status": "FABRICATED_STATIC_RESTRICTED_DEMO",
+      "geo0_disposition": "PRESERVE_UNCHANGED_EXCLUDE_FROM_INSTITUTIONAL_REPORTING"
+    },
+    {
+      "id": "geo.surface.operational_globe",
+      "classification": "ACTIVE_GLOBE_VIEW",
+      "path": "src/components/globe/OperationalGlobe.jsx",
+      "evidence": "Uses globe.gl, fetches /geo/us-states.geojson and /geo/us-counties.geojson, overlays county/state polygons, hardcoded lat/lng points, outcome arcs.",
+      "authority_status": "VISUAL_OPERATIONAL_CONTEXT",
+      "geo0_disposition": "PRESERVE_UNCHANGED"
+    },
+    {
+      "id": "geo.surface.mapbox_operational_map",
+      "classification": "ACTIVE_MAPBOX_VIEW",
+      "path": "src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx",
+      "evidence": "Lazy Mapbox component with VITE_MAPBOX_TOKEN, remote US county GeoJSON, layer steps, central Ohio counties, operational points, localStorage map context publication.",
+      "authority_status": "OPERATIONAL_CONTEXT_AND_UI_STATE",
+      "geo0_disposition": "PRESERVE_UNCHANGED"
+    },
+    {
+      "id": "geo.surface.civicsure_explorer_frame",
+      "classification": "DEMO_FRAME_GEOGRAPHY",
+      "path": "apps/shf-web/src/pages/civicsure/explorer/civicsureExplorerMockData.js",
+      "evidence": "File-level warning says DEMO / FRAME DATA, not production assurance data; marker positions are decorative and not tied to real coordinates.",
+      "authority_status": "DEMO_ONLY",
+      "geo0_disposition": "PRESERVE_UNCHANGED_EXCLUDE_FROM_AUTHORITY"
+    },
+    {
+      "id": "geo.backend.gpa_jurisdictions",
+      "classification": "BACKEND_JURISDICTION_MODEL",
+      "path": "apps/shs-api/migrations/099_government_program_assurance_source_scope.sql",
+      "evidence": "Defines gpa_jurisdictions with jurisdiction_type, canonical_name, state_country_code, geographic_reference, parent_jurisdiction_id, status, provenance_json.",
+      "authority_status": "JURISDICTION_METADATA_NOT_GEOMETRY_STORAGE",
+      "geo0_disposition": "PRESERVE_UNCHANGED"
+    },
+    {
+      "id": "geo.backend.public_projection_geography_level",
+      "classification": "BACKEND_PUBLIC_REPORTING_GEOGRAPHY_FIELD",
+      "path": "apps/shs-api/migrations/025_report_publications.sql",
+      "evidence": "shf_public_impact_projections includes geography_level constrained to COUNTY, STATE, ORGANIZATION_WIDE.",
+      "authority_status": "PUBLIC_REPORTING_SCOPE_FIELD",
+      "geo0_disposition": "PRESERVE_UNCHANGED"
+    },
+    {
+      "id": "geo.assets.public_geo",
+      "classification": "STATIC_GEOJSON_ASSETS",
+      "paths": [
+        "public/geo/ohio-counties.geojson",
+        "public/geo/us-states.geojson",
+        "public/geo/us-counties.geojson",
+        "public/assets/maps/ohio-counties.geojson",
+        "public/assets/maps/clusters/*.geojson"
+      ],
+      "authority_status": "STATIC_ASSETS_PROVENANCE_UNVERIFIED_IN_GEO0",
+      "geo0_disposition": "PRESERVE_UNCHANGED_REGISTER_IN_GEO2"
+    },
+    {
+      "id": "geo.dependencies.runtime",
+      "classification": "SPATIAL_RUNTIME_DEPENDENCIES",
+      "path": "package.json",
+      "evidence": "Spatial/map dependencies include d3-geo, globe.gl, mapbox-gl, maplibre-gl, react-globe.gl, three, three-globe, topojson-client.",
+      "authority_status": "RUNTIME_TOOLING",
+      "geo0_disposition": "PRESERVE_UNCHANGED"
+    },
+    {
+      "id": "geo.bundle.map_chunks",
+      "classification": "BUNDLE_BOUNDARY",
+      "path": "vite.config.js",
+      "evidence": "Manual chunks split mapbox-gl, maplibre-gl, geojson/supercluster, @mapbox/@maplibre, plus Capital Mapbox preload filtering.",
+      "authority_status": "PERFORMANCE_BOUNDARY",
+      "geo0_disposition": "PRESERVE_UNCHANGED"
+    },
+    {
+      "id": "geo.reporting.surface_registry",
+      "classification": "EXISTING_PROVENANCE_WARNING",
+      "path": "docs/SHF_REPORTING_SURFACE_REGISTRY.v1.json",
+      "evidence": "Classifies SHF Impact Ohio Map as static/provenance-insufficient and IEP Command Center as fabricated/static with REMOVE migration status for reporting.",
+      "authority_status": "GOVERNANCE_EVIDENCE",
+      "geo0_disposition": "CONSUME_AS_CONSTRAINT"
+    },
+    {
+      "id": "geo.recovery.locked_and_frozen_maps",
+      "classification": "HISTORICAL_RECOVERY_CANDIDATES",
+      "paths": [
+        "_LOCKED_MAP_CLICK_CONTEXT_BRIDGE_V1_20260515_192839",
+        "_LOCKED_MAP_CLICK_CONTEXT_BRIDGE_V1_20260515_193058",
+        "_LOCKED_REGIONAL_DETAIL_SIDE_RAIL_FIX_20260515_223801",
+        "_LOCKED_SHF_HEADER_FOOTER_GLOBE_BRANDING_20260516_101030",
+        "_LOCKED_SELECTED_COUNTY_CONTEXT_V1_20260515_185544",
+        "_frozen_checkpoints/ohio_map_working_20260407_215302",
+        "_frozen_checkpoints/county_layer_stable_20260407_130630",
+        "_frozen_checkpoints/iep-command-v2-recovered"
+      ],
+      "authority_status": "HISTORICAL_REFERENCE_ONLY",
+      "geo0_disposition": "DO_NOT_RESTORE_OR_DELETE_IN_GEO0"
+    }
+  ]
+}

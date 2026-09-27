@@ -1,0 +1,42 @@
+{
+  "matrix_id": "GEO-0_EVIDENCE_MATRIX",
+  "created_at": "2026-09-27",
+  "entries": [
+    {
+      "id": "GEO-EV-001",
+      "claim": "Workspace was correct before work began.",
+      "evidence": ["pwd", "git rev-parse --show-toplevel", "git branch --show-current", "git status", "git log -1 --oneline"],
+      "finding": "Directory/root matched expected path; branch was feature/spatial-intelligence-geo0; tree was clean; HEAD was 2651e17."
+    },
+    {
+      "id": "GEO-EV-002",
+      "claim": "Current repo has active spatial dependencies.",
+      "evidence": ["package.json"],
+      "finding": "d3-geo, globe.gl, mapbox-gl, maplibre-gl, react-globe.gl, three, three-globe, and topojson-client are present."
+    },
+    {
+      "id": "GEO-EV-004",
+      "claim": "Ohio county geometry renders from static GeoJSON.",
+      "evidence": ["src/pages/iep-command-v2/OhioCountyNeutralBase.jsx", "public/assets/maps/ohio-counties.geojson"],
+      "finding": "Component fetches static Ohio county GeoJSON and derives paths/centroids with d3-geo."
+    },
+    {
+      "id": "GEO-EV-008",
+      "claim": "Mapbox operational map exists and publishes UI map context.",
+      "evidence": ["src/pages/exchange/unified-truth/components/SHSOperationalMapboxMap.jsx"],
+      "finding": "Component uses Mapbox, remote county GeoJSON, local layer steps, operational points, and localStorage event publication."
+    },
+    {
+      "id": "GEO-EV-010",
+      "claim": "Backend has jurisdiction metadata, not spatial geometry persistence.",
+      "evidence": ["apps/shs-api/migrations/099_government_program_assurance_source_scope.sql"],
+      "finding": "gpa_jurisdictions includes jurisdiction type/name/geographic reference/provenance; no geometry/geography column was identified."
+    },
+    {
+      "id": "GEO-EV-012",
+      "claim": "Existing reporting governance flags spatial provenance gaps.",
+      "evidence": ["docs/SHF_REPORTING_SURFACE_REGISTRY.v1.json"],
+      "finding": "SHF Impact Ohio Map is static/provenance-insufficient; IEP command is fabricated/static; Exchange public impact is noncanonical."
+    }
+  ]
+}

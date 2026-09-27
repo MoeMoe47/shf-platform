@@ -1,0 +1,20 @@
+# GEO-0 Spatial Risk Register
+
+Created: 2026-09-27
+
+| Risk ID | Risk | Evidence | Severity | Mitigation |
+|---|---|---|---|---|
+| GEO-RISK-001 | Static or fabricated county values could be mistaken for verified institutional metrics. | `SHFOhioMapEngine.jsx`, `countyProfiles.js`, `docs/SHF_REPORTING_SURFACE_REGISTRY.v1.json`. | HIGH | GEO-5 must require producer, Evidence, Truth, Metric Registry, Reporting Service, and publication eligibility before reporting use. |
+| GEO-RISK-002 | Historical locked/frozen map folders could be restored or deleted without authority. | `_LOCKED_*`, `_frozen_checkpoints/*map*`, `_recovery_*`, `_restore_*`. | HIGH | GEO-8 preservation/disposition plan required; GEO-0 does not restore/delete. |
+| GEO-RISK-003 | Remote Mapbox/GeoJSON dependencies may create availability, token, privacy, or license issues. | `SHSOperationalMapboxMap.jsx` uses `VITE_MAPBOX_TOKEN` and remote county GeoJSON URL. | MEDIUM | GEO-4 must define remote source/token/fallback policy. |
+| GEO-RISK-004 | Multiple map engines can increase bundle size and route regressions. | `package.json`, `vite.config.js`. | MEDIUM | Preserve current chunking until GEO-4 explicitly changes it. |
+| GEO-RISK-005 | Backend jurisdiction metadata may be conflated with authoritative geometry. | `gpa_jurisdictions.geographic_reference`; no reviewed geometry/geography column. | MEDIUM | GEO-3 must separate jurisdiction identity, geometry, and source provenance. |
+| GEO-RISK-006 | Demo CivicSure geography frame may be over-promoted into real assurance UI. | `civicsureExplorerMockData.js` file-level DEMO warning. | HIGH | GEO-5/GEO-6 must keep frame data out of assurance authority until wired to canonical data. |
+| GEO-RISK-007 | Accessibility gaps in map/globe/canvas surfaces may block production acceptance. | SVG map, Globe, Mapbox surfaces. | MEDIUM | GEO-7 must require keyboard and nonvisual equivalents. |
+| GEO-RISK-008 | GEO phases may reopen solved reporting governance problems. | Reporting registry already classifies several surfaces. | MEDIUM | Treat current reporting registry as a constraint unless superseded by a later accepted authority record. |
+| GEO-RISK-009 | Unknown SHF entities can be mapped to Franklin County, creating fabricated/default geography. | `src/system/resolvers/entityToCounty.js` returns `"franklin"` after temporary mappings. | HIGH | GEO-5/GEO-6 must replace unknown fallback with explicit unknown/null handling before public or authoritative use. |
+| GEO-RISK-010 | SHF Public Impact route expectations are stale. | `FoundationRoutes.jsx` declares `impact`, but `foundation.main.jsx` renders `FoundationApp`, whose manual hash router does not handle `#/impact`. | HIGH | GEO-1 must decide intended public route ownership before implementation; GEO-5 must confirm publication eligibility. |
+| GEO-RISK-011 | Exchange / Capital map rendering depends on unregistered token and remote county geometry. | `SHSOperationalMapboxMap.jsx` uses `VITE_MAPBOX_TOKEN` and a remote county GeoJSON URL; checked example env files do not declare the token. | MEDIUM | GEO-4 must define config contract, local fallback, and source/license handling. |
+| GEO-RISK-012 | Metaverse coordinate spaces can be conflated. | Quick Map uses a 1448 x 1086 source image and master-city traces use an approximately 1672 x 941 plate; no confirmed transform exists. | HIGH | GEO-3 must require coordinate family and coordinate-space identifiers on every projection. |
+| GEO-RISK-013 | Capability metadata may be overstated as complete engines. | Emergency/dispatch and Sky Bridge/Transit evidence is registry-only, metadata-only, or explicitly pending. | MEDIUM | GEO-4/GEO-8 must require runtime, route, authority, and test evidence before engine classification. |
+| GEO-RISK-014 | Disconnected globe/map components may be mistaken for active routes or deleted without review. | `OperationalGlobe`, `RealGlobe`, `OutcomeGlobe`, and `SHFOhioMapEngine` have no confirmed live route/importer beyond test or checkpoint references. | MEDIUM | GEO-8 must preserve and disposition candidates non-destructively. |

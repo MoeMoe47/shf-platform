@@ -158,7 +158,9 @@ def test_read_session_cannot_run_verification_actions():
 
 def test_read_session_cannot_execute_runs_publish_or_change_policy():
     c = _session_client("shs_admin")
-    assert c.post("/runs/execute", json={"planId": "p", "approved": True}).status_code == 401
+    # AFCC-3 Phase 3: execution needs a session with fabric.run.execute AND a CSRF
+    # token; the admin key is gone. A cookie alone (no CSRF) is refused.
+    assert c.post("/runs/execute", json={"planId": "p", "approved": True}).status_code == 403
     assert c.post("/runs/reports/r1/publish", json={}).status_code in (401, 422)
     assert c.post("/admin/layers/L08/enabled", json={"enabled": False}).status_code == 401
     assert c.post("/admin/agents/a1/enabled", json={"enabled": False}).status_code == 401

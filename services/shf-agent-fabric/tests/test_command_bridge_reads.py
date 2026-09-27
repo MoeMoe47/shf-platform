@@ -30,6 +30,7 @@ from services.internal_service_identity import (
     COMMAND_READ_PATHS,
     authenticate_internal_request,
     canonical_request_bytes,
+    is_command_read_path,
 )
 
 BASE = "/api/v1-command-center/agent-fabric"
@@ -112,7 +113,12 @@ def _session(role: str) -> TestClient:
 
 
 def test_allow_list_is_exactly_the_bridged_reads():
-    assert COMMAND_READ_PATHS == {f"{BASE}/{p}" for p in BRIDGED}
+    assert {f"{BASE}/{p}" for p in BRIDGED}.issubset(COMMAND_READ_PATHS)
+    assert f"{BASE}/runs" in COMMAND_READ_PATHS
+    for path in (f"{BASE}/runs/rX", f"{BASE}/runs/rX/timeline", f"{BASE}/runs/rX/evidence", f"{BASE}/runs/rX/dependencies"):
+        assert is_command_read_path(path)
+    for path in (f"{BASE}/runs/rX/secrets", f"{BASE}/runs/../../gate", f"{BASE}/runs/rX/quarantine"):
+        assert not is_command_read_path(path)
 
 
 @pytest.mark.parametrize("path,kind", BRIDGED.items())
@@ -212,6 +218,31 @@ def test_runs_projection_minimizes_and_keeps_hashes(client):
     assert run["snapshotSha256"] == SHA
     assert run["artifacts"] == [{"artifactId": "draft_39", "sha256": SHA}]
     assert "/Users/" not in res.text and "events.jsonl" not in res.text
+
+
+@pytest.mark.parametrize("suffix,kind", [
+    ("", "run_detail"),
+    ("/timeline", "run_timeline"),
+    ("/evidence", "run_evidence"),
+    ("/dependencies", "run_dependencies"),
+])
+def test_live_operations_reads_are_allowlisted_sanitized_and_read_only(client, suffix, kind):
+    full = f"{BASE}/runs/rX{suffix}"
+    res = client.get(full, headers=_signed("GET", full))
+    assert res.status_code == 200, res.text
+    body = res.json()
+    assert (body["contract"], body["kind"], body["read_only"], body["access"]) == ("afcc.read.v1", kind, True, "shs_service")
+    assert body["state"] == "AVAILABLE"
+    assert "/Users/" not in res.text and "Traceback" not in res.text and SECRET not in res.text
+
+
+def test_live_operations_list_read_is_allowlisted(client):
+    full = f"{BASE}/runs"
+    body = client.get(full, headers=_signed("GET", full)).json()
+    assert body["kind"] == "runs_live"
+    assert body["state"] == "AVAILABLE"
+    assert body["runs"][0]["run_id"] == "rX"
+    assert body["runs"][0]["current_state"] == "FAILED"
 
 
 def test_agent_and_gate_projections_have_only_contract_fields(client):
@@ -322,3 +353,30 @@ def test_recorded_verification_is_returned_as_last_known(client, isolated, kind)
     assert (body["state"], body["status"]) == ("AVAILABLE", "DEGRADED")
     assert body["degraded"] == ["watchtower_attestation"]
     assert isinstance(body["staleness"]["age_seconds"], int)
+
+
+# ------------------------------------------------------------------ AFCC-3 Phase 2
+
+
+@pytest.mark.parametrize("word", ["execute", "cancel", "revoke", "retry", "timeout"])
+def test_action_words_are_not_readable_run_ids(client, word):
+    full = f"{BASE}/runs/{word}"
+    assert client.get(full, headers=_signed("GET", full)).status_code == 401
+
+
+@pytest.mark.parametrize("method", ["POST", "PUT", "PATCH", "DELETE"])
+def test_live_run_reads_are_get_only(client, method):
+    for suffix in ("", "/timeline", "/evidence", "/dependencies"):
+        full = f"{BASE}/runs/rX{suffix}"
+        assert client.request(method, full, headers=_signed(method, full)).status_code in (401, 405)
+
+
+def test_live_run_detail_carries_phase2_lineage_blocks(client):
+    full = f"{BASE}/runs/rX"
+    run = client.get(full, headers=_signed("GET", full)).json()["run"]
+    assert run["current_state"] == "FAILED"
+    assert run["state_derivation"]["reason_code"] == "RUN_EVENT_TERMINAL"
+    assert run["retry_lineage"]["retrying_state"] == "DEFERRED"
+    assert run["domain_refs"]["truth_spine"]["state"] == "NOT_PUBLISHED"
+    assert run["execution"]["model_invoked"] == "NOT_CAPTURED"
+    assert run["failure_summary"] == "[redacted]"

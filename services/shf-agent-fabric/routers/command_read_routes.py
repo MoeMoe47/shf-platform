@@ -193,3 +193,48 @@ def read_runs_recent(access=Depends(require_command_read)):
 
     body = _fleet_read("runs_recent", runs_recent_projection)
     return _envelope("runs_recent", access, body) if body is not None else _projection_failure("runs_recent")
+
+
+# ------------------------------------------------------------------ AFCC-3
+# Canonical Live Operations read projections. These are GET-only, side-effect
+# free views over the existing run event log, plan store, and reference fields.
+
+
+@router.get("/runs")
+def read_live_runs(access=Depends(require_command_read)):
+    from fabric.command.live_operations import live_runs_projection
+
+    body = _fleet_read("runs_live", live_runs_projection)
+    return _envelope("runs_live", access, body) if body is not None else _projection_failure("runs_live")
+
+
+@router.get("/runs/{run_id}")
+def read_run_detail(run_id: str, access=Depends(require_command_read)):
+    from fabric.command.live_operations import run_detail_projection
+
+    body = _fleet_read("run_detail", lambda: run_detail_projection(run_id))
+    return _envelope("run_detail", access, body) if body is not None else _projection_failure("run_detail")
+
+
+@router.get("/runs/{run_id}/timeline")
+def read_run_timeline(run_id: str, access=Depends(require_command_read)):
+    from fabric.command.live_operations import run_timeline_projection
+
+    body = _fleet_read("run_timeline", lambda: run_timeline_projection(run_id))
+    return _envelope("run_timeline", access, body) if body is not None else _projection_failure("run_timeline")
+
+
+@router.get("/runs/{run_id}/evidence")
+def read_run_evidence(run_id: str, access=Depends(require_command_read)):
+    from fabric.command.live_operations import run_evidence_projection
+
+    body = _fleet_read("run_evidence", lambda: run_evidence_projection(run_id))
+    return _envelope("run_evidence", access, body) if body is not None else _projection_failure("run_evidence")
+
+
+@router.get("/runs/{run_id}/dependencies")
+def read_run_dependencies(run_id: str, access=Depends(require_command_read)):
+    from fabric.command.live_operations import run_dependencies_projection
+
+    body = _fleet_read("run_dependencies", lambda: run_dependencies_projection(run_id))
+    return _envelope("run_dependencies", access, body) if body is not None else _projection_failure("run_dependencies")

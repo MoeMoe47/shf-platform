@@ -149,8 +149,22 @@ _SHF_CLIENT_REPORTING_PERMISSIONS = (
     SHF_REPORT_READ,
 )
 
+# Agent Fabric plan/run authority (AFCC-3 Phase 3). Create, decide and execute
+# are separate grants; none is implied by bos.governance.read (the Command
+# Center read permission). Plans and runs carry no organization binding, so
+# these are platform authority and are granted to ROLE_SHS_ADMIN only.
+FABRIC_PLAN_CREATE = "fabric.plan.create"
+FABRIC_PLAN_APPROVE = "fabric.plan.approve"  # approve AND reject: the approval decision
+FABRIC_RUN_EXECUTE = "fabric.run.execute"
+
+FABRIC_RUN_AUTHORITY_PERMISSIONS = (
+    FABRIC_PLAN_CREATE,
+    FABRIC_PLAN_APPROVE,
+    FABRIC_RUN_EXECUTE,
+)
+
 ROLE_PERMISSION_MAP = {
-    ROLE_SHS_ADMIN: tuple(PERMISSIONS) + _TRUTH_SHS_ADMIN_PERMISSIONS + _SHF_ADMIN_REPORTING_PERMISSIONS,
+    ROLE_SHS_ADMIN: tuple(PERMISSIONS) + _TRUTH_SHS_ADMIN_PERMISSIONS + _SHF_ADMIN_REPORTING_PERMISSIONS + FABRIC_RUN_AUTHORITY_PERMISSIONS,
     ROLE_CLIENT_ADMIN: CLIENT_PERMISSIONS + _TRUTH_CLIENT_ADMIN_PERMISSIONS + _SHF_CLIENT_ADMIN_REPORTING_PERMISSIONS,
     ROLE_CLIENT: () + _TRUTH_CLIENT_PERMISSIONS + _SHF_CLIENT_REPORTING_PERMISSIONS,
 }

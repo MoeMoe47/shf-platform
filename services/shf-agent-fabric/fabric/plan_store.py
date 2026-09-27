@@ -1,5 +1,6 @@
 import json
 import secrets
+from datetime import datetime, timezone
 from pathlib import Path
 from threading import Lock
 
@@ -33,6 +34,7 @@ def mark_plan_status(plan_id: str, status: str) -> bool:
         if not plan:
             return False
         plan["status"] = status
+        plan["statusUpdatedAt"] = datetime.now(timezone.utc).isoformat()
         _path(plan_id).write_text(json.dumps(plan, indent=2, sort_keys=True) + "\n")
         return True
 
@@ -46,3 +48,35 @@ def list_recent_plans(limit: int = 10) -> list[dict]:
         except Exception:
             continue
     return out
+
+
+class PlanDecisionError(Exception):
+    def __init__(self, code: str):
+        super().__init__(code)
+        self.code = code
+
+
+def record_approval_decision(plan_id: str, decision: dict, may_decide) -> dict:
+    """Atomically check eligibility and record an attributable approval decision.
+
+    `may_decide(plan)` returns None or a refusal code. The decision is kept as
+    `approvalDecision` (current) and appended to `approvalHistory` (all decisions).
+    """
+    with _lock:
+        plan = load_plan(plan_id)
+        if not plan:
+            raise PlanDecisionError("PLAN_NOT_FOUND")
+        refusal = may_decide(plan)
+        if refusal:
+            raise PlanDecisionError(refusal)
+        approved = decision["decision"] == "APPROVED"
+        plan["status"] = "APPROVED" if approved else "REJECTED"
+        plan["approved"] = approved
+        plan["statusUpdatedAt"] = decision["decided_at"]
+        if not plan.get("correlationId") and decision.get("correlation_id"):
+            plan["correlationId"] = decision["correlation_id"]
+            plan["correlationSource"] = decision.get("correlation_source")
+        plan["approvalDecision"] = decision
+        plan.setdefault("approvalHistory", []).append(decision)
+        _path(plan_id).write_text(json.dumps(plan, indent=2, sort_keys=True) + "\n")
+        return plan

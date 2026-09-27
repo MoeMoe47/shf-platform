@@ -58,10 +58,45 @@ function envelope(kind: string) {
   return { ...base, window: 25, events: [{ runId: "r1", planId: "p1", agentName: "Layer23OrchestratorAgent", kind: "execute", outcome: "ok", ts: "2026-01-09T03:56:55+00:00", snapshotSha256: SHA, artifacts: [{ artifactId: "draft_1", sha256: SHA, path: "/Users/x/db/a.json" }] }] };
 }
 
+// AFCC-3 live-run projections served by the fake Fabric.
+function liveRunKind(url: string) {
+  const m = url.split("?")[0].match(/^\/api\/v1-command-center\/agent-fabric\/runs(?:\/([^/]+)(\/timeline|\/evidence|\/dependencies)?)?$/);
+  if (!m) return null;
+  if (!m[1]) return "runs_live";
+  return ({ "": "run_detail", "/timeline": "run_timeline", "/evidence": "run_evidence", "/dependencies": "run_dependencies" } as Record<string, string>)[m[2] || ""];
+}
+
+function liveRunBody(kind: string) {
+  const base = { contract: "afcc.read.v1", kind, read_only: true, state: "AVAILABLE", access: "shs_service", generated_at: "2026-09-27T10:00:00Z" };
+  const source = { authority: "Agent Fabric run ledger and plan store", stores: ["db/runs/events.jsonl"], projection: "live_operations", read_only: true, record_type: "run_event", malformed_event_count: 2, unattributed_event_count: 1, internal_path: "/srv/db/runs/events.jsonl" };
+  const refs = (authority: string, r: string[]) => ({ authority, state: r.length ? "PUBLISHED" : "NOT_PUBLISHED", link_basis: r.length ? "RUN_EVENT_RECORDED" : "NO_RUN_SPECIFIC_RELATION", refs: r, raw_record: { secret: "x" } });
+  const run = {
+    run_id: "a1b2c3", current_state: "COMPLETED", correlation_id: "corr_1234abcd", retry_count: "NOT_CAPTURED", provider: "NOT_APPLICABLE", model: "NOT_APPLICABLE", adapter: "save_draft_artifact",
+    state_derivation: { state: "COMPLETED", reason_code: "RUN_EVENT_TERMINAL", conflict: false, debug: "/srv/x.py" },
+    initiator: { actor_id: "u-approver", actor_type: "HUMAN", initiator_type: "HUMAN", actor_verification: "VERIFIED", organization_id: "NOT_APPLICABLE", organization_verification: "VERIFIED", tenant_id: "NOT_APPLICABLE", tenant_verification: "VERIFIED", source_system: "agent_fabric.session", source_system_verification: "VERIFIED", entry_point: "fabric.runs.execute", execution_system: "agent_fabric", admin_key: ADMIN_KEY,
+      authority: { authentication: "FABRIC_SESSION", role: "shs_admin", permission: "fabric.run.execute", scope: "PLATFORM_GLOBAL", session_token: "tok-should-not-pass" },
+      declared_identity: { actor_id: "ceo", organization_id: "org_victim", verification: "DECLARED", email: "ceo@victim.example" } },
+    execution: { provider: "NOT_APPLICABLE", model: "NOT_APPLICABLE", adapter: "save_draft_artifact", adapters: ["save_draft_artifact"], agent_version: "NOT_CAPTURED", model_invoked: false, credentials: "sk-live" },
+    correlation: { id: "corr_1234abcd", source: "PLAN", continuity: "CONSISTENT" },
+    retry_lineage: { retry_supported: false, retrying_state: "DEFERRED", retry_count: "NOT_CAPTURED", parent_run_id: "NOT_CAPTURED", root_run_id: "NOT_CAPTURED", retry_of_run_id: "NOT_CAPTURED", same_plan_run_ids: [] },
+    domain_refs: { truth_spine: refs("Truth Spine", ["truth:claim_1"]), watchtower: refs("Watchtower", []), loo: refs("LOO", []), reporting: { ...refs("Reporting", []), proof_refs: [] } },
+    approval: { state: "APPROVED", required: true, authority: "plan_store", plan_status: "DONE", basis: "PLAN_APPROVAL_VERIFIED",
+      decision: { decision: "APPROVED", approver_actor_id: "u-approver", approver_type: "HUMAN", actor_verification: "VERIFIED", organization_id: "NOT_APPLICABLE", organization_verification: "VERIFIED", decided_at: "2026-09-27T08:00:00Z", reason: "reviewed", correlation_id: "corr_1234abcd", provenance: "RECORDED", csrf_token: "csrf-should-not-pass",
+        authority: { authentication: "FABRIC_SESSION", role: "shs_admin", permission: "fabric.plan.approve", scope: "PLATFORM_GLOBAL" } } },
+    failure_summary: mode === "leaky" ? "Traceback (most recent call last): File \"/srv/x.py\" ValueError" : "NOT_AVAILABLE",
+    event_count: 1, source,
+  };
+  if (kind === "runs_live") return { ...base, source, count: 1, runs: [run], lifecycle: { supported_states: ["APPROVAL_DENIED", "APPROVAL_REQUIRED", "APPROVED", "COMPLETED", "FAILED"], deferred_states: ["QUEUED", "EXECUTING"] }, freshness: { last_updated: "2026-09-27T09:00:00Z", captured_at: "2026-09-27T10:00:00Z", threshold: "NOT_DEFINED" } };
+  if (kind === "run_detail") return { ...base, source, run };
+  if (kind === "run_timeline") return { ...base, source, run_id: "a1b2c3", events: [{ event_id: "run_evt_1", run_id: "a1b2c3", event_type: "run.completed", from_state: "APPROVED", to_state: "COMPLETED", occurred_at: "2026-09-27T09:00:00Z", actor_ref: "NOT_CAPTURED", authority_ref: "agent_fabric.run_events", reason_code: "NOT_CAPTURED", reason_summary: "plan executed", evidence_refs: [], policy_refs: [], correlation_id: "corr_1234abcd", source: "agent_fabric.run_events", provenance: "RECORDED", raw: { path: "/srv/a" } }] };
+  if (kind === "run_evidence") return { ...base, source, run_id: "a1b2c3", evidence: { evidence_refs: [], artifact_refs: [{ artifact_id: "draft_1", sha256: SHA, path: "/Users/x/a.json" }], proof_refs: [], report_refs: [], truth_refs: ["truth:claim_1"], watchtower_refs: [], loo_refs: [], domain_refs: run.domain_refs, counts: { evidence: 0, artifacts: 1, proofs: 0, reports: 0 } } };
+  return { ...base, source, run_id: "a1b2c3", dependency_run_ids: [], parent_run_id: "NOT_CAPTURED", retry_lineage: run.retry_lineage, correlation_id: "corr_1234abcd" };
+}
+
 before(async () => {
   fabric = http.createServer((req, res) => {
     received.push({ method: req.method || "", path: req.url || "", headers: req.headers, verified: verify(req) });
-    const kind = Object.values(BRIDGED_SOURCES).find((s) => s.fabricPath === (req.url || "").split("?")[0])?.kind || "unknown";
+    const kind = Object.values(BRIDGED_SOURCES).find((s) => s.fabricPath === (req.url || "").split("?")[0])?.kind || liveRunKind(req.url || "") || "unknown";
     if (mode === "hang") return; // never answers
     if (!verify(req)) { res.writeHead(401, { "content-type": "application/json" }); return res.end(JSON.stringify({ detail: "Authentication required" })); }
     if (mode === "401") { res.writeHead(401, { "content-type": "application/json" }); return res.end("{}"); }
@@ -69,7 +104,7 @@ before(async () => {
     if (mode === "backend_error") { res.writeHead(503, { "content-type": "application/json" }); return res.end(JSON.stringify({ contract: "afcc.read.v1", kind, read_only: true, state: "BACKEND_ERROR", reason_code: "PROJECTION_READ_FAILED" })); }
     if (mode === "bad_state") { res.writeHead(200, { "content-type": "application/json" }); return res.end(JSON.stringify({ ...envelope(kind), state: "EVALUATING_NOW" })); }
     if (mode === "malformed") { res.writeHead(200, { "content-type": "application/json" }); return res.end(JSON.stringify({ contract: "afcc.read.v1", kind: "something_else", read_only: true, state: "AVAILABLE" })); }
-    const body: any = envelope(kind);
+    const body: any = ["runs_live", "run_detail", "run_timeline", "run_evidence", "run_dependencies"].includes(kind) ? liveRunBody(kind) : envelope(kind);
     if (mode === "leaky") {
       if (body.events) body.events[0].message = "Traceback (most recent call last): File \"/srv/x.py\" ValueError";
       if (body.agents) body.agents[0].name = `ADMIN_API_KEY=${ADMIN_KEY}`;
@@ -358,4 +393,76 @@ test("2A.3: canonical dev startup loads the local .env; production start does no
   assert.equal(pkg.scripts.dev, "tsx watch --env-file-if-exists=.env src/server.ts");
   assert.equal(pkg.scripts.start, "node dist/server.js", "production start unchanged: env comes from the platform, never a file");
   assert.doesNotMatch(JSON.stringify(pkg.scripts), /SHF_INTERNAL_SERVICE_KEYS|ADMIN_API_KEY|SECRET|KEY=/, "no secret material in scripts");
+});
+
+// ------------------------------------------------------------ AFCC-3 Phase 2
+
+test("AFCC-3 P2: action words are rejected as run ids before any Fabric call", async () => {
+  await withApp(userFor("shs_admin"), async (base) => {
+    for (const word of ["execute", "cancel", "revoke", "retry", "timeout", "EXECUTE"]) {
+      for (const suffix of ["", "/timeline"]) {
+        const res = await fetch(`${base}/agent-fabric/command/runs/${word}${suffix}`);
+        assert.equal(res.status, 400, word + suffix);
+        assert.equal((await res.json()).error.code, "INVALID_RUN_ID");
+      }
+    }
+  });
+  assert.equal(received.length, 0, "nothing reached Fabric");
+});
+
+test("AFCC-3 P2: lifecycle, execution, lineage and domain-ref blocks are minimized to the contract", async () => {
+  mode = "leaky";
+  await withApp(userFor("shs_admin"), async (base) => {
+    const detailRes = await fetch(`${base}/agent-fabric/command/runs/a1b2c3`);
+    const text = await detailRes.clone().text();
+    const { run } = await detailRes.json();
+    assert.deepEqual(run.state_derivation, { state: "COMPLETED", reason_code: "RUN_EVENT_TERMINAL", conflict: false });
+    assert.deepEqual(run.execution, { provider: "NOT_APPLICABLE", model: "NOT_APPLICABLE", adapter: "save_draft_artifact", agent_version: "NOT_CAPTURED", adapters: ["save_draft_artifact"], model_invoked: false });
+    assert.equal(run.initiator.initiator_type, "HUMAN");
+    assert.equal(run.initiator.entry_point, "fabric.runs.execute");
+    assert.ok(!("admin_key" in run.initiator));
+    assert.deepEqual(run.correlation, { id: "corr_1234abcd", source: "PLAN", continuity: "CONSISTENT" });
+    assert.equal(run.retry_count, "NOT_CAPTURED");
+    assert.equal(run.retry_lineage.retrying_state, "DEFERRED");
+    assert.equal(run.retry_lineage.retry_supported, false);
+    assert.deepEqual(run.domain_refs.truth_spine, { authority: "Truth Spine", state: "PUBLISHED", link_basis: "RUN_EVENT_RECORDED", refs: ["truth:claim_1"] });
+    assert.equal(run.domain_refs.reporting.state, "NOT_PUBLISHED");
+    assert.equal(run.approval.basis, "PLAN_APPROVAL_VERIFIED");
+    assert.equal(run.failure_summary, "[redacted]");
+    assert.equal(run.source.malformed_event_count, 2);
+    for (const leak of [ADMIN_KEY, "sk-live", "/srv/", "/Users/", "raw_record", "internal_path", "Traceback"]) assert.ok(!text.includes(leak), leak);
+
+    const timeline = await (await fetch(`${base}/agent-fabric/command/runs/a1b2c3/timeline`)).json();
+    assert.equal(timeline.events[0].provenance, "RECORDED");
+    assert.equal(timeline.events[0].source, "agent_fabric.run_events");
+    assert.ok(!("raw" in timeline.events[0]));
+
+    const evidence = await (await fetch(`${base}/agent-fabric/command/runs/a1b2c3/evidence`)).json();
+    assert.deepEqual(evidence.evidence.artifact_refs, [{ artifact_id: "draft_1", sha256: SHA }]);
+    assert.deepEqual(evidence.evidence.domain_refs.truth_spine.refs, ["truth:claim_1"]);
+
+    const deps = await (await fetch(`${base}/agent-fabric/command/runs/a1b2c3/dependencies`)).json();
+    assert.equal(deps.retry_lineage.root_run_id, "NOT_CAPTURED");
+
+    const list = await (await fetch(`${base}/agent-fabric/command/runs`)).json();
+    assert.deepEqual(list.lifecycle.deferred_states, ["QUEUED", "EXECUTING"]);
+    assert.equal(list.runs[0].execution.model_invoked, false);
+  });
+  assert.ok(received.every((r) => r.method === "GET" && r.verified));
+});
+
+test("AFCC-3 P3: verification status, approver and declared identity pass; credentials never do", async () => {
+  await withApp(userFor("shs_admin"), async (base) => {
+    const res = await fetch(`${base}/agent-fabric/command/runs/a1b2c3`);
+    const text = await res.clone().text();
+    const { run } = await res.json();
+    assert.equal(run.initiator.actor_verification, "VERIFIED");
+    assert.equal(run.initiator.organization_verification, "VERIFIED");
+    assert.deepEqual(run.initiator.authority, { authentication: "FABRIC_SESSION", role: "shs_admin", permission: "fabric.run.execute", scope: "PLATFORM_GLOBAL" });
+    assert.deepEqual(run.initiator.declared_identity, { actor_id: "ceo", organization_id: "org_victim", tenant_id: null, source_system: null, verification: "DECLARED" });
+    assert.equal(run.approval.decision.approver_actor_id, "u-approver");
+    assert.equal(run.approval.decision.actor_verification, "VERIFIED");
+    assert.equal(run.approval.decision.authority.permission, "fabric.plan.approve");
+    for (const leak of ["tok-should-not-pass", "csrf-should-not-pass", "ceo@victim.example", ADMIN_KEY]) assert.ok(!text.includes(leak), leak);
+  });
 });

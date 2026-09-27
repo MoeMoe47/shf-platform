@@ -13,7 +13,7 @@ import { signInternalRequest } from "../trusted-reporting/outbox.js";
 
 export const BRIDGE_CONTRACT = "afcc.bridge.v1";
 export const READ_CONTRACT = "afcc.read.v1";
-const FABRIC_READ_BASE = "/api/v1-command-center/agent-fabric";
+export const FABRIC_READ_BASE = "/api/v1-command-center/agent-fabric";
 const DEFAULT_TIMEOUT_MS = 10_000;
 
 // SHS route segment -> Fabric projection. Fixed; never derived from the request.
@@ -33,6 +33,10 @@ const VALID_STATES: Record<string, string[]> = {
   watchtower: ["AVAILABLE", "NOT_YET_EVALUATED"],
   infrastructure: ["AVAILABLE", "NOT_YET_VERIFIED"],
   observability: ["AVAILABLE", "NOT_YET_VERIFIED"],
+  run_detail: ["AVAILABLE", "NOT_AVAILABLE"],
+  run_timeline: ["AVAILABLE", "NOT_AVAILABLE"],
+  run_evidence: ["AVAILABLE", "NOT_AVAILABLE"],
+  run_dependencies: ["AVAILABLE", "NOT_AVAILABLE"],
 };
 
 export type BridgedSource = keyof typeof BRIDGED_SOURCES;
@@ -121,6 +125,10 @@ const code = (v: unknown) => (v === null || v === undefined ? null : safeReasonC
 const staleness = (v: unknown) => {
   const s = obj(v);
   return s ? { age_seconds: num(s.age_seconds), oldest_age_seconds: num(s.oldest_age_seconds), threshold_seconds: num(s.threshold_seconds), threshold: code(s.threshold) } : null;
+};
+const freshness = (v: unknown) => {
+  const s = obj(v);
+  return s ? { last_updated: safeText(s.last_updated), captured_at: safeText(s.captured_at), threshold: code(s.threshold) } : null;
 };
 const safeSource = (v: unknown) => (typeof v === "string" && /^contracts\/[\w./-]+\.json$/.test(v) && !v.includes("..") ? v : null);
 
@@ -225,7 +233,197 @@ const MINIMIZE: Record<string, (p: Record<string, unknown>) => Record<string, un
       }),
     };
   },
+  runs_live(p) {
+    if (!Array.isArray(p.runs)) return null;
+    return {
+      count: num(p.count),
+      source: commandSource(p.source),
+      freshness: freshness(p.freshness),
+      lifecycle: lifecycleVocabulary(p.lifecycle),
+      runs: objects(p.runs).map(liveRun),
+    };
+  },
+  run_detail(p) {
+    if (p.state === "NOT_AVAILABLE") return { run_id: safeText(p.run_id), source: commandSource(p.source) };
+    const run = obj(p.run);
+    return run ? { source: commandSource(p.source), run: liveRun(run) } : null;
+  },
+  run_timeline(p) {
+    if (!Array.isArray(p.events)) return null;
+    return {
+      run_id: safeText(p.run_id),
+      source: commandSource(p.source),
+      events: objects(p.events).map((e) => ({
+        event_id: safeText(e.event_id),
+        run_id: safeText(e.run_id),
+        event_type: safeText(e.event_type),
+        from_state: safeText(e.from_state),
+        to_state: safeText(e.to_state),
+        occurred_at: safeText(e.occurred_at),
+        actor_ref: safeText(e.actor_ref),
+        authority_ref: safeText(e.authority_ref),
+        reason_code: safeText(e.reason_code),
+        reason_summary: safeText(e.reason_summary),
+        evidence_refs: list(e.evidence_refs),
+        policy_refs: list(e.policy_refs),
+        correlation_id: safeText(e.correlation_id),
+        source: safeText(e.source),
+        provenance: safeText(e.provenance),
+      })),
+    };
+  },
+  run_evidence(p) {
+    if (p.state === "NOT_AVAILABLE") return { run_id: safeText(p.run_id), source: commandSource(p.source) };
+    const evidence = obj(p.evidence);
+    return evidence ? {
+      run_id: safeText(p.run_id),
+      source: commandSource(p.source),
+      evidence: {
+        evidence_refs: list(evidence.evidence_refs),
+        artifact_refs: objects(evidence.artifact_refs).map(artifactRef),
+        proof_refs: list(evidence.proof_refs),
+        report_refs: list(evidence.report_refs),
+        truth_refs: list(evidence.truth_refs),
+        watchtower_refs: list(evidence.watchtower_refs),
+        loo_refs: list(evidence.loo_refs),
+        domain_refs: domainRefs(evidence.domain_refs),
+        counts: pick(obj(evidence.counts) || {}, ["evidence", "artifacts", "proofs", "reports"], num),
+      },
+    } : null;
+  },
+  run_dependencies(p) {
+    if (p.state === "NOT_AVAILABLE") return { run_id: safeText(p.run_id), source: commandSource(p.source) };
+    return {
+      run_id: safeText(p.run_id),
+      source: commandSource(p.source),
+      dependency_run_ids: list(p.dependency_run_ids),
+      parent_run_id: safeText(p.parent_run_id),
+      retry_lineage: retryLineage(p.retry_lineage),
+      correlation_id: safeText(p.correlation_id),
+    };
+  },
 };
+
+function commandSource(v: unknown) {
+  const s = obj(v);
+  return s ? {
+    authority: safeText(s.authority),
+    stores: list(s.stores),
+    projection: safeText(s.projection),
+    read_only: bool(s.read_only),
+    record_type: safeText(s.record_type),
+    malformed_event_count: num(s.malformed_event_count),
+    unattributed_event_count: num(s.unattributed_event_count),
+  } : null;
+}
+
+const countOrCode = (v: unknown) => (typeof v === "number" && Number.isInteger(v) && v >= 0 ? v : safeText(v));
+
+function lifecycleVocabulary(v: unknown) {
+  const l = obj(v);
+  return l ? { supported_states: list(l.supported_states), deferred_states: list(l.deferred_states) } : null;
+}
+
+function retryLineage(v: unknown) {
+  const r = obj(v);
+  return r ? {
+    ...pick(r, ["retrying_state", "parent_run_id", "root_run_id", "retry_of_run_id"]),
+    retry_supported: bool(r.retry_supported),
+    retry_count: countOrCode(r.retry_count),
+    same_plan_run_ids: list(r.same_plan_run_ids),
+  } : null;
+}
+
+function domainRefs(v: unknown) {
+  const d = obj(v);
+  if (!d) return null;
+  const one = (x: unknown) => {
+    const r = obj(x);
+    return r ? { ...pick(r, ["authority", "state", "link_basis"]), refs: list(r.refs) } : null;
+  };
+  const reporting = one(d.reporting);
+  return {
+    truth_spine: one(d.truth_spine),
+    watchtower: one(d.watchtower),
+    loo: one(d.loo),
+    reporting: reporting ? { ...reporting, proof_refs: list(obj(d.reporting)?.proof_refs) } : null,
+  };
+}
+
+function artifactRef(a: Record<string, unknown>) {
+  return { artifact_id: safeText(a.artifact_id), sha256: hash(a.sha256) };
+}
+
+function liveRun(r: Record<string, unknown>) {
+  const agent = obj(r.agent) || {};
+  const operation = obj(r.operation) || {};
+  const approval = obj(r.approval) || {};
+  const initiator = obj(r.initiator) || {};
+  const policy = obj(r.policy) || {};
+  return {
+    ...pick(r, ["run_id", "work_order_id", "tenant_id", "organization_id", "current_state", "created_at", "queued_at", "started_at", "completed_at", "failed_at", "cancelled_at", "timed_out_at", "last_transition_at", "result", "failure_code", "failure_summary", "provider", "model", "adapter", "parent_run_id", "correlation_id"]),
+    retry_count: countOrCode(r.retry_count),
+    initiator: identityView(initiator),
+    created_by: r.created_by === undefined ? undefined : (obj(r.created_by) ? identityView(obj(r.created_by) || {}) : safeText(r.created_by)),
+    state_derivation: stateDerivation(r.state_derivation),
+    execution: execution(r.execution),
+    correlation: pick(obj(r.correlation) || {}, ["id", "source", "continuity"]),
+    retry_lineage: retryLineage(r.retry_lineage),
+    domain_refs: domainRefs(r.domain_refs),
+    event_count: num(r.event_count),
+    agent: pick(agent, ["agent_id", "name", "layer", "version"]),
+    operation: pick(operation, ["type", "plan_id"]),
+    approval: { ...pick(approval, ["state", "authority", "plan_status", "basis"]), decision: approvalDecision(approval.decision), required: typeof approval.required === "boolean" ? approval.required : safeText(approval.required) },
+    policy: { policy_ref: safeText(policy.policy_ref), gate_decision_refs: list(policy.gate_decision_refs) },
+    evidence_refs: list(r.evidence_refs),
+    artifact_refs: objects(r.artifact_refs).map(artifactRef),
+    proof_refs: list(r.proof_refs),
+    report_refs: list(r.report_refs),
+    policy_decision_refs: list(r.policy_decision_refs),
+    watchtower_refs: list(r.watchtower_refs),
+    truth_refs: list(r.truth_refs),
+    loo_refs: list(r.loo_refs),
+    dependency_run_ids: list(r.dependency_run_ids),
+    source: commandSource(r.source),
+    freshness: freshness(r.freshness),
+  };
+}
+
+// AFCC-3 Phase 3: identity is shown with its verification status. Only
+// allowlisted fields pass; tokens, emails and credentials never do.
+function identityView(i: Record<string, unknown>) {
+  const declared = obj(i.declared_identity);
+  return {
+    ...pick(i, ["actor_id", "actor_type", "initiator_type", "actor_verification", "organization_id", "organization_verification", "tenant_id", "tenant_verification", "source_system", "source_system_verification", "entry_point", "execution_system"]),
+    authority: pick(obj(i.authority) || {}, ["authentication", "role", "permission", "scope"]),
+    declared_identity: declared ? pick(declared, ["actor_id", "organization_id", "tenant_id", "source_system", "verification"]) : safeText(i.declared_identity),
+  };
+}
+
+function approvalDecision(v: unknown) {
+  const d = obj(v);
+  if (!d) return safeText(v);
+  const declared = obj(d.declared_identity);
+  return {
+    ...pick(d, ["decision", "approver_actor_id", "approver_type", "actor_verification", "organization_id", "organization_verification", "tenant_id", "tenant_verification", "decided_at", "reason", "correlation_id", "authority_ref", "provenance"]),
+    authority: pick(obj(d.authority) || {}, ["authentication", "role", "permission", "scope"]),
+    declared_identity: declared ? pick(declared, ["actor_id", "organization_id", "tenant_id", "source_system", "verification"]) : safeText(d.declared_identity),
+  };
+}
+
+function stateDerivation(v: unknown) {
+  const s = obj(v);
+  return s ? { state: safeText(s.state), reason_code: code(s.reason_code), conflict: bool(s.conflict) } : null;
+}
+
+function execution(v: unknown) {
+  const e = obj(v);
+  return e ? {
+    ...pick(e, ["provider", "model", "adapter", "agent_version"]),
+    adapters: list(e.adapters),
+    model_invoked: typeof e.model_invoked === "boolean" ? e.model_invoked : safeText(e.model_invoked),
+  } : null;
+}
 
 // Last-recorded verification result. Reading never runs a verifier.
 function verification(p: Record<string, unknown>): Record<string, unknown> | null {
@@ -261,15 +459,23 @@ export async function readFabricSource(
   options: { fetchImpl?: FetchLike; config?: BridgeConfig | null; sign?: typeof signInternalRequest } = {},
 ): Promise<BridgeSuccess | BridgeFailure> {
   const spec = BRIDGED_SOURCES[source];
+  return readFabricProjection(spec.kind, spec.fabricPath, options);
+}
+
+export async function readFabricProjection(
+  kind: string,
+  fabricPath: string,
+  options: { fetchImpl?: FetchLike; config?: BridgeConfig | null; sign?: typeof signInternalRequest } = {},
+): Promise<BridgeSuccess | BridgeFailure> {
   const config = options.config === undefined ? bridgeConfig() : options.config;
-  if (!config) return fail(spec.kind, "BRIDGE_NOT_CONFIGURED", "shs", "FABRIC_URL_MISSING");
+  if (!config) return fail(kind, "BRIDGE_NOT_CONFIGURED", "shs", "FABRIC_URL_MISSING");
 
   let headers: Record<string, string>;
   try {
-    headers = (options.sign || signInternalRequest)("GET", spec.fabricPath, {});
+    headers = (options.sign || signInternalRequest)("GET", fabricPath, {});
   } catch (error: any) {
     // Credential names only; never the value.
-    return fail(spec.kind, "BRIDGE_NOT_CONFIGURED", "shs", String(error?.message || "").toUpperCase() || "SERVICE_CREDENTIALS_MISSING");
+    return fail(kind, "BRIDGE_NOT_CONFIGURED", "shs", String(error?.message || "").toUpperCase() || "SERVICE_CREDENTIALS_MISSING");
   }
 
   const fetchImpl = options.fetchImpl || (fetch as unknown as FetchLike);
@@ -278,13 +484,13 @@ export async function readFabricSource(
   const timer = setTimeout(() => { timedOut = true; controller.abort(); }, config.timeoutMs);
   let response: { status: number; text(): Promise<string> };
   try {
-    response = await fetchImpl(`${config.fabricBaseUrl}${spec.fabricPath}`, {
+    response = await fetchImpl(`${config.fabricBaseUrl}${fabricPath}`, {
       method: "GET",
       headers: { Accept: "application/json", ...headers },
       signal: controller.signal,
     });
   } catch {
-    return fail(spec.kind, "BACKEND_UNAVAILABLE", "shs_to_fabric", timedOut ? "FABRIC_TIMEOUT" : "FABRIC_UNREACHABLE", timedOut ? 504 : 502);
+    return fail(kind, "BACKEND_UNAVAILABLE", "shs_to_fabric", timedOut ? "FABRIC_TIMEOUT" : "FABRIC_UNREACHABLE", timedOut ? 504 : 502);
   } finally {
     clearTimeout(timer);
   }
@@ -297,26 +503,27 @@ export async function readFabricSource(
     payload = null;
   }
 
-  if (response.status === 401 || response.status === 403) return fail(spec.kind, "BRIDGE_REJECTED", "shs_to_fabric", `FABRIC_HTTP_${response.status}`);
+  if (response.status === 401 || response.status === 403) return fail(kind, "BRIDGE_REJECTED", "shs_to_fabric", `FABRIC_HTTP_${response.status}`);
   const isEnvelope = payload && typeof payload === "object" && !Array.isArray(payload);
   if (response.status >= 500 || (isEnvelope && payload.state === "BACKEND_ERROR")) {
     const reason = isEnvelope && payload.contract === READ_CONTRACT ? safeReasonCode(payload.reason_code, `FABRIC_HTTP_${response.status}`) : `FABRIC_HTTP_${response.status}`;
-    return fail(spec.kind, "FABRIC_ERROR", "fabric", reason);
+    return fail(kind, "FABRIC_ERROR", "fabric", reason);
   }
-  if (response.status !== 200) return fail(spec.kind, "FABRIC_ERROR", "fabric", `FABRIC_HTTP_${response.status}`);
-  const validStates = VALID_STATES[spec.kind] || ["AVAILABLE"];
-  if (!isEnvelope || payload.contract !== READ_CONTRACT || payload.kind !== spec.kind || payload.read_only !== true || !validStates.includes(payload.state)) {
-    return fail(spec.kind, "INVALID_RESPONSE", "fabric", "CONTRACT_MISMATCH");
+  if (response.status !== 200) return fail(kind, "FABRIC_ERROR", "fabric", `FABRIC_HTTP_${response.status}`);
+  const validStates = VALID_STATES[kind] || ["AVAILABLE"];
+  if (!isEnvelope || payload.contract !== READ_CONTRACT || payload.kind !== kind || payload.read_only !== true || !validStates.includes(payload.state)) {
+    return fail(kind, "INVALID_RESPONSE", "fabric", "CONTRACT_MISMATCH");
   }
-  const minimized = MINIMIZE[spec.kind](payload);
-  if (!minimized) return fail(spec.kind, "INVALID_RESPONSE", "fabric", "CONTRACT_MISMATCH");
+  const minimize = MINIMIZE[kind];
+  const minimized = minimize ? minimize(payload) : null;
+  if (!minimized) return fail(kind, "INVALID_RESPONSE", "fabric", "CONTRACT_MISMATCH");
 
   return {
     ok: true,
     status: 200,
     body: {
       contract: READ_CONTRACT,
-      kind: spec.kind,
+      kind,
       read_only: true,
       state: payload.state,
       ...(payload.reason_code ? { reason_code: safeReasonCode(payload.reason_code) } : {}),

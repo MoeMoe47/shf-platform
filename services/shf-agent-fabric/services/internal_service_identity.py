@@ -4,6 +4,7 @@ import hashlib
 import hmac
 import json
 import os
+import re
 import time
 from dataclasses import dataclass
 from typing import Any, Mapping
@@ -92,6 +93,8 @@ COMMAND_READ_PATHS = frozenset(
         "/api/v1-command-center/agent-fabric/agents/readiness",
         "/api/v1-command-center/agent-fabric/gate",
         "/api/v1-command-center/agent-fabric/runs/recent",
+        # AFCC-3: canonical Live Operations list projection.
+        "/api/v1-command-center/agent-fabric/runs",
         # AFCC-2A.3: the existing AFCC-2A safe read projections (persisted state
         # and last-recorded verification results only; they never evaluate or verify).
         "/api/v1-command-center/agent-fabric/watchtower",
@@ -100,10 +103,26 @@ COMMAND_READ_PATHS = frozenset(
     }
 )
 
+COMMAND_READ_PATH_PATTERNS = (
+    re.compile(r"^/api/v1-command-center/agent-fabric/runs/[A-Za-z0-9_.:-]{1,128}(?:/(?:timeline|evidence|dependencies))?$"),
+)
+
+
+def is_command_read_path(path: str) -> bool:
+    text = str(path or "")
+    if text in COMMAND_READ_PATHS:
+        return True
+    if not any(pattern.match(text) for pattern in COMMAND_READ_PATH_PATTERNS):
+        return False
+    # AFCC-3 Phase 2: action words (execute, cancel, revoke, ...) are never run ids.
+    from fabric.run_lifecycle import is_valid_run_id
+
+    return is_valid_run_id(text.split("/runs/", 1)[1].split("/", 1)[0])
+
 
 def authenticate_internal_read_request(*, method: str, path: str, headers: Mapping[str, str]) -> InternalServicePrincipal:
     service_id, key_id = _verify_signed_request(method=method, path=path, body={}, headers=headers)
-    if method.upper() != "GET" or path not in COMMAND_READ_PATHS:
+    if method.upper() != "GET" or not is_command_read_path(path):
         raise ValueError("invalid_internal_service_audience")
     return InternalServicePrincipal(service_id=service_id, permission=COMMAND_READ_PERMISSION, key_id=key_id)
 

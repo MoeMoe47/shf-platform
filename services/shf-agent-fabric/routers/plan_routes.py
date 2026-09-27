@@ -5,10 +5,28 @@ import secrets
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from fastapi import APIRouter, HTTPException
+from datetime import datetime, timezone
+
+from fastapi import APIRouter, Body, Depends, Header, HTTPException
 from pydantic import BaseModel, Field
 
-from fabric.plan_store import save_plan, load_plan, list_recent_plans, mark_plan_status
+from auth.audit import record_auth_event
+from auth.dependencies import require_permission
+from auth.permissions import FABRIC_PLAN_APPROVE, FABRIC_PLAN_CREATE
+from fabric.plan_store import PlanDecisionError, list_recent_plans, load_plan, record_approval_decision, save_plan
+from fabric.run_identity import (
+    VERIFIED,
+    VerifiedActor,
+    actor_may_act_on,
+    declared_identity,
+    require_fabric_actor,
+    verified_identity_fields,
+)
+from fabric.run_lifecycle import is_valid_id, resolve_correlation_id
+
+# Reading plans exposes approver/creator identity; it needs the Command Center read grant.
+PLAN_READ_PERMISSION = "bos.governance.read"
+REASON_MAX_CHARS = 500
 
 router = APIRouter()
 
@@ -550,11 +568,16 @@ def _loo_schema_and_example(north_star: dict) -> dict:
 
 
 @router.post("/plan")
-def create_plan(req: PlanRequest):
+def create_plan(
+    req: PlanRequest,
+    x_correlation_id: str | None = Header(default=None, alias="X-Correlation-Id"),
+    actor: VerifiedActor = Depends(require_fabric_actor(FABRIC_PLAN_CREATE)),
+):
     agent = _load_agent_meta(req.agentName)
     policy = agent.get("policy") or {}
     plan_id = secrets.token_hex(8)
     request_id = secrets.token_hex(6)
+    correlation = resolve_correlation_id(incoming=x_correlation_id)
 
     user_task = ""
     if isinstance(req.input, dict):
@@ -580,9 +603,16 @@ def create_plan(req: PlanRequest):
     else:
         draft_body = {"echo": req.input}
 
+    creator = verified_identity_fields(actor, prefix="creator")
     plan = {
         "planId": plan_id,
         "requestId": request_id,
+        "createdAt": datetime.now(timezone.utc).isoformat(),
+        "correlationId": correlation["correlation_id"],
+        "correlationSource": correlation["correlation_source"],
+        # AFCC-3 Phase 3: verified creator from the session; body claims are only DECLARED.
+        "organization_id": creator["organization_id"],
+        "createdBy": creator,
         "agent": {
             "name": agent.get("name"),
             "agentId": agent.get("agentId"),
@@ -611,35 +641,95 @@ def create_plan(req: PlanRequest):
             }
         ],
     }
+    declared = declared_identity(req.input)
+    if declared:
+        plan["declared_identity"] = declared
 
     save_plan(plan)
-    return {"ok": True, "planId": plan_id, "requestId": request_id}
+    record_auth_event("fabric_plan_created", user_id=actor.actor_id, role=actor.role, result="allowed",
+                      metadata={"plan_id": plan_id, "correlation_id": correlation["correlation_id"], "permission": actor.permission})
+    return {"ok": True, "planId": plan_id, "requestId": request_id, "correlationId": correlation["correlation_id"]}
 
 
 @router.get("/plans/recent")
-def recent_plans(limit: int = 10):
+def recent_plans(limit: int = 10, _session=Depends(require_permission(PLAN_READ_PERMISSION))):
     return {"ok": True, "plans": list_recent_plans(limit)}
 
 
 @router.get("/plan/{plan_id}")
-def get_plan(plan_id: str):
-    plan = load_plan(plan_id)
+def get_plan(plan_id: str, _session=Depends(require_permission(PLAN_READ_PERMISSION))):
+    plan = load_plan(plan_id) if is_valid_id(plan_id) else None
     if not plan:
         raise HTTPException(status_code=404, detail="Plan not found")
     return {"ok": True, "plan": plan}
 
 
-@router.post("/plan/{plan_id}/approve")
-def approve_plan(plan_id: str):
-    ok = mark_plan_status(plan_id, "APPROVED")
-    if not ok:
+def _has_attributable_decision(plan: Dict[str, Any]) -> bool:
+    decision = plan.get("approvalDecision")
+    return isinstance(decision, dict) and (decision.get("identity_verification") or {}).get("actor") == VERIFIED
+
+
+def _decide(plan_id: str, decision: str, actor: VerifiedActor, body: Optional[Dict[str, Any]], incoming_correlation: Optional[str]):
+    if not is_valid_id(plan_id):
         raise HTTPException(status_code=404, detail="Plan not found")
-    return {"ok": True, "planId": plan_id, "status": "APPROVED"}
+    body = body if isinstance(body, dict) else {}
+    reason = body.get("reason")
+    reason = reason.strip()[:REASON_MAX_CHARS] if isinstance(reason, str) and reason.strip() else None
+
+    def may_decide(plan: Dict[str, Any]) -> Optional[str]:
+        if not actor_may_act_on(actor, plan):
+            return "PLAN_NOT_FOUND"  # never confirm another organization's plan exists
+        status = str(plan.get("status") or "").upper()
+        if status == "DONE":
+            return "PLAN_ALREADY_EXECUTED"
+        if not bool(plan.get("approvalRequired", True)):
+            return "APPROVAL_NOT_REQUIRED"
+        if _has_attributable_decision(plan):
+            return "DECISION_ALREADY_RECORDED"
+        return None
+
+    existing = load_plan(plan_id)
+    correlation = resolve_correlation_id(plan_correlation_id=(existing or {}).get("correlationId"), incoming=incoming_correlation)
+    record: Dict[str, Any] = {
+        "decision": decision,
+        "plan_id": plan_id,
+        "decided_at": datetime.now(timezone.utc).isoformat(),
+        "reason": reason,
+        "correlation_id": correlation["correlation_id"],
+        "correlation_source": correlation["correlation_source"],
+        **verified_identity_fields(actor, prefix="approver"),
+    }
+    declared = declared_identity(body)
+    if declared:
+        record["declared_identity"] = declared
+    try:
+        record_approval_decision(plan_id, record, may_decide)
+    except PlanDecisionError as exc:
+        record_auth_event("fabric_plan_decision_refused", user_id=actor.actor_id, role=actor.role, result="denied",
+                          metadata={"plan_id": plan_id, "decision": decision, "reason": exc.code})
+        if exc.code == "PLAN_NOT_FOUND":
+            raise HTTPException(status_code=404, detail="Plan not found")
+        raise HTTPException(status_code=409, detail=exc.code)
+    record_auth_event("fabric_plan_decision_recorded", user_id=actor.actor_id, role=actor.role, result="allowed",
+                      metadata={"plan_id": plan_id, "decision": decision, "correlation_id": correlation["correlation_id"], "permission": actor.permission})
+    return {"ok": True, "planId": plan_id, "status": decision, "decidedBy": actor.actor_id, "correlationId": correlation["correlation_id"]}
+
+
+@router.post("/plan/{plan_id}/approve")
+def approve_plan(
+    plan_id: str,
+    body: Optional[Dict[str, Any]] = Body(default=None),
+    x_correlation_id: str | None = Header(default=None, alias="X-Correlation-Id"),
+    actor: VerifiedActor = Depends(require_fabric_actor(FABRIC_PLAN_APPROVE)),
+):
+    return _decide(plan_id, "APPROVED", actor, body, x_correlation_id)
 
 
 @router.post("/plan/{plan_id}/reject")
-def reject_plan(plan_id: str):
-    ok = mark_plan_status(plan_id, "REJECTED")
-    if not ok:
-        raise HTTPException(status_code=404, detail="Plan not found")
-    return {"ok": True, "planId": plan_id, "status": "REJECTED"}
+def reject_plan(
+    plan_id: str,
+    body: Optional[Dict[str, Any]] = Body(default=None),
+    x_correlation_id: str | None = Header(default=None, alias="X-Correlation-Id"),
+    actor: VerifiedActor = Depends(require_fabric_actor(FABRIC_PLAN_APPROVE)),
+):
+    return _decide(plan_id, "REJECTED", actor, body, x_correlation_id)

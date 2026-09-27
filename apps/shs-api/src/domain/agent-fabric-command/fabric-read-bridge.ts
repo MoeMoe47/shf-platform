@@ -240,13 +240,14 @@ const MINIMIZE: Record<string, (p: Record<string, unknown>) => Record<string, un
       source: commandSource(p.source),
       freshness: freshness(p.freshness),
       lifecycle: lifecycleVocabulary(p.lifecycle),
+      execution_safety: executionSafety(p.execution_safety),
       runs: objects(p.runs).map(liveRun),
     };
   },
   run_detail(p) {
     if (p.state === "NOT_AVAILABLE") return { run_id: safeText(p.run_id), source: commandSource(p.source) };
     const run = obj(p.run);
-    return run ? { source: commandSource(p.source), run: liveRun(run) } : null;
+    return run ? { source: commandSource(p.source), run: liveRun(run), execution_safety: executionSafety(p.execution_safety) } : null;
   },
   run_timeline(p) {
     if (!Array.isArray(p.events)) return null;
@@ -366,6 +367,7 @@ function liveRun(r: Record<string, unknown>) {
     initiator: identityView(initiator),
     created_by: r.created_by === undefined ? undefined : (obj(r.created_by) ? identityView(obj(r.created_by) || {}) : safeText(r.created_by)),
     state_derivation: stateDerivation(r.state_derivation),
+    execution_lease: executionLease(r.execution_lease),
     execution: execution(r.execution),
     correlation: pick(obj(r.correlation) || {}, ["id", "source", "continuity"]),
     retry_lineage: retryLineage(r.retry_lineage),
@@ -409,6 +411,23 @@ function approvalDecision(v: unknown) {
     authority: pick(obj(d.authority) || {}, ["authentication", "role", "permission", "scope"]),
     declared_identity: declared ? pick(declared, ["actor_id", "organization_id", "tenant_id", "source_system", "verification"]) : safeText(d.declared_identity),
   };
+}
+
+// AFCC-3 Phase 4: the recorded execution lease. Holder process details are never forwarded.
+function executionLease(v: unknown) {
+  const l = obj(v);
+  return l ? {
+    ...pick(l, ["status", "lease_expires_at", "heartbeat", "scope", "evaluated_at"]),
+    lease_seconds: countOrCode(l.lease_seconds),
+    orphan_recorded: bool(l.orphan_recorded),
+  } : null;
+}
+
+// AFCC-3 Phase 4.1: the execution claim is replica-local. This block keeps that
+// visible to operators; it never upgrades to distributed assurance.
+function executionSafety(v: unknown) {
+  const s = obj(v);
+  return s ? pick(s, ["level", "local_single_flight", "distributed_single_flight", "scope", "production_blocker", "summary"]) : null;
 }
 
 function stateDerivation(v: unknown) {

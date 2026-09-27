@@ -664,6 +664,16 @@ def get_plan(plan_id: str, _session=Depends(require_permission(PLAN_READ_PERMISS
     return {"ok": True, "plan": plan}
 
 
+def _verified_creator(plan: Dict[str, Any]) -> Optional[str]:
+    """The plan creator, only if the writer recorded it from an authenticated session."""
+    created_by = plan.get("createdBy")
+    if not isinstance(created_by, dict):
+        return None
+    verification = created_by.get("identity_verification") if isinstance(created_by.get("identity_verification"), dict) else {}
+    creator = created_by.get("creator_actor_id")
+    return creator if verification.get("actor") == VERIFIED and is_valid_id(creator) else None
+
+
 def _has_attributable_decision(plan: Dict[str, Any]) -> bool:
     decision = plan.get("approvalDecision")
     return isinstance(decision, dict) and (decision.get("identity_verification") or {}).get("actor") == VERIFIED
@@ -679,6 +689,12 @@ def _decide(plan_id: str, decision: str, actor: VerifiedActor, body: Optional[Di
     def may_decide(plan: Dict[str, Any]) -> Optional[str]:
         if not actor_may_act_on(actor, plan):
             return "PLAN_NOT_FOUND"  # never confirm another organization's plan exists
+        # AFCC-3 Phase 4.1, Policy B (SHS convention, e.g. AI Governance
+        # SELF_APPROVAL_DENIED): the verified creator may neither approve nor
+        # reject their own plan. Both identities come from sessions, never bodies.
+        # Legacy plans with no verified creator cannot be compared and stay decidable.
+        if _verified_creator(plan) == actor.actor_id:
+            return "SELF_APPROVAL_DENIED"
         status = str(plan.get("status") or "").upper()
         if status == "DONE":
             return "PLAN_ALREADY_EXECUTED"
@@ -709,6 +725,8 @@ def _decide(plan_id: str, decision: str, actor: VerifiedActor, body: Optional[Di
                           metadata={"plan_id": plan_id, "decision": decision, "reason": exc.code})
         if exc.code == "PLAN_NOT_FOUND":
             raise HTTPException(status_code=404, detail="Plan not found")
+        if exc.code == "SELF_APPROVAL_DENIED":
+            raise HTTPException(status_code=403, detail="SELF_APPROVAL_DENIED")
         raise HTTPException(status_code=409, detail=exc.code)
     record_auth_event("fabric_plan_decision_recorded", user_id=actor.actor_id, role=actor.role, result="allowed",
                       metadata={"plan_id": plan_id, "decision": decision, "correlation_id": correlation["correlation_id"], "permission": actor.permission})

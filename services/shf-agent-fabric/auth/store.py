@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from auth.config import environment
 from auth.passwords import hash_password, verify_password
 from auth.permissions import ROLE_CLIENT, ROLE_CLIENT_ADMIN, ROLE_SHS_ADMIN, normalize_role
 
@@ -56,8 +57,24 @@ _USERS = {
 }
 
 
+# AFCC-3 Phase 4.1: a second platform operator so plan creation and approval can
+# be done by different people (creator != approver). Development/test only: it
+# is resolved at lookup time and never exists when the environment is production
+# or anything not explicitly listed here.
+DEV_ONLY_ENVIRONMENTS = frozenset({"development", "test", "local"})
+_DEV_ONLY_USERS = {
+    "approver@demo.shs": _fixture_user("demo_shs_approver", "approver@demo.shs", "Casey Brooks", ROLE_SHS_ADMIN, organization_id=None),
+}
+
+
+def _active_users() -> dict[str, AuthUser]:
+    if environment() in DEV_ONLY_ENVIRONMENTS:
+        return {**_USERS, **_DEV_ONLY_USERS}
+    return _USERS
+
+
 def find_user_by_email(email: str | None) -> AuthUser | None:
-    return _USERS.get(str(email or "").strip().lower())
+    return _active_users().get(str(email or "").strip().lower())
 
 
 def authenticate_user(email: str | None, password: str | None) -> AuthUser | None:
@@ -81,6 +98,6 @@ def list_sanitized_users() -> list[dict]:
             "role": user.role,
             "disabled": user.disabled,
         }
-        for user in _USERS.values()
+        for user in _active_users().values()
     ]
 

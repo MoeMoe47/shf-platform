@@ -13,16 +13,20 @@ new records; the Command Center read projection imports the derivation rules.
 
 import re
 import secrets
+from datetime import datetime, timezone
 from typing import Any, Dict, Iterable, List, Optional
 
 NOT_CAPTURED = "NOT_CAPTURED"
 NOT_APPLICABLE = "NOT_APPLICABLE"
 UNKNOWN = "UNKNOWN"
 
-RUN_EVENT_SCHEMA = "fabric.run_event.v3"
-# v2: Phase 2 single terminal event. v3: Phase 3 start + terminal events with verified identity.
-RECORDED_SCHEMAS = frozenset({"fabric.run_event.v2", RUN_EVENT_SCHEMA})
+RUN_EVENT_SCHEMA = "fabric.run_event.v4"
+# v2: Phase 2 single terminal event. v3: Phase 3 start + terminal events with verified
+# identity. v4: Phase 4 adds the execution lease, TIMED_OUT and recorded orphaning.
+RECORDED_SCHEMAS = frozenset({"fabric.run_event.v2", "fabric.run_event.v3", RUN_EVENT_SCHEMA})
 START_EVENT_TYPE = "run.execution_started"
+TIMED_OUT_EVENT_TYPE = "run.timed_out"
+LEASE_EXPIRED_EVENT_TYPE = "run.lease_expired"
 
 # Live lifecycle vocabulary. Anything else found in a source record is treated
 # as unsupported and derives UNKNOWN; it is never passed through.
@@ -30,13 +34,17 @@ APPROVAL_REQUIRED = "APPROVAL_REQUIRED"
 APPROVED = "APPROVED"
 APPROVAL_DENIED = "APPROVAL_DENIED"
 EXECUTING = "EXECUTING"
+ORPHANED = "ORPHANED"
 COMPLETED = "COMPLETED"
 FAILED = "FAILED"
-SUPPORTED_STATES = frozenset({APPROVAL_REQUIRED, APPROVED, APPROVAL_DENIED, EXECUTING, COMPLETED, FAILED})
-TERMINAL_STATES = frozenset({COMPLETED, FAILED})
+TIMED_OUT = "TIMED_OUT"
+SUPPORTED_STATES = frozenset({APPROVAL_REQUIRED, APPROVED, APPROVAL_DENIED, EXECUTING, ORPHANED, COMPLETED, FAILED, TIMED_OUT})
+TERMINAL_STATES = frozenset({COMPLETED, FAILED, TIMED_OUT})
+# States that only a specific recorded event may assert.
+_EVENT_GATED_STATES = {EXECUTING: START_EVENT_TYPE, TIMED_OUT: TIMED_OUT_EVENT_TYPE, ORPHANED: LEASE_EXPIRED_EVENT_TYPE}
 
 # Deferred until real events exist. Listed so the contract can say so explicitly.
-DEFERRED_STATES = ("REQUESTED", "QUEUED", "WAITING", "RETRYING", "CANCELLED", "TIMED_OUT", "REVOKED")
+DEFERRED_STATES = ("REQUESTED", "QUEUED", "WAITING", "RETRYING", "CANCEL_REQUESTED", "CANCELLED", "REVOKED")
 
 _SUCCESS_OUTCOMES = frozenset({"ok", "success", "completed", "done"})
 _FAILURE_OUTCOMES = frozenset({"error", "failed", "fail"})
@@ -99,10 +107,10 @@ def event_state_claim(event: Dict[str, Any]) -> str:
         if isinstance(value, str) and value.strip():
             explicit = value.strip().upper()
             break
-    if explicit == EXECUTING:
-        # EXECUTING is live only when it comes from a recorded start event.
-        is_start = event.get("event_type") == START_EVENT_TYPE and event.get("schema_version") in RECORDED_SCHEMAS
-        return EXECUTING if is_start else "UNSUPPORTED"
+    if explicit in _EVENT_GATED_STATES:
+        # EXECUTING / TIMED_OUT / ORPHANED are live only from their own recorded event.
+        recorded = event.get("event_type") == _EVENT_GATED_STATES[explicit] and event.get("schema_version") in RECORDED_SCHEMAS
+        return explicit if recorded else "UNSUPPORTED"
     outcome = str(event.get("outcome") or "").strip().lower()
     outcome_state = COMPLETED if outcome in _SUCCESS_OUTCOMES else FAILED if outcome in _FAILURE_OUTCOMES else None
 
@@ -182,7 +190,18 @@ def _ts(event: Dict[str, Any]) -> str:
     return value if isinstance(value, str) else ""
 
 
-def derive_run_state(run_events: List[Dict[str, Any]], plan: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+def _lease_expired(start_event: Dict[str, Any], at: datetime) -> bool:
+    value = start_event.get("lease_expires_at")
+    if not isinstance(value, str):
+        return False  # pre-Phase-4 start events carry no lease: nothing proves abandonment
+    try:
+        expires = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return False
+    return at >= (expires if expires.tzinfo else expires.replace(tzinfo=timezone.utc))
+
+
+def derive_run_state(run_events: List[Dict[str, Any]], plan: Optional[Dict[str, Any]], now: Optional[datetime] = None) -> Dict[str, Any]:
     """Deterministic precedence (first match wins):
 
     1. any event that contradicts itself                               -> UNKNOWN
@@ -193,7 +212,13 @@ def derive_run_state(run_events: List[Dict[str, Any]], plan: Optional[Dict[str, 
     6. neither a terminal nor a start claim                            -> UNKNOWN
     7. terminal/start claim, but the plan store says rejected/pending   -> UNKNOWN
     8. run says verified approval, plan store holds none               -> UNKNOWN
-    9. otherwise the terminal claim, or EXECUTING if only a start exists
+    9. otherwise the terminal claim (COMPLETED / FAILED / TIMED_OUT)
+   10. start, no terminal, recorded run.lease_expired             -> ORPHANED (recorded)
+   11. start, no terminal, lease expired by the clock             -> ORPHANED (derived)
+   12. start, no terminal, lease live or not recorded             -> EXECUTING
+
+    ORPHANED is not terminal: the executor stops itself at its lease deadline and can
+    only ever add TIMED_OUT/FAILED afterwards, never COMPLETED. A late terminal wins.
     """
     claims = [event_state_claim(e) for e in run_events]
     if "CONFLICT" in claims:
@@ -211,8 +236,10 @@ def derive_run_state(run_events: List[Dict[str, Any]], plan: Optional[Dict[str, 
         terminal_ts = [_ts(e) for e, c in zip(run_events, claims) if c in TERMINAL_STATES]
         if start_ts and any(t and t < start_ts for t in terminal_ts):
             return {"state": UNKNOWN, "reason_code": "EVENT_ORDER_CONFLICT", "conflict": True}
+    orphaned = ORPHANED in claims
     if not terminal and not starts:
-        return {"state": UNKNOWN, "reason_code": "NO_STATE_IN_SOURCE", "conflict": False}
+        reason = "ORPHAN_WITHOUT_START" if orphaned else "NO_STATE_IN_SOURCE"
+        return {"state": UNKNOWN, "reason_code": reason, "conflict": False}
     if isinstance(plan, dict):
         approval = derive_approval(plan, run_events)["state"]
         if approval in {"DENIED", "PENDING", UNKNOWN}:
@@ -221,6 +248,10 @@ def derive_run_state(run_events: List[Dict[str, Any]], plan: Optional[Dict[str, 
             return {"state": UNKNOWN, "reason_code": "APPROVAL_PROVENANCE_CONFLICT", "conflict": True}
     if terminal:
         return {"state": terminal[0], "reason_code": "RUN_EVENT_TERMINAL", "conflict": False}
+    if orphaned:
+        return {"state": ORPHANED, "reason_code": "ORPHAN_RECORDED", "conflict": False}
+    if _lease_expired(starts[0], now or datetime.now(timezone.utc)):
+        return {"state": ORPHANED, "reason_code": "LEASE_EXPIRED_NO_TERMINAL", "conflict": False}
     return {"state": EXECUTING, "reason_code": "RUN_EXECUTION_STARTED", "conflict": False}
 
 

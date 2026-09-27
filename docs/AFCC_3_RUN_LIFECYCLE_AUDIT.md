@@ -138,3 +138,46 @@ Future vocabulary such as `QUEUED`, `EXECUTING`, `WAITING`, `CANCELLED`, `TIMED_
 
 - `bin/run_plan.sh`, `bin/run_schema.sh`: updated to log in (`FABRIC_EMAIL` / `FABRIC_PASSWORD`), then create → approve → execute with the session. Syntax-checked; not run against a live server (it would write to the real `db/` stores).
 - `AlignmentSwitchboard.jsx` "Approve + Execute": unchanged (no UI work in this phase). It was already non-functional (no admin key sent); it now needs a session, CSRF, and a prior attributable approval.
+
+## PHASE 4 — EXECUTION SAFETY
+
+### Concurrency finding
+
+At `e229fc1`, `/runs/execute` protected a plan only with `status != DONE`, checked before work and set after it. FastAPI runs sync endpoints in a thread pool, so two requests could both pass the check. Reproduced against an export of `e229fc1`: two concurrent requests both returned 200, writing **2 start events and 2 artifacts** for one plan. **Fixed** by the execution claim (see Canonical Run Model).
+
+### Deployment model (lock scope)
+
+- Dev: one uvicorn process (`start` script, no `--workers`).
+- Production: Azure Container App `agent-fabric`, `min_replicas = 1`, `max_replicas = 2`, **no volume**. Each replica has its own ephemeral filesystem, so plans and run logs are already per-replica.
+- A claim file created with `O_CREAT|O_EXCL` in the same `db/runs` store is exclusive across threads and processes **that share that store**.
+- **Corrected in Phase 4.1:** this is *not* distributed single-flight. Production replicas do not share a store, so the claim gives no cross-replica guarantee. See Phase 4.1: production blocker.
+- If plans or run events move to a shared database, the claim must move into that database's transaction.
+
+### Admin-key surfaces
+
+| Route | Class | Phase 4 |
+| --- | --- | --- |
+| `POST /runs/validate` | READ/DIAGNOSTIC, execution-adjacent (reads full plan, writes nothing) | **Moved** to session + CSRF + `fabric.run.execute` |
+| `POST /runs/dry-run` | READ/DIAGNOSTIC, execution-adjacent | **Moved** to session + CSRF + `fabric.run.execute` |
+| `POST /runs/reports/{run_id}/publish` | PUBLICATION (Reporting domain; separate registry run-id namespace; writes `registry/published/*`) | **Unchanged** (admin key). Owned by Reporting; moving it is out of scope. |
+| `GET /runs/recent` | READ (legacy raw run events) | **Unchanged** (admin key). The AFCC read projection is the governed replacement. |
+
+Callers of validate/dry-run: `bin/run_plan.sh`, `bin/run_schema.sh` (updated; they no longer need `ADMIN_API_KEY`) and `AlignmentSwitchboard.jsx` (already sent no key; unchanged).
+
+### Separation-of-duties audit
+
+The repo convention, in SHS, is "the creator/submitter cannot approve their own item", returned as 403:
+- AI Governance: `SELF_APPROVAL_DENIED`
+- Organization onboarding: `SELF_APPROVAL_FORBIDDEN`
+- Studio: `REVIEW_SELF_APPROVAL_FORBIDDEN`
+- Input security: `SELF_REVIEW_DENIED`
+- GPA: `SELF_APPROVAL_DENIED`
+
+No domain restricts approver ≠ executor. Fabric has no such rule yet, and its fixture store has one `shs_admin`. Phase 4 decision was to document Policy B and defer enforcement. **Superseded in Phase 4.1: Policy B is enforced** (see Phase 4.1).
+
+## PHASE 4.1 — GOVERNANCE & DISTRIBUTED SAFETY RECONCILIATION
+
+- **Policy B enforced:** creator ≠ approver; 403 `SELF_APPROVAL_DENIED` for approve and reject. Approver may execute. See Canonical Run Model.
+- **Execution safety classified:** `LOCAL_SINGLE_FLIGHT = YES`, `CROSS_PROCESS_SAME_STORE = YES`, `CROSS_REPLICA_DISTRIBUTED_SINGLE_FLIGHT = NO`.
+- **Shared-store audit → classification B.** Azure Postgres exists and Fabric already uses it (Truth Spine, rate limit; schema owned by SHS migrations). No execution-claim, lease, advisory-lock, or Redis authority exists, and plans/approvals/run events are replica-local JSON, so a claim cannot be made transactional with the state it guards without migrating the plan/run authority.
+- **PRODUCTION BLOCKER — DISTRIBUTED SINGLE-FLIGHT NOT GUARANTEED.** More broadly, the whole plan → approval → run lifecycle is replica-local in production (2 replicas, no shared volume).

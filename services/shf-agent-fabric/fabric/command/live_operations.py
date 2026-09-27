@@ -17,6 +17,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from fabric.command.sanitize import REDACTED, sanitize, safe_reason_code
+from fabric.run_claims import EXECUTION_SAFETY
 from fabric.run_lifecycle import (
     APPROVAL_REQUIRED,
     APPROVED,
@@ -380,6 +381,43 @@ def _correlation(events: List[Dict[str, Any]], plan: Optional[Dict[str, Any]]) -
     return {"id": NOT_CAPTURED, "source": NOT_CAPTURED}
 
 
+def _execution_safety() -> Dict[str, str]:
+    """Operator-facing guarantee of the execution claim. Never implies distributed safety."""
+    return {
+        "level": EXECUTION_SAFETY["level"],
+        "local_single_flight": EXECUTION_SAFETY["local_single_flight"],
+        "distributed_single_flight": EXECUTION_SAFETY["distributed_single_flight"],
+        "scope": "REPLICA_LOCAL",
+        "production_blocker": EXECUTION_SAFETY["production_blocker"],
+        "summary": EXECUTION_SAFETY["summary"],
+    }
+
+
+def _execution_lease(events: List[Dict[str, Any]], state: str) -> Dict[str, Any]:
+    """What the recorded lease says about a started run. Evaluated against the clock now."""
+    start = next((e for e in events if event_state_claim(e) == "EXECUTING"), None)
+    expires = start.get("lease_expires_at") if isinstance(start, dict) else None
+    seconds = start.get("lease_seconds") if isinstance(start, dict) else None
+    if not isinstance(expires, str):
+        status = NOT_CAPTURED  # no start event, or a pre-Phase-4 start without a lease
+    elif state in TERMINAL_STATES:
+        status = "CLOSED_BY_TERMINAL"
+    elif state == "ORPHANED":
+        status = "EXPIRED"
+    else:
+        status = "ACTIVE"
+    return {
+        "status": status,
+        "lease_expires_at": expires if isinstance(expires, str) else NOT_CAPTURED,
+        "lease_seconds": seconds if isinstance(seconds, int) and not isinstance(seconds, bool) else NOT_CAPTURED,
+        "heartbeat": "NOT_SUPPORTED",
+        "orphan_recorded": any(event_state_claim(e) == "ORPHANED" for e in events),
+        # Lease, orphan and timeout facts come from this replica's store only.
+        "scope": "REPLICA_LOCAL",
+        "evaluated_at": _now_iso(),
+    }
+
+
 def _correlation_continuity(events: List[Dict[str, Any]], plan: Optional[Dict[str, Any]]) -> str:
     ids = {e.get("correlation_id") for e in events if is_valid_id(e.get("correlation_id"))}
     plan = plan or {}
@@ -552,7 +590,7 @@ def _run_from_events(run_id: str, events: List[Dict[str, Any]], plan_runs: Dict[
     truth_refs = _refs(events, "truth_refs", "truthRefs")
     watchtower_refs = _refs(events, "watchtower_refs", "watchtowerRefs")
     loo_refs = _refs(events, "loo_refs", "looRefs")
-    failed = state == "FAILED"
+    failed = state in {"FAILED", "TIMED_OUT"}
 
     run = {
         "run_id": run_id,
@@ -584,7 +622,8 @@ def _run_from_events(run_id: str, events: List[Dict[str, Any]], plan_runs: Dict[
         "completed_at": terminal_ts if state == "COMPLETED" and terminal_ts else NOT_AVAILABLE,
         "failed_at": terminal_ts if failed and terminal_ts else NOT_AVAILABLE,
         "cancelled_at": NOT_AVAILABLE,
-        "timed_out_at": NOT_AVAILABLE,
+        "timed_out_at": terminal_ts if state == "TIMED_OUT" and terminal_ts else NOT_AVAILABLE,
+        "execution_lease": _execution_lease(events, state),
         "last_transition_at": ts or NOT_CAPTURED,
         "result": _str(events, "outcome", "result"),
         "failure_code": safe_reason_code(_latest(events, "failure_code", "reason_code"), NOT_CAPTURED) if failed else NOT_AVAILABLE,
@@ -649,6 +688,8 @@ def _run_from_plan(plan: Dict[str, Any]) -> Dict[str, Any]:
         "failed_at": NOT_AVAILABLE,
         "cancelled_at": NOT_AVAILABLE,
         "timed_out_at": NOT_AVAILABLE,
+        "execution_lease": {"status": NOT_AVAILABLE, "lease_expires_at": NOT_AVAILABLE, "lease_seconds": NOT_AVAILABLE,
+                            "heartbeat": "NOT_SUPPORTED", "orphan_recorded": False, "evaluated_at": _now_iso()},
         "last_transition_at": plan.get("statusUpdatedAt") or plan.get("executedAt") or created_at,
         "result": NOT_AVAILABLE,
         "failure_code": NOT_AVAILABLE,
@@ -712,6 +753,7 @@ def live_runs_projection(limit: int = 25) -> Dict[str, Any]:
         "runs": runs,
         "count": len(runs),
         "lifecycle": {"supported_states": sorted(SUPPORTED_STATES), "deferred_states": list(DEFERRED_STATES)},
+        "execution_safety": _execution_safety(),
         "freshness": {"last_updated": updated, "captured_at": _now_iso(), "threshold": "NOT_DEFINED"},
     })
 
@@ -720,7 +762,7 @@ def run_detail_projection(run_id: str) -> Dict[str, Any]:
     rid = _safe_run_id(run_id)
     groups, plan_runs, _ = _snapshot()
     if rid in groups:
-        return sanitize({"source": _source(), "state": "AVAILABLE", "run": _run_from_events(rid, groups[rid], plan_runs)})
+        return sanitize({"source": _source(), "state": "AVAILABLE", "run": _run_from_events(rid, groups[rid], plan_runs), "execution_safety": _execution_safety()})
     return sanitize({"source": _source(), "state": "NOT_AVAILABLE", "reason_code": "RUN_NOT_FOUND", "run_id": rid})
 
 

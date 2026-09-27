@@ -34,6 +34,8 @@ ADMIN_KEY = "phase3-admin-key-must-not-authorize"
 KID = "phase3-kid"
 SECRET = "phase3-hmac-secret-value"
 APPROVER = "u-approver"
+# Phase 4.1 Policy B: plans are created by a different operator than the approver.
+CREATOR = "u-creator"
 
 
 @pytest.fixture(autouse=True)
@@ -93,7 +95,8 @@ def _log(stores) -> list[dict]:
 
 
 def _create(c: TestClient, **headers) -> str:
-    res = c.post("/plan", json={"agentName": "UnregisteredTestAgent", "input": {"x": 1}}, headers=headers)
+    # Always created by CREATOR so that `c` (usually the approver) may decide it.
+    res = _client("shs_admin", user_id=CREATOR).post("/plan", json={"agentName": "UnregisteredTestAgent", "input": {"x": 1}}, headers=headers)
     assert res.status_code == 200, res.text
     return res.json()["planId"]
 
@@ -179,7 +182,7 @@ def test_authorized_approver_decision_is_attributable(isolated):
     assert decision["reason"] == "reviewed scope" and decision["decided_at"]
     assert decision["correlation_id"] == "corr-approval-0001"
     assert plan["approvalHistory"] == [decision]
-    assert plan["createdBy"]["creator_actor_id"] == APPROVER
+    assert plan["createdBy"]["creator_actor_id"] == CREATOR
     assert any(e["event_type"] == "fabric_plan_decision_recorded" and e["user_id"] == APPROVER for e in _EVENTS)
 
 
@@ -197,13 +200,13 @@ def test_rejection_is_attributable_and_decisions_are_final(isolated):
 def test_body_identity_claims_are_declared_never_verified(isolated):
     admin = _client("shs_admin")
     spoof = {"actor_id": "ceo", "organizationId": "org_victim", "tenant_id": "tenant:org_victim", "source_system": "payroll"}
-    res = admin.post("/plan", json={"agentName": "UnregisteredTestAgent", "input": {"x": 1, **spoof}})
+    res = _client("shs_admin", user_id=CREATOR).post("/plan", json={"agentName": "UnregisteredTestAgent", "input": {"x": 1, **spoof}})
     plan_id = res.json()["planId"]
     assert admin.post(f"/plan/{plan_id}/approve", json={"approver_id": "ceo", "organization_id": "org_victim"}).status_code == 200
     run_id = admin.post("/runs/execute", json={"planId": plan_id, "actorId": "ceo", "organizationId": "org_victim", "userId": "u@x.com"}).json()["runId"]
 
     plan = _read_plan(isolated, plan_id)
-    assert plan["createdBy"]["creator_actor_id"] == APPROVER and plan["organization_id"] == "NOT_APPLICABLE"
+    assert plan["createdBy"]["creator_actor_id"] == CREATOR and plan["organization_id"] == "NOT_APPLICABLE"
     assert plan["declared_identity"]["verification"] == "DECLARED" and plan["declared_identity"]["actor_id"] == "ceo"
     assert plan["approvalDecision"]["approver_actor_id"] == APPROVER
     assert plan["approvalDecision"]["declared_identity"] == {"actor_id": "ceo", "organization_id": "org_victim", "verification": "DECLARED"}
@@ -245,7 +248,8 @@ def test_org_scoped_actor_cannot_act_on_another_scope(isolated, monkeypatch):
     assert plan["createdBy"]["identity_verification"]["organization"] == "VERIFIED"
     assert plan["createdBy"]["tenant_id"] == "tenant:org_a"
     assert plan["createdBy"]["identity_verification"]["tenant"] == "DERIVED_FROM_VERIFIED_ORGANIZATION"
-    assert scoped.post(f"/plan/{own}/approve").status_code == 200
+    assert scoped.post(f"/plan/{own}/approve").json()["detail"] == "SELF_APPROVAL_DENIED"
+    assert _client("client_admin", user_id="u-scoped-2", org="org_a").post(f"/plan/{own}/approve").status_code == 200
     assert _log(isolated) == []
 
 
@@ -280,14 +284,15 @@ def test_not_required_plan_follows_current_policy(isolated):
 def test_no_secrets_in_records_or_responses(isolated):
     admin = _client("shs_admin")
     token, csrf = admin.secret_material  # type: ignore[attr-defined]
-    created = admin.post("/plan", json={"agentName": "UnregisteredTestAgent", "input": {"x": 1}})
+    creator = _client("shs_admin", user_id=CREATOR)
+    created = creator.post("/plan", json={"agentName": "UnregisteredTestAgent", "input": {"x": 1}})
     plan_id = created.json()["planId"]
     approved = admin.post(f"/plan/{plan_id}/approve")
     executed = admin.post("/runs/execute", json={"planId": plan_id})
     stored = (isolated["plans"] / f"{plan_id}.json").read_text() + isolated["log"].read_text()
     projected = json.dumps(live_runs_projection()) + json.dumps(run_timeline_projection(executed.json()["runId"]))
     for blob in (stored, projected, created.text, approved.text):
-        for secret in (token, csrf, ADMIN_KEY, SECRET, f"{APPROVER}@test.invalid"):
+        for secret in (token, csrf, *creator.secret_material, ADMIN_KEY, SECRET, f"{APPROVER}@test.invalid", f"{CREATOR}@test.invalid"):
             assert secret not in blob
 
 
@@ -429,8 +434,9 @@ def test_verified_basis_without_verified_plan_decision_fails_safe():
 
 
 def test_deferred_states_stay_deferred():
-    assert "EXECUTING" in lc.SUPPORTED_STATES
-    for state in ("QUEUED", "WAITING", "RETRYING", "CANCELLED", "TIMED_OUT", "REVOKED"):
+    # Phase 4 made TIMED_OUT (enforced deadline) and ORPHANED (expired lease) live.
+    assert {"EXECUTING", "TIMED_OUT", "ORPHANED"} <= lc.SUPPORTED_STATES
+    for state in ("QUEUED", "WAITING", "RETRYING", "CANCEL_REQUESTED", "CANCELLED", "REVOKED"):
         assert state in lc.DEFERRED_STATES and state not in lc.SUPPORTED_STATES
     assert not any(getattr(r, "path", "").endswith(("/cancel", "/revoke", "/timeout", "/retry")) and "runs" in getattr(r, "path", "") for r in app.routes)
 

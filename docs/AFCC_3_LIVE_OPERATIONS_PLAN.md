@@ -168,3 +168,60 @@ The SHS minimizer allowlists each new field. Credentials, tokens, and emails are
 - A crash after the start event leaves the run `EXECUTING` with no terminal and no timeout sweeper.
 - `/runs/validate`, `/runs/dry-run`, and report publishing still use the admin key (no state transition; unchanged).
 - `AlignmentSwitchboard.jsx` still posts `approved: true` without a session; it needs UI work (not in scope).
+
+## PHASE 4 — EXECUTION SAFETY
+
+### Projection additions
+
+| Field | Content |
+| --- | --- |
+| `current_state` | adds `ORPHANED` and `TIMED_OUT` |
+| `timed_out_at` | `run.timed_out` timestamp |
+| `failure_code` / `failure_summary` | also populated for `TIMED_OUT` (`DEADLINE_EXCEEDED`) |
+| `execution_lease.status` | `ACTIVE`, `EXPIRED`, `CLOSED_BY_TERMINAL`, or `NOT_CAPTURED` (pre-Phase-4 or no start) |
+| `execution_lease.*` | `lease_expires_at`, `lease_seconds`, `heartbeat: NOT_SUPPORTED`, `orphan_recorded`, `evaluated_at` |
+
+`ORPHANED` and `ACTIVE`/`EXPIRED` are evaluated against the clock at read time; `evaluated_at` says when. The claim holder's pid/process instance is never projected; the SHS minimizer drops it (tested).
+
+### Security / concurrency verification
+
+- **Real threads:** 2 requests (winner held mid-execution) → 200 + 409 `RUN_ALREADY_EXECUTING`. 8 simultaneous requests → exactly 1 × 200, 7 × 409, 1 start event, 1 artifact.
+- **Real processes:** 6 OS processes race for one claim → exactly one `ACQUIRED`.
+- **Mutation check:** replacing `O_EXCL` with truncate-create makes 6 Phase 4 tests fail.
+- **Claim lifecycle:** created once; released on success, recorded failure, and timeout; kept when no terminal can be recorded; released if the start write fails.
+- **Re-check:** a plan completed between check and claim → idempotent response, no run.
+- **Authority unchanged:** admin key, read permission, wrong org (404), rejected plan, and unattributable approval are all refused before any claim. Body identity cannot alter the executor or claim holder.
+- **Preflight:** `/runs/validate`, `/runs/dry-run` → 401 without a session or with the admin key, 403 without CSRF or with read-only permission.
+- AFCC remains GET-only; no cancel/revoke/retry route exists.
+
+### Remaining lifecycle gaps
+
+- Cancellation and approval revocation: deferred (design above).
+- ~~Separation of duties: Policy B documented, not enforced.~~ Enforced in Phase 4.1.
+- No heartbeat; a hung step is only caught at the next checkpoint.
+- Residual fencing gap across separate files (documented above); closing it needs a transactional store.
+- Report publishing and `/runs/recent` still use the admin key (Reporting / legacy read).
+- Live Operations UI not built.
+
+## PHASE 4.1 — GOVERNANCE & DISTRIBUTED SAFETY RECONCILIATION
+
+### Operator-facing truth
+
+- The runs list and run detail carry `execution_safety` (`LOCAL` / `ACTIVE` / `NOT_GUARANTEED` / `REPLICA_LOCAL`). A UI must show **"LOCAL SINGLE-FLIGHT ACTIVE"** and **"DISTRIBUTED SINGLE-FLIGHT NOT YET GUARANTEED"**, never a global "no duplicates" assurance.
+- `execution_lease.scope: REPLICA_LOCAL`: lease, orphan, and timeout facts come from the answering replica only.
+- The SHS bridge forwards exactly these fields and drops anything else (tested).
+- Approval decisions now always show two different verified actors: creator (`created_by`) and approver (`approval.decision`).
+
+### Corrected Phase 4 claim
+
+Phase 4 reported "no duplicate execution" for the same plan store. The accurate statement:
+- duplicates are blocked across threads and processes that share one store;
+- production does **not** share a store across replicas, so distributed single-flight is **not** guaranteed.
+
+### Remaining gaps
+
+- Production blocker above (classification B; migration requires explicit approval).
+- Cancellation and approval revocation are deferred.
+- No heartbeat.
+- Report publishing and `/runs/recent` use the admin key.
+- Live Operations UI not built.

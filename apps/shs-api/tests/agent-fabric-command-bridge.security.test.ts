@@ -85,9 +85,12 @@ function liveRunBody(kind: string) {
         authority: { authentication: "FABRIC_SESSION", role: "shs_admin", permission: "fabric.plan.approve", scope: "PLATFORM_GLOBAL" } } },
     failure_summary: mode === "leaky" ? "Traceback (most recent call last): File \"/srv/x.py\" ValueError" : "NOT_AVAILABLE",
     event_count: 1, source,
+    timed_out_at: "NOT_AVAILABLE",
+    execution_lease: { status: "EXPIRED", lease_expires_at: "2026-09-27T09:05:00Z", lease_seconds: 300, heartbeat: "NOT_SUPPORTED", orphan_recorded: true, scope: "REPLICA_LOCAL", evaluated_at: "2026-09-27T10:00:00Z", holder: { pid: 4242, process_instance: "abc" } },
   };
-  if (kind === "runs_live") return { ...base, source, count: 1, runs: [run], lifecycle: { supported_states: ["APPROVAL_DENIED", "APPROVAL_REQUIRED", "APPROVED", "COMPLETED", "FAILED"], deferred_states: ["QUEUED", "EXECUTING"] }, freshness: { last_updated: "2026-09-27T09:00:00Z", captured_at: "2026-09-27T10:00:00Z", threshold: "NOT_DEFINED" } };
-  if (kind === "run_detail") return { ...base, source, run };
+  const executionSafety = { level: "LOCAL", local_single_flight: "ACTIVE", distributed_single_flight: "NOT_GUARANTEED", scope: "REPLICA_LOCAL", production_blocker: "DISTRIBUTED_SINGLE_FLIGHT_NOT_GUARANTEED", summary: "LOCAL SINGLE-FLIGHT ACTIVE; DISTRIBUTED SINGLE-FLIGHT NOT YET GUARANTEED", claims_dir: "/srv/db/runs/claims" };
+  if (kind === "runs_live") return { ...base, source, count: 1, runs: [run], execution_safety: executionSafety, lifecycle: { supported_states: ["APPROVAL_DENIED", "APPROVAL_REQUIRED", "APPROVED", "COMPLETED", "FAILED"], deferred_states: ["QUEUED", "EXECUTING"] }, freshness: { last_updated: "2026-09-27T09:00:00Z", captured_at: "2026-09-27T10:00:00Z", threshold: "NOT_DEFINED" } };
+  if (kind === "run_detail") return { ...base, source, run, execution_safety: executionSafety };
   if (kind === "run_timeline") return { ...base, source, run_id: "a1b2c3", events: [{ event_id: "run_evt_1", run_id: "a1b2c3", event_type: "run.completed", from_state: "APPROVED", to_state: "COMPLETED", occurred_at: "2026-09-27T09:00:00Z", actor_ref: "NOT_CAPTURED", authority_ref: "agent_fabric.run_events", reason_code: "NOT_CAPTURED", reason_summary: "plan executed", evidence_refs: [], policy_refs: [], correlation_id: "corr_1234abcd", source: "agent_fabric.run_events", provenance: "RECORDED", raw: { path: "/srv/a" } }] };
   if (kind === "run_evidence") return { ...base, source, run_id: "a1b2c3", evidence: { evidence_refs: [], artifact_refs: [{ artifact_id: "draft_1", sha256: SHA, path: "/Users/x/a.json" }], proof_refs: [], report_refs: [], truth_refs: ["truth:claim_1"], watchtower_refs: [], loo_refs: [], domain_refs: run.domain_refs, counts: { evidence: 0, artifacts: 1, proofs: 0, reports: 0 } } };
   return { ...base, source, run_id: "a1b2c3", dependency_run_ids: [], parent_run_id: "NOT_CAPTURED", retry_lineage: run.retry_lineage, correlation_id: "corr_1234abcd" };
@@ -464,5 +467,29 @@ test("AFCC-3 P3: verification status, approver and declared identity pass; crede
     assert.equal(run.approval.decision.actor_verification, "VERIFIED");
     assert.equal(run.approval.decision.authority.permission, "fabric.plan.approve");
     for (const leak of ["tok-should-not-pass", "csrf-should-not-pass", "ceo@victim.example", ADMIN_KEY]) assert.ok(!text.includes(leak), leak);
+  });
+});
+
+test("AFCC-3 P4: execution lease passes minimized; holder process details never do", async () => {
+  await withApp(userFor("shs_admin"), async (base) => {
+    const res = await fetch(`${base}/agent-fabric/command/runs/a1b2c3`);
+    const text = await res.clone().text();
+    const { run } = await res.json();
+    assert.deepEqual(run.execution_lease, { status: "EXPIRED", lease_expires_at: "2026-09-27T09:05:00Z", heartbeat: "NOT_SUPPORTED", scope: "REPLICA_LOCAL", evaluated_at: "2026-09-27T10:00:00Z", lease_seconds: 300, orphan_recorded: true });
+    assert.equal(run.timed_out_at, "NOT_AVAILABLE");
+    assert.ok(!text.includes("process_instance") && !text.includes("4242"));
+  });
+});
+
+test("AFCC-3 P4.1: execution safety stays LOCAL / NOT_GUARANTEED through the bridge; no internals", async () => {
+  await withApp(userFor("shs_admin"), async (base) => {
+    const expected = { level: "LOCAL", local_single_flight: "ACTIVE", distributed_single_flight: "NOT_GUARANTEED", scope: "REPLICA_LOCAL", production_blocker: "DISTRIBUTED_SINGLE_FLIGHT_NOT_GUARANTEED", summary: "LOCAL SINGLE-FLIGHT ACTIVE; DISTRIBUTED SINGLE-FLIGHT NOT YET GUARANTEED" };
+    const list = await (await fetch(`${base}/agent-fabric/command/runs`)).json();
+    const detailRes = await fetch(`${base}/agent-fabric/command/runs/a1b2c3`);
+    const detailText = await detailRes.clone().text();
+    const detail = await detailRes.json();
+    assert.deepEqual(list.execution_safety, expected);
+    assert.deepEqual(detail.execution_safety, expected);
+    assert.ok(!detailText.includes("claims_dir") && !detailText.includes("/srv/"));
   });
 });

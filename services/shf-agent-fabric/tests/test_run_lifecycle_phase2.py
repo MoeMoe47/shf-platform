@@ -79,6 +79,11 @@ def writer_client(monkeypatch, stores):
     client = TestClient(app)
     client.cookies.set(get_auth_settings().cookie_name, token)
     client.headers.update({"x-csrf-token": session.csrf_token})
+    # Phase 4.1 Policy B: a separate operator creates plans.
+    creator_token, creator_session = create_session(AuthUser(user_id="u-phase2-creator", email="c@test.invalid", display_name="C", role="shs_admin", password_hash=""))
+    client.creator = TestClient(app)  # type: ignore[attr-defined]
+    client.creator.cookies.set(get_auth_settings().cookie_name, creator_token)
+    client.creator.headers.update({"x-csrf-token": creator_session.csrf_token})
     return client
 
 
@@ -171,7 +176,7 @@ def test_conflicting_plan_references_fail_safe(stores):
 
 def test_new_run_captures_execution_context_and_correlation_chain(writer_client, stores):
     corr = "corr-chain-0001"
-    created = writer_client.post("/plan", json={"agentName": "UnregisteredTestAgent", "input": {"x": 1}}, headers={"X-Correlation-Id": corr})
+    created = writer_client.creator.post("/plan", json={"agentName": "UnregisteredTestAgent", "input": {"x": 1}}, headers={"X-Correlation-Id": corr})
     assert created.status_code == 200, created.text
     assert created.json()["correlationId"] == corr
     plan_id = created.json()["planId"]

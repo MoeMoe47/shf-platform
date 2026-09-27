@@ -366,3 +366,204 @@ One id from `/plan` (valid `X-Correlation-Id` or generated) through:
 - the artifact body: `provenance: {run_id, plan_id, correlation_id}`, part of the hashed content for new artifacts
 
 A legacy plan without a correlation id gets one at its first decision. The projection reports `correlation.continuity`: `CONSISTENT` when every recorded id in plan, decision, and run events matches, `DIVERGENT` otherwise, `NOT_CAPTURED` if none are recorded.
+
+## PHASE 4 — EXECUTION SAFETY
+
+Modules: `fabric/run_claims.py` (claim + lease), `fabric/run_lifecycle.py` (states), `routers/runs_routes.py` (executor). Run event schema: `fabric.run_event.v4` (v2/v3 still recognized).
+
+### Execution locking (single-flight)
+
+One claim per plan at `db/runs/claims/{plan_id}.json`, created with `O_CREAT|O_EXCL`:
+- The first request holds it.
+- Any other request for the same plan gets **409 `RUN_ALREADY_EXECUTING`** before writing anything: no start event, no artifact.
+- Under the claim, the plan is **re-loaded and re-checked**, so a plan that finished, or was rejected, between the first check and the claim is refused.
+
+Sequence: pre-checks (auth, gate, approval, validation) → claim → re-check → `run.execution_started` → work → terminal event → release.
+
+| Outcome | Claim |
+| --- | --- |
+| COMPLETED / FAILED / TIMED_OUT recorded | released (only by its own run id) |
+| start event could not be written | released (nothing started) |
+| terminal could not be recorded (crash, unwritable log) | **kept** — the plan stays blocked until lease + grace, then is reclaimable |
+
+### Claim / lease
+
+The claim holds:
+- `plan_id`, `run_id`
+- `claimed_by_actor_id` (verified session), `correlation_id`
+- `claimed_at`, `lease_seconds`, `lease_expires_at`
+- `heartbeat: NOT_SUPPORTED`
+- `holder: {pid, process_instance}` — never projected
+
+Lease rules:
+- **Lease** = `FABRIC_RUN_LEASE_SECONDS` (server env, default 300, bounded 30–3600). No request field can change it (tested).
+- **No heartbeat.** Execution is one synchronous request, so there is no separate worker to beat.
+- The start event carries `lease_expires_at`, `lease_seconds`, `claim_ref`.
+
+### Timeout (TIMED_OUT — supported)
+
+The executor enforces its lease at **checkpoints**: before each tool step and before finalizing.
+- If the deadline has passed, it stops and writes `run.timed_out` (`EXECUTING → TIMED_OUT`, `failure_code: DEADLINE_EXCEEDED`, `partial: true`, artifacts written so far listed).
+- It then releases the claim and returns **504 `RUN_TIMED_OUT`**.
+- The plan is not marked DONE and may be executed again.
+- Guarantee: no step starts, and no completion is written, after the deadline. A step already running cannot be interrupted; its overrun is caught at the next checkpoint.
+
+### Orphaned runs (ORPHANED — supported, non-terminal)
+
+A run with a start event and no terminal event is:
+
+| Evidence | State | Reason |
+| --- | --- | --- |
+| lease not expired | `EXECUTING` | `RUN_EXECUTION_STARTED` |
+| lease expired (clock) | `ORPHANED` | `LEASE_EXPIRED_NO_TERMINAL` |
+| `run.lease_expired` recorded | `ORPHANED` | `ORPHAN_RECORDED` |
+| pre-Phase-4 start (no lease) | `EXECUTING` — nothing proves abandonment | `RUN_EXECUTION_STARTED` |
+
+Why lease expiry supports "orphaned":
+- The executor never completes after its deadline; it can only add TIMED_OUT (or FAILED).
+- So once the lease expires with no terminal, the run has lost its authority to complete and has no recorded outcome.
+- ORPHANED **never** claims failure or completion. A late terminal from the original executor wins over ORPHANED.
+
+Recovery:
+- After `lease_expires_at + 60s` grace, the next authorized `/runs/execute` may reclaim the claim.
+- The stale claim is atomically renamed to `.reclaimed.*.json` and kept as evidence.
+- The reclaimer appends `run.lease_expired` (`EXECUTING → ORPHANED`, reason `LEASE_EXPIRED_NO_TERMINAL`) **for the old run**. The reclaimer's identity is nested under `recorded_by`, so it is never shown as the orphan's initiator.
+- The new execution then proceeds under a fresh claim.
+
+Residual risk: claim, plan, and run log are separate files. If an executor were suspended for longer than the whole grace window exactly between its final deadline check and its DONE write, a reclaimer could start a second execution. Fencing that fully requires one transactional store.
+
+### Cancellation (deferred)
+
+Checkpoints now exist and would be the honest place to stop. But execution is a single synchronous request, normally sub-second, with one tool step. There is no async worker, and no request could realistically land mid-run. `CANCEL_REQUESTED` / `CANCELLED` stay **deferred** until execution is asynchronous or multi-step. At that point: `REQUEST_CANCEL` (recorded request) → the executor observes it at its next checkpoint → `CANCELLED` only when the executor itself stopped.
+
+### Revoke (deferred, separated)
+
+Three different things; none overloads another:
+
+| Concept | Belongs to | Meaning | Status |
+| --- | --- | --- | --- |
+| Approval revocation | plan store (approval authority) | withdraw an APPROVED decision **before execution**; appended to `approvalHistory`; plan returns to requiring approval; prohibits future execution | feasible (attributable, final decisions exist); **deferred** |
+| Execution authority revocation | auth (session / role / permission) | removing a user's `fabric.run.execute` or session | already enforced by auth on every request |
+| Active run termination | executor | stopping a running execution | this is **cancellation**, not revoke (deferred) |
+
+`REVOKED` is not a run state.
+
+### Separation of duties (Phase 4: deferred — superseded, enforced in Phase 4.1)
+
+| Policy | Rule | Convention in repo |
+| --- | --- | --- |
+| A | same actor may create, approve, execute | Fabric today |
+| **B** | **creator cannot approve** | **SHS convention in 5 domains** (403 `SELF_APPROVAL_DENIED`) |
+| C | approver cannot execute | none |
+| D | all three distinct | none |
+| E | configurable per plan risk class | AI Governance exempts `READ_ONLY` consequence from B |
+
+Recommendation: **B**, returning 403 `SELF_APPROVAL_DENIED` as AI Governance does; legacy plans with no verified creator stay approvable. Phase 4 owner decision was to document and defer. **Phase 4.1 enforces B** (see below).
+
+### Lifecycle states now supported
+
+| State | Terminal | Source |
+| --- | --- | --- |
+| `APPROVAL_REQUIRED` | no | plan store (pending, or approved without a verified approver) |
+| `APPROVED` | no | plan store (verified approval, or not required) |
+| `APPROVAL_DENIED` | yes (for the plan) | plan store |
+| `EXECUTING` | no | `run.execution_started`, lease live |
+| `ORPHANED` | no | `run.lease_expired`, or start + expired lease, no terminal |
+| `COMPLETED` | yes | `run.completed` |
+| `FAILED` | yes | `run.execution_failed` |
+| `TIMED_OUT` | yes | `run.timed_out` |
+| `UNKNOWN` | — | conflicting or unsupported source data |
+
+`EXECUTING`, `TIMED_OUT`, and `ORPHANED` are accepted only from their own recorded event type; a bare state word derives `UNKNOWN`.
+
+Still deferred: `REQUESTED`, `QUEUED`, `WAITING`, `RETRYING`, `CANCEL_REQUESTED`, `CANCELLED`, `REVOKED`.
+
+## PHASE 4.1 — GOVERNANCE & DISTRIBUTED SAFETY RECONCILIATION
+
+### Policy B enforced: creator ≠ approver
+
+Rule: **the plan creator cannot approve or reject their own plan.** Reject is included because the SHS convention covers both ("cannot approve or decline its own case").
+
+- Enforced in `plan_routes._decide` under the plan-store lock.
+- Compares the **verified** creator (`createdBy.creator_actor_id` with `identity_verification.actor == VERIFIED`) against the **verified** session actor. Request bodies play no part.
+- Same actor → **403 `SELF_APPROVAL_DENIED`**. Recorded in the auth audit as `fabric_plan_decision_refused`, reason `SELF_APPROVAL_DENIED`. Nothing is written to `approvalDecision` or `approvalHistory`.
+
+Order of checks:
+1. cross-org → 404 (existence never confirmed)
+2. self-approval → 403
+3. DONE → 409 `PLAN_ALREADY_EXECUTED`
+4. not required → 409 `APPROVAL_NOT_REQUIRED`
+5. already decided → 409 `DECISION_ALREADY_RECORDED`
+
+Legacy compatibility: a plan with no creator, or a creator recorded without `VERIFIED`, cannot be compared and stays decidable by any authorized approver.
+
+Not enforced (by design): approver ≠ executor, and all-three-distinct. The approver may execute when they hold `fabric.run.execute`; so may the creator once someone else approved.
+
+### Development workflow
+
+- Dev-only second operator: `approver@demo.shs` (`demo_shs_approver`, `shs_admin`, global scope, fixture password).
+- It resolves only when `SHS_AUTH_ENV`/`ENVIRONMENT` is `development`, `test`, or `local`, and is checked at lookup time. It **does not exist in production** or any unlisted environment (tested). No production identity was created.
+- `bin/run_plan.sh` / `bin/run_schema.sh`:
+  - creator logs in with `FABRIC_EMAIL`/`FABRIC_PASSWORD` and creates the plan;
+  - approver logs in with `APPROVER_EMAIL`/`APPROVER_PASSWORD` and approves;
+  - executor logs in with `EXECUTOR_EMAIL`/`EXECUTOR_PASSWORD` (default: the approver) and runs validate → dry-run → execute.
+- The scripts refuse to start if creator and approver emails match. There is no policy bypass.
+
+### Execution safety levels
+
+| Level | Guarantee | Status |
+| --- | --- | --- |
+| 1. Thread safety | concurrent requests in one process | **YES** (real-thread tests) |
+| 2. Process safety, shared filesystem | processes sharing `db/runs` | **YES** (real multi-process test) |
+| 3. Replica / distributed safety | executions on different replicas | **NO** |
+
+Code: `run_claims.EXECUTION_SAFETY`. Projection: `execution_safety` on the runs list and on run detail:
+```
+level: LOCAL
+local_single_flight: ACTIVE
+distributed_single_flight: NOT_GUARANTEED
+scope: REPLICA_LOCAL
+production_blocker: DISTRIBUTED_SINGLE_FLIGHT_NOT_GUARANTEED
+summary: LOCAL SINGLE-FLIGHT ACTIVE; DISTRIBUTED SINGLE-FLIGHT NOT YET GUARANTEED
+```
+It carries no paths or process details. `execution_lease.scope: REPLICA_LOCAL`.
+
+### Production truth — PRODUCTION BLOCKER: DISTRIBUTED SINGLE-FLIGHT NOT GUARANTEED
+
+Topology: Azure Container App `agent-fabric`, `max_replicas = 2`, **no shared volume**. Plans, approvals, run events, claims, and artifacts are files on each replica's ephemeral disk.
+
+What another replica can see:
+
+| Record | Visible from the other replica? |
+| --- | --- |
+| execution claim | **No** |
+| `run.execution_started` | **No** |
+| terminal events (`run.completed` / `run.execution_failed` / `run.timed_out` / `run.lease_expired`) | **No** |
+| plans and approval decisions | **No** |
+
+Consequences, all replica-local:
+- A plan exists only on the replica that created it. Approve/execute requests routed to the other replica get 404.
+- The AFCC read shows only the answering replica's runs.
+- Container restarts lose all of it (storage is already classified `development_only` for operational events).
+
+- **ORPHANED** is replica-local. Only the replica holding the start event can derive it, and only that replica can reclaim the plan and record `run.lease_expired`. **Cross-replica orphan recovery is not supported.**
+- **TIMED_OUT** is enforced by the executing process itself, so the deadline holds wherever the run executes. The resulting record is replica-local.
+
+### Shared-store audit and decision: **B**
+
+| Candidate | Finding |
+| --- | --- |
+| Azure PostgreSQL (`infra/azure/postgres.tf`) → `SHF_DATABASE_URL` on the Fabric container | **exists, shared, production-capable** |
+| Fabric Postgres users | Truth Spine (`truth_spine_records`), public population, evidence projection, internal-ingestion rate limit |
+| Schema ownership | SHS migration runner (`apps/shs-api/migrations`, e.g. `114_truth_spine_canonical_persistence.sql`) |
+| `services/shf-agent-fabric/migrations/20260310_execution_pipeline.sql` | unrelated (`execution_actions`, `execution_rules`); no runner applies it |
+| Redis / advisory locks / lease or idempotency table for plans or runs | **none** |
+| Plan store, approvals, run ledger | replica-local JSON; no Postgres representation |
+
+**Classification B — a shared store exists, but migration is a separate project.** A Postgres-only claim would not be correct while the plan state and run ledger it guards stay on replica disks. The claim must share a transaction with the plan status transition and the terminal close. No lock was invented, no schema created, no replica count or volume changed.
+
+### Recommended distributed-claim follow-up (needs explicit approval)
+
+1. Add an SHS-owned migration for Fabric run authority, in the same Postgres: `fabric_plans` (status, approval decision), `fabric_run_events` (append-only), and `fabric_execution_claims` (`plan_id` PRIMARY KEY, `run_id`, actor, correlation, `lease_expires_at`, `released_at`).
+2. Claim = `INSERT … ON CONFLICT DO NOTHING`, or `UPDATE … WHERE lease_expires_at < now() - grace` for reclaim, in the **same transaction** as reading the plan status. Terminal close = the terminal event insert + `plan.status = DONE` + claim release in one transaction. A fencing token (claim version) is checked on every write.
+3. Keep the file claim as the development fallback. Flip `EXECUTION_SAFETY` to `DISTRIBUTED` only after the Postgres path is the production authority and a two-connection concurrency test proves it.

@@ -20,6 +20,14 @@ Statuses are based on current repository evidence, not the earlier roadmap label
 | Workforce | NOT JUSTIFIED | No evidence sufficient for a spatial adapter in this pass. |
 | Projects | NOT JUSTIFIED | No evidence sufficient for a spatial adapter in this pass. |
 
+## Wave 5D IEP Addendum
+
+The Census county geometry adapter is production-ready infrastructure, but the
+IEP client is `BLOCKED_BY_DOMAIN_IDENTITY`. The current page uses label-keyed
+profiles and retains an import of `entityToCounty.js`; no explicit validated
+`countyFips` join is established for IEP records. This does not change the
+neutral `census-geography` adapter readiness or authorize IEP map migration.
+
 ## Readiness Rule
 
 `READY WITH CONDITIONS` means an adapter can be planned around a confirmed domain boundary but cannot be registered until source identity, coordinates, publication, and regression evidence are accepted. `PARTIAL` and `BLOCKED` are not migration permission.

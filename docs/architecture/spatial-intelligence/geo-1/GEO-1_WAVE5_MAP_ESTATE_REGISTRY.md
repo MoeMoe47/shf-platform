@@ -10,7 +10,7 @@ This planning registry is descriptive. It is not a runtime registry and does not
 | `shs.operations-mapbox` | operational county map | SHS operations | Exchange unified truth | Mapbox GL + remote GeoJSON | operator/public boundary requires review | Partial / blocked on config and authority |
 | `exchange.unified-truth` | Unified Truth Map | Exchange / SHS boundary | `capital.html#/exchange`, unified-truth route evidence | Mapbox | authenticated/operator policy | Partial |
 | `shf.public-impact` | Foundation impact map | SHF | `foundation.html#/impact` | Ohio county geometry + SHF data filter | public approval required | Blocked while records are draft |
-| `iep.ohio-county` | official Ohio county map | IEP / county geometry owner TBD | IEP command surface | local `/assets/maps/ohio-counties.geojson` | application-specific | Partial |
+| `iep.ohio-county` | official Ohio county map | IEP consumes Census geometry; IEP remains domain-data owner | `capital.html#/iep-command-v2` / `IEPCommandCenterV2` | Census-qualified `/assets/maps/ohio-counties.geojson`; current renderer fetches directly | geometry public; attached IEP records separately governed | Base adapter ready; IEP client blocked by explicit domain identity; legacy path preserved and onboarding deferred |
 | `shf.ohio-engine` | `SHFOhioMapEngine` | SHF candidate | test/unrouted page evidence | county base plus hardcoded metrics | unknown | Blocked |
 | `globe.operational` | `OperationalGlobe` | unknown | no confirmed importer | globe.gl + remote GeoJSON | unknown | Unknown / unmounted candidate |
 | `globe.real` | `RealGlobe` | unknown | no confirmed importer | globe.gl + remote county data | unknown | Unknown / unmounted candidate |

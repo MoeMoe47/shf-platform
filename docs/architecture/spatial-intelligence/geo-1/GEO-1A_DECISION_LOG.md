@@ -410,3 +410,14 @@ Repository evidence: official Census match and use restrictions in `GEO-1_WAVE5C
 Reason: Separate source authority, client context, and operational legacy data while preserving the existing map and the qualified Census scale/use restrictions.
 Affected phases: GEO-1 Wave 5C contract and later adapter implementation.
 Revisit condition: New authoritative source evidence, a change in the governed Census asset, or a separately approved ODOT operational geometry contract.
+
+## GEO1-WAVE5D-DEC-025
+
+Decision ID: GEO1-WAVE5D-DEC-025
+Question: What must be true before the existing IEP county map can consume Census Spatial results?
+Decision: Keep Census county geometry and IEP domain records as separate authorities. A future IEP client may consume safe `census-geography::county` results, but it may join domain data only through an explicit validated five-digit `countyFips`. Label matching, address inference, `entityToCounty`, and the Franklin fallback are prohibited. Until that identity exists and is regression-protected, IEP onboarding is `BLOCKED_BY_DOMAIN_IDENTITY`.
+Alternatives considered: Join by county label; preserve the resolver fallback; treat IEP as owner of Census geometry; replace the current map immediately.
+Repository evidence: `src/pages/iep-command-v2/IEPCommandCenterV2.jsx`; `src/pages/iep-command-v2/OhioCountyOfficialMapV2.jsx`; `src/system/resolvers/entityToCounty.js`; GEO-1 Wave 5C Census adapter contract.
+Reason: Explicit identity preserves separate authority, prevents fabricated county associations, and allows geometry onboarding without publishing or mutating IEP domain truth.
+Affected phases: GEO-1 Wave 5D planning and later IEP client onboarding.
+Revisit condition: IEP source records expose a validated county FIPS identity and the fallback dependency is removed or formally isolated from the Spatial path.

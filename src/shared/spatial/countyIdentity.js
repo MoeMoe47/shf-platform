@@ -130,5 +130,20 @@ export function joinIepRecordToCounty(record, countyFeature) {
     : { ok: false, reason: "COUNTY_IDENTITY_MISMATCH" };
 }
 
+export function normalizeDynamicIepCountyIdentity(record) {
+  return {
+    ...record,
+    countyFips: isQualifiedOhioCountyFips(record?.countyFips) ? record.countyFips : null,
+  };
+}
+
+export function propagateCountyFipsFromCountyOwnedParent(parent, child, relationship) {
+  const countyFips = relationship === "COUNTY_OWNED_DERIVED"
+    && isQualifiedOhioCountyFips(parent?.countyFips)
+    ? parent.countyFips
+    : null;
+  return { ...child, countyFips };
+}
+
 export const QUALIFIED_OHIO_COUNTY_FIPS = OHIO_COUNTY_FIPS;
 export const QUALIFIED_OHIO_COUNTY_NAME_TO_FIPS = OHIO_COUNTY_NAME_TO_FIPS;

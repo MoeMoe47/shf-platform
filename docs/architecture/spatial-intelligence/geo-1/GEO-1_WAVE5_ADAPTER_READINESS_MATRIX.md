@@ -34,6 +34,12 @@ validated `countyFips` values and removed the resolver import from the active
 IEP page. Dynamic IEP record identity remains a gate, and the resolver remains
 available to unrelated legacy consumers.
 
+Wave 5D-DYN now makes repository-controlled dynamic/demo records explicit:
+county-owned derived views propagate validated parent FIPS, while standalone
+records without a source relationship remain null and excluded from geography.
+Production/API onboarding remains `READY WITH CONDITIONS` until the source
+schema supplies authoritative `countyFips: string | null`.
+
 ## Readiness Rule
 
 `READY WITH CONDITIONS` means an adapter can be planned around a confirmed domain boundary but cannot be registered until source identity, coordinates, publication, and regression evidence are accepted. `PARTIAL` and `BLOCKED` are not migration permission.

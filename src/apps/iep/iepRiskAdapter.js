@@ -21,6 +21,7 @@ export function mapIEPAlertToRisk(student) {
     id: `risk_${student.id}`,
     studentId: student.id,
     studentName: student.name,
+    countyFips: student.countyFips || null,
     type,
     severity,
     confidence,

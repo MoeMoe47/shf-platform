@@ -13,6 +13,7 @@ const initialStudents = [
   {
     id: "stu_001",
     name: "Emily S.",
+    countyFips: null,
     readingProgress: 80,
     mathProgress: 74,
     risk: "On Track",
@@ -45,6 +46,7 @@ const initialStudents = [
   {
     id: "stu_002",
     name: "Jason T.",
+    countyFips: null,
     readingProgress: 44,
     mathProgress: 39,
     risk: "High Risk",
@@ -77,6 +79,7 @@ const initialStudents = [
   {
     id: "stu_003",
     name: "Sophia M.",
+    countyFips: null,
     readingProgress: 67,
     mathProgress: 61,
     risk: "Needs Attention",
@@ -99,6 +102,7 @@ const initialStudents = [
   {
     id: "stu_004",
     name: "Aiden D.",
+    countyFips: null,
     readingProgress: 56,
     mathProgress: 52,
     risk: "On Track",

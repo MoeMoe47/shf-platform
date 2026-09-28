@@ -1,4 +1,7 @@
-import { resolveExactQualifiedCountyNameToFips } from "../../shared/spatial/countyIdentity.js";
+import {
+  propagateCountyFipsFromCountyOwnedParent,
+  resolveExactQualifiedCountyNameToFips,
+} from "../../shared/spatial/countyIdentity.js";
 
 const RAW_COUNTY_PROFILES = {
   __default: {
@@ -4507,6 +4510,15 @@ export const COUNTY_PROFILES = Object.freeze(
         : {
             ...profile,
             countyFips: resolveExactQualifiedCountyNameToFips(profile.label || key),
+            priorityCases: Array.isArray(profile.priorityCases)
+              ? profile.priorityCases.map((priorityCase) =>
+                  propagateCountyFipsFromCountyOwnedParent(
+                    { countyFips: resolveExactQualifiedCountyNameToFips(profile.label || key) },
+                    priorityCase,
+                    "COUNTY_OWNED_DERIVED"
+                  )
+                )
+              : profile.priorityCases,
           },
     ])
   )

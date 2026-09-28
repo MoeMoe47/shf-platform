@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { fabricUrl } from "@/system/fabric/fabricConfig";
 
 export default function CountyInteractionLayer({
-  county = "Franklin",
+  county = null,
   profile,
   isOpen = false,
   onClose,
@@ -12,7 +12,7 @@ export default function CountyInteractionLayer({
   const [simError, setSimError] = useState("");
   const [simResult, setSimResult] = useState(null);
 
-  const countyName = county || profile?.label || "Franklin";
+  const countyName = county || profile?.label || "Unknown county";
   const risk = profile?.riskStatus || "High Risk";
   const confidence = profile?.confidence || "91%";
   const funding = profile?.funding || "$1.2M";
@@ -46,6 +46,7 @@ export default function CountyInteractionLayer({
           agentName: "Layer09CaseSupportAgent",
           input: {
             region: countyName,
+            countyFips: profile?.countyFips || null,
             issue: "Education Risk",
             priority: /high/i.test(risk) ? "High" : "Normal",
             confidence,

@@ -432,3 +432,14 @@ Repository evidence: `src/pages/iep-command-v2/countyProfiles.js`; `src/shared/s
 Reason: Additive identity hardening preserves the current UI contract while establishing a safe domain-to-Census join boundary.
 Affected phases: GEO-1 Wave 5D identity remediation and later IEP client onboarding.
 Revisit condition: Dynamic IEP record sources expose explicit validated `countyFips`, or the qualified Census identity source changes.
+
+## GEO1-WAVE5D-DYN-DEC-027
+
+Decision ID: GEO1-WAVE5D-DYN-DEC-027
+Question: How should dynamic IEP records without an authoritative county relationship behave?
+Decision: Dynamic records carry `countyFips: string | null`. Non-null identity must be source-supplied, domain-validated, migrated from an exact qualified static reference, or propagated only from an explicitly county-owned derived parent. Missing or invalid identity remains null and is excluded from geographic joins. `entityToCounty`, labels, addresses, entity text, fuzzy matches, and defaults are prohibited.
+Alternatives considered: Infer from student/entity text; default unresolved records to Franklin; reject all non-geographic records; propagate from any parent object.
+Repository evidence: `src/shared/spatial/countyIdentity.js`; `src/pages/iep/IEPDashboardPage.jsx`; `src/apps/iep/iepRiskAdapter.js`; dynamic Wave 5D identity tests.
+Reason: Preserve valid non-geographic domain data without fabricating county authority, while allowing explicitly county-owned derived presentation models to retain identity.
+Affected phases: GEO-1 Wave 5D dynamic identity and later IEP client onboarding.
+Revisit condition: A production IEP/API schema supplies authoritative county identity and publication semantics.

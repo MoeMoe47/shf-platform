@@ -39,6 +39,7 @@ function buildPriorityCases(riskEvents = []) {
   return riskEvents.slice(0, 3).map((event) => ({
     id: event.id,
     name: event.studentName,
+    countyFips: event.countyFips || null,
     status:
       event.severity === "high"
         ? "High Risk"

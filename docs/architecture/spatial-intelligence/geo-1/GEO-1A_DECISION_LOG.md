@@ -399,3 +399,14 @@ Repository evidence: `MetaverseMiniMap.jsx` native marker/control buttons; Wave 
 Reason: Shared safe models keep state and privacy behavior aligned while native controls provide equivalent keyboard activation without moving authority.
 Affected phases: GEO-1 Wave 4D-4E.
 Revisit condition: When browser certification identifies a concrete focus or non-map parity gap, or when the accepted client model changes.
+
+## GEO1-WAVE5C-DEC-024
+
+Decision ID: GEO1-WAVE5C-DEC-024
+Question: What is the first qualified production county geometry contract, and which authority owns it?
+Decision: Freeze the first adapter contract around the matched U.S. Census Bureau 2010 Cartographic Boundary File, State-County, `1:20,000,000`, represented by `public/assets/maps/ohio-counties.geojson`. Use neutral domain `census-geography`, feature type `county`, source authority `us-census-bureau-2010-cartographic-boundary`, five-digit Ohio FIPS source record IDs, and the existing `real-world.county-geojson` coordinate space. IEP is a consuming client context and does not own Census geometry. The ODOT file remains a separate legacy dependency.
+Alternatives considered: Treat IEP as the source domain; use ODOT as the canonical base geometry; merge both files; use county names or array order as identity.
+Repository evidence: official Census match and use restrictions in `GEO-1_WAVE5C_IEP_SOURCE_QUALIFICATION.md`; existing coordinate registry; `createSpatialFeatureId`; ODOT comparison addendum.
+Reason: Separate source authority, client context, and operational legacy data while preserving the existing map and the qualified Census scale/use restrictions.
+Affected phases: GEO-1 Wave 5C contract and later adapter implementation.
+Revisit condition: New authoritative source evidence, a change in the governed Census asset, or a separately approved ODOT operational geometry contract.

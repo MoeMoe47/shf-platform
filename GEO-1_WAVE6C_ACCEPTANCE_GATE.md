@@ -4,6 +4,9 @@
 
 `QUALIFIED_WITH_CONDITIONS`
 
+Wave 6C-G geometry qualification keeps the runtime gate blocked until a
+scene-local coordinate standard and approved geometry payload exist.
+
 ## Conditions Before Runtime Implementation
 
 1. Confirm the regional scene registry as an approved source authority, or
@@ -19,6 +22,9 @@
    authorities.
 7. Re-run the existing regional/browser accessibility baselines before any
    runtime adapter work.
+8. Freeze scene-local geometry semantics and approval ownership before
+   authoring.
+9. Prove asset alignment or explicitly approve variant-specific geometry.
 
 ## Gate Results
 
@@ -32,6 +38,7 @@
 | Publication boundary | PASS for current separation; future contract required. |
 | Navigation boundary | PASS: router/page remains owner. |
 | Feature contract | CONDITION: planning-only, not implemented. |
+| Scene-local geometry | BLOCKED: no approved geometry payload; coordinate bounds remain scene-defined. |
 
 ## Wave 6 Decision
 
@@ -39,6 +46,8 @@
 
 This means Wave 6C may proceed to a contract/red-test review after the listed
 conditions are addressed. It does not authorize an adapter or client runtime.
+Geometry authoring is separately `BLOCKED_BY_COORDINATE_STANDARD` until the
+Wave 6C-G entry conditions are closed.
 
 ## Validation Snapshot
 

@@ -88,3 +88,11 @@ family is `METAVERSE` and its registered space is `metaverse.regional-scene`.
 The registry remains presentation authority pending a reviewed Spatial feature
 contract. Traffic, water, river, ocean, transit, and navigation authorities
 remain separate. No regional adapter or runtime registration exists.
+
+## Wave 6C-G Geometry Update
+
+Regional scene geometry is planned as a separate owner-approved scene coverage
+Polygon registry. The scene registry remains authoritative for scene identity
+and existence; Spatial remains a projection coordinator. The registered
+`metaverse.regional-scene` space does not yet freeze concrete bounds, so no
+scene is Spatial-eligible and no geometry authoring or adapter runtime exists.

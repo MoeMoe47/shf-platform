@@ -64,6 +64,37 @@ Affected phases: Wave 6C and a future regional contract/runtime phase.
 Revisit condition: A reviewed source/feature contract names the scene authority
 and closes the implemented-scene coverage and client-boundary conditions.
 
+## GEO1-WAVE6C-DEC-002
+
+Decision ID: GEO1-WAVE6C-DEC-002
+Question: What geometry may represent a Regional scene for Spatial?
+Decision: Use an owner-authored scene coverage Polygon in a future dedicated
+Regional Geometry Registry; do not use image bounds, route order, Quick Map,
+master-city, or mobility traces.
+Repository evidence: The existing SpatialFeature contract requires geometry;
+the Regional registry supplies stable scene declarations and assets but no
+scene-local geometry. Existing authoring tools provide reusable normalized
+point-editing patterns, but their Traffic/River authorities are distinct.
+Reason: A separate approved geometry registry preserves scene identity and
+geometry ownership without transferring authority to Spatial or fabricating
+coordinates from presentation assets.
+Affected phases: Wave 6C-G and future Regional adapter implementation.
+Revisit condition: An approved Regional coordinate standard, geometry payload,
+or a repository-backed alternative spatial representation exists.
+
+## GEO1-WAVE6C-DEC-003
+
+Decision ID: GEO1-WAVE6C-DEC-003
+Question: Are DAY/DUSK/NIGHT assets proven to share one geometry frame?
+Decision: No. Alignment is `INSUFFICIENT_EVIDENCE` for Oil Rig and Open Sea.
+Repository evidence: Oil Rig variants share `1536x1024` dimensions but have no
+landmark registration metadata; Open Sea variants differ in dimensions
+(`1584x993`, `1580x995`, `1578x997`).
+Reason: Visual similarity is not sufficient to approve shared geometry.
+Affected phases: Wave 6C-G authoring and later adapter eligibility.
+Revisit condition: Measured alignment evidence or an approved variant-specific
+geometry policy.
+
 ## GEO1-WAVE1-DEC-001
 
 Decision ID: GEO1-WAVE1-DEC-001

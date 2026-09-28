@@ -223,3 +223,102 @@ Repository evidence: GEO-1B State Engine Plan priority; GEO1-WAVE3A-DEC-001 (mul
 Reason: What may be shown and who owns a fact are different questions. Conflating them lets visibility erase domain truth, or lets domain state bypass visibility.
 Affected phases: GEO-1 Wave 3B resolver and all clients.
 Revisit condition: When a new dimension is added.
+
+## GEO1-WAVE3B-DEC-008
+
+Decision ID: GEO1-WAVE3B-DEC-008
+Question: How does a projection adapter declare its identity, and how is it validated at registration?
+Decision: Adapters self-declare `getDomain()`, `getSourceAuthority()`, `getSupportedFeatureTypes()`, `getSupportedCoordinateSpaces()`, and `getProjectionVersion()` alongside `canProject()` and `project()`. Registration requires a frozen adapter, calls the identity methods once, and snapshots their values. It rejects malformed identity with the new catalog code `INVALID_ADAPTER` (REGISTRY, ERROR, not client-safe, blocking). The collision key is `${domain}::${featureType}` for each supported type, and any collision rejects the whole registration. At projection, the record's domain and authority and the feature's domain, type, authority, and coordinate space must match the declared identity.
+Alternatives considered: Caller-supplied domain at `register(adapter, domain, featureType)` (Wave 3A fixture); deriving domain from projected features.
+Repository evidence: The Wave 3A fixture registry accepted domain from the caller, which let an adapter be filed under a domain it does not serve. The domain cannot be derived before projection. `createSpatialFeatureId` requires normalized segments.
+Reason: Self-declared, snapshotted identity removes caller ambiguity and makes collision detection and authority checks deterministic.
+Affected phases: GEO-1 Wave 3B.
+Revisit condition: If adapters must serve multiple domains.
+
+## GEO1-WAVE3B-DEC-009
+
+Decision ID: GEO1-WAVE3B-DEC-009
+Question: Where does projection version live, and who is its authority?
+Decision: The adapter's `getProjectionVersion()` is the single authority. `feature.provenance.projectionVersion` must equal it; a mismatch is `INVALID_PROVENANCE` and is never silently overwritten. Results reference the version only through provenance. No separate result-level version field exists.
+Alternatives considered: A version on each result; a pipeline-stamped version; independent adapter and provenance versions.
+Repository evidence: GEO-1B Provenance Model Plan requires `projectionVersion` in provenance; Wave 1 `validateSpatialProvenance` requires it.
+Reason: One authority with an enforced reference prevents conflicting version claims.
+Affected phases: GEO-1 Wave 3B.
+Revisit condition: When a versioned replacement policy (DEC-003) is proposed.
+
+## GEO1-WAVE3B-DEC-010
+
+Decision ID: GEO1-WAVE3B-DEC-010
+Question: How do Wave 1 validators gain machine-readable results without breaking callers?
+Decision: Every validator result adds `issues: [{ code, field, message, details? }]` as the structured twin of `errors`: same length and order, and `message` equals the legacy string. Codes come from the new `VALIDATION_ISSUE_CODES` vocabulary, and `details` keys are limited to `VALIDATION_ISSUE_DETAIL_KEYS`. Registry `get` and `assertNoImplicitTransform` failures gain `code`. Registration throws gain `error.code` and `error.issues`. Projection maps issue codes to diagnostic codes through a code-to-code table and never reads messages. Existing `errors` strings are unchanged.
+Alternatives considered: Reuse projection diagnostic codes inside validators; replace `errors` with objects.
+Repository evidence: `validation.js` returns strings; the Wave 3A harness parsed them; the Wave 1 and Wave 2 suites assert on those strings.
+Reason: Validators serve more callers than projection, so they need their own vocabulary. The twin shape preserves compatibility and makes parity testable.
+Affected phases: Wave 1 contracts (additive), GEO-1 Wave 3B.
+Revisit condition: When all callers migrate to `issues` and a deprecation of `errors` is proposed.
+
+## GEO1-WAVE3B-DEC-011
+
+Decision ID: GEO1-WAVE3B-DEC-011
+Question: Is `availabilityReason` a canonical field or a duplicate of diagnostics?
+Decision: Canonical. It is populated if and only if `availabilityState = UNAVAILABLE`, with the first applicable reason in stage order: `LAYER_LIFECYCLE`, then `STALE_POLICY`, then `DOMAIN_SUPPLIED`. Status is the exposure outcome, `availabilityState` is the fact, `availabilityReason` is the authority behind the fact, and diagnostics are operator events. `LAYER_LIFECYCLE` and `DOMAIN_SUPPLIED` emit no diagnostic.
+Alternatives considered: Derive the reason from diagnostics; omit the reason.
+Repository evidence: Two of the three reasons have no diagnostic; S12 of the Wave 3B test plan requires the reason.
+Reason: A reason field is the only non-redundant record of which authority made a feature unavailable.
+Affected phases: GEO-1 Wave 3B.
+Revisit condition: When a new availability source is added.
+
+## GEO1-WAVE3B-DEC-012
+
+Decision ID: GEO1-WAVE3B-DEC-012
+Question: How is non-dominant presentation context represented?
+Decision: `modifiers` is a closed vocabulary (`SELECTED`, `HIGHLIGHTED`, `STALE`, `UNVERIFIED`) in fixed order, unique, and derived only; caller input is ignored. Each modifier is present whenever its condition holds and has an accessibility equivalent (`selected`, `highlighted`, `freshnessText`, `verificationText`). Modifiers never carry domain values and are omitted from masked client results.
+Alternatives considered: Boolean flags per condition; allowing domain values as modifiers; omitting a modifier that equals the dominant state.
+Repository evidence: GEO1-WAVE3B-DEC-007 layers modifiers over `resolvedVisualState`; GEO-1A Layer Contract requires text equivalents.
+Reason: A closed, derived, ordered list is testable and cannot smuggle domain facts or hidden state.
+Affected phases: GEO-1 Wave 3B and all clients.
+Revisit condition: When a new presentation-only condition needs representation.
+
+## GEO1-WAVE3B-DEC-013
+
+Decision ID: GEO1-WAVE3B-DEC-013
+Question: What are the exact internal and client projection result shapes?
+Decision: Freeze `InternalProjectionResult` and `ClientProjectionResult` as specified in `GEO-1_WAVE3B_RUNTIME_CONTRACT.md` §4. Internal results always evaluate all dimensions for valid features, including masked ones. Client results are built constructively from per-status allowlists: PROJECTED/STALE feature allowlist, UNAVAILABLE feature allowlist without title or description, a 5-key client provenance allowlist, and omission of SUPPRESSED, INVALID, and HIDE results. Identifier lookup returns `{ ok, result }` or `{ ok: false, diagnostics: [FEATURE_NOT_AVAILABLE] }`.
+Alternatives considered: Deriving client results by deleting known private fields; a `NOT_AVAILABLE` result status.
+Repository evidence: GEO1-WAVE3B-DEC-002; `featureId` embeds `sourceRecordId`.
+Reason: Allowlisting cannot leak a field nobody remembered to delete.
+Affected phases: GEO-1 Wave 3B and all clients.
+Revisit condition: When a new client surface needs a different field set.
+
+## GEO1-WAVE3B-DEC-014
+
+Decision ID: GEO1-WAVE3B-DEC-014
+Question: What exactly may a RESTRICTED NOTICE result contain?
+Decision: Only `kind`, `status`, `resultRef`, `layerId`, `presentation: { resolvedVisualState: "RESTRICTED" }`, `accessibility: { label: "Restricted item", stateText: "Restricted" }`, and `diagnostics: [{ code: "RESTRICTED", message }]`. GENERALIZED mode may add `geometry` only from source-supplied `generalizedGeometry`. Apart from `resultRef`, every NOTICE result on a layer is identical. `layerId` is permitted because NOTICE is an explicit layer-owner opt-in; the default remains HIDE.
+Alternatives considered: Removing known private fields from a feature copy; including `featureId` for client selection.
+Repository evidence: GEO-1A Public/Private Boundary rule 6; GEO1-WAVE3B-DEC-002.
+Reason: A fixed, record-independent notice cannot disclose record data.
+Affected phases: GEO-1 Wave 3B and all clients.
+Revisit condition: When a publication authority requires a per-record masked reference.
+
+## GEO1-WAVE3B-DEC-015
+
+Decision ID: GEO1-WAVE3B-DEC-015
+Question: Which Wave 3B layer policy fields join the canonical layer contract, and when are they validated?
+Decision: Amend `GEO-1A_LAYER_CONTRACT.md` with the optional fields `stalePolicy`, `maxSourceAge` + `freshnessAuthority`, `soonThreshold` + `soonThresholdAuthority`, and `maskMode`, with the types, defaults, and rules in `GEO-1_WAVE3B_RUNTIME_CONTRACT.md` §8. `validateSpatialLayer` validates them at registration (`LAYER_POLICY_INVALID`), so a malformed policy rejects the layer. This supersedes the red-test expectation that a malformed or authority-less `soonThreshold` registers and is diagnosed at projection. `EVENT_SOON_THRESHOLD_NOT_CONFIGURED` now means only "no threshold declared".
+Alternatives considered: A single `policyAuthority`; runtime-only validation; keeping the fields fixture-only.
+Repository evidence: `SpatialLayerRegistry.register` already rejects invalid layers; default layers declare none of the fields; GEO1-WAVE3B-DEC-004 and DEC-005.
+Reason: Fail-fast registration keeps invalid policy out of runtime. Separate authorities follow the governing principle.
+Affected phases: Wave 1 layer contract (additive), GEO-1 Wave 3B.
+Revisit condition: When a layer needs a policy outside these fields.
+
+## GEO1-WAVE3B-DEC-016
+
+Decision ID: GEO1-WAVE3B-DEC-016
+Question: How are the diagnostic catalog representation details frozen?
+Decision: `PROJECTION_DIAGNOSTIC_DETAIL_KEYS` is exactly `expectedCoordinateFamily`, `field`, `issueCode`, `maskMode`, `receivedCoordinateFamily`, `stalePolicy`, and payload keys are permanently excluded. `STALE_SOURCE` catalog `blocking` is `"PER_STALE_POLICY"`, while emitted instances carry a boolean. The catalog holds 17 codes: 16 from DEC-006 plus `INVALID_ADAPTER` from DEC-008.
+Alternatives considered: An open-ended details object; a boolean catalog `blocking` for `STALE_SOURCE`.
+Repository evidence: GEO1-WAVE3B-DEC-006; red-test D01 and D05.
+Reason: Frozen keys make "no payload in diagnostics" enforceable.
+Affected phases: GEO-1 Wave 3B.
+Revisit condition: When a new diagnostic needs a new non-payload detail key.

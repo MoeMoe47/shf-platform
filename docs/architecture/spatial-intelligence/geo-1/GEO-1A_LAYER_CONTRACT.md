@@ -44,3 +44,16 @@ Allowed lifecycle values:
 - `RESTORATION_CANDIDATE`
 - `RETIREMENT_CANDIDATE`
 - `UNKNOWN`
+
+## Amendment: GEO1-WAVE3B-DEC-015 (Wave 3B Layer Policy Fields)
+
+This amendment adds optional fields. The contract text above is unchanged. Full types, defaults, and validation rules are in `GEO-1_WAVE3B_RUNTIME_CONTRACT.md` §8.
+
+| Field | Absent means |
+|---|---|
+| `stalePolicy` (`MARK_STALE` \| `SUPPRESS` \| `UNAVAILABLE`) | behave as `MARK_STALE` |
+| `maxSourceAge` (ISO 8601 duration) + `freshnessAuthority` | no calculated freshness |
+| `soonThreshold` (ISO 8601 duration) + `soonThresholdAuthority`, time-aware layers only | EVENT_SOON not calculable |
+| `maskMode` (`HIDE` \| `NOTICE` \| `GENERALIZED`) | `HIDE` |
+
+Invalid values reject the layer at registration (`LAYER_POLICY_INVALID`). These fields describe presentation policy declared by the named authorities. They do not make a layer a data authority.

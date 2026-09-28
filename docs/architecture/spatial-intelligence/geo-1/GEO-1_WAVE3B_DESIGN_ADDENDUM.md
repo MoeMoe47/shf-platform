@@ -1,6 +1,7 @@
 # GEO-1 Wave 3B Design Addendum
 
 Status: design only. No production runtime.
+Refined by: `GEO-1_WAVE3B_RUNTIME_CONTRACT.md` (GEO1-WAVE3B-DEC-008 through DEC-016). Where that contract is more specific, it governs. This text is kept as frozen at `39e9b62`.
 Baseline: `954560b test(spatial): freeze Wave 3A projection state contract`
 Decisions: GEO1-WAVE3B-DEC-001 through GEO1-WAVE3B-DEC-007 in `GEO-1A_DECISION_LOG.md`
 

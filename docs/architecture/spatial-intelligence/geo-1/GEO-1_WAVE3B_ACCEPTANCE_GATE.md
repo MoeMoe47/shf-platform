@@ -36,13 +36,28 @@ Conditions:
 4. `stalePolicy`, `maxSourceAge`, `freshnessAuthority`, `soonThreshold`, `soonThresholdAuthority`, and mask mode are new optional layer or record fields. They need to be added to the layer contract when implemented.
 5. Route-derived NEXT is deferred to the route/path wave.
 
+## Part 1b: Test-Contract Reconciliation Gate
+
+Status: COMPLETE
+
+- All seven red-test deviations, plus the five earlier recorded refinements, are ruled on in GEO1-WAVE3B-DEC-008 through DEC-016.
+- The frozen production contract is `GEO-1_WAVE3B_RUNTIME_CONTRACT.md`.
+- The layer contract is amended by DEC-015, with the historical text unchanged.
+- The red tests are reconciled at 63 tests: 3 pass, 60 `EXPECTED_MISSING_RUNTIME`, 0 contract, regression, or unexpected failures.
+
+Part 1 conditions updated by reconciliation:
+
+- Condition 2 is now concrete: the `issues` twin on 8 validators, registry codes, and throw codes (contract §3).
+- Condition 4 is now concrete: the layer fields are accepted and validated at registration (contract §8, DEC-015).
+
 ## Part 2: Production Wave 3B Gate
 
 Status: NOT STARTED
 
 Production Wave 3B may be accepted only when:
 
-- all 63 tests in `GEO-1_WAVE3B_TEST_PLAN.md` are implemented and pass
+- all 63 tests in `GEO-1_WAVE3B_TEST_PLAN.md` pass against `GEO-1_WAVE3B_RUNTIME_CONTRACT.md`
+- the fixture helper's missing-runtime gates no longer trigger (runtime entry and additive Wave 1 exports present)
 - all prior Spatial suites pass unmodified (53 at baseline `954560b`)
 - `npm run build` passes
 - no production module imports a fixture

@@ -455,6 +455,14 @@ Reason: Define the future producer obligation without fabricating persistence au
 Affected phases: GEO-1 Wave 5D API contract and later IEP client onboarding.
 Revisit condition: A verified IEP domain/API authority exists with county identity, publication, authorization, and persistence semantics.
 
+## GEO1-WAVE6A-DEC-030
+
+Decision ID: GEO1-WAVE6A-DEC-030
+Question: Which additional client should enter the next Spatial qualification phase?
+Decision: Select ODOT operational county geography as the sole Wave 6B qualification candidate. Its official TIMS source, stable FIPS crosswalk, and distinct high-resolution operational use case provide stronger evidence than Exchange/Capital, SHF, regional presentation scenes, or disconnected globes. Implementation remains blocked until ODOT reuse terms, versioned snapshot governance, operational publication ownership, and a narrow client contract are confirmed. Census and ODOT remain separate authorities.
+Evidence: `GEO-1_WAVE6A_ADDITIONAL_CLIENT_AUDIT.md`, `GEO-1_WAVE6_SOURCE_AUTHORITY_MATRIX_V2.md`, `GEO-1_WAVE6_NEXT_CLIENT_SELECTION.md`, and the Wave 5C ODOT comparison record.
+Affected phases: GEO-1 Wave 6A selection and Wave 6B qualification.
+
 ## GEO1-WAVE5E-DEC-029
 
 Decision ID: GEO1-WAVE5E-DEC-029

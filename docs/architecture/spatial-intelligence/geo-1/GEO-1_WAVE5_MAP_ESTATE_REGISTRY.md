@@ -43,6 +43,17 @@ the dual-run remains a DEV-only diagnostic. Spatial failure is controlled and
 does not silently fall back. The IEP migration is accepted with rollback
 condition; the Census asset remains canonical and the ODOT asset remains an
 independent legacy dependency.
+
+## Wave 6A Revalidation
+
+Wave 6A revalidated the remaining estate. Exchange/Capital remains blocked by
+remote source provenance, token/external-service dependency, and mixed domain
+identity. SHF remains blocked by publication state. ODOT TIMS is the strongest
+next qualification candidate with `QUALIFIED_WITH_CONDITIONS` status; it must
+remain a separate authority from Census. Metaverse regional scenes remain
+presentation-oriented and partial. OperationalGlobe, RealGlobe, OutcomeGlobe,
+and SHFOhioMapEngine remain reference or disposition candidates rather than
+Spatial clients.
 | Disconnected globes | globe overlays/arcs | component-local/remote data | UNKNOWN | Component-local | UNKNOWN | UNKNOWN | DISPOSITION PENDING |
 
 The matrix intentionally leaves authority dimensions independent. A candidate source is not a confirmed source authority.

@@ -44,6 +44,26 @@ Reason: Presentation cannot approve, verify, or publish domain data.
 Affected phases: GEO-1 through GEO-7.
 Revisit condition: None; this is a standing authority rule.
 
+## GEO1-WAVE6C-DEC-001
+
+Decision ID: GEO1-WAVE6C-DEC-001
+Question: Is the Metaverse regional surface ready for a Spatial contract?
+Decision: QUALIFIED_WITH_CONDITIONS for a future `regional-scene` contract only.
+Alternatives considered: Implement a regional adapter immediately; block all
+regional work; treat route context as geometry.
+Repository evidence: `regionalSceneRegistry.js` defines 15 stable route IDs,
+`MetaverseRegionalScenePage.jsx` is mounted for implemented slugs, and
+`metaverse.regional-scene` is already registered. The existing tests confirm
+only `oil-rig` and `open-sea` as implemented scenes; route context and mobility
+registries remain separate presentation/reference systems.
+Reason: The client and coordinate family are real, but the current registry is
+not yet a confirmed geographic source authority and the full route is not
+implemented as scene features. The first scope must be scene features only;
+Spatial must not assume route, traffic, water, transit, or navigation authority.
+Affected phases: Wave 6C and a future regional contract/runtime phase.
+Revisit condition: A reviewed source/feature contract names the scene authority
+and closes the implemented-scene coverage and client-boundary conditions.
+
 ## GEO1-WAVE1-DEC-001
 
 Decision ID: GEO1-WAVE1-DEC-001

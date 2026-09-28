@@ -9,7 +9,7 @@ Statuses reflect current evidence and do not authorize implementation.
 | Exchange / Capital | `BLOCKED` | Mapbox token/platform dependency, remote county source provenance/license, mixed marker identity, and publication boundaries remain unresolved. |
 | SHF public impact | `BLOCKED` | Current impact records are sample/draft and all `publicApproved:false`. |
 | ODOT operational geography | `QUALIFIED_WITH_CONDITIONS` | Source and FIPS are qualified; rights clarification, approved snapshot governance, and a justified first consuming client remain open. Gate closure result: `BLOCKED_BY_CLIENT`; adapter implementation remains `NOT_READY`. |
-| Metaverse regional geography | `PARTIAL` | Strong presentation registry and assets, but no confirmed geographic source authority or registered production feature contract. |
+| Metaverse regional geography | `QUALIFIED_WITH_CONDITIONS` | Mounted `/metaverse/:scene` client, stable 15-stop registry IDs, registered `metaverse.regional-scene` space, and existing regression coverage; authority remains presentation-oriented, only 2 scenes are implemented, and no production feature contract exists yet. |
 | CivicSure | `NOT_JUSTIFIED` | No confirmed geographic source/coordinate contract in current evidence. |
 | Career | `NOT_JUSTIFIED` | No confirmed canonical geographic records. |
 | Opportunities | `NOT_JUSTIFIED` | Domain surfaces exist without qualified spatial authority. |
@@ -23,7 +23,7 @@ Statuses reflect current evidence and do not authorize implementation.
 
 ## Recommended Next Qualification
 
-ODOT operational county geography remains the sole Wave 6B qualification
-candidate. Wave 6B evidence supports a conditional source qualification, but
-does not authorize an adapter, source registration, snapshot replacement, or
-consumer migration. The first consuming client is currently `NONE`.
+Wave 6C qualifies the mounted Metaverse regional surface conditionally for a
+future `regional-scene` contract limited to implemented scene records. It does
+not authorize an adapter, source registration, route migration, or mobility
+onboarding. ODOT remains parked with no justified first consuming client.

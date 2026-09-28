@@ -6,7 +6,7 @@ This planning registry is descriptive. It is not a runtime registry and does not
 | --- | --- | --- | --- | --- | --- | --- |
 | `metaverse.quick-map` | Silicon Heartland top map / `MetaverseMiniMap.jsx` | Metaverse presentation; record owners unknown | city page | PNG asset plus registry overlays | Metaverse client visibility | Adapter client-ready; legacy mapping blocked |
 | `metaverse.master-city` | master city scene and facility relationships | Metaverse | city page | scene assets and verified relationship registry | Metaverse | Partial; separate from Quick Map |
-| `metaverse.regional-scenes` | regional scene maps | Metaverse | `/metaverse/:scene` | scene registry, per-scene quick-map assets | Metaverse | Partial; route references null |
+| `metaverse.regional-scenes` | regional scene maps | Metaverse | `/metaverse/:scene` | `regionalSceneRegistry.js`, per-scene assets, route context | Metaverse | Qualified with conditions; future scene-feature contract only |
 | `shs.operations-mapbox` | operational county map | SHS operations | Exchange unified truth | Mapbox GL + remote GeoJSON | operator/public boundary requires review | Partial / blocked on config and authority |
 | `exchange.unified-truth` | Unified Truth Map | Exchange / SHS boundary | `capital.html#/exchange`, unified-truth route evidence | Mapbox | authenticated/operator policy | Partial |
 | `shf.public-impact` | Foundation impact map | SHF | `foundation.html#/impact` | Ohio county geometry + SHF data filter | public approval required | Blocked while records are draft |
@@ -79,3 +79,12 @@ METAVERSE presentation/review systems rather than ODOT consumers. ODOT remains
 a conditional future authority with no adapter or source registration.
 
 Future implementation work may add evidence links, source IDs, and acceptance dates. It must not turn this planning table into a source-of-truth registry without a separate contract and review.
+
+## Wave 6C Metaverse Regional Update
+
+The regional surface is a mounted Metaverse client with a 15-stop canonical
+presentation sequence and 2 implemented scene declarations. Its coordinate
+family is `METAVERSE` and its registered space is `metaverse.regional-scene`.
+The registry remains presentation authority pending a reviewed Spatial feature
+contract. Traffic, water, river, ocean, transit, and navigation authorities
+remain separate. No regional adapter or runtime registration exists.

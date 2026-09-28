@@ -58,6 +58,16 @@ Spatial clients.
 
 The matrix intentionally leaves authority dimensions independent. A candidate source is not a confirmed source authority.
 
+## Wave 6B ODOT Qualification
+
+The ODOT asset `public/geo/ohio-counties.geojson` remains an unchanged legacy
+dependency for existing SHF/base-map consumers. Wave 6B qualified the official
+ODOT TIMS County layer conditionally as a separate operational geography
+authority. No ODOT adapter or runtime source registration exists. A future
+ODOT client must use a governed snapshot, exact `FIPS_COUNTY_CD`, separate
+source identity, and a named operational consumer; it must not merge with the
+Census county source.
+
 ## Registry Use
 
 Future implementation work may add evidence links, source IDs, and acceptance dates. It must not turn this planning table into a source-of-truth registry without a separate contract and review.

@@ -470,3 +470,26 @@ Question: What legacy IEP elements remain after the Spatial-default migration?
 Decision: Accept the IEP county migration with the Spatial path as default. Retain the direct legacy preparation path only behind the explicit development `iepLegacyMap=1` rollback seam, retain `iepSpatialDualRun=1` as a development-only diagnostic, and fail closed on Spatial preparation errors rather than silently falling back. The qualified Census asset remains canonical source data; the ODOT asset remains an independent legacy dependency. No legacy element is retired while it remains required by rollback or parity evidence.
 Evidence: `GEO-1_WAVE5E_IEP_MIGRATION_ACCEPTANCE.md`, `GEO-1_WAVE5E_LEGACY_DISPOSITION.md`, and `tests/ui/spatial-iep-wave5e-acceptance.spec.mjs`.
 Affected phases: GEO-1 Wave 5E migration acceptance and later Wave 6 client onboarding.
+
+## GEO1-WAVE6B-DEC-031
+
+Decision ID: GEO1-WAVE6B-DEC-031
+Question: Can ODOT TIMS county geography proceed to production adapter implementation?
+Decision: Qualify ODOT TIMS County as a separate operational geography source
+with conditions, but do not implement or register an adapter. The official
+service and 88-county FIPS crosswalk are confirmed. A governed local snapshot
+is the recommended future architecture. Redistribution/modification terms are
+not complete, and no justified first consuming operational client is currently
+identified, so implementation readiness remains `NOT_READY`. Census and ODOT
+features remain distinct authorities.
+Evidence: `GEO-1_WAVE6B_ODOT_RIGHTS_QUALIFICATION.md`,
+`GEO-1_WAVE6B_ODOT_SNAPSHOT_GOVERNANCE.md`,
+`GEO-1_WAVE6B_ODOT_SOURCE_CONTRACT.md`, and the temporary official-service
+retrieval recorded in the Wave 6B governance document.
+Reason: This preserves official-source identity and operational value without
+overclaiming rights, creating a live network dependency, or inventing a client
+need.
+Affected phases: GEO-1 Wave 6B qualification and any later ODOT adapter/client
+implementation.
+Revisit condition: Written ODOT use terms, an approved snapshot process, and a
+named regression-protected operational client are available.

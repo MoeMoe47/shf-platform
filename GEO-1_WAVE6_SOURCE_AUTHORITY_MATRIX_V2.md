@@ -10,7 +10,7 @@ or client consumer is not thereby the source or publication authority.
 | Exchange county base | Exchange/SHS layer owner unresolved | Remote county dataset candidate | Exchange policy | Unknown | Mapbox/GeoJSON consumer boundary | SHSOperationalMapboxMap | None | Blocked | Remote provenance/license and identity |
 | Exchange operational markers | Exchange/SHS domain candidate | Marker-local/hardcoded or API-dependent | Role-dependent | Unknown | Mapbox geographic view | Mapbox markers/layers | None | Blocked | No confirmed source record authority |
 | SHF public impact | SHF impact data | Separate qualified base geometry candidate | SHF approval | SHF verification | County geometry consumer | SHFImpactOhioMap | None | Blocked | All current records `publicApproved:false` |
-| ODOT county operations | ODOT operational domain | ODOT TIMS County layer | ODOT terms/policy | ODOT service metadata | ODOT service snapshot | Future operational renderer | Not implemented | Qualified with conditions | Reuse terms and versioned snapshot |
+| ODOT county operations | ODOT operational domain | ODOT TIMS County layer | ODOT terms/policy | ODOT service metadata | ODOT service snapshot | Future operational renderer | Not implemented | Qualified with conditions | Redistribution/modification terms, governed snapshot, and first consumer |
 | Metaverse regional scenes | Presentation registry | Scene assets/registry | Metaverse presentation policy | Unknown | METAVERSE regional spaces | RegionalScenePage | None | Partial | No canonical geographic source records |
 | OperationalGlobe | Unknown | Local/remote geographic layers | Unknown | Unknown | REAL_WORLD lat/lng candidate | globe.gl | None | Reference only | Unmounted and ungoverned |
 | RealGlobe | Unknown | Remote Plotly county data | Unknown | Unknown | REAL_WORLD lat/lng candidate | globe.gl | None | Deprecate candidate | Direct remote demo dependency |
@@ -23,3 +23,14 @@ The accepted Census county source remains `census-geography::county` with
 five-digit Ohio FIPS and `real-world.county-geojson`. ODOT must never be
 registered under that collision key; a future ODOT adapter would require its
 own source authority and explicit operational layer contract.
+
+## Wave 6B ODOT Evidence
+
+The current ODOT FeatureServer layer is the `County` layer, item
+`5a65fb89de864e0b97bbcb346dd761f3`, credited to `ODOT Office of Technical
+Services`, and describes annual updates for 88 Ohio counties. The service
+metadata establishes public-information access and a use disclaimer, but does
+not provide a complete redistribution/modification license. The local asset
+crosswalk is 88/88 FIPS, 82/88 non-service-managed attribute matches, and
+85/88 exact geometry matches against a WGS84 GeoJSON query export. This is
+conditional source evidence, not adapter authorization.

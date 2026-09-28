@@ -443,3 +443,14 @@ Repository evidence: `src/shared/spatial/countyIdentity.js`; `src/pages/iep/IEPD
 Reason: Preserve valid non-geographic domain data without fabricating county authority, while allowing explicitly county-owned derived presentation models to retain identity.
 Affected phases: GEO-1 Wave 5D dynamic identity and later IEP client onboarding.
 Revisit condition: A production IEP/API schema supplies authoritative county identity and publication semantics.
+
+## GEO1-WAVE5D-API-DEC-028
+
+Decision ID: GEO1-WAVE5D-API-DEC-028
+Question: What production contract governs county identity before an IEP API exists?
+Decision: Freeze an additive `countyFips: string | null` contract at the shared domain boundary. Non-null values must be validated Ohio FIPS from the qualified 88-county set; null means unresolved. IEP/domain producers own the relationship, Census owns geometry, and consumers join only by exact FIPS. No speculative API route, backend model, DTO, database migration, or frontend inference is introduced because no production IEP model was found.
+Alternatives considered: Infer from county labels; create a speculative IEP table; let Spatial assign identity; reuse the Franklin fallback.
+Repository evidence: `apps/shs-api/src/api/router.ts` and active domain modules contain no IEP county producer; `src/pages/iep/IEPDashboardPage.jsx`, `src/pages/iep-command-v2/countyProfiles.js`, and `src/pages/iep-command/IEPCommandCenter.jsx` are frontend-controlled/demo or derived paths; Wave 5D identity contract and tests.
+Reason: Define the future producer obligation without fabricating persistence authority, while allowing the current client architecture to consume explicit or unresolved repository-controlled records safely.
+Affected phases: GEO-1 Wave 5D API contract and later IEP client onboarding.
+Revisit condition: A verified IEP domain/API authority exists with county identity, publication, authorization, and persistence semantics.

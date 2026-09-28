@@ -40,6 +40,11 @@ records without a source relationship remain null and excluded from geography.
 Production/API onboarding remains `READY WITH CONDITIONS` until the source
 schema supplies authoritative `countyFips: string | null`.
 
+Wave 5D-API freezes that future contract without inventing an API or database
+model. Current client readiness is `READY WITH CONDITIONS`; future production
+data readiness is `FUTURE_IMPLEMENTATION_REQUIRED` because no IEP county-bearing
+backend authority exists in the repository.
+
 ## Readiness Rule
 
 `READY WITH CONDITIONS` means an adapter can be planned around a confirmed domain boundary but cannot be registered until source identity, coordinates, publication, and regression evidence are accepted. `PARTIAL` and `BLOCKED` are not migration permission.

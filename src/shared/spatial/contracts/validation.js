@@ -23,6 +23,36 @@ function hasText(value) {
   return typeof value === "string" && value.trim().length > 0;
 }
 
+function finitePosition(position) {
+  return Array.isArray(position)
+    && position.length >= 2
+    && Number.isFinite(position[0])
+    && Number.isFinite(position[1])
+    && position[0] >= -180
+    && position[0] <= 180
+    && position[1] >= -90
+    && position[1] <= 90;
+}
+
+function validRing(ring) {
+  return Array.isArray(ring) && ring.length >= 4 && ring.every(finitePosition);
+}
+
+function validGeometryObject(value) {
+  if (!isObject(value)) return false;
+  if (value.type === "Polygon") return Array.isArray(value.coordinates) && value.coordinates.length > 0 && value.coordinates.every(validRing);
+  if (value.type === "MultiPolygon") {
+    return Array.isArray(value.coordinates)
+      && value.coordinates.length > 0
+      && value.coordinates.every((polygon) => Array.isArray(polygon) && polygon.length > 0 && polygon.every(validRing));
+  }
+  return false;
+}
+
+function hasGeometry(value) {
+  return hasText(value) || validGeometryObject(value);
+}
+
 function isIsoDateLike(value) {
   return hasText(value) && !Number.isNaN(Date.parse(value));
 }
@@ -172,9 +202,10 @@ export function validateTemporalProjection(temporalProjection) {
 export function validateSpatialFeature(feature, { coordinateRegistry, layerRegistry } = {}) {
   const issues = [];
   if (!isObject(feature)) return result([issue(CODES.OBJECT_REQUIRED, null, "feature is required")]);
-  for (const field of ["featureId", "featureType", "domain", "sourceAuthority", "sourceRecordId", "coordinateFamily", "coordinateSpaceId", "geometry", "layerId", "verificationState", "publicationState", "updatedAt"]) {
+  for (const field of ["featureId", "featureType", "domain", "sourceAuthority", "sourceRecordId", "coordinateFamily", "coordinateSpaceId", "layerId", "verificationState", "publicationState", "updatedAt"]) {
     requireText(issues, feature, field);
   }
+  if (!hasGeometry(feature.geometry)) issues.push(issue(CODES.FIELD_REQUIRED, "geometry", "geometry is required"));
   if (hasText(feature.featureId) && !isSpatialFeatureId(feature.featureId)) {
     issues.push(issue(CODES.FEATURE_ID_INVALID_FORMAT, "featureId", "featureId must use canonical spatial feature id format"));
   }

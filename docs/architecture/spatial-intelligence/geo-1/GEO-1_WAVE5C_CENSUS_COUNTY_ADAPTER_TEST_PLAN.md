@@ -52,3 +52,7 @@ UNEXPECTED_FAILURE: 0
 ```
 
 After implementation, all 26 cases must pass with zero failures. Existing Spatial, IEP, Wave 5B, and build baselines remain independently required.
+
+## Runtime Integration Checks
+
+`tests/spatialCensusCountyAdapterRuntimeWave5C.test.mjs` adds four focused implementation checks for registry registration, real Projection Pipeline execution, client provenance allowlisting, publication separation, and geometry/coordinate continuity. These are reported separately from the original 26-case contract.

@@ -2,7 +2,7 @@
 
 ## Status
 
-Contract frozen for implementation review. **Production adapter: NOT IMPLEMENTED.** The qualified path is conditional on the Census cartographic-use restrictions, attribution, governed local asset, and the companion red tests. No adapter is registered in application startup.
+Contract frozen and implemented for review. **Production adapter: IMPLEMENTED.** The qualified path remains conditional on the Census cartographic-use restrictions, attribution, and governed local asset. No adapter is registered in application startup.
 
 ## Boundary
 
@@ -69,8 +69,6 @@ Unknown geography remains `null`/unresolved rather than becoming Franklin County
 
 The geometry feature's publication eligibility is evaluated independently from any IEP record attached to it. A valid public base geometry cannot carry an unpublished or private IEP record across the projection boundary.
 
-## Readiness Gate
-
 ## Coordinate Contract
 
 The adapter uses the existing registered `real-world.county-geojson` space. Its contract is `REAL_WORLD`, source GeoJSON longitude/latitude order, Polygon or MultiPolygon geometry, and no transform. `metaverse.quick-map`, `metaverse.master-city`, and any other coordinate family or space are rejected. The adapter validates coordinates and passes accepted geometry through unchanged; it does not simplify, round, repair, reproject, normalize, or clamp it.
@@ -81,7 +79,7 @@ Every projected feature must retain the required runtime provenance fields and t
 
 ## Readiness Gate
 
-Implementation may begin only after source publisher, license, stable identifier, coordinate ownership, registered coordinate space, provenance, publication semantics, and the 26-case red contract are accepted. Until then the adapter remains a contract and red-test artifact.
+Implementation satisfies the 88-record identity set, unique valid Ohio FIPS identities, geometry validation, coordinate-space validation, no implicit transform, publication separation, no Franklin fallback dependency, unchanged IEP behavior, and the full 26-case contract. IEP onboarding remains a separate Wave 5D decision.
 
 ## Provenance Recovery Constraint
 

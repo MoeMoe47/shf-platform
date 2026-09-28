@@ -4,7 +4,7 @@
 
 **QUALIFIED_WITH_CONDITIONS**
 
-The current source qualification decision is **QUALIFIED_WITH_CONDITIONS** for the narrow Census base-geometry path only. No production adapter, source mapping, migration, or publication change is permitted until the implementation conditions are reviewed.
+The current source qualification decision is **QUALIFIED_WITH_CONDITIONS** for the narrow Census base-geometry path only. The adapter runtime is implemented and tested; no IEP source mapping, migration, or publication change is permitted.
 
 ## Frozen First-Adapter Contract
 
@@ -12,7 +12,7 @@ The proposed first adapter is a neutral `census-geography` / `county` adapter ov
 
 The adapter is strictly for small-scale statewide/county visual geography. It does not support parcel, address, survey-grade, precise boundary adjudication, or entity-to-county inference. Candidate B remains an unchanged ODOT legacy dependency and is not merged into this contract.
 
-## Required Before Adapter Implementation
+## Runtime Acceptance Conditions
 
 - original publisher and source URL confirmed;
 - retrieval/import provenance and geometry vintage recorded;
@@ -26,18 +26,18 @@ The adapter is strictly for small-scale statewide/county visual geography. It do
 - source authority and verification authority identified;
 - adapter contract and client compatibility reviewed;
 - existing IEP regression coverage remains green;
-- no dependency on the Franklin County fallback.
+- no dependency on the Franklin County fallback;
 - the exact adapter API is the existing Wave 3 interface: `getDomain`, `getSourceAuthority`, `getSupportedFeatureTypes`, `getSupportedCoordinateSpaces`, `getProjectionVersion`, `canProject`, and `project`;
 - FIPS validation requires five digits, Ohio state prefix `39`, agreement with Census `GEO_ID`/`STATE`/`COUNTY`, and membership in the qualified 88-feature source set;
 - geometry is Polygon or MultiPolygon with finite longitude/latitude coordinates and is passed through without repair, simplification, rounding, reprojection, or transform;
 - base-geometry publication is independent from publication of attached IEP records;
-- the 26-case Census county adapter red contract is green or has been explicitly reviewed before implementation begins.
+- the 26-case Census county adapter contract is green;
+- the four runtime pipeline checks are green;
+- existing Spatial, IEP, Wave 5B, and build baselines remain green.
 
 ## Production Prohibitions in This Phase
 
-- do not create `src/system/spatial` IEP adapter code;
 - do not modify either GeoJSON asset;
-- do not create production county source IDs;
 - do not alter IEP publication state;
 - do not fix `entityToCounty.js` here;
 - do not add a coordinate transform;
@@ -57,9 +57,9 @@ The external comparison establishes a qualified Census source for a constrained 
 
 Approved conditional status: `QUALIFIED_WITH_CONDITIONS`.
 
-## Implementation Prohibition
+## Implementation Boundary
 
-This contract pass creates no production adapter file, registry registration, source mapping, IEP map integration, coordinate transform, or `entityToCounty` change. The companion red suite is expected to fail only because the production adapter module is intentionally absent.
+The adapter is infrastructure-only. It is not registered in application startup and is not connected to the IEP map. No source migration, coordinate transform, publication-state change, or `entityToCounty` change was made.
 
 ## Exit Classification
 

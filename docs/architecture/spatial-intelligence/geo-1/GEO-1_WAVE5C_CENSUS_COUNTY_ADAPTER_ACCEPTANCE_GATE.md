@@ -18,6 +18,7 @@ Contract/red-test phase. **Production adapter: NOT IMPLEMENTED.**
 - The adapter does not import `entityToCounty.js`, create a Franklin fallback, add ODOT attributes, or mutate the existing IEP map.
 - The existing seven-method Wave 3 adapter interface is used.
 - The 26-case red suite is written and has no contract, regression, or unexpected failures.
+- The four runtime integration checks pass without changing the IEP client path.
 
 ## Required Verification
 

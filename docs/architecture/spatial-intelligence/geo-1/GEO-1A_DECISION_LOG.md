@@ -109,3 +109,40 @@ Repository evidence: Wave 2A required loop prevention and a strict distinction b
 Reason: Explicit coordination prevents hidden circular event loops and avoids surprise state mutation from transient events.
 Affected phases: GEO-1 Wave 2B, Wave 3, future map integrations.
 Revisit condition: Revisit only if a later adapter owns an explicit, tested coordination layer.
+
+## GEO1-WAVE3A-DEC-001
+
+Decision ID: GEO1-WAVE3A-DEC-001
+Question: Should presentation state be a single collapsed value?
+Decision: No. Model presentation state as dimensions: domain, temporal, selection, availability, verification, publication, highlight, and resolved visual treatment.
+Alternatives considered: Store one final state string only.
+Repository evidence: GEO-1A and Wave 2B preserve authority boundaries; selection must not overwrite mission, emergency, publication, or verification state.
+Reason: Multi-dimensional state preserves source authority and prevents selection or highlight from destroying domain facts.
+Affected phases: GEO-1 Wave 3B, GEO-7, GEO-10.
+Revisit condition: Revisit only if a future renderer needs an additional derived display token while preserving source dimensions.
+
+## GEO1-WAVE3A-DEC-002
+
+Decision ID: GEO1-WAVE3A-DEC-002
+Question: Should highlight be the same thing as selection?
+Decision: No. Highlight is transient, non-authoritative presentation context separate from selection.
+Alternatives considered: Treat highlight as selected state.
+Repository evidence: Wave 2B defines selection as canonical local context; Wave 3A includes search, hover/focus, evidence, route, alert, synchronized panel, and selection as possible highlight sources.
+Reason: Highlight can be temporary and multi-source, while selection is shared context.
+Affected phases: GEO-1 Wave 3B and future client integrations.
+Revisit condition: Revisit if a later accessibility review requires additional highlight categories.
+
+## GEO1-WAVE3A-DEC-003
+
+Decision ID: GEO1-WAVE3A-DEC-003
+Question: Is `SCHEDULED` a domain-supplied lifecycle state, or may Spatial calculate it from source time?
+Prior contract(s): GEO-1A State Projection Contract lists `SCHEDULED` as "supplied" by event/mission/domain authority. GEO-1B State Engine Plan says Spatial may not calculate `SCHEDULED` (must be supplied). GEO-1A Temporal Projection Contract and GEO-1B TemporalProjection type define temporal *categories* (`current`, `upcoming`, `soon`, `live`, `ended`, `scheduled_later`), which are separate from `SPATIAL_STATES`.
+Conflict: The Wave 3A design draft classified `SCHEDULED` as `TEMPORAL_CALCULATED_FROM_DOMAIN_TIME`. The Wave 3A harness derived `SPATIAL_STATES.SCHEDULED` from `effectiveStart > now` and stored a visual state in the `temporalState` dimension.
+Canonical decision: Wave 3A drifted, and GEO-1A stands unamended. `SCHEDULED` means the source authority has placed the record in a scheduled lifecycle status. It is a domain fact carried in `domainState`, not a function of the clock.
+Authority class: DOMAIN_SUPPLIED (event, mission, or other owning domain authority).
+Required source data: an explicit domain lifecycle status mapped to `SCHEDULED` by the projection adapter, plus `sourceAuthority`, `sourceRecordId`, and provenance. `effectiveStart`, `effectiveEnd`, `timezone`, and `sourceTimestamp` are optional context for the date label.
+What Spatial may calculate: the temporal category (`TEMPORAL_STATES`, e.g. `upcoming`, `live`, `ended`) from valid source-authorized timestamps, stored in `temporalState`. Within its display priority, Spatial may resolve a domain-supplied `SCHEDULED` into `resolvedVisualState`.
+What Spatial may not infer: `SCHEDULED` from a future `effectiveStart` alone; `SCHEDULED` for records the domain holds as draft, cancelled, closed, or any other non-scheduled status; missing start or end dates for a domain-supplied `SCHEDULED` record (its date label stays unknown).
+Reason: Repository domains treat scheduled as a lifecycle status that is independent of time. `shf_civic_elections.status` is `DRAFT | SCHEDULED | OPEN | CLOSED | ... | CANCELLED` (migration 148), and live sessions are `draft | scheduled | open | in_progress | completed | cancelled | expired` (`apps/shs-api/src/domain/live-learning/model/live-session.ts`). A draft or cancelled record with a future start time is not scheduled, so deriving `SCHEDULED` from time would invent domain state and violate GEO1A-DEC-001.
+Affected files/phases: `GEO-1_WAVE3A_PROJECTION_STATE_DESIGN.md`, `GEO-1_WAVE3A_TEST_MATRIX.md`, `GEO-1_WAVE3A_ACCEPTANCE_GATE.md`, `tests/spatialProjectionStateWave3.test.mjs`; GEO-1 Wave 3B resolver; GEO-7/GEO-10 temporal work. GEO-1A and GEO-1B contracts are unchanged.
+Revisit condition: Only if a source domain explicitly delegates scheduled-status derivation to Spatial through a documented, tested contract.

@@ -57,10 +57,22 @@ function safeInteraction(feature, restricted = false) {
   const allowed = Array.isArray(feature?.allowedInteractions)
     ? feature.allowedInteractions.filter((entry) => SAFE_INTERACTIONS.has(entry))
     : [];
+  const selectionContext = feature?.featureId && feature?.domain && feature?.sourceAuthority && feature?.layerId
+    ? Object.freeze({
+        featureId: feature.featureId,
+        domain: feature.domain,
+        sourceAuthority: feature.sourceAuthority,
+        coordinateFamily: feature.coordinateFamily,
+        coordinateSpaceId: feature.coordinateSpaceId,
+        layerId: feature.layerId,
+        eligibleActions: Object.freeze([]),
+      })
+    : undefined;
   return Object.freeze({
     selectable: allowed.includes("SELECT"),
     focusable: true,
     interactionType: allowed.includes("SELECT") ? "SELECT" : "FOCUS",
+    ...(selectionContext ? { selectionContext } : {}),
   });
 }
 

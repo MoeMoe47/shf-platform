@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { publicAssetUrl } from "@/system/metaverse/metaverseNavigationModel.js";
+import { createQuickMapInteractionController } from "@/system/spatial/clients/quickMap/index.js";
 import {
   MINIMAP_ASSET,
   MINIMAP_CALIBRATION_TARGET_IDS,
@@ -161,6 +162,9 @@ export default function MetaverseMiniMap({
   activeRoomParticipants = null,
   reducedMotion = false,
   onSelectDistrict,
+  spatialMarkers = [],
+  spatialSelectionStore = null,
+  spatialInteractionBus = null,
 }) {
   const youAreHereAnchorId = youAreHereDistrictId || currentDistrictId;
   const [mapState, setMapState] = useState(() => readStoredMapState());
@@ -172,6 +176,7 @@ export default function MetaverseMiniMap({
   const [calibrationTargetId, setCalibrationTargetId] = useState(readCalibrationTargetId);
   const [calibrationCopied, setCalibrationCopied] = useState(false);
   const [calibrationReviewStatus, setCalibrationReviewStatus] = useState("UNMAPPED");
+  const [selectedSpatialMarkerId, setSelectedSpatialMarkerId] = useState(null);
   const [layerToggles, setLayerToggles] = useState({
     districts: true,
     students: true,
@@ -181,6 +186,23 @@ export default function MetaverseMiniMap({
   });
   const calibrationMode = isCalibrationModeEnabled();
   const faceFixtureMode = isFaceFixtureModeEnabled();
+  const spatialInteraction = useMemo(
+    () => spatialSelectionStore && spatialInteractionBus
+      ? createQuickMapInteractionController({ store: spatialSelectionStore, bus: spatialInteractionBus })
+      : null,
+    [spatialSelectionStore, spatialInteractionBus],
+  );
+
+  useEffect(() => {
+    if (!spatialSelectionStore) {
+      setSelectedSpatialMarkerId(null);
+      return undefined;
+    }
+    const syncSelection = () => setSelectedSpatialMarkerId(spatialSelectionStore.getSelection()?.featureId || null);
+    const subscription = spatialSelectionStore.subscribe(syncSelection);
+    syncSelection();
+    return () => spatialSelectionStore.unsubscribe(subscription);
+  }, [spatialSelectionStore]);
   const infrastructureLocations = getCalibratedMiniMapLocations();
   const mapAssetUrl = publicAssetUrl(MINIMAP_ASSET);
   // FINAL RECONCILIATION V3.1 — PART 6: only ever substitutes fixture
@@ -273,6 +295,39 @@ export default function MetaverseMiniMap({
     </div>
   );
 
+  const renderSpatialMarkers = () => spatialMarkers.map((marker) => {
+    if (!marker || typeof marker.id !== "string" || !Number.isFinite(marker.x) || !Number.isFinite(marker.y)) return null;
+    const selected = selectedSpatialMarkerId === marker.id;
+    const label = marker.accessibility?.label || marker.label || "Spatial feature";
+    const stateText = marker.accessibility?.stateText || marker.state || "Available";
+    const activate = () => spatialInteraction?.activate(marker);
+    return (
+      <button
+        key={marker.id}
+        type="button"
+        className={`met-citymap__marker met-citymap__spatial-marker ${selected ? "is-spatial-selected" : ""}`}
+        style={{ left: `${marker.x}%`, top: `${marker.y}%` }}
+        data-spatial-marker="true"
+        data-spatial-state={marker.state || "NORMAL"}
+        aria-label={`${label}, ${stateText}`}
+        aria-pressed={selected}
+        onClick={(event) => {
+          event.stopPropagation();
+          activate();
+        }}
+        onFocus={() => spatialInteraction?.focus(marker)}
+        onMouseEnter={() => spatialInteraction?.highlight(marker)}
+        onMouseLeave={() => spatialInteraction?.clearHighlight(marker)}
+      >
+        <span className="met-citymap__dot" aria-hidden="true" />
+        <span className="met-citymap__tag">
+          <span className="met-citymap__tag-name">{marker.label || label}</span>
+          <span className="met-citymap__tag-status">{stateText}</span>
+        </span>
+      </button>
+    );
+  });
+
   const renderMapLayers = (variant) => (
     <div
       className={`met-citymap__canvas ${variant === "full" ? "met-citymap__canvas--full" : ""}`}
@@ -355,6 +410,7 @@ export default function MetaverseMiniMap({
               );
             })
           : null}
+        {renderSpatialMarkers()}
         {/* INFRASTRUCTURE MARKERS — only revealed at closer zoom (PART
             5 adaptive density); registry-calibrated (provisional)
             locations only, no destinationRoute yet. */}

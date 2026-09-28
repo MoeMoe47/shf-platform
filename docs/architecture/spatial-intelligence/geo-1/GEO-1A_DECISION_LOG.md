@@ -377,3 +377,14 @@ Repository evidence: Quick Map coordinate registry; `MetaverseCityPage.jsx` prot
 Reason: Presentation compatibility is distinct from coordinate calibration and domain/navigation authority.
 Affected phases: GEO-1 Wave 4B-4D.
 Revisit condition: When a registered transform and explicit navigation request contract are separately accepted.
+
+## GEO1-WAVE4C-DEC-022
+
+Decision ID: GEO1-WAVE4C-DEC-022
+Question: How should Quick Map Spatial markers join the existing selection and interaction runtime without migrating legacy markers?
+Decision: Add an optional framework-neutral Quick Map interaction controller that consumes sanitized Spatial marker models, reuses the existing Selection Store and Interaction Bus, and emits only SELECT, DESELECT, FOCUS, HIGHLIGHT, and request-only OPEN_RECORD. `MetaverseMiniMap` renders these markers as a separate source when supplied; legacy markers remain on their current path.
+Alternatives considered: Route every marker through Spatial; add a second selection store; let marker activation navigate directly; wire the existing registry into Spatial without source mappings.
+Repository evidence: `src/components/metaverse/MetaverseMiniMap.jsx`; `src/pages/metaverse/MetaverseCityPage.jsx`; `src/system/spatial/selectionStore.js`; `src/system/spatial/interactionBus.js`; Wave 4A preservation tests.
+Reason: This preserves current navigation and uncertain registry authority while making the accepted Spatial client path testable and presentation-only.
+Affected phases: GEO-1 Wave 4C and Wave 4D.
+Revisit condition: When legitimate production source mappings and a separately accepted navigation/record-opening contract exist.

@@ -26,7 +26,7 @@ Result: `4/4 PASS`.
 
 ## Production Gate
 
-The dual-run requires both `import.meta.env.DEV` and the `iepSpatialDualRun=1` query in the hash route. The default development route has no diagnostics, and the unit contract covers the production-mode false case. A production-preview browser boot was attempted, but the existing capital bundle fails before React mounts with `__DEFINES__ is not defined`; therefore production-preview browser gating remains an environment/build-harness condition, not a certified browser pass.
+The dual-run requires both `import.meta.env.DEV` and the `iepSpatialDualRun=1` query in the hash route. Production preview now boots successfully after removing stale Vite development-client injections and correcting the production chunk graph. Chromium verified both `/capital.html#/iep-command-v2?iepSpatialDualRun=1` and the default route: 88 county paths rendered, no dual-run diagnostics or fixture content appeared, and the query flag did not activate Spatial dual-run behavior. Production gating: `PASS`.
 
 ## Accessibility
 

@@ -191,24 +191,9 @@ export default defineConfig({
             return "vendor";
           }
 
-          if (normalizedId.includes("/src/pages/exchange/")) return "pages-exchange";
-          if (normalizedId.includes("/src/pages/admin/")) return "pages-admin";
-          if (normalizedId.includes("/src/pages/hub/")) return "pages-hub";
-          if (normalizedId.includes("/src/pages/shf-command/")) return "pages-foundation";
-          if (normalizedId.includes("/src/foundation/")) return "pages-foundation";
-          if (normalizedId.includes("/src/pages/public/")) return "pages-public";
-          if (
-            normalizedId.includes("/src/pages/lord/") ||
-            normalizedId.includes("/src/pages/lord-of-outcomes") ||
-            normalizedId.includes("/src/pages/lordOutcomes/")
-          ) {
-            return "pages-lord";
-          }
-
-          if (normalizedId.includes("/src/pages/")) return "pages";
-          if (normalizedId.includes("/src/components/")) return "components";
-          if (normalizedId.includes("/src/shared/")) return "shared";
-
+          // Keep application modules in Rollup's natural graph. Forcing
+          // page/component/shared modules into separate manual chunks creates
+          // eager cross-chunk cycles in the multi-entry production build.
           return undefined;
         },
       },

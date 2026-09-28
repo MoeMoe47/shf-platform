@@ -3,6 +3,11 @@ import "./iep-command-v2.css";
 import OhioCountyOfficialMapV2 from "./OhioCountyOfficialMapV2";
 import { getCountyProfile } from "./countyProfiles";
 import CountyInteractionLayer from "./CountyInteractionLayer";
+import {
+  isIepSpatialDualRunEnabled,
+  projectIepCountyGeoJson,
+  runIepSpatialDualRun,
+} from "@/system/spatial/clients/iep";
 
 import shsShuttleIcon from "./assets/shs-shuttle-icon.png";
 function SectionCard({ title, children, className = "" }) {
@@ -21,6 +26,13 @@ function MetricTile({ label, value, tone = "" }) {
       <div className="v2-metric-value">{value}</div>
     </div>
   );
+}
+
+function routeSearch() {
+  if (typeof window === "undefined") return "";
+  const hash = window.location.hash || "";
+  const queryStart = hash.indexOf("?");
+  return queryStart >= 0 ? hash.slice(queryStart) : window.location.search;
 }
 
 export default function IEPCommandCenterV2(
@@ -217,6 +229,44 @@ export default function IEPCommandCenterV2(
   const [activeCountyState, setActiveCountyState] = React.useState("Franklin");
   const [countyCentroids, setCountyCentroids] = React.useState({});
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [spatialDualRun, setSpatialDualRun] = React.useState({
+    enabled: false,
+    comparison: null,
+    countyViewModels: [],
+    error: null,
+  });
+
+  useEffect(() => {
+    const search = routeSearch();
+    if (!isIepSpatialDualRunEnabled({ search, isDevelopment: import.meta.env.DEV })) return undefined;
+
+    let alive = true;
+    fetch("/assets/maps/ohio-counties.geojson")
+      .then((response) => {
+        if (!response.ok) throw new Error(`IEP county source failed (${response.status})`);
+        return response.json();
+      })
+      .then((collection) => {
+        if (!alive || collection?.type !== "FeatureCollection") return;
+        const clientProjectionResults = projectIepCountyGeoJson(collection.features, {
+          clock: () => new Date("2026-09-28T12:00:00.000Z"),
+        });
+        const result = runIepSpatialDualRun({
+          search,
+          isDevelopment: import.meta.env.DEV,
+          legacyFeatures: collection.features,
+          clientProjectionResults,
+        });
+        if (alive) setSpatialDualRun({ ...result, error: null });
+      })
+      .catch((error) => {
+        if (alive) setSpatialDualRun({ enabled: true, comparison: null, countyViewModels: [], error: error.message });
+      });
+
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   const profile = React.useMemo(
     () => getCountyProfile(activeCountyState),
@@ -506,6 +556,30 @@ export default function IEPCommandCenterV2(
                     )}
                   />
                 </div>
+                {spatialDualRun.enabled ? (
+                  <section
+                    className="iep-spatial-dual-run"
+                    data-testid="iep-spatial-dual-run"
+                    aria-label="IEP Spatial dual-run diagnostics"
+                  >
+                    <strong>Development dual-run</strong>
+                    {spatialDualRun.error ? (
+                      <span data-testid="iep-dual-run-error">{spatialDualRun.error}</span>
+                    ) : spatialDualRun.comparison ? (
+                      <>
+                        <span data-testid="iep-dual-run-legacy-count">{spatialDualRun.comparison.legacyCount}</span>
+                        <span data-testid="iep-dual-run-spatial-count">{spatialDualRun.comparison.spatialCount}</span>
+                        <span data-testid="iep-dual-run-fips-parity">{String(spatialDualRun.comparison.fipsParity)}</span>
+                        <span data-testid="iep-dual-run-label-parity">{String(spatialDualRun.comparison.labelParity)}</span>
+                        <span data-testid="iep-dual-run-geometry-parity">{String(spatialDualRun.comparison.geometryParity)}</span>
+                        <span data-testid="iep-dual-run-selected-fips">{profile.countyFips || ""}</span>
+                        <span data-testid="iep-dual-run-selected-label">{profile.label}</span>
+                      </>
+                    ) : (
+                      <span data-testid="iep-dual-run-loading">Loading</span>
+                    )}
+                  </section>
+                ) : null}
 <div className="v2-map-legend">
                   <div className="legend-title">Legend</div>
                   <div className="legend-row"><span className="dot high" /> High Risk</div>

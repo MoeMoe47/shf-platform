@@ -1,11 +1,10 @@
-import { readFileSync } from "node:fs";
-
 import {
   COORDINATE_FAMILIES,
   PUBLICATION_ELIGIBILITY_LEVELS,
   VERIFICATION_STATES,
 } from "../../../shared/spatial/index.js";
 import { createSpatialFeatureId } from "../../../shared/spatial/contracts/featureIds.js";
+import { QUALIFIED_OHIO_COUNTY_FIPS } from "../../../shared/spatial/countyIdentity.js";
 
 export const CENSUS_COUNTY_DOMAIN = "census-geography";
 export const CENSUS_COUNTY_FEATURE_TYPE = "county";
@@ -20,19 +19,6 @@ const CENSUS_COUNTY_DATASET = "2010 Cartographic Boundary File, State-County";
 const CENSUS_COUNTY_VINTAGE = "2010";
 const CENSUS_COUNTY_SCALE = "1:20,000,000";
 const CENSUS_COUNTY_UPDATED_AT = "2010-01-01T00:00:00.000Z";
-
-function loadQualifiedCountyIds() {
-  const assetUrl = new URL("../../../../public/assets/maps/ohio-counties.geojson", import.meta.url);
-  const collection = JSON.parse(readFileSync(assetUrl, "utf8"));
-  if (collection?.type !== "FeatureCollection" || !Array.isArray(collection.features) || collection.features.length !== 88) {
-    throw new Error("qualified Census county asset must contain exactly 88 features");
-  }
-  const ids = collection.features.map((feature) => extractFips(feature));
-  if (ids.some((id) => id === null) || new Set(ids).size !== 88) {
-    throw new Error("qualified Census county asset must contain unique Ohio FIPS identities");
-  }
-  return Object.freeze(new Set(ids));
-}
 
 function extractFips(record) {
   const properties = record?.properties || {};
@@ -119,8 +105,8 @@ function sourceRecordIsEligible(record, qualifiedCountyIds) {
   );
 }
 
-export function createCensusCountyGeometryAdapter() {
-  const qualifiedCountyIds = loadQualifiedCountyIds();
+export function createCensusCountyGeometryAdapter({ qualifiedCountyIds = QUALIFIED_OHIO_COUNTY_FIPS } = {}) {
+  const qualifiedIds = Object.freeze(new Set(qualifiedCountyIds));
 
   return Object.freeze({
     getDomain: () => CENSUS_COUNTY_DOMAIN,
@@ -129,10 +115,10 @@ export function createCensusCountyGeometryAdapter() {
     getSupportedCoordinateSpaces: () => [CENSUS_COUNTY_COORDINATE_SPACE],
     getProjectionVersion: () => CENSUS_COUNTY_PROJECTION_VERSION,
     canProject(record) {
-      return sourceRecordIsEligible(record, qualifiedCountyIds);
+      return sourceRecordIsEligible(record, qualifiedIds);
     },
     project(record) {
-      if (!sourceRecordIsEligible(record, qualifiedCountyIds)) {
+      if (!sourceRecordIsEligible(record, qualifiedIds)) {
         throw new Error("Census county record is not a qualified Ohio county feature");
       }
 
@@ -192,4 +178,4 @@ export function createCensusCountyGeometryAdapter() {
   });
 }
 
-export const QUALIFIED_CENSUS_COUNTY_FIPS = Object.freeze([...loadQualifiedCountyIds()]);
+export const QUALIFIED_CENSUS_COUNTY_FIPS = Object.freeze([...QUALIFIED_OHIO_COUNTY_FIPS]);

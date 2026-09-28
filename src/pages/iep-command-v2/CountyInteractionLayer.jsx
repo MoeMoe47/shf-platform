@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { fabricUrl } from "@/system/fabric/fabricConfig";
 
 export default function CountyInteractionLayer({
@@ -11,6 +11,28 @@ export default function CountyInteractionLayer({
   const [simLoading, setSimLoading] = useState(false);
   const [simError, setSimError] = useState("");
   const [simResult, setSimResult] = useState(null);
+  const closeButtonRef = useRef(null);
+  const previousFocusRef = useRef(null);
+  const wasOpenRef = useRef(false);
+
+  useEffect(() => {
+    if (isOpen && !wasOpenRef.current) {
+      previousFocusRef.current = document.activeElement;
+      requestAnimationFrame(() => closeButtonRef.current?.focus());
+    } else if (!isOpen && wasOpenRef.current) {
+      previousFocusRef.current?.focus?.();
+    }
+    wasOpenRef.current = isOpen;
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") onClose?.();
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
 
   const countyName = county || profile?.label || "Unknown county";
   const risk = profile?.riskStatus || "High Risk";
@@ -99,6 +121,9 @@ export default function CountyInteractionLayer({
           />
 
           <aside
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="iep-county-drawer-title"
             style={{
               position: "absolute",
               top: 0,
@@ -113,7 +138,10 @@ export default function CountyInteractionLayer({
               overflowY: "auto",
             }}
           >
-            <h2>{countyName}</h2>
+            <button ref={closeButtonRef} type="button" onClick={onClose} aria-label="Close county details">
+              Close
+            </button>
+            <h2 id="iep-county-drawer-title">{countyName}</h2>
             <p>{analystSummary}</p>
 
             <button onClick={handleRunSimulation}>

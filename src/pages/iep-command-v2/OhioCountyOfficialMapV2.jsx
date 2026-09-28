@@ -9,6 +9,13 @@ function normalizeCountyName(name = "") {
   return String(name).replace(/\s+County$/i, "").trim();
 }
 
+function countyFips(feature) {
+  const geoId = feature?.properties?.GEO_ID;
+  return typeof geoId === "string" && /^0500000US39\d{3}$/.test(geoId)
+    ? geoId.slice(-5)
+    : null;
+}
+
 export default function OhioCountyOfficialMapV2({
   activeCounty = null,
   selectedCounty = null,
@@ -152,14 +159,42 @@ export default function OhioCountyOfficialMapV2({
           })}
         </g>
 
-        {typeof renderOverlay === "function"
-          ? renderOverlay({
-              countyCentroids: mapState.countyCentroids,
-              width: VIEWBOX_WIDTH,
-              height: VIEWBOX_HEIGHT,
-            })
-          : null}
       </svg>
+
+      {typeof renderOverlay === "function"
+        ? renderOverlay({
+            countyCentroids: mapState.countyCentroids,
+            width: VIEWBOX_WIDTH,
+            height: VIEWBOX_HEIGHT,
+          })
+        : null}
+
+      <div className="ohio-official-map-v2__county-list" aria-label="Ohio county selection">
+        {mapState.features.map((feature, idx) => {
+          const rawName =
+            feature?.properties?.NAME ||
+            feature?.properties?.name ||
+            feature?.properties?.county ||
+            feature?.properties?.COUNTY ||
+            `County ${idx + 1}`;
+          const countyName = normalizeCountyName(rawName);
+          const fips = countyFips(feature);
+          return (
+            <button
+              key={`county-control-${countyName || idx}`}
+              type="button"
+              className="ohio-official-map-v2__county-control"
+              data-county={countyName}
+              data-county-fips={fips || undefined}
+              aria-label={`Select ${countyName} County`}
+              aria-pressed={countyName === selectedName}
+              onClick={() => onCountyClick?.(countyName, mapState.countyCentroids[countyName], feature)}
+            >
+              {countyName} County
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }

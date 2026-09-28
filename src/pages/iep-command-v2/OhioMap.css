@@ -849,6 +849,21 @@
   height: 100%;
 }
 
+.ohio-official-map-v2__county-list {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.ohio-official-map-v2__county-control:focus-visible {
+  outline: 2px solid #f3b14f;
+  outline-offset: 2px;
+}
+
 .ohio-official-map-v2__county {
   fill: rgba(255, 255, 255, 0.015);
   stroke: rgba(255, 255, 255, 0.94);

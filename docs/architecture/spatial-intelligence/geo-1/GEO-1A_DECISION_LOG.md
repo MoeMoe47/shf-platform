@@ -98,3 +98,14 @@ Repository evidence: GEO-1A and GEO-1B separate selection state from interaction
 Reason: No replay is safer for UI interactions and avoids accidental domain action re-execution.
 Affected phases: GEO-1 Wave 2B.
 Revisit condition: Revisit only for development-only debugging hooks or an explicitly approved replay design.
+
+## GEO1-WAVE2B-DEC-001
+
+Decision ID: GEO1-WAVE2B-DEC-001
+Question: Should publishing a `SELECT` interaction automatically mutate the selection store?
+Decision: No. The Interaction Bus and Selection Store remain separate modules; consumers explicitly call `select(...)` after validating intent and feature projection.
+Alternatives considered: Auto-wire bus `SELECT` events into the store; make the store publish bus events on every mutation.
+Repository evidence: Wave 2A required loop prevention and a strict distinction between selection context and domain/action events.
+Reason: Explicit coordination prevents hidden circular event loops and avoids surprise state mutation from transient events.
+Affected phases: GEO-1 Wave 2B, Wave 3, future map integrations.
+Revisit condition: Revisit only if a later adapter owns an explicit, tested coordination layer.

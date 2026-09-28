@@ -40,6 +40,11 @@ records without a source relationship remain null and excluded from geography.
 Production/API onboarding remains `READY WITH CONDITIONS` until the source
 schema supplies authoritative `countyFips: string | null`.
 
+Wave 5D client infrastructure now has a dedicated REAL_WORLD county adapter
+and a development-only dual-run seam. Exact 88-county parity is certified;
+default IEP rendering remains legacy and browser certification is still
+deferred.
+
 Wave 5D-API freezes that future contract without inventing an API or database
 model. Current client readiness is `READY WITH CONDITIONS`; future production
 data readiness is `FUTURE_IMPLEMENTATION_REQUIRED` because no IEP county-bearing

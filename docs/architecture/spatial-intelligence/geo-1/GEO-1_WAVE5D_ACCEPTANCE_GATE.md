@@ -35,8 +35,8 @@ in the current planning pass.
 
 ## Decision statuses
 
-Current status: `BLOCKED_BY_DOMAIN_IDENTITY`.
+Current status: `READY_FOR_BROWSER_PARITY_WITH_CONDITIONS`.
 
-The base geography adapter is complete, but the current IEP path lacks an
-explicit stable domain join and imports the unsafe county fallback module.
-Wave 5D must not be marked ready until those facts are resolved by evidence.
+The dedicated client adapter and development dual-run are complete. Exact
+88-county data parity is certified while the default IEP map remains on its
+legacy path. Browser certification remains a separate condition.

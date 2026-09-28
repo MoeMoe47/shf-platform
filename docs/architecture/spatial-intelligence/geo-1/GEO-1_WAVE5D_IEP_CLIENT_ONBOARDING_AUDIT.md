@@ -1,6 +1,6 @@
 # GEO-1 Wave 5D IEP Spatial Client Onboarding Audit
 
-Status: planning only. No IEP production files are changed by Wave 5D planning.
+Status: client infrastructure implemented; default IEP rendering remains unchanged.
 
 ## Current route and data flow
 
@@ -50,9 +50,9 @@ Wave 5D onboarding seam.
 The qualified Census asset provides stable five-digit Ohio FIPS identity via
 `STATE` + `COUNTY`, consistent with `GEO_ID`. That identity is available for
 base geography. Wave 5D-ID now adds validated `countyFips` to the 88 static
-county profiles, but dynamic IEP/domain record families still lack a proven
-explicit join contract. Therefore the safe dynamic IEP domain join remains
-**absent**.
+county profiles, and repository-controlled dynamic records now carry explicit
+or unresolved `countyFips` values under the API contract. Future API-backed
+records remain conditional on a producer supplying the same field.
 
 Decision before remediation: `BLOCKED_BY_DOMAIN_IDENTITY` for full client
 onboarding. After static-profile hardening, the remaining gate is dynamic
@@ -61,12 +61,9 @@ production-ready infrastructure.
 
 ## Entity-to-county dependency
 
-Yes, as a current module dependency: `IEPCommandCenterV2.jsx` imports
-`resolveCountyFromEntity` and `useSelectedEntity`, even though the active
-render path currently derives its visible county from local state/profile data.
-The resolver itself maps a few suffix patterns and otherwise returns Franklin,
-which is a known integrity defect. Wave 5D must not call, preserve, or hide
-this fallback inside a Spatial join. Explicit `countyFips` is required.
+No in the canonical identity or client path. The legacy resolver remains
+available to unrelated consumers and still contains the known Franklin
+fallback, but the client and exact-FIPS join do not import or call it.
 
 ## Target flow
 
@@ -79,9 +76,9 @@ qualified Census asset
   -> existing IEP map renderer and separately governed IEP data view
 ```
 
-The Census adapter remains a neutral geography authority. The IEP client may
-consume safe county results, but it does not own Census geometry or publication
-authority for IEP records.
+The Census adapter remains a neutral geography authority. The implemented IEP
+client consumes safe county results, but it does not own Census geometry or
+publication authority for IEP records.
 
 ## Client adapter decision
 
@@ -157,9 +154,8 @@ authorize Wave 5D to change the IEP map during planning.
 
 ## Entry decision
 
-`BLOCKED_BY_DOMAIN_IDENTITY`
+`READY_FOR_BROWSER_PARITY_WITH_CONDITIONS`
 
-The qualified geometry source is ready, but the current IEP path lacks an
-explicit stable county join and retains an unsafe resolver dependency. No
-client adapter or production join should be implemented until that boundary is
-resolved.
+The dedicated client and development dual-run are implemented and pass exact
+88-county parity tests. The default map was not switched, and the existing
+browser certification condition remains open.

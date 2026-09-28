@@ -12,16 +12,16 @@ cannot proceed.
 
 ## 5D-B — IEP Spatial client adapter
 
-Implement only after the identity gate passes. Convert safe Census projection
-results into an IEP county view model. Keep the adapter independent of React,
-D3, Mapbox, `entityToCounty`, and domain publication logic.
+Implemented as infrastructure only. The adapter converts safe Census
+projection results into an IEP county view model and remains independent of
+React, D3, Mapbox, `entityToCounty`, and domain publication logic.
 
 ## 5D-C — Development-only dual run
 
-Run the legacy asset path and Spatial path side by side in development/tests.
-Compare feature count, FIPS set, geometry hashes, labels, selection inputs,
-and safe domain joins. Do not expose a production toggle or migrate legacy
-records.
+Implemented as a gated comparison seam used by tests. It compares the legacy
+asset path with real pipeline/client output by feature count, FIPS set,
+geometry, labels, and safe domain joins. It is not connected to the default
+route and does not migrate legacy records.
 
 ## 5D-D — Browser parity certification
 

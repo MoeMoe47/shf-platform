@@ -88,6 +88,8 @@ import useMetaverseRiverFlowPreview from "@/hooks/metaverse/useMetaverseRiverFlo
 import MetaverseTrafficAuthoringPanel from "@/components/metaverse/traffic-authoring/MetaverseTrafficAuthoringPanel.jsx";
 import MetaverseTrafficAuthoringOverlay from "@/components/metaverse/traffic-authoring/MetaverseTrafficAuthoringOverlay.jsx";
 import MetaverseTrafficAuthoringErrorBoundary from "@/components/metaverse/traffic-authoring/MetaverseTrafficAuthoringErrorBoundary.jsx";
+import { createSpatialInteractionBus, createSpatialSelectionStore } from "@/system/spatial/index.js";
+import { createQuickMapParityFixtureRuntime } from "@/system/spatial/fixtures/quickMapParityFixture.js";
 import "./metaverse-city.css";
 
 const PRESENCE_HEARTBEAT_INTERVAL_MS = 25000;
@@ -486,6 +488,25 @@ function MetaverseCityExperience() {
     );
   });
   const [devModeEnabled] = useState(() => resolveMetaverseDevModeEnabled({ isDev: import.meta.env.DEV, search: window.location.search }));
+  const spatialFixtureEnabled = devModeEnabled && new URLSearchParams(window.location.search).get("spatialFixture") === "1";
+  const spatialFixtureRuntime = useMemo(
+    () => spatialFixtureEnabled ? createQuickMapParityFixtureRuntime() : null,
+    [spatialFixtureEnabled],
+  );
+  const spatialFixtureSelectionStore = useMemo(
+    () => spatialFixtureRuntime
+      ? createSpatialSelectionStore({
+          features: spatialFixtureRuntime.selectableFeatures,
+          coordinateRegistry: spatialFixtureRuntime.coordinateRegistry,
+          layerRegistry: spatialFixtureRuntime.layerRegistry,
+        })
+      : null,
+    [spatialFixtureRuntime],
+  );
+  const spatialFixtureInteractionBus = useMemo(
+    () => spatialFixtureRuntime ? createSpatialInteractionBus() : null,
+    [spatialFixtureRuntime],
+  );
   const [devTimeMode, setDevTimeMode] = useState(() => (devModeEnabled ? readStoredDevTimeMode() : "AUTO"));
   const environmentController = useMetaverseEnvironmentRuntime();
   const timePreviewMode = riverTraceEnabled ? "DAY" : (reviewForcesDay ? "DAY" : (devModeEnabled ? devTimeMode : "AUTO"));
@@ -1436,6 +1457,9 @@ function MetaverseCityExperience() {
             activeRoomParticipants={activeRoom ? roomParticipants : null}
             reducedMotion={reducedMotion}
             onSelectDistrict={selectDistrict}
+            spatialMarkers={spatialFixtureRuntime?.markerModels || []}
+            spatialSelectionStore={spatialFixtureSelectionStore}
+            spatialInteractionBus={spatialFixtureInteractionBus}
           />
         ) : null}
       </div>

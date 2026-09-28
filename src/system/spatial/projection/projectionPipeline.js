@@ -20,12 +20,12 @@ const LIFECYCLE_UNAVAILABLE = new Set([
 ]);
 const FEATURE_ALLOWLIST = [
   "allowedInteractions", "coordinateFamily", "coordinateSpaceId", "description", "domain", "featureId", "featureType",
-  "geometry", "label", "layerId", "provenance", "publicEligibility", "publicationState", "sourceAuthority",
+  "geometry", "position", "label", "layerId", "provenance", "publicEligibility", "publicationState", "sourceAuthority",
   "sourceRecordId", "title", "updatedAt", "verificationState",
 ];
 const UNAVAILABLE_ALLOWLIST = [
   "allowedInteractions", "coordinateFamily", "coordinateSpaceId", "domain", "featureId", "featureType", "geometry",
-  "label", "layerId", "provenance", "publicEligibility", "publicationState", "sourceAuthority", "sourceRecordId",
+  "position", "label", "layerId", "provenance", "publicEligibility", "publicationState", "sourceAuthority", "sourceRecordId",
   "updatedAt", "verificationState",
 ];
 const CLIENT_PROVENANCE_ALLOWLIST = ["freshness", "publicationState", "sourceAuthority", "updatedAt", "verificationState"];

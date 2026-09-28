@@ -92,6 +92,10 @@ function mapTagLabel(label) {
   return label.split(/\s+/)[0];
 }
 
+function safeMarkerTestId(label) {
+  return `spatial-marker-${String(label || "feature").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")}`;
+}
+
 // PART 8 — a real `display_name` (a two-word full name) is shortened
 // to "First L." for the compact rail, matching the approved mock's
 // display convention. This is a display-only transform of a REAL name
@@ -323,6 +327,7 @@ export default function MetaverseMiniMap({
     const selected = selectedSpatialMarkerId === marker.id;
     const label = marker.accessibility?.label || marker.label || "Spatial feature";
     const stateText = marker.accessibility?.stateText || marker.state || "Available";
+    const presentationText = marker.accessibility?.freshnessText || marker.accessibility?.unavailableText || stateText;
     const activate = () => spatialInteraction?.activate(marker);
     return (
       <button
@@ -331,8 +336,10 @@ export default function MetaverseMiniMap({
         className={`met-citymap__marker met-citymap__spatial-marker ${selected ? "is-spatial-selected" : ""}`}
         style={{ left: `${marker.x}%`, top: `${marker.y}%` }}
         data-spatial-marker="true"
+        data-testid={safeMarkerTestId(label)}
+        disabled={marker.interaction?.selectable === false || marker.state === "UNAVAILABLE"}
         data-spatial-state={marker.state || "NORMAL"}
-        aria-label={`${label}, ${stateText}`}
+        aria-label={`${label}, ${presentationText}`}
         aria-pressed={selected}
         onClick={(event) => {
           event.stopPropagation();
@@ -345,7 +352,7 @@ export default function MetaverseMiniMap({
         <span className="met-citymap__dot" aria-hidden="true" />
         <span className="met-citymap__tag">
           <span className="met-citymap__tag-name">{marker.label || label}</span>
-          <span className="met-citymap__tag-status">{stateText}</span>
+          <span className="met-citymap__tag-status">{presentationText}</span>
         </span>
       </button>
     );
@@ -361,12 +368,14 @@ export default function MetaverseMiniMap({
             const sourceMarker = spatialMarkers.find((marker) => marker?.id === item.id);
             const selected = selectedSpatialMarkerId === item.id || item.modifiers.includes("SELECTED");
             const unavailable = item.state === "UNAVAILABLE" || item.interaction.selectable === false;
+            const presentationText = item.accessibility.freshnessText || item.accessibility.unavailableText || item.accessibility.stateText;
             return (
               <li key={item.id}>
                 <button
                   type="button"
                   data-spatial-list-item="true"
-                  aria-label={`${item.accessibility.label}, ${item.accessibility.stateText}`}
+                  data-testid={safeMarkerTestId(item.accessibility.label).replace("spatial-marker-", "spatial-list-")}
+                  aria-label={`${item.accessibility.label}, ${presentationText}`}
                   aria-pressed={selected}
                   disabled={unavailable}
                   onClick={() => sourceMarker && spatialInteraction?.activate(sourceMarker)}
@@ -375,7 +384,7 @@ export default function MetaverseMiniMap({
                   onMouseLeave={() => sourceMarker && spatialInteraction?.clearHighlight(sourceMarker)}
                 >
                   <span>{item.label}</span>
-                  <span>{item.accessibility.stateText}</span>
+                  <span>{presentationText}</span>
                 </button>
               </li>
             );

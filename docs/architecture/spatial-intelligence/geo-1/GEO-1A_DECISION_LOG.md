@@ -333,3 +333,47 @@ Repository evidence: `tests/spatialFoundationWave1.test.mjs:103`; `node:assert` 
 Reason: This is the only option that honors both the frozen Wave 3B contract and the unmodified Wave 1 baseline. Consumers that copy or serialize a lookup result lose `code` and must read it before copying. In-process lookups are the only current callers.
 Affected phases: Wave 1 registries (additive), GEO-1 Wave 3B runtime.
 Revisit condition: If a consumer needs `code` after serialization, or when the Wave 1 lookup-shape test is next intentionally revised.
+
+## GEO1-WAVE4B-DEC-018
+
+Decision ID: GEO1-WAVE4B-DEC-018
+Question: Where should the first Quick Map client boundary live?
+Decision: A framework-neutral adapter will live under `src/system/spatial/clients/quickMap/` and will consume only sanitized `ClientProjectionResult[]` values. The existing Metaverse Quick Map renderer and registry remain separate during migration.
+Alternatives considered: Put projection logic in `MetaverseMiniMap.jsx`; replace the existing registry; create a new top-level app.
+Repository evidence: `src/components/metaverse/MetaverseMiniMap.jsx`; `src/system/metaverse/metaverseMiniMapRegistry.js`; GEO-1B repository placement plan.
+Reason: The adapter coordinates safe presentation without transferring domain, publication, navigation, or coordinate authority.
+Affected phases: GEO-1 Wave 4B and later Quick Map client phases.
+Revisit condition: When a second client requires a shared adapter abstraction.
+
+## GEO1-WAVE4B-DEC-019
+
+Decision ID: GEO1-WAVE4B-DEC-019
+Question: What is the Quick Map marker view model boundary?
+Decision: Construct marker models from an explicit allowlist containing safe identity, bounded x/y, label, presentation state, modifiers, accessibility, and interaction intent. Raw records, internal results, private provenance, and domain actions never enter the renderer.
+Alternatives considered: Pass ClientProjectionResult through unchanged; clone and delete private fields; reuse the existing registry entry shape as a SpatialFeature.
+Repository evidence: Wave 3B client allowlist contract; `MetaverseMiniMap.jsx` marker fields; `featureId` source-record identity risk.
+Reason: Constructive projection prevents accidental privacy and authority leakage.
+Affected phases: GEO-1 Wave 4B-4D.
+Revisit condition: When an accepted renderer capability requires another safe field.
+
+## GEO1-WAVE4B-DEC-020
+
+Decision ID: GEO1-WAVE4B-DEC-020
+Question: How will existing registry markers coexist with future Spatial markers?
+Decision: Use dual-source rendering with distinct namespaces. Existing registry markers remain client-owned `UNMAPPED`/`PROVISIONAL` presentation records; Spatial fixture or future projected markers retain explicit source identity. Matching labels or coordinates never deduplicate records.
+Alternatives considered: Replace registry markers immediately; merge by label; merge by coordinate.
+Repository evidence: 9 Quick Map districts are UNMAPPED; 6 infrastructure entries are PROVISIONAL and destination-less; preservation principle.
+Reason: Preservation keeps uncertainty visible and prevents synthetic source mapping.
+Affected phases: GEO-1 Wave 4B-4E.
+Revisit condition: When an owner-reviewed source mapping proves identity equivalence.
+
+## GEO1-WAVE4B-DEC-021
+
+Decision ID: GEO1-WAVE4B-DEC-021
+Question: What coordinate and navigation permissions does the Quick Map client have?
+Decision: The client accepts only `METAVERSE` features in `metaverse.quick-map`, performs no transforms, and never navigates directly. Existing navigation remains owned by `MetaverseCityPage`; Selection Store and Interaction Bus wiring remain Wave 4C work.
+Alternatives considered: Accept master-city coordinates; calibrate during client rendering; let marker activation call navigation directly.
+Repository evidence: Quick Map coordinate registry; `MetaverseCityPage.jsx` protected-entry and fast-travel functions; Wave 4A preservation tests.
+Reason: Presentation compatibility is distinct from coordinate calibration and domain/navigation authority.
+Affected phases: GEO-1 Wave 4B-4D.
+Revisit condition: When a registered transform and explicit navigation request contract are separately accepted.

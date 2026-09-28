@@ -322,3 +322,14 @@ Repository evidence: GEO1-WAVE3B-DEC-006; red-test D01 and D05.
 Reason: Frozen keys make "no payload in diagnostics" enforceable.
 Affected phases: GEO-1 Wave 3B.
 Revisit condition: When a new diagnostic needs a new non-payload detail key.
+
+## GEO1-WAVE3B-DEC-017
+
+Decision ID: GEO1-WAVE3B-DEC-017
+Question: How can registry lookup failures gain `code` (DEC-010) without breaking the frozen Wave 1 baseline, which asserts their exact shape?
+Decision: Registry failure results from `CoordinateSpaceRegistry.get`, `SpatialLayerRegistry.get`, and `assertNoImplicitTransform` keep their legacy enumerable shape `{ ok: false, error }`. `code` is attached as a non-enumerable, read-only own property. `result.code` works as DEC-010 requires, while strict deep equality, `JSON.stringify`, and object spread still see the legacy shape. Registration throws use ordinary `error.code` and `error.issues` properties, because no baseline test asserts their shape.
+Alternatives considered: An enumerable `code` (fails `tests/spatialFoundationWave1.test.mjs` "unknown coordinate-space lookup fails safely", which strictly deep-equals `{ ok, error }`); editing that frozen Wave 1 test; dropping registry codes from DEC-010.
+Repository evidence: `tests/spatialFoundationWave1.test.mjs:103`; `node:assert` strict deep equality compares only enumerable own properties.
+Reason: This is the only option that honors both the frozen Wave 3B contract and the unmodified Wave 1 baseline. Consumers that copy or serialize a lookup result lose `code` and must read it before copying. In-process lookups are the only current callers.
+Affected phases: Wave 1 registries (additive), GEO-1 Wave 3B runtime.
+Revisit condition: If a consumer needs `code` after serialization, or when the Wave 1 lookup-shape test is next intentionally revised.

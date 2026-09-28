@@ -37,6 +37,12 @@ available only through the explicit development `iepLegacyMap=1` rollback seam;
 Spatial failure is surfaced as a controlled unavailable state rather than an
 invisible fallback. Retirement of the legacy path remains a Wave 5E decision.
 
+Wave 5E decision: the Spatial path is accepted as the default. The legacy
+direct preparation path remains only as an explicit DEV rollback, and the
+dual-run remains an explicit DEV diagnostic. The canonical Census source and
+existing renderer remain in service; no silent fallback or legacy asset removal
+was performed.
+
 ## Failure and rollback
 
 The Spatial path fails closed. During the migration window, a documented

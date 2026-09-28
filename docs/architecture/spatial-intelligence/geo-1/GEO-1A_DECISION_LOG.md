@@ -454,3 +454,11 @@ Repository evidence: `apps/shs-api/src/api/router.ts` and active domain modules 
 Reason: Define the future producer obligation without fabricating persistence authority, while allowing the current client architecture to consume explicit or unresolved repository-controlled records safely.
 Affected phases: GEO-1 Wave 5D API contract and later IEP client onboarding.
 Revisit condition: A verified IEP domain/API authority exists with county identity, publication, authorization, and persistence semantics.
+
+## GEO1-WAVE5E-DEC-029
+
+Decision ID: GEO1-WAVE5E-DEC-029
+Question: What legacy IEP elements remain after the Spatial-default migration?
+Decision: Accept the IEP county migration with the Spatial path as default. Retain the direct legacy preparation path only behind the explicit development `iepLegacyMap=1` rollback seam, retain `iepSpatialDualRun=1` as a development-only diagnostic, and fail closed on Spatial preparation errors rather than silently falling back. The qualified Census asset remains canonical source data; the ODOT asset remains an independent legacy dependency. No legacy element is retired while it remains required by rollback or parity evidence.
+Evidence: `GEO-1_WAVE5E_IEP_MIGRATION_ACCEPTANCE.md`, `GEO-1_WAVE5E_LEGACY_DISPOSITION.md`, and `tests/ui/spatial-iep-wave5e-acceptance.spec.mjs`.
+Affected phases: GEO-1 Wave 5E migration acceptance and later Wave 6 client onboarding.

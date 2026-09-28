@@ -46,6 +46,15 @@ certification are complete; the Spatial path is now the default county
 preparation path behind the existing IEP renderer. The legacy path remains an
 explicit development rollback and is not retired.
 
+## Wave 5E Addendum
+
+IEP migration is `COMPLETE_WITH_ROLLBACK_CONDITION`: Spatial is the default
+county preparation path behind the existing renderer, DEV rollback is explicit
+and production-inactive, and DEV dual-run remains diagnostic-only. The Census
+asset is canonical source data; the ODOT asset remains an independent legacy
+dependency. No legacy element was safe to remove without weakening rollback or
+historical parity evidence.
+
 Wave 5D-API freezes that future contract without inventing an API or database
 model. Current client readiness is `READY WITH CONDITIONS`; future production
 data readiness is `FUTURE_IMPLEMENTATION_REQUIRED` because no IEP county-bearing

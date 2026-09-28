@@ -10,7 +10,7 @@ This planning registry is descriptive. It is not a runtime registry and does not
 | `shs.operations-mapbox` | operational county map | SHS operations | Exchange unified truth | Mapbox GL + remote GeoJSON | operator/public boundary requires review | Partial / blocked on config and authority |
 | `exchange.unified-truth` | Unified Truth Map | Exchange / SHS boundary | `capital.html#/exchange`, unified-truth route evidence | Mapbox | authenticated/operator policy | Partial |
 | `shf.public-impact` | Foundation impact map | SHF | `foundation.html#/impact` | Ohio county geometry + SHF data filter | public approval required | Blocked while records are draft |
-| `iep.ohio-county` | official Ohio county map | IEP consumes Census geometry; IEP remains domain-data owner | `capital.html#/iep-command-v2` / `IEPCommandCenterV2` | Census-qualified `/assets/maps/ohio-counties.geojson`; current renderer fetches directly | geometry public; attached IEP records separately governed | Base adapter ready; IEP client blocked by explicit domain identity; legacy path preserved and onboarding deferred |
+| `iep.ohio-county` | official Ohio county map | IEP consumes Census geometry; IEP remains domain-data owner | `capital.html#/iep-command-v2` / `IEPCommandCenterV2` | Census-qualified `/assets/maps/ohio-counties.geojson` through `CensusCountyGeometryAdapter` and the Spatial pipeline | geometry public; attached IEP records separately governed | Spatial-managed client accepted; legacy direct path retained only as DEV rollback; migration complete with rollback condition |
 | `shf.ohio-engine` | `SHFOhioMapEngine` | SHF candidate | test/unrouted page evidence | county base plus hardcoded metrics | unknown | Blocked |
 | `globe.operational` | `OperationalGlobe` | unknown | no confirmed importer | globe.gl + remote GeoJSON | unknown | Unknown / unmounted candidate |
 | `globe.real` | `RealGlobe` | unknown | no confirmed importer | globe.gl + remote county data | unknown | Unknown / unmounted candidate |
@@ -36,6 +36,13 @@ Wave 5D update: the qualified Census geometry now reaches the existing IEP
 renderer through `CensusCountyGeometryAdapter`, the Spatial projection
 pipeline, and `IepCountyClientAdapter`. The legacy preparation path is retained
 as an explicit development rollback and is not retired.
+
+Wave 5E update: Spatial is the default IEP county path. The old direct
+preparation path is no longer the default, but remains a DEV-only rollback and
+the dual-run remains a DEV-only diagnostic. Spatial failure is controlled and
+does not silently fall back. The IEP migration is accepted with rollback
+condition; the Census asset remains canonical and the ODOT asset remains an
+independent legacy dependency.
 | Disconnected globes | globe overlays/arcs | component-local/remote data | UNKNOWN | Component-local | UNKNOWN | UNKNOWN | DISPOSITION PENDING |
 
 The matrix intentionally leaves authority dimensions independent. A candidate source is not a confirmed source authority.

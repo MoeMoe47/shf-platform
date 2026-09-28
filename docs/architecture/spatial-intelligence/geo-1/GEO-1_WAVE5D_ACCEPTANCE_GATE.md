@@ -45,3 +45,8 @@ The dedicated client adapter is now the default county preparation path behind
 the existing renderer. The legacy path is retained for explicit development
 rollback and is not silently selected on Spatial failure. Final legacy-path
 retirement remains a Wave 5E decision.
+
+Wave 5E disposition: the legacy default is retired, while the direct loader is
+retained as an explicit DEV-only rollback and the dual-run is retained as a
+DEV-only diagnostic. No silent fallback exists. IEP migration is
+`IEP_MIGRATION_COMPLETE_WITH_ROLLBACK`.

@@ -63,4 +63,6 @@ mounting or county rendering.
 `WAVE_5D_COMPLETE_WITH_ROLLBACK_CONDITION`
 
 Wave 5E owns rollback observation, final parity closure, and legacy-path
-retirement. This cutover remains uncommitted for review.
+retirement. The cutover was frozen in commit `2bf0fe7` (`feat(spatial): cut
+over IEP county map to Spatial`); Wave 5E acceptance remains uncommitted for
+review.

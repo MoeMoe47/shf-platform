@@ -146,3 +146,80 @@ What Spatial may not infer: `SCHEDULED` from a future `effectiveStart` alone; `S
 Reason: Repository domains treat scheduled as a lifecycle status that is independent of time. `shf_civic_elections.status` is `DRAFT | SCHEDULED | OPEN | CLOSED | ... | CANCELLED` (migration 148), and live sessions are `draft | scheduled | open | in_progress | completed | cancelled | expired` (`apps/shs-api/src/domain/live-learning/model/live-session.ts`). A draft or cancelled record with a future start time is not scheduled, so deriving `SCHEDULED` from time would invent domain state and violate GEO1A-DEC-001.
 Affected files/phases: `GEO-1_WAVE3A_PROJECTION_STATE_DESIGN.md`, `GEO-1_WAVE3A_TEST_MATRIX.md`, `GEO-1_WAVE3A_ACCEPTANCE_GATE.md`, `tests/spatialProjectionStateWave3.test.mjs`; GEO-1 Wave 3B resolver; GEO-7/GEO-10 temporal work. GEO-1A and GEO-1B contracts are unchanged.
 Revisit condition: Only if a source domain explicitly delegates scheduled-status derivation to Spatial through a documented, tested contract.
+
+## GEO1-WAVE3B-DEC-001
+
+Decision ID: GEO1-WAVE3B-DEC-001
+Question: Who may supply EMERGENCY, and how does it interact with selection, restriction, verification, and staleness?
+Decision: EMERGENCY is a domain-supplied fact, never a visual inference. Only a source authority explicitly allowlisted as a confirmed emergency authority may supply it. It outranks presentation states (domain lifecycle, temporal, SELECTED, NORMAL) in `resolvedVisualState`, but it does not outrank visibility: RESTRICTED, NOT_PUBLISHED, and UNAVAILABLE decide what may be rendered. Claims from non-allowlisted authorities are retained internally with `EMERGENCY_AUTHORITY_NOT_CONFIRMED` and not rendered. Unverified claims are not rendered on public surfaces. A stale emergency follows layer stale policy and never renders as current. The production allowlist ships empty.
+Alternatives considered: Let any domain supply EMERGENCY; let EMERGENCY override restriction for safety; infer EMERGENCY from alert context or capability metadata.
+Repository evidence: GEO-1B State Engine Plan ("only when supplied by a confirmed emergency authority"); GEO-1A State Projection Contract (verification "required for public use"); GEO-1A Engine/Client Boundary and Gaps (Emergency/Dispatch is metadata-only); GEO-1B Domain Adapter Plan (Emergency BLOCKED); `regionalSceneRegistry.js` holds only `emergencyCapabilities` strings.
+Reason: Spatial must not create emergency authority or broadcast what the publication authority has not made visible.
+Affected phases: GEO-1 Wave 3B, GEO-4, GEO-8.
+Revisit condition: When an emergency engine is confirmed with runtime evidence, or a domain needs EMERGENCY concurrent with another lifecycle state.
+
+## GEO1-WAVE3B-DEC-002
+
+Decision ID: GEO1-WAVE3B-DEC-002
+Question: What may a client receive for non-projected results?
+Decision: Separate `InternalProjectionResult` (trusted, full feature, all dimensions and diagnostics) from `ClientProjectionResult` (redacted per viewer). SUPPRESSED and INVALID are omitted from clients entirely. RESTRICTED defaults to HIDE; NOTICE returns only an allowlisted placeholder; GENERALIZED returns only source-supplied generalized geometry, and Spatial never generalizes coordinates. `featureId` is exposed only for PROJECTED, STALE, and UNAVAILABLE results. Masked results use an opaque, per-response `resultRef`. Every lookup by identifier passes the eligibility gate, and unknown and hidden identifiers return the identical `FEATURE_NOT_AVAILABLE` response. The selection store is seeded only with client-visible features.
+Alternatives considered: Return the feature with a status flag (Wave 3A fixture pattern); expose `featureId` on masked placeholders.
+Repository evidence: `featureIds.js` embeds `sourceRecordId` in `featureId`, so the ID is both a disclosure and an injection vector; `selectionStore.js` checks only NOT_PUBLISHED; GEO-1A Public/Private Boundary rules 6–7; GEO-1B defense-in-depth table.
+Reason: Knowing or computing an identifier must not yield private geometry, payload, or proof of existence.
+Affected phases: GEO-1 Wave 3B and all client integrations.
+Revisit condition: Only with a publication-authority decision that a masked-ID scheme is required.
+
+## GEO1-WAVE3B-DEC-003
+
+Decision ID: GEO1-WAVE3B-DEC-003
+Question: Is ADAPTER_COLLISION canonical, and may adapters be replaced?
+Decision: Yes, `ADAPTER_COLLISION` joins the catalog (REGISTRY stage, ERROR, blocking the registration, not client-safe). A second registration for the same `(domain, featureType)`, including the identical adapter or a different `projectionVersion`, is rejected atomically and the registry is left unchanged. Replacement is not supported; any future replacement requires an explicit, versioned replacement policy decision.
+Alternatives considered: Last-write-wins; version-keyed coexistence.
+Repository evidence: `SpatialLayerRegistry.register` rejects duplicate ids; the Wave 3A harness already used the code; GEO-1B Provenance Model Plan treats `projectionVersion` as metadata.
+Reason: A silent override would change which authority's projection logic is applied without a trace.
+Affected phases: GEO-1 Wave 3B.
+Revisit condition: When a replacement or version-migration policy is proposed.
+
+## GEO1-WAVE3B-DEC-004
+
+Decision ID: GEO1-WAVE3B-DEC-004
+Question: What threshold defines EVENT_SOON?
+Decision: No Spatial-owned threshold. EVENT_SOON is allowed only from (A) a domain-supplied soon flag or (B) a domain-configured ISO 8601 `soonThreshold` with a named `soonThresholdAuthority`, on a time-aware layer, with a valid absolute `effectiveStart` (offset, or local plus declared timezone) and an injected clock. The window `start − threshold ≤ now < start` is inclusive at the lower boundary and exclusive at the upper. The default (D) is non-calculable: a future event is `upcoming` only, with `EVENT_SOON_THRESHOLD_NOT_CONFIGURED` recorded for operators.
+Alternatives considered: Global fixed threshold (15/30/60 minutes); Spatial presentation-only threshold (option C).
+Repository evidence: No event "soon" threshold exists. Existing "soon" semantics are domain-specific and inconsistent: assignments `due_soon` is 3 days (`assignment.ts`, `UpcomingAssignmentsCard.jsx`) and Hub pipeline "Due Soon" is 7 days (`hubTourSteps.js`).
+Reason: Choosing a number would invent event semantics that belong to the event authority.
+Affected phases: GEO-1 Wave 3B, GEO-7 temporal work.
+Revisit condition: When an event authority publishes a threshold.
+
+## GEO1-WAVE3B-DEC-005
+
+Decision ID: GEO1-WAVE3B-DEC-005
+Question: How is staleness decided and applied?
+Decision: Add an explicit `freshnessState` dimension (CURRENT, STALE, UNKNOWN), separate from `availabilityState`. Freshness is source-supplied, or calculated only from a layer-declared `maxSourceAge` with a `freshnessAuthority`; otherwise it is UNKNOWN. Layers may declare `stalePolicy` of `MARK_STALE`, `SUPPRESS`, or `UNAVAILABLE`, and an undeclared policy behaves as `MARK_STALE`. Restriction is evaluated before freshness. `REQUIRE_REFRESH` and `DOMAIN_DECIDES` are rejected.
+Alternatives considered: Overload staleness into availability (Wave 3A fixture); a global default maximum age; `REQUIRE_REFRESH` and `DOMAIN_DECIDES` policies.
+Repository evidence: GEO-1A Temporal Projection Contract rule 4 ("marked stale or unavailable according to layer policy"); GEO-1A Spatial Integrity Policy; GEO-1A Provenance contract (Spatial displays supplied freshness); `defaultLayers.js` declares no freshness policy.
+Reason: A stale-but-available feature is a distinct fact. Undeclared rules must not be invented, and disclosing supplied freshness hides nothing.
+Affected phases: GEO-1 Wave 3B; the layer contract gains optional fields when implemented.
+Revisit condition: When a layer needs a policy not expressible by the three values.
+
+## GEO1-WAVE3B-DEC-006
+
+Decision ID: GEO1-WAVE3B-DEC-006
+Question: What structure do projection diagnostics use?
+Decision: Diagnostics are objects `{ code, severity, stage, blocking, resultStatus, safeForClient, message, featureId?, layerId?, coordinateSpaceId?, sourceAuthority?, details? }`. Severity uses the operational telemetry vocabulary (INFO, WARNING, ERROR, CRITICAL; CRITICAL is unassigned in Wave 3B). Messages are static per code and details are allowlisted; no source payload appears in either. Clients receive only `safeForClient` diagnostics, reduced to `{ code, message }`. Production must never classify message text. Wave 1 validators gain additive structured `issues` codes, and their existing `errors` strings are preserved. The catalog is the 12 Wave 3A codes plus `ADAPTER_COLLISION`, `INVALID_DOMAIN_STATE`, `FEATURE_NOT_AVAILABLE`, `EMERGENCY_AUTHORITY_NOT_CONFIRMED`, and `EVENT_SOON_THRESHOLD_NOT_CONFIGURED`.
+Alternatives considered: FATAL severity; string-only diagnostics; replacing Wave 1 error strings.
+Repository evidence: `operational-telemetry.ts` `OperationalSeverity`; `{ code, message, status }` domain error convention; Wave 3A harness string mapping; `validation.js` string errors.
+Reason: Stable codes are required for safe redaction and for tests; string parsing is brittle and leaks.
+Affected phases: GEO-1 Wave 3B.
+Revisit condition: When an operator paging integration requires CRITICAL codes.
+
+## GEO1-WAVE3B-DEC-007
+
+Decision ID: GEO1-WAVE3B-DEC-007
+Question: In what order is presentation resolved, and how does render priority relate to authority?
+Decision: Eight stages run in order: data eligibility, visibility/publication, availability/freshness, domain facts, temporal, selection, highlight, resolved visual. Stages 1–3 may end client exposure. The resolved visual is the first applicable value in: RESTRICTED › UNAVAILABLE › confirmed EMERGENCY › domain lifecycle › temporal visual › SELECTED › NORMAL. Selection, highlight, stale, and verification are modifiers. Render priority does not change authority: no stage overwrites another dimension, and `resolvedVisualState` is never written back.
+Alternatives considered: A single priority list that doubles as authority ranking.
+Repository evidence: GEO-1B State Engine Plan priority; GEO1-WAVE3A-DEC-001 (multi-dimensional state); GEO-1A Authority Charter non-transfer rule.
+Reason: What may be shown and who owns a fact are different questions. Conflating them lets visibility erase domain truth, or lets domain state bypass visibility.
+Affected phases: GEO-1 Wave 3B resolver and all clients.
+Revisit condition: When a new dimension is added.

@@ -7,4 +7,4 @@ export {
   toIepCountyViewModels,
 } from "./countyViewModel.js";
 export { IepCountyClientAdapter, createIepCountyClientAdapter } from "./IepCountyClientAdapter.js";
-export { compareIepCountySources, isIepSpatialDualRunEnabled, projectIepCountyGeoJson, runIepSpatialDualRun } from "./dualRun.js";
+export { compareIepCountySources, isIepSpatialDualRunEnabled, isIepSpatialRollbackEnabled, projectIepCountyGeoJson, projectIepCountyViewModels, runIepSpatialDualRun } from "./dualRun.js";

@@ -31,6 +31,11 @@ The principal evidence paths are `src/system/metaverse/metaverseMiniMapRegistry.
 | Exchange / SHS Mapbox | county/operational signals | Exchange/SHS data surfaces | Boundary unresolved | Mapbox geographic view | Role-dependent | PARTIAL | LEGACY |
 | SHF Public Impact | approved county impact | SHF impact data | SHF publication owner; records not approved | County GeoJSON candidate | SHF | BLOCKED | LEGACY |
 | IEP County | county geometry | local Ohio GeoJSON | Geometry owner/provenance unresolved | IEP geometry asset | IEP/application policy | PARTIAL | LEGACY |
+
+Wave 5D update: the qualified Census geometry now reaches the existing IEP
+renderer through `CensusCountyGeometryAdapter`, the Spatial projection
+pipeline, and `IepCountyClientAdapter`. The legacy preparation path is retained
+as an explicit development rollback and is not retired.
 | Disconnected globes | globe overlays/arcs | component-local/remote data | UNKNOWN | Component-local | UNKNOWN | UNKNOWN | DISPOSITION PENDING |
 
 The matrix intentionally leaves authority dimensions independent. A candidate source is not a confirmed source authority.

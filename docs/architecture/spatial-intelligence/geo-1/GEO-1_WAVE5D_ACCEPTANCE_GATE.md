@@ -1,7 +1,8 @@
 # GEO-1 Wave 5D IEP Client Acceptance Gate
 
-This gate governs future implementation. It does not authorize implementation
-in the current planning pass.
+This gate records the controlled Wave 5D cutover. The legacy renderer remains
+in place and the legacy geometry path remains available as an explicit
+development rollback.
 
 ## Entry gate
 
@@ -30,13 +31,17 @@ in the current planning pass.
 - [ ] publication filtering is no weaker
 - [ ] error state never fabricates county data
 - [ ] accessibility is not regressed
-- [ ] development dual-run passes
-- [ ] Chromium certification passes
+- [x] development dual-run passes
+- [x] Chromium certification passes
+- [x] Spatial path is the default county preparation path
+- [x] explicit development rollback renders the legacy path
+- [x] Spatial preparation fails closed without silent legacy fallback
 
 ## Decision statuses
 
-Current status: `READY_FOR_BROWSER_PARITY_WITH_CONDITIONS`.
+Current status: `WAVE_5D_COMPLETE_WITH_ROLLBACK_CONDITION`.
 
-The dedicated client adapter and development dual-run are complete. Exact
-88-county data parity is certified while the default IEP map remains on its
-legacy path. Browser certification remains a separate condition.
+The dedicated client adapter is now the default county preparation path behind
+the existing renderer. The legacy path is retained for explicit development
+rollback and is not silently selected on Spatial failure. Final legacy-path
+retirement remains a Wave 5E decision.

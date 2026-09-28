@@ -4,7 +4,9 @@ import OhioCountyOfficialMapV2 from "./OhioCountyOfficialMapV2";
 import { getCountyProfile } from "./countyProfiles";
 import CountyInteractionLayer from "./CountyInteractionLayer";
 import {
+  createIepCountyClientAdapter,
   isIepSpatialDualRunEnabled,
+  isIepSpatialRollbackEnabled,
   projectIepCountyGeoJson,
   runIepSpatialDualRun,
 } from "@/system/spatial/clients/iep";
@@ -235,10 +237,14 @@ export default function IEPCommandCenterV2(
     countyViewModels: [],
     error: null,
   });
+  const [spatialCountyViewModels, setSpatialCountyViewModels] = React.useState([]);
+  const [mapSource, setMapSource] = React.useState("spatial");
+  const [spatialLoadError, setSpatialLoadError] = React.useState("");
 
   useEffect(() => {
     const search = routeSearch();
-    if (!isIepSpatialDualRunEnabled({ search, isDevelopment: import.meta.env.DEV })) return undefined;
+    const rollback = isIepSpatialRollbackEnabled({ search, isDevelopment: import.meta.env.DEV });
+    const dualRun = isIepSpatialDualRunEnabled({ search, isDevelopment: import.meta.env.DEV });
 
     let alive = true;
     fetch("/assets/maps/ohio-counties.geojson")
@@ -248,9 +254,21 @@ export default function IEPCommandCenterV2(
       })
       .then((collection) => {
         if (!alive || collection?.type !== "FeatureCollection") return;
-        const clientProjectionResults = projectIepCountyGeoJson(collection.features, {
-          clock: () => new Date("2026-09-28T12:00:00.000Z"),
-        });
+        if (rollback) {
+          setMapSource("legacy");
+          setSpatialLoadError("");
+          setSpatialCountyViewModels([]);
+          return;
+        }
+
+        const clock = () => new Date("2026-09-28T12:00:00.000Z");
+        const clientProjectionResults = projectIepCountyGeoJson(collection.features, { clock });
+        const countyViewModels = createIepCountyClientAdapter().toCountyViewModels(clientProjectionResults);
+        setMapSource("spatial");
+        setSpatialLoadError("");
+        setSpatialCountyViewModels(countyViewModels);
+
+        if (!dualRun) return;
         const result = runIepSpatialDualRun({
           search,
           isDevelopment: import.meta.env.DEV,
@@ -260,7 +278,16 @@ export default function IEPCommandCenterV2(
         if (alive) setSpatialDualRun({ ...result, error: null });
       })
       .catch((error) => {
-        if (alive) setSpatialDualRun({ enabled: true, comparison: null, countyViewModels: [], error: error.message });
+        if (!alive) return;
+        if (rollback) {
+          setMapSource("legacy");
+          setSpatialLoadError("");
+          setSpatialCountyViewModels([]);
+          return;
+        }
+        setMapSource("spatial-error");
+        setSpatialLoadError(error.message);
+        if (dualRun) setSpatialDualRun({ enabled: true, comparison: null, countyViewModels: [], error: error.message });
       });
 
     return () => {
@@ -532,6 +559,7 @@ export default function IEPCommandCenterV2(
                   </div>
                 </div>
                 <div className="v2-map-surface">
+                  {spatialLoadError ? <div role="alert" className="v2-map-error">Spatial county preparation unavailable: {spatialLoadError}</div> : null}
                   <OhioCountyOfficialMapV2
                     activeCounty={activeCountyState}
                     selectedCounty={activeCountyState}
@@ -544,6 +572,8 @@ export default function IEPCommandCenterV2(
                       if (name) setActiveCountyState(name);
                     }}
                     onReady={setCountyCentroids}
+                    countyViewModels={mapSource === "spatial" ? spatialCountyViewModels : null}
+                    sourceMode={mapSource}
                     renderOverlay={({ countyCentroids }) => (
                       <CountyInteractionLayer
                         county={activeCountyState || profile.label}

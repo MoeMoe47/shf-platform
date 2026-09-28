@@ -31,10 +31,11 @@ the negative case where missing county identity produces no fabricated join.
 
 ## 5D-E — Production switch decision
 
-Only after all gates pass, decide whether to switch the geometry source behind
-the existing renderer. Keep rollback to the legacy path until parity and
-publication evidence are accepted. Retirement of the legacy path is a separate
-decision and is not implied by onboarding.
+Completed for the controlled Wave 5D cutover. The Spatial path now supplies
+the county view models behind the existing renderer. The legacy path remains
+available only through the explicit development `iepLegacyMap=1` rollback seam;
+Spatial failure is surfaced as a controlled unavailable state rather than an
+invisible fallback. Retirement of the legacy path remains a Wave 5E decision.
 
 ## Failure and rollback
 

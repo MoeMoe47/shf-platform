@@ -41,9 +41,10 @@ Production/API onboarding remains `READY WITH CONDITIONS` until the source
 schema supplies authoritative `countyFips: string | null`.
 
 Wave 5D client infrastructure now has a dedicated REAL_WORLD county adapter
-and a development-only dual-run seam. Exact 88-county parity is certified;
-default IEP rendering remains legacy and browser certification is still
-deferred.
+and a development-only dual-run seam. Exact 88-county parity and browser
+certification are complete; the Spatial path is now the default county
+preparation path behind the existing IEP renderer. The legacy path remains an
+explicit development rollback and is not retired.
 
 Wave 5D-API freezes that future contract without inventing an API or database
 model. Current client readiness is `READY WITH CONDITIONS`; future production

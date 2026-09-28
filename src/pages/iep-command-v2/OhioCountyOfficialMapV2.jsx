@@ -24,6 +24,8 @@ export default function OhioCountyOfficialMapV2({
   onCountyHover,
   onReady,
   renderOverlay = null,
+  countyViewModels = null,
+  sourceMode = "legacy",
   className = "",
 }) {
   const [geojson, setGeojson] = useState(null);
@@ -32,26 +34,39 @@ export default function OhioCountyOfficialMapV2({
   useEffect(() => {
     let alive = true;
 
-    fetch("/assets/maps/ohio-counties.geojson")
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-      })
-      .then((data) => {
-        if (!alive) return;
-        setGeojson(data);
-        setError("");
-      })
-      .catch((err) => {
-        console.error("Failed to load Ohio GeoJSON:", err);
-        if (!alive) return;
-        setError(String(err.message || err));
+    if (Array.isArray(countyViewModels)) {
+      setGeojson({
+        type: "FeatureCollection",
+        features: countyViewModels.map((county) => ({
+          type: "Feature",
+          id: county.id,
+          properties: { NAME: county.label, GEO_ID: `0500000US${county.countyFips}` },
+          geometry: county.geometry,
+        })),
       });
+      setError("");
+    } else {
+      fetch("/assets/maps/ohio-counties.geojson")
+        .then((res) => {
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.json();
+        })
+        .then((data) => {
+          if (!alive) return;
+          setGeojson(data);
+          setError("");
+        })
+        .catch((err) => {
+          console.error("Failed to load Ohio GeoJSON:", err);
+          if (!alive) return;
+          setError(String(err.message || err));
+        });
+    }
 
     return () => {
       alive = false;
     };
-  }, []);
+  }, [countyViewModels]);
 
   const mapState = useMemo(() => {
     if (!geojson?.features?.length) {
@@ -101,7 +116,10 @@ export default function OhioCountyOfficialMapV2({
   const hoveredName = normalizeCountyName(hoveredCounty || "");
 
   return (
-    <div className={`ohio-official-map-v2 ${className}`.trim()}>
+    <div
+      className={`ohio-official-map-v2 ${className}`.trim()}
+      {...(import.meta.env.DEV ? { "data-iep-map-source": sourceMode } : {})}
+    >
       {error ? (
         <div className="ohio-official-map-v2__error">
           Failed to load map: {error}

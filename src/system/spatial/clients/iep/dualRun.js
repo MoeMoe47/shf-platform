@@ -46,6 +46,10 @@ export function projectIepCountyGeoJson(features, { clock = () => new Date() } =
   );
 }
 
+export function projectIepCountyViewModels(features, { clock = () => new Date() } = {}) {
+  return createIepCountyClientAdapter().toCountyViewModels(projectIepCountyGeoJson(features, { clock }));
+}
+
 function freeze(value) {
   return Object.freeze(value);
 }
@@ -62,6 +66,10 @@ function legacyLabel(feature) {
 
 export function isIepSpatialDualRunEnabled({ search = "", isDevelopment = Boolean(import.meta.env?.DEV) } = {}) {
   return isDevelopment === true && new URLSearchParams(search).get("iepSpatialDualRun") === "1";
+}
+
+export function isIepSpatialRollbackEnabled({ search = "", isDevelopment = Boolean(import.meta.env?.DEV) } = {}) {
+  return isDevelopment === true && new URLSearchParams(search).get("iepLegacyMap") === "1";
 }
 
 export function compareIepCountySources({ legacyFeatures = [], spatialCountyViewModels = [] } = {}) {

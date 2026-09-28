@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./iep-command-v2.css";
-import { useSelectedEntity } from "@/system/context/SelectedEntityContext";
-import { resolveCountyFromEntity } from "@/system/resolvers/entityToCounty";
 import OhioCountyOfficialMapV2 from "./OhioCountyOfficialMapV2";
 import { getCountyProfile } from "./countyProfiles";
 import CountyInteractionLayer from "./CountyInteractionLayer";

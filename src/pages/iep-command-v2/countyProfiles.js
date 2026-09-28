@@ -1,4 +1,6 @@
-export const COUNTY_PROFILES = {
+import { resolveExactQualifiedCountyNameToFips } from "../../shared/spatial/countyIdentity.js";
+
+const RAW_COUNTY_PROFILES = {
   __default: {
     label: "COUNTY",
     title: "County Detail",
@@ -4495,6 +4497,20 @@ export const COUNTY_PROFILES = {
   },
 
 };
+
+export const COUNTY_PROFILES = Object.freeze(
+  Object.fromEntries(
+    Object.entries(RAW_COUNTY_PROFILES).map(([key, profile]) => [
+      key,
+      key === "__default"
+        ? { ...profile, countyFips: null }
+        : {
+            ...profile,
+            countyFips: resolveExactQualifiedCountyNameToFips(profile.label || key),
+          },
+    ])
+  )
+);
 
 export function getCountyProfile(countyName) {
   const key = String(countyName || "").trim().toUpperCase();

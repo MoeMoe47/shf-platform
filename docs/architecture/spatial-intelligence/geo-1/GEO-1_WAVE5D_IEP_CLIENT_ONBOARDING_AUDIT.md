@@ -49,12 +49,15 @@ Wave 5D onboarding seam.
 
 The qualified Census asset provides stable five-digit Ohio FIPS identity via
 `STATE` + `COUNTY`, consistent with `GEO_ID`. That identity is available for
-base geography. The active IEP presentation path does not currently carry an
-explicit `countyFips` alongside its profile/selection state; it uses county
-labels. Therefore the safe IEP domain join is **absent** in the current path.
+base geography. Wave 5D-ID now adds validated `countyFips` to the 88 static
+county profiles, but dynamic IEP/domain record families still lack a proven
+explicit join contract. Therefore the safe dynamic IEP domain join remains
+**absent**.
 
-Decision: `BLOCKED_BY_DOMAIN_IDENTITY` for full client onboarding, while the
-base Census geometry adapter remains production-ready infrastructure.
+Decision before remediation: `BLOCKED_BY_DOMAIN_IDENTITY` for full client
+onboarding. After static-profile hardening, the remaining gate is dynamic
+record identity and resolver isolation; the Census geometry adapter remains
+production-ready infrastructure.
 
 ## Entity-to-county dependency
 

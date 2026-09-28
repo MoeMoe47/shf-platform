@@ -421,3 +421,14 @@ Repository evidence: `src/pages/iep-command-v2/IEPCommandCenterV2.jsx`; `src/pag
 Reason: Explicit identity preserves separate authority, prevents fabricated county associations, and allows geometry onboarding without publishing or mutating IEP domain truth.
 Affected phases: GEO-1 Wave 5D planning and later IEP client onboarding.
 Revisit condition: IEP source records expose a validated county FIPS identity and the fallback dependency is removed or formally isolated from the Spatial path.
+
+## GEO1-WAVE5D-ID-DEC-026
+
+Decision ID: GEO1-WAVE5D-ID-DEC-026
+Question: How should existing IEP county profiles gain identity without changing the current map path?
+Decision: Retain the existing normalized county-name keys and display labels, and add an immutable-domain `countyFips` field to the 88 static profiles using exact matches against the qualified Census identity manifest. Use a neutral validator and exact-FIPS join helper for future records. Missing or unmatched identity remains unresolved; no Franklin fallback, fuzzy matching, address inference, or Spatial feature ID storage is permitted.
+Alternatives considered: Replace profile keys with FIPS; infer FIPS continuously from labels; call `entityToCounty`; store generated Spatial feature IDs in IEP records.
+Repository evidence: `src/pages/iep-command-v2/countyProfiles.js`; `src/shared/spatial/countyIdentity.js`; `public/assets/maps/ohio-counties.geojson`; Wave 5D identity tests.
+Reason: Additive identity hardening preserves the current UI contract while establishing a safe domain-to-Census join boundary.
+Affected phases: GEO-1 Wave 5D identity remediation and later IEP client onboarding.
+Revisit condition: Dynamic IEP record sources expose explicit validated `countyFips`, or the qualified Census identity source changes.

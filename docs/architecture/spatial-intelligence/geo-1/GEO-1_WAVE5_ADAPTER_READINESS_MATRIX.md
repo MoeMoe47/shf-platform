@@ -23,10 +23,16 @@ Statuses are based on current repository evidence, not the earlier roadmap label
 ## Wave 5D IEP Addendum
 
 The Census county geometry adapter is production-ready infrastructure, but the
-IEP client is `BLOCKED_BY_DOMAIN_IDENTITY`. The current page uses label-keyed
-profiles and retains an import of `entityToCounty.js`; no explicit validated
-`countyFips` join is established for IEP records. This does not change the
-neutral `census-geography` adapter readiness or authorize IEP map migration.
+IEP client is `BLOCKED_BY_DOMAIN_IDENTITY`. The audit found a label-keyed
+profile path and an `entityToCounty.js` dependency; no explicit validated
+`countyFips` join was established for dynamic IEP records. This does not
+change the neutral `census-geography` adapter readiness or authorize IEP map
+migration.
+
+Wave 5D-ID has now hardened all 88 static county profiles with additive
+validated `countyFips` values and removed the resolver import from the active
+IEP page. Dynamic IEP record identity remains a gate, and the resolver remains
+available to unrelated legacy consumers.
 
 ## Readiness Rule
 

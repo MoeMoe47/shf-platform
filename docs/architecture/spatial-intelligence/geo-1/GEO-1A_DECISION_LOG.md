@@ -388,3 +388,14 @@ Repository evidence: `src/components/metaverse/MetaverseMiniMap.jsx`; `src/pages
 Reason: This preserves current navigation and uncertain registry authority while making the accepted Spatial client path testable and presentation-only.
 Affected phases: GEO-1 Wave 4C and Wave 4D.
 Revisit condition: When legitimate production source mappings and a separately accepted navigation/record-opening contract exist.
+
+## GEO1-WAVE4D-DEC-023
+
+Decision ID: GEO1-WAVE4D-DEC-023
+Question: How should accessibility and non-map parity consume Spatial Quick Map data?
+Decision: Use the same sanitized Quick Map marker models for visual markers and a semantic non-map list. Add native-button modal focus entry, Escape close, and focus return to the existing full-map flow. Keep legacy entries separate and do not create a second selection or projection source.
+Alternatives considered: Duplicate projection logic for a list; expose raw projection results to accessibility clients; migrate legacy registry markers into Spatial; rely on hover-only semantics.
+Repository evidence: `MetaverseMiniMap.jsx` native marker/control buttons; Wave 4B allowlisted marker model; existing legacy activity list; Wave 4C interaction controller.
+Reason: Shared safe models keep state and privacy behavior aligned while native controls provide equivalent keyboard activation without moving authority.
+Affected phases: GEO-1 Wave 4D-4E.
+Revisit condition: When browser certification identifies a concrete focus or non-map parity gap, or when the accepted client model changes.

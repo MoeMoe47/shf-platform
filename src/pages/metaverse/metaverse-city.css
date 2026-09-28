@@ -6195,6 +6195,59 @@ body:has(.met-home) .brainiact-root {
   box-shadow: 0 0 6px rgba(102, 217, 255, 0.6);
 }
 
+.met-minimap .met-citymap__spatial-marker.is-spatial-selected .met-citymap__dot {
+  width: 10px;
+  height: 10px;
+  border: 2px solid #f8fafc;
+  background: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25), 0 0 9px rgba(56, 189, 248, 0.85);
+}
+
+.met-citymap__spatial-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.met-citymap__spatial-list ul {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.met-citymap__spatial-list button {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 36px;
+  padding: 7px 10px;
+  border: 1px solid rgba(125, 211, 252, 0.3);
+  border-radius: 6px;
+  background: rgba(8, 22, 46, 0.74);
+  color: #e2e8f0;
+  text-align: left;
+}
+
+.met-citymap__spatial-list button:focus-visible {
+  outline: 2px solid #f8fafc;
+  outline-offset: 2px;
+}
+
+.met-citymap__spatial-list button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .met-minimap .met-citymap__spatial-marker,
+  .met-citymap__spatial-list button {
+    transition: none;
+  }
+}
+
 /* PART 11 — contextual callout, same hover/focus-reveal mechanism as
    the main-scene hotspot cards (.met-hotspot__card): hidden by
    default, revealed instantly on hover/focus, hidden again with a

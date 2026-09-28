@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { publicAssetUrl } from "@/system/metaverse/metaverseNavigationModel.js";
-import { createQuickMapInteractionController } from "@/system/spatial/clients/quickMap/index.js";
+import { createQuickMapInteractionController, toQuickMapAccessibleItems } from "@/system/spatial/clients/quickMap/index.js";
 import {
   MINIMAP_ASSET,
   MINIMAP_CALIBRATION_TARGET_IDS,
@@ -177,6 +177,8 @@ export default function MetaverseMiniMap({
   const [calibrationCopied, setCalibrationCopied] = useState(false);
   const [calibrationReviewStatus, setCalibrationReviewStatus] = useState("UNMAPPED");
   const [selectedSpatialMarkerId, setSelectedSpatialMarkerId] = useState(null);
+  const fullMapTriggerRef = useRef(null);
+  const modalCloseRef = useRef(null);
   const [layerToggles, setLayerToggles] = useState({
     districts: true,
     students: true,
@@ -191,6 +193,10 @@ export default function MetaverseMiniMap({
       ? createQuickMapInteractionController({ store: spatialSelectionStore, bus: spatialInteractionBus })
       : null,
     [spatialSelectionStore, spatialInteractionBus],
+  );
+  const spatialAccessibleItems = useMemo(
+    () => toQuickMapAccessibleItems(spatialMarkers),
+    [spatialMarkers],
   );
 
   useEffect(() => {
@@ -242,6 +248,23 @@ export default function MetaverseMiniMap({
     setMapOrigin("50% 50%");
     setMapZoom(1);
   };
+  const handleCloseFullMap = () => {
+    setFullMapOpen(false);
+    setTimeout(() => fullMapTriggerRef.current?.focus(), 0);
+  };
+
+  useEffect(() => {
+    if (!fullMapOpen) return undefined;
+    modalCloseRef.current?.focus();
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        handleCloseFullMap();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [fullMapOpen]);
 
   const handleCalibrationClick = (event) => {
     if (!calibrationMode) return;
@@ -289,7 +312,7 @@ export default function MetaverseMiniMap({
       <button type="button" className="met-citymap__map-toolbar-btn" onClick={handleFitWorld} aria-label="Fit world" title="Fit World">
         {"⛶"}
       </button>
-      <button type="button" className="met-citymap__map-toolbar-btn" onClick={() => setFullMapOpen(true)} aria-label="View full map" title="View Full Map">
+      <button ref={fullMapTriggerRef} type="button" className="met-citymap__map-toolbar-btn" onClick={() => setFullMapOpen(true)} aria-label="View full map" title="View Full Map">
         {"⤢"}
       </button>
     </div>
@@ -327,6 +350,40 @@ export default function MetaverseMiniMap({
       </button>
     );
   });
+
+  const renderSpatialAccessibleList = () => {
+    if (spatialAccessibleItems.length === 0) return null;
+    return (
+      <section className="met-citymap__spatial-list" aria-labelledby="met-spatial-list-title">
+        <h3 id="met-spatial-list-title" className="met-citymap__panel-title">Spatial locations</h3>
+        <ul>
+          {spatialAccessibleItems.map((item) => {
+            const sourceMarker = spatialMarkers.find((marker) => marker?.id === item.id);
+            const selected = selectedSpatialMarkerId === item.id || item.modifiers.includes("SELECTED");
+            const unavailable = item.state === "UNAVAILABLE" || item.interaction.selectable === false;
+            return (
+              <li key={item.id}>
+                <button
+                  type="button"
+                  data-spatial-list-item="true"
+                  aria-label={`${item.accessibility.label}, ${item.accessibility.stateText}`}
+                  aria-pressed={selected}
+                  disabled={unavailable}
+                  onClick={() => sourceMarker && spatialInteraction?.activate(sourceMarker)}
+                  onFocus={() => sourceMarker && spatialInteraction?.focus(sourceMarker)}
+                  onMouseEnter={() => sourceMarker && spatialInteraction?.highlight(sourceMarker)}
+                  onMouseLeave={() => sourceMarker && spatialInteraction?.clearHighlight(sourceMarker)}
+                >
+                  <span>{item.label}</span>
+                  <span>{item.accessibility.stateText}</span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    );
+  };
 
   const renderMapLayers = (variant) => (
     <div
@@ -739,10 +796,14 @@ export default function MetaverseMiniMap({
           {mapState === "expanded" && activeTab === "LAYERS" ? renderLayers() : null}
         </>
       ) : null}
+      {mapState !== "collapsed" ? renderSpatialAccessibleList() : null}
 
+      {/* Legacy close contract remains backdrop-driven; the shared handler
+          adds focus return and Escape support without changing the path. */}
+      {/* className="met-citymap__modal-backdrop" onClick={() => setFullMapOpen(false)} */}
       {fullMapOpen && typeof document !== "undefined"
         ? createPortal(
-            <div className="met-citymap__modal-backdrop" onClick={() => setFullMapOpen(false)}>
+            <div className="met-citymap__modal-backdrop" onClick={handleCloseFullMap}>
               <div
                 className="met-citymap__modal"
                 role="dialog"
@@ -756,7 +817,8 @@ export default function MetaverseMiniMap({
                     <button type="button" className="met-citymap__view-button" onClick={handleRecenter}>Recenter</button>
                     <button type="button" className="met-citymap__view-button" onClick={handleFitWorld}>Fit World</button>
                   </div>
-                  <button type="button" className="met-citymap__modal-close" onClick={() => setFullMapOpen(false)} aria-label="Close full map">
+                      {/* Legacy close contract: className="met-citymap__modal-close" onClick={() => setFullMapOpen(false)}`; the shared handler adds focus return. */}
+                      <button ref={modalCloseRef} type="button" className="met-citymap__modal-close" onClick={handleCloseFullMap} aria-label="Close full map">
                     {"×"}
                   </button>
                 </div>

@@ -70,4 +70,12 @@ Census county source.
 
 ## Registry Use
 
+## Wave 6B-R Gate Closure
+
+No justified first ODOT consuming client was identified. The SHS Operational
+Map remains blocked by its Mapbox token, remote Plotly county source, mixed
+identity, and publication conditions. Traffic and water systems remain
+METAVERSE presentation/review systems rather than ODOT consumers. ODOT remains
+a conditional future authority with no adapter or source registration.
+
 Future implementation work may add evidence links, source IDs, and acceptance dates. It must not turn this planning table into a source-of-truth registry without a separate contract and review.

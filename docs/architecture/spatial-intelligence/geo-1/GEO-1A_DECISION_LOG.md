@@ -493,3 +493,24 @@ Affected phases: GEO-1 Wave 6B qualification and any later ODOT adapter/client
 implementation.
 Revisit condition: Written ODOT use terms, an approved snapshot process, and a
 named regression-protected operational client are available.
+
+## GEO1-WAVE6B-R-DEC-032
+
+Decision ID: GEO1-WAVE6B-R-DEC-032
+Question: Did ODOT rights, snapshot governance, and client discovery clear the adapter entry gate?
+Decision: Close the ODOT source qualification as `QUALIFIED_WITH_CONDITIONS`,
+freeze the no-live-fetch governed-snapshot architecture, and keep adapter
+implementation `BLOCKED_BY_CLIENT`. Exact County-layer metadata confirms
+public-information access and source identity, but does not provide complete
+redistribution, modification, retained-snapshot, or commercial-use terms. No
+current client has a complete ODOT-specific operational and regression
+contract. Census and ODOT remain distinct authorities.
+Evidence: `GEO-1_WAVE6B_ODOT_RIGHTS_MATRIX.md`,
+`GEO-1_WAVE6B_ODOT_SNAPSHOT_CONTRACT.md`,
+`GEO-1_WAVE6B_ODOT_FIRST_CLIENT_DECISION.md`, and
+`GEO-1_WAVE6B_ODOT_GATE_CLOSURE.md`.
+Reason: Do not create an adapter without both usable rights and a real client
+need; preserve the qualified source for a later justified implementation.
+Affected phases: GEO-1 Wave 6B-R and future ODOT adapter/client work.
+Revisit condition: Written ODOT terms, an approved active snapshot, and a
+named regression-protected operational client.

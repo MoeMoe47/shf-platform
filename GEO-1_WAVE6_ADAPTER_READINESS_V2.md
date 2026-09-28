@@ -8,7 +8,7 @@ Statuses reflect current evidence and do not authorize implementation.
 | IEP county map | `QUALIFIED` | Census adapter, explicit countyFips, client parity, browser certification, and Spatial-default cutover are complete. |
 | Exchange / Capital | `BLOCKED` | Mapbox token/platform dependency, remote county source provenance/license, mixed marker identity, and publication boundaries remain unresolved. |
 | SHF public impact | `BLOCKED` | Current impact records are sample/draft and all `publicApproved:false`. |
-| ODOT operational geography | `QUALIFIED_WITH_CONDITIONS` | Current TIMS metadata confirms public information, annual 88-county service, and stable FIPS; redistribution/modification terms, approved snapshot governance, and a first consuming client remain unresolved. Adapter implementation is `NOT_READY`. |
+| ODOT operational geography | `QUALIFIED_WITH_CONDITIONS` | Source and FIPS are qualified; rights clarification, approved snapshot governance, and a justified first consuming client remain open. Gate closure result: `BLOCKED_BY_CLIENT`; adapter implementation remains `NOT_READY`. |
 | Metaverse regional geography | `PARTIAL` | Strong presentation registry and assets, but no confirmed geographic source authority or registered production feature contract. |
 | CivicSure | `NOT_JUSTIFIED` | No confirmed geographic source/coordinate contract in current evidence. |
 | Career | `NOT_JUSTIFIED` | No confirmed canonical geographic records. |

@@ -184,10 +184,12 @@ test("APPROVED export causes no Spatial eligibility", () => {
   const result = prepareOilRigApprovedExport(createHumanApprovedOilRigArtifact());
   assert.equal(result.payload.spatialEligibility, "NONE");
 });
-test("APPROVED export keeps adapter red contract EXPECTED_MISSING_ADAPTER", () => {
+test("APPROVED export remains independent from the production adapter", () => {
   const source = readFileSync(new URL("../tests/spatialMetaverseRegionalSceneContractWave6C.test.mjs", import.meta.url), "utf8");
-  assert.match(source, /EXPECTED_MISSING_ADAPTER/);
-  assert.equal(existsSync(new URL("../src/system/spatial/adapters/metaverseRegionalSceneAdapter.js", import.meta.url)), false);
+  assert.doesNotMatch(source, /EXPECTED_MISSING_ADAPTER/);
+  assert.equal(existsSync(new URL("../src/system/spatial/adapters/metaverseRegionalSceneAdapter.js", import.meta.url)), true);
+  const tracerSource = readFileSync(new URL("../src/pages/metaverse/dev/OilRigRegionalGeometryTracer.jsx", import.meta.url), "utf8");
+  assert.doesNotMatch(tracerSource, /metaverseRegionalSceneAdapter/);
 });
 test("Export APPROVED control is APPROVED-only and no adapter is added", () => {
   const source = readFileSync(new URL("../src/pages/metaverse/dev/OilRigRegionalGeometryTracer.jsx", import.meta.url), "utf8");

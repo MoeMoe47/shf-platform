@@ -160,6 +160,9 @@ test("duplicate registry scene ids fail closed", () => {
   assert.equal(validateRegionalGeometryRegistry([entry, entry]).valid, false);
 });
 
-test("adapter remains missing", () => {
-  assert.equal(existsSync(new URL("../src/system/spatial/adapters/metaverseRegionalSceneAdapter.js", import.meta.url)), false);
+test("adapter implementation remains outside registry authority", () => {
+  const entry = getRegionalGeometryRegistryEntry("oil-rig");
+  assert.equal(existsSync(new URL("../src/system/spatial/adapters/metaverseRegionalSceneAdapter.js", import.meta.url)), true);
+  assert.equal(Object.hasOwn(entry, "projectionAdapter"), false);
+  assert.equal(Object.hasOwn(entry, "spatialFeatureId"), false);
 });

@@ -48,6 +48,21 @@ export const DEFAULT_SPATIAL_LAYERS = Object.freeze([
     accessibilityBehavior: "text route/path summary required",
     lifecycleStatus: SPATIAL_LAYER_LIFECYCLE_STATUS.EXPERIMENTAL,
   }),
+  Object.freeze({
+    layerId: "metaverse.regional-scenes",
+    name: "Metaverse Regional Scenes",
+    owningDomain: "Metaverse",
+    sourceAuthority: "silicon-heartland-metaverse-regional-scene-registry",
+    supportedCoordinateSpaces: Object.freeze(["metaverse.regional-scene"]),
+    visibilityPolicy: "client-controlled",
+    publicPrivateEligibility: PUBLICATION_ELIGIBILITY_LEVELS.AUTHENTICATED,
+    requiredPermissions: Object.freeze([]),
+    timeAwareCapability: false,
+    selectionCapability: true,
+    verificationCapability: true,
+    accessibilityBehavior: "keyboard regional scene polygons and text equivalents required",
+    lifecycleStatus: SPATIAL_LAYER_LIFECYCLE_STATUS.EXPERIMENTAL,
+  }),
 ]);
 
 export function createDefaultSpatialLayerRegistry({ coordinateRegistry = defaultCoordinateSpaceRegistry } = {}) {

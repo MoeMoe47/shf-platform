@@ -7381,3 +7381,111 @@ body:has(.met-home) .brainiact-root {
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
 }
+
+.met-regional-geometry-tracer {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  cursor: crosshair;
+  pointer-events: auto;
+}
+
+.met-regional-geometry-tracer__grid {
+  stroke: rgba(255, 255, 255, 0.35);
+  stroke-width: 0.08;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.met-regional-geometry-tracer__line {
+  fill: none;
+  stroke: #67e8f9;
+  stroke-width: 0.35;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.met-regional-geometry-tracer__fill {
+  fill: rgba(34, 211, 238, 0.22);
+  stroke: #67e8f9;
+  stroke-width: 0.35;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.met-regional-geometry-tracer__fill.is-invalid {
+  fill: rgba(248, 113, 113, 0.2);
+  stroke: #fca5a5;
+}
+
+.met-regional-geometry-tracer__vertex {
+  fill: #f8fafc;
+  stroke: #0891b2;
+  stroke-width: 0.35;
+  vector-effect: non-scaling-stroke;
+  cursor: grab;
+}
+
+.met-regional-geometry-tracer__vertex.is-selected,
+.met-regional-geometry-tracer__vertex:focus {
+  fill: #fbbf24;
+  stroke: #ffffff;
+  outline: none;
+}
+
+.met-regional-geometry-tracer-panel {
+  position: fixed;
+  z-index: 40;
+  top: 18px;
+  right: 18px;
+  width: min(390px, calc(100vw - 36px));
+  max-height: calc(100vh - 36px);
+  overflow: auto;
+  padding: 16px;
+  color: #e2e8f0;
+  background: rgba(8, 18, 32, 0.94);
+  border: 1px solid rgba(103, 232, 249, 0.55);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.36);
+}
+
+.met-regional-geometry-tracer-panel button,
+.met-regional-geometry-tracer__file-button {
+  min-height: 32px;
+  padding: 6px 9px;
+  color: inherit;
+  background: rgba(148, 163, 184, 0.16);
+  border: 1px solid rgba(226, 232, 240, 0.25);
+  cursor: pointer;
+}
+
+.met-regional-geometry-tracer-panel button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.met-regional-geometry-tracer__file-button input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.met-regional-geometry-tracer__errors {
+  margin: 8px 0;
+  padding-left: 18px;
+  color: #fca5a5;
+  font-size: 12px;
+}
+
+.met-regional-geometry-tracer__approved {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 8px;
+  color: #fde68a;
+  border: 1px solid rgba(253, 230, 138, 0.35);
+}

@@ -13,6 +13,8 @@ import MetaverseWeatherEnvironmentLayer from "@/components/metaverse/MetaverseWe
 import { MetaverseDevSection, MetaverseWeatherDevSection } from "@/components/metaverse/MetaverseDevConsole.jsx";
 import useOceanMotionEditor from "@/hooks/metaverse/useOceanMotionEditor.js";
 import useMetaverseEnvironmentRuntime from "@/hooks/metaverse/useMetaverseEnvironmentRuntime.js";
+import useRegionalSceneGeometryAuthoring, { resolveRegionalGeometryAuthoringEnabled } from "@/hooks/metaverse/useRegionalSceneGeometryAuthoring.js";
+import OilRigRegionalGeometryTracer from "@/pages/metaverse/dev/OilRigRegionalGeometryTracer.jsx";
 import { getRegionalRouteNeighbors, getRegionalSceneBySlug, REGIONAL_ROUTE_SEQUENCE } from "@/system/metaverse/regionalSceneRegistry.js";
 import { CLOUD_MOTION_PREVIEW_MODES, cloneCloudSceneConfig, OIL_RIG_DAY_CLOUD_PRESET } from "@/system/metaverse/regionalCloudAtmosphere.js";
 import { cloneSeagullSceneConfig, OIL_RIG_DAY_SEAGULL_PRESET } from "@/system/metaverse/seagullRegistry.js";
@@ -819,6 +821,9 @@ export default function MetaverseRegionalScenePage({ scene }) {
   const [moreOpen, setMoreOpen] = useState(false);
   const [now, setNow] = useState(() => new Date());
   const [devModeEnabled] = useState(() => resolveMetaverseDevModeEnabled({ isDev: import.meta.env.DEV, search: window.location.search }));
+  const regionalGeometryAuthoringEnabled = resolveRegionalGeometryAuthoringEnabled({ isDev: import.meta.env.DEV, search: window.location.search }) && scene.id === "oil-rig";
+  const regionalGeometryAuthoring = useRegionalSceneGeometryAuthoring({ enabled: regionalGeometryAuthoringEnabled });
+  const [regionalGeometryPointer, setRegionalGeometryPointer] = useState(null);
   const [devTimeMode, setDevTimeMode] = useState(() => readInitialDevTimeMode(devModeEnabled));
   const [cloudConfig, setCloudConfig] = useState(() => cloneCloudSceneConfig(OIL_RIG_DAY_CLOUD_PRESET));
   const [cloudPlayback, setCloudPlayback] = useState(() => createCloudPlaybackHome(devModeEnabled));
@@ -913,10 +918,11 @@ export default function MetaverseRegionalScenePage({ scene }) {
       data-route={`/metaverse/${scene.slug}`}
       data-regional-scene-id={scene.id}
     >
-      <MetaverseCamera
+        <MetaverseCamera
         background={background}
         camera={camera}
-        markers={[]}
+          markers={[]}
+          authoringOverlay={regionalGeometryAuthoringEnabled ? <OilRigRegionalGeometryTracer scene={scene} model={regionalGeometryAuthoring} renderPanel={false} pointer={regionalGeometryPointer} onPointerChange={setRegionalGeometryPointer} /> : null}
         livingCityLayer={(
           <>
             <RegionalSceneLayers scene={scene} timeOfDay={resolvedTimeOfDay} reducedMotion={reducedMotion} />
@@ -1060,58 +1066,62 @@ export default function MetaverseRegionalScenePage({ scene }) {
         )}
         devContent={
           devModeEnabled ? (
-            <UnifiedOilRigDevPanel
-              scene={scene}
-              resolvedTimeOfDay={resolvedTimeOfDay}
-              devTimeMode={devTimeMode}
-              onDevTimeModeSelect={handleDevTimeModeSelect}
-              backgroundVariant={backgroundVariant}
-              miniMapVisible={miniMapVisible}
-              cloudConfig={cloudConfig}
-              effectiveCloudConfig={effectiveCloudConfig}
-              cloudPlayback={cloudPlayback}
-              cloudDebug={cloudDebug}
-              cloudMotionTrail={cloudMotionTrail}
-              cloudSkyBounds={cloudSkyBounds}
-              setCloudConfig={setCloudConfig}
-              setCloudPlayback={setCloudPlayback}
-              setCloudDebug={setCloudDebug}
-              setCloudMotionTrail={setCloudMotionTrail}
-              setCloudSkyBounds={setCloudSkyBounds}
-              rigDepthMaskEnabled={rigDepthMaskEnabled}
-              rigDepthMaskDebug={rigDepthMaskDebug}
-              setRigDepthMaskEnabled={setRigDepthMaskEnabled}
-              setRigDepthMaskDebug={setRigDepthMaskDebug}
-              seagullConfig={seagullConfig}
-              seagullPlayback={seagullPlayback}
-              seagullDebug={seagullDebug}
-              seagullFlightPaths={seagullFlightPaths}
-              seagullPerchAnchors={seagullPerchAnchors}
-              setSeagullConfig={setSeagullConfig}
-              setSeagullPlayback={setSeagullPlayback}
-              setSeagullDebug={setSeagullDebug}
-              setSeagullFlightPaths={setSeagullFlightPaths}
-              setSeagullPerchAnchors={setSeagullPerchAnchors}
-              cargoShipConfig={cargoShipConfig}
-              cargoShipPlayback={cargoShipPlayback}
-              cargoShipRoutes={cargoShipRoutes}
-              cargoShipBounds={cargoShipBounds}
-              cargoShipLabels={cargoShipLabels}
-              setCargoShipConfig={setCargoShipConfig}
-              setCargoShipPlayback={setCargoShipPlayback}
-              setCargoShipRoutes={setCargoShipRoutes}
-              setCargoShipBounds={setCargoShipBounds}
-              setCargoShipLabels={setCargoShipLabels}
-              oceanController={oceanController}
-              oceanRenderer={oceanRenderer}
-              onOceanRendererChange={setOceanRenderer}
-              environmentController={environmentController}
-              capabilities={devCapabilities}
-              reducedMotion={reducedMotion}
-            />
+            <>
+              <UnifiedOilRigDevPanel
+                scene={scene}
+                resolvedTimeOfDay={resolvedTimeOfDay}
+                devTimeMode={devTimeMode}
+                onDevTimeModeSelect={handleDevTimeModeSelect}
+                backgroundVariant={backgroundVariant}
+                miniMapVisible={miniMapVisible}
+                cloudConfig={cloudConfig}
+                effectiveCloudConfig={effectiveCloudConfig}
+                cloudPlayback={cloudPlayback}
+                cloudDebug={cloudDebug}
+                cloudMotionTrail={cloudMotionTrail}
+                cloudSkyBounds={cloudSkyBounds}
+                setCloudConfig={setCloudConfig}
+                setCloudPlayback={setCloudPlayback}
+                setCloudDebug={setCloudDebug}
+                setCloudMotionTrail={setCloudMotionTrail}
+                setCloudSkyBounds={setCloudSkyBounds}
+                rigDepthMaskEnabled={rigDepthMaskEnabled}
+                rigDepthMaskDebug={rigDepthMaskDebug}
+                setRigDepthMaskEnabled={setRigDepthMaskEnabled}
+                setRigDepthMaskDebug={setRigDepthMaskDebug}
+                seagullConfig={seagullConfig}
+                seagullPlayback={seagullPlayback}
+                seagullDebug={seagullDebug}
+                seagullFlightPaths={seagullFlightPaths}
+                seagullPerchAnchors={seagullPerchAnchors}
+                setSeagullConfig={setSeagullConfig}
+                setSeagullPlayback={setSeagullPlayback}
+                setSeagullDebug={setSeagullDebug}
+                setSeagullFlightPaths={setSeagullFlightPaths}
+                setSeagullPerchAnchors={setSeagullPerchAnchors}
+                cargoShipConfig={cargoShipConfig}
+                cargoShipPlayback={cargoShipPlayback}
+                cargoShipRoutes={cargoShipRoutes}
+                cargoShipBounds={cargoShipBounds}
+                cargoShipLabels={cargoShipLabels}
+                setCargoShipConfig={setCargoShipConfig}
+                setCargoShipPlayback={setCargoShipPlayback}
+                setCargoShipRoutes={setCargoShipRoutes}
+                setCargoShipBounds={setCargoShipBounds}
+                setCargoShipLabels={setCargoShipLabels}
+                oceanController={oceanController}
+                oceanRenderer={oceanRenderer}
+                onOceanRendererChange={setOceanRenderer}
+                environmentController={environmentController}
+                capabilities={devCapabilities}
+                reducedMotion={reducedMotion}
+              />
+            </>
           ) : null
         }
       />
+
+      {regionalGeometryAuthoringEnabled ? <OilRigRegionalGeometryTracer scene={scene} model={regionalGeometryAuthoring} renderOverlay={false} pointer={regionalGeometryPointer} onPointerChange={setRegionalGeometryPointer} /> : null}
 
       <section className="met-regional-info" aria-labelledby="met-regional-title">
         <p>{scene.subtitle}</p>

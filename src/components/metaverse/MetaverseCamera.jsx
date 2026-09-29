@@ -100,7 +100,7 @@ export default function MetaverseCamera({
       ref={containerRef}
       className={`met-camera ${dragging ? "is-dragging" : ""}`}
       onPointerDown={(event) => {
-        if (event.target.closest("button, a, .met-hotspot")) return;
+        if (event.target.closest("button, a, .met-hotspot, [data-metaverse-geometry-tracer]")) return;
         event.currentTarget.setPointerCapture(event.pointerId);
         drag.current = { x: event.clientX, y: event.clientY, cameraX: camera.x, cameraY: camera.y };
         setDragging(true);

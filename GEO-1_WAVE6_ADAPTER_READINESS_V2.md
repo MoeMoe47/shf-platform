@@ -9,7 +9,7 @@ Statuses reflect current evidence and do not authorize implementation.
 | Exchange / Capital | `BLOCKED` | Mapbox token/platform dependency, remote county source provenance/license, mixed marker identity, and publication boundaries remain unresolved. |
 | SHF public impact | `BLOCKED` | Current impact records are sample/draft and all `publicApproved:false`. |
 | ODOT operational geography | `QUALIFIED_WITH_CONDITIONS` | Source and FIPS are qualified; rights clarification, approved snapshot governance, and a justified first consuming client remain open. Gate closure result: `BLOCKED_BY_CLIENT`; adapter implementation remains `NOT_READY`. |
-| Metaverse regional geography | `QUALIFIED_WITH_CONDITIONS` | Mounted `/metaverse/:scene` client, stable registry IDs, and frozen normalized `metaverse.regional-scene` semantics; geometry authority, asset alignment, and approved geometry payloads remain open. Adapter status is `BLOCKED_BY_COORDINATES`. |
+| Metaverse regional geography | `QUALIFIED_WITH_CONDITIONS` | Mounted `/metaverse/:scene` client, stable registry IDs, frozen normalized `metaverse.regional-scene` semantics, and Oil Rig DAY/DUSK/NIGHT alignment proven within tolerance. Separate geometry authority and approval are defined; no approved geometry payload exists. Adapter status is `BLOCKED_BY_COORDINATES`. |
 | CivicSure | `NOT_JUSTIFIED` | No confirmed geographic source/coordinate contract in current evidence. |
 | Career | `NOT_JUSTIFIED` | No confirmed canonical geographic records. |
 | Opportunities | `NOT_JUSTIFIED` | Domain surfaces exist without qualified spatial authority. |

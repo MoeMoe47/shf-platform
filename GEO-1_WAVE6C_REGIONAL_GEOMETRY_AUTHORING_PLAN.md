@@ -34,7 +34,7 @@ Only approved entries can be consumed by a future Spatial adapter.
 
 ## First Candidates
 
-`oil-rig` and `open-sea` are both `READY_WITH_CONDITIONS`: implemented and
-asset-backed, but blocked by the unfrozen Regional coordinate standard,
-geometry ownership approval, and asset-alignment evidence. No geometry is
-traced in this phase.
+`oil-rig` is `READY_WITH_ALIGNMENT_CONDITION`: its production DAY/DUSK/NIGHT
+plates are aligned within the frozen tolerance, and a separate geometry
+registry/approval contract is defined. `open-sea` is deferred until after the
+Oil Rig pilot. No geometry is traced in this phase.

@@ -9,8 +9,8 @@ blocked until an approved geometry payload exists.
 
 ## Conditions Before Runtime Implementation
 
-1. Confirm the regional scene registry as an approved source authority, or
-   introduce a reviewed authority contract that names the true owner.
+1. Keep the regional scene registry authoritative for scene identity/assets and
+   use the separate regional geometry registry for owner-approved geometry.
 2. Define the record contract for implemented scenes without treating the 13
    route-context-only stops as present geometry.
 3. Preserve `METAVERSE` and `metaverse.regional-scene`; no implicit transform
@@ -34,11 +34,11 @@ blocked until an approved geometry payload exists.
 | Coordinate space | PASS: registered scene-local METAVERSE space. |
 | No implicit transforms | PASS. |
 | Mounted client | PASS for implemented slugs. |
-| Source authority | CONDITION: current registry is presentation authority, not yet confirmed geographic authority. |
+| Source authority | PASS for scene identity/assets; geometry ownership is separately assigned to the Regional Geometry Registry. |
 | Publication boundary | PASS for current separation; future contract required. |
 | Navigation boundary | PASS: router/page remains owner. |
 | Feature contract | CONDITION: planning-only, not implemented. |
-| Scene-local geometry | CONDITION: coordinate semantics frozen; no approved geometry payload exists. |
+| Scene-local geometry | CONDITION: Oil Rig alignment is proven within tolerance; no approved geometry payload exists. |
 
 ## Wave 6 Decision
 
@@ -46,8 +46,8 @@ blocked until an approved geometry payload exists.
 
 This means Wave 6C may proceed to a contract/red-test review after the listed
 conditions are addressed. It does not authorize an adapter or client runtime.
-Geometry authoring is separately `BLOCKED_BY_COORDINATE_STANDARD` until the
-Wave 6C-G entry conditions are closed.
+Geometry authoring is `READY_TO_BUILD_TRACER_WITH_CONDITIONS`; the Regional
+adapter remains blocked until an approved Polygon exists.
 
 ## Validation Snapshot
 

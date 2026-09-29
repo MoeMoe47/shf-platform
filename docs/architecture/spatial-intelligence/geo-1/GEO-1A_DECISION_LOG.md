@@ -584,3 +584,23 @@ need; preserve the qualified source for a later justified implementation.
 Affected phases: GEO-1 Wave 6B-R and future ODOT adapter/client work.
 Revisit condition: Written ODOT terms, an approved active snapshot, and a
 named regression-protected operational client.
+
+## GEO1-WAVE6C-A-DEC-033
+
+Decision ID: GEO1-WAVE6C-A-DEC-033
+Question: Can the Oil Rig regional scene enter geometry-authoring preparation?
+Decision: Classify the production Oil Rig DAY/DUSK/NIGHT background family as
+`ALIGNED_WITH_TOLERANCE` using eight distributed structural landmarks and a
+pre-declared 1.0 scene-normalized-unit tolerance. Permit one shared
+composition-family reference, but keep authored geometry under the separate
+`silicon-heartland-metaverse-regional-geometry-registry` authority. The future
+Polygon represents owner-approved scene coverage, not an image rectangle or
+mobility geometry. Oil Rig is `READY_WITH_ALIGNMENT_CONDITION` for a future
+DEV-only tracer; no geometry is authored and the Regional adapter remains
+`BLOCKED_BY_COORDINATES`.
+Evidence: `GEO-1_WAVE6C_OIL_RIG_ALIGNMENT_REPORT.md`,
+`GEO-1_WAVE6C_REGIONAL_GEOMETRY_REGISTRY_CONTRACT.md`, and
+`GEO-1_WAVE6C_REGIONAL_GEOMETRY_APPROVAL_CONTRACT.md`.
+Affected phases: GEO-1 Wave 6C regional geometry authoring preparation.
+Revisit condition: A future tracer must create a DRAFT, review it, validate it,
+and obtain explicit approval before Spatial eligibility changes.

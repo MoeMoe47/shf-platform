@@ -35,10 +35,15 @@ an engine transform, and must be versioned and tested before use.
 ## Variant Rule
 
 Geometry may be shared across DAY/DUSK/NIGHT only after asset alignment is
-proven. Current evidence is insufficient for both implemented scenes: Oil Rig
-variants share dimensions, while Open Sea variants differ (`1584x993`,
-`1580x995`, and `1578x997`). No alignment manifest or landmark registration
-currently proves a shared geometry frame.
+proven. The Oil Rig audit now classifies its three production plates as
+`ALIGNED_WITH_TOLERANCE` using eight distributed structural landmarks and a
+pre-declared 1.0 scene-unit tolerance. The Open Sea variants remain unaudited;
+their differing dimensions (`1584x993`, `1580x995`, and `1578x997`) do not by
+themselves prove misalignment or alignment.
+
+Oil Rig geometry remains owned by the separate
+`silicon-heartland-metaverse-regional-geometry-registry`; the scene registry
+continues to own scene identity and assets. No approved geometry exists yet.
 
 ## Eligibility
 

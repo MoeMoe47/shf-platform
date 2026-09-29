@@ -6,11 +6,26 @@ import {
   createOilRigDraft,
   createOilRigAssetFamily,
   parseOilRigDraft,
+  prepareOilRigDraftExport,
   validateOilRigDraft,
 } from "../src/system/metaverse/regionalGeometry/regionalSceneGeometryDraft.js";
 import { imageLocalToRegionalScene, regionalSceneToImageLocal } from "../src/system/metaverse/regionalGeometry/regionalSceneCoordinate.js";
 
 const polygon = { type: "Polygon", coordinates: [[[10, 10], [90, 10], [90, 90], [10, 90], [10, 10]]] };
+const failingDraftRing = [
+  [90.05902594629895, 89.93067590987869],
+  [95.91038103132142, 20.48602215356793],
+  [52.09683787330771, 91.15943598824505],
+  [8.975962625273151, 90.12357772586843],
+  [17.720844950141913, 21.064727601537186],
+  [51.80016577499811, 20.678923969557683],
+  [95.84608042599152, 20.389571245573055],
+  [52.09683787330771, 91.15943598824505],
+  [89.69847317459121, 90.3039169052822],
+  [89.67322231431945, 90.22002863386331],
+  [90.05902594629895, 89.93067590987869],
+];
+const failingDraftGeometry = { type: "Polygon", coordinates: [failingDraftRing] };
 
 test("DEV gate requires development mode", () => assert.equal(resolveRegionalGeometryAuthoringEnabled({ isDev: false, search: "?metaverseDev=1&regionalGeometryAuthoring=1" }), false));
 test("explicit authoring flag is required", () => assert.equal(resolveRegionalGeometryAuthoringEnabled({ isDev: true, search: "?metaverseDev=1" }), false));
@@ -48,3 +63,9 @@ test("Polygon type is fixed", () => assert.equal(createOilRigDraft().geometryTyp
 test("coordinate family is fixed", () => assert.equal(createOilRigDraft().coordinateFamily, "METAVERSE"));
 test("coordinate space is fixed", () => assert.equal(createOilRigDraft().coordinateSpace, "metaverse.regional-scene"));
 test("tracer does not invent a starting polygon", () => assert.equal(createOilRigDraft().geometry.coordinates.length, 0));
+test("the reported DRAFT is rejected on import", () => assert.equal(parseOilRigDraft({ ...createOilRigDraft({ geometry: failingDraftGeometry }), geometry: failingDraftGeometry }).draft, null));
+test("export is blocked for the reported invalid DRAFT", () => {
+  const result = prepareOilRigDraftExport({ ...createOilRigDraft({ geometry: failingDraftGeometry }), geometry: failingDraftGeometry });
+  assert.equal(result.payload, null);
+  assert.match(result.errors.join("; "), /self-intersect|duplicate/);
+});

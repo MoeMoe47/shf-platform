@@ -53,6 +53,12 @@ export function validateOilRigDraft(draft) {
   return { valid: errors.length === 0, errors };
 }
 
+export function prepareOilRigDraftExport(draft) {
+  const payload = { ...draft, geometryHash: hashRegionalSceneGeometry(draft?.geometry), status: "DRAFT" };
+  const validation = validateOilRigDraft(payload);
+  return validation.valid ? { payload, errors: [] } : { payload: null, errors: validation.errors };
+}
+
 export function parseOilRigDraft(input) {
   let draft;
   try {

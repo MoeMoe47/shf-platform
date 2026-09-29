@@ -8,8 +8,21 @@ function samePoint(a, b) {
   return Array.isArray(a) && Array.isArray(b) && a[0] === b[0] && a[1] === b[1];
 }
 
+const VERTEX_EPSILON = 1e-6;
+
 function orientation(a, b, c) {
   return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
+}
+
+function between(value, left, right) {
+  return value >= Math.min(left, right) - VERTEX_EPSILON
+    && value <= Math.max(left, right) + VERTEX_EPSILON;
+}
+
+function onSegment(a, b, point) {
+  return Math.abs(orientation(a, b, point)) <= VERTEX_EPSILON
+    && between(point[0], a[0], b[0])
+    && between(point[1], a[1], b[1]);
 }
 
 function segmentsIntersect(a, b, c, d) {
@@ -17,8 +30,15 @@ function segmentsIntersect(a, b, c, d) {
   const abD = orientation(a, b, d);
   const cdA = orientation(c, d, a);
   const cdB = orientation(c, d, b);
-  return (abC > 0 && abD < 0 || abC < 0 && abD > 0)
-    && (cdA > 0 && cdB < 0 || cdA < 0 && cdB > 0);
+  const abCrosses = (abC > VERTEX_EPSILON && abD < -VERTEX_EPSILON)
+    || (abC < -VERTEX_EPSILON && abD > VERTEX_EPSILON);
+  const cdCrosses = (cdA > VERTEX_EPSILON && cdB < -VERTEX_EPSILON)
+    || (cdA < -VERTEX_EPSILON && cdB > VERTEX_EPSILON);
+  return (abCrosses && cdCrosses)
+    || (Math.abs(abC) <= VERTEX_EPSILON && onSegment(a, b, c))
+    || (Math.abs(abD) <= VERTEX_EPSILON && onSegment(a, b, d))
+    || (Math.abs(cdA) <= VERTEX_EPSILON && onSegment(c, d, a))
+    || (Math.abs(cdB) <= VERTEX_EPSILON && onSegment(c, d, b));
 }
 
 function hasSelfIntersection(ring) {
@@ -50,16 +70,30 @@ export function validateRegionalScenePolygon({ sceneId, geometry, implemented = 
   const ring = rings?.[0];
   if (!Array.isArray(ring) || ring.length < 4) errors.push("outer ring requires at least four coordinates including closure");
   if (ring && !samePoint(ring[0], ring[ring.length - 1])) errors.push("outer ring must be closed");
-  const unique = ring ? new Set(ring.slice(0, -1).map((point) => JSON.stringify(point))) : new Set();
+  const vertices = ring?.slice(0, -1) || [];
+  const unique = new Set(vertices.map((point) => JSON.stringify(point)));
   if (unique.size < 3) errors.push("outer ring requires at least three unique vertices");
+  let coordinatesValid = true;
   for (const point of ring || []) {
     if (!Array.isArray(point) || point.length !== 2 || !isRegionalSceneCoordinate(point[0]) || !isRegionalSceneCoordinate(point[1])) {
       errors.push("all coordinates must be finite scene-normalized values in 0..100");
+      coordinatesValid = false;
       break;
     }
   }
-  if (ring && Math.abs(signedArea(ring)) === 0) errors.push("Polygon area must be non-zero");
-  if (ring && hasSelfIntersection(ring)) errors.push("Polygon must not self-intersect");
+  for (let left = 0; left < vertices.length; left += 1) {
+    for (let right = left + 1; right < vertices.length; right += 1) {
+      const dx = vertices[left]?.[0] - vertices[right]?.[0];
+      const dy = vertices[left]?.[1] - vertices[right]?.[1];
+      if (Number.isFinite(dx) && Number.isFinite(dy) && Math.hypot(dx, dy) <= VERTEX_EPSILON) {
+        errors.push("non-closing vertices must not be duplicate or near-duplicate");
+        left = vertices.length;
+        break;
+      }
+    }
+  }
+  if (coordinatesValid && ring && Math.abs(signedArea(ring)) <= VERTEX_EPSILON) errors.push("Polygon area must be non-zero");
+  if (coordinatesValid && ring && hasSelfIntersection(ring)) errors.push("Polygon must not self-intersect");
   return { valid: errors.length === 0, errors };
 }
 

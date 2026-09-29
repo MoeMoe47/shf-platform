@@ -2,6 +2,7 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import {
   createOilRigDraft,
   parseOilRigDraft,
+  prepareOilRigDraftExport,
   validateOilRigDraft,
 } from "../../system/metaverse/regionalGeometry/regionalSceneGeometryDraft.js";
 import { hashRegionalSceneGeometry } from "../../system/metaverse/regionalGeometry/regionalSceneGeometryHash.js";
@@ -145,7 +146,12 @@ export default function useRegionalSceneGeometryAuthoring({ enabled = false } = 
   }, []);
 
   const exportDraft = useCallback(() => {
-    const payload = { ...draft, geometryHash: hashRegionalSceneGeometry(draft.geometry), status: "DRAFT" };
+    const prepared = prepareOilRigDraftExport(draft);
+    if (!prepared.payload) {
+      setStatusMessage(`Export blocked: ${prepared.errors.join("; ")}`);
+      return false;
+    }
+    const { payload } = prepared;
     const ok = triggerJsonDownload(payload, "oil-rig-regional-scene-geometry-draft.json");
     if (ok) {
       lastSavedRef.current = JSON.stringify(payload);

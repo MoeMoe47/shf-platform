@@ -7,6 +7,7 @@ import { validateRegionalSceneContractMetadata, validateRegionalScenePolygon } f
 
 export const OIL_RIG_ALIGNMENT_STANDARD_ID = "GEO-1_WAVE6C_OIL_RIG_ALIGNMENT_REPORT";
 export const OIL_RIG_GEOMETRY_SOURCE_AUTHORITY = "silicon-heartland-metaverse-regional-geometry-registry";
+export const OIL_RIG_APPROVED_GEOMETRY_HASH = "201e189ef24d2adb";
 export const OIL_RIG_ASSET_VARIANTS = Object.freeze({
   DAY: "3b5d111b624f365a26434f0bb99aebe82bdd0641ffece39992ca9b94b64d8608",
   DUSK: "882070509dac8430d61b6e82b9b52a9d679b80d8338c08069bf9509ec446d3f2",
@@ -96,6 +97,31 @@ export function validateOilRigReviewArtifact(review) {
   return { valid: errors.length === 0, errors };
 }
 
+function deepFreeze(value) {
+  if (!value || typeof value !== "object" || Object.isFrozen(value)) return value;
+  Object.freeze(value);
+  for (const child of Object.values(value)) deepFreeze(child);
+  return value;
+}
+
+export function validateOilRigApprovedArtifact(approved) {
+  const errors = [];
+  const base = validateOilRigDraft(approved);
+  errors.push(...base.errors);
+  if (approved?.status !== "APPROVED") errors.push("approved artifact status must be APPROVED");
+  if (approved?.geometryHash !== OIL_RIG_APPROVED_GEOMETRY_HASH) errors.push("approved artifact geometry hash is not the human-approved Oil Rig hash");
+  if (approved?.provenance?.sourceAuthority !== OIL_RIG_GEOMETRY_SOURCE_AUTHORITY) errors.push("approved provenance source authority is invalid");
+  if (approved?.provenance?.reviewedGeometryHash !== OIL_RIG_APPROVED_GEOMETRY_HASH) errors.push("approved provenance must reference reviewed geometry hash 201e189ef24d2adb");
+  if (approved?.provenance?.sourceReviewStatus !== "REVIEW") errors.push("approved provenance must reference REVIEW source status");
+  if (approved?.canonicalRegistryWrite !== "NONE") errors.push("approved artifact must not carry a canonical registry write");
+  if (approved?.spatialEligibility !== "NONE") errors.push("approved artifact must not create Spatial eligibility");
+  if (approved?.adapterImplementation !== "NOT_IMPLEMENTED") errors.push("approved artifact must not implement the Regional Spatial adapter");
+  for (const field of ["approvalActorId", "reviewerId", "navigationAuthority", "nextScene", "traffic", "water", "transit"]) {
+    if (Object.hasOwn(approved || {}, field) || Object.hasOwn(approved?.provenance || {}, field)) errors.push(`approved artifact must not contain ${field}`);
+  }
+  return { valid: errors.length === 0, errors };
+}
+
 export function parseOilRigReviewArtifact(input) {
   let review;
   try {
@@ -105,6 +131,17 @@ export function parseOilRigReviewArtifact(input) {
   }
   const validation = validateOilRigReviewArtifact(review);
   return validation.valid ? { review, errors: [] } : { review: null, errors: validation.errors };
+}
+
+export function parseOilRigApprovedArtifact(input) {
+  let approved;
+  try {
+    approved = typeof input === "string" ? JSON.parse(input) : input;
+  } catch {
+    return { approved: null, errors: ["input is not valid JSON"] };
+  }
+  const validation = validateOilRigApprovedArtifact(approved);
+  return validation.valid ? { approved: deepFreeze(structuredClone(approved)), errors: [] } : { approved: null, errors: validation.errors };
 }
 
 export function createDraftFromOilRigReview(review) {
@@ -117,6 +154,12 @@ export function createDraftFromOilRigReview(review) {
     }),
     errors: [],
   };
+}
+
+export function prepareOilRigApprovedExport(approved) {
+  const parsed = parseOilRigApprovedArtifact(approved);
+  if (!parsed.approved) return { payload: null, errors: parsed.errors };
+  return { payload: parsed.approved, errors: [] };
 }
 
 export function parseOilRigDraft(input) {

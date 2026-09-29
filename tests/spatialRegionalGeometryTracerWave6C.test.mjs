@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolveRegionalGeometryAuthoringEnabled } from "../src/hooks/metaverse/useRegionalSceneGeometryAuthoring.js";
 import {
   createOilRigDraft,
@@ -8,8 +8,11 @@ import {
   createOilRigReviewArtifact,
   createDraftFromOilRigReview,
   parseOilRigDraft,
+  parseOilRigApprovedArtifact,
   parseOilRigReviewArtifact,
+  prepareOilRigApprovedExport,
   prepareOilRigDraftExport,
+  validateOilRigApprovedArtifact,
   validateOilRigReviewArtifact,
   validateOilRigDraft,
 } from "../src/system/metaverse/regionalGeometry/regionalSceneGeometryDraft.js";
@@ -31,6 +34,22 @@ const failingDraftRing = [
   [90.05902594629895, 89.93067590987869],
 ];
 const failingDraftGeometry = { type: "Polygon", coordinates: [failingDraftRing] };
+
+function createHumanApprovedOilRigArtifact() {
+  const review = createOilRigReviewArtifact(createOilRigDraft({ geometry: finalOilRigPolygon }), { reviewedAt: "2026-09-29T12:00:00.000Z" }).review;
+  return {
+    ...review,
+    status: "APPROVED",
+    provenance: {
+      ...review.provenance,
+      sourceReviewStatus: "REVIEW",
+      reviewedGeometryHash: "201e189ef24d2adb",
+    },
+    canonicalRegistryWrite: "NONE",
+    spatialEligibility: "NONE",
+    adapterImplementation: "NOT_IMPLEMENTED",
+  };
+}
 
 test("DEV gate requires development mode", () => assert.equal(resolveRegionalGeometryAuthoringEnabled({ isDev: false, search: "?metaverseDev=1&regionalGeometryAuthoring=1" }), false));
 test("explicit authoring flag is required", () => assert.equal(resolveRegionalGeometryAuthoringEnabled({ isDev: true, search: "?metaverseDev=1" }), false));
@@ -116,4 +135,64 @@ test("REVIEW has no approval transition or authority metadata", () => {
   assert.equal(Object.hasOwn(review, "approvalActorId"), false);
   assert.equal(Object.hasOwn(review, "publicationState"), false);
   assert.equal(Object.hasOwn(review, "navigationAuthority"), false);
+});
+test("REVIEW does not auto-approve", () => {
+  const review = createOilRigReviewArtifact(createOilRigDraft({ geometry: finalOilRigPolygon }), { reviewedAt: "2026-09-29T12:00:00.000Z" }).review;
+  assert.equal(review.status, "REVIEW");
+});
+test("only APPROVED state can export an approved artifact", () => {
+  const review = createOilRigReviewArtifact(createOilRigDraft({ geometry: finalOilRigPolygon }), { reviewedAt: "2026-09-29T12:00:00.000Z" }).review;
+  assert.equal(prepareOilRigApprovedExport(review).payload, null);
+  const result = prepareOilRigApprovedExport(createHumanApprovedOilRigArtifact());
+  assert.equal(result.errors.length, 0);
+  assert.equal(result.payload.status, "APPROVED");
+});
+test("REVIEW cannot masquerade as APPROVED", () => {
+  const review = createOilRigReviewArtifact(createOilRigDraft({ geometry: finalOilRigPolygon }), { reviewedAt: "2026-09-29T12:00:00.000Z" }).review;
+  const masquerade = { ...review, status: "APPROVED" };
+  assert.equal(validateOilRigApprovedArtifact(masquerade).valid, false);
+  assert.equal(parseOilRigApprovedArtifact(masquerade).approved, null);
+});
+test("APPROVED export preserves hash and exact coordinates", () => {
+  const result = prepareOilRigApprovedExport(createHumanApprovedOilRigArtifact());
+  assert.equal(result.payload.geometryHash, "201e189ef24d2adb");
+  assert.equal(result.payload.provenance.reviewedGeometryHash, "201e189ef24d2adb");
+  assert.deepEqual(result.payload.geometry, finalOilRigPolygon);
+});
+test("APPROVED export preserves exact asset and alignment metadata", () => {
+  const approved = createHumanApprovedOilRigArtifact();
+  const result = prepareOilRigApprovedExport(approved);
+  assert.equal(result.payload.compositionFamilyId, approved.compositionFamilyId);
+  assert.equal(result.payload.assetFamilyHash, approved.assetFamilyHash);
+  assert.deepEqual(result.payload.assetAlignment, approved.assetAlignment);
+  assert.deepEqual(result.payload.assetAlignment.variants, createOilRigAssetFamily().variants);
+});
+test("APPROVED artifact remains immutable", () => {
+  const result = prepareOilRigApprovedExport(createHumanApprovedOilRigArtifact());
+  assert.equal(Object.isFrozen(result.payload), true);
+  assert.equal(Object.isFrozen(result.payload.geometry.coordinates[0][0]), true);
+  assert.throws(() => { result.payload.geometry.coordinates[0][0][0] = 0; }, TypeError);
+  assert.equal(result.payload.geometry.coordinates[0][0][0], finalOilRigPolygon.coordinates[0][0][0]);
+});
+test("APPROVED export causes no registry write", () => {
+  const result = prepareOilRigApprovedExport(createHumanApprovedOilRigArtifact());
+  assert.equal(result.payload.canonicalRegistryWrite, "NONE");
+  const source = readFileSync(new URL("../src/pages/metaverse/dev/OilRigRegionalGeometryTracer.jsx", import.meta.url), "utf8");
+  assert.doesNotMatch(source, /fetch\(|PUT|POST|regionalGeometryRegistry/);
+});
+test("APPROVED export causes no Spatial eligibility", () => {
+  const result = prepareOilRigApprovedExport(createHumanApprovedOilRigArtifact());
+  assert.equal(result.payload.spatialEligibility, "NONE");
+});
+test("APPROVED export keeps adapter red contract EXPECTED_MISSING_ADAPTER", () => {
+  const source = readFileSync(new URL("../tests/spatialMetaverseRegionalSceneContractWave6C.test.mjs", import.meta.url), "utf8");
+  assert.match(source, /EXPECTED_MISSING_ADAPTER/);
+  assert.equal(existsSync(new URL("../src/system/spatial/adapters/metaverseRegionalSceneAdapter.js", import.meta.url)), false);
+});
+test("Export APPROVED control is APPROVED-only and no adapter is added", () => {
+  const source = readFileSync(new URL("../src/pages/metaverse/dev/OilRigRegionalGeometryTracer.jsx", import.meta.url), "utf8");
+  assert.match(source, /Export APPROVED/);
+  assert.match(source, /model\.approvedPreview \?/);
+  assert.doesNotMatch(source, /Approve Reviewed Geometry/);
+  assert.doesNotMatch(source, /metaverseRegionalSceneAdapter/);
 });

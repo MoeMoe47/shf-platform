@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { publicAssetUrl } from "@/system/metaverse/metaverseNavigationModel.js";
 import { pointerToRegionalScene } from "@/system/metaverse/regionalGeometry/regionalSceneCoordinate.js";
-import { createOilRigAssetFamily } from "@/system/metaverse/regionalGeometry/regionalSceneGeometryDraft.js";
+import { createOilRigAssetFamily, validateOilRigDraft } from "@/system/metaverse/regionalGeometry/regionalSceneGeometryDraft.js";
 
 function variantAsset(scene, variant) {
   return publicAssetUrl(scene.backgroundAsset?.[`${variant.toLowerCase()}Asset`] || scene.backgroundAsset?.baseAsset);
@@ -10,7 +10,10 @@ function variantAsset(scene, variant) {
 function RegionalGeometryTracerOverlay({ model, onPointer }) {
   const svgRef = useRef(null);
   const [draggingIndex, setDraggingIndex] = useState(null);
-  const coordinates = model.draft.geometry.coordinates[0] || [];
+  const activeRecord = model.reviewPreview || model.approvedPreview || model.draft;
+  const readOnly = Boolean(model.reviewPreview || model.approvedPreview);
+  const activeValidation = validateOilRigDraft(activeRecord);
+  const coordinates = activeRecord.geometry.coordinates[0] || [];
   const openCoordinates = coordinates.length > 1 && coordinates[0][0] === coordinates.at(-1)?.[0] && coordinates[0][1] === coordinates.at(-1)?.[1]
     ? coordinates.slice(0, -1)
     : coordinates;
@@ -20,7 +23,7 @@ function RegionalGeometryTracerOverlay({ model, onPointer }) {
     const point = readPoint(event);
     if (!point) return;
     onPointer(point);
-    if (draggingIndex !== null) model.actions.moveVertex(draggingIndex, point);
+    if (!readOnly && draggingIndex !== null) model.actions.moveVertex(draggingIndex, point);
   };
 
   return (
@@ -39,6 +42,7 @@ function RegionalGeometryTracerOverlay({ model, onPointer }) {
         event.stopPropagation();
       }}
       onClick={(event) => {
+        if (readOnly) return;
         if (event.target.closest?.("circle")) return;
         const point = readPoint(event);
         if (point) {
@@ -49,7 +53,7 @@ function RegionalGeometryTracerOverlay({ model, onPointer }) {
     >
       {[0, 25, 50, 75, 100].map((value) => <React.Fragment key={`grid-${value}`}><line x1={value} y1="0" x2={value} y2="100" className="met-regional-geometry-tracer__grid" /><line x1="0" y1={value} x2="100" y2={value} className="met-regional-geometry-tracer__grid" /></React.Fragment>)}
       {openCoordinates.length > 1 ? <polyline points={openCoordinates.map(([x, y]) => `${x},${y}`).join(" ")} className="met-regional-geometry-tracer__line" /> : null}
-      {coordinates.length > 3 && coordinates[0][0] === coordinates.at(-1)?.[0] && coordinates[0][1] === coordinates.at(-1)?.[1] ? <polygon points={openCoordinates.map(([x, y]) => `${x},${y}`).join(" ")} className={`met-regional-geometry-tracer__fill ${model.validation.valid ? "is-valid" : "is-invalid"}`} /> : null}
+      {coordinates.length > 3 && coordinates[0][0] === coordinates.at(-1)?.[0] && coordinates[0][1] === coordinates.at(-1)?.[1] ? <polygon points={openCoordinates.map(([x, y]) => `${x},${y}`).join(" ")} className={`met-regional-geometry-tracer__fill ${activeValidation.valid ? "is-valid" : "is-invalid"}`} /> : null}
       {openCoordinates.map(([x, y], index) => (
         <circle
           key={`${x}-${y}-${index}`}
@@ -61,12 +65,14 @@ function RegionalGeometryTracerOverlay({ model, onPointer }) {
           role="button"
           aria-label={`Vertex ${index + 1}, x ${x.toFixed(2)}, y ${y.toFixed(2)}`}
           onPointerDown={(event) => {
+            if (readOnly) return;
             event.stopPropagation();
             svgRef.current?.setPointerCapture?.(event.pointerId);
             model.setSelectedVertexIndex(index);
             setDraggingIndex(index);
           }}
           onKeyDown={(event) => {
+            if (readOnly) return;
             if (event.key === "Delete" || event.key === "Backspace") model.actions.deleteVertex(index);
           }}
         />
@@ -78,7 +84,10 @@ function RegionalGeometryTracerOverlay({ model, onPointer }) {
 export default function OilRigRegionalGeometryTracer({ scene, model, renderOverlay = true, renderPanel = true, pointer = null, onPointerChange = () => {} }) {
   const [fileKey, setFileKey] = useState(0);
   const assetFamily = createOilRigAssetFamily();
-  const vertices = model.draft.geometry.coordinates[0] || [];
+  const activeRecord = model.reviewPreview || model.approvedPreview || model.draft;
+  const readOnly = Boolean(model.reviewPreview || model.approvedPreview);
+  const activeValidation = validateOilRigDraft(activeRecord);
+  const vertices = activeRecord.geometry.coordinates[0] || [];
   const closed = vertices.length > 3 && vertices[0][0] === vertices.at(-1)?.[0] && vertices[0][1] === vertices.at(-1)?.[1];
   const importFile = (event) => {
     const file = event.target.files?.[0];
@@ -95,29 +104,34 @@ export default function OilRigRegionalGeometryTracer({ scene, model, renderOverl
       {renderPanel ? <section className="met-regional-geometry-tracer-panel" data-regional-geometry-tracer-panel="true" aria-labelledby="regional-geometry-tracer-title">
         <div className="met-sidebar__dev-unified-header">
           <h3 id="regional-geometry-tracer-title">Oil Rig Geometry Tracer <span className="met-sidebar__dev-badge">DEV ONLY</span></h3>
-          <p>Draft authoring only. No approval or registry write is available.</p>
+          <p>DEV review surface for preserving already-approved Oil Rig geometry. No registry write occurs.</p>
         </div>
         <label className="met-sidebar__dev-field"><span>Reference variant</span><select value={model.variant} onChange={(event) => model.setVariant(event.target.value)}>{["DAY", "DUSK", "NIGHT"].map((value) => <option key={value}>{value}</option>)}</select></label>
         <p className="met-sidebar__dev-resolved">Asset: {variantAsset(scene, model.variant)}</p>
         <p className="met-sidebar__dev-resolved">Composition: {assetFamily.compositionFamilyId}</p>
         <p className="met-sidebar__dev-resolved">Asset family hash: {assetFamily.assetFamilyHash}</p>
         <p className="met-sidebar__dev-resolved">Alignment: approved within measured tolerance; not pixel identity.</p>
+        <p className="met-sidebar__dev-resolved"><strong>Scene:</strong> {scene.id}</p>
+        <p className="met-sidebar__dev-resolved"><strong>Lifecycle:</strong> {activeRecord.status}</p>
+        <p className="met-sidebar__dev-resolved"><strong>Geometry Hash:</strong> {activeRecord.geometryHash}</p>
+        <p className="met-sidebar__dev-resolved"><strong>Spatial Eligibility:</strong> NONE</p>
+        <p className="met-sidebar__dev-resolved"><strong>Approval:</strong> {activeRecord.status === "APPROVED" ? "APPROVED" : "NONE"}</p>
         <p className="met-sidebar__dev-resolved">Pointer: {pointer ? `x ${pointer[0].toFixed(2)} · y ${pointer[1].toFixed(2)} scene units` : "move over the scene"}</p>
-        <p className="met-sidebar__dev-resolved">Vertices: {vertices.length}{closed ? " · closed" : " · open"} · {model.validation.valid ? "VALID" : "INVALID"}</p>
-        {model.validation.errors.length ? <ul className="met-regional-geometry-tracer__errors">{model.validation.errors.map((error) => <li key={error}>{error}</li>)}</ul> : null}
+        <p className="met-sidebar__dev-resolved">Vertices: {vertices.length}{closed ? " · closed" : " · open"} · {readOnly ? "READ-ONLY" : (activeValidation.valid ? "VALID" : "INVALID")}</p>
+        {activeValidation.errors.length ? <ul className="met-regional-geometry-tracer__errors">{activeValidation.errors.map((error) => <li key={error}>{error}</li>)}</ul> : null}
         <div className="met-sidebar__dev-modes" role="group" aria-label="Geometry edit actions">
-          <button type="button" onClick={model.actions.closePolygon}>Close Polygon</button>
-          <button type="button" onClick={model.actions.undo} disabled={!model.canUndo}>Undo</button>
-          <button type="button" onClick={model.actions.redo} disabled={!model.canRedo}>Redo</button>
-          <button type="button" onClick={() => { if (!model.unsaved || window.confirm("Discard unsaved draft changes?")) model.actions.reset(); }}>Reset</button>
+          <button type="button" onClick={model.actions.closePolygon} disabled={readOnly}>Close Polygon</button>
+          <button type="button" onClick={model.actions.undo} disabled={readOnly || !model.canUndo}>Undo</button>
+          <button type="button" onClick={model.actions.redo} disabled={readOnly || !model.canRedo}>Redo</button>
+          <button type="button" onClick={() => { if (!model.unsaved || window.confirm("Discard unsaved draft changes?")) model.actions.reset(); }} disabled={readOnly}>Reset</button>
         </div>
         <div className="met-sidebar__dev-modes" role="group" aria-label="Geometry draft transfer">
-          <button type="button" onClick={model.actions.exportDraft}>Export DRAFT</button>
-          <label className="met-regional-geometry-tracer__file-button">Import DRAFT/REVIEW<input key={fileKey} type="file" accept="application/json,.json" onChange={importFile} /></label>
+          <button type="button" onClick={model.actions.exportDraft} disabled={readOnly}>Export DRAFT</button>
+          <label className="met-regional-geometry-tracer__file-button">Import DRAFT/REVIEW/APPROVED<input key={fileKey} type="file" accept="application/json,.json" onChange={importFile} /></label>
         </div>
-        {model.approvedPreview ? <div className="met-regional-geometry-tracer__approved"><strong>APPROVED preview is read-only.</strong><button type="button" onClick={model.actions.createDraftFromApproved}>Create new DRAFT</button></div> : null}
+        {model.approvedPreview ? <div className="met-regional-geometry-tracer__approved"><strong>APPROVED preview is read-only.</strong><button type="button" onClick={model.actions.exportApproved}>Export APPROVED</button><button type="button" onClick={model.actions.createDraftFromApproved}>Create new DRAFT</button></div> : null}
         {model.reviewPreview ? <div className="met-regional-geometry-tracer__approved"><strong>REVIEW preview is read-only.</strong><button type="button" onClick={model.actions.createDraftFromReview}>Return to DRAFT</button></div> : null}
-        <p className="met-sidebar__dev-resolved">Status: {model.draft.status}{model.unsaved ? " · UNSAVED CHANGES" : ""}</p>
+        <p className="met-sidebar__dev-resolved">Status: {activeRecord.status}{model.unsaved ? " · UNSAVED CHANGES" : ""}</p>
         <p className="met-sidebar__dev-resolved" role="status">{model.statusMessage}</p>
       </section> : null}
     </>

@@ -2,8 +2,10 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import {
   createOilRigDraft,
   createDraftFromOilRigReview,
+  parseOilRigApprovedArtifact,
   parseOilRigDraft,
   parseOilRigReviewArtifact,
+  prepareOilRigApprovedExport,
   prepareOilRigDraftExport,
   validateOilRigDraft,
 } from "../../system/metaverse/regionalGeometry/regionalSceneGeometryDraft.js";
@@ -173,7 +175,13 @@ export default function useRegionalSceneGeometryAuthoring({ enabled = false } = 
     setPast([]);
     setFuture([]);
     if (result.draft.status === "APPROVED") {
-      setApprovedPreview(result.draft);
+      const approved = parseOilRigApprovedArtifact(result.draft);
+      if (!approved.approved) {
+        setStatusMessage(`Import rejected: ${approved.errors.join("; ")}`);
+        return false;
+      }
+      setReviewPreview(null);
+      setApprovedPreview(approved.approved);
       setStatusMessage("APPROVED geometry loaded read-only. Create a new DRAFT to edit it.");
       return true;
     }
@@ -194,6 +202,17 @@ export default function useRegionalSceneGeometryAuthoring({ enabled = false } = 
     setStatusMessage(`${result.draft.status} geometry loaded for authoring review.`);
     return true;
   }, []);
+
+  const exportApproved = useCallback(() => {
+    const prepared = prepareOilRigApprovedExport(approvedPreview);
+    if (!prepared.payload) {
+      setStatusMessage(`APPROVED export blocked: ${prepared.errors.join("; ")}`);
+      return false;
+    }
+    const ok = triggerJsonDownload(prepared.payload, "oil-rig-regional-scene-geometry-approved.json");
+    if (ok) setStatusMessage("APPROVED artifact exported. Registry write NONE. Spatial eligibility NONE. Adapter NOT IMPLEMENTED.");
+    return ok;
+  }, [approvedPreview]);
 
   const createDraftFromApproved = useCallback(() => {
     if (!approvedPreview) return false;
@@ -241,6 +260,7 @@ export default function useRegionalSceneGeometryAuthoring({ enabled = false } = 
       redo,
       reset,
       exportDraft,
+      exportApproved,
       importDraft,
       createDraftFromApproved,
       createDraftFromReview,

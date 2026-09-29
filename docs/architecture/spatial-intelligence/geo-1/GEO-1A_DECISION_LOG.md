@@ -95,6 +95,25 @@ Affected phases: Wave 6C-G authoring and later adapter eligibility.
 Revisit condition: Measured alignment evidence or an approved variant-specific
 geometry policy.
 
+## GEO1-WAVE6C-DEC-004
+
+Decision ID: GEO1-WAVE6C-DEC-004
+Question: What coordinate semantics should govern regional scene geometry?
+Decision: Freeze `metaverse.regional-scene` as METAVERSE scene-normalized
+`0..100` coordinates, top-left origin, x-right/y-down, with `[x,y]` points.
+Alternatives considered: persistent pixels, `0..1`, Quick Map reuse, and
+scene-defined bounds.
+Repository evidence: The Regional camera computes an aspect-locked world box
+with centered cover rendering and shared camera transforms; existing Metaverse
+authoring models use explicit normalized scene values and the coordinate
+registry already separates Regional Scene from Quick Map, master-city, and
+camera-world.
+Reason: Normalized scene-local coordinates remain stable across responsive
+viewport sizes without claiming equivalence to another Metaverse space.
+Affected phases: Wave 6C-G authoring and future Regional adapter/client work.
+Revisit condition: A reviewed asset-frame calibration or a materially different
+canonical Regional rendering contract is approved.
+
 ## GEO1-WAVE1-DEC-001
 
 Decision ID: GEO1-WAVE1-DEC-001

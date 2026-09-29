@@ -4,8 +4,8 @@
 
 `QUALIFIED_WITH_CONDITIONS`
 
-Wave 6C-G geometry qualification keeps the runtime gate blocked until a
-scene-local coordinate standard and approved geometry payload exist.
+Wave 6C-G freezes the scene-local coordinate standard. The runtime gate remains
+blocked until an approved geometry payload exists.
 
 ## Conditions Before Runtime Implementation
 
@@ -38,7 +38,7 @@ scene-local coordinate standard and approved geometry payload exist.
 | Publication boundary | PASS for current separation; future contract required. |
 | Navigation boundary | PASS: router/page remains owner. |
 | Feature contract | CONDITION: planning-only, not implemented. |
-| Scene-local geometry | BLOCKED: no approved geometry payload; coordinate bounds remain scene-defined. |
+| Scene-local geometry | CONDITION: coordinate semantics frozen; no approved geometry payload exists. |
 
 ## Wave 6 Decision
 

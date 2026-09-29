@@ -45,5 +45,5 @@ Each projected spatial feature must declare:
 | jurisdiction-text | REAL_WORLD | text/ids | domain records and migrations | Not geometry |
 | quick-map | METAVERSE | normalized percent over 1448 x 1086 source image | Metaverse Quick Map registry | No confirmed transform to master-city |
 | master-city | METAVERSE | normalized percent over approximately 1672 x 941 city plate | Metaverse road/river/destination registries | No confirmed transform to quick-map |
-| regional-scene | METAVERSE | scene-specific image/viewport coordinates | Metaverse regional scene registry | Scene-local unless mapped |
+| regional-scene | METAVERSE | scene-normalized `0..100`, top-left origin, `[x,y]` | Metaverse regional scene geometry contract | No implicit transform; asset alignment required |
 | camera-world | METAVERSE | runtime camera/world state | Metaverse runtime clients | Presentation state only |

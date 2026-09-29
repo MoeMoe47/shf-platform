@@ -20,22 +20,16 @@ scene declarations projectable.
 
 ## Coordinate Decision
 
-The registered `metaverse.regional-scene` space is authoritative for the
-family and scene-local semantics, but its bounds are currently
-`scene-defined`. Existing Traffic, River, and Road authoring tools use
-normalized `0..100` values, but that convention has not been explicitly frozen
-for regional scene assets. A future authoring contract may adopt `x/y 0..100`,
-origin top-left, with units of normalized scene extent, after owner approval.
-
-Until that decision is recorded, the coordinate standard remains unresolved
-for production geometry. No pixel-to-normalized conversion is implicit.
+The registered `metaverse.regional-scene` space is now frozen as top-left
+origin, x-right/y-down, normalized `0..100` scene units. This is a Regional
+numeric convention only; it is not equivalent to Quick Map, master-city, or
+camera-world coordinates. No cross-space conversion is implicit.
 
 ## Pixel Versus Normalized
 
-Normalized scene coordinates are the recommended authoring representation once
-the Regional coordinate contract is approved. They avoid binding stored
-geometry to a particular raster resolution and can support aligned variants.
-The conversion from an authoring asset is a controlled authoring operation, not
+Normalized scene coordinates are the canonical authoring representation. They
+avoid binding stored geometry to a raster resolution and can support aligned
+variants. Any image-local conversion is a controlled authoring operation, not
 an engine transform, and must be versioned and tested before use.
 
 ## Variant Rule

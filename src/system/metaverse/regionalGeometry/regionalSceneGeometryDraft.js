@@ -6,6 +6,7 @@ import {
 import { validateRegionalSceneContractMetadata, validateRegionalScenePolygon } from "./regionalSceneGeometryValidator.js";
 
 export const OIL_RIG_ALIGNMENT_STANDARD_ID = "GEO-1_WAVE6C_OIL_RIG_ALIGNMENT_REPORT";
+export const OIL_RIG_GEOMETRY_SOURCE_AUTHORITY = "silicon-heartland-metaverse-regional-geometry-registry";
 export const OIL_RIG_ASSET_VARIANTS = Object.freeze({
   DAY: "3b5d111b624f365a26434f0bb99aebe82bdd0641ffece39992ca9b94b64d8608",
   DUSK: "882070509dac8430d61b6e82b9b52a9d679b80d8338c08069bf9509ec446d3f2",
@@ -57,6 +58,65 @@ export function prepareOilRigDraftExport(draft) {
   const payload = { ...draft, geometryHash: hashRegionalSceneGeometry(draft?.geometry), status: "DRAFT" };
   const validation = validateOilRigDraft(payload);
   return validation.valid ? { payload, errors: [] } : { payload: null, errors: validation.errors };
+}
+
+export function createOilRigReviewArtifact(draft, { reviewedAt = new Date().toISOString() } = {}) {
+  const validation = validateOilRigDraft(draft);
+  if (!validation.valid || draft?.status !== "DRAFT") {
+    return {
+      review: null,
+      errors: [...validation.errors, ...(draft?.status === "DRAFT" ? [] : ["only a DRAFT may enter REVIEW"])],
+    };
+  }
+  const review = {
+    ...structuredClone(draft),
+    status: "REVIEW",
+    provenance: {
+      sourceAuthority: OIL_RIG_GEOMETRY_SOURCE_AUTHORITY,
+      sourceDraftStatus: "DRAFT",
+      sourceDraftGeometryHash: draft.geometryHash,
+      reviewedAt,
+    },
+  };
+  return { review, errors: [] };
+}
+
+export function validateOilRigReviewArtifact(review) {
+  const errors = [];
+  const base = validateOilRigDraft(review);
+  errors.push(...base.errors);
+  if (review?.status !== "REVIEW") errors.push("review artifact status must be REVIEW");
+  if (review?.provenance?.sourceAuthority !== OIL_RIG_GEOMETRY_SOURCE_AUTHORITY) errors.push("review provenance source authority is invalid");
+  if (review?.provenance?.sourceDraftStatus !== "DRAFT") errors.push("review must reference a DRAFT source");
+  if (review?.provenance?.sourceDraftGeometryHash !== review?.geometryHash) errors.push("review source geometry hash does not match geometry hash");
+  if (!review?.provenance?.reviewedAt || Number.isNaN(Date.parse(review.provenance.reviewedAt))) errors.push("reviewedAt must be an ISO timestamp");
+  for (const field of ["approvedAt", "approvalActorId", "publicationState", "navigationAuthority"]) {
+    if (Object.hasOwn(review || {}, field) || Object.hasOwn(review?.provenance || {}, field)) errors.push(`review must not contain ${field}`);
+  }
+  return { valid: errors.length === 0, errors };
+}
+
+export function parseOilRigReviewArtifact(input) {
+  let review;
+  try {
+    review = typeof input === "string" ? JSON.parse(input) : input;
+  } catch {
+    return { review: null, errors: ["input is not valid JSON"] };
+  }
+  const validation = validateOilRigReviewArtifact(review);
+  return validation.valid ? { review, errors: [] } : { review: null, errors: validation.errors };
+}
+
+export function createDraftFromOilRigReview(review) {
+  const validation = validateOilRigReviewArtifact(review);
+  if (!validation.valid) return { draft: null, errors: validation.errors };
+  return {
+    draft: createOilRigDraft({
+      geometry: structuredClone(review.geometry),
+      authoringMetadata: { derivedFromStatus: "REVIEW", sourceDraftGeometryHash: review.geometryHash },
+    }),
+    errors: [],
+  };
 }
 
 export function parseOilRigDraft(input) {

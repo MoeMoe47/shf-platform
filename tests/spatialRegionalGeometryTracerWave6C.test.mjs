@@ -5,13 +5,18 @@ import { resolveRegionalGeometryAuthoringEnabled } from "../src/hooks/metaverse/
 import {
   createOilRigDraft,
   createOilRigAssetFamily,
+  createOilRigReviewArtifact,
+  createDraftFromOilRigReview,
   parseOilRigDraft,
+  parseOilRigReviewArtifact,
   prepareOilRigDraftExport,
+  validateOilRigReviewArtifact,
   validateOilRigDraft,
 } from "../src/system/metaverse/regionalGeometry/regionalSceneGeometryDraft.js";
 import { imageLocalToRegionalScene, regionalSceneToImageLocal } from "../src/system/metaverse/regionalGeometry/regionalSceneCoordinate.js";
 
 const polygon = { type: "Polygon", coordinates: [[[10, 10], [90, 10], [90, 90], [10, 90], [10, 10]]] };
+const finalOilRigPolygon = { type: "Polygon", coordinates: [[[95.52457739934192, 20.389571245573055], [10.71207896918092, 20.775374877552558], [9.104563835932987, 89.83422500188381], [95.52457739934192, 89.73777409388893], [95.52457739934192, 20.389571245573055]]] };
 const failingDraftRing = [
   [90.05902594629895, 89.93067590987869],
   [95.91038103132142, 20.48602215356793],
@@ -68,4 +73,47 @@ test("export is blocked for the reported invalid DRAFT", () => {
   const result = prepareOilRigDraftExport({ ...createOilRigDraft({ geometry: failingDraftGeometry }), geometry: failingDraftGeometry });
   assert.equal(result.payload, null);
   assert.match(result.errors.join("; "), /self-intersect|duplicate/);
+});
+test("exact Oil Rig DRAFT enters REVIEW without changing geometry or hash", () => {
+  const draft = createOilRigDraft({ geometry: finalOilRigPolygon });
+  const result = createOilRigReviewArtifact(draft, { reviewedAt: "2026-09-29T12:00:00.000Z" });
+  assert.equal(result.errors.length, 0);
+  assert.equal(result.review.status, "REVIEW");
+  assert.deepEqual(result.review.geometry, finalOilRigPolygon);
+  assert.equal(result.review.geometryHash, "201e189ef24d2adb");
+  assert.equal(result.review.provenance.reviewedAt, "2026-09-29T12:00:00.000Z");
+});
+test("REVIEW preserves asset/composition provenance", () => {
+  const draft = createOilRigDraft({ geometry: finalOilRigPolygon });
+  const review = createOilRigReviewArtifact(draft, { reviewedAt: "2026-09-29T12:00:00.000Z" }).review;
+  assert.equal(review.compositionFamilyId, draft.compositionFamilyId);
+  assert.equal(review.assetFamilyHash, draft.assetFamilyHash);
+  assert.deepEqual(review.assetAlignment, draft.assetAlignment);
+});
+test("REVIEW is not APPROVED or Spatial-eligible", () => {
+  const review = createOilRigReviewArtifact(createOilRigDraft({ geometry: finalOilRigPolygon }), { reviewedAt: "2026-09-29T12:00:00.000Z" }).review;
+  assert.equal(review.status, "REVIEW");
+  assert.equal(validateOilRigReviewArtifact(review).valid, true);
+  assert.equal(review.status === "APPROVED", false);
+});
+test("changed REVIEW geometry is rejected by hash and source provenance", () => {
+  const review = createOilRigReviewArtifact(createOilRigDraft({ geometry: finalOilRigPolygon }), { reviewedAt: "2026-09-29T12:00:00.000Z" }).review;
+  const changed = { ...review, geometry: { ...review.geometry, coordinates: [[[95, 20], [10, 20], [9, 89], [95, 89], [95, 20]]] } };
+  assert.equal(validateOilRigReviewArtifact(changed).valid, false);
+  assert.equal(parseOilRigReviewArtifact(changed).review, null);
+});
+test("REVIEW can only return to a new DRAFT", () => {
+  const review = createOilRigReviewArtifact(createOilRigDraft({ geometry: finalOilRigPolygon }), { reviewedAt: "2026-09-29T12:00:00.000Z" }).review;
+  const result = createDraftFromOilRigReview(review);
+  assert.equal(result.errors.length, 0);
+  assert.equal(result.draft.status, "DRAFT");
+  assert.deepEqual(result.draft.geometry, finalOilRigPolygon);
+  assert.equal(Object.hasOwn(result.draft, "approvedAt"), false);
+});
+test("REVIEW has no approval transition or authority metadata", () => {
+  const review = createOilRigReviewArtifact(createOilRigDraft({ geometry: finalOilRigPolygon }), { reviewedAt: "2026-09-29T12:00:00.000Z" }).review;
+  assert.equal(Object.hasOwn(review, "approvedAt"), false);
+  assert.equal(Object.hasOwn(review, "approvalActorId"), false);
+  assert.equal(Object.hasOwn(review, "publicationState"), false);
+  assert.equal(Object.hasOwn(review, "navigationAuthority"), false);
 });

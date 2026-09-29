@@ -116,6 +116,7 @@ export default function OilRigRegionalGeometryTracer({ scene, model, renderOverl
           <label className="met-regional-geometry-tracer__file-button">Import DRAFT/REVIEW<input key={fileKey} type="file" accept="application/json,.json" onChange={importFile} /></label>
         </div>
         {model.approvedPreview ? <div className="met-regional-geometry-tracer__approved"><strong>APPROVED preview is read-only.</strong><button type="button" onClick={model.actions.createDraftFromApproved}>Create new DRAFT</button></div> : null}
+        {model.reviewPreview ? <div className="met-regional-geometry-tracer__approved"><strong>REVIEW preview is read-only.</strong><button type="button" onClick={model.actions.createDraftFromReview}>Return to DRAFT</button></div> : null}
         <p className="met-sidebar__dev-resolved">Status: {model.draft.status}{model.unsaved ? " · UNSAVED CHANGES" : ""}</p>
         <p className="met-sidebar__dev-resolved" role="status">{model.statusMessage}</p>
       </section> : null}

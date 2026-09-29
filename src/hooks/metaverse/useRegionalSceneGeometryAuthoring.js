@@ -1,7 +1,9 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import {
   createOilRigDraft,
+  createDraftFromOilRigReview,
   parseOilRigDraft,
+  parseOilRigReviewArtifact,
   prepareOilRigDraftExport,
   validateOilRigDraft,
 } from "../../system/metaverse/regionalGeometry/regionalSceneGeometryDraft.js";
@@ -15,7 +17,7 @@ function readStoredDraft() {
     const raw = window.localStorage.getItem(LOCAL_STORAGE_KEY);
     if (!raw) return null;
     const parsed = parseOilRigDraft(raw);
-    return parsed.draft?.status === "DRAFT" || parsed.draft?.status === "REVIEW" ? parsed.draft : null;
+    return parsed.draft?.status === "DRAFT" ? parsed.draft : null;
   } catch {
     return null;
   }
@@ -64,6 +66,7 @@ export default function useRegionalSceneGeometryAuthoring({ enabled = false } = 
   const [future, setFuture] = useState([]);
   const [statusMessage, setStatusMessage] = useState("");
   const [approvedPreview, setApprovedPreview] = useState(null);
+  const [reviewPreview, setReviewPreview] = useState(null);
   const lastSavedRef = useRef(JSON.stringify(draft));
 
   const commit = useCallback((nextDraft) => {
@@ -174,6 +177,17 @@ export default function useRegionalSceneGeometryAuthoring({ enabled = false } = 
       setStatusMessage("APPROVED geometry loaded read-only. Create a new DRAFT to edit it.");
       return true;
     }
+    if (result.draft.status === "REVIEW") {
+      const review = parseOilRigReviewArtifact(result.draft);
+      if (!review.review) {
+        setStatusMessage(`Import rejected: ${review.errors.join("; ")}`);
+        return false;
+      }
+      setReviewPreview(review.review);
+      setStatusMessage("REVIEW geometry loaded read-only. Return it to DRAFT to edit it.");
+      return true;
+    }
+    setReviewPreview(null);
     setApprovedPreview(null);
     setDraft(result.draft);
     lastSavedRef.current = JSON.stringify(result.draft);
@@ -188,6 +202,17 @@ export default function useRegionalSceneGeometryAuthoring({ enabled = false } = 
     setStatusMessage("New DRAFT created from APPROVED geometry. The approved record was not modified.");
     return true;
   }, [approvedPreview]);
+
+  const createDraftFromReview = useCallback(() => {
+    const result = createDraftFromOilRigReview(reviewPreview);
+    if (!result.draft) return false;
+    setDraft(result.draft);
+    setReviewPreview(null);
+    setPast([]);
+    setFuture([]);
+    setStatusMessage("New DRAFT created from REVIEW. The REVIEW artifact was not modified.");
+    return true;
+  }, [reviewPreview]);
 
   const validation = useMemo(() => validateOilRigDraft(draft), [draft]);
   const unsaved = JSON.stringify(draft) !== lastSavedRef.current;
@@ -204,6 +229,7 @@ export default function useRegionalSceneGeometryAuthoring({ enabled = false } = 
     canRedo: future.length > 0,
     statusMessage,
     approvedPreview,
+    reviewPreview,
     setApprovedPreview,
     actions: {
       addVertex,
@@ -217,6 +243,7 @@ export default function useRegionalSceneGeometryAuthoring({ enabled = false } = 
       exportDraft,
       importDraft,
       createDraftFromApproved,
+      createDraftFromReview,
     },
   };
 }

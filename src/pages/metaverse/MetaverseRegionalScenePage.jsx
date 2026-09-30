@@ -10,6 +10,7 @@ import RegionalOceanVideoLayer from "@/components/metaverse/RegionalOceanVideoLa
 import RegionalSeagullLifeLayer from "@/components/metaverse/RegionalSeagullLifeLayer.jsx";
 import MetaverseSidebar from "@/components/metaverse/MetaverseSidebar.jsx";
 import MetaverseWeatherEnvironmentLayer from "@/components/metaverse/MetaverseWeatherEnvironmentLayer.jsx";
+import RegionalSceneSpatialIntelligencePanel from "@/components/metaverse/RegionalSceneSpatialIntelligencePanel.jsx";
 import { MetaverseDevSection, MetaverseWeatherDevSection } from "@/components/metaverse/MetaverseDevConsole.jsx";
 import useOceanMotionEditor from "@/hooks/metaverse/useOceanMotionEditor.js";
 import useMetaverseEnvironmentRuntime from "@/hooks/metaverse/useMetaverseEnvironmentRuntime.js";
@@ -31,6 +32,7 @@ import { publicAssetUrl } from "@/system/metaverse/metaverseNavigationModel.js";
 import { getMetaverseDevCapabilities } from "@/system/metaverse/metaverseDevCapabilities.js";
 import { createMetaverseEnvironmentConfig } from "@/system/metaverse/metaverseEnvironmentRuntime.js";
 import { getMetaverseFrameProfilerSnapshot } from "@/system/metaverse/metaverseFrameProfiler.js";
+import { createRegionalSceneIntelligenceClient, resolveRegionalSceneIntelligenceFixture } from "@/system/spatial/clients/regionalScene/RegionalSceneIntelligenceClient.js";
 
 const CAMERA_HOME = { x: 0, y: 0, zoom: 1 };
 const DEV_TIME_MODE_STORAGE_KEY = "met-dev-time-mode";
@@ -821,6 +823,28 @@ export default function MetaverseRegionalScenePage({ scene }) {
   const [moreOpen, setMoreOpen] = useState(false);
   const [now, setNow] = useState(() => new Date());
   const [devModeEnabled] = useState(() => resolveMetaverseDevModeEnabled({ isDev: import.meta.env.DEV, search: window.location.search }));
+  const spatialIntelligenceFixture = useMemo(
+    () => resolveRegionalSceneIntelligenceFixture({ isDev: import.meta.env.DEV, sceneId: scene.id, search: window.location.search }),
+    [scene.id],
+  );
+  const spatialIntelligenceClient = useMemo(
+    () => spatialIntelligenceFixture
+      ? createRegionalSceneIntelligenceClient({ isDev: import.meta.env.DEV, sceneId: scene.id, search: window.location.search })
+      : null,
+    [scene.id, spatialIntelligenceFixture],
+  );
+
+  useEffect(() => {
+    if (!spatialIntelligenceFixture) return undefined;
+    const announcer = document.querySelector('.sh-srOnly[role="status"]');
+    if (!announcer) return undefined;
+    const previousHidden = announcer.getAttribute("aria-hidden");
+    announcer.setAttribute("aria-hidden", "true");
+    return () => {
+      if (previousHidden === null) announcer.removeAttribute("aria-hidden");
+      else announcer.setAttribute("aria-hidden", previousHidden);
+    };
+  }, [spatialIntelligenceFixture]);
   const regionalGeometryAuthoringEnabled = resolveRegionalGeometryAuthoringEnabled({ isDev: import.meta.env.DEV, search: window.location.search }) && scene.id === "oil-rig";
   const regionalGeometryAuthoring = useRegionalSceneGeometryAuthoring({ enabled: regionalGeometryAuthoringEnabled });
   const [regionalGeometryPointer, setRegionalGeometryPointer] = useState(null);
@@ -1013,7 +1037,7 @@ export default function MetaverseRegionalScenePage({ scene }) {
         reducedMotion={reducedMotion}
       />
 
-      <div className="met-status-strip" role="status" aria-label="Current date, time, and scene lighting">
+      <div className="met-status-strip" role={spatialIntelligenceFixture ? undefined : "status"} aria-label="Current date, time, and scene lighting">
         <span className="met-status-strip__icon" aria-hidden="true">
           {realAutoTimeOfDay === "DAY" ? "☀️" : realAutoTimeOfDay === "DUSK" ? "🌆" : "🌙"}
         </span>
@@ -1129,6 +1153,8 @@ export default function MetaverseRegionalScenePage({ scene }) {
         <span>{scene.classification}</span>
         <p>{scene.description}</p>
       </section>
+
+      {spatialIntelligenceClient ? <RegionalSceneSpatialIntelligencePanel client={spatialIntelligenceClient} /> : null}
 
       {nextScene ? (
         <a className="met-regional-next" href={`/metaverse/${nextScene.slug}`} aria-label={`Continue west to ${nextScene.title}`}>

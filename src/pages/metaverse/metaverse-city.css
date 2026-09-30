@@ -3689,6 +3689,64 @@ body:has(.met-home) .brainiact-root {
   line-height: 1.45;
 }
 
+.met-regional-spatial-intelligence {
+  position: absolute;
+  z-index: 16;
+  left: 236px;
+  top: 350px;
+  width: min(390px, calc(100vw - 760px));
+  padding: 10px 12px;
+  border: 1px solid rgba(180, 215, 255, 0.22);
+  border-radius: 8px;
+  background: rgba(4, 10, 22, 0.72);
+  backdrop-filter: blur(12px);
+  color: #f8fafc;
+}
+
+.met-regional-spatial-intelligence h2,
+.met-regional-spatial-intelligence p {
+  margin: 0;
+}
+
+.met-regional-spatial-intelligence h2 {
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.met-regional-spatial-intelligence button {
+  min-height: 34px;
+  margin-top: 8px;
+  padding: 6px 10px;
+  border: 1px solid rgba(255, 210, 122, 0.45);
+  border-radius: 6px;
+  background: rgba(255, 210, 122, 0.12);
+  color: #fff5dc;
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.met-regional-spatial-intelligence button:focus-visible {
+  outline: 2px solid #f1b65c;
+  outline-offset: 3px;
+}
+
+.met-regional-spatial-intelligence__status {
+  margin-top: 8px;
+  font-size: 0.76rem;
+  line-height: 1.4;
+}
+
+.met-regional-spatial-intelligence__status p + p {
+  margin-top: 3px;
+}
+
+.met-regional-spatial-intelligence__detail {
+  color: rgba(226, 232, 240, 0.76);
+  font-size: 0.7rem;
+}
+
 .met-regional-next {
   position: absolute;
   z-index: 16;
@@ -6982,6 +7040,12 @@ body:has(.met-home) .brainiact-root {
     width: min(330px, calc(100vw - 470px));
   }
 
+  .met-regional-spatial-intelligence {
+    left: 236px;
+    top: 310px;
+    width: min(330px, calc(100vw - 470px));
+  }
+
   .met-regional-progress {
     left: 236px;
     width: min(280px, calc(100vw - 470px));
@@ -7037,6 +7101,13 @@ body:has(.met-home) .brainiact-root {
     top: 76px;
     width: auto;
     padding: 10px;
+  }
+
+  .met-regional-spatial-intelligence {
+    left: 68px;
+    right: 10px;
+    top: 190px;
+    width: auto;
   }
 
   .met-regional-info > p:last-child {

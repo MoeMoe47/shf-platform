@@ -1,0 +1,123 @@
+{
+  "phase": "0",
+  "date": "2026-09-30",
+  "overallStatus": "GO WITH BLOCKERS",
+  "counts": {
+    "routesDiscovered": 16,
+    "gamesExperiencesDiscovered": 20,
+    "confirmedPlayable": 0,
+    "placeholders": 13,
+    "brokenRoutesFeatures": 9
+  },
+  "routes": [
+    { "id": "arcade-root", "route": "/arcade.html#/", "status": "COMPLETE", "target": "redirect:/dashboard", "source": "src/router/ArcadeRoutes.jsx" },
+    { "id": "learning-dashboard", "route": "/arcade.html#/dashboard", "status": "PARTIAL", "target": "ArcadeDashboard", "source": "src/router/ArcadeRoutes.jsx" },
+    { "id": "classic-room", "route": "/arcade.html#/classical-arcade", "status": "PARTIAL", "target": "ClassicalArcadeRoom", "source": "src/router/ArcadeRoutes.jsx" },
+    { "id": "games", "route": "/arcade.html#/games", "status": "PARTIAL", "target": "ArcadeLibrary", "source": "src/router/ArcadeRoutes.jsx" },
+    { "id": "leaderboard", "route": "/arcade.html#/leaderboard", "status": "PARTIAL", "target": "Leaderboard", "source": "src/router/ArcadeRoutes.jsx" },
+    { "id": "rewards", "route": "/arcade.html#/rewards", "status": "PARTIAL", "target": "Rewards", "source": "src/router/ArcadeRoutes.jsx" },
+    { "id": "tournaments", "route": "/arcade.html#/tournaments", "status": "PLACEHOLDER", "target": "Tournaments", "source": "src/router/ArcadeRoutes.jsx" },
+    { "id": "tournaments-weekly", "route": "/arcade.html#/tournaments/weekly", "status": "BROKEN", "target": "Tournaments", "source": "src/router/ArcadeRoutes.jsx" },
+    { "id": "history", "route": "/arcade.html#/history", "status": "PARTIAL", "target": "History", "source": "src/router/ArcadeRoutes.jsx" },
+    { "id": "help", "route": "/arcade.html#/help", "status": "PARTIAL", "target": "Help", "source": "src/router/ArcadeRoutes.jsx" },
+    { "id": "notifications", "route": "/arcade.html#/notifications", "status": "PARTIAL", "target": "ArcadeNotifications", "source": "src/router/ArcadeRoutes.jsx" },
+    { "id": "metaverse-growth", "route": "/arcade.html#/metaverse/growth-observatory", "status": "UNKNOWN / REQUIRES RUNTIME VERIFICATION", "target": "GrowthObservationTower", "source": "src/router/ArcadeRoutes.jsx" },
+    { "id": "metaverse-bfe", "route": "/arcade.html#/metaverse/bfe-test", "status": "UNKNOWN / REQUIRES RUNTIME VERIFICATION", "target": "BFETestPage", "source": "src/router/ArcadeRoutes.jsx" },
+    { "id": "legacy-arcade", "route": "/arcade.html#/arcade", "status": "LEGACY", "target": "fallback:/dashboard", "source": "runtime smoke" },
+    { "id": "legacy-arcade-games", "route": "/arcade.html#/arcade/games", "status": "BROKEN", "target": "fallback:/dashboard", "source": "src/pages/Arcade.jsx" },
+    { "id": "legacy-games-leaderboard", "route": "/arcade.html#/games/leaderboard", "status": "BROKEN", "target": "fallback:/dashboard", "source": "src/pages/Arcade.jsx" }
+  ],
+  "pages": [
+    { "id": "ArcadeDashboard", "path": "src/pages/arcade/ArcadeDashboard.jsx", "status": "PARTIAL" },
+    { "id": "ClassicalArcadeRoom", "path": "src/pages/arcade/ClassicalArcadeRoom.jsx", "status": "PARTIAL" },
+    { "id": "ArcadeLibrary", "path": "src/pages/arcade/ArcadeLibrary.jsx", "status": "PARTIAL" },
+    { "id": "Leaderboard", "path": "src/pages/arcade/Leaderboard.jsx", "status": "PARTIAL" },
+    { "id": "Tournaments", "path": "src/pages/arcade/Tournaments.jsx", "status": "PLACEHOLDER" },
+    { "id": "Tournament", "path": "src/pages/arcade/Tournament.jsx", "status": "LEGACY" }
+  ],
+  "games": [
+    { "id": "debt-hunter", "title": "Debt Hunter", "status": "PLACEHOLDER", "playable": false },
+    { "id": "career-rush", "title": "Career Match Rush", "status": "PLACEHOLDER", "playable": false },
+    { "id": "client-sim", "title": "Client Service Simulator", "status": "PLACEHOLDER", "playable": false },
+    { "id": "resume-quest", "title": "Resume Builder Quest", "status": "PLACEHOLDER", "playable": false },
+    { "id": "classic/fingerspelling", "title": "Fingerspelling Speed", "status": "LEGACY", "playable": false },
+    { "id": "classic/vocab-match", "title": "Vocabulary Match", "status": "PLACEHOLDER", "playable": false },
+    { "id": "classic/gesture-memory", "title": "Gesture Memory", "status": "PLACEHOLDER", "playable": false },
+    { "id": "transport/cdl-driver", "title": "CDL Driver Trainer", "status": "LEGACY", "playable": false },
+    { "id": "orbit-defender", "title": "Orbit Defender", "status": "PLACEHOLDER", "playable": false },
+    { "id": "pixel-foundry", "title": "Pixel Foundry", "status": "PLACEHOLDER", "playable": false },
+    { "id": "circuit-runner", "title": "Circuit Runner", "status": "PLACEHOLDER", "playable": false },
+    { "id": "eco-stack", "title": "Eco Stack", "status": "PLACEHOLDER", "playable": false },
+    { "id": "eco-city-agent-challenge", "title": "Eco City Agent Challenge", "status": "PLACEHOLDER", "playable": false },
+    { "id": "ai-game-development-i", "title": "AI Game Development I", "status": "PLACEHOLDER", "playable": false },
+    { "id": "agent-architect", "title": "Agent Architect", "status": "PLACEHOLDER", "playable": false },
+    { "id": "code-red", "title": "Code Red", "status": "PLACEHOLDER", "playable": false },
+    { "id": "community-tech-sprint", "title": "Community Tech Sprint", "status": "PLACEHOLDER", "playable": false },
+    { "id": "arcade-hub", "title": "Arcade Hub", "status": "PARTIAL", "playable": null },
+    { "id": "simulation-hall", "title": "Simulation Hall", "status": "PARTIAL", "playable": null },
+    { "id": "skills-challenge-center", "title": "Skills Challenge Center", "status": "PARTIAL", "playable": null }
+  ],
+  "components": [
+    { "id": "ArcadeAppShell", "path": "src/layouts/arcade/ArcadeAppShell.jsx", "status": "PARTIAL" },
+    { "id": "ArcadeTopNav", "path": "src/components/arcade/ArcadeTopNav.jsx", "status": "PARTIAL" },
+    { "id": "ArcadeMissionCard", "path": "src/components/curriculum/lesson/ArcadeMissionCard.jsx", "status": "PARTIAL" }
+  ],
+  "services": [
+    { "id": "arcade-service", "path": "apps/shs-api/src/domain/arcade/service/arcade-service.ts", "status": "PARTIAL" },
+    { "id": "arcade-repo", "path": "apps/shs-api/src/domain/arcade/repo/arcade-repo.ts", "status": "PARTIAL" },
+    { "id": "credit-ledger", "path": "src/utils/creditLedger.js", "status": "BROKEN" }
+  ],
+  "APIs": [
+    { "method": "GET", "path": "/arcade/activities", "status": "PARTIAL" },
+    { "method": "POST", "path": "/arcade/activities", "status": "PARTIAL" },
+    { "method": "POST", "path": "/arcade/attempts", "status": "PARTIAL" },
+    { "method": "POST", "path": "/arcade/attempts/:id/result", "status": "PARTIAL" },
+    { "method": "GET", "path": "/arcade/results", "status": "PARTIAL" }
+  ],
+  "databases": [
+    { "id": "arcade_activities", "migration": "apps/shs-api/migrations/052_arcade_activities.sql", "status": "PARTIAL" },
+    { "id": "arcade_attempts", "migration": "apps/shs-api/migrations/052_arcade_activities.sql", "status": "PARTIAL" },
+    { "id": "arcade_results", "migration": "apps/shs-api/migrations/052_arcade_activities.sql", "status": "PARTIAL" },
+    { "id": "curriculum_lesson_arcade_activities", "migration": "apps/shs-api/migrations/064_curriculum_resource_arcade_linkage.sql", "status": "PARTIAL" }
+  ],
+  "integrations": [
+    { "id": "curriculum", "status": "PARTIAL" },
+    { "id": "career", "status": "PARTIAL" },
+    { "id": "portfolio", "status": "PARTIAL" },
+    { "id": "evidence", "status": "PARTIAL" },
+    { "id": "truth-spine", "status": "PARTIAL" },
+    { "id": "metaverse", "status": "PARTIAL" },
+    { "id": "treasury", "status": "BROKEN" },
+    { "id": "agent-fabric", "status": "MISSING" },
+    { "id": "shf-civic", "status": "MISSING" }
+  ],
+  "authorities": [
+    { "id": "identity", "status": "PARTIAL" },
+    { "id": "curriculum", "status": "PARTIAL" },
+    { "id": "arcade", "status": "PARTIAL" },
+    { "id": "treasury", "status": "BROKEN" },
+    { "id": "truth-spine", "status": "PARTIAL" },
+    { "id": "civicsure", "status": "SEPARATE" }
+  ],
+  "tests": [
+    { "path": "tests/ui/arcade-learning-arcade.spec.mjs", "type": "playwright", "result": "FAIL", "summary": "3 touch target failures" },
+    { "path": "tests/ui/classical-arcade-room-visual.spec.mjs", "type": "playwright", "result": "FAIL", "summary": "1 page-height failure" },
+    { "path": "apps/shs-api/tests/arcade.security.test.ts", "type": "api", "result": "NOT_RUN", "summary": "Arcade API auth/mastery coverage" }
+  ],
+  "gaps": [
+    { "id": "canonical-game-registry", "severity": "CRITICAL", "status": "MISSING" },
+    { "id": "playable-games", "severity": "CRITICAL", "status": "MISSING" },
+    { "id": "server-authoritative-leaderboards", "severity": "HIGH", "status": "MISSING" },
+    { "id": "treasury-authorized-rewards", "severity": "CRITICAL", "status": "MISSING" },
+    { "id": "route-normalization", "severity": "HIGH", "status": "PARTIAL" }
+  ],
+  "blockers": [
+    "Broken legacy deep links silently fall back to dashboard.",
+    "No canonical game registry.",
+    "No confirmed playable games.",
+    "Browser-local score/reward systems conflict with authority model.",
+    "Runtime pages make local proxy calls to unavailable ecosystem API ports during smoke testing.",
+    "Accessibility touch target failures.",
+    "Classic Arcade visual height regression."
+  ]
+}

@@ -95,7 +95,7 @@ test("adapter has no browser storage side effects or authority implementation im
   assert.doesNotMatch(adapterSource, /from\s+["'][^"']*(treasury|truth|evidence|curriculum|career|metaverse|agent|identity|studio)[^"']*["']/i);
 });
 
-test("legacy source catalog and existing consumers are unchanged in the worktree", () => {
-  const changed = execFileSync("git", ["status", "--short", "--", "src/data/arcade.js", "src/shared/arcade/useArcadeLedger.js", "src/shared/arcade/useArcadeHistory.js", "src/shared/arcade/arcadeRules.js"], { encoding: "utf8" });
+test("legacy source catalog and deferred history consumer are unchanged in the worktree", () => {
+  const changed = execFileSync("git", ["status", "--short", "--", "src/data/arcade.js", "src/shared/arcade/useArcadeHistory.js"], { encoding: "utf8" });
   assert.equal(changed, "");
 });

@@ -2,11 +2,7 @@
 // ------------------------------------------------------------
 // SHF Arcade – Northstar Dashboard
 //
-// High-level KPIs + dev-only test panel that fires sample
-// arcade events through useArcadeLedger so you can:
-//   - Populate Arcade History
-//   - Test CSV exports
-//   - Verify Polygon / wallet wiring
+// High-level KPI scaffold + dev-only legacy compatibility event panel.
 // ------------------------------------------------------------
 
 import React from "react";
@@ -64,9 +60,8 @@ export default function ArcadeDashboardNorthstar() {
 /**
  * DevArcadeTestPanelNorthstar
  * ------------------------------------------------------------
- * Dev-only helper that sends 3 sample events into useArcadeLedger,
- * tagged as NORTHSTAR-DEV so you can differentiate them later if
- * you want in filters.
+ * Dev-only helper that sends legacy UI event vocabulary through the
+ * quarantined compatibility hook. It creates no institutional records.
  */
 function DevArcadeTestPanelNorthstar() {
   const { ARCADE_EVENTS, recordArcadeEvent } = useArcadeLedger();
@@ -96,14 +91,14 @@ function DevArcadeTestPanelNorthstar() {
   async function fire(label, eventType, payload) {
     try {
       setBusy(true);
-      setMessage(`Logging: ${label}…`);
+      setMessage(`Sending compatibility event: ${label}…`);
 
       await recordArcadeEvent(eventType, payload);
 
-      setMessage(`✓ Logged ${label} into SHF Arcade ledger`);
+      setMessage("Legacy compatibility event — no institutional outcome is recorded.");
     } catch (err) {
-      console.error("[DevArcadeTestPanelNorthstar] Failed to log event:", err);
-      setMessage(`⚠️ Error logging ${label} – see console for details`);
+      console.error("[DevArcadeTestPanelNorthstar] Failed to send compatibility event:", err);
+      setMessage(`Could not send ${label} – see console for details`);
     } finally {
       setBusy(false);
     }
@@ -176,9 +171,8 @@ function DevArcadeTestPanelNorthstar() {
               maxWidth: "30rem",
             }}
           >
-            Trigger a few <strong>Northstar-tagged</strong> events so you can
-            see how they roll up into the Arcade History view and CSV export.
-            Perfect for tuning KPIs before you go live.
+            Send legacy compatibility event labels for development checks.
+            No institutional outcome is recorded or added to Arcade History.
           </p>
         </div>
 
@@ -196,7 +190,7 @@ function DevArcadeTestPanelNorthstar() {
             onClick={handleGameStart}
             disabled={busy}
           >
-            Log NS Game Start
+            Send NS Game Start Intent
           </button>
 
           <button
@@ -205,7 +199,7 @@ function DevArcadeTestPanelNorthstar() {
             onClick={handleGameComplete}
             disabled={busy}
           >
-            Log NS Game Complete
+            Send NS Game Completion Intent
           </button>
 
           <button
@@ -214,7 +208,7 @@ function DevArcadeTestPanelNorthstar() {
             onClick={handleBadgeClaim}
             disabled={busy}
           >
-            Log NS Badge Claim
+            Send NS Badge Claim Intent
           </button>
         </div>
       </div>

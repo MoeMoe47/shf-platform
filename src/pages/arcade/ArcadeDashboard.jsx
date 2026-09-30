@@ -353,7 +353,7 @@ function AchievementSnapshotSection() {
   );
 }
 
-// --------------------------- Dev-only ledger test panel (preserved) -----
+// ---------------------- Dev-only compatibility event panel -------------
 function DevArcadeTestPanel() {
   const { ARCADE_EVENTS, recordArcadeEvent } = useArcadeLedger();
   const [busy, setBusy] = React.useState(false);
@@ -373,12 +373,12 @@ function DevArcadeTestPanel() {
   async function fire(label, eventType, payload) {
     try {
       setBusy(true);
-      setMessage(`Logging: ${label}…`);
+      setMessage(`Sending compatibility event: ${label}…`);
       await recordArcadeEvent(eventType, payload);
-      setMessage(`Logged ${label} into the SHF Arcade ledger`);
+      setMessage("Legacy compatibility event — no institutional outcome is recorded.");
     } catch (err) {
-      console.error("[DevArcadeTestPanel] Failed to log event:", err);
-      setMessage(`Error logging ${label} — see console for details`);
+      console.error("[DevArcadeTestPanel] Failed to send compatibility event:", err);
+      setMessage(`Could not send ${label} — see console for details`);
     } finally {
       setBusy(false);
     }
@@ -403,11 +403,11 @@ function DevArcadeTestPanel() {
   return (
     <div className="ar-card ar-section">
       <h2 style={{ fontSize: "1rem" }}>Arcade Dev Tools (local only)</h2>
-      <p className="ar-muted">Generates sample arcade events. Open Arcade Impact History and download the CSV to verify.</p>
+      <p className="ar-muted">Sends legacy compatibility event labels. No institutional outcome is recorded.</p>
       <div className="ar-linkRow">
-        <button type="button" className="ar-btn ar-btn--ghost" onClick={handleGameStart} disabled={busy}>Log Game Start (Dev 1)</button>
-        <button type="button" className="ar-btn ar-btn--primary" onClick={handleGameComplete} disabled={busy}>Log Game Complete (Dev 2)</button>
-        <button type="button" className="ar-btn ar-btn--ghost" onClick={handleBadgeClaim} disabled={busy}>Log Badge Claim (Dev 3)</button>
+        <button type="button" className="ar-btn ar-btn--ghost" onClick={handleGameStart} disabled={busy}>Send Game Start Intent (Dev 1)</button>
+        <button type="button" className="ar-btn ar-btn--primary" onClick={handleGameComplete} disabled={busy}>Send Game Completion Intent (Dev 2)</button>
+        <button type="button" className="ar-btn ar-btn--ghost" onClick={handleBadgeClaim} disabled={busy}>Send Badge Claim Intent (Dev 3)</button>
       </div>
       {message && <p className="ar-muted" role="status">{busy ? "⏳ " : "✅ "}{message}</p>}
     </div>

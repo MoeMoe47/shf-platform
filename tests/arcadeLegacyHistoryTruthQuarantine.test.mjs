@@ -101,5 +101,10 @@ test("frozen verification authorities and prior migrations remain untouched", ()
     .map((entry) => entry.slice(3))
     .sort();
 
-  assert.deepEqual(changedMigrationPaths, ["apps/shs-api/migrations/149_arcade_runtime_sessions.sql"]);
+  const allowedMigrationPaths = [
+    "apps/shs-api/migrations/149_arcade_runtime_sessions.sql",
+    "apps/shs-api/migrations/150_arcade_runtime_save_states.sql",
+  ];
+  assert.ok(changedMigrationPaths.includes("apps/shs-api/migrations/150_arcade_runtime_save_states.sql"));
+  assert.ok(changedMigrationPaths.every((path) => allowedMigrationPaths.includes(path)), `Unexpected migration changes: ${changedMigrationPaths.join(", ")}`);
 });

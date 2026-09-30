@@ -4,7 +4,7 @@ import { ArcadeRuntimeSessionRepo } from "../repo/runtime-session-repo.js";
 import { ARCADE_RUNTIME_FAMILIES, ARCADE_RUNTIME_SESSION_STATUSES, ARCADE_RUNTIME_SESSION_TYPES, type ArcadeRuntimeSessionAction, type ArcadeRuntimeSessionStatus } from "../model/runtime-session.js";
 
 export class ArcadeRuntimeSessionError extends Error {
-  constructor(public code: string, message: string, public statusCode = 400) {
+  constructor(public code: string, message: string, public statusCode = 400, public details: Record<string, unknown> = {}) {
     super(message);
     this.name = "ArcadeRuntimeSessionError";
   }

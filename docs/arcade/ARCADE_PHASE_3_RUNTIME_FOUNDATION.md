@@ -10,6 +10,18 @@ Arcade Runtime Sessions preserve gameplay continuity but do not establish master
 
 Runtime Session status describes operational runtime lifecycle only. It is not an Arcade Attempt or Result. Runtime completion does not submit an Attempt or create a Result. Existing Result persistence, server-derived mastery, transactional `arcade.resulted`, Verified Evidence, signed Agent Fabric ingestion, Truth Spine, and Treasury remain separate and unchanged.
 
+## Phase 3B: Save State
+
+`arcade_runtime_save_states` stores one current JSON object per runtime session. The session ID is the primary key and references `arcade_runtime_sessions` with cascade deletion; organization, tenant, and user scope are resolved from the parent session rather than duplicated in save rows.
+
+The authenticated owner reads and writes through `GET /arcade/runtime/sessions/:id/save` and `PUT /arcade/runtime/sessions/:id/save`. Writes require `expectedRevision`: revision `0` creates revision `1`; a successful subsequent write increments the current revision by one. PostgreSQL performs this compare-and-swap atomically, scoped to the owning organization, tenant, user, and writable parent session. A stale write returns HTTP 409 with `SAVE_REVISION_CONFLICT` and `currentRevision`; clients must reload rather than overwrite.
+
+Save payloads must be JSON objects no larger than 64 KiB when serialized. Writes are allowed only for ACTIVE and PAUSED sessions; terminal sessions remain readable but cannot be changed. Save-state persistence does not modify session lifecycle or create Attempts, Results, mastery, `arcade.resulted`, Evidence, Truth Spine facts, rewards, or leaderboard entries. Concurrent writes using one expected revision produce at most one successful update.
+
+Arcade save state preserves resumable gameplay continuity. It is operational runtime data and does not establish mastery, evidence, credentials, rewards, leaderboard standing, or institutional truth.
+
+Telemetry remains deferred to Phase 3C.
+
 Leaderboard rank is a presentation projection over authorized score sources and is not itself evidence or credential authority. Evidence Replay explains the provenance of a canonical Arcade outcome but does not independently establish mastery or verification. Neither leaderboard nor replay is implemented in 3A.
 
 ## Runtime Session Identity and Persistence

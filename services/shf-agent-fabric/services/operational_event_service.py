@@ -39,9 +39,10 @@ SUPPORTED_EVENT_TYPES = {
     "funding_commitment.committed",
     "employment_started.verified",
     "government_assurance.truth_determination.accepted",
+    "arcade.resulted",
 }
 
-SUPPORTED_SUBJECT_TYPES = {"student", "lesson", "assessment", "course", "credential", "portfolio_artifact", "referral", "report", "grant_binder", "funding_commitment", "workforce_employment_outcome", "gpa_truth_determination"}
+SUPPORTED_SUBJECT_TYPES = {"student", "lesson", "assessment", "course", "credential", "portfolio_artifact", "referral", "report", "grant_binder", "funding_commitment", "workforce_employment_outcome", "gpa_truth_determination", "arcade_result"}
 
 
 class OperationalEventError(ValueError):
@@ -174,6 +175,7 @@ def validate_operational_event(payload: Dict[str, Any], actor: Any) -> None:
         "shs.exchange": _validate_funding_commitment_committed_payload,
         "shf.workforce": _validate_employment_started_verified_payload,
         "shs.government_assurance": _validate_government_assurance_truth_determination_payload,
+        "curriculum.arcade": _validate_arcade_resulted_payload,
     }
     validator = validators.get(str(payload.get("producer_id") or "").strip())
     if validator:
@@ -240,6 +242,10 @@ def _validate_payload(payload: Dict[str, Any]) -> None:
     if event_type == "government_assurance.truth_determination.accepted" and producer_id != "shs.government_assurance":
         raise OperationalEventError("invalid_producer_event_binding", {"producer_id": producer_id, "event_type": event_type})
     if producer_id == "shs.government_assurance" and event_type != "government_assurance.truth_determination.accepted":
+        raise OperationalEventError("invalid_producer_event_binding", {"producer_id": producer_id, "event_type": event_type})
+    if event_type == "arcade.resulted" and producer_id != "curriculum.arcade":
+        raise OperationalEventError("invalid_producer_event_binding", {"producer_id": producer_id, "event_type": event_type})
+    if producer_id == "curriculum.arcade" and event_type != "arcade.resulted":
         raise OperationalEventError("invalid_producer_event_binding", {"producer_id": producer_id, "event_type": event_type})
     if payload["subject_type"] not in SUPPORTED_SUBJECT_TYPES:
         raise OperationalEventError("unsupported_subject_type", {"subject_type": payload["subject_type"]})
@@ -363,6 +369,42 @@ def _validate_government_assurance_truth_determination_payload(payload: Dict[str
         raise OperationalEventError("invalid_government_assurance_truth_determination_payload", {"field": "idempotency_key"})
 
 
+def _validate_arcade_resulted_payload(payload: Dict[str, Any], actor: Any) -> None:
+    if str(getattr(actor, "principal_type", "")) != "service" or str(getattr(actor, "service_id", "")) != "service:shs-api":
+        raise OperationalEventError("service_identity_required")
+    if payload.get("schema_version") != "1.0" or payload.get("subject_type") != "arcade_result" or payload.get("originating_actor_type") != "user":
+        raise OperationalEventError("invalid_event_schema")
+    event_payload = payload.get("payload")
+    required = {"arcade_result_id", "arcade_activity_id", "mastery_achieved", "source_event_type", "source_occurred_at", "verified_evidence"}
+    if not isinstance(event_payload, dict) or set(event_payload) != required:
+        raise OperationalEventError("invalid_arcade_resulted_payload")
+    result_id = str(payload.get("subject_id") or "")
+    if event_payload.get("arcade_result_id") != result_id or event_payload.get("mastery_achieved") is not True:
+        raise OperationalEventError("invalid_arcade_resulted_payload", {"field": "arcade_result"})
+    if event_payload.get("source_event_type") != "arcade.resulted" or event_payload.get("source_occurred_at") != payload.get("occurred_at"):
+        raise OperationalEventError("invalid_arcade_resulted_payload", {"field": "source_event"})
+    if str(payload.get("idempotency_key") or "") != f"arcade.resulted:{result_id}":
+        raise OperationalEventError("invalid_arcade_resulted_payload", {"field": "idempotency_key"})
+    evidence = event_payload.get("verified_evidence")
+    references = payload.get("evidence_references")
+    if not isinstance(evidence, list) or not evidence or not isinstance(references, list):
+        raise OperationalEventError("invalid_arcade_resulted_payload", {"field": "verified_evidence"})
+    evidence_ids = []
+    item_fields = {"evidence_id", "organization_id", "source_type", "evidence_rule_id", "evidence_rule_version", "status", "occurred_at", "arcade_activity_id"}
+    for item in evidence:
+        if not isinstance(item, dict) or set(item) != item_fields:
+            raise OperationalEventError("invalid_arcade_resulted_payload", {"field": "verified_evidence_item"})
+        if item.get("source_type") != "ARCADE_RESULT" or item.get("status") != "REVIEWED":
+            raise OperationalEventError("invalid_arcade_resulted_payload", {"field": "verified_evidence_state"})
+        if item.get("organization_id") != payload.get("organization_id") or item.get("arcade_activity_id") != event_payload.get("arcade_activity_id") or item.get("occurred_at") != payload.get("occurred_at"):
+            raise OperationalEventError("invalid_arcade_resulted_payload", {"field": "verified_evidence_provenance"})
+        if not all(str(item.get(field) or "").strip() for field in ("evidence_id", "evidence_rule_id")) or not isinstance(item.get("evidence_rule_version"), int):
+            raise OperationalEventError("invalid_arcade_resulted_payload", {"field": "verified_evidence_reference"})
+        evidence_ids.append(item["evidence_id"])
+    if references != evidence_ids:
+        raise OperationalEventError("invalid_arcade_resulted_payload", {"field": "evidence_references"})
+
+
 def _retention_policy_for(producer_id: str, event_type: str) -> str:
     for entry in (
         find_lineage_entry("lineage.curriculum.lesson.completed.v1"),
@@ -374,6 +416,7 @@ def _retention_policy_for(producer_id: str, event_type: str) -> str:
         find_lineage_entry("lineage.shs.exchange.funding_commitment.committed.v1"),
         find_lineage_entry("lineage.shf.workforce.employment_started.verified.v1"),
         find_lineage_entry("lineage.shs.government_assurance.truth_determination.accepted.v1"),
+        find_lineage_entry("lineage.curriculum.arcade.resulted.v1"),
     ):
         if not entry:
             continue

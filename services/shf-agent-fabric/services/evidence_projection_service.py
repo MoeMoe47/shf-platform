@@ -5,6 +5,7 @@ import json
 import os
 from datetime import datetime, timezone
 from pathlib import Path
+from types import SimpleNamespace
 from typing import Any, Dict, List
 
 from auth.audit import record_auth_event
@@ -244,6 +245,122 @@ def _require_projection_authority(actor: Any) -> None:
     role = getattr(actor, "role", None)
     if not has_permission(role, TRUTH_SOURCE_CREATE) or not has_permission(role, TRUTH_CLAIM_CREATE):
         raise ProjectionError("missing_truth_projection_permission", status_code=403)
+
+
+def project_verified_arcade_event_to_truth(payload: Dict[str, Any], actor: Any) -> Dict[str, Any]:
+    """Persist a signed, SHS-verified Arcade evidence reference through Truth Spine APIs."""
+    _require_projection_authority(actor)
+    lineage = find_lineage_for_event("curriculum.arcade", "arcade.resulted")
+    if not lineage or lineage.get("truth_eligibility") != TRUTH_PROJECTABLE_ELIGIBILITY:
+        raise ProjectionError("arcade_truth_lineage_unavailable", status_code=409)
+    organization_id = str(getattr(actor, "organization_id", "") or "")
+    tenant_id = f"tenant:{organization_id}"
+    event_payload = payload.get("payload") or {}
+    result_id = str(event_payload.get("arcade_result_id") or "")
+    activity_id = str(event_payload.get("arcade_activity_id") or "")
+    evidence_records = event_payload.get("verified_evidence")
+    evidence_ids = [str(item.get("evidence_id") or "") for item in evidence_records or [] if isinstance(item, dict)]
+    if (
+        not organization_id
+        or payload.get("tenant_id") != tenant_id
+        or payload.get("organization_id") != organization_id
+        or payload.get("subject_id") != result_id
+        or not activity_id
+        or event_payload.get("mastery_achieved") is not True
+        or not evidence_ids
+        or payload.get("evidence_references") != evidence_ids
+    ):
+        raise ProjectionError("arcade_verified_evidence_scope_invalid", status_code=422)
+    learner_user_id = str(payload.get("originating_actor_id") or "")
+    if not learner_user_id or payload.get("originating_actor_type") != "user":
+        raise ProjectionError("arcade_verified_evidence_learner_missing", status_code=422)
+    service_caller_id = str(getattr(actor, "service_id", "") or "")
+    if not service_caller_id:
+        raise ProjectionError("arcade_signed_service_identity_missing", status_code=403)
+    truth_actor = SimpleNamespace(**{**vars(actor), "user_id": service_caller_id})
+
+    source_ids = []
+    for item in evidence_records:
+        if (
+            item.get("source_type") != "ARCADE_RESULT"
+            or item.get("status") != "REVIEWED"
+            or item.get("organization_id") != organization_id
+            or item.get("arcade_activity_id") != activity_id
+            or item.get("occurred_at") != payload.get("occurred_at")
+            or not item.get("evidence_rule_id")
+            or not isinstance(item.get("evidence_rule_version"), int)
+        ):
+            raise ProjectionError("arcade_verified_evidence_invalid", status_code=422)
+        source_id = _stable_id("src", f"{organization_id}|{item['evidence_id']}")
+        existing_source = truth_spine_service.get_source(source_id)
+        if existing_source:
+            truth_spine_service.check_organization_access(truth_actor, existing_source.get("organization_id"))
+            if existing_source.get("uri") != f"verified-evidence://{item['evidence_id']}":
+                raise ProjectionError("arcade_truth_source_conflict", status_code=409)
+        else:
+            truth_spine_service.create_source({
+                "source_id": source_id,
+                "system_id": "shs",
+                "source_type": "verified_evidence_reference",
+                "title": f"Arcade Result {result_id} for Activity {activity_id}",
+                "uri": f"verified-evidence://{item['evidence_id']}",
+                "evidence_type": "ARCADE_RESULT",
+                "requested_organization_id": organization_id,
+            }, truth_actor)
+        source_ids.append(source_id)
+
+    claim_id = _stable_id("claim", f"{tenant_id}|arcade.resulted|{result_id}")
+    expected_evidence_ids = sorted(set(evidence_ids))
+    expected_source_ids = sorted(set(source_ids))
+    claim = truth_spine_service.get_claim(claim_id)
+    idempotent = claim is not None
+    if claim:
+        truth_spine_service.check_organization_access(truth_actor, claim.get("organization_id"))
+        if sorted(claim.get("evidence_ids") or []) != expected_evidence_ids or sorted(claim.get("source_ids") or []) != expected_source_ids:
+            raise ProjectionError("arcade_truth_claim_conflict", status_code=409)
+    else:
+        claim = truth_spine_service.create_claim({
+            "claim_id": claim_id,
+            "app_id": "shf",
+            "client_id": organization_id,
+            "program_id": "arcade",
+            "claim_type": lineage["truth_claim_type"],
+            "claim_text": f"Server-derived Arcade mastery achieved for Activity {activity_id} in Result {result_id}.",
+            "source_ids": expected_source_ids,
+            "evidence_ids": expected_evidence_ids,
+            "subject_id": learner_user_id,
+            "predicate": lineage["truth_predicate"],
+            "occurred_at": str(payload["occurred_at"]),
+            "lineage_id": lineage["lineage_id"],
+            "producer_id": "curriculum.arcade",
+            "producer_event_type": "arcade.resulted",
+            "trace_coverage": 100,
+            "requested_organization_id": organization_id,
+        }, truth_actor)
+    truth_spine_record_id = None
+    if durable_repo.is_postgres_mode():
+        identity = durable_repo.find_record_identity("claims", claim_id, tenant_id, organization_id)
+        truth_spine_record_id = identity.get("record_id") if identity else None
+    projection = {
+        "status": "projected",
+        "truth_eligibility": lineage["truth_eligibility"],
+        "lineage_id": lineage["lineage_id"],
+        "truth_claim_id": claim_id,
+        "truth_claim_version": int(claim.get("version") or 1),
+        "truth_source_ids": expected_source_ids,
+        "evidence_ids": expected_evidence_ids,
+        "truth_spine_record_id": truth_spine_record_id,
+        "verification_status": claim.get("verification_status"),
+        "public_approved": claim.get("public_approved", False),
+    }
+    record_auth_event(
+        "shf_arcade_truth_projection_replayed" if idempotent else "shf_arcade_truth_projection_created",
+        user_id=service_caller_id,
+        role=str(getattr(actor, "role", "")),
+        result="allowed",
+        metadata={"claim_id": claim_id, "result_id": result_id, "organization_id": organization_id, "evidence_count": len(expected_evidence_ids)},
+    )
+    return {"projection": projection, "idempotent_replay": idempotent}
 
 
 def _validate_event(event: Dict[str, Any], actor: Any) -> None:

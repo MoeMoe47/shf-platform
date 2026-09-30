@@ -20,6 +20,48 @@ export type TrustedReportingOutboxEvent = {
 
 export type ReferralOutboxEvent = TrustedReportingOutboxEvent;
 
+export function buildArcadeVerifiedEvidenceTruthHandoff(event: any, evidenceRecords: Array<Record<string, any>>) {
+  if (event?.producer_id !== "curriculum.arcade" || event?.event_type !== "arcade.resulted" || event?.subject_type !== "arcade_result") {
+    throw new Error("arcade_truth_handoff_event_invalid");
+  }
+  const resultId = String(event?.subject_id || "").trim();
+  const activityId = String(event?.payload?.arcade_activity_id || evidenceRecords?.[0]?.arcade_activity_id || "").trim();
+  const sourceRecordId = String(event?.payload?.source_record_id || "").trim();
+  if (!resultId || sourceRecordId !== resultId || !activityId || event?.payload?.mastery_achieved !== true) {
+    throw new Error("arcade_truth_handoff_result_invalid");
+  }
+  if (!Array.isArray(evidenceRecords) || evidenceRecords.length === 0) {
+    throw new Error("arcade_truth_handoff_evidence_missing");
+  }
+  const verifiedEvidence = evidenceRecords.map((record) => {
+    if (record.source_type !== "ARCADE_RESULT" || record.status !== "REVIEWED" || !record.evidence_id || record.organization_id !== event.organization_id || record.arcade_activity_id !== activityId) {
+      throw new Error("arcade_truth_handoff_evidence_invalid");
+    }
+    return {
+      evidence_id: String(record.evidence_id),
+      organization_id: String(record.organization_id),
+      source_type: "ARCADE_RESULT",
+      evidence_rule_id: String(record.evidence_rule_id),
+      evidence_rule_version: Number(record.evidence_rule_version),
+      status: "REVIEWED",
+      occurred_at: String(record.occurred_at),
+      arcade_activity_id: activityId,
+    };
+  });
+  return {
+    ...event,
+    evidence_references: verifiedEvidence.map((record) => record.evidence_id),
+    payload: {
+      arcade_result_id: resultId,
+      arcade_activity_id: activityId,
+      mastery_achieved: true,
+      source_event_type: "arcade.resulted",
+      source_occurred_at: String(event.occurred_at),
+      verified_evidence: verifiedEvidence,
+    },
+  };
+}
+
 export function buildGovernmentAssuranceTruthDeterminationOutboxEvent(determination: any, handoff: any, correlationId: string): TrustedReportingOutboxEvent {
   const determinationId = String(determination?.determination_id || determination?.determinationId || "").trim();
   const truthFactId = String(determination?.truth_fact_id || determination?.truthFactId || "").trim();

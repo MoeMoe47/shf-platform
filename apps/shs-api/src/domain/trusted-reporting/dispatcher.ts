@@ -1,6 +1,6 @@
 import { IntegrationOutboxRepo } from "./outbox-repo.js";
 import { randomUUID } from "node:crypto";
-import { classifyDeliveryFailure, classifyDeliveryResponse, signInternalRequest } from "./outbox.js";
+import { buildArcadeVerifiedEvidenceTruthHandoff, classifyDeliveryFailure, classifyDeliveryResponse, signInternalRequest } from "./outbox.js";
 import { emitOperationalTelemetry } from "../../observability/operational-telemetry.js";
 import { projectAuthoritativeOutboxEvent, verifiedEvidenceEventSourceTypes } from "../verified-evidence/service/verified-evidence-service.js";
 
@@ -57,14 +57,17 @@ export async function dispatchPendingIntegrationEvents(
       if (Object.prototype.hasOwnProperty.call(verifiedEvidenceEventSourceTypes, event.event_type)) {
         verifiedProjection = await projectAuthoritativeOutboxEvent({ ...event, payload_json: body });
       }
-      const headers = signInternalRequest("POST", "/shf/internal/ingestion/events", body, options.now);
+      const handoffBody = event.event_type === "arcade.resulted"
+        ? buildArcadeVerifiedEvidenceTruthHandoff(body, (verifiedProjection as any)?.verifiedEvidenceRecords || [])
+        : body;
+      const headers = signInternalRequest("POST", "/shf/internal/ingestion/events", handoffBody, options.now);
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), config.requestTimeoutMs);
       let response: DispatcherResponse;
       try { response = await fetchImpl(`${baseUrl}/shf/internal/ingestion/events`, {
         method: "POST",
         headers: { "Content-Type": "application/json", ...headers },
-        body: JSON.stringify(body),
+        body: JSON.stringify(handoffBody),
         signal: controller.signal,
       }); } finally { clearTimeout(timeout); }
       let responseBody: any = null;

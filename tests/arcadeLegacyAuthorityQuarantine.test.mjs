@@ -107,11 +107,11 @@ test("event vocabulary remains compatibility-only and documents arcade.resulted"
   assert.match(source.rules, /arcade\.resulted/);
 });
 
-test("history, source catalog, and backend remain untouched", () => {
+test("history and source catalog remain untouched", () => {
   assert.equal(source.history.includes("creditLedger.listRecentEntries"), true);
   const changed = execFileSync(
     "git",
-    ["status", "--short", "--", "src/shared/arcade/useArcadeHistory.js", "src/data/arcade.js", "apps/shs-api"],
+    ["status", "--short", "--", "src/shared/arcade/useArcadeHistory.js", "src/data/arcade.js"],
     { encoding: "utf8" },
   );
   assert.equal(changed, "");

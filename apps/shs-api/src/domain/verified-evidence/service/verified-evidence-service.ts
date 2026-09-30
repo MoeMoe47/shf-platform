@@ -117,7 +117,7 @@ async function projectAuthoritativeFactInternal(actor: ProjectionActor, input: P
       evidence = result.rows[0] || (await db.query("SELECT * FROM prepare_prove_evidence WHERE organization_id=$1 AND source_type=$2 AND source_record_id=$3 AND evidence_rule_id=$4 AND status <> 'SUPERSEDED'", [actor.organization_id, sourceType, sourceRecordId, evidenceRuleId])).rows[0];
     }
     let truthFact = null;
-    if (configured.truth_fact_type && emitTruthFact) {
+    if (configured.truth_fact_type && emitTruthFact && (sourceType !== "ARCADE_RESULT" || evidence?.status === "REVIEWED")) {
       const truthFactId = `truth_fact_${stableId(actor.organization_id, sourceType, sourceRecordId, configured.truth_fact_type, evidenceRuleId)}`;
       const result = await db.query(`INSERT INTO curriculum_truth_facts
         (truth_fact_id, organization_id, learner_user_id, fact_type, source_type, source_record_id, evidence_id, assignment_id, curriculum_release_id, release_version, course_id, unit_stable_key, lesson_stable_key, definition_id, evidence_rule_id, evidence_rule_version, competency_id, provenance_json, occurred_at)
@@ -187,12 +187,34 @@ export async function projectAuthoritativeOutboxEvent(event: ProjectionOutboxEve
   const learnerId = String(row[source.learner] || "").trim();
   if (!learnerId) { const error: any = new Error("projection_source_learner_missing"); error.status = 503; throw error; }
   const rules = await query("SELECT evidence_rule_id FROM curriculum_evidence_rules WHERE organization_id=$1 AND source_type=$2 AND status='ACTIVE' ORDER BY evidence_rule_id", [event.organization_id, sourceType]);
+  if (sourceType === "ARCADE_RESULT" && rules.rows.length === 0) {
+    const error: any = new Error("arcade_evidence_rule_missing"); error.status = 503; throw error;
+  }
   let projected = 0;
+  const verifiedEvidenceRecords: Array<Record<string, unknown>> = [];
   for (const rule of rules.rows) {
-    await projectAuthoritativeFactInternal({ user_id: learnerId, organization_id: event.organization_id }, { sourceType, sourceRecordId, evidenceRuleId: rule.evidence_rule_id }, sourceType !== "STUDIO_DELIVERY");
+    const projection = await projectAuthoritativeFactInternal({ user_id: learnerId, organization_id: event.organization_id }, { sourceType, sourceRecordId, evidenceRuleId: rule.evidence_rule_id }, sourceType !== "STUDIO_DELIVERY");
+    if (sourceType === "ARCADE_RESULT") {
+      if (!projection.evidence || projection.evidence.status !== "REVIEWED") continue;
+      verifiedEvidenceRecords.push({
+        evidence_id: projection.evidence.evidence_id,
+        organization_id: event.organization_id,
+        source_type: "ARCADE_RESULT",
+        evidence_rule_id: projection.evidence.evidence_rule_id,
+        evidence_rule_version: projection.evidence.evidence_rule_version,
+        status: projection.evidence.status,
+        occurred_at: projection.evidence.source_occurred_at instanceof Date
+          ? projection.evidence.source_occurred_at.toISOString()
+          : String(projection.evidence.source_occurred_at || ""),
+        arcade_activity_id: row.arcade_activity_id,
+      });
+    }
     projected += 1;
   }
-  return { handled: true, projected };
+  if (sourceType === "ARCADE_RESULT" && verifiedEvidenceRecords.length === 0) {
+    const error: any = new Error("arcade_verified_evidence_pending"); error.status = 503; throw error;
+  }
+  return { handled: true, projected, ...(sourceType === "ARCADE_RESULT" ? { verifiedEvidenceRecords } : {}) };
 }
 
 export async function supersedeEvidence(actor: ProjectionActor, evidenceId: string, replacementStatus: "REVIEWABLE" | "REVIEWED" = "REVIEWED") {

@@ -169,25 +169,29 @@ export async function submitResult(actor: ArcadeActor, attemptId: string, input:
       maxScore: activity.maxScore,
       masteryAchieved,
     });
-    await repo.completeAttempt(dbQuery, attemptId);
-    return result;
-  });
-  await outbox.enqueue({
-    producer_id: "curriculum.arcade",
-    event_type: "arcade.resulted",
-    schema_version: "1.0",
-    subject_type: "arcade_result",
-    subject_id: result.id,
-    organization_id: organizationId,
-    originating_actor_id: userId,
-    originating_actor_type: "user",
-    tenant_id: tenantId,
-    occurred_at: result.createdAt,
-    idempotency_key: `arcade.resulted:${result.id}`,
-    correlation_id: `arcade:${result.id}`,
-    payload: { source_record_id: result.id, mastery_achieved: result.masteryAchieved },
-    destination: "shs-verified-evidence",
-  });
+      await repo.completeAttempt(dbQuery, attemptId);
+      await outbox.enqueue({
+        producer_id: "curriculum.arcade",
+        event_type: "arcade.resulted",
+        schema_version: "1.0",
+        subject_type: "arcade_result",
+        subject_id: result.id,
+        organization_id: organizationId,
+        originating_actor_id: userId,
+        originating_actor_type: "user",
+        tenant_id: tenantId,
+        occurred_at: result.createdAt,
+        idempotency_key: `arcade.resulted:${result.id}`,
+        correlation_id: `arcade:${result.id}`,
+        payload: {
+          source_record_id: result.id,
+          arcade_activity_id: result.arcadeActivityId,
+          mastery_achieved: result.masteryAchieved,
+        },
+        destination: "shs-verified-evidence",
+      }, { query: dbQuery });
+      return result;
+    });
   return result;
 }
 

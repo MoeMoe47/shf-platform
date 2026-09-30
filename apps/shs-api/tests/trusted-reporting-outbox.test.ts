@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { CaseService } from "../src/domain/cases/service/case-service.ts";
-import { buildGovernmentAssuranceTruthDeterminationOutboxEvent, buildReferralOutboxEvent, classifyDeliveryFailure } from "../src/domain/trusted-reporting/outbox.ts";
+import { buildArcadeVerifiedEvidenceTruthHandoff, buildGovernmentAssuranceTruthDeterminationOutboxEvent, buildReferralOutboxEvent, classifyDeliveryFailure } from "../src/domain/trusted-reporting/outbox.ts";
 import { dispatchPendingIntegrationEvents } from "../src/domain/trusted-reporting/dispatcher.ts";
 import { runTrustedReportingWorker } from "../src/domain/trusted-reporting/worker.ts";
 import { IntegrationOutboxRepo } from "../src/domain/trusted-reporting/outbox-repo.ts";
@@ -34,6 +34,54 @@ test("referral outbox event is minimized and idempotent", () => {
     payload: { referral_id: "case_123" },
     destination: "agent-fabric",
   });
+});
+
+test("Arcade Truth Spine handoff contains only canonical Result and reviewed Verified Evidence provenance", () => {
+  const event = {
+    producer_id: "curriculum.arcade",
+    event_type: "arcade.resulted",
+    subject_type: "arcade_result",
+    subject_id: "result-1",
+    organization_id: "org-1",
+    originating_actor_id: "learner-1",
+    originating_actor_type: "user",
+    tenant_id: "tenant:org-1",
+    occurred_at: "2026-09-30T12:00:00.000Z",
+    idempotency_key: "arcade.resulted:result-1",
+    correlation_id: "arcade:result-1",
+    payload: { source_record_id: "result-1", arcade_activity_id: "activity-1", mastery_achieved: true, xpDelta: 999 },
+  };
+  const handoff = buildArcadeVerifiedEvidenceTruthHandoff(event, [{
+    evidence_id: "evidence-1",
+    organization_id: "org-1",
+    source_type: "ARCADE_RESULT",
+    evidence_rule_id: "rule-1",
+    evidence_rule_version: 1,
+    status: "REVIEWED",
+    occurred_at: event.occurred_at,
+    arcade_activity_id: "activity-1",
+  }]);
+  assert.deepEqual(handoff.evidence_references, ["evidence-1"]);
+  assert.deepEqual(handoff.payload, {
+    arcade_result_id: "result-1",
+    arcade_activity_id: "activity-1",
+    mastery_achieved: true,
+    source_event_type: "arcade.resulted",
+    source_occurred_at: event.occurred_at,
+    verified_evidence: [{
+      evidence_id: "evidence-1",
+      organization_id: "org-1",
+      source_type: "ARCADE_RESULT",
+      evidence_rule_id: "rule-1",
+      evidence_rule_version: 1,
+      status: "REVIEWED",
+      occurred_at: event.occurred_at,
+      arcade_activity_id: "activity-1",
+    }],
+  });
+  assert.equal("xpDelta" in handoff.payload, false);
+  assert.throws(() => buildArcadeVerifiedEvidenceTruthHandoff(event, []), /evidence_missing/);
+  assert.throws(() => buildArcadeVerifiedEvidenceTruthHandoff(event, [{ evidence_id: "evidence-1", status: "REVIEWABLE" }]), /evidence_invalid/);
 });
 
 test("accepted GPA determinations publish a sanitized idempotent Truth Spine handoff", () => {

@@ -7,7 +7,7 @@ from fastapi import APIRouter, Body, HTTPException, Request
 
 from services.internal_service_identity import authenticate_internal_request
 from services.operational_telemetry import emit_operational_telemetry
-from services.evidence_projection_service import ProjectionError, project_operational_event_to_truth
+from services.evidence_projection_service import ProjectionError, project_operational_event_to_truth, project_verified_arcade_event_to_truth
 from services.internal_ingestion_rate_limit_service import (
     InternalIngestionRateLimitError,
     consume_internal_ingestion_limit,
@@ -78,6 +78,26 @@ def create_internal_operational_event(request: Request, payload: Dict[str, Any] 
             headers={"Retry-After": str(decision.retry_after_seconds)},
             detail={"error": "rate_limited", "retry_after_seconds": decision.retry_after_seconds},
         )
+    event_key = (str(payload.get("producer_id") or "").strip(), str(payload.get("event_type") or "").strip())
+    if event_key == ("curriculum.arcade", "arcade.resulted"):
+        try:
+            # This branch projects directly instead of storing an operational event;
+            # enforce the same canonical event contract at this trust boundary.
+            validate_operational_event(payload or {}, actor)
+            result = project_verified_arcade_event_to_truth(payload, actor)
+        except OperationalEventError as exc:
+            raise HTTPException(status_code=422, detail={"error": exc.reason, **exc.detail}) from exc
+        except ProjectionError as exc:
+            raise HTTPException(status_code=503 if exc.retryable else exc.status_code, detail={"error": exc.reason, "retryable": exc.retryable}) from exc
+        return {
+            "ok": True,
+            "principal_type": principal.principal_type,
+            "event": {"event_id": result["projection"]["truth_claim_id"]},
+            "projection": result["projection"],
+            "event_idempotent_replay": bool(result.get("idempotent_replay")),
+            "projection_idempotent_replay": bool(result.get("idempotent_replay")),
+            "idempotent_replay": bool(result.get("idempotent_replay")),
+        }
     try:
         result = ingest_operational_event(payload or {}, actor, correlation_id=payload.get("correlation_id"))
     except OperationalEventError as exc:

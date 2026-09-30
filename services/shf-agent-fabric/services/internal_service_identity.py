@@ -22,6 +22,7 @@ ALLOWED_SERVICE_EVENTS = {
     ("shs.exchange", "funding_commitment.committed"),
     ("shf.workforce", "employment_started.verified"),
     ("shs.government_assurance", "government_assurance.truth_determination.accepted"),
+    ("curriculum.arcade", "arcade.resulted"),
 }
 
 

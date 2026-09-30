@@ -195,16 +195,18 @@ export async function submitResult(actor: ArcadeActor, attemptId: string, input:
   return result;
 }
 
-export async function listResultsForActor(actor: ArcadeActor): Promise<ArcadeResult[]> {
+export async function listResultsForActor(actor: ArcadeActor, requestedLimit = 50, requestedOffset = 0) {
   const { organizationId, userId } = scope(actor);
+  const limit = Number.isFinite(requestedLimit) ? Math.min(100, Math.max(1, Math.trunc(requestedLimit))) : 50;
+  const offset = Number.isFinite(requestedOffset) ? Math.max(0, Math.trunc(requestedOffset)) : 0;
   if (isAdminTier(actor.roles)) {
     if (!hasPermission(actor.permissions, SHS_SECURITY_PERMISSIONS.ARCADE_RESULTS_VIEW)) {
       throw new ArcadeError("FORBIDDEN", "Missing arcade.results.view permission.", 403);
     }
-    return repo.listResultsForOrganization(organizationId);
+    return repo.listHistoryForOrganization(organizationId, limit, offset);
   }
   if (!hasPermission(actor.permissions, SHS_SECURITY_PERMISSIONS.ARCADE_ATTEMPT)) {
     throw new ArcadeError("FORBIDDEN", "Missing arcade.attempt permission.", 403);
   }
-  return repo.listResultsForLearner(organizationId, userId);
+  return repo.listHistoryForLearner(organizationId, userId, limit, offset);
 }

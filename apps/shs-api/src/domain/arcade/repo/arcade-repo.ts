@@ -54,6 +54,32 @@ function rowToResult(row: any): ArcadeResult {
   };
 }
 
+function rowToHistoryItem(row: any) {
+  const completedAt = row.created_at instanceof Date ? row.created_at.toISOString() : row.created_at;
+  const attemptStartedAt = row.attempt_started_at instanceof Date ? row.attempt_started_at.toISOString() : row.attempt_started_at;
+  return {
+    resultId: row.arcade_result_id,
+    attemptId: row.arcade_attempt_id,
+    activityId: row.arcade_activity_id,
+    activitySlug: row.activity_slug,
+    activityTitle: row.activity_title,
+    learnerId: row.learner_user_id,
+    organizationId: row.organization_id,
+    attemptStartedAt,
+    completedAt,
+    score: row.score === null ? null : Number(row.score),
+    maxScore: row.max_score === null ? null : Number(row.max_score),
+    passed: row.passed,
+    masteryAchieved: row.mastery_achieved,
+    // Preserve the established /arcade/results Result field names for API callers.
+    id: row.arcade_result_id,
+    arcadeAttemptId: row.arcade_attempt_id,
+    arcadeActivityId: row.arcade_activity_id,
+    learnerUserId: row.learner_user_id,
+    createdAt: completedAt,
+  };
+}
+
 export class ArcadeRepo {
   async createActivity(input: {
     id: string; slug: string; title: string; activityType: string; lessonId: string | null;
@@ -142,6 +168,46 @@ export class ArcadeRepo {
   async listResultsForOrganization(organizationId: string): Promise<ArcadeResult[]> {
     const res = await query(`SELECT ${RESULT_COLUMNS} FROM arcade_results WHERE organization_id=$1 ORDER BY created_at DESC`, [organizationId]);
     return res.rows.map(rowToResult);
+  }
+
+  async listHistoryForLearner(organizationId: string, learnerUserId: string, limit: number, offset: number) {
+    const res = await query(
+      `SELECT r.arcade_result_id, r.arcade_attempt_id, r.arcade_activity_id,
+              r.learner_user_id, r.organization_id, r.passed, r.score,
+              r.max_score, r.mastery_achieved, r.created_at,
+              a.slug AS activity_slug, a.title AS activity_title,
+              t.started_at AS attempt_started_at
+       FROM arcade_results r
+       JOIN arcade_activities a ON a.arcade_activity_id = r.arcade_activity_id
+       JOIN arcade_attempts t ON t.arcade_attempt_id = r.arcade_attempt_id
+       WHERE r.organization_id=$1 AND r.learner_user_id=$2
+       ORDER BY r.created_at DESC, r.arcade_result_id DESC
+       LIMIT $3 OFFSET $4`,
+      [organizationId, learnerUserId, limit + 1, offset],
+    );
+    const hasMore = res.rows.length > limit;
+    const items = res.rows.slice(0, limit).map(rowToHistoryItem);
+    return { items, hasMore };
+  }
+
+  async listHistoryForOrganization(organizationId: string, limit: number, offset: number) {
+    const res = await query(
+      `SELECT r.arcade_result_id, r.arcade_attempt_id, r.arcade_activity_id,
+              r.learner_user_id, r.organization_id, r.passed, r.score,
+              r.max_score, r.mastery_achieved, r.created_at,
+              a.slug AS activity_slug, a.title AS activity_title,
+              t.started_at AS attempt_started_at
+       FROM arcade_results r
+       JOIN arcade_activities a ON a.arcade_activity_id = r.arcade_activity_id
+       JOIN arcade_attempts t ON t.arcade_attempt_id = r.arcade_attempt_id
+       WHERE r.organization_id=$1
+       ORDER BY r.created_at DESC, r.arcade_result_id DESC
+       LIMIT $2 OFFSET $3`,
+      [organizationId, limit + 1, offset],
+    );
+    const hasMore = res.rows.length > limit;
+    const items = res.rows.slice(0, limit).map(rowToHistoryItem);
+    return { items, hasMore };
   }
 
   // The one real, deterministic Journey/Celebration signal: has this

@@ -95,7 +95,13 @@ export function registerArcadeRoutes(app: any) {
 
   app.get("/arcade/results", requireAnyPermission(SHS_SECURITY_PERMISSIONS.ARCADE_ATTEMPT, SHS_SECURITY_PERMISSIONS.ARCADE_RESULTS_VIEW), async (req: any, res: any, next: any) => {
     try {
-      return res.json(ok({ items: await service.listResultsForActor(actorFromRequest(req)) }));
+      const limit = Number(req.query?.limit ?? 50);
+      const offset = Number(req.query?.offset ?? 0);
+      if (!Number.isInteger(limit) || limit < 1 || limit > 100 || !Number.isInteger(offset) || offset < 0) {
+        return res.status(400).json(fail("INVALID_PAGINATION", "limit must be 1-100 and offset must be a non-negative integer."));
+      }
+      const page = await service.listResultsForActor(actorFromRequest(req), limit, offset);
+      return res.json(ok({ ...page, limit, offset, nextOffset: page.hasMore ? offset + page.items.length : null }));
     } catch (error) {
       return sendArcadeError(error, res, next);
     }

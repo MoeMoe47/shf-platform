@@ -48,18 +48,19 @@ test("normalized public events isolate legacy outcome metadata", () => {
   }
 });
 
-test("routed History page uses bounded copy and exports no legacy outcome values", () => {
+test("routed History page uses canonical result copy and exports no legacy outcome values", () => {
   assert.match(routes, /import History from "@\/pages\/arcade\/History\.jsx"/);
   assert.match(routes, /path="\/history"[\s\S]*?<History\s*\/>/);
   assert.match(history, /<h1[^>]*>Arcade History<\/h1>/);
-  assert.match(history, /Legacy activity history/);
-  assert.match(history, /Verified outcomes are recorded by the canonical Arcade Result, Verified Evidence, and Truth Spine systems/);
+  assert.match(history, /canonical Arcade Result system/);
+  assert.match(history, /useCanonicalArcadeHistory/);
+  assert.doesNotMatch(history, /useArcadeHistory/);
   for (const claim of [/XP earned/i, /XP Awarded/i, /Polygon-verified/i, /on-chain proof/i, /funder-ready/i, /reward proof/i, /Arcade Impact/i, /institutional impact/i]) {
     assert.doesNotMatch(history, claim);
   }
-  assert.match(history, /Download CSV \(Arcade History\)/);
-  const headers = history.match(/const headers = \[([\s\S]*?)\];/)?.[1] || "";
-  for (const column of ["timestamp", "userId", "userName", "eventType", "gameId", "gameTitle", "cohort", "location", "device", "selTags", "workforceTags", "source", "authoritative"]) {
+  assert.match(history, /Download CSV \(Canonical Arcade History\)/);
+  const headers = history.match(/const fields = \[([\s\S]*?)\];/)?.[1] || "";
+  for (const column of ["resultId", "attemptId", "activityId", "activitySlug", "activityTitle", "completedAt", "score", "maxScore", "passed", "masteryAchieved"]) {
     assert.match(headers, new RegExp(`"${column}"`));
   }
   assert.doesNotMatch(headers, /xpDelta|evuDelta|creditsDelta|onChain|txHash/);
@@ -89,7 +90,7 @@ test("Northstar uses the compatibility badge constant and bounded dev copy", () 
   assert.match(northstar, /No institutional outcome is recorded/);
 });
 
-test("Phase 2D authority and canonical backend files remain untouched", () => {
-  const status = execFileSync("git", ["status", "--short", "--", "apps/shs-api", "services/shf-agent-fabric", "apps/shs-api/migrations", "src/data/arcade.js"], { encoding: "utf8" });
+test("frozen verification authorities, migrations, and legacy catalog remain untouched", () => {
+  const status = execFileSync("git", ["status", "--short", "--", "services/shf-agent-fabric", "apps/shs-api/src/domain/verified-evidence", "apps/shs-api/src/domain/trusted-reporting", "apps/shs-api/migrations", "src/data/arcade.js"], { encoding: "utf8" });
   assert.equal(status, "");
 });

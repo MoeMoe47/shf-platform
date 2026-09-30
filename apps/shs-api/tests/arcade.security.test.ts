@@ -308,3 +308,53 @@ test("a student's own results view never includes another learner's results", as
   const view = await api("/arcade/results", { userId: "user_student_001" });
   assert.ok(view.json.data.items.every((r: any) => r.learnerUserId === "user_student_001"));
 });
+
+test("canonical history is bounded, newest-first, joined to Activity/Attempt, and contains only Result truth", async () => {
+  const activity = await createScoreActivity("history-dto");
+  const olderAttempt = await startAttempt("user_student_001", activity.json.data.id);
+  const older = await api(`/arcade/attempts/${olderAttempt.json.data.id}/result`, { method: "POST", userId: "user_student_001", body: { score: 4 } });
+  const newerAttempt = await startAttempt("user_student_001", activity.json.data.id);
+  const newer = await api(`/arcade/attempts/${newerAttempt.json.data.id}/result`, { method: "POST", userId: "user_student_001", body: { score: 9 } });
+
+  const firstPage = await api("/arcade/results?limit=1&offset=0", { userId: "user_student_001" });
+  assert.equal(firstPage.status, 200);
+  assert.equal(firstPage.json.data.items.length, 1);
+  assert.equal(firstPage.json.data.items[0].resultId, newer.json.data.id);
+  assert.equal(firstPage.json.data.items[0].attemptId, newerAttempt.json.data.id);
+  assert.equal(firstPage.json.data.items[0].activityId, activity.json.data.id);
+  assert.equal(firstPage.json.data.items[0].activitySlug, activity.json.data.slug);
+  assert.equal(firstPage.json.data.items[0].activityTitle, activity.json.data.title);
+  assert.equal(firstPage.json.data.items[0].masteryAchieved, true);
+  assert.equal(firstPage.json.data.hasMore, true);
+  assert.equal(firstPage.json.data.nextOffset, 1);
+  assert.equal("xp" in firstPage.json.data.items[0], false);
+  assert.equal("evu" in firstPage.json.data.items[0], false);
+  assert.equal("credits" in firstPage.json.data.items[0], false);
+  assert.equal("polygon" in firstPage.json.data.items[0], false);
+
+  const secondPage = await api("/arcade/results?limit=1&offset=1", { userId: "user_student_001" });
+  assert.deepEqual(secondPage.json.data.items.map((item: any) => item.resultId), [older.json.data.id]);
+});
+
+test("history pagination rejects unbounded or malformed client limits", async () => {
+  const oversized = await api("/arcade/results?limit=101", { userId: "user_student_001" });
+  assert.equal(oversized.status, 400);
+  assert.equal(oversized.json.error.code, "INVALID_PAGINATION");
+  const negativeOffset = await api("/arcade/results?offset=-1", { userId: "user_student_001" });
+  assert.equal(negativeOffset.status, 400);
+});
+
+test("canonical history is isolated to the authenticated active organization", async () => {
+  const activity = await createFlagActivity("history-org-scope");
+  const shfAttempt = await startAttempt("user_student_001", activity.json.data.id);
+  await api(`/arcade/attempts/${shfAttempt.json.data.id}/result`, { method: "POST", userId: "user_student_001", body: { passed: true } });
+  const partnerAttempt = await startAttempt("user_partner_student_001", activity.json.data.id);
+  const partnerResult = await api(`/arcade/attempts/${partnerAttempt.json.data.id}/result`, { method: "POST", userId: "user_partner_student_001", body: { passed: true } });
+  assert.equal(partnerResult.status, 201);
+
+  const shfHistory = await api("/arcade/results", { userId: "user_student_001" });
+  const partnerHistory = await api("/arcade/results", { userId: "user_partner_student_001" });
+  assert.ok(shfHistory.json.data.items.every((item: any) => item.organizationId === "org_shf_001"));
+  assert.ok(partnerHistory.json.data.items.every((item: any) => item.organizationId === "org_partner_001"));
+  assert.ok(partnerHistory.json.data.items.some((item: any) => item.resultId === partnerResult.json.data.id));
+});

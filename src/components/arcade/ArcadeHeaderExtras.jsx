@@ -21,10 +21,10 @@ import ArcadeThemeSwitch from "./ArcadeThemeSwitch.jsx";
 import NotificationBell from "@/components/shared/notifications/NotificationBell.jsx";
 
 const DESTINATIONS = [
-  { to: "/dashboard", label: "Learning Arcade Home" },
-  { to: "/classical-arcade", label: "Classical Arcade Room" },
-  { to: "/games", label: "Explore Games" },
-  { to: "/leaderboard", label: "Leaderboard" },
+  { to: "/learning", label: "Learning Arcade Home" },
+  { to: "/classic", label: "Classical Arcade Room" },
+  { to: "/learning/library", label: "Explore Games" },
+  { to: "/leaderboards", label: "Leaderboard" },
   { to: "/rewards", label: "Rewards Wallet" },
   { to: "/tournaments", label: "Tournaments" },
   { to: "/history", label: "Arcade Impact History" },

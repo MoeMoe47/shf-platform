@@ -74,7 +74,7 @@ export default function ArcadeActivitySummary({ headingId, title, variant = "hom
       </p>
 
       <div className="ar-activityLinks">
-        <Link className="ar-activityLink" to="/leaderboard">Leaderboard <span aria-hidden="true">→</span></Link>
+        <Link className="ar-activityLink" to="/leaderboards">Leaderboard <span aria-hidden="true">→</span></Link>
         <Link className="ar-activityLink" to="/history">Game History <span aria-hidden="true">→</span></Link>
         <Link className="ar-activityLink" to="/rewards">Rewards Wallet <span aria-hidden="true">→</span></Link>
       </div>

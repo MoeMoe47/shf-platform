@@ -31,7 +31,7 @@ export default function ArcadeHeader({ mobileMenuOpen, onToggleMobileMenu, mobil
         <span className="ar-mobileMenuBar" aria-hidden="true" />
       </button>
 
-      <a className="ar-headerBrand" href="/arcade.html#/dashboard" aria-label="Learning Arcade Home">
+      <a className="ar-headerBrand" href="/arcade.html#/learning" aria-label="Learning Arcade Home">
         LEARNING ARCADE
       </a>
 

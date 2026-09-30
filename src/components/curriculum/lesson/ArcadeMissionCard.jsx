@@ -8,7 +8,7 @@
 // which would misrepresent a specific mission as launched. Per the guided
 // experience's "fail safely, never invent a working route" rule, every
 // launch action here goes to the real, working Arcade entry point
-// instead (src/router/paths.js's href.arcade("/games")), while still
+// instead (src/router/paths.js's href.arcade("/learning/library")), while still
 // showing the game's own real title/time/XP/outcomes from lesson data.
 // No Attempt or Result is created here — Arcade's own backend/local state
 // is untouched.
@@ -43,7 +43,7 @@ export default function ArcadeMissionCard({ games, suggestedGames }) {
                 {game.outcomes.map((o, i) => <li key={i}>{o}</li>)}
               </ul>
             )}
-            <a className="ld-btnGhost" href={href.arcade("/games")}>
+            <a className="ld-btnGhost" href={href.arcade("/learning/library")}>
               <PlayIcon size={15} /> Open in Arcade
             </a>
           </div>
@@ -58,7 +58,7 @@ export default function ArcadeMissionCard({ games, suggestedGames }) {
           <ul className="ld-arcadeSuggestedList">
             {suggestedGames.map((g, i) => <li key={i}>{g}</li>)}
           </ul>
-          <a className="ld-btnGhost" style={{ marginTop: 12 }} href={href.arcade("/games")}>
+          <a className="ld-btnGhost" style={{ marginTop: 12 }} href={href.arcade("/learning/library")}>
             <PlayIcon size={15} /> Open in Arcade
           </a>
         </div>

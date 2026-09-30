@@ -18,7 +18,7 @@ import { useLocation } from "react-router-dom";
 import AppLink from "@/components/nav/AppLink.jsx";
 import ArcadeInfoDialog from "./ArcadeInfoDialog.jsx";
 
-const PLAY_ROUTES = new Set(["/dashboard", "/classical-arcade"]);
+const PLAY_ROUTES = new Set(["/learning", "/classic"]);
 
 const FUTURE_TABS = [
   {
@@ -56,14 +56,14 @@ export default function ArcadeTopNav() {
   // `disabled`, and still exposes the same information — just via a
   // visually-hidden span here instead of a visible badge, so it doesn't
   // compete with the approved compact composition.
-  const hideComingSoonBadge = location.pathname === "/classical-arcade";
+  const hideComingSoonBadge = location.pathname === "/classic";
 
   return (
     <nav className="ar-topNav" aria-label="Arcade sections">
       <ul className="ar-topNavList">
         <li>
           <AppLink
-            to="/dashboard"
+            to="/learning"
             className={`ar-topNavTab${playActive ? " is-active" : ""}`}
             aria-current={playActive ? "page" : undefined}
           >

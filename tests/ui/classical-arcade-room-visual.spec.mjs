@@ -24,7 +24,7 @@
 //     for the broader capability suite, unchanged and still passing.
 import { test, expect } from "@playwright/test";
 
-const BASE = "http://localhost:5173/arcade.html#/classical-arcade";
+const BASE = "http://localhost:5173/arcade.html#/classic";
 
 async function setTheme(page, theme) {
   await page.evaluate((t) => localStorage.setItem("arcade:ui:theme", t), theme);
@@ -417,7 +417,7 @@ test.describe("G. Capability preservation", () => {
   test("Start Free Play still navigates to the real Games route", async ({ page }) => {
     await page.goto(BASE, { waitUntil: "networkidle" });
     await page.getByRole("button", { name: "Start Free Play" }).click();
-    await expect.poll(() => page.evaluate(() => window.location.hash)).toBe("#/games");
+    await expect.poll(() => page.evaluate(() => window.location.hash)).toBe("#/learning/library");
   });
 
   test("Your Arcade Activity reads real XP/history data, not a hardcoded fixture", async ({ page }) => {

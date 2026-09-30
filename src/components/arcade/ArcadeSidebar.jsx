@@ -46,7 +46,7 @@ import { useArcadeHistory } from "@/shared/arcade/useArcadeHistory.js";
 const PRIMARY_ITEMS = [
   { kind: "cross", href: "/career.html#/dashboard", icon: "🏠", label: "Dashboard" },
   { kind: "cross", href: "/career.html#/learn", icon: "📚", label: "Learn" },
-  { kind: "in", to: "/dashboard", icon: "🕹️", label: "Arcade", alwaysActive: true },
+  { kind: "in", to: "/learning", icon: "🕹️", label: "Arcade", alwaysActive: true },
   { kind: "cross", href: "/career.html#/portfolio", icon: "📁", label: "Portfolio" },
   { kind: "cross", href: "/career.html#/portfolio", icon: "🎓", label: "Credentials" },
 ];

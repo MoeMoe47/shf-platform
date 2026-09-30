@@ -69,7 +69,7 @@ function HeroSection() {
           build your own AI agent games as new capabilities come online.
         </p>
         <div className="ar-hero__actions">
-          <button type="button" className="ar-btn ar-btn--primary" onClick={() => navigate("/games")}>
+          <button type="button" className="ar-btn ar-btn--primary" onClick={() => navigate("/learning/library")}>
             Explore Games
           </button>
           <InfoTriggerButton label="Open Creator Studio" onOpen={() => setStudioOpen(true)} triggerRef={studioBtnRef} />
@@ -295,7 +295,7 @@ function ClassicalArcadeRoomCard() {
         </h2>
         <p className="ar-roomEntry__sub">Classic games. Timeless fun. Level up your skills.</p>
       </div>
-      <Link className="ar-btn ar-btn--primary" to="/classical-arcade">Enter Arcade</Link>
+      <Link className="ar-btn ar-btn--primary" to="/classic">Enter Arcade</Link>
     </section>
   );
 }

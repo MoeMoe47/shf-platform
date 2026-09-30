@@ -88,7 +88,7 @@ function RoomControls() {
 
   return (
     <div className="ar-roomControls">
-      <button type="button" className="ar-btn ar-btn--primary" onClick={() => navigate("/games")}>
+      <button type="button" className="ar-btn ar-btn--primary" onClick={() => navigate("/learning/library")}>
         Start Free Play
       </button>
       <InfoTriggerButton label="How the Arcade Works" onOpen={() => setHowOpen(true)} triggerRef={howBtnRef} />
@@ -153,7 +153,7 @@ function RoomHero() {
 function AppLinkBreadcrumb() {
   return (
     <ol className="ar-roomBreadcrumb__list">
-      <li><a href="/arcade.html#/dashboard">Arcade</a></li>
+      <li><a href="/arcade.html#/learning">Arcade</a></li>
       <li aria-hidden="true">/</li>
       <li aria-current="page">Classical Arcade Room</li>
     </ol>
@@ -180,7 +180,7 @@ function FeaturedCabinetSection() {
             {d.skills.map((s) => <li key={s} className="ar-pill">{s}</li>)}
           </ul>
           <div className="ar-linkRow">
-            <button type="button" className="ar-btn ar-btn--primary" onClick={() => navigate("/games")}>Play Now</button>
+            <button type="button" className="ar-btn ar-btn--primary" onClick={() => navigate("/learning/library")}>Play Now</button>
             <InfoTriggerButton label="See How It Was Built" onOpen={() => setHowBuiltOpen(true)} triggerRef={howBuiltBtnRef} />
           </div>
         </div>
@@ -224,7 +224,7 @@ function ArcadeModeSection() {
             ref={(el) => { triggerRefs.current[m.key] = el; }}
             className={`ar-roomModeCard ar-roomModeCard--${m.accent}${m.key === "free" ? " is-active" : ""}`}
             aria-describedby={m.real ? undefined : `ar-mode-${m.key}-status`}
-            onClick={() => (m.real ? navigate("/games") : setOpenMode(m.key))}
+            onClick={() => (m.real ? navigate("/learning/library") : setOpenMode(m.key))}
           >
             <span className="ar-roomModeCard__icon" aria-hidden="true" />
             <span className="ar-roomModeCard__text">
@@ -257,7 +257,7 @@ function HallOfFameSection() {
     <section className="ar-card ar-section ar-roomItem ar-roomItem--hof" aria-labelledby="ar-hof-title">
       <div className="ar-section__head">
         <h2 id="ar-hof-title" className="ar-section__title">4. Student Hall of Fame</h2>
-        <Link className="ar-note ar-note--link" to="/leaderboard">View All →</Link>
+        <Link className="ar-note ar-note--link" to="/leaderboards">View All →</Link>
       </div>
       <p className="ar-muted ar-srOnly">Privacy-safe fictional display names only.</p>
       <ol className="ar-hofList">
@@ -475,7 +475,7 @@ function TurnPlayIntoProgressSection() {
         <h2 id="ar-progress-title" className="ar-section__title">7. Turn Play Into Progress</h2>
       </div>
       <ol className="ar-stageRow">
-        <li><button type="button" className="ar-stageBtn is-active" onClick={() => navigate("/games")}>Play</button></li>
+        <li><button type="button" className="ar-stageBtn is-active" onClick={() => navigate("/learning/library")}>Play</button></li>
         <li><a className="ar-stageBtn" href="/career.html#/learn">Learn</a></li>
         {FUTURE_STAGES.map((s) => (
           <li key={s.key}>
@@ -492,7 +492,7 @@ function TurnPlayIntoProgressSection() {
           </li>
         ))}
       </ol>
-      <Link className="ar-btn ar-btn--ghost ar-btn--block" to="/dashboard">View Creator Pathway</Link>
+      <Link className="ar-btn ar-btn--ghost ar-btn--block" to="/learning">View Creator Pathway</Link>
 
       {FUTURE_STAGES.map((s) => (
         <ArcadeInfoDialog
@@ -523,7 +523,7 @@ function ContentNoticeSection() {
         <li className="ar-pill ar-pill--green">Educational</li>
         <li className="ar-pill ar-pill--green">Approved by Instructors</li>
       </ul>
-      <a className="ar-note ar-note--link" href="/help">Report an Issue</a>
+      <a className="ar-note ar-note--link" href="/arcade.html#/help">Report an Issue</a>
     </div>
   );
 }

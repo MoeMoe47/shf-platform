@@ -93,7 +93,7 @@ export default function Leaderboard() {
           <h1 style={S.title}>{icon} Leaderboard — {title}</h1>
           <p style={S.sub}><span style={S.pill}>Game key: {gameKey}</span></p>
         </div>
-        <Link to="/arcade" style={S.btn}>← Back to Arcade</Link>
+        <Link to="/learning" style={S.btn}>← Back to Arcade</Link>
       </div>
 
       <form onSubmit={submit} style={S.form}>

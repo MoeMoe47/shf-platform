@@ -3,6 +3,7 @@ import { requirePermission } from "../../../auth/permission-guard.js";
 import { SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
 import * as service from "../service/arcade-service.js";
 import { ArcadeError } from "../service/arcade-service.js";
+import { registerArcadeRuntimeRoutes } from "./runtime-routes.js";
 
 function actorFromRequest(req: any) {
   return {
@@ -39,6 +40,7 @@ function requireAnyPermission(...permissions: string[]) {
 }
 
 export function registerArcadeRoutes(app: any) {
+  registerArcadeRuntimeRoutes(app);
   // Global reference data — no permission gate, mirrors GET /careers.
   app.get("/arcade/activities", async (_req: any, res: any, next: any) => {
     try {

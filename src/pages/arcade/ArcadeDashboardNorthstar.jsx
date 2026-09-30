@@ -21,7 +21,7 @@ export default function ArcadeDashboardNorthstar() {
         <div>
           <h1 className="db-title">Arcade — Northstar</h1>
           <p className="db-subtitle">
-            Core KPIs across XP, EVU, rewards, and Polygon-verified cohorts.
+            Development scaffold for future Arcade reporting; no institutional metrics are connected here.
           </p>
         </div>
 
@@ -36,14 +36,12 @@ export default function ArcadeDashboardNorthstar() {
       {/* Northstar content scaffold */}
       <div className="card card--pad">
         <p>
-          This Northstar view is where you’ll surface high-level arcade KPIs:
-          <strong> sessions per cohort</strong>, <strong>XP to EVU flow</strong>,
-          and <strong>on-chain engagement</strong> across sites.
+          This Northstar view is a planning scaffold. Any future institutional
+          reporting must use records from their canonical authorities.
         </p>
         <p style={{ marginTop: "0.75rem" }}>
-          As you wire more data into the ledger, this page becomes your
-          funding-facing snapshot for board decks, grant reports, and partner
-          updates.
+          Legacy browser history and event metadata do not establish impact,
+          rewards, verified skills, or institutional truth.
         </p>
       </div>
 
@@ -136,7 +134,7 @@ function DevArcadeTestPanelNorthstar() {
     );
 
   const handleBadgeClaim = () =>
-    fire("Northstar Badge Claim (Dev Student C)", ARCADE_EVENTS.BADGE_CLAIM, {
+    fire("Northstar Badge Claim (Dev Student C)", ARCADE_EVENTS.BADGE_CLAIMED, {
       userId: "ns-dev-student-c",
       userName: "NS Dev Student C",
       gameId: "debt-hunter",

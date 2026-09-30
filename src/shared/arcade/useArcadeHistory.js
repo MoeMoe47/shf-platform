@@ -1,6 +1,6 @@
 // src/shared/arcade/useArcadeHistory.js
 // ------------------------------------------------------------
-// SHF Arcade – useArcadeHistory
+// Legacy/local compatibility history only; this is not canonical Arcade truth.
 // ------------------------------------------------------------
 
 import React from "react";
@@ -8,8 +8,14 @@ import * as creditLedger from "@/utils/creditLedger.js";
 import { arcadeGames } from "@/data/arcade.js";
 import { getArcadeEventRule } from "./arcadeRules.js";
 
-const LIMIT = 200; // keep a decent window for funder views
+const LIMIT = 200;
 
+/**
+ * Reads historical frontend-era rows for compatibility and forensic review.
+ * These rows are not canonical Arcade Results, Verified Evidence records,
+ * Treasury records, Truth Spine facts, or proof of mastery, credentials, or
+ * institutional blockchain proof.
+ */
 export function useArcadeHistory() {
   const [events, setEvents] = React.useState([]);
   const [summary, setSummary] = React.useState(null);
@@ -72,7 +78,7 @@ export function useArcadeHistory() {
   return { events, summary, loading, error };
 }
 
-function normalizeArcadeEntry(raw) {
+export function normalizeArcadeEntry(raw) {
   if (!raw || typeof raw !== "object") return null;
 
   const {
@@ -118,26 +124,26 @@ function normalizeArcadeEntry(raw) {
     gameMeta?.title ||
     null;
 
-  const xpChange =
+  const legacyXpDelta =
     xpDelta ??
     xp ??
     deltaXp ??
     meta.xpDelta ??
-    0;
+    null;
 
-  const evuChange =
+  const legacyEvuDelta =
     evuDelta ??
     evu ??
     deltaEvu ??
     meta.evuDelta ??
-    0;
+    null;
 
-  const creditsChange =
+  const legacyCreditsDelta =
     creditsDelta ??
     creditDelta ??
     credits ??
     meta.creditsDelta ??
-    0;
+    null;
 
   const userId = rawUserId || user?.id || meta.userId || null;
   const userName =
@@ -147,15 +153,15 @@ function normalizeArcadeEntry(raw) {
     meta.userName ||
     null;
 
-  const onChain =
+  const legacyOnChain =
     raw.onChain ??
     meta.onChain ??
     ruleMeta.onChain ??
     polygon.onChain ??
     rule?.onChain ??
-    false;
+    null;
 
-  const txHash =
+  const legacyTxHash =
     rawTxHash ||
     meta.txHash ||
     polygon.txHash ||
@@ -194,42 +200,37 @@ function normalizeArcadeEntry(raw) {
     eventType: eventLabel,
     gameId,
     gameTitle,
-    xpDelta: Number.isFinite(Number(xpChange)) ? Number(xpChange) : 0,
-    evuDelta: Number.isFinite(Number(evuChange)) ? Number(evuChange) : 0,
-    creditsDelta: Number.isFinite(Number(creditsChange))
-      ? Number(creditsChange)
-      : 0,
-    onChain: Boolean(onChain),
-    txHash,
     cohort,
     location,
     device,
     selTags,
     workforceTags,
+    source: "legacy_local_history",
+    authoritative: false,
+    legacyOutcomeMetadata: {
+      xpDelta: legacyXpDelta ?? null,
+      evuDelta: legacyEvuDelta ?? null,
+      creditsDelta: legacyCreditsDelta ?? null,
+      onChain: legacyOnChain ?? null,
+      txHash: legacyTxHash ?? null,
+    },
   };
 }
 
-function buildSummary(events) {
-  if (!Array.isArray(events) || !events.length) {
-    return {
-      totalSessions: 0,
-      totalXp: 0,
-      onChainCount: 0,
-    };
-  }
-
-  let totalSessions = events.length;
-  let totalXp = 0;
-  let onChainCount = 0;
-
-  for (const evt of events) {
-    if (typeof evt.xpDelta === "number") totalXp += evt.xpDelta;
-    if (evt.onChain) onChainCount += 1;
-  }
-
+export function buildSummary(events) {
+  const rows = Array.isArray(events) ? events : [];
+  const timestamps = rows
+    .map((event) => event.timestamp)
+    .filter((timestamp) => timestamp && !Number.isNaN(new Date(timestamp).getTime()))
+    .map((timestamp) => new Date(timestamp).toISOString())
+    .sort();
   return {
-    totalSessions,
-    totalXp,
-    onChainCount,
+    totalEntries: rows.length,
+    totalSessions: rows.length,
+    distinctGames: new Set(rows.map((event) => event.gameId).filter(Boolean)).size,
+    distinctEventTypes: new Set(rows.map((event) => event.eventType).filter(Boolean)).size,
+    latestTimestamp: timestamps.at(-1) || null,
+    source: "legacy_local_history",
+    authoritative: false,
   };
 }

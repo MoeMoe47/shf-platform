@@ -1,7 +1,6 @@
 // src/components/arcade/ArcadeSidebar.jsx
-// Full Learning Arcade sidebar, matching the approved mock's authoritative
-// desktop geometry: SHF logo header, a primary nav list, a real-data
-// Rewards Wallet stat card, a static SHF Pledge card, and Help & Safety /
+// Full Learning Arcade sidebar, matching the approved mock's desktop
+// geometry: SHF logo header, primary nav, Rewards card, SHF Pledge card, and Help & Safety /
 // Sign Out pinned near the bottom. Rendered inside ArcadeAppShell (this
 // app's own dedicated shell, not AppShellLayout — see
 // src/layouts/arcade/ArcadeAppShell.jsx) — collapse/expand state, the
@@ -28,11 +27,7 @@
 //  - Credentials -> career.html#/portfolio (Credentials has no separate
 //                    route anywhere in this codebase — same honest choice
 //                    CareerSidebar.jsx already made for the same reason)
-//  - Rewards Wallet card -> /rewards (real route). XP shown is real
-//                    (useArcadeHistory — the same hook History.jsx uses),
-//                    not a fixture. "Level" is a real, deterministic
-//                    function of that real XP (see levelFromXp below), not
-//                    sample data, so it needs no "Demo preview" label.
+//  - Rewards card -> /rewards (real route); the rewards system owns its values.
 //  - SHF Pledge card -> foundation.html (real, existing SHF Foundation app)
 //  - Help & Safety  -> /help (real, existing route)
 //  - Sign Out       -> opens an informational dialog (no AuthProvider is
@@ -41,7 +36,6 @@
 import React, { useRef, useState } from "react";
 import AppLink from "@/components/nav/AppLink.jsx";
 import ArcadeInfoDialog from "./ArcadeInfoDialog.jsx";
-import { useArcadeHistory } from "@/shared/arcade/useArcadeHistory.js";
 
 const PRIMARY_ITEMS = [
   { kind: "cross", href: "/career.html#/dashboard", icon: "🏠", label: "Dashboard" },
@@ -50,18 +44,6 @@ const PRIMARY_ITEMS = [
   { kind: "cross", href: "/career.html#/portfolio", icon: "📁", label: "Portfolio" },
   { kind: "cross", href: "/career.html#/portfolio", icon: "🎓", label: "Credentials" },
 ];
-
-// XP thresholds for each level — a simple, real, deterministic function of
-// the real XP total (not sample data). 350 XP per level, matching the
-// mock's shown ratio (2,450 XP ≈ mid Level 7).
-function levelFromXp(xp) {
-  const XP_PER_LEVEL = 350;
-  const level = Math.max(1, Math.floor(xp / XP_PER_LEVEL) + 1);
-  const xpIntoLevel = xp % XP_PER_LEVEL;
-  const xpToNext = XP_PER_LEVEL - xpIntoLevel;
-  const percent = Math.round((xpIntoLevel / XP_PER_LEVEL) * 100);
-  return { level, xpToNext, percent };
-}
 
 function NavItem({ item }) {
   if (item.kind === "cross") {
@@ -90,13 +72,9 @@ function NavItem({ item }) {
 }
 
 function RewardsWalletCard({ collapsed }) {
-  const { summary } = useArcadeHistory();
-  const xp = summary?.totalXp ?? 0;
-  const { level, xpToNext, percent } = levelFromXp(xp);
-
   if (collapsed) {
     return (
-      <a className="ar-sideCard ar-sideCard--collapsed" href="#/rewards" data-label={`Rewards Wallet — ${xp} XP`}>
+      <a className="ar-sideCard ar-sideCard--collapsed" href="#/rewards" data-label="Rewards">
         <span aria-hidden="true">💰</span>
       </a>
     );
@@ -106,14 +84,10 @@ function RewardsWalletCard({ collapsed }) {
     <AppLink to="/rewards" className="ar-sideCard ar-rewardsCard">
       <div className="ar-rewardsCard__head">
         <span className="ar-rewardsCard__icon" aria-hidden="true">💰</span>
-        <span className="ar-rewardsCard__title">Rewards Wallet</span>
+        <span className="ar-rewardsCard__title">Rewards</span>
       </div>
-      <div className="ar-rewardsCard__xp">{xp.toLocaleString()} <span>XP</span></div>
-      <div className="ar-rewardsCard__level">Level {level} · Innovator</div>
-      <div className="ar-progressBar ar-progressBar--sm" role="progressbar" aria-valuenow={percent} aria-valuemin={0} aria-valuemax={100} aria-label="Progress to next level">
-        <div className="ar-progressBar__fill" style={{ width: `${percent}%` }} />
-      </div>
-      <div className="ar-rewardsCard__next">Next Level: {xpToNext} XP</div>
+      <div className="ar-rewardsCard__level">Managed by the rewards system</div>
+      <div className="ar-rewardsCard__next">View Rewards</div>
     </AppLink>
   );
 }

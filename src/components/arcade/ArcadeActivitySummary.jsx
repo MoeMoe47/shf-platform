@@ -1,17 +1,5 @@
 // src/components/arcade/ArcadeActivitySummary.jsx
-// Shared "your real Arcade activity" card — reads useArcadeHistory() (the
-// real ledger-backed hook, same one History.jsx uses) for XP, Badges, and
-// Games Played/On-chain events. Used by both Learning Arcade Home
-// ("Arcade Activity") and Classical Arcade Room ("Your Arcade Activity")
-// so the two pages consume the exact same real data path rather than each
-// inventing its own.
-//
-// Rank has no real source anywhere in this codebase (no cross-student
-// aggregate exists), so it's a clearly-isolated fixture, not computed —
-// see ARCADE_ACTIVITY_DEMO in arcadeHomeFixtures.js. The 4th stat differs
-// per the approved mocks: Home shows "Next Tournament" (also a fixture —
-// Tournaments.jsx is itself still a pre-existing placeholder), Classical
-// Arcade Room shows "Games Played" (real, from the same hook).
+// Shared display of legacy/local history counts and clearly labeled demo values.
 import React from "react";
 import { Link } from "react-router-dom";
 import { useArcadeHistory } from "@/shared/arcade/useArcadeHistory.js";
@@ -20,7 +8,6 @@ import { ARCADE_ACTIVITY_DEMO } from "@/data/arcadeHomeFixtures.js";
 export default function ArcadeActivitySummary({ headingId, title, variant = "home", className = "" }) {
   const { events, summary, loading, error } = useArcadeHistory();
   const safeEvents = Array.isArray(events) ? events : [];
-  const badgeCount = safeEvents.filter((e) => e.eventType === "Badge claimed").length;
   const mostRecent = safeEvents[0];
   const { rank, nextTournamentDay } = ARCADE_ACTIVITY_DEMO;
 
@@ -43,19 +30,19 @@ export default function ArcadeActivitySummary({ headingId, title, variant = "hom
           </div>
           <div className="ar-kpi ar-kpi--violet">
             <span className="ar-kpi__icon" aria-hidden="true">⭐</span>
-            <span className="ar-kpi__value">{(summary?.totalXp ?? 0).toLocaleString()}</span>
-            <span className="ar-kpi__label">XP</span>
+            <span className="ar-kpi__value">{summary?.totalEntries ?? 0}</span>
+            <span className="ar-kpi__label">History Entries</span>
           </div>
           <div className="ar-kpi ar-kpi--green">
             <span className="ar-kpi__icon" aria-hidden="true">🛡️</span>
-            <span className="ar-kpi__value">{badgeCount}</span>
-            <span className="ar-kpi__label">Badges</span>
+            <span className="ar-kpi__value">{summary?.distinctEventTypes ?? 0}</span>
+            <span className="ar-kpi__label">Activity Types</span>
           </div>
           {variant === "room" ? (
             <div className="ar-kpi ar-kpi--cyan">
               <span className="ar-kpi__icon" aria-hidden="true">🕹️</span>
-              <span className="ar-kpi__value">{summary?.totalSessions ?? 0}</span>
-              <span className="ar-kpi__label">Games Played</span>
+              <span className="ar-kpi__value">{summary?.distinctGames ?? 0}</span>
+              <span className="ar-kpi__label">Games Seen</span>
             </div>
           ) : (
             <div className="ar-kpi ar-kpi--cyan">
@@ -69,14 +56,14 @@ export default function ArcadeActivitySummary({ headingId, title, variant = "hom
 
       <p className="ar-activityRecent">
         {mostRecent
-          ? `Most recent: ${mostRecent.eventType}${mostRecent.gameTitle ? ` — ${mostRecent.gameTitle}` : ""}`
-          : "No arcade sessions recorded yet."}
+          ? `Latest legacy entry: ${mostRecent.eventType}${mostRecent.gameTitle ? ` — ${mostRecent.gameTitle}` : ""}`
+          : "No legacy Arcade history entries."}
       </p>
 
       <div className="ar-activityLinks">
         <Link className="ar-activityLink" to="/leaderboards">Leaderboard <span aria-hidden="true">→</span></Link>
         <Link className="ar-activityLink" to="/history">Game History <span aria-hidden="true">→</span></Link>
-        <Link className="ar-activityLink" to="/rewards">Rewards Wallet <span aria-hidden="true">→</span></Link>
+        <Link className="ar-activityLink" to="/rewards">Rewards <span aria-hidden="true">→</span></Link>
       </div>
     </section>
   );

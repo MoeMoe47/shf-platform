@@ -13,8 +13,8 @@
 // comparison.
 //
 // Data sourcing discipline is unchanged from the certified package:
-//   - Arcade Activity (via ArcadeActivitySummary) reads useArcadeHistory()
-//     for XP/Badges/Games Played — REAL data, empty-ledger-honest.
+//   - Arcade Activity (via ArcadeActivitySummary) reads legacy/local history
+//     counts only; it does not present verified outcomes or rewards.
 //   - Everything else describing a future capability renders clearly
 //     labeled "Demo preview" data from arcadeHomeFixtures.js.
 //   - "Open Creator Studio" and "Build Agent Game" open honest dialogs;

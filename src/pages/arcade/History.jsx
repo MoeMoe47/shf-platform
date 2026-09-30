@@ -1,18 +1,10 @@
 // src/pages/arcade/History.jsx
 // ------------------------------------------------------------
-// SHF Arcade – Impact History
-//
-// Funder-facing view that shows:
-//  - Live arcade events (sessions, rewards, on-chain status)
-//  - Summary KPIs (sessions, XP, on-chain count)
-//  - One-click CSV export for grants / board reports
-//
-// Data source:
-//  - useArcadeHistory() hook (local ledger + Polygon metadata)
+// Legacy/local Arcade activity retained for compatibility and review.
 // ------------------------------------------------------------
 
 import React from "react";
-import { useArcadeHistory } from "@/shared/arcade/useArcadeHistory.js"; // adjust path/name if needed
+import { useArcadeHistory } from "@/shared/arcade/useArcadeHistory.js";
 
 // Small helper to keep CSV safe
 function escapeCsvValue(value) {
@@ -32,7 +24,6 @@ export default function ArcadeHistory() {
   const handleDownloadCsv = () => {
     if (!safeEvents.length) return;
 
-    // Define the CSV columns (funding-friendly)
     const headers = [
       "timestamp",
       "userId",
@@ -40,16 +31,13 @@ export default function ArcadeHistory() {
       "eventType",
       "gameId",
       "gameTitle",
-      "xpDelta",
-      "evuDelta",
-      "creditsDelta",
-      "onChain",
-      "txHash",
       "cohort",
       "location",
       "device",
       "selTags",
       "workforceTags",
+      "source",
+      "authoritative",
     ];
 
     const rows = safeEvents.map((evt) => {
@@ -60,16 +48,13 @@ export default function ArcadeHistory() {
         eventType,
         gameId,
         gameTitle,
-        xpDelta,
-        evuDelta,
-        creditsDelta,
-        onChain,
-        txHash,
         cohort,
         location,
         device,
         selTags,
         workforceTags,
+        source,
+        authoritative,
       } = evt || {};
 
       return [
@@ -79,16 +64,13 @@ export default function ArcadeHistory() {
         eventType,
         gameId,
         gameTitle,
-        xpDelta,
-        evuDelta,
-        creditsDelta,
-        onChain ? "yes" : "no",
-        txHash,
         cohort,
         location,
         device,
         Array.isArray(selTags) ? selTags.join("|") : selTags,
         Array.isArray(workforceTags) ? workforceTags.join("|") : workforceTags,
+        source,
+        authoritative,
       ].map(escapeCsvValue);
     });
 
@@ -117,47 +99,46 @@ export default function ArcadeHistory() {
       {/* Header */}
       <header className="ar-history-header">
         <div>
-          <h1 className="ar-history-title">Arcade Impact History</h1>
+          <h1 className="ar-history-title">Arcade History</h1>
           <p className="ar-history-subtitle">
-            Live feed of game sessions, XP earned, and on-chain proof of
-            learning. Use this view for funders, partners, and board reports.
+            Legacy Arcade activity retained for compatibility and review. Verified outcomes are recorded by the canonical Arcade Result, Verified Evidence, and Truth Spine systems.
           </p>
         </div>
         <div className="ar-history-badge">
           <span className="ar-history-badge-dot" />
-          <span>Polygon-verified arcade events</span>
+          <span>Legacy activity history</span>
         </div>
       </header>
 
       {/* Summary strip */}
       <section className="ar-history-summary">
         <div className="ar-history-summary-card">
-          <div className="ar-history-summary-label">Total Sessions</div>
+          <div className="ar-history-summary-label">History Entries</div>
           <div className="ar-history-summary-value">
-            {summary?.totalSessions ?? (safeEvents.length || "—")}
+            {summary?.totalEntries ?? (safeEvents.length || "—")}
           </div>
           <div className="ar-history-summary-helper">
-            Unique game runs across all students.
+            Legacy/local history rows; not verified sessions.
           </div>
         </div>
 
         <div className="ar-history-summary-card">
-          <div className="ar-history-summary-label">XP Awarded</div>
+          <div className="ar-history-summary-label">Distinct Games</div>
           <div className="ar-history-summary-value">
-            {summary?.totalXp ?? "—"}
+            {summary?.distinctGames ?? 0}
           </div>
           <div className="ar-history-summary-helper">
-            SHF Arcade XP driving credit and wallet growth.
+            Game titles represented in legacy history.
           </div>
         </div>
 
         <div className="ar-history-summary-card">
-          <div className="ar-history-summary-label">On-chain Events</div>
+          <div className="ar-history-summary-label">Activity Types</div>
           <div className="ar-history-summary-value">
-            {summary?.onChainCount ?? "—"}
+            {summary?.distinctEventTypes ?? 0}
           </div>
           <div className="ar-history-summary-helper">
-            Logged to Polygon as proof of engagement.
+            Historical event labels in these entries.
           </div>
         </div>
       </section>
@@ -171,14 +152,11 @@ export default function ArcadeHistory() {
           </button>
           <button className="ar-history-chip">Game starts</button>
           <button className="ar-history-chip">Game completes</button>
-          <button className="ar-history-chip">Badges</button>
+          <button className="ar-history-chip">Badge event records</button>
           <button className="ar-history-chip">Tournaments</button>
         </div>
 
-        <label className="ar-history-toggle">
-          <input type="checkbox" />
-          <span>Show on-chain only</span>
-        </label>
+        <div className="ar-history-toggle">Legacy records · not verified outcomes</div>
       </section>
 
       {/* Table card */}
@@ -190,15 +168,13 @@ export default function ArcadeHistory() {
 
           {error && !loading && (
             <div className="ar-history-empty ar-history-empty--error">
-              Could not load arcade history. Please try again or check the
-              ledger service.
+            Could not load legacy Arcade history.
             </div>
           )}
 
           {!loading && !error && !safeEvents.length && (
             <div className="ar-history-empty">
-              No arcade events yet. Once students start playing, this view will
-              show every game session and on-chain reward.
+              No legacy Arcade history entries are available.
             </div>
           )}
 
@@ -210,9 +186,7 @@ export default function ArcadeHistory() {
                   <th>Student</th>
                   <th>Event</th>
                   <th>Game</th>
-                  <th>XP / EVU</th>
-                  <th>Credits</th>
-                  <th>On-chain</th>
+                  <th>Classification</th>
                 </tr>
               </thead>
               <tbody>
@@ -254,27 +228,7 @@ export default function ArcadeHistory() {
                       </div>
                     </td>
                     <td>
-                      {evt.xpDelta ?? 0} XP
-                      {typeof evt.evuDelta === "number" && (
-                        <> · {evt.evuDelta} EVU</>
-                      )}
-                    </td>
-                    <td>{evt.creditsDelta ?? 0}</td>
-                    <td>
-                      {evt.onChain ? (
-                        <span className="ar-history-onchain">
-                          <span className="ar-history-onchain-dot" />
-                          <span className="ar-history-onchain-tx">
-                            {evt.txHash
-                              ? `${evt.txHash.slice(0, 8)}…`
-                              : "Recorded"}
-                          </span>
-                        </span>
-                      ) : (
-                        <span className="ar-history-onchain ar-history-onchain--off">
-                          Off-chain only
-                        </span>
-                      )}
+                      Legacy event: {evt.eventType}
                     </td>
                   </tr>
                 ))}
@@ -291,11 +245,10 @@ export default function ArcadeHistory() {
             onClick={handleDownloadCsv}
             disabled={!safeEvents.length}
           >
-            Download CSV (Arcade Impact)
+            Download CSV (Arcade History)
           </button>
           <span style={{ marginLeft: "0.75rem", fontSize: "0.8rem" }}>
-            Export a funder-ready snapshot of every arcade session, including
-            XP, EVU, credits, and on-chain status.
+            Exports legacy activity metadata only. Source: legacy_local_history; authoritative: false.
           </span>
         </div>
       </section>

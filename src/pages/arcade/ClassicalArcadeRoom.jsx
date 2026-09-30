@@ -36,8 +36,8 @@
 //   - Student Hall of Fame uses privacy-safe, clearly fictional gamertag
 //     handles (never a real student's name), and is never written into
 //     the real per-game leaderboard storage.
-//   - "Your Arcade Activity" (via ArcadeActivitySummary) reads real XP/
-//     session data from useArcadeHistory() — unchanged, not a fixture.
+//   - "Your Arcade Activity" (via ArcadeActivitySummary) shows legacy/local
+//     history counts only, not verified results or rewards.
 // ------------------------------------------------------------
 
 import React, { useRef, useState } from "react";

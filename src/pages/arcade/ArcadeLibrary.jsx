@@ -1,6 +1,12 @@
 // src/pages/arcade/ArcadeLibrary.jsx
 import React from "react";
 import { arcadeGames } from "@/data/arcade.js";
+import { adaptLegacyArcadeGames } from "@/shared/arcade/experience/legacyArcadeCatalogAdapter.js";
+
+const adaptedGames = adaptLegacyArcadeGames(arcadeGames);
+const validGames = adaptedGames.filter((entry) => entry.validation?.valid === true);
+const previewCount = validGames.filter((entry) => entry.descriptor.lifecycle.status === "preview").length;
+const playableCount = validGames.filter((entry) => entry.descriptor.lifecycle.playable === true).length;
 
 const GAME_TAGS = [
   "all",
@@ -16,19 +22,19 @@ export default function ArcadeLibrary() {
 
   const filteredGames =
     activeTag === "all"
-      ? arcadeGames
-      : arcadeGames.filter((game) => {
-          if (activeTag === "sel") return game.selTags && game.selTags.length > 0;
-          if (activeTag === "workforce")
-            return game.workforceTags && game.workforceTags.length > 0;
+      ? validGames
+      : validGames.filter((entry) => {
+          const { selTags, workforceTags } = entry.legacyMetadata;
+          if (activeTag === "sel") return selTags?.length > 0;
+          if (activeTag === "workforce") return workforceTags?.length > 0;
           if (activeTag === "career")
-            return game.workforceTags?.some((w) =>
+            return workforceTags?.some((w) =>
               /career|resume|job|interview/i.test(w)
             );
           if (activeTag === "cognitive")
-            return game.selTags?.some((s) => /planning|focus|decision/i.test(s));
+            return selTags?.some((s) => /planning|focus|decision/i.test(s));
           if (activeTag === "leadership")
-            return game.selTags?.some((s) => /leadership|relationship/i.test(s));
+            return selTags?.some((s) => /leadership|relationship/i.test(s));
           return true;
         });
 
@@ -40,23 +46,21 @@ export default function ArcadeLibrary() {
           <div className="shf-arcade-library__hero-label">Silicon Heartland</div>
           <h1 className="shf-arcade-library__hero-title">Workforce Arcade</h1>
           <p className="shf-arcade-library__hero-subtitle">
-            Play PS2-style mini-games. Build SEL skills. Earn blockchain-backed
-            credentials for real careers.
+            Explore workforce and SEL-themed learning game previews. Practice
+            scenarios and discover future Arcade experiences.
           </p>
           <div className="shf-arcade-library__hero-metrics">
             <div className="shf-arcade-library__metric">
-              <span className="shf-arcade-library__metric-label">XP</span>
-              <span className="shf-arcade-library__metric-value">12,340</span>
+              <span className="shf-arcade-library__metric-label">Experiences</span>
+              <span className="shf-arcade-library__metric-value">{validGames.length}</span>
             </div>
             <div className="shf-arcade-library__metric">
-              <span className="shf-arcade-library__metric-label">Badges</span>
-              <span className="shf-arcade-library__metric-value">18</span>
+              <span className="shf-arcade-library__metric-label">Preview</span>
+              <span className="shf-arcade-library__metric-value">{previewCount}</span>
             </div>
             <div className="shf-arcade-library__metric">
-              <span className="shf-arcade-library__metric-label">
-                On-Chain Proofs
-              </span>
-              <span className="shf-arcade-library__metric-value">7</span>
+              <span className="shf-arcade-library__metric-label">Playable</span>
+              <span className="shf-arcade-library__metric-value">{playableCount}</span>
             </div>
           </div>
         </div>
@@ -73,8 +77,9 @@ export default function ArcadeLibrary() {
               Billy Gateson says:
             </p>
             <p className="shf-arcade-library__hero-note-body">
-              “Every win in here can show up on your resume or scholarship
-              application. Pick a game, and I’ll track your progress.”
+              These previews are designed to support future learning and
+              workforce experiences. Verified results and portfolio evidence
+              are handled by the systems that own those records.
             </p>
           </div>
         </div>
@@ -99,55 +104,61 @@ export default function ArcadeLibrary() {
 
       {/* Games grid */}
       <section className="shf-arcade-library__grid">
-        {filteredGames.map((game) => (
-          <article key={game.id} className="shf-arcade-library__card">
-            <div className="shf-arcade-library__card-top">
-              <div className="shf-arcade-library__card-pill">
-                {game.mode === "builder" ? "Builder" : "Scenario"}
-              </div>
-              <div className="shf-arcade-library__card-difficulty">
-                {game.difficulty}
-              </div>
-            </div>
+        {filteredGames.map((entry) => {
+          const { descriptor, legacyMetadata } = entry;
+          const { presentation, lifecycle, capabilities, product } = descriptor;
 
-            <h2 className="shf-arcade-library__card-title">{game.title}</h2>
-            <p className="shf-arcade-library__card-subtitle">
-              {game.subtitle}
-            </p>
-
-            <div className="shf-arcade-library__card-tags">
-              {game.selTags?.length ? (
-                <span className="shf-arcade-library__chip shf-arcade-library__chip--sel">
-                  SEL: {game.selTags.join(", ")}
-                </span>
-              ) : null}
-              {game.workforceTags?.length ? (
-                <span className="shf-arcade-library__chip shf-arcade-library__chip--workforce">
-                  Workforce: {game.workforceTags.join(", ")}
-                </span>
-              ) : null}
-            </div>
-
-            <div className="shf-arcade-library__card-footer">
-              <div className="shf-arcade-library__xp">
-                <span className="shf-arcade-library__xp-label">Reward</span>
-                <span className="shf-arcade-library__xp-value">
-                  {game.xpReward} XP · On-Chain Badge
-                </span>
+          return (
+            <article key={descriptor.id} className="shf-arcade-library__card">
+              <div className="shf-arcade-library__card-top">
+                <div className="shf-arcade-library__card-pill">
+                  {product.experienceType === "simulation" ? "Simulation" : "Game"}
+                </div>
+                <div className="shf-arcade-library__card-difficulty">
+                  {presentation.difficulty ?? "Difficulty not set"}
+                </div>
               </div>
-              <button
-                type="button"
-                className="shf-arcade-library__play-btn"
-                // TODO: replace with navigation + ledger + Polygon
-                onClick={() => {
-                  alert(`Launch game: ${game.title}`);
-                }}
-              >
-                Play
-              </button>
-            </div>
-          </article>
-        ))}
+
+              <h2 className="shf-arcade-library__card-title">{presentation.title}</h2>
+              <p className="shf-arcade-library__card-subtitle">
+                {presentation.description}
+              </p>
+
+              <div className="shf-arcade-library__card-tags">
+                {legacyMetadata.selTags?.length ? (
+                  <span className="shf-arcade-library__chip shf-arcade-library__chip--sel">
+                    SEL: {legacyMetadata.selTags.join(", ")}
+                  </span>
+                ) : null}
+                {legacyMetadata.workforceTags?.length ? (
+                  <span className="shf-arcade-library__chip shf-arcade-library__chip--workforce">
+                    Workforce: {legacyMetadata.workforceTags.join(", ")}
+                  </span>
+                ) : null}
+              </div>
+
+              <div className="shf-arcade-library__card-footer">
+                <div className="shf-arcade-library__xp">
+                  <span className="shf-arcade-library__xp-label">Status</span>
+                  <span className="shf-arcade-library__xp-value">
+                    {lifecycle.status === "preview"
+                      ? "Preview"
+                      : capabilities.evidenceResultCapable
+                        ? "Result capable"
+                        : "Not result producing"}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  className="shf-arcade-library__play-btn"
+                  disabled
+                >
+                  Preview
+                </button>
+              </div>
+            </article>
+          );
+        })}
       </section>
     </div>
   );

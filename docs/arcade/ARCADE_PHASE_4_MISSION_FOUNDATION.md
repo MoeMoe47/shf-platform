@@ -267,6 +267,60 @@ scope. Starting a Mission still creates no Attempt, Result, mastery, Evidence,
 Truth, reward, or leaderboard score; Learning outcome coordination remains
 deferred to 4G.
 
+## Phase 4C Mission Builder / Creator Studio
+
+The Mission Builder at `/studio/missions` is an authoring surface inside the
+existing Studio shell. It edits full 4A `MissionDefinition` drafts using
+structured controls and server validation. Drafts are stored separately from
+the Studio Website/AI Agent project workspaces and from the read-only
+`PublishedMissionResolver` catalog. The draft table is
+`mission_definition_drafts` (migration 153), scoped by organization, tenant,
+and author. List responses are bounded to the author's 100 most recently
+updated drafts; read and update are owner-scoped. There is no delete route.
+
+The API uses existing Studio project create/view/update permissions plus the
+`project_studio` organization entitlement. Because those existing permissions
+also support student-owned Studio projects, the Mission draft service explicitly
+rejects the `student` role. The UI applies the same check; API authorization is
+the enforcement boundary. Author/update user IDs and timestamps are retained,
+without exposing email addresses.
+
+Draft status is server-forced to `DRAFT`, including when a submitted definition
+claims another status. The complete definition is validated by the canonical
+4A validator at every create/update and is bounded to 128 KiB serialized JSON.
+Mission `version` identifies intended content; draft `revision` is a separate
+database CAS counter beginning at 1. Updates require `expectedRevision`; stale
+writes return HTTP 409 `MISSION_DRAFT_REVISION_CONFLICT` with
+`currentRevision`. Mission identity and content version cannot be changed by
+updating an existing draft. The UI offers an explicit reload after a conflict
+and never silently merges or retries.
+
+The Builder covers identity and basics, audience/roles, canonical Activity
+reference, objective types and ordering, stage ordering and objective
+membership, type-specific condition operands, score metadata, environment
+references, declarative AI flags, and accessibility/safety metadata. Objective
+and stage order can be changed with keyboard-operable Move Up/Move Down
+controls. Optional stages are represented but bypass execution is not
+implemented. The Activity selector reads existing canonical active Activities;
+choosing one only stores a reference and does not create or change an Activity.
+Environment references are entered as references only.
+
+Client validation is not authoritative: server validation errors are surfaced
+by field/path text. The preview is labeled `DRAFT PREVIEW`; there is no Play or
+Launch action. Runtime score metadata does not create Result or leaderboard
+authority. AI flags are declarations only; governed AI execution is not enabled
+in 4C. The screen uses labeled controls, visible focus, 44px minimum control
+targets, reduced-motion handling, and keyboard reorder controls.
+
+There is no draft autosave, local-storage draft cache, publishing control,
+moderation handoff, or direct Mission Runtime call. 4D owns review, approval,
+publication, immutable release/version lifecycle, and moderation. The
+published catalog remains unchanged by draft operations. A saved draft is not
+runtime-authorized, even if its identity/version matches a published Mission.
+
+**A saved Mission draft is validated authoring content only. It is not
+published, approved, runtime-authorized, or institutional truth.**
+
 ## Deferred
 
 Persistence and publishing, creator tooling, execution/evaluation, AI mission

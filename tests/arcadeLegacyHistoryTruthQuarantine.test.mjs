@@ -101,20 +101,30 @@ test("frozen verification authorities and prior migrations remain untouched", ()
     .map((entry) => entry.slice(3))
     .sort();
 
-  // Migration 152 is the current Mission Runtime foundation migration. Prior
-  // migrations remain frozen. This guard must work both before and after 152 is committed.
-  const allowedMigration = "apps/shs-api/migrations/152_mission_runtime_foundation.sql";
+  // Migration 153 is the current Phase 4C migration. All prior migrations,
+  // including 152, are frozen. This guard must work both before 153 is
+  // committed and after the worktree is clean.
+  const allowedMigration = "apps/shs-api/migrations/153_mission_draft_authoring.sql";
   const unexpectedMigrationPaths = changedMigrationPaths.filter((path) => path !== allowedMigration);
 
   assert.deepEqual(unexpectedMigrationPaths, [], `Unexpected migration changes: ${unexpectedMigrationPaths.join(", ")}`);
 });
 
-test("migration guard accepts clean or 152-only status and rejects prior/extra migrations", () => {
-  const allowedMigration = "apps/shs-api/migrations/152_mission_runtime_foundation.sql";
+test("migration guard allows only the current Phase 4C migration before and after commit", () => {
+  const allowedMigration = "apps/shs-api/migrations/153_mission_draft_authoring.sql";
   const unexpected = (paths) => paths.filter((path) => path !== allowedMigration);
 
   assert.deepEqual(unexpected([allowedMigration]), []);
   assert.deepEqual(unexpected([]), []);
+  assert.deepEqual(unexpected(["apps/shs-api/migrations/152_mission_runtime_foundation.sql"]), ["apps/shs-api/migrations/152_mission_runtime_foundation.sql"]);
   assert.deepEqual(unexpected(["apps/shs-api/migrations/151_arcade_runtime_telemetry.sql"]), ["apps/shs-api/migrations/151_arcade_runtime_telemetry.sql"]);
-  assert.deepEqual(unexpected([allowedMigration, "apps/shs-api/migrations/151_arcade_runtime_telemetry.sql"]), ["apps/shs-api/migrations/151_arcade_runtime_telemetry.sql"]);
+  assert.deepEqual(unexpected([
+    "apps/shs-api/migrations/152_mission_runtime_foundation.sql",
+    allowedMigration,
+  ]), ["apps/shs-api/migrations/152_mission_runtime_foundation.sql"]);
+  assert.deepEqual(unexpected([
+    allowedMigration,
+    "apps/shs-api/migrations/151_arcade_runtime_telemetry.sql",
+  ]), ["apps/shs-api/migrations/151_arcade_runtime_telemetry.sql"]);
+  assert.deepEqual(unexpected(["apps/shs-api/migrations/154_unexpected.sql"]), ["apps/shs-api/migrations/154_unexpected.sql"]);
 });

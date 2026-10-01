@@ -35,6 +35,7 @@ function readCollapsed() {
 // id that doesn't exist in the URL, so nothing here hardcodes "ASL" as a
 // stand-in for "whatever curriculum this is."
 const ROUTE_TITLES = [
+  { test: /\/studio\/missions\/?$/, title: "Mission Builder", subtitle: "Create validated Mission drafts without publishing them." },
   { test: /\/studio\/new\/?$/, title: "Start a Studio Project", subtitle: "Choose a direction for your next project." },
   { test: /\/studio\/projects\/[^/]+\/?$/, title: "Studio Project" },
   { test: /\/studio\/projects\/?$/, title: "My Studio Projects" },

@@ -65,6 +65,7 @@ const StudioNewProject = lazy(() => import("@/pages/studio/StudioNewProject.jsx"
 const StudioProjects = lazy(() => import("@/pages/studio/StudioProjects.jsx"));
 const StudioProjectShell = lazy(() => import("@/pages/studio/StudioProjectShell.jsx"));
 const StudioBuilderWorkspace = lazy(() => import("@/pages/studio/StudioBuilderWorkspace.jsx"));
+const StudioMissionBuilder = lazy(() => import("@/pages/studio/StudioMissionBuilder.jsx"));
 const StudioAssignments = lazy(() => import("@/pages/studio/StudioAssignments.jsx"));
 const StudioTemplates = lazy(() => import("@/pages/studio/StudioTemplates.jsx"));
 const StudioReviewSubmission = lazy(() => import("@/pages/studio/StudioReviewSubmission.jsx"));
@@ -210,6 +211,7 @@ export default function CurriculumRoutes() {
           <Route path="projects" element={<StudioProjects />} />
           <Route path="projects/:projectId" element={<StudioProjectShell />} />
           <Route path="projects/:projectId/build" element={<StudioBuilderWorkspace />} />
+          <Route path="missions" element={<StudioMissionBuilder />} />
           <Route path="review/:projectId/:submissionId" element={<StudioReviewSubmission />} />
           <Route path="reviewer-queue" element={<StudioReviewerQueue />} />
           <Route path="teams" element={<StudioTeams />} />

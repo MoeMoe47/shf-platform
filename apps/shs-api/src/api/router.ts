@@ -57,6 +57,7 @@ import { registerActivityDomainRoutes } from "../domain/activity-domains/api/rou
 import { registerVerifiedEvidenceRoutes } from "../domain/verified-evidence/api/routes.js";
 import { registerOperationalRoutes } from "../domain/operations/api/routes.js";
 import { registerStudioProjectRoutes } from "../domain/studio/api/studio-project-routes.js";
+import { registerMissionDraftRoutes } from "../domain/mission-content/api/mission-draft-routes.js";
 import { registerPortfolioRoutes } from "../domain/portfolio/api/routes.js";
 import { registerWebsiteDeploymentRoutes } from "../domain/deployment/api/routes.js";
 import { registerStudioReleaseRoutes } from "../domain/deployment/api/release-routes.js";
@@ -472,6 +473,7 @@ app.post("/auth/login", async (req: any, res: any) => {
   registerVerifiedEvidenceRoutes(app);
   registerOperationalRoutes(app);
   registerStudioProjectRoutes(app);
+  registerMissionDraftRoutes(app);
   registerPortfolioRoutes(app);
   registerWebsiteDeploymentRoutes(app);
   registerStudioReleaseRoutes(app);

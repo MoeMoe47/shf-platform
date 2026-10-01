@@ -6,11 +6,15 @@ import { BriefcaseIcon, ChevronRightIcon, SparkleIcon } from "@/components/curri
 import { StudioExperienceProvider, StudioNextAction } from "./StudioExperience.jsx";
 import OglGuidanceEntryPoint from "@/system/guidance/OglGuidanceEntryPoint.jsx";
 import { SeaDashboardSection, SeaHelpRegion, SeaNextAction } from "@/components/sea/SeaDashboardPrimitives.jsx";
+import useAuth from "@/auth/useAuth.js";
+import { SHS_SECURITY_PERMISSIONS } from "@/system/security/security-permissions.js";
 
 function typeLabel(type) { return type === "AI_AGENT" ? "AI Agent" : "Website"; }
 
 export default function StudioHome() {
   const { role } = useUser();
+  const auth = useAuth();
+  const canAuthorMissions = auth.hasPermission(SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_CREATE) && !auth.hasRole("student");
   const [state, setState] = React.useState({ loading: true, error: null, projects: [] });
 
   React.useEffect(() => {
@@ -51,6 +55,8 @@ export default function StudioHome() {
           <Link className="studio-choice" to="/studio/new?type=AI_AGENT"><span className="studio-choiceIcon studio-choiceIcon--agent" aria-hidden="true">A</span><span><strong>AI Agent</strong><small>Define an agent idea for a governed build.</small></span><ChevronRightIcon size={18} /></Link>
         </div>
       </section>
+
+      {canAuthorMissions && <section className="studio-section" aria-labelledby="studio-missions-heading"><div className="studio-sectionHeading"><h2 id="studio-missions-heading">Mission Content</h2><span>Authorized creators</span></div><p>Construct and validate scenario drafts. Saving does not publish or authorize runtime.</p><Link className="studio-primaryButton" to="/studio/missions">Open Mission Builder</Link></section>}
 
       <section className="studio-section" aria-labelledby="studio-projects-heading">
         <div className="studio-sectionHeading"><h2 id="studio-projects-heading">Continue Working</h2><span><Link to="/studio/projects">My Projects <ChevronRightIcon size={15} /></Link> · <Link to="/studio/teams">Teams <ChevronRightIcon size={15} /></Link></span></div>

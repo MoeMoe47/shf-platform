@@ -1,139 +1,86 @@
-// src/pages/arcade/Leaderboard.jsx
-import React, { useEffect, useMemo, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
-import { meta as gameMeta } from "./games/index.js";
+import React from "react";
+import { Link } from "react-router-dom";
+import { useArcadeLeaderboard } from "@/shared/arcade/leaderboard/useArcadeLeaderboard.js";
 
-/** ---------- Storage key helpers (with CDL legacy support) ---------- */
-const LEGACY = {
-  bestKeyByGame: { "transport/cdl-driver": "sh_arcade_cdl_best" },
-  lbKeyByGame:   { "transport/cdl-driver": "sh_class_cdl_leaderboard_v1" },
-};
-
-function keysFor(gameKey) {
-  return {
-    best: LEGACY.bestKeyByGame[gameKey] || `best_${gameKey}`,
-    lb:   LEGACY.lbKeyByGame[gameKey]   || `lb_${gameKey}`,
-  };
-}
-
-const safeRead = (k, fb = null) => {
-  try {
-    const v = localStorage.getItem(k);
-    if (v == null) return fb;
-    try { return JSON.parse(v); } catch { return v; }
-  } catch { return fb; }
-};
-const safeWrite = (k, v) => {
-  try { localStorage.setItem(k, typeof v === "string" ? v : JSON.stringify(v)); } catch {}
-};
-
-function useLB(gameKey) {
-  const { lb } = keysFor(gameKey);
-  const [rows, setRows] = useState(() => safeRead(lb, []) || []);
-  useEffect(() => {
-    const refresh = () => setRows(safeRead(lb, []) || []);
-    window.addEventListener("storage", refresh);
-    const onVis = () => { if (document.visibilityState === "visible") refresh(); };
-    document.addEventListener("visibilitychange", onVis);
-    return () => { window.removeEventListener("storage", refresh); document.removeEventListener("visibilitychange", onVis); };
-  }, [lb]);
-  const set = (next) => { safeWrite(lb, next); setRows(next); };
-  return [rows, set];
-}
+const PAGE_SIZE = 50;
 
 export default function Leaderboard() {
-  const [params] = useSearchParams();
-  const gameKey = params.get("game") || "transport/cdl-driver"; // sensible default
-
-  const meta = gameMeta[gameKey];
-  const title = meta?.title || gameKey;
-  const icon = meta?.icon || "🎮";
-
-  const { best: bestKey } = keysFor(gameKey);
-  const best = useMemo(() => Number(safeRead(bestKey, 0) || 0), [bestKey]);
-
-  const [rows, setRows] = useLB(gameKey);
-  const [name, setName] = useState("");
-
-  const submit = (e) => {
-    e.preventDefault();
-    const score = Number(safeRead(bestKey, 0) || 0);
-    if (!name.trim() || !score) return;
-    const entry = {
-      id: crypto.randomUUID(),
-      name: name.trim(),
-      score: Math.round(score),
-      date: new Date().toISOString(),
-    };
-    const next = [...rows, entry].sort((a, b) => b.score - a.score).slice(0, 100);
-    setRows(next);
-    setName("");
-  };
-
-  const S = {
-    page: { display:"grid", gap:16, padding:16, maxWidth:920, margin:"0 auto" },
-    header: { display:"flex", alignItems:"center", justifyContent:"space-between", gap:12, flexWrap:"wrap" },
-    titleWrap: { display:"flex", alignItems:"baseline", gap:10, flexWrap:"wrap" },
-    title: { margin:0, fontSize:24, letterSpacing:"-0.01em" },
-    sub: { margin:0, color:"var(--ink-soft)" },
-    btn: { padding:"8px 12px", borderRadius:10, border:"1px solid var(--ring)", cursor:"pointer", background:"var(--card)", color:"var(--ink)", textDecoration:"none" },
-    form: { display:"flex", gap:8, alignItems:"center", flexWrap:"wrap" },
-    input: { padding:"8px 10px", border:"1px solid var(--ring)", borderRadius:8, minWidth:220, background:"var(--card)", color:"var(--ink)" },
-    pill: { fontSize:12, background:"rgba(0,0,0,.06)", padding:"3px 10px", borderRadius:999, display:"inline-block" },
-    table: { width:"100%", borderCollapse:"collapse" },
-    th: { textAlign:"left", borderBottom:"1px solid var(--ring)", padding:"8px" },
-    td: { borderBottom:"1px solid var(--ring)", padding:"8px", fontSize:14 },
-    empty: { padding:14, color:"var(--ink-soft)" },
-  };
+  const leaderboard = useArcadeLeaderboard({ limit: PAGE_SIZE });
+  const selectedActivity = leaderboard.activities.find((activity) => activity.id === leaderboard.activityId);
 
   return (
-    <div style={S.page}>
-      <div style={S.header}>
-        <div style={S.titleWrap}>
-          <h1 style={S.title}>{icon} Leaderboard — {title}</h1>
-          <p style={S.sub}><span style={S.pill}>Game key: {gameKey}</span></p>
+    <main className="page pad" aria-labelledby="arcade-leaderboard-title">
+      <header className="page__header">
+        <div>
+          <h1 id="arcade-leaderboard-title">Learning Arcade Leaderboard</h1>
+          <p className="muted">Rankings are a read projection of scored canonical Arcade Results in your active organization.</p>
         </div>
-        <Link to="/learning" style={S.btn}>← Back to Arcade</Link>
-      </div>
+        <Link className="sh-btn sh-btn--secondary" to="/learning">Back to Arcade</Link>
+      </header>
 
-      <form onSubmit={submit} style={S.form}>
-        <span style={S.pill}>Your Best: {Math.round(best) || 0}</span>
-        <input
-          style={S.input}
-          value={name}
-          placeholder="Your name (e.g., J. Smith)"
-          onChange={(e)=>setName(e.target.value)}
-          aria-label="Your name"
-        />
-        <button type="submit" style={{...S.btn, background:"var(--accent)", color:"#fff", borderColor:"var(--accent)"}}>
-          Submit to Leaderboard
-        </button>
-      </form>
+      <section className="card card--pad" aria-label="Activity leaderboard">
+        <label htmlFor="leaderboard-activity">Arcade Activity</label>
+        <select
+          id="leaderboard-activity"
+          value={leaderboard.activityId}
+          onChange={(event) => leaderboard.setActivityId(event.target.value)}
+          disabled={leaderboard.loadingActivities || leaderboard.activities.length === 0}
+        >
+          {leaderboard.activities.map((activity) => (
+            <option key={activity.id} value={activity.id}>{activity.title}</option>
+          ))}
+        </select>
 
-      <div>
-        <table style={S.table}>
-          <thead>
-            <tr>
-              <th style={S.th}>Rank</th>
-              <th style={S.th}>Name</th>
-              <th style={S.th}>Score</th>
-              <th style={S.th}>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.length === 0 ? (
-              <tr><td style={S.td} colSpan={4}><div style={S.empty}>No entries yet.</div></td></tr>
-            ) : rows.map((r, i) => (
-              <tr key={r.id}>
-                <td style={S.td}>{i+1}</td>
-                <td style={S.td}>{r.name}</td>
-                <td style={S.td}><b>{r.score}</b></td>
-                <td style={S.td}>{new Date(r.date).toLocaleString()}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+        {leaderboard.loadingActivities && <p role="status">Loading Arcade Activities…</p>}
+        {!leaderboard.loadingActivities && leaderboard.activities.length === 0 && (
+          <p role="status">No Arcade Activities are available.</p>
+        )}
+        {selectedActivity && <h2>{selectedActivity.title}</h2>}
+        {leaderboard.error && (
+          <p role="alert">
+            {leaderboard.error.status === 403
+              ? "Organization leaderboard access is not available for this account."
+              : "The canonical Arcade leaderboard is temporarily unavailable."}
+          </p>
+        )}
+        {leaderboard.loading && <p role="status">Loading canonical Results…</p>}
+
+        {!leaderboard.loading && !leaderboard.error && leaderboard.activityId && leaderboard.items.length === 0 && (
+          <p role="status">No scored canonical Arcade Results are available for this Activity.</p>
+        )}
+
+        {leaderboard.items.length > 0 && (
+          <div className="table-wrap">
+            <table>
+              <caption className="sr-only">Organization-scoped Learning Arcade ranks</caption>
+              <thead>
+                <tr><th scope="col">Rank</th><th scope="col">Learner</th><th scope="col">Score</th><th scope="col">Achieved</th></tr>
+              </thead>
+              <tbody>
+                {leaderboard.items.map((item) => (
+                  <tr key={item.resultId}>
+                    <td>{item.rank}</td>
+                    <td>{item.displayName}</td>
+                    <td>{item.score}{item.maxScore == null ? "" : ` / ${item.maxScore}`}</td>
+                    <td>{new Date(item.achievedAt).toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        <nav aria-label="Leaderboard pages">
+          <button type="button" className="sh-btn sh-btn--secondary" disabled={leaderboard.loading || leaderboard.offset === 0} onClick={() => leaderboard.load(Math.max(0, leaderboard.offset - PAGE_SIZE))}>Previous</button>
+          <button type="button" className="sh-btn sh-btn--secondary" disabled={leaderboard.loading || !leaderboard.hasMore} onClick={() => leaderboard.load(leaderboard.offset + PAGE_SIZE)}>Next</button>
+        </nav>
+      </section>
+
+      <aside className="card card--pad" aria-label="Leaderboard scope">
+        <h2>Classic Arcade</h2>
+        <p>Server ranking is not yet available for Classic Arcade. Runtime telemetry and save state are not score sources.</p>
+        <p>Rank is presentation only; it does not establish mastery, evidence, credentials, rewards, or institutional truth.</p>
+      </aside>
+    </main>
   );
 }

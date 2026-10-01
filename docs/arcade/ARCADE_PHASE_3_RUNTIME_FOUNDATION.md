@@ -2,7 +2,7 @@
 
 ## Phase Status
 
-Phase 3A establishes authenticated Runtime Session persistence and lifecycle only. Save state (3B), telemetry (3C), frontend runtime client/development harness (3D), server-backed Learning leaderboard projection (3E), Evidence Replay projection (3F), and cross-slice integration acceptance (3G) are deferred. No gameplay engine or game wiring is included.
+Phase 3A establishes authenticated Runtime Session persistence and lifecycle. Save state (3B), telemetry (3C), frontend runtime client/development harness (3D), and the server-backed Learning leaderboard projection (3E) are documented below. Evidence Replay projection (3F) and cross-slice integration acceptance (3G) remain deferred. No gameplay engine or game wiring is included.
 
 ## Authority Boundaries
 
@@ -70,4 +70,14 @@ The direct-link hash route `/arcade.html#/dev/runtime` is an internal Developmen
 
 The harness uses labeled form controls, keyboard focus outlines, semantic status/error regions and a horizontally scrollable event table; reduced-motion preference is respected. Runtime state is held only in component memory and is not persisted to localStorage, sessionStorage, or IndexedDB.
 
-The Phase 3D development harness exercises authoritative server runtime APIs but does not itself establish Runtime Session, Result, Evidence, reward, or Truth Spine authority. Runtime completion remains separate from Result submission. Game clients, gameplay, leaderboard, Evidence Replay, and any outcome/economic integration are deferred.
+The Phase 3D development harness exercises authoritative server runtime APIs but does not itself establish Runtime Session, Result, Evidence, reward, or Truth Spine authority. Runtime completion remains separate from Result submission. Game clients, gameplay, Evidence Replay, and any outcome/economic integration are deferred.
+
+## Phase 3E: Server Learning Leaderboard
+
+`GET /arcade/leaderboards/activities/:activityId` is a read-only, active-organization projection over persisted `arcade_results`. It requires the existing `arcade.results.view` permission; the learner's `arcade.attempt` permission remains scoped to their own attempts and history and does not expose organization peer results. The organization is derived from authenticated context; query parameters cannot widen it.
+
+Only scored Results for the requested real Arcade Activity are eligible. Scoreless Results are excluded. Inactive Activities remain readable as historical context because their Results are immutable; unknown Activity IDs return not found. Each learner contributes their highest score, with the earliest Result retained when their scores tie. SQL `RANK()` ranks by score alone, so equal scores share a rank and the next rank has the expected gap. Display order is score descending, achievement time ascending, then stable learner ID; the learner ID is not returned.
+
+The DTO contains rank, organization-local display name, score, max score, Result ID, and achievement time. The name is resolved from `users.full_name` only within the Result's organization, with a neutral `Learner` fallback. Email and raw learner ID are excluded. Pagination is bounded to 1-100 and applied after ranking. No leaderboard table or migration is added; ranking is computed directly from canonical Results. Migration 052's existing Result indexes are organization+learner oriented rather than organization+Activity+score, so this is a correctness-first query that may warrant a measured index if usage grows.
+
+Leaderboard rank is a read projection over canonical Arcade Results. Leaderboard APIs do not accept gameplay scores from the browser. Rank does not establish gameplay truth, mastery, evidence, credentials, rewards, or institutional truth. The routed `/leaderboards` page consumes only the authenticated server projection; legacy browser scoreboards remain disconnected compatibility surfaces. Classic Arcade ranking remains deferred until a canonical server-backed score source exists. No Result, Evidence, outbox, Truth Spine, Treasury, or reward writes occur when reading the leaderboard.

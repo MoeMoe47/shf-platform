@@ -256,10 +256,10 @@ function HallOfFameSection() {
   return (
     <section className="ar-card ar-section ar-roomItem ar-roomItem--hof" aria-labelledby="ar-hof-title">
       <div className="ar-section__head">
-        <h2 id="ar-hof-title" className="ar-section__title">4. Student Hall of Fame</h2>
-        <Link className="ar-note ar-note--link" to="/leaderboards">View All →</Link>
+        <h2 id="ar-hof-title" className="ar-section__title">4. Classic Leaderboard Preview</h2>
+        <Link className="ar-note ar-note--link" to="/leaderboards">Learning Leaderboard →</Link>
       </div>
-      <p className="ar-muted ar-srOnly">Privacy-safe fictional display names only.</p>
+      <p className="ar-muted">Static demo display; server ranking is not yet available for Classic Arcade.</p>
       <ol className="ar-hofList">
         {HALL_OF_FAME_DEMO.map((row) => (
           <li key={row.rank} className="ar-hofRow">
@@ -268,7 +268,7 @@ function HallOfFameSection() {
               <span className="ar-hofRow__name">{row.displayName}</span>
               <span className="ar-hofRow__title">{row.title}</span>
             </span>
-            <span className="ar-hofRow__xp">{row.xp.toLocaleString()} XP</span>
+            <span className="ar-hofRow__xp">Demo</span>
           </li>
         ))}
       </ol>

@@ -3,6 +3,8 @@ import { requirePermission } from "../../../auth/permission-guard.js";
 import { SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
 import * as service from "../service/arcade-service.js";
 import { ArcadeError } from "../service/arcade-service.js";
+import * as leaderboardService from "../service/leaderboard-service.js";
+import { ArcadeLeaderboardError } from "../service/leaderboard-service.js";
 import { registerArcadeRuntimeRoutes } from "./runtime-routes.js";
 
 function actorFromRequest(req: any) {
@@ -16,6 +18,7 @@ function actorFromRequest(req: any) {
 
 function sendArcadeError(error: any, res: any, next: any) {
   if (error instanceof ArcadeError) return res.status(error.statusCode).json(fail(error.code, error.message));
+  if (error instanceof ArcadeLeaderboardError) return res.status(error.statusCode).json(fail(error.code, error.message));
   return next(error);
 }
 
@@ -104,6 +107,20 @@ export function registerArcadeRoutes(app: any) {
       }
       const page = await service.listResultsForActor(actorFromRequest(req), limit, offset);
       return res.json(ok({ ...page, limit, offset, nextOffset: page.hasMore ? offset + page.items.length : null }));
+    } catch (error) {
+      return sendArcadeError(error, res, next);
+    }
+  });
+
+  app.get("/arcade/leaderboards/activities/:activityId", requirePermission(SHS_SECURITY_PERMISSIONS.ARCADE_RESULTS_VIEW), async (req: any, res: any, next: any) => {
+    try {
+      const limit = Number(req.query?.limit ?? 50);
+      const offset = Number(req.query?.offset ?? 0);
+      if (!Number.isInteger(limit) || limit < 1 || limit > 100 || !Number.isInteger(offset) || offset < 0) {
+        return res.status(400).json(fail("INVALID_PAGINATION", "limit must be 1-100 and offset must be a non-negative integer."));
+      }
+      const data = await leaderboardService.getActivityLeaderboard(actorFromRequest(req), req.params.activityId, limit, offset);
+      return res.json(ok({ ...data, nextOffset: data.hasMore ? offset + data.items.length : null }));
     } catch (error) {
       return sendArcadeError(error, res, next);
     }

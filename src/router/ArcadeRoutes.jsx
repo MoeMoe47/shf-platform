@@ -19,6 +19,7 @@ import Rewards from "@/pages/arcade/Rewards.jsx";
 import Tournaments from "@/pages/arcade/Tournaments.jsx";
 import Tournament from "@/pages/arcade/Tournament.jsx";
 import Help from "@/pages/arcade/Help.jsx";
+import ArcadeRuntimeDevHarness from "@/pages/arcade/ArcadeRuntimeDevHarness.jsx";
 
 import GrowthObservationTower from "@/pages/metaverse/GrowthObservationTower.jsx";
 import BFETestPage from "@/pages/metaverse/BFETestPage.jsx";
@@ -134,6 +135,15 @@ export default function ArcadeRoutes() {
         element={
           <ArcadeLayout>
             <Help />
+          </ArcadeLayout>
+        }
+      />
+
+      <Route
+        path="/dev/runtime"
+        element={
+          <ArcadeLayout>
+            <ArcadeRuntimeDevHarness />
           </ArcadeLayout>
         }
       />

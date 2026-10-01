@@ -90,7 +90,7 @@ test("Northstar uses the compatibility badge constant and bounded dev copy", () 
   assert.match(northstar, /No institutional outcome is recorded/);
 });
 
-test("frozen verification authorities and prior migrations remain untouched", () => {
+test("frozen verification authorities and migrations remain untouched", () => {
   const status = execFileSync("git", ["status", "--short", "--", "services/shf-agent-fabric", "apps/shs-api/src/domain/verified-evidence", "apps/shs-api/src/domain/trusted-reporting", "src/data/arcade.js"], { encoding: "utf8" });
   assert.equal(status, "");
 
@@ -101,11 +101,5 @@ test("frozen verification authorities and prior migrations remain untouched", ()
     .map((entry) => entry.slice(3))
     .sort();
 
-  const allowedMigrationPaths = [
-    "apps/shs-api/migrations/149_arcade_runtime_sessions.sql",
-    "apps/shs-api/migrations/150_arcade_runtime_save_states.sql",
-    "apps/shs-api/migrations/151_arcade_runtime_telemetry.sql",
-  ];
-  assert.ok(changedMigrationPaths.includes("apps/shs-api/migrations/151_arcade_runtime_telemetry.sql"));
-  assert.ok(changedMigrationPaths.every((path) => allowedMigrationPaths.includes(path)), `Unexpected migration changes: ${changedMigrationPaths.join(", ")}`);
+  assert.deepEqual(changedMigrationPaths, [], `Unexpected migration changes: ${changedMigrationPaths.join(", ")}`);
 });

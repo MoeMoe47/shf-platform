@@ -19,10 +19,8 @@
 // here — see DEMO_LABEL below, used consistently by ArcadeDashboard.jsx and
 // ClassicalArcadeRoom.jsx.
 //
-// Real data (current Workforce Arcade XP/session/on-chain totals, game
-// catalog, leaderboard entries a student actually submitted) comes from
-// useArcadeHistory()/useArcadeLedger()/arcadeGames instead — never from
-// here.
+// Legacy local history is non-authoritative compatibility data. It is not
+// a source for current rewards, verified outcomes, or institutional facts.
 
 export const DEMO_LABEL = "Demo preview";
 
@@ -181,7 +179,7 @@ export const CLASSIC_GAMES_DEMO = [
     skills: ["Logic", "Timing", "Systems"],
     difficulty: "Beginner",
     rating: 4.7,
-    xp: 150,
+    demoPoints: 150,
   },
   {
     id: "pixel-foundry",
@@ -189,7 +187,7 @@ export const CLASSIC_GAMES_DEMO = [
     skills: ["Creativity", "Patterns", "Loops"],
     difficulty: "Beginner",
     rating: 4.6,
-    xp: 120,
+    demoPoints: 120,
   },
   {
     id: "circuit-runner",
@@ -197,7 +195,7 @@ export const CLASSIC_GAMES_DEMO = [
     skills: ["Logic", "Flow", "Optimization"],
     difficulty: "Intermediate",
     rating: 4.5,
-    xp: 110,
+    demoPoints: 110,
   },
   {
     id: "eco-stack",
@@ -205,7 +203,7 @@ export const CLASSIC_GAMES_DEMO = [
     skills: ["Systems", "Balance", "Strategy"],
     difficulty: "Intermediate",
     rating: 4.6,
-    xp: 130,
+    demoPoints: 130,
   },
 ];
 

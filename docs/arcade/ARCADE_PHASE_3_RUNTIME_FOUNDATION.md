@@ -2,7 +2,7 @@
 
 ## Phase Status
 
-Phase 3A establishes authenticated Runtime Session persistence and lifecycle. Save state (3B), telemetry (3C), frontend runtime client/development harness (3D), and the server-backed Learning leaderboard projection (3E) are documented below. Evidence Replay projection (3F) and cross-slice integration acceptance (3G) remain deferred. No gameplay engine or game wiring is included.
+Phase 3A establishes authenticated Runtime Session persistence and lifecycle. Save state (3B), telemetry (3C), frontend runtime client/development harness (3D), the server-backed Learning leaderboard projection (3E), and Evidence Replay (3F) are implemented. Integrated acceptance (3G) is recorded below. No gameplay engine or game wiring is included.
 
 ## Authority Boundaries
 
@@ -93,3 +93,56 @@ There is no canonical Runtime Session-to-Attempt or Runtime Session-to-Result re
 The frontend client is `src/shared/arcade/replay/arcadeReplayClient.js`; the `useArcadeReplay` hook drives `/history/:resultId/replay`. Canonical History links to replay using the actual server-provided Result ID only. Replay reads do not mutate source records, create outbox events, create Evidence, write Truth Spine, award rewards, or alter leaderboard projections.
 
 Evidence Replay is an explanatory projection over existing Arcade records. Replay does not establish, verify, or modify mastery, Evidence, credentials, rewards, or institutional truth. Missing canonical relationships are shown as unavailable rather than inferred.
+
+## Phase 3G Integrated Acceptance
+
+Acceptance date: 2026-09-30. Acceptance base: `8ffb761 feat: add arcade evidence replay foundation`. The Phase 3G worktree began clean on `feature/arcade-modernization-v1` at that commit. Phase 3G added one API integration test and this acceptance record; it changed no production authority implementation or migration.
+
+### Integrated Flow
+
+`apps/shs-api/tests/arcade-phase3g.integration.test.ts` passed against the local `sh_dev` PostgreSQL database and SHS API test server. It creates a real SCORE_THRESHOLD Activity through the authenticated Activity API, starts a Learning Runtime Session bound using the server contract's `activityId`, exercises owner read, revision 0→1 and 1→2 saves, a stale-write 409 with `currentRevision`, telemetry sequences 1 and 2 plus duplicate rejection, and pause/resume. It then creates a canonical Attempt and submits a score without mastery input; the stored Result has score 8/10 and server-derived `masteryAchieved=true`. A duplicate Result submission conflicts. Runtime completion is exercised independently and does not change Result count; repeated completion is idempotent.
+
+The same Result appears in canonical History and the organization-scoped Learning leaderboard, and loads in Result-rooted Replay with its stored mastery and canonical Attempt/Activity. Exactly one `arcade.resulted` outbox record with key `arcade.resulted:<resultId>` was present. Replay correctly returns `runtimeSession: null` and excludes coincident Session telemetry because no canonical Session↔Attempt link exists. The test also starts a Classic Session without an Activity and verifies terminal abandon behavior. It does not claim that sharing learner and Activity creates a canonical relationship.
+
+The integration test cleans its uniquely scoped Activity, Attempt, Result, Runtime Sessions (and cascaded save/events), and associated outbox/evidence projection rows in teardown. The database cleanup check found no Phase 3G fixture rows remaining.
+
+### Acceptance Evidence
+
+- Runtime Session, save-state, telemetry, leaderboard, replay, and Arcade Result API suites passed: 5, 7, 9, 7, 3, and 25 tests respectively; the integrated scenario passed 1/1. The SHS Arcade Result→Truth Spine integration suite passed 4/4 using its existing test harness. The Agent Fabric connectivity suite passed 3 tests and skipped its PostgreSQL acceptance case because `SHF_ARCADE_TRUTH_SPINE_TEST_DSN` was not configured for this run; the previously established Phase 2D.6B PostgreSQL acceptance is not being re-claimed by that skipped run.
+- The Phase 2A–3F frontend contract suite passed 81/81. SHS API `npm run typecheck` passed. Root `npm run build` passed, with the existing CareerConsultantPanel static/dynamic import warning and existing large-chunk notices.
+- Final browser specs `classical-arcade-room-visual.spec.mjs` and `arcade-learning-arcade.spec.mjs` passed 171/171. Stale assertions for Arcade Impact/XP/EVU history metrics, Rewards Wallet links, the former Classic leaderboard heading, and the retired Classic page-height target were updated to the approved canonical UI; no legacy behavior was restored. The three Notifications target checks (390x844, 768x1024, 1024x768) now measure at least 44x44.
+- Migration status on `sh_dev`: migrations through 151 applied; no pending migrations, drift, or unknown applied migrations. No Phase 3G migration was added. Persistence remains `arcade_runtime_sessions`, `arcade_runtime_save_states`, and `arcade_runtime_events`; there is no leaderboard, replay, or duplicate Result table.
+- Result write/mastery derivation and transactional outbox behavior were not modified. Verified Evidence, signed Agent Fabric ingestion, Truth Spine, Treasury, Identity, Curriculum, Career, and Metaverse authority implementations were not modified in Phase 3G. Runtime, leaderboard, and replay reads do not write outcomes or downstream truth.
+- Isolation is covered by the focused live API tests for Runtime Session, Save State, Telemetry, Result/History, Leaderboard, and Replay. The integrated scenario used the seeded active organization and test learner. Session↔Attempt linkage, telemetry in replay, and Classic server ranking remain deferred by design.
+
+### Final Remediation
+
+The routed Classic page now labels fixture scores `Demo points` and stores them as `demoPoints`; it no longer renders `+XP` or implies an earned reward. The Arcade header's Notifications bell is explicitly sized to 44x44 below the desktop tier, matching its search/theme neighbors. Responsive browser assertions cover those targets at 390x844, 768x1024, and 1024x768. The Classic page, Learning History, Arcade Activity summary, and shell navigation browser assertions now test current approved content rather than restoring retired XP/reward presentation.
+
+Legacy local-storage Arcade/game/leaderboard modules remain in the repository but are not mounted by current Arcade routes; legacy routes redirect to the current library or Learning leaderboard. They remain a re-mounting risk, not an active canonical path. `/arcade.html#/dev/runtime` remains direct-link development tooling and is absent from normal navigation. The frontend harness was contract-tested and its APIs exercised through the live authenticated API integration test; a full browser-authenticated runtime interaction was not established in this run.
+
+### Component Readiness
+
+| Component | Status |
+| --- | --- |
+| Runtime Session | PASS |
+| Save State | PASS |
+| Telemetry | PASS |
+| Frontend runtime client/harness | PASS WITH DEFERRED BROWSER-AUTH SMOKE |
+| Learning leaderboard | PASS |
+| Canonical History | PASS |
+| Evidence Replay | PASS WITH SESSION LINKAGE DEFERRED |
+| Learning authority boundary | PASS |
+| Classic authority boundary | PASS; displayed score is explicitly demo points |
+| Evidence/Truth boundary | PASS; Agent Fabric PostgreSQL test skipped in this run |
+| Organization isolation | PASS IN FOCUSED API SUITES |
+| Accessibility | PASS; responsive header icon targets meet 44x44 |
+| Observability/error handling | PASS for bounded API errors/conflicts; no Phase 3G code changes |
+
+### Deferred by Design and Performance Notes
+
+Deferred: canonical Runtime Session↔Attempt mapping, telemetry in Evidence Replay, Classic server leaderboard until a canonical validated score source exists, gameplay/content tooling, multiplayer, seasons/leagues/tournament authority, creator/publishing tools, spectator systems, and broader Metaverse integration. These are not Phase 3 defects.
+
+The Learning leaderboard ranks directly from canonical Results and applies bounded pagination after ranking. Existing indexes are not optimized specifically for organization+Activity+score; no measured evidence justified an index in this phase. No unbounded history/replay/runtime-event response or leaderboard N+1 was found in the reviewed paths.
+
+**PHASE 3 COMPLETE.** The Classic demo-label and header touch-target findings are closed. The 171/171 browser result, 81/81 frontend contracts, 1/1 integrated API scenario, API typecheck, and root build all pass. Frozen authority paths and migrations remain unchanged. The Agent Fabric PostgreSQL test caveat above is unchanged; this remediation made no changes to that handoff and does not replace the Phase 2D.6B production PostgreSQL acceptance evidence.

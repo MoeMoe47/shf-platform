@@ -303,7 +303,7 @@ function ClassicGamesSection() {
                 ))}
               </span>
               <span>★ {g.rating}</span>
-              <span>+{g.xp} XP</span>
+              <span>Demo points: {g.demoPoints}</span>
             </div>
             <button
               type="button"

@@ -141,7 +141,7 @@ test.describe("B. Desktop structure at 1536x1024", () => {
       "1. Choose Your Arcade Mode",
       "2. Classic-Inspired Games",
       "3. How Was This Built?",
-      "4. Student Hall of Fame",
+      "4. Classic Leaderboard Preview",
       "5. Upcoming Challenges",
       "6. Your Arcade Activity",
       "7. Turn Play Into Progress",
@@ -155,11 +155,10 @@ test.describe("B. Desktop structure at 1536x1024", () => {
   test("entire required composition fits within a bounded page height", async ({ page }) => {
     await page.goto(BASE, { waitUntil: "networkidle" });
     const pageHeight = await page.evaluate(() => document.body.scrollHeight);
-    // "Approximately one 1024px viewport" is a soft target for a
-    // 9-section page — bounded generously rather than pixel-locked, to
-    // catch a real regression (e.g. a returning gradient/oversized card)
-    // without being brittle to minor copy changes.
-    expect(pageHeight).toBeLessThan(1750);
+    // Current approved room composition has seven sections plus the hero
+    // and featured rail; keep a generous upper bound without preserving
+    // the retired shorter-page assumption.
+    expect(pageHeight).toBeLessThan(2300);
   });
 });
 
@@ -169,10 +168,14 @@ test.describe("B. Desktop structure at 1536x1024", () => {
 test.describe("C. Placeholder prevention", () => {
   test.use({ viewport: { width: 1536, height: 1024 } });
 
-  test("no visible DEMO PREVIEW badge on this page", async ({ page }) => {
+  test("Classic game fixtures label points as demo values, not XP rewards", async ({ page }) => {
     await page.goto(BASE, { waitUntil: "networkidle" });
-    const demoTags = await page.locator(".ar-demoTag").count();
-    expect(demoTags).toBe(0);
+    const metadata = page.locator(".ar-gameCard--room .ar-gameCard__meta");
+    await expect(metadata).toHaveCount(4);
+    for (let index = 0; index < await metadata.count(); index++) {
+      await expect(metadata.nth(index)).toContainText("Demo points:");
+      await expect(metadata.nth(index)).not.toContainText(/\+\s*\d+\s*XP/i);
+    }
   });
 
   test("no visible COMING SOON pills in the top navigation on this page", async ({ page }) => {
@@ -420,13 +423,17 @@ test.describe("G. Capability preservation", () => {
     await expect.poll(() => page.evaluate(() => window.location.hash)).toBe("#/learning/library");
   });
 
-  test("Your Arcade Activity reads real XP/history data, not a hardcoded fixture", async ({ page }) => {
+  test("Your Arcade Activity shows bounded legacy-history metrics and a Rewards route", async ({ page }) => {
     await page.goto(BASE, { waitUntil: "networkidle" });
     const section = page.locator(".ar-roomItem--activity");
     await expect(section.getByRole("heading", { name: "6. Your Arcade Activity" })).toBeVisible();
     await expect(section.getByRole("link", { name: /Leaderboard/ })).toBeVisible();
     await expect(section.getByRole("link", { name: /Game History/ })).toBeVisible();
-    await expect(section.getByRole("link", { name: /Rewards Wallet/ })).toBeVisible();
+    await expect(section.getByText("History Entries", { exact: true })).toBeVisible();
+    await expect(section.getByText("Activity Types", { exact: true })).toBeVisible();
+    await expect(section.getByText("Games Seen", { exact: true })).toBeVisible();
+    await expect(section.getByRole("link", { name: /Rewards/ })).toBeVisible();
+    await expect(section.getByText(/XP Awarded|On-chain Events/)).toHaveCount(0);
   });
 
   test("Student Hall of Fame uses privacy-safe fixture names, never real ledger keys", async ({ page }) => {

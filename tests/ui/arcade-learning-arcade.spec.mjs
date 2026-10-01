@@ -54,14 +54,15 @@ test.describe("Route rendering: new + existing Arcade routes", () => {
 
   test("History CSV export control remains available", async ({ page }) => {
     await page.goto(`${BASE}#/history`, { waitUntil: "networkidle" });
-    await expect(page.getByRole("button", { name: "Download CSV (Arcade Impact)" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Download CSV (Canonical Arcade History)" })).toBeVisible();
   });
 
-  test("History summary KPI labels (data contract) are unchanged", async ({ page }) => {
+  test("History presents canonical Result fields without legacy reward metrics", async ({ page }) => {
     await page.goto(`${BASE}#/history`, { waitUntil: "networkidle" });
-    await expect(page.getByText("Total Sessions")).toBeVisible();
-    await expect(page.getByText("XP Awarded")).toBeVisible();
-    await expect(page.getByText("On-chain Events")).toBeVisible();
+    await expect(page.getByText("Canonical results")).toBeVisible();
+    await expect(page.locator(".ar-history-empty")).toBeVisible();
+    await expect(page.getByText("XP Awarded")).toHaveCount(0);
+    await expect(page.getByText("On-chain Events")).toHaveCount(0);
   });
 });
 
@@ -82,7 +83,7 @@ test.describe("Navigation from the new pages reaches real, existing routes", () 
     await expect(page.getByRole("heading", { name: "CLASSICAL ARCADE ROOM" })).toBeVisible();
   });
 
-  test("Arcade Activity links reach Leaderboard, Game History, Rewards Wallet", async ({ page }) => {
+  test("Arcade Activity links reach Leaderboard, Game History, and Rewards", async ({ page }) => {
     await page.goto(`${BASE}#/learning`, { waitUntil: "networkidle" });
     const activity = page.locator("section", { has: page.getByRole("heading", { name: "Arcade Activity" }) });
     await activity.getByRole("link", { name: "Leaderboard" }).click();
@@ -95,14 +96,14 @@ test.describe("Navigation from the new pages reaches real, existing routes", () 
 
     await page.goto(`${BASE}#/learning`, { waitUntil: "networkidle" });
     const activity3 = page.locator("section", { has: page.getByRole("heading", { name: "Arcade Activity" }) });
-    await activity3.getByRole("link", { name: "Rewards Wallet" }).click();
+    await activity3.getByRole("link", { name: /Rewards/ }).click();
     await expect.poll(() => page.evaluate(() => window.location.hash)).toBe("#/rewards");
   });
 
-  test("Sidebar Rewards Wallet and Help & Safety reach real routes", async ({ page }) => {
+  test("Sidebar Rewards and Help & Safety reach real routes", async ({ page }) => {
     await page.goto(`${BASE}#/learning`, { waitUntil: "networkidle" });
     const sidebar = page.getByRole("navigation", { name: "Primary" });
-    await sidebar.getByRole("link", { name: "Rewards Wallet" }).click();
+    await sidebar.getByRole("link", { name: /Rewards/ }).click();
     await expect.poll(() => page.evaluate(() => window.location.hash)).toBe("#/rewards");
 
     await page.goto(`${BASE}#/learning`, { waitUntil: "networkidle" });
@@ -396,11 +397,11 @@ test.describe("Learning Arcade Home: authoritative desktop geometry (visual-fide
     expect(box.height).toBe(960); // full viewport height, not below a header
   });
 
-  test("sidebar contains the SHF logo, primary nav, Rewards Wallet card, and SHF Pledge card", async ({ page }) => {
+  test("sidebar contains the SHF logo, primary nav, Rewards card, and SHF Pledge card", async ({ page }) => {
     await page.goto(`${BASE}#/learning`, { waitUntil: "networkidle" });
     const sidebar = page.getByRole("navigation", { name: "Primary" });
     await expect(sidebar.locator(".ar-sideLogo__mark")).toBeVisible(); // logo mark (alt="" is decorative, excluded from the a11y tree by design)
-    await expect(sidebar.getByText("REWARDS WALLET")).toBeVisible();
+    await expect(sidebar.getByText("Rewards", { exact: true })).toBeVisible();
     await expect(sidebar.getByText("SHF PLEDGE")).toBeVisible();
     await expect(sidebar.getByRole("link", { name: "Help & Safety" })).toBeVisible();
   });
@@ -703,7 +704,7 @@ test.describe("Dedicated Arcade shell: light/dark theme parity for shell geometr
       await expect(page.locator(".ar-shell__sidebar")).toHaveCount(1);
       await expect(page.locator(".ar-shell__header")).toHaveCount(1);
       const sidebar = page.getByRole("navigation", { name: "Primary" });
-      await expect(sidebar.getByText("REWARDS WALLET")).toBeVisible();
+      await expect(sidebar.locator(".ar-rewardsCard__title")).toHaveText("Rewards");
       await expect(sidebar.getByText("SHF PLEDGE")).toBeVisible();
     });
   }
@@ -786,7 +787,7 @@ test.describe("B. Mobile drawer: open/close/focus/scroll-lock (390x844 + 768x102
         await menuBtn.click();
         await expect(page.locator(".ar-shell__sidebar")).toHaveClass(/is-mobileOpen/);
         const sidebar = page.getByRole("navigation", { name: "Primary" });
-        for (const label of ["Dashboard", "Learn", "Arcade", "Portfolio", "Credentials", "Rewards Wallet", "Help & Safety", "Sign Out"]) {
+        for (const label of ["Dashboard", "Learn", "Arcade", "Portfolio", "Credentials", "Rewards", "Help & Safety", "Sign Out"]) {
           await expect(sidebar.getByText(label, { exact: false }).first()).toBeVisible();
         }
         await expect(sidebar.getByRole("link", { name: "Arcade", exact: true })).toHaveClass(/is-active/);
@@ -983,7 +984,12 @@ test.describe("Accessibility: 44x44 minimum touch targets below the desktop tier
     test(`${vp.name}: header icon buttons meet the 44x44 minimum`, async ({ page }) => {
       await page.setViewportSize({ width: vp.width, height: vp.height });
       await page.goto(`${BASE}#/learning`, { waitUntil: "networkidle" });
-      const selectors = [".ar-mobileMenuBtn", ".ar-themeSwitch__trigger"];
+      const selectors = [
+        ".ar-mobileMenuBtn",
+        ".ar-headerExtras .ar-iconBtn",
+        ".ar-headerExtras .nca-notif-bell__trigger",
+        ".ar-themeSwitch__trigger",
+      ];
       for (const sel of selectors) {
         const el = page.locator(sel).first();
         if (await el.count()) {

@@ -27,7 +27,7 @@ const DESTINATIONS = [
   { to: "/leaderboards", label: "Leaderboard" },
   { to: "/rewards", label: "Rewards Wallet" },
   { to: "/tournaments", label: "Tournaments" },
-  { to: "/history", label: "Arcade Impact History" },
+  { to: "/history", label: "Arcade History" },
   { to: "/help", label: "Help & Safety" },
 ];
 

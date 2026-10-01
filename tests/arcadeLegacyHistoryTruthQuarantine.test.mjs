@@ -90,7 +90,7 @@ test("Northstar uses the compatibility badge constant and bounded dev copy", () 
   assert.match(northstar, /No institutional outcome is recorded/);
 });
 
-test("frozen verification authorities and migrations remain untouched", () => {
+test("frozen verification authorities and prior migrations remain untouched", () => {
   const status = execFileSync("git", ["status", "--short", "--", "services/shf-agent-fabric", "apps/shs-api/src/domain/verified-evidence", "apps/shs-api/src/domain/trusted-reporting", "src/data/arcade.js"], { encoding: "utf8" });
   assert.equal(status, "");
 
@@ -101,5 +101,20 @@ test("frozen verification authorities and migrations remain untouched", () => {
     .map((entry) => entry.slice(3))
     .sort();
 
-  assert.deepEqual(changedMigrationPaths, [], `Unexpected migration changes: ${changedMigrationPaths.join(", ")}`);
+  // Migration 152 is the current Mission Runtime foundation migration. Prior
+  // migrations remain frozen. This guard must work both before and after 152 is committed.
+  const allowedMigration = "apps/shs-api/migrations/152_mission_runtime_foundation.sql";
+  const unexpectedMigrationPaths = changedMigrationPaths.filter((path) => path !== allowedMigration);
+
+  assert.deepEqual(unexpectedMigrationPaths, [], `Unexpected migration changes: ${unexpectedMigrationPaths.join(", ")}`);
+});
+
+test("migration guard accepts clean or 152-only status and rejects prior/extra migrations", () => {
+  const allowedMigration = "apps/shs-api/migrations/152_mission_runtime_foundation.sql";
+  const unexpected = (paths) => paths.filter((path) => path !== allowedMigration);
+
+  assert.deepEqual(unexpected([allowedMigration]), []);
+  assert.deepEqual(unexpected([]), []);
+  assert.deepEqual(unexpected(["apps/shs-api/migrations/151_arcade_runtime_telemetry.sql"]), ["apps/shs-api/migrations/151_arcade_runtime_telemetry.sql"]);
+  assert.deepEqual(unexpected([allowedMigration, "apps/shs-api/migrations/151_arcade_runtime_telemetry.sql"]), ["apps/shs-api/migrations/151_arcade_runtime_telemetry.sql"]);
 });

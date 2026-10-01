@@ -154,6 +154,80 @@ and accepts only `count`; it does not identify a particular objective.
 - **Identity:** owns users and permissions. Mission roles are fictional
   participant roles, not identity roles.
 
+## Phase 4B Mission Runtime
+
+Mission Runtime is a separate execution authority for progress through one
+Mission Definition version. It does not extend or replace Arcade Runtime
+Session. A runtime may carry an explicit, owner/org/tenant-validated Arcade
+Runtime Session reference; no relationship is inferred from learner, Activity,
+or time. Arcade Runtime continues to own gameplay continuity, while Mission
+Runtime owns content progression.
+
+Phase 4A has no persisted Mission registry or authorized resolver. Accordingly,
+the internal runtime service accepts only a server-supplied definition that
+passes the Phase 4A validator and is marked `PUBLISHED`, then stores an exact
+bounded snapshot with `missionId` and `missionVersion`. It never accepts a
+client-supplied definition. There is no public start route or fixture-backed
+registry in 4B. The internal `MissionRuntimeService.start(actor, definition, …)`
+remains server-side only. A future HTTP start path must resolve
+`missionId + version` to an authorized server-side published MissionDefinition,
+validate and snapshot that exact definition, then start Mission Runtime. It
+must never accept an arbitrary MissionDefinition from the browser. Exposing
+that path requires an approved resolver and permission contract; a future
+registry may supply the snapshot, but an existing runtime never follows a later
+definition edit.
+
+Runtime status is `ACTIVE`, `PAUSED`, `SUCCEEDED`, `FAILED`, `ABANDONED`, or
+`EXPIRED`. Terminal states cannot resume; repeated ABANDON is idempotent.
+Mutations use owner-scoped row locking plus `expectedRevision` compare-and-swap;
+stale writes return `MISSION_RUNTIME_REVISION_CONFLICT` with `currentRevision`.
+The persisted snapshot, objective/stage state, scalar runtime state, status,
+revision, optional explicit Arcade Runtime Session reference, and timestamps
+live in `mission_runtime_sessions`. Ordered declared runtime observations live
+in `mission_runtime_events` with unique `(missionRuntimeId, sequence)`. Event
+history is capped at 500 per runtime.
+
+Objectives are `PENDING`, `ACTIVE`, or `COMPLETED`; their completion rules are
+evaluated on the server. Stages are `LOCKED`, `ACTIVE`, or `COMPLETED`, retain
+their declared optional flag, and advance in declared order only when required
+objectives and exit conditions are satisfied. A stage made solely of optional
+objectives must have an explicit exit condition to avoid a non-terminating
+stage. `stage.optional` is preserved, but Phase 4B does not implement an
+explicit `SKIPPED` transition. Later Mission authoring/runtime work must define
+optional-stage bypass semantics before optional stages are used for branching
+progression. The runtime state is a bounded (16 KiB), shallow JSON object limited to
+scalar keys declared by the Mission's `STATE_EQUALS`/`STATE_THRESHOLD`
+conditions. Sensitive keys and undeclared values fail closed.
+
+The pure condition evaluator supports all seven Phase 4A condition types:
+`OBJECTIVE_COMPLETE`, `OBJECTIVE_COUNT` (count across completed objectives),
+`STAGE_COMPLETE`, `TIME_ELAPSED` (server `startedAt`), `STATE_EQUALS`,
+`STATE_THRESHOLD`, and `EVENT_OCCURRED` (recorded Mission Runtime event only).
+Only event types referenced by the validated snapshot are accepted; sequence
+must be exactly next and events do not mutate Arcade Runtime lifecycle. Stage
+time limits are evaluated against server timestamps when a mutation/read-path
+evaluation occurs; there is no background expiration scheduler. If success and
+failure conditions become true together, failure takes precedence.
+
+Mission Runtime success is an operational execution state only. It does not
+establish mastery, Evidence, credentials, rewards, Curriculum completion,
+Career readiness, or institutional truth. The engine creates no Arcade
+Attempt/Result, Evidence, Truth Spine fact, Treasury/reward, leaderboard score,
+Metaverse state change, or Agent Fabric execution. Activity references and
+environment references remain metadata only.
+
+The internal service is owner-scoped by authenticated actor organization,
+tenant, user, and existing `arcade.attempt` permission. There are no 4B HTTP
+routes or frontend harness: without a canonical published-definition resolver,
+a start API would either trust client content or invent a fixture registry.
+The service is exercised by the Postgres-backed `mission-runtime.test.ts`.
+Deferred work includes an approved Mission registry/publishing resolver,
+public API and development harness, explicit Learning/Arcade outcome
+coordination, runtime telemetry bridges, background expiry, and all 4C–4H
+capabilities. Arcade Runtime Session, Curriculum, Career, Metaverse, Verified
+Evidence, Truth Spine, Treasury, Identity, and Agent Fabric authorities remain
+separate and unchanged.
+
 ## Deferred
 
 Persistence and publishing, creator tooling, execution/evaluation, AI mission

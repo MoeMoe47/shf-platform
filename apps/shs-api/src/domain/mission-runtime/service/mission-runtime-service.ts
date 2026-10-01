@@ -1,0 +1,362 @@
+import { hasPermission, SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
+import { assertValidMissionDefinition, type MissionCondition, type MissionDefinition } from "../../mission-content/model/mission-definition.js";
+import {
+  MISSION_RUNTIME_EVENT_MAX_BYTES,
+  MISSION_RUNTIME_MAX_EVENTS,
+  MISSION_RUNTIME_MAX_STATE_DEPTH,
+  MISSION_RUNTIME_STATE_MAX_BYTES,
+  type MissionObjectiveState,
+  type MissionRuntimeEvent,
+  type MissionRuntimeSession,
+  type MissionRuntimeStatus,
+  type MissionStageState,
+} from "../model/mission-runtime.js";
+import { MissionRuntimeRepo, type MissionRuntimeMutation, type MissionRuntimeScope } from "../repo/mission-runtime-repo.js";
+import { evaluateMissionCondition } from "./condition-evaluator.js";
+
+const SENSITIVE_KEYS = new Set(["password", "token", "authorization", "cookie", "secret", "credential", "latitude", "longitude", "location", "geolocation", "gps", "clipboard", "microphone", "camera", "keystrokes", "browserhistory", "fingerprint"]);
+const ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,159}$/;
+
+export class MissionRuntimeError extends Error {
+  constructor(public code: string, message: string, public statusCode = 400, public details: Record<string, unknown> = {}) {
+    super(message);
+    this.name = "MissionRuntimeError";
+  }
+}
+
+export interface MissionRuntimeActor {
+  user_id: string;
+  organization_id: string;
+  permissions: string[];
+}
+
+function scopeFor(actor: MissionRuntimeActor): MissionRuntimeScope {
+  if (!hasPermission(actor.permissions, SHS_SECURITY_PERMISSIONS.ARCADE_ATTEMPT)) {
+    throw new MissionRuntimeError("FORBIDDEN", "Missing arcade.attempt permission.", 403);
+  }
+  const organizationId = String(actor.organization_id || "").trim();
+  const userId = String(actor.user_id || "").trim();
+  if (!organizationId || !userId) throw new MissionRuntimeError("SCOPE_MISSING", "Actor organization/user is required.", 403);
+  return { organizationId, tenantId: `tenant:${organizationId}`, userId };
+}
+
+function runtimeId(value: unknown) {
+  const id = String(value ?? "").trim();
+  if (!ID_PATTERN.test(id)) throw new MissionRuntimeError("MISSION_RUNTIME_ID_INVALID", "Mission runtime id is invalid.");
+  return id;
+}
+
+function stableJson(value: unknown): string {
+  if (Array.isArray(value)) return `[${value.map(stableJson).join(",")}]`;
+  if (value && typeof value === "object") {
+    return `{${Object.keys(value).sort().map((key) => `${JSON.stringify(key)}:${stableJson((value as any)[key])}`).join(",")}}`;
+  }
+  return JSON.stringify(value);
+}
+
+function allConditions(conditions: MissionCondition[], context: Parameters<typeof evaluateMissionCondition>[1]) {
+  return conditions.every((condition) => evaluateMissionCondition(condition, context));
+}
+
+function conditionEventTypes(definition: MissionDefinition): Set<string> {
+  const types = new Set<string>();
+  const visit = (condition: MissionCondition) => {
+    if (condition.type === "EVENT_OCCURRED") types.add(condition.eventType!);
+  };
+  definition.objectives.forEach((objective) => visit(objective.completionRule));
+  definition.stages.forEach((stage) => [...stage.entryConditions, ...stage.exitConditions].forEach(visit));
+  [...definition.successConditions, ...definition.failureConditions].forEach(visit);
+  return types;
+}
+
+function conditionStateKeys(definition: MissionDefinition): Set<string> {
+  const keys = new Set<string>();
+  const visit = (condition: MissionCondition) => {
+    if (condition.type === "STATE_EQUALS" || condition.type === "STATE_THRESHOLD") keys.add(condition.stateKey!);
+  };
+  definition.objectives.forEach((objective) => visit(objective.completionRule));
+  definition.stages.forEach((stage) => [...stage.entryConditions, ...stage.exitConditions].forEach(visit));
+  [...definition.successConditions, ...definition.failureConditions].forEach(visit);
+  return keys;
+}
+
+function assertRunnableDefinition(definition: MissionDefinition) {
+  assertValidMissionDefinition(definition);
+  if (definition.status !== "PUBLISHED") throw new MissionRuntimeError("MISSION_VERSION_NOT_RUNNABLE", "Only an authorized PUBLISHED Mission Definition snapshot can start runtime.", 409);
+  if (!definition.successConditions.length) throw new MissionRuntimeError("MISSION_SUCCESS_RULE_REQUIRED", "A runnable Mission requires at least one success condition.");
+  for (const objective of definition.objectives) {
+    const condition = objective.completionRule;
+    if (condition.type === "OBJECTIVE_COMPLETE" && condition.objectiveId === objective.objectiveId) {
+      throw new MissionRuntimeError("MISSION_OBJECTIVE_CYCLE", "An objective cannot require itself to complete.");
+    }
+  }
+  for (const stage of definition.stages) {
+    const hasRequiredObjective = stage.objectiveIds.some((id) => definition.objectives.find((objective) => objective.objectiveId === id)?.required);
+    if (!hasRequiredObjective && !stage.exitConditions.length) {
+      throw new MissionRuntimeError("MISSION_STAGE_NOT_RUNNABLE", `Stage '${stage.stageId}' has no completion condition.`);
+    }
+  }
+}
+
+function initObjectiveStates(definition: MissionDefinition): MissionObjectiveState[] {
+  return definition.objectives.map((objective) => ({ objectiveId: objective.objectiveId, status: "PENDING", completedAt: null }));
+}
+
+function initStageStates(definition: MissionDefinition): MissionStageState[] {
+  return definition.stages.map((stage) => ({ stageId: stage.stageId, status: "LOCKED", startedAt: null, completedAt: null, optional: stage.optional }));
+}
+
+function conditionContext(
+  objectiveStates: MissionObjectiveState[], stageStates: MissionStageState[], runtimeState: Record<string, unknown>,
+  events: readonly Pick<MissionRuntimeEvent, "eventType">[], startedAt: string, now: string,
+) {
+  return { objectiveStates, stageStates, runtimeState, events, startedAt, now };
+}
+
+function advance(
+  definition: MissionDefinition,
+  current: Pick<MissionRuntimeSession, "objectiveStates" | "stageStates" | "runtimeState" | "startedAt">,
+  events: readonly MissionRuntimeEvent[],
+  now: string,
+): MissionRuntimeMutation {
+  const objectiveStates = current.objectiveStates.map((state) => ({ ...state }));
+  const stageStates = current.stageStates.map((state) => ({ ...state }));
+  const runtimeState = { ...current.runtimeState };
+
+  const expiredStage = definition.stages.find((stage) => {
+    const state = stageStates.find((item) => item.stageId === stage.stageId);
+    return state?.status === "ACTIVE" && stage.timeLimitSeconds !== null && state.startedAt !== null
+      && Date.parse(now) - Date.parse(state.startedAt) >= stage.timeLimitSeconds * 1000;
+  });
+  if (expiredStage) return { status: "EXPIRED", objectiveStates, stageStates, runtimeState, expiredAt: now };
+
+  for (let pass = 0; pass <= definition.stages.length + definition.objectives.length; pass += 1) {
+    let changed = false;
+    const context = conditionContext(objectiveStates, stageStates, runtimeState, events, current.startedAt, now);
+
+    definition.stages.forEach((stage, index) => {
+      const state = stageStates[index];
+      if (state.status !== "LOCKED") return;
+      const previousComplete = index === 0 || stageStates[index - 1].status === "COMPLETED";
+      if (previousComplete && allConditions(stage.entryConditions, context)) {
+        state.status = "ACTIVE";
+        state.startedAt = now;
+        changed = true;
+      }
+    });
+
+    definition.objectives.forEach((objective, index) => {
+      const state = objectiveStates[index];
+      if (state.status !== "PENDING") return;
+      const stageIndex = definition.stages.findIndex((stage) => stage.objectiveIds.includes(objective.objectiveId));
+      if (stageIndex < 0 || stageStates[stageIndex]?.status === "ACTIVE") {
+        state.status = "ACTIVE";
+        changed = true;
+      }
+    });
+
+    definition.objectives.forEach((objective, index) => {
+      const state = objectiveStates[index];
+      if (state.status === "ACTIVE" && evaluateMissionCondition(objective.completionRule, context)) {
+        state.status = "COMPLETED";
+        state.completedAt = now;
+        changed = true;
+      }
+    });
+
+    definition.stages.forEach((stage, index) => {
+      const state = stageStates[index];
+      if (state.status !== "ACTIVE") return;
+      const requiredIds = stage.objectiveIds.filter((id) => definition.objectives.find((objective) => objective.objectiveId === id)?.required);
+      const objectivesComplete = requiredIds.length > 0 && requiredIds.every((id) => objectiveStates.find((item) => item.objectiveId === id)?.status === "COMPLETED");
+      const exitConditionsComplete = stage.exitConditions.length > 0 && allConditions(stage.exitConditions, context);
+      const hasObjectiveGate = requiredIds.length > 0;
+      const objectivesSatisfied = !hasObjectiveGate || objectivesComplete;
+      const exitsSatisfied = stage.exitConditions.length === 0 || exitConditionsComplete;
+      if ((hasObjectiveGate || stage.exitConditions.length > 0) && objectivesSatisfied && exitsSatisfied) {
+        state.status = "COMPLETED";
+        state.completedAt = now;
+        changed = true;
+      }
+    });
+    if (!changed) break;
+  }
+
+  const context = conditionContext(objectiveStates, stageStates, runtimeState, events, current.startedAt, now);
+  const failure = definition.failureConditions.some((condition) => evaluateMissionCondition(condition, context));
+  const success = definition.successConditions.length > 0 && allConditions(definition.successConditions, context);
+  if (failure) return { status: "FAILED", objectiveStates, stageStates, runtimeState, failedAt: now };
+  if (success) return { status: "SUCCEEDED", objectiveStates, stageStates, runtimeState, completedAt: now };
+  return { status: "ACTIVE", objectiveStates, stageStates, runtimeState };
+}
+
+function validateJsonObject(value: unknown, code: string, maxBytes: number, maxDepth: number, forbiddenKeys: Set<string>): Record<string, any> {
+  if (!value || typeof value !== "object" || Array.isArray(value) || Object.getPrototypeOf(value) !== Object.prototype) {
+    throw new MissionRuntimeError(code, "Value must be a plain JSON object.");
+  }
+  const seen = new Set<object>();
+  const inspect = (item: unknown, depth: number) => {
+    if (depth > maxDepth) throw new MissionRuntimeError(code, "JSON nesting exceeds the allowed depth.");
+    if (item === null || typeof item === "string" || typeof item === "boolean") return;
+    if (typeof item === "number" && Number.isFinite(item)) return;
+    if (typeof item !== "object") throw new MissionRuntimeError(code, "Only JSON values are accepted.");
+    if (seen.has(item)) throw new MissionRuntimeError(code, "Circular JSON values are not accepted.");
+    seen.add(item);
+    if (Array.isArray(item)) item.forEach((child) => inspect(child, depth + 1));
+    else {
+      if (Object.getPrototypeOf(item) !== Object.prototype) throw new MissionRuntimeError(code, "Only plain JSON objects and arrays are accepted.");
+      for (const [key, child] of Object.entries(item)) {
+        const normalized = key.toLowerCase().replace(/[^a-z0-9]/g, "");
+        if (forbiddenKeys.has(normalized) || normalized.includes("token")) throw new MissionRuntimeError("MISSION_RUNTIME_SENSITIVE_STATE", `Field '${key}' is not permitted.`);
+        inspect(child, depth + 1);
+      }
+    }
+    seen.delete(item);
+  };
+  inspect(value, 0);
+  if (Buffer.byteLength(JSON.stringify(value), "utf8") > maxBytes) throw new MissionRuntimeError(code, `JSON object exceeds ${maxBytes} bytes.`, 413);
+  return value as Record<string, any>;
+}
+
+function validateRuntimeState(definition: MissionDefinition, patch: unknown): Record<string, string | number | boolean> {
+  const object = validateJsonObject(patch, "MISSION_RUNTIME_STATE_INVALID", MISSION_RUNTIME_STATE_MAX_BYTES, MISSION_RUNTIME_MAX_STATE_DEPTH, SENSITIVE_KEYS);
+  const allowedKeys = conditionStateKeys(definition);
+  for (const [key, value] of Object.entries(object)) {
+    if (!allowedKeys.has(key)) throw new MissionRuntimeError("MISSION_RUNTIME_STATE_KEY_INVALID", `State key '${key}' is not declared by this Mission Definition.`);
+    if (!["string", "number", "boolean"].includes(typeof value)) throw new MissionRuntimeError("MISSION_RUNTIME_STATE_INVALID", "Mission runtime state supports scalar values only.");
+  }
+  return object;
+}
+
+function validateExpectedRevision(value: unknown) {
+  if (!Number.isSafeInteger(value) || Number(value) < 1) throw new MissionRuntimeError("MISSION_RUNTIME_REVISION_INVALID", "expectedRevision must be a positive integer.");
+  return Number(value);
+}
+
+function resultOrThrow(result: Awaited<ReturnType<MissionRuntimeRepo["mutateOwned"]>>) {
+  if (result.kind === "NOT_FOUND") throw new MissionRuntimeError("MISSION_RUNTIME_NOT_FOUND", "Mission runtime was not found.", 404);
+  if (result.kind === "REVISION_CONFLICT") throw new MissionRuntimeError("MISSION_RUNTIME_REVISION_CONFLICT", "Mission runtime revision is stale; reload before retrying.", 409, { currentRevision: result.currentRevision });
+  if (result.kind === "EVENT_LIMIT") throw new MissionRuntimeError("MISSION_RUNTIME_EVENT_LIMIT", `Mission runtime history is limited to ${MISSION_RUNTIME_MAX_EVENTS} events.`, 409);
+  return result;
+}
+
+export class MissionRuntimeService {
+  constructor(private readonly repo = new MissionRuntimeRepo(), private readonly now: () => Date = () => new Date()) {}
+
+  async start(actor: MissionRuntimeActor, definitionInput: MissionDefinition, options: { idempotencyKey?: string | null; arcadeRuntimeSessionId?: string | null } = {}) {
+    const scope = scopeFor(actor);
+    assertRunnableDefinition(definitionInput);
+    const definition = JSON.parse(JSON.stringify(definitionInput)) as MissionDefinition;
+    const idempotencyKey = options.idempotencyKey == null ? null : String(options.idempotencyKey).trim();
+    if (idempotencyKey !== null && !ID_PATTERN.test(idempotencyKey)) throw new MissionRuntimeError("MISSION_RUNTIME_IDEMPOTENCY_KEY_INVALID", "idempotencyKey is invalid.");
+    const arcadeRuntimeSessionId = options.arcadeRuntimeSessionId == null ? null : runtimeId(options.arcadeRuntimeSessionId);
+    const startedAt = this.now().toISOString();
+    const objectiveStates = initObjectiveStates(definition);
+    const stageStates = initStageStates(definition);
+    const initial = { objectiveStates, stageStates, runtimeState: {}, startedAt };
+    const initialMutation = advance(definition, initial, [], startedAt);
+    const created = await this.repo.start({
+      ...scope,
+      missionId: definition.missionId,
+      missionVersion: definition.version,
+      definition,
+      objectiveStates: initialMutation.objectiveStates,
+      stageStates: initialMutation.stageStates,
+      startedAt,
+      arcadeRuntimeSessionId,
+      idempotencyKey,
+    });
+    if (!created.session) throw new MissionRuntimeError("ARCADE_RUNTIME_SESSION_NOT_FOUND", "Explicit Arcade Runtime Session reference is not owned by this actor.", 404);
+    if (created.reused && (created.session.missionId !== definition.missionId || created.session.missionVersion !== definition.version
+      || created.session.arcadeRuntimeSessionId !== arcadeRuntimeSessionId || stableJson(created.session.definitionSnapshot) !== stableJson(definition))) {
+      throw new MissionRuntimeError("MISSION_RUNTIME_IDEMPOTENCY_KEY_REUSED", "idempotencyKey was already used for another Mission version or Arcade Runtime Session.", 409);
+    }
+    if (initialMutation.status !== "ACTIVE" && !created.reused) {
+      const settled = await this.repo.mutateOwned({
+        id: created.session.id, scope, expectedRevision: created.session.revision,
+        derive: () => initialMutation,
+      });
+      return { session: resultOrThrow(settled).session, reused: false };
+    }
+    return created;
+  }
+
+  async get(actor: MissionRuntimeActor, rawId: string) {
+    const scope = scopeFor(actor);
+    const session = await this.repo.getOwned(runtimeId(rawId), scope);
+    if (!session) throw new MissionRuntimeError("MISSION_RUNTIME_NOT_FOUND", "Mission runtime was not found.", 404);
+    return session;
+  }
+
+  async list(actor: MissionRuntimeActor) {
+    return this.repo.listOwned(scopeFor(actor));
+  }
+
+  async listEvents(actor: MissionRuntimeActor, rawId: string) {
+    const scope = scopeFor(actor);
+    const events = await this.repo.listEventsOwned(runtimeId(rawId), scope);
+    if (!events) throw new MissionRuntimeError("MISSION_RUNTIME_NOT_FOUND", "Mission runtime was not found.", 404);
+    return events;
+  }
+
+  async transition(actor: MissionRuntimeActor, rawId: string, action: "PAUSE" | "RESUME" | "ABANDON", expectedRevisionInput: unknown) {
+    const scope = scopeFor(actor);
+    const id = runtimeId(rawId);
+    const expectedRevision = validateExpectedRevision(expectedRevisionInput);
+    const idempotentStatus = action === "ABANDON" ? "ABANDONED" : undefined;
+    const result = await this.repo.mutateOwned({ id, scope, expectedRevision, idempotentStatus,
+      derive: (session, events) => {
+        const now = this.now().toISOString();
+        const advanced = advance(session.definitionSnapshot, session, events, now);
+        if (advanced.status !== "ACTIVE") return advanced;
+        if (action === "PAUSE" && session.status === "ACTIVE") return { ...advanced, status: "PAUSED", pausedAt: now };
+        if (action === "RESUME" && session.status === "PAUSED") return { ...advanced, status: "ACTIVE", pausedAt: null };
+        if (action === "ABANDON" && ["ACTIVE", "PAUSED"].includes(session.status)) return { ...advanced, status: "ABANDONED", abandonedAt: now };
+        if ((action === "PAUSE" && session.status === "PAUSED") || (action === "RESUME" && session.status === "ACTIVE")) return { ...advanced, noChange: true };
+        throw new MissionRuntimeError("MISSION_RUNTIME_TRANSITION_INVALID", `Cannot ${action.toLowerCase()} a ${session.status.toLowerCase()} Mission runtime.`, 409);
+      },
+    });
+    return resultOrThrow(result).session;
+  }
+
+  async updateState(actor: MissionRuntimeActor, rawId: string, body: { expectedRevision: unknown; patch: unknown }) {
+    const scope = scopeFor(actor);
+    const id = runtimeId(rawId);
+    const expectedRevision = validateExpectedRevision(body?.expectedRevision);
+    const result = await this.repo.mutateOwned({ id, scope, expectedRevision,
+      derive: (session, events) => {
+        if (session.status !== "ACTIVE") throw new MissionRuntimeError("MISSION_RUNTIME_NOT_ACTIVE", "Runtime state may be updated only while ACTIVE.", 409);
+        const patch = validateRuntimeState(session.definitionSnapshot, body.patch);
+        const next = { ...session.runtimeState, ...patch };
+        validateRuntimeState(session.definitionSnapshot, next);
+        const advanced = advance(session.definitionSnapshot, { ...session, runtimeState: next }, events, this.now().toISOString());
+        if (advanced.status === "EXPIRED") return { ...advanced, runtimeState: session.runtimeState };
+        return { ...advanced, runtimeState: next };
+      },
+    });
+    return resultOrThrow(result).session;
+  }
+
+  async appendEvent(actor: MissionRuntimeActor, rawId: string, body: { expectedRevision: unknown; sequence: unknown; eventType: unknown; payload?: unknown }) {
+    const scope = scopeFor(actor);
+    const id = runtimeId(rawId);
+    const expectedRevision = validateExpectedRevision(body?.expectedRevision);
+    if (!Number.isSafeInteger(body?.sequence) || Number(body.sequence) < 1) throw new MissionRuntimeError("MISSION_RUNTIME_SEQUENCE_INVALID", "sequence must be a positive integer.");
+    const eventType = typeof body?.eventType === "string" ? body.eventType.trim() : "";
+    const payload = validateJsonObject(body?.payload ?? {}, "MISSION_RUNTIME_EVENT_PAYLOAD_INVALID", MISSION_RUNTIME_EVENT_MAX_BYTES, 4, SENSITIVE_KEYS);
+    const result = await this.repo.mutateOwned({ id, scope, expectedRevision,
+      derive: (session, events) => {
+        if (session.status !== "ACTIVE") throw new MissionRuntimeError("MISSION_RUNTIME_NOT_ACTIVE", "Events may be appended only while ACTIVE.", 409);
+        if (Number(body.sequence) !== events.length + 1) throw new MissionRuntimeError("MISSION_RUNTIME_SEQUENCE_CONFLICT", `sequence must be exactly ${events.length + 1}.`, 409, { expectedSequence: events.length + 1 });
+        const allowed = conditionEventTypes(session.definitionSnapshot);
+        if (!allowed.has(eventType)) throw new MissionRuntimeError("MISSION_RUNTIME_EVENT_TYPE_INVALID", "eventType is not declared by this Mission Definition.");
+        const now = this.now().toISOString();
+        const event: MissionRuntimeEvent = { id: "pending", sequence: Number(body.sequence), eventType, payload, occurredAt: now, serverReceivedAt: now };
+        const advanced = advance(session.definitionSnapshot, session, [...events, event], now);
+        if (advanced.status === "EXPIRED") return advanced;
+        return { ...advanced, event: { eventType, payload, occurredAt: now } };
+      },
+    });
+    return resultOrThrow(result);
+  }
+}

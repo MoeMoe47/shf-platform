@@ -221,12 +221,51 @@ tenant, user, and existing `arcade.attempt` permission. There are no 4B HTTP
 routes or frontend harness: without a canonical published-definition resolver,
 a start API would either trust client content or invent a fixture registry.
 The service is exercised by the Postgres-backed `mission-runtime.test.ts`.
-Deferred work includes an approved Mission registry/publishing resolver,
-public API and development harness, explicit Learning/Arcade outcome
-coordination, runtime telemetry bridges, background expiry, and all 4C–4H
-capabilities. Arcade Runtime Session, Curriculum, Career, Metaverse, Verified
-Evidence, Truth Spine, Treasury, Identity, and Agent Fabric authorities remain
-separate and unchanged.
+Deferred work includes a publishing registry/workflow, development harness,
+explicit Learning/Arcade outcome coordination, runtime telemetry bridges,
+background expiry, and all 4C–4H capabilities. Arcade Runtime Session,
+Curriculum, Career, Metaverse, Verified Evidence, Truth Spine, Treasury,
+Identity, and Agent Fabric authorities remain separate and unchanged.
+
+## Phase 4B.5 Published Mission Resolver / Start Authority
+
+`POST /arcade/mission-runtimes` accepts only `missionId`, `missionVersion`, and
+the optional `idempotencyKey` and `arcadeRuntimeSessionId` fields. Unknown body
+fields fail validation, so Mission content such as definitions, objectives,
+stages, conditions, status, scoring, AI policy, or environment references
+cannot be injected by the caller. The route requires authenticated
+`arcade.attempt` permission and delegates to a start orchestration service.
+
+The start authority resolves the exact `missionId + missionVersion` through
+the `PublishedMissionResolver` contract. There is no `latest` fallback. The
+resolver validates catalog entries on registration and again on resolution,
+returns only `PUBLISHED` entries, and returns an independent clone rather than
+a mutable shared object. The runtime service validates the resolved definition
+again and persists its exact snapshot. Unknown identity/version and DRAFT,
+REVIEW, or RETIRED entries are unavailable (404); the client cannot override
+status or publication state.
+
+The current code-backed `ServerPublishedMissionCatalog` is intentionally
+empty. Phase 4A fixtures remain DRAFT test fixtures and are not promoted to
+production content. Tests inject explicitly published definitions through
+the resolver abstraction and exercise the same route/start orchestration with
+real Mission Runtime persistence. There is no registry table, publishing
+workflow, or catalog read route in 4B.5. This temporary source may be replaced
+in Phase 4D while preserving the resolver interface and exact-version
+contract. Phase 4D owns publication, review, moderation, and immutable release
+management.
+
+Clients may request a published Mission by canonical identity and exact
+version, but they may not submit or modify the MissionDefinition used to start
+a Mission Runtime. The public start authority resolves
+`missionId + version` to an authorized server-side published definition,
+validates and snapshots it, and only then invokes Mission Runtime. The
+optional Arcade Runtime Session reference is still checked against the same
+authenticated owner and organization; it is never inferred or auto-created.
+The start response omits the definition snapshot and internal user/tenant
+scope. Starting a Mission still creates no Attempt, Result, mastery, Evidence,
+Truth, reward, or leaderboard score; Learning outcome coordination remains
+deferred to 4G.
 
 ## Deferred
 

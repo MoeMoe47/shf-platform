@@ -8,6 +8,7 @@ import { ArcadeLeaderboardError } from "../service/leaderboard-service.js";
 import * as replayService from "../service/replay-service.js";
 import { ArcadeReplayError } from "../service/replay-service.js";
 import { registerArcadeRuntimeRoutes } from "./runtime-routes.js";
+import { registerMissionRuntimeRoutes } from "../../mission-runtime/api/routes.js";
 
 function actorFromRequest(req: any) {
   return {
@@ -47,6 +48,7 @@ function requireAnyPermission(...permissions: string[]) {
 
 export function registerArcadeRoutes(app: any) {
   registerArcadeRuntimeRoutes(app);
+  registerMissionRuntimeRoutes(app);
   // Global reference data — no permission gate, mirrors GET /careers.
   app.get("/arcade/activities", async (_req: any, res: any, next: any) => {
     try {

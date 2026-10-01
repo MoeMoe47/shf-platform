@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { useCanonicalArcadeHistory } from "@/shared/arcade/useCanonicalArcadeHistory.js";
 
 const PAGE_SIZE = 50;
@@ -63,7 +64,7 @@ export default function ArcadeHistory() {
                 {safeItems.map((item) => (
                   <tr key={item.resultId}>
                     <td>{readableDate(item.completedAt)}</td>
-                    <td><div className="ar-history-game"><span className="ar-history-game-title">{item.activityTitle || item.activitySlug}</span></div></td>
+                    <td><div className="ar-history-game"><span className="ar-history-game-title">{item.activityTitle || item.activitySlug}</span><Link to={`/history/${encodeURIComponent(item.resultId)}/replay`}>View Replay</Link></div></td>
                     <td>{item.score === null || item.score === undefined ? "—" : `${item.score}${item.maxScore === null || item.maxScore === undefined ? "" : ` / ${item.maxScore}`}`}</td>
                     <td>{item.passed === true ? "Passed" : item.passed === false ? "Not passed" : "Recorded"}</td>
                     <td>{item.masteryAchieved ? "Achieved" : "Not achieved"}</td>

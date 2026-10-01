@@ -5,6 +5,8 @@ import * as service from "../service/arcade-service.js";
 import { ArcadeError } from "../service/arcade-service.js";
 import * as leaderboardService from "../service/leaderboard-service.js";
 import { ArcadeLeaderboardError } from "../service/leaderboard-service.js";
+import * as replayService from "../service/replay-service.js";
+import { ArcadeReplayError } from "../service/replay-service.js";
 import { registerArcadeRuntimeRoutes } from "./runtime-routes.js";
 
 function actorFromRequest(req: any) {
@@ -19,6 +21,7 @@ function actorFromRequest(req: any) {
 function sendArcadeError(error: any, res: any, next: any) {
   if (error instanceof ArcadeError) return res.status(error.statusCode).json(fail(error.code, error.message));
   if (error instanceof ArcadeLeaderboardError) return res.status(error.statusCode).json(fail(error.code, error.message));
+  if (error instanceof ArcadeReplayError) return res.status(error.statusCode).json(fail(error.code, error.message));
   return next(error);
 }
 
@@ -121,6 +124,14 @@ export function registerArcadeRoutes(app: any) {
       }
       const data = await leaderboardService.getActivityLeaderboard(actorFromRequest(req), req.params.activityId, limit, offset);
       return res.json(ok({ ...data, nextOffset: data.hasMore ? offset + data.items.length : null }));
+    } catch (error) {
+      return sendArcadeError(error, res, next);
+    }
+  });
+
+  app.get("/arcade/results/:resultId/replay", requireAnyPermission(SHS_SECURITY_PERMISSIONS.ARCADE_ATTEMPT, SHS_SECURITY_PERMISSIONS.ARCADE_RESULTS_VIEW), async (req: any, res: any, next: any) => {
+    try {
+      return res.json(ok(await replayService.getResultReplay(actorFromRequest(req), req.params.resultId)));
     } catch (error) {
       return sendArcadeError(error, res, next);
     }

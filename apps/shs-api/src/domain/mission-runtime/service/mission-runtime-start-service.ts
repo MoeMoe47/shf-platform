@@ -67,7 +67,9 @@ export class MissionRuntimeStartService {
   async startPublishedMission(actor: MissionRuntimeActor, input: StartPublishedMissionRequest) {
     validateMissionRuntimeStartRequest(input);
     const identity: PublishedMissionIdentity = { missionId: String(input.missionId), version: Number(input.missionVersion) };
-    const definition: MissionDefinition | null = await this.resolver.resolvePublishedMission(identity);
+    const organizationId = String(actor.organization_id || "").trim();
+    const scope = { organizationId, tenantId: `tenant:${organizationId}` };
+    const definition: MissionDefinition | null = await this.resolver.resolvePublishedMission(identity, scope);
     if (!definition) throw new MissionRuntimeError("PUBLISHED_MISSION_NOT_FOUND", "Published Mission version was not found.", 404);
 
     const result = await this.runtimeService.start(actor, definition, {

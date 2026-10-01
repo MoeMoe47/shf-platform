@@ -21,6 +21,8 @@
 .mission-builder__subhead h2, .mission-builder__subhead h3, .mission-builder__subhead h4 { margin: 0; }
 .mission-builder__subhead > div { display: flex; flex-wrap: wrap; gap: 6px; }
 .mission-builder .studio-primaryButton, .mission-builder .studio-secondaryButton { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 8px 12px; cursor: pointer; }
+.mission-governance .studio-primaryButton, .mission-governance .studio-secondaryButton { min-height: 44px; padding: 8px 12px; }
+.mission-governance button:focus-visible, .mission-governance a:focus-visible { outline: 3px solid var(--ld-orange-600); outline-offset: 2px; }
 .mission-builder .studio-secondaryButton:disabled { opacity: .5; cursor: not-allowed; }
 .mission-builder__condition { display: flex; flex-wrap: wrap; align-items: end; gap: 10px; padding: 12px 0; border-top: 1px solid var(--ld-ring); }
 .mission-builder__condition > * { flex: 1 1 140px; }

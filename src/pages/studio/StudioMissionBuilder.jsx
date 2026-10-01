@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import useAuth from "@/auth/useAuth.js";
 import { SHS_SECURITY_PERMISSIONS } from "@/system/security/security-permissions.js";
-import { createMissionDraft, getMissionDraft, listMissionDrafts, updateMissionDraft } from "@/lib/studio/missionDraftApi.js";
+import { createMissionDraft, getMissionDraft, listMissionDrafts, listMissionDraftSubmissions, submitMissionDraft, updateMissionDraft } from "@/lib/studio/missionDraftApi.js";
 import { listLeaderboardActivities } from "@/shared/arcade/leaderboard/arcadeLeaderboardClient.js";
 import "@/styles/studio-mission-builder.css";
 
@@ -94,6 +94,7 @@ export default function StudioMissionBuilder() {
   const [definition, setDefinition] = React.useState(null);
   const [draftId, setDraftId] = React.useState(null);
   const [revision, setRevision] = React.useState(null);
+  const [submissions, setSubmissions] = React.useState([]);
   const [dirty, setDirty] = React.useState(false);
   const [view, setView] = React.useState({ loading: true, saving: false, error: null, validation: [], saved: false });
 
@@ -117,6 +118,7 @@ export default function StudioMissionBuilder() {
     try {
       const draft = await getMissionDraft(item.draftId);
       setDraftId(draft.draftId); setRevision(draft.revision); setDefinition(draft.definition); setDirty(false);
+      setSubmissions(await listMissionDraftSubmissions(draft.draftId));
       setView({ loading: false, saving: false, error: null, validation: [], saved: false });
     } catch (error) { setView((state) => ({ ...state, loading: false, error })); }
   }
@@ -130,11 +132,21 @@ export default function StudioMissionBuilder() {
     try {
       const saved = draftId ? await updateMissionDraft(draftId, revision, definition) : await createMissionDraft(definition);
       setDraftId(saved.draftId); setRevision(saved.revision); setDefinition(saved.definition); setDirty(false);
+      setSubmissions(await listMissionDraftSubmissions(saved.draftId));
       setDrafts((items) => [saved, ...items.filter((item) => item.draftId !== saved.draftId)]);
       setView({ loading: false, saving: false, error: null, validation: [], saved: true });
     } catch (error) { setView((state) => ({ ...state, saving: false, error, validation: error.details?.errors || [] })); }
   }
   async function reloadLatest() { if (draftId) await chooseDraft({ draftId }); }
+  async function submitForReview() {
+    if (!draftId || dirty || !revision) return;
+    setView((state) => ({ ...state, saving: true, error: null }));
+    try {
+      await submitMissionDraft(draftId, revision);
+      setSubmissions(await listMissionDraftSubmissions(draftId));
+      setView((state) => ({ ...state, saving: false, saved: false }));
+    } catch (error) { setView((state) => ({ ...state, saving: false, error })); }
+  }
 
   if (!permitted) return <div className="studio-page mission-builder"><h1 className="ld-h1">Mission Builder</h1><p role="alert">Mission authoring is limited to authorized Studio creators.</p></div>;
 
@@ -153,6 +165,7 @@ export default function StudioMissionBuilder() {
         {view.error && <div className="mission-builder__error" role="alert"><strong>{view.error.code === "MISSION_DRAFT_REVISION_CONFLICT" ? "This draft changed since you loaded it." : "Draft could not be saved."}</strong><span>{view.error.message}</span>{view.error.code === "MISSION_DRAFT_REVISION_CONFLICT" && <button type="button" className="studio-secondaryButton" onClick={reloadLatest}>Reload latest</button>}{view.error.details?.currentRevision && <span>Server revision: {view.error.details.currentRevision}</span>}</div>}
         {view.validation.length > 0 && <div className="mission-builder__error" role="alert"><strong>Validation needs attention</strong><ul>{view.validation.map((message, i) => <li key={`${i}-${message}`}>{message}</li>)}</ul></div>}
         {view.saved && <p role="status" className="mission-builder__saved">Draft saved at revision {revision}.</p>}
+        {submissions.length > 0 && <section className="mission-builder__notice" aria-label="Review submissions"><strong>Review history</strong>{submissions.map((submission) => <div key={submission.submissionId}><p>{submission.status}: submitted revision {submission.draftRevision} at {new Date(submission.submittedAt).toLocaleString()}. Current draft revision: {revision}.</p>{submission.decisionNote && <p>Reviewer note: {submission.decisionNote}</p>}</div>)}</section>}
         <details open><summary>1. Basics</summary><div className="mission-builder__grid">
           <Field label="Mission ID" hint={draftId ? "Identity is fixed for this draft." : "Stable identity, independent of routes and Activity IDs."}><input value={definition.missionId} disabled={Boolean(draftId)} onChange={(e) => setAt(["missionId"], e.target.value)} /></Field>
           <Field label="Mission version" hint={draftId ? "Create a separate draft to author another Mission version." : "Content version is distinct from draft revision."}><input type="number" min="1" value={definition.version} disabled={Boolean(draftId)} onChange={(e) => setAt(["version"], Number(e.target.value))} /></Field>
@@ -184,7 +197,7 @@ export default function StudioMissionBuilder() {
         <details><summary>7. AI capability declarations</summary><p className="mission-builder__boundary">Capability declaration only. Governed AI execution is not enabled in 4C.</p><div className="mission-builder__grid">{Object.keys(definition.aiCapabilities).map((key) => <label className="mission-builder__check" key={key}><input type="checkbox" checked={definition.aiCapabilities[key]} onChange={(e) => setAt(["aiCapabilities", key], e.target.checked)} />{key}</label>)}</div></details>
         <details><summary>8. Accessibility and safety</summary><div className="mission-builder__grid"><label className="mission-builder__check"><input type="checkbox" checked={definition.accessibility.reducedMotionSupported} onChange={(e) => setAt(["accessibility", "reducedMotionSupported"], e.target.checked)} />Reduced motion supported</label><label className="mission-builder__check"><input type="checkbox" checked={definition.accessibility.captionsAvailable} onChange={(e) => setAt(["accessibility", "captionsAvailable"], e.target.checked)} />Captions available</label><label className="mission-builder__check"><input type="checkbox" checked={definition.accessibility.audioDescriptionsAvailable} onChange={(e) => setAt(["accessibility", "audioDescriptionsAvailable"], e.target.checked)} />Audio descriptions available</label><Field label="Visual reliance"><select value={definition.accessibility.visualReliance} onChange={(e) => setAt(["accessibility", "visualReliance"], e.target.value)}>{["NONE", "OPTIONAL", "REQUIRED"].map((x) => <option key={x}>{x}</option>)}</select></Field><Field label="Audio reliance"><select value={definition.accessibility.audioReliance} onChange={(e) => setAt(["accessibility", "audioReliance"], e.target.value)}>{["NONE", "OPTIONAL", "REQUIRED"].map((x) => <option key={x}>{x}</option>)}</select></Field><Field label="Input modes" hint="One item per line."><textarea rows="2" value={definition.accessibility.inputModes.join("\n")} onChange={(e) => setAt(["accessibility", "inputModes"], lines(e.target.value))} /></Field><Field label="Safety classification"><select value={definition.safety.classification} onChange={(e) => setAt(["safety", "classification"], e.target.value)}>{["GENERAL", "SENSITIVE", "SUPERVISED"].map((x) => <option key={x}>{x}</option>)}</select></Field><Field label="Content sensitivity" hint="One item per line."><textarea rows="2" value={definition.safety.contentSensitivity.join("\n")} onChange={(e) => setAt(["safety", "contentSensitivity"], lines(e.target.value))} /></Field><Field label="Safety notes" hint="One note per line."><textarea rows="3" value={definition.safety.notes.join("\n")} onChange={(e) => setAt(["safety", "notes"], lines(e.target.value))} /></Field></div></details>
         <details open><summary>9. Draft preview</summary><div className="mission-builder__preview"><strong>DRAFT PREVIEW</strong><h3>{definition.title}</h3><p>{definition.summary}</p><p>{definition.family} · {definition.difficulty} · Mission version {definition.version}</p><p>Audience: {definition.intendedAudience.join(", ") || "Not specified"}</p><p>Roles: {definition.roles.join(", ") || "None specified"}</p><h4>Objectives</h4><ol>{definition.objectives.map((item) => <li key={item.objectiveId}>{item.title} <small>{item.type} · {item.required ? "required" : "optional"} · completion: {conditionLabel(item.completionRule)}</small></li>)}</ol><h4>Stages</h4>{definition.stages.length ? <ol>{definition.stages.map((item) => <li key={item.stageId}>{item.title}{item.optional ? " · optional" : ""}<small>Entry: {item.entryConditions.map(conditionLabel).join("; ") || "none"} · Exit: {item.exitConditions.map(conditionLabel).join("; ") || "none"}</small></li>)}</ol> : <p>No stages defined.</p>}<h4>Conditions</h4><p>Success: {definition.successConditions.map(conditionLabel).join("; ") || "None"}</p><p>Failure: {definition.failureConditions.map(conditionLabel).join("; ") || "None"}</p><h4>Runtime score policy</h4><p>{definition.runtimeScorePolicy}</p><h4>Environment references</h4><p>{definition.environmentRefs.map((item) => `${item.system}:${item.environmentId}${item.locationId ? ` · location ${item.locationId}` : ""}${item.sceneId ? ` · scene ${item.sceneId}` : ""}`).join("; ") || "None"}</p><h4>AI capability declarations</h4><p>{Object.entries(definition.aiCapabilities).map(([key, enabled]) => `${key}: ${enabled ? "declared allowed" : "off"}`).join("; ")}</p><h4>Accessibility</h4><p>Reduced motion: {definition.accessibility.reducedMotionSupported ? "supported" : "not declared"}; captions: {definition.accessibility.captionsAvailable ? "available" : "not declared"}; audio descriptions: {definition.accessibility.audioDescriptionsAvailable ? "available" : "not declared"}; visual reliance: {definition.accessibility.visualReliance}; audio reliance: {definition.accessibility.audioReliance}; input modes: {definition.accessibility.inputModes.join(", ") || "none"}</p><h4>Safety</h4><p>{definition.safety.classification} · sensitivities: {definition.safety.contentSensitivity.join(", ") || "none"} · notes: {definition.safety.notes.join("; ") || "none"}</p><p className="mission-builder__boundary">This preview is not executable and cannot be launched. Save does not publish or approve content.</p></div></details>
-        <div className="mission-builder__actions"><span>{dirty ? "Unsaved changes" : draftId ? `Draft revision ${revision}` : "Not saved"}</span><button className="studio-primaryButton" type="submit" disabled={view.saving || !dirty}>{view.saving ? "Saving…" : "Save Draft"}</button></div>
+        <div className="mission-builder__actions"><span>{dirty ? "Unsaved changes" : draftId ? `Draft revision ${revision}` : "Not saved"}</span><div><button className="studio-primaryButton" type="submit" disabled={view.saving || !dirty}>{view.saving ? "Saving…" : "Save Draft"}</button><button type="button" className="studio-secondaryButton" onClick={submitForReview} disabled={view.saving || dirty || !draftId}>{view.saving ? "Submitting…" : "Submit for Review"}</button></div></div>
       </form>}
     </div>
   </div>;

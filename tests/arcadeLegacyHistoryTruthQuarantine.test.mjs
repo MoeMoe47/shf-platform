@@ -101,30 +101,35 @@ test("frozen verification authorities and prior migrations remain untouched", ()
     .map((entry) => entry.slice(3))
     .sort();
 
-  // Migration 153 is the current Phase 4C migration. All prior migrations,
-  // including 152, are frozen. This guard must work both before 153 is
+  // Migration 154 is the current Phase 4D migration. All prior migrations,
+  // including 153 and 152, are frozen. This guard works before 154 is
   // committed and after the worktree is clean.
-  const allowedMigration = "apps/shs-api/migrations/153_mission_draft_authoring.sql";
+  const allowedMigration = "apps/shs-api/migrations/154_mission_publishing.sql";
   const unexpectedMigrationPaths = changedMigrationPaths.filter((path) => path !== allowedMigration);
 
   assert.deepEqual(unexpectedMigrationPaths, [], `Unexpected migration changes: ${unexpectedMigrationPaths.join(", ")}`);
 });
 
-test("migration guard allows only the current Phase 4C migration before and after commit", () => {
-  const allowedMigration = "apps/shs-api/migrations/153_mission_draft_authoring.sql";
+test("migration guard allows only the current Phase 4D migration before and after commit", () => {
+  const allowedMigration = "apps/shs-api/migrations/154_mission_publishing.sql";
   const unexpected = (paths) => paths.filter((path) => path !== allowedMigration);
 
   assert.deepEqual(unexpected([allowedMigration]), []);
   assert.deepEqual(unexpected([]), []);
+  assert.deepEqual(unexpected(["apps/shs-api/migrations/153_mission_draft_authoring.sql"]), ["apps/shs-api/migrations/153_mission_draft_authoring.sql"]);
   assert.deepEqual(unexpected(["apps/shs-api/migrations/152_mission_runtime_foundation.sql"]), ["apps/shs-api/migrations/152_mission_runtime_foundation.sql"]);
   assert.deepEqual(unexpected(["apps/shs-api/migrations/151_arcade_runtime_telemetry.sql"]), ["apps/shs-api/migrations/151_arcade_runtime_telemetry.sql"]);
   assert.deepEqual(unexpected([
-    "apps/shs-api/migrations/152_mission_runtime_foundation.sql",
+    "apps/shs-api/migrations/153_mission_draft_authoring.sql",
     allowedMigration,
-  ]), ["apps/shs-api/migrations/152_mission_runtime_foundation.sql"]);
+  ]), ["apps/shs-api/migrations/153_mission_draft_authoring.sql"]);
   assert.deepEqual(unexpected([
     allowedMigration,
-    "apps/shs-api/migrations/151_arcade_runtime_telemetry.sql",
-  ]), ["apps/shs-api/migrations/151_arcade_runtime_telemetry.sql"]);
-  assert.deepEqual(unexpected(["apps/shs-api/migrations/154_unexpected.sql"]), ["apps/shs-api/migrations/154_unexpected.sql"]);
+    "apps/shs-api/migrations/153_mission_draft_authoring.sql",
+  ]), ["apps/shs-api/migrations/153_mission_draft_authoring.sql"]);
+  assert.deepEqual(unexpected([
+    allowedMigration,
+    "apps/shs-api/migrations/152_mission_runtime_foundation.sql",
+  ]), ["apps/shs-api/migrations/152_mission_runtime_foundation.sql"]);
+  assert.deepEqual(unexpected(["apps/shs-api/migrations/155_unexpected.sql"]), ["apps/shs-api/migrations/155_unexpected.sql"]);
 });

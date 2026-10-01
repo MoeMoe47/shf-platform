@@ -2,6 +2,7 @@ import {
   assertValidMissionDefinition,
   type MissionDefinition,
 } from "../model/mission-definition.js";
+import { MissionPublicationRepo } from "../repo/mission-publication-repo.js";
 
 export interface PublishedMissionIdentity {
   missionId: string;
@@ -9,7 +10,7 @@ export interface PublishedMissionIdentity {
 }
 
 export interface PublishedMissionResolver {
-  resolvePublishedMission(identity: PublishedMissionIdentity): Promise<MissionDefinition | null>;
+  resolvePublishedMission(identity: PublishedMissionIdentity, scope?: { organizationId: string; tenantId: string }): Promise<MissionDefinition | null>;
 }
 
 export class PublishedMissionCatalogError extends Error {
@@ -54,7 +55,27 @@ export class ServerPublishedMissionCatalog implements PublishedMissionResolver {
   }
 }
 
+export class PersistedPublishedMissionResolver implements PublishedMissionResolver {
+  constructor(private readonly repo = new MissionPublicationRepo()) {}
+
+  async resolvePublishedMission(identity: PublishedMissionIdentity, scope?: { organizationId: string; tenantId: string }): Promise<MissionDefinition | null> {
+    if (!scope?.organizationId || scope.tenantId !== `tenant:${scope.organizationId}`) return null;
+    const definition = await this.repo.resolvePublishedMission(scope, identity.missionId, identity.version);
+    if (!definition) return null;
+    try {
+      const cloned = cloneDefinition(definition as MissionDefinition);
+      assertValidMissionDefinition(cloned);
+      if (cloned.status !== "PUBLISHED" || cloned.missionId !== identity.missionId || cloned.version !== identity.version) {
+        throw new Error("Stored release identity/status does not match resolver request.");
+      }
+      return cloned;
+    } catch (error) {
+      throw new PublishedMissionCatalogError(`Stored published Mission ${identity.missionId}@${identity.version} failed validation: ${error instanceof Error ? error.message : "invalid definition"}`);
+    }
+  }
+}
+
 // No 4A draft fixture is promoted or exposed as production content here.
 // 4D may replace this code-backed source while preserving the resolver contract.
 export const SERVER_PUBLISHED_MISSION_DEFINITIONS: readonly MissionDefinition[] = Object.freeze([]);
-export const serverPublishedMissionResolver = new ServerPublishedMissionCatalog(SERVER_PUBLISHED_MISSION_DEFINITIONS);
+export const serverPublishedMissionResolver = new PersistedPublishedMissionResolver();

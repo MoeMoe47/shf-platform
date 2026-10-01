@@ -48,3 +48,48 @@ export function updateMissionDraft(draftId, expectedRevision, definition) {
     body: JSON.stringify({ expectedRevision, definition }),
   });
 }
+
+export function listMissionDraftSubmissions(draftId) {
+  return request(`/studio/missions/drafts/${encodeURIComponent(draftId)}/submissions`).then((data) => data.items || []);
+}
+
+export function submitMissionDraft(draftId, expectedRevision, submissionNote = "") {
+  return request(`/studio/missions/drafts/${encodeURIComponent(draftId)}/submit`, {
+    method: "POST",
+    body: JSON.stringify({ expectedRevision, submissionNote }),
+  });
+}
+
+export function listMissionReviewSubmissions(status = "SUBMITTED") {
+  return request(`/studio/missions/review/submissions?status=${encodeURIComponent(status)}`).then((data) => data.items || []);
+}
+
+export function getMissionReviewSubmission(submissionId) {
+  return request(`/studio/missions/review/submissions/${encodeURIComponent(submissionId)}`);
+}
+
+export function decideMissionReviewSubmission(submissionId, decision, decisionNote = "") {
+  return request(`/studio/missions/review/submissions/${encodeURIComponent(submissionId)}/${decision.toLowerCase()}`, {
+    method: "POST", body: JSON.stringify({ decisionNote }),
+  });
+}
+
+export function publishMissionSubmission(submissionId) {
+  return request(`/studio/missions/review/submissions/${encodeURIComponent(submissionId)}/publish`, {
+    method: "POST", body: JSON.stringify({}),
+  });
+}
+
+export function listMissionReleases() {
+  return request("/studio/missions/releases").then((data) => data.items || []);
+}
+
+export function listApprovedMissionsForPublication() {
+  return request("/studio/missions/publication/approved").then((data) => data.items || []);
+}
+
+export function retireMissionRelease(releaseId, retirementNote) {
+  return request(`/studio/missions/releases/${encodeURIComponent(releaseId)}/retire`, {
+    method: "POST", body: JSON.stringify({ retirementNote }),
+  });
+}

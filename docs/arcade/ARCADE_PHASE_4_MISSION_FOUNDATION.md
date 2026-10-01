@@ -312,19 +312,77 @@ authority. AI flags are declarations only; governed AI execution is not enabled
 in 4C. The screen uses labeled controls, visible focus, 44px minimum control
 targets, reduced-motion handling, and keyboard reorder controls.
 
-There is no draft autosave, local-storage draft cache, publishing control,
-moderation handoff, or direct Mission Runtime call. 4D owns review, approval,
-publication, immutable release/version lifecycle, and moderation. The
-published catalog remains unchanged by draft operations. A saved draft is not
-runtime-authorized, even if its identity/version matches a published Mission.
+There is no draft autosave, local-storage draft cache, publication control,
+or direct Mission Runtime call. Phase 4D provides the review and release
+handoff. The published resolver remains unchanged by draft operations. A
+saved draft is not runtime-authorized, even if its identity/version matches a
+published Mission.
 
 **A saved Mission draft is validated authoring content only. It is not
 published, approved, runtime-authorized, or institutional truth.**
 
+## Phase 4D Mission Publishing, Versioning & Moderation
+
+4D provides an organization/tenant-scoped lifecycle over Phase 4C drafts:
+`DRAFT → SUBMITTED → APPROVED → PUBLISHED → RETIRED`. Rejection marks the
+immutable review submission `REJECTED`; the associated draft remains editable.
+Authoring uses existing `studio.project.update/view` permissions, reviewer
+actions use `studio.review.queue.view` and `project.submission.review`, and
+publication/retirement use the existing `curriculum.catalog.publish` and
+`curriculum.catalog.retire` authorities. An author cannot approve their own
+submission, including when permissions overlap. Publication is separate from
+approval.
+
+Submission snapshots the exact validated Mission Definition at the requested
+draft revision. The review queue displays that frozen content, not a later
+draft edit. `draftRevision` remains distinct from Mission `version`. Submitting
+the same revision is idempotent; a newer edit requires a new submission.
+Approval and rejection record actor/time/note and append operational
+`mission_publication_events`. Rejection requires a bounded plain-text note.
+
+Publishing revalidates the frozen snapshot and creates a distinct immutable
+release with a server-owned `PUBLISHED` status. Unique organization/tenant,
+Mission ID/version and source-submission constraints prevent replacement or
+duplicate release creation. Publish retry returns the same release. The
+`PublishedMissionResolver` abstraction is preserved and now reads only an
+exact, validated, non-retired release scoped to the authenticated active
+organization and tenant. Draft, submitted, approved-only, rejected, retired,
+unknown, and wrong-version content remain unavailable to new runtime starts.
+
+**A Mission becomes runtime-authorized only when an immutable published
+release exists in the authorized Published Mission Resolver.** Approval alone
+does not make a Mission runtime-authorized.
+
+Retirement requires a plain-text note and separate publisher permission. It
+changes only release availability/status; the definition snapshot and audit
+history remain retained. New starts stop resolving a retired release. Existing
+Mission Runtime sessions keep their original definition snapshot and status;
+retirement does not terminate or rewrite runtime history. Changes require a
+new Mission version rather than editing a release. Publication lifecycle audit
+is operational governance history and does not write Truth Spine facts.
+
+The author Builder exposes `Submit for Review` only for a saved current draft
+revision and shows submitted revision/status separately from the current draft
+revision. Reviewer routes are `/studio/missions/review`; release management is
+`/studio/missions/releases`, whose publisher-only queue lists approved
+submissions awaiting release. The review view renders frozen content as text,
+with separate Approve, Reject, and permission-gated Publish actions. Retirement
+requires a note and explicit confirmation. These screens do not expose draft
+launch, Runtime mutation, Result/mastery, Evidence, Truth, rewards, or
+Metaverse/Agent Fabric authority.
+
+Migration 154 adds the review-submission, published-release, and publication
+event records. Releases are organization/tenant scoped, not globally reusable.
+The migration guard allows only migration 154 as an uncommitted migration and
+continues to pass after it is committed; migrations 151–153 remain frozen.
+
+**Approval alone does not make a Mission runtime-authorized. Retirement
+prevents new starts but does not rewrite historical runtime state.**
+
 ## Deferred
 
-Persistence and publishing, creator tooling, execution/evaluation, AI mission
-directors, adaptive difficulty, multiplayer, seasons/leagues/tournaments,
-reward/credential integrations, Metaverse orchestration, and adapters to
-Curriculum/Career/Arcade are deferred. These require explicit owners and
-authority-safe contracts in later phases.
+Mission version derivation, richer moderation policy, creator collaboration,
+execution/evaluation, AI mission directors, adaptive difficulty, multiplayer,
+seasons/leagues/tournaments, reward/credential integrations, Metaverse
+orchestration, and adapters to Curriculum/Career/Arcade are deferred. These
+require explicit owners and authority-safe contracts in later phases.

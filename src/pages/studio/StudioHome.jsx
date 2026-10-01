@@ -15,6 +15,8 @@ export default function StudioHome() {
   const { role } = useUser();
   const auth = useAuth();
   const canAuthorMissions = auth.hasPermission(SHS_SECURITY_PERMISSIONS.STUDIO_PROJECT_CREATE) && !auth.hasRole("student");
+  const canReviewMissions = auth.hasPermission(SHS_SECURITY_PERMISSIONS.STUDIO_REVIEW_QUEUE_VIEW) && auth.hasPermission(SHS_SECURITY_PERMISSIONS.PROJECT_SUBMISSION_REVIEW) && !auth.hasRole("student");
+  const canPublishMissions = auth.hasPermission(SHS_SECURITY_PERMISSIONS.CURRICULUM_CATALOG_PUBLISH) && !auth.hasRole("student");
   const [state, setState] = React.useState({ loading: true, error: null, projects: [] });
 
   React.useEffect(() => {
@@ -57,6 +59,7 @@ export default function StudioHome() {
       </section>
 
       {canAuthorMissions && <section className="studio-section" aria-labelledby="studio-missions-heading"><div className="studio-sectionHeading"><h2 id="studio-missions-heading">Mission Content</h2><span>Authorized creators</span></div><p>Construct and validate scenario drafts. Saving does not publish or authorize runtime.</p><Link className="studio-primaryButton" to="/studio/missions">Open Mission Builder</Link></section>}
+      {(canReviewMissions || canPublishMissions) && <section className="studio-section" aria-labelledby="studio-mission-governance-heading"><div className="studio-sectionHeading"><h2 id="studio-mission-governance-heading">Mission Governance</h2><span>Organization-scoped</span></div><p>Review decisions and release authority remain separate from draft authoring.</p>{canReviewMissions && <Link className="studio-primaryButton" to="/studio/missions/review">Mission Review</Link>} {canPublishMissions && <Link className="studio-textLink" to="/studio/missions/releases">Mission Releases</Link>}</section>}
 
       <section className="studio-section" aria-labelledby="studio-projects-heading">
         <div className="studio-sectionHeading"><h2 id="studio-projects-heading">Continue Working</h2><span><Link to="/studio/projects">My Projects <ChevronRightIcon size={15} /></Link> · <Link to="/studio/teams">Teams <ChevronRightIcon size={15} /></Link></span></div>

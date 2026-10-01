@@ -65,6 +65,13 @@ export const SHS_SECURITY_PERMISSIONS = Object.freeze({
   GROWTH_MANAGE: "growth.manage",
   PARTNERS_MANAGE: "partners.manage",
   REFERRALS_MANAGE: "referrals.manage",
+  STUDIO_REVIEW_QUEUE_VIEW: "studio.review.queue.view",
+  PROJECT_SUBMISSION_REVIEW: "project.submission.review",
+  CURRICULUM_CATALOG_PUBLISH: "curriculum.catalog.publish",
+  CURRICULUM_CATALOG_RETIRE: "curriculum.catalog.retire",
+  STUDIO_PROJECT_CREATE: "studio.project.create",
+  STUDIO_PROJECT_VIEW: "studio.project.view",
+  STUDIO_PROJECT_UPDATE: "studio.project.update",
 });
 
 export const SHS_SUPER_ADMIN_PERMISSIONS = Object.freeze(

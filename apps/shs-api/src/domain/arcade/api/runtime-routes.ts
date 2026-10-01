@@ -3,9 +3,11 @@ import { requirePermission } from "../../../auth/permission-guard.js";
 import { SHS_SECURITY_PERMISSIONS } from "../../../auth/security-permissions.js";
 import { ArcadeRuntimeSessionError, ArcadeRuntimeSessionService } from "../service/runtime-session-service.js";
 import { ArcadeRuntimeSaveStateService } from "../service/runtime-save-state-service.js";
+import { ArcadeRuntimeTelemetryService } from "../service/runtime-telemetry-service.js";
 
 const service = new ArcadeRuntimeSessionService();
 const saveStateService = new ArcadeRuntimeSaveStateService();
+const telemetryService = new ArcadeRuntimeTelemetryService();
 const actions = ["pause", "resume", "complete", "abandon"] as const;
 
 function actorFromRequest(req: any) {
@@ -56,6 +58,18 @@ export function registerArcadeRuntimeRoutes(app: any) {
   app.put("/arcade/runtime/sessions/:id/save", permission, async (req: any, res: any, next: any) => {
     try {
       return res.json(ok(await saveStateService.save(actorFromRequest(req), req.params.id, req.body || {})));
+    } catch (error) { return sendError(error, req, res, next); }
+  });
+
+  app.post("/arcade/runtime/sessions/:id/events", permission, async (req: any, res: any, next: any) => {
+    try {
+      return res.status(201).json(ok(await telemetryService.append(actorFromRequest(req), req.params.id, req.body || {})));
+    } catch (error) { return sendError(error, req, res, next); }
+  });
+
+  app.get("/arcade/runtime/sessions/:id/events", permission, async (req: any, res: any, next: any) => {
+    try {
+      return res.json(ok(await telemetryService.list(actorFromRequest(req), req.params.id, req.query || {})));
     } catch (error) { return sendError(error, req, res, next); }
   });
 

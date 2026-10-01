@@ -104,7 +104,8 @@ test("frozen verification authorities and prior migrations remain untouched", ()
   const allowedMigrationPaths = [
     "apps/shs-api/migrations/149_arcade_runtime_sessions.sql",
     "apps/shs-api/migrations/150_arcade_runtime_save_states.sql",
+    "apps/shs-api/migrations/151_arcade_runtime_telemetry.sql",
   ];
-  assert.ok(changedMigrationPaths.includes("apps/shs-api/migrations/150_arcade_runtime_save_states.sql"));
+  assert.ok(changedMigrationPaths.includes("apps/shs-api/migrations/151_arcade_runtime_telemetry.sql"));
   assert.ok(changedMigrationPaths.every((path) => allowedMigrationPaths.includes(path)), `Unexpected migration changes: ${changedMigrationPaths.join(", ")}`);
 });

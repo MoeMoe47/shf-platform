@@ -20,7 +20,17 @@ Save payloads must be JSON objects no larger than 64 KiB when serialized. Writes
 
 Arcade save state preserves resumable gameplay continuity. It is operational runtime data and does not establish mastery, evidence, credentials, rewards, leaderboard standing, or institutional truth.
 
-Telemetry remains deferred to Phase 3C.
+## Phase 3C: Bounded Runtime Telemetry
+
+`arcade_runtime_events` stores minimized operational observations for a runtime session. Events have a UUID, parent session, positive sequence, allowlisted event type, client `occurredAt`, server-assigned `serverReceivedAt`, bounded JSON-object payload, and creation timestamp. `(session_id, sequence)` is unique and events are read in sequence order.
+
+The allowlist is `SESSION_STARTED`, `SESSION_RESUMED`, `SESSION_PAUSED`, `CHECKPOINT_REACHED`, `LEVEL_STARTED`, `LEVEL_COMPLETED`, `INTERACTION`, `SESSION_COMPLETED`, and `SESSION_ABANDONED`. Lifecycle-named telemetry describes a runtime observation only; it does not invoke or replace the separate Runtime Session lifecycle routes. Telemetry writes are accepted only while the parent session is ACTIVE. PAUSED and terminal sessions reject new events; owners may still read their timeline.
+
+`POST /arcade/runtime/sessions/:id/events` requires the next contiguous sequence beginning at 1. A duplicate, gap, or out-of-order sequence returns HTTP 409 `RUNTIME_EVENT_SEQUENCE_CONFLICT`; exact replays conflict and create no duplicate row. A session-row lock held inside a transaction serializes writers before reading the current sequence and inserting. `GET /arcade/runtime/sessions/:id/events` is owner-scoped, ordered ascending, and bounded with `afterSequence`/`limit` pagination.
+
+Payloads are JSON objects capped at 16 KiB and nesting depth 12. Sensitive keys for credentials, authorization, cookies, clipboard, microphone/camera, location/GPS, keystrokes, browser history, fingerprints, and free-form messages/essays are rejected recursively. The event timestamp is an ISO-8601 client observation time, limited to at most five minutes in the future; `serverReceivedAt` is the server-side receipt time. Neither timestamp establishes institutional outcome time.
+
+Arcade runtime telemetry records bounded operational observations and does not establish mastery, verified completion, evidence, credentials, rewards, leaderboard standing, or institutional truth. Telemetry events cannot mutate Runtime Session lifecycle state. They do not create Attempts or Results, update save state, emit outbox events, or write Evidence, Truth Spine, Treasury, or leaderboard records. Evidence Replay may later consume an authorized bounded projection; no such handoff exists in this phase.
 
 Leaderboard rank is a presentation projection over authorized score sources and is not itself evidence or credential authority. Evidence Replay explains the provenance of a canonical Arcade outcome but does not independently establish mastery or verification. Neither leaderboard nor replay is implemented in 3A.
 

@@ -1,0 +1,52 @@
+/* Phase 4F.5 — MOL command center. Institutional and diagnostic; no motion. */
+.mol-cc {
+  --mol-bg: #f6f7f9;
+  --mol-surface: #ffffff;
+  --mol-ink: #1b1f24;
+  --mol-muted: #4a5360;
+  --mol-line: #c9ced6;
+  --mol-focus: #0b57d0;
+  background: var(--mol-bg);
+  color: var(--mol-ink);
+  min-height: 100vh;
+  padding: 24px 16px 48px;
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  .mol-cc {
+    --mol-bg: #111418;
+    --mol-surface: #1a1f25;
+    --mol-ink: #eef1f4;
+    --mol-muted: #b4bcc6;
+    --mol-line: #3a424c;
+    --mol-focus: #8ab4f8;
+  }
+}
+.mol-cc__header, .mol-cc__section { max-width: 1200px; margin: 0 auto 20px; }
+.mol-cc__eyebrow { margin: 0; color: var(--mol-muted); font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; }
+.mol-cc h1 { margin: 4px 0 8px; font-size: 26px; }
+.mol-cc h2 { margin: 0 0 12px; font-size: 19px; }
+.mol-cc h3 { margin: 16px 0 8px; font-size: 16px; }
+.mol-cc__boundary { margin: 0 0 4px; font-weight: 600; }
+.mol-cc__note, .mol-cc__empty { color: var(--mol-muted); }
+.mol-cc__section { background: var(--mol-surface); border: 1px solid var(--mol-line); border-radius: 8px; padding: 16px; }
+.mol-cc__stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 0; }
+.mol-cc__stats div { border: 1px solid var(--mol-line); border-radius: 6px; padding: 8px 10px; }
+.mol-cc__stats dt { color: var(--mol-muted); font-size: 13px; }
+.mol-cc__stats dd { margin: 2px 0 0; font-weight: 600; overflow-wrap: anywhere; }
+.mol-cc__tableWrap { overflow-x: auto; margin: 8px 0; }
+.mol-cc__tableWrap:focus-visible { outline: 3px solid var(--mol-focus); outline-offset: 2px; }
+.mol-cc__table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.mol-cc__table caption { text-align: left; color: var(--mol-muted); padding-bottom: 6px; }
+.mol-cc__table th, .mol-cc__table td { border-bottom: 1px solid var(--mol-line); padding: 6px 8px; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+.mol-cc__controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 12px; }
+.mol-cc__controls button, .mol-cc__controls select {
+  min-height: 36px; padding: 4px 12px; border: 1px solid var(--mol-line); border-radius: 6px;
+  background: var(--mol-surface); color: var(--mol-ink); font: inherit;
+}
+.mol-cc__controls button:disabled { opacity: 0.55; }
+.mol-cc button:focus-visible, .mol-cc select:focus-visible, .mol-cc summary:focus-visible { outline: 3px solid var(--mol-focus); outline-offset: 2px; }
+.mol-cc__sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) {
+  .mol-cc *, .mol-cc *::before, .mol-cc *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

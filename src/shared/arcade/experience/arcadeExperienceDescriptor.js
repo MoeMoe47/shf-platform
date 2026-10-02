@@ -39,6 +39,18 @@ export const ARCADE_EXPERIENCE_PROVENANCE_CLASSIFICATIONS = Object.freeze([
   "preview_only",
 ]);
 
+// Phase 6 — optional creator/source provenance. Provenance describes origin only; it never
+// grants publishing authority (publishing remains studio-registry-moderation).
+export const ARCADE_EXPERIENCE_CREATOR_SOURCES = Object.freeze(["SYSTEM", "INSTRUCTOR", "AUTHORIZED_CREATOR", "PARTNER"]);
+
+// Phase 6 — optional presentation support declarations (never accommodation records).
+export const ARCADE_EXPERIENCE_ACCESSIBILITY_SUPPORTS = Object.freeze([
+  "reducedMotionSupported", "keyboardSupported", "screenReaderSupported", "captionsSupported", "alternateInputSupported", "highContrastSupported",
+]);
+
+// Phase 6 — optional capability flags added to the existing capability block (absent = false).
+export const ARCADE_EXPERIENCE_OPTIONAL_CAPABILITIES = Object.freeze(["missionLaunch", "replay", "achievementEligible"]);
+
 export const ARCADE_EXPERIENCE_AUTHORITY_MAP = Object.freeze({
   arcadeDefinition: "arcade",
   arcadeAttemptResult: "arcade",
@@ -51,6 +63,9 @@ export const ARCADE_EXPERIENCE_AUTHORITY_MAP = Object.freeze({
   metaverse: "metaverse",
   agents: "agent-fabric",
   publishing: "studio-registry-moderation",
+  mission: "mission-content",
+  team: "mission-team",
+  achievements: "arcade",
 });
 
 export const ARCADE_EXPERIENCE_DESCRIPTOR_FIELD_GROUPS = Object.freeze([

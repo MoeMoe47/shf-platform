@@ -9,6 +9,7 @@ import * as replayService from "../service/replay-service.js";
 import { ArcadeReplayError } from "../service/replay-service.js";
 import { registerArcadeRuntimeRoutes } from "./runtime-routes.js";
 import { registerMissionRuntimeRoutes } from "../../mission-runtime/api/routes.js";
+import { registerArcadeIntegrationRoutes } from "../../arcade-integration/api/routes.js";
 import { registerMissionTeamRoutes } from "../../mission-team/api/routes.js";
 
 function actorFromRequest(req: any) {
@@ -51,6 +52,7 @@ export function registerArcadeRoutes(app: any) {
   registerArcadeRuntimeRoutes(app);
   registerMissionRuntimeRoutes(app);
   registerMissionTeamRoutes(app);
+  registerArcadeIntegrationRoutes(app);
   // Global reference data — no permission gate, mirrors GET /careers.
   app.get("/arcade/activities", async (_req: any, res: any, next: any) => {
     try {

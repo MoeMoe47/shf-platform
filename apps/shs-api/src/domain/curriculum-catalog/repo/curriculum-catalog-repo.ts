@@ -550,6 +550,21 @@ export class CurriculumCatalogRepo {
     return res.rows[0] ? { id: res.rows[0].id } : null;
   }
 
+  // Phase 6: read-only reverse lookup (Arcade Activity → org-scoped lesson links), owned by Curriculum.
+  // Returns lesson/unit/course identifiers and titles only; never lesson content.
+  async listLessonLinksForArcadeActivity(organizationId: string, arcadeActivityId: string): Promise<Array<{ lessonId: string; lessonTitle: string; unitId: string; courseId: string; sequence: number }>> {
+    const res = await this.dbQuery(
+      `SELECT la.curriculum_lesson_id, la.sequence, l.title AS lesson_title, l.unit_id, u.course_id
+       FROM curriculum_lesson_arcade_activities la
+       JOIN curriculum_lessons l ON l.lesson_id = la.curriculum_lesson_id AND l.organization_id = la.organization_id
+       JOIN curriculum_units u ON u.unit_id = l.unit_id AND u.organization_id = l.organization_id
+       WHERE la.organization_id = $1 AND la.arcade_activity_id = $2
+       ORDER BY la.sequence ASC, la.curriculum_lesson_id ASC LIMIT 50`,
+      [organizationId, arcadeActivityId],
+    );
+    return res.rows.map((r: any) => ({ lessonId: r.curriculum_lesson_id, lessonTitle: r.lesson_title, unitId: r.unit_id, courseId: r.course_id, sequence: r.sequence }));
+  }
+
   async listArcadeLinksForLesson(organizationId: string, curriculumLessonId: string): Promise<Array<{ id: string; arcadeActivityId: string; slug: string; title: string; sequence: number }>> {
     const res = await this.dbQuery(
       `SELECT la.curriculum_lesson_arcade_activity_id AS id, la.arcade_activity_id, la.sequence, aa.slug, aa.title

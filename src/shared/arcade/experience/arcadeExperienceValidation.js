@@ -1,4 +1,7 @@
 import {
+  ARCADE_EXPERIENCE_ACCESSIBILITY_SUPPORTS,
+  ARCADE_EXPERIENCE_CREATOR_SOURCES,
+  ARCADE_EXPERIENCE_OPTIONAL_CAPABILITIES,
   ARCADE_EXPERIENCE_FAMILIES,
   ARCADE_EXPERIENCE_LIFECYCLE_STATUSES,
   ARCADE_EXPERIENCE_PROVENANCE_CLASSIFICATIONS,
@@ -254,6 +257,7 @@ export function validateArcadeExperienceDescriptor(descriptor) {
     ARCADE_EXPERIENCE_PROVENANCE_CLASSIFICATIONS,
     "provenance.classification",
   );
+  validatePhase6Extensions(errors, descriptor, arcadeActivityId);
 
   addProhibitedFieldErrors(errors, descriptor);
 
@@ -261,6 +265,52 @@ export function validateArcadeExperienceDescriptor(descriptor) {
     valid: errors.length === 0,
     errors,
   };
+}
+
+// Phase 6 — optional, backward-compatible extensions. Absent fields mean "not declared".
+function validatePhase6Extensions(errors, descriptor, arcadeActivityId) {
+  ARCADE_EXPERIENCE_OPTIONAL_CAPABILITIES.forEach((key) => {
+    const value = descriptor.capabilities?.[key];
+    if (value !== undefined && typeof value !== "boolean") errors.push(`capabilities.${key} must be boolean when declared`);
+  });
+  const mission = descriptor.relationships?.mission;
+  if (mission !== undefined) {
+    if (!isObject(mission)) {
+      errors.push("relationships.mission must be an object when declared");
+    } else {
+      if (!["none", "reference"].includes(mission.relationshipType)) errors.push("relationships.mission.relationshipType must be one of: none, reference");
+      if (!Array.isArray(mission.missionReferences)) {
+        errors.push("relationships.mission.missionReferences must be an array");
+      } else {
+        mission.missionReferences.forEach((ref, index) => {
+          if (!isObject(ref) || typeof ref.missionId !== "string" || !ref.missionId.trim() || !Number.isInteger(ref.missionVersion) || ref.missionVersion < 1) {
+            errors.push(`relationships.mission.missionReferences[${index}] requires missionId and a positive integer missionVersion`);
+          }
+        });
+      }
+    }
+  }
+  if (descriptor.capabilities?.missionLaunch === true) {
+    // Mission launch is a Learning Arcade capability tied to a canonical activity and exact Mission versions.
+    if (descriptor.product?.family !== "learning") errors.push("capabilities.missionLaunch=true is available to learning experiences only");
+    if (!arcadeActivityId) errors.push("capabilities.missionLaunch=true requires activityReference.arcadeActivityId");
+    if (mission?.relationshipType !== "reference" || !Array.isArray(mission?.missionReferences) || mission.missionReferences.length === 0) {
+      errors.push("capabilities.missionLaunch=true requires relationships.mission references");
+    }
+  }
+  if (descriptor.provenance?.source !== undefined) {
+    addVocabularyError(errors, descriptor.provenance.source, ARCADE_EXPERIENCE_CREATOR_SOURCES, "provenance.source");
+  }
+  const supports = descriptor.accessibility?.supports;
+  if (supports !== undefined) {
+    if (!isObject(supports)) errors.push("accessibility.supports must be an object when declared");
+    else {
+      Object.keys(supports).forEach((key) => {
+        if (!ARCADE_EXPERIENCE_ACCESSIBILITY_SUPPORTS.includes(key)) errors.push(`accessibility.supports.${key} is not a declared support`);
+        else if (typeof supports[key] !== "boolean") errors.push(`accessibility.supports.${key} must be boolean`);
+      });
+    }
+  }
 }
 
 export const ARCADE_EXPERIENCE_PROHIBITED_AUTHORITY_FIELDS = PROHIBITED_AUTHORITY_FIELDS;

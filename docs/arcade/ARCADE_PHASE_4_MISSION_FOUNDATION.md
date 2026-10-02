@@ -639,6 +639,69 @@ Leave is idempotent; the host disbands instead of leaving. A removed participant
 
 **Deferred.** Multi-team Missions, matchmaking, discovery, social features, chat/voice, tournaments, spectators, realtime push, and AI or NPC participants.
 
+## Phase 6 — Arcade Integration Fabric
+
+Learning Arcade and Classic Arcade share platform infrastructure but remain separate product authorities.
+
+Arcade Integration Fabric coordinates integrations; it does not absorb the authority of connected systems.
+
+**Audit.**
+- Product type reuses the existing Arcade family vocabulary (`learning` | `classic`, migration 149). Its CHECK already makes a Classic runtime session unable to bind an Arcade Activity.
+- The canonical shared contract is the existing Arcade Experience Descriptor (`src/shared/arcade/experience`). Phase 6 extends it and does not replace it. No server-side experience registry, new table or migration was added.
+- `arcade_activities` stays the global Learning activity registry. Curriculum keeps its lesson ↔ activity link table.
+- Leaderboards exist only for Learning (per activity, org-scoped). There is no achievement store and no treasury.
+- Classic Arcade has no server-side score authority.
+
+**Descriptor extensions (all optional; absent ⇒ unchanged behavior).**
+- `capabilities.missionLaunch`, `capabilities.replay`, `capabilities.achievementEligible`.
+- `relationships.mission {relationshipType, missionReferences:[{missionId, missionVersion}]}`. These are exact versions, and `missionLaunch` requires a Learning activity.
+- `provenance.source` ∈ SYSTEM | INSTRUCTOR | AUTHORIZED_CREATOR | PARTNER. This records origin only; publishing stays with Studio/Mission publication.
+- `accessibility.supports`: declared boolean support flags only, never learner accommodation data.
+
+A curriculum relationship stays prohibited on the descriptor; Curriculum is read through its own link table.
+
+**Fabric** (`apps/shs-api/src/domain/arcade-integration`).
+- `arcade-experience-bridge.ts` imports the shared descriptor catalog (no server copy).
+- `ArcadeIntegrationService` derives normalized capabilities: MISSION_LAUNCH, MULTIPLAYER, LEADERBOARD, ACHIEVEMENTS, CAREER_LINK, CURRICULUM_LINK, EVIDENCE_CANDIDATE, METAVERSE_CONTEXT, CREATOR_AUTHORED, REPLAY. Consumers check capabilities, never routes or product names. EVIDENCE_CANDIDATE, CURRICULUM_LINK and MISSION_LAUNCH are never derived for Classic.
+- The Fabric persists nothing and owns no event bus, map registry, telemetry log, table or migration.
+
+**Routes** (guarded by `arcade.attempt`; org, tenant and identity always come from the authenticated actor):
+- `GET /arcade/integration/experiences/:id` resolves the canonical activity reference with read-only projections (curriculum lesson ids and titles only, published Mission references, career references, metaverse references, accessibility support flags, provenance with `grantsPublishingAuthority:false`). It contains no learner identity.
+- `GET …/:id/capabilities`.
+- `POST …/:id/launch`:
+  - `mode: ARCADE_SESSION` delegates to Arcade Runtime.
+  - `mode: MISSION` requires MISSION_LAUNCH, a declared Mission, and the exact declared version. It then delegates to the canonical `MissionRuntimeStartService` (no latest fallback; idempotent with the direct start). Multiplayer stays with the Phase 5 team routes on the resulting runtime.
+- `GET /arcade/integration/runtimes/:kind/:id` returns `ArcadeIntegrationRuntimeRef {runtimeKind, runtimeId, experienceId, arcadeActivityId, productType, status}`. It reads owner-scoped through the owning runtime service.
+- **Mission Runtime classification.** Mission Runtime carries no Arcade product classification: `MissionDefinition.family` is Mission Content's own taxonomy, and `arcadeActivityId` is an optional reference. A Mission Runtime is addressable through the Fabric only when exactly one canonical Learning descriptor establishes the link, meaning:
+  - the same `arcadeActivityId` as the frozen definition;
+  - the MISSION_LAUNCH capability;
+  - the exact `missionId`/`missionVersion` declared.
+
+  Any other Mission Runtime (no activity, no matching descriptor, a Classic descriptor, or an ambiguous link) returns `RUNTIME_NOT_FOUND` and is never labeled `learning`. Launch checks the same link before the canonical start, so the Fabric never creates a runtime it cannot classify.
+- `GET /arcade/integration/results/:kind/:id` returns a bounded result projection that keeps COMPLETION, SCORE, TEAM PERFORMANCE, INDIVIDUAL ACTIONS and LEARNING EVIDENCE CANDIDATE separate:
+  - Missions and runtime sessions have no score (`value:null`); no score is ever invented.
+  - Only a canonical Learning Arcade Result carries an authoritative score and mastery, from the activity's deterministic rule.
+  - Classic results are never learning Evidence.
+  - A team result is TEAM_PERFORMANCE. Individual actions are the server-attributed participant actions; Director-emitted events never count.
+  - Every evidence candidate is `isVerifiedEvidence:false`. Only the frozen verified-evidence authority decides, through its existing ARCADE_RESULT source.
+- `GET /arcade/integration/operations` is the MOCC read-only, aggregate, learner-agnostic projection. It has no commands.
+
+**Eligibility.**
+- **Leaderboard** requires the LEADERBOARD capability and an authoritative score.
+- **Achievement** requires the ACHIEVEMENTS capability and completion. It is Arcade-native eligibility only (no store yet) and is never a credential, certificate, Evidence or career readiness.
+
+**Degraded handling.**
+- Optional reads (Career, Curriculum links, published-Mission lookup, team counts) return `status: UNAVAILABLE`. Unknown is never reported as false, and no data is fabricated.
+- Required launch dependencies fail explicitly with `DEPENDENCY_UNAVAILABLE` (503).
+- Stable error codes: ACTIVITY_NOT_FOUND, ACTIVITY_NOT_LAUNCHABLE, CAPABILITY_NOT_SUPPORTED, DEPENDENCY_UNAVAILABLE, MISSION_NOT_PUBLISHED, MISSION_VERSION_MISMATCH, TENANT_SCOPE_MISMATCH, MULTIPLAYER_NOT_ALLOWED, EVIDENCE_NOT_ADDRESSABLE, RUNTIME_NOT_FOUND, LAUNCH_INVALID.
+
+**Telemetry.** Operational observation only, mapped onto existing records (Arcade runtime sessions, Arcade Results, Mission Runtime events, team history). It is not Evidence, Truth or billing.
+
+**Acceptance.** `apps/shs-api/tests/arcade-integration-fabric.test.ts` covers:
+- the Learning reference flow (lesson → activity → Fabric → published Mission → canonical start → team → MOL context → actions → completion → result → candidate → career projection → replay ref → eligibility);
+- the Classic reference flow (resolution → runtime → result → eligibility, with no curriculum or Evidence claims);
+- cross-org isolation, degraded handling and a zero-residue cleanup proof.
+
 ## Deferred
 
 Mission version derivation, richer moderation policy, creator collaboration,

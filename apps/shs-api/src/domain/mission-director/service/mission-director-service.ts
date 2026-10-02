@@ -37,7 +37,7 @@ export class MissionDirectorService {
     const previous = await this.repo.findByIdempotency({ ...actorScope, idempotencyKey });
     if (previous) return this.replay(actor, previous, observed.id, expectedRevision);
 
-    const { context, digest } = await this.contextBuilder.build(actor, runtimeSessionId);
+    const { context, executorContext, digest } = await this.contextBuilder.build(actor, runtimeSessionId);
     let providerExecutionRef: string | null = null;
     let status: "NO_OP" | "REJECTED" | "FAILED" = "REJECTED";
     let action: MissionDirectorAction | null = null;
@@ -54,7 +54,8 @@ export class MissionDirectorService {
     } else {
       let rawAction: unknown;
       try {
-        const proposal = await this.executor.propose(structuredClone(context));
+        // The executor sees only the minimized projection; policy below validates against the full internal context.
+        const proposal = await this.executor.propose(structuredClone(executorContext));
         rawAction = proposal?.action;
         providerExecutionRef = typeof proposal?.providerExecutionRef === "string" && proposal.providerExecutionRef.length <= 256
           ? proposal.providerExecutionRef : null;

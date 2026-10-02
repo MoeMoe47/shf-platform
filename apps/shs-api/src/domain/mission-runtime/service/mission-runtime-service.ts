@@ -14,6 +14,8 @@ import {
 import { MissionRuntimeRepo, type MissionDirectorDecisionWrite, type MissionRuntimeMutation, type MissionRuntimeScope } from "../repo/mission-runtime-repo.js";
 import { evaluateMissionCondition } from "./condition-evaluator.js";
 import type { MissionDirectorAction } from "../../mission-director/model/mission-director.js";
+import { MISSION_SYSTEM_EVENTS, initialScenarioState, isReservedStateKey, isSystemEventType } from "../../mission-content/model/mission-scenario.js";
+import { isScenarioAction, scenarioActionDenial, scenarioActionEffect } from "../../mission-director/service/mission-director-scenario-rules.js";
 
 const SENSITIVE_KEYS = new Set(["password", "token", "authorization", "cookie", "secret", "credential", "latitude", "longitude", "location", "geolocation", "gps", "clipboard", "microphone", "camera", "keystrokes", "browserhistory", "fingerprint"]);
 const ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,159}$/;
@@ -219,14 +221,23 @@ function validateJsonObject(value: unknown, code: string, maxBytes: number, maxD
   return value as Record<string, any>;
 }
 
-function validateRuntimeState(definition: MissionDefinition, patch: unknown): Record<string, string | number | boolean> {
+// Reserved `mission.*` keys are runtime-managed: rejected in any patch, permitted in merged state.
+function validateRuntimeState(definition: MissionDefinition, patch: unknown, { allowReserved = false } = {}): Record<string, string | number | boolean> {
   const object = validateJsonObject(patch, "MISSION_RUNTIME_STATE_INVALID", MISSION_RUNTIME_STATE_MAX_BYTES, MISSION_RUNTIME_MAX_STATE_DEPTH, SENSITIVE_KEYS);
   const allowedKeys = conditionStateKeys(definition);
   for (const [key, value] of Object.entries(object)) {
+    if (isReservedStateKey(key)) {
+      if (!allowReserved) throw new MissionRuntimeError("MISSION_RUNTIME_STATE_KEY_RESERVED", `State key '${key}' is managed by Mission Runtime.`);
+      continue;
+    }
     if (!allowedKeys.has(key)) throw new MissionRuntimeError("MISSION_RUNTIME_STATE_KEY_INVALID", `State key '${key}' is not declared by this Mission Definition.`);
     if (!["string", "number", "boolean"].includes(typeof value)) throw new MissionRuntimeError("MISSION_RUNTIME_STATE_INVALID", "Mission runtime state supports scalar values only.");
   }
   return object;
+}
+
+function expiredDuringDirectorApply() {
+  return new MissionRuntimeError("MISSION_RUNTIME_EXPIRED", "Mission runtime time limit elapsed; the Director action was not applied.", 409);
 }
 
 function validateExpectedRevision(value: unknown) {
@@ -254,7 +265,7 @@ export class MissionRuntimeService {
     const startedAt = this.now().toISOString();
     const objectiveStates = initObjectiveStates(definition);
     const stageStates = initStageStates(definition);
-    const initial = { objectiveStates, stageStates, runtimeState: {}, startedAt };
+    const initial = { objectiveStates, stageStates, runtimeState: initialScenarioState(definition), startedAt };
     const initialMutation = advance(definition, initial, [], startedAt);
     const created = await this.repo.start({
       ...scope,
@@ -263,6 +274,7 @@ export class MissionRuntimeService {
       definition,
       objectiveStates: initialMutation.objectiveStates,
       stageStates: initialMutation.stageStates,
+      runtimeState: initialMutation.runtimeState,
       startedAt,
       arcadeRuntimeSessionId,
       idempotencyKey,
@@ -329,8 +341,9 @@ export class MissionRuntimeService {
         if (session.status !== "ACTIVE") throw new MissionRuntimeError("MISSION_RUNTIME_NOT_ACTIVE", "Runtime state may be updated only while ACTIVE.", 409);
         const patch = validateRuntimeState(session.definitionSnapshot, body.patch);
         const next = { ...session.runtimeState, ...patch };
-        validateRuntimeState(session.definitionSnapshot, next);
+        validateRuntimeState(session.definitionSnapshot, next, { allowReserved: true });
         const advanced = advance(session.definitionSnapshot, { ...session, runtimeState: next }, events, this.now().toISOString());
+        if (advanced.status === "EXPIRED" && directorDecision) throw expiredDuringDirectorApply();
         if (advanced.status === "EXPIRED") return { ...advanced, runtimeState: session.runtimeState };
         return { ...advanced, runtimeState: next };
       },
@@ -350,10 +363,11 @@ export class MissionRuntimeService {
         if (session.status !== "ACTIVE") throw new MissionRuntimeError("MISSION_RUNTIME_NOT_ACTIVE", "Events may be appended only while ACTIVE.", 409);
         if (Number(body.sequence) !== events.length + 1) throw new MissionRuntimeError("MISSION_RUNTIME_SEQUENCE_CONFLICT", `sequence must be exactly ${events.length + 1}.`, 409, { expectedSequence: events.length + 1 });
         const allowed = conditionEventTypes(session.definitionSnapshot);
-        if (!allowed.has(eventType)) throw new MissionRuntimeError("MISSION_RUNTIME_EVENT_TYPE_INVALID", "eventType is not declared by this Mission Definition.");
+        if (isSystemEventType(eventType) || !allowed.has(eventType)) throw new MissionRuntimeError("MISSION_RUNTIME_EVENT_TYPE_INVALID", "eventType is not declared by this Mission Definition.");
         const now = this.now().toISOString();
         const event: MissionRuntimeEvent = { id: "pending", sequence: Number(body.sequence), eventType, payload, occurredAt: now, serverReceivedAt: now };
         const advanced = advance(session.definitionSnapshot, session, [...events, event], now);
+        if (advanced.status === "EXPIRED" && directorDecision) throw expiredDuringDirectorApply();
         if (advanced.status === "EXPIRED") return advanced;
         return { ...advanced, event: { eventType, payload, occurredAt: now } };
       },
@@ -377,15 +391,29 @@ export class MissionRuntimeService {
       const events = await this.listEvents(actor, rawId);
       return (await this.appendEvent(actor, rawId, { expectedRevision: expectedRevisionInput, sequence: events.length + 1, eventType: action.eventType, payload: action.payload ?? {} }, directorDecision)).session;
     }
-    const events = await this.listEvents(actor, rawId);
+    if (!isScenarioAction(action) && action.type !== "ESCALATE") throw new MissionRuntimeError("MISSION_DIRECTOR_ACTION_UNSUPPORTED", "Mission Director action is not supported.");
     const result = await this.repo.mutateOwned({ id: runtimeId(rawId), scope: scopeFor(actor), expectedRevision: validateExpectedRevision(expectedRevisionInput), directorDecision,
       derive: (session, currentEvents) => {
         if (session.status !== "ACTIVE") throw new MissionRuntimeError("MISSION_RUNTIME_NOT_ACTIVE", "Mission Director actions require an ACTIVE runtime.", 409);
-        if (currentEvents.length !== events.length) throw new MissionRuntimeError("MISSION_RUNTIME_REVISION_CONFLICT", "Mission Director proposal is stale.", 409);
+        const definition = session.definitionSnapshot;
+        let statePatch: Record<string, string> = {};
+        let eventType: string = MISSION_SYSTEM_EVENTS.escalated;
+        let payload: Record<string, unknown>;
+        if (action.type === "ESCALATE") {
+          payload = { reasonCode: action.reasonCode, ...(action.message === undefined ? {} : { message: action.message }) };
+        } else {
+          // Re-check declarations against the row-locked session; the frozen snapshot is the only source.
+          const denial = scenarioActionDenial(definition, session, action);
+          if (denial) throw new MissionRuntimeError(denial, "Mission Director action is not declared or not available.", 409);
+          ({ statePatch, event: { eventType, payload } } = scenarioActionEffect(definition, session, action));
+        }
         const now = this.now().toISOString();
-        const eventType = "MISSION_DIRECTOR_ESCALATED";
-        const payload = { reasonCode: action.reasonCode, ...(action.message === undefined ? {} : { message: action.message }) };
-        return { ...advance(session.definitionSnapshot, session, currentEvents, now), event: { eventType, payload, occurredAt: now } };
+        const runtimeState = { ...session.runtimeState, ...statePatch };
+        const pending: MissionRuntimeEvent = { id: "pending", sequence: currentEvents.length + 1, eventType, payload, occurredAt: now, serverReceivedAt: now };
+        // Branch/tier changes feed the one existing condition engine; there is no parallel state machine.
+        const advanced = advance(definition, { ...session, runtimeState }, [...currentEvents, pending], now);
+        if (advanced.status === "EXPIRED") throw expiredDuringDirectorApply();
+        return { ...advanced, runtimeState, event: { eventType, payload, occurredAt: now } };
       },
     });
     return resultOrThrow(result).session;

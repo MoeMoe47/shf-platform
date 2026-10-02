@@ -109,7 +109,21 @@ test("publish lifecycle freezes revision, separates author/reviewer/publisher, r
   definition.version = 1;
   definition.status = "DRAFT";
   definition.title = "Governed publication acceptance";
-  definition.aiCapabilities = { ...definition.aiCapabilities, missionDirector: true, scenarioVariation: true };
+  definition.aiCapabilities = { missionDirector: true, adaptiveDifficulty: true, npcDialogue: true, scenarioVariation: true };
+  // Phase 4F declarative scenario envelope travels draft → review → release → runtime snapshot unchanged.
+  definition.difficultyProfile = { tiers: [definition.difficulty, definition.difficulty === "ADVANCED" ? "EXPERT" : "ADVANCED"] };
+  definition.characters = [{
+    characterId: "trainer", displayName: "Trainer", characterType: "INSTRUCTOR", simulatedRole: "Simulated trainer",
+    allowedBehaviors: ["SPEAK"], knowledgeScope: "CURRENT_STAGE", dialogueMode: "SCRIPTED_ONLY",
+    scriptedLines: [{ lineId: "hint-1", text: "Look at the indicator lights." }], scenarioFacts: [], availableStageIds: [],
+  }];
+  definition.scenarioBranching = {
+    defaultBranchId: "standard",
+    branches: [
+      { branchId: "standard", label: "Standard", description: "Nominal conditions.", availableDuringStageIds: [] },
+      { branchId: "equipment-fault", label: "Equipment fault", description: "A declared equipment issue.", availableDuringStageIds: [] },
+    ],
+  };
 
   const created = await request("/studio/missions/drafts", AUTHOR, "POST", { definition });
   assert.equal(created.status, 201, JSON.stringify(created.body));
@@ -168,6 +182,21 @@ test("publish lifecycle freezes revision, separates author/reviewer/publisher, r
   runtimeId = started.body.data.session.id;
   assert.equal(started.body.data.session.missionId, missionId);
   assert.equal(started.body.data.session.missionVersion, 1);
+  const learnerActor = { user_id: LEARNER, organization_id: ORG, permissions: ["arcade.attempt"] };
+  const startedRuntime = await runtimeService.get(learnerActor, runtimeId);
+  assert.deepEqual(startedRuntime.definitionSnapshot.characters, definition.characters);
+  assert.deepEqual(startedRuntime.definitionSnapshot.difficultyProfile, definition.difficultyProfile);
+  assert.deepEqual(startedRuntime.definitionSnapshot.scenarioBranching, definition.scenarioBranching);
+  const adapt = await new MissionDirectorService(runtimeService, new FixtureMissionDirectorExecutor({
+    action: { type: "ADAPT_DIFFICULTY", tier: definition.difficultyProfile.tiers[1] },
+  })).direct(learnerActor, runtimeId, { expectedRevision: startedRuntime.revision, idempotencyKey: `${RUN}:adapt-published` });
+  assert.equal(adapt.status, "APPLIED");
+  const invalidCharacter = await new MissionDirectorService(runtimeService, new FixtureMissionDirectorExecutor({
+    action: { type: "CHARACTER_SPEAK", characterId: "trainer", text: "Improvised and unscripted" },
+  })).direct(learnerActor, runtimeId, { expectedRevision: adapt.runtime.revision, idempotencyKey: `${RUN}:invalid-character` });
+  assert.equal(invalidCharacter.status, "REJECTED");
+  assert.equal(invalidCharacter.runtime.revision, adapt.runtime.revision);
+  assert.deepEqual(invalidCharacter.runtime.runtimeState, adapt.runtime.runtimeState);
 
   const draft = await query("SELECT definition_json FROM mission_definition_drafts WHERE draft_id=$1", [draftId]);
   const publishedBeforeEdit = await query("SELECT definition_snapshot FROM mission_published_releases WHERE release_id=$1", [releaseId]);
@@ -238,11 +267,21 @@ test("publish lifecycle freezes revision, separates author/reviewer/publisher, r
   assert.equal(existing.missionId, missionId);
   assert.equal(existing.status, started.body.data.session.status);
   const frozenTitle = existing.definitionSnapshot.title;
+  const characterAfterRetirement = await new MissionDirectorService(runtimeService, new FixtureMissionDirectorExecutor({
+    action: { type: "CHARACTER_SPEAK", characterId: "trainer", lineId: "hint-1" },
+  })).direct(learnerActor, runtimeId, { expectedRevision: existing.revision, idempotencyKey: `${RUN}:character-after-retirement` });
+  assert.equal(characterAfterRetirement.status, "APPLIED");
+  const branchAfterRetirement = await new MissionDirectorService(runtimeService, new FixtureMissionDirectorExecutor({
+    action: { type: "SELECT_SCENARIO_BRANCH", branchId: "equipment-fault" },
+  })).direct(learnerActor, runtimeId, { expectedRevision: characterAfterRetirement.runtime.revision, idempotencyKey: `${RUN}:branch-after-retirement` });
+  assert.equal(branchAfterRetirement.status, "APPLIED");
+  const replayable = await runtimeService.listEvents(learnerActor, runtimeId);
+  assert.deepEqual(replayable.map((event) => event.eventType), ["MISSION_DIFFICULTY_ADAPTED", "MISSION_CHARACTER_SPOKE", "MISSION_SCENARIO_BRANCH_SELECTED"]);
   const director = new MissionDirectorService(runtimeService, new FixtureMissionDirectorExecutor({
     action: { type: "EMIT_DECLARED_EVENT", eventType: "objective-observed", payload: { afterRetirement: true } },
   }));
   const directed = await director.direct({ user_id: LEARNER, organization_id: ORG, permissions: ["arcade.attempt"] }, runtimeId, {
-    expectedRevision: existing.revision, idempotencyKey: `${RUN}:director-after-retirement`,
+    expectedRevision: branchAfterRetirement.runtime.revision, idempotencyKey: `${RUN}:director-after-retirement`,
   });
   assert.equal(directed.status, "APPLIED");
   assert.equal(directed.runtime.definitionSnapshot.title, frozenTitle);

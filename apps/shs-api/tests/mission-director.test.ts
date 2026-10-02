@@ -4,7 +4,7 @@ import { query } from "../src/db/client.js";
 import { SHS_SECURITY_PERMISSIONS } from "../src/auth/security-permissions.js";
 import { MISSION_DEFINITION_FIXTURES } from "../src/domain/mission-content/fixtures/mission-definition-fixtures.js";
 import type { MissionDefinition } from "../src/domain/mission-content/model/mission-definition.js";
-import { MISSION_DIRECTOR_POLICY_VERSION, type MissionDirectorContext, type MissionDirectorProposal } from "../src/domain/mission-director/model/mission-director.js";
+import { MISSION_DIRECTOR_POLICY_VERSION, type MissionDirectorContext, type MissionDirectorExecutorContext, type MissionDirectorProposal } from "../src/domain/mission-director/model/mission-director.js";
 import { MissionDirectorService } from "../src/domain/mission-director/service/mission-director-service.js";
 import { DeterministicMissionDirectorExecutor, FixtureMissionDirectorExecutor, type MissionDirectorExecutor } from "../src/domain/mission-director/service/mission-director-executor.js";
 import { validateMissionDirectorAction } from "../src/domain/mission-director/service/mission-director-policy.js";
@@ -80,9 +80,9 @@ function isReused(error: unknown) {
 
 class CapturingExecutor implements MissionDirectorExecutor {
   readonly kind = "FIXTURE" as const;
-  seen: MissionDirectorContext | null = null;
+  seen: MissionDirectorExecutorContext | null = null;
   constructor(private readonly proposal: MissionDirectorProposal, private readonly during?: () => Promise<void>) {}
-  async propose(context: MissionDirectorContext) {
+  async propose(context: MissionDirectorExecutorContext) {
     this.seen = context;
     if (this.during) await this.during();
     return structuredClone(this.proposal);
@@ -355,10 +355,10 @@ test("tenant isolation: policy rejects mismatched scope and the ledger rejects c
   ), /mission_director_tenant_matches_org/);
 });
 
-test("the executor receives a minimized context built from the frozen runtime snapshot", async () => {
+test("the executor receives a minimized projection of the frozen runtime snapshot, never the raw definition", async () => {
   const original = definition({ scenarioVariation: true });
   const session = await start("frozen", original);
-  original.title = "mutated after start";
+  original.stages[0].title = "mutated after start";
   original.aiCapabilities.missionDirector = false;
   const executor = new CapturingExecutor({ action: { type: "NO_OP" } });
   const result = await new MissionDirectorService(runtimeService, executor).direct(actor, session.id, {
@@ -367,15 +367,17 @@ test("the executor receives a minimized context built from the frozen runtime sn
   assert.equal(result.status, "NO_OP");
   const seen = executor.seen!;
   assert.deepEqual(Object.keys(seen).sort(), [
-    "aiCapabilities", "definitionSnapshot", "missionId", "missionVersion", "objectiveStates", "organizationId", "recentEvents",
-    "runtimeRevision", "runtimeSessionId", "runtimeState", "runtimeStatus", "stageStates", "tenantId",
+    "activeStages", "aiCapabilities", "characters", "difficulty", "missionId", "missionVersion", "objectives", "recentEvents",
+    "runtimeRevision", "runtimeSessionId", "runtimeState", "runtimeStatus", "scenarioBranching",
   ]);
-  assert.equal(seen.definitionSnapshot.title, session.definitionSnapshot.title);
-  assert.notEqual(seen.definitionSnapshot.title, "mutated after start");
+  assert.equal("definitionSnapshot" in seen, false);
+  assert.equal(seen.activeStages[0].title, session.definitionSnapshot.stages[0].title);
+  assert.notEqual(seen.activeStages[0].title, "mutated after start");
   assert.equal(seen.aiCapabilities.missionDirector, true);
-  assert.doesNotMatch(JSON.stringify(seen), new RegExp(USER));
+  const serialized = JSON.stringify(seen);
+  for (const forbidden of [USER, ORG, "tenant:", session.definitionSnapshot.summary]) assert.equal(serialized.includes(forbidden), false, forbidden);
   // Executor mutation of its context cannot reach the runtime snapshot.
-  seen.definitionSnapshot.title = "executor tampering";
+  seen.activeStages[0].title = "executor tampering";
   assert.deepEqual((await runtimeService.get(actor, session.id)).definitionSnapshot, session.definitionSnapshot);
 });
 

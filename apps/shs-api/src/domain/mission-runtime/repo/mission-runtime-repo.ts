@@ -95,6 +95,7 @@ export class MissionRuntimeRepo {
     definition: MissionDefinition;
     objectiveStates: MissionObjectiveState[];
     stageStates: MissionStageState[];
+    runtimeState: Record<string, string | number | boolean>;
     startedAt: string;
     arcadeRuntimeSessionId: string | null;
     idempotencyKey: string | null;
@@ -114,13 +115,13 @@ export class MissionRuntimeRepo {
           (mission_runtime_id, organization_id, tenant_id, user_id, mission_id, mission_version,
            definition_snapshot, status, objective_states, stage_states, runtime_state,
            arcade_runtime_session_id, idempotency_key, started_at)
-         VALUES ($1,$2,$3,$4,$5,$6,$7::jsonb,'ACTIVE',$8::jsonb,$9::jsonb,'{}'::jsonb,$10,$11,$12)
+         VALUES ($1,$2,$3,$4,$5,$6,$7::jsonb,'ACTIVE',$8::jsonb,$9::jsonb,$13::jsonb,$10,$11,$12)
          ON CONFLICT (organization_id, tenant_id, user_id, idempotency_key)
            WHERE idempotency_key IS NOT NULL DO NOTHING
          RETURNING ${COLUMNS}`,
         [id, input.organizationId, input.tenantId, input.userId, input.missionId, input.missionVersion,
           JSON.stringify(input.definition), JSON.stringify(input.objectiveStates), JSON.stringify(input.stageStates),
-          input.arcadeRuntimeSessionId, input.idempotencyKey, input.startedAt],
+          input.arcadeRuntimeSessionId, input.idempotencyKey, input.startedAt, JSON.stringify(input.runtimeState)],
       );
       if (inserted.rows[0]) return { session: fromRow(inserted.rows[0]), reused: false };
       const existing = await db.query(

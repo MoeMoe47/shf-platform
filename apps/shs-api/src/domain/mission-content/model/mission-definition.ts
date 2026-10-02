@@ -1,3 +1,11 @@
+import {
+  MISSION_DIFFICULTY_TIERS,
+  validateMissionScenarioExtensions,
+  type MissionCharacter,
+  type MissionDifficultyProfile,
+  type MissionScenarioBranching,
+} from "./mission-scenario.js";
+
 export const MISSION_FAMILIES = [
   "LEARNING",
   "CLASSIC",
@@ -13,7 +21,8 @@ export const MISSION_FAMILIES = [
 ] as const;
 
 export const MISSION_STATUSES = ["DRAFT", "REVIEW", "PUBLISHED", "RETIRED"] as const;
-export const MISSION_DIFFICULTIES = ["INTRODUCTORY", "BEGINNER", "INTERMEDIATE", "ADVANCED", "EXPERT"] as const;
+// Catalog difficulty and Phase 4F adaptive tiers share one closed vocabulary.
+export const MISSION_DIFFICULTIES = MISSION_DIFFICULTY_TIERS;
 export const MISSION_OBJECTIVE_TYPES = [
   "REACH", "INTERACT", "ANSWER", "INSPECT", "COLLECT", "OPERATE", "REPAIR", "RESPOND", "ESCORT", "DELIVER", "CREATE", "DECIDE", "SURVIVE", "OBSERVE", "REPORT", "CUSTOM",
 ] as const;
@@ -105,6 +114,10 @@ export interface MissionDefinition {
     notes: string[];
   };
   metadata: Record<string, string | number | boolean>;
+  // Phase 4F optional declarative adaptive-scenario envelope (absent on earlier definitions).
+  difficultyProfile?: MissionDifficultyProfile;
+  characters?: MissionCharacter[];
+  scenarioBranching?: MissionScenarioBranching;
 }
 
 const FORBIDDEN_KEYS = new Set([
@@ -191,7 +204,7 @@ function validateNoAuthorityOrExecutableContent(value: unknown, path: string, er
 export function validateMissionDefinition(value: unknown): string[] {
   const errors: string[] = [];
   if (!isRecord(value)) return ["mission must be an object"];
-  onlyKeys(value, ["missionId", "slug", "version", "status", "family", "title", "summary", "intendedAudience", "difficulty", "roles", "objectives", "stages", "successConditions", "failureConditions", "environmentRefs", "arcadeActivityId", "runtimeScorePolicy", "aiCapabilities", "accessibility", "safety", "metadata"], "mission", errors);
+  onlyKeys(value, ["missionId", "slug", "version", "status", "family", "title", "summary", "intendedAudience", "difficulty", "roles", "objectives", "stages", "successConditions", "failureConditions", "environmentRefs", "arcadeActivityId", "runtimeScorePolicy", "aiCapabilities", "accessibility", "safety", "metadata", "difficultyProfile", "characters", "scenarioBranching"], "mission", errors);
   validateNoAuthorityOrExecutableContent(value, "mission", errors);
 
   add(errors, typeof value.missionId === "string" && ID_PATTERN.test(value.missionId), "missionId is required and must be a stable identifier");
@@ -297,6 +310,7 @@ export function validateMissionDefinition(value: unknown): string[] {
   });
   if (value.arcadeActivityId !== undefined) add(errors, typeof value.arcadeActivityId === "string" && ID_PATTERN.test(value.arcadeActivityId), "arcadeActivityId must be a real canonical reference identifier");
   validateScalarMetadata(value.metadata, "metadata", errors);
+  validateMissionScenarioExtensions(value, stageIds, errors);
   return errors;
 }
 

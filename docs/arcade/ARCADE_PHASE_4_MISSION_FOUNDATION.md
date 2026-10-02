@@ -391,6 +391,48 @@ The Phase 4E action vocabulary is limited to `NO_OP`, `EMIT_DECLARED_EVENT`, `SE
 
 Mission Director provenance is operational audit data, not verified evidence or Truth Spine truth. Director orchestration does not create Results, evidence, credentials, mastery, career eligibility, rewards, Treasury changes, or institutional truth. Deterministic Mission Runtime operation does not require an AI provider.
 
+## Phase 4F — Adaptive Scenario / Governed AI Characters
+
+Phase 4F extends the Phase 4E pipeline; it is not a second AI system. Proposals still flow executor → deterministic Mission Director policy → Mission Runtime transaction → append-only `mission_director_decisions` provenance (policy version `mission-director-policy.v2`). No migration was added.
+
+**Declarative envelope.** `MissionDefinition` gains three optional, closed, validated fields that freeze into `mission_runtime_sessions.definition_snapshot` like every other field. Definitions without them behave exactly as before.
+
+- `difficultyProfile.tiers` — 2–5 tiers from the existing `MISSION_DIFFICULTIES` vocabulary; must include the Mission's catalog `difficulty`, which is the default tier.
+- `characters[]` — `characterId`, `displayName`, `characterType` (`INSTRUCTOR`, `SUPERVISOR`, `TEAMMATE`, `CUSTOMER`, `PATIENT`, `WITNESS`, `DISPATCHER`), `simulatedRole`, `allowedBehaviors` (`SPEAK`, `OBSERVE`, `REQUEST_ACTION`), `knowledgeScope` (`CURRENT_STAGE`, `MISSION_ONLY`), `dialogueMode` (`NONE`, `SCRIPTED_ONLY`, `BOUNDED`), authored `scriptedLines`, authored `scenarioFacts`, `availableStageIds`, optional `environmentId`.
+- `scenarioBranching` — `defaultBranchId` plus 2–8 `branches` with `availableDuringStageIds`.
+
+**Actions.** `ADAPT_DIFFICULTY` (requires `adaptiveDifficulty`), `SELECT_SCENARIO_BRANCH` (requires `scenarioVariation`), and `CHARACTER_SPEAK` / `CHARACTER_OBSERVE` / `CHARACTER_REQUEST_ACTION` (require `npcDialogue` plus the character's declared behavior, dialogue mode and stage availability). Every action additionally requires `missionDirector`. Declaration checks run once in the policy and again in Mission Runtime against the row-locked snapshot.
+
+**Runtime semantics.** Tier and branch are runtime-managed state keys (`mission.difficultyTier`, `mission.scenarioBranch`) seeded at start to the deterministic defaults. Mission Definitions may reference them only through `STATE_EQUALS` on declared values, so branches act through the one existing condition engine. Learner routes and the generic `SET_DECLARED_RUNTIME_STATE` action cannot write the `mission.*` prefix. Every applied action appends a runtime-owned event (`MISSION_DIFFICULTY_ADAPTED`, `MISSION_SCENARIO_BRANCH_SELECTED`, `MISSION_CHARACTER_*`). Definitions cannot declare those event types, so learners cannot forge them, and runtime history stays replayable. If a time limit elapses during an apply, the action is rejected rather than recorded as `APPLIED`.
+
+Adaptive difficulty selects only among options declared by the immutable MissionDefinition.
+
+AI characters are Mission-scoped simulated participants, not human identities or institutional authorities. They are never Identity users, memberships, or agent identities. Every character event carries `simulated: true`. In Phase 4F all character actions are identifier-only: `CHARACTER_SPEAK` selects a declared `lineId`, `CHARACTER_OBSERVE` a declared `factId`, and `CHARACTER_REQUEST_ACTION` a declared `objectiveId`. Mission Runtime resolves authored text from the frozen snapshot when it writes the event. Generated free-text dialogue is rejected (`CHARACTER_GENERATED_DIALOGUE_DEFERRED`) until a character-scoped executor context exists; `dialogueMode: "BOUNDED"` is a declaration for that future phase and today only permits scripted lines. Healthcare, public-safety, and non-`GENERAL` Missions may declare only `SCRIPTED_ONLY` dialogue.
+
+AI character actions are bounded proposals validated by deterministic server policy.
+
+Character memory is bounded to the Mission Runtime session.
+
+**Executor boundary.** The Director builds two contexts from the frozen `definition_snapshot`. The *internal* context keeps the full snapshot and is used only by server-side policy; Mission Runtime separately re-validates against the row-locked snapshot. Executors receive only a closed `MissionDirectorExecutorContext`:
+
+- runtime identifiers, revision and status, plus capabilities
+- active stages and their objectives
+- runtime state
+- recent non-character events
+- the current difficulty tier and allowed tiers
+- branch IDs, labels and current availability
+- a **character directory**
+
+The directory lists each available character's ID, name, type, simulated role, allowed behaviors, knowledge scope, dialogue mode, opaque `scriptedLineIds` and `scenarioFactIds`, and a content-free `interactionCount`. The shared executor never sees any character's line text, fact text, dialogue history or knowledge-stage content, so it cannot base one character's action on another character's private declarations. Using another character's ID is rejected server-side. Knowledge scope is enforced server-side: a `CURRENT_STAGE` character's requests are limited to active stages it may appear in. The executor never receives the raw definition, organization, tenant or learner identifiers, future-stage content, branch descriptions, or unavailable characters. A decision's `context_digest` is the SHA-256 of exactly this executor-visible projection, so it shows what information produced the proposal without storing it.
+
+Scenario branches must be declared by the MissionDefinition; AI cannot invent new branches.
+
+Accessibility and accommodation authority cannot be overridden by adaptive difficulty or AI character behavior. Difficulty tiers are labels with no timing, caption, motion, input or reliance parameters, and no action can change the frozen `accessibility` block or stage time limits. Mission Runtime does not yet receive learner accommodations; that link is a future, explicitly authorized integration.
+
+Difficulty, dialogue, and branch selection do not by themselves constitute verified evidence or institutional truth.
+
+**Deterministic fallback.** Missions run at the default tier and branch with no AI. Scripted lines are authored content. Executor outages are recorded as `FAILED` decisions and leave the runtime untouched.
+
 ## Deferred
 
 Mission version derivation, richer moderation policy, creator collaboration,

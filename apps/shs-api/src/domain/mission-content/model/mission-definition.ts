@@ -6,6 +6,8 @@ import {
   type MissionScenarioBranching,
 } from "./mission-scenario.js";
 import { validateMissionWorldDeclaration, type MissionMetaverseContextDeclaration } from "./mission-world.js";
+import { declaredMissionRoles, validateMissionMultiplayerDeclaration, type MissionMultiplayerDeclaration } from "./mission-multiplayer.js";
+import { allMissionConditions } from "./mission-scenario.js";
 
 export const MISSION_FAMILIES = [
   "LEARNING",
@@ -29,6 +31,8 @@ export const MISSION_OBJECTIVE_TYPES = [
 ] as const;
 export const MISSION_CONDITION_TYPES = [
   "OBJECTIVE_COMPLETE", "OBJECTIVE_COUNT", "STAGE_COMPLETE", "TIME_ELAPSED", "STATE_EQUALS", "STATE_THRESHOLD", "EVENT_OCCURRED",
+  // Phase 5: satisfied only by a canonical event carrying server-set participant attribution in this role.
+  "ROLE_EVENT_OCCURRED",
 ] as const;
 export const MISSION_SCORE_POLICIES = ["NONE", "POINTS", "TIME", "OBJECTIVE_WEIGHTED"] as const;
 
@@ -47,6 +51,7 @@ export interface MissionCondition {
   operator?: "EQ" | "GTE" | "LTE";
   value?: string | number | boolean;
   eventType?: string;
+  missionRole?: string;
 }
 
 export interface MissionObjective {
@@ -123,6 +128,8 @@ export interface MissionDefinition {
   scenarioBranching?: MissionScenarioBranching;
   // Phase 4G optional Learning ↔ Metaverse world-context declaration.
   metaverseContext?: MissionMetaverseContextDeclaration;
+  // Phase 5 optional multiplayer declaration; absent means single-player.
+  multiplayer?: MissionMultiplayerDeclaration;
 }
 
 const FORBIDDEN_KEYS = new Set([
@@ -174,11 +181,13 @@ function validateCondition(condition: any, path: string, errors: string[]) {
     STATE_EQUALS: ["type", "stateKey", "value"],
     STATE_THRESHOLD: ["type", "stateKey", "operator", "value"],
     EVENT_OCCURRED: ["type", "eventType"],
+    ROLE_EVENT_OCCURRED: ["type", "eventType", "missionRole"],
   };
   onlyKeys(condition, allowedKeys[condition.type], path, errors);
   const required: Record<string, string[]> = {
     OBJECTIVE_COMPLETE: ["objectiveId"], OBJECTIVE_COUNT: ["count"], STAGE_COMPLETE: ["stageId"],
     TIME_ELAPSED: ["seconds"], STATE_EQUALS: ["stateKey", "value"], STATE_THRESHOLD: ["stateKey", "operator", "value"], EVENT_OCCURRED: ["eventType"],
+    ROLE_EVENT_OCCURRED: ["eventType", "missionRole"],
   };
   for (const key of required[condition.type]) add(errors, condition[key] !== undefined, `${path}: ${condition.type} requires ${key}`);
   if (condition.objectiveId !== undefined) add(errors, typeof condition.objectiveId === "string" && ID_PATTERN.test(condition.objectiveId), `${path}: invalid objectiveId`);
@@ -209,7 +218,7 @@ function validateNoAuthorityOrExecutableContent(value: unknown, path: string, er
 export function validateMissionDefinition(value: unknown): string[] {
   const errors: string[] = [];
   if (!isRecord(value)) return ["mission must be an object"];
-  onlyKeys(value, ["missionId", "slug", "version", "status", "family", "title", "summary", "intendedAudience", "difficulty", "roles", "objectives", "stages", "successConditions", "failureConditions", "environmentRefs", "arcadeActivityId", "runtimeScorePolicy", "aiCapabilities", "accessibility", "safety", "metadata", "difficultyProfile", "characters", "scenarioBranching", "metaverseContext"], "mission", errors);
+  onlyKeys(value, ["missionId", "slug", "version", "status", "family", "title", "summary", "intendedAudience", "difficulty", "roles", "objectives", "stages", "successConditions", "failureConditions", "environmentRefs", "arcadeActivityId", "runtimeScorePolicy", "aiCapabilities", "accessibility", "safety", "metadata", "difficultyProfile", "characters", "scenarioBranching", "metaverseContext", "multiplayer"], "mission", errors);
   validateNoAuthorityOrExecutableContent(value, "mission", errors);
 
   add(errors, typeof value.missionId === "string" && ID_PATTERN.test(value.missionId), "missionId is required and must be a stable identifier");
@@ -317,6 +326,14 @@ export function validateMissionDefinition(value: unknown): string[] {
   validateScalarMetadata(value.metadata, "metadata", errors);
   validateMissionScenarioExtensions(value, stageIds, errors);
   validateMissionWorldDeclaration(value, errors);
+  validateMissionMultiplayerDeclaration(value, errors);
+  // Role-attributed conditions exist only for multiplayer Missions and only for declared roles.
+  const roles = declaredMissionRoles(value as MissionDefinition);
+  for (const condition of allMissionConditions(value as MissionDefinition)) {
+    if (condition.type !== "ROLE_EVENT_OCCURRED") continue;
+    add(errors, value.multiplayer !== undefined, "ROLE_EVENT_OCCURRED requires a multiplayer declaration");
+    add(errors, roles.has(String(condition.missionRole)), `ROLE_EVENT_OCCURRED references undeclared mission role ${condition.missionRole}`);
+  }
   return errors;
 }
 

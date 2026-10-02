@@ -90,6 +90,8 @@ export interface MissionDirectorExecutorContext {
   characters: MissionDirectorExecutorCharacter[];
   // Phase 4G: minimal LIVE world summary via Mission Runtime; never raw MOL state, events or accommodations.
   worldContext: MissionDirectorExecutorWorldContext | null;
+  // Phase 5: minimal team summary (counts and mission role IDs); never participant identities.
+  team: { teamStatus: string; teamSize: number; rolesPresent: string[]; readyCount: number } | null;
 }
 
 export interface MissionDirectorExecutorWorldContext {

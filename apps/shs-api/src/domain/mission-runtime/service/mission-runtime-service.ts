@@ -77,7 +77,7 @@ function allConditions(conditions: MissionCondition[], context: Parameters<typeo
 function conditionEventTypes(definition: MissionDefinition): Set<string> {
   const types = new Set<string>();
   const visit = (condition: MissionCondition) => {
-    if (condition.type === "EVENT_OCCURRED") types.add(condition.eventType!);
+    if (condition.type === "EVENT_OCCURRED" || condition.type === "ROLE_EVENT_OCCURRED") types.add(condition.eventType!);
   };
   definition.objectives.forEach((objective) => visit(objective.completionRule));
   definition.stages.forEach((stage) => [...stage.entryConditions, ...stage.exitConditions].forEach(visit));
@@ -124,7 +124,7 @@ function initStageStates(definition: MissionDefinition): MissionStageState[] {
 
 function conditionContext(
   objectiveStates: MissionObjectiveState[], stageStates: MissionStageState[], runtimeState: Record<string, unknown>,
-  events: readonly Pick<MissionRuntimeEvent, "eventType">[], startedAt: string, now: string,
+  events: readonly (Pick<MissionRuntimeEvent, "eventType"> & { payload?: Record<string, unknown> })[], startedAt: string, now: string,
 ) {
   return { objectiveStates, stageStates, runtimeState, events, startedAt, now };
 }
@@ -249,6 +249,11 @@ function validateRuntimeState(definition: MissionDefinition, patch: unknown, { a
   return object;
 }
 
+export const PARTICIPANT_ATTRIBUTION_KEY = "participant";
+// Server-set origin marker on declared events emitted by the Mission Director: such events are never learner actions.
+export const DIRECTOR_ORIGIN_KEY = "emittedBy";
+export const DIRECTOR_ORIGIN = "MISSION_DIRECTOR";
+
 function expiredDuringDirectorApply() {
   return new MissionRuntimeError("MISSION_RUNTIME_EXPIRED", "Mission runtime time limit elapsed; the Director action was not applied.", 409);
 }
@@ -339,6 +344,20 @@ export class MissionRuntimeService {
     return session;
   }
 
+  // Phase 5 internal reads for an owner scope already resolved server-side by the multiplayer domain
+  // (participants are authorized there). Read-only; no actor-supplied scope reaches these.
+  async getScoped(scope: MissionRuntimeScope, rawId: string) {
+    const session = await this.repo.getOwned(runtimeId(rawId), scope);
+    if (!session) throw new MissionRuntimeError("MISSION_RUNTIME_NOT_FOUND", "Mission runtime was not found.", 404);
+    return session;
+  }
+
+  async listEventsScoped(scope: MissionRuntimeScope, rawId: string) {
+    const events = await this.repo.listEventsOwned(runtimeId(rawId), scope);
+    if (!events) throw new MissionRuntimeError("MISSION_RUNTIME_NOT_FOUND", "Mission runtime was not found.", 404);
+    return events;
+  }
+
   async list(actor: MissionRuntimeActor) {
     return this.repo.listOwned(scopeFor(actor));
   }
@@ -425,21 +444,98 @@ export class MissionRuntimeService {
     if (!Number.isSafeInteger(body?.sequence) || Number(body.sequence) < 1) throw new MissionRuntimeError("MISSION_RUNTIME_SEQUENCE_INVALID", "sequence must be a positive integer.");
     const eventType = typeof body?.eventType === "string" ? body.eventType.trim() : "";
     const payload = validateJsonObject(body?.payload ?? {}, "MISSION_RUNTIME_EVENT_PAYLOAD_INVALID", MISSION_RUNTIME_EVENT_MAX_BYTES, 4, SENSITIVE_KEYS);
+    // Participant attribution and Director origin are set only by the server; they can never be supplied.
+    if (Object.hasOwn(payload, PARTICIPANT_ATTRIBUTION_KEY) || Object.hasOwn(payload, DIRECTOR_ORIGIN_KEY)) {
+      throw new MissionRuntimeError("MISSION_RUNTIME_EVENT_PAYLOAD_INVALID", "participant attribution and event origin are reserved.");
+    }
+    // Stamp a copy: never mutate the caller's object.
+    const eventPayload: Record<string, any> = directorDecision ? { ...payload, [DIRECTOR_ORIGIN_KEY]: DIRECTOR_ORIGIN } : payload;
     const result = await this.repo.mutateOwned({ id, scope, expectedRevision, directorDecision,
       derive: (session, events) => {
+        // In a team Mission, learner actions must arrive as attributed team actions (Director events are not learner actions).
+        if (session.definitionSnapshot.multiplayer && !directorDecision) {
+          throw new MissionRuntimeError("MISSION_RUNTIME_TEAM_ACTION_REQUIRED", "Learner actions in a team Mission are submitted as team actions.", 409);
+        }
         if (session.status !== "ACTIVE") throw new MissionRuntimeError("MISSION_RUNTIME_NOT_ACTIVE", "Events may be appended only while ACTIVE.", 409);
         if (Number(body.sequence) !== events.length + 1) throw new MissionRuntimeError("MISSION_RUNTIME_SEQUENCE_CONFLICT", `sequence must be exactly ${events.length + 1}.`, 409, { expectedSequence: events.length + 1 });
         const allowed = conditionEventTypes(session.definitionSnapshot);
         if (isSystemEventType(eventType) || !allowed.has(eventType)) throw new MissionRuntimeError("MISSION_RUNTIME_EVENT_TYPE_INVALID", "eventType is not declared by this Mission Definition.");
         const now = this.now().toISOString();
-        const event: MissionRuntimeEvent = { id: "pending", sequence: Number(body.sequence), eventType, payload, occurredAt: now, serverReceivedAt: now };
+        const event: MissionRuntimeEvent = { id: "pending", sequence: Number(body.sequence), eventType, payload: eventPayload, occurredAt: now, serverReceivedAt: now };
         const advanced = advance(session.definitionSnapshot, session, [...events, event], now);
         if (advanced.status === "EXPIRED" && directorDecision) throw expiredDuringDirectorApply();
         if (advanced.status === "EXPIRED") return advanced;
-        return { ...advanced, event: { eventType, payload, occurredAt: now } };
+        return { ...advanced, event: { eventType, payload: eventPayload, occurredAt: now } };
       },
     });
     return resultOrThrow(result);
+  }
+
+  // Phase 5: an attributed team action. The multiplayer domain authorizes the participant and resolves the
+  // runtime owner scope server-side; Mission Runtime still applies CAS, declared-event validation, the one
+  // condition engine, sequencing and idempotency under its own row lock. Attribution is server-set.
+  async appendParticipantEvent(scope: MissionRuntimeScope, rawId: string, body: {
+    expectedRevision: unknown; eventType: unknown; payload?: unknown;
+    participant: { participantId: string; missionRole: string }; actionKey: unknown;
+  }) {
+    const id = runtimeId(rawId);
+    const expectedRevision = validateExpectedRevision(body?.expectedRevision);
+    const eventType = typeof body?.eventType === "string" ? body.eventType.trim() : "";
+    const actionKey = typeof body?.actionKey === "string" ? body.actionKey.trim() : "";
+    if (!ID_PATTERN.test(actionKey)) throw new MissionRuntimeError("MISSION_TEAM_ACTION_KEY_INVALID", "A bounded idempotencyKey is required for team actions.");
+    const payload = validateJsonObject(body?.payload ?? {}, "MISSION_RUNTIME_EVENT_PAYLOAD_INVALID", MISSION_RUNTIME_EVENT_MAX_BYTES, 4, SENSITIVE_KEYS);
+    if (Object.hasOwn(payload, PARTICIPANT_ATTRIBUTION_KEY) || Object.hasOwn(payload, DIRECTOR_ORIGIN_KEY)) {
+      throw new MissionRuntimeError("MISSION_RUNTIME_EVENT_PAYLOAD_INVALID", "participant attribution and event origin are reserved.");
+    }
+    const attribution = { participantId: body.participant.participantId, missionRole: body.participant.missionRole, actionKey, attributedBy: "MISSION_TEAM" };
+    // Idempotent retry: the same participant + key returns the original event; conflicting reuse is rejected.
+    const matchPrior = (events: readonly MissionRuntimeEvent[]) => {
+      const prior = events.find((event) => {
+        const participant = event.payload?.[PARTICIPANT_ATTRIBUTION_KEY] as any;
+        return participant?.participantId === attribution.participantId && participant?.actionKey === actionKey;
+      });
+      if (!prior) return null;
+      const { [PARTICIPANT_ATTRIBUTION_KEY]: _attribution, ...priorPayload } = prior.payload;
+      if (prior.eventType !== eventType || stableJson(priorPayload) !== stableJson(payload)) {
+        throw new MissionRuntimeError("MISSION_TEAM_ACTION_KEY_REUSED", "idempotencyKey was already used for a different team action.", 409);
+      }
+      return prior;
+    };
+    const replay = async () => {
+      const prior = matchPrior((await this.repo.listEventsOwned(id, scope)) ?? []);
+      return prior ? { session: (await this.repo.getOwned(id, scope))!, event: prior, replayed: true } : null;
+    };
+    // Resolved before the revision check so a retry of a successful action is not mistaken for a stale one.
+    const early = await replay();
+    if (early) return early;
+    let replayed: MissionRuntimeEvent | null = null;
+    const result = await this.repo.mutateOwned({ id, scope, expectedRevision,
+      derive: (session, events) => {
+        const prior = matchPrior(events);
+        if (prior) {
+          replayed = prior;
+          return { ...session, noChange: true };
+        }
+        if (!session.definitionSnapshot.multiplayer) throw new MissionRuntimeError("MISSION_RUNTIME_NOT_MULTIPLAYER", "This Mission is not a team Mission.", 409);
+        if (session.status !== "ACTIVE") throw new MissionRuntimeError("MISSION_RUNTIME_NOT_ACTIVE", "Team actions may be submitted only while ACTIVE.", 409);
+        if (isSystemEventType(eventType) || !conditionEventTypes(session.definitionSnapshot).has(eventType)) {
+          throw new MissionRuntimeError("MISSION_RUNTIME_EVENT_TYPE_INVALID", "eventType is not declared by this Mission Definition.");
+        }
+        const now = this.now().toISOString();
+        const fullPayload = { ...payload, [PARTICIPANT_ATTRIBUTION_KEY]: attribution };
+        const event: MissionRuntimeEvent = { id: "pending", sequence: events.length + 1, eventType, payload: fullPayload, occurredAt: now, serverReceivedAt: now };
+        const advanced = advance(session.definitionSnapshot, session, [...events, event], now);
+        if (advanced.status === "EXPIRED") return advanced;
+        return { ...advanced, event: { eventType, payload: fullPayload, occurredAt: now } };
+      },
+    });
+    // A concurrent identical retry that lost the revision race resolves to the winner's event.
+    if (result.kind === "REVISION_CONFLICT") {
+      const late = await replay();
+      if (late) return late;
+    }
+    const ok = resultOrThrow(result);
+    return { session: ok.session, event: ok.event ?? replayed, replayed: replayed !== null };
   }
 
   async applyDirectorAction(actor: MissionRuntimeActor, rawId: string, expectedRevisionInput: unknown, action: MissionDirectorAction, directorDecision: MissionDirectorDecisionWrite) {

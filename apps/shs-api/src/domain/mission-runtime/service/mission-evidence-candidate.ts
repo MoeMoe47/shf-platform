@@ -19,7 +19,12 @@ export const MISSION_EVIDENCE_SOURCE_ADDRESSABLE = false as const;
 const RUNTIME_OWNED_PREFIX = "MISSION_";
 
 export function describeMissionEvidenceCandidate(session: MissionRuntimeSession, events: readonly MissionRuntimeEvent[]) {
-  const learnerEvents = events.filter((event) => !event.eventType.startsWith(RUNTIME_OWNED_PREFIX));
+  // Learner actions only: never runtime-owned events, never Director-emitted declared events, and in a team
+  // Mission only server-attributed participant actions.
+  const team = Boolean(session.definitionSnapshot.multiplayer);
+  const learnerEvents = events.filter((event) => !event.eventType.startsWith(RUNTIME_OWNED_PREFIX)
+    && event.payload?.emittedBy !== "MISSION_DIRECTOR"
+    && (!team || (event.payload?.participant as any)?.attributedBy === "MISSION_TEAM"));
   const worldContext = events.find((event) => event.eventType === MISSION_SYSTEM_EVENTS.worldContextCaptured)?.payload as any;
   const accommodation = events.find((event) => event.eventType === MISSION_SYSTEM_EVENTS.accommodationProjected)?.payload as any;
   const eligible = session.status === "SUCCEEDED" && learnerEvents.length > 0;
@@ -36,7 +41,26 @@ export function describeMissionEvidenceCandidate(session: MissionRuntimeSession,
       runtimeStatus: session.status,
       completedAt: session.completedAt,
       completedObjectiveIds: session.objectiveStates.filter((item) => item.status === "COMPLETED").map((item) => item.objectiveId),
-      learnerActionRefs: learnerEvents.map((event) => ({ sequence: event.sequence, eventType: event.eventType, occurredAt: event.occurredAt })),
+      learnerActionRefs: learnerEvents.map((event) => {
+        const participant = event.payload?.participant as any;
+        return {
+          sequence: event.sequence, eventType: event.eventType, occurredAt: event.occurredAt,
+          ...(participant?.attributedBy === "MISSION_TEAM" ? { participantId: participant.participantId, missionRole: participant.missionRole } : {}),
+        };
+      }),
+      // Phase 5: a team result is TEAM PERFORMANCE. It never establishes that every participant
+      // demonstrated every skill; individual demonstration is only each participant's own attributed actions.
+      team: session.definitionSnapshot.multiplayer ? {
+        scope: "TEAM_PERFORMANCE" as const,
+        individualEvidenceInferred: false as const,
+        individualDemonstration: Object.values(learnerEvents.reduce((acc: Record<string, { participantId: string; missionRole: string; actionCount: number }>, event) => {
+          const participant = event.payload?.participant as any;
+          if (participant?.attributedBy !== "MISSION_TEAM") return acc;
+          const entry = acc[participant.participantId] ??= { participantId: participant.participantId, missionRole: participant.missionRole, actionCount: 0 };
+          entry.actionCount += 1;
+          return acc;
+        }, {})),
+      } : null,
       worldContext: worldContext ? {
         contextKind: worldContext.contextKind, simulated: worldContext.simulated, scenarioId: worldContext.scenario?.scenarioId,
         correlationId: worldContext.scenario?.correlationId, molEventIds: (worldContext.eventRefs ?? []).map((ref: any) => ref.molEventId),

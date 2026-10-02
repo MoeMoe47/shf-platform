@@ -101,35 +101,29 @@ test("frozen verification authorities and prior migrations remain untouched", ()
     .map((entry) => entry.slice(3))
     .sort();
 
-  // Migration 155 is the current Phase 4E migration. All prior migrations are frozen.
-  const allowedMigration = "apps/shs-api/migrations/155_mission_director.sql";
+  // Migration 156 is the current Phase 5 migration. All prior migrations, including 155, are frozen.
+  const allowedMigration = "apps/shs-api/migrations/156_mission_teams.sql";
   const unexpectedMigrationPaths = changedMigrationPaths.filter((path) => path !== allowedMigration);
 
   assert.deepEqual(unexpectedMigrationPaths, [], `Unexpected migration changes: ${unexpectedMigrationPaths.join(", ")}`);
 });
 
-test("migration guard allows only migration 155 before and after commit", () => {
-  const allowedMigration = "apps/shs-api/migrations/155_mission_director.sql";
+test("migration guard allows only migration 156 before and after commit", () => {
+  const allowedMigration = "apps/shs-api/migrations/156_mission_teams.sql";
   const unexpected = (paths) => paths.filter((path) => path !== allowedMigration);
 
   assert.deepEqual(unexpected([allowedMigration]), []);
   assert.deepEqual(unexpected([]), []);
   for (const path of [
+    "apps/shs-api/migrations/155_mission_director.sql",
     "apps/shs-api/migrations/154_mission_publishing.sql",
     "apps/shs-api/migrations/153_mission_draft_authoring.sql",
     "apps/shs-api/migrations/152_mission_runtime_foundation.sql",
     "apps/shs-api/migrations/151_arcade_runtime_telemetry.sql",
-    "apps/shs-api/migrations/156_future.sql",
+    "apps/shs-api/migrations/157_future.sql",
   ]) assert.deepEqual(unexpected([path]), [path]);
-  assert.deepEqual(unexpected([
-    "apps/shs-api/migrations/154_mission_publishing.sql",
-    allowedMigration,
-  ]), ["apps/shs-api/migrations/154_mission_publishing.sql"]);
-  assert.deepEqual(unexpected([
-    allowedMigration,
-    "apps/shs-api/migrations/153_mission_draft_authoring.sql",
-  ]), ["apps/shs-api/migrations/153_mission_draft_authoring.sql"]);
-  assert.deepEqual(unexpected(["apps/shs-api/migrations/152_mission_runtime_foundation.sql", allowedMigration]), ["apps/shs-api/migrations/152_mission_runtime_foundation.sql"]);
-  assert.deepEqual(unexpected(["apps/shs-api/migrations/153_mission_draft_authoring.sql", allowedMigration]), ["apps/shs-api/migrations/153_mission_draft_authoring.sql"]);
-  assert.deepEqual(unexpected(["apps/shs-api/migrations/156_future.sql"]), ["apps/shs-api/migrations/156_future.sql"]);
+  for (const prior of ["155_mission_director", "154_mission_publishing", "153_mission_draft_authoring", "152_mission_runtime_foundation"]) {
+    assert.deepEqual(unexpected([`apps/shs-api/migrations/${prior}.sql`, allowedMigration]), [`apps/shs-api/migrations/${prior}.sql`]);
+  }
+  assert.deepEqual(unexpected(["apps/shs-api/migrations/157_future.sql", allowedMigration]), ["apps/shs-api/migrations/157_future.sql"]);
 });

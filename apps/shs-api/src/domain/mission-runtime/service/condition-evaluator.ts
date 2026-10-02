@@ -5,7 +5,7 @@ export interface MissionConditionContext {
   objectiveStates: readonly MissionObjectiveState[];
   stageStates: readonly MissionStageState[];
   runtimeState: Readonly<Record<string, unknown>>;
-  events: readonly Pick<MissionRuntimeEvent, "eventType">[];
+  events: readonly (Pick<MissionRuntimeEvent, "eventType"> & { payload?: Record<string, unknown> })[];
   startedAt: string;
   now: string;
 }
@@ -34,5 +34,11 @@ export function evaluateMissionCondition(condition: MissionCondition, context: M
     }
     case "EVENT_OCCURRED":
       return context.events.some((event) => event.eventType === condition.eventType);
+    case "ROLE_EVENT_OCCURRED":
+      // Only server-attributed team actions count; world, Director and character events carry no attribution.
+      return context.events.some((event) => {
+        const participant = event.payload?.participant as Record<string, unknown> | undefined;
+        return event.eventType === condition.eventType && participant?.attributedBy === "MISSION_TEAM" && participant.missionRole === condition.missionRole;
+      });
   }
 }

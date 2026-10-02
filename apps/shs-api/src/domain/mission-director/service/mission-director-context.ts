@@ -10,6 +10,7 @@ import type {
   MissionDirectorExecutorWorldContext,
 } from "../model/mission-director.js";
 import type { MissionWorldContext } from "../../mission-runtime/world/mission-world-context.js";
+import { missionTeamDirectorSummary, type MissionTeamDirectorSummary } from "../../mission-team/service/mission-team-service.js";
 import { CHARACTER_EVENT_TYPES, activeStageIds, availableCharacters } from "./mission-director-scenario-rules.js";
 
 const RECENT_EVENT_LIMIT = 20;
@@ -23,7 +24,10 @@ function stableJson(value: unknown): string {
 }
 
 function eventView(event: MissionRuntimeEvent) {
-  return { sequence: event.sequence, eventType: event.eventType, payload: structuredClone(event.payload) };
+  const payload = structuredClone(event.payload ?? {});
+  // Team actions keep only their mission role; participant IDs and action keys never reach the executor.
+  if (payload.participant && typeof payload.participant === "object") payload.participant = { missionRole: (payload.participant as any).missionRole };
+  return { sequence: event.sequence, eventType: event.eventType, payload };
 }
 
 // Builds both contexts from the frozen runtime snapshot (never a draft or current release):
@@ -52,7 +56,7 @@ export class MissionDirectorContextBuilder {
       recentEvents: structuredClone(events.slice(-RECENT_EVENT_LIMIT)),
       aiCapabilities: structuredClone(session.definitionSnapshot.aiCapabilities),
     };
-    const executorContext = projectExecutorContext(session, events, this.runtime.liveWorldContextFor(session));
+    const executorContext = projectExecutorContext(session, events, this.runtime.liveWorldContextFor(session), await missionTeamDirectorSummary(session));
     const digest = createHash("sha256").update(stableJson(executorContext)).digest("hex");
     return { context, executorContext, digest };
   }
@@ -74,7 +78,7 @@ export function projectExecutorWorldContext(live: MissionWorldContext | null): M
   };
 }
 
-export function projectExecutorContext(session: MissionRuntimeSession, events: readonly MissionRuntimeEvent[], live: MissionWorldContext | null = null): MissionDirectorExecutorContext {
+export function projectExecutorContext(session: MissionRuntimeSession, events: readonly MissionRuntimeEvent[], live: MissionWorldContext | null = null, team: MissionTeamDirectorSummary | null = null): MissionDirectorExecutorContext {
   const definition = session.definitionSnapshot;
   const capabilities = definition.aiCapabilities;
   const active = activeStageIds(session);
@@ -108,6 +112,7 @@ export function projectExecutorContext(session: MissionRuntimeSession, events: r
     // Character dialogue appears only inside the owning character's view.
     recentEvents: events.filter((event) => !CHARACTER_EVENT_TYPES.has(event.eventType) && !EXECUTOR_HIDDEN_EVENT_TYPES.has(event.eventType)).slice(-RECENT_EVENT_LIMIT).map(eventView),
     worldContext: projectExecutorWorldContext(live),
+    team: team ? { ...team, rolesPresent: [...team.rolesPresent] } : null,
     difficulty: capabilities.adaptiveDifficulty && definition.difficultyProfile ? {
       currentTier: (session.runtimeState[MISSION_DIFFICULTY_STATE_KEY] ?? definition.difficulty) as MissionDifficultyTier,
       allowedTiers: [...definition.difficultyProfile.tiers],

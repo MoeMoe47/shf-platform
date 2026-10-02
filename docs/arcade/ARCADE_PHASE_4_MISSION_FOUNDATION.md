@@ -560,6 +560,85 @@ New programs should integrate through Mission, MOL, Evidence and registry contra
 - MOL references the canonical destination registry and shared coordinate families instead of copying them, so Phase 4 adds no competing map, coordinate, destination or route authority. The existing Quick Map / Mini Map remains the spatial surface.
 - **Future roadmap items:** a durable server-side MOL log, and a read-only operational Mission-state projection for operators.
 
+## Phase 5 — Multiplayer / Team Missions
+
+Mission Runtime remains the canonical Mission state authority.
+
+Multiplayer coordinates participants; it does not create a second Mission authority.
+
+Team performance does not automatically establish individual learner evidence.
+
+**Audit.**
+- The repo has no WebSocket, Socket.IO or Redis. One authenticated SSE stream exists (Studio collaboration).
+- MET-6 presence is city-wide social presence, so Mission presence is a separate, mission-scoped concept.
+- Studio/project teams are persistent project authority. MET-13 team simulations reuse them read-only.
+- No Mission-scoped team, participant or role concept existed, so these are new, bounded to one runtime.
+
+**Authorities.**
+- **Identity** owns users and memberships.
+- **Mission Runtime** owns lifecycle, revision/CAS, objectives, stages, canonical events and the result.
+- **Multiplayer** (`apps/shs-api/src/domain/mission-team`) owns team membership, mission participation roles, readiness and ephemeral presence.
+- **MOL** owns world coordination only. **Evidence**, **Curriculum** and **Career** are unchanged.
+
+**Transport.** Server-authoritative commands with polling reads (`/arcade/mission-runtimes/:runtimeId/team…`). Every route is a thin wrapper over `MissionTeamService`, so SSE (the existing Studio pattern), WebSocket, mobile or Metaverse clients can be added later without moving authority.
+
+**Model (migration 156).**
+- `mission_teams` — one per runtime (SINGLE_TEAM only); cascades with the runtime; statuses FORMING, ACTIVE, COMPLETED, DISBANDED.
+- `mission_team_participants` — composite FK to `users(organization_id, user_id)`, so cross-org membership is impossible; one row per user per team; statuses JOINED, LEFT, REMOVED; `ready`.
+- `mission_team_events` — ordered team-lifecycle history related to runtime revisions.
+
+Presence (ONLINE / AWAY / DISCONNECTED) is in memory, mission-scoped, expires after 90 seconds, and is never persisted.
+
+**MissionDefinition.**
+- `multiplayer` declares `minParticipants`/`maxParticipants` (system maximum 8), `teamMode` (SINGLE_TEAM), declared `roles` (`roleId`, `label`, `required`, `maxParticipants`), and `lateJoinPolicy` (default NONE).
+- Missions without the block are single-player and unchanged.
+- Mission role ≠ platform role: roles grant no RBAC, organization, instructor, Evidence or governance permission.
+
+**Lifecycle.**
+1. The canonical published start is unchanged.
+2. The runtime owner forms the team around the ACTIVE runtime and becomes host.
+3. Participants join with a declared role. The service validates org/tenant, capacity, role seats, lifecycle and late-join policy under a team row lock.
+4. Participants declare readiness.
+5. The host activates only when the minimum size is met, every required role is filled, and every joined participant is ready. Presence never implies readiness, and readiness never implies authorization.
+6. The team completes when the runtime reaches a terminal state.
+
+Leave is idempotent; the host disbands instead of leaving. A removed participant cannot rejoin. A disconnect never removes membership or role; reconnecting reuses the same membership row.
+
+**Actions and conditions.**
+- In a team Mission, learner actions are accepted only as team actions. The participant and role come from server state.
+- Mission Runtime appends them as canonical events carrying server-set attribution (`payload.participant`: `participantId`, `missionRole`, `actionKey`, `attributedBy`), under the same row lock and CAS.
+- The single-player append path rejects team Missions, and both paths reject supplied attribution.
+- `ROLE_EVENT_OCCURRED { eventType, missionRole }` is one more case in the one condition engine. World, Director-emitted and character events carry no attribution, so they cannot satisfy it.
+
+**Concurrency and idempotency.**
+- Simultaneous actions resolve through runtime CAS: exactly one lands, and the other fails safely as stale.
+- A retry with the same participant and key returns the original event, even with its original now-stale revision. Reusing a key for a different action is rejected.
+- Joins race safely under the team lock. Team creation, join, ready and leave are idempotent by state.
+
+**Director.** The executor receives `team: { teamStatus, teamSize, rolesPresent, readyCount }`. Team actions in its recent events keep only `missionRole`, with no participant IDs, user IDs or accommodations. AI cannot change membership or roles.
+
+**Evidence.**
+- The candidate is `TEAM_PERFORMANCE` with `individualEvidenceInferred: false`, plus each participant's own attributed action counts.
+- No Evidence, Truth, credential, mastery or career rows are written.
+- Phase 5 also fixed a defect that existed since 4E. Director-emitted declared events now carry a server-set `emittedBy: "MISSION_DIRECTOR"` marker that learners cannot supply. They are never counted as learner actions, so a Director-completed run is not a learner evidence candidate.
+
+**Privacy and accessibility.**
+- Team views show participant IDs, mission roles, readiness and presence only: no user IDs, emails, profiles, accommodation data or runtime-owned projections.
+- Accommodation projections stay with the runtime owner and never reach teammates, MOL or AI.
+- Participants' own accommodations are not projected in Phase 5 (limitation).
+
+**MOL / MOCC.** `MissionTeamService.operationalProjection` provides team status, Mission status, participant count, role distribution, presence summary and canonical environment references, with `missionAuthority`, `membershipAuthority`, `containsLearnerIdentity` and `containsAccommodationData` all `false`. It's read-only and adds no new location registry. Future MOCC views can render active teams from it without gaining authority.
+
+**Known limitations.**
+- Presence is process-local.
+- Only SINGLE_TEAM is supported.
+- There is no developer harness UI (the API and tests cover the flow).
+- No time-limit pause while a team is FORMING.
+- Participant accommodations are not projected.
+- Display names are deliberately omitted.
+
+**Deferred.** Multi-team Missions, matchmaking, discovery, social features, chat/voice, tournaments, spectators, realtime push, and AI or NPC participants.
+
 ## Deferred
 
 Mission version derivation, richer moderation policy, creator collaboration,

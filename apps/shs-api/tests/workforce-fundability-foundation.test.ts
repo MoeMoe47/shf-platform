@@ -208,8 +208,9 @@ test("registry: production registries start empty; the generic fixture validates
   assert.deepEqual(validateProgramPackage(fixture()), []);
   for (const source of fundingSources) assert.deepEqual(validateFundingSource(source), [], source.fundingSourceId);
   const registry = buildWorkforceRegistry({ packages: [fixture(), fixture(), mutate((value) => { value.fundingRefs[0].fundingSourceId = "unregistered.source"; value.program.programId = "OTHER"; })], fundingSources });
-  assert.equal(registry.packages.length, 1);
-  assert.deepEqual(registry.rejected.map((item) => item.id).sort(), ["OTHER", "PROGRAM_INFRASTRUCTURE_TECH_FOUNDATION"]);
+  // Phase 8: a duplicated programId rejects every entry that claims it (fail closed).
+  assert.equal(registry.packages.length, 0);
+  assert.deepEqual(registry.rejected.map((item) => item.id), ["OTHER", "PROGRAM_INFRASTRUCTURE_TECH_FOUNDATION", "PROGRAM_INFRASTRUCTURE_TECH_FOUNDATION"]);
   assert.ok(registry.rejected.find((item) => item.id === "OTHER")!.errors.some((error) => /not a registered funding source/.test(error)));
   assert.deepEqual([...PROGRAM_LIFECYCLE], ["PLANNED", "DESIGN", "AUTHORITY_REVIEW", "INTEGRATION_READINESS", "PARTNER_VALIDATION", "PILOT_READY", "PILOT", "ACTIVE", "SUSPENDED", "RETIRED"]);
   assert.equal(Object.keys(WORKFORCE_CAPABILITIES).length, 14);
@@ -371,8 +372,8 @@ test("14 fundability gate outputs BUILD/HOLD/REJECT deterministically with reaso
 test("17/18/20 evidence requirements, program completion and employer partners create nothing and imply nothing", async () => {
   const resolved = await service.resolveProgram(staff, "PROGRAM_INFRASTRUCTURE_TECH_FOUNDATION");
   assert.ok(resolved.evidenceRequirements.every((item) => item.authority === "verified-evidence" && item.createsEvidence === false));
-  assert.deepEqual(resolved.partners.items, [{ organizationId: PARTNER_ORG, role: "EMPLOYER_PARTNER", status: "DECLARED", resolved: true, impliesEmployment: false, impliesHiring: false }]);
-  assert.ok(validateProgramPackage(mutate((value) => { value.partnerRefs[0].status = "CONFIRMED"; })).some((error) => /CONFIRMED requires an agreementRef/.test(error)));
+  assert.deepEqual(resolved.partners.items, [{ organizationId: PARTNER_ORG, role: "EMPLOYER", status: "DECLARED", resolved: true, impliesEmployment: false, impliesHiring: false }]);
+  assert.ok(validateProgramPackage(mutate((value) => { value.partnerRefs[0].status = "CONFIRMED"; })).some((error) => /CONFIRMED requires a relationshipRef/.test(error)));
   assert.ok(resolved.reportProfiles.items.filter((item) => item.kind === "VERIFIED_INSTITUTIONAL_TRUTH").every((item) => item.truthAuthority === "truth-spine" && item.verifiedByThisRegistry === false));
   const methods = Object.getOwnPropertyNames(WorkforceFoundationService.prototype);
   assert.ok(!methods.some((name) => /issue|award|enroll|hire|complete|verify|write|create|publish/i.test(name)), methods.join(","));

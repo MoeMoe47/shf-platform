@@ -2,8 +2,8 @@
 // Pure rules over declared contracts and resolved references. No AI scoring, no numeric ranking, no claim of
 // funding eligibility, employment, credential attainment or job readiness.
 import {
-  FUNDING_BUCKETS, INTEGRATION_READINESS_QUESTIONS, PROGRAM_LIFECYCLE, maturityRank,
-  type IntegrationReadinessQuestion, type ProgramLifecycle, type ProgramPackage,
+  FUNDING_BUCKETS, INTEGRATION_READINESS_QUESTIONS, PROGRAM_LIFECYCLE, executionLevelRank, maturityRank,
+  type ExecutionLevel, type IntegrationReadinessQuestion, type ProgramLifecycle, type ProgramPackage,
 } from "./workforce-foundation.js";
 
 // What the service learned from the owning authorities. Unknown is never treated as resolved.
@@ -33,6 +33,38 @@ export function capabilityMaturityIssues(pkg: ProgramPackage, facts: Pick<Progra
     }
   }
   return issues;
+}
+
+// Phase 8 — capability requirement contract. Effective maturity is the declared maturity capped by every providing
+// MOL system; each providing system must supply the capability in an allowed provider mode. Unmet requirements
+// block when the capability is required with a BLOCK policy, and degrade otherwise.
+export function capabilityRequirementIssues(pkg: ProgramPackage, facts: Pick<ProgramResolutionFacts, "molSystems">) {
+  const issues: Array<{ capability: string; reason: string; effect: "BLOCKING" | "DEGRADED" }> = [];
+  for (const declaration of pkg.capabilityRefs) {
+    const effect = declaration.required && declaration.degradationPolicy === "BLOCK" ? "BLOCKING" as const : "DEGRADED" as const;
+    const systems = (declaration.molSystemIds ?? []).map((id) => [id, facts.molSystems[id]] as const);
+    const ranks = [maturityRank(declaration.maturity), ...systems.map(([, system]) => (system ? maturityRank(system.maturity) : -1))];
+    if (Math.min(...ranks) < maturityRank(declaration.minimumMaturity)) issues.push({ capability: declaration.capability, reason: "MINIMUM_MATURITY_UNMET", effect });
+    for (const [id, system] of systems) {
+      if (!system) issues.push({ capability: declaration.capability, reason: `MOL_SYSTEM_UNRESOLVED:${id}`, effect });
+      else if (system.mode === "UNAVAILABLE") issues.push({ capability: declaration.capability, reason: `PROVIDER_UNAVAILABLE:${id}`, effect });
+      else if (!declaration.allowedProviderModes.includes(system.mode)) issues.push({ capability: declaration.capability, reason: `PROVIDER_MODE_NOT_ALLOWED:${id}:${system.mode}`, effect });
+    }
+  }
+  return issues;
+}
+
+// Execution level is evaluated from how MOL actually supplies the referenced systems; it is never upgraded.
+// No regional simulation authority exists yet, so LIVING_WORLD cannot be evaluated or honestly claimed.
+export const LIVING_WORLD_AUTHORITY_AVAILABLE = false;
+export function evaluateExecutionLevel(pkg: ProgramPackage, facts: Pick<ProgramResolutionFacts, "molSystems">) {
+  const ids = [...new Set([...pkg.metaverseRefs.map((ref) => ref.molSystemId), ...pkg.capabilityRefs.flatMap((cap) => cap.molSystemIds ?? [])])].sort();
+  const modes = ids.map((id) => facts.molSystems[id]?.mode ?? "UNAVAILABLE").filter((mode) => mode !== "UNAVAILABLE");
+  const evaluated: ExecutionLevel = modes.includes("LIVE") || modes.includes("HYBRID") ? "HYBRID" : "STANDALONE";
+  const issues: string[] = [];
+  if (pkg.program.executionLevel === "LIVING_WORLD" && !LIVING_WORLD_AUTHORITY_AVAILABLE) issues.push("LIVING_WORLD_AUTHORITY_UNAVAILABLE");
+  if (executionLevelRank(pkg.program.executionLevel) > executionLevelRank(evaluated)) issues.push("EXECUTION_LEVEL_OVERSTATED");
+  return { declared: pkg.program.executionLevel, evaluated, systems: ids, issues };
 }
 
 export function fundingLanes(pkg: ProgramPackage, facts: Pick<ProgramResolutionFacts, "fundingSourceTypes">) {
@@ -77,9 +109,14 @@ export function evaluateIntegrationReadiness(pkg: ProgramPackage, facts: Program
   // Optional dependencies degrade readiness; they never block it.
   const degradedDependencies = pkg.dependencyRefs.filter((dep) => !dep.required && dep.status !== "AVAILABLE").map((dep) => ({ dependencyId: dep.dependencyId, fallback: dep.fallback }));
   const maturityIssues = capabilityMaturityIssues(pkg, facts);
+  const requirementIssues = capabilityRequirementIssues(pkg, facts);
+  const executionLevel = evaluateExecutionLevel(pkg, facts);
   const gaps = questions.filter((item) => item.status === "GAP");
-  const status: ReadinessStatus = gaps.length || blockingDependencies.length || maturityIssues.length ? "BLOCKED" : degradedDependencies.length ? "DEGRADED" : "READY";
-  return { status, questions, gaps: gaps.map((item) => item.question), blockingDependencies, degradedDependencies, maturityIssues };
+  const blocked = gaps.length || blockingDependencies.length || maturityIssues.length || executionLevel.issues.length
+    || requirementIssues.some((issue) => issue.effect === "BLOCKING");
+  const degraded = degradedDependencies.length || requirementIssues.some((issue) => issue.effect === "DEGRADED");
+  const status: ReadinessStatus = blocked ? "BLOCKED" : degraded ? "DEGRADED" : "READY";
+  return { status, questions, gaps: gaps.map((item) => item.question), blockingDependencies, degradedDependencies, maturityIssues, requirementIssues, executionLevel };
 }
 
 const PATH: ProgramLifecycle[] = ["PLANNED", "DESIGN", "AUTHORITY_REVIEW", "INTEGRATION_READINESS", "PARTNER_VALIDATION", "PILOT_READY", "PILOT", "ACTIVE"];
@@ -105,6 +142,52 @@ export function evaluateLifecycleTransition(from: ProgramLifecycle, to: ProgramL
     if (readiness.maturityIssues.length) reasons.push("CAPABILITY_MATURITY_OVERSTATED");
   }
   return { allowed: reasons.length === 0, reasons };
+}
+
+// Phase 8 — requested vs evaluated lifecycle. A package's declared lifecycle is a request; the evaluated state is the
+// highest canonical state its resolved readiness supports, never above the request. PILOT and ACTIVE need an
+// activation record, which configuration alone can never provide. SUSPENDED/RETIRED are administrative.
+const LIFECYCLE_PATH: ProgramLifecycle[] = ["PLANNED", "DESIGN", "AUTHORITY_REVIEW", "INTEGRATION_READINESS", "PARTNER_VALIDATION", "PILOT_READY", "PILOT", "ACTIVE"];
+
+export function evaluateProgramLifecycle(pkg: ProgramPackage, readiness: ReturnType<typeof evaluateIntegrationReadiness>, context: {
+  confirmedPartners: number; internalIssuerUnresolved: boolean; activationRecord?: boolean;
+}) {
+  const requestedState = pkg.program.lifecycle;
+  if (requestedState === "SUSPENDED" || requestedState === "RETIRED") {
+    return { requestedState, evaluatedState: requestedState, allowed: true, blockingReasons: [] as string[], gates: [] as Array<{ state: ProgramLifecycle; reasons: string[] }> };
+  }
+  const reasonsFor = (state: ProgramLifecycle): string[] => {
+    switch (state) {
+      case "AUTHORITY_REVIEW":
+        return pkg.authorityRefs.some((ref) => ref.domain === "program") ? [] : ["PROGRAM_AUTHORITY_NOT_DECLARED"];
+      case "INTEGRATION_READINESS":
+        return context.internalIssuerUnresolved ? ["INTERNAL_ISSUER_UNRESOLVED"] : [];
+      case "PARTNER_VALIDATION":
+        return [
+          ...(readiness.gaps.length ? ["INTEGRATION_READINESS_GAPS"] : []),
+          ...(readiness.maturityIssues.length ? ["CAPABILITY_MATURITY_OVERSTATED"] : []),
+          ...readiness.executionLevel.issues,
+        ];
+      case "PILOT_READY":
+        return [
+          ...(readiness.blockingDependencies.length ? ["REQUIRED_DEPENDENCIES_BLOCKING"] : []),
+          ...(readiness.requirementIssues.some((issue) => issue.effect === "BLOCKING") ? ["CAPABILITY_REQUIREMENTS_UNMET"] : []),
+          ...(context.confirmedPartners > 0 ? [] : ["PARTNER_VALIDATION_INCOMPLETE"]),
+        ];
+      case "PILOT":
+      case "ACTIVE":
+        return context.activationRecord ? [] : ["ACTIVATION_RECORD_REQUIRED"];
+      default:
+        return [];
+    }
+  };
+  const gates = LIFECYCLE_PATH.map((state) => ({ state, reasons: reasonsFor(state) }));
+  let highest = 0;
+  while (highest + 1 < gates.length && gates[highest + 1].reasons.length === 0) highest += 1;
+  const requestedIndex = LIFECYCLE_PATH.indexOf(requestedState);
+  const allowed = requestedIndex <= highest;
+  const blockingReasons = allowed ? [] : [...new Set(gates.slice(highest + 1, requestedIndex + 1).flatMap((gate) => gate.reasons))];
+  return { requestedState, evaluatedState: LIFECYCLE_PATH[Math.min(requestedIndex, highest)], allowed, blockingReasons, gates };
 }
 
 export const FUNDABILITY_CRITERION_VALUES = Object.freeze(["MET", "PARTIAL", "NOT_MET", "UNKNOWN"] as const);

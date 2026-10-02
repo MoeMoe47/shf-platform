@@ -1,7 +1,13 @@
 // Phase 6.5 — GENERIC reference fixture that proves the foundation. Test/reference only: it is never
 // registered in WORKFORCE_PROGRAM_PACKAGES, carries no Data Center content, and every external authority,
 // partner and funding relationship is a placeholder or POTENTIAL — nothing here is a real claim.
-import type { FundingSource, ProgramPackage } from "../model/workforce-foundation.js";
+import { WORKFORCE_CAPABILITIES, type CapabilityDeclaration, type FundingSource, type ProgramPackage, type WorkforceCapability } from "../model/workforce-foundation.js";
+
+const capability = (id: WorkforceCapability, required: boolean, maturity: string, extra: Partial<CapabilityDeclaration> = {}): CapabilityDeclaration => ({
+  capability: id, required, maturity, minimumMaturity: maturity, providerAuthority: WORKFORCE_CAPABILITIES[id], allowedProviderModes: ["LIVE"],
+  fallbackPolicy: required ? "NONE" : "OMIT", degradationPolicy: required ? "BLOCK" : "DEGRADE", acceptanceRef: null,
+  fundingBucket: "SHARED_INFRASTRUCTURE", ...extra,
+});
 
 export interface FoundationFixtureRefs {
   owningOrganizationId: string;
@@ -29,28 +35,29 @@ export function genericFundingSourceFixtures(ids: FoundationFixtureRefs["funding
 
 export function infrastructureTechFoundationFixture(refs: FoundationFixtureRefs): ProgramPackage {
   return {
-    contractVersion: 1,
+    schemaVersion: 2,
     program: {
       programId: "PROGRAM_INFRASTRUCTURE_TECH_FOUNDATION", name: "Infrastructure Technician Foundation (generic reference)", lifecycle: "INTEGRATION_READINESS",
       programType: "workforce", owningOrganizationId: refs.owningOrganizationId, authorityOwner: "Owning organization program office",
-      geography: "Generic region", audience: "Adult and secondary learners", operationalProgramId: refs.operationalProgramId,
+      geography: "Generic region", audience: "Adult and secondary learners", operationalProgramId: refs.operationalProgramId, executionLevel: "STANDALONE",
     },
     curriculumRefs: [{ courseId: refs.courseId }],
     arcadeExperienceRefs: [{ experienceId: refs.experienceId }],
     missionRefs: [{ missionId: refs.missionId, missionVersion: refs.missionVersion }],
     metaverseRefs: [{ molSystemId: "power-grid" }],
+    destinationRefs: [{ destinationId: "power-electrical-facility" }],
     careerRefs: [{ careerId: refs.careerId }],
     competencyRefs: [{ competencyId: refs.competencyId }],
     capabilityRefs: [
-      { capability: "CURRICULUM_DELIVERY", required: true, maturity: "LIVE", acceptanceRef: null, fundingBucket: "SHARED_INFRASTRUCTURE" },
-      { capability: "LEARNING_ARCADE", required: true, maturity: "PARTIAL", acceptanceRef: null, fundingBucket: "SHARED_INFRASTRUCTURE" },
-      { capability: "MISSION_SIMULATION", required: true, maturity: "PARTIAL", acceptanceRef: null, fundingBucket: "SHARED_INFRASTRUCTURE" },
+      capability("CURRICULUM_DELIVERY", true, "LIVE"),
+      capability("LEARNING_ARCADE", true, "PARTIAL"),
+      capability("MISSION_SIMULATION", true, "PARTIAL"),
       // Simulated infrastructure capability: MOL provides power-grid only through a SIMULATED provider at
       // CONTRACT_DEFINED maturity, so the program cannot honestly declare more than CONTRACT_DEFINED.
-      { capability: "METAVERSE_ENVIRONMENT", required: false, maturity: "CONTRACT_DEFINED", acceptanceRef: null, molSystemIds: ["power-grid"], fundingBucket: "DESTINATION_PROGRAM" },
-      { capability: "EVIDENCE_CAPTURE", required: true, maturity: "PARTIAL", acceptanceRef: null, fundingBucket: "SHARED_INFRASTRUCTURE" },
-      { capability: "CAREER_MAPPING", required: true, maturity: "LIVE", acceptanceRef: null, fundingBucket: "SHARED_INFRASTRUCTURE" },
-      { capability: "CREDENTIAL_BRIDGE", required: false, maturity: "CONTRACT_DEFINED", acceptanceRef: null, fundingBucket: "DESTINATION_PROGRAM" },
+      capability("METAVERSE_ENVIRONMENT", false, "CONTRACT_DEFINED", { molSystemIds: ["power-grid"], allowedProviderModes: ["SIMULATED"], fallbackPolicy: "SIMULATED_STAND_IN", fundingBucket: "DESTINATION_PROGRAM" }),
+      capability("EVIDENCE_CAPTURE", true, "PARTIAL"),
+      capability("CAREER_MAPPING", true, "LIVE"),
+      capability("CREDENTIAL_BRIDGE", false, "CONTRACT_DEFINED", { fundingBucket: "DESTINATION_PROGRAM" }),
     ],
     evidenceRequirements: [
       { requirementType: "INDIVIDUAL_DEMONSTRATION", competencyId: refs.competencyId },
@@ -74,8 +81,8 @@ export function infrastructureTechFoundationFixture(refs: FoundationFixtureRefs)
       { fundingSourceId: refs.fundingSourceIds.employer, alignment: "POTENTIAL", verification: null, capabilityRefs: ["MISSION_SIMULATION"] },
       { fundingSourceId: refs.fundingSourceIds.philanthropy, alignment: "UNKNOWN", verification: null, capabilityRefs: ["ACCESSIBILITY"] },
     ],
-    accessibilityRequirements: ["keyboard operable", "captions for media", "reduced motion option"],
-    partnerRefs: [{ organizationId: refs.partnerOrganizationId, role: "EMPLOYER_PARTNER", status: "DECLARED", agreementRef: null }],
+    accessibilityRequirements: ["KEYBOARD", "CAPTIONS", "REDUCED_MOTION"],
+    partnerRefs: [{ organizationId: refs.partnerOrganizationId, role: "EMPLOYER", status: "DECLARED", relationshipRef: null }],
     reportingRequirements: [
       { metric: "PARTICIPATION", kind: "OPERATIONAL_METRIC", reportProfileKey: null },
       { metric: "DEMONSTRATION", kind: "VERIFIED_INSTITUTIONAL_TRUTH", reportProfileKey: null },
@@ -86,6 +93,7 @@ export function infrastructureTechFoundationFixture(refs: FoundationFixtureRefs)
       { dependencyId: "dep.power-grid-simulation", type: "METAVERSE_ENGINE", required: false, status: "DEGRADED", owner: "mol", fallback: "Mission runs with simulated world context.", constraints: "No live power-grid engine." },
       { dependencyId: "dep.credential-issuer", type: "CREDENTIALING_BODY", required: false, status: "UNKNOWN", owner: "external", fallback: "Program completes without credential bridge.", constraints: "Issuer not yet identified." },
     ],
+    governanceRefs: [],
     integrationReadiness: {
       CURRICULUM: { answer: "ANSWERED" }, ARCADE: { answer: "ANSWERED" }, MISSIONS: { answer: "ANSWERED" }, METAVERSE: { answer: "ANSWERED" },
       EVIDENCE: { answer: "ANSWERED" }, CAREER: { answer: "ANSWERED" }, EXTERNAL_CREDENTIAL_AUTHORITY: { answer: "ANSWERED" },

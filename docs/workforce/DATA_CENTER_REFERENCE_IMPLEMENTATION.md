@@ -79,6 +79,9 @@ Mission world contexts:
 
 ## ProgramPackage
 
+> **Phase 8:** the package is migrated to `schemaVersion: 2` and registered as `DATA_CENTER_PROGRAM_MODULE`. The generic pipeline still evaluates it at INTEGRATION_READINESS, STANDALONE and HOLD, with partners, credential authority and funding visible as gaps.
+
+
 `DATA_CENTER_COMMUNITY_WORKFORCE` is defined in `apps/shs-api/src/domain/workforce-foundation/registry/programs/data-center-community-workforce.ts` and registered in `WORKFORCE_PROGRAM_PACKAGES`.
 
 **Lifecycle: `INTEGRATION_READINESS`.**

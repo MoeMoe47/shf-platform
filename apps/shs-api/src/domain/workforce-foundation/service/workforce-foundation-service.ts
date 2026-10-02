@@ -20,12 +20,20 @@ import { ProgramRepo } from "../../programs/repo/program-repo.js";
 import { programReportProfileRegistry } from "../../reporting/program-report-profile-registry.js";
 import { WORKFORCE_CAPABILITIES, type ProgramLifecycle, type ProgramPackage } from "../model/workforce-foundation.js";
 import {
-  evaluateFundabilityGate, evaluateIntegrationReadiness, evaluateLifecycleTransition, fundingLanes,
+  evaluateFundabilityGate, evaluateIntegrationReadiness, evaluateLifecycleTransition, evaluateProgramLifecycle, fundingLanes,
   type FundabilityComponent, type ProgramResolutionFacts,
 } from "../model/readiness-and-fundability.js";
+import { validateProgramPackageStructured } from "../model/workforce-foundation.js";
 import { buildWorkforceRegistry, type WorkforceRegistry } from "../registry/workforce-program-registry.js";
 import { canonicalSensoryRegistry, resolveSensoryReference, type SensoryRegistry } from "../sensory-bridge.js";
-import { workforceMolSystem } from "../workforce-mol-bridge.js";
+import { existsSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { isWorkforceDestinationId, workforceMolSystem } from "../workforce-mol-bridge.js";
+
+// Repository root: same relative depth from src/ and dist/. Governance DOCUMENT refs are fixed docs/*.md paths
+// validated by the package contract (no user input, no scanning).
+const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../../../../..");
 
 export const WORKFORCE_FOUNDATION_ERRORS = Object.freeze({ PROGRAM_NOT_FOUND: 404, TENANT_SCOPE_MISMATCH: 403, INVALID_REQUEST: 400 } as const);
 
@@ -53,6 +61,9 @@ export interface WorkforceFoundationDependencies {
   fundingAwards?: { grantExists(grantId: string, organizationId: string): Promise<boolean>; assuranceReferenceExists(referenceId: string, scope: { organizationId: string; tenantId: string }): Promise<boolean> };
   reportProfiles?: () => Array<{ profileKey: string; status: string }>;
   sensory?: () => SensoryRegistry;
+  relationships?: { activeLink(kind: "SERVICE_AGREEMENT" | "ORGANIZATION_RELATIONSHIP", id: string, organizationA: string, organizationB: string): Promise<boolean> };
+  entitlements?: { hasActive(organizationId: string, serviceKey: string): Promise<boolean> };
+  documents?: { exists(repoPath: string): boolean };
 }
 
 type Section<T> = { status: "AVAILABLE"; items: T[] } | { status: "UNAVAILABLE"; items: [] };
@@ -95,6 +106,20 @@ export class WorkforceFoundationService {
       },
       reportProfiles: dependencies.reportProfiles ?? (() => programReportProfileRegistry.definitions()),
       sensory: dependencies.sensory ?? (() => canonicalSensoryRegistry()),
+      // Existing authorities only: service agreements and organization relationships (no partner database).
+      relationships: dependencies.relationships ?? {
+        activeLink: async (kind, id, a, b) => Boolean((await query(kind === "SERVICE_AGREEMENT"
+          ? `SELECT 1 FROM service_agreements WHERE agreement_id=$1 AND status='ACTIVE' AND ((provider_organization_id=$2 AND consumer_organization_id=$3) OR (provider_organization_id=$3 AND consumer_organization_id=$2))`
+          : `SELECT 1 FROM organization_relationships WHERE relationship_id=$1 AND status='ACTIVE' AND ((source_organization_id=$2 AND target_organization_id=$3) OR (source_organization_id=$3 AND target_organization_id=$2))`,
+        [id, a, b])).rows[0]),
+      },
+      entitlements: dependencies.entitlements ?? {
+        hasActive: async (organizationId, serviceKey) => Boolean((await query(
+          `SELECT 1 FROM organization_service_entitlements e JOIN service_catalog c ON c.service_id=e.service_id
+           WHERE e.organization_id=$1 AND c.service_key=$2 AND e.status='ACTIVE' AND (e.effective_until IS NULL OR e.effective_until > NOW())`,
+          [organizationId, serviceKey])).rows[0]),
+      },
+      documents: dependencies.documents ?? { exists: (repoPath) => existsSync(path.join(REPO_ROOT, repoPath)) },
     };
   }
 
@@ -143,12 +168,27 @@ export class WorkforceFoundationService {
         throw error;
       }
     })));
-    const missions = await section(() => Promise.all(pkg.missionRefs.map(async ({ missionId, missionVersion }) => {
+    const missions = await section(() => Promise.all(pkg.missionRefs.map(async ({ missionId, missionVersion, roleRequirements, worldCapabilities }) => {
       // Exact published version in this organization, through the canonical Mission catalog.
       const definition = await d.missions.resolvePublishedMission({ missionId, version: missionVersion }, scope);
-      return definition ? { missionId, missionVersion, title: definition.title, published: true, resolved: true } : { missionId, missionVersion, published: false, resolved: false };
+      if (!definition) return { missionId, missionVersion, published: false, resolved: false };
+      if (!roleRequirements && !worldCapabilities) return { missionId, missionVersion, title: definition.title, published: true, resolved: true };
+      // Role and world-capability requirements are checked against the published definition itself.
+      const roles = new Set((definition.multiplayer?.roles ?? []).map((role: any) => role.roleId));
+      const declared = new Set([...(definition.metaverseContext?.requiredCapabilities ?? []), ...(definition.metaverseContext?.optionalCapabilities ?? [])]);
+      const requirementIssues = [
+        ...(roleRequirements ?? []).filter((role) => !roles.has(role)).map((role) => `MISSION_ROLE_NOT_DECLARED:${role}`),
+        ...(worldCapabilities ?? []).filter((cap) => !declared.has(cap)).map((cap) => `WORLD_CAPABILITY_NOT_DECLARED:${cap}`),
+      ];
+      return { missionId, missionVersion, title: definition.title, published: true, resolved: requirementIssues.length === 0, requirementIssues };
     })));
     const metaverse = pkg.metaverseRefs.map(({ molSystemId }) => ({ molSystemId, system: workforceMolSystem(molSystemId) }));
+    // Canonical destinations by id only; no geometry, routes or world state are read or copied.
+    const destinations = pkg.destinationRefs.map(({ destinationId }) => ({ destinationId, resolved: isWorkforceDestinationId(destinationId) }));
+    const governance = await section(() => Promise.all(pkg.governanceRefs.map(async (ref) => ({
+      ...ref,
+      resolved: ref.refType === "DOCUMENT" ? d.documents.exists(ref.ref) : await d.entitlements.hasActive(scope.organizationId, ref.ref),
+    }))));
     const careers = await section(() => Promise.all(pkg.careerRefs.map(async ({ careerId }) => {
       const row = await d.careers.getById(careerId);
       return row ? { careerId, title: row.title, status: row.status, resolved: true, jobEligibilityInferred: false as const } : { careerId, resolved: false, jobEligibilityInferred: false as const };
@@ -157,10 +197,18 @@ export class WorkforceFoundationService {
       const row = await d.competencies.getById(competencyId);
       return row ? { competencyId, title: row.title, status: row.status, resolved: true } : { competencyId, resolved: false };
     })));
-    const partners = await section(() => Promise.all(pkg.partnerRefs.map(async (ref) => ({
-      organizationId: ref.organizationId, role: ref.role, status: ref.status, resolved: await d.organizations.exists(ref.organizationId),
-      impliesEmployment: false as const, impliesHiring: false as const,
-    }))));
+    const partners = await section(() => Promise.all(pkg.partnerRefs.map(async (ref) => {
+      const resolvedOrg = await d.organizations.exists(ref.organizationId);
+      // CONFIRMED only counts when an ACTIVE agreement/relationship really links the two organizations.
+      const relationshipResolved = ref.status === "CONFIRMED" && ref.relationshipRef
+        ? await d.relationships.activeLink(ref.relationshipRef.kind, ref.relationshipRef.id, scope.organizationId, ref.organizationId)
+        : null;
+      return {
+        organizationId: ref.organizationId, role: ref.role, status: ref.status, resolved: resolvedOrg,
+        ...(ref.status === "CONFIRMED" ? { relationshipResolved, confirmed: resolvedOrg && relationshipResolved === true } : {}),
+        impliesEmployment: false as const, impliesHiring: false as const,
+      };
+    })));
     const reportProfiles = await section(async () => {
       const known = new Set(d.reportProfiles().filter((profile) => profile.status === "ACTIVE").map((profile) => profile.profileKey));
       return pkg.reportingRequirements.map((item) => ({
@@ -187,10 +235,10 @@ export class WorkforceFoundationService {
       fundingSourceTypes: Object.fromEntries(pkg.fundingRefs.map((ref) => [ref.fundingSourceId, registry.fundingSources.find((source) => source.fundingSourceId === ref.fundingSourceId)?.sourceType ?? null])),
     };
     return {
-      contractVersion: pkg.contractVersion,
+      schemaVersion: pkg.schemaVersion,
       program: { ...pkg.program },
       operationalProgram: operational,
-      curriculum, arcade, missions, metaverse, careers, competencies, partners, reportProfiles,
+      curriculum, arcade, missions, metaverse, destinations, governance, careers, competencies, partners, reportProfiles,
       evidenceRequirements: pkg.evidenceRequirements.map((item) => ({ ...item, authority: "verified-evidence" as const, createsEvidence: false as const })),
       accessibilityRequirements: [...pkg.accessibilityRequirements],
       sensory: { authority: "experience-layer" as const, references: sensory, ownedByProgram: false as const },
@@ -304,10 +352,12 @@ export class WorkforceFoundationService {
 
   // BOS read contract: program readiness, fundability, capability maturity, dependency risk, partner readiness and
   // authority clarity, composed only from this service's existing read methods. Read-only; BOS gets no commands.
-  async bosProgramProjection(actor: WorkforceActor, programId: unknown, component: FundabilityComponent) {
+  async bosProgramProjection(actor: WorkforceActor, programId: unknown, component?: FundabilityComponent) {
     const { pkg } = this.packageFor(actor, programId);
     const readiness = await this.describeProgramReadiness(actor, programId);
-    const fundability = await this.evaluateFundability(actor, programId, component);
+    const assessment = component ?? this.assessmentFor(pkg.program.programId)?.component;
+    if (!assessment) throw new WorkforceFoundationError("INVALID_REQUEST", "No fundability assessment is declared for this program.");
+    const fundability = await this.evaluateFundability(actor, programId, assessment);
     const capabilities = await this.resolveCapabilities(actor, programId);
     const dependencies = this.resolveDependencies(actor, programId);
     const authority = await this.describeAuthority(actor, programId);
@@ -330,6 +380,189 @@ export class WorkforceFoundationService {
     };
   }
 
+  private assessmentFor(programId: string) {
+    return this.registry().modules.find((module) => module.package.program.programId === programId)?.fundabilityAssessment ?? null;
+  }
+
+  // ---------------------------------------------------------------- Phase 8 — generic integration pipeline
+
+  // Read-only resolution of every section against its canonical authority. No learner data.
+  async resolveProgramIntegration(actor: WorkforceActor, programId: unknown) {
+    const { pkg } = this.packageFor(actor, programId);
+    const resolution = await this.resolveProgram(actor, programId);
+    const readiness = evaluateIntegrationReadiness(pkg, resolution.facts);
+    const authority = await this.describeAuthority(actor, programId);
+    const funding = await this.listFundingRelationships(actor, programId);
+    const confirmedPartners = resolution.partners.items.filter((item: any) => item.confirmed === true).length;
+    const internalIssuerUnresolved = authority.credentialIssuers.some((issuer) => !issuer.external && issuer.basis?.type === "INTERNAL_CREDENTIAL_DEFINITION" && issuer.basisResolved !== true);
+    const lifecycle = evaluateProgramLifecycle(pkg, readiness, { confirmedPartners, internalIssuerUnresolved });
+    const assessment = this.assessmentFor(pkg.program.programId);
+    const lanes = fundingLanes(pkg, resolution.facts);
+    const fundability = assessment
+      ? { assessed: true as const, ...evaluateFundabilityGate(assessment.component, { fundingLaneCount: lanes.length, blockingDependencyCount: readiness.blockingDependencies.length, readinessStatus: readiness.status }), fundingLanes: lanes }
+      : { assessed: false as const, decision: null, reasons: ["NOT_ASSESSED"], fundingLanes: lanes, eligibilityEstablished: false as const, fundingGuaranteed: false as const };
+    return { pkg, resolution, readiness, authority, funding, lifecycle, fundability, confirmedPartners, internalIssuerUnresolved };
+  }
+
+  // Deterministic validation report. Each section: status (RESOLVED | UNRESOLVED | UNAVAILABLE | BLOCKED | DEGRADED),
+  // issues, warnings, resolvedRefs, unresolvedRefs. No timestamps, no learner data.
+  async validateProgramIntegration(actor: WorkforceActor, programId: unknown) {
+    const { pkg, resolution, readiness, authority, funding, lifecycle, fundability, confirmedPartners, internalIssuerUnresolved } = await this.resolveProgramIntegration(actor, programId);
+    type Status = "RESOLVED" | "UNRESOLVED" | "UNAVAILABLE" | "BLOCKED" | "DEGRADED";
+    const sectionOf = (status: Status, issues: string[] = [], warnings: string[] = [], resolvedRefs: string[] = [], unresolvedRefs: string[] = []) =>
+      ({ status, issues: [...issues].sort(), warnings: [...warnings].sort(), resolvedRefs: [...resolvedRefs].sort(), unresolvedRefs: [...unresolvedRefs].sort() });
+    const split = (items: any[], key: (item: any) => string) => [items.filter((item) => item.resolved).map(key), items.filter((item) => !item.resolved).map(key)];
+    const groups: Array<[string, { status: string; items: any[] }, (item: any) => string]> = [
+      ["curriculum", resolution.curriculum, (item) => `curriculum:${item.courseStableKey ?? item.courseId}`],
+      ["arcade", resolution.arcade, (item) => `arcade:${item.experienceId}`],
+      ["mission", resolution.missions, (item) => `mission:${item.missionId}@${item.missionVersion}`],
+      ["career", resolution.careers, (item) => `career:${item.careerId}`],
+      ["competency", resolution.competencies, (item) => `competency:${item.competencyId}`],
+    ];
+    const refResolved: string[] = [];
+    const refUnresolved: string[] = [];
+    let unavailable = false;
+    for (const [, group, key] of groups) {
+      if (group.status === "UNAVAILABLE") unavailable = true;
+      const [ok, missing] = split(group.items, key);
+      refResolved.push(...ok);
+      refUnresolved.push(...missing);
+    }
+    const [destOk, destMissing] = split(resolution.destinations, (item) => `destination:${item.destinationId}`);
+    refResolved.push(...destOk, ...resolution.metaverse.filter((item) => item.system).map((item) => `mol:${item.molSystemId}`));
+    refUnresolved.push(...destMissing, ...resolution.metaverse.filter((item) => !item.system).map((item) => `mol:${item.molSystemId}`));
+    const operationalWarnings = resolution.operationalProgram.items.filter((item: any) => !item.resolved).map((item: any) => `OPERATIONAL_PROGRAM_UNRESOLVED:${item.programId}`);
+    const missionIssues = resolution.missions.items.flatMap((item: any) => item.requirementIssues ?? []);
+
+    const blockingRequirements = readiness.requirementIssues.filter((issue) => issue.effect === "BLOCKING");
+    const degradedRequirements = readiness.requirementIssues.filter((issue) => issue.effect === "DEGRADED");
+    const credentialQuestion = readiness.questions.find((item) => item.question === "EXTERNAL_CREDENTIAL_AUTHORITY")!;
+    const credentialItems = authority.credentialAuthorities.items as any[];
+    const verifiedUnresolved = funding.filter((item) => item.alignment === "VERIFIED" && item.verificationResolved !== true).map((item) => `funding:${item.fundingSourceId}`);
+    const sensoryRefs = resolution.sensory.references;
+    const governanceItems = resolution.governance.items as any[];
+    const reportItems = resolution.reportProfiles.items as any[];
+
+    const sections = {
+      schema: sectionOf(validateProgramPackageStructured(pkg).valid ? "RESOLVED" : "BLOCKED", [], [], [`schemaVersion:${pkg.schemaVersion}`]),
+      references: sectionOf(unavailable ? "UNAVAILABLE" : refUnresolved.length ? "UNRESOLVED" : "RESOLVED", missionIssues, operationalWarnings, refResolved, refUnresolved),
+      authority: sectionOf(internalIssuerUnresolved ? "BLOCKED" : "RESOLVED", internalIssuerUnresolved ? ["INTERNAL_ISSUER_UNRESOLVED"] : [],
+        authority.credentialIssuerStatus === "NOT_DECLARED" ? ["CREDENTIAL_ISSUER_NOT_DECLARED"] : [], pkg.authorityRefs.map((ref) => `authority:${ref.domain}`)),
+      capabilities: sectionOf(readiness.maturityIssues.length || blockingRequirements.length ? "BLOCKED" : degradedRequirements.length ? "DEGRADED" : "RESOLVED",
+        [...readiness.maturityIssues.map((issue) => `${issue.capability}:${issue.reason}`), ...blockingRequirements.map((issue) => `${issue.capability}:${issue.reason}`)],
+        degradedRequirements.map((issue) => `${issue.capability}:${issue.reason}`), pkg.capabilityRefs.map((cap) => `capability:${cap.capability}`)),
+      dependencies: sectionOf(readiness.blockingDependencies.length ? "BLOCKED" : readiness.degradedDependencies.length ? "DEGRADED" : "RESOLVED",
+        readiness.blockingDependencies.map((id) => `REQUIRED_DEPENDENCY_BLOCKING:${id}`), readiness.degradedDependencies.map((dep) => `OPTIONAL_DEPENDENCY_DEGRADED:${dep.dependencyId}`)),
+      integrationReadiness: sectionOf(readiness.status === "READY" ? "RESOLVED" : readiness.status, readiness.gaps.map((gap) => `READINESS_GAP:${gap}`)),
+      executionLevel: sectionOf(readiness.executionLevel.issues.length ? "BLOCKED" : "RESOLVED", readiness.executionLevel.issues, [],
+        [`declared:${readiness.executionLevel.declared}`, `evaluated:${readiness.executionLevel.evaluated}`]),
+      partners: sectionOf(confirmedPartners > 0 ? "RESOLVED" : "UNRESOLVED", confirmedPartners > 0 ? [] : ["PARTNER_VALIDATION_INCOMPLETE"],
+        resolution.partners.items.filter((item: any) => item.status === "CONFIRMED" && item.confirmed !== true).map((item: any) => `CONFIRMED_WITHOUT_ACTIVE_RELATIONSHIP:${item.organizationId}`),
+        resolution.partners.items.filter((item: any) => item.confirmed === true).map((item: any) => `partner:${item.organizationId}`),
+        resolution.partners.items.filter((item: any) => item.confirmed !== true).map((item: any) => `partner:${item.organizationId}`)),
+      credentials: sectionOf(credentialQuestion.status === "GAP" ? "UNRESOLVED" : credentialItems.some((item) => !item.resolved) ? "UNRESOLVED" : "RESOLVED",
+        credentialQuestion.status === "GAP" ? ["CREDENTIAL_AUTHORITY_NOT_DECLARED"] : [], credentialItems.filter((item) => item.status === "PLACEHOLDER").map((item) => `CREDENTIAL_AUTHORITY_PLACEHOLDER:${item.name}`),
+        credentialItems.filter((item) => item.resolved && item.credentialDefinition).map((item) => `credential:${item.credentialDefinition.id}`),
+        credentialItems.filter((item) => !item.resolved).map((item) => `credential:${item.name}`)),
+      funding: sectionOf(verifiedUnresolved.length ? "BLOCKED" : fundability.fundingLanes.length ? "RESOLVED" : "UNRESOLVED",
+        [...(verifiedUnresolved.length ? verifiedUnresolved.map((ref) => `VERIFIED_WITHOUT_CANONICAL_SOURCE:${ref}`) : []), ...(fundability.fundingLanes.length ? [] : ["NO_FUNDING_LANES"])],
+        ["ALIGNMENT_IS_NOT_ELIGIBILITY"], funding.filter((item) => item.alignment !== "UNKNOWN").map((item) => `funding:${item.fundingSourceId}`)),
+      reporting: sectionOf(resolution.reportProfiles.status === "UNAVAILABLE" ? "UNAVAILABLE" : reportItems.every((item) => item.resolved) ? "RESOLVED" : "UNRESOLVED", [], [],
+        reportItems.filter((item) => item.resolved && item.reportProfileKey).map((item) => `report:${item.metric}`),
+        reportItems.filter((item) => !item.resolved).map((item) => `report:${item.metric}`)),
+      accessibility: sectionOf(pkg.accessibilityRequirements.length ? "RESOLVED" : "UNRESOLVED", pkg.accessibilityRequirements.length ? [] : ["NO_ACCESSIBILITY_REQUIREMENTS"], [],
+        pkg.accessibilityRequirements.map((item) => `support:${item}`)),
+      sensory: sectionOf(sensoryRefs.some((ref) => !ref.resolved) ? "UNRESOLVED" : "RESOLVED", [], sensoryRefs.length ? [] : ["NO_SENSORY_REFS"],
+        sensoryRefs.filter((ref) => ref.resolved).map((ref) => `${ref.kind}:${ref.id}`), sensoryRefs.filter((ref) => !ref.resolved).map((ref) => `${ref.kind}:${ref.id}`)),
+      governance: sectionOf(resolution.governance.status === "UNAVAILABLE" ? "UNAVAILABLE" : governanceItems.some((item) => !item.resolved) ? "UNRESOLVED" : "RESOLVED", [], [],
+        governanceItems.filter((item) => item.resolved).map((item) => `${item.refType}:${item.ref}`), governanceItems.filter((item) => !item.resolved).map((item) => `${item.refType}:${item.ref}`)),
+      lifecycle: sectionOf(lifecycle.allowed ? "RESOLVED" : "BLOCKED", lifecycle.blockingReasons, [], [`requested:${lifecycle.requestedState}`, `evaluated:${lifecycle.evaluatedState}`]),
+      fundability: sectionOf(!fundability.assessed ? "UNRESOLVED" : fundability.decision === "BUILD" ? "RESOLVED" : fundability.decision === "HOLD" ? "UNRESOLVED" : "BLOCKED",
+        fundability.reasons, ["ALIGNMENT_IS_NOT_ELIGIBILITY"], fundability.fundingLanes.map((lane) => `lane:${lane}`)),
+    };
+    const order = ["RESOLVED", "DEGRADED", "UNRESOLVED", "UNAVAILABLE", "BLOCKED"];
+    const overall = Object.values(sections).map((item) => item.status).sort((a, b) => order.indexOf(b) - order.indexOf(a))[0];
+    return {
+      programId: pkg.program.programId, schemaVersion: pkg.schemaVersion, overall,
+      lifecycle: { requestedState: lifecycle.requestedState, evaluatedState: lifecycle.evaluatedState, allowed: lifecycle.allowed, blockingReasons: lifecycle.blockingReasons },
+      executionLevel: { declared: readiness.executionLevel.declared, evaluated: readiness.executionLevel.evaluated },
+      fundability: { decision: fundability.decision, reasons: fundability.reasons, eligibilityEstablished: false as const },
+      sections,
+      createsEvidence: false as const, createsCredential: false as const, establishesEligibility: false as const, writes: [] as const,
+    };
+  }
+
+  async evaluateProgramLifecycle(actor: WorkforceActor, programId: unknown) {
+    return (await this.resolveProgramIntegration(actor, programId)).lifecycle;
+  }
+
+  // Future activation concept, read-only: what activation would require. Nothing is written; there is no
+  // activation record in Phase 8, so PILOT/ACTIVE can never be reached from configuration alone.
+  async evaluateActivation(actor: WorkforceActor, programId: unknown) {
+    const report = await this.validateProgramIntegration(actor, programId);
+    const entitlementRefs = this.packageFor(actor, programId).pkg.governanceRefs.filter((ref) => ref.refType === "SERVICE_ENTITLEMENT");
+    const conditions = {
+      REGISTERED: true,
+      VALIDATES: report.sections.schema.status === "RESOLVED",
+      REQUIRED_REFERENCES_RESOLVE: report.sections.references.status === "RESOLVED",
+      LIFECYCLE_ALLOWS_ACTIVATION: report.lifecycle.allowed && ["PILOT_READY", "PILOT", "ACTIVE"].includes(report.lifecycle.evaluatedState),
+      ORGANIZATION_AUTHORIZED: true,
+      DEPENDENCIES_MEET_POLICY: report.sections.dependencies.status !== "BLOCKED" && report.sections.capabilities.status !== "BLOCKED",
+      ENTITLEMENTS_PRESENT: entitlementRefs.length === 0 || report.sections.governance.status === "RESOLVED",
+    };
+    return {
+      programId: report.programId, activatable: Object.values(conditions).every(Boolean), conditions,
+      unmet: Object.entries(conditions).filter(([, ok]) => !ok).map(([name]) => name).sort(),
+      activationRecord: "NOT_PERSISTED" as const, writes: [] as const,
+    };
+  }
+
+  // BOS program readiness packet (generic). BOS stays advisory/coordination; it owns none of these domains.
+  async bosProgramReadinessPacket(actor: WorkforceActor, programId: unknown) {
+    const { pkg, readiness, authority, lifecycle, fundability, confirmedPartners } = await this.resolveProgramIntegration(actor, programId);
+    const report = await this.validateProgramIntegration(actor, programId);
+    const assessment = this.assessmentFor(pkg.program.programId);
+    return {
+      readOnly: true as const, controls: [] as const,
+      program: { programId: pkg.program.programId, name: pkg.program.name, owningOrganizationId: pkg.program.owningOrganizationId, authorityOwner: pkg.program.authorityOwner },
+      lifecycle: { requestedState: lifecycle.requestedState, evaluatedState: lifecycle.evaluatedState, allowed: lifecycle.allowed, blockingReasons: lifecycle.blockingReasons },
+      fundability: { decision: fundability.decision, reasons: fundability.reasons, fundingLanes: fundability.fundingLanes, eligibilityEstablished: false as const },
+      integrationReadiness: { status: readiness.status, gaps: readiness.gaps },
+      capabilityMaturity: pkg.capabilityRefs.map((cap) => ({ capability: cap.capability, maturity: cap.maturity, minimumMaturity: cap.minimumMaturity, required: cap.required })),
+      dependencies: { blocking: readiness.blockingDependencies, degraded: readiness.degradedDependencies.map((dep) => dep.dependencyId) },
+      authorityGaps: [...report.sections.authority.issues, ...report.sections.authority.warnings],
+      partnerGaps: confirmedPartners > 0 ? [] : ["PARTNER_VALIDATION_INCOMPLETE"],
+      credentialGaps: [...report.sections.credentials.issues, ...report.sections.credentials.warnings],
+      fundingGaps: report.sections.funding.issues,
+      reportingReadiness: report.sections.reporting.status,
+      sensoryReadiness: report.sections.sensory.status,
+      risk: { implementationRisk: assessment?.component.implementationRisk ?? "UNKNOWN", executionLevel: readiness.executionLevel.evaluated, credentialIssuerStatus: authority.credentialIssuerStatus },
+    };
+  }
+
+  // MOCC program packets (generic): bounded aggregates for the actor's organization. No learner identity, no
+  // private health/accommodation detail, no write or control path.
+  async moccProgramPackets(actor: WorkforceActor) {
+    const scope = this.scope(actor);
+    const packages = this.registry().packages.filter((pkg) => pkg.program.owningOrganizationId === scope.organizationId);
+    const packets = [];
+    for (const pkg of packages) {
+      const { readiness, lifecycle } = await this.resolveProgramIntegration(actor, pkg.program.programId);
+      packets.push({
+        programId: pkg.program.programId, status: lifecycle.evaluatedState, executionLevel: readiness.executionLevel.evaluated,
+        affectedSystems: readiness.executionLevel.systems,
+        requiredCapabilities: pkg.capabilityRefs.filter((cap) => cap.required).map((cap) => cap.capability).sort(),
+        degradedCapabilities: [...new Set(readiness.requirementIssues.map((issue) => issue.capability))].sort(),
+        blockingDependencies: readiness.blockingDependencies,
+        activeMissionTypes: pkg.missionRefs.map((ref) => `${ref.missionId}@${ref.missionVersion}`),
+        authorityOwner: pkg.program.authorityOwner,
+        sensoryProfileRefs: pkg.sensoryRefs ? Object.values(pkg.sensoryRefs).filter(Boolean) : [],
+        fundingBuckets: [...new Set(pkg.capabilityRefs.map((cap) => cap.fundingBucket))].sort(),
+      });
+    }
+    return { readOnly: true as const, controls: [] as const, programs: packets };
+  }
+
   // Future MOCC: which programs depend on a MOL system, which capabilities and dependencies would be affected.
   // Read-only, aggregate, learner-agnostic; it controls nothing.
   moccSystemImpact(actor: WorkforceActor, molSystemId: string) {
@@ -341,7 +574,7 @@ export class WorkforceFoundationService {
       if (!viaRefs && !capabilities.length) return [];
       return [{
         programId: pkg.program.programId, lifecycle: pkg.program.lifecycle, affectedCapabilities: capabilities,
-        affectedMissions: pkg.missionRefs.map((ref) => ({ ...ref })),
+        affectedMissions: pkg.missionRefs.map((ref) => ({ missionId: ref.missionId, missionVersion: ref.missionVersion })),
         fundingBuckets: [...new Set(pkg.capabilityRefs.filter((cap) => capabilities.includes(cap.capability)).map((cap) => cap.fundingBucket))],
         authorityOwner: pkg.program.authorityOwner,
         sensoryRefs: pkg.sensoryRefs ? { ...pkg.sensoryRefs } : null,

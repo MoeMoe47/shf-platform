@@ -17,12 +17,21 @@
 // INTEGRATION_READINESS.
 // Simulation completion does not establish credential attainment, employment eligibility, or verified mastery.
 import type { FundabilityComponent } from "../../model/readiness-and-fundability.js";
-import type { ProgramPackage } from "../../model/workforce-foundation.js";
+import type { WorkforceProgramModule } from "../program-module.js";
+import { WORKFORCE_CAPABILITIES, type CapabilityDeclaration, type ProgramPackage, type WorkforceCapability } from "../../model/workforce-foundation.js";
+
+// Capability requirement (schemaVersion 2). Required platform capabilities must be supplied LIVE and block when
+// unmet; optional ones degrade. Provider authority is always the registered authority for the capability.
+const capability = (id: WorkforceCapability, required: boolean, maturity: string, extra: Partial<CapabilityDeclaration> = {}): CapabilityDeclaration => ({
+  capability: id, required, maturity, minimumMaturity: maturity, providerAuthority: WORKFORCE_CAPABILITIES[id], allowedProviderModes: ["LIVE"],
+  fallbackPolicy: required ? "NONE" : "OMIT", degradationPolicy: required ? "BLOCK" : "DEGRADE", acceptanceRef: null,
+  fundingBucket: "SHARED_INFRASTRUCTURE", ...extra,
+});
 
 export const DATA_CENTER_PROGRAM_ID = "DATA_CENTER_COMMUNITY_WORKFORCE";
 
 export const DATA_CENTER_COMMUNITY_WORKFORCE_PACKAGE: ProgramPackage = {
-  contractVersion: 1,
+  schemaVersion: 2,
   program: {
     programId: DATA_CENTER_PROGRAM_ID,
     name: "Silicon Heartland Data Center Community & Workforce Initiative",
@@ -33,27 +42,31 @@ export const DATA_CENTER_COMMUNITY_WORKFORCE_PACKAGE: ProgramPackage = {
     geography: "Central Ohio (Silicon Heartland region)",
     audience: "Grades 7-12 learners, adult learners and community members",
     operationalProgramId: "data-center-specialization-11",
+    // Every world capability it uses is a SIMULATED stand-in (power-grid) or unavailable (data-center).
+    executionLevel: "STANDALONE",
   },
   curriculumRefs: [{ courseStableKey: "data-center" }],
   arcadeExperienceRefs: [{ experienceId: "experience.learning.data-center-cooling-incident" }],
-  missionRefs: [{ missionId: "data-center-cooling-failure-response", missionVersion: 1 }],
+  missionRefs: [{ missionId: "data-center-cooling-failure-response", missionVersion: 1, roleRequirements: ["FACILITY_TECHNICIAN", "ELECTRICAL_TECHNICIAN"], worldCapabilities: ["POWER_CONTEXT"] }],
   metaverseRefs: [{ molSystemId: "power-grid" }, { molSystemId: "data-center" }],
+  destinationRefs: [{ destinationId: "main-data-center" }, { destinationId: "cooling-mechanical-plant" }, { destinationId: "power-electrical-facility" }],
   careerRefs: [{ careerId: "career_data_center_technician" }],
   competencyRefs: [{ competencyId: "competency_prepare_prove_monitoring_finding" }],
   capabilityRefs: [
-    { capability: "CURRICULUM_DELIVERY", required: true, maturity: "PARTIAL", acceptanceRef: null, fundingBucket: "SHARED_INFRASTRUCTURE" },
-    { capability: "LEARNING_ARCADE", required: true, maturity: "PARTIAL", acceptanceRef: null, fundingBucket: "SHARED_INFRASTRUCTURE" },
-    { capability: "MISSION_SIMULATION", required: true, maturity: "PARTIAL", acceptanceRef: null, fundingBucket: "SHARED_INFRASTRUCTURE" },
-    { capability: "MULTIPLAYER", required: true, maturity: "PARTIAL", acceptanceRef: null, fundingBucket: "SHARED_INFRASTRUCTURE" },
+    capability("CURRICULUM_DELIVERY", true, "PARTIAL"),
+    capability("LEARNING_ARCADE", true, "PARTIAL"),
+    capability("MISSION_SIMULATION", true, "PARTIAL"),
+    capability("MULTIPLAYER", true, "PARTIAL"),
     // The Data Center environment is PLANNED in MOL; power context is a SIMULATED provider. Never above PLANNED here.
-    { capability: "METAVERSE_ENVIRONMENT", required: false, maturity: "PLANNED", acceptanceRef: null, molSystemIds: ["power-grid", "data-center"], fundingBucket: "DESTINATION_PROGRAM" },
-    { capability: "EVIDENCE_CAPTURE", required: true, maturity: "PARTIAL", acceptanceRef: null, fundingBucket: "SHARED_INFRASTRUCTURE" },
-    { capability: "CAREER_MAPPING", required: true, maturity: "LIVE", acceptanceRef: null, fundingBucket: "SHARED_INFRASTRUCTURE" },
-    { capability: "EMPLOYER_CONNECTION", required: false, maturity: "PLANNED", acceptanceRef: null, fundingBucket: "DESTINATION_PROGRAM" },
-    { capability: "CREDENTIAL_BRIDGE", required: false, maturity: "PLANNED", acceptanceRef: null, fundingBucket: "DESTINATION_PROGRAM" },
-    { capability: "ACCESSIBILITY", required: true, maturity: "PARTIAL", acceptanceRef: null, fundingBucket: "SHARED_INFRASTRUCTURE" },
-    { capability: "REPORTING", required: true, maturity: "PARTIAL", acceptanceRef: null, fundingBucket: "SHARED_INFRASTRUCTURE" },
-    { capability: "MOCC_VISIBILITY", required: false, maturity: "CONTRACT_DEFINED", acceptanceRef: null, fundingBucket: "SHARED_INFRASTRUCTURE" },
+    capability("METAVERSE_ENVIRONMENT", false, "PLANNED", { molSystemIds: ["power-grid", "data-center"], allowedProviderModes: ["SIMULATED"],
+      fallbackPolicy: "SIMULATED_STAND_IN", fundingBucket: "DESTINATION_PROGRAM" }),
+    capability("EVIDENCE_CAPTURE", true, "PARTIAL"),
+    capability("CAREER_MAPPING", true, "LIVE"),
+    capability("EMPLOYER_CONNECTION", false, "PLANNED", { fundingBucket: "DESTINATION_PROGRAM" }),
+    capability("CREDENTIAL_BRIDGE", false, "PLANNED", { fundingBucket: "DESTINATION_PROGRAM" }),
+    capability("ACCESSIBILITY", true, "PARTIAL"),
+    capability("REPORTING", true, "PARTIAL"),
+    capability("MOCC_VISIBILITY", false, "CONTRACT_DEFINED"),
   ],
   evidenceRequirements: [
     { requirementType: "INDIVIDUAL_DEMONSTRATION", competencyId: "competency_prepare_prove_monitoring_finding" },
@@ -75,10 +88,7 @@ export const DATA_CENTER_COMMUNITY_WORKFORCE_PACKAGE: ProgramPackage = {
   credentialAuthorityRefs: [],
   // No funding source records exist for this program; none is invented. See docs for the owner decision needed.
   fundingRefs: [],
-  accessibilityRequirements: [
-    "keyboard operable", "captions for every audio cue", "visual indicators for alarms", "reduced motion presentation",
-    "no flashing alerts in training presentation", "screen-reader text alternatives for alerts and results",
-  ],
+  accessibilityRequirements: ["KEYBOARD", "CAPTIONS", "VISUAL_ALERTS", "REDUCED_MOTION", "NO_FLASHING", "SCREEN_READER"],
   // Employer validation outreach exists in docs but is NOT REVIEWED and no organization record exists.
   partnerRefs: [],
   reportingRequirements: [
@@ -113,6 +123,7 @@ export const DATA_CENTER_COMMUNITY_WORKFORCE_PACKAGE: ProgramPackage = {
     CAPABILITY_MATURITY: { answer: "ANSWERED" }, BLOCKING_DEPENDENCIES: { answer: "ANSWERED" },
     EXTERNAL_CREDENTIAL_AUTHORITY: { answer: "GAP" }, PARTNERS: { answer: "GAP" }, FUNDING_LANES: { answer: "GAP" },
   },
+  governanceRefs: [{ refType: "DOCUMENT", ref: "docs/workforce/DATA_CENTER_REFERENCE_IMPLEMENTATION.md" }],
   sensoryRefs: {
     soundProfileRef: "sound-profile.data-center",
     celebrationProfileRef: "celebration-profile.data-center",
@@ -137,5 +148,17 @@ export const DATA_CENTER_FUNDABILITY_ASSESSMENT: { component: FundabilityCompone
     authorityClarity: "Program, evidence and career authorities are declared; no external credential issuer is identified.",
     implementationRisk: "Platform paths exist; the Data Center MOL environment and a client Mission player are not built.",
     reuseProgramCount: "Only this program uses the package today.",
+  },
+};
+
+// Program module (Phase 8): the package, its assessment, and references to authority-owned artifacts only.
+export const DATA_CENTER_PROGRAM_MODULE: WorkforceProgramModule = {
+  package: DATA_CENTER_COMMUNITY_WORKFORCE_PACKAGE,
+  fundabilityAssessment: DATA_CENTER_FUNDABILITY_ASSESSMENT,
+  artifactRefs: {
+    arcadeActivityIds: ["arcade_activity_data_center_cooling_incident_v1"],
+    arcadeExperienceIds: ["experience.learning.data-center-cooling-incident"],
+    missionSources: [{ missionId: "data-center-cooling-failure-response", missionVersion: 1 }],
+    sensoryProfileIds: ["sound-profile.data-center", "celebration-profile.data-center", "environment-audio.main-data-center", "policy.data-center-training"],
   },
 };

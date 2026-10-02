@@ -60,6 +60,9 @@ The generic fixture `PROGRAM_INFRASTRUCTURE_TECH_FOUNDATION` is test/reference o
 
 ## Program Registry and ProgramPackage (Phase 7 precursor)
 
+> **Phase 8:** the ProgramPackage is now `schemaVersion: 2`, loaded as a plain-data program module through a static allow-list. It adds capability requirements, execution level, destinations, partner relationship refs, governance refs and generic lifecycle evaluation. See `WORKFORCE_PROGRAM_INTEGRATION_CONTRACT.md`.
+
+
 **Program fields:** `programId`, `name`, `lifecycle`, `programType`, `owningOrganizationId`, `authorityOwner` (required), `geography`, `audience`, and an optional `operationalProgramId`.
 
 **References, each bounded to 24 entries and never copied:**

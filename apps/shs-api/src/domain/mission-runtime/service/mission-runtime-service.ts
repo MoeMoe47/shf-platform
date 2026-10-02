@@ -11,8 +11,9 @@ import {
   type MissionRuntimeStatus,
   type MissionStageState,
 } from "../model/mission-runtime.js";
-import { MissionRuntimeRepo, type MissionRuntimeMutation, type MissionRuntimeScope } from "../repo/mission-runtime-repo.js";
+import { MissionRuntimeRepo, type MissionDirectorDecisionWrite, type MissionRuntimeMutation, type MissionRuntimeScope } from "../repo/mission-runtime-repo.js";
 import { evaluateMissionCondition } from "./condition-evaluator.js";
+import type { MissionDirectorAction } from "../../mission-director/model/mission-director.js";
 
 const SENSITIVE_KEYS = new Set(["password", "token", "authorization", "cookie", "secret", "credential", "latitude", "longitude", "location", "geolocation", "gps", "clipboard", "microphone", "camera", "keystrokes", "browserhistory", "fingerprint"]);
 const ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,159}$/;
@@ -319,11 +320,11 @@ export class MissionRuntimeService {
     return resultOrThrow(result).session;
   }
 
-  async updateState(actor: MissionRuntimeActor, rawId: string, body: { expectedRevision: unknown; patch: unknown }) {
+  async updateState(actor: MissionRuntimeActor, rawId: string, body: { expectedRevision: unknown; patch: unknown }, directorDecision?: MissionDirectorDecisionWrite) {
     const scope = scopeFor(actor);
     const id = runtimeId(rawId);
     const expectedRevision = validateExpectedRevision(body?.expectedRevision);
-    const result = await this.repo.mutateOwned({ id, scope, expectedRevision,
+    const result = await this.repo.mutateOwned({ id, scope, expectedRevision, directorDecision,
       derive: (session, events) => {
         if (session.status !== "ACTIVE") throw new MissionRuntimeError("MISSION_RUNTIME_NOT_ACTIVE", "Runtime state may be updated only while ACTIVE.", 409);
         const patch = validateRuntimeState(session.definitionSnapshot, body.patch);
@@ -337,14 +338,14 @@ export class MissionRuntimeService {
     return resultOrThrow(result).session;
   }
 
-  async appendEvent(actor: MissionRuntimeActor, rawId: string, body: { expectedRevision: unknown; sequence: unknown; eventType: unknown; payload?: unknown }) {
+  async appendEvent(actor: MissionRuntimeActor, rawId: string, body: { expectedRevision: unknown; sequence: unknown; eventType: unknown; payload?: unknown }, directorDecision?: MissionDirectorDecisionWrite) {
     const scope = scopeFor(actor);
     const id = runtimeId(rawId);
     const expectedRevision = validateExpectedRevision(body?.expectedRevision);
     if (!Number.isSafeInteger(body?.sequence) || Number(body.sequence) < 1) throw new MissionRuntimeError("MISSION_RUNTIME_SEQUENCE_INVALID", "sequence must be a positive integer.");
     const eventType = typeof body?.eventType === "string" ? body.eventType.trim() : "";
     const payload = validateJsonObject(body?.payload ?? {}, "MISSION_RUNTIME_EVENT_PAYLOAD_INVALID", MISSION_RUNTIME_EVENT_MAX_BYTES, 4, SENSITIVE_KEYS);
-    const result = await this.repo.mutateOwned({ id, scope, expectedRevision,
+    const result = await this.repo.mutateOwned({ id, scope, expectedRevision, directorDecision,
       derive: (session, events) => {
         if (session.status !== "ACTIVE") throw new MissionRuntimeError("MISSION_RUNTIME_NOT_ACTIVE", "Events may be appended only while ACTIVE.", 409);
         if (Number(body.sequence) !== events.length + 1) throw new MissionRuntimeError("MISSION_RUNTIME_SEQUENCE_CONFLICT", `sequence must be exactly ${events.length + 1}.`, 409, { expectedSequence: events.length + 1 });
@@ -358,5 +359,35 @@ export class MissionRuntimeService {
       },
     });
     return resultOrThrow(result);
+  }
+
+  async applyDirectorAction(actor: MissionRuntimeActor, rawId: string, expectedRevisionInput: unknown, action: MissionDirectorAction, directorDecision: MissionDirectorDecisionWrite) {
+    const current = await this.get(actor, rawId);
+    if (current.revision !== validateExpectedRevision(expectedRevisionInput)) {
+      throw new MissionRuntimeError("MISSION_RUNTIME_REVISION_CONFLICT", "Mission Director proposal is stale.", 409, { currentRevision: current.revision });
+    }
+    if (current.status !== "ACTIVE") throw new MissionRuntimeError("MISSION_RUNTIME_NOT_ACTIVE", "Mission Director actions require an ACTIVE runtime.", 409);
+    if (!current.definitionSnapshot.aiCapabilities.missionDirector) throw new MissionRuntimeError("MISSION_DIRECTOR_CAPABILITY_DENIED", "Mission Director is not declared for this Mission.", 403);
+    if (action.type === "NO_OP") return current;
+    if (action.type === "SET_DECLARED_RUNTIME_STATE") {
+      return this.updateState(actor, rawId, { expectedRevision: expectedRevisionInput, patch: { [action.key]: action.value } }, directorDecision);
+    }
+    if (action.type === "EMIT_DECLARED_EVENT") {
+      if (!current.definitionSnapshot.aiCapabilities.scenarioVariation) throw new MissionRuntimeError("MISSION_DIRECTOR_CAPABILITY_DENIED", "Scenario variation is not declared for this Mission.", 403);
+      const events = await this.listEvents(actor, rawId);
+      return (await this.appendEvent(actor, rawId, { expectedRevision: expectedRevisionInput, sequence: events.length + 1, eventType: action.eventType, payload: action.payload ?? {} }, directorDecision)).session;
+    }
+    const events = await this.listEvents(actor, rawId);
+    const result = await this.repo.mutateOwned({ id: runtimeId(rawId), scope: scopeFor(actor), expectedRevision: validateExpectedRevision(expectedRevisionInput), directorDecision,
+      derive: (session, currentEvents) => {
+        if (session.status !== "ACTIVE") throw new MissionRuntimeError("MISSION_RUNTIME_NOT_ACTIVE", "Mission Director actions require an ACTIVE runtime.", 409);
+        if (currentEvents.length !== events.length) throw new MissionRuntimeError("MISSION_RUNTIME_REVISION_CONFLICT", "Mission Director proposal is stale.", 409);
+        const now = this.now().toISOString();
+        const eventType = "MISSION_DIRECTOR_ESCALATED";
+        const payload = { reasonCode: action.reasonCode, ...(action.message === undefined ? {} : { message: action.message }) };
+        return { ...advance(session.definitionSnapshot, session, currentEvents, now), event: { eventType, payload, occurredAt: now } };
+      },
+    });
+    return resultOrThrow(result).session;
   }
 }

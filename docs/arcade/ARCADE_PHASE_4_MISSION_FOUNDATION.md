@@ -379,6 +379,18 @@ continues to pass after it is committed; migrations 151–153 remain frozen.
 **Approval alone does not make a Mission runtime-authorized. Retirement
 prevents new starts but does not rewrite historical runtime state.**
 
+## Phase 4E — Governed AI Mission Director
+
+The Mission Director proposes bounded scenario actions. It does not directly mutate Mission Runtime state. All Mission Director proposals are deterministically validated before application. The Mission Director uses the frozen Mission Runtime definition snapshot.
+
+Phase 4E uses a provider-neutral executor seam and deterministic executor. Live Agent Fabric execution remains deferred. Agent Fabric remains the AI governance boundary. Mission Runtime remains the operational Mission state authority.
+
+An applied Director action and its `APPLIED` decision row are written in the same Mission Runtime transaction; if either fails, both roll back. `NO_OP`, `REJECTED`, and `FAILED` decisions do not mutate runtime state or revision and are recorded as standalone append-only rows. Idempotency keys are scoped to organization/tenant; reusing a key for a different runtime or expected revision is rejected with `MISSION_DIRECTOR_IDEMPOTENCY_KEY_REUSED` rather than reinterpreted. Decision rows (migration 155) reject `UPDATE` and `DELETE` and intentionally have no cascading link to runtime sessions so operational history outlives runtime cleanup.
+
+The Phase 4E action vocabulary is limited to `NO_OP`, `EMIT_DECLARED_EVENT`, `SET_DECLARED_RUNTIME_STATE`, and `ESCALATE`. Runtime state keys and event types must already be declared by the frozen Mission Definition. Event injection additionally requires the existing `scenarioVariation` capability. Director execution requires `missionDirector`; other existing capability flags do not grant additional actions in this phase.
+
+Mission Director provenance is operational audit data, not verified evidence or Truth Spine truth. Director orchestration does not create Results, evidence, credentials, mastery, career eligibility, rewards, Treasury changes, or institutional truth. Deterministic Mission Runtime operation does not require an AI provider.
+
 ## Deferred
 
 Mission version derivation, richer moderation policy, creator collaboration,

@@ -11,6 +11,8 @@ import { MISSION_DEFINITION_FIXTURES } from "../src/domain/mission-content/fixtu
 import { registerMissionRuntimeRoutes } from "../src/domain/mission-runtime/api/routes.js";
 import { MissionRuntimeService } from "../src/domain/mission-runtime/service/mission-runtime-service.js";
 import { MissionRuntimeStartService } from "../src/domain/mission-runtime/service/mission-runtime-start-service.js";
+import { MissionDirectorService } from "../src/domain/mission-director/service/mission-director-service.js";
+import { FixtureMissionDirectorExecutor } from "../src/domain/mission-director/service/mission-director-executor.js";
 
 const RUN = `mission_pub_${Date.now()}`;
 const ORG = `org_${RUN}`;
@@ -107,6 +109,7 @@ test("publish lifecycle freezes revision, separates author/reviewer/publisher, r
   definition.version = 1;
   definition.status = "DRAFT";
   definition.title = "Governed publication acceptance";
+  definition.aiCapabilities = { ...definition.aiCapabilities, missionDirector: true, scenarioVariation: true };
 
   const created = await request("/studio/missions/drafts", AUTHOR, "POST", { definition });
   assert.equal(created.status, 201, JSON.stringify(created.body));
@@ -234,6 +237,17 @@ test("publish lifecycle freezes revision, separates author/reviewer/publisher, r
   const existing = await runtimeService.get({ user_id: LEARNER, organization_id: ORG, permissions: ["arcade.attempt"] }, runtimeId);
   assert.equal(existing.missionId, missionId);
   assert.equal(existing.status, started.body.data.session.status);
+  const frozenTitle = existing.definitionSnapshot.title;
+  const director = new MissionDirectorService(runtimeService, new FixtureMissionDirectorExecutor({
+    action: { type: "EMIT_DECLARED_EVENT", eventType: "objective-observed", payload: { afterRetirement: true } },
+  }));
+  const directed = await director.direct({ user_id: LEARNER, organization_id: ORG, permissions: ["arcade.attempt"] }, runtimeId, {
+    expectedRevision: existing.revision, idempotencyKey: `${RUN}:director-after-retirement`,
+  });
+  assert.equal(directed.status, "APPLIED");
+  assert.equal(directed.runtime.definitionSnapshot.title, frozenTitle);
+  assert.equal((await query("SELECT status FROM mission_published_releases WHERE release_id=$1", [releaseId])).rows[0].status, "RETIRED");
+  assert.equal(await publishedResolver.resolvePublishedMission({ missionId, version: 1 }, { organizationId: ORG, tenantId: `tenant:${ORG}` }), null);
 
   const counts = await query(
     `SELECT

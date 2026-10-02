@@ -70,6 +70,16 @@ export interface MissionRuntimeMutation {
   noChange?: boolean;
 }
 
+export interface MissionDirectorDecisionWrite {
+  idempotencyKey: string;
+  capability: "missionDirector";
+  proposal: unknown;
+  executorKind: "DETERMINISTIC" | "FIXTURE";
+  providerExecutionRef: string | null;
+  policyVersion: string;
+  contextDigest: string;
+}
+
 export type MissionRuntimeMutationResult =
   | { kind: "NOT_FOUND" }
   | { kind: "REVISION_CONFLICT"; currentRevision: number }
@@ -164,6 +174,7 @@ export class MissionRuntimeRepo {
     scope: MissionRuntimeScope;
     expectedRevision: number;
     idempotentStatus?: MissionRuntimeStatus;
+    directorDecision?: MissionDirectorDecisionWrite;
     derive: (session: MissionRuntimeSession, events: MissionRuntimeEvent[]) => MissionRuntimeMutation;
   }): Promise<MissionRuntimeMutationResult> {
     return withTransaction(async (db) => {
@@ -182,6 +193,7 @@ export class MissionRuntimeRepo {
       );
       const events = eventRows.rows.map(eventFromRow);
       const mutation = input.derive(session, events);
+      if (mutation.noChange && input.directorDecision) throw new Error("MISSION_DIRECTOR_APPLY_WITHOUT_MUTATION");
       if (mutation.noChange) return { kind: "OK", session, event: null };
       if (mutation.event && events.length >= 500) return { kind: "EVENT_LIMIT" };
       const eventId = mutation.event ? randomUUID() : null;
@@ -209,6 +221,22 @@ export class MissionRuntimeRepo {
           [eventId, input.id, sequence, mutation.event.eventType, JSON.stringify(mutation.event.payload), mutation.event.occurredAt],
         );
         event = eventFromRow(inserted.rows[0]);
+      }
+      if (input.directorDecision) {
+        // Same transaction as the runtime mutation: a provenance failure (including an
+        // idempotency-key collision) must roll the runtime change back, so no ON CONFLICT here.
+        await db.query(
+          `INSERT INTO mission_director_decisions
+           (director_decision_id, organization_id, tenant_id, mission_runtime_session_id, mission_id,
+            mission_version, expected_runtime_revision, observed_runtime_revision, capability, idempotency_key,
+            proposal, decision_status, executor_kind, provider_execution_ref, policy_version, context_digest)
+           VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11::jsonb,'APPLIED',$12,$13,$14,$15)`,
+          [randomUUID(), session.organizationId, session.tenantId, session.id, session.missionId,
+            session.missionVersion, input.expectedRevision, session.revision, input.directorDecision.capability,
+            input.directorDecision.idempotencyKey, JSON.stringify(input.directorDecision.proposal),
+            input.directorDecision.executorKind, input.directorDecision.providerExecutionRef,
+            input.directorDecision.policyVersion, input.directorDecision.contextDigest],
+        );
       }
       return { kind: "OK", session: fromRow(updated.rows[0]), event };
     });

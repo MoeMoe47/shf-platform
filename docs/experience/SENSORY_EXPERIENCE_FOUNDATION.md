@@ -131,6 +131,13 @@ Arbitration only removes channels, so accessibility removals made when a plan is
 
 MOL authoritative world events, MOCC read-only observation, World Audio Engine, City Mood System, Dynamic Signage, Ceremony Engine and Environmental Storytelling consume Director plans and registries. They never bypass the Director or own domain truth.
 
+## Phase 7 additions
+
+- **The Data Center sensory profile is the first registered content.** It lives in `profiles/dataCenterSensoryProfile.js`; see `docs/workforce/DATA_CENTER_REFERENCE_IMPLEMENTATION.md`.
+- **Registered sound ≠ audio file.** A sound `source` must be `asset:` or `synth:`. `asset:pending[:id]` marks a registered sound with no file, and `soundAssetStatus` reports PENDING_ASSET, ASSET_REFERENCE or SYNTHESIZED.
+- **`buildSensoryRegistry()`** with no argument builds the production registry. With an explicit argument it builds exactly those lists, so injected content never mixes with production content.
+- **`buildSensoryEvent(trigger, record)`** builds an event from a declared trigger and a real authoritative record id.
+
 ## Program connection
 
 `ProgramPackage.sensoryRefs` (`soundProfileRef`, `celebrationProfileRef`, `environmentAudioProfileRef`, `sensoryPolicyRef`) is optional and holds references only. `WorkforceFoundationService.resolveProgram` reports `{kind, id, resolved}` for each, with `ownedByProgram: false`.

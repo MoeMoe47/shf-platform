@@ -135,8 +135,9 @@ export function validateSound(value) {
     "occlusionSupported", "caption", "accessibilityLabel"], "sound", errors);
   if (!ID.test(String(value.soundId ?? ""))) errors.push("soundId is invalid");
   if (!SOUND_CATEGORIES.includes(value.category)) errors.push("category is not a canonical sound category");
-  // An asset reference only (e.g. "asset:pending" or "synth:sfx.click"); no audio file is required.
-  if (!text(value.source)) errors.push("source reference is required");
+  // An asset reference only; no audio file is required. "asset:pending[:id]" marks a registered sound with no
+  // audio file yet, "asset:<path>" references a real asset, "synth:<cue>" a synthesized cue (src/shared/sfx).
+  if (!text(value.source) || !/^(asset|synth):[A-Za-z0-9._:/-]+$/.test(value.source)) errors.push("source must be an asset:/synth: reference");
   if (!refOrNull(value.environment)) errors.push("environment must be a reference or null");
   for (const key of ["looping", "spatial", "occlusionSupported"]) if (typeof value[key] !== "boolean") errors.push(`${key} must be boolean`);
   if (value.spatial === true ? !(Number.isFinite(value.maxDistance) && value.maxDistance > 0 && value.maxDistance <= 10000) : value.maxDistance !== null) {
@@ -158,6 +159,14 @@ function validateVariant(value, path, errors, rule) {
   for (const key of VARIANT_KEYS) if (!refOrNull(value[key] ?? null)) errors.push(`${path}.${key} must be a reference or null`);
   if (!text(value.captionKey)) errors.push(`${path}.captionKey is required (text alternative)`);
   rule(value);
+}
+
+// Registered sound profile ≠ actual audio file.
+export function soundAssetStatus(sound) {
+  const source = String(sound?.source ?? "");
+  if (source === "asset:pending" || source.startsWith("asset:pending:")) return "PENDING_ASSET";
+  if (source.startsWith("synth:")) return "SYNTHESIZED";
+  return source.startsWith("asset:") ? "ASSET_REFERENCE" : "INVALID";
 }
 
 export function validateCelebration(value) {
@@ -295,4 +304,15 @@ export function validateSensoryProfile(value, kind, { knownIds = [] } = {}) {
   if (!Array.isArray(value[key]) || value[key].length > 64) errors.push(`${key} must be up to 64 references`);
   else for (const id of value[key]) if (!knownIds.includes(id)) errors.push(`${key}: ${id} is not registered`);
   return errors;
+}
+
+// Builds a SensoryEvent from a declared trigger and a real authoritative record. The trigger table (owned by an
+// experience profile) declares intent/severity; the record id comes from the authority. Nothing is copied.
+export function buildSensoryEvent(trigger, { sensoryEventId, sourceRecordId, correlationId, environmentRefs = [], replayPolicy = "WITH_SOURCE_REPLAY", worldStateRequirement = null }) {
+  return {
+    sensoryEventId, sourceEventType: trigger.triggerEvent, sourceAuthority: trigger.authoritySource, sourceRecordId, correlationId,
+    presentationIntent: trigger.presentationIntent, alertSeverity: trigger.alertSeverity ?? null, celebrationTier: null,
+    environmentRefs: [...environmentRefs], accessibleAlternative: trigger.accessibleAlternative, replayPolicy, worldStateRequirement,
+    ...SENSORY_NON_AUTHORITY,
+  };
 }

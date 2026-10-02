@@ -7,8 +7,10 @@
 import { arcadeGames, sections } from "../../../data/arcade.js";
 import { adaptLegacyArcadeGames, adaptLegacyDisplaySections } from "./legacyArcadeCatalogAdapter.js";
 import { validateArcadeExperienceDescriptor } from "./arcadeExperienceValidation.js";
+import { CANONICAL_ARCADE_EXPERIENCE_DESCRIPTOR_LIST } from "./canonicalArcadeExperienceDescriptors.js";
 
-export const CANONICAL_ARCADE_EXPERIENCE_DESCRIPTORS = Object.freeze([]);
+// Phase 7: canonical descriptors live in canonicalArcadeExperienceDescriptors.js (references only).
+export const CANONICAL_ARCADE_EXPERIENCE_DESCRIPTORS = CANONICAL_ARCADE_EXPERIENCE_DESCRIPTOR_LIST;
 
 function unwrap(entry) {
   return entry?.descriptor ?? entry;

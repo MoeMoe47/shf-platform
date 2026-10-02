@@ -153,7 +153,9 @@ export interface ProgramPackage {
     // Optional binding to the operational Program row (programs table) in the owning organization.
     operationalProgramId: string | null;
   };
-  curriculumRefs: Array<{ courseId: string }>;
+  // A course is referenced by its org-scoped id, or (Phase 7) by its deterministic import stable key, which is
+  // the only identity that is the same in every organization that imports the canonical curriculum.
+  curriculumRefs: Array<{ courseId: string } | { courseStableKey: string }>;
   arcadeExperienceRefs: Array<{ experienceId: string }>;
   missionRefs: Array<{ missionId: string; missionVersion: number }>;
   metaverseRefs: Array<{ molSystemId: string }>;
@@ -241,7 +243,13 @@ export function validateProgramPackage(value: unknown): string[] {
     if (!(program.operationalProgramId === null || ID.test(String(program.operationalProgramId ?? "")))) errors.push("program.operationalProgramId must be an id or null");
   }
 
-  refList(errors, value.curriculumRefs, "curriculumRefs", (item, at) => { onlyKeys(item, ["courseId"], at, errors); if (!ID.test(String(item.courseId ?? ""))) errors.push(`${at}.courseId is invalid`); });
+  refList(errors, value.curriculumRefs, "curriculumRefs", (item, at) => {
+    onlyKeys(item, ["courseId", "courseStableKey"], at, errors);
+    const byId = item.courseId !== undefined;
+    const byKey = item.courseStableKey !== undefined;
+    if (byId === byKey) errors.push(`${at} must declare exactly one of courseId or courseStableKey`);
+    else if (!ID.test(String(byId ? item.courseId : item.courseStableKey))) errors.push(`${at}.${byId ? "courseId" : "courseStableKey"} is invalid`);
+  });
   refList(errors, value.arcadeExperienceRefs, "arcadeExperienceRefs", (item, at) => { onlyKeys(item, ["experienceId"], at, errors); if (!ID.test(String(item.experienceId ?? ""))) errors.push(`${at}.experienceId is invalid`); });
   refList(errors, value.missionRefs, "missionRefs", (item, at) => {
     onlyKeys(item, ["missionId", "missionVersion"], at, errors);

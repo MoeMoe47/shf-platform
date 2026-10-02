@@ -8,6 +8,7 @@
 //   competencies → competency_definitions credentials → credential_definitions organizations → identity
 //   VERIFIED funding → funding_grants / gpa_funding_references                  reporting → report profiles
 import { query } from "../../../db/client.js";
+import { ArcadeRepo } from "../../arcade/repo/arcade-repo.js";
 import { ArcadeIntegrationService } from "../../arcade-integration/service/arcade-integration-service.js";
 import { CareerRepo } from "../../careers/repo/career-repo.js";
 import { CredentialDefinitionRepo } from "../../credentials/repo/credential-definition-repo.js";
@@ -41,8 +42,9 @@ export interface WorkforceActor { user_id: string; organization_id: string }
 export interface WorkforceFoundationDependencies {
   registry?: () => WorkforceRegistry;
   programs?: { getProgramById(programId: string, scope: any): Promise<any | null> };
-  curriculum?: { findCourse(organizationId: string, courseId: string): Promise<any | null> };
-  arcade?: { describeCapabilities(experienceId: unknown): { experienceId: string; productType: string; capabilities: string[] } };
+  curriculum?: { findCourse(organizationId: string, courseId: string): Promise<any | null>; findCourseByStableKey(organizationId: string, stableKey: string): Promise<any | null> };
+  arcade?: { resolve(actor: any, experienceId: unknown): Promise<{ experienceId: string; productType: string; capabilities: string[]; arcadeActivityId: string | null }> };
+  arcadeActivities?: { getActivityById(activityId: string): Promise<any | null> };
   missions?: { resolvePublishedMission(identity: { missionId: string; version: number }, scope: { organizationId: string; tenantId: string }): Promise<any | null> };
   careers?: { getById(careerId: string): Promise<any | null> };
   competencies?: { getById(competencyId: string): Promise<any | null> };
@@ -79,6 +81,7 @@ export class WorkforceFoundationService {
       programs: dependencies.programs ?? new ProgramRepo(),
       curriculum: dependencies.curriculum ?? new CurriculumCatalogRepo(),
       arcade: dependencies.arcade ?? new ArcadeIntegrationService(),
+      arcadeActivities: dependencies.arcadeActivities ?? new ArcadeRepo(),
       missions: dependencies.missions ?? new PersistedPublishedMissionResolver(),
       careers: dependencies.careers ?? new CareerRepo(),
       competencies: dependencies.competencies ?? {
@@ -119,20 +122,27 @@ export class WorkforceFoundationService {
         return [row ? { programId: row.program_id, name: row.name, status: row.status, resolved: true } : { programId: pkg.program.operationalProgramId!, resolved: false }];
       })
       : { status: "AVAILABLE" as const, items: [] };
-    const curriculum = await section(() => Promise.all(pkg.curriculumRefs.map(async ({ courseId }) => {
-      const row = await d.curriculum.findCourse(scope.organizationId, courseId);
+    const curriculum = await section(() => Promise.all(pkg.curriculumRefs.map(async (ref) => {
+      const byKey = "courseStableKey" in ref;
+      const row = byKey ? await d.curriculum.findCourseByStableKey(scope.organizationId, ref.courseStableKey) : await d.curriculum.findCourse(scope.organizationId, ref.courseId);
+      const identity = byKey ? { courseStableKey: ref.courseStableKey } : { courseId: ref.courseId };
       // Identifier, title and status only: course content stays with Curriculum.
-      return row ? { courseId, title: row.title, status: row.status, resolved: true } : { courseId, resolved: false };
+      return row ? { ...identity, courseId: row.courseId ?? row.course_id, title: row.title, status: row.status, resolved: true } : { ...identity, resolved: false };
     })));
-    const arcade = await section(async () => pkg.arcadeExperienceRefs.map(({ experienceId }) => {
+    const arcade = await section(() => Promise.all(pkg.arcadeExperienceRefs.map(async ({ experienceId }) => {
       try {
-        const described = d.arcade.describeCapabilities(experienceId);
-        return { experienceId, productType: described.productType, capabilities: described.capabilities, resolved: true };
+        // Through the Phase 6 Fabric; the experience counts only if its canonical activity row really exists.
+        const described = await d.arcade.resolve(actor, experienceId);
+        const activity = described.arcadeActivityId ? await d.arcadeActivities.getActivityById(described.arcadeActivityId) : null;
+        return {
+          experienceId, productType: described.productType, capabilities: described.capabilities, arcadeActivityId: described.arcadeActivityId,
+          activityExists: Boolean(activity), resolved: Boolean(activity),
+        };
       } catch (error: any) {
         if (error?.code === "ACTIVITY_NOT_FOUND") return { experienceId, resolved: false };
         throw error;
       }
-    }));
+    })));
     const missions = await section(() => Promise.all(pkg.missionRefs.map(async ({ missionId, missionVersion }) => {
       // Exact published version in this organization, through the canonical Mission catalog.
       const definition = await d.missions.resolvePublishedMission({ missionId, version: missionVersion }, scope);
@@ -292,6 +302,34 @@ export class WorkforceFoundationService {
     }));
   }
 
+  // BOS read contract: program readiness, fundability, capability maturity, dependency risk, partner readiness and
+  // authority clarity, composed only from this service's existing read methods. Read-only; BOS gets no commands.
+  async bosProgramProjection(actor: WorkforceActor, programId: unknown, component: FundabilityComponent) {
+    const { pkg } = this.packageFor(actor, programId);
+    const readiness = await this.describeProgramReadiness(actor, programId);
+    const fundability = await this.evaluateFundability(actor, programId, component);
+    const capabilities = await this.resolveCapabilities(actor, programId);
+    const dependencies = this.resolveDependencies(actor, programId);
+    const authority = await this.describeAuthority(actor, programId);
+    return {
+      readOnly: true as const, controls: [] as const,
+      programId: pkg.program.programId, lifecycle: pkg.program.lifecycle,
+      readiness: { status: readiness.status, gaps: readiness.gaps, maturityIssues: readiness.maturityIssues.map((issue) => issue.reason) },
+      fundability: { decision: fundability.decision, reasons: fundability.reasons, fundingLanes: fundability.fundingLanes, eligibilityEstablished: false as const },
+      capabilityMaturity: capabilities.map((cap) => ({ capability: cap.capability, maturity: cap.maturity, required: cap.required, issues: cap.issues })),
+      dependencyRisk: {
+        blocking: dependencies.filter((dep) => dep.blocking).map((dep) => dep.dependencyId),
+        degraded: dependencies.filter((dep) => dep.degradesReadiness).map((dep) => dep.dependencyId),
+      },
+      partnerReadiness: {
+        declared: pkg.partnerRefs.length,
+        confirmed: pkg.partnerRefs.filter((ref) => ref.status === "CONFIRMED").length,
+        status: pkg.partnerRefs.some((ref) => ref.status === "CONFIRMED") ? "PARTIAL" as const : pkg.partnerRefs.length ? "DECLARED_ONLY" as const : "NONE" as const,
+      },
+      authorityClarity: { authorityOwner: authority.authorityOwner, credentialIssuerStatus: authority.credentialIssuerStatus, owningOrganizationIsIssuer: authority.owningOrganizationIsIssuer },
+    };
+  }
+
   // Future MOCC: which programs depend on a MOL system, which capabilities and dependencies would be affected.
   // Read-only, aggregate, learner-agnostic; it controls nothing.
   moccSystemImpact(actor: WorkforceActor, molSystemId: string) {
@@ -306,6 +344,7 @@ export class WorkforceFoundationService {
         affectedMissions: pkg.missionRefs.map((ref) => ({ ...ref })),
         fundingBuckets: [...new Set(pkg.capabilityRefs.filter((cap) => capabilities.includes(cap.capability)).map((cap) => cap.fundingBucket))],
         authorityOwner: pkg.program.authorityOwner,
+        sensoryRefs: pkg.sensoryRefs ? { ...pkg.sensoryRefs } : null,
       }];
     });
     return { readOnly: true as const, controls: [] as const, system, programs };

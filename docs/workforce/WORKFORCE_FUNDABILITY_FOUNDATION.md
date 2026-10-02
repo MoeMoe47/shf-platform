@@ -63,7 +63,7 @@ The generic fixture `PROGRAM_INFRASTRUCTURE_TECH_FOUNDATION` is test/reference o
 **Program fields:** `programId`, `name`, `lifecycle`, `programType`, `owningOrganizationId`, `authorityOwner` (required), `geography`, `audience`, and an optional `operationalProgramId`.
 
 **References, each bounded to 24 entries and never copied:**
-- `curriculumRefs`
+- `curriculumRefs`, by `courseId` or (Phase 7) by the deterministic import `courseStableKey`
 - `arcadeExperienceRefs`
 - `missionRefs`, with an exact version
 - `metaverseRefs`, as MOL system ids
@@ -249,7 +249,7 @@ The foundation never claims:
 
 ## BOS and MOCC
 
-**BOS** can later read readiness, capability maturity, dependency risk, partner readiness and evidence readiness from the foundation's service projections. Nothing in BOS is rebuilt.
+**BOS** reads `bosProgramProjection` (Phase 7, read-only): readiness, fundability, capability maturity, dependency risk, partner readiness and authority clarity. It can later also read readiness, capability maturity, dependency risk, partner readiness and evidence readiness from the foundation's service projections. Nothing in BOS is rebuilt.
 
 **MOCC:** `moccSystemImpact(actor, molSystemId)` is read-only (`controls: []`), aggregate and learner-agnostic. It answers which programs depend on a system, which capabilities and Missions are affected, which funding buckets apply, and who the authority owner is.
 
@@ -268,7 +268,11 @@ The foundation never claims:
 
 Packages are visible only to their owning organization. Optional authority reads degrade to `UNAVAILABLE`. The service writes nothing.
 
-## Phase 7 readiness
+## Phase 7 status
+
+The first package is registered: see `docs/workforce/DATA_CENTER_REFERENCE_IMPLEMENTATION.md`. An Arcade reference resolves only when its canonical activity row exists.
+
+## Phase 7 readiness (original plan)
 
 Phase 7 adds the Silicon Heartland Data Center Community & Workforce Initiative as the first registered `ProgramPackage`:
 - its funding sources go in `WORKFORCE_FUNDING_SOURCES`;

@@ -3,13 +3,18 @@
 import {
   tierRank, validateCelebration, validateEnvironmentAudioProfile, validatePresentationPolicy, validateSensoryProfile, validateSound,
 } from "./sensoryContracts.js";
+import {
+  DATA_CENTER_CELEBRATIONS, DATA_CENTER_CELEBRATION_PROFILES, DATA_CENTER_ENVIRONMENT_AUDIO_PROFILES, DATA_CENTER_PRESENTATION_POLICIES,
+  DATA_CENTER_SOUNDS, DATA_CENTER_SOUND_PROFILES,
+} from "./profiles/dataCenterSensoryProfile.js";
 
-export const SOUND_REGISTRY = Object.freeze([]);
-export const CELEBRATION_REGISTRY = Object.freeze([]);
-export const SOUND_PROFILES = Object.freeze([]);
-export const CELEBRATION_PROFILES = Object.freeze([]);
-export const ENVIRONMENT_AUDIO_PROFILES = Object.freeze([]);
-export const SENSORY_PRESENTATION_POLICIES = Object.freeze([]);
+// Phase 7: the Data Center profile is the first registered content (references only, no audio files).
+export const SOUND_REGISTRY = Object.freeze([...DATA_CENTER_SOUNDS]);
+export const CELEBRATION_REGISTRY = Object.freeze([...DATA_CENTER_CELEBRATIONS]);
+export const SOUND_PROFILES = Object.freeze([...DATA_CENTER_SOUND_PROFILES]);
+export const CELEBRATION_PROFILES = Object.freeze([...DATA_CENTER_CELEBRATION_PROFILES]);
+export const ENVIRONMENT_AUDIO_PROFILES = Object.freeze([...DATA_CENTER_ENVIRONMENT_AUDIO_PROFILES]);
+export const SENSORY_PRESENTATION_POLICIES = Object.freeze([...DATA_CENTER_PRESENTATION_POLICIES]);
 
 function collect(items, idKey, validate, rejected, kind) {
   const accepted = new Map();
@@ -23,10 +28,17 @@ function collect(items, idKey, validate, rejected, kind) {
   return accepted;
 }
 
-export function buildSensoryRegistry({
-  sounds = SOUND_REGISTRY, celebrations = CELEBRATION_REGISTRY, soundProfiles = SOUND_PROFILES, celebrationProfiles = CELEBRATION_PROFILES,
-  environmentAudioProfiles = ENVIRONMENT_AUDIO_PROFILES, presentationPolicies = SENSORY_PRESENTATION_POLICIES,
-} = {}) {
+const PRODUCTION_LISTS = Object.freeze({
+  sounds: SOUND_REGISTRY, celebrations: CELEBRATION_REGISTRY, soundProfiles: SOUND_PROFILES, celebrationProfiles: CELEBRATION_PROFILES,
+  environmentAudioProfiles: ENVIRONMENT_AUDIO_PROFILES, presentationPolicies: SENSORY_PRESENTATION_POLICIES,
+});
+
+// No argument builds the production registry. An explicit argument builds exactly those lists (missing ones are
+// empty), so injected content is never silently mixed with production content.
+export function buildSensoryRegistry(lists) {
+  const {
+    sounds = [], celebrations = [], soundProfiles = [], celebrationProfiles = [], environmentAudioProfiles = [], presentationPolicies = [],
+  } = lists ?? PRODUCTION_LISTS;
   const rejected = [];
   const soundMap = collect(sounds, "soundId", validateSound, rejected, "SOUND");
   const triggers = new Set();

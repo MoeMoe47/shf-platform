@@ -71,6 +71,16 @@ export function registerArcadeRoutes(app: any) {
     }
   });
 
+  // Phase 7 — provision a code-defined canonical activity (fixed id) into this environment.
+  app.post("/arcade/activities/canonical/:activityId/provision", requirePermission(SHS_SECURITY_PERMISSIONS.ARCADE_ACTIVITY_MANAGE), async (req: any, res: any, next: any) => {
+    try {
+      const result = await service.provisionCanonicalArcadeActivity(actorFromRequest(req), String(req.params.activityId || ""));
+      return res.status(result.provisioned ? 201 : 200).json(ok(result));
+    } catch (error) {
+      return sendArcadeError(error, res, next);
+    }
+  });
+
   app.post("/arcade/attempts", requirePermission(SHS_SECURITY_PERMISSIONS.ARCADE_ATTEMPT), async (req: any, res: any, next: any) => {
     try {
       const attempt = await service.startAttempt(actorFromRequest(req), String(req.body?.activityId || ""));

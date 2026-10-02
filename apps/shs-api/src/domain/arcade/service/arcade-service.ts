@@ -16,6 +16,7 @@ import { isAdminTier } from "../../shared/audience-eligibility.js";
 import { ArcadeRepo } from "../repo/arcade-repo.js";
 import { ArcadeActivity, ArcadeAttempt, ArcadeResult, deriveMastery } from "../model/arcade.js";
 import { IntegrationOutboxRepo } from "../../trusted-reporting/outbox-repo.js";
+import { canonicalArcadeActivity } from "../catalog/canonical-arcade-activities.js";
 
 const repo = new ArcadeRepo();
 const outbox = new IntegrationOutboxRepo();
@@ -80,6 +81,32 @@ export async function createActivity(actor: ArcadeActor, input: {
     passThresholdScore: input.passThresholdScore ?? null,
     createdByUserId: userId,
   });
+}
+
+// Phase 7 — provisions a code-defined canonical activity with its fixed id, through the same authority and
+// permission as createActivity. Idempotent: an existing matching row is returned unchanged; a drifted row or a
+// slug owned by a different id is a conflict, never silently overwritten.
+export async function provisionCanonicalArcadeActivity(actor: ArcadeActor, activityId: string): Promise<{ activity: ArcadeActivity; provisioned: boolean }> {
+  if (!hasPermission(actor.permissions, SHS_SECURITY_PERMISSIONS.ARCADE_ACTIVITY_MANAGE)) {
+    throw new ArcadeError("FORBIDDEN", "Only an authorized admin or program manager may define Arcade Activities.", 403);
+  }
+  const { userId } = scope(actor);
+  const definition = canonicalArcadeActivity(String(activityId || ""));
+  if (!definition) throw new ArcadeError("CANONICAL_ACTIVITY_NOT_FOUND", "No canonical Arcade Activity is defined with this id.", 404);
+  const matches = (row: ArcadeActivity) => row.slug === definition.slug && row.title === definition.title && row.activityType === definition.activityType
+    && row.masteryRule === definition.masteryRule && row.maxScore === null && row.passThresholdScore === null;
+  const existing = await repo.getActivityById(definition.id);
+  if (existing) {
+    if (!matches(existing)) throw new ArcadeError("CANONICAL_ACTIVITY_DRIFT", "The stored activity does not match its canonical definition.", 409);
+    return { activity: existing, provisioned: false };
+  }
+  const slugOwner = await repo.getActivityBySlug(definition.slug);
+  if (slugOwner) throw new ArcadeError("DUPLICATE_SLUG", "Another Arcade Activity already uses this canonical slug.", 409);
+  const activity = await repo.createActivity({
+    id: definition.id, slug: definition.slug, title: definition.title, activityType: definition.activityType, lessonId: null,
+    masteryRule: definition.masteryRule, maxScore: null, passThresholdScore: null, createdByUserId: userId,
+  });
+  return { activity, provisioned: true };
 }
 
 export async function listActivities(): Promise<ArcadeActivity[]> {

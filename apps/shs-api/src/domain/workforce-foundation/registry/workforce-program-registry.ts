@@ -1,9 +1,11 @@
 // Phase 6.5 — code-backed Program and Funding registries (version-controlled configuration, reviewed like the
-// MOL System Registry and the reporting Program Report Profiles). No program or funding source is registered
-// yet: Phase 7 adds the first real ProgramPackage. Illustrative fixtures never enter these lists.
+// MOL System Registry and the reporting Program Report Profiles). Illustrative fixtures never enter these lists.
+// No funding source is registered: none exists in canonical data.
 import { validateFundingSource, validateProgramPackage, type FundingSource, type ProgramPackage } from "../model/workforce-foundation.js";
+import { DATA_CENTER_COMMUNITY_WORKFORCE_PACKAGE } from "./programs/data-center-community-workforce.js";
 
-export const WORKFORCE_PROGRAM_PACKAGES: readonly ProgramPackage[] = Object.freeze([]);
+// Phase 7: the Data Center Community & Workforce Initiative is the first registered package.
+export const WORKFORCE_PROGRAM_PACKAGES: readonly ProgramPackage[] = Object.freeze([DATA_CENTER_COMMUNITY_WORKFORCE_PACKAGE]);
 export const WORKFORCE_FUNDING_SOURCES: readonly FundingSource[] = Object.freeze([]);
 
 export interface WorkforceRegistry {

@@ -60,10 +60,15 @@ const event = (extra = {}) => ({
 });
 const plan = (overrides = {}, options = {}) => planSensoryPresentation(event(overrides), { registry, policyId: "policy.metaverse", accessibility: NONE, ...options });
 const SENSORY_DIR = new URL("../src/shared/experience/sensory/", import.meta.url);
-const sources = () => readdirSync(SENSORY_DIR).map((name) => [name, readFileSync(new URL(name, SENSORY_DIR), "utf8")]);
+const sources = (dir = SENSORY_DIR, prefix = "") => readdirSync(dir, { withFileTypes: true }).flatMap((entry) => entry.isDirectory()
+  ? sources(new URL(`${entry.name}/`, dir), `${prefix}${entry.name}/`)
+  : [[`${prefix}${entry.name}`, readFileSync(new URL(entry.name, dir), "utf8")]]);
 
-test("registry: production sensory registries are empty; the reference registry validates with no rejections", () => {
-  for (const list of [SOUND_REGISTRY, CELEBRATION_REGISTRY, ENVIRONMENT_AUDIO_PROFILES, SENSORY_PRESENTATION_POLICIES]) assert.equal(list.length, 0);
+test("registry: production sensory content (Phase 7: Data Center profile only) validates; the reference registry validates with no rejections", () => {
+  const production = buildSensoryRegistry();
+  assert.deepEqual(production.rejected, []);
+  assert.ok([...SOUND_REGISTRY, ...CELEBRATION_REGISTRY, ...ENVIRONMENT_AUDIO_PROFILES, ...SENSORY_PRESENTATION_POLICIES]
+    .every((item) => /^(dc\.|environment-audio\.main-data-center|policy\.data-center)/.test(item.soundId ?? item.celebrationId ?? item.profileId ?? item.policyId)), "only the Data Center profile is registered");
   assert.deepEqual(registry.rejected, []);
   assert.deepEqual([registry.sounds.length, registry.celebrations.length, registry.presentationPolicies.length], [4, 3, 2]);
 });

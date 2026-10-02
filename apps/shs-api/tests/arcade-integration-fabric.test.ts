@@ -280,7 +280,7 @@ function fabricSources(dir = "../src/domain/arcade-integration/"): Array<[string
 test("contract: reference descriptors validate on the extended canonical descriptor; the Fabric vocabulary is stable", () => {
   assert.deepEqual(catalog.rejected, []);
   for (const item of REFERENCE_DESCRIPTORS) assert.deepEqual(validateArcadeExperience(item), { valid: true, errors: [] }, item.id);
-  assert.equal(catalog.descriptors.length, 12 + 3, "legacy catalog plus three reference descriptors");
+  assert.equal(catalog.descriptors.length, 12 + 1 + 3, "legacy catalog, the Phase 7 canonical Data Center descriptor, plus three reference descriptors");
   assert.deepEqual([...ARCADE_INTEGRATION_CAPABILITIES].sort(), ["ACHIEVEMENTS", "CAREER_LINK", "CREATOR_AUTHORED", "CURRICULUM_LINK", "EVIDENCE_CANDIDATE", "LEADERBOARD", "METAVERSE_CONTEXT", "MISSION_LAUNCH", "MULTIPLAYER", "REPLAY"]);
   assert.deepEqual(Object.keys(ARCADE_INTEGRATION_ERRORS).sort(), ["ACTIVITY_NOT_FOUND", "ACTIVITY_NOT_LAUNCHABLE", "CAPABILITY_NOT_SUPPORTED", "DEPENDENCY_UNAVAILABLE", "EVIDENCE_NOT_ADDRESSABLE",
     "LAUNCH_INVALID", "MISSION_NOT_PUBLISHED", "MISSION_VERSION_MISMATCH", "MULTIPLAYER_NOT_ALLOWED", "RUNTIME_NOT_FOUND", "TENANT_SCOPE_MISMATCH"]);
@@ -639,7 +639,7 @@ test("29 MOCC projection is read-only, aggregate and learner-agnostic", async ()
   const projection = (await call("/arcade/integration/operations", LEARNER)).body.data;
   assert.equal(projection.readOnly, true);
   assert.deepEqual(projection.controls, []);
-  assert.deepEqual(projection.experiences.byProduct, { learning: 4 + 2, classic: 8 + 1 });
+  assert.deepEqual(projection.experiences.byProduct, { learning: 4 + 1 + 2, classic: 8 + 1 }, "legacy + Phase 7 canonical + reference descriptors");
   assert.deepEqual(projection.teams, { status: "AVAILABLE", forming: 0, active: 0 }, "the completed team is no longer operational");
   assert.doesNotMatch(JSON.stringify(projection), new RegExp(`${LEARNER}|${TEAMMATE}|${state.teamRuntimeId}`));
   assert.equal((await call("/arcade/integration/operations", LEARNER, "POST", {})).status, 404, "no command surface");

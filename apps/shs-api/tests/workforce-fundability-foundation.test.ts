@@ -203,7 +203,8 @@ const component = (overrides: Partial<FundabilityComponent> = {}): FundabilityCo
 // ---------------------------------------------------------------- contracts and registries
 
 test("registry: production registries start empty; the generic fixture validates; invalid entries are rejected and reported", () => {
-  assert.deepEqual([WORKFORCE_PROGRAM_PACKAGES.length, WORKFORCE_FUNDING_SOURCES.length], [0, 0], "no illustrative program or funding source is registered");
+  // Phase 7 registers exactly one real package; no illustrative fixture and no funding source is registered.
+  assert.deepEqual([WORKFORCE_PROGRAM_PACKAGES.map((pkg) => pkg.program.programId), WORKFORCE_FUNDING_SOURCES.length], [["DATA_CENTER_COMMUNITY_WORKFORCE"], 0]);
   assert.deepEqual(validateProgramPackage(fixture()), []);
   for (const source of fundingSources) assert.deepEqual(validateFundingSource(source), [], source.fundingSourceId);
   const registry = buildWorkforceRegistry({ packages: [fixture(), fixture(), mutate((value) => { value.fundingRefs[0].fundingSourceId = "unregistered.source"; value.program.programId = "OTHER"; })], fundingSources });
@@ -233,7 +234,7 @@ test("2/19/23 Program references Career without copying it or inferring job read
 
 test("3/25 Program references Arcade descriptors through the Phase 6 Fabric (no second Arcade registry)", async () => {
   const resolved = await service.resolveProgram(staff, "PROGRAM_INFRASTRUCTURE_TECH_FOUNDATION");
-  assert.deepEqual(resolved.arcade.items, [{ experienceId: EXPERIENCE, productType: "learning", capabilities: fabric.describeCapabilities(EXPERIENCE).capabilities, resolved: true }]);
+  assert.deepEqual(resolved.arcade.items, [{ experienceId: EXPERIENCE, productType: "learning", capabilities: fabric.describeCapabilities(EXPERIENCE).capabilities, arcadeActivityId: ARCADE, activityExists: true, resolved: true }]);
   const unknown = await serviceFor([mutate((value) => { value.arcadeExperienceRefs = [{ experienceId: "experience.unknown.x" }]; })]).resolveProgram(staff, "PROGRAM_INFRASTRUCTURE_TECH_FOUNDATION");
   assert.deepEqual(unknown.arcade.items, [{ experienceId: "experience.unknown.x", resolved: false }]);
   for (const [file, source] of sources()) {
@@ -409,7 +410,7 @@ test("28 MOCC projection is read-only, aggregate and future-facing", async () =>
   assert.deepEqual([impact.readOnly, impact.controls, impact.system?.maturity], [true, [], "CONTRACT_DEFINED"]);
   assert.deepEqual(impact.programs, [{
     programId: "PROGRAM_INFRASTRUCTURE_TECH_FOUNDATION", lifecycle: "INTEGRATION_READINESS", affectedCapabilities: ["METAVERSE_ENVIRONMENT"],
-    affectedMissions: [{ missionId: MISSION, missionVersion: 1 }], fundingBuckets: ["DESTINATION_PROGRAM"], authorityOwner: "Owning organization program office",
+    affectedMissions: [{ missionId: MISSION, missionVersion: 1 }], fundingBuckets: ["DESTINATION_PROGRAM"], authorityOwner: "Owning organization program office", sensoryRefs: null,
   }]);
   assert.deepEqual(service.moccSystemImpact(staff, "road-traffic").programs, []);
   assert.doesNotMatch(JSON.stringify(impact), new RegExp(`${STAFF}|user_id|userId`));
@@ -445,6 +446,9 @@ test("sensory 11/12 ProgramPackage references sensory profiles without owning or
 });
 
 test("29 Phase 6 Arcade Integration Fabric is unchanged", () => {
-  const changed = execFileSync("git", ["diff", "--name-only", "HEAD", "--", "src/domain/arcade-integration", "../../src/shared/arcade"], { cwd: new URL("..", import.meta.url), encoding: "utf8" }).trim();
+  // Fabric logic and the descriptor contract are unchanged. Phase 7 adds canonical descriptor *data* only
+  // (canonicalArcadeExperienceDescriptors.js, wired into the catalog's canonical list).
+  const changed = execFileSync("git", ["diff", "--name-only", "4d0aed9", "--", "src/domain/arcade-integration", "../../src/shared/arcade/experience/arcadeExperienceValidation.js",
+    "../../src/shared/arcade/experience/arcadeExperienceDescriptor.js", "../../src/shared/arcade/experience/legacyArcadeCatalogAdapter.js"], { cwd: new URL("..", import.meta.url), encoding: "utf8" }).trim();
   assert.equal(changed, "");
 });

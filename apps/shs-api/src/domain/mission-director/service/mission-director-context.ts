@@ -1,13 +1,15 @@
 import { createHash } from "node:crypto";
 import type { MissionRuntimeActor, MissionRuntimeService } from "../../mission-runtime/service/mission-runtime-service.js";
 import type { MissionRuntimeEvent, MissionRuntimeSession } from "../../mission-runtime/model/mission-runtime.js";
-import { MISSION_BRANCH_STATE_KEY, MISSION_DIFFICULTY_STATE_KEY, type MissionDifficultyTier } from "../../mission-content/model/mission-scenario.js";
+import { MISSION_BRANCH_STATE_KEY, MISSION_DIFFICULTY_STATE_KEY, MISSION_SYSTEM_EVENTS, type MissionDifficultyTier } from "../../mission-content/model/mission-scenario.js";
 import type {
   MissionDirectorContext,
   MissionDirectorExecutorCharacter,
   MissionDirectorExecutorContext,
   MissionDirectorExecutorStage,
+  MissionDirectorExecutorWorldContext,
 } from "../model/mission-director.js";
+import type { MissionWorldContext } from "../../mission-runtime/world/mission-world-context.js";
 import { CHARACTER_EVENT_TYPES, activeStageIds, availableCharacters } from "./mission-director-scenario-rules.js";
 
 const RECENT_EVENT_LIMIT = 20;
@@ -50,13 +52,29 @@ export class MissionDirectorContextBuilder {
       recentEvents: structuredClone(events.slice(-RECENT_EVENT_LIMIT)),
       aiCapabilities: structuredClone(session.definitionSnapshot.aiCapabilities),
     };
-    const executorContext = projectExecutorContext(session, events);
+    const executorContext = projectExecutorContext(session, events, this.runtime.liveWorldContextFor(session));
     const digest = createHash("sha256").update(stableJson(executorContext)).digest("hex");
     return { context, executorContext, digest };
   }
 }
 
-export function projectExecutorContext(session: MissionRuntimeSession, events: readonly MissionRuntimeEvent[]): MissionDirectorExecutorContext {
+// Frozen projections are runtime/server-side records; the executor never sees them.
+const EXECUTOR_HIDDEN_EVENT_TYPES: ReadonlySet<string> = new Set([MISSION_SYSTEM_EVENTS.worldContextCaptured, MISSION_SYSTEM_EVENTS.accommodationProjected]);
+
+export function projectExecutorWorldContext(live: MissionWorldContext | null): MissionDirectorExecutorWorldContext | null {
+  if (!live) return null;
+  const conditions = Object.entries(live.conditions).flatMap(([category, value]) => (Array.isArray(value) ? value : value ? [{ key: "weather", ...value }] : [])
+    .map((item: any) => ({ category, key: String(item.key), state: String(item.state), freshness: String(item.freshness) })));
+  return {
+    contextKind: "LIVE",
+    simulated: live.simulated,
+    conditions,
+    unavailableCapabilities: live.capabilities.filter((item) => item.status === "UNAVAILABLE" || item.status === "SIMULATION_NOT_PERMITTED").map((item) => item.capability),
+    degradedCapabilities: live.capabilities.filter((item) => item.status === "DEGRADED").map((item) => item.capability),
+  };
+}
+
+export function projectExecutorContext(session: MissionRuntimeSession, events: readonly MissionRuntimeEvent[], live: MissionWorldContext | null = null): MissionDirectorExecutorContext {
   const definition = session.definitionSnapshot;
   const capabilities = definition.aiCapabilities;
   const active = activeStageIds(session);
@@ -88,7 +106,8 @@ export function projectExecutorContext(session: MissionRuntimeSession, events: r
     })),
     runtimeState: structuredClone(session.runtimeState),
     // Character dialogue appears only inside the owning character's view.
-    recentEvents: events.filter((event) => !CHARACTER_EVENT_TYPES.has(event.eventType)).slice(-RECENT_EVENT_LIMIT).map(eventView),
+    recentEvents: events.filter((event) => !CHARACTER_EVENT_TYPES.has(event.eventType) && !EXECUTOR_HIDDEN_EVENT_TYPES.has(event.eventType)).slice(-RECENT_EVENT_LIMIT).map(eventView),
+    worldContext: projectExecutorWorldContext(live),
     difficulty: capabilities.adaptiveDifficulty && definition.difficultyProfile ? {
       currentTier: (session.runtimeState[MISSION_DIFFICULTY_STATE_KEY] ?? definition.difficulty) as MissionDifficultyTier,
       allowedTiers: [...definition.difficultyProfile.tiers],

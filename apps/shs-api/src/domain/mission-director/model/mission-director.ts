@@ -88,6 +88,16 @@ export interface MissionDirectorExecutorContext {
   difficulty: { currentTier: MissionDifficultyTier; allowedTiers: MissionDifficultyTier[] } | null;
   scenarioBranching: { currentBranchId: string; branches: Array<{ branchId: string; label: string; available: boolean }> } | null;
   characters: MissionDirectorExecutorCharacter[];
+  // Phase 4G: minimal LIVE world summary via Mission Runtime; never raw MOL state, events or accommodations.
+  worldContext: MissionDirectorExecutorWorldContext | null;
+}
+
+export interface MissionDirectorExecutorWorldContext {
+  contextKind: "LIVE";
+  simulated: boolean;
+  conditions: Array<{ category: string; key: string; state: string; freshness: string }>;
+  unavailableCapabilities: string[];
+  degradedCapabilities: string[];
 }
 
 export interface MissionDirectorProposal {

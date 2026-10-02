@@ -73,6 +73,13 @@ export class PersistedPublishedMissionResolver implements PublishedMissionResolv
       throw new PublishedMissionCatalogError(`Stored published Mission ${identity.missionId}@${identity.version} failed validation: ${error instanceof Error ? error.message : "invalid definition"}`);
     }
   }
+
+  // Learning Arcade → canonical Mission: which published Missions serve an existing Arcade Activity.
+  // Starting one still goes through the canonical start authority; this only resolves references.
+  async listPublishedMissionsForArcadeActivity(scope: { organizationId: string; tenantId: string }, arcadeActivityId: string) {
+    if (!scope?.organizationId || scope.tenantId !== `tenant:${scope.organizationId}`) return [];
+    return this.repo.listPublishedForArcadeActivity(scope, arcadeActivityId);
+  }
 }
 
 // No 4A draft fixture is promoted or exposed as production content here.

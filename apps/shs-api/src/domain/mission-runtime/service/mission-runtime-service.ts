@@ -16,6 +16,19 @@ import { evaluateMissionCondition } from "./condition-evaluator.js";
 import type { MissionDirectorAction } from "../../mission-director/model/mission-director.js";
 import { MISSION_SYSTEM_EVENTS, initialScenarioState, isReservedStateKey, isSystemEventType } from "../../mission-content/model/mission-scenario.js";
 import { isScenarioAction, scenarioActionDenial, scenarioActionEffect } from "../../mission-director/service/mission-director-scenario-rules.js";
+import { randomUUID } from "node:crypto";
+import { getMissionAccommodationProjection, type MissionAccommodationProvider } from "../../accessibility-accommodations/service/mission-accommodation-projection.js";
+import { buildMissionWorldContext, defaultMissionWorldContextProvider, type MissionWorldContextProvider } from "../world/mission-world-context.js";
+
+export interface MissionRuntimeIntegrations {
+  world?: MissionWorldContextProvider;
+  accommodations?: MissionAccommodationProvider;
+}
+
+// Accommodation requirements are frozen at start (MISSION_ACCOMMODATION_PROJECTED) but Mission Runtime
+// executes no timing semantics: the accommodation authority has no validated normalized timing policy yet,
+// and Mission Runtime must never infer one (extended time is not unlimited time; breaks are not disabled
+// expiration). Stage time limits, objectives and mastery rules behave exactly as without accommodation.
 
 const SENSITIVE_KEYS = new Set(["password", "token", "authorization", "cookie", "secret", "credential", "latitude", "longitude", "location", "geolocation", "gps", "clipboard", "microphone", "camera", "keystrokes", "browserhistory", "fingerprint"]);
 const ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,159}$/;
@@ -253,7 +266,28 @@ function resultOrThrow(result: Awaited<ReturnType<MissionRuntimeRepo["mutateOwne
 }
 
 export class MissionRuntimeService {
-  constructor(private readonly repo = new MissionRuntimeRepo(), private readonly now: () => Date = () => new Date()) {}
+  private readonly world: MissionWorldContextProvider;
+  private readonly accommodations: MissionAccommodationProvider;
+
+  constructor(private readonly repo = new MissionRuntimeRepo(), private readonly now: () => Date = () => new Date(), integrations: MissionRuntimeIntegrations = {}) {
+    this.world = integrations.world ?? defaultMissionWorldContextProvider;
+    this.accommodations = integrations.accommodations ?? getMissionAccommodationProjection;
+  }
+
+  // Frozen start-time projections, recorded as runtime-owned events in the start transaction.
+  private async startProjections(scope: MissionRuntimeScope, definition: MissionDefinition, runtimeId: string, startedAt: string) {
+    const events: Array<{ eventType: string; payload: Record<string, unknown>; occurredAt: string }> = [];
+    if (definition.metaverseContext) {
+      const { binding, context } = buildMissionWorldContext({ definition, runtimeId, startedAt, now: startedAt, contextKind: "FROZEN", provider: this.world });
+      if (binding.blocked) {
+        throw new MissionRuntimeError("MISSION_WORLD_CONTEXT_UNAVAILABLE", "Required Metaverse context is unavailable for this Mission.", 409, { reasons: binding.blockReasons });
+      }
+      events.push({ eventType: MISSION_SYSTEM_EVENTS.worldContextCaptured, payload: context as unknown as Record<string, unknown>, occurredAt: startedAt });
+    }
+    const accommodation = await this.accommodations({ organizationId: scope.organizationId, userId: scope.userId, at: startedAt });
+    if (accommodation) events.push({ eventType: MISSION_SYSTEM_EVENTS.accommodationProjected, payload: { ...accommodation }, occurredAt: startedAt });
+    return events;
+  }
 
   async start(actor: MissionRuntimeActor, definitionInput: MissionDefinition, options: { idempotencyKey?: string | null; arcadeRuntimeSessionId?: string | null } = {}) {
     const scope = scopeFor(actor);
@@ -266,6 +300,8 @@ export class MissionRuntimeService {
     const objectiveStates = initObjectiveStates(definition);
     const stageStates = initStageStates(definition);
     const initial = { objectiveStates, stageStates, runtimeState: initialScenarioState(definition), startedAt };
+    const missionRuntimeId = `mission_runtime_${randomUUID()}`;
+    const initialEvents = await this.startProjections(scope, definition, missionRuntimeId, startedAt);
     const initialMutation = advance(definition, initial, [], startedAt);
     const created = await this.repo.start({
       ...scope,
@@ -278,6 +314,8 @@ export class MissionRuntimeService {
       startedAt,
       arcadeRuntimeSessionId,
       idempotencyKey,
+      missionRuntimeId,
+      initialEvents,
     });
     if (!created.session) throw new MissionRuntimeError("ARCADE_RUNTIME_SESSION_NOT_FOUND", "Explicit Arcade Runtime Session reference is not owned by this actor.", 404);
     if (created.reused && (created.session.missionId !== definition.missionId || created.session.missionVersion !== definition.version
@@ -303,6 +341,35 @@ export class MissionRuntimeService {
 
   async list(actor: MissionRuntimeActor) {
     return this.repo.listOwned(scopeFor(actor));
+  }
+
+  // LIVE world context for an already-loaded session: recomputed from the same deterministic,
+  // simulated source and never stored. Null when the Mission declares no Metaverse context.
+  liveWorldContextFor(session: MissionRuntimeSession, options: { ambientEvents?: readonly unknown[] } = {}) {
+    if (!session.definitionSnapshot.metaverseContext) return null;
+    return buildMissionWorldContext({
+      definition: session.definitionSnapshot, runtimeId: session.id, startedAt: session.startedAt,
+      now: this.now().toISOString(), contextKind: "LIVE", provider: this.world, ambientEvents: options.ambientEvents,
+    }).context;
+  }
+
+  // Read-only Mission ↔ Metaverse context: FROZEN (captured at start) and LIVE (current) are reported
+  // separately and never merged. Owner-scoped like every other runtime read.
+  async getWorldContext(actor: MissionRuntimeActor, rawId: string, options: { ambientEvents?: readonly unknown[] } = {}) {
+    const session = await this.get(actor, rawId);
+    const events = await this.listEvents(actor, rawId);
+    const frozen = events.find((event) => event.eventType === MISSION_SYSTEM_EVENTS.worldContextCaptured)?.payload ?? null;
+    const accommodation = events.find((event) => event.eventType === MISSION_SYSTEM_EVENTS.accommodationProjected)?.payload ?? null;
+    return {
+      runtimeId: session.id,
+      missionId: session.missionId,
+      missionVersion: session.missionVersion,
+      integrated: Boolean(session.definitionSnapshot.metaverseContext),
+      frozen,
+      live: this.liveWorldContextFor(session, options),
+      accommodation,
+      missionAuthority: "MISSION_RUNTIME" as const,
+    };
   }
 
   async listEvents(actor: MissionRuntimeActor, rawId: string) {

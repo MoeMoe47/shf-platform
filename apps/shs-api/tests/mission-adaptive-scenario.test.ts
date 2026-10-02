@@ -398,7 +398,7 @@ test("executor context is a closed projection without the raw definition, and th
   assert.equal("definitionSnapshot" in seen, false);
   assert.deepEqual(Object.keys(seen).sort(), [
     "activeStages", "aiCapabilities", "characters", "difficulty", "missionId", "missionVersion", "objectives", "recentEvents",
-    "runtimeRevision", "runtimeSessionId", "runtimeState", "runtimeStatus", "scenarioBranching",
+    "runtimeRevision", "runtimeSessionId", "runtimeState", "runtimeStatus", "scenarioBranching", "worldContext",
   ]);
   const serialized = JSON.stringify(seen);
   // Content outside every visible scope never reaches the executor.

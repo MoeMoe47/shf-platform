@@ -70,8 +70,9 @@ export function graphNodeForLocation(location) {
 // Read-only world context a future Mission integration (Phase 4G) may observe. It carries no
 // learner data and grants no Mission authority: MOL never starts, mutates or completes Missions.
 export const MOL_MISSION_WORLD_CONTEXT_CONTRACT = Object.freeze({
-  contractVersion: 1, consumer: "mission-runtime", missionAuthority: false, startsMissions: false, containsLearnerData: false,
-  fields: Object.freeze(["contractVersion", "generatedAt", "simulated", "environment", "closures", "restrictions", "incidents", "missionAuthority"]),
+  // v2 (Phase 4G): adds infrastructure conditions and per-system health. Still read-only and learner-free.
+  contractVersion: 2, consumer: "mission-runtime", missionAuthority: false, startsMissions: false, containsLearnerData: false,
+  fields: Object.freeze(["contractVersion", "generatedAt", "simulated", "environment", "closures", "restrictions", "incidents", "infrastructure", "systems", "missionAuthority"]),
 });
 
 export function projectMolMissionWorldContext(worldState) {
@@ -86,6 +87,8 @@ export function projectMolMissionWorldContext(worldState) {
     closures: list("traffic", ["CLOSED", "COLLISION_REPORTED"]),
     restrictions: list("water", ["RESTRICTED"]),
     incidents: list("incidents", ["OPEN"]),
+    infrastructure: list("infrastructure", ["FAILED", "ONLINE"]),
+    systems: worldState.systems.map((system) => ({ systemId: system.systemId, mode: system.mode, maturity: system.maturity, health: system.health })),
     missionAuthority: false,
   };
 }

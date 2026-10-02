@@ -106,6 +106,7 @@ The build document is not checked into this repository. This phase implements it
   - Supports step, pause and resume.
   - If a cause is rejected, its dependent steps are skipped while unrelated steps continue.
   - Replay preserves order, IDs, correlation, causation, attribution and timestamps, and re-issues no requests.
+- **Contract update (Phase 4G).** `MOL_MISSION_WORLD_CONTEXT_CONTRACT` is now v2. It adds `infrastructure` conditions and per-system `systems` health so infrastructure Missions can consume power context. It is still read-only, carries no learner data, and has `missionAuthority: false` and `startsMissions: false`. Mission Runtime consumes it through `apps/shs-api/src/domain/mission-runtime/world/mol-bridge.ts`.
 - **Contracts.**
   - `MOL_MISSION_WORLD_CONTEXT_CONTRACT`: read-only, no learner data, `missionAuthority: false`, `startsMissions: false`.
   - `MOL_WORLD_EVENT_CONTEXT_CONTRACT`: `executesModels: false`.

@@ -33,7 +33,7 @@ export const MISSION_BRANCH_STATE_KEY = "mission.scenarioBranch";
 
 // Runtime-owned operational events. Mission Definitions cannot declare them as condition events,
 // so learner-facing event routes can never forge them.
-export const MISSION_SYSTEM_EVENT_PREFIXES = ["MISSION_DIRECTOR_", "MISSION_DIFFICULTY_", "MISSION_SCENARIO_", "MISSION_CHARACTER_"] as const;
+export const MISSION_SYSTEM_EVENT_PREFIXES = ["MISSION_DIRECTOR_", "MISSION_DIFFICULTY_", "MISSION_SCENARIO_", "MISSION_CHARACTER_", "MISSION_WORLD_", "MISSION_ACCOMMODATION_"] as const;
 export const MISSION_SYSTEM_EVENTS = {
   escalated: "MISSION_DIRECTOR_ESCALATED",
   difficultyAdapted: "MISSION_DIFFICULTY_ADAPTED",
@@ -41,6 +41,9 @@ export const MISSION_SYSTEM_EVENTS = {
   characterSpoke: "MISSION_CHARACTER_SPOKE",
   characterObserved: "MISSION_CHARACTER_OBSERVED",
   characterRequestedAction: "MISSION_CHARACTER_REQUESTED_ACTION",
+  // Phase 4G: frozen start-time projections, written by Mission Runtime only.
+  worldContextCaptured: "MISSION_WORLD_CONTEXT_CAPTURED",
+  accommodationProjected: "MISSION_ACCOMMODATION_PROJECTED",
 } as const;
 
 // Families/classifications where 4F permits only authored (scripted) character dialogue.

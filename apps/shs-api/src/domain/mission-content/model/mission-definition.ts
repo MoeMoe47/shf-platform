@@ -5,6 +5,7 @@ import {
   type MissionDifficultyProfile,
   type MissionScenarioBranching,
 } from "./mission-scenario.js";
+import { validateMissionWorldDeclaration, type MissionMetaverseContextDeclaration } from "./mission-world.js";
 
 export const MISSION_FAMILIES = [
   "LEARNING",
@@ -91,6 +92,8 @@ export interface MissionDefinition {
     environmentId: string;
     locationId?: string;
     sceneId?: string;
+    // Phase 4G: a required metaverse ref must resolve before start; an optional one may degrade.
+    required?: boolean;
   }>;
   arcadeActivityId?: string;
   runtimeScorePolicy: (typeof MISSION_SCORE_POLICIES)[number];
@@ -118,6 +121,8 @@ export interface MissionDefinition {
   difficultyProfile?: MissionDifficultyProfile;
   characters?: MissionCharacter[];
   scenarioBranching?: MissionScenarioBranching;
+  // Phase 4G optional Learning ↔ Metaverse world-context declaration.
+  metaverseContext?: MissionMetaverseContextDeclaration;
 }
 
 const FORBIDDEN_KEYS = new Set([
@@ -204,7 +209,7 @@ function validateNoAuthorityOrExecutableContent(value: unknown, path: string, er
 export function validateMissionDefinition(value: unknown): string[] {
   const errors: string[] = [];
   if (!isRecord(value)) return ["mission must be an object"];
-  onlyKeys(value, ["missionId", "slug", "version", "status", "family", "title", "summary", "intendedAudience", "difficulty", "roles", "objectives", "stages", "successConditions", "failureConditions", "environmentRefs", "arcadeActivityId", "runtimeScorePolicy", "aiCapabilities", "accessibility", "safety", "metadata", "difficultyProfile", "characters", "scenarioBranching"], "mission", errors);
+  onlyKeys(value, ["missionId", "slug", "version", "status", "family", "title", "summary", "intendedAudience", "difficulty", "roles", "objectives", "stages", "successConditions", "failureConditions", "environmentRefs", "arcadeActivityId", "runtimeScorePolicy", "aiCapabilities", "accessibility", "safety", "metadata", "difficultyProfile", "characters", "scenarioBranching", "metaverseContext"], "mission", errors);
   validateNoAuthorityOrExecutableContent(value, "mission", errors);
 
   add(errors, typeof value.missionId === "string" && ID_PATTERN.test(value.missionId), "missionId is required and must be a stable identifier");
@@ -303,7 +308,7 @@ export function validateMissionDefinition(value: unknown): string[] {
       errors.push(`environmentRefs[${i}] must be an object`);
       return;
     }
-    onlyKeys(ref, ["system", "environmentId", "locationId", "sceneId"], `environmentRefs[${i}]`, errors);
+    onlyKeys(ref, ["system", "environmentId", "locationId", "sceneId", "required"], `environmentRefs[${i}]`, errors);
     add(errors, ["metaverse", "arcade", "simulation"].includes(ref.system), `environmentRefs[${i}].system is invalid`);
     add(errors, typeof ref.environmentId === "string" && ID_PATTERN.test(ref.environmentId), `environmentRefs[${i}].environmentId is invalid`);
     for (const field of ["locationId", "sceneId"]) if (ref[field] !== undefined) add(errors, typeof ref[field] === "string" && ID_PATTERN.test(ref[field]), `environmentRefs[${i}].${field} is invalid`);
@@ -311,6 +316,7 @@ export function validateMissionDefinition(value: unknown): string[] {
   if (value.arcadeActivityId !== undefined) add(errors, typeof value.arcadeActivityId === "string" && ID_PATTERN.test(value.arcadeActivityId), "arcadeActivityId must be a real canonical reference identifier");
   validateScalarMetadata(value.metadata, "metadata", errors);
   validateMissionScenarioExtensions(value, stageIds, errors);
+  validateMissionWorldDeclaration(value, errors);
   return errors;
 }
 

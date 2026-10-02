@@ -99,8 +99,11 @@ export class MissionRuntimeRepo {
     startedAt: string;
     arcadeRuntimeSessionId: string | null;
     idempotencyKey: string | null;
+    missionRuntimeId?: string;
+    // Runtime-owned events recorded atomically with session creation (Phase 4G frozen projections).
+    initialEvents?: Array<{ eventType: string; payload: Record<string, unknown>; occurredAt: string }>;
   }): Promise<{ session: MissionRuntimeSession | null; reused: boolean }> {
-    const id = `mission_runtime_${randomUUID()}`;
+    const id = input.missionRuntimeId ?? `mission_runtime_${randomUUID()}`;
     return withTransaction(async (db) => {
       if (input.arcadeRuntimeSessionId) {
         const arcadeSession = await db.query(
@@ -123,7 +126,17 @@ export class MissionRuntimeRepo {
           JSON.stringify(input.definition), JSON.stringify(input.objectiveStates), JSON.stringify(input.stageStates),
           input.arcadeRuntimeSessionId, input.idempotencyKey, input.startedAt, JSON.stringify(input.runtimeState)],
       );
-      if (inserted.rows[0]) return { session: fromRow(inserted.rows[0]), reused: false };
+      if (inserted.rows[0]) {
+        for (const [index, event] of (input.initialEvents ?? []).entries()) {
+          await db.query(
+            `INSERT INTO mission_runtime_events
+              (mission_runtime_event_id, mission_runtime_id, sequence, event_type, payload, occurred_at)
+             VALUES ($1,$2,$3,$4,$5::jsonb,$6)`,
+            [randomUUID(), id, index + 1, event.eventType, JSON.stringify(event.payload), event.occurredAt],
+          );
+        }
+        return { session: fromRow(inserted.rows[0]), reused: false };
+      }
       const existing = await db.query(
         `SELECT ${COLUMNS} FROM mission_runtime_sessions
          WHERE organization_id=$1 AND tenant_id=$2 AND user_id=$3 AND idempotency_key=$4`,

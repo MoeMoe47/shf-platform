@@ -125,3 +125,33 @@ export const MISSION_DEFINITION_FIXTURES: MissionDefinition[] = [
     role: "operator-trainee",
   }),
 ];
+
+// Phase 4G reference Mission: the existing data-center cooling fixture, bound to declared
+// Metaverse context. Exported separately so the 4A fixture set is unchanged. Every provider
+// behind it is SIMULATED (Phase 4F.5 audit); allowSimulatedContext opts in explicitly.
+export const MISSION_WORLD_REFERENCE_FIXTURE: MissionDefinition = (() => {
+  const base = MISSION_DEFINITION_FIXTURES.find((item) => item.missionId === "fixture-infrastructure-cooling-response")!;
+  const value: MissionDefinition = JSON.parse(JSON.stringify(base));
+  value.missionId = "fixture-infrastructure-world-response";
+  value.slug = "infrastructure-world-response";
+  value.title = "Data Center Power Event Response";
+  value.summary = "A simulated data-center exercise that observes declared Metaverse power context. No live infrastructure is connected.";
+  value.environmentRefs = [
+    { system: "metaverse", environmentId: "main-data-center", required: true },
+    { system: "metaverse", environmentId: "cooling-mechanical-plant", required: false },
+  ];
+  value.metaverseContext = {
+    scenarioId: "INFRASTRUCTURE_FAILURE",
+    requiredCapabilities: ["POWER_CONTEXT"],
+    optionalCapabilities: ["DATA_CENTER_CONTEXT", "WEATHER_CONTEXT"],
+    allowSimulatedContext: true,
+    requiredUnavailablePolicy: "BLOCK_START",
+  };
+  value.aiCapabilities = { missionDirector: true, adaptiveDifficulty: false, npcDialogue: true, scenarioVariation: false };
+  value.characters = [{
+    characterId: "shift-supervisor", displayName: "Shift Supervisor", characterType: "SUPERVISOR", simulatedRole: "Simulated data-center shift supervisor",
+    allowedBehaviors: ["SPEAK"], knowledgeScope: "CURRENT_STAGE", dialogueMode: "SCRIPTED_ONLY",
+    scriptedLines: [{ lineId: "check-power", text: "Check the power feed before you report." }], scenarioFacts: [], availableStageIds: [],
+  }];
+  return value;
+})();

@@ -368,7 +368,7 @@ test("the executor receives a minimized projection of the frozen runtime snapsho
   const seen = executor.seen!;
   assert.deepEqual(Object.keys(seen).sort(), [
     "activeStages", "aiCapabilities", "characters", "difficulty", "missionId", "missionVersion", "objectives", "recentEvents",
-    "runtimeRevision", "runtimeSessionId", "runtimeState", "runtimeStatus", "scenarioBranching",
+    "runtimeRevision", "runtimeSessionId", "runtimeState", "runtimeStatus", "scenarioBranching", "worldContext",
   ]);
   assert.equal("definitionSnapshot" in seen, false);
   assert.equal(seen.activeStages[0].title, session.definitionSnapshot.stages[0].title);

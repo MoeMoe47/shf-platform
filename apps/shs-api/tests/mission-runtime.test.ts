@@ -313,8 +313,19 @@ test("runtime completion creates no Arcade Result, Evidence, Truth fact, or outb
   assert.deepEqual(afterCounts, before);
 });
 
-test("runtime domain has no Metaverse, Agent Fabric, Evidence, Truth, Treasury, Curriculum, or Career adapter imports", async () => {
-  const { readFile } = await import("node:fs/promises");
+test("runtime domain has no Metaverse-domain, Agent Fabric, Evidence, Truth, Treasury, Curriculum, or Career adapter imports", async () => {
+  const { readFile, readdir } = await import("node:fs/promises");
   const source = await readFile(new URL("../src/domain/mission-runtime/service/mission-runtime-service.ts", import.meta.url), "utf8");
-  assert.doesNotMatch(source, /metaverse|agent-fabric|verified-evidence|truth-spine|treasury|curriculum|career/i);
+  const imports = [...source.matchAll(/from\s+"([^"]+)"/g)].map((match) => match[1]);
+  for (const specifier of imports) {
+    assert.doesNotMatch(specifier, /domain\/metaverse|metaverse\/|agent-fabric|verified-evidence|truth-spine|treasury|curriculum|career/i, specifier);
+  }
+  // Phase 4G: Metaverse context enters only through the sanctioned world-context seam.
+  assert.ok(imports.includes("../world/mission-world-context.js"));
+  for (const file of await readdir(new URL("../src/domain/mission-runtime/world/", import.meta.url))) {
+    const seam = await readFile(new URL(`../src/domain/mission-runtime/world/${file}`, import.meta.url), "utf8");
+    for (const [, specifier] of seam.matchAll(/from\s+"([^"]+)"/g)) {
+      assert.match(specifier, /^(node:|\.\/mol-bridge\.js$|\.\.\/\.\.\/mission-content\/model\/|(\.\.\/){6}src\/system\/metaverse\/mol\/index\.js$)/, `${file} imports ${specifier}`);
+    }
+  }
 });

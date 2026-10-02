@@ -49,6 +49,7 @@ async function cleanup() {
     await tx.query("DELETE FROM mission_review_submissions WHERE organization_id = ANY($1::text[])", [[ORG, OTHER_ORG]]);
     await tx.query("DELETE FROM mission_runtime_sessions WHERE organization_id = ANY($1::text[])", [[ORG, OTHER_ORG]]);
     await tx.query("DELETE FROM mission_definition_drafts WHERE organization_id = ANY($1::text[])", [[ORG, OTHER_ORG]]);
+    await tx.query("DELETE FROM arcade_activities WHERE arcade_activity_id=$1", [`${RUN}:arcade`]);
     await tx.query("DELETE FROM users WHERE user_id = ANY($1::text[])", [[AUTHOR, REVIEWER, PUBLISHER, LEARNER]]);
     await tx.query("DELETE FROM organizations WHERE organization_id = ANY($1::text[])", [[ORG, OTHER_ORG]]);
     await tx.query("ALTER TABLE mission_review_submissions ENABLE TRIGGER mission_review_submission_snapshot_immutable");
@@ -109,6 +110,12 @@ test("publish lifecycle freezes revision, separates author/reviewer/publisher, r
   definition.version = 1;
   definition.status = "DRAFT";
   definition.title = "Governed publication acceptance";
+  // Phase 4G: the Mission serves an existing canonical Arcade Activity (the Curriculum lesson ↔ Arcade link target).
+  await query(
+    "INSERT INTO arcade_activities (arcade_activity_id, slug, title, activity_type, mastery_rule, created_by_user_id) VALUES ($1,$2,'Mission Arcade Activity','SCENARIO','PASSED_FLAG',$3)",
+    [`${RUN}:arcade`, `${RUN.replaceAll("_", "-")}-arcade`, AUTHOR],
+  );
+  definition.arcadeActivityId = `${RUN}:arcade`;
   definition.aiCapabilities = { missionDirector: true, adaptiveDifficulty: true, npcDialogue: true, scenarioVariation: true };
   // Phase 4F declarative scenario envelope travels draft → review → release → runtime snapshot unchanged.
   definition.difficultyProfile = { tiers: [definition.difficulty, definition.difficulty === "ADVANCED" ? "EXPERT" : "ADVANCED"] };
@@ -170,6 +177,10 @@ test("publish lifecycle freezes revision, separates author/reviewer/publisher, r
   const published = await request(`/studio/missions/review/submissions/${submissionId}/publish`, PUBLISHER, "POST", {});
   assert.equal(published.status, 201);
   releaseId = published.body.data.release.releaseId;
+  // Learning Arcade → canonical Mission: the activity resolves to this published release by reference only.
+  assert.deepEqual(await publishedResolver.listPublishedMissionsForArcadeActivity({ organizationId: ORG, tenantId: `tenant:${ORG}` }, `${RUN}:arcade`),
+    [{ missionId, missionVersion: 1, title: "Governed publication acceptance" }]);
+  assert.deepEqual(await publishedResolver.listPublishedMissionsForArcadeActivity({ organizationId: OTHER_ORG, tenantId: `tenant:${OTHER_ORG}` }, `${RUN}:arcade`), []);
   assert.equal(published.body.data.release.status, "PUBLISHED");
   assert.equal(published.body.data.release.definition.status, "PUBLISHED");
   assert.equal(await publishedResolver.resolvePublishedMission({ missionId, version: 1 }, { organizationId: OTHER_ORG, tenantId: `tenant:${OTHER_ORG}` }), null);
@@ -223,6 +234,7 @@ test("publish lifecycle freezes revision, separates author/reviewer/publisher, r
   assert.equal(retirementWithoutNote.status, 400);
   const retired = await request(`/studio/missions/releases/${releaseId}/retire`, PUBLISHER, "POST", { retirementNote: "New Mission version replaces this release." });
   assert.equal(retired.status, 200);
+  assert.deepEqual(await publishedResolver.listPublishedMissionsForArcadeActivity({ organizationId: ORG, tenantId: `tenant:${ORG}` }, `${RUN}:arcade`), [], "retired releases are not offered for new starts");
   assert.equal(retired.body.data.release.status, "RETIRED");
   const retiredRelease = await query(
     "SELECT retired_by_user_id, retired_at, retirement_note FROM mission_published_releases WHERE release_id=$1",

@@ -433,6 +433,73 @@ Difficulty, dialogue, and branch selection do not by themselves constitute verif
 
 **Deterministic fallback.** Missions run at the default tier and branch with no AI. Scripted lines are authored content. Executor outages are recorded as `FAILED` decisions and leave the runtime untouched.
 
+## Phase 4G — Learning ↔ Metaverse Mission Integration
+
+Curriculum teaches.
+Learning Arcade provides practice and mission experience.
+Mission Runtime owns Mission state.
+MOL supplies world context.
+Metaverse domain engines own their own simulation facts.
+Evidence Engine determines valid Evidence.
+Truth Spine receives only verified reportable facts.
+Accessibility/Accommodation remains a separate authority.
+Agent Fabric governs AI execution.
+Metaverse context may influence a Mission; it does not become Mission authority.
+
+**Audit summary.**
+- **Learning chain.** Curriculum-catalog owns lesson ↔ Arcade Activity links (`curriculum_lesson_arcade_activities`), and `MissionDefinition.arcadeActivityId` references an Arcade Activity.
+- **MET-7 City Missions.** These are read-time projections of canonical *Assignments* into the Metaverse (Assignment → completion-policy requirement or lesson link → Arcade Activity). They are a separate concept from Phase 4 Mission Runtime.
+- **Evidence path.** An authoritative source row plus an org-registered evidence rule goes through `projectAuthoritativeFact`, which writes `prepare_prove_evidence` and, if the rule allows, a truth fact. That service is **frozen** by the governance guards in `tests/arcadeCanonicalHistory.test.mjs` and `tests/arcadeLegacyHistoryTruthQuarantine.test.mjs`.
+- **Accommodations.** There are two authorities: `accessibility_accommodation_cases`/`_requirements` (migration 141, a sensitive request → review → approval → activation lifecycle) and `authorized_accommodations` (migration 057, ACTIVE/REVOKED grants of four closed types). Learner preferences (`user_accessibility_profiles`, migration 056) are separate and presentation-only.
+- **MOL location.** MOL exists only as a client-side, in-memory library.
+
+**Contract.** A Mission opts in with `metaverseContext`, which declares:
+- `scenarioId` (an approved MOL scenario)
+- `requiredCapabilities` and `optionalCapabilities` (`TRAFFIC_CONTEXT`, `WATER_CONTEXT`, `WEATHER_CONTEXT`, `INCIDENT_CONTEXT`, `POWER_CONTEXT`, `DATA_CENTER_CONTEXT`, each mapped to one MOL system)
+- `allowSimulatedContext`
+- `requiredUnavailablePolicy` (`BLOCK_START` | `START_DEGRADED`)
+
+The existing `environmentRefs` gain an optional `required` flag; there is no new environment field. Execution levels (STANDALONE / HYBRID / LIVING) stay documentation-only, because every provider is SIMULATED.
+
+**Server-side MOL.** `mission-runtime/world/mol-bridge.ts` imports the same pure MOL modules the client uses: there is one source of truth and no second engine. Each runtime's world context is the bound approved scenario, re-derived deterministically (seed = runtime id, timeline anchored at runtime start). It is labeled SIMULATED, never live.
+
+**Frozen vs live.**
+- **FROZEN:** captured once as `MISSION_WORLD_CONTEXT_CAPTURED`, a runtime-owned event inside the start transaction.
+- **LIVE:** recomputed on demand by `MissionRuntimeService.getWorldContext` and never stored.
+- **Markers:** every value carries `contextKind`, `freshness` (CURRENT / STALE / SOURCE_UNAVAILABLE) and `simulated`. Capability status is AVAILABLE / DEGRADED / UNAVAILABLE / SIMULATION_NOT_PERMITTED, and the provider mode is preserved.
+
+**Start rules.**
+- A required environment ref that fails to resolve, or an unapproved scenario, always blocks start.
+- A required capability outage follows the declared policy.
+- Optional outages degrade without fabricating state.
+- A SIMULATED provider without explicit permission is treated as unavailable; there is no silent fallback.
+- MOL can never start a Mission; start remains published Mission → start authority → Mission Runtime.
+
+**Events.** Only events from usable declared capabilities that share the runtime's correlation chain, or touch the Mission's environment dependency set, are referenced. They are stored as bounded references (`molEventId`, type, source, authority, provider mode, `occurredAt`, correlation, causation, relevance) and never as copied bodies.
+
+**AI.** The Director executor receives only a minimal LIVE summary (`worldContext`: condition rows, unavailable and degraded capability names). It never receives raw MOL state, event references, correlation IDs or accommodation data, and the frozen projection events are hidden from executor `recentEvents`.
+
+**Accommodation.** The accommodation domain owns `getMissionAccommodationProjection`, which reads only ACTIVE `authorized_accommodations` inside their effective window. It projects closed **requirement** flags:
+- `timingAdjustmentRequired` (EXTENDED_ASSESSMENT_TIME)
+- `breakAccommodationRequired` (ADDITIONAL_BREAKS), kept distinct from extended time
+- `alternatePresentationRequired`
+- `alternateInputRequired`
+- `timingPolicy: null`
+
+It never projects the stored `value`, case data, notes, reviewers or identifiers. The projection is frozen at start as `MISSION_ACCOMMODATION_PROJECTED` and is never sent to MOL or the Director executor.
+
+The audit found no validated normalized timing policy: no canonical multiplier, no extra duration, no break/pause policy, and no service that computes effective timing. `authorized_accommodations.value` is copied unvalidated from requirement payloads, and the `accommodation-value.ts` validator referenced by migration 057 does not exist. Therefore:
+
+The authoritative accommodation requires timing adjustment, but Phase 4G does not execute timing semantics until the accommodation domain exposes a validated normalized timing policy.
+
+Mission Runtime never infers one. Extended time is not unlimited time, and additional breaks do not disable expiration. Stage time limits, objectives and mastery rules behave exactly as without accommodation.
+
+**Evidence.** `describeMissionEvidenceCandidate` describes a candidate only: a SUCCEEDED runtime with learner actions, plus provenance (objectives, learner action refs, world-context event IDs, and `assessmentConditions: { timingAccommodationPresent, timingAdjustmentApplied: false }`, which states only what was recorded versus applied). The frozen verified-evidence authority does not yet accept `MISSION_RUNTIME_RESULT`, so `addressableByEvidenceAuthority: false`. Registering it is a separate, governed Evidence-authority change. Presence, context reads and world events never produce Evidence, and no Mission or MOL path writes Truth.
+
+**Learning Arcade.** `PersistedPublishedMissionResolver.listPublishedMissionsForArcadeActivity` resolves published, org-scoped Missions for an Arcade Activity by reference. Retired releases are excluded. Starting still uses the canonical start path.
+
+**Persistence.** No migration. Frozen projections fit existing `mission_runtime_events`, and live context is computed.
+
 ## Deferred
 
 Mission version derivation, richer moderation policy, creator collaboration,

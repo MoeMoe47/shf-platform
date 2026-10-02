@@ -165,6 +165,20 @@ export class MissionPublicationRepo {
     return result.rows[0]?.definition_snapshot ?? null;
   }
 
+  // Phase 4G: published Missions that reference a canonical Arcade Activity (the existing
+  // Curriculum lesson ↔ Arcade link target). Reference lookup only; no curriculum content is copied.
+  async listPublishedForArcadeActivity(scope: Pick<MissionPublicationScope, "organizationId" | "tenantId">, arcadeActivityId: string) {
+    const result = await this.dbQuery(
+      `SELECT r.mission_id, r.mission_version, r.definition_snapshot->>'title' AS title
+       FROM mission_published_releases r
+       JOIN arcade_activities a ON a.arcade_activity_id = r.definition_snapshot->>'arcadeActivityId'
+       WHERE r.organization_id=$1 AND r.tenant_id=$2 AND r.status='PUBLISHED' AND a.arcade_activity_id=$3
+       ORDER BY r.mission_id, r.mission_version`,
+      [scope.organizationId, scope.tenantId, arcadeActivityId],
+    );
+    return result.rows.map((row: any) => ({ missionId: row.mission_id, missionVersion: Number(row.mission_version), title: row.title }));
+  }
+
   private async insertEvent(tx: any, scope: MissionPublicationScope, missionId: string, version: number, eventType: string, submissionId: string | null, releaseId: string | null, metadata: Record<string, unknown>) {
     await tx.query(
       `INSERT INTO mission_publication_events

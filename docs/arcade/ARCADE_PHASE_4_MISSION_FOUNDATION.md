@@ -500,6 +500,66 @@ Mission Runtime never infers one. Extended time is not unlimited time, and addit
 
 **Persistence.** No migration. Frozen projections fit existing `mission_runtime_events`, and live context is computed.
 
+## Phase 4H — Integrated Phase 4 Acceptance
+
+Phase 4 provides a reusable Mission Platform.
+
+New programs should integrate through Mission, MOL, Evidence and registry contracts rather than creating course-specific infrastructure.
+
+**Accepted flow.** These run as one journey in `apps/shs-api/tests/mission-phase4-integrated-acceptance.test.ts`, plus `tests/metaverseMolPhase4Integration.test.mjs` on the root side.
+1. A curriculum lesson links to a canonical Arcade Activity.
+2. The Activity resolves to published Missions (lookup by reference only).
+3. A Mission is published through the HTTP draft → submit → approve → publish workflow.
+4. The canonical start authority starts the exact `(missionId, version)`, with no latest fallback.
+5. The release snapshot is frozen into the runtime.
+6. Frozen MOL world context and the minimum-necessary accommodation requirements are recorded in the start transaction.
+7. LIVE world context is recomputed separately.
+8. The Director sees only its minimized, digest-bound projection.
+9. Adaptive difficulty, scenario branching (observed by the canonical condition engine) and two isolated governed characters all run.
+10. The learner's canonical event completes the Mission.
+11. An evidence candidate is described, never Evidence.
+12. An auditor reconstructs publication history, frozen definition, frozen MOL chain, runtime events, Director decisions and provenance. Replay duplicates nothing and calls nothing external.
+13. After retirement, existing runtimes continue on their frozen snapshot.
+
+**Authorities.**
+
+| Authority | Owns | May read | May request | May not control |
+|---|---|---|---|---|
+| Curriculum | Lessons, lesson ↔ Arcade links | — | — | Missions |
+| Mission Content | Drafts, review, releases | Arcade Activity IDs | — | Runtime state |
+| Mission Runtime | Session, state, revision, events | Frozen snapshot, MOL contract, accommodation projection | — | MOL, engines, Evidence, Truth, accommodation grants |
+| Mission Director | Decision ledger | Internal frozen context | Bounded actions via Mission Runtime | Runtime rows directly, Evidence, Truth |
+| MOL | Coordination log/projections (in-memory) | Its own events | Record-only requests | Missions, learners, engines |
+| Accommodation | Cases, grants | — | — | — (exposes a read-only projection) |
+| Agent Fabric | AI execution | — | — | — (executor seam only; no live calls in Phase 4) |
+| Evidence / Truth | Evidence, truth facts | — | — | — (frozen; Missions never write them) |
+| Identity / Career | Users, memberships, careers | — | — | — (NPCs and MOL systems create no identities) |
+
+**Persistence.**
+- **Persisted:** drafts (`mission_definition_drafts`); review submissions and frozen review snapshots; immutable releases and append-only publication events; runtime sessions with the frozen definition snapshot; runtime events, including the frozen `MISSION_WORLD_CONTEXT_CAPTURED` and `MISSION_ACCOMMODATION_PROJECTED`; and append-only Director decisions (migration 155).
+- **Computed only:** LIVE world context, MOL world state/graph/replay (client in-memory, server deterministic re-derivation), executor projections, and the evidence-candidate description.
+
+**Simulation status.** Every Metaverse provider is SIMULATED or UNAVAILABLE. No live engine exists, and nothing in Phase 4 claims live city integration.
+
+**Evidence and Truth limitations.** The verified-evidence authority is frozen and does not accept `MISSION_RUNTIME_RESULT` (`addressableByEvidenceAuthority: false`). Completing a Mission writes no Evidence, Truth, credential, mastery or career row. Making Mission results Evidence requires a separate, governed Evidence-authority change.
+
+**Known limitations (non-blocking).**
+- The accommodation timing policy is not executed until the accommodation authority validates one.
+- The Arcade Activity lookup lists published Missions without checking current startability (for example, a Mission that forbids simulation while only simulated providers exist).
+- There is no learner-facing HTTP route for world context.
+- There is no Builder UI for 4F/4G fields.
+- MOL has no durable server log.
+- The command center is a diagnostic surface with in-memory sessions only.
+
+**Deferred to Phase 5+.** Multiplayer and team Missions, Arcade Integration Fabric, Program Packages, the Universal Event Registry, the full MOCC, live engines and live Agent Fabric execution.
+
+**MOCC forward compatibility.** Verified by test, with no MOCC features built:
+- The versioned MOL event contract can evolve into a Universal Event Registry.
+- System Registry entries already declare publish, consume, request, state and dependencies.
+- Dependency impact and replay timelines are structured data.
+- MOL references the canonical destination registry and shared coordinate families instead of copying them, so Phase 4 adds no competing map, coordinate, destination or route authority. The existing Quick Map / Mini Map remains the spatial surface.
+- **Future roadmap items:** a durable server-side MOL log, and a read-only operational Mission-state projection for operators.
+
 ## Deferred
 
 Mission version derivation, richer moderation policy, creator collaboration,

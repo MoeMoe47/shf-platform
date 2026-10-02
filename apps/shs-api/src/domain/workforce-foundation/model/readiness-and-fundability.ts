@@ -55,16 +55,25 @@ export function capabilityRequirementIssues(pkg: ProgramPackage, facts: Pick<Pro
 }
 
 // Execution level is evaluated from how MOL actually supplies the referenced systems; it is never upgraded.
-// No regional simulation authority exists yet, so LIVING_WORLD cannot be evaluated or honestly claimed.
-export const LIVING_WORLD_AUTHORITY_AVAILABLE = false;
+// Phase 9: LIVING_WORLD requires the Regional Simulation Authority. The authority existing is not enough: the program
+// must reference it, the authority must have reached at least PARTIAL maturity, and every referenced system must be
+// available. Today the authority is SIMULATED, so no program can honestly evaluate to LIVING_WORLD.
+export const REGIONAL_SIMULATION_SYSTEM_ID = "regional-simulation";
+export const LIVING_WORLD_MINIMUM_AUTHORITY_MATURITY = "PARTIAL";
 export function evaluateExecutionLevel(pkg: ProgramPackage, facts: Pick<ProgramResolutionFacts, "molSystems">) {
   const ids = [...new Set([...pkg.metaverseRefs.map((ref) => ref.molSystemId), ...pkg.capabilityRefs.flatMap((cap) => cap.molSystemIds ?? [])])].sort();
   const modes = ids.map((id) => facts.molSystems[id]?.mode ?? "UNAVAILABLE").filter((mode) => mode !== "UNAVAILABLE");
-  const evaluated: ExecutionLevel = modes.includes("LIVE") || modes.includes("HYBRID") ? "HYBRID" : "STANDALONE";
+  const authority = ids.includes(REGIONAL_SIMULATION_SYSTEM_ID) ? facts.molSystems[REGIONAL_SIMULATION_SYSTEM_ID] ?? null : null;
+  const livingWorldBlockers = [
+    ...(authority ? [] : ["LIVING_WORLD_REQUIRES_REGIONAL_SIMULATION"]),
+    ...(authority && maturityRank(authority.maturity) < maturityRank(LIVING_WORLD_MINIMUM_AUTHORITY_MATURITY) ? ["LIVING_WORLD_AUTHORITY_IMMATURE"] : []),
+    ...(ids.some((id) => (facts.molSystems[id]?.mode ?? "UNAVAILABLE") === "UNAVAILABLE") ? ["LIVING_WORLD_SYSTEMS_UNAVAILABLE"] : []),
+  ];
+  const evaluated: ExecutionLevel = !livingWorldBlockers.length ? "LIVING_WORLD" : modes.includes("LIVE") || modes.includes("HYBRID") ? "HYBRID" : "STANDALONE";
   const issues: string[] = [];
-  if (pkg.program.executionLevel === "LIVING_WORLD" && !LIVING_WORLD_AUTHORITY_AVAILABLE) issues.push("LIVING_WORLD_AUTHORITY_UNAVAILABLE");
   if (executionLevelRank(pkg.program.executionLevel) > executionLevelRank(evaluated)) issues.push("EXECUTION_LEVEL_OVERSTATED");
-  return { declared: pkg.program.executionLevel, evaluated, systems: ids, issues };
+  if (pkg.program.executionLevel === "LIVING_WORLD") issues.push(...livingWorldBlockers);
+  return { declared: pkg.program.executionLevel, evaluated, systems: ids, issues, livingWorldBlockers };
 }
 
 export function fundingLanes(pkg: ProgramPackage, facts: Pick<ProgramResolutionFacts, "fundingSourceTypes">) {

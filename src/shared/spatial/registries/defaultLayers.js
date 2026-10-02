@@ -63,6 +63,23 @@ export const DEFAULT_SPATIAL_LAYERS = Object.freeze([
     accessibilityBehavior: "keyboard regional scene polygons and text equivalents required",
     lifecycleStatus: SPATIAL_LAYER_LIFECYCLE_STATUS.EXPERIMENTAL,
   }),
+  // Phase 9 — MOCC Digital Twin overlays on the EXISTING Quick Map coordinate space. No new map, geometry or
+  // coordinate system: overlay features are positioned only through calibrated Quick Map locations.
+  ...["infrastructure", "incidents", "mobility"].map((overlay) => Object.freeze({
+    layerId: `metaverse.mocc.${overlay}`,
+    name: `MOCC ${overlay[0].toUpperCase()}${overlay.slice(1)} Overlay`,
+    owningDomain: "Metaverse",
+    sourceAuthority: "regional-simulation-projection",
+    supportedCoordinateSpaces: Object.freeze(["metaverse.quick-map"]),
+    visibilityPolicy: "explicit",
+    publicPrivateEligibility: PUBLICATION_ELIGIBILITY_LEVELS.NOT_PUBLISHED,
+    requiredPermissions: Object.freeze(["metaverse.operations.view"]),
+    timeAwareCapability: true,
+    selectionCapability: true,
+    verificationCapability: false,
+    accessibilityBehavior: "text list equivalent required; unmapped features listed, never placed",
+    lifecycleStatus: SPATIAL_LAYER_LIFECYCLE_STATUS.EXPERIMENTAL,
+  })),
 ]);
 
 export function createDefaultSpatialLayerRegistry({ coordinateRegistry = defaultCoordinateSpaceRegistry } = {}) {

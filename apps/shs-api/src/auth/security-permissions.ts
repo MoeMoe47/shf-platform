@@ -333,6 +333,9 @@ export const SHS_SECURITY_PERMISSIONS = {
   METAVERSE_ENTERPRISE_VIEW: "metaverseEnterprise.view",
   METAVERSE_ENTERPRISE_PROPOSE: "metaverseEnterprise.propose",
   METAVERSE_ENTERPRISE_APPROVE: "metaverseEnterprise.approve",
+  // Phase 9 — MOCC: view operations; operate simulation-only controls (domain actions are request-only).
+  METAVERSE_OPERATIONS_VIEW: "metaverse.operations.view",
+  METAVERSE_OPERATIONS_OPERATE: "metaverse.operations.operate",
 
   ACCESSIBILITY_ACCOMMODATION_REQUEST: "accessibility.accommodation.request",
   ACCESSIBILITY_ACCOMMODATION_REVIEW: "accessibility.accommodation.review",

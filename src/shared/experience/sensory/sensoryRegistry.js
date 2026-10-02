@@ -7,14 +7,19 @@ import {
   DATA_CENTER_CELEBRATIONS, DATA_CENTER_CELEBRATION_PROFILES, DATA_CENTER_ENVIRONMENT_AUDIO_PROFILES, DATA_CENTER_PRESENTATION_POLICIES,
   DATA_CENTER_SOUNDS, DATA_CENTER_SOUND_PROFILES,
 } from "./profiles/dataCenterSensoryProfile.js";
+import {
+  REGIONAL_WORLD_CELEBRATIONS, REGIONAL_WORLD_CELEBRATION_PROFILES, REGIONAL_WORLD_ENVIRONMENT_AUDIO_PROFILES, REGIONAL_WORLD_PRESENTATION_POLICIES,
+  REGIONAL_WORLD_SOUNDS, REGIONAL_WORLD_SOUND_PROFILES,
+} from "./profiles/regionalWorldSensoryProfile.js";
 
-// Phase 7: the Data Center profile is the first registered content (references only, no audio files).
-export const SOUND_REGISTRY = Object.freeze([...DATA_CENTER_SOUNDS]);
-export const CELEBRATION_REGISTRY = Object.freeze([...DATA_CENTER_CELEBRATIONS]);
-export const SOUND_PROFILES = Object.freeze([...DATA_CENTER_SOUND_PROFILES]);
-export const CELEBRATION_PROFILES = Object.freeze([...DATA_CENTER_CELEBRATION_PROFILES]);
-export const ENVIRONMENT_AUDIO_PROFILES = Object.freeze([...DATA_CENTER_ENVIRONMENT_AUDIO_PROFILES]);
-export const SENSORY_PRESENTATION_POLICIES = Object.freeze([...DATA_CENTER_PRESENTATION_POLICIES]);
+// Phase 7: the Data Center profile is the first registered content; Phase 9 adds the regional world profile.
+// References only, no audio files.
+export const SOUND_REGISTRY = Object.freeze([...DATA_CENTER_SOUNDS, ...REGIONAL_WORLD_SOUNDS]);
+export const CELEBRATION_REGISTRY = Object.freeze([...DATA_CENTER_CELEBRATIONS, ...REGIONAL_WORLD_CELEBRATIONS]);
+export const SOUND_PROFILES = Object.freeze([...DATA_CENTER_SOUND_PROFILES, ...REGIONAL_WORLD_SOUND_PROFILES]);
+export const CELEBRATION_PROFILES = Object.freeze([...DATA_CENTER_CELEBRATION_PROFILES, ...REGIONAL_WORLD_CELEBRATION_PROFILES]);
+export const ENVIRONMENT_AUDIO_PROFILES = Object.freeze([...DATA_CENTER_ENVIRONMENT_AUDIO_PROFILES, ...REGIONAL_WORLD_ENVIRONMENT_AUDIO_PROFILES]);
+export const SENSORY_PRESENTATION_POLICIES = Object.freeze([...DATA_CENTER_PRESENTATION_POLICIES, ...REGIONAL_WORLD_PRESENTATION_POLICIES]);
 
 function collect(items, idKey, validate, rejected, kind) {
   const accepted = new Map();

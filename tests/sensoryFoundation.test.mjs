@@ -64,11 +64,11 @@ const sources = (dir = SENSORY_DIR, prefix = "") => readdirSync(dir, { withFileT
   ? sources(new URL(`${entry.name}/`, dir), `${prefix}${entry.name}/`)
   : [[`${prefix}${entry.name}`, readFileSync(new URL(entry.name, dir), "utf8")]]);
 
-test("registry: production sensory content (Phase 7: Data Center profile only) validates; the reference registry validates with no rejections", () => {
+test("registry: production sensory content (Phase 7 Data Center + Phase 9 regional world profiles) validates; the reference registry validates with no rejections", () => {
   const production = buildSensoryRegistry();
   assert.deepEqual(production.rejected, []);
   assert.ok([...SOUND_REGISTRY, ...CELEBRATION_REGISTRY, ...ENVIRONMENT_AUDIO_PROFILES, ...SENSORY_PRESENTATION_POLICIES]
-    .every((item) => /^(dc\.|environment-audio\.main-data-center|policy\.data-center)/.test(item.soundId ?? item.celebrationId ?? item.profileId ?? item.policyId)), "only the Data Center profile is registered");
+    .every((item) => /^(dc\.|world\.|environment-audio\.|policy\.(data-center|regional-world))/.test(item.soundId ?? item.celebrationId ?? item.profileId ?? item.policyId)), "only the Data Center and regional world profiles are registered");
   assert.deepEqual(registry.rejected, []);
   assert.deepEqual([registry.sounds.length, registry.celebrations.length, registry.presentationPolicies.length], [4, 3, 2]);
 });

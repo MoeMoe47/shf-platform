@@ -20,6 +20,8 @@ export const MOL_WORLD_STATE_OWNERS = Object.freeze({
   environment: "OCEAN_ENVIRONMENT",
   infrastructure: "POWER_GRID",
   incidents: "INCIDENT",
+  // Phase 9: simulated downstream impacts projected by the Regional Simulation Authority.
+  regionalImpacts: "REGIONAL_SIMULATION",
 });
 
 // Authorities MOL can never write to, request writes from, or impersonate.
@@ -117,6 +119,21 @@ export const MOL_SYSTEMS = Object.freeze([
     interfaces: Object.freeze(["src/system/metaverse/mol"]),
     notes: "Coordinates only. Owns orchestration operational state, never domain facts.",
   }),
+  // Phase 9 — owns SIMULATED regional world state only. It never establishes real-world civic truth, never
+  // rewrites a domain system's internal state, and only projects declared-dependency impacts as simulated events.
+  system({
+    systemId: "regional-simulation", displayName: "Regional Simulation Authority", systemType: "ORCHESTRATION", authorityDomain: "REGIONAL_SIMULATION",
+    owner: "Phase 9 Regional Simulation Authority", mode: "SIMULATED", maturity: "SIMULATED", integrationMode: "ORCHESTRATOR",
+    capabilities: Object.freeze(["deterministic-simulation-clock", "declared-dependency-propagation", "regional-scenario-hosting", "deterministic-replay"]),
+    publishes: Object.freeze([T.SIMULATION_STATE_CHANGED, T.REGIONAL_IMPACT_PROJECTED]),
+    consumes: Object.freeze([T.POWER_FAILURE, T.POWER_RESTORED, T.STORM_STARTED, T.STORM_ENDED, T.ROAD_CLOSED, T.ROAD_REOPENED,
+      T.WATERWAY_RESTRICTED, T.WATERWAY_RESTRICTION_LIFTED, T.INCIDENT_OPENED, T.INCIDENT_CLOSED]),
+    acceptsRequests: Object.freeze(["START", "PAUSE", "RESUME", "RESET", "ADVANCE"]),
+    worldStateContributions: Object.freeze(["regionalImpacts"]),
+    dependsOn: Object.freeze(["mol"]),
+    interfaces: Object.freeze(["src/system/metaverse/regional"]),
+    notes: "Simulated regional world state only (REAL_WORLD ≠ SIMULATED_WORLD). Coordinates registered systems; never owns their domain facts.",
+  }),
 ]);
 
 // SYSTEM | OWNS | MOL MAY READ | MOL MAY REQUEST | MOL MAY NOT CONTROL
@@ -134,6 +151,7 @@ export const MOL_AUTHORITY_MATRIX = Object.freeze([
   ["identity-governance", "Users, roles, permissions", "Nothing", "Nothing", "Any identity or permission"],
   ["curriculum-career", "Instruction, pathways", "Nothing", "Nothing", "Any curriculum or career record"],
   ["mol", "Orchestration operational state (log, projections, health)", "All accepted MOL events", "Bounded record-only requests", "Domain facts owned above"],
+  ["regional-simulation", "Simulated regional world state and simulated dependency impacts", "Accepted source events from registered systems", "Nothing (projects simulated impacts only)", "Any domain system's internal state; real-world civic truth"],
 ].map(([system, owns, molMayRead, molMayRequest, molMayNotControl]) => Object.freeze({ system, owns, molMayRead, molMayRequest, molMayNotControl })));
 
 const BY_ID = new Map(MOL_SYSTEMS.map((entry) => [entry.systemId, entry]));

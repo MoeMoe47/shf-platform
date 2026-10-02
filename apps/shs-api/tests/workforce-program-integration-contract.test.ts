@@ -295,7 +295,8 @@ test("20/21/22 execution levels: STANDALONE uses approved simulated stand-ins, H
   const living = structuredClone(COMPLETE);
   living.program.executionLevel = "LIVING_WORLD";
   const livingReport = await serviceFor([module(living)]).validateProgramIntegration(staff, "COMPLETE_GENERIC_TEST_PROGRAM");
-  assert.deepEqual(livingReport.sections.executionLevel.issues, ["EXECUTION_LEVEL_OVERSTATED", "LIVING_WORLD_AUTHORITY_UNAVAILABLE"]);
+  // Phase 9: the Regional Simulation Authority exists, but a program must reference it (and it must be mature) to qualify.
+  assert.deepEqual(livingReport.sections.executionLevel.issues, ["EXECUTION_LEVEL_OVERSTATED", "LIVING_WORLD_REQUIRES_REGIONAL_SIMULATION"]);
   assert.equal(livingReport.lifecycle.allowed, false);
 });
 

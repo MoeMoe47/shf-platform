@@ -27,6 +27,7 @@ import MetaverseRiverTraceAuthoringPanel from "@/components/metaverse/MetaverseR
 import MetaverseRegionalScenePage from "@/pages/metaverse/MetaverseRegionalScenePage.jsx";
 import OceanEngineDevPage from "@/pages/metaverse/OceanEngineDevPage.jsx";
 import MolCommandCenterPage from "@/pages/metaverse/MolCommandCenterPage.jsx";
+import MoccCommandCenterPage from "@/pages/metaverse/MoccCommandCenterPage.jsx";
 import MetaverseDevConsole, { MetaverseWeatherDevSection } from "@/components/metaverse/MetaverseDevConsole.jsx";
 import MetaverseWeatherEnvironmentLayer from "@/components/metaverse/MetaverseWeatherEnvironmentLayer.jsx";
 import useMetaverseEnvironmentRuntime from "@/hooks/metaverse/useMetaverseEnvironmentRuntime.js";
@@ -1688,6 +1689,7 @@ export default function MetaverseCityPage() {
   if (routePath === "/metaverse") return <MetaverseHomePage />;
   if (routePath === "/metaverse/dev/ocean") return <OceanEngineDevPage />;
   if (routePath === "/metaverse/dev/orchestration") return <MolCommandCenterPage />;
+  if (routePath === "/metaverse/dev/mocc") return <MoccCommandCenterPage />;
   const routeSlug = routePath.match(/^\/metaverse\/([^/]+)$/)?.[1] || null;
   const regionalScene = routeSlug ? getRegionalSceneBySlug(routeSlug) : null;
   if (regionalScene) return <MetaverseRegionalScenePage scene={regionalScene} />;

@@ -28,6 +28,9 @@ export const MOL_EVENT_TYPES = Object.freeze({
   INCIDENT_OPENED: "INCIDENT_OPENED",
   INCIDENT_CLOSED: "INCIDENT_CLOSED",
   SYSTEM_HEALTH_CHANGED: "SYSTEM_HEALTH_CHANGED",
+  // Phase 9 — Regional Simulation Authority (simulated regional world state only).
+  SIMULATION_STATE_CHANGED: "SIMULATION_STATE_CHANGED",
+  REGIONAL_IMPACT_PROJECTED: "REGIONAL_IMPACT_PROJECTED",
 });
 export const MOL_EVENT_TYPE_VALUES = Object.freeze(Object.values(MOL_EVENT_TYPES));
 export const MOL_EVENT_TYPE_PATTERN = /^[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)+$/;
@@ -55,6 +58,8 @@ const ENVELOPE_KEYS = Object.freeze([
   "eventId", "eventVersion", "eventType", "occurredAt", "sourceSystem", "authority", "providerMode", "location",
   "severity", "entities", "correlationId", "causationId", "status", "requiredCapabilities", "relatedMission",
   "evidencePolicy", "truthPolicy", "payload",
+  // Phase 9 (optional, backward compatible): the regional simulation an event belongs to and its simulated time.
+  "simulationId", "simulationTime",
 ]);
 const LOCATION_KEYS = Object.freeze(["coordinateFamily", "coordinateSpaceId", "destinationId", "featureId", "layerId"]);
 const ENTITY_KEYS = Object.freeze(["entityType", "entityRef", "role"]);
@@ -149,6 +154,8 @@ export function validateMolEvent(event) {
       }
     }
   }
+  if (event.simulationId !== undefined && !isId(event.simulationId)) errors.push("simulationId must be a stable identifier");
+  if (event.simulationTime !== undefined && (typeof event.simulationTime !== "string" || Number.isNaN(Date.parse(event.simulationTime)))) errors.push("simulationTime must be an ISO timestamp");
   validatePayload(event.payload, errors);
   return Object.freeze({ valid: errors.length === 0, unsupportedVersion, errors: Object.freeze([...new Set(errors)]) });
 }

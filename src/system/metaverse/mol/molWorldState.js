@@ -34,6 +34,8 @@ const REDUCERS = Object.freeze({
   [T.POWER_RESTORED]: ["infrastructure", (event) => event.location?.destinationId, () => "ONLINE"],
   [T.INCIDENT_OPENED]: ["incidents", subjectRef, () => "OPEN"],
   [T.INCIDENT_CLOSED]: ["incidents", subjectRef, () => "CLOSED"],
+  // Phase 9: simulated impact on a dependent node; cleared when the cause resolves.
+  [T.REGIONAL_IMPACT_PROJECTED]: ["regionalImpacts", (event) => String(event.payload.impactedNodeId || ""), (event) => String(event.payload.impact || "DEGRADED")],
 });
 
 export function projectMolWorldState(events, { now = Date.now(), staleAfterMs = MOL_DEFAULT_STALE_AFTER_MS } = {}) {

@@ -8,3 +8,4 @@ export * from "./molRegionalGraph.js";
 export * from "./molScenarios.js";
 export * from "./molCoordination.js";
 export * from "./molCommandCenterViewModel.js";
+export * from "./molEventRegistry.js";

@@ -21,12 +21,30 @@ export class SalesRepo {
 
   async getLinkReference(type: "relationship" | "discovery" | "need", id: string, executor: any = { query }) {
     const source = {
-      relationship: ["sales_relationships", "relationship_id"],
-      discovery: ["sales_discovery_records", "discovery_record_id"],
-      need: ["sales_needs", "need_id"],
+      relationship: [
+        "sales_relationships",
+        "relationship_id",
+        "relationship_status",
+        "NULL::text AS discovery_status",
+        "NULL::text AS status",
+      ],
+      discovery: [
+        "sales_discovery_records",
+        "discovery_record_id",
+        "NULL::text AS relationship_status",
+        "discovery_status",
+        "NULL::text AS status",
+      ],
+      need: [
+        "sales_needs",
+        "need_id",
+        "NULL::text AS relationship_status",
+        "NULL::text AS discovery_status",
+        "status",
+      ],
     }[type]
     const res = await executor.query(
-      `SELECT tenant_id, organization_id, account_organization_id, archived_at, relationship_status, discovery_status, status
+      `SELECT tenant_id, organization_id, account_organization_id, archived_at, ${source[2]}, ${source[3]}, ${source[4]}
        FROM ${source[0]} WHERE ${source[1]}=$1 LIMIT 1`,
       [id],
     )
@@ -296,31 +314,49 @@ export class SalesRepo {
   }
 
   async updateOpportunity(id: string, scope: SalesScope, input: any, executor: any) {
+    if (input.stage !== undefined && input.stage !== null) {
+      throw new Error("DIRECT_STAGE_MUTATION_FORBIDDEN");
+    }
     const res = await executor.query(
       `UPDATE sales_opportunities
-       SET stage=COALESCE($4, stage),
+       SET status=COALESCE($4, status),
+           name=COALESCE($5, name),
+           estimated_value=COALESCE($6, estimated_value),
+           currency=COALESCE($7, currency),
+           target_close_date=COALESCE($8, target_close_date),
+           owner_user_id=COALESCE($9, owner_user_id),
+           primary_need_ids=COALESCE($10::jsonb, primary_need_ids),
+           employer_incentive_assessment_ids=COALESCE($11::jsonb, employer_incentive_assessment_ids),
+           updated_by_user_id=$12,
+           updated_at=NOW(),
+           archived_at=CASE WHEN $4 = 'ARCHIVED' THEN COALESCE(archived_at, NOW()) ELSE archived_at END,
+           version=version+1
+       WHERE opportunity_id=$1 AND tenant_id=$2 AND organization_id=$3 AND archived_at IS NULL
+       RETURNING *`,
+      [
+        id, scope.tenant_id, scope.organization_id, input.status || null,
+        input.name || null, input.estimated_value ?? null, input.currency || null, input.target_close_date || null,
+        input.owner_user_id || null, input.primary_need_ids ? JSON.stringify(input.primary_need_ids) : null,
+        input.employer_incentive_assessment_ids ? JSON.stringify(input.employer_incentive_assessment_ids) : null,
+        input.actor_id,
+      ],
+    );
+    return res.rows[0] || null;
+  }
+
+  async transitionOpportunityStage(id: string, scope: SalesScope, input: any, executor: any) {
+    const res = await executor.query(
+      `UPDATE sales_opportunities
+       SET stage=$4,
            status=COALESCE($5, status),
-           name=COALESCE($6, name),
-           estimated_value=COALESCE($7, estimated_value),
-           currency=COALESCE($8, currency),
-           target_close_date=COALESCE($9, target_close_date),
-           owner_user_id=COALESCE($10, owner_user_id),
-           primary_need_ids=COALESCE($11::jsonb, primary_need_ids),
-           employer_incentive_assessment_ids=COALESCE($12::jsonb, employer_incentive_assessment_ids),
-           updated_by_user_id=$13,
+           updated_by_user_id=$6,
            updated_at=NOW(),
            closed_at=CASE WHEN $5 IN ('WON','LOST') OR $4 IN ('WON','LOST') THEN COALESCE(closed_at, NOW()) ELSE closed_at END,
            archived_at=CASE WHEN $5 = 'ARCHIVED' THEN COALESCE(archived_at, NOW()) ELSE archived_at END,
            version=version+1
        WHERE opportunity_id=$1 AND tenant_id=$2 AND organization_id=$3 AND archived_at IS NULL
        RETURNING *`,
-      [
-        id, scope.tenant_id, scope.organization_id, input.stage || null, input.status || null,
-        input.name || null, input.estimated_value ?? null, input.currency || null, input.target_close_date || null,
-        input.owner_user_id || null, input.primary_need_ids ? JSON.stringify(input.primary_need_ids) : null,
-        input.employer_incentive_assessment_ids ? JSON.stringify(input.employer_incentive_assessment_ids) : null,
-        input.actor_id,
-      ],
+      [id, scope.tenant_id, scope.organization_id, input.stage, input.status || null, input.actor_id],
     );
     return res.rows[0] || null;
   }

@@ -18,10 +18,15 @@ import { evaluateSalesOpportunityStageTransition } from "./sales-stage-transitio
 const SERVER_DERIVED_FIELDS = [
   "id", "tenantId", "tenant_id", "organizationId", "organization_id",
   "actor_id", "createdByUserId", "updatedByUserId",
+  "activeOrganizationId", "active_organization_id",
   "createdBy", "created_by_user_id", "updatedBy", "updated_by_user_id",
   "createdAt", "created_at", "updatedAt", "updated_at", "archivedAt",
   "archived_at", "version", "canonicalOrganization", "organizationName",
   "organizationType", "address",
+  "approvalState", "approval_state", "approvalStatus", "approval_status",
+  "internalApprovalState", "internal_approval_state",
+  "systemProvenance", "system_provenance", "provenance", "verifiedState",
+  "verified_state", "verified", "authorityState", "authority_state",
 ];
 
 function actorId(actor: any) {
@@ -334,8 +339,7 @@ export class SalesService {
         }
       }
 
-      const updated = await this.repo.updateOpportunity(id, scope, {
-        stage,
+      const updatePayload = {
         status: requestedStatus !== current.status ? requestedStatus : null,
         name: text(input, "name", "name", "Name", 300),
         estimated_value: optionalMoney(input?.estimatedValue ?? input?.estimated_value),
@@ -345,7 +349,25 @@ export class SalesService {
         primary_need_ids: primaryNeedIds,
         employer_incentive_assessment_ids: stringArray(input, "employerIncentiveAssessmentIds", "employer_incentive_assessment_ids"),
         actor_id: scope.actor_id,
-      }, executor);
+      };
+      const hasGenericUpdate = Boolean(
+        updatePayload.status
+        || updatePayload.name
+        || updatePayload.estimated_value !== null
+        || updatePayload.currency
+        || updatePayload.target_close_date
+        || updatePayload.owner_user_id
+        || updatePayload.primary_need_ids
+        || updatePayload.employer_incentive_assessment_ids,
+      );
+      let updated = hasGenericUpdate ? await this.repo.updateOpportunity(id, scope, updatePayload, executor) : current;
+      if (stage) {
+        updated = await this.repo.transitionOpportunityStage(id, scope, {
+          stage,
+          status: requestedStatus !== current.status ? requestedStatus : null,
+          actor_id: scope.actor_id,
+        }, executor);
+      }
       if (!updated) return null;
       if (transitionDecision) updated.transition_decision = transitionDecision;
       const action = requestedStatus === "ARCHIVED" ? "sales.opportunity.archived"

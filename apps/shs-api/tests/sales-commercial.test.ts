@@ -65,7 +65,8 @@ class FakeRepo {
   async getOpportunity(id: string, scope: any) { const item = this.opportunities.get(id); return item?.organization_id === scope.organization_id && item?.tenant_id === scope.tenant_id && !item?.archived_at ? item : null; }
   async getOpportunityForUpdate(id: string, scope: any) { return this.getOpportunity(id, scope); }
   async createOpportunity(input: any) { const created = row({ ...input, opportunity_id: input.opportunity_id }); this.opportunities.set(created.opportunity_id, created); return created; }
-  async updateOpportunity(id: string, scope: any, input: any) { const current = await this.getOpportunity(id, scope); if (!current) return null; const updated = { ...current, ...input, updated_by_user_id: input.actor_id, status: input.status || current.status, stage: input.stage || current.stage, closed_at: input.status === "WON" || input.stage === "WON" ? "2026-01-02T00:00:00.000Z" : current.closed_at, archived_at: input.status === "ARCHIVED" ? "2026-01-03T00:00:00.000Z" : current.archived_at, version: current.version + 1 }; this.opportunities.set(id, updated); return updated; }
+  async updateOpportunity(id: string, scope: any, input: any) { if (input.stage !== undefined && input.stage !== null) throw new Error("DIRECT_STAGE_MUTATION_FORBIDDEN"); const current = await this.getOpportunity(id, scope); if (!current) return null; const updated = { ...current, ...input, updated_by_user_id: input.actor_id, status: input.status || current.status, archived_at: input.status === "ARCHIVED" ? "2026-01-03T00:00:00.000Z" : current.archived_at, version: current.version + 1 }; this.opportunities.set(id, updated); return updated; }
+  async transitionOpportunityStage(id: string, scope: any, input: any) { const current = await this.getOpportunity(id, scope); if (!current) return null; const updated = { ...current, stage: input.stage, status: input.status || current.status, updated_by_user_id: input.actor_id, closed_at: input.status === "WON" || input.status === "LOST" || input.stage === "WON" || input.stage === "LOST" ? "2026-01-02T00:00:00.000Z" : current.closed_at, archived_at: input.status === "ARCHIVED" ? "2026-01-03T00:00:00.000Z" : current.archived_at, version: current.version + 1 }; this.opportunities.set(id, updated); return updated; }
 }
 
 function service(repo = new FakeRepo()) {
@@ -194,13 +195,23 @@ test("Opportunity update cannot attach a Need from a different account", async (
 
 test("protected server-derived fields cannot be mass assigned", async () => {
   const ctx = service();
-  for (const field of [{ tenantId: "attacker-tenant" }, { createdBy: "attacker" }, { version: 999 }, { archivedAt: "2026-01-01" }]) {
+  for (const field of [{ tenantId: "attacker-tenant" }, { activeOrganizationId: "attacker-org" }, { createdBy: "attacker" }, { version: 999 }, { archivedAt: "2026-01-01" }, { approvalStatus: "APPROVED" }, { verifiedState: "VERIFIED" }, { systemProvenance: "client" }]) {
     await assert.rejects(
       () => ctx.service.createRelationship({ accountOrganizationId: "org_account_1", ...field }, actorA),
       (error: any) => error.code === "SERVER_DERIVED_AUTHORITY",
     );
   }
   assert.equal(ctx.repo.relationships.size, 0);
+});
+
+test("generic opportunity persistence rejects direct stage mutation", async () => {
+  const ctx = service();
+  const opportunity = await ctx.service.createOpportunity({ accountOrganizationId: "org_account_1", name: "Direct mutation guard" }, actorA);
+  await assert.rejects(
+    () => ctx.repo.updateOpportunity(opportunity.opportunity_id, { tenant_id: actorA.tenant_id, organization_id: actorA.active_organization_id }, { stage: "RELATIONSHIP", actor_id: actorA.user_id }),
+    /DIRECT_STAGE_MUTATION_FORBIDDEN/,
+  );
+  assert.equal((await ctx.service.getOpportunity(opportunity.opportunity_id, actorA)).stage, "TARGET");
 });
 
 test("discovery archive is scoped and emits safe server audit", async () => {
